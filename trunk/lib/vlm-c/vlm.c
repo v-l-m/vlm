@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.6 2008/08/08 08:24:45 ylafon Exp $
+ * $Id: vlm.c,v 1.7 2008-11-23 16:14:06 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -53,11 +53,12 @@ void set_vlm_pilot_mode(boat *aboat, int vlm_mode) {
    }
 }
 
+/* VLM needs wind in the opposite direction */
 wind_info *get_wind_info_latlong_deg(double latitude, double longitude,
 				     time_t vac_time, wind_info *wind) {
   get_wind_info_latlong(degToRad(latitude), degToRad(longitude),
 			vac_time, wind);
-  wind->angle = radToDeg(wind->angle);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
 
@@ -65,7 +66,7 @@ wind_info *get_wind_info_latlong_deg_UV(double latitude, double longitude,
 					time_t vac_time, wind_info *wind) {
   get_wind_info_latlong_UV(degToRad(latitude), degToRad(longitude),
 			   vac_time, wind);
-  wind->angle = radToDeg(wind->angle);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
 
@@ -73,7 +74,7 @@ wind_info *get_wind_info_latlong_deg_TWSA(double latitude, double longitude,
 					  time_t vac_time, wind_info *wind) {
   get_wind_info_latlong_TWSA(degToRad(latitude), degToRad(longitude),
 			     vac_time, wind);
-  wind->angle = radToDeg(wind->angle);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
 
@@ -81,7 +82,7 @@ wind_info *get_wind_info_latlong_millideg(double latitude, double longitude,
 				     time_t vac_time, wind_info *wind) {
   get_wind_info_latlong(degToRad(latitude/1000.0), degToRad(longitude/1000.0),
 			vac_time, wind);
-  wind->angle = radToDeg(wind->angle);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
 
@@ -90,7 +91,7 @@ wind_info *get_wind_info_latlong_millideg_UV(double latitude, double longitude,
   get_wind_info_latlong_UV(degToRad(latitude/1000.0), 
 			   degToRad(longitude/1000.0),
 			   vac_time, wind);
-  wind->angle = radToDeg(wind->angle);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
 
@@ -99,7 +100,7 @@ wind_info *get_wind_info_latlong_millideg_TWSA(double latitude,double longitude,
   get_wind_info_latlong_TWSA(degToRad(latitude/1000.0), 
 			     degToRad(longitude/1000.0),
 			     vac_time, wind);
-  wind->angle = radToDeg(wind->angle);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
 
