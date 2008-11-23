@@ -1,0 +1,381 @@
+<?php
+// ========== WIND AT POSITION ========
+// Pour les tests (depuis automne 2007..), pour passer facilement d'une
+// version à l'autre de la fonction "windAtPosition"
+// ==> Abandon de ce système (pour les cartes) à prévoir...
+function windAtPosition($_lat = 0, $_long = 0, $when = 0, $version = SYSTEME_WIND_AT_POSITION )
+{
+        $versions=array("OLD","NEW","SPF","NO");
+
+        // On force le mode de gestion du vent à ce qui est dit dans la config (param.php)
+        $version = SYSTEME_WIND_AT_POSITION ;
+
+	if ( in_array($version , $versions) ) {
+          return call_user_func($version . 'windAtPosition' , $_lat, $_long, $when);
+        } else {
+          return call_user_func('OLDwindAtPosition' , $_lat, $_long);
+        }
+}
+
+
+/*
+   Cette fonction envoie du vent de nord-ouest
+*/
+function NOwindAtPosition($_lat , $_long, $when = 0)
+{
+
+    $vitesse = 25;
+    $angle   = 135;
+
+    //                Force         Direction
+    //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
+    //printf ("Wind=%f\n", $vitesse, $angle);
+    return array (
+    			$vitesse, $angle
+		 );
+}
+
+/*
+   Cette fonction s'appuie sur le moulin a vent de Yves
+*/
+function SPFwindAtPosition($_lat , $_long, $when = 0)
+{
+
+	include_once("vlmc.php");
+	
+	$global_vlmc_context = new vlmc_context();
+	global_vlmc_context_set($global_vlmc_context);
+	shm_lock_sem_construct_grib(1);
+
+	$wind_boat = new wind_info();
+	$_time=time()+$when;
+	get_wind_info_latlong_millideg_UV($_lat, $_long,
+                                          $_time, $wind_boat);
+
+	shm_unlock_sem_destroy_grib(1);
+
+    //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
+    //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
+    return array (
+    			$wind_boat->speed, ($wind_boat->angle+180) % 360
+		 );
+}
+
+// Fonction avec table "windAtPosition" ==> 17/12/2006
+/*
+   Cette fonction s'appuie sur la table "wind"
++-----------+------------+------+-----+---------+-------+
+| Field     | Type       | Null | Key | Default | Extra |
++-----------+------------+------+-----+---------+-------+
+| latitude  | int(11)    | NO   | PRI | 0       |       |
+| longitude | int(11)    | NO   | PRI | 0       |       |
+| wspeed    | float      | NO   |     | 0       |       |
+| wheading  | int(11)    | NO   |     | 0       |       |
+| time      | bigint(20) | NO   |     | 0       |       |
+| uwind     | float      | YES  |     | NULL    |       |
+| vwind     | float      | YES  |     | NULL    |       |
+| uwind3    | float      | YES  |     | NULL    |       |
+| vwind3    | float      | YES  |     | NULL    |       |
++-----------+------------+------+-----+---------+-------+
+Acquisition des données : getgrib.sh
+=======================
+Les mises à jour sont réalisées toutes les 3 heures, a partir d'un
+téléchargement toutes les 6 heures. A chaque fois, on a un fichier 
+pour T0, T+3, T+6, T+N...(24h). Si au téléchargement, on "met en place" 
+les données concernant "T0 et T3" dans uv et u3,v3, 3 heures plus
+tard, T3 alimente u/v et T6 alimente u3 et v3.
+Si à un moment on ne peut pas télécharger de données, on a 24h de 
+marge.
+*/
+function OLDwindAtPosition($_lat , $_long, $when = 0)
+{
+    $lat=$_lat/1000;
+    $long=$_long/1000;
+    // On cherche les 4 points entourant le bateau et fait une interpolation
+    // ceil et floor (lat & long) pour trouver quels points nous intéressent.
+    // dX = distance entre le méridien / parallèle X et nous.
+    $dN=abs($lat - floor($lat) );
+    $dS=abs($lat - ceil($lat) );
+    $dW=abs($long - ceil($long) );
+    $dE=abs($long - floor($long) );
+
+    // Les points sont considérés dans cet ordre par le select : NW, SW, NE, SE
+    // Voir la clause order by (long ASC, lat DESC)
+
+    $query21 = "SELECT uwind, vwind , uwind3, vwind3, `time`" .
+		" FROM  wind " .
+		" WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
+		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
+		" ORDER BY longitude ASC, latitude DESC;"  ;
+
+    $result21 = mysql_db_query(DBNAME,$query21);
+    //or die("Query failed : " . mysql_error." ".$query21);
+
+    // Tableau à 4 points : 0:NW, 2:NE
+    //                    , 1:SW, 3:SE
+
+    // Si on a que 2 enregistrements, on est sur un parallèle ou un méridien.
+    // (ceil = floor) ==> trouver lesquels c'est.
+    //   ==> Dans ce cas, soit dN=dS=0,  soit dW=dE = 0
+    
+    // Si on a qu'un enregistrement, alors on est au croisement médirien / parallèle.
+    // dans ce cas, dN=dS=dE=dW=0.
+    $i=0;
+    while ( $row21 = @mysql_fetch_array($result21, MYSQL_NUM) )  {
+        $uwind[$i] = $row21[0];
+        $vwind[$i] = $row21[1];
+        $uwind3[$i] = $row21[2];
+        $vwind3[$i] = $row21[3];
+        $T0= $row21[4];
+	$i++;
+    }
+
+    // Le timestamp de UWIND et VWIND (UWIND3 et VWIND3 sont valables 180 minutes après)
+    //printf ("NB_i : %d\n", $i);
+
+    // Composition des valeurs pour interpolation                            
+    switch ( $i ) {
+      case 4:
+      // Tableau à 4 points : 0:NW, 2:NE
+      //                    , 1:SW, 3:SE
+    	$uw= $dW*($dN*$uwind[0]+$dS*$uwind[1]) + $dE*($dN*$uwind[2] + $dS*$uwind[3]);
+    	$uw3= $dW*($dN*$uwind3[0]+$dS*$uwind3[1]) + $dE*($dN*$uwind3[2] + $dS*$uwind3[3]);
+    	$vw= $dW*($dN*$vwind[0]+$dS*$vwind[1]) + $dE*($dN*$vwind[2] + $dS*$vwind[3]);
+    	$vw3= $dW*($dN*$vwind3[0]+$dS*$vwind3[1]) + $dE*($dN*$vwind3[2] + $dS*$vwind3[3]);
+	break;
+      case 2:
+	// On est sur un parallèle : moyenne sur W et E uniquement
+	// Order by longitude ASC ==>  [0]=W et [1]=E
+        if ( $dN == 0 && $dS == 0 ) {
+    	  $uw= ($dW*$uwind[0] + $dE*$uwind[1]);
+    	  $uw3= ($dW*$uwind3[0] + $dE*$uwind3[1]);
+    	  $vw= ($dW*$vwind[0] + $dE*$vwind[1]);
+    	  $vw3= ($dW*$vwind3[0] + $dE*$vwind3[1]);
+	} 
+	// On est sur un méridien : moyenne sur N et S uniquement
+	// Order by latitude DESC ==> [0]=N et [1]=S
+	else {
+    	  $uw= ($dN*$uwind[0] + $dS*$uwind[1]);
+    	  $uw3= ($dN*$uwind3[0] + $dS*$uwind3[1]);
+    	  $vw= ($dN*$vwind[0] + $dS*$vwind[1]);
+    	  $vw3= ($dN*$vwind3[0] + $dS*$vwind3[1]);
+	}
+        break;
+      case 1:
+        // 1 point  : Sur un méridien et un parallèle à la fois
+	  $uw=$uwind[0];
+	  $uw3=$uwind3[0];
+	  $vw=$vwind[0];
+	  $vw3=$vwind3[0];
+        break;
+      case 0:
+        // 0 point (hors zone) ==> léger souffle de W  du à la rotation de la planète :-)
+	// Voir modification de la fonction angle()
+	  $uw=0;
+	  $uw3=0;
+	  $vw=0;
+	  $vw3=0;
+	  break;
+    }
+
+    // On va faire le calcul du vent en fonction de time() et de sa proximité par rapport à T0.
+    // d_T0 = proximité de T0 dans le calcul de moyenne ==> Ramené à un %age (10800 sec entre T0 et T1)
+    $d_T0=(time()-$T0) / 10800;
+    $d_T1=(1-$d_T0);
+    
+    //                Force         Direction
+    //printf ("Lat=%d, Long=%d, UW=%d, VW=%d\n", $_lat, $_long, $uv, $uw);
+    //printf ("Wind=%f\n", norm($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3));
+    return array (
+    			norm($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3),
+    			angle($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3)
+		 );
+}
+
+
+// Nouvelle fonction avec table "winds"          ==> 07/07/2007
+// ============================================================
+/*
+   Cette fonction s'appuie sur la nouvelle table "winds"
+   +-----------+------------+------+-----+---------+-------+
+   | Field     | Type       | Null | Key | Default | Extra |
+   +-----------+------------+------+-----+---------+-------+
+   | latitude  | int(11)    | NO   | PRI | 0       |       |
+   | longitude | int(11)    | NO   | PRI | 0       |       |
+   | time      | bigint(20) | NO   |     | 0       |       |
+   | uwind     | float      | YES  |     | NULL    |       |
+   | vwind     | float      | YES  |     | NULL    |       |
+   +-----------+------------+------+-----+---------+-------+
+   
+   Les mises à jour sont réalisées toutes les 6 heures, dès que les données
+   sont disponibles sur le NOAA
+   
+   On stocke en permanence les données à partir du T0 jusqu'à 24h.
+   On automatise une purge des vielles données (> 12h)
+
+   Cette table peut être utilisée pour donner des prévisions de vent sur les cartes
+   au lieu actuellement du vent du moment 
+      ==> Permettre à ceux ne disposant pas d'Ugrib
+          de connaitre la meteo à l'avance quand même
+
+   ===== Fonctionnement =====
+   - on fonctionne toujours sur un carré de 4 valeurs (les longitudes/latitudes rondes
+     autour du bateau)
+   - on ne prend plus uwind/uwind3 ni vwind/vwind3, mais on ne se sert que des
+     colonnes uwind et vwind dont time est juste inférieur ou juste supérieur à maintenant
+     
+*/
+
+// Le script get-grib est modifié pour recevoir les données H et H+3 (sachant qu'on
+// est entre H et H+3).  On s'appuie sur le timestamp (colone time), pour interpoler
+// selon la proximité entre les deux timestamps entre lesquels on se trouve. 
+// Plus un est loin du T0, plus T1 compte. C'est une simple interpolation linéaire.
+
+
+function NEWwindAtPosition($_lat , $_long, $when = 0)
+{
+
+    $_time=time()+$when; 
+    $lat=$_lat/1000;
+    $long=$_long/1000;
+
+    // Tests si latitude ronde ou longitude ronde, ajout d'un centième de degré... (pour être sûr de ramener 4 valeurs)
+    //echo "L=" . $lat . "RoundL=" . round($lat);
+    if ( $lat == round($lat)  ) $lat+=0.01;
+    if ( $long == round($long) ) $long+=0.01;
+
+    // On cherche les 4 points entourant le bateau et fait une interpolation
+    // ceil et floor (lat & long) pour trouver quels points nous intéressent.
+    // dX = distance entre le méridien / parallèle X et nous.
+    $dN=abs($lat - floor($lat) );
+    $dS=abs($lat - ceil($lat) );
+    $dW=abs($long - ceil($long) );
+    $dE=abs($long - floor($long) );
+
+    // Les points sont considérés dans cet ordre par le select : NW, SW, NE, SE
+    // Voir la clause order by (long ASC, lat DESC)
+    // On récupère 2 tableaux de 4 points (situation T0 et T0+3)
+    // Tableau à 4 points : 0:NW, 2:NE
+    //                    , 1:SW, 3:SE
+
+    // Si on a que 2 enregistrements, on est sur un parallèle ou un méridien.
+    // (ceil = floor) ==> trouver lesquels c'est.
+    //   ==> Dans ce cas, soit dN=dS=0,  soit dW=dE = 0
+    
+    // Si on a qu'un enregistrement, alors on est au croisement médirien / parallèle.
+    // dans ce cas, dN=dS=dE=dW=0.
+
+    // Premier enregistrement (time juste inférieur)
+    $query = "SELECT uwind, vwind , `time` " .
+		" FROM  winds " .
+		" WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
+		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
+		" AND   time <= $_time " .
+		" ORDER BY time DESC, longitude ASC, latitude DESC " .
+		" LIMIT 4;"  ;
+
+    $result = mysql_db_query(DBNAME,$query);
+    //echo $query;
+
+    $i=0;
+    while ( $row = mysql_fetch_array($result, MYSQL_NUM) )  {
+        $uwind0[$i] = $row[0];
+        $vwind0[$i] = $row[1];
+        $T0= $row[2];
+	$i++;
+    }
+
+
+    // Second enregistrement (time juste supérieur)
+    $query = "SELECT uwind, vwind , `time` " .
+		" FROM  winds " .
+		" WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
+		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
+		" AND   time >= $_time " .
+		" ORDER BY time ASC, longitude ASC, latitude DESC " .
+		" LIMIT 4;"  ;
+
+    $result = mysql_db_query(DBNAME,$query);
+    //echo $query;
+    //or die("Query failed : " . mysql_error." ".$query21);
+
+    $i=0;
+    while ( $row = mysql_fetch_array($result, MYSQL_NUM) )  {
+        $uwind3[$i] = $row[0];
+        $vwind3[$i] = $row[1];
+        $T3= $row[2];
+	$i++;
+    }
+    // Le timestamp de UWIND et VWIND (UWIND3 et VWIND3 sont valables 180 minutes après)
+
+    //printf ("NB_i : %d\n", $i);
+
+    // Composition des valeurs pour interpolation                            
+    switch ( $i ) {
+      case 4:
+      // Tableau à 4 points : 0:NW, 2:NE
+      //                    , 1:SW, 3:SE
+    	$uw= $dW*($dN*$uwind0[0]+$dS*$uwind0[1]) + $dE*($dN*$uwind0[2] + $dS*$uwind0[3]);
+    	$uw3= $dW*($dN*$uwind3[0]+$dS*$uwind3[1]) + $dE*($dN*$uwind3[2] + $dS*$uwind3[3]);
+    	$vw= $dW*($dN*$vwind0[0]+$dS*$vwind0[1]) + $dE*($dN*$vwind0[2] + $dS*$vwind0[3]);
+    	$vw3= $dW*($dN*$vwind3[0]+$dS*$vwind3[1]) + $dE*($dN*$vwind3[2] + $dS*$vwind3[3]);
+	break;
+      case 2:
+	// On est sur un parallèle : moyenne sur W et E uniquement
+	// Order by longitude ASC ==>  [0]=W et [1]=E
+        if ( $dN == 0 && $dS == 0 ) {
+    	  $uw= ($dW*$uwind0[0] + $dE*$uwind0[1]);
+    	  $uw3= ($dW*$uwind3[0] + $dE*$uwind3[1]);
+    	  $vw= ($dW*$vwind0[0] + $dE*$vwind0[1]);
+    	  $vw3= ($dW*$vwind3[0] + $dE*$vwind3[1]);
+	} 
+	// On est sur un méridien : moyenne sur N et S uniquement
+	// Order by latitude DESC ==> [0]=N et [1]=S
+	else {
+    	  $uw= ($dN*$uwind0[0] + $dS*$uwind0[1]);
+    	  $uw3= ($dN*$uwind3[0] + $dS*$uwind3[1]);
+    	  $vw= ($dN*$vwind0[0] + $dS*$vwind0[1]);
+    	  $vw3= ($dN*$vwind3[0] + $dS*$vwind3[1]);
+	}
+        break;
+      case 1:
+        // 1 point  : Sur un méridien et un parallèle à la fois
+	  $uw=$uwind0[0];
+	  $uw3=$uwind3[0];
+	  $vw=$vwind0[0];
+	  $vw3=$vwind3[0];
+        break;
+      case 0:
+        // 0 point (hors zone) ==> léger souffle de W  du à la rotation de la planète :-)
+	// Voir modification de la fonction angle()
+	  $uw=0;
+	  $uw3=0;
+	  $vw=0;
+	  $vw3=0;
+	  break;
+    }
+
+    // On va faire le calcul du vent en fonction de time() et de sa proximité par rapport à T0.
+    // d_T0 = proximité de T0 dans le calcul de moyenne ==> Ramené à un %age (nb de sec entre T0 et T3)
+   
+    $d_temps=($T3 - $T0);
+    if ( $d_temps == 0 ) {
+       $d_T0=0;
+    } else {
+       $d_T0=($_time-$T0) / $d_temps;
+    }
+    $d_T3=(1-$d_T0);
+    
+    //                Force         Direction
+    //printf ("Lat=%d, Long=%d, UW=%2.2f, VW=%2.2f, ", $_lat, $_long, $uw, $uw);
+    //printf ("Wind=%2.1f (%3.1f)", norm($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3),
+    //                        angle($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3)+180%360);
+    //printf ("T0=%s, <br>TIME=%s, <br>T3=%s, <br>DTemps=%d, Delta=%f\n", gmdate("Y/m/d H:i:s",$T0), gmdate("Y/m/d H:i:s",$_time), gmdate("Y/m/d H:i:s",$T3), $d_temps, $d_T0);
+    //printf ("T0=%s, <br>TIME=%s, <br>T3=%s, <br>DTemps=%d, Delta=%f\n", $T0, $_time, $T3, $d_temps, $d_T0);
+    return array (
+    			norm($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3),
+    			angle($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3)
+		 );
+}
+
+?>
