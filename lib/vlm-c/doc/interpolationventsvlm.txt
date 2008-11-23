@@ -1,0 +1,10 @@
+Polaires: http://www.virtual-loup-de-mer.org/Polaires
+
+Les composantes des vents dans les fichiers grib sont a 2 composantes
+NS et EO
+Visiblement l'interpolation est entre NS(a)/NS(b) puis EO(a)/EO(b), puis recombine
+donc si on a 0 dans EO, +2 dans NS(a) -2 dans NS(b), NS((a+b)/2) sera 0, donc vent nul.
+Apres ca, vitesse = sqrt(NS(x)^2+EO(x)^2).
+angle = acos(NS(x)/vitesse) * (signe de EO(x)).
+
+Le calcul de vitesse(a) / vitesse(b), angle(a) / angle(b) puis interpolation entre les 2 donnerait un vent changeant rapidement d'angle mais toujours de vitesse 2, dans l'exemple ci-dessus.
