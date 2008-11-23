@@ -1,0 +1,5 @@
+ExpiresActive On
+<Files ~ "\.png$">
+  ExpiresDefault "access plus 1 day"
+</Files>
+
