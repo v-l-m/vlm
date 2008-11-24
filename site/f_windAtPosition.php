@@ -57,7 +57,7 @@ function SPFwindAtPosition($_lat , $_long, $when = 0)
     //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
     //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
     return array (
-    			$wind_boat->speed, ($wind_boat->angle+180) % 360
+    			$wind_boat->speed, $wind_boat->angle
 		 );
 }
 
