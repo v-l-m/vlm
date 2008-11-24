@@ -1,0 +1,31 @@
+#NB : ce fichier présuppose que VLMRACINE est déja configuré...
+#VLMRACINE est normalement le ~/
+# source d'inspiration : v2.openesub.org / Auteur : paparazzia@gmail.com / Licence : GPL2
+
+#Définition de la branche
+export VLMSVNBRANCH=trunk
+
+#Le reste n'est normalement pas à modifier
+
+#Définition de la racine svn
+export VLMSVNROOT=http://dev.virtual-loup-de-mer.org/svn/vlm
+
+#Les chemins pour les scripts et la conf
+export VLMSCRIPTS=$VLMRACINE/scripts
+export VLMCONF=$VLMRACINE/conf
+
+#Racine du site web...
+export VLMDOCUMENTROOT=$VLMRACINE/testing/site
+export VLMJEUROOT=$VLMRACINE/testing
+
+#Répertoire de travail
+export VLMTEMP=$VLMRACINE/tmp
+
+#Helpers pour le svn
+export VLMSVNBASE=branches/
+if test "$VLMSVNBRANCH" = "trunk"; then
+  VLMSVNBASE=
+fi
+export VLMSVNFULL=$VLMSVNROOT/$VLMSVNBASE$VLMSVNBRANCH
+export VLMSVNPATH=/usr/bin/svn
+
