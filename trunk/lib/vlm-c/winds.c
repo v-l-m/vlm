@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.15 2008/07/05 21:37:26 ylafon Exp $
+ * $Id: winds.c,v 1.16 2008-11-24 16:19:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -374,12 +374,12 @@ wind_info *get_wind_info_latlong_TWSA(double latitude, double longitude,
   uprev = u01prev + (u23prev - u01prev) * (d_long - floor(d_long));
 
 #define _check_angle_interp(a)			\
-  if (a >= PI) {				\
-    a -= TWO_PI;				\
-  } else if (a <= -PI) {			\
-    a += TWO_PI;				\
+  if (a > PI) {					\
+    a -= PI;					\
+  } else if (a < -PI) {				\
+    a += PI;					\
   }
-
+  
 #define _positive_angle(a)			\
   if (a < 0) {					\
     a += TWO_PI;				\
