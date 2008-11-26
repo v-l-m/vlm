@@ -11,14 +11,14 @@ case $svnmodule in
     base)
     ;;
     site)
-    $VLMRACINE/scripts/maj_module.sh lib/phpcommon
     ;;
     moteur)
-    $VLMRACINE/scripts/maj_module.sh lib/phpcommon
     ;;
     hosting)
     ;;
     lib/vlm-c)
+    ;;
+    lib/phpcommon)
     ;;
     *)
     echo "Précisez : base, moteur, site, ..."
