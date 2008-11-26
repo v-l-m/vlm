@@ -31,7 +31,7 @@ if test -d $destmodulepath ; then
   echo "Le repertoire $destmodulepath existe !!!"
   exit 1
 fi
-mkdir $destmodulepath
+mkdir -p $destmodulepath
 echo "Ok !"
 echo -n "Remplacement..."
 cp -Rf $curmodulepath/* $destmodulepath
@@ -39,17 +39,23 @@ echo 'Ok !'
 
 #Recopie de la conf si nécessaire
 echo " "
+echo "Post-déploiement"
 
+#NB : présuppose un seul fichier de conf par module
 case $confmodule in
-    base)
-#    confpath=config/config.sh
-    ;;
+#    base)
+#    Pas de fichier de conf base pour l'instant
+#    ;;
     site)
-#    confpath=application/settings/config.ini
+    confsrc=conf_php
+    confpath=param.php
     ;;
     moteur)
-#    confpath=rorqual/openConstantes.py
+    confsrc=conf_php
+    confpath=param.php
     ;;
+#    phpcommon)
+#    ;;
     *)
     
     echo "Pas de fichier de conf à mettre à jour."
@@ -57,7 +63,7 @@ case $confmodule in
     ;;
 esac
 
-echo "Copie de $VLMCONF/conf_$confmodule vers $destmodulepath/$confpath"
+echo "Copie de $VLMCONF/$confsrc vers $destmodulepath/$confpath"
 echo -n "Mise en place de droits et de la configuration... pour $confmodule ..."
-cp -f $VLMCONF/conf_$confmodule $destmodulepath/$confpath || exit 1
+cp -f $VLMCONF/$confsrc $destmodulepath/$confpath || exit 1
 echo "Ok!"
