@@ -15,8 +15,10 @@ case $svnmodule in
     ;;
     hosting)
     ;;
+    lib/vlm-c)
+    ;;
     *)
-    echo "Précisez : base, moteur, site, ...
+    echo "Précisez : base, moteur, site, ..."
     exit 1
     ;;
 esac
@@ -45,7 +47,7 @@ fi
 echo "Ok !"
 echo "Recuperation de $current... depuis $svncurrent"
 cd $VLMTEMP || exit 1
-$VLMSVNPATH export $svncurrent
+$VLMSVNPATH export $svncurrent $current
 echo "Ok !"
 
 
