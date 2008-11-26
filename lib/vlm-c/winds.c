@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.17 2008-11-24 17:49:59 ylafon Exp $
+ * $Id: winds.c,v 1.18 2008-11-26 18:06:22 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -452,10 +452,6 @@ wind_info *get_wind_info_latlong_TWSA(double latitude, double longitude,
     vnext = v01next + (angle) * (d_long - floor(d_long));
     _positive_angle(vnext);
     
-    v01next = v0next + (v1next - v0next) * (d_lat - floor(d_lat));
-    v23next = v2next + (v3next - v2next) * (d_lat - floor(d_lat));
-    vnext = v01next + (v23next - v01next) * (d_long - floor(d_long));
-
 #ifdef DEBUG
     printf("-> u01next: %.2f kts, %.2f deg\n", u01next, radToDeg(v01next));
     printf("-> u23next: %.2f kts, %.2f deg\n", u23next, radToDeg(v23next));
