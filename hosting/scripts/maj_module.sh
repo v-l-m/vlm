@@ -48,11 +48,13 @@ case $confmodule in
 #    ;;
     site)
     cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/
+    exit 0
     ;;
     moteur)
     cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/
+    exit 0
     ;;
-    phpcommon)
+    lib/phpcommon)
     confsrc=conf_php
     confpath=param.php
     ;;
