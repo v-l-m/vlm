@@ -47,15 +47,15 @@ case $confmodule in
 #    Pas de fichier de conf base pour l'instant
 #    ;;
     site)
-    confsrc=conf_php
-    confpath=param.php
+    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/
     ;;
     moteur)
+    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/
+    ;;
+    phpcommon)
     confsrc=conf_php
     confpath=param.php
     ;;
-#    phpcommon)
-#    ;;
     *)
     
     echo "Pas de fichier de conf à mettre à jour."

@@ -6,12 +6,15 @@ source $VLMRACINE/conf/conf_script || exit 1
 
 svnmodule=$1
 
+#Pré déploiement
 case $svnmodule in
     base)
     ;;
     site)
+    $VLMRACINE/scripts/maj_module.sh lib/phpcommon
     ;;
     moteur)
+    $VLMRACINE/scripts/maj_module.sh lib/phpcommon
     ;;
     hosting)
     ;;
