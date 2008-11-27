@@ -4,12 +4,14 @@ touch /tmp/cronvlm.$1.lock
 
 LOG=/tmp/$(date +%Y%m%d_%H:%M)-$1-cronvlm.log
 
-cd /home/commun/vlm/moteur
+source $VLMRACINE/conf/conf_script || exit 1
+
+cd $VLMJEUROOT/moteur
 echo -e "\n" >> $LOG
 echo  "******************* starting the engine ********************" >> $LOG
 date >> $LOG
 echo "************************************************************" >> $LOG
-nice -10 /opt/php/bin/php moteur.php $* >> $LOG 2>&1
+nice -10 $VLMPHPPATH moteur.php $* >> $LOG 2>&1
 
 [ $(hostname) != "maupiti.actilis" -a $(hostname) != "r16212.ovh.net" ] && grep CROSSED $LOG | sed 's/.*player //g' | sed 's/ CROSSED.*$//g' | while read idusers ; do
         sed -n "/user $idusers:/,/DONE/p"  $LOG >/tmp/CC-$idusers.log
