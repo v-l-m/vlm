@@ -37,35 +37,34 @@ echo -n "Remplacement..."
 cp -Rf $curmodulepath/* $destmodulepath
 echo 'Ok !'
 
-#Recopie de la conf si nécessaire
+#Recopie de la conf si nécessaire // Postdéploiement
 echo " "
-echo "Post-déploiement"
+echo -n "Post-déploiement, mise en place de droits et de la configuration... pour $confmodule ..."
 
-#NB : présuppose un seul fichier de conf par module
 case $confmodule in
 #    base)
-#    Pas de fichier de conf base pour l'instant
+#    Pas de post déploiement pour l'instant
 #    ;;
     site)
-    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/
-    exit 0
+    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     ;;
     moteur)
-    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/
-    exit 0
+    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     ;;
     lib/phpcommon)
     confsrc=conf_php
     confpath=param.php
+    echo "Copie de $VLMCONF/$confsrc vers $destmodulepath/$confpath"
+    cp -f $VLMCONF/$confsrc $destmodulepath/$confpath || exit 1
+    echo "Recopie de phpcommon dans site & moteur"
+    cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/site/ || exit 1
+    cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/moteur/ || exit 1
     ;;
     *)
     
-    echo "Pas de fichier de conf à mettre à jour."
+    echo "Pas de post déploiement / fichiers de conf à mettre à jour"
     exit 0
     ;;
 esac
 
-echo "Copie de $VLMCONF/$confsrc vers $destmodulepath/$confpath"
-echo -n "Mise en place de droits et de la configuration... pour $confmodule ..."
-cp -f $VLMCONF/$confsrc $destmodulepath/$confpath || exit 1
 echo "Ok!"
