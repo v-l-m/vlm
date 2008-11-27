@@ -21,7 +21,7 @@ case $svnmodule in
     lib/phpcommon)
     ;;
     *)
-    echo "Précisez : base, moteur, site, ..."
+    echo "Précisez : base, moteur, site, lib/vlm-c, lib/phpcommon..."
     exit 1
     ;;
 esac
@@ -52,5 +52,3 @@ echo "Recuperation de $current... depuis $svncurrent"
 cd $VLMTEMP || exit 1
 $VLMSVNPATH export $svncurrent $current
 echo "Ok !"
-
-
