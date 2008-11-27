@@ -36,29 +36,40 @@ function NOwindAtPosition($_lat , $_long, $when = 0)
 }
 
 /*
-   Cette fonction s'appuie sur le moulin a vent de Yves
+ *  Cette fonction s'appuie sur le moulin a vent de Yves
+ * @input $_lat latitude, en millieme de degres.
+ * @input $_long longitude, en millieme de degres.
+ * @input $when, offset de temps en secondes par rapport a "maintenant"
+ *               defaut a "0".
+ * //FIXME ($when si different devrait etre un temps absolu, pour faire
+ *          les calculs a un meme instant 
+ * @return une array ( vitesse (kts), angle (degres) )
 */
 function SPFwindAtPosition($_lat , $_long, $when = 0)
 {
-
-	include_once("vlmc.php");
-	
-	$global_vlmc_context = new vlmc_context();
-	global_vlmc_context_set($global_vlmc_context);
-	shm_lock_sem_construct_grib(1);
-
-	$wind_boat = new wind_info();
-	$_time=time()+$when;
-	get_wind_info_latlong_millideg_UV($_lat, $_long,
-                                          $_time, $wind_boat);
-
-	shm_unlock_sem_destroy_grib(1);
-
-    //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
-    //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
-    return array (
-    			$wind_boat->speed, $wind_boat->angle
-		 );
+  /*
+    la fonction creer une structure contenant des pointeurs vers
+     le grib pour eviter tout deplacement de blocs memoire 
+     voir vlm-c/useshmem.c et shmem.c pour plus de details.
+  */
+  include_once("vlmc.php");
+  
+  $global_vlmc_context = new vlmc_context();
+  global_vlmc_context_set($global_vlmc_context);
+  shm_lock_sem_construct_grib(1);
+  
+  $wind_boat = new wind_info();
+  $_time=time()+$when;
+  get_wind_info_latlong_millideg_UV($_lat, $_long,
+				    $_time, $wind_boat);
+  
+  shm_unlock_sem_destroy_grib(1);
+  
+  //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
+  //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
+  return array (
+		$wind_boat->speed, $wind_boat->angle
+		);
 }
 
 // Fonction avec table "windAtPosition" ==> 17/12/2006
