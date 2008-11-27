@@ -28,4 +28,4 @@ if test "$VLMSVNBRANCH" = "trunk"; then
 fi
 export VLMSVNFULL=$VLMSVNROOT/$VLMSVNBASE$VLMSVNBRANCH
 export VLMSVNPATH=/usr/bin/svn
-
+export VLMPHPPATH=/opt/php/bin/php
