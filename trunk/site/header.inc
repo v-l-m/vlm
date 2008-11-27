@@ -112,9 +112,9 @@ if ($type == "change")
   //FIXME : no escaping ?
   $users->users->blocnote = $blocnote;
   $users->users->country = $country;
-  // Hidepos : si on est caché, valeur positive (que le moteur décrémente)
-  //           sinon, valeur négative.
-  //           La valeur est le capital de vacations qu'on peut être caché
+  // Hidepos : si on est cachÃ©, valeur positive (que le moteur dÃ©crÃ©mente)
+  //           sinon, valeur nÃ©gative.
+  //           La valeur est le capital de vacations qu'on peut Ãªtre cachÃ©
   $users->users->hidepos = abs($users->users->hidepos);
   if ( $hidepos != "on" ) {
        $users->users->hidepos = -1 * $users->users->hidepos  ;
@@ -133,11 +133,11 @@ if ($type == "unsubscribe")
 if ($type == "subscribe")
 {
   $users = new fullUsers(getLoginId());
-  // On vérifie que le joueur n'est pas déjà en course
+  // On vÃ©rifie que le joueur n'est pas dÃ©jÃ  en course
   //print_r($users);
   if ( $users->users->engaged == 0 ) {
-       // On vérifie aussi qu'il a accès à cette course :
-       // $idraces doit être dans le tableau retourné par availableRaces($idusers) 
+       // On vÃ©rifie aussi qu'il a accÃ¨s Ã  cette course :
+       // $idraces doit Ãªtre dans le tableau retournÃ© par availableRaces($idusers) 
        $avRaces=availableRaces($users->users->idusers);
 
        //print_r($avRaces);
@@ -155,8 +155,8 @@ if ($type == "subscribe")
 
 ?>
 <!DOCTYPE html 
-      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 
  <head>
@@ -201,14 +201,13 @@ if ($CurrentFile == "update_angle.php" ) {
    <!-- onLoad connot be in body so we create a false div not to  be displayed -->
    <!-- TODO put expert in cookies-->
 
-   <div id="baneer" align=right>
-	<?php
-                echo "<B>".$strings[$lang]["sponsor"];
-		echo "<a href=\"http://www.actilis.net/\" target=_actilis><img src=/actilis.png></a>";
-		echo "</B>\n";
-	?>
+   <div id="baneer" align="right">
+     <b>
+       <?php echo $strings[$lang]["sponsor"]; ?>
+     </b>
+     <a href="http://www.actilis.net/" target="_actilis"><img src="/actilis.png" alt="Actilis"></a>
    </div>
-
+   
    <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
    <div id="login">
 <?php
@@ -218,14 +217,14 @@ if (!isLoggedIn()) //if not connected
 {
    ?>
       <form method="post" action="myboat.php">
-         <p align=left>
+         <p align="left">
             User: <input size="10" maxlength="15" name="pseudo" /><br />
             Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
             <input type="hidden" name="lang" value="<?echo $lang?>" />
             <input type="hidden" name="type" value="login" />
          </p>
-         <p align=center>
-	 	<input type="submit" value="<? echo $strings[$lang]["login"]?>" />
+         <p align="center">
+	   <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
 	 </p>
       </form>
    <?
@@ -243,17 +242,17 @@ else //if loggedin
   */
   
 ?>
-  <p align=center>
+  <p align="center">
   <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
   <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
   <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
 <!--  <a href="http://s142313913.onlinehome.fr/vlm/solitaire.html" target="_rankings"><?echo $strings[$lang]["ranking"]?></a>  -->
   </p>
   <form method="post" action="index.php">
-    <p align=center>
-    <input type="hidden" name="type" value="logout" />
-    <input type="hidden" name="lang" value="<?echo $lang?>" />
-    <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
+    <p align="center">
+      <input type="hidden" name="type" value="logout" />
+      <input type="hidden" name="lang" value="<?echo $lang?>" />
+      <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
     </p>
   </form>
 
@@ -261,22 +260,22 @@ else //if loggedin
   // Bouton "ADMIN" pour les administrateurs
   if ( idusersIsAdmin (getLoginId()) ) {
       printf ("<p align=center>");
-      printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\">");
+      printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
       printf ("</p>");
   }
 }?>
-  <hr>
+  <hr />
   <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="fr.png" alt="version Francaise" width="30" height="20" /></a>
   <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="en.png" alt="English version" width="30" height="20" /></a>
   <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="it.png" alt="Italian version" width="30" height="20" /></a>
   <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="pt.png" alt="Portugese version" width="30" height="20" /></a>
   <br />
       <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
-      <a href="http://images.virtual-loup-de-mer.org/" target=_images><?echo $strings[$lang]["images"]?></a> 
-      <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a><br>
+      <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
+      <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a><br />
       <a href="faq.php?lang=<?echo $lang?>"><?echo $strings[$lang]["faq"]?></a> 
-      <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a><br>
-      <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target=_forum><b><?echo $strings[$lang]["forum"]?></b></a>
+      <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a><br />
+      <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><b><?echo $strings[$lang]["forum"]?></b></a>
       <?php 
           echo "<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
       ?><b>
@@ -289,60 +288,60 @@ else //if loggedin
           echo "new".$strings[$lang]["tchat"];
           echo "</b></a> ";
           echo "<hr />";
-          //echo "<A href=\"http://www.virtual-winds.com/phille/vlm/vlm_user_manual_fr.pdf\" target=_vlmdoc alt=\"". $strings[$lang]["doc"]."\"><img src=\"documentation.png\"></A>";
-          echo "<A href=\"http://wiki.virtual-loup-de-mer.org/\" target=_vlmwiki alt=\"". $strings[$lang]["doc"]."\"><img src=\"documentation.png\"></A>";
-          //echo "<A href=\"http://loupdev.tuxfamily.org/wiki/index.php?title=Accueil\" target=_vlmdoc alt=\"". $strings[$lang]["doc"]."\">
+          //echo "<a href=\"http://www.virtual-winds.com/phille/vlm/vlm_user_manual_fr.pdf\" target=_vlmdoc alt=\"". $strings[$lang]["doc"]."\"><img src=\"documentation.png\"></A>";
+          echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=_vlmwiki alt=\"". $strings[$lang]["doc"]."\"><img src=\"documentation.png\" alt=\"Documentation\"></a>";
+          //echo "<a href=\"http://loupdev.tuxfamily.org/wiki/index.php?title=Accueil\" target=_vlmdoc alt=\"". $strings[$lang]["doc"]."\">
 
 	  // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
-	  echo "<A HREF=http://www.virtual-winds.com/forum/index.php?showtopic=4737 target=_tcv alt=\"" . $strings[$lang]["tcv"]. "\">
-                <img src=\"jpbateaux.png\"></A>
+	  echo "<a href=http://www.virtual-winds.com/forum/index.php?showtopic=4737 target=\"_tcv\" alt=\"" . $strings[$lang]["tcv"]. "\">
+                <img src=\"jpbateaux.png\" alt=\"TCV\"></a>
                 <hr />";
 
 	  echo "<h3>".$strings[$lang]["weather"]."</h3>\n";
 
 	?>
-	<b><a href="<?php echo GRIB_SERVER_URL; ?>/" target=_meteodata><?echo $strings[$lang]["meteodata"]?></a></b><br />
-	<b><a href="http://grib.us/" target=_ugrib><img src=grib.us.gif border=0 alt="Logo du site GRIB" /></a></b><hr />
+	<a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
+	<a href="http://grib.us/" target="_ugrib"><img src="grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
 	<!--
-	<B><a href="http://grib.us/" target=_ugrib><?echo $strings[$lang]["ugrib"]?></a></B><hr>
+	<B><a href="http://grib.us/" target=_ugrib><?echo $strings[$lang]["ugrib"]?></a></B><hr />
 	-->
 
         <br />
-        ** <a href="http://www.passageweather.com/" target=_pw>Passage Weather</a> **<br/>
+        ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br/>
 	Meteo France
-	<a href="http://www.meteofrance.com/FR/mer/popupCartePrevFrontsGF.jsp?LIEUID=ATLANTIQUE" target=_meteof>Fronts</a>
-	<a href="http://www.meteofrance.com/FR/mer/popupCarteVentsGF.jsp?LIEUID=ATLANTIQUE" target=_meteof>Vents</a>
+	<a href="http://www.meteofrance.com/FR/mer/popupCartePrevFrontsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Fronts</a>
+	<a href="http://www.meteofrance.com/FR/mer/popupCarteVentsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Vents</a>
 
 	<br />
 	Wetterzentrale
-	<a href="http://www.meteo-marine.com/meteo_marine/gfs.htm" target=_meteowz>GFS</a>,
-	<a href="http://www.meteo-marine.com/meteo_marine/jma.htm" target=_meteowz>JMA</a>
+	<a href="http://www.meteo-marine.com/meteo_marine/gfs.htm" target="_meteowz">GFS</a>,
+	<a href="http://www.meteo-marine.com/meteo_marine/jma.htm" target="_meteowz">JMA</a>
 
 	<br />
 	Weather-online
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?03&amp;LANG=en&amp;WIND=g246" target=_wol>North Brazil</a>, 
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=atla" target=_wol>Europe</a>, 
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=eatl" target=_wol>Atlan.</a>, 
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=kana" target=_wol>Manche</a>,
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=mitt" target=_wol>Med.</a>
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=afri&amp;MEER=ioze" target=_wol>Indien</a>
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=aust" target=_wol>Aust</a>
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=neus" target=_wol>NZL.</a>
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?03&amp;LANG=en&amp;WIND=g246" target="_wol">North Brazil</a>, 
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=atla" target="_wol">Europe</a>, 
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=eatl" target="_wol">Atlan.</a>, 
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=kana" target="_wol">Manche</a>,
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=mitt" target="_wol">Med.</a>
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=afri&amp;MEER=ioze" target="_wol">Indien</a>
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=aust" target="_wol">Aust</a>
+	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=neus" target="_wol">NZL.</a>
 
 	<br />
 	Aviation Weather
-	<a href="http://aviationweather.gov/obs/sat/intl/ir.shtml" target=_wf>All Zones</a>
+	<a href="http://aviationweather.gov/obs/sat/intl/ir.shtml" target="_wf">All Zones</a>
 	<br />
 	Wind Finder
-	<a href="http://www.windfinder.com/forecasts/" target=_wf>All Zones</a>
+	<a href="http://www.windfinder.com/forecasts/" target="_wf">All Zones</a>
 	<br />
 	MetVUW
-	<a href="http://www.metvuw.com/ows/" target=_mv>MetVUW</a>
+	<a href="http://www.metvuw.com/ows/" target="_mv">MetVUW</a>
 	<br />
 	COTWeb
-	<a href="http://www.cotweb.com/meteo.php4" target=_mv>COTWeb</a>
+	<a href="http://www.cotweb.com/meteo.php4" target="_mv">COTWeb</a>
 	<?
-           echo "<hr>Srv = " . SERVER_NAME . ".";
+           echo "<hr />Srv = " . SERVER_NAME . ".";
         ?>
       
    </div>
