@@ -52,7 +52,7 @@ case $confmodule in
     cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     ;;
     lib/phpcommon)
-    confsrc=conf_php
+    confsrc=param.php
     confpath=param.php
     echo "Copie de $VLMCONF/$confsrc vers $destmodulepath/$confpath"
     cp -f $VLMCONF/$confsrc $destmodulepath/$confpath || exit 1
