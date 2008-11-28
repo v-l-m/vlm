@@ -29,3 +29,5 @@ fi
 export VLMSVNFULL=$VLMSVNROOT/$VLMSVNBASE$VLMSVNBRANCH
 export VLMSVNPATH=/usr/bin/svn
 export VLMPHPPATH=/opt/php/bin/php
+export VLMVLMCPHP=/opt/php/lib/php
+export VLMVLMCSO=/opt/php/lib/php/no-debug-non-zts-20060613
