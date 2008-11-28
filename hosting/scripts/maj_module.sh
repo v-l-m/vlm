@@ -67,6 +67,7 @@ case $confmodule in
     cp php/vlmc.so $VLMVLMCSO/
     cp php/vlmc.php $VLMVLMCPHP/vlmc.php
     cd $oldpwd
+    echo "/// ATTENTION /// VOUS DEVEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?"
     ;;
     *)
     
