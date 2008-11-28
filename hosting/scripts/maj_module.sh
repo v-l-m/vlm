@@ -60,6 +60,13 @@ case $confmodule in
     cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/site/ || exit 1
     cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/moteur/ || exit 1
     ;;
+    lib/vlm-c)
+    oldpwd=$PWD
+    cd $destmodulepath
+    make php || exit 1
+    cp php/vlmc.so $VLMVLMCSO/vlmc.so
+    cp php/vlmc.php $VLMVLMCPHP/vlmc.php
+    cd $oldpwd
     *)
     
     echo "Pas de post déploiement / fichiers de conf à mettre à jour"
