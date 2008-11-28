@@ -171,7 +171,7 @@ include_once("myboat.js");
 
            $status_content="<div class=\"infobulle\"><b>WP" . $wp_num . "</b><br />\n";
 	   $status_content.=$wp_libelle." (".$wp_label.")" ;
-           $status_content.="<hr />\n";
+           $status_content.="<br />\n";
 
 	   if ( $wp[4] == WPTYPE_PORTE ) {
 	      $wp_north = max ($wp[1], $wp[3]);
