@@ -169,7 +169,7 @@ include_once("myboat.js");
 	   $wp_laisser_au=$wp[7];
 	   $wp_maparea=$wp[8];
 
-           $status_content="<div class=\"infobulle\"><b>WP" . $wp_num . "</b><br />\n";
+           $status_content="<div class=\'infobulle\'><b>WP" . $wp_num . "</b><br />\n";
 	   $status_content.=$wp_libelle." (".$wp_label.")" ;
            $status_content.="<br />\n";
 
