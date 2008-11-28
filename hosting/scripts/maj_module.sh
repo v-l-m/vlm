@@ -49,7 +49,7 @@ case $confmodule in
     cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     ;;
     moteur)
-    cp $VLMRACINE/conf/conf_site $destmodulepath/
+    cp $VLMRACINE/conf/conf_script $destmodulepath/
     cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     ;;
     lib/phpcommon)
