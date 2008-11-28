@@ -225,8 +225,8 @@ include_once("myboat.js");
 		"&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
 		"&amp;tracks=on" . $oppList . 
 		"&amp;wp=" . $wp_num . 
-		"&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=" . $WPCLASS . 
-                " onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+		"&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class="\" . $WPCLASS . 
+                "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
                 " onmouseout=\"hideDiv('infobulle');\" " .
                 ">" . $wp_num ;
 
