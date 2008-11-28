@@ -220,19 +220,19 @@ include_once("myboat.js");
 //echo "$status_content";
            // Affichage de l'URL dans la boiboite, et armement du javascript pour info WP
 	   echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
-		"&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-		"&amp;long=" . ($wp_west+$wp_east)/2/1000  .
-		"&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
-		"&amp;tracks=on" . $oppList . 
-		"&amp;wp=" . $wp_num . 
-		"&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class="\" . $WPCLASS . 
-                "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
-                " onmouseout=\"hideDiv('infobulle');\" " .
-                ">" . $wp_num ;
-
+	     "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
+	     "&amp;long=" . ($wp_west+$wp_east)/2/1000  .
+	     "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
+	     "&amp;tracks=on" . $oppList . 
+	     "&amp;wp=" . $wp_num . 
+	     "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
+	     "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+	     " onmouseout=\"hideDiv('infobulle');\" " .
+	     ">" . $wp_num ;
+	   
 	   echo "</a> ";
-
-	  $wp_num++;
+	   
+	   $wp_num++;
 	}
 
         echo "<br />";
