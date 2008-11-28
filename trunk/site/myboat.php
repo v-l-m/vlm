@@ -350,7 +350,7 @@ include_once("myboat.js");
         // Colone SOS
         $status_content="<div class=\"infobulle\" align=\"center\">" . $strings[$lang]["racingcomite"] . "</div>";
         echo "<td class=\"boat\" align=\"center\" valign=\"top\">";
-        echo "<a href=\"mailto:" . EMAIL_COMITE_VLM . a 
+        echo "<a href=\"mailto:" . EMAIL_COMITE_VLM .
                   "?Subject=PAN-PAN" . 
                   "%20%2F%20RACE%3D" . $usersObj->users->engaged .
                                                    "%20%2F%20IDU%3D".$usersObj->users->idusers .
