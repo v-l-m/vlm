@@ -4,7 +4,7 @@ touch /tmp/cronvlm.$1.lock
 
 LOG=/tmp/$(date +%Y%m%d_%H:%M)-$1-cronvlm.log
 
-source $VLMRACINE/conf/conf_script || exit 1
+source conf_script || exit 1
 
 cd $VLMJEUROOT/moteur
 echo -e "\n" >> $LOG
