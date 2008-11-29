@@ -13,16 +13,16 @@ function confirmation() {
 <?php
 $fullUsersObj = new fullUsers(getLoginId());
 
-echo "<H2>". $strings[$lang]["warning"]."</H2>";
+echo "<h2>". $strings[$lang]["warning"]."</h2>";
 
   $racesObj = new races($fullUsersObj->users->engaged);
-  echo 	"<P>Engaged on Race : <B>" . 	$fullUsersObj->users->engaged .  " (" .
+  echo 	"<p>Engaged on Race : <b>" . 	$fullUsersObj->users->engaged .  " (" .
 					$racesObj->racename    .  ") " .
-		"</B></P>";
+		"</b></p>";
 
   // The user may want to unsubscribe from this race
   ?>
-  <form name=abandon action="subscribe.php">
+  <form name="abandon" action="subscribe.php">
      <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
      <input type="hidden" name="type" value="unsubscribe"/>
      <input type="hidden" name="lang" value="<?php echo $lang?>"/>
