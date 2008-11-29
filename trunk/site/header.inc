@@ -291,7 +291,7 @@ else //if loggedin
           echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
  
 	  // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
-	  echo "<a href=http://www.virtual-winds.com/forum/index.php?showtopic=4737 target=\"_tcv\" alt=\"" . $strings[$lang]["tcv"]. "\">
+	  echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\" alt=\"" . $strings[$lang]["tcv"]. "\">
                 <img src=\"jpbateaux.png\" alt=\"TCV\"></a>
                 <hr />";
 
@@ -300,9 +300,6 @@ else //if loggedin
 	?>
 	<a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
 	<a href="http://grib.us/" target="_ugrib"><img src="grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
-	<!--
-	<B><a href="http://grib.us/" target=_ugrib><?echo $strings[$lang]["ugrib"]?></a></B><hr />
-	-->
 
         <br />
         ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br />
