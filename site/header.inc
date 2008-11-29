@@ -195,6 +195,10 @@ if ($CurrentFile == "update_angle.php" ) {
 	   eval("page" + NOM + " = window.open(URL, NOM, 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=595');");
       }
    </script>
+  <script type="text/javascript" src="dms.js"></script>
+  <script type="text/javascript" src="hashtable.js"></script>
+  <script type="text/javascript" src="showdiv.js"></script>
+
  </head>
 
  <body>

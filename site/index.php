@@ -1,7 +1,6 @@
 <?
 //ini_set(arg_separator.output, "&amp;");
 include_once("header.inc");
-include_once("showdiv.js");
 
 echo "
     <span id=\"infobulle\">
@@ -16,7 +15,7 @@ if ( isLoggedIn() ) {
 }
 */
 
-echo "<H1 class=info align=center>" . $strings[$lang]["one-one-one"] . "</H1>";
+echo "<h1 class=\"info\" align=\"center\">" . $strings[$lang]["one-one-one"] . "</h1>";
 echo "<hr />";
 
 include "raceslist.inc";
@@ -30,7 +29,7 @@ include "raceslist.inc";
 
 
 echo "      <h1> ".$strings[$lang]["homeofsailing"]." </h1>\n";
-printf("      <p> ".$strings[$lang]["q1"]." </p>"); 
+printf("      <p> ".$strings[$lang]["q1"]." </p>\n"); 
 printf("      <p> ".$strings[$lang]["a1"]." </p>"); 
 
 lastUpdate($strings, $lang);
@@ -44,7 +43,7 @@ echo "<hr />";
     printf( "<h4>" . $strings[$lang]["nbplayers"]. "</h4>", $row[0]);
 
     // Affichage des course
-    echo "      <h4 class=babord>".$strings[$lang]["warningnomap"]." </h4>\n";
+    echo "      <h4 class=\"babord\`'>".$strings[$lang]["warningnomap"]." </h4>\n";
     //include "races.php";
 ?>
 
@@ -61,8 +60,7 @@ echo "<hr />";
 
 <?
 echo "<hr />";
-echo "<H1 class=info align=center>Rejoignez Virtual-Loup-De-Mer.Org, c'est gratuit !</H1>";
-//echo "<A HREF=\"http://ocean-express.org/\" target=\"_oe\" alt=\"Soutenez le projet de Pierre-Yves et Benoit !\"><IMG width=820 SRC=/ocean-express.png></A>";
+echo "<h1 class=\"info\" align=\"center\">Rejoignez Virtual-Loup-De-Mer.Org, c'est gratuit !</h1>";
 echo "<hr />";
 
 include_once("footer.inc");
