@@ -121,7 +121,7 @@ include_once("myboat.js");
         $href = "racemaps/regate".$usersObj->users->engaged.".jpg";
         if ( file_exists($href) ) {
 
-            $status_content = "<img src=\"$href\" alt=\"engagned\" />";
+            $status_content = "<img src=&quot;$href&quot; alt=&quot;engaged&quot; />";
             list($xSize, $ySize, $type, $attr) = getimagesize($href);
 
             echo "<img src=\"cartemarine.png\" " . 
@@ -169,9 +169,9 @@ include_once("myboat.js");
 	   $wp_laisser_au=$wp[7];
 	   $wp_maparea=$wp[8];
 
-           $status_content="<div class=\'infobulle\'><b>WP" . $wp_num . "</b><br />\n";
+           $status_content="<div class=&quot;infobulle&quot;><b>WP" . $wp_num . "</b><br />\n";
 	   $status_content.=$wp_libelle." (".$wp_label.")" ;
-           $status_content.="<br />\n";
+           $status_content.="<br />";
 
 	   if ( $wp[4] == WPTYPE_PORTE ) {
 	      $wp_north = max ($wp[1], $wp[3]);
@@ -188,7 +188,7 @@ include_once("myboat.js");
 	      $wp_west  = $wp_east  = $wp[0];
 
               $status_content.="Waypoint Coords=<b>" . 
-                              round($wp[1]/1000,3) . "," . round($wp[0]/1000,3) . " ($wp_laisser_au)" . "</b><br />\n"; 
+                              round($wp[1]/1000,3) . "," . round($wp[0]/1000,3) . " ($wp_laisser_au)" . "</b><br />"; 
 
 	   }
 	   if ( $wp_num > $usersObj->users->nwp ) {
@@ -230,7 +230,7 @@ include_once("myboat.js");
 	     " onmouseout=\"hideDiv('infobulle');\" " .
 	     ">" . $wp_num ;
 	   
-	   echo "</a> ";
+	   echo "</a> \n";
 	   
 	   $wp_num++;
 	}
@@ -292,7 +292,7 @@ include_once("myboat.js");
                } else {
 	           $locktime = duration2string($usersObj->users->releasetime - time());
 	           //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-	           printf("<img src=\"attention.png\"><font color=#F0F0F0><B>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</B></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+	           printf("<img src=\"attention.png\"><font color=\"#F0F0F0\"><b>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</b></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
                }
 	    }
 	/* Sinon (heure départ pas atteinte), affichage de la date de départ */
@@ -348,24 +348,24 @@ include_once("myboat.js");
 	echo "</h3></td>";
 
         // Colone SOS
-        $status_content="<div class=\"infobulle\" align=\"center\">" . $strings[$lang]["racingcomite"] . "</div>";
+        $status_content="<div class=infobulle align=center>" . $strings[$lang]["racingcomite"] . "</div>";
         echo "<td class=\"boat\" align=\"center\" valign=\"top\">";
         echo "<a href=\"mailto:" . EMAIL_COMITE_VLM .
-                  "?Subject=PAN-PAN" . 
-                  "%20%2F%20RACE%3D" . $usersObj->users->engaged .
-                                                   "%20%2F%20IDU%3D".$usersObj->users->idusers .
-                                                   "%20%2F%20USERNAME%3D".$usersObj->users->username .
-                                                   "%20%2F%20Lat%3D". $usersObj->lastPositions->lat .
-                                                   "%2C%20Long%3D" . $usersObj->lastPositions->long .
-             "&Body=Hello%2C%0A" .
-             "%0A%20******%20EXPLICATION%20DU%20PROBLEME%20%2F%20EXPLANATION%20******%20%0A".
-             "%0AFair%20winds%2C%0A" . $usersObj->users->username .
-             "\" alt=\"COMITE\"".
-             " onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
-             " onmouseout=\"hideDiv('infobulle');\" " .
-             "><img src=\"sos.png\" alt=\"SOS\"></a>";
+	  "?Subject=PAN-PAN" . 
+	  "%20%2F%20RACE%3D" . $usersObj->users->engaged .
+	  "%20%2F%20IDU%3D".$usersObj->users->idusers .
+	  "%20%2F%20USERNAME%3D".$usersObj->users->username .
+	  "%20%2F%20Lat%3D". $usersObj->lastPositions->lat .
+	  "%2C%20Long%3D" . $usersObj->lastPositions->long .
+	  "&amp;Body=Hello%2C%0A" .
+	  "%0A%20******%20EXPLICATION%20DU%20PROBLEME%20%2F%20EXPLANATION%20******%20%0A".
+	  "%0AFair%20winds%2C%0A" . $usersObj->users->username .
+	  "\" alt=\"COMITE\"".
+	  " onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+	  " onmouseout=\"hideDiv('infobulle');\" " .
+	  "><img src=\"sos.png\" alt=\"SOS\"></a>";
 	echo "</td>\n";
-
+	
         echo "</tr></table>";
 	?>
 </div>
@@ -611,8 +611,8 @@ include_once("myboat.js");
 <br />
 <!-- VMG POUR VLM -->
 <form name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
-<?php echo "<B>".$strings[$lang]["vmgsheet"]."</B>"?>
-    <BR>
+<?php echo "<b>".$strings[$lang]["vmgsheet"]."</b>"?>
+    <br />
     <input type="submit" value="Go !" />
     <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
     <input type="hidden" name="lang" value="<?php echo $lang?>"/>
