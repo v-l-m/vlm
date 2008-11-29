@@ -108,7 +108,7 @@ include_once("myboat.js");
 	echo "<table width=\"100%\">\n";
         echo "<tr class=\"boat\">\n";
         // PREMIERE LIGNE : La course
-        echo "<td colspan=\"3\" class=\"boat\" align=\"center\">";
+        echo "<td colspan=\"3\" class=\"boat\" align=\"center\">\n";
 
         // Cette ligne contient une table d'une ligne et 3 colonnes
         echo "<table width=\"100%\"><tr class=\"boat\"><td class=\"boat\" align=\"center\" valign=\"top\">";
@@ -124,7 +124,7 @@ include_once("myboat.js");
                 " onmouseout=\"hideDiv('infobulle');\" " .
              " alt=\"" .$strings[$lang]["racemap"]. "\">";
         }
-        echo "</td>";
+        echo "</td></tr></table>\n";
 
         // Le nom de la course 
         echo "</td><td class=\"boat\" align=\"left\" valign=\"top\">";
@@ -442,7 +442,7 @@ include_once("myboat.js");
                      $available_races=availableRaces(getLoginId());
                      /*
                      if ( in_array (20081109, $available_races) ) {
-                          printf ( "Race Vent Des Globes : <B>Qualif OK</B>" );
+                          printf ( "Race Vent Des Globes : <b>Qualif OK</b>" );
                      } else {
                           printf ( "NOT QUALIFIED for Race Vent Des Globes" );
                      }

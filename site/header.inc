@@ -295,8 +295,8 @@ else //if loggedin
           echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
  
 	  // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
-	  echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\" alt=\"" . $strings[$lang]["tcv"]. "\">
-                <img src=\"jpbateaux.png\" alt=\"TCV\"></a>
+	  echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\">
+                <img src=\"jpbateaux.png\" alt=\"" . $strings[$lang]["tcv"]. "\" /></a>
                 <hr />";
 
 	  echo "<h3>".$strings[$lang]["weather"]."</h3>\n";
