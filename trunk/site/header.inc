@@ -144,11 +144,11 @@ if ($type == "subscribe")
        if ( in_array($idraces, $avRaces) ) {
           $users->subscribeToRaces($idraces);
        } else {
-          printf ("<H4>You should not do that.<H4>You can't subscribe to this race.");
+          printf ("<h4>You should not do that.<h4>You can't subscribe to this race.");
        }
   } else {
-      printf ("<H4>You should not do that.<H4>You are already engaged in a race. Please LogOff before and Log in an other boat ! Never go back with your browser, instead, close the session.");
-      printf ("<H4>Ne faites pas &ccedil;a.<H4>Votre bateau est d&eacute;j&agrave; en course ! D&eacute;connectez ce bateau et connextez vous avec l'autre ! (JAMAIS DE RETOUR ARRIERE AVEC VOTRE NAVIGATEUR, MAIS FERMETURE DE SESSION)");
+      printf ("<h4>You should not do that.<h4>You are already engaged in a race. Please LogOff before and Log in an other boat ! Never go back with your browser, instead, close the session.");
+      printf ("<h4>Ne faites pas &ccedil;a.<h4>Votre bateau est d&eacute;j&agrave; en course ! D&eacute;connectez ce bateau et connextez vous avec l'autre ! (JAMAIS DE RETOUR ARRIERE AVEC VOTRE NAVIGATEUR, MAIS FERMETURE DE SESSION)");
   }
 }
 
@@ -157,7 +157,7 @@ if ($type == "subscribe")
 <!DOCTYPE html 
       PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>">
 
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -205,7 +205,7 @@ if ($CurrentFile == "update_angle.php" ) {
      <b>
        <?php echo $strings[$lang]["sponsor"]; ?>
      </b>
-     <a href="http://www.actilis.net/" target="_actilis"><img src="/actilis.png" alt="Actilis"></a>
+     <a href="http://www.actilis.net/" target="_actilis"><img src="/actilis.png" alt="Actilis" /></a>
    </div>
    
    <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
@@ -307,7 +307,7 @@ else //if loggedin
 	-->
 
         <br />
-        ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br/>
+        ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br />
 	Meteo France
 	<a href="http://www.meteofrance.com/FR/mer/popupCartePrevFrontsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Fronts</a>
 	<a href="http://www.meteofrance.com/FR/mer/popupCarteVentsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Vents</a>
@@ -354,7 +354,7 @@ else //if loggedin
 <?php
 if ( !isLoggedIn() && (in_array($_SERVER["PHP_SELF"], $restrictedPages) ) )
 {
-   echo "Access restricted\n<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>";
+   echo "Access restricted\n<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
    include_once("footer.inc");
    die();
 }
