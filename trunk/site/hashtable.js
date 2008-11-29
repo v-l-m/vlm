@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 /**
     Created by: Michael Synovic
     on: 01/12/2003
@@ -138,6 +136,3 @@ function hashtable_values(){
     }
     return values;
 }
-
-</script>
-

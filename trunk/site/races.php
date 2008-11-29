@@ -2,7 +2,6 @@
 include_once("header.inc");
 include_once("config.php");
 include_once("strings.inc");
-include_once("showdiv.js");
 
 /*
  * Affichage de l'onglet 
@@ -10,7 +9,7 @@ include_once("showdiv.js");
  */
 function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr") {
     //echo "<H1>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</H1>";
-    echo "<H1>" ; printf ("CHOIX DU CLASSEMENT"); echo "</H1>";
+    echo "<h1>" ; printf ("CHOIX DU CLASSEMENT"); echo "</h1>";
 
     $tables = array();
 
@@ -23,10 +22,10 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
 
     array_push($tables, "arrived", "racing", "dnf", "abd", "htp", "hc");
     if ( ! in_array($tableType, $tables) ) {
-         printf ("<H1>You should not do that, this type of ranking is not accepted : %s</H1>\n", $tableType); exit;
+         printf ("<h1>You should not do that, this type of ranking is not accepted : %s</h1>\n", $tableType); exit;
     }
 
-    echo "<table><tr>";
+    echo "<table>\n<tr>";
     // Affichage des classements classiques 
     foreach ($tables as $table) {
         if ( $table == $tableType ) {
@@ -39,9 +38,9 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
            } else {
               $tlabel=$table;
            }
-	   $cellcontent="<A href=" . $_SERVER["PHP_SELF"] . "?lang=".$lang."&amp;idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. ">";
+	   $cellcontent="<a href=" . $_SERVER["PHP_SELF"] . "?lang=".$lang."&amp;idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. ">";
 	   $cellcontent.=ucfirst($tlabel);
-	   $cellcontent.="</A>";
+	   $cellcontent.="</a>";
         }
         echo "<td " . $class . ">\n";
 	
@@ -64,18 +63,18 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
 function displayPrevious100($startnum) {
           // Si on ne part pas de 1, on propose le bouton "-100"
           if ( $startnum > 1 ) {
-               $FORMULAIRE="<form method=GET name=moins method=GET action=" . $_SERVER["PHP_SELF"] . ">\n";
+               $FORMULAIRE="<form method=\"get\" name=\"moins\" ction=\"" . $_SERVER["PHP_SELF"] . "\">\n";
 
                $new_startnum=$startnum-MAX_BOATS_ON_RANKINGS;
                if ( $new_startnum < 0 ) $new_startnum=1;
-               $FORMULAIRE.="<input type=hidden name=\"startnum\" value=\"$new_startnum\">\n";
+               $FORMULAIRE.="<input type=\"hidden\" name=\"startnum\" value=\"$new_startnum\" />\n";
 
                foreach($_REQUEST as $keyname => $value) {
                     if ( $keyname != "startnum" && $keyname != "PHPSESSID" ) {
-                         $FORMULAIRE.="<input type=hidden name=\"$keyname\" value=\"$value\">\n";
+                         $FORMULAIRE.="<input type=\"hidden\" name=\"$keyname\" value=\"$value\" />\n";
                     }
                }
-               $FORMULAIRE.="<input type=submit value=\"< " . MAX_BOATS_ON_RANKINGS . "\">\n";
+               $FORMULAIRE.="<input type=\"submit\" value=\"< " . MAX_BOATS_ON_RANKINGS . "\" />\n";
                $FORMULAIRE.="</form>\n";
                echo $FORMULAIRE;
           }
@@ -85,15 +84,15 @@ function displayNext100($startnum, $num_engaged) {
           // Si on ne part pas de 1, on propose le bouton "+100"
           $new_startnum=$startnum+MAX_BOATS_ON_RANKINGS;
           if ( $startnum >= 1 && $new_startnum  < $num_engaged ) {
-               $FORMULAIRE="<form method=GET name=plus action=" . $_SERVER["PHP_SELF"] . ">\n";
-               $FORMULAIRE.="<input type=hidden name=\"startnum\" value=\"$new_startnum\">\n";
+               $FORMULAIRE="<form method=\"get\" name=\"plus\" action=\"" . $_SERVER["PHP_SELF"] . "\" />\n";
+               $FORMULAIRE.="<input type=\"hidden\" name=\"startnum\" value=\"$new_startnum\" />\n";
 
                foreach($_REQUEST as $keyname => $value) {
                     if ( $keyname != "startnum" && $keyname != "PHPSESSID" ) {
-                         $FORMULAIRE.= "<input type=hidden name=\"$keyname\" value=\"$value\">\n";
+                         $FORMULAIRE.= "<input type=\"hidden\" name=\"$keyname\" value=\"$value\" />\n";
                     }
                }
-               $FORMULAIRE.="<input type=submit value=\"> " . MAX_BOATS_ON_RANKINGS . "\">\n";
+               $FORMULAIRE.="<input type=\"submit\" value=\"> " . MAX_BOATS_ON_RANKINGS . "\" />\n";
                $FORMULAIRE.="</form>\n";
                echo $FORMULAIRE;
           }
@@ -120,7 +119,7 @@ if ( $q == "" ) $q = "arrived";
 
 if ( $q == "palmares" ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
-	echo "<H1>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</H1>";
+	echo "<h1>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</h1>";
 	displayPalmares($idusers);
 }
 
@@ -141,7 +140,7 @@ if ($idraces != 0) {
 	  $href = "racemaps/regate".$fullRacesObj->races->idraces.".jpg";
           if ( file_exists($href) ) {
 
-              $status_content = "<img src=$href>";
+              $status_content = "<img src=&quot;$href&quot; />";
               list($xSize, $ySize, $type, $attr) = getimagesize($href);
 
               echo "<img src=cartemarine.png " .
@@ -150,19 +149,18 @@ if ($idraces != 0) {
                   " alt=\"" .$strings[$lang]["racemap"]. "\">";
           }
 
-          echo "<table class=boat><tr class=boat>";
-          echo "<td class=boat>";
+          echo "<table class=\"boat\"><tr class=\"boat\">";
+          echo "<td class=\"boat\">";
 	  // ** Onglet de choix sur différents classements
           displayRankingMenu($fullRacesObj, $q, $sortkey, $lang);
-          echo "</td><td class=boat valign=bottom>";
+          echo "</td><td class=\"boat\" valign=\"bottom\">";
           displayPrevious100($startnum);
-          echo "</td><td class=boat valign=bottom>";
+          echo "</td><td class=\"boat\" valign=\"bottom\">";
           displayNext100($startnum, $num_engaged);
           echo "</td>";
           echo "</tr></table>";
 	
-	  echo "<A NAME=\"ARR\"";
-	  echo "</A>";
+	  echo "<a name=\"ARR\" id=\"ARR\"></a>";
 
 	  if ( $q == "arrived" ) {
 	      if ( isset($sortkey) && $sortkey != "" ) {
@@ -193,8 +191,7 @@ if ($idraces != 0) {
 	
 	  if ( $q == "racing" ) {
 	     if ( $fullRacesObj->races->started ) {
-	         echo "<A NAME=\"ENC\"";
-	         echo "</A>";
+	         echo "<a anme=\"ENC\" id=\"ENC\"></a>";
 
                  // Analyse de la clé de tri demandée
                  $sortkeys=array();
@@ -202,7 +199,7 @@ if ($idraces != 0) {
                  $sortkey=htmlentities(quote_smart($_REQUEST['sortkey'])) ;
                  if ( ! in_array($sortkey, $sortkeys, TRUE) ) {
                     $sortkey="";
-                    printf ("<H1>BAD sortkey : %s, defaulting to nextwaypoint and distance</H1>\n", $sortkey); 
+                    printf ("<h1>BAD sortkey : %s, defaulting to nextwaypoint and distance</h1>\n", $sortkey); 
                  }
 
                  $sortorder=strtolower(htmlentities(quote_smart($_REQUEST['sortorder']))) ;
@@ -227,23 +224,19 @@ if ($idraces != 0) {
 	
 	
 	  if ( $q == "htp" ) {
-	       echo "<A NAME=\"HTP\"";
-	       echo "</A>";
+	       echo "<a name=\"HTP\" id=\"HTP\"></a>";
 	       $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HTP, 0, $startnum);
 	  }
 	  if ( $q == "dnf" ) {
-	       echo "<A NAME=\"DNF\"";
-	       echo "</A>";
+	       echo "<a name=\"DNF\" id=\"DNF\"></a>";
 	       $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_DNF, 0, $startnum);
 	  }
 	  if ( $q == "abd" ) {
-	       echo "<A NAME=\"ABD\"";
-	       echo "</A>";
+	       echo "<a name=\"ABD\" id=\"ABD\"></a>";
 	       $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ABD, 0, $startnum);
 	  }
 	  if ( $q == "hc" ) {
-	       echo "<A NAME=\"HC\"";
-	       echo "</A>";
+	       echo "<a name=\"HC\" id=\"HC\"></a>";
 	       $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HC, 0, $startnum);
 	  }
 	
@@ -253,13 +246,13 @@ if ($idraces != 0) {
 	  echo $strings[$lang]["list"]."</a>"; 
 	  echo "</p>";
 
-          echo "<table class=boat><tr class=boat>";
-          echo "<td class=boat>";
+          echo "<table class=\"boat\"><tr class=\"boat\">";
+          echo "<td class=\"boat\">";
 	  // ** Onglet de choix sur différents classements
           displayRankingMenu($fullRacesObj, $q, $sortkey, $lang);
-          echo "</td><td class=boat valign=bottom>";
+          echo "</td><td class=\"boat\" valign=\"bottom\">";
           displayPrevious100($startnum);
-          echo "</td><td class=boat valign=bottom>";
+          echo "</td><td class=\"boat\" valign=\"bottom\">";
           displayNext100($startnum, $num_engaged);
           echo "</td>";
           echo "</tr></table>";

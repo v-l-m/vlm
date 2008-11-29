@@ -10,11 +10,6 @@ it'a little bit messy (html+java+php)
 include_once("header.inc");
 echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->";
 
-include_once("dms.js");
-include_once("hashtable.js");
-include_once("showdiv.js");
-
-
   $usersObj = new fullUsers(getLoginId());
 
 
@@ -135,7 +130,7 @@ include_once("myboat.js");
         echo "</td><td class=\"boat\" align=\"left\" valign=\"top\">";
 
         $user_ranking=getCurrentRanking($usersObj->users->idusers, $usersObj->users->engaged) ;
-	echo "<a href=\"races.php?lang=".$lang."&amp;type=racing&amp;idraces=". $usersObj->users->engaged."&startnum=" . (max(1,($user_ranking-MAX_BOATS_ON_RANKINGS/20))) ."\"><b>".$usersObj->races->racename."</b></a>";
+	echo "<a href=\"races.php?lang=".$lang."&amp;type=racing&amp;idraces=". $usersObj->users->engaged."&amp;startnum=" . (max(1,($user_ranking-MAX_BOATS_ON_RANKINGS/20))) ."\"><b>".$usersObj->races->racename."</b></a>";
 /*
         $MaxTimeRemaining=$usersObj->races->maxTimeRemaining();
         if ( $MaxTimeRemaining !=1 && $MaxTimeRemaining != -1 ) {
