@@ -7,16 +7,16 @@ $fullUsersObj = new fullUsers(getLoginId());
 // If engaged on a race, display Warning
 if ($fullUsersObj->users->engaged  != 0)
 {
-  echo "<H2>". $strings[$lang]["warning"]."</H2>";
+  echo "<h2>". $strings[$lang]["warning"]."</h2>";
 
   $racesListObj = new racesList();
   foreach($racesListObj->records as $racesObj)
   {
      if (  $racesObj->races->idraces == $fullUsersObj->users->engaged )
      {
-        echo 	"<P>Engaged on Race : <B>" . 	$fullUsersObj->users->engaged .  " (" .
+        echo 	"<p>Engaged on Race : <b>" . 	$fullUsersObj->users->engaged .  " (" .
 						$racesObj->races->racename    .  ") " .
-		"</B></P>";
+		"</b></p>";
      }
   }
 
@@ -24,8 +24,8 @@ if ($fullUsersObj->users->engaged  != 0)
   ?>
   <form action="subscribe_race.php">
      <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
-     <input type="hidden" name="type" value="unsubscribe"/>
-     <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+     <input type="hidden" name="type" value="unsubscribe" />
+     <input type="hidden" name="lang" value="<?php echo $lang?>" />
      <input type="submit" value="<?php echo $strings[$lang]["unsubscribe"]?>" />
      <p>
      <?php echo $strings[$lang]["wanttosubscribe"]?>

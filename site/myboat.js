@@ -1,4 +1,5 @@
 <script type="text/javascript">
+//<![CDATA[
 var speed=<?php
 	echo $usersObj->boatspeed ;
 	?>;
@@ -228,5 +229,5 @@ function updateUserPref()
 	val = document.mercator.maparea.value;
 	alert(val)
 }
-
+//]]>
 </script>
