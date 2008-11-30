@@ -46,22 +46,22 @@ case $confmodule in
 #    Pas de post déploiement pour l'instant
 #    ;;
     site)
-    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
+    #cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt
     date >> $destmodulepath/version.txt
     ;;
     moteur)
     cp $VLMRACINE/conf/conf_script $destmodulepath/
-    cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
+    #cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     ;;
     lib/phpcommon)
     confsrc=param.php
     confpath=param.php
     echo "Copie de $VLMCONF/$confsrc vers $destmodulepath/$confpath"
     cp -f $VLMCONF/$confsrc $destmodulepath/$confpath || exit 1
-    echo "Recopie de phpcommon dans site & moteur"
-    cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/site/ || exit 1
-    cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/moteur/ || exit 1
+    echo "La recopie de phpcommon dans site & moteur n'est plus nécessaire car on fixe l'include path dans la conf du vhost"
+    #cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/site/ || exit 1
+    #cp $VLMJEUROOT/lib/phpcommon/* $VLMJEUROOT/moteur/ || exit 1
     ;;
     lib/vlm-c)
     oldpwd=$PWD
