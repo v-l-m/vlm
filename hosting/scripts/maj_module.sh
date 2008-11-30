@@ -48,8 +48,8 @@ case $confmodule in
     site)
     #cp $VLMJEUROOT/lib/phpcommon/* $destmodulepath/ || exit 1
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt
-    echo "<br />" 
-    date >> $destmodulepath/version.txt
+    echo "<br />" >> $destmodulepath/version.txt
+    date +"%m/%d/%y %X %Z" >> $destmodulepath/version.txt
     ;;
     moteur)
     cp $VLMRACINE/conf/conf_script $destmodulepath/
