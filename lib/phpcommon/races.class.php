@@ -317,8 +317,8 @@ class fullRaces
     {
         echo "    <tr class=ranking>\n";
 	    // ============= Affichage des noms de bateaux en acronyme
-	    echo "<td><img src=pavillons/" . $users->country .  ".png alt=Flag_".$users->country.">";
-	    echo "<ACRONYM style=\" border-bottom: solid #" . $users->color . "\" " .
+	    echo "<td><img src=\"pavillons/" . $users->country .  ".png\" alt=\"Flag_".$users->country."\" />\n";
+	    echo "<acronym style=\" border-bottom: solid #" . $users->color . "\" " .
 	    	              "title=\"". $users->boatname . "\">" .$users->username .  " (". $users->idusers . ")</acronym></td>\n";
 	    //echo "<td>" . $users->boatname . " (" . $users->ipaddr . ")" .  "</td>";
 	    echo "<td>" . $users->boatname .  "</td>";
@@ -331,7 +331,7 @@ class fullRaces
     echo "  </tbody>\n";
     echo "</table>\n";
 
-    echo "<BR><H3>Total : ". $num_inscrits . " inscrits.</H3>";
+    echo "<br />\n<h3>Total : ". $num_inscrits . " inscrits.</h3>";
 
   }
 
@@ -367,11 +367,11 @@ class fullRaces
     $classification_time=$row[time];
 
     // L'URL de la page affichant ces classements :
-    // http://vlm/races.php?lang=fr&type=racing&&idraces=20071111&sortkey=idusers&sortorder=asc
+    // http://vlm/races.php?lang=fr&type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
     $baseurl=$_SERVER['PHP_SELF'];
       $baseurl.="?lang=".$lang;
-      $baseurl.="&type=racing";
-      $baseurl.="&idraces=".$this->races->idraces;
+      $baseurl.="&amp;type=racing";
+      $baseurl.="&amp;idraces=".$this->races->idraces;
 
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
     $query_ranking = "SELECT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime, US.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
@@ -389,7 +389,7 @@ class fullRaces
     if ( $this->races->bobegin < $now && $now < $this->races->boend ) {
         echo $strings[$lang]["classification"]
              .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->bobegin);
-        echo "<BR>";
+        echo "<br />\n";
         echo $strings[$lang]["blackout"]
              .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->boend);
     } else {
@@ -412,32 +412,32 @@ class fullRaces
 
     // Titre colonne SKIPPER (avec appels des tris)
     $str=$strings[$lang]["skipper"];
-    $str.=" <A href=\"".$baseurl."&sortkey=idusers&sortorder=asc\">+</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=idusers&sortorder=desc\">-</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=idusers&amp;sortorder=asc\">+</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=idusers&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     // Distance à la prochaine marque (c'est le tri par défaut)
-    $str="<A href=\"".$baseurl."\">".$strings[$lang]["distance"]."</a>";
+    $str="<a href=\"".$baseurl."\">".$strings[$lang]["distance"]."</a>";
     echo "<th>".$str."</th>\n";
 
     // Temps de course
     $str=$strings[$lang]["racingtime"];
-    $str.=" <A href=\"".$baseurl."&sortkey=userdeptime&sortorder=asc\">+</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=userdeptime&sortorder=desc\">-</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=userdeptime&amp;sortorder=asc\">+</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=userdeptime&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     // Distance parcourue
     $str=$strings[$lang]["loch"];
-    $str.=" <A href=\"".$baseurl."&sortkey=loch&sortorder=asc\">+</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=loch&sortorder=desc\">-</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=loch&amp;sortorder=asc\">+</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=loch&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     // Position : tris nord,sud/west,east
     $str=$strings[$lang]["position"];
-    $str.=" <A href=\"".$baseurl."&sortkey=latitude&sortorder=desc\">^</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=latitude&sortorder=asc\">v</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=longitude&sortorder=asc\">&lt;</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=longitude&sortorder=desc\">&gt;</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=latitude&amp;sortorder=desc\">^</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=latitude&amp;sortorder=asc\">v</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=longitude&amp;sortorder=asc\">&lt;</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=longitude&amp;sortorder=desc\">&gt;</a>";
     echo "<th>".$str."</th>\n";
 
  //   echo "<th>".$strings[$lang]["speed"]."</th>\n";
@@ -445,27 +445,27 @@ class fullRaces
 
     // Distances parcourues sur 1h, 3h, 24h...
     $str="1h";
-    $str.=" <A href=\"".$baseurl."&sortkey=last1h&sortorder=asc\">+</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=last1h&sortorder=desc\">-</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=last1h&amp;sortorder=asc\">+</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=last1h&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     $str="3h";
-    $str.=" <A href=\"".$baseurl."&sortkey=last3h&sortorder=asc\">+</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=last3h&sortorder=desc\">-</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=last3h&amp;sortorder=asc\">+</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=last3h&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     $str="24h";
-    $str.=" <A href=\"".$baseurl."&sortkey=last24h&sortorder=asc\">+</a>";
-    $str.=" <A href=\"".$baseurl."&sortkey=last24h&sortorder=desc\">-</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=last24h&amp;sortorder=asc\">+</a>";
+    $str.=" <a href=\"".$baseurl."&amp;sortkey=last24h&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
 
     // Ecart par rapport au premier : pas de tri
     $str=$strings[$lang]["ecart"];
     if ( strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) == "tonm" ) { 
-         $str.=" <A href=\"".$baseurl."&disttype=tofirst\">1st</a>";
+         $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
     } else {
-         $str.=" <A href=\"".$baseurl."&disttype=tonm\">NM</a>";
+         $str.=" <a href=\"".$baseurl."&amp;disttype=tonm\">NM</a>";
     }
     echo "<th>".$str."</th>\n";
 
@@ -525,10 +525,10 @@ class fullRaces
 	// ============= Affichage des noms de bateaux en acronyme
         if ( $row[idusers] > 0 ) {
             if ( $startnum == 0 ) {
-	          echo "<td class=ranking>" . $row[country] . " / " . $row[username]  .  " (". $row[idusers] . ") "  ;
+	          echo "<td class=\"ranking\">" . $row[country] . " / " . $row[username]  .  " (". $row[idusers] . ") "  ;
             } else {
-	          echo "<td class=ranking><img src=pavillons/" . $row[country] .  ".png alt=Flag_".$row[country].">";
-	          echo "<ACRONYM OnMouseDown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&type=palmares&idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
+	          echo "<td class=\"ranking\"><img src=\"pavillons/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+	          echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
 	    	              "title=\"". $row[boatname] . "\">" . 
 			      " (". $row[idusers] . ") " . 
 			      $row[username] .
@@ -539,7 +539,7 @@ class fullRaces
             $idu=-$row[idusers];
 	    if ( $idu >=100 and $idu <=199 ) $idu-=100;
 
-	    echo "<td>".$row[username]. " <B>(". $idu .")</B>" ."</td>\n";
+	    echo "<td>".$row[username]. " <b>(". $idu .")</b>" ."</td>\n";
         }
 //	echo "<td>" . substr($row[boatname],0,20) . "</td>";
 	// =================================================================
@@ -597,20 +597,20 @@ class fullRaces
         }
 
         // Calcul de l'URL de la carte Carte sur les 1° autour du bateau
-        $mapurl="<a class=ranking href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
-                "&lat=". round($latitude/1000,2) .
-                "&long=" . round($longitude/1000,2) .
-                "&maparea=16" .
-                "&tracks=on&age=6&list[]=" . $row[idusers] .
-                "&x=800&y=600&proj=mercator&text=right\" target=_new>"  ;
+        $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
+                "&amp;lat=". round($latitude/1000,2) .
+                "&amp;long=" . round($longitude/1000,2) .
+                "&amp;maparea=16" .
+                "&amp;tracks=on&amp;age=6&amp;list[]=" . $row[idusers] .
+                "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right\" target=\"_new\">"  ;
  //               "&tracks=on&list=all" .
 
 	// Affichage de la position
 	//printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</A>, <A target=_gm HREF=http://maps.google.fr/maps?ie=UTF8&z=8&ll=%f,%f&t=k>GM</A></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
         if ( $startnum == 0 ) {
-	     printf("<td class=ranking>%3.2f" . $lat_side . ", %3.2f" . $long_side . "</td>\n", abs(round($latitude/1000,2)), abs(round($longitude/1000,2)));
+	     printf("<td class=\"ranking\">%3.2f" . $lat_side . ", %3.2f" . $long_side . "</td>\n", abs(round($latitude/1000,2)), abs(round($longitude/1000,2)));
         } else {
-	     printf("<td class=ranking>" . $mapurl . "%3.2f" . $lat_side . ", %3.2f" . $long_side . "</A>, <A target=_gm HREF=http://maps.google.fr/maps?ie=UTF8&z=8&ll=%f,%f&t=k>GM</A></td>\n", abs($latitude/1000), abs($longitude/1000), round($latitude/1000,2), round($longitude/1000,2));
+	     printf("<td class=\"ranking\">" . $mapurl . "%3.2f" . $lat_side . ", %3.2f" . $long_side . "</a>, <a target=\"_gm\" href=\"http://maps.google.fr/maps?ie=UTF8&amp;z=8&amp;ll=%f,%f&amp;t=k\">GM</a></td>\n", abs($latitude/1000), abs($longitude/1000), round($latitude/1000,2), round($longitude/1000,2));
         }
 
 	// Affichage de la vitesse
@@ -691,7 +691,7 @@ class fullRaces
     echo "</tr>\n";
     echo "</thead>\n";
     */
-    echo "<tbody class=htmltable>\n";
+    echo "<tbody class=\"htmltable\">\n";
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
@@ -706,37 +706,37 @@ class fullRaces
 
     $key = 0;
     $lastrace=0;
-    echo "<tr class=htmltable>\n";
+    echo "<tr class=\"htmltable\">\n";
     while( $row = mysql_fetch_assoc( $result ) ) {
 
         if ( $row[engaged] != $lastrace ) {
 	    $lastrace = $row[engaged];
-	    echo "</tr><tr class=htmltable>";
-            echo "<td CLASS=htmltable colspan=8><input type=\"submit\" name=\"action\" value=\"" . $strings[$lang]["valider"] . "\"/></td>";
-            echo "</tr><tr class=htmltable>";
-            echo "<td CLASS=htmltable colspan=8><B>RACE " . $lastrace . "</B></td>";
-            echo "</tr><tr class=htmltable>";
+	    echo "</tr><tr class=\"htmltable\">";
+            echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . $strings[$lang]["valider"] . "\" /></td>";
+            echo "</tr><tr class=\"htmltable\">";
+            echo "<td class=\"htmltable\" colspan=\"8\"><b>RACE " . $lastrace . "</b></td>";
+            echo "</tr><tr class=\"htmltable\">";
 	    $key=0;
 	}
         //table lines
             $key++;
-	    echo "<td class=htmltable>".$key."</td>\n";
-	    echo "<td class=htmltable><img src=pavillons/" . 
-                  $row[country] .  ".png alt=Flag_".$row[country].">";
+	    echo "<td class=\"htmltable\">".$key."</td>\n";
+	    echo "<td class=\"htmltable\"><img src=\"pavillons/" . 
+                  $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
 
 	    // ============= Affichage des noms de bateaux en acronyme
 	    //echo "<td class=htmltable>" ;
 	    printf("<input type=\"checkbox\" name=\"list[]\" value=\"%s\" ", $row[idusers] );
 	    if ( in_array($row[idusers], $list  ) || (empty($list[0]) ))
 	      echo " checked=\"checked\"";
-            echo ">";
+            echo " />";
 
-            echo "<ACRONYM OnMouseDown=\"javascript:palmares=popup_small('palmares.php?lang=".
-                      $lang."&type=palmares&idusers=" . $row[idusers] . 
+            echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".
+                      $lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . 
                       "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
                       "title=\"". $row[boatname] . "\">" ;
 	    if ( $row[engaged] == $this->races->idraces ) {
-	        echo "<B>" . $row[username] . "</B>";
+	        echo "<b>" . $row[username] . "</b>";
 	    } else {
 	        echo $row[username] ;
 	    }
@@ -798,7 +798,7 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
              $query .= " ORDER BY " . $sortkey ;
         } else {
              //$query .= " ORDER BY deptime+duration";
-             printf ("<H1>You should not do that, this sortkey is not accepted : %s</H1>\n", $sortkey); exit;
+             printf ("<h1>You should not do that, this sortkey is not accepted : %s</h1>\n", $sortkey); exit;
         }
 
         $valid_sortorders=array("asc", "desc");
@@ -818,7 +818,7 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
 	     if ( $sortkey == "arrtime" ) $sortkey = " time ";
              $sortclause = " ORDER BY " . $sortkey ;
        } else {
-             printf ("<H1>You should not do that, this sortkey is not accepted : %s</H1>\n", $sortkey); exit;
+             printf ("<h1>You should not do that, this sortkey is not accepted : %s</h1>\n", $sortkey); exit;
        }
        $valid_sortorders=array("asc", "desc");
        if ( in_array($sortorder, $valid_sortorders) ) {
@@ -870,7 +870,7 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
     //display table headers
     echo "<table>\n";
     echo "  <thead>\n";
-    echo "    <tr class=ranking>\n";
+    echo "    <tr class=\"ranking\">\n";
     if ( $status > 0 ) {
         //echo "      <th>". $strings[$lang]["position"]."</th> \n";
         echo "<th>Pos.</th>\n"; // position au classement
@@ -933,19 +933,13 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
 	echo "<tr " . $class . ">\n";
 
 	    if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
-	    echo "<td class=ranking><img src=pavillons/" . $row[country] .  ".png alt=Flag_".$row[country].">";
-	    echo "<ACRONYM OnMouseDown=\"javascript:popup_small('palmares.php?lang=".$lang."&type=palmares&idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
+	    echo "<td class=\"ranking\"><img src=\"pavillons/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+	    echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
 	    	              "title=\"". $row[boatname] . "\">" . 
 			      " (". $row[idusers] . ") " . 
 			      $row[username] .
 		"</acronym>\n";
-	    //echo "(<A ONMOUSEOVER=\"javascript:popup_small('palmares.php?lang=".$lang."&type=palmares&idusers=" . $row[idusers] . "', 'palmares');\">";
-	    //echo $row[idusers];
-	    //echo "</A>) ";
-	    //echo $row[username] ;
 	    echo "</td>\n";
-	    // echo "      <td>". substr($row[boatname],0,20)."</td>\n";
-
 
 	    $longitude=$row[longitude];
 	    $latitude=$row[latitude];
@@ -1012,16 +1006,16 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
 	       }
 	    }
 	    if ( $row[position] == BOAT_STATUS_DNF ) {
-              $mapurl="<a class=ranking href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
-	        "&age=24"  . 
-                "&lat=". ($latitude/1000) .
-                "&long=" . ($longitude/1000) .
-                "&maparea=10"  .
-                "&tracks=on&windtext=off&age=1&&list=myboat&boat=" . $row[idusers] .
-                "&x=800&y=600&proj=mercator&text=right&raceover=true\" target=_new>"  ;
+              $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
+	        "&amp;age=24"  . 
+                "&amp;lat=". ($latitude/1000) .
+                "&amp;long=" . ($longitude/1000) .
+                "&amp;maparea=10"  .
+                "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row[idusers] .
+                "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right&amp;raceover=true\" target=\"_new\">"  ;
 
 	      // Affichage de la position
-	      printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</A></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
+	      printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</a></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
 	    }
 
 	    // Affichage du loch (ARR, DNF, ABD)
