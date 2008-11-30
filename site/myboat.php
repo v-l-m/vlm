@@ -127,7 +127,7 @@ include_once("myboat.js");
 	     <?php
 		$user_ranking=getCurrentRanking($usersObj->users->idusers, 
 						$usersObj->users->engaged) ; ?>
-	     <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (max(1,($user_ranking-MAX_BOATS_ON_RANKINGS/20)))?>"><b><? echo $usersObj->races->racename ?></b></a>
+	     <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>"><b><? echo $usersObj->races->racename; ?></b></a>
 	   </td>
 	   <?php /* Cartes du départ et des WP */ ?>
 	   <td class="boat" align="right" valign="top">
