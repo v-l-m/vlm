@@ -1,3 +1,6 @@
+#/base/testing/ est le chemin d'hébergement des fichiers de vlm
+#/base/testing/site/ est le vhost servi par apache
+
 <VirtualHost *:80>
         ServerAdmin admin@actilis.net
 
@@ -20,6 +23,7 @@
                 AddType application/x-httpd-php .php
 
         </Directory>
+        #Fixe le chemin de la libphp commune au moteur & au site
         <IfModule mod_php5.c>
           php_value include_path ".:/opt/php/lib/php:/base/testing/lib/phpcommon"
         </IfModule>
