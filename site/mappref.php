@@ -5,10 +5,10 @@ include_once("strings.inc");
 //TODO read from cookie and populate form
 //TODO if no cookie found, put default values in the form
 ?>
-<?php //print_r($_COOKIE);?>
+<?php /*print_r($_COOKIE); */ ?>
 <div>
 <h2><?php echo $strings[$lang][mymappref]; ?></h2>
-<BR>
+<br />
 </div>
 <?php 
 $fullUsersObj = new fullUsers(getLoginId());
@@ -59,21 +59,18 @@ if ($fullUsersObj->users->engaged != 0) {
     } 
     $prefOpponents=getUserPref($fullUsersObj->users->idusers,"mapPrefOpponents");
 ?>
-<form id="mercator" action="mappref.php" method="POST">
+<form id="mercator" action="mappref.php" method="post">
 <input type="hidden" name="idraces" value="<?php echo $fullUsersObj->users->engaged; ?>" />
 
 
 <!-- Table pour remonter un peu toute la page -->
-<table border=0 width=100%><tr><td class=map align=left valign=top>
-
+<table border="0" width="100%">
+  <tr>
+    <td class="map" align="left" valign="top">
+    </td>
 <!-- //Colonne 2 : les trajectoires et les noms des bateaux -->
-<td class=map align=left valign=top>
+    <td class="map" align="left" valign="top">
 
-<!--
-<h3><?php echo $strings[$lang]["tracks"] ?> : </h3>
-<input type="checkbox" name="tracks" <?php if (($_COOKIE['tracks'])=="on") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["disptracks"] ?>
-<br>
--->
 
 <h3><?php echo $strings[$lang]["chooseopp"] . " (You = " . getBoatPopularity($fullUsersObj->users->idusers, $fullUsersObj->users->engaged) . " times)";  ?> : </h3>
 <?
@@ -85,14 +82,16 @@ $fullRacesObj->dispHtmlForm($strings, $lang, explode(",", $prefOpponents)  );
 
 
 ?>
-<BR>
-</td></tr></table>
+<br />
+</td>
+</tr>
+</table>
 
-<input type="submit" name="action" value="<? echo $strings[$lang]["valider"]?>"/>
-<input type="submit" name="action" value="<? echo $strings[$lang]["tous"]?>"/>
-<input type="submit" name="action" value="<? echo $strings[$lang]["top20"]?>"/>
-<input type="submit" name="action" value="<? echo $strings[$lang]["top10"]?>"/>
-<input type="submit" name="action" value="<? echo $strings[$lang]["aucun"]?>"/>
+<input type="submit" name="action" value="<? echo $strings[$lang]["valider"] ?>" />
+<input type="submit" name="action" value="<? echo $strings[$lang]["tous"] ?>" />
+<input type="submit" name="action" value="<? echo $strings[$lang]["top20"] ?>" />
+<input type="submit" name="action" value="<? echo $strings[$lang]["top10"] ?>" />
+<input type="submit" name="action" value="<? echo $strings[$lang]["aucun"] ?>" />
       </form>
 <?php
    }
