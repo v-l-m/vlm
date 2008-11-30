@@ -706,12 +706,16 @@ class fullRaces
 
     $key = 0;
     $lastrace=0;
-    echo "<tr class=\"htmltable\">\n";
-    while( $row = mysql_fetch_assoc( $result ) ) {
+    $printtd=0;
 
+    while( $row = mysql_fetch_assoc( $result ) ) {
         if ( $row[engaged] != $lastrace ) {
 	    $lastrace = $row[engaged];
-	    echo "</tr><tr class=\"htmltable\">";
+	    if ( $printtd != 0 ) {
+	      echo "</tr>" ;
+	      $printtd = 1;
+	    }
+	    echo "<tr class=\"htmltable\">";
             echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . $strings[$lang]["valider"] . "\" /></td>";
             echo "</tr><tr class=\"htmltable\">";
             echo "<td class=\"htmltable\" colspan=\"8\"><b>RACE " . $lastrace . "</b></td>";
