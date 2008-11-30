@@ -214,9 +214,9 @@ if ($idraces != 0) {
 	             $fullRacesObj->dispHtmlClassification($strings, $lang, $numarrived, "nwp desc, dnm asc", $disttype, $startnum);
                  }
 	     } else {
-	         printf( "<h3>". $strings[$lang]["hasnotstart"]."<br />\n",$fullRacesObj->races->racename);
+	         printf( "<h3>". $strings[$lang]["hasnotstart"]."<br /><b>\n",$fullRacesObj->races->racename);
 	         $departure = gmdate("Y/m/d H:i:s",$fullRacesObj->races->deptime)." GMT";
-	         echo $strings[$lang]["departuredate"]." : $departure </h3>\n";
+	         echo "</b>" . $strings[$lang]["departuredate"]." : $departure </h3>\n";
 	         echo "<h4>".$strings[$lang]["playersengaged"]."</h4>";
 	         $fullRacesObj->dispHtmlEngaged($strings, $lang, $startnum);
 	     }
