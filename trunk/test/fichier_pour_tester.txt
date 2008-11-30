@@ -1,9 +1,6 @@
-* juste un test
-* un autre
-* again
-* hop
-* glop
-* hip
-* Steph le boulet sous win$
-* Test de l'interraction avec trac via les commits
-* retest 
+#Ceci est un fichier pour tester subversion... modifiez le comme bon vous semble !
+#Notez que vous pouvez interragir avec le trac (commenter ou clore un ticket) via les messages de commit
+#Par exemple, le message " Ajout du logo ( refs #15 ) ", ajoutera le commentaire Ajout du logo au ticket 15
+#Autre exemple, le message " Fichier inutile (fix #21 ) " cloturera le ticket 21
+
+Mais que tout ça ne vous préoccupe pas trop, si vous vouliez simplement tester votre connexion avec subversion ;)
