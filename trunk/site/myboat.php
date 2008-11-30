@@ -231,7 +231,7 @@ include_once("myboat.js");
        n&deg; <b><? echo $usersObj->users->idusers ?></b>
        / &quot;<? echo $usersObj->users->boatname ?>&quot;<?php
 	echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
-        echo "<img src=\"pavillons/" . $usersObj->users->country . ".png\" align=\"center\" alt=\"" . $usersObj->users->country . "\" />"; 
+        echo "<img src=\"pavillons/" . $usersObj->users->country . ".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
         
         echo "<br />" . $strings[$lang]["ranking"] . " : " . $user_ranking;
 
@@ -549,8 +549,8 @@ include_once("myboat.js");
 	       <input type="button"  class="blue" name="longdms" />
 	     </td>
 	   </tr>
-	   <tr>
-	   </tr>
+<!--	   <tr>
+	   </tr> -->
 	   <tr>
 	     <td align="right" class="boat">
 	       <b>@WPH</b>
@@ -610,7 +610,7 @@ include_once("myboat.js");
 </tr>
 </table>
 <hr />
-	<?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?></td>
+	<?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?>
 	<form id="mercator" action="map.img.php" target="_new" method="get">
 	<table width="100%">
 	  <tr valign="middle"><td class="boat"></td>
