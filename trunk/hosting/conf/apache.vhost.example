@@ -1,0 +1,28 @@
+<VirtualHost *:80>
+        ServerAdmin admin@actilis.net
+
+        DocumentRoot /base/testing/site
+        ServerName testing.virtual-loup-de-mer.org
+        ServerAlias vlmdev
+
+        ErrorLog    /var/log/apache2/vlmtesting_error_log
+        CustomLog   /var/log/apache2/vlmtesting_access_log combined
+
+        <Directory /base/testing/site>
+                DirectoryIndex index.php index.html
+
+                Order Allow,Deny
+                Allow from All
+
+                AllowOverride All
+                Options Indexes Includes
+
+                AddType application/x-httpd-php .php
+
+        </Directory>
+        <IfModule mod_php5.c>
+          php_value include_path ".:/opt/php/lib/php:/base/testing/lib/phpcommon"
+        </IfModule>
+
+</VirtualHost>
+
