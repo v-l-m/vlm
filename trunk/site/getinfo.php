@@ -11,7 +11,6 @@ header("content-type: text/plain; charset=UTF-8");
      echo "\nxxxxx = votre nom d'utilisateur";
      echo "\nppppp = votre mot de passe";
      echo "\nVariables = \n
-    #* MPO contient une liste des ID des concurrents à suivre (liste)
     #* WPL : liste de Waypoints (liste)
     #* RAC : numéro de la course (string)
     #* IDB : nom du bateau (string)
