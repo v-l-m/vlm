@@ -293,6 +293,7 @@ else //if loggedin
           echo "</b></a> ";
           echo "<hr />";
           echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
+          echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\"><img src=\"vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
  
 	  // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
 	  echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\">
