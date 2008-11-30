@@ -342,6 +342,8 @@ else //if loggedin
 	<a href="http://www.cotweb.com/meteo.php4" target="_mv">COTWeb</a>
 	<?
            echo "<hr />Srv = " . SERVER_NAME . ".";
+           echo "<hr />Version = ";  
+           include("version.txt");
         ?>
       
    </div>
