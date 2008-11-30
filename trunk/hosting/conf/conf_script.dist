@@ -28,6 +28,7 @@ if test "$VLMSVNBRANCH" = "trunk"; then
 fi
 export VLMSVNFULL=$VLMSVNROOT/$VLMSVNBASE$VLMSVNBRANCH
 export VLMSVNPATH=/usr/bin/svn
-export VLMPHPPATH=/opt/php/bin/php
+#le define sert à fixer l'include path quand on est dans le moteur
+export VLMPHPPATH="/opt/php/bin/php --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
 export VLMVLMCPHP=/opt/php/lib/php
 export VLMVLMCSO=/opt/php/lib/php/no-debug-non-zts-20060613
