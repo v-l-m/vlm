@@ -4,3 +4,6 @@
 #Autre exemple, le message " Fichier inutile (fix #21 ) " cloturera le ticket 21
 
 Mais que tout ça ne vous préoccupe pas trop, si vous vouliez simplement tester votre connexion avec subversion ;)
+
+Test de commit après remplacement /data/www/vlm par le contenu du svn sur
+portable fm.
