@@ -16,7 +16,10 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
     // Ajout en début de tableau d'un classement par WP (uniquement si >1)
     if ( count($fullRacesObj->races->waypoints) > 1 ) {
          for ($wp_num=1; $wp_num < count($fullRacesObj->races->waypoints); $wp_num++) {
-	     array_push($tables, "WP" . $wp_num);
+             $WP=$fullRacesObj->races->waypoints[$wp_num-1];
+             if ( !strstr($WP[5],'IceGate') ) {
+	          array_push($tables, "WP" . $wp_num);
+             }
 	 }
     }
 
@@ -28,13 +31,19 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
     echo "<table>\n<tr>";
     // Affichage des classements classiques 
     foreach ($tables as $table) {
+        $WP=$fullRacesObj->races->waypoints[substr($table,2)-1];
         if ( $table == $tableType ) {
            $class="class=\"hilight\"";
-	   $cellcontent=ucfirst($table);
+	   if ( strstr($table, "WP") ) {
+              $cellcontent=$WP[6];
+           } else {
+	      $cellcontent=ucfirst($table);
+           }
         } else {
            $class="class=\"nohilight\"";
 	   if ( strstr($table, "WP") ) {
-              $tlabel=substr($table,2);
+              //$tlabel=substr($table,2);
+              $tlabel=$WP[6];
            } else {
               $tlabel=$table;
            }
