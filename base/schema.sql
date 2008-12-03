@@ -60,40 +60,19 @@ CREATE TABLE `positions` (
   KEY `time` (`time`,`race`,`idusers`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---
--- Table structure for table `races`
---
-
-DROP TABLE IF EXISTS `races`;
-CREATE TABLE `races` (
-  `idraces` int(11) NOT NULL auto_increment,
-  `racename` varchar(255) NOT NULL default '',
-  `started` int(11) NOT NULL default '0',
-  `deptime` bigint(14) default NULL,
-  `startlong` int(11) NOT NULL default '0',
-  `startlat` int(11) NOT NULL default '0',
-  `boattype` varchar(255) default NULL,
-  `closetime` bigint(20) default NULL,
-  `racetype` int(11) default NULL,
-  `firstpcttime` bigint(20) default NULL,
-  `depend_on` int(11) default NULL,
-  `qualifying_races` text,
-  `idchallenge` text,
-  `coastpenalty` int(11) default '0',
-  `bobegin` bigint(20) default '0',
-  `boend` bigint(20) default '0',
-  `maxboats` int(11) default '0',
-  PRIMARY KEY  (`idraces`)
-) ENGINE=MyISAM AUTO_INCREMENT=2008443516 DEFAULT CHARSET=latin1 COMMENT='The races that exist';
 
 --
--- Table structure for table `races_instructions`
+-- Table structure for table `waypoint_crossing`
 --
 
-DROP TABLE IF EXISTS `races_instructions`;
-CREATE TABLE `races_instructions` (
-  `idraces` int(11) default NULL,
-  `instructions` text
+DROP TABLE IF EXISTS `waypoint_crossing`;
+CREATE TABLE `waypoint_crossing` (
+  `idraces` int(11) NOT NULL,
+  `idwaypoint` int(11) NOT NULL,
+  `idusers` int(11) NOT NULL,
+  `time` int(11) default NULL,
+  `userdeptime` int(20) default NULL,
+  PRIMARY KEY  (`idraces`,`idwaypoint`,`idusers`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
@@ -221,40 +200,14 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`idusers`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9338 DEFAULT CHARSET=latin1 COMMENT='Utilisateurs de VLM';
 
---
--- Table structure for table `waypoint_crossing`
---
 
-DROP TABLE IF EXISTS `waypoint_crossing`;
-CREATE TABLE `waypoint_crossing` (
-  `idraces` int(11) NOT NULL,
-  `idwaypoint` int(11) NOT NULL,
-  `idusers` int(11) NOT NULL,
-  `time` int(11) default NULL,
-  `userdeptime` int(20) default NULL,
-  PRIMARY KEY  (`idraces`,`idwaypoint`,`idusers`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Table structure for table `waypoints`
---
-
-DROP TABLE IF EXISTS `waypoints`;
-CREATE TABLE `waypoints` (
-  `idwaypoint` int(20) NOT NULL default '0',
-  `latitude1` double default NULL,
-  `longitude1` double default NULL,
-  `latitude2` double default NULL,
-  `longitude2` double default NULL,
-  `libelle` varchar(255) default NULL,
-  `maparea` int(11) default '10',
-  PRIMARY KEY  (`idwaypoint`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='waypoints';
-
+/*
+ * TABLE WIND : utilisée par la fonction OLDwindAtPosition
+ *
+*/
 --
 -- Table structure for table `wind`
 --
-
 DROP TABLE IF EXISTS `wind`;
 CREATE TABLE `wind` (
   `latitude` int(11) NOT NULL default '0',
@@ -273,6 +226,13 @@ CREATE TABLE `wind` (
   PRIMARY KEY  (`latitude`,`longitude`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='geographical grid contains wind info in knts';
 
+/*
+ * TABLE WINDS : utilisée par la fonction NEWwindAtPosition
+                 CETTE FONCTION NE SERA JAMAIS MISE EN PRODUCTION (trop lente)
+                 Cette table disparait (comme WINDS) en version 0.8, à la mise en route
+                 de la fonction SPFwindAtPosition (utilisant un segment de SHM)
+ *
+*/
 --
 -- Table structure for table `winds`
 --
