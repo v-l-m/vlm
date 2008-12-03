@@ -8,3 +8,5 @@ Depuis la 0.7.1 (production vlm au 31/11/2008)
 (non prise en compte des icegate dans le classement)
 (Cf. les commentaires du commit)
 
+* Découpage de schema.sql pour extraction des différents composants
+(voir README.txt)
