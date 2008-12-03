@@ -9,6 +9,10 @@ gshhs_tables.sql
 # Les polaires de vitesse
 boat_tables.sql
 
+# Tout ce qui concerne la création d'une course (retrouver le post expliquant
+# ça sur la taverne / le wiki)
+races_tables.sql
+
 # Les tables applicatives, courses, joueurs, positions, classements...
 schema.sql
 
