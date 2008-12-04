@@ -9,7 +9,7 @@ $fullUsersObj = new fullUsers(getLoginId());
 echo "<h2>".$strings[$lang]["choose"]."</h2>";
 ?>
 
-<form action="myboat.php" name=modify>
+<form action="myboat.php" name="modify" method="post">
 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
 <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
 <input type="hidden" name="type" value="change" />
@@ -22,21 +22,21 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
      // Affichage de la checkbox uniquement dans les cas contraires
      if ( $fullUsersObj->users->hidepos != 0 ) {
 
-         echo "<BR>";
+         echo "<br />";
 
          echo "<input type=\"checkbox\" name=\"hidepos\" ";
          if ( $fullUsersObj->users->hidepos > 0 ) { 
               echo "checked=\"checked\""; 
          }
-         echo ">";
+         echo " />";
 
          echo $strings[$lang]["hidepos"] . " (" . abs($fullUsersObj->users->hidepos) . " units.)"; 
-         echo "<BR>";
+         echo "<br />";
 
      }
 
-        echo "<br>" . $strings[$lang]["useremail"];
-        echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\"/>";
+        echo "<br />" . $strings[$lang]["useremail"];
+        echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
 
 
      // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
@@ -45,7 +45,6 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
 	$dh  = opendir($dir);
         $select_list="";
 	while (false !== ($filename = readdir($dh))) {
-	  //    echo $filename  . "<BR>";
 	      if ( ! is_dir($filename) && substr($filename,0,1) != "." ) {
 	      	  $files[] = basename($filename,".png");
 	      }
@@ -53,40 +52,34 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
 	sort($files);
 	foreach ($files as $filename) {
                   $select_list = $select_list . "<option value=\"". $filename . "\"";
-		  if ( $fullUsersObj->users->country == $filename ) $select_list = $select_list . " selected ";
-		  $select_list = $select_list . ">". $filename ."</option>";
+		  if ( $fullUsersObj->users->country == $filename ) $select_list = $select_list . " selected=\"selected\" ";
+		  $select_list = $select_list . ">". $filename ."</option>\n";
 	}
         if ( $select_list != "" ) {
-  	      echo "<h1>".$strings[$lang]["choose_your_country"]."</h1>";
-	      echo "<select name=\"country\">" . $select_list . "</select>";
+  	      echo "</p>\n<h1>".$strings[$lang]["choose_your_country"]."</h1>\n";
+	      echo "<select name=\"country\">\n" . $select_list . "</select>\n";
         }
 
 
 ?>
-
-<br/>
-<br/>
-<br/>
-Notepad :<br>
-<textarea name="blocnote" cols="60" rows="10" maxlength=250><?php echo $fullUsersObj->users->blocnote ?></textarea>
-
-</p>
-
+<br />
+<br />
+<br />
+Notepad :<br />
+<textarea name="blocnote" cols="60" rows="10"><?php echo $fullUsersObj->users->blocnote ?></textarea>
 
 <!--
 //setUserPref(htmlentities($_GET['boat']), "mapTools" , "none");
 //setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $list)   );
 -->
 
-<br>
+<br />
 <?php
      echo $strings[$lang]["color"];
     //display a table with all the colors
 ?>
 
-<p style=" background-color: #<?php echo $fullUsersObj->users->color?>; width: 50%" >
-
-
+<div> <?php /* style="background-color: #<?php echo $fullUsersObj->users->color?>; width: 50%" > */ ?>
 <?php 
 	// make an array with colors
 	$colors = array();
@@ -108,23 +101,25 @@ Notepad :<br>
 	}
 
 	// report each color in a clickable table
-	echo '<table border=0 cellspacing="0" id="grid"><tr border=0>';
+	echo "<table border=\"0\" cellspacing=\"0\" id=\"grid\">\n";
 
 	$color_num=0;
 	foreach ($colors as $i)
 	{
-
-	  echo '<td  border=0 style="background: #'.$i.'"  onClick="document.forms[1].color.value='."'".$i."'".'">';
-	  echo '</td> ';
+          if ( $color_num%16 == 0) {
+	    echo "<tr>\n";
+	  }
+	  echo "  <td style=\"background: #".$i."\"  onclick=\"document.forms[1].color.value=&quot;".$i."&quot;\">";
+	  echo "</td>\n";
 	  if ( $color_num%16 == 15)
 	  {
-	  	echo "</tr><tr border=0 >";
+	  	echo "</tr>\n";
 	  }
 	  $color_num++;
 
 	  echo "";
 	}
-	echo '</tr></table>';
+	echo "</table>\n";
 
         if ( substr($fullUsersObj->users->color,0,1) == "-" ) {
              $checked="checked ";
@@ -135,13 +130,13 @@ Notepad :<br>
         }
         echo "<input type=\"text\" name=\"color\" size=\"6\" ";
         echo "value = \"" . $color . "\"";
-        echo " onfocus=\"document.forms.modify.color.blur()\"/> ";
+        echo " onfocus=\"document.forms.modify.color.blur()\" />";
 
-        echo "<input type=checkbox name=\"invisible\" " . $checked . "> Invisible";
+        echo "<input type=\"checkbox\" name=\"invisible\" " . $checked . " /> Invisible";
 ?>
 
 
-</p>
+</div>
 <br/>
    <input type="submit"  value="<?php echo $strings[$lang]["change"]?>" />
 
