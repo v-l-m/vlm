@@ -155,7 +155,7 @@ if ($idraces != 0) {
               echo "<img src=\"cartemarine.png\" " .
                      " onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                      " onmouseout=\"hideDiv('infobulle');\" " .
-                  " alt=\"" .$strings[$lang]["racemap"]. "\">";
+                  " alt=\"" .$strings[$lang]["racemap"]. "\" />";
           }
 
           echo "<table class=\"boat\"><tr class=\"boat\">";
