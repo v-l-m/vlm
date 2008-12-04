@@ -149,10 +149,10 @@ if ($idraces != 0) {
 	  $href = "racemaps/regate".$fullRacesObj->races->idraces.".jpg";
           if ( file_exists($href) ) {
 
-              $status_content = "<img src=&quot;$href&quot; />";
+              $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
               list($xSize, $ySize, $type, $attr) = getimagesize($href);
 
-              echo "<img src=cartemarine.png " .
+              echo "<img src=\"cartemarine.png\" " .
                      " onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                      " onmouseout=\"hideDiv('infobulle');\" " .
                   " alt=\"" .$strings[$lang]["racemap"]. "\">";

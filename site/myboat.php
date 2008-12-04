@@ -113,12 +113,12 @@ include_once("myboat.js");
         $href = "racemaps/regate".$usersObj->users->engaged.".jpg";
         if ( file_exists($href) ) {
           $status_content = "&lt;img src=&quot;$href&quot; " . 
-                            "alt=&quot;engaged&quot; /&gt;";
+                            "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
                   list($xSize, $ySize, $type, $attr) = getimagesize($href);
           echo "<img src=\"cartemarine.png\" " . 
-          " onmouseover=\"showDivLeft(&quot;infobulle&quot;" .
-          ",&quot;$status_content&quot;, $xSize, $ySize);\" " .
-          " onmouseout=\"hideDiv(&quot;infobulle&quot;);\" " .
+          " onmouseover=\"showDivLeft('infobulle'" .
+          ",'$status_content', $xSize, $ySize);\" " .
+          " onmouseout=\"hideDiv('infobulle');\" " .
           " alt=\"" .$strings[$lang]["racemap"]. "\" />";
         } ?>
        </td>
