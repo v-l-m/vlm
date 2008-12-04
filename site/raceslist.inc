@@ -46,53 +46,53 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
     else
     {
 
-      echo "<table width=100%><tr><td align=left class=boat>";
-      printf("<H1>%d (%s) - %s</H1>",$idraces, $boattype, $racename);
-      printf ("<UL>");
+      echo "<table width=\"100%\">\n<tr>\n<td align=\"left\" class=\"boat\">";
+      printf("<h1>%d (%s) - %s</h1>\n",$idraces, $boattype, $racename); /* FIXME use style there */
+      printf ("  <ul>");
       if ( $dep > $time ) {
           $duration = duration2string($duration);
-          printf("<LI>".$strings[$lang]["nextrace"] . " " , $duration[0],$duration[1],$duration[2]);
-          printf("<LI>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.\n");
+          printf("    <li>".$strings[$lang]["nextrace"] . "</li>\n" , $duration[0],$duration[1],$duration[2]);
+          printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
       } else {
           $duration = duration2string(-$duration);
-          printf("<LI>".$strings[$lang]["openrace"] . " ", $duration[0],$duration[1],$duration[2]);
+          printf("    <li>".$strings[$lang]["openrace"] . "</li>\n", $duration[0],$duration[1],$duration[2]);
       }
 
       if ( $closetime > $dep ) {
-          printf("<LI>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT\n");
+          printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
       }
 
       if ( $firstpcttime >0 ) {
-          printf("<LI>".$strings[$lang]["endrace"]. "%d %%\n", 100 + $firstpcttime );
+          printf("    <li>".$strings[$lang]["endrace"]. "%d %%</li>\n", 100 + $firstpcttime );
       } else {
-          printf("<LI>".$strings[$lang]["endrace"]." no limit\n");
+          printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
       }
       if ( $maxboats != 0 ) {
-           printf ("<LI>Engaged / Total : " . $num_engaged . "/" . $maxboats . "\n" );
+           printf ("    <li>Engaged / Total : " . $num_engaged . "/" . $maxboats . "</li>\n" );
       } else {
-           printf ("<LI>Engaged : " . $num_engaged . " (unlimited)\n" );
+           printf ("    <li>Engaged : " . $num_engaged . " (unlimited)</li>\n" );
       }
-      printf ("</UL>");
-      echo "</td>";
+      printf ("  </ul>");
+      echo "</td>\n";
 
-      echo "<td align=right class=boat>";
+      echo "<td align=\"right\" class=\"boat\">";
       // Carte de la course
       $href = "racemaps/regate".$idraces.".jpg";
       if ( file_exists($href) ) {
-      	$status_content = "<img src=$href>";
+      	$status_content = "*lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
       	list($xSize, $ySize, $type, $attr) = getimagesize($href);
-      	echo "<img src=minimap.php?idraces=" . $idraces . 
-                 " onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
+      	echo "<img src=\"minimap.php?idraces=" . $idraces . 
+                 "\" onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                  " onmouseout=\"hideDiv('infobulle');\" " .
-              " alt=\"" .$strings[$lang]["racemap"]. "\">";
+              " alt=\"" .$strings[$lang]["racemap"]. "\" />";
       }
-      echo "</td></tr></table>";
+      echo "</td>\n</tr>\n</table>\n";
 
 
         if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
             // Subscribe button/form
             $sub_button= "
-    		<form action=\"myboat.php\">
+    		<form action=\"myboat.php\" method=\"post\">
     		<input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
     		<input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
     		<input type=\"hidden\" name=\"type\" value=\"subscribe\">
@@ -105,15 +105,15 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
 
 
     }
-    echo "<hr>";
+    echo "<hr />";
 }
 
 if ( $q == RACE_TYPE_CLASSIC ) {
 	$URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
-	echo "<input type=button value=\"Click here to see Permanent-Record races\" onClick=\"document.location='" . $URL . "'\">";
+	echo "<input type=\"button\" value=\"Click here to see Permanent-Record races\" onclick=\"document.location='" . $URL . "'\" />";
 } else {
 	$URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_CLASSIC;
-	echo "<input type=button value=\"Click here to see Classical &amp; Qualification races\" onClick=\"document.location='" . $URL . "'\">";
+	echo "<input type=\"button\" value=\"Click here to see Classical &amp; Qualification races\" onclick=\"document.location='" . $URL . "'\" />";
 }
 
 ?>

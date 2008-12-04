@@ -43,7 +43,7 @@ echo "<hr />";
     printf( "<h4>" . $strings[$lang]["nbplayers"]. "</h4>", $row[0]);
 
     // Affichage des course
-    echo "      <h4 class=\"babord\`'>".$strings[$lang]["warningnomap"]." </h4>\n";
+    echo "      <h4 class=\"babord\">".$strings[$lang]["warningnomap"]." </h4>\n";
     //include "races.php";
 ?>
 
