@@ -235,19 +235,19 @@ if ($idraces != 0) {
   
     if ( $q == "htp" ) {
          echo "<a name=\"HTP\" id=\"HTP\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HTP, $sortkey , $sortorder, 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HTP, "duration" , "asc", 0, $startnum);
     }
     if ( $q == "dnf" ) {
          echo "<a name=\"DNF\" id=\"DNF\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_DNF, $sortkey , $sortorder, 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_DNF, "duration" , "asc", 0, $startnum);
     }
     if ( $q == "abd" ) {
          echo "<a name=\"ABD\" id=\"ABD\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ABD, $sortkey , $sortorder, 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ABD, "duration" , "asc", 0, $startnum);
     }
     if ( $q == "hc" ) {
          echo "<a name=\"HC\" id=\"HC\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HC, $sortkey , $sortorder, 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HC, "duration" , "asc", 0, $startnum);
     }
   
     echo "<p>";
