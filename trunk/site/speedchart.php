@@ -29,15 +29,13 @@ $pas=15;
 $minws=0;
 $maxws=$row[0];
 //printf("MAXWS=%s",$maxws);
-for ($wspeed = $minws; $wspeed<=$maxws; $wspeed+=$pas) 
-{  
-   echo "<img src=\"scaledspeedchart.php?boattype=". 
-     $boattype . "&amp;minws=". $minws ."&amp;maxws=" . ($wspeed+$pas) . "&amp;pas=2\" alt=\"speedchart\" />";
+for ($wspeed = $minws; $wspeed<=$maxws; $wspeed+=$pas) {  
+    echo "<img src=\"scaledspeedchart.php?boattype=". 
+    $boattype . "&amp;minws=". $minws ."&amp;maxws=" . ($wspeed+$pas) . "&amp;pas=2\" alt=\"speedchart\" />";
 
-   $minws=$wspeed+$pas;
+    $minws=$wspeed+$pas;
 }
 ?>
    </p>
  </body>
 </html>
-
