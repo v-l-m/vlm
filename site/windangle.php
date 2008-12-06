@@ -2,29 +2,29 @@
 include_once("functions.php");
 
 function LoadPng ($imgname) {
-   $im = @imagecreatefrompng ($imgname); /* Tentative d'ouverture */
-   if (!$im) { /* Test d'échec */
-       $im = imagecreatetruecolor (150, 30); /* Création d'une image vide */
-       $bgc = imagecolorallocate ($im, 255, 255, 255);
-       $tc = imagecolorallocate ($im, 0, 0, 0);
-       imagefilledrectangle ($im, 0, 0, 150, 30, $bgc);
-       /* Affichage d'un message d'erreur */
-       imagestring ($im, 1, 5, 5, "Erreur au chargement de l'image $imgname", $tc);
-   }
-   return $im;
+    $im = @imagecreatefrompng ($imgname); /* Tentative d'ouverture */
+    if (!$im) { /* Test d'échec */
+        $im = imagecreatetruecolor (150, 30); /* Création d'une image vide */
+        $bgc = imagecolorallocate ($im, 255, 255, 255);
+        $tc = imagecolorallocate ($im, 0, 0, 0);
+        imagefilledrectangle ($im, 0, 0, 150, 30, $bgc);
+        /* Affichage d'un message d'erreur */
+        imagestring ($im, 1, 5, 5, "Erreur au chargement de l'image $imgname", $tc);
+    }
+    return $im;
 }
 
 function LoadGif ($imgname) {
-   $im = @imagecreatefromgif ($imgname); /* Tentative d'ouverture */
-   if (!$im) { /* Test d'échec */
-       $im = imagecreatetruecolor (150, 30); /* Création d'une image vide */
-       $bgc = imagecolorallocate ($im, 255, 255, 255);
-       $tc = imagecolorallocate ($im, 0, 0, 0);
-       imagefilledrectangle ($im, 0, 0, 150, 30, $bgc);
-       /* Affichage d'un message d'erreur */
-       imagestring ($im, 1, 5, 5, "Erreur au chargement de l'image $imgname", $tc);
-   }
-   return $im;
+    $im = @imagecreatefromgif ($imgname); /* Tentative d'ouverture */
+    if (!$im) { /* Test d'échec */
+        $im = imagecreatetruecolor (150, 30); /* Création d'une image vide */
+        $bgc = imagecolorallocate ($im, 255, 255, 255);
+        $tc = imagecolorallocate ($im, 0, 0, 0);
+        imagefilledrectangle ($im, 0, 0, 150, 30, $bgc);
+        /* Affichage d'un message d'erreur */
+        imagestring ($im, 1, 5, 5, "Erreur au chargement de l'image $imgname", $tc);
+    }
+    return $im;
 }
 
 
@@ -37,7 +37,7 @@ $roadtoend=quote_smart($_REQUEST['roadtoend']);
 header("Cache-Control: no-store, no-cache, must-revalidate");
 if ($noHeader !=1)
 {
-  header("Content-type: image/png");
+    header("Content-type: image/png");
 }
 include_once("config.php");
 
@@ -47,12 +47,11 @@ $deck = imagecreatefrompng(BOAT_IMAGE );
 
 $bg =  imagecolorallocate($deck, 170, 170, 170);
 
-$deck = imagerotate($deck, geographic2drawing($boatheading),
-		    $bg);
+$deck = imagerotate($deck, geographic2drawing($boatheading), $bg);
 
 imagecopymerge ( $im, $deck, (imagesx($im)  - imagesx($deck))/2,  
-		 (imagesy($im)  - imagesy($deck))/2, 
-		 0, 0, imagesx($deck), imagesy($deck), 100);
+     (imagesy($im)  - imagesy($deck))/2, 
+     0, 0, imagesx($deck), imagesy($deck), 100);
 
 
 //draw a line from the center of the circle to the circle
