@@ -1394,69 +1394,63 @@ class fullUsers
    // History : creation date 2nd May 2007.
    function dotheycross2($x1,$y1,$x2,$y2,$x3,$y3,$x4,$y4, &$encounterCoordinates, $verbose)
    {
-      // Coast line is between two points C1 (x1,y1) and C2 (x2,y2).
-      // The boat movement is between two points P1 (x3,y3) and P2 (x4,y4)
-      // The intersection point of both lines is called I.
+        // Coast line is between two points C1 (x1,y1) and C2 (x2,y2).
+        // The boat movement is between two points P1 (x3,y3) and P2 (x4,y4)
+        // The intersection point of both lines is called I.
 
-      // First test: make sure C1 != C2 and P1 != P2
-      if ( $x1 == $x2 && $y1 == $y2 ) {
+        // First test: make sure C1 != C2 and P1 != P2
+        if ( $x1 == $x2 && $y1 == $y2 ) {
+            if ($verbose > 0) echo ":dotheycross2: Le segment de cote est reduit a un point.";
+            return (false);
+        }
+        if ( $x3 == $x4 && $y3 == $y4 ) {
+            if ($verbose > 0) echo ":dotheycross2: Le vecteur deplacement du bateau est reduit a un point.";
+            return (false);
+        }
 
-          if ($verbose > 0)
-             echo ":dotheycross2: Le segment de cote est reduit a un point.";
-          return (false);
-      }
-      if ( $x3 == $x4 && $y3 == $y4 ) {
-          if ($verbose > 0)
-             echo ":dotheycross2: Le vecteur deplacement du bateau est reduit a un point.";
-          return (false);
-      }
-
-      if ( $verbose > 0) echo "== Enterring dotheycross2 ==";
+        if ( $verbose > 0) echo "== Enterring dotheycross2 ==";
+       
+        // Local variables
+        $deltaXP = $x4 - $x3;
+        $deltaYP = $y4 - $y3;
+        $deltaXC = $x2 - $x1;
+        $deltaYC = $y2 - $y1;
      
-      // Local variables
-      $deltaXP = $x4 - $x3;
-      $deltaYP = $y4 - $y3;
-      $deltaXC = $x2 - $x1;
-      $deltaYC = $y2 - $y1;
-   
-      // Compute the cross-product between the two segments/vectors.
-      $crossProduct = $deltaYC*$deltaXP - $deltaYP*$deltaXC;
+        // Compute the cross-product between the two segments/vectors.
+        $crossProduct = $deltaYC*$deltaXP - $deltaYP*$deltaXC;
 
-      // If the cross-product is not zero, lines are not parallel and there
-      // is hence a chance that the two segments intersect.
-      if ( $crossProduct != 0 ) {
-         // two more local variables
-         $deltaX1 = $x3-$x1;
-         $deltaY1 = $y3-$y1;
+        // If the cross-product is not zero, lines are not parallel and there
+        // is hence a chance that the two segments intersect.
+        if ( $crossProduct != 0 ) {
+            // two more local variables
+            $deltaX1 = $x3-$x1;
+            $deltaY1 = $y3-$y1;
 
-         //kP is the length ratio of [P1,I] over [P1,P2]
-         $kP = ($deltaY1*$deltaXC - $deltaX1*$deltaYC)/$crossProduct;
-         //kC is the length ratio of [C1,I] over [C1,C2]
-         $kC = ($deltaY1*$deltaXP - $deltaX1*$deltaYP)/$crossProduct;
+            //kP is the length ratio of [P1,I] over [P1,P2]
+            $kP = ($deltaY1*$deltaXC - $deltaX1*$deltaYC)/$crossProduct;
+            //kC is the length ratio of [C1,I] over [C1,C2]
+            $kC = ($deltaY1*$deltaXP - $deltaX1*$deltaYP)/$crossProduct;
 
-         //If (and only if) both kP and kC are between 0 and 1
-         // then the two segments have an intersection point I.
-         if ( ($kP >= 0 && $kP <= 1) && ($kC >= 0 && $kC <= 1) ) {
-            // Compute the coordinates of the intersection point
-            $xi = $kP*$deltaXP + $x3;
-            $yi = $kP*$deltaYP + $y3;
-            if ($verbose > 0)
-               echo ":dotheycross2: intersection : (".$xi.";".$yi.")";
-            $encounterCoordinates = array ($xi , $yi );
-         } else {
-            if ($verbose > 0)
-               echo ":dotheycross2: les 2 vecteurs ne se croisent pas";
+            //If (and only if) both kP and kC are between 0 and 1
+            // then the two segments have an intersection point I.
+            if ( ($kP >= 0 && $kP <= 1) && ($kC >= 0 && $kC <= 1) ) {
+                // Compute the coordinates of the intersection point
+                $xi = $kP*$deltaXP + $x3;
+                $yi = $kP*$deltaYP + $y3;
+                if ($verbose > 0) echo ":dotheycross2: intersection : (".$xi.";".$yi.")";
+                $encounterCoordinates = array ($xi , $yi );
+            } else {
+                if ($verbose > 0) echo ":dotheycross2: les 2 vecteurs ne se croisent pas";
+                return(false);
+            }
+        } else {
+            if ($verbose > 0) echo ":dotheycross2: droites // ";
             return(false);
-         }
-      } else {
-         if ($verbose > 0)
-            echo ":dotheycross2: droites // ";
-         return(false);
-      }
+        }
 
-      if ( $verbose > 0) echo "== Exiting dotheycross2 ==";
-      return(true);
-   }
+        if ( $verbose > 0) echo "== Exiting dotheycross2 ==";
+        return(true);
+  }
 
   //this function says how many milles the user travelled during the last
   //24hrs
