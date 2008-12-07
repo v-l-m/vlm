@@ -36,7 +36,7 @@ class users
     $query= "SELECT idusers, boattype, username, password,".
             " boatname, color, boatheading, pilotmode, pilotparameter,".
             " engaged, lastchange, email, nextwaypoint, userdeptime, " .
-	    " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
+      " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
             " mooringtime, releasetime, hidepos, blocnote, ipaddr  FROM  users WHERE idusers = ".$id;
 
 
@@ -80,12 +80,12 @@ class users
   {
     //write everything in db
     $query = "UPDATE users SET `boatname` = '" . addslashes($this->boatname) . "'," . 
-    		" `color` = '" . $this->color . "'," . 
-    		" `email` = '" . $this->email . "'," . 
-    		" `country` = '" . $this->country . "'," . 
-    		" `hidepos` =  " . $this->hidepos . "," . 
-    		" `blocnote` = '" . mysql_real_escape_string( $this->blocnote) . "'" . 
-    		" WHERE idusers = " . $this->idusers;
+        " `color` = '" . $this->color . "'," . 
+        " `email` = '" . $this->email . "'," . 
+        " `country` = '" . $this->country . "'," . 
+        " `hidepos` =  " . $this->hidepos . "," . 
+        " `blocnote` = '" . mysql_real_escape_string( $this->blocnote) . "'" . 
+        " WHERE idusers = " . $this->idusers;
     mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
     logUserEvent($this->idusers , $_SESSION['IP'] , $this->engaged, "Update prefs." );
@@ -97,7 +97,7 @@ class users
   {
     $this->releasetime = time() + $time;
     $query = "UPDATE users SET releasetime = " . $this->releasetime .  
-    	     " WHERE idusers = " . $this->idusers;
+           " WHERE idusers = " . $this->idusers;
     mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
   }
 
@@ -110,50 +110,50 @@ class users
     $now=time();
     // lookup for a task to do
     $query = "SELECT taskid, pilotmode, pilotparameter FROM auto_pilot
-    		 WHERE status='" . PILOTOTO_PENDING . "'
-		   AND idusers = $this->idusers
-		   AND time <= $now";
+         WHERE status='" . PILOTOTO_PENDING . "'
+       AND idusers = $this->idusers
+       AND time <= $now";
     echo $quety;
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
     while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
         // Execute the task
         $PIM=$row[1];
-	if ( $PIM == 0 OR $PIM > 4 ) $flag_err=true;
-	$this->pilotmode=$PIM;
+  if ( $PIM == 0 OR $PIM > 4 ) $flag_err=true;
+  $this->pilotmode=$PIM;
 
-	$PIP=$row[2];
+  $PIP=$row[2];
 
-	printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row[0], $row[1], $row[2]);
-	$query="UPDATE users SET pilotmode=$PIM ";
+  printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row[0], $row[1], $row[2]);
+  $query="UPDATE users SET pilotmode=$PIM ";
 
-	if ( $PIM == PILOTMODE_HEADING ) {
-	   $this->boatheading=$PIP;
-	   $query .= ", boatheading=$PIP ";
-	}
-	if ( $PIM == PILOTMODE_WINDANGLE ) {
-	   $this->pilotparameter=$PIP;
-	   $query .= ", pilotparameter=$PIP ";
-	}
-	if ( $PIM == PILOTMODE_ORTHODROMIC or $PIM == PILOTMODE_BESTVMG ) {
-	   if ( strlen($PIP) != 0 && $PIP != "0" ) {
-	   $values = explode("@", $PIP);
-	   $Coords = explode(",", $values[0]);
-	   $query .= ", targetlat=round($Coords[0],4), targetlong=round($Coords[1],4) ";
+  if ( $PIM == PILOTMODE_HEADING ) {
+     $this->boatheading=$PIP;
+     $query .= ", boatheading=$PIP ";
+  }
+  if ( $PIM == PILOTMODE_WINDANGLE ) {
+     $this->pilotparameter=$PIP;
+     $query .= ", pilotparameter=$PIP ";
+  }
+  if ( $PIM == PILOTMODE_ORTHODROMIC or $PIM == PILOTMODE_BESTVMG ) {
+     if ( strlen($PIP) != 0 && $PIP != "0" ) {
+     $values = explode("@", $PIP);
+     $Coords = explode(",", $values[0]);
+     $query .= ", targetlat=round($Coords[0],4), targetlong=round($Coords[1],4) ";
            if ( round($values[1]) > 0 ) {
                 $query .= ", targetandhdg=" . $values[1] ;
            } else {
                 $query .= ", targetandhdg=-1 ";
            }
-	   echo $query;
-	   }
-	}
-	// Don't forget tu add the where clause... and execute the query
-	$query .= " WHERE idusers=$this->idusers;";
+     echo $query;
+     }
+  }
+  // Don't forget tu add the where clause... and execute the query
+  $query .= " WHERE idusers=$this->idusers;";
         mysql_db_query(DBNAME,$query); //or die("Query failed : " . mysql_error." ".$query);
 
-	// Mark the task as DONE
-	$query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = $row[0];";
+  // Mark the task as DONE
+  $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = $row[0];";
         mysql_db_query(DBNAME,$query); //or die("Query failed : " . mysql_error." ".$query);
         
         // Purge old tasks
@@ -170,8 +170,8 @@ class users
   {
     // lookup for a task to do
     $query = "SELECT count(*) NumTasks FROM auto_pilot
-		 WHERE idusers = $this->idusers
-		   AND status = '" . $status . "'";
+     WHERE idusers = $this->idusers
+       AND status = '" . $status . "'";
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
@@ -193,15 +193,15 @@ class users
     $this->pilototo=array();
     // lookup for a task to do
     $query = "SELECT taskid, time, pilotmode, pilotparameter, status FROM auto_pilot
-		 WHERE idusers = $this->idusers
-		   ORDER by time ASC";
-//		   AND status = '" . $status . "'
+     WHERE idusers = $this->idusers
+       ORDER by time ASC";
+//       AND status = '" . $status . "'
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
     //echo $query;
     while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
 
-	  array_push ($this->pilototo, $row);
+    array_push ($this->pilototo, $row);
         
     }
     return(0);
@@ -213,8 +213,8 @@ class users
     $now=time();
     // lookup for a task to do
     $query = "DELETE FROM auto_pilot
-		 WHERE idusers = $this->idusers
-		   AND taskid = $taskid";
+     WHERE idusers = $this->idusers
+       AND taskid = $taskid";
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
 //echo $query;
@@ -236,8 +236,8 @@ class users
     
     // lookup for a task to do
     $query = "DELETE FROM auto_pilot
-		 WHERE idusers = $this->idusers
-		   AND time   <= $timestamp";
+     WHERE idusers = $this->idusers
+       AND time   <= $timestamp";
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
 //echo $query;
@@ -254,8 +254,8 @@ class users
     $row = mysql_fetch_array($result, MYSQL_NUM);
     if ( $row[0] < PILOTOTO_MAX_EVENTS ) {
          $query = "INSERT INTO auto_pilot
-	           ( time, idusers, pilotmode, pilotparameter, status)
-		   VALUES ( $time, $this->idusers, '" . $pim . "', '" . $pip . "', '".PILOTOTO_PENDING."');";
+             ( time, idusers, pilotmode, pilotparameter, status)
+       VALUES ( $time, $this->idusers, '" . $pim . "', '" . $pip . "', '".PILOTOTO_PENDING."');";
          $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
          //echo $query;
          return(0);
@@ -269,12 +269,12 @@ class users
   {
     // lookup for a task to do
     $query = "UPDATE auto_pilot
-		 SET time=$time,
-		     pilotmode = $pim,
-		     pilotparameter = '" . $pip . "',
-		     status = '" .PILOTOTO_PENDING . "' 
-	       WHERE idusers = $this->idusers
-		 AND taskid = $taskid";
+     SET time=$time,
+         pilotmode = $pim,
+         pilotparameter = '" . $pip . "',
+         status = '" .PILOTOTO_PENDING . "' 
+         WHERE idusers = $this->idusers
+     AND taskid = $taskid";
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 //echo $query;
 
@@ -323,14 +323,14 @@ class fullUsers
 
     if (!isset($lastPositionsObject->long) )
     {
-	//if object is empty
-	//that shouldnot happen if base is written automaticaly
-	//but it's dangerous
-	//write a default position
+  //if object is empty
+  //that shouldnot happen if base is written automaticaly
+  //but it's dangerous
+  //write a default position
 
-	//echo "writing default positions ".$this->users->idusers."\n";
-	$lastPositionsObject->writeDefaultPositions(
-				$this->users->idusers, $this->users->engaged);
+  //echo "writing default positions ".$this->users->idusers."\n";
+  $lastPositionsObject->writeDefaultPositions(
+        $this->users->idusers, $this->users->engaged);
     }
     $this->lastPositions = $lastPositionsObject;
 
@@ -338,13 +338,13 @@ class fullUsers
     $anteLastPositionsObject = new positions;
 //  echo "Avant appel anteLast depuis users.class.php 2\n";
     $anteLastPositionsObject->getAnteLastPositions(
-				$this->users->idusers, $this->users->engaged);
+        $this->users->idusers, $this->users->engaged);
     $this->anteLastPositions = $anteLastPositionsObject;
 
     // this->hours (temps depuis la dernière VAC)
     if ( $this->users->userdeptime == -1 ) {
          $time = $now;
-	 $this->hours = 0;
+   $this->hours = 0;
     } else {
          $time = $this->lastPositions->time;
          $this->hours = ($now - $time )/3600 ;  //everything is in GMT
@@ -366,8 +366,8 @@ class fullUsers
     //find boatspeed
     //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
     $this->boatspeed =  findboatspeed(abs($this->boatanglewithwind),
-					$this->wspeed,
-					$this->users->boattype);
+          $this->wspeed,
+          $this->users->boattype);
 
     // Find the best coordinates to cross the nextwaypoint (LatNM & LongNM)
     /* 
@@ -379,8 +379,8 @@ class fullUsers
          $rc = $this->bestWayToWaypoint($this->nwp);
     } else {
     //echo "*User WP*";
-	 $this->LatNM = $this->users->targetlat*1000;
-	 $this->LongNM = $this->users->targetlong*1000;
+   $this->LatNM = $this->users->targetlat*1000;
+   $this->LongNM = $this->users->targetlong*1000;
     }
 
     $this->distancefromend = ortho($this->lastPositions->long, $this->lastPositions->lat, $this->LongNM, $this->LatNM);
@@ -390,12 +390,12 @@ class fullUsers
 
     $this->VMG =
       VMG( $this->lastPositions->long, $this->lastPositions->lat,
-	   $this->LongNM, $this->LatNM,
-	   $this->users->boatheading, $this->boatspeed, 0);
+     $this->LongNM, $this->LatNM,
+     $this->users->boatheading, $this->boatspeed, 0);
 
     $this->VMGortho =
       VMGortho($this->lastPositions->long, $this->lastPositions->lat,
-	   $this->users->boatheading, $this->boatspeed, $this->orthoangletoend);
+     $this->users->boatheading, $this->boatspeed, $this->orthoangletoend);
 
     //    print_r($this);
 
@@ -419,7 +419,7 @@ class fullUsers
     //printf ("Lat2=%f, Long2=%f\n", $nextwaypoint[3]/1000, $nextwaypoint[2]/1000);
     //printf ("BoatLat=%f, BoatLong=%f\n", $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
     $coords=coordonneescroisement($nextwaypoint[1]/1000, $nextwaypoint[0]/1000,
-    				  $nextwaypoint[3]/1000, $nextwaypoint[2]/1000,
+              $nextwaypoint[3]/1000, $nextwaypoint[2]/1000,
                                   $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
 
     $this->LatNM=$coords[0]*1000;
@@ -448,7 +448,7 @@ class fullUsers
     //TODO write a positions->deletepositions that will be called here for every positions
     //delete old positions from database
     $query65 = "DELETE FROM positions WHERE idusers = ". $this->users->idusers  . 
-    	 	" AND  race = " . $idraces;
+         " AND  race = " . $idraces;
     mysql_db_query(DBNAME,$query65);// or die("Query failed : " . mysql_error." ".$query65);
   }
 
@@ -456,36 +456,36 @@ class fullUsers
   {
     if ( $this->users->pilotmode == PILOTMODE_BESTSPEED ) //  BEST SPEED
     {
-	$Hdg=0; $bestHdg=0; 
-	$Spd=-1 ;$bestSpd=-1;
-	while ( $Hdg <= 359 ) {
-	        $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
-			                              $this->wspeed,
-			                              $this->users->boattype);
-		if ( $Spd >= $bestSpd ) {
-			$bestHdg=$Hdg;
-			$bestSpd=$Spd;
-		}
-		$Hdg+=1;
-		//echo "DEBUG Spd=$Spd, H=$Hdg \n";
-	}
+  $Hdg=0; $bestHdg=0; 
+  $Spd=-1 ;$bestSpd=-1;
+  while ( $Hdg <= 359 ) {
+          $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
+                                    $this->wspeed,
+                                    $this->users->boattype);
+    if ( $Spd >= $bestSpd ) {
+      $bestHdg=$Hdg;
+      $bestSpd=$Spd;
+    }
+    $Hdg+=1;
+    //echo "DEBUG Spd=$Spd, H=$Hdg \n";
+  }
 
         // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degré près".
-	for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
-	        $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
-			                              $this->wspeed,
-			                              $this->users->boattype);
-		if ( $Spd > $bestSpd ) {
-			$bestHdg=$Hdg;
-			$bestSpd=$Spd;
-		}
-		//echo "DEBUG Spd=$Spd, H=$Hdg \n";
-	}
+  for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
+          $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
+                                    $this->wspeed,
+                                    $this->users->boattype);
+    if ( $Spd > $bestSpd ) {
+      $bestHdg=$Hdg;
+      $bestSpd=$Spd;
+    }
+    //echo "DEBUG Spd=$Spd, H=$Hdg \n";
+  }
 
-	$this->users->boatheading = $bestHdg;
-	$query1 = "UPDATE users SET boatheading =". $this->users->boatheading 
-	        ." WHERE idusers =".$this->users->idusers;
-	$result1 = mysql_db_query(DBNAME,$query1);
+  $this->users->boatheading = $bestHdg;
+  $query1 = "UPDATE users SET boatheading =". $this->users->boatheading 
+          ." WHERE idusers =".$this->users->idusers;
+  $result1 = mysql_db_query(DBNAME,$query1);
     }
 
     if ( $this->users->pilotmode == PILOTMODE_BESTVMG ) //  BEST VMG
@@ -556,36 +556,36 @@ class fullUsers
 
     if ($this->users->pilotmode == PILOTMODE_WINDANGLE) //constant wind angle
     {
-	//update boatheading
-	$this->users->boatheading = (($this->wheading+180) + $this->users->pilotparameter) ;
+  //update boatheading
+  $this->users->boatheading = (($this->wheading+180) + $this->users->pilotparameter) ;
 
-	while ( $this->users->boatheading > 360 ) $this->users->boatheading-=360;
-	while ( $this->users->boatheading < 0 ) $this->users->boatheading+=360;
+  while ( $this->users->boatheading > 360 ) $this->users->boatheading-=360;
+  while ( $this->users->boatheading < 0 ) $this->users->boatheading+=360;
 
-	$query1 = "UPDATE users SET boatheading =". round($this->users->boatheading ,1)
-	  ." WHERE idusers =".$this->users->idusers;
-	$result1 = mysql_db_query(DBNAME,$query1);
-	//echo $query1;
+  $query1 = "UPDATE users SET boatheading =". round($this->users->boatheading ,1)
+    ." WHERE idusers =".$this->users->idusers;
+  $result1 = mysql_db_query(DBNAME,$query1);
+  //echo $query1;
     }
 
     if ($this->users->pilotmode == PILOTMODE_ORTHODROMIC) //orthodromic course, no pilot parameter required
     {
-	//update boatheading
-	$this->users->boatheading = $this->orthodromicHeading();
-	$query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-	  ." WHERE idusers = ".$this->users->idusers;
-	$result1 = mysql_db_query(DBNAME,$query1);
-	//echo $query1;
+  //update boatheading
+  $this->users->boatheading = $this->orthodromicHeading();
+  $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
+    ." WHERE idusers = ".$this->users->idusers;
+  $result1 = mysql_db_query(DBNAME,$query1);
+  //echo $query1;
     }
     //find the angle boat/wind
     $this->boatanglewithwind = angleDifference($this->users->boatheading,
-						$this->wheading) ;
+            $this->wheading) ;
 
     //find boatspeed
     //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
     $this->boatspeed =  findboatspeed($this->boatanglewithwind,
-					$this->wspeed,
-					$this->users->boattype);
+          $this->wspeed,
+          $this->users->boattype);
 
   }
 
@@ -616,7 +616,7 @@ class fullUsers
              $query .=  " pilotparameter  = " . $this->users->pilotparameter . " ," ;
              $query .=  " boatheading     = " . $this->users->boatheading    . " ," ;
         }  else  {
-	     // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG)
+       // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG)
              // Mais il faut remettre à jour LatNM et LongNM
               $rc = $this->bestWayToWaypoint($this->nwp);
         }
@@ -629,7 +629,7 @@ class fullUsers
         $query .=  " targetlong      = " . $this->users->targetlong     . " ," ;
 
         $query .= "   lastchange      = " . time()  .
-    		" WHERE idusers = " . $this->users->idusers;
+        " WHERE idusers = " . $this->users->idusers;
 
         //echo "ABANDONWP QUERY=" . $query;
         mysql_db_query(DBNAME,$query) ; //or printf("\nQuery failed : " . mysql_error." ".$query);
@@ -653,8 +653,8 @@ class fullUsers
           * Update targetlong
           */
         if ( is_numeric($long) && abs($long)<180 ) {
-    	if ( $long >180 ) $long-=360;
-    	if ( $long <-180 ) $long+=360;
+      if ( $long >180 ) $long-=360;
+      if ( $long <-180 ) $long+=360;
             $this->users->targetlong = $long;
             $query .= " , `targetlong` = " . $this->users->targetlong ; 
         } else { 
@@ -705,20 +705,20 @@ class fullUsers
     // Retourne -1 si il n'y a plus de waypoints (on a passé le dernier, donc la finish line)
 //     select wporder from races_waypoints where idraces=35 and wporder >1 ORDER BY wporder ASC LIMIT 1; 
     $query = "SELECT wporder FROM races_waypoints " .
-    		" WHERE idraces = " . $this->users->engaged . 
-		" AND wporder > " . $this->users->nwp . 
-		" ORDER BY wporder ASC LIMIT 1";
+        " WHERE idraces = " . $this->users->engaged . 
+    " AND wporder > " . $this->users->nwp . 
+    " ORDER BY wporder ASC LIMIT 1";
 
     $result = mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request Races_Waypoints : %s\n" , $query);
 
     if ( mysql_num_rows($result) == 0 ) {
-	printf (", No more Waypoint\n");
-	return (-1);
+  printf (", No more Waypoint\n");
+  return (-1);
     } else {
-    	$row = mysql_fetch_array($result, MYSQL_NUM);
-	printf (", Next Waypoint : %d. ", $row[0] );
-	return ($row[0]);
+      $row = mysql_fetch_array($result, MYSQL_NUM);
+  printf (", Next Waypoint : %d. ", $row[0] );
+  return ($row[0]);
     }
 
   }
@@ -745,7 +745,7 @@ class fullUsers
                                        $this->nwp . ", " .
                                        $this->users->idusers . ", " .
                                        time() . ", " .
-				       $udt . ");"   ;
+               $udt . ");"   ;
 
      mysql_db_query(DBNAME,$query) ;//or die("Query failed : " . mysql_error." ".$query);
 
@@ -755,15 +755,15 @@ class fullUsers
   {
     // MAJ la table users pour prise en compte du prochain Waypoint
     $query = "UPDATE users SET nextwaypoint = " . $this->nwp . 
-	     " WHERE idusers = " . $this->users->idusers;
+       " WHERE idusers = " . $this->users->idusers;
     mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
     // MAJ la table races_ranking pour prise en compte du prochain Waypoint
     //$query = "UPDATE races_ranking SET nwp = " . $this->nwp . ", " .
     //         "                         dnm       = " . $this->distancefromend     . ", " .
-    //	     " WHERE idusers = " . $this->users->idusers .
-    //	     "   AND idraces = " . $this->users->engaged;
+    //       " WHERE idusers = " . $this->users->idusers .
+    //       "   AND idraces = " . $this->users->engaged;
     //   mysql_db_query(DBNAME,$query);// or die("Query failed : " . mysql_error." ".$query);
     //  printf ("Request RACES_RANKING : %s\n" , $query);
   }
@@ -791,13 +791,13 @@ class fullUsers
 
     // Cumul du loch sauf si bout au vent... (si vitesse <0.1, loch n'est pas incrémenté)
     if ( $this->boatspeed > 0.1 )  {
-    	$query_update .= " loch = loch + " . round($this->boatspeed*$this->hours,3) . "," ;
+      $query_update .= " loch = loch + " . round($this->boatspeed*$this->hours,3) . "," ;
     }
 
     // On décrémente HidePos si positif
     if ( $this->users->hidepos > 0 ) {
          $this->users->hidepos = $this->users->hidepos - 1 ;
-    	$query_update .= " hidepos = " .  $this->users->hidepos . "," ;
+      $query_update .= " hidepos = " .  $this->users->hidepos . "," ;
     }
 
     $query_update .= " lastupdate = " . time() ; 
@@ -838,9 +838,9 @@ class fullUsers
     // 1 : corrected, 0 : not corrected
     $dist = $this->distRecords(24*3600);
     if ( $this->loch > $dist[1] ) {
-    	$last24h = $dist[1];
+      $last24h = $dist[1];
     } else {
-    	$last24h = $dist[0];
+      $last24h = $dist[0];
     }
     if ( $last24h > 24 * MAX_SPEED_FOR_RANKING ) $last24h = 0;
 
@@ -982,16 +982,16 @@ class fullUsers
     //                       values ($1, $2, 0, $la_date, $longitude, $latitude);
     $timestamp=time();
     $query = "UPDATE users SET `pilotmode` = 2, " .
-    	     " `pilotparameter` = 0 , " . 
-	     " `lastchange` = " . $timestamp . 
-	     " WHERE idusers = ".$this->users->idusers;
+           " `pilotparameter` = 0 , " . 
+       " `lastchange` = " . $timestamp . 
+       " WHERE idusers = ".$this->users->idusers;
     mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
     // Determiner quel est le timestamp de la dernière position écrite pour ce joueur
     $query = "SELECT max(time) FROM positions " .
              " WHERE race = " . $this->users->engaged . 
-	     " AND   idusers = ". $this->users->idusers  ;
+       " AND   idusers = ". $this->users->idusers  ;
     $result = mysql_db_query(DBNAME,$query);// or echo("Query failed : " . mysql_error." ".$query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
     $timestamp=$row[0];
@@ -1000,7 +1000,7 @@ class fullUsers
     $query = "DELETE FROM positions " . 
              " WHERE `time` = " .  $timestamp  . 
              " AND race = " . $this->users->engaged . 
-	     " AND idusers = ". $this->users->idusers ;
+       " AND idusers = ". $this->users->idusers ;
     //printf ("Request POSITIONS : %s\n" , $query);
     mysql_db_query(DBNAME,$query);// or echo("Query failed : " . mysql_error." ".$query);
 
@@ -1012,16 +1012,16 @@ class fullUsers
   {
     $query11 = "UPDATE users SET engaged =" . $id . ", " . 
                " pilotmode=2, " . 
-	       " pilotparameter=0,  " . 
-	       " nextwaypoint=1, " . 
-	       " userdeptime=-1, " . 
-	       " loch=0 " . 
-	       " WHERE idusers = ".$this->users->idusers;
+         " pilotparameter=0,  " . 
+         " nextwaypoint=1, " . 
+         " userdeptime=-1, " . 
+         " loch=0 " . 
+         " WHERE idusers = ".$this->users->idusers;
     $result11 = mysql_db_query(DBNAME,$query11);
 
     if ( $id != 0 ) {
-    	$this->races = new races($id);
-    	$this->users->boattype = $this->races->boattype;
+      $this->races = new races($id);
+      $this->users->boattype = $this->races->boattype;
 
         //delete old positions from database for this race
         $this->deletePositions($id);
@@ -1029,34 +1029,34 @@ class fullUsers
         // Purge all Pilototo tasks
         $this->users->pilototoPurge(0);
 
-	// insert an initial position
-    	$query7 = "INSERT INTO positions SET     `time` = ". time().
+  // insert an initial position
+      $query7 = "INSERT INTO positions SET     `time` = ". time().
                                        ",    `long` =". $this->races->startlong .
                                        ",     `lat` =". $this->races->startlat.
                                        ", `idusers` = ".$this->users->idusers.
                                        ", `race`    = ".$id;
-    	mysql_db_query(DBNAME,$query7);
+      mysql_db_query(DBNAME,$query7);
 
-    	// Delete old positions from races_results (in case of sub/unsub/sub again) (only if not TYPE_RECORD)
+      // Delete old positions from races_results (in case of sub/unsub/sub again) (only if not TYPE_RECORD)
         if ( $this->races->racetype != RACE_TYPE_RECORD ) {
-    	   $query_clean_races_results = "DELETE FROM races_results WHERE `idraces` = ". $id .
+         $query_clean_races_results = "DELETE FROM races_results WHERE `idraces` = ". $id .
                                         " AND `idusers` = " . $this->users->idusers;
-    	   mysql_db_query(DBNAME,$query_clean_races_results);
-	}
+         mysql_db_query(DBNAME,$query_clean_races_results);
+  }
  
-    	// Delete all old entries from races_ranking
-    	$query_clean_races_ranking = "DELETE FROM races_ranking where idusers= " .  $this->users->idusers ;
-    	mysql_db_query(DBNAME,$query_clean_races_ranking);
+      // Delete all old entries from races_ranking
+      $query_clean_races_ranking = "DELETE FROM races_ranking where idusers= " .  $this->users->idusers ;
+      mysql_db_query(DBNAME,$query_clean_races_ranking);
 
-    	// Prepare the table races_ranking
-    	$query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers ) values " . 
-				     " ( ". $id . ", " . $this->users->idusers . ")";
-    	mysql_db_query(DBNAME,$query_clean_races_ranking);
+      // Prepare the table races_ranking
+      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers ) values " . 
+             " ( ". $id . ", " . $this->users->idusers . ")";
+      mysql_db_query(DBNAME,$query_clean_races_ranking);
 
-    	// Update boattype
+      // Update boattype
         $query_boattype=" UPDATE users set boattype = '" . $this->races->boattype . "'" . 
                         "             ,    targetlat = 0, targetlong = 0, targetandhdg = -1        " .   
-	                " WHERE idusers = " . $this->users->idusers;
+                  " WHERE idusers = " . $this->users->idusers;
         $result = mysql_db_query(DBNAME,$query_boattype) or die("Query [$query_boattype] failed \n");
 
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $id, "Engaged." );
@@ -1085,63 +1085,63 @@ class fullUsers
 
     if ($mode == "autopilot")
       {
-	//find angle and wind angle
-	$this->users->boatheading = $boath;
-	$this->users->pilotmode = 1;
-	$query = "UPDATE users SET `pilotmode` = 1, " . 
-		 " boatheading = ". $this->users->boatheading . ", " .
-		 " pilotparameter = ". $this->users->boatheading . ", " .
-		 " lastchange = ". $timestamp . ", " .
-		 " ipaddr = '". $_SESSION['IP'] . "'" .
-	         " WHERE idusers = ".$this->users->idusers;
-	$result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+  //find angle and wind angle
+  $this->users->boatheading = $boath;
+  $this->users->pilotmode = 1;
+  $query = "UPDATE users SET `pilotmode` = 1, " . 
+     " boatheading = ". $this->users->boatheading . ", " .
+     " pilotparameter = ". $this->users->boatheading . ", " .
+     " lastchange = ". $timestamp . ", " .
+     " ipaddr = '". $_SESSION['IP'] . "'" .
+           " WHERE idusers = ".$this->users->idusers;
+  $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading );
       }
 
     else if ($mode == "windangle")
       {
-	$this->users->pilotparameter = $param;
-	$this->users->pilotmode = 2;
-	$query = "UPDATE users SET `pilotmode` = 2, " . 
-		  " `pilotparameter` = " . round($this->users->pilotparameter,1) . ", " .
-		  " lastchange = ". $timestamp . ", " .
-		  " ipaddr = '". $_SESSION['IP'] . "'" .
-		  " WHERE idusers = ".$this->users->idusers;
-	mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+  $this->users->pilotparameter = $param;
+  $this->users->pilotmode = 2;
+  $query = "UPDATE users SET `pilotmode` = 2, " . 
+      " `pilotparameter` = " . round($this->users->pilotparameter,1) . ", " .
+      " lastchange = ". $timestamp . ", " .
+      " ipaddr = '". $_SESSION['IP'] . "'" .
+      " WHERE idusers = ".$this->users->idusers;
+  mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter );
 
       }
 
     else if ($mode == "orthodromic")
       {
-	$this->users->pilotmode = 3;
-	$query = "UPDATE users SET `pilotmode` = 3, " . 
-		  " lastchange = ". $timestamp . ", " .
-		  " ipaddr = '". $_SESSION['IP'] . "'" .
-		  " WHERE idusers = ".$this->users->idusers;
-	mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+  $this->users->pilotmode = 3;
+  $query = "UPDATE users SET `pilotmode` = 3, " . 
+      " lastchange = ". $timestamp . ", " .
+      " ipaddr = '". $_SESSION['IP'] . "'" .
+      " WHERE idusers = ".$this->users->idusers;
+  mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
 
       }
     else if ($mode == "bestvmg")
       {
-	$this->users->pilotmode = 4;
-	$query = "UPDATE users SET `pilotmode` = 4, " . 
-		  " lastchange = ". $timestamp . ", " .
-		  " ipaddr = '". $_SESSION['IP'] . "'" .
-		  " WHERE idusers = ".$this->users->idusers;
-	mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+  $this->users->pilotmode = 4;
+  $query = "UPDATE users SET `pilotmode` = 4, " . 
+      " lastchange = ". $timestamp . ", " .
+      " ipaddr = '". $_SESSION['IP'] . "'" .
+      " WHERE idusers = ".$this->users->idusers;
+  mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
 
       }
     else if ($mode == "bestspeed")
       {
-	$this->users->pilotmode = 5;
-	$query = "UPDATE users SET `pilotmode` = 5, " . 
-		  " lastchange = ". $timestamp . ", " .
-		  " ipaddr = '". $_SESSION['IP'] . "'" .
-		  " WHERE idusers = ".$this->users->idusers;
-	mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+  $this->users->pilotmode = 5;
+  $query = "UPDATE users SET `pilotmode` = 5, " . 
+      " lastchange = ". $timestamp . ", " .
+      " ipaddr = '". $_SESSION['IP'] . "'" .
+      " WHERE idusers = ".$this->users->idusers;
+  mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       }
@@ -1246,7 +1246,7 @@ class fullUsers
      $lat_bat = deg2rad($this->lastPositions->lat/1000);
 
      if ($lat_bat == $lat_wp and $long_bat == $long_wp) {
- 	$caportho = 2; 
+   $caportho = 2; 
      } else {
         $X = M_PI_2 - $lat_wp;
         $Y = M_PI_2 - $lat_bat;
@@ -1254,16 +1254,16 @@ class fullUsers
         $W = (cos($X) -  (cos($Y) * cos($Z)))/ (sin($Y) * sin($Z));
 
         if ($W > 1 or $W < -1) {
-     	   $cap = 0;
+          $cap = 0;
         } else {
-	   $cap = rad2deg(acos($W));
+     $cap = rad2deg(acos($W));
         }
      }
 
      if (($lat_bat < $lat_wp and $long_bat == $long_wp) or ($lat_bat == $lat_wp and $long_bat == $long_wp) or ($lat_bat == 0 and $long_bat == 0 and $lat_wp == 0 and $long_wp == 0 )) $caportho = 0;
-	 elseif (($lat_bat > $lat_wp and $long_bat == $long_wp)) $caportho = 180 ;
-	 elseif (sin($long_wp - $long_bat) > 0) $caportho = $cap;
-	 elseif ($caportho = 360 - $cap );
+   elseif (($lat_bat > $lat_wp and $long_bat == $long_wp)) $caportho = 180 ;
+   elseif (sin($long_wp - $long_bat) > 0) $caportho = $cap;
+   elseif ($caportho = 360 - $cap );
 
    return $caportho;
   }
@@ -1277,112 +1277,108 @@ class fullUsers
 
     function dotheycross($x1,$y1,$x2,$y2,$x3,$y3,$x4,$y4, &$encounterCoordinates, $verbose)
     {
-	$rotation=0;
+        $rotation=0;
 
-	//printf ("\nVecteur 1:x=%f,y=%f -> x=%f,y=%f\n", $x1,$y1,$x2,$y2);
-	//printf ("Vecteur 2:x=%f,y=%f -> x=%f,y=%f\n", $x3,$y3,$x4,$y4);
-	// Test sur la longueur des vecteurs (pour éviter boucle à vide)
-	if ( $x1 == $x2 && $y1 == $y2 ) return (false);
-	if ( $x3 == $x4 && $y3 == $y4 ) return (false);
-	// On peut y aller, les coordonnées ne désignent pas des points.
+        //printf ("\nVecteur 1:x=%f,y=%f -> x=%f,y=%f\n", $x1,$y1,$x2,$y2);
+        //printf ("Vecteur 2:x=%f,y=%f -> x=%f,y=%f\n", $x3,$y3,$x4,$y4);
+        // Test sur la longueur des vecteurs (pour éviter boucle à vide)
+        if ( $x1 == $x2 && $y1 == $y2 ) return (false);
+        if ( $x3 == $x4 && $y3 == $y4 ) return (false);
+        // On peut y aller, les coordonnées ne désignent pas des points.
 
-	if ( $verbose > 0) echo "== Enterring dotheycross ==";
-	//on test division !=0
-	while(($x1==$x2)  || ($x3==$x4)) {
-	//on fait une rotation de tous les pts
-	//x' = xcos(q) - ysin(q) + a 
-	//y' = xsin(q) + ycos(q) + b
-		$rotation+=.01;
-	
-		$tmp=$x1;
-		$x1=$x1*cos($rotation) - $y1*sin($rotation);
-		$y1=$tmp*sin($rotation) + $y1*cos($rotation);
+        if ( $verbose > 0) echo "== Enterring dotheycross ==";
+        //on test division !=0
+        while(($x1==$x2)  || ($x3==$x4)) {
+            //on fait une rotation de tous les pts
+            //x' = xcos(q) - ysin(q) + a 
+            //y' = xsin(q) + ycos(q) + b
+            $rotation+=.01;
+          
+            $tmp=$x1;
+            $x1=$x1*cos($rotation) - $y1*sin($rotation);
+            $y1=$tmp*sin($rotation) + $y1*cos($rotation);
 
-		$tmp=$x2;
-		$x2=$x2*cos($rotation) - $y2*sin($rotation);
-		$y2=$tmp*sin($rotation) + $y2*cos($rotation);
+            $tmp=$x2;
+            $x2=$x2*cos($rotation) - $y2*sin($rotation);
+            $y2=$tmp*sin($rotation) + $y2*cos($rotation);
 
-		$tmp=$x3;
-		$x3=$x3*cos($rotation) - $y3*sin($rotation);
-		$y3=$tmp*sin($rotation) + $y3*cos($rotation);
+            $tmp=$x3;
+            $x3=$x3*cos($rotation) - $y3*sin($rotation);
+            $y3=$tmp*sin($rotation) + $y3*cos($rotation);
 
-		$tmp=$x4;
-		$x4=$x4*cos($rotation) - $y4*sin($rotation);
-		$y4=$tmp*sin($rotation) + $y4*cos($rotation);
-	} 
-	if ( $verbose > 0) echo "== Après while ==";
+            $tmp=$x4;
+            $x4=$x4*cos($rotation) - $y4*sin($rotation);
+            $y4=$tmp*sin($rotation) + $y4*cos($rotation);
+        } 
+        if ( $verbose > 0) echo "== Après while ==";
 
-	//calcul l'equation de la premiere droite de point 1 et 2
-	//y=ax+b
-	$a1 = ($y1 - $y2) / ($x1 - $x2);
-	$b1 = $y2 - $a1 * $x2;
+        //calcul l'equation de la premiere droite de point 1 et 2
+        //y=ax+b
+        $a1 = ($y1 - $y2) / ($x1 - $x2);
+        $b1 = $y2 - $a1 * $x2;
 
-	//calcul l'equation de la seconde droite de point 3 et 4
-	//y=ax+b
-	$a2 = ($y3 - $y4) / ($x3 - $x4);
-	$b2 = $y4 - $a2 * $x4;
+        //calcul l'equation de la seconde droite de point 3 et 4
+        //y=ax+b
+        $a2 = ($y3 - $y4) / ($x3 - $x4);
+        $b2 = $y4 - $a2 * $x4;
 
-	//on verifie que les 2 droites se croisent
-	if( $a1 == $a2 ) {
-	  	if ($verbose > 0)
-			echo "droites // "; 
-		return(false);
-	}
+        //on verifie que les 2 droites se croisent
+        if( $a1 == $a2 ) {
+            if ($verbose > 0) echo "droites // "; 
+            return(false);
+        }
 
-	//calcul des points d'intersection
-	$xi = ($b2 - $b1) / ($a1 - $a2);
-	$yi = $a1 * $xi + $b1;
+        //calcul des points d'intersection
+        $xi = ($b2 - $b1) / ($a1 - $a2);
+        $yi = $a1 * $xi + $b1;
 
-	//on test si le pt i est  sur le vecteur 1
-	if ( $x1<$x2 ) {
-		$maxX=$x2; $minX=$x1;
-	} else {
-		$maxX=$x1; $minX=$x2;
-	}
+        //on test si le pt i est  sur le vecteur 1
+        if ( $x1<$x2 ) {
+            $maxX=$x2; $minX=$x1;
+        } else {
+            $maxX=$x1; $minX=$x2;
+        }
 
-	if ( $y1<$y2 ) {
-		$maxY=$y2; $minY=$y1;
-	} else {
-		$maxY=$y1; $minY=$y2;
-	}
+        if ( $y1<$y2 ) {
+            $maxY=$y2; $minY=$y1;
+        } else {
+            $maxY=$y1; $minY=$y2;
+        }
 
-	if( ($xi<$minX || $xi>$maxX) ||  ($yi<$minY || $yi>$maxY) ) {
-	  	if ($verbose > 0)
-			echo "les 2 vecteurs ne se croisent pas"; 
-		return(false);
-	}
+        if( ($xi<$minX || $xi>$maxX) ||  ($yi<$minY || $yi>$maxY) ) {
+            if ($verbose > 0) echo "les 2 vecteurs ne se croisent pas"; 
+            return(false);
+        }
 
-	//on test si le pt i est  sur le vecteur 2
-	if ( $x3<$x4 ) {
-		$maxX=$x4; $minX=$x3;
-	} else {
-		$maxX=$x3; $minX=$x4;
-	}
+        //on test si le pt i est  sur le vecteur 2
+        if ( $x3<$x4 ) {
+            $maxX=$x4; $minX=$x3;
+        } else {
+            $maxX=$x3; $minX=$x4;
+        }
 
-  	if( $y3<$y4 ) {
-		$maxY=$y4; $minY=$y3;
-  	} else {
-		$maxY=$y3; $minY=$y4;
-  	}
+        if( $y3<$y4 ) {
+            $maxY=$y4; $minY=$y3;
+        } else {
+            $maxY=$y3; $minY=$y4;
+        }
 
-  	if ( ($xi<$minX || $xi>$maxX) ||  ($yi<$minY || $yi>$maxY) ) {
-	  	if ($verbose > 0)
-			echo "les 2 vecteurs ne se croisent pas"; 
-		return(false);
-  	}
+        if ( ($xi<$minX || $xi>$maxX) ||  ($yi<$minY || $yi>$maxY) ) {
+            if ($verbose > 0) echo "les 2 vecteurs ne se croisent pas"; 
+            return(false);
+        }
 
-  	// On a trouvé l'intersection
-  	// on fait une rotation inverse afin de retablir le repere d'origine
-  	$rotation=-$rotation;
-  	$tmp=$xi;
-  	$xi=$xi*cos($rotation) - $yi*sin($rotation);
-  	$yi=$tmp*sin($rotation) + $yi*cos($rotation);
+        // On a trouvé l'intersection
+        // on fait une rotation inverse afin de retablir le repere d'origine
+        $rotation=-$rotation;
+        $tmp=$xi;
+        $xi=$xi*cos($rotation) - $yi*sin($rotation);
+        $yi=$tmp*sin($rotation) + $yi*cos($rotation);
 
-	if ($verbose > 0)
-  		echo "intersection : (".$xi.";".$yi.")<br>";
-	$encounterCoordinates = array ($xi , $yi );
-	if ( $verbose > 0) echo "== Exiting dotheycross ==";
-	return(true);
+        if ($verbose > 0) echo "intersection : (".$xi.";".$yi.")<br>";
+        $encounterCoordinates = array ($xi , $yi );
+        if ( $verbose > 0) echo "== Exiting dotheycross ==";
+        return(true);
     }
 
 
@@ -1475,7 +1471,7 @@ class fullUsers
     $time_elapsed = max($timestamp - $position[0], 1);
 
     if ($time_elapsed == 1 && $distance > 10) {
-	$distance = 0;
+  $distance = 0;
         $corrected_distance = 0;
     } else {
         $corrected_distance =  $distance *  $duration / $time_elapsed ;
@@ -1501,12 +1497,12 @@ class fullUsers
 
     foreach($this->allPositions->records as $pos)
     {
-	//echo "sum = $sum, checking : ";
-	//print_r($pos);
-	if ( (time() - $pos->time) > $duration)
-	  break;
-	$sum = $sum + ortho($pos->long, $pos->lat, $lastPos->long, $lastPos->lat);
-	$lastPos = $pos;
+  //echo "sum = $sum, checking : ";
+  //print_r($pos);
+  if ( (time() - $pos->time) > $duration)
+    break;
+  $sum = $sum + ortho($pos->long, $pos->lat, $lastPos->long, $lastPos->lat);
+  $lastPos = $pos;
     }
 
 
@@ -1518,9 +1514,9 @@ class fullUsers
   {
     $othersUsers = new fullUsers($idu, $this->north, $this->south, $this->west, $this->east);
     return ortho($this->lastPositions->long,
-		 $this->lastPositions->lat,
-		 $othersUsers->lastPositions->long,
-		 $othersUsers->lastPositions->lat);
+     $this->lastPositions->lat,
+     $othersUsers->lastPositions->long,
+     $othersUsers->lastPositions->lat);
   }
 
 }
@@ -1538,7 +1534,7 @@ class excludedUsers
       $lastPositions, //a postions object
       $hours,
       $anteLastPositions, //another positions obj
-      $races ;  	//include a race object
+      $races ;    //include a race object
 
 
   // This one takes one more parameter than fullUsers (raceid)
