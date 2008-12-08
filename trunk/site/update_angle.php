@@ -18,6 +18,17 @@ include_once("config.php");
 
 //echo "<p>";
 
+if ( preg_match('/[#%]/', $pilotmode ) ||
+     preg_match('/[#%]/', $boatheading ) ||
+     preg_match('/[#%]/', $pilotparameter ) ) {
+
+      printf ("<H1>This is not a nice thing to try this.</H1>");
+      printf ("<H2>Your IP address is : " . $_SERVER["REMOTE_ADDR"] . "</H2>\n");
+      sleep (1);
+      printf ("<H2>It has been logged. Don't try this again.</H2>\n");
+      exit;
+}
+
 if ($idusers != 0 )
 {
 
