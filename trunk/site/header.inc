@@ -249,7 +249,6 @@ else //if loggedin
   <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
   <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
   <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
-<!--  <a href="http://s142313913.onlinehome.fr/vlm/solitaire.html" target="_rankings"><?echo $strings[$lang]["ranking"]?></a>  -->
   </p>
   <form method="post" action="index.php">
     <p align="center">
@@ -276,6 +275,7 @@ else //if loggedin
       <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
       <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
       <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a><br />
+      <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]?></a> 
       <a href="faq.php?lang=<?echo $lang?>"><?echo $strings[$lang]["faq"]?></a> 
       <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a><br />
       <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><b><?echo $strings[$lang]["forum"]?></b></a>
