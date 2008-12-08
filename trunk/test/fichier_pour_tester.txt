@@ -5,11 +5,4 @@
 
 Mais que tout ça ne vous préoccupe pas trop, si vous vouliez simplement tester votre connexion avec subversion ;)
 
-Test de commit après remplacement /data/www/vlm par le contenu du svn sur
-portable fm.
 
-Test de la liste trac@
-re..
-la bonne ? cette fois ci ?
-encore une fois
-again
