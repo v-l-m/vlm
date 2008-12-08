@@ -7,3 +7,5 @@ Mais que tout ça ne vous préoccupe pas trop, si vous vouliez simplement tester
 
 Test de commit après remplacement /data/www/vlm par le contenu du svn sur
 portable fm.
+
+Test de la liste trac@
