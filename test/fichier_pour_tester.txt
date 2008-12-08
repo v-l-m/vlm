@@ -9,3 +9,4 @@ Test de commit après remplacement /data/www/vlm par le contenu du svn sur
 portable fm.
 
 Test de la liste trac@
+re..
