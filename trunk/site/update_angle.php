@@ -16,11 +16,10 @@ else
 include_once("header.inc");
 include_once("config.php");
 
-//echo "<p>";
 
-if ( preg_match('/[#%]/', $pilotmode ) ||
-     preg_match('/[#%]/', $boatheading ) ||
-     preg_match('/[#%]/', $pilotparameter ) ) {
+if ( strspn($pilotmode, "-+.0123456789") != strlen($pilotmode)  ||
+     strspn($boatheading, "-+.0123456789") != strlen($boatheading)  ||
+     strspn($pilotparameter, "-+.0123456789") != strlen($pilotparameter)  ) {
 
       printf ("<h1>This is not a nice thing to try this.</h1>");
       printf ("<h2>Your IP address is : " . $_SERVER["REMOTE_ADDR"] . "</h2>\n");
