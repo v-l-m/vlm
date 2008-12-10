@@ -440,7 +440,7 @@ include_once("myboat.js");
   <tr>
     <td class="capfixe" align="center" width="20%">
     <?php echo "<b>". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</b>"; ?>
-    <form name="autopilot" action="update_angle.php" method=POST> 
+    <form name="autopilot" action="update_angle.php" method="post"> 
     <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
     <input type="hidden" name="lang" value="<?php echo $lang?>"/>
     <input type="hidden" name="pilotmode" value="autopilot"/>
@@ -456,7 +456,7 @@ include_once("myboat.js");
 <!-- Régulateur d'allure -->
 <td class="regulateur" align="center" width="25%">
 <?php echo "<b>". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</b>"?>
-<form name="angle" action="update_angle.php" method=POST> 
+<form name="angle" action="update_angle.php" method="post"> 
 <input type="button" value="&lt;" onclick="decrementAngle(); "/>
 <input type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>"/>
 <!--
@@ -473,7 +473,7 @@ include_once("myboat.js");
 <!-- BEST SPEED -->
 <!--
 <?php //echo "<B>".$strings[$lang]["bestspeedengaged"]."</B>"?>
-<form name="bestspeed" action="update_angle.php" method=POST> 
+<form name="bestspeed" action="update_angle.php" method="post"> 
 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
 
@@ -486,7 +486,7 @@ include_once("myboat.js");
 <!-- Pilote Orthodromique -->
 <td class="orthopilot" align="center" width="25%">
 <?php echo "<b>". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</b>"?>
-<form name="ortho" action="update_angle.php" method=POST> 
+<form name="ortho" action="update_angle.php" method="post"> 
 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
 
@@ -498,7 +498,7 @@ include_once("myboat.js");
 
 <!-- BEST VMG -->
 <?php echo "<b>". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</b>"?>
-<form name="bestvmg" action="update_angle.php" method=POST> 
+<form name="bestvmg" action="update_angle.php" method="post"> 
 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
 
