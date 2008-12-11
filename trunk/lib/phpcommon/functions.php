@@ -135,7 +135,7 @@ function polar2cartesianDrawing($a, $r)
 
 
 function errorprint($message) {
-    printf ("<H1>" . $message . "</H1>" );
+    printf ("<h1>" . $message . "</h1>" );
 }
 
 /*display a string containing the difference between now and the last update*/
@@ -940,7 +940,7 @@ function getNumOpponents($idraces) {
 
 function dispHtmlRacesList($strings, $lang) {
 
-    echo "<H4>".$strings[$lang]["current_races"]."</H4>";
+    echo "<h4>".$strings[$lang]["current_races"]."</h4>";
     echo "<table>\n";
     echo "<thead>\n";
     echo "    <tr>\n";
@@ -954,7 +954,7 @@ function dispHtmlRacesList($strings, $lang) {
     echo "  <tbody>\n";
     echo "<tr><td></td><td></td><td></td><td></td></tr>";
 
-    $finished_races_title="<H4>".$strings[$lang]["finished_races"]."</H4>";
+    $finished_races_title="<h4>".$strings[$lang]["finished_races"]."</h4>";
     $finished_races="";
 
 
