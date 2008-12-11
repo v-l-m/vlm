@@ -8,7 +8,7 @@ links
 it'a little bit messy (html+java+php)
 */
 include_once("header.inc");
-echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->";
+echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 
   $usersObj = new fullUsers(getLoginId());
 
