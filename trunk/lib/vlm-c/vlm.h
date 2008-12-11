@@ -36,8 +36,8 @@ void set_vlm_pilot_mode PARAM2(boat *, int);
  * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
-wind_info *get_wind_info_latlong_deg      PARAM4(double, double, 
-						 time_t, wind_info *);
+wind_info *VLM_get_wind_info_latlong_deg      PARAM4(double, double, 
+						     time_t, wind_info *);
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in UV
@@ -47,8 +47,8 @@ wind_info *get_wind_info_latlong_deg      PARAM4(double, double,
  * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
-wind_info *get_wind_info_latlong_deg_UV   PARAM4(double, double, 
-						 time_t, wind_info *);
+wind_info *VLM_get_wind_info_latlong_deg_UV   PARAM4(double, double, 
+						     time_t, wind_info *);
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in True Wind Speed / Angle
@@ -58,8 +58,8 @@ wind_info *get_wind_info_latlong_deg_UV   PARAM4(double, double,
  * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
-wind_info *get_wind_info_latlong_deg_TWSA PARAM4(double, double, 
-						 time_t, wind_info *);
+wind_info *VLM_get_wind_info_latlong_deg_TWSA PARAM4(double, double, 
+						     time_t, wind_info *);
 
 /**
  * get wind info based on the location and time
@@ -71,8 +71,8 @@ wind_info *get_wind_info_latlong_deg_TWSA PARAM4(double, double,
  * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
-wind_info *get_wind_info_latlong_millideg      PARAM4(double, double, 
-						      time_t, wind_info *);
+wind_info *VLM_get_wind_info_latlong_millideg      PARAM4(double, double, 
+							  time_t, wind_info *);
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in UV
@@ -82,8 +82,8 @@ wind_info *get_wind_info_latlong_millideg      PARAM4(double, double,
  * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
-wind_info *get_wind_info_latlong_millideg_UV   PARAM4(double, double, 
-						      time_t, wind_info *);
+wind_info *VLM_get_wind_info_latlong_millideg_UV   PARAM4(double, double, 
+							  time_t, wind_info *);
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in True Wind Speed / Angle
@@ -93,7 +93,37 @@ wind_info *get_wind_info_latlong_millideg_UV   PARAM4(double, double,
  * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
-wind_info *get_wind_info_latlong_millideg_TWSA PARAM4(double, double, 
-						      time_t, wind_info *);
+wind_info *VLM_get_wind_info_latlong_millideg_TWSA PARAM4(double, double, 
+							  time_t, wind_info *);
+
+
+/**
+ * Compute the orthodromic distance between two points, A & B
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ */
+double VLM_ortho_distance PARAM4(double, double, double, double);
+
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_line PARAM6( double, double,
+				    double, double,
+				    double, double);
 
 #endif /* _VLM_H_ */
