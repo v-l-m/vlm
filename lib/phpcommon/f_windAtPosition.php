@@ -60,8 +60,8 @@ function SPFwindAtPosition($_lat , $_long, $when = 0)
   
   $wind_boat = new wind_info();
   $_time=time()+$when;
-  get_wind_info_latlong_millideg_UV($_lat, $_long,
-				    $_time, $wind_boat);
+  VLM_get_wind_info_latlong_millideg_UV($_lat, $_long,
+					$_time, $wind_boat);
   
   shm_unlock_sem_destroy_grib(1);
   
