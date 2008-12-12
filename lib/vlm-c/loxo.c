@@ -1,5 +1,5 @@
 /**
- * $Id: loxo.c,v 1.11 2008/07/22 21:01:31 ylafon Exp $
+ * $Id: loxo.c,v 1.13 2008-12-12 16:27:06 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -161,4 +161,76 @@ void set_heading_wind_angle(boat *aboat) {
     angle += TWO_PI;
   }
   set_heading_direct(aboat, angle);
+}
+ 
+/**
+ * compute coordinate from one point with one angle and distance 
+ * @param latitude, the latitude or the starting point, in radians
+ * @param longitude, the longitude of the starting point, in radians
+ * @param distance, the distance in nautic miles
+ * @param angle, the followed heading, in radians
+ * @param target_lat, a pointer to the latitude at the arrival, in radians
+ * @param target_long, a pointer to the longitude at the arrival, in radians
+  */
+void get_loxo_coord_from_dist_angle(double latitude, double longitude,
+				    double distance, double angle,
+				    double *target_lat, double *target_long) {
+  double ld, la;
+  *target_lat = latitude + degToRad( (cos(angle)*distance)/60.0 );
+  ld = log(tan(M_PI_4 + (latitude/2.0)));
+  la = log(tan(M_PI_4 + (*target_lat/2.0)));
+  *target_long = longitude + (la-ld)*tan(angle);
+}
+
+void loxo_distance_angle(double latitude, double longitude, 
+			 double target_lat, double target_long,
+			 double *distance, double *angle) {
+  double ld, la;
+  double l, g, rfq;
+
+  longitude = fmod(longitude+TWO_PI, TWO_PI);
+  target_long = fmod(target_long+TWO_PI, TWO_PI);
+
+  if (fabs(target_lat-latitude) < 0.000001) {
+    /* clamp to horizontal */
+    if (fabs(target_lat-latitude) < M_PI) {
+      *angle = ((target_lat-latitude)>0) ? M_PI_2 : -M_PI_2;
+      *distance = fabs(60.0 * cos((latitude+target_lat)/2) 
+		       * radToDeg(target_long - longitude));
+    } else {
+      *angle = ((target_lat-latitude)>0) ? -M_PI_2 : M_PI_2;
+      *distance = fabs(60.0 * cos((latitude+target_lat)/2) 
+		       * (360.0 - radToDeg(target_long - longitude)));
+    }
+    return;
+  }
+  if (fabs(target_long-longitude) < 0.000001) {
+    /* clamp to vertical */
+    *distance = fabs(60.0 * radToDeg(target_lat-latitude));
+    *angle = ((target_lat-latitude) > 0) ? 0 : M_PI;
+    return;
+  }
+  ld = log(tan(M_PI_4 + (latitude/2.0)));
+  la = log(tan(M_PI_4 + (target_lat/2.0)));
+  l = target_lat - latitude;
+  g = target_long - longitude;
+  rfq = atan(fabs(g/(la-ld)));
+  if (l>0.0) {
+    if (g > 0.0) {
+      *angle = rfq;
+    } else {
+      *angle = TWO_PI - rfq;
+    }
+  } else {
+    if (g > 0.0) {
+      *angle = PI - rfq;
+    } else {
+      *angle = PI + rfq;
+    }
+  }
+  if (degToRad(rfq) > 89.0) {
+    *distance = (60*fabs(radToDeg(g))*cos((latitude+target_lat)/2)) / sin(rfq);
+  } else {
+    *distance = (60*fabs(radToDeg(l))) / cos(rfq);
+  }
 }
