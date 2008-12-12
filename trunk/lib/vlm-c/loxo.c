@@ -1,5 +1,5 @@
 /**
- * $Id: loxo.c,v 1.13 2008-12-12 16:27:06 ylafon Exp $
+ * $Id: loxo.c,v 1.14 2008-12-12 16:43:39 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -193,12 +193,12 @@ void loxo_distance_angle(double latitude, double longitude,
 
   if (fabs(target_lat-latitude) < 0.000001) {
     /* clamp to horizontal */
-    if (fabs(target_lat-latitude) < M_PI) {
-      *angle = ((target_lat-latitude)>0) ? M_PI_2 : -M_PI_2;
+    if (fabs(target_long-longitude) < M_PI) {
+      *angle = ((target_long-longitude)>0) ? M_PI_2 : -M_PI_2;
       *distance = fabs(60.0 * cos((latitude+target_lat)/2) 
 		       * radToDeg(target_long - longitude));
     } else {
-      *angle = ((target_lat-latitude)>0) ? -M_PI_2 : M_PI_2;
+      *angle = ((target_long-longitude)>0) ? -M_PI_2 : M_PI_2;
       *distance = fabs(60.0 * cos((latitude+target_lat)/2) 
 		       * (360.0 - radToDeg(target_long - longitude)));
     }
