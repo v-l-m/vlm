@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.7 2008-11-23 16:14:06 ylafon Exp $
+ * $Id: vlm.c,v 1.8 2008-12-11 17:53:53 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -18,6 +18,7 @@
 #include "defs.h"
 #include "types.h"
 #include "loxo.h"
+#include "lines.h"
 #include "vmg.h"
 #include "ortho.h"
 #include "winds.h"
