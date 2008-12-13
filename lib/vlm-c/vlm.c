@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.8 2008-12-11 17:53:53 ylafon Exp $
+ * $Id: vlm.c,v 1.12 2008-12-13 08:26:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -244,4 +244,44 @@ double VLM_distance_to_line(double latitude, double longitude,
   return distance_to_line(degToRad(latitude)  , degToRad(longitude),
 			  degToRad(latitude_a), degToRad(longitude_a),
 			  degToRad(latitude_b), degToRad(longitude_b));
+}
+
+/**
+ * Compute the coordinate of a point computed form an origin, using a 
+ * loxodromic course, with a specified heading and distance.
+ * it is clipped at +/-80 degrees.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param distance, a <code>double</code>, in <em>milli-degrees</em>
+ * @param heading, a <code>double</code>, in <em>degrees</em>
+ * @param target_lat, a pointer to a <code>double</code>, the resulting
+ *                    latitude in <em>milli-degrees</em>
+ * @param target_long, a pointer to a <code>double</code>, the resulting
+ *                    longitude in <em>milli-degrees</em>
+ */
+void VLM_get_loxo_coord_from_dist_angle(double latitude, double longitude,
+					double distance, double heading,
+					double *target_lat, 
+					double *target_long) {
+  double new_lat, new_long, ratio;
+  /* first, sanitize everything */
+  latitude = degToRad(latitude/1000.0);
+  longitude = fmod(degToRad(longitude/1000.0), TWO_PI);
+  heading = degToRad(heading);
+  
+  get_loxo_coord_from_dist_angle(latitude, longitude, distance, heading,
+				 &new_lat, &new_long);
+  if (fabs(new_lat) > degToRad(80.0)) {
+    ratio = (degToRad(80.0)-fabs(latitude)) / (fabs(new_lat)-fabs(latitude));
+    distance *= ratio;
+    get_loxo_coord_from_dist_angle(latitude, longitude, distance, heading,
+				   &new_lat, &new_long);
+  }
+  if (new_long > PI) {
+    new_long -= TWO_PI;
+  } else if (new_long < -PI) {
+    new_long += TWO_PI;
+  }
+  *target_lat = 1000.0 * radToDeg(new_lat);
+  *target_long = 1000.0 * radToDeg(new_long);
 }
