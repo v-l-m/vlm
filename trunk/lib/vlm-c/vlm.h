@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.5 2008/08/08 08:00:32 ylafon Exp $
+ * $Id: vlm.h,v 1.7 2008-12-13 08:24:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -125,5 +125,22 @@ double VLM_ortho_distance PARAM4(double, double, double, double);
 double VLM_distance_to_line PARAM6( double, double,
 				    double, double,
 				    double, double);
+
+
+/**
+ * Compute the coordinate of a point computed form an origin, using a 
+ * loxodromic course, with a specified heading and distance.
+ * it is clipped at +/-80 degrees.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param distance, a <code>double</code>, in <em>milli-degrees</em>
+ * @param heading, a <code>double</code>, in <em>degrees</em>
+ * @param target_lat, a pointer to a <code>double</code>, the resulting
+ *                    latitude in <em>milli-degrees</em>
+ * @param target_long, a pointer to a <code>double</code>, the resulting
+ *                    longitude in <em>milli-degrees</em>
+ */
+void VLM_get_loxo_coord_from_dist_angle PARAM6(double, double, double, double,
+					       double *, double *);
 
 #endif /* _VLM_H_ */
