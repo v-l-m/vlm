@@ -307,27 +307,14 @@ function caportho($long, $lat, $longnm, $latnm)
 // Used in track projection
 function giveEndPointCoordinates( $longitude, $latitude, $distance, $heading  )
 {
-   $EndLat = 99999;
-   while ( abs($EndLat) > 80000 ) {
-
-           //printf ("DEBUG:lat=%d, long=%d, d=%d,h=%d --> \n",$latitude, $longitude, $distance,$heading);
-           $vector = polar2cartesian  ($heading, $distance);
-           $distance = $distance * 0.95;
-
-           // Latitude, no problem except > 80 or < -80
-           $EndLat = $latitude + $vector[1]*MILDEGREE2NAUTICS; //true only for latitude
-           //if ( $EndLat >  80000 ) $EndLat =  80000;
-           //if ( $EndLat < -80000 ) $EndLat = -80000;
-   }
-
-   // Longitude, we have to handle the +180/-180 crossing
-   $EndLong = $longitude +  $vector[0]*1000 / (60*cos(deg2rad($EndLat/1000)));
-
-   // Handle day changing line crossing West --> East (we work in millidegrees)
-   if ( $EndLong > 180000 ) $EndLong-=360000;
-
-   // Handle day changing line crossing East --> West (we work in millidegrees)
-   if ( $EndLong < -180000 ) $EndLong+=360000;
+  include_once("vlmc.php");
+  $lata = new doublep();
+  $longa = new doublep();
+  VLM_get_loxo_coord_from_dist_angle($latitude, $longitude, 
+				     $distance, $heading, 
+				     $lata, $longa);
+   $EndLat = doublep_value($lata);
+   $EndLong = doublep_value($longa);
 
    // We give back an array (Long/Lat)
    //printf ("DEBUG:EP=lat=%d, long=%d<BR>\n",$EndLat, $EndLong);
