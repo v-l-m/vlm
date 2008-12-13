@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.12 2008-12-13 08:26:28 ylafon Exp $
+ * $Id: vlm.c,v 1.13 2008-12-13 08:40:43 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -284,4 +284,31 @@ void VLM_get_loxo_coord_from_dist_angle(double latitude, double longitude,
   }
   *target_lat = 1000.0 * radToDeg(new_lat);
   *target_long = 1000.0 * radToDeg(new_long);
+}
+
+/**
+ * Compute the loxodromic distance and heading from one point to another.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @param distance, a pointer to a <code>double</code>, the resulting
+ *                  distance in <em>nautic miles</em>
+ * @param heading, a pointer to a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+void VLM_loxo_distance_angle(double latitude, double longitude, 
+			     double target_lat, double target_long,
+			     double *distance, double *heading) {
+  
+  double new_heading;
+  /* first, sanitize everything */
+  latitude    = degToRad(latitude/1000.0);
+  longitude   = fmod(degToRad(longitude/1000.0), TWO_PI);
+  target_lat  = degToRad(target_lat/1000.0);
+  target_long = fmod(degToRad(target_long/1000.0), TWO_PI);
+  
+  loxo_distance_angle(latitude, longitude, target_lat, target_long,
+		      distance, &new_heading);
+  *heading = radToDeg(fmod(new_heading+TWO_PI, TWO_PI));
 }

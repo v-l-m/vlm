@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.7 2008-12-13 08:24:00 ylafon Exp $
+ * $Id: vlm.h,v 1.8 2008-12-13 08:40:43 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -142,5 +142,19 @@ double VLM_distance_to_line PARAM6( double, double,
  */
 void VLM_get_loxo_coord_from_dist_angle PARAM6(double, double, double, double,
 					       double *, double *);
+
+/**
+ * Compute the loxodromic distance and heading from one point to another.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @param distance, a pointer to a <code>double</code>, the resulting
+ *                  distance in <em>nautic miles</em>
+ * @param heading, a pointer to a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+void VLM_loxo_distance_angle PARAM6(double, double, double, double,
+				    double *, double *);
 
 #endif /* _VLM_H_ */
