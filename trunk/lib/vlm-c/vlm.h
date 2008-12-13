@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.8 2008-12-13 08:40:43 ylafon Exp $
+ * $Id: vlm.h,v 1.9 2008-12-13 20:59:13 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -156,5 +156,31 @@ void VLM_get_loxo_coord_from_dist_angle PARAM6(double, double, double, double,
  */
 void VLM_loxo_distance_angle PARAM6(double, double, double, double,
 				    double *, double *);
+
+/**
+ * Check if the waypoint is crossed.
+ * We check if we are in the range where approximation is valid,
+ * otherwise we compute a clipped part of the gate, then use the
+ * approximation method of checking the gate crossing
+ * order of parameters is:
+ * start lat/long of boat
+ * end lat/long of boat
+ * start WP of Gate
+ * end WP of Gate
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param ratio, a pointer to  a <code>double</code>, the ratio of 
+ *        the intersection, 0 (boat start) < ratio < 1 (boat end)
+ * @return 1 if crossing occured, 0 otherwise
+ */
+int VLM_check_cross_WP PARAM9(double, double, double, double,
+			      double, double, double, double,
+			      double *);
 
 #endif /* _VLM_H_ */
