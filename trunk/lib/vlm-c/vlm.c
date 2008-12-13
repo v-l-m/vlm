@@ -349,6 +349,7 @@ int VLM_check_cross_WP(double latitude, double longitude,
   new_lat   = degToRad(new_lat/1000.0);
   new_long  = fmod(degToRad(new_long/1000.0), TWO_PI);
 
+  /* Note, we expect the WP to be already normalized */
   wp0_lat  = degToRad(wp0_lat/1000.0);
   wp0_long = degToRad(wp0_long/1000.0);
   wp1_lat  = degToRad(wp1_lat/1000.0);
