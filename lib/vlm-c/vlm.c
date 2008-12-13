@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.13 2008-12-13 08:40:43 ylafon Exp $
+ * $Id: vlm.c,v 1.14 2008-12-13 20:59:13 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -312,3 +312,81 @@ void VLM_loxo_distance_angle(double latitude, double longitude,
 		      distance, &new_heading);
   *heading = radToDeg(fmod(new_heading+TWO_PI, TWO_PI));
 }
+
+/**
+ * Check if the waypoint is crossed.
+ * We check if we are in the range where approximation is valid,
+ * otherwise we compute a clipped part of the gate, then use the
+ * approximation method of checking the gate crossing
+ * order of parameters is:
+ * start lat/long of boat
+ * end lat/long of boat
+ * start WP of Gate
+ * end WP of Gate
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param ratio, a pointer to  a <code>double</code>, the ratio of 
+ *        the intersection, 0 (boat start) < ratio < 1 (boat end)
+ * @return 1 if crossing occured, 0 otherwise
+ */
+int VLM_check_cross_WP(double latitude, double longitude, 
+		       double new_lat, double new_long,
+		       double wp0_lat, double wp0_long,
+		       double wp1_lat, double wp1_long,
+		       double *ratio) {
+
+  double loxoheading, loxodist, c_ratio, r1, r2;
+  double t_dist, t1_lat, t1_long, t2_lat, t2_long;
+
+  latitude  = degToRad(latitude/1000.0);
+  longitude = fmod(degToRad(longitude/1000.0), TWO_PI);
+  new_lat   = degToRad(new_lat/1000.0);
+  new_long  = fmod(degToRad(new_long/1000.0), TWO_PI);
+
+  wp0_lat  = degToRad(wp0_lat/1000.0);
+  wp0_long = degToRad(wp0_long/1000.0);
+  wp1_lat  = degToRad(wp1_lat/1000.0);
+  wp1_long = degToRad(wp1_long/1000.0);
+  
+  loxo_distance_angle(wp0_lat, wp0_long, wp1_lat, wp1_long, 
+		      &loxodist, &loxoheading);
+  
+  if (loxodist < 200.0) {
+    c_ratio = intersects(latitude, longitude, new_lat, new_long,
+			 wp0_lat, wp0_long, wp1_lat, wp1_long,
+			 &r1, &r2);
+    if (c_ratio > -1.0) {
+      *ratio = c_ratio;
+      return 1;
+    }
+    return 0;
+  }
+  /* find two points around lat->new_lat in wp0->wp1 */
+  c_ratio = (((new_lat+latitude)/2.0)-wp0_lat) / (wp1_lat - wp0_lat);
+  if ((c_ratio < 0.0)||(c_ratio>1.0)) {
+    /* ratio is negative, we are out of range, bail out */
+    return 0;
+  }
+  t_dist = loxodist * c_ratio;
+  get_loxo_coord_from_dist_angle(wp0_lat, wp0_long, 
+				 t_dist - 10.0, loxoheading,
+				 &t1_lat, &t1_long);
+  get_loxo_coord_from_dist_angle(wp0_lat, wp0_long, 
+				 t_dist + 10.0, loxoheading,
+				 &t2_lat, &t2_long);  
+  c_ratio = intersects(latitude, longitude, new_lat, new_long,
+		       t1_lat, t1_long, t2_lat, t2_long,
+		       &r1, &r2);
+  if (c_ratio > -1.0) {
+    *ratio = c_ratio;
+    return 1;
+  }
+  return 0;
+}
+
