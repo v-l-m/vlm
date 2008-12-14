@@ -54,6 +54,7 @@ define("MAX_SPEED_FOR_RANKING", 40);
 
 /********Constants*************/
 define("CRONVLMLOCK", "/tmp/cronvlm.lock");
+define("IMAGE_SITE_PATH", "images/site/");
 define("BOAT_IMAGE", "deck-small.png");
 define ("COMPASS_IMAGE", "compass-small-complete.png");
 #define ("COMPASS_IMAGE", "compass-small-complete.gif");
