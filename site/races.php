@@ -1,7 +1,7 @@
 <?php
-include_once("_include/header.inc");
+include_once("includes/header.inc");
 include_once("config.php");
-//include_once("_include/strings.inc");
+//include_once("includes/strings.inc");
 
 /*
  * Affichage de l'onglet 
@@ -274,5 +274,5 @@ if ($idraces != 0) {
     dispHtmlRacesList($strings, $lang);
 }
 
-include_once("_include/footer.inc");
+include_once("includes/footer.inc");
 ?>

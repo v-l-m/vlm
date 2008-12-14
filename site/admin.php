@@ -10,17 +10,17 @@
    + * boat=xx&action=reset_username&USN=xxxxxxx => met à jour le nom d'utilisateur
 */
 session_start();
-include_once("_include/strings.inc");
+include_once("includes/strings.inc");
 include_once("config.php");
 
 // Les entêtes
 echo "<html><head>";
 echo "<title>Admin VLM</title>";
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"_style/new-style.css\" />";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/new-style.css\" />";
 
 ///   CODE JAVASCRIPT
 
-include_once("_scripts/dms.js");
+include_once("scripts/dms.js");
 
 
 echo "</head></html>";

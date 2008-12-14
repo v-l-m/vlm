@@ -1,5 +1,5 @@
 <?php
-include_once("_include/header.inc");
+include_once("includes/header.inc");
 include_once("config.php");
 
 // Controle de saisie / soumission
@@ -52,5 +52,5 @@ if ($idusers != 0 )
 
 //print_r($_COOKIE);
 //echo "</p>";
-include_once("_include/footer.inc");
+include_once("includes/footer.inc");
 ?>

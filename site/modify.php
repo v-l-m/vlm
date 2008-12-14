@@ -1,5 +1,5 @@
 <?php
-include_once("_include/header.inc");
+include_once("includes/header.inc");
 include_once("config.php");
 
 
@@ -144,5 +144,5 @@ Notepad :<br />
 </form>
 
 <?php
-include_once("_include/footer.inc");
+include_once("includes/footer.inc");
 ?>

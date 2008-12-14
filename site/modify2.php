@@ -1,5 +1,5 @@
 <?
-include_once("_include/header.inc");
+include_once("includes/header.inc");
 include_once("config.php");
 if (isLoggedIn)
 { 
@@ -29,6 +29,6 @@ else
   echo $strings[$lang]["belogin"];
 }
  
-  include_once("_include/footer.inc");
+  include_once("includes/footer.inc");
 ?>
 
