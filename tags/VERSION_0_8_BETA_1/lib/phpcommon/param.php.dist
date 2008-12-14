@@ -1,0 +1,9 @@
+<?php
+
+
+/********to_be_change****************/
+define("DBSERVER", "databaseserver");
+define("DBUSER", "databaseuser");
+define("DBPASSWORD", "databasepassword");
+define("DBNAME", "databasename");
+?>

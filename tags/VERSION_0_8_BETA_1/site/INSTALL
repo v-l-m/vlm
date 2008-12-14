@@ -1,0 +1,55 @@
+INSTALL
+-------
+
+Intro
+
+This file describes how to install a virtual loup-de-mer server on
+your plateform.
+
+
+
+Requirements
+
+You'll need :
+- php4 (tested with 4.3.10, dont know about other versions)
+- the php-GD library enabled
+- the allow_url_fopen parameter set to ON 
+- a mysql database
+- a recent version of virtual loup de mer source code package
+- an access to a unix server with cron running
+
+Installing the code 
+
+Extract everything from the package. Modify param.php to change the
+DBSERVER, DBUSER, DBPASSWORD and DBNAME values with your mysql values.
+Copy everything in your webserver directory. Check
+http://yourwebserver.com/path/to/your/server/phpinfo.php
+
+
+Installing the database
+
+Check that the files dump.sql and _install.php are present in your
+webserver directory.
+In your webbrowser, request 
+http://yourwebserver.com/path/to/your/server/_install.php
+It should create the database that is stored in the file dump.sql.
+
+Setting crontable
+Edit your crontab
+$> crontab -e
+and write the contents of the file CRON, modifying the URL.
+Save an quit.
+Check it by 
+$> crontab -l
+
+Finalizing
+
+Delete _install.php from your webserver. With a web browser, connect to
+http://yourwebserver.com/path/to/your/server/
+it should display the main page.
+You can now create and account and play!
+
+
+Bon vent!
+(this process hasnot been test. I'm eager to hear from you, dear reader)
+

@@ -1,0 +1,127 @@
+mysql> desc positions;
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| time    | bigint(20) | YES  | MUL | NULL    |       |
+| long    | double     | YES  |     | NULL    |       |
+| lat     | double     | YES  |     | NULL    |       |
+| idusers | int(11)    | NO   | MUL | 0       |       |
+| race    | int(11)    | YES  | MUL | NULL    |       |
++---------+------------+------+-----+---------+-------+
+Le "race", c'est un chiffre au hasard entre 20071110 et 20071112.
+le "idusers", c'est tes numéros à toi. (mets les en négatif)
+le "time", c'est $(date +%s), ou "time()" en PHP.
+
+mysql> desc winds;
++-----------+------------+------+-----+---------+-------+
+| Field     | Type       | Null | Key | Default | Extra |
++-----------+------------+------+-----+---------+-------+
+| latitude  | int(11)    | NO   | PRI | 0       |       |
+| longitude | int(11)    | NO   | PRI | 0       |       |
+| time      | bigint(20) | NO   | PRI | 0       |       |
+| uwind     | float      | YES  |     | NULL    |       |
+| vwind     | float      | YES  |     | NULL    |       |
++-----------+------------+------+-----+---------+-------+
+
+delete from races where idraces=49;
+insert into races values (49, 'Mise en bouches &agrave; Bonifacio (de PFA)', 0 , 1178125200, 9150, 41384, 'boat_figaro2',1178125200 + 1800 ,0,50);
+
+delete from races_waypoints where idraces=49;
+insert into races_waypoints (idraces, wporder, idwaypoint) values (49,1,4901);
+insert into races_waypoints (idraces, wporder, idwaypoint) values (49,2,4902);
+insert into races_waypoints (idraces, wporder, idwaypoint) values (49,3,4903);
+
+delete from waypoints where idwaypoint between 4901 and 4903;
+insert into waypoints (idwaypoint, libelle, longitude1,latitude1,longitude2,latitude2) values (4901,'Sardaigne',9340,41227,9340,41210);
+insert into waypoints (idwaypoint, libelle, longitude1,latitude1,longitude2,latitude2) values (4902,'MAdalena',9384,41298,9397,41295);
+insert into waypoints (idwaypoint, libelle, longitude1,latitude1,longitude2,latitude2) values (4903,'Arriv&eacute; Bonifacio',9150,41384,9180,41365);
+
+mysql> desc races;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| idraces      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| racename     | varchar(255) | NO   |     |         |                |
+| started      | int(11)      | NO   |     | 0       |                |
+| deptime      | bigint(14)   | YES  |     | NULL    |                |
+| startlong    | int(11)      | NO   |     | 0       |                |
+| startlat     | int(11)      | NO   |     | 0       |                |
+| boattype     | varchar(255) | YES  |     | NULL    |                |
+| closetime    | bigint(20)   | YES  |     | NULL    |                |
+| racetype     | int(11)      | YES  |     | NULL    |                |
+| firstpcttime | bigint(20)   | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+mysql> desc waypoints;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| idwaypoint | int(11)      | NO   | PRI | 0       |       |
+| latitude1  | double       | YES  |     | NULL    |       |
+| longitude1 | double       | YES  |     | NULL    |       |
+| latitude2  | double       | YES  |     | NULL    |       |
+| longitude2 | double       | YES  |     | NULL    |       |
+| libelle    | varchar(255) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+
+mysql> desc races_waypoints;
++------------+---------+------+-----+---------+-------+
+| Field      | Type    | Null | Key | Default | Extra |
++------------+---------+------+-----+---------+-------+
+| idraces    | int(11) | NO   | PRI | 0       |       |
+| wporder    | int(11) | NO   | PRI | 0       |       |
+| idwaypoint | int(11) | NO   |     | 0       |       |
+| laisser_au | int(11) | YES  |     | NULL    |       |
++------------+---------+------+-----+---------+-------+
+
+mysql> select * from races where idraces=49;
++---------+---------------------------------------------+---------+------------+-----------+----------+--------------+------------+----------+--------------+
+| idraces | racename                                    | started | deptime    | startlong | startlat | boattype     | closetime  | racetype | firstpcttime |
++---------+---------------------------------------------+---------+------------+-----------+----------+--------------+------------+----------+--------------+
+|      49 | Mise en bouches &agrave; Bonifacio (de PFA) |       0 | 1178125200 |      9150 |    41384 | boat_figaro2 | 1178127000 |        0 |           50 |
++---------+---------------------------------------------+---------+------------+-----------+----------+--------------+------------+----------+--------------+
+
+mysql> select * from  races_waypoints where idraces=49;
++---------+---------+------------+------------+
+| idraces | wporder | idwaypoint | laisser_au |
++---------+---------+------------+------------+
+|      49 |       1 |       4901 |       NULL |
+|      49 |       2 |       4902 |       NULL |
+|      49 |       3 |       4903 |       NULL |
++---------+---------+------------+------------+
+
+mysql> select * from  waypoints where idwaypoint between 4900 and 4999;
++------------+-----------+------------+-----------+------------+-------------------------+
+| idwaypoint | latitude1 | longitude1 | latitude2 | longitude2 | libelle                 |
++------------+-----------+------------+-----------+------------+-------------------------+
+|       4901 |     41227 |       9340 |     41210 |       9340 | Sardaigne               |
+|       4902 |     41298 |       9384 |     41295 |       9397 | MAdalena                |
+|       4903 |     41384 |       9150 |     41365 |       9180 | Arriv&eacute; Bonifacio |
++------------+-----------+------------+-----------+------------+-------------------------+
+
+
+
+
+=========== /tmp/20080110_22:30--cronvlm.log ===========
+(343) Checking user 3682: PIM=2/PIP=50/Heading=72.2
+Position updated (WS=11.6, WH=203.1, Hours=0.1697, ANG=48.9, Hdg=72.2, BS=8.562, Dist=1.453nm), Position written
+Next Waypoint is 11, checking if player 3682 crossed this waypoint :
+* WP = (lon1=-38.400000, lat1=-3.850000), (lon2=11.041667, lat2=-3.850000): No (NWP=11, DNM=1251.701891), ranking updated.
+Boat positions (before --> now) :(long=-34.425823441852, lat=-24.35964715043)->(long=-34.400401212705, lat=-24.352566337618)
+** DONE FOR THIS USER ** Pilotmode=2/50, Angle updated, Heading = 73.147649152529
+=========== /tmp/20080110_22:40--cronvlm.log ===========
+(343) Checking user 3682: PIM=2/PIP=50/Heading=73.1
+Position updated (WS=11.4, WH=204, Hours=0.165, ANG=49, Hdg=73.1, BS=8.524, Dist=1.406nm), Position written
+Next Waypoint is 11, checking if player 3682 crossed this waypoint :
+* WP = (lon1=-38.400000, lat1=-3.850000), (lon2=11.041667, lat2=-3.850000): No (NWP=11, DNM=1251.586762), ranking updated.
+Boat positions (before --> now) :(long=-34.400401212705, lat=-24.352566337618)->(long=-34.375668239756, lat=-24.346104956097)
+** DONE FOR THIS USER ** Pilotmode=2/50, Angle updated, Heading = 74.037440870194
+=========== /tmp/20080110_22:50--cronvlm.log ===========
+=========== /tmp/20080110_23:00--cronvlm.log ===========
+=========== /tmp/20080110_23:10--cronvlm.log ===========
+
+*** Feb 26 2008 19:01:35
+*** Checking race 20071111
+Deptime:1194782400, WinnersDuration=7230329, Pct=50, Winners + 1+pct/100=10845493
+MaxArrivalTime:1205627893, Now=1204052495...La course n'est pas finie, fin dans 437 heures
+
