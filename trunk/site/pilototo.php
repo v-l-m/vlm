@@ -3,7 +3,7 @@
 ** Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connecté
 */
 session_start();
-include_once("_include/strings.inc");
+include_once("includes/strings.inc");
 include_once("config.php");
 include_once("functions.php");
 
@@ -15,7 +15,7 @@ isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang="en";
 // Les entêtes
 echo "<html><head>";
 echo "<title>VLM Programmable Auto Pilot (" . $lang . ")</title>";
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"_style/new-style.css\" />";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/new-style.css\" />";
 
 ///   CODE JAVASCRIPT
 ?>

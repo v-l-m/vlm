@@ -1,7 +1,7 @@
 <?php
-include_once("_include/header.inc");
+include_once("includes/header.inc");
 include_once("config.php");
-//include_once("_include/strings.inc");
+//include_once("includes/strings.inc");
 //TODO read from cookie and populate form
 //TODO if no cookie found, put default values in the form
 ?>
@@ -102,5 +102,5 @@ else
 }
 //TODO : list of users with checkboxes
 //TODO : write into cookie at submission
-include_once("_include/footer.inc");
+include_once("includes/footer.inc");
 ?>

@@ -1,12 +1,12 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" href="_style/new-style.css" />
+<link rel="stylesheet" type="text/css" href="styles/new-style.css" />
 <link rel="shortcut icon" type="image/png" href="images/site/favicon.png" />
 <title>Virtual Loup-De-Mer </title>
 <?php
-//include_once("_include/header.inc");
+//include_once("includes/header.inc");
 include_once("config.php");
-include_once("_include/strings.inc");
+include_once("includes/strings.inc");
 
 $lang=htmlentities(quote_smart($_REQUEST['lang']));
 if ( htmlentities(quote_smart($_REQUEST['type'])) == 'palmares' ) {
@@ -16,6 +16,6 @@ if ( htmlentities(quote_smart($_REQUEST['type'])) == 'palmares' ) {
 	echo "<INPUT TYPE=BUTTON VALUE=\"Close\" ONCLICK=\"javascript:self.close();\">";
 }
 
-//include_once("_include/footer.inc");
+//include_once("includes/footer.inc");
 
 ?>

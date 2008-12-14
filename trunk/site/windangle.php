@@ -42,8 +42,8 @@ if ($noHeader !=1)
 include_once("config.php");
 
 
-$im = imagecreatefrompng(COMPASS_IMAGE );
-$deck = imagecreatefrompng(BOAT_IMAGE );
+$im = imagecreatefrompng(IMAGE_SITE_PATH.COMPASS_IMAGE );
+$deck = imagecreatefrompng(IMAGE_SITE_PATH.BOAT_IMAGE );
 
 $bg =  imagecolorallocate($deck, 170, 170, 170);
 
