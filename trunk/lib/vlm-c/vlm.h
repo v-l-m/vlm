@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.9 2008-12-13 20:59:13 ylafon Exp $
+ * $Id: vlm.h,v 1.10 2008-12-14 18:46:06 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -179,8 +179,8 @@ void VLM_loxo_distance_angle PARAM6(double, double, double, double,
  *        the intersection, 0 (boat start) < ratio < 1 (boat end)
  * @return 1 if crossing occured, 0 otherwise
  */
-int VLM_check_cross_WP PARAM9(double, double, double, double,
-			      double, double, double, double,
-			      double *);
+int VLM_check_cross_WP PARAM11(double, double, double, double,
+			       double, double, double, double,
+			       double *, double *, double *);
 
 #endif /* _VLM_H_ */
