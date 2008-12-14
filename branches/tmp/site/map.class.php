@@ -579,7 +579,7 @@ if ( $drawwind >= 0 ) {
       call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[1]),
       call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[0]),      
       call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[1]),
-      IMG_COLOR_STYLED);
+      IMG_COLORstylesD);
 
               array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[0]),
                                         call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[1]));
@@ -611,7 +611,7 @@ if ( $drawwind >= 0 ) {
       call_user_func_array( array(&$this, $projCallbackLat),  $lat_inter),
       call_user_func_array( array(&$this, $projCallbackLong), $long_extrem),      
       call_user_func_array( array(&$this, $projCallbackLat),  $lat_extrem),
-      IMG_COLOR_STYLED);
+      IMG_COLORstylesD);
               */
 
        }
@@ -934,7 +934,7 @@ if ( $drawwind >= 0 ) {
       call_user_func_array( array(&$this, $projCallbackLong), $Estime[0]),
       call_user_func_array( array(&$this, $projCallbackLat), $Estime[1])
     );
-                imageline ( $this->mapImage, $DepEstime[0], $DepEstime[1], $E[0], $E[1] , IMG_COLOR_STYLED);
+                imageline ( $this->mapImage, $DepEstime[0], $DepEstime[1], $E[0], $E[1] , IMG_COLORstylesD);
 
     // Label pour l'estime
     imagestring ( $this->mapImage, $font, $E[0], $E[1]-5 , "+" .$estime ."nm" , $this->colorText);
@@ -1110,7 +1110,7 @@ if ( $drawwind >= 0 ) {
       call_user_func_array( array(&$this, $projCallbackLong), $Estime[0]),
       call_user_func_array( array(&$this, $projCallbackLat), $Estime[1])
     );
-                imageline ( $this->mapImage, $DepOrtho[0], $DepOrtho[1], $E[0], $E[1] , IMG_COLOR_STYLED);
+                imageline ( $this->mapImage, $DepOrtho[0], $DepOrtho[1], $E[0], $E[1] , IMG_COLORstylesD);
                 //imageline ( $this->mapImage, $A[0], $A[1], $E[0], $E[1] , $this->colorTextOrtho);
 
     $np++;

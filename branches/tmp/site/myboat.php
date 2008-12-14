@@ -7,7 +7,7 @@ javascripts to directly compute speed
 links
 it'a little bit messy (html+java+php)
 */
-include_once("_include/header.inc");
+include_once("includes/header.inc");
 echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 
   $usersObj = new fullUsers(getLoginId());
@@ -22,7 +22,7 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     // S'engager dans une course
     printf("<h3>" . $strings[$lang]["notengaged"] . "</h3>",$lang);
     //include ("subscribe_race.php");
-    include ("_include/raceslist.inc");
+    include ("includes/raceslist.inc");
 
   } else {
 
@@ -94,7 +94,7 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
     //printf("amure=%s<BR/>",$amure);
 
-include_once("_scripts/myboat.js");
+include_once("scripts/myboat.js");
 ?>
 <!-- Affichage de la page -->
 <div id="boat">
@@ -767,6 +767,6 @@ include_once("_scripts/myboat.js");
     <?php
 }
 
-include_once("_include/footer.inc");
+include_once("includes/footer.inc");
 ?>
 

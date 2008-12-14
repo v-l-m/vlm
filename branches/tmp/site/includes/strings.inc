@@ -109,7 +109,7 @@ array(
 	      "howtohelp" => "I like this game. How can I contribute to make it better ?",
 	      "howtohelptext" => "<ul><li>As a player, you can report bugs and propose improvements (user interface, new functionality) in the forum.</li> 
 	      <li>You can write a manual of the game for beginners with screenshots.</li> 
-	      <li>You can propose any translation of the game. It is quick and easy. See <a href=\"_include/strings.inc\">_include/strings.inc</a> to see how it works</li>
+	      <li>You can propose any translation of the game. It is quick and easy. See <a href=\"includes/strings.inc\">includes/strings.inc</a> to see how it works</li>
               <li>You can propose logos, banners and CSS.</li>
               <li>You can join the development team by posting a message to the forum</li>
 	      <li>You can propose some new speed charts (see <a href=\"figaro.sql\">a typical file</a> and <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\"> the chart </a>)</li>
@@ -402,7 +402,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "howtohelp" => "Ce jeu me pla&icirc;t. J'aimerai remercier ses concepteurs en aidant. Comment faire ?",
 	      "howtohelptext" => "<ul><li>En tant que joueur, vous pouvez recenser les bugs et proposer des am&eacute;liorations (ergonomie, nouvelles fonctionnalit&eacute;s) sur le forum.</li>
 <li>Vous pouvez r&eacute;diger un manuel d'utilisation du site avec des captures d'&eacute;cran pour faciliter la compr&eacute;hension des d&eacute;butants</li> 
-	      <li>Vous pouvez proposer une traduction du jeu dans n'importe quelle langue. C'est facile et rapide voir <a href=\"_include/strings.inc\">_include/strings.inc</a></li>
+	      <li>Vous pouvez proposer une traduction du jeu dans n'importe quelle langue. C'est facile et rapide voir <a href=\"includes/strings.inc\">includes/strings.inc</a></li>
               <li>Vous pouvez proposer un logo, une banni&egrave;re ou un CSS</li>
               <li>Vous pouvez rejoindre l'&eacute;quipe de d&eacute;veloppement (voir le forum)</li>
 	      <li>Vous pouvez proposer de nouveaux diagrammes de vitesse. (voir <a href=\"figaro.sql\">un fichier de donn&eacute;es</a> et <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\">le diagramme associ&eacute;</a>)</li>
@@ -689,7 +689,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "howtohelp" => "Mi piace questo gioco. Come posso contribuire per renderlo migliore?",
 	      "howtohelptext" => "<ul><li>Come giocatore, puoi segnalare i bug e proporre i miglioramenti (interfaccia utente, nuova funzionalità) nell forum.</li>
 	      <li>Potete scrivere un manuale del gioco per i principianti con gli screenshots</li>
-	      <li>Potete proporre la traduzione del gioco. È rapida e facile. Guarda <a href=\"_include/strings.inc\">_include/strings.inc</a>per vedere come funziona</li>
+	      <li>Potete proporre la traduzione del gioco. È rapida e facile. Guarda <a href=\"includes/strings.inc\">includes/strings.inc</a>per vedere come funziona</li>
 	      <li>Potete proporre i marchi, le bandiere ed il CSS</li>
 	      <li>Potete fare parte del team di sviluppo inviando un messaggio nel forum</li>
 	      <li>Potete proporre nuovi diagrammi per le tabelle di velocità. (guarda <a href=\"figaro.sql\">un tipico file</a> e <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\">la tabella</a>)</li>
@@ -975,7 +975,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "howtohelp" => "Sou apreciador do jogo. Como posso contribuir para o melhorar?",
 	      "howtohelptext" => "<ul><li>Como jogador, pode informar-nos de bugs e propôr melhorias no forum (interacção com o jogador, novas funcionalidades,?). </li> 
 	      <li>Pode escrever um manual para principiantes, utilizando imagens do jogo.</li> 
-	      <li>Pode propor a tradução do jogo. É rápido e simples. Veja <a href=\"_include/strings.inc\">_include/strings.inc</a> para perceber como funciona.</li>
+	      <li>Pode propor a tradução do jogo. É rápido e simples. Veja <a href=\"includes/strings.inc\">includes/strings.inc</a> para perceber como funciona.</li>
               <li>Pode propor logos, banners e CSS.</li>
               <li>Pode juntar-se à equipa de desenvolvimento deixando uma mensagem no forum </li>
 	      <li>Pode submeter novos diagramas de polares de velocidade para outras classes de embarcações (ver <a href=\"figaro.sql\">ficheiro tipo</a> e <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\"> aqui </a>)</li>

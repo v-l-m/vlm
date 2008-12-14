@@ -161,7 +161,7 @@ if ($type == "subscribe")
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
-   <link rel="stylesheet" type="text/css" href="_style/new-style.css" />
+   <link rel="stylesheet" type="text/css" href="styles/new-style.css" />
    <link rel="icon" type="image/png" href="images/site/favicon.png" />
    <title>Virtual Loup-De-Mer </title>
     <?
@@ -196,7 +196,7 @@ if ($CurrentFile == "update_angle.php" ) {
    </script>
   <script type="text/javascript" src="scripts/_dms.js"></script>
   <script type="text/javascript" src="scripts/_hashtable.js"></script>
-  <script type="text/javascript" src="_scripts/showdiv.js"></script>
+  <script type="text/javascript" src="scripts/showdiv.js"></script>
 
  </head>
 
@@ -356,7 +356,7 @@ else //if loggedin
 if ( !isLoggedIn() && (in_array($_SERVER["PHP_SELF"], $restrictedPages) ) )
 {
    echo "Access restricted\n<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
-   include_once("_include/footer.inc");
+   include_once("includes/footer.inc");
    die();
 }
 ?>
