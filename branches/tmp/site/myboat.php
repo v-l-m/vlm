@@ -231,7 +231,7 @@ include_once("_scripts/myboat.js");
        n&deg; <b><? echo $usersObj->users->idusers ?></b>
        / &quot;<? echo $usersObj->users->boatname ?>&quot;<?php
     echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
-        echo "<img src=\"images/pavillons" . $usersObj->users->country . ".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
+        echo "<img src=\"images/pavillons/" . $usersObj->users->country . ".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
         
         echo "<br />" . $strings[$lang]["ranking"] . " : " . $user_ranking;
 
@@ -360,8 +360,8 @@ include_once("_scripts/myboat.js");
         </td><td class="boat">
     <!-- Affichage de windangle -->
         <img alt="wind angle" src="windangle.php?
-        wheading=<?php    printf ('%03d' , ($usersObj->wheading )) ?>&amp;
-        boatheading=<?php    printf ('%03d' , $usersObj->users->boatheading ) ?>&amp;
+        wheading=<?php printf ('%03d' , ($usersObj->wheading )) ?>&amp;
+        boatheading=<?php printf ('%03d' , $usersObj->users->boatheading ) ?>&amp;
         wspeed=<?php echo intval($usersObj->wspeed) ?>&amp;
         roadtoend=<?php echo $usersObj->orthoangletoend ?>"
     />

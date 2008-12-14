@@ -75,7 +75,7 @@ body
   margin: 1px;
   height: 82px;
   width: 980px;
-  background-image:  url('images/site/banniere_haut.jpg');
+  background-image:  url('/images/site/banniere_haut.jpg');
 }
 
 #time
