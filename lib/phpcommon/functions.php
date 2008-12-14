@@ -980,7 +980,7 @@ function dispHtmlRacesList($strings, $lang) {
       echo " <tr>\n";
       echo "<td>";
             if ( $racetype == RACE_TYPE_RECORD ) {
-                 echo "<img src=\"P.png\">";
+                 echo "<img src=\"/images/site/P.png\">";
             }
             echo $idraces."</td>\n";
       echo "<td>";
@@ -988,7 +988,7 @@ function dispHtmlRacesList($strings, $lang) {
       echo $racename."</a>";
       echo "</td>\n";
       echo "<td>" ;
-      echo "<img src=/greenarrow.gif>" ;
+			echo "<img src=\"/images/site/greenarrow.gif>\"" ;
             echo "$departure</td>\n";
       echo "  <td align=center>" .  $num_engaged ;
             if ( $maxboats != 0 ) {
@@ -1005,7 +1005,7 @@ function dispHtmlRacesList($strings, $lang) {
 
                 $status_content = "<img width=720 src=$href>";
                 list($xSize, $ySize, $type, $attr) = getimagesize($href);
-                echo "<img width=30 height=20 src=cartemarine.png " .
+                echo "<img width=30 height=20 src=\"/images/site/cartemarine.png\" " .
                      " onmouseover=\"showDivRight('infobulle','$status_content', 720, 480);\" " .
                      " onmouseout=\"hideDiv('infobulle');\" " .
                   " alt=\"" .$strings[$lang]["racemap"]. "\">";
@@ -1022,10 +1022,10 @@ function dispHtmlRacesList($strings, $lang) {
     } else {
       // La course est elle encore ouverte ?
       if ( $closetime > time() ) {
-        $departure  = "<img src=/yellowarrow.gif>" ;
+		$departure  = "<img src=\"/images/site/yellowarrow.gif>\"" ;
         $departure .= $strings[$lang]["already"];
       } else {
-        $departure  = "<img src=/redarrow.gif>" ;
+		$departure  = "<img src=\"/images/site/redarrow.gif>\"" ;
         $departure .= $strings[$lang]["closed"];
       }
 
@@ -1033,7 +1033,7 @@ function dispHtmlRacesList($strings, $lang) {
       echo " <tr>\n";
       echo "<td>";
             if ( $racetype == RACE_TYPE_RECORD ) {
-                 echo "<img src=\"P.png\">";
+                 echo "<img src=\"/images/site/P.png\">";
             }
 
       echo "<a href=\"races.php?lang=$lang&amp;idraces=".$idraces. "&amp;type=racing" . "\">";
@@ -1073,7 +1073,7 @@ function dispHtmlRacesList($strings, $lang) {
       $href="racemaps/regate".$idraces.".jpg";
             $status_content = "<img src=$href>";
             list($xSize, $ySize, $type, $attr) = getimagesize($href);
-            echo "<img width=30 height=20 src=cartemarine.png " .
+            echo "<img width=30 height=20 src=\"/images/site/cartemarine.png\" " .
                  " onmouseover=\"showDivRight('infobulle','$status_content', 720, 480);\" " .
                  " onmouseout=\"hideDiv('infobulle');\" " .
               " alt=\"" .$strings[$lang]["racemap"]. "\">";
