@@ -44,7 +44,7 @@ function setBackgroundImage (id, URL, x, y) {
 
 function DisplayPngByBrowser ( browser, img_path, width, height ) {
   if (browser == 'Microsoft Internet Explorer') {
-      document.write('<img src="blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
+      document.write('<img src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
   }
   else if (browser == 'Netscape')
             document.write("<img src='"+img_path+"' />");

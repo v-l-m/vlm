@@ -260,12 +260,12 @@ if ( $drawpositions != "no" && $windonly != "true" ) {
 if ( $drawlogos != "no" && $windonly != "true" ) {
     // Quelques pubs.
     if ( $idraces == 55 ) {
-        $logo = @imagecreatefromgif("banniere_hi5.gif");
+        $logo = @imagecreatefromgif("images/site/banniere_hi5.gif");
         imagecopymerge ( $mapObj->mapImage, $logo, 1 , $mapObj->ySize-60-1, 35, 0, 240, 60, 60 );
     }
 
     // Logo VLM en haut à droite des cartes.
-    $logo = @imagecreatefromjpeg("banniere_vlm.jpg");
+    $logo = @imagecreatefromjpeg("images/site/banniere_vlm.jpg");
     imagecopymerge ( $mapObj->mapImage, $logo, $mapObj->xSize-320 , 0, 0, 0, 320, 55, 30 );
 }
 

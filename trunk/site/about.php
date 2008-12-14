@@ -1,5 +1,5 @@
 <?php 
-include_once("header.inc");
+include_once("_include/header.inc");
 include_once("config.php");
 
 ?>
@@ -50,5 +50,5 @@ include_once("config.php");
 </p>
 
 <?php 
-include_once("footer.inc");
+include_once("_include/footer.inc");
 ?>

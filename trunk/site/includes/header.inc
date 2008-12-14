@@ -161,8 +161,8 @@ if ($type == "subscribe")
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
-   <link rel="stylesheet" type="text/css" href="new-style.css" />
-   <link rel="icon" type="image/png" href="favicon.png" />
+   <link rel="stylesheet" type="text/css" href="_style/new-style.css" />
+   <link rel="icon" type="image/png" href="images/site/favicon.png" />
    <title>Virtual Loup-De-Mer </title>
     <?
     // finds current file name
@@ -194,9 +194,9 @@ if ($CurrentFile == "update_angle.php" ) {
 	   eval("page" + NOM + " = window.open(URL, NOM, 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=595');");
       }
    </script>
-  <script type="text/javascript" src="dms.js"></script>
-  <script type="text/javascript" src="hashtable.js"></script>
-  <script type="text/javascript" src="showdiv.js"></script>
+  <script type="text/javascript" src="scripts/_dms.js"></script>
+  <script type="text/javascript" src="scripts/_hashtable.js"></script>
+  <script type="text/javascript" src="_scripts/showdiv.js"></script>
 
  </head>
 
@@ -208,7 +208,7 @@ if ($CurrentFile == "update_angle.php" ) {
      <b>
        <?php echo $strings[$lang]["sponsor"]; ?>
      </b>
-     <a href="http://www.actilis.net/" target="_actilis"><img src="/actilis.png" alt="Actilis" /></a>
+     <a href="http://www.actilis.net/" target="_actilis"><img src="/images/site/actilis.png" alt="Actilis" /></a>
    </div>
    
    <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
@@ -267,10 +267,10 @@ else //if loggedin
   }
 }?>
   <hr />
-  <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="fr.png" alt="version Francaise" width="30" height="20" /></a>
-  <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="en.png" alt="English version" width="30" height="20" /></a>
-  <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="it.png" alt="Italian version" width="30" height="20" /></a>
-  <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="pt.png" alt="Portugese version" width="30" height="20" /></a>
+  <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" alt="version Francaise" width="30" height="20" /></a>
+  <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" alt="English version" width="30" height="20" /></a>
+  <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" alt="Italian version" width="30" height="20" /></a>
+  <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" alt="Portugese version" width="30" height="20" /></a>
   <br />
       <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
       <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
@@ -291,19 +291,19 @@ else //if loggedin
           echo "new".$strings[$lang]["tchat"];
           echo "</b></a> ";
           echo "<hr />";
-          echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
-          echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\"><img src=\"vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
+          echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"images/site/documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
+          echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\"><img src=\"images/site/vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
  
 	  // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
 	  echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\">
-                <img src=\"jpbateaux.png\" alt=\"" . $strings[$lang]["tcv"]. "\" /></a>
+                <img src=\"images/site/jpbateaux.png\" alt=\"" . $strings[$lang]["tcv"]. "\" /></a>
                 <hr />";
 
 	  echo "<h3>".$strings[$lang]["weather"]."</h3>\n";
 
 	?>
 	<a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
-	<a href="http://grib.us/" target="_ugrib"><img src="grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
+	<a href="http://grib.us/" target="_ugrib"><img src="images/site/grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
 
         <br />
         ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br />
@@ -356,7 +356,7 @@ else //if loggedin
 if ( !isLoggedIn() && (in_array($_SERVER["PHP_SELF"], $restrictedPages) ) )
 {
    echo "Access restricted\n<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
-   include_once("footer.inc");
+   include_once("_include/footer.inc");
    die();
 }
 ?>

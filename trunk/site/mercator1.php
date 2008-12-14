@@ -1,7 +1,7 @@
 <?php
-include_once("header.inc");
+include_once("_include/header.inc");
 include_once("config.php");
-include_once("strings.inc");
+//include_once("_include/strings.inc");
 //TODO read from cookie and populate form
 //TODO if no cookie found, put default values in the form
 ?>
@@ -31,7 +31,7 @@ $bounds = $fullRacesObj->getRacesBoundaries();
 	    N <input id="north" name="north" size="5" maxlength="5" value="<?php if (isset($_COOKIE['north'])) print($_COOKIE['north']); else print($bounds['north']);?>"/><br />
 
             W <input id="west" name="west" size="5" maxlength="5" value="<?php if (isset($_COOKIE['west'])) print($_COOKIE['west']); else print($bounds['west']);?>"/>
-<img style="vertical-align: middle" src="minimap.png" alt="minimap"/>
+<img style="vertical-align: middle" src="images/site/minimap.png" alt="minimap"/>
             E <input id="east" name="east" size="5" maxlength="5" value="<?php if (isset($_COOKIE['east'])) print($_COOKIE['east']); else print($bounds['east']);?>"/><br/>
             S <input id="south" name="south" size="5" maxlength="5" value="<?php if (isset($_COOKIE['south'])) print($_COOKIE['south']); else print($bounds['south']);?>"/><br />
 
@@ -102,5 +102,5 @@ else
 }
 //TODO : list of users with checkboxes
 //TODO : write into cookie at submission
-include_once("footer.inc");
+include_once("_include/footer.inc");
 ?>

@@ -17,7 +17,7 @@ function LoadGif ($imgname) {
 
 
 // Chargement du fond d'image
-$im = LoadGif ('Afficheur-vide-2zones.gif');
+$im = LoadGif ('images/site/Afficheur-vide-2zones.gif');
 
 // Définition de code de couleurs
 $white = imagecolorallocate($im, 255, 255, 255);

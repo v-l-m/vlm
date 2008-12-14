@@ -1092,7 +1092,7 @@ window.document.vmg.status_way2.value="Calcul !!!";
     <tr>
 
       <td width="33%">
-      <p align="center"><a href="http://virtual-loup-de-mer.org" target="blank"><img src="banniere_vlm.jpg" border="0" height="55" width="320" /></a></p>
+      <p align="center"><a href="http://virtual-loup-de-mer.org" target="blank"><img src="images/site/banniere_vlm.jpg" border="0" height="55" width="320" /></a></p>
 
       </td>
 

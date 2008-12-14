@@ -64,7 +64,7 @@ drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
  
 
 // Chargement du fond d'image
-$instrum = LoadGif ('Afficheur-vide.gif');
+$instrum = LoadGif ('images/site/Afficheur-vide.gif');
 
 // Définition de code de couleurs
 $white = imagecolorallocate($instrum, 255, 255, 255);

@@ -29,9 +29,9 @@ function LoadGif ($imgname) {
 
 // Chargement du fond d'image
 //$im = LoadPng ('Afficheur-VentApp.png');
-//$im = LoadGif ('Afficheur-VentApp.gif');
-//$im = LoadGif ('Afficheur-vide-2zones.gif');
-$im = LoadGif ('Afficheur-vide.gif');
+//$im = LoadGif ('images/site/Afficheur-VentApp.gif');
+//$im = LoadGif ('images/site/Afficheur-vide-2zones.gif');
+$im = LoadGif ('images/site/Afficheur-vide.gif');
 
 // Définition de code de couleurs
 $white = imagecolorallocate($im, 255, 255, 255);
@@ -82,7 +82,7 @@ $textshade=$grey;
 $titlesize=4;
 $fontsize=12;
 putenv('GDFONTPATH=' . realpath('.'));
-$ttffontname="Verdana_Bold.ttf";
+$ttffontname="_fonts/Verdana_Bold.ttf";
 $ttffontsize=22;
 $x=85;
 $y=030;
