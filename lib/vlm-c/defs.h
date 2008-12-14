@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.15 2008/07/30 19:18:40 ylafon Exp $
+ * $Id: defs.h,v 1.16 2008-12-14 18:46:07 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,10 +24,12 @@
 #if 0
 #  define PI     M_PIl
 #  define PI_2   M_PI_2l
+#  define PI_4   M_PI_4l
 #  define TWO_PI M_PIl * 2
 #else
 #  define PI     M_PI
 #  define PI_2   M_PI_2
+#  define PI_4   M_PI_4
 #  define TWO_PI M_PI * 2
 #endif /* 0 */  
 
@@ -103,6 +105,7 @@
 #  define PARAM8(a,b,c,d,e,f,g,h) (a,b,c,d,e,f,g,h)
 #  define PARAM9(a,b,c,d,e,f,g,h,i) (a,b,c,d,e,f,g,h,i)
 #  define PARAM10(a,b,c,d,e,f,g,h,i,j) (a,b,c,d,e,f,g,h,i,j)
+#  define PARAM11(a,b,c,d,e,f,g,h,i,j,k) (a,b,c,d,e,f,g,h,i,j,k)
 #else
 #  define PARAM1(a) ()
 #  define PARAM2(a,b) ()
@@ -114,6 +117,7 @@
 #  define PARAM8(a,b,c,d,e,f,g,h) ()
 #  define PARAM9(a,b,c,d,e,f,g,h,i) ()
 #  define PARAM10(a,b,c,d,e,f,g,h,i,j) ()
+#  define PARAM11(a,b,c,d,e,f,g,h,i,j,k) ()
 #  define const
 #endif /* __STDC__ */
 
