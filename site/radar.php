@@ -27,7 +27,7 @@ function LoadGif ($imgname) {
 
 
 // Chargement du fond d'image
-$im = LoadGif ('Afficheur-vide.gif');
+$im = LoadGif ('images/site/Afficheur-vide.gif');
 $map_im = LoadPng('../minimaps/map-'.htmlentities($_GET["idusers"]).'.png');
 
 // Définition de code de couleurs

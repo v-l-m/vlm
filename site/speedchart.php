@@ -12,7 +12,7 @@ include_once("config.php");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-   <link rel="icon" type="image/png" href="favicon.png" />
+   <link rel="icon" type="image/png" href="images/site/favicon.png" />
    <title>Virtual Loup-De-Mer - Speedchart</title>
  </head>
  <body>

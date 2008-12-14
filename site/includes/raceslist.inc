@@ -77,7 +77,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
 
       echo "<td align=\"right\" class=\"boat\">";
       // Carte de la course
-      $href = "racemaps/regate".$idraces.".jpg";
+      $href = "images/racemaps/regate".$idraces.".jpg";
       if ( file_exists($href) ) {
       	$status_content = "*lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
       	list($xSize, $ySize, $type, $attr) = getimagesize($href);

@@ -1,7 +1,7 @@
 <?php
-include_once("header.inc");
+include_once("_include/header.inc");
 include_once("config.php");
-include_once("strings.inc");
+//include_once("_include/strings.inc");
 
 /*
  * Affichage de l'onglet 
@@ -147,13 +147,13 @@ if ($idraces != 0) {
     printf("<h3>".$strings[$lang]["racestarted"]."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));     
 
           // Carte de la course
-    $href = "racemaps/regate".$fullRacesObj->races->idraces.".jpg";
+    $href = "images/racemaps/regate".$fullRacesObj->races->idraces.".jpg";
           if ( file_exists($href) ) {
 
               $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
               list($xSize, $ySize, $type, $attr) = getimagesize($href);
 
-              echo "<img src=\"cartemarine.png\" " .
+              echo "<img src=\"images/site/cartemarine.png\" " .
                      " onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                      " onmouseout=\"hideDiv('infobulle');\" " .
                   " alt=\"" .$strings[$lang]["racemap"]. "\" />";
@@ -274,5 +274,5 @@ if ($idraces != 0) {
     dispHtmlRacesList($strings, $lang);
 }
 
-include_once("footer.inc");
+include_once("_include/footer.inc");
 ?>

@@ -1,6 +1,6 @@
 <?
 //ini_set(arg_separator.output, "&amp;");
-include_once("header.inc");
+include_once("_include/header.inc");
 
 echo "
     <span id=\"infobulle\">
@@ -18,7 +18,7 @@ if ( isLoggedIn() ) {
 echo "<h1 class=\"info\" align=\"center\">" . $strings[$lang]["one-one-one"] . "</h1>";
 echo "<hr />";
 
-include "raceslist.inc";
+include "_include/raceslist.inc";
 
 
 #echo "<HR>";
@@ -63,5 +63,5 @@ echo "<hr />";
 echo "<h1 class=\"info\" align=\"center\">Rejoignez Virtual-Loup-De-Mer.Org, c'est gratuit !</h1>";
 echo "<hr />";
 
-include_once("footer.inc");
+include_once("_include/footer.inc");
 ?>

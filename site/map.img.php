@@ -107,7 +107,7 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
         function DisplayPngByBrowser ( browser, img_path, width, height ) {
              var png_path;
              if (browser == 'Microsoft Internet Explorer') {
-                  document.write('<img src="blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
+                  document.write('<img src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
              }
              else if (browser == 'Netscape')
              document.write("<img src='"+img_path+"' />");
@@ -269,7 +269,7 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
       // Que met t'on sur la carte ?
       if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
         setUserPref(htmlentities($_GET['boat']), "mapTools" , $maptype);
-        echo "<div id=\"deplacable\" style=\"top:150; left:250; position:absolute;\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><IMG SRC=\"compas-transparent.gif\"></div>";
+        echo "<div id=\"deplacable\" style=\"top:150; left:250; position:absolute;\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><IMG SRC=\"images/site/compas-transparent.gif\"></div>";
 
       } else if ( $maptype == "compas" ) {
 

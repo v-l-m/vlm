@@ -1,5 +1,5 @@
 <?php
-include_once("header.inc");
+include_once("_include/header.inc");
 include_once("config.php");
 
 $fullUsersObj = new fullUsers(getLoginId());
@@ -64,6 +64,6 @@ if ($fullUsersObj->users->engaged  != 0)
     } 
 }
 
-include_once("footer.inc");
+include_once("_include/footer.inc");
 
 ?>

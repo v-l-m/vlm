@@ -1,7 +1,7 @@
 <?php
-include_once("header.inc");
+include_once("_include/header.inc");
 include_once("config.php");
-include_once("strings.inc");
+//include_once("_include/strings.inc");
 //TODO read from cookie and populate form
 //TODO if no cookie found, put default values in the form
 ?>
@@ -100,5 +100,5 @@ else
   echo  $strings[$lang]["mustbeengaged"];
 }
 //TODO : write into cookie at submission
-include_once("footer.inc");
+include_once("_include/footer.inc");
 ?>

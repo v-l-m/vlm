@@ -6,7 +6,7 @@ $idraces=($_REQUEST["idraces"]);
 // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
 $image="regate".$idraces;
 $thumb="images/minimaps/" . $image . ".png";
-$original="racemaps/" . $image . ".jpg";
+$original="images/racemaps/" . $image . ".jpg";
 
 // Création et mise en cache de la miniature si elle n'existe pas ou est trop vieille
 if ( 

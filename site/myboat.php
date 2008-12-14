@@ -7,7 +7,7 @@ javascripts to directly compute speed
 links
 it'a little bit messy (html+java+php)
 */
-include_once("header.inc");
+include_once("_include/header.inc");
 echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 
   $usersObj = new fullUsers(getLoginId());
@@ -22,7 +22,7 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     // S'engager dans une course
     printf("<h3>" . $strings[$lang]["notengaged"] . "</h3>",$lang);
     //include ("subscribe_race.php");
-    include ("raceslist.inc");
+    include ("_include/raceslist.inc");
 
   } else {
 
@@ -94,7 +94,7 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
     //printf("amure=%s<BR/>",$amure);
 
-include_once("myboat.js");
+include_once("_scripts/myboat.js");
 ?>
 <!-- Affichage de la page -->
 <div id="boat">
@@ -110,12 +110,12 @@ include_once("myboat.js");
         <td class="boat" align="center" valign="top">
           <?php
         // Carte de la course
-        $href = "racemaps/regate".$usersObj->users->engaged.".jpg";
+        $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
         if ( file_exists($href) ) {
           $status_content = "&lt;img src=&quot;$href&quot; " . 
                             "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
                   list($xSize, $ySize, $type, $attr) = getimagesize($href);
-          echo "<img src=\"cartemarine.png\" " . 
+          echo "<img src=\"images/site/cartemarine.png\" " . 
           " onmouseover=\"showDivLeft('infobulle'" .
           ",'$status_content', $xSize, $ySize);\" " .
           " onmouseout=\"hideDiv('infobulle');\" " .
@@ -231,7 +231,7 @@ include_once("myboat.js");
        n&deg; <b><? echo $usersObj->users->idusers ?></b>
        / &quot;<? echo $usersObj->users->boatname ?>&quot;<?php
     echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
-        echo "<img src=\"pavillons/" . $usersObj->users->country . ".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
+        echo "<img src=\"images/pavillons" . $usersObj->users->country . ".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
         
         echo "<br />" . $strings[$lang]["ranking"] . " : " . $user_ranking;
 
@@ -263,7 +263,7 @@ include_once("myboat.js");
                } else {
                $locktime = duration2string($usersObj->users->releasetime - time());
                //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-               printf("<img src=\"attention.png\"><font color=\"#F0F0F0\"><b>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</b></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+               printf("<img src=\"images/site/attention.png\"><font color=\"#F0F0F0\"><b>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</b></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
                }
         }
     /* Sinon (heure départ pas atteinte), affichage de la date de départ */
@@ -332,7 +332,7 @@ include_once("myboat.js");
       "%0AFair%20winds%2C%0A" . $usersObj->users->username .
       "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
       " onmouseout=\"hideDiv('infobulle');\" " .
-      "><img src=\"sos.png\" alt=\"SOS COMITE\" /></a>"; ?>
+      "><img src=\"images/site/sos.png\" alt=\"SOS COMITE\" /></a>"; ?>
     </td>
       </tr>
     </table>
@@ -767,6 +767,6 @@ include_once("myboat.js");
     <?php
 }
 
-include_once("footer.inc");
+include_once("_include/footer.inc");
 ?>
 
