@@ -1,4 +1,6 @@
 <?php
+include_once("vlmc.php");
+
     // ==================================
     //  Do they cross the next waypoint ?
     // ==================================
@@ -14,6 +16,11 @@
   
     // The code used to implement the pre-start is to check if deptime + prestart-duration < time_of_wp_crossing
     //              ==> only if a waypoint is crossed, then if this WP is WP0,
+
+$xing_ratio = new doublep();
+$xing_lat   = new doublep();
+$xing_long  = new doublep();
+
     do {
         // 1- find the coordinates of user's next waypoint
         printf ("\n\tNext Waypoint is %d", $fullUsersObj->nwp);
@@ -29,29 +36,38 @@
         // Test de croisement avec un waypoint
         $waypoint_crossed=false;
 
-        if ( $fullUsersObj->dotheycross2 (
-                $nextwaypoint[0], $nextwaypoint[1], 
-                $nextwaypoint[2], $nextwaypoint[3],
-                $lonAvant, $latAvant,
-                $lonApres, $latApres,
-                $encounterCoordinates,
-                $verbose )
-        ) {
-
-            echo " *** Yes (DTC2) ***\n";
-            $waypoint_crossed=true;
-        } 
-        if ($waypoint_crossed != true and $fullUsersObj->dotheycross( 
-                $nextwaypoint[0], $nextwaypoint[1], 
-                $nextwaypoint[2], $nextwaypoint[3],
-                $lonAvant, $latAvant,
-                $lonApres, $latApres,
-                $encounterCoordinates,
-                $verbose)     
-        ) {
-            echo " *** Yes (DTC1) ***\n";
-            $waypoint_crossed=true;
-        }
+	if (VLM_check_cross_WP($latAvant, $lonAvant, $latApres, $lonApres, 
+			       $nextwaypoint[1], $nextwaypoint[0], 
+			       $nextwaypoint[3], $nextwaypoint[2],
+			       $xing_lat, $xing_long, $xing_ratio)) {
+	  echo " *** Yes (DTC vlm-c) ***\n";
+	  $waypoint_crossed=true;
+	  // fill the array lat and long are reversed...
+	  $encounterCoordinates = array( doublep_value($xing_long), doublep_value($xing_lat) ); 
+	}
+	  //        if ( $fullUsersObj->dotheycross2 (
+	  //     $nextwaypoint[0], $nextwaypoint[1], 
+	  //                $nextwaypoint[2], $nextwaypoint[3],
+          //      $lonAvant, $latAvant,
+	  //     $lonApres, $latApres,
+	  //     $encounterCoordinates,
+          //      $verbose )
+	  // ) {
+	  //
+	  //            echo " *** Yes (DTC2) ***\n";
+	  //   $waypoint_crossed=true;
+	  //        } 
+	  //    if ($waypoint_crossed != true and $fullUsersObj->dotheycross( 
+	  //     $nextwaypoint[0], $nextwaypoint[1], 
+	  //     $nextwaypoint[2], $nextwaypoint[3],
+	  //     $lonAvant, $latAvant,
+	  //     $lonApres, $latApres,
+	  //     $encounterCoordinates,
+	  //     $verbose)     
+	  //  ) {
+          //  echo " *** Yes (DTC1) ***\n";
+	  // $waypoint_crossed=true;
+	  // }
 
         if ($waypoint_crossed == true ) {
             echo "\t==>Player ".$fullUsersObj->users->idusers . " crossed waypoint " .
