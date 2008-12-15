@@ -317,7 +317,7 @@ class fullRaces
     {
         echo "    <tr class=ranking>\n";
       // ============= Affichage des noms de bateaux en acronyme
-      echo "<td><img src=\"pavillons/" . $users->country .  ".png\" alt=\"Flag_".$users->country."\" />\n";
+      echo "<td><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $users->country .  ".png\" alt=\"Flag_".$users->country."\" />\n";
       echo "<acronym style=\" border-bottom: solid #" . $users->color . "\" " .
                       "title=\"". $users->boatname . "\">" .$users->username .  " (". $users->idusers . ")</acronym></td>\n";
       //echo "<td>" . $users->boatname . " (" . $users->ipaddr . ")" .  "</td>";
@@ -527,7 +527,7 @@ class fullRaces
             if ( $startnum == 0 ) {
             echo "<td class=\"ranking\">" . $row[country] . " / " . $row[username]  .  " (". $row[idusers] . ") "  ;
             } else {
-            echo "<td class=\"ranking\"><img src=\"pavillons/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+            echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
             echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
                       "title=\"". $row[boatname] . "\">" . 
             " (". $row[idusers] . ") " . 
@@ -725,7 +725,7 @@ class fullRaces
         //table lines
             $key++;
       echo "<td class=\"htmltable\">".$key."</td>\n";
-      echo "<td class=\"htmltable\"><img src=\"pavillons/" . 
+      echo "<td class=\"htmltable\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . 
                   $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
 
       // ============= Affichage des noms de bateaux en acronyme
@@ -937,7 +937,7 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
   echo "<tr " . $class . ">\n";
 
       if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
-      echo "<td class=\"ranking\"><img src=\"pavillons/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+      echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
       echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
                       "title=\"". $row[boatname] . "\">" . 
             " (". $row[idusers] . ") " . 
