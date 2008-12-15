@@ -14,17 +14,17 @@ include_once("includes/strings.inc");
 include_once("config.php");
 
 // Les entêtes
-echo "<html><head>";
-echo "<title>Admin VLM</title>";
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/new-style.css\" />";
-
-///   CODE JAVASCRIPT
-
-include_once("scripts/dms.js");
-
-
-echo "</head></html>";
-
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>">
+  <head>
+    <title>Admin VLM</title>
+    <link rel="stylesheet" type="text/css" href="styles/new-style.css" />
+    <script type="text/javascript" src="scripts/dms.js"></script>
+  </head>
+  <body>
+<?php
 //all GET and POST variables
 isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang=NavigatorLanguage();
 
@@ -55,8 +55,8 @@ if ( idusersIsAdmin (getLoginId()) ) {
 }
 
 // On est encore là, un Admin est donc connecté.
-echo "<H4>Admin connect&eacute; : " . $pseudo . "</h4>\n";
-echo "<input type=button value=\"Fermer\" onClick=\"javascript:self.close();\">";
+echo "<h4>Admin connect&eacute; : " . $pseudo . "</h4>\n<form>\n";
+echo "<input type=\"button\" value=\"Fermer\" onClick=\"javascript:self.close();\">";
 
 // Y a t'il une course choisie ?
 // On n'a pas de course, on propose la liste
@@ -71,19 +71,18 @@ if ( $race == "" ) {
            $select_list = $select_list . "<option value=\"". 
 		                                  $_SERVER['PHP_SELF'] . 
 						  "?pseudo=".$pseudo.
-						  "&password=".$password.
-						  "&boat=".$boat.
-						  "&action=".$action . 
-						  "&race=".$row[idraces] . "\"";
+						  "&amp;password=".$password.
+						  "&amp;boat=".$boat.
+						  "&amp;action=".$action . 
+						  "&amp;race=".$row[idraces] . "\"";
            if ( $boat == $row[idraces] ) $select_list = $select_list . " selected ";
            $select_list = $select_list . ">". $row[idraces] . " - " . $row[racename] ."</option>\n";
    	
    }
-   echo "<h4>No de Course : " .$race;
+   echo "<h4>No de Course : " .$race . "</h4>";
    echo "<select name=\"race\" " ;
    echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
    echo $select_list . "</select>";
-   echo "</h4>";
 } else {
    // On a un numéro, est-ce qu'il existe ?
    if ( ! raceExists($race) ) {
@@ -91,15 +90,14 @@ if ( $race == "" ) {
      exit;
    } else {
    // On a une course qui existe
-      echo "<h4>Course : " . $race ;
+      echo "<h4>Course : " . $race . "</h4>" ;
 
-      echo "<input type=button value=changer onClick=\"document.location='". $_SERVER['PHP_SELF'] .
+      echo "<input type=\"button\" value=\"changer\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
 						      "?pseudo=".$pseudo.
-						      "&password=".$password.
-						      "&action=".$action.
-						      "&boat=".$boat.
-						      "'\">";
-      echo "</h4>";
+						      "&amp;password=".$password.
+						      "&amp;action=".$action.
+						      "&amp;boat=".$boat.
+						      "'\" />";
    }
 }
 
@@ -117,15 +115,14 @@ if ( $boat != "" ) {
       $usersObj = new fullUsers($boat);
       if ( $usersObj->users->engaged == $race ) {
 
-           echo "<h4>Bateau : " . $boat . " (" . $usersObj->users->boatname . "), skipper=" . $usersObj->users->username . " (email=". $usersObj->users->email. ")"; 
+           echo "<h4>Bateau : " . $boat . " (" . $usersObj->users->boatname . "), skipper=" . $usersObj->users->username . " (email=". $usersObj->users->email. ")</h4>\n"; 
 
-           echo "<input type=button value=changer onClick=\"document.location='". $_SERVER['PHP_SELF'] .
+           echo "<input type=\"button\" value=\"changer\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
 						      "?pseudo=".$pseudo.
-						      "&password=".$password.
-						      "&action=".$action.
-						      "&race=".$race.
-						      "'\">";
-           echo "</h4>";
+						      "&amp;password=".$password.
+						      "&amp;action=".$action.
+						      "&amp;race=".$race.
+						      "'\" />";
        } else {
            // Le bateau qui avait été choisi n'est pas dans la course choisie...
            $boat="";
@@ -147,19 +144,18 @@ if ( $race != "" && $boat == "" ) {
            $select_list = $select_list . "<option value=\"". 
 		                                  $_SERVER['PHP_SELF'] . 
 						  "?pseudo=".$pseudo.
-						  "&password=".$password.
-						  "&race=".$race.
-						  "&action=".$action . 
-						  "&boat=".$row[idusers] . "\"";
+						  "&amp;password=".$password.
+						  "&amp;race=".$race.
+						  "&amp;action=".$action . 
+						  "&amp;boat=".$row[idusers] . "\"";
            if ( $boat == $row[idusers] ) $select_list = $select_list . " selected ";
            $select_list = $select_list . ">". $row[idusers] . " - skipper=" . $row[username] ."</option>\n";
    	
    }
-   echo "<h4>Bateau : " ; 
+   echo "<h4>Bateau : </h4>\n" ; 
    echo "<select name=\"boat\" " ;
    echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
    echo $select_list . "</select>";
-   echo "</h4>";
    // Si on n'a pas de bateau, on sort
    exit;
 
@@ -171,11 +167,11 @@ if ( $race == "" || $boat == "" ) exit;
 // Y a t'il une action fournie ?
 $URL="\"document.location='". $_SERVER['PHP_SELF'] .
                                 "?pseudo=".$pseudo.
-                                "&password=".$password.
-                                "&boat=".$boat .
-                                "&race=".$race.
-                                "&action=".$action.
-                                "'\">";
+                                "&amp;password=".$password.
+                                "&amp;boat=".$boat .
+                                "&amp;race=".$race.
+                                "&amp;action=".$action.
+                                "'\" />";
 // Réalisation de l'action si "do = yes"..
 if ( $do == "yes" ) {
     echo "Mise a jour en cours...";
@@ -240,8 +236,8 @@ if ( $do == "yes" ) {
              break;
 	default:
     }
-    echo "<B>OK<B><br>";
-    echo "<input type=button value=\"Raffraichir la page\" onClick=$URL";
+    echo "<b>OK<b><br />";
+    echo "<input type=\"button\" value=\"Raffraichir la page\" onClick=$URL";
 
 
     //tracking...
@@ -256,62 +252,62 @@ if ( $do == "yes" ) {
 // Les actions valides laissent passer, si aucune action est choisie, on présente la liste et on s'arrête là
 $URL="\"document.location='". $_SERVER['PHP_SELF'] .
                                 "?pseudo=".$pseudo.
-                                "&password=".$password.
-                                "&boat=".$boat .
-                                "&race=".$race.
-                                "&action=".$action.
-				"&do=yes".
-                                "'\">";
+                                "&amp;password=".$password.
+                                "&amp;boat=".$boat .
+                                "&amp;race=".$race.
+                                "&amp;action=".$action.
+				"&amp;do=yes".
+                                "'\" />";
 echo "<h4>Action : " . $action ; 
-echo "<form name=coordonnees action=". $_SERVER['PHP_SELF'] . ">";
-     echo "<input type=hidden name=action value=".$action.  ">";
-     echo "<input type=hidden name=pseudo value=".$pseudo.  ">";
-     echo "<input type=hidden name=password value=".$password.  ">";
-     echo "<input type=hidden name=boat value=".$boat .  ">";
-     echo "<input type=hidden name=race value=".$race. ">";
-     echo "<input type=hidden name=do value=yes>";
+echo "<form name=\"coordonnees\" action=". $_SERVER['PHP_SELF'] . "\"/>";
+     echo "<input type=\"hidden\" name=\"action\" value=\"".$action.  "\"/>";
+     echo "<input type=\"hidden\" name=\"pseudo\" value=\"".$pseudo.  "\"/>";
+     echo "<input type=\"hidden\" name=\"password\" value=\"".$password.  "\"/>";
+     echo "<input type=\"hidden\" name=\"boat\" value=\"".$boat .  "\"/>";
+     echo "<input type=\"hidden\" name=\"race\" value=\"".$race. "\"/>";
+     echo "<input type=\"hidden\" name=\"do\" value=\"yes\"/>";
 
 switch ($action) {
         case "unlock_boat":
-	     echo "<hr>Bloquer le bateau : <input type=checkbox name=lock ";
+	     echo "<hr />Bloquer le bateau : <input type=\"checkbox\" name=\"lock\" ";
              if ( $usersObj->users->releasetime > time() ) {
-		  echo "checked ";
+		  echo "checked=\"checked\" ";
              }
-             echo "><br>";
+             echo " /><br />";
 
 	     break;
         case "maj_nextwp":
-	     echo "<hr>Prochaine marque : <input type=text name=nwp value=" . $usersObj->users->nwp . "><br>";
+	     echo "<hr />Prochaine marque : <input type=\"text\" name=\"nwp\" value=\"" . $usersObj->users->nwp . "\"/><br />";
 
 	     break;
         case "maj_position":
-	     echo "<hr>";
-	     echo "<table border=0>
+	     echo "<hr />";
+	     echo "<table border=\"0\">
 	           <tr>
 	     		<td>&nbsp;</td><td>Millidegres</td><td>Deg/Min/Sec</td>
 		   </tr>";
 
 	     echo "<tr>
-	     	   <td align=right>Lon : </td>";
-	     echo "<td><input type=text name=targetlong onKeyup=\"convertdmslong();\" value=" . $usersObj->lastPositions->long/1000 . "></td>";
-//	     echo "<td><input type=text name=longdms disabled value=" . $usersObj->lastPositions->long . "></td>";
-	     echo "<td><input type=button  class=\"blue\" name=\"longdms\"></td>";
+	     	   <td align=\"right\">Lon : </td>";
+	     echo "<td><input type=\"text\" name=\"targetlong\" onKeyup=\"convertdmslong();\" value=\"" . $usersObj->lastPositions->long/1000 . "\"/></td>";
+//	     echo "<td><input type=\"text\" name=\"longdms\" disabled=\"disabled\" value=\"" . $usersObj->lastPositions->long . "\"/></td>";
+	     echo "<td><input type=\"button\" class=\"blue\" name=\"longdms\"></td>";
 	     echo "</tr>";
 	     echo "<tr>
-	     	   <td align=right>Lat : </td>";
-	     echo "<td><input type=text name=targetlat onKeyup=\"convertdmslat();\" value=" . $usersObj->lastPositions->lat/1000 . "></td>";
-//	     echo "<td><input type=text name=latdms disabled value=" . $usersObj->lastPositions->long . "></td>";
-	     echo "<td><input type=button  class=\"blue\" name=\"latdms\"></td>";
+	     	   <td align=\"right\">Lat : </td>";
+	     echo "<td><input type=\"text\" name=\"targetlat\" onKeyup=\"convertdmslat();\" value=\"" . $usersObj->lastPositions->lat/1000 . "\"/></td>";
+//	     echo "<td><input type=\"text\" name=\"latdms\" disabled=\"disabled\" value=\"" . $usersObj->lastPositions->long . "\"/></td>";
+	     echo "<td><input type=\"button\"  class=\"blue\" name=\"latdms\" /></td>";
 	     echo "</tr>";
 	     echo "</table>";
 
 	     break;
         case "reset_pass":
-	     echo "<hr>Mot de passe : <input type=text name=newpass value=" . $usersObj->users->password . "><br>";
+	     echo "<hr />Mot de passe : <input type=\"text\" name=\"newpass\" value=\"" . $usersObj->users->password . "\" /><br />";
 
              break;
         case "reset_username":
-	     echo "<hr>Nouveau nom d'utilisateur : <input type=text name=newusern value=" . $usersObj->users->username . "><br>";
+	     echo "<hr />Nouveau nom d'utilisateur : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
 
              break;
 	default:
@@ -322,12 +318,12 @@ switch ($action) {
                     $select_list = $select_list . "<option value=\"". 
 		                                  $_SERVER['PHP_SELF'] . 
 						  "?pseudo=".$pseudo.
-						  "&password=".$password.
-						  "&race=".$race.
-						  "&boat=".$boat.
-						  "&action=" . 
+						  "&amp;password=".$password.
+						  "&amp;race=".$race.
+						  "&amp;boat=".$boat.
+						  "&amp;action=" . 
 						  $a . "\"";
-                    if ( $action == $a ) $select_list = $select_list . " selected ";
+                    if ( $action == $a ) $select_list = $select_list . " selected=\"selected\" ";
                     $select_list = $select_list . ">". $a ."</option>\n";
                 }
 		echo "<select name=\"action\" " ;
@@ -338,12 +334,13 @@ switch ($action) {
 		exit;
 }
 	
-  	echo "<input type=button value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-				      "?pseudo=".$pseudo.  "&password=".$password.  "&boat=".$boat .  "&race=".$race. "'\">";
-	echo "<input type=submit value=\"Juste fais le !\" >";
+  	echo "<input type=\"button\" value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
+				      "?pseudo=".$pseudo.  "&amp;password=".$password.  "&amp;boat=".$boat .  "&amp;race=".$race. "'\"/>";
+	echo "<input type=\"submit\" value=\"Juste fais le !\" />";
 echo "</form>";
-echo "</h4>";
-
+?>
+</body>
+</html>
 
 
 
