@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.15 2008-12-14 18:46:06 ylafon Exp $
+ * $Id: vlm.c,v 1.16 2008-12-15 14:35:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -349,53 +349,29 @@ int VLM_check_cross_WP(double latitude, double longitude,
 		       double *xing_lat, double *xing_long,
 		       double *ratio) {
 
+
+  /*
   double loxoheading, loxodist, c_ratio, r_lat, r_long;
   double t_dist, t1_lat, t1_long, t2_lat, t2_long;
+  */
+  double c_ratio, r_lat, r_long;
 
-  latitude  = degToRad(latitude/1000.0);
+  latitude  = latToY(degToRad(latitude/1000.0));
   longitude = fmod(degToRad(longitude/1000.0), TWO_PI);
-  new_lat   = degToRad(new_lat/1000.0);
+  new_lat   = latToY(degToRad(new_lat/1000.0));
   new_long  = fmod(degToRad(new_long/1000.0), TWO_PI);
 
-  wp0_lat  = degToRad(wp0_lat/1000.0);
+  wp0_lat  = latToY(degToRad(wp0_lat/1000.0));
   wp0_long = degToRad(wp0_long/1000.0);
-  wp1_lat  = degToRad(wp1_lat/1000.0);
+  wp1_lat  = latToY(degToRad(wp1_lat/1000.0));
   wp1_long = degToRad(wp1_long/1000.0);
-  
-  loxo_distance_angle(wp0_lat, wp0_long, wp1_lat, wp1_long, 
-		      &loxodist, &loxoheading);
-  
-  if (loxodist < 200.0) {
-    c_ratio = intersects(latitude, longitude, new_lat, new_long,
-			 wp0_lat, wp0_long, wp1_lat, wp1_long,
-			 &r_lat, &r_long);
-    if (c_ratio > -1.0) {
-      *ratio     = c_ratio;
-      *xing_lat  = 1000.0 * radToDeg(r_lat);
-      *xing_long = 1000.0 * radToDeg(r_long);
-      return 1;
-    }
-    return 0;
-  }
-  /* find two points around lat->new_lat in wp0->wp1 */
-  c_ratio = (((new_lat+latitude)/2.0)-wp0_lat) / (wp1_lat - wp0_lat);
-  if ((c_ratio < 0.0)||(c_ratio>1.0)) {
-    /* ratio is negative, we are out of range, bail out */
-    return 0;
-  }
-  t_dist = loxodist * c_ratio;
-  get_loxo_coord_from_dist_angle(wp0_lat, wp0_long, 
-				 t_dist - 10.0, loxoheading,
-				 &t1_lat, &t1_long);
-  get_loxo_coord_from_dist_angle(wp0_lat, wp0_long, 
-				 t_dist + 10.0, loxoheading,
-				 &t2_lat, &t2_long);  
+
   c_ratio = intersects(latitude, longitude, new_lat, new_long,
-		       t1_lat, t1_long, t2_lat, t2_long,
+		       wp0_lat, wp0_long, wp1_lat, wp1_long,
 		       &r_lat, &r_long);
   if (c_ratio > -1.0) {
-    *ratio = c_ratio;
-    *xing_lat  = 1000.0 * radToDeg(r_lat);
+    *ratio     = c_ratio;
+    *xing_lat  = 1000.0 * radToDeg(yToLat(r_lat));
     *xing_long = 1000.0 * radToDeg(r_long);
     return 1;
   }
