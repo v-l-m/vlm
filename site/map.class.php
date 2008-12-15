@@ -909,9 +909,9 @@ if ( $drawwind >= 0 ) {
          //imagestring ( $this->mapImage, $font, 50, 70 ,"EstimeEndAfter ="  .$Estime[0] , $this->colorText);
     } else {
                      // Si les longitudes de départ et d'arrivée n'ont pas le même signe
-         if ( $current_long * $Estime[0] < 0) {
+      //         if ( $current_long * $Estime[0] < 0) {
                         // cas du franchissement de Greenwich
-            $Estime[0]+=360000;
+	   //            $Estime[0]+=360000;
                            // Dans le sens Amerique-europe
                            // $current_long <0 && $Estime[0] >0
 
@@ -923,7 +923,7 @@ if ( $drawwind >= 0 ) {
                            // $current_long >0 && $Estime[0] <0
                            // Dans le sens Amerique-NZ
                            // $current_long <0 && $Estime[0] >0
-                     }
+      //             }
          $DepEstime=$A;
          imagestring ( $this->mapImage, $font, 50, 50 , "AM NOT ON MAP" , $this->colorText);
     }
