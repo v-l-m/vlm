@@ -161,15 +161,15 @@ if ($type == "subscribe")
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
-   <link rel="stylesheet" type="text/css" href="_style/new-style.css" />
+   <link rel="stylesheet" type="text/css" href="style/new-style.css" />
    <link rel="icon" type="image/png" href="images/site/favicon.png" />
    <title>Virtual Loup-De-Mer </title>
     <?
     // finds current file name
     if(ereg("([^/?]+)(\?.*)?$",$_SERVER["PHP_SELF"] , $regs))
-        	$CurrentFile = $regs[1];
+          $CurrentFile = $regs[1];
     else   // it should not be possible :-(
-        	$CurrentFile = '';
+          $CurrentFile = '';
 
 //echo "current file =".$CurrentFile."SCrIPT name = ".$_SERVER["PHP_SELF"]."\n";
 //little trick : if update_angle page, display and then redirect to myboat
@@ -188,10 +188,10 @@ if ($CurrentFile == "update_angle.php" ) {
 
     <script type="text/javascript" >
      function popup_small(URL,NOM) {
-	window.open(URL, NOM, 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=850,height=500');
+  window.open(URL, NOM, 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=850,height=500');
       }
      function popUp(URL,NOM) {
-	   eval("page" + NOM + " = window.open(URL, NOM, 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=595');");
+     eval("page" + NOM + " = window.open(URL, NOM, 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=595');");
       }
    </script>
   <script type="text/javascript" src="scripts/_dms.js"></script>
@@ -227,8 +227,8 @@ if (!isLoggedIn()) //if not connected
             <input type="hidden" name="type" value="login" />
          </p>
          <p align="center">
-	   <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
-	 </p>
+     <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
+   </p>
       </form>
    <?
    printf ("   ".$strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
@@ -240,7 +240,7 @@ else //if loggedin
   $available_races=availableRaces(getLoginId());
   /*
   if ( in_array (20081109, $available_races) ) {
-	printf ( "Vent Des Globes : <B>OK</B>" );
+  printf ( "Vent Des Globes : <B>OK</B>" );
   }
   */
   
@@ -294,52 +294,52 @@ else //if loggedin
           echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"images/site/documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
           echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\"><img src=\"images/site/vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
  
-	  // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
-	  echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\">
+    // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
+    echo "<a href=\"http://www.virtual-winds.com/forum/index.php?showtopic=4737\" target=\"_tcv\">
                 <img src=\"images/site/jpbateaux.png\" alt=\"" . $strings[$lang]["tcv"]. "\" /></a>
                 <hr />";
 
-	  echo "<h3>".$strings[$lang]["weather"]."</h3>\n";
+    echo "<h3>".$strings[$lang]["weather"]."</h3>\n";
 
-	?>
-	<a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
-	<a href="http://grib.us/" target="_ugrib"><img src="images/site/grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
+  ?>
+  <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
+  <a href="http://grib.us/" target="_ugrib"><img src="images/site/grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
 
         <br />
         ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br />
-	Meteo France
-	<a href="http://www.meteofrance.com/FR/mer/popupCartePrevFrontsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Fronts</a>
-	<a href="http://www.meteofrance.com/FR/mer/popupCarteVentsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Vents</a>
+  Meteo France
+  <a href="http://www.meteofrance.com/FR/mer/popupCartePrevFrontsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Fronts</a>
+  <a href="http://www.meteofrance.com/FR/mer/popupCarteVentsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Vents</a>
 
-	<br />
-	Wetterzentrale
-	<a href="http://www.meteo-marine.com/meteo_marine/gfs.htm" target="_meteowz">GFS</a>,
-	<a href="http://www.meteo-marine.com/meteo_marine/jma.htm" target="_meteowz">JMA</a>
+  <br />
+  Wetterzentrale
+  <a href="http://www.meteo-marine.com/meteo_marine/gfs.htm" target="_meteowz">GFS</a>,
+  <a href="http://www.meteo-marine.com/meteo_marine/jma.htm" target="_meteowz">JMA</a>
 
-	<br />
-	Weather-online
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?03&amp;LANG=en&amp;WIND=g246" target="_wol">North Brazil</a>, 
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=atla" target="_wol">Europe</a>, 
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=eatl" target="_wol">Atlan.</a>, 
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=kana" target="_wol">Manche</a>,
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=mitt" target="_wol">Med.</a>
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=afri&amp;MEER=ioze" target="_wol">Indien</a>
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=aust" target="_wol">Aust</a>
-	<a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=neus" target="_wol">NZL.</a>
+  <br />
+  Weather-online
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?03&amp;LANG=en&amp;WIND=g246" target="_wol">North Brazil</a>, 
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=atla" target="_wol">Europe</a>, 
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=eatl" target="_wol">Atlan.</a>, 
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=kana" target="_wol">Manche</a>,
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=mitt" target="_wol">Med.</a>
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=afri&amp;MEER=ioze" target="_wol">Indien</a>
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=aust" target="_wol">Aust</a>
+  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=neus" target="_wol">NZL.</a>
 
-	<br />
-	Aviation Weather
-	<a href="http://aviationweather.gov/obs/sat/intl/ir.shtml" target="_wf">All Zones</a>
-	<br />
-	Wind Finder
-	<a href="http://www.windfinder.com/forecasts/" target="_wf">All Zones</a>
-	<br />
-	MetVUW
-	<a href="http://www.metvuw.com/ows/" target="_mv">MetVUW</a>
-	<br />
-	COTWeb
-	<a href="http://www.cotweb.com/meteo.php4" target="_mv">COTWeb</a>
-	<?
+  <br />
+  Aviation Weather
+  <a href="http://aviationweather.gov/obs/sat/intl/ir.shtml" target="_wf">All Zones</a>
+  <br />
+  Wind Finder
+  <a href="http://www.windfinder.com/forecasts/" target="_wf">All Zones</a>
+  <br />
+  MetVUW
+  <a href="http://www.metvuw.com/ows/" target="_mv">MetVUW</a>
+  <br />
+  COTWeb
+  <a href="http://www.cotweb.com/meteo.php4" target="_mv">COTWeb</a>
+  <?
            echo "<hr />Srv = " . SERVER_NAME . ".";
            echo "<br />Version = ";  
            include("version.txt");
