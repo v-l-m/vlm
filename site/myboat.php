@@ -562,7 +562,7 @@ include_once("scripts/myboat.js");
                          echo "value=\""  . $usersObj->users->targetandhdg . "\" />" ;
                          echo "<input type=\"checkbox\" name=\"andhdg\" checked=\"checked\" onclick=\"toggle_andhdg()\" />";
                     } else {
-                         echo "disabled value=\"" . -1*abs($usersObj->users->targetandhdg) . "\" />" ;
+                         echo "disabled=\"disabled\" value=\"" . -1*abs($usersObj->users->targetandhdg) . "\" />" ;
                          echo "<input type=\"checkbox\" name=\"andhdg\" onclick=\"toggle_andhdg()\" />";
                     }
                ?>
