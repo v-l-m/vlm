@@ -29,8 +29,6 @@
     #include "vlm.h"
     #include "move.h"
     #include "waypoint.h"
-    #include "front.h"
-    #include "kml.h"
     #include "shmem.h" 
     #include "useshmem.h"
     vlmc_context *global_vlmc_context;
@@ -56,8 +54,6 @@ typedef long time_t;
 %include "vlm.h"
 %include "move.h"
 %include "waypoint.h"
-%include "front.h"
-%include "kml.h"
 %include "shmem.h"
 %include "useshmem.h"
 
