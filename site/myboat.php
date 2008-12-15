@@ -231,7 +231,7 @@ include_once("scripts/myboat.js");
        n&deg; <b><? echo $usersObj->users->idusers ?></b>
        / &quot;<? echo $usersObj->users->boatname ?>&quot;<?php
     echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
-        echo "<img src=\"images/pavillons/" . $usersObj->users->country . ".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
+        echo "<img src=\"".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
         
         echo "<br />" . $strings[$lang]["ranking"] . " : " . $user_ranking;
 
