@@ -63,7 +63,7 @@ define ("BUOY_S", "buoy_south.png");
 define ("BUOY_W", "buoy_west.png");
 define ("BUOY_E", "buoy_south.png");
 
-define ("DIRECTORY_COUNTRY_FLAGS","pavillons");
+define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
 
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);
