@@ -724,7 +724,7 @@ class fullUsers
   }
 
   // Function updateWaypoints
-  function recordWaypointCrossing()
+  function recordWaypointCrossing($xingtime)
   {
      // Choix de "userdeptime"
      
@@ -744,7 +744,7 @@ class fullUsers
                         " VALUES ( " . $this->users->engaged . ", " .
                                        $this->nwp . ", " .
                                        $this->users->idusers . ", " .
-                                       time() . ", " .
+                                       $xingtime . ", " .
                $udt . ");"   ;
 
      mysql_db_query(DBNAME,$query) ;//or die("Query failed : " . mysql_error." ".$query);

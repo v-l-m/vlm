@@ -36,161 +36,138 @@ $xing_long  = new doublep();
         // Test de croisement avec un waypoint
         $waypoint_crossed=false;
 
-	if (VLM_check_cross_WP($latAvant, $lonAvant, $latApres, $lonApres, 
-			       $nextwaypoint[1], $nextwaypoint[0], 
-			       $nextwaypoint[3], $nextwaypoint[2],
-			       $xing_lat, $xing_long, $xing_ratio)) {
-	  echo " *** Yes (DTC vlm-c) ***\n";
-	  $waypoint_crossed=true;
-	  // fill the array lat and long are reversed...
-	  $encounterCoordinates = array( doublep_value($xing_long), doublep_value($xing_lat) ); 
-	}
-	  //        if ( $fullUsersObj->dotheycross2 (
-	  //     $nextwaypoint[0], $nextwaypoint[1], 
-	  //                $nextwaypoint[2], $nextwaypoint[3],
-          //      $lonAvant, $latAvant,
-	  //     $lonApres, $latApres,
-	  //     $encounterCoordinates,
-          //      $verbose )
-	  // ) {
-	  //
-	  //            echo " *** Yes (DTC2) ***\n";
-	  //   $waypoint_crossed=true;
-	  //        } 
-	  //    if ($waypoint_crossed != true and $fullUsersObj->dotheycross( 
-	  //     $nextwaypoint[0], $nextwaypoint[1], 
-	  //     $nextwaypoint[2], $nextwaypoint[3],
-	  //     $lonAvant, $latAvant,
-	  //     $lonApres, $latApres,
-	  //     $encounterCoordinates,
-	  //     $verbose)     
-	  //  ) {
-          //  echo " *** Yes (DTC1) ***\n";
-	  // $waypoint_crossed=true;
-	  // }
+        if (VLM_check_cross_WP($latAvant, $lonAvant, $latApres, $lonApres, 
+                               $nextwaypoint[1], $nextwaypoint[0], 
+                               $nextwaypoint[3], $nextwaypoint[2],
+                               $xing_lat, $xing_long, $xing_ratio)) {
+          echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
+          $waypoint_crossed=true;
+          // fill the array lat and long are reversed...
+          $encounterCoordinates = array( doublep_value($xing_long), doublep_value($xing_lat) ); 
+        }
 
         if ($waypoint_crossed == true ) {
-            echo "\t==>Player ".$fullUsersObj->users->idusers . " crossed waypoint " .
+          echo "\t==>Player ".$fullUsersObj->users->idusers . " crossed waypoint " .
             $fullUsersObj->nwp ;
-            // If it is a start line (nwp == 0), we have to compute the crossing coordinates
-            // Then to compute the crossing time, and compare it to deptime + prestart-duration
+          // If it is a start line (nwp == 0), we have to compute the crossing coordinates
+          // Then to compute the crossing time, and compare it to deptime + prestart-duration
+          
+          // distanceSinceLastUpdate = dist entre dernière position et ce coint
+          $distanceSinceLastUpdate = ortho($encounterCoordinates[0],
+                                           $encounterCoordinates[1],
+                                           $lonAvant, $latAvant
+                                           );
+          
+          // Temps de course (entre départ et passage de la ligne )
+          // ======================================================
+          // Calcul exact de duration. 
+          // On en prend $fullRacesObj->races-deptime (si racetype =0),
+          // mais on prend $fullUsersObj->users->userdeptime si racetype = 1
+          if ( $fullRacesObj->races->racetype == RACE_TYPE_CLASSIC ) {
+            $deptime = $fullRacesObj->races->deptime  ;
+          } else {
+            // Cas RACE_TYPE_RECORD
+            $deptime = $fullUsersObj->users->userdeptime  ;
+            // Au cas où problème de MAJ de userdeptime (cf arrivée de la 46)
+            //$deptime = $fullRacesObj->races->deptime  ;
+          }
+          
+          // Duration c'est la somme de :
+          /*     temps de course écoulé jusqu'à la vacatin d'avant
+                 + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
+          */
+	  $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
+          $duration = $timeAvant - $deptime + $timeSinceLastUpdate  ;
 
-            $fullUsersObj->recordWaypointCrossing();
-      
-            // Is it the last one (aka finish line ?)
-            // giveNextWaypoint returns -1 if this was the finish line
-            // else it gives the next waypoint
-            $nextwaypointid = $fullUsersObj->giveNextWaypoint();
-      
-            if ( $nextwaypointid != -1 ) {
-      
-                // It was not the Finish Line, update user's nextwaypoint
-                $fullUsersObj->users->nwp = $fullUsersObj->nwp = $nextwaypointid;
-                // compute the distance to this waypoint
-        
-                $fullUsersObj->updateNextWaypoint();
-                $is_arrived=false;
-      
-            } else {
-
-                // RACE IS FINISHED FOR THIS BOAT : record result and continue the loop
-                $is_arrived=true;
-
-                echo "\t==>Course =" . $fullRacesObj->races->idraces . "\n";
-                echo "\t==>encounterCoordinates = " . $encounterCoordinates[0] . "/" . $encounterCoordinates[1] . "\n";
-                // encounterCoordinates est le point où la ligne a été coupée
-                // distanceSinceLastUpdate = dist entre dernière position et ce coint
-                $distanceSinceLastUpdate = ortho($encounterCoordinates[0],
-                       $encounterCoordinates[1],
-                       $lonAvant, $latAvant
-                       );
-
-                // Temps de course (entre départ et passage de la ligne )
-                            // ======================================================
-                // Calcul exact de duration. 
-                // On en prend $fullRacesObj->races-deptime (si racetype =0),
-                // mais on prend $fullUsersObj->users->userdeptime si racetype = 1
-                if ( $fullRacesObj->races->racetype == RACE_TYPE_CLASSIC ) {
-                    $deptime = $fullRacesObj->races->deptime  ;
-                } else {
-                    // Cas RACE_TYPE_RECORD
-                    $deptime = $fullUsersObj->users->userdeptime  ;
-                    // Au cas où problème de MAJ de userdeptime (cf arrivée de la 46)
-                    //$deptime = $fullRacesObj->races->deptime  ;
-                }
-
-                // Duration c'est la somme de :
-                /*     temps de course écoulé jusqu'à la vacatin d'avant
-                     + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
-                */
-
-                $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
-                $duration = $timeAvant - $deptime + $timeSinceLastUpdate  ;
-        
-                if ($verbose>=0) {
-                    echo "\t\tBoatspeed : " . $fullUsersObj->boatspeed . ", ";
-                    echo "distanceSinceLastUpdate = $distanceSinceLastUpdate nm \n"; 
-                                echo "\t\ttimesincelastupdate = " . $timeSinceLastUpdate . " sec, duration = $duration sec \n";
-                    echo "\t\tDeptime = " . $deptime . "\n";
-                }
-        
-                //insert score in database (or update if it is a "TYPE_RECORD" race)
-                if ( $fullRacesObj->races->racetype == RACE_TYPE_CLASSIC ) {
-                    $query = "INSERT INTO races_results 
+          $fullUsersObj->recordWaypointCrossing($timeAvant + $timeSinceLastUpdate);
+          
+          // Is it the last one (aka finish line ?)
+          // giveNextWaypoint returns -1 if this was the finish line
+          // else it gives the next waypoint
+          $nextwaypointid = $fullUsersObj->giveNextWaypoint();
+          
+          if ( $nextwaypointid != -1 ) {
+            
+            // It was not the Finish Line, update user's nextwaypoint
+            $fullUsersObj->users->nwp = $fullUsersObj->nwp = $nextwaypointid;
+            // compute the distance to this waypoint
+            
+            $fullUsersObj->updateNextWaypoint();
+            $is_arrived=false;
+            
+          } else {
+          
+            // RACE IS FINISHED FOR THIS BOAT : record result and continue the loop
+            $is_arrived=true;
+            
+            echo "\t==>Course =" . $fullRacesObj->races->idraces . "\n";
+            echo "\t==>encounterCoordinates = " . $encounterCoordinates[0] . "/" . $encounterCoordinates[1] . "\n";
+            // encounterCoordinates est le point où la ligne a été coupée
+            
+            if ($verbose>=0) {
+              echo "\t\tBoatspeed : " . $fullUsersObj->boatspeed . ", ";
+              echo "distanceSinceLastUpdate = $distanceSinceLastUpdate nm \n"; 
+              echo "\t\ttimesincelastupdate = " . $timeSinceLastUpdate . " sec, duration = $duration sec \n";
+              echo "\t\tDeptime = " . $deptime . "\n";
+            }
+            
+            //insert score in database (or update if it is a "TYPE_RECORD" race)
+            if ( $fullRacesObj->races->racetype == RACE_TYPE_CLASSIC ) {
+              $query = "INSERT INTO races_results 
                              ( idraces, idusers, position,  deptime, duration, loch, longitude, latitude)
                              VALUES ("  . $fullRacesObj->races->idraces .
-                             " , ". $fullUsersObj->users->idusers .
-                             " , ". BOAT_STATUS_ARR .
-                             " , ". $deptime .
-                             " , ". $duration .
-                             " , ". $fullUsersObj->users->loch .
-                             " , ". $lonApres .
-                             " , ". $latApres   .")";
-                } else {
-                    // Cas RACE_TYPE_RECORD : on MAJ le resultat seulement s'il est meilleur.
-
-                    // Récupération de l'éventuel temps de référence getOldDuration($idraces,$idusers)
-                    $oldDuration=getOldDuration($fullRacesObj->races->idraces, $fullUsersObj->users->idusers);
+                " , ". $fullUsersObj->users->idusers .
+                " , ". BOAT_STATUS_ARR .
+                " , ". $deptime .
+                " , ". $duration .
+                " , ". $fullUsersObj->users->loch .
+                " , ". $lonApres .
+                " , ". $latApres   .")";
+            } else {
+              // Cas RACE_TYPE_RECORD : on MAJ le resultat seulement s'il est meilleur.
               
-                    // ==> Si 0 : pas de temps de référence, on REPLACE
-                    //     ou si $duration est meilleur (<), on REPLACE
-                    if ( $oldDuration <= 0  OR  $duration < $oldDuration ) {
-
-                             $query = "REPLACE INTO races_results 
+              // Récupération de l'éventuel temps de référence getOldDuration($idraces,$idusers)
+              $oldDuration=getOldDuration($fullRacesObj->races->idraces, $fullUsersObj->users->idusers);
+              
+              // ==> Si 0 : pas de temps de référence, on REPLACE
+              //     ou si $duration est meilleur (<), on REPLACE
+              if ( $oldDuration <= 0  OR  $duration < $oldDuration ) {
+                
+                $query = "REPLACE INTO races_results 
                                      ( idraces, idusers, position,  deptime, duration,loch ,longitude, latitude)
                                           VALUES ("  . $fullRacesObj->races->idraces .
-                                    " , ". $fullUsersObj->users->idusers .
-                              " , ". BOAT_STATUS_ARR .
-                              " , ". $deptime .
-                              " , ". $duration .
-                              " , ". $fullUsersObj->users->loch .
-                              " , ". $lonApres .
-                              " , ". $latApres .")";
-                    } else {
-                        // sinon, on oublie cette tentative.      
-                        $query = "NOQUERY";
-                    }
-                }
-
-                if ( $query != "NOQUERY" ) {
-                    if ($verbose >0 ) echo $query;
-                    $result = mysql_db_query(DBNAME,$query);
-                    printf ("\t\tBoat arrived...\n");
-                } else {
-                    printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);
-                }
-
-                //remove player from race
-                $fullUsersObj->removeFromRaces();
-
-                // CONTINUE this loop
-            } // Test waypoint was the last one
+                  " , ". $fullUsersObj->users->idusers .
+                  " , ". BOAT_STATUS_ARR .
+                  " , ". $deptime .
+                  " , ". $duration .
+                  " , ". $fullUsersObj->users->loch .
+                  " , ". $lonApres .
+                  " , ". $latApres .")";
+              } else {
+                // sinon, on oublie cette tentative.      
+                $query = "NOQUERY";
+              }
+            }
+            
+            if ( $query != "NOQUERY" ) {
+              if ($verbose >0 ) echo $query;
+              $result = mysql_db_query(DBNAME,$query);
+              printf ("\t\tBoat arrived...\n");
+            } else {
+              printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);
+            }
+            
+            //remove player from race
+            $fullUsersObj->removeFromRaces();
+            
+            // CONTINUE this loop
+          } // Test waypoint was the last one
         } // Test a waypoint was crossed
-
+        
         // Now, let's see if the boat crosses the coast.
         else  {
-        // Did not Cross the line, nor any waypoint ?
-             echo ":\t *** NO ***";
+          // Did not Cross the line, nor any waypoint ?
+          echo ":\t *** NO ***";
         } // FIN TEST WAYPOINT  CROSSED
     } while ( $is_arrived != true && $waypoint_crossed == true );
 ?>
