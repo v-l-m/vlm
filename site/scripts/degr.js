@@ -11,9 +11,9 @@ function dmsdec1() {
 	minutes = parseInt(document.convdeg.txtmin1.value * 1.0);
 	secondes = parseInt(document.convdeg.txtsec1.value * 1.0);
 
-if (document.convdeg.txtdeg1.value >= 90) {document.convdeg.txtdeg1.value = ''; alert('le nombre doit être inférieur à 90');}
-if (document.convdeg.txtmin1.value >= 60) {document.convdeg.txtmin1.value = ''; alert('le nombre doit être inférieur à 60');}
-if (document.convdeg.txtsec1.value >= 60) {document.convdeg.txtsec1.value = ''; alert('le nombre doit être inférieur à 60');}
+if (document.convdeg.txtdeg1.value >= 90) {document.convdeg.txtdeg1.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  90');}
+if (document.convdeg.txtmin1.value >= 60) {document.convdeg.txtmin1.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
+if (document.convdeg.txtsec1.value >= 60) {document.convdeg.txtsec1.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
 if (document.convdeg.txtdeg1.value=='') {degres='0'}
 if (document.convdeg.txtmin1.value=='') {minutes='0'}
 if (document.convdeg.txtsec1.value=='') {secondes='0'}
@@ -30,8 +30,8 @@ function decdms1() {
 	var minutesTemp = 0.0;
 	var secondes = 0;
 	var secondesTemp = 0.0;
-	if (document.convdeg.txtdec1.value >= 90) {document.convdeg.txtdec1.value = ''; alert('le nombre doit être inférieur à 90');}
-	if (document.convdeg.txtdec1.value <= -90) {document.convdeg.txtdec1.value = ''; alert('le nombre doit être inférieur à 90');}
+	if (document.convdeg.txtdec1.value >= 90) {document.convdeg.txtdec1.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  90');}
+	if (document.convdeg.txtdec1.value <= -90) {document.convdeg.txtdec1.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  90');}
 	if (document.convdeg.txtdec1.value < 0) {degresTemp = parseFloat(document.convdeg.txtdec1.value * -1.0);
 	document.convdeg.or1.value='S'; }
 	else 
@@ -64,9 +64,9 @@ function dmsdec2() {
 	minutes = parseInt(document.convdeg.txtmin2.value * 1.0);
 	secondes = parseInt(document.convdeg.txtsec2.value * 1.0);
 	
-if (document.convdeg.txtdeg2.value >= 180) {document.convdeg.txtdeg2.value = ''; alert('le nombre doit être inférieur à 180');}
-if (document.convdeg.txtmin2.value >= 60) {document.convdeg.txtmin2.value = ''; alert('le nombre doit être inférieur à 60');}
-if (document.convdeg.txtsec2.value >= 60) {document.convdeg.txtsec2.value = ''; alert('le nombre doit être inférieur à 60');}
+if (document.convdeg.txtdeg2.value >= 180) {document.convdeg.txtdeg2.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  180');}
+if (document.convdeg.txtmin2.value >= 60) {document.convdeg.txtmin2.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
+if (document.convdeg.txtsec2.value >= 60) {document.convdeg.txtsec2.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
 if (document.convdeg.txtdeg2.value=='') {degres='0'}
 if (document.convdeg.txtmin2.value=='') {minutes='0'}
 if (document.convdeg.txtsec2.value=='') {secondes='0'}
@@ -83,8 +83,8 @@ function decdms2() {
 	var minutesTemp = 0.0;
 	var secondes = 0;
 	var secondesTemp = 0.0;
-	if (document.convdeg.txtdec2.value >= 180) {document.convdeg.txtdec2.value = ''; alert('le nombre doit être inférieur à 180');}
-	if (document.convdeg.txtdec2.value <= -180) {document.convdeg.txtdec2.value = ''; alert('le nombre doit être inférieur à 180');}
+	if (document.convdeg.txtdec2.value >= 180) {document.convdeg.txtdec2.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  180');}
+	if (document.convdeg.txtdec2.value <= -180) {document.convdeg.txtdec2.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  180');}
 	if (document.convdeg.txtdec2.value < 0) {degresTemp = parseFloat(document.convdeg.txtdec2.value * -1.0);
 	document.convdeg.or2.value='W'; }
 	else 
@@ -117,9 +117,9 @@ function dmsdec3() {
 	minutes = parseInt(document.convdeg.txtmin3.value * 1.0);
 	secondes = parseInt(document.convdeg.txtsec3.value * 1.0);
 
-if (document.convdeg.txtdeg3.value >= 90) {document.convdeg.txtdeg3.value = ''; alert('le nombre doit être inférieur à 90');}
-if (document.convdeg.txtmin3.value >= 60) {document.convdeg.txtmin3.value = ''; alert('le nombre doit être inférieur à 60');}
-if (document.convdeg.txtsec3.value >= 60) {document.convdeg.txtsec3.value = ''; alert('le nombre doit être inférieur à 60');}
+if (document.convdeg.txtdeg3.value >= 90) {document.convdeg.txtdeg3.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  90');}
+if (document.convdeg.txtmin3.value >= 60) {document.convdeg.txtmin3.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
+if (document.convdeg.txtsec3.value >= 60) {document.convdeg.txtsec3.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
 if (document.convdeg.txtdeg3.value=='') {degres='0'}
 if (document.convdeg.txtmin3.value=='') {minutes='0'}
 if (document.convdeg.txtsec3.value=='') {secondes='0'}
@@ -136,8 +136,8 @@ function decdms3() {
 	var minutesTemp = 0.0;
 	var secondes = 0;
 	var secondesTemp = 0.0;
-	if (document.convdeg.txtdec3.value >= 90) {document.convdeg.txtdec3.value = ''; alert('le nombre doit être inférieur à 90');}
-	if (document.convdeg.txtdec3.value <= -90) {document.convdeg.txtdec3.value = ''; alert('le nombre doit être inférieur à 90');}
+	if (document.convdeg.txtdec3.value >= 90) {document.convdeg.txtdec3.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  90');}
+	if (document.convdeg.txtdec3.value <= -90) {document.convdeg.txtdec3.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  90');}
 	if (document.convdeg.txtdec3.value < 0) {degresTemp = parseFloat(document.convdeg.txtdec3.value * -1.0);
 	document.convdeg.or3.value='S'; }
 	else 
@@ -170,9 +170,9 @@ function dmsdec4() {
 	minutes = parseInt(document.convdeg.txtmin4.value * 1.0);
 	secondes = parseInt(document.convdeg.txtsec4.value * 1.0);
 
-if (document.convdeg.txtdeg4.value >= 180) {document.convdeg.txtdeg4.value = ''; alert('le nombre doit être inférieur à 180');}
-if (document.convdeg.txtmin4.value >= 60) {document.convdeg.txtmin4.value = ''; alert('le nombre doit être inférieur à 60');}
-if (document.convdeg.txtsec4.value >= 60) {document.convdeg.txtsec4.value = ''; alert('le nombre doit être inférieur à 60');}
+if (document.convdeg.txtdeg4.value >= 180) {document.convdeg.txtdeg4.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  180');}
+if (document.convdeg.txtmin4.value >= 60) {document.convdeg.txtmin4.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
+if (document.convdeg.txtsec4.value >= 60) {document.convdeg.txtsec4.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  60');}
 if (document.convdeg.txtdeg4.value=='') {degres='0'}
 if (document.convdeg.txtmin4.value=='') {minutes='0'}
 if (document.convdeg.txtsec4.value=='') {secondes='0'}
@@ -188,8 +188,8 @@ function decdms4() {
 	var minutesTemp = 0.0;
 	var secondes = 0;
 	var secondesTemp = 0.0;
-	if (document.convdeg.txtdec4.value >= 180) {document.convdeg.txtdec4.value = ''; alert('le nombre doit être inférieur à 180');}
-	if (document.convdeg.txtdec4.value <= -180) {document.convdeg.txtdec4.value = ''; alert('le nombre doit être inférieur à 180');}
+	if (document.convdeg.txtdec4.value >= 180) {document.convdeg.txtdec4.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  180');}
+	if (document.convdeg.txtdec4.value <= -180) {document.convdeg.txtdec4.value = ''; alert('le nombre doit Ãªtre infÃ©rieur Ã  180');}
 	if (document.convdeg.txtdec4.value < 0) {degresTemp = parseFloat(document.convdeg.txtdec4.value * -1.0);
 	document.convdeg.or4.value='W'; }
 	else 
