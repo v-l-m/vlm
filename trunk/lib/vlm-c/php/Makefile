@@ -3,7 +3,8 @@ CC = gcc
 RM = rm -f
 MAKE = make
 DEPEND = makedepend
-CDEBUGFLAGS = -Wall -pedantic -g
+CDEBUGFLAGS =
+#CDEBUGFLAGS = -Wall -pedantic -g
 #COPTIMFLAGS = -O3  -ftree-vectorize -ffast-math 
 #COPTIMFLAGS = -O3  -ftree-vectorize -ffast-math -march=nocona
 COPTIMFLAGS = -O3  -ftree-vectorize
