@@ -144,11 +144,11 @@ if ($type == "subscribe")
        if ( in_array($idraces, $avRaces) ) {
           $users->subscribeToRaces($idraces);
        } else {
-          printf ("<h4>You should not do that.<h4>You can't subscribe to this race.");
+          printf ("<h4>You should not do that.</h4>\n<h4>You can't subscribe to this race.</h4>");
        }
   } else {
-      printf ("<h4>You should not do that.<h4>You are already engaged in a race. Please LogOff before and Log in an other boat ! Never go back with your browser, instead, close the session.");
-      printf ("<h4>Ne faites pas &ccedil;a.<h4>Votre bateau est d&eacute;j&agrave; en course ! D&eacute;connectez ce bateau et connextez vous avec l'autre ! (JAMAIS DE RETOUR ARRIERE AVEC VOTRE NAVIGATEUR, MAIS FERMETURE DE SESSION)");
+      printf ("<h4>You should not do that.</h4>\n<h4>You are already engaged in a race. Please LogOff before and Log in an other boat ! Never go back with your browser, instead, close the session.</h4>");
+      printf ("<h4>Ne faites pas &ccedil;a.</h4>\n<h4>Votre bateau est d&eacute;j&agrave; en course ! D&eacute;connectez ce bateau et connextez vous avec l'autre ! (JAMAIS DE RETOUR ARRIERE AVEC VOTRE NAVIGATEUR, MAIS FERMETURE DE SESSION)</h4>");
   }
 }
 
@@ -194,9 +194,9 @@ if ($CurrentFile == "update_angle.php" ) {
      eval("page" + NOM + " = window.open(URL, NOM, 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=595');");
       }
    </script>
-  <script type="text/javascript" src="scripts/_dms.js"></script>
-  <script type="text/javascript" src="scripts/_hashtable.js"></script>
-  <script type="text/javascript" src="_scripts/showdiv.js"></script>
+  <script type="text/javascript" src="scripts/dms.js"></script>
+  <script type="text/javascript" src="scripts/hashtable.js"></script>
+  <script type="text/javascript" src="scripts/showdiv.js"></script>
 
  </head>
 
