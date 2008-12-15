@@ -1,4 +1,4 @@
-//****convertir degré décimal en degré/minute/seconde****
+//****convertir degrÃ© dÃ©cimal en degrÃ©/minute/seconde****
 function convertdmslat()
 {
     var latdegre=eval(document.coordonnees.targetlat.value);
@@ -21,8 +21,8 @@ function convertdmslat()
 	var latsecdec=Math.round(((latsectot)-(latsecent))*10000000)/10000000;
 	var latsecmil=Math.round((latsectot)*10000)/10000;
 	
-	//dms concaténés pour la latitude
-	document.coordonnees.latdms.value=(latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
+	//dms concatÃ©nÃ©s pour la latitude
+	document.coordonnees.latdms.value=(latdegent)+"Â° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
     }
 }
 
@@ -48,8 +48,8 @@ function convertdmslong()
 	var longsecdec=Math.round(((longsectot)-(longsecent))*10000000)/10000000;
 	var longsecmil=Math.round((longsectot)*10000)/10000;
 
-	//dms concaténés pour la longitude
-	document.coordonnees.longdms.value=(longdegent)+"° "+(longminent)+"' "+(longsecmil)+"\" "+(longsign);
+	//dms concatÃ©nÃ©s pour la longitude
+	document.coordonnees.longdms.value=(longdegent)+"Â° "+(longminent)+"' "+(longsecmil)+"\" "+(longsign);
     }
 
 }
@@ -69,4 +69,4 @@ function toggle_andhdg()
     }
 }
 
-//****fin conversion degré décimal en degré/minute/seconde****
+//****fin conversion degrÃ© dÃ©cimal en degrÃ©/minute/seconde****
