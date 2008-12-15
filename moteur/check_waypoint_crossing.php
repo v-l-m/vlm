@@ -76,7 +76,9 @@ $xing_long  = new doublep();
           /*     temps de course écoulé jusqu'à la vacatin d'avant
                  + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
           */
+	  //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($xing_ratio); (use this if we settle the time for the whole run)
 	  $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
+
           $duration = $timeAvant - $deptime + $timeSinceLastUpdate  ;
 
           $fullUsersObj->recordWaypointCrossing($timeAvant + $timeSinceLastUpdate);
