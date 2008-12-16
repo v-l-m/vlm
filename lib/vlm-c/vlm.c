@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.16 2008-12-15 14:35:03 ylafon Exp $
+ * $Id: vlm.c,v 1.18 2008-12-16 16:17:06 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -247,6 +247,52 @@ double VLM_distance_to_line(double latitude, double longitude,
 }
 
 /**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_line_ratio_xing(double latitude, double longitude, 
+				       double latitude_a, double longitude_a, 
+				       double latitude_b, double longitude_b,
+				       double *xing_lat, double *xing_long,
+				       double *ratio) {
+  double x_lat, x_long, dist;
+  
+  /* sanity check */
+  latitude    = latitude / 1000.0;
+  longitude   = fmod((longitude / 1000.0), 360.0);
+  latitude_a  = latitude_a / 1000.0;
+  longitude_a = fmod((longitude_a / 1000.0), 360.0);
+  latitude_b  = latitude_b / 1000.0;
+  longitude_b = fmod((longitude_b / 1000.0), 360.0);
+
+  /* if something goes wrong, return -1 */
+  if (latitude   < -90.0 || latitude   > 90.0 ||
+      latitude_a < -90.0 || latitude_a > 90.0 ||
+      latitude_b < -90.0 || latitude_b > 90.0) {
+    return -1.0;
+  }
+
+  dist = distance_to_line_ratio_xing(degToRad(latitude)  ,degToRad(longitude),
+				     degToRad(latitude_a),degToRad(longitude_a),
+				     degToRad(latitude_b),degToRad(longitude_b),
+				     &x_lat, &x_long, ratio);
+  *xing_lat  = 1000.0 * radToDeg(x_lat);
+  *xing_long = 1000.0 * radToDeg(x_long);
+  return dist;
+}
+
+/**
  * Compute the coordinate of a point computed form an origin, using a 
  * loxodromic course, with a specified heading and distance.
  * it is clipped at +/-80 degrees.
@@ -349,11 +395,6 @@ int VLM_check_cross_WP(double latitude, double longitude,
 		       double *xing_lat, double *xing_long,
 		       double *ratio) {
 
-
-  /*
-  double loxoheading, loxodist, c_ratio, r_lat, r_long;
-  double t_dist, t1_lat, t1_long, t2_lat, t2_long;
-  */
   double c_ratio, r_lat, r_long;
 
   latitude  = latToY(degToRad(latitude/1000.0));
