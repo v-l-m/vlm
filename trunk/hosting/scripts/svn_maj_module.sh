@@ -8,6 +8,8 @@ svnmodule=$1
 
 #Pré déploiement
 case $svnmodule in
+    medias)
+    ;;
     base)
     ;;
     site)
