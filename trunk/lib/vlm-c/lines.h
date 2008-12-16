@@ -1,5 +1,5 @@
 /**
- * $Id: lines.h,v 1.5 2008/07/22 20:29:58 ylafon Exp $
+ * $Id: lines.h,v 1.6 2008-12-16 16:09:23 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -63,6 +63,18 @@ double distance_to_line PARAM6(double, double, double, double,
  */
 double distance_to_line_ratio PARAM7(double, double, double, double,
 				     double, double, double *);
+
+/**
+ * All latitude/longitude in rad
+ * latitude/longitude of point A, latitude/longitude of segment 1
+ * @returns a double, the distance in nm from point A to segment 1
+ * The last parameter is filled with the position from segpoint 1 to 2
+ * as a value between 0 and 1 (0 is point 1, 1 is point 2)
+ */
+double distance_to_line_ratio_xing PARAM9(double, double, double, double,
+					  double, double, 
+					  double *, double *,
+					  double *);
 
 /**
  * All latitude/longitude in rad

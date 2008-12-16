@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.10 2008-12-14 18:46:06 ylafon Exp $
+ * $Id: vlm.h,v 1.11 2008-12-16 16:17:06 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -106,6 +106,32 @@ wind_info *VLM_get_wind_info_latlong_millideg_TWSA PARAM4(double, double,
  * @return a double, the distance, a <code>double</code> in nautic miles.
  */
 double VLM_ortho_distance PARAM4(double, double, double, double);
+
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param xing_latitude, a pointer to a <code>double</code>, 
+ *        in <em>milli-degrees</em>
+ * @param xing_longitude, a pointer to a <code>double</code>, 
+ *        in <em>milli-degrees</em>
+ * @param ratio, a pointer to a <code>double</code>, value between 0 and 1
+ *        ratio = position of the point from a to b.
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_line PARAM6( double, double,
+				    double, double,
+				    double, double);
+
 
 /**
  * Compute the orthodromic distance between a point and a line defined
