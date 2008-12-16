@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.23 2008-12-16 17:20:35 ylafon Exp $
+ * $Id: lines.c,v 1.24 2008-12-16 18:26:58 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -450,10 +450,10 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
   min_dist = fmin(dist_a, dist_b);
   /* we construct a line form the point, orthogonal to the segment, long of
      at least min_dist */
-  latitude_x = latitude + (longitude_a - longitude_b) * min_dist / ab_dist;
+  latitude_x = t_latitude + (longitude_a - longitude_b) * min_dist / ab_dist;
   longitude_x = longitude + (latitude_b - latitude_a) * min_dist / ab_dist;
   
-  latitude_y = latitude + (longitude_b - longitude_a) * min_dist / ab_dist;
+  latitude_y = t_latitude + (longitude_b - longitude_a) * min_dist / ab_dist;
   longitude_y = longitude + (latitude_a - latitude_b) * min_dist / ab_dist;
 
   intersect = intersects(latitude_a, longitude_a, latitude_b, longitude_b,
@@ -472,10 +472,12 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
   if (ortho_a < ortho_b) {
     *x_latitude = yToLat(latitude_a);
     *x_longitude = longitude_a;
+    *ab_ratio = -1.0;
     return ortho_a;
   }
   *x_latitude = yToLat(latitude_b);
   *x_longitude = longitude_b;
+  *ab_ratio = -2.0;
   return ortho_b;
 }
 
