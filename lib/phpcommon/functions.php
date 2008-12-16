@@ -941,7 +941,7 @@ function dispHtmlRacesList($strings, $lang) {
     echo "  <tbody>\n";
     echo "<tr><td></td><td></td><td></td><td></td></tr>";
 
-    $finished_races_title="<h4>".$strings[$lang]["finished_races"]."</h4>";
+    $finished_races_title="<h4>".$strings[$lang]["finished_races"]."</h4>\n";
     $finished_races="";
 
 
@@ -1017,7 +1017,7 @@ function dispHtmlRacesList($strings, $lang) {
   } else if ( $num_racing == 0 ) {
     //if started and no one is playing status is "finished"
       $departure = $strings[$lang]["finished"];
-      $finished_races="<a href=\"races.php?lang=$lang&amp;idraces=".$idraces.'">('.$idraces.") ".$racename."</a><br />".$finished_races;
+      $finished_races="<a href=\"races.php?lang=$lang&amp;idraces=".$idraces.'">('.$idraces.") ".$racename."</a><br />\n".$finished_races;
 
     } else {
       // La course est elle encore ouverte ?
