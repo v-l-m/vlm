@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.22 2008-12-16 16:09:23 ylafon Exp $
+ * $Id: lines.c,v 1.23 2008-12-16 17:20:35 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -469,6 +469,13 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
     *ab_ratio = intersect;
     return t_dist;
   }
-  return fmin(ortho_a, ortho_b);
+  if (ortho_a < ortho_b) {
+    *x_latitude = yToLat(latitude_a);
+    *x_longitude = longitude_a;
+    return ortho_a;
+  }
+  *x_latitude = yToLat(latitude_b);
+  *x_longitude = longitude_b;
+  return ortho_b;
 }
 
