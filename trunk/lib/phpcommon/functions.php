@@ -1000,7 +1000,7 @@ function dispHtmlRacesList($strings, $lang) {
       //$href="racemaps/regate".$idraces.".jpg";
       //echo "<a href=\"$href\">".$strings[$lang]["map"]."</a>";
             // Carte de la course
-      $href="racemaps/regate".$idraces.".jpg";
+      $href="images/racemaps/regate".$idraces.".jpg";
             if ( file_exists($href) ) {
 
                 $status_content = "<img width=720 src=$href>";
@@ -1070,7 +1070,7 @@ function dispHtmlRacesList($strings, $lang) {
       //$href="racemaps/regate".$idraces.".jpg";
       //echo "<a href=\"$href\">".$strings[$lang]["map"]."</a>";
             // Carte de la course
-      $href="racemaps/regate".$idraces.".jpg";
+      $href="images/racemaps/regate".$idraces.".jpg";
             $status_content = "<img src=$href>";
             list($xSize, $ySize, $type, $attr) = getimagesize($href);
             echo "<img width=30 height=20 src=\"/images/site/cartemarine.png\" " .
