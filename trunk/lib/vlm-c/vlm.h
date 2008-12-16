@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.11 2008-12-16 16:17:06 ylafon Exp $
+ * $Id: vlm.h,v 1.12 2008-12-16 17:34:22 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -128,9 +128,11 @@ double VLM_ortho_distance PARAM4(double, double, double, double);
  * @return a double, the distance, a <code>double</code> in nautic miles.
  * If the parameters are incorrect, -1.0 is returned.
  */
-double VLM_distance_to_line PARAM6( double, double,
-				    double, double,
-				    double, double);
+double VLM_distance_to_line_ratio_xing PARAM9( double, double,
+					       double, double,
+					       double, double,
+					       double *, double *,
+					       double *);
 
 
 /**
