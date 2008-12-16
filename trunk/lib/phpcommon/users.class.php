@@ -490,7 +490,8 @@ class fullUsers
 
     if ( $this->users->pilotmode == PILOTMODE_BESTVMG ) //  BEST VMG
       {
-        $cap_ortho = caportho($this->lastPositions->long, $this->lastPositions->lat, $this->LongNM, $this->LatNM);
+	//       $cap_ortho = caportho($this->lastPositions->long, $this->lastPositions->lat, $this->LongNM, $this->LatNM);
+	$cap_ortho = $this->orthodromicHeading();
 
         $cap_vent = ($this->wheading + 180)%360;
         $wind_speed = $this->wspeed;
