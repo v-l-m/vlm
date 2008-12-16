@@ -19,7 +19,7 @@ include_once("config.php");
 	<p><?php  echo $strings[$lang]["contributorstext"];?></p>
 
 <h3><?php   echo $strings[$lang]["howtohelp"];?></h3> 
-<p><?php   echo $strings[$lang]["howtohelptext"];?></p>
+<?php   echo $strings[$lang]["howtohelptext"];?>
 
 
 <!--
