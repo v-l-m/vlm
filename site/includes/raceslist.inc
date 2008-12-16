@@ -79,7 +79,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
       // Carte de la course
       $href = "images/racemaps/regate".$idraces.".jpg";
       if ( file_exists($href) ) {
-      	$status_content = "*lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
+      	$status_content = "<img src=\"$href\" alt=\";".$strings[$lang]["racemap"]."\" />";
       	list($xSize, $ySize, $type, $attr) = getimagesize($href);
       	echo "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
