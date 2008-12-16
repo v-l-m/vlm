@@ -60,26 +60,26 @@ class races
     $this->waypoints =array();
 
     $query = "SELECT wporder,wptype,libelle,laisser_au,maparea FROM races_waypoints RW, waypoints WP" .
-        " WHERE idraces = " . $this->idraces . 
-        "   AND RW.idwaypoint =  WP.idwaypoint " . 
-        " ORDER BY wporder ";
+      " WHERE idraces = " . $this->idraces . 
+      "   AND RW.idwaypoint =  WP.idwaypoint " . 
+      " ORDER BY wporder ";
 
     $result = mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
     // printf ("Request Races_Waypoints : %s\n" , $query);
 
     while( $row = mysql_fetch_array( $result, MYSQL_NUM) ) {
-        $WPcoords = array();
-  $WPcoords = giveWaypointCoordinates ($this->idraces, $row[0] , WPLL/WP_NUMSEGMENTS);
-  // On push dans le tableau des coordonnées le wptype (classement ou son nom), et le libellé et le "laisser_au" du WP
-  array_push ($WPcoords, $row[1]);
-  array_push ($WPcoords, $row[2]);
-  array_push ($WPcoords, $row[3]);
+      $WPcoords = array();
+      $WPcoords = giveWaypointCoordinates ($this->idraces, $row[0] , WPLL/WP_NUMSEGMENTS);
+      // On push dans le tableau des coordonnées le wptype (classement ou son nom), et le libellé et le "laisser_au" du WP
+      array_push ($WPcoords, $row[1]);
+      array_push ($WPcoords, $row[2]);
+      array_push ($WPcoords, $row[3]);
 
-        // On push aussi le maparea adapté
-  array_push ($WPcoords, $row[4]);
+      // On push aussi le maparea adapté
+      array_push ($WPcoords, $row[4]);
 
-  // On push ce WP dans la liste des WP
-        array_push($this->waypoints, $WPcoords );
+      // On push ce WP dans la liste des WP
+      array_push($this->waypoints, $WPcoords );
     }
     $this->stop1long = $WPcoords[0]; $this->stop1lat = $WPcoords[1];
     $this->stop2long = $WPcoords[2]; $this->stop2lat = $WPcoords[3];
@@ -96,15 +96,15 @@ class races
         //$this->racedistance+=ortho($lastlong,$lastlat,($WP[0]+$WP[2])/2, ($WP[1]+$WP[3])/2 );
         $d1=ortho($lastlong,$lastlat,$WP[0], $WP[1] );
         $d2=ortho($lastlong,$lastlat,$WP[2], $WP[3] );
-    if ( $d1 < $d2 ) {
-      $lastlong=$WP[0];
-      $lastlat=$WP[1];
+        if ( $d1 < $d2 ) {
+          $lastlong=$WP[0];
+          $lastlat=$WP[1];
           $this->racedistance+=$d1;
-    } else {
-      $lastlong=$WP[2];
-      $lastlat=$WP[3];
+        } else {
+          $lastlong=$WP[2];
+          $lastlat=$WP[3];
           $this->racedistance+=$d2;
-    }
+        }
       }
       // + la distance entre l'avant dernier WP et le dernier
       //$this->racedistance+=ortho($lastlong,$lastlat,($WP[0]+$WP[2])/2, ($WP[1]+$WP[3])/2 );
@@ -141,7 +141,7 @@ class races
 
     $result = mysql_db_query(DBNAME,$query);
     if ( mysql_num_rows($result) == 0 ) {
-        return(1);  // on s'arrete là si personne n'est arrivé !
+      return(1);  // on s'arrete là si personne n'est arrivé !
     }
 
     // On est encore là, on a donc un enregistrement "duration"
@@ -150,34 +150,34 @@ class races
     
     // Sur course RECORD, c'est 2 * le pourcentage du temps du premier
     if ( $this->racetype == RACE_TYPE_RECORD ) {
-        $maxArrivalTime = $this->closetime + ( $WinnersRaceDuration * (1 + $this->firstpcttime/100 ) ) ;
+      $maxArrivalTime = $this->closetime + ( $WinnersRaceDuration * (1 + $this->firstpcttime/100 ) ) ;
     } else {
-    // sur les autres courses, c'est le pourcentage du temps de course du premier
-        $maxArrivalTime = $this->deptime + ( $WinnersRaceDuration * (1 + $this->firstpcttime/100 ) ) ;
+      // sur les autres courses, c'est le pourcentage du temps de course du premier
+      $maxArrivalTime = $this->deptime + ( $WinnersRaceDuration * (1 + $this->firstpcttime/100 ) ) ;
     }
 
     $now = time();
     if ( $verbose != 0 ) {
-         printf ("\n\tDeptime:%d, WinnersDuration=%d, Pct=%d, ", $this->deptime, $WinnersRaceDuration, $this->firstpcttime);
-         printf ("Winners + 1+pct/100=%d\n",$WinnersRaceDuration * (1 + $this->firstpcttime/100 )  );
-         printf ("\tMaxArrivalTime:%d, Now=%d...", $maxArrivalTime, $now);
+      printf ("\n\tDeptime:%d, WinnersDuration=%d, Pct=%d, ", $this->deptime, $WinnersRaceDuration, $this->firstpcttime);
+      printf ("Winners + 1+pct/100=%d\n",$WinnersRaceDuration * (1 + $this->firstpcttime/100 )  );
+      printf ("\tMaxArrivalTime:%d, Now=%d...", $maxArrivalTime, $now);
     }
 
     // C'est trop tard...
     //   <0 lorsque pourcentage en plus du temps du premier est dépassé
     if ( $now > $maxArrivalTime ) {
-        if ( $verbose != 0 ) {
-             printf ("La course est finie...\n");
-        }
+      if ( $verbose != 0 ) {
+        printf ("La course est finie...\n");
+      }
       return (-1);   
     } 
     // Il reste du temps donc $maxArrivalTime - $now
     //   >0 si le premier n'est pas arrivé ou est arrivé il y a peu de temps
     else {
-        if ( $verbose != 0 ) {
-             printf ("La course n'est pas finie, fin dans %d heures\n",($maxArrivalTime-$now)/3600);
-        }
-        return ( $maxArrivalTime - $now );
+      if ( $verbose != 0 ) {
+        printf ("La course n'est pas finie, fin dans %d heures\n",($maxArrivalTime-$now)/3600);
+      }
+      return ( $maxArrivalTime - $now );
 
     }
 
@@ -195,7 +195,7 @@ class races
 class fullRaces
 {
   var $races,
-  ///not in db
+    ///not in db
     $excluded = array(), //array with users excludes (DNF, abandon, on shore)
     $opponents = array(); //array with users engaged
 
@@ -207,31 +207,31 @@ class fullRaces
     //create an array of users
     //$query6 = "SELECT idusers FROM users WHERE engaged = ".$this->races->idraces . " order by idusers";
     $query6 = "SELECT RR.idusers idusers " .
-               " FROM  races_ranking RR, users US " .
-         " WHERE RR.idusers = US.idusers " .
-         " AND   RR.idraces = "  . $this->races->idraces .
-         " AND   US.engaged = "  . $this->races->idraces .
-               " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
+      " FROM  races_ranking RR, users US " .
+      " WHERE RR.idusers = US.idusers " .
+      " AND   RR.idraces = "  . $this->races->idraces .
+      " AND   US.engaged = "  . $this->races->idraces .
+      " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
 
     $result6 = mysql_db_query(DBNAME,$query6);
     while($row = mysql_fetch_array($result6, MYSQL_NUM))
-    {
-      //WARNING: dont load fullUsers inside fullRaces
-      //because fullRaces contains fullUsers that contain fullRaces ..
-      $obj = new users($row[0]);
-      array_push($this->opponents, $obj );
-      //we should sort them!
-    }
+      {
+        //WARNING: dont load fullUsers inside fullRaces
+        //because fullRaces contains fullUsers that contain fullRaces ..
+        $obj = new users($row[0]);
+        array_push($this->opponents, $obj );
+        //we should sort them!
+      }
 
     // On prend aussi les utilisateurs de la table "races_results", pour les retrouver une fois la 
     // course terminée. 
     $query6b = "SELECT DISTINCT idusers FROM races_results WHERE idraces = ".$this->races->idraces;
     $result6b = mysql_db_query(DBNAME,$query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_NUM))
-    {
-      $obj = new users($row[0]);
-      array_push($this->excluded, $obj );
-    }
+      {
+        $obj = new users($row[0]);
+        array_push($this->excluded, $obj );
+      }
 
 
   }
@@ -248,7 +248,7 @@ class fullRaces
 
     //  Update Positions of all engaged boats to start line
     $query5  = "DELETE from positions " . 
-               " WHERE race = ".$this->races->idraces ;
+      " WHERE race = ".$this->races->idraces ;
     mysql_db_query(DBNAME,$query5);// or echo("Query failed : " . mysql_error." ".$query5);
 
 
@@ -286,16 +286,16 @@ class fullRaces
   }
 
 
-//===========================================//
-//                                           //
-// Function dispHtmlEngaged($strings, $lang) //
-//                                           //
-//-------------------------------------------//
-//                                           //
-//       Display engaged boats, when         //
-//         the race not start yet            //
-//                                           //
-//===========================================//
+  //===========================================//
+  //                                           //
+  // Function dispHtmlEngaged($strings, $lang) //
+  //                                           //
+  //-------------------------------------------//
+  //                                           //
+  //       Display engaged boats, when         //
+  //         the race not start yet            //
+  //                                           //
+  //===========================================//
 
   function dispHtmlEngaged($strings, $lang)
   {
@@ -303,7 +303,7 @@ class fullRaces
     echo "\n<table>\n";
     echo "  <thead>\n";
     echo "    <tr>\n";
-//    echo "      <th>".$strings[$lang]["country"]."</th>\n";
+    //    echo "      <th>".$strings[$lang]["country"]."</th>\n";
     echo "      <th>".$strings[$lang]["skipper"]."</th>\n";
     echo "      <th>".$strings[$lang]["boat"]."</th>\n";
     echo "    </tr>\n";
@@ -314,18 +314,18 @@ class fullRaces
 
     $num_inscrits=0;
     foreach ($this->opponents as $users)
-    {
+      {
         echo "    <tr class=ranking>\n";
-      // ============= Affichage des noms de bateaux en acronyme
-      echo "<td><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $users->country .  ".png\" alt=\"Flag_".$users->country."\" />\n";
-      echo "<acronym style=\" border-bottom: solid #" . $users->color . "\" " .
-                      "title=\"". $users->boatname . "\">" .$users->username .  " (". $users->idusers . ")</acronym></td>\n";
-      //echo "<td>" . $users->boatname . " (" . $users->ipaddr . ")" .  "</td>";
-      echo "<td>" . $users->boatname .  "</td>";
-      // =================================================================
-      echo "    </tr>\n";
-      $num_inscrits++;
-    }
+        // ============= Affichage des noms de bateaux en acronyme
+        echo "<td><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $users->country .  ".png\" alt=\"Flag_".$users->country."\" />\n";
+        echo "<acronym style=\" border-bottom: solid #" . $users->color . "\" " .
+          "title=\"". $users->boatname . "\">" .$users->username .  " (". $users->idusers . ")</acronym></td>\n";
+        //echo "<td>" . $users->boatname . " (" . $users->ipaddr . ")" .  "</td>";
+        echo "<td>" . $users->boatname .  "</td>";
+        // =================================================================
+        echo "    </tr>\n";
+        $num_inscrits++;
+      }
 
     //table footer
     echo "  </tbody>\n";
@@ -335,16 +335,16 @@ class fullRaces
 
   }
 
-//==================================================//
-//                                                  //
-// Function dispHtmlClassification($strings, $lang) //
-//                                                  //
-//--------------------------------------------------//
-//                                                  //
-//            Display classification                //
-//           when the race is running               //
-//                                                  //
-//==================================================//
+  //==================================================//
+  //                                                  //
+  // Function dispHtmlClassification($strings, $lang) //
+  //                                                  //
+  //--------------------------------------------------//
+  //                                                  //
+  //            Display classification                //
+  //           when the race is running               //
+  //                                                  //
+  //==================================================//
 
   function dispHtmlClassification($strings, $lang, $numarrived = 0 , 
                                   $sortclause="nwp desc, dnm asc", $disttype ="tofirst", 
@@ -357,7 +357,7 @@ class fullRaces
     if ( $IDU != 0 ) {
       $list = explode ("," , getUserPref($IDU,"mapPrefOpponents") );
     } else {
-        $list = "empty";
+      $list = "empty";
     }
 
     //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete là !
@@ -369,16 +369,16 @@ class fullRaces
     // L'URL de la page affichant ces classements :
     // http://vlm/races.php?lang=fr&type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
     $baseurl=$_SERVER['PHP_SELF'];
-      $baseurl.="?lang=".$lang;
-      $baseurl.="&amp;type=racing";
-      $baseurl.="&amp;idraces=".$this->races->idraces;
+    $baseurl.="?lang=".$lang;
+    $baseurl.="&amp;type=racing";
+    $baseurl.="&amp;idraces=".$this->races->idraces;
 
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
     $query_ranking = "SELECT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime, US.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
-                     " FROM  races_ranking RR, users US " . 
-         " WHERE RR.idusers = US.idusers " . 
-         " AND   RR.idraces = "  . $this->races->idraces . 
-         " ORDER by " . $sortclause ;
+      " FROM  races_ranking RR, users US " . 
+      " WHERE RR.idusers = US.idusers " . 
+      " AND   RR.idraces = "  . $this->races->idraces . 
+      " ORDER by " . $sortclause ;
 
     $result = mysql_db_query(DBNAME,$query_ranking) or die ($query_ranking);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
@@ -387,14 +387,14 @@ class fullRaces
     // Si on est en cours de Blackout, on prévient
     echo "<h3>";
     if ( $this->races->bobegin < $now && $now < $this->races->boend ) {
-        echo $strings[$lang]["classification"]
-             .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->bobegin);
-        echo "<br />\n";
-        echo $strings[$lang]["blackout"]
-             .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->boend);
+      echo $strings[$lang]["classification"]
+        .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->bobegin);
+      echo "<br />\n";
+      echo $strings[$lang]["blackout"]
+        .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->boend);
     } else {
-        echo $strings[$lang]["classification"]
-             .gmdate($strings[$lang]["dateClassificationFormat"], $classification_time);
+      echo $strings[$lang]["classification"]
+        .gmdate($strings[$lang]["dateClassificationFormat"], $classification_time);
     }
     echo "</h3>\n";
 
@@ -440,8 +440,8 @@ class fullRaces
     $str.=" <a href=\"".$baseurl."&amp;sortkey=longitude&amp;sortorder=desc\">&gt;</a>";
     echo "<th>".$str."</th>\n";
 
- //   echo "<th>".$strings[$lang]["speed"]."</th>\n";
- //   echo "<th>Cap</th>\n";
+    //   echo "<th>".$strings[$lang]["speed"]."</th>\n";
+    //   echo "<th>Cap</th>\n";
 
     // Distances parcourues sur 1h, 3h, 24h...
     $str="1h";
@@ -463,9 +463,9 @@ class fullRaces
     // Ecart par rapport au premier : pas de tri
     $str=$strings[$lang]["ecart"];
     if ( strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) == "tonm" ) { 
-         $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
+      $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
     } else {
-         $str.=" <a href=\"".$baseurl."&amp;disttype=tonm\">NM</a>";
+      $str.=" <a href=\"".$baseurl."&amp;disttype=tonm\">NM</a>";
     }
     echo "<th>".$str."</th>\n";
 
@@ -478,171 +478,171 @@ class fullRaces
     $key = 0; $printed =0;
     while( $row = mysql_fetch_assoc( $result ) ) {
 
-        // Si on a déjà affiché suffisament de lignes, on rend la main
-        if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
+      // Si on a déjà affiché suffisament de lignes, on rend la main
+      if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
-        // N'entrent dans les tableaux que les bateaux effectivement en course
-        if ( $row[nwp] == "" || $row[loch] == 0 ) continue;
+      // N'entrent dans les tableaux que les bateaux effectivement en course
+      if ( $row[nwp] == "" || $row[loch] == 0 ) continue;
 
-        if ( $key == 0 ) {
-      $FirstNwp = $row[nwp];
-      $FirstDnm = $row[dnm];
-            $FirstLat = $row[latitude];
-            $FirstLon = $row[longitude];
-  }
+      if ( $key == 0 ) {
+        $FirstNwp = $row[nwp];
+        $FirstDnm = $row[dnm];
+        $FirstLat = $row[latitude];
+        $FirstLon = $row[longitude];
+      }
 
-        //table lines
-// key++ uniquement pour les "joueurs VLM"
-        if ( $row[idusers] > 0 ) $key++;
+      //table lines
+      // key++ uniquement pour les "joueurs VLM"
+      if ( $row[idusers] > 0 ) $key++;
 
-  $rank=$key + $numarrived;
+      $rank=$key + $numarrived;
 
-        // On saute les "N"(startnum) premiers
-        if ( $startnum > 0 && $key < $startnum ) continue;
+      // On saute les "N"(startnum) premiers
+      if ( $startnum > 0 && $key < $startnum ) continue;
 
 
-        if ( $row[idusers] < 0 ) {
-     $class="class=\"realboat\"";
-        } else if ( $row[idusers] == $IDU ) {
-     $class="class=\"hilight\"";
-  } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
-     $class="class=\"hilightopps\"";
-  } else {
-     $class="class=\"ranking\"";
-  }
-        // Bateaux bloqués (lock) ou seulement à la cote (oncoast)
-        if ( $row[releasetime] > $now ) {
-     $class="class=\"locked\"";
-        } else if ( $row[pim] == 2 && abs($row[pip]) <= 1 ) {
-     $class="class=\"oncoast\"";
-        }
-  echo "<tr " . $class . ">\n";
-        if ( $row[idusers] > 0 ) {
-      echo "<td>". $rank ."</td>\n";
+      if ( $row[idusers] < 0 ) {
+        $class="class=\"realboat\"";
+      } else if ( $row[idusers] == $IDU ) {
+        $class="class=\"hilight\"";
+      } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
+        $class="class=\"hilightopps\"";
+      } else {
+        $class="class=\"ranking\"";
+      }
+      // Bateaux bloqués (lock) ou seulement à la cote (oncoast)
+      if ( $row[releasetime] > $now ) {
+        $class="class=\"locked\"";
+      } else if ( $row[pim] == 2 && abs($row[pip]) <= 1 ) {
+        $class="class=\"oncoast\"";
+      }
+      echo "<tr " . $class . ">\n";
+      if ( $row[idusers] > 0 ) {
+        echo "<td>". $rank ."</td>\n";
+      } else {
+        echo "<td>&nbsp;</td>\n";
+      }
+      // ============= Affichage des noms de bateaux en acronyme
+      if ( $row[idusers] > 0 ) {
+        if ( $startnum == 0 ) {
+          echo "<td class=\"ranking\">" . $row[country] . " / " . $row[username]  .  " (". $row[idusers] . ") "  ;
         } else {
-      echo "<td>&nbsp;</td>\n";
-        }
-  // ============= Affichage des noms de bateaux en acronyme
-        if ( $row[idusers] > 0 ) {
-            if ( $startnum == 0 ) {
-            echo "<td class=\"ranking\">" . $row[country] . " / " . $row[username]  .  " (". $row[idusers] . ") "  ;
-            } else {
-            echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
-            echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-                      "title=\"". $row[boatname] . "\">" . 
+          echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+          echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
+            "title=\"". $row[boatname] . "\">" . 
             " (". $row[idusers] . ") " . 
             $row[username] .
-    "</acronym>\n";
-            }
-      echo "</td>";
-        } else {
-            $idu=-$row[idusers];
-      if ( $idu >=100 and $idu <=199 ) $idu-=100;
-
-      echo "<td>".$row[username]. " <b>(". $idu .")</b>" ."</td>\n";
+            "</acronym>\n";
         }
-//  echo "<td>" . substr($row[boatname],0,20) . "</td>";
-  // =================================================================
-
-  // we give distance to the next WP
-  printf( "<td>" . "[" . $row[nwp] . "]" . "->" .
-          $strings[$lang]["nautics"].
-        "</td>\n", $row[dnm]);
-
-  // Give the racing time (if the boat has started)
-  if ( $row[nwp] != 0 ) {
-     $racingtime=$now-$row[userdeptime];
-           $duration = duration2string($racingtime);
-     printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
-  } else {
-     printf("      <td>-</td>\n");
-  }
-  // Loch
-  printf("      <td>%5.2f</td>\n", $row[loch]);
-
-  // Affichage de l'ETA
-  //               en milles  en noeuds ==> temps en heures avec décimale
-  // Maintenant + (distance / vitesse) * 3600 (on parle en secondes)
-  // Si VMG != 0 alors on fait le calcul, sinon, pas la peine
-  /*
-  if ( $usersObj->VMGortho != 0 )
-  {
-      $etr=( 60 * $row[dnm]) / $usersObj->VMGortho;
-      $etr_h=floor($etr / 60);
-      $etr_m=$etr -($etr_h*60);
-      printf( "<td>%dh %dm</td>\n",  $etr_h, $etr_m );
-  } else {
-      // Client dont le VMG est nul (abandon en chantier...)
-      printf( "<td>N/A</td>\n" );
-  }
-  */
-
-  // Position
-  $longitude=$row[longitude];
-        $latitude=$row[latitude];
-  // Longitude : W ou E
-  if ( $longitude > 0 ) 
-  {
-      $long_side='E';
-  } else {
-        $long_side='W';
-  }
-
-  // Latitude : N ou S
-  if ( $latitude > 0 ) 
-  {
-    $lat_side='N';
-  } else {
-    $lat_side='S';
-        }
-
-        // Calcul de l'URL de la carte Carte sur les 1° autour du bateau
-        $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
-                "&amp;lat=". round($latitude/1000,2) .
-                "&amp;long=" . round($longitude/1000,2) .
-                "&amp;maparea=16" .
-                "&amp;tracks=on&amp;age=6&amp;list[]=" . $row[idusers] .
-                "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right\" target=\"_new\">"  ;
- //               "&tracks=on&list=all" .
-
-  // Affichage de la position
-  //printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</A>, <A target=_gm HREF=http://maps.google.fr/maps?ie=UTF8&z=8&ll=%f,%f&t=k>GM</A></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
-        if ( $startnum == 0 ) {
-       printf("<td class=\"ranking\">%3.2f" . $lat_side . ", %3.2f" . $long_side . "</td>\n", abs(round($latitude/1000,2)), abs(round($longitude/1000,2)));
-        } else {
-       printf("<td class=\"ranking\">" . $mapurl . "%3.2f" . $lat_side . ", %3.2f" . $long_side . "</a>, <a target=\"_gm\" href=\"http://maps.google.fr/maps?ie=UTF8&amp;z=8&amp;ll=%f,%f&amp;t=k\">GM</a></td>\n", abs($latitude/1000), abs($longitude/1000), round($latitude/1000,2), round($longitude/1000,2));
-        }
-
-  // Affichage de la vitesse
-  //printf( "<td>".$strings[$lang]["knots"]."</td>\n", $usersObj->boatspeed);
-
-  // Affichage du cap du voilier
-  //printf( "<td>"."%3d"."</td>\n", $usersObj->users->boatheading);
-
-  // La progression des dernieres heures
-  printf( "<td>%3.2f</td>\n", $row[last1h]);
-  printf( "<td>%3.2f</td>\n", $row[last3h]);
-  printf( "<td>%3.2f</td>\n", $row[last24h]);
-  // If player is reaching the same WP as the first boat, we give the distance
-  // between the two players
-        
-        if ( $disttype == "tofirst" ) {
-       $dtl=ortho($FirstLon,$FirstLat, $longitude, $latitude);
-        } else {
-      if ( $row[nwp] == $FirstNwp ) {
-        $dtl=$row[dnm]-$FirstDnm ;
+        echo "</td>";
       } else {
-           $dtl=max($dtl,ortho($FirstLon,$FirstLat, $longitude, $latitude));
-            }
+        $idu=-$row[idusers];
+        if ( $idu >=100 and $idu <=199 ) $idu-=100;
+
+        echo "<td>".$row[username]. " <b>(". $idu .")</b>" ."</td>\n";
+      }
+      //  echo "<td>" . substr($row[boatname],0,20) . "</td>";
+      // =================================================================
+
+      // we give distance to the next WP
+      printf( "<td>" . "[" . $row[nwp] . "]" . "->" .
+              $strings[$lang]["nautics"].
+              "</td>\n", $row[dnm]);
+
+      // Give the racing time (if the boat has started)
+      if ( $row[nwp] != 0 ) {
+        $racingtime=$now-$row[userdeptime];
+        $duration = duration2string($racingtime);
+        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
+      } else {
+        printf("      <td>-</td>\n");
+      }
+      // Loch
+      printf("      <td>%5.2f</td>\n", $row[loch]);
+
+      // Affichage de l'ETA
+      //               en milles  en noeuds ==> temps en heures avec décimale
+      // Maintenant + (distance / vitesse) * 3600 (on parle en secondes)
+      // Si VMG != 0 alors on fait le calcul, sinon, pas la peine
+      /*
+        if ( $usersObj->VMGortho != 0 )
+        {
+        $etr=( 60 * $row[dnm]) / $usersObj->VMGortho;
+        $etr_h=floor($etr / 60);
+        $etr_m=$etr -($etr_h*60);
+        printf( "<td>%dh %dm</td>\n",  $etr_h, $etr_m );
+        } else {
+        // Client dont le VMG est nul (abandon en chantier...)
+        printf( "<td>N/A</td>\n" );
         }
+      */
 
-        // Remarque Batafieu du 29/12 sur l'avance réelle de Toushuss
-        // On compare les distances ortho entre les bateaux
-  //$dtl=max($dtl,ortho($FirstLon,$FirstLat, $longitude, $latitude));
-  printf( "<td>%3.2f</td>\n", $dtl);
+      // Position
+      $longitude=$row[longitude];
+      $latitude=$row[latitude];
+      // Longitude : W ou E
+      if ( $longitude > 0 ) 
+        {
+          $long_side='E';
+        } else {
+        $long_side='W';
+      }
 
-  echo "</tr>\n";
-        $printed++;
+      // Latitude : N ou S
+      if ( $latitude > 0 ) 
+        {
+          $lat_side='N';
+        } else {
+        $lat_side='S';
+      }
+
+      // Calcul de l'URL de la carte Carte sur les 1° autour du bateau
+      $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
+        "&amp;lat=". round($latitude/1000,2) .
+        "&amp;long=" . round($longitude/1000,2) .
+        "&amp;maparea=16" .
+        "&amp;tracks=on&amp;age=6&amp;list[]=" . $row[idusers] .
+        "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right\" target=\"_new\">"  ;
+      //               "&tracks=on&list=all" .
+
+      // Affichage de la position
+      //printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</A>, <A target=_gm HREF=http://maps.google.fr/maps?ie=UTF8&z=8&ll=%f,%f&t=k>GM</A></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
+      if ( $startnum == 0 ) {
+        printf("<td class=\"ranking\">%3.2f" . $lat_side . ", %3.2f" . $long_side . "</td>\n", abs(round($latitude/1000,2)), abs(round($longitude/1000,2)));
+      } else {
+        printf("<td class=\"ranking\">" . $mapurl . "%3.2f" . $lat_side . ", %3.2f" . $long_side . "</a>, <a target=\"_gm\" href=\"http://maps.google.fr/maps?ie=UTF8&amp;z=8&amp;ll=%f,%f&amp;t=k\">GM</a></td>\n", abs($latitude/1000), abs($longitude/1000), round($latitude/1000,2), round($longitude/1000,2));
+      }
+
+      // Affichage de la vitesse
+      //printf( "<td>".$strings[$lang]["knots"]."</td>\n", $usersObj->boatspeed);
+
+      // Affichage du cap du voilier
+      //printf( "<td>"."%3d"."</td>\n", $usersObj->users->boatheading);
+
+      // La progression des dernieres heures
+      printf( "<td>%3.2f</td>\n", $row[last1h]);
+      printf( "<td>%3.2f</td>\n", $row[last3h]);
+      printf( "<td>%3.2f</td>\n", $row[last24h]);
+      // If player is reaching the same WP as the first boat, we give the distance
+      // between the two players
+      
+      if ( $disttype == "tofirst" ) {
+        $dtl=ortho($FirstLon,$FirstLat, $longitude, $latitude);
+      } else {
+        if ( $row[nwp] == $FirstNwp ) {
+          $dtl=$row[dnm]-$FirstDnm ;
+        } else {
+          $dtl=max($dtl,ortho($FirstLon,$FirstLat, $longitude, $latitude));
+        }
+      }
+
+      // Remarque Batafieu du 29/12 sur l'avance réelle de Toushuss
+      // On compare les distances ortho entre les bateaux
+      //$dtl=max($dtl,ortho($FirstLon,$FirstLat, $longitude, $latitude));
+      printf( "<td>%3.2f</td>\n", $dtl);
+
+      echo "</tr>\n";
+      $printed++;
     }
 
     //table footer
@@ -660,47 +660,47 @@ class fullRaces
   }
 
 
-//==================================================//
-//                                                  //
-// Function dispHtmlForm($strings, $lang)           //
-//                                                  //
-//--------------------------------------------------//
-//                                                  //
-//            Display a htmltable                   //
-//           w ith a form to select the             //
-//           boats to se lect                       //
-//                                                  //
-//==================================================//
+  //==================================================//
+  //                                                  //
+  // Function dispHtmlForm($strings, $lang)           //
+  //                                                  //
+  //--------------------------------------------------//
+  //                                                  //
+  //            Display a htmltable                   //
+  //           w ith a form to select the             //
+  //           boats to se lect                       //
+  //                                                  //
+  //==================================================//
   function dispHtmlForm($strings, $lang, $list )
-    {
+  {
     //table header
     echo "\n<table>\n";
     /*
-    echo "<thead>\n";
-    echo "<tr>\n";
-    //echo "<th>".$strings[$lang]["position"]."</th>\n";
-    echo "<th class=htmltable>&nbsp;</th>\n";
-    //echo "<th>".$strings[$lang]["skipper"]."</th>\n";
-    echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
-    echo "<th class=htmltable>&nbsp;</th>\n";
-    echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
-    echo "<th class=htmltable>&nbsp;</th>\n";
-    echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
-    echo "<th class=htmltable>&nbsp;</th>\n";
-    echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
-    echo "</tr>\n";
-    echo "</thead>\n";
+      echo "<thead>\n";
+      echo "<tr>\n";
+      //echo "<th>".$strings[$lang]["position"]."</th>\n";
+      echo "<th class=htmltable>&nbsp;</th>\n";
+      //echo "<th>".$strings[$lang]["skipper"]."</th>\n";
+      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "<th class=htmltable>&nbsp;</th>\n";
+      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "<th class=htmltable>&nbsp;</th>\n";
+      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "<th class=htmltable>&nbsp;</th>\n";
+      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "</tr>\n";
+      echo "</thead>\n";
     */
     echo "<tbody class=\"htmltable\">\n";
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
     $query_listusers = "SELECT DISTINCT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country , US.engaged engaged" . 
-                     " FROM  races_ranking RR, users US " . 
-         " WHERE RR.idusers = US.idusers " . 
-         " AND   engaged != 0 " . 
-         " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
-     //    " AND   RR.idraces = "  . $this->races->idraces . 
+      " FROM  races_ranking RR, users US " . 
+      " WHERE RR.idusers = US.idusers " . 
+      " AND   engaged != 0 " . 
+      " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
+    //    " AND   RR.idraces = "  . $this->races->idraces . 
 
     $result = mysql_db_query(DBNAME,$query_listusers) or die ($query_listusers);
 
@@ -709,44 +709,44 @@ class fullRaces
     $printtd=0;
 
     while( $row = mysql_fetch_assoc( $result ) ) {
-        if ( $row[engaged] != $lastrace ) {
-      $lastrace = $row[engaged];
-      if ( $printtd != 0 ) {
-        echo "</tr>" ;
-        $printtd = 1;
+      if ( $row[engaged] != $lastrace ) {
+        $lastrace = $row[engaged];
+        if ( $printtd != 0 ) {
+          echo "</tr>" ;
+          $printtd = 1;
+        }
+        echo "<tr class=\"htmltable\">";
+        echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . $strings[$lang]["valider"] . "\" /></td>";
+        echo "</tr><tr class=\"htmltable\">";
+        echo "<td class=\"htmltable\" colspan=\"8\"><b>RACE " . $lastrace . "</b></td>";
+        echo "</tr><tr class=\"htmltable\">";
+        $key=0;
       }
-      echo "<tr class=\"htmltable\">";
-            echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . $strings[$lang]["valider"] . "\" /></td>";
-            echo "</tr><tr class=\"htmltable\">";
-            echo "<td class=\"htmltable\" colspan=\"8\"><b>RACE " . $lastrace . "</b></td>";
-            echo "</tr><tr class=\"htmltable\">";
-      $key=0;
-  }
-        //table lines
-            $key++;
+      //table lines
+      $key++;
       echo "<td class=\"htmltable\">".$key."</td>\n";
       echo "<td class=\"htmltable\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . 
-                  $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+        $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
 
       // ============= Affichage des noms de bateaux en acronyme
       //echo "<td class=htmltable>" ;
       printf("<input type=\"checkbox\" name=\"list[]\" value=\"%s\" ", $row[idusers] );
       if ( in_array($row[idusers], $list  ) || (empty($list[0]) ))
         echo " checked=\"checked\"";
-            echo " />";
+      echo " />";
 
-            echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".
-                      $lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . 
-                      "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-                      "title=\"". $row[boatname] . "\">" ;
+      echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".
+        $lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . 
+        "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
+        "title=\"". $row[boatname] . "\">" ;
       if ( $row[engaged] == $this->races->idraces ) {
-          echo "<b>" . $row[username] . "</b>";
+        echo "<b>" . $row[username] . "</b>";
       } else {
-          echo $row[username] ;
+        echo $row[username] ;
       }
       echo " (". $row[idusers] . ")"  ;
 
-            echo "</acronym>\n";
+      echo "</acronym>\n";
 
       echo "</td>";
 
@@ -758,86 +758,86 @@ class fullRaces
     echo "</tbody>\n";
     echo "</table>\n";
 
-    }
- 
-//================================================//
-//                                                //
-// Function dispHtmlRacesResults($strings, $lang) //
-//                                                //
-//------------------------------------------------//
-//                                                //
-//            Display race results.               //
-//        Nothing to display if no boat           //
-//               arrived yet .....                //
-//                                                //
-// * $status = type de classement                 //
-//================================================//
-function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , $sortorder = "asc", $WP = 0 , $startnum=1)
-{
+  }
+  
+  //================================================//
+  //                                                //
+  // Function dispHtmlRacesResults($strings, $lang) //
+  //                                                //
+  //------------------------------------------------//
+  //                                                //
+  //            Display race results.               //
+  //        Nothing to display if no boat           //
+  //               arrived yet .....                //
+  //                                                //
+  // * $status = type de classement                 //
+  //================================================//
+  function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , $sortorder = "asc", $WP = 0 , $startnum=1)
+  {
 
     $IDU=intval(getLoginId());
     if ( $IDU != 0 ) {
-        $list = explode ("," , getUserPref($IDU,"mapPrefOpponents") );
+      $list = explode ("," , getUserPref($IDU,"mapPrefOpponents") );
     } else {
-        $list = "empty";
+      $list = "empty";
     }
 
     /*
-  POUR CLASSEMENT DE TYPE TOTALTIME (temps cumulé entre plusieurs manches)
-  select idusers,sum(duration) from races_results where idraces in (404402, 404401) and position=1 and idusers in (select distinct(idusers) from races_results where idraces=404402 and position=1) group by idusers order by sum(duration) ASC limit 20 ;
+      POUR CLASSEMENT DE TYPE TOTALTIME (temps cumulé entre plusieurs manches)
+      select idusers,sum(duration) from races_results where idraces in (404402, 404401) and position=1 and idusers in (select distinct(idusers) from races_results where idraces=404402 and position=1) group by idusers order by sum(duration) ASC limit 20 ;
     */
 
     // WP=0 : classement à l'arrivée
     if ( $WP == 0 ) {
-       $query = "SELECT RR.position, RR.duration + RR.penalty duration, RR.idusers idusers, username, 
+      $query = "SELECT RR.position, RR.duration + RR.penalty duration, RR.idusers idusers, username, 
                         color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
               FROM      races_results RR, users US
               WHERE     idraces=".$this->races->idraces."
               AND       US.idusers = RR.idusers
               AND       position=" . $status . " " ;
 
-        /* Gaffe à l'injection SQL : normalement, c'est OK */
-        $valid_sortkeys=array("duration", "deptime", "arrtime","loch");
-        if ( in_array($sortkey, $valid_sortkeys) ) {
-            if ( $sortkey == "arrtime" ) $sortkey = "deptime + duration + penalty ";
-                $query .= " ORDER BY " . $sortkey ;
-            } else {
-                //$query .= " ORDER BY deptime+duration";
-                printf ("<h1>You should not do that, this sortkey is not accepted : %s</h1>\n", $sortkey); exit;
-            }
+      /* Gaffe à l'injection SQL : normalement, c'est OK */
+      $valid_sortkeys=array("duration", "deptime", "arrtime","loch");
+      if ( in_array($sortkey, $valid_sortkeys) ) {
+        if ( $sortkey == "arrtime" ) $sortkey = "deptime + duration + penalty ";
+        $query .= " ORDER BY " . $sortkey ;
+      } else {
+        //$query .= " ORDER BY deptime+duration";
+        printf ("<h1>You should not do that, this sortkey is not accepted : %s</h1>\n", $sortkey); exit;
+      }
 
-        $valid_sortorders=array("asc", "desc");
-        if ( in_array($sortorder, $valid_sortorders) ) {
-            $query .= " " . $sortorder ;
-        } else {
-            $query .= " ASC";
-        }
+      $valid_sortorders=array("asc", "desc");
+      if ( in_array($sortorder, $valid_sortorders) ) {
+        $query .= " " . $sortorder ;
+      } else {
+        $query .= " ASC";
+      }
 
     } else {
-    // WP!=0 : classement au WP donné 
-        $sortclause="";
-        $valid_sortkeys=array("duration", "arrtime");
-        /* Gaffe à l'injection SQL : normalement, c'est OK */
-        if ( in_array($sortkey, $valid_sortkeys) ) {
+      // WP!=0 : classement au WP donné 
+      $sortclause="";
+      $valid_sortkeys=array("duration", "arrtime");
+      /* Gaffe à l'injection SQL : normalement, c'est OK */
+      if ( in_array($sortkey, $valid_sortkeys) ) {
         if ( $sortkey == "duration" ) $sortkey = " duration ";
         if ( $sortkey == "arrtime" ) $sortkey = " time ";
-             $sortclause = " ORDER BY " . $sortkey ;
-        } else {
-            printf ("<h1>You should not do that, this sortkey is not accepted : %s</h1>\n", $sortkey); exit;
-        }
-        $valid_sortorders=array("asc", "desc");
-        if ( in_array($sortorder, $valid_sortorders) ) {
-            $sortclause .= " " . $sortorder ;
-        } else {
-            $sortclause .= " ASC";
-        }
+        $sortclause = " ORDER BY " . $sortkey ;
+      } else {
+        printf ("<h1>You should not do that, this sortkey is not accepted : %s</h1>\n", $sortkey); exit;
+      }
+      $valid_sortorders=array("asc", "desc");
+      if ( in_array($sortorder, $valid_sortorders) ) {
+        $sortclause .= " " . $sortorder ;
+      } else {
+        $sortclause .= " ASC";
+      }
 
-        // Cette requete est une adaptation de celle utilisée pour l'arrivée 
-        // Elle doit donc retourner les mêmes colonnes dans le meme ordre
-        /* $query = "SELECT RR.position, RR.duration, RR.idusers idusers, username, 
-                        color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch */
+      // Cette requete est une adaptation de celle utilisée pour l'arrivée 
+      // Elle doit donc retourner les mêmes colonnes dans le meme ordre
+      /* $query = "SELECT RR.position, RR.duration, RR.idusers idusers, username, 
+         color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch */
 
-        $query = "SELECT " . BOAT_STATUS_ARR . " position, WC.time - WC.userdeptime duration, WC.idusers idusers, username, 
+      $query = "SELECT " . BOAT_STATUS_ARR . " position, WC.time - WC.userdeptime duration, WC.idusers idusers, username, 
                         color, country, boatname, \"n/a\", \"n/a\", WC.userdeptime deptime, 0
                   FROM      waypoint_crossing WC, users US
                   WHERE     WC.idraces=".$this->races->idraces."
@@ -845,8 +845,8 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
                   AND       WC.userdeptime > 0 
                   AND       US.idusers = WC.idusers   
                   AND       idwaypoint=" . $WP . " " ;
-        $query .= $sortclause;
-  //print_r($query);
+      $query .= $sortclause;
+      //print_r($query);
 
     }
 
@@ -855,20 +855,20 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
 
     switch ($status) {
     case BOAT_STATUS_ARR:
-        echo "<h4>".$strings[$lang]["raceresultarr"]."</h4>";
-        break;
+      echo "<h4>".$strings[$lang]["raceresultarr"]."</h4>";
+      break;
     case BOAT_STATUS_DNF:
-        echo "<h4>".$strings[$lang]["raceresultdnf"]."</h4>";
-        break;
+      echo "<h4>".$strings[$lang]["raceresultdnf"]."</h4>";
+      break;
     case BOAT_STATUS_ABD:
-        echo "<h4>".$strings[$lang]["raceresultabd"]."</h4>";
-        break;
+      echo "<h4>".$strings[$lang]["raceresultabd"]."</h4>";
+      break;
     case BOAT_STATUS_HTP:
-        echo "<h4>".$strings[$lang]["raceresulthtp"]."</h4>";
-        break;
+      echo "<h4>".$strings[$lang]["raceresulthtp"]."</h4>";
+      break;
     case BOAT_STATUS_HC:
-        echo "<h4>".$strings[$lang]["raceresulthc"]."</h4>";
-        break;
+      echo "<h4>".$strings[$lang]["raceresulthc"]."</h4>";
+      break;
     }
 
     //display table headers
@@ -876,28 +876,28 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
     echo "  <thead>\n";
     echo "    <tr class=\"ranking\">\n";
     if ( $status > 0 ) {
-        //echo "      <th>". $strings[$lang]["position"]."</th> \n";
-        echo "<th>Pos.</th>\n"; // position au classement
+      //echo "      <th>". $strings[$lang]["position"]."</th> \n";
+      echo "<th>Pos.</th>\n"; // position au classement
     }
-//    echo "      <th>".$strings[$lang]["country"]."</th>\n";
+    //    echo "      <th>".$strings[$lang]["country"]."</th>\n";
     echo "      <th>". $strings[$lang]["skipper"]."</th>\n";
     // echo "      <th>". $strings[$lang]["boat"]."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
-        echo "      <th>". $strings[$lang]["departuredate"]." (GMT)</th>\n";
-        echo "      <th>". $strings[$lang]["arrived"]." (GMT)</th>\n";
+      echo "      <th>". $strings[$lang]["departuredate"]." (GMT)</th>\n";
+      echo "      <th>". $strings[$lang]["arrived"]." (GMT)</th>\n";
     }
     echo "      <th>". $strings[$lang]["totaltime"]."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
-        echo "      <th>". $strings[$lang]["ecart"]."</th>\n";
+      echo "      <th>". $strings[$lang]["ecart"]."</th>\n";
     }
     if ( $status == BOAT_STATUS_DNF ) {
-        echo "      <th>". $strings[$lang]["position"]."</th>\n";
+      echo "      <th>". $strings[$lang]["position"]."</th>\n";
     }
 
     // Dernière colonne : loch
     echo "      <th>". $strings[$lang]["loch"]."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
-        echo "      <th>". $strings[$lang]["penalite"]."</th>\n";
+      echo "      <th>". $strings[$lang]["penalite"]."</th>\n";
     }
 
     echo "    </tr>\n";
@@ -908,169 +908,169 @@ function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , 
     //see the races result table
     $rank = 0; $printed=0;
     while ($row = mysql_fetch_assoc($result))
-    {
+      {
         // Si on a déjà affiché suffisament de lignes, on rend la main
         if ( $startnum > 0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
         if ( $row[position] ==  BOAT_STATUS_ARR ) {
-    $duration = duration2string($row[duration] );
-    $arrivaltime = $row[deptime] + $row[duration] ;
-  }
+          $duration = duration2string($row[duration] );
+          $arrivaltime = $row[deptime] + $row[duration] ;
+        }
 
-  $rank++;
-  if ( $rank == 1 ) {
-    $ref_duration = $row[duration] ;
-    $ref_deptime  = $row[deptime] ;
-    $ref_arrivaltime = $row[deptime] + $row[duration] ;
-  }
-  
+        $rank++;
+        if ( $rank == 1 ) {
+          $ref_duration = $row[duration] ;
+          $ref_deptime  = $row[deptime] ;
+          $ref_arrivaltime = $row[deptime] + $row[duration] ;
+        }
+        
         // On saute les "N"(startnum) premiers
         if ( $startnum > 0 && $rank < $startnum ) continue;
 
         if ( $row[idusers] == $IDU ) {
-     $class="class=\"hilight\"";
-  } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
-     $class="class=\"hilightopps\"";
-  } else {
-     $class="class=\"ranking\"";
-  }
-  echo "<tr " . $class . ">\n";
+          $class="class=\"hilight\"";
+        } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
+          $class="class=\"hilightopps\"";
+        } else {
+          $class="class=\"ranking\"";
+        }
+        echo "<tr " . $class . ">\n";
 
-      if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
-      echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
-      echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-                      "title=\"". $row[boatname] . "\">" . 
-            " (". $row[idusers] . ") " . 
-            $row[username] .
-    "</acronym>\n";
-      echo "</td>\n";
+        if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
+        echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
+        echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
+          "title=\"". $row[boatname] . "\">" . 
+          " (". $row[idusers] . ") " . 
+          $row[username] .
+          "</acronym>\n";
+        echo "</td>\n";
 
-      $longitude=$row[longitude];
-      $latitude=$row[latitude];
+        $longitude=$row[longitude];
+        $latitude=$row[latitude];
 
-      // Mise en forme longitude/latitude
+        // Mise en forme longitude/latitude
 
-      // Position
-      // Longitude : W ou E
-      if ( $longitude > 0 )
-      {
-          $long_side='E';
-      } else {
+        // Position
+        // Longitude : W ou E
+        if ( $longitude > 0 )
+          {
+            $long_side='E';
+          } else {
           $long_side='W';
-      }
+        }
 
-      // Latitude : N ou S
-      if ( $latitude > 0 )
-      {
-          $lat_side='N';
-      } else {
+        // Latitude : N ou S
+        if ( $latitude > 0 )
+          {
+            $lat_side='N';
+          } else {
           $lat_side='S';
-      }
+        }
 
-      if ( $row[position] == BOAT_STATUS_ARR ) {
-        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime]));
-//        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$this->races->deptime + $row[duration]));
-        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime] + $row[duration]));
-        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
-      } else {
-    switch ($row[position]) {
-      case BOAT_STATUS_HC:
+        if ( $row[position] == BOAT_STATUS_ARR ) {
+          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime]));
+          //        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$this->races->deptime + $row[duration]));
+          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime] + $row[duration]));
+          printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
+        } else {
+          switch ($row[position]) {
+          case BOAT_STATUS_HC:
             printf("      <td>HC</td>\n");
-        break;
-      case BOAT_STATUS_HTP:
+            break;
+          case BOAT_STATUS_HTP:
             printf("      <td>HTP</td>\n");
-        break;
-      case BOAT_STATUS_DNF:
+            break;
+          case BOAT_STATUS_DNF:
             printf("      <td>DNF</td>\n");
-        break;
-      case BOAT_STATUS_ABD:
+            break;
+          case BOAT_STATUS_ABD:
             printf("      <td>ABD</td>\n");
-        break;
+            break;
           }
-      }
-            // Calcul de l'écart (temps de course dans un cas, heure d'arrivée dans l'autre)
-      if ( $row[position] == BOAT_STATUS_ARR ) {
-         if ( $rank == 1 ) {
+        }
+        // Calcul de l'écart (temps de course dans un cas, heure d'arrivée dans l'autre)
+        if ( $row[position] == BOAT_STATUS_ARR ) {
+          if ( $rank == 1 ) {
             printf("<td>%s</td>\n",$strings[$lang]["winner"]);
-         } else {
-                  if ( $this->races->racetype == RACE_TYPE_CLASSIC && $WP == 0 ) {
-                         // ARRIVAL DATE IS THE SORTING KEY
-                   $ecart = duration2string($arrivaltime - $ref_arrivaltime);
-       // PCT =      difference de temps de course / temps de course du vainqueur
-                   $pct=round(($arrivaltime - $ref_arrivaltime)/($ref_arrivaltime-$ref_deptime)*100,2);
-       //printf ("AT=%d, RAT=%d\n",$arrivaltime , $ref_arrivaltime);
-                  } else {
-                         // RECORD : the shortest racetime is the record 
-                   $ecart = duration2string($row[duration] - $ref_duration);
-       // PCT =    difference de temps de course  / temps du premier
-                   $pct=round(($row[duration] - $ref_duration)/$ref_duration*100,2);
-       //printf ("DU=%d, RDU=%d\n",$row[duration] , $ref_duration);
-                  }
+          } else {
+            if ( $this->races->racetype == RACE_TYPE_CLASSIC && $WP == 0 ) {
+              // ARRIVAL DATE IS THE SORTING KEY
+              $ecart = duration2string($arrivaltime - $ref_arrivaltime);
+              // PCT =      difference de temps de course / temps de course du vainqueur
+              $pct=round(($arrivaltime - $ref_arrivaltime)/($ref_arrivaltime-$ref_deptime)*100,2);
+              //printf ("AT=%d, RAT=%d\n",$arrivaltime , $ref_arrivaltime);
+            } else {
+              // RECORD : the shortest racetime is the record 
+              $ecart = duration2string($row[duration] - $ref_duration);
+              // PCT =    difference de temps de course  / temps du premier
+              $pct=round(($row[duration] - $ref_duration)/$ref_duration*100,2);
+              //printf ("DU=%d, RDU=%d\n",$row[duration] , $ref_duration);
+            }
             printf("<td>".$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart[0],$ecart[1],$ecart[2],$ecart[3],$pct);
-         }
-      }
-      if ( $row[position] == BOAT_STATUS_DNF ) {
-              $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
-          "&amp;age=24"  . 
-                "&amp;lat=". ($latitude/1000) .
-                "&amp;long=" . ($longitude/1000) .
-                "&amp;maparea=10"  .
-                "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row[idusers] .
-                "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right&amp;raceover=true\" target=\"_new\">"  ;
+          }
+        }
+        if ( $row[position] == BOAT_STATUS_DNF ) {
+          $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
+            "&amp;age=24"  . 
+            "&amp;lat=". ($latitude/1000) .
+            "&amp;long=" . ($longitude/1000) .
+            "&amp;maparea=10"  .
+            "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row[idusers] .
+            "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right&amp;raceover=true\" target=\"_new\">"  ;
 
-        // Affichage de la position
-        printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</a></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
-      }
+          // Affichage de la position
+          printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</a></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
+        }
 
-      // Affichage du loch (ARR, DNF, ABD)
-      if ( $row[loch] != 0 ) {
-        printf("<td>%5.2f</td>\n", $row[loch]);
-      } else {
-        printf("<td>n/a</td>\n");
+        // Affichage du loch (ARR, DNF, ABD)
+        if ( $row[loch] != 0 ) {
+          printf("<td>%5.2f</td>\n", $row[loch]);
+        } else {
+          printf("<td>n/a</td>\n");
+        }
+        if ( $row[position] == BOAT_STATUS_ARR ) {
+          if ( $row[penalty] == 0 ) {
+            printf("<td>n/a</td>\n");
+          } else {
+            printf("<td>%0d h</td>\n", $row[penalty]/3600);
+          }
+        }
+        echo "    </tr>\n";
+        $printed++;
       }
-      if ( $row[position] == BOAT_STATUS_ARR ) {
-        if ( $row[penalty] == 0 ) {
-             printf("<td>n/a</td>\n");
-                } else {
-             printf("<td>%0d h</td>\n", $row[penalty]/3600);
-                }
-      }
-      echo "    </tr>\n";
-            $printed++;
-  }
     echo "  </tbody>\n";
     echo "</table>\n";
 
     return ($rank);
   }
 
-//================================================//
-//                                                //
-// Function getRacesBoundaries()                  //
-//                                                //
-//------------------------------------------------//
-//                                                //
-//            compute the extreme                 //
-//        points in north, south,east and west    //
-//               return 4 values in an array      //
-//                                                //
-//================================================//
+  //================================================//
+  //                                                //
+  // Function getRacesBoundaries()                  //
+  //                                                //
+  //------------------------------------------------//
+  //                                                //
+  //            compute the extreme                 //
+  //        points in north, south,east and west    //
+  //               return 4 values in an array      //
+  //                                                //
+  //================================================//
 
   function getRacesBoundaries()
-    {
-      $S = min ( $this->races->startlat, $this->races->stop1lat, $this->races->stop2lat )/1000 - 0.5;
-      $N = max ( $this->races->startlat, $this->races->stop1lat, $this->races->stop2lat )/1000 + 0.5;
-      $W = min ( $this->races->startlong, $this->races->stop1long, $this->races->stop2long )/1000 - 0.5;
-      $E = max ( $this->races->startlong, $this->races->stop1long, $this->races->stop2long )/1000 + 0.5;
+  {
+    $S = min ( $this->races->startlat, $this->races->stop1lat, $this->races->stop2lat )/1000 - 0.5;
+    $N = max ( $this->races->startlat, $this->races->stop1lat, $this->races->stop2lat )/1000 + 0.5;
+    $W = min ( $this->races->startlong, $this->races->stop1long, $this->races->stop2long )/1000 - 0.5;
+    $E = max ( $this->races->startlong, $this->races->stop1long, $this->races->stop2long )/1000 + 0.5;
 
-            return(
-       array("north" => $N, 
-       "south" => $S,
-       "east"  => $E,
-       "west"  => $W)
-       );
+    return(
+           array("north" => $N, 
+                 "south" => $S,
+                 "east"  => $E,
+                 "west"  => $W)
+           );
 
-    }
+  }
 
   function raceNumEngaged()
   {
@@ -1103,8 +1103,8 @@ class racesList
     $result = mysql_db_query(DBNAME,$query);
     while($row = mysql_fetch_array($result, MYSQL_NUM))
       {
-  $racesFullObj = new fullRaces( $row[0] )  ;
-  array_push ($this->records, $racesFullObj);
+        $racesFullObj = new fullRaces( $row[0] )  ;
+        array_push ($this->records, $racesFullObj);
       }
   }
 }
@@ -1121,8 +1121,8 @@ class startedRacesList
     $result = mysql_db_query(DBNAME,$query);
     while($row = mysql_fetch_array($result, MYSQL_NUM))
       {
-  //$racesFullObj = new fullRaces( $row[0] )  ;
-  //array_push ($this->records, $racesFullObj);
+        //$racesFullObj = new fullRaces( $row[0] )  ;
+        //array_push ($this->records, $racesFullObj);
         array_push($this->records , $row[0]);
       }
 
@@ -1138,22 +1138,22 @@ class startedRacesList
 //                                                                                                 //
 //*************************************************************************************************//
 /*
-class races_results
-{
+  class races_results
+  {
   var $idraces,
-    $idusers,
-    $position,
-    $duration;
+  $idusers,
+  $position,
+  $duration;
 
   function races_results($idr, $idu, $position, $duration)
   {
-    $this->idraces = $idr;
-    $this->idusers = $idu;
-    $this->position = $position;
-    $this->duration = $duration;
+  $this->idraces = $idr;
+  $this->idusers = $idu;
+  $this->position = $position;
+  $this->duration = $duration;
   }
 
-}
+  }
 */
 
 //*************************************************************************************************//
@@ -1163,30 +1163,30 @@ class races_results
 //                                                                                                 //
 //*************************************************************************************************//
 /*
-class racesResultsFull
-{
+  class racesResultsFull
+  {
   //array containing all races_results about one race
   var  $idraces,
-   $records = array();
+  $records = array();
 
   function racesResultsFull($id)
   {
 
-    $query = "SELECT idraces, idusers, position, duration FROM races_results".
-      " WHERE idraces = $id ORDER BY 'position' ASC";
-    $result = mysql_db_query(DBNAME,$query) or die($query);
+  $query = "SELECT idraces, idusers, position, duration FROM races_results".
+  " WHERE idraces = $id ORDER BY 'position' ASC";
+  $result = mysql_db_query(DBNAME,$query) or die($query);
 
-    while ($row = mysql_fetch_array($result, MYSQL_NUM))
-      {
+  while ($row = mysql_fetch_array($result, MYSQL_NUM))
+  {
   $obj  = new races_results( $row[0], $row[1], $row[2], $row[3]);
   //print_r($obj);
   $this->records[] = $obj;
   //put the new object in the array at the end
-      }
+  }
 
   }
 
-}
+  }
 */
 
 //*************************************************************************************************//
@@ -1196,43 +1196,43 @@ class racesResultsFull
 //                                                                                                 //
 //*************************************************************************************************//
 /*
-class racesResults
-{
+  class racesResults
+  {
   var $idraces,
-      $idusers,
-      $position,
-      $duration;
+  $idusers,
+  $position,
+  $duration;
 
   function write($idu, $idr, $time)
   {
-    //find users rank
-    $query90 = "SELECT MAX(position) FROM races_results WHERE idraces= ".$idr;
-    $result90 = mysql_db_query(DBNAME,$query90);
-    $row90 = mysql_fetch_array($result90, MYSQL_NUM);
-    $rank = $row90[0] + 1;
+  //find users rank
+  $query90 = "SELECT MAX(position) FROM races_results WHERE idraces= ".$idr;
+  $result90 = mysql_db_query(DBNAME,$query90);
+  $row90 = mysql_fetch_array($result90, MYSQL_NUM);
+  $rank = $row90[0] + 1;
 
-    //find duration
-    $racesObj = new races($idr);
-    $duration =  $time ;
+  //find duration
+  $racesObj = new races($idr);
+  $duration =  $time ;
 
-    //insert score in database
-    $query10  = "INSERT INTO races_results ( idraces, idusers, position, duration)".
-      " VALUES (" .$racesObj->idraces ." , ". $idu ." , ". $rank ." , ". $duration .")";
-    $result10 = mysql_db_query(DBNAME,$query10);//  or echo("Query failed : " . mysql_error." ".$query10);
+  //insert score in database
+  $query10  = "INSERT INTO races_results ( idraces, idusers, position, duration)".
+  " VALUES (" .$racesObj->idraces ." , ". $idu ." , ". $rank ." , ". $duration .")";
+  $result10 = mysql_db_query(DBNAME,$query10);//  or echo("Query failed : " . mysql_error." ".$query10);
 
   }
 
   function getRacesResults($idu, $idr)
   {
-    $query= "SELECT idraces, idusers, position, duration FROM races_results WHERE idusers = $idu AND idraces = $idr";
-    $result = mysql_db_query(DBNAME,$query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
-    $this->idraces = $row[0] ;
-    $this->iduserss = $row[1] ;
-    $this->position = $row[2] ;
-    $this->duration = $row[3] ;
+  $query= "SELECT idraces, idusers, position, duration FROM races_results WHERE idusers = $idu AND idraces = $idr";
+  $result = mysql_db_query(DBNAME,$query);
+  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $this->idraces = $row[0] ;
+  $this->iduserss = $row[1] ;
+  $this->position = $row[2] ;
+  $this->duration = $row[3] ;
 
   }
-}
+  }
 */
 ?>
