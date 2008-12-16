@@ -50,6 +50,9 @@ case $confmodule in
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt
     echo "<br />" >> $destmodulepath/version.txt
     date +"%m/%d/%y %X %Z" >> $destmodulepath/version.txt
+    echo "Mise en place du .htaccess"
+    cp $VLMRACINE/conf/conf_htaccess_site $destmodulepath/.htaccess    
+
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     ;;
     moteur)
