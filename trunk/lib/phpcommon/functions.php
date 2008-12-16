@@ -1432,11 +1432,11 @@ function displayPalmares($idusers) {
     $result = mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
       $racesObj= new races($row[0]);
-  printf ("%d: %s, Classement = %s<BR>", $row[0],$racesObj->racename,getRaceRanking($idusers,$row[0]));
+  printf ("%d: %s, Classement = %s<br />", $row[0],$racesObj->racename,getRaceRanking($idusers,$row[0]));
   // Le classement
 
     }
-    printf ("<BR>");
+    printf ("<br />");
     return(0);
 }
 
