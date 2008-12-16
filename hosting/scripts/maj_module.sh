@@ -50,7 +50,6 @@ case $confmodule in
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt
     echo "<br />" >> $destmodulepath/version.txt
     date +"%m/%d/%y %X %Z" >> $destmodulepath/version.txt
-    rm $destmodulepath/images
     ln -s $destmodulepath/../medias/images images
     ;;
     moteur)
