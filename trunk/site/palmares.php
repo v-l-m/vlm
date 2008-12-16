@@ -1,6 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <?php 
+include_once("config.php");
+include_once("includes/strings.inc");
+
 $lang=htmlentities(quote_smart($_REQUEST['lang']));
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<? echo $lang ?>">
@@ -12,10 +15,6 @@ $lang=htmlentities(quote_smart($_REQUEST['lang']));
 </head>
 <body>
 <?php
-include_once("config.php");
-include_once("includes/strings.inc");
-
-$lang=htmlentities(quote_smart($_REQUEST['lang']));
 if ( htmlentities(quote_smart($_REQUEST['type'])) == 'palmares' ) {
   $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
   echo "<h4>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</h4>";
