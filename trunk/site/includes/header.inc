@@ -356,7 +356,7 @@ else //if loggedin
 if ( !isLoggedIn() && (in_array($_SERVER["PHP_SELF"], $restrictedPages) ) )
 {
    echo "Access restricted\n<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
-   include_once("include/footer.inc");
+   include_once("includes/footer.inc");
    die();
 }
 ?>
