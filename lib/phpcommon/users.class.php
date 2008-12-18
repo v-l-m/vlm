@@ -429,9 +429,7 @@ class fullUsers
 						 $lat_xing, $long_xing, $xing_ratio);
     //  printf("Xing_dist %.3f, ratio %.3f\n", $xing_dist, doublep_value($xing_ratio));
     $coords = array( doublep_value($lat_xing) / 1000.0, doublep_value($long_xing) / 1000.0);
-    //    $coords=coordonneescroisement($nextwaypoint[1]/1000, $nextwaypoint[0]/1000,
-    //                             $nextwaypoint[3]/1000, $nextwaypoint[2]/1000,
-    //                             $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
+
     // printf ("Lat=%f, Long=%f\n", doublep_value($lat_xing) / 1000.0, doublep_value($long_xing) / 1000.0);
 
     $this->LatNM=$coords[0]*1000;
