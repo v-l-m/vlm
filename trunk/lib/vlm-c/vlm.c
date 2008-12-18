@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.18 2008-12-16 16:17:06 ylafon Exp $
+ * $Id: vlm.c,v 1.19 2008-12-18 17:28:41 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -206,6 +206,36 @@ double VLM_ortho_distance(double latitude_a, double longitude_a,
 
   return ortho_distance(degToRad(latitude_a), degToRad(longitude_a),
 			degToRad(latitude_b), degToRad(longitude_b));
+}
+
+/**
+ * Compute the orthodromic heading between two points, A & B
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @return a double, the heading, a <code>double</code> in degrees 
+ *         from 0 to 360.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_ortho_heading(double latitude_a, double longitude_a, 
+			 double latitude_b, double longitude_b) {
+  double heading;
+  /* sanity check */
+  latitude_a  = latitude_a / 1000.0;
+  longitude_a = fmod((longitude_a / 1000.0), 360.0);
+  latitude_b  = latitude_b / 1000.0;
+  longitude_b = fmod((longitude_b / 1000.0), 360.0);
+
+  /* if something goes wrong, return -1 */
+  if (latitude_a < -90.0 || latitude_a > 90.0 ||
+      latitude_b < -90.0 || latitude_b > 90.0) {
+    return -1.0;
+  }
+
+  heading = ortho_initial_angle(degToRad(latitude_a), degToRad(longitude_a),
+				degToRad(latitude_b), degToRad(longitude_b));
+  return radToDeg(heading);
 }
 
 /**

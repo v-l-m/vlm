@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.12 2008-12-16 17:34:22 ylafon Exp $
+ * $Id: vlm.h,v 1.13 2008-12-18 17:28:41 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -104,8 +104,21 @@ wind_info *VLM_get_wind_info_latlong_millideg_TWSA PARAM4(double, double,
  * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
  * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
  * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
  */
 double VLM_ortho_distance PARAM4(double, double, double, double);
+
+/**
+ * Compute the orthodromic heading between two points, A & B
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @return a double, the heading, a <code>double</code> in degrees 
+ *         from 0 to 360.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_ortho_heading PARAM4(double, double, double, double);
 
 /**
  * Compute the orthodromic distance between a point and a line defined
