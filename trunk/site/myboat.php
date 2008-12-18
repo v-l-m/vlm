@@ -7,6 +7,7 @@ javascripts to directly compute speed
 links
 it'a little bit messy (html+java+php)
 */
+include_once("vlmc.php");
 include_once("includes/header.inc");
 echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 
@@ -596,14 +597,17 @@ include_once("scripts/myboat.js");
     $nwp_coords=giveWaypointCoordinates ($usersObj->users->engaged , $usersObj->nwp, WPLL/WP_NUMSEGMENTS);
     // print_r($nwp_coords);
     //                                Lat              Long
-    $bestway=coordonneescroisement($nwp_coords[1], $nwp_coords[0], 
-                                   $nwp_coords[3], $nwp_coords[2], 
-                       $usersObj->lastPositions->lat, $usersObj->lastPositions->long);
+    $lat_xing = new doublep();
+    $long_xing = new doublep();
+    $xing_ratio = new doublep();
 
-    //echo $bestway[0] . "/" . $bestway[1];
+    $xing_dist = VLM_distance_to_line_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
+						 $nextwaypoint[1], $nextwaypoint[0],
+						 $nextwaypoint[3], $nextwaypoint[2],
+						 $lat_xing, $long_xing, $xing_ratio);
     ?>
-    <input type="hidden" name="wp2lat" value="<?php echo $bestway[0]/1000; ?>" />
-    <input type="hidden" name="wp2long" value="<?php echo $bestway[1]/1000; ?>" />
+    <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
+    <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
 </form>
 
 </td>
