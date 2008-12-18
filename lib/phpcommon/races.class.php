@@ -39,22 +39,23 @@ class races
     $result = mysql_db_query(DBNAME,$query) or die($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
-    $this->idraces = $row[0];
-    $this->racename = $row[1];
-    $this->started = $row[2];
-    $this->deptime = $row[3];
-    $this->startlong = $row[4]; $this->startlat = $row[5];
-    $this->boattype = $row[6];
-    $this->closetime = $row[7];
-    $this->racetype = $row[8];
-    $this->firstpcttime = $row[9];
-    $this->depend_on = $row[10];
+    $this->idraces          = $row[0];
+    $this->racename         = $row[1];
+    $this->started          = $row[2];
+    $this->deptime          = $row[3];
+    $this->startlong        = $row[4]; 
+    $this->startlat         = $row[5];
+    $this->boattype         = $row[6];
+    $this->closetime        = $row[7];
+    $this->racetype         = $row[8];
+    $this->firstpcttime     = $row[9];
+    $this->depend_on        = $row[10];
     $this->qualifying_races = $row[11];
-    $this->idchallenge = $row[12];
-    $this->coastpenalty = $row[13];
-    $this->bobegin = $row[14];
-    $this->boend = $row[15];
-    $this->maxboats = $row[16];
+    $this->idchallenge      = $row[12];
+    $this->coastpenalty     = $row[13];
+    $this->bobegin          = $row[14];
+    $this->boend            = $row[15];
+    $this->maxboats         = $row[16];
 
     // retreive all waypoints
     $this->waypoints =array();
