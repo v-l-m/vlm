@@ -89,8 +89,8 @@
                            echo " bestWayToWP = (" . $fullUsersObj->LatNM/1000 . "," . $fullUsersObj->LongNM/1000 . ")" ;
                      }
 
-	             $dist=ortho($fullUsersObj->lastPositions->long, $fullUsersObj->lastPositions->lat, 
-		                 $fullUsersObj->LongNM, $fullUsersObj->LatNM);
+	             $dist=ortho($fullUsersObj->lastPositions->lat, $fullUsersObj->lastPositions->long, 
+				 $fullUsersObj->LatNM, $fullUsersObj->LongNM);
 		     echo ", dist=".round($dist,3)."nm" ;
 		}
 		echo "\n";
@@ -152,11 +152,11 @@
                if (  $fullUsersObj->users->pilotmode >= PILOTMODE_ORTHODROMIC 
                   && $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
 
-	            $distAvant=ortho($lonAvant, $latAvant, 
-		                $fullUsersObj->users->targetlong*1000, $fullUsersObj->users->targetlat*1000);
-	            $distApres=ortho($lonApres, $latApres, 
-		                $fullUsersObj->users->targetlong*1000, $fullUsersObj->users->targetlat*1000);
-
+		 $distAvant=ortho($latAvant, $lonAvant,
+				  $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
+		 $distApres=ortho($latApres, $lonApres,
+				  $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
+		 
 		    // On lache le WP perso si il est plus près que la distance parcourue à la dernière VAC.
 		    if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
                       || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {

@@ -385,7 +385,8 @@ class fullUsers
       $this->LongNM = $this->users->targetlong*1000;
     }
 
-    $this->distancefromend = ortho($this->lastPositions->long, $this->lastPositions->lat, $this->LongNM, $this->LatNM);
+    $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long, 
+				   $this->latNM, $this->LongNM);
 
     $this->loxoangletoend = $this->loxodromicHeading();
     $this->orthoangletoend = $this->orthodromicHeading();
@@ -500,7 +501,6 @@ class fullUsers
 
     if ( $this->users->pilotmode == PILOTMODE_BESTVMG ) //  BEST VMG
       {
-	//       $cap_ortho = caportho($this->lastPositions->long, $this->lastPositions->lat, $this->LongNM, $this->LatNM);
 	$cap_ortho = $this->orthodromicHeading();
 
         $cap_vent = ($this->wheading + 180)%360;
@@ -843,7 +843,8 @@ class fullUsers
     //==> On restore quand on a plus besoin des "vraies valeurs"...
 
     $rc = $this->bestWayToWaypoint($this->nwp);
-    $this->distancefromend = ortho($this->lastPositions->long, $this->lastPositions->lat, $this->LongNM, $this->LatNM);
+    $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long, 
+				   $this->LatNM, $this->LongNM);
 
 
     // 1 : corrected, 0 : not corrected
@@ -1247,7 +1248,7 @@ class fullUsers
       return 0;
     }
     return VLM_ortho_heading($this->lastPositions->lat, $this->lastPositions->long,
-			     $this->LatNM, $this->LongNM);
+                             $this->LatNM, $this->LongNM);
   }
 
   // ============================================================================================
@@ -1442,7 +1443,7 @@ class fullUsers
     $position = $this->lastPositions->getOldPosition($this->users->idusers, $this->users->engaged, $timestamp - $duration);
 
     $lastPos = $this->lastPositions;
-    $distance = ortho($lastPos->long, $lastPos->lat, $position[1], $position[2]);
+    $distance = ortho( $lastPos->lat, $lastPos->long, $lastPos->lat, $position[2], $position[1]);
     $time_elapsed = max($timestamp - $position[0], 1);
 
     if ($time_elapsed == 1 && $distance > 10) {
@@ -1476,7 +1477,7 @@ class fullUsers
         //print_r($pos);
         if ( (time() - $pos->time) > $duration)
           break;
-        $sum = $sum + ortho($pos->long, $pos->lat, $lastPos->long, $lastPos->lat);
+        $sum = $sum + ortho($pos->lat, $pos->long, $lastPos->lat, $lastPos->long);
         $lastPos = $pos;
       }
 
@@ -1488,10 +1489,10 @@ class fullUsers
   function distFromUsers($idu)
   {
     $othersUsers = new fullUsers($idu, $this->north, $this->south, $this->west, $this->east);
-    return ortho($this->lastPositions->long,
-                 $this->lastPositions->lat,
-                 $othersUsers->lastPositions->long,
-                 $othersUsers->lastPositions->lat);
+    return ortho($this->lastPositions->lat,
+		 $this->lastPositions->long,
+		 $othersUsers->lastPositions->lat,
+                 $othersUsers->lastPositions->long);
   }
 
 }

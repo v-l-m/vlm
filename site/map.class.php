@@ -432,7 +432,7 @@ class map
         $map_size = round($map_size/10   )*5;
       }
     }
-    $ortholength = ortho($this->west, $this->south , $this->west, $this->south + $map_size);
+    $ortholength = ortho($this->south, $this->west, $this->south + $map_size, $this->west);
 
     //imagestring ($this->mapImage, $font, 100,10, $map_size, $this->colorBlack);
 

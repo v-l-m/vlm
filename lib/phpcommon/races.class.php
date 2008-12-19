@@ -94,9 +94,8 @@ class races
       $lastlong=$this->startlong;
       $lastlat=$this->startlat;
       foreach ( $this->waypoints as $WP ) {
-        //$this->racedistance+=ortho($lastlong,$lastlat,($WP[0]+$WP[2])/2, ($WP[1]+$WP[3])/2 );
-        $d1=ortho($lastlong,$lastlat,$WP[0], $WP[1] );
-        $d2=ortho($lastlong,$lastlat,$WP[2], $WP[3] );
+        $d1=ortho($lastlat,$lastlong,$WP[1], $WP[0] );
+        $d2=ortho($lastlat,$lastlong,$WP[3],$WP[2]);
         if ( $d1 < $d2 ) {
           $lastlong=$WP[0];
           $lastlat=$WP[1];
@@ -108,8 +107,7 @@ class races
         }
       }
       // + la distance entre l'avant dernier WP et le dernier
-      //$this->racedistance+=ortho($lastlong,$lastlat,($WP[0]+$WP[2])/2, ($WP[1]+$WP[3])/2 );
-      $this->racedistance+=min(ortho($lastlong,$lastlat,$WP[0], $WP[1] ), ortho($lastlong,$lastlat,$WP[2], $WP[3] ) );
+      $this->racedistance+=min(ortho($lastlat,$lastlong,$WP[1], $WP[0] ), ortho($lastlat,$lastlong,$WP[3], $WP[2] ) );
 
       //$this->racename = sprintf ("%s (%d nm)", $this->racename, $this->racedistance);
     }
@@ -628,18 +626,17 @@ class fullRaces
       // between the two players
       
       if ( $disttype == "tofirst" ) {
-        $dtl=ortho($FirstLon,$FirstLat, $longitude, $latitude);
+        $dtl=ortho($FirstLat,$FirstLon, $latitude, $longitude);
       } else {
         if ( $row[nwp] == $FirstNwp ) {
           $dtl=$row[dnm]-$FirstDnm ;
         } else {
-          $dtl=max($dtl,ortho($FirstLon,$FirstLat, $longitude, $latitude));
+          $dtl=max($dtl,ortho($FirstLat,$FirstLon, $latitude, $longitude));
         }
       }
 
       // Remarque Batafieu du 29/12 sur l'avance réelle de Toushuss
       // On compare les distances ortho entre les bateaux
-      //$dtl=max($dtl,ortho($FirstLon,$FirstLat, $longitude, $latitude));
       printf( "<td>%3.2f</td>\n", $dtl);
 
       echo "</tr>\n";
