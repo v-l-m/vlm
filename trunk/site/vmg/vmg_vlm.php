@@ -110,67 +110,75 @@
 <!--
 <?php
 $row = 0;
+
+if ($_REQUEST['boattype'] == "")
+{
+    $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_Imoca2008.csv";
+}
+else
+{
+    $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_" + $_REQUEST['boattype'] + ".csv";
+}
+/*
 switch ($_REQUEST['boattype'])
 {
         case "C5v2":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_C5v2.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_C5v2.csv", "r");
                 break;
 
         case "C5":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_C5.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_C5.csv", "r");
                 break;
 
         case "hi5":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_hi5.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_hi5.csv", "r");
                 break;
 
         case "figaro2":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_figaro2.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_figaro2.csv", "r");
                 break;
-/*
         case "imoca60":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_imoca60.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_imoca60.csv", "r");
                 break;
 
         case "maxicata":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_maxicata.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_maxicata.csv", "r");
                 break;
-*/
         case "A35":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_A35.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_A35.csv", "r");
                 break;
 
         case "Class40":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_Class40.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Class40.csv", "r");
                 break;
 
         case "Imoca2007":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_Imoca2007.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca2007.csv", "r");
                 break;
                 
         case "Imoca2008":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_Imoca2008.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca2008.csv", "r");
                 break;
                 
         case "VLM70":
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_VLM70.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_VLM70.csv", "r");
                 break;
                 
         case "OceanExpress";
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_OceanExpress.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_OceanExpress.csv", "r");
                 break;
 
         case "Imoca";
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_Imoca.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca.csv", "r");
                 break;
         
 
         default:
-                $handle = fopen("http://virtual-loup-de-mer.org/Polaires/boat_Imoca2008.csv", "r");
+                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca2008.csv", "r");
                 break;
 
 }
-
+*/
 
 
 while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
