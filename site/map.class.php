@@ -546,7 +546,7 @@ class map
         } else {
 
           // On va tracer un arc de cercle sur les 200 premiers milles, tous les 10 milles
-          // giveEndPointCoordinates( $longitude, $latitude, $distance, $heading  )
+          // giveEndPointCoordinates(  $latitude, $longitude, $distance, $heading  )
           //$style = array ($this->colorWaypoints, $this->colorSea);
           //imagesetstyle ($this->mapImage, $style);
           $poly_coords=array();
@@ -554,7 +554,7 @@ class map
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[1]));
 
           $wpheading=($waypoint[7]+180)%360;
-          $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint[0], $waypoint[1], $distEP, $wpheading );
+          $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint[1], $waypoint[0], $distEP, $wpheading );
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[0]),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[1]));
 
@@ -565,11 +565,11 @@ class map
                       call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[1]),
                       $this->colorBuoy);
 
-          $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint[0], $waypoint[1], $distEP, $wpheading );
+          $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint[1], $waypoint[0], $distEP, $wpheading );
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords1[0]),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords1[1]));
 
-          $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint[0], $waypoint[1], $distEP, $wpheading );
+          $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint[1], $waypoint[0], $distEP, $wpheading );
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[0]),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[1]));
 
@@ -889,8 +889,8 @@ class map
             */
 
             /* 2008/01/27 : expression de l'estime en temps plutot qu'en distance  */
-            $Estime=giveEndPointCoordinates(  $current_long,
-                                              $current_lat,
+            $Estime=giveEndPointCoordinates(  $current_lat,
+					      $current_long,
                                               $estime,
                                               $usersObj->boatheading  );
 
@@ -1059,8 +1059,8 @@ class map
         $_lastlong=$fullUsersObj->lastPositions->long;
         $_lastlat=$fullUsersObj->lastPositions->lat;
         //addDistance2Positions
-        $Estime=giveEndPointCoordinates(  $fullUsersObj->lastPositions->long,
-                                          $fullUsersObj->lastPositions->lat,
+        $Estime=giveEndPointCoordinates(  $fullUsersObj->lastPositions->lat
+					  $fullUsersObj->lastPositions->long,
                                           ORTHOSTEP, 
                                           $fullUsersObj->orthodromicHeading()  );
 
