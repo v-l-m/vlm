@@ -43,7 +43,7 @@ $xing_long  = new doublep();
           echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
           $waypoint_crossed=true;
           // fill the array lat and long are reversed...
-          $encounterCoordinates = array( doublep_value($xing_long), doublep_value($xing_lat) ); 
+          $encounterCoordinates = array(doublep_value($xing_lat), doublep_value($xing_long)); 
         }
 
         if ($waypoint_crossed == true ) {
@@ -53,7 +53,7 @@ $xing_long  = new doublep();
           // Then to compute the crossing time, and compare it to deptime + prestart-duration
           
           // distanceSinceLastUpdate = dist entre dernière position et ce coint
-          $distanceSinceLastUpdate = ortho($encounterCoordinates[1], $encounterCoordinates[0],
+          $distanceSinceLastUpdate = ortho($encounterCoordinates[0], $encounterCoordinates[1],
                                            $latAvant, $lonAvant);
           
           // Temps de course (entre départ et passage de la ligne )
