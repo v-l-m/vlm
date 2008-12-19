@@ -53,10 +53,8 @@ $xing_long  = new doublep();
           // Then to compute the crossing time, and compare it to deptime + prestart-duration
           
           // distanceSinceLastUpdate = dist entre dernière position et ce coint
-          $distanceSinceLastUpdate = ortho($encounterCoordinates[0],
-                                           $encounterCoordinates[1],
-                                           $lonAvant, $latAvant
-                                           );
+          $distanceSinceLastUpdate = ortho($encounterCoordinates[1], $encounterCoordinates[0],
+                                           $latAvant, $lonAvant);
           
           // Temps de course (entre départ et passage de la ligne )
           // ======================================================

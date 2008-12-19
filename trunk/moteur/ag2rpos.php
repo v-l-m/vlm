@@ -28,7 +28,7 @@
                   if ($lon[4] == "W"){ $lonb=-1*($lon[0]+ $lon[1]/60 + $lon[2]/3600); }
                   if ($lon[4] == "E"){ $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600; }
 
-		  $loch=ortho($lonb*1000, $latb*1000, -3947, 47855);
+		  $loch=ortho($latb*1000, $lonb*1000, 47855, -3947);
 
   		  // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
   		  $time=time();

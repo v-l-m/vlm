@@ -38,7 +38,7 @@ while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
     // we skip the first timestamp.
     if ( $time != 0 ) {
     	$elapsed = $time - $row[0];
-	$dist    = ortho($long, $lat, $row[1], $row[2]); 
+	$dist    = ortho($lat, $long, $row[2], $row[1]); 
 	if ($elapsed != 0 ) { 
 	    $speed   = abs(3600 * $dist / $elapsed);
 	} else {
