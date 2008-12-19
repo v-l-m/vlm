@@ -25,20 +25,20 @@ $xing_long  = new doublep();
         // 1- find the coordinates of user's next waypoint
         printf ("\n\tNext Waypoint is %d", $fullUsersObj->nwp);
         $nextwaypoint = giveWaypointCoordinates($fullUsersObj->users->engaged, $fullUsersObj->nwp, WPLL);
-        // ==> long1, lat1, long2, lat2
+        // ==> lat1, long1, lat2, long2
 
         // 2 - verify if the boat has crossed this waypoint
         $encounterCoordinates = array();
         echo (", checking for WP crossing... ");
-        printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint[1]/1000, $nextwaypoint[0]/1000, $nextwaypoint[3]/1000, $nextwaypoint[2]/1000);
+        printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint[0]/1000, $nextwaypoint[1]/1000, $nextwaypoint[2]/1000, $nextwaypoint[3]/1000);
         printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latAvant/1000, $lonAvant/1000, $latApres/1000, $lonApres/1000);
 
         // Test de croisement avec un waypoint
         $waypoint_crossed=false;
 
         if (VLM_check_cross_WP($latAvant, $lonAvant, $latApres, $lonApres, 
-                               $nextwaypoint[1], $nextwaypoint[0], 
-                               $nextwaypoint[3], $nextwaypoint[2],
+                               $nextwaypoint[0], $nextwaypoint[1], 
+                               $nextwaypoint[2], $nextwaypoint[3],
                                $xing_lat, $xing_long, $xing_ratio)) {
           echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
           $waypoint_crossed=true;
