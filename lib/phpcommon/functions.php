@@ -214,105 +214,16 @@ function ortho($lat, $long, $latnm, $longnm)  {
   return VLM_ortho_distance($lat, $long, $latnm, $longnm);
 }
 
-//=================================================================//
-//                   Distance Ortodromique                         //
-//                   par John-Pet Juin 2007                        //
-//-----------------------------------------------------------------//
-//         position de départ à position d'arrivée,                //
-//            retourne la distance orthodromique.                  //
-//=================================================================//
-//        Algo écrit par John-Pet (JP@virtual-winds.com)           //
-//=================================================================//
-function OLD_ortho($long, $lat, $longnm, $latnm) {
-  // gestion des cas spécifiques
-  if ($lat == -$latnm and abs($long - $longnm) == 180000) {
-    $distortho = 10800;
-
-  } elseif ($lat ==0 and $long == 0 and $latnm == 0 and $longnm == 0 or $lat == $latnm and $long == $longnm ) {
-    $distortho = 0;
-
-  } else {
-    // gestion des cas généraux
-    // Passage en radians des valeurs (qui sont en millidegrés à la base)
-    $lat_bat  = deg2rad($lat/1000);
-    $long_bat = deg2rad($long/1000);
-    $lat_wp  = deg2rad($latnm/1000);
-    $long_wp = deg2rad($longnm/1000);
-
-    // calcul
-    $distortho = 60 * rad2deg(acos(
-                                   cos($lat_bat) * cos($lat_wp) * cos($long_bat-$long_wp)
-                                   +  
-                                   sin($lat_bat) * sin($lat_wp) 
-                                   ));
-  }
-  return $distortho;
+/**
+ * @input, lat, long (current pos, next mark), millidegrees
+ * @return heading, in degrees
+ */
+function ortho_heading($lat, $long, $latnm, $longnm)  {
+  if (($lat == $latnm) && ($long == $longnm)) {
+    return 0.0;
+  } 
+  return VLM_ortho_heading($lat, $long, $latnm, $longnm);
 }
-
-
-// ============================================
-// Fonction pour le calcul du cap orthodromique
-// STEPHPEN ===================================
-// ============================================
-function caportho($long, $lat, $longnm, $latnm)
-{
-  $x=0;
-  $y=0;
-  $z=0;
-  $cap=0;
-  // Passage en radians des valeurs (qui sont en millidegrés à la base)
-  $lat_bat  = deg2rad($lat/1000);
-  $long_bat = deg2rad($long/1000);
-  $lat_wp  = deg2rad($latnm/1000);
-  $long_wp = deg2rad($longnm/1000);
-
-  if (($lat_bat == $lat_wp) && ($long_bat == $long_wp))
-    {
-      return (0);
-    }
-  else
-    {
-      $x = pi() / 2 - $lat_wp;
-      $y = pi() / 2 - $lat_bat;
-      $z = acos(sin($lat_bat) * sin($lat_wp) + (cos($lat_bat) * cos($lat_wp) * cos($long_bat - $long_wp)));
-      if ( ((cos($x) - (cos($y) * cos($z))) / (sin($y) * sin($z)) > 1) 
-           || ((cos($x) - (cos($y) * cos($z))) / (sin($y) * sin($z)) < -1) )
-        {
-          $cap = 0;
-        }
-      else
-        {
-          $cap = acos((cos($x) - (cos($y) * cos($z))) / (sin($y) * sin($z))) * 180 / pi();
-        }
-      if ( ($lat_bat < $lat_wp) && ($long_bat == $long_wp) 
-           || ($lat_bat == $lat_wp) && ($long_bat == $long_wp) 
-           || ($lat_bat == 0) && ($long_bat == 0) && ($lat_wp == 0) && ($long_wp == 0) )
-        {
-          return (0);
-        }
-      else
-        {
-          if (($lat_bat > $lat_wp) && ($long_bat == $long_wp))
-            {
-              return (180);
-            }
-          else
-            {
-              if ($long_bat < $long_wp)
-                {
-                  return ($cap);
-                }
-              else
-                {
-                  return (360 - $cap);
-                }
-            }
-        }
-    }
-}
-
-
-
 
 // For a refpoint (long/lat) and a distance and a heading, give the end point 
 // Used in "One point" waypoints
@@ -1523,6 +1434,4 @@ function logUserEvent($idusers, $ipaddr, $idraces, $action ) {
 
 }
 
-
-include "jp.php";
 ?>

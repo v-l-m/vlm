@@ -1,5 +1,6 @@
 <?php
 include_once("vlmc.php");
+include_once("functions.php");
 
 class users
 {
@@ -1244,11 +1245,8 @@ class fullUsers
    * @return the heading in degrees.
    */
   function orthodromicHeading() {
-    if (($this->LatNM == $this->lastPositions->lat) && ($this->LongNM == $this->lastPositions->long)) {
-      return 0;
-    }
-    return VLM_ortho_heading($this->lastPositions->lat, $this->lastPositions->long,
-                             $this->LatNM, $this->LongNM);
+    return ortho_heading($this->lastPositions->lat, $this->lastPositions->long,
+			 $this->LatNM, $this->LongNM);
   }
 
   // ============================================================================================
