@@ -384,9 +384,9 @@ class fullUsers
       $this->LatNM = $this->users->targetlat*1000;
       $this->LongNM = $this->users->targetlong*1000;
     }
-
+    
     $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long, 
-				   $this->latNM, $this->LongNM);
+				   $this->LatNM, $this->LongNM);
 
     $this->loxoangletoend = $this->loxodromicHeading();
     $this->orthoangletoend = $this->orthodromicHeading();
