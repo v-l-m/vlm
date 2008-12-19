@@ -111,76 +111,18 @@
 <?php
 $row = 0;
 
+
+
 if ($_REQUEST['boattype'] == "")
 {
     $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_Imoca2008.csv";
 }
 else
 {
-    $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_" + $_REQUEST['boattype'] + ".csv";
+    $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_" . $_REQUEST['boattype'] . ".csv";
 }
 
 $handle = fopen($path_polar, "r");
-/*
-switch ($_REQUEST['boattype'])
-{
-        case "C5v2":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_C5v2.csv", "r");
-                break;
-
-        case "C5":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_C5.csv", "r");
-                break;
-
-        case "hi5":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_hi5.csv", "r");
-                break;
-
-        case "figaro2":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_figaro2.csv", "r");
-                break;
-        case "imoca60":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_imoca60.csv", "r");
-                break;
-
-        case "maxicata":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_maxicata.csv", "r");
-                break;
-        case "A35":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_A35.csv", "r");
-                break;
-
-        case "Class40":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Class40.csv", "r");
-                break;
-
-        case "Imoca2007":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca2007.csv", "r");
-                break;
-                
-        case "Imoca2008":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca2008.csv", "r");
-                break;
-                
-        case "VLM70":
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_VLM70.csv", "r");
-                break;
-                
-        case "OceanExpress";
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_OceanExpress.csv", "r");
-                break;
-
-        case "Imoca";
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca.csv", "r");
-                break;
-        
-
-        default:
-                $handle = fopen("http://virtual-loup-de-mer.org/polaires/boat_Imoca2008.csv", "r");
-                break;
-
-}
-*/
 
 
 while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
@@ -1111,65 +1053,15 @@ window.document.vmg.status_way2.value="Calcul !!!";
 
       <h1 style= "line-height: 100%; margin-top: 0pt; margin-bottom: 0pt;" align="center"><font face="verdana"><span style="font-size: 18pt;"> 
                 <?php
-                        switch($_REQUEST['boattype'])
+                        if ($_REQUEST['boattype'] == "")
                         {
-                        case "C5v2":
-                                echo "-C5v2-";
-                                break;
-                        
-                        case "C5":
-                                echo "-C5-";
-                                break;
-                        
-                        case "hi5":
-                                echo "-Hi5-";
-                                break;
-                        
-                        case "figaro2":
-                                echo "-Figaro2-";
-                                break;
-/*                      
-                        case "imoca60":
-                                echo "-IMOCA 60'-";
-                                break;
-                        
-                        case "maxicata":
-                                echo "-Maxicata-";
-                                break;
-*/                      
-                        case "A35":
-                                echo "-A35-";
-                                break;
-                        
-                        case "Class40":
-                                echo "-Class 40-";
-                                break;
-                        
-                        case "Imoca2007":
-                                echo "-IMOCA 2007-";
-                                break;
-                                
-                        case "Imoca2008":
-                                echo "-IMOCA 2008-";
-                                break;
-                                
-                        case "VLM70":
-                                echo "-VLM 70-";
-                                break;
-                                
-                        case "OceanExpress":
-                                echo "-OceanExpress-";
-                                break;
-                                
-                        case "Imoca":
-                                echo "-IMOCA-";
-                                break;
-                        
-                        default:
-                                echo "-IMOCA 2008-";
-                                break;
-                        
+                            echo "-"."Imoca2008"."-";
                         }
+                        else
+                        {
+                            echo "-".$_REQUEST['boattype']."-";
+                        }
+
                 ?>
 
 </span></font></h1>
@@ -1550,68 +1442,18 @@ window.document.vmg.status_way2.value="Calcul !!!";
                                                         <table border="0" cellspacing="2" cellpadding="0" align="center">
                                                                 <tr>
                   <?php
-                    switch ($_REQUEST['boattype'])
+                    if ($_REQUEST['boattype'] == "")
                     {
-		    case "C5v2":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_C5v2\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_C5/C5.png\" border=\"0\" /></a></td>";
-		    break;
-                    
-		    case "C5":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_C5\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_C5/C5.png\" border=\"0\" /></a></td>";
-		    break;
-                    
-		    case "hi5":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_hi5\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Hi5/boat2.jpg\" border=\"0\" /></a></td>";
-		    break;
-                    
-		    case "figaro2":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_figaro2\" target=\"blank\"><img style=\"width: 243px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Figaro2/Figaro2_Beneteau.jpg\" border=\"0\" /></a></td>";
-		    break;
-		    /*                                                      
-									    case "imoca60":
-									    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_imoca60\" target=\"blank\"><img style=\"width: 243px; height: 175px;\" alt=\"\" src=\"imoca60.jpg\" border=\"0\" /></a></td>";
-									    break;
-                                                                            
-									    case "maxicata":
-									    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_maxicata\" target=\"blank\"><img style=\"width: 243px; height: 175px;\" alt=\"\" src=\"maxicata.jpg\" border=\"0\" /></a></td>";
-									    break;
-		    */                                                      
-		    case "A35":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_A35\" target=\"blank\"><img style=\"width: 259px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_A35/A35_couleur.jpg\" border=\"0\" /></a></td>";
-                                                                                        break;
-                                                                                                                                        
-		    case "Class40":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_Class40\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Class40/Class40.jpg\" border=\"0\" /></a></td>";
-		    break;
-                    
-		    case "Imoca2007":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_Imoca2007\" target=\"blank\"><img style=\"width: 258px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Imoca2007/Imoca2007.png\" border=\"0\" /></a></td>";
-		    break;
-		    
-		    case "Imoca2008":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_Imoca2007\" target=\"blank\"><img style=\"width: 258px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Imoca2008/Imoca2008.png\" border=\"0\" /></a></td>";
-		    break;
-		    
-		    case "VLM70":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_Imoca2007\" target=\"blank\"><img style=\"width: 258px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_VLM70/VLM70.png\" border=\"0\" /></a></td>";
-		    break;
-		    
-		    case "OceanExpress":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_OceanExpress\" target=\"blank\"><img style=\"width: 254px; height: 167px;\" alt=\"\" src=\"/images/Boats/Boat_OceanExpress/OceanExpress.jpg\" border=\"0\" /></a></td>";
-		    break;
-		    
-		    case "Imoca":
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_Imoca2007\" target=\"blank\"><img style=\"width: 258px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Imoca2007/Imoca2007.png\" border=\"0\" /></a></td>";
-		    break;
-		    
-                    
-		    default:
-		    echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_Imoca2008\" target=\"blank\"><img style=\"width: 258px; height: 175px;\" alt=\"\" src=\"/images/Boats/Boat_Imoca2008/Imoca2008.png\" border=\"0\" /></a></td>";
-		    break;
-                    
-                                                                                }       
-                                                                                
-                                                                        ?>
+                        echo "-"."Imoca2008"."-";
+                        echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_"."Imoca2008"."\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"polaire.png\" border=\"0\" /></a></td>";
+                        
+                    }
+                    else
+                    {
+                        echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_".$_REQUEST['boattype']."\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"polaire.png\" border=\"0\" /></a></td>";
+
+                    }
+                   ?>
                                                                 </tr>
                                                                 <tr>
                                                                         <!--<td>
