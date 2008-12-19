@@ -259,8 +259,8 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
 function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
 {
 
-  //                         row[0]         row[1]         row[2]        row[3]        row[4]
-  $querywaypoint = "SELECT WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, RW.laisser_au " .
+  //                          row[0]         row[1]         row[2]        row[3]        row[4]
+  $querywaypoint = "SELECT WP.latitude1, WP.longitude1, WP.latitude2, WP.longitude2, RW.laisser_au " .
     " FROM  waypoints WP, races_waypoints RW" .
     " WHERE RW.wporder = " . $idwp . 
     " AND   RW.idraces = " . $idraces . 
@@ -282,14 +282,14 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
     // If latitude > 90, we reduce the length
     //        $EndPoint=array(180000,90000);
     //        while ( abs($EndPoint[1] >= 80000 && $wplength > 1 ) ) {
-    $EndPoint=giveEndPointCoordinates($row[1],$row[0], $wplength, $gisement_bouee1_bouee2);
+    $EndPoint=giveEndPointCoordinates($row[0],$row[1], $wplength, $gisement_bouee1_bouee2);
     //    $wplength--;
     //                printf ("L=%f,l=%f, WPL=%f\n", $EndPoint[0],$EndPoint[1], $wplength);
     //        }
 
-    //printf ("WP=%d : Lon=%d, Lat=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $row[0], $row[1], $row[4],$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
+    //printf ("WP=%d : Lat=%d, Lon=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $row[0], $row[1], $row[4],$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
 
-    return array ($row[0], $row[1], $EndPoint[1], $EndPoint[0], WPTYPE_WP);
+    return array ($row[0], $row[1], $EndPoint[0], $EndPoint[1], WPTYPE_WP);
 
   } else {
     // Cas d'une porte : cas "historique"
