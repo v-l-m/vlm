@@ -555,31 +555,31 @@ class map
 
           $wpheading=($waypoint[7]+180)%360;
           $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint[1], $waypoint[0], $distEP, $wpheading );
-          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[0]),
-                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[1]));
+          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),
+                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]));
 
           imageline ( $this->mapImage, 
                       call_user_func_array( array(&$this, $projCallbackLong), $waypoint[0]),
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[1]),
-                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[0]),      
-                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[1]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),      
+                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]),
                       $this->colorBuoy);
 
           $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint[1], $waypoint[0], $distEP, $wpheading );
-          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords1[0]),
-                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords1[1]));
+          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords1[1]),
+                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords1[0]));
 
           $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint[1], $waypoint[0], $distEP, $wpheading );
-          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[0]),
-                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[1]));
+          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[1]),
+                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[0]));
 
           $style = array ($this->colorWaypoints, $this->colorSea);
           imagesetstyle ($this->mapImage, $style);
           imageline ( $this->mapImage, 
-                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[0]),
-                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[1]),
-                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[0]),      
-                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[1]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),
+                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[1]),      
+                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[0]),
                       IMG_COLOR_STYLED);
 
           array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[0]),
@@ -904,26 +904,26 @@ class map
                 //imagestring ( $this->mapImage, $font, 50, 60 , "BOAT on east" , $this->colorText);
                 $DepEstime=$A;
               }
-              if ( $Estime[0] < 0) {
-                $Estime[0]+=360000;
+              if ( $Estime[1] < 0) {
+                $Estime[1]+=360000;
               }
-              //imagestring ( $this->mapImage, $font, 50, 70 ,"EstimeEndAfter ="  .$Estime[0] , $this->colorText);
+              //imagestring ( $this->mapImage, $font, 50, 70 ,"EstimeEndAfter ="  .$Estime[1] , $this->colorText);
             } else {
               // Si les longitudes de départ et d'arrivée n'ont pas le même signe
-              //         if ( $current_long * $Estime[0] < 0) {
+              //         if ( $current_long * $Estime[1] < 0) {
               // cas du franchissement de Greenwich
-              //            $Estime[0]+=360000;
+              //            $Estime[1]+=360000;
               // Dans le sens Amerique-europe
-              // $current_long <0 && $Estime[0] >0
+              // $current_long <0 && $Estime[1] >0
 
               // Dans le sens Europe-Amerique
-              // $current_long >0 && $Estime[0] <0
+              // $current_long >0 && $Estime[1] <0
 
               // Cas du franchissement de DCL
               // Dans le sens NZ-Amerique
-              // $current_long >0 && $Estime[0] <0
+              // $current_long >0 && $Estime[1] <0
               // Dans le sens Amerique-NZ
-              // $current_long <0 && $Estime[0] >0
+              // $current_long <0 && $Estime[1] >0
               //             }
               $DepEstime=$A;
               imagestring ( $this->mapImage, $font, 50, 50 , "AM NOT ON MAP" , $this->colorText);
@@ -932,8 +932,8 @@ class map
             $style = array ($this->fromhex( $usersObj->color), $this->colorSea);
             imagesetstyle ($this->mapImage, $style);
             $E = array ( 
-                        call_user_func_array( array(&$this, $projCallbackLong), $Estime[0]),
-                        call_user_func_array( array(&$this, $projCallbackLat), $Estime[1])
+                        call_user_func_array( array(&$this, $projCallbackLong), $Estime[1]),
+                        call_user_func_array( array(&$this, $projCallbackLat), $Estime[0])
                          );
             imageline ( $this->mapImage, $DepEstime[0], $DepEstime[1], $E[0], $E[1] , IMG_COLOR_STYLED);
 
@@ -1065,22 +1065,22 @@ class map
                                           $fullUsersObj->orthodromicHeading()  );
 
         $fullUsersObj->lastPositions->addDistance2Positions(ORTHOSTEP,$fullUsersObj->orthodromicHeading());
-        //$fullUsersObj->lastPositions->long=$Estime[0];
-        //$fullUsersObj->lastPositions->lat=$Estime[1];
+        //$fullUsersObj->lastPositions->long=$Estime[1];
+        //$fullUsersObj->lastPositions->lat=$Estime[0];
 
         // Controle sur l'antemeridien
-        if ( $fullUsersObj->lastPositions->long <0 and $Estime[0] > 0) {
-          $Estime[0]-=360000;
+        if ( $fullUsersObj->lastPositions->long <0 and $Estime[1] > 0) {
+          $Estime[1]-=360000;
         }
-        if ( $fullUsersObj->lastPositions->long >0 and $Estime[0] < 0) {
-          $Estime[0]+=360000;
+        if ( $fullUsersObj->lastPositions->long >0 and $Estime[1] < 0) {
+          $Estime[1]+=360000;
         }
-        //if ( $Estime[0] < $this->west || $Estime[0] > $this->east ) break;
-        if ( $Estime[0] < $this->west || $Estime[0] > $this->east ) {
-          //echo "EAST=$this->east, WEST=$this->west, ESTIME0=".$Estime[0]."\n";
+        //if ( $Estime[1] < $this->west || $Estime[1] > $this->east ) break;
+        if ( $Estime[1] < $this->west || $Estime[1] > $this->east ) {
+          //echo "EAST=$this->east, WEST=$this->west, ESTIME1=".$Estime[1]."\n";
           break;
         }
-        if ( $Estime[1] < $this->south || $Estime[1] > $this->north ) {
+        if ( $Estime[0] < $this->south || $Estime[0] > $this->north ) {
           //echo "NORTH=$this->north, SOUTH=$this->south, ESTIME1=".$Estime[1]."\n";
           break;
         }
@@ -1108,8 +1108,8 @@ class map
         }
 
         $E = array ( 
-                    call_user_func_array( array(&$this, $projCallbackLong), $Estime[0]),
-                    call_user_func_array( array(&$this, $projCallbackLat), $Estime[1])
+                    call_user_func_array( array(&$this, $projCallbackLong), $Estime[1]),
+                    call_user_func_array( array(&$this, $projCallbackLat), $Estime[0])
                      );
         imageline ( $this->mapImage, $DepOrtho[0], $DepOrtho[1], $E[0], $E[1] , IMG_COLOR_STYLED);
         //imageline ( $this->mapImage, $A[0], $A[1], $E[0], $E[1] , $this->colorTextOrtho);

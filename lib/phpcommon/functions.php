@@ -240,7 +240,7 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
   
   // We give back an array (Long/Lat)
   //printf ("DEBUG:EP=lat=%d, long=%d<BR>\n",$EndLat, $EndLong);
-  return array ( $EndLong,$EndLat );
+  return array ( $EndLat, $EndLong );
 }
 
 // =====================================================
@@ -289,7 +289,7 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
 
     //printf ("WP=%d : Lon=%d, Lat=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $row[0], $row[1], $row[4],$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
 
-    return array ($row[0], $row[1], $EndPoint[0], $EndPoint[1], WPTYPE_WP);
+    return array ($row[0], $row[1], $EndPoint[1], $EndPoint[0], WPTYPE_WP);
 
   } else {
     // Cas d'une porte : cas "historique"
