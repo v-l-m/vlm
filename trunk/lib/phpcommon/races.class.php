@@ -82,8 +82,10 @@ class races
       // On push ce WP dans la liste des WP
       array_push($this->waypoints, $WPcoords );
     }
-    $this->stop1long = $WPcoords[0]; $this->stop1lat = $WPcoords[1];
-    $this->stop2long = $WPcoords[2]; $this->stop2lat = $WPcoords[3];
+    $this->stop1lat  = $WPcoords[0];
+    $this->stop1long = $WPcoords[1];
+    $this->stop2lat  = $WPcoords[2];
+    $this->stop2long = $WPcoords[3];
 
     // Calcul de la longueur totale de la course ==> $this->raceDistance
     // == En partant de la position de départ, boucle foreach sur les WP et addition de ortho(lastWP,nextWP)
@@ -94,20 +96,20 @@ class races
       $lastlong=$this->startlong;
       $lastlat=$this->startlat;
       foreach ( $this->waypoints as $WP ) {
-        $d1=ortho($lastlat,$lastlong,$WP[1], $WP[0] );
-        $d2=ortho($lastlat,$lastlong,$WP[3],$WP[2]);
+        $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
+        $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
         if ( $d1 < $d2 ) {
-          $lastlong=$WP[0];
-          $lastlat=$WP[1];
+	  $lastlat=$WP[0];
+	  $lastlong=$WP[1];
           $this->racedistance+=$d1;
         } else {
-          $lastlong=$WP[2];
-          $lastlat=$WP[3];
+          $lastlat=$WP[2];
+          $lastlong=$WP[3];
           $this->racedistance+=$d2;
         }
       }
       // + la distance entre l'avant dernier WP et le dernier
-      $this->racedistance+=min(ortho($lastlat,$lastlong,$WP[1], $WP[0] ), ortho($lastlat,$lastlong,$WP[3], $WP[2] ) );
+      $this->racedistance+=min(ortho($lastlat,$lastlong,$WP[0], $WP[1] ), ortho($lastlat,$lastlong,$WP[2], $WP[3] ) );
 
       //$this->racename = sprintf ("%s (%d nm)", $this->racename, $this->racedistance);
     }

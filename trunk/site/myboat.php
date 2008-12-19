@@ -160,21 +160,21 @@ include_once("scripts/myboat.js");
            $status_content.="&lt;br /&gt;";
 
        if ( $wp[4] == WPTYPE_PORTE ) {
-          $wp_north = max ($wp[1], $wp[3]);
-          $wp_east  = max ($wp[0], $wp[2]);
-          $wp_south = min ($wp[1], $wp[3]);
-          $wp_west  = min ($wp[0], $wp[2]);
+          $wp_north = max ($wp[0], $wp[2]);
+          $wp_east  = max ($wp[1], $wp[3]);
+          $wp_south = min ($wp[0], $wp[2]);
+          $wp_west  = min ($wp[1], $wp[3]);
 
               $status_content.="Gate Coords=&lt;b&gt;" . 
-                              round($wp[1]/1000,3) . "," . round($wp[0]/1000,3) . 
-                      " &lt;----&gt; " . round($wp[3]/1000,3) . "," . round($wp[2]/1000,3) . "&lt;/b&gt;";
+                              round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
+                      " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
 
        } else {
-          $wp_south = $wp_north = $wp[1];
-          $wp_west  = $wp_east  = $wp[0];
+          $wp_south = $wp_north = $wp[0];
+          $wp_west  = $wp_east  = $wp[1];
 
               $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                              round($wp[1]/1000,3) . "," . round($wp[0]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
+                              round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
 
        }
        if ( $wp_num > $usersObj->users->nwp ) {
@@ -602,8 +602,8 @@ include_once("scripts/myboat.js");
     $xing_ratio = new doublep();
 
     $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
-						 $nwp_coords[1], $nwp_coords[0],
-						 $nwp_coords[3], $nwp_coords[2],
+						 $nwp_coords[0], $nwp_coords[1],
+						 $nwp_coords[2], $nwp_coords[3],
 						 $lat_xing, $long_xing, $xing_ratio);
     ?>
     <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
@@ -739,8 +739,8 @@ include_once("scripts/myboat.js");
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?
           if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
-               $latwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][1] + $usersObj->races->waypoints[$usersObj->users->nwp-1][3])/2/1000;
-               $longwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][0] + $usersObj->races->waypoints[$usersObj->users->nwp-1][2])/2/1000;
+               $latwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][0] + $usersObj->races->waypoints[$usersObj->users->nwp-1][2])/2/1000;
+               $longwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][1] + $usersObj->races->waypoints[$usersObj->users->nwp-1][3])/2/1000;
           } else {
                $latwp=$usersObj->users->targetlat;
                $longwp=$usersObj->users->targetlong;

@@ -416,19 +416,18 @@ class fullUsers
     $xing_ratio = new doublep();
 
     // Get coords of the nextwaypoint
-    // Retourne long/lat + long/lat
     $nextwaypoint = giveWaypointCoordinates($this->users->engaged, $wp, WPLL/WP_NUMSEGMENTS);
 
     // Get the best crossing point
 
     // Attend des couples lat/long et retourne lat/long
-    //  printf ("Lat1=%f, Long1=%f\n", $nextwaypoint[1]/1000, $nextwaypoint[0]/1000);
-    //  printf ("Lat2=%f, Long2=%f\n", $nextwaypoint[3]/1000, $nextwaypoint[2]/1000);
-    //  printf ("BoatLat=%f, BoatLong=%f\n", $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
+    //     printf ("<p>Lat1=%f, Long1=%f</p>\n", $nextwaypoint[0]/1000, $nextwaypoint[1]/1000);
+    //  printf ("<p>Lat2=%f, Long2=%f</p>\n", $nextwaypoint[2]/1000, $nextwaypoint[3]/1000);
+    //  printf ("<p>BoatLat=%f, BoatLong=%f</p>\n", $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
 
     $xing_dist = VLM_distance_to_line_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
-						 $nextwaypoint[1], $nextwaypoint[0],
-						 $nextwaypoint[3], $nextwaypoint[2],
+						 $nextwaypoint[0], $nextwaypoint[1],
+						 $nextwaypoint[2], $nextwaypoint[3],
 						 $lat_xing, $long_xing, $xing_ratio);
     //  printf("Xing_dist %.3f, ratio %.3f\n", $xing_dist, doublep_value($xing_ratio));
     $coords = array( doublep_value($lat_xing) / 1000.0, doublep_value($long_xing) / 1000.0);
@@ -437,7 +436,7 @@ class fullUsers
 
     $this->LatNM=$coords[0]*1000;
     $this->LongNM=$coords[1]*1000;
-    //      printf ("Lat=%f, Long=%f\n", $this->LatNM, $this->LongNM);
+    //    printf ("<p>Lat=%f, Long=%f</p>\n", $this->LatNM, $this->LongNM);
     return (0);
   }
 
