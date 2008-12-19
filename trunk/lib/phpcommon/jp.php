@@ -11,7 +11,7 @@
 //=================================================================//
 function orthodromicDistance($lat, $long, $latnm, $longnm)
 {
-  return ortho($long,$lat, $longnm, $latnm);
+  return ortho($lat,$long, $latnm, $longnm);
 
 }
 
