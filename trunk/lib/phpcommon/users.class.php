@@ -1443,7 +1443,7 @@ class fullUsers
     $position = $this->lastPositions->getOldPosition($this->users->idusers, $this->users->engaged, $timestamp - $duration);
 
     $lastPos = $this->lastPositions;
-    $distance = ortho( $lastPos->lat, $lastPos->long, $lastPos->lat, $position[2], $position[1]);
+    $distance = ortho( $lastPos->lat, $lastPos->long, $position[2], $position[1]);
     $time_elapsed = max($timestamp - $position[0], 1);
 
     if ($time_elapsed == 1 && $distance > 10) {
