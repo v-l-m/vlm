@@ -1059,7 +1059,7 @@ class map
         $_lastlong=$fullUsersObj->lastPositions->long;
         $_lastlat=$fullUsersObj->lastPositions->lat;
         //addDistance2Positions
-        $Estime=giveEndPointCoordinates(  $fullUsersObj->lastPositions->lat
+        $Estime=giveEndPointCoordinates(  $fullUsersObj->lastPositions->lat,
 					  $fullUsersObj->lastPositions->long,
                                           ORTHOSTEP, 
                                           $fullUsersObj->orthodromicHeading()  );
