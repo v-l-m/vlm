@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.24 2008-12-16 18:26:58 ylafon Exp $
+ * $Id: lines.c,v 1.25 2008-12-19 14:53:42 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -399,7 +399,7 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
 				   double latitude_b, double longitude_b,
 				   double *x_latitude, double *x_longitude,
 				   double *ab_ratio) {
-  double dist_a, dist_b, min_dist, ab_dist, t_dist;
+  double dist_a, dist_b, max_dist, ab_dist, t_dist;
   double ortho_a, ortho_b;
   double t_latitude, t_longitude;
   double longitude_x, latitude_x, intersect;
@@ -447,14 +447,14 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
   dist_b = __distance((latitude-latitude_b), (longitude-longitude_b));
   ab_dist = __distance((latitude_a-latitude_b),(longitude_a-longitude_b));
   
-  min_dist = fmin(dist_a, dist_b);
+  max_dist = fmax(dist_a, dist_b);
   /* we construct a line form the point, orthogonal to the segment, long of
-     at least min_dist */
-  latitude_x = t_latitude + (longitude_a - longitude_b) * min_dist / ab_dist;
-  longitude_x = longitude + (latitude_b - latitude_a) * min_dist / ab_dist;
+     at least max_dist */
+  latitude_x = t_latitude + (longitude_a - longitude_b) * max_dist / ab_dist;
+  longitude_x = longitude + (latitude_b - latitude_a) * max_dist / ab_dist;
   
-  latitude_y = t_latitude + (longitude_b - longitude_a) * min_dist / ab_dist;
-  longitude_y = longitude + (latitude_a - latitude_b) * min_dist / ab_dist;
+  latitude_y = t_latitude + (longitude_b - longitude_a) * max_dist / ab_dist;
+  longitude_y = longitude + (latitude_a - latitude_b) * max_dist / ab_dist;
 
   intersect = intersects(latitude_a, longitude_a, latitude_b, longitude_b,
 			 latitude_y, longitude_y, latitude_x, longitude_x,
@@ -464,7 +464,7 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
     *x_longitude = xing_longitude; 
     t_dist = ortho_distance(latitude, longitude, *x_latitude, *x_longitude);
 #ifdef DEBUG
-    printf("Min dist: %.3f, found dist: %.3f\n", min_dist, t_dist);
+    printf("Min dist: %.3f, found dist: %.3f\n", max_dist, t_dist);
 #endif /* DEBUG */
     *ab_ratio = intersect;
     return t_dist;
