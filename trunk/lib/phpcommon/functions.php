@@ -228,7 +228,7 @@ function ortho_heading($lat, $long, $latnm, $longnm)  {
 // For a refpoint (long/lat) and a distance and a heading, give the end point 
 // Used in "One point" waypoints
 // Used in track projection
-function giveEndPointCoordinates( $longitude, $latitude, $distance, $heading  )
+function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
 {
   $lata = new doublep();
   $longa = new doublep();
@@ -282,7 +282,7 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
     // If latitude > 90, we reduce the length
     //        $EndPoint=array(180000,90000);
     //        while ( abs($EndPoint[1] >= 80000 && $wplength > 1 ) ) {
-    $EndPoint=giveEndPointCoordinates($row[0],$row[1], $wplength, $gisement_bouee1_bouee2);
+    $EndPoint=giveEndPointCoordinates($row[1],$row[0], $wplength, $gisement_bouee1_bouee2);
     //    $wplength--;
     //                printf ("L=%f,l=%f, WPL=%f\n", $EndPoint[0],$EndPoint[1], $wplength);
     //        }
