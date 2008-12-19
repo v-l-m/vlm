@@ -1,4 +1,6 @@
 <?php
+include_once("vlmc.php");
+
 class users
 {
   //var from db_users
@@ -407,7 +409,6 @@ class fullUsers
   //====================================================================================
   function bestWayToWaypoint($wp)
   {
-    include_once("vlmc.php");
     $lat_xing = new doublep();
     $long_xing = new doublep();
     $xing_ratio = new doublep();
@@ -1236,48 +1237,18 @@ class fullUsers
     return $caploxo;
   }
 
-  //=================================================================//
-  //                    Orthodromic Heading                          //
-  //                   By John-Pet Avril 2007                        //
-  //-----------------------------------------------------------------//
-  //            from a position and a destination,                   //
-  //       return the angle to follow an orthodromic course.         //
-  //=================================================================//
-  //        Algo written by John-Pet (JP@virtual-winds.com)          //
-  //=================================================================//
-
-  function orthodromicHeading()
-  {
-    // Find the best coordinates to cross the nextwaypoint
-    $long_wp = deg2rad($this->LongNM/1000);
-    $lat_wp = deg2rad($this->LatNM/1000);
-
-    $long_bat = deg2rad($this->lastPositions->long/1000);
-    $lat_bat = deg2rad($this->lastPositions->lat/1000);
-
-    if ($lat_bat == $lat_wp and $long_bat == $long_wp) {
-      $caportho = 2; 
-    } else {
-      $X = M_PI_2 - $lat_wp;
-      $Y = M_PI_2 - $lat_bat;
-      $Z = acos(sin($lat_bat) * sin($lat_wp) + cos($lat_bat) * cos($lat_wp) * cos(($long_bat-$long_wp)));
-      $W = (cos($X) -  (cos($Y) * cos($Z)))/ (sin($Y) * sin($Z));
-
-      if ($W > 1 or $W < -1) {
-        $cap = 0;
-      } else {
-        $cap = rad2deg(acos($W));
-      }
+  /**
+   * return the orthodromic heading from the current position
+   * to the next mark
+   * @return the heading in degrees.
+   */
+  function orthodromicHeading() {
+    if (($this->LatNM == $this->lastPositions->lat) && ($this->LongNM == $this->lastPositions->long)) {
+      return 0;
     }
-
-    if (($lat_bat < $lat_wp and $long_bat == $long_wp) or ($lat_bat == $lat_wp and $long_bat == $long_wp) or ($lat_bat == 0 and $long_bat == 0 and $lat_wp == 0 and $long_wp == 0 )) $caportho = 0;
-    elseif (($lat_bat > $lat_wp and $long_bat == $long_wp)) $caportho = 180 ;
-    elseif (sin($long_wp - $long_bat) > 0) $caportho = $cap;
-    elseif ($caportho = 360 - $cap );
-
-    return $caportho;
+    return VLM_ortho_heading($this->lastPositions->lat, $this->lastPositions->long,
+			     $this->LatNM, $this->LongNM);
   }
-
 
   // ============================================================================================
   // This function is used to verify if two vectors are crossing each-other
