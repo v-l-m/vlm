@@ -119,6 +119,8 @@ else
 {
     $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_" + $_REQUEST['boattype'] + ".csv";
 }
+
+$handle = fopen($path_polar, "r");
 /*
 switch ($_REQUEST['boattype'])
 {
