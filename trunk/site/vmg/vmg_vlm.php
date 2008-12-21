@@ -4,6 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>VMG pour VLM</title>
 <?php 
+   include_once("config.php");
+
   /* Convertion des degres décimaux en degres, minutes, secondes sur les deux coordonnées d'un point
      Returns an array :   coord["latdeg"=latdeg,
                                                                 "latmin"=latmin,
