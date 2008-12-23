@@ -5,6 +5,22 @@
 #Définition de la branche
 export VLMSVNBRANCH=trunk
 
+#Racine du site web...
+export VLMDOCUMENTROOT=$VLMRACINE/vlmcode/site
+export VLMJEUROOT=$VLMRACINE/vlmcode
+
+#Répertoire de travail
+export VLMTEMP=$VLMRACINE/tmp
+
+#Chemin du binaire svn
+export VLMSVNPATH=/usr/bin/svn
+
+#Chemin du binaire PHP et autres
+export VLMPHPPATH="/opt/php/bin/php --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
+export VLMVLMCPHP=/opt/php/lib/php
+export VLMVLMCSO=/opt/php/lib/php/no-debug-non-zts-20060613
+
+##########################################
 #Le reste n'est normalement pas à modifier
 
 #Définition de la racine svn
@@ -14,21 +30,9 @@ export VLMSVNROOT=http://dev.virtual-loup-de-mer.org/svn/vlm
 export VLMSCRIPTS=$VLMRACINE/scripts
 export VLMCONF=$VLMRACINE/conf
 
-#Racine du site web...
-export VLMDOCUMENTROOT=$VLMRACINE/testing/site
-export VLMJEUROOT=$VLMRACINE/testing
-
-#Répertoire de travail
-export VLMTEMP=$VLMRACINE/tmp
-
 #Helpers pour le svn
 export VLMSVNBASE=branches/
 if test "$VLMSVNBRANCH" = "trunk"; then
   VLMSVNBASE=
 fi
 export VLMSVNFULL=$VLMSVNROOT/$VLMSVNBASE$VLMSVNBRANCH
-export VLMSVNPATH=/usr/bin/svn
-#le define sert à fixer l'include path quand on est dans le moteur
-export VLMPHPPATH="/opt/php/bin/php --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
-export VLMVLMCPHP=/opt/php/lib/php
-export VLMVLMCSO=/opt/php/lib/php/no-debug-non-zts-20060613
