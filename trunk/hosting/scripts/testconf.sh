@@ -10,3 +10,7 @@ fi
 
 source $VLMRACINE/conf/conf_script || { echo "ERREUR: votre fichier de configuration n'est pas disponible"; exit 1;}
 
+echo "Création des répertoires si nécessaire"
+
+mkdir -p $VLMJEUROOT
+mkdir -p $VLMTEMP
