@@ -5,11 +5,10 @@
 #Définition de la branche
 export VLMSVNBRANCH=trunk
 
-#Racine du site web...
-export VLMDOCUMENTROOT=$VLMRACINE/vlmcode/site
+#Racine du jeu
 export VLMJEUROOT=$VLMRACINE/vlmcode
 
-#Répertoire de travail
+#Répertoire de travail temporaire
 export VLMTEMP=$VLMRACINE/tmp
 
 #Chemin du binaire svn
