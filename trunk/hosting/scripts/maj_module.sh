@@ -87,9 +87,9 @@ case $confmodule in
     echo -n "+$confmodule: installation du wrapper dans $VLMVLMCPHP..."
     cp php/vlmc.php $VLMVLMCPHP/vlmc.php
     echo 'OK !'
-    echo -n "+$confmodule: installation du winserver dans $VLMWINDSERVERPATH..."
-    cp windserver $VLMWINDSERVERPATH/windserver
-    chmod a+rx $VLMWINDSERVERPATH/windserver
+    echo -n "+$confmodule: installation du winserver dans $VLMBIN..."
+    cp windserver $VLMBIN/windserver
+    chmod a+rx $VLMBIN/windserver
     echo 'OK !'
 
     cd $oldpwd

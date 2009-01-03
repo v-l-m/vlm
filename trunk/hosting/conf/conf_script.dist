@@ -14,8 +14,8 @@ export VLMTEMP=$VLMRACINE/tmp
 #Chemin du binaire svn
 export VLMSVNPATH=/usr/bin/svn
 
-#Chemin de stockage du binaire du windserver
-export VLMWINDSERVERPATH=$VLMRACINE/bin
+#Chemin des binaires VLM
+export VLMBIN=$VLMRACINE/bin
 
 #Chemin du binaire PHP et autres
 export VLMPHPPATH="/opt/php/bin/php --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
