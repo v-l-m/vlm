@@ -29,7 +29,7 @@ DAT=`date '+%Y%m%d'`
 LOG=log.txt
 
 updated=0
-mkdir $TMPGRIBPATH/$DAT$HH
+mkdir -p $TMPGRIBPATH/$DAT$HH
 
 cd $TMPGRIBPATH/$DAT$HH
 rm -Rf  ${PREFIX}*
