@@ -6,7 +6,7 @@
 
 PATH=$VLMBIN:$PATH
 
-source $VLMRACINE/scripts/conf_script
+source $VLMRACINE/conf/conf_script
 
 #GRIBPATH=/path/to/gribfiles/grib - fixé dans le conf_script
 GRIBPATH=$VLMGRIBS
