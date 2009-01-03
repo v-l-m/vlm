@@ -87,6 +87,11 @@ case $confmodule in
     echo -n "+$confmodule: installation du wrapper dans $VLMVLMCPHP..."
     cp php/vlmc.php $VLMVLMCPHP/vlmc.php
     echo 'OK !'
+    echo -n "+$confmodule: installation du winserver dans $VLMWINDSERVERPATH..."
+    cp windserver $VLMWINDSERVERPATH/windserver
+    chmod a+rx $VLMWINDSERVERPATH/windserver
+    echo 'OK !'
+
     cd $oldpwd
     echo "!!! ATTENTION /// VOUS DEVEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?"
     ;;
