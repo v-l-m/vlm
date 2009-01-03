@@ -46,7 +46,7 @@ $longb = deg2rad(10);
     <h1>Unit test: distance from a Point to a Line</h1>
     <ol>
       <li>From point 1 to Line A-B
-	<pre>
+        <pre>
 <?php
 printf("Point1: lat %.3f, long %.3f\n", rad2deg($lat1), rad2deg($long1));
 printf("Line A: lat %.3f, long %.3f\n", rad2deg($lata), rad2deg($longa));
@@ -60,10 +60,10 @@ printf("Distance Point1 -> Line A-B: %.3f\n", distance_to_line($lat1, $long1,
                                                                $lata, $longa, 
                                                                $latb, $longb));
 ?>
-	</pre>
+        </pre>
       </li>
       <li>From Point 2 to Line A-B
-	<pre>
+        <pre>
 <?php
 printf("Point2: lat %.3f, long %.3f\n",rad2deg($lat2), rad2deg($long2));
 printf("Line A: lat %.3f, long %.3f\n", rad2deg($lata), rad2deg($longa));
@@ -77,10 +77,10 @@ printf("Distance Point2 -> Line A-B: %.3f\n", distance_to_line($lat2, $long2,
                                                                $lata, $longa, 
                                                                $latb, $longb));
 ?>
-	</pre>
+        </pre>
       </li>
       <li>From Point 3 to Line A-B
-	<pre>
+        <pre>
 <?php
 printf("Point3: lat %.3f, long %.3f\n", rad2deg($lat3), rad2deg($long3));
 printf("Line A: lat %.3f, long %.3f\n", rad2deg($lata), rad2deg($longa));
@@ -94,7 +94,7 @@ printf("Distance Point3 -> Line A-B: %.3f\n", distance_to_line($lat3, $long3,
                                                                $lata, $longa, 
                                                                $latb, $longb));
 ?>
-	</pre>
+        </pre>
       </li>
     </ol>
     <h1>Wind Test</h1>
@@ -108,9 +108,9 @@ $long_boat    = 8.43;
 $wind_boat = new wind_info();
 
 if (in_vlm_compat_mode()) {
-	printf("VLM_COMPAT mode");
+        printf("VLM_COMPAT mode");
 } else {
-	printf("normal mode");
+        printf("normal mode");
 }
 ?>
     </p>
@@ -121,9 +121,9 @@ shm_lock_sem_construct_grib(1);
 for($i =0; $i < 40 ; $i++ ) {
     
     printf("<dt>Date: %s GMT</dt>\n", gmdate("Y-m-d:H:i:s", 
-		                     $current_time + (5 * 60 * $i)));
+                                     $current_time + (5 * 60 * $i)));
     # each 15mn
-    get_wind_info_latlong_deg_UV($lat_boat, $long_boat, 
+    VLM_get_wind_info_latlong_deg_UV($lat_boat, $long_boat, 
                                      $current_time + (5 * 60 * $i), $wind_boat);
     printf("<dd>UV Wind at lat: %.2f long: %.2f, speed %.1f angle %.1f</dd>\n",
            $lat_boat, $long_boat, $wind_boat->speed, $wind_boat->angle);
@@ -148,7 +148,7 @@ $fake_waypoint->longitude2 = deg2rad(-50);
 $fake_waypoint->type = 0;
 
 if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-47), $current_time - 1000,
-			     deg2rad(40.3), deg2rad(-47), $current_time,
+                             deg2rad(40.3), deg2rad(-47), $current_time,
                              $fake_waypoint, $crossing_time)) {
     printf("First waypoint crossed at %ld (%ld) -> %s\n",
            longp_value($crossing_time), 
@@ -159,7 +159,7 @@ if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-47), $current_time - 1000,
 }
 
 if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-49), $current_time - 1000,
-			     deg2rad(40.3), deg2rad(-49), $current_time,
+                             deg2rad(40.3), deg2rad(-49), $current_time,
                              $fake_waypoint, $crossing_time)) {
     printf("Second waypoint crossed at %ld (%ld) -> %s\n", 
            longp_value($crossing_time), 
@@ -170,7 +170,7 @@ if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-49), $current_time - 1000,
 }
 
 if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-50), $current_time - 1000,
-			     deg2rad(40.15), deg2rad(-50), $current_time,
+                             deg2rad(40.15), deg2rad(-50), $current_time,
                              $fake_waypoint, $crossing_time)) {
     printf("Third waypoint crossed at %ld (%ld) -> %s\n", 
            longp_value($crossing_time), 
@@ -181,7 +181,7 @@ if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-50), $current_time - 1000,
 }
 
 if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-50.1), $current_time -1000,
-			     deg2rad(40.15), deg2rad(-50.1), $current_time,
+                             deg2rad(40.15), deg2rad(-50.1), $current_time,
                              $fake_waypoint, $crossing_time)) {
     printf("Fourth waypoint crossed (FAILED) at %ld (%ld) -> %s\n", 
            longp_value($crossing_time), 
@@ -192,7 +192,7 @@ if ( check_waypoint_crossed( deg2rad(39.8), deg2rad(-50.1), $current_time -1000,
 }
 
 if ( check_waypoint_crossed( deg2rad(39.5), deg2rad(-49.5), $current_time -1000,
-			     deg2rad(40.5), deg2rad(-50.5), $current_time,
+                             deg2rad(40.5), deg2rad(-50.5), $current_time,
                              $fake_waypoint, $crossing_time)) {
     printf("Fifth waypoint crossed at %ld (%ld) -> %s\n", 
            longp_value($crossing_time), 
@@ -208,7 +208,7 @@ $fake_waypoint->latitude2 = deg2rad(40);
 $fake_waypoint->longitude2 = deg2rad(-50);
 
 if ( check_waypoint_crossed( deg2rad(39.5), deg2rad(-49.5), $current_time -1000,
-			     deg2rad(40.5), deg2rad(-50.5), $current_time,
+                             deg2rad(40.5), deg2rad(-50.5), $current_time,
                              $fake_waypoint, $crossing_time)) {
      printf("Sixth waypoint crossed at %ld (%ld) -> %s\n", 
             longp_value($crossing_time), 
