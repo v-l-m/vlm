@@ -17,7 +17,7 @@ echo "- les répertoires conf et scripts de VLM dans le répertoire courant: $pw
 echo "- la version $VLMSVNBASE de ces répertoires"
 echo "Vérifiez également les prérequis :"
 echo "- que la commande 'svn' est disponible. (paquet debian : subversion)"
-echo "- que php est installé (paquet debian : php5 php5-cli)" 
+echo "- que php est installé (paquets debian : php5 php5-cli php-config php5-dev)" 
 read -n1 -r -p "Tapez Ctrl-C pour stopper la procédure maintenant ou n'importe quelle touche pour continuer" key
 
 #Nettoyage
