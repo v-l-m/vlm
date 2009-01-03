@@ -15,7 +15,7 @@ fi
 echo "Vous allez installer:"
 echo "-les répertoires conf et scripts de VLM dans le répertoire courant: $pwd"
 echo "-la version $VLMSVNBASE de ces répertoires"
-echo "Vérifiez également que la commande `svn` est disponible."
+echo "Vérifiez également que la commande 'svn' est disponible."
 read -n1 -r -p "Tapez Ctrl-C pour stopper la procédure maintenant ou n'importe quelle touche pour continuer" key
 
 #Nettoyage
