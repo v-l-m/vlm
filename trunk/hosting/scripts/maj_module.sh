@@ -95,7 +95,11 @@ case $confmodule in
     cd $oldpwd
     echo "!!! ATTENTION /// VOUS DEVEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?"
     ;;
-
+    grib)
+    echo -n "+$confmodule: installation du script de récupération des gribs dans $VLMBIN..."
+    cp noaa.sh $VLMBIN/noaa.sh
+    echo 'OK !'
+    ;;
     *)
     #Tous les autres modules
     echo "+$confmodule: Pas de post déploiement"

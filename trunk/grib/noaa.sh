@@ -4,9 +4,9 @@
 # [1] <http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/>
 # It generates an interim grib to be retrieved until the full version is available.
 
-PATH=$VLMBIN:$PATH
-
 source $VLMRACINE/conf/conf_script
+
+PATH=$VLMBIN:$PATH
 
 #GRIBPATH=/path/to/gribfiles/grib - fixé dans le conf_script
 GRIBPATH=$VLMGRIBS
