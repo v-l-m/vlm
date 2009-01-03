@@ -1,0 +1,10 @@
+Ce module est destiné à traiter les sources de données externe pour VLM
+
+Il requiert les outils suivants
+* cnvgrib (du noaa)
+* windserver (de lib/vlm-c)
+
+Il requiert les variables d'environnement suivantes:
+* VLMRACINE
+
+Une example de crontab est fourni (crontab.sample). Le crontab doit comporter l'affectation de VLMRACINE.

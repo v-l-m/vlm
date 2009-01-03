@@ -4,10 +4,14 @@
 # [1] <http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/>
 # It generates an interim grib to be retrieved until the full version is available.
 
-# PATH=/path-to-cnvgrib-and-windserver-if-needed:$PATH
+PATH=$VLMBIN:$PATH
 
-GRIBPATH=/path/to/gribfiles/grib
-TMPGRIBPATH=/path/to/gribfiles/tmpgrib
+source $VLMRACINE/scripts/conf_script
+
+#GRIBPATH=/path/to/gribfiles/grib - fixé dans le conf_script
+GRIBPATH=$VLMGRIBS
+
+TMPGRIBPATH=$GRIBPATH/tmpgrib
 
 PREFIX=gfs_NOAA
 TIME_THRESHOLD=09
@@ -44,23 +48,23 @@ for TSTAMP in `echo $allindexes` ; do
     GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
     let retry=1
     while [ $retry -gt 0 ]; do
-	wget --waitretry 600 -nc -c ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
-        let retry=$?
-	if [ $retry -gt 0 ] ; then 
-	    sleep 30
-	fi
+      wget --waitretry 600 -nc -c ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
+      let retry=$?
+      if [ $retry -gt 0 ] ; then 
+        sleep 30
+      fi
     done
     echo  $DAT $GRIBFILE downloaded... >> $LOG 2>&1
     cnvgrib -g21 $GRIBFILE $GRIBFILE.grib1
     echo $GRIBFILE converted >> $LOG 2>&1
     cat $GRIBFILE.grib1 >> ${PREFIX}-${DAT}${HH}.grb
     if [ $TSTAMP -gt $TIME_THRESHOLD ]; then
-	if [ ! -f $GRIBPATH/$INTERIM_NAME ]; then
-	    cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_NAME
-	fi
-	# we change the weather now
-	windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
-	updated=1
+    if [ ! -f $GRIBPATH/$INTERIM_NAME ]; then
+      cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_NAME
+    fi
+  # we change the weather now
+  windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
+  updated=1
     fi
 done
 
