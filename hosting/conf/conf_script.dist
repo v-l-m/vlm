@@ -18,6 +18,11 @@ export VLMSVNPATH=/usr/bin/svn
 export VLMPHPPATH="/opt/php/bin/php --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
 export VLMVLMCPHP=/opt/php/lib/php
 export VLMVLMCSO=/opt/php/lib/php/no-debug-non-zts-20060613
+#DEBIAN:
+#export VLMPHPPATH="/usr/bin/php --define include_path=.:/usr/share/php5:$VLMJEUROOT/lib/phpcommon"
+#export VLMVLMCPHP=/usr/share/php5
+#export VLMVLMCSO=/usr/lib/php5/20060613
+
 
 ##########################################
 #Le reste n'est normalement pas à modifier
