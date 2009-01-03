@@ -15,3 +15,9 @@ mkdir -p $VLMJEUROOT
 mkdir -p $VLMTEMP
 mkdir -p $VLMVLMCPHP
 mkdir -p $VLMVLMCSO
+mkdir -p $VLMGRIBS
+mkdir -p $VLMWINDSERVERPATH
+
+echo "N'oubliez pas de créer si nécessaire les liens symboliques :"
+echo "- vers $VLMVLMCPHP/vlmc.php"
+echo "- vers $VLMVLMCSO/vlmc.so"
