@@ -2,8 +2,13 @@
 
 # init script, be sure to call this before cron and apache are started
 
-export PATH=/path/to/windserver:$PATH
-GRIBPATH=/path/to/grib/files
+#FIXER VLMRACINE ici s'il n'est pas défini comme variable d'environnement à ce stade.
+#VLMRACINE=/path/to/vlmracine
+
+source $VLMRACINE/conf/conf_script
+
+export PATH=$VLMBIN:$PATH
+GRIBPATH=$VLMGRIBS
 LATEST=latest.grb
 
 case "$1" in
