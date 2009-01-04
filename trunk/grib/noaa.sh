@@ -77,8 +77,8 @@ fi
 # then cleanup
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
-rm $GRIBPATH/latest.24.grb
-ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/latest.24.grb
+rm $GRIBPATH/latest.grb
+ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/latest.grb
 mv $LOG $GRIBPATH/
 rm -Rf $TMPGRIBPATH/$DAT$HH
 
