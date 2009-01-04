@@ -57,7 +57,7 @@ array(
 	  "satellite" => "Satellite map of the Atlantic (Weather Channel)",
 	  "faqtitle" =>"Here is the FAQ of Virtual Loup-de-Mer.",
 	  "q1" => "What is Virtual Loup-De-Mer?",
-	  "a1" => "It's a web-based real-time Sailboat-routing simulation. It uses real weather data (data for wind strength and direction updated every 3 hours - GMT 0h30, 3h30...+ 3 minutes). Wind is interpolated from H to H+3 taking attention of the time now between H and to H+3 and of boats position within a 1&deg; square. Winds are the same as in UGRIB (http://grib.us), and have are this time 35 minutes later than in Ugrib. Boat polar charts are similar to real boats, boat speed and direction are updated every 10 minutes (or 5 if less than 50 boats racing). Races will be organised frequently.",
+	  "a1" => "It's a web-based real-time Sailboat-routing simulation. It uses real weather data (data for wind strength and direction are updated every 6 hours - GMT 3h40, 9h40, 15h40 & 21h40). GRIB file is available here: http://grib.virtual-loup-de-mer.org/ GRIB files contains wind info in 3hour steps and 0.5° grid and is interpolated to be used in the game (only wind info at 1° grid is used). Boat polar charts are similar to real boats, boat speed and direction are updated every 5 minutes (or less in some very short races). Races will be organised frequently.",
 	      "q2" => "Is it Free Software?",
 	      "a2" => "Yes. The source code (PHP/Mysql/XHTML) will soon be available for redistribution and modification under the conditions of the General Public License. To learn more about free software, please consult <a href=\"http://www.gnu.org/philosophy/\">this site</a> ",
 	      "q3" => "How do I play?",
