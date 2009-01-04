@@ -16,6 +16,7 @@ TMPGRIBPATH=$GRIBPATH/tmpgrib
 PREFIX=gfs_NOAA
 TIME_THRESHOLD=09
 MAX_TIME=24
+LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
 
 if [ $MAX_TIME -lt 12 ]; then
@@ -77,8 +78,8 @@ fi
 # then cleanup
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
-rm $GRIBPATH/latest.grb
-ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/latest.grb
+rm $GRIBPATH/$LATEST
+ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/$LATEST
 mv $LOG $GRIBPATH/
 rm -Rf $TMPGRIBPATH/$DAT$HH
 
