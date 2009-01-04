@@ -45,9 +45,9 @@ echo " "
 echo "+Post-déploiement, mise en place de droits et de la configuration... pour $confmodule ..."
 
 case $confmodule in
-#    base)
-#    Pas de post déploiement pour l'instant
-#    ;;
+    #base)
+    #Pas de post déploiement pour l'instant
+    #;;
     site)
     echo -n "+$confmodule: Constitution et copie du fichier de version..."
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt
