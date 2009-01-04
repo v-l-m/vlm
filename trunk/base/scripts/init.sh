@@ -5,6 +5,8 @@ source $VLMRACINE/conf/conf_base
 echo "CREATE USER '$DBUSER' IDENTIFIED BY '$DBPASSWORD';" > init.sql.tmp
 echo "CREATE DATABASE $DBNAME ;" >> init.sql.tmp
 echo "GRANT ALL ON $DBNAME.* TO '$DBUSER' ;" >> init.sql.tmp
+echo "CREATE DATABASE temporary ;" >> init.sql.tmp
+echo "GRANT ALL ON temporary.* TO '$DBUSER' ;" >> init.sql.tmp
 
 echo "Tapez votre mot de passe root"
 mysql -u root -p < init.sql.tmp
