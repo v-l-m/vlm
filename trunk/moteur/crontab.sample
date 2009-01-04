@@ -1,0 +1,3 @@
+# Moteur toutes les 5 minutes
+VLMRACINE=/base/de/vlm
+*/5 * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm.sh
