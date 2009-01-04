@@ -18,7 +18,7 @@ export VLMSVNPATH=/usr/bin/svn
 export VLMBIN=$VLMRACINE/bin
 
 #Chemin du binaire PHP et autres
-export VLMPHPPATH="/opt/php/bin/php --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
+export VLMPHPPATH="/opt/php/bin/php --define extension=vlmc.so --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
 export VLMVLMCPHP=$VLMCRACINE/bin/lib
 export VLMVLMCSO=$VLMCRACINE/bin/lib
 #DEBIAN:
