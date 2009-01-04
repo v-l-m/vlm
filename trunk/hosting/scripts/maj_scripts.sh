@@ -14,3 +14,4 @@ if test $? -ne 0 ; then
 fi
 
 cp $VLMTEMP/hosting/scripts/*.sh $VLMSCRIPTS/
+cp $VLMTEMP/hosting/conf/* $VLMCONF/
