@@ -1,5 +1,5 @@
 /**
- * $Id: grib.c,v 1.23 2008/07/05 21:37:26 ylafon Exp $
+ * $Id: grib.c,v 1.24 2009-01-05 09:20:47 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -380,7 +380,7 @@ winds **read_gribs(int *nb_prevs) {
     printf("Time: %ld", gribtime);
 #endif /* DEBUG */
     if (PDS_ForecastTimeUnit(pds) == HOUR) {
-      gribtime += PDS_P2(pds) * 3600;
+      gribtime += (PDS_P1(pds)*256 + PDS_P2(pds)) * 3600;
     } else {
       printf("Unknown forecat time unit %d, contact maintainer\n", 
 	     PDS_ForecastTimeUnit(pds));
