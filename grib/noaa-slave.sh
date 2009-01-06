@@ -4,17 +4,22 @@
 # [1] <http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/>
 # It generates an interim grib to be retrieved until the full version is available.
 
-# PATH=/path-to-cnvgrib-and-windserver-if-needed:$PATH
+source $VLMRACINE/conf/conf_script
 
-GRIBPATH=/path/to/gribfiles/grib
-TMPGRIBPATH=/path/to/gribfiles/tmpgrib
+PATH=$VLMBIN:$PATH
 
-GRIBURLPATH=http://www.example.com/grib
-TMPGRIBURLPATH=http://www.example.com/grib
+#GRIBPATH=/path/to/gribfiles/grib - fixé dans le conf_script
+GRIBPATH=$VLMGRIBS
+
+TMPGRIBPATH=$GRIBPATH/tmpgrib
+
+GRIBURLPATH=$VLMGRIBSURL
+TMPGRIBURLPATH=$VLMGRIBSURL
 
 PREFIX=gfs_NOAA
 TIME_THRESHOLD=09
 MAX_TIME=24
+LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
 
 HH=$1
@@ -51,8 +56,7 @@ rm $GRIBPATH/$PREFIX*${HH}.grb
 
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
-rm $GRIBPATH/latest.24.grb
-ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/latest.24.grb
+rm $GRIBPATH/$LATEST
+ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/$LATEST
 mv $LOG $GRIBPATH/
 rm -Rf $TMPGRIBPATH/$DAT$HH
-

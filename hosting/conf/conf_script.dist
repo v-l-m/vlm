@@ -27,6 +27,7 @@ export VLMVLMCSO=$VLMCRACINE/bin/lib
 
 #Chemin vers le stockage des gribs
 export VLMGRIBS=$VLMRACINE/gribs
+export VLMGRIBSURL=http://grib.example.com
 
 ##########################################
 #Le reste n'est normalement pas à modifier
