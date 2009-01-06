@@ -98,6 +98,7 @@ case $confmodule in
     grib)
     echo -n "+$confmodule: installation du script de récupération des gribs dans $VLMBIN..."
     cp $destmodulepath/noaa.sh $VLMBIN/noaa.sh
+    cp $destmodulepath/noaa-slave.sh $VLMBIN/noaa-slave.sh
     echo 'OK !'
     ;;
     *)
