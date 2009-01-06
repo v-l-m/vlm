@@ -29,7 +29,7 @@ LOG=log.txt
 interim=0
 updated=0
 
-mkdir $TMPGRIBPATH/$DAT$HH
+mkdir -p $TMPGRIBPATH/$DAT$HH
 
 cd $TMPGRIBPATH/$DAT$HH
 rm -Rf  ${PREFIX}*
@@ -37,18 +37,18 @@ declare -i retry=1
 
 while [ $updated = 0 ]; do
     if [ $interim = 0 ]; then
-	wget $TMPGRIBURLPATH/$INTERIM_NAME >>$LOG 2>&1
-	if [ $? -eq 0 ]; then
-	    $interim=1
-	    windserver $INTERIM_NAME >>$LOG 2>&1
-	fi
+  wget $TMPGRIBURLPATH/$INTERIM_NAME >>$LOG 2>&1
+  if [ $? -eq 0 ]; then
+      interim=1
+      windserver $INTERIM_NAME >>$LOG 2>&1
+  fi
     fi
     wget $GRIBURLPATH/$PREFIX-${DAT}${HH}.grb >>$LOG 2>&1
     if [ $? -eq 0 ]; then
-	$updated=1
-	windserver $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
+      updated=1
+      windserver $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
     else
-	sleep 10
+      sleep 10
     fi
 done
 
