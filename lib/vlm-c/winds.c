@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.19 2009-01-07 10:43:27 ylafon Exp $
+ * $Id: winds.c,v 1.20 2009-01-07 14:36:14 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -525,7 +525,7 @@ time_t get_prevision_time_index(int gribindex) {
   
   windtable = &global_vlmc_context->windtable;
   if (windtable->wind == NULL || (gribindex < 0)
-      || (gribindex >= windtable->nb_prebs)) {
+      || (gribindex >= windtable->nb_prevs)) {
     return 0;
   }
   return windtable->wind[gribindex]->prevision_time;
