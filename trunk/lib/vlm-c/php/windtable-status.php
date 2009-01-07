@@ -1,6 +1,6 @@
 <?php
 
-# $Id: windtable-status.php,v 1.1 2009-01-07 14:36:37 ylafon Exp $
+# $Id: windtable-status.php,v 1.2 2009-01-07 15:09:48 ylafon Exp $
 #
 # (c) 2008 by Yves Lafon
 #      See COPYING file for copying and redistribution conditions.
@@ -21,16 +21,32 @@ include("vlmc.php");
 $global_vlmc_context = new vlmc_context();
 global_vlmc_context_set($global_vlmc_context);
 
+$current_time = time();
+
+header('Content-Type: application/xhtml+xml; charset=UTF-8');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>VLM-C windtable status (GRIB using shared memory)</title>
+    <style type="text/css">
+      <![CDATA[
+	     .after {
+		 background-color: #99FF99;
+		 }
+	     .before {
+		 background-color: #FFFF99;
+		 }
+	 ]]>
+    </style>
   </head>
   <body>
-    <p id="currenttime">
-      <?php echo gmdate("Y-m-d:H:i:s", time()) ?>
+    <h1>Windtable status check</h1>
+    <p id="currenttimeblurb">
+      Current time: <span id="currenttime">
+      <?php echo gmdate("Y-m-d:H:i:s", $current_time) ?>
+    </span>
     </p>
     <?php
       shm_lock_sem_construct_grib(1);
@@ -40,22 +56,30 @@ if ( $nb_grib == 0 ) {
   printf ("<p id=\"alertgrib\">NO GRIB FOUND</p>");
 } else {
     ?>
-    <p id="nbgrib">
+    <p id="nbgribblurb">
+      Found <span id="nbgrib">
       <?php echo $nb_grib ?>
+    </span> GRIB entries.
     </p>
     <ol id="gribdates">
       <?php
 	for ($i=0; $i < $nb_grib; $i++) { 
+	  $grib_time = get_prevision_time_index($i);
       ?>
-      <li class="gribtime" id="<?php echo "gribtimeentry_".$i ?>">
-      <?php echo  gmdate("Y-m-d:H:i:s", time()) ?>
+      <li class="gribtime">
+	<p id="dump_<?php echo $i ;?>">Grib time for entry number <span class="gribnum"><?php echo $i; ?></span>:
+	  <span id="gribtimeentry_<?php echo $i; ?>" class="<?php echo ($grib_time < $current_time) ? "before" : "after"; ?>">
+	  <?php echo gmdate("Y-m-d:H:i:s", $grib_time); ?>
+	</span>
+	</p>
       </li>
-    <?php
+      <?php
 	}
-    ?>
+      ?>
     </ol>
-  <?php
-	shm_unlock_sem_destroy_grib(1);
-  ?>
+    <?php
+      }
+shm_unlock_sem_destroy_grib(1);
+    ?>
   </body>
 </html>
