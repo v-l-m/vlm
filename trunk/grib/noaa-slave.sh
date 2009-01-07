@@ -37,18 +37,22 @@ declare -i retry=1
 
 while [ $updated = 0 ]; do
     if [ $interim = 0 ]; then
-  wget $TMPGRIBURLPATH/$INTERIM_NAME >>$LOG 2>&1
-  if [ $? -eq 0 ]; then
-      interim=1
-      windserver $INTERIM_NAME >>$LOG 2>&1
-  fi
+        wget $TMPGRIBURLPATH/$INTERIM_NAME >>$LOG 2>&1
+        if [ $? -eq 0 ]; then
+            interim=1
+            windserver $INTERIM_NAME >>$LOG 2>&1
+        fi
     fi
     wget $GRIBURLPATH/$PREFIX-${DAT}${HH}.grb >>$LOG 2>&1
     if [ $? -eq 0 ]; then
-      updated=1
-      windserver $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
+        updated=1
+        windserver $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
     else
-      sleep 10
+        if [ $interim -eq 0 ]; then
+            sleep 1
+        else
+            sleep 10
+        fi
     fi
 done
 
