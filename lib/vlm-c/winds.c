@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.18 2008-11-26 18:06:22 ylafon Exp $
+ * $Id: winds.c,v 1.19 2009-01-07 10:43:27 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -508,4 +508,25 @@ time_t get_min_prevision_time() {
     return 0;
   }
   return windtable->wind[0]->prevision_time;
+}
+
+int get_prevision_count() {
+  winds_prev *windtable;
+  
+  windtable = &global_vlmc_context->windtable;
+  if (windtable->wind == NULL) {
+    return 0;
+  }
+  return windtable->nb_prevs;
+}
+
+time_t get_prevision_time_index(int gribindex) {
+  winds_prev *windtable;
+  
+  windtable = &global_vlmc_context->windtable;
+  if (windtable->wind == NULL || (gribindex < 0)
+      || (gribindex >= windtable->nb_prebs)) {
+    return 0;
+  }
+  return windtable->wind[gribindex]->prevision_time;
 }
