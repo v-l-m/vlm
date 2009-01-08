@@ -22,8 +22,8 @@ $global_vlmc_context = new vlmc_context();
 global_vlmc_context_set($global_vlmc_context);
 
 $current_time = time();
-
 header('Content-Type: application/xhtml+xml; charset=UTF-8');
+header('Cache-Control: max-age=1');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,20 +32,27 @@ header('Content-Type: application/xhtml+xml; charset=UTF-8');
     <title>VLM-C windtable status (GRIB using shared memory)</title>
     <style type="text/css">
       <![CDATA[
-	     .after {
-		 background-color: #99FF99;
-		 }
-	     .before {
-		 background-color: #FFFF99;
-		 }
-	 ]]>
+             .after {
+                 background-color: #99FF99;
+                 }
+             .before {
+                 background-color: #FFFF99;
+                 }
+             li, li > p {
+                 margin-top: 0px;
+                 margin-bottom: 0px;
+             }
+	     .hidden {
+		 display: none;
+	     }
+         ]]>
     </style>
   </head>
   <body>
     <h1>Windtable status check</h1>
     <p id="currenttimeblurb">
       Current time: <span id="currenttime">
-      <?php echo gmdate("Y-m-d:H:i:s", $current_time) ?>
+      <?php echo gmdate("Y-m-d:H:i:s", $current_time) ?> GMT
     </span>
     </p>
     <?php
@@ -63,18 +70,24 @@ if ( $nb_grib == 0 ) {
     </p>
     <ol id="gribdates">
       <?php
-	for ($i=0; $i < $nb_grib; $i++) { 
-	  $grib_time = get_prevision_time_index($i);
+        for ($i=0; $i < $nb_grib; $i++) { 
+          $grib_time = get_prevision_time_index($i);
       ?>
       <li class="gribtime">
-	<p id="dump_<?php echo $i ;?>">Grib time for entry number <span class="gribnum"><?php echo $i; ?></span>:
-	  <span id="gribtimeentry_<?php echo $i; ?>" class="<?php echo ($grib_time < $current_time) ? "before" : "after"; ?>">
-	  <?php echo gmdate("Y-m-d:H:i:s", $grib_time); ?>
-	</span>
-	</p>
+        <p id="dump_<?php echo $i ;?>">Grib time for entry number <span class="gribnum"><?php
+        if ($i>9) {
+          echo $i;
+        } else {
+          printf ("&nbsp;&nbsp;%d", $i);
+        } 
+        ?></span>:
+          <span id="gribtimeentry_<?php echo $i; ?>" class="<?php echo ($grib_time < $current_time) ? "before" : "after"; ?>">
+          <?php echo gmdate("Y-m-d:H:i:s", $grib_time); ?> GMT
+	  </span> <span class="hidden" id="gribrawtimeentry_<?php echo $i; ?>"><?php echo $grib_time ?></span>
+        </p>
       </li>
       <?php
-	}
+        }
       ?>
     </ol>
     <?php
