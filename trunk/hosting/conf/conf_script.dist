@@ -5,6 +5,9 @@
 #Définition de la branche
 export VLMSVNBRANCH=trunk
 
+#Utilisateur en charge de recuperer les gribs
+export VLMGRIBUSER=devvlm
+
 #Racine du jeu
 export VLMJEUROOT=$VLMRACINE/vlmcode
 
