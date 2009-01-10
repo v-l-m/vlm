@@ -1,35 +1,35 @@
 <script type="text/javascript">
 //<![CDATA[
 var speed=<?php
-	echo $usersObj->boatspeed ;
-	?>;
+  echo $usersObj->boatspeed ;
+  ?>;
 var boatheading = <?php
-	//echo $usersObj->users->boatheading ;
-	echo $boatdir ;
-	?>;
+  //echo $usersObj->users->boatheading ;
+  echo $boatdir ;
+  ?>;
 var wspeed = <?php
-	echo $usersObj->wspeed;
-	?>;
+  echo $usersObj->wspeed;
+  ?>;
 var wheading =<?php
-	echo $usersObj->wheading ;
-	?>;
+  echo $usersObj->wheading ;
+  ?>;
 var angle = <?php
            if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-	       $baww = round($usersObj->users->pilotparameter,1) ;
-	   } else {
-	       $twa = $usersObj->wheading - $usersObj->users->boatheading;
-	       if ($twa < -180 ) $twa +=360;
-	       if ($twa > 180 ) $twa -=360;
-	       if ( $twa > 0 ) {
-	           $amure = "tribord";
+         $baww = round($usersObj->users->pilotparameter,1) ;
+     } else {
+         $twa = $usersObj->wheading - $usersObj->users->boatheading;
+         if ($twa < -180 ) $twa +=360;
+         if ($twa > 180 ) $twa -=360;
+         if ( $twa > 0 ) {
+             $amure = "tribord";
                    $baww = round($usersObj->boatanglewithwind,1) ;
-	       } else {
-	           $amure = "babord";
+         } else {
+             $amure = "babord";
                    $baww =  -round($usersObj->boatanglewithwind,1) ;
-	       }
-	   }
-	   echo $baww;
-	?>;
+         }
+     }
+     echo $baww;
+  ?>;
 
 /*
 function expertmode()
@@ -51,62 +51,62 @@ function beginnermode()
 
 function increment()
 {
-	boatheading=document.autopilot.boatheading.value;
-	boatheading++;
-	if ( boatheading >=360 ) boatheading -= 360;
-	document.autopilot.boatheading.value = parseInt(boatheading);
+  boatheading=document.autopilot.boatheading.value;
+  boatheading++;
+  if ( boatheading >=360 ) boatheading -= 360;
+  document.autopilot.boatheading.value = parseInt(boatheading);
 }
 
 function decrement()
 {
-	boatheading=document.autopilot.boatheading.value;
-	boatheading--;
-	if ( boatheading <0 ) boatheading += 360;
-	document.autopilot.boatheading.value = parseInt(boatheading);
+  boatheading=document.autopilot.boatheading.value;
+  boatheading--;
+  if ( boatheading <0 ) boatheading += 360;
+  document.autopilot.boatheading.value = parseInt(boatheading);
 }
 
 function incrementAngle()
 {
-	angle=document.angle.pilotparameter.value;
-	angle++ ;
-	if ( angle >180 ) angle -= 360;
-	if ( angle <-180 ) angle += 360;
-	document.angle.pilotparameter.value = parseInt(angle);
-	document.angle.pim.value = parseInt(angle);
+  angle=document.angle.pilotparameter.value;
+  angle++ ;
+  if ( angle >180 ) angle -= 360;
+  if ( angle <-180 ) angle += 360;
+  document.angle.pilotparameter.value = parseInt(angle);
+  document.angle.pim.value = parseInt(angle);
 }
 
 function decrementAngle()
 {
-	angle=document.angle.pilotparameter.value;
-	angle--;
-	if ( angle >180 ) angle -= 360;
-	if ( angle <-180 ) angle += 360;
-	document.angle.pilotparameter.value = parseInt(angle);
-	document.angle.pim.value = parseInt(angle);
+  angle=document.angle.pilotparameter.value;
+  angle--;
+  if ( angle >180 ) angle -= 360;
+  if ( angle <-180 ) angle += 360;
+  document.angle.pilotparameter.value = parseInt(angle);
+  document.angle.pim.value = parseInt(angle);
 }
 
 function tack()
 {
-	document.angle.pilotparameter.value = -(document.angle.pilotparameter.value) ;
-	document.angle.pim.value = (document.angle.pilotparameter.value) ;
+  document.angle.pilotparameter.value = -(document.angle.pilotparameter.value) ;
+  document.angle.pim.value = (document.angle.pilotparameter.value) ;
 }
 
 
 function updateBoatheading()
 {
-	boatheading = document.autopilot.boatheading.value;
+  boatheading = document.autopilot.boatheading.value;
 }
 
 //js conversion from a php function
 /* 
     The PHP CODE :
- 	 function angleDifference($a, $b)
- 	 {
+    function angleDifference($a, $b)
+    {
            while ( $a >= 360 ) $a-=360;
- 	   $b += 180; while ( $b >= 360 ) $b-=360;
+      $b += 180; while ( $b >= 360 ) $b-=360;
 
- 	   return abs($a - $b);
- 	 }
+      return abs($a - $b);
+    }
 */
 function angleDifference(a, b)
 {
@@ -127,9 +127,9 @@ function angleDifference(a, b)
 
 function updateSpeed()
 {
-	speed = findboatspeed(angleDifference(boatheading, wheading)) ;
-	//document.write('WH = '+wheading+ ' AD = '+ angleDifference(boatheading, wheading) +' BH = '+boatheading+ ' field = '+ document.autopilot.boatheading.value +' speed ='+speed);
-	document.autopilot.speed.value = Math.round(speed*100)/100; //trunk it
+  speed = findboatspeed(angleDifference(boatheading, wheading)) ;
+  //document.write('WH = '+wheading+ ' AD = '+ angleDifference(boatheading, wheading) +' BH = '+boatheading+ ' field = '+ document.autopilot.boatheading.value +' speed ='+speed);
+  document.autopilot.speed.value = Math.round(speed*100)/100; //trunk it
 }
 
 //from a linear chart and an angle find speed
@@ -143,30 +143,30 @@ function boatspeedfromlinearchart(chart, angle)
   for (var cur in chart.hashtable)
     {
       if (angle<=cur)
-	break;
+  break;
       prev = cur;
     }
 
   //in every of them, cur refers to angle and hashtable[cur] to speed
   //find medium boatspeed value
   return(
-	 (chart.get(prev) + (angle - prev)
-	  * (chart.get(cur) - chart.get(prev))
-	  / (cur - prev)));
+   (chart.get(prev) + (angle - prev)
+    * (chart.get(cur) - chart.get(prev))
+    / (cur - prev)));
 }
 
 
 function boatspeedfromcharts(windInf, windSup, windInfBoatSpeed,
-			       windSupBoatSpeed, windspeed, boatangle)
+             windSupBoatSpeed, windspeed, boatangle)
 {
 
       if (windInf != windSup)
-	return(
-	       windInfBoatSpeed + (windspeed - windInf)
-	       * (windSupBoatSpeed - windInfBoatSpeed)
-	       / (windSup - windInf));
+  return(
+         windInfBoatSpeed + (windspeed - windInf)
+         * (windSupBoatSpeed - windInfBoatSpeed)
+         / (windSup - windInf));
       else
-	return windInfBoatSpeed;
+  return windInfBoatSpeed;
 
  }
 
@@ -185,13 +185,13 @@ function findboatspeed(angledifference)
 
       //too much complicated if 180
       <?php
-	$windinf = windInf($usersObj->wspeed, $usersObj->users->boattype);
-	$windsup =  windSup($usersObj->wspeed, $usersObj->users->boattype ) ;
-	if (empty($windsup) ) //if outside of the charts (sup), goes to the higher existant value
-	{
-	//hack, should be done by function
-		$windsup = $windinf;
-	}
+  $windinf = windInf($usersObj->wspeed, $usersObj->users->boattype);
+  $windsup =  windSup($usersObj->wspeed, $usersObj->users->boattype ) ;
+  if (empty($windsup) ) //if outside of the charts (sup), goes to the higher existant value
+  {
+  //hack, should be done by function
+    $windsup = $windinf;
+  }
       ?>
 
       windInf =  <?php echo $windinf;?>;
@@ -202,12 +202,12 @@ function findboatspeed(angledifference)
     <?php
       foreach ( windChart($windinf, $usersObj->users->boattype) as $key=>$value )
       {
-	echo "windInfChart.put(\"$key\", $value);\n";
+  echo "windInfChart.put(\"$key\", $value);\n";
 
       }
       foreach ( windChart($windsup, $usersObj->users->boattype) as $key=>$value )
       {
-	echo "windSupChart.put(\"$key\", $value);\n";
+  echo "windSupChart.put(\"$key\", $value);\n";
       }
     ?>
 
@@ -218,16 +218,16 @@ function findboatspeed(angledifference)
 
 
   return boatspeedfromcharts(
-			       windInf, windSup,
-			       windInfBoatSpeed, windSupBoatSpeed, wspeed,
-			       angledifference);
+             windInf, windSup,
+             windInfBoatSpeed, windSupBoatSpeed, wspeed,
+             angledifference);
 
 }
 
 function updateUserPref()
 {
-	val = document.mercator.maparea.value;
-	alert(val)
+  val = document.mercator.maparea.value;
+  alert(val)
 }
 //]]>
 </script>
