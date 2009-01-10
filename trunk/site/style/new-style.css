@@ -158,13 +158,13 @@ body
 }
 
 #footer{
-	clear: both;
-	width: 740px;
-	height: 30px;
-	margin: 0 auto;
-	padding: 0;
-	/*background: url(img/footer.png) no-repeat center;*/
-	text-align: center;
+  clear: both;
+  width: 740px;
+  height: 30px;
+  margin: 0 auto;
+  padding: 0;
+  /*background: url(img/footer.png) no-repeat center;*/
+  text-align: center;
 }
 
 
@@ -236,19 +236,19 @@ img.map
 
 img.babord
 {
-	margin-top: 1px;
-	border: 3px solid #E02020;
+  margin-top: 1px;
+  border: 3px solid #E02020;
 }
 
 img.tribord
 {
-	margin-top: 1px;
-	border: 3px solid #00A020;
+  margin-top: 1px;
+  border: 3px solid #00A020;
 }
 
 img
 {
-	border: 0;
+  border: 0;
 }
 
 
@@ -489,10 +489,10 @@ td.pilototo
 }
 
 input.blue {
-	border:0px solid black;
-	#font-family:"Courier",sans-serif;
-	background-color: #90A0A0;
-	color:black;
+  border:0px solid black;
+  #font-family:"Courier",sans-serif;
+  background-color: #90A0A0;
+  color:black;
 }
 
 
