@@ -67,79 +67,79 @@ $usersObj = new users($idusers);
     function pilototoList($status = PILOTOTO_PENDING)
       function pilototoDelete($taskid)
         function pilototoAdd($time, $pim, $pip)
-	  function pilototoUpdate($taskid, $time, $pim, $pip)
-	  */
+    function pilototoUpdate($taskid, $time, $pim, $pip)
+    */
 $action=$_POST['action'];
 if ( !empty($action)) {
    // Action donnée, on exécute l'action
        switch ($action) {
             case $strings[$lang]["pilototo_prog_add"]:
-	         $time=$_POST['time'];
-	         $pim=$_POST['pim'];
+           $time=$_POST['time'];
+           $pim=$_POST['pim'];
                  $pip=$_POST['pip'];
-//		 if ( $pim == 3 || $pim == 4 ) {
-//		      $pip=0;
-//		 } else {
-//	              $pip=$_POST['pip'];
-//		 }
-		 if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
-		      if ( $pim <1 || $pim >4) {
-		         echo "ERROR ADD : PIM between 1 and 4 please.";
-		      //} else if ( $time < time() ) {
-		      //   echo "ERROR ADD : TIME is passed...(" .$time . "/" . gmdate(time()) . ")" ;
-		      } else if ( ( $pim == 1 ) && ($pip <0 or $pip >359)  ) {
-		         echo "ERROR ADD : With PIM=1, PIP should be between 0 and 359 please";
-		      } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
-		         echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
-		      } else if (  ( $pim == 3 or $pim ==4 ) 
-		             &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )  
-			        ) {
-		         echo "ERROR ADD : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
-		      } else {
+//     if ( $pim == 3 || $pim == 4 ) {
+//          $pip=0;
+//     } else {
+//                $pip=$_POST['pip'];
+//     }
+     if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
+          if ( $pim <1 || $pim >4) {
+             echo "ERROR ADD : PIM between 1 and 4 please.";
+          //} else if ( $time < time() ) {
+          //   echo "ERROR ADD : TIME is passed...(" .$time . "/" . gmdate(time()) . ")" ;
+          } else if ( ( $pim == 1 ) && ($pip <0 or $pip >359)  ) {
+             echo "ERROR ADD : With PIM=1, PIP should be between 0 and 359 please";
+          } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
+             echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
+          } else if (  ( $pim == 3 or $pim ==4 ) 
+                 &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )  
+              ) {
+             echo "ERROR ADD : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
+          } else {
                          $rc=$usersObj->pilototoAdd($time, $pim, $pip);
-		      }
-		 } else {
-		      printf ("ERROR ADD: Mandatory Param missing... time=%s, pim=%s, pip=%s\n", $time, $pim, $pip);
-		 }
+          }
+     } else {
+          printf ("ERROR ADD: Mandatory Param missing... time=%s, pim=%s, pip=%s\n", $time, $pim, $pip);
+     }
                  break;
             case $strings[$lang]["pilototo_prog_upd"]:
-	         $taskid=$_POST['taskid'];
-	         $time=$_POST['time'];
-	         $pim=$_POST['pim'];
-	         $pip=$_POST['pip'];
-//		 if ( $pim == 3 || $pim == 4 ) {
-//		      $pip=0;
-//		 } else {
-//	              $pip=$_POST['pip'];
-//		 }
-		 if ( !empty($taskid) && !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip ==0 ) ) {
-		      if ( $pim <1 || $pim >4) {
-		         echo "ERROR : PIM between 1 and 4 please.";
-		      //} else if ( $time < gmdate(time()) ) {
-		      //   echo "ERROR ADD : TIME is passed...(" .$time . "/" . gmdate(time()) . ")" ;
-		      } else if ( ( $pim == 1 ) && ($pip <0 or $pip >359)  ) {
-		         echo "ERROR : With PIM=1, PIP should be between 0 and 359 please";
-		      } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
-		         echo "ERROR : With PIM=2, PIP should be between -180 and 180 please";
-		      } else if ( ( $pim == 3 or $pim ==4 ) && ( strlen($pip)==0 or strpos($pip, ',')==false )  ) {
-		         echo "ERROR : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE";
-		      } else {
+           $taskid=$_POST['taskid'];
+           $time=$_POST['time'];
+           $pim=$_POST['pim'];
+           $pip=$_POST['pip'];
+//     if ( $pim == 3 || $pim == 4 ) {
+//          $pip=0;
+//     } else {
+//                $pip=$_POST['pip'];
+//     }
+     if ( !empty($taskid) && !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip ==0 ) ) {
+          if ( $pim <1 || $pim >4) {
+             echo "ERROR : PIM between 1 and 4 please.";
+          //} else if ( $time < gmdate(time()) ) {
+          //   echo "ERROR ADD : TIME is passed...(" .$time . "/" . gmdate(time()) . ")" ;
+          } else if ( ( $pim == 1 ) && ($pip <0 or $pip >359)  ) {
+             echo "ERROR : With PIM=1, PIP should be between 0 and 359 please";
+          } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
+             echo "ERROR : With PIM=2, PIP should be between -180 and 180 please";
+          } else if ( ( $pim == 3 or $pim ==4 ) && ( strlen($pip)==0 or strpos($pip, ',')==false )  ) {
+             echo "ERROR : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE";
+          } else {
                          $rc=$usersObj->pilototoUpdate($taskid, $time, $pim, $pip);
-		      }
-		 } else {
-		      printf ("ERROR UPD: Mandatory Param missing... taskid=%d, time=%s, pim=%s, pip=%s\n", $taskid, $time, $pim, $pip);
-		 }
+          }
+     } else {
+          printf ("ERROR UPD: Mandatory Param missing... taskid=%d, time=%s, pim=%s, pip=%s\n", $taskid, $time, $pim, $pip);
+     }
                  break;
             case $strings[$lang]["pilototo_prog_del"]:
-	         $taskid=$_POST['taskid'];
-		 if ( !empty($taskid) ) {
+           $taskid=$_POST['taskid'];
+     if ( !empty($taskid) ) {
                       $rc=$usersObj->pilototoDelete($taskid);
-		 } else {
-		      printf ("ERROR DEL: Task id should not be empty to delete it");
-		 }
+     } else {
+          printf ("ERROR DEL: Task id should not be empty to delete it");
+     }
                  break;
-	    default:
-	}
+      default:
+  }
 }
 
 
@@ -153,22 +153,22 @@ if ( count($usersObj->pilototo) != 0) {
     $numligne=0;
     foreach ($usersObj->pilototo as $pilototo_row) {
         echo "\n<form action=pilototo.php method=post>";
-	echo "<input type=hidden name=lang value=$lang>";
+  echo "<input type=hidden name=lang value=$lang>";
              echo "<tr>";
-	     echo "<input type=hidden name=taskid value=$pilototo_row[0]>";
-	     echo "<td>
-		      <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_upd"]  .">
-		   </td>";
-	     echo "<td><input type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1]></td>";
-	     // SELECT LIST pour le type de pilote
-	     echo "<td><input type=text name=pim onKeyup=\"checkpip($numligne);\" width=1 size=1 value=$pilototo_row[2]></td>";
-	     echo "<td><input type=text name=pip width=20 size=20 value=$pilototo_row[3]></td>";
-	     echo "<td>$pilototo_row[4]
-	              <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_del"] . ">
+       echo "<input type=hidden name=taskid value=$pilototo_row[0]>";
+       echo "<td>
+          <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_upd"]  .">
+       </td>";
+       echo "<td><input type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1]></td>";
+       // SELECT LIST pour le type de pilote
+       echo "<td><input type=text name=pim onKeyup=\"checkpip($numligne);\" width=1 size=1 value=$pilototo_row[2]></td>";
+       echo "<td><input type=text name=pip width=20 size=20 value=$pilototo_row[3]></td>";
+       echo "<td>$pilototo_row[4]
+                <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_del"] . ">
                    </td>";
-	     //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
-	     echo "<td><input type=text size=25 name=gmtdate disabled value=\"" .gmdate("Y/m/d H:i:s", $pilototo_row[1]) . " GMT\"></td>";
-	     echo "<td>" . $pilototo_row[0] . "</td>";
+       //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
+       echo "<td><input type=text size=25 name=gmtdate disabled value=\"" .gmdate("Y/m/d H:i:s", $pilototo_row[1]) . " GMT\"></td>";
+       echo "<td>" . $pilototo_row[0] . "</td>";
              echo "</tr>";
         echo "</form>";
         $numligne++;
@@ -181,14 +181,14 @@ if ( $numligne < PILOTOTO_MAX_EVENTS ) {
     echo "\n<form action=pilototo.php method=POST>";
     echo "<input type=hidden name=lang value=$lang>";
     echo "<tr>
-	     <td align=center><input type=submit name=action 
-	                             value=" . $strings[$lang]["pilototo_prog_add"] . "></td>
-	     <td><input type=text name=time onKeyup=\"majhrdate($numligne);\" value=" . time() . " width=15 size=15></td>
-	     <td><input type=text name=pim  onKeyup=\"checkpip($numligne);\" width=1  size=1 ></td>
-	     <td><input type=text name=pip  width=20  size=20 ></td>
-	     <td>this line to add</td>
-	     <td><input name=gmtdate size=25 type=text disabled value=\"\"></td>
-	     <td>&nbsp;</td>
+       <td align=center><input type=submit name=action 
+                               value=" . $strings[$lang]["pilototo_prog_add"] . "></td>
+       <td><input type=text name=time onKeyup=\"majhrdate($numligne);\" value=" . time() . " width=15 size=15></td>
+       <td><input type=text name=pim  onKeyup=\"checkpip($numligne);\" width=1  size=1 ></td>
+       <td><input type=text name=pip  width=20  size=20 ></td>
+       <td>this line to add</td>
+       <td><input name=gmtdate size=25 type=text disabled value=\"\"></td>
+       <td>&nbsp;</td>
           </tr>";
     echo "</form>";
 } else {

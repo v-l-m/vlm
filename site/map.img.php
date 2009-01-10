@@ -13,43 +13,43 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
 
      $im = @imagecreate($x, $y)
          or die("Cannot Initialize new GD image stream");
-	 $blanc = imagecolorallocate($im, 255, 255, 255);
-	 $noir = imagecolorallocate($im, 0, 0, 0);
+   $blanc = imagecolorallocate($im, 255, 255, 255);
+   $noir = imagecolorallocate($im, 0, 0, 0);
 
-	 // Affichage d'un "-X-" au milieu de l'image
+   // Affichage d'un "-X-" au milieu de l'image
 
-	 imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] , $noir);
-	 imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$_GET['boat'].")" , $noir);
-	 imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
-	 imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
+   imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] , $noir);
+   imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$_GET['boat'].")" , $noir);
+   imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
+   imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
 
-	 // Affichage de l'image
+   // Affichage de l'image
          header("Content-type: image/png");
-	 imagepng($im);
-	 imagedestroy($im);
+   imagepng($im);
+   imagedestroy($im);
      exit;
 }
 
-	$maptype= htmlentities($_GET['maptype']);
+  $maptype= htmlentities($_GET['maptype']);
 
         $list= htmlentities($_GET['list']) ;
         
-	$maparea= htmlentities($_GET['maparea']);
-	if ( $maparea == "" ) {
-		$maparea=round(MAPAREA_MAX/2);
-	} else {
-		if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
-	}
-	if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX;
+  $maparea= htmlentities($_GET['maparea']);
+  if ( $maparea == "" ) {
+    $maparea=round(MAPAREA_MAX/2);
+  } else {
+    if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
+  }
+  if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX;
         setUserPref(htmlentities($_GET['boat']), "maparea" , $maparea);
 
         $maille= htmlentities($_GET['maille']);
-	if ( $maille == "" ) {
-		$maille=round(MAILLE_MAX/2);
-	} else {
-		if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
-	}
-	if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
+  if ( $maille == "" ) {
+    $maille=round(MAILLE_MAX/2);
+  } else {
+    if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
+  }
+  if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
         setUserPref(htmlentities($_GET['boat']), "mapMaille" , $maille);
 
         $idraces= htmlentities($_GET['idraces']) ;
@@ -58,52 +58,52 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
         $boat= htmlentities($_GET['boat']) ;
         $save= htmlentities($_GET['save']) ;
         $tracks= htmlentities($_GET['tracks']) ;
-	if ( $tracks == "" ) $tracks = "on";
+  if ( $tracks == "" ) $tracks = "on";
 
         $x= htmlentities($_GET['x']) ;
-	if ( $x == "" ) $x = 800;
+  if ( $x == "" ) $x = 800;
         $y= htmlentities($_GET['y']) ;
-	if ( $y == "" ) $y = 600;
+  if ( $y == "" ) $y = 600;
 
-	// Limitation de la taille de la carte pour pas péter le serveur
-	if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
+  // Limitation de la taille de la carte pour pas péter le serveur
+  if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
         setUserPref(htmlentities($_GET['boat']), "mapX" , $x);
 
-	if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
+  if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
         setUserPref(htmlentities($_GET['boat']), "mapY" , $y);
 
         $age= htmlentities($_GET['age']) ;
-	if ( $age == "" ) $age = 2;
+  if ( $age == "" ) $age = 2;
         setUserPref(htmlentities($_GET['boat']), "mapAge" , $age);
 
         $estime= htmlentities($_GET['estime']) ;
-	if ( $estime == "" ) $estime = 30;
+  if ( $estime == "" ) $estime = 30;
         setUserPref(htmlentities($_GET['boat']), "mapEstime" , $estime);
 
         $proj= htmlentities($_GET['proj']) ;
-//	$proj="carre"; 
+//  $proj="carre"; 
 
         $text= htmlentities($_GET['text']) ;
-	if ( $text == "" ) $text = "right";
+  if ( $text == "" ) $text = "right";
 
         $windtext= htmlentities($_GET['windtext']) ;
-	if ( $windtext == "" ) $windtext = "on";
+  if ( $windtext == "" ) $windtext = "on";
 
-	// Guess real map coordinates
+  // Guess real map coordinates
 
 ?>
 <html>
   <head>
     <script>
-	clicEnCours = false;
-	position_x = 250 ; 
-	position_y = 150 ;
-	netscape = false;
-	if (navigator.appName.substring(0,8) == "Netscape")
-	  {
-	  netscape = true;
-	  }
-	
+  clicEnCours = false;
+  position_x = 250 ; 
+  position_y = 150 ;
+  netscape = false;
+  if (navigator.appName.substring(0,8) == "Netscape")
+    {
+    netscape = true;
+    }
+  
         function DisplayPngByBrowser ( browser, img_path, width, height ) {
              var png_path;
              if (browser == 'Microsoft Internet Explorer') {
@@ -115,59 +115,59 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
              document.write("<img src='"+img_path+"' />");
          }
 
-	function boutonPresse()
-	  {
-	  origine_x = x - position_x;
-	  origine_y = y - position_y;
-	  clicEnCours = true;
-	  }
-	
-	function boutonRelache()
-	  {
-	  clicEnCours = false;
-	  }
-	
-	function deplacementSouris(e)
-	  {
-	  x = (netscape) ? e.pageX : event.x + document.body.scrollLeft;
-	  y = (netscape) ? e.pageY : event.y + document.body.scrollTop;
-	
-	  if (clicEnCours && document.getElementById)
-	    {
-	    position_x = x - origine_x;
-	    position_y = y - origine_y;
-	    document.getElementById("deplacable").style.left = position_x ;
-	    document.getElementById("deplacable").style.top = position_y ;
-	    }
-	  }
-	
+  function boutonPresse()
+    {
+    origine_x = x - position_x;
+    origine_y = y - position_y;
+    clicEnCours = true;
+    }
+  
+  function boutonRelache()
+    {
+    clicEnCours = false;
+    }
+  
+  function deplacementSouris(e)
+    {
+    x = (netscape) ? e.pageX : event.x + document.body.scrollLeft;
+    y = (netscape) ? e.pageY : event.y + document.body.scrollTop;
+  
+    if (clicEnCours && document.getElementById)
+      {
+      position_x = x - origine_x;
+      position_y = y - origine_y;
+      document.getElementById("deplacable").style.left = position_x ;
+      document.getElementById("deplacable").style.top = position_y ;
+      }
+    }
+  
 
-	function previousTimestamp() {
-	        vts=document.control.vts.value;
-		if ( vts >0 ) vts--;
-	        document.control.vts.value=vts;
-		//showvts();
-		for (ts=0; ts<=24 ; ts++) {
-		    vt=eval("ts" . ts);
-        	    document.getElementById(vt).style.display = 'none' ;
-		}
-		vt=eval("ts" . document.control.vts.value);
-        	document.getElementById(vt).style.display = '' ;
-	}
+  function previousTimestamp() {
+          vts=document.control.vts.value;
+    if ( vts >0 ) vts--;
+          document.control.vts.value=vts;
+    //showvts();
+    for (ts=0; ts<=24 ; ts++) {
+        vt=eval("ts" . ts);
+              document.getElementById(vt).style.display = 'none' ;
+    }
+    vt=eval("ts" . document.control.vts.value);
+          document.getElementById(vt).style.display = '' ;
+  }
 
-	function nextTimestamp() {
-	        vts=document.control.vts.value;
-		if ( vts <24 ) vts++;
-	        document.control.vts.value=vts;
-		showvts();
-	}
+  function nextTimestamp() {
+          vts=document.control.vts.value;
+    if ( vts <24 ) vts++;
+          document.control.vts.value=vts;
+    showvts();
+  }
 
-	if (netscape)
-	  {
-	  document.captureEvents(Event.MOUSEMOVE);
-	  }
-	
-	document.onmousemove = deplacementSouris;
+  if (netscape)
+    {
+    document.captureEvents(Event.MOUSEMOVE);
+    }
+  
+  document.onmousemove = deplacementSouris;
     </script>
   </head>
   <body background="#A0A0A0">
@@ -203,30 +203,30 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
              $lat  = $latwp;
       } // else lat/long = ceux qu'on a déjà (position du bateau)
 
-    	$query_string_base="lat=". $lat . "&" . 
-		      "long=". $long . "&" . 
-		      "x=". $x . "&" . 
-		      "y=". $y . "&" . 
-		      "maparea=". $maparea . "&" .
-		      "maille=". $maille . "&" .
-	              "idraces=". $idraces . "&" . 
-		      "proj=". $proj  ; 
+      $query_string_base="lat=". $lat . "&" . 
+          "long=". $long . "&" . 
+          "x=". $x . "&" . 
+          "y=". $y . "&" . 
+          "maparea=". $maparea . "&" .
+          "maille=". $maille . "&" .
+                "idraces=". $idraces . "&" . 
+          "proj=". $proj  ; 
         $query_string = $query_string_base . "&" . 
-		      "seacolor=e0e0f0". "&" . 
-		      "tracks=". $tracks . "&" . 
-		      "age=". $age . "&" . 
-		      "estime=". $estime . "&" . 
-		      "list=". $list . "&" . 
-		      "boat=". $boat . "&" . 
-		      "text=". $text ;
+          "seacolor=e0e0f0". "&" . 
+          "tracks=". $tracks . "&" . 
+          "age=". $age . "&" . 
+          "estime=". $estime . "&" . 
+          "list=". $list . "&" . 
+          "boat=". $boat . "&" . 
+          "text=". $text ;
 
     // **** And now, draw the map **** 
-		      
-	if ( $maplayers == "merged" ) {
+          
+  if ( $maplayers == "merged" ) {
              $URL_MAP=MAP_SERVER_URL . "/mercator.img.php?drawortho=yes&drawwind=0&" . $query_string  ;
-	     echo "<img src=\"$URL_MAP\">";
+       echo "<img src=\"$URL_MAP\">";
 
-	} else {
+  } else {
              $URL_MAP=MAP_SERVER_URL . "/mercator.img.php?drawortho=yes&drawwind=-1&" . $query_string  ;
 
        // **** DRAW  WIND MAPS **** 
@@ -234,36 +234,36 @@ if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
            //for ( $timestamp = 12 ; $timestamp >=0 ; $timestamp-=3) {
 
                $URL_TS=MAP_SERVER_URL . "/mercator.img.php?" ;
-	       $URL_TS.="drawwind=".$timestamp;
-	       $URL_TS.="&drawgrid=no&drawmap=no&drawrace=no&drawscale=no";
-	       $URL_TS.="&drawpositions=no&drawlogos=no&drawlibelle=no&drawortho=no";
-	       $URL_TS.="&seacolor=transparent";
-	       $URL_TS.="&". $query_string_base ;
+         $URL_TS.="drawwind=".$timestamp;
+         $URL_TS.="&drawgrid=no&drawmap=no&drawrace=no&drawscale=no";
+         $URL_TS.="&drawpositions=no&drawlogos=no&drawlibelle=no&drawortho=no";
+         $URL_TS.="&seacolor=transparent";
+         $URL_TS.="&". $query_string_base ;
 
-	       echo "<div id=ts".$timestamp." style=\"top:10; left:10; position:absolute; background-image:url(".$URL_MAP.");\">";
+         echo "<div id=ts".$timestamp." style=\"top:10; left:10; position:absolute; background-image:url(".$URL_MAP.");\">";
                //echo "<IMG SRC=" . $URL_TS . " " ;
-	       //echo " style=\"width:".$x."px;height:".$y."px;border:0; \">";
+         //echo " style=\"width:".$x."px;height:".$y."px;border:0; \">";
                echo "<script language=\"javascript\">";
                echo "     var path_png = DisplayPngByBrowser(navigator.appName, ' " . $URL_TS . "', " . $x . ", " . $y.");";
                echo "</script>";
-	       echo "</div>";
-	   //}
+         echo "</div>";
+     //}
 
         // **** DRAW CONTROL BUTTONS **** 
              //echo "<div id=controls style=\"filter:alpha(opacity=90);opacity:0.90; visibility:hidden\" >
              //echo "<div id=controls style=\"top:" . $y+20 . "; left:".$x+10 . "; position:absolute; filter:alpha(opacity=90);opacity:0.90; \" >
-	     /*
-	     $Y=$y+10;
+       /*
+       $Y=$y+10;
              echo "<div id=controls style=\"top:" . $Y . "; left:10; position:absolute; filter:alpha(opacity=90);opacity:0.90; \" >
-		<form name=control>
-        	<input type=button value=\"Wind timestamp <\" onClick=\"javascript:previousTimestamp();\"/>
-        	<input type=button value=\"Wind timestamp >\" onClick=\"javascript:nextTimestamp();\"/>
-		<input type=text name=vts value=0>
-		</form>
+    <form name=control>
+          <input type=button value=\"Wind timestamp <\" onClick=\"javascript:previousTimestamp();\"/>
+          <input type=button value=\"Wind timestamp >\" onClick=\"javascript:nextTimestamp();\"/>
+    <input type=text name=vts value=0>
+    </form>
                 </div>";
-		*/
+    */
 
-	}
+  }
 
     // ****  Le compas deplacable en dernier, sinon il est dessous.. *** 
       // Que met t'on sur la carte ?

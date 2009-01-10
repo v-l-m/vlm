@@ -2,12 +2,12 @@
 <script type="text/javascript">
 function confirmation() {
    var answer = confirm("ABANDON de la course <? echo $usersObj->races->idraces; ?>. Confirmation ?")
-	if (answer){
-	  alert("Bye bye !")
-	  document.abandon.submit();
-	} else {
-	  alert("Ouf !")
-	}
+  if (answer){
+    alert("Bye bye !")
+    document.abandon.submit();
+  } else {
+    alert("Ouf !")
+  }
 }
 </script>
 <?php
@@ -16,9 +16,9 @@ $fullUsersObj = new fullUsers(getLoginId());
 echo "<h2>". $strings[$lang]["warning"]."</h2>";
 
   $racesObj = new races($fullUsersObj->users->engaged);
-  echo 	"<p>Engaged on Race : <b>" . 	$fullUsersObj->users->engaged .  " (" .
-					$racesObj->racename    .  ") " .
-		"</b></p>";
+  echo   "<p>Engaged on Race : <b>" .   $fullUsersObj->users->engaged .  " (" .
+          $racesObj->racename    .  ") " .
+    "</b></p>";
 
   // The user may want to unsubscribe from this race
   ?>

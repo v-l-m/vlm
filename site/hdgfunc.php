@@ -114,8 +114,8 @@ function linear($Xa, $Ya, $Xb, $Yb)
   //} else if ( $Ya == $Yb ) {
   //  
   //  } else {
-  	$m = ($Yb-$Ya)/($Xb-$Xa);
-  	//applies in a
+    $m = ($Yb-$Ya)/($Xb-$Xa);
+    //applies in a
         $p = $Ya - $m*$Xa;
   //}
   

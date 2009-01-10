@@ -890,7 +890,7 @@ class map
 
             /* 2008/01/27 : expression de l'estime en temps plutot qu'en distance  */
             $Estime=giveEndPointCoordinates(  $current_lat,
-					      $current_long,
+                $current_long,
                                               $estime,
                                               $usersObj->boatheading  );
 
@@ -1060,7 +1060,7 @@ class map
         $_lastlat=$fullUsersObj->lastPositions->lat;
         //addDistance2Positions
         $Estime=giveEndPointCoordinates(  $fullUsersObj->lastPositions->lat,
-					  $fullUsersObj->lastPositions->long,
+            $fullUsersObj->lastPositions->long,
                                           ORTHOSTEP, 
                                           $fullUsersObj->orthodromicHeading()  );
 

@@ -57,13 +57,13 @@ if ( $race == "" ) {
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
    while ( $row = mysql_fetch_assoc($result)) {
            $select_list = $select_list . "<option value=\"". 
-		                                  $_SERVER['PHP_SELF'] . 
-						  "?boat=".$boat.
-						  "&action=".$action . 
-						  "&race=".$row[idraces] . "\"";
+                                      $_SERVER['PHP_SELF'] . 
+              "?boat=".$boat.
+              "&action=".$action . 
+              "&race=".$row[idraces] . "\"";
            if ( $boat == $row[idraces] ) $select_list = $select_list . " selected ";
            $select_list = $select_list . ">". $row[idraces] . " - " . $row[racename] ."</option>\n";
-   	
+     
    }
    echo "<h4>No de Course : " .$race;
    echo "<select name=\"race\" " ;
@@ -80,9 +80,9 @@ if ( $race == "" ) {
       echo "<h4>Course : " . $race ;
 
       echo "<input type=button value=changer onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-						      "?action=".$action.
-						      "&boat=".$boat.
-						      "'\">";
+                  "?action=".$action.
+                  "&boat=".$boat.
+                  "'\">";
       echo "</h4>";
    }
 }
@@ -104,9 +104,9 @@ if ( $boat != "" ) {
            echo "<h4>Bateau : " . $boat . " (" . $usersObj->users->boatname . "), skipper=" . $usersObj->users->username . " (email=". $usersObj->users->email. ")"; 
 
            echo "<input type=button value=changer onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-						      "?action=".$action.
-						      "&race=".$race.
-						      "'\">";
+                  "?action=".$action.
+                  "&race=".$race.
+                  "'\">";
            echo "</h4>";
        } else {
            // Le bateau qui avait été choisi n'est pas dans la course choisie...
@@ -127,13 +127,13 @@ if ( $race != "" && $boat == "" ) {
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
    while ( $row = mysql_fetch_assoc($resultusers)) {
            $select_list = $select_list . "<option value=\"". 
-		                                  $_SERVER['PHP_SELF'] . 
-						  "?race=".$race.
-						  "&action=".$action . 
-						  "&boat=".$row[idusers] . "\"";
+                                      $_SERVER['PHP_SELF'] . 
+              "?race=".$race.
+              "&action=".$action . 
+              "&boat=".$row[idusers] . "\"";
            if ( $boat == $row[idusers] ) $select_list = $select_list . " selected ";
            $select_list = $select_list . ">". $row[idusers] . " - skipper=" . $row[username] ."</option>\n";
-   	
+     
    }
    echo "<h4>Bateau : " ; 
    echo "<select name=\"boat\" " ;
@@ -159,64 +159,64 @@ if ( $do == "yes" ) {
     echo "Mise a jour en cours...";
     switch ($action) {
         case "unlock_boat":
-	     $query = "update users " ;
+       $query = "update users " ;
              if ( quote_smart($_REQUEST['lock']) ) {
                   $query .= " set releasetime = " . ( time() + 3600 ); 
              } else {
                   $query .= " set releasetime =0 " ; 
              }
 
-	     $query .="     where idusers = " .  $boat  . 
-		      "     and engaged   = " .  $race  .
-		      "    ;";
+       $query .="     where idusers = " .  $boat  . 
+          "     and engaged   = " .  $race  .
+          "    ;";
              $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
-	     $action_tracking = "UNLOCK boat for user $boat in race $race";
+       $action_tracking = "UNLOCK boat for user $boat in race $race";
 
-	     break;
+       break;
         case "maj_nextwp":
              $nwp=quote_smart($_REQUEST['nwp']);
-	     $query = "update users set nextwaypoint= " .  $nwp . 
-	     	      "     where idusers = " .  $boat . 
-		      "     and engaged   = " .  $race .
-		      "    ;";
+       $query = "update users set nextwaypoint= " .  $nwp . 
+               "     where idusers = " .  $boat . 
+          "     and engaged   = " .  $race .
+          "    ;";
              $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
-	     $action_tracking = "UPDATE nextwaypoint ($nwp) for user $boat in race $race";
+       $action_tracking = "UPDATE nextwaypoint ($nwp) for user $boat in race $race";
 
-	     break;
+       break;
         case "maj_position":
              $longitude=quote_smart($_REQUEST['targetlong']);
              $latitude=quote_smart($_REQUEST['targetlat']);
-	     $query = "insert into positions (time, `long`, `lat`, idusers, race) " . 
-	                           "values   (" . 
-				              time() . ", " .
-				              $longitude*1000 . ", " .
-				              $latitude*1000  . ", " .
-				              $boat   . ", " .
-				              $race      . 
-				   "                                            );";
+       $query = "insert into positions (time, `long`, `lat`, idusers, race) " . 
+                             "values   (" . 
+                      time() . ", " .
+                      $longitude*1000 . ", " .
+                      $latitude*1000  . ", " .
+                      $boat   . ", " .
+                      $race      . 
+           "                                            );";
              $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
-	     $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
+       $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
 
-	     break;
+       break;
         case "reset_pass":
              $newpass=quote_smart($_REQUEST['newpass']);
-	     $query = "update users set password= '" .  $newpass . "'" .
-	     	      "     where idusers = " .  $boat . 
-		      "     and engaged   = " .  $race .
-		      "    ;";
+       $query = "update users set password= '" .  $newpass . "'" .
+               "     where idusers = " .  $boat . 
+          "     and engaged   = " .  $race .
+          "    ;";
              $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
-	     $action_tracking = "UPDATE password (newpass=*********) for user $boat in race $race";
+       $action_tracking = "UPDATE password (newpass=*********) for user $boat in race $race";
              break;
         case "reset_username":
              $newusern=quote_smart($_REQUEST['newusern']);
-	     $query = "update users set username= '" .  $newusern . "'" .
-	     	      "     where idusers = " .  $boat . 
-		      "     and engaged   = " .  $race .
-		      "    ;";
+       $query = "update users set username= '" .  $newusern . "'" .
+               "     where idusers = " .  $boat . 
+          "     and engaged   = " .  $race .
+          "    ;";
              $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
-	     $action_tracking = "UPDATE username (username=$newusern) for user $boat in race $race";
+       $action_tracking = "UPDATE username (username=$newusern) for user $boat in race $race";
              break;
-	default:
+  default:
     }
     echo "<B>OK<B><br>";
     echo "<input type=button value=\"Raffraichir la page\" onClick=$URL";
@@ -236,7 +236,7 @@ $URL="\"document.location='". $_SERVER['PHP_SELF'] .
                                 "?boat=".$boat .
                                 "&race=".$race.
                                 "&action=".$action.
-				"&do=yes".
+        "&do=yes".
                                 "'\">";
 echo "<h4>Action : " . $action ; 
 echo "<form name=coordonnees action=". $_SERVER['PHP_SELF'] . ">";
@@ -247,72 +247,72 @@ echo "<form name=coordonnees action=". $_SERVER['PHP_SELF'] . ">";
 
 switch ($action) {
         case "unlock_boat":
-	     echo "<hr>Bloquer le bateau : <input type=checkbox name=lock ";
+       echo "<hr>Bloquer le bateau : <input type=checkbox name=lock ";
              if ( $usersObj->users->releasetime > time() ) {
-		  echo "checked ";
+      echo "checked ";
              }
              echo "><br>";
 
-	     break;
+       break;
         case "maj_nextwp":
-	     echo "<hr>Prochaine marque : <input type=text name=nwp value=" . $usersObj->users->nwp . "><br>";
+       echo "<hr>Prochaine marque : <input type=text name=nwp value=" . $usersObj->users->nwp . "><br>";
 
-	     break;
+       break;
         case "maj_position":
-	     echo "<hr>";
-	     echo "<table border=0>
-	           <tr>
-	     		<td>&nbsp;</td><td>Millidegres</td><td>Deg/Min/Sec</td>
-		   </tr>";
+       echo "<hr>";
+       echo "<table border=0>
+             <tr>
+           <td>&nbsp;</td><td>Millidegres</td><td>Deg/Min/Sec</td>
+       </tr>";
 
-	     echo "<tr>
-	     	   <td align=right>Lon : </td>";
-	     echo "<td><input type=text name=targetlong onKeyup=\"convertdmslong();\" value=" . $usersObj->lastPositions->long/1000 . "></td>";
-//	     echo "<td><input type=text name=longdms disabled value=" . $usersObj->lastPositions->long . "></td>";
-	     echo "<td><input type=button  class=\"blue\" name=\"longdms\"></td>";
-	     echo "</tr>";
-	     echo "<tr>
-	     	   <td align=right>Lat : </td>";
-	     echo "<td><input type=text name=targetlat onKeyup=\"convertdmslat();\" value=" . $usersObj->lastPositions->lat/1000 . "></td>";
-//	     echo "<td><input type=text name=latdms disabled value=" . $usersObj->lastPositions->long . "></td>";
-	     echo "<td><input type=button  class=\"blue\" name=\"latdms\"></td>";
-	     echo "</tr>";
-	     echo "</table>";
+       echo "<tr>
+            <td align=right>Lon : </td>";
+       echo "<td><input type=text name=targetlong onKeyup=\"convertdmslong();\" value=" . $usersObj->lastPositions->long/1000 . "></td>";
+//       echo "<td><input type=text name=longdms disabled value=" . $usersObj->lastPositions->long . "></td>";
+       echo "<td><input type=button  class=\"blue\" name=\"longdms\"></td>";
+       echo "</tr>";
+       echo "<tr>
+            <td align=right>Lat : </td>";
+       echo "<td><input type=text name=targetlat onKeyup=\"convertdmslat();\" value=" . $usersObj->lastPositions->lat/1000 . "></td>";
+//       echo "<td><input type=text name=latdms disabled value=" . $usersObj->lastPositions->long . "></td>";
+       echo "<td><input type=button  class=\"blue\" name=\"latdms\"></td>";
+       echo "</tr>";
+       echo "</table>";
 
-	     break;
+       break;
         case "reset_pass":
-	     echo "<hr>Mot de passe : <input type=text name=newpass value=" . $usersObj->users->password . "><br>";
+       echo "<hr>Mot de passe : <input type=text name=newpass value=" . $usersObj->users->password . "><br>";
 
              break;
         case "reset_username":
-	     echo "<hr>Nouveau nom d'utilisateur : <input type=text name=newusern value=" . $usersObj->users->username . "><br>";
+       echo "<hr>Nouveau nom d'utilisateur : <input type=text name=newusern value=" . $usersObj->users->username . "><br>";
 
              break;
-	default:
-		// Choix de l'action à réaliser
+  default:
+    // Choix de l'action à réaliser
                 $actions=array("maj_nextwp","unlock_boat","maj_position","reset_pass","reset_username");
                 $select_list="<option value=\"#\">--- CHOISIR ---</option>";
                 foreach ($actions as $a) {
                     $select_list = $select_list . "<option value=\"". 
-		                                  $_SERVER['PHP_SELF'] . 
-						  "?race=".$race.
-						  "&boat=".$boat.
-						  "&action=" . 
-						  $a . "\"";
+                                      $_SERVER['PHP_SELF'] . 
+              "?race=".$race.
+              "&boat=".$boat.
+              "&action=" . 
+              $a . "\"";
                     if ( $action == $a ) $select_list = $select_list . " selected ";
                     $select_list = $select_list . ">". $a ."</option>\n";
                 }
-		echo "<select name=\"action\" " ;
-		echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
-		echo $select_list . "</select>";
-		echo "</h4>";
-		// S'il n'y a pas d'action choisie, on s'arrête là.
-		exit;
+    echo "<select name=\"action\" " ;
+    echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
+    echo $select_list . "</select>";
+    echo "</h4>";
+    // S'il n'y a pas d'action choisie, on s'arrête là.
+    exit;
 }
-	
-  	echo "<input type=button value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-				      "?boat=".$boat .  "&race=".$race. "'\">";
-	echo "<input type=submit value=\"Juste fais le !\" >";
+  
+    echo "<input type=button value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
+              "?boat=".$boat .  "&race=".$race. "'\">";
+  echo "<input type=submit value=\"Juste fais le !\" >";
 echo "</form>";
 echo "</h4>";
 

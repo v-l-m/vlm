@@ -13,7 +13,7 @@ include_once("config.php");
 <?php 
 $fullUsersObj = new fullUsers(getLoginId());
 if ($fullUsersObj->users->engaged != 0)
-{	
+{  
 $fullUsersObj = new fullUsers (getLoginId());
 $fullRacesObj = new fullRaces ($fullUsersObj->users->engaged);
 $bounds = $fullRacesObj->getRacesBoundaries();
@@ -28,7 +28,7 @@ $bounds = $fullRacesObj->getRacesBoundaries();
 <h3><?php echo $strings[$lang]["coord"] ?></h3>
          <div id="minimap">
 
-	    N <input id="north" name="north" size="5" maxlength="5" value="<?php if (isset($_COOKIE['north'])) print($_COOKIE['north']); else print($bounds['north']);?>"/><br />
+      N <input id="north" name="north" size="5" maxlength="5" value="<?php if (isset($_COOKIE['north'])) print($_COOKIE['north']); else print($bounds['north']);?>"/><br />
 
             W <input id="west" name="west" size="5" maxlength="5" value="<?php if (isset($_COOKIE['west'])) print($_COOKIE['west']); else print($bounds['west']);?>"/>
 <img style="vertical-align: middle" src="images/site/minimap.png" alt="minimap"/>
@@ -44,8 +44,8 @@ document.getElementById('south').value='<?echo $bounds['south']?>';"
 </div>
 
 <h3><?php echo $strings[$lang]["maximage"] ?></h3> 
-	    <?php echo $strings[$lang]["maxwidth"] ?> <input name="x"  size="4"  maxlength="4" value="<?php if (isset($_COOKIE['x'])) print($_COOKIE['x']); else print(800);?>"/> * 
-	    <?php echo $strings[$lang]["maxheight"] ?>  <input name="y"  size="4"  maxlength="4" value="<?php if (isset($_COOKIE['y'])) print($_COOKIE['y']); else print(600);?>"/><br/>
+      <?php echo $strings[$lang]["maxwidth"] ?> <input name="x"  size="4"  maxlength="4" value="<?php if (isset($_COOKIE['x'])) print($_COOKIE['x']); else print(800);?>"/> * 
+      <?php echo $strings[$lang]["maxheight"] ?>  <input name="y"  size="4"  maxlength="4" value="<?php if (isset($_COOKIE['y'])) print($_COOKIE['y']); else print(600);?>"/><br/>
 
 <h3><?php echo $strings[$lang]["proj"] ?> : </h3>
 <?php echo $strings[$lang]["mercator"] ?>  <input type="radio" name="proj" value="mercator" <?php if ((($_COOKIE['proj'])=="mercator") || (!isset($_COOKIE['proj']))) echo  "checked=\"checked\"";?> />

@@ -13,16 +13,16 @@ function getRealBoats($race = 0, $age = 10800 ) {
         // Le retour
         $boatarr = array();
 
-	$query = "SELECT P.idusers, P.lat, P.long, U.color, U.boatname  
-	          FROM positions P, users U 
-		  WHERE  P.idusers < 0 
+  $query = "SELECT P.idusers, P.lat, P.long, U.color, U.boatname  
+            FROM positions P, users U 
+      WHERE  P.idusers < 0 
                   AND    P.time > $reftime - $age
-		  AND    U.idusers = P.idusers ";
+      AND    U.idusers = P.idusers ";
         if ( $race != 0 ) $query .= "AND race = $race ";
 
-	// On se limite le nombre de positions pour les bateaux réels pour l'instant
-	$query .= " ORDER BY P.race DESC, P.idusers ASC , P.time DESC  ";
-	// Dans la mise en tableau, on arrête la boucle si le numéro de bateau est supérieur au dernier qu'on a ajouté
+  // On se limite le nombre de positions pour les bateaux réels pour l'instant
+  $query .= " ORDER BY P.race DESC, P.idusers ASC , P.time DESC  ";
+  // Dans la mise en tableau, on arrête la boucle si le numéro de bateau est supérieur au dernier qu'on a ajouté
 
         $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
         $num_rows = mysql_num_rows($result);
@@ -99,26 +99,26 @@ function coordCarte($lat_bat, $long_bat, $unite, $HauteurCartePixel, $LargeurCar
 function imagelinethick($image, $x1, $y1, $x2, $y2, $color, $thick = 1)
     {
       /* this way it works well only for orthogonal lines
-   	imagesetthickness($image, $thick);
-   	return imageline($image, $x1, $y1, $x2, $y2, $color);
+     imagesetthickness($image, $thick);
+     return imageline($image, $x1, $y1, $x2, $y2, $color);
       */
       if ($thick == 1) {
-	return imageline($image, $x1, $y1, $x2, $y2, $color);
+  return imageline($image, $x1, $y1, $x2, $y2, $color);
       }
       $t = $thick / 2 - 0.5;
       if ($x1 == $x2 || $y1 == $y2) {
-	return imageline($image, $x1, $y1, $x2, $y2, $color);
-	//I dont know why, but this next line fails when using a big zoom
-	//return imagefilledrectangle($image, round(min($x1, $x2) - $t), round(min($y1, $y2) - $t), round(max($x1, $x2) + $t), round(max($y1, $y2) + $t), $color);
+  return imageline($image, $x1, $y1, $x2, $y2, $color);
+  //I dont know why, but this next line fails when using a big zoom
+  //return imagefilledrectangle($image, round(min($x1, $x2) - $t), round(min($y1, $y2) - $t), round(max($x1, $x2) + $t), round(max($y1, $y2) + $t), $color);
       }
       $k = ($y2 - $y1) / ($x2 - $x1); //y = kx + q
       $a = $t / sqrt(1 + pow($k, 2));
       $points = array(
-		      round($x1 - (1+$k)*$a), round($y1 + (1-$k)*$a),
-		      round($x1 - (1-$k)*$a), round($y1 - (1+$k)*$a),
-		      round($x2 + (1+$k)*$a), round($y2 - (1-$k)*$a),
-		      round($x2 + (1-$k)*$a), round($y2 + (1+$k)*$a),
-		      );   
+          round($x1 - (1+$k)*$a), round($y1 + (1-$k)*$a),
+          round($x1 - (1-$k)*$a), round($y1 - (1+$k)*$a),
+          round($x2 + (1+$k)*$a), round($y2 - (1-$k)*$a),
+          round($x2 + (1-$k)*$a), round($y2 + (1+$k)*$a),
+          );   
       imagefilledpolygon($image, $points, 4, $color);
       return imagepolygon($image, $points, 4, $color);
     }
