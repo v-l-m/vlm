@@ -7,13 +7,12 @@
 
 source $VLMRACINE/conf/conf_script
 
-export PATH=$VLMBIN:$PATH
 GRIBPATH=$VLMGRIBS
 LATEST=latest.grb
 
 case "$1" in
   start)
-    sudo -u $VLMGRIBUSER windserver $GRIBPATH/$LATEST
+    sudo -u $VLMGRIBUSER $VLMBIN/windserver $GRIBPATH/$LATEST
     exit 0
   ;;
   stop)
