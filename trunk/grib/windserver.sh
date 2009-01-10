@@ -13,7 +13,7 @@ LATEST=latest.grb
 
 case "$1" in
   start)
-    sudo $VLMGRIBUSER windserver $GRIBPATH/$LATEST
+    sudo -u $VLMGRIBUSER windserver $GRIBPATH/$LATEST
     exit 0
   ;;
   stop)
