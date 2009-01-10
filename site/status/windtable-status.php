@@ -82,7 +82,7 @@ if ( $nb_grib == 0 ) {
         } 
         ?></span>:
           <span id="gribtimeentry_<?php echo $i; ?>" class="<?php echo ($grib_time < $current_time) ? "before" : "after"; ?>">
-          <?php echo gmdate("Y-m-d:H:i:s", $grib_time); ?> GMT
+          <?php echo gmdate("Y-m-d&nbsp;-&nbsp;H:i:s", $grib_time); ?> GMT
 	  </span> <span class="hidden" id="gribrawtimeentry_<?php echo $i; ?>"><?php echo $grib_time ?></span>
         </p>
       </li>
