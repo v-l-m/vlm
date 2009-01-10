@@ -59,6 +59,11 @@ header("content-type: text/plain; charset=UTF-8");
     #* COL : Color
     #* CNT : Country 
     #* SRV : Servername 
+    #* PIL1: Pilototo instruction 1 (id,time,PIM,PIP,status)
+    #* PIL2: Pilototo instruction 2 (id,time,PIM,PIP,status)
+    #* PIL3: Pilototo instruction 3 (id,time,PIM,PIP,status)
+    #* PIL4: Pilototo instruction 4 (id,time,PIM,PIP,status)
+    #* PIL5: Pilototo instruction 5 (id,time,PIM,PIP,status)
     ";
     exit;
   }
@@ -70,8 +75,8 @@ header("content-type: text/plain; charset=UTF-8");
   // On teste donc checkaccount en conversion ISO8859-1   *ET*  en UTF-8
   if ( checkAccount(htmlentities($pseudo,ENT_COMPAT)        , htmlentities($password, ENT_COMPAT)) != $idu 
     && checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"), htmlentities($password, ENT_COMPAT,"UTF-8")) != $idu  ) {
-  	echo "You should not do that.";
-	exit;
+    echo "You should not do that.";
+    exit;
   }
 
   $usersObj = new fullUsers($idu);
@@ -81,6 +86,7 @@ header("content-type: text/plain; charset=UTF-8");
   printf ("COL=%s\n", $usersObj->users->color) ;
   printf ("CNT=%s\n", $usersObj->users->country) ;
   printf ("POL=%s\n", $usersObj->users->boattype) ;
+
   if ( $usersObj->users->engaged == 0 ) {
 
      // Race is 0
@@ -91,7 +97,6 @@ header("content-type: text/plain; charset=UTF-8");
      printf ("RAC=%d\n", $usersObj->users->engaged) ;
      $racesObj = new races($usersObj->users->engaged);
      printf ("RAN=%s\n", $racesObj->racename) ;
-
      printf ("LAT=%s\n", $usersObj->lastPositions->lat) ;
      printf ("LON=%s\n", $usersObj->lastPositions->long) ;
      printf ("BSP=%2.2f\n", round($usersObj->boatspeed, 2));
@@ -101,6 +106,7 @@ header("content-type: text/plain; charset=UTF-8");
      printf ("ORT=%03.1f\n" , $usersObj->orthoangletoend );
      printf ("LOX=%03.1f\n" , $usersObj->loxoangletoend ) ;
      printf ("VMG=%2.2f\n", round($usersObj->VMGortho, 2));
+
      if ( $usersObj->VMGortho != 0 ) {
          $_timetogo=60 * 60 * $usersObj->distancefromend / $usersObj->VMGortho;
          if ( $_timetogo < 0 ) {
@@ -163,7 +169,7 @@ header("content-type: text/plain; charset=UTF-8");
      );
      $prefs=listUserPref($idu);
      while ( $pref = current($prefs)  ) { 
-	echo $mapvar[key($prefs)] . "=" . $pref . "\n"; 
+  echo $mapvar[key($prefs)] . "=" . $pref . "\n"; 
         next($prefs);
      }
      
@@ -172,7 +178,19 @@ header("content-type: text/plain; charset=UTF-8");
 
 
      printf ("NPD=\"%s\"\n", $usersObj->users->blocnote) ; //encloser pour le blocnote
-  
+
+     // Pilototo data
+     $rc=$usersObj->users->pilototoList();
+     $numligne=1;
+     foreach ($usersObj->users->pilototo as $pilototo_row) { /*(id,time,PIM,PIP,status)*/
+          printf("PIL%d=%d,%d,%d,%s,%s\n",$numligne,$pilototo_row[0],$pilototo_row[1],$pilototo_row[2],$pilototo_row[3],$pilototo_row[4]);
+          $numligne++;
+     }
+     while($numligne<=5)
+     {
+          printf("PIL%d=none\n",$numligne);
+          $numligne++;
+     }
   }
 ?>
   

@@ -14,8 +14,8 @@
   $password=quote_smart($_REQUEST['password']);
   $idu = checkAccount($pseudo, $password);
   if ( $idu ==  FALSE ) {
-  	echo "You should not do that.";
-	exit;
+    echo "You should not do that.";
+    exit;
   }
 
   $usersObj = new fullUsers($idu);
@@ -60,6 +60,19 @@
      printf ('POS=%s;' , getCurrentRanking($idu, $usersObj->users->engaged) );
      printf ('LOC=%s;' , $usersObj->users->loch);
      printf ('NUP=%d;' , 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10);
+     
+     // Pilototo data
+     $rc=$usersObj->users->pilototoList();
+     $numligne=1;
+     foreach ($usersObj->users->pilototo as $pilototo_row) { /*(id,time,PIM,PIP,status)*/
+          printf("PIL%d=%d,%d,%d,%s,%s;",$numligne,$pilototo_row[0],$pilototo_row[1],$pilototo_row[2],$pilototo_row[3],$pilototo_row[4]);
+          $numligne++;
+     }
+     while($numligne<=5)
+     {
+          printf("PIL%d=none;",$numligne);
+          $numligne++;
+     }
   
   }
 ?>
