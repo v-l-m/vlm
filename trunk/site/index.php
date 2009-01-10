@@ -51,10 +51,10 @@ echo "<hr />";
 
 
   <!-- 
-  	<?php printf("      <p> ".$strings[$lang]["atlantic_windinfo"]." </p>"); ?> 
-  	<?php printf("      <p> ".$strings[$lang]["classification_dnf"]." </p>"); ?>
-	<h3><?php   echo $strings[$lang]["howtohelp"];?></h3> 
-	<p><?php   echo $strings[$lang]["howtohelptext"];?></p>
+    <?php printf("      <p> ".$strings[$lang]["atlantic_windinfo"]." </p>"); ?> 
+    <?php printf("      <p> ".$strings[$lang]["classification_dnf"]." </p>"); ?>
+  <h3><?php   echo $strings[$lang]["howtohelp"];?></h3> 
+  <p><?php   echo $strings[$lang]["howtohelptext"];?></p>
   -->
 
 

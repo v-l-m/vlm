@@ -13,9 +13,9 @@ echo "\n **************  UPDATE WEATHER ************* \n";
 
 $gribFileObj = new gribFile;
 if ( $argv[1] != "-clean" ) {
-	$gribFileObj->newstore($argv[1]);
+  $gribFileObj->newstore($argv[1]);
 } else {
-	$gribFileObj->newclean();
+  $gribFileObj->newclean();
 }
 
 ?>

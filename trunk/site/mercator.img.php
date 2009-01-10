@@ -35,8 +35,8 @@ $x=max(100,htmlentities($_GET['x']));
 $y=max(100,htmlentities($_GET['y']));
 // Limitation de la taille de la carte pour pas péter le serveur 
 if ( !idusersIsAdmin(htmlentities($_GET['boat'])) ) {
-	if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
-	if ( $y > MAX_MAP_Y ) $y=MAX_MAP_Y;
+  if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
+  if ( $y > MAX_MAP_Y ) $y=MAX_MAP_Y;
 }
 
 // On reçoit maintenant un point de coordonnées du centre de la carte
@@ -52,10 +52,10 @@ $west=$mapCoords[2];
 $east=$mapCoords[3];
 
 while ( $west > 360 ) {
-	$west -=360;
+  $west -=360;
 }
 while ( $east > 360 ) {
-	$east -=360;
+  $east -=360;
 }
 
 
@@ -66,7 +66,7 @@ while ( $east > 360 ) {
 $libmap=sprintf ("N=%4.3f, S=%4.3f, W=%4.3f, E=%4.3f", $north,$south,$west,$east);
 // Maintenant que le libellé est prêt, on va convertir les cordonnées en cas d'antemeridien
 if ( $west > 0 && $east <0 ) {
-	$east +=360;
+  $east +=360;
 }
 
 $proj=htmlentities($_GET['proj']);
@@ -76,7 +76,7 @@ $idraces=round(htmlentities($_GET['idraces']));
 
 $list=$_REQUEST['list'];
 if ( is_numeric($list) ) {
-	$list=array($list);
+  $list=array($list);
 }
 $text=htmlentities($_GET['text']);
 $save=htmlentities($_GET['save']);
@@ -139,10 +139,10 @@ if ( $list == "mylist" ) {
 
 // Le pas de temps du vent
 if ( $drawwind == "no" ) {
-	$drawwind=-1;
+  $drawwind=-1;
 }
 if ( $drawwind >= 0 ) {
-	$drawwind=min($drawwind,96)*3600;
+  $drawwind=min($drawwind,96)*3600;
 }
 
 
@@ -159,11 +159,11 @@ if ( $list=="all" ) {
   $fullRacesObj = new fullRaces($idraces); 
   if ( $raceover == "true") 
   {
-  	foreach ($fullRacesObj->excluded as $excl)
-  		array_push($list, $excl->idusers);
+    foreach ($fullRacesObj->excluded as $excl)
+      array_push($list, $excl->idusers);
   } else {
-  	foreach ($fullRacesObj->opponents as $opp)
-		array_push($list, $opp->idusers);
+    foreach ($fullRacesObj->opponents as $opp)
+    array_push($list, $opp->idusers);
   }
   //print_r($list);
 }
@@ -202,7 +202,7 @@ if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 20, "Time new ma
 
 if ( $drawrace != "no" && $windonly != "true" ) {
     if ( $wpnum != 0 ) {
-    	$mapObj->wp_only = $wpnum;
+      $mapObj->wp_only = $wpnum;
     }
     $time_start = time();
     $mapObj->drawRaces($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
@@ -244,12 +244,12 @@ if ( $drawpositions != "no" && $windonly != "true" ) {
     $time_start = time();
     $mapObj->drawRealBoatPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
     if ( $raceover == "true") {
-	    $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $_GET['boat'], $age, $estime);
+      $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $_GET['boat'], $age, $estime);
     } else {
-	    $mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age, $estime);
-	    if ( $drawortho == "yes" ) {
-	        $mapObj->drawOrtho($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $estime);
-	    }
+      $mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age, $estime);
+      if ( $drawortho == "yes" ) {
+          $mapObj->drawOrtho($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $estime);
+      }
     }
     $time_stop = time();
     if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 80, "Time Positions = ". ($time_stop - $time_start) . "s", $mapObj->colorText);

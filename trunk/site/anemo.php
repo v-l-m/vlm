@@ -115,11 +115,11 @@ imagestring($im, $titlesize, $x-60+1, $y+95, $twalib, $textcolor);
 // Ajout de la valeur
 imagettftext ( $im, $ttffontsize, 0, $x-30, $y+100+35+2, $textshade, $ttffontname , $twa );
 if ( $amure == "babord" ) {
-	imagettftext ( $im, $ttffontsize, 0, $x-30, $y+100+35, $red, $ttffontname , $twa );
-	imagettftext ( $im, $ttffontsize, 0, $x-30+1, $y+100+35, $red, $ttffontname , $twa );
+  imagettftext ( $im, $ttffontsize, 0, $x-30, $y+100+35, $red, $ttffontname , $twa );
+  imagettftext ( $im, $ttffontsize, 0, $x-30+1, $y+100+35, $red, $ttffontname , $twa );
 } else {
-	imagettftext ( $im, $ttffontsize, 0, $x-30, $y+100+35, $green, $ttffontname , $twa );
-	imagettftext ( $im, $ttffontsize, 0, $x-30+1, $y+100+35, $green, $ttffontname , $twa );
+  imagettftext ( $im, $ttffontsize, 0, $x-30, $y+100+35, $green, $ttffontname , $twa );
+  imagettftext ( $im, $ttffontsize, 0, $x-30+1, $y+100+35, $green, $ttffontname , $twa );
 }
 // unit.
 imagestring($im, $titlesize, $x+75, $y+100, $twaunit, $textcolor);

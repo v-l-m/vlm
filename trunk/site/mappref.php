@@ -12,16 +12,16 @@ include_once("config.php");
 </div>
 <?php 
 $fullUsersObj = new fullUsers(getLoginId());
-if ($fullUsersObj->users->engaged != 0) {	
+if ($fullUsersObj->users->engaged != 0) {  
     //echo "PO=".$prefOpponents;
     $fullRacesObj = new fullRaces ($fullUsersObj->users->engaged);
     //$bounds = $fullRacesObj->getRacesBoundaries();
     // Sauvegarde des préférences
     // Check si liste vide, dans ce cas, on précoche l'utilisateur demandeur (bug implode signalé par Phille le 27/06/07)
     if ( htmlentities($_POST['action']) == $strings[$lang]["valider"] ) {
-	$list=$_POST['list'];
-	//print_r($list);
-	//echo implode(",",$list);
+  $list=$_POST['list'];
+  //print_r($list);
+  //echo implode(",",$list);
         if ( $list == "" || count($list) == 0 ) {
             $list = array($fullUsersObj->users->idusers) ;
         }
@@ -30,28 +30,28 @@ if ($fullUsersObj->users->engaged != 0) {
     } else if ( htmlentities($_POST['action']) == $strings[$lang]["tous"] ) {
         $oppList=array();
         foreach ( $fullRacesObj->opponents as $opp) {
-	    array_push($oppList, $opp->idusers);
-	}
+      array_push($oppList, $opp->idusers);
+  }
         setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
 
     } else if ( htmlentities($_POST['action']) == $strings[$lang]["top20"] ) {
-	$oppList=array();
-	$num_opp=0;
+  $oppList=array();
+  $num_opp=0;
         foreach ( $fullRacesObj->opponents as $opp) {
-	  $num_opp++;
-	  array_push($oppList, $opp->idusers);
-	  if ( $num_opp == 20 ) break;
-	}
+    $num_opp++;
+    array_push($oppList, $opp->idusers);
+    if ( $num_opp == 20 ) break;
+  }
         setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
 
     } else if ( htmlentities($_POST['action']) == $strings[$lang]["top10"] ) {
-	$oppList=array();
-	$num_opp=0;
+  $oppList=array();
+  $num_opp=0;
         foreach ( $fullRacesObj->opponents as $opp) {
-	  $num_opp++;
-	  array_push($oppList, $opp->idusers);
-	  if ( $num_opp == 10 ) break;
-	}
+    $num_opp++;
+    array_push($oppList, $opp->idusers);
+    if ( $num_opp == 10 ) break;
+  }
         setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
 
     } else if ( htmlentities($_POST['action']) == $strings[$lang]["aucun"] ) {

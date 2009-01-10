@@ -602,9 +602,9 @@ include_once("scripts/myboat.js");
     $xing_ratio = new doublep();
 
     $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
-						 $nwp_coords[0], $nwp_coords[1],
-						 $nwp_coords[2], $nwp_coords[3],
-						 $lat_xing, $long_xing, $xing_ratio);
+             $nwp_coords[0], $nwp_coords[1],
+             $nwp_coords[2], $nwp_coords[3],
+             $lat_xing, $long_xing, $xing_ratio);
     ?>
     <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
     <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />

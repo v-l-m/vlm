@@ -2,11 +2,11 @@
 // Nouvelle fonction de cartographie
 
 // Plus de coordonnées N, S, W, E, ni x et y, mais 
-//	- un couple latitude/longitude (centre de la carte)
-//	- une taille en largeur : x   ==> la hauteur y est déduite à partir de X (16/10)
-//	- un niveau de zoom : (en fait un nombre de degrés à couvrir en longitude)
-//	      ==> l'amplitude nord-sud est calculée pour être égale celle west-est/2
-//		 ==> + tant qu'on dépasse 80°nord ou 80° sud, zoom--
+//  - un couple latitude/longitude (centre de la carte)
+//  - une taille en largeur : x   ==> la hauteur y est déduite à partir de X (16/10)
+//  - un niveau de zoom : (en fait un nombre de degrés à couvrir en longitude)
+//        ==> l'amplitude nord-sud est calculée pour être égale celle west-est/2
+//     ==> + tant qu'on dépasse 80°nord ou 80° sud, zoom--
 // projection : proj=mercator, proj=lambert, proj=carre
 
 // PARAMETRES :
@@ -64,7 +64,7 @@ if ($save == "on")
   setcookie("x", $x, time()+3600*24*365);
   setcookie("y", $y, time()+3600*24*365);
   if ( $list != "" ) {
-  //	setcookie("list", implode(",", $list), time()+3600*24*365);
+  //  setcookie("list", implode(",", $list), time()+3600*24*365);
   } 
   setcookie("proj", $proj, time()+3600*24*365);
   setcookie("text", $text ,time()+3600*24*365);
@@ -77,9 +77,9 @@ $longitude *=1000;
 $zoom *=1000;
 
 //  ==> + tant qu'on dépasse 80° nord ou 80° sud, on réduit le ZOOM
-//            NORTH			     SOUTH
+//            NORTH           SOUTH
 while ( $latitude+$zoom > MAX_NORTH || $latitude-$zoom < MAX_SOUTH ) {
-	$zoom-=1;
+  $zoom-=1;
 }
 // On peut établir les bornes de la carte
 //  ==> l'amplitude WEST-EST est calculée pour être égale à MAP_RATIO * (NORD - SUD)
@@ -103,11 +103,11 @@ if ($list=="all")
   $list = array();
   $fullRacesObj = new fullRaces($idraces); 
   if ( $raceover == "true") {
-  	foreach ($fullRacesObj->excluded as $excl)
-  		array_push($list, $excl->idusers);
+    foreach ($fullRacesObj->excluded as $excl)
+      array_push($list, $excl->idusers);
   } else {
-  	foreach ($fullRacesObj->opponents as $opp)
-		array_push($list, $opp->idusers);
+    foreach ($fullRacesObj->opponents as $opp)
+    array_push($list, $opp->idusers);
   }
   //print_r($list);
 }
@@ -119,9 +119,9 @@ $mapObj->drawWind($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
 $mapObj->drawRaces($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
 if ( $raceover == "true") 
 {
-	$mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces);
+  $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces);
 } else {
-	$mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age);
+  $mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age);
 }
 $mapObj->display();
 
