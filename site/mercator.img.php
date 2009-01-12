@@ -93,6 +93,7 @@ $drawscale=htmlentities($_GET['drawscale']);
 $drawpositions=htmlentities($_GET['drawpositions']);
 $drawortho=htmlentities($_GET['drawortho']);
 $drawlibelle=htmlentities($_GET['drawlibelle']);
+$drawrealboats=htmlentities($_GET['drawrealboats']);
 $fullres=htmlentities($_GET['fullres']);
 /*
 if ( $maparea > 5 ) {
@@ -242,7 +243,9 @@ if ( $drawscale != "no" && $windonly != "true" ) {
 
 if ( $drawpositions != "no" && $windonly != "true" ) {
     $time_start = time();
-    $mapObj->drawRealBoatPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
+    if ($drawrealboats != "no") {
+      $mapObj->drawRealBoatPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
+    }
     if ( $raceover == "true") {
       $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $_GET['boat'], $age, $estime);
     } else {
