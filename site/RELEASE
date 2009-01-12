@@ -1,0 +1,63 @@
+RELEASE NOTES
+See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
+
+v0.8: what's new for ...
+... the players ?
+ * better management of ranking & heading towards gate. Gate validation also improved. (spf, fm)
+ * new type of gate [ice gate} (fm, spf)
+ * BVMG pilot mode works now around change date line. (spf)
+ * HTP / DNF ranking now displays more than the first 100's. (paparazzia)
+ 
+... tools developpers :
+ * HTML clean-up, check your scripts ! (spf)
+ * getinfo now returns piloto parameters (oxygen77)
+ 
+... vlm developpers :
+ * first version of vlm developped using a dedicated hosting (fm, paparazzia)
+ * wind management using Vlm-C module (spf) 
+ * loxo/ortho computing handled by VlmC (spf)
+ * code split into modules (paparazzia, Line28)
+ * clean-up in the code (tab, charset, ...) (spf, paparazzia, Line28)
+ * new script for downloading grib files (spf, paparazzia)
+ * escaping/quoting more parameters for bullet-proof & security reasons (fm)
+ * it's now possible to hide (using GET parameter) the real boats on the map (paparazzia)
+ * "vmg for vlm" knows where to find the list of the polars (stephpen)
+ * documentation (all)
+ * hosting scripts to make life easier (paparazzia)
+
+v.>0.7 (november 2008) : See http://dev.virtual-loup-de-mer.org
+
+v.0.3.1 (April 2005)
+- new installation process : files _install.php and params.php
+- new colors in maps
+- less verbose update_grid.php
+
+v.0.3 (march 2005)
+- "strong wind only" bug fixed
+- new css and logo
+- lot of code rewriting to implement an ObjectOriented approach
+- a javascript to compute estimated boatspeed on myboat.php
+- orthodromic pilot added permanently
+- add some info and colors to image boat.php : heading to finish
+- better compression of png images (use palette) 
+- add a default position to a boat if it hasnot, that way it wont break anything
+- migration to tuxfamily.org and php4.3.8
+- XHTML valid
+
+v.0.2 (Nov 2004)
+- languages support : french
+- forum miniBB added
+- info added to myboat.php : heading to finish and VMG
+- correct session behaviour
+- 2 bugs corrected from findboatspeed function
+- add a map with the player only
+- orthodromic pilot almost ready, just test it
+- finish line bug corrected
+- about page added
+- addings to FAQ
+- CSS improved
+- change database format for dates : unix time stamp only
+- shadow password 
+
+v0.1 (Oct 2004)
+first version !
