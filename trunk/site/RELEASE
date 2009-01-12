@@ -3,9 +3,14 @@ See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by versi
 
 v0.8: what's new for ...
 ... players ?
- * better management of ranking & heading towards gate. Gate validation also improved. (spf, fm)
- * new type of gate [ice gate] (fm, spf)
+ * more realistic distance to gate (spf)
+ * ortho/bvmg now heads toward the closest point of the gate for 0,0 (spf)
+ * large gate crossing fixed (spf)
+ * Gribs are now handled with their embedded time information (spf)
+ * gate crossing real time [no more rounded to the vacation timer] (spf)
+ * new type of gate [ice gate] (fm)
  * BVMG pilot mode works now around change date line. (spf)
+ * Estime now works across the prime meridian (spf)
  * HTP / DNF ranking now displays more than the first 100's. (paparazzia)
  
 ... tools developpers :
