@@ -5,8 +5,7 @@ v0.8: what's new for ...
 ... players ?
  * more realistic distance to gate (spf)
  * ortho/bvmg now heads toward the closest point of the gate for 0,0 (spf)
- * large gate crossing fixed (spf)
- * Gribs are now handled with their embedded time information (spf)
+ * oblique large gate crossing fixed (spf)
  * gate crossing real time [no more rounded to the vacation timer] (spf)
  * new type of gate [ice gate] (fm)
  * BVMG pilot mode works now around change date line. (spf)
@@ -16,11 +15,12 @@ v0.8: what's new for ...
 ... tools developpers :
  * HTML clean-up, check your scripts ! (spf)
  * getinfo.php now returns piloto parameters (oxygen77)
- * it's now possible to hide (using GET parameter 'drawrealboats=no') the real boats on the map (paparazzia)
+ * now possible to hide (using GET parameter 'drawrealboats=no') the real boats on the map (paparazzia)
  
 ... vlm developpers :
  * first version of vlm developped using a dedicated hosting (fm, paparazzia)
  * wind management using Vlm-C module (spf) 
+ * gribs are now handled with their embedded time information (spf)
  * loxo/ortho computing handled by Vlm-C (spf)
  * code split into modules (paparazzia, Line28)
  * clean-up in the code (tab, charset, ...) (spf, paparazzia, Line28)
