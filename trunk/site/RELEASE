@@ -2,25 +2,25 @@ RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
 v0.8: what's new for ...
-... the players ?
+... players ?
  * better management of ranking & heading towards gate. Gate validation also improved. (spf, fm)
- * new type of gate [ice gate} (fm, spf)
+ * new type of gate [ice gate] (fm, spf)
  * BVMG pilot mode works now around change date line. (spf)
  * HTP / DNF ranking now displays more than the first 100's. (paparazzia)
  
 ... tools developpers :
  * HTML clean-up, check your scripts ! (spf)
- * getinfo now returns piloto parameters (oxygen77)
+ * getinfo.php now returns piloto parameters (oxygen77)
+ * it's now possible to hide (using GET parameter 'drawrealboats=no') the real boats on the map (paparazzia)
  
 ... vlm developpers :
  * first version of vlm developped using a dedicated hosting (fm, paparazzia)
  * wind management using Vlm-C module (spf) 
- * loxo/ortho computing handled by VlmC (spf)
+ * loxo/ortho computing handled by Vlm-C (spf)
  * code split into modules (paparazzia, Line28)
  * clean-up in the code (tab, charset, ...) (spf, paparazzia, Line28)
  * new script for downloading grib files (spf, paparazzia)
  * escaping/quoting more parameters for bullet-proof & security reasons (fm)
- * it's now possible to hide (using GET parameter) the real boats on the map (paparazzia)
  * "vmg for vlm" knows where to find the list of the polars (stephpen)
  * documentation (all)
  * hosting scripts to make life easier (paparazzia)
