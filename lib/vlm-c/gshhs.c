@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.12 2008/08/11 12:59:33 ylafon Exp $
+ * $Id: gshhs.c,v 1.13 2009-01-13 06:18:27 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -72,7 +72,11 @@ void internal_init_partial_coastline(int minlat, int minlong,
   int *segnum;
   int nb_read, level, greenwich,i,k, nb_seg, idx;
   int x,y, prev_x, prev_y;
+#ifdef SAVE_MEMORY
+  int longitude, latitude, prev_longitude, prev_latitude;
+#else
   double longitude, latitude, prev_longitude, prev_latitude;
+#endif /* SAVE_MEMORY */
   coast_seg *segment;
   coast *wholecoast;
   int flip, zerocrossed;
@@ -114,8 +118,12 @@ void internal_init_partial_coastline(int minlat, int minlong,
 
   /* to make the compiler happy */
   prev_y = 0;
+#ifdef SAVE_MEMORY
+  prev_longitude = prev_latitude = 0;
+#else
   prev_longitude = prev_latitude = 0.0;
-  
+#endif /* SAVE MEMORY */
+
   coastfile = fopen(global_vlmc_context->gshhs_filename, "r");
   if (coastfile == NULL) {
     printf("Fatal error trying to read %s\n", 
@@ -293,8 +301,13 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	}
 	x = floor((double)p.x * GSHHS_SCL * 10.0);
 	y = floor((double)p.y * GSHHS_SCL * 10.0)+900;
+#ifdef SAVE_MEMORY
+	longitude = p.x;
+	latitude = p.y;
+#else
 	longitude = degToRad((double)p.x * GSHHS_SCL);
 	latitude = degToRad((double)p.y * GSHHS_SCL);
+#endif /* SAVE_MEMORY */
 	assert((x>=0 && x<=3600) && (y>=0 && y< 1800));
 	if (prev_x == -1) {
 	  prev_x = x;

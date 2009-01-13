@@ -1,5 +1,5 @@
 /**
- * $Id: types.h,v 1.12 2008/08/06 09:50:06 ylafon Exp $
+ * $Id: types.h,v 1.13 2009-01-13 06:18:27 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,10 +24,17 @@
 #include "defs.h"
 
 typedef struct coast_seg_str {
+#ifdef SAVE_MEMORY
+  int longitude_a;
+  int latitude_a;
+  int longitude_b;
+  int latitude_b;
+#else
   double longitude_a;
   double latitude_a;
   double longitude_b;
   double latitude_b;
+#endif /* SAVE_MEMORY */
 } coast_seg;
 
 typedef struct coast_zone_str {

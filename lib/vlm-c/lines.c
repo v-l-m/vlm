@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.25 2008-12-19 14:53:42 ylafon Exp $
+ * $Id: lines.c,v 1.26 2009-01-13 06:18:27 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -25,6 +25,68 @@
 #include "ortho.h"
 #include "lines.h"
 
+#ifdef SAVE_MEMORY
+#  include "dist_gshhs.h"
+double intersects_trans PARAM10(double, double, double, double,
+			    int, int, int, int,
+			    double *, double *);
+#  define intersects_c(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb) \
+  intersects_trans(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb);
+#  ifdef PARANOID_COAST_CHECK
+double paranoid_intersects_trans PARAM10(double, double, double, double,
+					 int, int, int, int,
+					 double *, double *);
+#    define paranoid_intersects_c(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb)	\
+  paranoid_intersects_trans(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb);
+#  endif /* PARANOID_COAST_CHECK */
+#else
+#  define intersects_c(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb) \
+  intersects(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb);
+#  ifdef PARANOID_COAST_CHECK
+#    define paranoid_intersects_c(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb)	\
+  paranoid_intersects(aa,ab,ac,ad,ba,bb,bc,bd,ra,rb);
+#  endif /* PARANOID_COAST_CHECK */
+#endif /* SAVE_MEMORY */
+
+#ifdef SAVE_MEMORY
+double intersects_trans(double latitude, double longitude,
+			double new_latitude, double new_longitude,
+			int seg_a_latitude, int seg_a_longitude,
+			int seg_b_latitude, int seg_b_longitude, 
+			double *inter_latitude, double *inter_longitude) {
+  double rad_seg_a_latitude, rad_seg_a_longitude;
+  double rad_seg_b_latitude, rad_seg_b_longitude;
+
+  rad_seg_a_latitude  = degToRad((double)seg_a_latitude * GSHHS_SCL);
+  rad_seg_a_longitude = degToRad((double)seg_a_longitude * GSHHS_SCL);
+  rad_seg_b_latitude  = degToRad((double)seg_b_latitude * GSHHS_SCL);
+  rad_seg_b_longitude = degToRad((double)seg_b_longitude * GSHHS_SCL);
+  return intersects(latitude, longitude, new_latitude, new_longitude,
+		    rad_seg_a_latitude, rad_seg_a_longitude,
+		    rad_seg_b_latitude, rad_seg_b_longitude,
+		    inter_latitude, inter_longitude);
+}
+#  ifdef PARANOID_COAST_CHECK
+double paranoid_intersects_trans(double latitude, double longitude,
+				 double new_latitude, double new_longitude,
+				 int seg_a_latitude, int seg_a_longitude,
+				 int seg_b_latitude, int seg_b_longitude, 
+				 double *inter_latitude, 
+				 double *inter_longitude) {
+  double rad_seg_a_latitude, rad_seg_a_longitude;
+  double rad_seg_b_latitude, rad_seg_b_longitude;
+  
+  rad_seg_a_latitude  = degToRad((double)seg_a_latitude * GSHHS_SCL);
+  rad_seg_a_longitude = degToRad((double)seg_a_longitude * GSHHS_SCL);
+  rad_seg_b_latitude  = degToRad((double)seg_b_latitude * GSHHS_SCL);
+  rad_seg_b_longitude = degToRad((double)seg_b_longitude * GSHHS_SCL);
+  return paranoid_intersects(latitude, longitude, new_latitude, new_longitude,
+			     rad_seg_a_latitude, rad_seg_a_longitude,
+			     rad_seg_b_latitude, rad_seg_b_longitude,
+			     inter_latitude, inter_longitude);
+}
+#  endif /* PARANOID_COAST_CHECK */
+#endif /* SAVE_MEMORY */
 /**
  * The shore line is composed of an array of "coast zones" consisting of
  * an int, the number of segments to be checked, and the segments, with
@@ -249,13 +311,13 @@ double check_coast(double latitude, double longitude,
   nb_segments = c_zone->nb_segments;					\
   seg_array = c_zone->seg_array;					\
   for (k=0; k<nb_segments; k++) {					\
-    inter = paranoid_intersects(latitude, longitude,			\
-				new_latitude, new_longitude,		\
-				seg_array->latitude_a,			\
-				seg_array->longitude_a,			\
-				seg_array->latitude_b,			\
-				seg_array->longitude_b,			\
-				&t_lat, &t_long);			\
+    inter = paranoid_intersects_c(latitude, longitude,			\
+				  new_latitude, new_longitude,		\
+				  seg_array->latitude_a,		\
+				  seg_array->longitude_a,		\
+				  seg_array->latitude_b,		\
+				  seg_array->longitude_b,		\
+				  &t_lat, &t_long);			\
     seg_array++;							\
     if (inter>=COAST_INTER_MIN_LIMIT && inter<=COAST_INTER_MAX_LIMIT) {	\
       if (inter < min_val) {						\
@@ -270,11 +332,11 @@ double check_coast(double latitude, double longitude,
   nb_segments = c_zone->nb_segments;					\
   seg_array = c_zone->seg_array;					\
   for (k=0; k<nb_segments; k++) {					\
-    inter = intersects(latitude, longitude,				\
-		       new_latitude, new_longitude,			\
-		       seg_array->latitude_a, seg_array->longitude_a,	\
-		       seg_array->latitude_b, seg_array->longitude_b,	\
-		       &t_lat, &t_long);				\
+    inter = intersects_c(latitude, longitude,				\
+			 new_latitude, new_longitude,			\
+			 seg_array->latitude_a, seg_array->longitude_a,	\
+			 seg_array->latitude_b, seg_array->longitude_b,	\
+			 &t_lat, &t_long);				\
     seg_array++;							\
     if (inter>=INTER_MIN_LIMIT && inter<=INTER_MAX_LIMIT) {		\
       if (inter < min_val) {						\
