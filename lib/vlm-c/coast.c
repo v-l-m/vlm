@@ -1,5 +1,5 @@
 /**
- * $Id: coast.c,v 1.10 2009-01-13 06:18:26 ylafon Exp $
+ * $Id: coast.c,v 1.11 2009-01-13 06:24:56 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -34,6 +34,9 @@
 #include "context.h"
 #include "optim.h"
 #include "gshhs.h"
+#ifdef SAVE_MEMORY
+#  include "dist_gshhs.h"
+#endif /* SAVE_MEMORY */
 
 vlmc_context *global_vlmc_context;
 
