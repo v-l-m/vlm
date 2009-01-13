@@ -1,5 +1,5 @@
 /**
- * $Id: coast.c,v 1.9 2008/08/06 09:50:48 ylafon Exp $
+ * $Id: coast.c,v 1.10 2009-01-13 06:18:26 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -32,6 +32,7 @@
 #include "loxo.h"
 #include "grib.h"
 #include "context.h"
+#include "optim.h"
 #include "gshhs.h"
 
 vlmc_context *global_vlmc_context;
@@ -133,8 +134,15 @@ int main(int argc, char **argv) {
         <LineString>\n\
           <tessellate>1</tessellate>\n\
           <coordinates>\n", segnum++, (color ? "fooStyle" : "barStyle"));
+#ifdef SAVE_MEMORY
+	print_position_ge(degToRad((double)seg_array->latitude_a * GSHHS_SCL),
+			  degToRad((double) seg_array->longitude_a *GSHHS_SCL));
+	print_position_ge(degToRad((double)seg_array->latitude_b * GSHHS_SCL),
+			  degToRad((double) seg_array->longitude_b *GSHHS_SCL));
+#else
 	print_position_ge(seg_array->latitude_a, seg_array->longitude_a);
 	print_position_ge(seg_array->latitude_b, seg_array->longitude_b);
+#endif /* SAVE_MEMORY */
 	seg_array++;
 	color = !color;
 	printf("\n\
