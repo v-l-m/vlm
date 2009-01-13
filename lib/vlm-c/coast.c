@@ -1,5 +1,5 @@
 /**
- * $Id: coast.c,v 1.11 2009-01-13 06:24:56 ylafon Exp $
+ * $Id: coast.c,v 1.12 2009-01-13 06:35:35 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -32,7 +32,6 @@
 #include "loxo.h"
 #include "grib.h"
 #include "context.h"
-#include "optim.h"
 #include "gshhs.h"
 #ifdef SAVE_MEMORY
 #  include "dist_gshhs.h"
