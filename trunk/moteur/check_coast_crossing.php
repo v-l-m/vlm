@@ -199,8 +199,9 @@ $verbose=0;
 	 		          $crosses_the_coast=true;
 			       }
 
-			       // Test avec dtc2 seulement si DTC1 n'a rien vu
-			       if ($crosses_the_coast != true and $fullUsersObj->dotheycross( 
+                               // APPEL A DTC1 DESACTIVE LE 08/12/2008, DTC2 FAIT TRES BIEN LE BOULOT 
+                               /*
+                               if ($crosses_the_coast != true and $fullUsersObj->dotheycross( 
 			    		$point1_long, $point1_lat, 
 					$point2_long, $point2_lat, 
 					$long1, $lat1, 
@@ -213,6 +214,7 @@ $verbose=0;
 			          echo "\n\t*** YES player " . $fullUsersObj->users->idusers . " CROSSED (DTC1), ";
 	 		          $crosses_the_coast=true;
 		               }
+                               */
 			    }
 
 			    if ( $crosses_the_coast == true ) {
