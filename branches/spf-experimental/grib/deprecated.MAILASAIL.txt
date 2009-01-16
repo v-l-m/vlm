@@ -1,0 +1,19 @@
+#!/bin/bash
+# MailASail
+#grib [type_of_grib] [region_of_interest] [times] [grib_fields]
+#Mediterannee
+
+ZONEMASAIL=36N:19E:2400
+/usr/sbin/sendmail -i -f winds@vlm.team-tnz.org -- weather@mailasail.com <<FIN
+To: weather@mailasail.com
+Subject: grib gfs $ZONEMASAIL 3,6 GRD
+FIN
+
+
+# Rio
+ZONEMASAIL=20S:40W:2400
+/usr/sbin/sendmail -i -f winds@vlm.team-tnz.org -- weather@mailasail.com <<FIN
+To: weather@mailasail.com
+Subject: grib gfs $ZONEMASAIL 3,6 GRD
+FIN
+

@@ -1,0 +1,12 @@
+Depuis la 0.7.1 (production vlm au 31/11/2008)
+
+* Suite au nettoyage du code
+
+ UPDATE races SET racename='Le Vent Des Globes' WHERE idraces='20081109';
+
+* Suite au changeset http://dev.virtual-loup-de-mer.org/vlm/changeset/86
+(non prise en compte des icegate dans le classement)
+(Cf. les commentaires du commit)
+
+* Découpage de schema.sql pour extraction des différents composants
+(voir README.txt)

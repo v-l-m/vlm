@@ -1,0 +1,15 @@
+<?php
+define("SERVER_NAME", "DEV");
+
+/********to_be_change****************/
+define("DBSERVER", "databaseserver");
+define("DBUSER", "databaseuser");
+define("DBPASSWORD", "databasepassword");
+define("DBNAME", "databasename");
+
+define("GSHHS_DIRECTORY", "/path/to/the/unzipped/gshhs/files/");
+
+// SYSTEME DE GESTION DU VENT : OLD, NEW, NO, SPF
+define("SYSTEME_WIND_AT_POSITION", "SPF");
+
+?>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org" />
+<meta http-equiv="content-type" content=
+"text/html; charset=utf-8" />
+<title>VLM - Google Map plugin - BETA TEST</title>
+
+<script src="prototype.js" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAU9L35N6EdAtdkT4Cb2abDRR9fpxOiyHPEX_8YzC8CNXvq83W-hRDmTj4GD1F8DLKiaJ97BAfcB5i7w" type="text/javascript"></script>
+<script type="text/javascript" src="compas.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+		function getUserMarker(idusers, idraces) {
+			var url = "index.php";
+			var date = new Date();
+			var param = date.getMilliseconds() + date.getMinutes() + date.getSeconds();
+			var ajaxrequest = new Ajax.Request(url,{
+				asynchronous:true,
+				method:"get",
+				parameters: "date=" + param + "&idusers=" + idusers + "&type=ajax&riq=pos&idraces=" + idraces,
+				onSuccess: function(request) {
+						eval(request.responseText);
+					}
+			});
+		}
+
+		function getUserLine(idusers, idraces) {
+			var url = "index.php";
+			var date = new Date();
+			var param = date.getMilliseconds() + date.getMinutes() + date.getSeconds();
+			var ajaxrequest = new Ajax.Request(url,{
+				asynchronous:true,
+				method:"get",
+				parameters: "date=" + param + "&idusers=" + idusers + "&type=ajax&riq=trj&idraces=" + idraces,
+				onSuccess: function(request) {
+						eval(request.responseText);
+					}
+			});
+		}
+		
+		var map
+    function load() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"));
+        map.addControl(new GSmallMapControl());
+        map.addControl(new GMapTypeControl());
+        map.setCenter(new GLatLng(0,0), 1);
+      }
+    }
+    //]]>
+</script>
+
+</head>
+<body onload="load()" onunload="GUnload()">
+
+<h1>VLM - Google Map plugin - BETA TEST</h1>
+<p>
+Cliquer sur un joueur pour afficher sa position et sa trajectoire. 
+Cliquer sur la "larme" d'un joueur pour accéder à ses informations.
+</p>
+
+<table style="vertical-align:top;" width="100%">
+	<tbody style="vertical-align:top;">
+	<tr style="vertical-align:top;">
+		<td width="22px">
+			<img onclick="$('deplacable').toggle();" style="border:0px solid gray;" src="konqueror.png" alt="compas" />
+		</td>
+		<td style="vertical-align:top;" width="800px">
+			<div id="map" style="width:800px;height:600px"></div>
+		</td>
+		<td >
+			<div style="overflow:auto;height:500px;">
+			<ul style="overflow:auto;">
+				###LISTPLAYER###
+			</ul>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+<img id="deplacable" src="images/site/compas-transparent.gif" alt="compas" 
+	style="z-index=10;display:none;top:150px;left:100px;position:absolute;" 
+	onmousedown="boutonPresse()"
+	onmouseup="boutonRelache()"
+/>
+
+</body>
+</html>
+
