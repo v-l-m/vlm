@@ -296,7 +296,7 @@ else //if loggedin
  
     // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
     echo "<a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM\" target=\"_outils\">
-                <img src=\"outils.png\" alt=\"" . $strings[$lang]["tcv"]. "\" /></a>
+                <img src=\"images/site/outils.png\" alt=\"" . $strings[$lang]["tools"]. "\" /></a>
                 <hr />";
 
     echo "<h3>".$strings[$lang]["weather"]."</h3>\n";
