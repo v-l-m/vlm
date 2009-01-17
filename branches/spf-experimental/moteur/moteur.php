@@ -21,7 +21,7 @@ $global_vlmc_context = new vlmc_context();
 init_context($global_vlmc_context);
 global_vlmc_context_set($global_vlmc_context);
 
-set_gshhs_filename($global_vlmc_context, GSSHS_FILENAME);
+set_gshhs_filename($global_vlmc_context, GSHHS_FILENAME);
 init_coastline();
 
 //$verbose=$_REQUEST['verbose'];
