@@ -1,6 +1,8 @@
 <?php
 include_once("vlmc.php");
 
+define('MOTEUR','Yes');
+
 /**
  * This script is the engine of VLM
  * launched every vacation (like 5mn), it will make a number of thing that will
@@ -19,9 +21,9 @@ include("config.php");
 
 $global_vlmc_context = new vlmc_context();
 init_context($global_vlmc_context);
+set_gshhs_filename($global_vlmc_context, GSHHS_FILENAME);
 global_vlmc_context_set($global_vlmc_context);
 
-set_gshhs_filename($global_vlmc_context, GSHHS_FILENAME);
 init_coastline();
 
 //$verbose=$_REQUEST['verbose'];
