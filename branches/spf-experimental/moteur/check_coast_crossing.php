@@ -49,7 +49,7 @@ if ($crosses_the_coast) {
   // compute the real endpoint (using linear interpolation)
   // We can tune the 0.9 to whatever we want, to avoid putting the boat on the line
   // and have rounding errors having fun with us.
-  $latApres = $latAvant + ($latApres - $latAvant) * 0.9 * double_value($coast_xingratio);
-  $lonApres = $lonAvant + ($lonApres - $lonAvant) * 0.9 * double_value($coast_xingratio);
+  $latApres = $latAvant + ($latApres - $latAvant) * 0.9 * doublep_value($coast_xingratio);
+  $lonApres = $lonAvant + ($lonApres - $lonAvant) * 0.9 * doublep_value($coast_xingratio);
 }
 ?>
