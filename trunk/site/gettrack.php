@@ -28,9 +28,17 @@ header("content-type: text/plain; charset=UTF-8");
   // La requête : 
   // select * from histpos where idusers=$idu and race=$idr order by time asc
 
+  $query   =  "select deptime from races " .
+              " where race=" . round($idr);
+
+  $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+  $row = mysql_fetch_array($result, MYSQL_NUM)
+  $deptime = $row[0]; // départ
+
   $query   =  "select * from histpos " .
               " where idusers=" . round($idu) . 
-              "   and race=" . round($idr) . 
+              "   and race=" . round($idr) .
+              "   and time >= ". $deptime . 
               " order by time asc";
 
   $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
