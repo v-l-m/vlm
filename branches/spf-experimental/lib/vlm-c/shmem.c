@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.10 2008/08/05 09:27:29 ylafon Exp $
+ * $Id: shmem.c,v 1.11 2009-01-08 18:29:52 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -181,6 +181,17 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
   winds *windarray;
   struct shmid_ds shminfo;
   
+  /*
+    we are storing in the segment array the folloing thing:
+    (int) nb_prevs
+    (time_t) grib offset (should be 0, may be moved to something else
+    nb_prevs * (wind) complete wind structure, aka
+                      -> time_t prevision_time
+                      -> double wind_u[[WIND_GRID_LONG][WIND_GRID_LAT]; 
+                      -> double wind_v[WIND_GRID_LONG][WIND_GRID_LAT];
+
+    As the types used are fixed, it's bery easy to process.
+  */
   if (shmctl(shmid, IPC_STAT , &shminfo) == -1) {
     fprintf(stderr, "Unable to access information on GRIB segment\n");
     return -1;
