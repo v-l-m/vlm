@@ -33,9 +33,9 @@ if (  round($idr) == 0 || round($idu) == 0
 
   $query   =  "SELECT histpos.* FROM histpos,races" .
               " WHERE histpos.idusers=" . round($idu) . 
-              " AND histpos.race" . round($idr) . 
+              " AND histpos.race=" . round($idr) . 
               " AND histpos.race=races.idraces" .
-              " AND histpos.time > races.deptime".
+              " AND histpos.time >= races.deptime".
               " ORDER BY time ASC";
 
   $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
