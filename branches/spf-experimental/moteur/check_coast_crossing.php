@@ -15,9 +15,9 @@ if ($crosses_the_coast) {
 	  $latAvant/1000,$longApres/1000 , $latAvant/1000,$longApres/1000);
   
   echo "\n\t\t\tEncounterCoordinates " . 
-    doublep_value($coast_xinglat)/1000 . ", " . $doublep_value($coast_xinglong)/1000 . 
+    doublep_value($coast_xinglat)/1000 . ", " . doublep_value($coast_xinglong)/1000 . 
     "\n\nGoogleMap http://maps.google.fr/maps?f=q&hl=fr&geocode=&q=".
-    doublep_value($coast_xinglat)/1000 . "," . $doublep_value($coast_xinglong)/1000 .
+    doublep_value($coast_xinglat)/1000 . "," . doublep_value($coast_xinglong)/1000 .
     "&ie=UTF8&spn=0.0191,0.082998&t=p&z=11&iwloc=addr. \n";
   
   /* NOTE the encounter coordinates are the real ones */
