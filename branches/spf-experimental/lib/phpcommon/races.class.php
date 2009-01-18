@@ -525,16 +525,12 @@ class fullRaces
       }
       // ============= Affichage des noms de bateaux en acronyme
       if ( $row[idusers] > 0 ) {
-        if ( $startnum == 0 ) {
-          echo "<td class=\"ranking\">" . $row[country] . " / " . $row[username]  .  " (". $row[idusers] . ") "  ;
-        } else {
           echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
           echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
             "title=\"". $row[boatname] . "\">" . 
             " (". $row[idusers] . ") " . 
             $row[username] .
             "</acronym>\n";
-        }
         echo "</td>";
       } else {
         $idu=-$row[idusers];
