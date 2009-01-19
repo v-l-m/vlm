@@ -291,11 +291,11 @@ else //if loggedin
           echo "new".$strings[$lang]["tchat"];
           echo "</b></a> ";
           echo "<hr />";
-          echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\"><img src=\"images/site/documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
-          echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\"><img src=\"images/site/vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
- 
-    // echo "<h3>".$strings[$lang]["tools"]."</h3>\n"; 
-    echo "<a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM\" target=\"_outils\">
+          echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\">
+                <img src=\"images/site/documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
+          echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\">
+                <img src=\"images/site/vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
+          echo "<a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM\" target=\"_outils\">
                 <img src=\"images/site/outils.png\" alt=\"" . $strings[$lang]["tools"]. "\" /></a>
                 <hr />";
 
@@ -303,42 +303,9 @@ else //if loggedin
 
   ?>
   <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
-  <a href="http://grib.us/" target="_ugrib"><img src="images/site/grib.us.gif" border="0" alt="Logo du site GRIB" /></a><hr />
+  <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><b><?echo $strings[$lang]["meteotools"]?></b></a><br />
+  <hr />
 
-        <br />
-        ** <a href="http://www.passageweather.com/" target="_pw">Passage Weather</a> **<br />
-  Meteo France
-  <a href="http://www.meteofrance.com/FR/mer/popupCartePrevFrontsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Fronts</a>
-  <a href="http://www.meteofrance.com/FR/mer/popupCarteVentsGF.jsp?LIEUID=ATLANTIQUE" target="_meteof">Vents</a>
-
-  <br />
-  Wetterzentrale
-  <a href="http://www.meteo-marine.com/meteo_marine/gfs.htm" target="_meteowz">GFS</a>,
-  <a href="http://www.meteo-marine.com/meteo_marine/jma.htm" target="_meteowz">JMA</a>
-
-  <br />
-  Weather-online
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?03&amp;LANG=en&amp;WIND=g246" target="_wol">North Brazil</a>, 
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=atla" target="_wol">Europe</a>, 
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=eatl" target="_wol">Atlan.</a>, 
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=kana" target="_wol">Manche</a>,
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=euro&amp;MEER=mitt" target="_wol">Med.</a>
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=afri&amp;MEER=ioze" target="_wol">Indien</a>
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=aust" target="_wol">Aust</a>
-  <a href="http://www.weatheronline.co.uk/cgi-bin/windkarten?02&amp;LANG=en&amp;CONT=aupa&amp;MEER=neus" target="_wol">NZL.</a>
-
-  <br />
-  Aviation Weather
-  <a href="http://aviationweather.gov/obs/sat/intl/ir.shtml" target="_wf">All Zones</a>
-  <br />
-  Wind Finder
-  <a href="http://www.windfinder.com/forecasts/" target="_wf">All Zones</a>
-  <br />
-  MetVUW
-  <a href="http://www.metvuw.com/ows/" target="_mv">MetVUW</a>
-  <br />
-  COTWeb
-  <a href="http://www.cotweb.com/meteo.php4" target="_mv">COTWeb</a>
   <?
            echo "<hr />Srv = " . SERVER_NAME . ".";
            echo "<br />Version = ";  
