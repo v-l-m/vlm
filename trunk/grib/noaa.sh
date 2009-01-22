@@ -69,7 +69,7 @@ for TSTAMP in `echo $allindexes` ; do
     fi
 done
 
-rm $GRIBPATH/$PREFIX*${HH}.grb
+rm -f $GRIBPATH/$PREFIX*${HH}.grb
 
 # we change the weather now (if not done yet)
 if [ $updated -eq 0 ]; then
