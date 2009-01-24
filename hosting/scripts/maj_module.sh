@@ -60,8 +60,9 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     echo 'OK !'
-    echo -n "Gestion des permissions sur le repertoire minimaps"
-    chmod 777 $destmodulepath/images/minimaps
+    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps..."
+    chmod 777 $destmodulepath/../medias/images/minimaps
+    echo 'OK !'
     ;;
 
     moteur)
@@ -102,6 +103,10 @@ case $confmodule in
     cp $destmodulepath/noaa.sh $VLMBIN/noaa.sh
     cp $destmodulepath/noaa-slave.sh $VLMBIN/noaa-slave.sh
     echo 'OK !'
+    ;;
+    medias)
+    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps..."
+    chmod 777 $destmodulepath/images/minimaps
     ;;
     *)
     #Tous les autres modules
