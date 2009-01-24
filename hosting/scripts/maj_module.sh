@@ -60,6 +60,8 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     echo 'OK !'
+    echo -n "Gestion des permissions sur le repertoire minimaps"
+    chmod 777 $destmodulepath/images/minimaps
     ;;
 
     moteur)
