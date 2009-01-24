@@ -103,6 +103,10 @@ case $confmodule in
     cp $destmodulepath/noaa-slave.sh $VLMBIN/noaa-slave.sh
     echo 'OK !'
     ;;
+    medias)
+    echo "Configuration des droits pour les thumbnails"
+    chmod 777 $destmodulepath/images/minimaps
+    ;;
     *)
     #Tous les autres modules
     echo "+$confmodule: Pas de post déploiement"
