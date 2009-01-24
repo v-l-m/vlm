@@ -59,6 +59,8 @@ case $confmodule in
     echo 'OK !'    
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
+    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps..."
+    chmod 777 $destmodulepath/../medias/images/minimaps
     echo 'OK !'
     ;;
 
