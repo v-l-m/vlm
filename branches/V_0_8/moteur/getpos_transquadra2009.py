@@ -22,7 +22,11 @@ class GetPosTransquadra2009(GetPositions.GetPositions):
     vlmNextWpLon = -60.874
     #la base du calcul de l'id
     vlmBaseId = -400
+    vlmDepTime = 1232809200
 
 if __name__ == '__main__':
     gp = GetPosTransquadra2009()
+    #on veut du csv
     gp.outPositions()
+    #on veut du sql
+    #gp.sqlPositions()
