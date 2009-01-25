@@ -28,25 +28,24 @@ class GetPositions(VlmHttp.VlmHttp):
     url = None
     #expression régulière pour récupèrer tout ce qui constitue une "voile" (l'ensemble des infos sur un boat)
     reSailDatas = None
-    #pour faire le mapping avec un helpe
+    #pour faire le mapping avec un helper
     reSailDatasMap = None
-    #identifiantvlm de la course
+    #identifiant vlm de la course
     vlmRaceId = None
+    #prochain wp
     vlmNextWp = 1
+    #comment on calcule le loch s'il faut
     vlmPrevWpLat = 0.
     vlmPrevWpLon = 0.
+    #comment on calcule le dnm s'il faut
     vlmNextWpLat = 0.
     vlmNextWpLon = 0.
+    #base du calcul de l'iduser
     vlmBaseId = 0
+    #depart de la course (pour engager l'user virtuel)
     vlmDepTime = 0
     
     def __init__(self, *argv, **kargv):
-        if kargv.has_key('url'):
-            self.url = kargv['url']
-        if kargv.has_key('reSailDatas'):
-            self.url = kargv['reSailDatas']
-        if kargv.has_key('reSailDatasMap'):
-            self.url = kargv['reSailDatasMap']
         super(GetPositions, self).__init__(*argv, **kargv)
         self.sailsData = None
         if self.url == None :
@@ -69,7 +68,6 @@ class GetPositions(VlmHttp.VlmHttp):
             return self.distanceOrtho(dat['lat'], dat['lon'], self.vlmNextWpLat, self.vlmNextWpLon)
         else :
             return dat['dnm']
-
     
     def getUrl(self, url = None):
         if url == None :
@@ -126,6 +124,7 @@ class GetPositions(VlmHttp.VlmHttp):
         cursor = conn.cursor ()
 
         for r in data:
+            self.outSail(r)
             a, b, c = self.sqlSail(r, currenttime)
             cursor.execute(a)
             cursor.execute(b)
@@ -134,7 +133,6 @@ class GetPositions(VlmHttp.VlmHttp):
         conn.close()
         
     def sqlSail(self, r, currenttime):
-          self.outSail(r)
           sqlengage = \
               "replace into users (idusers,password,username,engaged,nextwaypoint,userdeptime,loch) values (%s, 'xxxxxxxx', '%s', %s, %s, %s, %s) ;"\
               % (self.sailid(r), r['boatname'], self.vlmRaceId, self.vlmNextWp, self.vlmDepTime, self.loch(r)) 
