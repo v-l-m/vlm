@@ -9,7 +9,11 @@ class GetPosTransquadra2009(GetPositions.GetPositions):
     reSailDatasMap = ['rank:int', 'sailid:int', 'boatname', 'skipper', 'time_pos', 'lat:degminutes', 'lon:degminutes', 'speed:float', 'heading:float', 'dnm:float', 'dtof:float']
     vlmRaceId = '20090124'
     vlmNextWp = '1'
-
+    vlmPrevWpLat = 33.05
+    vlmPrevWpLon = 16.335
+    vlmNextWpLat = 14.386
+    vlmNextWpLon = -60.874
+    vlmBaseId = -400
 
 if __name__ == '__main__':
     gp = GetPosTransquadra2009()
