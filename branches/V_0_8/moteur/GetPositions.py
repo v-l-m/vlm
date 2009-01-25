@@ -47,12 +47,10 @@ class GetPositions(VlmHttp.VlmHttp):
         if kargv.has_key('reSailDatasMap'):
             self.url = kargv['reSailDatasMap']
         super(GetPositions, self).__init__(*argv, **kargv)
-
+        self.sailsData = None
         if self.url == None :
             print "ERREUR : no url"
             sys.exit()
-
-        self.outPositions()
 
     #Méthodes à surcharger optionnellement
 
@@ -88,6 +86,8 @@ class GetPositions(VlmHttp.VlmHttp):
     
     #Ordonnance les étapes du parsing
     def getSails(self):
+        if self.sailsData != None :
+            return self.sailsData
         #Récupérer les données
         data = self.getUrl()
         #Matcher les positions et obtenir une liste d'arguments
@@ -96,18 +96,24 @@ class GetPositions(VlmHttp.VlmHttp):
         data = map(self.cleanSail, data)
         #Conversion des arguments en dico
         data = map(self.convertSail, data)
+        self.sailsData = data
         return data
 
     #Output
     def outPositions(self):
         data = self.getSails()
         for r in data:
-            print "%s|%s|%i|%s|%s|%f|%f|%f|%f" % (self.vlmRaceId, self.vlmNextWp, \
-                                                  self.sailid(r), r['boatname'], r['skipper'], \
-                                                  r['lat'], r['lon'], \
-                                                  self.loch(r), self.dnm(r)
-                                                  )
+            self.outSail(r)
+            
+    def outSail(self, r):
+        print "%s|%s|%i|%s|%s|%f|%f|%f|%f" % (self.vlmRaceId, self.vlmNextWp, \
+                                              self.sailid(r), r['boatname'], r['skipper'], \
+                                              r['lat'], r['lon'], \
+                                              self.loch(r), self.dnm(r)
+                                              )
 
+    def sqlPositions(self):
+        pass
 
     #toolbox
     def _cleanSail(self, data):
