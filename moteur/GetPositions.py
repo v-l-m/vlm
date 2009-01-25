@@ -19,7 +19,7 @@
 
 # auteur : paparazzia@gmail.Com
 
-import re, sys, VlmHttp, math
+import re, sys, VlmHttp, math, time
 
 class GetPositions(VlmHttp.VlmHttp):
     #attributs à surcharger
@@ -38,6 +38,7 @@ class GetPositions(VlmHttp.VlmHttp):
     vlmNextWpLat = 0.
     vlmNextWpLon = 0.
     vlmBaseId = 0
+    vlmDepTime = 0
     
     def __init__(self, *argv, **kargv):
         if kargv.has_key('url'):
@@ -106,14 +107,44 @@ class GetPositions(VlmHttp.VlmHttp):
             self.outSail(r)
             
     def outSail(self, r):
-        print "%s|%s|%i|%s|%s|%f|%f|%f|%f" % (self.vlmRaceId, self.vlmNextWp, \
+        print "%s|%s|%s|%i|%s|%s|%f|%f|%f|%f" % (self.vlmRaceId, self.vlmNextWp, self.vlmDepTime,\
                                               self.sailid(r), r['boatname'], r['skipper'], \
                                               r['lat'], r['lon'], \
                                               self.loch(r), self.dnm(r)
                                               )
 
     def sqlPositions(self):
-        pass
+        data = self.getSails()
+        currenttime=int(time.time())
+        #init bdd
+        import MySQLdb
+
+        conn = MySQLdb.connect (host = "localhost",
+                                user = "vlmtest",
+                                passwd = "vlmtest",
+                                db = "vlm")
+        cursor = conn.cursor ()
+
+        for r in data:
+            a, b, c = self.sqlSail(r, currenttime)
+            cursor.execute(a)
+            cursor.execute(b)
+            cursor.execute(c)
+        cursor.close ()
+        conn.close()
+        
+    def sqlSail(self, r, currenttime):
+          self.outSail(r)
+          sqlengage = \
+              "replace into users (idusers,password,username,engaged,nextwaypoint,userdeptime,loch) values (%s, 'xxxxxxxx', '%s', %s, %s, %s, %s) ;"\
+              % (self.sailid(r), r['boatname'], self.vlmRaceId, self.vlmNextWp, self.vlmDepTime, self.loch(r)) 
+          sqlranking = \
+              "replace into races_ranking (idraces,idusers,latitude,longitude,loch,nwp,dnm) values (%s, %s, %f, %f, %f, %s, %f) ;"\
+              % (self.vlmRaceId, self.sailid(r), r['lat']*1000., r['lon']*1000., self.loch(r), self.vlmNextWp, r['dnm'])
+          sqlpositions = \
+              "insert into positions values ( %i , %f, %f, %s, %s, '' ) ;"\
+              % (currenttime, r['lat']*1000., r['lon']*1000., self.sailid(r), self.vlmRaceId)
+          return sqlengage, sqlranking, sqlpositions 
 
     #toolbox
     def _cleanSail(self, data):
