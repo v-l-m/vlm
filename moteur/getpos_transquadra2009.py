@@ -27,7 +27,7 @@ class GetPosTransquadra2009(GetPositions.GetPositions):
     #on dérive la méthode sailid pour diminuer la plage d'iduser utilisées
     #il n'y a pas d'id des réel entre 100 et 200 donc on enlève 100 quand l'id est > 200
     def sailid(self, dat):
-        if dat['sailid'] > 200
+        if dat['sailid'] > 200:
             dat['sailid'] -= 100
         return self.vlmBaseId-dat['sailid']
 
