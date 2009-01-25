@@ -19,7 +19,7 @@
 
 # auteur : paparazzia@gmail.Com
 
-import re, sys, VlmHttp
+import re, sys, VlmHttp, math
 
 class GetPositions(VlmHttp.VlmHttp):
     #attributs à surcharger
@@ -32,7 +32,12 @@ class GetPositions(VlmHttp.VlmHttp):
     reSailDatasMap = None
     #identifiantvlm de la course
     vlmRaceId = None
-    vlmNextWp = None
+    vlmNextWp = 1
+    vlmPrevWpLat = 0.
+    vlmPrevWpLon = 0.
+    vlmNextWpLat = 0.
+    vlmNextWpLon = 0.
+    vlmBaseId = 0
     
     def __init__(self, *argv, **kargv):
         if kargv.has_key('url'):
@@ -49,10 +54,23 @@ class GetPositions(VlmHttp.VlmHttp):
 
         self.outPositions()
 
-    #Méthodes à surcharger
+    #Méthodes à surcharger optionnellement
 
-    def sailid2vlm(self, sailid):
-        return 400-sailid    
+    def sailid(self, dat):
+        return self.vlmBaseId-dat['sailid']
+    
+    def loch(self, dat):
+        if not dat.has_key('loch'):
+            return self.distanceOrtho(dat['lat'], dat['lon'], self.vlmPrevWpLat, self.vlmPrevWpLon)
+        else :
+            return dat['loch']
+            
+    def dnm(self, dat):
+        if not dat.has_key('dnm'):
+            return self.distanceOrtho(dat['lat'], dat['lon'], self.vlmNextWpLat, self.vlmNextWpLon)
+        else :
+            return dat['dnm']
+
     
     def getUrl(self, url = None):
         if url == None :
@@ -84,7 +102,11 @@ class GetPositions(VlmHttp.VlmHttp):
     def outPositions(self):
         data = self.getSails()
         for r in data:
-            print "%s|%s|%i|%s|%s|%f|%f" % (self.vlmRaceId, self.vlmNextWp, self.sailid2vlm(r['sailid']), r['boatname'], r['skipper'], r['lat'], r['lon'])
+            print "%s|%s|%i|%s|%s|%f|%f|%f|%f" % (self.vlmRaceId, self.vlmNextWp, \
+                                                  self.sailid(r), r['boatname'], r['skipper'], \
+                                                  r['lat'], r['lon'], \
+                                                  self.loch(r), self.dnm(r)
+                                                  )
 
 
     #toolbox
@@ -96,7 +118,7 @@ class GetPositions(VlmHttp.VlmHttp):
 
     def _convertSail(self, listdat, mapping):
         #informations de base attendus
-        dico = {'sailid' :0, 'loch' : 0., 'boatname': 'boatname', 'skipper': 'skipper', 'lat':0., 'lon':0., 'dnm':0.}
+        dico = {'sailid' :0, 'boatname': 'boatname', 'skipper': 'skipper', 'lat':0., 'lon':0.,}
         ind = 0
         for m in mapping:
             l = m.split(':')
@@ -115,6 +137,25 @@ class GetPositions(VlmHttp.VlmHttp):
                 dico[namevar] = self._cleantype(listdat[ind], r'|')
             ind += 1
         return dico
+
+    # Fonction pour le calcul de la distance orthodromique en miles
+    # Arguments en degres
+    # Retourne une distance en miles
+    def distanceOrtho(self, lat_bat, long_bat, lat_wp, long_wp) :
+        lat_bat=math.radians(float(lat_bat))
+        long_bat=math.radians(float(long_bat))
+        lat_wp=math.radians(float(lat_wp))
+        long_wp=math.radians(float(long_wp))
+
+        dlong = abs(long_bat - long_wp)
+        if dlong > math.pi :
+            dlong = 2*math.pi - dlong
+        x = math.sin(lat_bat) * math.sin(lat_wp) + (math.cos(lat_bat) * math.cos(lat_wp) * math.cos(dlong))
+        if ((lat_bat == 0) and (long_bat == 0) and (lat_wp == 0) and (long_wp == 0) or (lat_bat == lat_wp) and (long_bat == long_wp)) :
+            return (0)
+        else :
+            return (10800. / math.pi * math.acos(x))
+
 
     #Transtypages
 
