@@ -18,7 +18,6 @@ TIME_THRESHOLD=09
 MAX_TIME=24
 LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
-NOAA_SERVICE_URI=http://www.ftp.ncep.noaa.gov/data/nccf/com/gfs/prod
 
 if [ $MAX_TIME -lt 12 ]; then
     echo "MAX_TIME must be > 12"
@@ -50,7 +49,7 @@ for TSTAMP in `echo $allindexes` ; do
     GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
     let retry=1
     while [ $retry -gt 0 ]; do
-      wget --waitretry 600 -nc -c ${NOAA_SERVICE}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
+      wget --waitretry 600 -nc -c ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
       let retry=$?
       if [ $retry -gt 0 ] ; then 
         sleep 30

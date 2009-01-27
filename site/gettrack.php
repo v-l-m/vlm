@@ -5,9 +5,7 @@ header("content-type: text/plain; charset=UTF-8");
 
   $idu=htmlentities(quote_smart($_REQUEST['idu']));
   $idr=htmlentities(quote_smart($_REQUEST['idr']));
-if (  round($idr) == 0 || round($idu) == 0 
-      || (strspn($idu, "0123456789") != strlen($idu)) 
-      || (strspn($idr, "0123456789") != strlen($idr)) ){
+  if (  round($idr) == 0 || round($idu) == 0 ) {
      echo "usage : http://virtual-loup-de-mer.org/gettrack.php?idu=X&idr=Y\n";
      echo "\nX = numero de votre bateau";
      echo "\nY = numero de la course";
@@ -28,15 +26,12 @@ if (  round($idr) == 0 || round($idu) == 0
 +---------+------------+------+-----+---------+-------+
   */
   // La requête : 
-  // SELECT histpos.* FROM histpos,races WHERE histpos.idusers=$idu AND histpos.race=$idr
-  // AND histpos.race=races.idraces AND histpos.time > races.deptime ORDER BY time ASC;
+  // select * from histpos where idusers=$idu and race=$idr order by time asc
 
-  $query   =  "SELECT histpos.* FROM histpos,races" .
-              " WHERE histpos.idusers=" . round($idu) . 
-              " AND histpos.race=" . round($idr) . 
-              " AND histpos.race=races.idraces" .
-              " AND histpos.time >= races.deptime".
-              " ORDER BY time ASC";
+  $query   =  "select * from histpos " .
+              " where idusers=" . round($idu) . 
+              "   and race=" . round($idr) . 
+              " order by time asc";
 
   $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
 
