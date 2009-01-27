@@ -1,0 +1,16 @@
+<?php
+define("SERVER_NAME", "DEV");
+
+/********to_be_change****************/
+define("DBSERVER", "databaseserver");
+define("DBUSER", "databaseuser");
+define("DBPASSWORD", "databasepassword");
+define("DBNAME", "databasename");
+
+// SYSTEME DE GESTION DU VENT : OLD, NEW, NO, SPF
+define("SYSTEME_WIND_AT_POSITION", "SPF");
+
+//TEMPORARY DIR : idem que $VLMTEMP = $VLMRACINE/tmp dans conf_script
+define("VLMTEMP", "/path/to/VLMRACINE/tmp");
+
+?>
