@@ -406,10 +406,10 @@ void VLM_loxo_distance_angle(double latitude, double longitude,
  * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
  * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
- * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
- * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
- * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
- * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param wp0_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp0_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param wp1_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp1_long, a <code>double</code>, in <em>milli-degrees</em> 
  * @param xing_lat, a pointer to a <code>double</code>, 
  *                  in <em>milli-degrees</em>
  * @param xing_long, a pointer to a <code>double</code>, 
@@ -443,6 +443,49 @@ int VLM_check_cross_WP(double latitude, double longitude,
   if (c_ratio > -1.0) {
     *ratio     = c_ratio;
     *xing_lat  = 1000.0 * radToDeg(yToLat(r_lat));
+    *xing_long = 1000.0 * radToDeg(r_long);
+    return 1;
+  }
+  return 0;
+}
+
+/**
+ * Check if the coast is crossed.
+ * order of parameters is:
+ * start lat/long of boat
+ * end lat/long of boat
+ * result:
+ * crossing lat/long
+ * ratio from the start to end of boat
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param xing_lat, a pointer to a <code>double</code>, 
+ *                  in <em>milli-degrees</em>
+ * @param xing_long, a pointer to a <code>double</code>, 
+ *                   in <em>milli-degrees</em> 
+ * @param ratio, a pointer to  a <code>double</code>, the ratio of 
+ *        the intersection, 0 (boat start) < ratio < 1 (boat end)
+ * @return 1 if crossing occured, 0 otherwise
+ */
+int VLM_check_cross_coast(double latitude, double longitude, 
+			  double new_lat, double new_long,
+			  double *xing_lat, double *xing_long,
+			  double *ratio) {
+
+  double c_ratio, r_lat, r_long;
+
+  latitude  = degToRad(latitude/1000.0);
+  longitude = fmod(degToRad(longitude/1000.0), TWO_PI);
+  new_lat   = degToRad(new_lat/1000.0);
+  new_long  = fmod(degToRad(new_long/1000.0), TWO_PI);
+
+  c_ratio = check_coast(latitude, longitude, new_lat, new_long,
+			&r_lat, &r_long);
+  if (c_ratio > -1.0) {
+    *ratio     = c_ratio;
+    *xing_lat  = 1000.0 * radToDeg(r_lat);
     *xing_long = 1000.0 * radToDeg(r_long);
     return 1;
   }

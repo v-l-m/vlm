@@ -17,9 +17,9 @@ include_once("vlmc.php");
     // The code used to implement the pre-start is to check if deptime + prestart-duration < time_of_wp_crossing
     //              ==> only if a waypoint is crossed, then if this WP is WP0,
 
-$xing_ratio = new doublep();
-$xing_lat   = new doublep();
-$xing_long  = new doublep();
+$wp_xingratio = new doublep();
+$wp_xinglat   = new doublep();
+$wp_xinglong  = new doublep();
 
     do {
         // 1- find the coordinates of user's next waypoint
@@ -39,11 +39,11 @@ $xing_long  = new doublep();
         if (VLM_check_cross_WP($latAvant, $lonAvant, $latApres, $lonApres, 
                                $nextwaypoint[0], $nextwaypoint[1], 
                                $nextwaypoint[2], $nextwaypoint[3],
-                               $xing_lat, $xing_long, $xing_ratio)) {
+                               $wp_xinglat, $wp_xinglong, $wp_xingratio)) {
           echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
           $waypoint_crossed=true;
           // fill the array lat and long are reversed...
-          $encounterCoordinates = array(doublep_value($xing_lat), doublep_value($xing_long)); 
+          $encounterCoordinates = array(doublep_value($wp_xinglat), doublep_value($wp_xinglong)); 
         }
 
         if ($waypoint_crossed == true ) {
@@ -74,7 +74,7 @@ $xing_long  = new doublep();
           /*     temps de course écoulé jusqu'à la vacatin d'avant
                  + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
           */
-	  //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($xing_ratio); (use this if we settle the time for the whole run)
+	  //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($wp_xingratio); (use this if we settle the time for the whole run)
 	  $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
 
           $duration = $timeAvant - $deptime + $timeSinceLastUpdate  ;

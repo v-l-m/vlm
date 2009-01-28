@@ -20,7 +20,8 @@ COPTIMFLAGS     = -O3
 EXTRA_CFLAGS    = -fPIC -pipe
 EXTRA_DEFINES   = 
 EXTRA_INCLUDES  =
-VLM_DEFINES     = -DVLM_COMPAT -DSAFE_LINE_CHECK -DPARANOID_COAST_CHECK
+VLM_DEFINES     = -DVLM_COMPAT -DSAFE_LINE_CHECK -DSAVE_MEMORY
+#VLM_DEFINES     = -DVLM_COMPAT -DSAFE_LINE_CHECK -DPARANOID_COAST_CHECK
 #VLM_DEFINES     = -DGRIB_TIME_OFFSET=2100 -DSAFE_LINE_CHECK
 
 CFLAGS = $(CDEBUGFLAGS) $(COPTIMFLAGS) $(EXTRA_CFLAGS) $(OS_DEFINES) $(EXTRA_DEFINES) $(VLM_DEFINES) $(EXTRA_INCLUDES) #-DDEBUG
@@ -122,7 +123,7 @@ context.o:  defs.h
 context.o:  types.h 
 vlm.o: defs.h  
 vlm.o:  types.h 
-vlm.o:  loxo.h vmg.h ortho.h
+vlm.o:  loxo.h vmg.h ortho.h lines.h
 move.o: defs.h  
 move.o:  types.h 
 move.o:  loxo.h vmg.h ortho.h

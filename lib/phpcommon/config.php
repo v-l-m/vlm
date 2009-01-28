@@ -10,6 +10,8 @@ $engineOnlyScripts = array("new-update-wind.php", "undate-wind.php");
 
 include_once("param.php");
 
+// The full path of the gshhs coast file in use (the "full" version)
+define("GSHHS_FILENAME", "".GSHHS_DIRECTORY."/gshhs_f.b");
 
 /********session params***********/
 #ini_set('session.use_only_cookies', 1);
@@ -182,5 +184,4 @@ include_once("f_windAtPosition.php");
 include_once("users.class.php");
 include_once("races.class.php");
 include_once("positions.class.php");
-include_once("gribfile.class.php");
 ?>

@@ -1,20 +1,31 @@
 <?php
+include_once("vlmc.php");
 
-/*
-This script is the engine of VLM
-launched every 3 hours, it will make a number of thing that will
-make the game alive :
-- check if the races should start and start them if necessary
-- move the boats, create new positions
-- change boats heading if necessary (autopilots)
-- check if someone has won the race
-- update weather
-- write a new value in the "update" table
+define('MOTEUR','Yes');
+
+/**
+ * This script is the engine of VLM
+ * launched every vacation (like 5mn), it will make a number of thing that will
+ * make the game alive :
+ * - check if the races should start and start them if necessary
+ * - move the boats, create new positions
+ * - change boats heading if necessary (autopilots)
+ * - check if someone crossed the coast
+ * - check if someone has won the race
+ * - write a new value in the "update" table
 */
 header("Cache-Control: no-store, no-cache, must-revalidate\n\n");
 header("Content-Type: text/plain\n\n");
 
 include("config.php");
+
+$global_vlmc_context = new vlmc_context();
+init_context($global_vlmc_context);
+set_gshhs_filename($global_vlmc_context, GSHHS_FILENAME);
+global_vlmc_context_set($global_vlmc_context);
+
+init_coastline();
+
 //$verbose=$_REQUEST['verbose'];
 $verbose=0;
 
@@ -25,11 +36,11 @@ $flagglobal=true;
 // Si on a un argument, c'est le numéro d'une course
 // Si on en a 2, c'est la course PUIS le numéro du bateau
 if ( $argc > 1 ) {
-	$RACE_NUM=$argv[1];
-        $flagglobal=false;
+  $RACE_NUM=$argv[1];
+  $flagglobal=false;
 }
 if ( $argc > 2 ) {
-	$USER_NUM=$argv[2];
+  $USER_NUM=$argv[2];
 }
 
 
@@ -48,23 +59,6 @@ $result = mysql_db_query(DBNAME,$querypurgeupdates);
 
 
 //echo "\n".$querypurgepositions;
-
-// Creates the temporary table for tmpcoastline
-$querydroptemp = "DROP TABLE IF EXISTS temporary.tmpcoastline;";
-$result = mysql_db_query('temporary',$querydroptemp) or die ("PB drop tmpcoastline");
-
-$querycreatetemp = "CREATE TEMPORARY TABLE temporary.tmpcoastline (
-                `idpoint` int(11) NOT NULL auto_increment,
-                `idcoast` int(11) NOT NULL default '0',
-                `longitude` double NOT NULL default '0',
-                `latitude`  double NOT NULL default '0',
-                        PRIMARY KEY  (`idpoint`),
-                        KEY `latitude` (`latitude`),
-                        KEY `longitude` (`longitude`),
-                        KEY `idcoast` (`idcoast`)
-                ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='tmpcoastline for crossing verification';";
-$result = mysql_db_query('temporary',$querycreatetemp) or die ("PB create tmpcoastline");
-//echo "\n".$querycreatetemp;
 
 
 // ========================================

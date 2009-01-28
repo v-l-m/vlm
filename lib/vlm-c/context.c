@@ -1,5 +1,5 @@
 /**
- * $Id: context.c,v 1.8 2008/08/06 09:50:05 ylafon Exp $
+ * $Id: context.c,v 1.9 2009-01-17 23:25:19 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -57,11 +57,7 @@ void set_polar_definition_filename(vlmc_context *global_vlmc_context,
 }
 
 void init_context(vlmc_context *global_vlmc_context) {
-  global_vlmc_context->windtable.wind       = NULL;
-  global_vlmc_context->windtable.nb_prevs   = 0;
-  global_vlmc_context->polar_list.polars    = NULL;
-  global_vlmc_context->polar_list.nb_polars = 0;
-  global_vlmc_context->init_value           = 0;
+  memset(global_vlmc_context, 0, sizeof(vlmc_context));
 }
 
 void init_context_default(vlmc_context *global_vlmc_context) {

@@ -123,24 +123,28 @@
 		$fullUsersObj->lastPositions->writePositions(); //important, will write a new position
 		echo " done";
 
-	       // ==========================
-	       // Does he cross a waypoint
-	       // ==========================
-               /**
-                 *  
-                 */
-	       include "check_waypoint_crossing.php";
-	       $fullUsersObj->writeCurrentRanking();
+		// ==========================
+		//  Do they cross the coast ?
+		// ==========================
+		include "check_coast_crossing.php";
+		// ==========================
+		// Does he cross a waypoint
+		// ==========================
+		include "check_waypoint_crossing.php";
+		$fullUsersObj->writeCurrentRanking();
 
-	       // ==========================
-	       //  Do they cross the coast ?
-	       // ==========================
-	       if ( ! $is_arrived ) {
-                  /**
-                    *  
-                    */
-	          include "check_coast_crossing.php";
-	       }
+		if ($crosses_the_coast && ! $is_arrived) {
+		  $fullUsersObj->setSTOPPED(); // sets the boat mooring
+		  $fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
+		  
+		  $fullUsersObj->lastPositions->lat=$latApres;
+		  $fullUsersObj->lastPositions->long=$lonApres;
+		  $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at this place
+		  
+		  // set wind angle to 0
+		  $fullUsersObj->users->pilotmode=2;
+		  $fullUsersObj->users->pilotparameter=0;
+		}
 
 	       // =========================================================================
 	       // Check if boat uses its own WP and is close to it (only if PIM != 1 or 2 )
