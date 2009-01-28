@@ -212,10 +212,10 @@ void VLM_loxo_distance_angle PARAM6(double, double, double, double,
  * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
  * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
- * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
- * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
- * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
- * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param wp0_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp0_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param wp1_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp1_long, a <code>double</code>, in <em>milli-degrees</em> 
  * @param ratio, a pointer to  a <code>double</code>, the ratio of 
  *        the intersection, 0 (boat start) < ratio < 1 (boat end)
  * @return 1 if crossing occured, 0 otherwise
@@ -223,5 +223,29 @@ void VLM_loxo_distance_angle PARAM6(double, double, double, double,
 int VLM_check_cross_WP PARAM11(double, double, double, double,
 			       double, double, double, double,
 			       double *, double *, double *);
+
+/**
+ * Check if the coast is crossed.
+ * order of parameters is:
+ * start lat/long of boat
+ * end lat/long of boat
+ * result:
+ * crossing lat/long
+ * ratio from the start to end of boat
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param xing_lat, a pointer to a <code>double</code>, 
+ *                  in <em>milli-degrees</em>
+ * @param xing_long, a pointer to a <code>double</code>, 
+ *                   in <em>milli-degrees</em> 
+ * @param ratio, a pointer to  a <code>double</code>, the ratio of 
+ *        the intersection, 0 (boat start) < ratio < 1 (boat end)
+ * @return 1 if crossing occured, 0 otherwise
+ */
+int VLM_check_cross_coast PARAM7(double, double, double, double,
+				 double *, double *,
+				 double *);
 
 #endif /* _VLM_H_ */

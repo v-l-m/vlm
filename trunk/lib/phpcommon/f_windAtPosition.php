@@ -48,14 +48,18 @@ function NOwindAtPosition($_lat , $_long, $when = 0)
 function SPFwindAtPosition($_lat , $_long, $when = 0)
 {
   /*
-    la fonction creer une structure contenant des pointeurs vers
-     le grib pour eviter tout deplacement de blocs memoire 
-     voir vlm-c/useshmem.c et shmem.c pour plus de details.
+    la fonction cree une structure contenant des pointeurs vers
+    le grib pour eviter tout deplacement de blocs memoire 
+    voir vlm-c/useshmem.c et shmem.c pour plus de details.
+    Si on se trouve en mode "MOTEUR", on evite de changer le contexte
+    sous les pieds de l'appli
   */
   include_once("vlmc.php");
-  
-  $global_vlmc_context = new vlmc_context();
-  global_vlmc_context_set($global_vlmc_context);
+
+  if (!defined('MOTEUR')) {
+    $global_vlmc_context = new vlmc_context();
+    global_vlmc_context_set($global_vlmc_context);
+  }
   shm_lock_sem_construct_grib(1);
   
   $wind_boat = new wind_info();
