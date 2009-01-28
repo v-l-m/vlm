@@ -50,7 +50,7 @@ for TSTAMP in `echo $allindexes` ; do
     GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
     let retry=1
     while [ $retry -gt 0 ]; do
-      wget --waitretry 600 -nc -c ${NOAA_SERVICE}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
+      wget --waitretry 600 -nc -c ${NOAA_SERVICE_URI}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
       let retry=$?
       if [ $retry -gt 0 ] ; then 
         sleep 30
