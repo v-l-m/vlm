@@ -8,3 +8,5 @@ _______________
  - "export VlMGSHHS=$VLMDATAS/gshhs"
 * EDIT hosting/conf/param.php and add
  - "define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");"
+* deployment of module maps :
+ $ ./maj_module.sh maps
