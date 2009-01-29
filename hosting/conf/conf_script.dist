@@ -31,7 +31,7 @@ export VLMVLMCSO=$VLMRACINE/bin/lib
 export VLMDATAS=$VLMRACINE/vlmdatas
 
 #Les gshhs seront (par défaut) dans VLMDATAS/gshhs
-export VlMGSHHS=$VLMDATAS/gshhs
+export VLMGSHHS=$VLMDATAS/gshhs
 
 #Chemin vers le stockage des gribs
 export VLMGRIBS=$VLMDATAS/gribs
