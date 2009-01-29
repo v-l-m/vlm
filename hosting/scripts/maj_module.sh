@@ -48,6 +48,10 @@ case $confmodule in
     #base)
     #Pas de post déploiement pour l'instant
     #;;
+    maps)
+    echo "+$confmodule : Test & déploiement des fichiers gshhs"
+    $destmodulepath/init-gshhs.sh
+    ;;
     site)
     echo -n "+$confmodule: Constitution et copie du fichier de version..."
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt
