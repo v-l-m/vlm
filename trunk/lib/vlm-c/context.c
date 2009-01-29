@@ -1,5 +1,5 @@
 /**
- * $Id: context.c,v 1.9 2009-01-17 23:25:19 ylafon Exp $
+ * $Id: context.c,v 1.10 2009-01-18 15:08:42 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -61,10 +61,10 @@ void init_context(vlmc_context *global_vlmc_context) {
 }
 
 void init_context_default(vlmc_context *global_vlmc_context) {
+  init_context(global_vlmc_context);
   set_grib_filename(global_vlmc_context, "latest.grb");
   set_gshhs_filename(global_vlmc_context, "gshhs.b");
   set_polar_definition_filename(global_vlmc_context, "../datas/polars.list");
-  init_context(global_vlmc_context);
 }
 
 /* return true if all the needed structures are filled */
