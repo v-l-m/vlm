@@ -34,7 +34,7 @@ depend::
 	$(DEPEND) -- $(EXTRA_DEFINES) -- $(SRCS)
 
 vlmc.so: ../libvlmc.a ../wgrib/libgrib.a ../vlmc.i
-	$(SWIG) -php5 -o vlmc_wrap.c ../vlmc.i
+	$(SWIG) -php5 -outdir . -o vlmc_wrap.c ../vlmc.i
 	$(CC) `php-config --includes` -I.. $(CFLAGS) -c vlmc_wrap.c
 	ld $(LD_FLAGS) vlmc_wrap.o ../libvlmc.a ../wgrib/libgrib.a -o vlmc.so $(EXTRA_LIBRARIES)
 
