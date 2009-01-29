@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.20 2009-01-07 14:36:14 ylafon Exp $
+ * $Id: winds.c,v 1.21 2009-01-29 11:06:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -41,11 +41,11 @@ void get_wind_info(boat *aboat, wind_info *wind) {
 
 wind_info *get_wind_info_latlong(double latitude, double longitude,
 				 time_t vac_time, wind_info *wind) {
-#ifdef VLM_COMPAT
+#ifdef DEFAULT_INTERPOLATION_UV
   return get_wind_info_latlong_UV(latitude, longitude, vac_time, wind);
 #else
   return get_wind_info_latlong_TWSA(latitude, longitude, vac_time, wind);
-#endif /* VLM_COMPAT */
+#endif /* DEFAULT_INTERPOLATION_UV */
 }
 
 wind_info *get_wind_info_latlong_now(double latitude, double longitude,

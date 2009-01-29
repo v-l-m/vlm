@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.10 2008/08/05 09:27:29 ylafon Exp $
+ * $Id: shmem.c,v 1.12 2009-01-29 11:05:39 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -181,6 +181,17 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
   winds *windarray;
   struct shmid_ds shminfo;
   
+  /*
+    we are storing in the segment array the folloing thing:
+    (int) nb_prevs
+    (time_t) grib offset (should be 0, may be moved to something else
+    nb_prevs * (wind) complete wind structure, aka
+                      -> time_t prevision_time
+                      -> double wind_u[[WIND_GRID_LONG][WIND_GRID_LAT]; 
+                      -> double wind_v[WIND_GRID_LONG][WIND_GRID_LAT];
+
+    As the types used are fixed, it's bery easy to process.
+  */
   if (shmctl(shmid, IPC_STAT , &shminfo) == -1) {
     fprintf(stderr, "Unable to access information on GRIB segment\n");
     return -1;
@@ -191,7 +202,7 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
   /* be sure to lock the semaphore before using this function */
   nb_bytes = nb_prevs * sizeof(winds);
   printf("Got %d entries in windtable\n", windtable->nb_prevs);
-  printf("Bytes used: %ld (winds struct size is %ld)\n",nb_bytes,sizeof(winds));
+  printf("Bytes used: %ld (winds struct size is %d)\n",nb_bytes,sizeof(winds));
   ok = (shminfo.shm_segsz > nb_bytes);
   printf("Segment size: %ld %s\n",  (long)shminfo.shm_segsz, 
 	 (ok) ? "OK" : "NOT OK");

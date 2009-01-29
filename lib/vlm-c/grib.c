@@ -1,5 +1,5 @@
 /**
- * $Id: grib.c,v 1.24 2009-01-05 09:20:47 ylafon Exp $
+ * $Id: grib.c,v 1.25 2009-01-29 11:06:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -489,11 +489,11 @@ winds **read_gribs(int *nb_prevs) {
 
 /* return a winds entry interpolated in the time domain */
 winds *generate_interim_grib(time_t gribtime) {
-#ifdef VLM_COMPAT
+#ifdef DEFAULT_INTERPOLATION_UV
   return generate_interim_grib_UV(gribtime);
 #else
   return generate_interim_grib_TWSA(gribtime);
-#endif /* VLM_COMPAT */
+#endif /* DEFAULT_INTERPOLATION_UV */
 }
 
 /* return a winds entry interpolated in the time domain using UV */
