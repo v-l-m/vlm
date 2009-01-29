@@ -1,0 +1,10 @@
+This file traces the changes that are required for upgrading from a previous VLM version
+
+To 0.9 from 0.8
+_______________
+
+* EDIT hosting/conf/conf_script and add
+ - "export VLMDATAS=$VLMRACINE/vlmdatas"
+ - "export VlMGSHHS=$VLMDATAS/gshhs"
+* EDIT hosting/conf/param.php and add
+ - "define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");"
