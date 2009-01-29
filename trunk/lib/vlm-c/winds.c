@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.21 2009-01-29 11:06:03 ylafon Exp $
+ * $Id: winds.c,v 1.23 2009-01-29 23:42:23 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -115,13 +115,13 @@ wind_info *get_wind_info_latlong_UV(double latitude, double longitude,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
-#ifdef GRIB_RESOLUTION_1
+#ifdef GRIB_RESOLUTION_0_5
+  d_long = d_long*2.0;
+  d_lat = d_lat*2.0;
+#endif /* GRID_RESOLUTION_0_5 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
-#else
-  t_long = (int)floor(d_long*2.0);
-  t_lat = (int)floor(d_lat*2.0);
-#endif /* GRID_RESOLUTION_1 */
+
   u0prev = prev->wind_u[t_long][t_lat];
   v0prev = prev->wind_v[t_long][t_lat];
   u1prev = prev->wind_u[t_long][t_lat+1];
@@ -322,13 +322,13 @@ wind_info *get_wind_info_latlong_TWSA(double latitude, double longitude,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
-#ifdef GRIB_RESOLUTION_1
+#ifdef GRIB_RESOLUTION_0_5
+  d_long = d_long*2.0;
+  d_lat = d_lat*2.0;
+#endif /* GRID_RESOLUTION_0_5 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
-#else
-  t_long = (int)floor(d_long*2.0);
-  t_lat = (int)floor(d_lat*2.0);
-#endif /* GRID_RESOLUTION_1 */
+
   u0prev = prev->wind_u[t_long][t_lat];
   v0prev = prev->wind_v[t_long][t_lat];
   u1prev = prev->wind_u[t_long][t_lat+1];
