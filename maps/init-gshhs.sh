@@ -14,7 +14,7 @@ if test -e $destpath/gshhs_f.b ; then
 else 
     echo "+initGshhs ; Downloading gshhs files from $urlgshhs to $destpath"
     rm -Rf $VLMTEMP/$gshhsfile
-    wget --directory-prefix=$VLMTEMP $urlgshhs
+    wget --output-document=$VLMTEMP/$gshhsfile $urlgshhs
     unzip -j $VLMTEMP/$gshhsfile -d $destpath/
 fi        
 
