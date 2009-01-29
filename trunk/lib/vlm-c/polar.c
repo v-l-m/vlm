@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.10 2008/07/05 21:37:26 ylafon Exp $
+ * $Id: polar.c,v 1.11 2009-01-29 11:06:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -64,7 +64,7 @@ void add_polar(char *pname, char *fname) {
     for (j=0; j<=60; j++) {
       ok = fscanf(pfile, "%d;%d;%lf", &wangle, &wspeed, &speed);
       if (!ok) {
-	      printf("ERROR while reading the polar file %s (i=%d, j=%d, wangle=%d, wspeed=%d, speed=%f)\n", fname, i, j, wangle, wspeed, speed);
+	printf("ERROR while reading the polar file %s\n", fname);
       }
       assert((wangle == i) && (wspeed == j));
       pol->polar_tab[i*61+j] = speed;
@@ -204,7 +204,7 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   int intspeed;
   double valfloor, valceil;
   double *polar_tab;
-#ifdef VLM_COMPAT
+#ifdef ROUND_WIND_ANGLE_IN_POLAR
   /* in VLM compatibility mode, we interpolate only speed, not angle
      which is rounded to nearest integer */
   intangle = rint(radToDeg(fabs(fmod(wind_angle, TWO_PI))));
@@ -255,7 +255,7 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   valceil  = polar_tab[intangle*61+intspeed+1];
   tvalceil = polar_tab[intangle_p1*61+intspeed+1];
   valceil += (tvalceil - valceil)*(tangle - (double)intangle);
-#endif /* VLM_COMPAT */
+#endif /* ROUND_WIND_ANGLE_IN_POLAR */
   /* linear interpolation for wind speed */
   return (valfloor + (valceil-valfloor)*(wind_speed-(double)intspeed));
 }
