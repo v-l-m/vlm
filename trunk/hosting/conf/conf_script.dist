@@ -27,9 +27,14 @@ export VLMVLMCSO=$VLMRACINE/bin/lib
 #DEBIAN:
 #export VLMPHPPATH="/usr/bin/php --define include_path=.:/usr/share/php5:$VLMJEUROOT/lib/phpcommon"
 
+#Racine des datas du jeu
+export VLMDATAS=$VLMRACINE/vlmdatas
+
+#Les gshhs seront (par défaut) dans VLMDATAS/gshhs
+export VlMGSHHS=$VLMDATAS/gshhs
 
 #Chemin vers le stockage des gribs
-export VLMGRIBS=$VLMRACINE/gribs
+export VLMGRIBS=$VLMDATAS/gribs
 export VLMGRIBSURL=http://grib.example.com
 
 ##########################################

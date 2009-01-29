@@ -14,6 +14,8 @@ case $svnmodule in
     ;;
     site)
     ;;
+    maps)
+    ;;
     moteur)
     ;;
     hosting)
@@ -25,7 +27,7 @@ case $svnmodule in
     lib/phpcommon)
     ;;
     *)
-    echo "Précisez : medias, base, moteur, site, grib, lib/vlm-c, lib/phpcommon..."
+    echo "Précisez : medias, base, moteur, site, grib, maps, lib/vlm-c, lib/phpcommon..."
     exit 1
     ;;
 esac
