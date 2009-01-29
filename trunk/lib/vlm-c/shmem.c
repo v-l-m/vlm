@@ -202,7 +202,8 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
   /* be sure to lock the semaphore before using this function */
   nb_bytes = nb_prevs * sizeof(winds);
   printf("Got %d entries in windtable\n", windtable->nb_prevs);
-  printf("Bytes used: %ld (winds struct size is %d)\n",nb_bytes,sizeof(winds));
+  printf("Bytes used: %ld (winds struct size is %ld)\n", nb_bytes, 
+                                                         (long)sizeof(winds));
   ok = (shminfo.shm_segsz > nb_bytes);
   printf("Segment size: %ld %s\n",  (long)shminfo.shm_segsz, 
 	 (ok) ? "OK" : "NOT OK");
