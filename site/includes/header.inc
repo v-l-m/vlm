@@ -258,14 +258,12 @@
     }
 ?>
         </div>
-        <hr />
         <div id="langbox">
             <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" alt="version Francaise" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" alt="English version" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" alt="Italian version" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" alt="Portugese version" width="30" height="20" /></a>
         </div>
-        <br />
         <div id="menubox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
             <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
@@ -287,7 +285,6 @@
                 echo "</b></a> ";
             ?>
         </div>
-        <hr />
         <div id="toolbarbox">
             <?php
               echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\">
@@ -298,13 +295,11 @@
                     <img src=\"images/site/outils.png\" alt=\"" . $strings[$lang]["tools"]. "\" /></a>";
             ?>
         </div>
-        <hr />
         <div id="weatherbox">
             <?php echo "<h3>".$strings[$lang]["weather"]."</h3>\n"; ?>
             <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
             <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><b><?echo $strings[$lang]["meteotools"]?></b></a><br />
         </div>
-        <hr />
         <div id="serverbox">
             <?php
               echo "Srv = " . SERVER_NAME . ".";
