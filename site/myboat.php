@@ -426,15 +426,6 @@ include_once("scripts/myboat.js");
         ?>
         </td></tr></table>
     <hr />
-        <!--
-        twa=<?php    printf ('%3.1f' , round($usersObj->boatanglewithwind,1) ) ?>&amp;
-        amure=<?php  echo $amure;  ?>&amp;
-        -->
-<!--
-<img src="radar.php?
-        idusers=<?php   echo ($usersObj->users->idusers)  ?>&amp;
-    ">
--->
 
 <!-- Pilote automatique -->
 <table width="99%">
