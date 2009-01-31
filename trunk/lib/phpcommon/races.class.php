@@ -71,12 +71,12 @@ class races
     while( $row = mysql_fetch_array( $result, MYSQL_NUM) ) {
       $WPcoords = array();
       $WPcoords = giveWaypointCoordinates ($this->idraces, $row[0] , WPLL/WP_NUMSEGMENTS);
-      // On push dans le tableau des coordonnÈes le wptype (classement ou son nom), et le libellÈ et le "laisser_au" du WP
+      // On push dans le tableau des coordonn√©es le wptype (classement ou son nom), et le libell√© et le "laisser_au" du WP
       array_push ($WPcoords, $row[1]);
       array_push ($WPcoords, $row[2]);
       array_push ($WPcoords, $row[3]);
 
-      // On push aussi le maparea adaptÈ
+      // On push aussi le maparea adapt√©
       array_push ($WPcoords, $row[4]);
 
       // On push ce WP dans la liste des WP
@@ -88,7 +88,7 @@ class races
     $this->stop2long = $WPcoords[3];
 
     // Calcul de la longueur totale de la course ==> $this->raceDistance
-    // == En partant de la position de dÈpart, boucle foreach sur les WP et addition de ortho(lastWP,nextWP)
+    // == En partant de la position de d√©part, boucle foreach sur les WP et addition de ortho(lastWP,nextWP)
 
     // Attention, ce calcul n'est valable que depuis la course 40 et au dela (ainsi que la 35)
     if ( $this->idraces == 35 OR $this->idraces >=40 ) {
@@ -120,9 +120,9 @@ class races
   //                    =0 pour les courses de type "record" (pas de temps limite) 
   //                       -NON, PLUS APRES ECHANGE D'AVIS AVEC PHILE-
   //    Pour les autres courses :
-  //                    >0 si le premier n'est pas arrivÈ ou est arrivÈ il y a peu de temps
+  //                    >0 si le premier n'est pas arriv√© ou est arriv√© il y a peu de temps
   //                       => on calcule cette valeur
-  //                    <0 lorsque pourcentage en plus du temps du premier est dÈpassÈ
+  //                    <0 lorsque pourcentage en plus du temps du premier est d√©pass√©
   function maxTimeRemaining($verbose = 0)
   {
     // Si course "record", il n'y avait pas de temps limite... 
@@ -131,7 +131,7 @@ class races
     //  }
     // => depuis le 14/10/2007, il y en a un : 2*PCT du temps du premier
 
-    // On est encore l‡... c'est une course classique
+    // On est encore l√†... c'est une course classique
     // Recherche du temps de course du premier (dans races_results)
     $query = "SELECT    duration
               FROM      races_results
@@ -142,10 +142,10 @@ class races
 
     $result = mysql_db_query(DBNAME,$query);
     if ( mysql_num_rows($result) == 0 ) {
-      return(1);  // on s'arrete l‡ si personne n'est arrivÈ !
+      return(1);  // on s'arrete l√† si personne n'est arriv√© !
     }
 
-    // On est encore l‡, on a donc un enregistrement "duration"
+    // On est encore l√†, on a donc un enregistrement "duration"
     $row = mysql_fetch_array($result, MYSQL_NUM);
     $WinnersRaceDuration = $row[0];
     
@@ -165,7 +165,7 @@ class races
     }
 
     // C'est trop tard...
-    //   <0 lorsque pourcentage en plus du temps du premier est dÈpassÈ
+    //   <0 lorsque pourcentage en plus du temps du premier est d√©pass√©
     if ( $now > $maxArrivalTime ) {
       if ( $verbose != 0 ) {
         printf ("La course est finie...\n");
@@ -173,7 +173,7 @@ class races
       return (-1);   
     } 
     // Il reste du temps donc $maxArrivalTime - $now
-    //   >0 si le premier n'est pas arrivÈ ou est arrivÈ il y a peu de temps
+    //   >0 si le premier n'est pas arriv√© ou est arriv√© il y a peu de temps
     else {
       if ( $verbose != 0 ) {
         printf ("La course n'est pas finie, fin dans %d heures\n",($maxArrivalTime-$now)/3600);
@@ -225,7 +225,7 @@ class fullRaces
       }
 
     // On prend aussi les utilisateurs de la table "races_results", pour les retrouver une fois la 
-    // course terminÈe. 
+    // course termin√©e. 
     $query6b = "SELECT DISTINCT idusers FROM races_results WHERE idraces = ".$this->races->idraces;
     $result6b = mysql_db_query(DBNAME,$query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_NUM))
@@ -361,7 +361,7 @@ class fullRaces
       $list = "empty";
     }
 
-    //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete l‡ !
+    //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete l√† !
     $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
     $result = mysql_db_query(DBNAME,$query);
     $row = mysql_fetch_assoc($result);
@@ -382,10 +382,10 @@ class fullRaces
       " ORDER by " . $sortclause ;
 
     $result = mysql_db_query(DBNAME,$query_ranking) or die ($query_ranking);
-    if (mysql_num_rows($result)==0) return;  // on s'arrete l‡ si personne n'est concernÈ !
+    if (mysql_num_rows($result)==0) return;  // on s'arrete l√† si personne n'est concern√© !
 
-    // On est encore l‡, on affiche le classement
-    // Si on est en cours de Blackout, on prÈvient
+    // On est encore l√†, on affiche le classement
+    // Si on est en cours de Blackout, on pr√©vient
     echo "<h3>";
     if ( $this->races->bobegin < $now && $now < $this->races->boend ) {
       echo $strings[$lang]["classification"]
@@ -417,7 +417,7 @@ class fullRaces
     $str.=" <a href=\"".$baseurl."&amp;sortkey=idusers&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
-    // Distance ‡ la prochaine marque (c'est le tri par dÈfaut)
+    // Distance √† la prochaine marque (c'est le tri par d√©faut)
     $str="<a href=\"".$baseurl."\">".$strings[$lang]["distance"]."</a>";
     echo "<th>".$str."</th>\n";
 
@@ -479,7 +479,7 @@ class fullRaces
     $key = 0; $printed =0;
     while( $row = mysql_fetch_assoc( $result ) ) {
 
-      // Si on a dÈj‡ affichÈ suffisament de lignes, on rend la main
+      // Si on a d√©j√† affich√© suffisament de lignes, on rend la main
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
       // N'entrent dans les tableaux que les bateaux effectivement en course
@@ -511,7 +511,7 @@ class fullRaces
       } else {
         $class="class=\"ranking\"";
       }
-      // Bateaux bloquÈs (lock) ou seulement ‡ la cote (oncoast)
+      // Bateaux bloqu√©s (lock) ou seulement √† la cote (oncoast)
       if ( $row[releasetime] > $now ) {
         $class="class=\"locked\"";
       } else if ( $row[pim] == 2 && abs($row[pip]) <= 1 ) {
@@ -558,7 +558,7 @@ class fullRaces
       printf("      <td>%5.2f</td>\n", $row[loch]);
 
       // Affichage de l'ETA
-      //               en milles  en noeuds ==> temps en heures avec dÈcimale
+      //               en milles  en noeuds ==> temps en heures avec d√©cimale
       // Maintenant + (distance / vitesse) * 3600 (on parle en secondes)
       // Si VMG != 0 alors on fait le calcul, sinon, pas la peine
       /*
@@ -593,7 +593,7 @@ class fullRaces
         $lat_side='S';
       }
 
-      // Calcul de l'URL de la carte Carte sur les 1∞ autour du bateau
+      // Calcul de l'URL de la carte Carte sur les 1¬∞ autour du bateau
       $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
         "&amp;lat=". round($latitude/1000,2) .
         "&amp;long=" . round($longitude/1000,2) .
@@ -633,7 +633,7 @@ class fullRaces
         }
       }
 
-      // Remarque Batafieu du 29/12 sur l'avance rÈelle de Toushuss
+      // Remarque Batafieu du 29/12 sur l'avance r√©elle de Toushuss
       // On compare les distances ortho entre les bateaux
       printf( "<td>%3.2f</td>\n", $dtl);
 
@@ -779,11 +779,11 @@ class fullRaces
     }
 
     /*
-      POUR CLASSEMENT DE TYPE TOTALTIME (temps cumulÈ entre plusieurs manches)
+      POUR CLASSEMENT DE TYPE TOTALTIME (temps cumul√© entre plusieurs manches)
       select idusers,sum(duration) from races_results where idraces in (404402, 404401) and position=1 and idusers in (select distinct(idusers) from races_results where idraces=404402 and position=1) group by idusers order by sum(duration) ASC limit 20 ;
     */
 
-    // WP=0 : classement ‡ l'arrivÈe
+    // WP=0 : classement √† l'arriv√©e
     if ( $WP == 0 ) {
       $query = "SELECT RR.position, RR.duration + RR.penalty duration, RR.idusers idusers, username, 
                         color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
@@ -792,7 +792,7 @@ class fullRaces
               AND       US.idusers = RR.idusers
               AND       position=" . $status . " " ;
 
-      /* Gaffe ‡ l'injection SQL : normalement, c'est OK */
+      /* Gaffe √† l'injection SQL : normalement, c'est OK */
       $valid_sortkeys=array("duration", "deptime", "arrtime","loch");
       if ( in_array($sortkey, $valid_sortkeys) ) {
         if ( $sortkey == "arrtime" ) $sortkey = "deptime + duration + penalty ";
@@ -810,10 +810,10 @@ class fullRaces
       }
 
     } else {
-      // WP!=0 : classement au WP donnÈ 
+      // WP!=0 : classement au WP donn√© 
       $sortclause="";
       $valid_sortkeys=array("duration", "arrtime");
-      /* Gaffe ‡ l'injection SQL : normalement, c'est OK */
+      /* Gaffe √† l'injection SQL : normalement, c'est OK */
       if ( in_array($sortkey, $valid_sortkeys) ) {
         if ( $sortkey == "duration" ) $sortkey = " duration ";
         if ( $sortkey == "arrtime" ) $sortkey = " time ";
@@ -828,8 +828,8 @@ class fullRaces
         $sortclause .= " ASC";
       }
 
-      // Cette requete est une adaptation de celle utilisÈe pour l'arrivÈe 
-      // Elle doit donc retourner les mÍmes colonnes dans le meme ordre
+      // Cette requete est une adaptation de celle utilis√©e pour l'arriv√©e 
+      // Elle doit donc retourner les m√™mes colonnes dans le meme ordre
       /* $query = "SELECT RR.position, RR.duration, RR.idusers idusers, username, 
          color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch */
 
@@ -847,7 +847,7 @@ class fullRaces
     }
 
     $result = mysql_db_query(DBNAME,$query); // or die ($query);
-    if (mysql_num_rows($result)==0) return;  // on s'arrete l‡ si personne n'est concernÈ !
+    if (mysql_num_rows($result)==0) return;  // on s'arrete l√† si personne n'est concern√© !
 
     switch ($status) {
     case BOAT_STATUS_ARR:
@@ -890,7 +890,7 @@ class fullRaces
       echo "      <th>". $strings[$lang]["position"]."</th>\n";
     }
 
-    // DerniËre colonne : loch
+    // Derni√®re colonne : loch
     echo "      <th>". $strings[$lang]["loch"]."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
       echo "      <th>". $strings[$lang]["penalite"]."</th>\n";
@@ -905,7 +905,7 @@ class fullRaces
     $rank = 0; $printed=0;
     while ($row = mysql_fetch_assoc($result))
       {
-        // Si on a dÈj‡ affichÈ suffisament de lignes, on rend la main
+        // Si on a d√©j√† affich√© suffisament de lignes, on rend la main
         if ( $startnum > 0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
         if ( $row[position] ==  BOAT_STATUS_ARR ) {
@@ -984,7 +984,7 @@ class fullRaces
             break;
           }
         }
-        // Calcul de l'Ècart (temps de course dans un cas, heure d'arrivÈe dans l'autre)
+        // Calcul de l'√©cart (temps de course dans un cas, heure d'arriv√©e dans l'autre)
         if ( $row[position] == BOAT_STATUS_ARR ) {
           if ( $rank == 1 ) {
             printf("<td>%s</td>\n",$strings[$lang]["winner"]);
