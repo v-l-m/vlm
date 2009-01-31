@@ -23,6 +23,14 @@ body
   margin-bottom: 0 ;/*0 important sinon menu va pas en dessous*/
 }
 
+#loginbox {}
+#langbox {}
+#msgbox {}
+#menubox {}
+#weatherbox {}
+#toolbarbox {}
+#serverbox {}
+
 #main
 {
   width: 825px;
