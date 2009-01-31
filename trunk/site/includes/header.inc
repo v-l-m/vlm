@@ -218,8 +218,8 @@
             <input type="hidden" name="type" value="login" />
          </p>
          <p align="center">
-     <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
-   </p>
+             <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
+         </p>
       </form>
 <?php
        printf ("   ".$strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
@@ -236,9 +236,9 @@
         */  
 ?>
         <p align="center">
-        <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
-        <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
-        <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
+            <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
+            <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
+            <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
         </p>
         <form method="post" action="index.php">
           <p align="center">
@@ -247,7 +247,6 @@
             <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
           </p>
         </form>
-
 <?php
         // Bouton "ADMIN" pour les administrateurs
         if ( idusersIsAdmin (getLoginId()) ) {
@@ -286,17 +285,18 @@
             ?>
         </div>
         <div id="toolbarbox">
-            <?php
-              echo "<a href=\"http://wiki.virtual-loup-de-mer.org/\" target=\"_vlmwiki\">
-                    <img src=\"images/site/documentation.png\"  alt=\"". $strings[$lang]["doc"]."\" /></a>";
-              echo "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\" target=\"_vlmdev\">
-                    <img src=\"images/site/vlmdev.png\"  alt=\"". $strings[$lang]["dev"]."\" /></a>";
-              echo "<a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM\" target=\"_outils\">
-                    <img src=\"images/site/outils.png\" alt=\"" . $strings[$lang]["tools"]. "\" /></a>";
-            ?>
+            <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
+                <img src="images/site/documentation.png"  alt="<?php echo $strings[$lang]["doc"]; ?>" title="<?php echo $strings[$lang]["doc"]; ?>" />
+            </a>
+            <a href="http://dev.virtual-loup-de-mer.org/vlm/" target="_vlmdev">
+                <img src="images/site/vlmdev.png"  alt="<?php echo $strings[$lang]["dev"]; ?>" title="<?php echo $strings[$lang]["dev"]; ?>" />
+            </a>
+            <a href="http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM" target="_outils">
+                <img src="images/site/outils.png" alt="<?php echo $strings[$lang]["tools"]; ?>" title="<?php echo $strings[$lang]["tools"]; ?>"/>
+            </a>            
         </div>
         <div id="weatherbox">
-            <?php echo "<h3>".$strings[$lang]["weather"]."</h3>\n"; ?>
+            <h3><?php echo $strings[$lang]["weather"]; ?></h3>
             <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
             <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><b><?echo $strings[$lang]["meteotools"]?></b></a><br />
         </div>
