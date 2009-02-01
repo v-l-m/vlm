@@ -1115,16 +1115,17 @@ function getLoginId()
 
 function getTheme()
 {
-   if isLoggedIn() {
-      if isset($_SESSION['theme']) {
+   if (isLoggedIn() ) {
+      if ( isset($_SESSION['theme']) ) {
           return ($_SESSION['theme']);
       } else {
           $users = new fullUsers(getLoginId());
-          return $users->users->theme;
+          return ( $users->users->theme );
       }
    else {
-      return "default";
+      return ( "default" );
    }
+
 function setUserPref($idusers,$pref_name,$pref_value)
 {
   if ($idusers != "") {
