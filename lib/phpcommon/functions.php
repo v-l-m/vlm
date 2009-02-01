@@ -1069,7 +1069,7 @@ function createAccount($log, $pass, $mail, $country)
 
 function login($idus, $pseudo)
 {
-  //echo "calling login wiith $idus and $pseudo\n";
+  //echo "calling login with $idus and $pseudo\n";
   //if (!isset($_SESSION['idusers']))
   {
     session_start();
