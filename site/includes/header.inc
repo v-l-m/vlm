@@ -18,7 +18,7 @@
     if (eregi("^http", $blocnote) || eregi("://", $blocnote)) {
         $blocnote="BAD NOTEPAD (code inclusion is forbidden)";
     }
-    $color=quote_smart($_REQUEST['theme']);
+    $theme=quote_smart($_REQUEST['theme']);
     $country=quote_smart($_REQUEST['country']);
     $hidepos=quote_smart($_REQUEST['hidepos']);
     $invisible=quote_smart($_REQUEST['invisible']);
@@ -102,6 +102,7 @@
         //FIXME : no escaping ?
         $users->users->blocnote = $blocnote;
         $users->users->country = $country;
+        $users->users->theme = $theme;
         // Hidepos : si on est caché, valeur positive (que le moteur décrémente)
         //           sinon, valeur négative.
         //           La valeur est le capital de vacations qu'on peut être caché
