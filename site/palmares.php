@@ -9,7 +9,8 @@ $lang=htmlentities(quote_smart($_REQUEST['lang']));
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<? echo $lang ?>">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="style/new-style.css" />
+  <link rel="stylesheet" type="text/css" href="style/base-style.css" />
+  <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
   <link rel="shortcut icon" type="image/png" href="images/site/favicon.png" />
   <title>Virtual Loup-De-Mer </title>
 </head>

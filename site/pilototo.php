@@ -15,7 +15,8 @@ isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang="en";
 // Les entêtes
 echo "<html><head>";
 echo "<title>VLM Programmable Auto Pilot (" . $lang . ")</title>";
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/new-style.css\" />";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/base-style.css\" />";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/" . getTheme() . "/style.css\" />";
 
 ///   CODE JAVASCRIPT
 ?>

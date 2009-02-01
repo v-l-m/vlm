@@ -20,7 +20,7 @@ include_once("config.php");
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>">
   <head>
     <title>Admin VLM</title>
-    <link rel="stylesheet" type="text/css" href="styles/new-style.css" />
+    <link rel="stylesheet" type="text/css" href="styles/base-style.css" />
     <script type="text/javascript" src="scripts/dms.js"></script>
   </head>
   <body>

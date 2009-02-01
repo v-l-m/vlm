@@ -153,7 +153,7 @@
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
-   <link rel="stylesheet" type="text/css" href="style/new-style.css" />
+   <link rel="stylesheet" type="text/css" href="style/base-style.css" />
    <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
    <link rel="icon" type="image/png" href="images/site/favicon.png" />
    <title>Virtual Loup-De-Mer </title>
