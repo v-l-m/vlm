@@ -3,10 +3,31 @@ This file traces the changes that are required for upgrading from a previous VLM
 To 0.9 from 0.8
 _______________
 
+(Do it in this order, please)
+
+=Configuration=
+
 * EDIT hosting/conf/conf_script and add
  - "export VLMDATAS=$VLMRACINE/vlmdatas"
  - "export VlMGSHHS=$VLMDATAS/gshhs"
 * EDIT hosting/conf/param.php and add
  - "define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");"
-* deployment of module maps :
+ 
+=Database=
+ 
+See file UPDATE in the module "base"
+
+=Grib=
+
+Please run the new 'windserver' binary ASAP in order to have a correct segment in memory.
+
+=Maps=
+
+You have to make deployment of module maps :
  $ ./maj_module.sh maps
+ 
+This is going to download gshhs files during the first deployment.
+
+= Others=
+
+Just deploy other modules again.
