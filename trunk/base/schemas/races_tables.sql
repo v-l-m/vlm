@@ -29,6 +29,7 @@ CREATE TABLE `races` (
   `bobegin` bigint(20) default '0',
   `boend` bigint(20) default '0',
   `maxboats` int(11) default '0',
+  `theme` varchar(30) default NULL,
   PRIMARY KEY  (`idraces`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2008443516 DEFAULT CHARSET=latin1 COMMENT='The races that exist';
 

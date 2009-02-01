@@ -96,6 +96,7 @@ CREATE TABLE `users` (
   `hidepos` tinyint(4) default '0',
   `blocnote` varchar(250) default NULL,
   `ipaddr` varchar(16) default '0',
+  `theme` varchar(30) default NULL,
   PRIMARY KEY  (`idusers`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9338 DEFAULT CHARSET=latin1 COMMENT='Utilisateurs de VLM';
 
