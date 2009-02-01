@@ -104,7 +104,7 @@
         $users->users->country = $country;
         $users->users->theme = $theme;
         //on en profite pour nettoyer la session
-        unset($_SESSION['theme'])
+        unset($_SESSION['theme']);
         // Hidepos : si on est caché, valeur positive (que le moteur décrémente)
         //           sinon, valeur négative.
         //           La valeur est le capital de vacations qu'on peut être caché
