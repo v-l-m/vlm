@@ -30,7 +30,7 @@ class users
     $hidepos,
     $blocnote,
     $ipaddr,
-    $pilototo;
+    $pilototo,
     $theme;
 
   function users($id)
