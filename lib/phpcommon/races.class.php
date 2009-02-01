@@ -26,6 +26,7 @@ class races
     $bobegin,
     $boend,
     $maxboats,
+    $theme,
     $waypoints,
     $racedistance;
 
@@ -34,7 +35,7 @@ class races
     $query= "SELECT idraces, racename, started, deptime, startlong, startlat, 
              boattype, closetime, racetype, firstpcttime, depend_on, 
              qualifying_races, idchallenge, coastpenalty, bobegin, boend,
-             maxboats
+             maxboats, theme
              FROM races WHERE idraces = $id";
     $result = mysql_db_query(DBNAME,$query) or die($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
@@ -56,7 +57,7 @@ class races
     $this->bobegin          = $row[14];
     $this->boend            = $row[15];
     $this->maxboats         = $row[16];
-
+    $this->theme            = $row[16];
     // retreive all waypoints
     $this->waypoints =array();
 

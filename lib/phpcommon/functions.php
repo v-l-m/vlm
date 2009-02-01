@@ -1116,15 +1116,25 @@ function getLoginId()
 function getTheme()
 {
    if (isLoggedIn() ) {
+      //Connecté
       if ( isset($_SESSION['theme']) ) {
+          //On utilise la session
           return ($_SESSION['theme']);
       } else {
-          $users = new fullUsers(getLoginId());
-          return ( $users->users->theme );
+          //La première fois, la session ne contient pas le theme
+          $users = new users(getLoginId());
+          if ( $users->engaged != 0 ) {
+              //Le joueur est engagé dans une course
+              $race = new races($users->engaged);
+              if ( !is_null($race->theme) ) {
+                  return ( $race->theme);
+              }
+          }
       }
-   } else {
-      return ( "default" );
+      return ( $users->theme );
    }
+   return ( "default" );
+
 }
 
 function setUserPref($idusers,$pref_name,$pref_value)

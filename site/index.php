@@ -1,4 +1,4 @@
-<?
+<?php
 //ini_set(arg_separator.output, "&amp;");
 include_once("includes/header.inc");
 
