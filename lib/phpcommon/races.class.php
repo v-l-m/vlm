@@ -57,7 +57,7 @@ class races
     $this->bobegin          = $row[14];
     $this->boend            = $row[15];
     $this->maxboats         = $row[16];
-    $this->theme            = $row[16];
+    $this->theme            = $row[17];
     // retreive all waypoints
     $this->waypoints =array();
 
