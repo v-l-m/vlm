@@ -59,7 +59,7 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
         echo "</p>\n<h1>".$strings[$lang]["choose_your_country"]."</h1>\n";
         echo "<select name=\"country\">\n" . $select_list . "</select>\n";
     }
-    closedir($dh)
+    closedir($dh);
 
     // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
     // give a list of theme (taken in directory "style")
@@ -84,7 +84,7 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
         echo "</p>\n<h1>".$strings[$lang]["choose_your_theme"]."</h1>\n";
         echo "<select name=\"theme\">\n" . $select_list . "</select>\n";
     }
-    closedir($dh)
+    closedir($dh);
 
 ?>
 <br />

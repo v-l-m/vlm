@@ -18,6 +18,7 @@
     if (eregi("^http", $blocnote) || eregi("://", $blocnote)) {
         $blocnote="BAD NOTEPAD (code inclusion is forbidden)";
     }
+    $color=quote_smart($_REQUEST['theme']);
     $country=quote_smart($_REQUEST['country']);
     $hidepos=quote_smart($_REQUEST['hidepos']);
     $invisible=quote_smart($_REQUEST['invisible']);
