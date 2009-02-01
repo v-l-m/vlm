@@ -103,6 +103,8 @@
         $users->users->blocnote = $blocnote;
         $users->users->country = $country;
         $users->users->theme = $theme;
+        //on en profite pour le mettre dans la session
+        $_SESSION['theme'] = $theme
         // Hidepos : si on est caché, valeur positive (que le moteur décrémente)
         //           sinon, valeur négative.
         //           La valeur est le capital de vacations qu'on peut être caché
@@ -152,7 +154,7 @@
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
    <link rel="stylesheet" type="text/css" href="style/new-style.css" />
-   <link rel="stylesheet" type="text/css" href="style/<?php echo $users->users->theme; ?>/style.css" />
+   <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
    <link rel="icon" type="image/png" href="images/site/favicon.png" />
    <title>Virtual Loup-De-Mer </title>
 
