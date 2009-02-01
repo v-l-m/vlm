@@ -5,6 +5,10 @@ Depuis la mise en production de la V0.8
   UPDATE users SET country="00-UN" WHERE country is NULL;
   ALTER TABLE users ALTER COLUMN country SET DEFAULT '00-UN';
 
+* ajout de la préférence de theme
+
+  ALTER TABLE users ADD COLUMN theme varchar(30) default NULL;
+
 Depuis la 0.7.1 (production vlm au 31/11/2008)
 
 * Suite au nettoyage du code

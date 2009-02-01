@@ -31,6 +31,7 @@ class users
     $blocnote,
     $ipaddr,
     $pilototo;
+    $theme;
 
   function users($id)
   {
@@ -40,7 +41,7 @@ class users
       " boatname, color, boatheading, pilotmode, pilotparameter,".
       " engaged, lastchange, email, nextwaypoint, userdeptime, " .
       " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
-      " mooringtime, releasetime, hidepos, blocnote, ipaddr  FROM  users WHERE idusers = ".$id;
+      " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
 
 
     //    $result = mysql_db_query(DBNAME,$query) or die("\n FAIL::::::: ".$query."\n");
@@ -73,9 +74,13 @@ class users
     $this->hidepos = $row[23]; 
     $this->blocnote = $row[24]; 
     if ( eregi("^http|://|script|language|<|>", $this->blocnote) ) {
-      $this->blocnote="some characters are not valid in your notepad";
+        $this->blocnote="some characters are not valid in your notepad";
     } 
-    $this->ipaddr = $row[25]; 
+    $this->ipaddr = $row[25];
+    $this->theme = $row[26];
+    if ( is_null($this->theme) ) {
+        $this->theme = 'default';
+    } 
   }
 
   //update boatname and color
