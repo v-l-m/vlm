@@ -1127,12 +1127,15 @@ function getTheme()
               //Le joueur est engagé dans une course
               $race = new races($users->engaged);
               if ( !is_null($race->theme) ) {
+                  //La course possède un thème, on l'utilise
                   return ( $race->theme);
               }
           }
       }
+      // Dans tous les autres cas ou on est identifié, on renvoie le thème de l'utilisateur (éventuellement 'default')
       return ( $users->theme );
    }
+   //Non connecté, on utilise le thème par defaut
    return ( "default" );
 
 }

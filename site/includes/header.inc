@@ -103,7 +103,7 @@
         $users->users->blocnote = $blocnote;
         $users->users->country = $country;
         $users->users->theme = $theme;
-        //on en profite pour nettoyer la session
+        //on en profite pour nettoyer la session. le theme sera rechargé au premier appel de getTheme()
         unset($_SESSION['theme']);
         // Hidepos : si on est caché, valeur positive (que le moteur décrémente)
         //           sinon, valeur négative.
