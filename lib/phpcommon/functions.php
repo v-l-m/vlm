@@ -1122,9 +1122,10 @@ function getTheme()
           $users = new fullUsers(getLoginId());
           return ( $users->users->theme );
       }
-   else {
+   } else {
       return ( "default" );
    }
+}
 
 function setUserPref($idusers,$pref_name,$pref_value)
 {
