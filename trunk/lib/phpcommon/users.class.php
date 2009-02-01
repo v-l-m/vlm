@@ -88,7 +88,8 @@ class users
   {
     //write everything in db
     $query = "UPDATE users SET `boatname` = '" . addslashes($this->boatname) . "'," . 
-      " `color` = '" . $this->color . "'," . 
+      " `color` = '" . $this->color . "'," .
+      " `theme` = '" . $this->theme . "'," .
       " `email` = '" . $this->email . "'," . 
       " `country` = '" . $this->country . "'," . 
       " `hidepos` =  " . $this->hidepos . "," . 
