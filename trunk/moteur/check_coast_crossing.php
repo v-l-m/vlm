@@ -5,7 +5,7 @@ $coast_xingratio = new doublep();
 $coast_xinglat   = new doublep();
 $coast_xinglong  = new doublep();
 
-echo "\tChecking for coast crossing (vlm-c)\n ";
+echo "\n\tChecking for coast crossing (vlm-c)\n ";
 echo "\tUsing: ".GSHHS_FILENAME."\n ";
 
 $crosses_the_coast = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
