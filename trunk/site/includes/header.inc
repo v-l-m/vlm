@@ -1,9 +1,11 @@
 <?php
-    //header("Content-type: text/html");
+
     session_start();
     include_once("strings.inc");
     include_once("config.php");
     
+    header("Content-type: text/html; charset=utf-8");
+
     //all GET and POST variables
     if ( isset($_REQUEST['lang']) ) {
         $lang=quote_smart($_REQUEST['lang']);

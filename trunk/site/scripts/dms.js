@@ -22,7 +22,7 @@ function convertdmslat()
   var latsecmil=Math.round((latsectot)*10000)/10000;
   
   //dms concaténés pour la latitude
-  document.coordonnees.latdms.value=(latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
+  document.coordonnees.latdms.value=(latdegent)+"&deg; "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
     }
 }
 
@@ -49,7 +49,7 @@ function convertdmslong()
   var longsecmil=Math.round((longsectot)*10000)/10000;
 
   //dms concaténés pour la longitude
-  document.coordonnees.longdms.value=(longdegent)+"° "+(longminent)+"' "+(longsecmil)+"\" "+(longsign);
+  document.coordonnees.longdms.value=(longdegent)+"&deg; "+(longminent)+"' "+(longsecmil)+"\" "+(longsign);
     }
 
 }
