@@ -6,12 +6,17 @@ _______________
 (Do it in this order, please)
 
 =Configuration=
-
-* EDIT hosting/conf/conf_script and add
- - "export VLMDATAS=$VLMRACINE/vlmdatas"
- - "export VlMGSHHS=$VLMDATAS/gshhs"
+* EDIT hosting/conf/conf_script
+ - change the branch to V_0_9 
+ - add "export VLMDATAS=$VLMRACINE/vlmdatas"
+ - add "export VlMGSHHS=$VLMDATAS/gshhs"
 * EDIT hosting/conf/param.php and add
  - "define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");"
+
+=Hosting=
+
+Update the script directory :
+~/scripts/maj_scripts.sh
  
 =Database=
  
