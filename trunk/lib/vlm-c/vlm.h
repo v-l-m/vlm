@@ -121,6 +121,28 @@ double VLM_ortho_distance PARAM4(double, double, double, double);
 double VLM_ortho_heading PARAM4(double, double, double, double);
 
 /**
+ * Get loxodromic distance
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @return heading, a <code>double</code>, the resulting
+ *                 distance in <em>nm</em>
+ */
+double VLM_loxo_distance PARAM4(double, double, double, double);
+
+/**
+ * Get loxodromic heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @return heading, a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+double VLM_loxo_heading PARAM4(double, double, double, double);
+
+/**
  * Compute the orthodromic distance between a point and a line defined
  * by two points, A & B
  * This is done in cartesian coordinates to find the intersection point

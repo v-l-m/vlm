@@ -225,6 +225,28 @@ function ortho_heading($lat, $long, $latnm, $longnm)  {
   return VLM_ortho_heading($lat, $long, $latnm, $longnm);
 }
 
+/**
+ * @input, lat, long (current pos, next mark), millidegrees
+ * @return distance, in nm
+ */
+function loxo($lat, $long, $latnm, $longnm)  {
+  if (($lat == $latnm) && ($long == $longnm)) {
+    return 0.0;
+  } 
+  return VLM_loxo_distance($lat, $long, $latnm, $longnm);
+}
+
+/**
+ * @input, lat, long (current pos, next mark), millidegrees
+ * @return heading, in degrees
+ */
+function loxo_heading($lat, $long, $latnm, $longnm)  {
+  if (($lat == $latnm) && ($long == $longnm)) {
+    return 0.0;
+  } 
+  return VLM_loxo_heading($lat, $long, $latnm, $longnm);
+}
+
 // For a refpoint (long/lat) and a distance and a heading, give the end point 
 // Used in "One point" waypoints
 // Used in track projection

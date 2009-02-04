@@ -1167,83 +1167,6 @@ class fullUsers
 
   }
 
-
-  //=================================================================//
-  //                     loxodromic Heading                          //
-  //                       By JP Mars 2007                           //
-  //-----------------------------------------------------------------//
-  //            from a position and a destination,                   //
-  //       return the angle to follow an loxodromic course.          //
-  //-----------------------------------------------------------------//
-  //        Algo written by John-Pet (JP@virtual-winds.com)          //
-  //=================================================================//
-
-  function loxodromicHeading()
-  {
-
-    // Find the best coordinates to cross the nextwaypoint
-    $long_wp = deg2rad($this->LongNM/1000);
-    $lat_wp  = deg2rad($this->LatNM/1000);
-
-    $long_bat = deg2rad($this->lastPositions->long/1000);
-    $lat_bat  = deg2rad($this->lastPositions->lat/1000);
-
-    //printf ("   En radian : lat_bat=%f, long_bat=%f<BR>", $lat_bat, $long_bat);
-    //printf ("   En radian : lat_wp=%f, long_wp=%f<BR>", $lat_wp, $long_wp);
-
-    // Correction de la longitude de départ pour la gestion de l'antiméridien
-    if ( $long_bat < 0 and $long_wp > 0 and ($long_bat - $long_wp) < M_PI and ($long_bat - $long_wp) < -M_PI ) {
-      $cor_long_bat = 2 * M_PI + $long_bat;
-    } else {
-      $cor_long_bat = $long_bat;
-    }
-
-    // Correction de la longitude d'arrivée pour la gestion de l'antiméridien
-    if ( $long_bat > 0 and $long_wp < 0 and ($long_bat - $long_wp) > M_PI and ($long_bat - $long_wp) > - M_PI ) {
-      $cor_long_wp = 2 * M_PI + $long_wp;
-    } else {
-      $cor_long_wp = $long_wp;
-    }
-
-    // Nouvelles longitudes selon correction ou pas
-    $long_bat = $cor_long_bat;
-    $long_wp  = $cor_long_wp;
-
-    // calcul de l'angle avec gestion des caps 90 et 270°
-    $dla = rad2deg(60 * ($lat_bat - $lat_wp));
-    $dlom = rad2deg(60 * cos(($lat_bat + $lat_wp) / 2) * ($long_bat - $long_wp));
-      
-    if ($dlom == 0 ) {
-      $angle = 0;
-    } else {
-      $angle = abs(rad2deg(atan($dla / $dlom)));
-    }
-
-    // Résultat pour le cap loxo à suivre
-    if ( $lat_bat < $lat_wp and $long_bat > $long_wp ) {
-      $caploxo = 270 + $angle;
-    } elseif ( $lat_bat < $lat_wp and $long_bat < $long_wp ) {
-      $caploxo = 90 - $angle;
-    } elseif ( ( $lat_bat > $lat_wp and $long_bat > $long_wp ) or ($lat_bat == $lat_wp and $long_bat > $long_wp ) ) {
-      $caploxo = 270 - $angle;
-    } elseif ( ($lat_bat > $lat_wp and $long_bat < $long_wp ) or ($lat_bat == $lat_wp and $long_bat < $long_wp ) ) {
-      $caploxo = 90 + $angle;
-    } elseif ( ($lat_bat < $lat_wp and $long_bat == $long_wp ) or ($lat_bat == $lat_wp and $long_bat == $long_wp ) ) {
-      $caploxo = 0;
-    } elseif ( $lat_bat > $lat_wp and $long_bat == $long_wp ) {
-      $caploxo = 180;
-    } 
-
-    // Résultat pour la distance loxo
-    if ( $dlom == 0 ) {
-      $distloxo = abs($dla);
-    } else {
-      $distloxo = abs($dlom / cos(deg2rad($angle * M_PI)));
-    }
-
-    return $caploxo;
-  }
-
   /**
    * return the orthodromic heading from the current position
    * to the next mark
@@ -1254,6 +1177,17 @@ class fullUsers
 			 $this->LatNM, $this->LongNM);
   }
 
+  /**
+   * return the orthodromic heading from the current position
+   * to the next mark
+   * @return the heading in degrees.
+   */
+  function loxodromicHeading() {
+    return loxo_heading($this->lastPositions->lat, $this->lastPositions->long,
+			 $this->LatNM, $this->LongNM);
+  }
+
+  
   // ============================================================================================
   // This function is used to verify if two vectors are crossing each-other
   // It returns true if yes, false if no
