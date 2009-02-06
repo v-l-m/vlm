@@ -18,9 +18,11 @@ class positions
 
   function getLastPositions($id, $race)
   {
+    // same query as getAnteLastPositions do use the DB cache.
     $query= "SELECT `time`, `long`, `lat`, `idusers` , `race` ".
-      "FROM positions WHERE idusers =  $id  AND race = $race " .
-      "ORDER BY `time` DESC LIMIT 1";
+      "FROM positions WHERE idusers = $id AND race = $race " .
+      "ORDER BY `time` DESC LIMIT 2";
+
 //      echo "REQUEST: $query \n";
 
     $result = mysql_db_query(DBNAME,$query);
