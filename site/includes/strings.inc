@@ -3,6 +3,7 @@ $strings =
 array(
 
 "en" => array(
+          "lang_version"=>"English Version",
           "home" => "Home",
           "images" => "Images",
           "motd" => "Version 0.5.5",
@@ -294,6 +295,7 @@ array(
 
 
 "fr" => array(
+        "lang_version"=>"Version Française",
         "home" => "Accueil",
         "images" => "Images",
         "motd" => "Version 0.5.5",
@@ -349,7 +351,7 @@ array(
         "satellite" => "Photo satellite de l'Atlantique Nord (Weather Channel):",
         "faqtitle" =>"Foire Aux Questions - Virtual Loup-de-mer.",
         "q1" => "Qu'est-ce Virtual Loup-De-Mer ?",
-        "a1" => "C'est une simulation en temps r&eacute;el de strat&eacute;gie et de routage m&eacute;t&eacute;o dans le cadre de courses &agrave; la voile. Les donn&eacute;es m&eacute;t&eacute;o utilis&eacute;es sont celles des fichiers GRIB utilis&eacute;s par les navigateurs r&eacute;ls pour estimer leur strat&eacute;gie. Il s'agit de donn&eacute;es de pr&eacute;vision m&eacute;t&eacute;o (force et direction du vent) qui sont mises &agrave; jour toutes les 3 heures (r&eacute;ception &agrave; GMT 0h30, 3h30,...). Des polaires de vitesse de bateaux r&eacute;els sont utilis&eacute;s et le moteur du logiciel actualise les positions des bateaux toutes les 5 minutes. Des courses avec d&eacute;part en ligne sont souvent organis&eacute;es et des courses permanentes vous permettent de vous entrainer ou de battre un record. VLM un projet altruiste o&ugrave; tout est gratuit et il y reigne une bonne ambiance. Cette simulation qui se veut r&eacute;aliste, donc pas forc&eacute;ment &eacute;vidente &agrave; prendre en main est soutenue par le portail Virtual-Winds.com, et dispose d'un forum <i>(la taverne)</i> et de <i>t'chats</i>. Ce sont des lieux de convivialit&eacute; et d'entre-aide qui vous permettront d'apprendre et de comprendre rapidement pour vous confronter aux autres joueurs de tous ages et de toutes nationalit&eacute;s, naviguant ou pas, dans de bonnes conditions.",
+        "a1" => "C'est une simulation en temps r&eacute;el de strat&eacute;gie et de routage m&eacute;t&eacute;o dans le cadre de courses &agrave; la voile. Les donn&eacute;es m&eacute;t&eacute;o utilis&eacute;es sont celles des fichiers GRIB utilis&eacute;s par les navigateurs r&eacute;ls pour estimer leur strat&eacute;gie. Il s'agit de donn&eacute;es de pr&eacute;vision m&eacute;t&eacute;o (force et direction du vent) qui sont mises &agrave; jour toutes les 3 heures (r&eacute;ception &agrave; GMT 0h30, 3h30,...). Des polaires de vitesse de bateaux r&eacute;els sont utilis&eacute;s et le moteur du logiciel actualise les positions des bateaux toutes les 5 minutes. Des courses avec d&eacute;part en ligne sont souvent organis&eacute;es et des courses permanentes vous permettent de vous entrainer ou de battre un record. VLM un projet altruiste o&ugrave; tout est gratuit et il y règne une bonne ambiance. Cette simulation qui se veut r&eacute;aliste, donc pas forc&eacute;ment &eacute;vidente &agrave; prendre en main est soutenue par le portail Virtual-Winds.com, et dispose d'un forum <i>(la taverne)</i> et de <i>t'chats</i>. Ce sont des lieux de convivialit&eacute; et d'entre-aide qui vous permettront d'apprendre et de comprendre rapidement pour vous confronter aux autres joueurs de tous ages et de toutes nationalit&eacute;s, naviguant ou pas, dans de bonnes conditions.",
         "q2" => "S'agit-il de logiciel libre ?",
         "a2" => "Oui. le code source (PHP/Mysql/XHTML) sera disponible pour redistributions et modifications selon les termes et conditions de la Licence Publique G&eacute;n&eacute;rale (GPL). Pour en apprendre plus sur les logiciels libres, consulter <a href=\"http://www.gnu.org/philosophy/\">ce site</a> ",
         "q3" => "Comment jouer ?",
@@ -590,6 +592,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
               "degrees" => "&deg;" //this one is not ascii!
   ),
         "it" => array(
+        "lang_version"=>"Italian Version",
         "home" => "Home",
         "images" => "Immagini",
         "motd" => "Version 0.5.5",
@@ -879,6 +882,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
   ),
 
 "pt" => array(
+        "lang_version"=>"Portugese Version",
         "home" => "Início",
         "images" => "Imagens",
         "motd" => "Versão 0.5.5",
