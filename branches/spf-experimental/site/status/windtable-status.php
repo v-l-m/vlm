@@ -52,8 +52,9 @@ header('Cache-Control: max-age=1');
     <h1>Windtable status check</h1>
     <p id="currenttimeblurb">
       Current time: <span id="currenttime">
-      <?php echo gmdate("Y-m-d:H:i:s", $current_time) ?> GMT
+      <?php echo gmdate("Y-m-d \T H:i:s", $current_time) ?> GMT
     </span>
+    <span class="hidden"><?php echo $current_time ?></span>
     </p>
     <?php
       shm_lock_sem_construct_grib(1);
@@ -82,7 +83,7 @@ if ( $nb_grib == 0 ) {
         } 
         ?></span>:
           <span id="gribtimeentry_<?php echo $i; ?>" class="<?php echo ($grib_time < $current_time) ? "before" : "after"; ?>">
-          <?php echo gmdate("Y-m-d - H:i:s", $grib_time); ?> GMT
+          <?php echo gmdate("Y-m-d \T H:i:s", $grib_time); ?> GMT
     </span> <span class="hidden" id="gribrawtimeentry_<?php echo $i; ?>"><?php echo $grib_time ?></span>
         </p>
       </li>

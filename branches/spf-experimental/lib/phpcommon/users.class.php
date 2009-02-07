@@ -30,7 +30,8 @@ class users
     $hidepos,
     $blocnote,
     $ipaddr,
-    $pilototo;
+    $pilototo,
+    $theme;
 
   function users($id)
   {
@@ -40,7 +41,7 @@ class users
       " boatname, color, boatheading, pilotmode, pilotparameter,".
       " engaged, lastchange, email, nextwaypoint, userdeptime, " .
       " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
-      " mooringtime, releasetime, hidepos, blocnote, ipaddr  FROM  users WHERE idusers = ".$id;
+      " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
 
 
     //    $result = mysql_db_query(DBNAME,$query) or die("\n FAIL::::::: ".$query."\n");
@@ -73,9 +74,13 @@ class users
     $this->hidepos = $row[23]; 
     $this->blocnote = $row[24]; 
     if ( eregi("^http|://|script|language|<|>", $this->blocnote) ) {
-      $this->blocnote="some characters are not valid in your notepad";
+        $this->blocnote="some characters are not valid in your notepad";
     } 
-    $this->ipaddr = $row[25]; 
+    $this->ipaddr = $row[25];
+    $this->theme = $row[26];
+    if ( is_null($this->theme) ) {
+        $this->theme = 'default';
+    } 
   }
 
   //update boatname and color
@@ -83,7 +88,8 @@ class users
   {
     //write everything in db
     $query = "UPDATE users SET `boatname` = '" . addslashes($this->boatname) . "'," . 
-      " `color` = '" . $this->color . "'," . 
+      " `color` = '" . $this->color . "'," .
+      " `theme` = '" . $this->theme . "'," .
       " `email` = '" . $this->email . "'," . 
       " `country` = '" . $this->country . "'," . 
       " `hidepos` =  " . $this->hidepos . "," . 
@@ -1161,83 +1167,6 @@ class fullUsers
 
   }
 
-
-  //=================================================================//
-  //                     loxodromic Heading                          //
-  //                       By JP Mars 2007                           //
-  //-----------------------------------------------------------------//
-  //            from a position and a destination,                   //
-  //       return the angle to follow an loxodromic course.          //
-  //-----------------------------------------------------------------//
-  //        Algo written by John-Pet (JP@virtual-winds.com)          //
-  //=================================================================//
-
-  function loxodromicHeading()
-  {
-
-    // Find the best coordinates to cross the nextwaypoint
-    $long_wp = deg2rad($this->LongNM/1000);
-    $lat_wp  = deg2rad($this->LatNM/1000);
-
-    $long_bat = deg2rad($this->lastPositions->long/1000);
-    $lat_bat  = deg2rad($this->lastPositions->lat/1000);
-
-    //printf ("   En radian : lat_bat=%f, long_bat=%f<BR>", $lat_bat, $long_bat);
-    //printf ("   En radian : lat_wp=%f, long_wp=%f<BR>", $lat_wp, $long_wp);
-
-    // Correction de la longitude de départ pour la gestion de l'antiméridien
-    if ( $long_bat < 0 and $long_wp > 0 and ($long_bat - $long_wp) < M_PI and ($long_bat - $long_wp) < -M_PI ) {
-      $cor_long_bat = 2 * M_PI + $long_bat;
-    } else {
-      $cor_long_bat = $long_bat;
-    }
-
-    // Correction de la longitude d'arrivée pour la gestion de l'antiméridien
-    if ( $long_bat > 0 and $long_wp < 0 and ($long_bat - $long_wp) > M_PI and ($long_bat - $long_wp) > - M_PI ) {
-      $cor_long_wp = 2 * M_PI + $long_wp;
-    } else {
-      $cor_long_wp = $long_wp;
-    }
-
-    // Nouvelles longitudes selon correction ou pas
-    $long_bat = $cor_long_bat;
-    $long_wp  = $cor_long_wp;
-
-    // calcul de l'angle avec gestion des caps 90 et 270°
-    $dla = rad2deg(60 * ($lat_bat - $lat_wp));
-    $dlom = rad2deg(60 * cos(($lat_bat + $lat_wp) / 2) * ($long_bat - $long_wp));
-      
-    if ($dlom == 0 ) {
-      $angle = 0;
-    } else {
-      $angle = abs(rad2deg(atan($dla / $dlom)));
-    }
-
-    // Résultat pour le cap loxo à suivre
-    if ( $lat_bat < $lat_wp and $long_bat > $long_wp ) {
-      $caploxo = 270 + $angle;
-    } elseif ( $lat_bat < $lat_wp and $long_bat < $long_wp ) {
-      $caploxo = 90 - $angle;
-    } elseif ( ( $lat_bat > $lat_wp and $long_bat > $long_wp ) or ($lat_bat == $lat_wp and $long_bat > $long_wp ) ) {
-      $caploxo = 270 - $angle;
-    } elseif ( ($lat_bat > $lat_wp and $long_bat < $long_wp ) or ($lat_bat == $lat_wp and $long_bat < $long_wp ) ) {
-      $caploxo = 90 + $angle;
-    } elseif ( ($lat_bat < $lat_wp and $long_bat == $long_wp ) or ($lat_bat == $lat_wp and $long_bat == $long_wp ) ) {
-      $caploxo = 0;
-    } elseif ( $lat_bat > $lat_wp and $long_bat == $long_wp ) {
-      $caploxo = 180;
-    } 
-
-    // Résultat pour la distance loxo
-    if ( $dlom == 0 ) {
-      $distloxo = abs($dla);
-    } else {
-      $distloxo = abs($dlom / cos(deg2rad($angle * M_PI)));
-    }
-
-    return $caploxo;
-  }
-
   /**
    * return the orthodromic heading from the current position
    * to the next mark
@@ -1248,187 +1177,14 @@ class fullUsers
 			 $this->LatNM, $this->LongNM);
   }
 
-  // ============================================================================================
-  // This function is used to verify if two vectors are crossing each-other
-  // It returns true if yes, false if no
-  // If it returns true, $encountercoordinates[] gives the longitude ang latitude of the crossing
-  // ============================================================================================
-
-  function dotheycross($x1,$y1,$x2,$y2,$x3,$y3,$x4,$y4, &$encounterCoordinates, $verbose)
-  {
-    $rotation=0;
-
-    //printf ("\nVecteur 1:x=%f,y=%f -> x=%f,y=%f\n", $x1,$y1,$x2,$y2);
-    //printf ("Vecteur 2:x=%f,y=%f -> x=%f,y=%f\n", $x3,$y3,$x4,$y4);
-    // Test sur la longueur des vecteurs (pour éviter boucle à vide)
-    if ( $x1 == $x2 && $y1 == $y2 ) return (false);
-    if ( $x3 == $x4 && $y3 == $y4 ) return (false);
-    // On peut y aller, les coordonnées ne désignent pas des points.
-
-    if ( $verbose > 0) echo "== Enterring dotheycross ==";
-    //on test division !=0
-    while(($x1==$x2)  || ($x3==$x4)) {
-      //on fait une rotation de tous les pts
-      //x' = xcos(q) - ysin(q) + a 
-      //y' = xsin(q) + ycos(q) + b
-      $rotation+=.01;
-          
-      $tmp=$x1;
-      $x1=$x1*cos($rotation) - $y1*sin($rotation);
-      $y1=$tmp*sin($rotation) + $y1*cos($rotation);
-
-      $tmp=$x2;
-      $x2=$x2*cos($rotation) - $y2*sin($rotation);
-      $y2=$tmp*sin($rotation) + $y2*cos($rotation);
-
-      $tmp=$x3;
-      $x3=$x3*cos($rotation) - $y3*sin($rotation);
-      $y3=$tmp*sin($rotation) + $y3*cos($rotation);
-
-      $tmp=$x4;
-      $x4=$x4*cos($rotation) - $y4*sin($rotation);
-      $y4=$tmp*sin($rotation) + $y4*cos($rotation);
-    } 
-    if ( $verbose > 0) echo "== Après while ==";
-
-    //calcul l'equation de la premiere droite de point 1 et 2
-    //y=ax+b
-    $a1 = ($y1 - $y2) / ($x1 - $x2);
-    $b1 = $y2 - $a1 * $x2;
-
-    //calcul l'equation de la seconde droite de point 3 et 4
-    //y=ax+b
-    $a2 = ($y3 - $y4) / ($x3 - $x4);
-    $b2 = $y4 - $a2 * $x4;
-
-    //on verifie que les 2 droites se croisent
-    if( $a1 == $a2 ) {
-      if ($verbose > 0) echo "droites // "; 
-      return(false);
-    }
-
-    //calcul des points d'intersection
-    $xi = ($b2 - $b1) / ($a1 - $a2);
-    $yi = $a1 * $xi + $b1;
-
-    //on test si le pt i est  sur le vecteur 1
-    if ( $x1<$x2 ) {
-      $maxX=$x2; $minX=$x1;
-    } else {
-      $maxX=$x1; $minX=$x2;
-    }
-
-    if ( $y1<$y2 ) {
-      $maxY=$y2; $minY=$y1;
-    } else {
-      $maxY=$y1; $minY=$y2;
-    }
-
-    if( ($xi<$minX || $xi>$maxX) ||  ($yi<$minY || $yi>$maxY) ) {
-      if ($verbose > 0) echo "les 2 vecteurs ne se croisent pas"; 
-      return(false);
-    }
-
-    //on test si le pt i est  sur le vecteur 2
-    if ( $x3<$x4 ) {
-      $maxX=$x4; $minX=$x3;
-    } else {
-      $maxX=$x3; $minX=$x4;
-    }
-
-    if( $y3<$y4 ) {
-      $maxY=$y4; $minY=$y3;
-    } else {
-      $maxY=$y3; $minY=$y4;
-    }
-
-    if ( ($xi<$minX || $xi>$maxX) ||  ($yi<$minY || $yi>$maxY) ) {
-      if ($verbose > 0) echo "les 2 vecteurs ne se croisent pas"; 
-      return(false);
-    }
-
-    // On a trouvé l'intersection
-    // on fait une rotation inverse afin de retablir le repere d'origine
-    $rotation=-$rotation;
-    $tmp=$xi;
-    $xi=$xi*cos($rotation) - $yi*sin($rotation);
-    $yi=$tmp*sin($rotation) + $yi*cos($rotation);
-
-    if ($verbose > 0) echo "intersection : (".$xi.";".$yi.")<br>";
-    $encounterCoordinates = array ($xi , $yi );
-    if ( $verbose > 0) echo "== Exiting dotheycross ==";
-    return(true);
-  }
-
-
-
-  // This function is used to verify if two vectors are crossing each-other
-  // It returns true if yes, false if no
-  // If it returns true, $encountercoordinates[] gives the longitude ang latitude of the crossing
-  // ============================================================================================
-  // New version (called dotheycross2) of the intersection routine dotheycross. The previous
-  // version is based on line equations (y=ax+b) whereas the new one is based on vectors. This
-  // should 1) allow more rapid calculations and less if-then-else tests and 2) remove the need
-  // for rotations of the coordinates in case one of the 2 segments are vertical.
-  // History : creation date 2nd May 2007.
-  function dotheycross2($x1,$y1,$x2,$y2,$x3,$y3,$x4,$y4, &$encounterCoordinates, $verbose)
-  {
-    // Coast line is between two points C1 (x1,y1) and C2 (x2,y2).
-    // The boat movement is between two points P1 (x3,y3) and P2 (x4,y4)
-    // The intersection point of both lines is called I.
-
-    // First test: make sure C1 != C2 and P1 != P2
-    if ( $x1 == $x2 && $y1 == $y2 ) {
-      if ($verbose > 0) echo ":dotheycross2: Le segment de cote est reduit a un point.";
-      return (false);
-    }
-    if ( $x3 == $x4 && $y3 == $y4 ) {
-      if ($verbose > 0) echo ":dotheycross2: Le vecteur deplacement du bateau est reduit a un point.";
-      return (false);
-    }
-
-    if ( $verbose > 0) echo "== Enterring dotheycross2 ==";
-       
-    // Local variables
-    $deltaXP = $x4 - $x3;
-    $deltaYP = $y4 - $y3;
-    $deltaXC = $x2 - $x1;
-    $deltaYC = $y2 - $y1;
-     
-    // Compute the cross-product between the two segments/vectors.
-    $crossProduct = $deltaYC*$deltaXP - $deltaYP*$deltaXC;
-
-    // If the cross-product is not zero, lines are not parallel and there
-    // is hence a chance that the two segments intersect.
-    if ( $crossProduct != 0 ) {
-      // two more local variables
-      $deltaX1 = $x3-$x1;
-      $deltaY1 = $y3-$y1;
-
-      //kP is the length ratio of [P1,I] over [P1,P2]
-      $kP = ($deltaY1*$deltaXC - $deltaX1*$deltaYC)/$crossProduct;
-      //kC is the length ratio of [C1,I] over [C1,C2]
-      $kC = ($deltaY1*$deltaXP - $deltaX1*$deltaYP)/$crossProduct;
-
-      //If (and only if) both kP and kC are between 0 and 1
-      // then the two segments have an intersection point I.
-      if ( ($kP >= 0 && $kP <= 1) && ($kC >= 0 && $kC <= 1) ) {
-        // Compute the coordinates of the intersection point
-        $xi = $kP*$deltaXP + $x3;
-        $yi = $kP*$deltaYP + $y3;
-        if ($verbose > 0) echo ":dotheycross2: intersection : (".$xi.";".$yi.")";
-        $encounterCoordinates = array ($xi , $yi );
-      } else {
-        if ($verbose > 0) echo ":dotheycross2: les 2 vecteurs ne se croisent pas";
-        return(false);
-      }
-    } else {
-      if ($verbose > 0) echo ":dotheycross2: droites // ";
-      return(false);
-    }
-
-    if ( $verbose > 0) echo "== Exiting dotheycross2 ==";
-    return(true);
+  /**
+   * return the orthodromic heading from the current position
+   * to the next mark
+   * @return the heading in degrees.
+   */
+  function loxodromicHeading() {
+    return loxo_heading($this->lastPositions->lat, $this->lastPositions->long,
+			 $this->LatNM, $this->LongNM);
   }
 
   //this function says how many milles the user travelled during the last

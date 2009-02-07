@@ -7,7 +7,8 @@ define("DBUSER", "databaseuser");
 define("DBPASSWORD", "databasepassword");
 define("DBNAME", "databasename");
 
-define("GSHHS_DIRECTORY", "/path/to/the/unzipped/gshhs/files/");
+// Stockage des gshhs, idem que VLMGSHHS dans conf_script
+define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");
 
 // SYSTEME DE GESTION DU VENT : OLD, NEW, NO, SPF
 define("SYSTEME_WIND_AT_POSITION", "SPF");

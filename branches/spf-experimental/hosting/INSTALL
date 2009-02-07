@@ -14,12 +14,25 @@ See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (frenc
      * 0.1.2 répertoire de déploiement = racine du jeu = VLMJEUROOT = VLMRACINE/vlmcode
      * 0.1.3 répertoire de conf = VLMRACINE/conf
      * 0.1.4 répertoire de scripts = VLMRACINE/scripts
+     * 0.1.5 branche utilisée VLMSVNBRANCH = '''V_0_8''' (pour la version de maintenance actuelle)
+     * 0.1.6 utilisateur utilisé pour le serveur de vent VLMGRIBUSER.
    * 0.2 Prérequis logiciels
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
-     * 0.2.3 swig (debian: {{{apt-get install swig}}})
+     * 0.2.3 swig 1.3.36
+       * exemple debian: {{{apt-get install swig}}}).
+       * Sur d'autres systemes (RHEL / CentOS), le compiler (choisir pour l'instant 1.3.36, même si 1.3.37 est disponible) :
+             {{{wget -O - http://downloads.sourceforge.net/swig/swig-1.3.36.tar.gz | tar xz && chown -R 0.0 swig-1.3.36 ; }}}
+             {{{cd swig-1.3.36 && ./configure -prefix=/opt/swig --with-php=$(\which php) && make && make install}}}
+
+             Il est alors installé dans /opt/swig. Cela suppose que vous ayez pour la suite /opt/swig/bin dans votre PATH.
+
      * 0.2.4 apache (debian: {{{apt-get install apache}}}
      * 0.2.4 mysql (debian: {{{apt-get install mysql-server}}}
+   * 0.3 Attention à :
+     * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
+     * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter VLMRACINE=/home/vlmtest en tête des crontab
+     
 
 = Les outils de déploiement, l'installation de base =
 
@@ -27,7 +40,7 @@ See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (frenc
    * 1.1 Début installation : 
      * 1.1.1 se placer à la racine
      * 1.1.2 {{{$ wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/scripts/install.sh?format=txt -O install.sh }}}
-     * 1.1.3 {{{$ source install.sh trunk}}}
+     * 1.1.3 {{{$ source  install.sh branches/V_0_8}}}
    * 1.2 Configuration :
      * 1.2.1 vérifier que la variable VLMRACINE est fixée de façon permanente (optionnel)
        * 1.2.1.1 exemple via le bashrc:
@@ -43,28 +56,35 @@ See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (frenc
      * 1.3.2 => on doit avoir une mise à jour de ~/scripts
    * 1.4 Test de la configuration de déploiement :
      * 1.4.1 {{{$ ~/scripts/maj_module.sh hosting}}}
-     * 1.4.2 => on doit avoir le module hosting qui se crée dans le répertoire de déploiement (~/vlmcode/hosting)
+     * 1.4.2 => on doit avoir le module hosting qui se crée dans le répertoire de déploiement (~/vlmcode/hosting). Ce déploiement ne sert à rien à proprement parler, il teste juste la disponibilité de VLMJEUROOT
 
 
 = Serveur de vent : grib & vlm-c =
 
    * 1.5 Test du déploiement (et de la compilation) de vlmc
-     * 1.5.1 {{{$ ~/scripts/maj_module.sh lib/vlm-c}}}
-     * => la compilation doit avoir lieu modulo quelques warnings, et vous devez avoir les fichiers .so et php dans ~/bin/lib
+     * 1.5.1 {{{$ ~/scripts/maj_module.sh lib/vlm-c}}} => la compilation doit avoir lieu modulo quelques warnings,
+     * 1.5.2 vous devez avoir les fichiers .so et php dans ~/bin/lib (ou ailleurs suivant votre configuration)
+     * 1.5.3 vous devez avoir '''windserver''' dans votre ~/bin
    * 1.6 Configuration pour php & vlm-c
      * 1.6.1 Créer le lien symbolique depuis le répertoire des extensions php vers bin/lib
        * exemple: {{{$ ln -s /home/vlmtest/bin/lib/vlmc.so /usr/lib/php/extensions/vlmc.so}}}
+       * Si PHP est compilé manuellement par vous, le répertoire des extensions de PHP n'est peut-être pas créé. 
+            Son nom est donné par la commande "php-config --extension-dir".
+            S'il n'existe pas, créez le avant de continuer.
+
      * 1.6.2 Créer le lien symbolique depuis le répertoire inclus par défaut par php vers bin/lib
        * exemple: {{{$ ln -s /home/vlmtest/bin/lib/vlmc.php /usr/share/php/vlmc.php}}}
+       * Ce chemin d'accès peut être différent, par exemple /opt/php/lib/php, pour un php compilé et installé avec un prefix=/opt/php
+
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
      * 1.7.1 Déployer le module grib : {{{$ ~∕scripts/maj_module.sh grib}}}
      * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)
      * 1.7.3 Lancer manuellement {{{$ ~/bin/noaa.sh 00|06|12|18}}} (suivant l'horaire).
      * 1.7.4 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.sample comme exemple)
-     * 1.7.5 Déclarer VLMGRIBUSER dans le script de configuration (voir VLMRACINE/conf/)
-     * 1.7.5 Déclarer l'init du windserver au boot (script d'init en exemple fournit dans VLMJEUROOT/grib)
+     * 1.7.5 Déclarer VLMGRIBUSER dans le script de configuration (voir VLMRACINE/conf/conf_script)
+     * 1.7.6 Déclarer l'init du windserver au boot (script d'init en exemple fournit dans VLMJEUROOT/grib)
    * 1.8 Configuration de la récupération des gribs (serveur esclave)
-     * 1.8.1 faire les 1.7.1 & 1.7.2 & 1.7.5
+     * 1.8.1 faire les 1.7.1 & 1.7.2 & 1.7.5 & 1.7.6
      * 1.8.2 Lancer manuellement {{{$ ~/bin/noaa-slave.sh 00|06|12|18}}} (suivant l'horaire).
      * 1.8.3 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.slave.example comme exemple)
    * 1.9 Unit test de vlm-c : {{{php --define extension=vlmc.so ~/vlmcode/lib/vlm-c/php/vlmc-shm-unittest.php}}}
@@ -88,7 +108,7 @@ See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (frenc
    * 3.1 déploiement des autres modules
      * 3.1.1 lister les modules via {{{~/scripts/maj_module.sh}}}
      * 3.1.2 installer (ou réinstaller) chaque module de la liste via {{{~/scripts/maj_module.sh NOMDUMODULE}}}
-     * 3.1.3 configurer le vhost en le pointant vers ~/vlmcode/site en s'inspirant de l'exemple apache.vhost.example qui dans le répertoire conf)
+     * 3.1.3 configurer le vhost en le pointant vers ~/vlmcode/site en s'inspirant de l'exemple apache.vhost.example qui est dans le répertoire conf)
      * 3.1.4 vérifiez vos fichiers de configuration (notamment conf_htaccess)
      * 3.1.5 activez le module 'expires' de apache : {{{$ a2enmod expires}}}
      * 3.1.6 activez l'extension vlmc dans le fichier php.ini
@@ -96,6 +116,14 @@ See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (frenc
      * 3.1.8 redémarrer apache {{{$ /etc/init.d/apache restart}}}
 
 = Le moteur sur le serveur maître =
- * 4. Mise en place du moteur 
-   * 4.1 déployer le moteur si ce n'est déjà fait
-   * 4.2 utiliser le crontab.example comme exemple pour paramètrer le cron
+ * 4. Installer les cartes gshhs :
+   * Vérifier que VLMGSHHS est fixé dans conf_script et param.php
+   * déployer le module 'maps'
+
+ * 5. Mise en place du moteur 
+   * 5.1 déployer le moteur si ce n'est déjà fait via {{{~/scripts/maj_modules.sh moteur}}}
+   * 5.2 utiliser le crontab.example comme exemple pour paramètrer le cron
+
+= Notes pour les versions futures =
+
+

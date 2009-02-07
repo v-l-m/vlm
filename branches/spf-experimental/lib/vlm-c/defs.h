@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.18 2008-12-15 17:17:35 ylafon Exp $
+ * $Id: defs.h,v 1.19 2009-01-29 11:06:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -42,19 +42,51 @@
 #define latToY(lat) (log(tan(PI_4+(lat/2.0))))
 #define yToLat(y) ((2.0*atan(exp(y)) - PI_2))
 
+#define GRIB_TIME_OFFSET 0 /* VLM used to have 37/38mn offset, now 0 */
+
 #ifdef VLM_COMPAT
+# define VLM_MAJOR_VERSION 0
+# define VLM_MINOR_VERSION 7
+#endif /* VLM_COMPAT */
+
+#ifndef VLM_MAJOR_VERSION
+# define VLM_MAJOR_VERSION 0
+#endif /* VLM_MAJOR_VERSION */
+
+#ifndef VLM_MINOR_VERSION
+# define VLM_MINOR_VERSION 8
+#endif /* VLM_MINOR_VERSION */
+
+#if VLM_MAJOR_VERSION == 0
+# if VLM_MINOR_VERSION == 7
+#  define GRIB_RESOLUTION_1
+#  define DEFAULT_INTERPOLATION_UV
+#  define ROUND_WIND_ANGLE_IN_POLAR
+# elif VLM_MINOR_VERSION == 8
+#  define GRIB_RESOLUTION_1
+#  define DEFAULT_INTERPOLATION_UV
+#  define ROUND_WIND_ANGLE_IN_POLAR
+# elif  VLM_MINOR_VERSION == 9
+#  define GRIB_RESOLUTION_0_5
+#  define DEFAULT_INTERPOLATION_UV
+#  define ROUND_WIND_ANGLE_IN_POLAR
+# else /* default */
+#  define GRIB_RESOLUTION_0_5
+#  define DEFAULT_INTERPOLATION_UV
+#  define ROUND_WIND_ANGLE_IN_POLAR
+# endif /* VLM_MINOR_VERSION */
+#endif /* VLM_MAJOR_VERSION */
+
+/* for now, no default when major != 0 */
+
+#ifdef GRIB_RESOLUTION_1
 # define WIND_GRID_LONG   360
 # define WIND_GRID_LAT    181
-# define GRIB_TIME_OFFSET 0 /* VLM used to have 37/38mn offset, now 0 */
-# define GRIB_RESOLUTION_1
 #else
 # define WIND_GRID_LONG   720
 # define WIND_GRID_LAT    361
-# ifndef GRIB_TIME_OFFSET
-#  define GRIB_TIME_OFFSET 0
-# endif /* GRIB_TIME_OFFSET */
 # define GRIB_RESOLUTION_0_5
-#endif
+#endif /* GRIB_RESOLUTION_1 */
 
 /* 1 land, 2 lake, 3 island_in_lake, 4 pond_in_island_in_lake */
 #define GSHHS_MAX_DETAILS 3

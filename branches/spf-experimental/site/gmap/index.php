@@ -17,7 +17,7 @@
 
 // A change le lien vers la base de donnée VLM
 $localDBPages=array();
-include_once "../param.php";
+include_once "param.php";
 
 mysql_connect(DBSERVER, DBUSER, DBPASSWORD) or die("Impossible de se connecter : " . mysql_error());
 mysql_select_db(DBNAME);

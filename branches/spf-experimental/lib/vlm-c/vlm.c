@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.20 2009-01-16 21:39:14 ylafon Exp $
+ * $Id: vlm.c,v 1.19 2008-12-18 17:28:41 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -388,6 +388,41 @@ void VLM_loxo_distance_angle(double latitude, double longitude,
 		      distance, &new_heading);
   *heading = radToDeg(fmod(new_heading+TWO_PI, TWO_PI));
 }
+
+/**
+ * Get loxodromic distance
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @return heading, a <code>double</code>, the resulting
+ *                 distance in <em>nm</em>
+ */
+double VLM_loxo_distance(double latitude, double longitude, 
+			 double target_lat, double target_long) {
+  double distance, heading;
+  VLM_loxo_distance_angle(latitude, longitude, target_lat, target_long,
+			  &distance, &heading);
+  return distance;
+}
+
+/**
+ * Get loxodromic heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @return heading, a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+double VLM_loxo_heading(double latitude, double longitude, 
+			double target_lat, double target_long) {
+  double distance, heading;
+  VLM_loxo_distance_angle(latitude, longitude, target_lat, target_long,
+			  &distance, &heading);
+  return heading;
+}
+
 
 /**
  * Check if the waypoint is crossed.

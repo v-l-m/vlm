@@ -35,6 +35,7 @@ define("MAP_SERVER_URL", "");
 //define("MAP_SERVER_URL", "http://map.virtual-loup-de-mer.org");
 define("CHAT_SERVER_URL", "http://chat.virtual-loup-de-mer.org");
 define("GRIB_SERVER_URL", "http://grib.virtual-loup-de-mer.org");
+define("GRIB_TOOLS_URL", "http://wiki.virtual-loup-de-mer.org/index.php/Outils_m%C3%A9t%C3%A9os");
 // Max position age (engine speedup on long races) => 1 week since whe have "histpos" table
 define("DEFAULT_POSITION_AGE", 1 * 3600);
 define("MAX_POSITION_AGE", 1 * 604800);
@@ -66,6 +67,7 @@ define ("BUOY_W", "buoy_west.png");
 define ("BUOY_E", "buoy_south.png");
 
 define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
+define ("DIRECTORY_THEMES","style");
 
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);

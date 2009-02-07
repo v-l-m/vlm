@@ -16,7 +16,7 @@ include_once("config.php");
 // Les entêtes
 echo "<html><head>";
 echo "<title>Admin VLM</title>";
-echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/new-style.css\" />";
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/base-style.css\" />";
 
 ///   CODE JAVASCRIPT
 

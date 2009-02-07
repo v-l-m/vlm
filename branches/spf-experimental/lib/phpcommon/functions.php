@@ -225,6 +225,28 @@ function ortho_heading($lat, $long, $latnm, $longnm)  {
   return VLM_ortho_heading($lat, $long, $latnm, $longnm);
 }
 
+/**
+ * @input, lat, long (current pos, next mark), millidegrees
+ * @return distance, in nm
+ */
+function loxo($lat, $long, $latnm, $longnm)  {
+  if (($lat == $latnm) && ($long == $longnm)) {
+    return 0.0;
+  } 
+  return VLM_loxo_distance($lat, $long, $latnm, $longnm);
+}
+
+/**
+ * @input, lat, long (current pos, next mark), millidegrees
+ * @return heading, in degrees
+ */
+function loxo_heading($lat, $long, $latnm, $longnm)  {
+  if (($lat == $latnm) && ($long == $longnm)) {
+    return 0.0;
+  } 
+  return VLM_loxo_heading($lat, $long, $latnm, $longnm);
+}
+
 // For a refpoint (long/lat) and a distance and a heading, give the end point 
 // Used in "One point" waypoints
 // Used in track projection
@@ -1069,7 +1091,7 @@ function createAccount($log, $pass, $mail, $country)
 
 function login($idus, $pseudo)
 {
-  //echo "calling login wiith $idus and $pseudo\n";
+  //echo "calling login with $idus and $pseudo\n";
   //if (!isset($_SESSION['idusers']))
   {
     session_start();
@@ -1111,6 +1133,33 @@ function getLoginName()
 function getLoginId()
 {
   return ($_SESSION['idu']);
+}
+
+function getTheme()
+{
+   if (isLoggedIn() ) {
+      //Connecté
+      if ( isset($_SESSION['theme']) ) {
+          //On utilise la session
+          return ($_SESSION['theme']);
+      } else {
+          //La première fois, la session ne contient pas le theme
+          $users = new users(getLoginId());
+          if ( $users->engaged != 0 ) {
+              //Le joueur est engagé dans une course
+              $race = new races($users->engaged);
+              if ( !is_null($race->theme) ) {
+                  //La course possède un thème, on l'utilise
+                  return ( $race->theme);
+              }
+          }
+      }
+      // Dans tous les autres cas ou on est identifié, on renvoie le thème de l'utilisateur (éventuellement 'default')
+      return ( $users->theme );
+   }
+   //Non connecté, on utilise le thème par defaut
+   return ( "default" );
+
 }
 
 function setUserPref($idusers,$pref_name,$pref_value)

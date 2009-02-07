@@ -39,27 +39,52 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
         echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
 
 
-     // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
-     // give a list of country (taken in directory "pavillons")
-  $dir = DIRECTORY_COUNTRY_FLAGS;
-  $dh  = opendir($dir);
-        $select_list="";
-  while (false !== ($filename = readdir($dh))) {
+    // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
+    // give a list of country (taken in directory "pavillons")
+    $dir = DIRECTORY_COUNTRY_FLAGS;
+    $dh  = opendir($dir);
+    $select_list="";
+    while (false !== ($filename = readdir($dh))) {
         if ( ! is_dir($filename) && substr($filename,0,1) != "." ) {
             $files[] = basename($filename,".png");
         }
-  }
-  sort($files);
-  foreach ($files as $filename) {
-                  $select_list = $select_list . "<option value=\"". $filename . "\"";
+    }
+    sort($files);
+    foreach ($files as $filename) {
+      $select_list = $select_list . "<option value=\"". $filename . "\"";
       if ( $fullUsersObj->users->country == $filename ) $select_list = $select_list . " selected=\"selected\" ";
       $select_list = $select_list . ">". $filename ."</option>\n";
-  }
-        if ( $select_list != "" ) {
-          echo "</p>\n<h1>".$strings[$lang]["choose_your_country"]."</h1>\n";
+    }
+    if ( $select_list != "" ) {
+        echo "</p>\n<h1>".$strings[$lang]["choose_your_country"]."</h1>\n";
         echo "<select name=\"country\">\n" . $select_list . "</select>\n";
-        }
+    }
+    closedir($dh);
 
+    // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
+    // give a list of theme (taken in directory "style")
+    $dir = DIRECTORY_THEMES;
+    $dh  = opendir($dir);
+    $select_list="";
+    while (false !== ($filename = readdir($dh))) {
+        if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
+            //Taking only directories
+            $list_themes[] = $filename;
+        }
+    }
+    sort($list_themes);
+    foreach ($list_themes as $theme) {
+        $select_list = $select_list . "<option value=\"". $theme . "\"";
+        if ( $fullUsersObj->users->theme == $theme ) {
+            $select_list = $select_list . " selected=\"selected\" ";
+        }
+        $select_list = $select_list . ">". $theme ."</option>\n";
+    }
+    if ( $select_list != "" ) {
+        echo "</p>\n<h1>".$strings[$lang]["choose_your_theme"]."</h1>\n";
+        echo "<select name=\"theme\">\n" . $select_list . "</select>\n";
+    }
+    closedir($dh);
 
 ?>
 <br />

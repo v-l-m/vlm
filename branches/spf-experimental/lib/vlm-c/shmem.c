@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.11 2009-01-08 18:29:52 ylafon Exp $
+ * $Id: shmem.c,v 1.12 2009-01-29 11:05:39 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -202,7 +202,8 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
   /* be sure to lock the semaphore before using this function */
   nb_bytes = nb_prevs * sizeof(winds);
   printf("Got %d entries in windtable\n", windtable->nb_prevs);
-  printf("Bytes used: %ld (winds struct size is %ld)\n",nb_bytes,sizeof(winds));
+  printf("Bytes used: %ld (winds struct size is %ld)\n", nb_bytes, 
+                                                         (long)sizeof(winds));
   ok = (shminfo.shm_segsz > nb_bytes);
   printf("Segment size: %ld %s\n",  (long)shminfo.shm_segsz, 
 	 (ok) ? "OK" : "NOT OK");
