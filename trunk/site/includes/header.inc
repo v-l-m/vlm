@@ -265,10 +265,10 @@
 ?>
         </div>
         <div id="langbox">
-            <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" alt="version Francaise" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" alt="English version" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" alt="Italian version" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" alt="Portugese version" width="30" height="20" /></a>
+            <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" title="<? echo $strings['fr']['lang_version']; ?>" alt="<? echo $strings['fr']['lang_version']; ?>" width="30" height="20" /></a>
+            <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" title="<? echo $strings['en']['lang_version']; ?>" alt="<? echo $strings['en']['lang_version']; ?>" width="30" height="20" /></a>
+            <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" title="<? echo $strings['it']['lang_version']; ?>" alt="<? echo $strings['it']['lang_version']; ?>" width="30" height="20" /></a>
+            <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" title="<? echo $strings['pt']['lang_version']; ?>" alt="<? echo $strings['pt']['lang_version']; ?>" width="30" height="20" /></a>
         </div>
         <div id="menubox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
