@@ -522,9 +522,17 @@ class fullUsers
 	$windArray = getwindinfsup( $wind_speed, $boat_type);
 	$windInf =  $windArray[0];
 	$windSup =  $windArray[1];
+
+	if ($windSup == 0) //if outside of the charts (sup), goes to the higher existant value
+	  $windSup = $windInf;//HACK; should be done by function
+	
+	$windInfChart = windChart($windInf, $boat_type);
+	$windSupChart = windChart($windSup, $boat_type);
+
         for ($i=20; $i<=170;$i++) //Pour limiter le nb de calcul on peut mettre ($i=30; $i<=170;$i++)
           {
-            $boatspeed = findboatspeedinfsup($i, $wind_speed, $windInf, $windSup, $boat_type);
+            $boatspeed = findboatspeedinfsupcharts($i, $wind_speed, $windInf, $windSup, 
+						   $windInfChart, $windSupChart, $boat_type);
             //echo "Debug boatspeed= ".$boatspeed;
 
             $vmg_t = $boatspeed * cos(($cap_ortho - ($cap_vent - $i)) * $DegRad);

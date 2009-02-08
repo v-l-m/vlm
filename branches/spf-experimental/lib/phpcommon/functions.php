@@ -538,6 +538,33 @@ function findboatspeed ($angledifference, $windspeed, $boattype )
 
 }
 
+function findboatspeedinfsupcharts($angledifference, $windspeed, $windInf, $windSup, $windInfChart, $windSupChart, $boattype )
+{
+  //$angledifference=round(abs($angledifference));
+  $angledifference=abs(round($angledifference));
+
+  // Si bout au vent, on gagne un peu de temps..
+  if ( $angledifference <= 1 ) return (0);
+
+  //echo "callinf findboatspeed with $angledifference, $windspeed, $boattype\n";
+  if ($angledifference == 180) $angledifference = 179;
+  //too much complicated if 180
+
+  if ($windSup == 0) {
+    $windSup = $windInf;//HACK; should be done by function
+    $windSupChart = windChart($windSup, $boattype );
+  }
+
+  $windInfBoatSpeed = boatspeedfromlinearchart($windInfChart, $angledifference);
+  $windSupBoatSpeed = boatspeedfromlinearchart($windSupChart, $angledifference);
+  //  echo "windInfBoatSpeed = ".$windInfBoatSpeed. "  windSupBoatSpeed = ".$windSupBoatSpeed;
+  return boatspeedfromcharts(
+                             $windInf, $windSup,
+                             $windInfBoatSpeed, $windSupBoatSpeed, $windspeed,
+                             $angledifference);
+
+}
+
 /*find boat speed with the angle and the windspeed
   proceed by double linear interpolation : one for the angle, one for the windspeed*/
 function findboatspeedinfsup ($angledifference, $windspeed, $windInf, $windSup, $boattype )
@@ -558,17 +585,8 @@ function findboatspeedinfsup ($angledifference, $windspeed, $windInf, $windSup, 
   //   echo "windspeed = $windspeed, windinf = ".$windInf." windsup =".$windSup."\n";
   $windInfChart = windChart($windInf, $boattype );
   $windSupChart = windChart($windSup, $boattype );
-  //print_r($windInfChart);
-  //print_r($windSupChart);
 
-  $windInfBoatSpeed = boatspeedfromlinearchart($windInfChart, $angledifference);
-  $windSupBoatSpeed = boatspeedfromlinearchart($windSupChart, $angledifference);
-  //  echo "windInfBoatSpeed = ".$windInfBoatSpeed. "  windSupBoatSpeed = ".$windSupBoatSpeed;
-  return boatspeedfromcharts(
-                             $windInf, $windSup,
-                             $windInfBoatSpeed, $windSupBoatSpeed, $windspeed,
-                             $angledifference);
-
+  return findboatspeedinfsupcharts($angledifference, $windspeed, $windInf, $windSup, $windInfChart, $windSupChart, $boattype);
 }
 
 /*in the grib file, collect the date (like 04 09 17 00 00 = 23rd sept
