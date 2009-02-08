@@ -289,6 +289,16 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
 // ========================================================
 function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
 {
+  // first, use the cache (in 'moteur' mode)
+  if (defined('MOTEUR')) {
+    static $WP_Cache = array();
+    
+    if (array_key_exists($idraces, $WP_Cache)) {
+      if (array_key_exists($idwp, $WP_Cache[$idraces])) {
+	return $WP_Cache[$idraces][$idwp];
+      }
+    } 
+  }
 
   //                          row[0]         row[1]         row[2]        row[3]        row[4]
   $querywaypoint = "SELECT WP.latitude1, WP.longitude1, WP.latitude2, WP.longitude2, RW.laisser_au " .
@@ -303,29 +313,42 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
 
   $row = mysql_fetch_array($result, MYSQL_NUM);
 
+  $wp_coord = internalGiveWaypointCoordinates($row[0], $row[1], $row[2], $row[3], $row[4]);
+  // we cache if we are in "moteur" mode
+  if (defined('MOTEUR')) {
+    if (!array_key_exists($idraces, $WP_Cache)) {
+      $WP_Cache[$idraces] = array( $idwp => $wp_coord);
+    } else {
+      $WP_Cache[$idraces][$idwp] = $wp_coord;
+    }
+  }
+  return $wp_coord;
+}
+
+function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_au) {
   // Cas d'un WP : long1=long2 && lat1=lat2
-  if ( ( $row[0] == $row[2] ) && ( $row[1] == $row[3] ) && ( $row[4] != 999 )  ) {
+  if ( ( $lat1 == $lat2 ) && ( $long1 == $long2 ) && ( $laisser_au != 999 )  ) {
     // On a uniquement la bouee1
     // On doit calculer la position de la "bouee2" en fonction de long1, lat1, et "laisser_au"
-    $gisement_bouee1_bouee2 = ($row[4]+180)%360;
+    $gisement_bouee1_bouee2 = ($laisser_au+180)%360;
 
     // We imagine a vector at WPLENGTH nm for this heading .
     // If latitude > 90, we reduce the length
     //        $EndPoint=array(180000,90000);
     //        while ( abs($EndPoint[1] >= 80000 && $wplength > 1 ) ) {
-    $EndPoint=giveEndPointCoordinates($row[0],$row[1], $wplength, $gisement_bouee1_bouee2);
+    $EndPoint=giveEndPointCoordinates($lat1,$long1, $wplength, $gisement_bouee1_bouee2);
     //    $wplength--;
     //                printf ("L=%f,l=%f, WPL=%f\n", $EndPoint[0],$EndPoint[1], $wplength);
     //        }
 
-    //printf ("WP=%d : Lat=%d, Lon=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $row[0], $row[1], $row[4],$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
+    //printf ("WP=%d : Lat=%d, Lon=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $lat1, $long1, $laisser_au,$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
 
-    return array ($row[0], $row[1], $EndPoint[0], $EndPoint[1], WPTYPE_WP);
+    return array ($lat1, $long1, $EndPoint[0], $EndPoint[1], WPTYPE_WP);
 
   } else {
     // Cas d'une porte : cas "historique"
-    //printf ("PORTE=%d :  %d, %d, %d, %d<BR>\n", $idwp, $row[0], $row[1], $row[2], $row[3],$row[4]);
-    return array ( $row[0], $row[1], $row[2], $row[3], WPTYPE_PORTE);
+    //printf ("PORTE=%d :  %d, %d, %d, %d<BR>\n", $idwp, $lat1, $long1, $lat2, $long2,$laisser_au);
+    return array ( $lat1, $long1, $lat2, $long2, WPTYPE_PORTE);
   }
 
 }
