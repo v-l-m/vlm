@@ -71,7 +71,7 @@ class races
 
     while( $row = mysql_fetch_array( $result, MYSQL_NUM) ) {
       $WPcoords = array();
-      $WPcoords = giveWaypointCoordinates ($this->idraces, $row[0] , WPLL/WP_NUMSEGMENTS);
+      $WPcoords = giveWaypointCoordinates ($this->idraces, $row[0] , WPLL);
       // On push dans le tableau des coordonnées le wptype (classement ou son nom), et le libellé et le "laisser_au" du WP
       array_push ($WPcoords, $row[1]);
       array_push ($WPcoords, $row[2]);

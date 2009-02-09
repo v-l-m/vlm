@@ -313,7 +313,7 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
 
   $row = mysql_fetch_array($result, MYSQL_NUM);
 
-  $wp_coord = internalGiveWaypointCoordinates($row[0], $row[1], $row[2], $row[3], $row[4]);
+  $wp_coord = internalGiveWaypointCoordinates($row[0], $row[1], $row[2], $row[3], $row[4], $wplength);
   // we cache if we are in "moteur" mode
   if (defined('MOTEUR')) {
     if (!array_key_exists($idraces, $WP_Cache)) {
@@ -325,7 +325,7 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
   return $wp_coord;
 }
 
-function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_au) {
+function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_au, $wplength = WPLL) {
   // Cas d'un WP : long1=long2 && lat1=lat2
   if ( ( $lat1 == $lat2 ) && ( $long1 == $long2 ) && ( $laisser_au != 999 )  ) {
     // On a uniquement la bouee1
