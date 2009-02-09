@@ -70,7 +70,7 @@ class gribFile
 	  if ($verbose != 0) echo $query0."\n";
 
 	  if ( $longi == round ($longi ) && $lati == round ($lati) ) {
-	    mysql_db_query(DBNAME,$query0);
+	    wrapper_mysql_db_query(DBNAME,$query0);
 	  }
 
     	  $i++;
@@ -92,7 +92,7 @@ class gribFile
   {
       $query0 = "DELETE FROM wind WHERE time < " . (time() - 86400)  ;
 
-      mysql_db_query(DBNAME,$query0);
+      wrapper_mysql_db_query(DBNAME,$query0);
       echo $query0 ."\n";
       if ($verbose != 0) echo $query0."\n";
    }
@@ -104,7 +104,7 @@ class gribFile
       while ( $latitude < 90 ) {
       	$query0 = "update wind set uwind=uwind*0.7,vwind=vwind*0.7,uwind3=uwind3*0.7,vwind3=vwind3*0.7  where abs(latitude) > " . $latitude  ;
 
-      	mysql_db_query(DBNAME,$query0);
+      	wrapper_mysql_db_query(DBNAME,$query0);
       	echo $query0 ."\n";
       	if ($verbose != 0) echo $query0."\n";
         $latitude++;
@@ -183,7 +183,7 @@ class gribFile
 	  if ($verbose != 0) echo $query0."\n";
 
 	  if ( $longi == round ($longi ) && $lati == round ($lati) ) {
-	    mysql_db_query(DBNAME,$query0);
+	    wrapper_mysql_db_query(DBNAME,$query0);
 	  }
 
     	  $i++;
@@ -198,7 +198,7 @@ class gribFile
   {
       $query0 = "DELETE FROM winds WHERE time < " . (time() - 3600)  ;
 
-      mysql_db_query(DBNAME,$query0);
+      wrapper_mysql_db_query(DBNAME,$query0);
       echo $query0 ."\n";
       if ($verbose != 0) echo $query0."\n";
    }

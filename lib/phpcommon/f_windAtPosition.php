@@ -64,8 +64,8 @@ function SPFwindAtPosition($_lat , $_long, $when = 0)
   
   $wind_boat = new wind_info();
   $_time=time()+$when;
-  VLM_get_wind_info_latlong_millideg_UV($_lat, $_long,
-					$_time, $wind_boat);
+  VLM_get_wind_info_latlong_millideg_TWSA($_lat, $_long,
+					  $_time, $wind_boat);
   
   shm_unlock_sem_destroy_grib(1);
   
@@ -123,7 +123,7 @@ function OLDwindAtPosition($_lat , $_long, $when = 0)
 		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
 		" ORDER BY longitude ASC, latitude DESC;"  ;
 
-    $result21 = mysql_db_query(DBNAME,$query21);
+    $result21 = wrapper_mysql_db_query(DBNAME,$query21);
     //or die("Query failed : " . mysql_error." ".$query21);
 
     // Tableau à 4 points : 0:NW, 2:NE
@@ -289,7 +289,7 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
 		" ORDER BY time DESC, longitude ASC, latitude DESC " .
 		" LIMIT 4;"  ;
 
-    $result = mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query(DBNAME,$query);
     //echo $query;
 
     $i=0;
@@ -310,7 +310,7 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
 		" ORDER BY time ASC, longitude ASC, latitude DESC " .
 		" LIMIT 4;"  ;
 
-    $result = mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query(DBNAME,$query);
     //echo $query;
     //or die("Query failed : " . mysql_error." ".$query21);
 
