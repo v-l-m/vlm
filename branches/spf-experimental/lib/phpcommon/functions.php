@@ -12,7 +12,7 @@ include_once("vlmc.php");
 
 
 function wrapper_mysql_db_query($dbname, $cmd) {
-  if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES') {
+  if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
     echo "*** DB ACCESS ".$cmd."\n";
   }
   return mysql_db_query($dbname, $cmd);
