@@ -8,7 +8,13 @@ Depuis la mise en production de la V0.8.1
 
   ALTER TABLE races ADD COLUMN theme varchar(30) default NULL;
 
+* Optimisation de la table 'positions'
 
+  ALTER TABLE positions DROP KEY `time`;
+  ALTER TABLE positions DROP KEY `idusers`;
+  ALTER TABLE positions DROP KEY `race`;
+  ALTER TABLE positions ADD KEY (`idusers`, `race`);
+  ALTER TABLE positions ADD CONSTRAINT UNIQUE (`idusers`, `race`, `time`);
 
 Depuis la mise en production de la V0.8
 
