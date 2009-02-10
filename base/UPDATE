@@ -33,6 +33,10 @@ Depuis la mise en production de la V0.8.1
   ALTER TABLE boat_imoca60 ADD PRIMARY KEY (`wspeed`, `wheading`);
   ALTER TABLE boat_maxicata ADD PRIMARY KEY (`wspeed`, `wheading`);
 
+* Optimisation de la table auto_pilot
+
+  ALTER TABLE auto_pilot add KEY(`idusers`);
+
 * Nettoyage
 
   DROP TABLE IF EXISTS `wind`;
