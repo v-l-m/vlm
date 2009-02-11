@@ -1244,17 +1244,16 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "a12" => "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\">Tareas</a> (sitio en francés)",                        
 	      "q13" => "¿Dónde se puede obtener las previsiones meteorológicas?",
 	      "a13" => "se puede ver uno de los sitios que figuran en la sección Tiempo de la página de inicio.",
-	      "q14" => "Todas las horas que veo están incorrectas! "
+	      "q14" => "Todas las horas que veo están incorrectas! ",
 	      "a14" => "No, están en GMT (Greenwich Mean Time: tiempo promedio del Observatorio de Greenwich) o UTC (Tiempo universal coordinado). Para España, tendrá que añadir una hora en invierno y dos durante el verano.",
 	      "q15" => "¿Cuál es la frecuencia de actualización de la información?",
 	      "a15" => "Cada 5 minutos para los barcos (1 minuto en algunas carreras), los datos de viento se actualizan cada 3 horas (GMT: 0h35, 3h35, 9h35, ..) y el viento es interpolado entre H y H+3. La interpolación también utiliza la posición del barco a dentro de un cuadrado de 1&deg;. Los datos son unos 35 minutos más tarde que Ugrib datos. Viento datos indicados en los mapas siempre se calculan cuando se pide el mapa.",
-	      "q16" => "Si mi velocidad es de 6 nudos (kts), cuantos millas náuticas (nm) voy a viajar? "
+	      "q16" => "Si mi velocidad es de 6 nudos (kts), cuantos millas náuticas (nm) voy a viajar? ",
 	      "a16" => "Un nudo es una milla marina por hora, así que viaja 6 millas náuticas cada hora.",
 	      "q17" =>"¿Qué debo hacer para optimizar mi bordada?",
 	      "a17" => "Tendrá que calcular su VMG (Velocity Made Good). Dibuje su vector de velocidad de proyecto sobre la dirección deseada. La optimización de esta proyección es la optimización de su ruta. "
               "q18" => "¿Qué debo hacer para escribir en el foro?",
-	      "a18" => "Tendrá que crear una cuenta separada para el foro. Esto es independiente de su virtual Loup-de-Mer cuenta.",
-	      
+	      "a18" => "Tendrá que crear una cuenta separada para el foro. Esto es independiente de su virtual Loup-de-Mer cuenta.",	      
 	      "author" => "Autor",
 	      "authorinfo" => "Sebastien Abeill&eacute; comenzó realmente un buen trabajo con este proyecto hasta la versión 0.4. Su vida cambió y ahora está un poco lejos de VLM desde finales de 2005. Gracias Sebastien para este material, bien y limpiamente desarrollada. Sólo tengo que continuar.",	      
 	      "mainteneur" => "Mantenedor",
