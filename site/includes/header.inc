@@ -269,7 +269,7 @@
             <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" title="<? echo $strings['en']['lang_version']; ?>" alt="<? echo $strings['en']['lang_version']; ?>" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" title="<? echo $strings['it']['lang_version']; ?>" alt="<? echo $strings['it']['lang_version']; ?>" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" title="<? echo $strings['pt']['lang_version']; ?>" alt="<? echo $strings['pt']['lang_version']; ?>" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/es.png" title="<? echo $strings['es']['lang_version']; ?>" alt="<? echo $strings['es']['lang_version']; ?>" width="30" height="20" /></a>
+            <a href="<? echo $SCRIPT_NAME ?>?lang=es"><img src="images/site/es.png" title="<? echo $strings['es']['lang_version']; ?>" alt="<? echo $strings['es']['lang_version']; ?>" width="30" height="20" /></a>
         </div>
         <div id="menubox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
