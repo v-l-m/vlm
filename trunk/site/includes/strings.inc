@@ -1251,7 +1251,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "q16" => "Si mi velocidad es de 6 nudos (kts), cuantos millas náuticas (nm) voy a viajar? ",
 	      "a16" => "Un nudo es una milla marina por hora, así que viaja 6 millas náuticas cada hora.",
 	      "q17" =>"¿Qué debo hacer para optimizar mi bordada?",
-	      "a17" => "Tendrá que calcular su VMG (Velocity Made Good). Dibuje su vector de velocidad de proyecto sobre la dirección deseada. La optimización de esta proyección es la optimización de su ruta. "
+	      "a17" => "Tendrá que calcular su VMG (Velocity Made Good). Dibuje su vector de velocidad de proyecto sobre la dirección deseada. La optimización de esta proyección es la optimización de su ruta. ",
               "q18" => "¿Qué debo hacer para escribir en el foro?",
 	      "a18" => "Tendrá que crear una cuenta separada para el foro. Esto es independiente de su virtual Loup-de-Mer cuenta.",	      
 	      "author" => "Autor",
@@ -1266,8 +1266,8 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "sourcecodetext" => "Descargalo aquí: ",
 	      "webstandard" => "Estándares web",
 	      "webstandardtext" => "Este sitio es compatible con los estándares web (XHTML y CSS). Para apreciar en su totalidad, por favor utilize un navegador web que respecta los estándares, cómo <a href=\"http://getfirefox.com\">Firefox</ a>.", 
-	      "howtohelp" => "Me gusta este juego. ¿Cómo puedo contribuir a hacerlo mejor? "	      
-	      "howtohelptext" => "<ul><li>Como jugador, puede informar de errores y proponer mejoras (interfaz de usuario, nuevas funcionalidades) en el foro.</li> 
+	      "howtohelp" => "Me gusta este juego. ¿Cómo puedo contribuir a hacerlo mejor? ",
+	      "howtohelptext" => "<ul><li>Como jugador, puede informar de errores y proponer mejoras (interfaz de usuario, nuevas funcionalidades) en el foro.</li>
 	      <li>Puede escribir un manual del juego para principiantes, con capturas de pantalla.</li> 
 	      <li> 	
 Puede proponer la traducción del juego. Es rápido y fácil. En <a href=\"_include/strings.inc\">_include/strings.inc</a> vea cómo funciona.</li>
@@ -1302,7 +1302,7 @@ Puede proponer la traducción del juego. Es rápido y fácil. En <a href=\"_incl
 	      "playersengaged" => "Número de jugadores",
 	      "atlantic_windinfo" => "<b><u>Mapas de viento sólo para Atlántico del norte</u></b> : No viento información más allá de 80&deg; Oeste / 10&deg; Sur / 70&deg; Norte / 10&deg; Este",
 	      "classification" => "Barcos todavía en la carrera. Clasificación de",
-	      "blackout" => "Posiciones escondidas hasta ==> "
+	      "blackout" => "Posiciones escondidas hasta ==> ",
 	      "ranking" => "Clasificación ",
 	      "classification_dnf" => "Los barcos ne tienen patas, no pueden andar por la costa. Si un barco se va a cruzar la costa, está orientado hacia el viento.",
           "dateClassificationFormat" => " Y/m/d H:i \U\TC",
