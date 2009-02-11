@@ -1236,7 +1236,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 	      "a8" => "El gráfico polar de la embarcación utilizada en el juego indica la máxima velocidad. Por ejemplo, vea la <a href=\"speedchart.php?boattype=boat_Imoca\"> velocidad gráfico del Imoca 2008 </ a>: la máxima velocidad del barco es de alrededor de 26 nudos (26 kts)",
 	      "q9" => "¿Cómo leer el mapa?",
 	      "a9" => "La dirección del viento está indicada con flechas. La velocidad está indicada con colores - azul para 0-10 nudos, verde para 10-15 nudos, amarillo para 15-20 kts, naranja para 20-25 y rojo para más de 30.",
-	      "q10" => "Cuál es la diferencia entre loxodrómica y ortodrómica?
+	      "q10" => "Cuál es la diferencia entre loxodrómica y ortodrómica?",
 	      "a10" => "Vea <a href=\"http://es.wikipedia.org/wiki/Ortodr%C3%B3mica\">aquí</a> y <a href=\"http://es.wikipedia.org/wiki/Loxodr%C3%B3mica\">aquí</a>.",
 	      "q11" => "Esas respuestas no han respondido a mi pregunta. ¿Qué debo hacer?",
 	      "a11" => "Hacer una consulta en el foro.",
