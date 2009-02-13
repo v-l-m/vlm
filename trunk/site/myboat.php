@@ -411,17 +411,12 @@ include_once("scripts/myboat.js");
             echo "<br /><b>Please contact race Comittee, click on the SOS icon</b>";
         }
 
-        // Vent Des Globes ?
-                if ( $usersObj->users->engaged != 20081109 ) {
-                     $available_races=availableRaces(getLoginId());
-                     /*
-                     if ( in_array (20081109, $available_races) ) {
-                          printf ( "Race Vent Des Globes : <b>Qualif OK</b>" );
-                     } else {
-                          printf ( "NOT QUALIFIED for Race Vent Des Globes" );
-                     }
-                     */
-                }
+        // Messages specifiques dans le panneau de controle en fonction des courses
+        // ==> devrait devenir un objet en base de données (lien vers des IC course par course ?)
+        // VOR 5 : info sur les portes de securité
+        if ( $usersObj->users->engaged == 81005 ) {
+             printf ( "VOR 5 : Your must be seen for at least one vacation on the North of both ice gates between NZL and CAPE HORN\n" );
+        }
 
         ?>
         </td></tr></table>
