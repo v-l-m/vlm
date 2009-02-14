@@ -38,6 +38,8 @@ if ($idraces != 0) {
     $fullRacesObj = new fullRaces($idraces);
     echo "<div id=\"raceheader\">\n";
         outputRaceTitle($fullRacesObj, $strings[$lang]["racestarted"]);
+        echo "<h3>".."</h3>\n";
+        echo "<h3><a href=\"races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ranking"]."</a></h3>";
     echo "</div>\n";
 
     // Carte de la course
@@ -46,7 +48,7 @@ if ($idraces != 0) {
     echo "</div>\n";
 
     echo "<div id=\"ic\">\n";
-        echo "<h3>".$strings[$lang]["ic"]."</h3>
+        echo "<h3>".$strings[$lang]["ic"]."</h3>\n";
         outputIC($fullRacesObj);
     echo "</div>\n";    
 }
