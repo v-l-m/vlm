@@ -39,11 +39,17 @@ body
 #loggedbox {}
 #langbox {}
 #msgbox {}
-#menubox {}
+#menubox {
+  text-align: center;
+}
 #weatherbox {}
-#toolbarbox {}
+#toolbarbox {
+  text-align: center;
+}
 #serverbox {}
-#pagesbox {}
+#pagesbox {
+  text-align: center;
+}
 #messagebox ul {
         margin-left: 0.5em;
         padding-left: 1em;
