@@ -378,46 +378,56 @@ include_once("scripts/myboat.js");
         cap=<?php    printf ('%4.1f' , $usersObj->users->boatheading ) ?>"
     />
         </td><td class="boat" valign="top">
-        <?php
-        // Test si blackout à prévoir
-            echo "<b>Messages : </b> ...";
-                // Blackout ?
-                $now = time();
-                if ( $usersObj->races->bobegin > $now ) {
-            $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$usersObj->races->bobegin);
-            $boduration = ($usersObj->races->boend - $usersObj->races->bobegin ) /3600;
-            echo "<br />" . "Blackout : " . $bobegin . " (". $boduration . "h)" ;
-                }
-            if ( $now > $usersObj->races->bobegin && $now < $usersObj->races->boend ) {    
-                     echo "<br />" . $strings[$lang]["blackout"]
-                          . "<br /><b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
-                          $usersObj->races->boend);
-                }
-
-        // Email vide ?
-        if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
-            echo "<br /><b>NO E-MAIL ADDRESS</b>";
-            echo "<br />Please give one (".$strings[$lang]["choose"] . ")";
-        }
-        if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
-            echo "<br /><b>Notes:</b><br />";
-            echo nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-            echo "<br />";
-        }
         
-        // OMOROB ?
-        if ( $usersObj->users->country == "000" ) {
-            echo "<br /><b>** ONE BOAT PER PLAYER PER RACE **</b>";
-            echo "<br /><b>Please contact race Comittee, click on the SOS icon</b>";
-        }
+        <?php
+            $messages = Array();
 
-        // Messages specifiques dans le panneau de controle en fonction des courses
-        // ==> devrait devenir un objet en base de données (lien vers des IC course par course ?)
-        // VOR 5 : info sur les portes de securité
-        if ( $usersObj->users->engaged == 81005 ) {
-             printf ( "VOR 5 : Your must be seen for at least one vacation on the North of both ice gates between NZL and CAPE HORN\n" );
-        }
-
+            // Messages specifiques dans le panneau de controle en fonction des courses
+            // Blackout ?
+            $now = time();
+            if ( $usersObj->races->bobegin > $now ) {
+                $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$usersObj->races->bobegin);
+                $boduration = ($usersObj->races->boend - $usersObj->races->bobegin ) /3600;
+                $messages[] = Array("id" => "incomingbo", "txt" => "Blackout : $bobegin ($boduration h)", "class" => "ic");
+            }
+            if ( $now > $usersObj->races->bobegin && $now < $usersObj->races->boend ) {    
+                $msg = $strings[$lang]["blackout"] . "<br /><b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
+                   $usersObj->races->boend);
+                $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic");
+            }
+            // VOR 5 : info sur les portes de securité
+            if ( $usersObj->users->engaged == 81005 ) {
+                 $msg = "VOR 5 : Your must be seen for at least one vacation on the North of both ice gates between NZL and CAPE HORN";
+                 $messages[] = Array("id" => "icfoo", "txt" => $msg, "class" => "ic");
+            }
+            
+            // Email vide ?
+            if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
+                $msg = "<b>NO E-MAIL ADDRESS</b><br />Please give one (".$strings[$lang]["choose"] . ")";
+                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn");
+            }
+            // OMOROB ?
+            if ( $usersObj->users->country == "000" ) {
+                $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b><br /><b>Please contact race Comittee, click on the SOS icon</b><";
+               $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
+            }
+            //Synthese
+            if (length($messages) > 0) {
+                echo "<div id="messagebox"><b>Messages : </b><ul>"
+                foreach ($msgstruct in $messages) {
+                    echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
+                         . $msgstruct["txt"] . "</span></li>";
+                }
+                echo "</ul></div>";
+            }
+        ?>
+        
+        <?php
+            if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
+                echo "<div id="blocnotebox"><b>Notes:</b><br />";
+                echo nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
+                echo "<br /></div>";
+            }
         ?>
         </td></tr></table>
     <hr />
