@@ -385,26 +385,27 @@ include_once("scripts/myboat.js");
             // Messages specifiques dans le panneau de controle en fonction des courses
             // Blackout ?
             $now = time();
+            $ichref="ics.php?lang=".$lang."&idraces=".$usersObj->races->idraces;
             if ( $usersObj->races->bobegin > $now ) {
                 $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$usersObj->races->bobegin);
                 $boduration = ($usersObj->races->boend - $usersObj->races->bobegin ) /3600;
-                $messages[] = Array("id" => "incomingbo", "txt" => "Blackout : $bobegin ($boduration h)", "class" => "ic");
+                $messages[] = Array("id" => "incomingbo", "txt" => $strings[$lang]["blackout"]." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
             }
             if ( $now > $usersObj->races->bobegin && $now < $usersObj->races->boend ) {    
-                $msg = $strings[$lang]["blackout"] . "<br /><b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
+                $msg = $strings[$lang]["blackout"] . " : <b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
                    $usersObj->races->boend);
-                $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic");
+                $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }
             // Affichage des IC destinées à la console
             foreach ( $usersObj->races->ics as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
-                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic");
+                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
                 }
             }
             // Email vide ?
             if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
                 $msg = "<b>NO E-MAIL ADDRESS</b><br />Please give one (".$strings[$lang]["choose"] . ")";
-                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn");
+                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php?lang=$lang");
             }
             // OMOROB ?
             if ( $usersObj->users->country == "000" ) {
@@ -414,7 +415,7 @@ include_once("scripts/myboat.js");
             //BLOCNOTE
             if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
                 $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info");
+                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "modify.php?lang=$lang");
             }
 
             //Synthese
@@ -422,7 +423,11 @@ include_once("scripts/myboat.js");
                 echo "<div id=\"messagebox\"><ul>";
                 foreach ($messages as $msgstruct) {
                     echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
-                         . $msgstruct["txt"] . "</span></li>";
+                         . $msgstruct["txt"];
+                    if (array_key_exists("url", $msgstruct)) {
+                        echo "<a href=\"".$href."\">?</a>";
+                    }
+                    echo "</span></li>";
                 }
                 echo "</ul></div>";
             }
