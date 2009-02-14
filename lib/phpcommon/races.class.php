@@ -61,7 +61,7 @@ class races
     $this->theme            = $row[17]; //Le theme , si non null, force le theme de l'interface
 
     // retrieve all IC if we are not running the engine
-    if (not defined('MOTEUR')) {
+    if (!defined('MOTEUR')) {
         $this->ics = array();
 
         $query = "SELECT instructions, flag FROM races_instructions" .

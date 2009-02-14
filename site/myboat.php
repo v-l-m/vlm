@@ -398,7 +398,7 @@ include_once("scripts/myboat.js");
             // Affichage des IC destinées à la console
             foreach ( $usersObj->races->ics as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
-                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" = "ic");
+                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic");
                 }
             }
             // Email vide ?
@@ -418,7 +418,7 @@ include_once("scripts/myboat.js");
             }
 
             //Synthese
-            if (length($messages) > 0) {
+            if (count($messages) > 0) {
                 echo "<div id=\"messagebox\"><ul>";
                 foreach ($messages as $msgstruct) {
                     echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
