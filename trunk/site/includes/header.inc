@@ -265,11 +265,12 @@
 ?>
         </div>
         <div id="langbox" class="leftbox">
-            <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" title="<? echo $strings['fr']['lang_version']; ?>" alt="<? echo $strings['fr']['lang_version']; ?>" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" title="<? echo $strings['en']['lang_version']; ?>" alt="<? echo $strings['en']['lang_version']; ?>" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" title="<? echo $strings['it']['lang_version']; ?>" alt="<? echo $strings['it']['lang_version']; ?>" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" title="<? echo $strings['pt']['lang_version']; ?>" alt="<? echo $strings['pt']['lang_version']; ?>" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=es"><img src="images/site/es.png" title="<? echo $strings['es']['lang_version']; ?>" alt="<? echo $strings['es']['lang_version']; ?>" width="30" height="20" /></a>
+<?php
+            $langs= array_keys($strings);
+            foreach ($langs as $lg) {
+                echo "<a href=\"".$SCRIPT_NAME."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".$strings[$lg]['lang_version']."\" alt=\"".$strings[$lg]['lang_version']."\" /></a>\n";
+            }            
+?>
         </div>
         <div id="menubox" class="leftbox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 

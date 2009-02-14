@@ -42,6 +42,9 @@ body
         text-indent: 0em;
 }
 
+#langbox img {
+    width: 25px;
+}
 
 #main
 {
