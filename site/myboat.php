@@ -425,7 +425,7 @@ include_once("scripts/myboat.js");
                     echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"];
                     if (array_key_exists("url", $msgstruct)) {
-                        echo "&nbsp;<a href=\"".$msgstruct["url"]."\">?</a>";
+                        echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">?</a>]";
                     }
                     echo "</span></li>";
                 }

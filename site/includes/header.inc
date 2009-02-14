@@ -210,8 +210,8 @@
    
    <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
    <div id="login">
-       <div id="msgbox">      <?php echo $msg; ?></div>
-       <div id="loginbox">
+       <div id="msgbox" class="leftbox">      <?php echo $msg; ?></div>
+       <div id="loginbox" class="leftbox">
 <?php
 
     if (!isLoggedIn()) //if not connected
@@ -264,14 +264,14 @@
     }
 ?>
         </div>
-        <div id="langbox">
+        <div id="langbox" class="leftbox">
             <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" title="<? echo $strings['fr']['lang_version']; ?>" alt="<? echo $strings['fr']['lang_version']; ?>" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" title="<? echo $strings['en']['lang_version']; ?>" alt="<? echo $strings['en']['lang_version']; ?>" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" title="<? echo $strings['it']['lang_version']; ?>" alt="<? echo $strings['it']['lang_version']; ?>" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" title="<? echo $strings['pt']['lang_version']; ?>" alt="<? echo $strings['pt']['lang_version']; ?>" width="30" height="20" /></a>
             <a href="<? echo $SCRIPT_NAME ?>?lang=es"><img src="images/site/es.png" title="<? echo $strings['es']['lang_version']; ?>" alt="<? echo $strings['es']['lang_version']; ?>" width="30" height="20" /></a>
         </div>
-        <div id="menubox">
+        <div id="menubox" class="leftbox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
             <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
             <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a><br />
@@ -292,7 +292,7 @@
                 echo "</b></a> ";
             ?>
         </div>
-        <div id="toolbarbox">
+        <div id="toolbarbox" class="leftbox">
             <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
                 <img src="images/site/documentation.png"  alt="<?php echo $strings[$lang]["doc"]; ?>" title="<?php echo $strings[$lang]["doc"]; ?>" />
             </a>
@@ -303,12 +303,12 @@
                 <img src="images/site/outils.png" alt="<?php echo $strings[$lang]["tools"]; ?>" title="<?php echo $strings[$lang]["tools"]; ?>"/>
             </a>            
         </div>
-        <div id="weatherbox">
+        <div id="weatherbox" class="leftbox">
             <h3><?php echo $strings[$lang]["weather"]; ?></h3>
             <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
             <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><b><?echo $strings[$lang]["meteotools"]?></b></a><br />
         </div>
-        <div id="serverbox">
+        <div id="serverbox" class="leftbox">
             <?php
               echo "Srv = " . SERVER_NAME . ".";
               echo "<br />Version = ";  
