@@ -40,10 +40,10 @@ function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
 function outputWayPoints($fullRacesObj) {
 
     echo "<table class=\"waypoints\">\n";
-    echo "<tr><td>#</td><td>Lat1</td><td>Lon1</td><td>Lat2</td><td>Lon2</td><td>Hdg</td><td>Type</td><td>Name</td></tr>";
+    echo "<th><td>#</td><td>Lat1</td><td>Lon1</td><td>Lat2</td><td>Lon2</td><td>Hdg</td><td>Type</td><td>Name</td></th>";
     foreach ($fullRacesObj->races->waypoints as $num => $wp) {
         echo "<tr>\n";
-        echo "<td>WP".$num."</td>\n";
+        echo "<td>WP".($num+1)."</td>";
         printf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.1f</td><td>%s</td><td>%s</td>", $wp[0]/1000., $wp[1]/1000., $wp[2]/1000., $wp[3]/1000., $wp[4], $wp[5], $wp[6]);
         echo "</tr>\n";
     }
