@@ -420,14 +420,14 @@ include_once("scripts/myboat.js");
 
             //Synthese
             if (count($messages) > 0) {
-                echo "<div id=\"messagebox\"><ul>";
+                echo "<div id=\"messagebox\"><ul>\n";
                 foreach ($messages as $msgstruct) {
                     echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"];
                     if (array_key_exists("url", $msgstruct)) {
                         echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">?</a>]";
                     }
-                    echo "</span></li>";
+                    echo "</span></li>\n";
                 }
                 echo "</ul></div>";
             }
