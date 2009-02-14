@@ -210,59 +210,65 @@
    
    <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
    <div id="login">
+<?php
+    if ($msg != "" and !is_null($msg) ) {
+?>
        <div id="msgbox" class="leftbox">      <?php echo $msg; ?></div>
-       <div id="loginbox" class="leftbox">
+<?php
+    }
+?>
 <?php
 
     if (!isLoggedIn()) //if not connected
     {
 ?>
-      <form method="post" action="myboat.php">
-         <p align="left">
-            User: <input size="10" maxlength="15" name="pseudo" /><br />
-            Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
-            <input type="hidden" name="lang" value="<?echo $lang?>" />
-            <input type="hidden" name="type" value="login" />
-         </p>
-         <p align="center">
-             <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
-         </p>
-      </form>
+        <div id="loginbox" class="leftbox">
+            <form method="post" action="myboat.php">
+                User: <input size="10" maxlength="15" name="pseudo" /><br />
+                Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
+                <input type="hidden" name="lang" value="<?echo $lang?>" />
+                <input type="hidden" name="type" value="login" />
+                <span class="leftbutton">
+                    <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
+                 </span>
+            </form>
+        </div>
+        <div id="pleasecreatebox" class="leftbox">
 <?php
-       printf ("   ".$strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
+            printf ("   ".$strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
+?>
+        </div>
+<?php
     }
     else //if loggedin
     {
-        //disp login name, infos
-        printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
-        $available_races=availableRaces(getLoginId());
-        /* FIXME
-        if ( in_array (20081109, $available_races) ) {
-        printf ( "Vent Des Globes : <B>OK</B>" );
-        }
-        */  
 ?>
-        <p align="center">
+        <div id="loggedbox" class="leftbox">
+<?php
+            //disp login name, infos
+            printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
+            $available_races=availableRaces(getLoginId());
+?>
+            <form method="post" action="index.php">
+                <input type="hidden" name="type" value="logout" />
+                <input type="hidden" name="lang" value="<?echo $lang?>" />
+                <span class="leftbutton">
+                    <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
+<?php
+                    // Bouton "ADMIN" pour les administrateurs
+                    if ( idusersIsAdmin (getLoginId()) ) {
+                        printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
+                    }
+?>
+
+                </span>
+            </form>
+
+        </div>
+        <div id="pagesbox" class="leftbox">
             <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
             <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
             <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
-        </p>
-        <form method="post" action="index.php">
-          <p align="center">
-            <input type="hidden" name="type" value="logout" />
-            <input type="hidden" name="lang" value="<?echo $lang?>" />
-            <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
-          </p>
-        </form>
-<?php
-        // Bouton "ADMIN" pour les administrateurs
-        if ( idusersIsAdmin (getLoginId()) ) {
-            printf ("<p align=center>");
-            printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
-            printf ("</p>");
-        }
-    }
-?>
         </div>
         <div id="langbox" class="leftbox">
 <?php
