@@ -201,7 +201,7 @@
    <!-- onLoad connot be in body so we create a false div not to  be displayed -->
    <!-- TODO put expert in cookies-->
 
-   <div id="baneer" align="right">
+   <div id="baneer">
      <b>
        <?php echo $strings[$lang]["sponsor"]; ?>
      </b>

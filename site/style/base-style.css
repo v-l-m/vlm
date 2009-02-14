@@ -53,6 +53,7 @@ body
   text-align: center;
 }
 #messagebox ul {
+        margin-top: 0em;
         margin-left: 0.5em;
         padding-left: 1em;
         text-indent: 0em;
@@ -115,6 +116,7 @@ body
   height: 82px;
   width: 980px;
   background-image:  url('/images/site/banniere_haut.jpg');
+  text-align: right;
 }
 
 #time
