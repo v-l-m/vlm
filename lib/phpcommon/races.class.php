@@ -28,7 +28,8 @@ class races
     $maxboats,
     $theme,
     $waypoints,
-    $racedistance;
+    $racedistance,
+    $ics;
 
   function races($id =0)
   {
@@ -58,7 +59,22 @@ class races
     $this->boend            = $row[15];
     $this->maxboats         = $row[16];
     $this->theme            = $row[17]; //Le theme , si non null, force le theme de l'interface
-    // retreive all waypoints
+
+    // retrieve all IC if we are not running the engine
+    if (not defined('MOTEUR')) {
+        $this->ics = array();
+
+        $query = "SELECT instructions, flag FROM races_instructions" .
+          " WHERE idraces = " . $this->idraces ; 
+
+        $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
+
+        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+            $this->ics[] = $row;
+        }
+    }
+
+    // retrieve all waypoints
     $this->waypoints =array();
 
     $query = "SELECT wporder,wptype,libelle,laisser_au,maparea FROM races_waypoints RW, waypoints WP" .

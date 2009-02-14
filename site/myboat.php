@@ -395,12 +395,12 @@ include_once("scripts/myboat.js");
                    $usersObj->races->boend);
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic");
             }
-            // VOR 5 : info sur les portes de securité
-            if ( $usersObj->users->engaged == 81005 ) {
-                 $msg = "VOR 5 : Your must be seen for at least one vacation on the North of both ice gates between NZL and CAPE HORN";
-                 $messages[] = Array("id" => "icfoo", "txt" => $msg, "class" => "ic");
+            // Affichage des IC destinées à la console
+            foreach ( $usersObj->races->ics as $ic) {
+                if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
+                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" = "ic");
+                }
             }
-            
             // Email vide ?
             if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
                 $msg = "<b>NO E-MAIL ADDRESS</b><br />Please give one (".$strings[$lang]["choose"] . ")";
@@ -409,11 +409,17 @@ include_once("scripts/myboat.js");
             // OMOROB ?
             if ( $usersObj->users->country == "000" ) {
                 $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b><br /><b>Please contact race Comittee, click on the SOS icon</b><";
-               $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
+                $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
             }
+            //BLOCNOTE
+            if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
+                $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
+                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info");
+            }
+
             //Synthese
             if (length($messages) > 0) {
-                echo "<div id=\"messagebox\"><b>Messages : </b><ul>";
+                echo "<div id=\"messagebox\"><ul>";
                 foreach ($messages as $msgstruct) {
                     echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"] . "</span></li>";
@@ -422,13 +428,6 @@ include_once("scripts/myboat.js");
             }
         ?>
         
-        <?php
-            if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
-                echo "<div id="blocnotebox"><b>Notes:</b><br />";
-                echo nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-                echo "<br /></div>";
-            }
-        ?>
         </td></tr></table>
     <hr />
 

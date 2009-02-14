@@ -170,6 +170,10 @@ define("MAX_EAST", 180000);
 define("MAX_NORTH", 80000);
 define("MAX_SOUTH", -80000);
 
+//IC FLAGS
+define("IC_FLAG_VISIBLE") = 1;
+define("IC_FLAG_CONSOLE") = 2;
+
 // Par défaut ( Atlantique nord seulement )
 //define("COASTLINE_DATAFILE", "N50E15S10W80@1_5000000.dat");
 //define("ISLANDS_DATAFILE", "mapFillCoordinates.dat");
