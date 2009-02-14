@@ -3,8 +3,16 @@ See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by versi
 
 v0.9: what's new for ...
 ... players ?
+* spanish translation now available (tigarou)
+* shorter vacation update (spf)
+* you may choose a different theme for the web interface (paparazzia)
+
+... tools developpers :
+* gettrack now return only running positions (spf/steph/paparazzia)
 
 ... vlm developers ?
+* fully optimized engine (better mysql handling & coast detection in C) (spf)
+* better themability (paparazzia)
 
 v0.8: what's new for ...
 ... players ?
