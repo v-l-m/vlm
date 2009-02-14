@@ -24,18 +24,26 @@ body
 }
 
 .leftbox {
-  border-top: groove 3px #DDDDF0;
+  border-bottom: groove 3px #DDDDF0;
   padding: 3px;
+  text-align: left;
 }
 
+.leftbutton {
+  text-align: center;
+}
+
+
 #loginbox {}
+#pleasecreatebox {}
+#loggedbox {}
 #langbox {}
 #msgbox {}
 #menubox {}
 #weatherbox {}
 #toolbarbox {}
 #serverbox {}
-
+#pagesbox {}
 #messagebox ul {
         margin-left: 0.5em;
         padding-left: 1em;
