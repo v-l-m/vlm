@@ -9,7 +9,7 @@ include_once("config.php");
 function outputIC($fullRacesObj) {
     foreach($fullRacesObj->races->ics as $ic) {
         if ($ic['flag'] & IC_FLAG_VISIBLE) {
-            echo "<div class=\"ic\">\n";
+            echo "<div class=\"icbox\">\n";
             echo nl2br($ic['instructions']);
             echo "\n</div>\n";
         }
@@ -29,8 +29,25 @@ function outputRaceMap($fullRacesObj, $alttemplate) {
     }
 }
 
+/* output du titre */
+
 function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
     printf("<h3>".$titletemplate."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));     
+}
+
+/* output du tableau de wp */
+
+function outputWayPoints($fullRacesObj) {
+
+    echo "<table class=\"waypoints\">\n";
+    foreach ($fullRacesObj->races->waypoints as $wp) {
+        echo "<tr>\n";
+        foreach ($wp as $dat) {
+            echo "<td>$dat</td>\n";
+        }
+        echo "</tr>\n";
+    }
+    echo "</table>\n";
 }
 
 if ($idraces != 0) {
@@ -50,6 +67,12 @@ if ($idraces != 0) {
         echo "<h3>".$strings[$lang]["ic"]."</h3>\n";
         outputIC($fullRacesObj);
     echo "</div>\n";    
+
+    echo "<div id=\"waypoints\">\n";
+        echo "<h3>Waypoints</h3>\n";
+        outputWaypoints($fullRacesObj);
+    echo "</div>\n";    
+
 }
 
 include_once("includes/footer.inc");

@@ -36,6 +36,13 @@ body
 .warnmessage {
   color: red;
 }
+
+.icbox {
+   margin: 1em;
+   padding: 1em;
+   border: groove 3px #DDDDF0;
+}
+
 #loginbox {}
 #pleasecreatebox {}
 #loggedbox {}
