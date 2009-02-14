@@ -413,8 +413,8 @@ include_once("scripts/myboat.js");
             }
             //Synthese
             if (length($messages) > 0) {
-                echo "<div id="messagebox"><b>Messages : </b><ul>"
-                foreach ($msgstruct in $messages) {
+                echo "<div id=\"messagebox\"><b>Messages : </b><ul>";
+                foreach ($messages as $msgstruct) {
                     echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"] . "</span></li>";
                 }
