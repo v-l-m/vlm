@@ -226,22 +226,20 @@
             <form method="post" action="myboat.php">
                 User: <input size="10" maxlength="15" name="pseudo" /><br />
                 Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
-                <input type="hidden" name="lang" value="<?echo $lang?>" />
+                <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
                 <input type="hidden" name="type" value="login" />
-                <span class="leftbutton">
-                    <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
-                 </span>
+                <p class="leftbutton">
+                    <input type="submit" value="<?php echo $strings[$lang]["login"]; ?>" />
+                </p>
             </form>
         </div>
         <div id="pleasecreatebox" class="leftbox">
 <?php
-            printf ("   ".$strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
+            printf ($strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
 ?>
         </div>
 <?php
-    }
-    else //if loggedin
-    {
+    } else { //if loggedin
 ?>
         <div id="loggedbox" class="leftbox">
 <?php
@@ -249,26 +247,32 @@
             printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
             $available_races=availableRaces(getLoginId());
 ?>
+        </div>
+        <div id="logoutbox" class="leftbox">
             <form method="post" action="index.php">
                 <input type="hidden" name="type" value="logout" />
-                <input type="hidden" name="lang" value="<?echo $lang?>" />
-                <span class="leftbutton">
-                    <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
+                <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
+                <p class="leftbutton">
+                    <input type="submit" value="<?php echo $strings[$lang]["logout"]; ?>" />
+                </p>
 <?php
-                    // Bouton "ADMIN" pour les administrateurs
-                    if ( idusersIsAdmin (getLoginId()) ) {
-                        printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
-                    }
+                // Bouton "ADMIN" pour les administrateurs
+                if ( idusersIsAdmin (getLoginId()) ) {
+                    echo '<p class="leftbutton">';
+                    printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
+                    echo '</p>';
+                }
 ?>
 
-                </span>
             </form>
-
         </div>
+<?php
+    }
+?>
         <div id="pagesbox" class="leftbox">
-            <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
-            <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
-            <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
+            <a href="myboat.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["control"]; ?></a>
+            <a href="mappref.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["mymap"]; ?></a>
+            <a href="modify.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["choose"]; ?></a>
         </div>
         <div id="langbox" class="leftbox">
 <?php
