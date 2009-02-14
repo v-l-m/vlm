@@ -1,4 +1,8 @@
 Depuis la mise en production de la V0.8.1
+* ajout du champ "flag" pour les IC
+
+  ALTER TABLE races_instructions ADD COLUMN `flag` int(11);
+  ALTER TABLE races_instructions ADD KEY (`idraces`);
 
 * ajout de la préférence de theme
 
