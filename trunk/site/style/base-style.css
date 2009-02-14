@@ -23,6 +23,11 @@ body
   margin-bottom: 0 ;/*0 important sinon menu va pas en dessous*/
 }
 
+.leftbox {
+  border-top: groove 3px #DDDDF0;
+  padding: 3px;
+}
+
 #loginbox {}
 #langbox {}
 #msgbox {}
@@ -30,6 +35,13 @@ body
 #weatherbox {}
 #toolbarbox {}
 #serverbox {}
+
+#messagebox ul {
+        margin-left: 0.5em;
+        padding-left: 1em;
+        text-indent: 0em;
+}
+
 
 #main
 {
