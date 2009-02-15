@@ -124,7 +124,14 @@ include_once("scripts/myboat.js");
         }
         $user_ranking=getCurrentRanking($usersObj->users->idusers,$usersObj->users->engaged) ;
 ?>
-        <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>"><b><? echo $usersObj->races->racename; ?></b></a>
+        <span id="racename">
+          <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
+<?php
+            echo $usersObj->races->racename;
+            echo "(".round($usersObj->races->racedistance) . "nm)";
+?>
+          </a>
+        </span>
 
 <?php /* Cartes du départ et des WP */ ?>
         <div id="wplistbox">
@@ -214,7 +221,6 @@ include_once("scripts/myboat.js");
           } else if ( $usersObj->races->coastpenalty  >= 60 ) {
               echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/60). " min</b></font> / ";
           }
-          echo $strings[$lang]["racedistance"] . " : ". round($usersObj->races->racedistance) . "nm";
 ?></b>
         </div>
       </div>
