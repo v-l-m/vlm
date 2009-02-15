@@ -205,7 +205,7 @@ include_once("scripts/myboat.js");
 
        echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
          "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-         "&amp;long=" . . $wp_long_center  .
+         "&amp;long=" . $wp_long_center  .
          "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
          "&amp;tracks=on" . $oppList . 
          "&amp;wp=" . $wp_num . 
