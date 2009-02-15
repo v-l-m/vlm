@@ -231,7 +231,7 @@ include_once("scripts/myboat.js");
         // Estimation de la prochaine VAC pour ce bateau là
 
         if ( $usersObj->users->lastupdate + DELAYBETWEENUPDATE >= time() ) {
-            printf ("$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10 );
+            printf ($strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10 );
         }
 ?>
       </div>
