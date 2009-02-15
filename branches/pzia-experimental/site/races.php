@@ -143,8 +143,10 @@ if ($idraces != 0) {
           if ( $startnum > 0 ) $startnum-=$num_arrived;
 
     //show alls races
-  
-    printf("<h3>".$strings[$lang]["racestarted"]."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));     
+    echo "<div id=\"raceheader\">\n";
+        printf("<h3>".$strings[$lang]["racestarted"]."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));
+        echo "<h3><a href=\"ics.php?lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ic"]."</a></h3>";
+    echo "</div>\n";     
 
           // Carte de la course
     $href = "images/racemaps/regate".$fullRacesObj->races->idraces.".jpg";

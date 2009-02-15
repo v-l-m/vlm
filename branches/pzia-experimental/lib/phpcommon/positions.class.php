@@ -18,12 +18,14 @@ class positions
 
   function getLastPositions($id, $race)
   {
+    // same query as getAnteLastPositions do use the DB cache.
     $query= "SELECT `time`, `long`, `lat`, `idusers` , `race` ".
-      "FROM positions WHERE idusers =  $id  AND race = $race " .
-      "ORDER BY `time` DESC LIMIT 1";
+      "FROM positions WHERE idusers = $id AND race = $race " .
+      "ORDER BY `time` DESC LIMIT 2";
+
 //      echo "REQUEST: $query \n";
 
-    $result = mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query(DBNAME,$query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
     $this->time = $row[0];
@@ -40,8 +42,8 @@ class positions
     $query= "SELECT `time`, `long`, `lat`, `idusers` , `race` ".
       "FROM positions WHERE idusers = $id AND race = $race " .
       "ORDER BY `time` DESC LIMIT 2";
-    $result = mysql_db_query(DBNAME,$query);
-    //$result = mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query(DBNAME,$query);
+    //$result = wrapper_mysql_db_query(DBNAME,$query);
 
     $row = mysql_fetch_array($result, MYSQL_NUM);
     $row = mysql_fetch_array($result, MYSQL_NUM);//we are not taking the last one
@@ -65,7 +67,7 @@ class positions
       " ORDER BY time ASC LIMIT 1";
     //echo "REQUEST: $query \n";
 
-    $result = mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query(DBNAME,$query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
     return array($row[0], $row[1], $row[2]);
@@ -103,7 +105,7 @@ class positions
               ", `lat` =". $this->lat.
               ", idusers = ".$this->idusers .
               ", `race` = ".$this->race;
-    mysql_db_query(DBNAME,$query7);
+    wrapper_mysql_db_query(DBNAME,$query7);
 
   }
 
@@ -151,7 +153,7 @@ class positionsList
       " AND `time` > " . $mintime .  
       " AND `time` < " . $maxtime .  
       " ORDER BY `time` ASC";
-    $result = mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query(DBNAME,$query);
 
     while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
 	    $pos = new positions();

@@ -1,9 +1,11 @@
 <?php
-    //header("Content-type: text/html");
+
     session_start();
     include_once("strings.inc");
     include_once("config.php");
     
+    header("Content-type: text/html; charset=utf-8");
+
     //all GET and POST variables
     if ( isset($_REQUEST['lang']) ) {
         $lang=quote_smart($_REQUEST['lang']);
@@ -199,7 +201,7 @@
    <!-- onLoad connot be in body so we create a false div not to  be displayed -->
    <!-- TODO put expert in cookies-->
 
-   <div id="baneer" align="right">
+   <div id="baneer">
      <b>
        <?php echo $strings[$lang]["sponsor"]; ?>
      </b>
@@ -208,67 +210,79 @@
    
    <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
    <div id="login">
-       <div id="msgbox">      <?php echo $msg; ?></div>
-       <div id="loginbox">
+<?php
+    if ($msg != "" and !is_null($msg) ) {
+?>
+       <div id="msgbox" class="leftbox">      <?php echo $msg; ?></div>
+<?php
+    }
+?>
 <?php
 
     if (!isLoggedIn()) //if not connected
     {
 ?>
-      <form method="post" action="myboat.php">
-         <p align="left">
-            User: <input size="10" maxlength="15" name="pseudo" /><br />
-            Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
-            <input type="hidden" name="lang" value="<?echo $lang?>" />
-            <input type="hidden" name="type" value="login" />
-         </p>
-         <p align="center">
-             <input type="submit" value="<? echo $strings[$lang]["login"]?>" />
-         </p>
-      </form>
+        <div id="loginbox" class="leftbox">
+            <form method="post" action="myboat.php">
+                User: <input size="10" maxlength="15" name="pseudo" /><br />
+                Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
+                <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
+                <input type="hidden" name="type" value="login" />
+                <p class="leftbutton">
+                    <input type="submit" value="<?php echo $strings[$lang]["login"]; ?>" />
+                </p>
+            </form>
+        </div>
+        <div id="pleasecreatebox" class="leftbox">
 <?php
-       printf ("   ".$strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
-    }
-    else //if loggedin
-    {
-        //disp login name, infos
-        printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
-        $available_races=availableRaces(getLoginId());
-        /* FIXME
-        if ( in_array (20081109, $available_races) ) {
-        printf ( "Vent Des Globes : <B>OK</B>" );
-        }
-        */  
-?>
-        <p align="center">
-            <a href="myboat.php?lang=<?echo $lang?>"><?echo $strings[$lang]["control"]?></a>
-            <a href="mappref.php?lang=<?echo $lang?>"><?echo $strings[$lang]["mymap"]?></a>
-            <a href="modify.php?lang=<?echo $lang?>"><?echo $strings[$lang]["choose"]?></a>
-        </p>
-        <form method="post" action="index.php">
-          <p align="center">
-            <input type="hidden" name="type" value="logout" />
-            <input type="hidden" name="lang" value="<?echo $lang?>" />
-            <input type="submit" value="<? echo $strings[$lang]["logout"]?>" />
-          </p>
-        </form>
-<?php
-        // Bouton "ADMIN" pour les administrateurs
-        if ( idusersIsAdmin (getLoginId()) ) {
-            printf ("<p align=center>");
-            printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
-            printf ("</p>");
-        }
-    }
+            printf ($strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
 ?>
         </div>
-        <div id="langbox">
-            <a href="<? echo $SCRIPT_NAME ?>?lang=fr"><img src="images/site/fr.png" alt="version Francaise" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=en"><img src="images/site/en.png" alt="English version" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=it"><img src="images/site/it.png" alt="Italian version" width="30" height="20" /></a>
-            <a href="<? echo $SCRIPT_NAME ?>?lang=pt"><img src="images/site/pt.png" alt="Portugese version" width="30" height="20" /></a>
+<?php
+    } else { //if loggedin
+?>
+        <div id="loggedbox" class="leftbox">
+<?php
+            //disp login name, infos
+            printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
+            $available_races=availableRaces(getLoginId());
+?>
         </div>
-        <div id="menubox">
+        <div id="logoutbox" class="leftbox">
+            <form method="post" action="index.php">
+                <input type="hidden" name="type" value="logout" />
+                <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
+                <p class="leftbutton">
+                    <input type="submit" value="<?php echo $strings[$lang]["logout"]; ?>" />
+                </p>
+<?php
+                // Bouton "ADMIN" pour les administrateurs
+                if ( idusersIsAdmin (getLoginId()) ) {
+                    echo '<p class="leftbutton">';
+                    printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
+                    echo '</p>';
+                }
+?>
+
+            </form>
+        </div>
+<?php
+    }
+?>
+        <div id="pagesbox" class="leftbox">
+            <a href="myboat.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["control"]; ?></a>
+            <a href="mappref.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["mymap"]; ?></a>
+            <a href="modify.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["choose"]; ?></a>
+        </div>
+        <div id="langbox" class="leftbox">
+<?php
+            $langs= array_keys($strings);
+            foreach ($langs as $lg) {
+                echo "<a href=\"".$SCRIPT_NAME."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".$strings[$lg]['lang_version']."\" alt=\"".$strings[$lg]['lang_version']."\" /></a>\n";
+            }            
+?>
+        </div>
+        <div id="menubox" class="leftbox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
             <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
             <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a><br />
@@ -289,7 +303,7 @@
                 echo "</b></a> ";
             ?>
         </div>
-        <div id="toolbarbox">
+        <div id="toolbarbox" class="leftbox">
             <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
                 <img src="images/site/documentation.png"  alt="<?php echo $strings[$lang]["doc"]; ?>" title="<?php echo $strings[$lang]["doc"]; ?>" />
             </a>
@@ -300,12 +314,12 @@
                 <img src="images/site/outils.png" alt="<?php echo $strings[$lang]["tools"]; ?>" title="<?php echo $strings[$lang]["tools"]; ?>"/>
             </a>            
         </div>
-        <div id="weatherbox">
+        <div id="weatherbox" class="leftbox">
             <h3><?php echo $strings[$lang]["weather"]; ?></h3>
             <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
             <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><b><?echo $strings[$lang]["meteotools"]?></b></a><br />
         </div>
-        <div id="serverbox">
+        <div id="serverbox" class="leftbox">
             <?php
               echo "Srv = " . SERVER_NAME . ".";
               echo "<br />Version = ";  

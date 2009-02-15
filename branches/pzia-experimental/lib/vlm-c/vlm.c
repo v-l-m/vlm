@@ -390,6 +390,41 @@ void VLM_loxo_distance_angle(double latitude, double longitude,
 }
 
 /**
+ * Get loxodromic distance
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @return heading, a <code>double</code>, the resulting
+ *                 distance in <em>nm</em>
+ */
+double VLM_loxo_distance(double latitude, double longitude, 
+			 double target_lat, double target_long) {
+  double distance, heading;
+  VLM_loxo_distance_angle(latitude, longitude, target_lat, target_long,
+			  &distance, &heading);
+  return distance;
+}
+
+/**
+ * Get loxodromic heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_long, a <code>double</code>, in <em>milli-degrees</em>
+ * @return heading, a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+double VLM_loxo_heading(double latitude, double longitude, 
+			double target_lat, double target_long) {
+  double distance, heading;
+  VLM_loxo_distance_angle(latitude, longitude, target_lat, target_long,
+			  &distance, &heading);
+  return heading;
+}
+
+
+/**
  * Check if the waypoint is crossed.
  * We check if we are in the range where approximation is valid,
  * otherwise we compute a clipped part of the gate, then use the

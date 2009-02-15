@@ -23,13 +23,52 @@ body
   margin-bottom: 0 ;/*0 important sinon menu va pas en dessous*/
 }
 
+.leftbox {
+  border-bottom: groove 3px #DDDDF0;
+  padding: 3px;
+  text-align: left;
+}
+
+.leftbutton {
+  text-align: center;
+}
+
+.warnmessage {
+  color: red;
+}
+
+.icbox {
+   margin: 1em;
+   padding: 1em;
+   border: groove 3px #DDDDF0;
+}
+
 #loginbox {}
+#pleasecreatebox {}
+#loggedbox {}
 #langbox {}
 #msgbox {}
-#menubox {}
+#menubox {
+  text-align: center;
+}
 #weatherbox {}
-#toolbarbox {}
+#toolbarbox {
+  text-align: center;
+}
 #serverbox {}
+#pagesbox {
+  text-align: center;
+}
+#messagebox ul {
+        margin-top: 0em;
+        margin-left: 0.5em;
+        padding-left: 1em;
+        text-indent: 0em;
+}
+
+#langbox img {
+    width: 25px;
+}
 
 #main
 {
@@ -84,6 +123,7 @@ body
   height: 82px;
   width: 980px;
   background-image:  url('/images/site/banniere_haut.jpg');
+  text-align: right;
 }
 
 #time

@@ -40,7 +40,9 @@ CREATE TABLE `races` (
 DROP TABLE IF EXISTS `races_instructions`;
 CREATE TABLE `races_instructions` (
   `idraces` int(11) default NULL,
-  `instructions` text
+  `instructions` text,
+  `flag` int(11),
+  KEY (`idraces`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 

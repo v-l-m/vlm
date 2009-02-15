@@ -378,52 +378,61 @@ include_once("scripts/myboat.js");
         cap=<?php    printf ('%4.1f' , $usersObj->users->boatheading ) ?>"
     />
         </td><td class="boat" valign="top">
-        <?php
-        // Test si blackout à prévoir
-            echo "<b>Messages : </b> ...";
-                // Blackout ?
-                $now = time();
-                if ( $usersObj->races->bobegin > $now ) {
-            $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$usersObj->races->bobegin);
-            $boduration = ($usersObj->races->boend - $usersObj->races->bobegin ) /3600;
-            echo "<br />" . "Blackout : " . $bobegin . " (". $boduration . "h)" ;
-                }
-            if ( $now > $usersObj->races->bobegin && $now < $usersObj->races->boend ) {    
-                     echo "<br />" . $strings[$lang]["blackout"]
-                          . "<br /><b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
-                          $usersObj->races->boend);
-                }
-
-        // Email vide ?
-        if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
-            echo "<br /><b>NO E-MAIL ADDRESS</b>";
-            echo "<br />Please give one (".$strings[$lang]["choose"] . ")";
-        }
-        if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
-            echo "<br /><b>Notes:</b><br />";
-            echo nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-            echo "<br />";
-        }
         
-        // OMOROB ?
-        if ( $usersObj->users->country == "000" ) {
-            echo "<br /><b>** ONE BOAT PER PLAYER PER RACE **</b>";
-            echo "<br /><b>Please contact race Comittee, click on the SOS icon</b>";
-        }
+        <?php
+            $messages = Array();
 
-        // Vent Des Globes ?
-                if ( $usersObj->users->engaged != 20081109 ) {
-                     $available_races=availableRaces(getLoginId());
-                     /*
-                     if ( in_array (20081109, $available_races) ) {
-                          printf ( "Race Vent Des Globes : <b>Qualif OK</b>" );
-                     } else {
-                          printf ( "NOT QUALIFIED for Race Vent Des Globes" );
-                     }
-                     */
+            // Messages specifiques dans le panneau de controle en fonction des courses
+            // Blackout ?
+            $now = time();
+            $ichref="ics.php?lang=".$lang."&idraces=".$usersObj->races->idraces;
+            if ( $usersObj->races->bobegin > $now ) {
+                $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$usersObj->races->bobegin);
+                $boduration = ($usersObj->races->boend - $usersObj->races->bobegin ) /3600;
+                $messages[] = Array("id" => "incomingbo", "txt" => $strings[$lang]["blackout"]." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
+            }
+            if ( $now > $usersObj->races->bobegin && $now < $usersObj->races->boend ) {    
+                $msg = $strings[$lang]["blackout"] . " : <b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
+                   $usersObj->races->boend);
+                $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
+            }
+            // Affichage des IC destinées à la console
+            foreach ( $usersObj->races->ics as $ic) {
+                if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
+                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
                 }
+            }
+            // Email vide ?
+            if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
+                $msg = "<b>NO E-MAIL ADDRESS</b><br />Please give one (".$strings[$lang]["choose"] . ")";
+                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php?lang=$lang");
+            }
+            // OMOROB ?
+            if ( $usersObj->users->country == "000" ) {
+                $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b><br /><b>Please contact race Comittee, click on the SOS icon</b><";
+                $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
+            }
+            //BLOCNOTE
+            if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
+                $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
+                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "modify.php?lang=$lang");
+            }
 
+            //Synthese
+            if (count($messages) > 0) {
+                echo "<div id=\"messagebox\"><ul>\n";
+                foreach ($messages as $msgstruct) {
+                    echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
+                         . $msgstruct["txt"];
+                    if (array_key_exists("url", $msgstruct)) {
+                        echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">?</a>]";
+                    }
+                    echo "</span></li>\n";
+                }
+                echo "</ul></div>";
+            }
         ?>
+        
         </td></tr></table>
     <hr />
 
