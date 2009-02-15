@@ -40,7 +40,7 @@ function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
 function outputWayPoints($fullRacesObj) {
 
     echo "<table class=\"waypoints\">\n";
-    echo "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Hdg</th><th>Type</th><td>Name</th></tr>";
+    echo "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Hdg</th><th>Type</th><th>Name</th></tr>";
     foreach ($fullRacesObj->races->waypoints as $num => $wp) {
         echo "<tr>\n";
         echo "<td>WP".($num+1)."</td>";
