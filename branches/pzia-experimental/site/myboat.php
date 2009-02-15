@@ -98,13 +98,13 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 include_once("scripts/myboat.js");
 ?>
 <!-- Affichage de la page -->
-<div id="boat">
+<div id="boatbox">
   <!-- Le Div "infobulle" -->
   <span id="infobulle">
   </span>
 
-  <div id="maintable">
-    <div id="firstrow"><!-- premiere ligne -->
+  <div id="mainboatbox">
+    <div id="firstbox"><!-- premiere ligne -->
       <div id="miniracebox">
 <?php // Carte de la course
         $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
@@ -216,7 +216,7 @@ include_once("scripts/myboat.js");
       </div>
     </div>
 <?php /*  DEUXIEME LIGNE : le bateau */ ?>
-    <div id="secondrow">
+    <div id="secondbox">
       <div id="yourboat1box">
         <b><?php echo $strings[$lang]["yourboat"]; ?></b>&nbsp;
         n&deg; <b><?php echo $usersObj->users->idusers ; ?></b>&nbsp;
