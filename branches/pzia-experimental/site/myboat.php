@@ -100,16 +100,15 @@ include_once("scripts/myboat.js");
 <!-- Affichage de la page -->
 <div id="boatbox">
   <!-- Le Div "infobulle" -->
-  <span id="infobulle">
+  <span id="infobulle">        $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
+                  "&amp;boat=" . $usersObj->users->idusers .
+                  "&amp;age=0&amp;ext=right";
+
   </span>
 
   <div id="mainboatbox">
     <div id="firstbox"><!-- premiere ligne -->
       <div id="miniracebox">
-<?php
-        $user_ranking=getCurrentRanking($usersObj->users->idusers,$usersObj->users->engaged) ;
-?>
-        <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>"><b><? echo $usersObj->races->racename; ?></b></a>
 <?php
         // Carte de la course
         $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
@@ -123,98 +122,101 @@ include_once("scripts/myboat.js");
           " onmouseout=\"hideDiv('infobulle');\" " .
           " alt=\"" .$strings[$lang]["racemap"]. "\" />";
         }
+        $user_ranking=getCurrentRanking($usersObj->users->idusers,$usersObj->users->engaged) ;
 ?>
-      </div>
+        <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>"><b><? echo $usersObj->races->racename; ?></b></a>
+
 <?php /* Cartes du départ et des WP */ ?>
-      <div id="wplistbox">
+        <div id="wplistbox">
 <?php
-        $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
-                  "&amp;boat=" . $usersObj->users->idusers .
-                  "&amp;age=0&amp;ext=right";
+          $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
+                    "&amp;boat=" . $usersObj->users->idusers .
+                    "&amp;age=0&amp;ext=right";
 ?>
-        <b><a href="<? echo MAP_SERVER_URL ?>/mercator.img.php?idraces=<?
-                     echo $usersObj->users->engaged ?>&amp;lat=<? 
-                     echo ($usersObj->races->startlat/1000) ?>&amp;long=<?
-                     echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
-                     target="_new"><? echo $strings[$lang]["startmap"] ?></a> - WP: 
+          <b><a href="<? echo MAP_SERVER_URL ?>/mercator.img.php?idraces=<?
+                       echo $usersObj->users->engaged ?>&amp;lat=<? 
+                       echo ($usersObj->races->startlat/1000) ?>&amp;long=<?
+                       echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
+                       target="_new"><? echo $strings[$lang]["startmap"] ?></a> - WP: 
 <?php
-        // On va afficher des liens vers des waypoints
-        // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage 
-    
-        // Cartes des Waypoints
-        $wp_num=1;
-        //echo "NWP = " . $usersObj->users->nwp;
-        foreach ($usersObj->races->waypoints as $wp) {
-           // label = colonne wptype de races_waypoints
-           $wp_label=$wp[5];
-           $wp_libelle=htmlentities($wp[6]);
-           $wp_laisser_au=$wp[7];
-           $wp_maparea=$wp[8];
-    
-           $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
-           $status_content.=$wp_libelle." (".$wp_label.")" ;
-           $status_content.="&lt;br /&gt;";
-    
-           if ( $wp[4] == WPTYPE_PORTE ) {
-              $wp_north = max ($wp[0], $wp[2]);
-              $wp_east  = max ($wp[1], $wp[3]);
-              $wp_south = min ($wp[0], $wp[2]);
-              $wp_west  = min ($wp[1], $wp[3]);
-    
-                  $status_content.="Gate Coords=&lt;b&gt;" . 
-                                  round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
-                          " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
-    
-           } else {
-              $wp_south = $wp_north = $wp[0];
-              $wp_west  = $wp_east  = $wp[1];
-    
-                  $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                                  round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
-    
-           }
-           if ( $wp_num > $usersObj->users->nwp ) {
-               $WPCLASS="notpassedwp";
-           } else if ( $wp_num < $usersObj->users->nwp ) {
-               $WPCLASS="passedwp";
-           } else {
-                // This one if the next one : we put it YELLOW (class=nextwp)
-               $WPCLASS="nextwp";
-           }
-    
-           $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
-           if ( $wp_racetime[0] != "N/A" ) {
-                $racetime = duration2string ($wp_racetime[1]);
-                        $status_content.="&lt;br /&gt;&lt;b&gt;";
-                    $status_content.=sprintf( $strings[$lang]["bestwptime"]."(%d)" , $racetime[0],$racetime[1],$racetime[2],$wp_racetime[0]);
-                        $status_content.="&lt;/b&gt;";
-               }
-    
-               $status_content .= "&lt;/div&gt;";
-    
-           echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
-             "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-             "&amp;long=" . ($wp_west+$wp_east)/2/1000  .
-             "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
-             "&amp;tracks=on" . $oppList . 
-             "&amp;wp=" . $wp_num . 
-             "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
-             "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
-             " onmouseout=\"hideDiv('infobulle');\" " .
-             ">" . $wp_num ;
-           
-           echo "</a> \n";
-           
-           $wp_num++;
-        }
-    
-            if ( $usersObj->races->coastpenalty  >= 3600 ) {
-            echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/3600). " h</b></font> / ";
-        } else if ( $usersObj->races->coastpenalty  >= 60 ) {
-            echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/60). " min</b></font> / ";
-        }
-        echo $strings[$lang]["racedistance"] . " : ". round($usersObj->races->racedistance) . "nm";
+          // On va afficher des liens vers des waypoints
+          // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage 
+      
+          // Cartes des Waypoints
+          $wp_num=1;
+          //echo "NWP = " . $usersObj->users->nwp;
+          foreach ($usersObj->races->waypoints as $wp) {
+             // label = colonne wptype de races_waypoints
+             $wp_label=$wp[5];
+             $wp_libelle=htmlentities($wp[6]);
+             $wp_laisser_au=$wp[7];
+             $wp_maparea=$wp[8];
+      
+             $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
+             $status_content.=$wp_libelle." (".$wp_label.")" ;
+             $status_content.="&lt;br /&gt;";
+      
+             if ( $wp[4] == WPTYPE_PORTE ) {
+                $wp_north = max ($wp[0], $wp[2]);
+                $wp_east  = max ($wp[1], $wp[3]);
+                $wp_south = min ($wp[0], $wp[2]);
+                $wp_west  = min ($wp[1], $wp[3]);
+      
+                    $status_content.="Gate Coords=&lt;b&gt;" . 
+                                    round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
+                            " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
+      
+             } else {
+                $wp_south = $wp_north = $wp[0];
+                $wp_west  = $wp_east  = $wp[1];
+      
+                    $status_content.="Waypoint Coords=&lt;b&gt;" . 
+                                    round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
+      
+             }
+             if ( $wp_num > $usersObj->users->nwp ) {
+                 $WPCLASS="notpassedwp";
+             } else if ( $wp_num < $usersObj->users->nwp ) {
+                 $WPCLASS="passedwp";
+             } else {
+                  // This one if the next one : we put it YELLOW (class=nextwp)
+                 $WPCLASS="nextwp";
+             }
+      
+             $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
+             if ( $wp_racetime[0] != "N/A" ) {
+                  $racetime = duration2string ($wp_racetime[1]);
+                          $status_content.="&lt;br /&gt;&lt;b&gt;";
+                      $status_content.=sprintf( $strings[$lang]["bestwptime"]."(%d)" , $racetime[0],$racetime[1],$racetime[2],$wp_racetime[0]);
+                          $status_content.="&lt;/b&gt;";
+                 }
+      
+                 $status_content .= "&lt;/div&gt;";
+      
+             echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
+               "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
+               "&amp;long=" . ($wp_west+$wp_east)/2/1000  .
+               "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
+               "&amp;tracks=on" . $oppList . 
+               "&amp;wp=" . $wp_num . 
+               "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
+               "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+               " onmouseout=\"hideDiv('infobulle');\" " .
+               ">" . $wp_num ;
+             
+             echo "</a> \n";
+             
+             $wp_num++;
+          }
+      
+              if ( $usersObj->races->coastpenalty  >= 3600 ) {
+              echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/3600). " h</b></font> / ";
+          } else if ( $usersObj->races->coastpenalty  >= 60 ) {
+              echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/60). " min</b></font> / ";
+          }
+          echo $strings[$lang]["racedistance"] . " : ". round($usersObj->races->racedistance) . "nm";
 ?></b>
+        </div>
       </div>
     </div>
 <?php /*  DEUXIEME LIGNE : le bateau */ ?>
