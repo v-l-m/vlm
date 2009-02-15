@@ -739,10 +739,14 @@ include_once("scripts/myboat.js");
 
      <input type="hidden" name="lat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
-      <?
+      <?php
           if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
                $latwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][0] + $usersObj->races->waypoints[$usersObj->users->nwp-1][2])/2/1000;
                $longwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][1] + $usersObj->races->waypoints[$usersObj->users->nwp-1][3])/2/1000;
+               if ( abs($usersObj->races->waypoints[$usersObj->users->nwp-1][1] - $usersObj->races->waypoints[$usersObj->users->nwp-1][3] ) > 180 ) {
+                   //on inverse le centre si un wp à l'air de faire plus de 180°
+                   $longwp += 180;
+               }
           } else {
                $latwp=$usersObj->users->targetlat;
                $longwp=$usersObj->users->targetlong;

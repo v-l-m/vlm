@@ -297,6 +297,3 @@ if ($noHeader !=1) {
 
 $mapObj->display();
 ?>
- 
-
-
