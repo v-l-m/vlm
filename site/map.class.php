@@ -496,11 +496,24 @@ class map
       */
 
       // La ligne de l'antemeridien...
+      //echo "L1:".$waypoint[1]."\nL2:".$waypoint[3]."\nXo:".$this->Xo."\n";
+      //echo "W:".$this->west."\nE:".$this->east."\n";
       if ($this->west > $this->east ) {
         if ( $waypoint[1] <0 ) $waypoint[1]+=360000;
         if ( $waypoint[3] <0 ) $waypoint[3]+=360000;
-      } 
-
+      } else {
+      /* le cas connu ou :
+       * - antemeridien non visible (east > west)
+       * - on veut tracer un wp sur l'antemeridien...
+       * - c'est une gate
+       */
+        if ( ( $waypoint[1] <0 ) and ($waypoint[3] >0 ) and ( $waypoint[4] == WPTYPE_PORTE ) ) {
+            $waypoint[1]+=360000;
+        } else if ( ( $waypoint[3] <0 ) and ($waypoint[1] >0 ) and ( $waypoint[4] == WPTYPE_PORTE )) {
+            $waypoint[3]+=360000;
+        }  
+      }
+          
       // bouée sur point 1
       imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
                          call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]),
