@@ -177,6 +177,13 @@ include_once("scripts/myboat.js");
                               round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
 
        }
+       //on prends en compte l'antemeridien dans le centrage
+       //convention : un wp fait moins de 180° de long
+       if ( abs($wp_west - $wp_east) > 180000) {
+           $wp_long_center = ($wp_west+$wp_east+360000)/1000/2;
+       } else {
+           $wp_long_center = ($wp_west+$wp_east)/1000/2;
+       }
        if ( $wp_num > $usersObj->users->nwp ) {
            $WPCLASS="notpassedwp";
        } else if ( $wp_num < $usersObj->users->nwp ) {
@@ -198,7 +205,7 @@ include_once("scripts/myboat.js");
 
        echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
          "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-         "&amp;long=" . ($wp_west+$wp_east)/2/1000  .
+         "&amp;long=" . $wp_long_center  .
          "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
          "&amp;tracks=on" . $oppList . 
          "&amp;wp=" . $wp_num . 
