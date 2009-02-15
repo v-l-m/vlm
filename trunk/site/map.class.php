@@ -508,9 +508,9 @@ class map
        * - c'est une gate
        */
         if ( ( $waypoint[1] <0 ) and ($waypoint[3] >0 ) and ( $waypoint[4] == WPTYPE_PORTE ) ) {
-            $waypoint[1]+=360000;
+            $waypoint[3]-=360000;
         } else if ( ( $waypoint[3] <0 ) and ($waypoint[1] >0 ) and ( $waypoint[4] == WPTYPE_PORTE )) {
-            $waypoint[3]+=360000;
+            $waypoint[1]-=360000;
         }  
       }
           
