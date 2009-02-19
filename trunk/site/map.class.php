@@ -296,16 +296,16 @@ class map
       
     if ( $num_points < 40 ) {
       $coastline_table="coastline_f";
-      $min_coast_points = floor( $num_points / 25 ) ;
+      //$min_coast_points = floor( $num_points / 50 ) ;
     } else if (  $num_points < 200  ) {
       $coastline_table="coastline_h";
-      $min_coast_points = floor( $num_points / 20 ) ;
+      //$min_coast_points = floor( $num_points / 20 ) ;
     } else if (  $num_points < 400  ) {
       $coastline_table="coastline_i";
-      $min_coast_points = floor( $num_points / 10 ) ;
+      //$min_coast_points = floor( $num_points / 10 ) ;
     } else {
       $coastline_table="coastline_l";
-      $min_coast_points = 5;
+      //$min_coast_points = 5;
     }
     imagestring( $this->mapImage, $font+2, 40 , 10 , "GSHHS_" . substr($coastline_table,10) , $colorBlack);
 
@@ -939,7 +939,7 @@ class map
               // $current_long <0 && $Estime[1] >0
               //             }
               $DepEstime=$A;
-              imagestring ( $this->mapImage, $font, 50, 50 , "AM NOT ON MAP" , $this->colorText);
+              //imagestring ( $this->mapImage, $font, 50, 50 , "AM NOT ON MAP" , $this->colorText);
             }
 
             $style = array ($this->fromhex( $usersObj->color), $this->colorSea);
