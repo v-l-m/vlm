@@ -421,7 +421,7 @@ include_once("scripts/myboat.js");
 
         // PGOR3 : info sur les portes de securité
         if ( $usersObj->users->engaged == 81103 ) {
-             printf ( "Portimao Leg 3: Navigation interdite au sud de 45&deg; sud entre les longitudes de 160&deg;W et 100&deg;W. Penalit&eacute; importante en cas d'infraction &agrave; cette r&egrave;le. A Yacht shall not pass to the South 45 degrees South between the longitudes of 160 degrees West and 100 degrees West. A breach of this rule will result in a significant penalty.\n" );
+             printf ( "Portimao Leg 3:<BR>* Navigation interdite au sud de 45&deg; sud entre les longitudes de 160&deg;W et 100&deg;W. Penalit&eacute; importante en cas d'infraction &agrave; cette r&egrave;le.<BR>* A Yacht shall not pass to the South 45 degrees South between the longitudes of 160 degrees West and 100 degrees West. A breach of this rule will result in a significant penalty.\n" );
         }
 
 
