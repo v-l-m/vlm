@@ -406,12 +406,6 @@ include_once("scripts/myboat.js");
             echo "<br /><b>NO E-MAIL ADDRESS</b>";
             echo "<br />Please give one (".$strings[$lang]["choose"] . ")";
         }
-        if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
-            echo "<br /><b>Notes:</b><br />";
-            echo nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-            echo "<br />";
-        }
-        
         // OMOROB ?
         if ( $usersObj->users->country == "000" ) {
             echo "<br /><b>** ONE BOAT PER PLAYER PER RACE **</b>";
@@ -430,6 +424,13 @@ include_once("scripts/myboat.js");
              printf ( "Portimao Leg 3: Navigation interdite au sud de 45&deg; sud entre les longitudes de 160&deg;W et 100&deg;W. Penalit&eacute; importante en cas d'infraction &agrave; cette r&egrave;le. A Yacht shall not pass to the South 45 degrees South between the longitudes of 160 degrees West and 100 degrees West. A breach of this rule will result in a significant penalty.\n" );
         }
 
+
+        if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
+            echo "<br /><b>Notes:</b><br />";
+            echo nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
+            echo "<br />";
+        }
+        
         ?>
         </td></tr></table>
     <hr />
