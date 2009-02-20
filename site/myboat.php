@@ -416,7 +416,7 @@ include_once("scripts/myboat.js");
         // ==> devrait devenir un objet en base de données (lien vers des IC course par course ?)
         // VOR 5 : info sur les portes de securité
         if ( $usersObj->users->engaged == 81005 ) {
-             printf ( "VOR 5 : Your must be seen for at least one vacation on the North of both ice gates between NZL and CAPE HORN\n" );
+             printf ( "VOR 5 :<BR>* Vous devez &ecirc;tre vu au moins une vacation au nord des portes de glace (2 et 3) entre la NZL et le Cap Horn.<BR>* Your must be seen for at least one vacation on the North of both ice gates (2 and 3) between NZL and Cape Horn\n" );
         }
 
         // PGOR3 : info sur les portes de securité
