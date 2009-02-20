@@ -425,6 +425,11 @@ include_once("scripts/myboat.js");
              printf ( "VOR 5 : Your must be seen for at least one vacation on the North of both ice gates between NZL and CAPE HORN\n" );
         }
 
+        // PGOR3 : info sur les portes de securité
+        if ( $usersObj->users->engaged == 81103 ) {
+             printf ( "Portimao Leg 3: Navigation interdite au sud de 45&deg; sud entre les longitudes de 160&deg;W et 100&deg;W. Penalit&eacute; importante en cas d'infraction &agrave; cette r&egrave;le. A Yacht shall not pass to the South 45 degrees South between the longitudes of 160 degrees West and 100 degrees West. A breach of this rule will result in a significant penalty.\n" );
+        }
+
         ?>
         </td></tr></table>
     <hr />
