@@ -1,26 +1,72 @@
-body
-{
-  background-color: #FFFFFF;
+body { background-color: #FFFFFF; }
+
+#login { background-color: #AAAAAA; }
+
+div {
+/* margin: 1em;*/ 
 }
 
-#login
-{
-  background-color: #AAAAAA;
-}
 
 #loginbox { background-color: #FF0000; }
 #langbox { background-color: #AA0000;}
 #msgbox { background-color: #00FF00; }
-#menubox {background-color: #00AA00;}
-#weatherbox { background-color: #0000FF;}
-#toolbarbox { background-color: #0000AA;}
-#serverbox { background-color: #FFFF00;}
-#boatbox { background-color: #FFFFFF;}
-#mainboatbox { background-color: #AFAFAF;}
-#firstbox { background-color: #FFFF00;}
-#miniracebox { background-color: #AFAF00;}
-#wplistbox { background-color: #AAAA00;}
-#secondbox { background-color: #00FFFF;}
-#yourboat1box { background-color: #00AFAF;}
-#yourboat2box { background-color: #00AAAA;}
-#sosbox { background-color: #0000FF;}
+#menubox { background-color: #00AA00; }
+#weatherbox { background-color: #0000FF; }
+#toolbarbox { background-color: #0000AA; }
+#serverbox { background-color: #FFFF00; }
+#messagebox { background-color: #ABCDEF; }
+#racenamebox { background-color: #AA00AA; }
+#raceicbox { background-color: #FF0000; }
+#costpenaltybox { background-color: #777777; }
+#wplistbox { background-color: #AA0000; }
+#racebox { background-color: #AFAFAF;}
+#sosbox { background-color: #0000FF; }
+#yourboatsummarybox { background-color: #00AFAF; }
+#yourboatstatusbox { background-color: #00AAAA; }
+#instrumentbox { background-color: #44FF44; }
+#controlbox { background-color: #4444FF; }
+
+
+#statusbox { background-color: #FFFFFF; display:block;}
+
+#racebox { display:block; float:left; }
+#racenamebox { font-weight: bold;vertical-align: top; display:inline; }
+#minimapbox { margin-right:1em; display:inline;}
+
+#raceicbox { float:right; text-align: right;}
+#costpenaltybox { font-weight: bold; color: #E0F080; display:block;}
+#wplistbox { font-weight: bold; } 
+
+
+#yourboatsummarybox { text-align: center; clear:both; float:left; }
+#yourboatstatusbox { float:left; margin-left: 1em; margin-right: 1em; text-align:center; }
+#sosbox { float:right; }
+
+#instrumentbox
+{
+  border: 1px solid #2c4897;
+  float: left;
+  min-height: 100px;
+  min-width: 821px;
+  margin-top: 1px;
+  margin-right: 1px;
+  margin-left: 1px;
+}
+
+#instrumentbox div {
+display:inline;
+}
+
+
+#instrumentbox img {
+width: 150px;
+height: 150px;
+}
+
+
+/* #messagebox { clear: both; } */
+#messagebox { display: inline;}
+
+#controlbox { clear: both; }
+
+.texthelpers { font-weight: bold; } /* visibility: hidden; display:none;} */
