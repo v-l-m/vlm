@@ -1002,7 +1002,11 @@ class map
 
       if ( $drawn[$boat[0]] > 14 ) {
         // Sur la Volvo, les pixels reels sont numérotés -700 à -708
-        $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2]) ;
+        if ( $this->am_on_map == true && $boat[2] < 0 ) {
+           $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2] + 360000 ) ;
+        } else {
+           $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2]) ;
+        }
         $ylogo = call_user_func_array(array(&$this, $projCallbackLat), $boat[1]) ;
         if ( $boat[0] > -709 and $boat[0] < -700 ) {
           $Volvologo= imagecreatefrompng("images/bateaux_reels/V70_" . $boat[4] . ".png");
