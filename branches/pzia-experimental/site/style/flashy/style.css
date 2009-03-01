@@ -2,6 +2,7 @@ body { background-color: #FFFFFF; }
 
 #login { background-color: #AAAAAA; }
 
+div {margin:0px;}
 
 #loginbox { background-color: #FF0000; }
 #langbox { background-color: #AA0000;}
@@ -23,42 +24,56 @@ body { background-color: #FFFFFF; }
 #instrumentbox { background-color: #44FF44; }
 #messagebox { background-color: #ABCDEF; }
 
-#controlbox { background-color: #D0D0D0; }
+#controlbox { background-color: #D0AAD0; }
 #autopilotcontrolbox { background-color: #DADADA; }
 
 
-#racebox { display:table; width:100%; }
-#racenamebox { display:table-cell; font-weight: bold; vertical-align: top;}
-#minimapbox { display:table-cell; }
-#raceicbox {display:table-cell; text-align: right; vertical-align: top; } /* top:0px; right:0px; position:relative;} */
+/* RACEBOX */
+
+#racebox { display:block; width:100%; }
+#racenamebox { display:inline; float:left; font-weight: bold; vertical-align: top;}
+#minimapbox { display:inline; float:left; }
+#raceicbox {display:inline; float:right; text-align: right; vertical-align: top; } /* top:0px; right:0px; position:relative;} */
 #costpenaltybox { font-weight: bold; color: #E0F080;}
 #wplistbox { font-weight: bold; } 
 
-#yourboatbox { display:table; width:100%;}
-#yourboatbox div { display:table-cell; vertical-align:top;}
-#yourboatsummarybox { text-align: center; }
-#yourboatstatusbox {  margin-left: 1em; margin-right: 1em; text-align:center;}
-#sosbox { display:table-cell; text-align: right;}
+/* BOATBOX */
+
+#yourboatbox { clear:both; display:block; width:100%; min-height:50px;}
+#sosbox { display:block; float:right; text-align: right;}
+
+#yourboatsummarybox { display:inline; float:left; vertical-align:top; text-align: center; }
+#yourboatstatusbox { display:inline; float:left; vertical-align:top; margin-left: 1em; margin-right: 1em; text-align:center;}
 
 img.minimap {
 width:50px;
 height:34px;
 }
 
+/* INSTRUMENT BOXES (+message) */
+
 #instrumentbox
 {
+  clear:both; display:block; width:100%;
   border: 1px solid #2c4897;
-  min-height: 100px;
   min-width: 821px;
   margin-top: 1px;
   margin-right: 1px;
   margin-left: 1px;
-  max-height: 140px;
+  height: 140px;
+}
+
+#messagebox {
+display:block;
+float:right;
+vertical-align: top;
+width: 400px;
+/* 821 - 3*140 - 1 */
 }
 
 div.instrument {
-display:table-cell;
-
+display:inline;
+float:left;
 }
 
 #instrumentbox img {
@@ -66,11 +81,6 @@ width: 140px;
 height: 140px;
 }
 
-#messagebox {
-display:table-cell;
-vertical-align: top;
-width: 100%;
-}
 
 #messagelist {
 display:block;
@@ -89,9 +99,19 @@ margin-left: 1.5em;
 background-color: #ABCDEF;
 }
 
+/* CONTROL BOX */
+
+#controlbox
+{
+  clear:both; display:block; width:100%;
+  min-width: 821px;
+  min-height: 100px;
+}
+
 div.controlitem {
-display:table-cell;
-margin: 0.5em;
+display:inline;
+float:left;
+margin: 0em;
 border: 2px solid black ;
 text-align: center;
 }
@@ -101,43 +121,44 @@ text-align: center;
   text-align: center
 }
 
+#morecontrolbox {
+  display:block;
+  float:right;
+}
 
 #autopilotcontrolbox div {display:block;}
 #windanglecontrolbox div {display:block;}
 
 #wpbasedcontrolbox div {
   display:block;
+  float:none;
   margin: 0px;
   border: none ;
 }
 
+#wpcontrolbox {
+float:left;
+display:block;
+}
+
+#wphcontrolbox span {display:block}
+
+
+#wpcoordscontrolbox { display:block; float:left; text-align:right;}
+#wpmorecontrolbox {display:block; float:left; text-align:left; margin-left: 1em;}
+
 #morecontrolbox div {
   display:block;
+  float:none;
   margin: 0px;
   border: none ;
   text-align: center
 }
 
-#vlmvmgcontrolbox span {
-display:block;
-}
-
-#pilotocontrolbox span {
-display:block;
-}
-
-#wphcontrolbox span {display:block}
-#wpcoordscontrolbox {display:table-cell; }
-#wpcoordscontrolbox div { display:block; text-align:right;}
-
-
-#wpmorecontrolbox {display:table-cell;}
-
-#wpmorecontrolbox div {display:block;}
-
-.texthelpers { font-weight: bold; }
+.texthelpers { font-weight: bold; display:inline; white-space: wrap}
+.texthelpers * {display:inline;}:
 .titlehelpers { font-weight: bold; display:block;}
-.texthelperscomment { font-style: italic;}
+.texthelperscomment { font-style: italic; white-space: wrap}
 /* visibility: hidden; display:none; }*/ 
 .inputhelpers {} 
 input.dynamichelper {
@@ -148,9 +169,20 @@ input.dynamichelper {
   text-align:center;
 }
 
+
+
+/* MAPBOX */
+
+#mapbox
+{
+  clear:both; display:block; width:100%;
+}
+
+
 div.mapboxitem {
-display:table-cell;
-margin: 0.5em;
+display:inline;
+float:left;
+margin: 0em;
 border: 2px solid red ;
 text-align: left;
 

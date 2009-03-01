@@ -496,15 +496,15 @@ include_once("scripts/myboat.js");
                 <input type="hidden" name="pilotmode" value="bestvmg"/>
                 <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
             </form>
-            <span class="texthelperscomment">
+            <p class="texthelperscomment">
                 <?php echo $strings[$lang]["orthodromic_comment"]; ?>
-            </span>
+            </p>
         </div>
     </div>
 
 <!-- PROGRAMMATION WP -->
 <div id="wpcontrolbox" class="controlitem">
-    <form class="controlform" name="coordonnees" action="myboat.php" method="post">
+    <form name="coordonnees" action="myboat.php" method="post">
         <input type="hidden" name="type" value="savemywp"/>
         <div id="wpcoordscontrolbox">
         <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
@@ -545,21 +545,27 @@ include_once("scripts/myboat.js");
 <div id="morecontrolbox" class="controlitem">
     <!-- Pilote programmable -->
     <div id="pilototocontrolbox">       
-<?php 
-    echo "<span class=\"texthelpers\">".$strings[$lang]["pilototoengaged"]."</span>";
-    $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
-    if ( $pilototoTasks > 0 ) {
-        echo " <b>(" . $pilototoTasks . ")</b>";
-    }
-?>
-        <input class="actionbutton" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+        <?php 
+            echo "<span class=\"texthelpers\">".$strings[$lang]["pilototoengaged"];
+            $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
+            if ( $pilototoTasks > 0 ) {
+                echo "&nbsp;(" . $pilototoTasks . ")</span>";
+            } else {
+                echo "</span>";
+            }
+        ?>
+        <div id="pilototoaction">
+            <input class="actionbutton" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+        </div>
     </div>
 
     <!-- VMG POUR VLM -->
     <div id="vlmvmgcontrolbox">
-        <form name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
+        <form class="controlform" name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
             <?php echo "<span class=\"texthelpers\">".$strings[$lang]["vmgsheet"]."</span>"; ?>
-            <input type="submit" value="Go !" />
+            <div id="vlmvmgaction">
+                <input type="submit" value="Go !" />
+            </div>
             <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
             <input type="hidden" name="lang" value="<?php echo $lang?>"/>
             <input type="hidden" name="boatlat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
@@ -592,9 +598,10 @@ include_once("scripts/myboat.js");
 </div> <!-- Fin des controlbox -->
 
 <!-- Mapbox -->
-<?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?>
 <form id="mercator" action="map.img.php" target="_new" method="get">
 <div id="mapbox">
+    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?>
+
     <div id="mapcenterbox" class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
         <p><input type="radio" name="mapcenter" value="myboat" <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  />
