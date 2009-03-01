@@ -99,18 +99,17 @@ include_once("scripts/myboat.js");
 ?>
 <!-- Affichage de la page -->
 <div id="statusbox">
-  <!-- Le Div "infobulle" -->
   <div id="infobulle"></div>
   <div id="racebox">
     <div id="minimapbox">
-<?php
+        <?php
         // Carte de la course
         $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
         if ( file_exists($href) ) {
           $status_content = "&lt;img src=&quot;$href&quot; " . 
                             "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
                   list($xSize, $ySize, $type, $attr) = getimagesize($href);
-          echo "<img src=\"images/site/cartemarine.png\" " . 
+          echo "<img class=\"minimap\" src=\"images/site/cartemarine.png\" " . 
           " onmouseover=\"showDivLeft('infobulle'" .
           ",'$status_content', $xSize, $ySize);\" " .
           " onmouseout=\"hideDiv('infobulle');\" " .
@@ -124,21 +123,18 @@ include_once("scripts/myboat.js");
 ?>
     <div id="racenamebox">
         <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
-        <b>
         <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->racedistance) . "nm)"; ?>
-        </b>
         </a>
     </div> <!-- fin de racenamebox -->
-    </div> <!-- fin de racebox -->
     <div id="raceicbox">
-    <div id="wplistbox">
+      <div id="wplistbox">
 <?php
       /* Cartes du départ et des WP */
       $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
                 "&amp;boat=" . $usersObj->users->idusers .
                 "&amp;age=0&amp;ext=right";
 ?>
-      <a href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
+        <a href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
                    echo $usersObj->users->engaged ?>&amp;lat=<? 
                    echo ($usersObj->races->startlat/1000) ?>&amp;long=<?php
                    echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
@@ -224,7 +220,9 @@ include_once("scripts/myboat.js");
       }
 ?>
     </div> <!--fin de raceicbox -->
+  </div> <!--fin de racebox -->
 <?php /*  DEUXIEME LIGNE : le bateau */ ?>
+  <div id="yourboatbox">
       <div id="yourboatsummarybox">
         <b><?php echo $strings[$lang]["yourboat"]; ?></b>&nbsp;
         n&deg; <b><?php echo $usersObj->users->idusers ; ?></b>&nbsp;
@@ -331,6 +329,7 @@ include_once("scripts/myboat.js");
           "><img src=\"images/site/sos.png\" alt=\"SOS COMITE\" /></a>";
 ?>
       </div> <!--fin de sosbox -->
+    </div> <!-- fin de yourboatbox -->
 </div> <!--fin de statusbox -->
 
 <!-- ********SIMPLE******* -->
@@ -338,7 +337,7 @@ include_once("scripts/myboat.js");
 <div id="instrumentbox">
 
     <!-- le beau GPS multifonctions -->
-        <div id="gpsbox">
+        <div id="gpsbox"  class="instrument">
         <img alt="GPS" src="gps.php?
         latitude=<?php   echo ($usersObj->lastPositions->lat)  ?>&amp;
         longitude=<?php  echo ($usersObj->lastPositions->long) ?>&amp;
@@ -352,7 +351,7 @@ include_once("scripts/myboat.js");
         avg=<?php    printf ('%02.1f', 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)) ?>"
         />
         </div>
-        <div id="windanglebox">
+        <div id="windanglebox"  class="instrument">
     <!-- Affichage de windangle -->
         <img alt="wind angle" src="windangle.php?
         wheading=<?php printf ('%03d' , ($usersObj->wheading )) ?>&amp;
@@ -361,7 +360,7 @@ include_once("scripts/myboat.js");
         roadtoend=<?php echo $usersObj->orthoangletoend ?>"
     />
         </div>
-        <div id="anemobox">
+        <div id="anemobox"  class="instrument">
     <!-- Affichage de l'anémo -->
         <img alt="anemo" src="anemo.php?
         twd=<?php    if ( $usersObj->wheading + 180 > 360 ) {
@@ -415,16 +414,16 @@ include_once("scripts/myboat.js");
 
             //Synthese
             if (count($messages) > 0) {
-                echo "<div id=\"messagebox\"><ul>\n";
+                echo "<div id=\"messagebox\"><span id=\"messagelist\">\n";
                 foreach ($messages as $msgstruct) {
-                    echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
+                    echo "<div class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"];
                     if (array_key_exists("url", $msgstruct)) {
                         echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">?</a>]";
                     }
-                    echo "</span></li>\n";
+                    echo "</div>\n";
                 }
-                echo "</ul></div>";
+                echo "</span></div>";
             }
         ?>
         
@@ -433,179 +432,164 @@ include_once("scripts/myboat.js");
 
 
 <div id="controlbox">
-<!-- Pilote automatique -->
-<div id="autopilotcontrolbox">
-    <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>"; ?>
-    <form name="autopilot" action="update_angle.php" method="post"> 
-    <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-    <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-    <input type="hidden" name="pilotmode" value="autopilot"/>
-    <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
-    <input type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
-    <input type="button" value="&gt;" onclick="increment(); updateSpeed();"/>
-    <?php echo $strings[$lang]["estimated"] ?>
-    <input type="text" size="5" maxlength="5" name="speed" readonly="readonly" value="<?php echo $usersObj->boatspeed?>"/>
-    <input type="submit" value="<?php echo $strings[$lang]["autopilot"]?>"/>
-      </form>
+    <!-- Pilote automatique -->
+    <div id="autopilotcontrolbox" class="controlitem">
+        <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>\n"; ?>
+        <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
+            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+            <input type="hidden" name="pilotmode" value="autopilot"/>
+            <div id="autopilotrange">
+                <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
+                <input type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
+                <input type="button" value="&gt;" onclick="increment(); updateSpeed();"/>
+            </div>
+            <span id="estimatespeed" class="inputhelpers">
+                <?php echo $strings[$lang]["estimated"] ?>
+                <input type="text" size="5" maxlength="5" name="speed" readonly="readonly" value="<?php echo $usersObj->boatspeed?>"/>
+            </span>
+            <div id="autopilotaction">          
+                <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["autopilot"]?>"/>
+            </div>
+        </form>
+    </div>
+
+    <!-- Régulateur d'allure -->
+    <div id="windanglecontrolbox" class="controlitem">
+        <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</span>"?>
+        <form class="controlform" name="angle" action="update_angle.php" method="post"> 
+            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+            <input type="hidden" name="pilotmode" value="windangle"/>
+            <div id="windanglerange">
+                <input type="button" value="&lt;" onclick="decrementAngle(); "/>
+                <input type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>" />
+                <input type="button" value="&gt;" onclick="incrementAngle();"/>
+            </div>
+            <input class="inputhelpers" type="button" value="<?php echo $strings[$lang]["tack"]; ?>" onclick="tack();" />
+            <div id="windangleaction">
+                <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["constant"]; ?>" />
+            </div>
+        </form>
+    </div>
+
+
+    <!--WP pilot based -->
+    <div id="wpbasedcontrolbox" class="controlitem">
+        <!-- Pilote Orthodromique -->
+        <div id="orthocontrolbox"  class="controlitem">
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</span>"?>
+            <form class="controlform" name="ortho" action="update_angle.php" method="post"> 
+                <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+                <input type="hidden" name="lang" value="<?php echo $lang?>"/>        
+                <input type="hidden" name="pilotmode" value="orthodromic"/>
+                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
+            </form>
+        </div>
+        
+        <!-- BEST VMG -->
+        <div id="bvmgcontrolbox" class="controlitem">
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</span>"?>
+            <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
+                <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+                <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+                <input type="hidden" name="pilotmode" value="bestvmg"/>
+                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
+            </form>
+            <span class="texthelperscomment">
+                <?php echo $strings[$lang]["orthodromic_comment"]; ?>
+            </span>
+        </div>
+    </div>
+
+<!-- PROGRAMMATION WP -->
+<div id="wpcontrolbox" class="controlitem">
+    <form class="controlform" name="coordonnees" action="myboat.php" method="post">
+        <input type="hidden" name="type" value="savemywp"/>
+        <div id="wpcoordscontrolbox">
+        <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
+
+            <div id="wplatcontrolbox" class="coordcontrol">
+                <span class="texthelpers">Lat</span>
+                <input type="text" size="8" maxlength="8" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
+                <input disabled="disabled" type="text" size="8" class="dynamichelper" name="latdms" value="none"/>
+            </div>
+            <div id="wplongcontrolbox" class="coordcontrol">
+                <span class="texthelpers">Long</span>
+                <input type="text" size="8" maxlength="8" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
+                <input disabled="disabled" type="text" size="8" class="dynamichelper" name="longdms" />
+            </div>
+        </div>
+        <div id="wpmorecontrolbox">
+            <div id="wphcontrolbox">
+                <span class="texthelpers">@WPH</span>
+                <?php
+                echo "<input type=\"text\" size=\"4\" maxlength=\"4\"  name=\"targetandhdg\" " ;
+                if ( $usersObj->users->targetandhdg >= 0 and $usersObj->users->targetandhdg <= 360 ) {
+                     echo "value=\""  . $usersObj->users->targetandhdg . "\" />" ;
+                     echo "<input type=\"checkbox\" name=\"andhdg\" checked=\"checked\" onclick=\"toggle_andhdg()\" />";
+                } else {
+                     echo "disabled=\"disabled\" value=\"" . -1*abs($usersObj->users->targetandhdg) . "\" />" ;
+                     echo "<input type=\"checkbox\" name=\"andhdg\" onclick=\"toggle_andhdg()\" />";
+                }
+                ?>
+            </div>
+            <span class="dynamichelpers">&nbsp;</span>
+            <div id="wpaction">
+                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["save"]?>" />
+            </div>
+        </div>
+    </form>
 </div>
 
-<!-- Régulateur d'allure -->
-<div id="windanglecontrolbox">
-<?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</span>"?>
-<form name="angle" action="update_angle.php" method="post"> 
-<input type="button" value="&lt;" onclick="decrementAngle(); "/>
-<input type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>"/>
-<!--
-<input type=button  class="blue" name="pim" value=<?php echo $baww; ?>>
--->
-<input type="button" value="&gt;" onclick="incrementAngle();"/>
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
-<input type="hidden" name="pilotmode" value="windangle"/>
-<input type="button" value="<?php echo $strings[$lang]["tack"]?>" onclick="tack();"/>
-<input type="submit" value="<?php echo $strings[$lang]["constant"]?>" />
-</form>
+<div id="morecontrolbox" class="controlitem">
+    <!-- Pilote programmable -->
+    <div id="pilototocontrolbox">       
+<?php 
+    echo "<span class=\"texthelpers\">".$strings[$lang]["pilototoengaged"]."</span>";
+    $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
+    if ( $pilototoTasks > 0 ) {
+        echo " <b>(" . $pilototoTasks . ")</b>";
+    }
+?>
+        <input class="actionbutton" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+    </div>
 
-<!-- BEST SPEED -->
-<!--
-<?php //echo "<B>".$strings[$lang]["bestspeedengaged"]."</B>"?>
-<form name="bestspeed" action="update_angle.php" method="post"> 
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
+    <!-- VMG POUR VLM -->
+    <div id="vlmvmgcontrolbox">
+        <form name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
+            <?php echo "<span class=\"texthelpers\">".$strings[$lang]["vmgsheet"]."</span>"; ?>
+            <input type="submit" value="Go !" />
+            <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
+            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+            <input type="hidden" name="boatlat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
+            <input type="hidden" name="boatlong" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
+            <input type="hidden" name="wdd" value="<?php echo ($usersObj->wheading+180)%360; ?>" />
+            <input type="hidden" name="wds" value="<?php echo $usersObj->wspeed; ?>" />
+            <input type="hidden" name="wp1lat" value="<?php echo $usersObj->users->targetlat; ?>" />
+            <input type="hidden" name="wp1long" value="<?php echo $usersObj->users->targetlong; ?>" />
+            <?php
+        
+            $nwp_coords=giveWaypointCoordinates ($usersObj->users->engaged , $usersObj->nwp, WPLL/WP_NUMSEGMENTS);
+            // print_r($nwp_coords);
+            //                                Lat              Long
+            $lat_xing = new doublep();
+            $long_xing = new doublep();
+            $xing_ratio = new doublep();
+        
+            $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
+                     $nwp_coords[0], $nwp_coords[1],
+                     $nwp_coords[2], $nwp_coords[3],
+                     $lat_xing, $long_xing, $xing_ratio);
+            ?>
+            <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
+            <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
+        </form>
+    
+    </div>
 
-<input type="hidden" name="pilotmode" value="bestspeed"/>
-<input type="submit" value="<?php  echo $strings[$lang]["bestspeedengaged"]?>" />
-</form>
--->
-</div>
-
-<!-- Pilote Orthodromique -->
-<div id="orthocontrolbox">
-<?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</span>"?>
-<form name="ortho" action="update_angle.php" method="post"> 
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
-
-<input type="hidden" name="pilotmode" value="orthodromic"/>
-<input type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
-</form>
-</div>
-
-<!-- BEST VMG -->
-<div id="bvmgcontrolbox">
-<?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</span>"?>
-<form name="bestvmg" action="update_angle.php" method="post"> 
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
-
-<input type="hidden" name="pilotmode" value="bestvmg"/>
-<input type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
-</form>
-
-       <?php echo $strings[$lang]["orthodromic_comment"]; ?>
-</div>
-
-</div>
-<!-- PROGRAMMATION AUTO PILOT  + SAISIE WP visé-->
-<div id="pilototocontrolbox">       <!-- Pilote programmable -->
-       <?php 
-            echo "<b>".$strings[$lang]["pilototoengaged"]."</b>";
-            $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
-            if ( $pilototoTasks > 0 ) {
-                 echo " <b>(" . $pilototoTasks . ")</b>";
-            }
-       ?>
-       <input type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" 
-       onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
-
-       <form name="coordonnees" action="myboat.php" method="post">
-       <input type="hidden" name="type" value="savemywp"/>
-       <?php echo "<b>". $strings[$lang]["mytargetpoint"] . "</b>"; ?>
-
-       <div>
-     <div>
-       <div align="right" class="boat">
-         <b>Lat</b>
-       </div>
-       <div align="left" class="boat">
-         <input type="text" size="8" maxlength="8" name="targetlat" 
-            onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
-         <input type="button"  class="blue" name="latdms" />
-       </div>
-       </div>
-       <div>
-         <div align="right" class="boat">
-           <b>Long</b>
-         </div>
-         <div align="left" class="boat">
-           <input type="text" size="8" maxlength="8" 
-              name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
-           <input type="button"  class="blue" name="longdms" />
-         </div>
-       </div>
-<!--       <div>
-       </div> -->
-       <div>
-         <div align="right" class="boat">
-           <b>@WPH</b>
-         </div>
-         <div align="left" class="boat">
-           <?php
-                    echo "<input type=\"text\" size=\"4\" maxlength=\"4\"  name=\"targetandhdg\" " ;
-                    if ( $usersObj->users->targetandhdg >= 0 and $usersObj->users->targetandhdg <= 360 ) {
-                         echo "value=\""  . $usersObj->users->targetandhdg . "\" />" ;
-                         echo "<input type=\"checkbox\" name=\"andhdg\" checked=\"checked\" onclick=\"toggle_andhdg()\" />";
-                    } else {
-                         echo "disabled=\"disabled\" value=\"" . -1*abs($usersObj->users->targetandhdg) . "\" />" ;
-                         echo "<input type=\"checkbox\" name=\"andhdg\" onclick=\"toggle_andhdg()\" />";
-                    }
-               ?>
-
-         </div>
-         </div>
-         <div>
-           <div colspan="2" align="right" class="boat">
-           </div>
-         </div>
-       </div>
-       <input type="submit" value="<?php  echo $strings[$lang]["save"]?>" />
-     </form>
-</div>
-
-<!-- VMG POUR VLM -->
-<div id="vlmvmgcontrolbox">
-<form name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
-<?php echo "<b>".$strings[$lang]["vmgsheet"]."</b>"?>
-    <input type="submit" value="Go !" />
-    <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
-    <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-    <input type="hidden" name="boatlat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
-    <input type="hidden" name="boatlong" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
-    <input type="hidden" name="wdd" value="<?php echo ($usersObj->wheading+180)%360; ?>" />
-    <input type="hidden" name="wds" value="<?php echo $usersObj->wspeed; ?>" />
-    <input type="hidden" name="wp1lat" value="<?php echo $usersObj->users->targetlat; ?>" />
-    <input type="hidden" name="wp1long" value="<?php echo $usersObj->users->targetlong; ?>" />
-    <?php
-
-    $nwp_coords=giveWaypointCoordinates ($usersObj->users->engaged , $usersObj->nwp, WPLL/WP_NUMSEGMENTS);
-    // print_r($nwp_coords);
-    //                                Lat              Long
-    $lat_xing = new doublep();
-    $long_xing = new doublep();
-    $xing_ratio = new doublep();
-
-    $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
-             $nwp_coords[0], $nwp_coords[1],
-             $nwp_coords[2], $nwp_coords[3],
-             $lat_xing, $long_xing, $xing_ratio);
-    ?>
-    <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
-    <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
-</form>
-
-</div>
-
-<br />
+    </div>
+</div> <!-- Fin des controlbox -->
 
     <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?>
     <form id="mercator" action="map.img.php" target="_new" method="get">

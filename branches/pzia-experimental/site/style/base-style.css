@@ -112,11 +112,6 @@ body
   width: 20%;
 }
 
-#minimap
-{
-  text-align: center;
-}
-
 #baneer
 {
   margin: 1px;
@@ -526,9 +521,9 @@ td.pilototo
 
 input.blue {
   border:0px solid black;
-  #font-family:"Courier",sans-serif;
   background-color: #90A0A0;
   color:black;
+  text-align:right;
 }
 
 

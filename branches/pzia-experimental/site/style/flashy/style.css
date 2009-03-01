@@ -2,10 +2,6 @@ body { background-color: #FFFFFF; }
 
 #login { background-color: #AAAAAA; }
 
-div {
-/* margin: 1em;*/ 
-}
-
 
 #loginbox { background-color: #FF0000; }
 #langbox { background-color: #AA0000;}
@@ -14,59 +10,141 @@ div {
 #weatherbox { background-color: #0000FF; }
 #toolbarbox { background-color: #0000AA; }
 #serverbox { background-color: #FFFF00; }
-#messagebox { background-color: #ABCDEF; }
+#statusbox { background-color: #FFFFFF;}
 #racenamebox { background-color: #AA00AA; }
 #raceicbox { background-color: #FF0000; }
 #costpenaltybox { background-color: #777777; }
 #wplistbox { background-color: #AA0000; }
-#racebox { background-color: #AFAFAF;}
+#racebox { background-color: #FF1111;}
 #sosbox { background-color: #0000FF; }
+#yourboatbox { background-color: #000000; }
 #yourboatsummarybox { background-color: #00AFAF; }
 #yourboatstatusbox { background-color: #00AAAA; }
 #instrumentbox { background-color: #44FF44; }
-#controlbox { background-color: #4444FF; }
+#messagebox { background-color: #ABCDEF; }
+
+#controlbox { background-color: #D0D0D0; }
+#autopilotcontrolbox { background-color: #DADADA; }
 
 
-#statusbox { background-color: #FFFFFF; display:block;}
-
-#racebox { display:block; float:left; }
-#racenamebox { font-weight: bold;vertical-align: top; display:inline; }
-#minimapbox { margin-right:1em; display:inline;}
-
-#raceicbox { float:right; text-align: right;}
-#costpenaltybox { font-weight: bold; color: #E0F080; display:block;}
+#racebox { display:table; width:100%; }
+#racenamebox { display:table-cell; font-weight: bold; vertical-align: top;}
+#minimapbox { display:table-cell; }
+#raceicbox {display:table-cell; text-align: right; vertical-align: top; } /* top:0px; right:0px; position:relative;} */
+#costpenaltybox { font-weight: bold; color: #E0F080;}
 #wplistbox { font-weight: bold; } 
 
+#yourboatbox { display:table; width:100%;}
+#yourboatbox div { display:table-cell; vertical-align:top;}
+#yourboatsummarybox { text-align: center; }
+#yourboatstatusbox {  margin-left: 1em; margin-right: 1em; text-align:center;}
+#sosbox { display:table-cell; text-align: right;}
 
-#yourboatsummarybox { text-align: center; clear:both; float:left; }
-#yourboatstatusbox { float:left; margin-left: 1em; margin-right: 1em; text-align:center; }
-#sosbox { float:right; }
+img.minimap {
+width:50px;
+height:34px;
+}
 
 #instrumentbox
 {
   border: 1px solid #2c4897;
-  float: left;
   min-height: 100px;
   min-width: 821px;
   margin-top: 1px;
   margin-right: 1px;
   margin-left: 1px;
+  max-height: 140px;
 }
 
-#instrumentbox div {
-display:inline;
-}
+div.instrument {
+display:table-cell;
 
+}
 
 #instrumentbox img {
-width: 150px;
-height: 150px;
+width: 140px;
+height: 140px;
+}
+
+#messagebox {
+display:table-cell;
+vertical-align: top;
+width: 100%;
+}
+
+#messagelist {
+display:block;
+height: 140px;
+overflow:auto;
+}
+
+#messagebox div {
+display:list-item;
+margin-left: 1.5em;
+}
+
+#blocnotebox {
+display:list-item;
+margin-left: 1.5em;
+background-color: #ABCDEF;
+}
+
+div.controlitem {
+display:table-cell;
+margin: 0.5em;
+border: 2px solid black ;
+text-align: center;
+}
+
+.controlform {
+  display: block ;
 }
 
 
-/* #messagebox { clear: both; } */
-#messagebox { display: inline;}
+#autopilotcontrolbox div {display:block;}
+#windanglecontrolbox div {display:block;}
 
-#controlbox { clear: both; }
+#wpbasedcontrolbox div {
+  display:block;
+  margin: 0px;
+  border: none ;
+}
 
-.texthelpers { font-weight: bold; } /* visibility: hidden; display:none;} */
+#morecontrolbox div {
+  display:block;
+  margin: 0px;
+  border: none ;
+  text-align: center
+}
+
+#vlmvmgcontrolbox span {
+display:block;
+
+}
+
+#pilotocontrolbox span {
+display:block;
+}
+
+
+#wphcontrolbox span {display:block}
+#wpcoordscontrolbox {display:table-cell; }
+#wpcoordscontrolbox div { display:block; text-align:right;}
+
+
+#wpmorecontrolbox {display:table-cell;}
+
+#wpmorecontrolbox div {display:block;}
+
+.texthelpers { font-weight: bold; }
+.texthelperscomment { font-style: italic;}
+/* visibility: hidden; display:none; }*/ 
+.inputhelpers {} 
+.actionbutton {display:block;}
+input.dynamichelper {
+  display:block;
+  border:0px;
+  background-color: #90A0A0;
+  color:black;
+  text-align:center;
+}
