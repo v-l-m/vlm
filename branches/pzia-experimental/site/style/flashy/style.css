@@ -98,6 +98,7 @@ text-align: center;
 
 .controlform {
   display: block ;
+  text-align: center
 }
 
 
@@ -119,13 +120,11 @@ text-align: center;
 
 #vlmvmgcontrolbox span {
 display:block;
-
 }
 
 #pilotocontrolbox span {
 display:block;
 }
-
 
 #wphcontrolbox span {display:block}
 #wpcoordscontrolbox {display:table-cell; }
@@ -137,14 +136,33 @@ display:block;
 #wpmorecontrolbox div {display:block;}
 
 .texthelpers { font-weight: bold; }
+.titlehelpers { font-weight: bold; display:block;}
 .texthelperscomment { font-style: italic;}
 /* visibility: hidden; display:none; }*/ 
 .inputhelpers {} 
-.actionbutton {display:block;}
 input.dynamichelper {
   display:block;
   border:0px;
   background-color: #90A0A0;
   color:black;
   text-align:center;
+}
+
+div.mapboxitem {
+display:table-cell;
+margin: 0.5em;
+border: 2px solid red ;
+text-align: left;
+
+}
+
+#mapdisplaybox * {
+/*display:block; */
+}
+#displaymapaction {
+text-align:center;
+}
+
+.mapboxitem p {
+margin: 0em;
 }
