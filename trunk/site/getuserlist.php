@@ -50,7 +50,7 @@ header("content-type: text/plain; charset=UTF-8");
 
   while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
 
-     printf ("\n%s;%s;%s;%s;%s", $row[0],$row[1],$row[2],$row[3],$row[4], $row[5]) ;
+     printf ("\n%s;%s;%s;%s;%s;%s", $row[0],$row[1],$row[2],$row[3],$row[4], $row[5]) ;
      if ( $idr == 0 ) {
             printf (";%d", $row[6]);
      }
