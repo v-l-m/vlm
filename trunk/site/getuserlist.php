@@ -27,7 +27,7 @@ header("content-type: text/plain; charset=UTF-8");
   // select * from histpos where idusers=$idu and race=$idr order by time asc
 
 
-  $query   = " select idusers, username, boatname, country, ipaddr ";
+  $query   = " select idusers, username, boatname, country, ipaddr , email ";
 
   if ( $idr == 0 ) {
        $query .= ", engaged ";
@@ -50,9 +50,9 @@ header("content-type: text/plain; charset=UTF-8");
 
   while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
 
-     printf ("\n%s;%s;%s;%s;%s", $row[0],$row[1],$row[2],$row[3],$row[4]) ;
+     printf ("\n%s;%s;%s;%s;%s", $row[0],$row[1],$row[2],$row[3],$row[4], $row[5]) ;
      if ( $idr == 0 ) {
-            printf (";%d", $row[5]);
+            printf (";%d", $row[6]);
      }
   
   }
