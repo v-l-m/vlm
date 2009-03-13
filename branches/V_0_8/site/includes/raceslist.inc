@@ -57,7 +57,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
       	$status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
       	list($xSize, $ySize, $type, $attr) = getimagesize($href);
       	echo "<img src=\"minimap.php?idraces=" . $idraces . 
-                 "\" onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
+                 "\" onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                  " onmouseout=\"hideDiv('infobulle');\" " .
               " alt=\"" .$strings[$lang]["racemap"]. "\" />";
       }
