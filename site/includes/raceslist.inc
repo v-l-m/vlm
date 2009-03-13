@@ -49,7 +49,21 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
     else
     {
 
-      echo "<table width=\"100%\">\n<tr>\n<td align=\"left\" class=\"boat\">";
+      echo "<table width=\"100%\">\n<tr>\n";
+      echo "<td width=200 align=\"left\" class=\"boat\">";
+      // Carte de la course
+      $href = "images/racemaps/regate".$idraces.".jpg";
+      if ( file_exists($href) ) {
+      	$status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
+      	list($xSize, $ySize, $type, $attr) = getimagesize($href);
+      	echo "<img src=\"minimap.php?idraces=" . $idraces . 
+                 "\" onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
+                 " onmouseout=\"hideDiv('infobulle');\" " .
+              " alt=\"" .$strings[$lang]["racemap"]. "\" />";
+      }
+      echo "</td>\n";
+
+      echo "<td align=\"left\" class=\"boat\">";
       printf("<h1>%d (%s) - %s</h1>\n",$idraces, $boattype, $racename); /* FIXME use style there */
       printf ("  <ul>");
       if ( $dep > $time ) {
@@ -75,21 +89,13 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
       } else {
            printf ("    <li>Engaged : " . $num_engaged . " (unlimited)</li>\n" );
       }
+      if ( $idraces == 20090317 or $idraces == 20090318 ) {
+           printf ("    <li><A HREF=\"http://www.virtual-winds.com/forum/index.php?showtopic=5951\" target=_ic><B>INSTRUCTIONS DE COURSE / RACE INSTRUCTIONS</B></A></li>\n");
+      }
       printf ("  </ul>");
       echo "</td>\n";
 
-      echo "<td align=\"right\" class=\"boat\">";
-      // Carte de la course
-      $href = "images/racemaps/regate".$idraces.".jpg";
-      if ( file_exists($href) ) {
-      	$status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
-      	list($xSize, $ySize, $type, $attr) = getimagesize($href);
-      	echo "<img src=\"minimap.php?idraces=" . $idraces . 
-                 "\" onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
-                 " onmouseout=\"hideDiv('infobulle');\" " .
-              " alt=\"" .$strings[$lang]["racemap"]. "\" />";
-      }
-      echo "</td>\n</tr>\n</table>\n";
+      echo "</tr>\n</table>\n";
 
 
         if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
