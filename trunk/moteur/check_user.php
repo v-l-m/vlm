@@ -154,7 +154,7 @@
                //    should test "pim is 3 or pim is 4 in real life because of a future pim=5" ..
 	       // ===============================================================================
                if (  $fullUsersObj->users->pilotmode >= PILOTMODE_ORTHODROMIC 
-                  && $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
+		     && ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) ) {
 
 		 $distAvant=ortho($latAvant, $lonAvant,
 				  $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
