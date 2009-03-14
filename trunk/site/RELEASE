@@ -8,7 +8,8 @@ v0.9: what's new for ...
 * you may choose a different theme for the web interface (paparazzia)
 * page for race instructions & waypoint list (paparazzia)
 * better messagebox handling (race instructions warnings, etc...) (paparazzia)
-* fix displaying of wp across the date line (paparazzia) 
+* fix displaying of wp across the date line (paparazzia)
+* better default theme (paparazzia) 
 
 ... tools developpers :
 * gettrack now return only running positions (spf/steph)
