@@ -13,7 +13,7 @@ body
   width: 150px;
   float: left;
   font-size: 70%;
-  margin-left: 1px;
+  margin-left: 0px;
   min-height: 180px;
   margin-bottom: 0 ;/*0 important sinon menu va pas en dessous*/
 }
@@ -83,10 +83,12 @@ body
 
 #baneerleftbox
 {
-  margin: 0px
-  height: 82px;
-  width:100px;
-  float:left;
+  position:absolute;
+  left:50px;
+  top:5px;
+  margin: 0px;
+  height: 75px;
+  width:150px;
 }
 
 #abandon {
@@ -402,4 +404,9 @@ div.mapboxsubitem {
 
 .mapboxitem p {
 margin: 0em;
+}
+
+/* Pour les form de IE */
+form {
+margin-top:0px;
 }
