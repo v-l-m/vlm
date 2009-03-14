@@ -268,8 +268,38 @@ class map
   }
 
 
-  //draw Map (coastline)
   //draw shoreline
+  function drawOneCoast($projCallbackLong, $projCallbackLat, $points , $fullres = "nopoly" , $coasts = "" )
+  {
+
+            $numpoints = count($points);
+
+            if ( $numpoints > 0 ) {
+
+                if ( $fullres == "poly"  && $numpoints > 2  ) {
+                  imagefilledpolygon( $this->mapImage, $points, $numpoints, $this->colorContinent);
+
+                } else {
+                      // drawCoastline from this x and y arrays
+                      $last_longitude = 0;
+                      for ($j=1; $j<$numpoints; $j++) {
+                            imagelinethick($this->mapImage, $points[$j-1][1], $points[$j-1][2], $points[$j][1], $points[$j][2], $this->colorContinent, 1);
+                            $label_x=$points[$j][1];
+                            $label_y=$points[$j][2];
+                      }
+
+                      // numero de cote  : idcoast , coastid
+                      if ( $coasts != "" ) {
+                            imagestring( $this->mapImage, $font, $label_x , $label_y , $points[0], $colorBlack);
+                      }
+                }
+
+            }
+  }
+
+        
+
+  //draw shoreline (search for coasts to draw and call drawOneCoast)
   function drawMap($projCallbackLong, $projCallbackLat, $coasts , $fullres, $maparea=2 )
   {
     $font = 2;
@@ -296,16 +326,16 @@ class map
       
     if ( $num_points < 40 ) {
       $coastline_table="coastline_f";
-      $min_coast_points = floor( $num_points / 25 ) ;
+      //$min_coast_points = floor( $num_points / 50 ) ;
     } else if (  $num_points < 200  ) {
       $coastline_table="coastline_h";
-      $min_coast_points = floor( $num_points / 20 ) ;
+      //$min_coast_points = floor( $num_points / 20 ) ;
     } else if (  $num_points < 400  ) {
       $coastline_table="coastline_i";
-      $min_coast_points = floor( $num_points / 10 ) ;
+      //$min_coast_points = floor( $num_points / 10 ) ;
     } else {
       $coastline_table="coastline_l";
-      $min_coast_points = 5;
+      //$min_coast_points = 5;
     }
     imagestring( $this->mapImage, $font+2, 40 , 10 , "GSHHS_" . substr($coastline_table,10) , $colorBlack);
 
@@ -337,81 +367,70 @@ class map
       
     // recherche des points de cote du coin
 
-    $query_coast="select idcoast,latitude, longitude from " . $coastline_table .
+    $query_coast="select idcoast, latitude, longitude from " . $coastline_table .
       " where idcoast >= 0 " .
       $filtre_latitude .
       $filtre_longitude . 
       $filtre_onecoast .
       " order by idcoast,idpoint ;"  ;
-    //printf (" Requete exécutée : %s \n", $query_coast);
+    //printf ("DEBUG Requete exécutée : %s \n", $query_coast);
 
     $result_coast = mysql_db_query(DBNAME,$query_coast) or die("Query [$query_coast] failed \n");
     // for each coast, draw the corresponding coastline
 
-    $i=0;
-
-    $x = array();
-    $y = array();
-    $coastpoints_array=array();
-    $points_count=0;
-
     $idcoast=-1;
-    while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) )
-      {
+    while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) ) {
 
-        // Si changement de d'idcoast, on doit peut-être tracer
+    // On parcourt tous les points résultant de la requête (ils sont classé par  idcoast, idpoint
+    //  - Chaque fois qu'on trouve un point : 
+
+        //    1/ C'est un point d'un trait de cote différent de celui mentionné par "$idcoast"
+        //       ==> Il faut tracer le trait de côte terminé (fonction drawOneCoast)
+        //       ==> Il faut initialiser le tableau (nettoyage + creation)
+        //       +   ==> on ajoute ce point au tableau 
+
+        //    2/ C'est un point du meme trait de cote que le repère "$idcoast", 
+        //       +   ==> on ajoute ce point au tableau 
+
         if ( $point[0] != $idcoast ) {
-        
-          // On a peut-être un trait de cote à tracer ? (points_count >1)
-          if ( $points_count > 1 ) {
+          
+            $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
 
-            if ( $fullres == "poly"  && $points_count > 2  ) {
-              imagefilledpolygon( $this->mapImage, $coastpoints_array, $points_count, $this->colorContinent);
+            unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
+            $points_count=0;
+            $coastpoints_array=array(); 
+            $idcoast= $point[0];         
+        }
+        // + ajout au tableau (dans tous les cas, donc factorisé)
 
-            } else {
-              // drawCoastline from this x and y arrays
-              $last_longitude = 0;
-              for ($j=1; $j<$i; $j++) {
-                imagelinethick($this->mapImage, $x[$j-1], $y[$j-1], $x[$j], $y[$j], $this->colorContinent, 1);
-                $label_x=$x[$j];
-                $label_y=$y[$j];
-              }
-              // numero de cote  : idcoast , coastid
-              if ( $coasts != "" ) {
-                imagestring( $this->mapImage, $font, $label_x , $label_y , $coast[0], $colorBlack);
-              }
-            }
-          }
-
-          // MAX points for this coast = $coast[1]  ( count(*) )
-          $i=0;
-          $x = array();
-          $y = array();
-          $coastpoints_array=array();
-          $points_count=0;
-
-          // Changement de numéro de côte...
-          $idcoast=$point[0];
-          //printf ("Idcoast = %d\n", $idcoast);
-
-        } 
-        // Sinon, on trace et on change de trait de côte
         // latitude
-        $y[$i] = call_user_func_array( array(&$this, $projCallbackLat), $point[1]*1000 );
+        $y = call_user_func_array( array(&$this, $projCallbackLat), $point[1]*1000 );
         // longitude
         if ( $this->flag_E_W == true && $point[2] < 0 ) {
-          $x[$i] = call_user_func_array( array(&$this, $projCallbackLong),360000+$point[2]*1000);
-          //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
+                      $x = call_user_func_array( array(&$this, $projCallbackLong),360000+$point[2]*1000);
+                      //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
         } else {
-          $x[$i] = call_user_func_array( array(&$this, $projCallbackLong),$point[2]*1000);
+                      $x = call_user_func_array( array(&$this, $projCallbackLong),$point[2]*1000);
         }
-        array_push ($coastpoints_array, $x[$i],$y[$i]);
-        $points_count++;
-        $i++;
-        
-      }
 
+        // On prépare un tableau que la fonction drawOneCoast mangera. 
+        // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
+        if ( $fulres == "poly" ) {
+             array_push ($coastpoints_array, $x, $y);
+        } else {
+        // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher les numéros de cote
+             array_push ($coastpoints_array, array($point[0],$x,$y));
+        }
+
+    }
+
+    // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
+    $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
+
+    // Puis on supprime le tableau
+    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
   }
+        
 
 
 
@@ -496,11 +515,24 @@ class map
       */
 
       // La ligne de l'antemeridien...
+      //echo "L1:".$waypoint[1]."\nL2:".$waypoint[3]."\nXo:".$this->Xo."\n";
+      //echo "W:".$this->west."\nE:".$this->east."\n";
       if ($this->west > $this->east ) {
         if ( $waypoint[1] <0 ) $waypoint[1]+=360000;
         if ( $waypoint[3] <0 ) $waypoint[3]+=360000;
-      } 
-
+      } else {
+      /* le cas connu ou :
+       * - antemeridien non visible (east > west)
+       * - on veut tracer un wp sur l'antemeridien...
+       * - c'est une gate
+       */
+        if ( ( $waypoint[1] <0 ) and ($waypoint[3] >0 ) and ( $waypoint[4] == WPTYPE_PORTE ) ) {
+            $waypoint[3]-=360000;
+        } else if ( ( $waypoint[3] <0 ) and ($waypoint[1] >0 ) and ( $waypoint[4] == WPTYPE_PORTE )) {
+            $waypoint[1]-=360000;
+        }  
+      }
+          
       // bouée sur point 1
       imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
                          call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]),
@@ -926,7 +958,7 @@ class map
               // $current_long <0 && $Estime[1] >0
               //             }
               $DepEstime=$A;
-              imagestring ( $this->mapImage, $font, 50, 50 , "AM NOT ON MAP" , $this->colorText);
+              //imagestring ( $this->mapImage, $font, 50, 50 , "AM NOT ON MAP" , $this->colorText);
             }
 
             $style = array ($this->fromhex( $usersObj->color), $this->colorSea);
@@ -970,7 +1002,11 @@ class map
 
       if ( $drawn[$boat[0]] > 14 ) {
         // Sur la Volvo, les pixels reels sont numérotés -700 à -708
-        $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2]) ;
+        if ( $this->am_on_map == true && $boat[2] < 0 ) {
+           $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2] + 360000 ) ;
+        } else {
+           $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2]) ;
+        }
         $ylogo = call_user_func_array(array(&$this, $projCallbackLat), $boat[1]) ;
         if ( $boat[0] > -709 and $boat[0] < -700 ) {
           $Volvologo= imagecreatefrompng("images/bateaux_reels/V70_" . $boat[4] . ".png");

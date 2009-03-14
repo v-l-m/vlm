@@ -10,15 +10,18 @@ if ( isLoggedIn() ) {
 }
 
 // Type of race (permanent / one shot )
-$q=intval(htmlentities(quote_smart($_REQUEST['type']))) ;
+$q=htmlentities(quote_smart($_REQUEST['type'])) ;
 
 //change that, nothing SQL shoud appear directly in scripts
-$query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats FROM races  ";
+$query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
 
-$query1 .= " WHERE racetype = $q ";
-$query1 .=   " AND (  ( started = 0 AND DEPTIME > " . time() . " )
+$query1 .= " WHERE ( ( started = 0 AND DEPTIME > " . time() . " )
 	              OR ( closetime > " . time() .  " ) ) " ;
 
+
+if ( $q != "" ) { 
+        $query1 .= " AND racetype = " . intval($q). " " ;
+}
 $query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
 
 $result1 = mysql_db_query(DBNAME,$query1) or die("Query [$query1] failed \n");
@@ -107,6 +110,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
     }
     echo "<hr />";
 }
+
 
 if ( $q == RACE_TYPE_CLASSIC ) {
 	$URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
