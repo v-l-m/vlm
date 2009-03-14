@@ -202,6 +202,7 @@
 
    <div id="baneer">
        <div id="baneerleftbox"></div>
+       <div id="baneercenterbox"></div>
        <div id="baneerrightbox">
        <?php echo $strings[$lang]["sponsor"]; ?>
        <a href="http://www.actilis.net/" target="_actilis"><img src="/images/site/actilis.png" alt="Actilis" /></a>
