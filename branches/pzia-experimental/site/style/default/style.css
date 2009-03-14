@@ -73,6 +73,13 @@ body
   text-align: right;
 }
 
+#baneerleftbox
+{
+  background-image:  url('/images/logos/logovlmnew.png');
+  background-repeat: no-repeat;
+}
+
+
 #abandon {
   background-color: #B05051;
   border: solid 2px #DDDDF0;
@@ -476,4 +483,3 @@ div.mapboxitem {
 .inputwarn {
   background-color:#aaffaa;
 }
-
