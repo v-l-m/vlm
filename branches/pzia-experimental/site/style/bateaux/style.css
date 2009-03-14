@@ -17,11 +17,8 @@ body
 color:#ff4d00;
 }
 
-#racenamebox a, #wplistbox a, #yourboatsummarybox a {
-color:#6894c4;
 
-}
-#costpenaltynumber {
+#racenamebox a, #wplistbox a, #yourboatsummarybox a, #infomessage a, #costpenaltynumber {
 color:#6894c4;
 }
 
