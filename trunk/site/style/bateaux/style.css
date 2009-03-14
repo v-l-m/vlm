@@ -1,0 +1,72 @@
+@import url("../default/style.css");
+
+body
+{
+  background-color: #6894c4;
+}
+
+#baneer
+{
+  background-color: #2b597b;
+  background-image:  url('/images/site/banniere_haut.jpg');
+  background-repeat: no-repeat
+
+}
+
+.texthelpers, #costpenaltybox, .titlehelpers {
+color:#ff4d00;
+}
+
+
+#racenamebox a, #wplistbox a, #yourboatsummarybox a, #infomessage a, #costpenaltynumber {
+color:#6894c4;
+}
+
+.actionbuttonwarn, .inputwarn {
+  background-color:#6894c4;
+}
+
+
+#leftcolumn { background-color: #2b597b; }
+
+#main {
+  background-color: #ffffff;
+}
+
+#controlbox, #instrumentbox, #mapbox, #time {
+border-top: 5px groove #2b597b;
+}
+
+#baneercenterbox
+{
+  position:absolute;
+  top:5px;
+  left:610px;
+  background-image:  url('/images/logos/logobateaux-x60.jpg');
+  background-repeat: no-repeat;
+  height:75px;
+  width:290px;
+  /* for IE */
+  filter:alpha(opacity=90);
+  /* CSS3 standard */
+  opacity:0.9;
+}
+
+#pubbox1 {
+  background-image:  url('/images/logos/logomarinepool.jpg');
+  background-repeat: no-repeat;
+  height:90px;
+  width:140px;
+}
+
+#pubbox2 {
+  background-image:  url('/images/logos/logonavicom.png');
+  background-repeat: no-repeat;
+  height:32px;
+  width:150px;
+}
+
+input.dynamichelper {
+  border:0px;
+  background-color: #ffffff;
+}
