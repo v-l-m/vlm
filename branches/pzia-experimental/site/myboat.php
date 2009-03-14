@@ -234,80 +234,8 @@ include_once("scripts/myboat.js");
 
         // Estimation de la prochaine VAC pour ce bateau là
 
-<<<<<<< .courant
         if ( $usersObj->users->lastupdate + DELAYBETWEENUPDATE >= time() ) {
             printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10 );
-=======
-           $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
-       $status_content.=$wp_libelle." (".$wp_label.")" ;
-           $status_content.="&lt;br /&gt;";
-
-       if ( $wp[4] == WPTYPE_PORTE ) {
-          $wp_north = max ($wp[0], $wp[2]);
-          $wp_east  = max ($wp[1], $wp[3]);
-          $wp_south = min ($wp[0], $wp[2]);
-          $wp_west  = min ($wp[1], $wp[3]);
-
-              $status_content.="Gate Coords=&lt;b&gt;" . 
-                              round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
-                      " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
-
-       } else {
-          $wp_south = $wp_north = $wp[0];
-          $wp_west  = $wp_east  = $wp[1];
-
-              $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                              round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
-
-       }
-       //on prends en compte l'antemeridien dans le centrage
-       //convention : un wp fait moins de 180° de long
-       if ( abs($wp_west - $wp_east) > 180000) {
-           $wp_long_center = ($wp_west+$wp_east+360000)/1000/2;
-       } else {
-           $wp_long_center = ($wp_west+$wp_east)/1000/2;
-       }
-       if ( $wp_num > $usersObj->users->nwp ) {
-           $WPCLASS="notpassedwp";
-       } else if ( $wp_num < $usersObj->users->nwp ) {
-           $WPCLASS="passedwp";
-       } else {
-            // This one if the next one : we put it YELLOW (class=nextwp)
-           $WPCLASS="nextwp";
-       }
-
-       $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
-       if ( $wp_racetime[0] != "N/A" ) {
-            $racetime = duration2string ($wp_racetime[1]);
-                    $status_content.="&lt;br /&gt;&lt;b&gt;";
-                $status_content.=sprintf( $strings[$lang]["bestwptime"]."(%d)" , $racetime[0],$racetime[1],$racetime[2],$wp_racetime[0]);
-                    $status_content.="&lt;/b&gt;";
-           }
-
-           $status_content .= "&lt;/div&gt;";
-
-       echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
-         "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-         "&amp;long=" . $wp_long_center  .
-         "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
-         "&amp;tracks=on" . $oppList . 
-         "&amp;wp=" . $wp_num . 
-         "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
-         "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
-         " onmouseout=\"hideDiv('infobulle');\" " .
-         ">" . $wp_num ;
-       
-       echo "</a> \n";
-       
-       $wp_num++;
-    }
-
-        echo "<br />";
-        if ( $usersObj->races->coastpenalty  >= 3600 ) {
-        echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/3600). " h</b></font> / ";
-    } else if ( $usersObj->races->coastpenalty  >= 60 ) {
-        echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/60). " min</b></font> / ";
->>>>>>> .fusion-droit.r527
         }
 ?>
       </div> <!--fin de yourboat1box -->
