@@ -1,0 +1,479 @@
+@import url("../base-style.css");
+
+body
+{
+  background-color: #DDDDF0;
+  color: black;
+}
+
+#leftcolumn
+{
+  background-color: #90A0A0;
+  border: 1px solid #2c4897;
+  color: black;
+}
+
+#logoutbox {
+  text-align: center;
+}
+
+.leftbox {
+  border-bottom: groove 3px #DDDDF0;
+}
+
+.warnmessage {
+  color: red;
+}
+
+.icbox {
+   border: groove 3px #DDDDF0;
+}
+
+#menubox {
+  text-align: center;
+}
+
+#menucommunicationbox {
+  text-align: center;
+  font-weight: bold;
+
+}
+
+
+#toolbarbox {
+  text-align: center;
+}
+#pagesbox {
+  text-align: center;
+}
+
+#main
+{
+  color: black;
+  background-color: #90A0A0;
+  border: 1px solid #2c4897;
+}
+
+#text
+{
+  padding: 0.5%;
+}
+
+#menu
+{
+  color: black;
+  background-color: #90A0A0;
+  border: 1px solid #2c4897;
+}
+
+#baneer
+{
+  background-image:  url('/images/site/banniere_haut.jpg');
+  background-repeat: no-repeat
+  text-align: right;
+}
+
+#abandon {
+  background-color: #B05051;
+  border: solid 2px #DDDDF0;
+  text-align: center;
+}
+
+#time
+{ 
+  border-top: groove 3px #DDDDF0;
+  text-align: center;
+}
+
+#boat
+{
+  background-color: #90A0A0;
+  border: 1px solid #2c4897;
+}
+
+#boatimg
+{
+  text-align: center;
+}
+
+#expert
+{
+  background-color: #90A0A0;
+  border: 1px solid #2c4897;
+}
+
+#displaymode
+{
+  background-color: #90A0A0;
+  border: 1px solid #2c4897;
+}
+
+#footer{
+  text-align: center;
+}
+
+a
+{
+  color: #F0F0F0;
+  text-decoration: none;
+}
+
+a.ranking
+{
+  color: #000000;
+  text-decoration: none;
+
+}
+a.passedwp
+{
+  color: #20A020;
+  text-decoration: none;
+
+}
+a.nextwp
+{
+  color: #A0A010;
+  text-decoration: none;
+
+}
+a.notpassedwp
+{
+  color: #E04040;
+  text-decoration: none;
+}
+
+a:hover
+{
+  background-color: #9cf;
+}
+
+div.infobulle
+{ 
+  background-color: #E0E0A0;
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+
+img.map
+{
+  text-align: center;
+  background-color: #90A0A0;
+  border: 5px solid #2c4897;
+}
+
+img.babord
+{
+  border: 3px solid #E02020;
+}
+
+img.tribord
+{
+  border: 3px solid #00A020;
+}
+
+img
+{
+  border: 0;
+}
+
+h1
+{
+  font-weight: bold;
+  color: #111111;
+}
+
+h1.info
+{
+  font-size: 14px;
+  font-weight: bold;
+  color: #A01111;
+}
+
+h2
+{
+  font-weight: bold; 
+  color: #222222;
+}
+
+h3
+{
+  color: #333333;
+}
+
+h4
+{
+  color: #444444;
+}
+
+h4.tribord
+{
+  color : #00A020;
+  text-align: center;
+}
+h4.babord
+{
+  color : #E02020;
+  text-align: center;
+}
+
+
+acronym 
+{
+  border-bottom: dashed 1px white;
+  cursor: help;
+}
+
+
+th 
+{ 
+  background-color: #7070A0;
+  border: 1px solid black ;
+  color: black;
+}
+
+th.ranking
+{ 
+  background-color: #E0E0A0;
+  border: 0px solid black ;
+  color: black;
+}
+
+th.htmltable
+{ 
+  background-color: #E0E0A0;
+  border: 0px solid black ;
+  color: black;
+}
+
+tr 
+{ 
+  border: 0px solid black ;
+}
+
+tr.ranking
+{ 
+  border: 0px solid black ;
+  background-color: #90A0A0;
+}
+
+tr.realboat
+{ 
+  background-color: #90E0C0;
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+tr.hilight
+{ 
+  background-color: #E0E0A0;
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+
+tr.hilightopps
+{ 
+  background-color: #90B0C0;
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+
+tr.locked
+{ 
+  background-color: #C090A0;
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+
+tr.oncoast
+{ 
+  background-color: #808080;
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+
+
+td 
+{ 
+  border: 1px solid black ;
+  color: black;
+  text-decoration: none;
+}
+
+td.hilight
+{ 
+  background-color: #E0E0A0;
+  text-decoration: none;
+  border: 1px solid #A0A0A0;
+  color: black;
+}
+
+td.nohilight
+{ 
+  background-color: #606080;
+  text-decoration: none;
+  border: 1px solid #A0A0A0;
+  color: blue;
+}
+
+td.ranking
+{ 
+  border: 1px solid black ;
+  text-decoration: none;
+  color: black;
+}
+
+td.map
+{ 
+  border: 0px solid black ;
+}
+
+td.htmltable
+{ 
+  border: 0px solid black ;
+  color: black;
+}
+
+td.boat
+{ 
+  border: 0px solid black ;
+}
+
+td.capfixe
+{ 
+  border: 0px solid black ;
+  background-color: #90A0A0;
+  text-decoration: none;
+}
+
+td.regulateur
+{ 
+  border: 0px solid black ;
+  background-color: #90A0A0;
+  text-decoration: none;
+}
+
+td.orthopilot
+{ 
+  border: 0px solid black ;
+  background-color: #90A0A0;
+  text-decoration: none;
+}
+
+td.pilototo
+{ 
+  border: 0px solid black ;
+  background-color: #90A0A0;
+  text-decoration: none;
+}
+
+input.blue {
+  border:0px solid black;
+  background-color: #90A0A0;
+  color:black;
+  text-align:right;
+}
+
+/* RACEBOX */
+
+#racenamebox { font-weight: bold; vertical-align: top;}
+#raceicbox {text-align: right; vertical-align: top; }
+#costpenaltybox { font-weight: bold; }
+#costpenaltynumber {color: #E0F080;}
+#wplistbox { font-weight: bold; } 
+
+/* BOATBOX */
+
+#sosbox { text-align: right;}
+
+#yourboatsummarybox { vertical-align:top; text-align: center; }
+#yourboatstatusbox { vertical-align:top; text-align:center;}
+
+/* INSTRUMENT BOXES (+message) */
+
+#instrumentbox
+{
+  border-top: groove 3px #DDDDF0;
+}
+
+#messagebox {
+  vertical-align: top;
+}
+
+/* CONTROL BOX */
+
+#controlbox
+{
+  border-top: groove 3px #DDDDF0;
+}
+
+div.controlitem {
+  text-align: center;
+  border-right: dashed 1px #DDDDF0;
+}
+
+.controlform {
+  text-align: center
+}
+
+#morecontrolbox {
+  border-right: 0px;
+}
+
+#wpcontrolbox {
+  text-align:center;
+}
+
+#wpcoordscontrolbox { text-align:left; width:125px; }
+#wpmorecontrolbox { text-align:left; }
+
+#morecontrolbox div {
+  text-align: center
+}
+
+
+.texthelpers { font-weight: bold; }
+.titlehelpers{ font-weight: bold; }
+.subtitlehelpers { font-weight: bold; }
+.texthelperscomment { font-style: italic; }
+
+input.dynamichelper {
+  border:0px;
+  background-color: #90A0A0;
+  color:black;
+  text-align:center;
+}
+
+/* MAPBOX */
+
+#mapbox
+{
+  border-top: groove 3px #DDDDF0;
+}
+
+
+div.mapboxitem {
+  text-align: left;
+
+}
+
+#mapinputbox * {
+  text-align:right;
+}
+
+#displaymapaction {
+  text-align:right;
+}
+
+.actionbuttonwarn {
+  background-color:#aaffaa;
+}
+
+.inputwarn {
+  background-color:#aaffaa;
+}
+

@@ -98,261 +98,246 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 include_once("scripts/myboat.js");
 ?>
 <!-- Affichage de la page -->
-<div id="boat">
-  <!-- Le Div "infobulle" -->
-  <span id="infobulle">
-  </span>
-
-  <table width="100%">
-    <tr class="boat"><!-- premiere ligne -->
-      <td colspan="3" class="boat" align="center">
-    <table width="100%">
-      <tr class="boat">
-        <td class="boat" align="center" valign="top">
-          <?php
+<div id="statusbox">
+  <div id="infobulle"></div>
+  <div id="racebox">
+    <div id="minimapbox">
+        <?php
         // Carte de la course
         $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
         if ( file_exists($href) ) {
           $status_content = "&lt;img src=&quot;$href&quot; " . 
                             "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
                   list($xSize, $ySize, $type, $attr) = getimagesize($href);
-          echo "<img src=\"images/site/cartemarine.png\" " . 
+          echo "<img class=\"minimap\" src=\"images/site/cartemarine.png\" " . 
           " onmouseover=\"showDivLeft('infobulle'" .
           ",'$status_content', $xSize, $ySize);\" " .
           " onmouseout=\"hideDiv('infobulle');\" " .
           " alt=\"" .$strings[$lang]["racemap"]. "\" />";
-        } ?>
-       </td>
-       <?php  /* le nom de la course */ ?>
-       <td class="boat" align="left" valign="top">
-         <?php
-        $user_ranking=getCurrentRanking($usersObj->users->idusers, 
-                        $usersObj->users->engaged) ; ?>
-         <a href="races.php?lang=<? echo $lang ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ?>&amp;startnum=<? echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>"><b><? echo $usersObj->races->racename; ?></b></a>
-       </td>
-       <?php /* Cartes du départ et des WP */ ?>
-       <td class="boat" align="right" valign="top">
-         <?php
-        $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
-          "&amp;boat=" . $usersObj->users->idusers .
-          "&amp;age=0&amp;ext=right"; ?>
-         <b><a href="<? echo MAP_SERVER_URL ?>/mercator.img.php?idraces=<?
-         echo $usersObj->users->engaged ?>&amp;lat=<? 
-         echo ($usersObj->races->startlat/1000) ?>&amp;long=<?
-         echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
-         target="_new"><? echo $strings[$lang]["startmap"] ?></a> - WP: 
-<?php
-    // On va afficher des liens vers des waypoints
-    // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage 
-
-        // Cartes des Waypoints
-    $wp_num=1;
-    //echo "NWP = " . $usersObj->users->nwp;
-    foreach ($usersObj->races->waypoints as $wp) {
-       // label = colonne wptype de races_waypoints
-       $wp_label=$wp[5];
-       $wp_libelle=htmlentities($wp[6]);
-       $wp_laisser_au=$wp[7];
-       $wp_maparea=$wp[8];
-
-           $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
-       $status_content.=$wp_libelle." (".$wp_label.")" ;
-           $status_content.="&lt;br /&gt;";
-
-       if ( $wp[4] == WPTYPE_PORTE ) {
-          $wp_north = max ($wp[0], $wp[2]);
-          $wp_east  = max ($wp[1], $wp[3]);
-          $wp_south = min ($wp[0], $wp[2]);
-          $wp_west  = min ($wp[1], $wp[3]);
-
-              $status_content.="Gate Coords=&lt;b&gt;" . 
-                              round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
-                      " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
-
-       } else {
-          $wp_south = $wp_north = $wp[0];
-          $wp_west  = $wp_east  = $wp[1];
-
-              $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                              round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
-
-       }
-       //on prends en compte l'antemeridien dans le centrage
-       //convention : un wp fait moins de 180° de long
-       if ( abs($wp_west - $wp_east) > 180000) {
-           $wp_long_center = ($wp_west+$wp_east+360000)/1000/2;
-       } else {
-           $wp_long_center = ($wp_west+$wp_east)/1000/2;
-       }
-       if ( $wp_num > $usersObj->users->nwp ) {
-           $WPCLASS="notpassedwp";
-       } else if ( $wp_num < $usersObj->users->nwp ) {
-           $WPCLASS="passedwp";
-       } else {
-            // This one if the next one : we put it YELLOW (class=nextwp)
-           $WPCLASS="nextwp";
-       }
-
-       $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
-       if ( $wp_racetime[0] != "N/A" ) {
-            $racetime = duration2string ($wp_racetime[1]);
-                    $status_content.="&lt;br /&gt;&lt;b&gt;";
-                $status_content.=sprintf( $strings[$lang]["bestwptime"]."(%d)" , $racetime[0],$racetime[1],$racetime[2],$wp_racetime[0]);
-                    $status_content.="&lt;/b&gt;";
-           }
-
-           $status_content .= "&lt;/div&gt;";
-
-       echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
-         "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-         "&amp;long=" . $wp_long_center  .
-         "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
-         "&amp;tracks=on" . $oppList . 
-         "&amp;wp=" . $wp_num . 
-         "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
-         "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
-         " onmouseout=\"hideDiv('infobulle');\" " .
-         ">" . $wp_num ;
-       
-       echo "</a> \n";
-       
-       $wp_num++;
-    }
-
-        echo "<br />";
-        if ( $usersObj->races->coastpenalty  >= 3600 ) {
-        echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/3600). " h</b></font> / ";
-    } else if ( $usersObj->races->coastpenalty  >= 60 ) {
-        echo $strings[$lang]["locktime"]."<font color=\"#E0F080\"><b>".($usersObj->races->coastpenalty/60). " min</b></font> / ";
         }
-        echo $strings[$lang]["racedistance"] . " : ". round($usersObj->races->racedistance) . "nm";
-?></b>
-           </td>
-     </tr>
-       </table>
-     </td>
-   </tr>
-   <?php /*  DEUXIEME LIGNE : le bateau */ ?>
-   <tr class="boat">
-     <td class="boat" width="50%" align="center" valign="top">
-       <b><? echo $strings[$lang]["yourboat"] ?></b>
-       n&deg; <b><? echo $usersObj->users->idusers ?></b>
-       / &quot;<? echo $usersObj->users->boatname ?>&quot;<?php
-    echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
-        echo "<img src=\"".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />"; 
-        
-        echo "<br />" . $strings[$lang]["ranking"] . " : " . $user_ranking;
+?>
 
-    // Estimation de la prochaine VAC pour ce bateau là
-        
-    if ( $usersObj->users->lastupdate + DELAYBETWEENUPDATE >= time() ) {
-        printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10 );
-    } ?>
-     </td>
-     <td class="boat" width="50%" align="center" valign="top">
-       <?php
+    </div>
+<?php
+        $user_ranking=getCurrentRanking($usersObj->users->idusers,$usersObj->users->engaged) ;
+?>
+    <div id="racenamebox">
+        <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
+        <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->racedistance) . "nm)"; ?>
+        </a>
+    </div> <!-- fin de racenamebox -->
+    <div id="raceicbox">
+      <div id="wplistbox">
+<?php
+      /* Cartes du départ et des WP */
+      $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
+                "&amp;boat=" . $usersObj->users->idusers .
+                "&amp;age=0&amp;ext=right";
+?>
+        <a href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
+                   echo $usersObj->users->engaged ?>&amp;lat=<? 
+                   echo ($usersObj->races->startlat/1000) ?>&amp;long=<?php
+                   echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
+                   target="_new"><?php echo $strings[$lang]["startmap"] ; ?></a> - WP: 
+<?php
+      // On va afficher des liens vers des waypoints
+      // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage 
+  
+      // Cartes des Waypoints
+      $wp_num=1;
+      //echo "NWP = " . $usersObj->users->nwp;
+      foreach ($usersObj->races->waypoints as $wp) {
+         // label = colonne wptype de races_waypoints
+         $wp_label=$wp[5];
+         $wp_libelle=htmlentities($wp[6]);
+         $wp_laisser_au=$wp[7];
+         $wp_maparea=$wp[8];
+  
+         $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
+         $status_content.=$wp_libelle." (".$wp_label.")" ;
+         $status_content.="&lt;br /&gt;";
+  
+         if ( $wp[4] == WPTYPE_PORTE ) {
+            $wp_north = max ($wp[0], $wp[2]);
+            $wp_east  = max ($wp[1], $wp[3]);
+            $wp_south = min ($wp[0], $wp[2]);
+            $wp_west  = min ($wp[1], $wp[3]);
+  
+                $status_content.="Gate Coords=&lt;b&gt;" . 
+                                round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
+                        " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
+  
+         } else {
+            $wp_south = $wp_north = $wp[0];
+            $wp_west  = $wp_east  = $wp[1];
+  
+                $status_content.="Waypoint Coords=&lt;b&gt;" . 
+                                round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
+  
+         }
+         if ( $wp_num > $usersObj->users->nwp ) {
+             $WPCLASS="notpassedwp";
+         } else if ( $wp_num < $usersObj->users->nwp ) {
+             $WPCLASS="passedwp";
+         } else {
+              // This one if the next one : we put it YELLOW (class=nextwp)
+             $WPCLASS="nextwp";
+         }
+  
+         $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
+         if ( $wp_racetime[0] != "N/A" ) {
+              $racetime = duration2string ($wp_racetime[1]);
+                      $status_content.="&lt;br /&gt;&lt;b&gt;";
+                  $status_content.=sprintf( $strings[$lang]["bestwptime"]."(%d)" , $racetime[0],$racetime[1],$racetime[2],$wp_racetime[0]);
+                      $status_content.="&lt;/b&gt;";
+             }
+  
+             $status_content .= "&lt;/div&gt;";
+  
+         echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
+           "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
+           "&amp;long=" . ($wp_west+$wp_east)/2/1000  .
+           "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
+           "&amp;tracks=on" . $oppList . 
+           "&amp;wp=" . $wp_num . 
+           "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
+           "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+           " onmouseout=\"hideDiv('infobulle');\" " .
+           ">" . $wp_num ;
+         
+         echo "</a> \n";
+         
+         $wp_num++;
+      }
+?>
+      </div> <!-- fin de wplistbox -->
+  
+<?php
+      if ( $usersObj->races->coastpenalty  >= 3600 ) {
+          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($usersObj->races->coastpenalty/3600). " h</span></div>";
+      } else if ( $usersObj->races->coastpenalty  >= 60 ) {
+          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($usersObj->races->coastpenalty/60). " min</span></div>";
+      }
+?>
+    </div> <!--fin de raceicbox -->
+  </div> <!--fin de racebox -->
+<?php /*  DEUXIEME LIGNE : le bateau */ ?>
+  <div id="yourboatbox">
+      <div id="yourboatsummarybox">
+        <b><?php echo $strings[$lang]["yourboat"]; ?></b>&nbsp;
+        n&deg; <b><?php echo $usersObj->users->idusers ; ?></b>&nbsp;
+        / &quot;<? echo $usersObj->users->boatname ?>&quot;
+<?php
+        echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
+        echo "<img src=\"".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
+        echo  "<br />".$strings[$lang]["ranking"] . " : " . $user_ranking;
+
+        // Estimation de la prochaine VAC pour ce bateau là
+
+        if ( $usersObj->users->lastupdate + DELAYBETWEENUPDATE >= time() ) {
+            printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10 );
+        }
+?>
+      </div> <!--fin de yourboat1box -->
+      <div id="yourboatstatusbox">
+<?php
         // Colone droite
 
-    /* Si l'heure du départ est dépassée */
-    if ( time() > $usersObj->races->deptime ) {
-        /* Si le bateau n'est pas encore parti, affichage "depart a la prochaine VAC" */
-        if ( $usersObj->users->userdeptime < $usersObj->races->deptime ) {
-           if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE && $usersObj->users->pilotparameter <= 1 ) {
-               printf($strings[$lang]["nostartpending"]);
-           } else {
-               printf($strings[$lang]["startpending"]);
-           }
-        /* Sinon affichage "En course depuis ... ou bateau locké depuis..." */
+        /* Si l'heure du départ est dépassée */
+        if ( time() > $usersObj->races->deptime ) {
+            /* Si le bateau n'est pas encore parti, affichage "depart a la prochaine VAC" */
+            if ( $usersObj->users->userdeptime < $usersObj->races->deptime ) {
+                if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE && $usersObj->users->pilotparameter <= 1 ) {
+                    printf($strings[$lang]["nostartpending"]);
+                } else {
+                    printf($strings[$lang]["startpending"]);
+                }
+            /* Sinon affichage "En course depuis ... ou bateau locké depuis..." */
+            } else {
+                // Si le bateau est libre
+                if ( time() > $usersObj->users->releasetime ) {
+                    $racingtime = duration2string(time() - $usersObj->users->userdeptime);
+                    printf($strings[$lang]["racingtime"] . $strings[$lang]["days"]."\n",$racingtime[0],$racingtime[1],$racingtime[2],$racingtime[3]);
+                } else {
+                    $locktime = duration2string($usersObj->users->releasetime - time());
+                    //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+                    printf("<img src=\"images/site/attention.png\"><font color=\"#F0F0F0\"><b>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</b></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+                }
+            }
+        /* Sinon (heure départ pas atteinte), affichage de la date de départ */
         } else {
-               // Si le bateau est libre
-               if ( time() > $usersObj->users->releasetime ) {
-               $racingtime = duration2string(time() - $usersObj->users->userdeptime);
-               printf($strings[$lang]["racingtime"] . $strings[$lang]["days"]."\n",$racingtime[0],$racingtime[1],$racingtime[2],$racingtime[3]);
-               } else {
-               $locktime = duration2string($usersObj->users->releasetime - time());
-               //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-               printf("<img src=\"images/site/attention.png\"><font color=\"#F0F0F0\"><b>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</b></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-               }
+            $departure = gmdate("Y/m/d H:i:s",$usersObj->races->deptime)." GMT";
+            echo $strings[$lang]["departuredate"]." : $departure\n";
         }
-    /* Sinon (heure départ pas atteinte), affichage de la date de départ */
-    } else {
-        $departure = gmdate("Y/m/d H:i:s",$usersObj->races->deptime)." GMT";
-        echo $strings[$lang]["departuredate"]." : $departure\n";
-    }
-
-    // Le mode de pilotage
-    //echo $strings[$lang]["pilotmode"]."<br/>";
-
         echo "<br />\n";
-    if ( $usersObj->users->pilotmode == PILOTMODE_HEADING ) {
-        echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
-    }
-    else if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-        echo $strings[$lang]["constantengaged"]." " ;
-        if ( $usersObj->users->pilotparameter > 0 )
-            echo " +";
-        echo $usersObj->users->pilotparameter ." ". $strings[$lang]["degrees"];
-    }
-    else if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
-        echo $strings[$lang]["orthoengaged"];
-    }
-    else if ( $usersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
-        echo $strings[$lang]["bestvmgengaged"];
-        //echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
-    }
-    else if ( $usersObj->users->pilotmode == PILOTMODE_BESTSPEED ) {
-        //echo $strings[$lang]["bestspeedengaged"];
-        echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
-    }
-    // Ligne complémentaire si pilote ortho
-    if (      $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC
-           or $usersObj->users->pilotmode == PILOTMODE_BESTVMG      )  {
-        echo "--&gt;" . giveDegMinSec ('html', $usersObj->LatNM/1000, $usersObj->LongNM/1000);
-    }
+        // Le mode de pilotage
+        //echo $strings[$lang]["pilotmode"]."<br/>";
+
+        if ( $usersObj->users->pilotmode == PILOTMODE_HEADING ) {
+            echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
+        } else if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
+            echo $strings[$lang]["constantengaged"]." " ;
+            if ( $usersObj->users->pilotparameter > 0 ) echo " +";
+            echo $usersObj->users->pilotparameter ." ". $strings[$lang]["degrees"];
+        } else if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
+            echo $strings[$lang]["orthoengaged"];
+        } else if ( $usersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
+            echo $strings[$lang]["bestvmgengaged"];
+            //echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
+        } else if ( $usersObj->users->pilotmode == PILOTMODE_BESTSPEED ) {
+            //echo $strings[$lang]["bestspeedengaged"];
+            echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
+        }
+        // Ligne complémentaire si pilote ortho
+        if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC or $usersObj->users->pilotmode == PILOTMODE_BESTVMG      )  {
+            echo "--&gt;" . giveDegMinSec ('html', $usersObj->LatNM/1000, $usersObj->LongNM/1000);
+        }
+        echo "<br />\n";
+
         if ( $usersObj->VMGortho != 0 ) {
             $_timetogo=60 * 60 * $usersObj->distancefromend / $usersObj->VMGortho;
             if ( $_timetogo > 0 ) {
-               echo "<br />\n";
-               printf($strings[$lang]["ETA="]. gmdate('Y-m-d H:i:s', time() + $_timetogo)) ;
-               $eta=$usersObj->distancefromend / $usersObj->VMGortho;
-               //$etad=floor($eta/24);
-               //$etah=ceil($eta - 24*$etad);
-               //echo " ( &lt; ". $etad . "d " .$etah ."h )";
-               $etatime = duration2string($eta*3600);
-               printf(" ( " . $strings[$lang]["days"]." )\n",$etatime[0],$etatime[1],$etatime[2],$etatime[3]);
+                echo "\n";
+                printf($strings[$lang]["ETA="]. gmdate('Y-m-d H:i:s', time() + $_timetogo)) ;
+                $eta=$usersObj->distancefromend / $usersObj->VMGortho;
+                //$etad=floor($eta/24);
+                //$etah=ceil($eta - 24*$etad);
+                //echo " ( &lt; ". $etad . "d " .$etah ."h )";
+                $etatime = duration2string($eta*3600);
+                printf(" ( " . $strings[$lang]["days"]." )\n",$etatime[0],$etatime[1],$etatime[2],$etatime[3]);
             }
         }
 ?>
-     </td>
+      </div> <!--fin de yourboat2box -->
 <?php
         // Colone SOS
         $status_content="&lt;div class=&quot;infobulle&quot; align=&quot;center&quot;&gt;" . $strings[$lang]["racingcomite"] . "&lt;/div&gt;"; ?>
-     <td class="boat" align="center" valign="top">
-<?php  echo "<a href=\"mailto:" . EMAIL_COMITE_VLM .
-      "?Subject=PAN-PAN" . 
-      "%20%2F%20RACE%3D" . $usersObj->users->engaged .
-      "%20%2F%20IDU%3D".$usersObj->users->idusers .
-      "%20%2F%20USERNAME%3D".$usersObj->users->username .
-      "%20%2F%20Lat%3D". $usersObj->lastPositions->lat .
-      "%2C%20Long%3D" . $usersObj->lastPositions->long .
-      "&amp;Body=Hello%2C%0A" .
-      "%0A%20******%20EXPLICATION%20DU%20PROBLEME%20%2F%20EXPLANATION%20******%20%0A".
-      "%0AFair%20winds%2C%0A" . $usersObj->users->username .
-      "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
-      " onmouseout=\"hideDiv('infobulle');\" " .
-      "><img src=\"images/site/sos.png\" alt=\"SOS COMITE\" /></a>"; ?>
-    </td>
-      </tr>
-    </table>
-  </div>
+      <div id="sosbox">
+<?php
+          echo "<a href=\"mailto:" . EMAIL_COMITE_VLM .
+          "?Subject=PAN-PAN" . 
+          "%20%2F%20RACE%3D" . $usersObj->users->engaged .
+          "%20%2F%20IDU%3D".$usersObj->users->idusers .
+          "%20%2F%20USERNAME%3D".$usersObj->users->username .
+          "%20%2F%20Lat%3D". $usersObj->lastPositions->lat .
+          "%2C%20Long%3D" . $usersObj->lastPositions->long .
+          "&amp;Body=Hello%2C%0A" .
+          "%0A%20******%20EXPLICATION%20DU%20PROBLEME%20%2F%20EXPLANATION%20******%20%0A".
+          "%0AFair%20winds%2C%0A" . $usersObj->users->username .
+          "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+          " onmouseout=\"hideDiv('infobulle');\" " .
+          "><img src=\"images/site/sos.png\" alt=\"SOS COMITE\" /></a>";
+?>
+      </div> <!--fin de sosbox -->
+    </div> <!-- fin de yourboatbox -->
+</div> <!--fin de statusbox -->
 
 <!-- ********SIMPLE******* -->
 
-<div id="simple">
+<div id="instrumentbox">
 
     <!-- le beau GPS multifonctions -->
-        <table class="boat"><tr class="boat">
-        <td class="boat">
+        <div id="gpsbox"  class="instrument">
         <img alt="GPS" src="gps.php?
         latitude=<?php   echo ($usersObj->lastPositions->lat)  ?>&amp;
         longitude=<?php  echo ($usersObj->lastPositions->long) ?>&amp;
@@ -361,11 +346,12 @@ include_once("scripts/myboat.js");
         dnm=<?php    printf ('%4.2f', round($usersObj->distancefromend,2)) ?>&amp;
         cnmo=<?php   printf ('%03.1f' , $usersObj->orthoangletoend ) ?>&amp;
         cnml=<?php   printf ('%03.1f' , $usersObj->loxoangletoend ) ?>&amp;
-        vmg=<?php    printf ("%2.2f", round($usersObj->VMGortho, 2)) ?>&amp;
-        loch=<?php   printf ("%02.1f", round($usersObj->users->loch, 1)) ?>&amp;
-        avg=<?php    printf ("%02.1f", 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)) ?>"
+        vmg=<?php    printf ('%2.2f', round($usersObj->VMGortho, 2)) ?>&amp;
+        loch=<?php   printf ('%02.1f', round($usersObj->users->loch, 1)) ?>&amp;
+        avg=<?php    printf ('%02.1f', 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)) ?>"
         />
-        </td><td class="boat">
+        </div>
+        <div id="windanglebox"  class="instrument">
     <!-- Affichage de windangle -->
         <img alt="wind angle" src="windangle.php?
         wheading=<?php printf ('%03d' , ($usersObj->wheading )) ?>&amp;
@@ -373,7 +359,8 @@ include_once("scripts/myboat.js");
         wspeed=<?php echo intval($usersObj->wspeed) ?>&amp;
         roadtoend=<?php echo $usersObj->orthoangletoend ?>"
     />
-        </td><td class="boat">
+        </div>
+        <div id="anemobox"  class="instrument">
     <!-- Affichage de l'anémo -->
         <img alt="anemo" src="anemo.php?
         twd=<?php    if ( $usersObj->wheading + 180 > 360 ) {
@@ -384,8 +371,8 @@ include_once("scripts/myboat.js");
         tws=<?php    printf ('%4.1f' , $usersObj->wspeed ) ?>&amp;
         cap=<?php    printf ('%4.1f' , $usersObj->users->boatheading ) ?>"
     />
-        </td><td class="boat" valign="top">
-        
+        </div>
+
         <?php
             $messages = Array();
 
@@ -411,12 +398,12 @@ include_once("scripts/myboat.js");
             }
             // Email vide ?
             if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
-                $msg = "<b>NO E-MAIL ADDRESS</b><br />Please give one (".$strings[$lang]["choose"] . ")";
+                $msg = "<b>NO E-MAIL ADDRESS</b>&nbsp;Please give one (".$strings[$lang]["choose"] . ")";
                 $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php?lang=$lang");
             }
             // OMOROB ?
             if ( $usersObj->users->country == "000" ) {
-                $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b><br /><b>Please contact race Comittee, click on the SOS icon</b><";
+                $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b>&nbsp;<b>Please contact race Comittee, click on the SOS icon</b><";
                 $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
             }
             //BLOCNOTE
@@ -427,321 +414,311 @@ include_once("scripts/myboat.js");
 
             //Synthese
             if (count($messages) > 0) {
-                echo "<div id=\"messagebox\"><ul>\n";
+                echo "<div id=\"messagebox\"><span id=\"messagelist\">\n";
                 foreach ($messages as $msgstruct) {
-                    echo "<li><span class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
+                    echo "<div class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"];
                     if (array_key_exists("url", $msgstruct)) {
                         echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">?</a>]";
                     }
-                    echo "</span></li>\n";
+                    echo "</div>\n";
                 }
-                echo "</ul></div>";
+                echo "</span></div>";
             }
         ?>
         
-        </td></tr></table>
-    <hr />
+</div> <!-- fin de instrumentbox -->        
+        
 
-<!-- Pilote automatique -->
-<table width="99%">
-  <tr>
-    <td class="capfixe" align="center" width="20%">
-    <?php echo "<b>". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</b>"; ?>
-    <form name="autopilot" action="update_angle.php" method="post"> 
-    <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-    <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-    <input type="hidden" name="pilotmode" value="autopilot"/>
-    <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
-    <input type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
-    <input type="button" value="&gt;" onclick="increment(); updateSpeed();"/><br />
-    <?php echo $strings[$lang]["estimated"] ?><br />
-    <input type="text" size="5" maxlength="5" name="speed" readonly="readonly" value="<?php echo $usersObj->boatspeed?>"/><br />
-    <input type="submit" value="<?php echo $strings[$lang]["autopilot"]?>"/>
-      </form>
-    </td>
 
-<!-- Régulateur d'allure -->
-<td class="regulateur" align="center" width="25%">
-<?php echo "<b>". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</b>"?>
-<form name="angle" action="update_angle.php" method="post"> 
-<input type="button" value="&lt;" onclick="decrementAngle(); "/>
-<input type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>"/>
-<!--
-<input type=button  class="blue" name="pim" value=<?php echo $baww; ?>>
--->
-<input type="button" value="&gt;" onclick="incrementAngle();"/>
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
-<input type="hidden" name="pilotmode" value="windangle"/><br />
-<input type="button" value="<?php echo $strings[$lang]["tack"]?>" onclick="tack();"/><br />
-<input type="submit" value="<?php echo $strings[$lang]["constant"]?>" />
-</form>
+<div id="controlbox">
+    <!-- Pilote automatique -->
+    <div id="autopilotcontrolbox" class="controlitem">
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_HEADING ) {
+            $autopilotclass = "inputwarn";
+        } else {
+            $autopilotclass = "inputnormal";
+        }
+        ?>
+        <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>\n"; ?>
+        <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
+            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+            <input type="hidden" name="pilotmode" value="autopilot"/>
+            <div id="autopilotrange">
+                <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
+                <input class="<?php echo $autopilotclass; ?>" type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
+                <input type="button" value="&gt;" onclick="increment(); updateSpeed();"/>
+            </div>
+            <span id="estimatespeed" class="inputhelpers">
+                <?php echo $strings[$lang]["estimated"] ?>
+                <input type="text" size="4" maxlength="4" name="speed" readonly="readonly" value="<?php echo round($usersObj->boatspeed, 2); ?>"/>
+            </span>
+            <div id="autopilotaction">          
+                <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["autopilot"]?>"/>
+            </div>
+        </form>
+    </div>
 
-<!-- BEST SPEED -->
-<!--
-<?php //echo "<B>".$strings[$lang]["bestspeedengaged"]."</B>"?>
-<form name="bestspeed" action="update_angle.php" method="post"> 
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
+    <!-- Régulateur d'allure -->
+    <div id="windanglecontrolbox" class="controlitem">
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
+            $inputclass = "inputwarn";
+        } else {
+            $inputclass = "inputnormal";
+        }
+        ?>
+        <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</span>"?>
+        <form class="controlform" name="angle" action="update_angle.php" method="post"> 
+            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+            <input type="hidden" name="pilotmode" value="windangle"/>
+            <div id="windanglerange">
+                <input type="button" value="&lt;" onclick="decrementAngle(); "/>
+                <input class="<?php echo $inputclass; ?>" type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>" />
+                <input type="button" value="&gt;" onclick="incrementAngle();"/>
+            </div>
+            <input class="inputhelpers" type="button" value="<?php echo $strings[$lang]["tack"]; ?>" onclick="tack();" />
+            <div id="windangleaction">
+                <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["constant"]; ?>" />
+            </div>
+        </form>
+    </div>
 
-<input type="hidden" name="pilotmode" value="bestspeed"/>
-<input type="submit" value="<?php  echo $strings[$lang]["bestspeedengaged"]?>" />
-</form>
--->
-</td>
 
-<!-- Pilote Orthodromique -->
-<td class="orthopilot" align="center" width="25%">
-<?php echo "<b>". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</b>"?>
-<form name="ortho" action="update_angle.php" method="post"> 
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
+    <!--WP pilot based -->
+    <div id="wpbasedcontrolbox" class="controlitem">
+        <!-- Pilote Orthodromique -->
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
+            $buttonclass = "actionbuttonwarn";
+        } else {
+            $buttonclass = "actionbutton";
+        }
+        ?>
+        <div id="orthocontrolbox"  class="controlitem">
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</span>"?>
+            <form class="controlform" name="ortho" action="update_angle.php" method="post"> 
+                <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+                <input type="hidden" name="lang" value="<?php echo $lang?>"/>        
+                <input type="hidden" name="pilotmode" value="orthodromic"/>
+                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
+            </form>
+        </div>
+        
+        <!-- BEST VMG -->
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
+            $buttonclass = "actionbuttonwarn";
+        } else {
+            $buttonclass = "actionbutton";
+        }
+        ?>
+        <div id="bvmgcontrolbox" class="controlitem">
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</span>"?>
+            <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
+                <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+                <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+                <input type="hidden" name="pilotmode" value="bestvmg"/>
+                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
+            </form>
+        </div>
+    </div>
 
-<input type="hidden" name="pilotmode" value="orthodromic"/>
-<input type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
-</form>
+<!-- PROGRAMMATION WP -->
+<div id="wpcontrolbox" class="controlitem">
+    <form name="coordonnees" action="myboat.php" method="post">
+        <input type="hidden" name="type" value="savemywp"/>
+        <div id="wpcoordscontrolbox">
+        <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
 
-<br />
+            <div id="wplatcontrolbox" class="coordcontrol">
+                <span class="subtitlehelpers">Lat&nbsp;&nbsp;&nbsp;</span>
+                <input type="text" size="6" maxlength="6" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
+                <input type="button" class="dynamichelper" name="latdms" width="1"/>
+            </div>
+            <div id="wplongcontrolbox" class="coordcontrol">
+                <span class="subtitlehelpers">Long</span>
+                <input type="text" size="6" maxlength="6" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
+                <input type="button" class="dynamichelper" name="longdms" width="1"/>
+            </div>
+        </div>
+        <div id="wpmorecontrolbox">
+            <div id="wphcontrolbox">
+                <span class="subtitlehelpers">@WPH</span>
+                <?php
+                echo "<input type=\"text\" size=\"4\" maxlength=\"4\"  name=\"targetandhdg\" " ;
+                if ( $usersObj->users->targetandhdg >= 0 and $usersObj->users->targetandhdg <= 360 ) {
+                     echo "value=\""  . $usersObj->users->targetandhdg . "\" />" ;
+                     echo "<input type=\"checkbox\" name=\"andhdg\" checked=\"checked\" onclick=\"toggle_andhdg()\" />";
+                } else {
+                     echo "disabled=\"disabled\" value=\"" . -1*abs($usersObj->users->targetandhdg) . "\" />" ;
+                     echo "<input type=\"checkbox\" name=\"andhdg\" onclick=\"toggle_andhdg()\" />";
+                }
+                ?>
+            </div>
+            <span class="dynamichelpers">&nbsp;</span>
+            <div id="wpaction">
+                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["save"]?>" />
+            </div>
+        </div>
+    </form>
+</div>
 
-<!-- BEST VMG -->
-<?php echo "<b>". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</b>"?>
-<form name="bestvmg" action="update_angle.php" method="post"> 
-<input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
-
-<input type="hidden" name="pilotmode" value="bestvmg"/>
-<input type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
-</form>
-
-       <?php echo $strings[$lang]["orthodromic_comment"]; ?>
-</td>
-
-<!-- PROGRAMMATION AUTO PILOT  + SAISIE WP visé-->
-<td class="pilototo" align="center" width="20%">
-       <!-- Pilote programmable -->
-       <?php 
-            echo "<b>".$strings[$lang]["pilototoengaged"]."</b>";
+<div id="morecontrolbox" class="controlitem">
+    <!-- Pilote programmable -->
+    <div id="pilototocontrolbox">       
+        <?php 
+            echo "<span class=\"texthelpers\">".$strings[$lang]["pilototoengaged"];
             $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
             if ( $pilototoTasks > 0 ) {
-                 echo " <b>(" . $pilototoTasks . ")</b>";
+                echo "&nbsp;(" . $pilototoTasks . ")</span>";
+                $pilototocssclass = "actionbuttonwarn";
+            } else {
+                echo "</span>";
+                $pilototocssclass = "actionbutton";
             }
-       ?>
-       <br />
-       <input type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" 
-       onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+        ?>
+        <div id="pilototoaction">
+            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+        </div>
+    </div>
 
-<br />
-       <form name="coordonnees" action="myboat.php" method="post">
-       <input type="hidden" name="type" value="savemywp"/>
-       <?php echo "<b>". $strings[$lang]["mytargetpoint"] . "</b>"; ?>
+    <!-- VMG POUR VLM -->
+    <div id="vlmvmgcontrolbox">
+        <form class="controlform" name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
+            <?php echo "<span class=\"texthelpers\">".$strings[$lang]["vmgsheet"]."</span>"; ?>
+            <div id="vlmvmgaction">
+                <input type="submit" value="Go !" />
+            </div>
+            <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
+            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+            <input type="hidden" name="boatlat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
+            <input type="hidden" name="boatlong" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
+            <input type="hidden" name="wdd" value="<?php echo ($usersObj->wheading+180)%360; ?>" />
+            <input type="hidden" name="wds" value="<?php echo $usersObj->wspeed; ?>" />
+            <input type="hidden" name="wp1lat" value="<?php echo $usersObj->users->targetlat; ?>" />
+            <input type="hidden" name="wp1long" value="<?php echo $usersObj->users->targetlong; ?>" />
+            <?php
+        
+            $nwp_coords=giveWaypointCoordinates ($usersObj->users->engaged , $usersObj->nwp, WPLL/WP_NUMSEGMENTS);
+            // print_r($nwp_coords);
+            //                                Lat              Long
+            $lat_xing = new doublep();
+            $long_xing = new doublep();
+            $xing_ratio = new doublep();
+        
+            $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
+                     $nwp_coords[0], $nwp_coords[1],
+                     $nwp_coords[2], $nwp_coords[3],
+                     $lat_xing, $long_xing, $xing_ratio);
+            ?>
+            <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
+            <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
+        </form>
+    
+    </div>
 
-       <table>
-     <tr>
-       <td align="right" class="boat">
-         <b>Lat</b>
-       </td>
-       <td align="left" class="boat">
-         <input type="text" size="8" maxlength="8" name="targetlat" 
-            onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
-         <input type="button"  class="blue" name="latdms" />
-       </td>
-       </tr>
-       <tr>
-         <td align="right" class="boat">
-           <b>Long</b>
-         </td>
-         <td align="left" class="boat">
-           <input type="text" size="8" maxlength="8" 
-              name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
-           <input type="button"  class="blue" name="longdms" />
-         </td>
-       </tr>
-<!--       <tr>
-       </tr> -->
-       <tr>
-         <td align="right" class="boat">
-           <b>@WPH</b>
-         </td>
-         <td align="left" class="boat">
-           <?php
-                    echo "<input type=\"text\" size=\"4\" maxlength=\"4\"  name=\"targetandhdg\" " ;
-                    if ( $usersObj->users->targetandhdg >= 0 and $usersObj->users->targetandhdg <= 360 ) {
-                         echo "value=\""  . $usersObj->users->targetandhdg . "\" />" ;
-                         echo "<input type=\"checkbox\" name=\"andhdg\" checked=\"checked\" onclick=\"toggle_andhdg()\" />";
-                    } else {
-                         echo "disabled=\"disabled\" value=\"" . -1*abs($usersObj->users->targetandhdg) . "\" />" ;
-                         echo "<input type=\"checkbox\" name=\"andhdg\" onclick=\"toggle_andhdg()\" />";
-                    }
-               ?>
+    </div>
+</div> <!-- Fin des controlbox -->
 
-         </td>
-         </tr>
-         <tr>
-           <td colspan="2" align="right" class="boat">
-           </td>
-         </tr>
-       </table>
-       <input type="submit" value="<?php  echo $strings[$lang]["save"]?>" />
-     </form>
+<!-- Mapbox -->
+<form id="mercator" action="map.img.php" target="_new" method="get">
+<div id="mapbox">
+<!--    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?> -->
+    <div id="maplayerbox" class="mapboxitem">
+    <!-- Layers-->
+        <div id="mapgriblayerbox"  class="mapboxsubitem">
+            <span class="titlehelpers"><?php echo $strings[$lang]["maplayers"]; ?></span>
+            <p>
+            <input type="radio" name="maplayers" value="multi" 
+            <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
+            <?php echo $strings[$lang]["maplayersmulti"]; ?>
+            </p>
+            <p>        
+            <input type="radio" name="maplayers" value="merged"
+            <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
+            <?php echo $strings[$lang]["maplayersone"]; ?>
+            </p>
+        </div>
+        <div  id="maptoolslayerbox"  class="mapboxsubitem">
+            <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
+            <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
+            <input type="hidden" name="save" value="on" />
+            <span class="titlehelpers"><?php echo $strings[$lang]["maptype"]; ?> </span>
+            <p><input type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
+            <?php echo $strings[$lang]["mapcompas"]; ?>
+            </p>
+            <p>
+            <input type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
+            <?php echo $strings[$lang]["mapfloatingcompas"]; ?>
+            </p>
+            <p>
+            <input type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
+            <?php echo $strings[$lang]["mapbothcompas"]; ?>
+            </p>
+            <p>
+            <input type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
+            <?php echo $strings[$lang]["mapsimple"]; ?>
+            </p>
+        </div>
+    </div>
+    <div  id="mapopponents"  class="mapboxitem">
+        <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
+        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
+        <p><input type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
+        <p><input type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
+        <p><input type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist") echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
+        <p><input type="radio" name="list" value="all" <?php if ($mapOpponents == "all") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+    </div>
+    <div id="mapcenterbox" class="mapboxitem">
+        <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
+        <p><input type="radio" name="mapcenter" value="myboat" <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  />
+        <label for="myboat"><?php echo $strings[$lang]["mymapboat"]; ?></label>
+        </p>
+        <p>
+        <input type="radio" name="mapcenter" value="mywp" <?php if ($mapCenter == "mywp" )  echo " checked=\"checked\""; ?>  />
+        <label for="mywp"><?php echo "waypoint"; ?></label>
+        </p>
+        <p>
+        <input type="radio" name="mapcenter" value="roadtowp" <?php if ($mapCenter == "roadtowp" )  echo " checked=\"checked\""; ?>  />
+        <label for="roadtowp"><?php echo $strings[$lang]["mymaproute"]; ?></label>
+        </p>
+    </div>
 
-<br />
-<!-- VMG POUR VLM -->
-<form name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
-<?php echo "<b>".$strings[$lang]["vmgsheet"]."</b>"?>
-    <br />
-    <input type="submit" value="Go !" />
-    <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
-    <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-    <input type="hidden" name="boatlat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
-    <input type="hidden" name="boatlong" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
-    <input type="hidden" name="wdd" value="<?php echo ($usersObj->wheading+180)%360; ?>" />
-    <input type="hidden" name="wds" value="<?php echo $usersObj->wspeed; ?>" />
-    <input type="hidden" name="wp1lat" value="<?php echo $usersObj->users->targetlat; ?>" />
-    <input type="hidden" name="wp1long" value="<?php echo $usersObj->users->targetlong; ?>" />
-    <?php
+    <div id="mapinputbox" class="mapboxitem">
+    
+        <div class="mapboxsubitem" id="displaymapaction"><input type="submit" value="<?php echo $strings[$lang]["map"] ?>" /></div>
+        <div  id="mapparameters"  class="mapboxsubitem">
+            <p>
+                
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["maille"]; ?></span>
+                <input title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
+            </p>
+            <p>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . "/vac)"; ?></span>
+                <input title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
+            </p>
+            <p>
+                <span class="subtitlehelpers"><?php echo  $strings[$lang]["trackage"] ; ?></span>
+                <input title="0..168h" type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />
+            </p>
+            <p>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["mapsize"]  ;  ?></span>
+                <input title="0..20" type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
+            </p>
+        </div>
+         <!-- Maillage  et tailles -->
+        <div  id="mapsizebox"  class="mapboxsubitem">
+            <span class="titlehelpers"><?php echo $strings[$lang]["mapimagesize"]; ?></span>
+             <p>X=<input type="text" size="3" maxlength="4" name="x" value="<?php echo $mapX;?>" />
+             Y=<input type="text" size="3" maxlength="4" name="y" value="<?php echo $mapY;?>" /></p>
+        </div>
 
-    $nwp_coords=giveWaypointCoordinates ($usersObj->users->engaged , $usersObj->nwp, WPLL/WP_NUMSEGMENTS);
-    // print_r($nwp_coords);
-    //                                Lat              Long
-    $lat_xing = new doublep();
-    $long_xing = new doublep();
-    $xing_ratio = new doublep();
-
-    $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
-             $nwp_coords[0], $nwp_coords[1],
-             $nwp_coords[2], $nwp_coords[3],
-             $lat_xing, $long_xing, $xing_ratio);
-    ?>
-    <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
-    <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
-</form>
-
-</td>
-</tr>
-</table>
-<hr />
-    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?>
-    <form id="mercator" action="map.img.php" target="_new" method="get">
-    <table width="100%">
-      <tr valign="middle"><td class="boat"></td>
-      <td class="boat" align="center">
-        <?php echo "<b>" . $strings[$lang]["mymaps"] . "</b>" ?>
-        <br />
-             <input type="radio" name="mapcenter" value="myboat" 
-             <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  /> 
-         <?php echo $strings[$lang]["mymapboat"]; ?>
-           <br />
-             <input type="radio" name="mapcenter" value="mywp"
-                 <?php if ($mapCenter == "mywp" )  echo " checked=\"checked\""; ?>  />
-                 <?php 
-              echo "waypoint";
-              /*
-              echo $strings[$lang]["mymapmywp"] ; 
-                      echo $strings[$lang]["mymapnextwp"]; 
-              */
-         ?>
-           <br />
-             <input type="radio" name="mapcenter" value="roadtowp"
-                 <?php if ($mapCenter == "roadtowp" )  echo " checked=\"checked\""; ?>  />
-                 <?php echo $strings[$lang]["mymaproute"]; ?>
-       </td>
-
-     <!-- Wind Layer separate/merge -->
-       <td class="boat" align="center">
-           <?php echo "<b>". $strings[$lang]["maplayers"] . "</b>"; ?>
-           <br />
-           <input type="radio" name="maplayers" value="multi" 
-                  <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
-              <?php echo $strings[$lang]["maplayersmulti"]; ?>
-           <br />
-           <input type="radio" name="maplayers" value="merged"
-                      <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
-                      <?php echo $strings[$lang]["maplayersone"]; ?>
-          </td>
-     <!-- Maillage  et tailles -->
-       <td class="boat" align="center">
-           <?php echo "<b>". $strings[$lang]["mapimagesize"] . "</b>"; ?>
-           <br />
-           X=<input type="text" size="4" maxlength="4" name="x" value="<?php echo $mapX;?>" />
-           Y=<input type="text" size="4" maxlength="4" name="y" value="<?php echo $mapY;?>" />
-
-          </td>
-      <td class="boat">
-        <input type="submit" value="<?php echo $strings[$lang]["map"] ?>" />
-      </td>
-    </tr>
-      </table>
-
-      <table width="100%">
-    <tr>
-      <td class="boat" width="30%" align="center">
-        <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
-        <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
-        <input type="hidden" name="save" value="on" />
-      <?php echo "<b>".$strings[$lang]["maptype"]."</b>"; ?>
-      <br />
-<!--      <input type="radio" name="maptype" value="traceur" /><?php echo $strings[$lang]["mapline"] ?><br /> -->
-      <input type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
-      <?php echo $strings[$lang]["mapcompas"]; ?><br />
-      <input type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
-      <?php echo $strings[$lang]["mapfloatingcompas"]; ?><br />
-      <input type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
-      <?php echo $strings[$lang]["mapbothcompas"]; ?><br />
-      <input type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
-      <?php echo $strings[$lang]["mapsimple"]; ?> <br />
-    </td>
-    <td class="boat" width="30%" align="center">
-      <?php echo "<b>". $strings[$lang]["mapwho"] . "</b>"; ?>
-      <br />
-      <input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?><br />
-      <input type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?><br />
-      <input type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?><br />
-      <input type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?><br />
-          <input type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist") echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?><br />
-      <input type="radio" name="list" value="all" <?php if ($mapOpponents == "all") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?>
-    </td>
-    <td class="boat" width="30%" align="center">
-      <table>
-        <tr>
-          <td align="right" class="boat">
-           <?php echo "<b>". $strings[$lang]["maille"] . "(0..9)</b>"; ?>
-          </td>
-          <td align="left" class="boat">
-        <input type="text" size="1" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
-          </td>
-        </tr>
-        <tr>
-          <td align="right" class="boat">
-        <?php echo "<b>". $strings[$lang]["estime"] . "(0...)</b>"; ?>
-          </td>
-          <td align="left" class="boat">
-        <input type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" /><?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . ")"; ?>
-          </td>
-        </tr>
-        <tr>
-          <td align="right" class="boat">
-        <?php echo  "<b>" . $strings[$lang]["trackage"] . "(0..168)</b>" ; ?>
-          </td>
-          <td align="left" class="boat">
-        <input type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />h
-          </td>
-        </tr>
-        <tr>
-          <td align="right" class="boat">
-        <b><?php echo "". $strings[$lang]["mapsize"]  ;  ?> 
-        0...
-        </b>
-          </td>
-          <td align="left" class="boat">
-        <input type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
-        <b>
-           ...20
-               </b>
-         </td>
-       </tr>
-     </table>
-
+    </div>
      <input type="hidden" name="lat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?php
@@ -763,23 +740,15 @@ include_once("scripts/myboat.js");
       <input type="hidden" name="tracks" value="on" />
       <input type="hidden" name="proj" value="mercator" />
       <input type="hidden" name="text" value="right" />
-    </td>
-    </tr>
-      </table>
-    </form>
-  </div>
-
-
+</form>
+</div>
 <div id="time">
-    <?php
-                include ("abandon_race.php");
+        <?php
         lastUpdate($strings, $lang);
-    //    nextUpdate($strings, $lang);
-    ?>
+        ?>
 </div>
 
-
-    <?php
+<?php
 }
 
 include_once("includes/footer.inc");
