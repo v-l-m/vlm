@@ -18,6 +18,9 @@ if ( isLoggedIn() ) {
 echo "<h1 class=\"info\" align=\"center\">" . $strings[$lang]["one-one-one"] . "</h1>";
 echo "<hr />";
 
+include("abandon_race.php");
+
+
 include "includes/raceslist.inc";
 
 
