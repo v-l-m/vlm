@@ -1,9 +1,9 @@
 body { background-color: #FFFFFF; }
 
+/* div {margin:0px; border: 1px solid #aaaaaa;}*/
+
+/*
 #login { background-color: #AAAAAA; }
-
-div {margin:0px;}
-
 #loginbox { background-color: #FF0000; }
 #langbox { background-color: #AA0000;}
 #msgbox { background-color: #00FF00; }
@@ -26,6 +26,7 @@ div {margin:0px;}
 
 #controlbox { background-color: #D0AAD0; }
 #autopilotcontrolbox { background-color: #DADADA; }
+*/
 
 
 /* RACEBOX */
@@ -55,7 +56,8 @@ height:34px;
 #instrumentbox
 {
   clear:both; display:block; width:100%;
-  border: 1px solid #2c4897;
+  border-top: groove 3px #DDDDF0;
+  margin-top: 3px;
   min-width: 821px;
   margin-top: 1px;
   margin-right: 1px;
@@ -67,7 +69,7 @@ height:34px;
 display:block;
 float:right;
 vertical-align: top;
-width: 400px;
+width: 335px;
 /* 821 - 3*140 - 1 */
 }
 
@@ -77,14 +79,14 @@ float:left;
 }
 
 #instrumentbox img {
-width: 140px;
-height: 140px;
+width: 160px;
+height: 160px;
 }
 
 
 #messagelist {
 display:block;
-height: 140px;
+height: 160px;
 overflow:auto;
 }
 
@@ -96,7 +98,6 @@ margin-left: 1.5em;
 #blocnotebox {
 display:list-item;
 margin-left: 1.5em;
-background-color: #ABCDEF;
 }
 
 /* CONTROL BOX */
@@ -104,16 +105,19 @@ background-color: #ABCDEF;
 #controlbox
 {
   clear:both; display:block; width:100%;
+  border-top: groove 3px #DDDDF0;
+  margin-top: 3px;
   min-width: 821px;
-  min-height: 100px;
 }
 
 div.controlitem {
 display:inline;
 float:left;
 margin: 0em;
-border: 2px solid black ;
+margin-left: 3px;
+margin-right: 3px;
 text-align: center;
+border-right: dashed 1px #DDDDF0;
 }
 
 .controlform {
@@ -124,6 +128,7 @@ text-align: center;
 #morecontrolbox {
   display:block;
   float:right;
+  border-right: 0px;
 }
 
 #autopilotcontrolbox div {display:block;}
@@ -141,11 +146,12 @@ float:left;
 display:block;
 }
 
-#wphcontrolbox span {display:block}
+#wpaction {display:inline; text-align:right; }
+#wphcontrolbox {display:inline;}
 
 
-#wpcoordscontrolbox { display:block; float:left; text-align:right;}
-#wpmorecontrolbox {display:block; float:left; text-align:left; margin-left: 1em;}
+#wpcoordscontrolbox { display:block; text-align:right;}
+#wpmorecontrolbox {display:block; text-align:left;}
 
 #morecontrolbox div {
   display:block;
@@ -155,18 +161,21 @@ display:block;
   text-align: center
 }
 
+
 .texthelpers { font-weight: bold; display:inline; white-space: wrap}
-.texthelpers * {display:inline;}:
-.titlehelpers { font-weight: bold; display:block;}
+.texthelpers * {display:inline;}
+.titlehelpers{ font-weight: bold; display:inline; }
+.subtitlehelpers { font-weight: bold; display:inline;}
 .texthelperscomment { font-style: italic; white-space: wrap}
 /* visibility: hidden; display:none; }*/ 
 .inputhelpers {} 
 input.dynamichelper {
-  display:block;
+  display:inline;
   border:0px;
   background-color: #90A0A0;
   color:black;
   text-align:center;
+  /*visibility:none;*/
 }
 
 
@@ -176,6 +185,7 @@ input.dynamichelper {
 #mapbox
 {
   clear:both; display:block; width:100%;
+  border-top: groove 3px #DDDDF0;
 }
 
 
@@ -183,18 +193,34 @@ div.mapboxitem {
 display:inline;
 float:left;
 margin: 0em;
-border: 2px solid red ;
+margin-top:3px;
+/*border: 2px solid red ;*/
 text-align: left;
 
 }
+div.mapboxsubitem {
+display:block;
+}
+#mapinputbox {
+float:right;
+}
 
-#mapdisplaybox * {
-/*display:block; */
+#mapinputbox * {
+text-align:right;
 }
 #displaymapaction {
-text-align:center;
+text-align:right;
 }
 
 .mapboxitem p {
 margin: 0em;
 }
+
+.actionbuttonwarn {
+background-color:#aaffaa;
+}
+
+.inputwarn {
+background-color:#aaffaa;
+}
+

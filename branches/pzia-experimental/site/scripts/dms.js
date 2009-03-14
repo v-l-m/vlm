@@ -22,7 +22,8 @@ function convertdmslat()
   var latsecmil=Math.round((latsectot)*10000)/10000;
   
   //dms concaténés pour la latitude
-  document.coordonnees.latdms.value=(latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
+  document.coordonnees.latdms.value = (latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
+  document.coordonnees.targetlat.title = (latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
     }
 }
 

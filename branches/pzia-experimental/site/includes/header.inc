@@ -202,13 +202,12 @@
    <!-- TODO put expert in cookies-->
 
    <div id="baneer">
-     <b>
        <?php echo $strings[$lang]["sponsor"]; ?>
-     </b>
      <a href="http://www.actilis.net/" target="_actilis"><img src="/images/site/actilis.png" alt="Actilis" /></a>
    </div>
    
-   <div id="contenaire"> <!-- ligne rajouter, Debut div contenaire-->
+   <div id="contenaire"> 
+
    <div id="login">
 <?php
     if ($msg != "" and !is_null($msg) ) {
@@ -232,12 +231,12 @@
                     <input type="submit" value="<?php echo $strings[$lang]["login"]; ?>" />
                 </p>
             </form>
-        </div>
+        </div> <!-- fin div loginbox-->
         <div id="pleasecreatebox" class="leftbox">
 <?php
             printf ($strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
 ?>
-        </div>
+        </div> <!-- fin div pleasecreatebox-->
 <?php
     } else { //if loggedin
 ?>
@@ -247,7 +246,7 @@
             printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
             $available_races=availableRaces(getLoginId());
 ?>
-        </div>
+        </div> <!-- fin div loggedbox-->
         <div id="logoutbox" class="leftbox">
             <form method="post" action="index.php">
                 <input type="hidden" name="type" value="logout" />
@@ -265,7 +264,7 @@
 ?>
 
             </form>
-        </div>
+        </div> <!-- fin div logoutbox-->
 <?php
     }
 ?>
@@ -273,7 +272,7 @@
             <a href="myboat.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["control"]; ?></a>
             <a href="mappref.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["mymap"]; ?></a>
             <a href="modify.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["choose"]; ?></a>
-        </div>
+        </div> <!-- fin div pagesbox -->
         <div id="langbox" class="leftbox">
 <?php
             $langs= array_keys($strings);
@@ -281,28 +280,28 @@
                 echo "<a href=\"".$SCRIPT_NAME."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".$strings[$lg]['lang_version']."\" alt=\"".$strings[$lg]['lang_version']."\" /></a>\n";
             }            
 ?>
-        </div>
+        </div> <!-- fin div langbox-->
         <div id="menubox" class="leftbox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
             <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
-            <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a><br />
+            <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]?></a> 
             <a href="faq.php?lang=<?echo $lang?>"><?echo $strings[$lang]["faq"]?></a> 
-            <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a><br />
-            <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><b><?echo $strings[$lang]["forum"]?></b></a>
-            <?php 
+            <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a>
+        </div> <!-- fin div menubox-->
+        <div id="menucommunicationbox" class="leftbox">
+            <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo $strings[$lang]["forum"]?></a>
+                <?php 
                 echo "<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
-            ?><b>
-            <?php 
                 echo $strings[$lang]["tchat"];
-                echo "</b></a> ";
-                echo "<a href=\"javascript:popUp('http://www.webchat.epiknet.org/tchat.php?canal=vlm&amp;pseudo=" . getLoginName() . "-" . getLoginId() . "','newchat')\">";
-            ?><b>
-            <?php 
-                echo "new".$strings[$lang]["tchat"];
-                echo "</b></a> ";
-            ?>
-        </div>
+                ?>
+            </a>
+                <?php
+                    echo "<a href=\"javascript:popUp('http://www.webchat.epiknet.org/tchat.php?canal=vlm&amp;pseudo=" . getLoginName() . "-" . getLoginId() . "','newchat')\">";
+                    echo "new".$strings[$lang]["tchat"];
+                ?>
+                </a>
+        </div> <!-- fin div menucommunicationbox -->
         <div id="toolbarbox" class="leftbox">
             <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
                 <img src="images/site/documentation.png"  alt="<?php echo $strings[$lang]["doc"]; ?>" title="<?php echo $strings[$lang]["doc"]; ?>" />
@@ -315,9 +314,9 @@
             </a>            
         </div>
         <div id="weatherbox" class="leftbox">
-            <h3><?php echo $strings[$lang]["weather"]; ?></h3>
-            <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><b><?echo $strings[$lang]["meteodata"]?></b></a><br />
-            <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><b><?echo $strings[$lang]["meteotools"]?></b></a><br />
+<!--            <h3><?php echo $strings[$lang]["weather"]; ?></h3> -->
+                <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><?echo $strings[$lang]["meteodata"]?></a>
+                <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><?echo $strings[$lang]["meteotools"]?></a>
         </div>
         <div id="serverbox" class="leftbox">
             <?php
@@ -329,10 +328,6 @@
    </div>
 <!--
 end of firstcolumn
--->
-
-<!--
-<div id="menu"> </div> 
 -->
 
    <div id="main">

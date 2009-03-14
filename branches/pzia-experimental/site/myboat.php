@@ -434,6 +434,13 @@ include_once("scripts/myboat.js");
 <div id="controlbox">
     <!-- Pilote automatique -->
     <div id="autopilotcontrolbox" class="controlitem">
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_HEADING ) {
+            $autopilotclass = "inputwarn";
+        } else {
+            $autopilotclass = "inputnormal";
+        }
+        ?>
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>\n"; ?>
         <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
@@ -441,12 +448,12 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="pilotmode" value="autopilot"/>
             <div id="autopilotrange">
                 <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
-                <input type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
+                <input class="<?php echo $autopilotclass; ?>" type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
                 <input type="button" value="&gt;" onclick="increment(); updateSpeed();"/>
             </div>
             <span id="estimatespeed" class="inputhelpers">
                 <?php echo $strings[$lang]["estimated"] ?>
-                <input type="text" size="5" maxlength="5" name="speed" readonly="readonly" value="<?php echo $usersObj->boatspeed?>"/>
+                <input type="text" size="4" maxlength="4" name="speed" readonly="readonly" value="<?php echo round($usersObj->boatspeed, 2); ?>"/>
             </span>
             <div id="autopilotaction">          
                 <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["autopilot"]?>"/>
@@ -456,6 +463,13 @@ include_once("scripts/myboat.js");
 
     <!-- Régulateur d'allure -->
     <div id="windanglecontrolbox" class="controlitem">
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
+            $inputclass = "inputwarn";
+        } else {
+            $inputclass = "inputnormal";
+        }
+        ?>
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</span>"?>
         <form class="controlform" name="angle" action="update_angle.php" method="post"> 
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
@@ -463,7 +477,7 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="pilotmode" value="windangle"/>
             <div id="windanglerange">
                 <input type="button" value="&lt;" onclick="decrementAngle(); "/>
-                <input type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>" />
+                <input class="<?php echo $inputclass; ?>" type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>" />
                 <input type="button" value="&gt;" onclick="incrementAngle();"/>
             </div>
             <input class="inputhelpers" type="button" value="<?php echo $strings[$lang]["tack"]; ?>" onclick="tack();" />
@@ -477,28 +491,39 @@ include_once("scripts/myboat.js");
     <!--WP pilot based -->
     <div id="wpbasedcontrolbox" class="controlitem">
         <!-- Pilote Orthodromique -->
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
+            $buttonclass = "actionbuttonwarn";
+        } else {
+            $buttonclass = "actionbutton";
+        }
+        ?>
         <div id="orthocontrolbox"  class="controlitem">
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</span>"?>
             <form class="controlform" name="ortho" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="lang" value="<?php echo $lang?>"/>        
                 <input type="hidden" name="pilotmode" value="orthodromic"/>
-                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
+                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
             </form>
         </div>
         
         <!-- BEST VMG -->
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
+            $buttonclass = "actionbuttonwarn";
+        } else {
+            $buttonclass = "actionbutton";
+        }
+        ?>
         <div id="bvmgcontrolbox" class="controlitem">
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</span>"?>
             <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
                 <input type="hidden" name="pilotmode" value="bestvmg"/>
-                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
+                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
             </form>
-            <p class="texthelperscomment">
-                <?php echo $strings[$lang]["orthodromic_comment"]; ?>
-            </p>
         </div>
     </div>
 
@@ -510,19 +535,19 @@ include_once("scripts/myboat.js");
         <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
 
             <div id="wplatcontrolbox" class="coordcontrol">
-                <span class="texthelpers">Lat</span>
+                <span class="subtitlehelpers">Lat</span>
                 <input type="text" size="8" maxlength="8" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
-                <input disabled="disabled" type="text" size="8" class="dynamichelper" name="latdms" value="none"/>
+                <input disabled="disabled" type="text" size="8" class="dynamichelper" name="latdms" />
             </div>
             <div id="wplongcontrolbox" class="coordcontrol">
-                <span class="texthelpers">Long</span>
+                <span class="subtitlehelpers">Long</span>
                 <input type="text" size="8" maxlength="8" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
                 <input disabled="disabled" type="text" size="8" class="dynamichelper" name="longdms" />
             </div>
         </div>
         <div id="wpmorecontrolbox">
             <div id="wphcontrolbox">
-                <span class="texthelpers">@WPH</span>
+                <span class="subtitlehelpers">@WPH</span>
                 <?php
                 echo "<input type=\"text\" size=\"4\" maxlength=\"4\"  name=\"targetandhdg\" " ;
                 if ( $usersObj->users->targetandhdg >= 0 and $usersObj->users->targetandhdg <= 360 ) {
@@ -550,12 +575,14 @@ include_once("scripts/myboat.js");
             $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
             if ( $pilototoTasks > 0 ) {
                 echo "&nbsp;(" . $pilototoTasks . ")</span>";
+                $pilototocssclass = "actionbuttonwarn";
             } else {
                 echo "</span>";
+                $pilototocssclass = "actionbutton";
             }
         ?>
         <div id="pilototoaction">
-            <input class="actionbutton" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
         </div>
     </div>
 
@@ -600,8 +627,53 @@ include_once("scripts/myboat.js");
 <!-- Mapbox -->
 <form id="mercator" action="map.img.php" target="_new" method="get">
 <div id="mapbox">
-    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?>
-
+<!--    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?> -->
+    <div id="maplayerbox" class="mapboxitem">
+    <!-- Layers-->
+        <div id="mapgriblayerbox"  class="mapboxsubitem">
+            <span class="titlehelpers"><?php echo $strings[$lang]["maplayers"]; ?></span>
+            <p>
+            <input type="radio" name="maplayers" value="multi" 
+            <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
+            <?php echo $strings[$lang]["maplayersmulti"]; ?>
+            </p>
+            <p>        
+            <input type="radio" name="maplayers" value="merged"
+            <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
+            <?php echo $strings[$lang]["maplayersone"]; ?>
+            </p>
+        </div>
+        <div  id="maptoolslayerbox"  class="mapboxsubitem">
+            <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
+            <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
+            <input type="hidden" name="save" value="on" />
+            <span class="titlehelpers"><?php echo $strings[$lang]["maptype"]; ?> </span>
+            <p><input type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
+            <?php echo $strings[$lang]["mapcompas"]; ?>
+            </p>
+            <p>
+            <input type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
+            <?php echo $strings[$lang]["mapfloatingcompas"]; ?>
+            </p>
+            <p>
+            <input type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
+            <?php echo $strings[$lang]["mapbothcompas"]; ?>
+            </p>
+            <p>
+            <input type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
+            <?php echo $strings[$lang]["mapsimple"]; ?>
+            </p>
+        </div>
+    </div>
+    <div  id="mapopponents"  class="mapboxitem">
+        <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
+        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
+        <p><input type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
+        <p><input type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
+        <p><input type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist") echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
+        <p><input type="radio" name="list" value="all" <?php if ($mapOpponents == "all") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+    </div>
     <div id="mapcenterbox" class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
         <p><input type="radio" name="mapcenter" value="myboat" <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  />
@@ -617,80 +689,36 @@ include_once("scripts/myboat.js");
         </p>
     </div>
 
-    <!-- Wind Layer separate/merge -->
-    <div id="maplayerbox"  class="mapboxitem">
-        
-        <span class="titlehelpers"><?php echo $strings[$lang]["maplayers"]; ?></span>
-        <p>
-        <input type="radio" name="maplayers" value="multi" 
-        <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
-        <?php echo $strings[$lang]["maplayersmulti"]; ?>
-        </p>
-        <p>        
-        <input type="radio" name="maplayers" value="merged"
-        <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
-        <?php echo $strings[$lang]["maplayersone"]; ?>
-        </p>
-    </div>
-     <!-- Maillage  et tailles -->
-    <div  id="mapdisplaybox"  class="mapboxitem">
-        <span class="titlehelpers"><?php echo $strings[$lang]["mapimagesize"]; ?></span>
-         <p>X=<input type="text" size="4" maxlength="4" name="x" value="<?php echo $mapX;?>" />
-         Y=<input type="text" size="4" maxlength="4" name="y" value="<?php echo $mapY;?>" /></p>
-         <p id="displaymapaction"><input type="submit" value="<?php echo $strings[$lang]["map"] ?>" /></p>
-    </div>
-    <div  id="maptools"  class="mapboxitem">
-        <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
-        <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
-        <input type="hidden" name="save" value="on" />
-        <?php echo "<b>".$strings[$lang]["maptype"]."</b>"; ?>
-        <!--      <input type="radio" name="maptype" value="traceur" /><?php echo $strings[$lang]["mapline"] ?><br /> -->
-        <p><input type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
-        <?php echo $strings[$lang]["mapcompas"]; ?>
-        </p>
-        <p>
-        <input type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
-        <?php echo $strings[$lang]["mapfloatingcompas"]; ?><br />
-        </p>
-        <p>
-        <input type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
-        <?php echo $strings[$lang]["mapbothcompas"]; ?><br />
-        </p>
-        <p>
-        <input type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
-        <?php echo $strings[$lang]["mapsimple"]; ?> <br />
-        </p>
-    </div>
-    <div  id="mapopponents"  class="mapboxitem">
-        <?php echo "<b>". $strings[$lang]["mapwho"] . "</b>"; ?>
-        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
-        <p><input type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
-        <p><input type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
-        <p><input type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
-        <p><input type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist") echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
-        <p><input type="radio" name="list" value="all" <?php if ($mapOpponents == "all") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
-    </div>
-    <div  id="mapparameters"  class="mapboxitem">
-        <p>
-            <?php echo "<b>". $strings[$lang]["maille"] . "(0..9)</b>"; ?>
-            <input type="text" size="1" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
-        </p>
-        <p>
-            <?php echo "<b>". $strings[$lang]["estime"] . "(0...)</b>"; ?>
-            <input type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" /><?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . ")"; ?>
-        </p>
-        <p>
-            <?php echo  "<b>" . $strings[$lang]["trackage"] . "(0..168)</b>" ; ?>
-            <input type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />h
-        </p>
-        <p>
-            <b><?php echo "". $strings[$lang]["mapsize"]  ;  ?> 
-            0-20
-            </b>
-            <input type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
-        </p>
-    </div>
+    <div id="mapinputbox" class="mapboxitem">
+    
+        <div class="mapboxsubitem" id="displaymapaction"><input type="submit" value="<?php echo $strings[$lang]["map"] ?>" /></div>
+        <div  id="mapparameters"  class="mapboxsubitem">
+            <p>
+                
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["maille"]; ?></span>
+                <input title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
+            </p>
+            <p>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . "/vac)"; ?></span>
+                <input title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
+            </p>
+            <p>
+                <span class="subtitlehelpers"><?php echo  $strings[$lang]["trackage"] ; ?></span>
+                <input title="0..168h" type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />
+            </p>
+            <p>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["mapsize"]  ;  ?></span>
+                <input title="0..20" type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
+            </p>
+        </div>
+         <!-- Maillage  et tailles -->
+        <div  id="mapsizebox"  class="mapboxsubitem">
+            <span class="titlehelpers"><?php echo $strings[$lang]["mapimagesize"]; ?></span>
+             <p>X=<input type="text" size="3" maxlength="4" name="x" value="<?php echo $mapX;?>" />
+             Y=<input type="text" size="3" maxlength="4" name="y" value="<?php echo $mapY;?>" /></p>
+        </div>
 
+    </div>
      <input type="hidden" name="lat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?php
