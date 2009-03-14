@@ -214,9 +214,9 @@ include_once("scripts/myboat.js");
   
 <?php
       if ( $usersObj->races->coastpenalty  >= 3600 ) {
-          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"].($usersObj->races->coastpenalty/3600). " h</div>";
+          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($usersObj->races->coastpenalty/3600). " h</span></div>";
       } else if ( $usersObj->races->coastpenalty  >= 60 ) {
-          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"].($usersObj->races->coastpenalty/60). " min</div>";
+          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($usersObj->races->coastpenalty/60). " min</span></div>";
       }
 ?>
     </div> <!--fin de raceicbox -->
@@ -535,14 +535,14 @@ include_once("scripts/myboat.js");
         <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
 
             <div id="wplatcontrolbox" class="coordcontrol">
-                <span class="subtitlehelpers">Lat</span>
-                <input type="text" size="8" maxlength="8" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
-                <input disabled="disabled" type="text" size="8" class="dynamichelper" name="latdms" />
+                <span class="subtitlehelpers">Lat&nbsp;&nbsp;&nbsp;</span>
+                <input type="text" size="6" maxlength="6" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
+                <input type="button" class="dynamichelper" name="latdms" width="1"/>
             </div>
             <div id="wplongcontrolbox" class="coordcontrol">
                 <span class="subtitlehelpers">Long</span>
-                <input type="text" size="8" maxlength="8" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
-                <input disabled="disabled" type="text" size="8" class="dynamichelper" name="longdms" />
+                <input type="text" size="6" maxlength="6" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
+                <input type="button" class="dynamichelper" name="longdms" width="1"/>
             </div>
         </div>
         <div id="wpmorecontrolbox">
@@ -742,14 +742,11 @@ include_once("scripts/myboat.js");
       <input type="hidden" name="text" value="right" />
 </form>
 </div>
-
 <div id="time">
-    <?php
-    include ("abandon_race.php");
-    lastUpdate($strings, $lang);
-    ?>
+        <?php
+        lastUpdate($strings, $lang);
+        ?>
 </div>
-
 
 <?php
 }

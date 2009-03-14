@@ -1126,7 +1126,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "bestspeedengaged" => "Melhor velocidade",
         "choosepilot" => "Escolha o tipo de governo:",
         "autopilot" => "Manter este rumo",
-        "constant" => "Manter esta marcação ao vento",
+        "constant" => "Manter esta marcação",
         "tack" => "Virar de bordo",
         "orthodromic" => "Derrota ortodrómica",
         "orthodromic_comment" => "Atingir Meu WP si non 0/0\no da próxima marca",

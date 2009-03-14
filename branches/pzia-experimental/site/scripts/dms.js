@@ -1,30 +1,29 @@
 //****convertir degré décimal en degré/minute/seconde****
 function convertdmslat()
 {
-    var latdegre=eval(document.coordonnees.targetlat.value);
-    if ( latdegre != undefined ) {
-  var latsign = 'N';
-  if ( latdegre < 0 ) {
-            latsign='S';
-  }
+  var latdegre=eval(document.coordonnees.targetlat.value);
+  if ( latdegre != undefined ) {
+    var latsign = 'N';
+    if ( latdegre < 0 ) {
+      latsign='S';
+    }
     latdegre=Math.abs(latdegre);
   
-  var latdegent=parseInt(latdegre);
-  var latdegdec=Math.round(((latdegre)-(latdegent))*10000000)/10000000;
-  
-  var latmintot=(latdegdec)*60;
-  var latminent=eval(parseInt(latmintot));
-  var latmindec=Math.round(((latmintot)-(latminent))*10000000)/10000000;
-  
-  var latsectot=(latmindec)*60;
-  var latsecent=parseInt(latsectot);
-  var latsecdec=Math.round(((latsectot)-(latsecent))*10000000)/10000000;
-  var latsecmil=Math.round((latsectot)*10000)/10000;
-  
-  //dms concaténés pour la latitude
-  document.coordonnees.latdms.value = (latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
-  document.coordonnees.targetlat.title = (latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
-    }
+    var latdegent=parseInt(latdegre);
+    var latdegdec=Math.round(((latdegre)-(latdegent))*10000000)/10000000;
+    
+    var latmintot=(latdegdec)*60;
+    var latminent=eval(parseInt(latmintot));
+    var latmindec=Math.round(((latmintot)-(latminent))*10000000)/10000000;
+    
+    var latsectot=(latmindec)*60;
+    var latsecent=parseInt(latsectot);
+    var latsecdec=Math.round(((latsectot)-(latsecent))*10000000)/10000000;
+    var latsecmil=Math.round((latsectot)*10000)/10000;
+    
+    //dms concaténés pour la latitude
+    document.coordonnees.latdms.value = (latdegent)+"° "+(latminent)+"' "+(latsecmil)+"\" "+(latsign);
+  }
 }
 
 function convertdmslong()
