@@ -319,7 +319,7 @@
         <div id="weatherbox" class="leftbox">
 <!--            <h3><?php echo $strings[$lang]["weather"]; ?></h3> -->
                 <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><?echo $strings[$lang]["meteodata"]?></a>
-                <a href="<?php echo GRIB_TOOLS_URL; ?>/" target="_meteotools"><?echo $strings[$lang]["meteotools"]?></a>
+                <a href="<?php echo GRIB_TOOLS_URL; ?>" target="_meteotools"><?echo $strings[$lang]["meteotools"]?></a>
         </div>
         <div id="pubbox1" class="leftpubbox">
         </div>
