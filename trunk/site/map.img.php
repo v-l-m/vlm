@@ -1,95 +1,96 @@
 <?php
-session_start();
-include_once("config.php");
-include_once("functions.php");
-include_once("mapfunctions.php");
+    session_start();
+    include_once("config.php");
+    include_once("functions.php");
+    include_once("mapfunctions.php");
 
-// Test si connecté ou pas.
-$idusers = getLoginId() ;
-if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
-     // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
-     $x=500;
-     $y=250;
+    // Test si connecté ou pas.
+    $idusers = getLoginId() ;
+    if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
+        // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
+        $x=500;
+        $y=250;
+    
+        $im = @imagecreate($x, $y)
+              or die("Cannot Initialize new GD image stream");
+        $blanc = imagecolorallocate($im, 255, 255, 255);
+        $noir = imagecolorallocate($im, 0, 0, 0);
+    
+        // Affichage d'un "-X-" au milieu de l'image
+    
+        imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] , $noir);
+        imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$_GET['boat'].")" , $noir);
+        imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
+        imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
+    
+        // Affichage de l'image
+        header("Content-type: image/png");
+        imagepng($im);
+        imagedestroy($im);
+        exit;
+    }
 
-     $im = @imagecreate($x, $y)
-         or die("Cannot Initialize new GD image stream");
-   $blanc = imagecolorallocate($im, 255, 255, 255);
-   $noir = imagecolorallocate($im, 0, 0, 0);
+    $maptype= htmlentities($_GET['maptype']);
 
-   // Affichage d'un "-X-" au milieu de l'image
-
-   imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] , $noir);
-   imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$_GET['boat'].")" , $noir);
-   imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
-   imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
-
-   // Affichage de l'image
-         header("Content-type: image/png");
-   imagepng($im);
-   imagedestroy($im);
-     exit;
-}
-
-  $maptype= htmlentities($_GET['maptype']);
-
-        $list= htmlentities($_GET['list']) ;
+    $list= htmlentities($_GET['list']) ;
         
-  $maparea= htmlentities($_GET['maparea']);
-  if ( $maparea == "" ) {
-    $maparea=round(MAPAREA_MAX/2);
-  } else {
-    if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
-  }
-  if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX;
+    $maparea= htmlentities($_GET['maparea']);
+    if ( $maparea == "" ) {
+        $maparea=round(MAPAREA_MAX/2);
+    } else {
+        if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
+    }
+    if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX; {
         setUserPref(htmlentities($_GET['boat']), "maparea" , $maparea);
+    }
+    $maille= htmlentities($_GET['maille']);
+    if ( $maille == "" ) {
+        $maille=round(MAILLE_MAX/2);
+    } else {
+        if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
+    }
+    if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
+    setUserPref(htmlentities($_GET['boat']), "mapMaille" , $maille);
 
-        $maille= htmlentities($_GET['maille']);
-  if ( $maille == "" ) {
-    $maille=round(MAILLE_MAX/2);
-  } else {
-    if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
-  }
-  if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
-        setUserPref(htmlentities($_GET['boat']), "mapMaille" , $maille);
+    $idraces= htmlentities($_GET['idraces']) ;
+    //if ( $idraces == 20081109 ) $list = "myboat";
 
-        $idraces= htmlentities($_GET['idraces']) ;
-        //if ( $idraces == 20081109 ) $list = "myboat";
+    $boat= htmlentities($_GET['boat']) ;
+    $save= htmlentities($_GET['save']) ;
+    $tracks= htmlentities($_GET['tracks']) ;
+    if ( $tracks == "" ) $tracks = "on";
 
-        $boat= htmlentities($_GET['boat']) ;
-        $save= htmlentities($_GET['save']) ;
-        $tracks= htmlentities($_GET['tracks']) ;
-  if ( $tracks == "" ) $tracks = "on";
+    $x= htmlentities($_GET['x']) ;
+    if ( $x == "" ) $x = 800;
 
-        $x= htmlentities($_GET['x']) ;
-  if ( $x == "" ) $x = 800;
-        $y= htmlentities($_GET['y']) ;
-  if ( $y == "" ) $y = 600;
+    $y= htmlentities($_GET['y']) ;
+    if ( $y == "" ) $y = 600;
 
-  // Limitation de la taille de la carte pour pas péter le serveur
-  if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
-        setUserPref(htmlentities($_GET['boat']), "mapX" , $x);
-
-  if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
-        setUserPref(htmlentities($_GET['boat']), "mapY" , $y);
-
-        $age= htmlentities($_GET['age']) ;
-  if ( $age == "" ) $age = 2;
-        setUserPref(htmlentities($_GET['boat']), "mapAge" , $age);
-
-        $estime= htmlentities($_GET['estime']) ;
-  if ( $estime == "" ) $estime = 30;
-        setUserPref(htmlentities($_GET['boat']), "mapEstime" , $estime);
-
-        $proj= htmlentities($_GET['proj']) ;
-//  $proj="carre"; 
-
-        $text= htmlentities($_GET['text']) ;
-  if ( $text == "" ) $text = "right";
-
-        $windtext= htmlentities($_GET['windtext']) ;
-  if ( $windtext == "" ) $windtext = "on";
-
-  // Guess real map coordinates
+    // Limitation de la taille de la carte pour pas péter le serveur
+    if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
+    setUserPref(htmlentities($_GET['boat']), "mapX" , $x);
+  
+    if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
+    setUserPref(htmlentities($_GET['boat']), "mapY" , $y);
+  
+    $age= htmlentities($_GET['age']) ;
+    if ( $age == "" ) $age = 2;
+    setUserPref(htmlentities($_GET['boat']), "mapAge" , $age);
+  
+    $estime= htmlentities($_GET['estime']) ;
+    if ( $estime == "" ) $estime = 30;
+    setUserPref(htmlentities($_GET['boat']), "mapEstime" , $estime);
+  
+    $proj= htmlentities($_GET['proj']) ;
+    //  $proj="carre"; 
+  
+    $text= htmlentities($_GET['text']) ;
+    if ( $text == "" ) $text = "right";
+  
+    $windtext= htmlentities($_GET['windtext']) ;
+    if ( $windtext == "" ) $windtext = "on";
+  
+    // Guess real map coordinates
 
 ?>
 <html>

@@ -8,11 +8,12 @@ v0.9 aka Like the Wind: what's new for ...
 * you may choose a different theme for the web interface (paparazzia)
 * page for race instructions & waypoint list (paparazzia)
 * better messagebox handling (race instructions warnings, etc...) (paparazzia)
-* date line bugfixes : displaying of wp and map centering (paparazzia)
+* date line bugfixes : displaying of wp, map centering and realboats (paparazzia, fm)
 * better default theme and visual feedback (paparazzia)
 * new logo (stephpen)
 * weather links are now handled using a page of the wiki for better flexibility (paparazzia)
 * bugfix for the small islands not allways visible (fm)
+* various fixes (fm, spf)
 
 ... tools developpers :
 * gettrack now return only running positions (spf, steph)
@@ -28,7 +29,7 @@ v0.9 aka Like the Wind: what's new for ...
 
 => http://dev.virtual-loup-de-mer.org/vlm/query?group=status&milestone=Like+the+wind
 
-v0.8: Community Powered what's new for ...
+v0.8 aka Community Powered what's new for ...
 ... players ?
  * more realistic distance to gate (spf)
  * ortho/bvmg now heads toward the closest point of the gate for 0,0 (spf)
