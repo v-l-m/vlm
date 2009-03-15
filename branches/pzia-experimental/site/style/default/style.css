@@ -69,7 +69,7 @@ body
 #baneer
 {
   background-image:  url('/images/site/banniere_haut.jpg');
-  background-repeat: no-repeat
+  background-repeat: no-repeat;
   text-align: right;
 }
 
