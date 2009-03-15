@@ -48,7 +48,10 @@ body
   width: 825px;
   float: right;
   font-size: 70%;
-  margin: 2px;
+  margin-bottom: 5px;
+  margin-right: 1px;
+  margin-left: 0px;
+  margin-top:0px;
 }
 
 #menu
