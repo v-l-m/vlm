@@ -3,7 +3,7 @@
     include_once("config.php");
 ?>
 
-    <h1<?php echo $strings[$lang]["faqtitle"]; ?></h1>
+    <h1><?php echo $strings[$lang]["faqtitle"]; ?></h1>
 
 <?php
     for ($i =1; $i<20; $i++) {
