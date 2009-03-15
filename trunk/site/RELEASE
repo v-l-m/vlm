@@ -1,25 +1,34 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
-v0.9: what's new for ...
+v0.9 aka Like the Wind: what's new for ...
 ... players ?
 * spanish translation now available (tigarou)
 * shorter vacation update (spf)
 * you may choose a different theme for the web interface (paparazzia)
 * page for race instructions & waypoint list (paparazzia)
 * better messagebox handling (race instructions warnings, etc...) (paparazzia)
-* fix displaying of wp across the date line (paparazzia)
-* better default theme (paparazzia) 
+* date line bugfixes : displaying of wp and map centering (paparazzia)
+* better default theme and visual feedback (paparazzia)
+* new logo (stephpen)
+* weather links are now handled using a page of the wiki for better flexibility (paparazzia)
+* bugfix for the small islands not allways visible (fm)
 
 ... tools developpers :
-* gettrack now return only running positions (spf/steph)
+* gettrack now return only running positions (spf, steph)
 
 ... vlm developers ?
 * fully optimized engine (better mysql handling & coast detection in C) (spf)
+* use of full acuracy (0.5°) available in noaa datas (spf) 
+* maps module to handle gshhs datas (spf, paparazzia)
+* bugfix : it was possible to validate a gate behind the coast... (spf) 
 * better themability (paparazzia)
 * theme is forcable on a per race basis (paparazzia)
+* use of the swig 'outdir' option (spf)
 
-v0.8: what's new for ...
+=> http://dev.virtual-loup-de-mer.org/vlm/query?group=status&milestone=Like+the+wind
+
+v0.8: Community Powered what's new for ...
 ... players ?
  * more realistic distance to gate (spf)
  * ortho/bvmg now heads toward the closest point of the gate for 0,0 (spf)
