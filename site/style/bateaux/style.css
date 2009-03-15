@@ -13,7 +13,7 @@ body
 
 }
 
-.texthelpers, #costpenaltybox, .titlehelpers {
+.texthelpers, #costpenaltybox, .titlehelpers, h1.info {
   color:#ff4d00;
 }
 
@@ -71,7 +71,16 @@ input.dynamichelper {
   background-color: #ffffff;
 }
 
-#infobulle {
+#infobulle, div.infobulle {
   background-color: #2b597b;
   color: #ffffff;
+  /* CSS3 standard */
+  opacity:0.9;
+  /* for IE - FIXME : remove me one day */
+  filter:alpha(opacity=90);
+}
+
+#abandon {
+  background-color: #dddddd;
+  border-color: #ff1010;
 }
