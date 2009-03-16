@@ -88,7 +88,8 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         }
         printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a></li>\n" , $lang,$idraces);
         // Affichage des IC destinées à la racelist
-        foreach ( $fullUsersObj->races->ics as $ic) {
+        $fullRacesObj = new fullRaces($idraces);
+        foreach ( $fullRacesObj->races->ics as $ic) {
             if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                 if ($ic['flag'] & IC_FLAG_LINKFORUM) {
                     printf ("    <li><a href=\"".$ic['instructions']."\" target=_ic><b>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</b></a></li>\n");
