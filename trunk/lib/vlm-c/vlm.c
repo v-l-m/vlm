@@ -511,7 +511,7 @@ int VLM_check_cross_coast(double latitude, double longitude,
 
   double c_ratio, r_lat, r_long;
   
-  if (latitude > MAX_LAT_GSHHS*1000 || latitude < -1000*MAX_LAT_GSHHS) {
+  if ((latitude > MAX_LAT_GSHHS*1000) || latitude < (-1000*MAX_LAT_GSHHS)) {
     *ratio = 0;
     *xint_lat = (latitude<0)?-MAX_LAT_GSHHS*1000:MAX_LAT_GSHHS*1000;
     *xing_long = longitude;
