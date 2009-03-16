@@ -54,7 +54,7 @@
 #endif /* VLM_MAJOR_VERSION */
 
 #ifndef VLM_MINOR_VERSION
-# define VLM_MINOR_VERSION 8
+# define VLM_MINOR_VERSION 9
 #endif /* VLM_MINOR_VERSION */
 
 #if VLM_MAJOR_VERSION == 0
