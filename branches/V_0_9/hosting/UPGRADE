@@ -33,6 +33,10 @@ You have to make deployment of module maps :
  
 This is going to download gshhs files during the first deployment.
 
+=Moteur=
+
+You can check now that all is OK
+
 = Others=
 
-Just deploy other modules again.
+Just deploy other modules again (site, lib/phpcommon, medias)
