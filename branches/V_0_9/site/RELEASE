@@ -6,7 +6,7 @@ v0.9 aka Like the Wind: what's new for ...
 * spanish translation now available (tigarou)
 * shorter vacation update (spf)
 * you may choose a different theme for the web interface (paparazzia)
-* page for race instructions & waypoint list (paparazzia)
+* page for race instructions & waypoint list, management of external link for them (paparazzia)
 * better messagebox handling (race instructions warnings, etc...) (paparazzia)
 * date line bugfixes : displaying of wp, map centering and realboats (paparazzia, fm)
 * better default theme and visual feedback (paparazzia)
