@@ -542,12 +542,12 @@ include_once("scripts/myboat.js");
 
             <div id="wplatcontrolbox" class="coordcontrol">
                 <span class="subtitlehelpers">Lat&nbsp;&nbsp;&nbsp;</span>
-                <input type="text" size="6" maxlength="6" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
+                <input type="text" size="6" maxlength="8" name="targetlat" onkeyup="convertdmslat();" value="<?php echo $usersObj->users->targetlat; ?>" />
                 <input type="button" class="dynamichelper" name="latdms" width="1"/>
             </div>
             <div id="wplongcontrolbox" class="coordcontrol">
                 <span class="subtitlehelpers">Long</span>
-                <input type="text" size="6" maxlength="6" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
+                <input type="text" size="6" maxlength="8" name="targetlong" onkeyup="convertdmslong();" value="<?php echo $usersObj->users->targetlong; ?>" />
                 <input type="button" class="dynamichelper" name="longdms" width="1"/>
             </div>
         </div>
