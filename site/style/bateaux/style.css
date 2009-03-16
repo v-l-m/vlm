@@ -30,7 +30,7 @@ body
 }
 
 #main {
-  background-color: #ffffff;
+  background-color: #ffffe5;
 }
 
 #controlbox, #instrumentbox, #mapbox, #time {
@@ -57,6 +57,7 @@ body
   background-repeat: no-repeat;
   height:90px;
   width:140px;
+  margin:5px;
 }
 
 #pubbox2 {
@@ -84,3 +85,25 @@ input.dynamichelper {
   background-color: #dddddd;
   border-color: #ff1010;
 }
+
+#main a {
+  color:#2b597b;
+}
+
+th
+{ 
+  background-color: #6894c4;
+  color:white;
+}
+
+td
+{ 
+  background-color: #eeeeee;
+}
+
+td.nohilight
+{ 
+  background-color: #6894c4;
+  color:white;
+}
+
