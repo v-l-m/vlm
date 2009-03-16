@@ -393,7 +393,13 @@ include_once("scripts/myboat.js");
             // Affichage des IC destinées à la console
             foreach ( $usersObj->races->ics as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
-                    $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
+                    if ($ic['flag'] & IC_FLAG_LINKFORUM) {
+                        $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>IC sur le forum / RI on the forum</a>";
+                        $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => $txtstr, "class" => "ic", "url" => $ichref);
+                    } else {
+                        $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
+                    }
+
                 }
             }
             // Email vide ?
