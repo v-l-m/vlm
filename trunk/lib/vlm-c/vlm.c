@@ -510,11 +510,23 @@ int VLM_check_cross_coast(double latitude, double longitude,
 			  double *ratio) {
 
   double c_ratio, r_lat, r_long;
-
+  
+  if (latitude > MAX_LAT_GSHHS*1000 || latitude < -1000*MAX_LAT_GSHHS) {
+    *ratio = 0;
+    *xint_lat = (latitude<0)?-MAX_LAT_GSHHS*1000:MAX_LAT_GSHHS*1000;
+    *xing_long = longitude;
+    return 1;
+  }
+      
   latitude  = degToRad(latitude/1000.0);
   longitude = fmod(degToRad(longitude/1000.0), TWO_PI);
   new_lat   = degToRad(new_lat/1000.0);
   new_long  = fmod(degToRad(new_long/1000.0), TWO_PI);
+
+  if ((latitude >= degToRad(89)) || (latitude <= degToRad(-89))) {
+    *ratio = 0;
+    *xint_lat = 
+
 
   c_ratio = check_coast(latitude, longitude, new_lat, new_long,
 			&r_lat, &r_long);
