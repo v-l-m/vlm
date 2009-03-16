@@ -57,7 +57,7 @@ function showDivLeft(id, text, xSize , ySize ) {
     document.getElementById(id).style.width = parseInt(xSize) + 'px';
     document.getElementById(id).style.height = parseInt(ySize) + 'px';
 
-    document.getElementById(id).style.left = parseInt(tempX   ) + 'px';
+    document.getElementById(id).style.left = parseInt(tempX+15) + 'px';
     document.getElementById(id).style.top  = parseInt(tempY+15) + 'px';
 
     //document.getElementById(id).style.display = 'inline';
