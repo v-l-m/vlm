@@ -89,6 +89,8 @@
 /* 1 land, 2 lake, 3 island_in_lake, 4 pond_in_island_in_lake */
 #define GSHHS_MAX_DETAILS 3
 
+#define MAX_LAT_GSHHS 88 /* in degrees */
+
 /**
  * Strict check will check intersection only between 0 and 1 (inclusive)
  * However, to ensure that no rounding issues happens, we can widen this
