@@ -269,8 +269,16 @@
         }
     
         // Logo VLM en haut à droite des cartes.
-        $logo = @imagecreatefromjpeg("images/site/banniere_vlm.jpg");
-        imagecopymerge ( $mapObj->mapImage, $logo, $mapObj->xSize-320 , 0, 0, 0, 320, 55, 30 );
+        $logo = @imagecreatefromgif("images/logos/logo_VLM_300px_B.gif");
+        //$transplogocolor=$mapObj->fromhex("ffffff");
+        //imagecolortransparent($mapObj->mapImage,$transplogocolor);
+        imagecopymerge ( $mapObj->mapImage, $logo, $mapObj->xSize-335 , 5, 0, 0, 300, 347, 99 );
+
+        if ( $idraces == 20090317 or $idraces == 20090318 ) {
+            $logo = @imagecreatefromjpeg("images/logos/logobateaux.jpg");
+            imagecopymerge ( $mapObj->mapImage, $logo, $mapObj->xSize-360-1 , $mapObj->ySize-85-1, 0, 0, 348, 75, 100 );
+        }
+    
     }
     
     if ( $drawlibelle != "no" && $windonly != "true" ) {
