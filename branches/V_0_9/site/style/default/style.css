@@ -17,6 +17,11 @@ body
   text-align: center;
 }
 
+#loginbox p {
+  text-align: center;
+}
+
+
 .leftbox {
   border-bottom: groove 3px #DDDDF0;
 }
