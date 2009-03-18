@@ -5,6 +5,7 @@ v0.9 aka Like the Wind: what's new for ...
 ... players ?
 * spanish translation now available (tigarou)
 * shorter vacation update (spf)
+* wind interpolation is now TWSA (spf)
 * you may choose a different theme for the web interface (paparazzia)
 * page for race instructions & waypoint list, management of external link for them (paparazzia)
 * better messagebox handling (race instructions warnings, etc...) (paparazzia)
@@ -25,6 +26,7 @@ v0.9 aka Like the Wind: what's new for ...
 * bugfix : it was possible to validate a gate behind the coast... (spf) 
 * better themability (paparazzia)
 * theme is forcable on a per race basis (paparazzia)
+* different type of wind interpolatio (spf)
 * use of the swig 'outdir' option (spf)
 
 => http://dev.virtual-loup-de-mer.org/vlm/query?group=status&milestone=Like+the+wind

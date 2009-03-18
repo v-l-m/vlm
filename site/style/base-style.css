@@ -284,13 +284,15 @@ img.minimap {
   margin-top: 1px;
   margin-right: 1px;
   margin-left: 1px;
-  height: 140px;
 }
 
 #messagebox {
   display:block;
   float:right;
-  width: 335px;
+  width: 220px;
+  height:100%;
+  border-bottom: 0px;
+  margin-bottom: 0px;
   /* 821 - 3*140 - 1 */
 }
 
@@ -300,15 +302,13 @@ div.instrument {
 }
 
 #instrumentbox img {
-  width: 160px;
-  height: 160px;
 }
 
 
 #messagelist {
   display:block;
-  height: 160px;
   overflow:auto;
+  height:200px;
 }
 
 #messagebox div {
