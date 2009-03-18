@@ -134,7 +134,7 @@ include_once("scripts/myboat.js");
                 "&amp;boat=" . $usersObj->users->idusers .
                 "&amp;age=0&amp;ext=right";
 ?>
-        <a href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
+        <a class="passedwp" href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
                    echo $usersObj->users->engaged ?>&amp;lat=<? 
                    echo ($usersObj->races->startlat/1000) ?>&amp;long=<?php
                    echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
