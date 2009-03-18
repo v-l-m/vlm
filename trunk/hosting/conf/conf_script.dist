@@ -37,6 +37,8 @@ export VLMGSHHS=$VLMDATAS/gshhs
 export VLMGRIBS=$VLMDATAS/gribs
 export VLMGRIBSURL=http://grib.example.com
 
+export MAIL_FOR_COASTCROSSING=false
+
 ##########################################
 #Le reste n'est normalement pas à modifier
 

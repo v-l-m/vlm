@@ -16,9 +16,8 @@ date >> $LOG
 echo "************************************************************" >> $LOG
 nice -10 $VLMPHPPATH moteur.php $* >> $LOG 2>&1
 
-#maupiti & r16212.ovh.net sont les serveurs ou le moteur est susceptible d'envoyer un mail
-#FIXME : faire une option de conf ?
-[ $(hostname) != "maupiti.actilis" -a $(hostname) != "r16212.ovh.net" ] && grep CROSSED $LOG | sed 's/.*player //g' | sed 's/ CROSSED.*$//g' | while read idusers ; do
+# Voir Option MAIL_FOR_COASTCROSSING dans conf_script
+[ "$MAIL_FOR_COASTCROSSING" == true ] && grep CROSSED $LOG | sed 's/.*player //g' | sed 's/ CROSSED.*$//g' | while read idusers ; do
         sed -n "/user $idusers:/,/DONE/p"  $LOG >$VLMTEMP/CC-$idusers.log
         mail -s "COAST CROSSING : BOAT $idusers" vlm@virtual-winds.com -- -F "VLM-ENGINE" -f "vlm@virtual-winds.com" <$VLMTEMP/CC-$idusers.log
         rm -f $VLMTEMP/CC-$idusers.log
