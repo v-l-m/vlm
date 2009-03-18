@@ -77,19 +77,19 @@ td.nohilight
   color:white;
 }
 
-a.passedwp
+#wplistbox a.passedwp
 {
   color: #00ff00;
   text-decoration: none;
 
 }
-a.nextwp
+#wplistbox a.nextwp
 {
   color: #FF4D00;
   text-decoration: none;
 
 }
-a.notpassedwp
+#wplistbox a.notpassedwp
 {
   color: #2b597b;
   text-decoration: none;
