@@ -527,6 +527,11 @@ int VLM_check_cross_coast(double latitude, double longitude,
 			&r_lat, &r_long);
   if (c_ratio > -1.0) {
     *ratio     = c_ratio;
+    if (r_long > PI) {
+      r_long -= TWO_PI;
+    } else if (r_long < -PI) {
+      r_long += TWO_PI;
+    }
     *xing_lat  = 1000.0 * radToDeg(r_lat);
     *xing_long = 1000.0 * radToDeg(r_long);
     return 1;
