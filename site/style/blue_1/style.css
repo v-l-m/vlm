@@ -94,3 +94,23 @@ td.nohilight
   color: #2b597b;
   text-decoration: none;
 }
+
+tr.hilight *
+{ 
+  background-color: #E0E0A0;
+}
+
+tr.hilightopps *
+{ 
+  background-color: #90B0C0;
+}
+
+tr.locked *
+{ 
+  background-color: #C090A0;
+}
+
+tr.oncoast *
+{ 
+  background-color: #808080;
+}
