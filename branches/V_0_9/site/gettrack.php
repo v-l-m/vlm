@@ -68,7 +68,7 @@ while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
 }
 
 if ($all) {
-  while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
+  while(  $row = mysql_fetch_array($resultnow, MYSQL_NUM) ) {
     printf ("%d;%5.6f;%5.6f\n", $row[0],$row[1]/1000,$row[2]/1000) ;
   }
 }
