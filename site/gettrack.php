@@ -43,9 +43,22 @@ $query   =  "SELECT histpos.time,histpos.lat,histpos.long FROM histpos,races" .
             " ORDER BY time ASC";
 
 $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+$nbresults =  mysql_num_rows($result);
+
+if ($all) {
+  $querynow   =  "SELECT positions.time,positions.lat,positions.long FROM positions,races" .
+              " WHERE positions.idusers=" . round($idu) . 
+              " AND positions.race=" . round($idr) . 
+              " AND positions.race=races.idraces" .
+              " AND positions.time >= races.deptime".
+              " ORDER BY time ASC";
+
+  $resultnow  = mysql_db_query(DBNAME,$querynow) or die("Query [$querynow] failed \n");
+  $nbresults  +=   mysql_num_rows($resultnow);
+}
 
 printf ("============================\n");
-printf ("====  %6d positions  ====\n", mysql_num_rows($result));
+printf ("====  %6d positions  ====\n", $nbresults);
 printf ("============================\n");
 printf ("Timestamp;latitude;longitude\n") ;
 printf ("============================\n");
@@ -55,14 +68,6 @@ while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
 }
 
 if ($all) {
-  $query   =  "SELECT positions.time,positions.lat,positions.long FROM positions,races" .
-              " WHERE positions.idusers=" . round($idu) . 
-              " AND positions.race=" . round($idr) . 
-              " AND positions.race=races.idraces" .
-              " AND positions.time >= races.deptime".
-              " ORDER BY time ASC";
-
-  $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
   while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
     printf ("%d;%5.6f;%5.6f\n", $row[0],$row[1]/1000,$row[2]/1000) ;
   }
