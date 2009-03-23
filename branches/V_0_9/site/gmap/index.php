@@ -108,7 +108,7 @@ switch ($type) {
 							FROM `positions` 
 							WHERE `idusers` = $idusers 
 							AND `race` = $idraces 
-							AND `time` > UNIX_TIMESTAMP()-24*60*60 ";
+							AND `time` > UNIX_TIMESTAMP()-5*24*60*60 ";
 				 	$sql .= $time_clause;
 					$sql .= "	ORDER BY `time` DESC;";
 							//AND `time` between UNIX_TIMESTAMP()-24*60*60 and UNIX_TIMESTAMP()-60*60
