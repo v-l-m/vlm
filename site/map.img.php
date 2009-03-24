@@ -231,7 +231,7 @@
              $URL_MAP=MAP_SERVER_URL . "/mercator.img.php?drawortho=yes&drawwind=-1&" . $query_string  ;
 
        // **** DRAW  WIND MAPS **** 
-           $timestamp=1;
+	     $timestamp=0;
            //for ( $timestamp = 12 ; $timestamp >=0 ; $timestamp-=3) {
 
                $URL_TS=MAP_SERVER_URL . "/mercator.img.php?" ;
@@ -270,7 +270,7 @@
       // Que met t'on sur la carte ?
       if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
         setUserPref(htmlentities($_GET['boat']), "mapTools" , $maptype);
-        echo "<div id=\"deplacable\" style=\"top:150; left:250; position:absolute;\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><IMG SRC=\"images/site/compas-transparent.gif\"></div>";
+        echo "<div id=\"deplacable\" style=\"top:150; left:250; position:absolute;\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><img src=\"images/site/compas-transparent.gif\"></div>";
 
       } else if ( $maptype == "compas" ) {
 
