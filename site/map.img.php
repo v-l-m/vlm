@@ -108,12 +108,12 @@
         function DisplayPngByBrowser ( browser, img_path, width, height ) {
              var png_path;
              if (browser == 'Microsoft Internet Explorer') {
-                  document.write('<img src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
+                  document.write('<img id="dynimg" src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
              }
              else if (browser == 'Netscape')
-             document.write("<img src='"+img_path+"' />");
+             document.write('<img id="dynimg" src="'+img_path+'" />');
              else
-             document.write("<img src='"+img_path+"' />");
+             document.write('<img id="dynimg" src="'+img_path+'" />');
          }
 
   function boutonPresse()
@@ -235,34 +235,51 @@
            //for ( $timestamp = 12 ; $timestamp >=0 ; $timestamp-=3) {
 
                $URL_TS=MAP_SERVER_URL . "/mercator.img.php?" ;
-         $URL_TS.="drawwind=".$timestamp;
-         $URL_TS.="&drawgrid=no&drawmap=no&drawrace=no&drawscale=no";
+         $URL_TS.="drawgrid=no&drawmap=no&drawrace=no&drawscale=no";
          $URL_TS.="&drawpositions=no&drawlogos=no&drawlibelle=no&drawortho=no";
          $URL_TS.="&seacolor=transparent";
          $URL_TS.="&". $query_string_base ;
+         $URL_TS_BASE = $URL_TS;
+         $URL_TS.="&drawwind=".$timestamp;
 
          echo "<div id=ts".$timestamp." style=\"top:10; left:10; position:absolute; background-image:url(".$URL_MAP.");\">";
-               //echo "<IMG SRC=" . $URL_TS . " " ;
-         //echo " style=\"width:".$x."px;height:".$y."px;border:0; \">";
                echo "<script language=\"javascript\">";
                echo "     var path_png = DisplayPngByBrowser(navigator.appName, ' " . $URL_TS . "', " . $x . ", " . $y.");";
                echo "</script>";
          echo "</div>";
-     //}
+         
+         
+         echo "\n<div id=\"windcontrolbox\" style=\"top:20; left:200; position:absolute;\">\n";
+?>
 
-        // **** DRAW CONTROL BUTTONS **** 
-             //echo "<div id=controls style=\"filter:alpha(opacity=90);opacity:0.90; visibility:hidden\" >
-             //echo "<div id=controls style=\"top:" . $y+20 . "; left:".$x+10 . "; position:absolute; filter:alpha(opacity=90);opacity:0.90; \" >
-       /*
-       $Y=$y+10;
-             echo "<div id=controls style=\"top:" . $Y . "; left:10; position:absolute; filter:alpha(opacity=90);opacity:0.90; \" >
-    <form name=control>
-          <input type=button value=\"Wind timestamp <\" onClick=\"javascript:previousTimestamp();\"/>
-          <input type=button value=\"Wind timestamp >\" onClick=\"javascript:nextTimestamp();\"/>
-    <input type=text name=vts value=0>
-    </form>
-                </div>";
-    */
+<script language="javascript">
+<?php
+               echo "    var url_ts_base = '".$URL_TS_BASE."';";
+?>
+    function enterOffset(event) {
+        if (event && event.keyCode == 13) {  
+          updateOffset();
+        }
+    }
+    function updateOffset() {
+        var path = url_ts_base+'&drawwind='+document.getElementById('griboffset').value;
+        document.getElementById('dynimg').src = path;
+    }
+    function nextOffset() {
+        document.getElementById('griboffset').value++;
+        updateOffset();
+    }
+    function prevOffset() {
+        document.getElementById('griboffset').value--;
+        updateOffset();
+    }
+
+
+</script>
+<?php
+         echo "  <input size=\"2\" value=\"-\" style=\"background:none;\" type=\"button\" onClick=\"javascript:prevOffset();\" />";
+         echo "  <input id=\"griboffset\"  style=\"background:none;\" type=\"text\" size=\"4\" value=\"0\" onKeyPress=\"javascript:enterOffset(event);\"/>";
+         echo "  <input size=\"2\" value=\"+\" style=\"background:none;\" type=\"button\" onClick=\"javascript:nextOffset();\" />";
 
   }
 
