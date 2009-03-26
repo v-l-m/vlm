@@ -2,6 +2,7 @@ RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
 Since v0.9:
+* start position (WP0) displayed in ics.php and overlay added in myboat.php (paparazzia)
 * various fixes (fm, spf, paparazzia)
 * correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
 
