@@ -5,7 +5,7 @@ source $VLMRACINE/conf/conf_script || exit 1
 [ -f $VLMTEMP/cronvlm.$1.lock ] && exit
 touch $VLMTEMP/cronvlm.$1.lock
 
-LOG=$VLMTEMP/$(date +%Y%m%d_%H:%M)-$1-cronvlm.log
+LOG=$VLMLOG/$(date +%Y%m%d_%H:%M)-$1-cronvlm.log
 export LOGFILE_MAX_AGE=7
 
 
@@ -28,7 +28,7 @@ gzip -9 $LOG
 
 # Purge des anciens logs
 #===8<===
-cd $VLMTEMP
-[ $(pwd) == "$VLMTEMP" ] && find . -name "*--cronvlm.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
+cd $VLMLOG
+[ $(pwd) == "$VLMLOG" ] && find . -name "*--cronvlm.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
 #===8<===
 
