@@ -87,6 +87,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
              printf ("    <li>Engaged : " . $num_engaged . " (unlimited)</li>\n" );
         }
         printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a></li>\n" , $lang,$idraces);
+        printf("    <li>%s nm</li>\n" , round($fullRacesObj->races->racedistance));
         // Affichage des IC destinées à la racelist
         $fullRacesObj = new fullRaces($idraces);
         foreach ( $fullRacesObj->races->ics as $ic) {
