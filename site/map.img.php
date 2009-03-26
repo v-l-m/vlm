@@ -249,7 +249,7 @@
          echo "</div>";
          
          
-         echo "\n<div id=\"windcontrolbox\" style=\"top:20; left:200; position:absolute;\">\n";
+         echo "\n<div id=\"windcontrolbox\" style=\"top:20; left:200; position:absolute; background-color: #ffffff; \">\n";
 ?>
 
 <script language="javascript">
@@ -277,9 +277,9 @@
 
 </script>
 <?php
-         echo "  <input size=\"2\" value=\"-\" style=\"background:none;\" type=\"button\" onClick=\"javascript:prevOffset();\" />";
-         echo "  <input id=\"griboffset\"  style=\"background:none;\" type=\"text\" size=\"4\" value=\"0\" onKeyPress=\"javascript:enterOffset(event);\"/>";
-         echo "  <input size=\"2\" value=\"+\" style=\"background:none;\" type=\"button\" onClick=\"javascript:nextOffset();\" />";
+         echo "  <input size=\"2\" value=\"-\" style=\"background:none; border:none; margin:none;\" type=\"button\" onClick=\"javascript:prevOffset();\" />";
+         echo "  <input id=\"griboffset\"  style=\"text-align:right;background:none;border-width:1px; margin:none;\" type=\"text\" maxlength=\"2\" size=\"2\" value=\"0\" onKeyPress=\"javascript:enterOffset(event);\"/>h";
+         echo "  <input size=\"2\" value=\"+\" style=\"background:none;border:none; margin:none;\" type=\"button\" onClick=\"javascript:nextOffset();\" />";
 
   }
 
