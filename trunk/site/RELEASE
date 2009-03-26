@@ -7,6 +7,7 @@ Since v0.9:
 * correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
 * the log directory is configurable (paparazzia)
 * more informations available _before_ choosing a race (paparazzia)
+* various configuration options (fm, paparazzia)
 
 v0.9 aka Like the Wind: what's new for ...
 ... players ?

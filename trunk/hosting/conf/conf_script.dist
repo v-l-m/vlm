@@ -39,6 +39,7 @@ export VLMGSHHS=$VLMDATAS/gshhs
 #Chemin vers le stockage des gribs
 export VLMGRIBS=$VLMDATAS/gribs
 export VLMGRIBSURL=http://grib.example.com
+export VLM_GRIB_MAX_TIME=24
 
 export MAIL_FOR_COASTCROSSING=false
 
