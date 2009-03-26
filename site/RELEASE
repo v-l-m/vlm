@@ -5,6 +5,7 @@ Since v0.9:
 * start position (WP0) displayed in ics.php and overlay added in myboat.php (paparazzia)
 * various fixes (fm, spf, paparazzia)
 * correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
+* the log directory is configurable (paparazzia)
 
 v0.9 aka Like the Wind: what's new for ...
 ... players ?
