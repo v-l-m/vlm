@@ -92,9 +92,9 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         foreach ( $fullRacesObj->races->ics as $ic) {
             if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                 if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                    printf ("    <li><a href=\"".$ic['instructions']."\" target=_ic><b>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</b></a></li>\n");
+                    printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=_ic>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</a></li>\n");
                 } else {
-                    printf ("    <li>".$ic['instructions']."</li>\n");
+                    printf ("    <li class=\"icflagracelist\">".$ic['instructions']."</li>\n");
                 }
             }
         }

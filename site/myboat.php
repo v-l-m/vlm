@@ -133,12 +133,29 @@ include_once("scripts/myboat.js");
       $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
                 "&amp;boat=" . $usersObj->users->idusers .
                 "&amp;age=0&amp;ext=right";
+                
+      if ( $usersObj->races->started ) {
+          $WPCLASS = "passedwp";
+      } else {
+          $WPCLASS = "notpassedwp";
+      }
+      $status_content  = "&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;" . htmlentities($strings[$lang]["startmap"]) . "&lt;/b&gt;&lt;br /&gt;";
+      $status_content .= "Waypoint Coords=&lt;b&gt;" . 
+                         round($usersObj->races->startlat/1000,3) . "," . round($usersObj->races->startlong/1000,3) . "&lt;/b&gt;&lt;br /&gt;"; 
+
+//      $status_content.="&lt;br /&gt;";
+      $status_content .= "&lt;/div&gt;";
+      
 ?>
         <a href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
-                   echo $usersObj->users->engaged ?>&amp;lat=<? 
+                   echo $usersObj->users->engaged ?>&amp;lat=<?php
                    echo ($usersObj->races->startlat/1000) ?>&amp;long=<?php
-                   echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<? echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" 
-                   target="_new"><?php echo $strings[$lang]["startmap"] ; ?></a> - WP: 
+                   echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
+                   echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" target="_new" class="<?php
+                   echo $WPCLASS; ?>" onmouseover="showDivRight('infobulle','<?php
+                   echo $status_content; ?>', 400, 0);" onmouseout="hideDiv('infobulle');" ><?php
+                   echo $strings[$lang]["startmap"] ; ?></a> - WP:
+
 <?php
       // On va afficher des liens vers des waypoints
       // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage 
