@@ -172,7 +172,7 @@
         document.onmousemove = deplacementSouris;
     </script>
   </head>
-  <body background="#A0A0A0">
+  <body id="mapbody">
 
     <?php
       // Sauvegarde des préférences
@@ -278,9 +278,9 @@
             }
 
         </script>
-        <input id="prevwindoffset" size="2" value="-" class="controlonmap" type="button" onClick="javascript:prevOffset();" />
+        <input id="prevgriboffset" size="2" value="-" class="controlonmap" type="button" onClick="javascript:prevOffset();" />
         <input id="griboffset"  class="controlonmap" type="text" maxlength="2" size="2" value="0" onKeyPress="javascript:enterOffset(event);"/>h
-        <input id="nextwindoffset" size="2" value="+" class="controlonmap" type="button" onClick="javascript:nextOffset();" />
+        <input id="nextgriboffset" size="2" value="+" class="controlonmap" type="button" onClick="javascript:nextOffset();" />
 
    <?php
       }
