@@ -54,7 +54,7 @@
 #endif /* VLM_MAJOR_VERSION */
 
 #ifndef VLM_MINOR_VERSION
-# define VLM_MINOR_VERSION 8
+# define VLM_MINOR_VERSION 9
 #endif /* VLM_MINOR_VERSION */
 
 #if VLM_MAJOR_VERSION == 0
@@ -68,11 +68,9 @@
 #  define ROUND_WIND_ANGLE_IN_POLAR
 # elif  VLM_MINOR_VERSION == 9
 #  define GRIB_RESOLUTION_0_5
-#  define DEFAULT_INTERPOLATION_UV
 #  define ROUND_WIND_ANGLE_IN_POLAR
 # else /* default */
 #  define GRIB_RESOLUTION_0_5
-#  define DEFAULT_INTERPOLATION_UV
 #  define ROUND_WIND_ANGLE_IN_POLAR
 # endif /* VLM_MINOR_VERSION */
 #endif /* VLM_MAJOR_VERSION */
@@ -90,6 +88,8 @@
 
 /* 1 land, 2 lake, 3 island_in_lake, 4 pond_in_island_in_lake */
 #define GSHHS_MAX_DETAILS 3
+
+#define MAX_LAT_GSHHS 88 /* in degrees */
 
 /**
  * Strict check will check intersection only between 0 and 1 (inclusive)

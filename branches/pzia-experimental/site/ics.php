@@ -10,7 +10,11 @@ function outputIC($fullRacesObj) {
     foreach($fullRacesObj->races->ics as $ic) {
         if ($ic['flag'] & IC_FLAG_VISIBLE) {
             echo "<div class=\"icbox\">\n";
-            echo nl2br($ic['instructions']);
+            if ($ic['flag'] & IC_FLAG_LINKFORUM) {
+                printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</b></a>\n");
+            } else {
+                echo nl2br($ic['instructions']);
+            }
             echo "\n</div>\n";
         }
     }
@@ -37,10 +41,16 @@ function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
 
 /* output du tableau de wp */
 
-function outputWayPoints($fullRacesObj) {
+function outputWayPoints($fullRacesObj, $startstring) {
 
     echo "<table class=\"waypoints\">\n";
     echo "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Hdg</th><th>Type</th><th>Name</th></tr>";
+
+    echo "<tr>\n";
+    echo "<td>WP0</td>"; 
+    printf("<td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $fullRacesObj->races->startlat/1000., $fullRacesObj->races->startlong/1000., $startstring);
+    echo "</tr>\n";
+
     foreach ($fullRacesObj->races->waypoints as $num => $wp) {
         echo "<tr>\n";
         echo "<td>WP".($num+1)."</td>";
@@ -70,7 +80,7 @@ if ($idraces != 0) {
 
     echo "<div id=\"waypoints\">\n";
         echo "<h3>Waypoints</h3>\n";
-        outputWaypoints($fullRacesObj);
+        outputWaypoints($fullRacesObj, $strings[$lang]["startmap"]);
     echo "</div>\n";    
 
 }

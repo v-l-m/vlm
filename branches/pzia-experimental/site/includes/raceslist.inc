@@ -42,54 +42,68 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
     $time = time();
     $duration = $dep - time();
 
-    if ( $dep < $time AND $closetime <$time ) //no race planned
-    {
-      printf("      ".$strings[$lang]["norace"]."\n");
-    }
-    else
-    {
+    if ( $dep < $time AND $closetime <$time ) { //no race planned
+        printf("      ".$strings[$lang]["norace"]."\n");
+    } else {
+        echo "<table width=\"100%\">\n<tr>\n";
+        echo "<td width=200 align=\"left\" class=\"boat\">";
+        // Carte de la course
+        $href = "images/racemaps/regate".$idraces.".jpg";
+        if ( file_exists($href) ) {
+       	    $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
+       	    list($xSize, $ySize, $type, $attr) = getimagesize($href);
+        	  echo "<img src=\"minimap.php?idraces=" . $idraces . 
+                 "\" onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
+                 " onmouseout=\"hideDiv('infobulle');\" " .
+                 " alt=\"" .$strings[$lang]["racemap"]. "\" />";
+        }
+        echo "</td>\n";
+  
+        echo "<td align=\"left\" class=\"boat\">";
 
-      echo "<table width=\"100%\">\n<tr>\n<td align=\"left\" class=\"boat\">";
-      printf("<h1>%d (%s) - %s</h1>\n",$idraces, $boattype, $racename); /* FIXME use style there */
-      printf ("  <ul>");
-      if ( $dep > $time ) {
-          $duration = duration2string($duration);
-          printf("    <li>".$strings[$lang]["nextrace"] . "</li>\n" , $duration[0],$duration[1],$duration[2]);
-          printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
-      } else {
-          $duration = duration2string(-$duration);
-          printf("    <li>".$strings[$lang]["openrace"] . "</li>\n", $duration[0],$duration[1],$duration[2]);
-      }
+        printf("<h1>%d (%s) - %s</h1>\n",$idraces, $boattype, $racename); /* FIXME use style there */
+        printf ("  <ul>");
+        if ( $dep > $time ) {
+            $duration = duration2string($duration);
+            printf("    <li>".$strings[$lang]["nextrace"] . "</li>\n" , $duration[0],$duration[1],$duration[2]);
+            printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
+        } else {
+            $duration = duration2string(-$duration);
+            printf("    <li>".$strings[$lang]["openrace"] . "</li>\n", $duration[0],$duration[1],$duration[2]);
+        }
+  
+        if ( $closetime > $dep ) {
+            printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
+        }
+  
+        if ( $firstpcttime >0 ) {
+            printf("    <li>".$strings[$lang]["endrace"]. "%d %%</li>\n", 100 + $firstpcttime );
+        } else {
+            printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
+        }
+        if ( $maxboats != 0 ) {
+             printf ("    <li>Engaged / Total : " . $num_engaged . "/" . $maxboats . "</li>\n" );
+        } else {
+             printf ("    <li>Engaged : " . $num_engaged . " (unlimited)</li>\n" );
+        }
+        printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a></li>\n" , $lang,$idraces);
+        printf("    <li>%s nm</li>\n" , round($fullRacesObj->races->racedistance));
+        // Affichage des IC destinées à la racelist
+        $fullRacesObj = new fullRaces($idraces);
+        foreach ( $fullRacesObj->races->ics as $ic) {
+            if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
+                if ($ic['flag'] & IC_FLAG_LINKFORUM) {
+                    printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=_ic>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</a></li>\n");
+                } else {
+                    printf ("    <li class=\"icflagracelist\">".$ic['instructions']."</li>\n");
+                }
+            }
+        }
 
-      if ( $closetime > $dep ) {
-          printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
-      }
-
-      if ( $firstpcttime >0 ) {
-          printf("    <li>".$strings[$lang]["endrace"]. "%d %%</li>\n", 100 + $firstpcttime );
-      } else {
-          printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
-      }
-      if ( $maxboats != 0 ) {
-           printf ("    <li>Engaged / Total : " . $num_engaged . "/" . $maxboats . "</li>\n" );
-      } else {
-           printf ("    <li>Engaged : " . $num_engaged . " (unlimited)</li>\n" );
-      }
       printf ("  </ul>");
       echo "</td>\n";
 
-      echo "<td align=\"right\" class=\"boat\">";
-      // Carte de la course
-      $href = "images/racemaps/regate".$idraces.".jpg";
-      if ( file_exists($href) ) {
-      	$status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
-      	list($xSize, $ySize, $type, $attr) = getimagesize($href);
-      	echo "<img src=\"minimap.php?idraces=" . $idraces . 
-                 "\" onmouseover=\"showDivTopLeft('infobulle','$status_content', $xSize, $ySize);\" " .
-                 " onmouseout=\"hideDiv('infobulle');\" " .
-              " alt=\"" .$strings[$lang]["racemap"]. "\" />";
-      }
-      echo "</td>\n</tr>\n</table>\n";
+      echo "</tr>\n</table>\n";
 
 
         if ( $display_submit == "true" and in_array($idraces, $av_races) ) {

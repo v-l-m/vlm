@@ -1,12 +1,21 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
+Since v0.9:
+* start position (WP0) displayed in ics.php and overlay added in myboat.php (paparazzia)
+* various fixes (fm, spf, paparazzia)
+* correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
+* the log directory is configurable (paparazzia)
+* more informations available _before_ choosing a race (paparazzia)
+* various configuration options (fm, paparazzia)
+
 v0.9 aka Like the Wind: what's new for ...
 ... players ?
 * spanish translation now available (tigarou)
 * shorter vacation update (spf)
+* wind interpolation is now TWSA (spf)
 * you may choose a different theme for the web interface (paparazzia)
-* page for race instructions & waypoint list (paparazzia)
+* page for race instructions & waypoint list, management of external link for them (paparazzia)
 * better messagebox handling (race instructions warnings, etc...) (paparazzia)
 * date line bugfixes : displaying of wp, map centering and realboats (paparazzia, fm)
 * better default theme and visual feedback (paparazzia)
@@ -25,6 +34,7 @@ v0.9 aka Like the Wind: what's new for ...
 * bugfix : it was possible to validate a gate behind the coast... (spf) 
 * better themability (paparazzia)
 * theme is forcable on a per race basis (paparazzia)
+* different type of wind interpolatio (spf)
 * use of the swig 'outdir' option (spf)
 
 => http://dev.virtual-loup-de-mer.org/vlm/query?group=status&milestone=Like+the+wind

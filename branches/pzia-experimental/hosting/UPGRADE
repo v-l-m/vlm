@@ -1,5 +1,15 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+To 1.0 from 0.9
+_______________
+(Do it in this order, please)
+
+=Configuration=
+* EDIT hosting/conf/conf_script
+ - change the branch to V_1_0
+ - add "export VLMLOG=$VLMTEMP" (or something else...)
+ - optionally, add "export VLM_GRIB_MAX=36" (or whatever you wish)
+  
 To 0.9 from 0.8
 _______________
 
@@ -33,6 +43,10 @@ You have to make deployment of module maps :
  
 This is going to download gshhs files during the first deployment.
 
+=Moteur=
+
+You can check now that all is OK
+
 = Others=
 
-Just deploy other modules again.
+Just deploy other modules again (site, lib/phpcommon, medias)
