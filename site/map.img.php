@@ -95,6 +95,7 @@
 ?>
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
     <script>
         clicEnCours = false;
         position_x = 250 ; 
