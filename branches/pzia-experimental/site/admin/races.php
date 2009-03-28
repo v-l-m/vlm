@@ -15,6 +15,23 @@ $opts['key_type'] = 'int';
 // Sorting field(s)
 $opts['sort_field'] = array('idraces');
 
+$PAGETITLE = "Admin of RACE table";
+
+/* Fields def. helpers */
+
+
+//suboptimal, should not be done for each load of the page but only when allowing to change something
+
+$dh  = opendir(DIRECTORY_POLARS);
+$select_list="";
+while (false !== ($filename = readdir($dh))) {
+    if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
+        //Taking only directories
+        $list_polars[$filename] = substr($filename, 5); 
+    }
+}
+sort($list_polars);
+closedir($dh);
 
 /* Field definitions
    
@@ -64,14 +81,15 @@ $opts['fdd']['idraces'] = array(
   'sort'     => true
 );
 $opts['fdd']['racename'] = array(
-  'name'     => 'Racename',
+  'name'     => 'Name of the race',
   'select'   => 'T',
   'maxlen'   => 255,
   'sort'     => true
 );
 $opts['fdd']['started'] = array(
   'name'     => 'Started',
-  'select'   => 'T',
+  'select'   => 'D',
+  'values2'   => Array("-1" => "No", "1" => "Yes"), 
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
@@ -83,14 +101,14 @@ $opts['fdd']['deptime'] = array(
   'sort'     => true
 );
 $opts['fdd']['startlong'] = array(
-  'name'     => 'Startlong',
+  'name'     => 'Start long.',
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
 );
 $opts['fdd']['startlat'] = array(
-  'name'     => 'Startlat',
+  'name'     => 'Start lat.',
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',
@@ -98,7 +116,8 @@ $opts['fdd']['startlat'] = array(
 );
 $opts['fdd']['boattype'] = array(
   'name'     => 'Boattype',
-  'select'   => 'T',
+  'select'   => 'D',
+  'values2'  => $list_polars,
   'maxlen'   => 255,
   'sort'     => true
 );

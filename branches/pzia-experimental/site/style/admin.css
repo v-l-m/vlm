@@ -17,8 +17,10 @@ table.pme-navigation {
   border-spacing: 0px;
   width: 100%;
   }
+td.pme-search {
+  min-width: 120px;
+  }
 td.pme-navigation-0, td.pme-navigation-1 {
-  min-width: 80px;
   white-space: nowrap;
   }
 th.pme-header {
@@ -42,5 +44,5 @@ td.pme-stats   {
   text-align: right;
   }
 tr.pme-row-1 {
-  background: #dddddd;
+  background: #eeeeee;
   }

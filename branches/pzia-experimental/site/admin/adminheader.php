@@ -20,7 +20,7 @@ $opts['db'] = DBNAME;
 
 // Number of records to display on the screen
 // Value of -1 lists all records in a table
-$opts['inc'] = 15;
+$opts['inc'] = 50;
 
 // Options you wish to give the users
 // A - add,  C - change, P - copy, V - view, D - delete,
