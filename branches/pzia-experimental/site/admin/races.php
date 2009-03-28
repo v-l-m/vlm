@@ -43,10 +43,11 @@ $select_list="";
 while (false !== ($filename = readdir($dh))) {
     if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
         //Taking only directories
-        $list_themes[] = $filename;
+        $list_themes[$filename] = $filename;
     }
 }
-sort($list_themes);
+$list_themes[''] = $filename;
+asort($list_themes);
 closedir($dh);
 
 
@@ -116,6 +117,24 @@ $opts['fdd']['deptime'] = array(
   'select'   => 'T',
   'sql|LFVD' => 'FROM_UNIXTIME(deptime)',
   'maxlen'   => 14,
+  'sort'     => true,
+  'calendar' => array(
+     'ifFormat'    => '%s', // defaults to the ['strftimemask']
+     'firstDay'    => 1,          // 0 = Sunday, 1 = Monday
+     'singleClick' => true,       // single or double click to close
+     'weekNumbers' => true,       // Show week numbers
+     'showsTime'   => true,      // Show time as well as date
+     'timeFormat'  => '24',       // 12 or 24 hour clock
+     'button'      => true,       // Display button (rather then clickable area)
+     'label'       => '...',      // button label (used by phpMyEdit)
+  )
+);
+$opts['fdd']['startlat'] = array(
+  'name'     => 'Start lat.',
+  'select'   => 'T',
+  'sql|LFVD' => 'startlat/1000',
+  'maxlen'   => 11,
+  'default'  => '0',
   'sort'     => true
 );
 $opts['fdd']['startlong'] = array(
@@ -123,14 +142,6 @@ $opts['fdd']['startlong'] = array(
   'select'   => 'T',
   'maxlen'   => 11,
   'sql|LFVD' => 'startlong/1000',
-  'default'  => '0',
-  'sort'     => true
-);
-$opts['fdd']['startlat'] = array(
-  'name'     => 'Start lat.',
-  'select'   => 'T',
-  'sql|LFVD' => 'startlat/1000',
-  'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
 );
@@ -150,7 +161,7 @@ $opts['fdd']['closetime'] = array(
 );
 $opts['fdd']['racetype'] = array(
   'name'     => 'Racetype',
-  'select'   => 'T',
+  'select'   => 'D',
   'values2'  => Array('0' => 'One shot', '1' => 'Permanent'), 
   'maxlen'   => 11,
   'sort'     => true
