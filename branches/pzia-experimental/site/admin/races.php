@@ -21,17 +21,34 @@ $PAGETITLE = "Admin of RACE table";
 
 
 //suboptimal, should not be done for each load of the page but only when allowing to change something
+$dir = "../".DIRECTORY_POLARS ; 
+$dh  = opendir($dir);
+$select_list="";
+while (false !== ($filename = readdir($dh))) {
+    if ( !is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
+        //Taking only files
+        $keypolar =  substr($filename, 0, -4);
+        $list_polars[$keypolar] = substr($keypolar, 5); 
+//        print $filename;
+    }
+}
+asort($list_polars);
+closedir($dh);
 
-$dh  = opendir(DIRECTORY_POLARS);
+//suboptimal, should not be done for each load of the page but only when allowing to change something
+
+$dir = "../".DIRECTORY_THEMES;
+$dh  = opendir($dir);
 $select_list="";
 while (false !== ($filename = readdir($dh))) {
     if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
         //Taking only directories
-        $list_polars[$filename] = substr($filename, 5); 
+        $list_themes[] = $filename;
     }
 }
-sort($list_polars);
+sort($list_themes);
 closedir($dh);
+
 
 /* Field definitions
    
@@ -97,6 +114,7 @@ $opts['fdd']['started'] = array(
 $opts['fdd']['deptime'] = array(
   'name'     => 'Deptime',
   'select'   => 'T',
+  'sql|LFVD' => 'FROM_UNIXTIME(deptime)',
   'maxlen'   => 14,
   'sort'     => true
 );
@@ -104,12 +122,14 @@ $opts['fdd']['startlong'] = array(
   'name'     => 'Start long.',
   'select'   => 'T',
   'maxlen'   => 11,
+  'sql|LFVD' => 'startlong/1000',
   'default'  => '0',
   'sort'     => true
 );
 $opts['fdd']['startlat'] = array(
   'name'     => 'Start lat.',
   'select'   => 'T',
+  'sql|LFVD' => 'startlat/1000',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
@@ -124,12 +144,14 @@ $opts['fdd']['boattype'] = array(
 $opts['fdd']['closetime'] = array(
   'name'     => 'Closetime',
   'select'   => 'T',
+  'sql|LFVD' => 'FROM_UNIXTIME(closetime)',
   'maxlen'   => 20,
   'sort'     => true
 );
 $opts['fdd']['racetype'] = array(
   'name'     => 'Racetype',
   'select'   => 'T',
+  'values2'  => Array('0' => 'One shot', '1' => 'Permanent'), 
   'maxlen'   => 11,
   'sort'     => true
 );
@@ -174,6 +196,7 @@ $opts['fdd']['bobegin'] = array(
   'name'     => 'Bobegin',
   'select'   => 'T',
   'maxlen'   => 20,
+  'sql|LFVD' => 'IF (bobegin=0,\'\',FROM_UNIXTIME(bobegin))',
   'default'  => '0',
   'sort'     => true
 );
@@ -181,6 +204,7 @@ $opts['fdd']['boend'] = array(
   'name'     => 'Boend',
   'select'   => 'T',
   'maxlen'   => 20,
+  'sql|LFVD' => 'IF (boend=0,\'\',FROM_UNIXTIME(boend))',
   'default'  => '0',
   'sort'     => true
 );
@@ -193,8 +217,9 @@ $opts['fdd']['maxboats'] = array(
 );
 $opts['fdd']['theme'] = array(
   'name'     => 'Theme',
-  'select'   => 'T',
+  'select'   => 'D',
   'maxlen'   => 30,
+  'values'   => $list_themes,
   'sort'     => true
 );
 
