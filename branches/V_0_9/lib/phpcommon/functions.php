@@ -1213,7 +1213,7 @@ function getTheme()
           if ( $users->engaged != 0 ) {
               //Le joueur est engagé dans une course
               $race = new races($users->engaged);
-              if ( !is_null($race->theme) ) {
+              if ( !is_null($race->theme) or ($race->theme != "")) {
                   //La course possède un thème, on l'utilise
                   return ( $race->theme);
               }
