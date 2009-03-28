@@ -50,6 +50,17 @@ $list_themes[''] = $filename;
 asort($list_themes);
 closedir($dh);
 
+$calendar_specifications = array(
+     'ifFormat'    => '%s', // defaults to the ['strftimemask']
+     'firstDay'    => 1,          // 0 = Sunday, 1 = Monday
+     'singleClick' => true,       // single or double click to close
+     'weekNumbers' => true,       // Show week numbers
+     'showsTime'   => true,      // Show time as well as date
+     'timeFormat'  => '24',       // 12 or 24 hour clock
+     'button'      => true,       // Display button (rather then clickable area)
+     'label'       => '...',      // button label (used by phpMyEdit)
+     );
+
 
 /* Field definitions
    
@@ -118,16 +129,7 @@ $opts['fdd']['deptime'] = array(
   'sql|LFVD' => 'FROM_UNIXTIME(deptime)',
   'maxlen'   => 14,
   'sort'     => true,
-  'calendar' => array(
-     'ifFormat'    => '%s', // defaults to the ['strftimemask']
-     'firstDay'    => 1,          // 0 = Sunday, 1 = Monday
-     'singleClick' => true,       // single or double click to close
-     'weekNumbers' => true,       // Show week numbers
-     'showsTime'   => true,      // Show time as well as date
-     'timeFormat'  => '24',       // 12 or 24 hour clock
-     'button'      => true,       // Display button (rather then clickable area)
-     'label'       => '...',      // button label (used by phpMyEdit)
-  )
+  'calendar' => $calendar_specifications,
 );
 $opts['fdd']['startlat'] = array(
   'name'     => 'Start lat.',
@@ -157,6 +159,7 @@ $opts['fdd']['closetime'] = array(
   'select'   => 'T',
   'sql|LFVD' => 'FROM_UNIXTIME(closetime)',
   'maxlen'   => 20,
+  'calendar' => $calendar_specifications,
   'sort'     => true
 );
 $opts['fdd']['racetype'] = array(
@@ -209,6 +212,7 @@ $opts['fdd']['bobegin'] = array(
   'maxlen'   => 20,
   'sql|LFVD' => 'IF (bobegin=0,\'\',FROM_UNIXTIME(bobegin))',
   'default'  => '0',
+  'calendar' => $calendar_specifications,
   'sort'     => true
 );
 $opts['fdd']['boend'] = array(
@@ -217,6 +221,7 @@ $opts['fdd']['boend'] = array(
   'maxlen'   => 20,
   'sql|LFVD' => 'IF (boend=0,\'\',FROM_UNIXTIME(boend))',
   'default'  => '0',
+  'calendar' => $calendar_specifications,
   'sort'     => true
 );
 $opts['fdd']['maxboats'] = array(
