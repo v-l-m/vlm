@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-include_once("includes/strings.inc");
+//include_once("../includes/strings.inc");
 include_once("config.php");
 
 header("Content-type: text/html; charset=utf-8");
@@ -64,6 +64,6 @@ $opts['filters'] = "section_id = 9";
 $opts['filters'] = "PMEtable0.sessions_count > 200";
 */
 
-$opts['images'] = '../images/pme/';
+$opts['url'] = array('images' => '/images/pme/');
 
 ?>
