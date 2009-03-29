@@ -15,10 +15,10 @@
    		});
 		</script>
 		/tinyMCE -->
-    <script type="text/javascript" src="../externals/calendar/calendar.js"></script>
-    <script type="text/javascript" src="../externals/calendar/lang/calendar-en.js"></script>
-    <script type="text/javascript" src="../externals/calendar/calendar-setup.js"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="../externals/calendar/calendar-system.css">
+    <script type="text/javascript" src="../<?php echo DIRECTORY_JSCALENDAR; ?>/calendar.js"></script>
+    <script type="text/javascript" src="../<?php echo DIRECTORY_JSCALENDAR; ?>/lang/calendar-en.js"></script>
+    <script type="text/javascript" src="../<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-setup.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
 
 

@@ -19,7 +19,7 @@ ini_set('arg_separator.output', "&amp;");
 
 /*********db_connect****************/
 $link = mysql_connect(DBSERVER, DBUSER, DBPASSWORD)
-   or die("Could not connect : " . mysql_error());
+   or die("Could not define ("DIRECTORY_POLARS","Polaires");connect : " . mysql_error());
    
 mysql_select_db(DBNAME) or die("Could not select database");
 
@@ -67,6 +67,7 @@ define ("BUOY_E", "buoy_south.png");
 define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
 define ("DIRECTORY_THEMES","style");
 define ("DIRECTORY_POLARS","Polaires");
+define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
 
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);
