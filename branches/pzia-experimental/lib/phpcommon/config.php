@@ -5,8 +5,6 @@ $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercato
 
 /************** localDBPages pages : HAS TO BE SET BEFORE INSLUSION OF PARAM.PHP ******/
 $localDBPages = array("/mercator.php", "/races.php");
-$engineOnlyScripts = array("new-update-wind.php", "undate-wind.php");
-
 
 include_once("param.php");
 

@@ -74,8 +74,8 @@ $wp_xinglong  = new doublep();
           /*     temps de course écoulé jusqu'à la vacatin d'avant
                  + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
           */
-	  //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($wp_xingratio); (use this if we settle the time for the whole run)
-	  $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
+    //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($wp_xingratio); (use this if we settle the time for the whole run)
+    $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
 
           $duration = $timeAvant - $deptime + $timeSinceLastUpdate  ;
 
