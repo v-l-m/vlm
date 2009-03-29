@@ -5,7 +5,7 @@ if ( isLoggedIn() ) {
      $users = new Users(getLoginId());
      if ( $users->engaged == 0 ) {
           $display_submit = "true";
-	  $av_races=availableRaces($users->idusers);
+    $av_races=availableRaces($users->idusers);
      }
 }
 
@@ -16,7 +16,7 @@ $q=htmlentities(quote_smart($_REQUEST['type'])) ;
 $query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
 
 $query1 .= " WHERE ( ( started = 0 AND DEPTIME > " . time() . " )
-	              OR ( closetime > " . time() .  " ) ) " ;
+                OR ( closetime > " . time() .  " ) ) " ;
 
 
 if ( $q != "" ) { 
@@ -50,9 +50,9 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         // Carte de la course
         $href = "images/racemaps/regate".$idraces.".jpg";
         if ( file_exists($href) ) {
-       	    $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
-       	    list($xSize, $ySize, $type, $attr) = getimagesize($href);
-        	  echo "<img src=\"minimap.php?idraces=" . $idraces . 
+             $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
+             list($xSize, $ySize, $type, $attr) = getimagesize($href);
+            echo "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                  " onmouseout=\"hideDiv('infobulle');\" " .
                  " alt=\"" .$strings[$lang]["racemap"]. "\" />";
@@ -109,15 +109,15 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
             // Subscribe button/form
             $sub_button= "
-    		<form action=\"myboat.php\" method=\"post\">
-    		<input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
-    		<input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
-    		<input type=\"hidden\" name=\"type\" value=\"subscribe\">
-    		<input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
-    		<input type=\"submit\" value=\"" . $strings[$lang]["subscribe"] . "\" >
-    		</form>
-	      ";
-	    echo $sub_button;
+        <form action=\"myboat.php\" method=\"post\">
+        <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
+        <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
+        <input type=\"hidden\" name=\"type\" value=\"subscribe\">
+        <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
+        <input type=\"submit\" value=\"" . $strings[$lang]["subscribe"] . "\" >
+        </form>
+        ";
+      echo $sub_button;
         } 
 
 
@@ -127,11 +127,11 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
 
 
 if ( $q == RACE_TYPE_CLASSIC ) {
-	$URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
-	echo "<input type=\"button\" value=\"Click here to see Permanent-Record races\" onclick=\"document.location='" . $URL . "'\" />";
+  $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
+  echo "<input type=\"button\" value=\"Click here to see Permanent-Record races\" onclick=\"document.location='" . $URL . "'\" />";
 } else {
-	$URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_CLASSIC;
-	echo "<input type=\"button\" value=\"Click here to see Classical &amp; Qualification races\" onclick=\"document.location='" . $URL . "'\" />";
+  $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_CLASSIC;
+  echo "<input type=\"button\" value=\"Click here to see Classical &amp; Qualification races\" onclick=\"document.location='" . $URL . "'\" />";
 }
 
 ?>

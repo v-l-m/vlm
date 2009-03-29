@@ -2,16 +2,16 @@
  * It must react to delta being more/less than zero.
  */
 function handle(delta) {
-	if (delta < 0) {
-	     zoom++ ;
-	} else {
-	     zoom--;
-	}
-	if ( zoom > 20 ) zoom = 20;
-	if ( zoom < 0 ) zoom = 0;
+  if (delta < 0) {
+       zoom++ ;
+  } else {
+       zoom--;
+  }
+  if ( zoom > 20 ) zoom = 20;
+  if ( zoom < 0 ) zoom = 0;
 
-	//document.parameters.maparea.value = maparea ;
-	document.location = window.location.pathname + "?x=" + x + "&y=" + y + "&zoom=" + zoom + "&lat=" + lat + "&lon=" + lon
+  //document.parameters.maparea.value = maparea ;
+  document.location = window.location.pathname + "?x=" + x + "&y=" + y + "&zoom=" + zoom + "&lat=" + lat + "&lon=" + lon
 }
 
 /** Event handler for mouse wheel event.
@@ -44,7 +44,7 @@ function wheel(event){
          */
         if (event.preventDefault)
                 event.preventDefault();
-	event.returnValue = false;
+  event.returnValue = false;
 }
 
 /** Initialization code. 
