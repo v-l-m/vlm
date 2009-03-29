@@ -1,7 +1,3 @@
-<Files /new-update-wind.php>
-	Order Allow,Deny
-	Deny from All
-</Files>
 <Files /f_windAtPosition.php>
 	Order Allow,Deny
 	Deny from All
