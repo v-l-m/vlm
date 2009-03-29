@@ -95,8 +95,12 @@ array(
         "a16" => "A knot is a nautical mile per hour, so you will travel 6 nautical miles (nautics) every hour",
         "q17" => "How do I optimize my tacking ?",
         "a17" => "You'll have to compute your VMG (Velocity Made Good). Draw your speed vector and project it on your desired direction. Optimizing this projection is optimizing your course.",
-              "q18" => "How do I post to the forum?",
+        "q18" => "How do I post to the forum?",
         "a18" => "You'll have to create a separate account for the forum using the miniBB interface. This is independent from your Virtual Loup-de-Mer account",
+        "sh1" => "In the navigation bar on the left, you will find links toward VLM documentation : ",
+        "sh2" => "and tools associated to VLM : ",
+        "sh3" => "As well as links toward the forum (hosted by La Taverne) : ",
+        "sh4" => "or the ",
 
         "author" => "Author",
         "authorinfo" => "Sebastien Abeill&eacute; started a really good work with this project till version 0.4. His life changed and he is now a bit away from VLM since late 2005. Thanks Sebastien for this stuff, well and cleanly developped. I just have to continue !",
@@ -390,6 +394,11 @@ Voir <a href=\"http://www.univ-lemans.fr/~hainry/articles/loxonavi.html\">celui-
         "a17" => "Vous devez calculer votre VMG (Velocity Made Good). Celle-ci est obtenue en tra&ccedil;ant le vecteur vitesse de votre bateau sur une carte, et en le projetant sur la direction d&eacute;sir&eacute;e. Maximiser cette projection, c'est maximiser votre louvoyage.",
         "q18" => "Comment poster un message sur le forum ?",
         "a18" => "Vous devez d'abord cr&eacute;er un compte sur le forum, ind&eacute;pendamment de votre compte Virtual Loup-De-Mer",
+        "sh1" => "Dans la barre de navigation à gauche vous trouverez des liens vers la documentation de VLM : ",
+        "sh2" => "et les outils associés à VLM : ",
+        "sh3" => "Ainsi que des liens vers le forum (hébérgé par La Taverne) : ",
+        "sh4" => "ou le ",
+
 
         "author" => "Auteur",
         "authorinfo" => "Sebastien Abeill&eacute;. Sebastien lanc&eacute; le d&eacute;veloppement et a fait un super boulot jusqu'&agrave; d&eacute;but 2006 mais sa vie a un peu chang&eacute; et il n'a plus le temps de s'occuper des d&eacute;veloppements. Il a donc arr&ecirc;t&eacute; d'y travailler apr&egrave;s avoir sorti la version 0.4. Merci pour ce travail, il n'y a plus qu'&agrave; le continuer ! ",
