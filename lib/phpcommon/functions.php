@@ -295,7 +295,7 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
     
     if (array_key_exists($idraces, $WP_Cache)) {
       if (array_key_exists($idwp, $WP_Cache[$idraces])) {
-	return $WP_Cache[$idraces][$idwp];
+  return $WP_Cache[$idraces][$idwp];
       }
     } 
   }

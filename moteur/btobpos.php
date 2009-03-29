@@ -4,22 +4,22 @@ include_once "config.php";
 
 //$boat_num = array("", "-85", "-9", "-99", "-35", "-1876", "-29", "-33", "-4", "-06");
 $boat_num= array(
-		-25=>'Safran',
-		-7=>'Cheminées Poujoulat',
-		-14=>'Akena Veranda',
-		-101=>'Foncia',
-		-80=>'Gitana Eighty',
-		-62=>'Brit\'Air',
-		-3=>'Ecover',
-		-22=>'Generali',
-		-84=>'Spirit of Canada',
-		-50=>'Great American III',
-		-64=>'Roxy',
-		-1=>'Cervin EnR',
-		-111=>'Aviva',
-		-8=>'Maisonneuve',
-		-360=>'Groupe Bel'
-	);
+    -25=>'Safran',
+    -7=>'Cheminées Poujoulat',
+    -14=>'Akena Veranda',
+    -101=>'Foncia',
+    -80=>'Gitana Eighty',
+    -62=>'Brit\'Air',
+    -3=>'Ecover',
+    -22=>'Generali',
+    -84=>'Spirit of Canada',
+    -50=>'Great American III',
+    -64=>'Roxy',
+    -1=>'Cervin EnR',
+    -111=>'Aviva',
+    -8=>'Maisonneuve',
+    -360=>'Groupe Bel'
+  );
 
 
 

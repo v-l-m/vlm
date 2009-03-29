@@ -75,7 +75,7 @@ class positions
   }
 
   //  $newPos = addDistance2Positions($usersObj->lastPositions->long, $usersObj->lastPositions->lat, 
-  //			 $usersObj->boatspeed*$usersObj->hours, $usersObj->boatheading);  
+  //       $usersObj->boatspeed*$usersObj->hours, $usersObj->boatheading);  
   /*compute a new position from old position (milliDegree, speed (knt) and heading (geo)
    */
 
@@ -156,13 +156,13 @@ class positionsList
     $result = wrapper_mysql_db_query(DBNAME,$query);
 
     while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
-	    $pos = new positions();
-	    $pos->time = $row[0];
-	    $pos->long = $row[1];
-	    $pos->lat = $row[2];
-	    $pos->idusers = $idusers;
-	    $pos->race = $race;
-      	    array_push ($this->records, $pos);
+      $pos = new positions();
+      $pos->time = $row[0];
+      $pos->long = $row[1];
+      $pos->lat = $row[2];
+      $pos->idusers = $idusers;
+      $pos->race = $race;
+            array_push ($this->records, $pos);
       }
   }
 }
@@ -213,7 +213,7 @@ class gridList
       $min_longitude = floor($west/1000);
       if ( $west > 0 && $east < 0 ) {
          $pas_longitude=$maille*abs($east+360000 - $west)/10000;
-	 $max_longitude = 180;
+   $max_longitude = 180;
       } else {
          $pas_longitude=$maille*abs($east - $west)/10000;
          $max_longitude = ceil($east/1000) ;
@@ -225,34 +225,34 @@ class gridList
       // Boucle sur des parallèles (N->S), 
       while ( $latitude >= floor($south/1000)  ) {
 
-	  // Boucle sur les méridiens (W->E)
+    // Boucle sur les méridiens (W->E)
           $longitude = $min_longitude  ;
-	  // Pour les longitudes à l'ouest de Day Changing Line
-	  while ( $longitude <= $max_longitude +1 )  {
-	      // Instanciation du point de grille (Long, Lat, wspeed, wheading)
-	      $fullGridObj = new fullGrid ( $latitude*1000, $longitude*1000 , $timestamp);
-	      array_push ($this->records, $fullGridObj);
+    // Pour les longitudes à l'ouest de Day Changing Line
+    while ( $longitude <= $max_longitude +1 )  {
+        // Instanciation du point de grille (Long, Lat, wspeed, wheading)
+        $fullGridObj = new fullGrid ( $latitude*1000, $longitude*1000 , $timestamp);
+        array_push ($this->records, $fullGridObj);
               //printf("Latitude : %d, Longitude : %d, idgrid : %d\n", $latitude, $longitude, $idgrid);
-	      //printf ("Vent : %d au %d\n" , $fullGridObj->wspeed, $fullGridObj->wheading);
-	      $idgrid++;
+        //printf ("Vent : %d au %d\n" , $fullGridObj->wspeed, $fullGridObj->wheading);
+        $idgrid++;
 
-	      $longitude+=$pas_longitude;
+        $longitude+=$pas_longitude;
           }
-	  //printf ("Num gridpoints = %f, " , $idgrid);
+    //printf ("Num gridpoints = %f, " , $idgrid);
 
-	  // Pour les longitudes à l'est de Day Changing Line
-	  if ( $west >0 && $east< 0 ) {
+    // Pour les longitudes à l'est de Day Changing Line
+    if ( $west >0 && $east< 0 ) {
               $longitude -=360  ;
-	      while ( $longitude <= ceil($east/1000) )  {
-	          // Instanciation du point de grille (Long, Lat, wspeed, wheading)
-	          $fullGridObj = new fullGrid ( $latitude*1000, $longitude*1000 , $timestamp);
-	          array_push ($this->records, $fullGridObj);
-	          $idgrid++;
+        while ( $longitude <= ceil($east/1000) )  {
+            // Instanciation du point de grille (Long, Lat, wspeed, wheading)
+            $fullGridObj = new fullGrid ( $latitude*1000, $longitude*1000 , $timestamp);
+            array_push ($this->records, $fullGridObj);
+            $idgrid++;
 
-	          $longitude+=$pas_longitude;
+            $longitude+=$pas_longitude;
               }
-	  }
-	  //printf ("Num gridpoints = %f\n" , $idgrid);
+    }
+    //printf ("Num gridpoints = %f\n" , $idgrid);
 
           $latitude-=$pas_latitude;
       }

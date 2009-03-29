@@ -15,7 +15,7 @@ if ($fd = fopen ($filename, "r")){
 
            $boat=$ligne[1];
            $class[$boat]=$ligne[0];
-	   $time = strtotime("20".substr($ligne[4],6,2)."/".substr($ligne[4],0,2)."/".substr($ligne[4],3,2)." ".substr($ligne[4],9));
+     $time = strtotime("20".substr($ligne[4],6,2)."/".substr($ligne[4],0,2)."/".substr($ligne[4],3,2)." ".substr($ligne[4],9));
 
 
            $buf_lat=$ligne[2];

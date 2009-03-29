@@ -10,7 +10,7 @@ function windAtPosition($_lat = 0, $_long = 0, $when = 0, $version = SYSTEME_WIN
         // On force le mode de gestion du vent à ce qui est dit dans la config (param.php)
         $version = SYSTEME_WIND_AT_POSITION ;
 
-	if ( in_array($version , $versions) ) {
+  if ( in_array($version , $versions) ) {
           return call_user_func($version . 'windAtPosition' , $_lat, $_long, $when);
         } else {
           return call_user_func('OLDwindAtPosition' , $_lat, $_long);
@@ -31,8 +31,8 @@ function NOwindAtPosition($_lat , $_long, $when = 0)
     //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
     //printf ("Wind=%f\n", $vitesse, $angle);
     return array (
-    			$vitesse, $angle
-		 );
+          $vitesse, $angle
+     );
 }
 
 /*
@@ -65,15 +65,15 @@ function SPFwindAtPosition($_lat , $_long, $when = 0)
   $wind_boat = new wind_info();
   $_time=time()+$when;
   VLM_get_wind_info_latlong_millideg_TWSA($_lat, $_long,
-					  $_time, $wind_boat);
+            $_time, $wind_boat);
   
   shm_unlock_sem_destroy_grib(1);
   
   //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
   //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
   return array (
-		$wind_boat->speed, $wind_boat->angle
-		);
+    $wind_boat->speed, $wind_boat->angle
+    );
 }
 
 // Fonction avec table "windAtPosition" ==> 17/12/2006
@@ -118,10 +118,10 @@ function OLDwindAtPosition($_lat , $_long, $when = 0)
     // Voir la clause order by (long ASC, lat DESC)
 
     $query21 = "SELECT uwind, vwind , uwind3, vwind3, `time`" .
-		" FROM  wind " .
-		" WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
-		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
-		" ORDER BY longitude ASC, latitude DESC;"  ;
+    " FROM  wind " .
+    " WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
+    " AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
+    " ORDER BY longitude ASC, latitude DESC;"  ;
 
     $result21 = wrapper_mysql_db_query(DBNAME,$query21);
     //or die("Query failed : " . mysql_error." ".$query21);
@@ -142,7 +142,7 @@ function OLDwindAtPosition($_lat , $_long, $when = 0)
         $uwind3[$i] = $row21[2];
         $vwind3[$i] = $row21[3];
         $T0= $row21[4];
-	$i++;
+  $i++;
     }
 
     // Le timestamp de UWIND et VWIND (UWIND3 et VWIND3 sont valables 180 minutes après)
@@ -153,44 +153,44 @@ function OLDwindAtPosition($_lat , $_long, $when = 0)
       case 4:
       // Tableau à 4 points : 0:NW, 2:NE
       //                    , 1:SW, 3:SE
-    	$uw= $dW*($dN*$uwind[0]+$dS*$uwind[1]) + $dE*($dN*$uwind[2] + $dS*$uwind[3]);
-    	$uw3= $dW*($dN*$uwind3[0]+$dS*$uwind3[1]) + $dE*($dN*$uwind3[2] + $dS*$uwind3[3]);
-    	$vw= $dW*($dN*$vwind[0]+$dS*$vwind[1]) + $dE*($dN*$vwind[2] + $dS*$vwind[3]);
-    	$vw3= $dW*($dN*$vwind3[0]+$dS*$vwind3[1]) + $dE*($dN*$vwind3[2] + $dS*$vwind3[3]);
-	break;
+      $uw= $dW*($dN*$uwind[0]+$dS*$uwind[1]) + $dE*($dN*$uwind[2] + $dS*$uwind[3]);
+      $uw3= $dW*($dN*$uwind3[0]+$dS*$uwind3[1]) + $dE*($dN*$uwind3[2] + $dS*$uwind3[3]);
+      $vw= $dW*($dN*$vwind[0]+$dS*$vwind[1]) + $dE*($dN*$vwind[2] + $dS*$vwind[3]);
+      $vw3= $dW*($dN*$vwind3[0]+$dS*$vwind3[1]) + $dE*($dN*$vwind3[2] + $dS*$vwind3[3]);
+  break;
       case 2:
-	// On est sur un parallèle : moyenne sur W et E uniquement
-	// Order by longitude ASC ==>  [0]=W et [1]=E
+  // On est sur un parallèle : moyenne sur W et E uniquement
+  // Order by longitude ASC ==>  [0]=W et [1]=E
         if ( $dN == 0 && $dS == 0 ) {
-    	  $uw= ($dW*$uwind[0] + $dE*$uwind[1]);
-    	  $uw3= ($dW*$uwind3[0] + $dE*$uwind3[1]);
-    	  $vw= ($dW*$vwind[0] + $dE*$vwind[1]);
-    	  $vw3= ($dW*$vwind3[0] + $dE*$vwind3[1]);
-	} 
-	// On est sur un méridien : moyenne sur N et S uniquement
-	// Order by latitude DESC ==> [0]=N et [1]=S
-	else {
-    	  $uw= ($dN*$uwind[0] + $dS*$uwind[1]);
-    	  $uw3= ($dN*$uwind3[0] + $dS*$uwind3[1]);
-    	  $vw= ($dN*$vwind[0] + $dS*$vwind[1]);
-    	  $vw3= ($dN*$vwind3[0] + $dS*$vwind3[1]);
-	}
+        $uw= ($dW*$uwind[0] + $dE*$uwind[1]);
+        $uw3= ($dW*$uwind3[0] + $dE*$uwind3[1]);
+        $vw= ($dW*$vwind[0] + $dE*$vwind[1]);
+        $vw3= ($dW*$vwind3[0] + $dE*$vwind3[1]);
+  } 
+  // On est sur un méridien : moyenne sur N et S uniquement
+  // Order by latitude DESC ==> [0]=N et [1]=S
+  else {
+        $uw= ($dN*$uwind[0] + $dS*$uwind[1]);
+        $uw3= ($dN*$uwind3[0] + $dS*$uwind3[1]);
+        $vw= ($dN*$vwind[0] + $dS*$vwind[1]);
+        $vw3= ($dN*$vwind3[0] + $dS*$vwind3[1]);
+  }
         break;
       case 1:
         // 1 point  : Sur un méridien et un parallèle à la fois
-	  $uw=$uwind[0];
-	  $uw3=$uwind3[0];
-	  $vw=$vwind[0];
-	  $vw3=$vwind3[0];
+    $uw=$uwind[0];
+    $uw3=$uwind3[0];
+    $vw=$vwind[0];
+    $vw3=$vwind3[0];
         break;
       case 0:
         // 0 point (hors zone) ==> léger souffle de W  du à la rotation de la planète :-)
-	// Voir modification de la fonction angle()
-	  $uw=0;
-	  $uw3=0;
-	  $vw=0;
-	  $vw3=0;
-	  break;
+  // Voir modification de la fonction angle()
+    $uw=0;
+    $uw3=0;
+    $vw=0;
+    $vw3=0;
+    break;
     }
 
     // On va faire le calcul du vent en fonction de time() et de sa proximité par rapport à T0.
@@ -202,9 +202,9 @@ function OLDwindAtPosition($_lat , $_long, $when = 0)
     //printf ("Lat=%d, Long=%d, UW=%d, VW=%d\n", $_lat, $_long, $uv, $uw);
     //printf ("Wind=%f\n", norm($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3));
     return array (
-    			norm($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3),
-    			angle($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3)
-		 );
+          norm($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3),
+          angle($d_T1*$uw + $d_T0*$uw3 ,   $d_T1*$vw + $d_T0 * $vw3)
+     );
 }
 
 
@@ -282,12 +282,12 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
 
     // Premier enregistrement (time juste inférieur)
     $query = "SELECT uwind, vwind , `time` " .
-		" FROM  winds " .
-		" WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
-		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
-		" AND   time <= $_time " .
-		" ORDER BY time DESC, longitude ASC, latitude DESC " .
-		" LIMIT 4;"  ;
+    " FROM  winds " .
+    " WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
+    " AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
+    " AND   time <= $_time " .
+    " ORDER BY time DESC, longitude ASC, latitude DESC " .
+    " LIMIT 4;"  ;
 
     $result = wrapper_mysql_db_query(DBNAME,$query);
     //echo $query;
@@ -297,18 +297,18 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
         $uwind0[$i] = $row[0];
         $vwind0[$i] = $row[1];
         $T0= $row[2];
-	$i++;
+  $i++;
     }
 
 
     // Second enregistrement (time juste supérieur)
     $query = "SELECT uwind, vwind , `time` " .
-		" FROM  winds " .
-		" WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
-		" AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
-		" AND   time >= $_time " .
-		" ORDER BY time ASC, longitude ASC, latitude DESC " .
-		" LIMIT 4;"  ;
+    " FROM  winds " .
+    " WHERE longitude  between " . floor($long) . " AND " . ceil($long)  .
+    " AND   latitude   between " . floor($lat)  . " AND " . ceil($lat)  .
+    " AND   time >= $_time " .
+    " ORDER BY time ASC, longitude ASC, latitude DESC " .
+    " LIMIT 4;"  ;
 
     $result = wrapper_mysql_db_query(DBNAME,$query);
     //echo $query;
@@ -319,7 +319,7 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
         $uwind3[$i] = $row[0];
         $vwind3[$i] = $row[1];
         $T3= $row[2];
-	$i++;
+  $i++;
     }
     // Le timestamp de UWIND et VWIND (UWIND3 et VWIND3 sont valables 180 minutes après)
 
@@ -330,44 +330,44 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
       case 4:
       // Tableau à 4 points : 0:NW, 2:NE
       //                    , 1:SW, 3:SE
-    	$uw= $dW*($dN*$uwind0[0]+$dS*$uwind0[1]) + $dE*($dN*$uwind0[2] + $dS*$uwind0[3]);
-    	$uw3= $dW*($dN*$uwind3[0]+$dS*$uwind3[1]) + $dE*($dN*$uwind3[2] + $dS*$uwind3[3]);
-    	$vw= $dW*($dN*$vwind0[0]+$dS*$vwind0[1]) + $dE*($dN*$vwind0[2] + $dS*$vwind0[3]);
-    	$vw3= $dW*($dN*$vwind3[0]+$dS*$vwind3[1]) + $dE*($dN*$vwind3[2] + $dS*$vwind3[3]);
-	break;
+      $uw= $dW*($dN*$uwind0[0]+$dS*$uwind0[1]) + $dE*($dN*$uwind0[2] + $dS*$uwind0[3]);
+      $uw3= $dW*($dN*$uwind3[0]+$dS*$uwind3[1]) + $dE*($dN*$uwind3[2] + $dS*$uwind3[3]);
+      $vw= $dW*($dN*$vwind0[0]+$dS*$vwind0[1]) + $dE*($dN*$vwind0[2] + $dS*$vwind0[3]);
+      $vw3= $dW*($dN*$vwind3[0]+$dS*$vwind3[1]) + $dE*($dN*$vwind3[2] + $dS*$vwind3[3]);
+  break;
       case 2:
-	// On est sur un parallèle : moyenne sur W et E uniquement
-	// Order by longitude ASC ==>  [0]=W et [1]=E
+  // On est sur un parallèle : moyenne sur W et E uniquement
+  // Order by longitude ASC ==>  [0]=W et [1]=E
         if ( $dN == 0 && $dS == 0 ) {
-    	  $uw= ($dW*$uwind0[0] + $dE*$uwind0[1]);
-    	  $uw3= ($dW*$uwind3[0] + $dE*$uwind3[1]);
-    	  $vw= ($dW*$vwind0[0] + $dE*$vwind0[1]);
-    	  $vw3= ($dW*$vwind3[0] + $dE*$vwind3[1]);
-	} 
-	// On est sur un méridien : moyenne sur N et S uniquement
-	// Order by latitude DESC ==> [0]=N et [1]=S
-	else {
-    	  $uw= ($dN*$uwind0[0] + $dS*$uwind0[1]);
-    	  $uw3= ($dN*$uwind3[0] + $dS*$uwind3[1]);
-    	  $vw= ($dN*$vwind0[0] + $dS*$vwind0[1]);
-    	  $vw3= ($dN*$vwind3[0] + $dS*$vwind3[1]);
-	}
+        $uw= ($dW*$uwind0[0] + $dE*$uwind0[1]);
+        $uw3= ($dW*$uwind3[0] + $dE*$uwind3[1]);
+        $vw= ($dW*$vwind0[0] + $dE*$vwind0[1]);
+        $vw3= ($dW*$vwind3[0] + $dE*$vwind3[1]);
+  } 
+  // On est sur un méridien : moyenne sur N et S uniquement
+  // Order by latitude DESC ==> [0]=N et [1]=S
+  else {
+        $uw= ($dN*$uwind0[0] + $dS*$uwind0[1]);
+        $uw3= ($dN*$uwind3[0] + $dS*$uwind3[1]);
+        $vw= ($dN*$vwind0[0] + $dS*$vwind0[1]);
+        $vw3= ($dN*$vwind3[0] + $dS*$vwind3[1]);
+  }
         break;
       case 1:
         // 1 point  : Sur un méridien et un parallèle à la fois
-	  $uw=$uwind0[0];
-	  $uw3=$uwind3[0];
-	  $vw=$vwind0[0];
-	  $vw3=$vwind3[0];
+    $uw=$uwind0[0];
+    $uw3=$uwind3[0];
+    $vw=$vwind0[0];
+    $vw3=$vwind3[0];
         break;
       case 0:
         // 0 point (hors zone) ==> léger souffle de W  du à la rotation de la planète :-)
-	// Voir modification de la fonction angle()
-	  $uw=0;
-	  $uw3=0;
-	  $vw=0;
-	  $vw3=0;
-	  break;
+  // Voir modification de la fonction angle()
+    $uw=0;
+    $uw3=0;
+    $vw=0;
+    $vw3=0;
+    break;
     }
 
     // On va faire le calcul du vent en fonction de time() et de sa proximité par rapport à T0.
@@ -388,9 +388,9 @@ function NEWwindAtPosition($_lat , $_long, $when = 0)
     //printf ("T0=%s, <br>TIME=%s, <br>T3=%s, <br>DTemps=%d, Delta=%f\n", gmdate("Y/m/d H:i:s",$T0), gmdate("Y/m/d H:i:s",$_time), gmdate("Y/m/d H:i:s",$T3), $d_temps, $d_T0);
     //printf ("T0=%s, <br>TIME=%s, <br>T3=%s, <br>DTemps=%d, Delta=%f\n", $T0, $_time, $T3, $d_temps, $d_T0);
     return array (
-    			norm($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3),
-    			angle($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3)
-		 );
+          norm($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3),
+          angle($d_T3*$uw + $d_T0*$uw3 ,   $d_T3*$vw + $d_T0 * $vw3)
+     );
 }
 
 ?>
