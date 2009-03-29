@@ -7,11 +7,7 @@
     header("Content-type: text/html; charset=utf-8");
 
     //all GET and POST variables
-    if ( isset($_REQUEST['lang']) ) {
-        $lang=quote_smart($_REQUEST['lang']);
-    } else {
-        $lang=NavigatorLanguage();
-    }
+    $lang = getCurrentLang();
     $pseudo=quote_smart($_REQUEST['pseudo']);
     $password=quote_smart($_REQUEST['password']);
     $class=quote_smart($_REQUEST['class']);

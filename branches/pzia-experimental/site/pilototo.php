@@ -1,16 +1,16 @@
 <?php
+
 /*
 ** Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connecté
 */
+
 session_start();
 include_once("includes/strings.inc");
 include_once("config.php");
 include_once("functions.php");
 
-
-
 //all GET and POST variables
-isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang="en";
+$lang = getCurrentLang();
 
 // Les entêtes
 echo "<html><head>";
