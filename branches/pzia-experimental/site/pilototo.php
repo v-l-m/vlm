@@ -25,6 +25,7 @@
 <script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar.js"></script>
 <script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/lang/calendar-<?php echo $lang; ?>.js"></script>
 <script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-setup.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
 <script type="text/javascript">
 
@@ -152,7 +153,7 @@
     $rc=$usersObj->pilototoList();
     
     echo "<table>
-         <th>&nbsp</th><th>Epoch Time</th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>";
+         <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>";
     if ( count($usersObj->pilototo) != 0) {
         $numligne=0;
         foreach ($usersObj->pilototo as $pilototo_row) {
@@ -163,8 +164,13 @@
             echo "<td>
               <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_upd"]  .">
             </td>";
-            echo "<td><input id=\"ts_value_$numligne\" type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1]></td>";
+            echo "<td><input id=\"ts_value_$numligne\" type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1] /></td>";
+            echo "<td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numligne\" class=\"calendarbutton\" title=\"Date selector\"
+                  onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" />";
+            echo "</td>\n";
+
 ?>
+
 <script type="text/javascript"> 
     Calendar.setup({
         inputField     :    "ts_value_<?php echo $numligne; ?>",     // id of the input field
@@ -176,9 +182,8 @@
         timeFormat      :    "24"
     });
 </script>
+
 <?php
-            echo "<img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numligne\" class=\"calendarbutton\" title=\"Date selector\"
-                  onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" />";
             // SELECT LIST pour le type de pilote
             echo "<td><input type=text name=pim onKeyup=\"checkpip($numligne);\" width=1 size=1 value=$pilototo_row[2]></td>";
             echo "<td><input type=text name=pip width=20 size=20 value=$pilototo_row[3]></td>";
@@ -202,7 +207,25 @@
         echo "<tr>
            <td align=center><input type=submit name=action 
                                    value=" . $strings[$lang]["pilototo_prog_add"] . "></td>
-           <td><input type=text name=time onKeyup=\"majhrdate($numligne);\" value=" . time() . " width=15 size=15></td>
+           <td><input id=\"ts_value_$numligne\" type=text name=time onKeyup=\"majhrdate($numligne);\" value=" . time() . " width=15 size=15></td>";
+        echo "<td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numligne\" class=\"calendarbutton\" title=\"Date selector\"
+                  onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" />";
+        echo "</td>\n";
+
+?>
+           <script type="text/javascript"> 
+              Calendar.setup({
+                  inputField     :    "ts_value_<?php echo $numligne; ?>",     // id of the input field
+                  ifFormat       :    "%s",      // format of the input field
+                  button         :    "trigger_jscal_<?php echo $numligne; ?>",  // trigger for the calendar (button ID)
+                  align          :    "Tl",           // alignment (defaults to "Bl")
+                  singleClick    :    false,
+                  showsTime       :    true,
+                  timeFormat      :    "24"
+              });
+          </script>
+<?php
+        echo "
            <td><input type=text name=pim  onKeyup=\"checkpip($numligne);\" width=1  size=1 ></td>
            <td><input type=text name=pip  width=20  size=20 ></td>
            <td>this line to add</td>
