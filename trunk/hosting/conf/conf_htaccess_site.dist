@@ -1,6 +1,6 @@
 <Files /f_windAtPosition.php>
-	Order Allow,Deny
-	Deny from All
+  Order Allow,Deny
+  Deny from All
 </Files>
 <IfModule mod_php5.c>
   php_value include_path ".:/home/commun/testing/lib/phpcommon:/opt/php/lib/php:"
