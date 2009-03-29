@@ -103,8 +103,10 @@ appear in generated list. Here are some most used field options documented.
 
 $opts['fdd']['idraces'] = array(
   'name'     => 'Idraces',
+  'help'     => 'Unique id of the race',
   'select'   => 'T',
-  'options'  => 'AVCPDR', // auto increment
+  'input|LVCD'  => 'R',
+  'input|AP' => '',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
@@ -112,6 +114,8 @@ $opts['fdd']['idraces'] = array(
 $opts['fdd']['racename'] = array(
   'name'     => 'Name of the race',
   'select'   => 'T',
+  'escape'   => false,
+  'help'     => 'Basic HTML is for now allowed but discouraged', 
   'maxlen'   => 255,
   'sort'     => true
 );
@@ -127,7 +131,7 @@ $opts['fdd']['deptime'] = array(
   'name'     => 'Deptime',
   'select'   => 'T',
   'sql|LFVD' => 'FROM_UNIXTIME(deptime)',
-  'maxlen'   => 14,
+  'maxlen'   => 20,
   'sort'     => true,
   'calendar' => $calendar_specifications,
 );
@@ -172,6 +176,7 @@ $opts['fdd']['racetype'] = array(
 $opts['fdd']['firstpcttime'] = array(
   'name'     => 'Firstpcttime',
   'select'   => 'T',
+  'mask'     => '%3.0f %%',
   'maxlen'   => 20,
   'sort'     => true
 );

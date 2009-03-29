@@ -722,7 +722,7 @@ include_once("scripts/myboat.js");
                 <input title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
             </p>
             <p>
-                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . "/vac)"; ?></span>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
                 <input title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
             </p>
             <p>
