@@ -66,6 +66,8 @@ define ("BUOY_E", "buoy_south.png");
 
 define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
 define ("DIRECTORY_THEMES","style");
+define ("DIRECTORY_POLARS","Polaires");
+define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
 
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);

@@ -34,6 +34,14 @@ function NavigatorLanguage()
   return $lang;
 }
 
+function getCurrentLang() {
+    //FIXME utiliser NavigatorLanguage pour définir le default en combinant avec strings
+    if (isset($_REQUEST['lang'])) {
+        return quote_smart($_REQUEST['lang']);
+    } else {
+         return "en";  
+    }
+}
 
 /*return knots*/
 function norm($x, $y)
