@@ -12,9 +12,9 @@ $filename="http://www.vendeeglobe.org/fr/classement.html";
 
 if ($fd = fopen ($filename, "r")) {
     while (!feof ($fd)) {
-       	$buffer = fgets($fd, 4096);
+         $buffer = fgets($fd, 4096);
         //printf ("==> %s", $buffer);
-	// Si la ligne contient  une référence à la page du skipper, 
+  // Si la ligne contient  une référence à la page du skipper, 
            // on en extrait numéro du bateau , et nom du skipper
            if ( ereg('/fr/edition-2008/skippers/[0-9]+',$buffer) ) {
                 $tmp=split('[/<>"]', $buffer);
@@ -23,33 +23,33 @@ if ($fd = fopen ($filename, "r")) {
                 $skipper=$tmp[11];
 
                 // nom du bateau
-       	        $buffer = fgets($fd, 4096);
+                 $buffer = fgets($fd, 4096);
                 $tmp=split('[/<>"]', $buffer);
                 $boatname= $tmp[2];
                 
                 // Puis on lit les suivantes : heure et position notamment
                 // une ligne vide 
-       	        $buffer = fgets($fd, 4096);
+                 $buffer = fgets($fd, 4096);
 
                 // Date position
-       	        $buffer = fgets($fd, 4096);
+                 $buffer = fgets($fd, 4096);
                                                // Tab + espace
-                $tmp=split('[<>]', preg_replace('/[	 ]*/','',$buffer));
+                $tmp=split('[<>]', preg_replace('/[   ]*/','',$buffer));
                 $date_pos=$tmp[0];
                 
                 // Heure position
-       	        $buffer = fgets($fd, 4096);
+                 $buffer = fgets($fd, 4096);
                                                // Tab + espace
-                $tmp=split('[<>]', preg_replace('/[	 ]*/','',$buffer));
+                $tmp=split('[<>]', preg_replace('/[   ]*/','',$buffer));
                 $heure_pos=$tmp[0];
 
                 // Ne fonctionne pas bien à cause de la carto qui ne remonte pas les vielles positions.
                 $time = strtotime ($date_pos . " " . $heure_pos) +7200;
 
-		// Latitude
-       	        $buffer = fgets($fd, 4096);
+    // Latitude
+                 $buffer = fgets($fd, 4096);
                                                // Tab seulement
-                $tmp=split('[<>]', preg_replace('/[	]*/','',$buffer));
+                $tmp=split('[<>]', preg_replace('/[  ]*/','',$buffer));
                 $latitude=$tmp[2];
                 $tmp=split("[ .]",$latitude);
                 if ($tmp[3] == "S" ){
@@ -58,10 +58,10 @@ if ($fd = fopen ($filename, "r")) {
                     $latb=1000*($tmp[0]  +  100/60*($tmp[1] . "." . substr($tmp[2],0,2))/100);
                 }
 
-		// Longitude
-       	        $buffer = fgets($fd, 4096);
+    // Longitude
+                 $buffer = fgets($fd, 4096);
                                                // Tab seulement
-                $tmp=split('[<>]', preg_replace('/[	]*/','',$buffer));
+                $tmp=split('[<>]', preg_replace('/[  ]*/','',$buffer));
                 $longitude=$tmp[2];
                 $tmp=split("[ .]",$longitude);
 //print_r($tmp);

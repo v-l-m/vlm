@@ -3,8 +3,8 @@
 include_once "config.php";
 
 $boat_num= array(
-		-10=>'Groupama 3',
-	);
+    -10=>'Groupama 3',
+  );
 
 
 
@@ -15,19 +15,19 @@ $filename="http://cammas-groupama.geovoile.com/julesverne/positions.asp?lg=fr";
 if ($fd = fopen ($filename, "r")) {
   while (!feof ($fd)) {
         $buffer = fgets($fd, 4096);
-	// Si le bloc contient "trLigne".. on regarde ce qui suit : les 3 lignes suivantes sont intéressantes
+  // Si le bloc contient "trLigne".. on regarde ce qui suit : les 3 lignes suivantes sont intéressantes
         if ( ereg('trLigne',$buffer) ) {
 
-	  // Le timestamp
-	  $buffer= fgets($fd , 4096);
+    // Le timestamp
+    $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
-	  $time=$ligne[2];
+    $time=$ligne[2];
 
-	  $buffer= fgets($fd , 4096);
+    $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
 
           $lat = preg_split("/[°, ]/",$ligne[2]);
-	  //print_r($lat);
+    //print_r($lat);
           if ($lat[3] == "S"){
                  $latb=-1*($lat[0]+ $lat[1]/60 + $lat[2]/3600);
           }
@@ -35,10 +35,10 @@ if ($fd = fopen ($filename, "r")) {
                  $latb=$lat[0]+ $lat[1]/60 + $lat[2]/3600;
           }
 
-	  $buffer= fgets($fd , 4096);
+    $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
           $lon = preg_split("/[°, ]/",$ligne[2]);
-	  //print_r($lon);
+    //print_r($lon);
 
           if ($lon[3] == "W"){
                  $lonb=-1*($lon[0]+ $lon[1]/60 + $lon[2]/3600);
@@ -47,7 +47,7 @@ if ($fd = fopen ($filename, "r")) {
                  $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600;
           }
           //printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
-	  break;
+    break;
         }
 
   }

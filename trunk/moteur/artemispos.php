@@ -23,40 +23,40 @@
                   $lonb=$coord[0]+ substr($coord[1], 0, 2)/60 + substr($coord[1], 2, 2)/3600;
 
 
-		  //$loch=ortho($lonb*1000, $latb*1000, -4151.5 , 50320);
+      //$loch=ortho($lonb*1000, $latb*1000, -4151.5 , 50320);
                   $loch=0;
 
-  		  $time=$ligne[4];
+        $time=$ligne[4];
                   $boatname=$ligne[7];
                   $race=$ligne[8];
                   $dnm=$ligne[5];
                   $last1h=$ligne[6];
 
-  		  // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
+        // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
                   printf ("Boat=%s, Num=%d, Time=%s, LAT=%s, LON=%s\n", $boatname, $idusers,$time, $latb, $lonb);
                   $query="replace into users (idusers,password,username,engaged,nextwaypoint,userdeptime,loch)
                                 values ($idusers, 'xxxxxxxx', '".$boatname."', $race,1,1210510800,$loch);";
-     		  mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
-     		  //echo "$query\n";
+           mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
+           //echo "$query\n";
 
                   $query="replace into races_ranking (idraces,idusers,latitude,longitude,loch,nwp,dnm, last1h)
                                 values ($race,$idusers, $latb*1000,$lonb*1000, $loch,1,$dnm,$last1h);";
-     		  mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
-     		  //echo "$query\n";
+           mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
+           //echo "$query\n";
 
 
-     		  $query ="insert into positions values ";
-     		  $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race, '' ) ;";
+           $query ="insert into positions values ";
+           $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race, '' ) ;";
 
-     		  mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
-     		  //echo "$query\n";
+           mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
+           //echo "$query\n";
 
-     		  $fullUsersObj = new fullUsers($idusers);
-     		  $fullUsersObj->writeCurrentRanking();
+           $fullUsersObj = new fullUsers($idusers);
+           $fullUsersObj->writeCurrentRanking();
                   printf("\n");
             }
 
-	}
+  }
    }
 
 }

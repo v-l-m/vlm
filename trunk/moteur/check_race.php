@@ -17,18 +17,18 @@
    //        Parameter (verbose) added 2008/03/16 (0 non verbose (myboat.php), 1 verbose (here))
    else if ( $fullRacesObj->races->maxTimeRemaining(1) < 0 ) {
         // let's put all the remaining players to status HTP
-	echo "\n   This race is finished : time exceeded the Winners's PCT time !\n";
-	foreach ( $fullRacesObj->opponents as $usersObj ) {
-	   echo "   Setting user ".$usersObj->idusers . " HTP... ";
-	  
+  echo "\n   This race is finished : time exceeded the Winners's PCT time !\n";
+  foreach ( $fullRacesObj->opponents as $usersObj ) {
+     echo "   Setting user ".$usersObj->idusers . " HTP... ";
+    
            //need to get fullUsers Object
            $fullUsersObj = new fullUsers($usersObj->idusers);
-	   $fullUsersObj->setHTP();
-	   echo " done !\n";
+     $fullUsersObj->setHTP();
+     echo " done !\n";
 
-	}
+  }
         // let's close the race
-	$fullRacesObj->stopRaces();
+  $fullRacesObj->stopRaces();
    } 
 
    // Race not finished, let's do the job for each user
@@ -39,12 +39,12 @@
              || ( $USER_NUM == 0)   ) {
 
              // Check only the race given in first arg if one is given, else check all races
-	     //echo "\n==>" . $usersObj->idusers;
+       //echo "\n==>" . $usersObj->idusers;
              
              // Cas d'un joueur VLM
              if ( $usersObj->idusers > 0 ) {
-	          include "check_user.php";
-	          $nb_boats++;
+            include "check_user.php";
+            $nb_boats++;
              } else {
                   // Cas d'un bateau réel
                   $fullUsersObj = new fullUsers($usersObj->idusers);

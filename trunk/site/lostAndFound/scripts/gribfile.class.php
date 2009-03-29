@@ -2,18 +2,18 @@
 class gribFile
 {
   var 
-	$minlat,
-	$maxlat,
-	$minlong,
-	$maxlong,
-	$validity;
+  $minlat,
+  $maxlat,
+  $minlong,
+  $maxlong,
+  $validity;
 
   function store($filename)
   {
     // Todo : tester le nombre d'arguments. Attention, en PHP, $argc compte le nom du script
     $handle = fopen($filename, "r");
     if ( $handle ) {
-    	printf ("Gribfile opened filename=%s\n", $filename);
+      printf ("Gribfile opened filename=%s\n", $filename);
 
     // get latitudes for the zone (min/max)
     $buffer = fscanf ($handle, "%s\t%s\n");
@@ -37,43 +37,43 @@ class gribFile
     $now_rond=mktime($h,0,0,$m,$d,$y);
 
     $i=0;
-    for ($lati=$this->maxlat; $lati >= $this->minlat ; $lati-=0.5 )	
+    for ($lati=$this->maxlat; $lati >= $this->minlat ; $lati-=0.5 )  
     {
     //printf ("%f\n", $lati);
       for ($longi=$this->minlong; $longi <= $this->maxlong ; $longi+=0.5 )
       {
           //printf ("%f\n", $longi);
           if ( $longi > 180 ) {
-	  	$corrected_longi = $longi - 360;
-	  } else {
-	  	$corrected_longi = $longi;
-	  }
+      $corrected_longi = $longi - 360;
+    } else {
+      $corrected_longi = $longi;
+    }
 
           $buffer = fscanf ($handle, "%s\t%s\t%s\t%s\n");  
-       	  list ($uwind , $vwind, $uwind3, $vwind3) = $buffer;
-	
-	  $query0 = "REPLACE INTO wind "  
-	     .      " (latitude, longitude, wspeed, wheading, time, uwind, vwind, uwind3, vwind3)" 
-	     .      "   VALUES ( " 
-	     .                    $lati  . ", " 
-	     .                    $corrected_longi . ", "  
-	     .                    norm($uwind, $vwind) . ", " 
-	     .                    angle($uwind, $vwind)  . ", "
-	     .			  $now_rond . ", "
-	     .                    $uwind . ", "
-	     .                    $vwind . ", "
-	     .			  $uwind3 . ", "
-	     .			  $vwind3
-	     .                   ");"   ;
+           list ($uwind , $vwind, $uwind3, $vwind3) = $buffer;
+  
+    $query0 = "REPLACE INTO wind "  
+       .      " (latitude, longitude, wspeed, wheading, time, uwind, vwind, uwind3, vwind3)" 
+       .      "   VALUES ( " 
+       .                    $lati  . ", " 
+       .                    $corrected_longi . ", "  
+       .                    norm($uwind, $vwind) . ", " 
+       .                    angle($uwind, $vwind)  . ", "
+       .        $now_rond . ", "
+       .                    $uwind . ", "
+       .                    $vwind . ", "
+       .        $uwind3 . ", "
+       .        $vwind3
+       .                   ");"   ;
 
 
-	  if ($verbose != 0) echo $query0."\n";
+    if ($verbose != 0) echo $query0."\n";
 
-	  if ( $longi == round ($longi ) && $lati == round ($lati) ) {
-	    wrapper_mysql_db_query(DBNAME,$query0);
-	  }
+    if ( $longi == round ($longi ) && $lati == round ($lati) ) {
+      wrapper_mysql_db_query(DBNAME,$query0);
+    }
 
-    	  $i++;
+        $i++;
         }
       }
       printf ("Gridsize = %d\n", $i);
@@ -81,7 +81,7 @@ class gribFile
     }
     else
     {
-    	printf ("Gribfile can not be opened filename=%s\n", $filename);
+      printf ("Gribfile can not be opened filename=%s\n", $filename);
     }
    }
 
@@ -102,11 +102,11 @@ class gribFile
   {
       $latitude=$lat;
       while ( $latitude < 90 ) {
-      	$query0 = "update wind set uwind=uwind*0.7,vwind=vwind*0.7,uwind3=uwind3*0.7,vwind3=vwind3*0.7  where abs(latitude) > " . $latitude  ;
+        $query0 = "update wind set uwind=uwind*0.7,vwind=vwind*0.7,uwind3=uwind3*0.7,vwind3=vwind3*0.7  where abs(latitude) > " . $latitude  ;
 
-      	wrapper_mysql_db_query(DBNAME,$query0);
-      	echo $query0 ."\n";
-      	if ($verbose != 0) echo $query0."\n";
+        wrapper_mysql_db_query(DBNAME,$query0);
+        echo $query0 ."\n";
+        if ($verbose != 0) echo $query0."\n";
         $latitude++;
       }
    }
@@ -116,9 +116,9 @@ class gribFile
     // Todo : tester le nombre d'arguments. Attention, en PHP, $argc compte le nom du script
     $handle = fopen($filename, "r");
     if ( $handle ) {
-    	printf ("Gribfile opened filename=%s\n", $filename);
+      printf ("Gribfile opened filename=%s\n", $filename);
     } else {
-    	printf ("Gribfile can not be opened filename=%s\n", $filename);
+      printf ("Gribfile can not be opened filename=%s\n", $filename);
         exit;
     }
 
@@ -143,50 +143,50 @@ class gribFile
     list($this->validity) =$buffer; 
 
     $i=0;
-    for ($lati=$this->maxlat; $lati >= $this->minlat ; $lati-=0.5 )	
+    for ($lati=$this->maxlat; $lati >= $this->minlat ; $lati-=0.5 )  
     {
     //printf ("%f\n", $lati);
       for ($longi=$this->minlong; $longi <= $this->maxlong ; $longi+=0.5 )
       {
           //printf ("%f\n", $longi);
           if ( $longi > 180 ) {
-	  	$corrected_longi = $longi - 360;
-	  } else {
-	  	$corrected_longi = $longi;
-	  }
+      $corrected_longi = $longi - 360;
+    } else {
+      $corrected_longi = $longi;
+    }
 
           $buffer = fscanf ($handle, "%s\t%s\n");  
-       	  list ($uwind , $vwind) = $buffer;
-	
-	  $query0 = "REPLACE INTO winds "  
-	     .      " (latitude, longitude, time, uwind, vwind)" 
-	     .      "   VALUES ( " 
-	     .                    $lati  . ", " 
-	     .                    $corrected_longi . ", "  
-	     .			  $this->validity  . ", "
-	     .                    $uwind . ", "
-	     .                    $vwind . ")"     ;
+           list ($uwind , $vwind) = $buffer;
+  
+    $query0 = "REPLACE INTO winds "  
+       .      " (latitude, longitude, time, uwind, vwind)" 
+       .      "   VALUES ( " 
+       .                    $lati  . ", " 
+       .                    $corrected_longi . ", "  
+       .        $this->validity  . ", "
+       .                    $uwind . ", "
+       .                    $vwind . ")"     ;
 
-	  // Ajout d'une ligne pour -180 (PB antemeridien)
-	  if ( $corrected_longi == 180 ) {
-	       $query0 .=     "   , ( "
-	               .                    $lati  . ", "
-	               .                    -180   . ", "
-	               .                    $this->validity  . ", "
-	               .                    $uwind . ", "
-	               .                    $vwind . ")"     ;
+    // Ajout d'une ligne pour -180 (PB antemeridien)
+    if ( $corrected_longi == 180 ) {
+         $query0 .=     "   , ( "
+                 .                    $lati  . ", "
+                 .                    -180   . ", "
+                 .                    $this->validity  . ", "
+                 .                    $uwind . ", "
+                 .                    $vwind . ")"     ;
 
-	  }
+    }
 
-	  $query0 .= ";";
+    $query0 .= ";";
 
-	  if ($verbose != 0) echo $query0."\n";
+    if ($verbose != 0) echo $query0."\n";
 
-	  if ( $longi == round ($longi ) && $lati == round ($lati) ) {
-	    wrapper_mysql_db_query(DBNAME,$query0);
-	  }
+    if ( $longi == round ($longi ) && $lati == round ($lati) ) {
+      wrapper_mysql_db_query(DBNAME,$query0);
+    }
 
-    	  $i++;
+        $i++;
         }
       }
       printf ("Gridsize = %d\n", $i);
