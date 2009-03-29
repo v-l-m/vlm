@@ -9,14 +9,44 @@
     include_once("config.php");
     include_once("functions.php");
     
+    //helper pour construire la page
+    
+    function echoPilototoRow($numline, $row = 0, $ts = 0, $pim = 0, $pip = 0, $status = "") {
+        global $strings, $lang;
+        if ($status === "") {
+            $klasssufix = "blank";  
+        }
+
+        echo "<form action=\"pilototo.php\" method=\"post\">\n";
+        echo "  <input type=\"hidden\" name=\"lang\" value=\"$lang\" />\n";
+        echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
+        echo "  <tr class="linepilototobox-$klasssuffix">\n";
+        echo "    <td><input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_upd"]  ." /></td>\n";
+        echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onKeyup=\"majhrdate($numligne);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
+        echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
+        // FIXME : SELECT LIST pour le type de pilote
+        echo "    <td><input type=\"text\" name=\"pim\" onKeyup=\"checkpip($numligne);\" width=\"1\" size=\"1\" value=\"$pim\" /></td>\n";
+        echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
+        echo "    <td>";
+        if ($status != "") {
+            echo "$status";
+            echo "<input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_del"] . " />";
+        }
+        echo "</td>\n";
+        //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
+        echo "    <td><input type=\"text\" size=\"25\" name=\"gmtdate\" disabled value=\"" .gmdate("Y/m/d H:i:s", $pilototo_row[1]) . " GMT\" /></td>\n";
+        echo "    <td>" . $row . "</td>\n";
+        echo "  </tr>\n";
+        echo "</form>\n";
+    }
+    
     //all GET and POST variables
     $lang = getCurrentLang();
     
     // Les entêtes
-    // FIXME : disposer d'un fichier d'en tête commun !
-    echo "<html><head>";
-    echo "<title>VLM Programmable Auto Pilot (" . $lang . ")</title>";
-    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/style/base-style.css\" />";
+    // FIXME : disposer d'un fichier d'en tête commun plus complet !
+    include("includes/doctypeheader.html");
+    echo "\n<title>VLM Programmable Auto Pilot (" . $lang . ")</title>";
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/" . getTheme() . "/style.css\" />";
 
 ///   CODE JAVASCRIPT
@@ -28,6 +58,21 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
 <script type="text/javascript">
+
+    function calbuttonsetup(n) {
+    
+        for (i=0;i<n;i++) {
+            Calendar.setup({
+                inputField     :    "ts_value_"+i,     // id of the input field
+                ifFormat       :    "%s",      // format of the input field
+                button         :    "trigger_jscal_"+i,  // trigger for the calendar (button ID)
+                align          :    "Tl",           // alignment (defaults to "Bl")
+                singleClick    :    false,
+                showsTime       :    true,
+                timeFormat      :    "24"
+            });
+        }
+    }
 
     function majhrdate(i) {
     
@@ -52,7 +97,7 @@
 </script>
 
 <?php
-    echo "</head></html>";
+    echo "</head><body>";
 
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
@@ -152,53 +197,16 @@
     // On affiche la liste des actions
     $rc=$usersObj->pilototoList();
     
-    echo "<table>
+    echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
          <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>";
     if ( count($usersObj->pilototo) != 0) {
         $numligne=0;
         foreach ($usersObj->pilototo as $pilototo_row) {
-            echo "\n<form action=pilototo.php method=post>";
-            echo "<input type=hidden name=lang value=$lang>";
-            echo "<tr>";
-            echo "<input type=hidden name=taskid value=$pilototo_row[0]>";
-            echo "<td>
-              <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_upd"]  .">
-            </td>";
-            echo "<td><input id=\"ts_value_$numligne\" type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1] /></td>";
-            echo "<td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numligne\" class=\"calendarbutton\" title=\"Date selector\"
-                  onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" />";
-            echo "</td>\n";
-
-?>
-
-<script type="text/javascript"> 
-    Calendar.setup({
-        inputField     :    "ts_value_<?php echo $numligne; ?>",     // id of the input field
-        ifFormat       :    "%s",      // format of the input field
-        button         :    "trigger_jscal_<?php echo $numligne; ?>",  // trigger for the calendar (button ID)
-        align          :    "Tl",           // alignment (defaults to "Bl")
-        singleClick    :    false,
-        showsTime       :    true,
-        timeFormat      :    "24"
-    });
-</script>
-
-<?php
-            // SELECT LIST pour le type de pilote
-            echo "<td><input type=text name=pim onKeyup=\"checkpip($numligne);\" width=1 size=1 value=$pilototo_row[2]></td>";
-            echo "<td><input type=text name=pip width=20 size=20 value=$pilototo_row[3]></td>";
-            echo "<td>$pilototo_row[4]
-                    <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_del"] . ">
-                       </td>";
-            //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
-            echo "<td><input type=text size=25 name=gmtdate disabled value=\"" .gmdate("Y/m/d H:i:s", $pilototo_row[1]) . " GMT\"></td>";
-            echo "<td>" . $pilototo_row[0] . "</td>";
-            echo "</tr>";
-            echo "</form>";
+            echoPilototoRow($numligne, $pilototo_row[0], $pilototo_row[1], $pilototo_row[2], $pilototo_row[3], $pilototo_row[4]);  
             $numligne++;
         }
     } else {
-        echo  "<BR>" . $strings[$lang]["pilototo_no_event"] ;
+        echo  "<br />" . $strings[$lang]["pilototo_no_event"] ;
     }
     
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
@@ -254,5 +262,5 @@
     echo "<INPUT TYPE=BUTTON VALUE=\"Refresh\" ONCLICK=\"javascript:location.reload();\">";
     
     
-    exit();
+    echo "</body></html>";
 ?>
