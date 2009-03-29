@@ -19,7 +19,7 @@ ini_set('arg_separator.output', "&amp;");
 
 /*********db_connect****************/
 $link = mysql_connect(DBSERVER, DBUSER, DBPASSWORD)
-   or die("Could not define ("DIRECTORY_POLARS","Polaires");connect : " . mysql_error());
+   or die("Could not connect : " . mysql_error());
    
 mysql_select_db(DBNAME) or die("Could not select database");
 

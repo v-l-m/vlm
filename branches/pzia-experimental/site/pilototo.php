@@ -21,6 +21,10 @@
 
 ///   CODE JAVASCRIPT
 ?>
+<!-- widget calendrier -->
+<script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar.js"></script>
+<script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/lang/calendar-<?php echo $lang; ?>.js"></script>
+<script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-setup.js"></script>
 
 <script type="text/javascript">
 
@@ -143,6 +147,7 @@
         }
     }
 
+
     // On affiche la liste des actions
     $rc=$usersObj->pilototoList();
     
@@ -158,7 +163,22 @@
             echo "<td>
               <input type=submit name=action value=" . $strings[$lang]["pilototo_prog_upd"]  .">
             </td>";
-            echo "<td><input type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1]></td>";
+            echo "<td><input id=\"ts_value_$numligne\" type=text name=time onKeyup=\"majhrdate($numligne);\" width=15 size=15 value=$pilototo_row[1]></td>";
+?>
+<script type="text/javascript"> 
+    Calendar.setup({
+        inputField     :    "ts_value_<?php echo $numligne; ?>",     // id of the input field
+        ifFormat       :    "%s",      // format of the input field
+        button         :    "trigger_jscal_<?php echo $numligne; ?>",  // trigger for the calendar (button ID)
+        align          :    "Tl",           // alignment (defaults to "Bl")
+        singleClick    :    false,
+        showsTime       :    true,
+        timeFormat      :    "24"
+    });
+</script>
+<?php
+            echo "<img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numligne\" class=\"calendarbutton\" title=\"Date selector\"
+                  onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" />";
             // SELECT LIST pour le type de pilote
             echo "<td><input type=text name=pim onKeyup=\"checkpip($numligne);\" width=1 size=1 value=$pilototo_row[2]></td>";
             echo "<td><input type=text name=pip width=20 size=20 value=$pilototo_row[3]></td>";
