@@ -11,30 +11,33 @@
     
     //helper pour construire la page
     
-    function echoPilototoRow($numline, $row = 0, $ts = 0, $pim = 0, $pip = 0, $status = "") {
+    function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $strings, $lang;
-        if ($status === "") {
-            $klasssufix = "blank";  
+        if ($row === 0) {
+            $klass = "blank";
+            $timestring = "";
+            $firstcolaction = "pilototo_prog_add";
+            $statusstring = "";
+        } else {
+            $klass = $status;
+            $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
+            $firstcolaction = "pilototo_prog_upd";
+            $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_del"] . " />";
+;
         }
-
         echo "<form action=\"pilototo.php\" method=\"post\">\n";
         echo "  <input type=\"hidden\" name=\"lang\" value=\"$lang\" />\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
-        echo "  <tr class="linepilototobox-$klasssuffix">\n";
-        echo "    <td><input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_upd"]  ." /></td>\n";
-        echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onKeyup=\"majhrdate($numligne);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
+        echo "  <tr class=\"linepilototobox-$klasssuffix\">\n";
+        echo "    <td><input type=\"submit\" name=\"action\" value=" . $strings[$lang][$firstcolaction]  ." /></td>\n";
+        echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
         // FIXME : SELECT LIST pour le type de pilote
         echo "    <td><input type=\"text\" name=\"pim\" onKeyup=\"checkpip($numligne);\" width=\"1\" size=\"1\" value=\"$pim\" /></td>\n";
         echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
-        echo "    <td>";
-        if ($status != "") {
-            echo "$status";
-            echo "<input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_del"] . " />";
-        }
-        echo "</td>\n";
+        echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
-        echo "    <td><input type=\"text\" size=\"25\" name=\"gmtdate\" disabled value=\"" .gmdate("Y/m/d H:i:s", $pilototo_row[1]) . " GMT\" /></td>\n";
+        echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled value=\"" . $timestring . "\" /></td>\n";
         echo "    <td>" . $row . "</td>\n";
         echo "  </tr>\n";
         echo "</form>\n";
@@ -58,15 +61,16 @@
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
 <script type="text/javascript">
+    var calendars = new Array();
 
     function calbuttonsetup(n) {
     
-        for (i=0;i<n;i++) {
-            Calendar.setup({
+        for (i=0;i<=n;i++) {
+            calendars[i] = Calendar.setup({
                 inputField     :    "ts_value_"+i,     // id of the input field
                 ifFormat       :    "%s",      // format of the input field
                 button         :    "trigger_jscal_"+i,  // trigger for the calendar (button ID)
-                align          :    "Tl",           // alignment (defaults to "Bl")
+                align          :    "Br",           // alignment 
                 singleClick    :    false,
                 showsTime       :    true,
                 timeFormat      :    "24"
@@ -197,8 +201,8 @@
     // On affiche la liste des actions
     $rc=$usersObj->pilototoList();
     
-    echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
-         <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>";
+    echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">\n
+         <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>\n";
     if ( count($usersObj->pilototo) != 0) {
         $numligne=0;
         foreach ($usersObj->pilototo as $pilototo_row) {
@@ -206,61 +210,36 @@
             $numligne++;
         }
     } else {
-        echo  "<br />" . $strings[$lang]["pilototo_no_event"] ;
+        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"7\">" . $strings[$lang]["pilototo_no_event"] . "</td></tr>\n" ;
     }
     
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
-        echo "\n<form action=pilototo.php method=POST>";
-        echo "<input type=hidden name=lang value=$lang>";
-        echo "<tr>
-           <td align=center><input type=submit name=action 
-                                   value=" . $strings[$lang]["pilototo_prog_add"] . "></td>
-           <td><input id=\"ts_value_$numligne\" type=text name=time onKeyup=\"majhrdate($numligne);\" value=" . time() . " width=15 size=15></td>";
-        echo "<td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numligne\" class=\"calendarbutton\" title=\"Date selector\"
-                  onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" />";
-        echo "</td>\n";
-
-?>
-           <script type="text/javascript"> 
-              Calendar.setup({
-                  inputField     :    "ts_value_<?php echo $numligne; ?>",     // id of the input field
-                  ifFormat       :    "%s",      // format of the input field
-                  button         :    "trigger_jscal_<?php echo $numligne; ?>",  // trigger for the calendar (button ID)
-                  align          :    "Tl",           // alignment (defaults to "Bl")
-                  singleClick    :    false,
-                  showsTime       :    true,
-                  timeFormat      :    "24"
-              });
-          </script>
-<?php
-        echo "
-           <td><input type=text name=pim  onKeyup=\"checkpip($numligne);\" width=1  size=1 ></td>
-           <td><input type=text name=pip  width=20  size=20 ></td>
-           <td>this line to add</td>
-           <td><input name=gmtdate size=25 type=text disabled value=\"\"></td>
-           <td>&nbsp;</td>
-              </tr>";
-        echo "</form>";
+        echoPilototoRow($numligne);
+        echo "<script type=\"text/javascript\">calbuttonsetup($numligne);</script>\n";
     } else {
-        echo "<tr>
-              <td colspan=7 align=center><B>MAX " . PILOTOTO_MAX_EVENTS . " events</B></td>
-              </tr>";
+        echo "<tr id=\"pilototo-max-event\" class=\"pilototoinfo\">
+              <td colspan=7>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
+              </tr>\n";
     }
     
-    echo "</table>";
-    echo "<hr>";
-    echo "<B>TIME</B> : GMT, in seconds since 01/01/1970 00:00<BR>";
-    echo "<B>PIM</B> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG<BR>";
-    echo "<B>PIP</B> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3 or 4: Lat<B>,</B>Long<li>Please give <B>0,0</B> for your or nextrace WP, <li><B>LATITUDE,LONGITUDE</B>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><B>LATITUDE,LONGITUDE@HEADING</B> : same but when reached, set boatheading to HEADING (0..360)<BR><hr>";
+    echo "</table></div>\n";
     
+    echo "<div id=\"helpvaluespilototobox\">\n";
+    echo "<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00<br />";
+    echo "<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG<br />\n";
+    echo "<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3 or 4: Lat<b>,</b>Long<li>Please give <b>0,0</b> for your or nextrace WP, <li><b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)\n";
+    echo "</div>\n";
     $time=time();
-    echo "server(s) time is now <B>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</B><BR>";
-    echo "tip1 : server_time + 3600 is in one hour, server_time+5*3600 is in 5 hours... <BR>" ;
-    echo "tip2 : for an update, modify a value, then click on " . $strings[$lang]["pilototo_prog_upd"]."<br>" ;
-    echo "tip3 : status is 'pending' if an order is not yet executed, 'done' otherwise"  ;
-    echo "<br><hr><INPUT TYPE=BUTTON VALUE=\"Close\" ONCLICK=\"javascript:self.close();\">";
-    echo "<INPUT TYPE=BUTTON VALUE=\"Refresh\" ONCLICK=\"javascript:location.reload();\">";
-    
+    echo "<div id=\"helptimepilototobox\">\n";
+    echo "Server(s) time is now <b>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</b><br />\n";
+    echo "Tip1 : server_time + 3600 is in one hour, server_time+5*3600 is in 5 hours... <br />\n" ;
+    echo "Tip2 : for an update, modify a value, then click on " . $strings[$lang]["pilototo_prog_upd"]."<br />\n" ;
+    echo "Tip3 : status is 'pending' if an order is not yet executed, 'done' otherwise\n"  ;
+    echo "</div>\n";
+    echo "<div id=\"buttonspilototobox\">\n";
+    echo "<input type=\"button\" value=\"Close\" onClick=\"javascript:self.close();\" />\n";
+    echo "<input type=\"button\" value=\"Refresh\" onClick=\"javascript:location.reload();\" />\n";
+    echo "</div>\n";
     
     echo "</body></html>";
 ?>
