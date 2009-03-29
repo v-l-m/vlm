@@ -33,7 +33,7 @@
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
         // FIXME : SELECT LIST pour le type de pilote
-        echo "    <td><input type=\"text\" name=\"pim\" onKeyup=\"checkpip($numline);\" width=\"1\" size=\"1\" value=\"$pim\" /></td>\n";
+        echo "    <td><input type=\"text\" name=\"pim\" onKeyup=\"checkpip($numligne);\" width=\"1\" size=\"1\" value=\"$pim\" /></td>\n";
         echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
         echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
@@ -203,14 +203,14 @@
     
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">\n
          <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>\n";
-    $numligne=0;
     if ( count($usersObj->pilototo) != 0) {
+        $numligne=0;
         foreach ($usersObj->pilototo as $pilototo_row) {
             echoPilototoRow($numligne, $pilototo_row[0], $pilototo_row[1], $pilototo_row[2], $pilototo_row[3], $pilototo_row[4]);  
             $numligne++;
         }
     } else {
-        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . $strings[$lang]["pilototo_no_event"] . "</td></tr>\n" ;
+        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"7\">" . $strings[$lang]["pilototo_no_event"] . "</td></tr>\n" ;
     }
     
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
@@ -218,7 +218,7 @@
         echo "<script type=\"text/javascript\">calbuttonsetup($numligne);</script>\n";
     } else {
         echo "<tr id=\"pilototo-max-event\" class=\"pilototoinfo\">
-              <td colspan=8>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
+              <td colspan=7>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
               </tr>\n";
     }
     
