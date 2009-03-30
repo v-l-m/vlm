@@ -15,16 +15,16 @@
         global $strings, $lang;
         if ($row === 0) {
             $klass = "blank";
-            $timestring = "";
+            $ts = time();
             $firstcolaction = "pilototo_prog_add";
             $statusstring = "";
         } else {
             $klass = $status;
-            $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
             $firstcolaction = "pilototo_prog_upd";
             $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_del"] . " />";
-;
         }
+        $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
+
         echo "<form action=\"pilototo.php\" method=\"post\">\n";
         echo "  <input type=\"hidden\" name=\"lang\" value=\"$lang\" />\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
@@ -72,8 +72,9 @@
                 button         :    "trigger_jscal_"+i,  // trigger for the calendar (button ID)
                 align          :    "Br",           // alignment 
                 singleClick    :    false,
-                showsTime       :    true,
-                timeFormat      :    "24"
+                showsTime      :    true,
+                firstDay       :    1,
+                timeFormat     :    "24"
             });
         }
     }
