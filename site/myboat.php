@@ -429,6 +429,16 @@ include_once("scripts/myboat.js");
                 $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b>&nbsp;<b>Please contact race Comittee, click on the SOS icon</b><";
                 $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
             }
+            //affichage de la deadline pour les départs en ligne
+            $mtr = $usersObj->races->maxTimeRemaining();
+            if ( $mtr > (48*3600) ) {
+                $msg = $strings[$lang]["endrace"]." ". gmdate("M d Y H:i:s", $mtr+time() );
+                $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "info");
+            } else if ($mtr > 1) {
+                $msg = sprintf($strings[$lang]["endracein"], round($mtr/3600) );
+                $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "warn");
+            }
+                
             //BLOCNOTE
             if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
                 $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
