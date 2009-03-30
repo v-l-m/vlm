@@ -121,8 +121,9 @@ $opts['fdd']['racename'] = array(
 );
 $opts['fdd']['started'] = array(
   'name'     => 'Started',
+  'help'     => "Status of the race",
   'select'   => 'D',
-  'values2'   => Array("-1" => "No", "1" => "Yes"), 
+  'values2'  => Array("-1" => "Finished", "0"=>"Not started", "1" => "Yes"), 
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
