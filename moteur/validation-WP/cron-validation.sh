@@ -1,5 +1,8 @@
 #!/bin/bash
-cd /data/www/validation-WP
+source $VLMRACINE/conf/conf_script || exit 1
+
+cd $VLMJEUROOT/moteur/validation-WP
+
 #sh valide-20071111-wp4.sh
 #sh valide-20071111-wp6.sh
 #sh valide-20071111-wp7.sh
