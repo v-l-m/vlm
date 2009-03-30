@@ -403,10 +403,37 @@ div.mapboxsubitem {
 }
 
 .mapboxitem p {
-margin: 0em;
+  margin: 0em;
 }
 
 /* Pour les form de IE */
 form {
-margin-top:0px;
+  margin-top:0px;
+}
+
+/* MAPLAYERS */
+/* This maybe should be in a dedicated css */
+
+#windcontrollayer {
+  top:20;
+  left:200;
+  position:absolute;
+  background-color: #ffffff;
+}
+
+.controlonmap {
+  background:none;
+  border:none;
+  margin:none;
+}
+
+#griboffset {
+  text-align:right;
+  border-width:1px;
+} 
+
+#deplacable {
+  top:150;
+  left:250;
+  position:absolute;
 }

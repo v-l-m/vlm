@@ -9,13 +9,13 @@ echo "\n\tChecking for coast crossing (vlm-c)\n ";
 echo "\tUsing: ".GSHHS_FILENAME."\n ";
 
 $crosses_the_coast = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
-					   $coast_xinglat, $coast_xinglong, $coast_xingratio);
+             $coast_xinglat, $coast_xinglong, $coast_xingratio);
 
 if ($crosses_the_coast) {
   echo "\t*** YES player " . $fullUsersObj->users->idusers . " CROSSED (vlmc), ";
   echo "\n\t\tCoast has been crossed : \n\t\t\t" ; 
   printf ("BOAT : %f,%f <----> %f,%f",
-	  $latAvant/1000,$lonAvant/1000 , $latApres/1000,$lonApres/1000);
+    $latAvant/1000,$lonAvant/1000 , $latApres/1000,$lonApres/1000);
   
   $encounter_lat  = doublep_value($coast_xinglat)/1000;
   $encounter_long = doublep_value($coast_xinglong)/1000;

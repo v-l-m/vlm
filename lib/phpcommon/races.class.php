@@ -116,8 +116,8 @@ class races
         $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
         $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
         if ( $d1 < $d2 ) {
-	  $lastlat=$WP[0];
-	  $lastlong=$WP[1];
+    $lastlat=$WP[0];
+    $lastlong=$WP[1];
           $this->racedistance+=$d1;
         } else {
           $lastlat=$WP[2];

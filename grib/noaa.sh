@@ -15,9 +15,12 @@ TMPGRIBPATH=$GRIBPATH/tmpgrib
 
 PREFIX=gfs_NOAA
 TIME_THRESHOLD=09
-if [ ! -n "$GRIB_MAX_TIME" ]; then
-    GRIB_MAX_TIME=24
+if [ ! -n "$VLM_GRIB_MAX_TIME" ]; then
+    VLM_GRIB_MAX_TIME=24
 fi
+
+GRIB_MAX_TIME=$VLM_GRIB_MAX_TIME
+
 LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
 NOAA_SERVICE_URI=http://www.ftp.ncep.noaa.gov/data/nccf/com/gfs/prod

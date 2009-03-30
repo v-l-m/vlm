@@ -5,8 +5,6 @@ $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercato
 
 /************** localDBPages pages : HAS TO BE SET BEFORE INSLUSION OF PARAM.PHP ******/
 $localDBPages = array("/mercator.php", "/races.php");
-$engineOnlyScripts = array("new-update-wind.php", "undate-wind.php");
-
 
 include_once("param.php");
 
@@ -68,6 +66,8 @@ define ("BUOY_E", "buoy_south.png");
 
 define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
 define ("DIRECTORY_THEMES","style");
+define ("DIRECTORY_POLARS","Polaires");
+define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
 
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);

@@ -34,6 +34,14 @@ function NavigatorLanguage()
   return $lang;
 }
 
+function getCurrentLang() {
+    //FIXME utiliser NavigatorLanguage pour définir le default en combinant avec strings
+    if (isset($_REQUEST['lang'])) {
+        return quote_smart($_REQUEST['lang']);
+    } else {
+         return "en";  
+    }
+}
 
 /*return knots*/
 function norm($x, $y)
@@ -295,7 +303,7 @@ function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
     
     if (array_key_exists($idraces, $WP_Cache)) {
       if (array_key_exists($idwp, $WP_Cache[$idraces])) {
-	return $WP_Cache[$idraces][$idwp];
+  return $WP_Cache[$idraces][$idwp];
       }
     } 
   }
@@ -1213,7 +1221,7 @@ function getTheme()
           if ( $users->engaged != 0 ) {
               //Le joueur est engagé dans une course
               $race = new races($users->engaged);
-              if ( !is_null($race->theme) or ($race->theme != "")) {
+              if ( !is_null($race->theme) and (strlen($race->theme) > 1)) {
                   //La course possède un thème, on l'utilise
                   return ( $race->theme);
               }

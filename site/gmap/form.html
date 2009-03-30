@@ -12,35 +12,35 @@
 <script type="text/javascript" src="compas.js"></script>
 <script type="text/javascript">
     //<![CDATA[
-		function getUserMarker(idusers, idraces) {
-			var url = "index.php";
-			var date = new Date();
-			var param = date.getMilliseconds() + date.getMinutes() + date.getSeconds();
-			var ajaxrequest = new Ajax.Request(url,{
-				asynchronous:true,
-				method:"get",
-				parameters: "date=" + param + "&idusers=" + idusers + "&type=ajax&riq=pos&idraces=" + idraces,
-				onSuccess: function(request) {
-						eval(request.responseText);
-					}
-			});
-		}
+    function getUserMarker(idusers, idraces) {
+      var url = "index.php";
+      var date = new Date();
+      var param = date.getMilliseconds() + date.getMinutes() + date.getSeconds();
+      var ajaxrequest = new Ajax.Request(url,{
+        asynchronous:true,
+        method:"get",
+        parameters: "date=" + param + "&idusers=" + idusers + "&type=ajax&riq=pos&idraces=" + idraces,
+        onSuccess: function(request) {
+            eval(request.responseText);
+          }
+      });
+    }
 
-		function getUserLine(idusers, idraces) {
-			var url = "index.php";
-			var date = new Date();
-			var param = date.getMilliseconds() + date.getMinutes() + date.getSeconds();
-			var ajaxrequest = new Ajax.Request(url,{
-				asynchronous:true,
-				method:"get",
-				parameters: "date=" + param + "&idusers=" + idusers + "&type=ajax&riq=trj&idraces=" + idraces,
-				onSuccess: function(request) {
-						eval(request.responseText);
-					}
-			});
-		}
-		
-		var map
+    function getUserLine(idusers, idraces) {
+      var url = "index.php";
+      var date = new Date();
+      var param = date.getMilliseconds() + date.getMinutes() + date.getSeconds();
+      var ajaxrequest = new Ajax.Request(url,{
+        asynchronous:true,
+        method:"get",
+        parameters: "date=" + param + "&idusers=" + idusers + "&type=ajax&riq=trj&idraces=" + idraces,
+        onSuccess: function(request) {
+            eval(request.responseText);
+          }
+      });
+    }
+    
+    var map
     function load() {
       if (GBrowserIsCompatible()) {
         map = new GMap2(document.getElementById("map"));
@@ -62,29 +62,29 @@ Cliquer sur la "larme" d'un joueur pour accéder à ses informations.
 </p>
 
 <table style="vertical-align:top;" width="100%">
-	<tbody style="vertical-align:top;">
-	<tr style="vertical-align:top;">
-		<td width="22px">
-			<img onclick="$('deplacable').toggle();" style="border:0px solid gray;" src="konqueror.png" alt="compas" />
-		</td>
-		<td style="vertical-align:top;" width="800px">
-			<div id="map" style="width:800px;height:600px"></div>
-		</td>
-		<td >
-			<div style="overflow:auto;height:500px;">
-			<ul style="overflow:auto;">
-				###LISTPLAYER###
-			</ul>
-			</div>
-		</td>
-	</tr>
-	</tbody>
+  <tbody style="vertical-align:top;">
+  <tr style="vertical-align:top;">
+    <td width="22px">
+      <img onclick="$('deplacable').toggle();" style="border:0px solid gray;" src="konqueror.png" alt="compas" />
+    </td>
+    <td style="vertical-align:top;" width="800px">
+      <div id="map" style="width:800px;height:600px"></div>
+    </td>
+    <td >
+      <div style="overflow:auto;height:500px;">
+      <ul style="overflow:auto;">
+        ###LISTPLAYER###
+      </ul>
+      </div>
+    </td>
+  </tr>
+  </tbody>
 </table>
 
 <img id="deplacable" src="images/site/compas-transparent.gif" alt="compas" 
-	style="z-index=10;display:none;top:150px;left:100px;position:absolute;" 
-	onmousedown="boutonPresse()"
-	onmouseup="boutonRelache()"
+  style="z-index=10;display:none;top:150px;left:100px;position:absolute;" 
+  onmousedown="boutonPresse()"
+  onmouseup="boutonRelache()"
 />
 
 </body>

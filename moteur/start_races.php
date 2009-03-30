@@ -23,51 +23,51 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_NUM))
   if (!$racesObj->races->started) //race has not started
     {
       if ($racesObj->races->deptime <= time())
-	{
-	  //start the race
-	  // Deleting old results, waypoint_crossing, rankings... updating positions...
-	  echo "Cleaning Race...";
-	  $racesObj->cleanRaces();
+  {
+    //start the race
+    // Deleting old results, waypoint_crossing, rankings... updating positions...
+    echo "Cleaning Race...";
+    $racesObj->cleanRaces();
 
-	  echo "Starting Race...";
-	  $racesObj->startRaces();
+    echo "Starting Race...";
+    $racesObj->startRaces();
 
           echo "RACE $racename STARTING!!!\n\n";
 
-	  //for every boat
-	  foreach ($racesObj->opponents as $users) {
+    //for every boat
+    foreach ($racesObj->opponents as $users) {
 
-	      // Insert a first position at start point
-	      $query_positions = "INSERT into positions " . 
-	                        " ( `time` , `long` , `lat` , `idusers` , `race` ) " .
-				" values ( " . 
-					$racesObj->races->deptime . ", " .
-					$racesObj->races->startlong . ", " .
-					$racesObj->races->startlat . ", " .
-					$users->idusers . ", " .
-					$idraces  . 
-				") ; ";
-	      if ( ! mysql_db_query(DBNAME,$query_positions) ) {
-	          echo "REQUEST FAILED " . $query_positions . "\n";
-	      }
+        // Insert a first position at start point
+        $query_positions = "INSERT into positions " . 
+                          " ( `time` , `long` , `lat` , `idusers` , `race` ) " .
+        " values ( " . 
+          $racesObj->races->deptime . ", " .
+          $racesObj->races->startlong . ", " .
+          $racesObj->races->startlat . ", " .
+          $users->idusers . ", " .
+          $idraces  . 
+        ") ; ";
+        if ( ! mysql_db_query(DBNAME,$query_positions) ) {
+            echo "REQUEST FAILED " . $query_positions . "\n";
+        }
 
-	      // Update Users to First Waypoint, lastupdate, ...and Loch=0
-	      $query_users = "UPDATE users " . 
-	      		     "   SET nextwaypoint = 1, " .
-			     "       userdeptime  = " . $racesObj->races->deptime . ", " .
-			     "       boattype     = '" . $racesObj->races->boattype . "', " .
-			     "       lastupdate   = " . $racesObj->races->deptime . ", " .
-			     "       lastchange   = " . $racesObj->races->deptime . ", " .
-			     "       loch         = 0" .
-	      		     " WHERE idusers = " . $users->idusers . ";";
-	      if ( ! mysql_db_query(DBNAME,$query_users) ) {
-	          echo "REQUEST FAILED " . $query_users . "\n";
-	      }
+        // Update Users to First Waypoint, lastupdate, ...and Loch=0
+        $query_users = "UPDATE users " . 
+                 "   SET nextwaypoint = 1, " .
+           "       userdeptime  = " . $racesObj->races->deptime . ", " .
+           "       boattype     = '" . $racesObj->races->boattype . "', " .
+           "       lastupdate   = " . $racesObj->races->deptime . ", " .
+           "       lastchange   = " . $racesObj->races->deptime . ", " .
+           "       loch         = 0" .
+                 " WHERE idusers = " . $users->idusers . ";";
+        if ( ! mysql_db_query(DBNAME,$query_users) ) {
+            echo "REQUEST FAILED " . $query_users . "\n";
+        }
 
 
-	    }
+      }
 
-	}
+  }
       //else nothing, race wont start this time :-(
     }
 
