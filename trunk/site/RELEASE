@@ -1,14 +1,18 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
-v1.0 aka Have Foehn: what's new for ...
+v0.9.5 aka Have Foehn: what's new for ...
 ... players ?
-* Useful links for beginner on the homepage body (DocteurX)
-* start position (WP0) displayed in ics.php and overlay added in myboat.php (paparazzia)
+* useful links for beginner on the homepage body (DocteurX)
+* start position (WP0) displayed in NOR and overlay added in myboat.php (paparazzia)
 * correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
 * more informations available _before_ choosing a race (paparazzia)
 * calendar widget to help EPOC input in pilototo (paparazzia)
 * time to finish displayed in messages (paparazzia)
+* as allways, some new races... (fm & the committee)
+
+... race committee ?
+* map forced on "myboat" mode when the race is not started (less noise on the commitee list) (paparazzia)
 
 ... vlm developers ?
 * various configuration options (fm, paparazzia)
