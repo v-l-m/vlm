@@ -637,14 +637,14 @@ Object.extend(Hash, {
   toQueryString: function(obj) {
     var parts = [];
 
-	  this.prototype._each.call(obj, function(pair) {
+    this.prototype._each.call(obj, function(pair) {
       if (!pair.key) return;
 
       if (pair.value && pair.value.constructor == Array) {
         var values = pair.value.compact();
         if (values.length < 2) pair.value = values.reduce();
         else {
-        	key = encodeURIComponent(pair.key);
+          key = encodeURIComponent(pair.key);
           values.each(function(value) {
             value = value != undefined ? encodeURIComponent(value) : '';
             parts.push(key + '=' + encodeURIComponent(value));
@@ -654,7 +654,7 @@ Object.extend(Hash, {
       }
       if (pair.value == undefined) pair[1] = '';
       parts.push(pair.map(encodeURIComponent).join('='));
-	  });
+    });
 
     return parts.join('&');
   }

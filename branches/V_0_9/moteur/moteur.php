@@ -78,8 +78,8 @@ foreach($racesListObj->records as $idraces) {
 
         $fullRacesObj = new fullRaces( $idraces )  ;
         // Check only the race given in first arg if one is given, else check all races
-	include "check_race.php";
-	$nb_races++;
+  include "check_race.php";
+  $nb_races++;
 
   }
 
@@ -105,11 +105,11 @@ echo "\n5- === TIMESTAMPING : ".gmdate("M d Y H:i:s",time())." (UTC)... ";
 // Only if full engine run (not for a "one race or one boat" run) ==> No arg.
 if ( $flagglobal == true ) {
      $query5 = "INSERT INTO updates  VALUES (" 
-		  .time()    . ","
-		  .$nb_races . ","
-		  .$nb_boats . ","
-		  .$engine_elapsed
-		  . ")";
+      .time()    . ","
+      .$nb_races . ","
+      .$nb_boats . ","
+      .$engine_elapsed
+      . ")";
      echo "writing timestamp...";
      $result5 = mysql_db_query(DBNAME,$query5);//  or echo("Query failed : " . mysql_error." ".$query5);
 }

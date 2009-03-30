@@ -1,3 +1,8 @@
+Depuis la mise en production de la V0.9
+* nettoyer les tables en CH*
+  mysql -e "show tables" --user=USERMYSL --password=MOTDEPASSEMYSQL BASEVLM | grep ^CH | while read tname ; do echo "drop table $tname;";done |mysql --user=USERMYSL --password=MOTDEPASSEMYSQL BASEVLM
+  (en remplacant USERMYSQL, MOTDEPASSEMYSQL et BASEVLM de manière appropriée) 
+
 Depuis la mise en production de la V0.8.1
 * ajout du champ "flag" pour les IC
 

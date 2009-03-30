@@ -4,6 +4,6 @@
 cd $VLMRACINE/vlmcode/lib/phpcommon
 
 # VOR
-php $VLMRACINE/vlmcode/moteur/VolvoPos.php
+php $VLMRACINE/vlmcode/moteur/posscripts/VolvoPos.php
 
 
