@@ -1,6 +1,6 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
-To 1.0 from 0.9
+To 0.9.5 from 0.9
 _______________
 (Do it in this order, please)
 
@@ -9,6 +9,9 @@ _______________
  - change the branch to V_1_0
  - add "export VLMLOG=$VLMTEMP" (or something else...)
  - optionally, add "export VLM_GRIB_MAX=36" (or whatever you wish)
+
+=Moteur=
+* be careful, the location of the scripts for getting externals positions has changed
   
 To 0.9 from 0.8
 _______________
