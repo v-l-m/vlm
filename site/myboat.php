@@ -698,14 +698,20 @@ include_once("scripts/myboat.js");
             </p>
         </div>
     </div>
+    <?php
+        if ( $usersObj->races->started != 1) {
+            $mapopdis = "disabled"; //.$usersObj->races->started;
+        }
+
+    ?>
     <div  id="mapopponents"  class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
-        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
-        <p><input type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
-        <p><input type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
-        <p><input type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
-        <p><input type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist") echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
-        <p><input type="radio" name="list" value="all" <?php if ($mapOpponents == "all") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $usersObj->races->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
     </div>
     <div id="mapcenterbox" class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
