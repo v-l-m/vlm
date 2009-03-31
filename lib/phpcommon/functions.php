@@ -33,7 +33,7 @@ function NavigatorLanguage()
   $lang = substr($lang,0,2)=="fr";
   if (in_array($lang, "fr", "en", "pt", "it", "es")) {
       return $lang;
-  else  {
+  } else  {
       return "en";
   }
 }
