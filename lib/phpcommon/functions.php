@@ -31,7 +31,7 @@ function NavigatorLanguage()
 {
   $lang = getenv("HTTP_ACCEPT_LANGUAGE");
   $lang = substr($lang,0,2)=="fr";
-  if (in_array($lang, "fr", "en", "pt", "it", "es")) {
+  if (in_array($lang, array("fr", "en", "pt", "it", "es"))) {
       return $lang;
   } else  {
       return "en";
