@@ -564,6 +564,7 @@ include_once("scripts/myboat.js");
 <div id="wpcontrolbox" class="controlitem">
     <form name="coordonnees" action="myboat.php" method="post">
         <input type="hidden" name="type" value="savemywp"/>
+        <input type="hidden" name="lang" value="<?php echo $lang?>"/>
         <div id="wpcoordscontrolbox">
         <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
 
@@ -706,7 +707,7 @@ include_once("scripts/myboat.js");
     ?>
     <div  id="mapopponents"  class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
-        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
         <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
         <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
         <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
