@@ -30,7 +30,7 @@ function quote_smart($value) {
 function NavigatorLanguage()
 {
   $lang = getenv("HTTP_ACCEPT_LANGUAGE");
-  $lang = substr($lang,0,2)=="fr";
+  $lang = substr($lang,0,2);
   if (in_array($lang, array("fr", "en", "pt", "it", "es"))) {
       return $lang;
   } else  {
