@@ -30,8 +30,12 @@ function quote_smart($value) {
 function NavigatorLanguage()
 {
   $lang = getenv("HTTP_ACCEPT_LANGUAGE");
-  substr($lang,0,2)=="fr" ? $lang = "fr" : $lang = "en";
-  return $lang;
+  $lang = substr($lang,0,2)=="fr";
+  if (in_array($lang, "fr", "en", "pt", "it", "es")) {
+      return $lang;
+  else  {
+      return "en";
+  }
 }
 
 function getCurrentLang() {
@@ -39,7 +43,7 @@ function getCurrentLang() {
     if (isset($_REQUEST['lang'])) {
         return quote_smart($_REQUEST['lang']);
     } else {
-         return "en";  
+         return NavigatorLanguage();  
     }
 }
 
