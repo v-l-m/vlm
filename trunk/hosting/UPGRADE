@@ -6,7 +6,7 @@ _______________
 
 =Configuration=
 * EDIT hosting/conf/conf_script
- - change the branch to V_1_0
+ - change the branch to V_9_5
  - add "export VLMLOG=$VLMTEMP" (or something else...)
  - optionally, add "export VLM_GRIB_MAX=36" (or whatever you wish)
 

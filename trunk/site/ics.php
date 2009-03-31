@@ -44,17 +44,20 @@ function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
 function outputWayPoints($fullRacesObj, $startstring) {
 
     echo "<table class=\"waypoints\">\n";
-    echo "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Hdg</th><th>Type</th><th>Name</th></tr>";
+    //echo "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Hdg</th><th>Type</th><th>Name</th></tr>";
+    echo "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Type</th><th>Name</th></tr>";
 
     echo "<tr>\n";
     echo "<td>WP0</td>"; 
-    printf("<td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $fullRacesObj->races->startlat/1000., $fullRacesObj->races->startlong/1000., $startstring);
+    //printf("<td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $fullRacesObj->races->startlat/1000., $fullRacesObj->races->startlong/1000., $startstring);
+    printf("<td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $fullRacesObj->races->startlat/1000., $fullRacesObj->races->startlong/1000., $startstring);
     echo "</tr>\n";
 
     foreach ($fullRacesObj->races->waypoints as $num => $wp) {
         echo "<tr>\n";
         echo "<td>WP".($num+1)."</td>";
-        printf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.1f</td><td>%s</td><td>%s</td>", $wp[0]/1000., $wp[1]/1000., $wp[2]/1000., $wp[3]/1000., $wp[4], $wp[5], $wp[6]);
+        //printf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.1f</td><td>%s</td><td>%s</td>", $wp[0]/1000., $wp[1]/1000., $wp[2]/1000., $wp[3]/1000., $wp[4], $wp[5], $wp[6]);
+        printf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%s</td><td>%s</td>", $wp[0]/1000., $wp[1]/1000., $wp[2]/1000., $wp[3]/1000.,  $wp[5], $wp[6]);
         echo "</tr>\n";
     }
     echo "</table>\n";
