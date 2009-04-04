@@ -285,7 +285,6 @@
     
     if ( $drawlibelle != "no" && $windonly != "true" ) {
         imagestring($mapObj->mapImage, 5, 10, $y-20, "Positions : " . gmdate("Y/m/d H:i:s",time()) . " GMT", $mapObj->colorText);
-        imagestring($mapObj->mapImage, 5, 10, $y-20, "Positions : " . gmdate("Y/m/d H:i:s",time()) . " GMT", $mapObj->colorText);
 
         imagestring($mapObj->mapImage, 3, $x-200 , 15  ,  "Map Borders" ,$mapObj->colorText);
         imagestring($mapObj->mapImage, 3, $x-300 , 25  ,  $libmap ,$mapObj->colorText);
