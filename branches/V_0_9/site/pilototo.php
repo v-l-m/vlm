@@ -8,7 +8,9 @@
     include_once("includes/strings.inc");
     include_once("config.php");
     include_once("functions.php");
-    
+
+    header("Content-type: text/html; charset=utf-8");
+
     //helper pour construire la page
     
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
