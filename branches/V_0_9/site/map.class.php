@@ -1213,6 +1213,8 @@ class map
   function drawWind($projCallbackLong, $projCallbackLat, $drawwind = 0)
   {
 
+    $now = time();
+    imagestring($this->mapImage, 5, 350, $this->ySize-20, "Wind : ".gmdate("Y/m/d H:i", $now + $drawwind) . " GMT", $this->colorText);
     foreach( $this->gridListObj->records as $fullGridObj)
       {
 
@@ -1283,7 +1285,6 @@ class map
           }
         }
       } 
-    imagestring($this->mapImage, 5, 3, 3, "H+".round($drawwind/3600), $this->colorText);
       
   }
   
