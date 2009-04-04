@@ -75,6 +75,7 @@
     $idraces=round(htmlentities($_GET['idraces']));
     
     $list=$_REQUEST['list'];
+   
     if ( is_numeric($list) ) {
         $list=array($list);
     }
@@ -112,7 +113,7 @@
     //warning
     //when transferring an array by GET or POST
     //if it is empty, the resulting var is NULL and it break everthing
-    if ($list == "myboat" ) {
+    if ($list == "" || $list == "myboat" ) {
         $list = array();
         array_push($list, htmlentities($_GET['boat']));
     }
@@ -247,6 +248,7 @@
         if ($drawrealboats != "no") {
           $mapObj->drawRealBoatPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
         }
+
         if ( $raceover == "true") {
           $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $_GET['boat'], $age, $estime);
         } else {
