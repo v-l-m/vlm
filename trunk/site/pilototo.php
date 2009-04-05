@@ -76,18 +76,23 @@
                 singleClick    :    false,
                 showsTime      :    true,
                 firstDay       :    1,
+                date           :    dateobj(i),    
                 timeFormat     :    "24"
             });
         }
     }
 
-    function majhrdate(i) {
-    
+    function dateobj(i) {
         var da = eval(document.forms[i].time.value);
             da*=1000;
-        var d = new Date(da);
+        return(new Date(da));
+    }
+
+    function majhrdate(i) {
+        var d = dateobj(i);    
         document.forms[i].gmtdate.value=d.toGMTString();
-    
+        //FIXME : Risque de réentrance ?
+        calendars[i].setDate(d);
     }
     
     function checkpip(i) {
