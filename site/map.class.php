@@ -668,6 +668,10 @@ class map
   function drawPositions($projCallbackLong, $projCallbackLat, $age, $estime)
   {
  
+    if ( $this->list == "" ) { 
+      return (0);
+    }
+
     $now=time();
 
     // Test blackout ou pas
@@ -678,13 +682,6 @@ class map
 
     $mapTools=getUserPref(htmlentities($_GET['boat']),"mapTools") ;
     $num_boats_to_draw=0;
-    //FMFM:modif_batafieu_12/06/2007 
-    //foreach( $this->fullRacesObj->opponents as $opp) {
-    //FMFM:modif_batafieu_12/06/2007  $opponent = $opp->idusers;
-
-    if ( $this->list == "" ) { 
-      return (0);
-    }
 
     // Si plus de trop de bateaux... on rend la main tout de suite.
     if ( !idusersIsAdmin(htmlentities($_GET['boat'])) ) {
@@ -748,6 +745,21 @@ class map
 
       // Get the positions from the database            idraces                        first    last
       $positions = new positionsList($opponnent, $this->fullRacesObj->races->idraces, $maxage, $minage);
+      
+      // If the race is not started, add one position at startpoint (for maps)
+      if ( $this->fullRacesObj->races->started == 0 ) {
+
+              $pos = new positions();
+              // positions : array(time, long, lat, idusers, race)
+              $pos->time    = $now ; 
+              $pos->long    = $this->fullRacesObj->races->startlong ;
+              $pos->lat     = $this->fullRacesObj->races->startlat  ;
+              $pos->idusers = $usersObj->idusers ;
+              $pos->idraces = $this->fullRacesObj->races->idraces ;
+
+              array_push ($positions->records, $pos);
+      }
+      //print_r($positions);
 
       // =======================
       // Tracé de la trajectoire
@@ -922,7 +934,7 @@ class map
 
             /* 2008/01/27 : expression de l'estime en temps plutot qu'en distance  */
             $Estime=giveEndPointCoordinates(  $current_lat,
-                $current_long,
+                                              $current_long,
                                               $estime,
                                               $usersObj->boatheading  );
 
@@ -1200,6 +1212,8 @@ class map
   function drawWind($projCallbackLong, $projCallbackLat, $drawwind = 0)
   {
 
+    $now = time();
+    imagestring($this->mapImage, 5, 350, $this->ySize-20, "Wind : ".gmdate("Y/m/d H:i", $now + $drawwind) . " GMT", $this->colorText);
     foreach( $this->gridListObj->records as $fullGridObj)
       {
 
@@ -1270,7 +1284,6 @@ class map
           }
         }
       } 
-    imagestring($this->mapImage, 5, 3, 3, "H+".round($drawwind/3600), $this->colorText);
       
   }
   
