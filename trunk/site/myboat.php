@@ -79,7 +79,7 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     $mapCenter = getUserPref($usersObj->users->idusers,"mapCenter");
     if ( $mapCenter == "NULL" ) $mapCenter="myboat";
     $mapArea = getUserPref($usersObj->users->idusers,"maparea");
-    if ( $maparea == "NULL" ) $mapArea=10;
+    if ( $mapArea == "NULL" ) $mapArea=10;
     $mapAge = getUserPref($usersObj->users->idusers,"mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
     $mapLayers = getUserPref($usersObj->users->idusers,"mapLayers");
