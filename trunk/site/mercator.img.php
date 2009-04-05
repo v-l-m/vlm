@@ -75,6 +75,7 @@
     $idraces=round(htmlentities($_GET['idraces']));
     
     $list=$_REQUEST['list'];
+   
     if ( is_numeric($list) ) {
         $list=array($list);
     }
@@ -112,7 +113,7 @@
     //warning
     //when transferring an array by GET or POST
     //if it is empty, the resulting var is NULL and it break everthing
-    if ($list == "myboat" ) {
+    if ($list == "" || $list == "myboat" ) {
         $list = array();
         array_push($list, htmlentities($_GET['boat']));
     }
@@ -280,7 +281,8 @@
     }
     
     if ( $drawlibelle != "no" && $windonly != "true" ) {
-        imagestring($mapObj->mapImage, 5, 10, $y-20, gmdate("Y/m/d H:i:s",time()) . " GMT", $mapObj->colorText);
+        imagestring($mapObj->mapImage, 5, 10, $y-20, "Positions : " . gmdate("Y/m/d H:i:s",time()) . " GMT", $mapObj->colorText);
+
         imagestring($mapObj->mapImage, 3, $x-200 , 15  ,  "Map Borders" ,$mapObj->colorText);
         imagestring($mapObj->mapImage, 3, $x-300 , 25  ,  $libmap ,$mapObj->colorText);
     }
