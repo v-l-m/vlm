@@ -63,10 +63,11 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         $urlidraces = sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
         $urlboattype = sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\">%s</a>", $boattype, $boattype);
         $urlracename = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
-        if ( $maxboats != 0 ) {
-             $strengaged = " - Engaged / Total : " . $num_engaged . "/" . $maxboats ;
+        $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
+        if ( $maxboats != 0 ) {            
+            $strengaged = " - Engaged / Total : " . $urlnumengaged . "/" . $maxboats ;
         } else {
-             $strengaged = " - Engaged : " . $num_engaged . " (unlimited)";
+            $strengaged = " - Engaged : " . $urlnumengaged . " (unlimited)";
         }
 
         printf("<h1>%s (%s) - %s</h1>\n",$urlidraces, $urlboattype, $urlracename); /* FIXME use style there */
