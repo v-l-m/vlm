@@ -185,9 +185,9 @@ class fullGrid
 
       // Recherche de la donnée vent de ce point
       if ( $timestamp > 0 ) {
-           $vent = windAtPosition($latitude, $longitude, $timestamp, 'OLD');
+           $vent = windAtPosition($latitude, $longitude, $timestamp);
       } else {
-           $vent = windAtPosition($latitude, $longitude, 0, 'OLD');
+           $vent = windAtPosition($latitude, $longitude, 0);
       }
 
       $this->wspeed = $vent[0];
