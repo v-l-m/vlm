@@ -27,7 +27,7 @@ if ($crosses_the_coast) {
   $latCheck = doublep_value($coast_xinglat);
   $lonCheck = doublep_value($coast_xinglong);
 } else {
-  $latCheck = $latAvant;
+  $latCheck = $latApres;
   $lonCheck = $lonApres;
 }
  
