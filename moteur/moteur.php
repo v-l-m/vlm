@@ -115,7 +115,7 @@ if ( $flagglobal == true ) {
       ."'" . $update_races ."'"
       . ")";
      echo "writing timestamp...";
-     $result5 = mysql_db_query(DBNAME,$query5) //or die("Query failed : $query5");
+     $result5 = mysql_db_query(DBNAME,$query5); //or die("Query failed : $query5");
 }
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
