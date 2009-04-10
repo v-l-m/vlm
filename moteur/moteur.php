@@ -69,6 +69,7 @@ $nb_boats=0;
 $nb_races=0;
 
 $racesListObj = new startedRacesList();
+//echo date ('i') . "\n";
 //print_r($racesListObj);
 
 //for every race

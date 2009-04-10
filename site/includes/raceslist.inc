@@ -89,7 +89,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         // Affichage des IC destinées à la racelist
         $fullRacesObj = new fullRaces($idraces);
         printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a></li>\n" , $lang,$idraces);
-        printf("    <li>%s nm</li>\n" , round($fullRacesObj->races->racedistance));
+        printf("    <li>%s nm, updates : %d minutes</li>\n" , round($fullRacesObj->races->racedistance), $fullRacesObj->races->vacfreq);
         foreach ( $fullRacesObj->races->ics as $ic) {
             if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                 if ($ic['flag'] & IC_FLAG_LINKFORUM) {
