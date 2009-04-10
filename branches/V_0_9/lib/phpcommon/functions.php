@@ -173,7 +173,7 @@ function lastUpdate($strings, $lang)
     $races = $row2[1];
     $boats = $row2[2];
     $duration = max($row2[3],1);
-    $comment = $row2[4];
+    $update_comment = $row2[4];
     $interval = time() - $lastupdate;
 
     $intervalarray = duration2string($interval);
