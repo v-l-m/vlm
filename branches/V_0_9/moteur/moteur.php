@@ -67,6 +67,7 @@ echo "\n2- === DO THE JOB FOR EACH RACE\n";
 // Compteurs
 $nb_boats=0;
 $nb_races=0;
+$update_races = "" ;
 
 $racesListObj = new startedRacesList();
 //echo date ('i') . "\n";
@@ -75,6 +76,7 @@ $racesListObj = new startedRacesList();
 //for every race
 foreach($racesListObj->records as $idraces) {
 
+  $update_races .= $idraces . " " ;
   if (    ( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)   ) {
 
         $fullRacesObj = new fullRaces( $idraces )  ;
@@ -109,13 +111,14 @@ if ( $flagglobal == true ) {
       .time()    . ","
       .$nb_races . ","
       .$nb_boats . ","
-      .$engine_elapsed
+      .$engine_elapsed. ","
+      ."'" . $update_races ."'"
       . ")";
      echo "writing timestamp...";
-     $result5 = mysql_db_query(DBNAME,$query5);//  or echo("Query failed : " . mysql_error." ".$query5);
+     $result5 = mysql_db_query(DBNAME,$query5) //or die("Query failed : $query5");
 }
 echo "done\n";
-echo "\n\tFINISHED ** Races=" . $nb_races . ", Boats=". $nb_boats . ", ";
+echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
 echo "Time=" . $engine_elapsed . "sec.  rate=". $nb_boats/$engine_elapsed . " boats/sec **\n";
 
 ?>
