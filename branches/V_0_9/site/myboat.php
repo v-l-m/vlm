@@ -80,7 +80,7 @@ include_once("includes/header.inc");
     $mapCenter = getUserPref($usersObj->users->idusers,"mapCenter");
     if ( $mapCenter == "NULL" ) $mapCenter="myboat";
     $mapArea = getUserPref($usersObj->users->idusers,"maparea");
-    if ( $maparea == "NULL" ) $mapArea=10;
+    if ( $mapArea == "NULL" ) $mapArea=10;
     $mapAge = getUserPref($usersObj->users->idusers,"mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
     $mapLayers = getUserPref($usersObj->users->idusers,"mapLayers");
@@ -477,9 +477,9 @@ include_once("scripts/myboat.js");
         ?>
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>\n"; ?>
         <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
-            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-            <input type="hidden" name="pilotmode" value="autopilot"/>
+            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>" />
+            <input type="hidden" name="lang" value="<?php echo $lang?>" />
+            <input type="hidden" name="pilotmode" value="autopilot" />
             <div id="autopilotrange">
                 <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
                 <input class="<?php echo $autopilotclass; ?>" type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
