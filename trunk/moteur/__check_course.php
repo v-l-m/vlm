@@ -17,8 +17,8 @@ $USER_NUM=0;
 // Si on a un argument, c'est le numéro d'une course
 // Si on en a 2, c'est la course PUIS le numéro du bateau
 if ( $argc < 2 ) {
-  echo "need race  + player args\n";
-  exit;
+	echo "need race  + player args\n";
+	exit;
 }
 
 $RACE_NUM=$argv[1];
@@ -37,18 +37,18 @@ while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
 
     // we skip the first timestamp.
     if ( $time != 0 ) {
-      $elapsed = $time - $row[0];
-  $dist    = ortho($lat, $long, $row[2], $row[1]); 
-  if ($elapsed != 0 ) { 
-      $speed   = abs(3600 * $dist / $elapsed);
-  } else {
-      $speed = -1;
-  };
+    	$elapsed = $time - $row[0];
+	$dist    = ortho($lat, $long, $row[2], $row[1]); 
+	if ($elapsed != 0 ) { 
+	    $speed   = abs(3600 * $dist / $elapsed);
+	} else {
+	    $speed = -1;
+	};
 
 
         $long=$row[1];
         $lat=$row[2];
-  printf ("%s: Long=%f, Lat=%f, Dist=%f, Speed=%f\n", gmdate("Y/m/d H:i:s",$time), $long, $lat, $dist , $speed );
+	printf ("%s: Long=%f, Lat=%f, Dist=%f, Speed=%f\n", gmdate("Y/m/d H:i:s",$time), $long, $lat, $dist , $speed );
     }
     $time=$row[0];
 }
