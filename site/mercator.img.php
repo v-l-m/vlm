@@ -230,8 +230,10 @@
     if ( $drawwind >= 0 ) {
         $time_start = time();
         $mapObj->drawWind($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $drawwind);
+
         $time_stop = time();
         if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 50, "Time drawWind = ". ($time_stop - $time_start) . "s", $mapObj->colorText);
+
     }
     
     
@@ -248,6 +250,7 @@
         if ($drawrealboats != "no") {
           $mapObj->drawRealBoatPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y');
         }
+
         if ( $raceover == "true") {
           $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $_GET['boat'], $age, $estime);
         } else {
