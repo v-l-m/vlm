@@ -205,5 +205,5 @@
           //sleep (2);
         // } // not arrived
           } // player is not sleeping
-      } 
+       } 
 ?>
