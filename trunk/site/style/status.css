@@ -1,0 +1,41 @@
+//css for status pages
+.after {
+  background-color: #99FF99;
+}
+.before {
+  background-color: #FFFF99;
+}
+.intime {
+  background-color: #99FF99;
+}
+.maybelate {
+  background-color: #FFFF99;
+}
+li, li > p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.hidden {
+  display: none;
+}
+table {
+  width: 100%;
+  border-width: 1px;
+}
+td {
+  text-align: center;
+}
+ 
+.idraces {
+  text-align: right;
+}
+
+.racename {
+  text-align: left;
+}
+
+.horizontalmenu, .time, .duration, .count {
+  text-align: center;
+}
+
+div { border-width: 1px; }
