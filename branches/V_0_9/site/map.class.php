@@ -745,6 +745,7 @@ class map
 
       // Get the positions from the database            idraces                        first    last
       $positions = new positionsList($opponnent, $this->fullRacesObj->races->idraces, $maxage, $minage);
+
       
       // If the race is not started, add one position at startpoint (for maps)
       if ( $this->fullRacesObj->races->started == 0 ) {

@@ -76,7 +76,6 @@
                 singleClick    :    false,
                 showsTime      :    true,
                 firstDay       :    1,
-//                date           :    dateobj(i),    
                 timeFormat     :    "24"
             });
         }
