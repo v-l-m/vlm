@@ -67,7 +67,7 @@ echo "\n2- === DO THE JOB FOR EACH RACE\n";
 // Compteurs
 $nb_boats=0;
 $nb_races=0;
-$update_races = "" ;
+$update_races = " " ;
 
 $racesListObj = new startedRacesList();
 //echo date ('i') . "\n";

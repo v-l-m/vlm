@@ -179,7 +179,7 @@ function lastUpdate($strings, $lang)
     $intervalarray = duration2string($interval);
     printf ( $strings[$lang]["lastupdate"]. " <br />\n",
              gmdate('H:i:s', time() ) . ' GMT', $intervalarray[1],$intervalarray[2],$intervalarray[3] );
-    printf ("%s seconds (%d races : %s, %d boats), %2.2f boats/sec", $duration, $races, $update_comment, $boats, $boats/$duration);
+    printf ("%s seconds (<span title=\"%s\">%d race(s)</span>, %d boat(s)), %2.2f boats/sec (<a target=\"_blank\" href=\"status/race-engine-status.php\">status page</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
   }
 }
 
