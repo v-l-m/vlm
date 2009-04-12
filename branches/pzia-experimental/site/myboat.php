@@ -9,12 +9,11 @@ it'a little bit messy (html+java+php)
 */
 include_once("vlmc.php");
 include_once("includes/header.inc");
-echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
 
   $usersObj = new fullUsers(getLoginId());
 
-
   if ( $usersObj->users->engaged == 0 ) {
+
 
     // Le palmares du joueur
     echo "<h1>" ; printf ($strings[$lang]["palmares"],$usersObj->users->idusers); echo "</h1>";
@@ -26,6 +25,8 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     include ("includes/raceslist.inc");
 
   } else {
+
+    echo "<!-- DELAY_BETWEEN_UPDATES=" .  60*$usersObj->races->vacfreq . "-->\n";
 
     // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
     // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis 
@@ -251,8 +252,8 @@ include_once("scripts/myboat.js");
 
         // Estimation de la prochaine VAC pour ce bateau là
 
-        if ( $usersObj->users->lastupdate + DELAYBETWEENUPDATE >= time() ) {
-            printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10 );
+        if ( $usersObj->users->lastupdate + 60*$usersObj->races->vacfreq  >= time() ) {
+            printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + 60*$usersObj->races->vacfreq  - time())/10 );
         }
 ?>
       </div> <!--fin de yourboat1box -->
@@ -739,7 +740,7 @@ include_once("scripts/myboat.js");
                 <input title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
             </p>
             <p>
-                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*DELAYBETWEENUPDATE/3600, 2) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*60*$usersObj->races->vacfreq /3600, 3) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
                 <input title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
             </p>
             <p>
