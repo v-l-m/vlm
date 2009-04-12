@@ -26,16 +26,12 @@ td {
   text-align: center;
 }
  
-.idraces {
-  text-align: right;
-}
-
 .racename {
   text-align: left;
 }
 
-.horizontalmenu, .time, .duration, .count {
+.horizontalmenu {
   text-align: center;
 }
 
-div { border-width: 1px; }
+div { border: solid 1px #ff0000; }
