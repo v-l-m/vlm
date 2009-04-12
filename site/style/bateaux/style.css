@@ -1,41 +1,4 @@
-@import url("../default/style.css");
-
-body
-{
-  background-color: #6894c4;
-}
-
-#baneer
-{
-  background-color: #2b597b;
-  background-image:  url('/images/site/banniere_haut.jpg');
-  background-repeat: no-repeat
-
-}
-
-.texthelpers, #costpenaltybox, .titlehelpers, h1.info {
-  color:#ff4d00;
-}
-
-#racenamebox a, #wplistbox a, #yourboatsummarybox a, #infomessage a, #costpenaltynumber {
-  color:#6894c4;
-}
-
-.actionbuttonwarn, .inputwarn {
-  background-color:#6894c4;
-}
-
-#leftcolumn {
-  background-color: #2b597b;
-}
-
-#main {
-  background-color: #ffffe5;
-}
-
-#controlbox, #instrumentbox, #mapbox, #time {
-  border-top: 5px groove #2b597b;
-}
+@import url("../blue_1/style.css");
 
 #baneercenterbox
 {
@@ -66,44 +29,3 @@ body
   height:32px;
   width:150px;
 }
-
-input.dynamichelper {
-  border:0px;
-  background-color: #ffffff;
-}
-
-#infobulle, div.infobulle {
-  background-color: #2b597b;
-  color: #ffffff;
-  /* CSS3 standard */
-  opacity:0.9;
-  /* for IE - FIXME : remove me one day */
-  filter:alpha(opacity=90);
-}
-
-#abandon {
-  background-color: #dddddd;
-  border-color: #ff1010;
-}
-
-#main a {
-  color:#2b597b;
-}
-
-th
-{ 
-  background-color: #6894c4;
-  color:white;
-}
-
-td
-{ 
-  background-color: #eeeeee;
-}
-
-td.nohilight
-{ 
-  background-color: #6894c4;
-  color:white;
-}
-
