@@ -166,19 +166,20 @@ function lastUpdate($strings, $lang)
   if (file_exists(CRONVLMLOCK)) {
     printf ($strings[$lang]["processing"] );
   } else {
-    $query2 = "SELECT `time`,races,boats,duration FROM updates ORDER BY `time` DESC LIMIT 1";
+    $query2 = "SELECT `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
     $result2 = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
     $row2 = mysql_fetch_array($result2, MYSQL_NUM);
     $lastupdate = $row2[0];
     $races = $row2[1];
     $boats = $row2[2];
     $duration = max($row2[3],1);
+    $update_comment = $row2[4];
     $interval = time() - $lastupdate;
 
     $intervalarray = duration2string($interval);
     printf ( $strings[$lang]["lastupdate"]. " <br />\n",
              gmdate('H:i:s', time() ) . ' GMT', $intervalarray[1],$intervalarray[2],$intervalarray[3] );
-    printf ("%s seconds (%d races, %d boats), %2.2f boats/sec", $duration, $races, $boats, $boats/$duration);
+    printf ("%s seconds (%d races : %s, %d boats), %2.2f boats/sec", $duration, $races, $update_comment, $boats, $boats/$duration);
   }
 }
 

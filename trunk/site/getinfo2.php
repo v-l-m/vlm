@@ -59,7 +59,7 @@
      printf ('PIP=%5.2f;' , $usersObj->users->pilotparameter );
      printf ('POS=%s;' , getCurrentRanking($idu, $usersObj->users->engaged) );
      printf ('LOC=%s;' , $usersObj->users->loch);
-     printf ('NUP=%d;' , 10 * round($usersObj->users->lastupdate + DELAYBETWEENUPDATE - time())/10);
+     printf ('NUP=%d;' , 10 * round($usersObj->users->lastupdate + 60*$racesObj->vacfreq - time())/10);
      
      // Pilototo data
      $rc=$usersObj->users->pilototoList();
