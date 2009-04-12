@@ -87,6 +87,8 @@ function displayPrevious100($startnum) {
                $FORMULAIRE.="<input type=\"submit\" value=\"< " . MAX_BOATS_ON_RANKINGS . "\" />\n";
                $FORMULAIRE.="</form>\n";
                echo $FORMULAIRE;
+          } else { //sinon, on le pose desactive pour garder la coherence d'ensemble
+               echo "<input disabled type=\"button\" value=\"< " . MAX_BOATS_ON_RANKINGS . "\" />\n";
           }
 }
 
@@ -105,6 +107,8 @@ function displayNext100($startnum, $num_engaged) {
                $FORMULAIRE.="<input type=\"submit\" value=\"> " . MAX_BOATS_ON_RANKINGS . "\" />\n";
                $FORMULAIRE.="</form>\n";
                echo $FORMULAIRE;
+          } else { //sinon, on le pose desactive pour garder la coherence d'ensemble
+               echo "<input disabled type=\"button\" value=\"> " . MAX_BOATS_ON_RANKINGS . "\" />\n";
           }
 
 }
