@@ -21,7 +21,17 @@ $wp_xingratio = new doublep();
 $wp_xinglat   = new doublep();
 $wp_xinglong  = new doublep();
 
-    do {
+// if we crossed the coast, get the crossing point and not the computed
+// point (as it can hide a potential waypoint xing)
+if ($crosses_the_coast) {
+  $latCheck = doublep_value($coast_xinglat);
+  $lonCheck = doublep_value($coast_xinglong);
+} else {
+  $latCheck = $latApres;
+  $lonCheck = $lonApres;
+}
+ 
+   do {
         // 1- find the coordinates of user's next waypoint
         printf ("\n\tNext Waypoint is %d", $fullUsersObj->nwp);
         $nextwaypoint = giveWaypointCoordinates($fullUsersObj->users->engaged, $fullUsersObj->nwp, WPLL);
@@ -31,12 +41,12 @@ $wp_xinglong  = new doublep();
         $encounterCoordinates = array();
         echo (", checking for WP crossing... ");
         printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint[0]/1000, $nextwaypoint[1]/1000, $nextwaypoint[2]/1000, $nextwaypoint[3]/1000);
-        printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latAvant/1000, $lonAvant/1000, $latApres/1000, $lonApres/1000);
+        printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latAvant/1000, $lonAvant/1000, $latCheck/1000, $lonCheck/1000);
 
         // Test de croisement avec un waypoint
         $waypoint_crossed=false;
 
-        if (VLM_check_cross_WP($latAvant, $lonAvant, $latApres, $lonApres, 
+        if (VLM_check_cross_WP($latAvant, $lonAvant, $latCheck, $lonCheck, 
                                $nextwaypoint[0], $nextwaypoint[1], 
                                $nextwaypoint[2], $nextwaypoint[3],
                                $wp_xinglat, $wp_xinglong, $wp_xingratio)) {

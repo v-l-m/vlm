@@ -60,18 +60,28 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         echo "</td>\n";
   
         echo "<td align=\"left\" class=\"boat\">";
+        $urlidraces = sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
+        $urlboattype = sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\">%s</a>", $boattype, $boattype);
+        $urlracename = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
+        $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
+        if ( $maxboats != 0 ) {            
+            $strengaged = " - Engaged / Total : " . $urlnumengaged . "/" . $maxboats ;
+        } else {
+            $strengaged = " - Engaged : " . $urlnumengaged . " (unlimited)";
+        }
 
-        printf("<h1>%d (%s) - %s</h1>\n",$idraces, $boattype, $racename); /* FIXME use style there */
+        printf("<h1>%s (%s) - %s</h1>\n",$urlidraces, $urlboattype, $urlracename); /* FIXME use style there */
+
         printf ("  <ul>");
         if ( $dep > $time ) {
             $duration = duration2string($duration);
-            printf("    <li>".$strings[$lang]["nextrace"] . "</li>\n" , $duration[0],$duration[1],$duration[2]);
+            printf("    <li>".$strings[$lang]["nextrace"] . $strengaged."</li>\n" , $duration[0],$duration[1],$duration[2]);
             printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
         } else {
             $duration = duration2string(-$duration);
-            printf("    <li>".$strings[$lang]["openrace"] . "</li>\n", $duration[0],$duration[1],$duration[2]);
+            printf("    <li>".$strings[$lang]["openrace"] . $strengaged."</li>\n", $duration[0],$duration[1],$duration[2]);
         }
-  
+    
         if ( $closetime > $dep ) {
             printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
         }
@@ -81,15 +91,10 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         } else {
             printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
         }
-        if ( $maxboats != 0 ) {
-             printf ("    <li>Engaged / Total : " . $num_engaged . "/" . $maxboats . "</li>\n" );
-        } else {
-             printf ("    <li>Engaged : " . $num_engaged . " (unlimited)</li>\n" );
-        }
-        printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a></li>\n" , $lang,$idraces);
-        printf("    <li>%s nm</li>\n" , round($fullRacesObj->races->racedistance));
         // Affichage des IC destinées à la racelist
         $fullRacesObj = new fullRaces($idraces);
+        printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a>" , $lang,$idraces);
+        printf(" - %s nm, updates : %d minutes</li>\n" , round($fullRacesObj->races->racedistance, $fullRacesObj->races->vacfreq));
         foreach ( $fullRacesObj->races->ics as $ic) {
             if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                 if ($ic['flag'] & IC_FLAG_LINKFORUM) {

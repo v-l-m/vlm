@@ -79,7 +79,7 @@ echo "<!-- DELAY_BETWEEN_UPDATES=" . DELAYBETWEENUPDATE . "-->\n";
     $mapCenter = getUserPref($usersObj->users->idusers,"mapCenter");
     if ( $mapCenter == "NULL" ) $mapCenter="myboat";
     $mapArea = getUserPref($usersObj->users->idusers,"maparea");
-    if ( $maparea == "NULL" ) $mapArea=10;
+    if ( $mapArea == "NULL" ) $mapArea=10;
     $mapAge = getUserPref($usersObj->users->idusers,"mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
     $mapLayers = getUserPref($usersObj->users->idusers,"mapLayers");
@@ -147,7 +147,7 @@ include_once("scripts/myboat.js");
       $status_content .= "&lt;/div&gt;";
       
 ?>
-        <a href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
+        <a class="passedwp" href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
                    echo $usersObj->users->engaged ?>&amp;lat=<?php
                    echo ($usersObj->races->startlat/1000) ?>&amp;long=<?php
                    echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
@@ -429,6 +429,16 @@ include_once("scripts/myboat.js");
                 $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b>&nbsp;<b>Please contact race Comittee, click on the SOS icon</b><";
                 $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
             }
+            //affichage de la deadline pour les départs en ligne
+            $mtr = $usersObj->races->maxTimeRemaining();
+            if ( $mtr > (48*3600) ) {
+                $msg = $strings[$lang]["endrace"]." ". gmdate("M d Y H:i:s", $mtr+time() );
+                $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "info");
+            } else if ($mtr > 1) {
+                $msg = sprintf($strings[$lang]["endracein"], round($mtr/3600) );
+                $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "warn");
+            }
+                
             //BLOCNOTE
             if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
                 $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
@@ -466,9 +476,9 @@ include_once("scripts/myboat.js");
         ?>
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>\n"; ?>
         <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
-            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-            <input type="hidden" name="pilotmode" value="autopilot"/>
+            <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>" />
+            <input type="hidden" name="lang" value="<?php echo $lang?>" />
+            <input type="hidden" name="pilotmode" value="autopilot" />
             <div id="autopilotrange">
                 <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
                 <input class="<?php echo $autopilotclass; ?>" type="text" size="5" maxlength="5" value="<?php echo round($usersObj->users->boatheading,1); ?>" name="boatheading" onchange="updateBoatheading(); updateSpeed();"/>
@@ -554,6 +564,7 @@ include_once("scripts/myboat.js");
 <div id="wpcontrolbox" class="controlitem">
     <form name="coordonnees" action="myboat.php" method="post">
         <input type="hidden" name="type" value="savemywp"/>
+        <input type="hidden" name="lang" value="<?php echo $lang?>"/>
         <div id="wpcoordscontrolbox">
         <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
 
@@ -688,14 +699,20 @@ include_once("scripts/myboat.js");
             </p>
         </div>
     </div>
+    <?php
+        if ( $usersObj->races->started != 1) {
+            $mapopdis = "disabled"; //.$usersObj->races->started;
+        }
+
+    ?>
     <div  id="mapopponents"  class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
-        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
-        <p><input type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
-        <p><input type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
-        <p><input type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10") echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
-        <p><input type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist") echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
-        <p><input type="radio" name="list" value="all" <?php if ($mapOpponents == "all") echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
+        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $usersObj->races->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
     </div>
     <div id="mapcenterbox" class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>

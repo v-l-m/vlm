@@ -1,15 +1,22 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
-Since v0.9:
-* start position (WP0) displayed in ics.php and overlay added in myboat.php (paparazzia)
-* various fixes (fm, spf, paparazzia)
+v0.9.5 aka Have Foehn: what's new for ...
+... players ?
+* useful links for beginner on the homepage body (DocteurX)
+* start position (WP0) displayed in NOR and overlay added in myboat.php (paparazzia)
 * correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
-* the log directory is configurable (paparazzia)
 * more informations available _before_ choosing a race (paparazzia)
-* various configuration options (fm, paparazzia)
-* Useful links for beginner on the homepage body (DocteurX)
 * calendar widget to help EPOC input in pilototo (paparazzia)
+* time to finish displayed in messages (paparazzia)
+* as allways, some new races... (fm & the committee)
+
+... race committee ?
+* map forced on "myboat" mode when the race is not started (less noise on the commitee list) (paparazzia)
+
+... vlm developers ?
+* various configuration options (fm, paparazzia)
+* various fixes and clean-up (fm, spf, paparazzia)
 
 v0.9 aka Like the Wind: what's new for ...
 ... players ?
@@ -26,7 +33,7 @@ v0.9 aka Like the Wind: what's new for ...
 * bugfix for the small islands not allways visible (fm)
 * various fixes (fm, spf)
 
-... tools developpers :
+... tools developpers ?
 * gettrack now return only running positions (spf, steph)
 
 ... vlm developers ?

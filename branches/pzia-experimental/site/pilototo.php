@@ -8,23 +8,25 @@
     include_once("includes/strings.inc");
     include_once("config.php");
     include_once("functions.php");
-    
+
+    header("Content-type: text/html; charset=utf-8");
+
     //helper pour construire la page
     
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $strings, $lang;
         if ($row === 0) {
             $klass = "blank";
-            $timestring = "";
+            $ts = time();
             $firstcolaction = "pilototo_prog_add";
             $statusstring = "";
         } else {
             $klass = $status;
-            $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
             $firstcolaction = "pilototo_prog_upd";
             $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_del"] . " />";
-;
         }
+        $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
+
         echo "<form action=\"pilototo.php\" method=\"post\">\n";
         echo "  <input type=\"hidden\" name=\"lang\" value=\"$lang\" />\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
@@ -72,19 +74,25 @@
                 button         :    "trigger_jscal_"+i,  // trigger for the calendar (button ID)
                 align          :    "Br",           // alignment 
                 singleClick    :    false,
-                showsTime       :    true,
-                timeFormat      :    "24"
+                showsTime      :    true,
+                firstDay       :    1,
+//                date           :    dateobj(i),    
+                timeFormat     :    "24"
             });
         }
     }
-
-    function majhrdate(i) {
     
+    function dateobj(i) {
         var da = eval(document.forms[i].time.value);
             da*=1000;
-        var d = new Date(da);
+        return(new Date(da));
+    }
+
+    function majhrdate(i) {
+        var d = dateobj(i);    
         document.forms[i].gmtdate.value=d.toGMTString();
-    
+        //FIXME : Risque de réentrance ?
+        //calendars[i].setDate(d);
     }
     
     function checkpip(i) {

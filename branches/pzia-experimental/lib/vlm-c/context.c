@@ -1,5 +1,5 @@
 /**
- * $Id: context.c,v 1.11 2009-01-29 22:57:07 ylafon Exp $
+ * $Id: context.c,v 1.12 2009-02-11 10:11:20 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -33,10 +33,10 @@ void context_set(char **structelem, char *fname) {
   }
   if (fname) {
     len = strlen(fname);
-    c = calloc(len+1, sizeof(char));
+    c = malloc((len+1)*sizeof(char));
     if (c) {
       strncpy(c, fname, len);
-      *(c+len)=0; /* some implementations do _not_ respect the calloc call */
+      *(c+len)=0; 
       *structelem = c;
     } else {
       printf("FATAL: while allocating memory for context initialization\n");
