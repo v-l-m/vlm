@@ -6,8 +6,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title><?php echo $PAGETITLE; ?></title>
-    <link rel="stylesheet" type="text/css" href="style/blue_1/style.css" />
-    <link rel="icon" type="image/png" href="images/site/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="../style/status.css" />
+    <link rel="icon" type="image/png" href="../images/site/favicon.png" />
   </head>
   <body>
     <p class=".horizontalmenu">Available status : <a href="race-engine-status.php">Race engine status</a>&nbsp;<a href="windtable-status.php">Windtable status</a>&nbsp;</p>
