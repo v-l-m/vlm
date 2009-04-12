@@ -36,7 +36,7 @@ class races
     $query= "SELECT idraces, racename, started, deptime, startlong, startlat, 
              boattype, closetime, racetype, firstpcttime, depend_on, 
              qualifying_races, idchallenge, coastpenalty, bobegin, boend,
-             maxboats, theme
+             maxboats, theme, vacfreq
              FROM races WHERE idraces = $id";
     $result = wrapper_mysql_db_query(DBNAME,$query) or die($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
@@ -59,6 +59,7 @@ class races
     $this->boend            = $row[15];
     $this->maxboats         = $row[16];
     $this->theme            = $row[17]; //Le theme , si non null, force le theme de l'interface
+    $this->vacfreq          = $row[18]; // 1, 5, ou 10, pour frequence des runs du moteur
 
     // retrieve all IC if we are not running the engine
     if (!defined('MOTEUR')) {
@@ -1129,15 +1130,28 @@ class startedRacesList
 
   function startedRacesList()
   {
-    $this->records = array();
-    $query = "SELECT idraces FROM races WHERE started > 0 order by deptime DESC";
-    $result = wrapper_mysql_db_query(DBNAME,$query);
-    while($row = mysql_fetch_array($result, MYSQL_NUM))
-      {
-        //$racesFullObj = new fullRaces( $row[0] )  ;
-        //array_push ($this->records, $racesFullObj);
-        array_push($this->records , $row[0]);
-      }
+        $this->records = array();
+        $query = "SELECT idraces FROM races WHERE started > 0 ";
+
+        $minute = date('i');
+         
+        if ( $minute % 10 == 0 ) {
+               $query .= " and vacfreq in (1,2,5,10) " ;
+        } else if ( $minute % 5 == 0 ) {
+               $query .= " and vacfreq in (1,5) " ;
+        } else if ( $minute % 2 == 0 ) {
+               $query .= " and vacfreq in (1,2) " ;
+        } else {
+               $query .= " and vacfreq = 1 " ;
+        }
+
+        $query .= " order by vacfreq ASC, deptime DESC";
+        $result = wrapper_mysql_db_query(DBNAME,$query);
+
+        while($row = mysql_fetch_array($result, MYSQL_NUM))
+        {
+            array_push($this->records , $row[0]);
+        }
 
   }
 
