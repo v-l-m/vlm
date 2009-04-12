@@ -1,18 +1,9 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
 From 0.9.7 To next...
-   Add a column in "races" table :
-   mysql>     alter table races add vacfreq tinyint default 5;
 
-   It is(will be) used when when the engine runs (once per minute), and il selects races to run :
-   - when minute%10 == 0 : selects all races
-   - when minute%5  == 0 : selects all races having 5 here
-   - when minute%2  == 0 : selects all races having 2 here
-   - whenever else       : selects all races having 1 here.
-
-   Add a column update_comment to the table "updates". It lists races concerned by each update.
-   mysql>     alter table updates add update_comment varchar(256);
-
+=Base=
+* see the UPDATE FILE in the base module
 
 To 0.9.5 from 0.9
 _______________
