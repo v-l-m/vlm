@@ -95,6 +95,7 @@
 ?>
 <html>
   <head>
+    <title>VLM Map (<?php echo $idusers; ?>)</title>
     <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
     <script>
         clicEnCours = false;
