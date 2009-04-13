@@ -149,7 +149,7 @@ switch ($type) {
  * Affiche la liste de joueurs
  */
   case "race":
-    header("content-type: text/html");
+    header("content-type: text/html; charset=UTF-8");
     if (is_numeric($idraces)) {
       // recupere les idusers et les username pour une course
       $sql = "SELECT idusers, username, engaged
@@ -176,7 +176,7 @@ switch ($type) {
     }
     break;
   default:
-    header("content-type: text/html");
+    header("content-type: text/html; charset=UTF-8");
       // recupere les courses en cours
       $sql = "SELECT idraces, racename, deptime
               FROM `races`

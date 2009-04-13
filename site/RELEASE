@@ -4,11 +4,11 @@ See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by versi
 v0.10 aka Have Foehn (part II) : what's new for ...
 ... players ?
 * engine more reliable, easier way to set up 1 min. races (fm)
-* more links from/to IC (paparazzia)
-...
+* home page more compact & more links from (papara
+* verbose race engine status (paparazzia)
+* various fixes, some cosmetics, some not... (paparazzia, fm, spf)
 
-
-v0.9.5 aka Have Foehn: what's new for ...
+v0.9.5 aka Have Foehn (part I): what's new for ...
 ... players ?
 * useful links for beginner on the homepage body (DocteurX)
 * start position (WP0) displayed in NOR and overlay added in myboat.php (paparazzia)
