@@ -4,7 +4,17 @@ include "../site/includes/strings.inc";
 
 $false_errors = Array(
     'fr' => Array(
-      'images', 'faq', 'doc', 'forum', 'contact', 'version', 'position', 'degrees'
+      'images', 'faq', 'doc', 'forum', 'contact', 'version', 'position', 'degrees', 'taverne', 'tchat', 'loch', 'estime', 'mapsize',
+      'proj', 'mercator', 'lambert', 
+      ),
+    'it' => Array(
+      'home', 'forum', 'taverne', 'tchat', 'sponsor', 'skipper', 'nautics', 'mapsize', 'degrees',
+      ),
+    'pt' => Array(
+      'faq', 'forum', 'tchat', 'days', 'mapsize', 'mercator', 'degrees',
+      ),
+    'es' => Array(
+      'faq', 'chat', 'skipper', 'nautics', 'knots', 'days', 'mapsize', 'mercator', 'tracks', 'degrees',
       ),
     );
 
