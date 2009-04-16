@@ -561,8 +561,6 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "autopilot" => "Fixer ce cap",
         "constant" => "Fixer cette allure",
         "tack" => "Virer / Empanner",
-        "babord_amure" => "BABORD AMURE",
-        "tribord_amure" => "TRIBORD AMURE",
         "orthodromic" => "Pilote Orthodromique",
         "orthodromic_comment" => "Vise Mon WP si diff&eacute;rent de 0/0\nsinon vise la prochaine marque",
         "estimated"=>"Vitesse Estim&eacute;e",
