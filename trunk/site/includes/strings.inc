@@ -972,7 +972,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "q11" => "Estas FAQ?s não respondem à minha questão. E agora?",
         "a11" => "Pergunte no Forum ou envie um e-mail para sebastien.abeille *arobase* gmail.com.",
         "q12" => "Coisas a fazer",
-        "a12" => "<a href=\"http://loupdev.tuxfamily.org/wiki/wakka.php?wiki=ListeDesTachesAutresVersions\">Todo</a>",                        
+        "a12" => "<a href=\"http://dev.virtual-loup-de-mer.org/vlm/\">Todo(fr)</a>",
         "q13" => "Como obter previsões meteorológicas?",
         "a13" => "Os melhores locais:  <a href=\"http://www.meteofrance.com/FR/mer/carteVents.jsp?LIEUID=ATLANTIQUE\">Meteo France</a> e <a href=\"https://www.fnmoc.navy.mil/mywxmap/index.jsp\">FNMOC</a>. Ou então tente <a href=\"http://perso.wanadoo.fr/ti.bleu/meteo_satellites/meteo_satellite.htm\">este site</a> e  <a href=\"http://perso.wanadoo.fr/meteo-marine/index_fr.htm\">este</a>.",
         "q14" => "Todas as horas que vejo estão erradas!",
