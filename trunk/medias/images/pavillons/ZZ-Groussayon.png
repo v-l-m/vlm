@@ -1,0 +1,389 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>ImageShack - Image Hosting :: 29715152.png </title>
+		<link rel="stylesheet" href="/css/style.css?1" type="text/css" />
+		<SCRIPT TYPE="text/javascript" SRC="http://content.yieldmanager.com/rmtag3.js"></SCRIPT>
+		<script type="text/javascript" src="/scripts/common/common.js"></script>
+		<script type="text/javascript" src="/scripts/common/prototype.js"></script>
+		<script type="text/javascript">
+			var brand = 1;
+			var url_image_path = 'img412/9076/29715152.png';
+			var triton_image_path = 'http://triton.imageshack.us/Himg412/scaled.php?server=412&filename=29715152.png&xsize=640&ysize=480';
+			var triton_enable = 0;
+			var is_image =  1;
+			var media_width = 30;
+			var media_height = 20;
+			var has_exif =  0;
+			var has_related_images =  0;
+			var related_images_json =  [];
+			var media_type =  'image';
+			var has_thumb =  0;
+			var is_registered_user = 0;
+			var browser_is_registered = 0;
+			var ref_tn = 0;
+
+			if (ref_tn>0) {
+				rt_i = new Image();
+				rt_i.src = "http://img1.imageshack.us/rt_log/?t=" + ref_tn + "&f=" + url_image_path + "&b=" + brand;
+			}
+
+			//Digg
+			// var digg_url = 'http://img412.imageshack.us/' + url_image_path;
+			
+			// YM Pop vars
+			var popunder = 1;
+			var rm_host = "http://ad.yieldmanager.com";
+			var rm_section_id = 64091;
+			var rm_banned_pop_types = 29;
+			var rm_pop_times = 1;
+			var rm_pop_frequency = 86400;
+			if (popunder) {
+				rmShowPop();
+			}
+
+			// Integrated File Upload
+			var upl_disableswf = false;
+			var upl_allowed_types = new Hash();
+			$A(['jpg','jpeg','png','gif','bmp','tiff','swf','pdf']).each(function(i) {upl_allowed_types.set(i,true);});
+						Event.observe(document, 'dom:loaded', page_loaded, false);
+						function page_loaded()
+			{
+				$('upl_submit_btn').disable();
+				if (media_type == 'image') {
+					image_init();
+				} else if (media_type == 'flv') {
+					flv_init();
+				} else if (media_type == 'swf') {
+					swf_init();
+				} else if (media_type == 'pdf') {
+					pdf_init();
+				} else {
+					var e_image = new Image();
+					e_image.src = 'http://img1.imageshack.us/images/e_image.gif?e=E_XML_FAIL&f='+ url_image_path;
+				}
+
+				if (is_registered_user) {
+					var profileLink = new Element('a', { 'href': 'http://profile.imageshack.us/user/'});
+					profileLink.update('Other images from this user');
+					$('profileDiv').update(profileLink);
+				}
+
+				if (browser_is_registered) {
+				}
+				$('q').focus();
+			}
+
+			function image_init()
+			{
+				var mainImage = new Element('img', { 'id': 'vImage' });
+				var scaled = get_scaled_size(media_width, media_height, 578, 480, false);
+	
+				mainImage.setAttribute('width', scaled[0]);
+				mainImage.setAttribute('height', scaled[1]);
+				mainImage.setStyle({
+					width: scaled[0],
+					height: scaled[1]
+				});
+
+				mainImage.setAttribute('src', (triton_enable) ? triton_image_path : url_image_path);
+
+				var a = new Element('a', { 'href': url_image_path, 'target': '_blank' });
+
+				a.update(mainImage);
+				$('mediaDiv').update(a);
+
+				if (!has_thumb) {
+					$('tab2').hide();
+				}
+
+				if (has_related_images) {
+					var images = new Array();
+					var algo;
+					var cluster_id;
+					related_images_json.each(function(row, index) {
+						// ["img206","4466","soguif198nl9.jpg","206",88,88],["img512","826","fluxxm174cp0.jpg","512",88,88]
+						var a = new Element('a',{'href': 'http://'+row[0]+'.imageshack.us/my.php?image='+row[2]+'&a='+row[6]+'&ci='+row[7]+'&rt='+ (index+1)});
+						a.setStyle({'padding': '2px'});
+						a.observe('click', function(event) {
+							pageTracker._trackEvent('related-click', 'bottom');
+						});
+						var img = new Element('img');
+						img.setAttribute('src',unescape('http://triton.imageshack.us/H'+row[0]+'/scaled.php?tn=1&server='+row[3]+'&filename='+row[2]+'&xsize='+row[4]+'&ysize='+row[5]));
+						img.observe('load',function(){
+							if (this.width > 85) {
+								this.setStyle({width: 85});
+							}
+							if (this.height < 85) {
+								var bottom_padding = 85 - this.height;
+								this.setStyle({
+									margin: '0 0 '+ bottom_padding +' 0'
+								});
+							}
+						});
+						a.insert(img);
+						$('relatedImagesDiv').insert(a);
+						images.push(row[0]+'/'+row[2]);
+						algo = row[6]
+						cluster_id = row[7]
+					});
+					$('relatedImagesDiv').show();
+
+					var pingback = new Image();
+					pingback.src = '/images/ping.gif?i=' + url_image_path + '&a='+ algo + '&ci=' + cluster_id + '&ri=' + images.join();
+
+					var pnDiv = new Element('div', {id:'pnDiv'});
+
+					var pRow = related_images_json[2];
+					var nRow = related_images_json[3];
+
+					var pa = new Element('a',{'href': 'http://'+pRow[0]+'.imageshack.us/my.php?image='+pRow[2]+'&a='+pRow[6]+'&ci='+pRow[7]+'&rt=7'});
+					pa.observe('click', function(event) {
+							pageTracker._trackEvent('related-click', 'top');
+					});
+					var na = new Element('a',{'href': 'http://'+nRow[0]+'.imageshack.us/my.php?image='+nRow[2]+'&a='+nRow[6]+'&ci='+nRow[7]+'&rt=8'});
+					na.observe('click', function(event) {
+							pageTracker._trackEvent('related-click', 'top');
+					});
+
+					pa.update('<< Prev');
+					na.update('Next >>');
+
+					pnDiv.insert(pa);
+					pnDiv.insert(na);
+
+					$('mediaDiv').insert({top : pnDiv});
+				}
+			}
+
+			function flv_init()
+			{
+				var embed = new Element('embed', {'src': 'http://img412.imageshack.us/flvplayer.swf?f=T29715152&autostart=true', 'width':'420', 'height':'320', 'type': 'application/x-shockwave-flash'});
+				$('mediaDiv').update(embed);
+				$('tab2').hide();
+				$('advControl').hide();
+				$('ibl_fs_forum').hide();
+				$('ibl_fs_forum_alt').hide();
+			}
+
+			function swf_init()
+			{
+				var embed = new Element('embed', {'src': 'http://img412.imageshack.us/' + url_image_path, 'width':'420', 'height':'320', 'allowScriptAccess':'never', 'type': 'application/x-shockwave-flash'});
+				$('mediaDiv').update(embed);
+				$('tab2').hide();
+				$('advControl').hide();
+				$('ibl_fs_forum').hide();
+				$('ibl_fs_forum_alt').hide();
+			}
+
+			function pdf_init(pdf_width, pdf_height)
+			{
+				var vpDimensions = getViewportDimensions();
+				var scaled = get_scaled_size(850, 1100, 578, (vpDimensions.height - 120), false );
+				var embed = new Element('embed', {'src': 'http://img412.imageshack.us/' + url_image_path + '#toolbar=0&navpanes=0'});
+				embed.setAttribute('width', scaled[0]);
+				embed.setAttribute('height', scaled[1]);
+				embed.setStyle({ width: scaled[0], height: scaled[1] });
+
+				$('mediaDiv').update(embed);
+				$('tab2').hide();
+				$('advControl').hide();
+				$('ibl_fs_forum').hide();
+				$('ibl_fs_forum_alt').hide();
+			}
+
+			function getViewportDimensions() {
+				var intH = 0, intW = 0;
+				if(self.innerHeight) {
+					intH = window.innerHeight;
+					intW = window.innerWidth;
+				} else {
+					if(document.documentElement && document.documentElement.clientHeight) {
+							intH = document.documentElement.clientHeight;
+						intW = document.documentElement.clientWidth;
+					} else {
+						if(document.body) {
+							intH = document.body.clientHeight;
+							intW = document.body.clientWidth;
+						}
+					}
+				}
+				return {height: parseInt(intH, 10), width: parseInt(intW, 10)};
+			}
+
+			function verifyFileType()
+			{
+					var upl_input = $('media_upload_input');
+					var upl_file_parts = upl_input.value.split(".");
+					if (upl_allowed_types.get(upl_file_parts[1].toLowerCase())) {
+						$('upl_submit_btn').enable();
+						$('filetypeerror').setStyle({'display':'none'});
+					} else {
+						$('upl_submit_btn').disable();
+						$('filetypeerror').show();
+					}
+			}
+
+		</script>
+
+		<!-- Start Google Analytics Tag -->
+
+		<script type="text/javascript">
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+
+		<script type="text/javascript">
+			var pageTracker = _gat._getTracker("UA-6232220-1");
+			pageTracker._initData();
+			pageTracker._setDomainName(".imageshack.us");
+			pageTracker._trackPageview(url_image_path);
+		</script>
+
+		<script type="text/javascript">
+			if (has_related_images) {
+				pageTracker._setVar('MyPage-with-Related');
+			} else {
+				pageTracker._setVar('MyPage');
+			}
+		</script> 
+
+		<!-- End Google Analytics tag -->
+
+		<script type="text/javascript">function highlight(field){field.focus();field.select();}</script>
+	</head>
+	<body id='view'>
+		<div id='overlay'></div>
+		<div id='page'>
+			<div id='header' class='clearfix'>
+				<a href="http://www.imageshack.us" title="ImageShack Home Page"><img id="logoImage" src="/images/greylogo.png" width="338" height="90" alt="ImageShack Image and Video Hosting"/></a>
+				<div id='searchContainer'>
+					<form method="get" id='searchForm' action="http://profile.imageshack.us/search.php">
+						<input id='q' type="text" value="" name="q" style='width: 280px;' ><input type="submit" value="Image Search"> 
+					</form>
+				</div>
+				<div class='clear'></div>
+			</div>
+			<div id='leftColumn'>
+				<div id='adIframe'>
+						<!-- BEGIN STANDARD TAG - 300 x 250 - imageshack: New Landing - EX Adsense - DO NOT MODIFY -->
+						<IFRAME FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="http://ad.yieldmanager.com/st?ad_type=iframe&ad_size=300x250&section=470513"></IFRAME>
+						<!-- END TAG -->
+				</div>
+
+<a href='http://www.yfrog.com/?url=http://img412.imageshack.us/img412/9076/29715152.png'><img border=0 src=/images/tweet.png></a>
+<span class='mobilize'><a href='http://www.yfrog.com/?url=http://img412.imageshack.us/img412/9076/29715152.png'>Send this image to Twitter</a></span>
+<br>
+				<div id='tabControl' class='tab1'>
+
+					<div id='inboundLinks'>
+
+						<ul id="tabnav">
+							<li class="tab1" id="tab1"><a href="#" onClick="$('tabControl').setAttribute((document.all ? 'className' : 'class'),'tab1'); return false;">Codes</a></li>
+							<li class="tab2" id="tab2"><a href="#" onClick="$('tabControl').setAttribute((document.all ? 'className' : 'class'), 'tab2'); return false;">Thumbs</a></li>
+							<li class="tab3" id="tab3"><a href="http://reg.imageshack.us/content.php?page=blogpost&files=img412/9076/29715152.png" target="_blank">QuickPost</a></li>
+							<li class="tab4" id="tab4"><a href="#" onClick="$('tabControl').setAttribute((document.all ? 'className' : 'class'),'tab4'); return false;" target="_blank">Upload</a></li>
+						</ul>
+
+						<div class='cTab1'>
+							<div class='row' id='ibl_fs_im'>
+								<span class='iblLabel'>IM</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_fs_im");' value='http://img412.imageshack.us/my.php?image=29715152.png'>
+								<br clear='both'/>
+							</div>
+							<div class='row' id='ibl_fs_forum'>
+								<span class='iblLabel'>Forum</span><textarea onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_fs_forum");'>[URL=http://img412.imageshack.us/my.php?image=29715152.png][IMG]http://img412.imageshack.us/img412/9076/29715152.png[/IMG][/URL]
+[URL=http://g.imageshack.us/img412/29715152.png/1/][IMG]http://img412.imageshack.us/img412/29715152.png/1/w30.png[/IMG][/URL]</textarea>
+								<br clear='both'/>
+							</div>
+							<div class='row' id='ibl_fs_forum_alt'>
+								<span class='iblLabel'>Alt Forum</span><textarea onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_fs_forum_alt");'>[URL=http://img412.imageshack.us/my.php?image=29715152.png][IMG=http://img412.imageshack.us/img412/9076/29715152.png][/IMG][/URL]
+[URL=http://g.imageshack.us/img412/29715152.png/1/][IMG=http://img412.imageshack.us/img412/29715152.png/1/w30.png][/IMG][/URL]</textarea>
+								<br clear='both'/>
+							</div>
+							<div class='row' id='ibl_fs_html'>
+								<span class='iblLabel'>HTML</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_fs_html");' value='&lt;a target=&#039;_blank&#039; title=&#039;ImageShack - Image And Video Hosting&#039; href=&#039;http://img412.imageshack.us/my.php?image=29715152.png&#039;&gt;&lt;img src=&#039;http://img412.imageshack.us/img412/9076/29715152.png&#039; border=&#039;0&#039;/&gt;&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;http://g.imageshack.us/img412/29715152.png/1/&quot;&gt;&lt;img src=&quot;http://img412.imageshack.us/img412/29715152.png/1/w30.png&quot; border=&quot;0&quot;&gt;&lt;/a&gt;'>
+								<br clear='both'/>
+							</div>
+							<div class='row'  id='ibl_fs_direct'>
+								<span class='iblLabel'>Direct</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_fs_direct");' value='http://img412.imageshack.us/img412/9076/29715152.png'>&nbsp;<a href='http://img412.imageshack.us/img412/9076/29715152.png' target='_blank'><img src='/images/external.png' border='0'/></a>
+								<br clear='both'/>
+							</div>
+							<div class='row'  id='ibl_yf'>
+								<span class='iblLabel'>Short Link</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_yf");' value='http://yfrog.com/bg29715152p'>
+								<br clear='both'/>
+							</div>
+							<br clear='both'/>
+						</div>
+
+						<div class='cTab2'>
+							<div class='row'>
+								<span class='iblLabel'>Forum</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_tn_forum");' value='[URL=http://img412.imageshack.us/my.php?image=29715152.png][IMG]http://img412.imageshack.us/img412/9076/29715152.th.png[/IMG][/URL]'>
+								<br clear='both'/>
+							</div>
+							<div class='row'>
+								<span class='iblLabel'>Alt Forum</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_tn_forum_alt");' value='[URL=http://img412.imageshack.us/my.php?image=29715152.png][IMG=http://img412.imageshack.us/img412/9076/29715152.th.png][/IMG][/URL]'>
+								<br clear='both'/>
+							</div>
+							<div class='row'>
+								<span class='iblLabel'>HTML</span><input onClick='highlight(this);pageTracker._trackEvent("my-php-click","ibl_tn_html");' value='&lt;a target=&#039;_blank&#039; href=&#039;http://img412.imageshack.us/my.php?image=29715152.png&#039;&gt;&lt;img src=&#039;http://img412.imageshack.us/img412/9076/29715152.th.png&#039; border=&#039;0&#039;/&gt;&lt;/a&gt;'>
+								<br clear='both'/>
+							</div>
+							<br clear='both'/>
+						</div>
+
+						<div class='cTab4'>
+							<div class='row'>
+								<form method="post" action="http://load.imageshack.us/" enctype="multipart/form-data">
+									<input id='media_upload_input' type="file" name="fileupload" size="20" style="height:25px;" onChange="verifyFileType();"/><br/>
+									<input type="checkbox" name="rembar" id="rembar" value="1" style='width:10px;'> <span style='font-size: 8pt;'>remove size/resolution bar from thumbnail?</span><br/>
+									<input type="hidden" name="MAX_FILE_SIZE" value="13145728">
+									<input type="hidden" name="refer" value="my_img412/9076/29715152.png"/>
+									<input id='upl_submit_btn' style="margin-top: 5px; width:135px;border:2px solid #FF6600" type="submit" value="host it!" />
+								</form>
+								<div id="filetypeerror" style="display: none"><b style="color: red;">Please select only one of the supported file types:</b></div>
+								<p id="filetypeallowed" style='font-size: 8pt;'>allowed: jpg jpeg png gif bmp tif tiff pdf &lt; 1.5mb.</p>
+
+								<br clear='both'/>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div id='content'>
+				<div id='mediaDiv'></div>
+				<div id='profileDiv'></div>
+								<div style='display: none;' id='relatedImagesDiv'>
+					<span class='title' style='text-align: left'>Images Like This One</span>
+				</div>
+								<br clear='both'/>
+			</div>
+			<br clear='all'/>
+			<div id='footer'>
+				&nbsp;
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=linkto">Link to ImageShack</a> |
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=aboutus">Learn about ImageShack</a> |
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=advertising">Advertise on ImageShack</a>
+				<br />
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=email&amp;q=customer">Customer Service</a>
+				<span style="color:#000000;">|</span>
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=email&amp;q=abuse">Report Abuse or Request Deletion</a>
+				<span style="color:#000000;">|</span>
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=email&amp;q=marketing">Marketing Opportunities</a><br/>
+				<a class="ser" href="http://reg.imageshack.us/content.php?page=email">Contact ImageShack</a>
+			</div>
+		</div>
+
+<!-- Start Quantcast tag -->
+<script type="text/javascript">
+_qoptions={
+qacct:"p-65DrxcUXjcWq6",
+labels:"MyPage"
+};
+</script>
+<script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
+<noscript>
+<a href="http://www.quantcast.com/p-65DrxcUXjcWq6" target="_blank"><img src="http://pixel.quantserve.com/pixel/p-65DrxcUXjcWq6.gif?labels=MyPage" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/></a>
+</noscript>
+<!-- End Quantcast tag -->
+	</body>
+</html>
