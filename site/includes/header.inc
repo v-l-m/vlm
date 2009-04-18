@@ -296,7 +296,7 @@
                 ?>
             </a>
                 <?php
-                    echo "<a href=\"javascript:popUp('http://www.webchat.epiknet.org/tchat.php?canal=vlm&amp;pseudo=" . getLoginName() . "-" . getLoginId() . "','newchat')\">";
+                    echo "<a href=\"javascript:popUp('http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&server=mibbit.epiknet.org&channel=%23vlm&noServerTab=false&autoConnect=true&customprompt=Welcome%20To%20VLM%20Chat&nick=" . getLoginName() . "-" . getLoginId() . "','newchat')\">";
                     echo "new".$strings[$lang]["tchat"];
                 ?>
                 </a>
