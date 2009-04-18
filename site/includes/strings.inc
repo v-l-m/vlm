@@ -595,7 +595,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
               "mustbeengaged" => "Vous devez &ecirc;tre engag&eacute; dans une course",
               "degrees" => "&deg;" //this one is not ascii!
   ),
-        "it" => array(
+  "it" => array(
         "lang_version"=>"Italian Version",
         "home" => "Home",
         "images" => "Immagini",
@@ -631,7 +631,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "choose_your_theme" => "Scegli il tuo sfondo",
         "myrace" => "Mia regata",
         "sub_race" => "Regate che stanno per partire",
-        "sponsor" => "Virtual Loup de Mer is hosted by",
+        "sponsor" => "Virtual Loup de Mer è ospitato da",
         "meteodata" => "GRIB&nbsp;database&nbsp;meteo ",
         "meteotools" => "Strumenti&nbsp;per&nbsp;la&nbsp;Meteo",
         "homeofsailing" => "HomePage Virtual Loup-de-mer",
@@ -641,7 +641,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "startrace" => "Data e ore della partenza : ",
         "closerace" => "Data e ora dell'arrivo : ",
         "endrace" => "Tempo dell finita :",
-        "endracein" => "La linea di arrivo sarà chiusa in %d ore.",
+        "endracein" => "La linea di arrivo sarà chiusa tra %d ore.",
         "postponed" => "<h3>La regata e'stata posticipata di 24h per permettere di arrivare a tutte le barche previste per la partenza.</h3>",
         "norace" => "<h1>non ci sono nuove regate previste</h1>",
         "lastupdate" => "<b>Ore del server</b> : %s<br /><b>Ultimo aggiornamento globale dei dati</b> il y a %d ore %d minuti, %d secondi.",
@@ -780,7 +780,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "mapmy10opps" => "le 10 piu vicine",
         "mapmeandtop10" => "le migliori 10",
         "trackage" => "Tracciati vecchi (ore)",
-        "crank" => "crank",
+        "crank" => "intervallo",
         "estime" => "Previsione rotta (nm)",
         "maille" => "Griglia del vento",
         "maplayers" => " griglia del Vento",
