@@ -289,17 +289,19 @@
             <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a>
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
+            <?php
+                $ircpseudo = preg_replace("([^a-zA-Z0-9-\[\]\\`^{}])", "-", getLoginName(). "-" . getLoginId());
+                $ircpseudo = preg_replace("(-+)", "-", $ircpseudo);
+                echo "<a href=\"http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&server=mibbit.epiknet.org&channel=%23vlm&noServerTab=false&autoConnect=true&customprompt=Welcome%20To%20VLM%20Chat&charset=iso-8859-15&nick=" . $ircpseudo . "\" target=\"_blank\" >";
+                echo $strings[$lang]["tchat"];
+            ?>
+                </a>
             <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo $strings[$lang]["forum"]?></a>
                 <?php 
-                echo "<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
-                echo $strings[$lang]["tchat"];
+                echo "(<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
+                echo "old".$strings[$lang]["tchat"];
                 ?>
-            </a>
-                <?php
-                    echo "<a href=\"http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&server=mibbit.epiknet.org&channel=%23vlm&noServerTab=false&autoConnect=true&customprompt=Welcome%20To%20VLM%20Chat&charset=iso-8859-15&nick=" . getLoginName() . "-" . getLoginId() . "\" target=\"_blank\" >";
-                    echo "new".$strings[$lang]["tchat"];
-                ?>
-                </a>
+            )</a>
         </div> <!-- fin div menucommunicationbox -->
         <div id="toolbarbox" class="leftbox">
             <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
