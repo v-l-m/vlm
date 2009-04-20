@@ -1,7 +1,7 @@
 <?php
 
 include_once "config.php";
-$IDRACES=80101;
+$IDRACES=80106;
 $boats= array(
     -701=>'ERT4',
     -702=>'ERT3',
