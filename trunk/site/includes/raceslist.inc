@@ -33,7 +33,8 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
     $idraces = $row[1];
     $racename = $row[2];
     $closetime = $row[3];
-    $boattype = strtoupper(ereg_replace('^.*_', '' ,$row[4]));
+    $boattypename = strtoupper(ereg_replace('^.*_', '' ,$row[4]));
+    $boattype = $row[4];
     $firstpcttime = $row[5];
     $maxboats = $row[6];
 
@@ -61,7 +62,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
   
         echo "<td align=\"left\" class=\"boat\">";
         $urlidraces = sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
-        $urlboattype = sprintf("<a href=\"speedchart.php?boattype=boat_%s\" target=\"_speedchart\">%s</a>", $boattype, $boattype);
+        $urlboattype = sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\">%s</a>", $boattype, $boattypename);
         $urlracename = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
         $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
         if ( $maxboats != 0 ) {            
