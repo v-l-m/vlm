@@ -3,12 +3,12 @@
 include_once ("functions.php");
 
 $idraces=($_REQUEST["idraces"]);
-// Récupération des dimensions (x et y) : valeurs mini par défaut = 250
+// RÃ©cupÃ©ration des dimensions (x et y) : valeurs mini par dÃ©faut = 250
 $image="regate".$idraces;
 $thumb="images/minimaps/" . $image . ".png";
 $original="images/racemaps/" . $image . ".jpg";
 
-// Création et mise en cache de la miniature si elle n'existe pas ou est trop vieille
+// CrÃ©ation et mise en cache de la miniature si elle n'existe pas ou est trop vieille
 if ( 
      ( ! file_exists($thumb) ) 
       ||  (filemtime($thumb) < filemtime($original) ) 
@@ -28,14 +28,18 @@ if (
     // Sauvegarde de la miniature
     imagepng($img_out, $thumb) or die ("Cannot write thumbnail");
 
-    // libération des ressources
+    // libÃ©ration des ressources
     imagedestroy($img_in);
     imagedestroy($img_out);
 }
 
 // Envoi de la miniature
-header("Content-type: image/png");
+header("Content-Type: image/png");
 header("Content-Length: " . filesize($thumb));
+header("Cache-Control: max-age=864000"); // default 10 days should be tunable.
+header("Content-Location: " . $thumb );
+// FIXME do we want to send a redirect, here ?
+
 readfile($thumb);
 
 ?> 
