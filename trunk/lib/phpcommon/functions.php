@@ -1401,6 +1401,13 @@ function getRaceRanking($idusers, $idraces) {
 
 // Race is up for some boats, we want to display the boat position
 function getCurrentRanking($idusers, $idraces) {
+
+  $rank_ar = getCurrentUserRanking($idusers, $idraces);
+
+  return ($rank_ar[0] . "/" . $rank_ar[1]);
+}
+
+function getCurrentUserRanking($idusers, $idraces) {
   // search for old races for this player
   $query = "SELECT idusers from races_ranking where idusers >0 and idraces = " . $idraces . " order by nwp DESC, dnm ASC" ;
   $result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
@@ -1419,7 +1426,7 @@ function getCurrentRanking($idusers, $idraces) {
   $nbu+=$nb_arr;
   $rank+=$nb_arr;
 
-  return ($rank . "/" . $nbu  );
+  return array ($rank, $nbu);
 }
 
 function findNearestOpponents($idraces,$idusers,$num) {
