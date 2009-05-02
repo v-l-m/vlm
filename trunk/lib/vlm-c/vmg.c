@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.5 2008/05/24 14:21:21 ylafon Exp $
+ * $Id: vmg.c,v 1.6 2009-05-02 16:56:44 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -253,3 +253,56 @@ void automatic_selection_heading(boat *aboat) {
   set_heading_ortho(aboat);
 }
   
+/**
+ * get the best angle in close hauled mode (allure de pres)
+ * @return a wind angle in radians
+ */
+double get_best_angle_close_hauled(boat *aboat, double speed) {
+  double t, t_max;
+  double maxangle;
+  double t_speed, t_angle;
+  int i;
+  
+  t_max = -100.0;
+  maxangle = 0.0;
+
+  for (i=0; i<900; i++) {
+    t_angle =  degToRad(((double)i)/10.0);
+    t_speed = find_speed(aboat, speed, t_angle);
+    t = t_speed * cos(t_angle);
+    if (t > t_max) {
+      t_max = t;
+      maxangle = t_angle;
+    } else if ( t_max - t > (t_max/20.0)) { 
+      break;  /* cut if lower enough from current maximum */
+    }
+  }
+  return maxangle;
+}
+
+/**
+ * get the best angle in close hauled mode (grand largue)
+ * @return a wind angle in radians
+ */
+double get_best_angle_broad_reach(boat *aboat, double speed) {
+  double t, t_max;
+  double maxangle;
+  double t_speed, t_angle;
+  int i;
+  
+  t_max = -100.0;
+  maxangle = M_PI;
+
+  for (i=1800; i>900; i--) {
+    t_angle =  degToRad(((double)i)/10.0);
+    t_speed = find_speed(aboat, speed, t_angle);
+    t = t_speed * cos(M_PI - t_angle);
+    if (t > t_max) {
+      t_max = t;
+      maxangle = t_angle;
+    } else if ( t_max - t > (t_max/20.0)) { 
+      break;  /* cut if lower enough from current maximum */
+    }
+  }
+  return maxangle;
+}
