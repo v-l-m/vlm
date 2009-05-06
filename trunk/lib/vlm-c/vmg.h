@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.h,v 1.3 2009-05-02 16:56:22 ylafon Exp $
+ * $Id: vmg.h,v 1.8 2009-05-06 12:55:24 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -22,12 +22,20 @@
 #include "defs.h"
 #include "types.h"
 
-void set_heading_bvmg                PARAM1(boat *);
-void set_heading_bvmg2               PARAM1(boat *);
-void set_heading_bvmg2_coast         PARAM1(boat *);
-void automatic_selection_heading     PARAM1(boat *);
+double get_heading_bvmg              PARAM2(boat *, int);
+void   set_heading_bvmg              PARAM1(boat *);
+void   set_heading_bvmg2             PARAM1(boat *);
+void   set_heading_bvmg2_coast       PARAM1(boat *);
 
-double get_best_angle_close_hauled   PARAM2(boat *, double);
-double get_best_angle_broad_reach    PARAM2(boat *, double);
+double get_best_angle_close_hauled   PARAM3(boat *, double, int);
+double get_best_angle_broad_reach    PARAM3(boat *, double, int);
+
+double get_heading_vbvmg             PARAM2(boat *, int);
+double get_wind_angle_vbvmg          PARAM2(boat *, int);
+
+void   do_vbvmg                      PARAM10(boat *, int, double *, double *, 
+					     double *, double *, 
+					     double *, double *, 
+					     double *, double *);
 
 #endif /* _VMG_H_ */
