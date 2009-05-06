@@ -54,7 +54,7 @@ all:: libvlmc.a unittest windserver unittest-shm
 
 bindings:: php
 
-php:: 
+php:: libvlmc.a
 	cd php && $(MAKE)
 
 wgrib/libgrib.a:
