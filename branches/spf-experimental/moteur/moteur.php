@@ -26,7 +26,7 @@ set_polar_definition_filename($global_vlmc_context, POLAR_DEFINITION_FILENAME);
 global_vlmc_context_set($global_vlmc_context);
 
 init_coastline();
-read_polars();
+init_polar();
 
 //$verbose=$_REQUEST['verbose'];
 $verbose=0;
