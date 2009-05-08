@@ -37,7 +37,7 @@ export VLMDATAS=$VLMRACINE/vlmdatas
 export VLMGSHHS=$VLMDATAS/gshhs
 
 #Les polaires transformees seront (par défaut) dans VLMDATAS/polars
-export VLMGSHHS=$VLMDATAS/polars
+export VLMPOLARS=$VLMDATAS/polars
 
 #Chemin vers le stockage des gribs
 export VLMGRIBS=$VLMDATAS/gribs
