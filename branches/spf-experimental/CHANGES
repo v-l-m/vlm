@@ -1,9 +1,0 @@
-* Gestion des cotes a partir du fichier gshhs_f en utilisant vlm-c
-* La detection des cotes se fait avant la verification du WP,
-  La verification du WP en cas de collision avec la cote se fait entre le point
-  de depart du bateau et le point de collision, et non plus jusqu'a la fin
-  de la vac.
-
-* TODO
--> rajouter ticket gestion de cote par vlm-c
--> rajouter ticket possibilite de passer une porte apres la cote.`
