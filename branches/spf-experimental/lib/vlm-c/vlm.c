@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.23 2009-05-08 14:31:56 ylafon Exp $
+ * $Id: vlm.c,v 1.24 2009-05-08 14:43:24 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -15,12 +15,16 @@
  *
  * Contact: <yves@raubacapeu.net>
  */
+#include <stdio.h>
+#include <string.h>
+
 #include "defs.h"
 #include "types.h"
-#include "loxo.h"
 #include "lines.h"
-#include "vmg.h"
+#include "loxo.h"
 #include "ortho.h"
+#include "polar.h"
+#include "vmg.h"
 #include "winds.h"
 
 /**
@@ -553,6 +557,7 @@ double VLM_best_vmg(double latitude, double longitude,
 		    double target_lat, double target_long,
 		    char *polar_name) {
   char *real_polar_name;
+  boat_polar *polar;
   boat aboat;
   race arace;
   double heading;
@@ -562,7 +567,7 @@ double VLM_best_vmg(double latitude, double longitude,
     return 0.0;
   }
   
-  if (!strncmp(polar_name), "boat_", 5) {
+  if (!strncmp(polar_name, "boat_", 5)) {
     real_polar_name = &polar_name[5];
   } else {
     real_polar_name = polar_name;
@@ -571,17 +576,20 @@ double VLM_best_vmg(double latitude, double longitude,
   latitude    = degToRad(latitude/1000.0);
   longitude   = fmod(degToRad(longitude/1000.0), TWO_PI);
   target_lat  = degToRad(target_lat/1000.0);
-  targer_long = fmod(degToRad(target_long/1000.0), TWO_PI);
+  target_long = fmod(degToRad(target_long/1000.0), TWO_PI);
   
   /* we fake stuff to have the bvmg computed "now" */
+  polar = get_polar_by_name(real_polar_name);
+
   arace.vac_duration = 0;
+  arace.boattype     = polar;
+
   aboat.latitude     = latitude;
   aboat.longitude    = longitude;
   aboat.wp_latitude  = target_lat;
   aboat.wp_longitude = target_long;
   aboat.in_race      = &arace;
-  associate_polar_boat(&aboat, real_polar_name);
-  arace.boattype = aboat.polar;
+  aboat.polar        = polar;
   time(&(aboat.last_vac_time));
 
   heading = get_heading_bvmg(&aboat, 0);
