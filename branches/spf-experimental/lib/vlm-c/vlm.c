@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.19 2008-12-18 17:28:41 ylafon Exp $
+ * $Id: vlm.c,v 1.23 2009-05-08 14:31:56 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -539,3 +539,51 @@ int VLM_check_cross_coast(double latitude, double longitude,
   return 0;
 }
 
+/**
+ * Get the best VMG heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @return heading, a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+double VLM_best_vmg(double latitude, double longitude,
+		    double target_lat, double target_long,
+		    char *polar_name) {
+  char *real_polar_name;
+  boat aboat;
+  race arace;
+  double heading;
+
+  /* if no polar are defined, bail out */
+  if (!polar_name) {
+    return 0.0;
+  }
+  
+  if (!strncmp(polar_name), "boat_", 5) {
+    real_polar_name = &polar_name[5];
+  } else {
+    real_polar_name = polar_name;
+  }
+
+  latitude    = degToRad(latitude/1000.0);
+  longitude   = fmod(degToRad(longitude/1000.0), TWO_PI);
+  target_lat  = degToRad(target_lat/1000.0);
+  targer_long = fmod(degToRad(target_long/1000.0), TWO_PI);
+  
+  /* we fake stuff to have the bvmg computed "now" */
+  arace.vac_duration = 0;
+  aboat.latitude     = latitude;
+  aboat.longitude    = longitude;
+  aboat.wp_latitude  = target_lat;
+  aboat.wp_longitude = target_long;
+  aboat.in_race      = &arace;
+  associate_polar_boat(&aboat, real_polar_name);
+  arace.boattype = aboat.polar;
+  time(&(aboat.last_vac_time));
+
+  heading = get_heading_bvmg(&aboat, 0);
+  return radToDeg(heading);
+}

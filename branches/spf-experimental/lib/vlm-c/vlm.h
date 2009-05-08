@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.13 2008-12-18 17:28:41 ylafon Exp $
+ * $Id: vlm.h,v 1.16 2009-05-08 14:31:47 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -269,5 +269,17 @@ int VLM_check_cross_WP PARAM11(double, double, double, double,
 int VLM_check_cross_coast PARAM7(double, double, double, double,
 				 double *, double *,
 				 double *);
+
+/**
+ * Get the best VMG heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @return heading, a <code>double</code>, the resulting
+ *                 heading in <em>degrees</em>
+ */
+double VLM_best_vmg PARAM5(double, double, double, double, char *);
 
 #endif /* _VLM_H_ */
