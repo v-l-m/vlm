@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.16 2009-05-08 14:31:47 ylafon Exp $
+ * $Id: vlm.h,v 1.17 2009-05-08 14:55:46 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -277,9 +277,12 @@ int VLM_check_cross_coast PARAM7(double, double, double, double,
  * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
  * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
  *                    the full name of the polar
- * @return heading, a <code>double</code>, the resulting
+ * @param heading, a pointer to a <em>double</em>, the resulting
  *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
  */
-double VLM_best_vmg PARAM5(double, double, double, double, char *);
+void VLM_best_vmg PARAM7(double, double, double, double, char *,
+			 double *, double *);
 
 #endif /* _VLM_H_ */

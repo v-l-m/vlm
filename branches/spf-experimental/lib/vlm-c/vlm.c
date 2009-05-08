@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.24 2009-05-08 14:43:24 ylafon Exp $
+ * $Id: vlm.c,v 1.25 2009-05-08 14:55:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,6 +24,7 @@
 #include "loxo.h"
 #include "ortho.h"
 #include "polar.h"
+#include "vlm.h"
 #include "vmg.h"
 #include "winds.h"
 
@@ -550,21 +551,23 @@ int VLM_check_cross_coast(double latitude, double longitude,
  * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
  * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
  *                    the full name of the polar
- * @return heading, a <code>double</code>, the resulting
+ * @param heading, a pointer to a <em>double</em>, the resulting
  *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
  */
-double VLM_best_vmg(double latitude, double longitude,
-		    double target_lat, double target_long,
-		    char *polar_name) {
+void VLM_best_vmg(double latitude, double longitude,
+		  double target_lat, double target_long,
+		  char *polar_name, double *heading, double *vmg) {
   char *real_polar_name;
   boat_polar *polar;
   boat aboat;
   race arace;
-  double heading;
+  double t_heading;
 
   /* if no polar are defined, bail out */
   if (!polar_name) {
-    return 0.0;
+    return;
   }
   
   if (!strncmp(polar_name, "boat_", 5)) {
@@ -592,6 +595,7 @@ double VLM_best_vmg(double latitude, double longitude,
   aboat.polar        = polar;
   time(&(aboat.last_vac_time));
 
-  heading = get_heading_bvmg(&aboat, 0);
-  return radToDeg(heading);
+  t_heading = get_heading_bvmg(&aboat, 0);
+  *heading = radToDeg(t_heading);
+  *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
 }
