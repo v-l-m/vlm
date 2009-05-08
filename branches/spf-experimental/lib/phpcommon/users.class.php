@@ -518,7 +518,7 @@ class fullUsers
 		       $vlmc_heading, $vlmc_vmg);
 
 	  $this->users->boatheading = doublep_value($vlmc_heading);
-	  $this->VMG = double_value($vlmc_vmg);
+	  $this->VMG = doublep_value($vlmc_vmg);
 	} else {
 	  $cap_ortho = $this->orthodromicHeading();
 	  
