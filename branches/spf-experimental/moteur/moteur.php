@@ -22,9 +22,11 @@ include("config.php");
 $global_vlmc_context = new vlmc_context();
 init_context($global_vlmc_context);
 set_gshhs_filename($global_vlmc_context, GSHHS_FILENAME);
+set_polar_definition_filename($global_vlmc_context, POLAR_DEFINITION_FILENAME);
 global_vlmc_context_set($global_vlmc_context);
 
 init_coastline();
+read_polars();
 
 //$verbose=$_REQUEST['verbose'];
 $verbose=0;
