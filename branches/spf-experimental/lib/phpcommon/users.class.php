@@ -510,15 +510,26 @@ class fullUsers
 	if (defined('MOTEUR')) {
 	  $vlmc_heading = new doublep();
 	  $vlmc_vmg = new doublep();
-
-	  VLM_best_vmg($this->users->lastPositions->lat, 
-		       $this->users->lastPositions->long,
-		       $this->users->LatNM, $this->users->LongNM, 
+	  
+	  shm_lock_sem_construct_grib(1);
+	  VLM_best_vmg($this->lastPositions->lat, 
+		       $this->lastPositions->long,
+		       $this->LatNM, $this->LongNM, 
 		       $this->users->boattype,
 		       $vlmc_heading, $vlmc_vmg);
+	  shm_unlock_sem_destroy_grib(1);
 
 	  $this->users->boatheading = doublep_value($vlmc_heading);
 	  $this->VMG = doublep_value($vlmc_vmg);
+
+	  //	  echo "Debug: Lat   = ".$this->lastPositions->lat;
+	  //	  echo "Debug: Lon   = ".$this->lastPositions->long;
+	  //	  echo "Debug: WPLat = ".$this->LatNM;
+	  //	  echo "Debug: WPLon = ".$this->LongNM;
+	  //	  echo "Debug: Type  = ".$this->users->boattype;
+	  //	  echo "Debug: HDG   = ".$this->users->boatheading;
+	  //	  echo "Debug: VMG   = ".$this->VMG;
+
 	} else {
 	  $cap_ortho = $this->orthodromicHeading();
 	  
