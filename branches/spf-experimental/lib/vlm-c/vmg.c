@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.22 2009-05-08 14:37:50 ylafon Exp $
+ * $Id: vmg.c,v 1.23 2009-05-09 16:52:33 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -474,10 +474,14 @@ void do_vbvmg(boat *aboat, int mode,
   *wangle1 = fmod(*heading1 - w_angle, TWO_PI);
   if (*wangle1 > PI ) {
     *wangle1 -= TWO_PI;
+  } else if (*wangle1 < -PI ) {
+    *wangle1 += TWO_PI;
   }
   *wangle2 = fmod(*heading2 - w_angle, TWO_PI);
   if (*wangle2 > PI ) {
     *wangle2 -= TWO_PI;
+  } else if (*wangle2 < -PI ) {
+    *wangle2 += TWO_PI;
   }
 #if DEBUG
   printf("VBVMG: wangle1=%.2f, wangle2=%.2f\n", radToDeg(*wangle1),
