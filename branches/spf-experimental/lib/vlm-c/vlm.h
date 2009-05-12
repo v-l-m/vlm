@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.17 2009-05-08 14:55:46 ylafon Exp $
+ * $Id: vlm.h,v 1.18 2009-05-12 22:21:48 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -63,6 +63,20 @@ wind_info *VLM_get_wind_info_latlong_deg_TWSA PARAM4(double, double,
 
 /**
  * get wind info based on the location and time
+ * It uses the bilinear interpolation in True Wind Speed / Angle
+ * In selective mode
+ * @param latitude, a <code>double</code>, in <em>degrees</em>
+ * @param longitude, a <code>double</code>, in <em>degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA PARAM4(double, double, 
+							       time_t, 
+							       wind_info *);
+
+/**
+ * get wind info based on the location and time
  * It uses the default interpolation defined at compile time, between
  * interpolation in UV or True Wind Speed/Angle
  * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
@@ -95,6 +109,22 @@ wind_info *VLM_get_wind_info_latlong_millideg_UV   PARAM4(double, double,
  */
 wind_info *VLM_get_wind_info_latlong_millideg_TWSA PARAM4(double, double, 
 							  time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in True Wind Speed / Angle
+ * In selective mode
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA PARAM4(double,
+								    double, 
+								    time_t, 
+								   wind_info *);
+
 
 
 /**

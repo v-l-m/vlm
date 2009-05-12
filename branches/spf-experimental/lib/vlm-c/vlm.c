@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.25 2009-05-08 14:55:59 ylafon Exp $
+ * $Id: vlm.c,v 1.26 2009-05-12 22:21:48 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -121,6 +121,29 @@ wind_info *VLM_get_wind_info_latlong_deg_TWSA(double latitude, double longitude,
 }
 
 /**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * in selective mode
+ * @param latitude, a double, in degree.
+ * @param longitude, a double, in degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA(double latitude,
+							double longitude,
+							time_t vac_time,
+							wind_info *wind) {
+  get_wind_info_latlong_selective_TWSA(degToRad(latitude), degToRad(longitude),
+				       vac_time, wind);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
+  return wind;
+}
+
+/**
  * This function uses the default interpolation function as defined in the
  * compilation options
  * @param latitude, a double, in milli-degree.
@@ -182,6 +205,29 @@ wind_info *VLM_get_wind_info_latlong_millideg_TWSA(double latitude,
   get_wind_info_latlong_TWSA(degToRad(latitude/1000.0), 
 			     degToRad(longitude/1000.0),
 			     vac_time, wind);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
+  return wind;
+}
+
+/**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA(double latitude,
+							     double longitude,
+							     time_t vac_time,
+							     wind_info *wind) {
+  get_wind_info_latlong_selective_TWSA(degToRad(latitude/1000.0), 
+				       degToRad(longitude/1000.0),
+				       vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
