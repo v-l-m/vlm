@@ -305,6 +305,7 @@
     $noHeader=htmlentities($_GET['noHeader']);
     if ($noHeader !=1) {
         header("Content-type: image/png");
+	header("Cache-Control: max-age=0");
     }
     
     $mapObj->display();
