@@ -317,6 +317,11 @@ double VLM_distance_to_line_ratio_xing(double latitude, double longitude,
 				     degToRad(latitude_a),degToRad(longitude_a),
 				     degToRad(latitude_b),degToRad(longitude_b),
 				     &x_lat, &x_long, ratio);
+  if (x_long > PI) {
+    x_long -= TWO_PI;
+  } else if (x_long < -PI) {
+    x_long += TWO_PI;
+  }
   *xing_lat  = 1000.0 * radToDeg(x_lat);
   *xing_long = 1000.0 * radToDeg(x_long);
   return dist;
