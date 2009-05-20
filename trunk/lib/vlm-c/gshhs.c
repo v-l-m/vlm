@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.13 2009-01-13 06:18:27 ylafon Exp $
+ * $Id: gshhs.c,v 1.14 2009-05-05 07:48:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -26,6 +26,20 @@
 #include "types.h"
 #include "dist_gshhs.h"
 #include "gshhs.h"
+
+/* FIXME
+   the structure should be...
+   one 1800x3601 array of int, the starting and ending index
+   of the segment array (for the record, in full we have
+   10482169 segments. -> 159 Mo.
+   total should be 184Mo (for the int version)
+   way of accessing it:
+   get the index from (latdeg+90)*10 long*10, and the subsequent one.
+   first index is curseg = (segarray+index0)
+   then for i= index0; i<index1; i++
+   blahblah
+   curseg++
+*/
 
 
 extern vlmc_context *global_vlmc_context;
@@ -225,13 +239,13 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	   wholecoast->nb_grid_x*wholecoast->nb_grid_y*sizeof(coast_zone));
   }
 
-#define _allocate_coast_entry(a,b)					\
-  idx = a*wholecoast->nb_grid_y+b;					\
-  nb_seg =  *(segnum+idx);						\
-  if (nb_seg) {								\
-    wholecoast->zone_array[idx].nb_segments = nb_seg;			\
-    wholecoast->zone_array[idx].seg_array   =				\
-                        calloc(nb_seg, sizeof(struct coast_seg_str));  	\
+#define _allocate_coast_entry(a,b)			\
+  idx = a*wholecoast->nb_grid_y+b;			\
+  nb_seg =  *(segnum+idx);				\
+  if (nb_seg) {						\
+    wholecoast->zone_array[idx].nb_segments = nb_seg;	\
+    wholecoast->zone_array[idx].seg_array   =		\
+      calloc(nb_seg, sizeof(struct coast_seg_str));  	\
   }
 
   /* now allocate the structures */
@@ -317,15 +331,15 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	  continue;
 	}
 
-#define _add_segment(a,b)                                               \
-	idx = a*wholecoast->nb_grid_y+b;				\
-	if (wholecoast->zone_array[idx].nb_segments) {			\
-          k = --*(segnum+idx);						\
-	  segment = &wholecoast->zone_array[idx].seg_array[k];		\
-	  segment->longitude_a = prev_longitude;			\
-	  segment->longitude_b = longitude;				\
-	  segment->latitude_a = prev_latitude;				\
-	  segment->latitude_b = latitude;				\
+#define _add_segment(a,b)					\
+	idx = a*wholecoast->nb_grid_y+b;			\
+	if (wholecoast->zone_array[idx].nb_segments) {		\
+          k = --*(segnum+idx);					\
+	  segment = &wholecoast->zone_array[idx].seg_array[k];	\
+	  segment->longitude_a = prev_longitude;		\
+	  segment->longitude_b = longitude;			\
+	  segment->latitude_a = prev_latitude;			\
+	  segment->latitude_b = latitude;			\
 	}
 
 	if (prev_x == x) {
@@ -383,7 +397,7 @@ void free_gshhs() {
 
 /* Helper for the bindings
    Return a coast_zone struct for a given square
-   */
+*/
 coast_zone *get_coastzone(int i, int j) {
   coast *wholecoast;
 
@@ -393,9 +407,9 @@ coast_zone *get_coastzone(int i, int j) {
 
 /* Helper for the bindings
    return a segment struct for a given coast_zone and index 
-   */
+*/
 coast_seg *get_coastseg(coast_zone *cz, int idx) {
-    coast_seg *cs;
-    cs = &(cz->seg_array[idx]);
-    return cs;
+  coast_seg *cs;
+  cs = &(cz->seg_array[idx]);
+  return cs;
 }
