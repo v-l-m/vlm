@@ -1,5 +1,5 @@
 /**
- * $Id: winds.h,v 1.7 2009-01-07 10:43:27 ylafon Exp $
+ * $Id: winds.h,v 1.8 2009-05-12 22:10:47 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -72,6 +72,20 @@ wind_info *get_wind_info_latlong_now PARAM3(double, double, wind_info *);
  */
 wind_info *get_wind_info_latlong_TWSA PARAM4(double, double, time_t, 
 					     wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the default interpolation defined at compile time, between
+ * It uses the bilinear interpolation in True Wind Speed / Angle
+ * and switch to UV if rotations are happenning in two opposite directions
+ * @param latitude, a <code>double</code>, in <em>radians</em>
+ * @param longitude, a <code>double</code>, in <em>radians</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>radians</em>
+ */
+wind_info *get_wind_info_latlong_selective_TWSA PARAM4(double, double, time_t, 
+						       wind_info *);
 
 /**
  * get wind info based on the location and time
