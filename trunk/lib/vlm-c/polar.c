@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.11 2009-01-29 11:06:03 ylafon Exp $
+ * $Id: polar.c,v 1.12 2009-05-06 08:47:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -207,7 +207,9 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
 #ifdef ROUND_WIND_ANGLE_IN_POLAR
   /* in VLM compatibility mode, we interpolate only speed, not angle
      which is rounded to nearest integer */
-  intangle = rint(radToDeg(fabs(fmod(wind_angle, TWO_PI))));
+  /* not using rint, as rint(0.5) = 0, while PHP round(0.5) = 1 */
+  intangle = floor(radToDeg(fabs(fmod(wind_angle, TWO_PI)))+0.5);
+  
   if (intangle > 180) {
     intangle = 360 - intangle;
   }

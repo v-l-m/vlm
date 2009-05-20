@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.20 2009-05-06 21:35:47 ylafon Exp $
+ * $Id: vmg.c,v 1.24 2009-05-19 19:51:51 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -330,7 +330,7 @@ void do_vbvmg(boat *aboat, int mode,
   double b1_alpha, b1_beta;
   int i,j, min_i, min_j, max_i, max_j;
   
-  b_t1 = b_t2 = b_l1 = b_l2 = b_alpha = b_beta = 0.0;
+  b_t1 = b_t2 = b_l1 = b_l2 = b_alpha = b_beta = beta = 0.0;
 
   dist = ortho_distance(aboat->latitude, aboat->longitude,
 			aboat->wp_latitude, aboat->wp_longitude);
@@ -349,6 +349,7 @@ void do_vbvmg(boat *aboat, int mode,
   t_min = dist / speed;
   
 #if DEBUG
+  printf("VBVMG: Wind %.2fkts %.2f\n", w_speed, radToDeg(w_angle));
   printf("VBVMG Direct road: heading %.2f time %.2f\n", 
 	 radToDeg(wanted_heading), t_min);
   printf("VBVMG Direct road: wind angle %.2f\n", 
@@ -473,19 +474,23 @@ void do_vbvmg(boat *aboat, int mode,
   *wangle1 = fmod(*heading1 - w_angle, TWO_PI);
   if (*wangle1 > PI ) {
     *wangle1 -= TWO_PI;
+  } else if (*wangle1 < -PI ) {
+    *wangle1 += TWO_PI;
   }
   *wangle2 = fmod(*heading2 - w_angle, TWO_PI);
   if (*wangle2 > PI ) {
     *wangle2 -= TWO_PI;
+  } else if (*wangle2 < -PI ) {
+    *wangle2 += TWO_PI;
   }
 #if DEBUG
   printf("VBVMG: wangle1=%.2f, wangle2=%.2f\n", radToDeg(*wangle1),
 	 radToDeg(*wangle2));
   printf("VBVMG: heading1 %.2f, heading2=%.2f\n", radToDeg(*heading1),
 	 radToDeg(*heading2));
-  printf("VBVMG: dist=%.2f, l1=%.2f, l2=%.2f, ratio=%.2f\n", dist, b_l1, b_l2,
-	 (b_l1+b_l2)/dist);
-  printf("VBVMG: t1 = %.2f, t2=%.2f, total=%.2f\n", b_t1, b_t2, t_min);
+  printf("VBVMG: dist=%.2f, l1=%.2f, l2=%.2f, ratio=%.2f\n", dist, *dist1,
+	 *dist2, (b_l1+b_l2)/dist);
+  printf("VBVMG: t1 = %.2f, t2=%.2f, total=%.2f\n", *time1, *time2, t_min);
   printf("VBVMG: heading %.2f\n", radToDeg(*heading1));
   printf("VBVMG: wind angle %.2f\n", radToDeg(*wangle1));
 #endif /* DEBUG */

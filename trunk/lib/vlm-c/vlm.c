@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.19 2008-12-18 17:28:41 ylafon Exp $
+ * $Id: vlm.c,v 1.27 2009-05-19 15:41:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -15,12 +15,17 @@
  *
  * Contact: <yves@raubacapeu.net>
  */
+#include <stdio.h>
+#include <string.h>
+
 #include "defs.h"
 #include "types.h"
-#include "loxo.h"
 #include "lines.h"
-#include "vmg.h"
+#include "loxo.h"
 #include "ortho.h"
+#include "polar.h"
+#include "vlm.h"
+#include "vmg.h"
 #include "winds.h"
 
 /**
@@ -116,6 +121,29 @@ wind_info *VLM_get_wind_info_latlong_deg_TWSA(double latitude, double longitude,
 }
 
 /**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * in selective mode
+ * @param latitude, a double, in degree.
+ * @param longitude, a double, in degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA(double latitude,
+							double longitude,
+							time_t vac_time,
+							wind_info *wind) {
+  get_wind_info_latlong_selective_TWSA(degToRad(latitude), degToRad(longitude),
+				       vac_time, wind);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
+  return wind;
+}
+
+/**
  * This function uses the default interpolation function as defined in the
  * compilation options
  * @param latitude, a double, in milli-degree.
@@ -177,6 +205,29 @@ wind_info *VLM_get_wind_info_latlong_millideg_TWSA(double latitude,
   get_wind_info_latlong_TWSA(degToRad(latitude/1000.0), 
 			     degToRad(longitude/1000.0),
 			     vac_time, wind);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
+  return wind;
+}
+
+/**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA(double latitude,
+							     double longitude,
+							     time_t vac_time,
+							     wind_info *wind) {
+  get_wind_info_latlong_selective_TWSA(degToRad(latitude/1000.0), 
+				       degToRad(longitude/1000.0),
+				       vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -544,3 +595,58 @@ int VLM_check_cross_coast(double latitude, double longitude,
   return 0;
 }
 
+/**
+ * Get the best VMG heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_best_vmg(double latitude, double longitude,
+		  double target_lat, double target_long,
+		  char *polar_name, double *heading, double *vmg) {
+  char *real_polar_name;
+  boat_polar *polar;
+  boat aboat;
+  race arace;
+  double t_heading;
+
+  /* if no polar are defined, bail out */
+  if (!polar_name) {
+    return;
+  }
+  
+  if (!strncmp(polar_name, "boat_", 5)) {
+    real_polar_name = &polar_name[5];
+  } else {
+    real_polar_name = polar_name;
+  }
+
+  latitude    = degToRad(latitude/1000.0);
+  longitude   = fmod(degToRad(longitude/1000.0), TWO_PI);
+  target_lat  = degToRad(target_lat/1000.0);
+  target_long = fmod(degToRad(target_long/1000.0), TWO_PI);
+  
+  /* we fake stuff to have the bvmg computed "now" */
+  polar = get_polar_by_name(real_polar_name);
+
+  arace.vac_duration = 0;
+  arace.boattype     = polar;
+
+  aboat.latitude     = latitude;
+  aboat.longitude    = longitude;
+  aboat.wp_latitude  = target_lat;
+  aboat.wp_longitude = target_long;
+  aboat.in_race      = &arace;
+  aboat.polar        = polar;
+  time(&(aboat.last_vac_time));
+
+  t_heading = get_heading_bvmg(&aboat, 0);
+  *heading = radToDeg(t_heading);
+  *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
+}
