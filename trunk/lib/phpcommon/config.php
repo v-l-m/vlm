@@ -10,6 +10,8 @@ include_once("param.php");
 
 // The full path of the gshhs coast file in use (the "full" version)
 define("GSHHS_FILENAME", "".GSHHS_DIRECTORY."/gshhs_f.b");
+// The full path of the polar definition filename  (the "full" version)
+define("POLAR_DEFINITION_FILENAME", "".POLARS_DIRECTORY."/polars.list");
 
 /********session params***********/
 #ini_set('session.use_only_cookies', 1);
