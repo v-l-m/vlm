@@ -5,6 +5,12 @@ From 0.9.7 To next...
 =Base=
 * see the UPDATE FILE in the base module
 
+=Configuration=
+* EDIT hosting/conf/conf_script
+ - add "export VLMPOLARS=$VLMDATAS/gshhs"
+* EDIT hosting/conf/param.php and add
+ - "define("POLARS_DIRECTORY", "/same/as/VLMPOLARS");"
+
 To 0.9.5 from 0.9
 _______________
 (Do it in this order, please)
