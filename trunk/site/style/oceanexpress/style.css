@@ -6,6 +6,12 @@ body
   color: #44505a;
 }
 
+a:hover
+{
+  color: #ffffff;
+  background-color: #ff652e;
+}
+
 #baneer
 {
   background-color: #2b597b;
@@ -24,7 +30,7 @@ body
   left:20px;
 }
 
-#costpenaltybox, .titlehelpers {
+#costpenaltybox {
   color:#ff652e;
 }
 
@@ -107,6 +113,22 @@ td
   background-color: #eeeeee;
 }
 
+#racelistbox {
+  background-color: #ffffff;
+  color: #44505a;
+}
+
+#raceslistbox h1, #raceslistbox h1 * {
+  background-color:#15214b;
+  color:white;
+  height:15px;
+}
+
+#raceslistbox * a:hover {
+  background-color: #ff652e;
+  color: #ffffff;
+}
+
 td.nohilight
 { 
   background-color: #6894c4;
@@ -163,4 +185,12 @@ list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/
   
 #racenamebox a {
   color : #ffffff;
+}
+
+h1.info
+{
+  font-size: 14px;
+  font-weight: bold;
+  color: #ff652e;
+  text-align:center;
 }
