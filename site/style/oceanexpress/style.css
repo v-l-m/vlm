@@ -113,9 +113,10 @@ td
   background-color: #eeeeee;
 }
 
-#racelistbox {
-  background-color: #ffffff;
+#raceslistbox {
   color: #44505a;
+  list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+
 }
 
 #raceslistbox h1, #raceslistbox h1 * {
