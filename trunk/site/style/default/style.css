@@ -415,6 +415,7 @@ input.blue {
 
 #messagebox {
   vertical-align: top;
+  margin-right: 2px;
 }
 
 /* CONTROL BOX */
