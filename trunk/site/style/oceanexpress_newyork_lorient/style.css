@@ -1,0 +1,15 @@
+@import url("../oceanexpress/style.css");
+
+#main {}
+
+#baneercenterbox
+{
+  position:absolute;
+  background-image:  url('/images/logos/logo_defiocto_newyork_lorient.png');
+  background-repeat: no-repeat;
+  left:300px;
+  top:1px;
+  margin: 0px;
+  height: 100px;
+  width:150px;
+}
