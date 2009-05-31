@@ -30,7 +30,7 @@ a:hover
   left:20px;
 }
 
-.texthelpers, .titlehelpers {
+.texthelpers, .titlehelpers, #costpenaltynumber {
   color: #44505a;
 }
 
