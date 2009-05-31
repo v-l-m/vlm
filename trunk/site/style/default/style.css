@@ -493,3 +493,7 @@ div.mapboxitem {
 a.icflagforum {
   font-weight: bold;
 }
+
+#mapinputbox {
+margin-right : 4px;
+}
