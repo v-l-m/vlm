@@ -9,9 +9,19 @@ body
 #baneer
 {
   background-color: #2b597b;
-  background-image:  url('/images/logos/banniereocto.png');
-  background-repeat: no-repeat
+  background-image:  url('/images/logos/banner_oceanexpress.png');
+  background-repeat: no-repeat;
+  height: 102px;
+}
 
+#baneerrightbox img
+{
+  height: 100px;
+}
+
+#baneerleftbox
+{
+  left:20px;
 }
 
 #costpenaltybox, .titlehelpers {
