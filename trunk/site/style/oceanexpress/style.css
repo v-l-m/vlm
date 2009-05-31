@@ -30,11 +30,7 @@ a:hover
   left:20px;
 }
 
-#costpenaltybox {
-  color:#ff652e;
-}
-
-.texthelpers, .titlehelpers {
+#costpenaltybox, .texthelpers, .titlehelpers {
   color: #44505a;
 }
 
