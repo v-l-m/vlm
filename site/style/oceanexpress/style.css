@@ -30,12 +30,15 @@ a:hover
   left:20px;
 }
 
-#costpenaltybox, .texthelpers, .titlehelpers {
+#costpenaltybox,  #costpenaltynumber {
+color : #ff0000;
+}
+.texthelpers, .titlehelpers {
   color: #44505a;
 }
 
 
-#yourboatsummarybox a, #infomessage a, #costpenaltynumber {
+#yourboatsummarybox a, #infomessage a {
   color:#15224c;
 }
 
