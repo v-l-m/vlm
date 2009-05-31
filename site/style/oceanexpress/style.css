@@ -33,7 +33,7 @@ body
 }
 
 
-#racenamebox a, #yourboatsummarybox a, #infomessage a, #costpenaltynumber {
+#yourboatsummarybox a, #infomessage a, #costpenaltynumber {
   color:#15224c;
 }
 
@@ -55,8 +55,6 @@ font-weight: 550;
 .leftbox, .icbox  {
   border-bottom: solid 1px #15214b;
 }
-
-
 
 #main {
   background-color: #f4f4f4;
@@ -156,4 +154,13 @@ tr.oncoast *
 
 #messagebox div {
 list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+  background-color: #f9f1e8;
+}
+
+#racenamebox {
+  background-color:#ff652e;
+  }
+  
+#racenamebox a {
+  color : #ffffff;
 }
