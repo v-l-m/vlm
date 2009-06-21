@@ -415,6 +415,7 @@ input.blue {
 
 #messagebox {
   vertical-align: top;
+  margin-right: 2px;
 }
 
 /* CONTROL BOX */
@@ -492,4 +493,8 @@ div.mapboxitem {
 
 a.icflagforum {
   font-weight: bold;
+}
+
+#mapinputbox {
+margin-right : 4px;
 }
