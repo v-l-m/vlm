@@ -279,7 +279,7 @@ include_once("scripts/myboat.js");
                 } else {
                     $locktime = duration2string($usersObj->users->releasetime - time());
                     //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-                    printf("<img src=\"images/site/attention.png\"><font color=\"#F0F0F0\"><b>".$strings[$lang]["locked"]. $strings[$lang]["days"]."</b></font>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+                    printf("<span class=\"warnmessage\"><img src=\"images/site/attention.png\" />".$strings[$lang]["locked"]. $strings[$lang]["days"]."</span>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
                 }
             }
         /* Sinon (heure départ pas atteinte), affichage de la date de départ */
