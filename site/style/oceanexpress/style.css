@@ -6,24 +6,35 @@ body
   color: #44505a;
 }
 
+a:hover
+{
+  color: #ffffff;
+  background-color: #ff652e;
+}
+
 #baneer
 {
   background-color: #2b597b;
-  background-image:  url('/images/logos/banniereocto.png');
-  background-repeat: no-repeat
-
+  background-image:  url('/images/logos/banner_oceanexpress.png');
+  background-repeat: no-repeat;
+  height: 102px;
 }
 
-#costpenaltybox, .titlehelpers {
-  color:#ff652e;
+#baneerrightbox img
+{
+  height: 100px;
 }
 
-.texthelpers, .titlehelpers {
+#baneerleftbox
+{
+  left:20px;
+}
+
+.texthelpers, .titlehelpers, #costpenaltynumber {
   color: #44505a;
 }
 
-
-#racenamebox a, #yourboatsummarybox a, #infomessage a, #costpenaltynumber {
+#yourboatsummarybox a, #infomessage a {
   color:#15224c;
 }
 
@@ -45,8 +56,6 @@ font-weight: 550;
 .leftbox, .icbox  {
   border-bottom: solid 1px #15214b;
 }
-
-
 
 #main {
   background-color: #f4f4f4;
@@ -99,6 +108,23 @@ td
   background-color: #eeeeee;
 }
 
+#raceslistbox {
+  color: #44505a;
+  list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+
+}
+
+#raceslistbox h1, #raceslistbox h1 * {
+  background-color:#15214b;
+  color:white;
+  height:15px;
+}
+
+#raceslistbox * a:hover {
+  background-color: #ff652e;
+  color: #ffffff;
+}
+
 td.nohilight
 { 
   background-color: #6894c4;
@@ -146,4 +172,21 @@ tr.oncoast *
 
 #messagebox div {
 list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+  background-color: #f9f1e8;
+}
+
+#racenamebox {
+  background-color:#ff652e;
+  }
+  
+#racenamebox a {
+  color : #ffffff;
+}
+
+h1.info
+{
+  font-size: 14px;
+  font-weight: bold;
+  color: #ff652e;
+  text-align:center;
 }
