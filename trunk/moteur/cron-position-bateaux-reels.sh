@@ -12,8 +12,6 @@ else
 fi
 
 
-# VOR
-$VLMPHPPATH $VLMJEUROOT/moteur/posscripts/VolvoPos.php
 =======
 # VOR : finished
 # $PHP $VLMRACINE/vlmcode/moteur/posscripts/VolvoPos.php
