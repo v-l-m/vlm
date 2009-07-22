@@ -10,7 +10,7 @@ fi
 # Appel aux scripts de recuperation des positions des reels
 cd $VLMRACINE/vlmcode/lib/phpcommon
 
-# VOR
-$PHP $VLMRACINE/vlmcode/moteur/posscripts/VolvoPos.php
+# VOR : finished
+# $PHP $VLMRACINE/vlmcode/moteur/posscripts/VolvoPos.php
 
 
