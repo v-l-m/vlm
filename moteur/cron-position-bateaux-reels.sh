@@ -2,6 +2,7 @@
 
 # Ce script doit etre executable.
 if [ -x /opt/php/bin/php ];
+then
    PHP=/opt/php/bin/php
 else 
    PHP=php
