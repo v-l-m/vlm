@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.c,v 1.4 2008/08/05 09:27:55 ylafon Exp $
+ * $Id: useshmem.c,v 1.5 2009-08-25 08:13:01 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -85,7 +85,7 @@ void shm_lock_sem_construct_grib(int do_construct) {
       exit(1);
     }
     
-    *segmaddr = get_grib_shmem(shmid, 1);
+    *segmaddr = get_shmem(shmid, 1);
     if (*segmaddr) {
       construct_grib_array_from_shmem(&global_vlmc_context->windtable,
 				      *segmaddr);

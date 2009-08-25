@@ -50,7 +50,7 @@ OBJS = $(LIBOBJS)
 
  PROGRAM = tst
 
-all:: libvlmc.a unittest windserver unittest-shm
+all:: libvlmc.a unittest windserver polarserver unittest-shm
 
 bindings:: php
 
@@ -71,6 +71,10 @@ unittest: unittest.o libvlmc.a wgrib/libgrib.a
 windserver: windserver.o grib.o shmem.o context.o  wgrib/libgrib.a
 	$(RM) $@
 	$(CC) -o $@ $(CFLAGS)  windserver.o grib.o shmem.o context.o  wgrib/libgrib.a $(EXTRA_LIBRARIES)
+
+polarserver: polarserver.o polar.o shmem.o context.o 
+	$(RM) $@
+	$(CC) -o $@ $(CFLAGS)  polarserver.o polar.o shmem.o context.o $(EXTRA_LIBRARIES)
 
 unittest-shm: unittest-shm.o libvlmc.a
 	$(RM) $@

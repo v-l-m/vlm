@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.13 2009-03-19 22:31:00 ylafon Exp $
+ * $Id: shmem.c,v 1.17 2009-08-25 14:50:26 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -150,8 +150,58 @@ int get_grib_shmid(int readonly) {
   return shmid;
 }
 
+/**
+ * create the shared memory entry in order to store a grib array
+ * @param windtable, a pointer to a <code>winds_prev</code> structure
+ * used to get the number of entries in the grib. If this parameter is NULL
+ * the default  DEFAULT_NB_SHARED_GRIB_ENTRIES is used
+ * @return an int, the shmid of the segment
+ */
+int create_polar_shmid(boat_polar_list *polars) {
+  long needed_bytes;
+  int i, shmid;
 
-void *get_grib_shmem(int shmid, int readonly) {
+  needed_bytes = sizeof(int);
+  /* we align to 4 bytes */
+  if (needed_bytes % 4) {
+    needed_bytes = (((needed_bytes >> 2) + 1) << 2);
+  }
+  
+  needed_bytes += 181*61*sizeof(double)*polars->nb_polars;
+  for (i=0; i<polars->nb_polars; i++) {
+    needed_bytes += sizeof(int); /* stirng length */
+    needed_bytes += strlen(polars->polars[i]->polar_name)+1; /* string value */
+    /* we align to 4 bytes */
+    if (needed_bytes % 4) {
+      needed_bytes = (((needed_bytes >> 2) + 1) << 2);
+    }
+  }
+
+  /* create the shared memory segment */
+  shmid = shmget(VLM_POLAR_MEM_KEY, needed_bytes, IPC_CREAT|0644);
+  if (shmid == -1) {
+    /* failed */
+    fprintf(stderr, "Unable to create shared memory segment VLMGRB\n");
+    exit(1);
+  }
+  return shmid;
+}
+
+/**
+ * get the shared memory entry in order to store or read a grib array
+ * @return an int, the shmid of the segment
+ */
+int get_polar_shmid(int readonly) {
+  int shmid;
+  if (readonly) {
+    shmid = shmget(VLM_POLAR_MEM_KEY, 0, 0444);
+  } else {
+    shmid = shmget(VLM_POLAR_MEM_KEY, 0, 0644);
+  }
+  return shmid;
+}
+
+void *get_shmem(int shmid, int readonly) {
   void *addr;
   
   if (readonly) {
@@ -324,7 +374,169 @@ void allocate_grib_array_from_shmem(winds_prev *windtable, void *memseg) {
   windtable->nb_prevs = nb_prevs;
 }
 
+/**
+ * Copy the polar tables to the dedicated shared memory segment
+ * @param shmid an int, the id of the shared memory segment
+ * @param polars a pointer to a <code>boat_polar_list</code> structure
+ * @param memseg a generic (void *) pointer representing the segment
+ * @return an int, the shmid. If it changed, the user must check that
+ * the memseg pointer is still valid
+ */
+int copy_polar_array_to_shmem(int shmid, boat_polar_list *polars, 
+			      void *memseg) {
+  long needed_bytes;
+  int *intarray, i, nb_polars, ok, slen;
+  double *darray;
+  char *carray;
+  long used_bytes;
+  struct shmid_ds shminfo;
   
+  /*
+    we are storing in the segment array the folloing thing:
+    (int) nb_polars (boat_polar_list->nb_polars)
+    nb_polars* (181*61*sizeof(double)) 
+                         (boat_polar_list->polars[0..nb_polars-1]->polar_tab)
+    [0..nb_polars-1]
+      (int) strlen (i)
+      boat_polar_list->polars[0..nb_polars-1]->polar_tab) (aligned to 4 bytes)
 
+    As the types used are fixed, it's very easy to process.
+  */
+  if (shmctl(shmid, IPC_STAT , &shminfo) == -1) {
+    fprintf(stderr, "Unable to access information on POLAR segment\n");
+    return -1;
+  }
 
+  needed_bytes = sizeof(int);
+  /* we align to 4 bytes */
+  if (needed_bytes % 4) {
+    needed_bytes = (((needed_bytes >> 2) + 1) << 2);
+  }
+  needed_bytes += 181*61*sizeof(double)*polars->nb_polars;
+  for (i=0; i<polars->nb_polars; i++) {
+    needed_bytes += sizeof(int); /* stirng length */
+    needed_bytes += strlen(polars->polars[i]->polar_name)+1; /* string value */
+    /* we align to 4 bytes */
+    if (needed_bytes % 4) {
+      needed_bytes = (((needed_bytes >> 2) + 1) << 2);
+    }
+  }
+
+  printf("Bytes used: %ld\n", needed_bytes);
+  ok = (shminfo.shm_segsz >= needed_bytes);
+  printf("Segment size: %ld %s\n",  (long)shminfo.shm_segsz, 
+	 (ok) ? "OK" : "NOT OK");
+  
+  if (!ok) {
+    /* we need to reallocate... here, we should own the semaphore, so it is 
+       safe to destroy everything and restart */
+    shmdt(memseg);
+    memseg = NULL;
+    if (shmctl(shmid, IPC_RMID, &shminfo) == -1) {
+      fprintf(stderr, "Unable to resize POLAR segment\n");
+      exit(-1);
+    } else {
+      shmid = create_polar_shmid(polars);
+      if (shmid == -1) {
+	/* ok we are in trouble, we destroyed the previous existing segment
+	   now we can't create a bigger new one */
+	shmid = shmget(VLM_POLAR_MEM_KEY, shminfo.shm_segsz, IPC_CREAT|0644);
+	if (shmid == -1) {
+	  /* we are in deeeeeeep trouble, abort */
+	  return -1;
+	}
+	return shmid;
+      }
+      /* don't forget to reattach the new memory */
+      memseg = shmat(shmid, (void *) 0, 0);
+    }
+  }
+  if ( shminfo.shm_segsz < needed_bytes) {
+    printf("Unable to request the needed size %ld\n", needed_bytes);
+    exit(-1);
+  }
+
+  nb_polars = polars->nb_polars;
+  /* dump the number of entries */
+  intarray = (int *) memseg;
+  *intarray =  nb_polars;
+  used_bytes = sizeof(int);
+  /* we are using a 4 bytes alignment, ensure that it's right (it should be) */
+  if (used_bytes % 4) {
+    used_bytes = (((used_bytes >> 2) + 1) << 2);
+  }
+  /* dump the polar tab values */
+  for (i=0; i<nb_polars;i++) {
+    darray = (double *) (((char *)memseg) + used_bytes);
+    memcpy(darray, polars->polars[i]->polar_tab, 61*181*sizeof(double));
+    used_bytes += 61*181*sizeof(double);
+  }
+  /* dump the size+value of polar names */
+  for (i=0; i<nb_polars; i++) {
+    intarray = (int *) (((char *)memseg) + used_bytes);
+    slen = strlen(polars->polars[i]->polar_name);
+    *intarray = slen;
+    used_bytes += sizeof(int);
+    carray = (char *) (((char *)memseg) + used_bytes);
+    strcpy(carray, polars->polars[i]->polar_name);
+    used_bytes += (slen+1)*sizeof(char);
+    if (used_bytes % 4) {
+      used_bytes = (((used_bytes >> 2) + 1) << 2);
+    }
+  }
+  /* done! */
+  printf("Updated %ld bytes\n", used_bytes);
+  return shmid;
+}
+
+/**
+ * Construct a local polar array (in the global context) based on
+ * what is in the memory segment.
+ * Only references are used to make it faster so:
+ * The segment should be used read-only
+ * @param polars, a <code>boat_polar_list *</code> pointer, where the 
+ * associated data will be stored.
+ * @param shmaddr, a <code>void *</code> pointer, the address of the attached
+ * shared memory segment
+ * NOTE that it will allocate an array of pointer, which must be freed when
+ * the polar table is no longer needed
+ */
+void construct_polar_array_from_shmem(boat_polar_list *polars, void *memseg) {
+  int *intarray, nb_polars, i, slen;
+  long used_bytes;
+  double *darray;
+  char *carray;
+
+  /* get the number of polars */
+  intarray = (int *)memseg;
+  nb_polars = *intarray;
+  used_bytes = sizeof(int);
+  /* we are using a 4 bytes alignment, ensure that it's right (it should be) */
+  if (used_bytes % 4) {
+    used_bytes = (((used_bytes >> 2) + 1) << 2);
+  }
+  /* allocate the polar list structure */
+  polars->polars = calloc(nb_polars, sizeof (boat_polar *));
+  for (i=0; i<nb_polars; i++) {
+    polars->polars[i] = calloc(1, sizeof(boat_polar));
+  }
+  /* now point from the boat_polar struct to the tab in the segment */
+  for (i=0; i<nb_polars; i++) {
+    darray = (double *) (((char *)memseg) + used_bytes);
+    polars->polars[i]->polar_tab = darray;
+    used_bytes += 61*181*sizeof(double);
+  }
+  /* and same for the polar names */
+    for (i=0; i<nb_polars; i++) {
+    intarray = (int *) (((char *)memseg) + used_bytes);
+    slen = *intarray;
+    used_bytes += sizeof(int);
+    carray = (char *) (((char *)memseg) + used_bytes);
+    polars->polars[i]->polar_name = carray;
+    used_bytes += (slen+1)*sizeof(char);
+    if (used_bytes % 4) {
+      used_bytes = (((used_bytes >> 2) + 1) << 2);
+    }
+  }
+}
 

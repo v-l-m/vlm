@@ -1,5 +1,5 @@
 /**
- * $Id: unittest-shm.c,v 1.4 2008/08/05 09:03:39 ylafon Exp $
+ * $Id: unittest-shm.c,v 1.5 2009-08-25 08:13:01 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -59,7 +59,6 @@ int main (int argc, char **argv) {
   lat2 = degToRad(54.789622936359);
   long2 = degToRad(-163.36603822435);
 
-#if 0
   init_coastline();
   latb = check_coast(lat1, long1, lat2, long2, &lata, &longa);
   if (latb >= INTER_MIN_LIMIT && latb <= INTER_MAX_LIMIT) {
@@ -73,7 +72,7 @@ int main (int argc, char **argv) {
   } else {
         printf("No intersection\n");
   }
-#endif
+
   lat1  = degToRad(10);
   long1 = degToRad(10);
   
@@ -156,7 +155,7 @@ int main (int argc, char **argv) {
     exit(1);
   }
 
-  segmaddr = get_grib_shmem(shmid, 1);
+  segmaddr = get_shmem(shmid, 1);
   construct_grib_array_from_shmem(&global_vlmc_context->windtable, segmaddr);
 
   time(&current_time);

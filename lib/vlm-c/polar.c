@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.12 2009-05-06 08:47:00 ylafon Exp $
+ * $Id: polar.c,v 1.18 2009-08-24 19:01:32 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -26,6 +26,10 @@
 #include "types.h"
 #include "polar.h"
 
+#ifdef USE_SETLOCALE
+#include <locale.h>
+#endif /* USE_SETLOCALE */
+
 extern vlmc_context *global_vlmc_context;
 
 #define INITIAL_BUFFER_SIZE 65536; /* 64k */
@@ -38,8 +42,12 @@ void add_polar(char *pname, char *fname) {
   boat_polar_list *plist;
   boat_polar      **p;
   FILE            *pfile;
-  int    i,j, wspeed, wangle, ok, nb_polar;
-  double speed;
+  char   wbuff[16384], *token, *ptoken;
+  int    p_i, p_j, i,j, wspeed, wangle, ok, nb_polar;
+  int    idx, interp_idx, idx_diff;
+  int    *polar_check_table;
+  int    wspeedidx[61];
+  double speed, p_speed;
 
   /* safety check */
   if ((pname == NULL) || (fname == NULL)) {
@@ -51,26 +59,142 @@ void add_polar(char *pname, char *fname) {
     printf("FATAL: unable to open \"%s\" for polar \"%s\"\n", fname, pname);
     return;
   }
+
   /* ok so far, process it */
   pol = calloc(1, sizeof(pol));
   pol->polar_tab = calloc(181*61, sizeof(double));
+  polar_check_table = calloc(181*61, sizeof(int));
+  for (i=0;i<61;i++) {
+    wspeedidx[i] = -1;
+  }
+  idx = -1;
+
+#ifdef USE_SETLOCALE
+  setlocale(LC_NUMERIC, "C");
+#endif /* USE_SETLOCALE */
 
   /* copy the name */
   pol->polar_name = calloc(strlen(pname)+1, sizeof(char));
   strcpy(pol->polar_name, pname);
 
   /* now cycle to read all the values */
-  for (i=0; i<=180; i++) {
-    for (j=0; j<=60; j++) {
-      ok = fscanf(pfile, "%d;%d;%lf", &wangle, &wspeed, &speed);
-      if (!ok) {
-	printf("ERROR while reading the polar file %s\n", fname);
+  while (1) {
+    ok = fscanf(pfile, "%s", wbuff);
+    if (ok<=0) { 
+      break;
+    }
+    if (idx == -1) { /* first line */
+      token = strtok(wbuff, ";");
+      idx = 0;
+      while (token) {
+	token = strtok(NULL, ";");
+	if (token) {
+	  wspeedidx[idx++] = atoi(token);
+	}
       }
-      assert((wangle == i) && (wspeed == j));
-      pol->polar_tab[i*61+j] = speed;
+      continue;
+    }
+    /* other lines */
+    /* first, read the angle _always there_ */
+    token = wbuff;
+    ptoken = wbuff;
+    while (*token && *token!=';') {
+      token++;
+    }
+    *token = 0;
+    wangle = atoi(ptoken);
+    idx = 0;
+    while (1) {
+      /* get the current speed */
+      wspeed = wspeedidx[idx++];
+      ptoken = ++token;
+      if (*token == ';') { /* two ; in a row, it's empty */
+	continue;
+      }
+      while (*token && *token!=';') {
+	token++;
+      }
+      ok = *token;
+      *token = 0;
+      sscanf(ptoken, "%lf", &speed);
+      pol->polar_tab[wangle*61+wspeed] = speed;
+      polar_check_table[wangle*61+wspeed] = 1;
+      if (!ok) {
+	break;
+      }
     }
   }
   fclose (pfile);
+
+  /* now interpolate the missing bits */
+  /* we assume (wrongly? :) ) that all polars uses
+     0-180 inclusive and speed always starts at 0 */
+
+  assert(wspeedidx[0] == 0);
+  idx_diff = 0;
+  j = 0;
+
+  /* First, for all known angles, fill all speeds */
+  for (i=0; i<=180; i++) {
+    if (polar_check_table[i*61]) {
+      p_j = 0;
+      p_speed = pol->polar_tab[i*61];
+      for (idx=1; wspeedidx[idx]>=0; idx++) {
+	j = wspeedidx[idx];
+	idx_diff = (j - p_j);
+	speed =  pol->polar_tab[i*61+j];
+	if (idx_diff > 1 ) { /* we have something to interpolate */
+	  for (interp_idx = 1; interp_idx < idx_diff; interp_idx++ ) {
+	    pol->polar_tab[i*61+p_j+interp_idx] = p_speed + 
+	             (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
+	    polar_check_table[i*61+p_j+interp_idx] = 1;
+	  }
+	}
+	p_j = j;
+	p_speed = speed;
+      }
+      if (j < 60) {
+	assert((j!=0) && (idx_diff !=0));
+	p_j = wspeedidx[idx-2];
+	p_speed = pol->polar_tab[i*61+p_j];
+	for (interp_idx = j - p_j +1 ; interp_idx < 61 - p_j ; interp_idx++ ) {
+	  pol->polar_tab[i*61+p_j+interp_idx] = p_speed + 
+	         (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
+	  polar_check_table[i*61+p_j+interp_idx] = 1;
+	}
+      }
+    }
+  }
+
+  /* The fill all the missing values for non-defined angles */
+  for (j=0; j<=60; j++) {
+    assert (polar_check_table[j] == 1);
+    p_i = 0;
+    p_speed = pol->polar_tab[j];
+    for (i=1; i<=180; i++) {
+      if (polar_check_table[i*61+j]) { /* got one value */
+	idx_diff = i-p_i;
+	speed = pol->polar_tab[i*61+j];
+	if ( idx_diff > 1) { /* if we have something to interpolate */
+	  for (interp_idx = 1; interp_idx < idx_diff; interp_idx++ ) {
+	    pol->polar_tab[(p_i+interp_idx)*61+j] = p_speed + 
+	             (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
+	    polar_check_table[(p_i+interp_idx)*61+j] = 1;
+	  }
+	}
+	p_i = i;
+	p_speed = speed;
+      }
+    }
+  }
+ 
+  /* final check (might be removed later) */
+  for (i=0; i<=180; i++) {
+    for (j=0; j<=60; j++) {
+      assert( polar_check_table[i*61+j] == 1);
+    }
+  }
+  free(polar_check_table);
 
   plist = &global_vlmc_context->polar_list;
   if (plist->polars == NULL) {
@@ -88,6 +212,9 @@ void add_polar(char *pname, char *fname) {
     plist->polars = p;
     plist->nb_polars++;
   }
+#ifdef USE_SETLOCALE
+  setlocale(LC_NUMERIC, "");
+#endif /* USE_SETLOCALE */
 }
 
 /* get the pointer to the polar entry based on its name */
