@@ -185,30 +185,36 @@ function findboatspeed(angledifference)
 
       //too much complicated if 180
       <?php
-  $windinf = windInf($usersObj->wspeed, $usersObj->users->boattype);
-  $windsup =  windSup($usersObj->wspeed, $usersObj->users->boattype ) ;
-  if (empty($windsup) ) //if outside of the charts (sup), goes to the higher existant value
-  {
-  //hack, should be done by function
-    $windsup = $windinf;
-  }
+    $windinf = floor( $usersObj->wspeed);
+    $windsup = ceil( $usersObj->wspeed);
+    if ($windinf >= 60) {
+	$windinf = 60;
+    }
+    if ( $windsup >= 60) {
+	$windsup = 60;
+    }
       ?>
 
-      windInf =  <?php echo $windinf;?>;
-      windSup =  <?php echo $windsup;?>;
+    windInf =  <?php echo $windinf;?>;
+    windSup =  <?php echo $windsup;?>;
 
 
       //converting php hash table to javascript hashstable (UGLY)
     <?php
-      foreach ( windChart($windinf, $usersObj->users->boattype) as $key=>$value )
-      {
-  echo "windInfChart.put(\"$key\", $value);\n";
+    $fwindinf = float($windinf);
+    $fwindsup = float($windsup);
 
-      }
-      foreach ( windChart($windsup, $usersObj->users->boattype) as $key=>$value )
-      {
-  echo "windSupChart.put(\"$key\", $value);\n";
-      }
+    shm_lock_sem_construct_polar(1);  
+    for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
+	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindinf, float($t_angle));
+	echo "windInfChart.put(\"$t_angle\", $t_boatspeed);\n";
+    }
+    
+    for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
+	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindsup, float($t_angle));
+	echo "windSupfChart.put(\"$t_angle\", $t_boatspeed);\n";
+    }
+    shm_unlock_sem_destroy_polar(1);
     ?>
 
   windInfBoatSpeed = boatspeedfromlinearchart(windInfChart, angledifference);
