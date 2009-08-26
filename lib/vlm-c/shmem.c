@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.17 2009-08-25 14:50:26 ylafon Exp $
+ * $Id: shmem.c,v 1.18 2009-08-26 15:20:27 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -516,6 +516,7 @@ void construct_polar_array_from_shmem(boat_polar_list *polars, void *memseg) {
     used_bytes = (((used_bytes >> 2) + 1) << 2);
   }
   /* allocate the polar list structure */
+  polars->nb_polars = nb_polars;
   polars->polars = calloc(nb_polars, sizeof (boat_polar *));
   for (i=0; i<nb_polars; i++) {
     polars->polars[i] = calloc(1, sizeof(boat_polar));
