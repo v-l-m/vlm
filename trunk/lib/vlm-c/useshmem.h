@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.h,v 1.4 2009-08-26 15:02:16 ylafon Exp $
+ * $Id: useshmem.h,v 1.5 2009-08-26 16:59:46 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -37,5 +37,7 @@ void shm_lock_sem_construct_grib PARAM1(int);
 void shm_unlock_sem_destroy_grib PARAM1(int);
 void shm_lock_sem_construct_polar PARAM1(int);
 void shm_unlock_sem_destroy_polar PARAM1(int);
+
+void create_and_fill_polar_shm ();
 
 #endif /* _USESHMEM_H_ */

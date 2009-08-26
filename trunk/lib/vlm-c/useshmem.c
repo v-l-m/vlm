@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.c,v 1.6 2009-08-26 14:54:32 ylafon Exp $
+ * $Id: useshmem.c,v 1.7 2009-08-26 16:59:46 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -138,16 +138,8 @@ void shm_lock_sem_construct_polar(int do_construct) {
   }
   sem_op[0].sem_num = 0;
   sem_op[0].sem_op  = 0;
-#ifdef SAFE_SHM_READ
-  sem_op[0].sem_flg = SEM_UNDO;
-  sem_op[1].sem_num = 0;
-  sem_op[1].sem_op  = 1;
-  sem_op[1].sem_flg = SEM_UNDO|IPC_NOWAIT;
-  nbops = 2;
-#else
   sem_op[0].sem_flg = 0;
   nbops = 1;
-#endif /* SAFE_SHM_READ */
   if (semop(*semid, sem_op, nbops) == -1) {
     fprintf(stderr, "Fail to lock the semaphore\n");
     exit(1);
@@ -170,10 +162,6 @@ void shm_lock_sem_construct_polar(int do_construct) {
 }
 
 void shm_unlock_sem_destroy_polar(int do_destroy) {
-#ifdef SAFE_SHM_READ
-  struct sembuf sem_op[2];
-  int semid;
-#endif /* SAFE_SHM_READ */
   int i;
   boat_polar_list *polars;
   void *segmaddr;
@@ -189,9 +177,58 @@ void shm_unlock_sem_destroy_polar(int do_destroy) {
     segmaddr = global_vlmc_context->polar_segmaddr;
     shmdt(segmaddr);
   }
-#ifdef SAFE_SHM_READ
-  semid    = global_vlmc_context->semid;
-  /* and release the semaphore */
+}
+
+void create_and_fill_polar_shm() {
+  int shmid, semid;
+  void *segmaddr;
+  struct sembuf sem_op[2];
+
+  if ( global_vlmc_context->polar_list.nb_polars == 0) {
+    printf("Polar initialization failed\n");
+    exit(-1);
+  }
+  shmid = -1;
+  semid = -1;
+  segmaddr = NULL;
+
+  /* 
+   *  lock it (we use the same semaphore as the grib, but it's not a big issue
+   */
+  semid = get_semaphore_id();
+  if (semid == -1) {
+    semid = create_semaphore();
+    if (semid == -1) {
+      fprintf(stderr, "Unable to create the semaphore\n");
+      exit(1);
+    }
+  }
+  sem_op[0].sem_num = 0;
+  sem_op[0].sem_op  = 0;
+  sem_op[0].sem_flg = SEM_UNDO;
+  sem_op[1].sem_num = 0;
+  sem_op[1].sem_op  = 1;
+  sem_op[1].sem_flg = SEM_UNDO|IPC_NOWAIT;
+  if (semop(semid, sem_op, 2) == -1) {
+    fprintf(stderr, "Fail to lock the semaphore\n");
+    exit(1);
+  }
+  
+  shmid = get_polar_shmid(0);
+  if (shmid == -1) {
+    /* not there, we create it */
+    shmid = create_polar_shmid(&global_vlmc_context->polar_list);
+    if (shmid == -1) {
+      fprintf(stderr, "Fail to create the Polar memory segment\n");
+      exit(1);
+    }
+  }
+
+  /* copy the polar array */
+  segmaddr = get_shmem(shmid, 0);
+  copy_polar_array_to_shmem(shmid, &global_vlmc_context->polar_list, segmaddr);
+  shmdt(segmaddr);
+
   sem_op[0].sem_num = 0;
   sem_op[0].sem_op  = -1;
   sem_op[0].sem_flg = SEM_UNDO|IPC_NOWAIT;
@@ -199,5 +236,5 @@ void shm_unlock_sem_destroy_polar(int do_destroy) {
     fprintf(stderr, "Fail to unlock the semaphore\n");
     exit(1);
   }
-#endif /* SAFE_SHM_READ */
+
 }

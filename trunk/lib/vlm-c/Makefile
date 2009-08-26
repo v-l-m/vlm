@@ -72,9 +72,9 @@ windserver: windserver.o grib.o shmem.o context.o  wgrib/libgrib.a
 	$(RM) $@
 	$(CC) -o $@ $(CFLAGS)  windserver.o grib.o shmem.o context.o  wgrib/libgrib.a $(EXTRA_LIBRARIES)
 
-polarserver: polarserver.o polar.o shmem.o context.o 
+polarserver: polarserver.o polar.o shmem.o context.o useshmem.o winds.o
 	$(RM) $@
-	$(CC) -o $@ $(CFLAGS)  polarserver.o polar.o shmem.o context.o $(EXTRA_LIBRARIES)
+	$(CC) -o $@ $(CFLAGS)  polarserver.o polar.o shmem.o useshmem.o winds.o context.o $(EXTRA_LIBRARIES)
 
 unittest-shm: unittest-shm.o libvlmc.a
 	$(RM) $@
