@@ -507,99 +507,32 @@ class fullUsers
 
     if ( $this->users->pilotmode == PILOTMODE_BESTVMG ) //  BEST VMG
       {
-	if (defined('MOTEUR')) {
-	  $vlmc_heading = new doublep();
-	  $vlmc_vmg = new doublep();
-	  
-	  shm_lock_sem_construct_grib(1);
-	  VLM_best_vmg($this->lastPositions->lat, 
-		       $this->lastPositions->long,
-		       $this->LatNM, $this->LongNM, 
-		       $this->users->boattype,
-		       $vlmc_heading, $vlmc_vmg);
-	  shm_unlock_sem_destroy_grib(1);
-
-	  $this->users->boatheading = doublep_value($vlmc_heading);
-	  $this->VMG = doublep_value($vlmc_vmg);
-
-	  //	  echo "Debug: Lat   = ".$this->lastPositions->lat;
-	  //	  echo "Debug: Lon   = ".$this->lastPositions->long;
-	  //	  echo "Debug: WPLat = ".$this->LatNM;
-	  //	  echo "Debug: WPLon = ".$this->LongNM;
-	  //	  echo "Debug: Type  = ".$this->users->boattype;
-	  //	  echo "Debug: HDG   = ".$this->users->boatheading;
-	  //	  echo "Debug: VMG   = ".$this->VMG;
-
-	} else {
-	  $cap_ortho = $this->orthodromicHeading();
-	  
-	  $cap_vent = ($this->wheading + 180)%360;
-	  $wind_speed = $this->wspeed;
-	  $boat_type = $this->users->boattype;
-	  $vmg_max_t = 0;
-	  $vmg_max_b = 0;
-	  $DegRad = pi()/180;
-	  //echo "Debug cap_ortho= ".$cap_ortho;
-	  //echo "Debug cap_vent= ".$cap_vent;
-	  //echo "Debug wind_speed= ".$wind_speed;
-	  //echo "Debug boat_type= ".$boat_type;
-	  $windArray = getwindinfsup( $wind_speed, $boat_type);
-	  $windInf =  $windArray[0];
-	  $windSup =  $windArray[1];
-	  
-	  if ($windSup == 0) //if outside of the charts (sup), goes to the higher existant value
-	    $windSup = $windInf;//HACK; should be done by function
-	  
-	  $windInfChart = windChart($windInf, $boat_type);
-	  $windSupChart = windChart($windSup, $boat_type);
-	  
-	  for ($i=20; $i<=170;$i++) //Pour limiter le nb de calcul on peut mettre ($i=30; $i<=170;$i++)
-	    {
-	      $boatspeed = findboatspeedinfsupcharts($i, $wind_speed, $windInf, $windSup, 
-						     $windInfChart, $windSupChart, $boat_type);
-	      //echo "Debug boatspeed= ".$boatspeed;
-	      
-	      $vmg_t = $boatspeed * cos(($cap_ortho - ($cap_vent - $i)) * $DegRad);
-	      $vmg_b = $boatspeed * cos(($cap_ortho - ($cap_vent + $i)) * $DegRad);
-	      //echo "Debug vmg_t= ".$vmg_t;
-	      //echo "Debug vmg_b= ".$vmg_b;
-	      
-	      if ($vmg_t > $vmg_max_t)
-		{
-		  $vmg_max_t = $vmg_t;
-		  $angle_vmg_max_t = $i;
-		  //echo "Debug vmg_max_t= ".$vmg_max_t;
-		  //echo "Debug angle_vmg_max_t= ".$angle_vmg_max_t;
-		}
-	      if ($vmg_b > $vmg_max_b)
-		{
-		  $vmg_max_b = $vmg_b;
-		  $angle_vmg_max_b = $i;
-		  //echo "Debug vmg_max_b= ".$vmg_max_b;
-		  //echo "Debug angle_vmg_max_b= ".$angle_vmg_max_b;
-		}
-	    }
-	  //echo "Debug vmg_max_t= ".$vmg_max_t;
-	  //echo "Debug angle_vmg_max_t= ".$angle_vmg_max_t;
-	  //echo "Debug vmg_max_b= ".$vmg_max_b;
-	  //echo "Debug angle_vmg_max_b= ".$angle_vmg_max_b;
-	  
-	  if ($vmg_max_t > $vmg_max_b)
-	    {
-	      $bestHdg = $cap_vent - $angle_vmg_max_t;
-	      $bestVMG = $vmg_max_t;
-	    }
-	  else
-	    {
-	      $bestHdg = $cap_vent + $angle_vmg_max_b;
-	      $bestVMG = $vmg_max_b;
-	    }
-	  //echo "Debug bestHdg= ".$bestHdg;
-	  //echo "Debug bestVMG= ".$bestVMG;
-	  
-	  
-	  $this->users->boatheading = ($bestHdg+360)%360;
-	  $this->VMG = $bestVMG;
+	if (!defined('MOTEUR')) {
+	  shm_lock_sem_construct_polar(1);
+	}
+	$vlmc_heading = new doublep();
+	$vlmc_vmg = new doublep();
+	
+	shm_lock_sem_construct_grib(1);
+	VLM_best_vmg($this->lastPositions->lat, 
+		     $this->lastPositions->long,
+		     $this->LatNM, $this->LongNM, 
+		     $this->users->boattype,
+		     $vlmc_heading, $vlmc_vmg);
+	shm_unlock_sem_destroy_grib(1);
+	
+	$this->users->boatheading = doublep_value($vlmc_heading);
+	$this->VMG = doublep_value($vlmc_vmg);
+	
+	//	  echo "Debug: Lat   = ".$this->lastPositions->lat;
+	//	  echo "Debug: Lon   = ".$this->lastPositions->long;
+	//	  echo "Debug: WPLat = ".$this->LatNM;
+	//	  echo "Debug: WPLon = ".$this->LongNM;
+	//	  echo "Debug: Type  = ".$this->users->boattype;
+	//	  echo "Debug: HDG   = ".$this->users->boatheading;
+	//	  echo "Debug: VMG   = ".$this->VMG;
+	if (!defined('MOTEUR')) {
+	  shm_unlock_sem_destroy_polar(1);
 	}
         $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
           ." WHERE idusers =".$this->users->idusers;
