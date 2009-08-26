@@ -201,17 +201,17 @@ function findboatspeed(angledifference)
 
       //converting php hash table to javascript hashstable (UGLY)
     <?php
-    $fwindinf = float($windinf);
-    $fwindsup = float($windsup);
+    $fwindinf = (float) $windinf;
+    $fwindsup = (float) $windsup;
 
     shm_lock_sem_construct_polar(1);  
     for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
-	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindinf, float($t_angle));
+	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindinf, (float)$t_angle);
 	echo "windInfChart.put(\"$t_angle\", $t_boatspeed);\n";
     }
     
     for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
-	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindsup, float($t_angle));
+	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindsup, (float)$t_angle);
 	echo "windSupfChart.put(\"$t_angle\", $t_boatspeed);\n";
     }
     shm_unlock_sem_destroy_polar(1);
