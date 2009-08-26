@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.28 2009-08-26 19:36:04 ylafon Exp $
+ * $Id: vlm.c,v 1.29 2009-08-26 19:40:44 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -659,7 +659,7 @@ double VLM_find_boat_speed(char *polar_name, double wind_speed,
 
   /* if no polar are defined, bail out */
   if (!polar_name) {
-    return;
+    return 0.0;
   }
   
   if (!strncmp(polar_name, "boat_", 5)) {

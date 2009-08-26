@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.19 2009-08-26 19:36:04 ylafon Exp $
+ * $Id: vlm.h,v 1.20 2009-08-26 19:40:44 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -322,6 +322,6 @@ void VLM_best_vmg PARAM7(double, double, double, double, char *,
  * @param angle_diff, a <code>double</code>, in <em>degrees</em>
  * @return a double, the boat speed in <em>kts</em>
  */
-double VLM_find_boat_speed PARAM3(char *,double, double, double);
+double VLM_find_boat_speed PARAM3(char *,double, double);
 
 #endif /* _VLM_H_ */
