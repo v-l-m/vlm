@@ -26,7 +26,14 @@ set_polar_definition_filename($global_vlmc_context, POLAR_DEFINITION_FILENAME);
 global_vlmc_context_set($global_vlmc_context);
 
 init_coastline();
-init_polar();
+
+$polar_shmid = get_polar_shmid(1);
+if ( $polar_shmid < 0 ) { // safeline
+  init_polar();
+  create_and_fill_polar_shm();
+} else {
+  shm_lock_sem_construct_polar(1);  
+}
 
 //$verbose=$_REQUEST['verbose'];
 $verbose=0;
