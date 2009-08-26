@@ -1,5 +1,5 @@
 /**
- * $Id: polarserver.c,v 1.2 2009-08-26 08:40:19 ylafon Exp $
+ * $Id: polarserver.c,v 1.3 2009-08-26 16:59:46 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -27,6 +27,7 @@
 #include "polar.h"
 #include "context.h"
 #include "shmem.h"
+#include "useshmem.h"
 
 vlmc_context *global_vlmc_context;
 
@@ -50,59 +51,8 @@ int main(int argc, char **argv) {
   set_polar_definition_filename(global_vlmc_context, argv[1]);
   init_polar();
   
-  if ( global_vlmc_context->polar_list.nb_polars == 0) {
-    printf("Polar initialization failed\n");
-    exit(-1);
-  }
+  create_and_fill_polar_shm();
 
-  shmid = -1;
-  semid = -1;
-  segmaddr = NULL;
-
-  /* 
-   *  lock it (we use the same semaphore as the grib, but it's not a big issue
-   */
-  semid = get_semaphore_id();
-  if (semid == -1) {
-    semid = create_semaphore();
-    if (semid == -1) {
-      fprintf(stderr, "Unable to create the semaphore\n");
-      exit(1);
-    }
-  }
-  sem_op[0].sem_num = 0;
-  sem_op[0].sem_op  = 0;
-  sem_op[0].sem_flg = SEM_UNDO;
-  sem_op[1].sem_num = 0;
-  sem_op[1].sem_op  = 1;
-  sem_op[1].sem_flg = SEM_UNDO|IPC_NOWAIT;
-  if (semop(semid, sem_op, 2) == -1) {
-    fprintf(stderr, "Fail to lock the semaphore\n");
-    exit(1);
-  }
-  
-  shmid = get_polar_shmid(0);
-  if (shmid == -1) {
-    /* not there, we create it */
-    shmid = create_polar_shmid(&global_vlmc_context->polar_list);
-    if (shmid == -1) {
-      fprintf(stderr, "Fail to create the Polar memory segment\n");
-      exit(1);
-    }
-  }
-
-  /* copy the polar array */
-  segmaddr = get_shmem(shmid, 0);
-  copy_polar_array_to_shmem(shmid, &global_vlmc_context->polar_list, segmaddr);
-  shmdt(segmaddr);
-
-  sem_op[0].sem_num = 0;
-  sem_op[0].sem_op  = -1;
-  sem_op[0].sem_flg = SEM_UNDO|IPC_NOWAIT;
-  if (semop(semid, sem_op, 1) == -1) {
-    fprintf(stderr, "Fail to unlock the semaphore\n");
-    exit(1);
-  }
   printf("Polar segment successfully updated\n");
   return 0;
 }
