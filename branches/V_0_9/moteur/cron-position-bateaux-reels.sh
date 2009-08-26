@@ -14,4 +14,3 @@ cd $VLMRACINE/vlmcode/lib/phpcommon
 # Pym et Benoit
 $PHP $VLMRACINE/vlmcode/moteur/posscripts/oeposNyLo.php
 
-
