@@ -471,10 +471,13 @@ function windSpeed2Length($windspeed, $base = 4)
   proceed by double linear interpolation : one for the angle, one for the windspeed*/
 function findboatspeed ($angledifference, $windspeed, $boattype )
 {
-  shm_lock_sem_construct_polar(1);  
+  if (!defined('MOTEUR')) {
+    shm_lock_sem_construct_polar(1);  
+  }
   $boatSpeed = VLM_find_boat_speed($boattype, $windspeed, $angledifference);
-  shm_unlock_sem_destroy_polar(1);
-
+  if (!defined('MOTEUR')) {
+    shm_unlock_sem_destroy_polar(1);
+  }
   return $boatSpeed;
 }
 
