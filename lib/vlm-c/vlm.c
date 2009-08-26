@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.27 2009-05-19 15:41:28 ylafon Exp $
+ * $Id: vlm.c,v 1.28 2009-08-26 19:36:04 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -27,6 +27,7 @@
 #include "vlm.h"
 #include "vmg.h"
 #include "winds.h"
+#include "boat.h"
 
 /**
  * using VLM's PIM definition, set the heading function of the boat
@@ -649,4 +650,28 @@ void VLM_best_vmg(double latitude, double longitude,
   t_heading = get_heading_bvmg(&aboat, 0);
   *heading = radToDeg(t_heading);
   *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
+}
+
+double VLM_find_boat_speed(char *polar_name, double wind_speed, 
+			   double angle_diff) {
+  char *real_polar_name;
+  boat fakeboat;
+
+  /* if no polar are defined, bail out */
+  if (!polar_name) {
+    return;
+  }
+  
+  if (!strncmp(polar_name, "boat_", 5)) {
+    real_polar_name = &polar_name[5];
+  } else {
+    real_polar_name = polar_name;
+  }
+
+  fakeboat.polar = NULL;
+  associate_polar_boat(&fakeboat, real_polar_name);
+  /* round things */
+  angle_diff = degToRad(fmod(angle_diff, 360.0));
+
+  return find_speed(&fakeboat, wind_speed, angle_diff);
 }

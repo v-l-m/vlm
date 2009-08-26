@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.18 2009-05-12 22:21:48 ylafon Exp $
+ * $Id: vlm.h,v 1.19 2009-08-26 19:36:04 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -314,5 +314,14 @@ int VLM_check_cross_coast PARAM7(double, double, double, double,
  */
 void VLM_best_vmg PARAM7(double, double, double, double, char *,
 			 double *, double *);
+
+/**
+ * Get the best VMG headingspeed boat
+ * @param polar_name, a <code>char *</code>, the polar name
+ * @param wind_speed, a <code>double</code>, in <em>kts</em>
+ * @param angle_diff, a <code>double</code>, in <em>degrees</em>
+ * @return a double, the boat speed in <em>kts</em>
+ */
+double VLM_find_boat_speed PARAM3(char *,double, double, double);
 
 #endif /* _VLM_H_ */
