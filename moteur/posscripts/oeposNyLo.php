@@ -69,7 +69,7 @@ if ( $latb != 0 && $lonb != 0 ) {
  mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
  $query ="insert into positions values ";
- $query .= "( $time , $lonb*1000, $latb*1000, -56, 20071201) ;";
+ $query .= "( $time , $lonb*1000, $latb*1000, -56, 20071201, 'n/a') ;";
 
  mysql_db_query(DBNAME,$query) or die("OE-POS : Query failed : " . mysql_error." ".$query);
  //echo "$query\n";
