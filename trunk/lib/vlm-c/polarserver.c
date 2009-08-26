@@ -1,5 +1,5 @@
 /**
- * $Id: polarserver.c,v 1.1 2009-08-25 14:48:47 ylafon Exp $
+ * $Id: polarserver.c,v 1.2 2009-08-26 08:40:19 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -30,7 +30,6 @@
 
 vlmc_context *global_vlmc_context;
 
-
 void usage(char *argv0) {
   printf("Usage: %s <polar list filename>\n", argv0);
   exit(1);
@@ -41,7 +40,6 @@ int main(int argc, char **argv) {
   void *segmaddr;
   struct sembuf sem_op[2];
   
-  /* TODO add options like -merge -interp -replace */
   global_vlmc_context = calloc(1, sizeof(vlmc_context));
   init_context_default(global_vlmc_context);
 
@@ -83,9 +81,7 @@ int main(int argc, char **argv) {
     exit(1);
   }
   
-  if (shmid == -1) { /* uninitialized ? (we might have got it already) */
-    shmid = get_polar_shmid(0);
-  }
+  shmid = get_polar_shmid(0);
   if (shmid == -1) {
     /* not there, we create it */
     shmid = create_polar_shmid(&global_vlmc_context->polar_list);
@@ -95,10 +91,8 @@ int main(int argc, char **argv) {
     }
   }
 
-  /* copy the grib */
-  if (!segmaddr) { /* did we got it from a merge ? */
-    segmaddr = get_shmem(shmid, 0);
-  }
+  /* copy the polar array */
+  segmaddr = get_shmem(shmid, 0);
   copy_polar_array_to_shmem(shmid, &global_vlmc_context->polar_list, segmaddr);
   shmdt(segmaddr);
 
