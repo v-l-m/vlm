@@ -467,163 +467,17 @@ function windSpeed2Length($windspeed, $base = 4)
   return $length;
 }
 
-
-
-//from a windspeed, find the windspeed of the chart inferior
-//ex: for the cigale14, windspeed in chart exist for 0, 4, 6, 10, 16...
-//given 13 knts, it will return 10
-function windInf($windspeed, $boattype)
-{
-  $windInfChart = array();
-  //find chart for wind inferior
-  $query = "SELECT wspeed FROM ".$boattype." WHERE wspeed <= $windspeed ORDER BY wspeed DESC LIMIT 1";
-  //$result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
-  $result = wrapper_mysql_db_query(DBNAME,$query);// or die("Query failed : " . mysql_error." ".$query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  return $row[0];
-}
-
-//same as windInf but returns 16
-function windSup($windspeed, $boattype)
-{
-  $windSupChart = array();
-  //find chart for wind inferior
-  //$query = "SELECT wspeed FROM ".$boattype." WHERE wspeed >= $windspeed ORDER BY wspeed ASC LIMIT 1";
-  $query = "SELECT wspeed FROM ".$boattype." WHERE wspeed > $windspeed ORDER BY wspeed ASC LIMIT 1";
-  $result = wrapper_mysql_db_query(DBNAME,$query); //or die("Query failed : " . mysql_error." ".$query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  return $row[0];
-}
-
-//from a windspeed, return the windChart for this windchart
-//returns an array(wheading=>boatspeed, ...)
-function windChart($wind, $boattype)
-{
-  $query2  = "SELECT wheading, boatspeed FROM ".$boattype." WHERE wspeed = $wind";
-  $result2 = wrapper_mysql_db_query(DBNAME,$query2); // or die("Query failed : " . mysql_error." ".$query2);
-  while( $row2 = mysql_fetch_array($result2, MYSQL_NUM))
-    {
-      $windChart[$row2[0]] = $row2[1];
-    }
-  return $windChart;
-}
-
-//from a linear chart(associated to a reference speed) and an angle find speed
-//linearcharts are arrays from the windchart function
-function boatspeedfromlinearchart($chart, $angle)
-{
-  //echo "calling boatspeedfromlinearchart with  $angle\n";
-  //print_r($chart);
-  //find angleinf and anglesup from tha charts
-  $cur = 0;
-  $prev = $cur;
-  while (( $cur = each($chart)) && ($angle > $cur[key]) )
-    {
-      $prev = $cur;
-    }
-  //in every of them, key refers to angle and value to speed
-  $AngleInf = $prev ;
-  $AngleSup = $cur;
-  if ($AngleSup[key] == 0) //case cur[key] == prev[key] == 0
-    $AngleSup[key] =1;
-  //echo "angle inf \n";
-  //print_r($AngleInf);
-  //echo "angle sup \n";
-  //print_r($AngleSup);
-  //find medium boatspeed value
-  return(
-         $AngleInf[value] + ($angle - $AngleInf[key])
-         * ($AngleSup[value] - $AngleInf[value])
-         / ($AngleSup[key] - $AngleInf[key]));
-}
-
-//from the windspeed of two charts (inf and sup)
-//the boatspeed for these charts for the angle,
-//the windspeed and the boat angle with wind
-//returns the boat speed (ouf!)
-function boatspeedfromcharts($windInf, $windSup, $windInfBoatSpeed,
-                             $windSupBoatSpeed, $windspeed, $boatangle)
-{
-  //echo "\nboatspeedfromcharts with ".$windInf." ". $windSup." ". $windInfBoatSpeed." ".
-  //  $windSupBoatSpeed." ". $windspeed." ". $boatangle;
-  if ($windInf != $windSup) //higher than charts
-    return(
-           $windInfBoatSpeed + ($windspeed - $windInf)
-           * ($windSupBoatSpeed - $windInfBoatSpeed)
-           / ($windSup - $windInf));
-  else
-    return $windInfBoatSpeed;
-
-}
-
-function getwindinfsup($windspeed, $boattype) {
-  $windInf =  windInf($windspeed, $boattype);
-  $windSup =  windSup($windspeed, $boattype);
-  return array ( $windInf, $windSup );
-}
-
 /*find boat speed with the angle and the windspeed
   proceed by double linear interpolation : one for the angle, one for the windspeed*/
 function findboatspeed ($angledifference, $windspeed, $boattype )
 {
-  $windArray = getwindinfsup($windspeed, $boattype);
-  $windInf =  $windArray[0];
-  $windSup =  $windArray[1];
+  shm_lock_sem_construct_polar(1);  
+  $boatSpeed = VLM_find_boat_speed($boattype, $windspeed, $angledifference);
+  shm_unlock_sem_destroy_polar(1);
 
-  return findboatspeedinfsup ($angledifference, $windspeed, $windInf, $windSup, $boattype);
-
+  return $boatSpeed;
 }
 
-function findboatspeedinfsupcharts($angledifference, $windspeed, $windInf, $windSup, $windInfChart, $windSupChart, $boattype )
-{
-  //$angledifference=round(abs($angledifference));
-  $angledifference=abs(round($angledifference));
-
-  // Si bout au vent, on gagne un peu de temps..
-  if ( $angledifference <= 1 ) return (0);
-
-  //echo "callinf findboatspeed with $angledifference, $windspeed, $boattype\n";
-  if ($angledifference == 180) $angledifference = 179;
-  //too much complicated if 180
-
-  if ($windSup == 0) {
-    $windSup = $windInf;//HACK; should be done by function
-    $windSupChart = windChart($windSup, $boattype );
-  }
-
-  $windInfBoatSpeed = boatspeedfromlinearchart($windInfChart, $angledifference);
-  $windSupBoatSpeed = boatspeedfromlinearchart($windSupChart, $angledifference);
-  //  echo "windInfBoatSpeed = ".$windInfBoatSpeed. "  windSupBoatSpeed = ".$windSupBoatSpeed;
-  return boatspeedfromcharts(
-                             $windInf, $windSup,
-                             $windInfBoatSpeed, $windSupBoatSpeed, $windspeed,
-                             $angledifference);
-
-}
-
-/*find boat speed with the angle and the windspeed
-  proceed by double linear interpolation : one for the angle, one for the windspeed*/
-function findboatspeedinfsup ($angledifference, $windspeed, $windInf, $windSup, $boattype )
-{
-  //$angledifference=round(abs($angledifference));
-  $angledifference=abs(round($angledifference));
-
-  // Si bout au vent, on gagne un peu de temps..
-  if ( $angledifference <= 1 ) return (0);
-
-  //echo "callinf findboatspeed with $angledifference, $windspeed, $boattype\n";
-  if ($angledifference == 180) $angledifference = 179;
-  //too much complicated if 180
-
-  if ($windSup == 0) //if outside of the charts (sup), goes to the higher existant value
-    $windSup = $windInf;//HACK; should be done by function
-
-  //   echo "windspeed = $windspeed, windinf = ".$windInf." windsup =".$windSup."\n";
-  $windInfChart = windChart($windInf, $boattype );
-  $windSupChart = windChart($windSup, $boattype );
-
-  return findboatspeedinfsupcharts($angledifference, $windspeed, $windInf, $windSup, $windInfChart, $windSupChart, $boattype);
-}
 
 /*in the grib file, collect the date (like 04 09 17 00 00 = 23rd sept
   midnight GMT) and the forecast interval (00 for now data, 0c for 12 hours)
