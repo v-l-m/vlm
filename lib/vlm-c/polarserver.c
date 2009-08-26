@@ -1,5 +1,5 @@
 /**
- * $Id: polarserver.c,v 1.3 2009-08-26 16:59:46 ylafon Exp $
+ * $Id: polarserver.c,v 1.4 2009-08-26 19:40:44 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -37,10 +37,7 @@ void usage(char *argv0) {
 }
 
 int main(int argc, char **argv) {
-  int shmid, semid;
-  void *segmaddr;
-  struct sembuf sem_op[2];
-  
+
   global_vlmc_context = calloc(1, sizeof(vlmc_context));
   init_context_default(global_vlmc_context);
 
