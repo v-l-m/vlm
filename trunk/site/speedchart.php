@@ -10,7 +10,7 @@ include_once("config.php");
 
 if ( $format != "pol" ) {
 
-        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Cache-Control: no-store, no-cache");
         echo '
               <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -30,17 +30,11 @@ if ( $format != "pol" ) {
 }
 
 
-//find all wind values like 4, 6, 10, 16, 24, 32
-$query = "SELECT max(wspeed) from ".$boattype ;
-$result = mysql_query($query) or die("Query [$query] failed \n");
-$row = mysql_fetch_array($result, MYSQL_NUM);
-//  print_r($result2);
-
 // On sort un .pol ou les polaires graphiques
 if ( $format == "pol" ) {
 
        printf ("TWA\\TWS\t");
-       for ($wspeed = 0; $wspeed <= 40 ; $wspeed+=5) {
+       for ($wspeed = 0; $wspeed <= 60 ; $wspeed+=5) {
              printf ("%d\t", $wspeed);
        }
        printf ("\n");
@@ -60,7 +54,7 @@ if ( $format == "pol" ) {
 
        $pas=15;
        $minws=0;
-       $maxws=$row[0];
+       $maxws=60;
        //printf("MAXWS=%s",$maxws);
        for ($wspeed = $minws; $wspeed<=$maxws; $wspeed+=$pas) {  
             echo "<img src=\"scaledspeedchart.php?boattype=". 
