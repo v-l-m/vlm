@@ -27,11 +27,22 @@ include_once("config.php");
 
 
 if (isset($boattype)) {
-    //get max speed boat value 
-    $query="SELECT max(boatspeed) FROM ".$boattype ." where wspeed between " . $minws . " and " . $maxws ; 
-    $result = mysql_query($query) or die("Query [$query] failed \n");
-    $row = mysql_fetch_array($result, MYSQL_NUM);
-    $maxvalue= $row[0];
+  $maxvalue = 0.0;
+  if (!defined('MOTEUR')) {
+    shm_lock_sem_construct_polar(1);  
+  }
+  for ( $wheading=0; $wheading<=180; $wheading+=5) {
+    for ($wspeed=$minws; $wspeed<=$maxws; $wspeed+=$pas) {
+      $bspeed =  VLM_find_boat_speed($boattype, $wspeed, $wheading);
+      if ( $bspeed > $maxvalue ) {
+	$maxvalue = $bspeed;
+      }
+    }
+  }
+  if (!defined('MOTEUR')) {
+    shm_unlock_sem_destroy_polar(1);
+  }
+
     $maxchart = nextmultiple($maxvalue, STEP);
     $marginleft = 50;
     $marginright = 30;
@@ -121,15 +132,7 @@ if (isset($boattype)) {
         imagestring ( $im, $font, $textposition[0], $textposition[1], $i, $color);
     }
   
-    //find all wind values like 4, 6, 10, 16, 24, 32
-    $query2 = "SELECT DISTINCT wspeed from ".$boattype . " where wspeed between " . $minws . " and " . $maxws ;
-    //  . " and wspeed/2 = floor(wspeed/2)";
-    $result2 = mysql_query($query2) or die("Query [$query2] failed \n");
-    $row2 = mysql_fetch_array($result2, MYSQL_NUM);
-    //  print_r($result2);
-  
     imagesetthickness ( $im, 2);
-    //foreach ($row2 as $wspeed)
     for ($wspeed=$minws; $wspeed<=$maxws; $wspeed+=$pas) {
         $wheadingbefore = 0;
         $boatspeedbefore = 0;
