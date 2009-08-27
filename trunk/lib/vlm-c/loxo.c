@@ -204,6 +204,14 @@ void loxo_distance_angle(double latitude, double longitude,
   longitude = fmod(longitude+TWO_PI, TWO_PI);
   target_long = fmod(target_long+TWO_PI, TWO_PI);
 
+  if (target_long > longitude) {
+    if (target_long - longitude > M_PI) {
+      target_long -= TWO_PI;
+    }
+  } else if (longitude - target_long > M_PI) {
+    longitude -= TWO_PI;
+  }
+
   if (fabs(target_lat-latitude) < degToRad(0.001)) {
     /* clamp to horizontal */
     if (fabs(target_long-longitude) < M_PI) {
