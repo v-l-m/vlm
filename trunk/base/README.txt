@@ -1,18 +1,18 @@
-Les tables de VLM sont dÃ©composÃ©es en plusieurs catÃ©gories :
+Les tables de VLM sont décomposées en plusieurs catégories :
 
-# Les carrÃ©s de 10Â°/10Â°  utilisÃ©s UNIQUEMENT par le moteur pour la dÃ©tection coastcrossing
+# Les carrés de 10°/10°  utilisés UNIQUEMENT par le moteur pour la détection coastcrossing
 CH_tables.sql
 
-# Les tables des polygones GSHHS, dans les 5 rÃ©solutions
+# Les tables des polygones GSHHS, dans les 5 résolutions
 gshhs_tables.sql
 
-# Les polaires de vitesse
-boat_tables.sql
-
-# Tout ce qui concerne la crÃ©ation d'une course (retrouver le post expliquant
-# Ã§a sur la taverne / le wiki)
+# Tout ce qui concerne la création d'une course (retrouver le post expliquant
+# ça sur la taverne / le wiki)
 races_tables.sql
 
 # Les tables applicatives, courses, joueurs, positions, classements...
 schema.sql
 
+# Les tables des polaires sont désormais inutiles
+# Leurs définitions sont toujours disponibles
+boat_tables.sql
