@@ -237,8 +237,10 @@ class fullRaces
       {
         //WARNING: dont load fullUsers inside fullRaces
         //because fullRaces contains fullUsers that contain fullRaces ..
-        $obj = new users($row[0]);
-        array_push($this->opponents, $obj );
+	$userid = $row[0];
+        $obj = new users($userid);
+	$this->opponents[$userid] = $obj;
+	//        array_push($this->opponents, $obj );
         //we should sort them!
       }
 
@@ -248,8 +250,16 @@ class fullRaces
     $result6b = wrapper_mysql_db_query(DBNAME,$query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_NUM))
       {
-        $obj = new users($row[0]);
-        array_push($this->excluded, $obj );
+	$userid = $row[0];
+	// FIXME main question is... should this table contain all the boats
+	// or just the 'excluded' ones. Other parts of the code might suggest all
+	if (array_key_exist($userid, $this->opponents)) {
+	  $obj = $this->opponents[$userid];
+	} else {
+	  $obj = new users($row[0]);
+	}
+	$this->excluded[$userid] = $obj;
+	//        array_push($this->excluded, $obj );
       }
 
 
