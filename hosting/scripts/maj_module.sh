@@ -87,17 +87,20 @@ case $confmodule in
     echo "+$confmodule: Compilation de vlm-c"
     oldpwd=$PWD
     cd $destmodulepath
-    make windserver || exit 1
-    make php || exit 1
+    make all || exit 1
     echo -n "+$confmodule: installation de la librairie dynamique dans $VLMVLMCSO..."
     cp php/vlmc.so $VLMVLMCSO/
     echo 'OK !'
     echo -n "+$confmodule: installation du wrapper dans $VLMVLMCPHP..."
     cp php/vlmc.php $VLMVLMCPHP/vlmc.php
     echo 'OK !'
-    echo -n "+$confmodule: installation du winserver dans $VLMBIN..."
+    echo -n "+$confmodule: installation du windserver dans $VLMBIN..."
     cp windserver $VLMBIN/windserver
     chmod a+rx $VLMBIN/windserver
+    echo 'OK !'
+    echo -n "+$confmodule: installation du polarserver dans $VLMBIN..."
+    cp polarserver $VLMBIN/polarserver
+    chmod a+rx $VLMBIN/polarserver
     echo 'OK !'
 
     cd $oldpwd
