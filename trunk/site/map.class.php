@@ -692,7 +692,7 @@ class map
       }
     }
     if ( isset ($_GET['boat']) ) {
-      $fullUsersObj = new fullUsers(htmlentities($_GET['boat']), $this->north, $this->south, $this->west, $this->east, $age);
+      $fullUsersObj = new fullUsers(htmlentities($_GET['boat']), NULL, $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
       // DRAW MyWP
       if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
         imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), 
@@ -1096,7 +1096,7 @@ class map
     if ( intval($opponent)  == 0 ) return(0);
 
     //opponent is a userid, get a fulluser
-    $fullUsersObj = new fullUsers($opponent, $this->north, $this->south, $this->west, $this->east, $age);
+    $fullUsersObj = new fullUsers($opponent, NULL, $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
 
     // Dessin de la trajectoire correspondant aux premiers pas de temps de la route ortho (morceaux de 10 milles)
     if ( $fullUsersObj->users->idusers == htmlentities($_GET['boat']) ) {

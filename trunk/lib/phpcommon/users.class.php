@@ -312,12 +312,16 @@ class fullUsers
     $LongNM, $LatNM,
     $loch;
 
-  function fullUsers($id, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
+  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
   {
 
     $now = time();
 
-    $this->users = new users($id);
+    if ($origuser == NULL) {
+      $this->users = new users($id);
+    } else {
+      $this->users = $origuser;
+    }
 
     // if boat not engage in a race, nothing else to do ....
     if ($this->users->engaged == 0) return;
@@ -359,7 +363,11 @@ class fullUsers
       $this->hours = ($now - $time )/3600 ;  //everything is in GMT
     }
 
-    $this->races = new races($this->users->engaged);
+    if ($origrace == NULL) {
+      $this->races = new races($this->users->engaged);
+    } else {
+      $this->races = $origrace->races;
+    }
 
     // windAtPosition returns a small array : (wspeed, wheading);
     // see functions.php
@@ -1205,17 +1213,6 @@ class fullUsers
 
     return $sum;
   }
-
-  //compute the distances in nautics
-  function distFromUsers($idu)
-  {
-    $othersUsers = new fullUsers($idu, $this->north, $this->south, $this->west, $this->east);
-    return ortho($this->lastPositions->lat,
-     $this->lastPositions->long,
-     $othersUsers->lastPositions->lat,
-                 $othersUsers->lastPositions->long);
-  }
-
 }
 
 

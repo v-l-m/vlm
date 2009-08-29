@@ -13,11 +13,11 @@
 </script>
 <?php
 
-    $fullUsersObj = new fullUsers(getLoginId());
+  $fullUsersObj = new fullUsers($users->idusers, $users);
 
-    echo "<p>". $strings[$lang]["warning"]."</p>";
+  echo "<p>". $strings[$lang]["warning"]."</p>";
 
-  $racesObj = new races($fullUsersObj->users->engaged);
+  $racesObj = $fullUsersObj->races;
   echo   "<p>Engaged on race : <b>" .   $fullUsersObj->users->engaged .  " (" .
           $racesObj->racename    .  ") " .
     "</b>";
