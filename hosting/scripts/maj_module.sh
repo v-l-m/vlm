@@ -74,7 +74,7 @@ case $confmodule in
     cp $destmodulepath/Polaires/* $VLMPOLARS/
     for i in `ls $VLMPOLARS` ; do
         if [ $i != polars.list ] ; then
-            echo -n "$i"|sed 's/boat_\(.*\)$/\1/' >> $VLMPOLARS/polars.list.tmp
+            echo -n "$i"|sed 's/boat_\(.*\)\.csv$/\1/' >> $VLMPOLARS/polars.list.tmp
             echo ":$VLMPOLARS/$i" >> $VLMPOLARS/polars.list.tmp
             fi;
         done ;
