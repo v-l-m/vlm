@@ -67,19 +67,20 @@ case $confmodule in
     echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps..."
     chmod -R 777 $destmodulepath/../medias/images/minimaps
     echo 'OK !'
-    ;;
+
     echo -n "+$confmodule: Constitution de la liste des polaires..."
     
     mkdir -p $VLMPOLARS
     cp $destmodulepath/Polaires/* $VLMPOLARS/
-    for $i in `ls $VLMPOLARS` ; do
-        echo -n $i|sed 's/boat_\(.*\)$/\1/' >> $VLMPOLARS/polars.list.tmp
-        echo ":$desmodulepath/$i" >> $VLMPOLARS/polars.list.tmp
+    for i in `ls $VLMPOLARS` ; do
+        echo -n "$i"|sed 's/boat_\(.*\)$/\1/' >> $VLMPOLARS/polars.list.tmp
+        echo ":$destmodulepath/$i" >> $VLMPOLARS/polars.list.tmp
         done ;
     mv $VLMPOLARS/polars.list.tmp $VLMPOLARS/polars.list
 
     echo -n "+$confmodule: Mise à jour polarserver"
     $VLMBIN/polarserver
+    ;;
 
     moteur)
     echo -n "+$confmodule: Copie de la configuration des scripts..."
