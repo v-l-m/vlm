@@ -73,10 +73,13 @@ case $confmodule in
     mkdir -p $VLMPOLARS
     cp $destmodulepath/Polaires/* $VLMPOLARS/
     for i in `ls $VLMPOLARS` ; do
-        echo -n "$i"|sed 's/boat_\(.*\)$/\1/' >> $VLMPOLARS/polars.list.tmp
-        echo ":$destmodulepath/$i" >> $VLMPOLARS/polars.list.tmp
+        if [ $i != polars.list ] ; then
+            echo -n "$i"|sed 's/boat_\(.*\)$/\1/' >> $VLMPOLARS/polars.list.tmp
+            echo ":$VLMPOLARS/$i" >> $VLMPOLARS/polars.list.tmp
+            fi;
         done ;
     mv $VLMPOLARS/polars.list.tmp $VLMPOLARS/polars.list
+    echo 'OK !'
 
     echo -n "+$confmodule: Mise à jour polarserver"
     $VLMBIN/polarserver $VLMPOLARS/polars.list
