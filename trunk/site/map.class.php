@@ -489,8 +489,12 @@ class map
     // Boat , to know about the newt wp ?
     $user=htmlentities($_GET['boat']);
     if ( round($user) != 0 ) {
-      $usersObj = new users(htmlentities($_GET['boat']));
-      $nwp = $usersObj->nwp;
+      if (array_key_exists($user, $this->fullRacesObj->opponents)) {
+	$usersObj = &$this->fullRacesObj->opponents[$user];
+      } else {
+	$usersObj = new users($user);
+      }
+      $nwp = &$usersObj->nwp;
     } else { 
       $nwp=0;
     }
@@ -691,8 +695,14 @@ class map
         return (0);
       }
     }
+    $t_userid = 0;
     if ( isset ($_GET['boat']) ) {
-      $fullUsersObj = new fullUsers(htmlentities($_GET['boat']), NULL, $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
+      $t_userid = htmlentities($_GET['boat']);
+      if (array_key_exists($t_userid, $this->fullRacesObj->opponents)) {
+	$fullUsersObj = new fullUsers($t_userid, $this->fullRacesObj->opponents[$t_userid], $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
+      } else {
+	$fullUsersObj = new fullUsers($t_userid, NULL, $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
+      }
       // DRAW MyWP
       if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
         imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), 
@@ -711,7 +721,7 @@ class map
     foreach ( $this->list as $opponnent ) {
 
       // Le pixel demandeur n'est pas sujet au blackout...
-      if ( $_GET['boat'] == $opponnent ) {
+      if ( $t_userid == $opponnent ) {
         $minage=0;
       } else {
         // la trajectoire "des autres" :
@@ -727,7 +737,11 @@ class map
 
       //opponent is a userid, get a fulluser is not required, users is sufficient
       // $fullUsersObj = new fullUsers($opponnent, $this->north, $this->south, $this->west, $this->east, $maxage, $minage);
-      $usersObj = new users($opponnent);
+      if (array_key_exists($opponnent, $this->fullRacesObj->opponents)) {
+	$userObj = &$this->fullRacesObj->opponents[$opponnent];
+      } else {
+	$usersObj = new users($opponnent);
+      }
       // Si le pixel se cache, on passe au suivant
       if ( $usersObj->hidepos > 0 ) continue;
 
@@ -1096,8 +1110,11 @@ class map
     if ( intval($opponent)  == 0 ) return(0);
 
     //opponent is a userid, get a fulluser
-    $fullUsersObj = new fullUsers($opponent, NULL, $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
-
+    if (array_key_exists($opponent, $this->fullRacesObj->opponents)) {
+      $fullUsersObj = new fullUsers($opponent, $this->fullRacesObj->opponents[$opponent], $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
+    } else {
+      $fullUsersObj = new fullUsers($opponent, NULL, $this->fullRacesObj, $this->north, $this->south, $this->west, $this->east, $age);
+    }
     // Dessin de la trajectoire correspondant aux premiers pas de temps de la route ortho (morceaux de 10 milles)
     if ( $fullUsersObj->users->idusers == htmlentities($_GET['boat']) ) {
       // Des traces de ORTHOSTEP milles pour l'ortho
