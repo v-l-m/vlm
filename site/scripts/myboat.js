@@ -212,7 +212,7 @@ function findboatspeed(angledifference)
     
     for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
 	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindsup, (float)$t_angle);
-	echo "windSupfChart.put(\"$t_angle\", $t_boatspeed);\n";
+	echo "windSupChart.put(\"$t_angle\", $t_boatspeed);\n";
     }
     shm_unlock_sem_destroy_polar(1);
     ?>
