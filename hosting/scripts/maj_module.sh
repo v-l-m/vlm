@@ -79,7 +79,7 @@ case $confmodule in
     mv $VLMPOLARS/polars.list.tmp $VLMPOLARS/polars.list
 
     echo -n "+$confmodule: Mise à jour polarserver"
-    $VLMBIN/polarserver
+    $VLMBIN/polarserver $VLMPOLARS/polars.list
     ;;
 
     moteur)
