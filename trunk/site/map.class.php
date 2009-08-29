@@ -738,7 +738,7 @@ class map
       //opponent is a userid, get a fulluser is not required, users is sufficient
       // $fullUsersObj = new fullUsers($opponnent, $this->north, $this->south, $this->west, $this->east, $maxage, $minage);
       if (array_key_exists($opponnent, $this->fullRacesObj->opponents)) {
-	$userObj = &$this->fullRacesObj->opponents[$opponnent];
+	$usersObj = &$this->fullRacesObj->opponents[$opponnent];
       } else {
 	$usersObj = new users($opponnent);
       }
