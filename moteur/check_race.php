@@ -22,7 +22,7 @@
      echo "   Setting user ".$usersObj->idusers . " HTP... ";
     
            //need to get fullUsers Object
-           $fullUsersObj = new fullUsers($usersObj->idusers);
+     $fullUsersObj = new fullUsers($usersObj->idusers, $userObj);
      $fullUsersObj->setHTP();
      echo " done !\n";
 
@@ -42,17 +42,15 @@
        //echo "\n==>" . $usersObj->idusers;
              
              // Cas d'un joueur VLM
-             if ( $usersObj->idusers > 0 ) {
-            include "check_user.php";
+	  if ( $usersObj->idusers > 0 ) {
+	    include "check_user.php";
             $nb_boats++;
-             } else {
-                  // Cas d'un bateau réel
-                  $fullUsersObj = new fullUsers($usersObj->idusers);
-                  $fullUsersObj->writeCurrentRanking();
-             }
-
+	  } else {
+	    // Cas d'un bateau réel
+	    $fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
+	    $fullUsersObj->writeCurrentRanking();
+	  }
         }
-
       } // Foreach opponent
    } // If race finished
 

@@ -9,7 +9,7 @@
   // Check Auto Pilote : if there is a command in the spool, then execute it
   $flag_pilototo = $usersObj->pilototoCheck();
 
-  $fullUsersObj = new fullUsers($usersObj->idusers);
+  $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj); // use the copy mode
 
   if ( $flag_pilototo == true ) {
       $fullUsersObj->updateAngles();

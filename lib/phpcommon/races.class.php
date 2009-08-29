@@ -219,9 +219,13 @@ class fullRaces
     $opponents = array(); //array with users engaged
 
 
-  function fullRaces($id = 0)
+  function fullRaces($id = 0, $origrace = NULL)
   {
-    $this->races = new races($id);
+    if ($origrace == NULL) {
+      $this->races = new races($id);
+    } else {
+      $this->races = $origrace;
+    }
     //select all the boats
     //create an array of users
     //$query6 = "SELECT idusers FROM users WHERE engaged = ".$this->races->idraces . " order by idusers";
@@ -240,7 +244,6 @@ class fullRaces
 	$userid = $row[0];
         $obj = new users($userid);
 	$this->opponents[$userid] = $obj;
-	//        array_push($this->opponents, $obj );
         //we should sort them!
       }
 
@@ -253,16 +256,13 @@ class fullRaces
 	$userid = $row[0];
 	// FIXME main question is... should this table contain all the boats
 	// or just the 'excluded' ones. Other parts of the code might suggest all
-	if (array_key_exist($userid, $this->opponents)) {
+	if (array_key_exists($userid, $this->opponents)) {
 	  $obj = $this->opponents[$userid];
 	} else {
 	  $obj = new users($row[0]);
 	}
 	$this->excluded[$userid] = $obj;
-	//        array_push($this->excluded, $obj );
       }
-
-
   }
 
   function cleanRaces()

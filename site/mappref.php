@@ -14,51 +14,51 @@ include_once("config.php");
 $fullUsersObj = new fullUsers(getLoginId());
 if ($fullUsersObj->users->engaged != 0) {  
     //echo "PO=".$prefOpponents;
-    $fullRacesObj = new fullRaces ($fullUsersObj->users->engaged);
-    //$bounds = $fullRacesObj->getRacesBoundaries();
-    // Sauvegarde des préférences
-    // Check si liste vide, dans ce cas, on précoche l'utilisateur demandeur (bug implode signalé par Phille le 27/06/07)
-    if ( htmlentities($_POST['action']) == $strings[$lang]["valider"] ) {
-  $list=$_POST['list'];
+  $fullRacesObj = new fullRaces ($fullUsersObj->users->engaged, $fullUsersObj->races);
+  //$bounds = $fullRacesObj->getRacesBoundaries();
+  // Sauvegarde des préférences
+  // Check si liste vide, dans ce cas, on précoche l'utilisateur demandeur (bug implode signalé par Phille le 27/06/07)
+  if ( htmlentities($_POST['action']) == $strings[$lang]["valider"] ) {
+    $list=$_POST['list'];
   //print_r($list);
   //echo implode(",",$list);
-        if ( $list == "" || count($list) == 0 ) {
-            $list = array($fullUsersObj->users->idusers) ;
-        }
-        setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $list)   );
-
-    } else if ( htmlentities($_POST['action']) == $strings[$lang]["tous"] ) {
-        $oppList=array();
-        foreach ( $fullRacesObj->opponents as $opp) {
+    if ( $list == "" || count($list) == 0 ) {
+      $list = array($fullUsersObj->users->idusers) ;
+    }
+    setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $list)   );
+    
+  } else if ( htmlentities($_POST['action']) == $strings[$lang]["tous"] ) {
+    $oppList=array();
+    foreach ( $fullRacesObj->opponents as $opp) {
       array_push($oppList, $opp->idusers);
-  }
-        setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
-
-    } else if ( htmlentities($_POST['action']) == $strings[$lang]["top20"] ) {
-  $oppList=array();
-  $num_opp=0;
-        foreach ( $fullRacesObj->opponents as $opp) {
-    $num_opp++;
-    array_push($oppList, $opp->idusers);
-    if ( $num_opp == 20 ) break;
-  }
-        setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
-
-    } else if ( htmlentities($_POST['action']) == $strings[$lang]["top10"] ) {
-  $oppList=array();
-  $num_opp=0;
-        foreach ( $fullRacesObj->opponents as $opp) {
-    $num_opp++;
-    array_push($oppList, $opp->idusers);
-    if ( $num_opp == 10 ) break;
-  }
-        setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
-
-    } else if ( htmlentities($_POST['action']) == $strings[$lang]["aucun"] ) {
-        setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , " "  );
-    } 
-    $prefOpponents=getUserPref($fullUsersObj->users->idusers,"mapPrefOpponents");
-?>
+    }
+    setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
+    
+  } else if ( htmlentities($_POST['action']) == $strings[$lang]["top20"] ) {
+    $oppList=array();
+    $num_opp=0;
+    foreach ( $fullRacesObj->opponents as $opp) {
+      $num_opp++;
+      array_push($oppList, $opp->idusers);
+      if ( $num_opp == 20 ) break;
+    }
+    setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
+    
+  } else if ( htmlentities($_POST['action']) == $strings[$lang]["top10"] ) {
+    $oppList=array();
+    $num_opp=0;
+    foreach ( $fullRacesObj->opponents as $opp) {
+      $num_opp++;
+      array_push($oppList, $opp->idusers);
+      if ( $num_opp == 10 ) break;
+    }
+    setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
+    
+  } else if ( htmlentities($_POST['action']) == $strings[$lang]["aucun"] ) {
+    setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , " "  );
+  } 
+  $prefOpponents=getUserPref($fullUsersObj->users->idusers,"mapPrefOpponents");
+  ?>
 <form id="mercator" action="mappref.php" method="post">
 <input type="hidden" name="idraces" value="<?php echo $fullUsersObj->users->engaged; ?>" />
 <input type="hidden" name="lang" value="<?php echo $lang?>" />
