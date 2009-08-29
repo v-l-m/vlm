@@ -224,7 +224,7 @@ class fullRaces
     if ($origrace == NULL) {
       $this->races = new races($id);
     } else {
-      $this->races = $origrace;
+      $this->races = &$origrace;
     }
     //select all the boats
     //create an array of users
@@ -242,8 +242,7 @@ class fullRaces
         //WARNING: dont load fullUsers inside fullRaces
         //because fullRaces contains fullUsers that contain fullRaces ..
 	$userid = $row[0];
-        $obj = new users($userid);
-	$this->opponents[$userid] = $obj;
+	$this->opponents[$userid] = new users($userid);;
         //we should sort them!
       }
 
@@ -251,20 +250,18 @@ class fullRaces
     // course terminée. 
     $query6b = "SELECT DISTINCT idusers FROM races_results WHERE idraces = ".$this->races->idraces;
     $result6b = wrapper_mysql_db_query(DBNAME,$query6b);
-    while($row = mysql_fetch_array($result6b, MYSQL_NUM))
-      {
-	$userid = $row[0];
-	// FIXME main question is... should this table contain all the boats
-	// or just the 'excluded' ones. Other parts of the code might suggest all
-	if (array_key_exists($userid, $this->opponents)) {
-	  $obj = $this->opponents[$userid];
-	} else {
-	  $obj = new users($row[0]);
-	}
-	$this->excluded[$userid] = $obj;
+    while($row = mysql_fetch_array($result6b, MYSQL_NUM)) {
+      $userid = $row[0];
+      // FIXME main question is... should this table contain all the boats
+      // or just the 'excluded' ones. Other parts of the code might suggest all
+      if (array_key_exists($userid, $this->opponents)) {
+	$this->excluded[$userid] = &$this->opponents[$userid];
+      } else {
+	$this->excluded[$userid] = new users($row[0]);
       }
+    }
   }
-
+  
   function cleanRaces()
   {
     // Delete from races_results
