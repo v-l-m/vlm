@@ -320,7 +320,7 @@ class fullUsers
     if ($origuser == NULL) {
       $this->users = new users($id);
     } else {
-      $this->users = $origuser;
+      $this->users = &$origuser;
     }
 
     // if boat not engage in a race, nothing else to do ....
@@ -331,7 +331,7 @@ class fullUsers
     $lastPositionsObject->getLastPositions($this->users->idusers, $this->users->engaged);
 
     // inherit of nwp
-    $this->nwp = $this->users->nwp;
+    $this->nwp = &$this->users->nwp;
     $this->loch = $this->users->loch;
 
     if (!isset($lastPositionsObject->long) )
@@ -366,7 +366,7 @@ class fullUsers
     if ($origrace == NULL) {
       $this->races = new races($this->users->engaged);
     } else {
-      $this->races = $origrace->races;
+      $this->races = &$origrace->races;
     }
 
     // windAtPosition returns a small array : (wspeed, wheading);
