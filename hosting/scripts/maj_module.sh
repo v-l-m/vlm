@@ -87,6 +87,7 @@ case $confmodule in
     echo "+$confmodule: Compilation de vlm-c"
     oldpwd=$PWD
     cd $destmodulepath
+    make windserver || exit 1
     make php || exit 1
     echo -n "+$confmodule: installation de la librairie dynamique dans $VLMVLMCSO..."
     cp php/vlmc.so $VLMVLMCSO/
