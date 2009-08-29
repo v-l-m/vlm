@@ -10,6 +10,7 @@ From 0.9.7 To next...
  - add "export VLMPOLARS=$VLMDATAS/gshhs"
 * EDIT hosting/conf/param.php and add
  - "define("POLARS_DIRECTORY", "/same/as/VLMPOLARS");"
+* NB: the directory will be created automatically
 
 To 0.9.5 from 0.9
 _______________
