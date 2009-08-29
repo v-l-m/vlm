@@ -143,8 +143,10 @@ echo "<span id=\"infobulle\">
 if ($idraces != 0) {
 
     $fullRacesObj = new fullRaces($idraces);
-          list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
-          if ( $startnum > 0 ) $startnum-=$num_arrived;
+    list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
+    if ( $startnum > 0 ) {
+      $startnum-=$num_arrived;
+    }
 
     //show alls races
     echo "<div id=\"raceheader\">\n";
