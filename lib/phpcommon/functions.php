@@ -472,6 +472,8 @@ function windSpeed2Length($windspeed, $base = 4)
 function findboatspeed ($angledifference, $windspeed, $boattype )
 {
   if (!defined('MOTEUR')) {
+    $global_vlmc_context = new vlmc_context();
+    global_vlmc_context_set($global_vlmc_context);
     shm_lock_sem_construct_polar(1);  
   }
   $boatSpeed = VLM_find_boat_speed($boattype, $windspeed, $angledifference);
