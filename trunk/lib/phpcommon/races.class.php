@@ -248,17 +248,13 @@ class fullRaces
 
     // On prend aussi les utilisateurs de la table "races_results", pour les retrouver une fois la 
     // course terminée. 
-    $query6b = "SELECT DISTINCT idusers FROM races_results WHERE idraces = ".$this->races->idraces;
+    $query6b = "SELECT DISTINCT races_results.idusers FROM races_results, users WHERE idraces = ".$this->races->idraces." AND users.idusers = races_results.idusers AND users.engaged != ".$this->races->idraces;
     $result6b = wrapper_mysql_db_query(DBNAME,$query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_NUM)) {
       $userid = $row[0];
       // FIXME main question is... should this table contain all the boats
       // or just the 'excluded' ones. Other parts of the code might suggest all
-      if (array_key_exists($userid, $this->opponents)) {
-	$this->excluded[$userid] = &$this->opponents[$userid];
-      } else {
-	$this->excluded[$userid] = new users($row[0]);
-      }
+      $this->excluded[$userid] = new users($userid);
     }
   }
   
