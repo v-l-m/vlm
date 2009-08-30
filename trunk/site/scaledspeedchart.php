@@ -25,6 +25,10 @@ if ($noHeader !=1) {
 }
 include_once("config.php");
 
+if (!defined('MOTEUR')) {
+  $global_vlmc_context = new vlmc_context();
+  global_vlmc_context_set($global_vlmc_context);
+}
 
 if (isset($boattype)) {
   $maxvalue = 0.0;
@@ -133,28 +137,34 @@ if (isset($boattype)) {
     }
   
     imagesetthickness ( $im, 2);
+    if (!defined('MOTEUR')) {
+      shm_lock_sem_construct_polar(1);  
+    }
     for ($wspeed=$minws; $wspeed<=$maxws; $wspeed+=$pas) {
         $wheadingbefore = 0;
         $boatspeedbefore = 0;
         
         for ( $wheading=0; $wheading<=180; $wheading+=5) {
-            $boatspeed = findboatspeed ($wheading, $wspeed, $boattype );
-    
-            //exclude points with 0 they confuse the reading
-            if ($boatspeedbefore !=0) $color=windspeedtocolorbeaufort($wspeed , $im);
-            drawlinespeedchart( $boatspeedbefore, $wheadingbefore, $boatspeed, $wheading, $im, $color, $center_x, $center_y);      
-            
-            //when 135 degrees, draw the windspeed value
-            if (($wheadingbefore<135+$wspeed) &&($wheading>=135+$wspeed)) {
-                $textposition = speedchartcoordinates($boatspeed , 135, $center_x, $center_y);
-                imagestring ( $im, 1, $textposition[0] +4 , $textposition[1] +4, $wspeed, $colorBlack);
-            }
-          
-            $wheadingbefore = $wheading;
-            $boatspeedbefore = $boatspeed;
-        }
+	  $boatspeed =  VLM_find_boat_speed($boattype, $wspeed, $wheading);
 
+	  //exclude points with 0 they confuse the reading
+	  if ($boatspeedbefore !=0) $color=windspeedtocolorbeaufort($wspeed , $im);
+	  drawlinespeedchart( $boatspeedbefore, $wheadingbefore, $boatspeed, $wheading, $im, $color, $center_x, $center_y);      
+          
+	  //when 135 degrees, draw the windspeed value
+	  if (($wheadingbefore<135+$wspeed) &&($wheading>=135+$wspeed)) {
+	    $textposition = speedchartcoordinates($boatspeed , 135, $center_x, $center_y);
+	    imagestring ( $im, 1, $textposition[0] +4 , $textposition[1] +4, $wspeed, $colorBlack);
+	  }
+          
+	  $wheadingbefore = $wheading;
+	  $boatspeedbefore = $boatspeed;
+        }
     }
+    if (!defined('MOTEUR')) {
+      shm_unlock_sem_destroy_polar(1);
+    }
+
 
 imagetruecolortopalette($im, true, 255);
 imagepng($im); 
