@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.26 2009-08-25 19:56:21 ylafon Exp $
+ * $Id: vmg.c,v 1.28 2009-08-31 13:07:48 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -29,6 +29,11 @@
 
 #define REACH_WP_LIMIT 1.0 /* in nm */
 
+extern vlmc_context *global_vlmc_context;
+
+double get_heading_bvmg(boat *aboat, int mode) {
+  return get_heading_bvmg_context(global_vlmc_context, aboat, mode);
+}
 /**
  * get the heading according to the BVMG.
  * The boat structure needs to have its WP filled
@@ -36,7 +41,7 @@
  * @param mode, an int, >0 for 0.1 degree precision, 0 for 1 degree precision
  * @return a double, the heading between 0 and 2*PI in radians
  */
-double get_heading_bvmg(boat *aboat, int mode) {
+double get_heading_bvmg_context(vlmc_context *context, boat *aboat, int mode) {
   int imax;
   double anglediv;
   double speed, maxspeed;
@@ -53,7 +58,7 @@ double get_heading_bvmg(boat *aboat, int mode) {
     anglediv = 1.0;
   }
 
-  get_wind_info(aboat, &aboat->wind);
+  get_wind_info_context(context, aboat, &aboat->wind);
   set_heading_ortho_nowind(aboat);
 
   wanted_heading = aboat->heading;
@@ -326,6 +331,22 @@ void do_vbvmg(boat *aboat, int mode,
 	      double *wangle1, double *wangle2, 
 	      double *time1, double *time2,
 	      double *dist1, double *dist2) {
+  do_vbvmg_context(global_vlmc_context, aboat, mode, heading1, heading2,
+		   wangle1, wangle2, time1, time2, dist1, dist2);
+}
+
+/**
+ * get the heading according to the Phavie's BVMG.
+ * The boat structure needs to have its WP filled
+ * @param aboat, a pointer to a <code>boat</code> structure
+ * @param mode, an int, >0 for 0.1 degree precision, 0 for 1 degree precision
+ * @return a double, the heading between 0 and 2*PI in radians
+ */
+void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode, 
+		      double *heading1, double *heading2,
+		      double *wangle1, double *wangle2, 
+		      double *time1, double *time2,
+		      double *dist1, double *dist2) {
   double alpha, beta;
   double speed, speed_t1, speed_t2, l1, l2, d1, d2;
   double angle, maxangle, t, t1, t2, t_min;
@@ -341,7 +362,7 @@ void do_vbvmg(boat *aboat, int mode,
   dist = ortho_distance(aboat->latitude, aboat->longitude,
 			aboat->wp_latitude, aboat->wp_longitude);
 
-  get_wind_info(aboat, &aboat->wind);
+  get_wind_info_context(context, aboat, &aboat->wind);
   set_heading_ortho_nowind(aboat);
 
   wanted_heading = aboat->heading;
@@ -526,9 +547,20 @@ void do_vbvmg(boat *aboat, int mode,
  * @return a double, the heading between 0 and 2*PI in radians
  */
 double get_heading_vbvmg(boat *aboat, int mode) {
+  return get_heading_vbvmg_context(global_vlmc_context, aboat, mode);
+}
+
+/**
+ * get the heading according to the Phavie's BVMG.
+ * The boat structure needs to have its WP filled
+ * @param aboat, a pointer to a <code>boat</code> structure
+ * @param mode, an int, >0 for 0.1 degree precision, 0 for 1 degree precision
+ * @return a double, the heading between 0 and 2*PI in radians
+ */
+double get_heading_vbvmg_context(vlmc_context *context, boat *aboat, int mode) {
   double heading, heading2, wangle, wangle2, time1, time2, dist1, dist2;
-  do_vbvmg(aboat, mode, &heading, &heading2, 
-	   &wangle, &wangle2, &time1, &time2, &dist1, &dist2);
+  do_vbvmg_context(context, aboat, mode, &heading, &heading2, 
+		   &wangle, &wangle2, &time1, &time2, &dist1, &dist2);
   return heading;
 }
 
@@ -540,8 +572,20 @@ double get_heading_vbvmg(boat *aboat, int mode) {
  * @return a double, the heading between 0 and 2*PI in radians
  */
 double get_wind_angle_vbvmg(boat *aboat, int mode) {
+  return get_wind_angle_vbvmg_context(global_vlmc_context, aboat, mode);
+}
+
+/**
+ * get the heading according to the Phavie's BVMG.
+ * The boat structure needs to have its WP filled
+ * @param aboat, a pointer to a <code>boat</code> structure
+ * @param mode, an int, >0 for 0.1 degree precision, 0 for 1 degree precision
+ * @return a double, the heading between 0 and 2*PI in radians
+ */
+double get_wind_angle_vbvmg_context(vlmc_context *context,
+				    boat *aboat, int mode) {
   double heading, heading2, wangle, wangle2, time1, time2, dist1, dist2;
-  do_vbvmg(aboat, mode, &heading, &heading2, 
-	   &wangle, &wangle2, &time1, &time2, &dist1, &dist2);
+  do_vbvmg_context(context, aboat, mode, &heading, &heading2, 
+		   &wangle, &wangle2, &time1, &time2, &dist1, &dist2);
   return wangle;
 }

@@ -1,5 +1,5 @@
 /**
- * $Id: winds.h,v 1.8 2009-05-12 22:10:47 ylafon Exp $
+ * $Id: winds.h,v 1.9 2009-08-31 10:10:08 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -36,6 +36,7 @@
  * that will be filled with speed in <em>kts</em>, and angle in <em>radians</em>
  */
 void get_wind_info PARAM2(boat *, wind_info *);
+void get_wind_info_context PARAM3(vlmc_context *, boat *, wind_info *);
 
 /**
  * get wind info based on the location and time
@@ -48,6 +49,9 @@ void get_wind_info PARAM2(boat *, wind_info *);
  * that will be filled with speed in <em>kts</em>, and angle in <em>radians</em>
  */
 wind_info *get_wind_info_latlong PARAM4(double, double, time_t, wind_info *);
+wind_info *get_wind_info_latlong_context PARAM5(vlmc_context *,
+						double, double, 
+						time_t, wind_info *);
 
 /**
  * get wind info based on the location and at the time the function is called
@@ -59,6 +63,9 @@ wind_info *get_wind_info_latlong PARAM4(double, double, time_t, wind_info *);
  * that will be filled with speed in <em>kts</em>, and angle in <em>radians</em>
  */
 wind_info *get_wind_info_latlong_now PARAM3(double, double, wind_info *);
+wind_info *get_wind_info_latlong_now_context PARAM4(vlmc_context *,
+						    double, double, 
+						    wind_info *);
 
 /**
  * get wind info based on the location and time
@@ -72,6 +79,9 @@ wind_info *get_wind_info_latlong_now PARAM3(double, double, wind_info *);
  */
 wind_info *get_wind_info_latlong_TWSA PARAM4(double, double, time_t, 
 					     wind_info *);
+wind_info *get_wind_info_latlong_TWSA_context PARAM5(vlmc_context *,
+						     double, double, time_t, 
+						     wind_info *);
 
 /**
  * get wind info based on the location and time
@@ -86,6 +96,10 @@ wind_info *get_wind_info_latlong_TWSA PARAM4(double, double, time_t,
  */
 wind_info *get_wind_info_latlong_selective_TWSA PARAM4(double, double, time_t, 
 						       wind_info *);
+wind_info *get_wind_info_latlong_selective_TWSA_context PARAM5(vlmc_context *,
+							       double, double,
+							       time_t, 
+							       wind_info *);
 
 /**
  * get wind info based on the location and time
@@ -98,21 +112,27 @@ wind_info *get_wind_info_latlong_selective_TWSA PARAM4(double, double, time_t,
  * that will be filled with speed in <em>kts</em>, and angle in <em>radians</em>
  */
 wind_info *get_wind_info_latlong_UV PARAM4(double, double, time_t, wind_info *);
+wind_info *get_wind_info_latlong_UV_context PARAM5(vlmc_context *, double, 
+						   double, time_t, wind_info *);
 
 /* get the timestamp (in seconds , see time()) of the first grib entry
    technically, an observation, not a prevision */
 time_t get_min_prevision_time();
+time_t get_min_prevision_time_context PARAM1(vlmc_context *);
 
 /* get the timestamp (in seconds , see time()) of the last prevision */
 time_t get_max_prevision_time();
+time_t get_max_prevision_time_context PARAM1(vlmc_context *);
 
 /* get the number of stored gribs in the windtable structure */
 int get_prevision_count();
+int get_prevision_count_context PARAM1(vlmc_context *);
 
 /**
  * get the timestamp (in seconds , see time()) of the n-th prevision
  * @return 0 if out of bounds, or no windtable struct is present
  */
 time_t get_prevision_time_index PARAM1(int);
+time_t get_prevision_time_index_context PARAM2(vlmc_context *, int);
 
 #endif /* _WINDS_H_ */

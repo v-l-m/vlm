@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.24 2009-05-12 22:10:47 ylafon Exp $
+ * $Id: winds.c,v 1.26 2009-08-31 11:39:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -39,13 +39,44 @@ void get_wind_info(boat *aboat, wind_info *wind) {
   get_wind_info_latlong(aboat->latitude, aboat->longitude, vac_time, wind);
 }
 
+void get_wind_info_context(vlmc_context *context, boat *aboat, 
+			   wind_info *wind) {
+  time_t vac_time;
+  
+  vac_time = aboat->last_vac_time + aboat->in_race->vac_duration;
+
+  get_wind_info_latlong_context(context, aboat->latitude, aboat->longitude, 
+				vac_time, wind);
+}
+
 wind_info *get_wind_info_latlong(double latitude, double longitude,
 				 time_t vac_time, wind_info *wind) {
 #ifdef DEFAULT_INTERPOLATION_UV
   return get_wind_info_latlong_UV(latitude, longitude, vac_time, wind);
-#else
-  return get_wind_info_latlong_TWSA(latitude, longitude, vac_time, wind);
 #endif /* DEFAULT_INTERPOLATION_UV */
+#ifdef DEFAULT_INTERPOLATION_TWSA
+  return get_wind_info_latlong_TWSA(latitude, longitude, vac_time, wind);
+#else
+  return get_wind_info_latlong_selective_TWSA(latitude, longitude, 
+					      vac_time, wind);
+#  endif /* DEFAULT_INTERPOLATION_TWSA */
+}
+
+wind_info *get_wind_info_latlong_context(vlmc_context *context,
+					 double latitude, double longitude,
+					 time_t vac_time, wind_info *wind) {
+#ifdef DEFAULT_INTERPOLATION_UV
+  return get_wind_info_latlong_UV_context(context, latitude, longitude, 
+					  vac_time, wind);
+#endif /* DEFAULT_INTERPOLATION_UV */
+#ifdef DEFAULT_INTERPOLATION_TWSA
+  return get_wind_info_latlong_TWSA_context(context, latitude, longitude, 
+					    vac_time, wind);
+#else
+  return get_wind_info_latlong_selective_TWSA_context(context, 
+						      latitude, longitude, 
+						      vac_time, wind);
+#endif /* DEFAULT_INTERPOLATION_TWSA */
 }
 
 wind_info *get_wind_info_latlong_now(double latitude, double longitude,
@@ -56,8 +87,26 @@ wind_info *get_wind_info_latlong_now(double latitude, double longitude,
   return get_wind_info_latlong(latitude, longitude, vac_time, wind);
 }
 
+wind_info *get_wind_info_latlong_now_context(vlmc_context *context,
+					     double latitude, double longitude,
+					     wind_info *wind) {
+  time_t vac_time;
+  
+  time(&vac_time);
+  return get_wind_info_latlong_context(context, latitude, longitude, 
+				       vac_time, wind);
+}
+
 wind_info *get_wind_info_latlong_UV(double latitude, double longitude, 
 				    time_t vac_time, wind_info *wind) {
+  return get_wind_info_latlong_UV_context(global_vlmc_context,
+					  latitude, longitude,
+					  vac_time, wind);
+}
+
+wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
+					    double latitude, double longitude, 
+					    time_t vac_time, wind_info *wind) {
   winds *prev, *next;
   int i, t_long, t_lat;
   double u0prev, u0next, v0prev, v0next;
@@ -79,7 +128,7 @@ wind_info *get_wind_info_latlong_UV(double latitude, double longitude,
   char buff[64];
 #endif /* DEBUG */
   
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   /* if the windtable is not there, return NULL */
   if (windtable->wind == NULL) {
     wind->speed = 0.0;
@@ -262,9 +311,18 @@ wind_info *get_wind_info_latlong_UV(double latitude, double longitude,
   return wind;
 }
 
-/* same as above, but with interpolation using True Wind Speed and Angle */
 wind_info *get_wind_info_latlong_TWSA(double latitude, double longitude,
 				      time_t vac_time, wind_info *wind) {
+  return get_wind_info_latlong_TWSA_context(global_vlmc_context,
+					    latitude, longitude,
+					    vac_time, wind);
+}
+
+/* same as above, but with interpolation using True Wind Speed and Angle */
+wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
+					      double latitude, double longitude,
+					      time_t vac_time, 
+					      wind_info *wind) {
   winds *prev, *next;
   int i, t_long, t_lat;
   double u0prev, u0next, v0prev, v0next;
@@ -286,7 +344,7 @@ wind_info *get_wind_info_latlong_TWSA(double latitude, double longitude,
   char buff[64];
 #endif /* DEBUG */
 
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   /* if the windtable is not there, return NULL */
   if (windtable->wind == NULL) {
     wind->speed = 0.0;
@@ -490,12 +548,22 @@ wind_info *get_wind_info_latlong_TWSA(double latitude, double longitude,
   return wind;
 }
 
-/* same as above, but with interpolation using True Wind Speed and Angle 
- In selective mode (trying to avoid diverging rotations) */
 wind_info *get_wind_info_latlong_selective_TWSA(double latitude, 
 						double longitude,
 						time_t vac_time, 
 						wind_info *wind) {
+  return get_wind_info_latlong_selective_TWSA_context(global_vlmc_context,
+						      latitude, longitude,
+						      vac_time, wind);
+}
+
+/* same as above, but with interpolation using True Wind Speed and Angle 
+ In selective mode (trying to avoid diverging rotations) */
+wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
+							double latitude, 
+							double longitude,
+							time_t vac_time, 
+							wind_info *wind) {
   winds *prev, *next;
   int i, t_long, t_lat;
   double u0prev, u0next, v0prev, v0next;
@@ -518,7 +586,7 @@ wind_info *get_wind_info_latlong_selective_TWSA(double latitude,
   char buff[64];
 #endif /* DEBUG */
 
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   /* if the windtable is not there, return NULL */
   if (windtable->wind == NULL) {
     wind->speed = 0.0;
@@ -759,43 +827,59 @@ wind_info *get_wind_info_latlong_selective_TWSA(double latitude,
   return wind;
 }
 
-time_t get_max_prevision_time() {
+time_t get_max_prevision_time_context(vlmc_context *context) {
   winds_prev *windtable;
 
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   if (windtable->wind == NULL) {
     return 0;
   }
   return windtable->wind[windtable->nb_prevs-1]->prevision_time;
 }
 
-time_t get_min_prevision_time() {
+time_t get_max_prevision_time() {
+  return get_max_prevision_time_context(global_vlmc_context);
+}
+
+time_t get_min_prevision_time_context(vlmc_context *context) {
   winds_prev *windtable;
 
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   if (windtable->wind == NULL) {
     return 0;
   }
   return windtable->wind[0]->prevision_time;
 }
 
-int get_prevision_count() {
+time_t get_min_prevision_time() {
+  return get_min_prevision_time_context(global_vlmc_context);
+}
+
+int get_prevision_count_context(vlmc_context *context) {
   winds_prev *windtable;
   
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   if (windtable->wind == NULL) {
     return 0;
   }
   return windtable->nb_prevs;
 }
 
-time_t get_prevision_time_index(int gribindex) {
+int get_prevision_count() {
+  return get_prevision_count_context(global_vlmc_context);
+}
+
+time_t get_prevision_time_index_context(vlmc_context *context, int gribindex) {
   winds_prev *windtable;
   
-  windtable = &global_vlmc_context->windtable;
+  windtable = &context->windtable;
   if (windtable->wind == NULL || (gribindex < 0)
       || (gribindex >= windtable->nb_prevs)) {
     return 0;
   }
   return windtable->wind[gribindex]->prevision_time;
+}
+
+time_t get_prevision_time_index(int gribindex) {
+  return get_prevision_time_index_context(global_vlmc_context, gribindex);
 }

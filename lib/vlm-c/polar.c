@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.18 2009-08-24 19:01:32 ylafon Exp $
+ * $Id: polar.c,v 1.19 2009-08-31 12:54:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -217,12 +217,16 @@ void add_polar(char *pname, char *fname) {
 #endif /* USE_SETLOCALE */
 }
 
-/* get the pointer to the polar entry based on its name */
 boat_polar *get_polar_by_name(char *pname) {
+  return get_polar_by_name_context(global_vlmc_context, pname);
+}
+
+/* get the pointer to the polar entry based on its name */
+boat_polar *get_polar_by_name_context(vlmc_context *context, char *pname) {
   boat_polar_list *plist;
   int i, nb_polars;
 
-  plist =  &global_vlmc_context->polar_list;
+  plist =  &context->polar_list;
   if ((pname == NULL) || (plist->polars == NULL)) {
     return NULL;
   }
