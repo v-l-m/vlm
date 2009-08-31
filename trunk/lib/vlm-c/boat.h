@@ -1,5 +1,5 @@
 /**
- * $Id: boat.h,v 1.2 2008/05/12 16:30:52 ylafon Exp $
+ * $Id: boat.h,v 1.3 2009-08-31 11:39:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -25,5 +25,6 @@
 boat *init_boat PARAM6(boat *, int, char *, double, double, double);
 boat *set_wp PARAM4(boat *, double, double, double);
 void associate_polar_boat PARAM2(boat *, char *);
+void associate_polar_boat_context PARAM3(vlmc_context *, boat *, char *);
 
 #endif /* _BOAT_H_ */

@@ -1,5 +1,5 @@
 /**
- * $Id: boat.c,v 1.4 2008/05/14 15:31:11 ylafon Exp $
+ * $Id: boat.c,v 1.5 2009-08-31 11:39:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,10 +24,17 @@
 #include "boat.h"
 #include "polar.h"
 
-/* associate a polar by its name to a boat */
+extern vlmc_context *global_vlmc_context;
+
 void associate_polar_boat(boat *aboat, char *polar_name) {
+  associate_polar_boat_context(global_vlmc_context, aboat, polar_name);
+}
+
+/* associate a polar by its name to a boat */
+void associate_polar_boat_context(vlmc_context *context, boat *aboat, 
+			  char *polar_name) {
   boat_polar *p;
-  p = get_polar_by_name(polar_name);
+  p = get_polar_by_name_context(context, polar_name);
   
   if (p != NULL) {
     aboat->polar = p;

@@ -1,5 +1,5 @@
 /**
- * $Id: loxo.c,v 1.16 2008-12-15 14:35:03 ylafon Exp $
+ * $Id: loxo.c,v 1.17 2009-08-28 06:26:42 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
