@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.29 2009-08-26 19:40:44 ylafon Exp $
+ * $Id: vlm.c,v 1.30 2009-08-31 12:54:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -28,6 +28,8 @@
 #include "vmg.h"
 #include "winds.h"
 #include "boat.h"
+
+extern vlmc_context *global_vlmc_context;
 
 /**
  * using VLM's PIM definition, set the heading function of the boat
@@ -72,10 +74,33 @@ void set_vlm_pilot_mode(boat *aboat, int vlm_mode) {
  * * speed, a double, in kts
  * * angle, a double, in degrees between 0.0 and 359.9999..
  */
- wind_info *VLM_get_wind_info_latlong_deg(double latitude, double longitude,
+wind_info *VLM_get_wind_info_latlong_deg(double latitude, double longitude,
 					 time_t vac_time, wind_info *wind) {
-  get_wind_info_latlong(degToRad(latitude), degToRad(longitude),
-			vac_time, wind);
+  return VLM_get_wind_info_latlong_deg_context(global_vlmc_context,
+					       latitude, longitude,
+					       vac_time, wind);
+}
+
+/**
+ * This function uses the default interpolation function as defined in the
+ * compilation options
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_deg_context(vlmc_context *context,
+						 double latitude, 
+						 double longitude,
+						 time_t vac_time,
+						 wind_info *wind) {
+  get_wind_info_latlong_context(context, degToRad(latitude), 
+				degToRad(longitude), vac_time, wind);
   /* VLM needs wind in the opposite direction */
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
@@ -94,8 +119,30 @@ void set_vlm_pilot_mode(boat *aboat, int vlm_mode) {
  */
 wind_info *VLM_get_wind_info_latlong_deg_UV(double latitude, double longitude, 
 					    time_t vac_time, wind_info *wind) {
-  get_wind_info_latlong_UV(degToRad(latitude), degToRad(longitude),
-			   vac_time, wind);
+  return VLM_get_wind_info_latlong_deg_UV_context(global_vlmc_context,
+						  latitude, longitude,
+						  vac_time, wind);
+}
+
+/**
+ * This function uses the U/V/time trilinear interpolation
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in degree.
+ * @param longitude, a double, in degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_deg_UV_context(vlmc_context *context,
+						    double latitude, 
+						    double longitude, 
+						    time_t vac_time,
+						    wind_info *wind) {
+  get_wind_info_latlong_UV_context(context, degToRad(latitude), 
+				   degToRad(longitude), vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -115,8 +162,29 @@ wind_info *VLM_get_wind_info_latlong_deg_UV(double latitude, double longitude,
 wind_info *VLM_get_wind_info_latlong_deg_TWSA(double latitude, double longitude,
 					      time_t vac_time,
 					      wind_info *wind) {
-  get_wind_info_latlong_TWSA(degToRad(latitude), degToRad(longitude),
-			     vac_time, wind);
+  return VLM_get_wind_info_latlong_deg_TWSA_context(global_vlmc_context,
+						    latitude, longitude,
+						    vac_time, wind);
+}
+/**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * @param latitude, a double, in degree.
+ * @param longitude, a double, in degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_deg_TWSA_context(vlmc_context *context,
+						      double latitude,
+						      double longitude,
+						      time_t vac_time,
+						      wind_info *wind) {
+  get_wind_info_latlong_TWSA_context(context, degToRad(latitude), 
+				     degToRad(longitude), vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -138,8 +206,35 @@ wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA(double latitude,
 							double longitude,
 							time_t vac_time,
 							wind_info *wind) {
-  get_wind_info_latlong_selective_TWSA(degToRad(latitude), degToRad(longitude),
-				       vac_time, wind);
+  return VLM_get_wind_info_latlong_deg_selective_TWSA_context(
+					    global_vlmc_context,
+					    latitude, longitude,
+					    vac_time, wind);
+}
+
+/**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * in selective mode
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in degree.
+ * @param longitude, a double, in degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA_context(
+							 vlmc_context *context,
+							 double latitude,
+							 double longitude,
+							 time_t vac_time,
+							 wind_info *wind) {
+  get_wind_info_latlong_selective_TWSA_context(context, degToRad(latitude), 
+					       degToRad(longitude), vac_time,
+					       wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -159,8 +254,31 @@ wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA(double latitude,
 wind_info *VLM_get_wind_info_latlong_millideg(double latitude, double longitude,
 					      time_t vac_time, 
 					      wind_info *wind) {
-  get_wind_info_latlong(degToRad(latitude/1000.0), degToRad(longitude/1000.0),
-			vac_time, wind);
+  return VLM_get_wind_info_latlong_millideg_context(global_vlmc_context,
+						    latitude, longitude,
+						    vac_time, wind);
+}
+
+/**
+ * This function uses the default interpolation function as defined in the
+ * compilation options
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_context(vlmc_context *context,
+						      double latitude,
+						      double longitude,
+						      time_t vac_time, 
+						      wind_info *wind) {
+  get_wind_info_latlong_context(context, degToRad(latitude/1000.0), 
+				degToRad(longitude/1000.0), vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -180,9 +298,31 @@ wind_info *VLM_get_wind_info_latlong_millideg_UV(double latitude,
 						 double longitude, 
 						 time_t vac_time,
 						 wind_info *wind) {
-  get_wind_info_latlong_UV(degToRad(latitude/1000.0), 
-			   degToRad(longitude/1000.0),
-			   vac_time, wind);
+  return VLM_get_wind_info_latlong_millideg_UV_context(global_vlmc_context,
+						       latitude, longitude,
+						       vac_time, wind);
+}
+
+/**
+ * This function uses the U/V/time trilinear interpolation
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_UV_context(vlmc_context *context,
+							 double latitude, 
+							 double longitude, 
+							 time_t vac_time,
+							 wind_info *wind) {
+  get_wind_info_latlong_UV_context(context, degToRad(latitude/1000.0), 
+				   degToRad(longitude/1000.0),
+				   vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -203,9 +343,33 @@ wind_info *VLM_get_wind_info_latlong_millideg_TWSA(double latitude,
 						   double longitude,
 						   time_t vac_time,
 						   wind_info *wind) {
-  get_wind_info_latlong_TWSA(degToRad(latitude/1000.0), 
-			     degToRad(longitude/1000.0),
-			     vac_time, wind);
+  return VLM_get_wind_info_latlong_millideg_TWSA_context(global_vlmc_context,
+							 latitude, longitude,
+							 vac_time, wind);
+}
+
+/**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_TWSA_context(
+							vlmc_context *context,
+							double latitude,
+							double longitude,
+							time_t vac_time,
+							wind_info *wind) {
+  get_wind_info_latlong_TWSA_context(context, degToRad(latitude/1000.0), 
+				     degToRad(longitude/1000.0),
+				     vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -229,6 +393,33 @@ wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA(double latitude,
   get_wind_info_latlong_selective_TWSA(degToRad(latitude/1000.0), 
 				       degToRad(longitude/1000.0),
 				       vac_time, wind);
+  wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
+  return wind;
+}
+
+/**
+ * This function uses the True Wind Speed & Angle interpolation function
+ * (polar/time tri-linear interpolation)
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a double, in milli-degree.
+ * @param longitude, a double, in milli-degree.
+ * @param vac_time, a time_t, in seconds since 00:00:00 January 1, 1970
+ * @param wind, a pointer to a wind_info structure
+ * @return the pointer to the wind_info structure above
+ * NOTE: the wind_info structure is filled with
+ * * speed, a double, in kts
+ * * angle, a double, in degrees between 0.0 and 359.9999..
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA_context(
+							 vlmc_context *context,
+							 double latitude,
+							 double longitude,
+							 time_t vac_time,
+							 wind_info *wind) {
+  get_wind_info_latlong_selective_TWSA_context(context, 
+					       degToRad(latitude/1000.0), 
+					       degToRad(longitude/1000.0),
+					       vac_time, wind);
   wind->angle = fmod((radToDeg(wind->angle)+180.0), 360.0);
   return wind;
 }
@@ -611,6 +802,27 @@ int VLM_check_cross_coast(double latitude, double longitude,
 void VLM_best_vmg(double latitude, double longitude,
 		  double target_lat, double target_long,
 		  char *polar_name, double *heading, double *vmg) {
+  VLM_best_vmg_context(global_vlmc_context, latitude, longitude,
+		       target_lat, target_long, polar_name, heading, vmg);
+}
+
+/**
+ * Get the best VMG heading
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_best_vmg_context(vlmc_context *context,
+			  double latitude, double longitude,
+			  double target_lat, double target_long,
+			  char *polar_name, double *heading, double *vmg) {
   char *real_polar_name;
   boat_polar *polar;
   boat aboat;
@@ -634,7 +846,7 @@ void VLM_best_vmg(double latitude, double longitude,
   target_long = fmod(degToRad(target_long/1000.0), TWO_PI);
   
   /* we fake stuff to have the bvmg computed "now" */
-  polar = get_polar_by_name(real_polar_name);
+  polar = get_polar_by_name_context(context, real_polar_name);
 
   arace.vac_duration = 0;
   arace.boattype     = polar;
@@ -652,8 +864,30 @@ void VLM_best_vmg(double latitude, double longitude,
   *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
 }
 
+/**
+ * Get the speed boat based on wind speed and wind angle
+ * @param polar_name, a <code>char *</code>, the polar name
+ * @param wind_speed, a <code>double</code>, in <em>kts</em>
+ * @param angle_diff, a <code>double</code>, in <em>degrees</em>
+ * @return a double, the boat speed in <em>kts</em>
+ */
 double VLM_find_boat_speed(char *polar_name, double wind_speed, 
 			   double angle_diff) {
+  return VLM_find_boat_speed_context(global_vlmc_context, polar_name,
+				     wind_speed, angle_diff);
+}
+
+/**
+ * Get the speed boat based on wind speed and wind angle
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param polar_name, a <code>char *</code>, the polar name
+ * @param wind_speed, a <code>double</code>, in <em>kts</em>
+ * @param angle_diff, a <code>double</code>, in <em>degrees</em>
+ * @return a double, the boat speed in <em>kts</em>
+ */
+double VLM_find_boat_speed_context(vlmc_context *context,
+				   char *polar_name, double wind_speed, 
+				   double angle_diff) {
   char *real_polar_name;
   boat fakeboat;
 
@@ -669,7 +903,7 @@ double VLM_find_boat_speed(char *polar_name, double wind_speed,
   }
 
   fakeboat.polar = NULL;
-  associate_polar_boat(&fakeboat, real_polar_name);
+  associate_polar_boat_context(context, &fakeboat, real_polar_name);
   /* round things */
   angle_diff = degToRad(fmod(angle_diff, 360.0));
 

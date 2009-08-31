@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.20 2009-08-26 19:40:44 ylafon Exp $
+ * $Id: vlm.h,v 1.21 2009-08-31 12:54:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -38,6 +38,22 @@ void set_vlm_pilot_mode PARAM2(boat *, int);
  */
 wind_info *VLM_get_wind_info_latlong_deg      PARAM4(double, double, 
 						     time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the default interpolation defined at compile time, between
+ * interpolation in UV or True Wind Speed/Angle
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>degrees</em>
+ * @param longitude, a <code>double</code>, in <em>degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_deg_context PARAM5(vlmc_context *, 
+							double, double, 
+							time_t, wind_info *);
+
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in UV
@@ -49,6 +65,20 @@ wind_info *VLM_get_wind_info_latlong_deg      PARAM4(double, double,
  */
 wind_info *VLM_get_wind_info_latlong_deg_UV   PARAM4(double, double, 
 						     time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in UV
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>degrees</em>
+ * @param longitude, a <code>double</code>, in <em>degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_deg_UV_context PARAM5(vlmc_context *,
+							   double, double, 
+							   time_t, wind_info *);
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in True Wind Speed / Angle
@@ -60,6 +90,21 @@ wind_info *VLM_get_wind_info_latlong_deg_UV   PARAM4(double, double,
  */
 wind_info *VLM_get_wind_info_latlong_deg_TWSA PARAM4(double, double, 
 						     time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in True Wind Speed / Angle
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>degrees</em>
+ * @param longitude, a <code>double</code>, in <em>degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_deg_TWSA_context PARAM5(vlmc_context *,
+							     double, double, 
+							     time_t, 
+							     wind_info *);
 
 /**
  * get wind info based on the location and time
@@ -77,6 +122,23 @@ wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA PARAM4(double, double,
 
 /**
  * get wind info based on the location and time
+ * It uses the bilinear interpolation in True Wind Speed / Angle
+ * In selective mode
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>degrees</em>
+ * @param longitude, a <code>double</code>, in <em>degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA_context PARAM5(
+							       vlmc_context *,
+							       double, double, 
+							       time_t, 
+							       wind_info *);
+
+/**
+ * get wind info based on the location and time
  * It uses the default interpolation defined at compile time, between
  * interpolation in UV or True Wind Speed/Angle
  * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
@@ -87,6 +149,23 @@ wind_info *VLM_get_wind_info_latlong_deg_selective_TWSA PARAM4(double, double,
  */
 wind_info *VLM_get_wind_info_latlong_millideg      PARAM4(double, double, 
 							  time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the default interpolation defined at compile time, between
+ * interpolation in UV or True Wind Speed/Angle
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_context PARAM5(vlmc_context *,
+							     double, double, 
+							     time_t,
+							     wind_info *);
+
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in UV
@@ -97,6 +176,19 @@ wind_info *VLM_get_wind_info_latlong_millideg      PARAM4(double, double,
  * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
  */
 wind_info *VLM_get_wind_info_latlong_millideg_UV   PARAM4(double, double, 
+							  time_t, wind_info *);
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in UV
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_UV_context PARAM5(vlmc_context *,
+								double, double, 
 							  time_t, wind_info *);
 /**
  * get wind info based on the location and time
@@ -113,6 +205,21 @@ wind_info *VLM_get_wind_info_latlong_millideg_TWSA PARAM4(double, double,
 /**
  * get wind info based on the location and time
  * It uses the bilinear interpolation in True Wind Speed / Angle
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_TWSA_context PARAM5(
+							       vlmc_context *,
+							       double, double, 
+							   time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in True Wind Speed / Angle
  * In selective mode
  * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
@@ -125,7 +232,22 @@ wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA PARAM4(double,
 								    time_t, 
 								   wind_info *);
 
-
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in True Wind Speed / Angle
+ * In selective mode
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA_context PARAM5(
+							        vlmc_context *,
+								double, double, 
+								time_t, 
+								wind_info *);
 
 /**
  * Compute the orthodromic distance between two points, A & B
@@ -316,12 +438,40 @@ void VLM_best_vmg PARAM7(double, double, double, double, char *,
 			 double *, double *);
 
 /**
- * Get the best VMG headingspeed boat
+ * Get the best VMG heading
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_best_vmg_context PARAM8(vlmc_context *, double, double, 
+				 double, double, char *,
+				 double *, double *);
+
+/**
+ * Get the speed boat based on wind speed and wind angle
  * @param polar_name, a <code>char *</code>, the polar name
  * @param wind_speed, a <code>double</code>, in <em>kts</em>
  * @param angle_diff, a <code>double</code>, in <em>degrees</em>
  * @return a double, the boat speed in <em>kts</em>
  */
 double VLM_find_boat_speed PARAM3(char *,double, double);
+
+/**
+ * Get the speed boat based on wind speed and wind angle
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param polar_name, a <code>char *</code>, the polar name
+ * @param wind_speed, a <code>double</code>, in <em>kts</em>
+ * @param angle_diff, a <code>double</code>, in <em>degrees</em>
+ * @return a double, the boat speed in <em>kts</em>
+ */
+double VLM_find_boat_speed_context PARAM4(vlmc_context *, char *,
+					  double, double);
 
 #endif /* _VLM_H_ */
