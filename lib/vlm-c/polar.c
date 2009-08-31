@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.19 2009-08-31 12:54:03 ylafon Exp $
+ * $Id: polar.c,v 1.20 2009-08-31 22:06:43 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -396,4 +396,15 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
 
 void init_polar() {
   read_polars();
+}
+
+int get_nb_polars_context(vlmc_context *context) {
+  return context->polar_list.nb_polars;
+}
+
+char *get_polar_name_index_context(vlmc_context *context, int idx) {
+  if ((idx < 0) || (idx >= context->polar_list.nb_polars)) {
+    return NULL;
+  }
+  return context->polar_list.polars[idx]->polar_name;
 }

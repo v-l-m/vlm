@@ -1,5 +1,5 @@
 /**
- * $Id: polar.h,v 1.3 2009-08-31 12:54:03 ylafon Exp $
+ * $Id: polar.h,v 1.4 2009-08-31 22:06:43 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -22,9 +22,12 @@
 #include "defs.h"
 #include "types.h"
 
-void init_polar ();
-double find_speed PARAM3(boat *, double, double);
-boat_polar *get_polar_by_name PARAM1(char *);
-boat_polar *get_polar_by_name_context PARAM2(vlmc_context *, char *);
+void       init_polar ();
+double     find_speed                    PARAM3(boat *, double, double);
+boat_polar *get_polar_by_name            PARAM1(char *);
+boat_polar *get_polar_by_name_context    PARAM2(vlmc_context *, char *);
+
+int        get_nb_polars_context         PARAM1(vlmc_context *);
+char       *get_polar_name_index_context PARAM2(vlmc_context *, int);
 
 #endif /* _POLAR_H_ */
