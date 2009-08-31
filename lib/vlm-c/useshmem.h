@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.h,v 1.5 2009-08-26 16:59:46 ylafon Exp $
+ * $Id: useshmem.h,v 1.6 2009-08-31 13:34:20 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -28,15 +28,26 @@
 #include "defs.h"
 #include "types.h"
 
-void shm_safe_get_wind_info_lat_long PARAM4(double, double, time_t, 
-					    wind_info *);
+void shm_safe_get_wind_info_lat_long         PARAM4(double, double, time_t, 
+						    wind_info *);
+void shm_safe_get_wind_info_lat_long_context PARAM5(vlmc_context *, 
+						    double, double, time_t, 
+						    wind_info *);
 
-void shm_get_wind_info_lat_long PARAM4(double, double, time_t, wind_info *);
+void shm_get_wind_info_lat_long              PARAM4(double, double, time_t, 
+						    wind_info *);
+void shm_get_wind_info_lat_long_context      PARAM5(vlmc_context *, 
+						    double, double, time_t, 
+						    wind_info *);
 
-void shm_lock_sem_construct_grib PARAM1(int);
-void shm_unlock_sem_destroy_grib PARAM1(int);
-void shm_lock_sem_construct_polar PARAM1(int);
-void shm_unlock_sem_destroy_polar PARAM1(int);
+void shm_lock_sem_construct_grib             PARAM1(int);
+void shm_lock_sem_construct_grib_context     PARAM2(vlmc_context *, int);
+void shm_unlock_sem_destroy_grib             PARAM1(int);
+void shm_unlock_sem_destroy_grib_context     PARAM2(vlmc_context *, int);
+void shm_lock_sem_construct_polar            PARAM1(int);
+void shm_lock_sem_construct_polar_context    PARAM2(vlmc_context *, int);
+void shm_unlock_sem_destroy_polar            PARAM1(int);
+void shm_unlock_sem_destroy_polar_context    PARAM2(vlmc_context *, int);
 
 void create_and_fill_polar_shm ();
 

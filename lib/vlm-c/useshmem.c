@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.c,v 1.7 2009-08-26 16:59:46 ylafon Exp $
+ * $Id: useshmem.c,v 1.8 2009-08-31 13:34:20 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -34,26 +34,47 @@ extern vlmc_context *global_vlmc_context;
 
 void shm_safe_get_wind_info_lat_long(double latitude, double longitude, 
 				     time_t when, wind_info *windinfos) {
-  shm_lock_sem_construct_grib(1);
-  get_wind_info_latlong(latitude, longitude, when, windinfos);
-  shm_unlock_sem_destroy_grib(1);
+  shm_safe_get_wind_info_lat_long_context(global_vlmc_context, 
+					  latitude, longitude,
+					  when, windinfos);
+}
+
+void shm_safe_get_wind_info_lat_long_context(vlmc_context *context,
+					     double latitude, double longitude, 
+					     time_t when, 
+					     wind_info *windinfos) {
+  shm_lock_sem_construct_grib_context(context, 1);
+  get_wind_info_latlong_context(context, latitude, longitude, when, windinfos);
+  shm_unlock_sem_destroy_grib_context(context, 1);
 }
 
 void shm_get_wind_info_lat_long(double latitude, double longitude, 
 				time_t when, wind_info *windinfos) {
-  shm_lock_sem_construct_grib(0);
-  get_wind_info_latlong(latitude, longitude, when, windinfos);
-  shm_unlock_sem_destroy_grib(0);
+  shm_get_wind_info_lat_long_context(global_vlmc_context,
+				     latitude, longitude, when, windinfos);
+}
+
+void shm_get_wind_info_lat_long_context(vlmc_context *context, 
+					double latitude, double longitude, 
+					time_t when, wind_info *windinfos) {
+  shm_lock_sem_construct_grib_context(context, 0);
+  get_wind_info_latlong_context(context, latitude, longitude, when, windinfos);
+  shm_unlock_sem_destroy_grib_context(context, 0);
 }
 
 void shm_lock_sem_construct_grib(int do_construct) {
+  shm_lock_sem_construct_grib_context(global_vlmc_context, do_construct);
+}
+
+void shm_lock_sem_construct_grib_context(vlmc_context *context, 
+					 int do_construct) {
   int shmid, nbops;
   int *semid;
   void **segmaddr;
   struct sembuf sem_op[2];
 
-  semid    = &global_vlmc_context->semid;
-  segmaddr = &global_vlmc_context->grib_segmaddr;
+  semid    = &context->semid;
+  segmaddr = &context->grib_segmaddr;
 
   *semid   = get_semaphore_id();
   if (*semid == -1) {
@@ -87,13 +108,18 @@ void shm_lock_sem_construct_grib(int do_construct) {
     
     *segmaddr = get_shmem(shmid, 1);
     if (*segmaddr) {
-      construct_grib_array_from_shmem(&global_vlmc_context->windtable,
+      construct_grib_array_from_shmem(&context->windtable,
 				      *segmaddr);
     }
   }
 }
 
 void shm_unlock_sem_destroy_grib(int do_destroy) {
+  shm_unlock_sem_destroy_grib_context(global_vlmc_context, do_destroy);
+}
+
+void shm_unlock_sem_destroy_grib_context(vlmc_context *context,
+					 int do_destroy) {
 #ifdef SAFE_SHM_READ
   struct sembuf sem_op[2];
   int semid;
@@ -102,11 +128,11 @@ void shm_unlock_sem_destroy_grib(int do_destroy) {
   void *segmaddr;
 
   if (do_destroy) {
-    windtable = &global_vlmc_context->windtable;
+    windtable = &context->windtable;
     free(windtable->wind);
     windtable->wind = NULL;
     
-    segmaddr = global_vlmc_context->grib_segmaddr;
+    segmaddr = context->grib_segmaddr;
     shmdt(segmaddr);
   }
 #ifdef SAFE_SHM_READ
@@ -123,13 +149,18 @@ void shm_unlock_sem_destroy_grib(int do_destroy) {
 }
 
 void shm_lock_sem_construct_polar(int do_construct) {
+  shm_lock_sem_construct_polar_context(global_vlmc_context, do_construct);
+}
+
+void shm_lock_sem_construct_polar_context(vlmc_context *context,
+					  int do_construct) {
   int shmid, nbops;
   int *semid;
   void **segmaddr;
   struct sembuf sem_op[2];
 
-  semid    = &global_vlmc_context->semid;
-  segmaddr = &global_vlmc_context->polar_segmaddr;
+  semid    = &context->semid;
+  segmaddr = &context->polar_segmaddr;
 
   *semid   = get_semaphore_id();
   if (*semid == -1) {
@@ -155,26 +186,31 @@ void shm_lock_sem_construct_polar(int do_construct) {
     
     *segmaddr = get_shmem(shmid, 1);
     if (*segmaddr) {
-      construct_polar_array_from_shmem(&global_vlmc_context->polar_list,
+      construct_polar_array_from_shmem(&context->polar_list,
 				       *segmaddr);
     }
   }
 }
 
 void shm_unlock_sem_destroy_polar(int do_destroy) {
+  shm_unlock_sem_destroy_polar_context(global_vlmc_context, do_destroy);
+}
+
+void shm_unlock_sem_destroy_polar_context(vlmc_context *context, 
+					  int do_destroy) {
   int i;
   boat_polar_list *polars;
   void *segmaddr;
 
   if (do_destroy) {
-    polars = &global_vlmc_context->polar_list;
+    polars = &context->polar_list;
     for (i=0; i<polars->nb_polars; i++) {
       free(polars->polars[i]);
     }
     free(polars->polars);
     polars->polars = NULL;
     
-    segmaddr = global_vlmc_context->polar_segmaddr;
+    segmaddr = context->polar_segmaddr;
     shmdt(segmaddr);
   }
 }
