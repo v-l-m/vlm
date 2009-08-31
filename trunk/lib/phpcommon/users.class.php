@@ -515,20 +515,29 @@ class fullUsers
 
     if ( $this->users->pilotmode == PILOTMODE_BESTVMG ) //  BEST VMG
       {
-	if (!defined('MOTEUR')) {
-	  shm_lock_sem_construct_polar(1);
-	}
 	$vlmc_heading = new doublep();
 	$vlmc_vmg = new doublep();
-	
-	shm_lock_sem_construct_grib(1);
-	VLM_best_vmg($this->lastPositions->lat, 
+	if (defined('MOTEUR')) {
+	  shm_lock_sem_construct_grib(1);
+	  VLM_best_vmg($this->lastPositions->lat, 
 		     $this->lastPositions->long,
 		     $this->LatNM, $this->LongNM, 
 		     $this->users->boattype,
 		     $vlmc_heading, $vlmc_vmg);
-	shm_unlock_sem_destroy_grib(1);
-	
+	  shm_unlock_sem_destroy_grib(1);
+	} else { // in regular mode, create and fill context first
+	  $temp_vlmc_context = new vlmc_context();
+	  shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
+	  shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
+	  VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat, 
+			       $this->lastPositions->long,
+			       $this->LatNM, $this->LongNM, 
+			       $this->users->boattype,
+			       $vlmc_heading, $vlmc_vmg);
+	  shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
+	  shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
+	}
+
 	$this->users->boatheading = doublep_value($vlmc_heading);
 	$this->VMG = doublep_value($vlmc_vmg);
 	
@@ -539,9 +548,6 @@ class fullUsers
 	//	  echo "Debug: Type  = ".$this->users->boattype;
 	//	  echo "Debug: HDG   = ".$this->users->boatheading;
 	//	  echo "Debug: VMG   = ".$this->VMG;
-	if (!defined('MOTEUR')) {
-	  shm_unlock_sem_destroy_polar(1);
-	}
         $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
           ." WHERE idusers =".$this->users->idusers;
         $result1 = wrapper_mysql_db_query(DBNAME,$query1) ; 

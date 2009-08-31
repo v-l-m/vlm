@@ -204,22 +204,21 @@ function findboatspeed(angledifference)
     $fwindinf = (float) $windinf;
     $fwindsup = (float) $windsup;
 
-    if (!defined('MOTEUR')) {
-	$global_vlmc_context = new vlmc_context();
-	global_vlmc_context_set($global_vlmc_context);
-    }
+    $temp_vlmc_context = new vlmc_context();
+    shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);  
 
-    shm_lock_sem_construct_polar(1);  
     for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
-	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindinf, (float)$t_angle);
+	$t_boatspeed = VLM_find_boat_speed_context($temp_vlmc_context, 
+			$usersObj->users->boattype, $fwindinf, (float)$t_angle);
 	echo "windInfChart.put(\"$t_angle\", $t_boatspeed);\n";
     }
     
     for ($t_angle = 0; $t_angle <= 180; $t_angle += 5) {
-	$t_boatspeed = VLM_find_boat_speed($usersObj->users->boattype, $fwindsup, (float)$t_angle);
+	$t_boatspeed = VLM_find_boat_speed_context($temp_vlmc_context,
+		        $usersObj->users->boattype, $fwindsup, (float)$t_angle);
 	echo "windSupChart.put(\"$t_angle\", $t_boatspeed);\n";
     }
-    shm_unlock_sem_destroy_polar(1);
+    shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
     ?>
 
   windInfBoatSpeed = boatspeedfromlinearchart(windInfChart, angledifference);
