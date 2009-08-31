@@ -10,5 +10,5 @@
     <link rel="icon" type="image/png" href="../images/site/favicon.png" />
   </head>
   <body>
-    <p class=".horizontalmenu">Available status : <a href="race-engine-status.php">Race engine status</a>&nbsp;<a href="windtable-status.php">Windtable status</a>&nbsp;</p>
+      <p class=".horizontalmenu">Available status : <a href="polar-status.php">Polar status</a>&nbsp;&middot;&nbsp;<a href="race-engine-status.php">Race engine status</a>&nbsp;&middot;&nbsp;<a href="windtable-status.php">Windtable status</a>&nbsp;</p>
     <h1><?php echo $PAGETITLE; ?></h1>
