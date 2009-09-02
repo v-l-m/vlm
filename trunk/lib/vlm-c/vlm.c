@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.30 2009-08-31 12:54:03 ylafon Exp $
+ * $Id: vlm.c,v 1.31 2009-09-02 08:44:53 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -859,7 +859,7 @@ void VLM_best_vmg_context(vlmc_context *context,
   aboat.polar        = polar;
   time(&(aboat.last_vac_time));
 
-  t_heading = get_heading_bvmg(&aboat, 0);
+  t_heading = get_heading_bvmg_context(context, &aboat, 0);
   *heading = radToDeg(t_heading);
   *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
 }
