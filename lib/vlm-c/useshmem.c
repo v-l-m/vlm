@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.c,v 1.8 2009-08-31 13:34:20 ylafon Exp $
+ * $Id: useshmem.c,v 1.9 2009-09-02 19:43:08 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -167,7 +167,7 @@ void shm_lock_sem_construct_polar_context(vlmc_context *context,
     fprintf(stderr, "Unable to get the semaphore\n");
     exit(1);
   }
-  sem_op[0].sem_num = 0;
+  sem_op[0].sem_num = 1;
   sem_op[0].sem_op  = 0;
   sem_op[0].sem_flg = 0;
   nbops = 1;
@@ -239,10 +239,10 @@ void create_and_fill_polar_shm() {
       exit(1);
     }
   }
-  sem_op[0].sem_num = 0;
+  sem_op[0].sem_num = 1;
   sem_op[0].sem_op  = 0;
   sem_op[0].sem_flg = SEM_UNDO;
-  sem_op[1].sem_num = 0;
+  sem_op[1].sem_num = 1;
   sem_op[1].sem_op  = 1;
   sem_op[1].sem_flg = SEM_UNDO|IPC_NOWAIT;
   if (semop(semid, sem_op, 2) == -1) {
@@ -265,12 +265,11 @@ void create_and_fill_polar_shm() {
   copy_polar_array_to_shmem(shmid, &global_vlmc_context->polar_list, segmaddr);
   shmdt(segmaddr);
 
-  sem_op[0].sem_num = 0;
+  sem_op[0].sem_num = 1;
   sem_op[0].sem_op  = -1;
   sem_op[0].sem_flg = SEM_UNDO|IPC_NOWAIT;
   if (semop(semid, sem_op, 1) == -1) {
     fprintf(stderr, "Fail to unlock the semaphore\n");
     exit(1);
   }
-
 }
