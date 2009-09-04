@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.31 2009-09-02 08:44:53 ylafon Exp $
+ * $Id: vlm.c,v 1.32 2009-09-04 14:10:07 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -544,10 +544,19 @@ double VLM_distance_to_line_ratio_xing(double latitude, double longitude,
   /* sanity check */
   latitude    = latitude / 1000.0;
   longitude   = fmod((longitude / 1000.0), 360.0);
+  if (longitude < 0.0) {
+    longitude += 360.0;
+  }
   latitude_a  = latitude_a / 1000.0;
   longitude_a = fmod((longitude_a / 1000.0), 360.0);
+  if (longitude_a < 0.0) {
+    longitude_a += 360.0;
+  }
   latitude_b  = latitude_b / 1000.0;
   longitude_b = fmod((longitude_b / 1000.0), 360.0);
+  if (longitude_b < 0.0) {
+    longitude_b += 360.0;
+  }
 
   /* if something goes wrong, return -1 */
   if (latitude   < -90.0 || latitude   > 90.0 ||
@@ -908,4 +917,37 @@ double VLM_find_boat_speed_context(vlmc_context *context,
   angle_diff = degToRad(fmod(angle_diff, 360.0));
 
   return find_speed(&fakeboat, wind_speed, angle_diff);
+}
+
+void VLM_raw_move_loxo(double latitude, double longitude, 
+		       double distance, double heading,
+		       double *new_latitude, double*new_longitude) {
+  double t_lat, t_long, t_new_lat, t_new_long;
+  
+  // normalization
+  heading = degToRad(fmod(heading, 360.0));
+  t_lat  = degToRad(latitude / 1000.0);
+  t_long = degToRad(fmod((longitude / 1000.0), 360.0));
+  // sanity check
+  if ((t_lat < -PI_2) || (t_lat > PI_2)) {
+    *new_latitude = latitude;
+    *new_longitude = longitude;
+    return;
+  }
+  raw_move_loxo(t_lat, t_long, distance, heading, 
+		&t_new_lat, &t_new_long);
+  // sanity check on result
+  if ((t_new_lat < -PI_2) || (t_new_lat > PI_2)) {
+    *new_latitude = latitude;
+    *new_longitude = longitude;
+    return;
+  }
+  // aligning longitude to -PI / +PI
+  if (t_new_long < -PI) {
+    t_new_long += TWO_PI;
+  } else if (t_new_long > PI) {
+    t_new_long -= TWO_PI;
+  }
+  *new_latitude = radToDeg(t_new_lat*1000.0);
+  *new_longitude = radToDeg(t_new_long*1000.0);
 }
