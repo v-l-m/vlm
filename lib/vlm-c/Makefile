@@ -92,7 +92,7 @@ distclean::
 	$(MAKE) clean
 
 clean::
-	$(RM) coast unittest unittest-shm windserver *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.so
+	$(RM) coast unittest unittest-shm polarserver windserver *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut *.so
 
 # after a make depend, run this:
 # mv Makefile Makefile.bak ; cat Makefile.bak | sed -e '/^[a-z]*\.o: / s,/[0-9A-Z_a-z/]*.h,,g' -e '^[a-z]*\.o: *$/ d' > Makefile
@@ -110,16 +110,16 @@ loxo.o:  loxo.h polar.h lines.h winds.h
 polar.o:   defs.h types.h
 polar.o:   polar.h
 vmg.o:  defs.h types.h 
-vmg.o:  loxo.h polar.h ortho.h winds.h
+vmg.o:  loxo.h polar.h ortho.h winds.h vmg.h
 lines.o:   defs.h
-lines.o: types.h   ortho.h lines.h
+lines.o: types.h ortho.h lines.h
 gshhs.o:  defs.h 
 gshhs.o:  types.h 
 gshhs.o:  dist_gshhs.h 
 winds.o:   defs.h
 winds.o: types.h winds.h
 grib.o:  defs.h types.h 
-grib.o:  grib.h wgrib wgrib wgrib
+grib.o:  grib.h wgrib/grib.h wgrib/bms.h wgrib/bds.h wgrib/gds.h wgrib/pds4.h
 grib.o: wgrib wgrib
 util.o: defs.h  
 util.o:  types.h 
@@ -127,7 +127,7 @@ context.o:  defs.h
 context.o:  types.h 
 vlm.o: defs.h  
 vlm.o:  types.h 
-vlm.o:  loxo.h vmg.h ortho.h lines.h
+vlm.o:  loxo.h vmg.h ortho.h lines.h polar.h vlm.h winds.h boat.h
 move.o: defs.h  
 move.o:  types.h 
 move.o:  loxo.h vmg.h ortho.h
