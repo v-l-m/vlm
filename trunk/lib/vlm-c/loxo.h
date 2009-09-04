@@ -1,5 +1,5 @@
 /**
- * $Id: loxo.h,v 1.7 2008-12-12 16:27:06 ylafon Exp $
+ * $Id: loxo.h,v 1.8 2009-09-04 14:10:07 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,6 +24,8 @@
 #include "defs.h"
 #include "types.h"
 
+void raw_move_loxo                  PARAM6(double, double, double, double,
+					   double *, double *);
 void move_boat_loxo                 PARAM1(boat *);
 void estimate_boat_loxo             PARAM5(boat *, int, double, 
 					   double *, double *);

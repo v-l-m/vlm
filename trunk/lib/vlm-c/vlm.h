@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.21 2009-08-31 12:54:03 ylafon Exp $
+ * $Id: vlm.h,v 1.22 2009-09-04 14:10:07 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -473,5 +473,19 @@ double VLM_find_boat_speed PARAM3(char *,double, double);
  */
 double VLM_find_boat_speed_context PARAM4(vlmc_context *, char *,
 					  double, double);
+
+/**
+ * Move the boat with a specific distance and heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param heading, a <em>double</em>, the heading in <em>degrees</em>
+ * @param distance, a <em>double</em>, the distance in <em>nautic miles</em>
+ * @param new_latitude, a pointer to a <code>double</code>, 
+ *                      in <em>milli-degrees</em>
+ * @param new_longitude, a pointer to a <code>double</code>,
+ *                       in <em>milli-degrees</em>
+ */
+void VLM_raw_move_loxo PARAM6(double, double, double, double,
+			      double *, double *);
 
 #endif /* _VLM_H_ */

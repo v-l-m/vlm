@@ -81,20 +81,16 @@ class positions
 
   function addDistance2Positions( $distance, $heading  )
   {
-    $vector = polar2cartesian  ($heading, $distance);
+    include_once("vlmc.php");
 
-    // Latitude, no problem
-    $this->lat = $this->lat + $vector[1]*MILDEGREE2NAUTICS; //true only for latitude
+    $new_lat = new doublep();
+    $new_long = new doublep();
+    
+    VLM_raw_move_loxo($this->lat, $this->long, $distance, $heading, 
+		      $new_lat, $new_long);
 
-    // Longitude, we have to handle the +180/-180 crossing
-    $this->long = $this->long +  $vector[0]*1000 / (60*cos(deg2rad($this->lat/1000)));  
-
-    // Handle day changing line crossing West --> East (we work in millidegrees)
-    if ( $this->long > 180000 ) $this->long-=360000;
-
-    // Handle day changing line crossing East --> West (we work in millidegrees)
-    if ( $this->long < -180000 ) $this->long+=360000;
-
+    $this->lat  = doublep_value($new_lat);
+    $this->long = doublep_value($new_long);
   } 
 
   function writePositions()

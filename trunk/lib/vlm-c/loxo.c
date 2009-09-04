@@ -1,5 +1,5 @@
 /**
- * $Id: loxo.c,v 1.17 2009-08-28 06:26:42 ylafon Exp $
+ * $Id: loxo.c,v 1.18 2009-09-04 14:10:07 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -25,6 +25,24 @@
 #include "polar.h"
 #include "lines.h"
 #include "winds.h"
+
+void raw_move_loxo(double latitude, double longitude, 
+		   double distance, double heading,
+		   double *new_latitude, double *new_longitude) {
+  double d, new_lat, t_lat, new_lon;
+  
+  d = degToRad(distance/60.0);
+  new_lat = latitude + d*cos(heading);
+  t_lat = (latitude + new_lat) / 2.0;
+  new_lon =  longitude + (d*sin(heading))/cos(t_lat);
+  if (new_lon > PI) {
+    new_lon -= TWO_PI;
+  } else if (new_lon < -PI) {
+    new_lon += TWO_PI;
+  }
+  *new_latitude = new_lat;
+  *new_longitude = new_lon;
+}
 
 /* vac_duration in seconds */
 void move_boat_loxo(boat *aboat) {
