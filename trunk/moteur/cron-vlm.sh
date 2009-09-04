@@ -3,6 +3,9 @@
 ##   DOIT ETRE APPELE TOUTES LES MINUTES A COMPTER DE V0.9.8     ##
 ##=================================================================
 #VLMRACINE=/base/de/vlm #A configurer normalement fans le crontab
+
+MAXMOTEURTIME=120
+
 source $VLMRACINE/conf/conf_script || exit 1
 
 LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-$1-cronvlm.log
@@ -29,6 +32,9 @@ echo -e "\n" >> $LOG
 echo  "******************* starting the engine ********************" >> $LOG
 date >> $LOG
 echo "************************************************************" >> $LOG
+
+limit -t $MAXMOTEURTIME
+
 nice -10 $VLMPHPPATH moteur.php $* >> $LOG 2>&1
 
 # Voir Option MAIL_FOR_COASTCROSSING dans conf_script
