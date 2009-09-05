@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.32 2009-09-04 14:10:07 ylafon Exp $
+ * $Id: vlm.c,v 1.33 2009-09-04 21:25:51 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -919,6 +919,17 @@ double VLM_find_boat_speed_context(vlmc_context *context,
   return find_speed(&fakeboat, wind_speed, angle_diff);
 }
 
+/**
+ * Move the boat with a specific distance and heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param heading, a <em>double</em>, the heading in <em>degrees</em>
+ * @param distance, a <em>double</em>, the distance in <em>nautic miles</em>
+ * @param new_latitude, a pointer to a <code>double</code>, 
+ *                      in <em>milli-degrees</em>
+ * @param new_longitude, a pointer to a <code>double</code>,
+ *                       in <em>milli-degrees</em>
+ */
 void VLM_raw_move_loxo(double latitude, double longitude, 
 		       double distance, double heading,
 		       double *new_latitude, double*new_longitude) {
