@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.28 2009-09-05 09:04:06 ylafon Exp $
+ * $Id: lines.c,v 1.29 2009-09-05 09:19:15 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -507,8 +507,8 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
     }
   }
   
-  dist_a = __distance((latitude-latitude_a), (longitude-longitude_a));
-  dist_b = __distance((latitude-latitude_b), (longitude-longitude_b));
+  dist_a = __distance((t_latitude-latitude_a), (longitude-longitude_a));
+  dist_b = __distance((t_latitude-latitude_b), (longitude-longitude_b));
   ab_dist = __distance((latitude_a-latitude_b),(longitude_a-longitude_b));
   
   max_dist = fmax(dist_a, dist_b);
