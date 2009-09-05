@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.27 2009-06-03 11:40:40 ylafon Exp $
+ * $Id: lines.c,v 1.28 2009-09-05 09:04:06 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -463,7 +463,7 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
 				   double *ab_ratio) {
   double dist_a, dist_b, max_dist, ab_dist, t_dist;
   double ortho_a, ortho_b;
-  double t_latitude, t_longitude;
+  double t_latitude;
   double longitude_x, latitude_x, intersect;
   double longitude_y, latitude_y;
   double xing_latitude, xing_longitude;
@@ -471,7 +471,6 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
   ortho_a = ortho_distance(latitude, longitude, latitude_a, longitude_a);
   ortho_b = ortho_distance(latitude, longitude, latitude_b, longitude_b);
 
-  t_longitude = longitude;
   t_latitude = latToY(latitude);
   latitude_a = latToY(latitude_a);
   latitude_b = latToY(latitude_b);
@@ -483,28 +482,31 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
 #endif /* OLD_C_COMPILER */
   
   /* some normalization */
-  if (fabs(longitude-longitude_a) > PI) {
-    if (fabs(longitude-longitude_b) > PI) {
-      if (longitude < 0) {
-	longitude += TWO_PI;
-      } else {
-	longitude -= TWO_PI;
-      }
-    } else {
-      if (longitude_a < 0) {
-	longitude_a += TWO_PI;
-      } else {
+  /* normalize the line */
+  if (fabs(longitude_a - longitude_b) > PI) {
+    if (longitude_a > longitude_b) {
+      if (longitude_a > 0.0) {
 	longitude_a -= TWO_PI;
+      } else {
+	longitude_b += TWO_PI;
       }
-    }
-  } else if ((fabs(longitude-longitude_b) > PI)) {
-    if (longitude < 0) {
-      longitude_b += TWO_PI;
     } else {
-      longitude_b -= TWO_PI;
+      if (longitude_b > 0.0) {
+	longitude_b -= TWO_PI;
+      } else {
+	longitude_a += TWO_PI;
+      }
     }
   }
-
+  /* then the point */
+  if ((fabs(longitude-longitude_a)>PI) && (fabs(longitude-longitude_b)>PI)) {
+    if (longitude < longitude_a) {
+      longitude += TWO_PI;
+    } else {
+      longitude -= TWO_PI;
+    }
+  }
+  
   dist_a = __distance((latitude-latitude_a), (longitude-longitude_a));
   dist_b = __distance((latitude-latitude_b), (longitude-longitude_b));
   ab_dist = __distance((latitude_a-latitude_b),(longitude_a-longitude_b));
