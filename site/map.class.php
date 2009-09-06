@@ -36,7 +36,7 @@ class map
   //constructor that set all constants and values
   function map($boatlist, $proj, $text, $tracks, 
                $north = 50000, $south = 40000, $east = 0, $west = -35000 , $idraces=0 , 
-               $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp=1)
+               $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp='on')
   {
     //echo $north." ".$south."  ".$west." ".$east."\n";
 
@@ -155,7 +155,7 @@ class map
     // remplissage du fond de la carte
     imagefill ( $this->mapImage, 0, 0, $this->colorSea );
     if ( $timings == "true" ) imagestring($this->mapImage, 2, 150, 20, "Time gridlist= " . ($time_stop - $time_start) . "s", $this->colorText);
-    $this->drawtextwp = $drawtextwp;
+    $this->drawtextwp = ($drawtextwp != 'no');
     //imagefill ( $this->mapImage, 0, 0, $this->colorContinent );
 
   }
@@ -479,14 +479,15 @@ class map
                      call_user_func_array( array(&$this, $projCallbackLong), $this->fullRacesObj->races->startlong) +$this->startSize, 
                      call_user_func_array( array(&$this, $projCallbackLat), $this->fullRacesObj->races->startlat ) +$this->startSize,
                      $this->fromhex("ff0000"));
-
-    imagestring($this->mapImage,
+    if ($this->drawtextwp) {
+        imagestring($this->mapImage,
                 1,
                 call_user_func_array( array(&$this, $projCallbackLong), $this->fullRacesObj->races->startlong) + 2 * $this->startSize,
                 call_user_func_array( array(&$this, $projCallbackLat), $this->fullRacesObj->races->startlat) -$this->startSize,
                 "Start (" . giveDegMinSec('img', $this->fullRacesObj->races->startlat/1000, 
                                           $this->fullRacesObj->races->startlong/1000) . ")" ,
                 $this->fromhex("000000"));
+    }
 
     // Boat , to know about the newt wp ?
     $user=htmlentities($_GET['boat']);
