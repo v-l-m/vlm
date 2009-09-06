@@ -14,7 +14,7 @@
     $email=quote_smart($_REQUEST['email']);
     $blocnote=quote_smart($_REQUEST['blocnote']);
     if (eregi("^http", $blocnote) || eregi("://", $blocnote)) {
-        $blocnote="BAD NOTEPAD (code inclusion is forbidden)";
+        $blocnote="BAD NOTEPAD (code inclusion (url, &lt;&gt; characters, ...) is forbidden)";
     }
     $theme=quote_smart($_REQUEST['theme']);
     $country=quote_smart($_REQUEST['country']);
