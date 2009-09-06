@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.22 2009-09-04 14:10:07 ylafon Exp $
+ * $Id: vlm.h,v 1.23 2009-09-06 14:07:18 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -453,6 +453,38 @@ void VLM_best_vmg PARAM7(double, double, double, double, char *,
 void VLM_best_vmg_context PARAM8(vlmc_context *, double, double, 
 				 double, double, char *,
 				 double *, double *);
+
+/**
+ * Get the VBVMG heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_vbvmg PARAM7(double, double, double, double, char *,
+		      double *, double *);
+
+/**
+ * Get the VBVMG heading
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_vbvmg_context PARAM8(vlmc_context *, double, double, 
+			      double, double, char *,
+			      double *, double *);
 
 /**
  * Get the speed boat based on wind speed and wind angle

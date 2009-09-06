@@ -97,7 +97,7 @@
     function checkpip(i) {
     
         var pim = eval(document.forms[i].pim.value);
-        if ( pim == 3 || $pim == 4 ) {
+        if ( pim >= 3 || pim <= 5 ) {
             //document.forms[i].pip.disabled=true;
             document.forms[i].pip.disabled=false;
         } else {
@@ -143,18 +143,18 @@
 //                $pip=$_POST['pip'];
 //     }
                 if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
-                    if ( $pim <1 || $pim >4) {
-                        echo "ERROR ADD : PIM between 1 and 4 please.";
+                    if ( $pim <1 || $pim >5) {
+                        echo "ERROR ADD : PIM between 1 and 5 please.";
                         //} else if ( $time < time() ) {
                         //   echo "ERROR ADD : TIME is passed...(" .$time . "/" . gmdate(time()) . ")" ;
                     } else if ( ( $pim == 1 ) && ($pip <0 or $pip >359)  ) {
                         echo "ERROR ADD : With PIM=1, PIP should be between 0 and 359 please";
                     } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
                         echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
-                    } else if (  ( $pim == 3 or $pim ==4 ) 
+                    } else if (  ( $pim == 3 or $pim == 4 or $pim == 5) 
                             &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )  
                         ) {
-                        echo "ERROR ADD : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
+                        echo "ERROR ADD : With PIM=3, 4 or 5, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
                     } else {
                         $rc=$usersObj->pilototoAdd($time, $pim, $pip);
                     }
@@ -175,15 +175,15 @@
 //     }
 
                 if ( !empty($taskid) && !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip ==0 ) ) {
-                if ( $pim <1 || $pim >4) {
-                    echo "ERROR : PIM between 1 and 4 please.";
+                if ( $pim <1 || $pim >5) {
+                    echo "ERROR : PIM between 1 and 5 please.";
                     //} else if ( $time < gmdate(time()) ) {
                     //   echo "ERROR ADD : TIME is passed...(" .$time . "/" . gmdate(time()) . ")" ;
                     } else if ( ( $pim == 1 ) && ($pip <0 or $pip >359)  ) {
                         echo "ERROR : With PIM=1, PIP should be between 0 and 359 please";
                     } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
                         echo "ERROR : With PIM=2, PIP should be between -180 and 180 please";
-                    } else if ( ( $pim == 3 or $pim ==4 ) && ( strlen($pip)==0 or strpos($pip, ',')==false )  ) {
+                    } else if ( ( $pim == 3 or $pim == 4 or $pim == 5 ) && ( strlen($pip)==0 or strpos($pip, ',')==false )  ) {
                         echo "ERROR : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE";
                     } else {
                         $rc=$usersObj->pilototoUpdate($taskid, $time, $pim, $pip);
@@ -233,8 +233,8 @@
     
     echo "<div id=\"helpvaluespilototobox\">\n";
     echo "<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00<br />";
-    echo "<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG<br />\n";
-    echo "<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3 or 4: Lat<b>,</b>Long<li>Please give <b>0,0</b> for your or nextrace WP, <li><b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)\n";
+    echo "<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 4/VBVMG<br />\n";
+    echo "<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long<li>Please give <b>0,0</b> for your or nextrace WP, <li><b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)\n";
     echo "</div>\n";
     $time=time();
     echo "<div id=\"helptimepilototobox\">\n";

@@ -126,7 +126,8 @@ define("PILOTMODE_HEADING", 1);
 define("PILOTMODE_WINDANGLE", 2);
 define("PILOTMODE_ORTHODROMIC", 3);
 define("PILOTMODE_BESTVMG", 4);
-define("PILOTMODE_BESTSPEED", 5);
+define("PILOTMODE_VBVMG", 5);
+define("PILOTMODE_BESTSPEED", 6);
 
 // Define the boat status (ARRIVE, HORS TEMPS, DNF, ABANDON)
 define("BOAT_STATUS_ARR", 1);
