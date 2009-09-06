@@ -291,24 +291,36 @@ include_once("scripts/myboat.js");
         // Le mode de pilotage
         //echo $strings[$lang]["pilotmode"]."<br/>";
 
-        if ( $usersObj->users->pilotmode == PILOTMODE_HEADING ) {
-            echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
-        } else if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-            echo $strings[$lang]["constantengaged"]." " ;
-            if ( $usersObj->users->pilotparameter > 0 ) echo " +";
-            echo $usersObj->users->pilotparameter ." ". $strings[$lang]["degrees"];
-        } else if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
-            echo $strings[$lang]["orthoengaged"];
-        } else if ( $usersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
-            echo $strings[$lang]["bestvmgengaged"];
-            //echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
-        } else if ( $usersObj->users->pilotmode == PILOTMODE_BESTSPEED ) {
-            //echo $strings[$lang]["bestspeedengaged"];
-            echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
-        }
+	switch ($usersObj->users->pilotmode) {
+	case PILOTMODE_HEADING:
+	  echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".
+	       $strings[$lang]["degrees"];
+	  break;
+	case PILOTMODE_WINDANGLE:
+	  echo $strings[$lang]["constantengaged"]." " ;
+	  if ( $usersObj->users->pilotparameter > 0 ) {
+	    echo " +";
+	  }
+	  echo $usersObj->users->pilotparameter ." ". $strings[$lang]["degrees"];
+	  break;
+	case PILOTMODE_ORTHODROMIC:
+	  echo $strings[$lang]["orthoengaged"];
+	  break;
+	case PILOTMODE_BESTVMG:
+	  echo $strings[$lang]["bestvmgengaged"];
+	  break;
+	case PILOTMODE_VBVMG:
+	  echo $strings[$lang]["vbvmgengaged"];
+	  break;
+	case PILOTMODE_BESTSPEED:
+	  echo $strings[$lang]["bestspeedengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
+	  break;
+	}
         // Ligne complémentaire si pilote ortho
-        if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC or $usersObj->users->pilotmode == PILOTMODE_BESTVMG      )  {
-            echo "--&gt;" . giveDegMinSec ('html', $usersObj->LatNM/1000, $usersObj->LongNM/1000);
+        if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC or 
+	     $usersObj->users->pilotmode == PILOTMODE_BESTVMG     or
+	     $usersObj->users->pilotmode == PILOTMODE_VBVMG )  {
+	  echo "--&gt;" . giveDegMinSec ('html', $usersObj->LatNM/1000, $usersObj->LongNM/1000);
         }
         echo "<br />\n";
 
