@@ -74,7 +74,7 @@ class users
     $this->hidepos = $row[23]; 
     $this->blocnote = $row[24]; 
     if ( eregi("^http|://|script|language|<|>", $this->blocnote) ) {
-        $this->blocnote="some characters are not valid in your notepad";
+        $this->blocnote="Some characters are not valid in your notepad. (Code inclusion, &gt;, &lt;, ...)";
     } 
     $this->ipaddr = $row[25];
     $this->theme = $row[26];
