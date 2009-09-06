@@ -29,13 +29,14 @@ class map
     $flag_E_W,
     $am_on_map,
     $wp_only,
+    $drawtextwp,
     $maille;
 
   
   //constructor that set all constants and values
   function map($boatlist, $proj, $text, $tracks, 
                $north = 50000, $south = 40000, $east = 0, $west = -35000 , $idraces=0 , 
-               $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false)
+               $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp=1)
   {
     //echo $north." ".$south."  ".$west." ".$east."\n";
 
@@ -154,6 +155,7 @@ class map
     // remplissage du fond de la carte
     imagefill ( $this->mapImage, 0, 0, $this->colorSea );
     if ( $timings == "true" ) imagestring($this->mapImage, 2, 150, 20, "Time gridlist= " . ($time_stop - $time_start) . "s", $this->colorText);
+    $this->drawtextwp = $drawtextwp;
     //imagefill ( $this->mapImage, 0, 0, $this->colorContinent );
 
   }
@@ -544,7 +546,7 @@ class map
 
 
       // Coordonnées bouée 1
-      if ( $this->wp_only == $waypoint_num  || $nwp == $waypoint_num ) {
+      if ( $this->drawtextwp && ($this->wp_only == $waypoint_num  || $nwp == $waypoint_num )) {
         imagestring($this->mapImage,
                     3,
                     call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]) ,
@@ -559,7 +561,7 @@ class map
                            call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[2]),
                            WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
-        if ( $this->wp_only == $waypoint_num || $nwp == $waypoint_num ) {
+        if ( $this->drawtextwp && ($this->wp_only == $waypoint_num || $nwp == $waypoint_num )) {
           imagestring($this->mapImage,
                       3,
                       call_user_func_array( array(&$this, $projCallbackLong), $waypoint[3]) ,

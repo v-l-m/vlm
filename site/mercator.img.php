@@ -96,6 +96,8 @@
     $drawlibelle=htmlentities($_GET['drawlibelle']);
     $drawrealboats=htmlentities($_GET['drawrealboats']);
     $fullres=htmlentities($_GET['fullres']);
+    $drawtextwp=htmlentities($_GET['drawtextwp']);
+
     /*
     if ( $maparea > 5 ) {
          $fullres="poly";
@@ -198,7 +200,7 @@
     
     
     $time_start = time();
-    $mapObj = new map($list, $proj, $text, $tracks, $north, $south, $east, $west, $idraces, $x, $y, $windtext, $maille, $drawwind, $timings);
+    $mapObj = new map($list, $proj, $text, $tracks, $north, $south, $east, $west, $idraces, $x, $y, $windtext, $maille, $drawwind, $timings, $drawtextwp);
     $time_stop = time();
     
     if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 20, "Time new map = " . ($time_stop - $time_start) . "s", $mapObj->colorText);
