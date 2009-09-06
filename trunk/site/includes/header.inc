@@ -285,7 +285,7 @@
             <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
             <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]?></a> 
-            <a href="http://wiki.virtual-loup-de-mer.org/index.php/<?echo $lang?>:FAQ"><?echo $strings[$lang]["faq"]?></a> 
+            <a href="http://wiki.virtual-loup-de-mer.org/index.php/<?echo $lang?>:FAQ" target="_vlmwiki"><?echo $strings[$lang]["faq"]?></a> 
             <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a>
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
