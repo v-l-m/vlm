@@ -120,7 +120,6 @@ winds.o:   defs.h
 winds.o: types.h winds.h
 grib.o:  defs.h types.h 
 grib.o:  grib.h wgrib/grib.h wgrib/bms.h wgrib/bds.h wgrib/gds.h wgrib/pds4.h
-grib.o: wgrib wgrib
 util.o: defs.h  
 util.o:  types.h 
 context.o:  defs.h 

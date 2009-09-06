@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.33 2009-09-04 21:25:51 ylafon Exp $
+ * $Id: vlm.c,v 1.34 2009-09-06 14:07:18 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -869,6 +869,83 @@ void VLM_best_vmg_context(vlmc_context *context,
   time(&(aboat.last_vac_time));
 
   t_heading = get_heading_bvmg_context(context, &aboat, 0);
+  *heading = radToDeg(t_heading);
+  *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
+}
+
+/**
+ * Get the VB VMG heading
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_vbvmg(double latitude, double longitude,
+	       double target_lat, double target_long,
+	       char *polar_name, double *heading, double *vmg) {
+  VLM_vbvmg_context(global_vlmc_context, latitude, longitude,
+		    target_lat, target_long, polar_name, heading, vmg);
+}
+
+/**
+ * Get the VB VMG heading
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param target_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param polar_name, a pointer to <code>char</code>, a <em>string</em>
+ *                    the full name of the polar
+ * @param heading, a pointer to a <em>double</em>, the resulting
+ *                 heading in <em>degrees</em>
+ * @param vmg, a pointer to a <em>double</em>, the resulting
+ *                 vmg in <em>knots</em>
+ */
+void VLM_vbvmg_context(vlmc_context *context,
+		       double latitude, double longitude,
+		       double target_lat, double target_long,
+		       char *polar_name, double *heading, double *vmg) {
+  char *real_polar_name;
+  boat_polar *polar;
+  boat aboat;
+  race arace;
+  double t_heading;
+
+  /* if no polar are defined, bail out */
+  if (!polar_name) {
+    return;
+  }
+  
+  if (!strncmp(polar_name, "boat_", 5)) {
+    real_polar_name = &polar_name[5];
+  } else {
+    real_polar_name = polar_name;
+  }
+
+  latitude    = degToRad(latitude/1000.0);
+  longitude   = fmod(degToRad(longitude/1000.0), TWO_PI);
+  target_lat  = degToRad(target_lat/1000.0);
+  target_long = fmod(degToRad(target_long/1000.0), TWO_PI);
+  
+  /* we fake stuff to have the bvmg computed "now" */
+  polar = get_polar_by_name_context(context, real_polar_name);
+
+  arace.vac_duration = 0;
+  arace.boattype     = polar;
+
+  aboat.latitude     = latitude;
+  aboat.longitude    = longitude;
+  aboat.wp_latitude  = target_lat;
+  aboat.wp_longitude = target_long;
+  aboat.in_race      = &arace;
+  aboat.polar        = polar;
+  time(&(aboat.last_vac_time));
+
+  t_heading = get_heading_vbvmg_context(context, &aboat, 0);
   *heading = radToDeg(t_heading);
   *vmg = find_speed(&aboat, aboat.wind.speed, aboat.wind.angle - t_heading);
 }

@@ -479,79 +479,136 @@ class fullUsers
 
   function updateAngles()
   {
-    if ( $this->users->pilotmode == PILOTMODE_BESTSPEED ) //  BEST SPEED
-      {
-        $Hdg=0; $bestHdg=0; 
-        $Spd=-1 ;$bestSpd=-1;
-        while ( $Hdg <= 359 ) {
-          $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
-                                $this->wspeed,
-                                $this->users->boattype);
-          if ( $Spd >= $bestSpd ) {
-            $bestHdg=$Hdg;
-            $bestSpd=$Spd;
-          }
-          $Hdg+=1;
-          //echo "DEBUG Spd=$Spd, H=$Hdg \n";
-        }
-
-        // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degré près".
-        for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
-          $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
-                                $this->wspeed,
-                                $this->users->boattype);
-          if ( $Spd > $bestSpd ) {
-            $bestHdg=$Hdg;
-            $bestSpd=$Spd;
-          }
-          //echo "DEBUG Spd=$Spd, H=$Hdg \n";
-        }
-
-        $this->users->boatheading = $bestHdg;
-        $query1 = "UPDATE users SET boatheading =". $this->users->boatheading 
-          ." WHERE idusers =".$this->users->idusers;
-        $result1 = wrapper_mysql_db_query(DBNAME,$query1);
-      }
-
-    if ( $this->users->pilotmode == PILOTMODE_BESTVMG ) //  BEST VMG
-      {
-	$vlmc_heading = new doublep();
-	$vlmc_vmg = new doublep();
-	if (defined('MOTEUR')) {
-	  shm_lock_sem_construct_grib(1);
-	  VLM_best_vmg($this->lastPositions->lat, 
+    switch ($this->users->pilotmode) {
+    case PILOTMODE_WINDANGLE:
+      //update boatheading
+      $this->users->boatheading = (($this->wheading+180) + $this->users->pilotparameter) ;
+      
+      while ( $this->users->boatheading > 360 ) $this->users->boatheading-=360;
+      while ( $this->users->boatheading < 0 ) $this->users->boatheading+=360;
+      
+      $query1 = "UPDATE users SET boatheading =". round($this->users->boatheading)
+	." WHERE idusers =".$this->users->idusers;
+      $result1 = wrapper_mysql_db_query(DBNAME,$query1);
+      break;
+    case PILOTMODE_ORTHODROMIC:
+      //update boatheading
+      $this->users->boatheading = $this->orthodromicHeading();
+      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
+	." WHERE idusers = ".$this->users->idusers;
+      $result1 = wrapper_mysql_db_query(DBNAME,$query1);
+      break;
+    case PILOTMODE_BESTVMG:
+      $vlmc_heading = new doublep();
+      $vlmc_vmg = new doublep();
+      if (defined('MOTEUR')) {
+	shm_lock_sem_construct_grib(1);
+	VLM_best_vmg($this->lastPositions->lat, 
 		     $this->lastPositions->long,
 		     $this->LatNM, $this->LongNM, 
 		     $this->users->boattype,
 		     $vlmc_heading, $vlmc_vmg);
-	  shm_unlock_sem_destroy_grib(1);
-	} else { // in regular mode, create and fill context first
-	  $temp_vlmc_context = new vlmc_context();
-	  shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
-	  shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
-	  VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat, 
-			       $this->lastPositions->long,
-			       $this->LatNM, $this->LongNM, 
-			       $this->users->boattype,
-			       $vlmc_heading, $vlmc_vmg);
-	  shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
-	  shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
-	}
-
-	$this->users->boatheading = doublep_value($vlmc_heading);
-	$this->VMG = doublep_value($vlmc_vmg);
-	
-	//	  echo "Debug: Lat   = ".$this->lastPositions->lat;
-	//	  echo "Debug: Lon   = ".$this->lastPositions->long;
-	//	  echo "Debug: WPLat = ".$this->LatNM;
-	//	  echo "Debug: WPLon = ".$this->LongNM;
-	//	  echo "Debug: Type  = ".$this->users->boattype;
-	//	  echo "Debug: HDG   = ".$this->users->boatheading;
-	//	  echo "Debug: VMG   = ".$this->VMG;
-        $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-          ." WHERE idusers =".$this->users->idusers;
-        $result1 = wrapper_mysql_db_query(DBNAME,$query1) ; 
+	shm_unlock_sem_destroy_grib(1);
+      } else { // in regular mode, create and fill context first
+	$temp_vlmc_context = new vlmc_context();
+	shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
+	shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
+	VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat, 
+			     $this->lastPositions->long,
+			     $this->LatNM, $this->LongNM, 
+			     $this->users->boattype,
+			     $vlmc_heading, $vlmc_vmg);
+	shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
+	shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
       }
+      
+      $this->users->boatheading = doublep_value($vlmc_heading);
+      $this->VMG = doublep_value($vlmc_vmg);
+      
+      //	  echo "Debug: Lat   = ".$this->lastPositions->lat;
+      //	  echo "Debug: Lon   = ".$this->lastPositions->long;
+      //	  echo "Debug: WPLat = ".$this->LatNM;
+      //	  echo "Debug: WPLon = ".$this->LongNM;
+      //	  echo "Debug: Type  = ".$this->users->boattype;
+      //	  echo "Debug: HDG   = ".$this->users->boatheading;
+      //	  echo "Debug: VMG   = ".$this->VMG;
+      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
+	." WHERE idusers =".$this->users->idusers;
+      $result1 = wrapper_mysql_db_query(DBNAME,$query1) ; 
+      break;
+    case PILOTMODE_VBVMG:
+      $vlmc_heading = new doublep();
+      $vlmc_vmg = new doublep();
+      if (defined('MOTEUR')) {
+	shm_lock_sem_construct_grib(1);
+	VLM_vbvmg($this->lastPositions->lat, 
+		  $this->lastPositions->long,
+		  $this->LatNM, $this->LongNM, 
+		  $this->users->boattype,
+		  $vlmc_heading, $vlmc_vmg);
+	shm_unlock_sem_destroy_grib(1);
+      } else { // in regular mode, create and fill context first
+	$temp_vlmc_context = new vlmc_context();
+	shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
+	shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
+	VLM_vbvmg_context($temp_vlmc_context, $this->lastPositions->lat, 
+			  $this->lastPositions->long,
+			  $this->LatNM, $this->LongNM, 
+			  $this->users->boattype,
+			  $vlmc_heading, $vlmc_vmg);
+	shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
+	shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
+      }
+      
+      $this->users->boatheading = doublep_value($vlmc_heading);
+      $this->VMG = doublep_value($vlmc_vmg);
+      
+      //	  echo "Debug: Lat   = ".$this->lastPositions->lat;
+      //	  echo "Debug: Lon   = ".$this->lastPositions->long;
+      //	  echo "Debug: WPLat = ".$this->LatNM;
+      //	  echo "Debug: WPLon = ".$this->LongNM;
+      //	  echo "Debug: Type  = ".$this->users->boattype;
+      //	  echo "Debug: HDG   = ".$this->users->boatheading;
+      //	  echo "Debug: VMG   = ".$this->VMG;
+      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
+	." WHERE idusers =".$this->users->idusers;
+      $result1 = wrapper_mysql_db_query(DBNAME,$query1) ; 
+      break;      
+    case PILOTMODE_BESTSPEED:
+      // FIXME if kept, needs to be redone in vlm-c
+      $Hdg=0; $bestHdg=0; 
+      $Spd=-1 ;$bestSpd=-1;
+      while ( $Hdg <= 359 ) {
+	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
+			      $this->wspeed,
+			      $this->users->boattype);
+	if ( $Spd >= $bestSpd ) {
+	  $bestHdg=$Hdg;
+	  $bestSpd=$Spd;
+	}
+	$Hdg+=1;
+	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
+      }
+      
+      // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degré près".
+      for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
+	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
+			      $this->wspeed,
+			      $this->users->boattype);
+	if ( $Spd > $bestSpd ) {
+	  $bestHdg=$Hdg;
+	  $bestSpd=$Spd;
+	}
+	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
+      }
+      
+      $this->users->boatheading = $bestHdg;
+      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading 
+	." WHERE idusers =".$this->users->idusers;
+      $result1 = wrapper_mysql_db_query(DBNAME,$query1);
+      break;
+    }
+
 
     if ($this->users->pilotmode == PILOTMODE_WINDANGLE) //constant wind angle
       {
