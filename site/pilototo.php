@@ -97,7 +97,7 @@
     function checkpip(i) {
     
         var pim = eval(document.forms[i].pim.value);
-        if ( pim >= 3 || pim <= 5 ) {
+        if ( pim >= 3 && pim <= 5 ) {
             //document.forms[i].pip.disabled=true;
             document.forms[i].pip.disabled=false;
         } else {
