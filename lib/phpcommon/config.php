@@ -121,7 +121,7 @@ define("NUM_NEAR_POINTS", 2);
 define("MAX_DURATION", 315360000);
 define("MAX_STOPTIME", 3*86400);
 
-// Define the 3 pilotmodes
+// Define the 5 pilotmodes
 define("PILOTMODE_HEADING", 1);
 define("PILOTMODE_WINDANGLE", 2);
 define("PILOTMODE_ORTHODROMIC", 3);
