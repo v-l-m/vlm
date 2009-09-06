@@ -14,7 +14,7 @@
     //helper pour construire la page
     
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
-        global $strings, $lang;
+        global $strings, $lang, $pilotmodeList;
         if ($row === 0) {
             $klass = "blank";
             $ts = time();
@@ -34,8 +34,16 @@
         echo "    <td><input type=\"submit\" name=\"action\" value=" . $strings[$lang][$firstcolaction]  ." /></td>\n";
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
-        // FIXME : SELECT LIST pour le type de pilote
-        echo "    <td><input type=\"text\" name=\"pim\" onKeyup=\"checkpip($numline);\" width=\"1\" size=\"1\" value=\"$pim\" /></td>\n";
+        
+        echo "    <td><select onKeyup=\"checkpip($numline);\" name=\"pim\">\n"; 
+        for ($i = 1; $i <= count($pilotmodeList); $i++) {
+            echo "    <option ";
+            if ($i == $pim) {
+                echo "selected=\"selected\" ";
+            }
+            echo "value=\"$i\">$i:".$strings[$lang][$pilotmodeList[$i]]."</option>";
+        }
+        echo "    </select></td>\n";
         echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
         echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date

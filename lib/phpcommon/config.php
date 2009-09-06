@@ -129,6 +129,9 @@ define("PILOTMODE_BESTVMG", 4);
 define("PILOTMODE_VBVMG", 5);
 define("PILOTMODE_BESTSPEED", 6);
 
+// Define strings used (see strings.inc) to describe the pilot mode
+$pilotmodeList = Array(1 => "autopilotengaged", 2 => "constantengaged", 3 => "orthoengaged", 4 => "bestvmgengaged", 5 => "vbvmgengaged");
+
 // Define the boat status (ARRIVE, HORS TEMPS, DNF, ABANDON)
 define("BOAT_STATUS_ARR", 1);
 define("BOAT_STATUS_HTP", -1);
