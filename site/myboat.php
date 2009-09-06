@@ -580,9 +580,9 @@ include_once("scripts/myboat.js");
             $buttonclass = "actionbutton";
         }
         ?>
-        <div id="bvmgcontrolbox" class="controlitem">
+        <div id="vbvmgcontrolbox" class="controlitem">
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_VBVMG . ": ".$strings[$lang]["vbvmgengaged"]."</span>"?>
-            <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
+            <form class="controlform" name="vbvmg" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
                 <input type="hidden" name="pilotmode" value="vbvmg"/>
