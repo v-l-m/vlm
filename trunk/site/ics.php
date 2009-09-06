@@ -39,6 +39,12 @@ function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
     printf("<h3>".$titletemplate."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));     
 }
 
+/* output de la polaire */
+
+function outputRacePolar($fullRacesObj) {
+    printf("<h3><a href=\"speedchart.php?boattype=" . $fullRacesObj->boattype . "\" target=\"_speedchart\">" . substr($fullRacesObj->boattype,5) . "</a></h3>");     
+}
+
 /* output du tableau de wp */
 
 function outputWayPoints($fullRacesObj, $startstring) {
@@ -68,6 +74,7 @@ if ($idraces != 0) {
     $fullRacesObj = new fullRaces($idraces);
     echo "<div id=\"raceheader\">\n";
         outputRaceTitle($fullRacesObj, $strings[$lang]["racestarted"]);
+        outputRacePolar($fullRacesObj);
         echo "<h3><a href=\"races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ranking"]."</a></h3>";
     echo "</div>\n";
 
