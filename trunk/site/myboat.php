@@ -571,6 +571,24 @@ include_once("scripts/myboat.js");
                 <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
             </form>
         </div>
+
+        <!-- VBVMG -->
+        <?php        
+        if ($usersObj->users->pilotmode == PILOTMODE_VBVMG ) {
+            $buttonclass = "actionbuttonwarn";
+        } else {
+            $buttonclass = "actionbutton";
+        }
+        ?>
+        <div id="bvmgcontrolbox" class="controlitem">
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_VBVMG . ": ".$strings[$lang]["vbvmgengaged"]."</span>"?>
+            <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
+                <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
+                <input type="hidden" name="lang" value="<?php echo $lang?>"/>
+                <input type="hidden" name="pilotmode" value="vbvmg"/>
+                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["vbvmgengaged"]?>" />
+            </form>
+        </div>
     </div>
 
 <!-- PROGRAMMATION WP -->
