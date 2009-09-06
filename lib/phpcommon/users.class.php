@@ -1133,7 +1133,8 @@ class fullUsers
     //pilotmode = 2 if wind angle
     //pilotmode = 3 if orthodromic
     //pilotmode = 4 if bestvmg
-    //pilotmode = 5 if bestspeed
+    //pilotmode = 5 if vbvmg
+    //pilotmode = 6 if bestspeed
 
     // We timestamp each change, 
     // ==> to detect sleeping users who are in STOPPED mode due to coast crossing
@@ -1191,10 +1192,20 @@ class fullUsers
         logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
 
       }
-    else if ($mode == "bestspeed")
+    else if ($mode == "vbvmg")
       {
         $this->users->pilotmode = 5;
         $query = "UPDATE users SET `pilotmode` = 5, " . 
+          " lastchange = ". $timestamp . ", " .
+          " ipaddr = '". $_SESSION['IP'] . "'" .
+          " WHERE idusers = ".$this->users->idusers;
+        wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+        logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
+      }
+    else if ($mode == "bestspeed")
+      {
+        $this->users->pilotmode = 6;
+        $query = "UPDATE users SET `pilotmode` = 6, " . 
           " lastchange = ". $timestamp . ", " .
           " ipaddr = '". $_SESSION['IP'] . "'" .
           " WHERE idusers = ".$this->users->idusers;

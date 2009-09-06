@@ -3,7 +3,7 @@ include_once("includes/header.inc");
 include_once("config.php");
 
 // Controle de saisie / soumission
-$pilotmodes=array("autopilot", "windangle", "orthodromic", "bestvmg", "bestspeed");
+$pilotmodes=array("autopilot", "windangle", "orthodromic", "bestvmg", "vbvmg", "bestspeed");
 if ( ! in_array($pilotmode, $pilotmodes) ) {
       printf ("<h1>PILOTMPDE = $pilotmode IS UNSUPPORTED.");
       printf ("<h2>Your IP address is : " . $_SERVER["REMOTE_ADDR"] . "</h2>\n");
