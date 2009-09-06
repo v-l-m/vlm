@@ -25,7 +25,8 @@ $nb_polars = get_nb_polars_context($temp_vlmc_context);
 <?php
 for ($i=0; $i<$nb_polars; $i++) {
   $pname = get_polar_name_index_context($temp_vlmc_context, $i); 
-  echo "  <li>".$pname."</li>";
+  echo "  <li><a href=\"/speedchart.php?boattype=\"".$pname."\">";
+  echo "".$pname."</a></li>";
 }
 shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);  
 ?>
