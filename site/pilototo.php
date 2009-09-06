@@ -233,7 +233,7 @@
     
     echo "<div id=\"helpvaluespilototobox\">\n";
     echo "<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00<br />";
-    echo "<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 4/VBVMG<br />\n";
+    echo "<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG<br />\n";
     echo "<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long<li>Please give <b>0,0</b> for your or nextrace WP, <li><b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)\n";
     echo "</div>\n";
     $time=time();
