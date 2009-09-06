@@ -105,13 +105,14 @@
         if (navigator.appName.substring(0,8) == "Netscape") {
             netscape = true;
         }
+        msiesix = /MSIE 6/i.test(navigator.userAgent);
   
         function DisplayPngByBrowser ( browser, img_path, width, height )
         {
             var png_path;
-            if (browser == 'Microsoft Internet Explorer') {
+            if (msiesix) {
                 document.write('<img id="dynimg" src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
-            } else if (browser == 'Netscape') {
+            } else if (netscape) {
                 document.write('<img id="dynimg" src="'+img_path+'" />');
             } else {
                 document.write('<img id="dynimg" src="'+img_path+'" />');
