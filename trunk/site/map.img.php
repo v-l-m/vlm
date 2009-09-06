@@ -90,6 +90,8 @@
     $windtext= htmlentities($_GET['windtext']) ;
     if ( $windtext == "" ) $windtext = "on";
   
+    $drawtextwp= htmlentities($_GET['drawtextwp']) ;
+    if ( $drawtextwp == "" ) $windtext = "on";
     // Guess real map coordinates
 
 ?>
@@ -213,8 +215,9 @@
           "y=". $y . "&" . 
           "maparea=". $maparea . "&" .
           "maille=". $maille . "&" .
-                "idraces=". $idraces . "&" . 
-          "proj=". $proj  ; 
+          "idraces=". $idraces . "&" .
+          "drawtextwp=" .$drawtextwp . "&" . 
+          "proj=". $proj  ;
         $query_string = $query_string_base . "&" . 
           "seacolor=e0e0f0". "&" . 
           "tracks=". $tracks . "&" . 
