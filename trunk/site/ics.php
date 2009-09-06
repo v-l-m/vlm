@@ -42,7 +42,7 @@ function outputRaceTitle($fullRacesObj, $titletemplate = "%s / %s") {
 /* output de la polaire */
 
 function outputRacePolar($fullRacesObj, $title) {
-    printf("<h3>" . $title . "<a href=\"speedchart.php?boattype=" . $fullRacesObj->races->boattype . "\" target=\"_speedchart\">" . substr($fullRacesObj->races->boattype,5) . "</a></h3>");     
+    printf("<h3>" . $title . "&nbsp;:&nbsp;<a href=\"speedchart.php?boattype=" . $fullRacesObj->races->boattype . "\" target=\"_speedchart\">" . substr($fullRacesObj->races->boattype,5) . "</a></h3>");     
 }
 
 /* output du tableau de wp */
