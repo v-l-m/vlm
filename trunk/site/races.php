@@ -9,7 +9,7 @@ include_once("config.php");
  */
 function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr") {
     //echo "<H1>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</H1>";
-    echo "<h1>"."CHOIX DU CLASSEMENT"."</h1>";
+    echo "<h1>".$strings[$lang]["rankingtype"]."</h1>";
 
     $tables = array();
 
@@ -36,7 +36,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
         if ( $table == $tableType ) {
             $class="class=\"hilight\"";
             if ( strstr($table, "WP") ) {
-                $cellcontent=$WP[6];
+                $cellcontent=$WP[6]."&nbsp;(".$table.")";
             } else {
                 $cellcontent=ucfirst($table);
             }
@@ -44,7 +44,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
             $class="class=\"nohilight\"";
             if ( strstr($table, "WP") ) {
                 //$tlabel=substr($table,2);
-                $tlabel=$WP[6];
+                $tlabel=$WP[6]."&nbsp;(".$table.")";
             } else {
                 $tlabel=$table;
             }
