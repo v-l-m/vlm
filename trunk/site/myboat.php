@@ -42,6 +42,7 @@ include_once("includes/header.inc");
 
     if ( $usersObj->users->pilotmode == PILOTMODE_HEADING 
       OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG  
+      OR $usersObj->users->pilotmode == PILOTMODE_VBVMG  
       OR $usersObj->users->pilotmode == PILOTMODE_BESTSPD  ) {
 
          $boatdir = (360 - $usersObj->users->boatheading ) ;

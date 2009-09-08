@@ -73,7 +73,8 @@ if ( $usersObj->engaged != 0 ) {
     echo "Heading=". $fullUsersObj->users->boatheading ;
 
     if ( $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC
-	   or $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
+	   or $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG
+	   or $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG ) {
 
       echo ", Reaching position=" . giveDegMinSec("engine",$fullUsersObj->LatNM/1000, $fullUsersObj->LongNM/1000);
       if ( $fullUsersObj->users->targetlong == $fullUsersObj->LongNM/1000 
@@ -193,7 +194,8 @@ if ( $usersObj->engaged != 0 ) {
     // ===================================================================
     if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE 
 	 OR $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC 
-	 OR $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG  )  {
+	 OR $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG 
+	 OR $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG )  {
 
       $fullUsersObj->updateAngles();
       echo ", Angle updated";

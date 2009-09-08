@@ -144,7 +144,7 @@ class users
         $this->pilotparameter=$PIP;
         $query .= ", pilotparameter=$PIP ";
       }
-      if ( $PIM == PILOTMODE_ORTHODROMIC or $PIM == PILOTMODE_BESTVMG ) {
+      if ( $PIM == PILOTMODE_ORTHODROMIC or $PIM == PILOTMODE_BESTVMG or $PIM == PILOTMODE_VBVMG ) {
         if ( strlen($PIP) != 0 && $PIP != "0" ) {
           $values = explode("@", $PIP);
           $Coords = explode(",", $values[0]);
