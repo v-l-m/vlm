@@ -62,7 +62,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
   
         echo "<td align=\"left\" class=\"boat\">";
         $urlidraces = sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
-        $urlboattype = sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\">%s</a>", $boattype, $boattypename);
+        $urlboattype = sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
         $urlracename = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
         $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
         if ( $maxboats != 0 ) {            
