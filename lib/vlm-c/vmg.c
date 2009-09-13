@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.31 2009-09-07 15:54:24 ylafon Exp $
+ * $Id: vmg.c,v 1.33 2009-09-13 12:50:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -79,7 +79,7 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
     if (t > t_max) {
       t_max = t;
       maxheading = t_heading;
-      maxwangle = w_angle - t_heading;
+      maxwangle = t_heading - w_angle;
       maxspeed = speed;
     } else if ( t_max - t > (t_max/20.0)) { 
       break;  /* cut if lower enough from current maximum */
@@ -97,7 +97,7 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
       t_max2 = t;
       if (t > t_max) {
 	maxheading = t_heading;
-	maxwangle = w_angle - t_heading;
+	maxwangle = t_heading - w_angle;
 	maxspeed = speed;
 	t_max = t;
       }
@@ -111,7 +111,11 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
     maxheading += TWO_PI;
   }
   maxwangle = fmod(maxwangle, TWO_PI);
-
+#if DEBUG
+  printf("BVMG: Wind %.2fkts %.2f\n", w_speed, radToDeg(w_angle));
+  printf("BVMG Wind Angle : heading %.2f, wind angle %.2f\n",
+         radToDeg(maxheading), radToDeg(maxwangle));
+#endif /* DEBUG */
   *heading = maxheading;
   *wangle = maxwangle;
 }
