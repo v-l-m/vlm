@@ -31,8 +31,10 @@ class users
     $blocnote,
     $ipaddr,
     $pilototo,
+    $preferences,
+    $gotpreferences,
     $theme;
-
+  
   function users($id)
   {
     //  echo "constructeur users with $id \n";
@@ -81,6 +83,23 @@ class users
     if ( is_null($this->theme) ) {
         $this->theme = 'default';
     } 
+  }
+
+  function getMyPref($pref_name) {
+    if (!isset($this->preferences)) {
+      $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
+	            " WHERE idusers = $idusers";
+      $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
+      $this->preferences = array();
+      while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
+	$this->preferences[$row[0]] = $row[1];
+      }
+    }
+    if (array_key_exists($pref_name, $this->preferences)) {
+      return $this->preferences[$pref_name];
+    } else {
+      return NOTSET;
+    }
   }
 
   //update boatname and color

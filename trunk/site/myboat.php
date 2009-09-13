@@ -31,9 +31,9 @@ include_once("includes/header.inc");
     // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
     // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis 
 
-    $autoUpdateAngles = getUserPref($usersObj->users->idusers,"autoUpdateAngles");
+    $autoUpdateAngles = $usersObj->users->getMyPref("autoUpdateAngles");
     if ( $autoUpdateAngles != "false" ) {
-          $usersObj->updateAngles();
+      $usersObj->updateAngles();
     }
 
     $winddir = (360 - $usersObj->wheading ) + 90;
@@ -74,25 +74,25 @@ include_once("includes/header.inc");
     }
 
     // Retrive user_prefs
-    $mapOpponents = getUserPref($usersObj->users->idusers,"mapOpponents");
+    $mapOpponents = $userObj->users->getMyPref("mapOpponents");
     if ( $mapOpponents == "NULL" ) $mapOpponents="myboat";
-    $mapTools = getUserPref($usersObj->users->idusers,"mapTools");
+    $mapTools = $userObj->users->getMyPref("mapTools");
     if ( $mapTools == "NULL" ) $mapTools="compas";
-    $mapCenter = getUserPref($usersObj->users->idusers,"mapCenter");
+    $mapCenter = $userObj->users->getMyPref("mapCenter");
     if ( $mapCenter == "NULL" ) $mapCenter="myboat";
-    $mapArea = getUserPref($usersObj->users->idusers,"maparea");
+    $mapArea = $userObj->users->getMyPref("maparea");
     if ( $mapArea == "NULL" ) $mapArea=10;
-    $mapAge = getUserPref($usersObj->users->idusers,"mapAge");
+    $mapAge = $userObj->users->getMyPref("mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
-    $mapLayers = getUserPref($usersObj->users->idusers,"mapLayers");
+    $mapLayers = $userObj->users->getMyPref("mapLayers");
     if ( $mapMaille == "NULL" ) $mapLayers="merged";
-    $mapMaille = getUserPref($usersObj->users->idusers,"mapMaille");
+    $mapMaille = $userObj->users->getMyPref("mapMaille");
     if ( $mapMaille == "NULL" ) $mapMaille=3;
-    $mapEstime = getUserPref($usersObj->users->idusers,"mapEstime");
+    $mapEstime = $userObj->users->getMyPref("mapEstime");
     if ( $mapEstime == "NULL" ) $mapEstime=50;
-    $mapX = getUserPref($usersObj->users->idusers,"mapX");
+    $mapX = $userObj->users->getMyPref("mapX");
     if ( $mapX == "NULL" ) $mapX = 800;
-    $mapY = getUserPref($usersObj->users->idusers,"mapY");
+    $mapY = $userObj->users->getMyPref("mapY");
     if ( $mapY == "NULL" ) $mapY = 600;
 
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
