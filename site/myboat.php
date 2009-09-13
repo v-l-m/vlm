@@ -94,6 +94,7 @@ include_once("includes/header.inc");
     if ( $mapX == "NULL" ) $mapX = 800;
     $mapY = getUserPref($usersObj->users->idusers,"mapY");
     if ( $mapY == "NULL" ) $mapY = 600;
+
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
     //printf("amure=%s<BR/>",$amure);
 
@@ -691,7 +692,7 @@ include_once("scripts/myboat.js");
 </div> <!-- Fin des controlbox -->
 
 <!-- Mapbox -->
-<form id="mercator" action="map.img.php" target="_new" method="get">
+<form name="mapprefs" id="mercator" action="map.img.php" target="_new" method="get">
 <div id="mapbox">
 <!--    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?> -->
     <div id="maplayerbox" class="mapboxitem">
@@ -699,12 +700,12 @@ include_once("scripts/myboat.js");
         <div id="mapgriblayerbox"  class="mapboxsubitem">
             <span class="titlehelpers"><?php echo $strings[$lang]["maplayers"]; ?></span>
             <p>
-            <input type="radio" name="maplayers" value="multi" 
+            <input onChange="mapprefChanged();" type="radio" name="maplayers" value="multi" 
             <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
             <?php echo $strings[$lang]["maplayersmulti"]; ?>
             </p>
             <p>        
-            <input type="radio" name="maplayers" value="merged"
+            <input onChange="mapprefChanged();" type="radio" name="maplayers" value="merged"
             <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
             <?php echo $strings[$lang]["maplayersone"]; ?>
             </p>
@@ -712,21 +713,21 @@ include_once("scripts/myboat.js");
         <div  id="maptoolslayerbox"  class="mapboxsubitem">
             <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
             <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
-            <input type="hidden" name="save" value="on" />
+            <input type="hidden" name="save" value="off" />
             <span class="titlehelpers"><?php echo $strings[$lang]["maptype"]; ?> </span>
-            <p><input type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
+            <p><input onChange="mapprefChanged();" type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
             <?php echo $strings[$lang]["mapcompas"]; ?>
             </p>
             <p>
-            <input type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
+            <input onChange="mapprefChanged();" type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
             <?php echo $strings[$lang]["mapfloatingcompas"]; ?>
             </p>
             <p>
-            <input type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
+            <input onChange="mapprefChanged();" type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
             <?php echo $strings[$lang]["mapbothcompas"]; ?>
             </p>
             <p>
-            <input type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
+            <input onChange="mapprefChanged();" type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
             <?php echo $strings[$lang]["mapsimple"]; ?>
             </p>
         </div>
@@ -739,24 +740,24 @@ include_once("scripts/myboat.js");
     ?>
     <div  id="mapopponents"  class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
-        <p><input type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
-        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
-        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
-        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
-        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
-        <p><input <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $usersObj->races->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+        <p><input onChange="mapprefChanged();"  type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $usersObj->races->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
     </div>
     <div id="mapcenterbox" class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
-        <p><input type="radio" name="mapcenter" value="myboat" <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  />
+        <p><input onChange="mapprefChanged();" type="radio" name="mapcenter" value="myboat" <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  />
         <label for="myboat"><?php echo $strings[$lang]["mymapboat"]; ?></label>
         </p>
         <p>
-        <input type="radio" name="mapcenter" value="mywp" <?php if ($mapCenter == "mywp" )  echo " checked=\"checked\""; ?>  />
+        <input onChange="mapprefChanged();" type="radio" name="mapcenter" value="mywp" <?php if ($mapCenter == "mywp" )  echo " checked=\"checked\""; ?>  />
         <label for="mywp"><?php echo "waypoint"; ?></label>
         </p>
         <p>
-        <input type="radio" name="mapcenter" value="roadtowp" <?php if ($mapCenter == "roadtowp" )  echo " checked=\"checked\""; ?>  />
+        <input onChange="mapprefChanged();" type="radio" name="mapcenter" value="roadtowp" <?php if ($mapCenter == "roadtowp" )  echo " checked=\"checked\""; ?>  />
         <label for="roadtowp"><?php echo $strings[$lang]["mymaproute"]; ?></label>
         </p>
     </div>
@@ -768,19 +769,19 @@ include_once("scripts/myboat.js");
             <p>
                 
                 <span class="subtitlehelpers"><?php echo $strings[$lang]["maille"]; ?></span>
-                <input title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
+                <input onChange="mapprefChanged();" title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
             </p>
             <p>
                 <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*60*$usersObj->races->vacfreq /3600, 3) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
-                <input title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
+                <input onChange="mapprefChanged();" title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
             </p>
             <p>
                 <span class="subtitlehelpers"><?php echo  $strings[$lang]["trackage"] ; ?></span>
-                <input title="0..168h" type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />
+                <input onChange="mapprefChanged();" title="0..168h" type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />
             </p>
             <p>
                 <span class="subtitlehelpers"><?php echo $strings[$lang]["mapsize"]  ;  ?></span>
-                <input title="0..20" type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
+                <input onChange="mapprefChanged();" title="0..20" type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
             </p>
         </div>
          <!-- Maillage  et tailles -->
