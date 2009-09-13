@@ -30,6 +30,8 @@
         exit;
     }
 
+    $save= (htmlentities($_GET['save']) == 'on');
+
     $maptype= htmlentities($_GET['maptype']);
 
     $list= htmlentities($_GET['list']) ;
@@ -41,7 +43,7 @@
         if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
     }
     if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX; {
-        setUserPref(htmlentities($_GET['boat']), "maparea" , $maparea);
+        setUserPref(htmlentities($_GET['boat']), "maparea" , $maparea, $save);
     }
     $maille= htmlentities($_GET['maille']);
     if ( $maille == "" ) {
@@ -50,13 +52,13 @@
         if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
     }
     if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
-    setUserPref(htmlentities($_GET['boat']), "mapMaille" , $maille);
+    setUserPref(htmlentities($_GET['boat']), "mapMaille" , $maille, $save);
 
     $idraces= htmlentities($_GET['idraces']) ;
     //if ( $idraces == 20081109 ) $list = "myboat";
 
     $boat= htmlentities($_GET['boat']) ;
-    $save= htmlentities($_GET['save']) ;
+
     $tracks= htmlentities($_GET['tracks']) ;
     if ( $tracks == "" ) $tracks = "on";
 
@@ -68,18 +70,18 @@
 
     // Limitation de la taille de la carte pour pas péter le serveur
     if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
-    setUserPref(htmlentities($_GET['boat']), "mapX" , $x);
+    setUserPref(htmlentities($_GET['boat']), "mapX" , $x, $save);
   
     if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
-    setUserPref(htmlentities($_GET['boat']), "mapY" , $y);
+    setUserPref(htmlentities($_GET['boat']), "mapY" , $y, $save);
   
     $age= htmlentities($_GET['age']) ;
     if ( $age == "" ) $age = 2;
-    setUserPref(htmlentities($_GET['boat']), "mapAge" , $age);
+    setUserPref(htmlentities($_GET['boat']), "mapAge" , $age, $save);
   
     $estime= htmlentities($_GET['estime']) ;
     if ( $estime == "" ) $estime = 30;
-    setUserPref(htmlentities($_GET['boat']), "mapEstime" , $estime);
+    setUserPref(htmlentities($_GET['boat']), "mapEstime" , $estime, $save);
   
     $proj= htmlentities($_GET['proj']) ;
     //  $proj="carre"; 
@@ -91,7 +93,7 @@
     if ( $windtext == "" ) $windtext = "on";
   
     $drawtextwp= htmlentities($_GET['drawtextwp']) ;
-    if ( $drawtextwp == "" ) $windtext = "on";
+    if ( $drawtextwp == "" ) $drawtext = "on";
     // Guess real map coordinates
 
 ?>
@@ -180,15 +182,15 @@
 
     <?php
       // Sauvegarde des préférences
-      setUserPref(htmlentities($_GET['boat']), "mapOpponents" , htmlentities($_GET['list']));
+      setUserPref(htmlentities($_GET['boat']), "mapOpponents" , htmlentities($_GET['list']), $save);
 
       $maplayers=htmlentities($_GET['maplayers']);
       if ( $maplayers == "" ) $maplayers = "merged";
-      setUserPref(htmlentities($_GET['boat']), "mapLayers" , $maplayers);
+      setUserPref(htmlentities($_GET['boat']), "mapLayers" , $maplayers, $save);
 
       $mapcenter=htmlentities($_GET['mapcenter']);
       if ( $mapcenter == "" ) $mapcenter = "myboat";
-      setUserPref(htmlentities($_GET['boat']), "mapCenter" , $mapcenter);
+      setUserPref(htmlentities($_GET['boat']), "mapCenter" , $mapcenter, $save);
 
       // Centrage de la carte
       // Coordonnées bateau
@@ -293,12 +295,12 @@
       // ****  Le compas deplacable en dernier, sinon il est dessous.. *** 
       // Que met t'on sur la carte ?
       if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
-          setUserPref(htmlentities($_GET['boat']), "mapTools" , $maptype);
+          setUserPref(htmlentities($_GET['boat']), "mapTools" , $maptype, $save);
           echo "<div id=\"deplacable\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><img src=\"images/site/compas-transparent.gif\"></div>";
       } else if ( $maptype == "compas" ) {
-          setUserPref(htmlentities($_GET['boat']), "mapTools" , "compas");
+          setUserPref(htmlentities($_GET['boat']), "mapTools" , "compas", $save);
       } else {
-          setUserPref(htmlentities($_GET['boat']), "mapTools" , "none");
+          setUserPref(htmlentities($_GET['boat']), "mapTools" , "none", $save);
       }
     ?>
 
