@@ -33,7 +33,7 @@ echo  "******************* starting the engine ********************" >> $LOG
 date >> $LOG
 echo "************************************************************" >> $LOG
 
-limit -t $MAXMOTEURTIME
+ulimit -t $MAXMOTEURTIME
 
 nice -10 $VLMPHPPATH moteur.php $* >> $LOG 2>&1
 
