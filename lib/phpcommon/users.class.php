@@ -32,7 +32,6 @@ class users
     $ipaddr,
     $pilototo,
     $preferences,
-    $gotpreferences,
     $theme;
   
   function users($id)
@@ -88,7 +87,7 @@ class users
   function getMyPref($pref_name) {
     if (!isset($this->preferences)) {
       $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
-	            " WHERE idusers = $idusers";
+	            " WHERE idusers = $this->idusers";
       $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
       $this->preferences = array();
       while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
