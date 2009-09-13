@@ -6,19 +6,24 @@ $false_errors = Array(
     'fr' => Array(
       'images', 'faq', 'doc', 'forum', 'contact', 'version', 'position', 'degrees', 'taverne', 'tchat', 'loch', 'estime', 'mapsize',
       'proj', 'mercator', 'lambert', 'a12', 
+      'vbvmgengaged',
       ),
     'it' => Array(
       'home', 'forum', 'taverne', 'tchat', 'sponsor', 'skipper', 'nautics', 'mapsize', 'degrees', 'a12', 'dateClassificationFormat', 
+      'vbvmgengaged',
       ),
     'pt' => Array(
-      'faq', 'forum', 'tchat', 'days', 'mapsize', 'mercator', 'degrees', 'a12', 'dateClassificationFormat'
+      'faq', 'forum', 'tchat', 'days', 'mapsize', 'mercator', 'degrees', 'a12', 'dateClassificationFormat',
+      'vbvmgengaged',
       ),
     'es' => Array(
       'faq', 'tchat', 'skipper', 'nautics', 'knots', 'days', 'mapsize', 'mercator', 'tracks', 'degrees', 'a12', 'dateClassificationFormat',
       'loch',
+      'vbvmgengaged',
       ),
     'en' => Array(
       'images', 'faq', 'doc', 'forum', 'tchat', 'taverne', 'a12', 'contact', 'version', 'position', 'loch', 'estime', 'mapsize', 'proj', 'mercator', 'lambert', 'degrees',
+      'vbvmgengaged',
       ),
     );
 
