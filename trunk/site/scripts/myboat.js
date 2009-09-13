@@ -235,9 +235,16 @@ function findboatspeed(angledifference)
 }
 
 function updateUserPref()
+//FIXME: useless, isn't it ?
 {
   val = document.mercator.maparea.value;
   alert(val)
+}
+
+//Something changed, then save it.
+function mapprefChanged()
+{
+  document.mapprefs.save.value='on';
 }
 //]]>
 </script>
