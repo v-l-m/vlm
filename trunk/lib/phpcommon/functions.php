@@ -1099,9 +1099,9 @@ function getTheme()
 
 }
 
-function setUserPref($idusers,$pref_name,$pref_value)
+function setUserPref($idusers,$pref_name,$pref_value, $save=true)
 {
-  if ($idusers != "") {
+  if ($idusers != "" and $save) {
     $query_pref = "REPLACE into user_prefs (idusers, pref_name, pref_value) " . 
       " VALUES ( " . $idusers . 
       ", " .     " '" . $pref_name .  "', '" . $pref_value . "')" ;
