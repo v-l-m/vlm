@@ -31,7 +31,6 @@ class users
     $blocnote,
     $ipaddr,
     $pilototo,
-    $preferences,
     $theme;
   
   function users($id)
@@ -84,22 +83,7 @@ class users
     } 
   }
 
-  function getMyPref($pref_name) {
-    if (!isset($this->preferences)) {
-      $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
-	            " WHERE idusers = $this->idusers";
-      $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
-      $this->preferences = array();
-      while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
-	$this->preferences[$row[0]] = $row[1];
-      }
-    }
-    if (array_key_exists($pref_name, $this->preferences)) {
-      return $this->preferences[$pref_name];
-    } else {
-      return NOTSET;
-    }
-  }
+
 
   //update boatname and color
   function write()
@@ -328,7 +312,8 @@ class fullUsers
     $distancefromend, $nwp,
     $VMG, $VMGortho,
     $LongNM, $LatNM,
-    $loch;
+    $loch,
+    $preferences;
 
   function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
   {
@@ -437,6 +422,22 @@ class fullUsers
 
   }
 
+  function getMyPref($pref_name) {
+    if (!isset($this->preferences)) {
+      $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
+	            " WHERE idusers = ".$this->users->idusers;
+      $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
+      $this->preferences = array();
+      while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
+	$this->preferences[$row[0]] = $row[1];
+      }
+    }
+    if (array_key_exists($pref_name, $this->preferences)) {
+      return $this->preferences[$pref_name];
+    } else {
+      return NOTSET;
+    }
+  }
 
   //====================================================================================
   // This function gives the lat ant long where it seems the best to cross next waypoint

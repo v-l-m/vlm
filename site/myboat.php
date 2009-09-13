@@ -74,25 +74,25 @@ include_once("includes/header.inc");
     }
 
     // Retrive user_prefs
-    $mapOpponents = $userObj->users->getMyPref("mapOpponents");
+    $mapOpponents = $userObj->getMyPref("mapOpponents");
     if ( $mapOpponents == "NULL" ) $mapOpponents="myboat";
-    $mapTools = $userObj->users->getMyPref("mapTools");
+    $mapTools = $userObj->getMyPref("mapTools");
     if ( $mapTools == "NULL" ) $mapTools="compas";
-    $mapCenter = $userObj->users->getMyPref("mapCenter");
+    $mapCenter = $userObj->getMyPref("mapCenter");
     if ( $mapCenter == "NULL" ) $mapCenter="myboat";
-    $mapArea = $userObj->users->getMyPref("maparea");
+    $mapArea = $userObj->getMyPref("maparea");
     if ( $mapArea == "NULL" ) $mapArea=10;
-    $mapAge = $userObj->users->getMyPref("mapAge");
+    $mapAge = $userObj->getMyPref("mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
-    $mapLayers = $userObj->users->getMyPref("mapLayers");
+    $mapLayers = $userObj->getMyPref("mapLayers");
     if ( $mapMaille == "NULL" ) $mapLayers="merged";
-    $mapMaille = $userObj->users->getMyPref("mapMaille");
+    $mapMaille = $userObj->getMyPref("mapMaille");
     if ( $mapMaille == "NULL" ) $mapMaille=3;
-    $mapEstime = $userObj->users->getMyPref("mapEstime");
+    $mapEstime = $userObj->getMyPref("mapEstime");
     if ( $mapEstime == "NULL" ) $mapEstime=50;
-    $mapX = $userObj->users->getMyPref("mapX");
+    $mapX = $userObj->getMyPref("mapX");
     if ( $mapX == "NULL" ) $mapX = 800;
-    $mapY = $userObj->users->getMyPref("mapY");
+    $mapY = $userObj->getMyPref("mapY");
     if ( $mapY == "NULL" ) $mapY = 600;
 
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
