@@ -31,7 +31,7 @@ include_once("includes/header.inc");
     // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
     // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis 
 
-    $autoUpdateAngles = $usersObj->users->getMyPref("autoUpdateAngles");
+    $autoUpdateAngles = $usersObj->getMyPref("autoUpdateAngles");
     if ( $autoUpdateAngles != "false" ) {
       $usersObj->updateAngles();
     }
