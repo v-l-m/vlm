@@ -54,6 +54,8 @@ if ( $argc > 2 ) {
 
 
 $engine_start=time();
+$engine_start_float=microtime(true);
+
 // Purge des anciennes positions (on ne garde une trace que sur MAX_POSITION_AGE)
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
@@ -107,7 +109,11 @@ include "clean_event_log.php";
 
 /////////////////////////////WRITE UPDATE DATE IN DATABASE
 $engine_stop=time();
-$engine_elapsed=1+$engine_stop - $engine_start;
+$engine_stop_float=microtime(true);
+$engine_elapsed_float=$engine_stop_float-$engine_stop_start;
+if (round($engine_elapsed_float) > 0 ) {
+   $engine_elapsed = round($engine_elapsed_float);
+}
 
 // Demarrage des courses à démarrer... 
 echo "\n4- === CHECKING IF A RACE STARTS\n";
@@ -128,6 +134,6 @@ if ( $flagglobal == true ) {
 }
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
-echo "Time=" . $engine_elapsed . "sec.  rate=". $nb_boats/$engine_elapsed . " boats/sec **\n";
+echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
 
 ?>
