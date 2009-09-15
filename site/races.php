@@ -36,7 +36,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
         if ( $table == $tableType ) {
             $class="class=\"hilight\"";
             if ( strstr($table, "WP") ) {
-                $cellcontent=$WP[6]."&nbsp;(".$table.")";
+                $cellcontent=$WP[6]."<br />(".$table.")";
             } else {
                 $cellcontent=ucfirst($table);
             }
@@ -44,7 +44,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
             $class="class=\"nohilight\"";
             if ( strstr($table, "WP") ) {
                 //$tlabel=substr($table,2);
-                $tlabel=$WP[6]."&nbsp;(".$table.")";
+                $tlabel=$WP[6]."<br />(".$table.")";
             } else {
                 $tlabel=$table;
             }
