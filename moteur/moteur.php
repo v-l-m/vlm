@@ -70,7 +70,9 @@ $result = mysql_db_query(DBNAME,$querypurgeupdates);
 
 
 //echo "\n".$querypurgepositions;
-
+$step_stop_float=microtime(true);
+echo "\n  TIMINGS: duration step 1 - ".($step_stop_float-$engine_start_float).
+     "\n";
 
 // ========================================
 echo "\n2- === DO THE JOB FOR EACH RACE\n";
@@ -99,6 +101,10 @@ foreach($racesListObj->records as $idraces) {
 
 } // Foreach race
 
+$next_step_stop_float=microtime(true);
+$step2_elapsed_float=$next_step_stop_float-$step_stop_float;
+echo "\n  TIMINGS: duration step 2 - ".($step2_elapsed_float)."\n";
+$step_stop_float=$next_step_stop_float;
 
 //////////// CLEANING GARBAGES RACES 
 //     (Race ended, but some boats still engaged on it...)
@@ -106,6 +112,11 @@ foreach($racesListObj->records as $idraces) {
 echo "\n3- === CHECKING FOR GARBAGE IN DATABASE\n";
 include "clean_garbage_races.php";
 include "clean_event_log.php";
+
+$next_step_stop_float=microtime(true);
+echo "\n  TIMINGS: duration step 3 - ".($next_step_stop_float-$step_stop_float).
+     "\n";
+$step_stop_float=$next_step_stop_float;
 
 /////////////////////////////WRITE UPDATE DATE IN DATABASE
 $engine_stop=time();
@@ -135,5 +146,6 @@ if ( $flagglobal == true ) {
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
 echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
+echo "  TIMINGS: Time race check=" . $step2_elapsed_float . "sec.  rate=". $nb_boats/$step2_elapsed_float . " boats/sec\n";
 
 ?>
