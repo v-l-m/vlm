@@ -126,7 +126,7 @@ include_once("scripts/myboat.js");
 ?>
     <div id="racenamebox">
         <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
-        <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->racedistance) . "nm)"; ?>
+        <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->getRaceDistance()) . "nm)"; ?>
         </a>
     </div> <!-- fin de racenamebox -->
     <div id="raceicbox">
