@@ -54,6 +54,8 @@ if ( $argc > 2 ) {
 
 
 $engine_start=time();
+$engine_start_float=microtime(true);
+
 // Purge des anciennes positions (on ne garde une trace que sur MAX_POSITION_AGE)
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
@@ -68,7 +70,9 @@ $result = mysql_db_query(DBNAME,$querypurgeupdates);
 
 
 //echo "\n".$querypurgepositions;
-
+$step_stop_float=microtime(true);
+echo "\n  TIMINGS: duration step 1 - ".($step_stop_float-$engine_start_float).
+     "\n";
 
 // ========================================
 echo "\n2- === DO THE JOB FOR EACH RACE\n";
@@ -97,6 +101,10 @@ foreach($racesListObj->records as $idraces) {
 
 } // Foreach race
 
+$next_step_stop_float=microtime(true);
+$step2_elapsed_float=$next_step_stop_float-$step_stop_float;
+echo "\n  TIMINGS: duration step 2 - ".($step2_elapsed_float)."\n";
+$step_stop_float=$next_step_stop_float;
 
 //////////// CLEANING GARBAGES RACES 
 //     (Race ended, but some boats still engaged on it...)
@@ -105,9 +113,18 @@ echo "\n3- === CHECKING FOR GARBAGE IN DATABASE\n";
 include "clean_garbage_races.php";
 include "clean_event_log.php";
 
+$next_step_stop_float=microtime(true);
+echo "\n  TIMINGS: duration step 3 - ".($next_step_stop_float-$step_stop_float).
+     "\n";
+$step_stop_float=$next_step_stop_float;
+
 /////////////////////////////WRITE UPDATE DATE IN DATABASE
 $engine_stop=time();
-$engine_elapsed=1+$engine_stop - $engine_start;
+$engine_stop_float=microtime(true);
+$engine_elapsed_float=$engine_stop_float-$engine_start_float;
+if (round($engine_elapsed_float) > 0 ) {
+   $engine_elapsed = round($engine_elapsed_float);
+}
 
 // Demarrage des courses à démarrer... 
 echo "\n4- === CHECKING IF A RACE STARTS\n";
@@ -128,6 +145,7 @@ if ( $flagglobal == true ) {
 }
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
-echo "Time=" . $engine_elapsed . "sec.  rate=". $nb_boats/$engine_elapsed . " boats/sec **\n";
+echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
+echo "  TIMINGS: Time race check=" . $step2_elapsed_float . "sec.  rate=". $nb_boats/$step2_elapsed_float . " boats/sec\n";
 
 ?>
