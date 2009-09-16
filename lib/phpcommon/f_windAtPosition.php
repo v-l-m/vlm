@@ -1,38 +1,4 @@
 <?php
-// ========== WIND AT POSITION ========
-// Pour les tests (depuis automne 2007..), pour passer facilement d'une
-// version à l'autre de la fonction "windAtPosition"
-// ==> Abandon de ce système (pour les cartes) à prévoir...
-function windAtPosition($_lat = 0, $_long = 0, $when = 0, $version = SYSTEME_WIND_AT_POSITION )
-{
-  $versions=array("SPF","NO");
-  
-  // On force le mode de gestion du vent à ce qui est dit dans la config (param.php)
-  $version = SYSTEME_WIND_AT_POSITION ;
-  
-  if ( in_array($version , $versions) ) {
-    return call_user_func($version . 'windAtPosition' , $_lat, $_long, $when);
-  } else {
-    return call_user_func('NOwindAtPosition' , $_lat, $_long);
-  }
-}
-
-/*
-   Cette fonction envoie du vent de nord-ouest
-*/
-function NOwindAtPosition($_lat , $_long, $when = 0)
-{
-  $vitesse = 25;
-  $angle   = 135;
-  
-  //                Force         Direction
-  //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
-  //printf ("Wind=%f\n", $vitesse, $angle);
-  return array (
-		$vitesse, $angle
-		);
-}
-
 /*
  *  Cette fonction s'appuie sur le moulin a vent de Yves
  * @input $_lat latitude, en millieme de degres.
@@ -43,7 +9,7 @@ function NOwindAtPosition($_lat , $_long, $when = 0)
  *          les calculs a un meme instant 
  * @return une array ( vitesse (kts), angle (degres) )
 */
-function SPFwindAtPosition($_lat , $_long, $when = 0)
+function windAtPosition($_lat = 0, $_long = 0, $when = 0, $version = SYSTEME_WIND_AT_POSITION )
 {
   /*
     la fonction cree une structure contenant des pointeurs vers
