@@ -203,13 +203,6 @@ function nextUpdate($strings, $lang)
     }
 }
 
-function getMicrotime()
-{
-  list($usec, $sec) = explode(" ", microtime());
-  return ((float)$usec + (float)$sec);
-  //return ($usec * 1000000);
-}
-
 /* from two geographics angles in degrees, compute the shortest angle between them */
 function angleDifference($a, $b)
 {
