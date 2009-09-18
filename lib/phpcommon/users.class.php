@@ -32,7 +32,7 @@ class users
     $ipaddr,
     $pilototo,
     $theme;
-
+  
   function users($id)
   {
     //  echo "constructeur users with $id \n";
@@ -310,7 +310,8 @@ class fullUsers
     $distancefromend, $nwp,
     $VMG, $VMGortho,
     $LongNM, $LatNM,
-    $loch;
+    $loch,
+    $preferences;
 
   function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
   {
@@ -419,6 +420,22 @@ class fullUsers
 
   }
 
+  function getMyPref($pref_name) {
+    if (!isset($this->preferences)) {
+      $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
+	            " WHERE idusers = ".$this->users->idusers;
+      $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
+      $this->preferences = array();
+      while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
+	$this->preferences[$row[0]] = $row[1];
+      }
+    }
+    if (array_key_exists($pref_name, $this->preferences)) {
+      return $this->preferences[$pref_name];
+    } else {
+      return NOTSET;
+    }
+  }
 
   //====================================================================================
   // This function gives the lat ant long where it seems the best to cross next waypoint
@@ -609,40 +626,16 @@ class fullUsers
       break;
     }
 
-
-    if ($this->users->pilotmode == PILOTMODE_WINDANGLE) //constant wind angle
-      {
-        //update boatheading
-        $this->users->boatheading = (($this->wheading+180) + $this->users->pilotparameter) ;
-
-        while ( $this->users->boatheading > 360 ) $this->users->boatheading-=360;
-        while ( $this->users->boatheading < 0 ) $this->users->boatheading+=360;
-
-        $query1 = "UPDATE users SET boatheading =". round($this->users->boatheading ,1)
-          ." WHERE idusers =".$this->users->idusers;
-        $result1 = wrapper_mysql_db_query(DBNAME,$query1);
-        //echo $query1;
-      }
-
-    if ($this->users->pilotmode == PILOTMODE_ORTHODROMIC) //orthodromic course, no pilot parameter required
-      {
-        //update boatheading
-        $this->users->boatheading = $this->orthodromicHeading();
-        $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-          ." WHERE idusers = ".$this->users->idusers;
-        $result1 = wrapper_mysql_db_query(DBNAME,$query1);
-        //echo $query1;
-      }
     //find the angle boat/wind
     $this->boatanglewithwind = angleDifference($this->users->boatheading,
                                                $this->wheading) ;
-
+    
     //find boatspeed
     //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
     $this->boatspeed =  findboatspeed($this->boatanglewithwind,
                                       $this->wspeed,
                                       $this->users->boattype);
-
+    
   }
 
   //update the target lat / long
