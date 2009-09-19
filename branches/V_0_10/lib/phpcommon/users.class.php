@@ -137,10 +137,12 @@ class users
       $query="UPDATE users SET pilotmode=$PIM ";
 
       if ( $PIM == PILOTMODE_HEADING ) {
+        // Setup the userclass for immediate use
         $this->boatheading=$PIP;
         $query .= ", boatheading=$PIP ";
       }
       if ( $PIM == PILOTMODE_WINDANGLE ) {
+        // Setup the userclass for immediate use
         $this->pilotparameter=$PIP;
         $query .= ", pilotparameter=$PIP ";
       }
@@ -151,10 +153,18 @@ class users
           $query .= ", targetlat=round($Coords[0],4), targetlong=round($Coords[1],4) ";
           if ( round($values[1]) > 0 ) {
             $query .= ", targetandhdg=" . $values[1] ;
+            // Setup the userclass for immediate use
+            $this->targetandhdg = $values[1];
           } else {
             $query .= ", targetandhdg=-1 ";
+            // Setup the userclass for immediate use
+            $this->targetandhdg = -1;
           }
+          
           echo $query;
+          // Setup the userclass for immediate use
+          $this->targetlat = round($Coords[0],4);
+          $this->targetlong = round($Coords[1],4);
         }
       }
       // Don't forget tu add the where clause... and execute the query
@@ -628,14 +638,14 @@ class fullUsers
 
     //find the angle boat/wind
     $this->boatanglewithwind = angleDifference($this->users->boatheading,
-                                               $this->wheading) ;
-    
+                                               $this->wheading) ;    
+
     //find boatspeed
     //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
     $this->boatspeed =  findboatspeed($this->boatanglewithwind,
                                       $this->wspeed,
                                       $this->users->boattype);
-    
+
   }
 
   //update the target lat / long
