@@ -83,8 +83,6 @@ class users
     } 
   }
 
-
-
   //update boatname and color
   function write()
   {
@@ -665,7 +663,6 @@ class fullUsers
     //find the angle boat/wind
     $this->boatanglewithwind = angleDifference($this->users->boatheading,
                                                $this->wheading) ;
-
 
     //find boatspeed
     //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
