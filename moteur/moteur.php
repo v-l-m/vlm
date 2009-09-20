@@ -1,5 +1,6 @@
 <?php
 include_once("vlmc.php");
+include_once("functions.php");
 
 define('MOTEUR','Yes');
 
@@ -60,13 +61,13 @@ $engine_start_float=microtime(true);
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = mysql_db_query(DBNAME,$queryhistopositions);
+$result = wrapper_mysql_db_query(DBNAME,$queryhistopositions);
 
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = mysql_db_query(DBNAME,$querypurgepositions);
+$result = wrapper_mysql_db_query(DBNAME,$querypurgepositions);
 
 $querypurgeupdates = "DELETE FROM updates WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = mysql_db_query(DBNAME,$querypurgeupdates);
+$result = wrapper_mysql_db_query(DBNAME,$querypurgeupdates);
 
 
 //echo "\n".$querypurgepositions;
@@ -141,7 +142,7 @@ if ( $flagglobal == true ) {
       ."'" . $update_races ."'"
       . ")";
      echo "writing timestamp...";
-     $result5 = mysql_db_query(DBNAME,$query5); //or die("Query failed : $query5");
+     $result5 = wrapper_mysql_db_query(DBNAME,$query5); //or die("Query failed : $query5");
 }
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";

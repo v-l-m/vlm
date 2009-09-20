@@ -1,5 +1,6 @@
 <?php
 include_once("vlmc.php");
+include_once("functions.php");
 
     // ==================================
     //  Do they cross the next waypoint ?
@@ -161,7 +162,7 @@ if ($crosses_the_coast) {
             
             if ( $query != "NOQUERY" ) {
               if ($verbose >0 ) echo $query;
-              $result = mysql_db_query(DBNAME,$query);
+              $result = wrapper_mysql_db_query(DBNAME,$query);
               printf ("\t\tBoat arrived...\n");
             } else {
               printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);
