@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.29 2009-09-05 09:19:15 ylafon Exp $
+ * $Id: lines.c,v 1.30 2009-09-20 20:51:41 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,6 +24,16 @@
 #include "types.h"
 #include "ortho.h"
 #include "lines.h"
+
+/**
+ * input: longitude/latitude of old position -> new position
+ * longitude/latitude of wpa->wpb or coast segment
+ * return a double is intersects, with inter_longitude/latitude filled
+ * -1 otherwise */
+
+double __intersects_no_norm PARAM10(double, double, double, double,
+				    double, double, double, double,
+				    double *, double *);
 
 #ifdef SAVE_MEMORY
 #  include "dist_gshhs.h"
@@ -106,15 +116,6 @@ double intersects(double latitude, double longitude,
 		  double seg_a_latitude, double seg_a_longitude,
 		  double seg_b_latitude, double seg_b_longitude, 
 		  double *inter_latitude, double *inter_longitude) {
-  double x, y, x1, x2, t, t_seg,d;
-
-#if 0
-  /* normalization of longitude */
-  longitude = fmod(longitude, TWO_PI);
-  new_longitude = fmod(new_longitude, TWO_PI);
-  seg_a_longitude = fmod(seg_a_longitude, TWO_PI);
-  seg_b_longitude = fmod(seg_b_longitude, TWO_PI);
-#endif /* 0 */
 
   /* then move to 0 -> TWO_PI interval */
   if (longitude <0) {
@@ -159,10 +160,33 @@ double intersects(double latitude, double longitude,
     }
   }
   /* normalization done, perform regular checks */
+
+  return __intersects_no_norm(latitude, longitude, new_latitude, new_longitude,
+			      seg_a_latitude, seg_a_longitude,
+			      seg_b_latitude, seg_b_longitude, 
+			      inter_latitude, inter_longitude);
+}
+
+/**
+ * input: longitude/latitude of old position -> new position
+ * longitude/latitude of wpa->wpb or coast segment
+ * return a double is intersects, with inter_longitude/latitude filled
+ * -1 otherwise */
+
+double __intersects_no_norm(double latitude, double longitude,
+			    double new_latitude, double new_longitude,
+			    double seg_a_latitude, double seg_a_longitude,
+			    double seg_b_latitude, double seg_b_longitude, 
+			    double *inter_latitude, double *inter_longitude) {
+  double x, y, x1, x2, t, t_seg,d;
+  
+  /* normalization done, perform regular checks */
 #ifdef DEBUG
   printf("Checking intersection between %.10fx%.10f->%.10fx%.10f and %.10fx%.10f->%.10fx%.10f\n",
-	 latitude, longitude, new_latitude, new_longitude,
-	 seg_a_latitude, seg_a_longitude, seg_b_latitude,seg_b_longitude);
+	 radToDeg(latitude), radToDeg(longitude),
+	 radToDeg(new_latitude), radToDeg(new_longitude),
+	 radToDeg(seg_a_latitude), radToDeg(seg_a_longitude),
+	 radToDeg(seg_b_latitude), radToDeg(seg_b_longitude));
 #endif /* DEBUG */
 
   x1 = (new_longitude - longitude);
@@ -383,11 +407,6 @@ double check_coast(double latitude, double longitude,
     j_max = i_lat;
   }
 
-#if DEBUG
-  printf("Checking segments: [%d][%d] -> %d\n", i_long, i_lat, 
-	 global_vlmc_context->shoreline[i_long][i_lat].nb_segments); 
-#endif /* DEBUG */
-
   if ((i_max - i_min) < 1800) {
     for (i=i_min; i<=i_max; i++) {
       for (j=j_min; j<=j_max; j++) {
@@ -483,6 +502,10 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
   
   /* some normalization */
   /* normalize the line */
+#ifdef DEBUG
+  printf("Longitude A: %.2f Longitude B: .%2f\n", radToDeg(longitude_a),
+	 radToDeg(longitude_b));
+#endif /* DEBUG */
   if (fabs(longitude_a - longitude_b) > PI) {
     if (longitude_a > longitude_b) {
       if (longitude_a > 0.0) {
@@ -498,6 +521,11 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
       }
     }
   }
+#ifdef DEBUG
+  printf("AB NORM: Longitude A: %.2f Longitude B: %2f\n", 
+	 radToDeg(longitude_a), radToDeg(longitude_b));
+  printf("Point: Longitude: %.2f\n", radToDeg(longitude));
+#endif /* DEBUG */
   /* then the point */
   if ((fabs(longitude-longitude_a)>PI) && (fabs(longitude-longitude_b)>PI)) {
     if (longitude < longitude_a) {
@@ -506,7 +534,9 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
       longitude -= TWO_PI;
     }
   }
-  
+#ifdef DEBUG
+  printf("Point NORM: Longitude: %.2f\n", radToDeg(longitude));
+#endif /* DEBUG */  
   dist_a = __distance((t_latitude-latitude_a), (longitude-longitude_a));
   dist_b = __distance((t_latitude-latitude_b), (longitude-longitude_b));
   ab_dist = __distance((latitude_a-latitude_b),(longitude_a-longitude_b));
@@ -520,15 +550,32 @@ double distance_to_line_ratio_xing(double latitude, double longitude,
   latitude_y = t_latitude + (longitude_b - longitude_a) * max_dist / ab_dist;
   longitude_y = longitude + (latitude_a - latitude_b) * max_dist / ab_dist;
 
-  intersect = intersects(latitude_a, longitude_a, latitude_b, longitude_b,
-			 latitude_y, longitude_y, latitude_x, longitude_x,
-			 &xing_latitude, &xing_longitude);
+#ifdef DEBUG
+  printf("Intersect point: Latitude X: %.2f, Longitude X: %.2f\n",
+	 radToDeg(yToLat(latitude_x)), radToDeg(longitude_x));
+  printf("Intersect point: Latitude Y: %.2f, Longitude Y: %.2f\n",
+	 radToDeg(yToLat(latitude_y)), radToDeg(longitude_y));
+
+#endif /* DEBUG */  
+
+  intersect = __intersects_no_norm(latitude_a, longitude_a, 
+				   latitude_b, longitude_b,
+				   latitude_y, longitude_y, 
+				   latitude_x, longitude_x,
+				   &xing_latitude, &xing_longitude);
   if (intersect>=INTER_MIN_LIMIT && intersect<=INTER_MAX_LIMIT) { 
     *x_latitude  = yToLat(xing_latitude);
     *x_longitude = xing_longitude; 
+#ifdef DEBUG
+  printf("Intersect point: Latitude X: %.2f\n", radToDeg(*x_latitude));
+  printf("Intersect point: Longitude Y: %.2f\n", radToDeg(*x_longitude));
+  printf("Orig point: Latitude X: %.2f\n", radToDeg(latitude));
+  printf("Orig point: Longitude Y: %.2f\n", radToDeg(longitude));
+#endif /* DEBUG */ 
     t_dist = ortho_distance(latitude, longitude, *x_latitude, *x_longitude);
 #ifdef DEBUG
     printf("Min dist: %.3f, found dist: %.3f\n", max_dist, t_dist);
+    printf("Ortho_a: %.3f, Ortho_b: %.3f\n", ortho_a, ortho_b);
 #endif /* DEBUG */
     if (t_dist < ortho_a && t_dist < ortho_b) {
       *ab_ratio = intersect;
