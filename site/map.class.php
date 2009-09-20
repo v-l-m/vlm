@@ -671,24 +671,37 @@ class map
 
   }
 
+
+  //DrawblackoutWarning (used by drawPositions)
+  function drawBlackoutWarning()
+  {
+      $now=time();
+
+      // Test blackout ou pas
+      if ( $now > $this->fullRacesObj->races->bobegin && $now < $this->fullRacesObj->races->boend ) {
+          //FIXME: WARNING is untranslated
+          //FIXME what is this $font var ? (I guess it's zero, this the font size is 15)
+          imagestring ( $this->mapImage, $font+15, $this->xSize/2 -150, 10 , "WARNING : POSITION BLACKOUT IN ACTION", $this->colorWarning);
+          imagestring ( $this->mapImage, $font+15, $this->xSize/2 -149, 9 , "WARNING : POSITION BLACKOUT IN ACTION", $this->colorBlack);
+      }
+      
+  } //drawBlackoutWarning      
+
+
   /////////////////////Draw boat positions and tracks
   function drawPositions($projCallbackLong, $projCallbackLat, $age, $estime)
   {
  
-    if ( $this->list == "" ) { 
-      return (0);
-    }
+      if ( $this->list == "" ) { 
+          return (0);
+      }
 
-    $now=time();
+      $now=time();
+    
+      $this->drawBlackoutWarning();
 
-    // Test blackout ou pas
-    if ( $now > $this->fullRacesObj->races->bobegin && $now < $this->fullRacesObj->races->boend ) {
-      imagestring ( $this->mapImage, $font+15, $this->xSize/2 -150, 10 , "WARNING : POSITION BLACKOUT IN ACTION", $this->colorWarning);
-      imagestring ( $this->mapImage, $font+15, $this->xSize/2 -149, 9 , "WARNING : POSITION BLACKOUT IN ACTION", $this->colorBlack);
-    }
-
-    $mapTools=getUserPref(htmlentities($_GET['boat']),"mapTools") ;
-    $num_boats_to_draw=0;
+      $mapTools=getUserPref(htmlentities($_GET['boat']),"mapTools") ;
+      $num_boats_to_draw=0;
 
     // Si plus de trop de bateaux... on rend la main tout de suite.
     if ( !idusersIsAdmin(htmlentities($_GET['boat'])) ) {
@@ -827,7 +840,7 @@ class map
                       call_user_func_array( array(&$this, $projCallbackLat), $posObj->lat)
                        );
           $ellipseSz=3;
-        }
+        }          
         //if ( $_GET['boat'] == $opponnent || $hidetrack == "no" ) {
         if ( $_GET['boat'] == $opponnent ) {
           imagefilledellipse($this->mapImage, $H[0], $H[1], 
