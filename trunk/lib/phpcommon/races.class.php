@@ -61,20 +61,6 @@ class races
     $this->theme            = $row[17]; //Le theme , si non null, force le theme de l'interface
     $this->vacfreq          = $row[18]; // 1, 5, ou 10, pour frequence des runs du moteur
 
-    // retrieve all IC if we are not running the engine
-    if (!defined('MOTEUR')) {
-        $this->ics = array();
-
-        $query = "SELECT instructions, flag FROM races_instructions" .
-          " WHERE idraces = " . $this->idraces ; 
-
-        $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
-
-        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
-            $this->ics[] = $row;
-        }
-    }
-
     // retrieve all waypoints
     $this->waypoints =array();
 
@@ -107,8 +93,8 @@ class races
 
   }
 
-  function getRaceDistance() {
-    if (!isset($this->racedistance)) {
+  function getRaceDistance($force = 0) {
+    if (!isset($this->racedistance) OR ($force != 0) ) {
       if ( $this->idraces == 35 OR $this->idraces >=40 ) {
 	$this->racedistance=0;
 	$lastlong=$this->startlong;
@@ -135,6 +121,26 @@ class races
       }
     }
     return $this->racedistance;
+  }
+
+  /* retrieve the Race Instructions */
+  function getICS($force = 0) {
+    if (!isset($this->ics) OR ($force != 0) ) {
+      // retrieve all IC if we are not running the engine
+      if (!defined('MOTEUR')) {
+        $this->ics = array();
+	
+        $query = "SELECT instructions, flag FROM races_instructions" .
+          " WHERE idraces = " . $this->idraces ; 
+	
+        $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
+	
+        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+	  $this->ics[] = $row;
+        }
+      }
+    }
+    return $this->ics;
   }
 
   // maxTimeRemaining : 

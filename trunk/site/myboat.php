@@ -423,7 +423,7 @@ include_once("scripts/myboat.js");
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }
             // Affichage des IC destinées à la console
-            foreach ( $usersObj->races->ics as $ic) {
+            foreach ( $usersObj->races->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
                         $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>IC sur le forum / RI on the forum</a>";
