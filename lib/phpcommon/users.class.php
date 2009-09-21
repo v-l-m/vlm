@@ -48,38 +48,38 @@ class users
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("\n FAILED !!\n");
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
-    $this->idusers = $row[0];
-    $this->boattype = $row[1];
-    $this->username = $row[2];
-    $this->password = $row[3];
-    $this->boatname = $row[4];
-    $this->color = $row[5];
-    $this->boatheading = $row[6];
-    $this->pilotmode = $row[7]; 
-    $this->pilotparameter = $row[8];
-    $this->engaged = $row[9];
-    $this->lastchange = $row[10];
-    $this->email = $row[11];
-    $this->nwp = $row[12];
-    $this->userdeptime = $row[13];
-    $this->lastupdate = $row[14];
-    $this->loch = $row[15];
-    $this->country = $row[16]; if ( strlen($this->country) < 3 ) $this->country="";
-    $this->class = $row[17]; 
-    $this->targetlat = $row[18]; 
-    $this->targetlong = $row[19]; 
-    $this->targetandhdg = $row[20]; 
-    $this->mooringtime = $row[21]; 
-    $this->releasetime = $row[22]; 
-    $this->hidepos = $row[23]; 
-    $this->blocnote = $row[24]; 
+    $this->idusers        = $row['idusers'];
+    $this->boattype       = $row['boattype'];
+    $this->username       = $row['username'];
+    $this->password       = $row['password'];
+    $this->boatname       = $row['boatname'];
+    $this->color          = $row['color'];
+    $this->boatheading    = $row['boatheading'];
+    $this->pilotmode      = $row['pilotmode']; 
+    $this->pilotparameter = $row['pilotparameter'];
+    $this->engaged        = $row['engaged'];
+    $this->lastchange     = $row['lastchange'];
+    $this->email          = $row['email'];
+    $this->nwp            = $row['nextwaypoint'];
+    $this->userdeptime    = $row['userdeptime'];
+    $this->lastupdate     = $row['lastupdate'];
+    $this->loch           = $row['loch'];
+    $this->country        = (strlen($row['country']) < 3 ) ? "" : $row['country'];
+    $this->class          = $row['class']; 
+    $this->targetlat      = $row['targetlat']; 
+    $this->targetlong     = $row['targetlong']; 
+    $this->targetandhdg   = $row['targetandhdg']; 
+    $this->mooringtime    = $row['mooringtime']; 
+    $this->releasetime    = $row['releasetime']; 
+    $this->hidepos        = $row['hidepos']; 
+    $this->blocnote       = $row['blocnote']; 
     if ( eregi("^http|://|script|language|<|>", $this->blocnote) ) {
         $this->blocnote="Some characters are not valid in your notepad. (Code inclusion, &gt;, &lt;, ...)";
     } 
-    $this->ipaddr = $row[25];
-    $this->theme = $row[26];
-    if ( is_null($this->theme) ) {
-        $this->theme = 'default';
+    $this->ipaddr         = $row['ipaddr'];
+    $this->theme          = $row['theme'];
+    if (is_null($this->theme) ) {
+      $this->theme = 'default';
     } 
   }
 
@@ -127,13 +127,13 @@ class users
 
     while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
       // Execute the task
-      $PIM=$row[1];
-      if ( $PIM == 0 OR $PIM > 4 ) $flag_err=true;
+      $PIM=$row['pilotmode'];
+      if ( $PIM == 0 OR $PIM > MAX_PILOTMODE ) $flag_err=true;
       $this->pilotmode=$PIM;
 
-      $PIP=$row[2];
+      $PIP=$row['pilotparameter'];
 
-      printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row[0], $row[1], $row[2]);
+      printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
       $query="UPDATE users SET pilotmode=$PIM ";
 
       switch ($PIM) {
@@ -274,7 +274,7 @@ class users
     $query = "SELECT COUNT(*) from auto_pilot
               WHERE idusers=$this->idusers";
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    $row = mysql_fetch_row($result, MYSQL_NUM);
     if ( $row[0] < PILOTOTO_MAX_EVENTS ) {
       $query = "INSERT INTO auto_pilot
              ( time, idusers, pilotmode, pilotparameter, status)
@@ -441,7 +441,7 @@ class fullUsers
       $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
       $this->preferences = array();
       while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
-	$this->preferences[$row[0]] = $row[1];
+	$this->preferences[$row['pref_name']] = $row['pref_value'];
       }
     }
     if (array_key_exists($pref_name, $this->preferences)) {
