@@ -1,0 +1,42 @@
+/* css for status pages */
+
+.after {
+  background-color: #99FF99;
+}
+.before {
+  background-color: #FFFF99;
+}
+.intime {
+  background-color: #99FF99;
+}
+.maybelate {
+  background-color: #FFFF99;
+}
+li, li > p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.hidden {
+  display: none;
+}
+table {
+  width: 100%;
+  border: solid 1px #dddddd;
+}
+
+td {
+  text-align: center;
+}
+ 
+.racename {
+  text-align: left;
+}
+
+.horizontalmenu {
+  text-align: center;
+}
+
+div {
+  border: solid 1px #ff0000;
+  margin: 1em;
+}
