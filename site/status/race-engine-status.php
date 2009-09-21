@@ -23,6 +23,7 @@ include("../includes/header-status.inc");
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
     $query .= " order by vacfreq ASC, deptime DESC, idraces ASC";
     $result = wrapper_mysql_db_query(DBNAME,$query);
+    $odd = 0;
     while($row = mysql_fetch_assoc($result)) {
         $idraces  = $row['idraces'];
         $racename = $row['racename'];
@@ -36,7 +37,13 @@ include("../includes/header-status.inc");
         } else {
             $cssklass = "intime";
         }
-        echo "<tr>\n";
+	if ($odd == 0) {
+	  echo "<tr class=\"even\">\n";
+	  $odd = 1;
+	} else {
+	  echo "<tr class=\"odd\">\n";
+	  $odd = 0;
+	}	  
         echo "<td class=\"idraces\">$idraces</td>";
         echo "<td class=\"racename\">$racename</td>";
         echo "<td class=\"time\">".gmdate("H:i:s", $row2['time'])."</td>";
@@ -55,8 +62,8 @@ include("../includes/header-status.inc");
     <?php
       $query2 = "SELECT `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 20";
       $result2 = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
+      $odd = 0;
       while($row2 = mysql_fetch_assoc($result2)) {
-          echo "<tr>\n";
           $lastupdate     = (int)$row2['time'];
           $races          = $row2['races'];
           $boats          = $row2['boats'];
@@ -67,6 +74,13 @@ include("../includes/header-status.inc");
           } else {
               $cssklass = "intime";
           }
+	  if ($odd == 0) {
+	    echo "<tr class=\"even\">\n";
+	    $odd = 1;
+	  } else {
+	    echo "<tr class=\"odd\">\n";
+	    $odd = 0;
+	  }
           printf("<td class=\"time\">%s</td>\n", gmdate('Y-m-d \T H:i:s', $lastupdate) );
           printf("<td class=\"$cssklass\">%d sec.</td>", $duration );
           printf("<td class=\"count\" title=\"%s\">%d</td>", $update_comment, $races );
