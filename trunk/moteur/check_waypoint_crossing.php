@@ -35,7 +35,7 @@ if ($crosses_the_coast) {
    do {
         // 1- find the coordinates of user's next waypoint
         printf ("\n\tNext Waypoint is %d", $fullUsersObj->nwp);
-        $nextwaypoint = giveWaypointCoordinates($fullUsersObj->users->engaged, $fullUsersObj->nwp, WPLL);
+        $nextwaypoint = $fullRacesObj->races->giveWPCoordinates($fullUsersObj->nwp);
         // ==> lat1, long1, lat2, long2
 
         // 2 - verify if the boat has crossed this waypoint

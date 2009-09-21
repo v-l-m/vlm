@@ -457,7 +457,7 @@ class fullUsers
     $xing_ratio = new doublep();
 
     // Get coords of the nextwaypoint
-    $nextwaypoint = giveWaypointCoordinates($this->users->engaged, $wp, WPLL);
+    $nextwaypoint = $this->races->giveWPCoordinates($wp);
 
     // Get the best crossing point
 

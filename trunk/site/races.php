@@ -14,13 +14,14 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
     $tables = array();
 
     // Ajout en début de tableau d'un classement par WP (uniquement si >1)
-    if ( count($fullRacesObj->races->waypoints) > 1 ) {
-         for ($wp_num=1; $wp_num < count($fullRacesObj->races->waypoints); $wp_num++) {
-             $WP=$fullRacesObj->races->waypoints[$wp_num-1];
-             if ( !strstr($WP[5],'IceGate') ) {
-                 array_push($tables, "WP" . $wp_num);
-             }
-         }
+    $nbWPs = $fullRacesObj->races->getWPsCount();
+    if ( $nbWPs > 1 ) {
+      for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
+	$WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
+	if ( !strstr($WP[5],'IceGate') ) {
+	  array_push($tables, "WP" . $wp_num);
+	}
+      }
     }
 
     array_push($tables, "arrived", "racing", "dnf", "abd", "htp", "hc");
@@ -32,7 +33,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
 
     // Affichage des classements classiques 
     foreach ($tables as $table) {
-        $WP=$fullRacesObj->races->waypoints[substr($table,2)-1];
+      $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
         if ( $table == $tableType ) {
             $class="class=\"hilight\"";
             if ( strstr($table, "WP") ) {

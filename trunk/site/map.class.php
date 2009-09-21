@@ -507,7 +507,7 @@ class map
     }
     // draw each waypoint
     $waypoint_num=0;
-    foreach( $this->fullRacesObj->races->waypoints as $waypoint) {
+    foreach( $this->fullRacesObj->races->getWPs() as $waypoint) {
       
       $waypoint_num++;
       //print_r($waypoint);

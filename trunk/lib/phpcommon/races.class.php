@@ -61,36 +61,58 @@ class races
     $this->theme            = $row[17]; //Le theme , si non null, force le theme de l'interface
     $this->vacfreq          = $row[18]; // 1, 5, ou 10, pour frequence des runs du moteur
 
-    // retrieve all waypoints
-    $this->waypoints =array();
+    // FIXME (here to get the old behaviour
+    $this->retrieveWPs();
+  }
 
-    $query = "SELECT wporder,wptype,libelle,laisser_au,maparea FROM races_waypoints RW, waypoints WP" .
-      " WHERE idraces = " . $this->idraces . 
-      "   AND RW.idwaypoint =  WP.idwaypoint " . 
+  function getWPs() {
+    $this->retrieveWPs();
+    return $this->waypoints;
+  }
+
+  function getWPsCount() {
+    $this->retrieveWPs();
+    return count($this->waypoints);
+  }
+
+
+// ====================================================
+// returns an array of 2 points (lat1,long1,lat2,long2) 
+// beeing the coordinates in millidegrees of a waypoint
+// ====================================================
+  function giveWPCoordinates($idwp) {
+    $this->retrieveWPs();
+    return $this->waypoints[$idwp];
+  }
+
+  function retrieveWPs() {
+    if (isset($this->waypoints)) {
+      return;
+    }
+    // retrieve all waypoints
+    $this->waypoints=array();
+
+    $query = "SELECT RW.wporder, RW.wptype, WP.libelle, RW.laisser_au, WP.maparea,".
+      "WP.latitude1, WP.longitude1, WP.latitude2, WP.longitude2 FROM races_waypoints RW, waypoints WP" .
+      " WHERE idraces=" . $this->idraces . 
+      " AND RW.idwaypoint=WP.idwaypoint " . 
       " ORDER BY wporder ";
 
     $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
     // printf ("Request Races_Waypoints : %s\n" , $query);
-
+    
     while( $row = mysql_fetch_array( $result, MYSQL_NUM) ) {
-      $WPcoords = array();
-      $WPcoords = giveWaypointCoordinates ($this->idraces, $row[0] , WPLL);
+      $WPCoords =  internalGiveWaypointCoordinates($row[5], $row[6], $row[7], $row[8], $row[3], WPLL);
       // On push dans le tableau des coordonnées le wptype (classement ou son nom), et le libellé et le "laisser_au" du WP
-      array_push ($WPcoords, $row[1]);
-      array_push ($WPcoords, $row[2]);
-      array_push ($WPcoords, $row[3]);
-
-      // On push aussi le maparea adapté
-      array_push ($WPcoords, $row[4]);
-
+      // ainsi que le maparea adapt
+      array_push ($WPCoords, $row[1], $row[2], $row[3], $row[4]);
       // On push ce WP dans la liste des WP
-      array_push($this->waypoints, $WPcoords );
+      $this->waypoints[$row[0]] = $WPCoords;
     }
     $this->stop1lat  = $WPcoords[0];
     $this->stop1long = $WPcoords[1];
     $this->stop2lat  = $WPcoords[2];
     $this->stop2long = $WPcoords[3];
-
   }
 
   function getRaceDistance($force = 0) {
@@ -99,6 +121,7 @@ class races
 	$this->racedistance=0;
 	$lastlong=$this->startlong;
 	$lastlat=$this->startlat;
+	$this->retrieveWPs();
 	foreach ( $this->waypoints as $WP ) {
 	  $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
 	  $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
@@ -122,6 +145,8 @@ class races
     }
     return $this->racedistance;
   }
+
+
 
   /* retrieve the Race Instructions */
   function getICS($force = 0) {
