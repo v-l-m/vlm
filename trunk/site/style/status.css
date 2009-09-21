@@ -30,6 +30,11 @@ table {
   border: solid 1px #dddddd;
 }
 
+table.polartable {
+  width: 50%;
+  border: solid 1px #dddddd;
+}
+
 td {
   text-align: center;
 }
