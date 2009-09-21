@@ -243,7 +243,6 @@
 <?php
             //disp login name, infos
             printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
-            $available_races=availableRaces(getLoginId());
 ?>
         </div> <!-- fin div loggedbox-->
         <div id="logoutbox" class="leftbox">
