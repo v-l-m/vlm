@@ -60,9 +60,6 @@ class races
     $this->maxboats         = $row[16];
     $this->theme            = $row[17]; //Le theme , si non null, force le theme de l'interface
     $this->vacfreq          = $row[18]; // 1, 5, ou 10, pour frequence des runs du moteur
-
-    // FIXME (here to get the old behaviour
-    $this->retrieveWPs();
   }
 
   function getWPs() {
