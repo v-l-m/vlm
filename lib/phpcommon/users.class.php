@@ -46,7 +46,7 @@ class users
 
     //    $result = wrapper_mysql_db_query(DBNAME,$query) or die("\n FAIL::::::: ".$query."\n");
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("\n FAILED !!\n");
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    $row = mysql_fetch_array($result);
 
     $this->idusers        = $row['idusers'];
     $this->boattype       = $row['boattype'];
@@ -125,7 +125,7 @@ class users
     echo $quety;
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
-    while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
+    while ( $row = mysql_fetch_array($result) ) {
       // Execute the task
       $PIM=$row['pilotmode'];
       if ( $PIM == 0 OR $PIM > MAX_PILOTMODE ) $flag_err=true;
@@ -198,7 +198,7 @@ class users
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
-    if ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
+    if ( $row = mysql_fetch_array($result) ) {
       $numRows=$row[0];
     } else {
       $numRows=0;
@@ -222,7 +222,7 @@ class users
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
 
     //echo $query;
-    while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
+    while ( $row = mysql_fetch_array($result) ) {
 
       array_push ($this->pilototo, $row);
         
@@ -274,7 +274,7 @@ class users
     $query = "SELECT COUNT(*) from auto_pilot
               WHERE idusers=$this->idusers";
     $result = wrapper_mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_row($result, MYSQL_NUM);
+    $row = mysql_fetch_row($result);
     if ( $row[0] < PILOTOTO_MAX_EVENTS ) {
       $query = "INSERT INTO auto_pilot
              ( time, idusers, pilotmode, pilotparameter, status)
@@ -440,7 +440,7 @@ class fullUsers
 	            " WHERE idusers = ".$this->users->idusers;
       $result_pref = wrapper_mysql_db_query(DBNAME,$query_pref) or die($query_pref);
       $this->preferences = array();
-      while( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
+      while( $row = mysql_fetch_array($result_pref) ) {
 	$this->preferences[$row['pref_name']] = $row['pref_value'];
       }
     }
@@ -779,7 +779,7 @@ class fullUsers
       printf (", No more Waypoint\n");
       return (-1);
     } else {
-      $row = mysql_fetch_array($result, MYSQL_NUM);
+      $row = mysql_fetch_array($result);
       printf (", Next Waypoint : %d. ", $row[0] );
       return ($row[0]);
     }
@@ -1057,7 +1057,7 @@ class fullUsers
       " WHERE race = " . $this->users->engaged . 
       " AND   idusers = ". $this->users->idusers  ;
     $result = wrapper_mysql_db_query(DBNAME,$query);// or echo("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    $row = mysql_fetch_array($result);
     $timestamp=$row[0];
     
     // Effacement de cette position là
