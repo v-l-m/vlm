@@ -21,15 +21,21 @@ shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
 $nb_polars = get_nb_polars_context($temp_vlmc_context);
 ?>
 <p>Currently in use: <?php echo $nb_polars ?> polars</p>
-<ol>
+<table>
 <?php
 for ($i=0; $i<$nb_polars; $i++) {
+  if ( $i & 1 ) {
+    echo "  <tr class=\"odd\">\n";
+  } else {
+    echo "  <tr class=\"even\">\n";
+  }
   $pname = get_polar_name_index_context($temp_vlmc_context, $i); 
-  echo "  <li><a href=\"/speedchart.php?boattype=".$pname."\">";
-  echo "".$pname."</a></li>\n";
+  echo "    <td><a href=\"/speedchart.php?boattype=".$pname."\">";
+  echo "".$pname."</a></td>\n";
+  echo "    <td><a href=\"/Polaires/boat_".$pname.".csv\">CSV</a></td>\n";
 }
 shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);  
 ?>
-</ol>
+</table>
 </body>
 </html>
