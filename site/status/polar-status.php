@@ -33,6 +33,7 @@ for ($i=0; $i<$nb_polars; $i++) {
   echo "    <td><a href=\"/speedchart.php?boattype=".$pname."\">";
   echo "".$pname."</a></td>\n";
   echo "    <td><a href=\"/Polaires/boat_".$pname.".csv\">CSV</a></td>\n";
+  echo "  </tr>\n";
 }
 shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);  
 ?>
