@@ -74,6 +74,7 @@ class races
             $this->ics[] = $row;
         }
     }
+  
 
     // retrieve all waypoints
     $this->waypoints =array();
@@ -104,35 +105,59 @@ class races
     $this->stop1long = $WPcoords[1];
     $this->stop2lat  = $WPcoords[2];
     $this->stop2long = $WPcoords[3];
-
-    // Calcul de la longueur totale de la course ==> $this->raceDistance
-    // == En partant de la position de départ, boucle foreach sur les WP et addition de ortho(lastWP,nextWP)
-
-    // Attention, ce calcul n'est valable que depuis la course 40 et au dela (ainsi que la 35)
-    if ( $this->idraces == 35 OR $this->idraces >=40 ) {
-      $this->racedistance=0;
-      $lastlong=$this->startlong;
-      $lastlat=$this->startlat;
-      foreach ( $this->waypoints as $WP ) {
-        $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
-        $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
-        if ( $d1 < $d2 ) {
-    $lastlat=$WP[0];
-    $lastlong=$WP[1];
-          $this->racedistance+=$d1;
-        } else {
-          $lastlat=$WP[2];
-          $lastlong=$WP[3];
-          $this->racedistance+=$d2;
-        }
-      }
-      // + la distance entre l'avant dernier WP et le dernier
-      $this->racedistance+=min(ortho($lastlat,$lastlong,$WP[0], $WP[1] ), ortho($lastlat,$lastlong,$WP[2], $WP[3] ) );
-
-      //$this->racename = sprintf ("%s (%d nm)", $this->racename, $this->racedistance);
-    }
-
   }
+
+function getICS($force = 0) {
+  if (isset($this->ics) && ($force == 0)) {
+    return $this->ics;
+  }
+  // retrieve all IC if we are not running the engine
+  if (!defined('MOTEUR')) {
+    $this->ics = array();
+    
+    $query = "SELECT instructions, flag FROM races_instructions" .
+      " WHERE idraces = " . $this->idraces ; 
+    
+    $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
+    
+    while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+      $this->ics[] = $row;
+    }
+  }
+  return $this->ics;
+}
+
+function getRaceDistance($force = 0) {
+  if (isset($this->racedistance) && ($force == 0)) {
+    return $this->racedistance;
+  }
+  // Calcul de la longueur totale de la course ==> $this->raceDistance
+  // == En partant de la position de départ, boucle foreach sur les WP et addition de ortho(lastWP,nextWP)
+  
+  // Attention, ce calcul n'est valable que depuis la course 40 et au dela (ainsi que la 35)
+  if ( $this->idraces == 35 OR $this->idraces >=40 ) {
+    $this->racedistance=0;
+    $lastlong=$this->startlong;
+    $lastlat=$this->startlat;
+    foreach ( $this->waypoints as $WP ) {
+      $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
+      $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
+      if ( $d1 < $d2 ) {
+	$lastlat=$WP[0];
+	$lastlong=$WP[1];
+	$this->racedistance+=$d1;
+      } else {
+	$lastlat=$WP[2];
+	$lastlong=$WP[3];
+	$this->racedistance+=$d2;
+      }
+    }
+    // + la distance entre l'avant dernier WP et le dernier
+    $this->racedistance+=min(ortho($lastlat,$lastlong,$WP[0], $WP[1] ), ortho($lastlat,$lastlong,$WP[2], $WP[3] ) );
+    //$this->racename = sprintf ("%s (%d nm)", $this->racename, $this->racedistance);
+  }
+  return $this->racedistance;
+}
 
   // maxTimeRemaining : 
   //                    =0 pour les courses de type "record" (pas de temps limite) 

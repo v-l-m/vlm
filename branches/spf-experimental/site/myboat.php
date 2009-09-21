@@ -124,7 +124,7 @@ include_once("scripts/myboat.js");
 ?>
     <div id="racenamebox">
         <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
-        <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->racedistance) . "nm)"; ?>
+        <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->getRaceDistance()) . "nm)"; ?>
         </a>
     </div> <!-- fin de racenamebox -->
     <div id="raceicbox">
@@ -409,7 +409,7 @@ include_once("scripts/myboat.js");
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }
             // Affichage des IC destinées à la console
-            foreach ( $usersObj->races->ics as $ic) {
+            foreach ( $usersObj->races->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
                         $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>IC sur le forum / RI on the forum</a>";

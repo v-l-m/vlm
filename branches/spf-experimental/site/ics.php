@@ -7,18 +7,17 @@ include_once("config.php");
  output des IC
  */
 function outputIC($fullRacesObj) {
-    foreach($fullRacesObj->races->ics as $ic) {
-        if ($ic['flag'] & IC_FLAG_VISIBLE) {
-            echo "<div class=\"icbox\">\n";
-            if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</b></a>\n");
-            } else {
-                echo nl2br($ic['instructions']);
-            }
-            echo "\n</div>\n";
-        }
+  foreach($fullRacesObj->races->getICS() as $ic) {
+    if ($ic['flag'] & IC_FLAG_VISIBLE) {
+      echo "<div class=\"icbox\">\n";
+      if ($ic['flag'] & IC_FLAG_LINKFORUM) {
+	printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</b></a>\n");
+      } else {
+	echo nl2br($ic['instructions']);
+      }
+      echo "\n</div>\n";
     }
-
+  }
 }
 
 /*
