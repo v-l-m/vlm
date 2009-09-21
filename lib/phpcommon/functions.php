@@ -552,13 +552,14 @@ function VMG($long, $lat, $longFin, $latFin, $boatheading, $boatspeed, $verbose)
   //difference so no need to convert
   $gamma = $boatheading;
   $alpha = $gamma - $beta;
-  if ($verbose > 0)
+  if ($verbose > 0) {
     echo "beta = $beta, gamma= $gamma, alpha = $alpha\n";
-  if (abs ( $boatspeed * cos(deg2rad($alpha) )) > 0.0001)
-    return  ( $boatspeed * cos(deg2rad($alpha) ));
-  //round problems when converting deg2rad
-  else
-    return 0;
+  }
+  $__vmg =  $boatspeed * cos(deg2rad($alpha));
+  if (abs ( $__vmg ) > 0.0001) {
+    return  ( $__vmg );
+  }
+  return 0;
 }
 
 function VMGortho($long, $lat,   $boatheading, $boatspeed, $orthoangletoend)
@@ -566,13 +567,14 @@ function VMGortho($long, $lat,   $boatheading, $boatspeed, $orthoangletoend)
   $beta = $orthoangletoend;
   $gamma = $boatheading;
   $alpha = $gamma - $beta;
-  if ($verbose > 0)
+  if ($verbose > 0) {
     echo "beta = $beta, gamma= $gamma, alpha = $alpha\n";
-  if (abs ( $boatspeed * cos(deg2rad($alpha) )) > 0.0001)
-    return  ( $boatspeed * cos(deg2rad($alpha) ));
-  //round problems when converting deg2rad
-  else
-    return 0;
+  }
+  $__vmgortho =  $boatspeed * cos(deg2rad($alpha));
+  if (abs ($__vmgortho) > 0.0001) {
+    return  ( $__vmgortho );
+  }
+  return 0;
 }
 
 function trianglecoordinates($A, $heading)

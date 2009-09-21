@@ -3,11 +3,11 @@
     include_once("mapfunctions.php");
     include_once("map.class.php");
     
-    
+
     //================================================================
     // MAIN
     //================================================================
-    
+
     $maparea=round(htmlentities($_GET['maparea']),1);
     $maille=round(htmlentities($_GET['maille']),1);
     
@@ -157,7 +157,8 @@
     } else {
         $age = $age*3600;
     }
-    
+
+    $fullRacesObj = NULL;
     if ( $list=="all" ) {
         $list = array();
         $fullRacesObj = new fullRaces($idraces); 
@@ -200,7 +201,8 @@
     
     
     $time_start = time();
-    $mapObj = new map($list, $proj, $text, $tracks, $north, $south, $east, $west, $idraces, $x, $y, $windtext, $maille, $drawwind, $timings, $drawtextwp);
+    $mapObj = new map($fullRacesObj, $list, $proj, $text, $tracks, $north, $south, $east, $west, 
+		      $idraces, $x, $y, $windtext, $maille, $drawwind, $timings, $drawtextwp);
     $time_stop = time();
     
     if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 20, "Time new map = " . ($time_stop - $time_start) . "s", $mapObj->colorText);

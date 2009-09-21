@@ -34,13 +34,17 @@ class map
 
   
   //constructor that set all constants and values
-  function map($boatlist, $proj, $text, $tracks, 
+  function map($origRace = NULL, $boatlist, $proj, $text, $tracks, 
                $north = 50000, $south = 40000, $east = 0, $west = -35000 , $idraces=0 , 
                $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp='on')
   {
     //echo $north." ".$south."  ".$west." ".$east."\n";
 
-    $this->fullRacesObj = new fullRaces($idraces);
+    if ($origRace != null) {
+      $this->fullRacesObj = &$origRace;
+    } else {
+      $this->fullRacesObj = new fullRaces($idraces);
+    }
     // Limits of the geographic zone to draw
 
     $this->north = $north;
