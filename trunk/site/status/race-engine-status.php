@@ -24,13 +24,13 @@ include("../includes/header-status.inc");
     $query .= " order by vacfreq ASC, deptime DESC, idraces ASC";
     $result = wrapper_mysql_db_query(DBNAME,$query);
     while($row = mysql_fetch_assoc($result)) {
-        $idraces = $row['idraces'];
+        $idraces  = $row['idraces'];
         $racename = $row['racename'];
-        $vacfreq = $row['vacfreq'];
-        $query2 = "SELECT `time`, update_comment FROM updates WHERE update_comment LIKE '% ".$idraces."%' OR update_comment LIKE '".$idraces."%' ORDER BY `time` DESC LIMIT 1";
-        $result2 = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
-        $row2 = mysql_fetch_assoc($result2);
-        $delay = $current_time - (int)$row2['time'];
+        $vacfreq  = $row['vacfreq'];
+        $query2   = "SELECT `time`, update_comment FROM updates WHERE update_comment LIKE '% ".$idraces."%' OR update_comment LIKE '".$idraces."%' ORDER BY `time` DESC LIMIT 1";
+        $result2  = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
+        $row2     = mysql_fetch_assoc($result2);
+        $delay    = $current_time - (int)$row2['time'];
         if ($delay > 60*(int)$vacfreq) {
             $cssklass = "maybelate";
         } else {
@@ -49,27 +49,25 @@ include("../includes/header-status.inc");
   </table>
   </div>
   <div id="updatedetailstatus">
-    <h2>Last 10 update status</h2>
+    <h2>Last 20 update status</h2>
     <table>
     <tr><th>Time (GMT)</th><th>Duration (s)</th><th>Nb. races</th><th>Nb. boats</th><th>boat/sec</th></tr>
     <?php
-      $query2 = "SELECT `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 10";
+      $query2 = "SELECT `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 20";
       $result2 = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
       while($row2 = mysql_fetch_assoc($result2)) {
           echo "<tr>\n";
-          $lastupdate = (int)$row2['time'];
-          $races = $row2['races'];
-          $boats = $row2['boats'];
-          $duration = max($row2['duration'],1);
+          $lastupdate     = (int)$row2['time'];
+          $races          = $row2['races'];
+          $boats          = $row2['boats'];
+          $duration       = max($row2['duration'],1);
           $update_comment = $row2['update_comment'];
           if ($duration > 60) {
               $cssklass = "maybelate";
           } else {
               $cssklass = "intime";
           }
-
           printf("<td class=\"time\">%s</td>\n", gmdate('Y-m-d \T H:i:s', $lastupdate) );
-
           printf("<td class=\"$cssklass\">%d sec.</td>", $duration );
           printf("<td class=\"count\" title=\"%s\">%d</td>", $update_comment, $races );
           printf("<td class=\"count\">%d</td>", $boats );
