@@ -1,5 +1,11 @@
 /* css for status pages */
 
+.odd {
+    background-color: white;
+}
+.even {
+    background-color: #F5F5DF;
+}
 .after {
   background-color: #99FF99;
 }
