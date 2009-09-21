@@ -21,7 +21,7 @@ shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
 $nb_polars = get_nb_polars_context($temp_vlmc_context);
 ?>
 <p>Currently in use: <?php echo $nb_polars ?> polars</p>
-<table>
+<table class="polartable">
 <?php
 for ($i=0; $i<$nb_polars; $i++) {
   if ( $i & 1 ) {
