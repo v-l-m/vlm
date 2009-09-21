@@ -293,7 +293,7 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
 // If "laisser_au" is 90, then boats have to cross a "line"
 // by sailing in the west of it (to see the WP at head 90° when "crossing")
 // ========================================================
-function giveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
+function OBSOLETEgiveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
 {
   // first, use the cache (in 'moteur' mode)
   if (defined('MOTEUR')) {

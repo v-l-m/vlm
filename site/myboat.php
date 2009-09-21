@@ -25,8 +25,10 @@ include_once("includes/header.inc");
     include ("includes/raceslist.inc");
 
   } else {
+    
+    $myRace = &$usersObj->races;
 
-    echo "<!-- DELAY_BETWEEN_UPDATES=" .  60*$usersObj->races->vacfreq . "-->\n";
+    echo "<!-- DELAY_BETWEEN_UPDATES=" .  60*$myRace->vacfreq . "-->\n";
 
     // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
     // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis 
@@ -126,7 +128,7 @@ include_once("scripts/myboat.js");
 ?>
     <div id="racenamebox">
         <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
-        <?php echo $usersObj->races->racename. '&nbsp;('. round($usersObj->races->getRaceDistance()) . "nm)"; ?>
+        <?php echo $myRace->racename. '&nbsp;('. round($myRace->getRaceDistance()) . "nm)"; ?>
         </a>
     </div> <!-- fin de racenamebox -->
     <div id="raceicbox">
@@ -137,14 +139,14 @@ include_once("scripts/myboat.js");
                 "&amp;boat=" . $usersObj->users->idusers .
                 "&amp;age=0&amp;ext=right";
                 
-      if ( $usersObj->races->started ) {
+      if ( $myRace->started ) {
           $WPCLASS = "passedwp";
       } else {
           $WPCLASS = "notpassedwp";
       }
       $status_content  = "&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;" . htmlentities($strings[$lang]["startmap"]) . "&lt;/b&gt;&lt;br /&gt;";
       $status_content .= "Waypoint Coords=&lt;b&gt;" . 
-                         round($usersObj->races->startlat/1000,3) . "," . round($usersObj->races->startlong/1000,3) . "&lt;/b&gt;&lt;br /&gt;"; 
+                         round($myRace->startlat/1000,3) . "," . round($myRace->startlong/1000,3) . "&lt;/b&gt;&lt;br /&gt;"; 
 
 //      $status_content.="&lt;br /&gt;";
       $status_content .= "&lt;/div&gt;";
@@ -152,8 +154,8 @@ include_once("scripts/myboat.js");
 ?>
         <a class="passedwp" href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
                    echo $usersObj->users->engaged ?>&amp;lat=<?php
-                   echo ($usersObj->races->startlat/1000) ?>&amp;long=<?php
-                   echo ($usersObj->races->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
+                   echo ($myRace->startlat/1000) ?>&amp;long=<?php
+                   echo ($myRace->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
                    echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" target="_new" class="<?php
                    echo $WPCLASS; ?>" onmouseover="showDivRight('infobulle','<?php
                    echo $status_content; ?>', 400, 0);" onmouseout="hideDiv('infobulle');" ><?php
@@ -166,7 +168,7 @@ include_once("scripts/myboat.js");
       // Cartes des Waypoints
       $wp_num=1;
       //echo "NWP = " . $usersObj->users->nwp;
-      foreach ($usersObj->races->waypoints as $wp) {
+      foreach ($myRace->getWPs() as $wp) {
          // label = colonne wptype de races_waypoints
          $wp_label=$wp[5];
          $wp_libelle=htmlentities($wp[6]);
@@ -233,10 +235,10 @@ include_once("scripts/myboat.js");
       </div> <!-- fin de wplistbox -->
   
 <?php
-      if ( $usersObj->races->coastpenalty  >= 3600 ) {
-          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($usersObj->races->coastpenalty/3600). " h</span></div>";
-      } else if ( $usersObj->races->coastpenalty  >= 60 ) {
-          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($usersObj->races->coastpenalty/60). " min</span></div>";
+      if ( $myRace->coastpenalty  >= 3600 ) {
+          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/3600). " h</span></div>";
+      } else if ( $myRace->coastpenalty  >= 60 ) {
+          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/60). " min</span></div>";
       }
 ?>
     </div> <!--fin de raceicbox -->
@@ -254,8 +256,8 @@ include_once("scripts/myboat.js");
 
         // Estimation de la prochaine VAC pour ce bateau là
 
-        if ( $usersObj->users->lastupdate + 60*$usersObj->races->vacfreq  >= time() ) {
-            printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + 60*$usersObj->races->vacfreq  - time())/10 );
+        if ( $usersObj->users->lastupdate + 60*$myRace->vacfreq  >= time() ) {
+            printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + 60*$myRace->vacfreq  - time())/10 );
         }
 ?>
       </div> <!--fin de yourboat1box -->
@@ -264,9 +266,9 @@ include_once("scripts/myboat.js");
         // Colone droite
 
         /* Si l'heure du départ est dépassée */
-        if ( time() > $usersObj->races->deptime ) {
+        if ( time() > $myRace->deptime ) {
             /* Si le bateau n'est pas encore parti, affichage "depart a la prochaine VAC" */
-            if ( $usersObj->users->userdeptime < $usersObj->races->deptime ) {
+            if ( $usersObj->users->userdeptime < $myRace->deptime ) {
                 if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE && $usersObj->users->pilotparameter <= 1 ) {
                     printf($strings[$lang]["nostartpending"]);
                 } else {
@@ -286,7 +288,7 @@ include_once("scripts/myboat.js");
             }
         /* Sinon (heure départ pas atteinte), affichage de la date de départ */
         } else {
-            $departure = gmdate("Y/m/d H:i:s",$usersObj->races->deptime)." GMT";
+            $departure = gmdate("Y/m/d H:i:s",$myRace->deptime)." GMT";
             echo $strings[$lang]["departuredate"]." : $departure\n";
         }
         echo "<br />\n";
@@ -411,25 +413,25 @@ include_once("scripts/myboat.js");
             // Messages specifiques dans le panneau de controle en fonction des courses
             // Blackout ?
             $now = time();
-            $ichref="ics.php?lang=".$lang."&idraces=".$usersObj->races->idraces;
-            if ( $usersObj->races->bobegin > $now ) {
-                $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$usersObj->races->bobegin);
-                $boduration = ($usersObj->races->boend - $usersObj->races->bobegin ) /3600;
+            $ichref="ics.php?lang=".$lang."&idraces=".$myRace->idraces;
+            if ( $myRace->bobegin > $now ) {
+                $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$myRace->bobegin);
+                $boduration = ($myRace->boend - $myRace->bobegin ) /3600;
                 $messages[] = Array("id" => "incomingbo", "txt" => $strings[$lang]["blackout"]." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
             }
-            if ( $now > $usersObj->races->bobegin && $now < $usersObj->races->boend ) {    
+            if ( $now > $myRace->bobegin && $now < $myRace->boend ) {    
                 $msg = $strings[$lang]["blackout"] . " : <b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
-                   $usersObj->races->boend);
+                   $myRace->boend);
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }
             // Affichage des IC destinées à la console
-            foreach ( $usersObj->races->getICS() as $ic) {
+            foreach ( $myRace->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
                         $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>IC sur le forum / RI on the forum</a>";
-                        $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => $txtstr, "class" => "ic", "url" => $ichref);
+                        $messages[] = Array("id" => "ic".$myRace->idraces , "txt" => $txtstr, "class" => "ic", "url" => $ichref);
                     } else {
-                        $messages[] = Array("id" => "ic".$usersObj->races->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
+                        $messages[] = Array("id" => "ic".$myRace->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
                     }
 
                 }
@@ -445,7 +447,7 @@ include_once("scripts/myboat.js");
                 $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
             }
             //affichage de la deadline pour les départs en ligne
-            $mtr = $usersObj->races->maxTimeRemaining();
+            $mtr = $myRace->maxTimeRemaining();
             if ( $mtr > (48*3600) ) {
                 $msg = $strings[$lang]["endrace"]." ". gmdate("M d Y H:i:s", $mtr+time() );
                 $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "info");
@@ -670,7 +672,7 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="wp1long" value="<?php echo $usersObj->users->targetlong; ?>" />
             <?php
         
-            $nwp_coords=giveWaypointCoordinates ($usersObj->users->engaged , $usersObj->nwp, WPLL/WP_NUMSEGMENTS);
+            $nwp_coords=$myRace->giveWPCoordinates($usersObj->nwp);
             // print_r($nwp_coords);
             //                                Lat              Long
             $lat_xing = new doublep();
@@ -733,19 +735,19 @@ include_once("scripts/myboat.js");
         </div>
     </div>
     <?php
-        if ( $usersObj->races->started != 1) {
-            $mapopdis = "disabled"; //.$usersObj->races->started;
+        if ( $myRace->started != 1) {
+            $mapopdis = "disabled"; //.$myRace->started;
         }
 
     ?>
     <div  id="mapopponents"  class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
-        <p><input onChange="mapprefChanged();"  type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $usersObj->races->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $usersObj->races->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $usersObj->races->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+        <p><input onChange="mapprefChanged();"  type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $myRace->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $myRace->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
     </div>
     <div id="mapcenterbox" class="mapboxitem">
         <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
@@ -772,7 +774,7 @@ include_once("scripts/myboat.js");
                 <input onChange="mapprefChanged();" title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
             </p>
             <p>
-                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*60*$usersObj->races->vacfreq /3600, 3) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
+                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*60*$myRace->vacfreq /3600, 3) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
                 <input onChange="mapprefChanged();" title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
             </p>
             <p>
@@ -796,9 +798,10 @@ include_once("scripts/myboat.js");
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?php
           if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
-               $latwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][0] + $usersObj->races->waypoints[$usersObj->users->nwp-1][2])/2/1000;
-               $longwp=($usersObj->races->waypoints[$usersObj->users->nwp-1][1] + $usersObj->races->waypoints[$usersObj->users->nwp-1][3])/2/1000;
-               if ( abs($usersObj->races->waypoints[$usersObj->users->nwp-1][1] - $usersObj->races->waypoints[$usersObj->users->nwp-1][3] ) > 180 ) {
+	    $myWP=&$myRace->giveWPCoordinates($usersObj->users->nwp);
+               $latwp=($myWP[0] + $myWP[2])/2/1000;
+               $longwp=($myWP[1] + $myWP[3])/2/1000;
+               if ( abs($myWP[1] - $myWP[3] ) > 180 ) {
                    //on inverse le centre si un wp à l'air de faire plus de 180°
                    $longwp += 180;
                }
@@ -822,7 +825,7 @@ include_once("scripts/myboat.js");
 </div>
 
 <?php
-}
+  }
 
 include_once("includes/footer.inc");
 ?>
