@@ -28,6 +28,7 @@ header("content-type: text/plain; charset=UTF-8");
     #* NWP : numéro du prochain waypoing (int)
     #* PIM : Pilot mode (int)
     #* NUP : nombre de secondes jusqu'à la prochaine VAC (int)
+    #* VAC : nombre de secondes entre deux vacations (int)
     #* MWD : 'mapX' (int), ie taille largeur en pixel
     #* MHT : 'mapY' (int), ie taille hauteur en pixel
     #* MAG : 'mapAge' (int), ie age des trajectoires
@@ -191,6 +192,9 @@ header("content-type: text/plain; charset=UTF-8");
           printf("PIL%d=none\n",$numligne);
           $numligne++;
      }
+     printf ("THEME=%d\n", $usersObj->users->theme) ;
+     printf ("HIDE=%d\n", $usersObj->users->hidepos) ;
+     printf ("VACFREQ=%d\n" , $racesObj->vacfreq );
   }
 ?>
   
