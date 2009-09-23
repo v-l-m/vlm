@@ -65,6 +65,9 @@ header("content-type: text/plain; charset=UTF-8");
     #* PIL3: Pilototo instruction 3 (id,time,PIM,PIP,status)
     #* PIL4: Pilototo instruction 4 (id,time,PIM,PIP,status)
     #* PIL5: Pilototo instruction 5 (id,time,PIM,PIP,status)
+    #* THEME: nom du theme
+    #* HIDE: trace cachée (1) ou visible (0)
+    #* VACFREQ: durée de la vacation (en secondes)
     ";
     exit;
   }
