@@ -64,6 +64,9 @@ header("content-type: text/plain; charset=UTF-8");
     #* PIL3: Pilototo instruction 3 (id,time,PIM,PIP,status)
     #* PIL4: Pilototo instruction 4 (id,time,PIM,PIP,status)
     #* PIL5: Pilototo instruction 5 (id,time,PIM,PIP,status)
+    #* THM: nom du theme
+    #* HID: trace cachée (1) ou visible (0)
+    #* VAC: durée de la vacation (en secondes)
     ";
     exit;
   }
@@ -191,6 +194,9 @@ header("content-type: text/plain; charset=UTF-8");
           printf("PIL%d=none\n",$numligne);
           $numligne++;
      }
+     printf ("THM=%s\n", $usersObj->users->theme) ;
+     printf ("HID=%d\n", $usersObj->users->hidepos) ;
+     printf ("VAC=%d\n" , $racesObj->vacfreq );
   }
 ?>
   
