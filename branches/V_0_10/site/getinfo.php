@@ -192,7 +192,7 @@ header("content-type: text/plain; charset=UTF-8");
           printf("PIL%d=none\n",$numligne);
           $numligne++;
      }
-     printf ("THEME=%d\n", $usersObj->users->theme) ;
+     printf ("THEME=%s\n", $usersObj->users->theme) ;
      printf ("HIDE=%d\n", $usersObj->users->hidepos) ;
      printf ("VACFREQ=%d\n" , $racesObj->vacfreq );
   }
