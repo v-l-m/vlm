@@ -6,6 +6,7 @@ $current_time = time();
 $PAGETITLE="Polars status check";
 include("../includes/header-status.inc");
 ?>
+<p>Please take a look at the <a href="http://wiki.virtual-loup-de-mer.org/index.php/Les_bateaux">boat descriptions</a>.</p>
 
 <p id="currenttimeblurb">
   Current time: <span id="currenttime">
