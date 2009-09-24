@@ -197,7 +197,8 @@ header("content-type: text/plain; charset=UTF-8");
      }
      printf ("THM=%s\n", $usersObj->users->theme) ;
      printf ("HID=%d\n", $usersObj->users->hidepos) ;
-     printf ("VAC=%d\n" , $racesObj->vacfreq );
+     // vacfreq est en minutes dans la base, mais affiché en secondes
+     printf ("VAC=%d\n" , 60 * $racesObj->vacfreq );
   }
 ?>
   
