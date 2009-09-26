@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /mercator.img.php
+Disallow: /speedchart.php
