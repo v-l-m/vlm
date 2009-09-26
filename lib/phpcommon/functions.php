@@ -660,11 +660,12 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
     $imy = imagesy($im);
     $center_x =imagesx($im)/2 ;
     $center_y =imagesy($im)/2 ;
-    $dotx = $center_x;
-    $doty = $center_y;
+    $dotx = $rdotx = $center_x;
+    $doty = $rdoty = $center_y;
+
 
     $max = 0;
-    for ($a = 1 ; $a <= 360 ; $a = $a + 5) {   
+    for ($a = 30 ; $a <= 180 ; $a = $a + 5) {   
 	// on boucle aec un step de 5 pour limiter la conso cpu
         $bs = findboatspeed( abs($a),
                        $windspeed,
@@ -678,7 +679,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
     //on fixe le max Ã  120% du max trouvÃ© pour esquiver les indications du cadrans
     $radius = 1.2*$max;
 
-    for ($a = 1 ; $a <= 360 ; $a = $a + 2) {
+    for ($a = 1 ; $a <= 180 ; $a = $a + 2) {
         $bs = findboatspeed( abs($a),
                        $windspeed,
                        $boattype
@@ -686,27 +687,36 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
                      
         $newx = cos(deg2rad(-$a+90+$whdg))*$center_x*$bs/$radius + $center_x;
         $newy = sin(deg2rad(-$a+90+$whdg))*$center_y*$bs/$radius + $center_y;
+        $rnewx = cos(deg2rad($a+90+$whdg))*$center_x*$bs/$radius + $center_x;
+        $rnewy = sin(deg2rad($a+90+$whdg))*$center_y*$bs/$radius + $center_y;
+
         //FIXME : affichage différent du max speed le principe est à affiner
         if ($bs > $max*.99) {
-            imageline ( $im,
-                        $dotx,
-                        $doty,
-                        $newx,
-                        $newy,
-                        $colormax
-                      );
+            $c = $colormax;
         } else {
-            imageline ( $im,
-                        $dotx,
-                        $doty,
-                        $newx,
-                        $newy,
-                        $color
-                      );
+            $c = $color;
         }
+
+        imageline ( $im,
+                    $dotx,
+                    $doty,
+                    $newx,
+                    $newy,
+                    $c
+                  );
+        imageline ( $im,
+                    $rdotx,
+                    $rdoty,
+                    $rnewx,
+                    $rnewy,
+                    $c
+                  );
             
         $dotx = $newx;
         $doty = $newy;
+        $rdotx = $rnewx;
+        $rdoty = $rnewy;
+        
      }
 
 }
