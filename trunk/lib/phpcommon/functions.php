@@ -622,9 +622,19 @@ function windtrianglecoordinates($A, $wheading, $wspeed)
 }
 
 
-//this function draw a line from the center to the outer of circle
+//this function draw a line from the outer of circle
 //in the image $im with a geographic angle $angle
 function drawWindVector($im, $color, $length, $angle, $thick)
+{
+  $center_x =imagesx($im)/2 ;
+
+  drawSubWindVector($im, $color, 1.-2./$center_x, 1.-$length/$center_x, $angle, $thick);
+
+}
+
+//this function draw a line from the center to the outer of circle
+//in the image $im with a geographic angle $angle
+function drawSubWindVector($im, $color, $ratio_start, $ratio_end, $angle, $thick)
 {
   imagesetthickness($im, $thick * 1);
   $center_x =imagesx($im)/2 ;
@@ -633,11 +643,71 @@ function drawWindVector($im, $color, $length, $angle, $thick)
   $vector_wind_x = cos(deg2rad($angle));
   $vector_wind_y = sin(deg2rad($angle));
   imageline ( $im,
-              $center_x + $vector_wind_x*($center_x - 2),
-              $center_y + $vector_wind_y*($center_y - 2),
-              $center_x + $vector_wind_x*($center_x - $length),
-              $center_y + $vector_wind_y*($center_y - $length) ,
+              $center_x + $vector_wind_x*$center_x*$ratio_end,
+              $center_y + $vector_wind_y*$center_y*$ratio_end,
+              $center_x + $vector_wind_x*$center_x*$ratio_start,
+              $center_y + $vector_wind_y*$center_y*$ratio_start,
               $color );
+
+}
+
+//this function draw the polar line 
+//in the image $im with a geographic angle $angle
+function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $whdg)
+{
+    imagesetthickness($im, $thick * 1);
+    $imx = imagesx($im);
+    $imy = imagesy($im);
+    $center_x =imagesx($im)/2 ;
+    $center_y =imagesy($im)/2 ;
+    $dotx = $center_x;
+    $doty = $center_y;
+
+    $max = 0;
+    for ($a = 1 ; $a <= 360 ; $a = $a + 5) {   
+	// on boucle aec un step de 5 pour limiter la conso cpu
+        $bs = findboatspeed( abs($a),
+                       $windspeed,
+                       $boattype
+                     );
+        if ($bs > $max) {
+            $max = $bs;
+        }
+    }
+
+    //on fixe le max √† 120% du max trouv√© pour esquiver les indications du cadrans
+    $radius = 1.2*$max;
+
+    for ($a = 1 ; $a <= 360 ; $a = $a + 2) {
+        $bs = findboatspeed( abs($a),
+                       $windspeed,
+                       $boattype
+                     );
+                     
+        $newx = cos(deg2rad(-$a+90+$whdg))*$center_x*$bs/$radius + $center_x;
+        $newy = sin(deg2rad(-$a+90+$whdg))*$center_y*$bs/$radius + $center_y;
+        //FIXME : affichage diffÈrent du max speed le principe est ‡ affiner
+        if ($bs > $max*.99) {
+            imageline ( $im,
+                        $dotx,
+                        $doty,
+                        $newx,
+                        $newy,
+                        $colormax
+                      );
+        } else {
+            imageline ( $im,
+                        $dotx,
+                        $doty,
+                        $newx,
+                        $newy,
+                        $color
+                      );
+        }
+            
+        $dotx = $newx;
+        $doty = $newy;
+     }
 
 }
 

@@ -33,6 +33,9 @@ $boatheading=quote_smart($_REQUEST['boatheading']);
 $wheading=quote_smart($_REQUEST['wheading']);
 $wspeed=quote_smart($_REQUEST['wspeed']);
 $roadtoend=quote_smart($_REQUEST['roadtoend']);
+$boattype=quote_smart($_REQUEST['boattype']);
+/* $vmg=quote_smart($_REQUEST['vmg']); */
+
 
 header("Cache-Control: no-store, no-cache, must-revalidate");
 if ($noHeader !=1)
@@ -53,6 +56,10 @@ imagecopymerge ( $im, $deck, (imagesx($im)  - imagesx($deck))/2,
      (imagesy($im)  - imagesy($deck))/2, 
      0, 0, imagesx($deck), imagesy($deck), 100);
 
+//draw windpolar
+$color = imagecolorallocate($im, 210, 200, 190);
+$maxcolor = imagecolorallocate($im, 250, 200, 190);
+drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, $wheading);
 
 //draw a line from the center of the circle to the circle
 //with a lenght and the color of the wind
@@ -61,7 +68,11 @@ drawWindVector($im, $windcolor, 50, geographic2drawingforwind($wheading), 5);
 
 $color = imagecolorallocate($im, 0, 0, 0);
 drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
- 
+
+/*
+$color = imagecolorallocate($im, 0, 255, 0);
+drawWindVector($im, $color, 15, geographic2drawingforwind($vmg - 180), 2);
+*/
 
 // Chargement du fond d'image
 $instrum = LoadGif ('images/site/Afficheur-vide.gif');
@@ -71,7 +82,6 @@ $white = imagecolorallocate($instrum, 255, 255, 255);
 $grey = imagecolorallocate($instrum, 160, 160, 160);
 $or = imagecolorallocate($instrum, 220, 200, 140);
 $black = imagecolorallocate($instrum, 0, 0, 0);
-
 
 // Merge
 //imagecopymerge ( resource dst_im, resource src_im, int dst_x, int dst_y, int src_x, int src_y, int src_w, int src_h, int pct )
