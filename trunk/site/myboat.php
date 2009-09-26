@@ -695,7 +695,7 @@ include_once("scripts/myboat.js");
 </div> <!-- Fin des controlbox -->
 
 <!-- Mapbox -->
-<form name="mapprefs" id="mercator" action="map.img.php" target="_new" method="get">
+<form name="mapprefs" id="mercator" action="map.img.php" onSubmit="mapprefSubmitted();" target="_new" method="get">
 <div id="mapbox">
 <!--    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?> -->
     <div id="maplayerbox" class="mapboxitem">
@@ -716,7 +716,7 @@ include_once("scripts/myboat.js");
         <div  id="maptoolslayerbox"  class="mapboxsubitem">
             <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
             <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
-            <input type="hidden" name="save" value="off" />
+            <input type="hidden" name="save" value="on" />
             <span class="titlehelpers"><?php echo $strings[$lang]["maptype"]; ?> </span>
             <p><input onChange="mapprefChanged();" type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
             <?php echo $strings[$lang]["mapcompas"]; ?>
