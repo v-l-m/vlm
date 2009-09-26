@@ -241,10 +241,24 @@ function updateUserPref()
   alert(val)
 }
 
+var mapprefcounter = 0; 
+
 //Something changed, then save it.
 function mapprefChanged()
 {
-  document.mapprefs.save.value='on';
+  mapprefcounter++;
 }
+
+//Reset mapprefs saving to on (when submitting, typically)
+function mapprefSubmitted()
+{
+    if (mapprefcounter > 0) {
+        document.mapprefs.save.value='on';
+    } else {
+        document.mapprefs.save.value='off';
+    }      
+    mapprefcounter = 0;
+}
+
 //]]>
 </script>
