@@ -391,7 +391,8 @@ include_once("scripts/myboat.js");
         wheading=<?php printf ('%03d' , ($usersObj->wheading )) ?>&amp;
         boatheading=<?php printf ('%03d' , $usersObj->users->boatheading ) ?>&amp;
         wspeed=<?php echo intval($usersObj->wspeed) ?>&amp;
-        roadtoend=<?php echo $usersObj->orthoangletoend ?>"
+        roadtoend=<?php echo $usersObj->orthoangletoend ?>&amp;
+        boattype=<?php echo $usersObj->users->boattype ?>"
     />
         </div>
         <div id="anemobox"  class="instrument">
