@@ -33,7 +33,11 @@ for ($i=0; $i<$nb_polars; $i++) {
   $pname = get_polar_name_index_context($temp_vlmc_context, $i); 
   echo "    <td class=\"racename\"><a href=\"/speedchart.php?boattype=".$pname."\">";
   echo "".$pname."</a></td>\n";
-  echo "    <td><a href=\"/Polaires/boat_".$pname.".csv\">CSV</a></td>\n";
+  echo "    <td><a href=\"".DOC_SERVER_URL.$pname."\">";
+  echo "Wiki</a></td>\n";
+  echo "    <td><a href=\"/speedchart.php?format=pol&amp;boattype=".$pname."\">";
+  echo "(pol)</a></td>\n";
+  echo "    <td><a href=\"/Polaires/boat_".$pname.".csv\">(csv)</a></td>\n";
   echo "  </tr>\n";
 }
 shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);  
