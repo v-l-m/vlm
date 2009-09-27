@@ -5,7 +5,7 @@ include_once ("functions.php");
 if (!isset($_REQUEST["idraces"])) {
     die();
 }
-$idraces=($_REQUEST["idraces"]);
+$idraces=$_REQUEST["idraces"];
 
 $image="regate".$idraces;
 $thumb="images/minimaps/" . $image . ".png";
@@ -23,8 +23,7 @@ if (
       $col = mysql_fetch_row ($ret);
       if ( !$col[0] )
       {
-            echo "Idraces inconnu";
-            print_r($col);
+            die("Idraces inconnu");
       }
       else
       {

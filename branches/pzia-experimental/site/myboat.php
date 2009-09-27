@@ -109,7 +109,7 @@ include_once("scripts/myboat.js");
     <div id="minimapbox">
         <?php
         // Carte de la course
-        $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
+        $href = "/racemap.php?idraces=".$usersObj->users->engaged;
         if ( file_exists($href) ) {
           $status_content = "&lt;img src=&quot;$href&quot; " . 
                             "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";

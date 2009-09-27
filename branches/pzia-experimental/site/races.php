@@ -156,8 +156,8 @@ if ($idraces != 0) {
     echo "</div>\n";     
 
           // Carte de la course
-    $href = "images/racemaps/regate".$fullRacesObj->races->idraces.".jpg";
-          if ( file_exists($href) ) {
+    $href = "/racemap.php?idraces=".$fullRacesObj->races->idraces;
+          if ( 1 or file_exists($href) ) {
 
               $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
               list($xSize, $ySize, $type, $attr) = getimagesize($href);

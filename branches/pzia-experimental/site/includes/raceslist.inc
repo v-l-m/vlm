@@ -49,10 +49,10 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         echo "<table width=\"100%\">\n<tr>\n";
         echo "<td width=200 align=\"left\" class=\"boat\">";
         // Carte de la course
-        $href = "images/racemaps/regate".$idraces.".jpg";
-        if ( file_exists($href) ) {
+        $href = "/racemap.php?idraces=".$idraces;
+        if ( 1 or file_exists($href) ) {
              $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
-             list($xSize, $ySize, $type, $attr) = getimagesize($href);
+             //list($xSize, $ySize, $type, $attr) = getimagesize($href);
             echo "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
                  " onmouseout=\"hideDiv('infobulle');\" " .

@@ -26,8 +26,8 @@ function outputIC($fullRacesObj) {
 
 function outputRaceMap($fullRacesObj, $alttemplate) {
 
-  $href = "images/racemaps/regate".$fullRacesObj->races->idraces.".jpg";
-  if ( file_exists($href) ) {
+  $href = "/racemap.php?idraces=".$fullRacesObj->races->idraces;
+  if (1 or file_exists($href) ) {
     echo "<img src=\"$href\" alt=\"" .$alttemplate. "\" />\n";
   }
 }
