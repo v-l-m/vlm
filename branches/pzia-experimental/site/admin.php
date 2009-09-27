@@ -55,7 +55,7 @@ if ( idusersIsAdmin (getLoginId()) ) {
 }
 
 // On est encore là, un Admin est donc connecté.
-echo "<h4>Admin connect&eacute; : " . $pseudo . "</h4>\n<form>\n";
+echo "<h4>Admin connect&eacute; : " . $pseudo . " - Go to <a href=\"/admin/\">new interface</a> (but not complete, yet !)</h4>\n<form>\n";
 echo "<input type=\"button\" value=\"Fermer\" onClick=\"javascript:self.close();\">";
 
 // Y a t'il une course choisie ?
