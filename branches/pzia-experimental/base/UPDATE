@@ -1,3 +1,13 @@
+Depuis la 0.10.2
+
+#Table pour stocker les racesmap
+CREATE TABLE `racesmap` (
+  `idraces` int(11) NOT NULL,
+  `racemap` longblob,
+  PRIMARY KEY  (`idraces`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='racesmap' | 
+
+
 Depuis la V 0.9.8:
 
   Removed boat polar tables :
