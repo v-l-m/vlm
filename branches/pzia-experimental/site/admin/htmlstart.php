@@ -1,4 +1,13 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+<?php
+    session_start();
+    //include_once("../includes/strings.inc");
+    include_once("config.php");
+    if (!isLoggedIn() or  !idusersIsAdmin(getLoginId()) ) {
+        include ("unallowed.html");
+        //FIXME: log the ip / username somewhere
+        die();
+    }  
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 		"http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -20,15 +29,16 @@
     <script type="text/javascript" src="../<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-setup.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
-
-
 </head>
 <body>
-<h3><?php echo $PAGETITLE; ?></h3>
+<h3>
 
 <?php
- if ( !idusersIsAdmin(getLoginId()) )  {
-     include ("unallowed.html");
-     die();
- }
+    echo $PAGETITLE;
+    if ($_SERVER["PHP_SELF"] != "/admin/" and $_SERVER["PHP_SELF"] != "/admin/index.php") {
+        echo "&nbsp;(<a href=\"/admin\">Menu</a>)";
+    }
+
 ?>
+
+</h3>

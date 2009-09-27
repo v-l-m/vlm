@@ -16,7 +16,7 @@ $opts['key'] = 'idraces';
 $opts['key_type'] = 'int';
 
 // Sorting field(s)
-$opts['sort_field'] = array('idraces');
+$opts['sort_field'] = array('-deptime');
 
 /* Fields def. helpers */
 
