@@ -14,6 +14,7 @@ $original="images/racemaps/" . $image . ".jpg";
 // Création et mise en cache de la miniature si elle n'existe pas ou est trop vieille
 if ( 
      ( ! file_exists($original) ) 
+      ||  ($_REQUEST['force'] == 'yes')
       ||  (filemtime($original) < filemtime(__FILE__) )
    ) {
 
