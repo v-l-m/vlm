@@ -15,6 +15,8 @@
                   "'".addslashes($img_blob)."') ";
         $ret = wrapper_mysql_db_query (DBNAME, $req) or die (mysql_error ());
         echo "<h3>OK</h3>";
+        echo "<img src=\"/racemap.php?idraces=$idnewrace&force=yes\" />";
+        echo "<img src=\"/minimap.php?idraces=$idnewrace&force=yes\" />";
     } else {
 ?>
         <h3>Envoi d'une image</h3>
