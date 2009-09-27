@@ -4,6 +4,7 @@
 
     $adminpages = Array(
         "races.php" => "Race definition",
+        "uploadracemap.php" => "Race map upload",
         );
 
     echo "<div class=\"adminbox\">";
