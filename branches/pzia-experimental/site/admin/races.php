@@ -1,5 +1,8 @@
 <?php
 
+// headers
+$PAGETITLE = "Admin of RACE table";
+
 include('adminheader.php');
 
 /* RACE TABLE */
@@ -14,8 +17,6 @@ $opts['key_type'] = 'int';
 
 // Sorting field(s)
 $opts['sort_field'] = array('idraces');
-
-$PAGETITLE = "Admin of RACE table";
 
 /* Fields def. helpers */
 

@@ -25,3 +25,10 @@
 </head>
 <body>
 <h3><?php echo $PAGETITLE; ?></h3>
+
+<?php
+ if ( !idusersIsAdmin(getLoginId()) )  {
+     include ("unallowed.html");
+     die();
+ }
+?>
