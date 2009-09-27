@@ -117,11 +117,10 @@ array(
         "howtohelp" => "I like this game. How can I contribute to make it better ?",
         "howtohelptext" => "<ul><li>As a player, you can report bugs and propose improvements (user interface, new functionality) in the forum.</li> 
         <li>You can write a manual of the game for beginners with screenshots.</li> 
-        <li>You can propose any translation of the game. It is quick and easy. See <a href=\"_include/strings.inc\">_include/strings.inc</a> to see how it works</li>
-              <li>You can propose logos, banners and CSS.</li>
-              <li>You can join the development team by posting a message to the forum</li>
-        <li>You can propose some new speed charts (see <a href=\"figaro.sql\">a typical file</a> and <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\"> the chart </a>)</li>
-        <li>You can donate to tuxfamily who hosted this site for free at the beginning ! <a href=\"http://tuxfamily.org\">tuxfamily.org</a></li>
+        <li>You can propose any translation of the game. It is quick and easy. See <a href=\"includes/strings.inc\">includes/strings.inc</a> to see how it works</li>
+        <li>You can propose logos, banners and CSS.</li>
+        <li>You can join the <a href=\"http://dev.virtual-loup-de-mer.org/vlm/\">development team</a></li>
+        <li>You can propose some new speed charts (see <a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Proposer_des_courses\">the wiki [fr] </a>)</li>
         <li>You can share your knowledge of boats, skippers and navigation by helping the wikipedia project : <a href=\"http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime\">Portail maritime</a></li>
         <li>If you're an Imoca or Orma boat owner, you can propose to board us for a sailing trip:-)</li>
         </ul>",        
@@ -417,18 +416,19 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "webstandard" => "Standards web",
         "webstandardtext" => "Ce site devrait &ecirc;tre conforme aux standards internationaux du web (XHTML et CSS). Pour l'appr&eacute;cier pleinement, utiliser un navigateur web conforme aux standards internationaux comme <a href=\"http://getfirefox.com\">firefox</a>.",
         "howtohelp" => "Ce jeu me pla&icirc;t. J'aimerai remercier ses concepteurs en aidant. Comment faire ?",
-        "howtohelptext" => "<ul><li>En tant que joueur, vous pouvez recenser les bugs et proposer des am&eacute;liorations (ergonomie, nouvelles fonctionnalit&eacute;s) sur le forum.</li>
-<li>Vous pouvez r&eacute;diger un manuel d'utilisation du site avec des captures d'&eacute;cran pour faciliter la compr&eacute;hension des d&eacute;butants</li> 
-        <li>Vous pouvez proposer une traduction du jeu dans n'importe quelle langue. C'est facile et rapide voir <a href=\"_include/strings.inc\">_include/strings.inc</a></li>
-              <li>Vous pouvez proposer un logo, une banni&egrave;re ou un CSS</li>
-              <li>Vous pouvez rejoindre l'&eacute;quipe de d&eacute;veloppement (voir le forum)</li>
-        <li>Vous pouvez proposer de nouveaux diagrammes de vitesse. (voir <a href=\"figaro.sql\">un fichier de donn&eacute;es</a> et <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\">le diagramme associ&eacute;</a>)</li>
-        <li>Le serveur web et celui h&eacute;bergeant la base de donn&eacute;es sont financ&eacute;s par Actilis (actilis.net), la soci&eacute;t&eacute; dont le mainteneur est le g&eacute;rant, qui les finance int&eacute;gralement, et utilise aussi le serveur de bases de donn&eacute;es pour h&eacute;berger d'autres bases de donn&eacute;es. Vous n'avez donc pas besoin d'envoyer vos dons au mainteneur, qui pr&eacute;f&egrave;re largement vos messages d'encouragement et aime bien les cartes postales parvenant d'endroits qu'il ne connait pas.</li>
-        <li>Vous pouvez soumettre des parcours, informer le mainteneur des nouvelles courses r&eacute;elles afin qu'elles soient aussi programm&eacute;es dans VLM pour que nous les courrions en virtuel simultan&eacute;ment. Il faut : la position latitude/longitude du point de d&eacute;part, l'heure de d&eacute;part, et la position de la ligne d'arriv&eacute;e.</li>
-        <li>Vous pouvez partager vos connaissances sur la mer, les marins et les bateaux sur le portail Maritime de Wikipedia: <a href=\"http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime\">Portail maritime</a></li>
-        <li>Si vous &ecirc;tes propri&eacute;taire, vous pouvez proposer un embarquement au concepteur, ce qu'a d&eacute;j&agrave; entrepris le mainteneur, d&egrave;s que le printemps reviendra. Mais si vous poss&eacute;dez un plus gros canote que le First 24 (un 60 pieds nomm&eacute; VM Mat, Veolia, PRB..., un  cata nomm&eacute; Orange 2 ou un tri nomm&eacute; Groupama 3), n'h&eacute;sitez pas &agrave; proposer un embarquement aux deux, ils ont tous les deux un point de chutte &agrave; Lorient.</li>
-        <li>Sinon, vous pouvez aussi offrir un Alliage 38 rouge ou un Opium 39 (mais petit tirant d'eau si possible). J'en connais une qui trouvera alors que finalement, tout le temps pass&eacute; sur le developpement VLM aura servi &agrave; quelque chose :-)</li>
-        </ul>",        
+        "howtohelptext" => "<ul>
+            <li>En tant que joueur, vous pouvez recenser les bugs et proposer des am&eacute;liorations (ergonomie, nouvelles fonctionnalit&eacute;s) sur le forum.</li>
+            <li>Vous pouvez r&eacute;diger un manuel d'utilisation du site avec des captures d'&eacute;cran pour faciliter la compr&eacute;hension des d&eacute;butants</li> 
+            <li>Vous pouvez proposer une traduction du jeu dans n'importe quelle langue. C'est facile et rapide voir <a href=\"includes/strings.inc\">includes/strings.inc</a></li>
+            <li>Vous pouvez proposer un logo, une banni&egrave;re ou un CSS</li>
+            <li>Vous pouvez rejoindre <a href=\"http://dev.virtual-loup-de-mer.org/vlm/\">l'&eacute;quipe de d&eacute;veloppement</a></li>
+            <li>Vous pouvez proposer de nouveaux diagrammes de vitesse. (voir <a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse\">la documentation</a>)</li>
+            <li>Le serveur web et celui h&eacute;bergeant la base de donn&eacute;es sont financ&eacute;s par Actilis (actilis.net), la soci&eacute;t&eacute; dont le mainteneur est le g&eacute;rant, qui les finance int&eacute;gralement, et utilise aussi le serveur de bases de donn&eacute;es pour h&eacute;berger d'autres bases de donn&eacute;es. Vous n'avez donc pas besoin d'envoyer vos dons au mainteneur, qui pr&eacute;f&egrave;re largement vos messages d'encouragement et aime bien les cartes postales parvenant d'endroits qu'il ne connait pas.</li>
+            <li>Vous pouvez soumettre des parcours, informer le mainteneur des nouvelles courses r&eacute;elles afin qu'elles soient aussi programm&eacute;es dans VLM pour que nous les courrions en virtuel simultan&eacute;ment. Il faut : la position latitude/longitude du point de d&eacute;part, l'heure de d&eacute;part, et la position de la ligne d'arriv&eacute;e.</li>
+            <li>Vous pouvez partager vos connaissances sur la mer, les marins et les bateaux sur le portail Maritime de Wikipedia: <a href=\"http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime\">Portail maritime</a></li>
+            <li>Si vous &ecirc;tes propri&eacute;taire, vous pouvez proposer un embarquement au concepteur, ce qu'a d&eacute;j&agrave; entrepris le mainteneur, d&egrave;s que le printemps reviendra. Mais si vous poss&eacute;dez un plus gros canote que le First 24 (un 60 pieds nomm&eacute; VM Mat, Veolia, PRB..., un  cata nomm&eacute; Orange 2 ou un tri nomm&eacute; Groupama 3), n'h&eacute;sitez pas &agrave; proposer un embarquement aux deux, ils ont tous les deux un point de chutte &agrave; Lorient.</li>
+            <li>Sinon, vous pouvez aussi offrir un Alliage 38 rouge ou un Opium 39 (mais petit tirant d'eau si possible). J'en connais une qui trouvera alors que finalement, tout le temps pass&eacute; sur le developpement VLM aura servi &agrave; quelque chose :-)</li>
+          </ul>",        
 
         "tools" => "Outils",
         "vmgsheet" => "VMG pour VLM",
@@ -715,11 +715,10 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "howtohelp" => "Mi piace questo gioco. Come posso contribuire per renderlo migliore?",
         "howtohelptext" => "<ul><li>Come giocatore, puoi segnalare i bug e proporre i miglioramenti (interfaccia utente, nuova funzionalità) nell forum.</li>
         <li>Potete scrivere un manuale del gioco per i principianti con gli screenshots</li>
-        <li>Potete proporre la traduzione del gioco. È rapida e facile. Guarda <a href=\"_include/strings.inc\">_include/strings.inc</a>per vedere come funziona</li>
+        <li>Potete proporre la traduzione del gioco. È rapida e facile. Guarda <a href=\"includes/strings.inc\">includes/strings.inc</a>per vedere come funziona</li>
         <li>Potete proporre i marchi, le bandiere ed il CSS</li>
         <li>Potete fare parte del team di sviluppo inviando un messaggio nel forum</li>
-        <li>Potete proporre nuovi diagrammi per le tabelle di velocità. (guarda <a href=\"figaro.sql\">un tipico file</a> e <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\">la tabella</a>)</li>
-        <li>Potete fare una donazione a tuxfamily per essere ospitati in questo sito publico!.<a href=\"http://tuxfamily.org\">tuxfamily.org</a></li>
+        <li>Potete proporre nuovi diagrammi per le tabelle di velocità. (guarda <a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse\">la documentazione</a>)</li>
         <li>Vous pouvez soumettre des parcours, informer le mainteneur des nouvelles courses r&eacute;elles afin qu'elles soient aussi programm&eacute;es dans VLM pour que nous les courrions en virtuel simultan&eacute;ment. Il faut : la position latitude/longitude du point de d&eacute;part, l'heure de d&eacute;part, et la position de la ligne d'arriv&eacute;e.</li>
         <li>Potete portare la vostra conoscenza delle barche, degli skipper e della navigazione aiutando il progetto di wikipedia: <a href=\"http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime\">Portail maritime</a></li>
         <li>Se sei un proprietario di barca, può inviare a bordo il team per una vacanza in barca: -).</li>
@@ -1014,11 +1013,10 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "howtohelp" => "Sou apreciador do jogo. Como posso contribuir para o melhorar?",
         "howtohelptext" => "<ul><li>Como jogador, pode informar-nos de bugs e propôr melhorias no forum (interacção com o jogador, novas funcionalidades,?). </li> 
         <li>Pode escrever um manual para principiantes, utilizando imagens do jogo.</li> 
-        <li>Pode propor a tradução do jogo. É rápido e simples. Veja <a href=\"_include/strings.inc\">_include/strings.inc</a> para perceber como funciona.</li>
+        <li>Pode propor a tradução do jogo. É rápido e simples. Veja <a href=\"includes/strings.inc\">includes/strings.inc</a> para perceber como funciona.</li>
               <li>Pode propor logos, banners e CSS.</li>
               <li>Pode juntar-se à equipa de desenvolvimento deixando uma mensagem no forum </li>
-        <li>Pode submeter novos diagramas de polares de velocidade para outras classes de embarcações (ver <a href=\"figaro.sql\">ficheiro tipo</a> e <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\"> aqui </a>)</li>
-        <li>Pode fazer um donativo à tuxfamily que aloja este jogo gratuitamente! <a href=\"http://tuxfamily.org\">tuxfamily.org</a></li>
+        <li>Pode submeter novos diagramas de polares de velocidade para outras classes de embarcações (ver <a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse\">la documentación</a>)</li>
         <li>Pode partilhar os seus conhecimentos de vela, navegação e nautical de recreio ajudando ao projecto da wikipedia: <a href=\"http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime\">Portail maritime</a></li>
         <li>Se for proprietário de uma embarcação à vela pode convidar o responsável pela concepção do jogo para um passeio :-)</li>        
         </ul>",        
@@ -1295,7 +1293,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "mainteneurinfo" => "Fran&ccedil;ois Micaux, ( francois ** at virtual-loup-de-mer ** dot ** org )<br />He decidido en octubre de 2006 continuar el buen trabajo de Sebastien. También alojo VLM en múltiples servidores dedicados que alquilo, instalo y administro.",
         "contact" => "Contacto",
         "contributors" => "Contribuyentes",
-        "contributorstext" => "John-Pet, Phille, Mike, Horn, Sleeso, Sunburn, Manta, Pascal, Fred, Fanch, Phavie, DocteurX, (y muchos otros) ... casi todos los jugadores dan ideas y hacen lo que puedan para ayudar ... documentación, fórmulas matemáticas, traducción...",        
+        "contributorstext" => "John-Pet, Phille, Mike, Horn, Sleeso, Sunburn, Manta, Pascal, Fred, Fanch, Phavie, DocteurX, Spifou, Oxygen77, Line28, Paparazzia, (y muchos otros) ... casi todos los jugadores dan ideas y hacen lo que puedan para ayudar ... documentación, fórmulas matemáticas, traducción...",        
         "version" => "Versión",
         "sourcecode" => "Código fuente",
         "sourcecodetext" => "Descargalo aquí: ",
@@ -1305,11 +1303,10 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "howtohelptext" => "<ul><li>Como jugador, puede informar de errores y proponer mejoras (interfaz de usuario, nuevas funcionalidades) en el foro.</li>
               <li>Puede escribir un manual del juego para principiantes, con capturas de pantalla.</li> 
               <li>      
-Puede proponer la traducción del juego. Es rápido y fácil. En <a href=\"_include/strings.inc\">_include/strings.inc</a> vea cómo funciona.</li>
+Puede proponer la traducción del juego. Es rápido y fácil. En <a href=\"includes/strings.inc\">includes/strings.inc</a> vea cómo funciona.</li>
               <li>Puede proponer logos, banderas y CSS.</li>
               <li>Puede unirse al equipo de desarrollo: publica un mensaje en el foro</li>
-              <li>Puedes proponer nuevos gráficos de velocidad (Vea <a href=\"figaro.sql\">un archivo</a> y <a href=\"http://loupdev.tuxfamily.org/speedchart.php?boattype=figaro\"> el gráfico</a>)</li>
-              <li>Puede donar a tuxfamily que alojó este sitio gratuitamente en el inicio! <a href=\"http://tuxfamily.org\">tuxfamily.org</a></li>
+              <li>Puedes proponer nuevos gráficos de velocidad (Vea <a href=\"http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse\">un documentação</a>)</li>
               <li>Puede compartir sus conocimientos de los barcos, los patrones de navegación y ayudar al proyecto en Wikipedia : <a href=\"http://es.wikipedia.org/wiki/Portal:N%C3%A1utico\">Portal náutico</a></li>
               <li>Si es el dueño de un Imoca o Orma, puede proponer para nosotros un viaje de vela :-)</li>
               </ul>",         
