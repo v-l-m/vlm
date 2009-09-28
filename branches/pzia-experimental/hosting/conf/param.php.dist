@@ -19,4 +19,7 @@ define("SYSTEME_WIND_AT_POSITION", "SPF");
 //TEMPORARY DIR : idem que $VLMTEMP = $VLMRACINE/tmp dans conf_script
 define("VLMTEMP", "/path/to/VLMRACINE/tmp");
 
+//LIST OF THE CLUSTER MEMBERS, INCLUDING THIS SERVER
+DEFINE("CLUSTERLIST", Array("s9.virtual-loup-de-mer.org", "s10.virtual-loup-de-mer.org", "s11.virtual-loup-de-mer.org") ); 
+
 ?>
