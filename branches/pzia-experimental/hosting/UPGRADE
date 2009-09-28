@@ -5,7 +5,10 @@ From 0.10.2 To Next
 
 =Configration=
 * EDIT conf/param.php and add :
- - DEFINE("CLUSTERLIST", Array("s9.virtual-loup-de-mer.org", "s10.virtual-loup-de-mer.org", "s11.virtual-loup-de-mer.org") ); 
+  - define("WEBINSTANCE_COUNT", 3);
+  - define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
+  - define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
+  - define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
 
 From 0.9.7 To next...
 

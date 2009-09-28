@@ -24,7 +24,8 @@ if (
       $col = mysql_fetch_row ($ret);
       if ( !$col[0] )
       {
-            die("Idraces inconnu");
+            header("Cache-Control: no-cache"); // no cache for dummy answer
+            die("No racemap with such id");
       }
       else
       {
