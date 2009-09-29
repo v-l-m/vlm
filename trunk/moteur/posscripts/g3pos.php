@@ -66,7 +66,7 @@ if ($fd = fopen ($filename, "r")) {
 
      $vent = windAtPosition($latb*1000, $lonb*1000, 0, 'NEW' ) ;
      $query ="insert into positions values ";
-     $query .= "( $time , $lonb*1000, $latb*1000, -3, 80, '" . round($vent[0],1) . "," . round(($vent[1]+180)%360) . "') ;";
+     $query .= "( $time , $lonb*1000, $latb*1000, -3, 80, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360) . "') ;";
 
      mysql_db_query(DBNAME,$query) or die("BTOB : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";

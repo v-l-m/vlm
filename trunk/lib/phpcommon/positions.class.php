@@ -186,8 +186,8 @@ class fullGrid
            $vent = windAtPosition($latitude, $longitude, 0);
       }
 
-      $this->wspeed = $vent[0];
-      $this->wheading = $vent[1];
+      $this->wspeed = $vent['speed'];
+      $this->wheading = $vent['windangle'];
     }
 }
 
