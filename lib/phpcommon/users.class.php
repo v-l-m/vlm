@@ -385,8 +385,8 @@ class fullUsers
     // windAtPosition returns a small array : (wspeed, wheading);
     // see functions.php
     $wind = windAtPosition($this->lastPositions->lat, $this->lastPositions->long, 0);
-    $this->wspeed = $wind[0];
-    $this->wheading = $wind[1];
+    $this->wspeed = $wind['speed'];
+    $this->wheading = $wind['windangle'];
 
     //find the angle boat/wind
     $this->boatanglewithwind = angleDifference($this->users->boatheading, 

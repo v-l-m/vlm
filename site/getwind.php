@@ -23,7 +23,7 @@
   echo "<H1>Fonction actuelle, table wind</H1>";
   echo "<code>";
   printf ('%s;Speed=%4.1f;Dir=%003d<BR>' , 
-       gmdate("Y/m/d H:i:s", $now+$ti), $wind[0], ($wind[1]+180)%360 ) ;
+       gmdate("Y/m/d H:i:s", $now+$ti), $wind['speed'], ($wind['windangle']+180)%360 ) ;
   echo "</code>";
 
 
@@ -38,7 +38,7 @@ exit;
         //printf ('Lat=%f, Long=%f, Time=%s    TWS=%5.2f;TWD=%5.2f<BR>' , 
   //             $lat/1000, $lon/1000, gmdate("Y/m/d H:i:s", $now+$ti), $wind[0], ($wind[1]+180)%300 ) ;
         printf ('%s;Speed=%04.1f;Dir=%003d<BR>' , 
-              gmdate("Y/m/d H:i:s", $now+$ti), $wind[0], ($wind[1]+180)%360 ) ;
+              gmdate("Y/m/d H:i:s", $now+$ti), $wind['speed'], ($wind['windangle']+180)%360 ) ;
   }
   echo "</code>";
  
