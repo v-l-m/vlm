@@ -125,7 +125,7 @@ function polar2cartesian($a, $r)
   //$a_trigo+=90;
   
   // Simplification JFD du 03/01/2008 
-  $a_trigo = fmod(360+90 -$a, 360);
+  $a_trigo = deg2rad(fmod(360+90-$a, 360));
 
   // Propositon Maitai du 03/01/2008 (plus couteux en CPU)
   /*
@@ -136,8 +136,8 @@ function polar2cartesian($a, $r)
     }
   */
 
-  $result[0] = $r*cos(deg2rad($a_trigo));
-  $result[1] = $r*sin(deg2rad($a_trigo));
+  $result[0] = $r*cos($a_trigo);
+  $result[1] = $r*sin($a_trigo);
   //echo "\npolar2cartesian angle_trigo = $a_trigo, x = $result[0], y = $result[1] \n";
   return $result;
 }
@@ -147,10 +147,10 @@ function polar2cartesian($a, $r)
 function polar2cartesianDrawing($a, $r)
 {
   //convert $a from geographic angle to drawing angle
-  $a = fmod ($a -90 ,360 );
-
-  $result[0] = $r*cos(deg2rad($a));
-  $result[1] = $r*sin(deg2rad($a));
+  $a = deg2rad(fmod($a-90 ,360)); // FIXME as $a is used only in cos and sin
+                                  // there is need to normalize it
+  $result[0] = $r*cos($a);
+  $result[1] = $r*sin($a);
   //echo "\npolar2cartesian angle_trigo = $a_trigo, x = $result[0], y = $result[1] \n";
   return $result;
 }
@@ -293,44 +293,6 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
 // If "laisser_au" is 90, then boats have to cross a "line"
 // by sailing in the west of it (to see the WP at head 90° when "crossing")
 // ========================================================
-function OBSOLETEgiveWaypointCoordinates ($idraces , $idwp, $wplength = WPLL)
-{
-  // first, use the cache (in 'moteur' mode)
-  if (defined('MOTEUR')) {
-    static $WP_Cache = array();
-    
-    if (array_key_exists($idraces, $WP_Cache)) {
-      if (array_key_exists($idwp, $WP_Cache[$idraces])) {
-  return $WP_Cache[$idraces][$idwp];
-      }
-    } 
-  }
-
-  //                          row[0]         row[1]         row[2]        row[3]        row[4]
-  $querywaypoint = "SELECT WP.latitude1, WP.longitude1, WP.latitude2, WP.longitude2, RW.laisser_au " .
-    " FROM  waypoints WP, races_waypoints RW" .
-    " WHERE RW.wporder = " . $idwp . 
-    " AND   RW.idraces = " . $idraces . 
-    " AND   WP.idwaypoint = RW.idwaypoint ";
-  //printf ("\nQuery = %s\n" , $querywaypoint);
-
-  $result = wrapper_mysql_db_query(DBNAME,$querywaypoint) or 
-    die("Query failed : " . mysql_error." ".$querywaypoint);
-
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-
-  $wp_coord = internalGiveWaypointCoordinates($row[0], $row[1], $row[2], $row[3], $row[4], $wplength);
-  // we cache if we are in "moteur" mode
-  if (defined('MOTEUR')) {
-    if (!array_key_exists($idraces, $WP_Cache)) {
-      $WP_Cache[$idraces] = array( $idwp => $wp_coord);
-    } else {
-      $WP_Cache[$idraces][$idwp] = $wp_coord;
-    }
-  }
-  return $wp_coord;
-}
-
 function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_au, $wplength = WPLL) {
   // Cas d'un WP : long1=long2 && lat1=lat2
   if ( ( $lat1 == $lat2 ) && ( $long1 == $long2 ) && ( $laisser_au != 999 )  ) {
