@@ -372,8 +372,7 @@ include_once("scripts/myboat.js");
 
     <!-- le beau GPS multifonctions -->
         <div id="gpsbox"  class="instrument">
-        <img alt="GPS" src="gps.php?
-        latitude=<?php   echo ($usersObj->lastPositions->lat)  ?>&amp;
+        <img alt="GPS" src="gps.php?latitude=<?php   echo ($usersObj->lastPositions->lat)  ?>&amp;
         longitude=<?php  echo ($usersObj->lastPositions->long) ?>&amp;
         speed=<?php  printf ('%2.2f', round($usersObj->boatspeed, 2)) ?>&amp;
         cap=<?php    printf ('%04.1f' , $usersObj->users->boatheading ) ?>&amp;
