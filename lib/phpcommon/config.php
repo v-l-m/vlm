@@ -20,10 +20,15 @@ ini_set('arg_separator.output', "&amp;");
 
 
 /*********db_connect****************/
-$link = mysql_connect(DBSERVER, DBUSER, DBPASSWORD)
-   or die("Could not connect : " . mysql_error());
+if (defined('MOTEUR')) {
+  $link = mysql_pconnect(DBSERVER, DBUSER, DBPASSWORD) or 
+          die("Could not connect : " . mysql_error());
+} else {
+  $link = mysql_connect(DBSERVER, DBUSER, DBPASSWORD) or 
+          die("Could not connect : " . mysql_error());
+} 
    
-mysql_select_db(DBNAME) or die("Could not select database");
+mysql_select_db(DBNAME, $link) or die("Could not select database");
 
 // EMAIL COMITE
 define("EMAIL_COMITE_VLM", "vlm@virtual-winds.com");

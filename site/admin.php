@@ -64,7 +64,7 @@ if ( $race == "" ) {
    $query = "SELECT idraces, racename  FROM races where started >=0 ";
    $query = $query . " order by idraces;";
 
-   $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+   $result = mysql_query($query) or die("Query [$query] failed \n");
 
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
    while ( $row = mysql_fetch_assoc($result)) {
@@ -137,7 +137,7 @@ if ( $race != "" && $boat == "" ) {
    }
    $queryusers = $queryusers . " order by idusers;";
 
-   $resultusers = mysql_db_query(DBNAME,$queryusers) or die("Query [$queryusers] failed \n");
+   $resultusers = mysql_query($queryusers) or die("Query [$queryusers] failed \n");
 
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
    while ( $row = mysql_fetch_assoc($resultusers)) {
@@ -187,7 +187,7 @@ if ( $do == "yes" ) {
        $query .="     where idusers = " .  $boat  . 
           "     and engaged   = " .  $race  .
           "    ;";
-             $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+             $result = mysql_query($query) or die("Query [$query] failed \n");
        $action_tracking = "UNLOCK boat for user $boat in race $race";
 
        break;
@@ -197,7 +197,7 @@ if ( $do == "yes" ) {
                "     where idusers = " .  $boat . 
           "     and engaged   = " .  $race .
           "    ;";
-             $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+             $result = mysql_query($query) or die("Query [$query] failed \n");
        $action_tracking = "UPDATE nextwaypoint ($nwp) for user $boat in race $race";
 
        break;
@@ -212,7 +212,7 @@ if ( $do == "yes" ) {
                       $boat   . ", " .
                       $race      . 
            "                                            );";
-             $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+             $result = mysql_query($query) or die("Query [$query] failed \n");
        $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
 
        break;
@@ -222,7 +222,7 @@ if ( $do == "yes" ) {
                "     where idusers = " .  $boat . 
           "     and engaged   = " .  $race .
           "    ;";
-             $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+             $result = mysql_query($query) or die("Query [$query] failed \n");
        $action_tracking = "UPDATE password (newpass=*********) for user $boat in race $race";
              break;
         case "reset_username":
@@ -231,7 +231,7 @@ if ( $do == "yes" ) {
                "     where idusers = " .  $boat . 
           "     and engaged   = " .  $race .
           "    ;";
-             $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+             $result = mysql_query($query) or die("Query [$query] failed \n");
        $action_tracking = "UPDATE username (username=$newusern) for user $boat in race $race";
              break;
   default:
@@ -243,7 +243,7 @@ if ( $do == "yes" ) {
     //tracking...
     $query_tracking = "insert into admin_tasks (time, admin, action) " . 
                       " values (" . time() . ",'" . $pseudo . "','" . addslashes($action_tracking) . "')";
-    $result = mysql_db_query(DBNAME,$query_tracking) or die("Query [$query_tracking] failed \n");
+    $result = mysql_query($query_tracking) or die("Query [$query_tracking] failed \n");
 
     exit;
 }

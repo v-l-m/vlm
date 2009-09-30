@@ -65,12 +65,12 @@ if ($fd = fopen ($filename, "r")) {
     
 if ( $latb != 0 && $lonb != 0 ) {
  $query  ="delete from positions where idusers=-56 ;" ;
- mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+ mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
  $query ="insert into positions values ";
  $query .= "( $time , $lonb*1000, $latb*1000, -56, 20071201) ;";
 
- mysql_db_query(DBNAME,$query) or die("OE-POS : Query failed : " . mysql_error." ".$query);
+ mysql_query($query) or die("OE-POS : Query failed : " . mysql_error." ".$query);
  //echo "$query\n";
 }
 
