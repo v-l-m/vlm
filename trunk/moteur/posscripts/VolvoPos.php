@@ -16,7 +16,7 @@ $boats= array(
 // Insertion des bateaux dans la base
 while ( $boat = current($boats) ) {
     $query = "REPLACE INTO `users` VALUES (" . key($boats) . ",'boat_VLM70','$boat','xxxx','$boat','000000',161,'4',135.4,$IDRACES,1224489337,'',1,1223726400,1224489337,2655.89,'','admin',5,-26,-1,0,1216352105,0,'-','127.0.0.1','');";
-    mysql_db_query(DBNAME,$query) or die("VLM70 : Query failed : " . mysql_error." ".$query);
+    mysql_query($query) or die("VLM70 : Query failed : " . mysql_error." ".$query);
     next($boats);
 }
 
@@ -55,7 +55,7 @@ if ($fd = fopen ($filename, "r")) {
             $query ="insert into positions values ";
             $query .= "( $time , $lonb*1000, $latb*1000,  " . array_search($nom, $boats). ", $IDRACES, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360) . "') ;";
 
-            mysql_db_query(DBNAME,$query) or die("VLM70 : Query failed : " . mysql_error." ".$query);
+            mysql_query($query) or die("VLM70 : Query failed : " . mysql_error." ".$query);
 
           }
         }

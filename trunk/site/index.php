@@ -62,7 +62,7 @@
 <?php
     // Nombre d'inscrits sur VLM
     $querynbu = "SELECT count(*) FROM users where idusers >0";
-    $resultnbu = mysql_db_query(DBNAME,$querynbu) or die("Query [$querynbu] failed \n");
+    $resultnbu = mysql_query($querynbu) or die("Query [$querynbu] failed \n");
 
     $row = mysql_fetch_array($resultnbu, MYSQL_NUM);
     printf( "<h4>" . $strings[$lang]["nbplayers"]. "</h4>", $row[0]);

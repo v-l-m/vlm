@@ -5,7 +5,7 @@
 // Cleaning Races_results only 
    $query = " DELETE from user_action
               WHERE time < " . (time()-604800)  ;
-   $result = wrapper_mysql_db_query(DBNAME,$query);
+   $result = wrapper_mysql_db_query($query);
 
 
 ?>

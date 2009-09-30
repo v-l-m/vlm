@@ -42,7 +42,7 @@ $query   =  "SELECT histpos.time,histpos.lat,histpos.long FROM histpos,races" .
             " AND histpos.time >= races.deptime".
             " ORDER BY time ASC";
 
-$result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+$result  = mysql_query($query) or die("Query [$query] failed \n");
 $nbresults =  mysql_num_rows($result);
 
 if ($all) {
@@ -53,7 +53,7 @@ if ($all) {
               " AND positions.time >= races.deptime".
               " ORDER BY time ASC";
 
-  $resultnow  = mysql_db_query(DBNAME,$querynow) or die("Query [$querynow] failed \n");
+  $resultnow  = mysql_query($querynow) or die("Query [$querynow] failed \n");
   $nbresults  +=   mysql_num_rows($resultnow);
 }
 

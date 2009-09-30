@@ -25,7 +25,7 @@ class positions
 
 //      echo "REQUEST: $query \n";
 
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
     $this->time = $row[0];
@@ -42,8 +42,8 @@ class positions
     $query= "SELECT `time`, `long`, `lat`, `idusers` , `race` ".
       "FROM positions WHERE idusers = $id AND race = $race " .
       "ORDER BY `time` DESC LIMIT 2";
-    $result = wrapper_mysql_db_query(DBNAME,$query);
-    //$result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
+    //$result = wrapper_mysql_db_query($query);
 
     $row = mysql_fetch_array($result, MYSQL_NUM);
     $row = mysql_fetch_array($result, MYSQL_NUM);//we are not taking the last one
@@ -67,7 +67,7 @@ class positions
       " ORDER BY time ASC LIMIT 1";
     //echo "REQUEST: $query \n";
 
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
     return array($row[0], $row[1], $row[2]);
@@ -101,7 +101,7 @@ class positions
               ", `lat` =". $this->lat.
               ", idusers = ".$this->idusers .
               ", `race` = ".$this->race;
-    wrapper_mysql_db_query(DBNAME,$query7);
+    wrapper_mysql_db_query($query7);
 
   }
 
@@ -149,7 +149,7 @@ class positionsList
       " AND `time` > " . $mintime .  
       " AND `time` < " . $maxtime .  
       " ORDER BY `time` ASC";
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
 
     while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
       $pos = new positions();

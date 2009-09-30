@@ -28,7 +28,7 @@ $USER_NUM=$argv[2];
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 //echo "\n0- PURGE OLD POSITIONS \n";
 $qp = "SELECT `time`,`long`,`lat` FROM histpos WHERE race = $RACE_NUM and idusers=$USER_NUM order by time";
-$result = wrapper_mysql_db_query(DBNAME,$qp);
+$result = wrapper_mysql_db_query($qp);
 
 $n=0;
 $time=0;

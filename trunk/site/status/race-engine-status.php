@@ -22,14 +22,14 @@ include("../includes/header-status.inc");
 
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
     $query .= " order by vacfreq ASC, deptime DESC, idraces ASC";
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     $odd = 0;
     while($row = mysql_fetch_assoc($result)) {
         $idraces  = $row['idraces'];
         $racename = $row['racename'];
         $vacfreq  = $row['vacfreq'];
         $query2   = "SELECT `time`, update_comment FROM updates WHERE update_comment LIKE '% ".$idraces."%' OR update_comment LIKE '".$idraces."%' ORDER BY `time` DESC LIMIT 1";
-        $result2  = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
+        $result2  = wrapper_mysql_db_query($query2) or die("Query [$query2] failed \n");
         $row2     = mysql_fetch_assoc($result2);
         $delay    = $current_time - (int)$row2['time'];
         if ($delay > 60*(int)$vacfreq) {
@@ -61,7 +61,7 @@ include("../includes/header-status.inc");
     <tr><th>Time (GMT)</th><th>Duration (s)</th><th>Nb. races</th><th>Nb. boats</th><th>boat/sec</th></tr>
     <?php
       $query2 = "SELECT `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 20";
-      $result2 = wrapper_mysql_db_query(DBNAME,$query2) or die("Query [$query2] failed \n");
+      $result2 = wrapper_mysql_db_query($query2) or die("Query [$query2] failed \n");
       $odd = 0;
       while($row2 = mysql_fetch_assoc($result2)) {
           $lastupdate     = (int)$row2['time'];

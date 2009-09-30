@@ -41,7 +41,7 @@ header("content-type: text/plain; charset=UTF-8");
 
   $query .=  " order by  idusers";
 
-  $result  = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+  $result  = mysql_query($query) or die("Query [$query] failed \n");
   printf ("============================\n");
   printf ("====  %5d players  ====\n", mysql_num_rows($result));
   printf ("============================\n");

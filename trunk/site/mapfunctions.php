@@ -24,7 +24,7 @@ function getRealBoats($race = 0, $age = 10800 ) {
   $query .= " ORDER BY P.race DESC, P.idusers ASC , P.time DESC  ";
   // Dans la mise en tableau, on arrête la boucle si le numéro de bateau est supérieur au dernier qu'on a ajouté
 
-        $result = mysql_db_query(DBNAME,$query) or die("Query [$query] failed \n");
+        $result = mysql_query($query) or die("Query [$query] failed \n");
         $num_rows = mysql_num_rows($result);
 //echo "NUM=$num_rows\n";
 

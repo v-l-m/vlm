@@ -76,7 +76,7 @@ if ($fd = fopen ($filename, "r")) {
 
                 // Refresh des données dans la table "Users"
                 $query = "REPLACE INTO `users` (idusers,boattype,username,password,boatname,engaged,userdeptime) VALUES (" . $boat_num . ",'boat_Imoca2008','$skipper','xxxx','$boatname',$IDRACES,1226232120);";
-                mysql_db_query(DBNAME,$query) or die("VLM70 : Query failed : " . mysql_error." ".$query);
+                mysql_query($query) or die("VLM70 : Query failed : " . mysql_error." ".$query);
 
                 $time = time();
                 if ( $latb != 0 && $lonb != 0 ) {
@@ -87,13 +87,13 @@ if ($fd = fopen ($filename, "r")) {
                              where idusers =  $boat_num and race = $IDRACES";
                  */
                   $query = "delete from positions where race= $IDRACES and idusers=$boat_num ;";
-                  mysql_db_query(DBNAME,$query) or die("VDG : Query failed : " . mysql_error." ".$query . "\n");
+                  mysql_query($query) or die("VDG : Query failed : " . mysql_error." ".$query . "\n");
 //echo $query . "\n";
 
                   $query = "insert into positions values ";
                   $query .= "( $time , $lonb, $latb,  " . $boat_num. ", $IDRACES, '" . round($vent[0],1) . "," . round(($vent[1]+180)%360) . "') ;";
 //echo $query . "\n";
-                  mysql_db_query(DBNAME,$query) or die("VDG : Query failed : " . mysql_error." ".$query . "\n");
+                  mysql_query($query) or die("VDG : Query failed : " . mysql_error." ".$query . "\n");
 
                 }
            }
