@@ -26,10 +26,8 @@ function outputIC($fullRacesObj) {
 
 function outputRaceMap($fullRacesObj, $alttemplate) {
 
-  $href = "/racemap.php?idraces=".$fullRacesObj->races->idraces;
-  if (1 or file_exists($href) ) {
-    echo "<img src=\"$href\" alt=\"" .$alttemplate. "\" />\n";
-  }
+  echo htmlTinymap($fullRacesObj->races->idraces, $alttemplate);
+
 }
 
 /* output du titre */

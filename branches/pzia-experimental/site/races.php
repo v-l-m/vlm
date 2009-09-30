@@ -156,17 +156,7 @@ if ($idraces != 0) {
     echo "</div>\n";     
 
           // Carte de la course
-    $href = "/racemap.php?idraces=".$fullRacesObj->races->idraces;
-          if ( 1 or file_exists($href) ) {
-
-              $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
-              list($xSize, $ySize, $type, $attr) = getimagesize($href);
-
-              echo "<img src=\"images/site/cartemarine.png\" " .
-                     " onmouseover=\"showDivLeft('infobulle','$status_content', $xSize, $ySize);\" " .
-                     " onmouseout=\"hideDiv('infobulle');\" " .
-                  " alt=\"" .$strings[$lang]["racemap"]. "\" />";
-          }
+          echo htmlTinymap($fullRacesObj->races->idraces, $strings[$lang]["racemap"]);
 
           echo "<table class=\"boat\"><tr class=\"boat\">";
           echo "<td class=\"boat\">";

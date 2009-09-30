@@ -42,7 +42,7 @@ $dir = "../".DIRECTORY_THEMES;
 $dh  = opendir($dir);
 $select_list="";
 while (false !== ($filename = readdir($dh))) {
-    if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
+    if ( is_dir("$dir/$filename") and (substr($filename, 0, 1) != ".") and ($filename != "..")) {
         //Taking only directories
         $list_themes[$filename] = $filename;
     }
@@ -112,6 +112,17 @@ $opts['fdd']['idraces'] = array(
   'default'  => '0',
   'sort'     => true
 );
+
+$opts['fdd']['raceminimap'] = array(
+  'name'     => 'Minimap',
+  'options'  => 'LDVF',
+  //'select'   => 'T',
+  'escape'   => 0,
+  'sql'      => 'idraces', 
+  'mask'     => "<img style=\"height:40px; \" src=\"/minimap.php?idraces=%s\" />",
+  'input'  => 'R',
+);
+
 $opts['fdd']['racename'] = array(
   'name'     => 'Name of the race',
   'select'   => 'T',

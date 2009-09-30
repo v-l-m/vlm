@@ -9,33 +9,12 @@ $idraces=$_REQUEST["idraces"];
 
 $image="regate".$idraces;
 $thumb="images/minimaps/" . $image . ".png";
-$original="images/racemaps/" . $image . ".jpg";
+$original=getRacemap($idraces,  $_REQUEST['force']);
 
-// Création et mise en cache de la miniature si elle n'existe pas ou est trop vieille
-if ( 
-     ( ! file_exists($original) ) 
-      ||  ($_REQUEST['force'] == 'yes')
-      ||  (filemtime($original) < filemtime(__FILE__) )
-   ) {
-
-      $req = "SELECT idraces, racemap ".
-             "FROM racesmap WHERE idraces = '".$idraces."'";
-      $ret = wrapper_mysql_db_query (DBNAME, $req) or die (mysql_error ());
-      $col = mysql_fetch_row ($ret);
-      if ( !$col[0] )
-      {
+if ($original ===False) {
             header("Cache-Control: no-cache"); // no cache for dummy answer
             die("No racemap with such id");
-      }
-      else
-      {
-          $img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
-
-          // Sauvegarde
-          imagejpeg($img_out, $original) or die ("Cannot write thumbnail");
-      }
 }
-
 
 // Envoi de la miniature
 header("Content-Type: image/jpg");

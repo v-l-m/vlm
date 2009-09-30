@@ -109,17 +109,7 @@ include_once("scripts/myboat.js");
     <div id="minimapbox">
         <?php
         // Carte de la course
-        $href = "/racemap.php?idraces=".$usersObj->users->engaged;
-        if (1 or file_exists($href) ) {
-          $status_content = "&lt;img src=&quot;$href&quot; " . 
-                            "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
-                  //list($xSize, $ySize, $type, $attr) = getimagesize($href);
-          echo "<img class=\"minimap\" src=\"images/site/cartemarine.png\" " . 
-          " onmouseover=\"showDivLeft('infobulle'" .
-          ",'$status_content', 800, 800);\" " .
-          " onmouseout=\"hideDiv('infobulle');\" " .
-          " alt=\"" .$strings[$lang]["racemap"]. "\" />";
-        }
+        echo htmlTinymap($usersObj->users->engaged, $strings[$lang]["racemap"]);
 ?>
 
     </div>
