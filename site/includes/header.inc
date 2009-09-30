@@ -8,6 +8,7 @@
     
     header("Content-type: text/html; charset=utf-8");
 
+    ob_start();
     //all GET and POST variables
     $lang = getCurrentLang();
     $pseudo=quote_smart($_REQUEST['pseudo']);
