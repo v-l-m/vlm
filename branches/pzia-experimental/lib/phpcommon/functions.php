@@ -951,21 +951,9 @@ function dispHtmlRacesList($strings, $lang) {
         echo " (max " . $maxboats . ")";
       }
       echo "</td>\n";
-      echo "  <td>"; 
+      echo "  <td align=\"center\">"; 
 
-      //$href="racemaps/regate".$idraces.".jpg";
-      //echo "<a href=\"$href\">".$strings[$lang]["map"]."</a>";
-      // Carte de la course
-      $href="images/racemaps/regate".$idraces.".jpg";
-      if ( file_exists($href) ) {
-
-        $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
-        list($xSize, $ySize, $type, $attr) = getimagesize($href);
-        echo "<img width=\"30\" height=\"20\" src=\"/images/site/cartemarine.png\" " .
-          " onmouseover=\"showDivRight('infobulle','$status_content', 720, 480);\" " .
-          " onmouseout=\"hideDiv('infobulle');\" " .
-          " alt=\"" .$strings[$lang]["racemap"]. "\"/>";
-      }
+      echo htmlTinymap($idraces, $strings[$lang]["racemap"], "Right");
       echo "</td>\n";
       echo " </tr>\n";
 
@@ -1007,7 +995,7 @@ function dispHtmlRacesList($strings, $lang) {
       echo "<td>" ;
       echo "$departure</td>\n";
       echo "  <td align=\"center\">" . $num_arrived . " / " . $num_racing . " / " . $num_engaged  . "</td>\n";
-      echo "  <td>"; 
+      echo "  <td align=\"center\">"; 
 
       /*
         $bounds = $fullRacesObj->getRacesBoundaries();
@@ -1023,16 +1011,8 @@ function dispHtmlRacesList($strings, $lang) {
         "&amp;windtext=off".
         "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=left&amp;idraces=".$fullRacesObj->races->idraces;
       */
-      //$href="racemaps/regate".$idraces.".jpg";
-      //echo "<a href=\"$href\">".$strings[$lang]["map"]."</a>";
       // Carte de la course
-      $href="images/racemaps/regate".$idraces.".jpg";
-      $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;map&quot; /&gt;";
-      list($xSize, $ySize, $type, $attr) = getimagesize($href);
-      echo "<img width=\"30\" height=\"20\" src=\"/images/site/cartemarine.png\" " .
-        " onmouseover=\"showDivRight('infobulle','$status_content', 720, 480);\" " .
-        " onmouseout=\"hideDiv('infobulle');\" " .
-        " alt=\"" .$strings[$lang]["racemap"]. "\" />";
+      echo htmlTinymap($idraces, $strings[$lang]["racemap"], "Right");
       echo "</td>\n";
       echo " </tr>\n";
     }
@@ -1044,7 +1024,49 @@ function dispHtmlRacesList($strings, $lang) {
   echo $finished_races;
 }
 
+function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
 
+      $href="/racemap.php?idraces=".$idraces;
+      $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
+      return "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" " .
+//FIXME : on doit pouvoir faire la taille de la popup en dynamique en js
+          " onmouseover=\"showDiv$where('infobulle','$status_content', 1000, 1000);\" " .
+          " onmouseout=\"hideDiv('infobulle');\" " .
+          " alt=\"" .$alt. "\"/>";
+}
+
+function getRacemap($idraces, $force = 'no') {
+
+    $image="regate".$idraces;
+    $original="images/racemaps/" . $image . ".jpg";
+    
+    // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
+    if ( 
+         ( ! file_exists($original) ) 
+          ||  ($force == 'yes')
+          ||  (filemtime($original) < filemtime(__FILE__) )
+       ) {
+    
+          $req = "SELECT idraces, racemap ".
+                 "FROM racesmap WHERE idraces = '".$idraces."'";
+          $ret = wrapper_mysql_db_query (DBNAME, $req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $col = mysql_fetch_row ($ret);
+          if ( !$col[0] )
+          {
+              //Ceci est une erreur de données absentes
+              return False;
+          }
+          else
+          {
+              $img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
+              // Sauvegarde
+              imagejpeg($img_out, $original) or die ("Cannot write cached racemap");
+          }
+    }
+
+    return $original;
+
+}
 
 
 function raceExists($race)
