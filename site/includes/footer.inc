@@ -12,7 +12,7 @@
       </p>
     -->
   </div> <!--footer-->
-
+	<!-- TIMINGS: <?php echo "generated in ".(microtime(1)-$page_start_time)."s" ?> -->
 </body>
 </html>
 <?php

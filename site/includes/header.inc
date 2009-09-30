@@ -1,5 +1,7 @@
 <?php
 
+    $page_start_time=microtime(1);
+
     session_start();
     include_once("strings.inc");
     include_once("config.php");
