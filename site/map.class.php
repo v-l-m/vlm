@@ -983,8 +983,8 @@ class map
                 //imagestring ( $this->mapImage, $font, 50, 60 , "BOAT on east" , $this->colorText);
                 $DepEstime=$A;
               }
-              if ( $Estime[1] < 0) {
-                $Estime[1]+=360000;
+              if ( $Estime['longitude'] < 0) {
+                $Estime['longitude']+=360000;
               }
               //imagestring ( $this->mapImage, $font, 50, 70 ,"EstimeEndAfter ="  .$Estime[1] , $this->colorText);
             } else {
@@ -1011,8 +1011,8 @@ class map
             $style = array ($this->fromhex( $usersObj->color), $this->colorSea);
             imagesetstyle ($this->mapImage, $style);
             $E = array ( 
-                        call_user_func_array( array(&$this, $projCallbackLong), $Estime[1]),
-                        call_user_func_array( array(&$this, $projCallbackLat), $Estime[0])
+                        call_user_func_array( array(&$this, $projCallbackLong), $Estime['longitude']),
+                        call_user_func_array( array(&$this, $projCallbackLat), $Estime['latitude'])
                          );
             imageline ( $this->mapImage, $DepEstime[0], $DepEstime[1], $E[0], $E[1] , IMG_COLOR_STYLED);
 
@@ -1145,28 +1145,26 @@ class map
         $_lastlong=$fullUsersObj->lastPositions->long;
         $_lastlat=$fullUsersObj->lastPositions->lat;
         //addDistance2Positions
-        $Estime=giveEndPointCoordinates(  $fullUsersObj->lastPositions->lat,
-            $fullUsersObj->lastPositions->long,
-                                          ORTHOSTEP, 
-                                          $fullUsersObj->orthodromicHeading()  );
-
+        $Estime=giveEndPointCoordinates( $fullUsersObj->lastPositions->lat,
+					 $fullUsersObj->lastPositions->long,
+					 ORTHOSTEP, 
+					 $fullUsersObj->orthodromicHeading());
+	
         $fullUsersObj->lastPositions->addDistance2Positions(ORTHOSTEP,$fullUsersObj->orthodromicHeading());
-        //$fullUsersObj->lastPositions->long=$Estime[1];
-        //$fullUsersObj->lastPositions->lat=$Estime[0];
 
         // Controle sur l'antemeridien
-        if ( $fullUsersObj->lastPositions->long <0 and $Estime[1] > 0) {
-          $Estime[1]-=360000;
+        if ( $fullUsersObj->lastPositions->long <0 and $Estime['longitude'] > 0) {
+          $Estime['longitude']-=360000;
         }
-        if ( $fullUsersObj->lastPositions->long >0 and $Estime[1] < 0) {
-          $Estime[1]+=360000;
+        if ( $fullUsersObj->lastPositions->long >0 and $Estime['longitude'] < 0) {
+          $Estime['longitude']+=360000;
         }
-        //if ( $Estime[1] < $this->west || $Estime[1] > $this->east ) break;
-        if ( $Estime[1] < $this->west || $Estime[1] > $this->east ) {
+
+        if ( $Estime['longitude'] < $this->west || $Estime['longitude'] > $this->east ) {
           //echo "EAST=$this->east, WEST=$this->west, ESTIME1=".$Estime[1]."\n";
           break;
         }
-        if ( $Estime[0] < $this->south || $Estime[0] > $this->north ) {
+        if ( $Estime['latitude'] < $this->south || $Estime['latitude'] > $this->north ) {
           //echo "NORTH=$this->north, SOUTH=$this->south, ESTIME1=".$Estime[1]."\n";
           break;
         }
@@ -1194,8 +1192,8 @@ class map
         }
 
         $E = array ( 
-                    call_user_func_array( array(&$this, $projCallbackLong), $Estime[1]),
-                    call_user_func_array( array(&$this, $projCallbackLat), $Estime[0])
+                    call_user_func_array( array(&$this, $projCallbackLong), $Estime['longitude']),
+                    call_user_func_array( array(&$this, $projCallbackLat), $Estime['latitude'])
                      );
         imageline ( $this->mapImage, $DepOrtho[0], $DepOrtho[1], $E[0], $E[1] , IMG_COLOR_STYLED);
         //imageline ( $this->mapImage, $A[0], $A[1], $E[0], $E[1] , $this->colorTextOrtho);
