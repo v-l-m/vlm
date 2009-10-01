@@ -170,31 +170,30 @@ include_once("scripts/myboat.js");
       //echo "NWP = " . $usersObj->users->nwp;
       foreach ($myRace->getWPs() as $wp) {
          // label = colonne wptype de races_waypoints
-         $wp_label=$wp[5];
-         $wp_libelle=htmlentities($wp[6]);
-         $wp_laisser_au=$wp[7];
-         $wp_maparea=$wp[8];
+         $wp_label=$wp['wptypelabel'];
+         $wp_libelle=htmlentities($wp['libelle']);
+         $wp_laisser_au=$wp['laisser_au'];
+         $wp_maparea=$wp['maparea'];
   
          $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
          $status_content.=$wp_libelle." (".$wp_label.")" ;
          $status_content.="&lt;br /&gt;";
   
-         if ( $wp[4] == WPTYPE_PORTE ) {
-            $wp_north = max ($wp[0], $wp[2]);
-            $wp_east  = max ($wp[1], $wp[3]);
-            $wp_south = min ($wp[0], $wp[2]);
-            $wp_west  = min ($wp[1], $wp[3]);
+         if ( $wp['wptype'] == WPTYPE_PORTE ) {
+            $wp_north = max ($wp['latitude1'], $wp['latitude2']);
+            $wp_east  = max ($wp['longitude1'], $wp['longitude2']);
+            $wp_south = min ($wp['latitude1'], $wp['latitude2']);
+            $wp_west  = min ($wp['longitude1'], $wp['longitude2']);
   
-                $status_content.="Gate Coords=&lt;b&gt;" . 
-                                round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . 
-                        " &lt;----&gt; " . round($wp[2]/1000,3) . "," . round($wp[3]/1000,3) . "&lt;/b&gt;";
-  
+	    $status_content.="Gate Coords=&lt;b&gt;" . 
+	      round($wp['latitude1']/1000,3) . "," . round($wp['longitude1']/1000,3) . 
+	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . "&lt;/b&gt;";
          } else {
-            $wp_south = $wp_north = $wp[0];
-            $wp_west  = $wp_east  = $wp[1];
+            $wp_south = $wp_north = $wp['latitude1'];
+            $wp_west  = $wp_east  = $wp['longitude1'];
   
                 $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                                round($wp[0]/1000,3) . "," . round($wp[1]/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
+                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
   
          }
          if ( $wp_num > $usersObj->users->nwp ) {
@@ -680,9 +679,9 @@ include_once("scripts/myboat.js");
             $xing_ratio = new doublep();
         
             $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
-                     $nwp_coords[0], $nwp_coords[1],
-                     $nwp_coords[2], $nwp_coords[3],
-                     $lat_xing, $long_xing, $xing_ratio);
+							 $nwp_coords['latitude1'], $nwp_coords['longitude1'],
+							 $nwp_coords['latitude2'], $nwp_coords['longitude2'],
+							 $lat_xing, $long_xing, $xing_ratio);
             ?>
             <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
             <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
@@ -799,15 +798,15 @@ include_once("scripts/myboat.js");
       <?php
           if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
 	    $myWP=&$myRace->giveWPCoordinates($usersObj->users->nwp);
-               $latwp=($myWP[0] + $myWP[2])/2/1000;
-               $longwp=($myWP[1] + $myWP[3])/2/1000;
-               if ( abs($myWP[1] - $myWP[3] ) > 180 ) {
-                   //on inverse le centre si un wp à l'air de faire plus de 180°
-                   $longwp += 180;
-               }
+	    $latwp=($myWP['latitude1'] + $myWP['latitude2'])/2/1000;
+	    $longwp=($myWP['longitude1'] + $myWP['longitude2'])/2/1000;
+	    if ( abs($myWP['longitude1'] - $myWP['longitude2'] ) > 180 ) {
+	      //on inverse le centre si un wp à l'air de faire plus de 180°
+	      $longwp += 180;
+	    }
           } else {
-               $latwp=$usersObj->users->targetlat;
-               $longwp=$usersObj->users->targetlong;
+	    $latwp=$usersObj->users->targetlat;
+	    $longwp=$usersObj->users->targetlong;
           }
       ?>
       <input type="hidden" name="latwp" value="<?php echo $latwp; ?>" />

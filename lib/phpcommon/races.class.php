@@ -102,14 +102,17 @@ class races
       $WPCoords =  internalGiveWaypointCoordinates($row[5], $row[6], $row[7], $row[8], $row[3], WPLL);
       // On push dans le tableau des coordonnées le wptype (classement ou son nom), et le libellé et le "laisser_au" du WP
       // ainsi que le maparea adapt
-      array_push ($WPCoords, $row[1], $row[2], $row[3], $row[4]);
+      $WPCoords['wptypelabel'] = $row[1];
+      $WPCoords['libelle'] = $row[2];
+      $WPCoords['laisser_au'] = $row[3];
+      $WPCoords['maparea'] = $row[4];
       // On push ce WP dans la liste des WP
       $this->waypoints[$row[0]] = $WPCoords;
     }
-    $this->stop1lat  = $WPcoords[0];
-    $this->stop1long = $WPcoords[1];
-    $this->stop2lat  = $WPcoords[2];
-    $this->stop2long = $WPcoords[3];
+    $this->stop1lat  = $WPcoords['latitude1'];
+    $this->stop1long = $WPcoords['longitude1'];
+    $this->stop2lat  = $WPcoords['latitude2'];
+    $this->stop2long = $WPcoords['longitude2'];
   }
 
   function getRaceDistance($force = 0) {
@@ -120,21 +123,23 @@ class races
 	$lastlat=$this->startlat;
 	$this->retrieveWPs();
 	foreach ( $this->waypoints as $WP ) {
-	  $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
-	  $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
+	  $d1=ortho($lastlat,$lastlong,$WP['latitude1'], $WP['longitude1'] );
+	  $d2=ortho($lastlat,$lastlong,$WP['latitude2'],$WP['longitude2']);
 	  if ( $d1 < $d2 ) {
-	    $lastlat=$WP[0];
-	    $lastlong=$WP[1];
+	    $lastlat=$WP['latitude1'];
+	    $lastlong=$WP['longitude1'];
 	    $this->racedistance+=$d1;
 	  } else {
-	    $lastlat=$WP[2];
-	    $lastlong=$WP[3];
+	    $lastlat=$WP['latitude2'];
+	    $lastlong=$WP['longitude2'];
 	    $this->racedistance+=$d2;
 	  }
 	}
 	// + la distance entre l'avant dernier WP et le dernier
-	$this->racedistance+=min(ortho($lastlat,$lastlong,$WP[0], $WP[1] ), 
-				 ortho($lastlat,$lastlong,$WP[2], $WP[3] ) );
+	$this->racedistance+=min(ortho($lastlat,$lastlong,
+				       $WP['latitude1'], $WP['longitude1'] ), 
+				 ortho($lastlat,$lastlong,
+				       $WP['latitude2'], $WP['longitude2'] ) );
 	//$this->racename = sprintf ("%s (%d nm)", $this->racename, $this->racedistance);
       } else {
 	$this->racedistance=0;

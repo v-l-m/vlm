@@ -529,24 +529,24 @@ class map
       //echo "L1:".$waypoint[1]."\nL2:".$waypoint[3]."\nXo:".$this->Xo."\n";
       //echo "W:".$this->west."\nE:".$this->east."\n";
       if ($this->west > $this->east ) {
-        if ( $waypoint[1] <0 ) $waypoint[1]+=360000;
-        if ( $waypoint[3] <0 ) $waypoint[3]+=360000;
+        if ( $waypoint['longitude1'] <0 ) $waypoint[1]+=360000;
+        if ( $waypoint['longitude2'] <0 ) $waypoint[3]+=360000;
       } else {
       /* le cas connu ou :
        * - antemeridien non visible (east > west)
        * - on veut tracer un wp sur l'antemeridien...
        * - c'est une gate
        */
-        if ( ( $waypoint[1] <0 ) and ($waypoint[3] >0 ) and ( $waypoint[4] == WPTYPE_PORTE ) ) {
-            $waypoint[3]-=360000;
-        } else if ( ( $waypoint[3] <0 ) and ($waypoint[1] >0 ) and ( $waypoint[4] == WPTYPE_PORTE )) {
-            $waypoint[1]-=360000;
+        if ( ( $waypoint['longitude1'] <0 ) and ($waypoint['longitude2'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE ) ) {
+            $waypoint['longitude2']-=360000;
+        } else if ( ( $waypoint['longitude2'] <0 ) and ($waypoint['longitude1'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE )) {
+            $waypoint['longitude1']-=360000;
         }  
       }
           
       // bouée sur point 1
-      imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
-                         call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]),
+      imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
+                         call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']),
                          WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
 
@@ -554,36 +554,36 @@ class map
       if ( $this->drawtextwp && ($this->wp_only == $waypoint_num  || $nwp == $waypoint_num )) {
         imagestring($this->mapImage,
                     3,
-                    call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]) ,
-                    call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]) ,
-                    "WP" . $waypoint_num . "(" .giveDegMinSec('img',$waypoint[0]/1000, $waypoint[1]/1000) . ")",
+                    call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']) ,
+                    call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']) ,
+                    "WP" . $waypoint_num . "(" .giveDegMinSec('img',$waypoint['latitude1']/1000, $waypoint['longitude1']/1000) . ")",
                     $this->colorBlack);
       }
 
       // bouée sur point 2 (seulement si PORTE, pas si WP)
-      if ( $waypoint[4] == WPTYPE_PORTE ) {
-        imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[3]),
-                           call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[2]),
+      if ( $waypoint['wptype'] == WPTYPE_PORTE ) {
+        imagefilledellipse($this->mapImage, call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude2']),
+                           call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude2']),
                            WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
         if ( $this->drawtextwp && ($this->wp_only == $waypoint_num || $nwp == $waypoint_num )) {
           imagestring($this->mapImage,
                       3,
-                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint[3]) ,
-                      call_user_func_array( array(&$this, $projCallbackLat), $waypoint[2]) ,
-                      "WP" . $waypoint_num . "(" .giveDegMinSec('img',$waypoint[2]/1000, $waypoint[3]/1000) . ")",
+                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude2']) ,
+                      call_user_func_array( array(&$this, $projCallbackLat), $waypoint['latitude2']) ,
+                      "WP" . $waypoint_num . "(" .giveDegMinSec('img',$waypoint['latitude2']/1000, $waypoint['longitude2']/1000) . ")",
                       $this->colorBlack);
         }
       }
 
       if ( $this->wp_only == $waypoint_num  || $nwp == $waypoint_num ) {
-        if ( $waypoint[4] == WPTYPE_PORTE ) {
+        if ( $waypoint['wptype'] == WPTYPE_PORTE ) {
           imagesetthickness ( $this->mapImage, WP_THICKNESS);
           imageline ( $this->mapImage, 
-                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
-                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]),
-                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint[3]),      
-                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[2]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
+                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']),
+                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude2']),      
+                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude2']),
                       $this->colorWaypoints);
           imagesetthickness ( $this->mapImage, 1);
         } else {
@@ -593,26 +593,26 @@ class map
           //$style = array ($this->colorWaypoints, $this->colorSea);
           //imagesetstyle ($this->mapImage, $style);
           $poly_coords=array();
-          array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
-                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]));
+          array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
+                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']));
 
-          $wpheading=($waypoint[7]+180)%360;
-          $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint[0], $waypoint[1], $distEP, $wpheading );
+          $wpheading=($waypoint['laisser_au']+180)%360;
+          $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]));
 
           imageline ( $this->mapImage, 
-                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
-                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
+                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']),
                       call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),      
                       call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]),
                       $this->colorBuoy);
 
-          $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint[0], $waypoint[1], $distEP, $wpheading );
+          $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords1[1]),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords1[0]));
 
-          $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint[0], $waypoint[1], $distEP, $wpheading );
+          $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[1]),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[0]));
 
@@ -625,10 +625,10 @@ class map
                       call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[0]),
                       IMG_COLOR_STYLED);
 
-          array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint[1]),
-                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint[0]));
-        
-
+          array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
+                      call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']));
+	  
+	  
           imagefilledpolygon( $this->mapImage, $poly_coords, 5, $this->colorBuoy );
 
           /*

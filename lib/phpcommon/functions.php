@@ -67,9 +67,9 @@ function angle($x, $y)
   // Petite modif pour éviter les divisions/0 sur les zones sans vent.
   if ( $hyp == 0 ) $hyp=0.0001;
   $angle_trigo = rad2deg(acos($x/$hyp));
-  if ($y < 0)
-    $angle_trigo *= -1;
-
+  if ($y < 0) {
+    $angle_trigo = -$angle_trigo;
+  }
   //echo "angle_trigo = $angle_trigo norm =".norm($x, $y)." xknt = $xknt angle_geographic =". trigo2geographic($angle_trigo)."\n";
 
   return trigo2geographic($angle_trigo);
@@ -78,10 +78,10 @@ function angle($x, $y)
 /*from a trigonometric angle in degree, return an geographic angle in degree*/
 function trigo2geographic($angle)
 {
-  $angle = 90-$angle;
-  if ($angle <= 0) $angle += 360;
-
-  return $angle;
+  if ($angle > 90) {
+    return (450-$angle);
+  }
+  return (90-$angle);
 }
 
 function geographic2trigo($angle)
@@ -316,12 +316,16 @@ function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_
 
     //printf ("WP=%d : Lat=%d, Lon=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $lat1, $long1, $laisser_au,$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
 
-    return array ($lat1, $long1, $EndPoint[0], $EndPoint[1], WPTYPE_WP);
+    return array ('latitude1' => $lat1, 'longitude1' => $long1, 
+		  'latitude2' => $EndPoint[0], 'longitude2' => $EndPoint[1], 
+		  'wptype' => WPTYPE_WP);
 
   } else {
     // Cas d'une porte : cas "historique"
     //printf ("PORTE=%d :  %d, %d, %d, %d<BR>\n", $idwp, $lat1, $long1, $lat2, $long2,$laisser_au);
-    return array ( $lat1, $long1, $lat2, $long2, WPTYPE_PORTE);
+    return array ( 'latitude1' => $lat1, 'longitude1' => $long1, 
+		   'latitude2' => $lat2, 'longitude2' => $long2, 
+		   'wptype' => WPTYPE_PORTE);
   }
 
 }
