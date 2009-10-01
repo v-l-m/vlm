@@ -183,7 +183,7 @@ function lastUpdate($strings, $lang)
 
     $intervalarray = duration2string($interval);
     printf ( $strings[$lang]["lastupdate"]. " <br />\n",
-             gmdate('H:i:s', time() ) . ' GMT', $intervalarray[1],$intervalarray[2],$intervalarray[3] );
+             gmdate('H:i:s', time() ) . ' GMT', $intervalarray['hours'],$intervalarray['minutes'],$intervalarray['seconds'] );
     printf ("%s seconds (<span title=\"%s\">%d race(s)</span>, %d boat(s)), %2.2f boats/sec (<a target=\"_blank\" href=\"status/race-engine-status.php\" rel=\"nofollow\">status page</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
   }
 }
@@ -204,7 +204,7 @@ function nextUpdate($strings, $lang)
   else
     {
       $next = duration2string(DELAYBETWEENUPDATE - $interval);
-      printf("      ".$strings[$lang]["nextupdate"], $next[1], $next[2] );
+      printf("      ".$strings[$lang]["nextupdate"], $next['hours'], $next['minutes'] );
     }
 }
 
@@ -497,7 +497,8 @@ function duration2string($dur)
   $hours = floor(($dur - $days*86400)/3600);
   $minutes = floor(($dur - $days*86400 - $hours*3600)/60);
   $seconds = $dur - $days*86400 - $hours*3600 - $minutes*60;
-  return array($days, $hours, $minutes, $seconds);
+  return array('days' => $days, 'hours' => $hours,
+	       'minutes' => $minutes, 'seconds' => $seconds);
 }
 
 /*function VMG from a boat position, a boat destination and the speed
