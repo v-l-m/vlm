@@ -598,31 +598,32 @@ class map
 
           $wpheading=($waypoint['laisser_au']+180)%360;
           $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
-          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),
-                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]));
-
+	  
+          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords['longitude']),
+                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords['latitude']));
+	  
           imageline ( $this->mapImage, 
                       call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']),
-                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),      
-                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords['longitude']),      
+                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords['latitude']),
                       $this->colorBuoy);
 
           $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
-          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords1[1]),
-                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords1[0]));
+          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords1['longitude']),
+                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords1['latitude']));
 
           $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
-          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[1]),
-                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[0]));
+          array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2['longitude']),
+                     call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2['latitude']));
 
           $style = array ($this->colorWaypoints, $this->colorSea);
           imagesetstyle ($this->mapImage, $style);
           imageline ( $this->mapImage, 
-                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords[1]),
-                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords[0]),
-                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2[1]),      
-                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2[0]),
+                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords['longitude']),
+                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords['latitude']),
+                      call_user_func_array( array(&$this, $projCallbackLong), $EP_coords2['longitude']),      
+                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords2['latitude']),
                       IMG_COLOR_STYLED);
 
           array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
