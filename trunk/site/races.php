@@ -18,7 +18,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
     if ( $nbWPs > 1 ) {
       for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
 	$WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
-	if ( !strstr($WP[5],'IceGate') ) {
+	if ( !strstr($WP['wptypelabel'],'IceGate') ) {
 	  array_push($tables, "WP" . $wp_num);
 	}
       }
@@ -37,7 +37,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
         if ( $table == $tableType ) {
             $class="class=\"hilight\"";
             if ( strstr($table, "WP") ) {
-                $cellcontent=$WP[6]."<br />(".$table.")";
+                $cellcontent=$WP['libelle']."<br />(".$table.")";
             } else {
                 $cellcontent=ucfirst($table);
             }
@@ -45,7 +45,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
             $class="class=\"nohilight\"";
             if ( strstr($table, "WP") ) {
                 //$tlabel=substr($table,2);
-                $tlabel=$WP[6]."<br />(".$table.")";
+                $tlabel=$WP['libelle']."<br />(".$table.")";
             } else {
                 $tlabel=$table;
             }
