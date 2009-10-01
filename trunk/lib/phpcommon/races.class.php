@@ -607,7 +607,7 @@ class fullRaces
       if ( $row[nwp] != 0 ) {
         $racingtime=$now-$row[userdeptime];
         $duration = duration2string($racingtime);
-        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
+        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
       } else {
         printf("      <td>-</td>\n");
       }
@@ -965,24 +965,24 @@ class fullRaces
         // Si on a déjà affiché suffisament de lignes, on rend la main
         if ( $startnum > 0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
-        if ( $row[position] ==  BOAT_STATUS_ARR ) {
-          $duration = duration2string($row[duration] );
-          $arrivaltime = $row[deptime] + $row[duration] ;
+        if ( $row['position'] ==  BOAT_STATUS_ARR ) {
+          $duration = duration2string($row['duration'] );
+          $arrivaltime = $row['deptime'] + $row['duration'] ;
         }
 
         $rank++;
         if ( $rank == 1 ) {
-          $ref_duration = $row[duration] ;
-          $ref_deptime  = $row[deptime] ;
-          $ref_arrivaltime = $row[deptime] + $row[duration] ;
+          $ref_duration = $row['duration'] ;
+          $ref_deptime  = $row['deptime'] ;
+          $ref_arrivaltime = $row['deptime'] + $row['duration'] ;
         }
         
         // On saute les "N"(startnum) premiers
         if ( $startnum > 0 && $rank < $startnum ) continue;
 
-        if ( $row[idusers] == $IDU ) {
+        if ( $row['idusers'] == $IDU ) {
           $class="class=\"hilight\"";
-        } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
+        } else if ( $list != "empty" && in_array($row['idusers'], $list) )  {
           $class="class=\"hilightopps\"";
         } else {
           $class="class=\"ranking\"";
@@ -990,16 +990,16 @@ class fullRaces
         echo "<tr " . $class . ">\n";
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
-        echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
-        echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-          "title=\"". $row[boatname] . "\">" . 
-          " (". $row[idusers] . ") " . 
-          $row[username] .
+        echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row['country'] .  ".png\" alt=\"Flag_".$row['country']."\" />";
+        echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
+          "title=\"". $row['boatname'] . "\">" . 
+          " (". $row['idusers'] . ") " . 
+          $row['username'] .
           "</acronym>\n";
         echo "</td>\n";
 
-        $longitude=$row[longitude];
-        $latitude=$row[latitude];
+        $longitude=$row['longitude'];
+        $latitude=$row['latitude'];
 
         // Mise en forme longitude/latitude
 
@@ -1020,13 +1020,13 @@ class fullRaces
           $lat_side='S';
         }
 
-        if ( $row[position] == BOAT_STATUS_ARR ) {
-          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime]));
+        if ( $row['position'] == BOAT_STATUS_ARR ) {
+          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime']));
           //        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$this->races->deptime + $row[duration]));
-          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime] + $row[duration]));
-          printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
+          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime'] + $row['duration']));
+          printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
         } else {
-          switch ($row[position]) {
+          switch ($row['position']) {
           case BOAT_STATUS_HC:
             printf("      <td>HC</td>\n");
             break;
@@ -1042,7 +1042,7 @@ class fullRaces
           }
         }
         // Calcul de l'écart (temps de course dans un cas, heure d'arrivée dans l'autre)
-        if ( $row[position] == BOAT_STATUS_ARR ) {
+        if ( $row['position'] == BOAT_STATUS_ARR ) {
           if ( $rank == 1 ) {
             printf("<td>%s</td>\n",$strings[$lang]["winner"]);
           } else {
@@ -1054,21 +1054,21 @@ class fullRaces
               //printf ("AT=%d, RAT=%d\n",$arrivaltime , $ref_arrivaltime);
             } else {
               // RECORD : the shortest racetime is the record 
-              $ecart = duration2string($row[duration] - $ref_duration);
+              $ecart = duration2string($row['duration'] - $ref_duration);
               // PCT =    difference de temps de course  / temps du premier
-              $pct=round(($row[duration] - $ref_duration)/$ref_duration*100,2);
+              $pct=round(($row['duration'] - $ref_duration)/$ref_duration*100,2);
               //printf ("DU=%d, RDU=%d\n",$row[duration] , $ref_duration);
             }
-            printf("<td>".$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart[0],$ecart[1],$ecart[2],$ecart[3],$pct);
+            printf("<td>".$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart['days'],$ecart['hours'],$ecart['minutes'],$ecart['seconds'],$pct);
           }
         }
-        if ( $row[position] == BOAT_STATUS_DNF ) {
+        if ( $row['position'] == BOAT_STATUS_DNF ) {
           $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
             "&amp;age=24"  . 
             "&amp;lat=". ($latitude/1000) .
             "&amp;long=" . ($longitude/1000) .
             "&amp;maparea=10"  .
-            "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row[idusers] .
+            "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row['idusers'] .
             "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right&amp;raceover=true\" target=\"_new\">"  ;
 
           // Affichage de la position
@@ -1076,16 +1076,16 @@ class fullRaces
         }
 
         // Affichage du loch (ARR, DNF, ABD)
-        if ( $row[loch] != 0 ) {
-          printf("<td>%5.2f</td>\n", $row[loch]);
+        if ( $row['loch'] != 0 ) {
+          printf("<td>%5.2f</td>\n", $row['loch']);
         } else {
           printf("<td>n/a</td>\n");
         }
-        if ( $row[position] == BOAT_STATUS_ARR ) {
-          if ( $row[penalty] == 0 ) {
+        if ( $row['position'] == BOAT_STATUS_ARR ) {
+          if ( $row['penalty'] == 0 ) {
             printf("<td>n/a</td>\n");
           } else {
-            printf("<td>%0d h</td>\n", $row[penalty]/3600);
+            printf("<td>%0d h</td>\n", $row['penalty']/3600);
           }
         }
         echo "    </tr>\n";

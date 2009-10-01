@@ -208,10 +208,11 @@ include_once("scripts/myboat.js");
          $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
          if ( $wp_racetime[0] != "N/A" ) {
               $racetime = duration2string ($wp_racetime[1]);
-                      $status_content.="&lt;br /&gt;&lt;b&gt;";
-                  $status_content.=sprintf( $strings[$lang]["bestwptime"]."(%d)" , $racetime[0],$racetime[1],$racetime[2],$wp_racetime[0]);
-                      $status_content.="&lt;/b&gt;";
-             }
+	      $status_content.="&lt;br /&gt;&lt;b&gt;";
+	      $status_content.=sprintf($strings[$lang]["bestwptime"]."(%d)" , $racetime['days'],$racetime['hours'],
+				       $racetime['minutes'], $wp_racetime[0]);
+	      $status_content.="&lt;/b&gt;";
+	 }
   
              $status_content .= "&lt;/div&gt;";
   
@@ -278,11 +279,12 @@ include_once("scripts/myboat.js");
                 // Si le bateau est libre
                 if ( time() > $usersObj->users->releasetime ) {
                     $racingtime = duration2string(time() - $usersObj->users->userdeptime);
-                    printf($strings[$lang]["racingtime"] . $strings[$lang]["days"]."\n",$racingtime[0],$racingtime[1],$racingtime[2],$racingtime[3]);
+                    printf($strings[$lang]["racingtime"] . $strings[$lang]["days"]."\n",$racingtime['days'],
+			   $racingtime['hours'],$racingtime['minutes'],$racingtime['seconds']);
                 } else {
-                    $locktime = duration2string($usersObj->users->releasetime - time());
+		  $locktime = duration2string($usersObj->users->releasetime - time());
                     //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-                    printf("<span class=\"warnmessage\"><img src=\"images/site/attention.png\" />".$strings[$lang]["locked"]. $strings[$lang]["days"]."</span>\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+		  printf("<span class=\"warnmessage\"><img src=\"images/site/attention.png\" />".$strings[$lang]["locked"]. $strings[$lang]["days"]."</span>\n",$locktime['days'],$locktime['hours'],$locktime['minutes'],$locktime['seconds']);
                 }
             }
         /* Sinon (heure départ pas atteinte), affichage de la date de départ */
@@ -337,7 +339,7 @@ include_once("scripts/myboat.js");
                 //$etah=ceil($eta - 24*$etad);
                 //echo " ( &lt; ". $etad . "d " .$etah ."h )";
                 $etatime = duration2string($eta*3600);
-                printf(" ( " . $strings[$lang]["days"]." )\n",$etatime[0],$etatime[1],$etatime[2],$etatime[3]);
+                printf(" ( " . $strings[$lang]["days"]." )\n",$etatime['days'],$etatime['hours'],$etatime['minutes'],$etatime['seconds']);
             }
         }
 ?>
