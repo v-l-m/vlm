@@ -282,7 +282,7 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
   
   // We give back an array (Long/Lat)
   //printf ("DEBUG:EP=lat=%d, long=%d<BR>\n",$EndLat, $EndLong);
-  return array ( $EndLat, $EndLong );
+  return array ( 'latitude' => $EndLat, 'longitude' => $EndLong );
 }
 
 // =====================================================
@@ -305,19 +305,12 @@ function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_
     // On doit calculer la position de la "bouee2" en fonction de long1, lat1, et "laisser_au"
     $gisement_bouee1_bouee2 = ($laisser_au+180)%360;
 
-    // We imagine a vector at WPLENGTH nm for this heading .
-    // If latitude > 90, we reduce the length
-    //        $EndPoint=array(180000,90000);
-    //        while ( abs($EndPoint[1] >= 80000 && $wplength > 1 ) ) {
     $EndPoint=giveEndPointCoordinates($lat1,$long1, $wplength, $gisement_bouee1_bouee2);
-    //    $wplength--;
-    //                printf ("L=%f,l=%f, WPL=%f\n", $EndPoint[0],$EndPoint[1], $wplength);
-    //        }
 
     //printf ("WP=%d : Lat=%d, Lon=%d, Laisser=%d/gisement=%d, EPLong=%d, EPLat=%d<BR>\n", $idwp, $lat1, $long1, $laisser_au,$gisement_bouee1_bouee2, $EndPoint[0],$EndPoint[1]);
 
     return array ('latitude1' => $lat1, 'longitude1' => $long1, 
-		  'latitude2' => $EndPoint[0], 'longitude2' => $EndPoint[1], 
+		  'latitude2' => $EndPoint['latitude'], 'longitude2' => $EndPoint['longitude'], 
 		  'wptype' => WPTYPE_WP);
 
   } else {
