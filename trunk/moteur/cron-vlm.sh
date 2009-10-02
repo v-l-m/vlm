@@ -11,20 +11,17 @@ source $VLMRACINE/conf/conf_script || exit 1
 LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-$1-cronvlm.log
 export LOGFILE_MAX_AGE=7
 
-# Si on trouve un lock, on s'intéresse à son age
-# Si sa date de dernière modif a plus de 60 secondes, c'est pas normal.
+# Si on trouve un lock, c'est qu'une instance du moteur est en fonctionnement
+# Si sa date de derniere modif a plus de MAXMOTEURTIME secondes, c'est pas normal.
 if [ -f $VLMTEMP/cronvlm.$1.lock ] ; then
-   # Petit 0 à gauche pour éviter certains moments où il se passe ceci :
-     # test -f trouve le lock, mais avant que stat ne puisse l'étudier, celui-ci est supprimé.
-     # unaty operator expected sur l'ex ligne 19 (22): test Son_Age (="") -gt date
-   Son_Age=0$(stat -c "%Y" $VLMTEMP/cronvlm.$1.lock )
-   (( Son_Age += 60 ))
-   if [ $Son_age -gt $(date +%s) ] ; then
-      
-      echo "=== LOCK FOUND : killing old engine instance" >> $LOG
-      kill -SIGQUIT $(cat $VLMTEMP/cronvlm.$1.lock )
 
-   fi
+    find $VLMTEMP/ -name cronvlm.$1.lock -mmin +$MAXMOTEURTIME | while read lockname ; do
+
+         echo "=== LOCK FOUND : killing old engine instance ($lockname)" >> $LOG
+         kill -SIGQUIT $(cat $lockname)
+
+    done
+
 fi
 
 rm -f $VLMTEMP/cronvlm.$1.lock
