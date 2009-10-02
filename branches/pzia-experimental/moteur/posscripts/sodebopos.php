@@ -60,12 +60,12 @@ if ($fd = fopen ($filename, "r")) {
 
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
      $query  ="delete from positions where idusers=-11;" ;
-     mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
      $query .= "( $time , $lonb*1000, $latb*1000, -11, 80, '') ;";
 
-     mysql_db_query(DBNAME,$query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
    }
 

@@ -59,14 +59,14 @@ for ($i = 1; $i<10; $i++){
 
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
      //$query  ="delete from positions where idusers=" . $boat_num[$i] . ";" ;
-     //mysql_db_query(DBNAME,$query) or die("BWR: Query failed : " . mysql_error." ".$query);
+     //mysql_query($query) or die("BWR: Query failed : " . mysql_error." ".$query);
 
      $vent = windAtPosition($latb[$i]*1000, $lonb[$i]*1000, 0, 'NEW' ) ;
 
      $query ="insert into positions values ";
-     $query .= "( $time , $lonb[$i]*1000, $latb[$i]*1000, $boat_num[$i], 2008051160, '" . round($vent[0],1) . "," . round(($vent[1]+180)%360)."') ;";
+     $query .= "( $time , $lonb[$i]*1000, $latb[$i]*1000, $boat_num[$i], 2008051160, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360)."') ;";
 
-     //mysql_db_query(DBNAME,$query) or die("BWR : Query failed : " . mysql_error." ".$query);
+     //mysql_query($query) or die("BWR : Query failed : " . mysql_error." ".$query);
      echo "$query\n";
    }
 

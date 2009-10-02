@@ -41,20 +41,22 @@ if ($crosses_the_coast) {
         // 2 - verify if the boat has crossed this waypoint
         $encounterCoordinates = array();
         echo (", checking for WP crossing... ");
-        printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint[0]/1000, $nextwaypoint[1]/1000, $nextwaypoint[2]/1000, $nextwaypoint[3]/1000);
+        printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint['latitude1']/1000, $nextwaypoint['longitude1']/1000, 
+		$nextwaypoint['latitude2']/1000, $nextwaypoint['longitude2']/1000);
         printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latAvant/1000, $lonAvant/1000, $latCheck/1000, $lonCheck/1000);
 
         // Test de croisement avec un waypoint
         $waypoint_crossed=false;
 
         if (VLM_check_cross_WP($latAvant, $lonAvant, $latCheck, $lonCheck, 
-                               $nextwaypoint[0], $nextwaypoint[1], 
-                               $nextwaypoint[2], $nextwaypoint[3],
+                               $nextwaypoint['latitude1'], $nextwaypoint['longitude1'], 
+                               $nextwaypoint['latitude2'], $nextwaypoint['longitude2'],
                                $wp_xinglat, $wp_xinglong, $wp_xingratio)) {
           echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
           $waypoint_crossed=true;
           // fill the array lat and long are reversed...
-          $encounterCoordinates = array(doublep_value($wp_xinglat), doublep_value($wp_xinglong)); 
+          $encounterCoordinates = array('latitude' => doublep_value($wp_xinglat), 
+					'longitude' => doublep_value($wp_xinglong)); 
         }
 
         if ($waypoint_crossed == true ) {
@@ -64,7 +66,8 @@ if ($crosses_the_coast) {
           // Then to compute the crossing time, and compare it to deptime + prestart-duration
           
           // distanceSinceLastUpdate = dist entre dernière position et ce coint
-          $distanceSinceLastUpdate = ortho($encounterCoordinates[0], $encounterCoordinates[1],
+          $distanceSinceLastUpdate = ortho($encounterCoordinates['latitude'], 
+					   $encounterCoordinates['longitude'],
                                            $latAvant, $lonAvant);
           
           // Temps de course (entre départ et passage de la ligne )
@@ -112,7 +115,7 @@ if ($crosses_the_coast) {
             $is_arrived=true;
             
             echo "\t==>Course =" . $fullRacesObj->races->idraces . "\n";
-            echo "\t==>encounterCoordinates = " . $encounterCoordinates[0] . "/" . $encounterCoordinates[1] . "\n";
+            echo "\t==>encounterCoordinates = " . $encounterCoordinates['latitude'] . "/" . $encounterCoordinates['longitude'] . "\n";
             // encounterCoordinates est le point où la ligne a été coupée
             
             if ($verbose>=0) {
@@ -162,7 +165,7 @@ if ($crosses_the_coast) {
             
             if ( $query != "NOQUERY" ) {
               if ($verbose >0 ) echo $query;
-              $result = wrapper_mysql_db_query(DBNAME,$query);
+              $result = wrapper_mysql_db_query($query);
               printf ("\t\tBoat arrived...\n");
             } else {
               printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);

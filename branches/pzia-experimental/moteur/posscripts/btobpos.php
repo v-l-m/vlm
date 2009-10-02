@@ -91,12 +91,12 @@ for ($i = 1; $i<16; $i++){
 
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
      $query  ="delete from positions where idusers=" . array_search($name[$i], $boat_num) . ";" ;
-     mysql_db_query(DBNAME,$query) or die("BTOB:Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("BTOB:Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
      $query .= "( $time , $lonb[$i]*1000, $latb[$i]*1000, " . array_search($name[$i], $boat_num) . ", 20071111) ;";
 
-     mysql_db_query(DBNAME,$query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
    }
 

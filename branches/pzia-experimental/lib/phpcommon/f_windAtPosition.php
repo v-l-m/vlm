@@ -44,7 +44,7 @@ function windAtPosition($_lat = 0, $_long = 0, $when = 0, $version = SYSTEME_WIN
   //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
   //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
   return array (
-    $wind_boat->speed, $wind_boat->angle
+    'speed' => $wind_boat->speed, 'windangle' => $wind_boat->angle
     );
 }
 

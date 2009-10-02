@@ -36,19 +36,19 @@
                   printf ("Boat=%s, Num=%d, Time=%s, LAT=%s, LON=%s\n", $boatname, $idusers,$time, $latb, $lonb);
                   $query="replace into users (idusers,password,username,engaged,nextwaypoint,userdeptime,loch)
                                 values ($idusers, 'xxxxxxxx', '".$boatname."', $race,1,1210510800,$loch);";
-           mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
+           mysql_query($query) or die("Artemis : Query failed : " . mysql_error." ".$query);
            //echo "$query\n";
 
                   $query="replace into races_ranking (idraces,idusers,latitude,longitude,loch,nwp,dnm, last1h)
                                 values ($race,$idusers, $latb*1000,$lonb*1000, $loch,1,$dnm,$last1h);";
-           mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
+           mysql_query($query) or die("Artemis : Query failed : " . mysql_error." ".$query);
            //echo "$query\n";
 
 
            $query ="insert into positions values ";
            $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race, '' ) ;";
 
-           mysql_db_query(DBNAME,$query) or die("Artemis : Query failed : " . mysql_error." ".$query);
+           mysql_query($query) or die("Artemis : Query failed : " . mysql_error." ".$query);
            //echo "$query\n";
 
            $fullUsersObj = new fullUsers($idusers);

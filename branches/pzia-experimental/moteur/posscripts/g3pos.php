@@ -62,13 +62,13 @@ if ($fd = fopen ($filename, "r")) {
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
      // A partir de la tentative sur le Jules Verne de Groupama 3, on conserve les positions
      //$query  ="delete from positions where idusers=-3;" ;
-     //mysql_db_query(DBNAME,$query) or die("Query failed : " . mysql_error." ".$query);
+     //mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $vent = windAtPosition($latb*1000, $lonb*1000, 0, 'NEW' ) ;
      $query ="insert into positions values ";
-     $query .= "( $time , $lonb*1000, $latb*1000, -3, 80, '" . round($vent[0],1) . "," . round(($vent[1]+180)%360) . "') ;";
+     $query .= "( $time , $lonb*1000, $latb*1000, -3, 80, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360) . "') ;";
 
-     mysql_db_query(DBNAME,$query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
 
 

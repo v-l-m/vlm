@@ -1,11 +1,14 @@
 <?php
 
+    $page_start_time=microtime(1);
+
     session_start();
     include_once("strings.inc");
     include_once("config.php");
     
     header("Content-type: text/html; charset=utf-8");
 
+    ob_start();
     //all GET and POST variables
     $lang = getCurrentLang();
     $pseudo=quote_smart($_REQUEST['pseudo']);

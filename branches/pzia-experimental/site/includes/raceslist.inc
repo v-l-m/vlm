@@ -24,7 +24,7 @@ if ( $q != "" ) {
 }
 $query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
 
-$result1 = mysql_db_query(DBNAME,$query1) or die("Query [$query1] failed \n");
+$result1 = wrapper_mysql_db_query($query1) or die("Query [$query1] failed \n");
 
 // Recherche de toutes les courses prévues
 while($row = mysql_fetch_array($result1, MYSQL_NUM))
@@ -76,11 +76,11 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         printf ("  <ul>");
         if ( $dep > $time ) {
             $duration = duration2string($duration);
-            printf("    <li>".$strings[$lang]["nextrace"] . $strengaged."</li>\n" , $duration[0],$duration[1],$duration[2]);
+            printf("    <li>".$strings[$lang]["nextrace"] . $strengaged."</li>\n" , $duration['days'],$duration['hours'],$duration['minutes']);
             printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
         } else {
             $duration = duration2string(-$duration);
-            printf("    <li>".$strings[$lang]["openrace"] . $strengaged."</li>\n", $duration[0],$duration[1],$duration[2]);
+            printf("    <li>".$strings[$lang]["openrace"] . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
         }
     
         if ( $closetime > $dep ) {

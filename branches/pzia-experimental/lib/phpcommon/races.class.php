@@ -38,7 +38,7 @@ class races
              qualifying_races, idchallenge, coastpenalty, bobegin, boend,
              maxboats, theme, vacfreq
              FROM races WHERE idraces = $id";
-    $result = wrapper_mysql_db_query(DBNAME,$query) or die($query);
+    $result = wrapper_mysql_db_query($query) or die($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
 
     $this->idraces          = $row[0];
@@ -95,21 +95,24 @@ class races
       " AND RW.idwaypoint=WP.idwaypoint " . 
       " ORDER BY wporder ";
 
-    $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query($query); // or die("Query failed : " . mysql_error." ".$query);
     // printf ("Request Races_Waypoints : %s\n" , $query);
     
     while( $row = mysql_fetch_array( $result, MYSQL_NUM) ) {
       $WPCoords =  internalGiveWaypointCoordinates($row[5], $row[6], $row[7], $row[8], $row[3], WPLL);
       // On push dans le tableau des coordonnées le wptype (classement ou son nom), et le libellé et le "laisser_au" du WP
       // ainsi que le maparea adapt
-      array_push ($WPCoords, $row[1], $row[2], $row[3], $row[4]);
+      $WPCoords['wptypelabel'] = $row[1];
+      $WPCoords['libelle'] = $row[2];
+      $WPCoords['laisser_au'] = $row[3];
+      $WPCoords['maparea'] = $row[4];
       // On push ce WP dans la liste des WP
       $this->waypoints[$row[0]] = $WPCoords;
     }
-    $this->stop1lat  = $WPcoords[0];
-    $this->stop1long = $WPcoords[1];
-    $this->stop2lat  = $WPcoords[2];
-    $this->stop2long = $WPcoords[3];
+    $this->stop1lat  = $WPcoords['latitude1'];
+    $this->stop1long = $WPcoords['longitude1'];
+    $this->stop2lat  = $WPcoords['latitude2'];
+    $this->stop2long = $WPcoords['longitude2'];
   }
 
   function getRaceDistance($force = 0) {
@@ -120,21 +123,23 @@ class races
 	$lastlat=$this->startlat;
 	$this->retrieveWPs();
 	foreach ( $this->waypoints as $WP ) {
-	  $d1=ortho($lastlat,$lastlong,$WP[0], $WP[1] );
-	  $d2=ortho($lastlat,$lastlong,$WP[2],$WP[3]);
+	  $d1=ortho($lastlat,$lastlong,$WP['latitude1'], $WP['longitude1'] );
+	  $d2=ortho($lastlat,$lastlong,$WP['latitude2'],$WP['longitude2']);
 	  if ( $d1 < $d2 ) {
-	    $lastlat=$WP[0];
-	    $lastlong=$WP[1];
+	    $lastlat=$WP['latitude1'];
+	    $lastlong=$WP['longitude1'];
 	    $this->racedistance+=$d1;
 	  } else {
-	    $lastlat=$WP[2];
-	    $lastlong=$WP[3];
+	    $lastlat=$WP['latitude2'];
+	    $lastlong=$WP['longitude2'];
 	    $this->racedistance+=$d2;
 	  }
 	}
 	// + la distance entre l'avant dernier WP et le dernier
-	$this->racedistance+=min(ortho($lastlat,$lastlong,$WP[0], $WP[1] ), 
-				 ortho($lastlat,$lastlong,$WP[2], $WP[3] ) );
+	$this->racedistance+=min(ortho($lastlat,$lastlong,
+				       $WP['latitude1'], $WP['longitude1'] ), 
+				 ortho($lastlat,$lastlong,
+				       $WP['latitude2'], $WP['longitude2'] ) );
 	//$this->racename = sprintf ("%s (%d nm)", $this->racename, $this->racedistance);
       } else {
 	$this->racedistance=0;
@@ -155,7 +160,7 @@ class races
         $query = "SELECT instructions, flag FROM races_instructions" .
           " WHERE idraces = " . $this->idraces ; 
 	
-        $result = wrapper_mysql_db_query(DBNAME,$query); // or die("Query failed : " . mysql_error." ".$query);
+        $result = wrapper_mysql_db_query($query); // or die("Query failed : " . mysql_error." ".$query);
 	
         while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
 	  $this->ics[] = $row;
@@ -189,7 +194,7 @@ class races
               ORDER BY  duration ASC
         LIMIT 1";
 
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     if ( mysql_num_rows($result) == 0 ) {
       return(1);  // on s'arrete là si personne n'est arrivé !
     }
@@ -267,7 +272,7 @@ class fullRaces
       " AND   US.engaged = "  . $this->races->idraces .
       " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
 
-    $result6 = wrapper_mysql_db_query(DBNAME,$query6);
+    $result6 = wrapper_mysql_db_query($query6);
     while($row = mysql_fetch_array($result6, MYSQL_NUM))
       {
         //WARNING: dont load fullUsers inside fullRaces
@@ -280,7 +285,7 @@ class fullRaces
     // On prend aussi les utilisateurs de la table "races_results", pour les retrouver une fois la 
     // course terminée. 
     $query6b = "SELECT DISTINCT races_results.idusers FROM races_results, users WHERE idraces = ".$this->races->idraces." AND users.idusers = races_results.idusers AND users.engaged != ".$this->races->idraces;
-    $result6b = wrapper_mysql_db_query(DBNAME,$query6b);
+    $result6b = wrapper_mysql_db_query($query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_NUM)) {
       $userid = $row[0];
       // FIXME main question is... should this table contain all the boats
@@ -293,16 +298,16 @@ class fullRaces
   {
     // Delete from races_results
     $query5  = "DELETE from races_results WHERE idraces = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query5);// or echo("Query failed : " . mysql_error." ".$query5);
+    wrapper_mysql_db_query($query5);// or echo("Query failed : " . mysql_error." ".$query5);
 
     // Delete from waypoints_crossing
     $query5  = "DELETE from waypoint_crossing WHERE idraces = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query5);// or echo("Query failed : " . mysql_error." ".$query5);
+    wrapper_mysql_db_query($query5);// or echo("Query failed : " . mysql_error." ".$query5);
 
     //  Update Positions of all engaged boats to start line
     $query5  = "DELETE from positions " . 
       " WHERE race = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query5);// or echo("Query failed : " . mysql_error." ".$query5);
+    wrapper_mysql_db_query($query5);// or echo("Query failed : " . mysql_error." ".$query5);
 
 
   }
@@ -311,7 +316,7 @@ class fullRaces
     //set started to 1
     $this->races->started = 1;
     $query5  = "UPDATE races SET `started` = 1 WHERE idraces = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query5);// or echo("Query failed : " . mysql_error." ".$query5);
+    wrapper_mysql_db_query($query5);// or echo("Query failed : " . mysql_error." ".$query5);
 
   }
 
@@ -322,19 +327,19 @@ class fullRaces
     echo "=> CLOSING RACE " . $this->races->idraces ."\n";
 
     $query  = "UPDATE races SET `started` = -1 WHERE idraces = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query);// or echo("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query($query);// or echo("Query failed : " . mysql_error." ".$query);
 
     $query  = "DELETE FROM races_ranking WHERE idraces = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query);// or echo("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query($query);// or echo("Query failed : " . mysql_error." ".$query);
 
     $query  = "UPDATE users SET engaged = 0 WHERE engaged = ".$this->races->idraces ;
-    wrapper_mysql_db_query(DBNAME,$query);// or echo("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query($query);// or echo("Query failed : " . mysql_error." ".$query);
 
     $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions WHERE race=" . $this->races->idraces . ";";
-    wrapper_mysql_db_query(DBNAME,$queryhistopositions);
+    wrapper_mysql_db_query($queryhistopositions);
 
     $querypurgepositions = "DELETE FROM positions WHERE race =" . $this->races->idraces .";";
-    wrapper_mysql_db_query(DBNAME,$querypurgepositions);
+    wrapper_mysql_db_query($querypurgepositions);
 
   }
 
@@ -415,7 +420,7 @@ class fullRaces
 
     //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete là !
     $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     $row = mysql_fetch_assoc($result);
     $classification_time=$row[time];
 
@@ -433,7 +438,7 @@ class fullRaces
       " AND   RR.idraces = "  . $this->races->idraces . 
       " ORDER by " . $sortclause ;
 
-    $result = wrapper_mysql_db_query(DBNAME,$query_ranking) or die ($query_ranking);
+    $result = wrapper_mysql_db_query($query_ranking) or die ($query_ranking);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
 
     // On est encore là, on affiche le classement
@@ -602,7 +607,7 @@ class fullRaces
       if ( $row[nwp] != 0 ) {
         $racingtime=$now-$row[userdeptime];
         $duration = duration2string($racingtime);
-        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
+        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
       } else {
         printf("      <td>-</td>\n");
       }
@@ -750,7 +755,7 @@ class fullRaces
       " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
     //    " AND   RR.idraces = "  . $this->races->idraces . 
 
-    $result = wrapper_mysql_db_query(DBNAME,$query_listusers) or die ($query_listusers);
+    $result = wrapper_mysql_db_query($query_listusers) or die ($query_listusers);
 
     $key = 0;
     $lastrace=0;
@@ -898,7 +903,7 @@ class fullRaces
 
     }
 
-    $result = wrapper_mysql_db_query(DBNAME,$query); // or die ($query);
+    $result = wrapper_mysql_db_query($query); // or die ($query);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
 
     switch ($status) {
@@ -960,24 +965,24 @@ class fullRaces
         // Si on a déjà affiché suffisament de lignes, on rend la main
         if ( $startnum > 0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
-        if ( $row[position] ==  BOAT_STATUS_ARR ) {
-          $duration = duration2string($row[duration] );
-          $arrivaltime = $row[deptime] + $row[duration] ;
+        if ( $row['position'] ==  BOAT_STATUS_ARR ) {
+          $duration = duration2string($row['duration'] );
+          $arrivaltime = $row['deptime'] + $row['duration'] ;
         }
 
         $rank++;
         if ( $rank == 1 ) {
-          $ref_duration = $row[duration] ;
-          $ref_deptime  = $row[deptime] ;
-          $ref_arrivaltime = $row[deptime] + $row[duration] ;
+          $ref_duration = $row['duration'] ;
+          $ref_deptime  = $row['deptime'] ;
+          $ref_arrivaltime = $row['deptime'] + $row['duration'] ;
         }
         
         // On saute les "N"(startnum) premiers
         if ( $startnum > 0 && $rank < $startnum ) continue;
 
-        if ( $row[idusers] == $IDU ) {
+        if ( $row['idusers'] == $IDU ) {
           $class="class=\"hilight\"";
-        } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
+        } else if ( $list != "empty" && in_array($row['idusers'], $list) )  {
           $class="class=\"hilightopps\"";
         } else {
           $class="class=\"ranking\"";
@@ -985,16 +990,16 @@ class fullRaces
         echo "<tr " . $class . ">\n";
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
-        echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row[country] .  ".png\" alt=\"Flag_".$row[country]."\" />";
-        echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-          "title=\"". $row[boatname] . "\">" . 
-          " (". $row[idusers] . ") " . 
-          $row[username] .
+        echo "<td class=\"ranking\"><img src=\"".DIRECTORY_COUNTRY_FLAGS."/" . $row['country'] .  ".png\" alt=\"Flag_".$row['country']."\" />";
+        echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
+          "title=\"". $row['boatname'] . "\">" . 
+          " (". $row['idusers'] . ") " . 
+          $row['username'] .
           "</acronym>\n";
         echo "</td>\n";
 
-        $longitude=$row[longitude];
-        $latitude=$row[latitude];
+        $longitude=$row['longitude'];
+        $latitude=$row['latitude'];
 
         // Mise en forme longitude/latitude
 
@@ -1015,13 +1020,13 @@ class fullRaces
           $lat_side='S';
         }
 
-        if ( $row[position] == BOAT_STATUS_ARR ) {
-          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime]));
+        if ( $row['position'] == BOAT_STATUS_ARR ) {
+          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime']));
           //        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$this->races->deptime + $row[duration]));
-          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row[deptime] + $row[duration]));
-          printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration[0],$duration[1],$duration[2],$duration[3]);
+          printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime'] + $row['duration']));
+          printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
         } else {
-          switch ($row[position]) {
+          switch ($row['position']) {
           case BOAT_STATUS_HC:
             printf("      <td>HC</td>\n");
             break;
@@ -1037,7 +1042,7 @@ class fullRaces
           }
         }
         // Calcul de l'écart (temps de course dans un cas, heure d'arrivée dans l'autre)
-        if ( $row[position] == BOAT_STATUS_ARR ) {
+        if ( $row['position'] == BOAT_STATUS_ARR ) {
           if ( $rank == 1 ) {
             printf("<td>%s</td>\n",$strings[$lang]["winner"]);
           } else {
@@ -1049,21 +1054,21 @@ class fullRaces
               //printf ("AT=%d, RAT=%d\n",$arrivaltime , $ref_arrivaltime);
             } else {
               // RECORD : the shortest racetime is the record 
-              $ecart = duration2string($row[duration] - $ref_duration);
+              $ecart = duration2string($row['duration'] - $ref_duration);
               // PCT =    difference de temps de course  / temps du premier
-              $pct=round(($row[duration] - $ref_duration)/$ref_duration*100,2);
+              $pct=round(($row['duration'] - $ref_duration)/$ref_duration*100,2);
               //printf ("DU=%d, RDU=%d\n",$row[duration] , $ref_duration);
             }
-            printf("<td>".$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart[0],$ecart[1],$ecart[2],$ecart[3],$pct);
+            printf("<td>".$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart['days'],$ecart['hours'],$ecart['minutes'],$ecart['seconds'],$pct);
           }
         }
-        if ( $row[position] == BOAT_STATUS_DNF ) {
+        if ( $row['position'] == BOAT_STATUS_DNF ) {
           $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
             "&amp;age=24"  . 
             "&amp;lat=". ($latitude/1000) .
             "&amp;long=" . ($longitude/1000) .
             "&amp;maparea=10"  .
-            "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row[idusers] .
+            "&amp;tracks=on&amp;windtext=off&amp;age=1&amp;list=myboat&amp;boat=" . $row['idusers'] .
             "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right&amp;raceover=true\" target=\"_new\">"  ;
 
           // Affichage de la position
@@ -1071,16 +1076,16 @@ class fullRaces
         }
 
         // Affichage du loch (ARR, DNF, ABD)
-        if ( $row[loch] != 0 ) {
-          printf("<td>%5.2f</td>\n", $row[loch]);
+        if ( $row['loch'] != 0 ) {
+          printf("<td>%5.2f</td>\n", $row['loch']);
         } else {
           printf("<td>n/a</td>\n");
         }
-        if ( $row[position] == BOAT_STATUS_ARR ) {
-          if ( $row[penalty] == 0 ) {
+        if ( $row['position'] == BOAT_STATUS_ARR ) {
+          if ( $row['penalty'] == 0 ) {
             printf("<td>n/a</td>\n");
           } else {
-            printf("<td>%0d h</td>\n", $row[penalty]/3600);
+            printf("<td>%0d h</td>\n", $row['penalty']/3600);
           }
         }
         echo "    </tr>\n";
@@ -1123,7 +1128,7 @@ class fullRaces
   function raceNumEngaged()
   {
     $query = "SELECT count(*) FROM users WHERE engaged=" . $this->races->idraces . ";";
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
     return ( $row[0] )  ;
   }
@@ -1148,7 +1153,7 @@ class racesList
   {
     $query = "SELECT idraces FROM races order by deptime desc";
     //printf ($query . "\n");
-    $result = wrapper_mysql_db_query(DBNAME,$query);
+    $result = wrapper_mysql_db_query($query);
     while($row = mysql_fetch_array($result, MYSQL_NUM))
       {
         $racesFullObj = new fullRaces( $row[0] )  ;
@@ -1180,7 +1185,7 @@ class startedRacesList
         }
 
         $query .= " order by vacfreq ASC, deptime DESC";
-        $result = wrapper_mysql_db_query(DBNAME,$query);
+        $result = wrapper_mysql_db_query($query);
 
         while($row = mysql_fetch_array($result, MYSQL_NUM))
         {
@@ -1235,7 +1240,7 @@ class startedRacesList
 
   $query = "SELECT idraces, idusers, position, duration FROM races_results".
   " WHERE idraces = $id ORDER BY 'position' ASC";
-  $result = wrapper_mysql_db_query(DBNAME,$query) or die($query);
+  $result = wrapper_mysql_db_query($query) or die($query);
 
   while ($row = mysql_fetch_array($result, MYSQL_NUM))
   {
@@ -1268,7 +1273,7 @@ class startedRacesList
   {
   //find users rank
   $query90 = "SELECT MAX(position) FROM races_results WHERE idraces= ".$idr;
-  $result90 = wrapper_mysql_db_query(DBNAME,$query90);
+  $result90 = wrapper_mysql_db_query($query90);
   $row90 = mysql_fetch_array($result90, MYSQL_NUM);
   $rank = $row90[0] + 1;
 
@@ -1279,14 +1284,14 @@ class startedRacesList
   //insert score in database
   $query10  = "INSERT INTO races_results ( idraces, idusers, position, duration)".
   " VALUES (" .$racesObj->idraces ." , ". $idu ." , ". $rank ." , ". $duration .")";
-  $result10 = wrapper_mysql_db_query(DBNAME,$query10);//  or echo("Query failed : " . mysql_error." ".$query10);
+  $result10 = wrapper_mysql_db_query($query10);//  or echo("Query failed : " . mysql_error." ".$query10);
 
   }
 
   function getRacesResults($idu, $idr)
   {
   $query= "SELECT idraces, idusers, position, duration FROM races_results WHERE idusers = $idu AND idraces = $idr";
-  $result = wrapper_mysql_db_query(DBNAME,$query);
+  $result = wrapper_mysql_db_query($query);
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $this->idraces = $row[0] ;
   $this->iduserss = $row[1] ;
