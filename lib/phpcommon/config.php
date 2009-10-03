@@ -76,6 +76,7 @@ define ("BUOY_W", "buoy_west.png");
 define ("BUOY_E", "buoy_south.png");
 
 define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
+define ("DIRECTORY_RACEMAPS","images/racemaps");
 define ("DIRECTORY_THEMES","style");
 define ("DIRECTORY_POLARS","Polaires");
 define ("DIRECTORY_JSCALENDAR","externals/jscalendar");

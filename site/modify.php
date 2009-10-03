@@ -38,28 +38,21 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
         echo "<br />" . $strings[$lang]["useremail"];
         echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
 
+    $select_list = "";
+    $flagres = getFlagsListCursor();
+    while ($row = mysql_fetch_array($flagres, MYSQL_ASSOC) ) {
+        $select_list = $select_list . "<option value=\"". $row['idflags'] . "\"";
+        if ( $fullUsersObj->users->country == $row['idflags'] ) $select_list = $select_list . " selected=\"selected\" ";
+        //FIXME: il serait plus exact d'utiliser l'attribut label de la balise opton pour fixer l'affichage... mais les vieux navigateurs n'aiment pas...
+        $select_list = $select_list . ">". $row['idflags'] ."</option>\n";
+    }
+    mysql_free_result($flagres);
 
-    // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
-    // give a list of country (taken in directory "pavillons")
-    $dir = DIRECTORY_COUNTRY_FLAGS;
-    $dh  = opendir($dir);
-    $select_list="";
-    while (false !== ($filename = readdir($dh))) {
-        if ( ! is_dir($filename) && substr($filename,0,1) != "." ) {
-            $files[] = basename($filename,".png");
-        }
-    }
-    sort($files);
-    foreach ($files as $filename) {
-      $select_list = $select_list . "<option value=\"". $filename . "\"";
-      if ( $fullUsersObj->users->country == $filename ) $select_list = $select_list . " selected=\"selected\" ";
-      $select_list = $select_list . ">". $filename ."</option>\n";
-    }
     if ( $select_list != "" ) {
         echo "</p>\n<h1>".$strings[$lang]["choose_your_country"]."</h1>\n";
         echo "<select name=\"country\">\n" . $select_list . "</select>\n";
     }
-    closedir($dh);
+
 
     // EN PHP5 : on aurait scandir. Le site est sur un serveur PHP4.
     // give a list of theme (taken in directory "style")

@@ -109,17 +109,7 @@ include_once("scripts/myboat.js");
     <div id="minimapbox">
         <?php
         // Carte de la course
-        $href = "images/racemaps/regate".$usersObj->users->engaged.".jpg";
-        if ( file_exists($href) ) {
-          $status_content = "&lt;img src=&quot;$href&quot; " . 
-                            "alt=&quot;".$strings[$lang]["racemap"]."&quot; /&gt;";
-                  list($xSize, $ySize, $type, $attr) = getimagesize($href);
-          echo "<img class=\"minimap\" src=\"images/site/cartemarine.png\" " . 
-          " onmouseover=\"showDivLeft('infobulle'" .
-          ",'$status_content', $xSize, $ySize);\" " .
-          " onmouseout=\"hideDiv('infobulle');\" " .
-          " alt=\"" .$strings[$lang]["racemap"]. "\" />";
-        }
+        echo htmlTinymap($usersObj->users->engaged, $strings[$lang]["racemap"]);
 ?>
 
     </div>
@@ -251,7 +241,7 @@ include_once("scripts/myboat.js");
         / &quot;<? echo $usersObj->users->boatname ?>&quot;
 <?php
         echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
-        echo "<img src=\"".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
+        echo "<img src=\"/flagimg.php?idflags=".$usersObj->users->country."\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
         echo  "<br />".$strings[$lang]["ranking"] . " : " . $user_ranking;
 
         // Estimation de la prochaine VAC pour ce bateau là
