@@ -424,7 +424,7 @@ class fullRaces
     $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
     $result = wrapper_mysql_db_query($query);
     $row = mysql_fetch_assoc($result);
-    $classification_time=$row[time];
+    $classification_time=$row['time'];
 
     // L'URL de la page affichant ces classements :
     // http://vlm/races.php?lang=fr&type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
@@ -542,18 +542,18 @@ class fullRaces
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
       // N'entrent dans les tableaux que les bateaux effectivement en course
-      if ( $row[nwp] == "" || $row[loch] == 0 ) continue;
+      if ( $row['nwp'] == "" || $row['loch'] == 0 ) continue;
 
       if ( $key == 0 ) {
-        $FirstNwp = $row[nwp];
-        $FirstDnm = $row[dnm];
-        $FirstLat = $row[latitude];
-        $FirstLon = $row[longitude];
+        $FirstNwp = $row['nwp'];
+        $FirstDnm = $row['dnm'];
+        $FirstLat = $row['latitude'];
+        $FirstLon = $row['longitude'];
       }
 
       //table lines
       // key++ uniquement pour les "joueurs VLM"
-      if ( $row[idusers] > 0 ) $key++;
+      if ( $row['idusers'] > 0 ) $key++;
 
       $rank=$key + $numarrived;
 
@@ -561,61 +561,61 @@ class fullRaces
       if ( $startnum > 0 && $key < $startnum ) continue;
 
 
-      if ( $row[idusers] < 0 ) {
+      if ( $row['idusers'] < 0 ) {
         $class="class=\"realboat\"";
-      } else if ( $row[idusers] == $IDU ) {
+      } else if ( $row['idusers'] == $IDU ) {
         $class="class=\"hilight\"";
-      } else if ( $list != "empty" && in_array($row[idusers], $list) )  {
+      } else if ( $list != "empty" && in_array($row['idusers'], $list) )  {
         $class="class=\"hilightopps\"";
       } else {
         $class="class=\"ranking\"";
       }
       // Bateaux bloqués (lock) ou seulement à la cote (oncoast)
-      if ( $row[releasetime] > $now ) {
+      if ( $row['releasetime'] > $now ) {
         $class="class=\"locked\"";
-      } else if ( $row[pim] == 2 && abs($row[pip]) <= 1 ) {
+      } else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) {
         $class="class=\"oncoast\"";
       }
       echo "<tr " . $class . ">\n";
-      if ( $row[idusers] > 0 ) {
+      if ( $row['idusers'] > 0 ) {
         echo "<td>". $rank ."</td>\n";
       } else {
         echo "<td>&nbsp;</td>\n";
       }
       // ============= Affichage des noms de bateaux en acronyme
-      if ( $row[idusers] > 0 ) {
+      if ( $row['idusers'] > 0 ) {
           echo "<td class=\"ranking\">";
-          echo $this->htmlFlagImg($row[country]);
-          echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-            "title=\"". $row[boatname] . "\">" . 
-            " (". $row[idusers] . ") " . 
-            $row[username] .
+          echo $this->htmlFlagImg($row['country']);
+          echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
+            "title=\"". $row['boatname'] . "\">" . 
+            " (". $row['idusers'] . ") " . 
+            $row['username'] .
             "</acronym>\n";
         echo "</td>";
       } else {
-        $idu=-$row[idusers];
+        $idu=-$row['idusers'];
         if ( $idu >=100 and $idu <=199 ) $idu-=100;
 
-        echo "<td>".$row[username]. " <b>(". $idu .")</b>" ."</td>\n";
+        echo "<td>".$row['username']. " <b>(". $idu .")</b>" ."</td>\n";
       }
       //  echo "<td>" . substr($row[boatname],0,20) . "</td>";
       // =================================================================
 
       // we give distance to the next WP
-      printf( "<td>" . "[" . $row[nwp] . "]" . "->" .
+      printf( "<td>" . "[" . $row['nwp'] . "]" . "->" .
               $strings[$lang]["nautics"].
-              "</td>\n", $row[dnm]);
+              "</td>\n", $row['dnm']);
 
       // Give the racing time (if the boat has started)
-      if ( $row[nwp] != 0 ) {
-        $racingtime=$now-$row[userdeptime];
+      if ( $row['nwp'] != 0 ) {
+        $racingtime=$now-$row['userdeptime'];
         $duration = duration2string($racingtime);
         printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
       } else {
         printf("      <td>-</td>\n");
       }
       // Loch
-      printf("      <td>%5.2f</td>\n", $row[loch]);
+      printf("      <td>%5.2f</td>\n", $row['loch']);
 
       // Affichage de l'ETA
       //               en milles  en noeuds ==> temps en heures avec décimale
@@ -635,8 +635,8 @@ class fullRaces
       */
 
       // Position
-      $longitude=$row[longitude];
-      $latitude=$row[latitude];
+      $longitude=$row['longitude'];
+      $latitude=$row['latitude'];
       // Longitude : W ou E
       if ( $longitude > 0 ) 
         {
@@ -658,7 +658,7 @@ class fullRaces
         "&amp;lat=". round($latitude/1000,2) .
         "&amp;long=" . round($longitude/1000,2) .
         "&amp;maparea=16" .
-        "&amp;tracks=on&amp;age=6&amp;list[]=" . $row[idusers] .
+        "&amp;tracks=on&amp;age=6&amp;list[]=" . $row['idusers'] .
         "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right\" target=\"_new\">"  ;
       //               "&tracks=on&list=all" .
 
@@ -677,17 +677,17 @@ class fullRaces
       //printf( "<td>"."%3d"."</td>\n", $usersObj->users->boatheading);
 
       // La progression des dernieres heures
-      printf( "<td>%3.2f</td>\n", $row[last1h]);
-      printf( "<td>%3.2f</td>\n", $row[last3h]);
-      printf( "<td>%3.2f</td>\n", $row[last24h]);
+      printf( "<td>%3.2f</td>\n", $row['last1h']);
+      printf( "<td>%3.2f</td>\n", $row['last3h']);
+      printf( "<td>%3.2f</td>\n", $row['last24h']);
       // If player is reaching the same WP as the first boat, we give the distance
       // between the two players
       
       if ( $disttype == "tofirst" ) {
         $dtl=ortho($FirstLat,$FirstLon, $latitude, $longitude);
       } else {
-        if ( $row[nwp] == $FirstNwp ) {
-          $dtl=$row[dnm]-$FirstDnm ;
+        if ( $row['nwp'] == $FirstNwp ) {
+          $dtl=$row['dnm']-$FirstDnm ;
         } else {
           $dtl=max($dtl,ortho($FirstLat,$FirstLon, $latitude, $longitude));
         }
@@ -765,8 +765,8 @@ class fullRaces
     $printtd=0;
 
     while( $row = mysql_fetch_assoc( $result ) ) {
-      if ( $row[engaged] != $lastrace ) {
-        $lastrace = $row[engaged];
+      if ( $row['engaged'] != $lastrace ) {
+        $lastrace = $row['engaged'];
         if ( $printtd != 0 ) {
           echo "</tr>" ;
           $printtd = 1;
@@ -782,25 +782,25 @@ class fullRaces
       $key++;
       echo "<td class=\"htmltable\">".$key."</td>\n";
       echo "<td class=\"htmltable\">";
-      echo $this->htmlFlagImg($row[country]);
+      echo $this->htmlFlagImg($row['country']);
 
       // ============= Affichage des noms de bateaux en acronyme
       //echo "<td class=htmltable>" ;
-      printf("<input type=\"checkbox\" name=\"list[]\" value=\"%s\" ", $row[idusers] );
-      if ( in_array($row[idusers], $list  ) || (empty($list[0]) ))
+      printf("<input type=\"checkbox\" name=\"list[]\" value=\"%s\" ", $row['idusers'] );
+      if ( in_array($row['idusers'], $list  ) || (empty($list[0]) ))
         echo " checked=\"checked\"";
       echo " />";
 
       echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".
-        $lang."&amp;type=palmares&amp;idusers=" . $row[idusers] . 
-        "', 'palmares');\" style=\" border-bottom: solid #" . $row[color] . "\" " .
-        "title=\"". $row[boatname] . "\">" ;
-      if ( $row[engaged] == $this->races->idraces ) {
-        echo "<b>" . $row[username] . "</b>";
+        $lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . 
+        "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
+        "title=\"". $row['boatname'] . "\">" ;
+      if ( $row['engaged'] == $this->races->idraces ) {
+        echo "<b>" . $row['username'] . "</b>";
       } else {
-        echo $row[username] ;
+        echo $row['username'] ;
       }
-      echo " (". $row[idusers] . ")"  ;
+      echo " (". $row['idusers'] . ")"  ;
 
       echo "</acronym>\n";
 
@@ -994,7 +994,7 @@ class fullRaces
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
         echo "<td class=\"ranking\">";
-        echo $this->htmlFlagImg($row[country]);
+        echo $this->htmlFlagImg($row['country']);
         echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
           "title=\"". $row['boatname'] . "\">" . 
           " (". $row['idusers'] . ") " . 

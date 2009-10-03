@@ -1060,14 +1060,14 @@ function getRacemap($idraces, $force = 'no') {
                  "FROM racesmap WHERE idraces = '".$idraces."'";
           $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
           $col = mysql_fetch_array ($ret, MYSQL_ASSOC);
-          if ( !$col[idraces] )
+          if ( !$col['idraces'] )
           {
               //Ceci est une erreur de données absentes
               return False;
           }
           else
           {
-              $img_out  = imagecreatefromstring( $col[racemap] ) or die("Cannot Initialize new GD image stream");
+              $img_out  = imagecreatefromstring( $col['racemap'] ) or die("Cannot Initialize new GD image stream");
               // Sauvegarde
               imagejpeg($img_out, $original) or die ("Cannot write cached racemap");
           }
