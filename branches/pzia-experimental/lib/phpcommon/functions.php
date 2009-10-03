@@ -1014,7 +1014,7 @@ function getRacemap($idraces, $force = 'no') {
     
           $req = "SELECT idraces, racemap ".
                  "FROM racesmap WHERE idraces = '".$idraces."'";
-          $ret = wrapper_mysql_db_query (DBNAME, $req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
           $col = mysql_fetch_row ($ret);
           if ( !$col[0] )
           {
@@ -1031,6 +1031,37 @@ function getRacemap($idraces, $force = 'no') {
 
     return $original;
 
+}
+
+/* Insert a racemap image $racemapfile for race $idraces  */
+function insertRacemap($idraces, $racemapfile) {
+    if (! file_exists($racemapfile) ) {
+        return False;
+    } else {
+        $img_blob = file_get_contents ($racemapfile);
+        $req = "REPLACE INTO racesmap ( idraces, racemap ".
+                  ") VALUES ( ".
+                  "".$idraces." , ".
+                  "'".addslashes($img_blob)."') ";
+        $ret = wrapper_mysql_db_query ($req) or die (mysql_error ());
+        return True;
+    }
+}
+
+/* Insert a flagship image $racemapfile for race $idraces  */
+function insertFlag($idflag, $flagfile) {
+    if (! file_exists($flagfile) ) {
+        return False;
+    } else {
+        //FIXME : tests sur la taille et le type ?
+        $img_blob = file_get_contents ($flagfile);
+        $req = "REPLACE INTO flags ( idflags, flag ".
+                  ") VALUES ( ".
+                  "'".$idflag."' , ".
+                  "'".addslashes($img_blob)."') ";
+        $ret = wrapper_mysql_db_query ($req) or die (mysql_error ());
+        return True;
+    }
 }
 
 

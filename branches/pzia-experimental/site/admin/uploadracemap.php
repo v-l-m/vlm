@@ -11,12 +11,8 @@
             }
         echo "<h3>Image reçue pour la course $idnewrace.</h3>";
         //FIXME: tests here
-        $img_blob = file_get_contents ($_FILES['fic']['tmp_name']);
-        $req = "REPLACE INTO racesmap ( idraces, racemap ".
-                  ") VALUES ( ".
-                  "".$idnewrace." , ".
-                  "'".addslashes($img_blob)."') ";
-        $ret = wrapper_mysql_db_query (DBNAME, $req) or die (mysql_error ());
+        insertRacemap($idnewrace, $_FILES['fic']['tmp_name']);
+
         echo "<h3>OK</h3>";
        for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {
             $webi = constant("WEBINSTANCE_$i");

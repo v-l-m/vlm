@@ -1,12 +1,13 @@
 Depuis la 0.10.2
+NB: A faire _avant_ l'upgrade de medias (voir le fichier hosting/UPGRADE)
 
 #Table pour stocker les flags
 CREATE TABLE `flags` (
-  `idflags` int(11) NOT NULL,
+  `idflags` varchar(25) NOT NULL,
   `flag` longblob,
   `description` varchar(250),
   PRIMARY KEY  (`idflags`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='content of flags' | 
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='content of flags';
 
 
 #Table pour stocker les racesmap
@@ -14,7 +15,7 @@ CREATE TABLE `racesmap` (
   `idraces` int(11) NOT NULL,
   `racemap` longblob,
   PRIMARY KEY  (`idraces`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='racesmap' | 
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='racesmap';
 
 
 Depuis la V 0.9.8:
