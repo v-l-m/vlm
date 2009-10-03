@@ -1,5 +1,5 @@
 /**
- * $Id: util.c,v 1.1 2008/04/26 09:09:18 ylafon Exp $
+ * $Id: util.c,v 1.2 2009-10-03 09:43:57 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -18,6 +18,7 @@
 
 #include "defs.h"
 #include "types.h"
+#include "util.h"
 
 /**
  * tell if we are in VLM compatibility mode
@@ -30,5 +31,11 @@ int in_vlm_compat_mode() {
 #else
   return 0;
 #endif /* VLM_COMPAT */
+}
+
+char *get_vlm_build_information() {
+  static char *vlm_build_info = VLM_BUILD_DATE;
+
+  return vlm_build_info;
 }
 
