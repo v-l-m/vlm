@@ -98,8 +98,8 @@
  * the boat is not a single pixel, it makes sense :)
  */
 #ifdef SAFE_LINE_CHECK
-#  define INTER_MAX_LIMIT 1.000000001
-#  define INTER_MIN_LIMIT -0.000000001
+#  define INTER_MAX_LIMIT 1.000001
+#  define INTER_MIN_LIMIT -0.000001
 #else
 #  define INTER_MAX_LIMIT 1.0
 #  define INTER_MIN_LIMIT 0.0
