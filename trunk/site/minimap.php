@@ -1,4 +1,5 @@
 <?php
+include_once ("config.php");
 
 include_once ("functions.php");
 
@@ -6,12 +7,19 @@ $idraces=($_REQUEST["idraces"]);
 // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
 $image="regate".$idraces;
 $thumb="images/minimaps/" . $image . ".png";
-$original="images/racemaps/" . $image . ".jpg";
+$original=getRacemap($idraces, $_REQUEST['force']);
+
+if ($original ===False) {
+            header("Cache-Control: no-cache"); // no cache for dummy answer
+            die("No racemap with such id");
+}
+
 
 // Création et mise en cache de la miniature si elle n'existe pas ou est trop vieille
 if ( 
      ( ! file_exists($thumb) ) 
-      ||  (filemtime($thumb) < filemtime($original) ) 
+      ||  (filemtime($thumb) < filemtime($original) )
+      ||  ($_REQUEST['force'] == 'yes')
       ||  (filemtime($thumb) < filemtime(__FILE__) )
    ) {
 

@@ -64,8 +64,10 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     echo 'OK !'
-    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps..."
+    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps & racemaps & pavillons"
     chmod -R 777 $destmodulepath/../medias/images/minimaps
+    chmod -R 777 $destmodulepath/../medias/images/racemaps
+    chmod -R 777 $destmodulepath/../medias/images/pavillons
     echo 'OK !'
 
     echo -n "+$confmodule: Constitution de la liste des polaires..."
@@ -129,8 +131,10 @@ case $confmodule in
     echo 'OK !'
     ;;
     medias)
-    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps..."
+    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps & racemaps & pavillons"
     chmod -R 777 $destmodulepath/images/minimaps
+    chmod -R 777 $destmodulepath/images/racemaps
+    chmod -R 777 $destmodulepath/images/pavillons
     ;;
     *)
     #Tous les autres modules

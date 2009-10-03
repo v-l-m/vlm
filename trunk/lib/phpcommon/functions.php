@@ -916,21 +916,9 @@ function dispHtmlRacesList($strings, $lang) {
         echo " (max " . $maxboats . ")";
       }
       echo "</td>\n";
-      echo "  <td>"; 
+      echo "  <td align=\"center\">"; 
 
-      //$href="racemaps/regate".$idraces.".jpg";
-      //echo "<a href=\"$href\">".$strings[$lang]["map"]."</a>";
-      // Carte de la course
-      $href="images/racemaps/regate".$idraces.".jpg";
-      if ( file_exists($href) ) {
-
-        $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
-        list($xSize, $ySize, $type, $attr) = getimagesize($href);
-        echo "<img width=\"30\" height=\"20\" src=\"/images/site/cartemarine.png\" " .
-          " onmouseover=\"showDivRight('infobulle','$status_content', 720, 480);\" " .
-          " onmouseout=\"hideDiv('infobulle');\" " .
-          " alt=\"" .$strings[$lang]["racemap"]. "\"/>";
-      }
+      echo htmlTinymap($idraces, $strings[$lang]["racemap"], "Right");
       echo "</td>\n";
       echo " </tr>\n";
 
@@ -972,7 +960,7 @@ function dispHtmlRacesList($strings, $lang) {
       echo "<td>" ;
       echo "$departure</td>\n";
       echo "  <td align=\"center\">" . $num_arrived . " / " . $num_racing . " / " . $num_engaged  . "</td>\n";
-      echo "  <td>"; 
+      echo "  <td align=\"center\">"; 
 
       /*
         $bounds = $fullRacesObj->getRacesBoundaries();
@@ -988,16 +976,8 @@ function dispHtmlRacesList($strings, $lang) {
         "&amp;windtext=off".
         "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=left&amp;idraces=".$fullRacesObj->races->idraces;
       */
-      //$href="racemaps/regate".$idraces.".jpg";
-      //echo "<a href=\"$href\">".$strings[$lang]["map"]."</a>";
       // Carte de la course
-      $href="images/racemaps/regate".$idraces.".jpg";
-      $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;map&quot; /&gt;";
-      list($xSize, $ySize, $type, $attr) = getimagesize($href);
-      echo "<img width=\"30\" height=\"20\" src=\"/images/site/cartemarine.png\" " .
-        " onmouseover=\"showDivRight('infobulle','$status_content', 720, 480);\" " .
-        " onmouseout=\"hideDiv('infobulle');\" " .
-        " alt=\"" .$strings[$lang]["racemap"]. "\" />";
+      echo htmlTinymap($idraces, $strings[$lang]["racemap"], "Right");
       echo "</td>\n";
       echo " </tr>\n";
     }
@@ -1009,7 +989,124 @@ function dispHtmlRacesList($strings, $lang) {
   echo $finished_races;
 }
 
+function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
 
+      $href="/racemap.php?idraces=".$idraces;
+      $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
+      return "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" " .
+//FIXME : on doit pouvoir faire la taille de la popup en dynamique en js
+          " onmouseover=\"showDiv$where('infobulle','$status_content', 1000, 1000);\" " .
+          " onmouseout=\"hideDiv('infobulle');\" " .
+          " alt=\"" .$alt. "\"/>";
+}
+
+function getFlag($idflags, $force = 'no') {
+
+    $original = DIRECTORY_COUNTRY_FLAGS . "/" . $idflags . ".png";
+    
+    // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
+    if ( 
+         ( ! file_exists($original) ) 
+          ||  ($force == 'yes')
+       ) {
+    
+          $req = "SELECT idflags, flag ".
+                 "FROM flags WHERE idflags = '".$idflags."'";
+          $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $col = mysql_fetch_row ($ret);
+          if ( !$col[0] )
+          {
+              //Ceci est une erreur de données absentes
+              die("Not there : \"$idflags\"");
+              return False;
+          }
+          else
+          {
+              $img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
+              // Sauvegarde
+              imagepng($img_out, $original) or die ("Cannot write cached racemap");
+          }
+    }
+
+    return $original;
+
+}
+
+function getFlagsListCursor($with_customs = True) {
+
+    $req = "SELECT idflags FROM flags"; 
+
+    if (!$with_customs) {
+        $req .= " WHERE idflags NOT LIKE 'ZZ%'";
+    }
+    $req .= " ORDER BY idflags";
+    
+    $ret = wrapper_mysql_db_query ($req) or die (mysql_error());
+    return $ret;
+}
+
+function getRacemap($idraces, $force = 'no') {
+
+    $image = "regate".$idraces;
+    $original = DIRECTORY_RACEMAPS . "/" . $image . ".jpg";
+    
+    // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
+    if ( 
+         ( ! file_exists($original) ) 
+          ||  ($force == 'yes')
+       ) {
+    
+          $req = "SELECT idraces, racemap ".
+                 "FROM racesmap WHERE idraces = '".$idraces."'";
+          $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $col = mysql_fetch_array ($ret, MYSQL_ASSOC);
+          if ( !$col['idraces'] )
+          {
+              //Ceci est une erreur de données absentes
+              return False;
+          }
+          else
+          {
+              $img_out  = imagecreatefromstring( $col['racemap'] ) or die("Cannot Initialize new GD image stream");
+              // Sauvegarde
+              imagejpeg($img_out, $original) or die ("Cannot write cached racemap");
+          }
+    }
+
+    return $original;
+
+}
+
+/* Insert a racemap image $racemapfile for race $idraces  */
+function insertRacemap($idraces, $racemapfile) {
+    if (! file_exists($racemapfile) ) {
+        return False;
+    } else {
+        $img_blob = file_get_contents ($racemapfile);
+        $req = "REPLACE INTO racesmap ( idraces, racemap ".
+                  ") VALUES ( ".
+                  "".$idraces." , ".
+                  "'".addslashes($img_blob)."') ";
+        $ret = wrapper_mysql_db_query ($req) or die (mysql_error ());
+        return True;
+    }
+}
+
+/* Insert a flagship image $racemapfile for race $idraces  */
+function insertFlag($idflag, $flagfile) {
+    if (! file_exists($flagfile) ) {
+        return False;
+    } else {
+        //FIXME : tests sur la taille et le type ?
+        $img_blob = file_get_contents ($flagfile);
+        $req = "REPLACE INTO flags ( idflags, flag ".
+                  ") VALUES ( ".
+                  "'".$idflag."' , ".
+                  "'".addslashes($img_blob)."') ";
+        $ret = wrapper_mysql_db_query ($req) or die (mysql_error ());
+        return True;
+    }
+}
 
 
 function raceExists($race)

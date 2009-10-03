@@ -19,4 +19,10 @@ define("SYSTEME_WIND_AT_POSITION", "SPF");
 //TEMPORARY DIR : idem que $VLMTEMP = $VLMRACINE/tmp dans conf_script
 define("VLMTEMP", "/path/to/VLMRACINE/tmp");
 
+//LIST OF WEB INSTANCES - please note that it is not possible to define an array(), thus the method below
+define("WEBINSTANCE_COUNT", 3);
+define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
+define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
+define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
+
 ?>
