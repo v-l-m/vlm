@@ -1000,6 +1000,39 @@ function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
           " alt=\"" .$alt. "\"/>";
 }
 
+function getFlag($idflags, $force = 'no') {
+
+    $original = DIRECTORY_COUNTRY_FLAGS . "/" . $idflags . ".png";
+    
+    // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
+    if ( 
+         ( ! file_exists($original) ) 
+          ||  ($force == 'yes')
+       ) {
+    
+          $req = "SELECT idflags, flag ".
+                 "FROM flags WHERE idflags = '".$idflags."'";
+          $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $col = mysql_fetch_row ($ret);
+          if ( !$col[0] )
+          {
+              //Ceci est une erreur de données absentes
+              die("Not there : \"$idflags\"");
+              return False;
+          }
+          else
+          {
+              $img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
+              // Sauvegarde
+              imagepng($img_out, $original) or die ("Cannot write cached racemap");
+          }
+    }
+
+    return $original;
+
+}
+
+
 function getRacemap($idraces, $force = 'no') {
 
     $image="regate".$idraces;
@@ -1009,7 +1042,6 @@ function getRacemap($idraces, $force = 'no') {
     if ( 
          ( ! file_exists($original) ) 
           ||  ($force == 'yes')
-          ||  (filemtime($original) < filemtime(__FILE__) )
        ) {
     
           $req = "SELECT idraces, racemap ".
