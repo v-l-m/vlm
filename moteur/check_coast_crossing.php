@@ -9,7 +9,8 @@ echo "\n\tChecking for coast crossing (vlm-c)\n ";
 echo "\tUsing: ".GSHHS_FILENAME."\n ";
 
 $crosses_the_coast = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
-             $coast_xinglat, $coast_xinglong, $coast_xingratio);
+					   $coast_xinglat, $coast_xinglong, 
+					   $coast_xingratio);
 
 if ($crosses_the_coast) {
   echo "\t*** YES player " . $fullUsersObj->users->idusers . " CROSSED (vlmc), ";
@@ -55,7 +56,23 @@ if ($crosses_the_coast) {
   // compute the real endpoint (using linear interpolation)
   // We can tune the 0.9 to whatever we want, to avoid putting the boat on the line
   // and have rounding errors having fun with us.
-  $latApres = $latAvant + ($latApres - $latAvant) * 0.9 * doublep_value($coast_xingratio);
-  $lonApres = $lonAvant + ($lonApres - $lonAvant) * 0.9 * doublep_value($coast_xingratio);
+  $latApres = $latAvant + ($encounter_lat - $latAvant) * 0.9;
+  $lonApres = $lonAvant + ($encounter_long - $lonAvant) * 0.9;
+
+  // ok we got a new point, check it's not crossing the coast because of roundings.
+  // new point coast check
+  for ( $coast_ratio = 8; $coast_ratio > 0; $coast_ratio--) {
+    $npcc = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
+				  $coast_xinglat, $coast_xinglong, 
+				  $coast_xingratio);
+    if ($npcc) {
+      echo "*** Safety engaged for new point, moving to ".$coast_ratio."0%\n";
+      $latApres = $latAvant + ($encounter_lat - $latAvant) * ($coast_ratio / 10.);
+      $lonApres = $lonAvant + ($encounter_long - $lonAvant) * ($coast_ratio / 10.);
+    } else {
+      break;
+    }
+  }
+  // if things go wrong again, it is hopeless ;)
 }
 ?>
