@@ -18,6 +18,9 @@ CREATE TABLE `racesmap` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='racesmap';
 
 
+Aller dans base/scripts et lancer : 
+$ ./runphp.sh upgrade-v11.php
+
 Depuis la V 0.9.8:
 
   Removed boat polar tables :
