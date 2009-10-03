@@ -2,21 +2,35 @@
     $PAGETITLE = "VLM Management";
     include("htmlstart.php");
 
-    $adminpages = Array(
+    $tablepages = Array(
         "races.php" => "Race definition",
-        "uploadracemap.php" => "Race map upload",
-        "uploadflag.php" => "Flag upload",
         );
 
     echo "<div class=\"adminbox\">";
     echo "<h3>Table administration</h3>";
     echo "<ul>";
-    foreach ($adminpages as $page => $pagedef) {
+    foreach ($tablepages as $page => $pagedef) {
         echo "<li>";
         echo "<a href=\"$page\">$pagedef</a>";
         echo "</li>";
         }
     echo "</ul></div>";
+
+    $uploadpages = Array(
+        "uploadracemap.php" => "Race map upload",
+        "uploadflag.php" => "Flag upload",
+        );
+
+    echo "<div class=\"adminbox\">";
+    echo "<h3>Upload tools</h3>";
+    echo "<ul>";
+    foreach ($uploadpages as $page => $pagedef) {
+        echo "<li>";
+        echo "<a href=\"$page\">$pagedef</a>";
+        echo "</li>";
+        }
+    echo "</ul></div>";
+
     
     include("htmlend.php");
 ?>

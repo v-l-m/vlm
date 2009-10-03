@@ -1032,6 +1032,18 @@ function getFlag($idflags, $force = 'no') {
 
 }
 
+function getFlagsListCursor($with_customs = True) {
+
+    $req = "SELECT idflags FROM flags"; 
+
+    if (!$with_customs) {
+        $req .= " WHERE idflags NOT LIKE 'ZZ%'";
+    }
+    $req .= " ORDER BY idflags";
+    
+    $ret = wrapper_mysql_db_query ($req) or die (mysql_error());
+    return $ret;
+}
 
 function getRacemap($idraces, $force = 'no') {
 

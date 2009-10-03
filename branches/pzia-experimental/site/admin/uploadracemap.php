@@ -3,7 +3,7 @@
     include ("htmlstart.php");
     include_once ("functions.php");
     
-    $idnewrace = intval($_REQUEST['idnewrace']) ;   
+    $idnewrace = intval($_REQUEST['idnewrace']) ;  
     
     if ($_REQUEST["action"] == "upload") {
         if ($idnewrace <1 ) {
@@ -31,7 +31,7 @@
         <form enctype="multipart/form-data" action="#" method="post">
             <input type="hidden" name="MAX_FILE_SIZE" value="2500000" />
             <input type="hidden" name="action" value="upload" />
-            Idraces:&nbsp;<input type="text" name="idnewrace" size="12" /><br />
+            Idraces:&nbsp;<input type="text" name="idnewrace" size="12" <?php if ($idnewrace > 0) echo "value=\"$idnewrace\""; ?> /><br />
             Fichier jpeg:&nbsp;<input type="file" name="fic" maxlength="250" size="50" /><br />
             <input type="submit" value="Envoyer" />
         </form>

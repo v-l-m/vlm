@@ -103,7 +103,7 @@ appear in generated list. Here are some most used field options documented.
 
 
 $opts['fdd']['idraces'] = array(
-  'name'     => 'Idraces',
+  'name'     => '#Id',
   'help'     => 'Unique id of the race',
   'select'   => 'T',
   'input|LVCD'  => 'R',
@@ -120,7 +120,9 @@ $opts['fdd']['raceminimap'] = array(
   'escape'   => 0,
   'sql'      => 'idraces', 
   'mask'     => "<img style=\"height:40px; \" src=\"/minimap.php?idraces=%s\" />",
-  'input'  => 'R',
+  'URL'      => '/admin/uploadracemap.php?idnewrace=$key',
+  'help'     => 'Click to upload the racemap',
+  'input'    => 'R',
 );
 
 $opts['fdd']['racename'] = array(
@@ -132,20 +134,22 @@ $opts['fdd']['racename'] = array(
   'sort'     => true
 );
 $opts['fdd']['started'] = array(
-  'name'     => 'Started',
+  'name'     => 'Status',
   'help'     => "Status of the race",
   'select'   => 'D',
   'values2'  => Array("-1" => "Finished", "0"=>"Not started", "1" => "Yes"), 
   'maxlen'   => 11,
   'default'  => '0',
+  'help'     => 'Status of the race',
   'sort'     => true
 );
 $opts['fdd']['deptime'] = array(
-  'name'     => 'Deptime',
+  'name'     => 'Start',
   'select'   => 'T',
   'sql|LFVD' => 'FROM_UNIXTIME(deptime)',
   'maxlen'   => 20,
   'sort'     => true,
+  'help'     => 'Start time',
   'calendar' => $calendar_specifications,
 );
 $opts['fdd']['startlat'] = array(
@@ -154,6 +158,7 @@ $opts['fdd']['startlat'] = array(
   'sql|LFVD' => 'startlat/1000',
   'maxlen'   => 11,
   'default'  => '0',
+  'help'     => 'Please input in Milli deg',
   'sort'     => true
 );
 $opts['fdd']['startlong'] = array(
@@ -162,17 +167,18 @@ $opts['fdd']['startlong'] = array(
   'maxlen'   => 11,
   'sql|LFVD' => 'startlong/1000',
   'default'  => '0',
+  'help'     => 'Please input in Milli deg',
   'sort'     => true
 );
 $opts['fdd']['boattype'] = array(
-  'name'     => 'Boattype',
+  'name'     => 'Boat type',
   'select'   => 'D',
   'values2'  => $list_polars,
   'maxlen'   => 255,
   'sort'     => true
 );
 $opts['fdd']['closetime'] = array(
-  'name'     => 'Closetime',
+  'name'     => 'Close time',
   'select'   => 'T',
   'sql|LFVD' => 'FROM_UNIXTIME(closetime)',
   'maxlen'   => 20,
@@ -180,17 +186,18 @@ $opts['fdd']['closetime'] = array(
   'sort'     => true
 );
 $opts['fdd']['racetype'] = array(
-  'name'     => 'Racetype',
+  'name'     => 'Race type',
   'select'   => 'D',
   'values2'  => Array('0' => 'One shot', '1' => 'Permanent'), 
   'maxlen'   => 11,
   'sort'     => true
 );
 $opts['fdd']['firstpcttime'] = array(
-  'name'     => 'Firstpcttime',
+  'name'     => 'Firstpct time',
   'select'   => 'T',
   'mask'     => '%3.0f %%',
   'maxlen'   => 20,
+  'help'     => "Input in %",
   'sort'     => true
 );
 $opts['fdd']['depend_on'] = array(
@@ -209,7 +216,8 @@ $opts['fdd']['qualifying_races'] = array(
   'sort'     => true
 );
 $opts['fdd']['idchallenge'] = array(
-  'name'     => 'Idchallenge',
+ //FIXME: what's that ?
+  'name'     => 'Id challenge',
   'select'   => 'T',
   'maxlen'   => 65535,
   'textarea' => array(
@@ -218,14 +226,14 @@ $opts['fdd']['idchallenge'] = array(
   'sort'     => true
 );
 $opts['fdd']['coastpenalty'] = array(
-  'name'     => 'Coastpenalty',
+  'name'     => 'Coast penalty',
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
 );
 $opts['fdd']['bobegin'] = array(
-  'name'     => 'Bobegin',
+  'name'     => 'Bo Begin',
   'select'   => 'T',
   'maxlen'   => 20,
   'sql|LFVD' => 'IF (bobegin=0,\'\',FROM_UNIXTIME(bobegin))',
@@ -234,7 +242,7 @@ $opts['fdd']['bobegin'] = array(
   'sort'     => true
 );
 $opts['fdd']['boend'] = array(
-  'name'     => 'Boend',
+  'name'     => 'Bo End',
   'select'   => 'T',
   'maxlen'   => 20,
   'sql|LFVD' => 'IF (boend=0,\'\',FROM_UNIXTIME(boend))',
