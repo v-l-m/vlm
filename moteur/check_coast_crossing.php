@@ -18,13 +18,13 @@ if ($crosses_the_coast) {
   printf ("BOAT : %f,%f <----> %f,%f",
     $latAvant/1000,$lonAvant/1000 , $latApres/1000,$lonApres/1000);
   
-  $encounter_lat  = doublep_value($coast_xinglat)/1000;
-  $encounter_long = doublep_value($coast_xinglong)/1000;
+  $encounter_lat  = doublep_value($coast_xinglat);
+  $encounter_long = doublep_value($coast_xinglong);
 
   echo "\n\t\t\tEncounterCoordinates " . 
-    $encounter_lat . ", " . $encounter_long . 
+    $encounter_lat/1000 . ", " . $encounter_long/1000 . 
     "\n\nGoogleMap http://maps.google.fr/maps?f=q&hl=fr&geocode=&q=".
-    $encounter_lat . "," . $encounter_long .
+    $encounter_lat/1000 . "," . $encounter_long/1000 .
     "&ie=UTF8&spn=0.0191,0.082998&t=p&z=11&iwloc=addr. \n";
   
   /* NOTE the encounter coordinates are the real ones */
@@ -36,7 +36,7 @@ if ($crosses_the_coast) {
   echo "&list=" . $fullUsersObj->users->idusers ;
   echo "&x=1000&y=600&proj=mercator&text=right"; /* ahem, we have a point instead of the segment now :) */
   echo "&seg1=".$latAvant/1000 . "," . $lonAvant/1000 . ":" . $latApres/1000 . "," . $lonApres/1000;
-  echo "&seg2=".$encounter_lat . "," . $encounter_long . ":" . $encounter_lat . "," . $encounter_long;
+  echo "&seg2=".$encounter_lat/1000 . "," . $encounter_long/1000 . ":" . $encounter_lat/1000 . "," . $encounter_long/1000;
   echo "\n\n";
   /*
     echo "\n\t ==> Position Avant " . 
