@@ -1047,8 +1047,8 @@ function getFlagsListCursor($with_customs = True) {
 
 function getRacemap($idraces, $force = 'no') {
 
-    $image="regate".$idraces;
-    $original="images/racemaps/" . $image . ".jpg";
+    $image = "regate".$idraces;
+    $original = DIRECTORY_RACEMAPS . "/" . $image . ".jpg";
     
     // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
     if ( 
@@ -1059,15 +1059,15 @@ function getRacemap($idraces, $force = 'no') {
           $req = "SELECT idraces, racemap ".
                  "FROM racesmap WHERE idraces = '".$idraces."'";
           $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
-          $col = mysql_fetch_row ($ret);
-          if ( !$col[0] )
+          $col = mysql_fetch_array ($ret, MYSQL_ASSOC);
+          if ( !$col[idraces] )
           {
               //Ceci est une erreur de données absentes
               return False;
           }
           else
           {
-              $img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
+              $img_out  = imagecreatefromstring( $col[racemap] ) or die("Cannot Initialize new GD image stream");
               // Sauvegarde
               imagejpeg($img_out, $original) or die ("Cannot write cached racemap");
           }
