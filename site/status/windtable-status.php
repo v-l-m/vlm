@@ -70,5 +70,8 @@ if ( $nb_grib == 0 ) {
       }
 shm_unlock_sem_destroy_grib(1);
     ?>
+    <p id="vlmcbuild">VLM-C build date: 
+    <?php echo get_vlm_build_information() ?>
+    </p>
   </body>
 </html>
