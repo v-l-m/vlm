@@ -4,6 +4,8 @@ From 0.10.2 To Next
 On the main database server :
 =Base=
 * Please, update the base module
+  ./scripts/maj_module.sh base
+
 * Then see the UPDATE FILE in the base module
 
 On all servers :

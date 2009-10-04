@@ -4,9 +4,7 @@
     $link = mysql_connect(DBSERVER, DBUSER, DBPASSWORD) or 
           die("Could not connect : " . mysql_error());
     mysql_select_db(DBNAME, $link) or die("Could not select database");
-    
-    include_once("../../lib/phpcommon/functions.php");
-    
+       
     $ids = Array();
     $dir = "../../medias/images/racemaps/";
     $dh  = opendir($dir);
@@ -16,8 +14,12 @@
         if ( ! is_dir($filename) && substr($filename,0,1) != "." && substr($filename, 0, 6) == "regate") {
             $idraces = intval(substr(basename($filename,".jpg"), 6));
             if ($idraces < 1 ) continue;
-            //echo "ID : $idraces\n";
-            insertRacemap($idraces, $dir.$filename);
+            $img_blob = file_get_contents ($dir.$filename);
+            $req = "REPLACE INTO racesmap ( idraces, racemap ".
+                  ") VALUES ( ".
+                  "".$idraces." , ".
+                  "'".addslashes($img_blob)."') ";
+            $ret = mysql_query ($req) or die (mysql_error ());
             $c++;
         } else {
             echo "ERROR: $filename not well formed (should be \"regate\d+.jpg\".\n";
@@ -33,8 +35,13 @@
     while (false !== ($filename = readdir($dh))) {
         if ( ! is_dir($filename) && substr($filename,0,1) != ".") {
             $idflag = basename($filename,".png");
-            //echo "ID : $idflag\n";
             insertFlag($idflag, $dir.$filename);
+            $img_blob = file_get_contents ($dir.filename);
+            $req = "REPLACE INTO flags ( idflags, flag ".
+                  ") VALUES ( ".
+                  "'".$idflag."' , ".
+                  "'".addslashes($img_blob)."') ";
+            $ret = mysql_query ($req) or die (mysql_error ());
             $c++;
         } else {
             echo "ERROR: $filename not well formed (should be \"*.png\".\n";
