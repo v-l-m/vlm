@@ -21,8 +21,6 @@ function getMouseXY(e) {
     return true;
 }
 
-
-
 function toggleDisplay(id){
     if (id.style.display=="none"){
   id.style.display="inline";
@@ -34,60 +32,59 @@ function toggleDisplay(id){
 
 function showDivTopLeft(id, text, xSize , ySize ) {
 
-    if ( xSize == 0 ) { xSize = "auto"; } 
-    if ( ySize == 0 ) { ySize = "auto"; }
-
-    document.getElementById(id).style.width = parseInt(xSize) + 'px';
-    document.getElementById(id).style.height = parseInt(ySize) + 'px';
+    setDivSize(id, xSize, ySize);
 
     document.getElementById(id).style.position = 'fixed';
     document.getElementById(id).style.left  = parseInt(50) + 'px';
     document.getElementById(id).style.top   = parseInt(50) + 'px';
 
-    //document.getElementById(id).style.display = 'inline';
-    document.getElementById(id).style.visibility = 'visible';
-    document.getElementById(id).innerHTML = text;
+    showDiv(id, text);
 }
 
 function showDivLeft(id, text, xSize , ySize ) {
 
-    if ( xSize == 0 ) { xSize = "auto"; } 
-    if ( ySize == 0 ) { ySize = "auto"; }
-
-    document.getElementById(id).style.width = parseInt(xSize) + 'px';
-    document.getElementById(id).style.height = parseInt(ySize) + 'px';
+    setDivSize(id, xSize, ySize);
 
     document.getElementById(id).style.left = parseInt(tempX+15) + 'px';
     document.getElementById(id).style.top  = parseInt(tempY+15) + 'px';
+
+    showDiv(id, text);
+}
+
+function showDivRight(id, text, xSize , ySize ) {
+
+    setDivSize(id, xSize, ySize);
+
+    document.getElementById(id).style.right = parseInt(document.body.clientWidth-tempX+15) + 'px';
+    document.getElementById(id).style.top  = parseInt(tempY+15) + 'px';
+
+    showDiv(id, text);
+}
+
+function showDiv(id, text) {
 
     //document.getElementById(id).style.display = 'inline';
     document.getElementById(id).style.visibility = 'visible';
     document.getElementById(id).innerHTML = text;
 }
 
-function showDivRight(id, text, xSize , ySize ) {
-
-    if ( xSize == 0 ) { 
-        xSize = 400 ; 
-    } 
-    document.getElementById(id).style.width = parseInt(xSize) + 'px';
-
-    if ( ySize == 0 ) { 
-  document.getElementById(id).style.height = 'auto';
+function setDivSize(id, xSize, ySize) {
+    if ( xSize == 0 ) {
+        document.getElementById(id).style.width = "auto";
     } else {
-  document.getElementById(id).style.height = parseInt(ySize) + 'px';
+        document.getElementById(id).style.width = parseInt(xSize) + 'px';
     }
-
-    document.getElementById(id).style.left = parseInt(tempX - parseInt(document.getElementById(id).style.width)) + 'px';
-    document.getElementById(id).style.top  = parseInt(tempY+15) + 'px';
-
-    //document.getElementById(id).style.display = 'inline';
-    document.getElementById(id).style.visibility = 'visible';
-    document.getElementById(id).innerHTML = text;
+    if ( ySize == 0 ) {
+        document.getElementById(id).style.height = "auto";
+    } else {
+        document.getElementById(id).style.height = parseInt(ySize) + 'px';
+    }
 }
 
 function hideDiv(id){
     //document.getElementById(id).style.display = 'none';
     document.getElementById(id).style.visibility = 'hidden';
     document.getElementById(id).innerHTML = "";
+    document.getElementById(id).style.width = "auto";
+    document.getElementById(id).style.height = "auto";
 }
