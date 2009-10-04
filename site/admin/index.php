@@ -3,7 +3,8 @@
     include("htmlstart.php");
 
     $tablepages = Array(
-        "races.php" => "Race definition",
+        "races.php" => "Races definitions",
+        "races_instructions.php" => "Races instructions",
         );
 
     echo "<div class=\"adminbox\">";
