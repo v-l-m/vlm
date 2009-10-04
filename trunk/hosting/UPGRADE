@@ -1,25 +1,27 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 From 0.10.2 To Next
 
-On the main database server :
-=Base=
+=On the main database server=
+
+==Hosting==
+* Do the ./scripts/maj_scripts.sh
+
+==Base==
 * Please, update the base module
   ./scripts/maj_module.sh base
 
 * Then see the UPDATE FILE in the base module
 
-On all servers :
+=On all servers :=
 
-=Hosting=
-* Do the ./scripts/maj_scripts.sh
-
-=Configuration=
+==Configuration==
 * EDIT conf/param.php and add :
   - define("WEBINSTANCE_COUNT", 3);
   - define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
   - define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
   - define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
-=And update all others modules
+
+==And update all others modules==
 
 From 0.9.7 To next...
 
