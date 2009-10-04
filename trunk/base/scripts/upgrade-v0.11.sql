@@ -1,3 +1,6 @@
+#Clef auto pour pouvoir gèrer plus facilement les races instructions
+ALTER TABLE races_instructions ADD autoid BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "clef auto pour gestion de la table";
+
 #Table pour stocker les flags
 CREATE TABLE IF NOT EXISTS `flags` (
   `idflags` varchar(25) NOT NULL,

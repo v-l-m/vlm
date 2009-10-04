@@ -1,7 +1,7 @@
 <?php
 
 // headers
-$PAGETITLE = "Admin of RACE table";
+$PAGETITLE = "Admin of RACES table";
 
 include('adminheader.php');
 
