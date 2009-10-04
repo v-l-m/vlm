@@ -1,10 +1,11 @@
 Depuis la 0.10.2
-NB: A faire _avant_ l'upgrade de medias (voir le fichier hosting/UPGRADE)
+NB: A faire AVANT l'upgrade de medias (voir le fichier hosting/UPGRADE)
 
 * Vérifier que le fichier conf/conf_base est correctement renseigné
 
 * Aller dans base/scripts et lancer : 
   ./runupgrade.sh 0.11
+  NB: ce script appelle automatiquement les fichiers en *.0.11.* contenus dans scripts
 
 
 Depuis la V 0.9.8:
