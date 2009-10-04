@@ -995,7 +995,7 @@ function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
       $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
       return "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" " .
 //FIXME : on doit pouvoir faire la taille de la popup en dynamique en js
-          " onmouseover=\"showDiv$where('infobulle','$status_content', 1000, 1000);\" " .
+          " onmouseover=\"showDiv$where('infobulle','$status_content', 0, 0);\" " .
           " onmouseout=\"hideDiv('infobulle');\" " .
           " alt=\"" .$alt. "\"/>";
 }

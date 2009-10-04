@@ -26,7 +26,8 @@ function outputIC($fullRacesObj) {
 
 function outputRaceMap($fullRacesObj, $alttemplate) {
 
-  echo htmlTinymap($fullRacesObj->races->idraces, $alttemplate);
+    $href = "racemap.php?idraces=".$fullRacesObj->races->idraces;
+    echo "<img src=\"$href\" alt=\"" .$alttemplate. "\" />\n";
 
 }
 
@@ -71,6 +72,7 @@ function outputWayPoints($fullRacesObj, $startstring) {
 if ($idraces != 0) {
 
   $fullRacesObj = new fullRaces($idraces);
+  echo "<div id=\"infobulle\"></div>"; //Empty container
   echo "<div id=\"raceheader\">\n";
   outputRaceTitle($fullRacesObj, $strings[$lang]["racestarted"]);
   outputRacePolar($fullRacesObj, $strings[$lang]["boattype"]);

@@ -148,7 +148,7 @@ include_once("scripts/myboat.js");
                    echo ($myRace->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
                    echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" target="_new" class="<?php
                    echo $WPCLASS; ?>" onmouseover="showDivRight('infobulle','<?php
-                   echo $status_content; ?>', 400, 0);" onmouseout="hideDiv('infobulle');" ><?php
+                   echo $status_content; ?>', 0, 0);" onmouseout="hideDiv('infobulle');" ><?php
                    echo $strings[$lang]["startmap"] ; ?></a> - WP:
 
 <?php
@@ -213,7 +213,7 @@ include_once("scripts/myboat.js");
            "&amp;tracks=on" . $oppList . 
            "&amp;wp=" . $wp_num . 
            "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
-           "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+           "\" onmouseover=\"showDivRight('infobulle','$status_content', 0, 0);\" " .
            " onmouseout=\"hideDiv('infobulle');\" " .
            ">" . $wp_num ;
          
@@ -349,7 +349,7 @@ include_once("scripts/myboat.js");
           "&amp;Body=Hello%2C%0A" .
           "%0A%20******%20EXPLICATION%20DU%20PROBLEME%20%2F%20EXPLANATION%20******%20%0A".
           "%0AFair%20winds%2C%0A" . $usersObj->users->username .
-          "\" onmouseover=\"showDivRight('infobulle','$status_content', 400, 0);\" " .
+          "\" onmouseover=\"showDivRight('infobulle','$status_content', 0, 0);\" " .
           " onmouseout=\"hideDiv('infobulle');\" " .
           "><img src=\"images/site/sos.png\" alt=\"SOS COMITE\" /></a>";
 ?>
