@@ -4,9 +4,10 @@
     include_once("config.php");
     if (!isLoggedIn() or  !idusersIsAdmin(getLoginId()) ) {
         include ("unallowed.html");
-        //FIXME: log the ip / username somewhere
         die();
-    }  
+    } 
+    $REMOTE_USER = getLoginId();
+    
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 		"http://www.w3.org/TR/html4/loose.dtd">
 <html>

@@ -1,3 +1,16 @@
+#Log table for new admin interfaces
+CREATE TABLE admin_changelog (
+  `updated`    timestamp default 0,
+  `user`       varchar(255)  default NULL,
+  `host`       varchar(255)  default NULL,
+  `operation`  varchar(255)   default NULL,
+  `tab`        varchar(255)  default NULL,
+  `rowkey`     varchar(255)  default NULL,
+  `col`        varchar(255)  default NULL,
+  `oldval`     blob          default NULL,
+  `newval`     blob          default NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='new admin log table';
+
 #Clef auto pour pouvoir gèrer plus facilement les races instructions
 ALTER TABLE races_instructions ADD autoid BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "clef auto pour gestion de la table";
 

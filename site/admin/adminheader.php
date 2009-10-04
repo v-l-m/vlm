@@ -65,5 +65,6 @@ $opts['filters'] = "PMEtable0.sessions_count > 200";
 */
 
 $opts['url'] = array('images' => '/images/pme/');
+$opts['logtable'] = 'admin_changelog';
 
 ?>
