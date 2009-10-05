@@ -4,10 +4,14 @@
     include_once ("functions.php");
         
     if ($_REQUEST["action"] == "upload") {
+        if (exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
+            die("<h1>ERROR : Not a PNG file...</h1>");
+        }
+        
         $idflags = $_REQUEST['idflags'] ;   
 
         echo "<h3>Image reçue pour le pavillon $idflags.</h3>";
-        //FIXME: tests here
+
         if (insertFlag($idflags, $_FILES['fic']['tmp_name'])) {
             echo "<h3>Insert OK</h3>";
             //flagimg.php ne sera pas utilisé en direct par le reste du code (appelé trop souvent)

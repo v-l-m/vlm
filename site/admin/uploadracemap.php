@@ -7,14 +7,17 @@
     
     if ($_REQUEST["action"] == "upload") {
         if ($idnewrace <1 ) {
-            die("<h1>Error, racemap malformed</h1>");
+            die("<h1>ERROR : Racemap id malformed</h1>");
             }
+        if (exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_JPEG) {
+            die("<h1>ERROR : Not a Jpeg file...</h1>");
+        }
+
         echo "<h3>Image reçue pour la course $idnewrace.</h3>";
-        //FIXME: tests here
         insertRacemap($idnewrace, $_FILES['fic']['tmp_name']);
 
         echo "<h3>OK</h3>";
-       for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {
+        for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {
             $webi = constant("WEBINSTANCE_$i");
             $racemap = "http://$webi/racemap.php?idraces=$idnewrace&force=yes";
             $minimap = "http://$webi/minimap.php?idraces=$idnewrace&force=yes";
@@ -22,8 +25,7 @@
             //on redimensionne à l'affichage la racemap pour garder l'affichage lisible.
             echo "<a href=\"$racemap\"><img style=\"width:180px ;\" src=\"$racemap\" /></a>";
             echo "<a href=\"$minimap\"><img src=\"$minimap\" /></a>";
-            }
-
+        }
     } else {
         
 ?>
