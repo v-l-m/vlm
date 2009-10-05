@@ -1013,8 +1013,8 @@ function getFlag($idflags, $force = 'no') {
           $req = "SELECT idflags, flag ".
                  "FROM flags WHERE idflags = '".$idflags."'";
           $ret = wrapper_mysql_db_query ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
-          $col = mysql_fetch_row ($ret);
-          if ( !$col[0] )
+          $col = mysql_fetch_array ($ret);
+          if ( !$col['idflags'] )
           {
               //Ceci est une erreur de données absentes
               die("Not there : \"$idflags\"");
@@ -1022,9 +1022,11 @@ function getFlag($idflags, $force = 'no') {
           }
           else
           {
-              $img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
+              //$img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
               // Sauvegarde
-              imagepng($img_out, $original) or die ("Cannot write cached racemap");
+              //imagepng($img_out, $original) or die ("Cannot write cached racemap");
+              file_put_contents($original, $col['flag'], FILE_BINARY  | LOCK_EX) or die ("Cannot write cached racemap");
+
           }
     }
 
