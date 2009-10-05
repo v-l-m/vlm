@@ -1067,9 +1067,10 @@ function getRacemap($idraces, $force = 'no') {
           }
           else
           {
-              $img_out  = imagecreatefromstring( $col['racemap'] ) or die("Cannot Initialize new GD image stream");
+              //$img_out  = imagecreatefromstring( $col['racemap'] ) or die("Cannot Initialize new GD image stream");
               // Sauvegarde
-              imagejpeg($img_out, $original) or die ("Cannot write cached racemap");
+              file_put_contents($original, $col['racemap'], FILE_BINARY  | LOCK_EX) or die ("Cannot write cached racemap");
+              //imagejpeg($img_out, $original, 100) 
           }
     }
 
