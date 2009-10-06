@@ -1558,12 +1558,48 @@ function checkMapArea($value) {
 }
 
 function logUserEvent($idusers, $ipaddr, $idraces, $action ) {
+    //tracking...
+    $query_user_event = "insert into user_action (time, idusers, ipaddr, idraces, action) " .
+                        " values (" . time() . "," . $idusers . ", '" . $ipaddr . "' ," . $idraces .
+                        ",'" . addslashes($action) . "')";
+    $result = wrapper_mysql_db_query($query_user_event) or die("Query [$query_user_event] failed \n");
+}
 
-  //tracking...
-  $query_user_event = "insert into user_action (time, idusers, ipaddr, idraces, action) " .
-    " values (" . time() . "," . $idusers . ", '" . $ipaddr . "' ," . $idraces . ",'" . addslashes($action) . "')";
-  $result = wrapper_mysql_db_query($query_user_event) or die("Query [$query_user_event] failed \n");
+function htmlQuery($sql) {
+    $result = wrapper_mysql_db_query($sql) or die("<h3 class=\"admin-error\">Query".query_user_event."] failed</h1>");
+    
+    if (!$result or !mysql_num_rows($result)) {
+        echo "<h3 class=\"admin-infos\">Nothing to display</h3>";
+        return False;
+    }
 
+    echo "<table class=\"admin-query\">";
+    echo "<tr class=\"admin-query\">";
+    
+    $i = 0;
+    while ($i < mysql_num_fields($result)) {
+        $meta = mysql_fetch_field($result, $i);
+        echo "<th>";
+        if ($meta) {
+            echo $meta->name;
+        }
+        echo "</th>";
+        $i++;
+    }
+    echo "</tr>";
+ 
+    $oddeven = 0;
+    while ( $row = mysql_fetch_array($result, MYSQL_NUM)) {
+        $oddeven = $oddeven % 2;
+        echo "<tr class=\"admin-query-$oddeven\">";
+        for($i=0;$i<count($row); $i++) {
+            echo "<td class=\"admin-query\">";
+            echo $row[$i];
+            echo "</td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";    
 
 }
 
