@@ -419,7 +419,7 @@ include_once("scripts/myboat.js");
             foreach ( $myRace->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                        $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>IC sur le forum / RI on the forum</a>";
+                        $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>".$strings[$lang]["icforum"]."</a>";
                         $messages[] = Array("id" => "ic".$myRace->idraces , "txt" => $txtstr, "class" => "ic", "url" => $ichref);
                     } else {
                         $messages[] = Array("id" => "ic".$myRace->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);

@@ -6,12 +6,12 @@ include_once("config.php");
 /*
   output des IC
 */
-function outputIC($fullRacesObj) {
+function outputIC($fullRacesObj, $icforum) {
   foreach($fullRacesObj->races->getICS() as $ic) {
     if ($ic['flag'] & IC_FLAG_VISIBLE) {
       echo "<div class=\"icbox\">\n";
       if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-	printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>INSTRUCTIONS DE COURSE SUR LE FORUM / RACE INSTRUCTIONS ON THE FORUM</b></a>\n");
+	printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>".strtoupper($icforum)."</b></a>\n");
       } else {
 	echo nl2br($ic['instructions']);
       }
@@ -86,7 +86,7 @@ if ($idraces != 0) {
 
   echo "<div id=\"ic\">\n";
   echo "<h3>".$strings[$lang]["ic"]."</h3>\n";
-  outputIC($fullRacesObj);
+  outputIC($fullRacesObj, $strings[$lang]["icforum"]);
   echo "</div>\n";    
 
   echo "<div id=\"waypoints\">\n";
