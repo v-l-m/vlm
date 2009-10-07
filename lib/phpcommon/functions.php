@@ -115,6 +115,12 @@ function geographic2drawingforspeedchart($angle)
   return $angle;
 }
 
+function longitudeConstraintDegrees($longitude) {
+      while ($longitude <= -180) $longitude+=360;
+      while ($longitude > 180)  $longitude-=360;
+      return $longitude;
+}
+
 
 /*from an angle (degrees) and a norm, give the normed cartesian cordinates*/
 function polar2cartesian($a, $r)

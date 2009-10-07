@@ -660,7 +660,7 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="wdd" value="<?php echo ($usersObj->wheading+180)%360; ?>" />
             <input type="hidden" name="wds" value="<?php echo $usersObj->wspeed; ?>" />
             <input type="hidden" name="wp1lat" value="<?php echo $usersObj->users->targetlat; ?>" />
-            <input type="hidden" name="wp1long" value="<?php echo $usersObj->users->targetlong; ?>" />
+            <input type="hidden" name="wp1long" value="<?php echo longitudeConstraintDegrees($usersObj->users->targetlong); ?>" />
             <?php
         
             $nwp_coords=$myRace->giveWPCoordinates($usersObj->nwp);
