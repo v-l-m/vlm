@@ -424,7 +424,7 @@ form {
 .controlonmap {
   background:none;
   border:none;
-  margin:none;
+  margin:0px;
 }
 
 #griboffset {
@@ -433,7 +433,7 @@ form {
 } 
 
 #deplacable {
-  top:150;
-  left:250;
+  top:150px;
+  left:250px;
   position:absolute;
 }
