@@ -415,8 +415,8 @@ form {
 /* This maybe should be in a dedicated css */
 
 #windcontrollayer {
-  top:20;
-  left:200;
+  top:20px;
+  left:200px;
   position:absolute;
   background-color: #ffffff;
 }
