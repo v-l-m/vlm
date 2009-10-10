@@ -96,7 +96,9 @@ include_once("includes/header.inc");
     if ( $mapX == "NULL" ) $mapX = 800;
     $mapY = $usersObj->getMyPref("mapY");
     if ( $mapY == "NULL" ) $mapY = 600;
-
+    $mapDrawtextwp = $usersObj->getMyPref("mapDrawtextwp");
+    if ( $mapDrawtextwp == "NULL" ) $mapDrawtextwp = "on";
+    
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
     //printf("amure=%s<BR/>",$amure);
 
@@ -753,6 +755,16 @@ include_once("scripts/myboat.js");
         <input onChange="mapprefChanged();" type="radio" name="mapcenter" value="roadtowp" <?php if ($mapCenter == "roadtowp" )  echo " checked=\"checked\""; ?>  />
         <label for="roadtowp"><?php echo $strings[$lang]["mymaproute"]; ?></label>
         </p>
+        <div id="mapdrawtextwpbox" class="mapboxsubitem">
+            <span class="titlehelpers"><?php echo $strings[$lang]["mapdrawtextwp"]; ?></span>
+            <p><input id="drawtextwpon" onChange="mapprefChanged();" type="radio" name="drawtextwp" value="on" <?php if ($mapDrawtextwp != "no" ) echo " checked=\"checked\""; ?>  />
+            <label for="drawtextonon"><?php echo $strings[$lang]["yes"]; ?></label>
+            </p>
+            <p><input id="drawtextwpno" onChange="mapprefChanged();" type="radio" name="drawtextwp" value="no" <?php if ($mapDrawtextwp == "no" ) echo " checked=\"checked\""; ?>  />
+            <label for="drawtextwpno"><?php echo $strings[$lang]["no"]; ?></label>
+            </p>
+        </div>
+
     </div>
 
     <div id="mapinputbox" class="mapboxitem">

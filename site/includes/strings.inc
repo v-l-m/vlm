@@ -4,6 +4,8 @@ array(
 
 "en" => array(
     "lang_version"=>"English Version",
+    "yes" => "Yes",
+    "no" => "No",
     "home" => "Home",
     "images" => "Images",
     "ic" => "Race Instructions",
@@ -175,6 +177,7 @@ array(
         "map" => "Display map",
         "racemap" => "Display Race map",
         "mymaps" => "Centerred on",
+        "mapdrawtextwp" => "Draw wp infos",
         "mapmaxboat" =>"You have to choose less than %d boats on your maps please",
         "mymapboat" => "my boat",
         "mymaproute" => "my trip to next mark",
@@ -301,6 +304,8 @@ array(
 
 "fr" => array(
         "lang_version"=>"Version Française",
+        "yes" => "Oui",
+        "no" => "Non",
         "home" => "Accueil",
         "images" => "Images",
         "ic" => "Instructions de course",
@@ -506,6 +511,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "startmap" => "D&eacute;part",
         "stopmap" => "Ligne d'arriv&eacute;e",
         "mymaps" => "Centrage",
+        "mapdrawtextwp" => "Affiche les infos du wp",
         "mapmaxboat" =>"Pas plus de %d bateaux sur les cartes SVP.",
         "mymapboat" => "mon bateau",
         "mymaproute" => "ma route",
@@ -605,6 +611,8 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
   ),
   "it" => array(
         "lang_version"=>"Italian Version",
+        "yes" => "Yes",
+        "no" => "No",
         "home" => "Home",
         "images" => "Immagini",
         "ic" => "Istruzioni di Regata",
@@ -801,6 +809,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "startmap" => "Partenza",
         "stopmap" => "Linea di arrivo",
         "mymaps" => "Centra",
+        "mapdrawtextwp" => "Draw wp infos",
         "mapmaxboat" =>"Troppe barche selezionate.",
         "mymapboat" => "Mia Barca",
         "mymaproute" => "Mia rotta",
@@ -903,6 +912,8 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
 
 "pt" => array(
         "lang_version"=>"Portugese Version",
+        "yes" => "Yes",
+        "no" => "No",
         "home" => "Início",
         "images" => "Imagens",
         "ic" => "Instruções de Regata",
@@ -1073,6 +1084,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "map" => "Mostrar na carta",
         "racemap" => "Ver a carta",
         "mymaps" => "Centrado em",
+        "mapdrawtextwp" => "Draw wp infos",
         "mapmaxboat" =>"Por favor, escolha menos de %d barcos na carta",
         "mymapboat" => "Meu barco",
         "mymaproute" => "Viagem para a próxima baliza",
@@ -1194,6 +1206,8 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
   ),
 "es" => array(
         "lang_version"=>"Spanish Version",
+        "yes" => "Yes",
+        "no" => "No",
         "home" => "Inicio",
         "images" => "Imágenes",
         "ic" => "Instrucciones de carrera",
@@ -1366,6 +1380,7 @@ Puede proponer la traducción del juego. Es rápido y fácil. En <a href=\"inclu
         "map" => "Visualizar el mapa",
         "racemap" => "Visualizar el mapa de la carrera",
         "mymaps" => "Centrada en",
+        "mapdrawtextwp" => "Draw wp infos",
         "mapmaxboat" =>"No se puede seleccionar más de %d barcos en el mapa.",
         "mymapboat" => "mi barco",
         "mymaproute" => "mi rumbo hacia la próxima marca",
