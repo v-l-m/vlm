@@ -4,9 +4,11 @@
     include_once("functions.php");
     include_once("mapfunctions.php");
 
+    $boat= htmlentities($_GET['boat']);
+    
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
-    if ( empty($idusers) || $idusers != htmlentities($_GET['boat']) ) {
+    if ( empty($idusers) || $idusers != $boat ) {
         // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
         $x=500;
         $y=250;
@@ -19,7 +21,7 @@
         // Affichage d'un "-X-" au milieu de l'image
     
         imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] , $noir);
-        imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$_GET['boat'].")" , $noir);
+        imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$boat.")" , $noir);
         imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
         imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
     
@@ -35,7 +37,7 @@
     $maptype= htmlentities($_GET['maptype']);
 
     $list= htmlentities($_GET['list']) ;
-        
+    
     $maparea= htmlentities($_GET['maparea']);
     if ( $maparea == "" ) {
         $maparea=round(MAPAREA_MAX/2);
@@ -43,7 +45,7 @@
         if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
     }
     if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX; {
-        setUserPref(htmlentities($_GET['boat']), "maparea" , $maparea, $save);
+        setUserPref($boat, "maparea" , $maparea, $save);
     }
     $maille= htmlentities($_GET['maille']);
     if ( $maille == "" ) {
@@ -52,12 +54,10 @@
         if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
     }
     if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
-    setUserPref(htmlentities($_GET['boat']), "mapMaille" , $maille, $save);
+    setUserPref($boat, "mapMaille" , $maille, $save);
 
     $idraces= htmlentities($_GET['idraces']) ;
     //if ( $idraces == 20081109 ) $list = "myboat";
-
-    $boat= htmlentities($_GET['boat']) ;
 
     $tracks= htmlentities($_GET['tracks']) ;
     if ( $tracks == "" ) $tracks = "on";
@@ -70,18 +70,18 @@
 
     // Limitation de la taille de la carte pour pas péter le serveur
     if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
-    setUserPref(htmlentities($_GET['boat']), "mapX" , $x, $save);
+    setUserPref($boat, "mapX" , $x, $save);
   
     if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
-    setUserPref(htmlentities($_GET['boat']), "mapY" , $y, $save);
+    setUserPref($boat, "mapY" , $y, $save);
   
     $age= htmlentities($_GET['age']) ;
     if ( $age == "" ) $age = 2;
-    setUserPref(htmlentities($_GET['boat']), "mapAge" , $age, $save);
+    setUserPref($boat, "mapAge" , $age, $save);
   
     $estime= htmlentities($_GET['estime']) ;
     if ( $estime == "" ) $estime = 30;
-    setUserPref(htmlentities($_GET['boat']), "mapEstime" , $estime, $save);
+    setUserPref($boat, "mapEstime" , $estime, $save);
   
     $proj= htmlentities($_GET['proj']) ;
     //  $proj="carre"; 
@@ -93,7 +93,8 @@
     if ( $windtext == "" ) $windtext = "on";
   
     $drawtextwp= htmlentities($_GET['drawtextwp']) ;
-    if ( $drawtextwp == "" ) $drawtext = "on";
+    if ( $drawtextwp == "" ) $drawtextwp = "on";
+    setUserPref($boat, "mapDrawtextwp" , $drawtextwp, $save);
     // Guess real map coordinates
 
 ?>
@@ -182,15 +183,15 @@
 
     <?php
       // Sauvegarde des préférences
-      setUserPref(htmlentities($_GET['boat']), "mapOpponents" , htmlentities($_GET['list']), $save);
+      setUserPref($boat, "mapOpponents" , $list, $save);
 
       $maplayers=htmlentities($_GET['maplayers']);
       if ( $maplayers == "" ) $maplayers = "merged";
-      setUserPref(htmlentities($_GET['boat']), "mapLayers" , $maplayers, $save);
+      setUserPref($boat, "mapLayers" , $maplayers, $save);
 
       $mapcenter=htmlentities($_GET['mapcenter']);
       if ( $mapcenter == "" ) $mapcenter = "myboat";
-      setUserPref(htmlentities($_GET['boat']), "mapCenter" , $mapcenter, $save);
+      setUserPref($boat, "mapCenter" , $mapcenter, $save);
 
       // Centrage de la carte
       // Coordonnées bateau
@@ -295,12 +296,12 @@
       // ****  Le compas deplacable en dernier, sinon il est dessous.. *** 
       // Que met t'on sur la carte ?
       if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
-          setUserPref(htmlentities($_GET['boat']), "mapTools" , $maptype, $save);
+          setUserPref($boat, "mapTools" , $maptype, $save);
           echo "<div id=\"deplacable\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><img src=\"images/site/compas-transparent.gif\"></div>";
       } else if ( $maptype == "compas" ) {
-          setUserPref(htmlentities($_GET['boat']), "mapTools" , "compas", $save);
+          setUserPref($boat, "mapTools" , "compas", $save);
       } else {
-          setUserPref(htmlentities($_GET['boat']), "mapTools" , "none", $save);
+          setUserPref($boat, "mapTools" , "none", $save);
       }
     ?>
 
