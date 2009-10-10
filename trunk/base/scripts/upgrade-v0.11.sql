@@ -1,6 +1,16 @@
+#Status table for tracking module upgrades, anticipating v0.12
+CREATE TABLE modules_status (
+  `autoid`     bigint NOT NULL AUTO_INCREMENT,
+  `updated`    timestamp,
+  `serverid`   varchar(50)  default NULL,
+  `moduleid`   varchar(50)  default NULL,
+  `revid`      int(11)   default NULL,
+  PRIMARY KEY  (`autoid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='status modules';
+
 #Log table for new admin interfaces
 CREATE TABLE admin_changelog (
-  `updated`    timestamp default 0,
+  `updated`    timestamp,
   `user`       varchar(255)  default NULL,
   `host`       varchar(255)  default NULL,
   `operation`  varchar(255)   default NULL,
