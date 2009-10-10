@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.34 2009-09-27 07:00:40 ylafon Exp $
+ * $Id: vmg.c,v 1.37 2009-10-10 08:36:24 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -111,6 +111,11 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
     maxheading += TWO_PI;
   }
   maxwangle = fmod(maxwangle, TWO_PI);
+  if (maxwangle > PI) {
+    maxwangle -= TWO_PI;
+  } else if (maxwangle < -PI) {
+    maxwangle += TWO_PI;
+  }
 #if DEBUG
   printf("BVMG: Wind %.2fkts %.2f\n", w_speed, radToDeg(w_angle));
   printf("BVMG Wind Angle : heading %.2f, wind angle %.2f\n",
@@ -397,6 +402,14 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
   vmg_alpha = speed_alpha * cos(b_alpha);
   speed_beta = find_speed(aboat, w_speed, angle-b_beta);
   vmg_beta = speed_beta * cos(b_beta);
+
+#if DEBUG
+    printf("VBVMG: speedalpha=%.2f, speedbeta=%.2f\n", speed_alpha, speed_beta);
+    printf("VBVMG: vmgalpha=%.2f, vmgbeta=%.2f\n", vmg_alpha, vmg_beta);
+    printf("VBVMG: headingalpha %.2f, headingbeta=%.2f\n",
+	   radToDeg(fmod(wanted_heading + b_alpha, TWO_PI)),
+	   radToDeg(fmod(wanted_heading + b_beta, TWO_PI)));
+#endif /* DEBUG */
 
   if (vmg_alpha > vmg_beta) {
     *heading1 = fmod(wanted_heading + b_alpha, TWO_PI);
