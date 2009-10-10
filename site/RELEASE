@@ -1,34 +1,50 @@
 RELEASE NOTES
-See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
+See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by milestone.
 
-v0.11 aka Autant en emporte l'autan : what's new for ...
+v0.11 aka "Autant en emporte l'autan" : what's new since 0.10 ...
 
-...players ?
-
+... players ?
     * bugfix in handling wp in pilototo (paparazzia)
     * bugfix in vbvmg computing (spifou)
     * more tests to avoid coast line traversal (spifou)
     * database handling optimizations mean quicker interface (spifou)
     * current polar displayed in windangle control, ability to hide the wp infos on map (paparazzia)
     * misc interface fixes and better integration with the wiki (paparazzia)
+    * as allways, some new races (race commitee)
 
 ... tools developpers ?
-
     * change of regular url to fetch images (flags, racemaps, minimaps)
 
-... race comittee ?
-
+... race committee ?
     * interface for Race Instructions (paparazzia)
     * upload interface for racemaps and flags (paparazzia
 
 ... developpers ?
-
     * mysql performance optimizations (spifou)
     * racemaps and flags are now stored in database in order to prepare high-availability (paparazzia)
     * status pages enhancements (spifou)
     * better mysql upgrade scripts (paparazzia)
 
-v0.10 aka Have Foehn (part II) : what's new for ...
+v0.10 aka Have Foehn (Part III) : What's new since the 0.9.6...
+
+... for players ?
+* interfaces improvement (dropdown for the pilotmode, wp number in ranking pages, theme clean-up, ...) (paparazzia)
+* bugfixes (for example, no more overlapping wind arrows in MS-IE...) (paparazzia, spf)
+* new pilotmode : VBVMG which is the automatic version of "VMG for VLM" button (spf, stephpen)
+* global performance improvement (spf) that everybody will notice (speed computing of cranks is 2 times faster)
+* new Mono650 polar available (Phille)
+* localization improvement
+* a shadow test to check if you watch out what happens to the chat links
+* BONUS TRACK : 72h of gribs datas (fm)
+
+... for developpers ?
+* engine performance enhancement by integrating polar and bvmg computing in vlm-c (spf)
+* optimization of lot of mysql usage (spf, paparazzia)
+* more status pages for server health reporting (spf, paparazzia)
+
+Next time, we will try to make this 20minutes upgrade faster, we promise.
+
+v0.9.6 aka Have Foehn (part II) : what's new for ...
 ... players ?
 * engine more reliable, easier way to set up 1 min. races (fm)
 * home page more compact & more links from (paparazzia)
