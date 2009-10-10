@@ -1,6 +1,33 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by version.
 
+v0.11 aka Autant en emporte l'autan : what's new for ...
+
+...players ?
+
+    * bugfix in handling wp in pilototo (paparazzia)
+    * bugfix in vbvmg computing (spifou)
+    * more tests to avoid coast line traversal (spifou)
+    * database handling optimizations mean quicker interface (spifou)
+    * current polar displayed in windangle control, ability to hide the wp infos on map (paparazzia)
+    * misc interface fixes and better integration with the wiki (paparazzia)
+
+... tools developpers ?
+
+    * change of regular url to fetch images (flags, racemaps, minimaps)
+
+... race comittee ?
+
+    * interface for Race Instructions (paparazzia)
+    * upload interface for racemaps and flags (paparazzia
+
+... developpers ?
+
+    * mysql performance optimizations (spifou)
+    * racemaps and flags are now stored in database in order to prepare high-availability (paparazzia)
+    * status pages enhancements (spifou)
+    * better mysql upgrade scripts (paparazzia)
+
 v0.10 aka Have Foehn (part II) : what's new for ...
 ... players ?
 * engine more reliable, easier way to set up 1 min. races (fm)
