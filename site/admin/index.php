@@ -17,7 +17,8 @@
     $tablepages = Array(
         "races_instructions.php" => "Races instructions",
         "flags.php" => "Flags definitions (no uploading, see below)",
-        "races.php" => "Races definitions (no uploading, see below) [Experimental]",
+        "races.php" => "[Experimental] Races definitions (no uploading, see below)",
+        "waypoints.php" => "[Experimental] Waypoints definitions",
         );
     adminlistbox($tablepages, "Table administration");
 
@@ -32,6 +33,8 @@
     $strangepages = Array(
         "strange_engaged_in_unknown.php" => "Engaged in unknown race.",
         "strange_unknown_flag.php" => "Boat with Unknown flag.",
+        "racemaps_without_race.report.php" => "Racemaps with no corresponding race",
+        "races_without_racemap.report.php" => "Races with no corresponding racemap",
         );
 
     adminlistbox($strangepages, "Strangeness reports [Use with caution]");
