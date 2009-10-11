@@ -215,8 +215,10 @@ $opts['fdd']['qualifying_races'] = array(
     'cols' => 50),
   'sort'     => true
 );
+
+/* FIXME: what's that ?
 $opts['fdd']['idchallenge'] = array(
- //FIXME: what's that ?
+
   'name'     => 'Id challenge',
   'select'   => 'T',
   'maxlen'   => 65535,
@@ -225,6 +227,7 @@ $opts['fdd']['idchallenge'] = array(
     'cols' => 50),
   'sort'     => true
 );
+*/
 $opts['fdd']['coastpenalty'] = array(
   'name'     => 'Coast penalty',
   'select'   => 'T',
@@ -235,6 +238,7 @@ $opts['fdd']['coastpenalty'] = array(
 $opts['fdd']['bobegin'] = array(
   'name'     => 'Bo Begin',
   'select'   => 'T',
+  'options'  => 'ACDPVF',
   'maxlen'   => 20,
   'sql|LFVD' => 'IF (bobegin=0,\'\',FROM_UNIXTIME(bobegin))',
   'default'  => '0',
@@ -244,6 +248,7 @@ $opts['fdd']['bobegin'] = array(
 $opts['fdd']['boend'] = array(
   'name'     => 'Bo End',
   'select'   => 'T',
+  'options'  => 'ACDPVF',
   'maxlen'   => 20,
   'sql|LFVD' => 'IF (boend=0,\'\',FROM_UNIXTIME(boend))',
   'default'  => '0',
@@ -253,6 +258,7 @@ $opts['fdd']['boend'] = array(
 $opts['fdd']['maxboats'] = array(
   'name'     => 'Maxboats',
   'select'   => 'T',
+  'options'  => 'ACDPVF',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
@@ -260,11 +266,13 @@ $opts['fdd']['maxboats'] = array(
 $opts['fdd']['theme'] = array(
   'name'     => 'Theme',
   'select'   => 'D',
+  'options'  => 'ACDPVF',
   'maxlen'   => 30,
   'values'   => $list_themes,
   'sort'     => true
 );
 
+$opts['triggers']['delete']['before'][0] = 'races.TAD.trigger.php';
 
 include('adminfooter.php');
 

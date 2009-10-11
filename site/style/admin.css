@@ -6,6 +6,14 @@ body {
   background-color: #CCCCCC;
   }
 
+.adminwarnbox h3 {
+  background-color: #FFFFCC;
+  }
+
+.adminwarnbox {
+  color: #FF0000;
+}
+
 a img {
 border: 1px;
 }
