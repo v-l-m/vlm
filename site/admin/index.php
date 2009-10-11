@@ -15,8 +15,9 @@
     }
 
     $tablepages = Array(
-        "races.php" => "Races definitions [Experimental]",
         "races_instructions.php" => "Races instructions",
+        "flags.php" => "Flags definitions (no uploading, see below)",
+        "races.php" => "Races definitions (no uploading, see below) [Experimental]",
         );
     adminlistbox($tablepages, "Table administration");
 
@@ -26,7 +27,7 @@
         "uploadflag.php" => "Flag upload",
         );
 
-    adminlistbox($uploadpages, "Table administration");
+    adminlistbox($uploadpages, "Upload operations");
 
     $strangepages = Array(
         "strange_engaged_in_unknown.php" => "Engaged in unknown race.",
