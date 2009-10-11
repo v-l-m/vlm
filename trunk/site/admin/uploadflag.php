@@ -2,13 +2,13 @@
     $PAGETITLE = "Flag upload";
     include ("htmlstart.php");
     include_once ("functions.php");
-        
+
+    $idflags = "".$_REQUEST['idflags'] ; 
+
     if ($_REQUEST["action"] == "upload") {
         if (exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
             die("<h1>ERROR : Not a PNG file...</h1>");
-        }
-        
-        $idflags = $_REQUEST['idflags'] ;   
+        }  
 
         echo "<h3>Image reçue pour le pavillon $idflags.</h3>";
 
@@ -32,7 +32,7 @@
         <form enctype="multipart/form-data" action="#" method="post">
             <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
             <input type="hidden" name="action" value="upload" />
-            ID of flag (insert or replace):&nbsp;<input type="text" name="idflags" size="20" maxlength="50" /><br />
+            ID of flag (insert or replace):&nbsp;<input type="text" name="idflags" size="20" <?php if ($idflags != "") echo "value=\"$idflags\""; ?> maxlength="50" /><br />
             Png filename (30x20):&nbsp;<input type="file" name="fic" maxlength="250" size="50" /><br />
             <input type="submit" value="Envoyer" />
         </form>
