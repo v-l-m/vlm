@@ -2,6 +2,19 @@ body {
   font-size: 10px;
   }
 
+.adminbox h3 {
+  background-color: #CCCCCC;
+  }
+
+a img {
+border: 1px;
+}
+
+div.adminbox {
+  border-bottom: #CCCCCC 1px solid;
+  border-right: #CCCCCC 1px solid;
+  }
+
 hr.pme-hr {
   border: 0px solid;
   padding: 0px;
