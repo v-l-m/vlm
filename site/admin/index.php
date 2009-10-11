@@ -31,6 +31,7 @@
 
     $strangepages = Array(
         "strange_engaged_in_unknown.php" => "Engaged in unknown race.",
+        "strange_unknown_flag.php" => "Boat with Unknown flag.",
         );
 
     adminlistbox($strangepages, "Strangeness reports [Use with caution]");
