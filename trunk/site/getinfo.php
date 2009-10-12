@@ -120,7 +120,7 @@ if ( $usersObj->users->engaged == 0 ) {
     $ETA=-1;
   }
   printf ("ETA=%s\n", $ETA);
-  $twd=fmod($usersObj->wheading+3780); 
+  $twd=fmod($usersObj->wheading+3780, 360); 
   printf ("TWD=%05.2f\n" , round($twd,2) ) ;
   printf ("TWS=%5.2f\n" , $usersObj->wspeed ) ;
 
