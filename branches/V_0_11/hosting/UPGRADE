@@ -1,0 +1,90 @@
+This file traces the changes that are required for upgrading from a previous VLM version
+From 0.10.2 To Next
+
+=On the main database server=
+
+==Hosting==
+* Do the ./scripts/maj_scripts.sh
+
+==Base==
+* Please, update the base module
+  ./scripts/maj_module.sh base
+
+* Then see the UPDATE FILE in the base module
+
+=On all servers :=
+
+==Configuration==
+* EDIT conf/param.php and add :
+  - define("WEBINSTANCE_COUNT", 3);
+  - define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
+  - define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
+  - define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
+
+==And update all others modules==
+
+From 0.9.7 To next...
+
+=Base=
+* see the UPDATE FILE in the base module
+
+=Configuration=
+* EDIT hosting/conf/conf_script
+ - add "export VLMPOLARS=$VLMDATAS/gshhs"
+* EDIT hosting/conf/param.php and add
+ - "define("POLARS_DIRECTORY", "/same/as/VLMPOLARS");"
+* NB: the directory will be created automatically
+
+To 0.9.5 from 0.9
+_______________
+(Do it in this order, please)
+
+=Configuration=
+* EDIT hosting/conf/conf_script
+ - change the branch to V_9_5
+ - add "export VLMLOG=$VLMTEMP" (or something else...)
+ - optionally, add "export VLM_GRIB_MAX=36" (or whatever you wish)
+
+=Moteur=
+* be careful, the location of the scripts for getting externals positions has changed
+  
+To 0.9 from 0.8
+_______________
+
+(Do it in this order, please)
+
+=Configuration=
+* EDIT hosting/conf/conf_script
+ - change the branch to V_0_9 
+ - add "export VLMDATAS=$VLMRACINE/vlmdatas"
+ - add "export VlMGSHHS=$VLMDATAS/gshhs"
+* EDIT hosting/conf/param.php and add
+ - "define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");"
+
+=Hosting=
+
+Update the script directory :
+~/scripts/maj_scripts.sh
+ 
+=Database=
+ 
+See file UPDATE in the module "base"
+
+=Grib=
+
+Please run the new 'windserver' binary ASAP in order to have a correct segment in memory.
+
+=Maps=
+
+You have to make deployment of module maps :
+ $ ./maj_module.sh maps
+ 
+This is going to download gshhs files during the first deployment.
+
+=Moteur=
+
+You can check now that all is OK
+
+= Others=
+
+Just deploy other modules again (site, lib/phpcommon, medias)
