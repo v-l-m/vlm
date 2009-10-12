@@ -22,6 +22,10 @@ From 0.10.2 To Next
   - define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
 
 ==And update all others modules==
+- medias
+- lib/phpcommon
+- site
+- lib/vlm-c
 
 From 0.9.7 To next...
 
