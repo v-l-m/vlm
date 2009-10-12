@@ -6,7 +6,7 @@
     $idflags = "".$_REQUEST['idflags'] ; 
 
     if ($_REQUEST["action"] == "upload") {
-        if (exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
+        if (function_exists("exif_imagetype") and exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
             die("<h1>ERROR : Not a PNG file...</h1>");
         }  
 
