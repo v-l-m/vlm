@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS admin_changelog (
 
 #Table pour stocker les flags
 CREATE TABLE IF NOT EXISTS `flags` (
-  `idflags` varchar(25) NOT NULL,
+  `idflags` varchar(64) NOT NULL,
   `flag` longblob,
   `description` varchar(250),
   PRIMARY KEY  (`idflags`)
