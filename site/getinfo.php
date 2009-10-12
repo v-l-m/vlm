@@ -4,13 +4,13 @@ include_once("config.php");
 header("content-type: text/plain; charset=UTF-8");
 
 
-  $idu=htmlentities(quote_smart($_REQUEST['idu']));
-  if (round($idu) == 0) {
-    echo "usage : http://virtual-loup-de-mer.org/getinfo.php?idu=X&pseudo=xxxx&password=pppp\n";
-    echo "\nX = numero de votre bateau";
-    echo "\nxxxxx = votre nom d'utilisateur";
-    echo "\nppppp = votre mot de passe";
-    echo "\nVariables = \n
+$idu=htmlentities(quote_smart($_REQUEST['idu']));
+if (round($idu) == 0) {
+  echo "usage : http://virtual-loup-de-mer.org/getinfo.php?idu=X&pseudo=xxxx&password=pppp\n";
+  echo "\nX = numero de votre bateau";
+  echo "\nxxxxx = votre nom d'utilisateur";
+  echo "\nppppp = votre mot de passe";
+  echo "\nVariables = \n
     #* WPL : liste de Waypoints (liste)
     #* RAC : numéro de la course (string)
     #* IDB : nom du bateau (string)
@@ -68,8 +68,8 @@ header("content-type: text/plain; charset=UTF-8");
     #* HID: trace cachée (1) ou visible (0)
     #* VAC: durée de la vacation (en secondes)
     ";
-    exit;
-  }
+  exit;
+}
 
 $pseudo=quote_smart($_REQUEST['pseudo']);
 $password=quote_smart($_REQUEST['password']);
@@ -120,16 +120,13 @@ if ( $usersObj->users->engaged == 0 ) {
     $ETA=-1;
   }
   printf ("ETA=%s\n", $ETA);
-  $twd=$usersObj->wheading + 180; 
-  while ( $twd > 360 ) { $twd-=360; }
+  $twd=fmod($usersObj->wheading+3780); 
   printf ("TWD=%05.2f\n" , round($twd,2) ) ;
-
   printf ("TWS=%5.2f\n" , $usersObj->wspeed ) ;
 
   // Calcul du TWA signé
   $twa=round($usersObj->boatanglewithwind,2);
   printf ("TWA=%5.2f\n" , $twa );
-
   printf ("PIM=%d\n" , $usersObj->users->pilotmode );
   switch ( $usersObj->users->pilotmode ) {
   case 1: 
@@ -140,6 +137,7 @@ if ( $usersObj->users->engaged == 0 ) {
     break;
   case 3:
   case 4:
+  case 5:
     if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
       printf ("PIP=%5.4f,%5.4f\n", $usersObj->users->LatNM, $usersObj->users->LonNM );
     } else {
@@ -150,6 +148,9 @@ if ( $usersObj->users->engaged == 0 ) {
   printf ("LOC=%s\n" , $usersObj->users->loch);
   printf ("LUP=%d\n" , $usersObj->users->lastupdate ) ;
   printf ("NUP=%d\n" , 10 * round($usersObj->users->lastupdate + 60*$racesObj->vacfreq - time())/10);
+  // vacfreq est en minutes dans la base, mais affiché en secondes 
+  printf ("VAC=%d\n" , 60 * $racesObj->vacfreq ); 
+
   printf ("AVG=%02.2f\n", 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime));
   printf ("WPLAT=%s\n", $usersObj->users->targetlat) ;
   printf ("WPLON=%s\n", $usersObj->users->targetlong) ;
@@ -190,8 +191,6 @@ if ( $usersObj->users->engaged == 0 ) {
   }
   printf ("THM=%s\n", $usersObj->users->theme) ;
   printf ("HID=%d\n", $usersObj->users->hidepos) ;
-  // vacfreq est en minutes dans la base, mais affiché en secondes 
-  printf ("VAC=%d\n" , 60 * $racesObj->vacfreq ); 
 }
 ?>
 
