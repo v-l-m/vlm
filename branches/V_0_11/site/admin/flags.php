@@ -74,7 +74,7 @@ $opts['fdd']['idflags'] = array(
   'select'   => 'T',
 //  'input|LVCD'  => 'R',
 //  'input|AP' => '',
-  'maxlen'   => 11,
+  'maxlen'   => 64,
   'default'  => '0',
   'sort'     => true
 );
