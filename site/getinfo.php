@@ -3,6 +3,134 @@ include_once("config.php");
 
 header("content-type: text/plain; charset=UTF-8");
 
+function get_info_array($idu) {
+  $info = array();
+  $userObj = new fullUsers($idu);
+
+  $info['IDU'] = $userObj->users->idusers;
+  $info['IDB'] = $userObj->users->boatname;
+  $info['EML'] = $userObj->users->email;
+  $info['COL'] = $userObj->users->color;
+  $info['CNT'] = $userObj->users->country;
+  $info['POL'] = $userObj->users->boattype;
+
+  if ( $userObj->users->engaged == 0 ) {
+    // Race is 0
+    $info['RAC'] = "0";
+  } else {
+    $info['RAC'] = $userObj->users->engaged;
+    $racesObj = &$userObj->races;
+    $info['RAN'] = $racesObj->racename;
+    $info['LAT'] = $userObj->lastPositions->lat;
+    $info['LON'] = $userObj->lastPositions->long;
+    $info['BSP'] = round($userObj->boatspeed, 2);
+    $info['HDG'] = round($userObj->users->boatheading, 2);
+    $info['NWP'] = $userObj->users->nwp;
+    $info['DNM'] = round($userObj->distancefromend, 2);
+    $info['ORT'] = round($userObj->orthoangletoend, 2);
+    $info['LOX'] = round($userObj->loxoangletoend, 2);
+    $info['VMG'] = round($userObj->VMGortho, 2);
+    
+    if ( $userObj->VMGortho != 0 ) {
+      $_timetogo = 3600 * $userObj->distancefromend / $userObj->VMGortho;
+      if ( $_timetogo < 0 ) {
+	$info['ETA'] = -1;
+      } else {
+	$info['ETA'] = sprintf(gmdate('Y-m-d H:i:s', time() + $_timetogo )); 
+      }
+    } else {
+      $info['ETA'] = -1;
+    }
+    $twd=fmod($userObj->wheading+3780, 360); 
+    $info['TWD'] = round($twd, 2);
+    $info['TWS'] = round($userObj->wspeed, 2);
+    
+    // Calcul du TWA signé
+    $twa=round($userObj->boatanglewithwind,2);
+    $info['TWA'] = $twa;
+    $info['PIM'] = $userObj->users->pilotmode;
+    switch ( $userObj->users->pilotmode ) {
+    case 1: 
+      $info['PIP'] = round($userObj->users->boatheading, 2);
+      break;
+    case 2:
+      $info['PIP'] = round($userObj->users->pilotparameter, 2);
+      break;
+    case 3:
+    case 4:
+    case 5:
+      if ( $userObj->users->targetlat == 0 && 
+	   $userObj->users->targetlong == 0 ) {
+	$info['PIP'] = sprintf ("PIP=%5.4f,%5.4f\n", 
+				$userObj->users->LatNM, 
+				$userObj->users->LonNM );
+      } else {
+	$info['PIP'] = sprintf ("PIP=%5.4f,%5.4f@%d\n", 
+				$userObj->users->targetlat, 
+				$userObj->users->targetlong, 
+				$userObj->users->targetandhdg );
+      }
+    }
+    $info['POS'] = getCurrentRanking($idu, $userObj->users->engaged);
+    $info['LOC'] = $userObj->users->loch;
+    $info['LUP'] = $userObj->users->lastupdate;
+    $info['NUP'] = 10*round($userObj->users->lastupdate + 
+			    60*$racesObj->vacfreq - time())/10;
+    $info['VAC'] =  60*$racesObj->vacfreq;
+
+    $info['AVG'] = round(3600*$userObj->users->loch / 
+			 (time() - $userObj->users->userdeptime), 2);
+    
+    $info['WPLAT'] = $userObj->users->targetlat;
+    $info['WPLON'] = $userObj->users->targetlong;
+    $info['H@WP'] = $userObj->users->targetandhdg;
+
+    // Map Preferences
+    $mapvar = array (
+		     'mapAge' => 'MAG',
+		     'maparea' => 'MAR',
+		     'mapCenter' => 'MCR',
+		     'mapEstime' => 'MES',
+		     'mapLayers' => 'MLY',
+		     'mapMaille' => 'MGD',
+		     'mapOpponents' => 'MOP',
+		     'mapPrefOpponents' => 'MPO',
+		     'mapTools' => 'MTL',
+		     'mapX' => 'MWD',
+		     'mapY' => 'MHT',
+		     );
+    $prefs=listUserPref($idu);
+    while ( $pref = current($prefs) ) { 
+      $info[$mapvar[key($prefs)]] = $pref;
+      next($prefs);
+    }
+    $info['SRV'] = SERVER_NAME;
+    $info['NPD'] = sprintf ("\"%s\"", $userObj->users->blocnote);
+
+    // Pilototo data
+    $rc=$userObj->users->pilototoList();
+    $numligne=1;
+    foreach ($userObj->users->pilototo as $pilototo_row) {
+      /*(id,time,PIM,PIP,status)*/
+      $p_key = sprintf("PIL%d", $numligne);
+      $info[$p_key] = sprintf("%d,%d,%d,%s,%s", $pilototo_row[0],
+			      $pilototo_row[1], $pilototo_row[2],
+			      $pilototo_row[3], $pilototo_row[4]);
+      $numligne++;
+    }
+    while($numligne<=5) {
+      $p_key = sprintf("PIL%d", $numligne);
+      $info[$p_key] = "none";
+      $numligne++;
+    }
+
+    $info['THM'] = $userObj->users->theme;
+    $info['HID'] = $userObj->users->hidepos;
+
+    return $info;
+  }
+}
+
 
 $idu=htmlentities(quote_smart($_REQUEST['idu']));
 if (round($idu) == 0) {
@@ -84,113 +212,16 @@ if ( checkAccount(htmlentities($pseudo,ENT_COMPAT),
   exit;
 }
 
-$usersObj = new fullUsers($idu);
-printf ("IDU=%d\n", $usersObj->users->idusers) ;
-printf ("IDB=%s\n", $usersObj->users->boatname) ;
-printf ("EML=%s\n", $usersObj->users->email) ;
-printf ("COL=%s\n", $usersObj->users->color) ;
-printf ("CNT=%s\n", $usersObj->users->country) ;
-printf ("POL=%s\n", $usersObj->users->boattype) ;
 
-if ( $usersObj->users->engaged == 0 ) {
-  // Race is 0
-  echo "RAC=0\nno-data:not engaged on any race";
-} else {
-  printf ("RAC=%d\n", $usersObj->users->engaged) ;
-  $racesObj = &$usersObj->races;
-  printf ("RAN=%s\n", $racesObj->racename) ;
-  printf ("LAT=%s\n", $usersObj->lastPositions->lat) ;
-  printf ("LON=%s\n", $usersObj->lastPositions->long) ;
-  printf ("BSP=%2.2f\n", round($usersObj->boatspeed, 2));
-  printf ("HDG=%05.2f\n" , $usersObj->users->boatheading );
-  printf ("NWP=%02d\n" , $usersObj->users->nwp );
-  printf ("DNM=%4.2f\n", round($usersObj->distancefromend,2)) ;
-  printf ("ORT=%03.2f\n" , $usersObj->orthoangletoend );
-  printf ("LOX=%03.2f\n" , $usersObj->loxoangletoend ) ;
-  printf ("VMG=%2.2f\n", round($usersObj->VMGortho, 2));
-
-  if ( $usersObj->VMGortho != 0 ) {
-    $_timetogo=60 * 60 * $usersObj->distancefromend / $usersObj->VMGortho;
-    if ( $_timetogo < 0 ) {
-      $ETA=-1;
-    } else {
-      $ETA=sprintf(gmdate('Y-m-d H:i:s', time() + $_timetogo )); 
-    }
-  } else {
-    $ETA=-1;
-  }
-  printf ("ETA=%s\n", $ETA);
-  $twd=fmod($usersObj->wheading+3780, 360); 
-  printf ("TWD=%05.2f\n" , round($twd,2) ) ;
-  printf ("TWS=%5.2f\n" , $usersObj->wspeed ) ;
-
-  // Calcul du TWA signé
-  $twa=round($usersObj->boatanglewithwind,2);
-  printf ("TWA=%5.2f\n" , $twa );
-  printf ("PIM=%d\n" , $usersObj->users->pilotmode );
-  switch ( $usersObj->users->pilotmode ) {
-  case 1: 
-    printf ("PIP=%5.2f\n", $usersObj->users->boatheading );
-    break;
-  case 2:
-    printf ("PIP=%5.2f\n", $usersObj->users->pilotparameter );
-    break;
-  case 3:
-  case 4:
-  case 5:
-    if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
-      printf ("PIP=%5.4f,%5.4f\n", $usersObj->users->LatNM, $usersObj->users->LonNM );
-    } else {
-      printf ("PIP=%5.4f,%5.4f@%d\n", $usersObj->users->targetlat, $usersObj->users->targetlong, $usersObj->users->targetandhdg );
-    }
-  }
-  printf ("POS=%s\n" , getCurrentRanking($idu, $usersObj->users->engaged) );
-  printf ("LOC=%s\n" , $usersObj->users->loch);
-  printf ("LUP=%d\n" , $usersObj->users->lastupdate ) ;
-  printf ("NUP=%d\n" , 10 * round($usersObj->users->lastupdate + 60*$racesObj->vacfreq - time())/10);
-  // vacfreq est en minutes dans la base, mais affiché en secondes 
-  printf ("VAC=%d\n" , 60 * $racesObj->vacfreq ); 
-
-  printf ("AVG=%02.2f\n", 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime));
-  printf ("WPLAT=%s\n", $usersObj->users->targetlat) ;
-  printf ("WPLON=%s\n", $usersObj->users->targetlong) ;
-  printf ("H@WP=%s\n", $usersObj->users->targetandhdg) ;
-
-  // Map Preferences
-  $mapvar = array (
-		   'mapAge' => 'MAG',
-		   'maparea' => 'MAR',
-		   'mapCenter' => 'MCR',
-		   'mapEstime' => 'MES',
-		   'mapLayers' => 'MLY',
-		   'mapMaille' => 'MGD',
-		   'mapOpponents' => 'MOP',
-		   'mapPrefOpponents' => 'MPO',
-		   'mapTools' => 'MTL',
-		   'mapX' => 'MWD',
-		   'mapY' => 'MHT',
-		   );
-  $prefs=listUserPref($idu);
-  while ( $pref = current($prefs)  ) { 
-    echo $mapvar[key($prefs)] . "=" . $pref . "\n"; 
-    next($prefs);
-  }
-  
-  printf ("SRV=%s\n", SERVER_NAME ) ;
-  printf ("NPD=\"%s\"\n", $usersObj->users->blocnote) ; //encloser pour le blocnote
-  // Pilototo data
-  $rc=$usersObj->users->pilototoList();
-  $numligne=1;
-  foreach ($usersObj->users->pilototo as $pilototo_row) { /*(id,time,PIM,PIP,status)*/
-    printf("PIL%d=%d,%d,%d,%s,%s\n",$numligne,$pilototo_row[0],$pilototo_row[1],$pilototo_row[2],$pilototo_row[3],$pilototo_row[4]);
-    $numligne++;
-  }
-  while($numligne<=5) {
-    printf("PIL%d=none\n",$numligne);
-    $numligne++;
-  }
-  printf ("THM=%s\n", $usersObj->users->theme) ;
-  printf ("HID=%d\n", $usersObj->users->hidepos) ;
+function ia_print($value, $key) {
+  echo $key."=".$value."\n";
 }
+
+$info_array = get_info_array($idu);
+array_walk($info_array, 'ia_print');
+
+// FIXME switch for output (based on Accept header or a parameter
+// for JSON output, use echo json_encode($info_array);
+
 ?>
 
