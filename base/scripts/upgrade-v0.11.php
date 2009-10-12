@@ -35,8 +35,7 @@
     while (false !== ($filename = readdir($dh))) {
         if ( ! is_dir($filename) && substr($filename,0,1) != ".") {
             $idflag = basename($filename,".png");
-            insertFlag($idflag, $dir.$filename);
-            $img_blob = file_get_contents ($dir.filename);
+            $img_blob = file_get_contents ($dir.$filename);
             $req = "REPLACE INTO flags ( idflags, flag ".
                   ") VALUES ( ".
                   "'".$idflag."' , ".
