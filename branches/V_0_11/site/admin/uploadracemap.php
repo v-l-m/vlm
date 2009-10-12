@@ -9,7 +9,7 @@
         if ($idnewrace <1 ) {
             die("<h1>ERROR : Racemap id malformed</h1>");
             }
-        if (exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_JPEG) {
+        if (function_exists("exif_imagetype") and exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_JPEG) {
             die("<h1>ERROR : Not a Jpeg file...</h1>");
         }
 
