@@ -10,7 +10,7 @@ v0.11 aka "Autant en emporte l'autan" : what's new since 0.10 ...
     * database handling optimizations mean quicker interface (spifou)
     * current polar displayed in windangle control, ability to hide the wp infos on map (paparazzia)
     * misc interface fixes and better integration with the wiki (paparazzia)
-    * as allways, some new races (race commitee)
+    * as always, some new races (race commitee)
 
 ... tools developpers ?
     * change of regular url to fetch images (flags, racemaps, minimaps)
@@ -60,7 +60,7 @@ v0.9.5 aka Have Foehn (part I): what's new for ...
 * more informations available _before_ choosing a race (paparazzia)
 * calendar widget to help EPOC input in pilototo (paparazzia)
 * time to finish displayed in messages (paparazzia)
-* as allways, some new races... (fm & the committee)
+* as always, some new races... (fm & the committee)
 
 ... race committee ?
 * map forced on "myboat" mode when the race is not started (less noise on the commitee list) (paparazzia)
@@ -81,7 +81,7 @@ v0.9 aka Like the Wind: what's new for ...
 * better default theme and visual feedback (paparazzia)
 * new logo (stephpen)
 * weather links are now handled using a page of the wiki for better flexibility (paparazzia)
-* bugfix for the small islands not allways visible (fm)
+* bugfix for the small islands not always visible (fm)
 * various fixes (fm, spf)
 
 ... tools developpers ?
