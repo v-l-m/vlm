@@ -176,7 +176,7 @@ class users
       wrapper_mysql_db_query($query); //or die("Query failed : " . mysql_error." ".$query);
 
       // Mark the task as DONE
-      $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = $row[0];";
+      $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
       wrapper_mysql_db_query($query); //or die("Query failed : " . mysql_error." ".$query);
       
       // Purge old tasks
