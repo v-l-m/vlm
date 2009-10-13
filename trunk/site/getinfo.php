@@ -3,6 +3,48 @@ include_once("config.php");
 
 header("content-type: text/plain; charset=UTF-8");
 
+function get_output_format() {
+  $qjson = 0;
+  $sjson = false;
+  $qplain = 0.1;
+  $splain = false;
+
+  if (preg_match(',application/json(;q=(d?.d+))?,i', 
+		 $_SERVER['HTTP_ACCEPT'], $res)) {
+    $qjson = (isset($res[2]))? $res[2] : 1;
+    $sjson = true;
+  }
+  
+  if (preg_match(',text/plain(;q=(d?.d+))?,i', 
+		$_SERVER['HTTP_ACCEPT'], $res)) {
+    $qplain = (isset($res[2]))? $res[2] : 1;
+    $splain = true;
+  } else if (preg_match(',text/\*(;q=(d?.d+))?,i', 
+			$_SERVER['HTTP_ACCEPT'], $res)) {
+    echo "got a match for *";
+
+    $qplain = (isset($res[2]))? $res[2] : 1;
+    $splain = true;
+  }
+  if ($qplain > $qjson) {
+    return "text";
+  } else if ($qplain < $qjson) {
+    return "json";
+  }
+  if ( $splain == $sjson) {
+    // both there, take the first one :)
+    $jsonpos = stripos($_SERVER['HTTP_ACCEPT'], "text/json");
+    $plainpos = stripos($_SERVER['HTTP_ACCEPT'], "text/plain");
+    if ($plainpos === false) {
+      $plainpos = stripos($_SERVER['HTTP_ACCEPT'], "text/*");  
+    }
+    if ($plainpos > $jsonpos) {
+      return "json";
+    } 
+  }
+  return "text";
+}
+
 function get_info_array($idu) {
   $info = array();
   $userObj = new fullUsers($idu);
@@ -131,10 +173,9 @@ function get_info_array($idu) {
   }
 }
 
-
-$idu=htmlentities(quote_smart($_REQUEST['idu']));
-if (round($idu) == 0) {
-  echo "usage : http://virtual-loup-de-mer.org/getinfo.php?idu=X&pseudo=xxxx&password=pppp\n";
+function usage() {
+  echo "usage : http://virtual-loup-de-mer.org/getinfo.php?idu=X&".
+       "pseudo=xxxx&password=pppp\n";
   echo "\nX = numero de votre bateau";
   echo "\nxxxxx = votre nom d'utilisateur";
   echo "\nppppp = votre mot de passe";
@@ -144,7 +185,7 @@ if (round($idu) == 0) {
     #* IDB : nom du bateau (string)
     #* RAN : nom de la course (string)
     #* POS : classement dans la course (string - xxx/yyy)
-    #* PIP : pilot parameter (string - doit le rester à causes des WP : x.xx,y.yy
+    #* PIP : pilot parameter (string - doit le rester à causes des WP: x.xx,y.yy
     #* POL : nom de la polaire (sans boat_) (string)
     #* MCR : 'mapCenter' (string), ie centre de la carte
     #* MLY : 'mapLayers' (string), ie type de layers
@@ -196,7 +237,25 @@ if (round($idu) == 0) {
     #* HID: trace cachée (1) ou visible (0)
     #* VAC: durée de la vacation (en secondes)
     ";
+}
+
+// now start the real work
+
+$idu=htmlentities(quote_smart($_REQUEST['idu']));
+if (round($idu) == 0) {
+  header("content-type: text/plain; charset=UTF-8");
+  usage();
   exit;
+}
+
+$fmt = get_output_format();
+switch ($fmt) {
+case "json":
+  header("content-type: text/plain; charset=UTF-8");
+  break;
+case "text":
+default:
+  header("content-type: text/plain; charset=UTF-8");
 }
 
 $pseudo=quote_smart($_REQUEST['pseudo']);
@@ -208,7 +267,14 @@ if ( checkAccount(htmlentities($pseudo,ENT_COMPAT),
 		  htmlentities($password, ENT_COMPAT)) != $idu 
      && checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
 		     htmlentities($password, ENT_COMPAT,"UTF-8")) != $idu  ) {
-  echo "You should not do that.";
+  switch ($fmt) {
+  case "json":
+    break;
+  case "text":
+  default:
+    echo "Not allowed\n";
+    usage();
+  }
   exit;
 }
 
@@ -218,10 +284,15 @@ function ia_print($value, $key) {
 }
 
 $info_array = get_info_array($idu);
-array_walk($info_array, 'ia_print');
 
-// FIXME switch for output (based on Accept header or a parameter
-// for JSON output, use echo json_encode($info_array);
+switch ($fmt) {
+case "json":
+  echo json_encode($info_array);
+  break;
+case "text":
+default:
+  array_walk($info_array, 'ia_print');
+}
 
 ?>
 
