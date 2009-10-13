@@ -611,7 +611,7 @@ include_once("scripts/myboat.js");
             <div id="wphcontrolbox">
                 <span class="subtitlehelpers">@WPH</span>
                 <?php
-                echo "<input type=\"text\" size=\"4\" maxlength=\"4\"  name=\"targetandhdg\" " ;
+                echo "<input type=\"text\" size=\"5\" maxlength=\"5\"  name=\"targetandhdg\" " ;
                 if ( $usersObj->users->targetandhdg >= 0 and $usersObj->users->targetandhdg <= 360 ) {
                      echo "value=\""  . $usersObj->users->targetandhdg . "\" />" ;
                      echo "<input type=\"checkbox\" name=\"andhdg\" checked=\"checked\" onclick=\"toggle_andhdg()\" />";
