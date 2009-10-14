@@ -57,23 +57,7 @@ if ( $argc > 2 ) {
 $engine_start=time();
 $engine_start_float=microtime(true);
 
-// Purge des anciennes positions (on ne garde une trace que sur MAX_POSITION_AGE)
-////////////////////////////////////////CHECK IF SOMEONE END RACE
-echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
-$queryhistopositions = "INSERT INTO histpos SELECT * FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query($queryhistopositions);
-
-$querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query($querypurgepositions);
-
-$querypurgeupdates = "DELETE FROM updates WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query($querypurgeupdates);
-
-
-//echo "\n".$querypurgepositions;
 $step_stop_float=microtime(true);
-echo "\n  TIMINGS: duration step 1 - ".($step_stop_float-$engine_start_float).
-     "\n";
 
 // ========================================
 echo "\n2- === DO THE JOB FOR EACH RACE\n";
@@ -105,18 +89,6 @@ foreach($racesListObj->records as $idraces) {
 $next_step_stop_float=microtime(true);
 $step2_elapsed_float=$next_step_stop_float-$step_stop_float;
 echo "\n  TIMINGS: duration step 2 - ".($step2_elapsed_float)."\n";
-$step_stop_float=$next_step_stop_float;
-
-//////////// CLEANING GARBAGES RACES 
-//     (Race ended, but some boats still engaged on it...)
-//     (Race ended, but races_ranking having lines for this race ...)
-echo "\n3- === CHECKING FOR GARBAGE IN DATABASE\n";
-include "clean_garbage_races.php";
-include "clean_event_log.php";
-
-$next_step_stop_float=microtime(true);
-echo "\n  TIMINGS: duration step 3 - ".($next_step_stop_float-$step_stop_float).
-     "\n";
 $step_stop_float=$next_step_stop_float;
 
 /////////////////////////////WRITE UPDATE DATE IN DATABASE
