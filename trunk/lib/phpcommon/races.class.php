@@ -158,7 +158,7 @@ class races
         $this->ics = array();
 	
         $query = "SELECT instructions, flag FROM races_instructions" .
-          " WHERE idraces = " . $this->idraces ; 
+          " WHERE idraces = 0 OR idraces = " . $this->idraces ; 
 	
         $result = wrapper_mysql_db_query($query); // or die("Query failed : " . mysql_error." ".$query);
 	

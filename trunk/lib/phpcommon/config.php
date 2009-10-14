@@ -192,6 +192,7 @@ define("IC_FLAG_VISIBLE", 1);
 define("IC_FLAG_CONSOLE", 2);
 define("IC_FLAG_RACELIST", 4);
 define("IC_FLAG_LINKFORUM", 8);
+define("IC_FLAG_HIDEONICS", 16);
 
 // Par défaut ( Atlantique nord seulement )
 //define("COASTLINE_DATAFILE", "N50E15S10W80@1_5000000.dat");

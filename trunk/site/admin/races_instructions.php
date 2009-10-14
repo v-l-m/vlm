@@ -71,7 +71,7 @@ $opts['fdd']['autoid'] = array(
 
 $opts['fdd']['idraces'] = array(
   'name'     => 'Id of Race',
-  'help'     => 'Unique id of the race',
+  'help'     => 'Unique id of the race<br />0 if the message is for all races.',
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '',
@@ -97,7 +97,9 @@ $opts['fdd']['flag'] = array(
   'help'     => "Faire la somme de : <ul><li> (1) => Pour rendre une IC Visible (en général - global flag)</li>
 <li>(2) => Pour rendre une IC visible en mode console</li>
 <li>(4) => Pour rendre une IC visible sur la racelist</li>
-<li>(8) => Pour mettre une URL dont le texte sera 'Instructions de courses sur le forum' </li><ul><br /><a href=\"http://dev.virtual-loup-de-mer.org/vlm/wiki/phpcommon\">Voir la doc</a>"
+<li>(8) => Pour mettre une URL dont le texte sera 'Instructions de courses sur le forum' </li>
+<li>(16) => Pour ne pas rendre visible dans la page des ics </li>
+<ul><br /><a href=\"http://dev.virtual-loup-de-mer.org/vlm/wiki/phpcommon\">Voir la doc</a>"
 );
 
 
