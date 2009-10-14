@@ -422,11 +422,14 @@ include_once("scripts/myboat.js");
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
                         $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>".$strings[$lang]["icforum"]."</a>";
-                        $messages[] = Array("id" => "ic".$myRace->idraces , "txt" => $txtstr, "class" => "ic", "url" => $ichref);
+                        $mes = Array("id" => "ic".$myRace->idraces , "txt" => $txtstr, "class" => "ic");
                     } else {
-                        $messages[] = Array("id" => "ic".$myRace->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic", "url" => $ichref);
+                        $mes = Array("id" => "ic".$myRace->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic");
+                        }
+                    if (!($ic['flag'] & IC_FLAG_HIDEONICS)) {
+                        $mes["url"] = $ichref;
                     }
-
+                    $messages[] = $mes;
                 }
             }
             // Email vide ?

@@ -8,7 +8,7 @@ include_once("config.php");
 */
 function outputIC($fullRacesObj, $icforum) {
   foreach($fullRacesObj->races->getICS() as $ic) {
-    if ($ic['flag'] & IC_FLAG_VISIBLE) {
+    if ($ic['flag'] & IC_FLAG_VISIBLE and !($ic['flag'] & IC_FLAG_HIDEONICS)) {
       echo "<div class=\"icbox\">\n";
       if ($ic['flag'] & IC_FLAG_LINKFORUM) {
 	printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>".strtoupper($icforum)."</b></a>\n");
