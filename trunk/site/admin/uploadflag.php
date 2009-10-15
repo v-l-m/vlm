@@ -14,6 +14,7 @@
 
         if (insertFlag($idflags, $_FILES['fic']['tmp_name'])) {
             echo "<h3>Insert OK</h3>";
+            insertAdminChangelog($operation = "Insert flag ".$idflags);
             //flagimg.php ne sera pas utilisé en direct par le reste du code (appelé trop souvent)
             // donc on se reposera sur l'existence du cache, quitte à donner les moyens de le forcer (par serveur).
             for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {

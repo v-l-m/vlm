@@ -1609,4 +1609,13 @@ function htmlQuery($sql) {
 
 }
 
+function insertAdminChangelog($operation = "NULL", $tab = "NULL", $rowkey = "NULL", $col = "NULL", $oldval = "NULL", $newval = "NULL") {
+    global $_SERVER;
+    $query = sprintf('insert into admin_changelog (user, host, operation, tab, rowkey, col, oldval, newval) VALUES ("%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")',
+                      getLoginName(), $_SERVER["REMOTE_ADDR"], $operation, $tab, $rowkey, $col, $oldval, $newval
+                      );
+    wrapper_mysql_db_query($query);
+}
+
+
 ?>

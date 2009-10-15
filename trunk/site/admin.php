@@ -234,17 +234,15 @@ if ( $do == "yes" ) {
              $result = mysql_query($query) or die("Query [$query] failed \n");
        $action_tracking = "UPDATE username (username=$newusern) for user $boat in race $race";
              break;
-  default:
+        default:
     }
     echo "<b>OK<b><br />";
     echo "<input type=\"button\" value=\"Raffraichir la page\" onClick=$URL";
 
 
     //tracking...
-    $query_tracking = "insert into admin_tasks (time, admin, action) " . 
-                      " values (" . time() . ",'" . $pseudo . "','" . addslashes($action_tracking) . "')";
-    $result = mysql_query($query_tracking) or die("Query [$query_tracking] failed \n");
-
+    insertAdminChangelog($operation = addslashes($action_tracking));
+    
     exit;
 }
 

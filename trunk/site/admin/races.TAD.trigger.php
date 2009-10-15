@@ -1,5 +1,5 @@
 <?php
-
+    require_once("functions.php");
     if (intval($this->rec) < 1) {
         die();
     }
@@ -19,9 +19,10 @@
         $res = $this->myQuery("DELETE FROM races_waypoints WHERE idraces = '".$this->rec."';");
         $res = $this->myQuery("DELETE FROM races_instructions WHERE idraces = '".$this->rec."';");
         $res = $this->myQuery("DELETE FROM racesmap WHERE idraces = '".$this->rec."';");
-
+        
         echo "<div class=\"adminbox\">";
-        echo "<h3>Corresponding waypoints and race instructions have been also deleted.</h3>";
+        insertAdminChangelog($operation = "Delete all race datas (racesmap, waypoints, waypoints links, instructions) for race : ".$this->rec);
+        echo "  <h3>Corresponding waypoints and race instructions have been also deleted.</h3>";
         echo "</div>";
         return True;
     }
