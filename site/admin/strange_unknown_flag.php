@@ -5,6 +5,7 @@
         
     if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
         wrapper_mysql_db_query("update users SET country='' where country not in (select distinct idflags from flags)");
+        insertAdminChangelog($operation = "Update users with unknown flag");
         echo "<h3>Done, following results should be empty.</h3>";
     }
     htmlQuery("select idusers, username, boatname, class, country, from_unixtime(lastchange) as lastchange from users where country not in (select distinct idflags from flags)");

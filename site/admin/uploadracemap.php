@@ -13,8 +13,9 @@
             die("<h1>ERROR : Not a Jpeg file...</h1>");
         }
 
-        echo "<h3>Image reçue pour la course $idnewrace.</h3>";
+        echo "<h3>Image uploaded for race : $idnewrace.</h3>";
         insertRacemap($idnewrace, $_FILES['fic']['tmp_name']);
+        insertAdminChangelog($operation = "Insert racemap for race ".$idnewrace);
 
         echo "<h3>OK</h3>";
         for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {

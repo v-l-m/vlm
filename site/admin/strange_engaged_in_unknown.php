@@ -5,6 +5,8 @@
         
     if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
         wrapper_mysql_db_query("update users SET engaged=0 where engaged != 0 and engaged not in (select distinct idraces from races)");
+        insertAdminChangelog($operation = "Update users engaged in unknown race");
+
         echo "<h3>Done, following results should be empty.</h3>";
     }
     htmlQuery("select idusers, username, boatname, class, engaged, from_unixtime(lastchange) as lastchange from users where engaged != 0 and engaged not in (select distinct idraces from races)");
