@@ -23,6 +23,7 @@ if (round($idu) == 0) {
     #* MOP : 'mapOpponents' (string), ie type d'affichage des concurrents
     #* MTL : 'mapTools' (string), ie 
     #* MPO : 'mapPrefOpponents' (liste), ie concurrents à suivre
+    #* MDT : 'mapDrawtextwp' (string) on/off
     #* ETA : Date estimée d'arrivé, seulement si pas de wp perso (string)
     #* IDU : numéro de bateau (int)
     #* NWP : numéro du prochain waypoing (int)
@@ -169,6 +170,7 @@ if ( $usersObj->users->engaged == 0 ) {
 		   'mapTools' => 'MTL',
 		   'mapX' => 'MWD',
 		   'mapY' => 'MHT',
+		   'mapDrawtextwp' => 'MDT'
 		   );
   $prefs=listUserPref($idu);
   while ( $pref = current($prefs)  ) { 
