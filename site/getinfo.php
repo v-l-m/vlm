@@ -140,6 +140,7 @@ function get_info_array($idu) {
 		     'mapTools' => 'MTL',
 		     'mapX' => 'MWD',
 		     'mapY' => 'MHT',
+		     'mapDrawtextwp' => 'MDT'
 		     );
     $prefs=listUserPref($idu);
     while ( $pref = current($prefs) ) { 
@@ -203,6 +204,7 @@ function usage() {
     #* MAR : 'maparea' (int), ie taille de la carte
     #* MES : 'mapEstime' (int), ie estime
     #* MGD : 'mapMaille' (int), ie taille de la grid de vent
+    #* MDT : 'mapDrawtextwp' (string) on/off
     #* BSP : vitesse du bateau (Boat SPeed) (float)
     #* HDG : direction (HeaDinG)
     #* DNM : Distance to next mark (float)
