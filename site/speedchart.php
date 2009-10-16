@@ -54,7 +54,7 @@ if ( $format == "pol" ) {
        echo "<h3>";
        echo "<a href=\"".DOC_SERVER_URL.$boattype."\">".$boattype."</a>";       
        echo " - <a href=\"/speedchart.php?boattype=".$boattype."&amp;format=pol\">(pol)</a>";
-       echo " - <a href=\"/Polaires/boat_".$boattype.".csv\">(csv)</a>";
+       echo " - <a href=\"/Polaires/".$boattype.".csv\">(csv)</a>";
        echo "</h3><p>";
 
        $pas=15;
