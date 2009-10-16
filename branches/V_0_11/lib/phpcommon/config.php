@@ -18,7 +18,7 @@ $localDBPages = array(
                 "/gettrack.php",
                 "/faq.php",
                 "/races.php",
-                "/flag.img",
+                "/flagimg.php",
                 "/getwind.php",
                 "/palmares.php",
                 "/getinfo2.php"
