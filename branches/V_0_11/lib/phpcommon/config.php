@@ -5,6 +5,7 @@ $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercato
 
 /************** localDBPages pages : HAS TO BE SET BEFORE INSLUSION OF PARAM.PHP ******/
 $localDBPages = array(
+                "/index.php",
                 "/mercator.php",
                 "/races.php",
                 "/getinfo.php",
