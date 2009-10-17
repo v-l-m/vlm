@@ -73,17 +73,15 @@ $racesListObj = new startedRacesList();
 
 //for every race
 foreach($racesListObj->records as $idraces) {
-
+  
   $update_races .= $idraces . " " ;
-  if (    ( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)   ) {
-
-        $fullRacesObj = new fullRaces( $idraces )  ;
-        // Check only the race given in first arg if one is given, else check all races
-  include "check_race.php";
-  $nb_races++;
-
+  if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) {
+    $fullRacesObj = new fullRaces( $idraces )  ;
+    // Check only the race given in first arg if one is given,
+    // otherwise check all races
+    include "check_race.php";
+    $nb_races++;
   }
-
 } // Foreach race
 
 $next_step_stop_float=microtime(true);
@@ -114,7 +112,7 @@ if ( $flagglobal == true ) {
       ."'" . $update_races ."'"
       . ")";
      echo "writing timestamp...";
-     $result5 = wrapper_mysql_db_query($query5); //or die("Query failed : $query5");
+     $result5 = wrapper_mysql_db_query_writer($query5); //or die("Query failed : $query5");
 }
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";

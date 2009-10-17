@@ -8,7 +8,7 @@ $raceList=array();
 $query = "SELECT distinct idraces FROM races_ranking 
             WHERE idraces in ( select idraces from races where started = -1 ) ";
 
-$result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+$result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 //for every race
 while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
       echo "Finished Race " . $row[0] . "\n";
@@ -20,12 +20,12 @@ foreach ( $raceList as $idraces ) {
       // Cleaning races_ranking
       $query = " DELETE from races_ranking 
                   WHERE idraces = " . $idraces;
-      $result2 = wrapper_mysql_db_query($query);
+      $result2 = wrapper_mysql_db_query_writer($query);
 
       // Unsubscribing users
       $query = " UPDATE users SET engaged=0
                   WHERE engaged = " . $idraces;
-      $result3 = wrapper_mysql_db_query($query);
+      $result3 = wrapper_mysql_db_query_writer($query);
 
 }
 
@@ -33,7 +33,7 @@ foreach ( $raceList as $idraces ) {
 // 2 - drop Players ABD when a race is not yes started
 $query = " select idraces from races where started = 0 ";
 
-$result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+$result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 //for every race
 while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
       echo "Not Started Race " . $row[0] . "\n";
@@ -45,7 +45,7 @@ foreach ( $raceList as $idraces ) {
       // Cleaning Races_results only 
       $query = " DELETE from races_results
                   WHERE idraces = " . $idraces;
-      $result = wrapper_mysql_db_query($query);
+      $result = wrapper_mysql_db_query_writer($query);
 
 }
 

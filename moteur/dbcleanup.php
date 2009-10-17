@@ -36,13 +36,13 @@ $engine_start_float=microtime(true);
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query($queryhistopositions);
+$result = wrapper_mysql_db_query_writer($queryhistopositions);
 
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query($querypurgepositions);
+$result = wrapper_mysql_db_query_writer($querypurgepositions);
 
 $querypurgeupdates = "DELETE FROM updates WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query($querypurgeupdates);
+$result = wrapper_mysql_db_query_writer($querypurgeupdates);
 
 
 //echo "\n".$querypurgepositions;

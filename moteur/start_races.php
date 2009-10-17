@@ -4,7 +4,7 @@
 
 $query4 = "SELECT idraces , racename FROM races WHERE started = 0";
 
-$result4 = wrapper_mysql_db_query($query4);
+$result4 = wrapper_mysql_db_query_writer($query4);
 
 //for every race
 while ($row4 = mysql_fetch_array($result4, MYSQL_NUM))
@@ -47,7 +47,7 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_NUM))
           $users->idusers . ", " .
           $idraces  . 
         ") ; ";
-        if ( ! wrapper_mysql_db_query($query_positions) ) {
+        if ( ! wrapper_mysql_db_query_writer($query_positions) ) {
             echo "REQUEST FAILED " . $query_positions . "\n";
         }
 
@@ -60,7 +60,7 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_NUM))
            "       lastchange   = " . $racesObj->races->deptime . ", " .
            "       loch         = 0" .
                  " WHERE idusers = " . $users->idusers . ";";
-        if ( ! wrapper_mysql_db_query($query_users) ) {
+        if ( ! wrapper_mysql_db_query_writer($query_users) ) {
             echo "REQUEST FAILED " . $query_users . "\n";
         }
 
