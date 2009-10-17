@@ -36,7 +36,7 @@ class races {
              qualifying_races, idchallenge, coastpenalty, bobegin, boend,
              maxboats, theme, vacfreq
              FROM races WHERE idraces = $id";
-    $result = wrapper_mysql_db_query($query) or die($query);
+    $result = wrapper_mysql_db_query_reader($query) or die($query);
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
     
     $this->idraces          = $row['idraces'];
@@ -94,7 +94,7 @@ class races {
       " FROM races_waypoints RW, waypoints WP WHERE idraces=".$this->idraces . 
       " AND RW.idwaypoint=WP.idwaypoint ORDER BY wporder";
     
-    $result = wrapper_mysql_db_query($query);
+    $result = wrapper_mysql_db_query_reader($query);
     // printf ("Request Races_Waypoints : %s\n" , $query);
     
     while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
@@ -163,7 +163,7 @@ class races {
         $query = "SELECT instructions, flag FROM races_instructions" .
           " WHERE idraces = 0 OR idraces = " . $this->idraces ; 
 	
-        $result = wrapper_mysql_db_query($query);
+        $result = wrapper_mysql_db_query_reader($query);
 	
         while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
 	  $this->ics[] = $row;
@@ -193,7 +193,7 @@ class races {
       $this->idraces."AND position=".BOAT_STATUS_ARR." ORDER BY duration ASC".
       " LIMIT 1";
 
-    $result = wrapper_mysql_db_query($query);
+    $result = wrapper_mysql_db_query_reader($query);
     if ( mysql_num_rows($result) == 0) {
       return(1);  // on s'arrete là si personne n'est arrivé !
     }
@@ -273,7 +273,7 @@ class fullRaces {
       " AND   US.engaged = "  . $this->races->idraces .
       " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
 
-    $result6 = wrapper_mysql_db_query($query6);
+    $result6 = wrapper_mysql_db_query_reader($query6);
     while($row = mysql_fetch_array($result6, MYSQL_ASSOC)) {
       //WARNING: dont load fullUsers inside fullRaces
       //because fullRaces contains fullUsers that contain fullRaces ..
@@ -288,7 +288,7 @@ class fullRaces {
       "users WHERE idraces = ".$this->races->idraces.
       " AND users.idusers = races_results.idusers AND users.engaged != ".
       $this->races->idraces;
-    $result6b = wrapper_mysql_db_query($query6b);
+    $result6b = wrapper_mysql_db_query_reader($query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_ASSOC)) {
       $userid = $row['idusers'];
       $this->excluded[$userid] = new users($userid);
@@ -299,16 +299,16 @@ class fullRaces {
     // Delete from races_results
     $query5  = "DELETE from races_results WHERE idraces = ".
       $this->races->idraces ;
-    wrapper_mysql_db_query($query5);
+    wrapper_mysql_db_query_writer($query5);
 
     // Delete from waypoints_crossing
     $query5  = "DELETE from waypoint_crossing WHERE idraces = ".
       $this->races->idraces ;
-    wrapper_mysql_db_query($query5);
+    wrapper_mysql_db_query_writer($query5);
 
     //  Update Positions of all engaged boats to start line
     $query5  = "DELETE from positions WHERE race = ".$this->races->idraces;
-    wrapper_mysql_db_query($query5);
+    wrapper_mysql_db_query_writer($query5);
   }
 
   function startRaces() {
@@ -316,7 +316,7 @@ class fullRaces {
     $this->races->started = 1;
     $query5 = "UPDATE races SET `started` = 1 WHERE idraces = ".
       $this->races->idraces;
-    wrapper_mysql_db_query($query5);
+    wrapper_mysql_db_query_writer($query5);
   }
 
   function stopRaces() {
@@ -326,23 +326,23 @@ class fullRaces {
     
     $query  = "UPDATE races SET `started` = -1 WHERE idraces = ".
       $this->races->idraces ;
-    wrapper_mysql_db_query($query);
+    wrapper_mysql_db_query_writer($query);
     
     $query  = "DELETE FROM races_ranking WHERE idraces = ".
       $this->races->idraces ;
-    wrapper_mysql_db_query($query);
+    wrapper_mysql_db_query_writer($query);
     
     $query  = "UPDATE users SET engaged = 0 WHERE engaged = ".
       $this->races->idraces ;
-    wrapper_mysql_db_query($query);
+    wrapper_mysql_db_query_writer($query);
     
     $queryhistopositions = "INSERT INTO histpos SELECT * FROM ". 
       "positions WHERE race=" . $this->races->idraces;
-    wrapper_mysql_db_query($queryhistopositions);
+    wrapper_mysql_db_query_writer($queryhistopositions);
 
     $querypurgepositions = "DELETE FROM positions WHERE race =". 
       $this->races->idraces;
-    wrapper_mysql_db_query($querypurgepositions);
+    wrapper_mysql_db_query_writer($querypurgepositions);
   }
 
 
@@ -422,7 +422,7 @@ class fullRaces {
     
     //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete là !
     $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
-    $result = wrapper_mysql_db_query($query);
+    $result = wrapper_mysql_db_query_reader($query);
     $row = mysql_fetch_assoc($result);
     $classification_time=$row['time'];
 
@@ -440,7 +440,7 @@ class fullRaces {
       " AND   RR.idraces = "  . $this->races->idraces . 
       " ORDER by " . $sortclause ;
 
-    $result = wrapper_mysql_db_query($query_ranking) or die ($query_ranking);
+    $result = wrapper_mysql_db_query_reader($query_ranking) or die ($query_ranking);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
 
     // On est encore là, on affiche le classement
@@ -761,7 +761,7 @@ class fullRaces {
       " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
     //    " AND   RR.idraces = "  . $this->races->idraces . 
 
-    $result = wrapper_mysql_db_query($query_listusers) or die ($query_listusers);
+    $result = wrapper_mysql_db_query_reader($query_listusers) or die ($query_listusers);
 
     $key = 0;
     $lastrace=0;
@@ -909,7 +909,7 @@ class fullRaces {
 
     }
 
-    $result = wrapper_mysql_db_query($query); // or die ($query);
+    $result = wrapper_mysql_db_query_reader($query); // or die ($query);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
 
     switch ($status) {
@@ -1135,7 +1135,7 @@ class fullRaces {
   function raceNumEngaged() {
     $query = "SELECT count(*) FROM users WHERE engaged=" . 
       $this->races->idraces;
-    $result = wrapper_mysql_db_query($query);
+    $result = wrapper_mysql_db_query_reader($query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
     return ($row[0])  ;
   }
@@ -1162,7 +1162,7 @@ class racesList {
   function racesList() {
     $query = "SELECT idraces FROM races order by deptime desc";
     //printf ($query . "\n");
-    $result = wrapper_mysql_db_query($query);
+    $result = wrapper_mysql_db_query_reader($query);
     while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
       $racesFullObj = new fullRaces( $row['idraces'] )  ;
       array_push ($this->records, $racesFullObj);
@@ -1191,7 +1191,7 @@ class startedRacesList {
     }
 
     $query .= " order by vacfreq ASC, deptime DESC";
-    $result = wrapper_mysql_db_query($query);
+    $result = wrapper_mysql_db_query_reader($query);
     
     while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
       array_push($this->records , $row['idraces']);
