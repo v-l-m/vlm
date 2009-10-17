@@ -2,7 +2,15 @@ body {
   font-size: 10px;
   }
 
-.adminbox h3 {
+tr.admin-query-1 {
+  background-color: #EEEEEE;
+}
+
+table.admin-query {
+  border: #CCCCCC 1px solid;
+}
+  
+th.admin-query, .adminbox h3 {
   background-color: #CCCCCC;
   }
 
