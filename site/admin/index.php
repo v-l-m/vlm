@@ -42,7 +42,7 @@
 
     echo "<div class=\"adminbox\">";
     echo "<h3>Last operations</h3>";
-    htmlQuery("SELECT updated, user AS admin, host, operation, tab, rowkey, col AS field, oldval, newval FROM admin_changelog ORDER BY updated DESC LIMIT 10;");
+    htmlQuery("SELECT updated, user AS admin, host, operation, tab, rowkey, col AS field, LEFT(oldval, 30) AS oldval, LEFT(newval, 30) AS newval FROM admin_changelog ORDER BY updated DESC LIMIT 10;");
     echo "</div>";
     
     
