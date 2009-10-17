@@ -27,9 +27,9 @@ function deplacementSouris(e) {
     document.getElementById("deplacable").setAttribute('style','left:'+position_x+'px;top:'+position_y+'px;position:absolute;');
   }
 }
-
+/*
 if (netscape) {
   document.captureEvents(Event.MOUSEMOVE);
 }
-
+*/
 document.onmousemove = deplacementSouris;

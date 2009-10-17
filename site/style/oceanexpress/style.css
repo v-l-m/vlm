@@ -43,14 +43,12 @@ a:hover
 }
 
 #leftcolumn {
-  /*  background-color: #15224c;*/
   background-color: #f9f1e8;
 
 }
 
 #leftcolumn a {
 color: #44505a;
-font-weight: 550;
 }
 
 .leftbox, .icbox  {
