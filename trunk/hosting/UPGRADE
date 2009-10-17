@@ -31,6 +31,9 @@ BASE
 MOTEUR
   ./scripts/maj_module.sh lib/phpcommon
   ./scripts/maj_module.sh moteur
+  
+  Add the new clean-up script in the crontab
+      2-59/5 * * * *     $VLMRACINE/testing/moteur/cron-vlm-clean.sh
 
 = All servers =
 
