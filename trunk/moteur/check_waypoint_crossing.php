@@ -165,7 +165,7 @@ if ($crosses_the_coast) {
             
             if ( $query != "NOQUERY" ) {
               if ($verbose >0 ) echo $query;
-              $result = wrapper_mysql_db_query($query);
+              $result = wrapper_mysql_db_query_writer($query);
               printf ("\t\tBoat arrived...\n");
             } else {
               printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);

@@ -15,7 +15,7 @@ if ( $argc == 1 ) {
 // Si pas de course précisée, on purge toutes les courses terminées
 if ( $RACE_NUM != 0 ) {
      $query = " select idraces from races where started = -1 order by idraces";
-     $result  = wrapper_mysql_db_query($query) or die("Query [$query] failed \n");
+     $result  = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
 } 
 
 
@@ -27,7 +27,7 @@ if ( $RACE_NUM != 0 ) {
               "   and race=" . round($RACE_NUM) . 
               " order by time asc";
 
-  $result  = wrapper_mysql_db_query($query) or die("Query [$query] failed \n");
+  $result  = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
 
   printf ("============================\n");
   printf ("====  %6d positions  ====\n", mysql_num_rows($result));
