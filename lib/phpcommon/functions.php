@@ -1611,7 +1611,7 @@ function htmlQuery($sql) {
  
     $oddeven = 0;
     while ( $row = mysql_fetch_array($result, MYSQL_NUM)) {
-        $oddeven = $oddeven % 2;
+        $oddeven = ($oddeven+1) % 2;
         echo "<tr class=\"admin-query-$oddeven\">";
         for($i=0;$i<count($row); $i++) {
             echo "<td class=\"admin-query\">";
@@ -1624,11 +1624,22 @@ function htmlQuery($sql) {
 
 }
 
-function insertAdminChangelog($operation = "NULL", $tab = "NULL", $rowkey = "NULL", $col = "NULL", $oldval = "NULL", $newval = "NULL") {
+function insertAdminChangelog($argarray) {
+    if (!is_array($argarray)) die("Not an array for insertAdminChangelog");
     global $_SERVER;
-    $query = sprintf('insert into admin_changelog (user, host, operation, tab, rowkey, col, oldval, newval) VALUES ("%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")',
-                      getLoginName(), $_SERVER["REMOTE_ADDR"], $operation, $tab, $rowkey, $col, $oldval, $newval
-                      );
+
+    $arglist = Array("operation", "tab", "rowkey", "col", "oldval", "newval");
+    $values = "";
+    foreach ($arglist as $varname) {
+        if (!array_key_exists($varname, $argarray) or is_null($argarray[$varname])) {
+            $values .= ", NULL ";
+        } else {
+            $values .= ", '".addslashes($argarray[$varname])."'";
+        }
+    }
+    $query = sprintf("INSERT INTO admin_changelog (user, host, operation, tab, rowkey, col, oldval, newval) VALUES ('%s', '%s' %s )",
+                      getLoginName(), $_SERVER["REMOTE_ADDR"], $values
+                       );
     wrapper_mysql_db_query_writer($query);
 }
 
