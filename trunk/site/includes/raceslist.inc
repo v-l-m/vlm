@@ -24,7 +24,7 @@ if ( $q != "" ) {
 }
 $query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
 
-$result1 = wrapper_mysql_db_query($query1) or die("Query [$query1] failed \n");
+$result1 = wrapper_mysql_db_query_read($query1) or die("Query [$query1] failed \n");
 
 // Recherche de toutes les courses prévues
 while($row = mysql_fetch_array($result1, MYSQL_NUM))
