@@ -6,14 +6,25 @@ From 0.11 to Next
 HOSTING
   EDIT file ./conf/conf_script and change VLMSVNBRANCH to V_0_12
   ./scripts/maj_scripts.sh
-  EDIT file ./conf/param.php and add values :
-      define("DBMASTERSERVER", "localhost");
+  EDIT file ./conf/param.php
+    and add values :
+      define("DBMASTERSERVER", "127.0.0.1");
       define("DBMASTERUSER", "vlm");
       define("DBMASTERPASSWORD", "***");
+      define("DBSLAVESERVER", "127.0.0.1");
+      define("DBSLAVEUSER", "vlm");
+      define("DBSLAVEPASSWORD", "***");
+
+    and del values :
+      define("DBSERVER", "localhost");
+      define("DBUSER", "vlm");
+      define("DBPASSWORD", "***");
 
 BASE
   ./scripts/maj_module.sh base
-  ./vlmcode/base/scripts/runupgrade.sh v0.12 
+  cd ./vlmcode/base/scripts/
+  ./runupgrade.sh 0.12
+  cd 
 
 
 From 0.10.2 To Next
