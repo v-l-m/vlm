@@ -15,7 +15,7 @@
 
         echo "<h3>Image uploaded for race : $idnewrace.</h3>";
         insertRacemap($idnewrace, $_FILES['fic']['tmp_name']);
-        insertAdminChangelog($operation = "Insert racemap for race ".$idnewrace);
+        insertAdminChangelog(Array("operation" => "Insert", "tab" => "racesmap", "rowkey" => $idnewrace));
 
         echo "<h3>OK</h3>";
         for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {
