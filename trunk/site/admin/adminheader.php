@@ -13,9 +13,9 @@ include('htmlstart.php');
 $opts = Array();
 
 // MySQL host name, user name, password, database, and table
-$opts['hn'] = DBSERVER;
-$opts['un'] = DBUSER;
-$opts['pw'] = DBPASSWORD;
+$opts['hn'] = DBMASTERSERVER;
+$opts['un'] = DBMASTERUSER;
+$opts['pw'] = DBMASTERPASSWORD;
 $opts['db'] = DBNAME;
 
 // Number of records to display on the screen
