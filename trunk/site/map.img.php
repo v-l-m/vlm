@@ -171,11 +171,11 @@
             document.control.vts.value=vts;
             showvts();
         }
-
+/*
         if (netscape) {
             document.captureEvents(Event.MOUSEMOVE);
         }
-  
+*/
         document.onmousemove = deplacementSouris;
     </script>
   </head>

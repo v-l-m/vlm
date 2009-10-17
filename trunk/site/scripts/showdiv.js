@@ -1,6 +1,8 @@
 
 var IE = document.all?true:false;
+/* capture event useless
 if (!IE) document.captureEvents(Event.MOUSEMOVE)
+*/
 document.onmousemove = getMouseXY;
 
 var tempX = 0;
