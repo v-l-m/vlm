@@ -1,13 +1,13 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 From 0.11 to Next
 
-= Master Server =
+= All servers =
 
 HOSTING
   EDIT file ./conf/conf_script and change VLMSVNBRANCH to V_0_12
-  ./scripts/maj_scripts.sh
+    ./scripts/maj_scripts.sh
   EDIT file ./conf/param.php
-    and add values :
+    and add correct values for keys :
       define("DBMASTERSERVER", "127.0.0.1");
       define("DBMASTERUSER", "vlm");
       define("DBMASTERPASSWORD", "***");
@@ -15,10 +15,12 @@ HOSTING
       define("DBSLAVEUSER", "vlm");
       define("DBSLAVEPASSWORD", "***");
 
-    and del values :
+    and del keys :
       define("DBSERVER", "localhost");
       define("DBUSER", "vlm");
       define("DBPASSWORD", "***");
+
+= Master Server =
 
 BASE
   ./scripts/maj_module.sh base
@@ -26,6 +28,15 @@ BASE
   ./runupgrade.sh 0.12
   cd 
 
+MOTEUR
+  ./scripts/maj_module.sh lib/phpcommon
+  ./scripts/maj_module.sh moteur
+
+= All servers =
+
+  ./scripts/maj_module.sh lib/phpcommon
+  ./scripts/maj_module.sh site
+  ./scripts/maj_module.sh medias
 
 From 0.10.2 To Next
 
