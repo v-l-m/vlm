@@ -198,7 +198,8 @@ if ( $do == "yes" ) {
           "     and engaged   = " .  $race .
           "    ;";
              $result = mysql_query($query) or die("Query [$query] failed \n");
-       $action_tracking = "UPDATE nextwaypoint ($nwp) for user $boat in race $race";
+//       $action_tracking = "UPDATE nextwaypoint ($nwp) for user $boat in race $race";
+              $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "nextwaypoint", "rowkey" => $boat, "newval" => $nwp);
 
        break;
         case "maj_position":
@@ -213,27 +214,27 @@ if ( $do == "yes" ) {
                       $race      . 
            "                                            );";
              $result = mysql_query($query) or die("Query [$query] failed \n");
-       $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
+            $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
 
        break;
         case "reset_pass":
-             $newpass=quote_smart($_REQUEST['newpass']);
-       $query = "update users set password= '" .  $newpass . "'" .
-               "     where idusers = " .  $boat . 
-          "     and engaged   = " .  $race .
-          "    ;";
-             $result = mysql_query($query) or die("Query [$query] failed \n");
-       $action_tracking = "UPDATE password (newpass=*********) for user $boat in race $race";
-             break;
+            $newpass=quote_smart($_REQUEST['newpass']);
+            $query = "update users set password= '" .  $newpass . "'" .
+                     "     where idusers = " .  $boat . 
+                     "     and engaged   = " .  $race .
+                     "    ;";
+            $result = mysql_query($query) or die("Query [$query] failed \n");
+            $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "password", "rowkey" => $boat, "newval" => "********");
+            break;
         case "reset_username":
-             $newusern=quote_smart($_REQUEST['newusern']);
-       $query = "update users set username= '" .  addslashes($newusern) . "'" .
-               "     where idusers = " .  $boat . 
-          "     and engaged   = " .  $race .
-          "    ;";
-             $result = mysql_query($query) or die("Query [$query] failed \n");
-       $action_tracking = "UPDATE username (username=$newusern) for user $boat in race $race";
-             break;
+            $newusern=quote_smart($_REQUEST['newusern']);
+            $query = "update users set username= '" .  addslashes($newusern) . "'" .
+                     "     where idusers = " .  $boat . 
+                     "     and engaged   = " .  $race .
+                     "    ;";
+            $result = mysql_query($query) or die("Query [$query] failed \n");
+            $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "username", "rowkey" => $boat, "newval" => $newusern);
+            break;
         default:
     }
     echo "<b>OK<b><br />";
@@ -241,7 +242,11 @@ if ( $do == "yes" ) {
 
 
     //tracking...
-    insertAdminChangelog($operation = addslashes($action_tracking));
+    if (is_array($action_tracking) ) {
+        insertAdminChangelog($action_tracking);
+    } else {
+        insertAdminChangelog(Array("operation" => $action_tracking) );
+    }
     
     exit;
 }

@@ -40,6 +40,11 @@
 
     adminlistbox($strangepages, "Strangeness reports [Use with caution]");
 
+    echo "<div class=\"adminbox\">";
+    echo "<h3>Last operations</h3>";
+    htmlQuery("SELECT updated, user AS admin, host, operation, tab, rowkey, col AS field, oldval, newval FROM admin_changelog ORDER BY updated DESC LIMIT 10;");
+    echo "</div>";
+    
     
     include("htmlend.php");
 ?>
