@@ -4,7 +4,27 @@
 $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercator1.php", "/subscribe_race.php", "/pilototo.php");
 
 /************** localDBPages pages : HAS TO BE SET BEFORE INSLUSION OF PARAM.PHP ******/
-$localDBPages = array("/mercator.php", "/races.php");
+
+$localDBPages = array(
+                "/index.php",
+                "/mercator.php",
+                "/races.php",
+                "/getinfo.php",
+                "/gps.php",
+                "/minimap.php",
+                "/racemap.php",
+                "/about.php",
+                "/getraceinfo.php",
+                "/ics.php",
+                "/speedchart.php",
+                "/gettrack.php",
+                "/faq.php",
+                "/races.php",
+                "/flagimg.php",
+                "/getwind.php",
+                "/palmares.php",
+                "/getinfo2.php"
+);
 
 include_once("param.php");
 
