@@ -41,11 +41,20 @@ ini_set('arg_separator.output', "&amp;");
 
 /*********db_connect****************/
 if (defined('MOTEUR')) {
-  $link = mysql_pconnect(DBSERVER, DBUSER, DBPASSWORD) or 
+  $link = mysql_pconnect(DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
           die("Could not connect : " . mysql_error());
+  $GLOBALS['masterdblink']=$link;
+  $GLOBALS['slavedblink']=$link;
+  mysql_select_db(DBNAME, $link) or die("Could not select database");
 } else {
-  $link = mysql_connect(DBSERVER, DBUSER, DBPASSWORD) or 
+  $link = mysql_connect(DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
           die("Could not connect : " . mysql_error());
+  $GLOBALS['masterdblink']=$link;
+  mysql_select_db(DBNAME, $link) or die("Could not select database");
+  $link = mysql_connect(DBSLAVESERVER, DBSLAVEUSER, DBSLAVEPASSWORD) or 
+    die("Could not connect : " . mysql_error());
+  $GLOBALS['slavedblink']=$link;
+  mysql_select_db(DBNAME, $link) or die("Could not select database");
 } 
    
 mysql_select_db(DBNAME, $link) or die("Could not select database");

@@ -45,7 +45,7 @@ class users
 
 
     //    $result = wrapper_mysql_db_query($query) or die("\n FAIL::::::: ".$query."\n");
-    $result = wrapper_mysql_db_query($query) or die("\n FAILED !!\n");
+    $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
 
     $this->idusers        = $row['idusers'];
@@ -95,7 +95,7 @@ class users
       " `hidepos` =  " . $this->hidepos . "," . 
       " `blocnote` = '" . mysql_real_escape_string( $this->blocnote) . "'" . 
       " WHERE idusers = " . $this->idusers;
-    wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 
     logUserEvent($this->idusers , $_SESSION['IP'] , $this->engaged, "Update prefs." );
 
@@ -107,7 +107,7 @@ class users
     $this->releasetime = time() + $time;
     $query = "UPDATE users SET releasetime = " . $this->releasetime .  
       " WHERE idusers = " . $this->idusers;
-    wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
   }
 
 
@@ -123,7 +123,7 @@ class users
        AND idusers = $this->idusers
        AND time <= $now";
     echo $quety;
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
 
     while ( $row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
       // Execute the task
@@ -173,11 +173,11 @@ class users
       }
       // Don't forget to add the where clause... and execute the query
       $query .= " WHERE idusers=$this->idusers;";
-      wrapper_mysql_db_query($query); //or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
 
       // Mark the task as DONE
       $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
-      wrapper_mysql_db_query($query); //or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
       
       // Purge old tasks
       $this->pilototoPurge( PILOTOTO_KEEP );
@@ -195,7 +195,7 @@ class users
     $query = "SELECT count(*) NumTasks FROM auto_pilot
      WHERE idusers = $this->idusers
        AND status = '" . $status . "'";
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
     if ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
@@ -219,7 +219,7 @@ class users
      WHERE idusers = $this->idusers
        ORDER by time ASC";
     //       AND status = '" . $status . "'
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
 
     //echo $query;
     while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
@@ -236,7 +236,7 @@ class users
     $query = "DELETE FROM auto_pilot
      WHERE idusers = $this->idusers
        AND taskid = $taskid";
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 
     //echo $query;
     return(0);
@@ -259,7 +259,7 @@ class users
     $query = "DELETE FROM auto_pilot
      WHERE idusers = $this->idusers
        AND time   <= $timestamp";
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 
     //echo $query;
     return(0);
@@ -271,13 +271,13 @@ class users
     // lookup for a task to do
     $query = "SELECT COUNT(*) from auto_pilot
               WHERE idusers=$this->idusers";
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     $row = mysql_fetch_row($result);
     if ( $row[0] < PILOTOTO_MAX_EVENTS ) {
       $query = "INSERT INTO auto_pilot
              ( time, idusers, pilotmode, pilotparameter, status)
        VALUES ( $time, $this->idusers, '" . $pim . "', '" . $pip . "', '".PILOTOTO_PENDING."');";
-      $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+      $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       //echo $query;
       return(0);
     } else {
@@ -296,7 +296,7 @@ class users
          status = '" .PILOTOTO_PENDING . "' 
          WHERE idusers = $this->idusers
      AND taskid = $taskid";
-    $result = wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
     logUserEvent($this->idusers , $_SESSION['IP'] , $this->engaged, "Update pilototo task $taskid : time=$time, pim=$pim,pip=$pip" );
@@ -436,7 +436,7 @@ class fullUsers
     if (!isset($this->preferences)) {
       $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
 	            " WHERE idusers = ".$this->users->idusers;
-      $result_pref = wrapper_mysql_db_query($query_pref) or die($query_pref);
+      $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
       $this->preferences = array();
       while( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
 	$this->preferences[$row['pref_name']] = $row['pref_value'];
@@ -493,7 +493,7 @@ class fullUsers
     //printf ("Time = %d\n",$time);
     $query_deptime = "UPDATE users set userdeptime = " . $time . " WHERE idusers = ". $this->users->idusers  ;
     //echo ( "Query failed : " . mysql_error." ".$query_deptime );
-    wrapper_mysql_db_query($query_deptime) or die ( "Query failed : " . mysql_error." ".$query_deptime );
+    wrapper_mysql_db_query_writer($query_deptime) or die ( "Query failed : " . mysql_error." ".$query_deptime );
   }
 
   //this function will delete all the positions of the boat for this race
@@ -503,7 +503,7 @@ class fullUsers
     //delete old positions from database
     $query65 = "DELETE FROM positions WHERE idusers = ". $this->users->idusers  . 
       " AND  race = " . $idraces;
-    wrapper_mysql_db_query($query65);// or die("Query failed : " . mysql_error." ".$query65);
+    wrapper_mysql_db_query_writer($query65);// or die("Query failed : " . mysql_error." ".$query65);
   }
 
   function updateAngles()
@@ -518,14 +518,14 @@ class fullUsers
       
       $query1 = "UPDATE users SET boatheading =". round($this->users->boatheading)
 	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query($query1);
+      $result1 = wrapper_mysql_db_query_writer($query1);
       break;
     case PILOTMODE_ORTHODROMIC:
       //update boatheading
       $this->users->boatheading = $this->orthodromicHeading();
       $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
 	." WHERE idusers = ".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query($query1);
+      $result1 = wrapper_mysql_db_query_writer($query1);
       break;
     case PILOTMODE_BESTVMG:
       $vlmc_heading = new doublep();
@@ -563,7 +563,7 @@ class fullUsers
       //	  echo "Debug: VMG   = ".$this->VMG;
       $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
 	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query($query1) ; 
+      $result1 = wrapper_mysql_db_query_writer($query1) ; 
       break;
     case PILOTMODE_VBVMG:
       $vlmc_heading = new doublep();
@@ -601,7 +601,7 @@ class fullUsers
       //	  echo "Debug: VMG   = ".$this->VMG;
       $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
 	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query($query1) ; 
+      $result1 = wrapper_mysql_db_query_writer($query1) ; 
       break;      
     case PILOTMODE_BESTSPEED:
       // FIXME if kept, needs to be redone in vlm-c
@@ -634,7 +634,7 @@ class fullUsers
       $this->users->boatheading = $bestHdg;
       $query1 = "UPDATE users SET boatheading =". $this->users->boatheading 
 	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query($query1);
+      $result1 = wrapper_mysql_db_query_writer($query1);
       break;
     }
 
@@ -693,7 +693,7 @@ class fullUsers
         " WHERE idusers = " . $this->users->idusers;
 
       //echo "ABANDONWP QUERY=" . $query;
-      wrapper_mysql_db_query($query) ; //or printf("\nQuery failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) ; //or printf("\nQuery failed : " . mysql_error." ".$query);
 
     } else {
       // Il ne s'agit pas d'un abandon de WP, donc c'est une modification du paramétrage
@@ -734,7 +734,7 @@ class fullUsers
 
       $query .= " WHERE idusers = " . $this->users->idusers;
       // echo "MODIFWP QUERY=" . $query;
-      wrapper_mysql_db_query($query) ;//or printf("\nQuery failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) ;//or printf("\nQuery failed : " . mysql_error." ".$query);
 
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" );
 
@@ -748,12 +748,12 @@ class fullUsers
   {
     $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions 
                              WHERE idusers = " . $this->users->idusers . " and race = " . $this->users->engaged . ";";
-    wrapper_mysql_db_query($queryhistopositions);
+    wrapper_mysql_db_query_writer($queryhistopositions);
     //echo "QH = $queryhistopositions" . "\n";
 
     $querypurgepositions = "DELETE FROM positions 
                              WHERE idusers = " . $this->users->idusers . " and race = " . $this->users->engaged . ";";
-    wrapper_mysql_db_query($querypurgepositions);
+    wrapper_mysql_db_query_writer($querypurgepositions);
     //echo "QP = $querypurgepositions" . "\n";
 
     // And then, the most important...
@@ -770,7 +770,7 @@ class fullUsers
       " AND wporder > " . $this->users->nwp . 
       " ORDER BY wporder ASC LIMIT 1";
 
-    $result = wrapper_mysql_db_query($query); // or die("Query failed : " . mysql_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request Races_Waypoints : %s\n" , $query);
 
     if ( mysql_num_rows($result) == 0 ) {
@@ -808,7 +808,7 @@ class fullUsers
       $xingtime . ", " .
       $udt . ");"   ;
 
-    wrapper_mysql_db_query($query) ;//or die("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
 
   }
   // Function updateWaypoints
@@ -817,7 +817,7 @@ class fullUsers
     // MAJ la table users pour prise en compte du prochain Waypoint
     $query = "UPDATE users SET nextwaypoint = " . $this->nwp . 
       " WHERE idusers = " . $this->users->idusers;
-    wrapper_mysql_db_query($query); // or die("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
     // MAJ la table races_ranking pour prise en compte du prochain Waypoint
@@ -863,7 +863,7 @@ class fullUsers
 
     $query_update .= " lastupdate = " . time() ; 
     $query_update .= " WHERE idusers  = " . $this->users->idusers ;
-    wrapper_mysql_db_query($query_update);// or die("Query failed : " . mysql_error." ".$query_ranking);
+    wrapper_mysql_db_query_writer($query_update);// or die("Query failed : " . mysql_error." ".$query_ranking);
 
     // =======================================================================================
     // En cas de blackout, on a fini.
@@ -936,7 +936,7 @@ class fullUsers
       " WHERE idraces  = " . $this->users->engaged .
       "  AND  idusers  = " . $this->users->idusers ;
 
-    wrapper_mysql_db_query($query_ranking);// or die("Query failed : " . mysql_error." ".$query_ranking);
+    wrapper_mysql_db_query_writer($query_ranking);// or die("Query failed : " . mysql_error." ".$query_ranking);
     //printf ("Query : %s\n", $query_ranking);
 
 
@@ -958,7 +958,7 @@ class fullUsers
       " WHERE idraces  = " . $this->users->engaged .
       "  AND  idusers  = " . $this->users->idusers ;
 
-    wrapper_mysql_db_query($query_ranking);
+    wrapper_mysql_db_query_writer($query_ranking);
 
   }
 
@@ -979,7 +979,7 @@ class fullUsers
         $this->lastPositions->long . ", " .
         $this->lastPositions->lat . ");"   ;
 
-      wrapper_mysql_db_query($query_abandon);
+      wrapper_mysql_db_query_writer($query_abandon);
     }
 
     // Then subscribe to race 0
@@ -1006,7 +1006,7 @@ class fullUsers
         $this->lastPositions->long . ", " .
         $this->lastPositions->lat . ");"   ;
 
-      wrapper_mysql_db_query($query_abandon);
+      wrapper_mysql_db_query_writer($query_abandon);
     }
 
     // Then subscribe to race 0
@@ -1030,7 +1030,7 @@ class fullUsers
         $this->lastPositions->long . ", " .
         $this->lastPositions->lat . ");"   ;
 
-      wrapper_mysql_db_query($query_abandon);
+      wrapper_mysql_db_query_writer($query_abandon);
     }
 
     // Then subscribe to race 0
@@ -1047,14 +1047,15 @@ class fullUsers
       " `pilotparameter` = 0 , " . 
       " `lastchange` = " . $timestamp . 
       " WHERE idusers = ".$this->users->idusers;
-    wrapper_mysql_db_query($query); // or die("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
     // Determiner quel est le timestamp de la dernière position écrite pour ce joueur
     $query = "SELECT max(time) FROM positions " .
       " WHERE race = " . $this->users->engaged . 
       " AND   idusers = ". $this->users->idusers  ;
-    $result = wrapper_mysql_db_query($query);// or echo("Query failed : " . mysql_error." ".$query);
+    // use the same db here to avoid replication gap effect
+    $result = wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
     $row = mysql_fetch_array($result, MYSQL_NUM);
     $timestamp=$row[0];
     
@@ -1064,7 +1065,7 @@ class fullUsers
       " AND race = " . $this->users->engaged . 
       " AND idusers = ". $this->users->idusers ;
     //printf ("Request POSITIONS : %s\n" , $query);
-    wrapper_mysql_db_query($query);// or echo("Query failed : " . mysql_error." ".$query);
+    wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
 
     $this->updateAngles();
   }
@@ -1079,7 +1080,7 @@ class fullUsers
       " userdeptime=-1, " . 
       " loch=0 " . 
       " WHERE idusers = ".$this->users->idusers;
-    $result11 = wrapper_mysql_db_query($query11);
+    $result11 = wrapper_mysql_db_query_writer($query11);
 
     if ( $id != 0 ) {
       $this->races = new races($id);
@@ -1097,29 +1098,29 @@ class fullUsers
         ",     `lat` =". $this->races->startlat.
         ", `idusers` = ".$this->users->idusers.
         ", `race`    = ".$id;
-      wrapper_mysql_db_query($query7);
+      wrapper_mysql_db_query_writer($query7);
 
       // Delete old positions from races_results (in case of sub/unsub/sub again) (only if not TYPE_RECORD)
       if ( $this->races->racetype != RACE_TYPE_RECORD ) {
         $query_clean_races_results = "DELETE FROM races_results WHERE `idraces` = ". $id .
           " AND `idusers` = " . $this->users->idusers;
-        wrapper_mysql_db_query($query_clean_races_results);
+        wrapper_mysql_db_query_writer($query_clean_races_results);
       }
  
       // Delete all old entries from races_ranking
       $query_clean_races_ranking = "DELETE FROM races_ranking where idusers= " .  $this->users->idusers ;
-      wrapper_mysql_db_query($query_clean_races_ranking);
+      wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Prepare the table races_ranking
       $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers ) values " . 
         " ( ". $id . ", " . $this->users->idusers . ")";
-      wrapper_mysql_db_query($query_clean_races_ranking);
+      wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Update boattype
       $query_boattype=" UPDATE users set boattype = '" . $this->races->boattype . "'" . 
         "             ,    targetlat = 0, targetlong = 0, targetandhdg = -1        " .   
         " WHERE idusers = " . $this->users->idusers;
-      $result = wrapper_mysql_db_query($query_boattype) or die("Query [$query_boattype] failed \n");
+      $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
 
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $id, "Engaged." );
 
@@ -1157,7 +1158,7 @@ class fullUsers
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
-      $result = wrapper_mysql_db_query($query) or die("Query [$query] failed \n");
+      $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading );
       break;
 
@@ -1169,7 +1170,7 @@ class fullUsers
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter );
       break;
 
@@ -1179,7 +1180,7 @@ class fullUsers
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
       
@@ -1189,7 +1190,7 @@ class fullUsers
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
 
@@ -1199,7 +1200,7 @@ class fullUsers
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
 
@@ -1209,7 +1210,7 @@ class fullUsers
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query($query) or die("Query failed : " . mysql_error." ".$query);
+      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       
       logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
