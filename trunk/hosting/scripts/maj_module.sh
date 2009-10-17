@@ -40,6 +40,13 @@ echo -n "+Remplacement par l'extraction du svn..."
 cp -Rf $curmodulepath/* $destmodulepath
 echo 'OK !'
 
+source $VLMRACINE/conf/conf_base
+if test $? -eq 0 ; then
+    REVID=`svn info $VLMSVNFULL --username anonymous|grep "vision :"|sed 's/[^0-9]//g'`
+    echo "INSERT INTO modules_status (serverid, moduleid, revid) VALUES ('`hostname -i`', '$confmodule', $REVID);"|mysql -h $DBSERVER -u $DBUSER --password=$DBPASSWORD $DBNAME
+    echo "Log du deploiement : OK !"
+fi
+
 #Recopie de la conf si nécessaire // Postdéploiement
 echo " "
 echo "+Post-déploiement, mise en place de droits et de la configuration... pour $confmodule ..."
