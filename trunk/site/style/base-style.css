@@ -347,6 +347,8 @@ div.controlitem {
   float:right;
 }
 
+#createbox div {display:block;}
+
 #autopilotcontrolbox div {display:block;}
 #windanglecontrolbox div {display:block;}
 
