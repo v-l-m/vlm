@@ -10,5 +10,5 @@
     <link rel="icon" type="image/png" href="../images/site/favicon.png" />
   </head>
   <body>
-      <p class=".horizontalmenu">Available status : <a href="polar-status.php" rel="nofollow">Polar status</a>&nbsp;&middot;&nbsp;<a href="race-engine-status.php" rel="nofollow">Race engine status</a>&nbsp;&middot;&nbsp;<a href="windtable-status.php" rel="nofollow">Windtable status</a>&nbsp;</p>
+      <p class=".horizontalmenu">Available status : <a href="polar-status.php" rel="nofollow">Polar status</a>&nbsp;&middot;&nbsp;<a href="race-engine-status.php" rel="nofollow">Race engine status</a>&nbsp;&middot;&nbsp;<a href="windtable-status.php" rel="nofollow">Windtable status</a>&nbsp;&middot;&nbsp;<a href="module-status.php" rel="nofollow">Module status</a>&nbsp;</p>
     <h1><?php echo $PAGETITLE; ?></h1>
