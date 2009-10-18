@@ -12,20 +12,18 @@ include_once("config.php");
       var r = new RegExp("[^a-zA-Z0-9_]", "i");
 
       // do field validation
-      if (form.pseudo.value == "") {
-        alert( "Vous devez entrer un pseudo !" ); // voir ensuite pour le choix lang - translation !
+      if ((form.pseudo.value == "") || (form.password.value == "")) {
+        alert( "<?php echo $strings[$lang]["loginempty"]; ?>"); 
         return false;
       } else if (r.exec(form.pseudo.value) || form.pseudo.value.length < 3) {
-        alert( "caractere non-autorise ou pseudo trop court (mini 4)" ); // voir ensuite pour le choix lang - translation !
+        alert( "<?php echo $strings[$lang]["malformedlogin"]; ?>" ); 
         return false;
       // SkYDuST : Je pense qu'il faudrait ajouter un champ email pour pouvoir envoyer des communications (et aussi pour la securite)
+      // FIXME: a fixer le jour on on demandera une confirmation par mail.
       //} else if (form.email.value == "") {
       //  alert( "vous devez entrer votre mail" );
-      } else if (form.password.value == "") {
-        alert( "Mot de passe obligatoire !" ); // voir ensuite pour le choix lang - translation !
-        return false;
       } else if (r.exec(form.password.value)) {
-        alert( "votre mot de passe doit contenir des caracteres non-autorises" ); // voir ensuite pour le choix lang - translation !
+        alert( "<?php echo $strings[$lang]["malformedpassword"]; ?>" );
         return false;
       } else {
         return true;
@@ -37,23 +35,21 @@ include_once("config.php");
 * END ADD  verif form - 11/05/2005 11:20:32 - SkYDuST
 */
 
-echo "<p>";
+echo "<div id=\"createbox\">";
 
- echo $strings[$lang]["chooseaccount"];?>
+    echo "<h2>".$strings[$lang]["chooseaccount"]."</h2>"; ?>
 
-<form onSubmit="return submitbutton();"  action="myboat.php" method="post" name="myboat"> <!-- modif SkYDuST -->
-<?echo $strings[$lang]["login_name"]?><br/>
-<input size="15" maxlength="15" name="pseudo"/><br/>
-<?echo $strings[$lang]["password"]?><br/>
-<input size="15" maxlength="15" name="password"/><br/>
-<input type="hidden" name="lang" value="<?echo $lang?>"/>
-<input type="hidden" name="type" value="create"/>
-<!--<input type="button" value="<?echo $strings[$lang]["create"]?>" onclick="submitbutton()" />  doesnot work, check why-->
-<input type="submit" />
-</form> 
-
-
-</p>
+    <form onSubmit="return submitbutton();"  action="myboat.php" method="post" name="myboat">
+        <span class="texthelpers"><?echo $strings[$lang]["login_name"]?></span>
+        <input size="15" maxlength="15" name="pseudo"/>
+        <span class="texthelpers"><?echo $strings[$lang]["password"]?></span>
+        <input size="15" maxlength="15" name="password"/>
+        <input type="hidden" name="lang" value="<?echo $lang?>"/>
+        <input type="hidden" name="type" value="create"/>
+        <input type="submit" />
+    </form> 
+    <p><?php echo nl2br($strings[$lang]["createaccountrules"]); ?></p>
+</div>
 
 
 
