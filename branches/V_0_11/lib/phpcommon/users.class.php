@@ -516,7 +516,7 @@ class fullUsers
       while ( $this->users->boatheading > 360 ) $this->users->boatheading-=360;
       while ( $this->users->boatheading < 0 ) $this->users->boatheading+=360;
       
-      $query1 = "UPDATE users SET boatheading =". round($this->users->boatheading)
+      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
 	." WHERE idusers =".$this->users->idusers;
       $result1 = wrapper_mysql_db_query($query1);
       break;
@@ -1165,7 +1165,7 @@ class fullUsers
       $this->users->pilotparameter = $param;
       $this->users->pilotmode = PILOTMODE_WINDANGLE;
       $query = "UPDATE users SET `pilotmode`=". PILOTMODE_WINDANGLE.", " . 
-	" `pilotparameter` = " . round($this->users->pilotparameter,1) . ", " .
+	" `pilotparameter` = " . round($this->users->pilotparameter,3) . ", " .
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
