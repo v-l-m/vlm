@@ -21,7 +21,7 @@ include("../includes/header-status.inc");
 <?php
 
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
-    $query .= " order by vacfreq ASC, deptime DESC, idraces ASC";
+    $query .= " ORDER BY vacfreq ASC, deptime DESC, idraces ASC";
     $result = wrapper_mysql_db_query_reader($query);
     $odd = 0;
     while($row = mysql_fetch_assoc($result)) {
