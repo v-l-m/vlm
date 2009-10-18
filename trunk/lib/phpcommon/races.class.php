@@ -1053,7 +1053,7 @@ class fullRaces {
           if ( $rank == 1 ) {
             printf("<td>%s</td>\n",$strings[$lang]["winner"]);
           } else {
-            if ( $this->races->racetype == RACE_TYPE_CLASSIC && $WP == 0 ) {
+            if ( $this->races->racetype == RACE_TYPE_CLASSIC) { // && $WP == 0 ) { - Cf. ticket #237
               // ARRIVAL DATE IS THE SORTING KEY
               $ecart = duration2string($arrivaltime - $ref_arrivaltime);
               // PCT =      difference de temps de course / temps de course du vainqueur
