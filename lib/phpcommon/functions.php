@@ -1587,7 +1587,7 @@ function logUserEvent($idusers, $ipaddr, $idraces, $action ) {
 }
 
 function htmlQuery($sql) {
-    $result = wrapper_mysql_db_query_writer($sql) or die("<h3 class=\"admin-error\">Query".query_user_event."] failed</h1>");
+    $result = wrapper_mysql_db_query_writer($sql) or die("<h3 class=\"admin-error\">Query [".$sql."] failed</h3>");
     
     if (!$result or !mysql_num_rows($result)) {
         echo "<h3 class=\"admin-infos\">Nothing to display</h3>";
