@@ -21,8 +21,6 @@ function get_output_format() {
     $splain = true;
   } else if (preg_match(',text/\*(;q=(d?.d+))?,i', 
 			$_SERVER['HTTP_ACCEPT'], $res)) {
-    echo "got a match for *";
-
     $qplain = (isset($res[2]))? $res[2] : 1;
     $splain = true;
   }
