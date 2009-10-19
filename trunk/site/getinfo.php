@@ -101,11 +101,11 @@ function get_info_array($idu) {
     case 5:
       if ( $userObj->users->targetlat == 0 && 
 	   $userObj->users->targetlong == 0 ) {
-	$info['PIP'] = sprintf ("%5.4f,%5.4f\n", 
+	$info['PIP'] = sprintf ("%5.4f,%5.4f", 
 				$userObj->users->LatNM, 
 				$userObj->users->LonNM );
       } else {
-	$info['PIP'] = sprintf ("%5.4f,%5.4f@%d\n", 
+	$info['PIP'] = sprintf ("%5.4f,%5.4f@%d", 
 				$userObj->users->targetlat, 
 				$userObj->users->targetlong, 
 				$userObj->users->targetandhdg );
