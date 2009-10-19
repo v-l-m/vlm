@@ -76,7 +76,7 @@ function get_info_array($idu) {
       if ( $_timetogo < 0 ) {
 	$info['ETA'] = -1;
       } else {
-	$info['ETA'] = sprintf(gmdate('Y-m-d H:i:s', time() + $_timetogo )); 
+	$info['ETA'] = sprintf(gmdate('Y-m-d\TH:i:s\Z', time() + $_timetogo )); 
       }
     } else {
       $info['ETA'] = -1;
