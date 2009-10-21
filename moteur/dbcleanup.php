@@ -35,7 +35,11 @@ $engine_start_float=microtime(true);
 // Purge des anciennes positions (on ne garde une trace que sur MAX_POSITION_AGE)
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
-$queryhistopositions = "INSERT INTO histpos SELECT * FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
+
+$locktables = "LOCK TABLE histpos WRITE, positions WRITE, updates WRITE, positions AS pos READ";
+$result = wrapper_mysql_db_query_writer($locktables);
+
+$queryhistopositions = "INSERT INTO histpos SELECT * FROM pos WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($queryhistopositions);
 
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
@@ -44,6 +48,8 @@ $result = wrapper_mysql_db_query_writer($querypurgepositions);
 $querypurgeupdates = "DELETE FROM updates WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($querypurgeupdates);
 
+$locktables = "UNLOCK TABLES";
+$result = wrapper_mysql_db_query_writer($locktables);
 
 //echo "\n".$querypurgepositions;
 $step_stop_float=microtime(true);
