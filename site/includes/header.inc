@@ -295,7 +295,7 @@
             <?php
                 $ircpseudo = preg_replace("([^a-zA-Z0-9-\[\]\\`^{}])", "-", getLoginName(). "-" . getLoginId());
                 $ircpseudo = preg_replace("(-+)", "-", $ircpseudo);
-                echo "<a href=\"http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&server=mibbit.epiknet.org&channel=%23vlm&noServerTab=false&autoConnect=true&customprompt=Welcome%20To%20VLM%20Chat&charset=iso-8859-15&nick=" . $ircpseudo . "\" target=\"_blank\" >";
+                echo "<a href=\"http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&amp;server=mibbit.epiknet.org&amp;channel=%23vlm&amp;noServerTab=false&amp;autoConnect=true&amp;customprompt=Welcome%20To%20VLM%20Chat&amp;charset=iso-8859-15&amp;nick=" . $ircpseudo . "\" target=\"_blank\" >";
                 echo $strings[$lang]["tchat"];
             ?>
             </a>
