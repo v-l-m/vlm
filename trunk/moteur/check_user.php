@@ -129,8 +129,6 @@
           ", Dist=". $distVac . "nm".
           ") ...";
 
-        // Writing positions
-        $fullUsersObj->lastPositions->writePositions(); //important, will write a new position
         echo " done";
     
         // ==========================
