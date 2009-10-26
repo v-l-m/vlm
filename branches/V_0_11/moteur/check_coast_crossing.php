@@ -35,8 +35,8 @@ if ($crosses_the_coast) {
   echo "&maparea=18&tracks=on&age=6";
   echo "&list=" . $fullUsersObj->users->idusers ;
   echo "&x=1000&y=600&proj=mercator&text=right"; /* ahem, we have a point instead of the segment now :) */
-  echo "&seg1=".$latAvant/1000 . "," . $lonAvant/1000 . ":" . $latApres/1000 . "," . $lonApres/1000;
-  echo "&seg2=".$encounter_lat/1000 . "," . $encounter_long/1000 . ":" . $encounter_lat/1000 . "," . $encounter_long/1000;
+  echo "&seg1=".$encounter_lat/1000 . "," . $encounter_long/1000 . ":" . $encounter_lat/1000 . "," . $encounter_long/1000;
+  echo "&seg2=".$latAvant/1000 . "," . $lonAvant/1000 . ":" . $latApres/1000 . "," . $lonApres/1000;
   echo "\n\n";
   /*
     echo "\n\t ==> Position Avant " . 
@@ -56,11 +56,10 @@ if ($crosses_the_coast) {
   // compute the real endpoint (using linear interpolation)
   // We can tune the 0.9 to whatever we want, to avoid putting the boat on the line
   // and have rounding errors having fun with us.
+  
   $latApres = $latAvant + ($encounter_lat - $latAvant) * 0.9;
   $lonApres = $lonAvant + ($encounter_long - $lonAvant) * 0.9;
 
-  // ok we got a new point, check it's not crossing the coast because of roundings.
-  // new point coast check
   for ( $coast_ratio = 8; $coast_ratio > 0; $coast_ratio--) {
     $npcc = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
 				  $coast_xinglat, $coast_xinglong, 
@@ -73,6 +72,15 @@ if ($crosses_the_coast) {
       break;
     }
   }
-  // if things go wrong again, it is hopeless ;)
+
+  echo "\nVLMMAP corrected position http://s9.virtual-loup-de-mer.org/mercator.img.php?idraces=" . $fullUsersObj->users->engaged ;
+  echo "&lat=" . $latAvant/1000;  
+  echo "&long=" .$lonAvant/1000;
+  echo "&maparea=18&tracks=on&age=6";
+  echo "&list=" . $fullUsersObj->users->idusers ;
+  echo "&x=1000&y=600&proj=mercator&text=right"; /* ahem, we have a point instead of the segment now :) */
+  echo "&seg2=".$latAvant/1000 . "," . $lonAvant/1000 . ":" . $latApres/1000 . "," . $lonApres/1000;
+  echo "\n\n";
+
 }
 ?>
