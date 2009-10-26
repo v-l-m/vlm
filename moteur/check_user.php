@@ -4,8 +4,8 @@
       echo "\n(".$nb_boats.") Checking user ".$usersObj->idusers . ": (race " . $usersObj->engaged . ") ";
     }
 
-    //Par défaut (hypothèse due à la requête amont de ce script)
-    //le joueur n'est pas arrivé.
+    //Par defaut (hypothese due Ã  la requete amont de ce script)
+    //le joueur n'est pas arrive.
     $is_arrived = false;
 
     //need to get fullUsers Object (if it is possible, and only for virtual users)
@@ -33,8 +33,8 @@
             // Compare (last_change timestamp + MAX_STOPTIME) and now
             //printf ("Lastchange = %d, MAXSTOP=%d, time=%d, ", $fullUsersObj->users->lastchange, MAX_STOPTIME, $timestamp);
         
-            // Si le bateau est au mouillage et n'est pas parti, c'est qu'il attend le départ
-            // cas des départs au pilototo, pour partir en groupe , après le départ officiel,
+            // Si le bateau est au mouillage et n'est pas parti, c'est qu'il attend le depart
+            // cas des departs au pilototo, pour partir en groupe , apres le depart officiel,
             // dans les courses permanentes
             // ==> 2007/09 : handle auto-pilot start (userdeptime =-1 if boat has not started)
             // (test this and write a new position only if boat already started)
@@ -65,12 +65,12 @@
             echo "\t** DONE ** " ;
 
         } else {
-            // userdeptime est mis à -1 dans subscribeToRaces
-            // Donc s'il vaut -1 ici, c'est que le joueur prend le départ d'une course
+            // userdeptime est mis a -1 dans subscribeToRaces
+            // Donc s'il vaut -1 ici, c'est que le joueur prend le depart d'une course
             if ( $fullUsersObj->users->userdeptime == -1 ) {
                 // update userdeptime in table users 
-                // ($now est positionné dans check_race.php pour mettre tout le monde à égalité)
-                // FIXME : on ne devrait pas appeler les variables "inter-script" avec des noms aussi évidents...
+                // ($now est positionne dans check_race.php pour mettre tout le monde a egalite)
+                // FIXME : on ne devrait pas appeler les variables "inter-script" avec des noms aussi evidents...
                 $fullUsersObj->updateDepTime($now);
             }
   
@@ -141,20 +141,26 @@
         // Does he cross a waypoint
         // ==========================
         include "check_waypoint_crossing.php";
-        $fullUsersObj->writeCurrentRanking();
-    
+
         if ($crosses_the_coast && ! $is_arrived) {
-            $fullUsersObj->setSTOPPED(); // sets the boat mooring
-            $fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
+	  $fullUsersObj->setSTOPPED(); // sets the boat mooring
+	  $fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
           
-            $fullUsersObj->lastPositions->lat=$latApres;
-            $fullUsersObj->lastPositions->long=$lonApres;
-            $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at this place
+	  $fullUsersObj->lastPositions->lat=$latApres;
+	  $fullUsersObj->lastPositions->long=$lonApres;
+	  echo "*** Coast crossed, setting boat position to ".
+	    $fullUsersObj->lastPositions->lat/1000.", ". 
+	    $fullUsersObj->lastPositions->long/1000;
+	  $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at this place
           
-            // set wind angle to 0
-            $fullUsersObj->users->pilotmode=2;
-            $fullUsersObj->users->pilotparameter=0;
-        }
+	  // set wind angle to 0
+	  $fullUsersObj->users->pilotmode=2;
+	  $fullUsersObj->users->pilotparameter=0;
+        } else {
+	  $fullUsersObj->lastPositions->writePositions(); //important, will write a new position
+	}
+
+	$fullUsersObj->writeCurrentRanking();
     
         // =========================================================================
         // Check if boat uses its own WP and is close to it (only if PIM != 1 or 2 )
@@ -171,7 +177,7 @@
           $distApres=ortho($latApres, $lonApres,
     		       $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
          
-          // On lache le WP perso si il est plus près que la distance parcourue à la dernière VAC.
+          // On lache le WP perso si il est plus pres que la distance parcourue Ã  la derniÃ¨re VAC.
           if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
     	   || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
     
@@ -183,7 +189,7 @@
     	       $dist);
     
     	// ABANDON DU WP PERSO => 
-    	// 4eme argument "abandonWP" pour différencier abandon de WP(true) de la saisie de WP(false)
+    	// 4eme argument "abandonWP" pour differencier abandon de WP(true) de la saisie de WP(false)
     	$fullUsersObj->updateTarget(0,0,0, true);
     
           }
@@ -198,9 +204,9 @@
         }
     
         // ===================================================================
-        // MAJ du cap du bateau, pour la prochaine VAC si régulateur d'allure.
+        // MAJ du cap du bateau, pour la prochaine VAC si regulateur d'allure.
         // * Pour mettre le bateau bout au vent si il tape la cote
-        // * Pour MAJ du pilote orthodromique si on a passé un WP
+        // * Pour MAJ du pilote orthodromique si on a passe un WP
         // ===================================================================
         if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE 
     	 OR $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC 
@@ -209,12 +215,11 @@
     
           $fullUsersObj->updateAngles();
           echo ", Angle updated";
-    
         }
-            echo ", Heading = " . $fullUsersObj->users->boatheading;
-            echo "\n\t** DONE ** ";
-            //sleep (2);
-            // } // not arrived
+	echo ", Heading = " . $fullUsersObj->users->boatheading;
+	echo "\n\t** DONE ** ";
+	//sleep (2);
+	// } // not arrived
         } // player is not sleeping
     } 
 ?>
