@@ -146,9 +146,6 @@
           
 	  $fullUsersObj->lastPositions->lat=$latApres;
 	  $fullUsersObj->lastPositions->long=$lonApres;
-	  echo "*** Coast crossed, setting boat position to ".
-	    $fullUsersObj->lastPositions->lat/1000.", ". 
-	    $fullUsersObj->lastPositions->long/1000;
 	  $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at this place
           
 	  // set wind angle to 0
