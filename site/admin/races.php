@@ -271,7 +271,14 @@ $opts['fdd']['theme'] = array(
   'values'   => $list_themes,
   'sort'     => true
 );
-
+$opts['fdd']['vacfreq'] = array(
+  'name'     => 'Crank. Freq.',
+  'select'   => 'T',
+  'options'  => 'ACDPVF',
+  'maxlen'   => 11,
+  'default'  => '0',
+  'sort'     => true
+);
 $opts['triggers']['delete']['before'][0] = 'races.TAD.trigger.php';
 
 include('adminfooter.php');
