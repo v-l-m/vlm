@@ -97,6 +97,7 @@
     $drawrealboats=htmlentities($_GET['drawrealboats']);
     $fullres=htmlentities($_GET['fullres']);
     $drawtextwp=htmlentities($_GET['drawtextwp']);
+    $defaultgridcolor=htmlentities($_GET['defaultgridcolor']);
 
     /*
     if ( $maparea > 5 ) {
@@ -202,7 +203,7 @@
     
     $time_start = time();
     $mapObj = new map($fullRacesObj, $list, $proj, $text, $tracks, $north, $south, $east, $west, 
-		      $idraces, $x, $y, $windtext, $maille, $drawwind, $timings, $drawtextwp);
+		      $idraces, $x, $y, $windtext, $maille, $drawwind, $timings, $drawtextwp, $defaultgridcolor);
     $time_stop = time();
     
     if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 20, "Time new map = " . ($time_stop - $time_start) . "s", $mapObj->colorText);

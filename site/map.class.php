@@ -36,7 +36,7 @@ class map
   //constructor that set all constants and values
   function map($origRace = NULL, $boatlist, $proj, $text, $tracks, 
                $north = 50000, $south = 40000, $east = 0, $west = -35000 , $idraces=0 , 
-               $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp='on')
+               $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp='on', $defaultgridcolor='yes')
   {
     //echo $north." ".$south."  ".$west." ".$east."\n";
 
@@ -124,9 +124,18 @@ class map
     $this->colorContinent= ImageColorAllocate($this->mapImage, 185, 100, 50);
     $this->colorCoastCross= ImageColorAllocate($this->mapImage, 250, 20, 20);
     // Meridiens et Parallèles (10, 5, 1)
-    $this->colorLines = ImageColorAllocate($this->mapImage, 255, 255, 255);
-    $this->color1Lines = ImageColorAllocate($this->mapImage, 200, 200, 210);
-    $this->color5Lines = ImageColorAllocate($this->mapImage, 180, 180, 230);
+    $colgrid = split(",", $defaultgridcolor);
+
+    if ($defaultgridcolor != 'yes' and count($colgrid) == 3) {
+        $this->colorLines = $this->fromhex($colgrid[0]);
+        $this->color1Lines = $this->fromhex($colgrid[1]);
+        $this->color5Lines = $this->fromhex($colgrid[2]);
+    } else {
+        $this->colorLines = ImageColorAllocate($this->mapImage, 255, 255, 255);
+        $this->color1Lines = ImageColorAllocate($this->mapImage, 200, 200, 210);
+        $this->color5Lines = ImageColorAllocate($this->mapImage, 180, 180, 230);
+    }
+    
     $this->colorText = ImageColorAllocate($this->mapImage, 0, 0, 0);
     $this->colorTextOrtho = ImageColorAllocate($this->mapImage, 0, 0, 127);
     $this->colorWarning = ImageColorAllocate($this->mapImage, 230, 80, 80);
