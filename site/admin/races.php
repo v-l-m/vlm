@@ -279,7 +279,8 @@ $opts['fdd']['vacfreq'] = array(
   'default'  => '0',
   'sort'     => true
 );
-$opts['triggers']['delete']['before'][0] = 'races.TAD.trigger.php';
+$opts['triggers']['delete']['before'][0] = 'races.TBD.trigger.php';
+$opts['triggers']['delete']['after'][0] = 'races.TAD.trigger.php';
 
 include('adminfooter.php');
 
