@@ -8,6 +8,14 @@ function get_output_format() {
   $sjson = false;
   $qplain = 0.1;
   $splain = false;
+  
+  if (isset($_REQUEST['forcefmt'])) {
+      $fmt = $_REQUEST['forcefmt'];
+      if (in_array($fmt, Array('json', 'text'))) {
+          return $fmt;
+      }
+      //else, we still try to autodetect...
+  }
 
   if (preg_match(',application/json(;q=(d?.d+))?,i', 
 		 $_SERVER['HTTP_ACCEPT'], $res)) {
