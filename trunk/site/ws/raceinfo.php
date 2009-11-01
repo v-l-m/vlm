@@ -31,13 +31,29 @@ function map_trigram($ar) {
 
 function get_info_array($idrace) {
     $res = wrapper_mysql_db_query_reader("SELECT * FROM races WHERE idraces = ".$idrace);
+    
+    //if nothing, then return null.
+    if (mysql_num_rows($res) == 0) return Null;
+    
+    //Race info in the main table
     $info = map_trigram(mysql_fetch_assoc($res));
-    $info["WPS"] = Array();
-    $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint as idwaypoint, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints as rw LEFT JOIN waypoints as w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
+
+    //Now fetch the waypoints
+    $info["races_waypoints"] = Array();
+    $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
     while ($wp = mysql_fetch_assoc($res)) {
-        $info["WPS"][$wp["wporder"]] = map_trigram($wp);
+        $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
+        }
+
+    //... and the race instructions
+    $info["races_instructions"] = Array();
+    $res = wrapper_mysql_db_query_reader("SELECT * FROM races_instructions WHERE idraces  = ".$idrace." AND MOD(flag, 2) = 1");
+    while ($ri = mysql_fetch_assoc($res)) {
+        $info["races_instructions"][] = map_trigram($ri);
         }
     
+    //the racemap ???
+
     return $info;
 }
 
