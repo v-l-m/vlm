@@ -27,9 +27,10 @@
     $uploadpages = Array(
         "uploadracemap.php" => "Race map upload",
         "uploadflag.php" => "Flag upload",
+        "importrace.php" => "Import race from another server",
         );
 
-    adminlistbox($uploadpages, "Upload operations");
+    adminlistbox($uploadpages, "Upload and import operations");
 
     $strangepages = Array(
         "strange_engaged_in_unknown.php" => "Engaged in unknown race.",

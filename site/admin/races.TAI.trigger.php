@@ -37,6 +37,7 @@
             $res2 = $this->myQuery($insertwp);
           }        
         print "</ul></div>";
+        insertAdminChangelog(Array("operation" => "Copy all race datas (racesmap, waypoints, instructions) from race $oldrectocopy to $rec"));
     }
     return True;
 ?>
