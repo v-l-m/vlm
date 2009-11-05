@@ -16,4 +16,6 @@ fi
 # VOR : finished
 # $PHP $VLMRACINE/vlmcode/moteur/posscripts/VolvoPos.php
 
+# G3
+$PHP $VLMRACINE/vlmcode/moteur/posscripts/g3pos.php
 
