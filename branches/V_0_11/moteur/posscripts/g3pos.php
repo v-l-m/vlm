@@ -64,16 +64,14 @@ if ($fd = fopen ($filename, "r")) {
      //$query  ="delete from positions where idusers=-3;" ;
      //mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
-     $vent = windAtPosition($latb*1000, $lonb*1000, 0, 'NEW' ) ;
-     $query ="insert into positions values ";
-     $query .= "( $time , $lonb*1000, $latb*1000, -3, 80, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360) . "') ;";
 
-     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     $query ="insert into positions  values ";
+     $query .= "( $time , " . $lonb*1000 . ", " . $latb*1000 . ", -3, 200982,null) ;";
+
+     mysql_query($query) or die("G3 : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
 
 
-     $fullUsersObj = new fullUsers(-3);
-     $fullUsersObj->writeCurrentRanking();
 
    }
 
