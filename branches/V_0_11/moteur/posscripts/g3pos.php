@@ -9,7 +9,7 @@ $boat_num= array(
 
 
 //$filename="http://trimaran-idec.geovoile.com/tourdumonde2007/positions.asp";
-$filename="http://cammas-groupama.geovoile.com/julesverne/positions.asp?lg=fr";
+$filename="http://cammas-groupama.geovoile.com/julesverne2009/positions.asp?lg=fr";
 //$filename="/home/fmicaux/toto";
 
 if ($fd = fopen ($filename, "r")) {
