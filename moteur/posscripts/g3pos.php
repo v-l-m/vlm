@@ -61,12 +61,12 @@ if ($fd = fopen ($filename, "r")) {
 
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
      // A partir de la tentative sur le Jules Verne de Groupama 3, on conserve les positions
-     //$query  ="delete from positions where idusers=-3;" ;
+     //$query  ="delete from positions where idusers=-1003;" ;
      //mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
 
      $query ="insert into positions  values ";
-     $query .= "( $time , " . $lonb*1000 . ", " . $latb*1000 . ", -3, 200982,null) ;";
+     $query .= "( $time , " . $lonb*1000 . ", " . $latb*1000 . ", -1003, 200982,null) ;";
 
      mysql_query($query) or die("G3 : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
