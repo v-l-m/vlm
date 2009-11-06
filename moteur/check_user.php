@@ -147,10 +147,6 @@
 	  $fullUsersObj->lastPositions->lat=$latApres;
 	  $fullUsersObj->lastPositions->long=$lonApres;
 	  $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at this place
-          
-	  // set wind angle to 0
-	  $fullUsersObj->users->pilotmode=2;
-	  $fullUsersObj->users->pilotparameter=0;
         } else {
 	  $fullUsersObj->lastPositions->writePositions(); //important, will write a new position
 	}
