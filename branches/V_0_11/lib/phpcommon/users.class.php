@@ -1043,6 +1043,9 @@ class fullUsers
     // replace into races_results (idraces , idusers , position , duration, longitude, latitude)
     //                       values ($1, $2, 0, $la_date, $longitude, $latitude);
     $timestamp=time();
+    $this->users->pilotmode      = 2;
+    $this->users->pilotparameter = 0;
+
     $query = "UPDATE users SET `pilotmode` = 2, " .
       " `pilotparameter` = 0 , " . 
       " `lastchange` = " . $timestamp . 
