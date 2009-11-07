@@ -30,10 +30,10 @@ function map_trigram($ar) {
 }
 
 function get_info_array($idrace) {
-    $res = wrapper_mysql_db_query_reader("SELECT * FROM races WHERE idraces = ".$idrace);
+    $res = wrapper_mysql_db_query_reader("SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq FROM races WHERE idraces = ".$idrace);
     
     //if nothing, then return null.
-    if (mysql_num_rows($res) == 0) return Null;
+    if (mysql_num_rows($res) == 0) return 0;
     
     //Race info in the main table
     $info = map_trigram(mysql_fetch_assoc($res));

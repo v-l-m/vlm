@@ -269,7 +269,7 @@ default:
 $pseudo=quote_smart($_REQUEST['pseudo']);
 $password=quote_smart($_REQUEST['password']);
 
-// Les clients Linux modernes utilisent l'UTF-8, alors que les clients Windows subsistent en IDO88591
+// Les clients Linux modernes utilisent l'UTF-8, alors que les clients Windows subsistent en ISO-8859-1
 // On teste donc checkaccount en conversion ISO8859-1   *ET*  en UTF-8
 if ( checkAccount(htmlentities($pseudo,ENT_COMPAT), 
 		  htmlentities($password, ENT_COMPAT)) != $idu 
