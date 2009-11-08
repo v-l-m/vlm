@@ -1101,17 +1101,22 @@ function getRacemap($idraces, $force = 'no') {
 
 }
 
+/* Insert a racemap image from content $racemapcontent for race $idraces */
+function insertRacemapContent($idraces, $racemapcontent) {
+    $req = "REPLACE INTO racesmap ( idraces, racemap ".
+             ") VALUES ( ".
+             "".$idraces." , ".
+             "'".addslashes($racemapcontent)."') ";
+    $ret = wrapper_mysql_db_query_writer ($req) or die (mysql_error ());
+}
+
 /* Insert a racemap image $racemapfile for race $idraces  */
 function insertRacemap($idraces, $racemapfile) {
     if (! file_exists($racemapfile) ) {
         return False;
     } else {
         $img_blob = file_get_contents ($racemapfile);
-        $req = "REPLACE INTO racesmap ( idraces, racemap ".
-                  ") VALUES ( ".
-                  "".$idraces." , ".
-                  "'".addslashes($img_blob)."') ";
-        $ret = wrapper_mysql_db_query_writer ($req) or die (mysql_error ());
+        insertRacemapContent($idraces, $img_blog);
         return True;
     }
 }
