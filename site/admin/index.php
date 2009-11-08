@@ -27,7 +27,7 @@
     $uploadpages = Array(
         "uploadracemap.php" => "Race map upload",
         "uploadflag.php" => "Flag upload",
-        "importrace.php" => "[Do not use] Import race from another server",
+        "importrace.php" => "Import race from another server",
         );
 
     adminlistbox($uploadpages, "Upload and import operations");
