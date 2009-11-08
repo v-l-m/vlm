@@ -421,10 +421,7 @@ class fullRaces {
     }
     
     //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete là !
-    $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
-    $result = wrapper_mysql_db_query_reader($query);
-    $row = mysql_fetch_assoc($result);
-    $classification_time=$row['time'];
+    $classification_time=lastUpdateTime();
 
     // L'URL de la page affichant ces classements :
     // http://vlm/races.php?lang=fr&type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
