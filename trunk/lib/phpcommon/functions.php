@@ -209,13 +209,22 @@ function lastUpdate($strings, $lang)
   }
 }
 
+/* return the last known update for the local database (or master if master is true) */
+function lastUpdateTime($master = false) {
+    $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
+    if (master) {
+        $result = wrapper_mysql_db_query_writer($query);
+    } else {
+        $result = wrapper_mysql_db_query_reader($query);
+    }
+    $row = mysql_fetch_assoc($result);
+    return $row['time'];
+}
+
 /*display the next supposed update*/
 function nextUpdate($strings, $lang)
 {
-  $query2 = "SELECT `time` FROM updates ORDER BY `time` DESC LIMIT 1";
-  $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-  $row2 = mysql_fetch_array($result2, MYSQL_NUM);
-  $lastupdate = $row2[0];
+  $lastupdate = lastUpdateTime();
   $interval = time() - $lastupdate;
   //echo "interval = $interval et DELAYBETWEENUPDATE ".DELAYBETWEENUPDATE."\n";
   if ($interval > DELAYBETWEENUPDATE) //problems during update
