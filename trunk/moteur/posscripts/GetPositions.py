@@ -207,7 +207,7 @@ class GetPositions(VlmHttp.VlmHttp):
         return re.compile(rexp).sub('', dat)
  
     def _degminutes(self, dat):
-        l = self._reGetOne(r'(\d+)\s*[^\d.,]*\s*([\d,.]+)\s*([N|S|E|W])', dat)
+        l = self._reGetOne(r'(\d+)\s*[^\d.,]*\s*([\d,.]+)[\s\']*([N|S|E|W])', dat)
         if l[2] in ['S', 'W']:
             sign = -1.
         else :
