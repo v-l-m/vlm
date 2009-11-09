@@ -1049,13 +1049,15 @@ class map
       }
 
       if ( $drawn[$boat[0]] > 14 ) {
-        // Sur la Volvo, les pixels reels sont numérotés -700 à -708
         if ( $this->am_on_map == true && $boat[2] < 0 ) {
            $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2] + 360000 ) ;
         } else {
            $xlogo = call_user_func_array(array(&$this, $projCallbackLong), $boat[2]) ;
         }
         $ylogo = call_user_func_array(array(&$this, $projCallbackLat), $boat[1]) ;
+
+        // Sur la Volvo, les pixels reels sont numérotés -700 à -708
+      /*
         if ( $boat[0] > -709 and $boat[0] < -700 ) {
           $Volvologo= imagecreatefrompng("images/bateaux_reels/V70_" . $boat[4] . ".png");
           imagecopymerge  ( $this->mapImage  , $Volvologo  , $xlogo, $ylogo,
@@ -1094,6 +1096,9 @@ class map
           $ylogo +=8;
 
         } else { 
+      */
+        
+        if ( $boat[0] < 0 ) {
           // Pas de logo disponible, on dessine des bulles
           imagefilledellipse($this->mapImage, $xlogo, $ylogo,
                              $drawn[$boat[0]], $drawn[$boat[0]],  $this->fromhex($boat[3])
@@ -1109,7 +1114,7 @@ class map
             $numcolor=$this->colorSea;
           }
 
-          if ( $boat[0] == -3 ) {
+          if ( $boat[0] == -1003 ) {
               $boat[0] = "G3";
           } else {
               $boat[0] = -$boat[0];
