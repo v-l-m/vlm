@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.19 2009-01-29 11:06:03 ylafon Exp $
+ * $Id: defs.h,v 1.22 2009-11-09 14:17:51 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -68,10 +68,15 @@
 #  define ROUND_WIND_ANGLE_IN_POLAR
 # elif  VLM_MINOR_VERSION == 9
 #  define GRIB_RESOLUTION_0_5
+#  define DEFAULT_INTERPOLATION_TWSA
+#  define ROUND_WIND_ANGLE_IN_POLAR
+# elif  VLM_MINOR_VERSION == 10
+#  define GRIB_RESOLUTION_0_5
+#  define DEFAULT_INTERPOLATION_SELECTIVE_TWSA
 #  define ROUND_WIND_ANGLE_IN_POLAR
 # else /* default */
 #  define GRIB_RESOLUTION_0_5
-#  define ROUND_WIND_ANGLE_IN_POLAR
+#  define DEFAULT_INTERPOLATION_SELECTIVE_TWSA
 # endif /* VLM_MINOR_VERSION */
 #endif /* VLM_MAJOR_VERSION */
 
@@ -98,8 +103,8 @@
  * the boat is not a single pixel, it makes sense :)
  */
 #ifdef SAFE_LINE_CHECK
-#  define INTER_MAX_LIMIT 1.000001
-#  define INTER_MIN_LIMIT -0.000001
+#  define INTER_MAX_LIMIT 1.0000001
+#  define INTER_MIN_LIMIT -0.0000001
 #else
 #  define INTER_MAX_LIMIT 1.0
 #  define INTER_MIN_LIMIT 0.0
@@ -115,6 +120,10 @@
 #endif /* PARANOID_COAST_CHECK */
 
 #define WP_ARRIVAL_DISTANCE 0.001
+
+#ifndef VLM_BUILD_DATE
+# define VLM_BUILD_DATE "\"Unknown\""
+#endif /* VLM_BUILD_DATE */
 
 #ifdef PARAM1
 #  undef PARAM1
