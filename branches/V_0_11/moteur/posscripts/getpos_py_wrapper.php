@@ -1,5 +1,5 @@
 <?php
-    //include_once "config.php";
+    include_once "config.php";
 
     // Main : open stdin and wait for lines
     if ($fd = fopen('php://stdin', 'r') ) {
