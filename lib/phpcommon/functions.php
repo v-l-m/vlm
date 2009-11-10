@@ -1034,7 +1034,7 @@ function getFlag($idflags, $force = 'no') {
 
     $original = DIRECTORY_COUNTRY_FLAGS . "/" . $idflags . ".png";
     
-    // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
+    // Création et mise en cache du flag si il n'existe pas ou est trop vieux
     if ( 
          ( ! file_exists($original) ) 
           ||  ($force == 'yes')
@@ -1054,8 +1054,8 @@ function getFlag($idflags, $force = 'no') {
           {
               //$img_out  = imagecreatefromstring( $col[1] ) or die("Cannot Initialize new GD image stream");
               // Sauvegarde
-              //imagepng($img_out, $original) or die ("Cannot write cached racemap");
-              file_put_contents($original, $col['flag'], FILE_BINARY  | LOCK_EX) or die ("Cannot write cached racemap");
+              //imagepng($img_out, $original) or die ("Cannot write cached raceflag");
+              file_put_contents($original, $col['flag'], FILE_BINARY  | LOCK_EX) or die ("Cannot write cached flag");
 
           }
     }
@@ -1122,10 +1122,11 @@ function insertRacemapContent($idraces, $racemapcontent) {
 /* Insert a racemap image $racemapfile for race $idraces  */
 function insertRacemap($idraces, $racemapfile) {
     if (! file_exists($racemapfile) ) {
+        die("ERROR : File $racemapfile doesn't exist.");
         return False;
     } else {
         $img_blob = file_get_contents ($racemapfile);
-        insertRacemapContent($idraces, $img_blog);
+        insertRacemapContent($idraces, $img_blob);
         return True;
     }
 }
