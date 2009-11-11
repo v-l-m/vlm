@@ -128,27 +128,27 @@
     echo "<h4>" . $strings[$lang]["pilototo_prog_title"] . "</h4>" ;
     $usersObj = new users($idusers);
 
-/* PILOTO (class users) Functions
-  function pilototoCheck()
-    function pilototoList($status = PILOTOTO_PENDING)
-      function pilototoDelete($taskid)
+    /* PILOTO (class users) Functions
+        function pilototoCheck()
+        function pilototoList($status = PILOTOTO_PENDING)
+        function pilototoDelete($taskid)
         function pilototoAdd($time, $pim, $pip)
-    function pilototoUpdate($taskid, $time, $pim, $pip)
+        function pilototoUpdate($taskid, $time, $pim, $pip)
     */
 
-    $action=$_POST['action'];
+    $action=quote_smart($_POST['action']);
     if ( !empty($action)) {
         // Action donnée, on exécute l'action
         switch ($action) {
             case $strings[$lang]["pilototo_prog_add"]:
-                $time=$_POST['time'];
-                $pim=$_POST['pim'];
-                $pip=$_POST['pip'];
+                $time=quote_smart($_POST['time']);
+                $pim=quote_smart($_POST['pim']);
+                $pip=quote_smart($_POST['pip']);
                 
 //     if ( $pim == 3 || $pim == 4 ) {
 //          $pip=0;
 //     } else {
-//                $pip=$_POST['pip'];
+//                $pip=quote_smart($_POST['pip']);
 //     }
                 if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
                     if ( $pim <1 || $pim >5) {
@@ -171,15 +171,15 @@
                 }
                 break;
             case $strings[$lang]["pilototo_prog_upd"]:
-                $taskid=$_POST['taskid'];
-                $time=$_POST['time'];
-                $pim=$_POST['pim'];
-                $pip=$_POST['pip'];
+                $taskid=quote_smart($_POST['taskid']);
+                $time=quote_smart($_POST['time']);
+                $pim=quote_smart($_POST['pim']);
+                $pip=quote_smart($_POST['pip']);
 
 //     if ( $pim == 3 || $pim == 4 ) {
 //          $pip=0;
 //     } else {
-//                $pip=$_POST['pip'];
+//                $pip=quote_smart($_POST['pip']);
 //     }
 
                 if ( !empty($taskid) && !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip ==0 ) ) {
@@ -201,7 +201,7 @@
                 }
                 break;
             case $strings[$lang]["pilototo_prog_del"]:
-                $taskid=$_POST['taskid'];
+                $taskid=quote_smart($_POST['taskid']);
                 if ( !empty($taskid) ) {
                     $rc=$usersObj->pilototoDelete($taskid);
                 } else {

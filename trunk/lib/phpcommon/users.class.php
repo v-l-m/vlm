@@ -269,11 +269,13 @@ class users
   function pilototoAdd($time, $pim, $pip)
   {
     // lookup for a task to do
+    $time = intval($time);
+    
     $query = "SELECT COUNT(*) from auto_pilot
               WHERE idusers=$this->idusers";
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     $row = mysql_fetch_row($result);
-    if ( $row[0] < PILOTOTO_MAX_EVENTS ) {
+    if ( $row[0] < PILOTOTO_MAX_EVENTS and $time > time()) {
       $query = "INSERT INTO auto_pilot
              ( time, idusers, pilotmode, pilotparameter, status)
        VALUES ( $time, $this->idusers, '" . $pim . "', '" . $pip . "', '".PILOTOTO_PENDING."');";
@@ -288,6 +290,8 @@ class users
   // Update a task of the pilototo
   function pilototoUpdate($taskid, $time, $pim, $pip)
   {
+    $time = intval($time);
+    if ($time < time()) return 1;
     // lookup for a task to do
     $query = "UPDATE auto_pilot
      SET time=$time,
