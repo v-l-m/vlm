@@ -370,7 +370,7 @@ class fullRaces {
     echo "  </thead>\n";
     echo "  <tbody>\n";
     //echo "    <tr><td></td><td></td></tr>\n";
-    //for xhtml  compliance, find other solution
+    //for xhtml  compliance, find other solution - tbody can't be void
 
     $num_inscrits=0;
     foreach ($this->opponents as $users)
