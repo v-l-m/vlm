@@ -8,7 +8,7 @@ include_once("config.php");
 <?php //print_r($_COOKIE);?>
 <div>
 <h2><?php echo $strings[$lang][mymap]; ?></h2>
-<BR>
+<br>
 </div>
 <?php 
 $fullUsersObj = new fullUsers(getLoginId());
@@ -40,7 +40,7 @@ $bounds = $fullRacesObj->getRacesBoundaries();
 document.getElementById('west').value='<?echo $bounds['west']?>';
 document.getElementById('east').value='<?echo $bounds['east']?>';
 document.getElementById('south').value='<?echo $bounds['south']?>';"
-> Centrer la carte sur la course</a><BR><BR>
+> Centrer la carte sur la course</a><br><br>
 </div>
 
 <h3><?php echo $strings[$lang]["maximage"] ?></h3> 
@@ -88,7 +88,7 @@ $fullRacesObj->dispHtmlForm($strings, $lang, explode(",", $_COOKIE['list']));
 
 
 ?>
-<BR>
+<br>
 <input type="checkbox" name="save" checked="checked" /><?php echo $strings[$lang]["save"] ?>  <br/>
 </td></tr></table>
 
