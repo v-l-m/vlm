@@ -74,7 +74,7 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
 function displayPrevious100($startnum) {
           // Si on ne part pas de 1, on propose le bouton "-100"
           if ( $startnum > 1 ) {
-               $FORMULAIRE="<form method=\"get\" name=\"moins\" ction=\"" . $_SERVER["PHP_SELF"] . "\">\n";
+               $FORMULAIRE="<form method=\"get\" name=\"moins\" action=\"" . $_SERVER["PHP_SELF"] . "\">\n";
 
                $new_startnum=$startnum-MAX_BOATS_ON_RANKINGS;
                if ( $new_startnum < 0 ) $new_startnum=1;
@@ -85,11 +85,11 @@ function displayPrevious100($startnum) {
                          $FORMULAIRE.="<input type=\"hidden\" name=\"$keyname\" value=\"$value\" />\n";
                     }
                }
-               $FORMULAIRE.="<input type=\"submit\" value=\"< " . MAX_BOATS_ON_RANKINGS . "\" />\n";
+               $FORMULAIRE.="<input type=\"submit\" value=\"&lt; " . MAX_BOATS_ON_RANKINGS . "\" />\n";
                $FORMULAIRE.="</form>\n";
                echo $FORMULAIRE;
           } else { //sinon, on le pose desactive pour garder la coherence d'ensemble
-               echo "<input disabled type=\"button\" value=\"< " . MAX_BOATS_ON_RANKINGS . "\" />\n";
+               echo "<input disabled=\"disabled\" type=\"button\" value=\"&lt; " . MAX_BOATS_ON_RANKINGS . "\" />\n";
           }
 }
 
@@ -105,11 +105,11 @@ function displayNext100($startnum, $num_engaged) {
                          $FORMULAIRE.= "<input type=\"hidden\" name=\"$keyname\" value=\"$value\" />\n";
                     }
                }
-               $FORMULAIRE.="<input type=\"submit\" value=\"> " . MAX_BOATS_ON_RANKINGS . "\" />\n";
+               $FORMULAIRE.="<input type=\"submit\" value=\"&gt; " . MAX_BOATS_ON_RANKINGS . "\" />\n";
                $FORMULAIRE.="</form>\n";
                echo $FORMULAIRE;
           } else { //sinon, on le pose desactive pour garder la coherence d'ensemble
-               echo "<input disabled type=\"button\" value=\"> " . MAX_BOATS_ON_RANKINGS . "\" />\n";
+               echo "<input disabled=\"disabled\" type=\"button\" value=\"&gt; " . MAX_BOATS_ON_RANKINGS . "\" />\n";
           }
 
 }

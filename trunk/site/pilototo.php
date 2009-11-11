@@ -47,7 +47,7 @@
         echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
         echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
-        echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled value=\"" . $timestring . "\" /></td>\n";
+        echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled=\"disabled\" value=\"" . $timestring . "\" /></td>\n";
         echo "    <td>" . $row . "</td>\n";
         echo "  </tr>\n";
         echo "</form>\n";
