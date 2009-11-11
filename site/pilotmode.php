@@ -1,4 +1,4 @@
-      echo "<B>".$strings[$lang]["pilotmode"]."</B>";
+      echo "<b>".$strings[$lang]["pilotmode"]."</b>";
       if ( $usersObj->users->pilotmode == 1 )
   echo $strings[$lang]["autopilotengaged"]." : ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
       else if ( $usersObj->users->pilotmode == 2 )

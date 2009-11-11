@@ -47,7 +47,7 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         printf("      ".$strings[$lang]["norace"]."\n");
     } else {
         echo "<table width=\"100%\">\n<tr>\n";
-        echo "<td width=200 align=\"left\" class=\"boat\">";
+        echo "<td width=\"200\" align=\"left\" class=\"boat\">";
         // Carte de la course
         $href = "/racemap.php?idraces=".$idraces;
         if ( 1 or file_exists($href) ) {
@@ -94,12 +94,12 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         }
         // Affichage des IC destinées à la racelist
         $fullRacesObj = new fullRaces($idraces);
-        printf("    <li><a href=\"/ics.php?lang=%s&idraces=%s\">WP(s)</a>" , $lang,$idraces);
+        printf("    <li><a href=\"/ics.php?lang=%s&amp;idraces=%s\">WP(s)</a>" , $lang,$idraces);
         printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), $strings[$lang]['crank'],  $fullRacesObj->races->vacfreq);
         foreach ( $fullRacesObj->races->getICS() as $ic) {
             if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                 if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                    printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=_ic>".$strings[$lang]["icforum"]."</a></li>\n");
+                    printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=\"_ic\">".$strings[$lang]["icforum"]."</a></li>\n");
                 } else {
                     printf ("    <li class=\"icflagracelist\">".$ic['instructions']."</li>\n");
                 }

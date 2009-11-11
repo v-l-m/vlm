@@ -11,7 +11,7 @@ function outputIC($fullRacesObj, $icforum) {
     if ($ic['flag'] & IC_FLAG_VISIBLE and !($ic['flag'] & IC_FLAG_HIDEONICS)) {
       echo "<div class=\"icbox\">\n";
       if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-	printf ("<a href=\"".$ic['instructions']."\" target=_ic><b>".strtoupper($icforum)."</b></a>\n");
+	printf ("<a href=\"".$ic['instructions']."\" target=\"_ic\"><b>".strtoupper($icforum)."</b></a>\n");
       } else {
 	echo nl2br($ic['instructions']);
       }

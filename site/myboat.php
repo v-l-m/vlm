@@ -406,7 +406,7 @@ include_once("scripts/myboat.js");
             // Messages specifiques dans le panneau de controle en fonction des courses
             // Blackout ?
             $now = time();
-            $ichref="ics.php?lang=".$lang."&idraces=".$myRace->idraces;
+            $ichref="ics.php?lang=".$lang."&amp;idraces=".$myRace->idraces;
             if ( $myRace->bobegin > $now ) {
                 $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$myRace->bobegin);
                 $boduration = ($myRace->boend - $myRace->bobegin ) /3600;
@@ -421,7 +421,7 @@ include_once("scripts/myboat.js");
             foreach ( $myRace->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                        $txtstr = "<a href=\"".$ic['instructions']."\" target=_ic>".$strings[$lang]["icforum"]."</a>";
+                        $txtstr = "<a href=\"".$ic['instructions']."\" target=\"_ic\">".$strings[$lang]["icforum"]."</a>";
                         $mes = Array("id" => "ic".$myRace->idraces , "txt" => $txtstr, "class" => "ic");
                     } else {
                         $mes = Array("id" => "ic".$myRace->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic");
