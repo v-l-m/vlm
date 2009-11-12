@@ -186,7 +186,8 @@ function usage() {
   echo "\nX = numero de votre bateau";
   echo "\nxxxxx = votre nom d'utilisateur";
   echo "\nppppp = votre mot de passe";
-  echo "\nVariables = \n
+  echo "\n\nLe mode txt est conservé uniquement pour des raisons historiques et pourra disparaitre dans les version ultérieures. Merci d'utiliser le format json";
+  echo "\n\nVariables = \n
     #* WPL : liste de Waypoints (liste)
     #* RAC : numéro de la course (string)
     #* IDB : nom du bateau (string)
