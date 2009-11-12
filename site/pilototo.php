@@ -91,7 +91,8 @@
     
     function dateobj(i) {
         var da = eval(document.forms[i].time.value);
-            da*=1000;
+        document.forms[i].time.value = da;
+        da*=1000;
         return(new Date(da));
     }
 
