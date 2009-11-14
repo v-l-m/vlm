@@ -20,7 +20,6 @@ $opts['sort_field'] = array('-deptime');
 
 /* Fields def. helpers */
 
-
 //suboptimal, should not be done for each load of the page but only when allowing to change something
 $dir = "../".DIRECTORY_POLARS ; 
 $dh  = opendir($dir);
@@ -62,45 +61,20 @@ $calendar_specifications = array(
      'label'       => '...',      // button label (used by phpMyEdit)
      );
 
+//Javascripts...
 
-/* Field definitions
-   
-Fields will be displayed left to right on the screen in the order in which they
-appear in generated list. Here are some most used field options documented.
+?>
+<script type="text/javascript">
+function computeFromEpoc(id) {
+    input = document.getElementById(id);
+    output = document.getElementById(id+'_help');
+    date = new Date(input.value*1000);
+    output.innerHTML = 'Date : '+date.toGMTString();
+}
+</script>
 
-['name'] is the title used for column headings, etc.;
-['maxlen'] maximum length to display add/edit/search input boxes
-['trimlen'] maximum length of string content to display in row listing
-['width'] is an optional display width specification for the column
-          e.g.  ['width'] = '100px';
-['mask'] a string that is used by sprintf() to format field output
-['sort'] true or false; means the users may sort the display on this column
-['strip_tags'] true or false; whether to strip tags from content
-['nowrap'] true or false; whether this field should get a NOWRAP
-['select'] T - text, N - numeric, D - drop-down, M - multiple selection
-['options'] optional parameter to control whether a field is displayed
-  L - list, F - filter, A - add, C - change, P - copy, D - delete, V - view
-            Another flags are:
-            R - indicates that a field is read only
-            W - indicates that a field is a password field
-            H - indicates that a field is to be hidden and marked as hidden
-['URL'] is used to make a field 'clickable' in the display
-        e.g.: 'mailto:$value', 'http://$value' or '$page?stuff';
-['URLtarget']  HTML target link specification (for example: _blank)
-['textarea']['rows'] and/or ['textarea']['cols']
-  specifies a textarea is to be used to give multi-line input
-  e.g. ['textarea']['rows'] = 5; ['textarea']['cols'] = 10
-['values'] restricts user input to the specified constants,
-           e.g. ['values'] = array('A','B','C') or ['values'] = range(1,99)
-['values']['table'] and ['values']['column'] restricts user input
-  to the values found in the specified column of another table
-['values']['description'] = 'desc_column'
-  The optional ['values']['description'] field allows the value(s) displayed
-  to the user to be different to those in the ['values']['column'] field.
-  This is useful for giving more meaning to column values. Multiple
-  descriptions fields are also possible. Check documentation for this.
-*/
-
+<?php
+//Fields definitions
 
 $opts['fdd']['idraces'] = array(
   'name'     => '#Id',
@@ -121,7 +95,7 @@ $opts['fdd']['raceminimap'] = array(
   'sql'      => 'idraces', 
   'mask'     => "<img style=\"height:40px; \" src=\"/minimap.php?idraces=%s\" />",
   'URL'      => '/admin/uploadracemap.php?idnewrace=$key',
-  'help'     => 'Click to upload the racemap',
+  'help'     => 'Click the minimapto upload the racemap',
   'input'    => 'R',
 );
 
@@ -149,7 +123,10 @@ $opts['fdd']['deptime'] = array(
   'sql|LFVD' => 'FROM_UNIXTIME(deptime)',
   'maxlen'   => 20,
   'sort'     => true,
-  'help'     => 'Start time',
+  'js'       => Array('required' => true, 'regexp' => '/^[0-9]+$/'),
+  'help|LVFD'=> 'Start time',
+  //FIXME: on peut mieux faire / on peut factoriser
+  'help|PCA' => '<span id="PME_dhtml_fld_deptime_help" onClick="computeFromEpoc(\'PME_dhtml_fld_deptime\');">Click to check the EPOC value</span>',
   'calendar' => $calendar_specifications,
 );
 $opts['fdd']['startlat'] = array(
@@ -183,6 +160,10 @@ $opts['fdd']['closetime'] = array(
   'sql|LFVD' => 'FROM_UNIXTIME(closetime)',
   'maxlen'   => 20,
   'calendar' => $calendar_specifications,
+  'help|LVFD'=> 'Close time',
+  //FIXME: on peut mieux faire / on peut factoriser
+  'help|PCA' => '<span id="PME_dhtml_fld_closetime_help" onClick="computeFromEpoc(\'PME_dhtml_fld_closetime\');">Click to check the EPOC value</span>',
+  'js'       => Array('required' => true, 'regexp' => '/^[0-9]+$/'),
   'sort'     => true
 );
 $opts['fdd']['racetype'] = array(
@@ -243,6 +224,9 @@ $opts['fdd']['bobegin'] = array(
   'sql|LFVD' => 'IF (bobegin=0,\'\',FROM_UNIXTIME(bobegin))',
   'default'  => '0',
   'calendar' => $calendar_specifications,
+  'help|LVFD'=> 'Start of the blackout',
+  //FIXME: on peut mieux faire / on peut factoriser
+  'help|PCA' => '<span id="PME_dhtml_fld_bobegin_help" onClick="computeFromEpoc(\'PME_dhtml_fld_bobegin\');">Click to check the EPOC value</span>',
   'sort'     => true
 );
 $opts['fdd']['boend'] = array(
@@ -253,6 +237,9 @@ $opts['fdd']['boend'] = array(
   'sql|LFVD' => 'IF (boend=0,\'\',FROM_UNIXTIME(boend))',
   'default'  => '0',
   'calendar' => $calendar_specifications,
+  'help|LVFD'=> 'End of the blackout',
+  //FIXME: on peut mieux faire / on peut factoriser
+  'help|PCA' => '<span id="PME_dhtml_fld_boend_help" onClick="computeFromEpoc(\'PME_dhtml_fld_boend\');">Click to check the EPOC value</span>',
   'sort'     => true
 );
 $opts['fdd']['maxboats'] = array(

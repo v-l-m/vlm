@@ -833,6 +833,6 @@ include_once("scripts/myboat.js");
 <?php
   }
 
-include_once("includes/footer.inc");
+  include_once("includes/footer.inc");
 ?>
 
