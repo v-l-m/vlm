@@ -66,9 +66,9 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         $urlracename = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
         $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
         if ( $maxboats != 0 ) {            
-            $strengaged = " - Engaged / Total : " . $urlnumengaged . "/" . $maxboats ;
+            $strengaged = " - ".$strings[$lang]["engaged"]." / Total : " . $urlnumengaged . "/" . $maxboats ;
         } else {
-            $strengaged = " - Engaged : " . $urlnumengaged . " (unlimited)";
+            $strengaged = " - ".$strings[$lang]["engaged"]." : " . $urlnumengaged . " (".$strings[$lang]["unlimited"].")";
         }
 
         printf("<h1>%s (%s) - %s</h1>\n",$urlidraces, $urlboattype, $urlracename); /* FIXME use style there */
