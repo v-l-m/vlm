@@ -681,7 +681,7 @@ class fullUsers
         $query .=  " pilotparameter  = " . $this->users->pilotparameter . " ," ;
         $query .=  " boatheading     = " . $this->users->boatheading    . " ," ;
       }  else  {
-        // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG)
+        // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG ou VBMG)
         // Mais il faut remettre à jour LatNM et LongNM
         $rc = $this->bestWayToWaypoint($this->nwp);
       }
@@ -717,9 +717,9 @@ class fullUsers
       /**
        * Update targetlong
        */
-      if ( is_numeric($long) && abs($long)<180 ) {
+      if ( is_numeric($long) && abs($long)<=180 ) {
         if ( $long >180 ) $long-=360;
-        if ( $long <-180 ) $long+=360;
+        if ( $long <=-180 ) $long+=360;
         $this->users->targetlong = $long;
         $query .= " , `targetlong` = " . $this->users->targetlong ; 
       } else { 
