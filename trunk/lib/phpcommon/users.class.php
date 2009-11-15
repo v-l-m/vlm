@@ -97,7 +97,7 @@ class users
       " WHERE idusers = " . $this->idusers;
     wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 
-    logUserEvent($this->idusers , $_SESSION['IP'] , $this->engaged, "Update prefs." );
+    logUserEvent($this->idusers , $this->engaged, "Update prefs." );
 
   }
 
@@ -303,7 +303,7 @@ class users
     $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
-    logUserEvent($this->idusers , $_SESSION['IP'] , $this->engaged, "Update pilototo task $taskid : time=$time, pim=$pim,pip=$pip" );
+    logUserEvent($this->idusers , $this->engaged, "Update pilototo task $taskid : time=$time, pim=$pim,pip=$pip" );
 
     return(0);
   }
@@ -740,7 +740,7 @@ class fullUsers
       // echo "MODIFWP QUERY=" . $query;
       wrapper_mysql_db_query_writer($query) ;//or printf("\nQuery failed : " . mysql_error." ".$query);
 
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" );
 
 
     }
@@ -989,7 +989,7 @@ class fullUsers
     // Then subscribe to race 0
     $this->subscribeToRaces(0);
 
-    logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Abandon." );
+    logUserEvent($this->users->idusers , $this->users->engaged, "Abandon." );
 
   }
 
@@ -1129,7 +1129,7 @@ class fullUsers
         " WHERE idusers = " . $this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
 
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $id, "Engaged." );
+      logUserEvent($this->users->idusers , $id, "Engaged." );
 
     } else {
       $this->deleteCurrentRanking();
@@ -1166,7 +1166,7 @@ class fullUsers
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading );
       break;
 
     case "windangle":
@@ -1178,7 +1178,7 @@ class fullUsers
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter );
       break;
 
     case "orthodromic":
@@ -1188,7 +1188,7 @@ class fullUsers
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
       
     case "bestvmg":
@@ -1198,7 +1198,7 @@ class fullUsers
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
 
     case "vbvmg":
@@ -1208,7 +1208,7 @@ class fullUsers
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
 
     case "bestspeed":
@@ -1219,7 +1219,7 @@ class fullUsers
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       
-      logUserEvent($this->users->idusers , $_SESSION['IP'] , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
+      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
     }
     $this->updateAngles();
