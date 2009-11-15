@@ -90,8 +90,10 @@ define("MAPAREA_MAX", 300);
 define("DEFAULT_SEA_COLOR", "e0e0f0");
 define("ALTERNATE_SEA_COLOR", "4040f0");
 define("TRANSPARENT_SEA_COLOR", "fefefe");
-
 define("MAX_SPEED_FOR_RANKING", 40);
+
+//Log parameters
+define("MAX_LOG_USER_ACTION_AGE", 168*3600); #1 week
 
 /********Constants*************/
 define("CRONVLMLOCK", "".VLMTEMP."/cronvlm.lock");
