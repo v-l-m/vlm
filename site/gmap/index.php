@@ -19,7 +19,7 @@
 $localDBPages=array();
 include_once "param.php";
 
-mysql_connect(DBSERVER, DBUSER, DBPASSWORD) or die("Impossible de se connecter : " . mysql_error());
+mysql_connect(DBSLAVESERVER, DBSLAVEUSER, DBSLAVEPASSWORD) or die("Impossible de se connecter : " . mysql_error());
 mysql_select_db(DBNAME);
 
 // Protège la variable
@@ -39,6 +39,10 @@ $idusers = quote_smart($_GET["idusers"]);
 $idraces = quote_smart($_GET["idraces"]);
 $type = quote_smart($_GET["type"]);
 $riquette = quote_smart($_GET["riq"]);
+
+if (!defined(VLMGMAPKEY)) {
+    define("VLMGMAPKEY", "ABQIAAAAU9L35N6EdAtdkT4Cb2abDRR9fpxOiyHPEX_8YzC8CNXvq83W-hRDmTj4GD1F8DLKiaJ97BAfcB5i7w");
+    }
 
 switch ($type) {
 
@@ -170,6 +174,8 @@ switch ($type) {
       }
       $html = file_get_contents("form.html");
       $html= str_replace('###LISTPLAYER###',$strListPlayers,$html);
+      $html= str_replace('###VLMGMAPKEY###', VLMGMAPKEY, $html);
+          
       echo $html;
     } else {
       echo 'Mauvais num&eacute;ro de course.';
