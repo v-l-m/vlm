@@ -17,7 +17,7 @@
     $tablepages = Array(
         "races_instructions.php" => "Races instructions",
         "flags.php" => "Flags definitions (no uploading, see below)",
-        "races.php" => "[Experimental] Races definitions (no uploading, see below)",
+        "races.php" => "Races definitions (no uploading, see below)",
         "waypoints.php" => "[Experimental] Waypoints definitions",
         "users.php" => "[Experimental] Users",
         );

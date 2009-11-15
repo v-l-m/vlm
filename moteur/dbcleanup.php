@@ -45,7 +45,7 @@ $result = wrapper_mysql_db_query_writer($queryhistopositions);
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($querypurgepositions);
 
-$querypurgeupdates = "DELETE FROM updates WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
+$querypurgeupdates = "DELETE FROM updates WHERE UNIX_TIMESTAMP(time) < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($querypurgeupdates);
 
 $locktables = "UNLOCK TABLES";

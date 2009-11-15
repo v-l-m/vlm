@@ -28,7 +28,7 @@ include("../includes/header-status.inc");
         $idraces  = $row['idraces'];
         $racename = $row['racename'];
         $vacfreq  = $row['vacfreq'];
-        $query2   = "SELECT `time`, update_comment FROM updates WHERE update_comment LIKE '% ".$idraces."%' OR update_comment LIKE '".$idraces."%' ORDER BY `time` DESC LIMIT 1";
+        $query2   = "SELECT UNIX_TIMESTAMP(`time`) AS time, update_comment FROM updates WHERE update_comment LIKE '% ".$idraces."%' OR update_comment LIKE '".$idraces."%' ORDER BY `time` DESC LIMIT 1";
         $result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
         $row2     = mysql_fetch_assoc($result2);
         $delay    = $current_time - (int)$row2['time'];
