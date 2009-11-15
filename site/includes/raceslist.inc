@@ -14,10 +14,7 @@ $q=htmlentities(quote_smart($_REQUEST['type'])) ;
 
 //change that, no SQL should appear directly in scripts
 $query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
-
-$query1 .= " WHERE ( ( started = 0 AND DEPTIME > " . time() . " )
-                OR ( closetime > " . time() .  " ) ) " ;
-
+$query1 .= " WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ";
 
 if ( $q != "" ) { 
         $query1 .= " AND racetype = " . intval($q). " " ;
