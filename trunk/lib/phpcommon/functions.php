@@ -192,14 +192,14 @@ function lastUpdate($strings, $lang)
   if (file_exists(CRONVLMLOCK)) {
     printf ($strings[$lang]["processing"] );
   } else {
-    $query2 = "SELECT `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
+    $query2 = "SELECT UNIX_TIMESTAMP(`time`) as time,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
     $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-    $row2 = mysql_fetch_array($result2, MYSQL_NUM);
-    $lastupdate = $row2[0];
-    $races = $row2[1];
-    $boats = $row2[2];
-    $duration = max($row2[3],1);
-    $update_comment = $row2[4];
+    $row2 = mysql_fetch_assoc($result2, MYSQL_NUM);
+    $lastupdate = $row2['time'];
+    $races = $row2['races'];
+    $boats = $row2['boats'];
+    $duration = max($row2['duration'],1);
+    $update_comment = $row2['update_comment'];
     $interval = time() - $lastupdate;
 
     $intervalarray = duration2string($interval);
@@ -211,8 +211,8 @@ function lastUpdate($strings, $lang)
 
 /* return the last known update for the local database (or master if master is true) */
 function lastUpdateTime($master = false) {
-    $query = "SELECT time FROM updates ORDER BY time DESC LIMIT 1";
-    if (master) {
+    $query = "SELECT UNIX_TIMESTAMP(time) AS time FROM updates ORDER BY time DESC LIMIT 1";
+    if ($master) {
         $result = wrapper_mysql_db_query_writer($query);
     } else {
         $result = wrapper_mysql_db_query_reader($query);

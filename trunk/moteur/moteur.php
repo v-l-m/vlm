@@ -104,8 +104,7 @@ include "start_races.php";
 echo "\n5- === TIMESTAMPING : ".gmdate("M d Y H:i:s",time())." (UTC)... ";
 // Only if full engine run (not for a "one race or one boat" run) ==> No arg.
 if ( $flagglobal == true ) {
-     $query5 = "INSERT INTO updates  VALUES (" 
-      .time()    . ","
+     $query5 = "INSERT INTO updates (races, boats, duration, update_comment) VALUES (" 
       .$nb_races . ","
       .$nb_boats . ","
       .$engine_elapsed. ","
