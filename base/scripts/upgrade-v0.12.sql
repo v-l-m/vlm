@@ -22,3 +22,4 @@ ALTER TABLE `user_action` ADD COLUMN `time2` timestamp;
 UPDATE `user_action` SET `time2` = FROM_UNIXTIME(`time`);
 ALTER TABLE `user_action` DROP COLUMN `time`;
 ALTER TABLE `user_action` CHANGE `time2` `time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP FIRST;
+
