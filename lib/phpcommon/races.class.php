@@ -415,9 +415,9 @@ class fullRaces {
     
     $IDU=intval(getLoginId());
     if ( $IDU != 0 ) {
-      $list = explode ("," , getUserPref($IDU,"mapPrefOpponents") );
+        $list = explode ("," , getUserPref($IDU,"mapPrefOpponents") );
     } else {
-      $list = "empty";
+        $list = "empty";
     }
     
     //if (!isset($toBeSort[0])) return; // plus personne en course. On arrete là !
@@ -444,14 +444,14 @@ class fullRaces {
     // Si on est en cours de Blackout, on prévient
     echo "<h3>";
     if ( $this->races->bobegin < $now && $now < $this->races->boend ) {
-      echo $strings[$lang]["classification"]
-        .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->bobegin);
-      echo "<br />\n";
-      echo $strings[$lang]["blackout"]
-        .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->boend);
+        echo $strings[$lang]["classification"]
+          .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->bobegin);
+        echo "<br />\n";
+        echo $strings[$lang]["blackout"]
+          .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->boend);
     } else {
-      echo $strings[$lang]["classification"]
-        .gmdate($strings[$lang]["dateClassificationFormat"], $classification_time);
+        echo $strings[$lang]["classification"]
+          .gmdate($strings[$lang]["dateClassificationFormat"], $classification_time);
     }
     echo "</h3>\n";
 
@@ -520,9 +520,9 @@ class fullRaces {
     // Ecart par rapport au premier : pas de tri
     $str=$strings[$lang]["ecart"];
     if ( strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) == "tonm" ) { 
-      $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
+        $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
     } else {
-      $str.=" <a href=\"".$baseurl."&amp;disttype=tonm\">NM</a>";
+        $str.=" <a href=\"".$baseurl."&amp;disttype=tonm\">NM</a>";
     }
     echo "<th>".$str."</th>\n";
 
@@ -540,66 +540,66 @@ class fullRaces {
 
       // N'entrent dans les tableaux que les bateaux effectivement en course
       if ( $row['nwp'] == "" || $row['loch'] == 0 ) {
-	continue;
+	        continue;
       }
 
       if ( $key == 0 ) {
-        $FirstNwp = $row['nwp'];
-        $FirstDnm = $row['dnm'];
-        $FirstLat = $row['latitude'];
-        $FirstLon = $row['longitude'];
+          $FirstNwp = $row['nwp'];
+          $FirstDnm = $row['dnm'];
+          $FirstLat = $row['latitude'];
+          $FirstLon = $row['longitude'];
       }
 
       //table lines
       // key++ uniquement pour les "joueurs VLM"
       if ( $row['idusers'] > 0 ) {
-	$key++;
+        	$key++;
       }
 
       $rank=$key + $numarrived;
 
       // On saute les "N"(startnum) premiers
       if ( $startnum > 0 && $key < $startnum ) {
-	continue;
+        	continue;
       }
 
       if ( $row['idusers'] < 0 ) {
-        $class="class=\"realboat\"";
+          $class="class=\"realboat\"";
       } else if ( $row['idusers'] == $IDU ) {
-        $class="class=\"hilight\"";
+          $class="class=\"hilight\"";
       } else if ( $list != "empty" && in_array($row['idusers'], $list) )  {
-        $class="class=\"hilightopps\"";
+          $class="class=\"hilightopps\"";
       } else {
-        $class="class=\"ranking\"";
+          $class="class=\"ranking\"";
       }
       // Bateaux bloqués (lock) ou seulement à la cote (oncoast)
       if ( $row['releasetime'] > $now ) {
-        $class="class=\"locked\"";
+          $class="class=\"locked\"";
       } else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) {
-        $class="class=\"oncoast\"";
+          $class="class=\"oncoast\"";
       }
       echo "<tr " . $class . ">\n";
       if ( $row['idusers'] > 0 ) {
-        echo "<td>". $rank ."</td>\n";
+          echo "<td>". $rank ."</td>\n";
       } else {
-        echo "<td>&nbsp;</td>\n";
+          echo "<td>&nbsp;</td>\n";
       }
       // ============= Affichage des noms de bateaux en acronyme
       if ( $row['idusers'] > 0 ) {
-	echo "<td class=\"ranking\">";
-	echo $this->htmlFlagImg($row['country']);
-	echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
-	  "title=\"". $row['boatname'] . "\">" . 
-	  " (". $row['idusers'] . ") " . 
-	  $row['username'] .
-	  "</acronym>\n";
-        echo "</td>";
+        	echo "<td class=\"ranking\">";
+        	echo $this->htmlFlagImg($row['country']);
+        	echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
+      	  "title=\"". $row['boatname'] . "\">" . 
+      	  " (". $row['idusers'] . ") " . 
+      	  $row['username'] .
+      	  "</acronym>\n";
+          echo "</td>";
       } else {
-        $idu=-$row['idusers'];
-        if ( $idu >=100 and $idu <=199 ) {
-	  $idu-=100;
-	}
-        echo "<td>".$row['username']. " <b>(". $idu .")</b>" ."</td>\n";
+          $idu=-$row['idusers'];
+          if ( $idu >=100 and $idu <=199 ) {
+          	  $idu-=100;
+	        }
+          echo "<td>".$row['username']. " <b>(". $idu .")</b>" ."</td>\n";
       }
       //  echo "<td>" . substr($row[boatname],0,20) . "</td>";
       // =================================================================
@@ -642,16 +642,16 @@ class fullRaces {
       $latitude=$row['latitude'];
       // Longitude : W ou E
       if ( $longitude > 0 ) {
-	$long_side='E';
+        	$long_side='E';
       } else {
-        $long_side='W';
+          $long_side='W';
       }
       
       // Latitude : N ou S
       if ( $latitude > 0 ) {
-	$lat_side='N';
+        	$lat_side='N';
       } else {
-        $lat_side='S';
+         $lat_side='S';
       }
 
       // Calcul de l'URL de la carte Carte sur les 1° autour du bateau
@@ -666,9 +666,9 @@ class fullRaces {
       // Affichage de la position
       //printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</A>, <A target=_gm HREF=http://maps.google.fr/maps?ie=UTF8&z=8&ll=%f,%f&t=k>GM</A></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
       if ( $startnum == 0 ) {
-        printf("<td class=\"ranking\">%3.2f" . $lat_side . ", %3.2f" . $long_side . "</td>\n", abs(round($latitude/1000,2)), abs(round($longitude/1000,2)));
+          printf("<td class=\"ranking\">%3.2f" . $lat_side . ", %3.2f" . $long_side . "</td>\n", abs(round($latitude/1000,2)), abs(round($longitude/1000,2)));
       } else {
-        printf("<td class=\"ranking\">" . $mapurl . "%3.2f" . $lat_side . ", %3.2f" . $long_side . "</a>, <a target=\"_gm\" href=\"http://maps.google.fr/maps?ie=UTF8&amp;z=8&amp;ll=%f,%f&amp;t=k\">GM</a></td>\n", abs($latitude/1000), abs($longitude/1000), round($latitude/1000,2), round($longitude/1000,2));
+          printf("<td class=\"ranking\">" . $mapurl . "%3.2f" . $lat_side . ", %3.2f" . $long_side . "</a>, <a target=\"_gm\" href=\"http://maps.google.fr/maps?ie=UTF8&amp;z=8&amp;ll=%f,%f&amp;t=k\">GM</a></td>\n", abs($latitude/1000), abs($longitude/1000), round($latitude/1000,2), round($longitude/1000,2));
       }
 
       // Affichage de la vitesse
