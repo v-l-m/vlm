@@ -215,7 +215,7 @@ if ($idraces != 0) {
                  if ($sortorder != "asc" and $sortorder != "desc") $sortorder="asc";
 
                  $disttype=strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) ;
-                 if ($disttype != "tofirst" and $disttype != "tonm") $disttype="tonm";
+                 if ($disttype != "tofirst" and $disttype != "tonm") $disttype="tofirst";
 
            if ( isset($sortkey) && $sortkey != "" ) {
                $fullRacesObj->dispHtmlClassification($strings, $lang, $numarrived , $sortkey . " " . $sortorder , $disttype, $startnum);
