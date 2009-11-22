@@ -46,46 +46,6 @@ $calendar_specifications = array(
      'label'       => '...',      // button label (used by phpMyEdit)
      );
 
-
-/* Field definitions
-   
-Fields will be displayed left to right on the screen in the order in which they
-appear in generated list. Here are some most used field options documented.
-
-['name'] is the title used for column headings, etc.;
-['maxlen'] maximum length to display add/edit/search input boxes
-['trimlen'] maximum length of string content to display in row listing
-['width'] is an optional display width specification for the column
-          e.g.  ['width'] = '100px';
-['mask'] a string that is used by sprintf() to format field output
-['sort'] true or false; means the users may sort the display on this column
-['strip_tags'] true or false; whether to strip tags from content
-['nowrap'] true or false; whether this field should get a NOWRAP
-['select'] T - text, N - numeric, D - drop-down, M - multiple selection
-['options'] optional parameter to control whether a field is displayed
-  L - list, F - filter, A - add, C - change, P - copy, D - delete, V - view
-            Another flags are:
-            R - indicates that a field is read only
-            W - indicates that a field is a password field
-            H - indicates that a field is to be hidden and marked as hidden
-['URL'] is used to make a field 'clickable' in the display
-        e.g.: 'mailto:$value', 'http://$value' or '$page?stuff';
-['URLtarget']  HTML target link specification (for example: _blank)
-['textarea']['rows'] and/or ['textarea']['cols']
-  specifies a textarea is to be used to give multi-line input
-  e.g. ['textarea']['rows'] = 5; ['textarea']['cols'] = 10
-['values'] restricts user input to the specified constants,
-           e.g. ['values'] = array('A','B','C') or ['values'] = range(1,99)
-['values']['table'] and ['values']['column'] restricts user input
-  to the values found in the specified column of another table
-['values']['description'] = 'desc_column'
-  The optional ['values']['description'] field allows the value(s) displayed
-  to the user to be different to those in the ['values']['column'] field.
-  This is useful for giving more meaning to column values. Multiple
-  descriptions fields are also possible. Check documentation for this.
-*/
-
-
 $opts['fdd']['idusers'] = array(
   'name'     => '#Id',
   'help'     => 'Unique id of the player',
@@ -108,6 +68,16 @@ $opts['fdd']['username'] = array(
 $opts['fdd']['password'] = array(
   'name'     => 'Password of the user',
   'options'  => 'ACP',
+  'input'    => 'W',
+  'select'   => 'T',
+  'escape'   => true,
+  'maxlen'   => 255,
+  'sort'     => true
+);
+
+$opts['fdd']['boatname'] = array(
+  'name'     => 'Boatname',
+  'help'     => 'Name of the boat (visible with mouse_over',
   'select'   => 'T',
   'escape'   => true,
   'options'  => 'ACDPVF',
@@ -132,6 +102,27 @@ $opts['fdd']['country'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['engaged'] = array(
+  'name'     => 'Engaged',
+  'help'     => 'Race the boat is engaged to',
+  'select'   => 'T',
+  'escape'   => true,
+  'options'  => 'LACDPVF',
+  'input'    => 'R',
+  'maxlen'   => 12,
+  'sort'     => true
+);
+
+$opts['fdd']['email'] = array(
+  'name'     => 'eMail',
+  'help'     => 'Private mail address',
+  'select'   => 'T',
+  'escape'   => true,
+  'options'  => 'ACDPVF',
+  'maxlen'   => 200,
+  'sort'     => true
+);
+
 
 $opts['fdd']['blocnote'] = array(
   'name'     => 'Notes of the user.',
@@ -146,13 +137,33 @@ $opts['fdd']['blocnote'] = array(
 
 $opts['fdd']['theme'] = array(
   'name'     => 'Theme',
-  'options'  => 'ACPDV',
   'select'   => 'D',
   'options'  => 'ACDPVF',
   'maxlen'   => 30,
   'values'   => $list_themes,
   'sort'     => true
 );
+
+$opts['fdd']['color'] = array(
+  'name'     => 'Color',
+  'help'     => 'Hidden if negative',
+  'select'   => 'T',
+  'options'  => 'ACDPVF',
+  'maxlen'   => 8,
+  'sort'     => true
+);
+
+
+/* Doesn't work, it seems this field is useless.
+$opts['fdd']['hidepos'] = array(
+  'name'     => 'Pos. hidden',
+  'select'   => 'D',
+  'options'  => 'ACDPVF',
+  'values2'  => Array(0 => 'Visible', 1 => 'Hidden'),
+  'sort'     => true
+);
+*/
+
 
 include('adminfooter.php');
 
