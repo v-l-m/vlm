@@ -1,3 +1,27 @@
+#Useless since v0.11
+DROP TABLE IF EXISTS admin_tasks;
+
+#Useless since v0.10, just in case of...
+DROP TABLE IF EXISTS boat_A35;
+DROP TABLE IF EXISTS boat_C5;
+DROP TABLE IF EXISTS boat_C5v2;
+DROP TABLE IF EXISTS boat_Class40;
+DROP TABLE IF EXISTS boat_Imoca;
+DROP TABLE IF EXISTS boat_Imoca2007;
+DROP TABLE IF EXISTS boat_Imoca2008;
+DROP TABLE IF EXISTS boat_Mono650;
+DROP TABLE IF EXISTS boat_OEv2009;
+DROP TABLE IF EXISTS boat_OceanExpress;
+DROP TABLE IF EXISTS boat_VLM70;
+DROP TABLE IF EXISTS boat_cigale14;
+DROP TABLE IF EXISTS boat_figaro;
+DROP TABLE IF EXISTS boat_figaro2;
+DROP TABLE IF EXISTS boat_debug;
+DROP TABLE IF EXISTS boat_dnf;
+DROP TABLE IF EXISTS boat_hi5;
+DROP TABLE IF EXISTS boat_imoca60;
+DROP TABLE IF EXISTS boat_maxicata;
+
 #Passage en decimal du WP@
 ALTER TABLE `users` MODIFY COLUMN `targetandhdg` decimal(4,1);
 
@@ -22,4 +46,20 @@ ALTER TABLE `user_action` ADD COLUMN `time2` timestamp;
 UPDATE `user_action` SET `time2` = FROM_UNIXTIME(`time`);
 ALTER TABLE `user_action` DROP COLUMN `time`;
 ALTER TABLE `user_action` CHANGE `time2` `time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP FIRST;
+
+#Change le charset par défaut latin1 => utf-8 (Cf. Ticket #221)
+#No convert for coastlines & histpos & positions tables (useless vs. size of the table)
+ALTER TABLE auto_pilot CONVERT TO CHARACTER SET utf8;
+ALTER TABLE races CONVERT TO CHARACTER SET utf8;
+ALTER TABLE races_instructions CONVERT TO CHARACTER SET utf8;
+ALTER TABLE races_ranking CONVERT TO CHARACTER SET utf8;
+ALTER TABLE races_results CONVERT TO CHARACTER SET utf8;
+ALTER TABLE races_waypoints CONVERT TO CHARACTER SET utf8;
+ALTER TABLE updates CONVERT TO CHARACTER SET utf8;
+ALTER TABLE user_action CONVERT TO CHARACTER SET utf8;
+ALTER TABLE user_prefs CONVERT TO CHARACTER SET utf8;
+ALTER TABLE users CONVERT TO CHARACTER SET utf8;
+ALTER TABLE waypoint_crossing CONVERT TO CHARACTER SET utf8;
+ALTER TABLE waypoints CONVERT TO CHARACTER SET utf8;
+
 
