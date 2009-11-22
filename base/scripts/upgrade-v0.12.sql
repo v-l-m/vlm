@@ -62,3 +62,8 @@ ALTER TABLE `user_action` CHANGE `time2` `time` timestamp NOT NULL default CURRE
 #Remets un INDEX dans histpos (mais pas unique)
 ALTER TABLE `histpos` ADD INDEX `idu_race_time` (`idusers`, `race`, `time`);
 
+#Remets un INDEX dans auto_pilot (mais pas unique)
+ALTER TABLE `auto_pilot` ADD INDEX `idusers` (`idusers`);
+ALTER TABLE `auto_pilot` ADD INDEX `idusers_time` (`idusers`, `time`);
+
+
