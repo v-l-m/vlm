@@ -182,8 +182,12 @@ if ( $do == "yes" ) {
                 $querysgo = "SELECT coastpenalty FROM races WHERE idraces = ".$race;
                 $resgo = wrapper_mysql_db_query_writer($querysgo) or die("Query [$query] failed \n");
                 $row = mysql_fetch_assoc($resgo);
-                $reltime = time() + $row['coastpenalty'];
-                $action_tracking = "LOCK boat for user $boat in race $race for ".$row['coastpenalty'];
+                $coastpenalty = $row['coastpenalty'];
+                if ( intval(quote_smart($_REQUEST['coastpenalty'])) != $coastpenalty ) {
+                    $coastpenalty = intval(quote_smart($_REQUEST['coastpenalty']));
+                }
+                $reltime = time() + $coastpenalty;
+                $action_tracking = "LOCK boat for user $boat in race $race for ".$coastpenalty;
             } else {
                 $reltime = 0;
                 $action_tracking = "UNLOCK boat for user $boat in race $race";
@@ -275,11 +279,15 @@ echo "<form name=\"coordonnees\" action=". $_SERVER['PHP_SELF'] . "\"/>";
 
 switch ($action) {
     case "unlock_boat":
-        echo "<hr />Bloquer le bateau : <input type=\"checkbox\" name=\"lock\" ";
+        $querysgo = "SELECT coastpenalty FROM races WHERE idraces = ".$race;
+        $resgo = wrapper_mysql_db_query_writer($querysgo) or die("Query [$query] failed \n");
+        $row = mysql_fetch_assoc($resgo);
+        $coastpenalty = $row['coastpenalty'];
+        echo "<hr />Bloquer le bateau (if checked) : <input type=\"checkbox\" name=\"lock\" ";
         if ( $usersObj->users->releasetime > time() ) {
             echo "checked=\"checked\" ";
         }
-        echo " /><br />";
+        echo " />&nbsp;pour&nbsp;<input type=\"text\" name=\"coastpenalty\" value=\"".intval($coastpenalty)."\" />&nbsp;secondes.<br />";
         break;
     case "maj_nextwp":
         echo "<hr />Prochaine marque : <input type=\"text\" name=\"nwp\" value=\"" . $usersObj->users->nwp . "\"/><br />";
