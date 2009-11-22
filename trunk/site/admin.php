@@ -271,71 +271,66 @@ echo "<form name=\"coordonnees\" action=". $_SERVER['PHP_SELF'] . "\"/>";
      echo "<input type=\"hidden\" name=\"do\" value=\"yes\"/>";
 
 switch ($action) {
-        case "unlock_boat":
-       echo "<hr />Bloquer le bateau : <input type=\"checkbox\" name=\"lock\" ";
-             if ( $usersObj->users->releasetime > time() ) {
-      echo "checked=\"checked\" ";
-             }
-             echo " /><br />";
-
-       break;
-        case "maj_nextwp":
-       echo "<hr />Prochaine marque : <input type=\"text\" name=\"nwp\" value=\"" . $usersObj->users->nwp . "\"/><br />";
-
-       break;
-        case "maj_position":
-       echo "<hr />";
-       echo "<table border=\"0\">
+    case "unlock_boat":
+        echo "<hr />Bloquer le bateau : <input type=\"checkbox\" name=\"lock\" ";
+        if ( $usersObj->users->releasetime > time() ) {
+            echo "checked=\"checked\" ";
+        }
+        echo " /><br />";
+        break;
+    case "maj_nextwp":
+        echo "<hr />Prochaine marque : <input type=\"text\" name=\"nwp\" value=\"" . $usersObj->users->nwp . "\"/><br />";
+        break;
+    case "maj_position":
+        echo "<hr />";
+        echo "<table border=\"0\">
              <tr>
            <td>&nbsp;</td><td>Millidegres</td><td>Deg/Min/Sec</td>
        </tr>";
 
-       echo "<tr>
+        echo "<tr>
             <td align=\"right\">Lon : </td>";
-       echo "<td><input type=\"text\" name=\"targetlong\" onKeyup=\"convertdmslong();\" value=\"" . $usersObj->lastPositions->long/1000 . "\"/></td>";
+        echo "<td><input type=\"text\" name=\"targetlong\" onKeyup=\"convertdmslong();\" value=\"" . $usersObj->lastPositions->long/1000 . "\"/></td>";
 //       echo "<td><input type=\"text\" name=\"longdms\" disabled=\"disabled\" value=\"" . $usersObj->lastPositions->long . "\"/></td>";
-       echo "<td><input type=\"button\" class=\"blue\" name=\"longdms\"></td>";
-       echo "</tr>";
-       echo "<tr>
+        echo "<td><input type=\"button\" class=\"blue\" name=\"longdms\"></td>";
+        echo "</tr>";
+        echo "<tr>
             <td align=\"right\">Lat : </td>";
-       echo "<td><input type=\"text\" name=\"targetlat\" onKeyup=\"convertdmslat();\" value=\"" . $usersObj->lastPositions->lat/1000 . "\"/></td>";
+        echo "<td><input type=\"text\" name=\"targetlat\" onKeyup=\"convertdmslat();\" value=\"" . $usersObj->lastPositions->lat/1000 . "\"/></td>";
 //       echo "<td><input type=\"text\" name=\"latdms\" disabled=\"disabled\" value=\"" . $usersObj->lastPositions->long . "\"/></td>";
-       echo "<td><input type=\"button\"  class=\"blue\" name=\"latdms\" /></td>";
-       echo "</tr>";
-       echo "</table>";
-
-       break;
-        case "reset_pass":
-       echo "<hr />Mot de passe : <input type=\"text\" name=\"newpass\" value=\"" . $usersObj->users->password . "\" /><br />";
-
-             break;
-        case "reset_username":
-       echo "<hr />Nouveau nom d'utilisateur : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
-
-             break;
-  default:
-    // Choix de l'action à réaliser
-                $actions=array("maj_nextwp","unlock_boat","maj_position","reset_pass","reset_username");
-                $select_list="<option value=\"#\">--- CHOISIR ---</option>";
-                foreach ($actions as $a) {
-                    $select_list = $select_list . "<option value=\"". 
-                                      $_SERVER['PHP_SELF'] . 
-              "?pseudo=".$pseudo.
-              "&amp;password=".$password.
-              "&amp;race=".$race.
-              "&amp;boat=".$boat.
-              "&amp;action=" . 
-              $a . "\"";
-                    if ( $action == $a ) $select_list = $select_list . " selected=\"selected\" ";
-                    $select_list = $select_list . ">". $a ."</option>\n";
-                }
-    echo "<select name=\"action\" " ;
-    echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
-    echo $select_list . "</select>";
-    echo "</h4>";
-    // S'il n'y a pas d'action choisie, on s'arrête là.
-    exit;
-}
+        echo "<td><input type=\"button\"  class=\"blue\" name=\"latdms\" /></td>";
+        echo "</tr>";
+        echo "</table>";
+        break;
+    case "reset_pass":
+        echo "<hr />Mot de passe : <input type=\"text\" name=\"newpass\" value=\"" . $usersObj->users->password . "\" /><br />";
+        break;
+    case "reset_username":
+        echo "<hr />Nouveau nom d'utilisateur : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
+        break;
+    default:
+        // Choix de l'action à réaliser
+        $actions=array("maj_nextwp","unlock_boat","maj_position","reset_pass","reset_username");
+        $select_list="<option value=\"#\">--- CHOISIR ---</option>";
+        foreach ($actions as $a) {
+            $select_list = $select_list . "<option value=\"". 
+                $_SERVER['PHP_SELF'] . 
+                "?pseudo=".$pseudo.
+                "&amp;password=".$password.
+                "&amp;race=".$race.
+                "&amp;boat=".$boat.
+                "&amp;action=" . 
+                $a . "\"";
+            if ( $action == $a ) $select_list = $select_list . " selected=\"selected\" ";
+            $select_list = $select_list . ">". $a ."</option>\n";
+        }
+        echo "<select name=\"action\" " ;
+        echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
+        echo $select_list . "</select>";
+        echo "</h4>";
+        // S'il n'y a pas d'action choisie, on s'arrête là.
+        exit;
+    }
   
     echo "<input type=\"button\" value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
               "?pseudo=".$pseudo.  "&amp;password=".$password.  "&amp;boat=".$boat .  "&amp;race=".$race. "'\"/>";
