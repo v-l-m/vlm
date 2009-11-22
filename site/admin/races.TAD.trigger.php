@@ -10,7 +10,7 @@
     $res = $this->myQuery("DELETE FROM racesmap WHERE idraces = '".$this->rec."';");
     
     echo "<div class=\"adminbox\">";
-    insertAdminChangelog(Array("operation" => "Delete all race datas (racesmap, waypoints, waypoints links, instructions) for race : ".$this->rec));
+    insertAdminChangelog(Array("operation" => "Delete all race datas (racesmap, waypoints, waypoints links, instructions)", "rowkey" => "".$this->rec));
     echo "  <h3>Corresponding waypoints and race instructions have been also deleted.</h3>";
     echo "</div>";
     return True;
