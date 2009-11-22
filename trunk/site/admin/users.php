@@ -107,6 +107,7 @@ $opts['fdd']['username'] = array(
 
 $opts['fdd']['password'] = array(
   'name'     => 'Password of the user',
+  'options'  => 'ACP',
   'select'   => 'T',
   'escape'   => true,
   'options'  => 'ACDPVF',
@@ -122,8 +123,19 @@ $opts['fdd']['class'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['country'] = array(
+  'name'     => 'Country/Flag',
+  'help'     => 'Input the name of the flag<br />Do we need a drop down here ?',
+  'options'  => 'ACPDV',
+  'select'   => 'T',
+  'maxlen'   => 64,
+  'sort'     => true
+);
+
+
 $opts['fdd']['blocnote'] = array(
   'name'     => 'Notes of the user.',
+  'options'  => 'ACPDV',
   'select'   => 'T',
   'maxlen'   => 250,
   'textarea' => array(
@@ -134,6 +146,7 @@ $opts['fdd']['blocnote'] = array(
 
 $opts['fdd']['theme'] = array(
   'name'     => 'Theme',
+  'options'  => 'ACPDV',
   'select'   => 'D',
   'options'  => 'ACDPVF',
   'maxlen'   => 30,
