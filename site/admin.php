@@ -64,7 +64,7 @@ if ( $race == "" ) {
    $query = "SELECT idraces, racename  FROM races where started >=0 ";
    $query = $query . " order by idraces;";
 
-   $result = mysql_query($query) or die("Query [$query] failed \n");
+   $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
 
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
    while ( $row = mysql_fetch_assoc($result)) {
@@ -137,7 +137,7 @@ if ( $race != "" && $boat == "" ) {
    }
    $queryusers = $queryusers . " order by idusers;";
 
-   $resultusers = mysql_query($queryusers) or die("Query [$queryusers] failed \n");
+   $resultusers = wrapper_mysql_db_query_writer($queryusers) or die("Query [$queryusers] failed \n");
 
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
    while ( $row = mysql_fetch_assoc($resultusers)) {
@@ -177,27 +177,30 @@ if ( $do == "yes" ) {
     echo "Mise a jour en cours...";
     switch ($action) {
         case "unlock_boat":
-       $query = "update users " ;
-             if ( quote_smart($_REQUEST['lock']) ) {
-                  $query .= " set releasetime = " . ( time() + 6*3600 ); 
-             } else {
-                  $query .= " set releasetime =0 " ; 
-             }
-
-       $query .="     where idusers = " .  $boat  . 
-          "     and engaged   = " .  $race  .
-          "    ;";
-             $result = mysql_query($query) or die("Query [$query] failed \n");
-       $action_tracking = "UNLOCK boat for user $boat in race $race";
-
-       break;
+            $query = "UPDATE users " ;
+            if ( quote_smart($_REQUEST['lock']) ) {
+                $querysgo = "SELECT coastpenalty FROM races WHERE idraces = ".$race;
+                $resgo = wrapper_mysql_db_query_writer($querysgo) or die("Query [$query] failed \n");
+                $row = mysql_fetch_assoc($resgo);
+                $reltime = time() + $row['coastpenalty'];
+                $action_tracking = "LOCK boat for user $boat in race $race for ".$row['coastpenalty'];
+            } else {
+                $reltime = 0;
+                $action_tracking = "UNLOCK boat for user $boat in race $race";
+            }
+            $query .= " SET releasetime = " . ( $reltime ); 
+            $query .= " WHERE idusers = " .  $boat  . 
+                      " AND engaged   = " .  $race  .
+                      " ;";
+            $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
+            break;
         case "maj_nextwp":
              $nwp=quote_smart($_REQUEST['nwp']);
        $query = "update users set nextwaypoint= " .  $nwp . 
                "     where idusers = " .  $boat . 
           "     and engaged   = " .  $race .
           "    ;";
-             $result = mysql_query($query) or die("Query [$query] failed \n");
+             $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
 //       $action_tracking = "UPDATE nextwaypoint ($nwp) for user $boat in race $race";
               $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "nextwaypoint", "rowkey" => $boat, "newval" => $nwp);
 
@@ -213,7 +216,7 @@ if ( $do == "yes" ) {
                       $boat   . ", " .
                       $race      . 
            "                                            );";
-             $result = mysql_query($query) or die("Query [$query] failed \n");
+             $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
             $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
 
        break;
@@ -223,7 +226,7 @@ if ( $do == "yes" ) {
                      "     where idusers = " .  $boat . 
                      "     and engaged   = " .  $race .
                      "    ;";
-            $result = mysql_query($query) or die("Query [$query] failed \n");
+            $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
             $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "password", "rowkey" => $boat, "newval" => "********");
             break;
         case "reset_username":
@@ -232,7 +235,7 @@ if ( $do == "yes" ) {
                      "     where idusers = " .  $boat . 
                      "     and engaged   = " .  $race .
                      "    ;";
-            $result = mysql_query($query) or die("Query [$query] failed \n");
+            $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
             $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "username", "rowkey" => $boat, "newval" => $newusern);
             break;
         default:
