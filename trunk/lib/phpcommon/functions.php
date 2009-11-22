@@ -194,7 +194,7 @@ function lastUpdate($strings, $lang)
   } else {
     $query2 = "SELECT UNIX_TIMESTAMP(`time`) as time,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
     $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-    $row2 = mysql_fetch_assoc($result2, MYSQL_NUM);
+    $row2 = mysql_fetch_assoc($result2);
     $lastupdate = $row2['time'];
     $races = $row2['races'];
     $boats = $row2['boats'];
