@@ -1,4 +1,4 @@
-#Useless since v0.10, just in case of...
+#Useless , for the record, just to track the changes
 DROP TABLE IF EXISTS boat_A35;
 DROP TABLE IF EXISTS boat_C5;
 DROP TABLE IF EXISTS boat_C5v2;
@@ -18,6 +18,8 @@ DROP TABLE IF EXISTS boat_dnf;
 DROP TABLE IF EXISTS boat_hi5;
 DROP TABLE IF EXISTS boat_imoca60;
 DROP TABLE IF EXISTS boat_maxicata;
+DROP TABLE IF EXISTS wind;
+DROP TABLE IF EXISTS winds;
 
 #Change le charset par défaut latin1 => utf-8 (Cf. Ticket #221)
 #No convert for coastlines & histpos & positions tables (useless vs. size of the table)
@@ -35,10 +37,11 @@ ALTER TABLE waypoint_crossing CONVERT TO CHARACTER SET utf8;
 ALTER TABLE waypoints CONVERT TO CHARACTER SET utf8;
 
 #Passage en decimal du WP@
-ALTER TABLE `users` MODIFY COLUMN `targetandhdg` decimal(4,1);
+ALTER TABLE `users` MODIFY COLUMN `targetandhdg` decimal(4,1) default -1;
 
 #Force le type timestamp qui s update tout seul au cas ou...
 ALTER TABLE `admin_changelog` MODIFY COLUMN `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
+ALTER TABLE `admin_changelog` ADD INDEX `updated` (`updated`);
 
 #Migre l ancienne table admin_task vers admin_changelog
 INSERT INTO `admin_changelog` (`updated`, `user`, `operation`) SELECT FROM_UNIXTIME(`time`), `admin`, `action` FROM `admin_tasks`;
@@ -63,10 +66,17 @@ ALTER TABLE `user_action` CHANGE `time2` `time` timestamp NOT NULL default CURRE
 ALTER TABLE `histpos` ADD INDEX `idu_race_time` (`idusers`, `race`, `time`);
 ALTER TABLE `histpos` ADD INDEX `idu_race` (`idusers`, `race`);
 
-#Remets un INDEX dans auto_pilot (mais pas unique)
+#Mets un INDEX dans auto_pilot (mais pas unique)
 ALTER TABLE `auto_pilot` ADD INDEX `idusers` (`idusers`);
 ALTER TABLE `auto_pilot` ADD INDEX `idusers_time` (`idusers`, `time`);
 
-#Remets un INDEX dans users sur 'engaged' (mais pas unique)
+#Mets un INDEX dans users sur 'engaged' (mais pas unique)
 ALTER TABLE `users` ADD INDEX `engaged` (`engaged`);
+
+#Mets un INDEX dans updates sur 'time' (mais pas unique)
+ALTER TABLE `updates` ADD INDEX `time` (`time`);
+
+#Mets un INDEX dans `user_action` sur `idusers` (mais pas unique)
+ALTER TABLE `user_action` ADD INDEX `idusers` (`idusers`);
+ALTER TABLE `user_action` ADD INDEX `time` (`time`);
 
