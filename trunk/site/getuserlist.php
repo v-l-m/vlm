@@ -10,7 +10,7 @@ header("content-type: text/plain; charset=UTF-8");
      exit;
   }
 
-  $query   = "SELECT idusers, username, boatname, country, ";
+  $query   = "SELECT idusers, username, boatname, country ";
 
   if ( $idr == 0 ) {
        $query .= ", engaged ";
