@@ -751,12 +751,12 @@ class fullRaces {
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
+    // FIXME : strange query : why do we need to join the races_ranking query ? (for this form, we don't care of old races)
     $query_listusers = "SELECT DISTINCT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country , US.engaged engaged" . 
-      " FROM  races_ranking RR, users US " . 
-      " WHERE RR.idusers = US.idusers " . 
-      " AND   engaged != 0 " . 
-      " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
-    //    " AND   RR.idraces = "  . $this->races->idraces . 
+                       " FROM  races_ranking RR, users US " . 
+                       " WHERE RR.idusers = US.idusers " . 
+                       " AND   engaged != 0 " . 
+                       " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
 
     $result = wrapper_mysql_db_query_reader($query_listusers) or die ($query_listusers);
 
