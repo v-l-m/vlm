@@ -4,8 +4,8 @@ include_once('vlmc.php');
 
 
 function get_output_format() {
-    //nothing more for now
-    return "json";
+  //nothing more for now
+  return "json";
 }
 
 function get_polar_list_array() {
@@ -26,10 +26,10 @@ $fmt = get_output_format();
 $polar_list = get_polar_list_array();
 
 switch ($fmt) {
-    case "json":
-    default:
-        header('Content-type: application/json; charset=UTF-8');
-        echo json_encode($polar_list);
+case "json":
+default:
+  header('Content-type: application/json; charset=UTF-8');
+  echo json_encode($polar_list);
 }
 
 ?>
