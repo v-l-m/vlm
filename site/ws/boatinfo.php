@@ -254,6 +254,13 @@ function ia_print($value, $key) {
 
 // now start the real work
 
+function ask_for_auth() {
+    header('WWW-Authenticate: Basic realm="VLM Access"');
+    header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
+    header("Content-Type: text/plain; charset=UTF-8");
+    usage();
+}
+
 session_start();
 // do we know the user from a previous login session?
 if (array_key_exists('idu', $_SESSION) && array_key_exists('loggedin', $_SESSION) 
@@ -262,26 +269,26 @@ if (array_key_exists('idu', $_SESSION) && array_key_exists('loggedin', $_SESSION
   $pseudo = $_SESSION['login'];
   $IP = $_SESSION['IP'];
 } else {
-  // if not fallback to auth (FIXME delegate auth to another page using POST, and some
-  // sort of digest
-  $idu=htmlentities(quote_smart($_REQUEST['idu']));
-  if (round($idu) == 0) {
-    header("content-type: text/plain; charset=UTF-8");
-    usage();
+  // fallback to HTTP auth
+  if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+    ask_for_auth();
     exit;
-  }
-  // good IDU, verify...
-  $pseudo=quote_smart($_REQUEST['pseudo']);
-  $password=quote_smart($_REQUEST['password']);
-  if ((checkAccount(htmlentities($pseudo,ENT_COMPAT), 
-		    htmlentities($password, ENT_COMPAT)) == $idu)
-      || (checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
-		       htmlentities($password, ENT_COMPAT,"UTF-8")) == $idu)) {
-    login($idu, $pseudo);
   } else {
-    header("content-type: text/plain; charset=UTF-8");
-    usage();
-    exit;
+    $pseudo=$_SERVER['PHP_AUTH_USER'];
+    $passwd=$_SERVER['PHP_AUTH_PW'];
+    $idu = checkAccount($pseudo, $passwd);
+    // FIXME, do we need to check after utf-8 transform?
+    /*
+      if ((checkAccount(htmlentities($pseudo,ENT_COMPAT), 
+      htmlentities($password, ENT_COMPAT)) != FALSE)
+      || (checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
+      htmlentities($password, ENT_COMPAT,"UTF-8")) |= FALSE)) {
+    */
+    if ($idu == FALSE) {
+      ask_for_auth();
+      exit();
+    }
+    login($idu, $pseudo);
   }
 }
 
@@ -290,12 +297,12 @@ $info_array = get_info_array($idu);
 
 switch ($fmt) {
 case "json":
-  header("content-type: text/plain; charset=UTF-8");
+  header("Content-Type: text/plain; charset=UTF-8");
   echo json_encode($info_array);
   break;
 case "text":
 default:
-  header("content-type: text/plain; charset=UTF-8");
+  header("Content-Type: text/plain; charset=UTF-8");
   array_walk($info_array, 'ia_print');
 }
 
