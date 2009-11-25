@@ -23,7 +23,6 @@ include("../includes/header-status.inc");
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
     $query .= " ORDER BY vacfreq ASC, deptime DESC, idraces ASC";
     $result = wrapper_mysql_db_query_reader($query);
-    $odd = 0;
     while($row = mysql_fetch_assoc($result)) {
         $idraces  = $row['idraces'];
         $racename = $row['racename'];
@@ -37,13 +36,7 @@ include("../includes/header-status.inc");
         } else {
             $cssklass = "intime";
         }
-	if ($odd == 0) {
-	  echo "<tr class=\"even\">\n";
-	  $odd = 1;
-	} else {
-	  echo "<tr class=\"odd\">\n";
-	  $odd = 0;
-	}	  
+	echo "<tr>\n";
         echo "<td class=\"idraces\">$idraces</td>";
         echo "<td class=\"racename\">$racename</td>";
         echo "<td class=\"time\">".gmdate("H:i:s", $row2['time'])."</td>";
