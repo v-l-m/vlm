@@ -248,58 +248,54 @@ function usage() {
     ";
 }
 
-// now start the real work
-
-$idu=htmlentities(quote_smart($_REQUEST['idu']));
-if (round($idu) == 0) {
-  header("content-type: text/plain; charset=UTF-8");
-  usage();
-  exit;
-}
-
-$fmt = get_output_format();
-switch ($fmt) {
-case "json":
-  header("content-type: text/plain; charset=UTF-8");
-  break;
-case "text":
-default:
-  header("content-type: text/plain; charset=UTF-8");
-}
-
-$pseudo=quote_smart($_REQUEST['pseudo']);
-$password=quote_smart($_REQUEST['password']);
-
-// Les clients Linux modernes utilisent l'UTF-8, alors que les clients Windows subsistent en ISO-8859-1
-// On teste donc checkaccount en conversion ISO8859-1   *ET*  en UTF-8
-if ( checkAccount(htmlentities($pseudo,ENT_COMPAT), 
-		  htmlentities($password, ENT_COMPAT)) != $idu 
-     && checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
-		     htmlentities($password, ENT_COMPAT,"UTF-8")) != $idu  ) {
-  switch ($fmt) {
-  case "json":
-    break;
-  case "text":
-  default:
-    echo "Not allowed\n";
-    usage();
-  }
-  exit;
-}
-
-
 function ia_print($value, $key) {
   echo $key."=".$value."\n";
 }
 
+// now start the real work
+
+session_start();
+// do we know the user from a previous login session?
+if (array_key_exists('idu', $_SESSION) && array_key_exists('loggedin', $_SESSION) 
+    && ($_SESSION['loggedin'] == 1)) {
+  $idu = $_SESSION['idu'];
+  $pseudo = $_SESSION['login'];
+  $IP = $_SESSION['IP'];
+} else {
+  // if not fallback to auth (FIXME delegate auth to another page using POST, and some
+  // sort of digest
+  $idu=htmlentities(quote_smart($_REQUEST['idu']));
+  if (round($idu) == 0) {
+    header("content-type: text/plain; charset=UTF-8");
+    usage();
+    exit;
+  }
+  // good IDU, verify...
+  $pseudo=quote_smart($_REQUEST['pseudo']);
+  $password=quote_smart($_REQUEST['password']);
+  if ((checkAccount(htmlentities($pseudo,ENT_COMPAT), 
+		    htmlentities($password, ENT_COMPAT)) == $idu)
+      || (checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
+		       htmlentities($password, ENT_COMPAT,"UTF-8")) == $idu)) {
+    login($idu, $pseudo);
+  } else {
+    header("content-type: text/plain; charset=UTF-8");
+    usage();
+    exit;
+  }
+}
+
+$fmt = get_output_format();
 $info_array = get_info_array($idu);
 
 switch ($fmt) {
 case "json":
+  header("content-type: text/plain; charset=UTF-8");
   echo json_encode($info_array);
   break;
 case "text":
 default:
+  header("content-type: text/plain; charset=UTF-8");
   array_walk($info_array, 'ia_print');
 }
 
