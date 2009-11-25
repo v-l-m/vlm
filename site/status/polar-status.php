@@ -25,11 +25,7 @@ $nb_polars = get_nb_polars_context($temp_vlmc_context);
 <table class="polartable">
 <?php
 for ($i=0; $i<$nb_polars; $i++) {
-  if ( $i & 1 ) {
-    echo "  <tr class=\"odd\">\n";
-  } else {
-    echo "  <tr class=\"even\">\n";
-  }
+  echo "  <tr>\n";
   $pname = get_polar_name_index_context($temp_vlmc_context, $i); 
   echo "    <td class=\"racename\"><a href=\"/speedchart.php?boattype=".$pname."\">";
   echo "".$pname."</a></td>\n";

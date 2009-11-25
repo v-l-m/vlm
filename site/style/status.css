@@ -1,9 +1,9 @@
 /* css for status pages */
 
-.odd {
+tr:nth-child(odd) {
     background-color: white;
 }
-.even {
+tr:nth-child(even) {
     background-color: #F5F5DF;
 }
 .after {
