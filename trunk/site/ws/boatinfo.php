@@ -181,12 +181,13 @@ function get_info_array($idu) {
 }
 
 function usage() {
-  echo "usage : http://virtual-loup-de-mer.org/getinfo.php?idu=X&".
-       "pseudo=xxxx&password=pppp\n";
-  echo "\nX = numero de votre bateau";
-  echo "\nxxxxx = votre nom d'utilisateur";
-  echo "\nppppp = votre mot de passe";
-  echo "\n\nLe mode txt est conservé uniquement pour des raisons historiques et pourra disparaitre dans les version ultérieures. Merci d'utiliser le format json";
+  echo "usage : http://virtual-loup-de-mer.org/ws/boatinfo.php\n";
+  echo "l'acces utilise l'authentification HTTP";
+  echo "\nlogin = votre nom d'utilisateur";
+  echo "\npassword = votre mot de passe";
+  echo "\n\nLe mode txt est conservé uniquement pour des raisons historiques ";
+  echo "et pourra disparaitre dans les version ultérieures. Merci d'utiliser ";
+  echo "le format json, via Accept: application/json ou via ?forcefmt=json";
   echo "\n\nVariables = \n
     #* WPL : liste de Waypoints (liste)
     #* RAC : numéro de la course (string)
