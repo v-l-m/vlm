@@ -23,6 +23,7 @@ $nb_polars = get_nb_polars_context($temp_vlmc_context);
 ?>
 <p>Currently in use: <?php echo $nb_polars ?> polars</p>
 <table class="polartable">
+<tr><th>Boat Type</th><th>Description</th><th>pol</th><th>csv</th></tr>
 <?php
 for ($i=0; $i<$nb_polars; $i++) {
   echo "  <tr>\n";
