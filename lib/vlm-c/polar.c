@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.20 2009-08-31 22:06:43 ylafon Exp $
+ * $Id: polar.c,v 1.21 2009-11-29 14:38:04 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -335,16 +335,11 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   int intspeed;
   double valfloor, valceil;
   double *polar_tab;
-#ifdef ROUND_WIND_ANGLE_IN_POLAR
-  /* in VLM compatibility mode, we interpolate only speed, not angle
-     which is rounded to nearest integer */
-  /* not using rint, as rint(0.5) = 0, while PHP round(0.5) = 1 */
-  intangle = floor(radToDeg(fabs(fmod(wind_angle, TWO_PI)))+0.5);
-  
-  if (intangle > 180) {
-    intangle = 360 - intangle;
-  }
+
   intspeed  = floor(wind_speed);
+  if (intspeed > 59) {
+    intspeed = 59;
+  }
   /* nothing set? return 0 */
   if (aboat->polar == NULL) {
     /* check if we can find the polar form the race */
@@ -359,6 +354,15 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
     }
   }
   polar_tab = aboat->polar->polar_tab;
+#ifdef ROUND_WIND_ANGLE_IN_POLAR
+  /* in VLM compatibility mode, we interpolate only speed, not angle
+     which is rounded to nearest integer */
+  /* not using rint, as rint(0.5) = 0, while PHP round(0.5) = 1 */
+  intangle = floor(radToDeg(fabs(fmod(wind_angle, TWO_PI)))+0.5);
+  
+  if (intangle > 180) {
+    intangle = 360 - intangle;
+  }
   valfloor  = polar_tab[intangle*61+intspeed];
   valceil   = polar_tab[intangle*61+intspeed+1];
 #else
@@ -377,7 +381,6 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   } else {
     intangle_p1 = intangle+1;
   }
-  intspeed  = floor(wind_speed);
   valfloor  = polar_tab[intangle*61+intspeed];
   tvalfloor = polar_tab[intangle_p1*61+intspeed];
   valfloor += (tvalfloor - valfloor)*(tangle - (double)intangle);
