@@ -60,7 +60,7 @@ if ($crosses_the_coast) {
   $latApres = $latAvant + ($encounter_lat - $latAvant) * 0.9;
   $lonApres = $lonAvant + ($encounter_long - $lonAvant) * 0.9;
 
-  for ( $coast_ratio = 8; $coast_ratio > 0; $coast_ratio--) {
+  for ( $coast_ratio = 8; $coast_ratio >= 0; $coast_ratio--) {
     $npcc = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
 				  $coast_xinglat, $coast_xinglong, 
 				  $coast_xingratio);
