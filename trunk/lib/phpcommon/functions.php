@@ -523,12 +523,19 @@ function linear($Xa, $Ya, $Xb, $Yb)
 /*from a nuber of seconds, return the duration in days, hours, minutes and seconds*/
 function duration2string($dur)
 {
+  $timeneg = ($dur < 0);
+  if ($timeneg) {
+      $dur = -$dur;
+      $prefix = "-";
+  } else {
+      $prefix = "";
+  }
   $days = floor($dur/86400);
   $hours = floor(($dur - $days*86400)/3600);
   $minutes = floor(($dur - $days*86400 - $hours*3600)/60);
   $seconds = $dur - $days*86400 - $hours*3600 - $minutes*60;
   return array('days' => $days, 'hours' => $hours,
-	       'minutes' => $minutes, 'seconds' => $seconds);
+	       'minutes' => $minutes, 'seconds' => $seconds, 'isneg' => $timeneg, 'prefix' => $prefix);
 }
 
 /*function VMG from a boat position, a boat destination and the speed

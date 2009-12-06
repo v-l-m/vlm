@@ -613,7 +613,7 @@ class fullRaces {
       if ( $row['nwp'] != 0 ) {
         $racingtime=$now-$row['userdeptime'];
         $duration = duration2string($racingtime);
-        printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
+        printf("      <td>".$duration['prefix'].$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
       } else {
         printf("      <td>-</td>\n");
       }
@@ -1028,7 +1028,7 @@ class fullRaces {
           printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime']));
           //        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$this->races->deptime + $row[duration]));
           printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime'] + $row['duration']));
-          printf("      <td>".$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
+          printf("      <td>".$duration['prefix'].$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
         } else {
           switch ($row['position']) {
           case BOAT_STATUS_HC:
@@ -1063,7 +1063,7 @@ class fullRaces {
               $pct=round(($row['duration'] - $ref_duration)/$ref_duration*100,2);
               //printf ("DU=%d, RDU=%d\n",$row[duration] , $ref_duration);
             }
-            printf("<td>".$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart['days'],$ecart['hours'],$ecart['minutes'],$ecart['seconds'],$pct);
+            printf("<td>".$ecart['prefix'].$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart['days'],$ecart['hours'],$ecart['minutes'],$ecart['seconds'],$pct);
           }
         }
         if ( $row['position'] == BOAT_STATUS_DNF ) {
