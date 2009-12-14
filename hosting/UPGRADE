@@ -5,7 +5,10 @@ From 0.11 to Next
 
 HOSTING
   EDIT file ./conf/conf_script and change VLMSVNBRANCH to V_0_12
+
+  RUN
     ./scripts/maj_scripts.sh
+
   EDIT file ./conf/param.php
     and add correct values for keys :
       define("DBMASTERSERVER", "127.0.0.1");
