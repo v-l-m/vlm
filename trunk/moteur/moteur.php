@@ -94,7 +94,9 @@ $engine_stop=time();
 $engine_stop_float=microtime(true);
 $engine_elapsed_float=$engine_stop_float-$engine_start_float;
 if (round($engine_elapsed_float) > 0 ) {
-   $engine_elapsed = round($engine_elapsed_float);
+  $engine_elapsed = round($engine_elapsed_float);
+} else {
+  $engine_elapsed = 1;
 }
 
 // Demarrage des courses à démarrer... 
