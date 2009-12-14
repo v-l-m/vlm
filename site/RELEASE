@@ -1,6 +1,29 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by milestone.
 
+v0.12 aka Take Five : what's new since 0.11 for ...
+
+... players ?
+* some bugfixes already backported to 0.11 ;)
+* various small bug and security fixes (you like security, don't you ?) (spf, paparazzia)
+* better handling of coast crossing penalty (spf)
+* @WPH is now in 1/10 of degrees (paparazzia)
+* performance mysql improvement (spf)
+* grid's color is now tunable (paparazzia)
+
+... tools developers ?
+* start of json webservices for race and boatinfo (spf, paparazzia)
+
+... race committee ?
+* easy import of races (paparazzia)
+* more loging of admins actions (paparazzia)
+* and more for the admin (you love your admins, don't you ?) (paparazzia)
+
+... developers ?
+* online module status (paparazzia, spf)
+* html & w3 compliance fixes (paparazzia)
+* base cleanup (indexes, timestamp types, charsets, etc...) (paparazzia)
+
 v0.11 aka "Autant en emporte l'autan" : what's new since 0.10 ...
 
 ... players ?
