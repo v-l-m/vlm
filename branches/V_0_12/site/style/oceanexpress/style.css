@@ -1,0 +1,190 @@
+@import url("../default/style.css");
+
+body
+{
+  background-color: #ffffff;
+  color: #44505a;
+}
+
+a:hover
+{
+  color: #ffffff;
+  background-color: #ff652e;
+}
+
+#baneer
+{
+  background-color: #2b597b;
+  background-image:  url('/images/logos/banner_oceanexpress.png');
+  background-repeat: no-repeat;
+  height: 102px;
+}
+
+#baneerrightbox img
+{
+  height: 100px;
+}
+
+#baneerleftbox
+{
+  left:20px;
+}
+
+.texthelpers, .titlehelpers, #costpenaltynumber {
+  color: #44505a;
+}
+
+#yourboatsummarybox a, #infomessage a {
+  color:#15224c;
+}
+
+.actionbuttonwarn, .inputwarn {
+  background-color:#ff652e;
+}
+
+#leftcolumn {
+  background-color: #f9f1e8;
+
+}
+
+#leftcolumn a {
+color: #44505a;
+}
+
+.leftbox, .icbox  {
+  border-bottom: solid 1px #15214b;
+}
+
+#main {
+  background-color: #f4f4f4;
+  color: #44505a;
+  border-top: solid 3px #ff652e;
+}
+
+#controlbox, #instrumentbox, #mapbox, #time {
+  border-top: solid 3px #ff652e;
+}
+
+#loggedbox {
+  background-color: #15214b;
+  color: #ffffff;
+  font-weight: bold;
+  border : none;
+}
+
+input.dynamichelper {
+  border:0px;
+  background-color: #ffffff;
+}
+
+#infobulle, div.infobulle {
+  background-color: #2b597b;
+  color: #ffffff;
+  /* CSS3 standard */
+  opacity:0.9;
+  /* for IE - FIXME : remove me one day */
+  filter:alpha(opacity=90);
+}
+
+#abandon {
+  background-color: #dddddd;
+  border-color: #ff1010;
+}
+
+#main a {
+  color:#2b597b;
+}
+
+th
+{ 
+  background-color: #6894c4;
+  color:white;
+}
+
+td
+{ 
+  background-color: #eeeeee;
+}
+
+#raceslistbox {
+  color: #44505a;
+  list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+
+}
+
+#raceslistbox h1, #raceslistbox h1 * {
+  background-color:#15214b;
+  color:white;
+  height:15px;
+}
+
+#raceslistbox * a:hover {
+  background-color: #ff652e;
+  color: #ffffff;
+}
+
+td.nohilight
+{ 
+  background-color: #6894c4;
+  color:white;
+}
+
+#wplistbox a.passedwp
+{
+  color: #00ff00;
+  text-decoration: none;
+
+}
+#wplistbox a.nextwp
+{
+  color: #FF4D00;
+  text-decoration: none;
+
+}
+#wplistbox a.notpassedwp
+{
+  color: #2b597b;
+  text-decoration: none;
+}
+
+tr.hilight *
+{ 
+  background-color: #E0E0A0;
+}
+
+tr.hilightopps *
+{ 
+  background-color: #90B0C0;
+}
+
+tr.locked *
+{ 
+  background-color: #C090A0;
+}
+
+tr.oncoast *
+{ 
+  background-color: #808080;
+}
+
+
+#messagebox div {
+list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+  background-color: #f9f1e8;
+}
+
+#racenamebox {
+  background-color:#ff652e;
+  }
+  
+#racenamebox a {
+  color : #ffffff;
+}
+
+h1.info
+{
+  font-size: 14px;
+  font-weight: bold;
+  color: #ff652e;
+  text-align:center;
+}
