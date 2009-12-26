@@ -408,7 +408,7 @@ class fullRaces {
 
   function dispHtmlClassification($strings, $lang, $numarrived = 0 , 
                                   $sortclause="nwp desc, dnm asc", 
-                                  $disttype ="tofirst", 
+                                  $disttype ="tonm", 
                                   $startnum = 1) {
     
     $now=time();
