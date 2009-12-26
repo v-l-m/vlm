@@ -19,6 +19,7 @@
         "flags.php" => "Flags definitions (no uploading, see below)",
         "races.php" => "Races definitions (no uploading, see below)",
         "waypoints.php" => "[Experimental] Waypoints definitions",
+        "races_waypoints.php" => "[Experimental] Races_waypoints definitions",
         "users.php" => "[Experimental] Users",
         );
     adminlistbox($tablepages, "Table administration");
