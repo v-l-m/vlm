@@ -210,7 +210,7 @@ class users
 
   // Delete a task from pilototo
   // List the piltoto orders
-  function pilototoList($status = PILOTOTO_PENDING)
+  function pilototoList($forcemaster = False)
   {
     $now=time();
     $this->pilototo=array();
@@ -219,7 +219,11 @@ class users
      WHERE idusers = $this->idusers
        ORDER by time ASC";
     //       AND status = '" . $status . "'
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+    if ($forcemaster) { // Special case is needed because of the update delay of the slaves
+        $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
+    } else {
+        $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+    }        
 
     //echo $query;
     while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
