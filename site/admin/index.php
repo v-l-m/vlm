@@ -33,11 +33,12 @@
     adminlistbox($uploadpages, "Upload and import operations");
 
     $strangepages = Array(
-        "possible_duplicates.php" => "Duplicates by IP",
-        "strange_engaged_in_unknown.php" => "Engaged in unknown race.",
-        "strange_unknown_flag.php" => "Boat with Unknown flag.",
-        "racemaps_without_race.report.php" => "Racemaps with no corresponding race",
-        "races_without_racemap.report.php" => "Races with no corresponding racemap",
+        "user_agents.php"                   => "User_agent statistics",
+        "possible_duplicates.php"           => "Duplicates by IP",
+        "strange_engaged_in_unknown.php"    => "Engaged in unknown race.",
+        "strange_unknown_flag.php"          => "Boat with Unknown flag.",
+        "racemaps_without_race.report.php"  => "Racemaps with no corresponding race",
+        "races_without_racemap.report.php"  => "Races with no corresponding racemap",
         );
 
     adminlistbox($strangepages, "Reports [Use with caution]");
