@@ -17,7 +17,7 @@ $opts['key_type'] = 'int';
 $opts['filters'] = "idwaypoint NOT IN (SELECT fooalias.idwaypoint FROM races_waypoints AS fooalias GROUP BY idwaypoint HAVING count(*) > 1)";
 
 // Sorting field(s)
-$opts['sort_field'] = array('idwaypoint');
+$opts['sort_field'] = array('-idwaypoint');
 
 
 $opts['fdd']['idwaypoint'] = array(
