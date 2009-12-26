@@ -138,19 +138,16 @@
     */
 
     $action=quote_smart($_POST['action']);
+    $pilotolist_force_master = False;
     if ( !empty($action)) {
         // Action donnée, on exécute l'action
+        $pilotolist_force_master = True; // We will need the freshest datas after update, thus we force data fetching from the master
         switch ($action) {
             case $strings[$lang]["pilototo_prog_add"]:
                 $time=quote_smart($_POST['time']);
                 $pim=quote_smart($_POST['pim']);
                 $pip=quote_smart($_POST['pip']);
                 
-//     if ( $pim == 3 || $pim == 4 ) {
-//          $pip=0;
-//     } else {
-//                $pip=quote_smart($_POST['pip']);
-//     }
                 if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
                     if ( $pim <1 || $pim >5) {
                         echo "ERROR ADD : PIM between 1 and 5 please.";
@@ -176,12 +173,6 @@
                 $time=quote_smart($_POST['time']);
                 $pim=quote_smart($_POST['pim']);
                 $pip=quote_smart($_POST['pip']);
-
-//     if ( $pim == 3 || $pim == 4 ) {
-//          $pip=0;
-//     } else {
-//                $pip=quote_smart($_POST['pip']);
-//     }
 
                 if ( !empty($taskid) && !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip ==0 ) ) {
                 if ( $pim <1 || $pim >5) {
@@ -215,7 +206,7 @@
 
 
     // On affiche la liste des actions
-    $rc=$usersObj->pilototoList();
+    $rc=$usersObj->pilototoList($pilotolist_force_master);
     
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">\n
          <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>\n";
