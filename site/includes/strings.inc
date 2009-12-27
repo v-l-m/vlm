@@ -544,7 +544,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "summary" => "Bonjour %s, voici les informations de votre voilier %s. ",
         "palmares" => "Courses auxquelles le bateau %d a particip&eacute;",
         "notengaged" => "Vous n'&ecirc;tes engag&eacute; dans aucune course. Vous pouvez vous engager dans une des courses ci-dessous.</a>",
-        "youengaged" => "Vous &ecirc;tes engag&eacute; dans la course  ", 
+        "youengaged" => "Vous &ecirc;tes engag&eacute; dans la course ", 
         "seemap" => "Cartes de la course : ",
         "seemappref" => "Choisissez les bateaux dans les pr&eacute;f&eacute;rences de carte",
         "seemaponly" => "Voir la carte avec votre voilier uniquement : ",
