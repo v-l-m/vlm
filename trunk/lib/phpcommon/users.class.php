@@ -101,7 +101,7 @@ class users
 
   }
 
-  // locks a boat (so the engine won't run for her) for a time (seconds) from now
+  // locks a boat (so the engine won't run for it) for a time (seconds) from now
   function lockBoat($time)
   {
     $this->releasetime = time() + $time;
@@ -990,10 +990,11 @@ class fullUsers
       wrapper_mysql_db_query_writer($query_abandon);
     }
 
+    $oldengaged = $this->users->engaged;
     // Then subscribe to race 0
     $this->subscribeToRaces(0);
 
-    logUserEvent($this->users->idusers , $this->users->engaged, "Abandon." );
+    logUserEvent($this->users->idusers , $oldengaged, "Abandon." );
 
   }
 
@@ -1088,7 +1089,8 @@ class fullUsers
       " pilotmode=2, " . 
       " pilotparameter=0,  " . 
       " nextwaypoint=1, " . 
-      " userdeptime=-1, " . 
+      " userdeptime=-1, " .
+      " releasetime=0, " . 
       " loch=0 " . 
       " WHERE idusers = ".$this->users->idusers;
     $result11 = wrapper_mysql_db_query_writer($query11);
