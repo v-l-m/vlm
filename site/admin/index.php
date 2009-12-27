@@ -21,8 +21,9 @@
         "waypoints.php" => "[Experimental] Waypoints definitions",
         "races_waypoints.php" => "[Experimental] Races_waypoints definitions",
         "users.php" => "[Experimental] Users",
+        "user_action.php" => "Browse User Actions",
         );
-    adminlistbox($tablepages, "Table administration");
+    adminlistbox($tablepages, "Table administration/browsing");
 
     $uploadpages = Array(
         "uploadracemap.php" => "Race map upload",
