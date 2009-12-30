@@ -17,8 +17,8 @@ function interditSUD()
                          and P.time > $NOW - 600
                          and P.race=U.engaged and U.engaged=$RACE" | tail -n +2 | while read idusers ; do 
 
-		echo mysql -e "update users set boattype='boat_IceBreaker', blocnote='<B>IceBreaker mode (60 South Limit)</B>' where idusers=$idusers;"
-	done
+		mysql -e "update users set boattype='boat_IceBreaker', blocnote='<B>IceBreaker mode (60 South Limit)</B>' where idusers=$idusers;"
+	done 
 
         # A prevoir : Remettre automatiquement une polaire de $BOAT 
         # à ceux  ne s'étant pas trouvés dans la zone interdite depuis plus de 30 minutes
@@ -29,8 +29,8 @@ function interditSUD()
                           and P.time > $NOW - 600
                           and P.race=U.engaged and U.engaged=$RACE" | tail -n +2 | while read idusers ; do 
  
- 		echo mysql -e "update users set boattype='boat_$BOAT' where idusers=$idusers;"
- 	done
+ 		mysql -e "update users set boattype='boat_$BOAT' where idusers=$idusers;"
+ 	done 
 
 
 
