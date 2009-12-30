@@ -17,7 +17,7 @@ function interditSUD()
                          and P.time > $NOW - 600
                          and P.race=U.engaged and U.engaged=$RACE" | tail -n +2 | while read idusers ; do 
 
-		mysql -e "update users set boattype='boat_IceBreaker', blocnote='<B>IceBreaker mode (60 South Limit)</B>' where idusers=$idusers;"
+		mysql -e "update users set boattype='boat_IceBreaker', blocnote='IceBreaker mode (60 South Limit)' where idusers=$idusers;"
 	done 
 
         # A prevoir : Remettre automatiquement une polaire de $BOAT 
