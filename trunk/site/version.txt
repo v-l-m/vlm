@@ -1,1 +1,5 @@
+<<<<<<< .courant
 trunk
+=======
+0.12.1
+>>>>>>> .fusion-droit.r1360
