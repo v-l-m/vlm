@@ -10,13 +10,13 @@ var tempY = 0;
 
 function getMouseXY(e) {
     if (IE) { // grab the x-y pos.s if browser is IE
-  tempX = event.clientX + document.body.scrollLeft;
-  tempY = event.clientY + document.body.scrollTop;
-    }
-    else {  // grab the x-y pos.s if browser is NS
-  tempX = e.pageX;
-  tempY = e.pageY;
+        tempX = event.clientX + document.body.scrollLeft;
+        tempY = event.clientY + document.body.scrollTop;
+    } else {  // grab the x-y pos.s if browser is NS
+        tempX = e.pageX;
+        tempY = e.pageY;
     }  
+
     if (tempX < 0){tempX = 0;}
     if (tempY < 0){tempY = 0;}  
 
@@ -25,15 +25,13 @@ function getMouseXY(e) {
 
 function toggleDisplay(id){
     if (id.style.display=="none"){
-  id.style.display="inline";
-    }
-    else {
-  id.style.display="none";
+        id.style.display="inline";
+    } else {
+        id.style.display="none";
     }
 }
 
 function showDivTopLeft(id, text, xSize , ySize ) {
-
     setDivSize(id, xSize, ySize);
 
     document.getElementById(id).style.position = 'fixed';
@@ -49,7 +47,6 @@ function showDivLeft(id, text, xSize , ySize ) {
 
     document.getElementById(id).style.left = parseInt(tempX+15) + 'px';
     document.getElementById(id).style.top  = parseInt(tempY+15) + 'px';
-
     showDiv(id, text);
 }
 
@@ -68,6 +65,22 @@ function showDiv(id, text) {
     //document.getElementById(id).style.display = 'inline';
     document.getElementById(id).style.visibility = 'visible';
     document.getElementById(id).innerHTML = text;
+
+/*
+    wh = window.innerHeight;
+    ww = window.innerWidth;
+
+    w = document.getElementById(id).offsetWidth;
+    h = document.getElementById(id).offsetHeight;
+
+    if ((parseInt(document.getElementById(id).style.top)+h) > wh) {
+        document.getElementById(id).style.top  = parseInt(wh-h) + 'px';
+    }
+
+    if ((document.getElementById(id).style.left+w) > ww) {
+        document.getElementById(id).style.left  = parseInt(ww-w) + 'px';
+    }
+*/
 }
 
 function setDivSize(id, xSize, ySize) {
