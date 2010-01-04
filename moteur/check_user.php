@@ -120,8 +120,8 @@
 
         $distVac=round($fullUsersObj->boatspeed*$fullUsersObj->hours,3);
 
-        echo "\tPosition update (WS=" . round($fullUsersObj->wspeed,1) . 
-          ", WH=".round($fullUsersObj->wheading,1). 
+        echo "\tPosition update (WSpd=" . round($fullUsersObj->wspeed,1) . 
+          ", WHdg=".(round($fullUsersObj->wheading,1)+180)%360. 
           ", Hours=".round($fullUsersObj->hours,4). 
           ", ANG=".round($fullUsersObj->boatanglewithwind,2). 
           ", Hdg=" . $fullUsersObj->users->boatheading. 
