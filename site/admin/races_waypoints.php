@@ -20,18 +20,18 @@ $opts['filters'] = "idwaypoint NOT IN (SELECT fooalias.idwaypoint FROM races_way
 $opts['sort_field'] = array('-idwaypoint');
 
 
-$opts['fdd']['idwaypoint'] = array(
-  'name'     => '#IdWaypoint',
-  'help'     => 'Unique id of the waypoint (or gate)',
+$opts['fdd']['idraces'] = array(
+  'name'     => '#IdRaces',
+  'help'     => 'Unique id of the race',
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
 );
 
-$opts['fdd']['idraces'] = array(
-  'name'     => '#IdRaces',
-  'help'     => 'Unique id of the race',
+$opts['fdd']['idwaypoint'] = array(
+  'name'     => '#IdWaypoint',
+  'help'     => 'Unique id of the waypoint (or gate)',
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',
