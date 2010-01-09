@@ -40,7 +40,7 @@
     $query =  "SELECT histpos.time,histpos.lat,histpos.long FROM histpos" .
               " WHERE histpos.idusers=" . round($idu) . 
               " AND histpos.race=" . round($idr) . 
-              " AND histpos.time >= races.deptime".
+              " AND histpos.time >= ".$deptime.
               " ORDER BY time ASC";
 
     $result = wrapper_mysql_db_query_reader($query) or die("Query [$query] failed \n");
