@@ -892,7 +892,7 @@ Pour ce qui concerne l'entraide et les question sur l'utilisation du logiciel, p
         "tribord_amure" => "TRIBORD AMURE",
         "orthodromic" => "Pilota Orthodromico",
         "orthodromic_comment" => "verso Mia WP si non 0/0\nverso il prossimo mark si Mia WP=0/0",
-        "estimated"=>"Tempo stimato",
+        "estimated"=>"Velocità stimata",
         "angleupdated" => "Angolo aggiornato",
         "boatnamethat" => "Nome della barca che comparira (skipper; sponsor)",
         "useremail" => "Vostra email (per essere informato se qualcosa non va)",
