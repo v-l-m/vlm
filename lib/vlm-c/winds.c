@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.26 2009-08-31 11:39:28 ylafon Exp $
+ * $Id: winds.c,v 1.27 2010-02-03 19:40:09 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -698,6 +698,7 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
     c = c01 + (c23 - c01) * (d_long - floor(d_long));
     uprev = cabs(c);
     vprev = carg(c);
+    _positive_angle(vprev);
 #endif /* OLD_C_COMPILER */
   }
 
@@ -770,6 +771,7 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
     c = c01 + (c23 - c01) * (d_long - floor(d_long));
     unext = cabs(c);
     vnext = carg(c);
+    _positive_angle(vnext);
 #endif /* OLD_C_COMPILER */
     }    
 #ifdef DEBUG
@@ -813,6 +815,7 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
       c = c01 + (c23 - c01) * t_ratio;
       u = cabs(c);
       v = carg(c);
+      _positive_angle(v);
 #endif /* OLD_C_COMPILER */
     }
   } else {
