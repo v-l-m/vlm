@@ -72,8 +72,8 @@ if ($fd = fopen ($filename, "r")) {
      //echo "$query\n";
 
 
-     $fullUsersObj = new fullUsers(-3);
-     $fullUsersObj->writeCurrentRanking();
+//     $fullUsersObj = new fullUsers(-3);
+//     $fullUsersObj->writeCurrentRanking();
 
    }
 
