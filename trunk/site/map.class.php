@@ -1088,7 +1088,7 @@ class map
           $xlogo +=8;
           $ylogo +=8;
 
-        } elseif ( $boat[0] >= -11 ) {
+        } elseif ( $boat[0] == -11 ) {
           $logo_name= "images/bateaux_reels/SODEBO.png";
           $VDGLogo= imagecreatefrompng($logo_name);
           imagecopy  ( $this->mapImage  , $VDGLogo  , 
@@ -1118,11 +1118,13 @@ class map
             $numcolor=$this->colorSea;
           }
 
-          //if ( $boat[0] == -3 ) {
-          //    $boat[0] = "G3";
-          //} else {
-          //    $boat[0] = -$boat[0];
-          //}
+          if ( $boat[0] == -3 ) {
+              $boat[0] = "G3";
+          } elseif ( $boat[0] == -5 ) {    
+              $boat[0] = "BP";
+          } else {
+              $boat[0] = -$boat[0];
+          }
         }
         imagestring ( $this->mapImage, $font+1, $xlogo-4, $ylogo-3, $boatname , $numcolor);
       }
