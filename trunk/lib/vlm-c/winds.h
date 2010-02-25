@@ -1,5 +1,5 @@
 /**
- * $Id: winds.h,v 1.9 2009-08-31 10:10:08 ylafon Exp $
+ * $Id: winds.h,v 1.10 2010-02-25 13:53:45 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -114,6 +114,23 @@ wind_info *get_wind_info_latlong_selective_TWSA_context PARAM5(vlmc_context *,
 wind_info *get_wind_info_latlong_UV PARAM4(double, double, time_t, wind_info *);
 wind_info *get_wind_info_latlong_UV_context PARAM5(vlmc_context *, double, 
 						   double, time_t, wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in UV to compute the wind angle
+ * and bilinear interpolation on wind speed as calculated in TWSA for speed 
+ * @param latitude, a <code>double</code>, in <em>radians</em>
+ * @param longitude, a <code>double</code>, in <em>radians</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>radians</em>
+ */
+wind_info *get_wind_info_latlong_hybrid PARAM4(double, double, 
+					       time_t, wind_info *);
+wind_info *get_wind_info_latlong_hybrid_context PARAM5(vlmc_context *, double, 
+						       double, time_t,
+						       wind_info *);
+
 
 /* get the timestamp (in seconds , see time()) of the first grib entry
    technically, an observation, not a prevision */
