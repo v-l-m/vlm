@@ -1,7 +1,7 @@
 /**
- * $Id: winds.c,v 1.27 2010-02-03 19:40:09 ylafon Exp $
+ * $Id: winds.c,v 1.28 2010-02-25 13:53:45 ylafon Exp $
  *
- * (c) 2008 by Yves Lafon
+ * (c) 2008-2010 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
  *
  *      This program is free software; you can redistribute it and/or modify
@@ -827,6 +827,267 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
 #endif /* DEBUG */
   wind->speed = u;
   wind->angle = v;
+  return wind;
+}
+
+
+wind_info *get_wind_info_latlong_hybrid(double latitude, double longitude, 
+					time_t vac_time, wind_info *wind) {
+  return get_wind_info_latlong_hybrid_context(global_vlmc_context,
+					      latitude, longitude,
+					      vac_time, wind);
+}
+
+wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
+						double latitude,
+						double longitude, 
+						time_t vac_time,
+						wind_info *wind) {
+  winds *prev, *next;
+  int i, t_long, t_lat;
+  double u0prev, u0next, v0prev, v0next;
+  double u1prev, u1next, v1prev, v1next;
+  double u2prev, u2next, v2prev, v2next;
+  double u3prev, u3next, v3prev, v3next;
+  double u01next, u23next, u01prev, u23prev;
+  double v01next, v23next, v01prev, v23prev;
+  double uprev, unext, vprev, vnext;
+  double ro0prev, ro0next;
+  double ro1prev, ro1next;
+  double ro2prev, ro2next;
+  double ro3prev, ro3next;
+  double ro01prev, ro23prev, ro01next, ro23next;
+  double ronext, roprev;
+  double u, v, ro;
+  double d_long, d_lat, t_ratio, angle;
+#ifdef OLD_C_COMPILER
+  double t_speed;
+#else
+  double complex c;
+#endif /* OLD_C_COMPILER */
+  winds_prev *windtable;
+#ifdef DEBUG
+  char buff[64];
+#endif /* DEBUG */
+  
+  windtable = &context->windtable;
+  /* if the windtable is not there, return NULL */
+  if (windtable->wind == NULL) {
+    wind->speed = 0.0;
+    wind->angle = 0.0;
+    return NULL;
+  }
+
+  d_long = radToDeg(longitude); /* is there a +180 drift? see grib */
+  if (d_long < 0) {
+    d_long += 360;
+  } else if (d_long >= 360) {
+    d_long -= 360;
+  }
+  d_lat = radToDeg(latitude) + 90; /* is there a +90 drift? see grib*/
+    
+  prev = next = NULL;
+
+  /* correct the grib time, currently variable in VLM */
+  vac_time -= windtable->time_offset;
+
+  for (i=0; i< windtable->nb_prevs; i++) {
+    if (windtable->wind[i]->prevision_time > vac_time) {
+      if (i) {
+	next = windtable->wind[i];
+	prev = windtable->wind[i-1];
+      } else {
+	prev = windtable->wind[i];
+      }
+      break;
+    }
+  }
+  /* none found the two are the last ones */
+  if (!next && !prev) {
+    prev = windtable->wind[windtable->nb_prevs-1];
+  } 
+#ifdef GRIB_RESOLUTION_0_5
+  d_long = d_long*2.0;
+  d_lat = d_lat*2.0;
+#endif /* GRID_RESOLUTION_0_5 */
+  t_long = (int)floor(d_long);
+  t_lat = (int)floor(d_lat);
+
+  u0prev = prev->wind_u[t_long][t_lat];
+  v0prev = prev->wind_v[t_long][t_lat];
+  u1prev = prev->wind_u[t_long][t_lat+1];
+  v1prev = prev->wind_v[t_long][t_lat+1];
+  u2prev = prev->wind_u[(t_long+1)%WIND_GRID_LONG][t_lat];
+  v2prev = prev->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat];
+  u3prev = prev->wind_u[(t_long+1)%WIND_GRID_LONG][t_lat+1];
+  v3prev = prev->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat+1];    
+
+#ifdef DEBUG
+  printf("u0prev: U=%.2f m/s, V=%.2f m/s\n", u0prev, v0prev);
+  printf("u1prev: U=%.2f m/s, V=%.2f m/s\n", u1prev, v1prev);
+  printf("u2prev: U=%.2f m/s, V=%.2f m/s\n", u2prev, v2prev);
+  printf("u3prev: U=%.2f m/s, V=%.2f m/s\n", u3prev, v3prev);
+#endif /* DEBUG */  
+
+  /* we reuse u = speed v = angle after conversion */
+#ifdef OLD_C_COMPILER
+# define _speed_u_v(a, b, ro)			\
+  ro = msToKts(sqrt(a*a+b*b));                         
+#else
+#  define _speed_u_v(a, b, ro)			\
+  ro = msToKts(hypot(a, b));
+#endif /* OLD_C_COMPILER */
+
+  /*
+    simple bilinear interpolation, we might factor the cos(lat) in
+    the computation to tackle the shape of the pseudo square
+    
+    Doing interpolation on angle/speed might be better 
+  */
+
+  _speed_u_v(u0prev, v0prev, ro0prev);
+  _speed_u_v(u1prev, v1prev, ro1prev);
+  _speed_u_v(u2prev, v2prev, ro2prev);
+  _speed_u_v(u3prev, v3prev, ro3prev);
+
+  /* UV for geting the angle without too much hashing */
+  u01prev = u0prev + (u1prev - u0prev) * (d_lat - floor(d_lat));
+  v01prev = v0prev + (v1prev - v0prev) * (d_lat - floor(d_lat));
+  u23prev = u2prev + (u3prev - u2prev) * (d_lat - floor(d_lat));
+  v23prev = v2prev + (v3prev - v2prev) * (d_lat - floor(d_lat));
+  
+  uprev = u01prev + (u23prev - u01prev) * (d_long - floor(d_long));
+  vprev = v01prev + (v23prev - v01prev) * (d_long - floor(d_long));
+
+  /* now the speed part */
+  ro01prev = ro0prev + (ro1prev - ro0prev) * (d_lat - floor(d_lat));
+  ro23prev = ro2prev + (ro3prev - ro2prev) * (d_lat - floor(d_lat));
+  
+  roprev = ro01prev + (ro23prev - ro01prev) * (d_long - floor(d_long));
+
+#ifdef DEBUG
+  printf("-> u01prev: U=%.2f m/s, V=%.2f m/s\n", u01prev, v01prev);
+  printf("-> u23prev: U=%.2f m/s, V=%.2f m/s\n", u23prev, v23prev);
+  printf("=>   uprev: U=%.2f m/s, V=%.2f m/s\n", uprev, vprev);
+  printf("->  roprev: %.2f kts\n", roprev);
+#endif /* DEBUG */  
+
+  if (next) {
+    u0next = next->wind_u[t_long][t_lat];
+    v0next = next->wind_v[t_long][t_lat];      
+    u1next = next->wind_u[t_long][t_lat+1];
+    v1next = next->wind_v[t_long][t_lat+1];
+    u2next = next->wind_u[(t_long+1)%WIND_GRID_LONG][t_lat];
+    v2next = next->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat];
+    u3next = next->wind_u[(t_long+1)%WIND_GRID_LONG][t_lat+1];
+    v3next = next->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat+1];
+      
+#ifdef DEBUG
+    printf("u0next: U=%.2f m/s, V=%.2f m/s\n", u0next, v0next);
+    printf("u1next: U=%.2f m/s, V=%.2f m/s\n", u1next, v1next);
+    printf("u2next: U=%.2f m/s, V=%.2f m/s\n", u2next, v2next);
+    printf("u3next: U=%.2f m/s, V=%.2f m/s\n", u3next, v3next);
+#endif /* DEBUG */  
+
+    /* simple bilinear interpolation, we might factor the cos(lat) in
+       the computation to tackle the shape of the pseudo square */
+      
+    _speed_u_v(u0next, v0next, ro0next);
+    _speed_u_v(u1next, v1next, ro1next);
+    _speed_u_v(u2next, v2next, ro2next);
+    _speed_u_v(u3next, v3next, ro3next);
+
+    u01next = u0next + (u1next - u0next) * (d_lat - floor(d_lat));
+    v01next = v0next + (v1next - v0next) * (d_lat - floor(d_lat));
+    u23next = u2next + (u3next - u2next) * (d_lat - floor(d_lat));
+    v23next = v2next + (v3next - v2next) * (d_lat - floor(d_lat));
+      
+    unext = u01next + (u23next - u01next) * (d_long - floor(d_long));
+    vnext = v01next + (v23next - v01next) * (d_long - floor(d_long));
+      
+    /* now the speed part */
+    ro01next = ro0next + (ro1next - ro0next) * (d_lat - floor(d_lat));
+    ro23next = ro2next + (ro3next - ro2next) * (d_lat - floor(d_lat));
+    
+    ronext = ro01next + (ro23next - ro01next) * (d_long - floor(d_long));
+
+#ifdef DEBUG
+    printf("-> u01next: U=%.2f m/s, V=%.2f m/s\n", u01next, v01next);
+    printf("-> u23next: U=%.2f m/s, V=%.2f m/s\n", u23next, v23next);
+    printf("=>   unext: U=%.2f m/s, V=%.2f m/s\n", unext, vnext);
+    printf("->  ronext: %.2f kts\n", ronext);
+#endif /* DEBUG */  
+
+#ifdef DEBUG
+    printf("vac_time %ld, prev prevision time %ld, next prevision time %ld\n", vac_time,
+	   prev->prevision_time, next->prevision_time);
+    ctime_r(&vac_time, buff);
+    printf("vac_time %s", buff);
+    ctime_r(&prev->prevision_time, buff);
+    printf(" prev_time %s", buff);
+    ctime_r(&next->prevision_time, buff);
+    printf(" next_time %s\n", buff);
+    printf("diff num %ld, diff_denom %ld\n", vac_time - prev->prevision_time,
+	   next->prevision_time - prev->prevision_time);
+#endif /* DEBUG */
+    t_ratio = ((double)(vac_time - prev->prevision_time)) / 
+      ((double)(next->prevision_time - prev->prevision_time));
+      
+    u = uprev + (unext - uprev) * t_ratio;
+    v = vprev + (vnext - vprev) * t_ratio;
+
+    ro = roprev + (ronext - roprev) * t_ratio;
+
+    /* check this from grib...
+       WE -> NS V (west from east, north from south) and in m/s
+       so U/V +/+ -> 270 to 360
+       +/- -> 180 to 270
+       -/- -> 90 to 180
+       -/+ -> 0 to 90
+       going clockwise.
+       1m/s -> 1.9438445 kts
+    */
+#ifdef OLD_C_COMPILER
+    t_speed = sqrt(u*u+v*v);
+    angle = acos(-v / t_speed);
+    if (u > 0.0) {
+      angle = TWO_PI - angle;
+    }
+#else
+    c = - v - _Complex_I * u;
+#endif /* OLD_C_COMPILER */
+#ifdef DEBUG
+    printf("time stamps: prev %ld, boat_time %ld", prev->prevision_time,
+	   vac_time);
+    printf(", next %ld, time ratio %.3f\n", next->prevision_time, t_ratio);
+#endif /* DEBUG */
+  } else {
+#ifdef OLD_C_COMPILER
+    t_speed = sqrt(uprev*uprev+vprev*vprev);
+    angle = acos(-vprev / t_speed);
+    if (uprev > 0.0) {
+      angle = TWO_PI - angle;
+    }
+#else
+    c = - vprev - _Complex_I * uprev;
+#endif /* OLD_C_COMPILER */
+  }
+#ifndef OLD_C_COMPILER
+  angle = carg(c);
+  if (angle < 0) {
+    angle += TWO_PI;
+  }
+#endif /* !OLD_C_COMPILER */
+#ifdef DEBUG
+  printf("U component %.3f, V component %.3f, speed %.3f, angle %.3f\n",
+	 -cimag(c), -creal(c), msToKts(ro), radToDeg(angle));
+#endif /* DEBUG */
+#ifdef OLD_C_COMPILER
+  wind->speed = ro;
+#else
+  wind->speed = msToKts(cabs(c));
+#endif /* OLD_C_COMPILER */
+  wind->angle = angle;
   return wind;
 }
 
