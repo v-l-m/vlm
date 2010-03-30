@@ -49,3 +49,7 @@ BOAT=C5bp5
 RACE=81
 interditSUD   -180000     180000  -60000  
 
+BOAT=Imoca2008
+RACE=20100228
+interditSUD   -180000     180000  -60000  
+
