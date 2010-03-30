@@ -1218,15 +1218,33 @@ function login($idus, $pseudo)
     $_SESSION['idu'] = $idus;
     $_SESSION['loggedin'] = 1;
     $_SESSION['login'] = $pseudo;
+
+/*
+    ## Attention : si derriere proxy, c'est l'@IP LAN qui est recuperee.
     if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      $IP = $_SERVER['HTTP_X_FORWARDED_FOR']; 
+        $IP = $_SERVER['HTTP_X_FORWARDED_FOR']; 
     } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
-      $IP = $_SERVER['HTTP_CLIENT_IP'];   
+        $IP = $_SERVER['HTTP_CLIENT_IP'];   
     } else {
-      $IP = $_SERVER['REMOTE_ADDR'];  
+        $IP = $_SERVER['REMOTE_ADDR'];  
     }
-    // affiche l'IP
+*/
+    // IP memorise "toutes les" adresses qu'on peut memoriser
+    // ==> Faire la difference entre 2 PCs derriere un meme proxy
+    //     et dans le cas d'un proxy, noter aussi son adresse, 
+    //     pas seulement celle des machines dans son LAN
+    //     ==> UPGRADE BDD : V0.13, ipaddr => varchar(255)
+    $IP="";
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $IP .= "HTTP_X_FORWARDED_FOR=" . $_SERVER['HTTP_X_FORWARDED_FOR'] . "/";
+    }
+    if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $IP .= "HTTP_CLIENT_IP=" . $_SERVER['HTTP_CLIENT_IP'] . "/";
+    }
+
+    $IP .= "REMOTE_ADDR=" . $_SERVER['REMOTE_ADDR'];
     $_SESSION['IP']=$IP;
+
   }
 }
 
