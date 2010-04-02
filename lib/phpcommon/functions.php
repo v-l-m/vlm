@@ -1209,6 +1209,64 @@ function createAccount($log, $pass, $mail, $country)
 }
 
 
+function validip($ip) {
+    if (!empty($ip) && ip2long($ip)!=-1) {
+ 
+        $reserved_ips = array (
+            array('0.0.0.0','2.255.255.255'),
+            array('10.0.0.0','10.255.255.255'),
+            array('127.0.0.0','127.255.255.255'),
+            array('169.254.0.0','169.254.255.255'),
+            array('172.16.0.0','172.31.255.255'),
+            array('192.0.2.0','192.0.2.255'),
+            array('192.168.0.0','192.168.255.255'),
+            array('255.255.255.0','255.255.255.255')
+        );
+ 
+        foreach ($reserved_ips as $r) { 
+            $min = ip2long($r[0]);
+            $max = ip2long($r[1]);
+            if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getip() { 
+    if (validip($_SERVER["HTTP_CLIENT_IP"])) {
+        return $_SERVER["HTTP_CLIENT_IP"];
+    }
+
+    foreach (explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]) as $ip) {
+        if (validip(trim($ip))) {
+            return $ip;
+        }
+    }
+     
+    if (validip($_SERVER["HTTP_X_FORWARDED"])) {
+        return $_SERVER["HTTP_X_FORWARDED"];
+    } elseif (validip($_SERVER["HTTP_FORWARDED_FOR"])) {
+        return $_SERVER["HTTP_FORWARDED_FOR"];
+    } elseif (validip($_SERVER["HTTP_FORWARDED"])) {
+        return $_SERVER["HTTP_FORWARDED"];
+    } else {
+        return $_SERVER["REMOTE_ADDR"];
+    }
+}
+
+function getfullip() {
+
+    $ipvars = Array("HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED", "HTTP_FORWARDED", "REMOTE_ADDR");
+    
+    $ipstr = "";
+    foreach($ipvars as $varname) {
+        if (isset($_SERVER[$varname])) $ipstr = $ipstr . $varname . "=" . $_SERVER[$varname] . ", ";
+    }
+    return $ipstr;
+}
+
 function login($idus, $pseudo)
 {
   //echo "calling login with $idus and $pseudo\n";
@@ -1219,31 +1277,13 @@ function login($idus, $pseudo)
     $_SESSION['loggedin'] = 1;
     $_SESSION['login'] = $pseudo;
 
-/*
-    ## Attention : si derriere proxy, c'est l'@IP LAN qui est recuperee.
-    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $IP = $_SERVER['HTTP_X_FORWARDED_FOR']; 
-    } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
-        $IP = $_SERVER['HTTP_CLIENT_IP'];   
-    } else {
-        $IP = $_SERVER['REMOTE_ADDR'];  
-    }
-*/
     // IP memorise "toutes les" adresses qu'on peut memoriser
     // ==> Faire la difference entre 2 PCs derriere un meme proxy
     //     et dans le cas d'un proxy, noter aussi son adresse, 
     //     pas seulement celle des machines dans son LAN
     //     ==> UPGRADE BDD : V0.13, ipaddr => varchar(255)
-    $IP="";
-    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $IP .= "HTTP_X_FORWARDED_FOR=" . $_SERVER['HTTP_X_FORWARDED_FOR'] . "/";
-    }
-    if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-        $IP .= "HTTP_CLIENT_IP=" . $_SERVER['HTTP_CLIENT_IP'] . "/";
-    }
-
-    $IP .= "REMOTE_ADDR=" . $_SERVER['REMOTE_ADDR'];
-    $_SESSION['IP']=$IP;
+    $_SESSION['FULLIP']=getfullip();
+    $_SESSION['IP'] = getip();
 
   }
 }
@@ -1620,8 +1660,8 @@ function checkMapArea($value) {
 
 function logUserEvent($idusers, $idraces, $action) {
     //tracking...
-    $query_user_event = "INSERT INTO `user_action` (`idusers`, `ipaddr`, `idraces`, `action`, `useragent`) " .
-                        " values (" . $idusers . ", '" . $_SESSION['IP'] . "' ," . $idraces .
+    $query_user_event = "INSERT INTO `user_action` (`idusers`, `ipaddr`, `fullipaddr`, `idraces`, `action`, `useragent`) " .
+                        " values (" . $idusers . ", '" . $_SESSION['IP'] . "' , '" . $_SESSION['FULLIP'] . "' ," . $idraces .
                         ",'" . addslashes($action) . "', '". addslashes($_SERVER["HTTP_USER_AGENT"]) ."' )";
     $result = wrapper_mysql_db_query_writer($query_user_event) or die("Query [$query_user_event] failed \n");
 }
@@ -1678,7 +1718,7 @@ function insertAdminChangelog($argarray) {
         }
     }
     $query = sprintf("INSERT INTO admin_changelog (user, host, operation, tab, rowkey, col, oldval, newval) VALUES ('%s', '%s' %s )",
-                      getLoginName(), $_SERVER["REMOTE_ADDR"], $values
+                      getLoginName(), getip(), $values
                        );
     wrapper_mysql_db_query_writer($query);
 }

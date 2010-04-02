@@ -80,3 +80,10 @@ ALTER TABLE `updates` ADD INDEX `time` (`time`);
 ALTER TABLE `user_action` ADD INDEX `idusers` (`idusers`);
 ALTER TABLE `user_action` ADD INDEX `time` (`time`);
 
+#LES MODIFS POST-RELEASE
+# ... quand meme tracees ici car si qq veut installer la 0.12, il en aura besoin.
+#Création d'un champ plus long pour stocker le detail.
+ALTER TABLE `user_action` ADD `fullipaddr` VARCHAR(255);
+
+
+
