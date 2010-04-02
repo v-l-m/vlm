@@ -104,6 +104,14 @@ body
   margin-right: 1px;
 }
 
+#user_action
+{ 
+  width: 100%;
+  margin-left:  1px;
+  margin-right: 1px;
+  text-align: center;
+}
+
 #infobulle
 {
   position: absolute; 

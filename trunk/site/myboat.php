@@ -829,6 +829,17 @@ include_once("scripts/myboat.js");
         lastUpdate($strings, $lang);
         ?>
 </div>
+        <?php if (isLoggedIn()) { ?>
+<div id="user_action">
+        <?php
+            $lastActionDetails = lastUserAction();
+            echo sprintf($strings[$lang]['lastactionip'], $lastActionDetails['action'], $lastActionDetails['ipaddr']);
+            echo "&nbsp;(&nbsp;<a href=\"userlogs.php\">".$strings[$lang]['moreiplogs']."</a>&nbsp;)";
+        ?>
+</div>
+        <?php
+            }
+        ?>
 
 <?php
   }

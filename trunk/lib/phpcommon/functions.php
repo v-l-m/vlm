@@ -209,6 +209,18 @@ function lastUpdate($strings, $lang)
   }
 }
 
+/* Dernière IP de l'utilisateur */
+function lastUserAction() {
+    if ( isLoggedIn() ) {
+        $query2 = "SELECT * FROM user_action WHERE idusers = ".getLoginId()." ORDER BY `time` DESC LIMIT 1";
+        $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
+        $row2 = mysql_fetch_assoc($result2);
+        return $row2;
+    } else {
+        return False;
+    }
+}
+
 /* return the last known update for the local database (or master if master is true) */
 function lastUpdateTime($master = false) {
     $query = "SELECT UNIX_TIMESTAMP(time) AS time FROM updates ORDER BY time DESC LIMIT 1";
