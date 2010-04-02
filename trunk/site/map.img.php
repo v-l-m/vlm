@@ -20,7 +20,7 @@
     
         // Affichage d'un "-X-" au milieu de l'image
     
-        imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] , $noir);
+        imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . getip() , $noir);
         imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$boat.")" , $noir);
         imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
         imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);

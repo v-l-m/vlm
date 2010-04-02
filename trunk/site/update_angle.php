@@ -6,7 +6,7 @@ include_once("config.php");
 $pilotmodes=array("autopilot", "windangle", "orthodromic", "bestvmg", "vbvmg", "bestspeed");
 if ( ! in_array($pilotmode, $pilotmodes) ) {
       printf ("<h1>PILOTMPDE = $pilotmode IS UNSUPPORTED.");
-      printf ("<h2>Your IP address is : " . $_SERVER["REMOTE_ADDR"] . "</h2>\n");
+      printf ("<h2>Your IP address is : " . getip() . "</h2>\n");
       printf ("<h2>It has been logged. Don't try this again.</h2>\n");
       sleep (1);
       exit;
@@ -17,7 +17,7 @@ if (
      strspn($pilotparameter, "-+.0123456789") != strlen($pilotparameter)  ) {
 
       printf ("<h1>This is not a nice thing to try this.</h1>");
-      printf ("<h2>Your IP address is : " . $_SERVER["REMOTE_ADDR"] . "</h2>\n");
+      printf ("<h2>Your IP address is : " . getip() . "</h2>\n");
       sleep (1);
       printf ("<h2>It has been logged. Don't try this again.</h2>\n");
       exit;
@@ -43,7 +43,7 @@ if ($idusers != 0 )
       echo "<h1 align=\"center\">&nbsp;<br />&nbsp;<br />" . $strings[$lang]["angleupdated"] . "<br />&nbsp;<br />&nbsp;</h1>";
   } else {
       printf ("<h1>This is not a nice thing to try this.</h1>");
-      printf ("<h2>Your IP address is : " . $_SERVER["REMOTE_ADDR"] . "</h2>\n");
+      printf ("<h2>Your IP address is : " . getip() . "</h2>\n");
       sleep (1);
       printf ("<h2>It has been logged. Don't try this again.</h2>\n");
   }
