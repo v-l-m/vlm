@@ -122,7 +122,7 @@
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
     if ( empty($idusers) ) {
-        echo "<h4>You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] . "</h4>";
+        echo "<h4>You should not do that...your IP : " . getip() . "</h4>";
         exit();
     } 
 

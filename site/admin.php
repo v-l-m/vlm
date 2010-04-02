@@ -49,7 +49,7 @@ if ( idusersIsAdmin (getLoginId()) ) {
      if ( isAdmin($pseudo, $password) )   {
          echo "C'est pas s&eacute;curis&eacute; le login et le password dans l'URL... Faudrait utiliser la session";
      } else {
-         echo "<h4>You should not do that...your IP : " . $_SERVER["REMOTE_ADDR"] . "</h4>";
+         echo "<h4>You should not do that...your IP : " . getip() . "</h4>";
          exit;
      }
 }
@@ -86,7 +86,7 @@ if ( $race == "" ) {
 } else {
    // On a un numéro, est-ce qu'il existe ?
    if ( ! raceExists($race) ) {
-     echo "<h4>You should not do that... your IP : " . $_SERVER["REMOTE_ADDR"] . "</h4>";
+     echo "<h4>You should not do that... your IP : " . getip() . "</h4>";
      exit;
    } else {
    // On a une course qui existe
@@ -108,7 +108,7 @@ if ( $race == "" ) {
 if ( $boat != "" ) {
    // On a un numéro, est-ce qu'il existe ?
    if ( !boatExists($boat) ) {
-     echo "<h4>You should not do that... your IP : " . $_SERVER["REMOTE_ADDR"] . "</h4>";
+     echo "<h4>You should not do that... your IP : " . getip() . "</h4>";
      exit;
    } else {
    // On a un bateau qui existe, on est content, on instancie l'objet
