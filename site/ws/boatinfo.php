@@ -175,9 +175,8 @@ function get_info_array($idu) {
 
     $info['THM'] = $userObj->users->theme;
     $info['HID'] = $userObj->users->hidepos;
-
-    return $info;
   }
+  return $info;
 }
 
 function usage() {
