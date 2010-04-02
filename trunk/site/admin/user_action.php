@@ -44,6 +44,15 @@ $opts['fdd']['ipaddr'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['fullipaddr'] = array(
+  'name'     => 'FULLIP',
+  'select'   => 'T',
+  'escape'   => true,
+  'maxlen'   => 256,
+//  'options'  => 'FV',
+  'sort'     => true
+);
+
 $opts['fdd']['idraces'] = array(
   'name'     => '#IdRaces',
   'select'   => 'T',
