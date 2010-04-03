@@ -1054,9 +1054,9 @@ function htmlFlagImg($idflag) {
 }
 
 function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
-    //This function is mapped in the race and the user class
+    //This function is mapped in the user class
   	return htmlFlagImg($country) .
-            "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $idusers . "\"" .
+            "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . $idusers . "\"" .
             " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
             " (". $idusers . ") " . $username . "</a>\n";
 }
