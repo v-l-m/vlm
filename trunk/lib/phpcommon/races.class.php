@@ -373,21 +373,17 @@ class fullRaces {
     //for xhtml  compliance, find other solution - tbody can't be void
 
     $num_inscrits=0;
-    foreach ($this->opponents as $users)
-      {
+    foreach ($this->opponents as $users) {
         echo "    <tr class=ranking>\n";
         // ============= Affichage des noms de bateaux en acronyme
-        echo "<td>";
-        echo $this->htmlFlagImg($users->country);
-        echo "\n";
-        echo "<acronym style=\" border-bottom: solid #" . $users->color."\" ".
-          "title=\"". $users->boatname."\">".$users->username." (".
-	  $users->idusers . ")</acronym></td>\n";
+      	echo "<td class=\"ranking\">";
+        echo $this->htmlIdusersUsernameLink($lang, $users->country, $users->color, $users->idusers, $users->boatname, $users->username);
+        echo "</td>";
         echo "<td>" . $users->boatname .  "</td>";
         // =================================================================
         echo "    </tr>\n";
         $num_inscrits++;
-      }
+    }
     
     //table footer
     echo "  </tbody>\n";
@@ -587,12 +583,7 @@ class fullRaces {
       // ============= Affichage des noms de bateaux en acronyme
       if ( $row['idusers'] > 0 ) {
         	echo "<td class=\"ranking\">";
-        	echo $this->htmlFlagImg($row['country']);
-        	echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
-      	  "title=\"". $row['boatname'] . "\">" . 
-      	  " (". $row['idusers'] . ") " . 
-      	  $row['username'] .
-      	  "</acronym>\n";
+          echo $this->htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
           echo "</td>";
       } else {
           $idu=-$row['idusers'];
@@ -782,7 +773,6 @@ class fullRaces {
       $key++;
       echo "<td class=\"htmltable\">".$key."</td>\n";
       echo "<td class=\"htmltable\">";
-      echo $this->htmlFlagImg($row['country']);
 
       // ============= Affichage des noms de bateaux en acronyme
       //echo "<td class=htmltable>" ;
@@ -791,18 +781,14 @@ class fullRaces {
         echo " checked=\"checked\"";
       echo " />";
 
-      echo "<acronym onmousedown=\"javascript:palmares=popup_small('palmares.php?lang=".
-        $lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . 
-        "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
-        "title=\"". $row['boatname'] . "\">" ;
+      echo $this->htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+      /*FIXME
       if ( $row['engaged'] == $this->races->idraces ) {
         echo "<b>" . $row['username'] . "</b>";
       } else {
         echo $row['username'] ;
       }
-      echo " (". $row['idusers'] . ")"  ;
-
-      echo "</acronym>\n";
+      */
 
       echo "</td>";
 
@@ -993,14 +979,9 @@ class fullRaces {
         echo "<tr " . $class . ">\n";
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
-        echo "<td class=\"ranking\">";
-        echo $this->htmlFlagImg($row['country']);
-        echo "<acronym onmousedown=\"javascript:popup_small('palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $row['idusers'] . "', 'palmares');\" style=\" border-bottom: solid #" . $row['color'] . "\" " .
-          "title=\"". $row['boatname'] . "\">" . 
-          " (". $row['idusers'] . ") " . 
-          $row['username'] .
-          "</acronym>\n";
-        echo "</td>\n";
+      	echo "<td class=\"ranking\">";
+        echo $this->htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+        echo "</td>";
 
         $longitude=$row['longitude'];
         $latitude=$row['latitude'];
@@ -1138,10 +1119,16 @@ class fullRaces {
   }
 
   function htmlFlagImg($idflag) {
-    return "<img src=\"/flagimg.php?idflags=".$idflag. "\" alt=\"Flag_".
-      $idflag."\" />";
+    return "<img src=\"/flagimg.php?idflags=".$idflag. "\" alt=\"Flag_". $idflag."\" />";
   }
   
+  function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
+    	return $this->htmlFlagImg($country) .
+              "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $idusers . "\"" .
+              " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
+              " (". $idusers . ") " . $username . "</a>\n";
+  }
+
 } // End class fullRaces
 
 
