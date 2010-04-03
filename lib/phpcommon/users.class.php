@@ -317,6 +317,11 @@ class users
       return htmlFlagImg($this->country);
   }
 
+  function htmlBoattypeLink() {
+      //Conventient mapping
+      return htmlBoattypeLink($this->boattype);
+  }
+
   function htmlIdusersUsernameLink($lang) {
       //This function is also in the race class
       return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);

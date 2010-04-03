@@ -242,7 +242,7 @@ include_once("scripts/myboat.js");
         n&deg; <b><?php echo $usersObj->users->idusers ; ?></b>&nbsp;
         / &quot;<? echo $usersObj->users->boatname ?>&quot;
 <?php
-        echo " / <a href=\"speedchart.php?boattype=" . $usersObj->users->boattype . "\" target=\"_speedchart\">" . substr($usersObj->users->boattype,5) . "</a>&nbsp;";
+        echo " / " . $usersObj->users->htmlBoattypeLink() . "&nbsp;";
         echo "<img src=\"/flagimg.php?idflags=".$usersObj->users->country."\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
         echo  "<br />".$strings[$lang]["ranking"] . " : " . $user_ranking;
 

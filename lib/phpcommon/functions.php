@@ -1054,11 +1054,24 @@ function htmlFlagImg($idflag) {
 }
 
 function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
-      //This function is mapped in the race and the user class
-    	return htmlFlagImg($country) .
-              "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $idusers . "\"" .
-              " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
-              " (". $idusers . ") " . $username . "</a>\n";
+    //This function is mapped in the race and the user class
+  	return htmlFlagImg($country) .
+            "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $idusers . "\"" .
+            " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
+            " (". $idusers . ") " . $username . "</a>\n";
+}
+
+function htmlIdracesLink($lang, $idraces) {
+    return sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
+}
+
+function htmlBoattypeLink($boattype) {
+    $boattypename = strtoupper(ereg_replace('^.*_', '' ,$boattype));
+    return sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
+}
+
+function htmlRacenameLink($lang, $idraces, $racename) {
+    return sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
 }
 
 function getFlag($idflags, $force = 'no') {
@@ -1605,18 +1618,32 @@ function findTopUsers($idraces,$num) {
   return($ret_array);
 }
 
-function displayPalmares($idusers) {
+function displayPalmares($lang, $idusers) {
+
+  include "includes/strings.inc"; // FIXME : très gore !
 
   // search for old races for this player
   $query = "SELECT idraces from races_results where idusers = " . $idusers ;
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+
+  echo "<table>\n";
+  echo "<thead>\n";
+  echo "    <tr>\n";
+  echo "    <th>".$strings[$lang]["raceid"]."</th>\n";
+  echo "    <th>".$strings[$lang]["racename"]."</th>\n";
+  echo "    <th>".$strings[$lang]["arrived"]."</th>\n";
+  echo "    </tr>\n";
+  echo "</thead>\n";
+  echo "<tbody>\n";
+
   while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
     $racesObj= new races($row[0]);
-    printf ("%d: %s, Classement = %s<br />", $row[0],$racesObj->racename,getRaceRanking($idusers,$row[0]));
-    // Le classement
+    printf ("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", htmlIdracesLink($lang, $row[0]),
+              htmlRacenameLink($lang, $row[0], $racesObj->racename),
+              getRaceRanking($idusers,$row[0])); // Le classement
 
   }
-  printf ("<br />");
+  printf ("</tbody></table>");
   return(0);
 }
 

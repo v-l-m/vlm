@@ -30,7 +30,6 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
     $idraces = $row[1];
     $racename = $row[2];
     $closetime = $row[3];
-    $boattypename = strtoupper(ereg_replace('^.*_', '' ,$row[4]));
     $boattype = $row[4];
     $firstpcttime = $row[5];
     $maxboats = $row[6];
@@ -58,9 +57,11 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         echo "</td>\n";
   
         echo "<td align=\"left\" class=\"boat\">";
-        $urlidraces = sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
-        $urlboattype = sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
-        $urlracename = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
+        //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
+        $urlidraces = htmlIdracesLink($lang, $idraces); // pointe vers les ICS
+        $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
+        $urlracename = htmlRacenameLink($lang, $idraces, $racename); // pointe vers le classement de la course
+        
         $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
         if ( $maxboats != 0 ) {            
             $strengaged = " - ".$strings[$lang]["engaged"]." / Total : " . $urlnumengaged . "/" . $maxboats ;
