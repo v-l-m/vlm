@@ -377,7 +377,7 @@ class fullRaces {
         echo "    <tr class=ranking>\n";
         // ============= Affichage des noms de bateaux en acronyme
       	echo "<td class=\"ranking\">";
-        echo $this->htmlIdusersUsernameLink($lang, $users->country, $users->color, $users->idusers, $users->boatname, $users->username);
+        echo $users->htmlIdusersUsernameLink($lang);
         echo "</td>";
         echo "<td>" . $users->boatname .  "</td>";
         // =================================================================
@@ -583,7 +583,7 @@ class fullRaces {
       // ============= Affichage des noms de bateaux en acronyme
       if ( $row['idusers'] > 0 ) {
         	echo "<td class=\"ranking\">";
-          echo $this->htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+          echo htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
           echo "</td>";
       } else {
           $idu=-$row['idusers'];
@@ -781,7 +781,7 @@ class fullRaces {
         echo " checked=\"checked\"";
       echo " />";
 
-      echo $this->htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+      echo htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
       /*FIXME
       if ( $row['engaged'] == $this->races->idraces ) {
         echo "<b>" . $row['username'] . "</b>";
@@ -980,7 +980,7 @@ class fullRaces {
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
       	echo "<td class=\"ranking\">";
-        echo $this->htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+        echo htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
         echo "</td>";
 
         $longitude=$row['longitude'];
@@ -1117,16 +1117,10 @@ class fullRaces {
     $row = mysql_fetch_array($result, MYSQL_NUM);
     return ($row[0])  ;
   }
-
-  function htmlFlagImg($idflag) {
-    return "<img src=\"/flagimg.php?idflags=".$idflag. "\" alt=\"Flag_". $idflag."\" />";
-  }
-  
+ 
   function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
-    	return $this->htmlFlagImg($country) .
-              "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $idusers . "\"" .
-              " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
-              " (". $idusers . ") " . $username . "</a>\n";
+      //This function is also in the user class
+    	return htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username);
   }
 
 } // End class fullRaces
