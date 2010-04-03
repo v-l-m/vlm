@@ -1049,6 +1049,18 @@ function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
           " alt=\"" .$alt. "\"/>";
 }
 
+function htmlFlagImg($idflag) {
+    return "<img src=\"/flagimg.php?idflags=".$idflag. "\" alt=\"Flag_". $idflag."\" />";
+}
+
+function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
+      //This function is mapped in the race and the user class
+    	return htmlFlagImg($country) .
+              "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=palmares&amp;idusers=" . $idusers . "\"" .
+              " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
+              " (". $idusers . ") " . $username . "</a>\n";
+}
+
 function getFlag($idflags, $force = 'no') {
 
     $original = DIRECTORY_COUNTRY_FLAGS . "/" . $idflags . ".png";

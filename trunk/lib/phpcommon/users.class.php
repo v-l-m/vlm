@@ -312,7 +312,15 @@ class users
     return(0);
   }
 
+  function htmlFlagImg() {
+      //Convenient mapping
+      return htmlFlagImg($this->country);
+  }
 
+  function htmlIdusersUsernameLink($lang) {
+      //This function is also in the race class
+      return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);
+  }
 
 }
 
@@ -1302,6 +1310,7 @@ class fullUsers
 
     return $sum;
   }
+
 }
 
 
