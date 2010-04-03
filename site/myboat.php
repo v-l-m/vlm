@@ -17,7 +17,7 @@ include_once("includes/header.inc");
 
     // Le palmares du joueur
     echo "<h1>" ; printf ($strings[$lang]["palmares"],$usersObj->users->idusers); echo "</h1>";
-    displayPalmares($usersObj->users->idusers);
+    displayPalmares($lang, $usersObj->users->idusers);
 
     // S'engager dans une course
     printf("<h3>" . $strings[$lang]["notengaged"] . "</h3>",$lang);

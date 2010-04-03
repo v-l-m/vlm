@@ -240,6 +240,17 @@ class races {
       return ( $maxArrivalTime - $now );
     }
   }
+
+  function htmlIdracesLink($lang) {
+      //Convenient wrapper
+      return htmlIdracesLink($lang, $this->idraces);
+  }
+
+  function htmlRacenameLink($lang) {
+      //Convenient wrapper
+      return htmlRacenameLink($lang, $this->idraces, $this->racename);
+  }
+
 }
 
 
@@ -1118,11 +1129,6 @@ class fullRaces {
     return ($row[0])  ;
   }
  
-  function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
-      //This function is also in the user class
-    	return htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username);
-  }
-
 } // End class fullRaces
 
 
