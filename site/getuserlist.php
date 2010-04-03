@@ -5,6 +5,8 @@ header("content-type: text/plain; charset=UTF-8");
 
   $idr=htmlentities(quote_smart($_REQUEST['idr']));
   if (  strlen($idr) == 0 ) {
+     echo "THIS SERVICE HAS BEEN DEPRECATED\n";
+     echo "Please use /ws/raceuserinfo.php for remplacement.\n";
      echo "Usage : http://virtual-loup-de-mer.org/getuserlist.php?idr=X\n";
      echo "\nX = numero de la course, 0 pour toute course confondue";
      exit;

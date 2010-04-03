@@ -1319,7 +1319,7 @@ function login($idus, $pseudo)
     //     et dans le cas d'un proxy, noter aussi son adresse, 
     //     pas seulement celle des machines dans son LAN
     //     ==> UPGRADE BDD : V0.13, ipaddr => varchar(255)
-    $_SESSION['FULLIP']=getfullip();
+    $_SESSION['FULLIP'] = getfullip();
     $_SESSION['IP'] = getip();
 
   }
@@ -1327,12 +1327,12 @@ function login($idus, $pseudo)
 
 function logout()
 {
-
-  $_SESSION = array();
-  if (isset($_COOKIE[session_name()]))
-    setcookie(session_name(), '', time()-42000, '/');
-  session_destroy();
-
+    if (isset($_COOKIE[session_name()]))
+        setcookie(session_name(), '', time()-42000, '/');
+    if (isset($_SESSION)) {
+        $_SESSION = array();
+        session_destroy();
+    }
 }
 
 function isLoggedIn()

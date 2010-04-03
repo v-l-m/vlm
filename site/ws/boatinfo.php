@@ -6,6 +6,7 @@ header("content-type: text/plain; charset=UTF-8");
 
 function get_output_format() {
   return get_requested_output_format();
+}
 
 function get_info_array($idu) {
   $info = array();
@@ -136,14 +137,14 @@ function get_info_array($idu) {
 }
 
 function usage() {
-  echo "usage : http://virtual-loup-de-mer.org/ws/boatinfo.php\n";
-  echo "l'acces utilise l'authentification HTTP";
-  echo "\nlogin = votre nom d'utilisateur";
-  echo "\npassword = votre mot de passe";
-  echo "\n\nLe mode txt est conservé uniquement pour des raisons historiques ";
-  echo "et pourra disparaitre dans les version ultérieures. Merci d'utiliser ";
-  echo "le format json, via Accept: application/json ou via ?forcefmt=json";
-  echo "\n\nVariables = \n
+  $usage = "usage : http://virtual-loup-de-mer.org/ws/boatinfo.php\n";
+  $usage .= "l'acces utilise l'authentification HTTP";
+  $usage .= "\nlogin = votre nom d'utilisateur";
+  $usage .= "\npassword = votre mot de passe";
+  $usage .= "\n\nLe mode txt est conservé uniquement pour des raisons historiques ";
+  $usage .= "et pourra disparaitre dans les version ultérieures. Merci d'utiliser ";
+  $usage .= "le format json, via Accept: application/json ou via ?forcefmt=json";
+  $usage .= "\n\nVariables = \n
     #* WPL : liste de Waypoints (liste)
     #* RAC : numéro de la course (string)
     #* IDB : nom du bateau (string)
@@ -203,6 +204,7 @@ function usage() {
     #* VAC: durée de la vacation (en secondes)
     #* LUP: date de la vacation pour ce boat
     ";
+    return $usage;
 }
 
 function ia_print($value, $key) {
@@ -211,20 +213,20 @@ function ia_print($value, $key) {
 
 // now start the real work
 
-login_if_not();
+login_if_not(usage());
 
 $fmt = get_output_format();
-$info_array = get_info_array($idu);
+$info_array = get_info_array($_SESSION['idu']);
 
 switch ($fmt) {
 case "json":
-  header("Content-Type: text/plain; charset=UTF-8");
-  echo json_encode($info_array);
-  break;
+    header("Content-Type: text/plain; charset=UTF-8");
+    echo json_encode($info_array);
+    break;
 case "text":
 default:
-  header("Content-Type: text/plain; charset=UTF-8");
-  array_walk($info_array, 'ia_print');
+    header("Content-Type: text/plain; charset=UTF-8");
+    array_walk($info_array, 'ia_print');
 }
 
 ?>
