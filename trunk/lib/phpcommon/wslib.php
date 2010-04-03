@@ -50,30 +50,32 @@ function get_requested_output_format() {
   return "text";
 }
 
-function ask_for_auth() {
+function ask_for_auth($usage) {
+    unset($_SERVER['PHP_AUTH_USER']);
+    unset($_SERVER['PHP_AUTH_PW']);
     header('WWW-Authenticate: Basic realm="VLM Access"');
     header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
     header("Content-Type: text/plain; charset=UTF-8");
-    usage();
+    echo $usage;
 }
 
-function login_if_not() {
+function login_if_not($usage = "") {
     
     session_start();
     // do we know the user from a previous login session?
     if (array_key_exists('idu', $_SESSION) && array_key_exists('loggedin', $_SESSION) 
-        && ($_SESSION['loggedin'] == 1)) {
+        && ($_SESSION['loggedin'] == 1) ) {
         $idu = $_SESSION['idu'];
         $pseudo = $_SESSION['login'];
         $IP = $_SESSION['IP'];
     } else {
         // fallback to HTTP auth
-        if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
-            ask_for_auth();
+        if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) ) {
+            ask_for_auth($usage);
             exit;
         } else {
-            $pseudo=$_SERVER['PHP_AUTH_USER'];
-            $passwd=$_SERVER['PHP_AUTH_PW'];
+            $pseudo = $_SERVER['PHP_AUTH_USER'];
+            $passwd = $_SERVER['PHP_AUTH_PW'];
             $idu = checkAccount($pseudo, $passwd);
             // FIXME, do we need to check after utf-8 transform?
             /*
@@ -82,12 +84,25 @@ function login_if_not() {
               || (checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
               htmlentities($password, ENT_COMPAT,"UTF-8")) |= FALSE)) {
             */
-            if ($idu == FALSE) {
-              ask_for_auth();
+            if ($idu === False) {
+              ask_for_auth($usage);
               exit();
             }
             login($idu, $pseudo);
         }
+    }
+}
+
+function logout_if_not($usage="Logout usage:\nUsername: test\nPassword: ko\nto force logout.") {
+    
+    logout();
+    if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
+        && $_SERVER['PHP_AUTH_USER'] == "test" && $_SERVER['PHP_AUTH_PW'] == "ko") {
+        return True;
+        exit;
+    } else {
+        ask_for_auth($usage);
+        exit;
     }
 }
 

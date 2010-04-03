@@ -42,20 +42,21 @@ function ia_print($value, $key) {
 }
 
 function usage() {
-    header("Content-type: text/plain; charset=UTF-8");
-    echo "usage : http://virtual-loup-de-mer.org/ws/raceuserinfo.php?idrace=X\n";
-    echo "\nX = numero de la course";
+    $usage = "usage : http://virtual-loup-de-mer.org/ws/raceuserinfo.php?idrace=X\n";
+    $usage .= "\nX = numero de la course";
+    return $usage;
 }
 
 // now start the real work
 
 $idrace=htmlentities(quote_smart($_REQUEST['idrace']));
 if (intval($idrace) == 0) {
-    usage();
+    header("Content-type: text/plain; charset=UTF-8");
+    echo usage();
     exit();
 }
 
-login_if_not();
+login_if_not($usage);
 
 $fmt = get_output_format();
 $info_array = get_info_array($idrace);
@@ -66,8 +67,8 @@ switch ($fmt) {
         break;
     case "text":
     default:
-      header("Content-Type: text/plain; charset=UTF-8");
-      array_walk($info_array, 'ia_print');
+        header("Content-Type: text/plain; charset=UTF-8");
+        array_walk($info_array, 'ia_print');
 }
 
 ?>
