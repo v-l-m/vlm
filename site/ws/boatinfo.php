@@ -245,6 +245,7 @@ function usage() {
     #* THM: nom du theme
     #* HID: trace cachée (1) ou visible (0)
     #* VAC: durée de la vacation (en secondes)
+    #* LUP: date de la vacation pour ce boat
     ";
 }
 
