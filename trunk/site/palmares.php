@@ -9,8 +9,8 @@
 
     if ( htmlentities(quote_smart($_REQUEST['type'])) == 'palmares' ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
-        echo "<h4>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</h4>";
-        displayPalmares($idusers);
+        echo "<h3>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</h3>";
+        displayPalmares($lang, $idusers);
     }
 
     include_once("includes/footer.inc");
