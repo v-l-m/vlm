@@ -242,9 +242,8 @@ if ($idraces != 0) {
     }
   
     echo "<p>";
-    echo $strings[$lang]["see"];
     echo '<a href="races.php?lang='.$lang.'"> ';
-    echo $strings[$lang]["list"]."</a>"; 
+    echo $strings[$lang]["see"]."</a>"; 
     echo "</p>";
 
           echo "<table class=\"boat\"><tr class=\"boat\">";
@@ -259,8 +258,13 @@ if ($idraces != 0) {
           echo "</tr></table>";
 
 } else  { //idraces ==0 means display all races
-    echo "<h4>".$strings[$lang]["races"]."</h4>";
-    dispHtmlRacesList($strings, $lang);
+    if (isset($_REQUEST['fulllist']) and $_REQUEST['fulllist']=1) {
+        echo "<h4>".$strings[$lang]["races"]."</h4>";
+        dispHtmlRacesList($strings, $lang);
+    } else {
+        echo "<h4>".$strings[$lang]["current_races"]."&nbsp;(<a href=\"races.php?lang=$lang&fulllist=1\">".$strings[$lang]["see"]."</a>)"."</h4>";
+        dispHtmlCurrentRacesList($strings, $lang);
+    }
 }
 
 include_once("includes/footer.inc");
