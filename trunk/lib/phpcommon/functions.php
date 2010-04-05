@@ -946,7 +946,11 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
       return $html;
 }
 
-function dispHtmlRacesList($strings, $lang) {
+function dispHtmlCurrentRacesList($strings, $lang) {
+    dispHtmlRacesList($strings, $lang, "WHERE started != -1");
+}
+
+function dispHtmlRacesList($strings, $lang, $where = "") {
 
   echo "<table>\n";
   echo "<thead>\n";
@@ -966,6 +970,7 @@ function dispHtmlRacesList($strings, $lang) {
   $query= "SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype,
              if(started=-1, 0, deptime) as deptimesort
              FROM races
+             $where
              ORDER by started desc, deptimesort asc, closetime desc, idraces desc;";
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
