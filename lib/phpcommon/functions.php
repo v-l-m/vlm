@@ -915,7 +915,7 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
       $html .= "<td>";
       $html .= htmlRacenameLink($lang, $rowdatas['idraces'], $rowdatas['racename']);
       $html .= "</td>\n";
-      $html .= "<td>" ;
+      $html .= "<td class=\"departurecell\">&nbsp;" ;
       //Affiche une date de départ ou un statut.
       if ( $rowdatas['started'] == 0 ) {
           // Not started
@@ -935,11 +935,11 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
           }
       }
       $html .= "</td>\n";
-      $html .= "<td>";
+      $html .= "<td class=\"racestatscell\">";
       $html .= $num_arrived . " / " . $num_racing . " / " . $num_engaged  . "\n";
 
       $html .= "</td>\n";
-      $html .= "  <td>"; 
+      $html .= "  <td class=\"mapcell\">"; 
       $html .= htmlTinymap($rowdatas['idraces'], $strings[$lang]["racemap"], "Right");
       $html .= "</td>\n";
       $html .= " </tr>\n";
@@ -948,25 +948,25 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
 
 function dispHtmlRacesList($strings, $lang) {
 
-  echo "<h4>".$strings[$lang]["races"]."</h4>";
   echo "<table>\n";
   echo "<thead>\n";
   echo "    <tr>\n";
   echo "    <th>".$strings[$lang]["raceid"]."</th>\n";
   echo "    <th>".$strings[$lang]["racename"]."</th>\n";
   echo "    <th>".$strings[$lang]["departuredate"]." (GMT)</th>\n";
-  echo "    <th>".$strings[$lang]["racenumboats"]."</th>\n";
+  echo "    <th>". join('<br />', split("/", $strings[$lang]["racenumboats"]))."</th>\n";
   echo "    <th>".$strings[$lang]["map"]."</th>\n";
   echo "    </tr>\n";
   echo "   </thead>\n";
   echo "  <tbody>\n";
-  echo "<tr><td></td><td></td><td></td><td></td></tr>";
+//  echo "<tr><td></td><td></td><td></td><td></td></tr>";
 
 
   // La requete qui donne la liste des courses en cours
-  $query= "SELECT idraces, racename, started, deptime, startlong, startlat,
-             boattype, closetime, racetype
-             FROM races ORDER by started desc, deptime asc, closetime desc, idraces desc;";
+  $query= "SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype,
+             if(started=-1, 0, deptime) as deptimesort
+             FROM races
+             ORDER by started desc, deptimesort asc, closetime desc, idraces desc;";
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
