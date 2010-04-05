@@ -855,10 +855,13 @@ function idusersIsAdmin($idusers)
 }
 
 function getNumOpponents($idraces) {
+  //force type int
+  $idraces = intval($idraces);
+
   // Verification si course existe
   $query= "SELECT count(*)
              FROM races
-       where idraces = " . round($idraces) . ";";
+       where idraces = " . $idraces . ";";
   $result = wrapper_mysql_db_query_reader($query) ;
   $row = mysql_fetch_array($result, MYSQL_NUM);
   if  ( $row[0] != 1 ) {
@@ -895,9 +898,57 @@ function getNumOpponents($idraces) {
   return (array ($num_arrived,$num_racing,$num_arrived + $num_out + $num_racing));
 }
 
+function htmlRacesListRow($strings, $lang, $rowdatas) {
+
+      // Affichage de la course dans le tableau
+      // idraces / racename / startdeparture / racenumboats / map
+
+      $html = "";
+      list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($rowdatas['idraces']);
+
+      $html .= "<tr>\n";
+      $html .= "<td>";
+      if ( $rowdatas['racetype'] == RACE_TYPE_RECORD ) {
+          $html .= "<img src=\"/images/site/P.png\" alt=\"Permanent\" />";
+      }
+      $html .= htmlIdracesLink($lang, $rowdatas['idraces'])."</td>\n";
+      $html .= "<td>";
+      $html .= htmlRacenameLink($lang, $rowdatas['idraces'], $rowdatas['racename']);
+      $html .= "</td>\n";
+      $html .= "<td>" ;
+      //Affiche une date de départ ou un statut.
+      if ( $rowdatas['started'] == 0 ) {
+          // Not started
+          $html .= "<img src=\"/images/site/greenarrow.gif\" alt=\"not started\" />" ;
+          $html .= gmdate("Y/m/d H:i:s",$rowdatas['deptime']);
+      } else if ( $rowdatas['started'] == -1 ) {
+          // Finished
+          $html .= $strings[$lang]["finished"];
+      } else {
+          // La course est elle encore ouverte ?
+          if ( $rowdatas['closetime'] > time() ) {
+              $html .= "<img src=\"/images/site/yellowarrow.gif\" alt=\"open\" />" ;
+              $html .= $strings[$lang]["already"];
+          } else {
+            $html .= "<img src=\"/images/site/redarrow.gif\" alt\"=closed\" />" ;
+            $html .= $strings[$lang]["closed"];
+          }
+      }
+      $html .= "</td>\n";
+      $html .= "<td>";
+      $html .= $num_arrived . " / " . $num_racing . " / " . $num_engaged  . "\n";
+
+      $html .= "</td>\n";
+      $html .= "  <td>"; 
+      $html .= htmlTinymap($rowdatas['idraces'], $strings[$lang]["racemap"], "Right");
+      $html .= "</td>\n";
+      $html .= " </tr>\n";
+      return $html;
+}
+
 function dispHtmlRacesList($strings, $lang) {
 
-  echo "<h4>".$strings[$lang]["current_races"]."</h4>";
+  echo "<h4>".$strings[$lang]["races"]."</h4>";
   echo "<table>\n";
   echo "<thead>\n";
   echo "    <tr>\n";
@@ -911,131 +962,20 @@ function dispHtmlRacesList($strings, $lang) {
   echo "  <tbody>\n";
   echo "<tr><td></td><td></td><td></td><td></td></tr>";
 
-  $finished_races_title="<h4>".$strings[$lang]["finished_races"]."</h4>\n";
-  $finished_races="";
 
-
-  // La requete qui donne la liste des courses
+  // La requete qui donne la liste des courses en cours
   $query= "SELECT idraces, racename, started, deptime, startlong, startlat,
-             boattype, closetime, racetype, firstpcttime, depend_on, qualifying_races,
-             maxboats
-             FROM races ORDER by deptime asc, closetime desc, idraces desc;";
+             boattype, closetime, racetype
+             FROM races ORDER by started desc, deptime asc, closetime desc, idraces desc;";
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
-  while ( $row = mysql_fetch_array($result, MYSQL_NUM)) {
-
-    $idraces = $row[0];
-    $racename = $row[1];
-    $started = $row[2];
-    $deptime = $row[3];
-    $startlong = $row[4]; 
-    $startlat = $row[5];
-    $boattype = $row[6];
-    $closetime = $row[7];
-    $racetype = $row[8];
-    $firstpcttime = $row[9];
-    $depend_on = $row[10];
-    $qualifying_races = $row[11];
-    $maxboats = $row[12];
-
-    // Calcul du nombre de bateaux arrivés, en course, inscrits
-    list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
-    //printf("RACE=%d, %d NA, %d NR, %d NE<BR>", $idraces, $num_arrived , $nom_racing, $num_engaged);
-
-    if ( $started == 0 ) {
-      $departure = gmdate("Y/m/d H:i:s",$deptime);
-
-      // Affichage de la course dans le tableau
-      echo " <tr>\n";
-      echo "<td>";
-      if ( $racetype == RACE_TYPE_RECORD ) {
-        echo "<img src=\"/images/site/P.png\" alt=\"Permanent\" />";
+  while ( $row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      echo htmlRacesListRow($strings, $lang, $row);
       }
-      echo $idraces."</td>\n";
-      echo "<td>";
-      echo "<a href=\"races.php?lang=$lang&amp;idraces=".$idraces. "&amp;type=racing" . "\">";
-      echo $racename."</a>";
-      echo "</td>\n";
-      echo "<td>" ;
-      echo "<img src=\"/images/site/greenarrow.gif\" alt=\"not started\" />" ;
-      echo "$departure</td>\n";
-      echo "  <td align=\"center\">" .  $num_engaged ;
-      if ( $maxboats != 0 ) {
-        echo " (max " . $maxboats . ")";
-      }
-      echo "</td>\n";
-      echo "  <td align=\"center\">"; 
-
-      echo htmlTinymap($idraces, $strings[$lang]["racemap"], "Right");
-      echo "</td>\n";
-      echo " </tr>\n";
-
-
-    } else if ( $num_racing == 0 ) {
-      //if started and no one is playing status is "finished"
-      $departure = $strings[$lang]["finished"];
-      $finished_races="<a href=\"races.php?lang=$lang&amp;idraces=".$idraces.'">('.$idraces.") ".$racename."</a><br />\n".$finished_races;
-
-    } else {
-      // La course est elle encore ouverte ?
-      if ( $closetime > time() ) {
-        $departure  = "<img src=\"/images/site/yellowarrow.gif\" alt=\"open\" />" ;
-        $departure .= $strings[$lang]["already"];
-      } else {
-        $departure  = "<img src=\"/images/site/redarrow.gif\" alt\"=closed\" />" ;
-        $departure .= $strings[$lang]["closed"];
-      }
-
-      // Affichage de la course dans le tableau
-      echo " <tr>\n";
-      echo "<td>";
-      if ( $racetype == RACE_TYPE_RECORD ) {
-        echo "<img src=\"/images/site/P.png\" alt=\"Permanent\" />";
-      }
-
-      echo "<a href=\"races.php?lang=$lang&amp;idraces=".$idraces. "&amp;type=racing" . "\">";
-      echo $idraces."</a>";
-      echo "</td>\n";
-      echo "<td>";
-      echo "<a href=\"races.php?lang=$lang&amp;idraces=".$idraces;
-      if ( $num_arrived != 0 ) {
-        echo "&amp;type=arrived" ;
-      } else { 
-        echo "&amp;type=racing" ;
-      }
-      echo "\">";
-      echo $racename."</a></td>\n";
-      echo "<td>" ;
-      echo "$departure</td>\n";
-      echo "  <td align=\"center\">" . $num_arrived . " / " . $num_racing . " / " . $num_engaged  . "</td>\n";
-      echo "  <td align=\"center\">"; 
-
-      /*
-        $bounds = $fullRacesObj->getRacesBoundaries();
-        $longitude=($bounds["east"]-$bounds["west"])/2;
-        $latitude=($bounds["north"]-$bounds["south"])/2;
-        $maparea=($bounds["north"]-$bounds["south"])*60;
-        $href = "mercator.page.php?".
-        "maparea=".$maparea.
-        "&amp;long=".$longitude.
-        "&amp;lat=".$latitude.
-        "&amp;list=all".
-        "&amp;tracks=on".
-        "&amp;windtext=off".
-        "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=left&amp;idraces=".$fullRacesObj->races->idraces;
-      */
-      // Carte de la course
-      echo htmlTinymap($idraces, $strings[$lang]["racemap"], "Right");
-      echo "</td>\n";
-      echo " </tr>\n";
-    }
-  }
-
+  
   echo "</tbody>\n";
   echo "</table>\n  ";
-  echo $finished_races_title;
-  echo $finished_races;
 }
 
 function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
