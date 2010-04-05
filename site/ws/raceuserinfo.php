@@ -56,7 +56,7 @@ if (intval($idrace) == 0) {
     exit();
 }
 
-login_if_not($usage);
+login_if_not(usage());
 
 $fmt = get_output_format();
 $info_array = get_info_array($idrace);
