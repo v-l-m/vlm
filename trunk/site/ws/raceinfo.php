@@ -58,16 +58,17 @@ function get_info_array($idrace) {
 }
 
 function usage() {
-    header("Content-type: text/plain; charset=UTF-8");
-    echo "usage : http://virtual-loup-de-mer.org/ws/raceinfo.php?idrace=X\n";
-    echo "\nX = numero de la course";
+    $usage = "usage : http://virtual-loup-de-mer.org/ws/raceinfo.php?idrace=X\n";
+    $usage .= "\nX = numero de la course";
+    return $usage;
 }
 
 // now start the real work
 
 $idrace=htmlentities(quote_smart($_REQUEST['idrace']));
 if (intval($idrace) == 0) {
-    usage();
+    header("Content-type: text/plain; charset=UTF-8");
+    echo usage();
     exit();
 }
 
