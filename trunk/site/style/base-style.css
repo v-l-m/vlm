@@ -447,3 +447,12 @@ form {
   left:250px;
   position:absolute;
 }
+
+.mapcell {
+  text-align: center;
+}
+
+.racestatscell {
+  text-align: center;
+}
+

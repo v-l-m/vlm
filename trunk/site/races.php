@@ -258,10 +258,8 @@ if ($idraces != 0) {
           echo "</td>";
           echo "</tr></table>";
 
-}
-
-  else  //idraces ==0 means display all races
-{
+} else  { //idraces ==0 means display all races
+    echo "<h4>".$strings[$lang]["races"]."</h4>";
     dispHtmlRacesList($strings, $lang);
 }
 
