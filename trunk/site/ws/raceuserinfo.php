@@ -42,7 +42,7 @@ function ia_print($value, $key) {
 }
 
 function usage() {
-    $usage = "usage : http://virtual-loup-de-mer.org/ws/raceuserinfo.php?idrace=X\n";
+    $usage = "usage : http://virtual-loup-de-mer.org/ws/raceuserlist.php?idrace=X\n";
     $usage .= "\nX = numero de la course";
     return $usage;
 }
