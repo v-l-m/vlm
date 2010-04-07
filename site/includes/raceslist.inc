@@ -48,11 +48,9 @@ while($row = mysql_fetch_array($result1, MYSQL_NUM))
         $href = "/racemap.php?idraces=".$idraces;
         if ( 1 or file_exists($href) ) {
              $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
-             //list($xSize, $ySize, $type, $attr) = getimagesize($href);
-            echo "<img src=\"minimap.php?idraces=" . $idraces . 
-                 "\" onmouseover=\"showDivLeft('infobulle','$status_content', 0, 0);\" " .
-                 " onmouseout=\"hideDiv('infobulle');\" " .
-                 " alt=\"" .$strings[$lang]["racemap"]. "\" />";
+            echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
+                 "<img src=\"minimap.php?idraces=" . $idraces . 
+                 "\" alt=\"" .$strings[$lang]["racemap"]. "\" /></a>";
         }
         echo "</td>\n";
   
