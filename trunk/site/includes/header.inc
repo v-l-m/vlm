@@ -191,7 +191,12 @@
    </script>
   <script type="text/javascript" src="scripts/dms.js"></script>
   <script type="text/javascript" src="scripts/hashtable.js"></script>
-  <script type="text/javascript" src="scripts/showdiv.js"></script>
+<script type="text/javascript" src="externals/lightbox/js/prototype.js"></script>
+<script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
+<script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
+<link rel="stylesheet" href="externals/lightbox/css/lightbox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+
 
  </head>
 

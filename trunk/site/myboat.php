@@ -149,9 +149,8 @@ include_once("scripts/myboat.js");
                    echo ($myRace->startlat/1000) ?>&amp;long=<?php
                    echo ($myRace->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
                    echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" target="_new" class="<?php
-                   echo $WPCLASS; ?>" onmouseover="showDivRight('infobulle','<?php
-                   echo $status_content; ?>', 0, 0);" onmouseout="hideDiv('infobulle');" ><?php
-                   echo $strings[$lang]["startmap"] ; ?></a> - WP:
+                   echo $WPCLASS; ?>" onmouseover="return overlib('<?php echo $status_content; ?>', FULLHTML, HAUTO);"
+                   onmouseout="return nd();" ><?php echo $strings[$lang]["startmap"] ; ?></a> - WP:
 
 <?php
       // On va afficher des liens vers des waypoints
@@ -215,15 +214,14 @@ include_once("scripts/myboat.js");
            "&amp;tracks=on" . $oppList . 
            "&amp;wp=" . $wp_num . 
            "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
-           "\" onmouseover=\"showDivRight('infobulle','$status_content', 0, 0);\" " .
-           " onmouseout=\"hideDiv('infobulle');\" " .
-           ">" . $wp_num ;
-         
+           "\" onmouseover=\"return overlib('" . $status_content . "', FULLHTML, HAUTO);" .
+           "\" onmouseout=\"return nd();\"" .
+           ">" . $wp_num ;         
          echo "</a> \n";
          
          $wp_num++;
       }
-?>
+?>&nbsp;
       </div> <!-- fin de wplistbox -->
   
 <?php
@@ -351,8 +349,8 @@ include_once("scripts/myboat.js");
           "&amp;Body=Hello%2C%0A" .
           "%0A%20******%20EXPLICATION%20DU%20PROBLEME%20%2F%20EXPLANATION%20******%20%0A".
           "%0AFair%20winds%2C%0A" . $usersObj->users->username .
-          "\" onmouseover=\"showDivRight('infobulle','$status_content', 0, 0);\" " .
-          " onmouseout=\"hideDiv('infobulle');\" " .
+          "\" onmouseover=\"return overlib('$status_content', FULLHTML, HAUTO);\" " .
+          " onmouseout=\"return nd();\" " .
           "><img src=\"images/site/sos.png\" alt=\"SOS COMITE\" /></a>";
 ?>
       </div> <!--fin de sosbox -->

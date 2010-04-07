@@ -940,7 +940,7 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
 
       $html .= "</td>\n";
       $html .= "  <td class=\"mapcell\">"; 
-      $html .= htmlTinymap($rowdatas['idraces'], $strings[$lang]["racemap"], "Right");
+      $html .= htmlTinymap($rowdatas['idraces'], $rowdatas['racename']);
       $html .= "</td>\n";
       $html .= " </tr>\n";
       return $html;
@@ -987,11 +987,9 @@ function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
 
       $href="/racemap.php?idraces=".$idraces;
       $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
-      return "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" " .
-//FIXME : on doit pouvoir faire la taille de la popup en dynamique en js
-          " onmouseover=\"showDiv$where('infobulle','$status_content', 0, 0);\" " .
-          " onmouseout=\"hideDiv('infobulle');\" " .
-          " alt=\"" .$alt. "\"/>";
+      return "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$alt\">" .
+             "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" />" .
+             "</a> ";
 }
 
 function htmlFlagImg($idflag) {

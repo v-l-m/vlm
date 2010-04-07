@@ -148,7 +148,7 @@ if ($idraces != 0) {
     echo "</div>\n";     
 
           // Carte de la course
-          echo htmlTinymap($fullRacesObj->races->idraces, $strings[$lang]["racemap"]);
+          echo htmlTinymap($fullRacesObj->races->idraces, $fullRacesObj->races->racename);
 
           echo "<table class=\"boat\"><tr class=\"boat\">";
           echo "<td class=\"boat\">";
