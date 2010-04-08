@@ -18,7 +18,7 @@
 
     echo "<p>" . $strings[$lang]["warning"] . "</p>";
     $racesObj = $fullUsersObj->races;
-    echo "<p>" . $strings[$lang]["youengaged"] . " <b>" .   $fullUsersObj->users->engaged .  " (" . $racesObj->racename    .  ") " . "</b></p>";
+    echo "<p>" . $strings[$lang]["youengaged"] . " <b>" .   $racesObj->htmlRacenameLink($lang) .  " (" . $racesObj->htmlIdracesLink($lang)    .  ") " . "</b></p>";
 
     // The user may want to unsubscribe from this race
 ?>
