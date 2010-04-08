@@ -72,6 +72,11 @@ color: #44505a;
   border : none;
 }
 
+#loggedbox a {
+  color: #ffffff;
+  font-weight: bold;
+}
+
 input.dynamichelper {
   border:0px;
   background-color: #ffffff;
