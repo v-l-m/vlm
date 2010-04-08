@@ -191,11 +191,11 @@
    </script>
   <script type="text/javascript" src="scripts/dms.js"></script>
   <script type="text/javascript" src="scripts/hashtable.js"></script>
-<script type="text/javascript" src="externals/lightbox/js/prototype.js"></script>
-<script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
-<script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
-<link rel="stylesheet" href="externals/lightbox/css/lightbox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+  <script type="text/javascript" src="externals/lightbox/js/prototype.js"></script>
+  <script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
+  <script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
+  <link rel="stylesheet" href="externals/lightbox/css/lightbox.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 
 
  </head>
@@ -250,7 +250,10 @@
         <div id="loggedbox" class="leftbox">
 <?php
             //disp login name, infos
-            printf (  $strings[$lang]["youlogin"], getLoginName(), getLoginId() );
+            echo $strings[$lang]["youlogin"];
+            echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
+                 " (". getLoginId() . ") " . getLoginName() . "</a>\n";
+
 ?>
         </div> <!-- fin div loggedbox-->
         <div id="logoutbox" class="leftbox">
