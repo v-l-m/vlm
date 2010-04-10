@@ -1,139 +1,136 @@
 <?php 
-// Le user peut-t'il s'engager dans les courses ou est il déjà engagé
-$display_submit = "false";
-if ( isLoggedIn() ) {
-     $users = new Users(getLoginId());
-     if ( $users->engaged == 0 ) {
-          $display_submit = "true";
-    $av_races=availableRaces($users->idusers);
-     }
-}
+    // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
+    $display_submit = "false";
+    if ( isLoggedIn() ) {
+        $users = new Users(getLoginId());
+        if ( $users->engaged == 0 ) {
+            $display_submit = "true";
+            $av_races=availableRaces($users->idusers);
+         }
+    }
 
-// Type of race (permanent / one shot )
-$q=htmlentities(quote_smart($_REQUEST['type'])) ;
+    // Type of race (permanent / one shot )
+    $q=htmlentities(quote_smart($_REQUEST['type'])) ;
 
-//change that, no SQL should appear directly in scripts
-$query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
-$query1 .= " WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ";
+    //change that, no SQL should appear directly in scripts
+    $query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
+    $query1 .= " WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ";
 
-if ( $q != "" ) { 
+    if ( $q != "" ) { 
         $query1 .= " AND racetype = " . intval($q). " " ;
-}
-$query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
+    }
+    $query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
 
-$result1 = wrapper_mysql_db_query_reader($query1) or die("Query [$query1] failed \n");
+    $result1 = wrapper_mysql_db_query_reader($query1) or die("Query [$query1] failed \n");
 
-// Recherche de toutes les courses prévues
-while($row = mysql_fetch_array($result1, MYSQL_NUM))
-{
-    $dep = $row[0];
-    $idraces = $row[1];
-    $racename = $row[2];
-    $closetime = $row[3];
-    $boattype = $row[4];
-    $firstpcttime = $row[5];
-    $maxboats = $row[6];
+    // Recherche de toutes les courses prévues
+    while($row = mysql_fetch_array($result1, MYSQL_ASSOC)) {
+        $dep = $row['deptime'];
+        $idraces = $row['idraces'];
+        $racename = $row['racename'];
+        $closetime = $row['closetime'];
+        $boattype = $row['boattype'];
+        $firstpcttime = $row['firstpcttime'];
+        $maxboats = $row['maxboats'];
 
-    list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
+        list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
 
-    $time = time();
-    $duration = $dep - time();
+        $time = time();
+        $duration = $dep - time();
 
-    if ( $dep < $time AND $closetime <$time ) { //no race planned
-        printf("      ".$strings[$lang]["norace"]."\n");
-    } else {
-        echo "<table width=\"100%\">\n<tr>\n";
-        echo "<td width=\"200\" align=\"left\" class=\"boat\">";
-        // Carte de la course
-        $href = "/racemap.php?idraces=".$idraces;
-        if ( 1 or file_exists($href) ) {
-             $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
+        if ( $dep < $time AND $closetime <$time ) { //no race planned
+            printf("      ".$strings[$lang]["norace"]."\n");
+        } else {
+            echo "<table width=\"100%\">\n<tr>\n";
+            echo "<td width=\"200\" align=\"left\" class=\"boat\">";
+            // Carte de la course
+            $href = "/racemap.php?idraces=".$idraces;
+            $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
                  "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" alt=\"" .$strings[$lang]["racemap"]. "\" /></a>";
-        }
-        echo "</td>\n";
-  
-        echo "<td align=\"left\" class=\"boat\">";
-        //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
-        $urlidraces = htmlIdracesLink($lang, $idraces); // pointe vers les ICS
-        $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
-        $urlracename = htmlRacenameLink($lang, $idraces, $racename); // pointe vers le classement de la course
+            echo "</td>\n";
+      
+            echo "<td align=\"left\" class=\"boat\">";
+            //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
+            $urlidraces = htmlIdracesLink($lang, $idraces); // pointe vers les ICS
+            $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
+            $urlracename = htmlRacenameLink($lang, $idraces, $racename); // pointe vers le classement de la course
+            
+            $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
+            if ( $maxboats != 0 ) {            
+                $strengaged = " - ".$strings[$lang]["engaged"]." / Total : " . $urlnumengaged . "/" . $maxboats ;
+            } else {
+                $strengaged = " - ".$strings[$lang]["engaged"]." : " . $urlnumengaged . " (".$strings[$lang]["unlimited"].")";
+            }
+
+            printf("<h1>%s (%s) - %s</h1>\n",$urlidraces, $urlboattype, $urlracename); /* FIXME use style there */
+
+            printf ("  <ul>");
+            if ( $dep > $time ) {
+                $duration = duration2string($duration);
+                printf("    <li>".$strings[$lang]["nextrace"] . $strengaged."</li>\n" , $duration['days'],$duration['hours'],$duration['minutes']);
+                printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
+            } else {
+                $duration = duration2string(-$duration);
+                printf("    <li>".$strings[$lang]["openrace"] . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
+            }
         
-        $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
-        if ( $maxboats != 0 ) {            
-            $strengaged = " - ".$strings[$lang]["engaged"]." / Total : " . $urlnumengaged . "/" . $maxboats ;
-        } else {
-            $strengaged = " - ".$strings[$lang]["engaged"]." : " . $urlnumengaged . " (".$strings[$lang]["unlimited"].")";
-        }
-
-        printf("<h1>%s (%s) - %s</h1>\n",$urlidraces, $urlboattype, $urlracename); /* FIXME use style there */
-
-        printf ("  <ul>");
-        if ( $dep > $time ) {
-            $duration = duration2string($duration);
-            printf("    <li>".$strings[$lang]["nextrace"] . $strengaged."</li>\n" , $duration['days'],$duration['hours'],$duration['minutes']);
-            printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
-        } else {
-            $duration = duration2string(-$duration);
-            printf("    <li>".$strings[$lang]["openrace"] . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
-        }
-    
-        if ( $closetime > $dep ) {
-            printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
-        }
-  
-        if ( $firstpcttime >0 ) {
-            printf("    <li>".$strings[$lang]["endrace"]. "%d %%</li>\n", 100 + $firstpcttime );
-        } else {
-            printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
-        }
-        // Affichage des IC destinées à la racelist
-        $fullRacesObj = new fullRaces($idraces);
-        printf("    <li><a href=\"/ics.php?lang=%s&amp;idraces=%s\">WP(s)</a>" , $lang,$idraces);
-        printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), $strings[$lang]['crank'],  $fullRacesObj->races->vacfreq);
-        foreach ( $fullRacesObj->races->getICS() as $ic) {
-            if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
-                if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                    printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=\"_ic\">".$strings[$lang]["icforum"]."</a></li>\n");
-                } else {
-                    printf ("    <li class=\"icflagracelist\">".$ic['instructions']."</li>\n");
+            if ( $closetime > $dep ) {
+                printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
+            }
+      
+            if ( $firstpcttime >0 ) {
+                printf("    <li>".$strings[$lang]["endrace"]. "%d %%</li>\n", 100 + $firstpcttime );
+            } else {
+                printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
+            }
+            // Affichage des IC destinées à la racelist
+            $fullRacesObj = new fullRaces($idraces);
+            printf("    <li><a href=\"/ics.php?lang=%s&amp;idraces=%s\">WP(s)</a>" , $lang,$idraces);
+            printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), $strings[$lang]['crank'],  $fullRacesObj->races->vacfreq);
+            foreach ( $fullRacesObj->races->getICS() as $ic) {
+                if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
+                    if ($ic['flag'] & IC_FLAG_LINKFORUM) {
+                        printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=\"_ic\">".$strings[$lang]["icforum"]."</a></li>\n");
+                    } else {
+                        printf ("    <li class=\"icflagracelist\">".$ic['instructions']."</li>\n");
+                    }
                 }
             }
+
+          printf ("  </ul>");
+          echo "</td>\n";
+
+          echo "</tr>\n</table>\n";
+
+
+            if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
+                // Subscribe button/form
+                $sub_button= "
+            <form action=\"myboat.php\" method=\"post\">
+            <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
+            <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
+            <input type=\"hidden\" name=\"type\" value=\"subscribe\">
+            <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
+            <input type=\"submit\" value=\"" . $strings[$lang]["subscribe"] . "\" >
+            </form>
+            ";
+          echo $sub_button;
+            } 
+
+
         }
-
-      printf ("  </ul>");
-      echo "</td>\n";
-
-      echo "</tr>\n</table>\n";
-
-
-        if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
-            // Subscribe button/form
-            $sub_button= "
-        <form action=\"myboat.php\" method=\"post\">
-        <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
-        <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
-        <input type=\"hidden\" name=\"type\" value=\"subscribe\">
-        <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
-        <input type=\"submit\" value=\"" . $strings[$lang]["subscribe"] . "\" >
-        </form>
-        ";
-      echo $sub_button;
-        } 
-
-
+        echo "<hr />";
     }
-    echo "<hr />";
-}
 
 
-if ( $q == RACE_TYPE_CLASSIC ) {
-  $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
-  echo "<input type=\"button\" value=\"Click here to see Permanent-Record races\" onclick=\"document.location='" . $URL . "'\" />";
-} else {
-  $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_CLASSIC;
-  echo "<input type=\"button\" value=\"Click here to see Classical &amp; Qualification races\" onclick=\"document.location='" . $URL . "'\" />";
-}
+    if ( $q == RACE_TYPE_CLASSIC ) {
+      $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
+      echo "<input type=\"button\" value=\"Click here to see Permanent-Record races\" onclick=\"document.location='" . $URL . "'\" />";
+    } else {
+      $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_CLASSIC;
+      echo "<input type=\"button\" value=\"Click here to see Classical &amp; Qualification races\" onclick=\"document.location='" . $URL . "'\" />";
+    }
 
 ?>
