@@ -62,13 +62,13 @@
     printf ("Timestamp;latitude;longitude\n") ;
     printf ("============================\n");
 
-    while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
-        printf ("%d;%5.6f;%5.6f\n", $row[0],$row[1]/1000,$row[2]/1000) ;
+    while(  $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
+        printf ("%d;%5.6f;%5.6f\n", $row['time'],$row['lat']/1000,$row['long']/1000) ;
     }
 
     if ($all) {
-        while(  $row = mysql_fetch_array($resultnow, MYSQL_NUM) ) {
-            printf ("%d;%5.6f;%5.6f\n", $row[0],$row[1]/1000,$row[2]/1000) ;
+        while(  $row = mysql_fetch_array($resultnow, MYSQL_ASSOC) ) {
+            printf ("%d;%5.6f;%5.6f\n", $row['time'],$row['lat']/1000,$row['long']/1000) ;
         }
     }
 
