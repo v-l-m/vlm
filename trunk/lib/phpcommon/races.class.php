@@ -1122,11 +1122,11 @@ class fullRaces {
   }
 
   function raceNumEngaged() {
-    $query = "SELECT count(*) FROM users WHERE engaged=" . 
+    $query = "SELECT count(*) as numengaged FROM users WHERE engaged=" . 
       $this->races->idraces;
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
-    return ($row[0])  ;
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    return ($row['numengaged'])  ;
   }
  
 } // End class fullRaces

@@ -198,8 +198,8 @@ class users
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
-    if ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
-      $numRows=$row[0];
+    if ( $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
+      $numRows=$row['NumTasks'];
     } else {
       $numRows=0;
     }
@@ -1076,13 +1076,13 @@ class fullUsers
     //printf ("Request USERS : %s\n" , $query);
 
     // Determiner quel est le timestamp de la dernière position écrite pour ce joueur
-    $query = "SELECT max(time) FROM positions " .
+    $query = "SELECT max(time) as maxpostime FROM positions " .
       " WHERE race = " . $this->users->engaged . 
       " AND   idusers = ". $this->users->idusers  ;
     // use the same db here to avoid replication gap effect
     $result = wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
-    $timestamp=$row[0];
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    $timestamp=$row['maxpostime'];
     
     // Effacement de cette position là
     $query = "DELETE FROM positions " . 
