@@ -267,8 +267,7 @@
                 // Bouton "ADMIN" pour les administrateurs
                 if ( idusersIsAdmin (getLoginId()) ) {
                     echo '<p class="leftbutton">';
-                    printf (  "<input type=\"button\" value=\"Admin\" onClick=\"javascript:popUp('admin.php?pseudo=" . $pseudo . "&password=" . $password . "','Admin')\" />");
-                    echo "&nbsp;<a target=\"newadmin\" href=\"/admin/\">Newadmin</a>";
+                    echo "&nbsp;<a target=\"newadmin\" href=\"/admin/\">Admin</a>";
                     echo '</p>';
                 }
 ?>
