@@ -15,6 +15,12 @@
     }
 
     $tablepages = Array(
+        "oldadmin.php" => "Old Admin interface",
+        );
+    adminlistbox($tablepages, "Miscellaneous");
+
+
+    $tablepages = Array(
         "races_instructions.php" => "Races instructions",
         "flags.php" => "Flags definitions (no uploading, see below)",
         "races.php" => "Races definitions (no uploading, see below)",
