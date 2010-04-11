@@ -9,22 +9,10 @@
    + * boat=xx&action=reset_pass&PWD=xxxxxxx => met à jour le mot de passe.
    + * boat=xx&action=reset_username&USN=xxxxxxx => met à jour le nom d'utilisateur
 */
-session_start();
-include_once("includes/strings.inc");
-include_once("config.php");
+$PAGETITLE = "User Admin Assistant";
+include("htmlstart.php");
+include_once("../includes/strings.inc");
 
-// Les entêtes
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>">
-  <head>
-    <title>Admin VLM</title>
-    <link rel="stylesheet" type="text/css" href="styles/base-style.css" />
-    <script type="text/javascript" src="scripts/dms.js"></script>
-  </head>
-  <body>
-<?php
 //all GET and POST variables
 isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang=NavigatorLanguage();
 
@@ -39,7 +27,6 @@ $do=quote_smart($_REQUEST['do']);
 // Pour Appel de VLM, en utilisant les sessions
 if ( idusersIsAdmin (getLoginId()) ) {
      $pseudo=getLoginName();
-
 } else {
      
      // Pour l'interface de JP, qui passe login et password dans les URLs
@@ -53,10 +40,6 @@ if ( idusersIsAdmin (getLoginId()) ) {
          exit;
      }
 }
-
-// On est encore là, un Admin est donc connecté.
-echo "<h4>Admin connect&eacute; : " . $pseudo . " - Go to <a href=\"/admin/\" target=\"_blank\">new interface</a> (but not complete, yet !)</h4>\n<form>\n";
-echo "<input type=\"button\" value=\"Fermer\" onClick=\"javascript:self.close();\">";
 
 // Y a t'il une course choisie ?
 // On n'a pas de course, on propose la liste
