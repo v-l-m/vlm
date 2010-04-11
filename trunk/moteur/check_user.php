@@ -72,7 +72,7 @@
                 // ($now est positionne dans check_race.php pour mettre tout le monde a egalite)
                 // FIXME : on ne devrait pas appeler les variables "inter-script" avec des noms aussi evidents...
                 $fullUsersObj->updateDepTime($now);
-		$fullUsersObj->updateAngles();
+                $fullUsersObj->updateAngles();
             }
   
             echo "PIM=" . $fullUsersObj->users->pilotmode . "/"  ;
