@@ -9,7 +9,7 @@
    + * boat=xx&action=reset_pass&PWD=xxxxxxx => met à jour le mot de passe.
    + * boat=xx&action=reset_username&USN=xxxxxxx => met à jour le nom d'utilisateur
 */
-$PAGETITLE = "User Admin Assistant";
+$PAGETITLE = "User Admin Wizard (Old admin interface)";
 include("htmlstart.php");
 include_once("../includes/strings.inc");
 
@@ -328,12 +328,7 @@ switch ($action) {
   
     echo "<input type=\"button\" value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
               "?pseudo=".$pseudo.  "&amp;password=".$password.  "&amp;boat=".$boat .  "&amp;race=".$race. "'\"/>";
-  echo "<input type=\"submit\" value=\"Juste fais le !\" />";
-echo "</form>";
+    echo "<input type=\"submit\" value=\"Juste fais le !\" />";
+    echo "</form>";
+    include("htmlend.php");
 ?>
-</body>
-</html>
-
-
-
-

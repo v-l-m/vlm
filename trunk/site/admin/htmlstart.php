@@ -1,6 +1,5 @@
 <?php
     session_start();
-    //include_once("../includes/strings.inc");
     include_once("config.php");
     if (!isLoggedIn() or  !idusersIsAdmin(getLoginId()) ) {
         include ("unallowed.html");
