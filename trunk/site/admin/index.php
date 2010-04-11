@@ -15,7 +15,7 @@
     }
 
     $tablepages = Array(
-        "oldadmin.php" => "Old Admin interface",
+        "adminwizard.php" => "Admin Wizard (old admin interface)",
         );
     adminlistbox($tablepages, "Miscellaneous");
 
