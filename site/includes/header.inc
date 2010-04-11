@@ -263,15 +263,6 @@
                 <p class="leftbutton">
                     <input type="submit" value="<?php echo $strings[$lang]["logout"]; ?>" />
                 </p>
-<?php
-                // Bouton "ADMIN" pour les administrateurs
-                if ( idusersIsAdmin (getLoginId()) ) {
-                    echo '<p class="leftbutton">';
-                    echo "&nbsp;<a target=\"newadmin\" href=\"/admin/\">Admin</a>";
-                    echo '</p>';
-                }
-?>
-
             </form>
         </div> <!-- fin div logoutbox-->
 <?php
@@ -292,6 +283,12 @@
         </div> <!-- fin div langbox-->
         <div id="menubox" class="leftbox">
             <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
+<?php
+                // Bouton "ADMIN" pour les administrateurs
+                if ( idusersIsAdmin (getLoginId()) ) {
+                    echo "<a target=\"_admin\" href=\"/admin/\">Admin</a>";
+                }
+?>
             <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
             <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]?></a> 
