@@ -642,7 +642,7 @@ class fullUsers
       break;
     }
 
-    if ($write == 1) {
+    if ($write == 1 && ($this->users->pilotmode != PILOTMODE_HEADING)) {
       $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
 	." WHERE idusers =".$this->users->idusers;
       $result1 = wrapper_mysql_db_query_writer($query1);
@@ -653,7 +653,6 @@ class fullUsers
                                                $this->wheading) ;
 
     //find boatspeed
-    //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
     $this->boatspeed =  findboatspeed($this->boatanglewithwind,
                                       $this->wspeed,
                                       $this->users->boattype);
