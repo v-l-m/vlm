@@ -32,7 +32,7 @@ class users
     $ipaddr,
     $pilototo,
     $theme;
-  
+
   function users($id)
   {
     //  echo "constructeur users with $id \n";
@@ -55,7 +55,7 @@ class users
     $this->boatname       = $row['boatname'];
     $this->color          = $row['color'];
     $this->boatheading    = $row['boatheading'];
-    $this->pilotmode      = $row['pilotmode']; 
+    $this->pilotmode      = $row['pilotmode'];
     $this->pilotparameter = $row['pilotparameter'];
     $this->engaged        = $row['engaged'];
     $this->lastchange     = $row['lastchange'];
@@ -65,35 +65,35 @@ class users
     $this->lastupdate     = $row['lastupdate'];
     $this->loch           = $row['loch'];
     $this->country        = (strlen($row['country']) < 3 ) ? "" : $row['country'];
-    $this->class          = $row['class']; 
-    $this->targetlat      = $row['targetlat']; 
-    $this->targetlong     = $row['targetlong']; 
-    $this->targetandhdg   = $row['targetandhdg']; 
-    $this->mooringtime    = $row['mooringtime']; 
-    $this->releasetime    = $row['releasetime']; 
-    $this->hidepos        = $row['hidepos']; 
-    $this->blocnote       = $row['blocnote']; 
+    $this->class          = $row['class'];
+    $this->targetlat      = $row['targetlat'];
+    $this->targetlong     = $row['targetlong'];
+    $this->targetandhdg   = $row['targetandhdg'];
+    $this->mooringtime    = $row['mooringtime'];
+    $this->releasetime    = $row['releasetime'];
+    $this->hidepos        = $row['hidepos'];
+    $this->blocnote       = $row['blocnote'];
     if ( eregi("^http|://|script|language|<|>", $this->blocnote) ) {
         $this->blocnote="Some characters are not valid in your notepad. (Code inclusion, &gt;, &lt;, ...)";
-    } 
+    }
     $this->ipaddr         = $row['ipaddr'];
     $this->theme          = $row['theme'];
     if (is_null($this->theme) ) {
       $this->theme = 'default';
-    } 
+    }
   }
 
   //update boatname and color
   function write()
   {
     //write everything in db
-    $query = "UPDATE users SET `boatname` = '" . addslashes($this->boatname) . "'," . 
+    $query = "UPDATE users SET `boatname` = '" . addslashes($this->boatname) . "'," .
       " `color` = '" . $this->color . "'," .
       " `theme` = '" . $this->theme . "'," .
-      " `email` = '" . $this->email . "'," . 
-      " `country` = '" . $this->country . "'," . 
-      " `hidepos` =  " . $this->hidepos . "," . 
-      " `blocnote` = '" . mysql_real_escape_string( $this->blocnote) . "'" . 
+      " `email` = '" . $this->email . "'," .
+      " `country` = '" . $this->country . "'," .
+      " `hidepos` =  " . $this->hidepos . "," .
+      " `blocnote` = '" . mysql_real_escape_string( $this->blocnote) . "'" .
       " WHERE idusers = " . $this->idusers;
     wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 
@@ -105,7 +105,7 @@ class users
   function lockBoat($time)
   {
     $this->releasetime = time() + $time;
-    $query = "UPDATE users SET releasetime = " . $this->releasetime .  
+    $query = "UPDATE users SET releasetime = " . $this->releasetime .
       " WHERE idusers = " . $this->idusers;
     wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
   }
@@ -122,7 +122,6 @@ class users
          WHERE status='" . PILOTOTO_PENDING . "'
        AND idusers = $this->idusers
        AND time <= $now";
-    echo $quety;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
 
     while ( $row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
@@ -163,7 +162,7 @@ class users
             // Setup the userclass for immediate use
             $this->targetandhdg = -1;
           }
-          
+
           echo $query;
           // Setup the userclass for immediate use
           $this->targetlat = round($Coords[0],4);
@@ -178,10 +177,10 @@ class users
       // Mark the task as DONE
       $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
       wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
-      
+
       // Purge old tasks
       $this->pilototoPurge( PILOTOTO_KEEP );
-      
+
       $flag_pilototo=true;
     }
 
@@ -198,14 +197,14 @@ class users
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     //echo $query;
 
-    if ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
-      $numRows=$row[0];
+    if ( $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
+      $numRows=$row['NumTasks'];
     } else {
       $numRows=0;
     }
 
     return($numRows);
-   
+
   }
 
   // Delete a task from pilototo
@@ -254,7 +253,7 @@ class users
     if ( $seconds != 0 ) {
       $timestamp-=$seconds;
     }
-    
+
     // lookup for a task to do
     $query = "DELETE FROM auto_pilot
      WHERE idusers = $this->idusers
@@ -270,7 +269,7 @@ class users
   {
     // lookup for a task to do
     $time = intval($time);
-    
+
     $query = "SELECT COUNT(*) from auto_pilot
               WHERE idusers=$this->idusers";
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
@@ -393,7 +392,7 @@ class fullUsers
     $this->wheading = $wind['windangle'];
 
     //find the angle boat/wind
-    $this->boatanglewithwind = angleDifference($this->users->boatheading, 
+    $this->boatanglewithwind = angleDifference($this->users->boatheading,
                                                $this->wheading) ;
     //echo "\n**angleDifference ( " . $this->users->boatheading . " and " . $this->wheading .") is ".$this->boatanglewithwind . "**";
 
@@ -404,8 +403,8 @@ class fullUsers
                                       $this->users->boattype);
 
     // Find the best coordinates to cross the nextwaypoint (LatNM & LongNM)
-    /* 
-       Since 2007-October-10, 
+    /*
+       Since 2007-October-10,
        these LatNM & LongNM are a Waypoint given by the user (if not 0/0)
     */
     if ( $this->users->targetlat == 0 && $this->users->targetlong == 0 ) {
@@ -416,8 +415,8 @@ class fullUsers
       $this->LatNM = $this->users->targetlat*1000;
       $this->LongNM = $this->users->targetlong*1000;
     }
-    
-    $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long, 
+
+    $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long,
            $this->LatNM, $this->LongNM);
 
     $this->loxoangletoend = $this->loxodromicHeading();
@@ -505,12 +504,12 @@ class fullUsers
   {
     //TODO write a positions->deletepositions that will be called here for every positions
     //delete old positions from database
-    $query65 = "DELETE FROM positions WHERE idusers = ". $this->users->idusers  . 
+    $query65 = "DELETE FROM positions WHERE idusers = ". $this->users->idusers  .
       " AND  race = " . $idraces;
     wrapper_mysql_db_query_writer($query65);// or die("Query failed : " . mysql_error." ".$query65);
   }
 
-  function updateAngles()
+  function updateAngles($write = 1)
   {
     switch ($this->users->pilotmode) {
     case PILOTMODE_WINDANGLE:
@@ -519,26 +518,19 @@ class fullUsers
       
       while ( $this->users->boatheading > 360 ) $this->users->boatheading-=360;
       while ( $this->users->boatheading < 0 ) $this->users->boatheading+=360;
-      
-      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query_writer($query1);
       break;
     case PILOTMODE_ORTHODROMIC:
       //update boatheading
       $this->users->boatheading = $this->orthodromicHeading();
-      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-	." WHERE idusers = ".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query_writer($query1);
       break;
     case PILOTMODE_BESTVMG:
       $vlmc_heading = new doublep();
       $vlmc_vmg = new doublep();
       if (defined('MOTEUR')) {
 	shm_lock_sem_construct_grib(1);
-	VLM_best_vmg($this->lastPositions->lat, 
+	VLM_best_vmg($this->lastPositions->lat,
 		     $this->lastPositions->long,
-		     $this->LatNM, $this->LongNM, 
+		     $this->LatNM, $this->LongNM,
 		     $this->users->boattype,
 		     $vlmc_heading, $vlmc_vmg);
 	shm_unlock_sem_destroy_grib(1);
@@ -546,18 +538,18 @@ class fullUsers
 	$temp_vlmc_context = new vlmc_context();
 	shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
 	shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
-	VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat, 
+	VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat,
 			     $this->lastPositions->long,
-			     $this->LatNM, $this->LongNM, 
+			     $this->LatNM, $this->LongNM,
 			     $this->users->boattype,
 			     $vlmc_heading, $vlmc_vmg);
 	shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
 	shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
       }
-      
+
       $this->users->boatheading = doublep_value($vlmc_heading);
       $this->VMG = doublep_value($vlmc_vmg);
-      
+
       //	  echo "Debug: Lat   = ".$this->lastPositions->lat;
       //	  echo "Debug: Lon   = ".$this->lastPositions->long;
       //	  echo "Debug: WPLat = ".$this->LatNM;
@@ -565,18 +557,15 @@ class fullUsers
       //	  echo "Debug: Type  = ".$this->users->boattype;
       //	  echo "Debug: HDG   = ".$this->users->boatheading;
       //	  echo "Debug: VMG   = ".$this->VMG;
-      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query_writer($query1) ; 
       break;
     case PILOTMODE_VBVMG:
       $vlmc_heading = new doublep();
       $vlmc_vmg = new doublep();
       if (defined('MOTEUR')) {
 	shm_lock_sem_construct_grib(1);
-	VLM_vbvmg($this->lastPositions->lat, 
+	VLM_vbvmg($this->lastPositions->lat,
 		  $this->lastPositions->long,
-		  $this->LatNM, $this->LongNM, 
+		  $this->LatNM, $this->LongNM,
 		  $this->users->boattype,
 		  $vlmc_heading, $vlmc_vmg);
 	shm_unlock_sem_destroy_grib(1);
@@ -584,18 +573,18 @@ class fullUsers
 	$temp_vlmc_context = new vlmc_context();
 	shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
 	shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
-	VLM_vbvmg_context($temp_vlmc_context, $this->lastPositions->lat, 
+	VLM_vbvmg_context($temp_vlmc_context, $this->lastPositions->lat,
 			  $this->lastPositions->long,
-			  $this->LatNM, $this->LongNM, 
+			  $this->LatNM, $this->LongNM,
 			  $this->users->boattype,
 			  $vlmc_heading, $vlmc_vmg);
 	shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
 	shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
       }
-      
+
       $this->users->boatheading = doublep_value($vlmc_heading);
       $this->VMG = doublep_value($vlmc_vmg);
-      
+
       //	  echo "Debug: Lat   = ".$this->lastPositions->lat;
       //	  echo "Debug: Lon   = ".$this->lastPositions->long;
       //	  echo "Debug: WPLat = ".$this->LatNM;
@@ -603,13 +592,10 @@ class fullUsers
       //	  echo "Debug: Type  = ".$this->users->boattype;
       //	  echo "Debug: HDG   = ".$this->users->boatheading;
       //	  echo "Debug: VMG   = ".$this->VMG;
-      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
-	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query_writer($query1) ; 
-      break;      
+      break;
     case PILOTMODE_BESTSPEED:
       // FIXME if kept, needs to be redone in vlm-c
-      $Hdg=0; $bestHdg=0; 
+      $Hdg=0; $bestHdg=0;
       $Spd=-1 ;$bestSpd=-1;
       while ( $Hdg <= 359 ) {
 	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
@@ -622,7 +608,7 @@ class fullUsers
 	$Hdg+=1;
 	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
       }
-      
+
       // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degré près".
       for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
 	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
@@ -634,24 +620,26 @@ class fullUsers
 	}
 	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
       }
-      
+
       $this->users->boatheading = $bestHdg;
-      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading 
-	." WHERE idusers =".$this->users->idusers;
-      $result1 = wrapper_mysql_db_query_writer($query1);
       break;
     }
 
+    if ($write == 1 && ($this->users->pilotmode != PILOTMODE_HEADING)) {
+      $query1 = "UPDATE users SET boatheading =". $this->users->boatheading
+	." WHERE idusers =".$this->users->idusers;
+      $result1 = wrapper_mysql_db_query_writer($query1);
+    }
+    
     //find the angle boat/wind
     $this->boatanglewithwind = angleDifference($this->users->boatheading,
                                                $this->wheading) ;
 
     //find boatspeed
-    //echo "calling findboatspeed with ".$this->boatanglewithwind." ". $this->wspeed." ".  $this->users->boattype;
     $this->boatspeed =  findboatspeed($this->boatanglewithwind,
                                       $this->wspeed,
                                       $this->users->boattype);
-
+    
   }
 
   //update the target lat / long
@@ -703,17 +691,17 @@ class fullUsers
       // Il ne s'agit pas d'un abandon de WP, donc c'est une modification du paramétrage
       $query = "UPDATE users ";
       $query .= "set lastchange = "  . time() ;
-    
+
       /**
        * Update targetlat
        */
       if ( is_numeric($lat) && abs($lat)<90 ) {
         $this->users->targetlat = $lat;
         $query .= " , `targetlat`  = " . $this->users->targetlat   ;
-      } else { 
+      } else {
         $this->users->targetlat = 0;
       }
-    
+
       /**
        * Update targetlong
        */
@@ -721,18 +709,18 @@ class fullUsers
         if ( $long >180 ) $long-=360;
         if ( $long <=-180 ) $long+=360;
         $this->users->targetlong = $long;
-        $query .= " , `targetlong` = " . $this->users->targetlong ; 
-      } else { 
+        $query .= " , `targetlong` = " . $this->users->targetlong ;
+      } else {
         $this->users->targetlong = 0;
       }
-    
+
       /**
        * Update targetandhdg
        */
       if ( is_numeric($hdg) && abs($hdg)<=360 ) {
         $this->users->targetandhdg = $hdg;
-        $query .= " , `targetandhdg` = " . $this->users->targetandhdg  ; 
-      } else { 
+        $query .= " , `targetandhdg` = " . $this->users->targetandhdg  ;
+      } else {
         $this->users->targetandhdg=-1;
       }
 
@@ -750,12 +738,12 @@ class fullUsers
   //remove player from races
   function removeFromRaces()
   {
-    $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions 
+    $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions
                              WHERE idusers = " . $this->users->idusers . " and race = " . $this->users->engaged . ";";
     wrapper_mysql_db_query_writer($queryhistopositions);
     //echo "QH = $queryhistopositions" . "\n";
 
-    $querypurgepositions = "DELETE FROM positions 
+    $querypurgepositions = "DELETE FROM positions
                              WHERE idusers = " . $this->users->idusers . " and race = " . $this->users->engaged . ";";
     wrapper_mysql_db_query_writer($querypurgepositions);
     //echo "QP = $querypurgepositions" . "\n";
@@ -768,10 +756,10 @@ class fullUsers
   function giveNextWaypoint()
   {
     // Retourne -1 si il n'y a plus de waypoints (on a passé le dernier, donc la finish line)
-    //     select wporder from races_waypoints where idraces=35 and wporder >1 ORDER BY wporder ASC LIMIT 1; 
+    //     select wporder from races_waypoints where idraces=35 and wporder >1 ORDER BY wporder ASC LIMIT 1;
     $query = "SELECT wporder FROM races_waypoints " .
-      " WHERE idraces = " . $this->users->engaged . 
-      " AND wporder > " . $this->users->nwp . 
+      " WHERE idraces = " . $this->users->engaged .
+      " AND wporder > " . $this->users->nwp .
       " ORDER BY wporder ASC LIMIT 1";
 
     $result = wrapper_mysql_db_query_reader($query); // or die("Query failed : " . mysql_error." ".$query);
@@ -792,7 +780,7 @@ class fullUsers
   function recordWaypointCrossing($xingtime)
   {
     // Choix de "userdeptime"
-     
+
     /*
     **  2008/09/13 : dans Waypoint_crossing, on stocke désormais le temps de course
     if ( $this->nwp == 1 ) {
@@ -803,7 +791,7 @@ class fullUsers
     */
 
     $udt = $this->users->userdeptime;
-     
+
     $query = "REPLACE INTO waypoint_crossing " .
       "        (idraces , idwaypoint, idusers , time, userdeptime)  " .
       " VALUES ( " . $this->users->engaged . ", " .
@@ -819,7 +807,7 @@ class fullUsers
   function updateNextWaypoint()
   {
     // MAJ la table users pour prise en compte du prochain Waypoint
-    $query = "UPDATE users SET nextwaypoint = " . $this->nwp . 
+    $query = "UPDATE users SET nextwaypoint = " . $this->nwp .
       " WHERE idusers = " . $this->users->idusers;
     wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
@@ -848,9 +836,9 @@ class fullUsers
     $query_update = "UPDATE users set ";
 
     // On maj Lastchange uniquement pour les bateaux qui ne sont pas bout au vent.
-    if ( $this->users->pilotmode != 2 
+    if ( $this->users->pilotmode != 2
          || ( $this->users->pilotmode ==2 && $this->users->pilotparameter != 0 )  ) {
-         
+
       $query_update .= " lastchange = " . time() . "," ;
     }
 
@@ -865,7 +853,7 @@ class fullUsers
       $query_update .= " hidepos = " .  $this->users->hidepos . "," ;
     }
 
-    $query_update .= " lastupdate = " . time() ; 
+    $query_update .= " lastupdate = " . time() ;
     $query_update .= " WHERE idusers  = " . $this->users->idusers ;
     wrapper_mysql_db_query_writer($query_update);// or die("Query failed : " . mysql_error." ".$query_ranking);
 
@@ -877,16 +865,16 @@ class fullUsers
         printf ("*** Blackout ACTIVE ***\n");
       }
       return(0);
-    } 
+    }
 
-    
+
     // =======================================================================================
     // En cas de StealthPlay, on a fini aussi.
     // =======================================================================================
     if ( $this->users->hidepos > 0 ) {
       printf ("*** StealthPlay ACTIVE (%d) ***\n", $this->users->hidepos);
       return(0);
-    } 
+    }
 
 
     // =======================================================================================
@@ -897,7 +885,7 @@ class fullUsers
     //==> On restore quand on a plus besoin des "vraies valeurs"...
 
     $rc = $this->bestWayToWaypoint($this->nwp);
-    $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long, 
+    $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long,
            $this->LatNM, $this->LongNM);
 
 
@@ -931,12 +919,12 @@ class fullUsers
       "dnm       = " . $this->distancefromend     . ", " .
       "nmlat     = " . $this->LatNM               . ", " .
       "nmlong    = " . $this->LongNM              . ", " .
-      "latitude  = " . $this->lastPositions->lat  . ", " . 
+      "latitude  = " . $this->lastPositions->lat  . ", " .
       "longitude = " . $this->lastPositions->long . ", " .
       "loch      = " . $this->loch                . ", " .
       "last1h    = " . $last1h                    . ", " .
       "last3h    = " . $last3h                    . ", " .
-      "last24h   = " . $last24h                   . 
+      "last24h   = " . $last24h                   .
       " WHERE idraces  = " . $this->users->engaged .
       "  AND  idusers  = " . $this->users->idusers ;
 
@@ -1051,25 +1039,25 @@ class fullUsers
     $this->users->pilotparameter = 0;
 
     $query = "UPDATE users SET `pilotmode` = 2, " .
-      " `pilotparameter` = 0 , " . 
-      " `lastchange` = " . $timestamp . 
+      " `pilotparameter` = 0 , " .
+      " `lastchange` = " . $timestamp .
       " WHERE idusers = ".$this->users->idusers;
     wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
     // Determiner quel est le timestamp de la dernière position écrite pour ce joueur
-    $query = "SELECT max(time) FROM positions " .
-      " WHERE race = " . $this->users->engaged . 
+    $query = "SELECT max(time) as maxpostime FROM positions " .
+      " WHERE race = " . $this->users->engaged .
       " AND   idusers = ". $this->users->idusers  ;
     // use the same db here to avoid replication gap effect
     $result = wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
-    $timestamp=$row[0];
-    
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    $timestamp=$row['maxpostime'];
+
     // Effacement de cette position là
-    $query = "DELETE FROM positions " . 
-      " WHERE `time` = " .  $timestamp  . 
-      " AND race = " . $this->users->engaged . 
+    $query = "DELETE FROM positions " .
+      " WHERE `time` = " .  $timestamp  .
+      " AND race = " . $this->users->engaged .
       " AND idusers = ". $this->users->idusers ;
     //printf ("Request POSITIONS : %s\n" , $query);
     wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
@@ -1080,10 +1068,10 @@ class fullUsers
 
   function subscribeToRaces($id)
   {
-    $query11 = "UPDATE users SET engaged =" . $id . ", " . 
-      " pilotmode=2, " . 
-      " pilotparameter=0,  " . 
-      " nextwaypoint=1, " . 
+    $query11 = "UPDATE users SET engaged =" . $id . ", " .
+      " pilotmode=2, " .
+      " pilotparameter=0,  " .
+      " nextwaypoint=1, " .
       " userdeptime=-1, " . 
       " loch=0 " . 
       " WHERE idusers = ".$this->users->idusers;
@@ -1113,19 +1101,19 @@ class fullUsers
           " AND `idusers` = " . $this->users->idusers;
         wrapper_mysql_db_query_writer($query_clean_races_results);
       }
- 
+
       // Delete all old entries from races_ranking
       $query_clean_races_ranking = "DELETE FROM races_ranking where idusers= " .  $this->users->idusers ;
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Prepare the table races_ranking
-      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers ) values " . 
+      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers ) values " .
         " ( ". $id . ", " . $this->users->idusers . ")";
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Update boattype
-      $query_boattype=" UPDATE users set boattype = '" . $this->races->boattype . "'" . 
-        "             ,    targetlat = 0, targetlong = 0, targetandhdg = -1        " .   
+      $query_boattype=" UPDATE users set boattype = '" . $this->races->boattype . "'" .
+        "             ,    targetlat = 0, targetlong = 0, targetandhdg = -1        " .
         " WHERE idusers = " . $this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
 
@@ -1135,7 +1123,7 @@ class fullUsers
       $this->deleteCurrentRanking();
     }
 
-    
+
   }
 
 
@@ -1149,7 +1137,7 @@ class fullUsers
     //pilotmode = 5 if vbvmg
     //pilotmode = 6 if bestspeed
 
-    // We timestamp each change, 
+    // We timestamp each change,
     // ==> to detect sleeping users who are in STOPPED mode due to coast crossing
     // Engine uses this field to set them DNF if the are sleeping for a long time
     $timestamp=time();
@@ -1159,7 +1147,7 @@ class fullUsers
       //find angle and wind angle
       $this->users->boatheading = $boath;
       $this->users->pilotmode = PILOTMODE_HEADING;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_HEADING.", " . 
+      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_HEADING.", " .
 	" boatheading = ". $this->users->boatheading . ", " .
 	" pilotparameter = ". $this->users->boatheading . ", " .
 	" lastchange = ". $timestamp . ", " .
@@ -1172,7 +1160,7 @@ class fullUsers
     case "windangle":
       $this->users->pilotparameter = $param;
       $this->users->pilotmode = PILOTMODE_WINDANGLE;
-      $query = "UPDATE users SET `pilotmode`=". PILOTMODE_WINDANGLE.", " . 
+      $query = "UPDATE users SET `pilotmode`=". PILOTMODE_WINDANGLE.", " .
 	" `pilotparameter` = " . round($this->users->pilotparameter,3) . ", " .
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
@@ -1183,17 +1171,17 @@ class fullUsers
 
     case "orthodromic":
       $this->users->pilotmode = PILOTMODE_ORTHODROMIC;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_ORTHODROMIC.", " . 
+      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_ORTHODROMIC.", " .
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
       logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
-      
+
     case "bestvmg":
       $this->users->pilotmode = PILOTMODE_BESTVMG;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_BESTVMG.", " . 
+      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_BESTVMG.", " .
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
@@ -1203,7 +1191,7 @@ class fullUsers
 
     case "vbvmg":
       $this->users->pilotmode = PILOTMODE_VBVMG;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_VBVMG.", " . 
+      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_VBVMG.", " .
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
@@ -1213,12 +1201,12 @@ class fullUsers
 
     case "bestspeed":
       $this->users->pilotmode = PILOTMODE_BESTSPEED;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_BESTSPEED.", " . 
+      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_BESTSPEED.", " .
 	" lastchange = ". $timestamp . ", " .
 	" ipaddr = '". $_SESSION['IP'] . "'" .
 	" WHERE idusers = ".$this->users->idusers;
       wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      
+
       logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
       break;
     }
@@ -1250,7 +1238,7 @@ class fullUsers
   //24hrs
   function distRecords($duration)
   {
-    
+
     $timestamp = time();
     $position = $this->lastPositions->getOldPosition($this->users->idusers, $this->users->engaged, $timestamp - $duration);
 
