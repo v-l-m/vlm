@@ -831,7 +831,7 @@ include_once("scripts/myboat.js");
 <div id="user_action">
         <?php
             $lastActionDetails = lastUserAction();
-            echo sprintf($strings[$lang]['lastactionip'], $lastActionDetails['action'], $lastActionDetails['ipaddr']);
+            echo sprintf($strings[$lang]['lastactionip'], $lastActionDetails['action'], dechex(crc32($lastActionDetails['ipaddr'])));
             echo "&nbsp;(&nbsp;<a href=\"userlogs.php\">".$strings[$lang]['moreiplogs']."</a>&nbsp;)";
         ?>
 </div>
