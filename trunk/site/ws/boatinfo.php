@@ -113,8 +113,8 @@ function get_info_array($idu) {
     $info['SRV'] = SERVER_NAME;
     $info['NPD'] = sprintf ("\"%s\"", $userObj->users->blocnote);
 
-    // Pilototo data
     $rc=$userObj->users->pilototoList();
+    // Pilototo data // old way - should be deleted in v0.14
     $numligne=1;
     foreach ($userObj->users->pilototo as $pilototo_row) {
       /*(id,time,PIM,PIP,status)*/
@@ -129,6 +129,9 @@ function get_info_array($idu) {
       $info[$p_key] = "none";
       $numligne++;
     }
+    
+    // Pilototo data // new way
+    $info['PIL'] = $userObj->users->pilototo;
 
     $info['THM'] = $userObj->users->theme;
     $info['HID'] = $userObj->users->hidepos;
@@ -208,7 +211,10 @@ function usage() {
 }
 
 function ia_print($value, $key) {
-  echo $key."=".$value."\n";
+    if (is_array($value) ) {
+        $value = "There is no support for Array() in text mode";
+    }
+    echo $key."=".$value."\n";
 }
 
 // now start the real work
