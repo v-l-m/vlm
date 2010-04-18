@@ -131,7 +131,7 @@
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
-        function pilototoList($status = PILOTOTO_PENDING)
+        function pilototoList($forcemaster = True)
         function pilototoDelete($taskid)
         function pilototoAdd($time, $pim, $pip)
         function pilototoUpdate($taskid, $time, $pim, $pip)
@@ -209,7 +209,7 @@
     $numligne=0;
     if ( count($usersObj->pilototo) != 0) {
         foreach ($usersObj->pilototo as $pilototo_row) {
-            echoPilototoRow($numligne, $pilototo_row[0], $pilototo_row[1], $pilototo_row[2], $pilototo_row[3], $pilototo_row[4]);  
+            echoPilototoRow($numligne, $pilototo_row['TID'], $pilototo_row['TTS'], $pilototo_row['PIM'], $pilototo_row['PIP'], $pilototo_row['STS']);  
             $numligne++;
         }
     } else {

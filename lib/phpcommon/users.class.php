@@ -207,30 +207,33 @@ class users
 
   }
 
-  // Delete a task from pilototo
-  // List the piltoto orders
-  function pilototoList($forcemaster = False)
-  {
-    $now=time();
-    $this->pilototo=array();
-    // lookup for a task to do
-    $query = "SELECT taskid, time, pilotmode, pilotparameter, status FROM auto_pilot
-     WHERE idusers = $this->idusers
-       ORDER by time ASC";
-    //       AND status = '" . $status . "'
-    if ($forcemaster) { // Special case is needed because of the update delay of the slaves
-        $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-    } else {
-        $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    }
+  /* List the pilototo orders
+    Update $this->pilototo array, with rows
+      TID = taskid
+      TTS = time (Task TimeStamp)
+      PIM = pilotmode
+      PIP = pilotparameter
+      STS = StaTuS
+    This should be checked against PILOTOTO_MAX_EVENTS
+  */
+  function pilototoList($forcemaster = False) {
+      $now=time();
+      $this->pilototo=array();
+      // lookup for a task to do
+      $query = "SELECT taskid as TID, time as TTS, pilotmode as PIM, pilotparameter as PIP, status as STS ".
+               "FROM auto_pilot WHERE idusers = $this->idusers ORDER by TTS ASC";
+      if ($forcemaster) { // Special case is needed because of the update delay of the slaves
+          $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
+      } else {
+          $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+      }
 
-    //echo $query;
-    while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
-      array_push ($this->pilototo, $row);
-    }
-    return(0);
+      while ( $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
+          array_push ($this->pilototo, $row);
+      }
+      return(0);
   }
-
+  
   // Delete a task from pilototo
   function pilototoDelete($taskid)
   {
