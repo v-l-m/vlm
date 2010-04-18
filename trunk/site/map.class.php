@@ -586,15 +586,15 @@ class map
       }
 
       if ( $this->wp_only == $waypoint_num  || $nwp == $waypoint_num ) {
+        imagesetthickness ( $this->mapImage, WP_THICKNESS);
+
         if ( $waypoint['wptype'] == WPTYPE_PORTE ) {
-          imagesetthickness ( $this->mapImage, WP_THICKNESS);
           imageline ( $this->mapImage, 
                       call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']),
                       call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude2']),      
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude2']),
                       $this->colorWaypoints);
-          imagesetthickness ( $this->mapImage, 1);
         } else {
 
           // On va tracer un arc de cercle sur les 200 premiers milles, tous les 10 milles
@@ -610,7 +610,7 @@ class map
 	  
           array_push($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $EP_coords['longitude']),
                      call_user_func_array( array(&$this, $projCallbackLat),  $EP_coords['latitude']));
-	  
+
           imageline ( $this->mapImage, 
                       call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']),
@@ -637,7 +637,6 @@ class map
 
           array_push ($poly_coords, call_user_func_array( array(&$this, $projCallbackLong), $waypoint['longitude1']),
                       call_user_func_array( array(&$this, $projCallbackLat),  $waypoint['latitude1']));
-	  
 	  
           imagefilledpolygon( $this->mapImage, $poly_coords, 5, $this->colorBuoy );
 
@@ -667,8 +666,9 @@ class map
           call_user_func_array( array(&$this, $projCallbackLat),  $lat_extrem),
           IMG_COLOR_STYLED);
           */
-
         }
+        imagesetthickness ( $this->mapImage, 1);
+
       }
 
 
@@ -679,7 +679,6 @@ class map
       //    call_user_func_array( array(&$this, $projCallbackLat),  ($waypoint[1] + $waypoint[3])/2) ,
       //    "WP" . $waypoint_num ,
       //    $this->colorBlack);
-
     }
 
 
