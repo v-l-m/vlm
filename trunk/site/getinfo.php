@@ -162,12 +162,12 @@ function get_info_array($idu) {
     foreach ($userObj->users->pilototo as $pilototo_row) {
       /*(id,time,PIM,PIP,status)*/
       $p_key = sprintf("PIL%d", $numligne);
-      $info[$p_key] = sprintf("%d,%d,%d,%s,%s", $pilototo_row[0],
-			      $pilototo_row[1], $pilototo_row[2],
-			      $pilototo_row[3], $pilototo_row[4]);
+      $info[$p_key] = sprintf("%d,%d,%d,%s,%s", $pilototo_row['TID'],
+			      $pilototo_row['TTS'], $pilototo_row['PIM'],
+			      $pilototo_row['PIP'], $pilototo_row['STS']);
       $numligne++;
     }
-    while($numligne<=5) {
+    while($numligne<=PILOTOTO_MAX_EVENTS) {
       $p_key = sprintf("PIL%d", $numligne);
       $info[$p_key] = "none";
       $numligne++;
