@@ -252,7 +252,7 @@ $URL="\"document.location='". $_SERVER['PHP_SELF'] .
         "&amp;do=yes".
                                 "'\" />";
 echo "<h4>Action : " . $action ; 
-echo "<form name=\"coordonnees\" action=". $_SERVER['PHP_SELF'] . "\"/>";
+echo "<form name=\"coordonnees\" action=\"". $_SERVER['PHP_SELF'] . "\"/>";
      echo "<input type=\"hidden\" name=\"action\" value=\"".$action.  "\"/>";
      echo "<input type=\"hidden\" name=\"pseudo\" value=\"".$pseudo.  "\"/>";
      echo "<input type=\"hidden\" name=\"password\" value=\"".$password.  "\"/>";
