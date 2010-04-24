@@ -275,7 +275,7 @@ class races {
 
     /* output de la racemap */
     function htmlRaceMap($alttemplate) {
-        $href = "racemap.php?idraces=".$this->idraces;
+        $href = "/racemap.php?idraces=".$this->idraces;
         return "<img src=\"$href\" alt=\"" .$alttemplate. "\" />\n";
     }
 
@@ -286,8 +286,7 @@ class races {
 
     /* output de la polaire */
     function htmlRacePolar($title) {
-        return "<h3>" . $title . "&nbsp;:&nbsp;<a href=\"speedchart.php?boattype=" . $this->boattype
-                . "\" target=\"_speedchart\" rel=\"nofollow\">" . substr($this->boattype,5) . "</a></h3>";
+        return "<h3>" . $title . "&nbsp;:&nbsp;". htmlBoattypeLink($this->boattype)."</h3>";
     }
 
     /* output du tableau de wp */
@@ -318,7 +317,7 @@ class races {
         $ret  = "<div id=\"raceheader\">\n";
         $ret .= $this->htmlRaceTitle($strings[$lang]["racestarted"]);
         $ret .= $this->htmlRacePolar($strings[$lang]["boattype"]);
-        $ret .= "<h3><a href=\"races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ranking"]."</a></h3>";
+        $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ranking"]."</a></h3>";
         $ret .= "</div>\n";
 
         // Carte de la course
