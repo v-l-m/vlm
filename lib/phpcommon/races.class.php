@@ -30,14 +30,19 @@ class races {
     $racedistance,
     $ics;
 
-  function races($id=0) {
-    $query= "SELECT idraces, racename, started, deptime, startlong, startlat, 
-             boattype, closetime, racetype, firstpcttime, depend_on, 
-             qualifying_races, idchallenge, coastpenalty, bobegin, boend,
-             maxboats, theme, vacfreq
-             FROM races WHERE idraces = $id";
-    $result = wrapper_mysql_db_query_reader($query) or die($query);
-    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+  function races($id=0, $row = null) {
+    $id = intval($id);
+    if ($id != 0) {
+        $query= "SELECT idraces, racename, started, deptime, startlong, startlat, 
+                 boattype, closetime, racetype, firstpcttime, depend_on, 
+                 qualifying_races, idchallenge, coastpenalty, bobegin, boend,
+                 maxboats, theme, vacfreq, updated
+                 FROM races WHERE idraces = $id";
+        $result = wrapper_mysql_db_query_reader($query) or die($query);
+        $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    } else if (is_null($row)) {
+        die("EXCEPTION : races class was called with bad id=$id");
+    }
     
     $this->idraces          = $row['idraces'];
     $this->racename         = $row['racename'];
@@ -60,6 +65,7 @@ class races {
                                              // force le theme de l'interface
     $this->vacfreq          = $row['vacfreq']; // 1, 5, ou 10, 
                                                //frequence des runs du moteur
+    $this->updated          = $row['updated']; //derniere mise à jour de l'enregistrement
   }
   
   function getWPs() {
@@ -250,6 +256,87 @@ class races {
       //Convenient wrapper
       return htmlRacenameLink($lang, $this->idraces, $this->racename);
   }
+
+    function htmlIC($icforum) {
+        $ret = "";
+        foreach($this->getICS() as $ic) {
+            if ($ic['flag'] & IC_FLAG_VISIBLE and !($ic['flag'] & IC_FLAG_HIDEONICS)) {
+                $ret .= "<div class=\"icbox\">\n";
+                if ($ic['flag'] & IC_FLAG_LINKFORUM) {
+	                  $ret .= sprintf ("<a href=\"".$ic['instructions']."\" target=\"_ic\"><b>".strtoupper($icforum)."</b></a>\n");
+                } else {
+	                  $ret .= nl2br($ic['instructions']);
+                }
+                $ret .= "\n</div>\n";
+            }
+        }
+        return $ret;
+    }
+
+    /* output de la racemap */
+    function htmlRaceMap($alttemplate) {
+        $href = "racemap.php?idraces=".$this->idraces;
+        return "<img src=\"$href\" alt=\"" .$alttemplate. "\" />\n";
+    }
+
+    /* output du titre */
+    function htmlRaceTitle($titletemplate = "%s / %s") {
+        return sprintf("<h3>".$titletemplate."</h3>", $this->racename, gmdate("Y/m/d H:i:s", $this->deptime));     
+    }
+
+    /* output de la polaire */
+    function htmlRacePolar($title) {
+        return "<h3>" . $title . "&nbsp;:&nbsp;<a href=\"speedchart.php?boattype=" . $this->boattype
+                . "\" target=\"_speedchart\" rel=\"nofollow\">" . substr($this->boattype,5) . "</a></h3>";
+    }
+
+    /* output du tableau de wp */
+    function htmlWayPoints($startstring) {
+        $ret  = "<table class=\"waypoints\">\n";
+        $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>Type</th><th>Name</th></tr>";
+        $ret .= "<tr>\n";
+        $ret .= "<td>WP0</td>"; 
+        $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $this->startlat/1000., $this->startlong/1000., $startstring);
+        $ret .= "</tr>\n";
+
+        foreach ($this->getWPs() as $num => $wp) {
+            $ret .= "<tr>\n";
+            $ret .= "<td>WP".$num."</td>";
+            $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%s</td><td>%s</td>", 
+        	       $wp['latitude1']/1000., $wp['longitude1']/1000., 
+        	       $wp['latitude2']/1000., $wp['longitude2']/1000.,  $wp['wptypelabel'], htmlentities($wp['libelle']));
+            $ret .= "</tr>\n";
+        }
+        $ret .= "</table>\n";
+        return $ret;
+    }
+
+    function htmlRaceDescription($lang) {
+        //FIXME : ugly.
+        global $strings;
+        $idraces = $this->idraces;
+        $ret  = "<div id=\"raceheader\">\n";
+        $ret .= $this->htmlRaceTitle($strings[$lang]["racestarted"]);
+        $ret .= $this->htmlRacePolar($strings[$lang]["boattype"]);
+        $ret .= "<h3><a href=\"races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ranking"]."</a></h3>";
+        $ret .= "</div>\n";
+
+        // Carte de la course
+        $ret .= "<div id=\"racemap\">\n";
+        $ret .= $this->htmlRaceMap($strings[$lang]["racemap"]);
+        $ret .= "</div>\n";
+
+        $ret .= "<div id=\"ic\">\n";
+        $ret .= "<h3>".$strings[$lang]["ic"]."</h3>\n";
+        $ret .= $this->htmlIC($strings[$lang]["icforum"]);
+        $ret .= "</div>\n";    
+
+        $ret .= "<div id=\"waypoints\">\n";
+        $ret .= "<h3>Waypoints</h3>\n";
+        $ret .= $this->htmlWaypoints($strings[$lang]["startmap"]);
+        $ret .= "</div>\n";
+        return $ret;
+    }
 
 }
 
@@ -752,9 +839,9 @@ class fullRaces {
     echo "<tbody class=\"htmltable\">\n";
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
-    // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
-    // FIXME : strange query : why do we need to join the races_ranking query ? (for this form, we don't care of old races)
-    $query_listusers = "SELECT DISTINCT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country , US.engaged engaged" . 
+    // we need to join the races_ranking query to know order of boats
+    $query_listusers = "SELECT DISTINCT RR.idusers idusers, US.username username, US.boatname boatname, " .
+                       " US.color color, US.country country , US.engaged engaged" . 
                        " FROM  races_ranking RR, users US " . 
                        " WHERE RR.idusers = US.idusers " . 
                        " AND   engaged != 0 " . 
