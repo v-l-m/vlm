@@ -156,6 +156,8 @@
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
    <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
    <link rel="icon" type="image/png" href="images/site/favicon.png" />
+   <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/races.php">
+   <link rel="alternate" type="text/ical" title="ICAL" href="/ical/races.php">
    <title>Virtual Loup-De-Mer </title>
 
 <?php
@@ -191,12 +193,13 @@
    </script>
   <script type="text/javascript" src="scripts/dms.js"></script>
   <script type="text/javascript" src="scripts/hashtable.js"></script>
+  
   <script type="text/javascript" src="externals/lightbox/js/prototype.js"></script>
   <script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
   <script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
   <link rel="stylesheet" href="externals/lightbox/css/lightbox.css" type="text/css" media="screen" />
-  <script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 
+  <script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 
  </head>
 

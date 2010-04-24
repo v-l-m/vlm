@@ -4,8 +4,6 @@
 
 ?>
 
-    <span id="infobulle"></span>
-
 <?php
     if (!isLoggedIn()) {
 ?>
