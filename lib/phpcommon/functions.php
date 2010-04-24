@@ -999,22 +999,22 @@ function htmlFlagImg($idflag) {
 function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
     //This function is mapped in the user class
   	return htmlFlagImg($country) .
-            "<a class=\"boatpalmares\" href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . $idusers . "\"" .
+            "<a class=\"boatpalmares\" href=\"/palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . $idusers . "\"" .
             " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
             " (". $idusers . ") " . $username . "</a>\n";
 }
 
 function htmlIdracesLink($lang, $idraces) {
-    return sprintf("<a href=\"ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
+    return sprintf("<a href=\"/ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
 }
 
 function htmlBoattypeLink($boattype) {
     $boattypename = strtoupper(ereg_replace('^.*_', '' ,$boattype));
-    return sprintf("<a href=\"speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
+    return sprintf("<a href=\"/speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
 }
 
 function htmlRacenameLink($lang, $idraces, $racename) {
-    return sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
+    return sprintf("<a href=\"/races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
 }
 
 function getFlag($idflags, $force = 'no') {
