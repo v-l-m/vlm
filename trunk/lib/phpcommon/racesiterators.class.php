@@ -54,6 +54,33 @@
         }
     }
 
+
+    class FullcalendarRacesIterator extends RacesIterator {
+        var $query = "SELECT * FROM races
+                      WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND racetype = 0
+                      ORDER BY started ASC, deptime ASC, closetime ASC ";
+        var $jsonarray;
+
+        function start() {
+            $this->jsonarray = Array();
+        }
+
+        function onerow($row) {
+            $jsonarray = Array();
+            $jsonarray['start'] = $row['deptime'];
+            $jsonarray['end'] = $row['closetime'];
+            $jsonarray['title'] = $row['racename'];
+            $jsonarray['allDay'] = False;
+            $jsonarray['url'] = sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
+            $this->jsonarray[] = $jsonarray;
+        }
+
+        function end() {
+            echo json_encode($this->jsonarray);
+        }
+    }
+
+
     class RssRacesIterator extends RacesIterator {
         var $query = "SELECT * FROM races
                       WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0

@@ -171,29 +171,22 @@
     //echo "current file =".$CurrentFile."SCrIPT name = ".$_SERVER["PHP_SELF"]."\n";
     //little trick : if update_angle page, display and then redirect to myboat
     if ($CurrentFile == "update_angle.php" ) {
-        echo "<meta http-equiv=\"refresh\" content=\"0; url=myboat.php?lang=$lang\" />";
+        echo "  <meta http-equiv=\"refresh\" content=\"0; url=myboat.php?lang=$lang\" />";
     } elseif ( $CurrentFile == "admin.php" )  {
         $do=quote_smart($_REQUEST['do']);
         if ( $do == 'yes' ) {
-            echo "<meta http-equiv=\"refresh\" content=\"0\" />";
+            echo "  <meta http-equiv=\"refresh\" content=\"0\" />";
         }
     } else {
-        echo "<meta http-equiv=\"refresh\" content=\"1200\" />";
+        echo "  <meta http-equiv=\"refresh\" content=\"1200\" />";
     }
 
 ?>
 
-    <script type="text/javascript" >
-     function popup_small(URL,NOM) {
-  window.open(URL, NOM, 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=850,height=500');
-      }
-     function popUp(URL,NOM) {
-     eval("page" + NOM + " = window.open(URL, NOM, 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=800,height=595');");
-      }
-   </script>
+  <script type="text/javascript" src="scripts/popup.js"></script>
   <script type="text/javascript" src="scripts/dms.js"></script>
   <script type="text/javascript" src="scripts/hashtable.js"></script>
-  
+
   <script type="text/javascript" src="externals/lightbox/js/prototype.js"></script>
   <script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
   <script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
