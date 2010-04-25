@@ -119,7 +119,7 @@ function get_info_array($idu) {
 				$userObj->users->targetandhdg );
       }
     }
-    $info['POS'] = getCurrentRanking($idu, $userObj->users->engaged);
+    $info['POS'] = $userObj->getCurrentRanking();
     $info['LOC'] = $userObj->users->loch;
     $info['LUP'] = $userObj->users->lastupdate;
     $info['NUP'] = 10*round($userObj->users->lastupdate + 
