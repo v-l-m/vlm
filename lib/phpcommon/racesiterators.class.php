@@ -69,7 +69,7 @@
             $jsonarray = Array();
             $jsonarray['start'] = $row['deptime'];
             $jsonarray['end'] = $row['closetime'];
-            $jsonarray['title'] = html_entity_decode($row['racename']);
+            $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
             $jsonarray['allDay'] = False;
             $jsonarray['url'] = sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
             $this->jsonarray[] = $jsonarray;
