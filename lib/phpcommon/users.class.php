@@ -390,7 +390,7 @@ class fullUsers
                                                    $this->users->idusers, $this->users->engaged);
     $this->anteLastPositions = $anteLastPositionsObject;
 
-    // this->hours (temps depuis la derniËre VAC)
+    // this->hours (temps depuis la derni√®re VAC)
     if ( $this->users->userdeptime == -1 ) {
       $time = $now;
       $this->hours = 0;
@@ -629,7 +629,7 @@ class fullUsers
 	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
       }
 
-      // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degrÈ prËs".
+      // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degr√© pr√®s".
       for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
 	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
 			      $this->wspeed,
@@ -663,13 +663,13 @@ class fullUsers
   }
 
   //update the target lat / long
-  // 3eme argument "abandonWP" pour diffÈrencier abandon de WP(true) de la saisie de WP(false)
+  // 3eme argument "abandonWP" pour diff√©rencier abandon de WP(true) de la saisie de WP(false)
   function updateTarget($lat, $long, $hdg, $abandonWP=false)
   {
     /**
-     *  S'agit t'il d'un abandon de WP ? ( on rÈ-initialise targetandhdg )
-     *  Si un cap est saisi (valeure positive infÈrieure ‡ 360), on prend ce cap
-     *  Sinon, il faut se mettre en route vers le prochain WP (redÈfinir LatNM et LongNM)
+     *  S'agit t'il d'un abandon de WP ? ( on r√©-initialise targetandhdg )
+     *  Si un cap est saisi (valeure positive inf√©rieure √† 360), on prend ce cap
+     *  Sinon, il faut se mettre en route vers le prochain WP (red√©finir LatNM et LongNM)
      */
     if ( $abandonWP ) {
 
@@ -689,8 +689,8 @@ class fullUsers
         $query .=  " pilotparameter  = " . $this->users->pilotparameter . " ," ;
         $query .=  " boatheading     = " . $this->users->boatheading    . " ," ;
       }  else  {
-        // On ne touche pas au pilotmode (c'est peut-Ítre Ortho ou BestVMG ou VBMG)
-        // Mais il faut remettre ‡ jour LatNM et LongNM
+        // On ne touche pas au pilotmode (c'est peut-√™tre Ortho ou BestVMG ou VBMG)
+        // Mais il faut remettre √† jour LatNM et LongNM
         $rc = $this->bestWayToWaypoint($this->nwp);
       }
       $this->users->targetandhdg = -1;
@@ -708,7 +708,7 @@ class fullUsers
       wrapper_mysql_db_query_writer($query) ; //or printf("\nQuery failed : " . mysql_error." ".$query);
 
     } else {
-      // Il ne s'agit pas d'un abandon de WP, donc c'est une modification du paramÈtrage
+      // Il ne s'agit pas d'un abandon de WP, donc c'est une modification du param√©trage
       $query = "UPDATE users ";
       $query .= "set lastchange = "  . time() ;
 
@@ -775,7 +775,7 @@ class fullUsers
   // Function giveNextWaipoint
   function giveNextWaypoint()
   {
-    // Retourne -1 si il n'y a plus de waypoints (on a passÈ le dernier, donc la finish line)
+    // Retourne -1 si il n'y a plus de waypoints (on a pass√© le dernier, donc la finish line)
     //     select wporder from races_waypoints where idraces=35 and wporder >1 ORDER BY wporder ASC LIMIT 1;
     $query = "SELECT wporder FROM races_waypoints " .
       " WHERE idraces = " . $this->users->engaged .
@@ -802,7 +802,7 @@ class fullUsers
     // Choix de "userdeptime"
 
     /*
-    **  2008/09/13 : dans Waypoint_crossing, on stocke dÈsormais le temps de course
+    **  2008/09/13 : dans Waypoint_crossing, on stocke d√©sormais le temps de course
     if ( $this->nwp == 1 ) {
     $udt = $this->users->userdeptime;
     } else {
@@ -849,9 +849,9 @@ class fullUsers
     //"        (idraces , idusers , nwp , dnm, latitude, longitude, last1h, last3h, last24h)  " .
     // ICI, on appelle vraiment la fonction bWTW, pour indiquer la bonne distance dans les classements
     // MAIS : bug du 10/10/2007 : elle modifie LatNM et LongNM... !
-    //==> En attendant de faire plus ÈlÈgant, on sauve/restore ces deux valeurs (pas beau, non... pas du tout)
+    //==> En attendant de faire plus √©l√©gant, on sauve/restore ces deux valeurs (pas beau, non... pas du tout)
     // =======================================================================================
-    // On met ‡ jour les colonnes lastupdate + lastchange et la colonne loch de la table users
+    // On met √† jour les colonnes lastupdate + lastchange et la colonne loch de la table users
     // =======================================================================================
     $query_update = "UPDATE users set ";
 
@@ -862,12 +862,12 @@ class fullUsers
       $query_update .= " lastchange = " . time() . "," ;
     }
 
-    // Cumul du loch sauf si bout au vent... (si vitesse <0.1, loch n'est pas incrÈmentÈ)
+    // Cumul du loch sauf si bout au vent... (si vitesse <0.1, loch n'est pas incr√©ment√©)
     if ( $this->boatspeed > 0.1 )  {
       $query_update .= " loch = loch + " . round($this->boatspeed*$this->hours,3) . "," ;
     }
 
-    // On dÈcrÈmente HidePos si positif
+    // On d√©cr√©mente HidePos si positif
     if ( $this->users->hidepos > 0 ) {
       $this->users->hidepos = $this->users->hidepos - 1 ;
       $query_update .= " hidepos = " .  $this->users->hidepos . "," ;
@@ -898,7 +898,7 @@ class fullUsers
 
 
     // =======================================================================================
-    // Si on est encore l‡ : Calculs et mise ‡ jour des classements (table races_ranking)
+    // Si on est encore l√† : Calculs et mise √† jour des classements (table races_ranking)
     // =======================================================================================
     $sauvlong=$this->LongNM;
     $sauvlat=$this->LatNM;
@@ -952,7 +952,7 @@ class fullUsers
     //printf ("Query : %s\n", $query_ranking);
 
 
-    //==> On restore l‡, maintenant...
+    //==> On restore l√†, maintenant...
     $this->LongNM=$sauvlong;
     $this->LatNM=$sauvlat;
 
@@ -1066,7 +1066,7 @@ class fullUsers
     wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
-    // Determiner quel est le timestamp de la derniËre position Ècrite pour ce joueur
+    // Determiner quel est le timestamp de la derni√®re position √©crite pour ce joueur
     $query = "SELECT max(time) as maxpostime FROM positions " .
       " WHERE race = " . $this->users->engaged .
       " AND   idusers = ". $this->users->idusers  ;
@@ -1075,7 +1075,7 @@ class fullUsers
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
     $timestamp=$row['maxpostime'];
 
-    // Effacement de cette position l‡
+    // Effacement de cette position l√†
     $query = "DELETE FROM positions " .
       " WHERE `time` = " .  $timestamp  .
       " AND race = " . $this->users->engaged .
@@ -1286,7 +1286,7 @@ class fullUsers
   {
     $sum = 0;
 
-    // A REECRIRE pour sortie de allPositions de la classe fullUsers et correction de l'imprÈcision
+    // A REECRIRE pour sortie de allPositions de la classe fullUsers et correction de l'impr√©cision
     // CF mail avec Phille du 09/03 le soir.
     // Concerne uniquement le moteur
 
@@ -1364,7 +1364,7 @@ class excludedUsers
     $anteLastPositionsObject = new positions;
     //    echo "Avant appel anteLast depuis users.class.php 2\n";
     $anteLastPositionsObject->getAnteLastPositions($this->users->idusers, $raceid);
-    //   echo "AprËs appel anteLast depuis users.class.php 2\n";
+    //   echo "Apr√®s appel anteLast depuis users.class.php 2\n";
     $this->anteLastPositions = $anteLastPositionsObject;
 
     $this->races = new races($raceid);
