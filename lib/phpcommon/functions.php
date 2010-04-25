@@ -1,13 +1,6 @@
 <?php
 /********Functions*********/
 
-//     String $lang NavigatorLanguage()
-//
-// Return navigator language.
-// As VLM just know French and English,
-// return is "fr" if French version, and
-// "en" for all other versions ......
-//--------------------------------------------
 include_once("vlmc.php");
 
 function wrapper_mysql_db_query_reader($cmd) {
@@ -47,11 +40,16 @@ function quote_smart($value) {
   return $value;
 }
 
-function NavigatorLanguage()
+//     String $lang NavigatorLanguage()
+//
+// Return navigator language or en if not supported
+//--------------------------------------------
+
+function NavigatorLanguage($allowed = array("fr", "en", "pt", "it", "es"))
 {
   $lang = getenv("HTTP_ACCEPT_LANGUAGE");
   $lang = substr($lang,0,2);
-  if (in_array($lang, array("fr", "en", "pt", "it", "es"))) {
+  if (in_array($lang, $allowed)) {
       return $lang;
   } else  {
       return "en";
@@ -59,11 +57,32 @@ function NavigatorLanguage()
 }
 
 function getCurrentLang() {
+    static $lang = null;
+    if (!is_null($lang)) return $lang;
     //FIXME utiliser NavigatorLanguage pour définir le default en combinant avec strings
     if (isset($_REQUEST['lang'])) {
-        return quote_smart($_REQUEST['lang']);
+        $lang = quote_smart($_REQUEST['lang']);
     } else {
-         return NavigatorLanguage();  
+        $lang = NavigatorLanguage();  
+    }
+    return $lang;
+}
+
+function getStrings($key) {
+    static $stringarray = null;
+    static $lang = null;
+    if (is_null($stringarray)) {
+        include("includes/strings.inc");
+        $lang = getCurrentLang();
+        if (!array_key_exists($lang, $strings)) $lang = "en";
+        $stringarray = $strings;
+    }
+    if (array_key_exists($key, $stringarray[$lang])) {
+        return $stringarray[$lang][$key];
+    } else if ($lang != "en" && array_key_exists($key, $stringarray["en"])) {
+        return "**".$stringarray[$lang][$key]."**";
+    } else {
+        return "**$key is not valid**";
     }
 }
 
