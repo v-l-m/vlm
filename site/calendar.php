@@ -42,7 +42,7 @@
         <div id='ical-help-box'>
         <?php
             echo nl2br($strings[$lang]["icalhelpbox"]);
-            echo "&nbsp;<b>http://".$_SERVER['SERVER_NAME']."/feed/races.ical.php</b>";
+            echo "&nbsp;<b>http://".$_SERVER['SERVER_NAME']."/feed/races.ical.php?lang=$lang</b>";
                 
         ?>
         </div>
