@@ -18,17 +18,17 @@ function get_output_format() {
   }
 
   if (preg_match(',application/json(;q=(d?.d+))?,i', 
-		 $_SERVER['HTTP_ACCEPT'], $res)) {
+     $_SERVER['HTTP_ACCEPT'], $res)) {
     $qjson = (isset($res[2]))? $res[2] : 1;
     $sjson = true;
   }
   
   if (preg_match(',text/plain(;q=(d?.d+))?,i', 
-		$_SERVER['HTTP_ACCEPT'], $res)) {
+    $_SERVER['HTTP_ACCEPT'], $res)) {
     $qplain = (isset($res[2]))? $res[2] : 1;
     $splain = true;
   } else if (preg_match(',text/\*(;q=(d?.d+))?,i', 
-			$_SERVER['HTTP_ACCEPT'], $res)) {
+      $_SERVER['HTTP_ACCEPT'], $res)) {
     $qplain = (isset($res[2]))? $res[2] : 1;
     $splain = true;
   }
@@ -82,9 +82,9 @@ function get_info_array($idu) {
     if ( $userObj->VMGortho != 0 ) {
       $_timetogo = 3600 * $userObj->distancefromend / $userObj->VMGortho;
       if ( $_timetogo < 0 ) {
-	$info['ETA'] = -1;
+  $info['ETA'] = -1;
       } else {
-	$info['ETA'] = sprintf(gmdate('Y-m-d\TH:i:s\Z', time() + $_timetogo )); 
+  $info['ETA'] = sprintf(gmdate('Y-m-d\TH:i:s\Z', time() + $_timetogo )); 
       }
     } else {
       $info['ETA'] = -1;
@@ -108,26 +108,26 @@ function get_info_array($idu) {
     case 4:
     case 5:
       if ( $userObj->users->targetlat == 0 && 
-	   $userObj->users->targetlong == 0 ) {
-	$info['PIP'] = sprintf ("%5.4f,%5.4f", 
-				$userObj->users->LatNM, 
-				$userObj->users->LonNM );
+     $userObj->users->targetlong == 0 ) {
+  $info['PIP'] = sprintf ("%5.4f,%5.4f", 
+        $userObj->users->LatNM, 
+        $userObj->users->LonNM );
       } else {
-	$info['PIP'] = sprintf ("%5.4f,%5.4f@%d", 
-				$userObj->users->targetlat, 
-				$userObj->users->targetlong, 
-				$userObj->users->targetandhdg );
+  $info['PIP'] = sprintf ("%5.4f,%5.4f@%d", 
+        $userObj->users->targetlat, 
+        $userObj->users->targetlong, 
+        $userObj->users->targetandhdg );
       }
     }
     $info['POS'] = $userObj->getCurrentRanking();
     $info['LOC'] = $userObj->users->loch;
     $info['LUP'] = $userObj->users->lastupdate;
     $info['NUP'] = 10*round($userObj->users->lastupdate + 
-			    60*$racesObj->vacfreq - time())/10;
+          60*$racesObj->vacfreq - time())/10;
     $info['VAC'] =  60*$racesObj->vacfreq;
 
     $info['AVG'] = round(3600*$userObj->users->loch / 
-			 (time() - $userObj->users->userdeptime), 2);
+       (time() - $userObj->users->userdeptime), 2);
     
     $info['WPLAT'] = $userObj->users->targetlat;
     $info['WPLON'] = $userObj->users->targetlong;
@@ -135,19 +135,19 @@ function get_info_array($idu) {
 
     // Map Preferences
     $mapvar = array (
-		     'mapAge' => 'MAG',
-		     'maparea' => 'MAR',
-		     'mapCenter' => 'MCR',
-		     'mapEstime' => 'MES',
-		     'mapLayers' => 'MLY',
-		     'mapMaille' => 'MGD',
-		     'mapOpponents' => 'MOP',
-		     'mapPrefOpponents' => 'MPO',
-		     'mapTools' => 'MTL',
-		     'mapX' => 'MWD',
-		     'mapY' => 'MHT',
-		     'mapDrawtextwp' => 'MDT'
-		     );
+         'mapAge' => 'MAG',
+         'maparea' => 'MAR',
+         'mapCenter' => 'MCR',
+         'mapEstime' => 'MES',
+         'mapLayers' => 'MLY',
+         'mapMaille' => 'MGD',
+         'mapOpponents' => 'MOP',
+         'mapPrefOpponents' => 'MPO',
+         'mapTools' => 'MTL',
+         'mapX' => 'MWD',
+         'mapY' => 'MHT',
+         'mapDrawtextwp' => 'MDT'
+         );
     $prefs=listUserPref($idu);
     while ( $pref = current($prefs) ) { 
       $info[$mapvar[key($prefs)]] = $pref;
@@ -163,8 +163,8 @@ function get_info_array($idu) {
       /*(id,time,PIM,PIP,status)*/
       $p_key = sprintf("PIL%d", $numligne);
       $info[$p_key] = sprintf("%d,%d,%d,%s,%s", $pilototo_row['TID'],
-			      $pilototo_row['TTS'], $pilototo_row['PIM'],
-			      $pilototo_row['PIP'], $pilototo_row['STS']);
+                              $pilototo_row['TTS'], $pilototo_row['PIM'],
+                              $pilototo_row['PIP'], $pilototo_row['STS']);
       $numligne++;
     }
     while($numligne<=PILOTOTO_MAX_EVENTS) {
@@ -272,9 +272,9 @@ $password=quote_smart($_REQUEST['password']);
 // Les clients Linux modernes utilisent l'UTF-8, alors que les clients Windows subsistent en IDO88591
 // On teste donc checkaccount en conversion ISO8859-1   *ET*  en UTF-8
 if ( checkAccount(htmlentities($pseudo,ENT_COMPAT), 
-		  htmlentities($password, ENT_COMPAT)) != $idu 
+      htmlentities($password, ENT_COMPAT)) != $idu 
      && checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
-		     htmlentities($password, ENT_COMPAT,"UTF-8")) != $idu  ) {
+         htmlentities($password, ENT_COMPAT,"UTF-8")) != $idu  ) {
   switch ($fmt) {
   case "json":
     break;
