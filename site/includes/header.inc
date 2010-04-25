@@ -156,7 +156,7 @@
    <meta name="verify-v1" content="m1CKSCjEAPxc1+D27ol3vqe87xq3L+LlTNK0pmV78Ns=" />
    <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
    <link rel="icon" type="image/png" href="images/site/favicon.png" />
-   <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/races.php">
+   <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/races.rss2.php">
    <link rel="alternate" type="text/ical" title="ICAL" href="/ical/races.php">
    <title>Virtual Loup-De-Mer </title>
 
