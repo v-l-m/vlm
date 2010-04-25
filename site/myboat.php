@@ -116,7 +116,7 @@ include_once("scripts/myboat.js");
 
     </div>
 <?php
-        $user_ranking=$usersObj->users->getCurrentRanking() ;
+        $user_ranking=$usersObj->getCurrentRanking() ;
 ?>
     <div id="racenamebox">
         <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">

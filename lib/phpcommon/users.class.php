@@ -329,33 +329,6 @@ class users
       return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);
   }
 
-  function getCurrentRanking() {
-      $ar = $this->getCurrentUserRanking();
-      $ret = $ar['rankracing'];
-      if ($ar['rankracing'] != $ar['rank']) {
-          $ret .= " (".$ar['rank'].")";
-      }
-      $ret .= " / ".$ar['nbu'];
-      return $ret;
-  }
-
-  function getCurrentUserRanking() {
-    $query = sprintf("SELECT count(DISTINCT idusers) AS nbracing, count(IF(nwp >= %d AND dnm < %f, 1, 0))+1 AS rankracing ".
-                     "FROM races_ranking WHERE idusers > 0 AND idraces = %d ORDER BY nwp DESC, dnm ASC", $this->nwp, $this->dnm, $this->engaged) ;
-    print $query;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    $rowracing = mysql_fetch_array($result, MYSQL_ASSOC);
-    // we do add num_arrived boats to each counters
-    $query = "SELECT count(*) AS nbarrived FROM races_results where position = " . BOAT_STATUS_ARR . " AND idraces = " . $this->engaged;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    $rowarrived = mysql_fetch_array($result, MYSQL_ASSOC);
-    print_r($rowracing);
-    print_r($rowarrived);
-    return array("rankracing" => $rowracing['rankracing'], "nbu" => $rowracing['nbracing']+$rowarrived['nbarrived'],
-                  "rank" => $rowracing['rankracing']+$rowarrived['nbarrived']);
-}
-
-
 }
 
 class fullUsers
@@ -1333,6 +1306,30 @@ class fullUsers
 
     return $sum;
   }
+
+  function getCurrentRanking() {
+      $ar = $this->getCurrentUserRanking();
+      $ret = $ar['rankracing'];
+      if ($ar['rankracing'] != $ar['rank']) {
+          $ret .= " (".$ar['rank'].")";
+      }
+      $ret .= " / ".$ar['nbu'];
+      return $ret;
+  }
+
+  function getCurrentUserRanking() {
+    $query = sprintf("SELECT count(DISTINCT idusers) AS nbracing, SUM(IF(dnm IS NOT NULL AND nwp >= %d AND dnm < %f, 1, 0))+1 AS rankracing ".
+                     "FROM races_ranking WHERE idusers > 0 AND idraces = %d ORDER BY nwp DESC, dnm ASC", $this->users->nwp, $this->distancefromend, $this->users->engaged) ;
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+    $rowracing = mysql_fetch_array($result, MYSQL_ASSOC);
+    // we do add num_arrived boats to each counters
+    $query = "SELECT count(*) AS nbarrived FROM races_results where position = " . BOAT_STATUS_ARR . " AND idraces = " . $this->users->engaged;
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+    $rowarrived = mysql_fetch_array($result, MYSQL_ASSOC);
+    return array("rankracing" => $rowracing['rankracing'], "nbu" => $rowracing['nbracing']+$rowarrived['nbarrived'],
+                  "rank" => $rowracing['rankracing']+$rowarrived['nbarrived']);
+}
+
 
 }
 
