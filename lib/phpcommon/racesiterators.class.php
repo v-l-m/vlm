@@ -42,8 +42,8 @@
             $vevent->setProperty( 'dtstart', array('timestamp' => $row['deptime']) );
             $vevent->setProperty( "organizer" , EMAIL_COMITE_VLM );
             $vevent->setProperty( 'dtend', array('timestamp' => $row['closetime']) );
-            $vevent->setProperty( 'summary', $row['racename'] );
-            $vevent->setProperty( 'description', $row['racename']." ( ".substr($row['boattype'], 5 )." ) " );
+            $vevent->setProperty( 'summary', html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8") );
+            $vevent->setProperty( 'description', html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8")." ( ".substr($row['boattype'], 5 )." ) " );
             //FIXME: construction de l'url ???
             $vevent->setProperty( 'url', sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']));
             $this->icalobject->setComponent ( $vevent ); // add event to calendar
