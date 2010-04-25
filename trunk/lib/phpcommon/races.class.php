@@ -310,29 +310,28 @@ class races {
         return $ret;
     }
 
-    function htmlRaceDescription($lang) {
-        //FIXME : ugly.
-        global $strings;
+    function htmlRaceDescription() {
+        $lang = getCurrentLang();
         $idraces = $this->idraces;
         $ret  = "<div id=\"raceheader\">\n";
-        $ret .= $this->htmlRaceTitle($strings[$lang]["racestarted"]);
-        $ret .= $this->htmlRacePolar($strings[$lang]["boattype"]);
-        $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".$strings[$lang]["ranking"]."</a></h3>";
+        $ret .= $this->htmlRaceTitle(getStrings("racestarted"));
+        $ret .= $this->htmlRacePolar(getStrings("boattype"));
+        $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".getStrings("ranking")."</a></h3>";
         $ret .= "</div>\n";
 
         // Carte de la course
         $ret .= "<div id=\"racemap\">\n";
-        $ret .= $this->htmlRaceMap($strings[$lang]["racemap"]);
+        $ret .= $this->htmlRaceMap(getStrings("racemap"));
         $ret .= "</div>\n";
 
         $ret .= "<div id=\"ic\">\n";
-        $ret .= "<h3>".$strings[$lang]["ic"]."</h3>\n";
-        $ret .= $this->htmlIC($strings[$lang]["icforum"]);
+        $ret .= "<h3>".getStrings("ic")."</h3>\n";
+        $ret .= $this->htmlIC(getStrings("icforum"));
         $ret .= "</div>\n";    
 
         $ret .= "<div id=\"waypoints\">\n";
         $ret .= "<h3>Waypoints</h3>\n";
-        $ret .= $this->htmlWaypoints($strings[$lang]["startmap"]);
+        $ret .= $this->htmlWaypoints(getStrings("startmap"));
         $ret .= "</div>\n";
         return $ret;
     }
