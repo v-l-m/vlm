@@ -1479,36 +1479,6 @@ function getRaceRanking($idusers, $idraces) {
   }
 }
 
-// Race is up for some boats, we want to display the boat position
-function getCurrentRanking($idusers, $idraces) {
-
-  $rank_ar = getCurrentUserRanking($idusers, $idraces);
-
-  return ($rank_ar[0] . "/" . $rank_ar[1]);
-}
-
-function getCurrentUserRanking($idusers, $idraces) {
-  // search for old races for this player
-  $query = "SELECT idusers from races_ranking where idusers >0 and idraces = " . $idraces . " order by nwp DESC, dnm ASC" ;
-  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-  $nbu=0;
-  while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
-    if( $row[0] == $idusers ) $rank=$nbu+1;
-    //printf ("IDU=%d, RANK=%d<BR>\n", $row[0], $nbu);
-    $nbu++;
-  }
-  // we do add num_arrived boats to each counters
-  $query = "SELECT count(*) from races_results where position = " . BOAT_STATUS_ARR . 
-    " AND idraces = " . $idraces;
-  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  $nb_arr= $row[0];
-  $nbu+=$nb_arr;
-  $rank+=$nb_arr;
-
-  return array ($rank, $nbu);
-}
-
 function findNearestOpponents($idraces,$idusers,$num) {
 
   $ret_array=array();
