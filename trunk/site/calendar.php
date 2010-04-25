@@ -12,6 +12,7 @@
                 header: { left: 'title', center: '', right:  'today prev,next'},
                 firstDay: 1,
                 events: "/feed/races.fullcalendar.php",
+                timeFormat: 'H:mm',
                 loading: function(bool) {
                     if (bool) $('#loading').show();
                     else $('#loading').hide();
@@ -37,6 +38,14 @@
     </style>
         <div id='loading' style='display:none'>loading...</div>
         <div id='calendar'></div>
+        <hr />
+        <div id='ical-help-box'>
+        <?php
+            echo nl2br($strings[$lang]["icalhelpbox"]);
+            echo "&nbsp;<b>http://".$_SERVER['SERVER_NAME']."/feed/races.ical.php</b>";
+                
+        ?>
+        </div>
 <?php
     include_once("includes/footer.inc");
 ?>
