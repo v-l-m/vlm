@@ -1,15 +1,14 @@
 <?php
 include_once("includes/header.inc");
 include_once("config.php");
-//include_once("includes/strings.inc");
 
 /*
  * Affichage de l'onglet 
  * de choix du classement 
  */
 function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr") {
-    //echo "<H1>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</H1>";
-    echo "<h1>".$strings[$lang]["rankingtype"]."</h1>";
+    //echo "<H1>" ; printf (getLocalizedString("palmares"),$idusers); echo "</H1>";
+    echo "<h1>".getLocalizedString("rankingtype")."</h1>";
 
     $tables = array();
 
@@ -126,7 +125,7 @@ if ( $q == "" ) $q = "arrived";
 
 if ( $q == "palmares" ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
-  echo "<h1>" ; printf ($strings[$lang]["palmares"],$idusers); echo "</h1>";
+  echo "<h1>" ; printf (getLocalizedString("palmares"),$idusers); echo "</h1>";
   displayPalmares($idusers);
 }
 
@@ -143,8 +142,8 @@ if ($idraces != 0) {
 
     //show alls races
     echo "<div id=\"raceheader\">\n";
-        printf("<h3>".$strings[$lang]["racestarted"]."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));
-        echo "<h3><a href=\"ics.php?lang=".$lang."&amp;idraces=".$idraces."\">".$strings[$lang]["ic"]."</a></h3>";
+        printf("<h3>".getLocalizedString("racestarted")."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));
+        echo "<h3><a href=\"ics.php?lang=".$lang."&amp;idraces=".$idraces."\">".getLocalizedString("ic")."</a></h3>";
     echo "</div>\n";     
 
           // Carte de la course
@@ -215,10 +214,10 @@ if ($idraces != 0) {
                $fullRacesObj->dispHtmlClassification($strings, $lang, $numarrived, "nwp desc, dnm asc", $disttype, $startnum);
            }
        } else {
-           printf( "<h3>". $strings[$lang]["hasnotstart"]."<br /><b>\n",$fullRacesObj->races->racename);
+           printf( "<h3>". getLocalizedString("hasnotstart")."<br /><b>\n",$fullRacesObj->races->racename);
            $departure = gmdate("Y/m/d H:i:s",$fullRacesObj->races->deptime)." GMT";
-           echo "</b>" . $strings[$lang]["departuredate"]." : $departure </h3>\n";
-           echo "<h4>".$strings[$lang]["playersengaged"]."</h4>";
+           echo "</b>" . getLocalizedString("departuredate")." : $departure </h3>\n";
+           echo "<h4>".getLocalizedString("playersengaged")."</h4>";
            $fullRacesObj->dispHtmlEngaged($strings, $lang, $startnum);
        }
     }
@@ -243,7 +242,7 @@ if ($idraces != 0) {
   
     echo "<p>";
     echo '<a href="races.php?lang='.$lang.'"> ';
-    echo $strings[$lang]["see"]."</a>"; 
+    echo getLocalizedString("see")."</a>"; 
     echo "</p>";
 
           echo "<table class=\"boat\"><tr class=\"boat\">";
@@ -259,10 +258,10 @@ if ($idraces != 0) {
 
 } else  { //idraces ==0 means display all races
     if (isset($_REQUEST['fulllist']) and $_REQUEST['fulllist']=1) {
-        echo "<h4>".$strings[$lang]["races"]."</h4>";
+        echo "<h4>".getLocalizedString("races")."</h4>";
         dispHtmlRacesList($strings, $lang);
     } else {
-        echo "<h4>".$strings[$lang]["current_races"]."&nbsp;(<a href=\"races.php?lang=$lang&fulllist=1\">".$strings[$lang]["see"]."</a>)"."</h4>";
+        echo "<h4>".getLocalizedString("current_races")."&nbsp;(<a href=\"races.php?lang=$lang&fulllist=1\">".getLocalizedString("see")."</a>)"."</h4>";
         dispHtmlCurrentRacesList($strings, $lang);
     }
 }

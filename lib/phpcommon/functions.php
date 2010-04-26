@@ -68,11 +68,11 @@ function getCurrentLang() {
     return $lang;
 }
 
-function getStrings($key) {
+function getLocalizedString($key) {
     static $stringarray = null;
     static $lang = null;
     if (is_null($stringarray)) {
-        include("includes/strings.inc");
+        include($_SERVER['DOCUMENT_ROOT']."/includes/strings.inc");
         $lang = getCurrentLang();
         if (!array_key_exists($lang, $strings)) $lang = "en";
         $stringarray = $strings;
@@ -209,7 +209,7 @@ function errorprint($message) {
 function lastUpdate($strings, $lang)
 {
   if (file_exists(CRONVLMLOCK)) {
-    printf ($strings[$lang]["processing"] );
+    printf (getLocalizedString("processing") );
   } else {
     $query2 = "SELECT UNIX_TIMESTAMP(`time`) as time,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
     $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
@@ -222,7 +222,7 @@ function lastUpdate($strings, $lang)
     $interval = time() - $lastupdate;
 
     $intervalarray = duration2string($interval);
-    printf ( $strings[$lang]["lastupdate"]. " <br />\n",
+    printf ( getLocalizedString("lastupdate"). " <br />\n",
              gmdate('H:i:s', time() ) . ' GMT', $intervalarray['hours'],$intervalarray['minutes'],$intervalarray['seconds'] );
     printf ("%s seconds (<span title=\"%s\">%d race(s)</span>, %d boat(s)), %2.2f boats/sec (<a target=\"_blank\" href=\"status/race-engine-status.php\" rel=\"nofollow\">status page</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
   }
@@ -260,12 +260,12 @@ function nextUpdate($strings, $lang)
   //echo "interval = $interval et DELAYBETWEENUPDATE ".DELAYBETWEENUPDATE."\n";
   if ($interval > DELAYBETWEENUPDATE) //problems during update
     {
-      printf("         ".$strings[$lang]["noupdate"]."\n");
+      printf("         ".getLocalizedString("noupdate")."\n");
     }
   else
     {
       $next = duration2string(DELAYBETWEENUPDATE - $interval);
-      printf("      ".$strings[$lang]["nextupdate"], $next['hours'], $next['minutes'] );
+      printf("      ".getLocalizedString("nextupdate"), $next['hours'], $next['minutes'] );
     }
 }
 
@@ -942,15 +942,15 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
           $html .= gmdate("Y/m/d H:i:s",$rowdatas['deptime']);
       } else if ( $rowdatas['started'] == -1 ) {
           // Finished
-          $html .= $strings[$lang]["finished"];
+          $html .= getLocalizedString("finished");
       } else {
           // La course est elle encore ouverte ?
           if ( $rowdatas['closetime'] > time() ) {
               $html .= "<img src=\"/images/site/yellowarrow.gif\" alt=\"open\" />" ;
-              $html .= $strings[$lang]["already"];
+              $html .= getLocalizedString("already");
           } else {
             $html .= "<img src=\"/images/site/redarrow.gif\" alt\"=closed\" />" ;
-            $html .= $strings[$lang]["closed"];
+            $html .= getLocalizedString("closed");
           }
       }
       $html .= "</td>\n";
@@ -974,11 +974,11 @@ function dispHtmlRacesList($strings, $lang, $where = "") {
   echo "<table>\n";
   echo "<thead>\n";
   echo "    <tr>\n";
-  echo "    <th>".$strings[$lang]["raceid"]."</th>\n";
-  echo "    <th>".$strings[$lang]["racename"]."</th>\n";
-  echo "    <th>".$strings[$lang]["departuredate"]." (GMT)</th>\n";
-  echo "    <th>". join('<br />', split("/", $strings[$lang]["racenumboats"]))."</th>\n";
-  echo "    <th>".$strings[$lang]["map"]."</th>\n";
+  echo "    <th>".getLocalizedString("raceid")."</th>\n";
+  echo "    <th>".getLocalizedString("racename")."</th>\n";
+  echo "    <th>".getLocalizedString("departuredate")." (GMT)</th>\n";
+  echo "    <th>". join('<br />', split("/", getLocalizedString("racenumboats")))."</th>\n";
+  echo "    <th>".getLocalizedString("map")."</th>\n";
   echo "    </tr>\n";
   echo "   </thead>\n";
   echo "  <tbody>\n";
@@ -1552,8 +1552,6 @@ function findTopUsers($idraces,$num) {
 
 function displayPalmares($lang, $idusers) {
 
-  include "includes/strings.inc"; // FIXME : très gore !
-
   // search for old races for this player
   $query = "SELECT idraces from races_results where idusers = " . $idusers ;
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
@@ -1561,9 +1559,9 @@ function displayPalmares($lang, $idusers) {
   echo "<table>\n";
   echo "<thead>\n";
   echo "    <tr>\n";
-  echo "    <th>".$strings[$lang]["raceid"]."</th>\n";
-  echo "    <th>".$strings[$lang]["racename"]."</th>\n";
-  echo "    <th>".$strings[$lang]["arrived"]."</th>\n";
+  echo "    <th>".getLocalizedString("raceid")."</th>\n";
+  echo "    <th>".getLocalizedString("racename")."</th>\n";
+  echo "    <th>".getLocalizedString("arrived")."</th>\n";
   echo "    </tr>\n";
   echo "</thead>\n";
   echo "<tbody>\n";

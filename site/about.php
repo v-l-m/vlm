@@ -4,22 +4,22 @@ include_once("config.php");
 
 ?>
 
-<h3><?php echo $strings[$lang]["author"];?></h3>
-<p><?php echo $strings[$lang]["authorinfo"];?></p>
+<h3><?php echo getLocalizedString("author");?></h3>
+<p><?php echo getLocalizedString("authorinfo");?></p>
 
-<h3><?php echo $strings[$lang]["mainteneur"];?></h3>
-<p><?php echo $strings[$lang]["mainteneurinfo"];?></p>
+<h3><?php echo getLocalizedString("mainteneur");?></h3>
+<p><?php echo getLocalizedString("mainteneurinfo");?></p>
 
 
 <!--
-  <h3><?php  echo $strings[$lang]["contact"];?></h3>
+  <h3><?php  echo getLocalizedString("contact");?></h3>
 -->
 
-  <h3><?php  echo $strings[$lang]["contributors"];?></h3> 
-  <p><?php  echo $strings[$lang]["contributorstext"];?></p>
+  <h3><?php  echo getLocalizedString("contributors");?></h3> 
+  <p><?php  echo getLocalizedString("contributorstext");?></p>
 
-<h3><?php   echo $strings[$lang]["howtohelp"];?></h3> 
-<?php   echo $strings[$lang]["howtohelptext"];?>
+<h3><?php   echo getLocalizedString("howtohelp");?></h3> 
+<?php   echo getLocalizedString("howtohelptext");?>
 
 
 <!--
@@ -34,19 +34,19 @@ include_once("config.php");
 -->
 
 <!--
-  <h3><?php  echo $strings[$lang]["sourcecode"];?></h3>
-  <p><?php  echo $strings[$lang]["sourcecodetext"];?> <a href="vlm.0.4.2.tar.gz">package source</a></p>
+  <h3><?php  echo getLocalizedString("sourcecode");?></h3>
+  <p><?php  echo getLocalizedString("sourcecodetext");?> <a href="vlm.0.4.2.tar.gz">package source</a></p>
 -->
 
 
-<h3><?php  echo $strings[$lang]["webstandard"];?></h3>
+<h3><?php  echo getLocalizedString("webstandard");?></h3>
 <p>
-<?echo $strings[$lang]["webstandardtext"];?>
+<?echo getLocalizedString("webstandardtext");?>
 </p>
 
-<h3><?php  echo $strings[$lang]["tools"];?></h3>
+<h3><?php  echo getLocalizedString("tools");?></h3>
 <p>
-<?php echo $strings[$lang]["toolstext"];?>
+<?php echo getLocalizedString("toolstext");?>
 </p>
 
 <?php 

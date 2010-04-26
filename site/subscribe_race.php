@@ -12,7 +12,7 @@
     }
   
     if ( $select_list != "" ) {
-        echo "<h1>".$strings[$lang]["sub_race"]."</h1>";
+        echo "<h1>".getLocalizedString("sub_race")."</h1>";
 ?>
     <form action="myboat.php">
         <select name="idraces">
@@ -23,11 +23,11 @@
         <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
         <input type="hidden" name="type" value="subscribe"/>
         <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-        <input type="submit" value="<?php echo $strings[$lang]["subscribe"]?>" />
+        <input type="submit" value="<?php echo getLocalizedString("subscribe"); ?>" />
         </form>
 
 <?php 
     } else { 
-        echo $strings[$lang]["norace"];
+        echo getLocalizedString("norace");
     } 
 ?>

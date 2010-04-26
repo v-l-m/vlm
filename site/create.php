@@ -13,17 +13,17 @@ include_once("config.php");
 
       // do field validation
       if ((form.pseudo.value == "") || (form.password.value == "")) {
-        alert( "<?php echo $strings[$lang]["loginempty"]; ?>"); 
+        alert( "<?php echo getLocalizedString("loginempty"); ?>"); 
         return false;
       } else if (r.exec(form.pseudo.value) || form.pseudo.value.length < 3) {
-        alert( "<?php echo $strings[$lang]["malformedlogin"]; ?>" ); 
+        alert( "<?php echo getLocalizedString("malformedlogin"); ?>" ); 
         return false;
       // SkYDuST : Je pense qu'il faudrait ajouter un champ email pour pouvoir envoyer des communications (et aussi pour la securite)
       // FIXME: a fixer le jour on on demandera une confirmation par mail.
       //} else if (form.email.value == "") {
       //  alert( "vous devez entrer votre mail" );
       } else if (r.exec(form.password.value)) {
-        alert( "<?php echo $strings[$lang]["malformedpassword"]; ?>" );
+        alert( "<?php echo getLocalizedString("malformedpassword"); ?>" );
         return false;
       } else {
         return true;
@@ -37,18 +37,18 @@ include_once("config.php");
 
 echo "<div id=\"createbox\">";
 
-    echo "<h2>".$strings[$lang]["chooseaccount"]."</h2>"; ?>
+    echo "<h2>".getLocalizedString("chooseaccount")."</h2>"; ?>
 
     <form onSubmit="return submitbutton();"  action="myboat.php" method="post" name="myboat">
-        <span class="texthelpers"><?echo $strings[$lang]["login_name"]?></span>
+        <span class="texthelpers"><?echo getLocalizedString("login_name")?></span>
         <input size="15" maxlength="15" name="pseudo"/>
-        <span class="texthelpers"><?echo $strings[$lang]["password"]?></span>
+        <span class="texthelpers"><?echo getLocalizedString("password")?></span>
         <input size="15" maxlength="15" name="password"/>
         <input type="hidden" name="lang" value="<?echo $lang?>"/>
         <input type="hidden" name="type" value="create"/>
         <input type="submit" />
     </form> 
-    <p><?php echo nl2br($strings[$lang]["createaccountrules"]); ?></p>
+    <p><?php echo nl2br(getLocalizedString("createaccountrules")); ?></p>
 </div>
 
 

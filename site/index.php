@@ -8,25 +8,25 @@
     if (!isLoggedIn()) {
 ?>
     <div id="whatisvlmbox" class="basic">
-      <h1><?php echo $strings[$lang]["homeofsailing"]; ?></h1>
-      <p><?php echo $strings[$lang]["q1"]; ?></p>
-      <p><?php echo $strings[$lang]["a1"]; ?></p>
+      <h1><?php echo getLocalizedString("homeofsailing"); ?></h1>
+      <p><?php echo getLocalizedString("q1"); ?></p>
+      <p><?php echo getLocalizedString("a1"); ?></p>
 
-      <p><?php echo $strings[$lang]["sh1"]; ?>
+      <p><?php echo getLocalizedString("sh1"); ?>
       <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
-         <img src="images/site/documentation.png"  alt="<?php echo $strings[$lang]["doc"]; ?>" title="<?php echo $strings[$lang]["doc"]; ?>" />
+         <img src="images/site/documentation.png"  alt="<?php echo getLocalizedString("doc"); ?>" title="<?php echo getLocalizedString("doc"); ?>" />
       </a>
-      <?php echo $strings[$lang]["sh2"]; ?>
+      <?php echo getLocalizedString("sh2"); ?>
       <a href="http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM" target="_outils">
-         <img src="images/site/outils.png" alt="<?php echo $strings[$lang]["tools"]; ?>" title="<?php echo $strings[$lang]["tools"]; ?>"/>
+         <img src="images/site/outils.png" alt="<?php echo getLocalizedString("tools"); ?>" title="<?php echo getLocalizedString("tools"); ?>"/>
       </a></p>
 
-      <p><?php echo $strings[$lang]["sh3"]; ?>
-      <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo $strings[$lang]["forum"]?></a>
-      <?php echo $strings[$lang]["sh4"]; ?>
+      <p><?php echo getLocalizedString("sh3"); ?>
+      <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo getLocalizedString("forum")?></a>
+      <?php echo getLocalizedString("sh4"); ?>
             <?php
             echo "<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
-            echo $strings[$lang]["tchat"];
+            echo getLocalizedString("tchat");
             ?>
       </a></p>
 
@@ -42,7 +42,7 @@
 ?>    
 
     <div id="oneoneonebox" class="basic">
-      <h1 class="info"><?php echo $strings[$lang]["one-one-one"]; ?></h1>
+      <h1 class="info"><?php echo getLocalizedString("one-one-one"); ?></h1>
     </div>
 
     <div id="raceslistbox" class="basic">
@@ -63,7 +63,7 @@
     $resultnbu = mysql_query($querynbu) or die("Query [$querynbu] failed \n");
 
     $row = mysql_fetch_array($resultnbu, MYSQL_ASSOC);
-    printf( "<h4>" . $strings[$lang]["nbplayers"]. "</h4>", $row['nbu']);
+    printf( "<h4>" . getLocalizedString("nbplayers"). "</h4>", $row['nbu']);
 ?>
     </div>
     

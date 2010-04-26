@@ -1,12 +1,11 @@
 <?php 
     include_once("includes/header.inc");
     include_once("config.php");
-    include_once("includes/strings.inc");
 
     if ( isLoggedIn() ) {
         $query = "SELECT time as TIME, HEX(CRC32(ipaddr)) as `COMPUTER ID`, action as ACTION FROM user_action WHERE idusers = ".getLoginId()." ORDER BY time DESC LIMIT 20;";
         htmlQuery($query);
-        echo "<h3>".$strings[$lang]["computerid"]."</h3>";
+        echo "<h3>".getLocalizedString("computerid")."</h3>";
 
     } else {
         echo "<h4>You should not do that...your IP : " . getip() . "</h4>";

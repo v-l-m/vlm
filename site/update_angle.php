@@ -40,7 +40,7 @@ if ($idusers != 0 )
       $fullUsersObj->writeNewheading($pilotmode, $boatheading, $pilotparameter);
 
 
-      echo "<h1 align=\"center\">&nbsp;<br />&nbsp;<br />" . $strings[$lang]["angleupdated"] . "<br />&nbsp;<br />&nbsp;</h1>";
+      echo "<h1 align=\"center\">&nbsp;<br />&nbsp;<br />" . getLocalizedString("angleupdated") . "<br />&nbsp;<br />&nbsp;</h1>";
   } else {
       printf ("<h1>This is not a nice thing to try this.</h1>");
       printf ("<h2>Your IP address is : " . getip() . "</h2>\n");

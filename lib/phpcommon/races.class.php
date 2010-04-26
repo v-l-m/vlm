@@ -314,24 +314,24 @@ class races {
         $lang = getCurrentLang();
         $idraces = $this->idraces;
         $ret  = "<div id=\"raceheader\">\n";
-        $ret .= $this->htmlRaceTitle(getStrings("racestarted"));
-        $ret .= $this->htmlRacePolar(getStrings("boattype"));
-        $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".getStrings("ranking")."</a></h3>";
+        $ret .= $this->htmlRaceTitle(getLocalizedString("racestarted"));
+        $ret .= $this->htmlRacePolar(getLocalizedString("boattype"));
+        $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".getLocalizedString("ranking")."</a></h3>";
         $ret .= "</div>\n";
 
         // Carte de la course
         $ret .= "<div id=\"racemap\">\n";
-        $ret .= $this->htmlRaceMap(getStrings("racemap"));
+        $ret .= $this->htmlRaceMap(getLocalizedString("racemap"));
         $ret .= "</div>\n";
 
         $ret .= "<div id=\"ic\">\n";
-        $ret .= "<h3>".getStrings("ic")."</h3>\n";
-        $ret .= $this->htmlIC(getStrings("icforum"));
+        $ret .= "<h3>".getLocalizedString("ic")."</h3>\n";
+        $ret .= $this->htmlIC(getLocalizedString("icforum"));
         $ret .= "</div>\n";    
 
         $ret .= "<div id=\"waypoints\">\n";
         $ret .= "<h3>Waypoints</h3>\n";
-        $ret .= $this->htmlWaypoints(getStrings("startmap"));
+        $ret .= $this->htmlWaypoints(getLocalizedString("startmap"));
         $ret .= "</div>\n";
         return $ret;
     }
@@ -459,9 +459,9 @@ class fullRaces {
     echo "\n<table>\n";
     echo "  <thead>\n";
     echo "    <tr>\n";
-    //    echo "      <th>".$strings[$lang]["country"]."</th>\n";
-    echo "      <th>".$strings[$lang]["skipper"]."</th>\n";
-    echo "      <th>".$strings[$lang]["boat"]."</th>\n";
+    //    echo "      <th>".getLocalizedString("country")."</th>\n";
+    echo "      <th>".getLocalizedString("skipper")."</th>\n";
+    echo "      <th>".getLocalizedString("boat")."</th>\n";
     echo "    </tr>\n";
     echo "  </thead>\n";
     echo "  <tbody>\n";
@@ -536,18 +536,18 @@ class fullRaces {
     // Si on est en cours de Blackout, on prévient
     echo "<h3>";
     if ( $this->races->bobegin < $now && $now < $this->races->boend ) {
-        echo $strings[$lang]["classification"]
-          .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->bobegin);
+        echo getLocalizedString("classification")
+          .gmdate(getLocalizedString("dateClassificationFormat"), $this->races->bobegin);
         echo "<br />\n";
-        echo $strings[$lang]["blackout"]
-          .gmdate($strings[$lang]["dateClassificationFormat"], $this->races->boend);
+        echo getLocalizedString("blackout")
+          .gmdate(getLocalizedString("dateClassificationFormat"), $this->races->boend);
     } else {
-        echo $strings[$lang]["classification"]
-          .gmdate($strings[$lang]["dateClassificationFormat"], $classification_time);
+        echo getLocalizedString("classification")
+          .gmdate(getLocalizedString("dateClassificationFormat"), $classification_time);
     }
     echo "</h3>\n";
 
-    //echo $strings[$lang]["classification_dnf"]."<BR><BR>";
+    //echo getLocalizedString("classification_dnf")."<BR><BR>";
 
 
 
@@ -560,36 +560,36 @@ class fullRaces {
     echo "<th>Pos.</th>\n"; 
 
     // Titre colonne SKIPPER (avec appels des tris)
-    $str=$strings[$lang]["skipper"];
+    $str=getLocalizedString("skipper");
     $str.=" <a href=\"".$baseurl."&amp;sortkey=idusers&amp;sortorder=asc\">+</a>";
     $str.=" <a href=\"".$baseurl."&amp;sortkey=idusers&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     // Distance à la prochaine marque (c'est le tri par défaut)
-    $str="<a href=\"".$baseurl."\">".$strings[$lang]["distance"]."</a>";
+    $str="<a href=\"".$baseurl."\">".getLocalizedString("distance")."</a>";
     echo "<th>".$str."</th>\n";
 
     // Temps de course
-    $str=$strings[$lang]["racingtime"];
+    $str=getLocalizedString("racingtime");
     $str.=" <a href=\"".$baseurl."&amp;sortkey=userdeptime&amp;sortorder=asc\">+</a>";
     $str.=" <a href=\"".$baseurl."&amp;sortkey=userdeptime&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     // Distance parcourue
-    $str=$strings[$lang]["loch"];
+    $str=getLocalizedString("loch");
     $str.=" <a href=\"".$baseurl."&amp;sortkey=loch&amp;sortorder=asc\">+</a>";
     $str.=" <a href=\"".$baseurl."&amp;sortkey=loch&amp;sortorder=desc\">-</a>";
     echo "<th>".$str."</th>\n";
 
     // Position : tris nord,sud/west,east
-    $str=$strings[$lang]["position"];
+    $str=getLocalizedString("position");
     $str.=" <a href=\"".$baseurl."&amp;sortkey=latitude&amp;sortorder=desc\">^</a>";
     $str.=" <a href=\"".$baseurl."&amp;sortkey=latitude&amp;sortorder=asc\">v</a>";
     $str.=" <a href=\"".$baseurl."&amp;sortkey=longitude&amp;sortorder=asc\">&lt;</a>";
     $str.=" <a href=\"".$baseurl."&amp;sortkey=longitude&amp;sortorder=desc\">&gt;</a>";
     echo "<th>".$str."</th>\n";
 
-    //   echo "<th>".$strings[$lang]["speed"]."</th>\n";
+    //   echo "<th>".getLocalizedString("speed")."</th>\n";
     //   echo "<th>Cap</th>\n";
 
     // Distances parcourues sur 1h, 3h, 24h...
@@ -610,7 +610,7 @@ class fullRaces {
 
 
     // Ecart par rapport au premier : pas de tri
-    $str=$strings[$lang]["ecart"];
+    $str=getLocalizedString("ecart");
     if ( strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) == "tonm" ) { 
         $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
     } else {
@@ -693,14 +693,14 @@ class fullRaces {
 
       // we give distance to the next WP
       printf( "<td>" . "[" . $row['nwp'] . "]" . "->" .
-              $strings[$lang]["nautics"].
+              getLocalizedString("nautics").
               "</td>\n", $row['dnm']);
 
       // Give the racing time (if the boat has started)
       if ( $row['nwp'] != 0 ) {
         $racingtime=$now-$row['userdeptime'];
         $duration = duration2string($racingtime);
-        printf("      <td>".$duration['prefix'].$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
+        printf("      <td>".$duration['prefix'].getLocalizedString("days")."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
       } else {
         printf("      <td>-</td>\n");
       }
@@ -759,7 +759,7 @@ class fullRaces {
       }
 
       // Affichage de la vitesse
-      //printf( "<td>".$strings[$lang]["knots"]."</td>\n", $usersObj->boatspeed);
+      //printf( "<td>".getLocalizedString("knots")."</td>\n", $usersObj->boatspeed);
 
       // Affichage du cap du voilier
       //printf( "<td>"."%3d"."</td>\n", $usersObj->users->boatheading);
@@ -821,16 +821,16 @@ class fullRaces {
     /*
       echo "<thead>\n";
       echo "<tr>\n";
-      //echo "<th>".$strings[$lang]["position"]."</th>\n";
+      //echo "<th>".getLocalizedString("position")."</th>\n";
       echo "<th class=htmltable>&nbsp;</th>\n";
-      //echo "<th>".$strings[$lang]["skipper"]."</th>\n";
-      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      //echo "<th>".getLocalizedString("skipper")."</th>\n";
+      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
       echo "<th class=htmltable>&nbsp;</th>\n";
-      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
       echo "<th class=htmltable>&nbsp;</th>\n";
-      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
       echo "<th class=htmltable>&nbsp;</th>\n";
-      echo "<th class=htmltable>".$strings[$lang]["boat"]."</th>\n";
+      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
       echo "</tr>\n";
       echo "</thead>\n";
     */
@@ -859,7 +859,7 @@ class fullRaces {
           $printtd = 1;
         }
         echo "<tr class=\"htmltable\">";
-        echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . $strings[$lang]["valider"] . "\" /></td>";
+        echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . getLocalizedString("valider") . "\" /></td>";
         echo "</tr><tr class=\"htmltable\">";
         echo "<td class=\"htmltable\" colspan=\"8\"><b>RACE " . $lastrace . "</b></td>";
         echo "</tr><tr class=\"htmltable\">";
@@ -993,19 +993,19 @@ class fullRaces {
 
     switch ($status) {
     case BOAT_STATUS_ARR:
-      echo "<h4>".$strings[$lang]["raceresultarr"]."</h4>";
+      echo "<h4>".getLocalizedString("raceresultarr")."</h4>";
       break;
     case BOAT_STATUS_DNF:
-      echo "<h4>".$strings[$lang]["raceresultdnf"]."</h4>";
+      echo "<h4>".getLocalizedString("raceresultdnf")."</h4>";
       break;
     case BOAT_STATUS_ABD:
-      echo "<h4>".$strings[$lang]["raceresultabd"]."</h4>";
+      echo "<h4>".getLocalizedString("raceresultabd")."</h4>";
       break;
     case BOAT_STATUS_HTP:
-      echo "<h4>".$strings[$lang]["raceresulthtp"]."</h4>";
+      echo "<h4>".getLocalizedString("raceresulthtp")."</h4>";
       break;
     case BOAT_STATUS_HC:
-      echo "<h4>".$strings[$lang]["raceresulthc"]."</h4>";
+      echo "<h4>".getLocalizedString("raceresulthc")."</h4>";
       break;
     }
 
@@ -1014,28 +1014,28 @@ class fullRaces {
     echo "  <thead>\n";
     echo "    <tr class=\"ranking\">\n";
     if ( $status > 0 ) {
-      //echo "      <th>". $strings[$lang]["position"]."</th> \n";
+      //echo "      <th>". getLocalizedString("position")."</th> \n";
       echo "<th>Pos.</th>\n"; // position au classement
     }
-    //    echo "      <th>".$strings[$lang]["country"]."</th>\n";
-    echo "      <th>". $strings[$lang]["skipper"]."</th>\n";
-    // echo "      <th>". $strings[$lang]["boat"]."</th>\n";
+    //    echo "      <th>".getLocalizedString("country")."</th>\n";
+    echo "      <th>". getLocalizedString("skipper")."</th>\n";
+    // echo "      <th>". getLocalizedString("boat")."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
-      echo "      <th>". $strings[$lang]["departuredate"]." (GMT)</th>\n";
-      echo "      <th>". $strings[$lang]["arrived"]." (GMT)</th>\n";
+      echo "      <th>". getLocalizedString("departuredate")." (GMT)</th>\n";
+      echo "      <th>". getLocalizedString("arrived")." (GMT)</th>\n";
     }
-    echo "      <th>". $strings[$lang]["totaltime"]."</th>\n";
+    echo "      <th>". getLocalizedString("totaltime")."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
-      echo "      <th>". $strings[$lang]["ecart"]."</th>\n";
+      echo "      <th>". getLocalizedString("ecart")."</th>\n";
     }
     if ( $status == BOAT_STATUS_DNF ) {
-      echo "      <th>". $strings[$lang]["position"]."</th>\n";
+      echo "      <th>". getLocalizedString("position")."</th>\n";
     }
 
     // Dernière colonne : loch
-    echo "      <th>". $strings[$lang]["loch"]."</th>\n";
+    echo "      <th>". getLocalizedString("loch")."</th>\n";
     if ( $status == BOAT_STATUS_ARR ) {
-      echo "      <th>". $strings[$lang]["penalite"]."</th>\n";
+      echo "      <th>". getLocalizedString("penalite")."</th>\n";
     }
 
     echo "    </tr>\n";
@@ -1105,7 +1105,7 @@ class fullRaces {
           printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime']));
           //        printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$this->races->deptime + $row[duration]));
           printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime'] + $row['duration']));
-          printf("      <td>".$duration['prefix'].$strings[$lang]["days"]."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
+          printf("      <td>".$duration['prefix'].getLocalizedString("days")."</td>\n",$duration['days'],$duration['hours'],$duration['minutes'],$duration['seconds']);
         } else {
           switch ($row['position']) {
           case BOAT_STATUS_HC:
@@ -1125,7 +1125,7 @@ class fullRaces {
         // Calcul de l'écart (temps de course dans un cas, heure d'arrivée dans l'autre)
         if ( $row['position'] == BOAT_STATUS_ARR ) {
           if ( $rank == 1 ) {
-            printf("<td>%s</td>\n",$strings[$lang]["winner"]);
+            printf("<td>%s</td>\n",getLocalizedString("winner"));
           } else {
             if ( $this->races->racetype == RACE_TYPE_CLASSIC) { // && $WP == 0 ) { - Cf. ticket #237
               // ARRIVAL DATE IS THE SORTING KEY
@@ -1140,7 +1140,7 @@ class fullRaces {
               $pct=round(($row['duration'] - $ref_duration)/$ref_duration*100,2);
               //printf ("DU=%d, RDU=%d\n",$row[duration] , $ref_duration);
             }
-            printf("<td>".$ecart['prefix'].$strings[$lang]["days"]."(+%2.2f&#37)</td>\n",$ecart['days'],$ecart['hours'],$ecart['minutes'],$ecart['seconds'],$pct);
+            printf("<td>".$ecart['prefix'].getLocalizedString("days")."(+%2.2f&#37)</td>\n",$ecart['days'],$ecart['hours'],$ecart['minutes'],$ecart['seconds'],$pct);
           }
         }
         if ( $row['position'] == BOAT_STATUS_DNF ) {

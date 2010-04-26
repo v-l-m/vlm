@@ -6,7 +6,7 @@ include_once("config.php");
 $fullUsersObj = new fullUsers(getLoginId());
 //Hello $username modify your account data : 
 
-echo "<h2>".$strings[$lang]["choose"]."</h2>";
+echo "<h2>".getLocalizedString("choose")."</h2>";
 ?>
 
 <form action="myboat.php" name="modify" method="post">
@@ -15,7 +15,7 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
 <input type="hidden" name="type" value="change" />
 <p>
 <?php
-     echo $strings[$lang]["boatnamethat"];
+     echo getLocalizedString("boatnamethat");
      echo "<input type=\"text\" name=\"boatname\" size=\"45\" maxlength=\"45\" value=\"" . $fullUsersObj->users->boatname . "\"/>";
 
      // Si le masquage de position n'est pas prévu ou qu'il n'y a pas de crédit, hidepos = 0
@@ -30,12 +30,12 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
          }
          echo " />";
 
-         echo $strings[$lang]["hidepos"] . " (" . abs($fullUsersObj->users->hidepos) . " units.)"; 
+         echo getLocalizedString("hidepos") . " (" . abs($fullUsersObj->users->hidepos) . " units.)"; 
          echo "<br />";
 
      }
 
-        echo "<br />" . $strings[$lang]["useremail"];
+        echo "<br />" . getLocalizedString("useremail");
         echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
 
     $select_list = "";
@@ -49,7 +49,7 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
     mysql_free_result($flagres);
 
     if ( $select_list != "" ) {
-        echo "</p>\n<h1>".$strings[$lang]["choose_your_country"]."</h1>\n";
+        echo "</p>\n<h1>".getLocalizedString("choose_your_country")."</h1>\n";
         echo "<select name=\"country\">\n" . $select_list . "</select>\n";
     }
 
@@ -74,7 +74,7 @@ echo "<h2>".$strings[$lang]["choose"]."</h2>";
         $select_list = $select_list . ">". $theme ."</option>\n";
     }
     if ( $select_list != "" ) {
-        echo "</p>\n<h1>".$strings[$lang]["choose_your_theme"]."</h1>\n";
+        echo "</p>\n<h1>".getLocalizedString("choose_your_theme")."</h1>\n";
         echo "<select name=\"theme\">\n" . $select_list . "</select>\n";
     }
     closedir($dh);
@@ -93,7 +93,7 @@ Notepad :<br />
 
 <br />
 <?php
-     echo $strings[$lang]["color"];
+     echo getLocalizedString("color");
     //display a table with all the colors
 ?>
 
@@ -156,7 +156,7 @@ Notepad :<br />
 
 </div>
 <br/>
-   <input type="submit"  value="<?php echo $strings[$lang]["change"]?>" />
+   <input type="submit"  value="<?php echo getLocalizedString("change")?>" />
 
 
 </form>
