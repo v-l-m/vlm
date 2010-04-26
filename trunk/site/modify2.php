@@ -7,7 +7,7 @@ if (isLoggedIn)
 
 <p>
 
-<?echo $strings[$lang]["boatupdated"]?>
+<?echo getLocalizedString("boatupdated")?>
 </p>
 <?
 if ($submittype=="change")
@@ -26,7 +26,7 @@ else if ($submittype = "subscribe")
 else
 
 {
-  echo $strings[$lang]["belogin"];
+  echo getLocalizedString("belogin");
 }
  
   include_once("includes/footer.inc");

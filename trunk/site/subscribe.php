@@ -7,7 +7,7 @@ $fullUsersObj = new fullUsers(getLoginId());
 // If engaged on a race, display Warning
 if ($fullUsersObj->users->engaged  != 0)
 {
-    echo "<h2>". $strings[$lang]["warning"]."</h2>";
+    echo "<h2>". getLocalizedString("warning")."</h2>";
 
     $racesListObj = new racesList();
     foreach($racesListObj->records as $racesObj) {
@@ -24,9 +24,9 @@ if ($fullUsersObj->users->engaged  != 0)
      <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
      <input type="hidden" name="type" value="unsubscribe" />
      <input type="hidden" name="lang" value="<?php echo $lang?>" />
-     <input type="submit" value="<?php echo $strings[$lang]["unsubscribe"]?>" />
+     <input type="submit" value="<?php echo getLocalizedString("unsubscribe")?>" />
      <p>
-     <?php echo $strings[$lang]["wanttosubscribe"]?>
+     <?php echo getLocalizedString("wanttosubscribe")?>
      </p>
   </form>
 
@@ -46,7 +46,7 @@ if ($fullUsersObj->users->engaged  != 0)
     }
 
     if ( $select_list != "" ) {
-        echo "<h1>".$strings[$lang]["sub_race"]."</h1>";
+        echo "<h1>".getLocalizedString("sub_race")."</h1>";
 ?>
   <form action="myboat.php">
     <select name="idraces">
@@ -55,12 +55,12 @@ if ($fullUsersObj->users->engaged  != 0)
     <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
     <input type="hidden" name="type" value="subscribe"/>
     <input type="hidden" name="lang" value="<?php echo $lang?>"/>
-    <input type="submit" value="<?php echo $strings[$lang]["subscribe"]?>" />
+    <input type="submit" value="<?php echo getLocalizedString("subscribe")?>" />
   </form>
 
 <?php 
     } else { 
-        echo $strings[$lang]["norace"];
+        echo getLocalizedString("norace");
     } 
 }
 

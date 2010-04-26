@@ -1,7 +1,6 @@
 <?php
 include_once("functions.php");
 
-
 $noHeader=htmlentities(quote_smart($_REQUEST['noHeader']));
 $boattype=htmlentities(quote_smart($_REQUEST['boattype']));
 

@@ -1,7 +1,6 @@
 <?php
-include_once("includes/header.inc");
-include_once("config.php");
-//include_once("includes/strings.inc");
+    include_once("includes/header.inc");
+    include_once("config.php");
 ?>
 
 <img class=map src="mercator.img.php?<?echo $_SERVER['QUERY_STRING'];?>" />

@@ -16,11 +16,11 @@ include_once("includes/header.inc");
 
 
     // Le palmares du joueur
-    echo "<h1>" ; printf ($strings[$lang]["palmares"],$usersObj->users->idusers); echo "</h1>";
+    echo "<h1>" ; printf (getLocalizedString("palmares"),$usersObj->users->idusers); echo "</h1>";
     displayPalmares($lang, $usersObj->users->idusers);
 
     // S'engager dans une course
-    printf("<h3>" . $strings[$lang]["notengaged"] . "</h3>",$lang);
+    printf("<h3>" . getLocalizedString("notengaged") . "</h3>",$lang);
     //include ("subscribe_race.php");
     include ("includes/raceslist.inc");
 
@@ -111,7 +111,7 @@ include_once("scripts/myboat.js");
     <div id="minimapbox">
         <?php
         // Carte de la course
-        echo htmlTinymap($usersObj->users->engaged, $strings[$lang]["racemap"]);
+        echo htmlTinymap($usersObj->users->engaged, getLocalizedString("racemap"));
 ?>
 
     </div>
@@ -136,7 +136,7 @@ include_once("scripts/myboat.js");
       } else {
           $WPCLASS = "notpassedwp";
       }
-      $status_content  = "&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;" . htmlentities($strings[$lang]["startmap"]) . "&lt;/b&gt;&lt;br /&gt;";
+      $status_content  = "&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;" . htmlentities(getLocalizedString("startmap")) . "&lt;/b&gt;&lt;br /&gt;";
       $status_content .= "Waypoint Coords=&lt;b&gt;" . 
                          round($myRace->startlat/1000,3) . "," . round($myRace->startlong/1000,3) . "&lt;/b&gt;&lt;br /&gt;"; 
 
@@ -150,7 +150,7 @@ include_once("scripts/myboat.js");
                    echo ($myRace->startlong/1000) ?>&amp;maparea=5&amp;drawwind=no&amp;tracks=on<?php
                    echo $oppList ?>&amp;x=800&amp;y=600&amp;proj=mercator" target="_new" class="<?php
                    echo $WPCLASS; ?>" onmouseover="return overlib('<?php echo $status_content; ?>', FULLHTML, HAUTO);"
-                   onmouseout="return nd();" ><?php echo $strings[$lang]["startmap"] ; ?></a> - WP:
+                   onmouseout="return nd();" ><?php echo getLocalizedString("startmap") ; ?></a> - WP:
 
 <?php
       // On va afficher des liens vers des waypoints
@@ -200,7 +200,7 @@ include_once("scripts/myboat.js");
          if ( $wp_racetime[0] != "N/A" ) {
               $racetime = duration2string ($wp_racetime[1]);
 	      $status_content.="&lt;br /&gt;&lt;b&gt;";
-	      $status_content.=sprintf($strings[$lang]["bestwptime"]."(%d)" , $racetime['days'],$racetime['hours'],
+	      $status_content.=sprintf(getLocalizedString("bestwptime")."(%d)" , $racetime['days'],$racetime['hours'],
 				       $racetime['minutes'], $wp_racetime[0]);
 	      $status_content.="&lt;/b&gt;";
 	 }
@@ -226,9 +226,9 @@ include_once("scripts/myboat.js");
   
 <?php
       if ( $myRace->coastpenalty  >= 3600 ) {
-          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/3600). " h</span></div>";
+          echo '<div id="costpenaltybox">'.getLocalizedString("locktime")."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/3600). " h</span></div>";
       } else if ( $myRace->coastpenalty  >= 60 ) {
-          echo '<div id="costpenaltybox">'.$strings[$lang]["locktime"]."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/60). " min</span></div>";
+          echo '<div id="costpenaltybox">'.getLocalizedString("locktime")."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/60). " min</span></div>";
       }
 ?>
     </div> <!--fin de raceicbox -->
@@ -236,18 +236,18 @@ include_once("scripts/myboat.js");
 <?php /*  DEUXIEME LIGNE : le bateau */ ?>
   <div id="yourboatbox">
       <div id="yourboatsummarybox">
-        <b><?php echo $strings[$lang]["yourboat"]; ?></b>&nbsp;
+        <b><?php echo getLocalizedString("yourboat"); ?></b>&nbsp;
         n&deg; <b><?php echo $usersObj->users->idusers ; ?></b>&nbsp;
         / &quot;<? echo $usersObj->users->boatname ?>&quot;
 <?php
         echo " / " . $usersObj->users->htmlBoattypeLink() . "&nbsp;";
         echo "<img src=\"/flagimg.php?idflags=".$usersObj->users->country."\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
-        echo  "<br />".$strings[$lang]["ranking"] . " : " . $user_ranking;
+        echo  "<br />".getLocalizedString("ranking") . " : " . $user_ranking;
 
         // Estimation de la prochaine VAC pour ce bateau là
 
         if ( $usersObj->users->lastupdate + 60*$myRace->vacfreq  >= time() ) {
-            printf ("<br />".$strings[$lang]["nextupdate"] . "%s sec.", 10 * round($usersObj->users->lastupdate + 60*$myRace->vacfreq  - time())/10 );
+            printf ("<br />".getLocalizedString("nextupdate") . "%s sec.", 10 * round($usersObj->users->lastupdate + 60*$myRace->vacfreq  - time())/10 );
         }
 ?>
       </div> <!--fin de yourboat1box -->
@@ -260,55 +260,55 @@ include_once("scripts/myboat.js");
             /* Si le bateau n'est pas encore parti, affichage "depart a la prochaine VAC" */
             if ( $usersObj->users->userdeptime < $myRace->deptime ) {
                 if ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE && $usersObj->users->pilotparameter <= 1 ) {
-                    printf($strings[$lang]["nostartpending"]);
+                    printf(getLocalizedString("nostartpending"));
                 } else {
-                    printf($strings[$lang]["startpending"]);
+                    printf(getLocalizedString("startpending"));
                 }
             /* Sinon affichage "En course depuis ... ou bateau locké depuis..." */
             } else {
                 // Si le bateau est libre
                 if ( time() > $usersObj->users->releasetime ) {
                     $racingtime = duration2string(time() - $usersObj->users->userdeptime);
-                    printf($strings[$lang]["racingtime"] . $strings[$lang]["days"]."\n",$racingtime['days'],
+                    printf(getLocalizedString("racingtime") . getLocalizedString("days")."\n",$racingtime['days'],
 			   $racingtime['hours'],$racingtime['minutes'],$racingtime['seconds']);
                 } else {
 		  $locktime = duration2string($usersObj->users->releasetime - time());
-                    //printf($strings[$lang]["locktime"] . $strings[$lang]["days"]."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
-		  printf("<span class=\"warnmessage\"><img src=\"images/site/attention.png\" />".$strings[$lang]["locked"]. $strings[$lang]["days"]."</span>\n",$locktime['days'],$locktime['hours'],$locktime['minutes'],$locktime['seconds']);
+                    //printf(getLocalizedString("locktime") . getLocalizedString("days")."\n",$locktime[0],$locktime[1],$locktime[2],$locktime[3]);
+		  printf("<span class=\"warnmessage\"><img src=\"images/site/attention.png\" />".getLocalizedString("locked"). getLocalizedString("days")."</span>\n",$locktime['days'],$locktime['hours'],$locktime['minutes'],$locktime['seconds']);
                 }
             }
         /* Sinon (heure départ pas atteinte), affichage de la date de départ */
         } else {
             $departure = gmdate("Y/m/d H:i:s",$myRace->deptime)." GMT";
-            echo $strings[$lang]["departuredate"]." : $departure\n";
+            echo getLocalizedString("departuredate")." : $departure\n";
         }
         echo "<br />\n";
         // Le mode de pilotage
-        //echo $strings[$lang]["pilotmode"]."<br/>";
+        //echo getLocalizedString("pilotmode")."<br/>";
 
 	switch ($usersObj->users->pilotmode) {
 	case PILOTMODE_HEADING:
-	  echo $strings[$lang]["autopilotengaged"]." ".$usersObj->users->boatheading." ".
-	       $strings[$lang]["degrees"];
+	  echo getLocalizedString("autopilotengaged")." ".$usersObj->users->boatheading." ".
+	       getLocalizedString("degrees");
 	  break;
 	case PILOTMODE_WINDANGLE:
-	  echo $strings[$lang]["constantengaged"]." " ;
+	  echo getLocalizedString("constantengaged")." " ;
 	  if ( $usersObj->users->pilotparameter > 0 ) {
 	    echo " +";
 	  }
-	  echo $usersObj->users->pilotparameter ." ". $strings[$lang]["degrees"];
+	  echo $usersObj->users->pilotparameter ." ". getLocalizedString("degrees");
 	  break;
 	case PILOTMODE_ORTHODROMIC:
-	  echo $strings[$lang]["orthoengaged"];
+	  echo getLocalizedString("orthoengaged");
 	  break;
 	case PILOTMODE_BESTVMG:
-	  echo $strings[$lang]["bestvmgengaged"];
+	  echo getLocalizedString("bestvmgengaged");
 	  break;
 	case PILOTMODE_VBVMG:
-	  echo $strings[$lang]["vbvmgengaged"];
+	  echo getLocalizedString("vbvmgengaged");
 	  break;
 	case PILOTMODE_BESTSPEED:
-	  echo $strings[$lang]["bestspeedengaged"]." ".$usersObj->users->boatheading." ".$strings[$lang]["degrees"];
+	  echo getLocalizedString("bestspeedengaged")." ".$usersObj->users->boatheading." ".getLocalizedString("degrees");
 	  break;
 	}
         // Ligne complémentaire si pilote ortho
@@ -323,20 +323,20 @@ include_once("scripts/myboat.js");
             $_timetogo=60 * 60 * $usersObj->distancefromend / $usersObj->VMGortho;
             if ( $_timetogo > 0 ) {
                 echo "\n";
-                printf($strings[$lang]["ETA="]. gmdate('Y-m-d H:i:s', time() + $_timetogo)) ;
+                printf(getLocalizedString("ETA="). gmdate('Y-m-d H:i:s', time() + $_timetogo)) ;
                 $eta=$usersObj->distancefromend / $usersObj->VMGortho;
                 //$etad=floor($eta/24);
                 //$etah=ceil($eta - 24*$etad);
                 //echo " ( &lt; ". $etad . "d " .$etah ."h )";
                 $etatime = duration2string($eta*3600);
-                printf(" ( " . $strings[$lang]["days"]." )\n",$etatime['days'],$etatime['hours'],$etatime['minutes'],$etatime['seconds']);
+                printf(" ( " . getLocalizedString("days")." )\n",$etatime['days'],$etatime['hours'],$etatime['minutes'],$etatime['seconds']);
             }
         }
 ?>
       </div> <!--fin de yourboat2box -->
 <?php
         // Colone SOS
-        $status_content="&lt;div class=&quot;infobulle&quot; align=&quot;center&quot;&gt;" . $strings[$lang]["racingcomite"] . "&lt;/div&gt;"; ?>
+        $status_content="&lt;div class=&quot;infobulle&quot; align=&quot;center&quot;&gt;" . getLocalizedString("racingcomite") . "&lt;/div&gt;"; ?>
       <div id="sosbox">
 <?php
           echo "<a href=\"mailto:" . EMAIL_COMITE_VLM .
@@ -406,12 +406,12 @@ include_once("scripts/myboat.js");
             $now = time();
             $ichref="ics.php?lang=".$lang."&amp;idraces=".$myRace->idraces;
             if ( $myRace->bobegin > $now ) {
-                $bobegin = gmdate($strings[$lang]["dateClassificationFormat"],$myRace->bobegin);
+                $bobegin = gmdate(getLocalizedString("dateClassificationFormat"),$myRace->bobegin);
                 $boduration = ($myRace->boend - $myRace->bobegin ) /3600;
-                $messages[] = Array("id" => "incomingbo", "txt" => $strings[$lang]["blackout"]." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
+                $messages[] = Array("id" => "incomingbo", "txt" => getLocalizedString("blackout")." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
             }
             if ( $now > $myRace->bobegin && $now < $myRace->boend ) {    
-                $msg = $strings[$lang]["blackout"] . " : <b>". gmdate($strings[$lang]["dateClassificationFormat"] . "</b>", 
+                $msg = getLocalizedString("blackout") . " : <b>". gmdate(getLocalizedString("dateClassificationFormat") . "</b>", 
                    $myRace->boend);
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }
@@ -419,7 +419,7 @@ include_once("scripts/myboat.js");
             foreach ( $myRace->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_CONSOLE & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                        $txtstr = "<a href=\"".$ic['instructions']."\" target=\"_ic\">".$strings[$lang]["icforum"]."</a>";
+                        $txtstr = "<a href=\"".$ic['instructions']."\" target=\"_ic\">".getLocalizedString("icforum")."</a>";
                         $mes = Array("id" => "ic".$myRace->idraces , "txt" => $txtstr, "class" => "ic");
                     } else {
                         $mes = Array("id" => "ic".$myRace->idraces , "txt" => nl2br($ic['instructions']), "class" => "ic");
@@ -432,7 +432,7 @@ include_once("scripts/myboat.js");
             }
             // Email vide ?
             if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
-                $msg = "<b>NO E-MAIL ADDRESS</b>&nbsp;Please give one (".$strings[$lang]["choose"] . ")";
+                $msg = "<b>NO E-MAIL ADDRESS</b>&nbsp;Please give one (".getLocalizedString("choose") . ")";
                 $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php?lang=$lang");
             }
             // OMOROB ?
@@ -443,10 +443,10 @@ include_once("scripts/myboat.js");
             //affichage de la deadline pour les départs en ligne
             $mtr = $myRace->maxTimeRemaining();
             if ( $mtr > (48*3600) ) {
-                $msg = $strings[$lang]["endrace"]." ". gmdate("M d Y H:i:s", $mtr+time() );
+                $msg = getLocalizedString("endrace")." ". gmdate("M d Y H:i:s", $mtr+time() );
                 $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "info");
             } else if ($mtr > 1) {
-                $msg = sprintf($strings[$lang]["endracein"], round($mtr/3600) );
+                $msg = sprintf(getLocalizedString("endracein"), round($mtr/3600) );
                 $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "warn");
             }
                 
@@ -485,7 +485,7 @@ include_once("scripts/myboat.js");
             $autopilotclass = "inputnormal";
         }
         ?>
-        <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .$strings[$lang]["autopilotengaged"]."</span>\n"; ?>
+        <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .getLocalizedString("autopilotengaged")."</span>\n"; ?>
         <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>" />
             <input type="hidden" name="lang" value="<?php echo $lang?>" />
@@ -496,11 +496,11 @@ include_once("scripts/myboat.js");
                 <input type="button" value="&gt;" onclick="increment(); updateSpeed();"/>
             </div>
             <span id="estimatespeed" class="inputhelpers">
-                <?php echo $strings[$lang]["estimated"] ?>
+                <?php echo getLocalizedString("estimated") ?>
                 <input type="text" size="4" maxlength="4" name="speed" readonly="readonly" value="<?php echo round($usersObj->boatspeed, 2); ?>"/>
             </span>
             <div id="autopilotaction">          
-                <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["autopilot"]?>"/>
+                <input class="actionbutton" type="submit" value="<?php echo getLocalizedString("autopilot")?>"/>
             </div>
         </form>
     </div>
@@ -514,7 +514,7 @@ include_once("scripts/myboat.js");
             $inputclass = "inputnormal";
         }
         ?>
-        <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".$strings[$lang]["constantengaged"]."</span>"?>
+        <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".getLocalizedString("constantengaged")."</span>"?>
         <form class="controlform" name="angle" action="update_angle.php" method="post"> 
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
             <input type="hidden" name="lang" value="<?php echo $lang?>"/>
@@ -524,9 +524,9 @@ include_once("scripts/myboat.js");
                 <input class="<?php echo $inputclass; ?>" type="text"  size="6" maxlength="6"  name="pilotparameter" value="<?php echo $baww; ?>" />
                 <input type="button" value="&gt;" onclick="incrementAngle();"/>
             </div>
-            <input class="inputhelpers" type="button" value="<?php echo $strings[$lang]["tack"]; ?>" onclick="tack();" />
+            <input class="inputhelpers" type="button" value="<?php echo getLocalizedString("tack"); ?>" onclick="tack();" />
             <div id="windangleaction">
-                <input class="actionbutton" type="submit" value="<?php echo $strings[$lang]["constant"]; ?>" />
+                <input class="actionbutton" type="submit" value="<?php echo getLocalizedString("constant"); ?>" />
             </div>
         </form>
     </div>
@@ -543,12 +543,12 @@ include_once("scripts/myboat.js");
         }
         ?>
         <div id="orthocontrolbox"  class="controlitem">
-            <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".$strings[$lang]["orthoengaged"]."</span>"?>
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".getLocalizedString("orthoengaged")."</span>"?>
             <form class="controlform" name="ortho" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="lang" value="<?php echo $lang?>"/>        
                 <input type="hidden" name="pilotmode" value="orthodromic"/>
-                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["orthodromic"]?>" />
+                <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("orthodromic")?>" />
             </form>
         </div>
         
@@ -561,12 +561,12 @@ include_once("scripts/myboat.js");
         }
         ?>
         <div id="bvmgcontrolbox" class="controlitem">
-            <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".$strings[$lang]["bestvmgengaged"]."</span>"?>
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".getLocalizedString("bestvmgengaged")."</span>"?>
             <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
                 <input type="hidden" name="pilotmode" value="bestvmg"/>
-                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["bestvmgengaged"]?>" />
+                <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("bestvmgengaged")?>" />
             </form>
         </div>
 
@@ -579,12 +579,12 @@ include_once("scripts/myboat.js");
         }
         ?>
         <div id="vbvmgcontrolbox" class="controlitem">
-            <?php echo "<span class=\"texthelpers\">". PILOTMODE_VBVMG . ": ".$strings[$lang]["vbvmgengaged"]."</span>"?>
+            <?php echo "<span class=\"texthelpers\">". PILOTMODE_VBVMG . ": ".getLocalizedString("vbvmgengaged")."</span>"?>
             <form class="controlform" name="vbvmg" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="lang" value="<?php echo $lang?>"/>
                 <input type="hidden" name="pilotmode" value="vbvmg"/>
-                <input title="<?php echo $strings[$lang]["orthodromic_comment"]; ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo $strings[$lang]["vbvmgengaged"]?>" />
+                <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("vbvmgengaged")?>" />
             </form>
         </div>
     </div>
@@ -595,7 +595,7 @@ include_once("scripts/myboat.js");
         <input type="hidden" name="type" value="savemywp"/>
         <input type="hidden" name="lang" value="<?php echo $lang?>"/>
         <div id="wpcoordscontrolbox">
-        <?php echo "<span class=\"texthelpers\">". $strings[$lang]["mytargetpoint"] . "</span>"; ?>
+        <?php echo "<span class=\"texthelpers\">". getLocalizedString("mytargetpoint") . "</span>"; ?>
 
             <div id="wplatcontrolbox" class="coordcontrol">
                 <span class="subtitlehelpers">Lat&nbsp;&nbsp;&nbsp;</span>
@@ -624,7 +624,7 @@ include_once("scripts/myboat.js");
             </div>
             <span class="dynamichelpers">&nbsp;</span>
             <div id="wpaction">
-                <input class="actionbutton" type="submit" value="<?php  echo $strings[$lang]["save"]?>" />
+                <input class="actionbutton" type="submit" value="<?php  echo getLocalizedString("save")?>" />
             </div>
         </div>
     </form>
@@ -634,7 +634,7 @@ include_once("scripts/myboat.js");
     <!-- Pilote programmable -->
     <div id="pilototocontrolbox">       
         <?php 
-            echo "<span class=\"texthelpers\">".$strings[$lang]["pilototoengaged"];
+            echo "<span class=\"texthelpers\">".getLocalizedString("pilototoengaged");
             $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
             if ( $pilototoTasks > 0 ) {
                 echo "&nbsp;(" . $pilototoTasks . ")</span>";
@@ -645,14 +645,14 @@ include_once("scripts/myboat.js");
             }
         ?>
         <div id="pilototoaction">
-            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo $strings[$lang]["pilototo_prog"]; ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
         </div>
     </div>
 
     <!-- VMG POUR VLM -->
     <div id="vlmvmgcontrolbox">
         <form class="controlform" name="vlmvmg" action="<?php echo VMG_SERVER_URL ?>" target="_VMG"> <!-- FIXME POST -->
-            <?php echo "<span class=\"texthelpers\">".$strings[$lang]["vmgsheet"]."</span>"; ?>
+            <?php echo "<span class=\"texthelpers\">".getLocalizedString("vmgsheet")."</span>"; ?>
             <div id="vlmvmgaction">
                 <input type="submit" value="Go !" />
             </div>
@@ -690,41 +690,41 @@ include_once("scripts/myboat.js");
 <!-- Mapbox -->
 <form name="mapprefs" id="mercator" action="map.img.php" onSubmit="mapprefSubmitted();" target="_new" method="get">
 <div id="mapbox">
-<!--    <?php echo "<h3>".$strings[$lang]["navigation"]. "</h3>"?> -->
+<!--    <?php echo "<h3>".getLocalizedString("navigation"). "</h3>"?> -->
     <div id="maplayerbox" class="mapboxitem">
     <!-- Layers-->
         <div id="mapgriblayerbox"  class="mapboxsubitem">
-            <span class="titlehelpers"><?php echo $strings[$lang]["maplayers"]; ?></span>
+            <span class="titlehelpers"><?php echo getLocalizedString("maplayers"); ?></span>
             <p>
             <input onChange="mapprefChanged();" type="radio" name="maplayers" value="multi" 
             <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
-            <?php echo $strings[$lang]["maplayersmulti"]; ?>
+            <?php echo getLocalizedString("maplayersmulti"); ?>
             </p>
             <p>        
             <input onChange="mapprefChanged();" type="radio" name="maplayers" value="merged"
             <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
-            <?php echo $strings[$lang]["maplayersone"]; ?>
+            <?php echo getLocalizedString("maplayersone"); ?>
             </p>
         </div>
         <div  id="maptoolslayerbox"  class="mapboxsubitem">
             <input type="hidden" name="idraces" value="<?php echo $usersObj->users->engaged; ?>" />
             <input type="hidden" name="boat" value="<?php echo $usersObj->users->idusers; ?>" />
             <input type="hidden" name="save" value="on" />
-            <span class="titlehelpers"><?php echo $strings[$lang]["maptype"]; ?> </span>
+            <span class="titlehelpers"><?php echo getLocalizedString("maptype"); ?> </span>
             <p><input onChange="mapprefChanged();" type="radio" name="maptype" value="compas" <?php if ($mapTools == "compas" ) echo " checked=\"checked\""; ?> />
-            <?php echo $strings[$lang]["mapcompas"]; ?>
+            <?php echo getLocalizedString("mapcompas"); ?>
             </p>
             <p>
             <input onChange="mapprefChanged();" type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
-            <?php echo $strings[$lang]["mapfloatingcompas"]; ?>
+            <?php echo getLocalizedString("mapfloatingcompas"); ?>
             </p>
             <p>
             <input onChange="mapprefChanged();" type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
-            <?php echo $strings[$lang]["mapbothcompas"]; ?>
+            <?php echo getLocalizedString("mapbothcompas"); ?>
             </p>
             <p>
             <input onChange="mapprefChanged();" type="radio" name="maptype" value="simple" <?php if ($mapTools == "none" ) echo " checked=\"checked\"" ; ?> />
-            <?php echo $strings[$lang]["mapsimple"]; ?>
+            <?php echo getLocalizedString("mapsimple"); ?>
             </p>
         </div>
     </div>
@@ -735,18 +735,18 @@ include_once("scripts/myboat.js");
 
     ?>
     <div  id="mapopponents"  class="mapboxitem">
-        <span class="titlehelpers"><?php echo $strings[$lang]["mapwho"]; ?></span>
-        <p><input onChange="mapprefChanged();"  type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $myRace->started != 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["maponlyme"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy5opps"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmy10opps"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo $strings[$lang]["mapmeandtop10"] ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". $strings[$lang]["seemappref"] . "\">" . $strings[$lang]["mapselboats"] . "</acronym>" ; ?></p>
-        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $myRace->started == 1) echo "checked=\"checked\"";?> /><?php echo $strings[$lang]["mapallboats"] ?></p>
+        <span class="titlehelpers"><?php echo getLocalizedString("mapwho"); ?></span>
+        <p><input onChange="mapprefChanged();"  type="radio" name="list" value="myboat" <?php if ($mapOpponents == "myboat" or $myRace->started != 1) echo "checked=\"checked\"";?>  /><?php echo getLocalizedString("maponlyme") ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my5opps" <?php if ($mapOpponents == "my5opps" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo getLocalizedString("mapmy5opps") ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="my10opps" <?php if ($mapOpponents == "my10opps" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo getLocalizedString("mapmy10opps") ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="meandtop10" <?php if ($mapOpponents == "meandtop10" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo getLocalizedString("mapmeandtop10") ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="mylist" <?php if ($mapOpponents == "mylist" and $myRace->started == 1) echo "checked=\"checked\"";?>  /><?php echo "<acronym style=\" border: solid 1px #336699\" title=\"". getLocalizedString("seemappref") . "\">" . getLocalizedString("mapselboats") . "</acronym>" ; ?></p>
+        <p><input onChange="mapprefChanged();" <?php echo $mapopdis; ?> type="radio" name="list" value="all" <?php if ($mapOpponents == "all" and $myRace->started == 1) echo "checked=\"checked\"";?> /><?php echo getLocalizedString("mapallboats") ?></p>
     </div>
     <div id="mapcenterbox" class="mapboxitem">
-        <span class="titlehelpers"><?php echo $strings[$lang]["mymaps"]; ?></span>
+        <span class="titlehelpers"><?php echo getLocalizedString("mymaps"); ?></span>
         <p><input onChange="mapprefChanged();" type="radio" name="mapcenter" value="myboat" <?php if ($mapCenter == "myboat" ) echo " checked=\"checked\""; ?>  />
-        <label for="myboat"><?php echo $strings[$lang]["mymapboat"]; ?></label>
+        <label for="myboat"><?php echo getLocalizedString("mymapboat"); ?></label>
         </p>
         <p>
         <input onChange="mapprefChanged();" type="radio" name="mapcenter" value="mywp" <?php if ($mapCenter == "mywp" )  echo " checked=\"checked\""; ?>  />
@@ -754,15 +754,15 @@ include_once("scripts/myboat.js");
         </p>
         <p>
         <input onChange="mapprefChanged();" type="radio" name="mapcenter" value="roadtowp" <?php if ($mapCenter == "roadtowp" )  echo " checked=\"checked\""; ?>  />
-        <label for="roadtowp"><?php echo $strings[$lang]["mymaproute"]; ?></label>
+        <label for="roadtowp"><?php echo getLocalizedString("mymaproute"); ?></label>
         </p>
         <div id="mapdrawtextwpbox" class="mapboxsubitem">
-            <span class="titlehelpers"><?php echo $strings[$lang]["mapdrawtextwp"]; ?></span>
+            <span class="titlehelpers"><?php echo getLocalizedString("mapdrawtextwp"); ?></span>
             <p><input id="drawtextwpon" onChange="mapprefChanged();" type="radio" name="drawtextwp" value="on" <?php if ($mapDrawtextwp != "no" ) echo " checked=\"checked\""; ?>  />
-            <label for="drawtextonon"><?php echo $strings[$lang]["yes"]; ?></label>
+            <label for="drawtextonon"><?php echo getLocalizedString("yes"); ?></label>
             </p>
             <p><input id="drawtextwpno" onChange="mapprefChanged();" type="radio" name="drawtextwp" value="no" <?php if ($mapDrawtextwp == "no" ) echo " checked=\"checked\""; ?>  />
-            <label for="drawtextwpno"><?php echo $strings[$lang]["no"]; ?></label>
+            <label for="drawtextwpno"><?php echo getLocalizedString("no"); ?></label>
             </p>
         </div>
 
@@ -770,29 +770,29 @@ include_once("scripts/myboat.js");
 
     <div id="mapinputbox" class="mapboxitem">
     
-        <div class="mapboxsubitem" id="displaymapaction"><input type="submit" value="<?php echo $strings[$lang]["map"] ?>" /></div>
+        <div class="mapboxsubitem" id="displaymapaction"><input type="submit" value="<?php echo getLocalizedString("map") ?>" /></div>
         <div  id="mapparameters"  class="mapboxsubitem">
             <p>
                 
-                <span class="subtitlehelpers"><?php echo $strings[$lang]["maille"]; ?></span>
+                <span class="subtitlehelpers"><?php echo getLocalizedString("maille"); ?></span>
                 <input onChange="mapprefChanged();" title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
             </p>
             <p>
-                <span class="subtitlehelpers"><?php echo $strings[$lang]["estime"]; ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*60*$myRace->vacfreq /3600, 3) . "/" . $strings[$lang]["crank"] . ")"; ?></span>
+                <span class="subtitlehelpers"><?php echo getLocalizedString("estime"); ?>&nbsp;<?php echo " (" .round($usersObj->boatspeed*60*$myRace->vacfreq /3600, 3) . "/" . getLocalizedString("crank") . ")"; ?></span>
                 <input onChange="mapprefChanged();" title="0..." type="text" size="3" maxlength="4" name="estime" value="<?php echo $mapEstime;?>" />
             </p>
             <p>
-                <span class="subtitlehelpers"><?php echo  $strings[$lang]["trackage"] ; ?></span>
+                <span class="subtitlehelpers"><?php echo  getLocalizedString("trackage") ; ?></span>
                 <input onChange="mapprefChanged();" title="0..168h" type="text" size="3" maxlength="3" name="age" value="<?php echo $mapAge;?>" />
             </p>
             <p>
-                <span class="subtitlehelpers"><?php echo $strings[$lang]["mapsize"]  ;  ?></span>
+                <span class="subtitlehelpers"><?php echo getLocalizedString("mapsize")  ;  ?></span>
                 <input onChange="mapprefChanged();" title="0..20" type="text" size="3" maxlength="3" name="maparea" value="<?php echo $mapArea;?>" />
             </p>
         </div>
          <!-- Maillage  et tailles -->
         <div  id="mapsizebox"  class="mapboxsubitem">
-            <span class="titlehelpers"><?php echo $strings[$lang]["mapimagesize"]; ?></span>
+            <span class="titlehelpers"><?php echo getLocalizedString("mapimagesize"); ?></span>
              <p>X=<input type="text" size="3" maxlength="4" name="x" value="<?php echo $mapX;?>" />
              Y=<input type="text" size="3" maxlength="4" name="y" value="<?php echo $mapY;?>" /></p>
         </div>
@@ -831,8 +831,8 @@ include_once("scripts/myboat.js");
 <div id="user_action">
         <?php
             $lastActionDetails = lastUserAction();
-            echo sprintf($strings[$lang]['lastactionip'], $lastActionDetails['action'], dechex(crc32($lastActionDetails['ipaddr'])));
-            echo "&nbsp;(&nbsp;<a href=\"userlogs.php\">".$strings[$lang]['moreiplogs']."</a>&nbsp;)";
+            echo sprintf(getLocalizedString('lastactionip'), $lastActionDetails['action'], dechex(crc32($lastActionDetails['ipaddr'])));
+            echo "&nbsp;(&nbsp;<a href=\"userlogs.php\">".getLocalizedString('moreiplogs')."</a>&nbsp;)";
         ?>
 </div>
         <?php

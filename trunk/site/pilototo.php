@@ -5,7 +5,6 @@
     */
     
     session_start();
-    include_once("includes/strings.inc");
     include_once("config.php");
     include_once("functions.php");
 
@@ -14,7 +13,8 @@
     //helper pour construire la page
     
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
-        global $strings, $lang, $pilotmodeList;
+        global $pilotmodeList;
+        $lang = getCurrentLang();
         if ($row === 0) {
             $klass = "blank";
             $ts = time();
@@ -23,7 +23,7 @@
         } else {
             $klass = $status;
             $firstcolaction = "pilototo_prog_upd";
-            $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . $strings[$lang]["pilototo_prog_del"] . " />";
+            $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . getLocalizedString("pilototo_prog_del") . " />";
         }
         $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
 
@@ -31,7 +31,7 @@
         echo "  <input type=\"hidden\" name=\"lang\" value=\"$lang\" />\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
         echo "  <tr class=\"linepilototobox-$klasssuffix\">\n";
-        echo "    <td><input type=\"submit\" name=\"action\" value=" . $strings[$lang][$firstcolaction]  ." /></td>\n";
+        echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." /></td>\n";
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
         
@@ -41,7 +41,7 @@
             if ($i == $pim) {
                 echo "selected=\"selected\" ";
             }
-            echo "value=\"$i\">$i:".$strings[$lang][$pilotmodeList[$i]]."</option>";
+            echo "value=\"$i\">$i:".getLocalizedString($pilotmodeList[$i])."</option>";
         }
         echo "    </select></td>\n";
         echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
@@ -126,7 +126,7 @@
         exit();
     } 
 
-    echo "<h4>" . $strings[$lang]["pilototo_prog_title"] . "</h4>" ;
+    echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
     $usersObj = new users($idusers);
 
     /* PILOTO (class users) Functions
@@ -143,7 +143,7 @@
         // Action donnée, on exécute l'action
         $pilotolist_force_master = True; // We will need the freshest datas after update, thus we force data fetching from the master
         switch ($action) {
-            case $strings[$lang]["pilototo_prog_add"]:
+            case getLocalizedString("pilototo_prog_add"):
                 $time=quote_smart($_POST['time']);
                 $pim=quote_smart($_POST['pim']);
                 $pip=quote_smart($_POST['pip']);
@@ -166,7 +166,7 @@
                     printf ("ERROR ADD: Mandatory Param missing... time=%s, pim=%s, pip=%s\n", $time, $pim, $pip);
                 }
                 break;
-            case $strings[$lang]["pilototo_prog_upd"]:
+            case getLocalizedString("pilototo_prog_upd"):
                 $taskid=quote_smart($_POST['taskid']);
                 $time=quote_smart($_POST['time']);
                 $pim=quote_smart($_POST['pim']);
@@ -188,7 +188,7 @@
                     printf ("ERROR UPD: Mandatory Param missing... taskid=%d, time=%s, pim=%s, pip=%s\n", $taskid, $time, $pim, $pip);
                 }
                 break;
-            case $strings[$lang]["pilototo_prog_del"]:
+            case getLocalizedString("pilototo_prog_del"):
                 $taskid=quote_smart($_POST['taskid']);
                 if ( !empty($taskid) ) {
                     $rc=$usersObj->pilototoDelete($taskid);
@@ -213,7 +213,7 @@
             $numligne++;
         }
     } else {
-        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . $strings[$lang]["pilototo_no_event"] . "</td></tr>\n" ;
+        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . getLocalizedString("pilototo_no_event"] . "</td></tr>\n" ;
     }
     
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
@@ -236,7 +236,7 @@
     echo "<div id=\"helptimepilototobox\">\n";
     echo "Server(s) time is now <b>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</b><br />\n";
     echo "Tip1 : server_time + 3600 is in one hour, server_time+5*3600 is in 5 hours... <br />\n" ;
-    echo "Tip2 : for an update, modify a value, then click on " . $strings[$lang]["pilototo_prog_upd"]."<br />\n" ;
+    echo "Tip2 : for an update, modify a value, then click on " . getLocalizedString("pilototo_prog_upd")."<br />\n" ;
     echo "Tip3 : status is 'pending' if an order is not yet executed, 'done' otherwise\n"  ;
     echo "</div>\n";
     echo "<div id=\"buttonspilototobox\">\n";

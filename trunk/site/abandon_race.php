@@ -2,7 +2,7 @@
 
     <script type="text/javascript">
         function confirmation() {
-            var answer = confirm("<?php echo $strings[$lang]["unsubscribe"]; echo $usersObj->races->idraces; ?>. Confirmation ?");
+            var answer = confirm("<?php echo getLocalizedString("unsubscribe"); echo $usersObj->races->idraces; ?>. Confirmation ?");
             if (answer){
                 alert("Bye bye !");
                 document.abandon.submit();
@@ -16,9 +16,9 @@
 
     $fullUsersObj = new fullUsers($users->idusers, $users);
 
-    echo "<p>" . $strings[$lang]["warning"] . "</p>";
+    echo "<p>" . getLocalizedString("warning") . "</p>";
     $racesObj = $fullUsersObj->races;
-    echo "<p>" . $strings[$lang]["youengaged"] . " <b>" .   $racesObj->htmlRacenameLink($lang) .  " (" . $racesObj->htmlIdracesLink($lang)    .  ") " . "</b></p>";
+    echo "<p>" . getLocalizedString("youengaged") . " <b>" .   $racesObj->htmlRacenameLink($lang) .  " (" . $racesObj->htmlIdracesLink($lang)    .  ") " . "</b></p>";
 
     // The user may want to unsubscribe from this race
 ?>
@@ -26,6 +26,6 @@
         <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers; ?>" />
         <input type="hidden" name="type" value="unsubscribe"/>
         <input type="hidden" name="lang" value="<?php echo $lang; ?>"/>
-        <input type="button" onclick="confirmation();" value="<?php echo $strings[$lang]["unsubscribe"]; ?>" />
+        <input type="button" onclick="confirmation();" value="<?php echo getLocalizedString("unsubscribe"); ?>" />
     </form>
 </div>
