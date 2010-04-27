@@ -285,12 +285,12 @@
                     echo "<a target=\"_admin\" href=\"/admin/\">Admin</a>";
                 }
 ?>
-            <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]?></a> 
-            <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]?></a>
-            <a href="calendar.php?lang=<?echo $lang?>"><?echo $strings[$lang]["calendar"]?></a>
-            <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]?></a> 
-            <a href="<?echo DOC_SERVER_URL.$lang?>:FAQ" target="_vlmwiki"><?echo $strings[$lang]["faq"]?></a> 
-            <a href="about.php?lang=<?echo $lang?>"><?echo $strings[$lang]["about"]?></a>
+            <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]; ?></a> 
+            <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]; ?></a>
+            <a href="calendar.php?lang=<?echo $lang?>"><?echo $strings[$lang]["calendar"]; ?></a>
+            <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]; ?></a> 
+            <a href="<?echo DOC_SERVER_URL.'FAQ/'.$lang; ?>" target="_vlmwiki"><?echo $strings[$lang]["faq"]; ?></a> 
+            <a href="<?echo DOC_SERVER_URL.'About/'.$lang; ?>" target="_vlmwiki"><?echo $strings[$lang]["about"]; ?></a>
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
             <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo $strings[$lang]["forum"]?></a>
