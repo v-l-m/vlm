@@ -39,16 +39,16 @@
         $duration = $dep - time();
 
         if ( $dep < $time AND $closetime <$time ) { //no race planned
-            printf("      ".$strings[$lang]["norace"]."\n");
+            printf("      ".getLocalizedString("norace")."\n");
         } else {
             echo "<table width=\"100%\">\n<tr>\n";
             echo "<td width=\"200\" align=\"left\" class=\"boat\">";
             // Carte de la course
             $href = "/racemap.php?idraces=".$idraces;
-            $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".$strings[$lang]["racemap"]."&quot; />";
+            $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".getLocalizedString("racemap")."&quot; />";
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
                  "<img src=\"minimap.php?idraces=" . $idraces . 
-                 "\" alt=\"" .$strings[$lang]["racemap"]. "\" /></a>";
+                 "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
             echo "</td>\n";
       
             echo "<td align=\"left\" class=\"boat\">";
@@ -59,9 +59,9 @@
             
             $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
             if ( $maxboats != 0 ) {            
-                $strengaged = " - ".$strings[$lang]["engaged"]." / Total : " . $urlnumengaged . "/" . $maxboats ;
+                $strengaged = " - ".getLocalizedString("engaged")." / Total : " . $urlnumengaged . "/" . $maxboats ;
             } else {
-                $strengaged = " - ".$strings[$lang]["engaged"]." : " . $urlnumengaged . " (".$strings[$lang]["unlimited"].")";
+                $strengaged = " - ".getLocalizedString("engaged")." : " . $urlnumengaged . " (".getLocalizedString("unlimited").")";
             }
 
             printf("<h1>%s (%s) - %s</h1>\n",$urlidraces, $urlboattype, $urlracename); /* FIXME use style there */
@@ -69,30 +69,30 @@
             printf ("  <ul>");
             if ( $dep > $time ) {
                 $duration = duration2string($duration);
-                printf("    <li>".$strings[$lang]["nextrace"] . $strengaged."</li>\n" , $duration['days'],$duration['hours'],$duration['minutes']);
-                printf("    <li>".$strings[$lang]["startrace"]. gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
+                printf("    <li>".getLocalizedString("nextrace") . $strengaged."</li>\n" , $duration['days'],$duration['hours'],$duration['minutes']);
+                printf("    <li>".getLocalizedString("startrace"). gmdate("Y/m/d H:i:s", $dep)." GMT.</li>\n");
             } else {
                 $duration = duration2string(-$duration);
-                printf("    <li>".$strings[$lang]["openrace"] . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
+                printf("    <li>".getLocalizedString("openrace") . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
             }
         
             if ( $closetime > $dep ) {
-                printf("    <li>".$strings[$lang]["closerace"]. gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
+                printf("    <li>".getLocalizedString("closerace"). gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
             }
       
             if ( $firstpcttime >0 ) {
-                printf("    <li>".$strings[$lang]["endrace"]. "%d %%</li>\n", 100 + $firstpcttime );
+                printf("    <li>".getLocalizedString("endrace"). "%d %%</li>\n", 100 + $firstpcttime );
             } else {
-                printf("    <li>".$strings[$lang]["endrace"]." no limit</li>\n");
+                printf("    <li>".getLocalizedString("endrace")." no limit</li>\n");
             }
             // Affichage des IC destinées à la racelist
             $fullRacesObj = new fullRaces($idraces);
             printf("    <li><a href=\"/ics.php?lang=%s&amp;idraces=%s\">WP(s)</a>" , $lang,$idraces);
-            printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), $strings[$lang]['crank'],  $fullRacesObj->races->vacfreq);
+            printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), getLocalizedString('crank'),  $fullRacesObj->races->vacfreq);
             foreach ( $fullRacesObj->races->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
-                        printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=\"_ic\">".$strings[$lang]["icforum"]."</a></li>\n");
+                        printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".$ic['instructions']."\" target=\"_ic\">".getLocalizedString("icforum")."</a></li>\n");
                     } else {
                         printf ("    <li class=\"icflagracelist\">".$ic['instructions']."</li>\n");
                     }
@@ -113,7 +113,7 @@
             <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
             <input type=\"hidden\" name=\"type\" value=\"subscribe\">
             <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
-            <input type=\"submit\" value=\"" . $strings[$lang]["subscribe"] . "\" >
+            <input type=\"submit\" value=\"" . getLocalizedString("subscribe") . "\" >
             </form>
             ";
           echo $sub_button;

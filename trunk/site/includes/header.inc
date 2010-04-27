@@ -3,7 +3,6 @@
     $page_start_time=microtime(1);
 
     session_start();
-    include_once("strings.inc");
     include_once("config.php");
     
     header("Content-type: text/html; charset=utf-8");
@@ -47,7 +46,7 @@
     if ($type == "logout")
     {
         logout();
-        $msg = $strings[$lang]["loggedout"];
+        $msg = getLocalizedString("loggedout");
     }
 
     if ($type == "create")
@@ -59,13 +58,13 @@
         $tmp="";
         if (checkLoginExists($pseudo))
         {
-            $msg = $strings[$lang]["loginexist"];
+            $msg = getLocalizedString("loginexist");
         } else if (($pseudo == "") || ($password == "")) {
-            $msg = $strings[$lang]["loginempty"];
+            $msg = getLocalizedString("loginempty");
         } else {
             $idu = createAccount($pseudo, $password, $email, $country);
             login($idu, $pseudo);
-            $msg = $strings[$lang]["accountcreated"]." ".$pseudo." ".$password;
+            $msg = getLocalizedString("accountcreated")." ".$pseudo." ".$password;
         }
     }
 
@@ -76,9 +75,9 @@
         if (  ($id = checkAccount($pseudo, $password)) != FALSE ) {
             //create session info
             login($id, $pseudo);
-            //$msg = $strings[$lang]["nowlogin"];
+            //$msg = getLocalizedString("nowlogin");
         } else {
-            $msg = $strings[$lang]["authfailed"];
+            $msg = getLocalizedString("authfailed");
         }
     }
 
@@ -204,7 +203,7 @@
        <div id="baneerleftbox"></div>
        <div id="baneercenterbox"></div>
        <div id="baneerrightbox">
-       <?php echo $strings[$lang]["sponsor"]; ?>
+       <?php echo getLocalizedString("sponsor"); ?>
        <a href="http://www.actilis.net/" target="_actilis"><img src="/images/site/actilis.png" alt="Actilis" /></a>
        </div>
    </div>
@@ -231,13 +230,13 @@
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
                 <input type="hidden" name="type" value="login" />
                 <p class="leftbutton">
-                    <input type="submit" value="<?php echo $strings[$lang]["login"]; ?>" />
+                    <input type="submit" value="<?php echo getLocalizedString("login"); ?>" />
                 </p>
             </form>
         </div> <!-- fin div loginbox-->
         <div id="pleasecreatebox" class="leftbox">
 <?php
-            printf ($strings[$lang]["pleasecreate"], "<a href=\"create.php?lang=$lang\">", "</a>");
+            printf (getLocalizedString("pleasecreate"), "<a href=\"create.php?lang=$lang\">", "</a>");
 ?>
         </div> <!-- fin div pleasecreatebox-->
 <?php
@@ -246,7 +245,7 @@
         <div id="loggedbox" class="leftbox">
 <?php
             //disp login name, infos
-            echo $strings[$lang]["youlogin"];
+            echo getLocalizedString("youlogin");
             echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
                  " (". getLoginId() . ") " . getLoginName() . "</a>\n";
 
@@ -257,7 +256,7 @@
                 <input type="hidden" name="type" value="logout" />
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
                 <p class="leftbutton">
-                    <input type="submit" value="<?php echo $strings[$lang]["logout"]; ?>" />
+                    <input type="submit" value="<?php echo getLocalizedString("logout"); ?>" />
                 </p>
             </form>
         </div> <!-- fin div logoutbox-->
@@ -265,63 +264,63 @@
     }
 ?>
         <div id="pagesbox" class="leftbox">
-            <a href="myboat.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["control"]; ?></a>
-            <a href="mappref.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["mymap"]; ?></a>
-            <a href="modify.php?lang=<?echo $lang?>"><?php echo $strings[$lang]["choose"]; ?></a>
+            <a href="myboat.php?lang=<?echo $lang?>"><?php echo getLocalizedString("control"); ?></a>
+            <a href="mappref.php?lang=<?echo $lang?>"><?php echo getLocalizedString("mymap"); ?></a>
+            <a href="modify.php?lang=<?echo $lang?>"><?php echo getLocalizedString("choose"); ?></a>
         </div> <!-- fin div pagesbox -->
         <div id="langbox" class="leftbox">
 <?php
-            $langs= array_keys($strings);
+            $langs= getLocalizedString(null);
             foreach ($langs as $lg) {
-                echo "<a href=\"".$SCRIPT_NAME."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".$strings[$lg]['lang_version']."\" alt=\"".$strings[$lg]['lang_version']."\" /></a>\n";
+                echo "<a href=\"".$SCRIPT_NAME."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
             }            
 ?>
         </div> <!-- fin div langbox-->
         <div id="menubox" class="leftbox">
-            <a href="index.php?lang=<?echo $lang?>"><?echo $strings[$lang]["home"]?></a> 
+            <a href="index.php?lang=<?echo $lang?>"><?echo getLocalizedString("home")?></a> 
 <?php
                 // Bouton "ADMIN" pour les administrateurs
                 if ( idusersIsAdmin (getLoginId()) ) {
                     echo "<a target=\"_admin\" href=\"/admin/\">Admin</a>";
                 }
 ?>
-            <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo $strings[$lang]["images"]; ?></a> 
-            <a href="races.php?lang=<?echo $lang?>"><?echo $strings[$lang]["races"]; ?></a>
-            <a href="calendar.php?lang=<?echo $lang?>"><?echo $strings[$lang]["calendar"]; ?></a>
-            <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo $strings[$lang]["ranking"]; ?></a> 
-            <a href="<?echo DOC_SERVER_URL.'FAQ/'.$lang; ?>" target="_vlmwiki"><?echo $strings[$lang]["faq"]; ?></a> 
-            <a href="<?echo DOC_SERVER_URL.'About/'.$lang; ?>" target="_vlmwiki"><?echo $strings[$lang]["about"]; ?></a>
+            <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo getLocalizedString("images"); ?></a> 
+            <a href="races.php?lang=<?echo $lang?>"><?echo getLocalizedString("races"); ?></a>
+            <a href="calendar.php?lang=<?echo $lang?>"><?echo getLocalizedString("calendar"); ?></a>
+            <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo getLocalizedString("ranking"); ?></a> 
+            <a href="<?echo DOC_SERVER_URL.'FAQ/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a> 
+            <a href="<?echo DOC_SERVER_URL.'About/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("about"); ?></a>
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
-            <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo $strings[$lang]["forum"]?></a>
+            <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo getLocalizedString("forum")?></a>
             <?php
                 $ircpseudo = preg_replace("([^a-zA-Z0-9-\[\]\\`^{}])", "-", getLoginName(). "-" . getLoginId());
                 $ircpseudo = preg_replace("(-+)", "-", $ircpseudo);
                 echo "<a href=\"http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&amp;server=mibbit.epiknet.org&amp;channel=%23vlm&amp;noServerTab=false&amp;autoConnect=true&amp;customprompt=Welcome%20To%20VLM%20Chat&amp;charset=iso-8859-15&amp;nick=" . $ircpseudo . "\" target=\"_blank\" >";
-                echo $strings[$lang]["tchat"];
+                echo getLocalizedString("tchat");
             ?>
             </a>
             <?php 
                 echo "(<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
-                echo "old".$strings[$lang]["tchat"];
+                echo "old".getLocalizedString("tchat");
                 ?>
             </a>)
         </div> <!-- fin div menucommunicationbox -->
         <div id="toolbarbox" class="leftbox">
             <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki">
-                <img src="images/site/documentation.png"  alt="<?php echo $strings[$lang]["doc"]; ?>" title="<?php echo $strings[$lang]["doc"]; ?>" />
+                <img src="images/site/documentation.png"  alt="<?php echo getLocalizedString("doc"); ?>" title="<?php echo getLocalizedString("doc"); ?>" />
             </a>
             <a href="<?php echo DEV_SERVER_URL; ?>" target="_vlmdev">
-                <img src="images/site/vlmdev.png"  alt="<?php echo $strings[$lang]["dev"]; ?>" title="<?php echo $strings[$lang]["dev"]; ?>" />
+                <img src="images/site/vlmdev.png"  alt="<?php echo getLocalizedString("dev"); ?>" title="<?php echo getLocalizedString("dev"); ?>" />
             </a>
             <a href="<?php echo TOOLS_SERVER_URL; ?>" target="_outils">
-                <img src="images/site/outils.png" alt="<?php echo $strings[$lang]["tools"]; ?>" title="<?php echo $strings[$lang]["tools"]; ?>"/>
+                <img src="images/site/outils.png" alt="<?php echo getLocalizedString("tools"); ?>" title="<?php echo getLocalizedString("tools"); ?>"/>
             </a>            
         </div>
         <div id="weatherbox" class="leftbox">
-<!--            <h3><?php echo $strings[$lang]["weather"]; ?></h3> -->
-                <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><?echo $strings[$lang]["meteodata"]?></a>
-                <a href="<?php echo GRIB_TOOLS_URL; ?>" target="_meteotools"><?echo $strings[$lang]["meteotools"]?></a>
+<!--            <h3><?php echo getLocalizedString("weather"); ?></h3> -->
+                <a href="<?php echo GRIB_SERVER_URL; ?>/" target="_meteodata"><?echo getLocalizedString("meteodata")?></a>
+                <a href="<?php echo GRIB_TOOLS_URL; ?>" target="_meteotools"><?echo getLocalizedString("meteotools")?></a>
         </div>
         <div id="pubbox1" class="leftpubbox">
         </div>
