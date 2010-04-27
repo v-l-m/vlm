@@ -68,7 +68,7 @@ function getCurrentLang() {
     return $lang;
 }
 
-function getLocalizedString($key) {
+function getLocalizedString($key, $lg = null) {
     static $stringarray = null;
     static $lang = null;
     if (is_null($stringarray)) {
@@ -77,10 +77,19 @@ function getLocalizedString($key) {
         if (!array_key_exists($lang, $strings)) $lang = "en";
         $stringarray = $strings;
     }
-    if (array_key_exists($key, $stringarray[$lang])) {
-        return $stringarray[$lang][$key];
-    } else if ($lang != "en" && array_key_exists($key, $stringarray["en"])) {
-        return "**".$stringarray[$lang][$key]."**";
+    if (is_null($key)) {
+        //Ugly, isn't it ?
+        return array_keys($stringarray);
+    }
+    if (is_null($lg)) {
+        $locallang = $lang;
+    } else {
+        $locallang = $lg;
+    }
+    if (array_key_exists($key, $stringarray[$locallang])) {
+        return $stringarray[$locallang][$key];
+    } else if ($locallang != "en" && array_key_exists($key, $stringarray["en"])) {
+        return "**".$stringarray[$locallang][$key]."**";
     } else {
         return "**$key is not valid**";
     }

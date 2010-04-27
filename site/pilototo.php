@@ -213,7 +213,7 @@
             $numligne++;
         }
     } else {
-        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . getLocalizedString("pilototo_no_event"] . "</td></tr>\n" ;
+        echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . getLocalizedString("pilototo_no_event") . "</td></tr>\n" ;
     }
     
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
