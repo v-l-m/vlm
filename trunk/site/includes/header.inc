@@ -283,8 +283,8 @@
                 if ( idusersIsAdmin (getLoginId()) ) {
                     echo "<a target=\"_admin\" href=\"/admin/\">Admin</a>";
                 }
+                //<a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo getLocalizedString("images"); ?></a> 
 ?>
-            <a href="http://images.virtual-loup-de-mer.org/" target="_images"><?echo getLocalizedString("images"); ?></a> 
             <a href="races.php?lang=<?echo $lang?>"><?echo getLocalizedString("races"); ?></a>
             <a href="calendar.php?lang=<?echo $lang?>"><?echo getLocalizedString("calendar"); ?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo getLocalizedString("ranking"); ?></a> 
