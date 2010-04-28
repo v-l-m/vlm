@@ -11,7 +11,6 @@
 */
 $PAGETITLE = "User Admin Wizard (Old admin interface)";
 include("htmlstart.php");
-include_once("../includes/strings.inc");
 
 //all GET and POST variables
 isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang=NavigatorLanguage();
