@@ -692,10 +692,15 @@ class map
 
       // Test blackout ou pas
       if ( $now > $this->fullRacesObj->races->bobegin && $now < $this->fullRacesObj->races->boend ) {
-          //FIXME: WARNING is untranslated
           //FIXME what is this $font var ? (I guess it's zero, this the font size is 15)
-          imagestring ( $this->mapImage, $font+15, $this->xSize/2 -150, 10 , "WARNING : POSITION BLACKOUT IN ACTION", $this->colorWarning);
-          imagestring ( $this->mapImage, $font+15, $this->xSize/2 -149, 9 , "WARNING : POSITION BLACKOUT IN ACTION", $this->colorBlack);
+          imagestring ( $this->mapImage, $font+15, 10, $this->ySize - 40 ,
+                        getLocalizedString("blackout").gmdate(getLocalizedString("dateClassificationFormat"),
+                          $this->fullRacesObj->races->boend),
+                        $this->colorWarning);
+          imagestring ( $this->mapImage, $font+15, 9, $this->ySize - 39 ,
+                        getLocalizedString("blackout").gmdate(getLocalizedString("dateClassificationFormat"),
+                          $this->fullRacesObj->races->boend),
+                        $this->colorBlack);
       }
       
   } //drawBlackoutWarning      
