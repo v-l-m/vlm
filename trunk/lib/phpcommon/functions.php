@@ -33,12 +33,44 @@ function wrapper_mysql_db_query($cmd) {
 
 // Protège la variable
 function quote_smart($value) {
-  // Stripslashes
-  if (get_magic_quotes_gpc()) {
-    $value = stripslashes($value);
-  }
-  return $value;
+  // Stripslashes if required
+    static $magic_quotes_gpc = null;
+    if ($magic_quotes_gpc === null) {
+        $magic_quotes_gpc = get_magic_quotes_gpc();
+    }
+
+    if ($magic_quote_gpc) {
+        $value = stripslashes($value);
+    }
+    return $value;
 }
+
+function get_cgi_var($name, $default_value = null) {
+    //From phpmyedit.org
+    static $magic_quotes_gpc = null;
+    if ($magic_quotes_gpc === null) {
+        $magic_quotes_gpc = get_magic_quotes_gpc();
+    }
+    $var = @$_GET[$name];
+    if (! isset($var)) {
+        $var = @$_POST[$name];
+    }
+    if (isset($var)) {
+        if ($magic_quotes_gpc) {
+            if (is_array($var)) {
+                foreach (array_keys($var) as $key) {
+                    $var[$key] = stripslashes($var[$key]);
+                }
+            } else {
+                $var = stripslashes($var);
+            }
+        }
+    } else {
+        $var = @$default_value;
+    }
+    return $var;
+}
+
 
 //     String $lang NavigatorLanguage()
 //
