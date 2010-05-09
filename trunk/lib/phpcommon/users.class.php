@@ -86,9 +86,17 @@ class users
     }
   }
 
+  //Save error string - concat all error strings
   function set_error($error_string) {
       $this->error_status = True;
-      $this->error_string = $error_string;
+      $this->error_string .= $error_string."\n";
+  }
+  
+  //Convenient with mysql errors
+  function set_error_with_mysql_query($query) {
+      $msg = "MySql error ".mysql_errno()." :".mysql_error()."\n".
+             "Query was :".$query;
+      $this->set_error($msg);
   }
 
   //update boatname and color
@@ -1153,37 +1161,23 @@ class fullUsers
       $this->deleteCurrentRanking();
     }
 
-
   }
 
 
   function writeNewheading($mode, $boath, $param) {
-
-      //fixme: pilot mode enumeration should be defined elsewhere !
-      if (is_int($mode)) {
-          $modes = Array(
-              1 => "autopilot",
-              2 => "windangle",
-              3 => "orthodromic",
-              4 => "bestvmg",
-              5 => "vbvmg",
-              6 => "bestspeed");
-          $mode = $modes[$mode];
-      }
 
       // We timestamp each change,
       // ==> to detect sleeping users who are in STOPPED mode due to coast crossing
       // Engine uses this field to set them DNF if the are sleeping for a long time
       // FIXME : does the lastchange field dups with the updated field ???
       $timestamp=time(); //Impact si différence au niveau temps des serveurs...
-      $result = False;
       $query = "UPDATE `users` ";
       $query_suffix = " `lastchange` = ". $timestamp . ", " .
                       " `ipaddr` = '". $_SESSION['IP'] . "'" .
                       " WHERE `idusers` = ".$this->users->idusers;
 
       switch ($mode) {
-          case "autopilot":
+          case PILOTMODE_HEADING :
               //find angle and wind angle
               $this->users->boatheading = $boath;
               $this->users->pilotmode = PILOTMODE_HEADING;
@@ -1193,7 +1187,7 @@ class fullUsers
                         $query_suffix;
               $logmsg = "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading;
               break;
-          case "windangle":
+          case PILOTMODE_WINDANGLE :
               $this->users->pilotparameter = $param;
               $this->users->pilotmode = PILOTMODE_WINDANGLE;
               $query .= "SET `pilotmode`=". PILOTMODE_WINDANGLE.", " .
@@ -1201,45 +1195,32 @@ class fullUsers
                         $query_suffix;
               $logmsg = "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter;
               break;
-
-          case "orthodromic":
-              $this->users->pilotmode = PILOTMODE_ORTHODROMIC;
-              $query .= "SET `pilotmode`=".PILOTMODE_ORTHODROMIC.", " .
-                        $query_suffix;
-              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
-              break;
-
-          case "bestvmg":
-              $this->users->pilotmode = PILOTMODE_BESTVMG;
-              $query .= "SET `pilotmode`=".PILOTMODE_BESTVMG.", " .
-                        $query_suffix;
-              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
-              break;
-
-          case "vbvmg":
-              $this->users->pilotmode = PILOTMODE_VBVMG;
-              $query .= "SET `pilotmode`=".PILOTMODE_VBVMG.", " .
-                        $query_suffix;
-              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
-              break;
-
-          case "bestspeed":
-              $this->users->pilotmode = PILOTMODE_BESTSPEED;
-              $query .= "SET `pilotmode`=".PILOTMODE_BESTSPEED.", " .
+          case PILOTMODE_ORTHODROMIC :
+          case PILOTMODE_BESTVMG :
+          case PILOTMODE_VBVMG :
+          case PILOTMODE_BESTSPEED :
+              $this->users->pilotmode = $mode;
+              $query .= "SET `pilotmode`=".$mode.", " .
                         $query_suffix;
               $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
           break;
           default :
+              //En principe, on ne doit jamais arriver là car les contrôles doivent être fait en amont de l'appel à la méthode
               $logmsg = "Update Angles : FAILED with pim = $mode";
-              logUserEvent($this->users->idusers , $this->users->engaged, $logmsg); 
-              die('FATAL : please report this error ! - '.$logmsg);
+              logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);
+              $this->users->set_error($logmsg);
+              return False;
       }
       if ($result = wrapper_mysql_db_query_writer($query)) {
-          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg); 
+          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);
           $this->updateAngles();
           return True;
       } else {
-          $this->users->set_error("Query [$query] failed !");
+          //Error d'accès sql ?
+          $logmsg = "Update Angles : FAILED with pim = $mode, boatheading = $boath, pip = $param";
+          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);          
+          $this->users->set_error($logmsg);
+          $this->users->set_error_with_mysql_query($query);
           return False;
       }
   }
