@@ -1149,91 +1149,90 @@ class fullUsers
   }
 
 
-  function writeNewheading($mode, $boath, $param)
-  {
+  function writeNewheading($mode, $boath, $param) {
 
-    //pilotmode = 1 if autopilot
-    //pilotmode = 2 if wind angle
-    //pilotmode = 3 if orthodromic
-    //pilotmode = 4 if bestvmg
-    //pilotmode = 5 if vbvmg
-    //pilotmode = 6 if bestspeed
+      //fixme: pilot mode enumeration should be defined elsewhere !
+      if (is_int($mode)) {
+          $modes = Array(
+              1 => "autopilot",
+              2 => "windangle",
+              3 => "orthodromic",
+              4 => "bestvmg",
+              5 => "vbvmg",
+              6 => "bestspeed");
+          $mode = $modes[$mode];
+      }
 
-    // We timestamp each change,
-    // ==> to detect sleeping users who are in STOPPED mode due to coast crossing
-    // Engine uses this field to set them DNF if the are sleeping for a long time
-    $timestamp=time();
+      // We timestamp each change,
+      // ==> to detect sleeping users who are in STOPPED mode due to coast crossing
+      // Engine uses this field to set them DNF if the are sleeping for a long time
+      // FIXME : does the lastchange field dups with the updated field ???
+      $timestamp=time(); //Impact si différence au niveau temps des serveurs...
+      $result = False;
+      $query = "UPDATE `users` ";
+      $query_suffix = " `lastchange` = ". $timestamp . ", " .
+                      " `ipaddr` = '". $_SESSION['IP'] . "'" .
+                      " WHERE `idusers` = ".$this->users->idusers;
 
-    switch ($mode) {
-    case "autopilot":
-      //find angle and wind angle
-      $this->users->boatheading = $boath;
-      $this->users->pilotmode = PILOTMODE_HEADING;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_HEADING.", " .
-	" boatheading = ". $this->users->boatheading . ", " .
-	" pilotparameter = ". $this->users->boatheading . ", " .
-	" lastchange = ". $timestamp . ", " .
-	" ipaddr = '". $_SESSION['IP'] . "'" .
-	" WHERE idusers = ".$this->users->idusers;
-      $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
-      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading );
-      break;
+      switch ($mode) {
+          case "autopilot":
+              //find angle and wind angle
+              $this->users->boatheading = $boath;
+              $this->users->pilotmode = PILOTMODE_HEADING;
+              $query .= "SET `pilotmode`=".PILOTMODE_HEADING.", " .
+                        " boatheading = ". $this->users->boatheading . ", " .
+                        " pilotparameter = ". $this->users->boatheading . ", " .
+                        $query_suffix;
+              $logmsg = "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading;
+              break;
+          case "windangle":
+              $this->users->pilotparameter = $param;
+              $this->users->pilotmode = PILOTMODE_WINDANGLE;
+              $query .= "SET `pilotmode`=". PILOTMODE_WINDANGLE.", " .
+                      " `pilotparameter` = " . round($this->users->pilotparameter,3) . ", " .
+                        $query_suffix;
+              $logmsg = "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter;
+              break;
 
-    case "windangle":
-      $this->users->pilotparameter = $param;
-      $this->users->pilotmode = PILOTMODE_WINDANGLE;
-      $query = "UPDATE users SET `pilotmode`=". PILOTMODE_WINDANGLE.", " .
-	" `pilotparameter` = " . round($this->users->pilotparameter,3) . ", " .
-	" lastchange = ". $timestamp . ", " .
-	" ipaddr = '". $_SESSION['IP'] . "'" .
-	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter );
-      break;
+          case "orthodromic":
+              $this->users->pilotmode = PILOTMODE_ORTHODROMIC;
+              $query .= "SET `pilotmode`=".PILOTMODE_ORTHODROMIC.", " .
+                        $query_suffix;
+              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
+              break;
 
-    case "orthodromic":
-      $this->users->pilotmode = PILOTMODE_ORTHODROMIC;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_ORTHODROMIC.", " .
-	" lastchange = ". $timestamp . ", " .
-	" ipaddr = '". $_SESSION['IP'] . "'" .
-	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
-      break;
+          case "bestvmg":
+              $this->users->pilotmode = PILOTMODE_BESTVMG;
+              $query .= "SET `pilotmode`=".PILOTMODE_BESTVMG.", " .
+                        $query_suffix;
+              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
+              break;
 
-    case "bestvmg":
-      $this->users->pilotmode = PILOTMODE_BESTVMG;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_BESTVMG.", " .
-	" lastchange = ". $timestamp . ", " .
-	" ipaddr = '". $_SESSION['IP'] . "'" .
-	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
-      break;
+          case "vbvmg":
+              $this->users->pilotmode = PILOTMODE_VBVMG;
+              $query .= "SET `pilotmode`=".PILOTMODE_VBVMG.", " .
+                        $query_suffix;
+              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
+              break;
 
-    case "vbvmg":
-      $this->users->pilotmode = PILOTMODE_VBVMG;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_VBVMG.", " .
-	" lastchange = ". $timestamp . ", " .
-	" ipaddr = '". $_SESSION['IP'] . "'" .
-	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
-      break;
-
-    case "bestspeed":
-      $this->users->pilotmode = PILOTMODE_BESTSPEED;
-      $query = "UPDATE users SET `pilotmode`=".PILOTMODE_BESTSPEED.", " .
-	" lastchange = ". $timestamp . ", " .
-	" ipaddr = '". $_SESSION['IP'] . "'" .
-	" WHERE idusers = ".$this->users->idusers;
-      wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-
-      logUserEvent($this->users->idusers , $this->users->engaged, "Update Angles : pim=" . $this->users->pilotmode  );
-      break;
-    }
-    $this->updateAngles();
-
+          case "bestspeed":
+              $this->users->pilotmode = PILOTMODE_BESTSPEED;
+              $query .= "SET `pilotmode`=".PILOTMODE_BESTSPEED.", " .
+                        $query_suffix;
+              $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
+          break;
+          default :
+              $logmsg = "Update Angles : FAILED with pim = $mode";
+              logUserEvent($this->users->idusers , $this->users->engaged, $logmsg); 
+              die('FATAL : please report this error ! - '.$logmsg);
+      }
+      if ($result = wrapper_mysql_db_query_writer($query)) {
+          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg); 
+          $this->updateAngles();
+          return True;
+      } else {
+          return "Query [$query] failed \n";
+      }
   }
 
   /**
