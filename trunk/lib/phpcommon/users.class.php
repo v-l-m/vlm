@@ -32,6 +32,9 @@ class users
     $ipaddr,
     $pilototo,
     $theme;
+    
+  var $error_status = False;
+  var $error_string = "";
 
   function users($id)
   {
@@ -81,6 +84,11 @@ class users
     if (is_null($this->theme) ) {
       $this->theme = 'default';
     }
+  }
+
+  function set_error($error_string) {
+      $this->error_status = True;
+      $this->error_string = $error_string;
   }
 
   //update boatname and color
@@ -1231,7 +1239,8 @@ class fullUsers
           $this->updateAngles();
           return True;
       } else {
-          return "Query [$query] failed \n";
+          $this->users->set_error("Query [$query] failed !");
+          return False;
       }
   }
 
