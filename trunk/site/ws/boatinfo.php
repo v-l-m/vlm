@@ -229,7 +229,7 @@ $info_array = get_info_array($_SESSION['idu']);
 
 switch ($fmt) {
 case "json":
-    header("Content-Type: text/plain; charset=UTF-8");
+    header('Content-type: application/json; charset=UTF-8');
     echo json_encode($info_array);
     break;
 case "text":
