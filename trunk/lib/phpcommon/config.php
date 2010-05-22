@@ -3,7 +3,7 @@
 /************** restricted pages ******/
 $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercator1.php", "/subscribe_race.php", "/pilototo.php");
 
-/************** localDBPages pages : HAS TO BE SET BEFORE INSLUSION OF PARAM.PHP ******/
+/************** localDBPages pages : HAS TO BE SET BEFORE INCLUSION OF PARAM.PHP ******/
 
 $localDBPages = array(
                 "/index.php",
