@@ -39,9 +39,14 @@ class races {
                  maxboats, theme, vacfreq, updated
                  FROM races WHERE idraces = $id";
         $result = wrapper_mysql_db_query_reader($query) or die($query);
-        $row = mysql_fetch_array($result, MYSQL_ASSOC);
-    } else if (is_null($row)) {
-        die("EXCEPTION : races class was called with bad id=$id");
+        if (mysql_num_rows($result) > 0) {
+            $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        } else {
+            $row = null;
+        }
+    }
+    if ($id == 0 || is_null($row)) {
+        die("Races class was called with bad id=$id");
     }
     
     $this->idraces          = $row['idraces'];
