@@ -25,6 +25,12 @@
         reply($answer);
     }
 
+    function reply_with_success($answer) {
+        $answer['success'] = 1;
+        reply($answer);
+    }
+
+
     function reply_with_error_if_not_exists($key, $request, $code, $answer) {
         if (!isset($request[$key])) reply_with_error($code, $answer);
     }
@@ -39,7 +45,7 @@
     function check_pip_with_float($request, $answer) {
         reply_with_error_if_not_exists('pip', $request, 'PIP01', $answer);
         $pip = $request['pip'];
-        if (!is_float($pip)) reply_with_error('PIP02', $answer);
+        if (!is_numeric($pip)) reply_with_error('PIP02', $answer);
         return $pip;
     }
     
@@ -54,7 +60,7 @@
         if (!isset($pip['wphdg'])) {
             $pip['wphdg'] = -1.;
         }
-        if (is_float($pip['wplat']) && is_float($pip['wplon']) && (is_float($pip['wphdg']))) {
+        if (is_numeric($pip['wplat']) && is_numeric($pip['wplon']) && (is_numeric($pip['wphdg']))) {
             return $pip;
         } else {
             reply_with_error('WP05', $answer);
@@ -104,11 +110,12 @@
                     $fullusers->writeNewheading($pim);
                     break;
                 default :
-                    reply_with_error('PIM03');
+                    reply_with_error('PIM03', $answer);
             }                
-
+            break;
         default :
             reply_with_error('PARM03', $answer);
-    }    
+    }
+    reply_with_success($answer);
 
 ?>
