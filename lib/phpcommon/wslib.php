@@ -2,6 +2,34 @@
 
 include_once("functions.php");
 
+function get_error($code) {
+
+    $ws_error_types = Array(
+        //Format
+        "PARM01" => "parms should be specified",
+        "PARM02" => "parms is not a valid array",
+        "PARM03" => "specified (maybe unspecified) action is not valid",
+        //Auth
+        "AUTH01" => "idu is mandatory for safety reasons and should match your login",
+        "AUTH02" => "Your request does not match the idu you are login in",
+        //pim
+        "PIM01" => "pim is unspecified",
+        "PIM02" => "pim should be int",
+        "PIM03" => "pim should be in range 1..5",
+        //pip
+        "PIP01" => "pip is unspecified",
+        "PIP02" => "pip should be float",
+        //wp (and also pip when pip = wp)
+        "WP01" => "pip/wp is unspecified",
+        "WP02" => "pip/wp should be an array",
+        "WP03" => "wplat is unspecified",
+        "WP04" => "wplon is unspecified",
+        "WP05" => "wp parameters should be floats",        
+    );
+    
+    return Array("code" => $code, "msg" => $ws_error_types[$code]);
+}
+
 function get_requested_output_format() {
   $qjson = 0;
   $sjson = false;
