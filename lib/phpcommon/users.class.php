@@ -1164,7 +1164,7 @@ class fullUsers
   }
 
 
-  function writeNewheading($mode, $boath, $param) {
+  function writeNewheading($mode, $boath = null, $param = null) {
 
       // We timestamp each change,
       // ==> to detect sleeping users who are in STOPPED mode due to coast crossing
@@ -1179,16 +1179,16 @@ class fullUsers
       switch ($mode) {
           case PILOTMODE_HEADING :
               //find angle and wind angle
-              $this->users->boatheading = $boath;
+              if (!is_null($boath)) $this->users->boatheading = $boath;
               $this->users->pilotmode = PILOTMODE_HEADING;
               $query .= "SET `pilotmode`=".PILOTMODE_HEADING.", " .
-                        " boatheading = ". $this->users->boatheading . ", " .
-                        " pilotparameter = ". $this->users->boatheading . ", " .
+                        " `boatheading` = ". $this->users->boatheading . ", " .
+                        " `pilotparameter` = ". $this->users->boatheading . ", " .
                         $query_suffix;
               $logmsg = "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->boatheading;
               break;
           case PILOTMODE_WINDANGLE :
-              $this->users->pilotparameter = $param;
+              if (!is_null($param)) $this->users->pilotparameter = $param;
               $this->users->pilotmode = PILOTMODE_WINDANGLE;
               $query .= "SET `pilotmode`=". PILOTMODE_WINDANGLE.", " .
                       " `pilotparameter` = " . round($this->users->pilotparameter,3) . ", " .
