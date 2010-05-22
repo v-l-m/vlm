@@ -18,13 +18,13 @@ function get_error($code) {
         "PIM03" => "pim should be in range 1..5",
         //pip
         "PIP01" => "pip is unspecified",
-        "PIP02" => "pip should be float",
+        "PIP02" => "pip should be numeric",
         //wp (and also pip when pip = wp)
         "WP01" => "pip/wp is unspecified",
         "WP02" => "pip/wp should be an array",
         "WP03" => "wplat is unspecified",
         "WP04" => "wplon is unspecified",
-        "WP05" => "wp parameters should be floats",        
+        "WP05" => "wp parameters should be numerics",        
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
