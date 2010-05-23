@@ -45,7 +45,7 @@ class races {
             $row = null;
         }
     }
-    if ($id == 0 || is_null($row)) {
+    if (is_null($row)) {
         die("Races class was called with bad id=$id");
     }
     
