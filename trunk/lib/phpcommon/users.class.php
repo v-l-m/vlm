@@ -716,6 +716,8 @@ class fullUsers
    */
   function updateTarget($lat, $long, $hdg) {
 
+      if ($this->users->targetlat == $lat && $this->users->targetlong == $long && $this->users->targetandhdg == $hdg) return True;
+
       //Update targetlat
       if ( is_numeric($lat) && abs($lat)<90 ) {
           $this->users->targetlat = $lat;
