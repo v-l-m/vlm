@@ -56,12 +56,12 @@
         $pip = $request['pip'];
         if (!is_array($pip)) reply_with_error('WP02', $answer);
         //existence des paramètres
-        reply_with_error_if_not_exists('wplat', $pip, 'WP03', $answer);
-        reply_with_error_if_not_exists('wplon', $pip, 'WP04', $answer);
-        if (!isset($pip['wphdg'])) {
-            $pip['wphdg'] = -1.;
+        reply_with_error_if_not_exists('targetlat', $pip, 'WP03', $answer);
+        reply_with_error_if_not_exists('targetlon', $pip, 'WP04', $answer);
+        if (!isset($pip['targetandhdg'])) {
+            $pip['targetandhdg'] = -1.;
         }
-        if (is_numeric($pip['wplat']) && is_numeric($pip['wplon']) && (is_numeric($pip['wphdg']))) {
+        if (is_numeric($pip['targetlat']) && is_numeric($pip['targetlon']) && (is_numeric($pip['targetandhdg']))) {
             return $pip;
         } else {
             reply_with_error('WP05', $answer);
@@ -106,7 +106,7 @@
                     if (isset($request['pip'])) {
                         $pip = check_pip_with_wp($request, $answer);
                         //OK, on a un pip, et il est valide
-                        $fullusers->updateTarget($pip['wplat'], $pip['wplon'], $pip['wphdg'], false);
+                        $fullusers->updateTarget($pip['targetlat'], $pip['targetlon'], $pip['targetandhdg']);
                     }
                     $fullusers->writeNewheading($pim);
                     break;
