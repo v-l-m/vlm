@@ -1200,7 +1200,7 @@ class fullUsers
           case PILOTMODE_VBVMG :
           case PILOTMODE_BESTSPEED :
               $this->users->pilotmode = $mode;
-              $query .= "SET `pilotmode`=".$mode.", " .
+              $query .= "SETA `pilotmode`=".$mode.", " .
                         $query_suffix;
               $logmsg = "Update Angles : pim=" . $this->users->pilotmode;
           break;

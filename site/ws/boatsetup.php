@@ -19,14 +19,15 @@
         exit();
     }
 
-    function reply_with_error($code, $answer) {
-        $answer['success'] = 0;
+    function reply_with_error($code, $answer, $error_string = null) {
+        $answer['success'] = False;
         $answer['error'] = get_error($code);
+        if (!is_null($error_string)) $answer['error']['error_string'] = $error_string;
         reply($answer);
     }
-
+    
     function reply_with_success($answer) {
-        $answer['success'] = 1;
+        $answer['success'] = True;
         reply($answer);
     }
 
@@ -87,7 +88,7 @@
 
     //OK, on peut instancier l'utilisateur
     $fullusers = new fullUsers(getLoginId());
-
+    
     switch($request['action']) {
         case "boat" :
             $pim = check_pim($request, $answer);
@@ -116,6 +117,10 @@
         default :
             reply_with_error('PARM03', $answer);
     }
-    reply_with_success($answer);
+    if ($fullusers->users->error_status) {
+        reply_with_error("CORE01", $answer, $fullusers->users->error_string);
+    } else {
+        reply_with_success($answer);
+    }
 
 ?>
