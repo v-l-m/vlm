@@ -678,88 +678,89 @@ class fullUsers
     
   }
 
+  function abandonWpAndTarget() {
+
+      //No logging, only called by engine
+
+      $query = "UPDATE `users` SET `targetandhdg` = -1, " ;
+
+      // If targetandhdg is between 0 and 360
+      if ( $this->users->targetandhdg>= 0 and $this->users->targetandhdg<=360) {
+          // New heading will become this heading, and pilotmode is set to PILOTMODE_HEADING
+          $this->users->pilotmode      = PILOTMODE_HEADING;
+          $this->users->pilotparameter = $this->users->targetandhdg;
+          $this->users->boatheading    = $this->users->targetandhdg;
+
+          $query .=  " `pilotmode` = " . $this->users->pilotmode      . " ," ;
+          $query .=  " `pilotparameter` = " . $this->users->pilotparameter . " ," ;
+          $query .=  " `boatheading` = " . $this->users->boatheading    . " ," ;
+      }  else  {
+          // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG ou VBMG)
+          // Mais il faut remettre à jour LatNM et LongNM
+          $rc = $this->bestWayToWaypoint($this->nwp);
+      }
+      $this->users->targetandhdg = -1;
+      $this->users->targetlat    = 0;
+      $this->users->targetlong   = 0;
+
+      $query .= " `targetlat` = " . $this->users->targetlat      . " ," ;
+      $query .= " `targetlong` = " . $this->users->targetlong     . " ," ;
+      $query .= " `lastchange` = " .time(). " WHERE `idusers` = " . $this->users->idusers;
+
+      return wrapper_mysql_db_query_writer($query);
+  }
+
   /* update the target
    *  - lat / long
    *  - hdg (-1 if not valid)
-   *  - abandonWP pour différencier abandon de WP(true) de la saisie de WP(false)
-   *  FIXME : pourquoi est ce dans la même fonction ?
    */
-  function updateTarget($lat, $long, $hdg, $abandonWP=false) {
+  function updateTarget($lat, $long, $hdg) {
 
-      /**
-       *  S'agit t'il d'un abandon de WP ? ( on ré-initialise targetandhdg )
-       *  Si un cap est saisi (valeure positive inférieure à 360), on prend ce cap
-       *  Sinon, il faut se mettre en route vers le prochain WP (redéfinir LatNM et LongNM)
-       */
-
-      if ( $abandonWP ) {
-          $query = "UPDATE `users` SET `targetandhdg` = -1, " ;
-
-          // If targetandhdg is between 0 and 360
-          if ( $this->users->targetandhdg>= 0 and $this->users->targetandhdg<=360) {
-              // New heading will become this heading, and pilotmode is set to PILOTMODE_HEADING
-              $this->users->pilotmode      = PILOTMODE_HEADING;
-              $this->users->pilotparameter = $this->users->targetandhdg;
-              $this->users->boatheading    = $this->users->targetandhdg;
-
-              $query .=  " `pilotmode` = " . $this->users->pilotmode      . " ," ;
-              $query .=  " `pilotparameter` = " . $this->users->pilotparameter . " ," ;
-              $query .=  " `boatheading` = " . $this->users->boatheading    . " ," ;
-          }  else  {
-              // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG ou VBMG)
-              // Mais il faut remettre à jour LatNM et LongNM
-              $rc = $this->bestWayToWaypoint($this->nwp);
-          }
-          $this->users->targetandhdg = -1;
-          $this->users->targetlat    = 0;
-          $this->users->targetlong   = 0;
-
-          $query .= " `targetlat` = " . $this->users->targetlat      . " ," ;
-          $query .= " `targetlong` = " . $this->users->targetlong     . " ," ;
-          $query .= " `lastchange` = " .time(). " WHERE idusers = " . $this->users->idusers;
-
-          wrapper_mysql_db_query_writer($query);
-
+      //Update targetlat
+      if ( is_numeric($lat) && abs($lat)<90 ) {
+          $this->users->targetlat = $lat;
       } else {
-          // Il ne s'agit pas d'un abandon de WP, donc c'est une modification du paramétrage
-          $query = "UPDATE users ";
-          $query .= "set `lastchange` = "  . time() ;
-
-          //FIXME: est ce que le fait de mettre à jour $users mais pas la base peut avoir un effet de bord pendant le run moteur ?
-
-          //Update targetlat
-          if ( is_numeric($lat) && abs($lat)<90 ) {
-              $this->users->targetlat = $lat;
-              $query .= " , `targetlat`  = " . $this->users->targetlat   ;
-          } else {
-              $this->users->targetlat = 0;
-          }
-
-          //Update targetlong
-          if ( is_numeric($long) && abs($long)<=180 ) {
-              if ( $long >180 ) $long-=360;
-              if ( $long <=-180 ) $long+=360;
-              $this->users->targetlong = $long;
-              $query .= " , `targetlong` = " . $this->users->targetlong ;
-          } else {
-              $this->users->targetlong = 0;
-          }
-
-          //Update targetandhdg
-          if ( is_numeric($hdg) && abs($hdg)<=360 ) {
-              $this->users->targetandhdg = $hdg;
-              $query .= " , `targetandhdg` = " . $this->users->targetandhdg  ;
-          } else {
-              $this->users->targetandhdg=-1;
-          }
-
-          $query .= " WHERE `idusers` = " . $this->users->idusers;
-          wrapper_mysql_db_query_writer($query) ;//or printf("\nQuery failed : " . mysql_error." ".$query);
-
-          logUserEvent( $this->users->idusers,
-                        $this->users->engaged,
-                        "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" );
+          $this->users->targetlat = 0;
       }
+
+      //Update targetlong
+      if ( is_numeric($long) ) {
+          while ( $long >180 ) $long-=360;
+          while ( $long <=-180 ) $long+=360;
+          $this->users->targetlong = $long;
+      } else {
+          $this->users->targetlong = 0;
+      }
+
+      //Update targetandhdg
+      if ( is_numeric($hdg) && $hdg<=360 && $hdg>=0) {
+          $this->users->targetandhdg = $hdg;
+      } else {
+          $this->users->targetandhdg=-1;
+      }
+
+      $timestamp=time(); //Impact si différence au niveau temps des serveurs...
+      $query = "UPDATE `users` SET " .
+                "`targetlat`  = " . $this->users->targetlat .
+                " , `targetlong` = " . $this->users->targetlong .
+                " , `targetandhdg` = " . $this->users->targetandhdg .
+                " , `lastchange` = ". $timestamp .
+                " , `ipaddr` = '". $_SESSION['IP'] . "'" .
+                " WHERE `idusers` = ".$this->users->idusers;
+
+      $logmsg = "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" ;
+      if ($result = wrapper_mysql_db_query_writer($query)) {
+          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);
+          //$this->updateAngles();
+          return True;
+      } else {
+          //Error d'accès sql ?
+          logUserEvent($this->users->idusers , $this->users->engaged, "FAILED : ".$logmsg);
+          $this->users->set_error($logmsg);
+          $this->users->set_error_with_mysql_query($query);
+          return False;
+      }
+
   }
 
 

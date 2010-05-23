@@ -84,7 +84,7 @@
     if ($type == "savemywp")
     {
         $users = new fullUsers(getLoginId());
-        $users->updateTarget($targetlat, $targetlong,  $targetandhdg, false);
+        $users->updateTarget($targetlat, $targetlong,  $targetandhdg);
     }
 
     if ($type == "change")

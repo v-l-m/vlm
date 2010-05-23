@@ -175,10 +175,8 @@ if ( $usersObj->engaged != 0 ) {
     	       $fullUsersObj->users->targetlat, 
     	       $dist);
     
-    	// ABANDON DU WP PERSO => 
-    	// 4eme argument "abandonWP" pour differencier abandon de WP(true) de la saisie de WP(false)
-    	$fullUsersObj->updateTarget(0,0,0, true);
-    
+    	// ABANDON DU WP PERSO
+    	$fullUsersObj->abandonWpAndTarget();    
       }
     }
     
