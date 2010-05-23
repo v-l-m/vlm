@@ -151,9 +151,9 @@
                 if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
                     if ( $pim <1 || $pim >5) {
                         echo "ERROR ADD : PIM between 1 and 5 please.";
-                    } else if ( ( $pim == 1 ) && ($pip <0 or $pip >=360)  ) {
+                    } else if ( ( $pim == 1 ) && (!is_numeric($pip) or $pip <0 or $pip >=360)  ) {
                         echo "ERROR ADD : With PIM=1, PIP should be between 0 and 359.9  please";
-                    } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
+                    } else if ( ( $pim == 2 ) && (!is_numeric($pip) or $pip <-180 or $pip >180)  ) {
                         echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
                     } else if (  ( $pim == 3 or $pim == 4 or $pim == 5) 
                             &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )  
@@ -175,9 +175,9 @@
                 if ( !empty($taskid) && !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip ==0 ) ) {
                 if ( $pim <1 || $pim >5) {
                     echo "ERROR : PIM between 1 and 5 please.";
-                    } else if ( ( $pim == 1 ) && ($pip <0 or $pip >=360)  ) {
+                    } else if ( ( $pim == 1 ) && (!is_numeric($pip) or $pip <0 or $pip >=360)  ) {
                         echo "ERROR : With PIM=1, PIP should be between 0 and 359.9 please";
-                    } else if ( ( $pim == 2 ) && ($pip <-180 or $pip >180)  ) {
+                    } else if ( ( $pim == 2 ) && (!is_numeric($pip) or $pip <-180 or $pip >180)  ) {
                         echo "ERROR : With PIM=2, PIP should be between -180 and 180 please";
                     } else if ( ( $pim == 3 or $pim == 4 or $pim == 5 ) && ( strlen($pip)==0 or strpos($pip, ',')==false )  ) {
                         echo "ERROR : With PIM=3 or 4, PIP should be 0,0 or LATITUDE,LONGITUDE";
