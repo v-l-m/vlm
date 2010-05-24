@@ -99,6 +99,17 @@ class users
       $this->set_error($msg);
   }
 
+  //Wrapper
+  function logUserEvent($logmsg) {
+      logUserEvent($this->idusers , $this->engaged, $logmsg);
+  }
+
+  //Convenient bundle
+  function logUserEventError($logmsg = null) {
+      if (!is_null($logmsg)) $this->set_error($logmsg);
+      $this->logUserEvent($this->error_string);
+  }
+
   //update boatname and color
   function write()
   {
@@ -251,17 +262,24 @@ class users
   }
   
   // Delete a task from pilototo
-  function pilototoDelete($taskid)
-  {
-    $now=time();
-    // lookup for a task to do
-    $query = "DELETE FROM auto_pilot
-     WHERE idusers = $this->idusers
-       AND taskid = $taskid";
-    $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
+  function pilototoDelete($taskid) {
+      $logmsg = "pilototoDelete : taskid=$taskid";
+      $query = "DELETE FROM `auto_pilot` WHERE `idusers` = " .$this->idusers. " AND taskid = $taskid";
 
-    //echo $query;
-    return(0);
+      $result = wrapper_mysql_db_query_writer($query);
+      if(!($result)) {
+          //Error d'accès sql ?
+          $this->set_error_with_mysql_query($query);
+          $this->logUserEventError($logmsg);
+          return False;
+      } else if (($numrows = mysql_affected_rows()) != 1) {
+          $this->set_error("ERROR : $numrows lines updated !!!");
+          $this->logUserEventError($logmsg);
+          return False;        
+      } else {
+          $this->logUserEvent($logmsg);
+          return True;
+      }
   }
 
   // Delete Old Tasks from auto_pilot
@@ -288,46 +306,87 @@ class users
   }
 
   // Add a task to Pilototo
-  function pilototoAdd($time, $pim, $pip)
-  {
-    // lookup for a task to do
-    $time = intval($time);
+  function pilototoAdd($time, $pim, $pip) {
+      $logmsg = "PilotoAdd : (time : $time, pim : $pim, pip : $pip)";
+      //checking parameter : FIXME there is no policy for type checking... (where and when)
+      if (!is_int($time) or $time <= time()) {
+          $this->set_error("FAILED : time is in the past or not int");
+          $this->logUserEventError($logmsg);
+          return False;
+      }
+      if (!is_int($pim)) {
+          $this->set_error("FAILED : pim should be int");
+          $this->logUserEventError($logmsg);
+          return False;
+      }
 
-    $query = "SELECT COUNT(*) from auto_pilot
-              WHERE idusers=$this->idusers";
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_row($result);
-    if ( $row[0] < PILOTOTO_MAX_EVENTS and $time > time()) {
-      $query = "INSERT INTO auto_pilot
-             ( time, idusers, pilotmode, pilotparameter, status)
-       VALUES ( $time, $this->idusers, '" . $pim . "', '" . $pip . "', '".PILOTOTO_PENDING."');";
-      $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-      //echo $query;
-      return(0);
-    } else {
-      return(1);
-    }
+      //Counting tasks
+      $query = "SELECT count(*) as nb_tasks FROM `auto_pilot` WHERE `idusers`=".$this->idusers;
+      $result = wrapper_mysql_db_query_reader($query);
+      if (!$result) {
+          $this->set_error("FAILED : Error when couting tasks");
+          $this->set_error_with_mysql_query($query);
+          $this->logUserEventError($logmsg);
+          return False;
+      }
+      
+      //Checking max events
+      $row = mysql_fetch_assoc($result);
+      if ( $row['nb_tasks'] >= PILOTOTO_MAX_EVENTS) {
+          $this->set_error("pilototoAdd : PILOTOTO_MAX_EVENTS reached");
+          $this->logUserEventError($logmsg);
+          return False;
+      }
+
+      //inserting task
+      $query = "INSERT INTO `auto_pilot` ( time, idusers, pilotmode, pilotparameter, status) " .
+               "VALUES ( " .$time. ", " .$this->idusers. ", '" .$pim. "', '" .$pip. "', '" .PILOTOTO_PENDING. "');";
+               
+      $logmsg = "PilotoAdd : (time : $time, pim : $pim, pip : $pip)";
+      
+      if ($result = wrapper_mysql_db_query_writer($query)) {
+          $this->logUserEvent($logmsg);
+          return True;
+      } else {
+          //Error d'accès sql ?
+          $this->set_error_with_mysql_query($query);
+          $this->logUserEventError($logmsg);
+          return False;
+      }
+
   }
 
   // Update a task of the pilototo
   function pilototoUpdate($taskid, $time, $pim, $pip)
   {
-    $time = intval($time);
-    if ($time < time()) return 1;
-    // lookup for a task to do
-    $query = "UPDATE auto_pilot
-     SET time=$time,
-         pilotmode = $pim,
-         pilotparameter = '" . $pip . "',
-         status = '" .PILOTOTO_PENDING . "' 
-         WHERE idusers = $this->idusers
-     AND taskid = $taskid";
-    $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-    //echo $query;
+      $time = intval($time);
+      $logmsg = "Update pilototo task $taskid : time=$time, pim=$pim, pip=$pip";
+      if ($time < time()) {
+          $this->set_error("FAILED : time < now()");
+          $this->logUserEventError($logmsg);
+          return False;
+      }
+      // lookup for a task to do
+      $query = "UPDATE `auto_pilot` SET `time`=$time, ".
+               "`pilotmode` = $pim, ".
+               "`pilotparameter` = '" . $pip . "', ".
+               "`status` = '" .PILOTOTO_PENDING . "' ".
+               "WHERE `idusers` = " .$this->idusers. " AND `taskid` = $taskid";
 
-    logUserEvent($this->idusers , $this->engaged, "Update pilototo task $taskid : time=$time, pim=$pim,pip=$pip" );
+      $result = wrapper_mysql_db_query_writer($query);
+      if (!$result) {
+          $this->set_error_with_mysql_query($query);
+          $this->logUserEventError($logmsg);
+          return False;
+      } else if (($numrows = mysql_affected_rows()) != 1) {
+          $this->set_error("ERROR: $numrows lines updated !!!");
+          $this->logUserEventError($logmsg);
+          return False;
+      } else {
+          $this->logUserEvent($logmsg);
+          return True;
+      }
 
-    return(0);
   }
 
   function htmlFlagImg() {
@@ -336,7 +395,7 @@ class users
   }
 
   function htmlBoattypeLink() {
-      //Conventient mapping
+      //Convenient mapping
       return htmlBoattypeLink($this->boattype);
   }
 
