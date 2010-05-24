@@ -160,7 +160,7 @@
                         ) {
                         echo "ERROR ADD : With PIM=3, 4 or 5, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
                     } else {
-                        $rc=$usersObj->pilototoAdd($time, $pim, $pip);
+                        $rc=$usersObj->pilototoAdd(intval($time), intval($pim), $pip);
                     }
                 } else {
                     printf ("ERROR ADD: Mandatory Param missing... time=%s, pim=%s, pip=%s\n", $time, $pim, $pip);

@@ -1717,7 +1717,7 @@ function htmlQuery($sql) {
         echo "<tr class=\"admin-query-$oddeven\">";
         for($i=0;$i<count($row); $i++) {
             echo "<td class=\"admin-query\">";
-            echo $row[$i];
+            echo nl2br($row[$i]);
             echo "</td>";
         }
         echo "</tr>";
