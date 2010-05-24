@@ -185,7 +185,7 @@
                 default :
                     reply_with_error('PIM03', $answer);
             }
-            $fullusers->users->pilototoAdd($taskid, $tasktime, $pim, $pip);
+            $fullusers->users->pilototoUpdate($taskid, $tasktime, $pim, $pip);
             break;  
         case "pilototo_delete" :
             $taskid = check_pilototo_taskid($request, $answer);
