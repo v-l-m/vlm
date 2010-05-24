@@ -22,7 +22,7 @@
     function reply_with_error($code, $answer, $error_string = null) {
         $answer['success'] = False;
         $answer['error'] = get_error($code);
-        if (!is_null($error_string)) $answer['error']['error_string'] = $error_string;
+        if (!is_null($error_string)) $answer['error']['custom_error_string'] = $error_string;
         reply($answer);
     }
     
@@ -34,6 +34,20 @@
     function reply_with_error_if_not_exists($key, $request, $code, $answer) {
         if (!isset($request[$key])) reply_with_error($code, $answer);
     }
+
+    function check_pilototo_tasktime($request, $answer) {
+        reply_with_error_if_not_exists('tasktime', $request, 'PILOTOTO01', $answer);
+        $tasktime = $request['tasktime'];
+        if (!is_int($tasktime)) reply_with_error('PILOTOTO02', $answer);
+        return $tasktime;
+    }
+
+    function check_pilototo_taskid($request, $answer) {
+        reply_with_error_if_not_exists('taskid', $request, 'PILOTOTO03', $answer);
+        $taskid = $request['taskid'];
+        if (!is_int($taskid)) reply_with_error('PILOTOTO04', $answer);
+        return $taskid;
+    }    
 
     function check_pim($request, $answer) {
         reply_with_error_if_not_exists('pim', $request, 'PIM01', $answer);
@@ -64,6 +78,14 @@
             return $pip;
         } else {
             reply_with_error('WP05', $answer);
+        }
+    }
+
+    function target_array2string($target) {
+        if (isset($target['targetandhdg'])) {
+            return sprintf("%f,%f@%f", $target['targetlat'], $target['targetlong'], $target['targetandhdg']);
+        } else {
+            return sprintf("%f,%f@%f", $target['targetlat'], $target['targetlong']);
         }
     }
 
@@ -118,7 +140,57 @@
             //OK, on a un pip, et il est valide
             $fullusers->updateTarget($pip['targetlat'], $pip['targetlong'], $pip['targetandhdg']);
             break;
+        case "pilototo_add" :
+            #FIXME on devrait pouvoir factoriser le switch() avec l'action boat
             
+            $tasktime = check_pilototo_tasktime($request, $answer);
+            $pim = check_pim($request, $answer);
+
+            switch ($pim) {
+                case PILOTMODE_HEADING:
+                case PILOTMODE_WINDANGLE:
+                    $pip = check_pip_with_float($request, $answer);
+                    break;
+                case PILOTMODE_ORTHODROMIC:
+                case PILOTMODE_BESTVMG:
+                case PILOTMODE_VBVMG:
+                    $pip = check_pip_with_wp($request, $answer);
+                    $pip = target_array2string($pip);
+                    break;
+                default :
+                    reply_with_error('PIM03', $answer);
+            }
+            $fullusers->users->pilototoAdd($tasktime, $pim, $pip);
+            break;
+        case "pilototo_update" :
+            #FIXME on devrait pouvoir factoriser le switch() avec l'action boat
+            
+            $taskid = check_pilototo_taskid($request, $answer);
+            $tasktime = check_pilototo_tasktime($request, $answer);
+            $pim = check_pim($request, $answer);
+
+            switch ($pim) {
+                case PILOTMODE_HEADING:
+                case PILOTMODE_WINDANGLE:
+                    $pip = check_pip_with_float($request, $answer);
+                    //OK, on a un pip et un pim
+                    break;
+                case PILOTMODE_ORTHODROMIC:
+                case PILOTMODE_BESTVMG:
+                case PILOTMODE_VBVMG:
+                    $pip = check_pip_with_wp($request, $answer);
+                    //OK, on a un pip, et il est valide
+                    $pip = target_array2string($pip);
+                    break;
+                default :
+                    reply_with_error('PIM03', $answer);
+            }
+            $fullusers->users->pilototoAdd($taskid, $tasktime, $pim, $pip);
+            break;  
+        case "pilototo_delete" :
+            $taskid = check_pilototo_taskid($request, $answer);
+            $fullusers->users->pilototoDelete($taskid);
+            break;          
         default :
             reply_with_error('PARM03', $answer);
     }

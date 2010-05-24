@@ -21,6 +21,11 @@ function get_error($code) {
         //pip
         "PIP01" => "pip is unspecified",
         "PIP02" => "pip should be numeric",
+        //pilototo
+        "PILOTOTO01" => "tasktime is unspecified",
+        "PILOTOTO02" => "tasktime should be int (EPOC)",
+        "PILOTOTO03" => "taskid is unspecified",
+        "PILOTOTO04" => "taskid should be int",
         //wp (and also pip when pip = wp)
         "WP01" => "pip/wp is unspecified",
         "WP02" => "pip/wp should be an array",
