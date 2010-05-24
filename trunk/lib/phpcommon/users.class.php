@@ -264,7 +264,7 @@ class users
   // Delete a task from pilototo
   function pilototoDelete($taskid) {
       $logmsg = "pilototoDelete : taskid=$taskid";
-      $query = "DELETE FROM `auto_pilot` WHERE `idusers` = " .$this->idusers. " AND taskid = $taskid";
+      $query = "DELETE FROM `auto_pilot` WHERE `idusers` = " .$this->idusers. " AND `taskid` = $taskid";
 
       $result = wrapper_mysql_db_query_writer($query);
       if(!($result)) {
