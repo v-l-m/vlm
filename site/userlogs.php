@@ -3,7 +3,7 @@
     include_once("config.php");
 
     if ( isLoggedIn() ) {
-        $query = "SELECT time as TIME, HEX(CRC32(ipaddr)) as `COMPUTER ID`, action as ACTION FROM user_action WHERE idusers = ".getLoginId()." ORDER BY time DESC LIMIT 20;";
+        $query = "SELECT time as TIME, HEX(CRC32(ipaddr)) as `COMPUTER ID`, action as ACTION FROM user_action WHERE idusers = ".getLoginId()." ORDER BY time DESC LIMIT ".MAX_LOG_USER_ACTION_VIEW.";";
         htmlQuery($query);
         echo "<h3>".getLocalizedString("computerid")."</h3>";
 

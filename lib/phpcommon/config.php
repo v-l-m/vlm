@@ -94,6 +94,8 @@ define("MAX_SPEED_FOR_RANKING", 40);
 
 //Log parameters
 define("MAX_LOG_USER_ACTION_AGE", 168*3600); #1 week
+define("MAX_LOG_USER_ACTION_VIEW", 50); #nb actions viewable by the user
+
 
 /********Constants*************/
 define("CRONVLMLOCK", "".VLMTEMP."/cronvlm.lock");
