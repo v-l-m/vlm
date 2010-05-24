@@ -13,7 +13,7 @@ function get_error($code) {
         "AUTH01" => "idu is mandatory for safety reasons and should match your login",
         "AUTH02" => "Your request does not match the idu you are login in",
         //SQL
-        "CORE01" => "Something went wrong when passing orders to the core",
+        "CORE01" => "Something went wrong when passing orders to the core. You should report this to the developpers ! (See the custom_error_string)",
         //pim
         "PIM01" => "pim is unspecified",
         "PIM02" => "pim should be int",
