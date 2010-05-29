@@ -196,21 +196,31 @@
       // Centrage de la carte
       // Coordonnées bateau
       $long= htmlentities($_GET['long']);
+      $long = longitudeConstraintDegrees($long);
+      
       $lat= htmlentities($_GET['lat']);
 
       // Coordonnées WP
       $longwp=htmlentities($_GET['longwp']);
+      $longwp = longitudeConstraintDegrees($longwp);
+
       $latwp= htmlentities($_GET['latwp']);
 
       // Si centrage sur la route, on moyenne long/longwp et lat/latwp
       // Sinon rien, long/lat sont le centre de la carte
       if ( $mapcenter == "roadtowp" ) {
-          $long = ($long + $longwp)/2;
-          $lat = ($lat + $latwp)/2;
+          if (abs($long-$longwp) < 180) {
+              $long = ($long + $longwp)/2;
+          } else {
+              $long = ($long + $longwp)/2 +180;
+          }
+          $long = longitudeConstraintDegrees($long);
+          $lat = ($lat + $latwp)/2; 
       } else if ( $mapcenter == "mywp" ) {
-             $long = $longwp;
-             $lat  = $latwp;
+          $long = $longwp;
+          $lat  = $latwp;
       } // else lat/long = ceux qu'on a déjà (position du bateau)
+
 
       $query_string_base="lat=". $lat . "&" . 
           "long=". $long . "&" . 
