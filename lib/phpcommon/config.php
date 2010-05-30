@@ -26,6 +26,7 @@ $localDBPages = array(
                 "/getinfo2.php"
 );
 
+// Constant defined in param.php have precedence over constant below.
 include_once("param.php");
 
 // The full path of the gshhs coast file in use (the "full" version)
@@ -37,7 +38,6 @@ define("POLAR_DEFINITION_FILENAME", "".POLARS_DIRECTORY."/polars.list");
 #ini_set('session.use_only_cookies', 1);
 #ini_set('session.use_trans_sid', 1);
 ini_set('arg_separator.output', "&amp;");
-
 
 /*********db_connect****************/
 if (defined('MOTEUR')) {
