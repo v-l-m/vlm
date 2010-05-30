@@ -1405,10 +1405,12 @@ function getUserPref($idusers,$pref_name) {
     }
 }
 
-function listUserPref($idusers) {
+function listUserPref($idusers, $prefix = null) {
     if ($idusers != "") {
         $prefs=array();
-        $query_pref = "SELECT `pref_name`, `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers ORDER BY `pref_name`";
+        $query_pref = "SELECT `pref_name`, `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers";
+        if (!is_null($prefix)) $query_pref .= " AND `pref_name` LIKE ".$prefix."%";
+        $query_pref .= " ORDER BY `pref_name`";
         $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
         while ( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
             $prefs[$row["pref_name"]]=$row["pref_value"];

@@ -3,7 +3,9 @@
     include_once("wslib.php");
 
     function usage() {
-      return "Usage: FIXME ";
+      return "Usage:
+      Documentation is in progress and should be available at the following url :
+      http://dev.virtual-loup-de-mer.org/vlm/wiki/webservices";
     }
 
     function reply($answer) {
@@ -22,6 +24,7 @@
     function reply_with_error($code, $answer, $error_string = null) {
         $answer['success'] = False;
         $answer['error'] = get_error($code);
+        $answer['usage'] = usage();
         if (!is_null($error_string)) $answer['error']['custom_error_string'] = $error_string;
         reply($answer);
     }
@@ -190,7 +193,8 @@
         case "pilototo_delete" :
             $taskid = check_pilototo_taskid($request, $answer);
             $fullusers->users->pilototoDelete($taskid);
-            break;          
+            break;
+        case "prefs" :
         default :
             reply_with_error('PARM03', $answer);
     }
