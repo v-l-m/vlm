@@ -1380,62 +1380,58 @@ function getTheme()
 
 }
 
-function setUserPref($idusers,$pref_name,$pref_value, $save=true)
-{
-  if ($idusers != "" and $save) {
-    $query_pref = "REPLACE into user_prefs (idusers, pref_name, pref_value) " . 
-      " VALUES ( " . $idusers . 
-      ", " .     " '" . $pref_name .  "', '" . $pref_value . "')" ;
-    $result_pref = wrapper_mysql_db_query_writer($query_pref) or die($query_pref);
-    return (0);
-  }
+function setUserPref($idusers,$pref_name,$pref_value, $save=true) {
+    if ($idusers != "" and $save) {
+        $query_pref = "REPLACE into user_prefs (idusers, pref_name, pref_value) " . 
+          " VALUES ( " . $idusers . 
+          ", " .     " '" . $pref_name .  "', '" . $pref_value . "')" ;
+        $result_pref = wrapper_mysql_db_query_writer($query_pref) or die($query_pref);
+        return (0);
+    }
 }
 
-function getUserPref($idusers,$pref_name)
-{
-  //printf("IDU=%s, PN=%s\n", $idusers,$pref_name);
-  if ($idusers != "") {
-    $query_pref = "SELECT pref_value FROM user_prefs WHERE idusers = $idusers AND pref_name = '$pref_name'";
-    $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
-    if ( $row_pref = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
-      $pref_value = $row_pref[0];
-    } else {
-      $pref_value = NOTSET;
+function getUserPref($idusers,$pref_name) {
+
+    if ($idusers != "") {
+        $query_pref = "SELECT `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers AND `pref_name` = '$pref_name'";
+        $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
+        if ( $row_pref = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
+            $pref_value = $row_pref[0];
+        } else {
+            $pref_value = NOTSET;
+        }
+
+        return ($pref_value);
     }
-    //printf("Q=%s\n", $query_pref);
-    return ($pref_value);
-  }
 }
 
-function listUserPref($idusers)
-{
-  if ($idusers != "") {
-    $prefs=array();
-    $query_pref = "SELECT pref_name, pref_value FROM user_prefs WHERE idusers = $idusers ORDER BY pref_name";
-    $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
-    while ( $row = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
-      $prefs[$row[0]]=$row[1];
+function listUserPref($idusers) {
+    if ($idusers != "") {
+        $prefs=array();
+        $query_pref = "SELECT `pref_name`, `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers ORDER BY `pref_name`";
+        $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
+        while ( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
+            $prefs[$row["pref_name"]]=$row["pref_value"];
+        }
+        return($prefs);
     }
-    return($prefs);
-  }
 }
 
-function getBoatPopularity($idusers, $idraces=0)
-{
-  $pop=0;
-  if ($idusers != "") {
-    $query = "select pref_value from user_prefs ";
-    $query .= " where pref_name='mapPrefOpponents'";
-    if ( $idraces != 0 ) {
-      $query .= " and idusers in (select idusers from users where engaged = $idraces)";
+function getBoatPopularity($idusers, $idraces=0) {
+    $pop=0;
+    if ($idusers != "") {
+        $query = "SELECT `pref_value` FROM `user_prefs` ";
+        $query .= " WHERE `pref_name`='mapPrefOpponents'";
+        if ( $idraces != 0 ) {
+            $query .= " AND `idusers` IN ( SELECT `idusers` FROM `users` WHERE `engaged` = $idraces)";
+        }
+        $result = wrapper_mysql_db_query_reader($query) or die($query);
+        while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
+            $arr=explode(',' , $row[0]);
+            if ( in_array($idusers, $arr) ) $pop++;
+        }
+        return($pop);
     }
-    $result = wrapper_mysql_db_query_reader($query) or die($query);
-    while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
-      $arr=explode(',' , $row[0]);
-      if ( in_array($idusers, $arr) ) $pop++;
-    }
-    return($pop);
-  }
 }
 
 function getOldDuration($idraces,$idusers)
