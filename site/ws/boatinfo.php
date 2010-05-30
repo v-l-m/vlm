@@ -107,7 +107,7 @@ function get_info_array($idu) {
          'mapY' => 'MHT',
          'mapDrawtextwp' => 'MDT'
          );
-    $prefs=listUserPref($idu);
+    $prefs=listUserPref($idu, "map");
     while ( $pref = current($prefs) ) { 
       $info[$mapvar[key($prefs)]] = $pref;
       next($prefs);
