@@ -199,9 +199,6 @@ define("STEP", 2);
 //pixels between two graduations
 define("STEPSIZE", 12);
 
-// NOTSET (for user_prefs)
-define("NOTSET", "NULL");
-
 // CLASS_ADMIN
 define("CLASS_ADMIN","admin");
 
@@ -226,6 +223,11 @@ define("IC_FLAG_CONSOLE", 2);
 define("IC_FLAG_RACELIST", 4);
 define("IC_FLAG_LINKFORUM", 8);
 define("IC_FLAG_HIDEONICS", 16);
+
+//PREFS
+// NOTSET (for user_prefs)
+define("NOTSET", "NULL");
+define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents");
 
 // Par défaut ( Atlantique nord seulement )
 //define("COASTLINE_DATAFILE", "N50E15S10W80@1_5000000.dat");
