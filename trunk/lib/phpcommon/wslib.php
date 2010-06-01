@@ -2,6 +2,148 @@
 
 include_once("functions.php");
 
+class WSBase {
+
+    public $answer = Array();
+    public $input = null;
+    public $request = null;
+
+    function __construct() {
+        // now start the real work
+        login_if_not($this->usage());
+
+        //surface test
+        $this->input = get_cgi_var('parms', null);
+        if (is_null($this->input)) $this->reply_with_error('PARM01');
+        $this->request = json_decode($this->input, true);
+        if (is_null($this->request) || !is_array($this->request)) $this->reply_with_error("PARM02");
+
+        //ask for debug
+        if (isset($this->request['debug']) && $this->request['debug']) $this->answer['request'] = $this->request;
+
+        }
+    
+    function usage() {
+        return "Usage:
+        Documentation is in progress and should be available at the following url :
+        http://dev.virtual-loup-de-mer.org/vlm/wiki/webservices";
+    }
+
+    function reply() {
+        $fmt = "json";
+
+        switch ($fmt) {
+            //retourne du json par défaut, mais peut être qu'on pourra supporter autre chose plus tard
+            case "json":
+            default:
+                header('Content-type: application/json; charset=UTF-8');
+                echo json_encode($this->answer);
+        }
+        exit();
+    }
+
+    function reply_with_error($code, $error_string = null) {
+        $this->answer['success'] = False;
+        $this->answer['error'] = get_error($code);
+        $this->answer['usage'] = $this->usage();
+        if (!is_null($error_string)) $this->answer['error']['custom_error_string'] = $error_string;
+        $this->reply();
+    }
+    
+    function reply_with_success() {
+        $this->answer['success'] = True;
+        $this->reply();
+    }
+
+    function reply_with_error_if_not_exists($key, $code, $request = null) {
+        if (is_null($request)) $request = $this->request;
+        if (!isset($request[$key])) $this->reply_with_error($code);
+    }
+
+    function finish() {
+        //Must be surcharged (?) by inherited classes
+        $ws->reply_with_error("CORE01");
+    }
+    
+}
+
+class WSBaseBoatsetup extends WSBase {
+    public $fullusers = null;
+    
+    function __construct() {
+        parent::__construct();
+        //auth check
+        $this->reply_with_error_if_not_exists('idu', "AUTH01");
+        if ($_SESSION['idu'] != $this->request['idu']) $this->reply_with_error("AUTH02");
+
+        //OK, on peut instancier l'utilisateur
+        $this->fullusers = new fullUsers(getLoginId());
+    }
+
+    function finish() {
+        if ($this->fullusers->users->error_status) {
+            $this->reply_with_error("CORE01", $this->fullusers->users->error_string);
+        } else {
+            $this->reply_with_success();
+        }
+    }
+
+    function check_pilototo_tasktime() {
+        $this->reply_with_error_if_not_exists('tasktime', 'PILOTOTO01');
+        $tasktime = $this->request['tasktime'];
+        if (!is_int($tasktime)) $this->reply_with_error('PILOTOTO02');
+        return $tasktime;
+    }
+
+    function check_pilototo_taskid() {
+        $this->reply_with_error_if_not_exists('taskid', 'PILOTOTO03');
+        $taskid = $this->request['taskid'];
+        if (!is_int($taskid)) $this->reply_with_error('PILOTOTO04');
+        return $taskid;
+    }    
+
+    function check_pim() {
+        $this->reply_with_error_if_not_exists('pim', 'PIM01');
+        $pim = $this->request['pim'];
+        if (!is_int($pim)) $this->reply_with_error('PIM02');
+        return $pim;
+    }
+
+    function check_pip_with_float() {
+        $this->reply_with_error_if_not_exists('pip', 'PIP01');
+        $pip = $this->request['pip'];
+        if (!is_numeric($pip)) $this->reply_with_error('PIP02');
+        return $pip;
+    }
+    
+    function check_pip_with_wp() {
+        //existence et pip/wp en tant qu'array
+        $this->reply_with_error_if_not_exists('pip', 'WP01');
+        $pip = $this->request['pip'];
+        if (!is_array($pip)) $this->reply_with_error('WP02');
+        //existence des paramètres
+        $this->reply_with_error_if_not_exists('targetlat', 'WP03', $pip);
+        $this->reply_with_error_if_not_exists('targetlong', 'WP04', $pip);
+        if (!isset($pip['targetandhdg'])) {
+            $pip['targetandhdg'] = -1.;
+        }
+        if (is_numeric($pip['targetlat']) && is_numeric($pip['targetlong']) && (is_numeric($pip['targetandhdg']))) {
+            return $pip;
+        } else {
+            $this->reply_with_error('WP05');
+        }
+    }
+
+    function target_array2string($target) {
+        if (isset($target['targetandhdg'])) {
+            return sprintf("%f,%f@%f", $target['targetlat'], $target['targetlong'], $target['targetandhdg']);
+        } else {
+            return sprintf("%f,%f@%f", $target['targetlat'], $target['targetlong']);
+        }
+    }
+
+}
+
 function get_error($code) {
 
     $ws_error_types = Array(
@@ -29,8 +171,8 @@ function get_error($code) {
         //wp (and also pip when pip = wp)
         "WP01" => "pip/wp is unspecified",
         "WP02" => "pip/wp should be an array",
-        "WP03" => "wplat is unspecified",
-        "WP04" => "wplon is unspecified",
+        "WP03" => "targetlat is unspecified",
+        "WP04" => "targetlong is unspecified",
         "WP05" => "wp parameters should be numerics",        
     );
     
