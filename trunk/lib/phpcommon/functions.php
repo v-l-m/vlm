@@ -1409,7 +1409,7 @@ function listUserPref($idusers, $prefix = null) {
     if ($idusers != "") {
         $prefs=array();
         $query_pref = "SELECT `pref_name`, `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers";
-        if (!is_null($prefix)) $query_pref .= " AND `pref_name` LIKE ".$prefix."%";
+        if (!is_null($prefix)) $query_pref .= " AND `pref_name` LIKE '".$prefix."%'";
         $query_pref .= " ORDER BY `pref_name`";
         $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
         while ( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
