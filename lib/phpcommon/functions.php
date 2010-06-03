@@ -1381,13 +1381,16 @@ function getTheme()
 }
 
 function setUserPref($idusers,$pref_name,$pref_value, $save=true) {
+    //FIXME : this is duplicated in users.class
     if ($idusers != "" and $save) {
         $query_pref = "REPLACE into user_prefs (idusers, pref_name, pref_value) " . 
           " VALUES ( " . $idusers . 
           ", " .     " '" . $pref_name .  "', '" . $pref_value . "')" ;
-        $result_pref = wrapper_mysql_db_query_writer($query_pref) or die($query_pref);
-        return (0);
+        if($result_pref = wrapper_mysql_db_query_writer($query_pref)) {
+            return True;
+        }
     }
+    return False;
 }
 
 function getUserPref($idusers,$pref_name) {

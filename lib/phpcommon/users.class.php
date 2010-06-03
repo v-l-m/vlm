@@ -1043,6 +1043,19 @@ class fullUsers
     wrapper_mysql_db_query_writer($query_ranking);
 
   }
+  
+  function setPref($key, $value) {
+      //FIXME: this is a duplicate of setUserPref. Putting here to catch the mysql error if needed
+      $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
+                    " VALUES ( " . $this->users->idusers . 
+                    ", " . " '" . mysql_real_escape_string($key) .  "', '" . mysql_real_escape_string($value) . "')" ;
+      if(wrapper_mysql_db_query_writer($query_pref)) {
+          return True;
+      } else {
+          $this->users->set_error_with_mysql_query($query_pref);
+          return False;
+      }
+  }
 
   function setABD()
   {

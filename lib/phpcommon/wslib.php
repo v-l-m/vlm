@@ -88,6 +88,17 @@ class WSBaseBoatsetup extends WSBase {
         }
     }
 
+    function check_prefs_list() {
+        $this->reply_with_error_if_not_exists('prefs', 'PREFS01');
+        $prefs = $this->request['prefs'];
+        foreach($prefs as $k => $v) {
+            if (!in_array($k, explode(',', USER_PREF_ALLOWED))) {
+                $this->reply_with_error('PREFS02', "BAD KEY:$k");
+            }
+        }
+        return $prefs;
+    }
+
     function check_pilototo_tasktime() {
         $this->reply_with_error_if_not_exists('tasktime', 'PILOTOTO01');
         $tasktime = $this->request['tasktime'];
@@ -173,7 +184,10 @@ function get_error($code) {
         "WP02" => "pip/wp should be an array",
         "WP03" => "targetlat is unspecified",
         "WP04" => "targetlong is unspecified",
-        "WP05" => "wp parameters should be numerics",        
+        "WP05" => "wp parameters should be numerics",
+        //prefs
+        "PREFS01" => "prefs is unspecified",
+        "PREFS02" => "key is not allowed"
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
