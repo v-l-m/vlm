@@ -23,7 +23,7 @@
         default :
             reply_with_error('PIM03');
     }
-    $fullusers->users->pilototoUpdate($taskid, $tasktime, $pim, $pip);
+    $ws->users->pilototoUpdate($taskid, $tasktime, $pim, $pip);
 
     $ws->finish();
 ?>
