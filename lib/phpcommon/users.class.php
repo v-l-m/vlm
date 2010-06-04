@@ -309,7 +309,7 @@ class users
   function pilototoAdd($time, $pim, $pip) {
       $logmsg = "PilotoAdd : (time : $time, pim : $pim, pip : $pip)";
       //checking parameter : FIXME there is no policy for type checking... (where and when)
-      if (!is_int($time) or $time <= time()) {
+      if (!is_int($time) or ($time <= $this->lastupdate)) {
           $this->set_error("FAILED : time is in the past or not int");
           $this->logUserEventError($logmsg);
           return False;
