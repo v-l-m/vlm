@@ -1274,7 +1274,14 @@ function validip($ip) {
     }
 }
 
-function getip() { 
+function getip() {
+    if (isset($_SESSION['activeproxy'])
+        && $_SESSION['activeproxy'] == 1
+        && validip($_SERVER['HTTP_VLM_CLIENT_IP'])
+        ) {
+        return $_SERVER['HTTP_VLM_CLIENT_IP'];
+    }
+
     if (validip($_SERVER["HTTP_CLIENT_IP"])) {
         return $_SERVER["HTTP_CLIENT_IP"];
     }
@@ -1297,13 +1304,18 @@ function getip() {
 }
 
 function getfullip() {
-
     $ipvars = Array("HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED", "HTTP_FORWARDED", "REMOTE_ADDR");
     
     $ipstr = "";
     foreach($ipvars as $varname) {
         if (isset($_SERVER[$varname])) $ipstr = $ipstr . $varname . "=" . $_SERVER[$varname] . ", ";
     }
+    if (isset($_SESSION['activeproxy'])
+        && $_SESSION['activeproxy'] == 1
+        && isset($_SERVER['HTTP_VLM_CLIENT_FULLIP'])) {
+        $ipstr = $ipstr . $_SERVER['HTTP_VLM_CLIENT_FULLIP'];
+    }
+
     return $ipstr;
 }
 
@@ -1316,6 +1328,7 @@ function login($idus, $pseudo)
     $_SESSION['idu'] = $idus;
     $_SESSION['loggedin'] = 1;
     $_SESSION['login'] = $pseudo;
+    if (isset($_SERVER['HTTP_VLM_PROXY_AGENT']) && $_SERVER['HTTP_VLM_PROXY_PASS']==PROXY_AGENT_PASS) $_SESSION['activeproxy'] = 1;
 
     // IP memorise "toutes les" adresses qu'on peut memoriser
     // ==> Faire la difference entre 2 PCs derriere un meme proxy
@@ -1324,7 +1337,6 @@ function login($idus, $pseudo)
     //     ==> UPGRADE BDD : V0.13, ipaddr => varchar(255)
     $_SESSION['FULLIP'] = getfullip();
     $_SESSION['IP'] = getip();
-
   }
 }
 

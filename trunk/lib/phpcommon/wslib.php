@@ -260,7 +260,7 @@ function ask_for_auth($usage) {
     echo $usage;
 }
 
-function login_if_not($usage = "") {
+function login_if_not($usage = "No usage given") {
     
     session_start();
     // do we know the user from a previous login session?

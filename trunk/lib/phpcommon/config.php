@@ -59,6 +59,9 @@ if (defined('MOTEUR')) {
    
 mysql_select_db(DBNAME, $link) or die("Could not select database");
 
+//PROXY AGENTS AUTH - please overide in param.php
+define("PROXY_AGENT_PASS", "PROXYPASS");
+
 // EMAIL COMITE
 define("EMAIL_COMITE_VLM", "vlm@virtual-winds.com");
 
