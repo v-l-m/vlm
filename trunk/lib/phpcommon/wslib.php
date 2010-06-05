@@ -19,9 +19,14 @@ class WSBase {
         if (is_null($this->request) || !is_array($this->request)) $this->reply_with_error("PARM02");
 
         //ask for debug
-        if (isset($this->request['debug']) && $this->request['debug']) $this->answer['request'] = $this->request;
-
+        if (isset($this->request['debug']) && $this->request['debug']) {
+            $this->answer['request'] = $this->request;
+            $this->warning("Debug mode for testing purposes only");
         }
+        
+        if (isset($_GET["parms"])) $this->warning("http/GET is allowed for testing purposes only");
+
+    }
     
     function usage() {
         return "Usage:
@@ -29,6 +34,11 @@ class WSBase {
         http://dev.virtual-loup-de-mer.org/vlm/wiki/webservices";
     }
 
+    function warning($msg) {
+        if (!isset($this->answer['warnings'])) $this->answer['warnings'] = Array();
+        $this->answer['warnings'][] = $msg;
+    }
+    
     function reply() {
         $fmt = "json";
 
