@@ -456,3 +456,20 @@ form {
   text-align: center;
 }
 
+td.racesummary-minimap {
+  width: 200px;
+  border:none;
+}
+
+.racesummary-type0, .racesummary-type1 {
+  border:none;
+}
+
+table.racesummary-type0, table.racesummary-type1 {
+  width:100%;
+}
+
+
+.racesummary-type1 {
+  font-style: italic;
+}

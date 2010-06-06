@@ -23,7 +23,6 @@ include_once("includes/header.inc");
     printf("<h3>" . getLocalizedString("notengaged") . "</h3>",$lang);
     //include ("subscribe_race.php");
     include ("includes/raceslist.inc");
-
   } else {
     
     $myRace = &$usersObj->races;

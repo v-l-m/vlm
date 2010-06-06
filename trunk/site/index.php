@@ -45,9 +45,7 @@
       <h1 class="info"><?php echo getLocalizedString("one-one-one"); ?></h1>
     </div>
 
-    <div id="raceslistbox" class="basic">
       <?php include "includes/raceslist.inc"; ?>
-    </div>
 
     <div id="time" class="basic">
       <?php

@@ -1,4 +1,6 @@
 <?php 
+    echo "<div id=\"raceslistbox\" class=\"basic\">";
+
     // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
     $display_submit = "false";
     if ( isLoggedIn() ) {
@@ -38,17 +40,16 @@
         if ( $dep < $time AND $closetime <$time ) { //no race planned
             printf("      ".getLocalizedString("norace")."\n");
         } else {
-            echo "<table class=\"racesummary-type$racetype\" width=\"100%\">\n<tr>\n";
-            echo "<td width=\"200\" align=\"left\" class=\"boat\">";
+            echo "<table class=\"racesummary-type$racetype\">\n<tr class=\"racesummary-type$racetype\">\n";
+            echo "<td class=\"racesummary-minimap\">";
             // Carte de la course
             $href = "/racemap.php?idraces=".$idraces;
-            $status_content = "&lt;img src=&quot;$href&quot; alt=&quot;".getLocalizedString("racemap")."&quot; />";
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
                  "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
             echo "</td>\n";
       
-            echo "<td align=\"left\" class=\"boat\">";
+            echo "<td class=\"racesummary-type$racetype\">";
             //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
             $urlidraces = htmlIdracesLink($lang, $idraces); // pointe vers les ICS
             $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
@@ -122,5 +123,7 @@
 
         }
     }
+
+    echo "</div>";
 
 ?>
