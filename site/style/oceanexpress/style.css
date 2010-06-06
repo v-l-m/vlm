@@ -186,10 +186,10 @@ list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/
   color : #ffffff;
 }
 
-h1.info
-{
+h1.info {
   font-size: 14px;
   font-weight: bold;
   color: #ff652e;
   text-align:center;
 }
+
