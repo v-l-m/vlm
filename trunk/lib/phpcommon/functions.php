@@ -1701,6 +1701,17 @@ function logUserEvent($idusers, $idraces, $action) {
     $result = wrapper_mysql_db_query_writer($query_user_event) or die("Query [$query_user_event] failed \n");
 }
 
+function htmlAbandonButton($idusers) {
+
+    return "<form id=\"abandonform\" name=\"abandon\" action=\"subscribe.php\">
+            <input type=\"hidden\" name=\"idusers\" value=\"$idusers\" />
+            <input type=\"hidden\" name=\"type\" value=\"unsubscribe\" />
+            <input type=\"hidden\" name=\"lang\" value=\"".getCurrentLang()."\" />
+            <input type=\"button\" onclick=\"confirmation_abandon('".getLocalizedString("unsubscribe").". Confirmation ?');\"
+                       value=\"".getLocalizedString("unsubscribe")."\" />
+            </form>";
+}
+
 function htmlQuery($sql) {
     $result = wrapper_mysql_db_query_writer($sql) or die("<h3 class=\"admin-error\">Query [".$sql."] failed</h3>");
     

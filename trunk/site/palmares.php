@@ -2,8 +2,6 @@
     include_once("includes/header.inc");
     include_once("config.php");
 
-//    header("Content-type: text/html; charset=utf-8");
-
     $lang=getCurrentLang();
 
     $palmares_type = htmlentities(quote_smart($_REQUEST['type']));
@@ -22,6 +20,7 @@
         if ($userobj->engaged > 0) {
             $raceobj = new races($userobj->engaged);
             echo "<h2>" . sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink($lang), $raceobj->htmlIdracesLink($lang) ) . "</h2>";
+            echo htmlAbandonButton($userobj->idusers);
         } else {
             echo "<h2>" . getLocalizedString('boatnotengaged') . "</h2>";
         }
