@@ -4,7 +4,7 @@
     include_once ("functions.php");
         
     if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
-        wrapper_mysql_db_query_writer("DELETE FROM races_results as rr WHERE rr.idraces NOT IN (SELECT DISTINCT idraces FROM races)");
+        wrapper_mysql_db_query_writer("DELETE FROM races_results WHERE races_results.idraces NOT IN (SELECT DISTINCT idraces FROM races)");
         insertAdminChangelog(Array("operation" => "Delete results for unknown races"));
 
         echo "<h3>Done, following results should be empty.</h3>";
