@@ -1,10 +1,41 @@
 This file traces the changes that are required for upgrading from a previous VLM version
+From 0.12 to Next :
+
+= All servers = 
+  EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_13
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    and add correct values for keys :
+      define("VLM_PROXY_PASS", "PROXYPASS"); //password for centralized (web) clients. Allow to log the correct IP of the client.
+
+= Master Server =
+
+BASE
+  ./scripts/maj_module.sh base
+  cd ./vlmcode/base/scripts/
+  ./runupgrade.sh 0.13
+  cd 
+
+MOTEUR
+  ./scripts/maj_module.sh lib/phpcommon
+  ./scripts/maj_module.sh moteur
+
+= All servers =
+
+  ./scripts/maj_module.sh lib/phpcommon
+  ./scripts/maj_module.sh site
+  ./scripts/maj_module.sh medias
+
+___
 From 0.11 to Next
 
 = All servers =
 
 HOSTING
-  EDIT file ./conf/conf_script and change VLMSVNBRANCH to V_0_12
+  EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_12
 
   RUN
     ./scripts/maj_scripts.sh
