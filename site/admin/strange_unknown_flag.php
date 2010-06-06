@@ -4,7 +4,7 @@
     include_once ("functions.php");
         
     if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
-        wrapper_mysql_db_query_writer("UPDATE users SET country='' WHERE country NOT IN (SELECT DISTINCT idflags FROM flags)");
+        wrapper_mysql_db_query_writer("UPDATE users SET country='000' WHERE country NOT IN (SELECT DISTINCT idflags FROM flags)");
         insertAdminChangelog(Array("operation" => "Update users with unknown flag"));
         echo "<h3>Done, following results should be empty.</h3>";
     }
