@@ -321,6 +321,14 @@ class races {
         $ret  = "<div id=\"raceheader\">\n";
         $ret .= $this->htmlRaceTitle(getLocalizedString("racestarted"));
         $ret .= $this->htmlRacePolar(getLocalizedString("boattype"));
+        $ret .= sprintf("<h3>%s : %d minutes</h3>\n" , getLocalizedString('crank'),  $this->vacfreq);
+        $ret .= "<h3>";
+        if ( $firstpcttime >0 ) {
+            $ret .= sprintf(getLocalizedString("endrace"). "%d %%\n", 100 + $this->firstpcttime );
+        } else {
+            $ret .= sprintf(getLocalizedString("endrace")." no limit\n");
+        }
+        $ret .= "</h3>";
         $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".getLocalizedString("ranking")."</a></h3>";
         $ret .= "</div>\n";
 
