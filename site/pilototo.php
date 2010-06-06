@@ -1,17 +1,12 @@
 <?php
 
-    /*
-    ** Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connecté
-    */
+    /* Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connecté */
     
     session_start();
     include_once("config.php");
     include_once("functions.php");
 
-    header("Content-type: text/html; charset=utf-8");
-
-    //helper pour construire la page
-    
+    //helper pour construire la page    
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $pilotmodeList;
         $lang = getCurrentLang();
@@ -59,7 +54,7 @@
     // Les entêtes
     // FIXME : disposer d'un fichier d'en tête commun plus complet !
     include("includes/doctypeheader.html");
-    echo "\n<title>VLM Programmable Auto Pilot (" . $lang . ")</title>";
+    echo "\n<title>".getLocalizedString("VLM Programmable Auto Pilot")."</title>";
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/" . getTheme() . "/style.css\" />";
 
 ///   CODE JAVASCRIPT
@@ -122,7 +117,7 @@
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
     if ( empty($idusers) ) {
-        echo "<h4>You should not do that...your IP : " . getip() . "</h4>";
+        echo htmlShouldNotDoThat();
         exit();
     } 
 
@@ -228,16 +223,12 @@
     echo "</table></div>\n";
     
     echo "<div id=\"helpvaluespilototobox\">\n";
-    echo "<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00<br />";
-    echo "<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG<br />\n";
-    echo "<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long<li>Please give <b>0,0</b> for nextrace WP, <li><b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)\n";
+    echo nl2br(getLocalizedString('pilototohelp1'));
     echo "</div>\n";
     $time=time();
     echo "<div id=\"helptimepilototobox\">\n";
     echo "Server(s) time is now <b>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</b><br />\n";
-    echo "Tip1 : server_time + 3600 is in one hour, server_time+5*3600 is in 5 hours... <br />\n" ;
-    echo "Tip2 : for an update, modify a value, then click on " . getLocalizedString("pilototo_prog_upd")."<br />\n" ;
-    echo "Tip3 : status is 'pending' if an order is not yet executed, 'done' otherwise\n"  ;
+    echo nl2br(getLocalizedString('pilototohelp2'));
     echo "</div>\n";
     echo "<div id=\"buttonspilototobox\">\n";
     echo "<input type=\"button\" value=\"Close\" onClick=\"javascript:self.close();\" />\n";
