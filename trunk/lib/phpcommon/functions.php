@@ -1047,7 +1047,7 @@ function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
 
       $href="/racemap.php?idraces=".$idraces;
       $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
-      return "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$alt\">" .
+      return "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"".strip_tags($alt)."\">" .
              "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" />" .
              "</a> ";
 }
