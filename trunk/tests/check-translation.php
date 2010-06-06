@@ -6,7 +6,7 @@ $false_errors = Array(
     'fr' => Array(
       'images', 'faq', 'doc', 'forum', 'contact', 'version', 'position', 'degrees', 'taverne', 'tchat', 'loch', 'estime', 'mapsize',
       'proj', 'mercator', 'lambert', 'a12', 
-      'vbvmgengaged',
+      'vbvmgengaged', 'Mobiles',
       ),
     'it' => Array(
       'home', 'forum', 'taverne', 'tchat', 'sponsor', 'skipper', 'nautics', 'mapsize', 'degrees', 'a12', 'dateClassificationFormat', 
@@ -23,7 +23,7 @@ $false_errors = Array(
       ),
     'en' => Array(
       'images', 'faq', 'doc', 'forum', 'tchat', 'taverne', 'a12', 'contact', 'version', 'position', 'loch', 'estime', 'mapsize', 'proj', 'mercator', 'lambert', 'degrees',
-      'vbvmgengaged',
+      'vbvmgengaged', 'Mobiles',
       ),
     );
 

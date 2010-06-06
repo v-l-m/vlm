@@ -516,7 +516,6 @@ Conseil 3 : le status est 'pending' si un ordre n'est pas encore ex&eacute;cut&e
     'Human Readable date' => 'Date en clair',
     'Server(s) time is now' => 'Le temps du serveur est actuellement',
     'pending' => 'en attente',
-    'done' => 'fait',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Si vous n\'avez pas de compte, vous pouvez en %s cr&eacute;er un %s.',
     'position' => 'Position',
