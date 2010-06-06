@@ -287,7 +287,10 @@
 ?>
             <a href="races.php?lang=<?echo $lang?>"><?echo getLocalizedString("races"); ?></a>
             <a href="calendar.php?lang=<?echo $lang?>"><?echo getLocalizedString("calendar"); ?></a>
-            <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo getLocalizedString("ranking"); ?></a> 
+            <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?php echo getLocalizedString("ranking"); ?></a> 
+            <a href="<?php echo MOBILE_SERVER_URL; ?>" target="_mobile" title="<?php echo getLocalizedString("Interface for mobiles devices"); ?> ">
+                <?php echo getLocalizedString("Mobiles"); ?>
+            </a> 
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
             <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo getLocalizedString("forum")?></a>

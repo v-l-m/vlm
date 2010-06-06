@@ -76,6 +76,7 @@ define("DOC_SERVER_URL", "http://wiki.virtual-loup-de-mer.org/index.php/");
 define("DEV_SERVER_URL", "http://dev.virtual-loup-de-mer.org/vlm/");
 define("TOOLS_SERVER_URL", DOC_SERVER_URL."Les_accessoires_et_outils_autour_de_VLM");
 define("GRIB_TOOLS_URL", DOC_SERVER_URL."Outils_m%C3%A9t%C3%A9os");
+define("MOBILE_SERVER_URL", "http://mobivlm.zigszags.com"); //FIXME : hébergement sur v-l-m.org a venir.
 
 // Max position age (engine speedup on long races) => 1 week since whe have "histpos" table
 define("DEFAULT_POSITION_AGE", 1 * 3600);
