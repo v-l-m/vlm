@@ -47,6 +47,17 @@
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
                  "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
+            if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
+                // Subscribe button/form
+                echo "<form action=\"myboat.php\" method=\"post\">
+                      <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
+                      <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
+                      <input type=\"hidden\" name=\"type\" value=\"subscribe\">
+                      <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
+                      <input type=\"submit\" value=\"" . getLocalizedString("subscribe") . "\" >
+                      </form>";
+            } 
+
             echo "</td>\n";
       
             echo "<td class=\"racesummary-type$racetype\">";
@@ -104,22 +115,6 @@
           echo "</td>\n";
 
           echo "</tr>\n</table>\n";
-
-
-            if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
-                // Subscribe button/form
-                $sub_button= "
-            <form action=\"myboat.php\" method=\"post\">
-            <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
-            <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
-            <input type=\"hidden\" name=\"type\" value=\"subscribe\">
-            <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
-            <input type=\"submit\" value=\"" . getLocalizedString("subscribe") . "\" >
-            </form>
-            ";
-          echo $sub_button;
-            } 
-
 
         }
     }
