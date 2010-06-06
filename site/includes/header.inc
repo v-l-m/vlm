@@ -247,7 +247,7 @@
             //disp login name, infos
             echo getLocalizedString("youlogin");
             echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
-                 " (". getLoginId() . ") " . getLoginName() . "</a>\n";
+                 " (". getLoginId() . ") <u>" . getLoginName() . "</u></a>\n";
 
 ?>
         </div> <!-- fin div loggedbox-->
