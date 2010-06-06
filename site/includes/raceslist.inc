@@ -57,7 +57,6 @@
                       <input type=\"submit\" value=\"" . getLocalizedString("subscribe") . "\" >
                       </form>";
             } 
-
             echo "</td>\n";
       
             echo "<td class=\"racesummary-type$racetype\">";
