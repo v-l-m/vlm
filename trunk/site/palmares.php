@@ -8,6 +8,7 @@
     
     if ( $palmares_type == 'user' ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
+        if (!(intval($idusers) > 0)) $idusers = getLoginId();
         
         $userobj = new users($idusers);
         echo '<h1>' . getLocalizedString('boatdescription') . '</h1>';
@@ -20,7 +21,7 @@
         if ($userobj->engaged > 0) {
             $raceobj = new races($userobj->engaged);
             echo "<h2>" . sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink($lang), $raceobj->htmlIdracesLink($lang) ) . "</h2>";
-            echo htmlAbandonButton($userobj->idusers);
+            if ($idusers == getLoginId()) echo htmlAbandonButton($userobj->idusers);
         } else {
             echo "<h2>" . getLocalizedString('boatnotengaged') . "</h2>";
         }

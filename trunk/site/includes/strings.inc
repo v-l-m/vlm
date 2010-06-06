@@ -281,6 +281,7 @@ or the next mark if your WP is 0/0',
     'youengaged' => 'You\'re subscribed to the race ',
     'youlogin' => 'Logged',
     'yourboat' => 'Your boat',
+    'Profile' => 'Profile',
   ),
   'fr' => 
   array (
@@ -570,6 +571,7 @@ sinon vise la prochaine marque',
     'youengaged' => 'Vous &ecirc;tes engag&eacute; dans la course ',
     'youlogin' => 'Connect&eacute; :',
     'yourboat' => 'Votre bateau',
+    'Profile' => 'Profil',
   ),
   'it' => 
   array (
@@ -856,6 +858,7 @@ verso il prossimo mark si Mia WP=0/0',
     'youengaged' => 'tu sei iscritto alla regata ',
     'youlogin' => 'registrati qui :',
     'yourboat' => 'la tua barca',
+    'Profile' => 'Profile',
   ),
   'pt' => 
   array (
@@ -1138,6 +1141,7 @@ o da próxima marca',
     'youengaged' => 'Encontra-se inscrito na regata ',
     'youlogin' => 'Registe-se aqui :',
     'yourboat' => 'O seu barco',
+    'Profile' => 'Profile',
   ),
   'es' => 
   array (
@@ -1421,6 +1425,7 @@ Use the following url :',
     'youengaged' => 'Su barco está suscrito a la carrera ',
     'youlogin' => 'Registrado :',
     'yourboat' => 'Su barco',
+    'Profile' => 'Profile',
   ),
 );
 

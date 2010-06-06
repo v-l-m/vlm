@@ -465,6 +465,10 @@ td.racesummary-minimap {
   border:none;
 }
 
+tr.racesummary-type0, tr.racesummary-type1 {
+  border-top: groove 3px #DDDDF0
+}
+
 table.racesummary-type0, table.racesummary-type1 {
   width:100%;
 }
