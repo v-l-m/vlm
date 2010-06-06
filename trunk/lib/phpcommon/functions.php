@@ -121,7 +121,7 @@ function getLocalizedString($key, $lg = null) {
     if (array_key_exists($key, $stringarray[$locallang])) {
         return $stringarray[$locallang][$key];
     } else if ($locallang != "en" && array_key_exists($key, $stringarray["en"])) {
-        return "**".$stringarray[$locallang][$key]."**";
+        return "**".$stringarray["en"][$key]."**";
     } else {
         return "**$key is not valid**";
     }
