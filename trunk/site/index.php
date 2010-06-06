@@ -14,11 +14,11 @@
 
       <p><?php echo getLocalizedString("sh1"); ?>
       <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
-         <img src="images/site/documentation.png"  alt="<?php echo getLocalizedString("doc"); ?>" title="<?php echo getLocalizedString("doc"); ?>" />
+          <?php echo getLocalizedString("doc"); ?>
       </a>
       <?php echo getLocalizedString("sh2"); ?>
       <a href="http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM" target="_outils">
-         <img src="images/site/outils.png" alt="<?php echo getLocalizedString("tools"); ?>" title="<?php echo getLocalizedString("tools"); ?>"/>
+      <?php echo getLocalizedString("tools"); ?>
       </a></p>
 
       <p><?php echo getLocalizedString("sh3"); ?>

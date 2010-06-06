@@ -15,10 +15,6 @@
     //change that, no SQL should appear directly in scripts
     $query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
     $query1 .= " WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ";
-
-    if ( $q != "" ) { 
-        $query1 .= " AND racetype = " . intval($q). " " ;
-    }
     $query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
 
     $result1 = wrapper_mysql_db_query_reader($query1) or die("Query [$query1] failed \n");
@@ -32,6 +28,7 @@
         $boattype = $row['boattype'];
         $firstpcttime = $row['firstpcttime'];
         $maxboats = $row['maxboats'];
+        $racetype = $row['racetype'];
 
         list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
 
@@ -41,7 +38,7 @@
         if ( $dep < $time AND $closetime <$time ) { //no race planned
             printf("      ".getLocalizedString("norace")."\n");
         } else {
-            echo "<table width=\"100%\">\n<tr>\n";
+            echo "<table class=\"racesummary-type$racetype\" width=\"100%\">\n<tr>\n";
             echo "<td width=\"200\" align=\"left\" class=\"boat\">";
             // Carte de la course
             $href = "/racemap.php?idraces=".$idraces;
@@ -74,6 +71,9 @@
             } else {
                 $duration = duration2string(-$duration);
                 printf("    <li>".getLocalizedString("openrace") . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
+            }
+            if ($racetype == RACE_TYPE_RECORD) {
+                echo "<li>".getLocalizedString("This is a permanent/record race").".</li>";
             }
         
             if ( $closetime > $dep ) {
@@ -121,16 +121,6 @@
 
 
         }
-        echo "<hr />";
-    }
-
-
-    if ( $q == RACE_TYPE_CLASSIC ) {
-      $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_RECORD;
-      echo "<input type=\"button\" value=\"Click here to see Permanent-Record races\" onclick=\"document.location='" . $URL . "'\" />";
-    } else {
-      $URL=$_SERVER["PHP_SELF"] . "?lang=" . $lang . "&amp;type=" . RACE_TYPE_CLASSIC;
-      echo "<input type=\"button\" value=\"Click here to see Classical &amp; Qualification races\" onclick=\"document.location='" . $URL . "'\" />";
     }
 
 ?>
