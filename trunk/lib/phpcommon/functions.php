@@ -1769,5 +1769,8 @@ function insertAdminChangelog($argarray) {
     wrapper_mysql_db_query_writer($query);
 }
 
+function htmlShouldNotDoThat() {
+    return "<h3>".getLocalizedString("You should not do that.").getLocalizedString("Your IP has been logged")."</h3>";
+}
 
 ?>
