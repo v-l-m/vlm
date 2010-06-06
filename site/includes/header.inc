@@ -288,8 +288,6 @@
             <a href="races.php?lang=<?echo $lang?>"><?echo getLocalizedString("races"); ?></a>
             <a href="calendar.php?lang=<?echo $lang?>"><?echo getLocalizedString("calendar"); ?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?echo getLocalizedString("ranking"); ?></a> 
-            <a href="<?echo DOC_SERVER_URL.'FAQ/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a> 
-            <a href="<?echo DOC_SERVER_URL.'About/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("about"); ?></a>
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
             <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo getLocalizedString("forum")?></a>
@@ -306,16 +304,13 @@
                 ?>
             </a>)
         </div> <!-- fin div menucommunicationbox -->
-        <div id="toolbarbox" class="leftbox">
-            <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki">
-                <img src="images/site/documentation.png"  alt="<?php echo getLocalizedString("doc"); ?>" title="<?php echo getLocalizedString("doc"); ?>" />
-            </a>
-            <a href="<?php echo DEV_SERVER_URL; ?>" target="_vlmdev">
-                <img src="images/site/vlmdev.png"  alt="<?php echo getLocalizedString("dev"); ?>" title="<?php echo getLocalizedString("dev"); ?>" />
-            </a>
-            <a href="<?php echo TOOLS_SERVER_URL; ?>" target="_outils">
-                <img src="images/site/outils.png" alt="<?php echo getLocalizedString("tools"); ?>" title="<?php echo getLocalizedString("tools"); ?>"/>
-            </a>            
+        <div id="docbox" class="leftbox">
+            <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki"><?php echo getLocalizedString("doc"); ?></a>
+            <a href="<?echo DOC_SERVER_URL.'FAQ/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a> 
+            <a href="<?php echo TOOLS_SERVER_URL; ?>" target="_outils"><?php echo getLocalizedString("tools"); ?></a>            
+            <a href="<?php echo DEV_SERVER_URL; ?>" target="_vlmdev"><?php echo getLocalizedString("dev"); ?></a>
+            <a href="<?echo DOC_SERVER_URL.'About/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("about"); ?></a>
+
         </div>
         <div id="weatherbox" class="leftbox">
 <!--            <h3><?php echo getLocalizedString("weather"); ?></h3> -->

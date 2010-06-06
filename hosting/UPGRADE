@@ -2,6 +2,7 @@ This file traces the changes that are required for upgrading from a previous VLM
 From 0.12 to Next :
 
 = All servers = 
+
   EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_13
 
   RUN
