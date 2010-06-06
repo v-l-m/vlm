@@ -200,7 +200,7 @@
     $rc=$usersObj->pilototoList($pilotolist_force_master);
     
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">\n
-         <th>&nbsp</th><th>Epoch Time</th><th></th><th>PIM</th><th>PIP</th><th>Status</th><th>Human Readable date</th><th>N&deg;</th>\n";
+         <th>&nbsp</th><th>".getLocalizedString("Epoch Time")."</th><th></th><th>PIM</th><th>PIP</th><th>".getLocalizedString("Status")."</th><th>".getLocalizedString("Human Readable date")."</th><th>N&deg;</th>\n";
     $numligne=0;
     if ( count($usersObj->pilototo) != 0) {
         foreach ($usersObj->pilototo as $pilototo_row) {
@@ -225,11 +225,13 @@
     echo "<div id=\"helpvaluespilototobox\">\n";
     echo nl2br(getLocalizedString('pilototohelp1'));
     echo "</div>\n";
+    echo "<hr />";
     $time=time();
     echo "<div id=\"helptimepilototobox\">\n";
-    echo "Server(s) time is now <b>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</b><br />\n";
+    echo getLocalizedString("Server(s) time is now")."&nbsp;<b>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</b><br />\n";
     echo nl2br(getLocalizedString('pilototohelp2'));
     echo "</div>\n";
+    echo "<hr />";
     echo "<div id=\"buttonspilototobox\">\n";
     echo "<input type=\"button\" value=\"Close\" onClick=\"javascript:self.close();\" />\n";
     echo "<input type=\"button\" value=\"Refresh\" onClick=\"javascript:location.reload();\" />\n";
