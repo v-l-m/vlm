@@ -200,6 +200,12 @@ or the next mark if your WP is 0/0',
     'pilototo_prog_title' => 'Schedule events',
     'pilototo_prog_upd' => 'update',
     'pilototoengaged' => 'Pilot Instructions',
+    'pilototohelp1' => "<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00
+<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG
+<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long<li>Please give <b>0,0</b> for nextrace WP, <li><b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)",
+    'pilototohelp2' => "Tip1 : server_time + 3600 is in one hour, server_time+5*3600 is in 5 hours...
+Tip2 : for an update, modify a value, then click on update
+Tip3 : status is 'pending' if an order is not yet executed, 'done' otherwise",
     'playersengaged' => 'Number of player',
     'pleasecreate' => 'If you do not have any account, please %s create one %s.',
     'position' => 'Position',
@@ -490,6 +496,12 @@ sinon vise la prochaine marque',
     'pilototo_prog_title' => 'Programmation du Pilototo',
     'pilototo_prog_upd' => 'modifie',
     'pilototoengaged' => 'Pilototo',
+    'pilototohelp1' => "<b>TIME</b> : GMT, en seconds depuis 01/01/1970 00:00
+<b>PIM</b> : type de pilote : 1/Mode cap, 2/R&eacute;gulateur d'allure 3/Pilode orthodromique 4/Best VMG 5/VBVMG
+<b>PIP</b> : Paramètre : Pour PIM=1: cap &agrave; suivre, pour PIM=2:angle au vent, pour PIM=3,4 or 5: Lat<b>,</b>Long<li>Mettre <b>0,0</b> le prochain WP de course, <li><b>LATITUDE,LONGITUDE</b>(<0 pour le Sud ou l'Ouest) pour sp&eacute;cifier un nouveau WP et viser le prochain wp de course une fois atteint. Ex:47.899,-3.973 pour Port Laforet<li><b>LATITUDE,LONGITUDE@HEADING</b> : idem, mais quand passage au cap HEADING quand le wp sera atteint (0..360)",
+    'pilototohelp2' => "Conseil 1 : server_time + 3600 sp&eacute;cifie une date dans une heure, server_time+5*3600 sp&eacute;cifie une date dans 5 heures...
+Conseil 2 : pour mettre &agrave; jour, modifiez une valeur et cliquez sur modifier,
+Conseil 3 : le status est 'pending' si un ordre n'est pas encore ex&eacute;cut&eacute;, 'done' sinon",
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Si vous n\'avez pas de compte, vous pouvez en %s cr&eacute;er un %s.',
     'position' => 'Position',
