@@ -76,6 +76,13 @@ $opts['fdd']['useragent'] = array(
   'sort'     => false
 );
 
+$opts['fdd']['actionserver'] = array(
+  'name'     => 'Action Server',
+  'select'   => 'T',
+  'maxlen'   => 32,
+  'sort'     => true
+);
+
 include('adminfooter.php');
 
 ?>

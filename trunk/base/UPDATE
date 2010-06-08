@@ -1,4 +1,9 @@
-Depuis la 0.12 :
+Depuis la 0.12
+* Aller dans base/scripts et lancer : 
+  ./runupgrade.sh 0.13 > up13.log
+  NB: ce script appelle automatiquement les fichiers en *.0.13.* contenus dans scripts
+
+Depuis la 0.11 :
 
 * Aller dans base/scripts et lancer : 
   ./runupgrade.sh 0.12 > up12.log
