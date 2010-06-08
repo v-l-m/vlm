@@ -39,6 +39,7 @@ $opts['fdd']['idusers'] = array(
 $opts['fdd']['ipaddr'] = array(
   'name'     => 'IP',
   'select'   => 'T',
+  'URL'      => 'http://whois.domaintools.com/$value',
   'escape'   => true,
   'maxlen'   => 16,
   'sort'     => true
