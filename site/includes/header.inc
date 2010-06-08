@@ -176,9 +176,9 @@
         if ( $do == 'yes' ) {
             echo "  <meta http-equiv=\"refresh\" content=\"0\" />";
         }
-    } else {
+    } elseif ($CurrentFile == "myboat.php" ) {
         echo "  <meta http-equiv=\"refresh\" content=\"1200\" />";
-    }
+    } //No refresh for other pages
 
 ?>
 
