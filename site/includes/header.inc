@@ -120,7 +120,8 @@
     if ($type == "unsubscribe")
     {
         $users = new fullUsers(getLoginId());
-        $users->setABD();
+        $idraces_unsubscribe = quote_smart($_REQUEST['idraces_unsubscribe']);
+        if ($users->users->engaged == $idraces_unsubscribe) $users->setABD();
     }
     
     if ($type == "subscribe")

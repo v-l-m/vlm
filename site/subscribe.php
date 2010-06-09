@@ -19,19 +19,7 @@ if ($fullUsersObj->users->engaged  != 0)
     }
 
     // The user may want to unsubscribe from this race
-?>
-  <form action="subscribe_race.php">
-     <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
-     <input type="hidden" name="type" value="unsubscribe" />
-     <input type="hidden" name="lang" value="<?php echo $lang?>" />
-     <input type="submit" value="<?php echo getLocalizedString("unsubscribe")?>" />
-     <p>
-     <?php echo getLocalizedString("wanttosubscribe")?>
-     </p>
-  </form>
-
-<?php
-
+    htmlAbandonButton($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
 // Else display list of available races
 } else {
 
