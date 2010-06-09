@@ -7,6 +7,6 @@
     echo " <b>" .   $racesObj->htmlRacenameLink($lang) .  " (" . $racesObj->htmlIdracesLink($lang)    .  ") " . "</b></p>";
 
     // The user may want to unsubscribe from this race
-    echo htmlAbandonButton($fullUsersObj->users->idusers);
+    echo htmlAbandonButton($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
 ?>
 </div>

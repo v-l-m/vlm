@@ -21,7 +21,7 @@
         if ($userobj->engaged > 0) {
             $raceobj = new races($userobj->engaged);
             echo "<h2>" . sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink($lang), $raceobj->htmlIdracesLink($lang) ) . "</h2>";
-            if ($idusers == getLoginId()) echo htmlAbandonButton($userobj->idusers);
+            if ($idusers == getLoginId()) echo htmlAbandonButton($userobj->idusers, $userobj->engaged);
         } else {
             echo "<h2>" . getLocalizedString('boatnotengaged') . "</h2>";
         }

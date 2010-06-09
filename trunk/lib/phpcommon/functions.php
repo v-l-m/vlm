@@ -1701,10 +1701,11 @@ function logUserEvent($idusers, $idraces, $action) {
     $result = wrapper_mysql_db_query_writer($query_user_event) or die("Query [$query_user_event] failed \n");
 }
 
-function htmlAbandonButton($idusers) {
+function htmlAbandonButton($idusers, $idraces) {
 
     return "<form id=\"abandonform\" name=\"abandon\" action=\"subscribe.php\">
             <input type=\"hidden\" name=\"idusers\" value=\"$idusers\" />
+            <input type=\"hidden\" name=\"idraces_unsubscribe\" value=\"".$idraces."\" />     
             <input type=\"hidden\" name=\"type\" value=\"unsubscribe\" />
             <input type=\"hidden\" name=\"lang\" value=\"".getCurrentLang()."\" />
             <input type=\"button\" onclick=\"confirmation_abandon('".getLocalizedString("unsubscribe").". Confirmation ?');\"

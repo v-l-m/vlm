@@ -1,5 +1,7 @@
 <?php
-
+    include_once("includes/header.inc");
+    include_once("config.php");
+    
     $fullUsersObj = new fullUsers(getLoginId());
 
     //select NOT started races list and available for this boat
