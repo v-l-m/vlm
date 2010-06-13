@@ -8,6 +8,11 @@
     <title><?php echo $PAGETITLE; ?></title>
     <link rel="stylesheet" type="text/css" href="../style/status.css" />
     <link rel="icon" type="image/png" href="../images/site/favicon.png" />
+    <?php
+        if (isset($RSSLINK)) {
+            echo '<link rel="alternate" type="application/rss+xml" title="RSS" href="'.$RSSLINK.'" />';
+        }
+    ?>
   </head>
   <body>
       <p class=".horizontalmenu">Available status : <a href="polar-status.php" rel="nofollow">Polar status</a>&nbsp;&middot;&nbsp;<a href="race-engine-status.php" rel="nofollow">Race engine status</a>&nbsp;&middot;&nbsp;<a href="windtable-status.php" rel="nofollow">Windtable status</a>&nbsp;&middot;&nbsp;<a href="module-status.php" rel="nofollow">Module status</a>&nbsp;</p>
