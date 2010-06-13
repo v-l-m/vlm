@@ -5,6 +5,7 @@
 include_once('config.php');
 
 $PAGETITLE="Module Status";
+$RSSLINK="/feed/modules.updates.rss2.php";
 include("../includes/header-status.inc");
 ?>
 
