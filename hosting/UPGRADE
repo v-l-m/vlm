@@ -10,7 +10,11 @@ From 0.12 to Next :
 
   EDIT file ./conf/param.php
     and add correct values for keys :
-      define("VLM_PROXY_PASS", "PROXYPASS"); //password for centralized (web) clients. Allow to log the correct IP of the client.
+      define("VLM_PROXY_PASS", "PROXYPASS"); //Change the password to something else !!! This is needed for client passing IP infos to VLM
+
+  ./scripts/maj_module.sh vlm-c
+  RESTART apache
+
 
 = Master Server =
 
@@ -20,16 +24,11 @@ BASE
   ./runupgrade.sh 0.13
   cd 
 
-MOTEUR
-  ./scripts/maj_module.sh lib/phpcommon
-  ./scripts/maj_module.sh moteur
-
 = All servers =
 
   ./scripts/maj_module.sh lib/phpcommon
   ./scripts/maj_module.sh site
   ./scripts/maj_module.sh medias
-
 ___
 From 0.11 to Next
 
