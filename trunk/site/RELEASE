@@ -1,5 +1,55 @@
 RELEASE NOTES
-See http://dev.virtual-loup-de-mer.org for detailed Changelog & tickets by milestone.
+See http://dev.virtual- loup-de-mer.org for detailed Changelog & tickets by milestone.
+
+v0.13 aka "En voiture Simoun" : What's up for ...
+
+... players ?
+    * various bugfixes, interfaces improvement and translation (paparazzia, spf & all translators - Cf. le wiki)
+    * feeds RSS and ICAL for races (so you can at last display races in your favorite feed reader or calendar application) (paparazzia)
+    * (start of) rewrite of Palmares/Profil's userpage (paparazzia)
+    * statically display racemap (paparazzia)
+    * ranking display bugfix (?) (paparazzia)
+    * pilototo : bugfix and more strict input checking (paparazzia, spf)
+    * report : "Who connected to my boat ?" (paparazzia - special dedication to the revatua team)
+    * clean race list (paparazzia)
+    * wiki now hold about and faq pages (paparazzia)
+    * visual race calendar (paparazzia)
+    * mobile interface by Kernel_Panic
+    * minor map bugfixes (paparazzia)
+    * engine bugfixes (spf) 
+
+... developers and tools developers (Tcv, SbsRouteur, QtVlm, MobiVlm, ...) :
+
+    * more webservices read and write (paparazzia)
+    * new interpolation method available in vlm-c (spf) 
+
+... race committee :
+
+    * ability to change WP online (paparazzia)
+    * new admin reports (paparazzia)
+
+v0.12 aka Take Five : what's new since 0.11 for ...
+
+... players ?
+* some bugfixes already backported to 0.11 ;)
+* various small bug and security fixes (you like security, don't you ?) (spf, paparazzia)
+* better handling of coast crossing penalty (spf)
+* @WPH is now in 1/10 of degrees (paparazzia)
+* performance mysql improvement (spf)
+* grid's color is now tunable (paparazzia)
+
+... tools developers ?
+* start of json webservices for race and boatinfo (spf, paparazzia)
+
+... race committee ?
+* easy import of races (paparazzia)
+* more loging of admins actions (paparazzia)
+* and more for the admin (you love your admins, don't you ?) (paparazzia)
+
+... developers ?
+* online module status (paparazzia, spf)
+* html & w3 compliance fixes (paparazzia)
+* base cleanup (indexes, timestamp types, charsets, etc...) (paparazzia)
 
 v0.11 aka "Autant en emporte l'autan" : what's new since 0.10 ...
 
