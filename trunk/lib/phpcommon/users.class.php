@@ -1147,24 +1147,6 @@ class fullUsers
       " `lastchange` = " . $timestamp .
       " WHERE idusers = ".$this->users->idusers;
     wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
-    //printf ("Request USERS : %s\n" , $query);
-
-    // Determiner quel est le timestamp de la dernière position écrite pour ce joueur
-    $query = "SELECT max(time) as maxpostime FROM positions " .
-      " WHERE race = " . $this->users->engaged .
-      " AND   idusers = ". $this->users->idusers  ;
-    // use the same db here to avoid replication gap effect
-    $result = wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
-    $row = mysql_fetch_array($result, MYSQL_ASSOC);
-    $timestamp=$row['maxpostime'];
-
-    // Effacement de cette position là
-    $query = "DELETE FROM positions " .
-      " WHERE `time` = " .  $timestamp  .
-      " AND race = " . $this->users->engaged .
-      " AND idusers = ". $this->users->idusers ;
-    //printf ("Request POSITIONS : %s\n" , $query);
-    wrapper_mysql_db_query_writer($query);// or echo("Query failed : " . mysql_error." ".$query);
 
     $this->updateAngles();
   }
