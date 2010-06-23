@@ -624,10 +624,10 @@ class fullRaces {
 
     // Ecart par rapport au premier : pas de tri
     $str=getLocalizedString("ecart");
-    if ( strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) == "tonm" ) { 
-        $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
-    } else {
+    if ( $disttype != "tonm" ) { 
         $str.=" <a href=\"".$baseurl."&amp;disttype=tonm\">NM</a>";
+    } else {
+        $str.=" <a href=\"".$baseurl."&amp;disttype=tofirst\">1st</a>";
     }
     echo "<th>".$str."</th>\n";
 
