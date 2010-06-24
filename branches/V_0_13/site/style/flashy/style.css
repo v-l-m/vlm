@@ -1,0 +1,27 @@
+@import url("../default/style.css");
+
+body { background-color: #FFAAAA; }
+
+#login { background-color: #AAAAAA; }
+#loginbox { background-color: #FF0000; }
+#langbox { background-color: #AA0000;}
+#msgbox { background-color: #00FF00; }
+#menubox { background-color: #00AA00; }
+#weatherbox { background-color: #0000FF; }
+#toolbarbox { background-color: #0000AA; }
+#serverbox { background-color: #FFFF00; }
+#statusbox { background-color: #FFFFFF;}
+#racenamebox { background-color: #AA00AA; }
+#raceicbox { background-color: #FF0000; }
+#costpenaltybox { background-color: #777777; }
+#wplistbox { background-color: #AA0000; }
+#racebox { background-color: #FF1111;}
+#sosbox { background-color: #0000FF; }
+#yourboatbox { background-color: #000000; }
+#yourboatsummarybox { background-color: #00AFAF; }
+#yourboatstatusbox { background-color: #00AAAA; }
+#instrumentbox { background-color: #44FF44; }
+#messagebox { background-color: #ABCDEF; }
+
+#controlbox { background-color: #D0AAD0; }
+#autopilotcontrolbox { background-color: #DADADA; }

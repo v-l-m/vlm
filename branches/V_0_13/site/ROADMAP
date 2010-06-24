@@ -1,0 +1,71 @@
+VIRTUAL LOUP DE MER - ROADMAP
+-----------------------
+
+Starting from 2008-11-29, ongoing work is on http://dev.virtual-loup-de-mer.org/vlm/roadmap
+
+Soon :
+
+- collisions with continent
+==> OK, done in 0.5 (FM)
+- source code package with INSTALL instructions
+
+- find more boats models
+==> OK, Mike/Phile/Seylo
+
+- e-mail alerts
+==> OK, mail are stored if given, but not yet used
+
+- more stats (last 24hr, best speed etc...)
+==> FM-in progress...
+
+- Fully Object Oriented
+==> Thibault-VLM - 0.6 - INTERFACE - will be fully PHP-5 compliant for the interface
+==> FM-VLM - 0.6 - ENGINE- is not. (0.7 will maybe be written in C)
+
+- admin panel to create races
+==> removed from VLM - 0.6, will be a separate api
+
+- better "wind angle constant" pilot mode, this one is not usable 
+==> FM-Is is now isable
+
+- more translation (help needed!)
+==> Nicolas (Esp), looking for help with German, Italian, Portugese...
+
+- auto detect browser language
+==> Not done
+
+Later
+- C#/GTK client and API using XML
+- a lambert projection map
+==> And a polar One
+
+- around the globe race
+==> Done - FM
+
+- follow famous races with real AND virtual skippers
+==> Problem : OV (VT) attacked (law) Virtualregatta after Rhum 2006.
+
+- currents
+==> Asked for currents data at Ifremer, SHOM, and friends working in Oceanography - FM (No answer yet)
+
+- wap access
+==> Works with my T610 ! (FM)
+
+- use mapserver technologies http://mapserver.gis.umn.edu/
+  to have a more dynamic map
+==> Thibault Morin has begun with GoogleMap
+==> Thibault Meunier for mapserver ?
+
+
+- full SVG (when browsers will support it)
+==> Thibault Morin (V 0.6)
+
+- maps with weather forecast
+==> OK, FM / 0.5. Wind data is now interpolated and received around the world to enclose each race
+
+
+
+# OTHER #
+VLM has now a dedicated webserver (paied by ACTILIS/FM)
+VLM has now a separate server for the engine and the database (paid by ACTILIS/FM)
+

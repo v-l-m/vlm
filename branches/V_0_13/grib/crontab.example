@@ -1,0 +1,6 @@
+#Exemple de crontab de récupération des gribs
+VLMRACINE=/home/vlmtest
+20 3    * * *   $VLMRACINE/bin/noaa.sh 00 > /dev/null 2>&1
+20 9    * * *   $VLMRACINE/bin/noaa.sh 06 > /dev/null 2>&1
+20 15   * * *   $VLMRACINE/bin/noaa.sh 12 > /dev/null 2>&1
+20 21   * * *   $VLMRACINE/bin/noaa.sh 18 > /dev/null 2>&1
