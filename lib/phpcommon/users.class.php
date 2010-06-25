@@ -1355,8 +1355,8 @@ class fullUsers
   }
 
   function getCurrentUserRanking() {
-    $query = sprintf("SELECT count(DISTINCT idusers) AS nbracing, SUM(IF(dnm IS NOT NULL AND nwp >= %d AND dnm < %f, 1, 0))+1 AS rankracing ".
-                     "FROM races_ranking WHERE idusers > 0 AND idraces = %d ORDER BY nwp DESC, dnm ASC", intval($this->users->nwp), (float) $this->distancefromend, intval($this->users->engaged)) ;
+    $query = sprintf("SELECT count(DISTINCT idusers) AS nbracing, SUM(IF(nwp IS NOT NULL AND dnm IS NOT NULL AND nwp >= %d AND dnm <= %f, 1, 0)) AS rankracing ".
+                     "FROM races_ranking WHERE idusers > 0 AND idraces = %d GROUP BY idraces", intval($this->users->nwp), (float) $this->distancefromend, intval($this->users->engaged)) ;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     $rowracing = mysql_fetch_array($result, MYSQL_ASSOC);
     // we do add num_arrived boats to each counters
