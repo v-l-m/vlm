@@ -139,80 +139,79 @@ class users
 
 
   // Check pilote auto returns true if an action was done, else false
-  function pilototoCheck()
-  {
+  function pilototoCheck() {
     $flag_pilototo=false;
 
     $now=time();
     // lookup for a task to do
-    $query = "SELECT taskid, pilotmode, pilotparameter FROM auto_pilot
-         WHERE status='" . PILOTOTO_PENDING . "'
-       AND idusers = $this->idusers
-       AND time <= $now";
+    $query = "SELECT `taskid`, `pilotmode`, `pilotparameter` FROM `auto_pilot`
+              WHERE `status`='" . PILOTOTO_PENDING . "'
+              AND `idusers` = ".$this->idusers."
+              AND `time` <= $now";
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
 
-    while ( $row = mysql_fetch_array($result,MYSQL_ASSOC) ) {
-      // Execute the task
-      $PIM=$row['pilotmode'];
-      if ( $PIM == 0 OR $PIM > MAX_PILOTMODE ) $flag_err=true;
-      $this->pilotmode=$PIM;
+    while ( $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
+        // Execute the task
+        $PIM=$row['pilotmode'];
+        if ( $PIM == 0 OR $PIM > MAX_PILOTMODE ) $flag_err=true;
+        $this->pilotmode=$PIM;
 
-      $PIP=$row['pilotparameter'];
+        $PIP=$row['pilotparameter'];
 
-      printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
-      $query="UPDATE users SET pilotmode=$PIM ";
+        printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
+        $query="UPDATE users SET pilotmode=$PIM ";
 
-      switch ($PIM) {
-      case PILOTMODE_HEADING:
-        // Setup the userclass for immediate use
-        $this->boatheading=$PIP;
-        $query .= ", boatheading=$PIP ";
-	break;
-      case PILOTMODE_WINDANGLE:
-        // Setup the userclass for immediate use
-        $this->pilotparameter=$PIP;
-        $query .= ", pilotparameter=$PIP ";
-	break;
-      case PILOTMODE_ORTHODROMIC:
-      case PILOTMODE_BESTVMG:
-      case PILOTMODE_VBVMG:
-        if ( strlen($PIP) != 0 && $PIP != "0" ) {
-          $values = explode("@", $PIP);
-          $Coords = explode(",", $values[0]);
-          $query .= ", targetlat=round($Coords[0],4), targetlong=round($Coords[1],4) ";
-          if ( round($values[1]) > 0 ) {
-            $query .= ", targetandhdg=" . $values[1] ;
-            // Setup the userclass for immediate use
-            $this->targetandhdg = $values[1];
-          } else {
-            $query .= ", targetandhdg=-1 ";
-            // Setup the userclass for immediate use
-            $this->targetandhdg = -1;
-          }
+        switch ($PIM) {
+            case PILOTMODE_HEADING:
+                // Setup the userclass for immediate use
+                $this->boatheading=$PIP;
+                $query .= ", boatheading=$PIP ";
+              	break;
+            case PILOTMODE_WINDANGLE:
+                // Setup the userclass for immediate use
+                $this->pilotparameter=$PIP;
+                $query .= ", pilotparameter=$PIP ";
+              	break;
+            case PILOTMODE_ORTHODROMIC:
+            case PILOTMODE_BESTVMG:
+            case PILOTMODE_VBVMG:
+                if ( strlen($PIP) != 0 && $PIP != "0" ) {
+                    $values = explode("@", $PIP);
+                    $Coords = explode(",", $values[0]);
+                    $query .= ", targetlat=round($Coords[0],4), targetlong=round($Coords[1],4) ";
+                    if ( round($values[1]) > 0 ) {
+                        $query .= ", targetandhdg=" . $values[1] ;
+                        // Setup the userclass for immediate use
+                        $this->targetandhdg = $values[1];
+                    } else {
+                        $query .= ", targetandhdg=-1 ";
+                        // Setup the userclass for immediate use
+                        $this->targetandhdg = -1;
+                    }
 
-          echo $query;
-          // Setup the userclass for immediate use
-          $this->targetlat = round($Coords[0],4);
-          $this->targetlong = round($Coords[1],4);
+                    echo $query;
+                    // Setup the userclass for immediate use
+                    $this->targetlat = round($Coords[0],4);
+                    $this->targetlong = round($Coords[1],4);
+                }
+                break;
         }
-	break;
-      }
-      // Don't forget to add the where clause... and execute the query
-      $query .= " WHERE idusers=$this->idusers;";
-      wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
+        // Don't forget to add the where clause... and execute the query
+        $query .= " WHERE idusers=$this->idusers;";
+        wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
 
-      // Mark the task as DONE
-      $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
-      wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
+        // Mark the task as DONE
+        $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
+        wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
 
-      // Purge old tasks
-      $this->pilototoPurge( PILOTOTO_KEEP );
+        // Purge old tasks
+        $this->pilototoPurge( PILOTOTO_KEEP );
 
-      $flag_pilototo=true;
+        $flag_pilototo=true;
     }
 
     return ($flag_pilototo);
-  }
+}
 
   // Give the number of pilototo tasks in the given Status (pending by default)
   function pilototoCountTasks($status = PILOTOTO_PENDING)
