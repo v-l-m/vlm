@@ -24,6 +24,10 @@ BASE
   ./runupgrade.sh 0.13
   cd 
 
+MOTEUR
+  ./scripts/maj_module.sh moteur
+
+
 = All servers =
 
   ./scripts/maj_module.sh lib/phpcommon
