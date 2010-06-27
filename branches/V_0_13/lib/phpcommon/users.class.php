@@ -1355,17 +1355,20 @@ class fullUsers
   }
 
   function getCurrentUserRanking() {
-    $query = sprintf("SELECT count(DISTINCT idusers) AS nbracing, SUM(IF(nwp IS NOT NULL AND dnm IS NOT NULL AND nwp >= %d AND dnm <= %f, 1, 0)) AS rankracing ".
-                     "FROM races_ranking WHERE idusers > 0 AND idraces = %d GROUP BY idraces", intval($this->users->nwp), (float) $this->distancefromend, intval($this->users->engaged)) ;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    $rowracing = mysql_fetch_array($result, MYSQL_ASSOC);
-    // we do add num_arrived boats to each counters
-    $query = "SELECT count(*) AS nbarrived FROM races_results where position = " . BOAT_STATUS_ARR . " AND idraces = " . $this->users->engaged;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    $rowarrived = mysql_fetch_array($result, MYSQL_ASSOC);
-    return array("rankracing" => $rowracing['rankracing'], "nbu" => $rowracing['nbracing']+$rowarrived['nbarrived'],
-                  "rank" => $rowracing['rankracing']+$rowarrived['nbarrived']);
-}
+      $query = "SELECT idusers from races_ranking where idusers >0 and idraces = " . $this->users->engaged . " order by nwp DESC, dnm ASC" ;
+      $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+      $nbu=0; $rank = 0;
+      while ($row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
+          if( $row['idusers'] == $this->users->idusers ) $rank=$nbu+1;
+          $nbu++;
+      }
+      // we do add num_arrived boats to each counters
+      $query = "SELECT count(*) AS nbarrived FROM races_results where position = " . BOAT_STATUS_ARR . " AND idraces = " . $this->users->engaged;
+      $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+      $rowarrived = mysql_fetch_array($result, MYSQL_ASSOC);
+      return array("rankracing" => $rank, "nbu" => $nbu+$rowarrived['nbarrived'],
+                    "rank" => $rank+$rowarrived['nbarrived']);
+  }
 
 
 }
