@@ -209,9 +209,9 @@ if ($idraces != 0) {
                  if ($disttype != "tofirst" and $disttype != "tonm") $disttype="tonm";
 
            if ( isset($sortkey) && $sortkey != "" ) {
-               $fullRacesObj->dispHtmlClassification($strings, $lang, $numarrived , $sortkey . " " . $sortorder , $disttype, $startnum);
+               $fullRacesObj->dispHtmlClassification($strings, $lang, $num_arrived , $sortkey . " " . $sortorder , $disttype, $startnum);
            } else {
-               $fullRacesObj->dispHtmlClassification($strings, $lang, $numarrived, "nwp desc, dnm asc", $disttype, $startnum);
+               $fullRacesObj->dispHtmlClassification($strings, $lang, $num_arrived, "nwp desc, dnm asc", $disttype, $startnum);
            }
        } else {
            printf( "<h3>". getLocalizedString("hasnotstart")."<br /><b>\n",$fullRacesObj->races->racename);

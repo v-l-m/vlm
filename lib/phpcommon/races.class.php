@@ -639,7 +639,6 @@ class fullRaces {
 
     $key = 0; $printed =0;
     while( $row = mysql_fetch_assoc( $result ) ) {
-
       // Si on a déjà affiché suffisament de lignes, on rend la main
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
