@@ -246,7 +246,6 @@
         <div id="loggedbox" class="leftbox">
 <?php
             //disp login name, infos
-            echo getLocalizedString("youlogin");
             echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
                  " (". getLoginId() . ") <u>" . getLoginName() . "</u></a>\n";
 
