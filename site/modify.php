@@ -60,7 +60,7 @@ echo "<h2>".getLocalizedString("choose")."</h2>";
     $dh  = opendir($dir);
     $select_list="";
     while (false !== ($filename = readdir($dh))) {
-        if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
+        if ( is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..") and $filename != ".svn") {
             //Taking only directories
             $list_themes[] = $filename;
         }
