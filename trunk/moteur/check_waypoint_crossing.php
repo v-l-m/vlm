@@ -46,7 +46,7 @@ do {
   echo (", checking for WP crossing... ");
   printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint['latitude1']/1000, $nextwaypoint['longitude1']/1000, 
 	  $nextwaypoint['latitude2']/1000, $nextwaypoint['longitude2']/1000);
-  printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latAvant/1000, $lonAvant/1000, $latCheck/1000, $lonCheck/1000);
+  printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latPreCheck/1000, $lonPreCheck/1000, $latCheck/1000, $lonCheck/1000);
 
   // Test de croisement avec un waypoint
   $waypoint_crossed=false;
