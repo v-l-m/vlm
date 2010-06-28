@@ -1695,9 +1695,14 @@ function checkMapArea($value) {
 
 function logUserEvent($idusers, $idraces, $action) {
     //tracking...
+    if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"]) {
+        $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"];
+    } else {
+        $ua = $_SERVER["HTTP_USER_AGENT"];
+    }
     $query_user_event = "INSERT INTO `user_action` (`idusers`, `ipaddr`, `fullipaddr`, `idraces`, `action`, `useragent`, `actionserver`) " .
                         " values (" . $idusers . ", '" . $_SESSION['IP'] . "' , '" . $_SESSION['FULLIP'] . "' ," . $idraces .
-                        ",'" . addslashes($action) . "', '". addslashes($_SERVER["HTTP_USER_AGENT"]) ."' , '".SERVER_NAME."' )";
+                        ",'" . addslashes($action) . "', '". addslashes($ua) ."' , '".SERVER_NAME."' )";
     $result = wrapper_mysql_db_query_writer($query_user_event) or die("Query [$query_user_event] failed \n");
 }
 
