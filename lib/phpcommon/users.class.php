@@ -205,7 +205,7 @@ class users
         wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
 
         // Purge old tasks
-        $this->pilototoPurge( PILOTOTO_KEEP );
+        $this->pilototoPurge();
 
         $flag_pilototo=true;
     }
@@ -287,21 +287,24 @@ class users
    *    else delete tasks older than (seconds) seconds
    */
 
-  function pilototoPurge($seconds)
-  {
-    $timestamp=time();
-    if ( $seconds != 0 ) {
-      $timestamp-=$seconds;
-    }
-
-    // lookup for a task to do
-    $query = "DELETE FROM auto_pilot
-     WHERE idusers = $this->idusers
-       AND time   <= $timestamp";
-    $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
-
-    //echo $query;
-    return(0);
+  function pilototoPurge($seconds = PILOTOTO_KEEP) {
+      // lookup for a task to do
+      $query = "DELETE FROM `auto_pilot` WHERE `idusers` = ".$this->idusers;
+      $logmsg = "Deleting all pilototo tasks";
+      if ( $seconds !== 0 ) {
+          $timestamp = time() - $seconds;
+          $query .= " AND time   <= $timestamp";
+          $logmsg .= " before $timestamp";
+      }
+  
+      if ($result = wrapper_mysql_db_query_writer($query)) {
+          $this->logUserEvent($logmsg);
+          return True;
+      } else {
+          $this->set_error_with_mysql_query($query);
+          $this->logUserEventError("FAILED : ".$logmsg);
+          return False;
+      }
   }
 
   // Add a task to Pilototo
@@ -1153,6 +1156,7 @@ class fullUsers
 
   function subscribeToRaces($id)
   {
+    $id = intval($id);
     $query11 = "UPDATE users SET engaged =" . $id . ", " .
       " pilotmode=2, " .
       " pilotparameter=0,  " .

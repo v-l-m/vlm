@@ -1695,7 +1695,7 @@ function checkMapArea($value) {
 
 function logUserEvent($idusers, $idraces, $action) {
     //tracking...
-    if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"]) {
+    if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"])) {
         $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"];
     } else {
         $ua = $_SERVER["HTTP_USER_AGENT"];
