@@ -2,8 +2,12 @@
     $PAGETITLE = "VLM Management";
     include("htmlstart.php");
 
-    function adminlistbox($list, $title) {
-        echo "<div class=\"adminbox\">";
+    function adminlistbox($list, $title, $style=null) {
+        echo "<div class=\"adminbox\"";
+        if (!is_null($style)) {
+            echo "style=\"$style\"";
+            }
+        echo ">";
         echo "<h3>$title</h3>";
         echo "<ul>";
         foreach ($list as $page => $pagedef) {
@@ -13,6 +17,8 @@
         }
         echo "</ul></div>";
     }
+
+    echo "<div style=\"display:inline;float:left\">";
 
     $tablepages = Array(
         "adminwizard.php" => "Admin Wizard (old admin interface)",
@@ -39,6 +45,9 @@
 
     adminlistbox($uploadpages, "Upload and import operations");
 
+    echo "</div>";
+    echo "<div style=\"display:inline;float:left;\">";
+
     $reportpages = Array(
         "user_agents.php"                   => "User_agent statistics",
         "possible_duplicates.php"           => "Duplicates by IP",
@@ -55,8 +64,9 @@
         );
     
     adminlistbox($strangepages, "Report & fix [Use with caution to fix inconsistencies]");
+    echo "</div>";
 
-    echo "<div class=\"adminbox\">";
+    echo "<div class=\"adminbox\" id=\"adminlastopbox\">";
     echo "<h3>Last operations</h3>";
     htmlQuery("SELECT updated, user AS admin, host, operation, tab, rowkey, col AS field, LEFT(oldval, 30) AS oldval, LEFT(newval, 30) AS newval FROM admin_changelog ORDER BY updated DESC LIMIT 10;");
     echo "</div>";

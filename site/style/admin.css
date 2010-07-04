@@ -26,9 +26,15 @@ a img {
 border: 1px;
 }
 
+#adminlastopbox {
+  clear: both;
+}
+
 div.adminbox {
   border-bottom: #CCCCCC 1px solid;
   border-right: #CCCCCC 1px solid;
+  margin: 5px;
+  padding-right: 5px;
   }
 
 hr.pme-hr {
