@@ -1,20 +1,37 @@
 <?php
 
 include_once("functions.php");
+include_once("baseClass");
 
-class players {
+class playersPending extends baseClass {
+    var $idplayers_pending,
+        $email,
+        $password,
+        $playername,
+        $updated,        
+        $seed;
+
+    function playersPending($idplayers_pending = 0, $seed = 0, $row = null) {
+        if ($idplayers_pending !== 0 && $seed !== 0) {
+            $this->contructFromIdSeed($idplayers, $seed);
+        } else if (!is_null($row) && is_array($row)) {
+            $this->constructFromRow($row);
+        }
+    }
+}
+
+class players extends baseClass {
     var $idplayers,
         $email,
+        $password,
         $playername,
-        $update,
+        $permissions,
+        $updated,
         $created;
           
-    var $error_status = False;
-    var $error_string = "";
-
-    function players($id = 0, $email = null, $row = null) {
-        if ($id !== 0) {
-            $this->contructFromId($id);
+    function players($idplayers = 0, $email = null, $row = null) {
+        if ($idplayers !== 0) {
+            $this->contructFromId($idplayers);
         } else if (!is_null($email) {
             $this->constructFromEmail($email);
         } else if (!is_null($row) && is_array($row)) {
@@ -35,62 +52,33 @@ class players {
     function constructFromRow($row) {
         $this->idplayers = $row['idplayers'];
         $this->playername = $row['playername'];
+        $this->password = $row['password'];
         $this->email = $row['email'];
-        //FIXME : other attributes.    function logPlayerEvent($logmsg) {
-        logUserEvent($this->idusers , $this->engaged, $logmsg);
+        $this->permissions = $row['permissions'];
+        $this->description = $row['description'];
+        //FIXME : et les autres attributs
     }
 
+    function constructFromId($id) {
+        $id = intval($id);
+        return $this->contructFromQuery("idplayers = $id");
+    }
+    
     //Convenient bundle
     function logPlayerEventError($logmsg = null) {
         if (!is_null($logmsg)) $this->set_error($logmsg);
         $this->logPlayerEvent($this->error_string);
     }
 
-
     function logPlayerEvent($logmsg) {
         //FIXME : Do nothing for now
         return True
     } 
 
-    function constructFromId($id) {
-        $id = intval($id);
-        return $this->contructFromQuery("idplayers = $id");
+    //setters
+    function setPassword($password) {
+        $this->password = hash('sha256', $password);
     }
-
-/* *********************** HELPER - should be in a base class */
-
-    function queryWrite($query) {
-        $result = wrapper_mysql_db_query_writer($query);
-        if ($result) {
-            return $result;
-        } else {
-            $this->set_error_with_mysql_query($query)
-            return False;
-        }            $this->idplayers = $row['idplayers'];
-    }
-
-    function queryRead($query) {
-        $result = wrapper_mysql_db_query_reader($query);
-        if ($result) {
-            return $result;
-        } else {
-            $this-> set_error_with_mysql_query($query)
-            return False;
-        }            
-    }
-
-
-    //Save error string - concat all error strings
-    function set_error($error_string) {
-        $this->error_status = True;
-        $this->error_string .= $error_string."\n";
-    }
-    
-    //Convenient with mysql errors
-    function set_error_with_mysql_query($query) {
-        $msg = "MySql error ".mysql_errno()." :".mysql_error()."\n".
-               "Query was :".$query;
-        $this->set_error($msg);
-    }
+}
 
 ?>
