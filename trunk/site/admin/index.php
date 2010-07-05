@@ -34,6 +34,7 @@
         "races_waypoints.php" => "[Experimental] Races_waypoints definitions",
         "users.php" => "[Experimental] Users",
         "user_action.php" => "Browse User Actions",
+        "players.php" => "[Experimental] Players",
         );
     adminlistbox($tablepages, "Table administration/browsing");
 
