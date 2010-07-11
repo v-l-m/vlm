@@ -380,7 +380,7 @@ class users
           $this->set_error_with_mysql_query($query);
           $this->logUserEventError($logmsg);
           return False;
-      } else if (($numrows = mysql_affected_rows($GLOBALS['masterdblink'])) != 1) {
+      } else if (($numrows = mysql_affected_rows($GLOBALS['masterdblink'])) > 1) {
           $this->set_error("ERROR: $numrows lines updated !!!");
           $this->logUserEventError($logmsg);
           return False;
