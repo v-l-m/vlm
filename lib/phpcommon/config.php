@@ -44,12 +44,17 @@ if (defined('MOTEUR')) {
   $link = mysql_pconnect(DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
           die("Could not connect : " . mysql_error());
   $GLOBALS['masterdblink']=$link;
-  $GLOBALS['slavedblink']=$link;
+  $GLOBALS['mapdblink']   =$link; // unused in 'MOTEUR' mode
+  $GLOBALS['slavedblink'] =$link;
   mysql_select_db(DBNAME, $link) or die("Could not select database");
 } else {
   $link = mysql_connect(DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
-          die("Could not connect : " . mysql_error());
+    die("Could not connect : " . mysql_error());
   $GLOBALS['masterdblink']=$link;
+  mysql_select_db(DBNAME, $link) or die("Could not select database");
+  $link = mysql_connect(DBMAPSERVER, DBMAPUSER, DBMAPPASSWORD) or 
+    die("Could not connect : " . mysql_error());
+  $GLOBALS['mapdblink']=$link;
   mysql_select_db(DBNAME, $link) or die("Could not select database");
   $link = mysql_connect(DBSLAVESERVER, DBSLAVEUSER, DBSLAVEPASSWORD) or 
     die("Could not connect : " . mysql_error());
