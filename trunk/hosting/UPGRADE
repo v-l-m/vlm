@@ -1,4 +1,30 @@
 This file traces the changes that are required for upgrading from a previous VLM version
+
+From 0.13 to Next:
+
+= All servers =
+
+  EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_14
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    and add correct values for keys :
+      define("DBMAPSERVER", "127.0.0.1"); 
+      define("DBMAPUSER", "vlm");
+      define("DBMAPPASSWORD", "***");
+
+  EDIT file ./conf/param.php
+    and modify key values for :
+      define("DBSLAVESERVER", "127.0.0.1"); 
+      define("DBSLAVEUSER", "vlm");
+      define("DBSLAVEPASSWORD", "***");
+    to point to S9 (master server).
+    (We keep master/slave paradigm for 
+     future uses)
+
+
 From 0.12 to Next :
 
 = All servers = 

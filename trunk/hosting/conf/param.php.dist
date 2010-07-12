@@ -2,9 +2,18 @@
 define("SERVER_NAME", "DEV");
 
 /********to_be_change****************/
-define("DBSERVER", "databaseserver");
-define("DBUSER", "databaseuser");
-define("DBPASSWORD", "databasepassword");
+define("DBMAPSERVER", "databaseserver");
+define("DBMAPUSER", "databaseuser");
+define("DBMAPPASSWORD", "databasepassword");
+
+define("DBSLAVESERVER", "databaseserver");
+define("DBSLAVEUSER", "databaseuser");
+define("DBSLAVEPASSWORD", "databasepassword");
+
+define("DBMASTERSERVER", "databaseserver");
+define("DBMASTERUSER", "databaseuser");
+define("DBMASTERPASSWORD", "databasepassword");
+
 define("DBNAME", "databasename");
 
 // Stockage des gshhs, idem que VLMGSHHS dans conf_script
