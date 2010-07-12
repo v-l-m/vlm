@@ -390,7 +390,7 @@ class map
       " order by idcoast,idpoint ;"  ;
     //printf ("DEBUG Requete exécutée : %s \n", $query_coast);
 
-    $result_coast = mysql_query($query_coast) or die("Query [$query_coast] failed \n");
+    $result_coast =  wrapper_mysql_map_db_query_reader($query_coast) or die("Query [$query_coast] failed \n");
     // for each coast, draw the corresponding coastline
 
     $idcoast=-1;
