@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS players;
 CREATE TABLE `players_pending` (
   `idplayers_pending` bigint(20) NOT NULL auto_increment,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `playername` varchar(20) NOT NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `seed` bigint default 0,
@@ -16,7 +16,7 @@ CREATE TABLE `players_pending` (
 CREATE TABLE `players` (
   `idplayers` bigint(20) NOT NULL auto_increment,
   `email` varchar(50) NOT NULL, 
-  `password` varchar(50) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `playername` varchar(20) NOT NULL,
   `permissions` varchar(20) NOT NULL default 'player',
   `description` text default NULL,
