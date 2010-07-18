@@ -1,14 +1,15 @@
 <?php
 define("SERVER_NAME", "DEV");
 
-/********to_be_change****************/
-define("DBMAPSERVER", "databaseserver");
-define("DBMAPUSER", "databaseuser");
-define("DBMAPPASSWORD", "databasepassword");
+/********to_be_change ****************/
 
-define("DBSLAVESERVER", "databaseserver");
-define("DBSLAVEUSER", "databaseuser");
-define("DBSLAVEPASSWORD", "databasepassword");
+//define("DBMAPSERVER", "databaseserver"); //uncomment and change if you have more than one server
+//define("DBMAPUSER", "databaseuser"); //uncomment and change if you have more than one server
+//define("DBMAPPASSWORD", "databasepassword"); //uncomment and change if you have more than one server
+
+//define("DBSLAVESERVER", "databaseserver"); //uncomment and change if you have more than one server
+//define("DBSLAVEUSER", "databaseuser"); //uncomment and change if you have more than one server
+//define("DBSLAVEPASSWORD", "databasepassword"); //uncomment and change if you have more than one server
 
 define("DBMASTERSERVER", "databaseserver");
 define("DBMASTERUSER", "databaseuser");

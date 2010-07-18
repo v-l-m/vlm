@@ -40,6 +40,13 @@ define("POLAR_DEFINITION_FILENAME", "".POLARS_DIRECTORY."/polars.list");
 ini_set('arg_separator.output', "&amp;");
 
 /*********db_connect****************/
+define("DBSLAVESERVER", DBMASTERSERVER); // define if not defined in param.php
+define("DBSLAVEUSER", DBMASTERUSER); // define if not defined in param.php
+define("DBSLAVEPASSWORD", DBMASTERPASSWORD); // define if not defined in param.php
+define("DBMAPSERVER", DBSLAVESERVER); // define if not defined in param.php
+define("DBMAPUSER", DBSLAVEUSER); // define if not defined in param.php
+define("DBMAPPASSWORD", DBSLAVEPASSWORD); // define if not defined in param.php
+
 if (defined('MOTEUR')) {
   $link = mysql_pconnect(DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
           die("Could not connect : " . mysql_error());
