@@ -1,5 +1,6 @@
 <?php
     include_once("includes/header.inc");
+    include_once("players.class.php");
     include_once("config.php");
 
     $actioncreate = get_cgi_var("createplayer");
@@ -28,13 +29,14 @@
 <?php
     }
 
-    if ($actioncreate == "requested") {
-        include_once("players.class.php");
+    $emailid = get_cgi_var("emailid");
+    $password = get_cgi_var("password");
+    $playername = get_cgi_var("playername");
 
-        $emailid = get_cgi_var("emailid");
-        $password = get_cgi_var("password");
-        $playername = get_cgi_var("playername");
-        $player = new players();
+
+    if ($actioncreate == "requested") {
+
+        $player = new playersPending();
         $player->email = $emailid;
         $player->playername = $playername;
         if (!$player->checkNonconformity()) {
@@ -63,10 +65,33 @@
             printFormRequest($emailid, $password, $playername);
         }   
     } else if ($actioncreate == "confirmed") {
-        echo "<div>";
-        print "CONFIRM";
+        $player = new playersPending();
+        $player->email = $emailid;
+        $player->playername = $playername;
+        $player->setPassword($password);
+        $player->setSeed();
+        if (!$player->checkNonconformity()) $player->insert();
+        if (!$player->error_status) {
+        echo "<div id=\"createplayerbox\">";
+            $player->mailValidationMessage();
+            echo getLocalizedString("An email has been sent. Click on the link to validate.");
 
         echo "</div>";
+
+        } else {
+            echo "<h2>INVALID</h2>";
+            echo "<h2>".nl2br($player->error_string)."</h2>";
+            printFormRequest($emailid, $password, $playername);
+        }   
+    } else if ($actioncreate == "validate") {
+        $seed = get_cgi_var("seed");
+        $player = new playersPending($emailid, $seed);
+        if (!$player->validate()) {
+            print "ERRORRRR";
+            print $player->error_string;
+        } else {
+            print "VALIDATED";
+        }
     } else {
         printFormRequest();
     }
