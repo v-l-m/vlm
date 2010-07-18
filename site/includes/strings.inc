@@ -38,6 +38,7 @@ $strings = array (
     'boattype' => 'Boat Type / Polar',
     'boatupdated' => 'Boat info updated',
     'calendar' => 'Calendar',
+    'Confirm account creation ?' => 'Confirm account creation ?',
     'change' => 'Change my settings',
     'choose' => 'Settings',
     'choose_your_country' => 'Choose your country or flag',
@@ -76,6 +77,7 @@ Allowed characters for both: a-z 0-9 _
     'distance' => 'Next mark',
     'doc' => 'Documentation',
     'ecart' => 'From first',
+    'email' => 'Email',
     'endrace' => 'Finish line closing condition : ',
     'endracein' => 'Finish line closing in %d hours.',
     'engaged' => 'Engaged',
@@ -208,6 +210,7 @@ or the next mark if your WP is 0/0',
     'pilototohelp2' => "Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is 'pending' if an order is not yet executed, 'done' otherwise",
+    'playername' => 'Playername',
     'Epoch Time' => 'Epoch Time',
     'Status' => 'Status',
     'Human Readable date' => 'Human Readable date',
