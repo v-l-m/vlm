@@ -15,7 +15,7 @@ CREATE TABLE `players_pending` (
 
 CREATE TABLE `players` (
   `idplayers` bigint(20) NOT NULL auto_increment,
-  `email` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL, 
   `password` varchar(50) NOT NULL,
   `playername` varchar(20) NOT NULL,
   `permissions` varchar(20) NOT NULL default 'player',

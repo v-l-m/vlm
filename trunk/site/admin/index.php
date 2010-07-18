@@ -35,6 +35,7 @@
         "users.php" => "[Experimental] Users",
         "user_action.php" => "Browse User Actions",
         "players.php" => "[Experimental] Players",
+        "players_pending.php" => "[Experimental] Players Pending",
         );
     adminlistbox($tablepages, "Table administration/browsing");
 
