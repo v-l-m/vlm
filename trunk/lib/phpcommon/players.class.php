@@ -75,17 +75,27 @@ class playersPending extends baseClass {
          $headers = 'From: '.EMAIL_COMITE_VLM. "\r\n" .
          'Reply-To: '.EMAIL_COMITE_VLM. "\r\n" .
          'X-Mailer: PHP/' . phpversion();
-        $res = mail ( $this->email , "VLM Validate your account" , $message, $headers);
+        $res = mail($this->email , "VLM Validate your account" , $message, $headers);
         return $res;
     }
 
     function validate() {
         if (!$this->constructFromEmailSeed($this->email, $this->seed)) return False;
         $players = new players(0, null, $this);
-
+        if ($players->error_status) {
+            $this->set_error($players->error_string);
+        }
+        return !$this->error_status;
+    }
+    
+    function create() {
+        if (!$this->validate()) return False;
+        $players = new players(0, null, $this);        
         $players->insert();
-        $this->error_string = $players->error_string;
-        $this->error_status = $players->error_status;
+        if ($players->error_status) {
+            $this->set_error($players->error_string);
+            return !$this->error_status;
+        }
         $this->delete();
         return !$this->error_status;
     } 
@@ -108,8 +118,6 @@ class playersPending extends baseClass {
             );
         return $dump;
     }
-
-
 }
 
 class players extends baseClass {

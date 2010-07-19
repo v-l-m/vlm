@@ -237,7 +237,7 @@
         </div> <!-- fin div loginbox-->
         <div id="pleasecreatebox" class="leftbox">
 <?php
-            printf (getLocalizedString("pleasecreate"), "<a href=\"create.php?lang=$lang\">", "</a>");
+            printf (getLocalizedString("pleasecreate"), "<a href=\"create_player.php?lang=$lang\">", "</a>");
 ?>
         </div> <!-- fin div pleasecreatebox-->
 <?php
