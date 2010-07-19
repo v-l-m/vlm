@@ -27,3 +27,15 @@ CREATE TABLE `players` (
   KEY `email_password` (`email`,`password`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='players (not boats)';
 
+#Tables players <-> boats
+CREATE TABLE `boatsitters` (
+  `idboatsittings` bigint(20) NOT NULL auto_increment,
+  `idplayers` bigint(20) NOT NULL auto_increment,
+  `idusers` bigint(20) NOT NULL auto_increment,
+  `type` varchar(20) NOT NULL default 'owner',
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`idboatsittings`),
+  UNIQUE KEY `boatsitting` (`idplayers`, `idusers`, `type`),
+  KEY `players` (`idplayers`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='boatsittings';
+
