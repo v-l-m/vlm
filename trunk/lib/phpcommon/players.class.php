@@ -202,6 +202,11 @@ class players extends baseClass {
     }
 
     function checkNonconformity() {
+        $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
+        if (preg_match($pattern  ,  $this->email) < 1) {
+            $this->set_error("Your email address doesn't seem to be valid");
+            return False;
+        }
         $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
         $result = $this->queryRead($query);
         if (!($result && mysql_num_rows($result) === 0)) $this->set_error(getLocalizedString("Your email is already in use."));
