@@ -19,7 +19,6 @@ class playersPending extends baseClass {
         }
     }
 
-
     function checkNonconformity() {
         $players = new players(0, null, $this);
         $players->checkNonconformity();
@@ -143,7 +142,8 @@ class players extends baseClass {
         
     function constructFromQuery($where) {
         $query= "SELECT * FROM players WHERE ".$where;
-        if ($result = $this->queryRead($query) &&  mysql_num_rows($result) === 1)  {
+        $result = $this->queryRead($query);
+        if ($result && mysql_num_rows($result) === 1)  {
             $row = mysql_fetch_array($result, MYSQL_ASSOC);
             return $this->constructFromRow($row);
         } else {
@@ -169,13 +169,17 @@ class players extends baseClass {
     }
 
     function constructFromEmail($email) {
-        return $this->contructFromQuery("email = $email");
+        return $this->constructFromQuery("email = '$email'");
     }
 
     function constructFromPending($pending) {
         $this->email = $pending->email;
         $this->playername = $pending->playername;
         $this->password = $pending->password;
+    }
+
+    function checkPassword($password) {
+        return hash("sha256", $password) === $this->password;
     }
 
     function query_addupdate() {
