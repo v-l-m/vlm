@@ -1,6 +1,7 @@
 #Nettoyages pour le dev
 DROP TABLE IF EXISTS players_pending;
 DROP TABLE IF EXISTS players;
+DROP TABLE IF EXISTS boatsitters;
 
 #Tables de gestion des PLAYERS
 CREATE TABLE `players_pending` (
@@ -29,12 +30,12 @@ CREATE TABLE `players` (
 
 #Tables players <-> boats
 CREATE TABLE `boatsitters` (
-  `idboatsittings` bigint(20) NOT NULL auto_increment,
-  `idplayers` bigint(20) NOT NULL auto_increment,
-  `idusers` bigint(20) NOT NULL auto_increment,
+  `idboatsitters` bigint(20) NOT NULL auto_increment,
+  `idplayers` bigint(20) NOT NULL,
+  `idusers` bigint(20) NOT NULL,
   `type` varchar(20) NOT NULL default 'owner',
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`idboatsittings`),
+  PRIMARY KEY  (`idboatsitters`),
   UNIQUE KEY `boatsitting` (`idplayers`, `idusers`, `type`),
   KEY `players` (`idplayers`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='boatsittings';

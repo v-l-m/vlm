@@ -70,6 +70,7 @@
 
     //if password and pseudo try to connect
     if ($type=="login" && $pseudo!="" && $password!="") {
+        //FIXME : check this
         $pseudo = htmlentities($pseudo);
         $password = htmlentities($password);
         if (  ($id = checkAccount($pseudo, $password)) != FALSE ) {
@@ -77,7 +78,13 @@
             login($id, $pseudo);
             //$msg = getLocalizedString("nowlogin");
         } else {
-            $msg = getLocalizedString("authfailed");
+            include_once("players.class.php");
+            $player = new players(0, $pseudo);
+            if (!$player->error_status && $player->checkPassword($password)) {
+                loginPlayer(1, "testfm", $pseudo, $player->idplayers);
+            } else {
+                $msg = getLocalizedString("authfailed");
+            }
         }
     }
 
@@ -226,7 +233,7 @@
 ?>
         <div id="loginbox" class="leftbox">
             <form method="post" action="myboat.php">
-                User: <input size="10" maxlength="15" name="pseudo" /><br />
+                User: <input size="10" maxlength="64" name="pseudo" /><br />
                 Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
                 <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
                 <input type="hidden" name="type" value="login" />

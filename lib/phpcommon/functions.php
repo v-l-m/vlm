@@ -1352,6 +1352,12 @@ function login($idus, $pseudo)
   }
 }
 
+function loginPlayer($idus, $pseudo, $idp, $playername) {
+    login($idus, $pseudo);
+    $_SESSION['idp'] = $idp;
+    $_SESSION['playername'] = $playername;
+}
+
 function logout()
 {
     if (isset($_COOKIE[session_name()]))
