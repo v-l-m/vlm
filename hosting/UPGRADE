@@ -8,6 +8,12 @@ From 0.13 to Next:
 
   RUN
     ./scripts/maj_scripts.sh
+    
+  RUN
+    ./scripts/check_mail_config.sh your@adress.com
+    
+  CHECK
+    ...your inbox ;)
 
   EDIT file ./conf/param.php
     and add correct values for keys :
