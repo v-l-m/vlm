@@ -36,8 +36,8 @@ CREATE TABLE `playerstousers` (
   `linktype` int NOT NULL DEFAULT 1,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`idplayerstousers`),
-  UNIQUE KEY `boatsitting` (`idplayers`, `idusers`, `linktype`),
+  UNIQUE KEY `playertouser` (`idplayers`, `idusers`, `linktype`),
   KEY `players` (`idplayers`),
-  KEY `players` (`idusers`)
+  KEY `users` (`idusers`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='link beween players and users';
 
