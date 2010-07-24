@@ -429,6 +429,19 @@ include_once("scripts/myboat.js");
                     $messages[] = $mes;
                 }
             }
+            // player not connected as a player but as a boat/user.
+            if ( ! isPlayerLoggedIn()  ) {
+                $msg = "<b>".getLocalizedString("You are not logged as a player. Please use the new way !")."</b>";
+                $messages[] = Array("id" => "oldloginmode", "txt" => $msg, "class" => "warn");//, "url" => "modify.php?lang=$lang");
+            }
+
+            // no ownership for this boat
+            if ( $usersObj->users->getOwner() == 0  ) {
+                $msg = "<b>".getLocalizedString("This boat has no owner. Please attach it to a player !")."</b>";
+                $messages[] = Array("id" => "noownership", "txt" => $msg, "class" => "warn");//, "url" => "modify.php?lang=$lang");
+            }
+
+
             // Email vide ?
             if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
                 $msg = "<b>NO E-MAIL ADDRESS</b>&nbsp;Please give one (".getLocalizedString("choose") . ")";

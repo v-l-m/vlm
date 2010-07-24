@@ -34,7 +34,7 @@ class users extends baseClass
     $pilototo,
     $theme;
 
-  var $idowner = 0;
+  var $idowner = null;
     
   function users($id)
   {
@@ -394,13 +394,16 @@ class users extends baseClass
   }
 
   function getOwner() {
-      if ($this->idowner > 0) return $this->idowner;
-      $query = "SELECT count(*) as nbowner FROM playerstousers WHERE idusers =".$this->idusers." AND linktype = ".PU_FLAG_OWNER;
+      if (is_null($this->idowner)) return $this->idowner;
+      $query = "SELECT idplayers FROM playerstousers WHERE idusers =".$this->idusers." AND linktype = ".PU_FLAG_OWNER;
       $res = $this->queryRead($query);
-      if (!$res) return null;
-      $row = mysql_fetch_assoc($result);
-      $this->idowner = $row['nbowner'];
-      return return $this->idowner;
+      if (!$res || mysql_num_rows($res) == 0) {
+          $this->idowner = 0;
+      } else {
+          $row = mysql_fetch_assoc($result);
+          $this->idowner = $row['idplayers'];
+      }
+      return $this->idowner;
   }
   
   function setOwner($idowner) {

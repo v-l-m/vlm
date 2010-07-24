@@ -81,7 +81,7 @@
             include_once("players.class.php");
             $player = new players(0, $pseudo);
             if (!$player->error_status && $player->checkPassword($password)) {
-                loginPlayer(1, "testfm", $pseudo, $player->idplayers);
+                loginPlayer(1, "testfm", $player->idplayers, $player->playername);
             } else {
                 $msg = getLocalizedString("authfailed");
             }
@@ -252,6 +252,10 @@
 ?>
         <div id="loggedbox" class="leftbox">
 <?php
+            if (isPlayerLoggedIn()) {
+                echo getPlayername()."<br />\n";
+            }
+
             //disp login name, infos
             echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
                  " (". getLoginId() . ") <u>" . getLoginName() . "</u></a>\n";
