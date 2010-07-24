@@ -1368,6 +1368,10 @@ function logout()
     }
 }
 
+function isPlayerLoggedIn() {
+    return (isset($_SESSION['idp']));
+}
+
 function isLoggedIn()
 {
   return (isset($_SESSION['idu']));
@@ -1378,9 +1382,18 @@ function getLoginName()
   return ($_SESSION['login']);
 }
 
+function getPlayername() {
+    return ($_SESSION['playername']);
+}
+
 function getLoginId()
 {
   return ($_SESSION['idu']);
+}
+
+function getPlayerId()
+{
+  return ($_SESSION['idp']);
 }
 
 function getTheme()
