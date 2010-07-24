@@ -1,8 +1,9 @@
 <?php
 include_once("vlmc.php");
 include_once("functions.php");
+include_once("base.class.php");
 
-class users
+class users extends baseClass
 {
   //var from db_users
   var $idusers,
@@ -32,10 +33,9 @@ class users
     $ipaddr,
     $pilototo,
     $theme;
-    
-  var $error_status = False;
-  var $error_string = "";
 
+  var $idowner = 0;
+    
   function users($id)
   {
     //  echo "constructeur users with $id \n";
@@ -84,19 +84,6 @@ class users
     if (is_null($this->theme) ) {
       $this->theme = 'default';
     }
-  }
-
-  //Save error string - concat all error strings
-  function set_error($error_string) {
-      $this->error_status = True;
-      $this->error_string .= $error_string."\n";
-  }
-  
-  //Convenient with mysql errors
-  function set_error_with_mysql_query($query) {
-      $msg = "MySql error ".mysql_errno()." :".mysql_error()."\n".
-             "Query was :".$query;
-      $this->set_error($msg);
   }
 
   //Wrapper
@@ -406,7 +393,30 @@ class users
       return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);
   }
 
+  function getOwner() {
+      if ($this->idowner > 0) return $this->idowner;
+      $query = "SELECT count(*) as nbowner FROM playerstousers WHERE idusers =".$this->idusers." AND linktype = ".PU_FLAG_OWNER;
+      $res = $this->queryRead($query);
+      if (!$res) return null;
+      $row = mysql_fetch_assoc($result);
+      $this->idowner = $row['nbowner'];
+      return return $this->idowner;
+  }
+  
+  function setOwner($idowner) {
+      $idowner = intval($idowner);
+      if ($idowner > 0) {
+          $query = "REPLACE playerstousers SET idusers = ".$this->idusers.", idplayers = ".$idowner.", linktype = ".PU_FLAG_OWNER;
+          if ($this->queryWrite($query)) {
+              $this->idowner = $idowner;
+              return True;
+          }
+      }
+      return False;
+  }
 }
+
+
 
 class fullUsers
 {

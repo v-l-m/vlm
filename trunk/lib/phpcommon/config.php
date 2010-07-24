@@ -241,20 +241,14 @@ define("IC_FLAG_RACELIST", 4);
 define("IC_FLAG_LINKFORUM", 8);
 define("IC_FLAG_HIDEONICS", 16);
 
+//LINKTYPE FLAG (between players & users)
+define("PU_FLAG_BOATSIT", 2);
+define("PU_FLAG_OWNER", 1);
+
 //PREFS
 // NOTSET (for user_prefs)
 define("NOTSET", "NULL");
 define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas");
-
-// Par défaut ( Atlantique nord seulement )
-//define("COASTLINE_DATAFILE", "N50E15S10W80@1_5000000.dat");
-//define("ISLANDS_DATAFILE", "mapFillCoordinates.dat");
-
-// Globe entier 1/5000000
-//define("COASTLINE_DATAFILE", "fullglobe-coastline.dat");
-
-// Plus détaillé, mais ingérable en l'état
-//define("COASTLINE_DATAFILE", "shoreline.dat");
 
 include_once("functions.php");
 include_once("f_windAtPosition.php");
