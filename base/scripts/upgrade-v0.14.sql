@@ -1,7 +1,7 @@
 #Nettoyages pour le dev
 DROP TABLE IF EXISTS players_pending;
 DROP TABLE IF EXISTS players;
-DROP TABLE IF EXISTS boatsitters;
+DROP TABLE IF EXISTS playerstousers;
 
 #Tables de gestion des PLAYERS
 CREATE TABLE `players_pending` (
@@ -29,14 +29,15 @@ CREATE TABLE `players` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='players (not boats)';
 
 #Tables players <-> boats
-CREATE TABLE `boatsitters` (
-  `idboatsitters` bigint(20) NOT NULL auto_increment,
+CREATE TABLE `playerstousers` (
+  `idplayerstousers` bigint(20) NOT NULL auto_increment,
   `idplayers` bigint(20) NOT NULL,
   `idusers` bigint(20) NOT NULL,
-  `type` varchar(20) NOT NULL default 'owner',
+  `linktype` int NOT NULL DEFAULT 1,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`idboatsitters`),
-  UNIQUE KEY `boatsitting` (`idplayers`, `idusers`, `type`),
-  KEY `players` (`idplayers`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='boatsittings';
+  PRIMARY KEY  (`idplayerstousers`),
+  UNIQUE KEY `boatsitting` (`idplayers`, `idusers`, `linktype`),
+  KEY `players` (`idplayers`),
+  KEY `players` (`idusers`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='link beween players and users';
 
