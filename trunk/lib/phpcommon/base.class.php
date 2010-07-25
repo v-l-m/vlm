@@ -23,7 +23,7 @@ abstract class baseClass {
         if ($result) {
             return $result;
         } else {
-            $this-> set_error_with_mysql_query($query);
+            $this->set_error_with_mysql_query($query);
             return False;
         }            
     }
