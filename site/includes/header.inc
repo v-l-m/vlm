@@ -4,6 +4,7 @@
 
     session_start();
     include_once("config.php");
+    include_once("players.class.php");
     
     header("Content-type: text/html; charset=utf-8");
 
@@ -78,14 +79,25 @@
             login($id, $pseudo);
             //$msg = getLocalizedString("nowlogin");
         } else {
-            include_once("players.class.php");
             $player = new players(0, $pseudo);
             if (!$player->error_status && $player->checkPassword($password)) {
-                loginPlayer(1, "testfm", $player->idplayers, $player->playername);
+                $defaultuser = new users($player->getDefaultBoat());
+                loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
             } else {
                 $msg = getLocalizedString("authfailed");
             }
         }
+    }
+
+    if ($type=="connectas" && isPlayerLoggedIn()) {
+          //FIXME !
+         $player = new players(getPLayerId());
+         $newuid = $_POST['boatid'];
+         $boatlist = array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList());
+         if (in_array($newuid, $boatlist)) {
+            $defaultuser = new users($newuid);
+            loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
+         }
     }
 
     if ($type == "savemywp")
@@ -254,12 +266,29 @@
 <?php
             if (isPlayerLoggedIn()) {
                 echo getPlayername()."<br />\n";
-            }
+                $player = new players(getPlayerId());
+                //FIXME : factorise
+                $boatlist = array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList());
+                echo "<form method=\"post\" action=\"myboat.php\">";
+                echo "<input type=\"hidden\" name=\"type\" value=\"connectas\" />";
+                echo "<select name=\"boatid\" onchange=\"submit();\">";
+                foreach ($boatlist as $idb) {
+                    $u = new users($idb);
+                    echo "<option value=\"$idb\"";
+                    if ($idb == getLoginId()) {
+                        echo " selected";
+                    }
+                    echo ">".$u->username."</option>";
+                }
+                echo "</select>";
+                echo "</form>";
+                    
+            } else {
 
             //disp login name, infos
             echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
                  " (". getLoginId() . ") <u>" . getLoginName() . "</u></a>\n";
-
+            }
 ?>
         </div> <!-- fin div loggedbox-->
         <div id="logoutbox" class="leftbox">

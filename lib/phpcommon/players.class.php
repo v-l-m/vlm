@@ -248,6 +248,16 @@ class players extends baseClass {
         return $this->boatsitidlist;
     }
 
+    function getDefaultBoat() {
+        $boatlist = array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList());
+        //Fixme : should be configurable, and should select a racing boat
+        if (count($boatlist) > 0) {
+            return $boatlist[0];
+        } else {
+            return 0;
+        }
+    }
+
     function getBoatIdList($linkfilter) {
         $boatidlist = Array();
         $query = "SELECT DISTINCT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND ".$linkfilter;
