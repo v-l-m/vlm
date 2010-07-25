@@ -232,6 +232,13 @@ class players extends baseClass {
     function setPassword($password) {
         $this->password = hash('sha256', $password);
     }
+    
+    function htmlPlayername() {
+        $ret  = "<a href=\"playerinfo.php?playerid=";
+        $ret .= $this->idplayers;
+        $ret .= "\">".$this->playername."</a>";
+        return $ret;
+    }
 }
 
 ?>

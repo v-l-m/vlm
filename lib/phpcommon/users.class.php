@@ -393,30 +393,40 @@ class users extends baseClass
       return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);
   }
 
-  function getOwner() {
-      if (is_null($this->idowner)) return $this->idowner;
+  function getOwnerId() {
+      if (!is_null($this->idowner)) return $this->idowner;
       $query = "SELECT idplayers FROM playerstousers WHERE idusers =".$this->idusers." AND linktype = ".PU_FLAG_OWNER;
       $res = $this->queryRead($query);
       if (!$res || mysql_num_rows($res) == 0) {
           $this->idowner = 0;
       } else {
-          $row = mysql_fetch_assoc($result);
+          $row = mysql_fetch_assoc($res);
           $this->idowner = $row['idplayers'];
       }
       return $this->idowner;
   }
   
-  function setOwner($idowner) {
-      $idowner = intval($idowner);
-      if ($idowner > 0) {
-          $query = "REPLACE playerstousers SET idusers = ".$this->idusers.", idplayers = ".$idowner.", linktype = ".PU_FLAG_OWNER;
-          if ($this->queryWrite($query)) {
+  function setOwnerId($idowner) {
+      if ($this->setRelationship($idowner, PU_FLAG_OWNER)) {
               $this->idowner = $idowner;
+              return True;
+      }          
+      return False;
+  }
+
+  function setRelationship($idplayer, $relationship) {
+      $idplayer = intval($idplayer);
+      $relationship = intval($relationship);
+      if ($idplayer > 0) {
+          $query = "REPLACE playerstousers SET idusers = ".$this->idusers.", idplayers = ".$idplayer.", linktype = ".$relationship;
+          if ($this->queryWrite($query)) {
+              $this->logUserEvent($query);
               return True;
           }
       }
       return False;
   }
+
 }
 
 
