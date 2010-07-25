@@ -127,7 +127,8 @@ class players extends baseClass {
         $permissions,
         $updated,
         $created;
-    var $boatlist = null;
+    var $boatsitidlist = null;
+    var $ownedboatidlist = null;
           
     function players($idplayers = 0, $email = null, $pending = null, $row = null) {
         if ($idplayers !== 0) {
@@ -235,18 +236,28 @@ class players extends baseClass {
     }
 
     //getters
-    function getBoatlist() {
-        if (!is_null($this->boatlist)) return $this->boatlist;
-        $boatlist = Array();
-        $query = "SELECT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND linktype = ".PU_FLAG_OWNER;
+    function getOwnedBoatIdList() {
+        if (!is_null($this->ownedboatidlist)) return $this->ownedboatidlist;
+        $this->ownedboatidlist = $this->getBoatIdList("linktype =".PU_FLAG_OWNER);
+        return $this->ownedboatidlist;
+    }
+
+    function getBoatsitIdList() {
+        if (!is_null($this->boatsitidlist)) return $this->boatsitidlist;
+        $this->boatsitidlist = $this->getBoatIdList("linktype = ".PU_FLAG_BOATSIT);
+        return $this->boatsitidlist;
+    }
+
+    function getBoatIdList($linkfilter) {
+        $boatidlist = Array();
+        $query = "SELECT DISTINCT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND ".$linkfilter;
         if ($res = $this->queryRead($query)) {
             while ($row = mysql_fetch_assoc($res)) {
-                $boatlist[$row['idusers']] = new users($row['idusers']);
+                $boatidlist[] = $row['idusers'];
                 //FIXME : check result ?
             }
-            $this->boatlist = $boatlist;
         }
-        return $this->boatlist;
+        return $boatidlist;
     }
     
     //html renderers
@@ -258,10 +269,21 @@ class players extends baseClass {
     }
     
     function htmlBoatlist() {
-        $boatlist = $this->getBoatlist();
+        $lang = getCurrentLang();
+        $boatlist = array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList());
         $ret = "<ul>";
-        foreach ($boatlist as $id => $user) {
-            $ret .= "<li>".$user->htmlIdusersUsernameLink(getCurrentLang())."</li>";
+        foreach ($boatlist as $id) {
+            $user = new users($id);
+            $ret .= "<li>".$user->htmlIdusersUsernameLink($lang)."&nbsp;-&nbsp;";
+
+            if ($user->engaged > 0) {
+                $raceobj = new races($user->engaged);
+                $ret .= sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink($lang), $raceobj->htmlIdracesLink($lang) );
+            } else {
+                $ret .= getLocalizedString('boatnotengaged');
+            }
+            $ret .= "</li>";
+            
         }
         $ret .= "</ul>";
         return $ret;

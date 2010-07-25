@@ -12,7 +12,7 @@
         if (!(intval($idusers) > 0)) $idusers = getLoginId();
         
         $userobj = new users($idusers);
-        echo '<h1>' . getLocalizedString('boatdescription') . '</h1>';
+        echo '<h1>' . getLocalizedString('boatdescription') . "&nbsp;:&nbsp;".$userobj->boatname. '</h1>';
         echo '<ul>';
         if ( $userobj->getOwnerId() == 0  ) {
             $msg = getLocalizedString("This boat has no owner.");
@@ -21,8 +21,13 @@
             }
             echo "<li><b>".$msg."</b></li>";
         } else {
-            $player = new players($userobj->getOwnerId());            
-            echo '<li>' . getLocalizedString('owner') . ' : ' . $player->htmlPlayername().'</li>';
+            $player = new players($userobj->getOwnerId());          
+            echo '<li>' . getLocalizedString('owner') . ' : ' . $player->htmlPlayername();
+            if (isPlayerLoggedIn() && getPlayerId() == $userobj->getOwnerId()) {
+                echo "&nbsp;(".getLocalizedString("You").")";
+            }
+            
+            echo '</li>';
         }            
         echo '<li>' . getLocalizedString('login_id') . ' : ' . $userobj->idusers.'</li>';
         echo '<li>' . getLocalizedString('login_name') . ' : ' . $userobj->username.'</li>';
@@ -36,7 +41,7 @@
         } else {
             echo "<h2>" . getLocalizedString('boatnotengaged') . "</h2>";
         }
-        echo "<h1>" . sprintf (getLocalizedString("palmares"),$idusers) . "</h1>";
+        echo "<h1>" . sprintf (getLocalizedString("palmares"), $userobj->boatname) . "</h1>";
         displayPalmares($lang, $idusers);
     } else if ( $palmares_type == 'player' ) {
         if (!isPlayerLoggedIn()) {
@@ -47,6 +52,7 @@
             $player = new players($idplayers);
             if ($player->idplayers > 0) {
                 echo "<h2>".getLocalizedString('playername') . ' : ' . $player->playername.'</h2>';
+                echo "<hr />";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
                 echo $player->htmlBoatlist();
             } else {
