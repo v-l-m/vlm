@@ -278,7 +278,10 @@
             <a href="myboat.php?lang=<?echo $lang?>"><?php echo getLocalizedString("control"); ?></a>
             <a href="mappref.php?lang=<?echo $lang?>"><?php echo getLocalizedString("mymap"); ?></a>
             <a href="modify.php?lang=<?echo $lang?>"><?php echo getLocalizedString("choose"); ?></a>
-            <a href="palmares.php?type=user&lang=<?echo $lang?>"><?php echo getLocalizedString("Profile"); ?></a>
+            <?php if (isPlayerLoggedIn()) {
+                echo "<a href=\"palmares.php?type=player&lang=$lang&idplayers=".getPlayerId()."\">".getLocalizedString("Profile")."</a>";
+                }
+            ?>
         </div> <!-- fin div pagesbox -->
         <div id="langbox" class="leftbox">
 <?php
