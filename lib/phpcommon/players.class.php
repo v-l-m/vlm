@@ -127,6 +127,7 @@ class players extends baseClass {
         $permissions,
         $updated,
         $created;
+    var $boatlist = null;
           
     function players($idplayers = 0, $email = null, $pending = null, $row = null) {
         if ($idplayers !== 0) {
@@ -232,11 +233,37 @@ class players extends baseClass {
     function setPassword($password) {
         $this->password = hash('sha256', $password);
     }
+
+    //getters
+    function getBoatlist() {
+        if (!is_null($this->boatlist)) return $this->boatlist;
+        $boatlist = Array();
+        $query = "SELECT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND linktype = ".PU_FLAG_OWNER;
+        if ($res = $this->queryRead($query)) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $boatlist[$row['idusers']] = new users($row['idusers']);
+                //FIXME : check result ?
+            }
+            $this->boatlist = $boatlist;
+        }
+        return $this->boatlist;
+    }
     
+    //html renderers
     function htmlPlayername() {
-        $ret  = "<a href=\"playerinfo.php?playerid=";
+        $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
         $ret .= $this->idplayers;
         $ret .= "\">".$this->playername."</a>";
+        return $ret;
+    }
+    
+    function htmlBoatlist() {
+        $boatlist = $this->getBoatlist();
+        $ret = "<ul>";
+        foreach ($boatlist as $id => $user) {
+            $ret .= "<li>".$user->htmlIdusersUsernameLink(getCurrentLang())."</li>";
+        }
+        $ret .= "</ul>";
         return $ret;
     }
 }

@@ -437,7 +437,7 @@ include_once("scripts/myboat.js");
 
             // no ownership for this boat
             if ( $usersObj->users->getOwnerId() == 0  ) {
-                $msg = "<b>".getLocalizedString("This boat has no owner. Please <a href=\"attach_boat.php?lang=$lang\">attach</a> it to a player !")."</b>";
+                $msg = "<b>".getLocalizedString("This boat has no owner.")." ".getLocalizedString("Please <a href=\"attach_boat.php\">attach</a> it to a player !")."</b>";
                 $messages[] = Array("id" => "noownership", "txt" => $msg, "class" => "warn", "url" => "attach_boat.php?lang=$lang");
             }
 
