@@ -265,8 +265,8 @@
         <div id="loggedbox" class="leftbox">
 <?php
             if (isPlayerLoggedIn()) {
-                echo getPlayername()."<br />\n";
                 $player = new players(getPlayerId());
+                echo $player->htmlPlayername()."<br />\n";
                 //FIXME : factorise
                 $boatlist = array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList());
                 echo "<form method=\"post\" action=\"myboat.php\">";

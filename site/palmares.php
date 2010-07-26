@@ -51,7 +51,7 @@
             $idplayers=htmlentities(quote_smart($_REQUEST['idplayers']));
             $player = new players($idplayers);
             if ($player->idplayers > 0) {
-                echo "<h2>".getLocalizedString('playername') . ' : ' . $player->playername.'</h2>';
+                echo "<h2>".getLocalizedString('playername') . ' : ' . $player->htmlPlayername().'</h2>';
                 echo "<hr />";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
                 echo $player->htmlBoatlist();
