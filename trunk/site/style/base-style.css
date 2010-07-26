@@ -39,6 +39,10 @@ body
         text-indent: 0em;
 }
 
+#loggedbox {
+  text-align: center;
+}
+
 #langbox img {
     width: 25px;
 }

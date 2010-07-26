@@ -393,6 +393,11 @@ class users extends baseClass
       return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);
   }
 
+  function htmlIdusers() {
+      $ret = "<a href=\"palmares.php?type=user&amp;idusers=".$this->idusers."\">".$this->idusers."</a>";
+      return $ret;
+  }
+
   function getOwnerId() {
       if (!is_null($this->idowner)) return $this->idowner;
       $query = "SELECT idplayers FROM playerstousers WHERE idusers =".$this->idusers." AND linktype = ".PU_FLAG_OWNER;

@@ -16,7 +16,7 @@ include_once("includes/header.inc");
 
 
     // Le palmares du joueur
-    echo "<h1>" ; printf (getLocalizedString("palmares"),$usersObj->users->idusers); echo "</h1>";
+    echo "<h1>" ; printf (getLocalizedString("palmares"), $usersObj->users->htmlIdusers()); echo "</h1>";
     displayPalmares($lang, $usersObj->users->idusers);
 
     // S'engager dans une course
@@ -236,7 +236,7 @@ include_once("scripts/myboat.js");
   <div id="yourboatbox">
       <div id="yourboatsummarybox">
         <b><?php echo getLocalizedString("yourboat"); ?></b>&nbsp;
-        n&deg; <b><?php echo $usersObj->users->idusers ; ?></b>&nbsp;
+        n&deg; <b><?php echo $usersObj->users->htmlIdusers() ; ?></b>&nbsp;
         / &quot;<? echo $usersObj->users->boatname ?>&quot;
 <?php
         echo " / " . $usersObj->users->htmlBoattypeLink() . "&nbsp;";
