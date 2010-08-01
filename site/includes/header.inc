@@ -240,7 +240,7 @@
 ?>
 <?php
 
-    if (!isLoggedIn()) //if not connected
+    if (!isLoggedIn() && !isPlayerLoggedIn()) //if not connected
     {
 ?>
         <div id="loginbox" class="leftbox">
@@ -260,6 +260,18 @@
 ?>
         </div> <!-- fin div pleasecreatebox-->
 <?php
+    } else if (isPlayerLoggedIn() && !isLoggedIn()) {
+?>
+        <div id="pleasecreatebox" class="leftbox">
+<?php
+                $player = new players(getPlayerId());
+                echo $player->htmlPlayername()."<br />\n";
+
+            echo "<a href=\"create_boat.php?lang=$lang\">".getLocalizedString("Please create a boat !")."</a>";
+?>
+        </div> <!-- fin div pleasecreatebox-->
+<?php
+
     } else { //if loggedin
 ?>
         <div id="loggedbox" class="leftbox">
@@ -384,7 +396,7 @@ end of firstcolumn
 <?php
 if ( !isLoggedIn() && (in_array($_SERVER["PHP_SELF"], $restrictedPages) ) )
 {
-   echo "Access restricted\n<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />";
+   echo "Access restricted\n<br />";
    include_once("includes/footer.inc");
    die();
 }
