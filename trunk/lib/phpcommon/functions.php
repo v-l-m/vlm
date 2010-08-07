@@ -51,7 +51,7 @@ function quote_smart($value) {
         $magic_quotes_gpc = get_magic_quotes_gpc();
     }
 
-    if ($magic_quote_gpc) {
+    if ($magic_quotes_gpc) {
         $value = stripslashes($value);
     }
     return $value;
@@ -259,7 +259,7 @@ function errorprint($message) {
 }
 
 /*display a string containing the difference between now and the last update*/
-function lastUpdate($strings, $lang)
+function lastUpdate()
 {
   if (file_exists(CRONVLMLOCK)) {
     printf (getLocalizedString("processing") );
@@ -306,7 +306,7 @@ function lastUpdateTime($master = false) {
 }
 
 /*display the next supposed update*/
-function nextUpdate($strings, $lang)
+function nextUpdate()
 {
   $lastupdate = lastUpdateTime();
   $interval = time() - $lastupdate;
@@ -653,9 +653,6 @@ function VMGortho($long, $lat,   $boatheading, $boatspeed, $orthoangletoend)
   $beta = $orthoangletoend;
   $gamma = $boatheading;
   $alpha = $gamma - $beta;
-  if ($verbose > 0) {
-    echo "beta = $beta, gamma= $gamma, alpha = $alpha\n";
-  }
   $__vmgortho =  $boatspeed * cos(deg2rad($alpha));
   if (abs ($__vmgortho) > 0.0001) {
     return  ( $__vmgortho );
@@ -970,11 +967,11 @@ function getNumOpponents($idraces) {
   return (array ($num_arrived,$num_racing,$num_arrived + $num_out + $num_racing));
 }
 
-function htmlRacesListRow($strings, $lang, $rowdatas) {
+function htmlRacesListRow($rowdatas) {
 
       // Affichage de la course dans le tableau
       // idraces / racename / startdeparture / racenumboats / map
-
+      $lang = getCurrentLang();
       $html = "";
       list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($rowdatas['idraces']);
 
@@ -1018,11 +1015,11 @@ function htmlRacesListRow($strings, $lang, $rowdatas) {
       return $html;
 }
 
-function dispHtmlCurrentRacesList($strings, $lang) {
-    dispHtmlRacesList($strings, $lang, "WHERE started != -1");
+function dispHtmlCurrentRacesList() {
+    dispHtmlRacesList("WHERE started != -1");
 }
 
-function dispHtmlRacesList($strings, $lang, $where = "") {
+function dispHtmlRacesList($where = "") {
 
   echo "<table>\n";
   echo "<thead>\n";
@@ -1048,7 +1045,7 @@ function dispHtmlRacesList($strings, $lang, $where = "") {
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
   while ( $row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-      echo htmlRacesListRow($strings, $lang, $row);
+      echo htmlRacesListRow($row);
       }
   
   echo "</tbody>\n";

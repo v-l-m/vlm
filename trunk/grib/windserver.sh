@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # init script, be sure to call this before cron and apache are started
+# this script has been copied to $VLMBIN
 
 #FIXER VLMRACINE ici s'il n'est pas défini comme variable d'environnement à ce stade.
 #VLMRACINE=/path/to/vlmracine
@@ -13,6 +14,7 @@ LATEST=latest.grb
 case "$1" in
   start)
     sudo -u $VLMGRIBUSER $VLMBIN/windserver $GRIBPATH/$LATEST
+    sudo -u $VLMGRIBUSER $VLMBIN/polarserver $VLMPOLARS/polars.list
     exit 0
   ;;
   stop)

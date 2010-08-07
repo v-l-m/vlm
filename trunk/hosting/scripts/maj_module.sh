@@ -135,6 +135,8 @@ case $confmodule in
     echo -n "+$confmodule: installation du script de récupération des gribs dans $VLMBIN..."
     cp $destmodulepath/noaa.sh $VLMBIN/noaa.sh
     cp $destmodulepath/noaa-slave.sh $VLMBIN/noaa-slave.sh
+    echo -n "+$confmodule: installation du script init.d de démarrage du (wind|polar)server dans $VLMBIN..."
+    cp $destmodulepath/windserver.sh $VLMBIN/windserver.sh
     echo 'OK !'
     ;;
     medias)

@@ -72,7 +72,7 @@ document.getElementById('south').value='<?echo $bounds['south']?>';"
 <?//List of players, check boxes
 
 
-$fullRacesObj->dispHtmlForm($strings, $lang, explode(",", $_COOKIE['list']));
+$fullRacesObj->dispHtmlForm(explode(",", $_COOKIE['list']));
 // foreach ( $fullRacesObj->opponents as $opp)
 // {
 //   printf("%s <span style=\"background-color: #%s\">%s</span>", $opp->username, $opp->color,  $opp->boatname); 

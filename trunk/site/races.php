@@ -15,12 +15,12 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
     // Ajout en début de tableau d'un classement par WP (uniquement si >1)
     $nbWPs = $fullRacesObj->races->getWPsCount();
     if ( $nbWPs > 1 ) {
-      for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
-	$WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
-	if ( !strstr($WP['wptypelabel'],'IceGate') ) {
-	  array_push($tables, "WP" . $wp_num);
-	}
-      }
+        for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
+          	$WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
+          	if ( !strstr($WP['wptypelabel'],'IceGate') ) {
+            	  array_push($tables, "WP" . $wp_num);
+          	}
+        }
     }
 
     array_push($tables, "arrived", "racing", "dnf", "abd", "htp", "hc");
@@ -32,17 +32,17 @@ function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr")
 
     // Affichage des classements classiques 
     foreach ($tables as $table) {
-      $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
         if ( $table == $tableType ) {
             $class="class=\"hilight\"";
-            if ( strstr($table, "WP") ) {
+            if ( strstr(substr($table, 0, 2), "WP") ) {
+                $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
                 $cellcontent=$WP['libelle']."<br />(".$table.")";
             } else {
                 $cellcontent=ucfirst($table);
             }
         } else {
             $class="class=\"nohilight\"";
-            if ( strstr($table, "WP") ) {
+            if ( strstr(substr($table, 0, 2), "WP") ) {
                 //$tlabel=substr($table,2);
                 $tlabel=$WP['libelle']."<br />(".$table.")";
             } else {
@@ -113,20 +113,30 @@ $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
 */
 
 
-if ( quote_smart($_REQUEST['full']) == "yes" ) {
+if ( get_cgi_var('full', 'no') == "yes" ) {
      $startnum=0;
 } else {
-     $startnum=max(1,quote_smart($_REQUEST['startnum'])) ;
+     $startnum=max(1, get_cgi_var('startnum', 0)) ;
 }
 
-$q=htmlentities(quote_smart($_REQUEST['type'])) ;
-if ( $q == "" ) $q = "arrived";
+$q = htmlentities(get_cgi_var('type', "arrived")) ;
 
+$sortkey = htmlentities(get_cgi_var('sortkey', "")) ;
+$sortorder = strtolower(htmlentities(get_cgi_var('sortorder', 'asc'))) ;
+$disttype = strtolower(htmlentities(get_cgi_var('disttype', 'tonm'))) ;
+// Analyse de la clé de tri demandée
+$sortkeys = array("", "idusers", "userdeptime", "loch", "last1h", "last3h","last24h","latitude","longitude");
+if ( ! in_array($sortkey, $sortkeys, TRUE) ) {
+    $sortkey="";
+    printf ("<h1>BAD sortkey : %s, defaulting to nextwaypoint and distance</h1>\n", $sortkey); 
+}
+if ($sortorder != "asc" and $sortorder != "desc") $sortorder="asc";
+if ($disttype != "tofirst" and $disttype != "tonm") $disttype="tonm";
 
 if ( $q == "palmares" ) {
-        $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
-  echo "<h1>" ; printf (getLocalizedString("palmares"),$idusers); echo "</h1>";
-  displayPalmares($idusers);
+    $idusers = htmlentities(get_cgi_var('idusers', 0));
+    echo "<h1>" ; printf (getLocalizedString("palmares"),$idusers); echo "</h1>";
+    displayPalmares($idusers);
 }
 
 echo "<span id=\"infobulle\">
@@ -164,16 +174,15 @@ if ($idraces != 0) {
 
     if ( $q == "arrived" ) {
         if ( isset($sortkey) && $sortkey != "" ) {
-           $numarrived=$fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ARR, $sortkey , $sortorder, 0, $startnum);
-
+           $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, $sortkey , $sortorder, 0, $startnum);
         } else {
            if ( $fullRacesObj->races->racetype == RACE_TYPE_RECORD ) {
         // dispHtmlResults : 2 derniers paramètres = critère de tri + ordre (asc/desc)
         // Pour une course record : c'est le temps de course par défaut
-              $numarrived=$fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ARR, "duration" , "asc" ,0,  $startnum);
+              $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "duration" , "asc" ,0,  $startnum);
            } else {
         // Pour une course classique, c'est tout simplement la date d'arrivée (on l'a avec deptime + duration)
-              $numarrived=$fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ARR, "arrtime", "asc", 0, $startnum);
+              $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "arrtime", "asc", 0, $startnum);
            }
         }
           }
@@ -182,62 +191,46 @@ if ($idraces != 0) {
         //echo "<H1>Classement au WP ".substr($q,2) ."</H1>";
         if ( $fullRacesObj->races->racetype == RACE_TYPE_RECORD ) {
      // Pour une course record : c'est le temps de course par défaut
-           $numarrived=$fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ARR, "duration" , "asc" , substr($q,2), 0, $startnum);
+           $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "duration" , "asc" , substr($q,2), 0, $startnum);
         } else {
      // Pour une course classique, c'est tout simplement la date d'arrivée (on l'a avec deptime + duration)
-           $numarrived=$fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ARR, "arrtime", "asc", substr($q,2), 0, $startnum);
+           $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "arrtime", "asc", substr($q,2), 0, $startnum);
         }
     }
   
     if ( $q == "racing" ) {
        if ( $fullRacesObj->races->started ) {
            echo "<a name=\"ENC\" id=\"ENC\"></a>";
-
-                 // Analyse de la clé de tri demandée
-                 $sortkeys=array();
-                 array_push($sortkeys, "", "idusers", "userdeptime", "loch", "last1h", "last3h","last24h","latitude","longitude");
-                 $sortkey=htmlentities(quote_smart($_REQUEST['sortkey'])) ;
-                 if ( ! in_array($sortkey, $sortkeys, TRUE) ) {
-                    $sortkey="";
-                    printf ("<h1>BAD sortkey : %s, defaulting to nextwaypoint and distance</h1>\n", $sortkey); 
-                 }
-
-                 $sortorder=strtolower(htmlentities(quote_smart($_REQUEST['sortorder']))) ;
-                 if ($sortorder != "asc" and $sortorder != "desc") $sortorder="asc";
-
-                 $disttype=strtolower(htmlentities(quote_smart($_REQUEST['disttype']))) ;
-                 if ($disttype != "tofirst" and $disttype != "tonm") $disttype="tonm";
-
            if ( isset($sortkey) && $sortkey != "" ) {
-               $fullRacesObj->dispHtmlClassification($strings, $lang, $num_arrived , $sortkey . " " . $sortorder , $disttype, $startnum);
+               $fullRacesObj->dispHtmlClassification($num_arrived , $sortkey . " " . $sortorder , $disttype, $startnum);
            } else {
-               $fullRacesObj->dispHtmlClassification($strings, $lang, $num_arrived, "nwp desc, dnm asc", $disttype, $startnum);
+               $fullRacesObj->dispHtmlClassification($num_arrived, "nwp desc, dnm asc", $disttype, $startnum);
            }
        } else {
            printf( "<h3>". getLocalizedString("hasnotstart")."<br /><b>\n",$fullRacesObj->races->racename);
            $departure = gmdate("Y/m/d H:i:s",$fullRacesObj->races->deptime)." GMT";
            echo "</b>" . getLocalizedString("departuredate")." : $departure </h3>\n";
            echo "<h4>".getLocalizedString("playersengaged")."</h4>";
-           $fullRacesObj->dispHtmlEngaged($strings, $lang, $startnum);
+           $fullRacesObj->dispHtmlEngaged($startnum);
        }
     }
   
   
     if ( $q == "htp" ) {
          echo "<a name=\"HTP\" id=\"HTP\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HTP, "duration" , "asc", 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_HTP, "duration" , "asc", 0, $startnum);
     }
     if ( $q == "dnf" ) {
          echo "<a name=\"DNF\" id=\"DNF\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_DNF, "duration" , "asc", 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_DNF, "duration" , "asc", 0, $startnum);
     }
     if ( $q == "abd" ) {
          echo "<a name=\"ABD\" id=\"ABD\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_ABD, "duration" , "asc", 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ABD, "duration" , "asc", 0, $startnum);
     }
     if ( $q == "hc" ) {
          echo "<a name=\"HC\" id=\"HC\"></a>";
-         $fullRacesObj->dispHtmlRacesResults($strings, $lang, BOAT_STATUS_HC, "duration" , "asc", 0, $startnum);
+         $fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_HC, "duration" , "asc", 0, $startnum);
     }
   
     echo "<p>";
@@ -245,24 +238,24 @@ if ($idraces != 0) {
     echo getLocalizedString("see")."</a>"; 
     echo "</p>";
 
-          echo "<table class=\"boat\"><tr class=\"boat\">";
-          echo "<td class=\"boat\">";
+    echo "<table class=\"boat\"><tr class=\"boat\">";
+    echo "<td class=\"boat\">";
     // ** Onglet de choix sur différents classements
-          displayRankingMenu($fullRacesObj, $q, $sortkey, $lang);
-          echo "</td><td class=\"boat\" valign=\"bottom\">";
-          displayPrevious100($startnum);
-          echo "</td><td class=\"boat\" valign=\"bottom\">";
-          displayNext100($startnum, $num_engaged);
-          echo "</td>";
-          echo "</tr></table>";
+    displayRankingMenu($fullRacesObj, $q, $sortkey, $lang);
+    echo "</td><td class=\"boat\" valign=\"bottom\">";
+    displayPrevious100($startnum);
+    echo "</td><td class=\"boat\" valign=\"bottom\">";
+    displayNext100($startnum, $num_engaged);
+    echo "</td>";
+    echo "</tr></table>";
 
 } else  { //idraces ==0 means display all races
     if (isset($_REQUEST['fulllist']) and $_REQUEST['fulllist']=1) {
         echo "<h4>".getLocalizedString("races")."</h4>";
-        dispHtmlRacesList($strings, $lang);
+        dispHtmlRacesList();
     } else {
         echo "<h4>".getLocalizedString("current_races")."&nbsp;(<a href=\"races.php?lang=$lang&fulllist=1\">".getLocalizedString("see")."</a>)"."</h4>";
-        dispHtmlCurrentRacesList($strings, $lang);
+        dispHtmlCurrentRacesList();
     }
 }
 

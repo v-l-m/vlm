@@ -34,7 +34,7 @@
     $x=max(100,htmlentities($_GET['x']));
     $y=max(100,htmlentities($_GET['y']));
     // Limitation de la taille de la carte pour pas péter le serveur 
-    if ( !idusersIsAdmin(htmlentities($_GET['boat'])) ) {
+    if (isset($_GET['boat']) && !idusersIsAdmin(htmlentities($_GET['boat'])) ) {
         if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
         if ( $y > MAX_MAP_Y ) $y=MAX_MAP_Y;
     }
@@ -307,10 +307,9 @@
     }
     
     // Display
-    $noHeader=htmlentities($_GET['noHeader']);
-    if ($noHeader !=1) {
+    if (!isset($_GET['noHeader']) || htmlentities($_GET['noHeader']) !=1) {
         header("Content-type: image/png");
-	header("Cache-Control: max-age=0");
+      	header("Cache-Control: max-age=0");
     }
     
     $mapObj->display();

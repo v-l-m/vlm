@@ -28,12 +28,12 @@ function LoadGif ($imgname) {
 }
 
 
-$noHeader=quote_smart($_REQUEST['noHeader']);
-$boatheading=quote_smart($_REQUEST['boatheading']);
-$wheading=quote_smart($_REQUEST['wheading']);
-$wspeed=quote_smart($_REQUEST['wspeed']);
-$roadtoend=quote_smart($_REQUEST['roadtoend']);
-$boattype=quote_smart($_REQUEST['boattype']);
+$noHeader=get_cgi_var('noHeader');
+$boatheading=get_cgi_var('boatheading');
+$wheading=get_cgi_var('wheading');
+$wspeed=get_cgi_var('wspeed');
+$roadtoend=get_cgi_var('roadtoend');
+$boattype=get_cgi_var('boattype');
 /* $vmg=quote_smart($_REQUEST['vmg']); */
 
 

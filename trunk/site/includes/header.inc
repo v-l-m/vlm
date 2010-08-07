@@ -11,36 +11,32 @@
     ob_start();
     //all GET and POST variables
     $lang = getCurrentLang();
-    $pseudo=quote_smart($_REQUEST['pseudo']);
-    $password=quote_smart($_REQUEST['password']);
-    $class=quote_smart($_REQUEST['class']);
-    $email=quote_smart($_REQUEST['email']);
-    $blocnote=quote_smart($_REQUEST['blocnote']);
+    $pseudo = get_cgi_var('pseudo');
+    $password = get_cgi_var('password');
+    $class = get_cgi_var('class');
+    $email = get_cgi_var('email');
+    $blocnote = get_cgi_var('blocnote');
     if (eregi("^http", $blocnote) || eregi("://", $blocnote)) {
         $blocnote="BAD NOTEPAD (code inclusion (url, &lt;&gt; characters, ...) is forbidden)";
     }
-    $theme=quote_smart($_REQUEST['theme']);
-    $country=quote_smart($_REQUEST['country']);
-    $hidepos=quote_smart($_REQUEST['hidepos']);
-    $invisible=quote_smart($_REQUEST['invisible']);
-    $type =quote_smart($_REQUEST['type']);
-    $action=quote_smart($_REQUEST['action']);
-    $boatname=quote_smart($_REQUEST['boatname']);
-    $color=quote_smart($_REQUEST['color']);
-    $idusers=quote_smart($_REQUEST['idusers']);
-    $idraces=quote_smart($_REQUEST['idraces']);
-    $submittype=quote_smart($_REQUEST['submittype']);
-    $pilotmode=quote_smart($_REQUEST['pilotmode']);
-    $pilotparameter=quote_smart($_REQUEST['pilotparameter']);
-    $targetlat=htmlentities(quote_smart($_REQUEST['targetlat']));
-    $targetlong=htmlentities(quote_smart($_REQUEST['targetlong']));
-    if ( isset ( $_REQUEST['targetandhdg']) ) {
-        $targetandhdg=htmlentities(quote_smart($_REQUEST['targetandhdg']));
-    } else {
-        $targetandhdg=-1;
-    }
-    $boatheading=quote_smart($_REQUEST['boatheading']);
-    $adminpasswd =quote_smart($_REQUEST['adminpasswd']);
+    $theme = get_cgi_var('theme');
+    $country = get_cgi_var('country');
+    $hidepos = get_cgi_var('hidepos');
+    $invisible = get_cgi_var('invisible');
+    $type  = get_cgi_var('type');
+    $action = get_cgi_var('action');
+    $boatname = get_cgi_var('boatname');
+    $color = get_cgi_var('color');
+    $idusers = get_cgi_var('idusers');
+    $idraces = get_cgi_var('idraces');
+    $submittype = get_cgi_var('submittype');
+    $pilotmode = get_cgi_var('pilotmode');
+    $pilotparameter = get_cgi_var('pilotparameter');
+    $targetlat=htmlentities(get_cgi_var('targetlat'));
+    $targetlong=htmlentities(get_cgi_var('targetlong'));
+    $targetandhdg=htmlentities(get_cgi_var('targetandhdg', -1));
+    $boatheading = get_cgi_var('boatheading');
+    $adminpasswd = get_cgi_var('adminpasswd');
 
     $msg="";
     //need to be at start because modify header info
@@ -328,7 +324,7 @@
 <?php
             $langs= getLocalizedString(null);
             foreach ($langs as $lg) {
-                echo "<a href=\"".$SCRIPT_NAME."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
+                echo "<a href=\"".$_SERVER['SCRIPT_NAME']."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
             }            
 ?>
         </div> <!-- fin div langbox-->

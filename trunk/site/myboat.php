@@ -86,7 +86,7 @@ include_once("includes/header.inc");
     $mapAge = $usersObj->getMyPref("mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
     $mapLayers = $usersObj->getMyPref("mapLayers");
-    if ( $mapMaille == "NULL" ) $mapLayers="merged";
+    if ( $mapLayers == "NULL" ) $mapLayers="merged";
     $mapMaille = $usersObj->getMyPref("mapMaille");
     if ( $mapMaille == "NULL" ) $mapMaille=3;
     $mapEstime = $usersObj->getMyPref("mapEstime");
@@ -743,6 +743,8 @@ include_once("scripts/myboat.js");
     <?php
         if ( $myRace->started != 1) {
             $mapopdis = "disabled"; //.$myRace->started;
+        } else {
+            $mapopdis = "";
         }
 
     ?>
@@ -836,7 +838,7 @@ include_once("scripts/myboat.js");
 </div>
 <div id="time">
         <?php
-        lastUpdate($strings, $lang);
+        lastUpdate();
         ?>
 </div>
         <?php if (isLoggedIn()) { ?>

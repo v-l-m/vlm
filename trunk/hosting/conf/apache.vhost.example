@@ -4,12 +4,12 @@
 <VirtualHost *:80>
         ServerAdmin admin@actilis.net
 
-        DocumentRoot /base/testing/site
-        ServerName testing.virtual-loup-de-mer.org
+        DocumentRoot /home/vlm/vlmcode/site
+        ServerName vlm
         ServerAlias vlmdev
 
-        ErrorLog    /var/log/apache2/vlmtesting_error_log
-        CustomLog   /var/log/apache2/vlmtesting_access_log combined
+        ErrorLog    /var/log/apache2/vlm_error_log
+        CustomLog   /var/log/apache2/vlm_access_log combined
 
         <Directory /base/testing/site>
                 DirectoryIndex index.php index.html
@@ -24,4 +24,3 @@
 
         </Directory>
 </VirtualHost>
-
