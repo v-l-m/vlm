@@ -9,7 +9,7 @@ $idraces=$_REQUEST["idraces"];
 
 $image="regate".$idraces;
 $thumb="images/minimaps/" . $image . ".png";
-$original=getRacemap($idraces,  $_REQUEST['force']);
+$original=getRacemap($idraces,  get_cgi_var('force', 'no'));
 
 if ($original ===False) {
             header("Cache-Control: no-cache"); // no cache for dummy answer

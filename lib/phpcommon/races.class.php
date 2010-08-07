@@ -124,10 +124,10 @@ class races {
       // On push ce WP dans la liste des WP
       $this->waypoints[$row['wporder']] = $WPCoords;
     }
-    $this->stop1lat  = $WPcoords['latitude1'];
-    $this->stop1long = $WPcoords['longitude1'];
-    $this->stop2lat  = $WPcoords['latitude2'];
-    $this->stop2long = $WPcoords['longitude2'];
+    $this->stop1lat  = $WPCoords['latitude1'];
+    $this->stop1long = $WPCoords['longitude1'];
+    $this->stop2lat  = $WPCoords['latitude2'];
+    $this->stop2long = $WPCoords['longitude2'];
   }
 
   function getRaceDistance($force = 0) {
@@ -457,7 +457,7 @@ class fullRaces {
 
   //===========================================//
   //                                           //
-  // Function dispHtmlEngaged($strings, $lang) //
+  // Function dispHtmlEngaged() //
   //                                           //
   //-------------------------------------------//
   //                                           //
@@ -466,7 +466,7 @@ class fullRaces {
   //                                           //
   //===========================================//
 
-  function dispHtmlEngaged($strings, $lang)
+  function dispHtmlEngaged()
   {
     //table header
     echo "\n<table>\n";
@@ -486,7 +486,7 @@ class fullRaces {
         echo "    <tr class=ranking>\n";
         // ============= Affichage des noms de bateaux en acronyme
       	echo "<td class=\"ranking\">";
-        echo $users->htmlIdusersUsernameLink($lang);
+        echo $users->htmlIdusersUsernameLink(getCurrentLang());
         echo "</td>";
         echo "<td>" . $users->boatname .  "</td>";
         // =================================================================
@@ -502,7 +502,7 @@ class fullRaces {
 
   //==================================================//
   //                                                  //
-  // Function dispHtmlClassification($strings, $lang) //
+  // Function dispHtmlClassification() //
   //                                                  //
   //--------------------------------------------------//
   //                                                  //
@@ -511,7 +511,7 @@ class fullRaces {
   //                                                  //
   //==================================================//
 
-  function dispHtmlClassification($strings, $lang, $numarrived = 0 , 
+  function dispHtmlClassification($numarrived = 0 , 
                                   $sortclause="nwp desc, dnm asc", 
                                   $disttype ="tonm", 
                                   $startnum = 1) {
@@ -531,7 +531,7 @@ class fullRaces {
     // L'URL de la page affichant ces classements :
     // http://vlm/races.php?lang=fr&type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
     $baseurl=$_SERVER['PHP_SELF'];
-    $baseurl.="?lang=".$lang;
+    $baseurl.="?lang=".getCurrentLang();
     $baseurl.="&amp;type=racing";
     $baseurl.="&amp;idraces=".$this->races->idraces;
 
@@ -691,7 +691,7 @@ class fullRaces {
       // ============= Affichage des noms de bateaux en acronyme
       if ( $row['idusers'] > 0 ) {
         	echo "<td class=\"ranking\">";
-          echo htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+          echo htmlIdusersUsernameLink(getCurrentLang(), $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
           echo "</td>";
       } else {
           $idu=-$row['idusers'];
@@ -817,7 +817,7 @@ class fullRaces {
 
   //==================================================//
   //                                                  //
-  // Function dispHtmlForm($strings, $lang)           //
+  // Function dispHtmlForm($list)           //
   //                                                  //
   //--------------------------------------------------//
   //                                                  //
@@ -826,26 +826,10 @@ class fullRaces {
   //           boats to se lect                       //
   //                                                  //
   //==================================================//
-  function dispHtmlForm($strings, $lang, $list )
+  function dispHtmlForm($list)
   {
     //table header
     echo "\n<table>\n";
-    /*
-      echo "<thead>\n";
-      echo "<tr>\n";
-      //echo "<th>".getLocalizedString("position")."</th>\n";
-      echo "<th class=htmltable>&nbsp;</th>\n";
-      //echo "<th>".getLocalizedString("skipper")."</th>\n";
-      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
-      echo "<th class=htmltable>&nbsp;</th>\n";
-      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
-      echo "<th class=htmltable>&nbsp;</th>\n";
-      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
-      echo "<th class=htmltable>&nbsp;</th>\n";
-      echo "<th class=htmltable>".getLocalizedString("boat")."</th>\n";
-      echo "</tr>\n";
-      echo "</thead>\n";
-    */
     echo "<tbody class=\"htmltable\">\n";
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
@@ -889,7 +873,7 @@ class fullRaces {
         echo " checked=\"checked\"";
       echo " />";
 
-      echo htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+      echo htmlIdusersUsernameLink(getCurrentLang(), $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
       /*FIXME
       if ( $row['engaged'] == $this->races->idraces ) {
         echo "<b>" . $row['username'] . "</b>";
@@ -912,7 +896,7 @@ class fullRaces {
   
   //================================================//
   //                                                //
-  // Function dispHtmlRacesResults($strings, $lang) //
+  // Function dispHtmlRacesResults() //
   //                                                //
   //------------------------------------------------//
   //                                                //
@@ -922,7 +906,7 @@ class fullRaces {
   //                                                //
   // * $status = type de classement                 //
   //================================================//
-  function dispHtmlRacesResults($strings, $lang, $status, $sortkey = "duration" , $sortorder = "asc", $WP = 0 , $startnum=1)
+  function dispHtmlRacesResults($status, $sortkey = "duration" , $sortorder = "asc", $WP = 0 , $startnum=1)
   {
 
     $IDU=intval(getLoginId());
@@ -1088,7 +1072,7 @@ class fullRaces {
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
       	echo "<td class=\"ranking\">";
-        echo htmlIdusersUsernameLink($lang, $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+        echo htmlIdusersUsernameLink(getCurrentLang(), $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
         echo "</td>";
 
         $longitude=$row['longitude'];
@@ -1169,13 +1153,13 @@ class fullRaces {
         }
 
         // Affichage du loch (ARR, DNF, ABD)
-        if ( $row['loch'] != 0 ) {
+        if ( isset($row['loch']) && $row['loch'] != 0 ) {
           printf("<td>%5.2f</td>\n", $row['loch']);
         } else {
           printf("<td>n/a</td>\n");
         }
         if ( $row['position'] == BOAT_STATUS_ARR ) {
-          if ( $row['penalty'] == 0 ) {
+          if ( !isset($row['penalty']) || $row['penalty'] == 0 ) {
             printf("<td>n/a</td>\n");
           } else {
             printf("<td>%0d h</td>\n", $row['penalty']/3600);

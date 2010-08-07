@@ -49,7 +49,7 @@
 
     <div id="time" class="basic">
       <?php
-          lastUpdate($strings, $lang);
+          lastUpdate();
       ?>
     </div>
 

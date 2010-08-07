@@ -5,7 +5,7 @@ source $VLMRACINE/conf/conf_script
 
 destpath=$VLMGSHHS
 gshhsfile=gshhs_1.10.zip
-urlgshhs=http://www.ngdc.noaa.gov/mgg/shorelines/data/gshhs/version1.10/$gshhsfile
+urlgshhs=http://www.ngdc.noaa.gov/mgg/shorelines/data/gshhs/oldversions/version1.10/$gshhsfile
 
 mkdir -p $destpath
 if test -e $destpath/gshhs_f.b ; then

@@ -8,7 +8,7 @@ echo "GRANT ALL ON $DBNAME.* TO '$DBUSER' ;" >> init.sql.tmp
 echo "CREATE DATABASE temporary ;" >> init.sql.tmp
 echo "GRANT ALL ON temporary.* TO '$DBUSER' ;" >> init.sql.tmp
 
-echo "Tapez votre mot de passe root"
+echo "Tapez votre mot de passe root Mysql"
 mysql -u root -p < init.sql.tmp
 
 echo "L'utilisateur $DBUSER a été créé avec le mot de passe $DBPASSWORD"
