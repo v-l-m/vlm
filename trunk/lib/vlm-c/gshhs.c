@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.15 2010-08-08 14:07:52 ylafon Exp $
+ * $Id: gshhs.c,v 1.16 2010-08-08 14:26:17 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -159,20 +159,23 @@ void internal_init_partial_coastline(int minlat, int minlong,
 
   while (nb_read == 1) {
     if (flip) {
+#ifndef OPTIMIZE_GSHHS_READ
       h.id    = swabi4 ((unsigned int)h.id);
+#endif /* OPTIMIZE_GSHHS_READ */
       h.n     = swabi4 ((unsigned int)h.n);
+      h.flag  = swabi4 ((unsigned int)h.flag);
+#ifndef OPTIMIZE_GSHHS_READ
       h.west  = swabi4 ((unsigned int)h.west);
       h.east  = swabi4 ((unsigned int)h.east);
       h.south = swabi4 ((unsigned int)h.south);
       h.north = swabi4 ((unsigned int)h.north);
       h.area  = swabi4 ((unsigned int)h.area);
-      h.flag  = swabi4 ((unsigned int)h.flag);
 #ifdef USE_GSHHS_20
       h.area_full = swabi4 ((unsigned int)h.area_full);
-      h.flag      = swabi4 ((unsigned int)h.flag);
       h.container = swabi4 ((unsigned int)h.container);
       h.ancestor  = swabi4 ((unsigned int)h.ancestor);
 #endif /* USE_GSHHS_20 */
+#endif /* OPTIMIZE_GSHHS_READ */
     }
     level = h.flag & 0xff;
 #ifdef USE_GSHHS_20
@@ -294,17 +297,32 @@ void internal_init_partial_coastline(int minlat, int minlong,
     
   while (nb_read == 1) {
     if (flip) {
-      h.id = swabi4 ((unsigned int)h.id);
-      h.n  = swabi4 ((unsigned int)h.n);
+#ifndef OPTIMIZE_GSHHS_READ
+      h.id    = swabi4 ((unsigned int)h.id);
+#endif /* OPTIMIZE_GSHHS_READ */
+      h.n     = swabi4 ((unsigned int)h.n);
+      h.flag  = swabi4 ((unsigned int)h.flag);
+#ifndef OPTIMIZE_GSHHS_READ
       h.west  = swabi4 ((unsigned int)h.west);
       h.east  = swabi4 ((unsigned int)h.east);
       h.south = swabi4 ((unsigned int)h.south);
       h.north = swabi4 ((unsigned int)h.north);
       h.area  = swabi4 ((unsigned int)h.area);
-      h.flag  = swabi4 ((unsigned int)h.flag);
+#ifdef USE_GSHHS_20
+      h.area_full = swabi4 ((unsigned int)h.area_full);
+      h.container = swabi4 ((unsigned int)h.container);
+      h.ancestor  = swabi4 ((unsigned int)h.ancestor);
+#endif /* USE_GSHHS_20 */
+#endif /* OPTIMIZE_GSHHS_READ */
     }
     level = h.flag & 0xff;
+#ifdef USE_GSHHS_20
+    /* the previous version should work, but be ready for 
+       future releases */
+    greenwich = (h.flag >>16) & 0x01;
+#else
     greenwich = (h.flag >>16) & 0xff;
+#endif /* USE_GSHHS_20 */
     if (level > GSHHS_MAX_DETAILS) {
       /* keep only land ?, not lake, island in lake, 
 	 pond in island in lake => take everything now */
