@@ -67,7 +67,9 @@ if ( $usersObj->engaged != 0 ) {
       // FIXME : on ne devrait pas appeler les variables "inter-script" avec des noms aussi evidents...
       $fullUsersObj->updateDepTime($now);
     }
-	  
+    
+    echo "\n     Prev Hdg: ".$fullUsersObj->users->boatheading." " ;
+
     $fullUsersObj->updateAngles(0); // update heading, but not the DB
 	  
     echo "PIM=" . $fullUsersObj->users->pilotmode . "/"  ;
