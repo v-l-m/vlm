@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.19 2010-08-09 16:15:55 ylafon Exp $
+ * $Id: gshhs.c,v 1.21 2010-08-09 16:56:46 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -42,7 +42,6 @@
    curseg++
 */
 
-
 extern vlmc_context *global_vlmc_context;
 
 void internal_init_partial_coastline PARAM4(int, int, int ,int);
@@ -83,9 +82,9 @@ void internal_init_partial_coastline(int minlat, int minlong,
 				     int maxlat, int maxlong) {
   FILE *coastfile;
   struct GSHHS h;
-  struct POINT p;
+  struct POINT *plist, *p;
   int *segnum;
-  int n, px, py;
+  int n, px, py, max_n;
   int nb_read, level, greenwich,i,k, nb_seg, idx;
   int x,y, prev_x, prev_y;
 #ifdef SAVE_MEMORY
@@ -99,7 +98,9 @@ void internal_init_partial_coastline(int minlat, int minlong,
   double min_longitude, max_longitude;
   min_longitude = 100000.0;
   max_longitude = -100000.0;
-
+  max_n = 0;
+  
+  plist = NULL;
   segnum = calloc(3601*1800, sizeof(int)); /* FIXME resolution + min/max lat */
   
   zerocrossed = 0;
@@ -191,25 +192,34 @@ void internal_init_partial_coastline(int minlat, int minlong,
     if (level > GSHHS_MAX_DETAILS) { 
       /* keep only land ?, not lake, island in lake, 
 	 pond in island in lake => take everything now */
-      for (i=0; i<n; i++) {
-	if (fread ((void *)&p, (size_t)sizeof(struct POINT), 
-		   (size_t)1, coastfile) != 1) {
-	  printf ("Fatal error reading Error reading file %s\n",
-		  global_vlmc_context->gshhs_filename);
-	  exit(2);
-	}
+      if (fseek(coastfile, n*sizeof(struct POINT), SEEK_CUR)) {
+	printf ("Fatal error reading Error reading file %s\n",
+		global_vlmc_context->gshhs_filename);
+	exit(2);
       }
     } else {
       prev_x = -1;
-      for (i=0; i<n; i++) {
-	if (fread ((void *)&p, (size_t)sizeof(struct POINT), 
-		   (size_t)1, coastfile) != 1) {
-	  printf ("Fatal error reading Error reading file %s\n",
-		  global_vlmc_context->gshhs_filename);
-	  exit(2);
+      // if the polygon has more points, reallocate
+      // but no need to copy
+      if (n > max_n) {
+	if (max_n) {
+	  free(plist);
 	}
-	px = ntohl(p.x);
-	py = ntohl(p.y);
+	plist = malloc(n*sizeof(struct POINT));
+	max_n = n;
+      }
+      // now read all the points from the polygon
+      if (fread ((void *)plist, (size_t)sizeof(struct POINT), 
+		 (size_t)n, coastfile) != n) {
+	printf ("Fatal error reading Error reading file %s\n",
+		global_vlmc_context->gshhs_filename);
+	exit(2);
+      }
+      // and iterate on all points
+      p = plist;
+      for (i=0; i<n; i++) {
+	px = ntohl(p->x);
+	py = ntohl(p->y);
 	x = floor((double)px * GSHHS_SCL * 10.0);
 	y = floor((double)py * GSHHS_SCL * 10.0)+900;
 	assert((x>=0 && x<=3600) && (y>=0 && y< 1800));
@@ -238,6 +248,7 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	}
 	prev_x = x;
 	prev_y = y;
+	p++;
       }
     }
     nb_read = fread((void *)&h, (size_t)sizeof (struct GSHHS), (size_t)1, 
@@ -325,25 +336,25 @@ void internal_init_partial_coastline(int minlat, int minlong,
     if (level > GSHHS_MAX_DETAILS) {
       /* keep only land ?, not lake, island in lake, 
 	 pond in island in lake => take everything now */
-      for (i=0; i<n; i++) {
-	if (fread ((void *)&p, (size_t)sizeof(struct POINT), 
-		   (size_t)1, coastfile) != 1) {
-	  printf ("Fatal error reading Error reading file %s\n",
-		  global_vlmc_context->gshhs_filename);
-	  exit(2);
-	}
+      if (fseek(coastfile, n*sizeof(struct POINT), SEEK_CUR)) {
+	printf ("Fatal error reading Error reading file %s\n",
+		global_vlmc_context->gshhs_filename);
+	exit(2);
       }
     } else {
       prev_x = -1;
+      // read all the points from the polygon
+      if (fread ((void *)plist, (size_t)sizeof(struct POINT), 
+		 (size_t)n, coastfile) != n) {
+	printf ("Fatal error reading Error reading file %s\n",
+		global_vlmc_context->gshhs_filename);
+	exit(2);
+      }
+      // and iterate on all points
+      p = plist;
       for (i=0; i<n; i++) {
-	if (fread ((void *)&p, (size_t)sizeof(struct POINT), 
-		   (size_t)1, coastfile) != 1) {
-	  printf ("Fatal error reading Error reading file %s\n",
-		  global_vlmc_context->gshhs_filename);
-	  exit(2);
-	}
-	px = ntohl(p.x);
-	py = ntohl(p.y);
+	px = ntohl(p->x);
+	py = ntohl(p->y);
 	x = floor((double)px * GSHHS_SCL * 10.0);
 	y = floor((double)py * GSHHS_SCL * 10.0)+900;
 #ifdef SAVE_MEMORY
@@ -351,14 +362,14 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	latitude  = py;
 #else
 	longitude = degToRad((double)px * GSHHS_SCL);
-	latitude = degToRad((double)py * GSHHS_SCL);
+	latitude  = degToRad((double)py * GSHHS_SCL);
 #endif /* SAVE_MEMORY */
 	assert((x>=0 && x<=3600) && (y>=0 && y< 1800));
 	if (prev_x == -1) {
 	  prev_x = x;
 	  prev_y = y;
 	  prev_longitude = longitude;
-	  prev_latitude = latitude;
+	  prev_latitude  = latitude;
 	  continue;
 	}
 
@@ -395,11 +406,13 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	prev_y = y;
 	prev_longitude = longitude;
 	prev_latitude = latitude;
+	p++;
       }
     }
     nb_read = fread((void *)&h, (size_t)sizeof (struct GSHHS), (size_t)1, 
 		    coastfile);
   }
+  free(plist);
   free(segnum);
   fclose (coastfile);
 }
