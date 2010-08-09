@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.16 2010-08-08 14:26:17 ylafon Exp $
+ * $Id: gshhs.c,v 1.17 2010-08-09 13:39:09 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <arpa/inet.h>
 #include "defs.h"
 #include "types.h"
 #include "dist_gshhs.h"
@@ -93,7 +94,7 @@ void internal_init_partial_coastline(int minlat, int minlong,
 #endif /* SAVE_MEMORY */
   coast_seg *segment;
   coast *wholecoast;
-  int flip, zerocrossed;
+  int zerocrossed;
   double min_longitude, max_longitude;
   min_longitude = 100000.0;
   max_longitude = -100000.0;
@@ -151,32 +152,33 @@ void internal_init_partial_coastline(int minlat, int minlong,
 
   nb_read = fread ((void *)&h, (size_t)sizeof (struct GSHHS), 
 		   (size_t)1, coastfile);
+
+  // FIXME we might want to test the version before proceeding
+  // but ntohl takes cares automagically of endianess 
 #ifdef USE_GSHHS_20
-  flip = (((h.flag >> 8) & 0xff) != GSHHS_DATA_RELEASE);
+  //  flip = (((h.flag >> 8) & 0xff) != GSHHS_DATA_RELEASE);
 #else /* USE_GSHHS_20 */
-  flip = (((h.flag >> 8) & 0xff) != GSHHS_DATA_VERSION);
+  //  flip = (((h.flag >> 8) & 0xff) != GSHHS_DATA_VERSION);
 #endif /* USE_GSHHS_20 */
 
   while (nb_read == 1) {
-    if (flip) {
 #ifndef OPTIMIZE_GSHHS_READ
-      h.id    = swabi4 ((unsigned int)h.id);
+    h.id    = ntohl(h.id);
 #endif /* OPTIMIZE_GSHHS_READ */
-      h.n     = swabi4 ((unsigned int)h.n);
-      h.flag  = swabi4 ((unsigned int)h.flag);
+    h.n     = ntohl(h.n);
+    h.flag  = ntohl(h.flag);
 #ifndef OPTIMIZE_GSHHS_READ
-      h.west  = swabi4 ((unsigned int)h.west);
-      h.east  = swabi4 ((unsigned int)h.east);
-      h.south = swabi4 ((unsigned int)h.south);
-      h.north = swabi4 ((unsigned int)h.north);
-      h.area  = swabi4 ((unsigned int)h.area);
+    h.west  = ntohl(h.west);
+    h.east  = ntohl(h.east);
+    h.south = ntohl(h.south);
+    h.north = ntohl(h.north);
+    h.area  = ntohl(h.area);
 #ifdef USE_GSHHS_20
-      h.area_full = swabi4 ((unsigned int)h.area_full);
-      h.container = swabi4 ((unsigned int)h.container);
-      h.ancestor  = swabi4 ((unsigned int)h.ancestor);
+    h.area_full = ntohl(h.area_full);
+    h.container = ntohl(h.container);
+    h.ancestor  = ntohl(h.ancestor);
 #endif /* USE_GSHHS_20 */
 #endif /* OPTIMIZE_GSHHS_READ */
-    }
     level = h.flag & 0xff;
 #ifdef USE_GSHHS_20
     /* the previous version should work, but be ready for 
@@ -205,10 +207,8 @@ void internal_init_partial_coastline(int minlat, int minlong,
 		  global_vlmc_context->gshhs_filename);
 	  exit(2);
 	}
-	if (flip) {
-	  p.x = swabi4 ((unsigned int)p.x);
-	  p.y = swabi4 ((unsigned int)p.y);
-	}
+	p.x = ntohl(p.x);
+	p.y = ntohl(p.y);
 	x = floor((double)p.x * GSHHS_SCL * 10.0);
 	y = floor((double)p.y * GSHHS_SCL * 10.0)+900;
 	assert((x>=0 && x<=3600) && (y>=0 && y< 1800));
@@ -296,25 +296,23 @@ void internal_init_partial_coastline(int minlat, int minlong,
 		   (size_t)1, coastfile);
     
   while (nb_read == 1) {
-    if (flip) {
 #ifndef OPTIMIZE_GSHHS_READ
-      h.id    = swabi4 ((unsigned int)h.id);
+    h.id    = ntohl ((unsigned int)h.id);
 #endif /* OPTIMIZE_GSHHS_READ */
-      h.n     = swabi4 ((unsigned int)h.n);
-      h.flag  = swabi4 ((unsigned int)h.flag);
+    h.n     = ntohl ((unsigned int)h.n);
+    h.flag  = ntohl ((unsigned int)h.flag);
 #ifndef OPTIMIZE_GSHHS_READ
-      h.west  = swabi4 ((unsigned int)h.west);
-      h.east  = swabi4 ((unsigned int)h.east);
-      h.south = swabi4 ((unsigned int)h.south);
-      h.north = swabi4 ((unsigned int)h.north);
-      h.area  = swabi4 ((unsigned int)h.area);
+    h.west  = ntohl ((unsigned int)h.west);
+    h.east  = ntohl ((unsigned int)h.east);
+    h.south = ntohl ((unsigned int)h.south);
+    h.north = ntohl ((unsigned int)h.north);
+    h.area  = ntohl ((unsigned int)h.area);
 #ifdef USE_GSHHS_20
-      h.area_full = swabi4 ((unsigned int)h.area_full);
-      h.container = swabi4 ((unsigned int)h.container);
-      h.ancestor  = swabi4 ((unsigned int)h.ancestor);
+    h.area_full = ntohl ((unsigned int)h.area_full);
+    h.container = ntohl ((unsigned int)h.container);
+    h.ancestor  = ntohl ((unsigned int)h.ancestor);
 #endif /* USE_GSHHS_20 */
 #endif /* OPTIMIZE_GSHHS_READ */
-    }
     level = h.flag & 0xff;
 #ifdef USE_GSHHS_20
     /* the previous version should work, but be ready for 
@@ -343,10 +341,8 @@ void internal_init_partial_coastline(int minlat, int minlong,
 		  global_vlmc_context->gshhs_filename);
 	  exit(2);
 	}
-	if (flip) {
-	  p.x = swabi4 ((unsigned int)p.x);
-	  p.y = swabi4 ((unsigned int)p.y);
-	}
+	p.x = ntohl(p.x);
+	p.y = ntohl(p.y);
 	x = floor((double)p.x * GSHHS_SCL * 10.0);
 	y = floor((double)p.y * GSHHS_SCL * 10.0)+900;
 #ifdef SAVE_MEMORY

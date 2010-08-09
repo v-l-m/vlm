@@ -1,4 +1,4 @@
-/*	$Id: dist_gshhs.h,v 1.2 2010-08-08 14:07:52 ylafon Exp $
+/*	$Id: dist_gshhs.h,v 1.3 2010-08-09 13:39:09 ylafon Exp $
  *
  * Include file defining structures used in gshhs.c
  *
@@ -57,7 +57,7 @@
 #define GSHHS_SCL	1.0e-6	/* COnvert micro-degrees to degrees */
 
 /* For byte swapping on little-endian systems (GSHHS is defined to be bigendian) */
-
+/* OBSOLETE, use ntohl instead (more optimized) -- spf */
 #define swabi4(i4) (((i4) >> 24) + (((i4) >> 8) & 65280) + (((i4) & 65280) << 8) + (((i4) & 255) << 24))
 
 #ifdef USE_GSHHS_20
