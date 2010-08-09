@@ -195,6 +195,7 @@ class players extends baseClass {
     
     function insert() {
         $query = sprintf("INSERT INTO `players` %s", $this->query_addupdate());
+        $this->logPlayerEvent("Player created.");
         return $this->queryWrite($query);
     }
 
@@ -204,6 +205,7 @@ class players extends baseClass {
             $this->email,
             intval($this->idplayers)
             );
+        $this->logPlayerEvent("Player updated.");
         return $this->queryWrite($query);
     }
 
@@ -227,14 +229,13 @@ class players extends baseClass {
     }
 
     //Convenient bundle
-    function logPlayerEventError($logmsg = null) {
+    function logPlayerEventError($logmsg = null, $idusers = null) {
         if (!is_null($logmsg)) $this->set_error($logmsg);
-        $this->logPlayerEvent($this->error_string);
+        $this->logPlayerEvent($this->error_string, $idusers = null);
     }
 
-    function logPlayerEvent($logmsg) {
-        //FIXME : Do nothing for now
-        return True;
+    function logPlayerEvent($logmsg, $idusers = null) {
+        logPlayerEvent($this->idplayers, $idusers, null, $logmsg);
     } 
 
     //setters

@@ -1,8 +1,8 @@
 Ce document décrit les étapes pour fabriquer une image virtualbox pour VLM.
 Cf. UPDATE pour les opérations à réaliser pour mettre à jour une image existante.
 Les opérations sont décrites pour une base debian/ubuntu.
-0.
- * mise à jour de l'etc/host local (127.0.2.1 vlm)
+0. Préparation locale
+ * mise à jour de l'etc/host local (127.0.0.1 localhost vlm)
 
 1. Installer une base server debian/ubuntu minimale
  * Choisir l'UTC
@@ -18,8 +18,10 @@ Les opérations sont décrites pour une base debian/ubuntu.
  
 
 4. Créer l'environnement lié au subversion
+ * Utiliser la doc du wiki
  * svn co http://dev.virtual-loup-de-mer.org/svn/vlm $VLMRACINE/svn
  * FIXME : crontab pour une mise à jour récurrente
+ * hostname et vhost à créer : vlmtrunk, vlmbranch014, etc...
  
 5. Nettoyage avant la photo
  * Nettoyer les bases mysql (status, logs, etc...)

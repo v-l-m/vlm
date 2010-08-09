@@ -38,35 +38,23 @@
 
     $list= htmlentities($_GET['list']) ;
     
-    $maparea= htmlentities($_GET['maparea']);
-    if ( $maparea == "" ) {
-        $maparea=round(MAPAREA_MAX/2);
-    } else {
-        if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
-    }
-    if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX; {
-        setUserPref($boat, "maparea" , $maparea, $save);
-    }
-    $maille= htmlentities($_GET['maille']);
-    if ( $maille == "" ) {
-        $maille=round(MAILLE_MAX/2);
-    } else {
-        if ($maille <MAILLE_MIN ) $maille=MAILLE_MIN;
-    }
-    if ($maille >MAILLE_MAX ) $maille=MAILLE_MAX;
+    $maparea= htmlentities(get_cgi_var('maparea', round(MAPAREA_MAX/2)));
+    if ($maparea <MAPAREA_MIN ) $maparea=MAPAREA_MIN;
+    if ($maparea >MAPAREA_MAX ) $maparea=MAPAREA_MAX;
+    setUserPref($boat, "maparea" , $maparea, $save);
+
+    $maille = htmlentities(get_cgi_var('maille', round(MAILLE_MAX/2)));
+    if ($maille < MAILLE_MIN ) $maille = MAILLE_MIN;
+    if ($maille > MAILLE_MAX ) $maille = MAILLE_MAX;
     setUserPref($boat, "mapMaille" , $maille, $save);
 
-    $idraces= htmlentities($_GET['idraces']) ;
+    $idraces= htmlentities(get_cgi_var('idraces')) ;
     //if ( $idraces == 20081109 ) $list = "myboat";
 
-    $tracks= htmlentities($_GET['tracks']) ;
-    if ( $tracks == "" ) $tracks = "on";
+    $tracks = htmlentities(get_cgi_var('tracks', 'on')) ;
 
-    $x= htmlentities($_GET['x']) ;
-    if ( $x == "" ) $x = 800;
-
-    $y= htmlentities($_GET['y']) ;
-    if ( $y == "" ) $y = 600;
+    $x = htmlentities(get_cgi_var('x', 800));
+    $y = htmlentities(get_cgi_var('y', 600)) ;
 
     // Limitation de la taille de la carte pour pas péter le serveur
     if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
@@ -75,25 +63,17 @@
     if ( $y > MAX_MAP_X ) $y=MAX_MAP_X;
     setUserPref($boat, "mapY" , $y, $save);
   
-    $age= htmlentities($_GET['age']) ;
-    if ( $age == "" ) $age = 2;
+    $age= htmlentities(get_cgi_var('age', 2));
     setUserPref($boat, "mapAge" , $age, $save);
   
-    $estime= htmlentities($_GET['estime']) ;
-    if ( $estime == "" ) $estime = 30;
+    $estime= htmlentities(get_cgi_var('estime', 30)) ;
     setUserPref($boat, "mapEstime" , $estime, $save);
-  
-    $proj= htmlentities($_GET['proj']) ;
-    //  $proj="carre"; 
-  
-    $text= htmlentities($_GET['text']) ;
-    if ( $text == "" ) $text = "right";
-  
-    $windtext= htmlentities($_GET['windtext']) ;
-    if ( $windtext == "" ) $windtext = "on";
-  
-    $drawtextwp= htmlentities($_GET['drawtextwp']) ;
-    if ( $drawtextwp == "" ) $drawtextwp = "on";
+
+    $proj= htmlentities(get_cgi_var('proj', 'on'));
+    $text= htmlentities(get_cgi_var('text', 'right'));
+    $windtext = htmlentities(get_cgi_var('windtext', 'on'));
+    $drawtextwp = htmlentities(get_cgi_var('drawtextwp', 'on'));
+
     setUserPref($boat, "mapDrawtextwp" , $drawtextwp, $save);
     // Guess real map coordinates
 

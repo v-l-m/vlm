@@ -8,8 +8,8 @@
     // MAIN
     //================================================================
 
-    $maparea=round(htmlentities($_GET['maparea']),1);
-    $maille=round(htmlentities($_GET['maille']),1);
+    $maparea=round(htmlentities(get_cgi_var('maparea', 10)),1);
+    $maille=round(htmlentities(get_cgi_var('maille', 1)),1);
     
     // ajustement du niveau de zoom (0.. 20/21)
     $maparea=max(exp($maparea/2.5)/10, MAPAREA_MIN);
@@ -25,23 +25,24 @@
     //echo "MAILLE=".$maille; exit;
     
     
-    $age=max(0,htmlentities($_GET['age']));
-    $estime=max(0,htmlentities($_GET['estime']));
+    $age=max(0,htmlentities(get_cgi_var('age', 0)));
+    $estime=max(0,htmlentities(get_cgi_var('estime', 0)));
     
-    $coasts=trim(htmlentities($_GET['coasts']));
+    $coasts=trim(htmlentities(get_cgi_var('coasts')));
     
     // Taille de la carte
-    $x=max(100,htmlentities($_GET['x']));
-    $y=max(100,htmlentities($_GET['y']));
+    $x=max(100,htmlentities(get_cgi_var('x', 100)));
+    $y=max(100,htmlentities(get_cgi_var('y', 100)));
     // Limitation de la taille de la carte pour pas péter le serveur 
-    if (isset($_GET['boat']) && !idusersIsAdmin(htmlentities($_GET['boat'])) ) {
+    $boat = htmlentities(get_cgi_var('boat'));
+    if (isset($boat) && !idusersIsAdmin(htmlentities($boat)) ) {
         if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
         if ( $y > MAX_MAP_Y ) $y=MAX_MAP_Y;
     }
     
     // On reçoit maintenant un point de coordonnées du centre de la carte
-    $lat=htmlentities($_GET['lat']);
-    $long=htmlentities($_GET['long']);
+    $lat=htmlentities(get_cgi_var('lat', 0));
+    $long=htmlentities(get_cgi_var('long', 0));
     
     // On limite les bornes de la carte (pour les problèmes de coloriage...
     $mapCoords=coordCarte($lat,$long,$maparea,$y,$x);
@@ -69,35 +70,34 @@
         $east +=360;
     }
     
-    $proj=htmlentities($_GET['proj']);
-    if ( $proj == "" ) $proj="mercator";
+    $proj=htmlentities(get_cgi_var('proj', "mercator"));
     
-    $idraces=round(htmlentities($_GET['idraces']));
+    $idraces=round(htmlentities(get_cgi_var('idraces')));
     
-    $list=$_REQUEST['list'];
+    $list = get_cgi_var('list');
    
     if ( is_numeric($list) ) {
         $list=array($list);
     }
-    $text=htmlentities($_GET['text']);
-    $save=htmlentities($_GET['save']);
-    $tracks=htmlentities($_GET['tracks']);
-    $raceover=htmlentities($_GET['raceover']);
-    $windtext=htmlentities($_GET['windtext']);
-    $drawrace=htmlentities($_GET['drawrace']);
-    $drawgrid=htmlentities($_GET['drawgrid']);
-    $drawmap=htmlentities($_GET['drawmap']);
-    $drawwind=htmlentities($_GET['drawwind']);
-    $windonly=htmlentities($_GET['windonly']);
-    $drawlogos=htmlentities($_GET['drawlogos']);
-    $drawscale=htmlentities($_GET['drawscale']);
-    $drawpositions=htmlentities($_GET['drawpositions']);
-    $drawortho=htmlentities($_GET['drawortho']);
-    $drawlibelle=htmlentities($_GET['drawlibelle']);
-    $drawrealboats=htmlentities($_GET['drawrealboats']);
-    $fullres=htmlentities($_GET['fullres']);
-    $drawtextwp=htmlentities($_GET['drawtextwp']);
-    $defaultgridcolor=htmlentities($_GET['defaultgridcolor']);
+    $text=htmlentities(get_cgi_var('text'));
+    $save=htmlentities(get_cgi_var('save'));
+    $tracks=htmlentities(get_cgi_var('tracks'));
+    $raceover=htmlentities(get_cgi_var('raceover'));
+    $windtext=htmlentities(get_cgi_var('windtext'));
+    $drawrace=htmlentities(get_cgi_var('drawrace'));
+    $drawgrid=htmlentities(get_cgi_var('drawgrid'));
+    $drawmap=htmlentities(get_cgi_var('drawmap'));
+    $drawwind=htmlentities(get_cgi_var('drawwind'));
+    $windonly=htmlentities(get_cgi_var('windonly'));
+    $drawlogos=htmlentities(get_cgi_var('drawlogos'));
+    $drawscale=htmlentities(get_cgi_var('drawscale'));
+    $drawpositions=htmlentities(get_cgi_var('drawpositions'));
+    $drawortho=htmlentities(get_cgi_var('drawortho'));
+    $drawlibelle=htmlentities(get_cgi_var('drawlibelle'));
+    $drawrealboats=htmlentities(get_cgi_var('drawrealboats'));
+    $fullres=htmlentities(get_cgi_var('fullres'));
+    $drawtextwp=htmlentities(get_cgi_var('drawtextwp'));
+    $defaultgridcolor=htmlentities(get_cgi_var('defaultgridcolor'));
 
     /*
     if ( $maparea > 5 ) {
@@ -105,39 +105,39 @@
     }
     */
     
-    $timings=htmlentities($_GET['timings']);
-    $wpnum=floor(htmlentities($_GET['wp']));
+    $timings=htmlentities(get_cgi_var('timings'));
+    $wpnum=floor(htmlentities(get_cgi_var('wp')));
     
     // 2 segments + 1 point : pour visualisation des points de croisement de cote
-    $seg1=htmlentities($_GET['seg1']);
-    $seg2=htmlentities($_GET['seg2']);
-    $ec=htmlentities($_GET['ec']);
+    $seg1=htmlentities(get_cgi_var('seg1'));
+    $seg2=htmlentities(get_cgi_var('seg2'));
+    $ec=htmlentities(get_cgi_var('ec'));
     
     //warning
     //when transferring an array by GET or POST
     //if it is empty, the resulting var is NULL and it break everthing
     if ($list == "" || $list == "myboat" ) {
         $list = array();
-        array_push($list, htmlentities($_GET['boat']));
+        array_push($list, $boat);
     }
     if ( $list == "my5opps" ) {
         $list = array();
-        $list = findNearestOpponents($idraces,htmlentities($_GET['boat']),5);
+        $list = findNearestOpponents($idraces,$boat,5);
     }
     
     if ( $list == "my10opps" ) {
         $list = array();
-        $list = findNearestOpponents($idraces,htmlentities($_GET['boat']),10);
+        $list = findNearestOpponents($idraces,$boat,10);
     }
     
     if ( $list == "meandtop10" ) {
         $list = array();
         $list = findTopUsers($idraces,10);
-        array_push ($list, $_GET['boat']);
+        array_push ($list, $boat);
     }
     
     if ( $list == "mylist" ) {
-      $list = explode ("," , getUserPref(htmlentities($_GET['boat']),"mapPrefOpponents") ); 
+      $list = explode ("," , getUserPref($boat,"mapPrefOpponents") ); 
       //print_r($list);
     }
     
@@ -257,7 +257,7 @@
         }
 
         if ( $raceover == "true") {
-          $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $_GET['boat'], $age, $estime);
+          $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $boat, $age, $estime);
         } else {
           $mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age, $estime);
           if ( $drawortho == "yes" ) {

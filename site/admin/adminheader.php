@@ -1,11 +1,5 @@
 <?php
 
-session_start();
-//include_once("../includes/strings.inc");
-include_once("config.php");
-
-header("Content-type: text/html; charset=UTF-8");
-
 include('htmlstart.php');
 
 //start configuring phpMyEdit

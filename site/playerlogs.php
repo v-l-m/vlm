@@ -2,8 +2,8 @@
     include_once("includes/header.inc");
     include_once("config.php");
 
-    if ( isLoggedIn() ) {
-        $query = "SELECT `time` AS `TIME`, HEX(CRC32(ipaddr)) AS `COMPUTER ID`, `idplayers` AS `PLAYER`, `action` AS ACTION FROM user_action WHERE idusers = ".getLoginId()." ORDER BY time DESC LIMIT ".MAX_LOG_USER_ACTION_VIEW.";";
+    if ( isPlayerLoggedIn() ) {
+        $query = "SELECT `time` AS `TIME`, HEX(CRC32(ipaddr)) AS `COMPUTER ID`, `idusers` AS `USER`, `action` AS ACTION FROM user_action WHERE idplayers = ".getPlayerId()." ORDER BY time DESC LIMIT ".MAX_LOG_USER_ACTION_VIEW.";";
         htmlQuery($query);
         echo "<h3>".getLocalizedString("computerid")."</h3>";
 

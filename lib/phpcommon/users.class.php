@@ -111,7 +111,7 @@ class users extends baseClass
       " WHERE idusers = " . $this->idusers;
     wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
 
-    logUserEvent($this->idusers , $this->engaged, "Update prefs." );
+    $this->logUserEvent("Update prefs.");
 
   }
 
@@ -425,13 +425,19 @@ class users extends baseClass
       if ($idplayer > 0) {
           $query = "REPLACE playerstousers SET idusers = ".$this->idusers.", idplayers = ".$idplayer.", linktype = ".$relationship;
           if ($this->queryWrite($query)) {
-              $this->logUserEvent($query);
+              switch($relationship) {
+                  case PU_FLAG_OWNER :
+                      $logmsg = "Player take ownership of this boat.";
+                      break;
+                  default :
+                      $logmsg = "Boat attached to player with linktype = ".$relationship;
+              }
+              logPlayerEvent($idplayer, $this->idusers, $this->engaged, $logmsg);
               return True;
           }
       }
       return False;
   }
-
 }
 
 
@@ -841,12 +847,12 @@ class fullUsers
 
       $logmsg = "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" ;
       if ($result = wrapper_mysql_db_query_writer($query)) {
-          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);
+          $this->users->logUserEvent($logmsg);
           //$this->updateAngles();
           return True;
       } else {
           //Error d'accès sql ?
-          logUserEvent($this->users->idusers , $this->users->engaged, "FAILED : ".$logmsg);
+          $this->users->logUserEvent("FAILED : ".$logmsg);
           $this->users->set_error($logmsg);
           $this->users->set_error_with_mysql_query($query);
           return False;
@@ -1287,18 +1293,18 @@ class fullUsers
           default :
               //En principe, on ne doit jamais arriver là car les contrôles doivent être fait en amont de l'appel à la méthode
               $logmsg = "Update Angles : FAILED with pim = $mode";
-              logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);
+              $this->users->logUserEvent($logmsg);
               $this->users->set_error($logmsg);
               return False;
       }
       if ($result = wrapper_mysql_db_query_writer($query)) {
-          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);
+          $this->users->logUserEvent($logmsg);
           $this->updateAngles();
           return True;
       } else {
           //Error d'accès sql ?
           $logmsg = "Update Angles : FAILED with pim = $mode, boatheading = $boath, pip = $param";
-          logUserEvent($this->users->idusers , $this->users->engaged, $logmsg);          
+          $this->users->logUserEvent($logmsg);          
           $this->users->set_error($logmsg);
           $this->users->set_error_with_mysql_query($query);
           return False;
