@@ -37,7 +37,7 @@ int GDS_grid(unsigned char *gds, unsigned char *bds, int *nx, int *ny,
 	      isum += gds[pl+i*2]*256 + gds[pl+i*2+1]; 
 	      isum2 += *((uint16_t *)&gds[pl+i*2]);
 	    }
-printf("%d %d\n", isum, isum2);
+printf("%ld %ld\n", isum, isum2);
 	    *nxny = isum;
 	}
 	return 0;
