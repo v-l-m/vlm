@@ -18,8 +18,11 @@ Les opérations sont décrites pour une base debian/ubuntu.
  
 
 4. Créer l'environnement lié au subversion
- * Utiliser la doc du wiki
+ * Utiliser la doc du wiki : http://dev.virtual-loup-de-mer.org/vlm/wiki/developpment
  * svn co http://dev.virtual-loup-de-mer.org/svn/vlm $VLMRACINE/svn
+ * autoriser subversion à stocker votre mot de passe : 
+    editer : ~/.subversion/servers
+    ajouter {{{store-passwords = yes}}} dans {{{[Global]}}}
  * FIXME : crontab pour une mise à jour récurrente
  * hostname et vhost à créer : vlmtrunk, vlmbranch014, etc...
  
