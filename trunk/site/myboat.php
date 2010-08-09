@@ -34,7 +34,7 @@ include_once("includes/header.inc");
 
     $autoUpdateAngles = $usersObj->getMyPref("autoUpdateAngles");
     if ( $autoUpdateAngles != "false" ) {
-      $usersObj->updateAngles();
+        $usersObj->updateAngles();
     }
 
     $winddir = (360 - $usersObj->wheading ) + 90;
@@ -42,15 +42,16 @@ include_once("includes/header.inc");
     while ( $winddir < 0 ) $winddir+=360;
 
     if ( $usersObj->users->pilotmode == PILOTMODE_HEADING 
-      OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG  
-      OR $usersObj->users->pilotmode == PILOTMODE_VBVMG  
-      OR $usersObj->users->pilotmode == PILOTMODE_BESTSPD  ) {
+        OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG  
+        OR $usersObj->users->pilotmode == PILOTMODE_VBVMG  
+//      OR $usersObj->users->pilotmode == PILOTMODE_BESTSPD
+        ) {
 
-         $boatdir = (360 - $usersObj->users->boatheading ) ;
+        $boatdir = (360 - $usersObj->users->boatheading ) ;
 
     } elseif ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-         //$boatdir = $usersObj->users->pilotparameter + $usersObj->wheading ;
-     $boatdir = (($usersObj->wheading) + $usersObj->users->pilotparameter);
+        //$boatdir = $usersObj->users->pilotparameter + $usersObj->wheading ;
+        $boatdir = (($usersObj->wheading) + $usersObj->users->pilotparameter);
     } elseif ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
          $boatdir = $usersObj->orthodromicHeading();
     }

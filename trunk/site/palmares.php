@@ -55,6 +55,10 @@
                 echo "<hr />";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
                 echo $player->htmlBoatlist();
+                if ($player->idplayers == getPlayerId()) {
+                    echo "<hr /><a href=\"playerlogs.php\">".getLocalizedString('Recent actions') . '</a>';
+                }
+
             } else {
                 echo "<h2>".getLocalizedString("This player account does not exist.")."</h2>";
             }

@@ -11,12 +11,12 @@
         global $pilotmodeList;
         $lang = getCurrentLang();
         if ($row === 0) {
-            $klass = "blank";
+            $klasssuffix = "blank";
             $ts = time();
             $firstcolaction = "pilototo_prog_add";
             $statusstring = "";
         } else {
-            $klass = $status;
+            $klasssuffix = $status;
             $firstcolaction = "pilototo_prog_upd";
             $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . getLocalizedString("pilototo_prog_del") . " />";
         }
@@ -132,7 +132,7 @@
         function pilototoUpdate($taskid, $time, $pim, $pip)
     */
 
-    $action=quote_smart($_POST['action']);
+    $action = get_cgi_var('action');
     $pilotolist_force_master = False;
     if ( !empty($action)) {
         // Action donnée, on exécute l'action

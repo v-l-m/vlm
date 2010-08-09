@@ -1,6 +1,9 @@
 <?php
     session_start();
     include_once("config.php");
+    
+    header("Content-type: text/html; charset=UTF-8");
+    
     if (!isLoggedIn() or  !idusersIsAdmin(getLoginId()) ) {
         include ("unallowed.html");
         die();

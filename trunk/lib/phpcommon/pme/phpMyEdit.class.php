@@ -3097,7 +3097,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		 */
 
 		// Let's do explicit quoting - it's safer
-		set_magic_quotes_runtime(0);
+		// DEPRECATED set_magic_quotes_runtime(0);
 		// Checking if language file inclusion was successful
 		if (! is_array($this->labels)) {
 			$this->error('could not locate language files', 'searched path: '.$this->dir['lang']);

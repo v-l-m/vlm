@@ -1,14 +1,14 @@
 VIRTUAL LOUP DE MER - ROADMAP
 -----------------------
 
-Starting from 2008-11-29, ongoing work is on http://dev.virtual-loup-de-mer.org/vlm/roadmap
-
-Soon :
+Paparazzia : Starting from 2008-11-29, ongoing work is on http://dev.virtual-loup-de-mer.org/vlm/roadmap
+___
+OLD ROADMAP / IDEAS / NOTES
 
 - collisions with continent
 ==> OK, done in 0.5 (FM)
 - source code package with INSTALL instructions
-
+=> OK, done in 0.8 (paparazzia)
 - find more boats models
 ==> OK, Mike/Phile/Seylo
 
@@ -26,16 +26,19 @@ Soon :
 ==> removed from VLM - 0.6, will be a separate api
 
 - better "wind angle constant" pilot mode, this one is not usable 
-==> FM-Is is now isable
+==> FM-It is now isable
 
 - more translation (help needed!)
 ==> Nicolas (Esp), looking for help with German, Italian, Portugese...
+==> Paparazzia : Italian & Portugese OK with 0.9
 
 - auto detect browser language
 ==> Not done
+==> Paparazzia : Done in 0.9
 
 Later
 - C#/GTK client and API using XML
+==> json API OK
 - a lambert projection map
 ==> And a polar One
 

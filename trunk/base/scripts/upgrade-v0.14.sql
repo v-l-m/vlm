@@ -2,6 +2,7 @@
 DROP TABLE IF EXISTS players_pending;
 DROP TABLE IF EXISTS players;
 DROP TABLE IF EXISTS playerstousers;
+ALTER TABLE `user_action` DROP COLUMN `idplayers`;
 
 #Tables de gestion des PLAYERS
 CREATE TABLE `players_pending` (
@@ -40,4 +41,7 @@ CREATE TABLE `playerstousers` (
   KEY `players` (`idplayers`),
   KEY `users` (`idusers`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='link beween players and users';
+
+#Logging player action
+ALTER TABLE user_action ADD COLUMN `idplayers` int(11) DEFAULT NULL AFTER `time` ;
 

@@ -1286,26 +1286,29 @@ function validip($ip) {
 function getip() {
     if (isset($_SESSION['activeproxy'])
         && $_SESSION['activeproxy'] == 1
+        && isset($_SERVER['HTTP_VLM_CLIENT_IP'])
         && validip($_SERVER['HTTP_VLM_CLIENT_IP'])
         ) {
         return $_SERVER['HTTP_VLM_CLIENT_IP'];
     }
 
-    if (validip($_SERVER["HTTP_CLIENT_IP"])) {
+    if (isset($_SERVER["HTTP_CLIENT_IP"]) && validip($_SERVER["HTTP_CLIENT_IP"])) {
         return $_SERVER["HTTP_CLIENT_IP"];
     }
 
-    foreach (explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]) as $ip) {
-        if (validip(trim($ip))) {
-            return $ip;
+    if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+        foreach (explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]) as $ip) {
+            if (validip(trim($ip))) {
+                return $ip;
+            }
         }
     }
      
-    if (validip($_SERVER["HTTP_X_FORWARDED"])) {
+    if (isset($_SERVER["HTTP_X_FORWARDED"]) && validip($_SERVER["HTTP_X_FORWARDED"])) {
         return $_SERVER["HTTP_X_FORWARDED"];
-    } elseif (validip($_SERVER["HTTP_FORWARDED_FOR"])) {
+    } elseif (isset($_SERVER["HTTP_FORWARDED_FOR"]) && validip($_SERVER["HTTP_FORWARDED_FOR"])) {
         return $_SERVER["HTTP_FORWARDED_FOR"];
-    } elseif (validip($_SERVER["HTTP_FORWARDED"])) {
+    } elseif (isset($_SERVER["HTTP_FORWARDED"]) && validip($_SERVER["HTTP_FORWARDED"])) {
         return $_SERVER["HTTP_FORWARDED"];
     } else {
         return $_SERVER["REMOTE_ADDR"];
@@ -1333,7 +1336,7 @@ function login($idus, $pseudo)
   //echo "calling login with $idus and $pseudo\n";
   //if (!isset($_SESSION['idusers']))
   {
-    session_start();
+    if (!isset($_SESSION)) session_start();
     $_SESSION['idu'] = $idus;
     $_SESSION['loggedin'] = 1;
     $_SESSION['login'] = $pseudo;
@@ -1365,32 +1368,36 @@ function logout()
     }
 }
 
+function getSessionValue($key) {
+    if (isset($_SESSION[$key])) {
+        return ($_SESSION[$key]);
+    } else {
+        return null;
+    }
+}
+
 function isPlayerLoggedIn() {
     return (isset($_SESSION['idp']));
 }
 
-function isLoggedIn()
-{
-  return (isset($_SESSION['idu']));
+function isLoggedIn() {
+    return (isset($_SESSION['idu']));
 }
 
-function getLoginName()
-{
-  return ($_SESSION['login']);
+function getLoginName() {
+    return getSessionValue('login');
 }
 
 function getPlayername() {
-    return ($_SESSION['playername']);
+    return getSessionValue('playername');
 }
 
-function getLoginId()
-{
-  return ($_SESSION['idu']);
+function getLoginId() {
+    return getSessionValue('idu');
 }
 
-function getPlayerId()
-{
-  return ($_SESSION['idp']);
+function getPlayerId() {
+    return getSessionValue('idp');
 }
 
 function getTheme()
@@ -1722,14 +1729,23 @@ function checkMapArea($value) {
 }
 
 function logUserEvent($idusers, $idraces, $action) {
+    if (isPlayerLoggedIn()) {
+        $idplayers = getPlayerId();
+    } else {
+        $idplayers = -1;
+    }
+    logPlayerEvent($idplayers, $idusers, $idraces, $action);
+}
+
+function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     //tracking...
     if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"])) {
         $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"];
     } else {
         $ua = $_SERVER["HTTP_USER_AGENT"];
     }
-    $query_user_event = "INSERT INTO `user_action` (`idusers`, `ipaddr`, `fullipaddr`, `idraces`, `action`, `useragent`, `actionserver`) " .
-                        " values (" . $idusers . ", '" . $_SESSION['IP'] . "' , '" . $_SESSION['FULLIP'] . "' ," . $idraces .
+    $query_user_event = "INSERT INTO `user_action` (`idplayers`, `idusers`, `ipaddr`, `fullipaddr`, `idraces`, `action`, `useragent`, `actionserver`) " .
+                        " values (" . $idplayers . ", " . $idusers . ", '" . $_SESSION['IP'] . "' , '" . $_SESSION['FULLIP'] . "' ," . $idraces .
                         ",'" . addslashes($action) . "', '". addslashes($ua) ."' , '".SERVER_NAME."' )";
     $result = wrapper_mysql_db_query_writer($query_user_event) or die("Query [$query_user_event] failed \n");
 }

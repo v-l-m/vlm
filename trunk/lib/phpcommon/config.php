@@ -98,7 +98,7 @@ define("MAX_BOATS_ON_RANKINGS", 100);
 define("MAX_BOATS_ON_MAPS", 31);
 define("MAX_MAP_X", 2000);
 define("MAX_MAP_Y", 2000);
-define("WP_THICKNESS", 3);
+define("WP_THICKNESS", 2);
 define("MAILLE_MIN", 0.25);
 define("MAILLE_MAX", 9);
 define("MAPAREA_MIN", 0.1);
