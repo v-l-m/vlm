@@ -251,7 +251,7 @@ define("NOTSET", "NULL");
 define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas");
 
 // WAYPOINTS
-define("WP_TWO_BUOY", 0);
+define("WP_TWO_BUOYS", 0);
 define("WP_ONE_BUOY", 1);
 // leave space for 0-15 types of buoys
 // next is bitmasks
