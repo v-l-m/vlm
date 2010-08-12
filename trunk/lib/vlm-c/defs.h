@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.22 2009-11-09 14:17:51 ylafon Exp $
+ * $Id: defs.h,v 1.24 2010-08-12 21:53:41 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -120,6 +120,21 @@
 #endif /* PARANOID_COAST_CHECK */
 
 #define WP_ARRIVAL_DISTANCE 0.001
+
+#define WP_TWO_BUOYS 0
+#define WP_ONE_BUOY  1
+/* leave space for 0-15 types of gates using buoys
+   next is bitmasks */
+#define WP_DEFAULT              0
+#define WP_ICE_GATE_N           (1 <<  4)
+#define WP_ICE_GATE_S           (1 <<  5)
+#define WP_ICE_GATE_E           (1 <<  6)
+#define WP_ICE_GATE_W           (1 <<  7)
+/* allow crossing in one direction only */
+#define WP_CROSS_CLOCKWISE      (1 <<  8)
+#define WP_CROSS_ANTI_CLOCKWISE (1 <<  9)
+/* for future releases */
+#define WP_CROSS_ONCE           (1 << 10)
 
 #ifndef VLM_BUILD_DATE
 # define VLM_BUILD_DATE "\"Unknown\""
