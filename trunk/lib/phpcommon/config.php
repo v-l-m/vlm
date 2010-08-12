@@ -250,6 +250,21 @@ define("PU_FLAG_OWNER", 1);
 define("NOTSET", "NULL");
 define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas");
 
+// WAYPOINTS
+define("WP_TWO_BUOY", 0);
+define("WP_ONE_BUOY", 1);
+// leave space for 0-15 types of buoys
+// next is bitmasks
+define("WP_ICE_GATE_N", 16);
+define("WP_ICE_GATE_S", 32);
+define("WP_ICE_GATE_E", 64);
+define("WP_ICE_GATE_W", 128);
+// allow crossing in one direction only
+define("WP_CROSS_CLOCKWISE", 256);
+define("WP_CROSS_ANTI_CLOCKWISE", 512);
+// for future releases
+//define("WP_CROSS_ONCE", 1024);
+
 include_once("functions.php");
 include_once("f_windAtPosition.php");
 include_once("users.class.php");
