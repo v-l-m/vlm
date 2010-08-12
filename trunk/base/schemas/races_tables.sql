@@ -74,6 +74,7 @@ CREATE TABLE `races_waypoints` (
   `idraces` int(11) NOT NULL default '0',
   `wporder` int(11) NOT NULL default '0',
   `idwaypoint` int(20) default NULL,
+  `wpformat` int NOT NULL default '0',
   `laisser_au` int(11) default NULL,
   `wptype` varchar(32) default NULL,
   PRIMARY KEY  (`idraces`,`wporder`)
