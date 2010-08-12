@@ -1,5 +1,5 @@
 /**
- * $Id: types.h,v 1.14 2009-08-26 14:54:53 ylafon Exp $
+ * $Id: types.h,v 1.15 2010-08-12 21:53:12 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -68,7 +68,6 @@ typedef struct waypoint_str {
   double longitude2;  /* longitude of second point (if used)  */
   double angle     ;  /* angle from the first point (if used) */
   char   *name     ;  /* (if needed)                          */
-  /* int laisser_au; unknown, taken from the forum */
 } waypoint;
 
 typedef struct race_str {
