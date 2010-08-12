@@ -46,5 +46,5 @@ CREATE TABLE `playerstousers` (
 ALTER TABLE user_action ADD COLUMN `idplayers` int(11) DEFAULT NULL AFTER `time` ;
 
 #Adding table for waypoint types
-ALTER TABLE waypoints ADD COLUMN `wptype` int NOT NULL default '0' AFTER `idwaypoint` ;
+ALTER TABLE races_waypoints ADD COLUMN `wpformat` int NOT NULL default '0' AFTER `idwaypoint` ;
 
