@@ -55,6 +55,7 @@ CREATE TABLE `races_instructions` (
 DROP TABLE IF EXISTS `waypoints`;
 CREATE TABLE `waypoints` (
   `idwaypoint` int(20) NOT NULL default '0',
+  `wptype` int NOT NULL default '0',
   `latitude1` double default NULL,
   `longitude1` double default NULL,
   `latitude2` double default NULL,
