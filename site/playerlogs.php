@@ -3,7 +3,8 @@
     include_once("config.php");
 
     if ( isPlayerLoggedIn() ) {
-        $query = "SELECT `time` AS `TIME`, HEX(CRC32(ipaddr)) AS `COMPUTER ID`, `idusers` AS `USER`, `action` AS ACTION FROM user_action WHERE idplayers = ".getPlayerId()." ORDER BY time DESC LIMIT ".MAX_LOG_USER_ACTION_VIEW.";";
+        echo "<h2>".getLocalizedString("Recent actions for this player")." : ".getLoggedPlayerObject()->htmlPlayername()."</h2>";
+        $query = "SELECT `time` AS `TIME`, HEX(CRC32(user_action.ipaddr)) AS `COMPUTER ID`, concat(username, ' #', users.idusers) AS `BOAT #id`, `action` AS ACTION FROM user_action LEFT JOIN users ON (users.idusers = user_action.idusers) WHERE idplayers = ".getPlayerId()." ORDER BY time DESC LIMIT ".MAX_LOG_USER_ACTION_VIEW.";";
         htmlQuery($query);
         echo "<h3>".getLocalizedString("computerid")."</h3>";
 

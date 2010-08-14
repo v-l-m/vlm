@@ -42,7 +42,6 @@ if ($fullUsersObj->users->engaged  != 0)
     </select>
     <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
     <input type="hidden" name="type" value="subscribe"/>
-    <input type="hidden" name="lang" value="<?php echo $lang?>"/>
     <input type="submit" value="<?php echo getLocalizedString("subscribe")?>" />
   </form>
 

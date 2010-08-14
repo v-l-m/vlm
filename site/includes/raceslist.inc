@@ -48,9 +48,8 @@
                 // Subscribe button/form
                 echo "<form action=\"myboat.php\" method=\"post\">
                       <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
-                      <input type=\"hidden\" name=\"idusers\" value=" . $fullUsersObj->users->idusers . ">
+                      <input type=\"hidden\" name=\"idusers\" value=" . $users->idusers . ">
                       <input type=\"hidden\" name=\"type\" value=\"subscribe\">
-                      <input type=\"hidden\" name=\"lang\" value=\"" . $lang . "\">
                       <input type=\"submit\" value=\"" . getLocalizedString("subscribe") . "\" >
                       </form>";
             } 
@@ -58,11 +57,11 @@
       
             echo "<td class=\"racesummary-type$racetype\">";
             //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
-            $urlidraces = htmlIdracesLink($lang, $idraces); // pointe vers les ICS
+            $urlidraces = htmlIdracesLink($idraces); // pointe vers les ICS
             $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
-            $urlracename = htmlRacenameLink($lang, $idraces, $racename); // pointe vers le classement de la course
+            $urlracename = htmlRacenameLink($idraces, $racename); // pointe vers le classement de la course
             
-            $urlnumengaged = sprintf("<a href=\"races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $num_engaged);
+            $urlnumengaged = sprintf("<a href=\"races.php?type=racing&amp;idraces=%d\">%s</a>", $idraces, $num_engaged);
             if ( $maxboats != 0 ) {            
                 $strengaged = " - ".getLocalizedString("engaged")." / Total : " . $urlnumengaged . "/" . $maxboats ;
             } else {
@@ -95,7 +94,7 @@
             }
             // Affichage des IC destinées à la racelist
             $fullRacesObj = new fullRaces($idraces);
-            printf("    <li><a href=\"/ics.php?lang=%s&amp;idraces=%s\">WP(s)</a>" , $lang,$idraces);
+            printf("    <li><a href=\"/ics.php?idraces=%s\">WP(s)</a>" , $idraces);
             printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), getLocalizedString('crank'),  $fullRacesObj->races->vacfreq);
             foreach ( $fullRacesObj->races->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {

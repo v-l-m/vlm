@@ -42,7 +42,7 @@
         <div id='ical-help-box'>
         <?php
             echo nl2br(getLocalizedString("icalhelpbox"));
-            echo "&nbsp;<b>http://".$_SERVER['SERVER_NAME']."/feed/races.ical.php?lang=$lang</b>";
+            echo "&nbsp;<b>http://".$_SERVER['SERVER_NAME']."/feed/races.ical.php?lang=".getCurrentLang()."</b>";
                 
         ?>
         </div>

@@ -116,7 +116,7 @@
             //The parameter is a timestamp for setDate() function
             $newItem->setDate($row['updated']);
             $ro = new Races(0, $row); //['idraces']);
-            $newItem->setDescription($ro->htmlRaceDescription($this->lang));
+            $newItem->setDescription($ro->htmlRaceDescription());
             //$newItem->setEncloser('http://www.attrtest.com', '1283629', 'audio/mpeg');
             //Use core addElement() function for other supported optional elements
             $newItem->addElement('author', EMAIL_COMITE_VLM);

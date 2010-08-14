@@ -48,7 +48,7 @@ $opts['fdd']['playername'] = array(
 $opts['fdd']['seed'] = array(
   'name'     => 'Seed',
   'select'   => 'T',
-  'help'     => 'Seed for the request', 
+  'help'     => 'Seed for the request\nClic for confirmation.',
   'maxlen'   => 11,
   'sort'     => false
 );
@@ -66,7 +66,9 @@ $opts['fdd']['updated'] = array(
 //$opts['triggers']['delete']['after'][0] = 'races.TAD.trigger.php';
 //$opts['triggers']['insert']['pre'][0] = 'races.TPI.trigger.php';
 //$opts['triggers']['insert']['after'][0] = 'races.TAI.trigger.php';
-//$opts['triggers']['select']['pre'][0] = 'races.TPS.trigger.php';
+$opts['triggers']['select']['pre'][0] = 'players_pending.TPS.trigger.php';
+
+echo "Option to validate the player is available when viewing the record.<hr />";
 
 include('adminfooter.php');
 

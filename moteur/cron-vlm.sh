@@ -2,7 +2,7 @@
 ##=================================================================
 ##   DOIT ETRE APPELE TOUTES LES MINUTES A COMPTER DE V0.9.8     ##
 ##=================================================================
-#VLMRACINE=/base/de/vlm #A configurer normalement fans le crontab
+#VLMRACINE=/base/de/vlm #A configurer normalement dans le crontab
 
 MAXMOTEURTIME=120
 

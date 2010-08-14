@@ -3,15 +3,13 @@
     include_once("players.class.php");
     include_once("config.php");
 
-    $lang=getCurrentLang();
-
     $palmares_type = htmlentities(quote_smart($_REQUEST['type']));
     
     if ( $palmares_type == 'user' ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
         if (!(intval($idusers) > 0)) $idusers = getLoginId();
         
-        $userobj = new users($idusers);
+        $userobj = getUserObject($idusers);
         echo '<h1>' . getLocalizedString('boatdescription') . "&nbsp;:&nbsp;".$userobj->boatname. '</h1>';
         echo '<ul>';
         if ( $userobj->getOwnerId() == 0  ) {
@@ -21,7 +19,7 @@
             }
             echo "<li><b>".$msg."</b></li>";
         } else {
-            $player = new players($userobj->getOwnerId());          
+            $player = getPlayerObject($userobj->getOwnerId());          
             echo '<li>' . getLocalizedString('owner') . ' : ' . $player->htmlPlayername();
             if (isPlayerLoggedIn() && getPlayerId() == $userobj->getOwnerId()) {
                 echo "&nbsp;(".getLocalizedString("You").")";
@@ -29,35 +27,53 @@
             
             echo '</li>';
         }            
-        echo '<li>' . getLocalizedString('login_id') . ' : ' . $userobj->idusers.'</li>';
-        echo '<li>' . getLocalizedString('login_name') . ' : ' . $userobj->username.'</li>';
+        echo '<li>' . getLocalizedString('login_id') . ' : #' . $userobj->idusers.'</li>';
+        echo '<li>' . getLocalizedString('boatpseudo') . ' : ' . $userobj->username.'</li>';
+        //FIXME : flag pour ne plus l'afficher si vieille API est dépréciée
+        if (isPlayerLoggedIn() && getPlayerId() == $userobj->getOwnerId()) {
+            echo "<li><em>" . getLocalizedString('boatpassword') . ' ('.getLocalizedString("Temporarily available for compatibility").') : '. $userobj->password. '</em></li>';
+        }
         echo '<li>' . getLocalizedString('boatname') . ' : ' . $userobj->boatname.'</li>';
         echo '<li>' . getLocalizedString('country') . ' : ' . $userobj->htmlFlagImg() . " ( " . $userobj->country. ' ) </li>';
         echo '</ul>';
+        if (isPlayerLoggedIn() && getPlayerId() == $userobj->getOwnerId()) {
+            echo "<hr /><ul>";
+            echo "<li><a href=\"userlogs.php\">".getLocalizedString('Recent actions') . '</a></li>';
+            echo "</ul>";
+        }
+        echo "<hr />";
         if ($userobj->engaged > 0) {
             $raceobj = new races($userobj->engaged);
-            echo "<h2>" . sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink($lang), $raceobj->htmlIdracesLink($lang) ) . "</h2>";
+            echo "<h2>" . sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink(), $raceobj->htmlIdracesLink() ) . "</h2>";
             if ($idusers == getLoginId()) echo htmlAbandonButton($userobj->idusers, $userobj->engaged);
         } else {
             echo "<h2>" . getLocalizedString('boatnotengaged') . "</h2>";
         }
         echo "<h1>" . sprintf (getLocalizedString("palmares"), $userobj->boatname) . "</h1>";
-        displayPalmares($lang, $idusers);
+        displayPalmares($idusers);
     } else if ( $palmares_type == 'player' ) {
         if (!isPlayerLoggedIn()) {
             echo "<h2>".getLocalizedString('You are not logged in with a player account.')."</h2>";
             echo "<h2>".getLocalizedString('You are not allowed to view player info.')."</h2>";
         } else {
             $idplayers=htmlentities(quote_smart($_REQUEST['idplayers']));
-            $player = new players($idplayers);
-            if ($player->idplayers > 0) {
+            $player = getPlayerObject($idplayers);
+            if (!is_null($player)) {
                 echo "<h2>".getLocalizedString('playername') . ' : ' . $player->htmlPlayername().'</h2>';
+                echo "<ul>";
+                echo "<li>".getLocalizedString("idplayer") . ' : @' . $idplayers .'</li>';
+                echo "</ul>";
                 echo "<hr />";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
                 echo $player->htmlBoatlist();
                 if ($player->idplayers == getPlayerId()) {
-                    echo "<hr /><a href=\"playerlogs.php\">".getLocalizedString('Recent actions') . '</a>';
+                    echo "<hr /><ul>";
+                    echo "<li><a href=\"playerlogs.php\">".getLocalizedString('Recent actions') . '</a></li>';
+                    echo "<li><a href=\"create_boat.php\">".getLocalizedString('Create your boat') . '</a></li>';
+                    echo "<li><a href=\"modify_password.php\">".getLocalizedString('Change your password') . '</a></li>';
+                    echo "<li><a href=\"manage_skippers.php\">".getLocalizedString("Boat-sitting management") . '</a></li>';
                 }
+
 
             } else {
                 echo "<h2>".getLocalizedString("This player account does not exist.")."</h2>";

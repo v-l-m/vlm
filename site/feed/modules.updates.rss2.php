@@ -4,7 +4,7 @@
 
     header('Content-Type: application/rss+xml');
 
-//    $lang = getCurrentLang();
+    $lang = getCurrentLang();
 
     require_once( 'FeedWriter/FeedWriter.php' );
     $rssobject = new FeedWriter(RSS2);

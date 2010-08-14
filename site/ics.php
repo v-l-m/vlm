@@ -4,7 +4,7 @@
 
     if ($idraces != 0) {
         $ro = new Races($idraces);
-        echo $ro->htmlRaceDescription($lang);
+        echo $ro->htmlRaceDescription();
     }
 
     include_once("includes/footer.inc");

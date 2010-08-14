@@ -10,7 +10,6 @@ echo "<h2>".getLocalizedString("choose")."</h2>";
 ?>
 
 <form action="myboat.php" name="modify" method="post">
-<input type="hidden" name="lang" value="<?php echo $lang?>"/>
 <input type="hidden" name="idusers" value="<?php echo $fullUsersObj->users->idusers?>" />
 <input type="hidden" name="type" value="change" />
 <p>

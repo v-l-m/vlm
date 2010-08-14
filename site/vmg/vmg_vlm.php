@@ -4,77 +4,65 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>VMG pour VLM</title>
 <?php 
-   include_once("config.php");
+    include_once("config.php");
 
-  /* Convertion des degres décimaux en degres, minutes, secondes sur les deux coordonnées d'un point
-     Returns an array :   coord["latdeg"=latdeg,
-                                                                "latmin"=latmin,
-                                                                "latsec"=latsec,
-                                                                "lathem"=lathem,
-                                                                "longdeg"=longdeg,
-                                                                "longmin"=longmin,
-                                                                "longsec"=longsec,
-                                                                "longhem"=longhem]
-  */
-  function degminsec($latitude, $longitude)
-  {
-         $l=abs($latitude);
-         $deg=floor($l);
-         $reste=($l - $deg) * 60;
-         $min=floor($reste);
-         $reste=($reste - $min) * 60;
-         $sec=round($reste);
-         if ($sec == 60 ) { $min++; $sec=0; };
-         if ($min == 60 ) { $deg++; $min=0; };
-         if (  $latitude >= 0 )  {
-                  $hem='n';
-         } else {
-                  $hem='s';
-         }
-         $coord["latdeg"]=$deg;
-         $coord["latmin"]=$min;
-         $coord["latsec"]=$sec;
-         $coord["lathem"]=$hem;
+    /* Convertion des degres décimaux en degres, minutes, secondes sur les deux coordonnées d'un point
+       Returns an array :   coord["latdeg"=latdeg,
+                                                                  "latmin"=latmin,
+                                                                  "latsec"=latsec,
+                                                                  "lathem"=lathem,
+                                                                  "longdeg"=longdeg,
+                                                                  "longmin"=longmin,
+                                                                  "longsec"=longsec,
+                                                                  "longhem"=longhem]
+    */
+    function degminsec($latitude, $longitude) {
+        $l=abs($latitude);
+        $deg=floor($l);
+        $reste=($l - $deg) * 60;
+        $min=floor($reste);
+        $reste=($reste - $min) * 60;
+        $sec=round($reste);
+        if ($sec == 60 ) { $min++; $sec=0; };
+        if ($min == 60 ) { $deg++; $min=0; };
+        if ( $latitude >= 0 )  {
+            $hem='n';
+        } else {
+            $hem='s';
+        }
+        $coord["latdeg"]=$deg;
+        $coord["latmin"]=$min;
+        $coord["latsec"]=$sec;
+        $coord["lathem"]=$hem;
 
-         $l=abs($longitude);
-         $deg=floor($l);
-         $reste=($l - $deg ) * 60;
-         $min=floor($reste);
-         $reste=($reste - $min ) * 60;
-         $sec=floor($reste);
-         if ($sec == 60 ) { $min++; $sec=0; };
-         if ($min == 60 ) { $deg++; $min=0; };
-         if (  $longitude > 0 )  {
-                  $hem='e';
-         } else {
-                  $hem='w';
-         }
-         $coord["longdeg"]=$deg;
-         $coord["longmin"]=$min;
-         $coord["longsec"]=$sec;
-     $coord["longhem"]=$hem;
-   
-         return $coord;
-  }
+        $l=abs($longitude);
+        $deg=floor($l);
+        $reste=($l - $deg ) * 60;
+        $min=floor($reste);
+        $reste=($reste - $min ) * 60;
+        $sec=floor($reste);
+        if ($sec == 60 ) { $min++; $sec=0; };
+        if ($min == 60 ) { $deg++; $min=0; };
+        if ( $longitude > 0 )  {
+            $hem='e';
+        } else {
+            $hem='w';
+        }
+        $coord["longdeg"]=$deg;
+        $coord["longmin"]=$min;
+        $coord["longsec"]=$sec;
+        $coord["longhem"]=$hem;
+
+        return $coord;
+    }
   
-  // Convertion des degres, minutes, secondes en degres d?cimaux 
-  function degdec($deg,$min,$sec,$hem)
-  {
+    // Convertion des degres, minutes, secondes en degres d?cimaux 
+    function degdec($deg,$min,$sec,$hem) {
         if ($hem=="n" || $hem=="e") return $deg + ($min + $sec/60)/60;
         if ($hem=="s" || $hem=="w") return -($deg + ($min + $sec/60)/60);
-  }
+    }
  
  
-  /*if (!isset($_REQUEST['boat_lat'])==true)
-  {
-    $pos_boat["lat_deg"]=$_POST['boat_long_d'];
-    echo "passe";
-  }
-  else
-  {
-    $pos_boat=giveDegMinSec($_REQUEST['boat_lat'],$_REQUEST['boat_long']);
-  }
-  */
   if (!isset($_REQUEST['boatlat'])) $_REQUEST['boatlat']=0;
   if (!isset($_REQUEST['boatlong'])) $_REQUEST['boatlong']=0;
   if (!isset($_REQUEST['wp1lat'])) $_REQUEST['wp1lat']=0;
@@ -97,15 +85,12 @@
   //$way1=array();
   //$way2=array();
 
-        include_once("strings_vmg.inc");
-        if(isset($_REQUEST['lang']))
-        {
+    include_once("strings_vmg.inc");
+    if (isset($_REQUEST['lang'])) {
         $lang = ('fr' == $_REQUEST['lang']) ? 'fr' : 'en';
-        }
-        else
-        {
-                        $lang = ('fr' == substr($SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)) ? 'en' : 'fr';
-        }
+    } else {
+        $lang = ('fr' == substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)) ? 'en' : 'fr';
+    }
 ?>
 
 <script type="text/javascript">
@@ -113,15 +98,10 @@
 <?php
 $row = 0;
 
-
-
-if ($_REQUEST['boattype'] == "")
-{
-    $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_Imoca2008.csv";
-}
-else
-{
-    $path_polar = "http://virtual-loup-de-mer.org/Polaires/boat_" . $_REQUEST['boattype'] . ".csv";
+if (!isset($_REQUEST['boattype'])) {
+    $path_polar = $_SERVER['DOCUMENT_ROOT']."/Polaires/boat_Imoca2008.csv";
+} else {
+    $path_polar = $_SERVER['DOCUMENT_ROOT']."/Polaires/boat_" . $_REQUEST['boattype'] . ".csv";
 }
 
 $handle = fopen($path_polar, "r");

@@ -63,19 +63,16 @@ class playersPending extends baseClass {
     }
     
     function delete() {
-        $query = sprintf("DELETE FROM players_pending WHERE email = '%s' AND seed = %d", $this->email, $this->seed);
+        //NB: on efface tous les pending avec le même email (quelque soit le seed)
+        $query = sprintf("DELETE FROM players_pending WHERE email = '%s'", $this->email);
         return $this->queryWrite($query);
     }
 
     function mailValidationMessage() {
-        $message = "You have requested to create an account on VLM.\nPlease, click on the link below or copy/paste it in your browser.\n";
-        $message .= "http://".$_SERVER['SERVER_NAME']."/create_player.php?createplayer=validate&seed=".$this->seed."&emailid=".urlencode($this->email)."\n";
-        $message .= "Thanks for playing VLM";
-         $headers = 'From: '.EMAIL_COMITE_VLM. "\r\n" .
-         'Reply-To: '.EMAIL_COMITE_VLM. "\r\n" .
-         'X-Mailer: PHP/' . phpversion();
-        $res = mail($this->email , "VLM Validate your account" , $message, $headers);
-        return $res;
+        $message  = getLocalizedString("Welcome into Virtual Loup de Mer !")."\n";
+        $message  = getLocalizedString("You have requested to create an account on VLM.\nPlease, click on the link below or copy/paste it in your browser.")."\n";
+        $message .= "http://".$_SERVER['HTTP_HOST']."/create_player.php?createplayer=validate&seed=".$this->seed."&emailid=".urlencode($this->email)."\n";
+        return mailInformation($this->email, getLocalizedString("Validate your account"), $message);
     }
 
     function validate() {
@@ -195,8 +192,10 @@ class players extends baseClass {
     
     function insert() {
         $query = sprintf("INSERT INTO `players` %s", $this->query_addupdate());
+        if (!$this->queryWrite($query)) return False;
+        $this->idplayers = mysql_insert_id($GLOBALS['masterdblink']);
         $this->logPlayerEvent("Player created.");
-        return $this->queryWrite($query);
+        return True;
     }
 
     function update() {
@@ -208,6 +207,22 @@ class players extends baseClass {
         $this->logPlayerEvent("Player updated.");
         return $this->queryWrite($query);
     }
+
+    function modifyPassword($password) {
+        $this->setPassword($password);
+        if ($this->update()) {
+            $this->logPlayerEvent("Password modified");
+            $this->mailInformation("Your password has been updated");
+            return True;
+        } 
+        return False;
+    }
+
+    function mailInformation($title, $message = null) {
+        //wrapper
+        return mailInformation($this->email, $title, $message);
+    }
+
 
     function checkNonconformity() {
         $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
@@ -268,7 +283,37 @@ class players extends baseClass {
 
     function getBoatIdList($linkfilter) {
         $boatidlist = Array();
-        $query = "SELECT DISTINCT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND ".$linkfilter;
+        $query = "SELECT DISTINCT `idusers` FROM `playerstousers` WHERE `idplayers` = ".$this->idplayers." AND ".$linkfilter;
+        if ($res = $this->queryRead($query)) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $boatidlist[$row['idusers']] = $row['idusers'];
+                //FIXME : check result ?
+            }
+        }
+        return $boatidlist;
+    }
+    
+    function getGrantedBoatList() {
+        $boatlist = Array();
+        $query = "SELECT PU.`idusers`, PU.`idplayers`, PU.`linktype` "
+                ."FROM `playerstousers` as PU "
+                ."WHERE PU.`idusers` IN ("
+                ."SELECT DISTINCT PO.`idusers` FROM `playerstousers` as PO WHERE PO.`idplayers` = ".$this->idplayers." AND PO.linktype = ".PU_FLAG_OWNER
+                .") ORDER BY PU.`idusers`, PU.`linktype`, PU.`idplayers`";
+        if ($res = $this->queryRead($query)) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $boatlist[] = $row;
+                //FIXME : check result ?
+            }
+        }
+        return $boatlist;
+    }
+
+
+    function getBoatCandidatesList() {
+        $boatidlist = Array();
+        $query = "SELECT DISTINCT MAIN.`idusers` FROM `users` as MAIN WHERE `email` LIKE '%".$this->email
+                ."%' AND MAIN.`idusers` NOT IN (SELECT DISTINCT `idusers` FROM `playerstousers`)";
         if ($res = $this->queryRead($query)) {
             while ($row = mysql_fetch_assoc($res)) {
                 $boatidlist[] = $row['idusers'];
@@ -277,7 +322,7 @@ class players extends baseClass {
         }
         return $boatidlist;
     }
-    
+
     //html renderers
     function htmlPlayername() {
         $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
@@ -285,18 +330,27 @@ class players extends baseClass {
         $ret .= "\">".$this->playername."</a>";
         return $ret;
     }
+
+    function htmlIdplayersPlayername() {
+        $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
+        $ret .= $this->idplayers;
+        $ret .= "\">(@".$this->idplayers.")&nbsp;".$this->playername."</a>";
+        return $ret;
+    }
+
     
     function htmlBoatlist() {
-        $lang = getCurrentLang();
-        $boatlist = array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList());
+        $boatlist = array_unique(array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList()));
         $ret = "<ul>";
         foreach ($boatlist as $id) {
-            $user = new users($id);
-            $ret .= "<li>".$user->htmlIdusersUsernameLink($lang)."&nbsp;-&nbsp;";
+            $user = getUserObject($id);
+            $ret .= "<li>".$user->htmlIdusersUsernameLink()."&nbsp;";
+            if (!in_array($user->idusers, $this->getOwnedBoatIdList())) $ret .= "(".getLocalizedString("as a boatsitter").")&nbsp;";
+            $ret .= "-&nbsp;";
 
             if ($user->engaged > 0) {
                 $raceobj = new races($user->engaged);
-                $ret .= sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink($lang), $raceobj->htmlIdracesLink($lang) );
+                $ret .= sprintf( getLocalizedString('boatengaged'), $raceobj->htmlRacenameLink(), $raceobj->htmlIdracesLink() );
             } else {
                 $ret .= getLocalizedString('boatnotengaged');
             }
@@ -306,6 +360,25 @@ class players extends baseClass {
         $ret .= "</ul>";
         return $ret;
     }
+
+    function htmlBoatCandidatesList() {
+        $listcandidate = $this->getBoatCandidatesList();
+        $ret = "";
+        
+        if (count($listcandidate) > 0) {
+            $ret .= "<h2>".getLocalizedString("These boats are maybe yours ?")."</h2>";
+            $ret .= "<ul>\n";
+            foreach ($listcandidate as $id) {
+                $user = getUserObject($id);
+                $ret .= "<li>".$user->htmlIdusersUsernameLink();
+                $ret .= "&nbsp;<a href=\"attach_owner.php?boatpseudo=".$user->username."\">(".getLocalizedString("Attachment to this account").")</a>";
+                $ret .= "</li>";
+            }
+            $ret .= "</ul><hr />";
+        }
+        return $ret;
+    }
+
 }
 
 ?>

@@ -510,7 +510,7 @@ class map
       if (array_key_exists($user, $this->fullRacesObj->opponents)) {
 	$usersObj = &$this->fullRacesObj->opponents[$user];
       } else {
-	$usersObj = new users($user);
+	$usersObj = getUserObject($user);
       }
       $nwp = &$usersObj->nwp;
     } else { 
@@ -781,7 +781,7 @@ class map
           if (array_key_exists($opponnent, $this->fullRacesObj->opponents)) {
             	$usersObj = &$this->fullRacesObj->opponents[$opponnent];
           } else {
-            	$usersObj = new users($opponnent);
+            	$usersObj = getUserObject($opponnent);
           }
           // Si le pixel se cache, on passe au suivant
           if ( $usersObj->hidepos > 0 ) continue;

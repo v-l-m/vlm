@@ -252,14 +252,14 @@ class races {
     }
   }
 
-  function htmlIdracesLink($lang) {
+  function htmlIdracesLink() {
       //Convenient wrapper
-      return htmlIdracesLink($lang, $this->idraces);
+      return htmlIdracesLink($this->idraces);
   }
 
-  function htmlRacenameLink($lang) {
+  function htmlRacenameLink() {
       //Convenient wrapper
-      return htmlRacenameLink($lang, $this->idraces, $this->racename);
+      return htmlRacenameLink($this->idraces, $this->racename);
   }
 
     function htmlIC($icforum) {
@@ -316,7 +316,6 @@ class races {
     }
 
     function htmlRaceDescription() {
-        $lang = getCurrentLang();
         $idraces = $this->idraces;
         $ret  = "<div id=\"raceheader\">\n";
         $ret .= $this->htmlRaceTitle(getLocalizedString("racestarted"));
@@ -329,7 +328,7 @@ class races {
             $ret .= sprintf(getLocalizedString("endrace")." no limit\n");
         }
         $ret .= "</h3>";
-        $ret .= "<h3><a href=\"/races.php?type=racing&lang=".$lang."&idraces=".$idraces."\">".getLocalizedString("ranking")."</a></h3>";
+        $ret .= "<h3><a href=\"/races.php?type=racing&idraces=".$idraces."\">".getLocalizedString("ranking")."</a></h3>";
         $ret .= "</div>\n";
 
         // Carte de la course
@@ -387,7 +386,7 @@ class fullRaces {
       //WARNING: dont load fullUsers inside fullRaces
       //because fullRaces contains fullUsers that contain fullRaces ..
       $userid = $row['idusers'];
-      $this->opponents[$userid] = new users($userid);
+      $this->opponents[$userid] = getUserObject($userid);
       //we should sort them!
     }
     
@@ -400,7 +399,7 @@ class fullRaces {
     $result6b = wrapper_mysql_db_query_reader($query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_ASSOC)) {
       $userid = $row['idusers'];
-      $this->excluded[$userid] = new users($userid);
+      $this->excluded[$userid] = getUserObject($userid);
     }
   }
   
@@ -486,7 +485,7 @@ class fullRaces {
         echo "    <tr class=ranking>\n";
         // ============= Affichage des noms de bateaux en acronyme
       	echo "<td class=\"ranking\">";
-        echo $users->htmlIdusersUsernameLink(getCurrentLang());
+        echo $users->htmlIdusersUsernameLink();
         echo "</td>";
         echo "<td>" . $users->boatname .  "</td>";
         // =================================================================
@@ -529,10 +528,9 @@ class fullRaces {
     $classification_time=lastUpdateTime();
 
     // L'URL de la page affichant ces classements :
-    // http://vlm/races.php?lang=fr&type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
+    // http://vlm/races.php?type=racing&idraces=20071111&sortkey=idusers&sortorder=asc
     $baseurl=$_SERVER['PHP_SELF'];
-    $baseurl.="?lang=".getCurrentLang();
-    $baseurl.="&amp;type=racing";
+    $baseurl.="?type=racing";
     $baseurl.="&amp;idraces=".$this->races->idraces;
 
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
@@ -691,7 +689,7 @@ class fullRaces {
       // ============= Affichage des noms de bateaux en acronyme
       if ( $row['idusers'] > 0 ) {
         	echo "<td class=\"ranking\">";
-          echo htmlIdusersUsernameLink(getCurrentLang(), $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+          echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
           echo "</td>";
       } else {
           $idu=-$row['idusers'];
@@ -873,7 +871,7 @@ class fullRaces {
         echo " checked=\"checked\"";
       echo " />";
 
-      echo htmlIdusersUsernameLink(getCurrentLang(), $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+      echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
       /*FIXME
       if ( $row['engaged'] == $this->races->idraces ) {
         echo "<b>" . $row['username'] . "</b>";
@@ -1072,7 +1070,7 @@ class fullRaces {
 
         if ( $status > 0 ) echo "      <td>". $rank."</td>\n";
       	echo "<td class=\"ranking\">";
-        echo htmlIdusersUsernameLink(getCurrentLang(), $row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+        echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
         echo "</td>";
 
         $longitude=$row['longitude'];
