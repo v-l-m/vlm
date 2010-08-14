@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 /*
  * w. ebisuzaki
@@ -9,7 +10,7 @@
  *  input: double x
  *	   int y
  */
-double int_power(double x, int y) {
+double old_int_power(double x, int y) {
 
 	double value;
 
@@ -27,4 +28,9 @@ double int_power(double x, int y) {
 		y >>= 1;
 	}
 	return value;
+}
+
+/* more efficient this way... */
+double inline int_power(double x, int y) {
+  return pow(x, y);
 }
