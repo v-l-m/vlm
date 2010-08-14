@@ -44,7 +44,6 @@ echo "<div id=\"createbox\">";
         <input size="15" maxlength="15" name="pseudo"/>
         <span class="texthelpers"><?echo getLocalizedString("password")?></span>
         <input size="15" maxlength="15" name="password"/>
-        <input type="hidden" name="lang" value="<?echo $lang?>"/>
         <input type="hidden" name="type" value="create"/>
         <input type="submit" />
     </form> 

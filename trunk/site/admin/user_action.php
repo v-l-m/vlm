@@ -28,11 +28,33 @@ $opts['fdd']['time'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['idplayers'] = array(
+  'name'     => '@IdPlayer',
+  'select'   => 'T',
+  'maxlen'   => 11,
+  'values'   => Array('table' => 'players',
+                      'column' => 'idplayers',
+                      'description' => Array(
+                             'columns' => Array(0 => 'playername', 1 => 'idplayers'),
+                             'divs'    => Array(0 => ' @',),
+                         ),
+                ),
+//  'URL'      => PROFILE_PLAYER_URL.'$val',
+  'sort'     => true
+);
 
 $opts['fdd']['idusers'] = array(
   'name'     => '#IdUser',
   'select'   => 'T',
   'maxlen'   => 11,
+  'values'   => Array('table' => 'users',
+                      'column' => 'idusers',
+                      'description' => Array(
+                             'columns' => Array(0 => 'username', 1 => 'idusers'),
+                             'divs'    => Array(0 => ' #',),
+                         ),
+                ),
+  
   'sort'     => true
 );
 
@@ -40,6 +62,7 @@ $opts['fdd']['ipaddr'] = array(
   'name'     => 'IP',
   'select'   => 'T',
   'URL'      => 'http://whois.domaintools.com/$value',
+  'URLtarget' => '_blank',
   'escape'   => true,
   'maxlen'   => 16,
   'sort'     => true
@@ -55,7 +78,7 @@ $opts['fdd']['fullipaddr'] = array(
 );
 
 $opts['fdd']['idraces'] = array(
-  'name'     => '#IdRaces',
+  'name'     => '*IdRace',
   'select'   => 'T',
   'maxlen'   => 11,
   'sort'     => true
@@ -71,8 +94,10 @@ $opts['fdd']['action'] = array(
 
 $opts['fdd']['useragent'] = array(
   'name'     => 'Useragent',
-  'sql'     => "concat('<span title=\"', useragent, '\">(user agent)</span>')",
-  'options'   => 'LFU',
+  'select'   => 'T',
+  'maxlen'   => 11,
+  'sql'      => "concat('<span title=\"', useragent, '\">', SUBSTRING_INDEX(useragent, ' ', 1), '...</span>')",
+  'options'  => 'LFU',
   'escape'   => false,
   'sort'     => false
 );

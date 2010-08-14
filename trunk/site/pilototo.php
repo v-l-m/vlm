@@ -9,7 +9,6 @@
     //helper pour construire la page    
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $pilotmodeList;
-        $lang = getCurrentLang();
         if ($row === 0) {
             $klasssuffix = "blank";
             $ts = time();
@@ -23,7 +22,6 @@
         $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
 
         echo "<form action=\"pilototo.php\" method=\"post\">\n";
-        echo "  <input type=\"hidden\" name=\"lang\" value=\"$lang\" />\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
         echo "  <tr class=\"linepilototobox-$klasssuffix\">\n";
         echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." /></td>\n";
@@ -48,9 +46,6 @@
         echo "</form>\n";
     }
     
-    //all GET and POST variables
-    $lang = getCurrentLang();
-    
     // Les entêtes
     // FIXME : disposer d'un fichier d'en tête commun plus complet !
     include("includes/doctypeheader.html");
@@ -61,7 +56,7 @@
 ?>
 <!-- widget calendrier -->
 <script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar.js"></script>
-<script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/lang/calendar-<?php echo $lang; ?>.js"></script>
+<script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/lang/calendar-<?php echo getCurrentLang(); ?>.js"></script>
 <script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-setup.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
@@ -122,7 +117,7 @@
     } 
 
     echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
-    $usersObj = new users($idusers);
+    $usersObj = getLoggedUserObject();
 
     /* PILOTO (class users) Functions
         function pilototoCheck()

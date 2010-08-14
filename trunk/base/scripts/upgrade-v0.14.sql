@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS players_pending;
 DROP TABLE IF EXISTS players;
 DROP TABLE IF EXISTS playerstousers;
 ALTER TABLE `user_action` DROP COLUMN `idplayers`;
+ALTER TABLE `users` DROP INDEX `boatpseudo`;
 
 #Tables de gestion des PLAYERS
 CREATE TABLE `players_pending` (
@@ -26,6 +27,7 @@ CREATE TABLE `players` (
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`idplayers`),
   UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `playername` (`playername`),
   KEY `email_password` (`email`,`password`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='players (not boats)';
 
@@ -45,6 +47,8 @@ CREATE TABLE `playerstousers` (
 #Logging player action
 ALTER TABLE user_action ADD COLUMN `idplayers` int(11) DEFAULT NULL AFTER `time` ;
 
+#Ajout Index unique sur le username (=boatpseudo)
+ALTER TABLE `users` ADD UNIQUE INDEX `boatpseudo` (`username`);
+
 #Adding table for waypoint types
 ALTER TABLE races_waypoints ADD COLUMN `wpformat` int NOT NULL default '0' AFTER `idwaypoint` ;
-

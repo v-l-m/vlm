@@ -12,9 +12,6 @@
 $PAGETITLE = "User Admin Wizard (Old admin interface)";
 include("htmlstart.php");
 
-//all GET and POST variables
-isset($_REQUEST['lang']) ? $lang=quote_smart($_REQUEST['lang']) : $lang=NavigatorLanguage();
-
 // Les paramètres
 
 $action=quote_smart($_REQUEST['action']);
@@ -299,7 +296,7 @@ switch ($action) {
         echo "<hr />Mot de passe : <input type=\"text\" name=\"newpass\" value=\"" . $usersObj->users->password . "\" /><br />";
         break;
     case "reset_username":
-        echo "<hr />Nouveau nom d'utilisateur : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
+        echo "<hr />Nouveau pseudo de bateau : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
         break;
     default:
         // Choix de l'action à réaliser

@@ -7,9 +7,8 @@
         $strings[$k] = $v;
     }
 
-    echo '<?php\n$strings = ';
+    echo "<?php\n".'$strings = ';
     var_export($strings);
-    echo ';\n\n?>';
+    echo ";\n\n?>";
 
 ?>
-    

@@ -6,7 +6,7 @@
      * Affichage de l'onglet 
      * de choix du classement 
      */
-    function displayRankingMenu($fullRacesObj, $tableType, $extra_arg, $lang = "fr") {
+    function displayRankingMenu($fullRacesObj, $tableType, $extra_arg) {
         //echo "<H1>" ; printf (getLocalizedString("palmares"),$idusers); echo "</H1>";
         echo "<h1>".getLocalizedString("rankingtype")."</h1>";
 
@@ -48,7 +48,7 @@
                 } else {
                     $tlabel=$table;
                 }
-                $cellcontent="<a href=\"" . $_SERVER["PHP_SELF"] . "?lang=".$lang."&amp;idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. "\">";
+                $cellcontent="<a href=\"" . $_SERVER["PHP_SELF"] . "?idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. "\">";
                 $cellcontent.=ucfirst($tlabel);
                 $cellcontent.="</a>";
             }
@@ -108,7 +108,7 @@
     // Query and QueryArgument
 
     /*
-    VARIABLES d'APPEL : q= lang= idraces= idusers= sortkey= sortorder= disttype= startnum=
+    VARIABLES d'APPEL : q= idraces= idusers= sortkey= sortorder= disttype= startnum=
     $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
 
     */
@@ -154,7 +154,7 @@
         //show alls races
         echo "<div id=\"raceheader\">\n";
             printf("<h3>".getLocalizedString("racestarted")."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));
-            echo "<h3><a href=\"ics.php?lang=".$lang."&amp;idraces=".$idraces."\">".getLocalizedString("ic")."</a></h3>";
+            echo "<h3><a href=\"ics.php?idraces=".$idraces."\">".getLocalizedString("ic")."</a></h3>";
         echo "</div>\n";     
 
         // Carte de la course
@@ -163,7 +163,7 @@
         echo "<table class=\"boat\"><tr class=\"boat\">";
         echo "<td class=\"boat\">";
         // ** Onglet de choix sur différents classements
-        displayRankingMenu($fullRacesObj, $q, $sortkey, $lang);
+        displayRankingMenu($fullRacesObj, $q, $sortkey);
         echo "</td><td class=\"boat\" valign=\"bottom\">";
         displayPrevious100($startnum);
         echo "</td><td class=\"boat\" valign=\"bottom\">";
@@ -235,14 +235,14 @@
         }
       
         echo "<p>";
-        echo '<a href="races.php?lang='.$lang.'"> ';
+        echo '<a href="races.php">';
         echo getLocalizedString("see")."</a>"; 
         echo "</p>";
 
         echo "<table class=\"boat\"><tr class=\"boat\">";
         echo "<td class=\"boat\">";
         // ** Onglet de choix sur différents classements
-        displayRankingMenu($fullRacesObj, $q, $sortkey, $lang);
+        displayRankingMenu($fullRacesObj, $q, $sortkey);
         echo "</td><td class=\"boat\" valign=\"bottom\">";
         displayPrevious100($startnum);
         echo "</td><td class=\"boat\" valign=\"bottom\">";
@@ -255,7 +255,7 @@
             echo "<h4>".getLocalizedString("races")."</h4>";
             dispHtmlRacesList();
         } else {
-            echo "<h4>".getLocalizedString("current_races")."&nbsp;(<a href=\"races.php?lang=$lang&fulllist=1\">".getLocalizedString("see")."</a>)"."</h4>";
+            echo "<h4>".getLocalizedString("current_races")."&nbsp;(<a href=\"races.php?fulllist=1\">".getLocalizedString("see")."</a>)"."</h4>";
             dispHtmlCurrentRacesList();
         }
     }

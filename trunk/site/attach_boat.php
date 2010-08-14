@@ -23,7 +23,7 @@
 
     function printFormRequest($emailid = "", $password = "") {
         echo "<div id=\"attachboatbox\">";
-        echo "<h2>".getLocalizedString("Here you can attach your boat to a newly created account. Please input your credentials.")."</h2>";
+        echo "<h2>".getLocalizedString("Here you can attach your boat to your player account. Please input your credentials.")."</h2>";
 ?>
         <form action="#" method="post" name="attachboat">
             <input size="25" maxlength="64" name="emailid" value="<?php echo $emailid; ?>" />
@@ -31,12 +31,11 @@
             <br />
             <input size="25" maxlength="15" name="password" value="<?php echo $password; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("password"); ?></span>
-            <input type="hidden" name="lang" value="<?php echo getCurrentLang(); ?>" />
             <input type="hidden" name="attachboat" value="requested" />
             <br />
             <input type="submit" />
         </form> 
-        <p><?php echo nl2br(getLocalizedString("attachboatrules")); ?></p>
+        <p><?php echo getLocalizedString("Log out to create a player account"); ?>.</p>
         </div>
 <?php
     }
@@ -50,10 +49,10 @@
         exit();
     }
     
-    $users = new users(getLoginId());
+    $users = getLoggedUserObject();
     
     if ($users->getOwnerId() > 0) { //no way to reattach a boat
-        $player = new players($users->getOwnerId());
+        $player = getPlayerObject($users->getOwnerId());
         echo "<div id=\"attachboatbox\">";
         echo "<p>";
         echo getLocalizedString("Current boat is already attached to the following player :")."&nbsp;";
@@ -79,7 +78,6 @@
             <form action="#" method="post" name="attachboat">
                 <input type="hidden" name="emailid" value="<?php echo $emailid; ?>"/>
                 <input type="hidden" name="password" value="<?php echo $password; ?>"/>
-                <input type="hidden" name="lang" value="<?php echo getCurrentLang(); ?>"/>
                 <input type="hidden" name="attachboat" value="confirmed"/>
                 <input type="submit" value="<?php echo getLocalizedString("Confirm attachment request ?"); ?>" />
             </form> 

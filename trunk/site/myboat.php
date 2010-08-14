@@ -17,10 +17,10 @@ include_once("includes/header.inc");
 
     // Le palmares du joueur
     echo "<h1>" ; printf (getLocalizedString("palmares"), $usersObj->users->htmlIdusers()); echo "</h1>";
-    displayPalmares($lang, $usersObj->users->idusers);
+    displayPalmares($usersObj->users->idusers);
 
     // S'engager dans une course
-    printf("<h3>" . getLocalizedString("notengaged") . "</h3>",$lang);
+    printf("<h3>" . getLocalizedString("notengaged") . "</h3>");
     //include ("subscribe_race.php");
     include ("includes/raceslist.inc");
   } else {
@@ -119,7 +119,7 @@ include_once("scripts/myboat.js");
         $user_ranking=$usersObj->getCurrentRanking() ;
 ?>
     <div id="racenamebox">
-        <a href="races.php?lang=<?php echo $lang ; ?>&amp;type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
+        <a href="races.php?type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
         <?php echo $myRace->racename. '&nbsp;('. round($myRace->getRaceDistance()) . "nm)"; ?>
         </a>
     </div> <!-- fin de racenamebox -->
@@ -404,7 +404,7 @@ include_once("scripts/myboat.js");
             // Messages specifiques dans le panneau de controle en fonction des courses
             // Blackout ?
             $now = time();
-            $ichref="ics.php?lang=".$lang."&amp;idraces=".$myRace->idraces;
+            $ichref="ics.php?idraces=".$myRace->idraces;
             if ( $myRace->bobegin > $now ) {
                 $bobegin = gmdate(getLocalizedString("dateClassificationFormat"),$myRace->bobegin);
                 $boduration = ($myRace->boend - $myRace->bobegin ) /3600;
@@ -432,21 +432,21 @@ include_once("scripts/myboat.js");
             }
             // player not connected as a player but as a boat/user.
             if ( ! isPlayerLoggedIn()  ) {
-                $msg = "<b>".getLocalizedString("You are not logged as a player. Please use the new way !")."</b>";
-                $messages[] = Array("id" => "oldloginmode", "txt" => $msg, "class" => "warn");//, "url" => "modify.php?lang=$lang");
+                $msg = "<b>".getLocalizedString("You are not logged as a player. Please create and use a player account !")."</b>";
+                $messages[] = Array("id" => "oldloginmode", "txt" => $msg, "class" => "warn");
             }
 
             // no ownership for this boat
             if ( $usersObj->users->getOwnerId() == 0  ) {
                 $msg = "<b>".getLocalizedString("This boat has no owner.")." ".getLocalizedString("Please <a href=\"attach_boat.php\">attach</a> it to a player !")."</b>";
-                $messages[] = Array("id" => "noownership", "txt" => $msg, "class" => "warn", "url" => "attach_boat.php?lang=$lang");
+                $messages[] = Array("id" => "noownership", "txt" => $msg, "class" => "warn", "url" => "attach_boat.php");
             }
 
 
             // Email vide ?
             if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
                 $msg = "<b>NO E-MAIL ADDRESS</b>&nbsp;Please give one (".getLocalizedString("choose") . ")";
-                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php?lang=$lang");
+                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php");
             }
             // OMOROB ?
             if ( $usersObj->users->country == "000" ) {
@@ -466,7 +466,7 @@ include_once("scripts/myboat.js");
             //BLOCNOTE
             if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
                 $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "modify.php?lang=$lang");
+                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "modify.php");
             }
 
             //Synthese
@@ -501,7 +501,6 @@ include_once("scripts/myboat.js");
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .getLocalizedString("autopilotengaged")."</span>\n"; ?>
         <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>" />
-            <input type="hidden" name="lang" value="<?php echo $lang?>" />
             <input type="hidden" name="pilotmode" value="autopilot" />
             <div id="autopilotrange">
                 <input type="button" value="&lt;" onclick="decrement(); updateSpeed();"/>
@@ -530,7 +529,6 @@ include_once("scripts/myboat.js");
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".getLocalizedString("constantengaged")."</span>"?>
         <form class="controlform" name="angle" action="update_angle.php" method="post"> 
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
             <input type="hidden" name="pilotmode" value="windangle"/>
             <div id="windanglerange">
                 <input type="button" value="&lt;" onclick="decrementAngle(); "/>
@@ -559,7 +557,6 @@ include_once("scripts/myboat.js");
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".getLocalizedString("orthoengaged")."</span>"?>
             <form class="controlform" name="ortho" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-                <input type="hidden" name="lang" value="<?php echo $lang?>"/>        
                 <input type="hidden" name="pilotmode" value="orthodromic"/>
                 <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("orthodromic")?>" />
             </form>
@@ -577,7 +574,6 @@ include_once("scripts/myboat.js");
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".getLocalizedString("bestvmgengaged")."</span>"?>
             <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-                <input type="hidden" name="lang" value="<?php echo $lang?>"/>
                 <input type="hidden" name="pilotmode" value="bestvmg"/>
                 <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("bestvmgengaged")?>" />
             </form>
@@ -595,7 +591,6 @@ include_once("scripts/myboat.js");
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_VBVMG . ": ".getLocalizedString("vbvmgengaged")."</span>"?>
             <form class="controlform" name="vbvmg" action="update_angle.php" method="post"> 
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
-                <input type="hidden" name="lang" value="<?php echo $lang?>"/>
                 <input type="hidden" name="pilotmode" value="vbvmg"/>
                 <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("vbvmgengaged")?>" />
             </form>
@@ -606,7 +601,6 @@ include_once("scripts/myboat.js");
 <div id="wpcontrolbox" class="controlitem">
     <form name="coordonnees" action="myboat.php" method="post">
         <input type="hidden" name="type" value="savemywp"/>
-        <input type="hidden" name="lang" value="<?php echo $lang?>"/>
         <div id="wpcoordscontrolbox">
         <?php echo "<span class=\"texthelpers\">". getLocalizedString("mytargetpoint") . "</span>"; ?>
 
@@ -658,7 +652,7 @@ include_once("scripts/myboat.js");
             }
         ?>
         <div id="pilototoaction">
-            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?lang=".$lang."&amp;idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
         </div>
     </div>
 
@@ -670,7 +664,6 @@ include_once("scripts/myboat.js");
                 <input type="submit" value="Go !" />
             </div>
             <input type="hidden" name="boattype" value="<?php echo substr($usersObj->users->boattype,5); ?>"/>
-            <input type="hidden" name="lang" value="<?php echo $lang?>"/>
             <input type="hidden" name="boatlat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
             <input type="hidden" name="boatlong" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
             <input type="hidden" name="wdd" value="<?php echo ($usersObj->wheading+180)%360; ?>" />

@@ -36,9 +36,8 @@ class users extends baseClass
 
   var $idowner = null;
     
-  function users($id)
-  {
-    //  echo "constructeur users with $id \n";
+  function users($id) {
+    $id = intval($id);
 
     $query= "SELECT idusers, boattype, username, password,".
       " boatname, color, boatheading, pilotmode, pilotparameter,".
@@ -46,8 +45,6 @@ class users extends baseClass
       " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
       " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
 
-
-    //    $result = wrapper_mysql_db_query($query) or die("\n FAIL::::::: ".$query."\n");
     $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
 
@@ -388,13 +385,13 @@ class users extends baseClass
       return htmlBoattypeLink($this->boattype);
   }
 
-  function htmlIdusersUsernameLink($lang) {
+  function htmlIdusersUsernameLink() {
       //This function is also in the race class
-      return htmlIdusersUsernameLink($lang, $this->country, $this->color, $this->idusers, $this->boatname, $this->username);
+      return htmlIdusersUsernameLink($this->country, $this->color, $this->idusers, $this->boatname, $this->username);
   }
 
   function htmlIdusers() {
-      $ret = "<a href=\"palmares.php?type=user&amp;idusers=".$this->idusers."\">".$this->idusers."</a>";
+      $ret = "<a href=\"palmares.php?type=user&amp;idusers=".$this->idusers."\">#".$this->idusers."</a>";
       return $ret;
   }
 
@@ -429,6 +426,9 @@ class users extends baseClass
                   case PU_FLAG_OWNER :
                       $logmsg = "Player take ownership of this boat.";
                       break;
+                  case PU_FLAG_BOATSIT :
+                      $logmsg = "Player granted boatsitter of this boat.";
+                      break;
                   default :
                       $logmsg = "Boat attached to player with linktype = ".$relationship;
               }
@@ -438,6 +438,32 @@ class users extends baseClass
       }
       return False;
   }
+
+  function removeRelationship($idplayer, $relationship) {
+      $idplayer = intval($idplayer);
+      $relationship = intval($relationship);
+      if ($idplayer > 0) {
+          $query = "DELETE FROM playerstousers WHERE idusers = ".$this->idusers." AND idplayers = ".$idplayer." AND linktype = ".$relationship;
+          if ($this->queryWrite($query)) {
+              switch($relationship) {
+                  //FIXME : translation !
+                  case PU_FLAG_OWNER :
+                      $logmsg = "Player no longer owner of this boat.";
+                      break;
+                  case PU_FLAG_BOATSIT :
+                      $logmsg = "Player no longer boatsitter of this boat.";
+                      break;
+                  default :
+                      $logmsg = "Boat and player not linked anymore  with linktype = ".$relationship;
+              }
+              logPlayerEvent($idplayer, $this->idusers, $this->engaged, $logmsg);
+              return True;
+          }
+      }
+      return False;
+  }
+
+
 }
 
 
@@ -465,7 +491,7 @@ class fullUsers
     $now = time();
 
     if ($origuser == NULL) {
-      $this->users = new users($id);
+      $this->users = getUserObject($id);
     } else {
       $this->users = &$origuser;
     }
@@ -1431,7 +1457,7 @@ class excludedUsers
   function excludedUsers($id, $raceid, $age = MAX_DURATION)
   {
 
-    $this->users = new users($id);
+    $this->users = getUserObject($id);
 
     //find last position and time interval from now
     $lastPositionsObject = new positions;

@@ -26,7 +26,6 @@
             <br />
             <input size="25" maxlength="15" name="playername" value="<?php echo $playername; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("playername"); ?></span>
-            <input type="hidden" name="lang" value="<?php echo getCurrentLang(); ?>" />
             <input type="hidden" name="createplayer" value="requested" />
             <br />
             <input type="submit" />
@@ -53,7 +52,6 @@
                 <input type="hidden" name="emailid" value="<?php echo $emailid; ?>"/>
                 <input type="hidden" name="password" value="<?php echo $password; ?>"/>
                 <input type="hidden" name="playername" value="<?php echo $playername; ?>"/>
-                <input type="hidden" name="lang" value="<?php echo getCurrentLang(); ?>"/>
                 <input type="hidden" name="createplayer" value="confirmed"/>
                 <input type="submit" value="<?php echo getLocalizedString("Confirm account request ?"); ?>" />
             </form> 
@@ -97,7 +95,6 @@
             <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" name="createplayer">
                 <input type="hidden" name="seed" value="<?php echo $seed; ?>" />
                 <input type="hidden" name="emailid" value="<?php echo $emailid; ?>" />
-                <input type="hidden" name="lang" value="<?php echo getCurrentLang(); ?>" />
                 <input type="hidden" name="createplayer" value="create" />
                 <input type="submit" value="<?php echo getLocalizedString("Confirm account creation ?"); ?>" />
             </form> 

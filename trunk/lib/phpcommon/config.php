@@ -1,5 +1,9 @@
 <?php
 
+function define_if_not($k, $v) {
+    if (!defined($k)) define($k, $v);
+}
+
 /************** restricted pages ******/
 $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercator1.php", "/subscribe_race.php", "/pilototo.php");
 
@@ -75,10 +79,12 @@ mysql_select_db(DBNAME, $link) or die("Could not select database");
 define("PROXY_AGENT_PASS", "PROXYPASS");
 
 // EMAIL COMITE
-define("EMAIL_COMITE_VLM", "vlm@virtual-winds.com");
+define_if_not("EMAIL_COMITE_VLM", "vlm@virtual-winds.com");
+define_if_not("MAIL_PREFIX", "VLM");
 
 /******** MAP_SERVER_URL A VERIFIER AVANT MISE EN PROD *****************/
 //define("VMG_SERVER_URL", "http://www.virtual-loup-de-mer.org/vmg/vmg_vlm.php");
+define_if_not("WWW_SERVER_URL", "http://www.virtual-loup-de-mer.org");
 define("VMG_SERVER_URL", "/vmg/vmg_vlm.php");
 define("MAP_SERVER_URL", "");
 //define("MAP_SERVER_URL", "http://map.virtual-loup-de-mer.org");
@@ -90,7 +96,7 @@ define("TOOLS_SERVER_URL", DOC_SERVER_URL."Les_accessoires_et_outils_autour_de_V
 define("GRIB_TOOLS_URL", DOC_SERVER_URL."Outils_m%C3%A9t%C3%A9os");
 define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
 
-// Max position age (engine speedup on long races) => 1 week since whe have "histpos" table
+// Max position age (engine speedup on long races) => 1 week since we have "histpos" table
 define("DEFAULT_POSITION_AGE", 1 * 3600);
 define("MAX_POSITION_AGE", 1 * 604800);
 // Max number of boats on each map
@@ -111,7 +117,7 @@ define("MAX_SPEED_FOR_RANKING", 40);
 //Log parameters
 define("MAX_LOG_USER_ACTION_AGE", 168*3600); #1 week
 define("MAX_LOG_USER_ACTION_VIEW", 50); #nb actions viewable by the user
-if (!defined("SERVER_NAME")) define("SERVER_NAME", "UNDEFINED_VLM_SERVER"); //should be defined in param.php
+define_if_not("SERVER_NAME", "UNDEFINED_VLM_SERVER"); //should be defined in param.php
 
 
 /********Constants*************/
@@ -119,7 +125,6 @@ define("CRONVLMLOCK", "".VLMTEMP."/cronvlm.lock");
 define("IMAGE_SITE_PATH", "images/site/");
 define("BOAT_IMAGE", "deck-small.png");
 define ("COMPASS_IMAGE", "compass-small-complete.png");
-#define ("COMPASS_IMAGE", "compass-small-complete.gif");
 define ("BUOY_N", "buoy_north.png");
 define ("BUOY_S", "buoy_south.png");
 define ("BUOY_W", "buoy_west.png");
@@ -130,6 +135,8 @@ define ("DIRECTORY_RACEMAPS","images/racemaps");
 define ("DIRECTORY_THEMES","style");
 define ("DIRECTORY_POLARS","Polaires");
 define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
+
+//define ("PROFILE_PLAYER_URL", "/palmares.php?type=player&idplayers=");
 
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);
@@ -244,6 +251,9 @@ define("IC_FLAG_HIDEONICS", 16);
 //LINKTYPE FLAG (between players & users)
 define("PU_FLAG_BOATSIT", 2);
 define("PU_FLAG_OWNER", 1);
+
+//Options du mode players
+define_if_not("SERVER_IS_SENDING_EMAIL", True);
 
 //PREFS
 // NOTSET (for user_prefs)

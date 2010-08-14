@@ -89,26 +89,27 @@ function get_cgi_var($name, $default_value = null) {
 // Return navigator language or en if not supported
 //--------------------------------------------
 
-function NavigatorLanguage($allowed = array("fr", "en", "pt", "it", "es"))
-{
-  $lang = getenv("HTTP_ACCEPT_LANGUAGE");
-  $lang = substr($lang,0,2);
-  if (in_array($lang, $allowed)) {
-      return $lang;
-  } else  {
-      return "en";
-  }
+function NavigatorLanguage($allowed = array("fr", "en", "pt", "it", "es")) {
+    $lang = getenv("HTTP_ACCEPT_LANGUAGE");
+    $lang = substr($lang,0,2);
+    if (in_array($lang, $allowed)) {
+        return $lang;
+    } else  {
+        return "en";
+    }
 }
 
 function getCurrentLang() {
     static $lang = null;
     if (!is_null($lang)) return $lang;
-    //FIXME utiliser NavigatorLanguage pour définir le default en combinant avec strings
     if (isset($_REQUEST['lang'])) {
         $lang = quote_smart($_REQUEST['lang']);
+    } else if (isset($_SESSION['LANG'])) {
+        $lang = $_SESSION['LANG'];
     } else {
         $lang = NavigatorLanguage();  
     }
+    $_SESSION['LANG'] = $lang;
     return $lang;
 }
 
@@ -971,7 +972,6 @@ function htmlRacesListRow($rowdatas) {
 
       // Affichage de la course dans le tableau
       // idraces / racename / startdeparture / racenumboats / map
-      $lang = getCurrentLang();
       $html = "";
       list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($rowdatas['idraces']);
 
@@ -980,9 +980,9 @@ function htmlRacesListRow($rowdatas) {
       if ( $rowdatas['racetype'] == RACE_TYPE_RECORD ) {
           $html .= "<img src=\"/images/site/P.png\" alt=\"Permanent\" />";
       }
-      $html .= htmlIdracesLink($lang, $rowdatas['idraces'])."</td>\n";
+      $html .= htmlIdracesLink($rowdatas['idraces'])."</td>\n";
       $html .= "<td>";
-      $html .= htmlRacenameLink($lang, $rowdatas['idraces'], $rowdatas['racename']);
+      $html .= htmlRacenameLink($rowdatas['idraces'], $rowdatas['racename']);
       $html .= "</td>\n";
       $html .= "<td class=\"departurecell\">&nbsp;" ;
       //Affiche une date de départ ou un statut.
@@ -1065,16 +1065,16 @@ function htmlFlagImg($idflag) {
     return "<img src=\"/flagimg.php?idflags=".$idflag. "\" alt=\"Flag_". $idflag."\" />";
 }
 
-function htmlIdusersUsernameLink($lang, $country, $color, $idusers, $boatname, $username) {
+function htmlIdusersUsernameLink($country, $color, $idusers, $boatname, $username) {
     //This function is mapped in the user class
   	return htmlFlagImg($country) .
-            "<a class=\"boatpalmares\" href=\"/palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . $idusers . "\"" .
+            "<a class=\"boatpalmares\" href=\"/palmares.php?type=user&amp;idusers=" . $idusers . "\"" .
             " style=\" border-bottom: solid #" . $color . "\" " . "title=\"". $boatname . "\">" .
-            " (". $idusers . ") " . $username . "</a>\n";
+            " (#". $idusers . ") " . $username . "</a>\n";
 }
 
-function htmlIdracesLink($lang, $idraces) {
-    return sprintf("<a href=\"/ics.php?lang=%s&amp;idraces=%s\">%d</a>" , $lang, $idraces, $idraces);
+function htmlIdracesLink($idraces) {
+    return sprintf("<a href=\"/ics.php?idraces=%s\">%d</a>" , $idraces, $idraces);
 }
 
 function htmlBoattypeLink($boattype) {
@@ -1082,8 +1082,8 @@ function htmlBoattypeLink($boattype) {
     return sprintf("<a href=\"/speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
 }
 
-function htmlRacenameLink($lang, $idraces, $racename) {
-    return sprintf("<a href=\"/races.php?lang=%s&amp;type=racing&amp;idraces=%d\">%s</a>", $lang, $idraces, $racename);
+function htmlRacenameLink($idraces, $racename) {
+    return sprintf("<a href=\"/races.php?type=racing&amp;idraces=%d\">%s</a>", $idraces, $racename);
 }
 
 function getFlag($idflags, $force = 'no') {
@@ -1219,42 +1219,57 @@ function raceExists($race)
 }
 
 /*return true if login already exist*/
-function boatExists($boat)
-{
-  //find a boat
-  $query = 'SELECT idusers FROM users WHERE idusers = "'.$boat.'"';
+function boatExists($idboat) {
+    //find a boat
+    $query = 'SELECT idusers FROM users WHERE idusers = "'.$idboat.'"';
 
-  $result = wrapper_mysql_db_query_reader($query)  ;
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  if (!$row) {
-    return FALSE;
-  } else {
-    return TRUE;
-  }
+    $result = wrapper_mysql_db_query_reader($query)  ;
+    $row = mysql_fetch_array($result, MYSQL_NUM);
+    if (!$row) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 /*return true if login already exist*/
-function checkLoginExists($login)
-{
-  $query2 = 'SELECT idusers FROM users WHERE username = "'.$login.'"';
-  $result2 = wrapper_mysql_db_query_reader($query2);
+function checkLoginExists($login) {
+    $query2 = 'SELECT idusers FROM users WHERE username = "'.$login.'"';
+    $result2 = wrapper_mysql_db_query_reader($query2);
 
-  return ($row2=mysql_fetch_array($result2, MYSQL_NUM));
+    return ($row2=mysql_fetch_array($result2, MYSQL_NUM));
 }
 
 /*create a new account with default values and return idusers*/
-function createAccount($log, $pass, $mail, $country)
-{
+function createBoat($log, $pass, $mail, $boatname = 'boat') {
   $query3 = "INSERT INTO `users` ( `boattype` , `username` , `password` , `email`,"
     ."`boatname`, `color`, `boatheading`, `pilotmode`, `engaged` )"
-    ."VALUES ( 'boat_imoca60', '$log', '$pass', '$mail', 'boat', '000000', '0', '1', '0')";
-  $result3 = wrapper_mysql_db_query_writer($query3);// or die("Query [$query3] failed \n");
+    ."VALUES ( 'boat_imoca60', '$log', '$pass', '$mail', '$boatname', '000000', '0', '1', '0')";
+  $result3 = wrapper_mysql_db_query_writer($query3);//or die("Query [$query3] failed \n");
 
   //is there another solution than reread from db?
   $query4 = "SELECT idusers FROM users WHERE username = \"$log\" ";
   $result4 = wrapper_mysql_db_query_writer($query4);// or die($query4);
   $row4 = mysql_fetch_array($result4, MYSQL_NUM);
   return ($row4[0]);
+}
+
+function mailInformation($who, $title, $message = null) {
+    if (is_null($message)) $message = $title;
+    $title = "[".MAIL_PREFIX."] ".$title;
+    $message .= "\n";
+    $message .= getLocalizedString("See you soon on VLM !")."\n";
+    $message .= WWW_SERVER_URL."\n";
+    $headers  = 'From: '.EMAIL_COMITE_VLM. "\r\n" .
+                'Reply-To: '.EMAIL_COMITE_VLM. "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+    if (SERVER_IS_SENDING_EMAIL) {
+        $res = mail($who , $title, $message, $headers);
+        return $res;
+    } else {
+        echo nl2br("<h3>$title</h3>\n$message");
+        return True;
+    }
 }
 
 
@@ -1349,6 +1364,7 @@ function login($idus, $pseudo)
     //     ==> UPGRADE BDD : V0.13, ipaddr => varchar(255)
     $_SESSION['FULLIP'] = getfullip();
     $_SESSION['IP'] = getip();
+    $_SESSION['LANG'] = NavigatorLanguage();
   }
 }
 
@@ -1400,6 +1416,60 @@ function getPlayerId() {
     return getSessionValue('idp');
 }
 
+function getLoggedPlayerObject() {
+    static $player = null;
+    if (!is_null($player)) return $player;
+    $player = getPlayerObject(getPlayerId());
+    return $player;
+}
+
+function getPlayerObject($id) {
+    static $pobjects = Array();
+    $id = intval($id);
+    if (array_key_exists($id, $pobjects)) return $pobjects[$id];
+    $p = new players($id);
+    if ($p->idplayers == $id) {
+        $pobjects[$id] = $p;
+        return $p;
+    } else {
+        return null;
+    }
+}
+
+function getLoggedUserObject() {
+    static $user = null;
+    if (!is_null($user)) return $user;
+    $user = getUserObject(getLoginId());
+    return $user;
+}
+
+
+function getUserObject($id) {
+    static $uobjects = Array();
+    $id = intval($id);
+    if (array_key_exists($id, $uobjects)) return $uobjects[$id];
+    $u = new users($id);
+    if ($u->idusers == $id) {
+        $uobjects[$id] = $u;
+        return $u;
+    } else {
+        return null;
+    }
+}
+
+function getPlayerList($where = null) {
+    $list = array();
+    $query = "SELECT idplayers, playername FROM players";
+    if (!is_null($where)) {
+        $query .= " WHERE ".$where;
+    }
+    $res = wrapper_mysql_db_query_reader($query) or die($query);
+    while ($row = mysql_fetch_assoc($res)) {
+        $list[$row['idplayers']] = $row;
+    }
+    return $list;
+}
+
 function getTheme()
 {
    if (isLoggedIn() ) {
@@ -1409,7 +1479,7 @@ function getTheme()
           return ($_SESSION['theme']);
       } else {
           //La première fois, la session ne contient pas le theme
-          $users = new users(getLoginId());
+          $users = getLoggedUserObject();
           if ( $users->engaged != 0 ) {
               //Le joueur est engagé dans une course
               $race = new races($users->engaged);
@@ -1639,7 +1709,7 @@ function findTopUsers($idraces,$num) {
   return($ret_array);
 }
 
-function displayPalmares($lang, $idusers) {
+function displayPalmares($idusers) {
 
   // search for old races for this player
   $query = "SELECT idraces from races_results where idusers = " . $idusers ;
@@ -1657,8 +1727,8 @@ function displayPalmares($lang, $idusers) {
 
   while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
     $racesObj= new races($row[0]);
-    printf ("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", htmlIdracesLink($lang, $row[0]),
-              htmlRacenameLink($lang, $row[0], $racesObj->racename),
+    printf ("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", htmlIdracesLink($row[0]),
+              htmlRacenameLink($row[0], $racesObj->racename),
               getRaceRanking($idusers,$row[0])); // Le classement
 
   }
@@ -1744,6 +1814,10 @@ function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     } else {
         $ua = $_SERVER["HTTP_USER_AGENT"];
     }
+    $idusers = is_null($idusers) ? -1 : $idusers;
+    $idplayers = is_null($idplayers) ? -1 : $idplayers;
+    $idraces = is_null($idraces) ? -1 : $idraces;
+
     $query_user_event = "INSERT INTO `user_action` (`idplayers`, `idusers`, `ipaddr`, `fullipaddr`, `idraces`, `action`, `useragent`, `actionserver`) " .
                         " values (" . $idplayers . ", " . $idusers . ", '" . $_SESSION['IP'] . "' , '" . $_SESSION['FULLIP'] . "' ," . $idraces .
                         ",'" . addslashes($action) . "', '". addslashes($ua) ."' , '".SERVER_NAME."' )";
@@ -1756,7 +1830,6 @@ function htmlAbandonButton($idusers, $idraces) {
             <input type=\"hidden\" name=\"idusers\" value=\"$idusers\" />
             <input type=\"hidden\" name=\"idraces_unsubscribe\" value=\"".$idraces."\" />     
             <input type=\"hidden\" name=\"type\" value=\"unsubscribe\" />
-            <input type=\"hidden\" name=\"lang\" value=\"".getCurrentLang()."\" />
             <input type=\"button\" onclick=\"confirmation_abandon('".getLocalizedString("unsubscribe").". Confirmation ?');\"
                        value=\"".getLocalizedString("unsubscribe")."\" />
             </form>";
@@ -1796,8 +1869,7 @@ function htmlQuery($sql) {
         }
         echo "</tr>";
     }
-    echo "</table>";    
-
+    echo "</table>";
 }
 
 function insertAdminChangelog($argarray) {
@@ -1821,6 +1893,19 @@ function insertAdminChangelog($argarray) {
 
 function htmlShouldNotDoThat() {
     return "<h3>".getLocalizedString("You should not do that.").getLocalizedString("Your IP has been logged")."</h3>";
+}
+
+function generatePassword($strseed) {
+    //un peu basique, mais pour l'usage ça ira
+    return substr(base_convert(md5(mt_rand()+crc32($strseed)), 16, 36), mt_rand(0, 16), 8);
+}
+
+function getLinktypeString($linktype) {
+    switch($linktype) {
+        case PU_FLAG_OWNER : return getLocalizedString("owner");
+        case PU_FLAG_BOATSIT : return getLocalizedString("Boatsitter");
+        default : return getLocalizedString("Unknow link's type");
+    }
 }
 
 ?>

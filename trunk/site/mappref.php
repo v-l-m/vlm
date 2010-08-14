@@ -56,7 +56,6 @@
 
     <form id="mercator" action="mappref.php" method="post">
       <input type="hidden" name="idraces" value="<?php echo $fullUsersObj->users->engaged; ?>" />
-      <input type="hidden" name="lang" value="<?php echo $lang?>" />
 
       <!-- Table pour remonter un peu toute la page -->
       <table border="0" width="100%">

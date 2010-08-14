@@ -46,8 +46,8 @@
         $msg = getLocalizedString("loggedout");
     }
 
-    if ($type == "create")
-    {
+    if ($type == "create") {
+        //FIXME : on laisse ce code le temps des tests pour pouvoir créer des bateaux "old style"
         $pseudo = htmlentities($pseudo);
         $password = htmlentities($password);
         //check if login exists
@@ -59,7 +59,7 @@
         } else if (($pseudo == "") || ($password == "")) {
             $msg = getLocalizedString("loginempty");
         } else {
-            $idu = createAccount($pseudo, $password, $email, $country);
+            $idu = createBoat($pseudo, $password, $email);
             login($idu, $pseudo);
             $msg = getLocalizedString("accountcreated")." ".$pseudo." ".$password;
         }
@@ -77,7 +77,7 @@
         } else {
             $player = new players(0, $pseudo);
             if (!$player->error_status && $player->checkPassword($password)) {
-                $defaultuser = new users($player->getDefaultBoat());
+                $defaultuser = getUserObject($player->getDefaultBoat());
                 loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
             } else {
                 $msg = getLocalizedString("authfailed");
@@ -87,11 +87,11 @@
 
     if ($type=="connectas" && isPlayerLoggedIn()) {
           //FIXME !
-         $player = new players(getPLayerId());
+         $player = getLoggedPlayerObject();
          $newuid = $_POST['boatid'];
          $boatlist = array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList());
          if (in_array($newuid, $boatlist)) {
-            $defaultuser = new users($newuid);
+            $defaultuser = getUserObject($newuid);
             loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
          }
     }
@@ -186,7 +186,7 @@
     //echo "current file =".$CurrentFile."SCrIPT name = ".$_SERVER["PHP_SELF"]."\n";
     //little trick : if update_angle page, display and then redirect to myboat
     if ($CurrentFile == "update_angle.php" ) {
-        echo "  <meta http-equiv=\"refresh\" content=\"0; url=myboat.php?lang=$lang\" />";
+        echo "  <meta http-equiv=\"refresh\" content=\"0; url=myboat.php\" />";
     } elseif ( $CurrentFile == "admin.php" )  {
         $do=quote_smart($_REQUEST['do']);
         if ( $do == 'yes' ) {
@@ -243,7 +243,6 @@
             <form method="post" action="myboat.php">
                 User: <input size="10" maxlength="64" name="pseudo" /><br />
                 Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
-                <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
                 <input type="hidden" name="type" value="login" />
                 <p class="leftbutton">
                     <input type="submit" value="<?php echo getLocalizedString("login"); ?>" />
@@ -252,7 +251,7 @@
         </div> <!-- fin div loginbox-->
         <div id="pleasecreatebox" class="leftbox">
 <?php
-            printf (getLocalizedString("pleasecreate"), "<a href=\"create_player.php?lang=$lang\">", "</a>");
+            printf (getLocalizedString("pleasecreate"), "<a href=\"create_player.php\">", "</a>");
 ?>
         </div> <!-- fin div pleasecreatebox-->
 <?php
@@ -263,9 +262,18 @@
                 $player = new players(getPlayerId());
                 echo $player->htmlPlayername()."<br />\n";
 
-            echo "<a href=\"create_boat.php?lang=$lang\">".getLocalizedString("Please create a boat !")."</a>";
+            echo "<a href=\"create_boat.php\">".getLocalizedString("Please create a boat !")."</a>";
 ?>
         </div> <!-- fin div pleasecreatebox-->
+        <div id="logoutbox" class="leftbox">
+            <form method="post" action="index.php">
+                <input type="hidden" name="type" value="logout" />
+                <p class="leftbutton">
+                    <input type="submit" value="<?php echo getLocalizedString("logout"); ?>" />
+                </p>
+            </form>
+        </div> <!-- fin div logoutbox-->
+
 <?php
 
     } else { //if loggedin
@@ -276,12 +284,12 @@
                 $player = new players(getPlayerId());
                 echo $player->htmlPlayername()."<br />\n";
                 //FIXME : factorise
-                $boatlist = array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList());
+                $boatlist = array_unique(array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList()));
                 echo "<form method=\"post\" action=\"myboat.php\">";
                 echo "<input type=\"hidden\" name=\"type\" value=\"connectas\" />";
                 echo "<select name=\"boatid\" onchange=\"submit();\">";
                 foreach ($boatlist as $idb) {
-                    $u = new users($idb);
+                    $u = getUserObject($idb);
                     echo "<option value=\"$idb\"";
                     if ($idb == getLoginId()) {
                         echo " selected";
@@ -293,16 +301,15 @@
                     
             } else {
 
-            //disp login name, infos
-            echo "<a href=\"palmares.php?lang=".$lang."&amp;type=user&amp;idusers=" . getLoginId() . "\">" .
-                 " (". getLoginId() . ") <u>" . getLoginName() . "</u></a>\n";
+                //disp login name, infos
+                echo "<a href=\"palmares.php?type=user&amp;idusers=" . getLoginId() . "\">" .
+                     " (". getLoginId() . ") <u>" . getLoginName() . "</u></a>\n";
             }
 ?>
         </div> <!-- fin div loggedbox-->
         <div id="logoutbox" class="leftbox">
             <form method="post" action="index.php">
                 <input type="hidden" name="type" value="logout" />
-                <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
                 <p class="leftbutton">
                     <input type="submit" value="<?php echo getLocalizedString("logout"); ?>" />
                 </p>
@@ -312,11 +319,11 @@
     }
 ?>
         <div id="pagesbox" class="leftbox">
-            <a href="myboat.php?lang=<?echo $lang?>"><?php echo getLocalizedString("control"); ?></a>
-            <a href="mappref.php?lang=<?echo $lang?>"><?php echo getLocalizedString("mymap"); ?></a>
-            <a href="modify.php?lang=<?echo $lang?>"><?php echo getLocalizedString("choose"); ?></a>
+            <a href="myboat.php"><?php echo getLocalizedString("control"); ?></a>
+            <a href="mappref.php"><?php echo getLocalizedString("mymap"); ?></a>
+            <a href="modify.php"><?php echo getLocalizedString("choose"); ?></a>
             <?php if (isPlayerLoggedIn()) {
-                echo "<a href=\"palmares.php?type=player&lang=$lang&idplayers=".getPlayerId()."\">".getLocalizedString("Profile")."</a>";
+                echo "<a href=\"palmares.php?type=player&idplayers=".getPlayerId()."\">".getLocalizedString("Profile")."</a>";
                 }
             ?>
         </div> <!-- fin div pagesbox -->
@@ -329,7 +336,7 @@
 ?>
         </div> <!-- fin div langbox-->
         <div id="menubox" class="leftbox">
-            <a href="index.php?lang=<?echo $lang?>"><?echo getLocalizedString("home")?></a> 
+            <a href="index.php"><?echo getLocalizedString("home")?></a> 
 <?php
                 // Bouton "ADMIN" pour les administrateurs
                 if ( idusersIsAdmin (getLoginId()) ) {
@@ -337,8 +344,8 @@
                 }
                 //<a href="http://images.virtual-loup-de-mer.org/" target="_images">echo getLocalizedString("images"); </a> 
 ?>
-            <a href="races.php?lang=<?echo $lang?>"><?echo getLocalizedString("races"); ?></a>
-            <a href="calendar.php?lang=<?echo $lang?>"><?echo getLocalizedString("calendar"); ?></a>
+            <a href="races.php"><?echo getLocalizedString("races"); ?></a>
+            <a href="calendar.php"><?echo getLocalizedString("calendar"); ?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?php echo getLocalizedString("ranking"); ?></a> 
             <a href="<?php echo MOBILE_SERVER_URL; ?>" target="_mobile" title="<?php echo getLocalizedString("Interface for mobiles devices"); ?> ">
                 <?php echo getLocalizedString("Mobiles"); ?>
