@@ -53,7 +53,7 @@ if ( $usersObj->engaged != 0 ) {
       } else {
 	//FIXME : Couldn't we just update the "same place" ?
 	$fullUsersObj->lastPositions->writePositions();
-	$fullUsersObj->writeCurrentRanking();
+	$fullUsersObj->writeCurrentRanking(0);
       }
     }
     echo "\t** DONE ** " ;
@@ -102,19 +102,23 @@ if ( $usersObj->engaged != 0 ) {
     }
     echo "\n";
 
-    $lonAvant=$fullUsersObj->lastPositions->long;
-    $latAvant=$fullUsersObj->lastPositions->lat;
-    $timeAvant=$fullUsersObj->lastPositions->time;
+    $lonAvant  = $fullUsersObj->lastPositions->long;
+    $latAvant  = $fullUsersObj->lastPositions->lat;
+    $timeAvant = $fullUsersObj->lastPositions->time;
 
+    $fullUsersObj->anteLastPositions->long = $lonAvant;
+    $fullUsersObj->anteLastPositions->lat  = $latAvant;
+    $fullUsersObj->anteLastPositions->time = $timeAvant;    
     // Updating positions
+    
     $fullUsersObj->lastPositions->addDistance2Positions(
 							$fullUsersObj->boatspeed*$fullUsersObj->hours,
 							$fullUsersObj->users->boatheading
 							);
 
-    $lonApres=$fullUsersObj->lastPositions->long;
-    $latApres=$fullUsersObj->lastPositions->lat;
-    $timeApres=$fullUsersObj->lastPositions->time;
+    $lonApres  = $fullUsersObj->lastPositions->long;
+    $latApres  = $fullUsersObj->lastPositions->lat;
+    $timeApres = $fullUsersObj->lastPositions->time;
 
     $distVac=round($fullUsersObj->boatspeed*$fullUsersObj->hours,3);
 

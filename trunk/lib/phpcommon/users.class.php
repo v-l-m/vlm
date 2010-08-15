@@ -482,7 +482,6 @@ class fullUsers
     $distancefromend, $nwp,
     $VMG, $VMGortho,
     $LongNM, $LatNM,
-    $loch,
     $preferences;
 
   function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
@@ -505,7 +504,6 @@ class fullUsers
 
     // inherit of nwp
     $this->nwp = &$this->users->nwp;
-    $this->loch = $this->users->loch;
 
     if (!isset($lastPositionsObject->long) )
       {
@@ -973,7 +971,7 @@ class fullUsers
     //  printf ("Request RACES_RANKING : %s\n" , $query);
   }
 
-  function writeCurrentRanking ( $freq = 0 )
+  function writeCurrentRanking ( $moved = 1 )
   {
     $now = time();
 
@@ -994,11 +992,12 @@ class fullUsers
       $query_update .= " lastchange = " . time() . "," ;
     }
 
-    // Cumul du loch sauf si bout au vent... (si vitesse <0.1, loch n'est pas incrémenté)
-    if ( $this->boatspeed > 0.1 )  {
+    // Cumul du loch sauf si bout au vent...
+    if ( $moved == 1)  {
       //FIXME : loch devrait être un DECIMAL
-      $this->loch = $this->users->loch += round($this->boatspeed*$this->hours,3);
-      $query_update .= " loch = loch + " . round($this->boatspeed*$this->hours,3) . "," ;
+      $this->users->loch += ortho($this->anteLastPositions->lat, $this->anteLastPositions->long,
+				  $this->lastPositions->lat, $this->lastPositions->long);
+      $query_update .= " loch = " . $this->users->loch . "," ;
     }
 
     // On décrémente HidePos si positif
@@ -1045,7 +1044,7 @@ class fullUsers
 
     // 1 : corrected, 0 : not corrected
     $dist = $this->distRecords(24*3600);
-    if ( $this->loch > $dist[1] ) {
+    if ( $this->users->loch > $dist[1] ) {
       $last24h = $dist[1];
     } else {
       $last24h = $dist[0];
@@ -1053,7 +1052,7 @@ class fullUsers
     if ( $last24h > 24 * MAX_SPEED_FOR_RANKING ) $last24h = 0;
 
     $dist = $this->distRecords(3*3600);
-    if ( $this->loch > $dist[1] ) {
+    if ( $this->users->loch > $dist[1] ) {
       $last3h = $dist[1];
     } else {
       $last3h = $dist[0];
@@ -1061,7 +1060,7 @@ class fullUsers
     if ( $last3h > 3 * MAX_SPEED_FOR_RANKING ) $last3h = 0;
 
     $dist = $this->distRecords(3600);
-    if ( $this->loch > $dist[1] ) {
+    if ( $this->users->loch > $dist[1] ) {
       $last1h = $dist[1];
     } else {
       $last1h = $dist[0];
@@ -1075,7 +1074,7 @@ class fullUsers
       "nmlong    = " . $this->LongNM              . ", " .
       "latitude  = " . $this->lastPositions->lat  . ", " .
       "longitude = " . $this->lastPositions->long . ", " .
-      "loch      = " . $this->loch                . ", " .
+      "loch      = " . $this->users->loch         . ", " .
       "last1h    = " . $last1h                    . ", " .
       "last3h    = " . $last3h                    . ", " .
       "last24h   = " . $last24h                   .
