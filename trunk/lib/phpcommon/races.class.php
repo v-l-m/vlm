@@ -386,6 +386,7 @@ class fullRaces {
       //WARNING: dont load fullUsers inside fullRaces
       //because fullRaces contains fullUsers that contain fullRaces ..
       $userid = $row['idusers'];
+      //FIXME : est ce bien d'utiliser getUserObject ici (il met en cache)
       $this->opponents[$userid] = getUserObject($userid);
       //we should sort them!
     }
@@ -399,6 +400,7 @@ class fullRaces {
     $result6b = wrapper_mysql_db_query_reader($query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_ASSOC)) {
       $userid = $row['idusers'];
+      //FIXME : est ce bien d'utiliser getUserObject ici (il met en cache)
       $this->excluded[$userid] = getUserObject($userid);
     }
   }
@@ -641,7 +643,7 @@ class fullRaces {
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
       // N'entrent dans les tableaux que les bateaux effectivement en course
-      if ( $row['nwp'] == "" || $row['loch'] == 0 ) {
+      if ( $row['nwp'] == "" || $row['loch'] <= 0.1 ) {
 	        continue;
       }
 

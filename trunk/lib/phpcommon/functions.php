@@ -1447,6 +1447,10 @@ function getLoggedUserObject() {
 function getUserObject($id) {
     static $uobjects = Array();
     $id = intval($id);
+
+    //TO PROTECT FROM POTENTIAL SIDE EFFECTS (?)
+    if (defined('MOTEUR')) return new users($id);
+    
     if (array_key_exists($id, $uobjects)) return $uobjects[$id];
     $u = new users($id);
     if ($u->idusers == $id) {

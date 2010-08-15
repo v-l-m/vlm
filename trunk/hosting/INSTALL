@@ -6,7 +6,7 @@
 Il est probable que cette documentation n'est pas à jour au moment ou vous essayez de l'appliquer pour installer votre propre serveur Vlm.
 
 Merci
- * de lire l'historique des fichiers UPGRADE (dans hostin et dans base) notamment
+ * de lire l'historique des fichiers UPGRADE (dans hosting et dans base) notamment
  * de mettre à jour cette page
 
 = Prérequis =
@@ -21,7 +21,7 @@ Merci
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_13''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
    * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip gunzip zip gzip}}}
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip gunzip zip gzip python-json}}}
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
      * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig}}}).
@@ -34,6 +34,7 @@ Merci
      * 0.2.4 apache (debian: {{{apt-get install apache2}}})
      * 0.2.5 mysql (debian: {{{apt-get install mysql-server}}}) donner un mot de passe pour la base MySQL, il vous sera demandé plus tard.
      * 0.2.6 unzip dans votre path et installé (debian: {{{apt-get install unzip}}})
+     * 0.2.7 python-json (debian {{{apt-get install python-json}}} (optionnel, pour les unittests des webservices)
    * 0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab

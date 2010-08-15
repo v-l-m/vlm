@@ -996,6 +996,8 @@ class fullUsers
 
     // Cumul du loch sauf si bout au vent... (si vitesse <0.1, loch n'est pas incrémenté)
     if ( $this->boatspeed > 0.1 )  {
+      //FIXME : loch devrait être un DECIMAL
+      $this->loch = $this->users->loch += round($this->boatspeed*$this->hours,3);
       $query_update .= " loch = loch + " . round($this->boatspeed*$this->hours,3) . "," ;
     }
 
@@ -1257,8 +1259,8 @@ class fullUsers
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Prepare the table races_ranking
-      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers ) values " .
-        " ( ". $id . ", " . $this->users->idusers . ")";
+      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch ) values " .
+        " ( ". $id . ", " . $this->users->idusers . ", 0)";
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Update boattype
