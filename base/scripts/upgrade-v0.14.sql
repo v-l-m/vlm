@@ -52,3 +52,7 @@ ALTER TABLE `users` ADD UNIQUE INDEX `boatpseudo` (`username`);
 
 #Adding table for waypoint types
 ALTER TABLE races_waypoints ADD COLUMN `wpformat` int NOT NULL default '0' AFTER `idwaypoint` ;
+UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = 1 WHERE RW.idwaypoint=WP.idwaypoint AND WP.latitude1=WP.latitude2 AND WP.longitude1=WP.longitude2 AND RW.laisser_au != 999;
+UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = RW.wpformat + 16 WHERE RW.idwaypoint=WP.idwaypoint AND RW.wptype LIKE "%Icegate%" AND WP.latitude1 > 0;
+UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = RW.wpformat + 32 WHERE RW.idwaypoint=WP.idwaypoint AND RW.wptype LIKE "%Icegate%" AND WP.latitude1 < 0;
+
