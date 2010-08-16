@@ -50,7 +50,7 @@ OBJS = $(LIBOBJS)
 
  PROGRAM = tst
 
-all:: libvlmc.a unittest windserver polarserver unittest-shm
+all:: wgrib/libgrib.a libvlmc.a unittest windserver polarserver unittest-shm
 
 bindings:: php
 
