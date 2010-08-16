@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.23 2009-09-06 14:07:18 ylafon Exp $
+ * $Id: vlm.h,v 1.24 2010-08-16 13:17:51 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -520,4 +520,23 @@ double VLM_find_boat_speed_context PARAM4(vlmc_context *, char *,
 void VLM_raw_move_loxo PARAM6(double, double, double, double,
 			      double *, double *);
 
+/**
+ * Create a two buoys wp structure out of any buoy definition
+ * @param wp, a <code>pointer to a waypoint struct</code>
+ * @param wp_type, an <code>int</code> representing the wp type (bitmask+value)
+ * @param id, an <code>int</code>, the id of the waypoint.
+ * @param lat1, a <code>double</code>, in <em>milli-degrees</em>
+ * @param long1, a <code>double</code>, in <em>milli-degrees</em>
+ * @param lat2, a <code>double</code>, in <em>milli-degrees</em>
+ * @param long2, a <code>double</code>, in <em>milli-degrees</em>
+ * @param leave_at, a <em>double</em>, leave the buoy at this angle
+ *                                     in <em>degrees</em>
+ * @param gate_length, a <em>double</em>, the gate length in the 
+ *                     one buoy+leave_at case (in <em>nautic miles</em>)
+ * NOTE the wp struc is filled with lat/long in <code>degrees</code>
+ * and angle in <code>radians</code>
+ */
+void VLM_init_waypoint PARAM9(waypoint *, int, int,
+			      double, double, double, double,
+			      double, double);
 #endif /* _VLM_H_ */
