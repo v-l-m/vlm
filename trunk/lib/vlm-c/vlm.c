@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.34 2009-09-06 14:07:18 ylafon Exp $
+ * $Id: vlm.c,v 1.36 2010-08-16 13:20:58 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -27,6 +27,7 @@
 #include "vlm.h"
 #include "vmg.h"
 #include "winds.h"
+#include "waypoint.h"
 #include "boat.h"
 
 extern vlmc_context *global_vlmc_context;
@@ -1038,4 +1039,37 @@ void VLM_raw_move_loxo(double latitude, double longitude,
   }
   *new_latitude = radToDeg(t_new_lat*1000.0);
   *new_longitude = radToDeg(t_new_long*1000.0);
+}
+
+/**
+ * Create a two buoys wp structure out of any buoy definition
+ * @param wp, a <code>pointer to a waypoint struct</code>
+ * @param wp_type, an <code>int</code> representing the wp type (bitmask+value)
+ * @param id, an <code>int</code>, the id of the waypoint.
+ * @param lat1, a <code>double</code>, in <em>milli-degrees</em>
+ * @param long1, a <code>double</code>, in <em>milli-degrees</em>
+ * @param lat2, a <code>double</code>, in <em>milli-degrees</em>
+ * @param long2, a <code>double</code>, in <em>milli-degrees</em>
+ * @param leave_at, a <em>double</em>, leave the buoy at this angle
+ *                                     in <em>degrees</em>
+ * @param gate_length, a <em>double</em>, the gate length in the 
+ *                     one buoy+leave_at case (in <em>nautic miles</em>)
+ * NOTE the wp struc is filled with lat/long in <code>degrees</code>
+ * and angle in <code>radians</code>
+ */
+void VLM_init_waypoint(waypoint *wp, int wp_type, int id,
+		       double lat1, double long1,
+		       double lat2, double long2,
+		       double leave_at, double gate_length) {
+  double t_lat1, t_long1;
+  double t_lat2, t_long2;
+
+  leave_at = degToRad(fmod(leave_at, 360.0));
+  t_lat1   = degToRad(lat1 / 1000.0);
+  t_long1  = degToRad(fmod((long1 / 1000.0), 360.0));
+  t_lat2   = degToRad(lat2 / 1000.0);
+  t_long2  = degToRad(fmod((long2 / 1000.0), 360.0));
+  
+  init_waypoint(wp, wp_type, id, t_lat1, t_long1, t_lat2, t_long2, 
+		leave_at, gate_length);
 }
