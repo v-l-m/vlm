@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.24 2010-08-12 21:53:41 ylafon Exp $
+ * $Id: defs.h,v 1.25 2010-08-16 16:03:07 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -123,6 +123,7 @@
 
 #define WP_TWO_BUOYS 0
 #define WP_ONE_BUOY  1
+#define WP_GATE_BUOY_MASK 0x000F
 /* leave space for 0-15 types of gates using buoys
    next is bitmasks */
 #define WP_DEFAULT              0
@@ -130,6 +131,7 @@
 #define WP_ICE_GATE_S           (1 <<  5)
 #define WP_ICE_GATE_E           (1 <<  6)
 #define WP_ICE_GATE_W           (1 <<  7)
+#define WP_GATE_KIND_MASK       0x00F0
 /* allow crossing in one direction only */
 #define WP_CROSS_CLOCKWISE      (1 <<  8)
 #define WP_CROSS_ANTI_CLOCKWISE (1 <<  9)
