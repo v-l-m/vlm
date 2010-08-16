@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.7 2010-08-13 20:03:22 ylafon Exp $
+ * $Id: waypoint.c,v 1.8 2010-08-16 16:02:58 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -73,7 +73,7 @@ double get_waypoint_xing_ratio(double prev_x, double x,
 
 /**
  * Create a two buoys wp structure out of any buoy definition
- * laisser_au is an angle in rad
+ * leave_at is an angle in rad
  */
 void init_waypoint(waypoint *wp, int wp_type, int id,
 		   double lat1, double long1, 
@@ -87,7 +87,7 @@ void init_waypoint(waypoint *wp, int wp_type, int id,
   wp->latitude1  = lat1;
   wp->longitude1 = long1;
 
-  switch (wp_type & 0x000F) {
+  switch (wp_type & WP_GATE_BUOY_MASK) {
   case WP_ONE_BUOY:
     wp->angle = leave_at;
     leave_at += PI;
@@ -168,7 +168,7 @@ int check_waypoint(double prev_latitude, double prev_longitude,
   __vlm_longitude_normalize(prev_longitude, current_longitude,
 			    wp_long1, wp_long2);
 
-  switch (wp->type & 0xFFF0) {
+  switch (wp->type & WP_GATE_KIND_MASK) {
   case WP_DEFAULT:
     intersect_ratio = intersects(prev_latitude, prev_longitude, 
 				 current_latitude, current_longitude,
