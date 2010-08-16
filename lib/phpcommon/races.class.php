@@ -100,8 +100,9 @@ class races {
     // retrieve all waypoints
     $this->waypoints=array();
 
-    $query = "SELECT RW.wporder, RW.wptype, WP.libelle, RW.laisser_au,".
-      "WP.maparea,WP.latitude1, WP.longitude1, WP.latitude2, WP.longitude2".
+    $query = "SELECT RW.wporder, RW.wptype, RW.wpformat, WP.libelle,".
+      " RW.laisser_au,WP.maparea,WP.latitude1, WP.longitude1,".
+      " WP.latitude2, WP.longitude2".
       " FROM races_waypoints RW, waypoints WP WHERE idraces=".$this->idraces . 
       " AND RW.idwaypoint=WP.idwaypoint ORDER BY wporder";
     
@@ -121,6 +122,14 @@ class races {
       $WPCoords['libelle'] = $row['libelle'];
       $WPCoords['laisser_au'] = $row['laisser_au'];
       $WPCoords['maparea'] = $row['maparea'];
+      // FIXME test
+      $vlm_wp = new waypoint();
+      VLM_init_waypoint(&$vlm_wp, $row['wpformat'],$row['wporder'],
+			$row['latitude1'], $row['longitude1'], 
+			$row['latitude2'], $row['longitude2'], 
+			$row['laisser_au'], WPLL);
+      $WPCoords['fakevlmwp'] = $vlm_wp;
+      // </FIXME> test
       // On push ce WP dans la liste des WP
       $this->waypoints[$row['wporder']] = $WPCoords;
     }
