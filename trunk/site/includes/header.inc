@@ -77,6 +77,7 @@
         } else {
             $player = new players(0, $pseudo);
             if (!$player->error_status && $player->checkPassword($password)) {
+                //Choosing a default boat is here possible because we give feedback to the user.
                 $defaultuser = getUserObject($player->getDefaultBoat());
                 loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
             } else {
@@ -89,7 +90,7 @@
           //FIXME !
          $player = getLoggedPlayerObject();
          $newuid = $_POST['boatid'];
-         $boatlist = array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList());
+         $boatlist = $player->getManageableBoatIdList();
          if (in_array($newuid, $boatlist)) {
             $defaultuser = getUserObject($newuid);
             loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
@@ -284,7 +285,7 @@
                 $player = new players(getPlayerId());
                 echo $player->htmlPlayername()."<br />\n";
                 //FIXME : factorise
-                $boatlist = array_unique(array_merge($player->getOwnedBoatIdList(), $player->getBoatsitIdList()));
+                $boatlist = $player->getManageableBoatIdList();
                 echo "<form method=\"post\" action=\"myboat.php\">";
                 echo "<input type=\"hidden\" name=\"type\" value=\"connectas\" />";
                 echo "<select name=\"boatid\" onchange=\"submit();\">";

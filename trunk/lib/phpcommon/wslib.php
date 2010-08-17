@@ -1,6 +1,7 @@
 <?php
 
 include_once("functions.php");
+include_once('players.class.php');
 
 class WSBase {
 
@@ -263,39 +264,61 @@ function ask_for_auth($usage) {
 function login_if_not($usage = "No usage given") {
     
     session_start();
+    // do we know the player from a previous login session?
+    if (isPlayerLoggedIn() && isLoggedIn() ) {
+        //OK, we are logged
+        $idu = get_cgi_var('select_idb');
+        if (!is_null($idu) && $idu != getLoginId() && in_array($idu, getLoggedPlayerObject()->getManageableBoatIdList())) {
+            //select_idb is correct, change login
+            $user = getUserObject($idu);
+            login($user->idusers, $user->username); //Boat login, to change idu in session
+        }
+        return $_SESSION['idu'];
+    // Backward compatible authentification during v14 lifetime
     // do we know the user from a previous login session?
-    if (array_key_exists('idu', $_SESSION) && array_key_exists('loggedin', $_SESSION) 
-        && ($_SESSION['loggedin'] == 1) ) {
-        $idu = $_SESSION['idu'];
-        $pseudo = $_SESSION['login'];
-        $IP = $_SESSION['IP'];
+    } else if (isLoggedIn()) {
+        //OK, we are BW logged
+        return $_SESSION['idu'];
     } else {
         // fallback to HTTP auth
         if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) ) {
+            //not http logged
             ask_for_auth($usage);
-            exit;
+            exit();
         } else {
             $pseudo = $_SERVER['PHP_AUTH_USER'];
             $passwd = $_SERVER['PHP_AUTH_PW'];
-            $idu = checkAccount($pseudo, $passwd);
-            // FIXME, do we need to check after utf-8 transform?
-            /*
-              if ((checkAccount(htmlentities($pseudo,ENT_COMPAT), 
-              htmlentities($password, ENT_COMPAT)) != FALSE)
-              || (checkAccount(htmlentities($pseudo,ENT_COMPAT,"UTF-8"),
-              htmlentities($password, ENT_COMPAT,"UTF-8")) |= FALSE)) {
-            */
-            if ($idu === False) {
-              ask_for_auth($usage);
-              exit();
+
+            if ( ($idu = checkAccount($pseudo, $passwd)) != FALSE ) {
+                // Backward compatible authentification during v14 lifetime
+                login($idu, $pseudo);
+                return $_SESSION['idu'];
+            } else {
+                //New player auth
+                $player = new players(0, $pseudo);
+                if (!$player->error_status && $player->checkPassword($passwd) ) {
+                    $idu = get_cgi_var('select_idb');
+                    if (is_null($idu) || !in_array($idu, $player->getManageableBoatIdList())) {
+                        //select_idb is not correct, selecting default
+                        $idu = $player->getDefaultBoat();
+                    }
+                    $user = getUserObject($idu);
+                    loginPlayer($user->idusers, $user->username, $player->idplayers, $player->playername);
+                    return $_SESSION['idu'];
+                } else {
+                    ask_for_auth($usage);
+                    exit();
+                }
             }
-            login($idu, $pseudo);
         }
     }
 }
 
 function logout_if_not($usage="Logout usage:\nUsername: test\nPassword: ko\nto force logout.") {
-    
+    /* This is required to bypass www-auth which does not standardise logout (the client has to "forget")
+       The trick is to allow logout with non-existing credentials.
+       Thus, the client software will propose these bad credentials next time, and asked for auth !
+    */
     logout();
     if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])
         && $_SERVER['PHP_AUTH_USER'] == "test" && $_SERVER['PHP_AUTH_PW'] == "ko") {

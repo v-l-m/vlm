@@ -6,12 +6,14 @@
     //FIXME: could be in functions.php
     //escape and quote if type is "string"
     //null => 0 if type is int
-    function sqlit(&$import, $t, $type = 'int', $coma = true) {
+    function sqlit(&$import, $t, $type = 'int', $coma = true, $default = null) {
+        if (!is_null($default)) $import[$t] = $default;
         switch ($type) {
             case 'string' :
                 $ret = "'".addslashes($import[$t])."'";
                 break;
-            case 'int' :
+            case 'int' :                    sqlit($wpmisc, "wptype", 'string', false).
+
             default :
                 $ret = intval($import[$t]);
         }
@@ -110,12 +112,14 @@
             //build the id of the waypoint - this is a convention
             $idwaypointto = sprintf("%d%02d", $idraceto, $wpmisc['wporder']);
             
-            $sqlrwp = "INSERT INTO races_waypoints (idwaypoint, idraces, wporder, laisser_au, wptype) ".
+            $sqlrwp = "INSERT INTO races_waypoints (idwaypoint, idraces, wporder, laisser_au, wptype, wpformat) ".
                     " VALUES (".$idwaypointto.", ".
                     $idraceto.", ".
                     sqlit($wpmisc, "wporder").
                     sqlit($wpmisc, "laisser_au").
-                    sqlit($wpmisc, "wptype", 'string', false).
+                    sqlit($wpmisc, "wptype", 'string').
+                    //default value for allowing v14 to import from v13, to remove when releasing v14.
+                    sqlit($wpmisc, "wpformat", 'int', false, 0).
                     " );";
             check_unicity('races_waypoints', "idraces = $idraceto AND idwaypoint = $idwaypointto", $umessage);
             exec_sql($sqlrwp, $printsql, $dryrun);            
