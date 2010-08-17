@@ -64,17 +64,16 @@ function get_info_array($idu) {
     case 3:
     case 4:
     case 5:
-      if ( $userObj->users->targetlat == 0 && 
-          $userObj->users->targetlong == 0 ) {
-        $info['PIP'] = sprintf ("%5.4f,%5.4f", 
-        $userObj->users->LatNM, 
-        $userObj->users->LonNM );
-      } else {
-        $info['PIP'] = sprintf ("%5.4f,%5.4f@%d", 
-        $userObj->users->targetlat, 
-        $userObj->users->targetlong, 
-        $userObj->users->targetandhdg );
-      }
+        if ( $userObj->users->targetlat == 0 && $userObj->users->targetlong == 0 ) {
+            $info['PIP'] = sprintf ("%5.4f,%5.4f", 
+            $userObj->LatNM, 
+            $userObj->LongNM );
+        } else {
+            $info['PIP'] = sprintf ("%5.4f,%5.4f@%d", 
+            $userObj->users->targetlat, 
+            $userObj->users->targetlong, 
+            $userObj->users->targetandhdg );
+        }
     }
     $rnkinfo = $userObj->getCurrentUserRanking();
     $info['POS'] = $rnkinfo['rankracing']."/".$rnkinfo['nbu'];
@@ -222,10 +221,10 @@ function ia_print($value, $key) {
 
 // now start the real work
 
-login_if_not(usage());
+$idu = login_if_not(usage());
 
 $fmt = get_output_format();
-$info_array = get_info_array($_SESSION['idu']);
+$info_array = get_info_array($idu);
 
 switch ($fmt) {
 case "json":

@@ -38,6 +38,15 @@ $opts['fdd']['idwaypoint'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['wpformat'] = array(
+  'name'     => 'Wpformat',
+  'help'     => 'Wp format (for future v0.14)',
+  'select'   => 'T',
+  'maxlen'   => 11,
+  'default'  => '0',
+  'sort'     => true
+);
+
 $opts['fdd']['wporder'] = array(
   'name'     => '#Wporder',
   'help'     => 'Unique id of the waypoint for the given race',

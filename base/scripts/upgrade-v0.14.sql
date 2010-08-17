@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS players;
 DROP TABLE IF EXISTS playerstousers;
 ALTER TABLE `user_action` DROP COLUMN `idplayers`;
 ALTER TABLE `users` DROP INDEX `boatpseudo`;
+ALTER TABLE `races_waypoints` DROP COLUMN `wpformat`;
 
 #Tables de gestion des PLAYERS
 CREATE TABLE `players_pending` (

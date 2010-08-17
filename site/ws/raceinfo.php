@@ -40,7 +40,7 @@ function get_info_array($idrace) {
 
     //Now fetch the waypoints
     $info["races_waypoints"] = Array();
-    $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
+    $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wpformat, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
     while ($wp = mysql_fetch_assoc($res)) {
         $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
         }

@@ -259,6 +259,10 @@ class players extends baseClass {
     }
 
     //getters
+    function getManageableBoatIdList() {
+        return array_unique(array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList()));
+    }
+    
     function getOwnedBoatIdList() {
         if (!is_null($this->ownedboatidlist)) return $this->ownedboatidlist;
         $this->ownedboatidlist = $this->getBoatIdList("linktype =".PU_FLAG_OWNER);

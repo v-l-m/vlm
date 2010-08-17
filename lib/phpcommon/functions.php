@@ -1397,7 +1397,7 @@ function isPlayerLoggedIn() {
 }
 
 function isLoggedIn() {
-    return (isset($_SESSION['idu']));
+    return (isset($_SESSION['idu']) && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1);
 }
 
 function getLoginName() {
