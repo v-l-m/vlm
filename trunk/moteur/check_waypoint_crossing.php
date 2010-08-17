@@ -51,6 +51,21 @@ do {
   // Test de croisement avec un waypoint
   $waypoint_crossed=false;
 
+  // FIXME TEST
+  if (array_key_exists('fakevlmwp', $nextwaypoint )) {
+    echo ("<testing>new WP check...\n");
+    if (VLM_check_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck,
+		     &$nextwaypoint['fakevlmwp'], $wp_xinglat, $wp_xinglong,
+		     $wp_xingratio)) {
+      printf ("\t=> Waypoint crossed");
+      printf (" : %f, %f (ratio %f)\n", doublep_value($wp_xinglat)/1000.0,
+	      doublep_value($wp_xinglong)/1000.0, doublep_value($wp_xingratio));
+    } else {
+      printf("\n=> WP not crossed\n");
+      printf ("</testing>\n");
+    }
+  }
+  // FIXME test
   if (VLM_check_cross_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck, 
 			 $nextwaypoint['latitude1'], $nextwaypoint['longitude1'], 
 			 $nextwaypoint['latitude2'], $nextwaypoint['longitude2'],
