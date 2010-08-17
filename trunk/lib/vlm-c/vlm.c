@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.37 2010-08-17 13:01:36 ylafon Exp $
+ * $Id: vlm.c,v 1.38 2010-08-17 22:30:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -1109,9 +1109,9 @@ int VLM_check_WP(double latitude, double longitude,
   double t_xing_lat, t_xing_long;
   int crossed;
   
-  t_prev_lat  = latitude / 1000.0;
+  t_prev_lat  = degToRad(latitude / 1000.0);
   t_prev_long = degToRad(fmod((longitude / 1000.0), 360.0));
-  t_new_lat   = new_lat / 1000.0;
+  t_new_lat   = degToRad(new_lat / 1000.0);
   t_new_long  = degToRad(fmod((new_long / 1000.0), 360.0));
   
   crossed = check_waypoint(t_prev_lat, t_prev_long, t_new_lat, t_new_long,
