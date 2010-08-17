@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.36 2010-08-16 13:20:58 ylafon Exp $
+ * $Id: vlm.c,v 1.37 2010-08-17 13:01:36 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -1072,4 +1072,58 @@ void VLM_init_waypoint(waypoint *wp, int wp_type, int id,
   
   init_waypoint(wp, wp_type, id, t_lat1, t_long1, t_lat2, t_long2, 
 		leave_at, gate_length);
+}
+
+/**
+ * Check if the waypoint is crossed.
+ * We check if we are in the range where approximation is valid,
+ * otherwise we compute a clipped part of the gate, then use the
+ * approximation method of checking the gate crossing
+ * order of parameters is:
+ * start lat/long of boat
+ * end lat/long of boat
+ * Gate pointer
+ * result:
+ * crossing lat/long
+ * ratio from the start to end of boat
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_lat, a <code>double</code>, in <em>milli-degrees</em>
+ * @param new_long, a <code>double</code>, in <em>milli-degrees</em> 
+ * @param wp, a pointer to a <code>waypoint struct</code>
+ * NOTE, the wp struct must contains long/lat in radians.
+ * @param xing_lat, a pointer to a <code>double</code>, 
+ *                  in <em>milli-degrees</em>
+ * @param xing_long, a pointer to a <code>double</code>, 
+ *                   in <em>milli-degrees</em> 
+ * @param ratio, a pointer to  a <code>double</code>, the ratio of 
+ *        the intersection, 0 (boat start) < ratio < 1 (boat end)
+ * @return 1 if crossing occured, 0 otherwise
+ */
+int VLM_check_WP(double latitude, double longitude, 
+		 double new_lat, double new_long,
+		 waypoint *wp,
+		 double *xing_lat, double *xing_long,
+		 double *ratio) { 
+  double t_prev_lat, t_prev_long, t_new_lat, t_new_long;
+  double t_xing_lat, t_xing_long;
+  int crossed;
+  
+  t_prev_lat  = latitude / 1000.0;
+  t_prev_long = degToRad(fmod((longitude / 1000.0), 360.0));
+  t_new_lat   = new_lat / 1000.0;
+  t_new_long  = degToRad(fmod((new_long / 1000.0), 360.0));
+  
+  crossed = check_waypoint(t_prev_lat, t_prev_long, t_new_lat, t_new_long,
+			   wp, ratio, &t_xing_lat, &t_xing_long);
+  if (crossed) {
+    if (t_xing_long > PI) {
+      t_xing_long -= TWO_PI;
+    } else if (t_xing_long < -PI) {
+      t_xing_long += TWO_PI;
+    }
+    *xing_lat  = 1000.0 * radToDeg(t_xing_lat);
+    *xing_long = 1000.0 * radToDeg(t_xing_long);
+  }
+  return crossed;
 }
