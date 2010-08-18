@@ -40,7 +40,24 @@ $opts['fdd']['idwaypoint'] = array(
 
 $opts['fdd']['wpformat'] = array(
   'name'     => 'Wpformat',
-  'help'     => 'Wp format (for future v0.14)',
+  'help'     => nl2br("Wp format (for future v0.14)
+#define WP_TWO_BUOYS 0
+#define WP_ONE_BUOY  1
+#define WP_GATE_BUOY_MASK 0x000F
+/* leave space for 0-15 types of gates using buoys
+   next is bitmasks */
+#define WP_DEFAULT              0
+#define WP_ICE_GATE_N           (1 <<  4)
+#define WP_ICE_GATE_S           (1 <<  5)
+#define WP_ICE_GATE_E           (1 <<  6)
+#define WP_ICE_GATE_W           (1 <<  7)
+#define WP_GATE_KIND_MASK       0x00F0
+/* allow crossing in one direction only */
+#define WP_CROSS_CLOCKWISE      (1 <<  8)
+#define WP_CROSS_ANTI_CLOCKWISE (1 <<  9)
+/* for future releases */
+#define WP_CROSS_ONCE           (1 << 10)
+"),
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',

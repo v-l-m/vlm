@@ -213,18 +213,29 @@ function usage() {
 }
 
 function ia_print($value, $key) {
+    $substkey = Array('error' => "ERR", "warning" => "WRN");
     if (is_array($value) ) {
         $value = "There is no support for Array() in text mode";
     }
+    if (array_key_exists($key, $substkey)) $key = $substkey[$key];
     echo $key."=".$value."\n";
 }
 
 // now start the real work
+login_if_not(usage());
 
-$idu = login_if_not(usage());
-
-$fmt = get_output_format();
-$info_array = get_info_array($idu);
+//This should be wrapped in helper funcs
+if (isPlayerLoggedIn() && is_null(get_cgi_var('select_idb'))) {
+    //FIXME normalize error message (like in boatsetup)
+    $info_array = Array('error' => 'select_idb is required as a GET parameter when using player login type');
+} else {
+    $fmt = get_output_format();
+    $info_array = get_info_array($_SESSION['idu']);
+    if (!isPlayerLoggedIn()) {
+        //FIXME : normalize warn message
+        $info_array['warning'] = 'This type of authentification is deprecated and is not garanteed in the next version of VLM';
+    }
+}
 
 switch ($fmt) {
 case "json":
