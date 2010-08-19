@@ -6,29 +6,12 @@ include_once('players.class.php');
 class WSBase {
 
     public $answer = Array();
-    public $input = null;
-    public $request = null;
 
     function __construct() {
         // now start the real work
         login_if_not($this->usage());
-
-        //surface test
-        $this->input = get_cgi_var('parms', null);
-        if (is_null($this->input)) $this->reply_with_error('PARM01');
-        $this->request = json_decode($this->input, true);
-        if (is_null($this->request) || !is_array($this->request)) $this->reply_with_error("PARM02");
-
-        //ask for debug
-        if (isset($this->request['debug']) && $this->request['debug']) {
-            $this->answer['request'] = $this->request;
-            $this->warning("Debug mode for testing purposes only");
-        }
-        
-        if (isset($_GET["parms"])) $this->warning("http/GET is allowed for testing purposes only");
-
     }
-    
+
     function usage() {
         return "Usage:
         Documentation is in progress and should be available at the following url :
@@ -66,19 +49,53 @@ class WSBase {
         $this->reply();
     }
 
+    function finish() {
+        //Must be surcharged (?) by inherited classes
+        $ws->reply_with_error("CORE01");
+    }
+
+}
+
+class WSBasePlayer extends WSBase {
+    function __construct() {
+        parent::__construct();
+        if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03');
+    }
+}
+
+class WSSetup extends WSBase {
+
+    public $input = null;
+    public $request = null;
+
+    function __construct() {
+        parent::__construct();
+        
+        //surface test
+        $this->input = get_cgi_var('parms', null);
+        if (is_null($this->input)) $this->reply_with_error('PARM01');
+        $this->request = json_decode($this->input, true);
+        if (is_null($this->request) || !is_array($this->request)) $this->reply_with_error("PARM02");
+
+        //ask for debug
+        if (isset($this->request['debug']) && $this->request['debug']) {
+            $this->answer['request'] = $this->request;
+            $this->warning("Debug mode for testing purposes only");
+        }
+        
+        if (isset($_GET["parms"])) $this->warning("http/GET is allowed for testing purposes only");
+
+    }
+    
     function reply_with_error_if_not_exists($key, $code, $request = null) {
         if (is_null($request)) $request = $this->request;
         if (!isset($request[$key])) $this->reply_with_error($code);
     }
 
-    function finish() {
-        //Must be surcharged (?) by inherited classes
-        $ws->reply_with_error("CORE01");
-    }
     
 }
 
-class WSBaseBoatsetup extends WSBase {
+class WSBaseBoatsetup extends WSSetup {
     public $fullusers = null;
     
     function __construct() {
@@ -176,6 +193,7 @@ function get_error($code) {
         //Auth
         "AUTH01" => "idu is mandatory for safety reasons and should match your login",
         "AUTH02" => "Your request does not match the idu you are login in",
+        "AUTH03" =>  "boat account authentification is deprecated, please use a player account.",
         //SQL
         "CORE01" => "Something went wrong when passing orders to the core. You should report this to the developpers ! (See the custom_error_string)",
         //pim
@@ -198,7 +216,10 @@ function get_error($code) {
         "WP05" => "wp parameters should be numerics",
         //prefs
         "PREFS01" => "prefs is unspecified",
-        "PREFS02" => "key is not allowed"
+        "PREFS02" => "key is not allowed",
+        //player
+        "PLAYER01" => 'idp (id player) is required',
+        "PLAYER02" => 'idp does not exist',
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
@@ -261,7 +282,11 @@ function ask_for_auth($usage) {
     echo $usage;
 }
 
-function login_if_not($usage = "No usage given") {
+function wsCheckLogin($usage) {
+    return login_if_not($usage, False);
+}
+
+function login_if_not($usage = "No usage given", $allow_boatauth = True) {
     
     session_start();
     // do we know the player from a previous login session?
@@ -276,7 +301,7 @@ function login_if_not($usage = "No usage given") {
         return $_SESSION['idu'];
     // Backward compatible authentification during v14 lifetime
     // do we know the user from a previous login session?
-    } else if (isLoggedIn()) {
+    } else if ($allow_boatauth && isLoggedIn()) {
         //OK, we are BW logged
         return $_SESSION['idu'];
     } else {
@@ -289,7 +314,7 @@ function login_if_not($usage = "No usage given") {
             $pseudo = $_SERVER['PHP_AUTH_USER'];
             $passwd = $_SERVER['PHP_AUTH_PW'];
 
-            if ( ($idu = checkAccount($pseudo, $passwd)) != FALSE ) {
+            if ($allow_boatauth && ($idu = checkAccount($pseudo, $passwd)) != FALSE ) {
                 // Backward compatible authentification during v14 lifetime
                 login($idu, $pseudo);
                 return $_SESSION['idu'];
