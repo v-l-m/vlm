@@ -27,8 +27,10 @@ From 0.13 to Next:
       define("DBSLAVEUSER", "vlm");
       define("DBSLAVEPASSWORD", "***");
     to point to S9 (master server).
-    (We keep master/slave paradigm for 
-     future uses)
+        (We keep master/slave paradigm for future uses)
+
+  EDIT file ./conf/param.php
+    and delete line defining "SYSTEME_WIND_AT_POSITION" (which is not used anymore since...)
 
 
 From 0.12 to Next :
