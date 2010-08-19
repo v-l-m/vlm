@@ -9,7 +9,7 @@
  *          les calculs a un meme instant 
  * @return une array ( vitesse (kts), angle (degres) )
 */
-function windAtPosition($_lat = 0, $_long = 0, $when = 0, $version = SYSTEME_WIND_AT_POSITION )
+function windAtPosition($_lat = 0, $_long = 0, $when = 0)
 {
   /*
     la fonction cree une structure contenant des pointeurs vers

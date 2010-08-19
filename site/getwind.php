@@ -10,7 +10,7 @@
                $lat/1000, $lon/1000 , giveDegMinSec ('html', $lat/1000, $lon/1000)) ;
   printf ("Time is UTC (%d), Wind Speed unit : kts, Wind Dir is where the wind comes from<br>", $now+$time);
 
-  $wind=windAtPosition($lat,$lon,$time,'OLD');
+  $wind=windAtPosition($lat,$lon,$time);
   echo "<H1>Fonction actuelle, table wind</H1>";
   echo "<code>";
   printf ('%s;Speed=%4.1f;Dir=%4.1f<BR>' , 
