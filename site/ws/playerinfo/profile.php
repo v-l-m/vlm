@@ -4,7 +4,7 @@ include_once("wslib.php");
 
 $ws = new WSBasePlayer();
 
-if (is_null($idp = get_cgi_var('idp'))) $ws->reply_with_error('PLAYER01');
+$idp = get_cgi_var('idp', getPlayerId());
 if (is_null($player = getPlayerObject($idp))) $ws->reply_with_error('PLAYER02');
 
 $ws->answer['profile'] = Array();
