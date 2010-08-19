@@ -13,6 +13,7 @@ function get_info_array($idu) {
   $userObj = new fullUsers($idu);
 
   $info['IDU'] = $userObj->users->idusers;
+  $info['IDP'] = $userObj->users->getOwnerId();
   $info['IDB'] = $userObj->users->boatname;
   $info['EML'] = $userObj->users->email;
   $info['COL'] = $userObj->users->color;
