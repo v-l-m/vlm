@@ -126,6 +126,7 @@ class players extends baseClass {
         $created;
     var $boatsitidlist = null;
     var $ownedboatidlist = null;
+    var $recentlyboatsittedidlist = null;
           
     function players($idplayers = 0, $email = null, $pending = null, $row = null) {
         if ($idplayers !== 0) {
@@ -269,11 +270,27 @@ class players extends baseClass {
         return $this->ownedboatidlist;
     }
 
+    function getBoatRecentlyBoatsittedIdList() {
+        if (!is_null($this->recentlyboatsittedidlist)) return $this->recentlyboatsittedidlist;
+        $boatidlist = Array();
+        //FIXME : optimiser la requête ?
+        $query  = "SELECT DISTINCT `idusers` FROM `user_action` WHERE `idplayers` = ".$this->idplayers." AND idusers NOT IN (SELECT DISTINCT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND linktype = ".PU_FLAG_OWNER." )";
+        if ($res = $this->queryRead($query)) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $boatidlist[$row['idusers']] = $row['idusers'];
+                //FIXME : check result ?
+            }
+        }
+        $this->recentlyboatsittedidlist = $boatidlist;
+        return $this->recentlyboatsittedidlist;
+    }
+
     function getBoatsitIdList() {
         if (!is_null($this->boatsitidlist)) return $this->boatsitidlist;
         $this->boatsitidlist = $this->getBoatIdList("linktype = ".PU_FLAG_BOATSIT);
         return $this->boatsitidlist;
     }
+
 
     function getDefaultBoat() {
         $boatlist = array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList());
@@ -354,6 +371,7 @@ class players extends baseClass {
         $ret = "<ul>";
         foreach ($boatlist as $id) {
             $user = getUserObject($id);
+            if (is_null($user)) continue;
             $ret .= "<li>".$user->htmlIdusersUsernameLink()."&nbsp;";
             if (!in_array($user->idusers, $this->getOwnedBoatIdList())) $ret .= "(".getLocalizedString("as a boatsitter").")&nbsp;";
             $ret .= "-&nbsp;";
@@ -387,6 +405,11 @@ class players extends baseClass {
             $ret .= "</ul><hr />";
         }
         return $ret;
+    }
+
+    function htmlBoatRecentlyBoatsittedList() {
+        $list = $this->getBoatRecentlyBoatsittedIdList();
+        return $this->htmlBoatlist($list);
     }
 
 }

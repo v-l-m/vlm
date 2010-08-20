@@ -70,6 +70,11 @@
                 } else {
                     echo $player->htmlBoatOwnedList();
                 }
+                if (count($player->getBoatRecentlyBoatsittedIdList()) > 0) {
+                    echo "<h2>".getLocalizedString('Recently boatsitted') . ' : </h2>';
+                    echo $player->htmlBoatRecentlyBoatsittedList();
+                }                
+
                 if ($player->idplayers == getPlayerId()) {
                     echo "<hr /><ul>";
                     echo "<li><a href=\"playerlogs.php\">".getLocalizedString('Recent actions') . '</a></li>';
