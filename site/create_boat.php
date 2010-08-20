@@ -33,7 +33,8 @@
     //FIXME
     <?php echo "<h2>OLD INTERFACE to create a single boat account is available <a href=\"create.php\">HERE</a> for testing purpose</h2>"; ?>
 
-        </div>
+        </div>        <p><?php echo "<a href=\"attach_owner.php\">".getLocalizedString("You may also attach a pre-existing boat").".</a>"; ?></p>
+
 <?php
     }
 
@@ -86,6 +87,7 @@
         }
     } else {
         $player = getLoggedPlayerObject();
+        <p><?php echo "<a href=\"attach_owner.php\">".getLocalizedString("You may also attach a pre-existing boat").".</a>"; ?></p>
         echo $player->htmlBoatCandidatesList();
         printFormRequest();
 
