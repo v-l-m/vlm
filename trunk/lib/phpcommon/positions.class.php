@@ -93,16 +93,17 @@ class positions
     $this->long = doublep_value($new_long);
   } 
 
-  function writePositions()
+  function writePositions($updatetime = 1)
   {
-    $query7 = "INSERT INTO positions " .
-              " SET time = ". time().
+    if ($updatetime == 1) {
+      $this->time = time();
+    }
+    $query7 = "INSERT INTO positions SET time = ". $this->time .
               ", `long` =". $this->long .
               ", `lat` =". $this->lat.
               ", idusers = ".$this->idusers .
               ", `race` = ".$this->race;
     wrapper_mysql_db_query_writer($query7);
-
   }
 
   function writeDefaultPositions($id, $race)
@@ -113,7 +114,6 @@ class positions
     $this->idusers = $id;
     $this->race = $race;
     $this->writePositions();
-   
   }
 
   /*returns FALSE if it's false*/
