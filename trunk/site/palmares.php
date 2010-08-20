@@ -65,7 +65,11 @@
                 echo "</ul>";
                 echo "<hr />";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
-                echo $player->htmlBoatlist();
+                if ($player->idplayers == getPlayerId()) {
+                    echo $player->htmlBoatManageableList();
+                } else {
+                    echo $player->htmlBoatOwnedList();
+                }
                 if ($player->idplayers == getPlayerId()) {
                     echo "<hr /><ul>";
                     echo "<li><a href=\"playerlogs.php\">".getLocalizedString('Recent actions') . '</a></li>';
