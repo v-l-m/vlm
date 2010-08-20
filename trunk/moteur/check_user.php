@@ -115,6 +115,7 @@ if ( $usersObj->engaged != 0 ) {
 							$fullUsersObj->boatspeed*$fullUsersObj->hours,
 							$fullUsersObj->users->boatheading
 							);
+    $fullUsersObj->lastPositions->time = $now;
 
     $lonApres  = $fullUsersObj->lastPositions->long;
     $latApres  = $fullUsersObj->lastPositions->lat;
