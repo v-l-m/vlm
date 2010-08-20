@@ -87,7 +87,7 @@
         }
     } else {
         $player = getLoggedPlayerObject();
-        <p><?php echo "<a href=\"attach_owner.php\">".getLocalizedString("You may also attach a pre-existing boat").".</a>"; ?></p>
+        echo "<p><a href=\"attach_owner.php\">".getLocalizedString("You may also attach a pre-existing boat").".</a></p>";
         echo $player->htmlBoatCandidatesList();
         printFormRequest();
 
