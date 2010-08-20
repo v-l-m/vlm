@@ -56,6 +56,9 @@
         "possible_duplicates.php"           => "Duplicates by IP",
         "racemaps_without_race.report.php"  => "Racemaps with no corresponding race",
         "races_without_racemap.report.php"  => "Races with no corresponding racemap",
+        "boats_with_more_than_one_owner.report.php" => "Boats with more than one owner",
+        "boats_without_owner.report.php" => "Boats without owner",
+        "boats_with_boatsitter_but_without_owner.report.php" => "Boats with boatsitter(s) but without owner",
         );
 
     adminlistbox($reportpages, "Reports");
