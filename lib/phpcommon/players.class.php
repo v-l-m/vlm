@@ -342,9 +342,15 @@ class players extends baseClass {
         return $ret;
     }
 
+    function htmlBoatOwnedList() {
+        return $this->htmlBoatlist($this->getOwnedBoatIdList());
+    }
+
+    function htmlBoatManageableList() {
+        return $this->htmlBoatlist($this->getManageableBoatIdList());
+    }
     
-    function htmlBoatlist() {
-        $boatlist = array_unique(array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList()));
+    function htmlBoatlist($boatlist) {
         $ret = "<ul>";
         foreach ($boatlist as $id) {
             $user = getUserObject($id);
