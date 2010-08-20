@@ -67,6 +67,7 @@
         "strange_results_for_unknown_races.php"    => "Results for unknown races.",
         "strange_engaged_in_unknown.php"    => "Engaged in unknown race.",
         "strange_unknown_flag.php"          => "Boat with Unknown flag.",
+        "players_pending_for_too_much_time.fixreport.php" => "Players pending for too much time",
         );
     
     adminlistbox($strangepages, "Report & fix [Use with caution to fix inconsistencies]");
