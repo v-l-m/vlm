@@ -32,6 +32,27 @@ From 0.13 to Next:
   EDIT file ./conf/param.php
     and delete line defining "SYSTEME_WIND_AT_POSITION" (which is not used anymore since...)
 
+= Master Server =
+
+  RUN
+    ./scripts/maj_module.sh base
+    cd ./vlmcode/base/scripts/
+    ./runupgrade.sh 0.14
+    cd 
+
+  RUN
+    ./scripts/maj_module.sh moteur
+
+= All servers =
+
+  RUN
+    ./scripts/maj_module.sh lib/vlm-c
+    (as root) /etc/init.d/apache2 restart (or service apache2 restart)
+
+    ./scripts/maj_module.sh lib/phpcommon
+    ./scripts/maj_module.sh site
+    ./scripts/maj_module.sh medias
+
 
 From 0.12 to Next :
 

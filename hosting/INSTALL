@@ -135,7 +135,11 @@ Merci
      * 2.3.2 lancez {{{$ ./importdump.sh vlmdump.sql.gz}}}
      * 2.3.3 Lisez le fichier UPDATE au cas ou
    * 2.4 Configuration du fichier param.php
-     (en reportant la conf de la base de donnée)
+     * (en reportant la conf de la base de donnée)
+     * pour un serveur de dev, pensez à modifier les clefs suivantes :
+      * define("EMAIL_COMITE_VLM", "paparazzia@gmail.com");
+      * define("MAIL_PREFIX", "VLM_".SERVER_NAME);
+
 
 = Le site, les images, le phpcommon ... =
  * 3. Install du php+apache sur chaque serveur
