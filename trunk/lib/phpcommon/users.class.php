@@ -416,8 +416,9 @@ class users extends baseClass
       return False;
   }
 
-  function setRelationship($idplayer, $relationship) {
+  function setRelationship($idplayer, $relationship, $done_by_idplayer = null) {
       $idplayer = intval($idplayer);
+      if (is_null($done_by_idplayer)) $done_by_idplayer = $idplayer;
       $relationship = intval($relationship);
       if ($idplayer > 0) {
           $query = "REPLACE playerstousers SET idusers = ".$this->idusers.", idplayers = ".$idplayer.", linktype = ".$relationship;
@@ -427,20 +428,21 @@ class users extends baseClass
                       $logmsg = "Player take ownership of this boat.";
                       break;
                   case PU_FLAG_BOATSIT :
-                      $logmsg = "Player granted boatsitter of this boat.";
+                      $logmsg = "Player $idplayer granted boatsitter of this boat.";
                       break;
                   default :
-                      $logmsg = "Boat attached to player with linktype = ".$relationship;
+                      $logmsg = "Boat attached to player $idplayer with linktype = ".$relationship;
               }
-              logPlayerEvent($idplayer, $this->idusers, $this->engaged, $logmsg);
+              logPlayerEvent($done_by_idplayer, $this->idusers, $this->engaged, $logmsg);
               return True;
           }
       }
       return False;
   }
 
-  function removeRelationship($idplayer, $relationship) {
+  function removeRelationship($idplayer, $relationship, $done_by_idplayer = null) {
       $idplayer = intval($idplayer);
+      if (is_null($done_by_idplayer)) $done_by_idplayer = $idplayer;
       $relationship = intval($relationship);
       if ($idplayer > 0) {
           $query = "DELETE FROM playerstousers WHERE idusers = ".$this->idusers." AND idplayers = ".$idplayer." AND linktype = ".$relationship;
@@ -448,15 +450,15 @@ class users extends baseClass
               switch($relationship) {
                   //FIXME : translation !
                   case PU_FLAG_OWNER :
-                      $logmsg = "Player no longer owner of this boat.";
+                      $logmsg = "Player @$idplayer no longer owner of this boat.";
                       break;
                   case PU_FLAG_BOATSIT :
-                      $logmsg = "Player no longer boatsitter of this boat.";
+                      $logmsg = "Player @$idplayer no longer boatsitter of this boat.";
                       break;
                   default :
-                      $logmsg = "Boat and player not linked anymore  with linktype = ".$relationship;
+                      $logmsg = "Boat and player @$idplayer not linked anymore  with linktype = ".$relationship;
               }
-              logPlayerEvent($idplayer, $this->idusers, $this->engaged, $logmsg);
+              logPlayerEvent($done_by_idplayer, $this->idusers, $this->engaged, $logmsg);
               return True;
           }
       }

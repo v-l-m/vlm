@@ -80,7 +80,7 @@
                 case 'confirm_add' :
                     if (!checkAddBoatsit($userObj, $playerObj, $msg)) {
                         break;
-                    } else if (!$userObj->setRelationship($playerObj->idplayers, $pu_linktype)) {
+                    } else if (!$userObj->setRelationship($playerObj->idplayers, $pu_linktype, getPlayerId())) {
                         $msg .= getLocalizedString("Error when attaching the boat");
                     } else {
                         $msg .= getLocalizedString("OK, player is now boatsitter of this boat.");
@@ -89,7 +89,7 @@
                 case 'confirm_delete' :
                     if (!checkDelBoatsit($userObj, $playerObj, $msg)) {
                         break;
-                    } else if (!$userObj->removeRelationship($playerObj->idplayers, $pu_linktype)) {
+                    } else if (!$userObj->removeRelationship($playerObj->idplayers, $pu_linktype, getPlayerId())) {
                         $msg .= getLocalizedString("Error when deleting relationship with the boat");
                     } else {
                         $msg .= getLocalizedString("OK, player is not anymore boatsitter of this boat.");
