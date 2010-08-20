@@ -20,6 +20,8 @@ Ce document décrit l'utilisation/l'installation sur votre système d'une image 
   * Règler l'offset de temps
    * La machine virtuelle est en UTC. Elle prend le temps sur votre PC. Si ce dernier n'est pas en UTC, vous allez avoir un décalage
      VBoxManage modifyvm vlmvbox --biossystemtimeoffset -7200000
+  * partager votre clef publique ssh dans .ssh/authorized_keys
 
 3. Pour démarrer en ligne de commande :
-    VBoxManage startvlm vlmvbox --type headless
+ * VBoxManage startvlm vlmvbox --type headless
+ * OU utiliser le script vlmvbox.sh

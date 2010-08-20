@@ -363,9 +363,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'action' => 'action',
     "as a boatsitter" => "as a boatsitter",
     "Boat-sitting management" => "Boat-sitting management",
+    "OK, player is now boatsitter of this boat." => "OK, player is now boatsitter of this boat.",
   ),
   'fr' => 
   array (
+    "OK, player is now boatsitter of this boat." => "OK, ce joueur est maintenant boat-sitter de ce bateau",
     "Boat-sitting management" => "Gestion du boat-sitting",
     "as a boatsitter" => "en tant que boat-sitter",
     'action' => 'action',
