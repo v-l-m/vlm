@@ -4,7 +4,7 @@
     // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
     $display_submit = "false";
     if ( isLoggedIn() ) {
-        $users = new Users(getLoginId());
+        $users = getLoggedUserObject();
         if ( $users->engaged == 0 ) {
             $display_submit = "true";
             $av_races=availableRaces($users->idusers);
