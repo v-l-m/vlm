@@ -433,12 +433,12 @@ include_once("scripts/myboat.js");
             // player not connected as a player but as a boat/user.
             if ( ! isPlayerLoggedIn()  ) {
                 $msg = "<b>".getLocalizedString("You are not logged as a player. Please create and use a player account !")."</b>";
-                $messages[] = Array("id" => "oldloginmode", "txt" => $msg, "class" => "warn");
+                $messages[] = Array("id" => "oldloginmode", "txt" => $msg, "class" => "warn", "url" => "create_player.php");
             }
 
             // no ownership for this boat
             if ( $usersObj->users->getOwnerId() == 0  ) {
-                $msg = "<b>".getLocalizedString("This boat has no owner.")." ".getLocalizedString("Please <a href=\"attach_boat.php\">attach</a> it to a player !")."</b>";
+                $msg = "<b>".getLocalizedString("This boat has no owner.")." ".getLocalizedString("Please attach it to a player !")."</b>";
                 $messages[] = Array("id" => "noownership", "txt" => $msg, "class" => "warn", "url" => "attach_boat.php");
             }
 
@@ -476,7 +476,13 @@ include_once("scripts/myboat.js");
                     echo "<div class=\"" . $msgstruct['class'] . "message\" id=\"" . $msgstruct['id'] . "box\">"
                          . $msgstruct["txt"];
                     if (array_key_exists("url", $msgstruct)) {
-                        echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">?</a>]";
+                        echo "&nbsp;[<a href=\"".$msgstruct["url"]."\">";
+                        if ($msgstruct['class'] == 'warn') {
+                            echo getLocalizedString("Click here");
+                        } else {
+                            echo "?";
+                        }
+                        echo "</a>]";
                     }
                     echo "</div>\n";
                 }

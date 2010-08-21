@@ -21,7 +21,7 @@ $strings = array (
     'Human Readable date' => 'Human Readable date',
     'Interface for mobiles devices' => 'Interface for mobiles devices',
     'Mobiles' => 'Mobiles',
-    'Please <a href=\\"attach_boat.php\\">attach</a> it to a player !' => 'Please <a href=\\"attach_boat.php\\">attach</a> it to a player !',
+    'Please attach it to a player !' => 'Please attach it to a player !',
     'Profile' => 'Profile',
     'Server(s) time is now' => 'Server time is now',
     'Status' => 'Status',
@@ -349,7 +349,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'New password' => 'New password',
     'check' => 'check',
     'See you soon on VLM !' => 'See you soon on VLM !',
-    "You have requested to create an account on VLM.\nPle ase, click on the link below or copy/paste it in your browser."
+    "You have requested to create an account on VLM.\nPlease, click on the link below or copy/paste it in your browser."
         => "You have requested to create an account on VLM.\nPlease, click on the link below or copy/paste it in your browser.",
     "Welcome into Virtual Loup de Mer !" => "Welcome into Virtual Loup de Mer !",
     "Validate your account" => "Validate your account",
@@ -364,9 +364,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     "as a boatsitter" => "as a boatsitter",
     "Boat-sitting management" => "Boat-sitting management",
     "OK, player is now boatsitter of this boat." => "OK, player is now boatsitter of this boat.",
+    "Click here" => "Click here",
   ),
   'fr' => 
   array (
+    "Click here" => "Cliquez ici",
     "OK, player is now boatsitter of this boat." => "OK, ce joueur est maintenant boat-sitter de ce bateau",
     "Boat-sitting management" => "Gestion du boat-sitting",
     "as a boatsitter" => "en tant que boat-sitter",
@@ -410,9 +412,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'Boat creation error' => 'Erreur lors de la création du bateau',
     'Recent actions' => 'Action récentes',
     'Input invalid' => 'Saisie invalide',
-
     'An email has been sent. Click on the link to validate.' => 'Un courriel vient de vous être envoyé. Cliquez sur le lien reçu pour valider votre demande.',
-    'Attachment successful.' => 'Rattachement réussi.',
     'Attachment to this account' => 'Rattacher à ce compte',
     'Boat id' => 'Identifiant numérique du bateau',
     'Boat login' => 'Pseudo du bateau',
@@ -430,7 +430,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'Human Readable date' => 'Date en clair',
     'Interface for mobiles devices' => 'Interface pour les mobiles',
     'Mobiles' => 'Mobiles',
-    'Please <a href="attach_boat.php">attach</a> it to a player !' => 'Merci de le <a href="attach_boat.php">rattacher</a> à un joueur !',
+    'Please attach it to a player !' => 'Merci de le rattacher à un joueur !',
     'Profile' => 'Profil',
     'Server(s) time is now' => 'Le temps du serveur est actuellement',
     'Status' => 'Statut',
