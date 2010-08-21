@@ -365,9 +365,13 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     "Boat-sitting management" => "Boat-sitting management",
     "OK, player is now boatsitter of this boat." => "OK, player is now boatsitter of this boat.",
     "Click here" => "Click here",
+    "You may also attach a pre-existing boat" => "You may also attach a pre-existing boat",
+    "Recently boatsitted" => "Recently boatsitted",
   ),
   'fr' => 
   array (
+    "Recently boatsitted" => "Boat-sittings récents",
+    "You may also attach a pre-existing boat" => "Vous pouvez aussi rattacher un ancien bateau",
     "Click here" => "Cliquez ici",
     "OK, player is now boatsitter of this boat." => "OK, ce joueur est maintenant boat-sitter de ce bateau",
     "Boat-sitting management" => "Gestion du boat-sitting",
