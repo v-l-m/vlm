@@ -242,8 +242,8 @@
 ?>
         <div id="loginbox" class="leftbox">
             <form method="post" action="myboat.php">
-                User: <input size="10" maxlength="64" name="pseudo" /><br />
-                Pass: <input size="10" maxlength="15" type="password" name="password" /><br />
+                <?php echo getLocalizedString("email"); ?> : <input size="10" maxlength="64" name="pseudo" /><br />
+                <?php echo getLocalizedString("password"); ?> : <input size="10" maxlength="15" type="password" name="password" /><br />
                 <input type="hidden" name="type" value="login" />
                 <p class="leftbutton">
                     <input type="submit" value="<?php echo getLocalizedString("login"); ?>" />

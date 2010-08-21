@@ -15,7 +15,7 @@
         if ( $userobj->getOwnerId() == 0  ) {
             $msg = getLocalizedString("This boat has no owner.");
             if ($idusers == getLoginId()) {
-                $msg .= " ".getLocalizedString("Please <a href=\"attach_boat.php\">attach</a> it to a player !")."</b>";
+                $msg .= " ".getLocalizedString("Please attach it to a player !")."&nbsp<a href=\"attach_boat.php\">".getLocalizedString("Click here")."</a>.";
             }
             echo "<li><b>".$msg."</b></li>";
         } else {
