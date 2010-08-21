@@ -38,7 +38,6 @@ class users extends baseClass
     
   function users($id) {
     $id = intval($id);
-
     $query= "SELECT idusers, boattype, username, password,".
       " boatname, color, boatheading, pilotmode, pilotparameter,".
       " engaged, lastchange, email, nextwaypoint, userdeptime, " .
@@ -488,10 +487,9 @@ class fullUsers
 
   function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
   {
-
     $now = time();
 
-    if ($origuser == NULL) {
+    if (is_null($origuser)) {
       $this->users = getUserObject($id);
     } else {
       $this->users = &$origuser;
@@ -1229,6 +1227,7 @@ class fullUsers
       " loch=0 " .
       " WHERE idusers = ".$this->users->idusers;
     $result11 = wrapper_mysql_db_query_writer($query11);
+    $this->users->engaged = $id;
 
     if ( $id != 0 ) {
       $this->races = new races($id);
