@@ -626,10 +626,8 @@ class fullUsers
     //  printf ("<p>Lat2=%f, Long2=%f</p>\n", $nextwaypoint[2]/1000, $nextwaypoint[3]/1000);
     //  printf ("<p>BoatLat=%f, BoatLong=%f</p>\n", $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
     if (defined('MOTEUR')) {
-      $xing_dist = VLM_distance_to_line_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
-						   $nextwaypoint->latitude1, $nextwaypoint->longitude1,
-						   $nextwaypoint->latitude2, $nextwaypoint->longitude2,
-						   $lat_xing, $long_xing, $xing_ratio);
+      $xing_dist = VLM_distance_to_wp_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
+						 &$nextwaypoint, $lat_xing, $long_xing, $xing_ratio);
     } else {
       $xing_dist = VLM_distance_to_line_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
 						   $nextwaypoint['latitude1'], $nextwaypoint['longitude1'],

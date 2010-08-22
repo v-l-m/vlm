@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.39 2010-08-22 13:55:43 ylafon Exp $
+ * $Id: vlm.c,v 1.40 2010-08-22 15:24:09 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -569,6 +569,63 @@ double VLM_distance_to_line_ratio_xing(double latitude, double longitude,
   dist = distance_to_line_ratio_xing(degToRad(latitude)  ,degToRad(longitude),
 				     degToRad(latitude_a),degToRad(longitude_a),
 				     degToRad(latitude_b),degToRad(longitude_b),
+				     &x_lat, &x_long, ratio);
+  if (x_long > PI) {
+    x_long -= TWO_PI;
+  } else if (x_long < -PI) {
+    x_long += TWO_PI;
+  }
+  *xing_lat  = 1000.0 * radToDeg(x_lat);
+  *xing_long = 1000.0 * radToDeg(x_long);
+  return dist;
+}
+
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B from a waypoint struct
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp, a pointer to a <code>waypoint</code> structure
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_wp_ratio_xing(double latitude, double longitude, 
+				     waypoint *wp,
+				     double *xing_lat, double *xing_long,
+				     double *ratio) {
+  double x_lat, x_long, dist;
+  double latitude_a, longitude_a, latitude_b, longitude_b;
+
+  /* sanity check */
+  latitude    = latitude / 1000.0;
+  longitude   = fmod((longitude / 1000.0), 360.0);
+  if (longitude < 0.0) {
+    longitude += 360.0;
+  }
+  latitude_a  = wp->latitude1;
+  longitude_a = fmod(wp->longitude1, TWO_PI);
+  if (longitude_a < 0.0) {
+    longitude_a += TWO_PI;
+  }
+  latitude_b  = wp->latitude2;
+  longitude_b = fmod(wp->longitude2, TWO_PI);
+  if (longitude_b < 0.0) {
+    longitude_b += TWO_PI;
+  }
+  
+  /* if something goes wrong, return -1 */
+  if (latitude   < -90.0 || latitude   > 90.0 ||
+      latitude_a < -PI || latitude_a > PI ||
+      latitude_b < -PI || latitude_b > PI) {
+    return -1.0;
+  }
+
+  dist = distance_to_line_ratio_xing(degToRad(latitude)  ,degToRad(longitude),
+				     latitude_a, longitude_a,
+				     latitude_b, longitude_b,
 				     &x_lat, &x_long, ratio);
   if (x_long > PI) {
     x_long -= TWO_PI;
