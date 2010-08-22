@@ -57,3 +57,6 @@ UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = 1 WHERE RW.idwaypoint=
 UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = RW.wpformat + 16 WHERE RW.idwaypoint=WP.idwaypoint AND RW.wptype LIKE "%Icegate%" AND WP.latitude1 > 0;
 UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = RW.wpformat + 32 WHERE RW.idwaypoint=WP.idwaypoint AND RW.wptype LIKE "%Icegate%" AND WP.latitude1 < 0;
 
+#waypoints crossing, adding validity check
+ALTER TABLE waypoint_crossing ADD COLUMN `validity` int NOT NULL default '1' AFTER `idusers` ;
+
