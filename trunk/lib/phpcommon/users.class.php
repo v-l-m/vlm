@@ -612,19 +612,14 @@ class fullUsers
   //====================================================================================
   function bestWayToWaypoint($wp)
   {
-    $lat_xing = new doublep();
-    $long_xing = new doublep();
+    $lat_xing   = new doublep();
+    $long_xing  = new doublep();
     $xing_ratio = new doublep();
-
+    
     // Get coords of the nextwaypoint
     $nextwaypoint = $this->races->giveWPCoordinates($wp);
-
+    
     // Get the best crossing point
-
-    // Attend des couples lat/long et retourne lat/long
-    //     printf ("<p>Lat1=%f, Long1=%f</p>\n", $nextwaypoint[0]/1000, $nextwaypoint[1]/1000);
-    //  printf ("<p>Lat2=%f, Long2=%f</p>\n", $nextwaypoint[2]/1000, $nextwaypoint[3]/1000);
-    //  printf ("<p>BoatLat=%f, BoatLong=%f</p>\n", $this->lastPositions->lat/1000, $this->lastPositions->long/1000);
     if (defined('MOTEUR')) {
       $xing_dist = VLM_distance_to_wp_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
 						 &$nextwaypoint, $lat_xing, $long_xing, $xing_ratio);
@@ -634,17 +629,12 @@ class fullUsers
 						   $nextwaypoint['latitude2'], $nextwaypoint['longitude2'],
 						   $lat_xing, $long_xing, $xing_ratio);
     }
-    //  printf("Xing_dist %.3f, ratio %.3f\n", $xing_dist, doublep_value($xing_ratio));
-    $coords = array( doublep_value($lat_xing) / 1000.0, doublep_value($long_xing) / 1000.0);
-
+    
     // printf ("Lat=%f, Long=%f\n", doublep_value($lat_xing) / 1000.0, doublep_value($long_xing) / 1000.0);
-
-    $this->LatNM=$coords[0]*1000;
-    $this->LongNM=$coords[1]*1000;
-    //    printf ("<p>Lat=%f, Long=%f</p>\n", $this->LatNM, $this->LongNM);
-    return (0);
+    $this->LatNM  = doublep_value($lat_xing);
+    $this->LongNM = doublep_value($long_xing);
   }
-
+  
 
 
   // this function will update the userdeptime in the users table
