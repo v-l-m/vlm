@@ -124,6 +124,7 @@ CREATE TABLE `waypoint_crossing` (
   `idraces` int(11) NOT NULL,
   `idwaypoint` int(11) NOT NULL,
   `idusers` int(11) NOT NULL,
+  `validity` int(11) NOT NULL default '1',
   `time` int(11) default NULL,
   `userdeptime` int(20) default NULL,
   PRIMARY KEY  (`idraces`,`idwaypoint`,`idusers`)

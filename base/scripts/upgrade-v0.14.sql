@@ -2,9 +2,12 @@
 DROP TABLE IF EXISTS players_pending;
 DROP TABLE IF EXISTS players;
 DROP TABLE IF EXISTS playerstousers;
+
+# FIX THIS BEFORE RELEASE
 ALTER TABLE `user_action` DROP COLUMN `idplayers`;
 ALTER TABLE `users` DROP INDEX `boatpseudo`;
 ALTER TABLE `races_waypoints` DROP COLUMN `wpformat`;
+ALTER TABLE `waypoint_crossing` DROP COLUMN `validity`;
 
 #Tables de gestion des PLAYERS
 CREATE TABLE `players_pending` (
