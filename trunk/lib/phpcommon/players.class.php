@@ -346,17 +346,11 @@ class players extends baseClass {
 
     //html renderers
     function htmlPlayername() {
-        $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
-        $ret .= $this->idplayers;
-        $ret .= "\">".$this->playername."</a>";
-        return $ret;
+        return htmlPlayername($this->idplayers, $this->playername);
     }
 
     function htmlIdplayersPlayername() {
-        $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
-        $ret .= $this->idplayers;
-        $ret .= "\">(@".$this->idplayers.")&nbsp;".$this->playername."</a>";
-        return $ret;
+        return htmlIdplayersPlayername($this->idplayers, $this->playername);
     }
 
     function htmlBoatOwnedList() {
@@ -413,5 +407,21 @@ class players extends baseClass {
     }
 
 }
+
+//convenient htmlrenderes for inlining (see iterators)
+function htmlPlayername($idplayers, $playername) {
+    $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
+    $ret .= $idplayers;
+    $ret .= "\">".$playername."</a>";
+    return $ret;
+}
+
+function htmlIdplayersPlayername($idplayers, $playername) {
+    $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
+    $ret .= $idplayers;
+    $ret .= "\">(@".$idplayers.")&nbsp;".$playername."</a>";
+    return $ret;
+}
+
 
 ?>
