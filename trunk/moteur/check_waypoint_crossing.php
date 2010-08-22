@@ -44,40 +44,37 @@ do {
   // 2 - verify if the boat has crossed this waypoint
   $encounterCoordinates = array();
   echo (", checking for WP crossing... ");
-  printf ("\n\t\t* WP   : %f, %f <---> %f, %f", $nextwaypoint['latitude1']/1000, $nextwaypoint['longitude1']/1000, 
-	  $nextwaypoint['latitude2']/1000, $nextwaypoint['longitude2']/1000);
+  printf ("\n\t\t* WP   : %f, %f <---> %f, %f", 
+	  rad2deg($nextwaypoint->latitude1), rad2deg($nextwaypoint->longitude1), 
+	  rad2deg($nextwaypoint->latitude2), rad2deg($nextwaypoint->longitude2));
   printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latPreCheck/1000, $lonPreCheck/1000, $latCheck/1000, $lonCheck/1000);
 
   // Test de croisement avec un waypoint
   $waypoint_crossed=false;
 
-  // FIXME TEST
-  if (array_key_exists('fakevlmwp', $nextwaypoint )) {
-    echo ("<testing>new WP check...\n");
-    if (VLM_check_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck,
-		     &$nextwaypoint['fakevlmwp'], $wp_xinglat, $wp_xinglong,
-		     $wp_xingratio)) {
-      printf ("\t=> Waypoint crossed");
-      printf (" : %f, %f (ratio %f)\n", doublep_value($wp_xinglat)/1000.0,
-	      doublep_value($wp_xinglong)/1000.0, doublep_value($wp_xingratio));
-    } else {
-      printf("\n=> WP not crossed\n");
-      printf ("</testing>\n");
-    }
-  }
-  // FIXME test
-  if (VLM_check_cross_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck, 
-			 $nextwaypoint['latitude1'], $nextwaypoint['longitude1'], 
-			 $nextwaypoint['latitude2'], $nextwaypoint['longitude2'],
-			 $wp_xinglat, $wp_xinglong, $wp_xingratio)) {
-    echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
+  $wp_xed = VLM_check_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck,
+			 &$nextwaypoint, $wp_xinglat, $wp_xinglong, $wp_xingratio);
+
+  switch ($wp_xed) {
+  case -1:
     $waypoint_crossed=true;
-    // fill the array lat and long are reversed...
-    $encounterCoordinates = array('latitude' => doublep_value($wp_xinglat), 
-				  'longitude' => doublep_value($wp_xinglong)); 
+    $invalid_crossing=true;
+    break;
+  case  1:
+    $waypoint_crossed=true;
+    $invalid_crossing=false;
+    break;
+  case 0:
+  default:
+    $waypoint_crossed=false;
   }
 
-  if ($waypoint_crossed == true ) {
+  // FIXME refine test, care in a special way for invalid crossing
+  if ($waypoint_crossed == true && $invalid_crossing == false) {
+    echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
+    $encounterCoordinates = array('latitude' => doublep_value($wp_xinglat), 
+				  'longitude' => doublep_value($wp_xinglong)); 
+    
     // we update the starting point to avoid crossing two lines in a row in
     // reverse order (bugs #294)
     $latPreCheck = $encounterCoordinates['latitude'];
