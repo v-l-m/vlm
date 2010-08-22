@@ -363,39 +363,44 @@ include_once("scripts/myboat.js");
 
     <!-- le beau GPS multifonctions -->
         <div id="gpsbox"  class="instrument">
-        <img alt="GPS" src="gps.php?latitude=<?php   echo ($usersObj->lastPositions->lat)  ?>&amp;
-        longitude=<?php  echo ($usersObj->lastPositions->long) ?>&amp;
-        speed=<?php  printf ('%2.2f', round($usersObj->boatspeed, 2)) ?>&amp;
-        cap=<?php    printf ('%04.1f' , $usersObj->users->boatheading ) ?>&amp;
-        dnm=<?php    printf ('%4.2f', round($usersObj->distancefromend,2)) ?>&amp;
-        cnmo=<?php   printf ('%03.1f' , $usersObj->orthoangletoend ) ?>&amp;
-        cnml=<?php   printf ('%03.1f' , $usersObj->loxoangletoend ) ?>&amp;
-        vmg=<?php    printf ('%2.2f', round($usersObj->VMGortho, 2)) ?>&amp;
-        loch=<?php   printf ('%02.1f', round($usersObj->users->loch, 1)) ?>&amp;
-        avg=<?php    printf ('%02.1f', 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)) ?>"
-        />
+        <img alt="GPS" src="<?php
+        printf( 'gps.php?latitude=%d&amp;longitude=%d&amp;speed=%2.2f&amp;cap=%04.1f&amp;dnm=%4.2f&amp;'.
+                'cnmo=%03.1f&amp;cnml=%03.1f&amp;vmg=%2.2f&amp;loch=%02.1f&amp;avg=02.1f',
+                $usersObj->lastPositions->lat,
+                $usersObj->lastPositions->long,
+                round($usersObj->boatspeed, 2),
+                $usersObj->users->boatheading,
+                round($usersObj->distancefromend,2),
+                $usersObj->orthoangletoend,
+                $usersObj->loxoangletoend,
+                round($usersObj->VMGortho, 2),
+                round($usersObj->users->loch, 1),
+                3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)
+                );
+        ?>" />
         </div>
         <div id="windanglebox"  class="instrument">
     <!-- Affichage de windangle -->
-        <img alt="wind angle" src="windangle.php?
-        wheading=<?php printf ('%03d' , ($usersObj->wheading )) ?>&amp;
-        boatheading=<?php printf ('%03d' , $usersObj->users->boatheading ) ?>&amp;
-        wspeed=<?php echo intval($usersObj->wspeed) ?>&amp;
-        roadtoend=<?php echo $usersObj->orthoangletoend ?>&amp;
-        boattype=<?php echo $usersObj->users->boattype ?>"
-    />
+        <img alt="wind angle" src="<?php
+        printf( 'windangle.php?wheading=%03d&amp;boatheading=%03d&amp;wspeed=%d&amp;roadtoend=%4.1f&amp;boattype=%s',
+                $usersObj->wheading,
+                $usersObj->users->boatheading,
+                intval($usersObj->wspeed),
+                $usersObj->orthoangletoend,
+                $usersObj->users->boattype
+                );
+        ?>" />
         </div>
         <div id="anemobox"  class="instrument">
     <!-- Affichage de l'anémo -->
-        <img alt="anemo" src="anemo.php?
-        twd=<?php    if ( $usersObj->wheading + 180 > 360 ) {
-                           printf ('%4.1f' , ($usersObj->wheading -180 ) );
-                     } else {
-                           printf ('%4.1f' , ($usersObj->wheading +180 ) );
-                 } ?>&amp;
-        tws=<?php    printf ('%4.1f' , $usersObj->wspeed ) ?>&amp;
-        cap=<?php    printf ('%4.1f' , $usersObj->users->boatheading ) ?>"
-    />
+        <img alt="anemo" src="anemo.php?<?php
+        if ( $usersObj->wheading + 180 > 360 ) {
+            printf ('twd=%4.1f' , ($usersObj->wheading -180 ) );
+        } else {
+            printf ('twd=%4.1f' , ($usersObj->wheading +180 ) );
+        }
+        printf ('&amp;tws=%4.1f&amp;cap=%4.1f' , $usersObj->wspeed, $usersObj->users->boatheading );
+        ?>" />
         </div>
 
         <?php
