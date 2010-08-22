@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.8 2010-08-16 16:02:58 ylafon Exp $
+ * $Id: waypoint.c,v 1.9 2010-08-22 13:52:30 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -127,7 +127,7 @@ int check_waypoint_crossed(double prev_latitude, double prev_longitude,
   double isect_ratio, isect_lat, isect_long;
   if (check_waypoint(prev_latitude, prev_longitude, 
 		     current_latitude, current_longitude,
-		     wp, &isect_ratio, &isect_lat, &isect_long)) {
+		     wp, &isect_ratio, &isect_lat, &isect_long) == 1) {
     *xing_time = prev_time + (long) rint(isect_ratio * 
 					 ((double) (current_time - prev_time)));
     return 1;
@@ -138,7 +138,9 @@ int check_waypoint_crossed(double prev_latitude, double prev_longitude,
 /**
  * check if a waypoint was in the way
  * populates the time when the wp was crossed
- * @returns a boolean, 1 if waypoint was crossed, 0 otherwise
+ * @returns an int,  1 if waypoint was crossed, 
+ *                  -1 if waypoint is incorrectly crossed 
+ *                   0 if not crossed
  */
 int check_waypoint(double prev_latitude, double prev_longitude,
 		   double current_latitude, double current_longitude, 
@@ -296,7 +298,7 @@ int check_waypoint(double prev_latitude, double prev_longitude,
     zvect = vboat_long*vgate_lat - vboat_lat*vgate_long;
     // result is positive if we crossed the gate clockwise
     if (zvect < 0) {
-      isect = 0;
+      isect = -1;
     }
     break;
   case WP_CROSS_ANTI_CLOCKWISE:
@@ -307,7 +309,7 @@ int check_waypoint(double prev_latitude, double prev_longitude,
     zvect = vboat_long*vgate_lat - vboat_lat*vgate_long;
     // result is positive if we crossed the gate clockwise
     if (zvect > 0) {
-      isect = 0;
+      isect = -1;
     }
     break;
   default:

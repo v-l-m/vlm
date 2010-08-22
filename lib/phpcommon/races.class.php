@@ -109,34 +109,38 @@ class races {
     $result = wrapper_mysql_db_query_reader($query);
     // printf ("Request Races_Waypoints : %s\n" , $query);
     
-    while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
-      $WPCoords = internalGiveWaypointCoordinates($row['latitude1'],
-						  $row['longitude1'], 
-						  $row['latitude2'], 
-						  $row['longitude2'],
-						  $row['laisser_au'], WPLL);
-      // On push dans le tableau des coordonnées le wptype 
-      // (classement ou son nom), et le libellé et le "laisser_au" du WP
-      // ainsi que le maparea adapt
-      $WPCoords['wptypelabel'] = $row['wptype'];
-      $WPCoords['libelle'] = $row['libelle'];
-      $WPCoords['laisser_au'] = $row['laisser_au'];
-      $WPCoords['maparea'] = $row['maparea'];
-      // FIXME test
-      $vlm_wp = new waypoint();
-      VLM_init_waypoint(&$vlm_wp, $row['wpformat'],$row['wporder'],
-			$row['latitude1'], $row['longitude1'], 
-			$row['latitude2'], $row['longitude2'], 
-			$row['laisser_au'], WPLL);
-      $WPCoords['fakevlmwp'] = $vlm_wp;
-      // </FIXME> test
-      // On push ce WP dans la liste des WP
-      $this->waypoints[$row['wporder']] = $WPCoords;
+    if (defined('MOTEUR')) {
+      while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+	$vlm_wp = new waypoint();
+	VLM_init_waypoint(&$vlm_wp, $row['wpformat'],$row['wporder'],
+			  $row['latitude1'], $row['longitude1'], 
+			  $row['latitude2'], $row['longitude2'], 
+			  $row['laisser_au'], WPLL);
+	$this->waypoints[$row['wporder']] = $vlm_wp;
+      }
+    } else {
+      while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+	// FIXME reduce code path 
+	$WPCoords = internalGiveWaypointCoordinates($row['latitude1'],
+						    $row['longitude1'], 
+						    $row['latitude2'], 
+						    $row['longitude2'],
+						    $row['laisser_au'], WPLL);
+	// On push dans le tableau des coordonnées le wptype 
+	// (classement ou son nom), et le libellé et le "laisser_au" du WP
+	// ainsi que le maparea adapt
+	$WPCoords['wptypelabel'] = $row['wptype'];
+	$WPCoords['libelle'] = $row['libelle'];
+	$WPCoords['laisser_au'] = $row['laisser_au'];
+	$WPCoords['maparea'] = $row['maparea'];
+	// On push ce WP dans la liste des WP
+	$this->waypoints[$row['wporder']] = $WPCoords;
+      }
+      $this->stop1lat  = $WPCoords['latitude1'];
+      $this->stop1long = $WPCoords['longitude1'];
+      $this->stop2lat  = $WPCoords['latitude2'];
+      $this->stop2long = $WPCoords['longitude2'];
     }
-    $this->stop1lat  = $WPCoords['latitude1'];
-    $this->stop1long = $WPCoords['longitude1'];
-    $this->stop2lat  = $WPCoords['latitude2'];
-    $this->stop2long = $WPCoords['longitude2'];
   }
 
   function getRaceDistance($force = 0) {

@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.25 2010-08-17 13:01:43 ylafon Exp $
+ * $Id: vlm.h,v 1.26 2010-08-22 13:55:51 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -564,7 +564,8 @@ void VLM_init_waypoint PARAM9(waypoint *, int, int,
  *                   in <em>milli-degrees</em> 
  * @param ratio, a pointer to  a <code>double</code>, the ratio of 
  *        the intersection, 0 (boat start) < ratio < 1 (boat end)
- * @return 1 if crossing occured, 0 otherwise
+ * @return 1 if crossing occured, -1 is the waypoint is incorrectly
+ *         crossed, 0 is no crossing occured
  */
 int VLM_check_WP PARAM8(double, double, double, double,
 			waypoint *, double *, double *, double *);
