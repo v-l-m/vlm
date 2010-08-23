@@ -130,9 +130,10 @@ class races {
 	// (classement ou son nom), et le libellé et le "laisser_au" du WP
 	// ainsi que le maparea adapt
 	$WPCoords['wptypelabel'] = $row['wptype'];
-	$WPCoords['libelle'] = $row['libelle'];
-	$WPCoords['laisser_au'] = $row['laisser_au'];
-	$WPCoords['maparea'] = $row['maparea'];
+	$WPCoords['wpformat']    = $row['wpformat'];
+	$WPCoords['libelle']     = $row['libelle'];
+	$WPCoords['laisser_au']  = $row['laisser_au'];
+	$WPCoords['maparea']     = $row['maparea'];
 	// On push ce WP dans la liste des WP
 	$this->waypoints[$row['wporder']] = $WPCoords;
       }
