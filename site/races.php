@@ -15,12 +15,12 @@
         // Ajout en début de tableau d'un classement par WP (uniquement si >1)
         $nbWPs = $fullRacesObj->races->getWPsCount();
         if ( $nbWPs > 1 ) {
-            for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
-              	$WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
-              	if ( !strstr($WP['wptypelabel'],'IceGate') ) {
-                	  array_push($tables, "WP" . $wp_num);
-              	}
-            }
+	  for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
+	    $WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
+	    if ( ($WP['wpformat'] & (WP_ICE_GATE_N | WP_ICEGATE_S)) == 0 ) {
+	      array_push($tables, "WP" . $wp_num);
+	    }
+	  }
         }
 
         array_push($tables, "arrived", "racing", "dnf", "abd", "htp", "hc");
@@ -43,7 +43,7 @@
             } else {
                 $class="class=\"nohilight\"";
                 if ( strstr(substr($table, 0, 2), "WP") ) {
-                    //$tlabel=substr($table,2);
+                    $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
                     $tlabel=$WP['libelle']."<br />(".$table.")";
                 } else {
                     $tlabel=$table;
