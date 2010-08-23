@@ -365,7 +365,7 @@ include_once("scripts/myboat.js");
         <div id="gpsbox"  class="instrument">
         <img alt="GPS" src="<?php
         printf( 'gps.php?latitude=%d&amp;longitude=%d&amp;speed=%2.2f&amp;cap=%04.1f&amp;dnm=%4.2f&amp;'.
-                'cnmo=%03.1f&amp;cnml=%03.1f&amp;vmg=%2.2f&amp;loch=%02.1f&amp;avg=02.1f',
+                'cnmo=%03.1f&amp;cnml=%03.1f&amp;vmg=%2.2f&amp;loch=%02.1f&amp;avg=%02.1f',
                 $usersObj->lastPositions->lat,
                 $usersObj->lastPositions->long,
                 round($usersObj->boatspeed, 2),
