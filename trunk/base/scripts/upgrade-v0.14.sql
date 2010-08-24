@@ -62,4 +62,9 @@ UPDATE races_waypoints RW, waypoints WP SET RW.wpformat = RW.wpformat + 32 WHERE
 
 #waypoints crossing, adding validity check
 ALTER TABLE waypoint_crossing ADD COLUMN `validity` int NOT NULL default '1' AFTER `idusers` ;
+ALTER TABLE waypoint_crossing DROP PRIMARY KEY;
+ALTER TABLE waypoint_crossing ADD UNIQUE KEY (`idraces`,`idwaypoint`,`idusers`,`validity`);
+ALTER TABLE waypoint_crossing ADD KEY (`idraces`,`idusers`);
+
+
 
