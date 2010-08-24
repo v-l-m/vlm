@@ -63,8 +63,32 @@ class WSBasePlayer extends WSBase {
     }
 }
 
-class WSSetup extends WSBase {
+class WSBaseBoat extends WSBasePlayer {
+    var $idu = null;
+    function __construct() {
+        parent::__construct();
+        $this->check_idu();
+    }
+    
+    function check_idu() {
+        $this->idu = $this->check_cgi_int('idu', 'USER01', 'USER02');
+    }
 
+    function check_cgi_int($var, $err_exists, $err_gt_0) {
+        $foo = get_cgi_var($var);
+        if (is_null($foo)) $this->reply_with_error($err_exists);
+        $foo = intval($foo);
+        if (is_int($foo) && $foo > 0) {
+            return $foo;
+        } else {
+            $this->reply_with_error($err_gt_0);
+        }
+    }
+
+}
+
+class WSSetup extends WSBase {
+    //should be an extends from WSBaseBoat(?) starting from v0.15
     public $input = null;
     public $request = null;
 
@@ -100,7 +124,7 @@ class WSBaseBoatsetup extends WSSetup {
     
     function __construct() {
         parent::__construct();
-        //auth check
+        //auth check - FIXME en lien avec le mode player/boat
         $this->reply_with_error_if_not_exists('idu', "AUTH01");
         if ($_SESSION['idu'] != $this->request['idu']) $this->reply_with_error("AUTH02");
 
@@ -193,7 +217,7 @@ function get_error($code) {
         //Auth
         "AUTH01" => "idu is mandatory for safety reasons and should match your login",
         "AUTH02" => "Your request does not match the idu you are login in",
-        "AUTH03" =>  "boat account authentification is deprecated, please use a player account.",
+        "AUTH03" => "Boat account authentification is deprecated, please use a player account.",
         //SQL
         "CORE01" => "Something went wrong when passing orders to the core. You should report this to the developpers ! (See the custom_error_string)",
         //pim
@@ -220,12 +244,20 @@ function get_error($code) {
         //player
         "PLAYER01" => 'idp (id player) is required',
         "PLAYER02" => 'idp does not exist',
+        //boat/user
+        "USER01" => 'idu (iduser = idboat) is required',
+        "USER02" => 'idu should be int and > 0',
+        //idr
+        "IDR01"  => 'idr is required',
+        "IDR02"  => 'idr should be int and > 0',
+        "IDR03"  => 'idr is not valid',
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
 }
 
-function get_requested_output_format() {
+function get_requested_output_format($allowed_fmt = null) {
+  if (is_null($allowed_fmt)) $allowed_fmt = Array('json', 'text');
   $qjson = 0;
   $sjson = false;
   $qplain = 0.1;
@@ -233,7 +265,7 @@ function get_requested_output_format() {
   
   if (isset($_REQUEST['forcefmt'])) {
       $fmt = quote_smart($_REQUEST['forcefmt']);
-      if (in_array($fmt, Array('json', 'text'))) {
+      if (in_array($fmt, $allowed_fmt)) {
           return $fmt;
       }
       //else, we still try to autodetect...
@@ -292,7 +324,7 @@ function login_if_not($usage = "No usage given", $allow_boatauth = True) {
     // do we know the player from a previous login session?
     if (isPlayerLoggedIn() && isLoggedIn() ) {
         //OK, we are logged
-        $idu = get_cgi_var('select_idb');
+        $idu = get_cgi_var('select_idu');
         if (!is_null($idu) && $idu != getLoginId() && in_array($idu, getLoggedPlayerObject()->getManageableBoatIdList())) {
             //select_idb is correct, change login
             $user = getUserObject($idu);
@@ -322,7 +354,7 @@ function login_if_not($usage = "No usage given", $allow_boatauth = True) {
                 //New player auth
                 $player = new players(0, $pseudo);
                 if (!$player->error_status && $player->checkPassword($passwd) ) {
-                    $idu = get_cgi_var('select_idb');
+                    $idu = get_cgi_var('select_idu');
                     if (is_null($idu) || !in_array($idu, $player->getManageableBoatIdList())) {
                         //select_idb is not correct, selecting default
                         $idu = $player->getDefaultBoat();

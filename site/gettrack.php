@@ -13,6 +13,7 @@
         echo "Usage : http://virtual-loup-de-mer.org/gettrack.php?idu=X&idr=Y\n";
         echo "\nX = numero de votre bateau";
         echo "\nY = numero de la course";
+        echo "\nNote that this service is deprecated. Please use ws/boatinfo/tracks.php";
         exit();
     }
 
