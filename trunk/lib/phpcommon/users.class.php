@@ -882,16 +882,21 @@ class fullUsers
   //remove player from races
   function removeFromRaces()
   {
-    $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions
-                             WHERE idusers = " . $this->users->idusers . " and race = " . $this->users->engaged . ";";
+    $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions WHERE idusers=" . 
+      $this->users->idusers . " AND race=" . $this->users->engaged;
     wrapper_mysql_db_query_writer($queryhistopositions);
     //echo "QH = $queryhistopositions" . "\n";
 
-    $querypurgepositions = "DELETE FROM positions
-                             WHERE idusers = " . $this->users->idusers . " and race = " . $this->users->engaged . ";";
+    $querypurgepositions = "DELETE FROM positions WHERE idusers=" . $this->users->idusers . 
+      " AND race=" . $this->users->engaged;
     wrapper_mysql_db_query_writer($querypurgepositions);
     //echo "QP = $querypurgepositions" . "\n";
 
+    $querypurgeinvalidwps = "DELETE FROM waypoint_crossing WHERE validity=0 AND idusers=".
+      $this->users->idusers." AND idraces=".$this->users->engaged ;
+    wrapper_mysql_db_query_writer($querypurgeinvalidwps);
+    //echo "QW = $querypurgeinvalidwps" . "\n";
+    
     // And then, the most important...
     $this->subscribeToRaces(0);
   }
@@ -902,7 +907,7 @@ class fullUsers
     // Retourne -1 si il n'y a plus de waypoints (on a passé le dernier, donc la finish line)
     //     select wporder from races_waypoints where idraces=35 and wporder >1 ORDER BY wporder ASC LIMIT 1;
     $query = "SELECT wporder FROM races_waypoints " .
-      " WHERE idraces = " . $this->users->engaged .
+      " WHERE idraces=" . $this->users->engaged .
       " AND wporder > " . $this->users->nwp .
       " ORDER BY wporder ASC LIMIT 1";
 
@@ -1249,8 +1254,13 @@ class fullUsers
       }
 
       // Delete all old entries from races_ranking
-      $query_clean_races_ranking = "DELETE FROM races_ranking where idusers= " .  $this->users->idusers ;
+      $query_clean_races_ranking = "DELETE FROM races_ranking WHERE idusers= " .  $this->users->idusers ;
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
+
+      // Delete old invalid WP crossing from waypoint_crossing
+      $query_clean_waypoint_crossing = "DELETE FROM waypoint_crossing WHERE validity=0 AND idusers=".
+	$this->users->idusers." AND idraces=".$id;
+      wrapper_mysql_db_query_writer($query_clean_waypoint_crossing);
 
       // Prepare the table races_ranking
       $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch ) values " .
