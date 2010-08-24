@@ -91,6 +91,11 @@ function get_info_array($idu) {
     $info['WPLAT'] = $userObj->users->targetlat;
     $info['WPLON'] = $userObj->users->targetlong;
     $info['H@WP'] = $userObj->users->targetandhdg;
+    if ( time() > $usersObj->users->releasetime ) {
+        $info['S&G'] = 0;
+    } else {
+        $info['S&G'] = intval($usersObj->users->releasetime);
+    }
 
     // Map Preferences
     $mapvar = array (
