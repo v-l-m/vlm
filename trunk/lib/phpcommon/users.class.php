@@ -942,10 +942,11 @@ class fullUsers
     $udt = $this->users->userdeptime;
 
     $query = "REPLACE INTO waypoint_crossing " .
-      "        (idraces , idwaypoint, idusers , time, userdeptime)  " .
+      "       (idraces , idwaypoint, idusers , validity, time, userdeptime) " .
       " VALUES ( " . $this->users->engaged . ", " .
       $this->nwp . ", " .
       $this->users->idusers . ", " .
+      " 1, ".
       $xingtime . ", " .
       $udt . ");"   ;
 

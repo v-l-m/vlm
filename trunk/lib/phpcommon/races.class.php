@@ -985,12 +985,10 @@ class fullRaces {
       /* $query = "SELECT RR.position, RR.duration, RR.idusers idusers, username, 
          color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch */
 
-      $query = "SELECT " . BOAT_STATUS_ARR . " position, WC.time - WC.userdeptime duration, WC.idusers idusers, username, 
-                        color, country, boatname, \"n/a\", \"n/a\", WC.userdeptime deptime, 0
+      $query = "SELECT " . BOAT_STATUS_ARR . " position, WC.time - WC.userdeptime duration, WC.idusers idusers, username, color, country, boatname, \"n/a\", \"n/a\", WC.userdeptime deptime, 0
                   FROM      waypoint_crossing WC, users US
-                  WHERE     WC.idraces=".$this->races->idraces."
-                  AND       WC.time > WC.userdeptime 
-                  AND       WC.userdeptime > 0 
+                  WHERE     WC.idraces=".$this->races->idraces." AND WC.validity=1
+                  AND       WC.time > WC.userdeptime AND WC.userdeptime > 0 
                   AND       US.idusers = WC.idusers   
                   AND       idwaypoint=" . $WP . " " ;
       $query .= $sortclause;

@@ -1595,7 +1595,8 @@ function getWaypointCrossingTime($idraces,$idwaypoint, $idusers)
     "  FROM waypoint_crossing " .
     " WHERE idraces = $idraces " .
     "   AND idwaypoint = $idwaypoint " .
-    "   AND idusers    = $idusers " ;
+    "   AND idusers    = $idusers ".
+    "   AND validity   = 1";
   //echo $query_wptime;
 
   $result_wptime = wrapper_mysql_db_query_reader($query_wptime); // or die($query_wptime);
@@ -1616,6 +1617,7 @@ function getWaypointBestTime($idraces,$idwaypoint)
     "  FROM waypoint_crossing " .
     " WHERE idraces = $idraces " .
     "   AND idwaypoint = $idwaypoint " .
+    "   AND validity = 1 ".
     " ORDER by `time` - `userdeptime` ASC limit 1";
 
 
