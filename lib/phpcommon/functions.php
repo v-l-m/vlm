@@ -1560,6 +1560,23 @@ function getBoatPopularity($idusers, $idraces=0) {
     }
 }
 
+function getBoatArrayFromIdList($list) {
+    $barray = Array();
+    foreach ($list as $idb) {
+        $idb = intval($idb);
+        $u = getUserObject($idb);
+        if (!is_null($u)) {
+            $b = Array();
+            $b['idu'] = intval($u->idusers);
+            $b['boatpseudo'] = $u->username;
+            $b['boatname'] = $u->boatname;
+            $b['engaged'] = intval($u->engaged);
+            $barray[$b['idu']] = $b;
+        }
+    }
+    return $barray;
+}
+
 function getOldDuration($idraces,$idusers)
 {
   $query_duration = "SELECT duration FROM races_results WHERE idusers = $idusers AND idraces = $idraces";
