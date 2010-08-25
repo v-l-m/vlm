@@ -136,7 +136,7 @@ class positionsIterator extends baseClass {
     var $records  = array();
     
     function __construct( $idusers, $idraces, $mintime = null, $maxtime = null, $roundstep = null ) {
-        if (is_null($roundstep)) $this->roundstep = DELAYBETWEENUPDATE;
+        if (is_null($roundstep)) $roundstep = DELAYBETWEENUPDATE;
         $this->roundstep = intval($roundstep);
         if (is_null($mintime) || $mintime == 0) $mintime = time() - DEFAULT_POSITION_AGE;
         if (is_null($maxtime) || $maxtime == 0) $maxtime = time();
@@ -170,7 +170,7 @@ class positionsIterator extends baseClass {
 
     function listing() {
         $result = $this->queryRead($this->getQuery());
-        if (!$this->error_status) return;
+        if ($this->error_status) return;
         $this->start();
         while ($row = mysql_fetch_array($result, MYSQL_NUM) ) $this->onerow($row);
         $this->end();
