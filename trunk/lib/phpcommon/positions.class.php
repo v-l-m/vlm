@@ -1,5 +1,7 @@
 <?php
 
+require_once("base.class.php");
+
 class positions
 {
   var $time ,
@@ -126,41 +128,80 @@ class positions
   
 }
 
+class positionsIterator extends baseClass {
+
+    //FIXME : should extended from a baseIteratorClass;
+    
+    var $roundstep, $idusers, $idraces, $mintime, $maxtime ;
+    var $records  = array();
+    
+    function __construct( $idusers, $idraces, $mintime = null, $maxtime = null, $roundstep = null ) {
+        if (is_null($roundstep)) $this->roundstep = DELAYBETWEENUPDATE;
+        $this->roundstep = intval($roundstep);
+        if (is_null($mintime) || $mintime == 0) $mintime = time() - DEFAULT_POSITION_AGE;
+        if (is_null($maxtime) || $maxtime == 0) $maxtime = time();
+        
+        //Time normalizationparent::__construct();
+        $this->mintime = $this->roundToVac($mintime);
+        $this->maxtime = $this->roundToVac($maxtime)+$this->roundstep;
+        $this->idusers = intval($idusers);
+        $this->idraces = intval($idraces);
+
+        //do it
+        $this->listing();
+    }
+    
+    function roundToVac($time) {
+        //This is for normalizing queries;
+        if ($this->roundstep < 60) return $time;
+        return (intval($time/$this->roundstep)*intval($this->roundstep));
+    }
+    
+    function getQuery() {
+        $query =  "SELECT `time`, `long`, `lat` ".
+                  " FROM positions " . 
+                  " WHERE idusers = " . $this->idusers . 
+                  " AND race = " .  $this->idraces  .
+                  " AND `time` > " . $this->mintime .  
+                  " AND `time` < " . $this->maxtime .  
+                  " ORDER BY `time` ASC";
+        return $query;
+    }
+
+    function listing() {
+        $result = $this->queryRead($this->getQuery());
+        if (!$this->error_status) return;
+        $this->start();
+        while ($row = mysql_fetch_array($result, MYSQL_NUM) ) $this->onerow($row);
+        $this->end();
+    }
+
+    function onerow($row) {
+        array_push ($this->records, $row);
+    }
+
+    function start() {
+        $this->records = Array();
+    }
+    
+    function end() {
+    }
+
+}
+
 // A list of the positions of the same player
-class positionsList
-{
-  var $records  = array(),
-    $idusers;
+class positionsList extends positionsIterator {
 
-  // Mintime et Maxtime sont soit 0 (= maintenant), ou un timestamp.
-  function positionsList($idusers, $race, $mintime = 0, $maxtime = 0 )
-  {
-   // Première position prise en compte : maintenant moins il y a DEF_POS_AGE si pas précisé.
-   //                                     sinon, c'est un timestamp de début
-   if ( $mintime == 0 ) $mintime = time() - DEFAULT_POSITION_AGE;
+    function onerow() {
+        $pos = new positions();
+        $pos->time = $row[0];
+        $pos->long = $row[1];
+        $pos->lat = $row[2];
+        $pos->idusers = $this->idusers;
+        $pos->race = $this->idraces;
 
-   // Dernière position prise en compte : maintenant si 0, spécifiée (timestamp de fin) sinon (cas des blackouts)
-   if ( $maxtime == 0 ) $maxtime = time();
-
-   $query= "SELECT `time`, `long`, `lat` ".
-      " FROM positions " . 
-      " WHERE idusers =  " . $idusers . 
-      " AND race =" .  $race  .
-      " AND `time` > " . $mintime .  
-      " AND `time` < " . $maxtime .  
-      " ORDER BY `time` ASC";
-    $result = wrapper_mysql_db_query_reader($query);
-
-    while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
-      $pos = new positions();
-      $pos->time = $row[0];
-      $pos->long = $row[1];
-      $pos->lat = $row[2];
-      $pos->idusers = $idusers;
-      $pos->race = $race;
-            array_push ($this->records, $pos);
-      }
-  }
+        array_push ($this->records, $pos);
+    }
 }
 
 // La structure fullGrid contient lat, long, wspeed, et wheading
