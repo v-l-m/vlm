@@ -901,28 +901,14 @@ class fullUsers
     $this->subscribeToRaces(0);
   }
 
-  // Function giveNextWaipoint
-  function giveNextWaypoint()
+  function getNextWaypoint()
   {
     // Retourne -1 si il n'y a plus de waypoints (on a passé le dernier, donc la finish line)
     //     select wporder from races_waypoints where idraces=35 and wporder >1 ORDER BY wporder ASC LIMIT 1;
-    $query = "SELECT wporder FROM races_waypoints " .
-      " WHERE idraces=" . $this->users->engaged .
-      " AND wporder > " . $this->users->nwp .
-      " ORDER BY wporder ASC LIMIT 1";
-
-    $result = wrapper_mysql_db_query_reader($query); // or die("Query failed : " . mysql_error." ".$query);
-    //printf ("Request Races_Waypoints : %s\n" , $query);
-
-    if ( mysql_num_rows($result) == 0 ) {
-      printf (", No more Waypoint\n");
-      return (-1);
-    } else {
-      $row = mysql_fetch_array($result, MYSQL_ASSOC);
-      printf (", Next Waypoint : %d. ", $row['wporder'] );
-      return ($row['wporder']);
+    if ($this->users->nwp < $this->races->getWPsCount()) {
+      return ($this->users->nwp + 1);
     }
-
+    return (-1);
   }
 
   // Function updateWaypoints

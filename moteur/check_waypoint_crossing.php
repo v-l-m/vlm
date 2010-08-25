@@ -134,9 +134,9 @@ do {
     $fullUsersObj->recordWaypointCrossing($timeAvant + $timeSinceLastUpdate);
           
     // Is it the last one (aka finish line ?)
-    // giveNextWaypoint returns -1 if this was the finish line
+    // getNextWaypoint returns -1 if this was the finish line
     // else it gives the next waypoint
-    $nextwaypointid = $fullUsersObj->giveNextWaypoint();
+    $nextwaypointid = $fullUsersObj->getNextWaypoint();
           
     if ( $nextwaypointid != -1 ) {
             
