@@ -192,7 +192,7 @@ class positionsIterator extends baseClass {
 // A list of the positions of the same player
 class positionsList extends positionsIterator {
 
-    function onerow() {
+    function onerow($row) {
         $pos = new positions();
         $pos->time = $row[0];
         $pos->long = $row[1];
