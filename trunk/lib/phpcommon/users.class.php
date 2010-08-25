@@ -926,33 +926,42 @@ class fullUsers
   }
 
   // Function updateWaypoints
-  function recordWaypointCrossing($xingtime)
+  function recordWaypointCrossing($xingtime, $validity = 1)
   {
     // Choix de "userdeptime"
-
-    /*
-    **  2008/09/13 : dans Waypoint_crossing, on stocke désormais le temps de course
-    if ( $this->nwp == 1 ) {
-    $udt = $this->users->userdeptime;
-    } else {
-    $udt = getWaypointCrossingTime($this->users->engaged,$this->nwp - 1, $this->users->idusers);
-    }
-    */
-
     $udt = $this->users->userdeptime;
 
     $query = "REPLACE INTO waypoint_crossing " .
-      "       (idraces , idwaypoint, idusers , validity, time, userdeptime) " .
+      " (idraces , idwaypoint, idusers , validity, time, userdeptime) " .
       " VALUES ( " . $this->users->engaged . ", " .
       $this->nwp . ", " .
       $this->users->idusers . ", " .
-      " 1, ".
-      $xingtime . ", " .
+      $validity . ", ".
+      $xingtime . ", ".
       $udt . ");"   ;
 
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
-
   }
+  // clear prior invalid waypoint crossing, if any
+  function clearInvalidWaypointCrossing() 
+  {
+    $query = "DELETE FROM waypoint_crossing WHERE validity=0 AND idusers=".
+      $this->users->idusers." AND idraces=".$this->users->engaged.
+      " AND idwaypoint=".$this->nwp;
+    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
+  }
+
+  // check if there was an invalid crossing reported for that WP
+  function checkInvalidWaypointCrossing()
+  {
+    $query = "SELECT count(*) AS nbinvalid FROM waypoint_crossing WHERE validity=0 AND idusers=".
+      $this->users->idusers." AND idraces=".$this->users->engaged.
+      " AND idwaypoint=".$this->nwp;
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+    $rowresult = mysql_fetch_array($result, MYSQL_ASSOC);
+    return $rowresult['nbinvalid'];
+  }
+  
   // Function updateWaypoints
   function updateNextWaypoint()
   {

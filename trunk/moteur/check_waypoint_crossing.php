@@ -69,9 +69,29 @@ do {
     $waypoint_crossed=false;
   }
 
+  if ($invalid_crossing) {
+    echo "\n\t\t*** Yes INVALID ***\n";    
+    // we don't really care about the exact crossing date as it is an invalid one
+    $fullUsersObj->recordWaypointCrossing(time(), 0);
+    // exit the do-while loop now.
+    break;
+  }
+
   // FIXME refine test, care in a special way for invalid crossing
   if ($waypoint_crossed == true && $invalid_crossing == false) {
-    echo "\n\t\t*** Yes (DTC vlm-c) ***\n";
+    echo "\n\t\t*** Yes (vlm-c) ***\n";
+    if (($nextwaypoint->type & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE))!= 0) {
+      // we have a clockwise/anti-clockwise check... now verify that we have
+      // or not an invalid crossing. If so, delete it (odd/even crossings)
+      if ($fullUsersObj->checkInvalidWaypointCrossing() != 0) {
+	echo "\n\t\t*** INVALID CROSSING ***\n";
+	// yeah we got one! ABORT ABORT! :)
+	$fullUsersObj->clearInvalidWaypointCrossing();
+	// exit the do-while loop now.
+	break;
+      }
+    }
+
     $encounterCoordinates = array('latitude' => doublep_value($wp_xinglat), 
 				  'longitude' => doublep_value($wp_xinglong)); 
     
