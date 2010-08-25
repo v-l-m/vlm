@@ -1204,18 +1204,20 @@ function insertFlag($idflag, $flagfile) {
 }
 
 
-function raceExists($race)
-{
-  //find a race
-  $query = 'SELECT idraces FROM races WHERE idraces = "'.$race.'"';
+function raceExists($race) {
+    //find a race
+    //FIXME : we should select * for better use of mysql query cache
+    $query = 'SELECT idraces FROM races WHERE idraces = "'.$race.'"';
 
-  $result = wrapper_mysql_db_query_reader($query)  ;
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  if (!$row) {
-    return FALSE;
-  } else {
-    return TRUE;
-  }
+    $result = wrapper_mysql_db_query_reader($query)  ;
+    if ($result === False) return False;
+    
+    $row = mysql_fetch_array($result, MYSQL_NUM);
+    if (!$row) {
+        return False;
+    } else {
+        return True;
+    }
 }
 
 /*return true if login already exist*/
