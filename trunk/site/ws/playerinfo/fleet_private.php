@@ -4,10 +4,10 @@ include_once("wslib.php");
 
 $ws = new WSBasePlayer();
 
-$idp = get_cgi_var('idp', getPlayerId());
-if (is_null($player = getPlayerObject($idp))) $ws->reply_with_error('PLAYER02');
+$player = getLoggedPlayerObject();
 
 $ws->answer['fleet'] = getBoatArrayFromIdList($player->getOwnedBoatIdList());
+$ws->answer['fleet_boatsit'] = getBoatArrayFromIdList($player->getBoatsitIdList());
 
 $ws->reply_with_success();
 
