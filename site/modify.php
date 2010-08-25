@@ -126,7 +126,7 @@ Notepad :<br />
           if ( $color_num%16 == 0) {
       echo "<tr>\n";
     }
-    echo "  <td style=\"background: #".$i."\"  onclick=\"document.forms[1].color.value=&quot;".$i."&quot;\">";
+    echo "  <td style=\"background: #".$i."\"  onclick=\"document.forms.modify.color.value=&quot;".$i."&quot;\">";
     echo "</td>\n";
     if ( $color_num%16 == 15)
     {
