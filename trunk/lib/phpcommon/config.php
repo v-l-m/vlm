@@ -147,7 +147,6 @@ define("MILDEGREE2NAUTICS", 1000/60);
 // que 1/100 de la longueur WPLL
 // le type de WP est positionné dans la structure "waypoints" par "races.class".
 define("WPLL", 2000);
-define("WP_NUMSEGMENTS", 1000);
 // long1!=long2 ou lat1!=lat2
 define("WPTYPE_PORTE", 1);
 // long1=long2 et lat1=lat2
@@ -273,7 +272,7 @@ define("WP_ICE_GATE_W", 128);
 define("WP_CROSS_CLOCKWISE", 256);
 define("WP_CROSS_ANTI_CLOCKWISE", 512);
 // for future releases
-//define("WP_CROSS_ONCE", 1024);
+define("WP_CROSS_ONCE", 1024);
 
 include_once("functions.php");
 include_once("f_windAtPosition.php");
