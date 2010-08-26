@@ -322,7 +322,7 @@ class races {
             $ret .= "<td>WP".$num."</td>";
 	    switch($wp['wpformat'] & 0xF) {
 	    case WP_ONE_BUOY:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td>&nbsp;</td><td>%s</td><td>%s</td>", 
+	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td>%s</td><td>%s</td>", 
 			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
 			      $wp['laisser_au'],  $wp['wptypelabel'], htmlentities($wp['libelle']));
 	      break;
