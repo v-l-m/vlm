@@ -550,7 +550,7 @@ class fullRaces {
     $baseurl.="&amp;idraces=".$this->races->idraces;
 
     // idraces , idusers , nwp  , dnm  , latitude , longitude , last1h  , last3h  , last24h
-    $query_ranking = "SELECT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime, US.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
+    $query_ranking = "SELECT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
       " FROM  races_ranking RR, users US " . 
       " WHERE RR.idusers = US.idusers " . 
       " AND   RR.idraces = "  . $this->races->idraces . 
