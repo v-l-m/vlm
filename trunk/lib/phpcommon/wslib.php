@@ -71,11 +71,11 @@ class WSBaseBoat extends WSBasePlayer {
     }
     
     function check_idu() {
-        $this->idu = $this->check_cgi_int('idu', 'USER01', 'USER02');
+        $this->idu = $this->check_cgi_int('idu', 'IDU01', 'IDU02');
     }
 
-    function check_cgi_int($var, $err_exists, $err_gt_0) {
-        $foo = get_cgi_var($var);
+    function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) {
+        $foo = get_cgi_var($var, $default);
         if (is_null($foo)) $this->reply_with_error($err_exists);
         $foo = intval($foo);
         if (is_int($foo) && $foo > 0) {
@@ -245,8 +245,9 @@ function get_error($code) {
         "PLAYER01" => 'idp (id player) is required',
         "PLAYER02" => 'idp does not exist',
         //boat/user
-        "USER01" => 'idu (iduser = idboat) is required',
-        "USER02" => 'idu should be int and > 0',
+        "IDU01" => 'idu (iduser = idboat) is required',
+        "IDU02" => 'idu should be int and > 0',
+        "IDU03" => 'idu is not valid user',
         //idr
         "IDR01"  => 'idr is required',
         "IDR02"  => 'idr should be int and > 0',
