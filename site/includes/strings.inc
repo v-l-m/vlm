@@ -367,9 +367,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     "Click here" => "Click here",
     "You may also attach a pre-existing boat" => "You may also attach a pre-existing boat",
     "Recently boatsitted" => "Recently boatsitted",
+    "This boat is already boatsitted by the player" => "This boat is already boatsitted by the player",
   ),
   'fr' => 
   array (
+    "This boat is already boatsitted by the player" => "Ce bateau est déjà boat-sitté par ce joueur",
     "Recently boatsitted" => "Boat-sittings récents",
     "You may also attach a pre-existing boat" => "Vous pouvez aussi rattacher un ancien bateau",
     "Click here" => "Cliquez ici",

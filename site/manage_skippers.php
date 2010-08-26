@@ -115,7 +115,7 @@
     echo "<tr>";
     echo "<form name=\"manage\" method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">";
     echo '<input type="hidden" name="pu_linktype" value="'.$pu_linktype.'" />';
-    echo '<td>';
+    echo '<td colspan=\"2\">';
     echo '<select name="pu_idplayers">';
     foreach (getPlayerList("idplayers != ".getPlayerId() ) as $row) {
         echo '<option value="'.$row['idplayers'].'"';
@@ -125,7 +125,7 @@
     echo "</select>\n";
     echo '</td>';
     echo '<td>';
-    echo "<select name=\"actionskipper\" >";
+    echo "<select name=\"actionskipper\">";
     foreach ($actionlist as $actionvalue) {
         echo "<option value=\"".$actionvalue."\"";
         if ($actionvalue == $actionskipper) echo " selected";
@@ -133,7 +133,7 @@
     }
     echo "</select>";
     echo '</td>';
-    echo '<td>';
+    echo '<td colspan=\"2\">';
     echo '<select name="pu_idusers">';
     foreach ($player->getOwnedBoatIdList() as $id) {
         $u = getUserObject($id);
@@ -153,14 +153,18 @@
     }
     echo "\" /></td>";
     echo "</form></tr>";
-    echo "<tr><th>".getLocalizedString("idplayer")."</th><th>".getLocalizedString("linktype")."</th><th>".getLocalizedString("login_id")."</th><th>".ucfirst(getLocalizedString("action"))."</tr>";
+    echo "<tr><th colspan=\"2\">".getLocalizedString("idplayer")."</th><th>".getLocalizedString("linktype")."</th><th colspan=\"2\">".getLocalizedString("login_id")."</th><th>".ucfirst(getLocalizedString("action"))."</tr>";
     foreach ($grantlist as $rel) {
         $p = getPlayerObject($rel['idplayers']);
         $u = getUserObject($rel['idusers']);
         echo "<tr>";
         echo "<td>".$p->htmlIdplayersPlayername()."&nbsp;<a onclick=\"document.forms.manage.pu_idplayers.value='".$p->idplayers."'\"><img src=\"images/pme/pme-copy.png\" /></a></td>";
+        echo "<td>";
+        if (getPlayerId() != $p->idplayers) echo "<a onclick=\"document.forms.manage.pu_idplayers.value='".$p->idplayers."'\"><img src=\"images/pme/pme-copy.png\" /></a>";
+        echo "</td>";
         echo "<td>".getLinktypeString($rel['linktype'])."</td>";
         echo "<td>".$u->htmlIdusersUsernameLink()."&nbsp;<a onclick=\"document.forms.manage.pu_idusers.value='".$u->idusers."'\"><img src=\"images/pme/pme-copy.png\" /></a></td>";
+        echo "<td><a onclick=\"document.forms.manage.pu_idusers.value='".$u->idusers."'\"><img src=\"images/pme/pme-copy.png\" /></a></td>";
         echo "<td>";
         if ($rel['linktype'] != PU_FLAG_OWNER) {
             echo htmlDelLinktype($rel);
