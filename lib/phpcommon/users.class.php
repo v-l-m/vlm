@@ -948,6 +948,21 @@ class fullUsers
     return $rowresult['nbinvalid'];
   }
   
+  function checkExistingPreviousWaypointCrossing() 
+  {
+    if ($this->nwp == 1) {
+      return false;
+    }
+    // we use userdeptime to ensure we are not taking a waypoint from a previous run
+    // in the case of a permanent race.
+    $query = "SELECT count(*) AS nbvalid FROM waypoint_crossing WHERE validity=0 AND idusers=".
+      $this->users->idusers." AND idraces=".$this->users->engaged.
+      " AND idwaypoint=".($this->nwp-1)." AND userdeptime=".$this->users->userdeptime;
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+    $rowresult = mysql_fetch_array($result, MYSQL_ASSOC);
+    return $rowresult['invalid'];
+  }
+
   // Function updateWaypoints
   function updateNextWaypoint()
   {
