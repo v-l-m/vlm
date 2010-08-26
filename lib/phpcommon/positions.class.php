@@ -159,9 +159,9 @@ class positionsIterator extends baseClass {
     
     function getQuery() {
         $query =  "SELECT `time`, `long`, `lat` ".
-                  " FROM positions " . 
-                  " WHERE idusers = " . $this->idusers . 
-                  " AND race = " .  $this->idraces  .
+                  " FROM `positions` " . 
+                  " WHERE `idusers` = " . $this->idusers . 
+                  " AND `race` = " .  $this->idraces  .
                   " AND `time` > " . $this->mintime .  
                   " AND `time` < " . $this->maxtime .  
                   " ORDER BY `time` ASC";

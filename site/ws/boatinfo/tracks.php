@@ -1,43 +1,54 @@
 <?php
     include_once("config.php");
     include_once("wslib.php");
+    include_once('positions.class.php');
 
     header("content-type: text/plain; charset=UTF-8");
 
+    //FIXME : types are badly checked
+
     $ws = new WSBaseBoat();
+    $now = time();
+    
+    $users = getUserObject($ws->idu);
+    if (is_null($users)) $ws->reply_with_error('IDU03');
 
-    $idr = $ws->check_cgi_int('idr', 'IDR01', 'IDR02');
+    $idr = $ws->check_cgi_int('idr', 'IDR01', 'IDR02', $users->engaged);
+ 
+    if (!raceExists($idr)) $ws->reply_with_error('IDR03'); //FIXME : select on races table made two times !
+    $races = new races($idr);
 
-    $query_race = "SELECT deptime FROM races WHERE idraces = ".$idr;
-    $result = wrapper_mysql_db_query_reader($query_race) or $ws->reply_with_error('CORE01');
-    if ($row = mysql_fetch_assoc($result)) {
-        $deptime = $row['deptime'];
+    $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
+    $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
+    //FIXME if debug
+    $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
+
+    if ($races->bobegin < $now && $races->boend > $now) {
+        //BlackOut in place
+        $endtime = $races->bobegin;
+        $ws->answer['blackout'] = True;
+        $ws->answer['blackout_start'] = $races->bobegin;
+        $ws->answer['blackout_end'] = $races->boend;
+    }
+
+    if ($users->hidden) {
+        $ws->answer['tracks_hidden'] = True;
+        $ws->answer['nb_tracks'] = 0;
+        $ws->reply_with_success();
+    }
+        
+    if ($races->bobegin < $now && $races->boend > $now) {
+        //BlackOut in place
+        $endtime = $races->bobegin;
     } else {
-       $ws->reply_with_error('IDR03');
+        $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
     }
-    //FIXME : blackout ???
-    $query =  "(".
-              "SELECT histpos.time AS t, histpos.lat AS lt, histpos.long AS lg FROM histpos" .
-              " WHERE histpos.idusers=" . $ws->idu. 
-              " AND histpos.race=" . $idr . 
-              " AND histpos.time >= ".$deptime.
-              " ORDER BY time ASC".
-              ") UNION (".
-              "SELECT positions.time AS t, positions.lat AS lt, positions.long AS lg FROM positions" .
-              " WHERE positions.idusers=" . $ws->idu .
-              " AND positions.race=" . $idr .
-              " AND positions.time >= $deptime".
-              " ORDER BY time ASC".
-              ")";
+    
+    $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
 
-    $result = wrapper_mysql_db_query_reader($query) or $ws->reply_with_error('CORE01');
-    $nbresults = mysql_num_rows($result);
-
-    $ws->answer['tracks'] = Array();
-
-    while(  $row = mysql_fetch_array($result, MYSQL_NUM) ) {
-        $ws->answer['tracks'][] = $row;
-    }
+    $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
+    $ws->answer['nb_tracks'] = count($pi->records);
+    $ws->answer['tracks'] = $pi->records;
 
     $ws->reply_with_success();
 
