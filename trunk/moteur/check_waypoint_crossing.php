@@ -38,7 +38,7 @@ $lonPreCheck = $lonAvant;
 $wp_invalidated = false;
 $prevwpidx = $fullUsersObj->getPreviousWaypointIdx();
 
-if ($previdx != 0) {
+if ($prevwpidx != 0) {
   $prevwaypoint =  $fullRacesObj->races->giveWPCoordinates($prevwpidx);
   if (($prevwaypoint->type & (WP_CROSS_ONCE)) != 0) {
     echo (", checking for previous WP crossing... ");
