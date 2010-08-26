@@ -53,7 +53,7 @@ if ($prevwpidx != 0) {
     case -1:
       // invalid crossing, in WP_CROSS_(ANTI)CLOCKWISE, we remove the entry
       if (($prevwaypoint->type & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) != 0) {
-	printf("\n\t\t* INVALID Crossing or previous WP -> INVALIDATING");
+	printf("\n\t\t* INVALID (anti)Clockwise Crossing or previous WP -> INVALIDATING");
 	$fullUsersObj->nwp = $fullUsersObj->nwp - 1;
 	$fullUsersObj->updateNextWaypoint();
 	// the test checks if we are in the current race before cleaning the WP
