@@ -948,7 +948,7 @@ class fullUsers
   // clear prior valid waypoint crossing, if any
   function clearValidWaypointCrossing($all=true) 
   {
-    $query = "DELETE FROM waypoint_crossing WHERE ".(all?"":" validity=1 AND".)" idusers=".
+    $query = "DELETE FROM waypoint_crossing WHERE ".(all?"":" validity=1 AND")." idusers=".
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp;
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
