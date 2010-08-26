@@ -911,6 +911,14 @@ class fullUsers
     return (-1);
   }
 
+  function getPreviousWaypointIdx()
+  {
+    if ($this->users->nwp < 2) {
+      return 0;
+    }
+    return ($this->users->nwp - 1);
+  }
+  
   // Function updateWaypoints
   function recordWaypointCrossing($xingtime, $validity = 1)
   {
@@ -937,6 +945,15 @@ class fullUsers
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
   }
 
+  // clear prior valid waypoint crossing, if any
+  function clearValidWaypointCrossing() 
+  {
+    $query = "DELETE FROM waypoint_crossing WHERE validity=1 AND idusers=".
+      $this->users->idusers." AND idraces=".$this->users->engaged.
+      " AND idwaypoint=".$this->nwp;
+    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
+  }
+
   // check if there was an invalid crossing reported for that WP
   function checkInvalidWaypointCrossing()
   {
@@ -948,19 +965,16 @@ class fullUsers
     return $rowresult['nbinvalid'];
   }
   
-  function checkExistingPreviousWaypointCrossing() 
+  function checkExistingCurrentWaypointCrossing() 
   {
-    if ($this->nwp == 1) {
-      return false;
-    }
     // we use userdeptime to ensure we are not taking a waypoint from a previous run
     // in the case of a permanent race.
     $query = "SELECT count(*) AS nbvalid FROM waypoint_crossing WHERE validity=0 AND idusers=".
       $this->users->idusers." AND idraces=".$this->users->engaged.
-      " AND idwaypoint=".($this->nwp-1)." AND userdeptime=".$this->users->userdeptime;
+      " AND idwaypoint=".$this->nwp." AND userdeptime=".$this->users->userdeptime;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     $rowresult = mysql_fetch_array($result, MYSQL_ASSOC);
-    return $rowresult['invalid'];
+    return ($rowresult['invalid']>0);
   }
 
   // Function updateWaypoints
