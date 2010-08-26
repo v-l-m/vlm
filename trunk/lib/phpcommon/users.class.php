@@ -1091,6 +1091,7 @@ class fullUsers
     }
     if ( $last1h > MAX_SPEED_FOR_RANKING ) $last1h = 0;
 
+    // we are not updating the loch in races_ranking during blackouts
     $query_ranking = "UPDATE races_ranking " .
       " SET      nwp       = " . $this->nwp                 . ", " .
       "dnm       = " . $this->distancefromend     . ", " .
@@ -1098,7 +1099,7 @@ class fullUsers
       "nmlong    = " . $this->LongNM              . ", " .
       "latitude  = " . $this->lastPositions->lat  . ", " .
       "longitude = " . $this->lastPositions->long . ", " .
-      "loch      = " . $this->users->loch         . ", " .
+      (( $this->races->bobegin < $now && $now < $this->races->boend ) ? "":"loch= " . $this->users->loch. ", ") .
       "last1h    = " . $last1h                    . ", " .
       "last3h    = " . $last3h                    . ", " .
       "last24h   = " . $last24h                   .
