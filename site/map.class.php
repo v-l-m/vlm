@@ -142,6 +142,8 @@ class map
     
     $this->styleCrossOnceWP = array( $this->colorWaypoint, $this->colorSea, $this->colorWaypoint,$this->colorSea,
                                      $this->colorCC,$this->colorCC,$this->colorSea,$this->colorCC,$this->colorCC,$this->colorSea);
+    $this->styleCrossOnceWPLong = array( $this->colorWaypoint, $this->colorWaypoint, $this->colorWaypoint,$this->colorcolorWaypoint,
+					 $this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC);
     // FIXME add a style with an arrow in alpha channel.
 
     //print_r($this);
@@ -652,7 +654,7 @@ class map
 
           $style = array ($this->colorWaypoints, $this->colorSea);
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
-	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
+	    imagesetstyle($this->mapImage, $this->styleCrossOnceWPLong);
 	  } else {
 	    imagesetstyle ($this->mapImage, $style);
 	  }
