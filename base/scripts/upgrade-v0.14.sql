@@ -66,5 +66,17 @@ ALTER TABLE waypoint_crossing DROP PRIMARY KEY;
 ALTER TABLE waypoint_crossing ADD UNIQUE KEY (`idraces`,`idwaypoint`,`idusers`,`validity`);
 ALTER TABLE waypoint_crossing ADD KEY (`idraces`,`idusers`);
 
+#tables contactmedias
+CREATE TABLE `playerstocontactmedias` (
+  `idplayerstocontactmedias` bigint(20) NOT NULL auto_increment,
+  `idplayers` bigint(20) NOT NULL,
+  `idcontactmedias` bigint(20) NOT NULL,
+  `contact_uid` VARCHAR(250) NOT NULL,
+  `privilege` int NOT NULL,
+  `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`idplayerstocontactmedias`),
+  KEY `playertocontactmedias` (`idplayers`, `idcontactmedias`),
+  KEY `players` (`idplayers`),
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='contact infos for players';
 
 
