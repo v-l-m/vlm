@@ -206,10 +206,13 @@ include_once("scripts/myboat.js");
 	 }
   
              $status_content .= "&lt;/div&gt;";
+
+        $centerwplong = ($wp_west+$wp_east)/2/1000;
+        if (abs($wp_west-$wp_east) > 180000) $centerwplong += 180;
   
          echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
            "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-           "&amp;long=" . ($wp_west+$wp_east)/2/1000  .
+           "&amp;long=" . $centerwplong .
            "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
            "&amp;tracks=on" . $oppList . 
            "&amp;wp=" . $wp_num . 

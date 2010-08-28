@@ -546,17 +546,17 @@ class map
       //echo "L1:".$waypoint[1]."\nL2:".$waypoint[3]."\nXo:".$this->Xo."\n";
       //echo "W:".$this->west."\nE:".$this->east."\n";
       if ($this->west > $this->east ) {
-        if ( $waypoint['longitude1'] <0 ) $waypoint[1]+=360000;
-        if ( $waypoint['longitude2'] <0 ) $waypoint[3]+=360000;
+          if ( $waypoint['longitude1'] <0 ) $waypoint['longitude1']+=360000;
+          if ( $waypoint['longitude2'] <0 ) $waypoint['longitude2']+=360000;
       } else {
       /* le cas connu ou :
        * - antemeridien non visible (east > west)
-       * - on veut tracer un wp sur l'antemeridien...
+       * - on veut tracer un wp sur l'antemeridien... (i.e. abs(long1-long2) > 180)
        * - c'est une gate
        */
-        if ( ( $waypoint['longitude1'] <0 ) and ($waypoint['longitude2'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE ) ) {
+        if ( ( $waypoint['longitude1'] <0 ) and ($waypoint['longitude2'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE ) and abs($waypoint['longitude1']-$waypoint['longitude2']) > 180000) {
             $waypoint['longitude2']-=360000;
-        } else if ( ( $waypoint['longitude2'] <0 ) and ($waypoint['longitude1'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE )) {
+        } else if ( ( $waypoint['longitude2'] <0 ) and ($waypoint['longitude1'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE ) and abs($waypoint['longitude1']-$waypoint['longitude2']) > 180000) {
             $waypoint['longitude1']-=360000;
         }  
       }
