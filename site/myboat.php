@@ -415,7 +415,7 @@ include_once("scripts/myboat.js");
             $ichref="ics.php?idraces=".$myRace->idraces;
             if ( $myRace->bobegin > $now ) {
                 $bobegin = gmdate(getLocalizedString("dateClassificationFormat"),$myRace->bobegin);
-                $boduration = ($myRace->boend - $myRace->bobegin ) /3600;
+                $boduration = round(($myRace->boend - $myRace->bobegin ) /3600);
                 $messages[] = Array("id" => "incomingbo", "txt" => getLocalizedString("incomingblackout")." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
             }
             if ( $now > $myRace->bobegin && $now < $myRace->boend ) {    
