@@ -633,7 +633,7 @@ class map
 			$this->projLong($waypoint['longitude1']),
 			$this->projLat($waypoint['latitude1']),
 			$this->projLong($EP_coords['longitude']),      
-			$this->projLat($waypoint['latitude']),
+			$this->projLat($EP_coords['latitude']),
 			IMG_COLOR_STYLED);
 	  } else {
 	    imageline ( $this->mapImage, 
