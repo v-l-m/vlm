@@ -1672,13 +1672,14 @@ function getRaceRanking($idusers, $idraces) {
   // Si dernier, trouver la raison
   if ( $rank == 9999 ) {
     //if ( $position = BOAT_STATUS_ARR ) $commentaire = " (ARR)";
+    $commentaire = "UNK"; // TO TRACK strange statuses
     if ( $position = BOAT_STATUS_HC ) $commentaire = " (HC)";
     if ( $position = BOAT_STATUS_HTP ) $commentaire = " (HTP)";
     if ( $position = BOAT_STATUS_DNF ) $commentaire = " (DNF)";
     if ( $position = BOAT_STATUS_ABD ) $commentaire = " (ABD)";
     return ($rank . $commentaire );
   } else {
-    return ($rank . "/" . $nbu . $commentaire );
+    return ($rank . "/" . $nbu);
   }
 }
 
