@@ -2,6 +2,7 @@
 $strings = array (
   'en' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'Estimated Time of Arrival : ',
     'ETR=' => 'Estimated Time Remaining = less than %d hours',
     'VMG=' => 'Velocity Made Good (ortho)= %2.2f',
@@ -299,6 +300,7 @@ Tip 3 : status is 'pending' if an order is not yet executed, 'done' otherwise",
   ),
   'fr' => 
   array (
+    'incomingblackout' => 'Blackout à venir',
     'ETA=' => 'Arriv&eacute;e pr&eacute;vue : ',
     'ETR=' => 'Estimation du temps restant  = moins de %d heures',
     'VMG=' => 'Velocity Made Good (ortho.) = %2.2f',
@@ -603,6 +605,7 @@ Conseil 3 : le status est 'pending' si un ordre n'est pas encore ex&eacute;cut&e
   ),
   'it' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'previsione data arrivo: ',
     'ETR=' => 'calcolo di quanto manca = meno di %d ore',
     'VMG=' => 'Miglor vmg (ortho.) = %2.2f',
@@ -890,6 +893,7 @@ verso il prossimo mark si Mia WP=0/0',
   ),
   'pt' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'Hora estimada de chegada : ',
     'ETR=' => 'Tempo restante estimado = menos de %d horas',
     'VMG=' => 'velocidade verdadeira de progressão (ortho)= %2.2f',
@@ -1173,6 +1177,7 @@ o da próxima marca',
   ),
   'es' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'Estimación de Tiempo de LLegada : ',
     'ETR=' => 'Estimación de Tiempo Restante = menos de %d horas',
     'VMG=' => 'Velocity Made Good (velocidad efectiva al Way Point)= %2.2f',
