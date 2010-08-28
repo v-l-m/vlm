@@ -40,7 +40,7 @@
         $updateTime = max($updateTime, $row['updated']);
     }
 
-    $rssobject->setChannelElement('pubDate', date(DATE_RSS, $updateTime));
+    $rssobject->setChannelElement('pubDate', $updateTime);
     $rssobject->genarateFeed();
     
 ?>
