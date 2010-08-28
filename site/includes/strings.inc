@@ -368,9 +368,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     "You may also attach a pre-existing boat" => "You may also attach a pre-existing boat",
     "Recently boatsitted" => "Recently boatsitted",
     "This boat is already boatsitted by the player" => "This boat is already boatsitted by the player",
+    'incomingblackout' => 'Incoming blackout',
   ),
   'fr' => 
   array (
+    'incomingblackout' => 'Blackout à venir',
     "This boat is already boatsitted by the player" => "Ce bateau est déjà boat-sitté par ce joueur",
     "Recently boatsitted" => "Boat-sittings récents",
     "You may also attach a pre-existing boat" => "Vous pouvez aussi rattacher un ancien bateau",
@@ -746,6 +748,7 @@ Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cu
   ),
   'it' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'previsione data arrivo: ',
     'ETR=' => 'calcolo di quanto manca = meno di %d ore',
     'Interface for mobiles devices' => 'Interface for mobiles devices',
@@ -1033,6 +1036,7 @@ verso il prossimo mark si Mia WP=0/0',
   ),
   'pt' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'Hora estimada de chegada : ',
     'ETR=' => 'Tempo restante estimado = menos de %d horas',
     'Interface for mobiles devices' => 'Interface for mobiles devices',
@@ -1316,6 +1320,7 @@ o da próxima marca',
   ),
   'es' => 
   array (
+    'incomingblackout' => 'Incoming blackout',
     'ETA=' => 'Estimación de Tiempo de LLegada : ',
     'ETR=' => 'Estimación de Tiempo Restante = menos de %d horas',
     'Interface for mobiles devices' => 'Interface for mobiles devices',
