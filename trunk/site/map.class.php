@@ -142,7 +142,7 @@ class map
     
     $this->styleCrossOnceWP = array( $this->colorWaypoints, $this->colorSea, $this->colorWaypoints,$this->colorSea,
                                      $this->colorCC,$this->colorCC,$this->colorSea,$this->colorCC,$this->colorCC,$this->colorSea);
-    $this->styleCrossOnceWPLong = array( $this->colorWaypoints, $this->colorWaypoints, $this->colorWaypoints,$this->colorcolorWaypoints,
+    $this->styleCrossOnceWPLong = array( $this->colorWaypoints, $this->colorWaypoints, $this->colorWaypoints,$this->colorWaypoints,
 					 $this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC);
     // FIXME add a style with an arrow in alpha channel.
 
@@ -896,7 +896,7 @@ class map
                              );
                   $ellipseSz=3;
               }          
-              if ( $boat == $opponnent ) {
+              if ( $boat == $opponnent && $num_segments%6 == 0 && $num_segments >= 6) {
                   imagefilledellipse($this->mapImage, $H[0], $H[1], 
                                      $ellipseSz, $ellipseSz, $this->fromhex( $usersObj->color)  );
               }
@@ -956,6 +956,7 @@ class map
                   //===============================
                   // Affichage des numéros de pixel
                   //===============================
+                  $font = 2; //FIXME HARDCODED
 
                   $width  = ImageFontWidth($font) * strlen($usersObj->boatname) + POSITIONSIZE/2 + 2;
                   if ($this->text == "left") {
