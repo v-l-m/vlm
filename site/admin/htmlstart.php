@@ -4,7 +4,7 @@
     
     header("Content-type: text/html; charset=UTF-8");
     
-    if (!isLoggedIn() or  !idusersIsAdmin(getLoginId()) ) {
+    if (!isLoggedIn() or  !isAdminLogged() ) {
         include ("unallowed.html");
         die();
     } 

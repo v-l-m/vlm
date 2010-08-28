@@ -744,7 +744,7 @@ class map
       $num_boats_to_draw=0;
 
       // Si plus de trop de bateaux... on rend la main tout de suite.
-      if ( !idusersIsAdmin(htmlentities($boat)) ) {
+      if ( !isAdminLogged()) ) {
           if ( count($this->list) > MAX_BOATS_ON_MAPS ) {
               imagestring ( $this->mapImage, $font+5, $this->xSize/2 - 290, $this->ySize/2 ,
                             "No boat drawn. Please select no more than " . MAX_BOATS_ON_MAPS . " boats on maps please !" ,
