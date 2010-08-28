@@ -140,10 +140,11 @@ class map
     $this->colorWind = ImageColorAllocate($this->mapImage, 110, 130, 150);
     $this->colorCC = ImageColorAllocate($this->mapImage, 250, 50, 50);
     
-    $this->styleCrossOnceWP = array( $this->colorWaypoints, $this->colorSea, $this->colorWaypoints,$this->colorSea,
-                                     $this->colorCC,$this->colorCC,$this->colorSea,$this->colorCC,$this->colorCC,$this->colorSea);
-    $this->styleCrossOnceWPLong = array( $this->colorWaypoints, $this->colorWaypoints, $this->colorWaypoints,$this->colorWaypoints,
-					 $this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC);
+    $this->styleCrossOnceWP = array( $this->colorWaypoints, $this->colorWaypoints, $this->colorWaypoints, $this->colorWaypoints,
+                                     $this->colorBlack, $this->colorBlack, $this->colorBlack, $this->colorBlack);
+    $this->styleCrossOnceWPLong = array( $this->colorWaypoints, $this->colorWaypoints, $this->colorSea, $this->colorSea,
+                                         $this->colorBlack, $this->colorBlack, $this->colorSea, $this->colorSea);
+
     // FIXME add a style with an arrow in alpha channel.
 
     //print_r($this);
@@ -175,7 +176,7 @@ class map
     $this->setFuncProjLat($this->proj."Long2x");
 
   }
-  
+
   // function drawLine
   // =================
   // == Draws a line (calls imageline), but before, checks and adapts x coordinates against ante-meridien
@@ -561,33 +562,32 @@ class map
         }  
       }
           
+      $wp1ProjLong = $this->projLong($waypoint['longitude1']);
+      $wp1ProjLat  = $this->projLat($waypoint['latitude1']);
+      $wp2ProjLong = $this->projLong($waypoint['longitude2']);
+      $wp2ProjLat  = $this->projLat($waypoint['latitude2']);
+
       // bouée sur point 1
-      imagefilledellipse($this->mapImage, $this->projLong($waypoint['longitude1']),
-                         $this->projLat($waypoint['latitude1']),
+      imagefilledellipse($this->mapImage, $wp1ProjLong, $wp1ProjLat
                          WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
 
       // Coordonnées bouée 1
       if ( $this->drawtextwp && ($this->wp_only == $waypoint_num  || $nwp == $waypoint_num )) {
         imagestring($this->mapImage,
-                    3,
-                    $this->projLong($waypoint['longitude1']) ,
-                    $this->projLat($waypoint['latitude1']) ,
+                    3, $wp1ProjLong, $wp1ProjLat,
                     "WP" . $waypoint_num . "(" .giveDegMinSec('img',$waypoint['latitude1']/1000, $waypoint['longitude1']/1000) . ")",
                     $this->colorBlack);
       }
 
       // bouée sur point 2 (seulement si PORTE, pas si WP)
       if ( $waypoint['wptype'] == WPTYPE_PORTE ) {
-        imagefilledellipse($this->mapImage, $this->projLong($waypoint['longitude2']),
-                           $this->projLat($waypoint['latitude2']),
+        imagefilledellipse($this->mapImage, $wp2ProjLong, $wp2ProjLat,
                            WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
         if ( $this->drawtextwp && ($this->wp_only == $waypoint_num || $nwp == $waypoint_num )) {
           imagestring($this->mapImage,
-                      3,
-                      $this->projLong($waypoint['longitude2']) ,
-                      $this->projLat($waypoint['latitude2']),
+                      3,  $wp2ProjLong, $wp2ProjLat,
                       "WP" . $waypoint_num . "(" .giveDegMinSec('img',$waypoint['latitude2']/1000, $waypoint['longitude2']/1000) . ")",
                       $this->colorBlack);
         }
@@ -600,27 +600,22 @@ class map
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
 	    imageline ( $this->mapImage, 
-			$this->projLong($waypoint['longitude1']),
-			$this->projLat($waypoint['latitude1']),
-			$this->projLong($waypoint['longitude2']),      
-			$this->projLat($waypoint['latitude2']),
+			$wp1ProjLong, $wp1ProjLat,
+			$wp2ProjLong, $wp2ProjLat,
 			IMG_COLOR_STYLED);
 	  } else {
 	    imageline ( $this->mapImage, 
-			$this->projLong($waypoint['longitude1']),
-			$this->projLat($waypoint['latitude1']),
-			$this->projLong($waypoint['longitude2']),      
-			$this->projLat($waypoint['latitude2']),
+			$wp1ProjLong, $wp1ProjLat,
+			$wp2ProjLong, $wp2ProjLat,
 			$this->colorWaypoints);
 	  }
-        } else {
 
           // On va tracer un arc de cercle sur les 200 premiers milles, tous les 10 milles
           // giveEndPointCoordinates(  $latitude, $longitude, $distance, $heading  )
           //$style = array ($this->colorWaypoints, $this->colorSea);
           //imagesetstyle ($this->mapImage, $style);
           $poly_coords=array();
-          array_push ($poly_coords, $this->projLong($waypoint['longitude1']), $this->projLat($waypoint['latitude1']));
+          array_push ($poly_coords, $wp1ProjLong, $wp1ProjLat);
 
           $wpheading=($waypoint['laisser_au']+180)%360;
           $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
@@ -630,15 +625,13 @@ class map
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
 	    imageline ( $this->mapImage, 
-			$this->projLong($waypoint['longitude1']),
-			$this->projLat($waypoint['latitude1']),
+			$wp1ProjLong, $wp1ProjLat
 			$this->projLong($EP_coords['longitude']),      
 			$this->projLat($EP_coords['latitude']),
 			IMG_COLOR_STYLED);
 	  } else {
 	    imageline ( $this->mapImage, 
-			$this->projLong($waypoint['longitude1']),
-			$this->projLat($waypoint['latitude1']),
+			$wp1ProjLong, $wp1ProjLat
 			$this->projLong($EP_coords['longitude']),      
 			$this->projLat($EP_coords['latitude']),
 			$this->colorBuoy);
@@ -665,8 +658,7 @@ class map
                       $this->projLat($EP_coords2['latitude']),
                       IMG_COLOR_STYLED);
 
-          array_push ($poly_coords, $this->projLong($waypoint['longitude1']),
-                      $this->projLat($waypoint['latitude1']));
+          array_push ($poly_coords, $wp1ProjLong, $wp1ProjLat);
 	  
           imagefilledpolygon( $this->mapImage, $poly_coords, 5, $this->colorBuoy );
 
