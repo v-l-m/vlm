@@ -343,6 +343,11 @@ class players extends baseClass {
         }
         return $boatidlist;
     }
+    //is ...
+    function isAdmin() {
+        //FIXME
+        return False;
+    }
 
     //html renderers
     function htmlPlayername() {

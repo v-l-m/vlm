@@ -10,32 +10,15 @@
    + * boat=xx&action=reset_username&USN=xxxxxxx => met à jour le nom d'utilisateur
 */
 $PAGETITLE = "User Admin Wizard (Old admin interface)";
-include("htmlstart.php");
+include("htmlstart.php"); // This will die if not logged or not admin.
 
 // Les paramètres
 
-$action=quote_smart($_REQUEST['action']);
-$race=quote_smart($_REQUEST['race']);
-$boat=quote_smart($_REQUEST['boat']);
-$do=quote_smart($_REQUEST['do']);
+$action = get_cgi_var('action');
+$race = get_cgi_var('race');
+$boat = get_cgi_var('boat');
+$do = get_cgi_var('do');
 
-// Si tentative de connexion en non admin, on ferme la fenêtre
-// Pour Appel de VLM, en utilisant les sessions
-if ( idusersIsAdmin (getLoginId()) ) {
-     $pseudo=getLoginName();
-} else {
-     
-     // Pour l'interface de JP, qui passe login et password dans les URLs
-     $pseudo=quote_smart($_REQUEST['pseudo']);
-     $password=quote_smart($_REQUEST['password']);
-
-     if ( isAdmin($pseudo, $password) )   {
-         echo "C'est pas s&eacute;curis&eacute; le login et le password dans l'URL... Faudrait utiliser la session";
-     } else {
-         echo "<h4>You should not do that...your IP : " . getip() . "</h4>";
-         exit;
-     }
-}
 
 // Y a t'il une course choisie ?
 // On n'a pas de course, on propose la liste
@@ -49,13 +32,11 @@ if ( $race == "" ) {
    while ( $row = mysql_fetch_assoc($result)) {
            $select_list = $select_list . "<option value=\"". 
                                       $_SERVER['PHP_SELF'] . 
-              "?pseudo=".$pseudo.
-              "&amp;password=".$password.
-              "&amp;boat=".$boat.
+              "?boat=".$boat.
               "&amp;action=".$action . 
-              "&amp;race=".$row[idraces] . "\"";
-           if ( $boat == $row[idraces] ) $select_list = $select_list . " selected ";
-           $select_list = $select_list . ">". $row[idraces] . " - " . $row[racename] ."</option>\n";
+              "&amp;race=".$row['idraces'] . "\"";
+           if ( $boat == $row['idraces'] ) $select_list = $select_list . " selected ";
+           $select_list = $select_list . ">". $row['idraces'] . " - " . $row['racename'] ."</option>\n";
      
    }
    echo "<h4>No de Course : " .$race . "</h4>";
@@ -72,9 +53,7 @@ if ( $race == "" ) {
       echo "<h4>Course : " . $race . "</h4>" ;
 
       echo "<input type=\"button\" value=\"changer\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-                  "?pseudo=".$pseudo.
-                  "&amp;password=".$password.
-                  "&amp;action=".$action.
+                  "?action=".$action.
                   "&amp;boat=".$boat.
                   "'\" />";
    }
@@ -97,9 +76,7 @@ if ( $boat != "" ) {
            echo "<h4>Bateau : " . $boat . " (" . $usersObj->users->boatname . "), skipper=" . $usersObj->users->username . " (email=". $usersObj->users->email. ")</h4>\n"; 
 
            echo "<input type=\"button\" value=\"changer\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-                  "?pseudo=".$pseudo.
-                  "&amp;password=".$password.
-                  "&amp;action=".$action.
+                  "?action=".$action.
                   "&amp;race=".$race.
                   "'\" />";
        } else {
@@ -122,13 +99,11 @@ if ( $race != "" && $boat == "" ) {
    while ( $row = mysql_fetch_assoc($resultusers)) {
            $select_list = $select_list . "<option value=\"". 
                                       $_SERVER['PHP_SELF'] . 
-              "?pseudo=".$pseudo.
-              "&amp;password=".$password.
-              "&amp;race=".$race.
+              "?race=".$race.
               "&amp;action=".$action . 
-              "&amp;boat=".$row[idusers] . "\"";
-           if ( $boat == $row[idusers] ) $select_list = $select_list . " selected ";
-           $select_list = $select_list . ">". $row[idusers] . " - skipper=" . $row[username] ."</option>\n";
+              "&amp;boat=".$row['idusers'] . "\"";
+           if ( $boat == $row['idusers'] ) $select_list = $select_list . " selected ";
+           $select_list = $select_list . ">". $row['idusers'] . " - skipper=" . $row['username'] ."</option>\n";
      
    }
    echo "<h4>Bateau : </h4>\n" ; 
@@ -145,9 +120,7 @@ if ( $race == "" || $boat == "" ) exit;
 
 // Y a t'il une action fournie ?
 $URL="\"document.location='". $_SERVER['PHP_SELF'] .
-                                "?pseudo=".$pseudo.
-                                "&amp;password=".$password.
-                                "&amp;boat=".$boat .
+                                "?boat=".$boat .
                                 "&amp;race=".$race.
                                 "&amp;action=".$action.
                                 "'\" />";
@@ -240,9 +213,7 @@ if ( $do == "yes" ) {
 
 // Les actions valides laissent passer, si aucune action est choisie, on présente la liste et on s'arrête là
 $URL="\"document.location='". $_SERVER['PHP_SELF'] .
-                                "?pseudo=".$pseudo.
-                                "&amp;password=".$password.
-                                "&amp;boat=".$boat .
+                                "?boat=".$boat .
                                 "&amp;race=".$race.
                                 "&amp;action=".$action.
         "&amp;do=yes".
@@ -250,8 +221,6 @@ $URL="\"document.location='". $_SERVER['PHP_SELF'] .
 echo "<h4>Action : " . $action ; 
 echo "<form name=\"coordonnees\" action=\"". $_SERVER['PHP_SELF'] . "\"/>";
      echo "<input type=\"hidden\" name=\"action\" value=\"".$action.  "\"/>";
-     echo "<input type=\"hidden\" name=\"pseudo\" value=\"".$pseudo.  "\"/>";
-     echo "<input type=\"hidden\" name=\"password\" value=\"".$password.  "\"/>";
      echo "<input type=\"hidden\" name=\"boat\" value=\"".$boat .  "\"/>";
      echo "<input type=\"hidden\" name=\"race\" value=\"".$race. "\"/>";
      echo "<input type=\"hidden\" name=\"do\" value=\"yes\"/>";
@@ -305,9 +274,7 @@ switch ($action) {
         foreach ($actions as $a) {
             $select_list = $select_list . "<option value=\"". 
                 $_SERVER['PHP_SELF'] . 
-                "?pseudo=".$pseudo.
-                "&amp;password=".$password.
-                "&amp;race=".$race.
+                "?race=".$race.
                 "&amp;boat=".$boat.
                 "&amp;action=" . 
                 $a . "\"";
@@ -323,7 +290,7 @@ switch ($action) {
     }
   
     echo "<input type=\"button\" value=\"Changer d'action\" onClick=\"document.location='". $_SERVER['PHP_SELF'] .
-              "?pseudo=".$pseudo.  "&amp;password=".$password.  "&amp;boat=".$boat .  "&amp;race=".$race. "'\"/>";
+              "?boat=".$boat .  "&amp;race=".$race. "'\"/>";
     echo "<input type=\"submit\" value=\"Juste fais le !\" />";
     echo "</form>";
     include("htmlend.php");

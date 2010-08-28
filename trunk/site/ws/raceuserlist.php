@@ -20,7 +20,7 @@ function get_info_array($idraces = 0) {
     $info = Array();
     $query = "SELECT idusers, username, boatname, country";
 
-    if ( idusersIsAdmin(getLoginId()) ) {
+    if ( isAdminLogged()) ) {
         $query .= ", ipaddr, email, class";
     }
 

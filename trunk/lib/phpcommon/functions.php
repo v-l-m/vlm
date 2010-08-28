@@ -2,6 +2,7 @@
 /********Functions*********/
 
 include_once("vlmc.php");
+require_once('players.class.php');
 
 function wrapper_mysql_map_db_query_reader($cmd) {
   if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
@@ -905,23 +906,18 @@ function isAdmin($login, $passwd)
   }
 }
 
-function idusersIsAdmin($idusers)
-{
-  if (round($idusers) == 0) return FALSE;
-  //find account
-  $query = "SELECT class FROM users WHERE idusers = " . $idusers;
+function isPlayerAdmin($idplayers) {
+    $p = getPlayerObject($idplayers);
+    return (!is_null($p) && $p->isAdmin());
+}
 
-  $result = wrapper_mysql_db_query_reader($query)  ;
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  if (!$row) {
-    return FALSE;
-  } else {
-    if ( $row[0] == CLASS_ADMIN ) {
-      return TRUE;
-    } else {
-      return FALSE;
-    }
-  }
+function isAdminLogged() {
+    return (isPlayerAdmin(getPlayerId()) || idusersIsAdmin(getLoginId()));
+}
+
+function idusersIsAdmin($idusers) {
+    $u = getUserObject($idusers);
+    return (!is_null($u) && $u->isAdmin());
 }
 
 function getNumOpponents($idraces) {

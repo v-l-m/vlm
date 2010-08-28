@@ -36,7 +36,6 @@
     $targetlong=htmlentities(get_cgi_var('targetlong'));
     $targetandhdg=htmlentities(get_cgi_var('targetandhdg', -1));
     $boatheading = get_cgi_var('boatheading');
-    $adminpasswd = get_cgi_var('adminpasswd');
 
     $msg="";
     //need to be at start because modify header info
@@ -188,11 +187,6 @@
     //little trick : if update_angle page, display and then redirect to myboat
     if ($CurrentFile == "update_angle.php" ) {
         echo "  <meta http-equiv=\"refresh\" content=\"0; url=myboat.php\" />";
-    } elseif ( $CurrentFile == "admin.php" )  {
-        $do=quote_smart($_REQUEST['do']);
-        if ( $do == 'yes' ) {
-            echo "  <meta http-equiv=\"refresh\" content=\"0\" />";
-        }
     } elseif ($CurrentFile == "myboat.php" ) {
         echo "  <meta http-equiv=\"refresh\" content=\"1200\" />";
     } //No refresh for other pages
@@ -340,7 +334,7 @@
             <a href="index.php"><?echo getLocalizedString("home")?></a> 
 <?php
                 // Bouton "ADMIN" pour les administrateurs
-                if ( idusersIsAdmin (getLoginId()) ) {
+                if ( isAdminLogged() ) {
                     echo "<a target=\"_admin\" href=\"/admin/\">Admin</a>";
                 }
                 //<a href="http://images.virtual-loup-de-mer.org/" target="_images">echo getLocalizedString("images"); </a> 
