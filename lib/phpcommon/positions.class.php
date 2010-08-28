@@ -165,6 +165,7 @@ class positionsIterator extends baseClass {
                   " AND `time` > " . $this->mintime .  
                   " AND `time` < " . $this->maxtime .  
                   " ORDER BY `time` ASC";
+
         return $query;
     }
 
@@ -187,6 +188,27 @@ class positionsIterator extends baseClass {
     function end() {
     }
 
+}
+
+class fullPositionsIterator extends positionsIterator {
+    function getQuery() {
+        $query =  "(".
+                  "SELECT `time`, `long`, `lat` ".
+                  " FROM `positions` " . 
+                  " WHERE `idusers` = " . $this->idusers . 
+                  " AND `race` = " .  $this->idraces  .
+                  " AND `time` > " . $this->mintime .  
+                  " AND `time` < " . $this->maxtime .
+                  ") UNION (".
+                  "SELECT `time`, `long`, `lat` ".
+                  " FROM `histpos` " . 
+                  " WHERE `idusers` = " . $this->idusers . 
+                  " AND `race` = " .  $this->idraces  .
+                  " AND `time` > " . $this->mintime .  
+                  " AND `time` < " . $this->maxtime .
+                  ") ORDER BY `time` ASC";
+        return $query;
+    }
 }
 
 // A list of the positions of the same player
