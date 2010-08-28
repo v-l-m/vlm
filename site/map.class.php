@@ -776,8 +776,15 @@ class map
 
           // DRAW MyWP
           if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
+              if ($this->west > $this->east && $fullUsersObj->users->targetlong < 0) {
+                  //case with wp east of AM and AM is visible
+                  $mywpoffset = 360000;
+              } else {
+                  $mywpoffset = 0;
+              }
+
               imagefilledellipse( $this->mapImage,
-                                  $this->projLong($fullUsersObj->users->targetlong*1000),
+                                  $this->projLong($fullUsersObj->users->targetlong*1000+$mywpoffset),
                                   $this->projLat($fullUsersObj->users->targetlat*1000),
                                   WP_BUOY_SIZE, WP_BUOY_SIZE,  $this->fromhex($fullUsersObj->users->color)
                                 );
