@@ -17,7 +17,7 @@
         if ( $nbWPs > 1 ) {
 	  for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
 	    $WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
-	    if ( ($WP['wpformat'] & (WP_ICE_GATE_N | WP_ICEGATE_S)) == 0 ) {
+	    if ( ($WP['wpformat'] & (WP_ICE_GATE_N | WP_ICE_GATE_S)) == 0 ) {
 	      array_push($tables, "WP" . $wp_num);
 	    }
 	  }
