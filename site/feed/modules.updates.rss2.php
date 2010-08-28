@@ -33,7 +33,7 @@
         $newItem->addElement('author', EMAIL_COMITE_VLM);
         //Attributes have to passed as array in 3rd parameter
         $newItem->addElement('guid', "".$row['revid'].$row['moduleid']);
-
+        $newItem->setLink(sprintf("http://%s", $_SERVER['SERVER_NAME']));
         //Now add the feed item
         $rssobject->addItem($newItem);
 
