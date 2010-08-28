@@ -140,9 +140,9 @@ class map
     $this->colorWind = ImageColorAllocate($this->mapImage, 110, 130, 150);
     $this->colorCC = ImageColorAllocate($this->mapImage, 250, 50, 50);
     
-    $this->styleCrossOnceWP = array( $this->colorWaypoint, $this->colorSea, $this->colorWaypoint,$this->colorSea,
+    $this->styleCrossOnceWP = array( $this->colorWaypoints, $this->colorSea, $this->colorWaypoints,$this->colorSea,
                                      $this->colorCC,$this->colorCC,$this->colorSea,$this->colorCC,$this->colorCC,$this->colorSea);
-    $this->styleCrossOnceWPLong = array( $this->colorWaypoint, $this->colorWaypoint, $this->colorWaypoint,$this->colorcolorWaypoint,
+    $this->styleCrossOnceWPLong = array( $this->colorWaypoints, $this->colorWaypoints, $this->colorWaypoints,$this->colorcolorWaypoints,
 					 $this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC,$this->colorCC);
     // FIXME add a style with an arrow in alpha channel.
 
