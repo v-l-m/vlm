@@ -3,6 +3,8 @@
 include_once("functions.php");
 include_once("base.class.php");
 
+define("VLM_PLAYER_ADMIN", 1);
+
 class playersPending extends baseClass {
     var $idplayers_pending,
         $email,
@@ -117,13 +119,16 @@ class playersPending extends baseClass {
 }
 
 class players extends baseClass {
-    var $idplayers,
-        $email,
-        $password,
-        $playername,
-        $permissions,
-        $updated,
-        $created;
+    //DB attributes
+    var $idplayers = null;
+    var $email = null;
+    var $password = null;
+    var $playername = null;
+    var $permissions = 0;
+    var $updated = null;
+    var $created = null; //FIXME this one seems not correct
+
+    //computed attributes
     var $boatsitidlist = null;
     var $ownedboatidlist = null;
     var $recentlyboatsittedidlist = null;
@@ -157,7 +162,7 @@ class players extends baseClass {
         $this->email = $row['email'];
         $this->password = $row['password'];
         $this->playername = $row['playername'];
-//        $this->permissions = $row['permissions'];
+        $this->permissions = $row['permissions'];
 //        $this->description = $row['description'];
         //FIXME : et les autres attributs
         return True;
@@ -183,10 +188,11 @@ class players extends baseClass {
     }
 
     function query_addupdate() {
-        $query = sprintf("SET `email`='%s', `password`='%s', `playername`='%s'",
+        $query = sprintf("SET `email`='%s', `password`='%s', `playername`='%s', `permissions`=%d",
             $this->email,
             $this->password,
-            $this->playername
+            $this->playername,
+            $this->permissions
             );
         return $query;
     }
@@ -343,10 +349,10 @@ class players extends baseClass {
         }
         return $boatidlist;
     }
+
     //is ...
     function isAdmin() {
-        //FIXME
-        return False;
+        return ($this->permissions & VLM_PLAYER_ADMIN);
     }
 
     //html renderers

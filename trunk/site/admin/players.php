@@ -44,6 +44,13 @@ $opts['fdd']['playername'] = array(
   'maxlen'   => 255,
   'sort'     => true
 );
+$opts['fdd']['permissions'] = array(
+  'name'     => 'Permissions',
+  'select'   => 'D',
+  'help'     => 'Perms of the player', 
+  'values2'  => array(0 => "Default", VLM_PLAYER_ADMIN => "Admin",),
+  'sort'     => true
+);
 $opts['fdd']['updated'] = array(
   'name'     => 'Updated',
   'input'    => 'R',

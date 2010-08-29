@@ -25,7 +25,7 @@ CREATE TABLE `players` (
   `email` varchar(50) NOT NULL, 
   `password` varchar(64) NOT NULL,
   `playername` varchar(20) NOT NULL,
-  `permissions` varchar(20) NOT NULL default 'player',
+  `permissions` int NOT NULL default 0,
   `description` text default NULL,
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL default '0000-00-00 00:00:00',
