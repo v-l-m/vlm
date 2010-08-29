@@ -568,7 +568,7 @@ class map
       $wp2ProjLat  = $this->projLat($waypoint['latitude2']);
 
       // bouée sur point 1
-      imagefilledellipse($this->mapImage, $wp1ProjLong, $wp1ProjLat
+      imagefilledellipse($this->mapImage, $wp1ProjLong, $wp1ProjLat,
                          WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
 
@@ -625,13 +625,13 @@ class map
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
 	    imageline ( $this->mapImage, 
-			$wp1ProjLong, $wp1ProjLat
+			$wp1ProjLong, $wp1ProjLat,
 			$this->projLong($EP_coords['longitude']),      
 			$this->projLat($EP_coords['latitude']),
 			IMG_COLOR_STYLED);
 	  } else {
 	    imageline ( $this->mapImage, 
-			$wp1ProjLong, $wp1ProjLat
+			$wp1ProjLong, $wp1ProjLat,
 			$this->projLong($EP_coords['longitude']),      
 			$this->projLat($EP_coords['latitude']),
 			$this->colorBuoy);
