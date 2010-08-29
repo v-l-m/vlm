@@ -555,9 +555,9 @@ class map
        * - on veut tracer un wp sur l'antemeridien... (i.e. abs(long1-long2) > 180)
        * - c'est une gate
        */
-        if ( ( $waypoint['longitude1'] <0 ) and ($waypoint['longitude2'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE ) and abs($waypoint['longitude1']-$waypoint['longitude2']) > 180000) {
+        if ( ( $waypoint['longitude1'] <0 ) and ($waypoint['longitude2'] >0 ) and ( ($waypoint['wpformat'] & 0xF) == WP_TWO_BUOYS ) and abs($waypoint['longitude1']-$waypoint['longitude2']) > 180000) {
             $waypoint['longitude2']-=360000;
-        } else if ( ( $waypoint['longitude2'] <0 ) and ($waypoint['longitude1'] >0 ) and ( $waypoint['wptype'] == WPTYPE_PORTE ) and abs($waypoint['longitude1']-$waypoint['longitude2']) > 180000) {
+        } else if ( ( $waypoint['longitude2'] <0 ) and ($waypoint['longitude1'] >0 ) and ( ($waypoint['wpformat'] & 0xF) == WP_TWO_BUOYS ) and abs($waypoint['longitude1']-$waypoint['longitude2']) > 180000) {
             $waypoint['longitude1']-=360000;
         }  
       }
@@ -581,7 +581,7 @@ class map
       }
 
       // bouée sur point 2 (seulement si PORTE, pas si WP)
-      if ( $waypoint['wptype'] == WPTYPE_PORTE ) {
+      if ( ($waypoint['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
         imagefilledellipse($this->mapImage, $wp2ProjLong, $wp2ProjLat,
                            WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
@@ -596,7 +596,7 @@ class map
       if ( $this->wp_only == $waypoint_num  || $nwp == $waypoint_num ) {
         imagesetthickness ( $this->mapImage, WP_THICKNESS);
 
-        if ( $waypoint['wptype'] == WPTYPE_PORTE ) {
+        if ( ($waypoint['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
 	    imageline ( $this->mapImage, 
@@ -609,6 +609,7 @@ class map
 			$wp2ProjLong, $wp2ProjLat,
 			$this->colorWaypoints);
 	  }
+	} else {
 
           // On va tracer un arc de cercle sur les 200 premiers milles, tous les 10 milles
           // giveEndPointCoordinates(  $latitude, $longitude, $distance, $heading  )
@@ -616,7 +617,7 @@ class map
           //imagesetstyle ($this->mapImage, $style);
           $poly_coords=array();
           array_push ($poly_coords, $wp1ProjLong, $wp1ProjLat);
-
+	  
           $wpheading=($waypoint['laisser_au']+180)%360;
           $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
 	  
@@ -692,7 +693,7 @@ class map
         imagesetthickness ( $this->mapImage, 1);
 
       }
-
+      
 
       // Numero de WP
       //imagestring($this->mapImage,
