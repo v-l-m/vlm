@@ -40,27 +40,22 @@ $opts['fdd']['idwaypoint'] = array(
 
 $opts['fdd']['wpformat'] = array(
   'name'     => 'Wpformat',
-  'help'     => nl2br("Wp format (for future v0.14)
-#define WP_TWO_BUOYS 0
-#define WP_ONE_BUOY  1
-#define WP_GATE_BUOY_MASK 0x000F
-/* leave space for 0-15 types of gates using buoys
-   next is bitmasks */
-#define WP_DEFAULT              0
-#define WP_ICE_GATE_N           (1 <<  4)
-#define WP_ICE_GATE_S           (1 <<  5)
-#define WP_ICE_GATE_E           (1 <<  6)
-#define WP_ICE_GATE_W           (1 <<  7)
-#define WP_GATE_KIND_MASK       0x00F0
-/* allow crossing in one direction only */
-#define WP_CROSS_CLOCKWISE      (1 <<  8)
-#define WP_CROSS_ANTI_CLOCKWISE (1 <<  9)
-/* for future releases */
-#define WP_CROSS_ONCE           (1 << 10)
-"),
-  'select'   => 'T',
-  'maxlen'   => 11,
-  'default'  => '0',
+  'help'     => nl2br("Wp format (for future v0.14)"),
+  'select|FLDV'   => 'M',
+  'select|ACP'   => 'C',
+  'values2' => Array(
+      WP_ONE_BUOY => "WP_ONE_BUOY",
+      WP_ICE_GATE_N => "WP_ICE_ICE N",
+      WP_ICE_GATE_N => "WP_ICE_ICE N",
+      WP_ICE_GATE_N => "WP_ICE_ICE N",
+      WP_ICE_GATE_N => "WP_ICE_ICE N",
+      WP_CROSS_CLOCKWISE => "WP_CROSS_CLOCKWISE",
+      WP_CROSS_ANTI_CLOCKWISE => "WP_CROSS_ANTI_CLOCKWISE",
+      WP_CROSS_ONCE => "WP_CROSS_ONCE",
+      ),
+  'sql' => 'MAKE_SET(`wpformat`, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096)',
+//  'maxlen'   => 11,
+//  'default'  => '0',
   'sort'     => true
 );
 
@@ -90,6 +85,13 @@ $opts['fdd']['wptype'] = array(
   'help'     => 'Type of the Wp : Finish, classement, ...',
   'sort'     => true
 );
+
+//$opts['triggers']['update']['pre'][0] = 'races_waypoints.TPU.trigger.php';
+$opts['triggers']['update']['before'][0] = 'races_waypoints.TBU.trigger.php';
+
+//force basic pme class.
+require_once('pme/phpMyEdit.class.php');
+$pmeinstance = new phpMyEdit($opts);
 
 include('adminfooter.php');
 
