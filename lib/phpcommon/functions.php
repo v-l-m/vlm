@@ -1398,6 +1398,14 @@ function isLoggedIn() {
     return (isset($_SESSION['idu']) && isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == 1);
 }
 
+function getAdminName() {
+    if (isPlayerLoggedIn()) {
+        return getPlayername();
+    } else {
+        return getLoginName();
+    }
+}
+
 function getLoginName() {
     return getSessionValue('login');
 }
@@ -1908,7 +1916,7 @@ function insertAdminChangelog($argarray) {
         }
     }
     $query = sprintf("INSERT INTO admin_changelog (user, host, operation, tab, rowkey, col, oldval, newval) VALUES ('%s', '%s' %s )",
-                      getLoginName(), getip(), $values
+                      getAdminName(), getip(), $values
                        );
     wrapper_mysql_db_query_writer($query);
 }
