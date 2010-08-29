@@ -421,16 +421,24 @@ class phpMyEdit_mce_cal extends phpMyEdit
 	{
 		$css_postfix    = @$this->fdd[$k]['css']['postfix'];
 		$css_class_name = $this->getCSSclass('input', null, true, $css_postfix);
+		$escape         = isset($this->fdd[$k]['escape']) ? $this->fdd[$k]['escape'] : true;
 		echo '<td class="',$this->getCSSclass('value', null, true, $css_postfix),'"';
 		echo $this->getColAttributes($k),">\n";
 		if ($this->col_has_values($k)) {
 			$vals       = $this->set_values($k);
-			$multiple   = $this->col_has_multiple_select($k);
+			$multiple   = $this->col_has_multiple($k);
 			$readonly   = $this->readonly($k);
 			$strip_tags = true;
-			$escape     = true;
-			echo $this->htmlSelect($this->cgi['prefix']['data'].$this->fds[$k], $css_class_name,
-					$vals, $row["qf$k"], $multiple, $readonly, $strip_tags, $escape);
+			//$escape     = true;
+			if ($this->col_has_checkboxes($k) || $this->col_has_radio_buttons($k)) {
+				echo $this->htmlRadioCheck($this->cgi['prefix']['data'].$this->fds[$k],
+						$css_class_name, $vals, $row["qf$k"], $multiple, $readonly,
+						$strip_tags, $escape);
+			} else {
+				echo $this->htmlSelect($this->cgi['prefix']['data'].$this->fds[$k],
+						$css_class_name, $vals, $row["qf$k"], $multiple, $readonly,
+						$strip_tags, $escape);
+			}
 		} elseif (isset($this->fdd[$k]['textarea'])) {
 			echo '<textarea class="',$css_class_name,'" name="',$this->cgi['prefix']['data'].$this->fds[$k],'"';
 			echo ($this->readonly($k) ? ' disabled' : '');
@@ -444,7 +452,7 @@ class phpMyEdit_mce_cal extends phpMyEdit
 				echo ' wrap="',$this->fdd[$k]['textarea']['wrap'],'"';
 			} else {
 				echo ' wrap="virtual"';
-			};
+			}
 			// mce mod start
 			if (isset($this->fdd[$k]['textarea']['html'])) {
 				$mce_tag = 'editable';
@@ -452,22 +460,35 @@ class phpMyEdit_mce_cal extends phpMyEdit
 				    $mce_tag = $this->fdd[$k]['textarea']['html'];
 				};
 				echo ' mce_'.$mce_tag.'=true ';
-            };
-            // mce mod end
-			echo '>',htmlspecialchars($row["qf$k"]),'</textarea>',"\n";
+      };
+      // mce mod end
+
+			echo '>';
+			if($escape) echo htmlspecialchars($row["qf$k"]);
+			else echo $row["qf$k"];
+			echo '</textarea>',"\n";
+		} elseif ($this->col_has_php($k)) {
+			echo include($this->fdd[$k]['php']);
 		} else {
-			$size_ml_props = '';
+			$len_props = '';
 			$maxlen = intval($this->fdd[$k]['maxlen']);
-			$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60);
-			$size   && $size_ml_props .= ' size="'.$size.'"';
-			$maxlen && $size_ml_props .= ' maxlength="'.$maxlen.'"';
-			echo '<input class="',$css_class_name,'" type="text" ';
-			echo ($this->readonly($k) ? 'disabled ' : '');
+			$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60); 
+			if ($size > 0) {
+				$len_props .= ' size="'.$size.'"';
+			}
+			if ($maxlen > 0) {
+				$len_props .= ' maxlength="'.$maxlen.'"';
+			}
+			echo '<input class="',$css_class_name,'" type="text"';
+			echo ($this->readonly($k) ? ' disabled' : '');
 			/* calendar mod start */
 			echo ' id="',$this->dhtml['prefix'].'fld_'.$this->fds[$k],'"';
 			/* calendar mod end */
-			echo 'name="',$this->cgi['prefix']['data'].$this->fds[$k],'" value="';
-			echo htmlspecialchars($row["qf$k"]),'" ',$size_ml_props,'>',"\n";
+
+			echo ' name="',$this->cgi['prefix']['data'].$this->fds[$k],'" value="';
+			if($escape) echo htmlspecialchars($row["qf$k"]);
+			else echo $row["qf$k"];
+			echo '"',$len_props,' />',"\n";
             /* calendar mod start */
 			/* Call calPopup helper function */
 			$this->calPopup_helper($k, htmlspecialchars($row["qf$k"]));

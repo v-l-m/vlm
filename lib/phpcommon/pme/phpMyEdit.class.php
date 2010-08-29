@@ -1181,14 +1181,19 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			$multiple   = $this->col_has_multiple($k);
 			$readonly   = $this->readonly($k);
 			$strip_tags = true;
+      if ($multiple && isset($row["qf".$k."_idx"])) {
+          $selected = $row["qf".$k."_idx"];
+      } else {
+          $selected = $row["qf$k"];
+      }
 			//$escape     = true;
 			if ($this->col_has_checkboxes($k) || $this->col_has_radio_buttons($k)) {
 				echo $this->htmlRadioCheck($this->cgi['prefix']['data'].$this->fds[$k],
-						$css_class_name, $vals, $row["qf$k"], $multiple, $readonly,
+						$css_class_name, $vals, $selected, $multiple, $readonly,
 						$strip_tags, $escape);
 			} else {
 				echo $this->htmlSelect($this->cgi['prefix']['data'].$this->fds[$k],
-						$css_class_name, $vals, $row["qf$k"], $multiple, $readonly,
+						$css_class_name, $vals, $selected, $multiple, $readonly,
 						$strip_tags, $escape);
 			}
 		} elseif (isset($this->fdd[$k]['textarea'])) {
@@ -1536,7 +1541,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		if (! is_array($selected)) {
 			$selected = $selected === null ? array() : array((string)$selected);
 		} else {
-			foreach($selected as $val) $selecte2[]=(string)$val;
+			foreach($selected as $val) $selected2[]=(string)$val;
 			$selected = $selected2;
 		}
 		$found = false;
