@@ -35,9 +35,13 @@
     $y=max(100,htmlentities(get_cgi_var('y', 100)));
     // Limitation de la taille de la carte pour pas péter le serveur 
     $boat = htmlentities(get_cgi_var('boat'));
-    if (!isAdminLogged()) ) {
-        if ( $x > MAX_MAP_X ) $x=MAX_MAP_X;
-        if ( $y > MAX_MAP_Y ) $y=MAX_MAP_Y;
+    if (!isAdminLogged()) {
+      if ( $x > MAX_MAP_X ) {
+	$x=MAX_MAP_X;
+      }
+      if ( $y > MAX_MAP_Y ) { 
+	$y=MAX_MAP_Y;
+      }
     }
     
     // On reçoit maintenant un point de coordonnées du centre de la carte
