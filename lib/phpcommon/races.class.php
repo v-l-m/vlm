@@ -1096,27 +1096,6 @@ class fullRaces {
         echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
         echo "</td>";
 
-        $longitude=$row['longitude'];
-        $latitude=$row['latitude'];
-
-        // Mise en forme longitude/latitude
-
-        // Position
-        // Longitude : W ou E
-        if ( $longitude > 0 )
-          {
-            $long_side='E';
-          } else {
-          $long_side='W';
-        }
-
-        // Latitude : N ou S
-        if ( $latitude > 0 )
-          {
-            $lat_side='N';
-          } else {
-          $lat_side='S';
-        }
 
         if ( $row['position'] == BOAT_STATUS_ARR ) {
           printf("      <td>%s</td>\n", gmdate("Y/m/d H:i:s",$row['deptime']));
@@ -1161,6 +1140,15 @@ class fullRaces {
           }
         }
         if ( $row['position'] == BOAT_STATUS_DNF ) {
+	  $longitude=$row['longitude'];
+	  $latitude=$row['latitude'];
+	  
+	  // Mise en forme longitude/latitude
+	  // Longitude : W ou E
+	  $long_side = ($longitude > 0) ? 'E' : 'W';
+	  // Latitude : N ou S
+	  $lat_side = ($latitude > 0) ? 'N' : 'S';
+	  
           $mapurl="<a class=\"ranking\" href=\"" . MAP_SERVER_URL . "/mercator.img.php?idraces=" . $this->races->idraces .
             "&amp;age=24"  . 
             "&amp;lat=". ($latitude/1000) .
@@ -1170,7 +1158,8 @@ class fullRaces {
             "&amp;x=800&amp;y=600&amp;proj=mercator&amp;text=right&amp;raceover=true\" target=\"_new\">"  ;
 
           // Affichage de la position
-          printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</a></td>\n", abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
+          printf("<td>" . $mapurl . "%3.3f&deg;" . $lat_side . ", %3.3f&deg;" . $long_side . "</a></td>\n", 
+		 abs($latitude/1000), abs($longitude/1000), $latitude/1000, $longitude/1000);
         }
 
         // Affichage du loch (ARR, DNF, ABD)
