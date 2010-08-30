@@ -142,73 +142,73 @@ if ( $usersObj->engaged != 0 ) {
     // Does he cross a waypoint
     // ==========================
     include "check_waypoint_crossing.php";
-
-    if ($crosses_the_coast && ! $is_arrived) {
-      $fullUsersObj->setSTOPPED(); // sets the boat mooring
-      $fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
-          
-      $fullUsersObj->lastPositions->lat=$latApres;
-      $fullUsersObj->lastPositions->long=$lonApres;
-      $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at this place
-    } else {
-      $fullUsersObj->lastPositions->writePositions(); //important, will write a new position
-    }
-
-    $fullUsersObj->writeCurrentRanking();
-    
-    // =========================================================================
-    // Check if boat uses its own WP and is close to it (only if PIM != 1 or 2 )
-    // If yes, we de-activate this WP (and boat reaches the "next race waypoint"
-    
-    //      ** THIS TEST IS OPTIMIZED for PERF (>=PILOTMODE_ORTHODROMIC)            **
-    //    should test "pim is 3 or pim is 4 in real life because of a future pim=5" ..
-    // ===============================================================================
-    if (  $fullUsersObj->users->pilotmode >= PILOTMODE_ORTHODROMIC 
-    	  && ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) ) {
-    
-      $distAvant=ortho($latAvant, $lonAvant,
-    		       $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
-      $distApres=ortho($latApres, $lonApres,
-    		       $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
-         
-      // On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
-      if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
-    	   || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
-    
-    	printf("\n\t** BOAT POSITION (Lon=%f, Lat=%f) **\n", 
-	       $lonApres/1000, $latApres/1000);
-    	printf("\t** USER WP (Lon=%f, Lat=%f) reached (dist=%f), deactivating it **\n", 
-    	       $fullUsersObj->users->targetlong, 
-    	       $fullUsersObj->users->targetlat, 
-    	       $dist);
-    
-    	// ABANDON DU WP PERSO
-    	$fullUsersObj->abandonWpAndTarget();    
+    if (!$is_arrived) {
+      if ($crosses_the_coast) {
+	$fullUsersObj->setSTOPPED(); // sets the boat mooring
+	$fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
+	
+	$fullUsersObj->lastPositions->lat=$latApres;
+	$fullUsersObj->lastPositions->long=$lonApres;
+	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position at thisplace
+      } else {
+	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position
       }
-    }
+      $fullUsersObj->writeCurrentRanking();
+      
+      // =========================================================================
+      // Check if boat uses its own WP and is close to it (only if PIM != 1 or 2 )
+      // If yes, we de-activate this WP (and boat reaches the "next race waypoint"
+      
+      //      ** THIS TEST IS OPTIMIZED for PERF (>=PILOTMODE_ORTHODROMIC)            **
+      //    should test "pim is 3 or pim is 4 in real life because of a future pim=5" ..
+      // ===============================================================================
+      if (  $fullUsersObj->users->pilotmode >= PILOTMODE_ORTHODROMIC 
+	    && ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) ) {
+	
+	$distAvant=ortho($latAvant, $lonAvant,
+			 $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
+	$distApres=ortho($latApres, $lonApres,
+			 $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
+	
+	// On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
+	if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
+	     || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
+	  
+	  printf("\n\t** BOAT POSITION (Lon=%f, Lat=%f) **\n", 
+		 $lonApres/1000, $latApres/1000);
+	  printf("\t** USER WP (Lon=%f, Lat=%f) reached (dist=%f), deactivating it **\n", 
+		 $fullUsersObj->users->targetlong, 
+		 $fullUsersObj->users->targetlat, 
+		 $dist);
+	  
+	  // ABANDON DU WP PERSO
+	  $fullUsersObj->abandonWpAndTarget();    
+	}
+      }
+      
+      // ==========================
+      //  Now all is done.
+      // ==========================
+      echo "\t** Pilotmode=" . $fullUsersObj->users->pilotmode ;
+      if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
+	echo "/" .$fullUsersObj->users->pilotparameter ;
+      }
     
-    // ==========================
-    //  Now all is done.
-    // ==========================
-    echo "\t** Pilotmode=" . $fullUsersObj->users->pilotmode ;
-    if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-      echo "/" .$fullUsersObj->users->pilotparameter ;
+      // ===================================================================
+      // MAJ du cap du bateau, pour la prochaine VAC si regulateur d'allure.
+      // * Pour mettre le bateau bout au vent si il tape la cote
+      // * Pour MAJ du pilote orthodromique si on a passe un WP
+      // ===================================================================
+      if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE 
+	   OR $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC 
+	   OR $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG 
+	   OR $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG )  {
+	
+	$fullUsersObj->updateAngles();
+	echo ", Angle updated";
+      }
+      echo ", Heading = " . $fullUsersObj->users->boatheading;
     }
-    
-    // ===================================================================
-    // MAJ du cap du bateau, pour la prochaine VAC si regulateur d'allure.
-    // * Pour mettre le bateau bout au vent si il tape la cote
-    // * Pour MAJ du pilote orthodromique si on a passe un WP
-    // ===================================================================
-    if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE 
-    	 OR $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC 
-    	 OR $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG 
-    	 OR $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG )  {
-    
-      $fullUsersObj->updateAngles();
-      echo ", Angle updated";
-    }
-    echo ", Heading = " . $fullUsersObj->users->boatheading;
     echo "\n\t** DONE ** ";
     //sleep (2);
     // } // not arrived
