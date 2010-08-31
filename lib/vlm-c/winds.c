@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.28 2010-02-25 13:53:45 ylafon Exp $
+ * $Id: winds.c,v 1.29 2010-08-31 15:44:17 ylafon Exp $
  *
  * (c) 2008-2010 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -53,13 +53,19 @@ wind_info *get_wind_info_latlong(double latitude, double longitude,
 				 time_t vac_time, wind_info *wind) {
 #ifdef DEFAULT_INTERPOLATION_UV
   return get_wind_info_latlong_UV(latitude, longitude, vac_time, wind);
-#endif /* DEFAULT_INTERPOLATION_UV */
-#ifdef DEFAULT_INTERPOLATION_TWSA
-  return get_wind_info_latlong_TWSA(latitude, longitude, vac_time, wind);
 #else
+#  ifdef DEFAULT_INTERPOLATION_TWSA
+  return get_wind_info_latlong_TWSA(latitude, longitude, vac_time, wind);
+#  else
+#    ifdef DEFAULT_INTERPOLATION_SELECTIVE_TWSA
   return get_wind_info_latlong_selective_TWSA(latitude, longitude, 
 					      vac_time, wind);
+#    else /* DEFAULT_INTERPOLATION_HYBRID */
+  return get_wind_info_latlong_hybrid(latitude, longitude, 
+				      vac_time, wind);
+#    endif /* DEFAULT_INTERPOLATION_SELECTIVE_TWSA */
 #  endif /* DEFAULT_INTERPOLATION_TWSA */
+#endif /* DEFAULT_INTERPOLATION_UV */
 }
 
 wind_info *get_wind_info_latlong_context(vlmc_context *context,
@@ -68,15 +74,21 @@ wind_info *get_wind_info_latlong_context(vlmc_context *context,
 #ifdef DEFAULT_INTERPOLATION_UV
   return get_wind_info_latlong_UV_context(context, latitude, longitude, 
 					  vac_time, wind);
-#endif /* DEFAULT_INTERPOLATION_UV */
-#ifdef DEFAULT_INTERPOLATION_TWSA
+#else
+#  ifdef DEFAULT_INTERPOLATION_TWSA
   return get_wind_info_latlong_TWSA_context(context, latitude, longitude, 
 					    vac_time, wind);
-#else
+#  else
+#    ifdef DEFAULT_INTERPOLATION_SELECTIVE_TWSA
   return get_wind_info_latlong_selective_TWSA_context(context, 
 						      latitude, longitude, 
 						      vac_time, wind);
-#endif /* DEFAULT_INTERPOLATION_TWSA */
+#    else /* DEFAULT_INTERPOLATION_HYBRID */
+  return get_wind_info_latlong_hybrid_context(context, latitude, longitude, 
+					      vac_time, wind);
+#    endif /* DEFAULT_INTERPOLATION_SELECTIVE_TWSA */
+#  endif /* DEFAULT_INTERPOLATION_TWSA */
+#endif /* DEFAULT_INTERPOLATION_UV */
 }
 
 wind_info *get_wind_info_latlong_now(double latitude, double longitude,
