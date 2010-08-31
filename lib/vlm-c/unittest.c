@@ -1,5 +1,5 @@
 /**
- * $Id: unittest.c,v 1.15 2008/07/08 14:11:11 ylafon Exp $
+ * $Id: unittest.c,v 1.16 2010-08-31 16:03:47 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -32,6 +32,7 @@
 #include "polar.h"
 #include "waypoint.h"
 #include "gshhs.h"
+#include "util.h"
 
 vlmc_context *global_vlmc_context;
 
@@ -40,10 +41,14 @@ int main (int argc, char **argv) {
   double lata, longa, latb, longb;
   
   double lat_boat, long_boat;
+
   time_t current_time, previ_time, crossing_time;
   int i;
   wind_info wind_boat;
   waypoint fake_waypoint;
+
+  printf("VERSION: %s\n", get_vlm_build_information());
+  printf("WIND INTERPOLATION: %s\n", get_vlm_wind_interpolation_scheme());
 
   global_vlmc_context = calloc(1, sizeof(vlmc_context));
   init_context_default(global_vlmc_context);
@@ -67,20 +72,29 @@ int main (int argc, char **argv) {
         printf("No intersection\n");
   }
 
-  lat1  = degToRad(10);
-  long1 = degToRad(10);
-  
-  lat2  = degToRad(11.1);
-  long2 = degToRad(9);
+  lat1 = degToRad(-21.411389);
+  long1 = degToRad(155.75);
 
-  lat3  = degToRad(30);
+  lat2 = degToRad(-21.814167);
+  long2 = degToRad(155.494444);
+
+  ortho_distance_initial_angle(lat1, long1, lat2, long2, &lata, &latb);
+  printf("Ortho Distance: %.3f - initial angle %.3f\n", lata, radToDeg(latb));
+
+  lat1  = degToRad(-7.5);
+  long1 = degToRad(-169);
+  
+  lat2  = degToRad(-7.5);
+  long2 = degToRad(169);
+
+  lat3  = degToRad(-10);
   long3 = degToRad(-10);
 
-  lata  = degToRad(10);
-  longa = degToRad(9);
+  lata  = degToRad(2);
+  longa = degToRad(103);
 
-  latb  = degToRad(11.1);
-  longb = degToRad(10);
+  latb  = degToRad(-65);
+  longb = degToRad(103);
 
   printf("Unit test: distance from Point 1 to Line A-B\n");
   printf("Point1: lat %.3f, long %.3f\n", radToDeg(lat1), radToDeg(long1));
