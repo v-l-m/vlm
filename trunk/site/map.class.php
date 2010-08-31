@@ -372,7 +372,7 @@ class map
       // Du coup, Si W > E, il faut prendre :
       // W à 180 + -180 à E
       if ( $this->flag_E_W == true ) {
-          $filtre_longitude = " and ( longitude between " . $west_x1000 . " and 181 OR longitude between -181 and " . $east_x1000 . ")";
+          $filtre_longitude = " and ( longitude between " . $west_x1000 . " and 191.0 OR longitude between -180.0 and " . $east_x1000 . ")";
       } else {
           $filtre_longitude = " and longitude between " . $west_x1000 . " and " . $east_x1000 ; 
       }
@@ -703,8 +703,6 @@ class map
       //    "WP" . $waypoint_num ,
       //    $this->colorBlack);
     }
-
-
   }
 
 
