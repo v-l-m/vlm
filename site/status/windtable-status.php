@@ -73,5 +73,8 @@ shm_unlock_sem_destroy_grib(1);
     <p id="vlmcbuild">VLM-C build date: 
     <?php echo get_vlm_build_information() ?>
     </p>
+    <p id="vlmcwindmode">VLM-C wind interpolation mode: 
+  <?php echo get_vlm_wind_interpolation_scheme() ?>
+    </p>
   </body>
 </html>
