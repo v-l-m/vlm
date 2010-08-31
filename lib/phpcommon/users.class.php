@@ -1254,7 +1254,6 @@ class fullUsers
       " loch=0 " .
       " WHERE idusers = ".$this->users->idusers;
     $result11 = wrapper_mysql_db_query_writer($query11);
-    $this->users->engaged = $id;
 
     if ( $id != 0 ) {
       $this->races = new races($id);
@@ -1306,7 +1305,7 @@ class fullUsers
     } else {
       $this->deleteCurrentRanking();
     }
-
+    $this->users->engaged = $id;
   }
 
 
