@@ -170,7 +170,7 @@ include_once("scripts/myboat.js");
          $status_content.=$wp_libelle." (".$wp_label.")" ;
          $status_content.="&lt;br /&gt;";
   
-         if ( $wp['wptype'] == WPTYPE_PORTE ) {
+         if ( ($wp['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
             $wp_north = max ($wp['latitude1'], $wp['latitude2']);
             $wp_east  = max ($wp['longitude1'], $wp['longitude2']);
             $wp_south = min ($wp['latitude1'], $wp['latitude2']);
