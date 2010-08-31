@@ -1,5 +1,5 @@
 /**
- * $Id: util.h,v 1.2 2009-10-03 09:43:57 ylafon Exp $
+ * $Id: util.h,v 1.3 2010-08-31 15:59:09 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,5 +24,6 @@
 
 int in_vlm_compat_mode();
 char *get_vlm_build_information();
+char *get_vlm_wind_interpolation_scheme();
 
 #endif /* _UTIL_H_ */
