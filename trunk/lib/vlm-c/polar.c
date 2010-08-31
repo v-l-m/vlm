@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.21 2009-11-29 14:38:04 ylafon Exp $
+ * $Id: polar.c,v 1.22 2010-08-31 15:43:48 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -369,7 +369,7 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   /* higher reolution mode, where bilinear interpolation is performed
      (angle and speed) */
   double tvalfloor, tvalceil, tangle;
-  int intangle_p1, intspeed_p1;
+  int intangle_p1;
   tangle = radToDeg(fabs(fmod(wind_angle, TWO_PI)));
   if (tangle > 180.0) {
     tangle = 360.0 - tangle;
