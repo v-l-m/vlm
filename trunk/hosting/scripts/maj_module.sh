@@ -58,6 +58,9 @@ case $confmodule in
     maps)
     echo "+$confmodule : Test & déploiement des fichiers gshhs"
     $destmodulepath/init-gshhs.sh
+    cd $destmodulepath/gshhs2mysql
+    make
+    ./import-gshhs.sh
     ;;
     site)
     echo -n "+$confmodule: Constitution et copie du fichier de version..."

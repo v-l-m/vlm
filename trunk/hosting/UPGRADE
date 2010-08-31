@@ -37,11 +37,16 @@ From 0.13 to Next:
   RUN
     ./scripts/maj_module.sh base
     cd ./vlmcode/base/scripts/
-    ./runupgrade.sh 0.14
+    ./runupgrade.sh 0.14 > log.txt
     cd 
 
   RUN
     ./scripts/maj_module.sh moteur
+
+  RUN
+    source $VLMRACINE/conf/conf_script
+    rm $VLMGSHHS/*.b
+    ./scripts/maj_module.sh maps
 
 = All servers =
 
