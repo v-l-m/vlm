@@ -291,12 +291,14 @@ class map
 
 
   //draw shoreline
-  function drawOneCoast($projCallbackLong, $projCallbackLat, $points , $fullres = "nopoly" , $coasts = "" ) {
+  function drawOneCoast($projCallbackLong, $projCallbackLat, $points , $fullres = "polyline" , $coasts = "" ) {
       $numpoints = count($points);
 
       if ( $numpoints > 0 ) {
           if ( $fullres == "poly"  && $numpoints > 4  ) {
               imagefilledpolygon( $this->mapImage, $points, $numpoints/2, $this->colorContinent);
+          } else if ( $fullres == "polyline"  && $numpoints > 4  ) {
+              imagepolygon( $this->mapImage, $points, $numpoints/2, $this->colorContinent);
           } else {
               // drawCoastline from this x and y arrays
               $last_longitude = 0;
@@ -430,7 +432,7 @@ class map
 		$new_y = $this->yMax;
 	      } 
 	      if ( ($new_x >=0) && ($new_y >=0) ) {
-		if ( $fullres == "poly" ) {
+		if ( $fullres == "poly" || $fullres == "polyline") {
 		  array_push ($coastpoints_array, $new_x, $new_y);
 		} else {
 		  array_push ($coastpoints_array, array($point[0]+.5,$x,$y));
@@ -472,7 +474,7 @@ class map
 		$new_y = $this->yMax;
 	      } 
 	      if ( ($new_x >=0) && ($new_y >=0) ) {
-		if ( $fullres == "poly" ) {
+		if ( $fullres == "poly" || $fullres == "polyline") {
 		  array_push ($coastpoints_array, $new_x, $new_y);
 		} else {
 		  array_push ($coastpoints_array, array($point[0]+.5,$x,$y));
@@ -488,7 +490,7 @@ class map
 	  $prev_y = $y;
           // On prépare un tableau que la fonction drawOneCoast mangera. 
           // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
-          if ( $fullres == "poly" ) {
+          if ( $fullres == "poly" || $fullres = "polyline") {
                array_push ($coastpoints_array, $x, $y);
           } else {
 	    // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher 
