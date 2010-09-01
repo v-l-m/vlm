@@ -295,8 +295,8 @@ class map
       $numpoints = count($points);
 
       if ( $numpoints > 0 ) {
-          if ( $fullres == "poly"  && $numpoints > 2  ) {
-              imagefilledpolygon( $this->mapImage, $points, $numpoints, $this->colorContinent);
+          if ( $fullres == "poly"  && $numpoints > 4  ) {
+              imagefilledpolygon( $this->mapImage, $points, $numpoints/2, $this->colorContinent);
           } else {
               // drawCoastline from this x and y arrays
               $last_longitude = 0;
@@ -366,38 +366,39 @@ class map
       //if ($east_x1000 >= 180 ) $east_x1000 -=360;
 
       // Filtre sur latitude
-      $filtre_latitude = " and latitude between " . $south_x1000 . " and " . $north_x1000 ; 
+      $filtre_latitude = "latitude BETWEEN " . $south_x1000 . " AND " . $north_x1000 ; 
       //$filtre_latitude = "";
        
       // Du coup, Si W > E, il faut prendre :
       // W à 180 + -180 à E
       if ( $this->flag_E_W == true ) {
-          $filtre_longitude = " and ( longitude between " . $west_x1000 . " and 191.0 OR longitude between -180.0 and " . $east_x1000 . ")";
+          $filtre_longitude = " AND ( longitude BETWEEN " . $west_x1000 . " AND 191.0 OR longitude BETWEEN -180.0 AND " . $east_x1000 . ")";
       } else {
-          $filtre_longitude = " and longitude between " . $west_x1000 . " and " . $east_x1000 ; 
+          $filtre_longitude = " AND longitude BETWEEN " . $west_x1000 . " AND " . $east_x1000 ; 
       }
 
       //printf ("Coasts=%s\n", $coasts);
       if ( $coasts == "" ) {
           $filtre_onecoast=" " ;
       } else {
-          $filtre_onecoast=" and idcoast= " . $coasts;
+          $filtre_onecoast=" AND idcoast= " . $coasts;
       }
       //printf ("West=%f, East=%f, %s\n", $west_x1000, $east_x1000, $filtre_longitude);
         
       // recherche des points de cote du coin
 
-      $query_coast="select idcoast, latitude, longitude from " . $coastline_table .
-          " where idcoast >= 0 " .
+      $query_coast="SELECT idcoast, idpoint, latitude, longitude FROM " . $coastline_table .
+          " WHERE " .
           $filtre_latitude .
           $filtre_longitude . 
           $filtre_onecoast .
-          " order by idcoast,idpoint ;"  ;
+          " ORDER BY idpoint ;"  ;
 
-      $result_coast =  wrapper_mysql_map_db_query_reader($query_coast) or die("Query [$query_coast] failed \n");
+      $result_coast = wrapper_mysql_map_db_query_reader($query_coast) or die("Query [$query_coast] failed \n");
       // for each coast, draw the corresponding coastline
 
       $idcoast = -1;
+      $idpoint = -1;
 
       while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) ) {
 
@@ -413,33 +414,87 @@ class map
           //       +   ==> on ajoute ce point au tableau 
 
           if ( $point[0] != $idcoast ) {            
-              if ($idcoast != -1 ) $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
-              unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
-              $points_count=0;
-              $coastpoints_array=array(); 
-              $idcoast= $point[0];         
+	    if ($idcoast != -1 ) {
+	      $new_x = -1;
+	      $new_y = -1;
+	      // we might have first and last points on different image edges
+	      // if so, let's add a fake point.
+	      if (($first_x <= 1) || ($x <= 1)) {
+		$new_x = 0;
+	      } else if (($first_x >= $this->xMax-1) || ($x >= $this->xMax-1)) {
+		$new_x = $this->xMax;
+	      } 
+	      if (($first_y <= 1) || ($y <= 1)) {
+		$new_y = 0;
+	      } else if (($first_y >= $this->yMax-1) || ($y >= $this->yMax-1)) {
+		$new_y = $this->yMax;
+	      } 
+	      if ( ($new_x >=0) && ($new_y >=0) ) {
+		if ( $fullres == "poly" ) {
+		  array_push ($coastpoints_array, $new_x, $new_y);
+		} else {
+		  array_push ($coastpoints_array, array($point[0]+.5,$x,$y));
+		}
+	      }
+	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
+	    }
+	    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
+	    $points_count = 0;
+	    $coastpoints_array = array(); 
+	    $idcoast = $point[0];      
+	    $idpoint = -1;
           }
           // + ajout au tableau (dans tous les cas, donc factorisé)
 
           // latitude
-          $y = $this->projLat($point[1]*1000);
+          $y = $this->projLat($point[2]*1000);
           // longitude
-          if ( $this->flag_E_W == true && $point[2] < 0 ) {
-              $x = $this->projLong(360000+$point[2]*1000);
+          if ( $this->flag_E_W == true && $point[3] < 0 ) {
+              $x = $this->projLong(360000+$point[3]*1000);
               //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
           } else {
-              $x = $this->projLong($point[2]*1000);
+              $x = $this->projLong($point[3]*1000);
           }
 
+	  if ($idpoint != -1) {
+	    if ($point[1]-$idpoint != 1) {
+	      $new_x = -1;
+	      $new_y = -1;
+	      // we jumped points ! let's add a fake point.
+	      if (($prev_x <= 1) || ($x <= 1)) {
+		$new_x = 0;
+	      } else if (($prev_x >= $this->xMax-1) || ($x >= $this->xMax-1)) {
+		$new_x = $this->xMax;
+	      } 
+	      if (($prev_y <= 1) || ($y <= 1)) {
+		$new_y = 0;
+	      } else if (($prev_y >= $this->yMax-1) || ($y >= $this->yMax-1)) {
+		$new_y = $this->yMax;
+	      } 
+	      if ( ($new_x >=0) && ($new_y >=0) ) {
+		if ( $fullres == "poly" ) {
+		  array_push ($coastpoints_array, $new_x, $new_y);
+		} else {
+		  array_push ($coastpoints_array, array($point[0]+.5,$x,$y));
+		}
+	      }
+	    }
+	  } else {
+	    $first_x = $x;
+	    $first_y = $y;
+	  }
+	  $idpoint = $point[1];
+	  $prev_x = $x;
+	  $prev_y = $y;
           // On prépare un tableau que la fonction drawOneCoast mangera. 
           // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
           if ( $fullres == "poly" ) {
                array_push ($coastpoints_array, $x, $y);
           } else {
-          // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher les numéros de cote
+	    // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher 
+	    // les numéros de cote
                array_push ($coastpoints_array, array($point[0],$x,$y));
           }
-
       }
 
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
