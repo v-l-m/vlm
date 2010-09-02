@@ -318,7 +318,7 @@ class map
   }
 
         
-  function addFakeMapPoints($coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid) {
+  function addFakeMapPoints($coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid, $c = false) {
     $new_x = -1;
     $new_y = -1;
     $new2_x = -1;
@@ -385,18 +385,36 @@ class map
       } 
     }
     if ( $fullres == "poly" || $fullres == "polyline") {
-      if ( ($new_x >=0) && ($new_y >=0) ) {
-	array_push ($coastarray, $new_x, $new_y);
-      } 
-      if ( ($new2_x >=0) && ($new2_y >=0) ) {
-	array_push ($coastarray, $new2_x, $new2_y);
-      } 
-    } else {
-      if ( ($new_x >=0) && ($new_y >=0) ) {
-	array_push ($coastarray, array($coastid+.5,$new_x,$new_y));
+      if ($c) {
+	if ( ($new2_x >=0) && ($new2_y >=0) ) {
+	  array_push ($coastarray, $new2_x, $new2_y);
+	} 
+	if ( ($new_x >=0) && ($new_y >=0) ) {
+	  array_push ($coastarray, $new_x, $new_y);
+	} 
+      } else {
+	if ( ($new_x >=0) && ($new_y >=0) ) {
+	  array_push ($coastarray, $new_x, $new_y);
+	} 
+	if ( ($new2_x >=0) && ($new2_y >=0) ) {
+	  array_push ($coastarray, $new2_x, $new2_y);
+	} 
       }
-      if ( ($new2_x >=0) && ($new2_y >=0) ) {
-	array_push ($coastarray, array($coastid+.5,$new2_x,$new2_y));
+    } else {
+      if ($c) {
+	if ( ($new2_x >=0) && ($new2_y >=0) ) {
+	  array_push ($coastarray, array($coastid+.5,$new2_x,$new2_y));
+	}
+	if ( ($new_x >=0) && ($new_y >=0) ) {
+	  array_push ($coastarray, array($coastid+.5,$new_x,$new_y));
+	}
+      } else {
+	if ( ($new_x >=0) && ($new_y >=0) ) {
+	  array_push ($coastarray, array($coastid+.5,$new_x,$new_y));
+	}
+	if ( ($new2_x >=0) && ($new2_y >=0) ) {
+	  array_push ($coastarray, array($coastid+.5,$new2_x,$new2_y));
+	}
       }
     }
   }
@@ -499,7 +517,8 @@ class map
 
           if ( $point[0] != $idcoast ) {            
 	    if ($idcoast != -1 ) {
-	      $this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
+	      $this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, 
+				      $x, $y, $idcoast, true);
 	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
 	    }
 	    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
@@ -544,7 +563,7 @@ class map
       
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
       if ($idcoast != -1 ) {
-	$this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
+	$this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
 	$this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
       }
 
