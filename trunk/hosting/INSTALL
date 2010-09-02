@@ -38,6 +38,8 @@ Merci
    * 0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
+   * 0.4 Prérequis de données
+     * 0.4.1 Pour l'instant, vous devez récupérer un export d'un des serveurs de dev pour disposer à la fois des schémas et des données de base pour votre instance. Adressez vous aux développeurs.
 
 = Les outils de déploiement, l'installation de base =
 
@@ -132,6 +134,7 @@ Merci
      * 2.2.3 Lancez {{{$ ./init.sh}}}. il vous demande le mot de passe administrateur de la base de donnée et crée l'utilisateur vlm et sa base
    * 2.3 Importation des données
      * 2.3.1 Récupèrez (demandez sur la ml) un dump mysql gzippé (il est produit avec le script base/scripts/dump.sh)
+       * 2.3.2 Suivant la version d'origine, ce fichier ne contient pas les maps !
      * 2.3.2 lancez {{{$ ./importdump.sh vlmdump.sql.gz}}}
      * 2.3.3 Lisez le fichier UPDATE au cas ou
    * 2.4 Configuration du fichier param.php
@@ -223,10 +226,10 @@ Merci
 
    * 3.2 Installer les cartes gshhs :
      * 3.2.1 déployer le module 'maps'
-     * 3.2.2 se placer dans maps/gshhs
-     * 3.3.3 lancer le script {{{./init-gshhs.sh}}}
+     * 3.3.2 Automatique, le script suivant va se lancer {{{./init-gshhs.sh}}}
        * le téléchargement s'opère et les fichiers sont décompressés dans le même répertoire
-     * 3.3.4 Si vous avez plusieurs serveurs à déployer, vous pouvez éviter de retélécharger les maps en les copiant d'un serveur à l'autre depuis {{{VLMDATAS/maps/}}}
+       * si vous avez plusieurs serveurs à déployer, vous pouvez éviter de retélécharger les maps en les copiant d'un serveur à l'autre depuis {{{VLMDATAS/maps/}}}
+     * 3.3.3 Automatiquement, les maps vont être regénérées dans mysql par le script gshhs2mysql/import-gshhs.sh
 
 = Le moteur sur le serveur maître =
  * 4. Mise en place du moteur 

@@ -109,7 +109,7 @@ define("MAILLE_MIN", 0.25);
 define("MAILLE_MAX", 9);
 define("MAPAREA_MIN", 0.1);
 define("MAPAREA_MAX", 300);
-define("MAP_POLYLINE_MODEMAP_POLYLINE_MODE", "polyline");
+define("MAP_POLYLINE_MODE", "polyline");
 define("MAP_POLYLINE_FULL_MODE", "poly");
 define("MAP_LINE_MODE", "nopoly");
 define_if_not("MAP_FULLRES_MODE", MAP_POLYLINE_MODE);
