@@ -31,13 +31,13 @@ function windAtPosition($_lat = 0, $_long = 0, $when = 0)
   $_time=time()+$when;
 
   if (defined('MOTEUR')) {
-    VLM_get_wind_info_latlong_millideg_selective_TWSA($_lat, $_long,
-						      $_time, $wind_boat);
+    VLM_get_wind_info_latlong_millideg($_lat, $_long,
+				       $_time, $wind_boat);
     shm_unlock_sem_destroy_grib(1);
   } else {
-    VLM_get_wind_info_latlong_millideg_selective_TWSA_context(
-					     $temp_vlmc_context, $_lat, $_long,
-					     $_time, $wind_boat);
+    VLM_get_wind_info_latlong_millideg_context($temp_vlmc_context,
+						      $_lat, $_long,
+						      $_time, $wind_boat);
     shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
   }
   
