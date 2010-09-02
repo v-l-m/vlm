@@ -12,8 +12,7 @@
             case 'string' :
                 $ret = "'".addslashes($import[$t])."'";
                 break;
-            case 'int' :                    sqlit($wpmisc, "wptype", 'string', false).
-
+            case 'int' :
             default :
                 $ret = intval($import[$t]);
         }
