@@ -109,7 +109,10 @@ define("MAILLE_MIN", 0.25);
 define("MAILLE_MAX", 9);
 define("MAPAREA_MIN", 0.1);
 define("MAPAREA_MAX", 300);
-define_if_not("MAP_FULLRES_MODE", "polyline");
+define("MAP_POLYLINE_MODEMAP_POLYLINE_MODE", "polyline");
+define("MAP_POLYLINE_FULL_MODE", "poly");
+define("MAP_LINE_MODE", "nopoly");
+define_if_not("MAP_FULLRES_MODE", MAP_POLYLINE_MODE);
 define("DEFAULT_SEA_COLOR", "e0e0f0");
 define("ALTERNATE_SEA_COLOR", "4040f0");
 define("TRANSPARENT_SEA_COLOR", "fefefe");
@@ -142,21 +145,21 @@ define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
 define("MS2KNT" , 3600/1852); //factor from ms to knots
 define("MILDEGREE2NAUTICS", 1000/60);
 
-// Distance entre bouée1 et bouée2 imaginaire sur les wayoints
+// Distance entre bouÃ©e1 et bouÃ©e2 imaginaire sur les wayoints
 // 2000 milles pour DO_THEY_CROSS
-// mercator.img.php s'intéresse au type de WP et ne prend
+// mercator.img.php s'intÃ©resse au type de WP et ne prend
 // que 1/100 de la longueur WPLL
-// le type de WP est positionné dans la structure "waypoints" par "races.class".
+// le type de WP est positionnÃ© dans la structure "waypoints" par "races.class".
 define("WPLL", 2000);
 // long1!=long2 ou lat1!=lat2
 define("WPTYPE_PORTE", 1);
 // long1=long2 et lat1=lat2
 define("WPTYPE_WP", 2);
-// ==> Dans la carto, toute porte de plus de 100 milles de large n'est représentée que par sa première bouée
+// ==> Dans la carto, toute porte de plus de 100 milles de large n'est reprÃ©sentÃ©e que par sa premiÃ¨re bouÃ©e
 
-// diametre des bouées des WP et Portes
+// diametre des bouÃ©es des WP et Portes
 define("WP_BUOY_SIZE", 6);
-// diametre des bateaux réels
+// diametre des bateaux rÃ©els
 define("BOAT_SIZE", 12);
 
 //size of the point on the map
@@ -175,12 +178,12 @@ define("DELAYBETWEENUPDATE", 300);
 // Distance around the boat for which we select coast points in the engine
 // when evaluating if a boat crosses the coast. (in degrees) 
 // (0.1 deg = 6 milles / 0.05deg = 3 milles => OK meme a 30 noeuds avec MAJ toutes les 5(2.5nm) / 10(5nm) minutes )
-// Si MAJ moins fréquente que toutes les 10 minutes, passer à 0.2 (sinon DTC aura du mal)
+// Si MAJ moins frÃ©quente que toutes les 10 minutes, passer Ã  0.2 (sinon DTC aura du mal)
 define("DISTANCEFROMROCKS", 0.1);
 // Next one is in nautical milles
 define("DISTANCEFROMTARGETWP", 1);
 // See check_coast_crossing
-//define("NUM_SUBVECTORS", 15); // N'est plus utilisé si on tient compte de la vitesse uniquement.
+//define("NUM_SUBVECTORS", 15); // N'est plus utilisÃ© si on tient compte de la vitesse uniquement.
 define("NUM_REF_POINTS",  7);
 define("NUM_NEAR_POINTS", 2);
 

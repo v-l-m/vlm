@@ -295,9 +295,9 @@ class map
       $numpoints = count($points);
 
       if ( $numpoints > 0 ) {
-          if ( $fullres == "poly"  && $numpoints > 4  ) {
+          if ( $fullres == MAP_POLYLINE_FULL_MODE  && $numpoints > 4  ) {
               imagefilledpolygon( $this->mapImage, $points, $numpoints/2, $this->colorContinent);
-          } else if ( $fullres == "polyline"  && $numpoints > 4  ) {
+          } else if ( $fullres == MAP_POLYLINE_MODE  && $numpoints > 4  ) {
               imagepolygon( $this->mapImage, $points, $numpoints/2, $this->colorContinent);
           } else {
               // drawCoastline from this x and y arrays
@@ -383,7 +383,7 @@ class map
 	}
       } 
     }
-    if ( $fullres == "poly" || $fullres == "polyline") {
+    if ( $fullres == MAP_POLYLINE_FULL_MODE || $fullres == MAP_POLYLINE_MODE) {
       if ($c) {
 	if ( ($new2_x >=0) && ($new2_y >=0) ) {
 	  array_push ($coastarray, $new2_x, $new2_y);
@@ -501,7 +501,7 @@ class map
       $idcoast = -1;
       $idpoint = -1;
 
-      $polymode = ($fullres == "poly" || $fullres = "polyline");
+      $polymode = ($fullres == MAP_POLYLINE_FULL_MODE || $fullres = MAP_POLYLINE_MODE);
       while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) ) {
 
       // On parcourt tous les points résultant de la requête (ils sont classé par  idcoast, idpoint
