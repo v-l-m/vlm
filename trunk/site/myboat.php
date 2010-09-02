@@ -823,7 +823,7 @@ include_once("scripts/myboat.js");
      <input type="hidden" name="lat" value="<?php echo $usersObj->lastPositions->lat/1000; ?>" />
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?php
-          if ( $usersObj->users->targetlat == 0 && $usersObj->users->targetlong == 0 ) {
+          if ( abs($usersObj->users->targetlat) < 0.0001 && abs($usersObj->users->targetlong) < 0.0001 ) {
 	    $myWP=&$myRace->giveWPCoordinates($usersObj->users->nwp);
 	    $latwp=($myWP['latitude1'] + $myWP['latitude2'])/2/1000;
 	    $longwp=($myWP['longitude1'] + $myWP['longitude2'])/2/1000;
