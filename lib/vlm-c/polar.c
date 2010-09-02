@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.22 2010-08-31 15:43:48 ylafon Exp $
+ * $Id: polar.c,v 1.23 2010-09-02 13:43:20 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -335,6 +335,10 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   int intspeed;
   double valfloor, valceil;
   double *polar_tab;
+#ifndef ROUND_WIND_ANGLE_IN_POLAR
+  double tvalfloor, tvalceil, tangle;
+  int intangle_p1;
+#endif /* !ROUND_WIND_ANGLE_IN_POLAR */
 
   intspeed  = floor(wind_speed);
   if (intspeed > 59) {
@@ -368,8 +372,6 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
 #else
   /* higher reolution mode, where bilinear interpolation is performed
      (angle and speed) */
-  double tvalfloor, tvalceil, tangle;
-  int intangle_p1;
   tangle = radToDeg(fabs(fmod(wind_angle, TWO_PI)));
   if (tangle > 180.0) {
     tangle = 360.0 - tangle;
@@ -378,19 +380,20 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   /* special case when we reach 180 */
   if (intangle == 180) {
     intangle_p1 = 179;
+    tangle = 179.0;
   } else {
     intangle_p1 = intangle+1;
   }
   valfloor  = polar_tab[intangle*61+intspeed];
   tvalfloor = polar_tab[intangle_p1*61+intspeed];
-  valfloor += (tvalfloor - valfloor)*(tangle - (double)intangle);
+  valfloor  = valfloor + (tvalfloor - valfloor)*(tangle - floor(tangle));
   /* if we reach the limit, return the right value now */
   if (intspeed == 60) {
     return valfloor;
   }
   valceil  = polar_tab[intangle*61+intspeed+1];
   tvalceil = polar_tab[intangle_p1*61+intspeed+1];
-  valceil += (tvalceil - valceil)*(tangle - (double)intangle);
+  valceil  = valceil + (tvalceil - valceil)*(tangle - floor(tangle));
 #endif /* ROUND_WIND_ANGLE_IN_POLAR */
   /* linear interpolation for wind speed */
   return (valfloor + (valceil-valfloor)*(wind_speed-(double)intspeed));
