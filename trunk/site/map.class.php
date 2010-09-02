@@ -313,7 +313,6 @@ class map
                   imagestring( $this->mapImage, $font, $label_x , $label_y , $points[0], $this->colorBlack);
               }
           }
-
       }
   }
 
@@ -502,6 +501,7 @@ class map
       $idcoast = -1;
       $idpoint = -1;
 
+      $polymode = ($fullres == "poly" || $fullres = "polyline");
       while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) ) {
 
       // On parcourt tous les points résultant de la requête (ils sont classé par  idcoast, idpoint
@@ -517,8 +517,11 @@ class map
 
           if ( $point[0] != $idcoast ) {            
 	    if ($idcoast != -1 ) {
-	      $this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, 
-				      $x, $y, $idcoast, true);
+	      if ( $polymode ) {
+		// only needed to close the polygon, not in multiline mode
+		$this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, 
+					$x, $y, $idcoast, true);
+	      }
 	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
 	    }
 	    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
@@ -552,21 +555,23 @@ class map
 	  $prev_y = $y;
           // On prépare un tableau que la fonction drawOneCoast mangera. 
           // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
-          if ( $fullres == "poly" || $fullres = "polyline") {
-               array_push ($coastpoints_array, $x, $y);
+          if ( $polymode ) {
+	    array_push ($coastpoints_array, $x, $y);
           } else {
 	    // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher 
 	    // les numéros de cote
-               array_push ($coastpoints_array, array($point[0],$x,$y));
+	    array_push ($coastpoints_array, array($point[0],$x,$y));
           }
       }
       
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
       if ($idcoast != -1 ) {
-	$this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
+	if ( $polymode ) {
+	  $this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
+	}
 	$this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
       }
-
+      
       // Puis on supprime le tableau
       unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
   }
