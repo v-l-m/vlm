@@ -321,27 +321,86 @@ class map
   function addFakeMapPoints($coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid) {
     $new_x = -1;
     $new_y = -1;
+    $new2_x = -1;
+    $new2_y = -1;
     // we might have first and last points on different image edges
     // if so, let's add a fake point.
     if (($prev_x <= 1) || ($curr_x <= 1)) {
       $new_x = 0;
-    } else if (($prev_x >= $this->xMax-1) || ($curr_x >= $this->xMax-1)) {
-      $new_x = $this->xMax;
     } 
-    if (($prev_y <= 1) || ($curr_y <= 1)) {
-      $new_y = 0;
-    } else if (($prev_y >= $this->yMax-1) || ($curr_y >= $this->yMax-1)) {
-      $new_y = $this->yMax;
-    } 
-    if ( ($new_x >=0) && ($new_y >=0) ) {
-      if ( $fullres == "poly" || $fullres == "polyline") {
-	array_push ($coastarray, $new_x, $new_y);
+    if (($prev_x >= $this->xMax-1) || ($curr_x >= $this->xMax-1)) {
+      if ($new_x == 0) {
+	// we need to add two points and reorder...
+	if ($prev_x >= $this->xMax-1) {
+	  $new2_x = 0;
+	  $new_x = $this->xMax;
+	} else {
+	  $new_x = 0;
+	  $new2_x = $this->xMax;
+	}
+	// now fill the y, and this addresses all cases
+	if (($prev_y+$curr_y) < $this->yMax) {
+	  $new_y = 0;
+	  $new2_y = 0;
+	} else {
+	  $new_y = $this->yMax;
+	  $new2_y = $this->yMax;
+	}
       } else {
+	$new_x = $this->xMax;
+      }
+    }
+    // check y only if we got one point
+    if ($new2_y == -1) {
+      if (($prev_y <= 1) || ($curr_y <= 1)) {
+	$new_y = 0;
+	if ($new2_x != -1) {
+	  $new2_y = 0;
+	}
+      } 
+      if (($prev_y >= $this->yMax-1) || ($curr_y >= $this->yMax-1)) {
+	if ($new_y == 0) {
+	  // in trouble again ;)
+	  if ($prev_y >= $this->yMax-1) {
+	    $new2_y = 0;
+	    $new_y = $this->yMax;
+	  } else {
+	    $new_y = 0;
+	    $new2_y = $this->yMax;
+	  }
+	} else {
+	  $new_y = $this->yMax;
+	  if ($new2_x != -1) {
+	    $new2_y = $this->yMax;
+	  }
+	}
+	// now fill the y, and this addresses all cases
+	if (($prev_x+$curr_x) < $this->xMax) {
+	  $new_x = 0;
+	  $new2_x = 0;
+	} else {
+	  $new_x = $this->xMax;
+	  $new2_x = $this->xMax;
+	}
+      } 
+    }
+    if ( $fullres == "poly" || $fullres == "polyline") {
+      if ( ($new_x >=0) && ($new_y >=0) ) {
+	array_push ($coastarray, $new_x, $new_y);
+      } 
+      if ( ($new2_x >=0) && ($new2_y >=0) ) {
+	array_push ($coastarray, $new2_x, $new2_y);
+      } 
+    } else {
+      if ( ($new_x >=0) && ($new_y >=0) ) {
 	array_push ($coastarray, array($coastid+.5,$new_x,$new_y));
+      }
+      if ( ($new2_x >=0) && ($new2_y >=0) ) {
+	array_push ($coastarray, array($coastid+.5,$new2_x,$new2_y));
       }
     }
   }
-
+  
   //draw shoreline (search for coasts to draw and call drawOneCoast)
   function drawMap($projCallbackLong, $projCallbackLat, $coasts , $fullres, $maparea=2 ) {
       $this->setFuncProjLat($projCallbackLat);
