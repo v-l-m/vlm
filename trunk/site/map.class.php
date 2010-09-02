@@ -291,7 +291,7 @@ class map
 
 
   //draw shoreline
-  function drawOneCoast($projCallbackLong, $projCallbackLat, $points , $fullres = "polyline" , $coasts = "" ) {
+  function drawOneCoast($projCallbackLong, $projCallbackLat, $points , $fullres = MAP_FULLRES_MODE , $coasts = "" ) {
       $numpoints = count($points);
 
       if ( $numpoints > 0 ) {

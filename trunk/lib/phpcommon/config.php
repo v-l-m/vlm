@@ -109,6 +109,7 @@ define("MAILLE_MIN", 0.25);
 define("MAILLE_MAX", 9);
 define("MAPAREA_MIN", 0.1);
 define("MAPAREA_MAX", 300);
+define_if_not("MAP_FULLRES_MODE", "polyline");
 define("DEFAULT_SEA_COLOR", "e0e0f0");
 define("ALTERNATE_SEA_COLOR", "4040f0");
 define("TRANSPARENT_SEA_COLOR", "fefefe");
