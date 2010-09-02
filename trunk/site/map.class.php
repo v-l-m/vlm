@@ -368,19 +368,19 @@ class map
 	    $new_y = 0;
 	    $new2_y = $this->yMax;
 	  }
+	  // now fill the y, and this addresses all cases
+	  if (($prev_x+$curr_x) < $this->xMax) {
+	    $new_x = 0;
+	    $new2_x = 0;
+	  } else {
+	    $new_x = $this->xMax;
+	    $new2_x = $this->xMax;
+	  }
 	} else {
 	  $new_y = $this->yMax;
 	  if ($new2_x != -1) {
 	    $new2_y = $this->yMax;
 	  }
-	}
-	// now fill the y, and this addresses all cases
-	if (($prev_x+$curr_x) < $this->xMax) {
-	  $new_x = 0;
-	  $new2_x = 0;
-	} else {
-	  $new_x = $this->xMax;
-	  $new2_x = $this->xMax;
 	}
       } 
     }
@@ -499,7 +499,7 @@ class map
 
           if ( $point[0] != $idcoast ) {            
 	    if ($idcoast != -1 ) {
-	      $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
+	      $this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
 	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
 	    }
 	    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
@@ -522,7 +522,7 @@ class map
 
 	  if ($idpoint != -1) {
 	    if ($point[1]-$idpoint != 1) {
-	      $this->addFakeMapPoints($coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
+	      $this->addFakeMapPoints(&$coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
 	    }
 	  } else {
 	    $first_x = $x;
@@ -544,7 +544,7 @@ class map
       
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
       if ($idcoast != -1 ) {
-	$this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
+	$this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
 	$this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
       }
 
