@@ -318,6 +318,29 @@ class map
   }
 
         
+  function addFakeMapPoints($coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid) {
+    $new_x = -1;
+    $new_y = -1;
+    // we might have first and last points on different image edges
+    // if so, let's add a fake point.
+    if (($prev_x <= 1) || ($curr_x <= 1)) {
+      $new_x = 0;
+    } else if (($prev_x >= $this->xMax-1) || ($curr_x >= $this->xMax-1)) {
+      $new_x = $this->xMax;
+    } 
+    if (($prev_y <= 1) || ($curr_y <= 1)) {
+      $new_y = 0;
+    } else if (($prev_y >= $this->yMax-1) || ($curr_y >= $this->yMax-1)) {
+      $new_y = $this->yMax;
+    } 
+    if ( ($new_x >=0) && ($new_y >=0) ) {
+      if ( $fullres == "poly" || $fullres == "polyline") {
+	array_push ($coastarray, $new_x, $new_y);
+      } else {
+	array_push ($coastarray, array($coastid+.5,$new_x,$new_y));
+      }
+    }
+  }
 
   //draw shoreline (search for coasts to draw and call drawOneCoast)
   function drawMap($projCallbackLong, $projCallbackLat, $coasts , $fullres, $maparea=2 ) {
@@ -417,27 +440,7 @@ class map
 
           if ( $point[0] != $idcoast ) {            
 	    if ($idcoast != -1 ) {
-	      $new_x = -1;
-	      $new_y = -1;
-	      // we might have first and last points on different image edges
-	      // if so, let's add a fake point.
-	      if (($first_x <= 1) || ($x <= 1)) {
-		$new_x = 0;
-	      } else if (($first_x >= $this->xMax-1) || ($x >= $this->xMax-1)) {
-		$new_x = $this->xMax;
-	      } 
-	      if (($first_y <= 1) || ($y <= 1)) {
-		$new_y = 0;
-	      } else if (($first_y >= $this->yMax-1) || ($y >= $this->yMax-1)) {
-		$new_y = $this->yMax;
-	      } 
-	      if ( ($new_x >=0) && ($new_y >=0) ) {
-		if ( $fullres == "poly" || $fullres == "polyline") {
-		  array_push ($coastpoints_array, $new_x, $new_y);
-		} else {
-		  array_push ($coastpoints_array, array($point[0]+.5,$x,$y));
-		}
-	      }
+	      $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
 	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
 	    }
 	    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
@@ -460,26 +463,7 @@ class map
 
 	  if ($idpoint != -1) {
 	    if ($point[1]-$idpoint != 1) {
-	      $new_x = -1;
-	      $new_y = -1;
-	      // we jumped points ! let's add a fake point.
-	      if (($prev_x <= 1) || ($x <= 1)) {
-		$new_x = 0;
-	      } else if (($prev_x >= $this->xMax-1) || ($x >= $this->xMax-1)) {
-		$new_x = $this->xMax;
-	      } 
-	      if (($prev_y <= 1) || ($y <= 1)) {
-		$new_y = 0;
-	      } else if (($prev_y >= $this->yMax-1) || ($y >= $this->yMax-1)) {
-		$new_y = $this->yMax;
-	      } 
-	      if ( ($new_x >=0) && ($new_y >=0) ) {
-		if ( $fullres == "poly" || $fullres == "polyline") {
-		  array_push ($coastpoints_array, $new_x, $new_y);
-		} else {
-		  array_push ($coastpoints_array, array($point[0]+.5,$x,$y));
-		}
-	      }
+	      $this->addFakeMapPoints($coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
 	    }
 	  } else {
 	    $first_x = $x;
@@ -498,9 +482,12 @@ class map
                array_push ($coastpoints_array, array($point[0],$x,$y));
           }
       }
-
+      
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
-      if ($idcoast != -1 ) $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
+      if ($idcoast != -1 ) {
+	$this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast);
+	$this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
+      }
 
       // Puis on supprime le tableau
       unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
