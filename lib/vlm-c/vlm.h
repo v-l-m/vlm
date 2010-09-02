@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.27 2010-08-22 15:23:59 ylafon Exp $
+ * $Id: vlm.h,v 1.28 2010-09-02 16:43:38 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -245,6 +245,35 @@ wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA PARAM4(double,
  */
 wind_info *VLM_get_wind_info_latlong_millideg_selective_TWSA_context PARAM5(
 							        vlmc_context *,
+								double, double, 
+								time_t, 
+								wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in Hybrid mode
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_hybrid PARAM4(double, double, 
+							    time_t, 
+							    wind_info *);
+
+/**
+ * get wind info based on the location and time
+ * It uses the bilinear interpolation in Hybrid mode
+ * @param context, a <code>vlmc_context *</code> pointer to a vlmc_context.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param vac_time, a <code>time_t</code>, in seconds since epoch
+ * @param wind, a <code>wind_info *</code>, a pointer to a wind_info structure
+ * that will be filled with speed in <em>kts</em>, and angle in <em>degrees</em>
+ */
+wind_info *VLM_get_wind_info_latlong_millideg_hybrid_context PARAM5(
+								vlmc_context *,
 								double, double, 
 								time_t, 
 								wind_info *);
