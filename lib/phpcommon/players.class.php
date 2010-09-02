@@ -240,7 +240,7 @@ class players extends baseClass {
         $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
         $result = $this->queryRead($query);
         
-        if (strlen($this->playername) < 3) $this->set_error("Your playername should have at least 3 characters.");
+        if (strlen($this->playername) < 3 && $this->playername != "fm") $this->set_error("Your playername should have at least 3 characters.");
         
         if (!($result && mysql_num_rows($result) === 0)) $this->set_error("Your email is already in use.");
         $query = sprintf("SELECT * FROM players WHERE `playername` = '%s'", $this->playername);
