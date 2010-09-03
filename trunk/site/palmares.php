@@ -30,7 +30,7 @@
         echo '<li>' . getLocalizedString('login_id') . ' : #' . $userobj->idusers.'</li>';
         echo '<li>' . getLocalizedString('boatpseudo') . ' : ' . $userobj->username.'</li>';
         //FIXME : flag pour ne plus l'afficher si vieille API est dépréciée
-        if (isPlayerLoggedIn() && in_array($userobj->idusers, getLoggedPlayerObject()->getManageableBoatIdList())) {
+        if (isPlayerLoggedIn() && in_array($userobj->idusers, getLoggedPlayerObject()->getOwnedBoatIdList())) {
             echo "<li><em>" . getLocalizedString('boatpassword') . ' ('.getLocalizedString("Temporarily available for compatibility").') : '. $userobj->password. '</em></li>';
         }
         echo '<li>' . getLocalizedString('boatname') . ' : ' . $userobj->boatname.'</li>';
