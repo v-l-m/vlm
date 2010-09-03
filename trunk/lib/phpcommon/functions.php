@@ -1293,9 +1293,8 @@ function validip($ip) {
             if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
         }
         return true;
-    } else {
-        return false;
-    }
+    } 
+    return false;
 }
 
 function getip() {
