@@ -108,6 +108,16 @@
         //FIXME: We should certainly have a specific webservice for that.
         $races_waypoints = $import['races_waypoints'];
         foreach ($races_waypoints as $wporder => $wpmisc) {
+	    // compute the missing bits, if any
+	    switch( $wpmisc['wpformat'] & 0xF) {
+	    case WP_ONE_BUOY:
+	        $wpmisc['latitude2'] = $wpmisc['latitude1'];
+		$wpmisc['longitude2'] = $wpmisc['longitude1'];
+		break;
+	    case WP_TWO_BUOYS:
+	    default:
+	        $wpmisc['laisser_au'] = 999;
+	    }
             //build the id of the waypoint - this is a convention
             $idwaypointto = sprintf("%d%02d", $idraceto, $wpmisc['wporder']);
             
