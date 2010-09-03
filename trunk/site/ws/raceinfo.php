@@ -42,18 +42,27 @@ function get_info_array($idrace) {
     $info["races_waypoints"] = Array();
     $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wpformat, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
     while ($wp = mysql_fetch_assoc($res)) {
-        $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
-        }
+      // remove irrelevant information
+      switch ($wp["wpformat"] & 0xF) {
+      case WP_ONE_BUOY:
+	unset($wp["latitude2"]);
+	unset($wp["longitude2"]);
+	break;
+      case WP_TWO_BUOYS:
+      default:
+	unset($wp["laisser_au"]);
+      }
+      $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
+    }
 
     //... and the race instructions
     $info["races_instructions"] = Array();
     $res = wrapper_mysql_db_query_reader("SELECT * FROM races_instructions WHERE idraces  = ".$idrace." AND MOD(flag, 2) = 1");
     while ($ri = mysql_fetch_assoc($res)) {
         $info["races_instructions"][] = map_trigram($ri);
-        }
+    }
     
     //the racemap ???
-
     return $info;
 }
 
@@ -78,7 +87,7 @@ switch ($fmt) {
     case "json":
     default:
         header('Content-type: application/json; charset=UTF-8');
-        echo json_encode($info_array);
+	echo json_encode($info_array);
 }
 
 ?>
