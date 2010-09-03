@@ -43,15 +43,27 @@ function get_info_array($idrace) {
     $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wpformat, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
     while ($wp = mysql_fetch_assoc($res)) {
       // remove irrelevant information
+      /*
+       *       UNCOMMENT THIS AFTER PUBLICATION of 0.14
+
       switch ($wp["wpformat"] & 0xF) {
       case WP_ONE_BUOY:
-	unset($wp["latitude2"]);
-	unset($wp["longitude2"]);
+	if (array_key_exists('latitude2', $wp)) {
+	    unset($wp["latitude2"]);
+	}
+	if (array_key_exists('longitude2', $wp)) {
+	    unset($wp["longitude2"]);
+	}
 	break;
       case WP_TWO_BUOYS:
       default:
-	unset($wp["laisser_au"]);
+	if (array_key_exists('laisser_au', $wp)) {
+	    unset($wp["laisser_au"]);
+	}
       }
+
+      *    REMOVE ABOVE AFTER PUBLICATION OF 0.14
+      */
       $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
     }
 
