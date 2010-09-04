@@ -508,7 +508,7 @@ class fullUsers
     // inherit of nwp
     $this->nwp = &$this->users->nwp;
 
-    if (!isset($lastPositionsObject->long) )
+    if ($lastPositionsObject->idusers == 0) )
       {
         //if object is empty
         //that shouldnot happen if base is written automaticaly
@@ -1290,8 +1290,8 @@ class fullUsers
       wrapper_mysql_db_query_writer($query_clean_waypoint_crossing);
 
       // Prepare the table races_ranking
-      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch ) values " .
-        " ( ". $id . ", " . $this->users->idusers . ", 0)";
+      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch, nwp ) values " .
+        " ( ". $id . ", " . $this->users->idusers . ", 0, 1)";
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Update boattype
