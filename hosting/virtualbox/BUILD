@@ -9,7 +9,7 @@ Les opérations sont décrites pour une base debian/ubuntu.
  * Choisir un clavier conforme au votre, car sinon vbox est perdu.
  * utilisateur de base : vlm / vlm
  * ajouter une synchro ntp régulière (toutes les heures, Vbox se décale quand vous mettez le PC en veille).
-  * ln -s /usr/sbin/ntpdate-debian /etc/cron.hourly/ntp
+  * sudo ln -s /usr/sbin/ntpdate-debian /etc/cron.hourly/ntp
  
 2. Exportation depuis un serveur de production/développement existant.
  * {{{./base/scripts/dump.sh}}}
