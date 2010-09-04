@@ -278,6 +278,9 @@ define("WP_CROSS_ANTI_CLOCKWISE", 512);
 // for future releases
 define("WP_CROSS_ONCE", 1024);
 
+//TRANSLATIONS
+define("DISPLAY_LANG_WARNINGS", False);
+
 include_once("functions.php");
 include_once("f_windAtPosition.php");
 include_once("users.class.php");
