@@ -99,6 +99,7 @@ if (!$wp_invalidated) {
     
     // Test de croisement avec un waypoint
     $waypoint_crossed=false;
+    $invalid_crossing = false;
     
     $wp_xed = VLM_check_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck,
 			   &$nextwaypoint, $wp_xinglat, $wp_xinglong, $wp_xingratio);
@@ -115,6 +116,7 @@ if (!$wp_invalidated) {
     case 0:
     default:
       $waypoint_crossed=false;
+      $invalid_crossing = false;
     }
     
     if ($invalid_crossing) {
