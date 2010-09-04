@@ -3,9 +3,9 @@
     include ("htmlstart.php");
     include_once ("functions.php");
     
-    $idnewrace = intval($_REQUEST['idnewrace']) ;  
+    $idnewrace = intval(get_cgi_var('idnewrace', 0)) ;  
     
-    if ($_REQUEST["action"] == "upload") {
+    if (get_cgi_var("action") == "upload") {
         if ($idnewrace <1 ) {
             die("<h1>ERROR : Racemap id malformed</h1>");
             }
