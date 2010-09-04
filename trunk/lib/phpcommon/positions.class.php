@@ -28,13 +28,18 @@ class positions
 //      echo "REQUEST: $query \n";
 
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
-
-    $this->time = $row[0];
-    $this->long = $row[1];
-    $this->lat = $row[2];
-    $this->idusers = $row[3];
-    $this->race = $row[4];
+    if (!$result) {
+      return;
+    }
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    if (!$row) {
+      return;
+    }
+    $this->time    = $row['time'];
+    $this->long    = $row['long'];
+    $this->lat     = $row['lat'];
+    $this->idusers = $row['idusers'];
+    $this->race    = $row['race'];
 
   }
 
@@ -46,15 +51,22 @@ class positions
       "ORDER BY `time` DESC LIMIT 2";
     $result = wrapper_mysql_db_query_reader($query);
     //$result = wrapper_mysql_db_query($query);
-
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    if (!$result) {
+      return;
+    }
     $row = mysql_fetch_array($result, MYSQL_NUM);//we are not taking the last one
-
-    $this->time = $row[0];
-    $this->long = $row[1];
-    $this->lat = $row[2];
-    $this->idusers = $row[3];
-    $this->race = $row[4];
+    if (!$row) {
+      return;
+    }
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    if (!$row) {
+      return;
+    }
+    $this->time    = $row['time'];
+    $this->long    = $row['long'];
+    $this->lat     = $row['lat'];
+    $this->idusers = $row['idusers'];
+    $this->race    = $row['race'];
 
   }
 
@@ -70,9 +82,9 @@ class positions
     //echo "REQUEST: $query \n";
 
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
 
-    return array($row[0], $row[1], $row[2]);
+    return array($row['time'], $row['long'], $row['lat']);
 
   }
 
