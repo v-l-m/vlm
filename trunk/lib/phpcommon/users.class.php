@@ -508,7 +508,7 @@ class fullUsers
     // inherit of nwp
     $this->nwp = &$this->users->nwp;
 
-    if ($lastPositionsObject->idusers == 0) )
+    if ($lastPositionsObject->idusers == 0 )
       {
         //if object is empty
         //that shouldnot happen if base is written automaticaly
