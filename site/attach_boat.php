@@ -8,7 +8,7 @@
     $password = get_cgi_var("password");
 
     function printAttachmentSummary($emailid = "", $playername = "") {
-        echo "<h2>".getLocalizedString("Attachment to this account")."</h2";
+        echo "<h2>".getLocalizedString("Attachment to this account")."</h2>";
         echo "<ul>";
             echo "<li>".getLocalizedString("email")." : $emailid</li>";
             echo "<li>".getLocalizedString("playername")." : $playername</li>";
