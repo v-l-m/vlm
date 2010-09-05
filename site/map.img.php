@@ -189,13 +189,9 @@
       // Si centrage sur la route, on moyenne long/longwp et lat/latwp
       // Sinon rien, long/lat sont le centre de la carte
       if ( $mapcenter == "roadtowp" ) {
-          if (abs($long-$longwp) < 180) {
-              $long = ($long + $longwp)/2;
-          } else {
-              $long = ($long + $longwp)/2 +180;
-          }
-          $long = longitudeConstraintDegrees($long);
-          $lat = ($lat + $latwp)/2; 
+          $centerwp = centerDualCoord($lat, $long, $latwp, $longwp);      
+          $long = longitudeConstraintDegrees($centerwp['lat']);
+          $lat = $centerwp['lat'];
       } else if ( $mapcenter == "mywp" ) {
           $long = $longwp;
           $lat  = $latwp;

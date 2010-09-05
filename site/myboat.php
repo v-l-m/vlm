@@ -204,15 +204,13 @@ include_once("scripts/myboat.js");
 				       $racetime['minutes'], $wp_racetime[0]);
 	      $status_content.="&lt;/b&gt;";
 	 }
-  
+
              $status_content .= "&lt;/div&gt;";
 
-        $centerwplong = ($wp_west+$wp_east)/2/1000;
-        if (abs($wp_west-$wp_east) > 180000) $centerwplong += 180;
-  
+         $centerwp = centerDualCoordMilli($wp_north, $wp_east, $wp_south, $wp_west);
          echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
-           "&amp;lat=". ($wp_north+$wp_south)/2/1000  .
-           "&amp;long=" . $centerwplong .
+           "&amp;lat=". $centerwp['mlat']/1000.  .
+           "&amp;long=" . $centerwp['mlon']/1000. .
            "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
            "&amp;tracks=on" . $oppList . 
            "&amp;wp=" . $wp_num . 
@@ -824,16 +822,13 @@ include_once("scripts/myboat.js");
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?php
           if ( abs($usersObj->users->targetlat) < 0.0001 && abs($usersObj->users->targetlong) < 0.0001 ) {
-	    $myWP=&$myRace->giveWPCoordinates($usersObj->users->nwp);
-	    $latwp=($myWP['latitude1'] + $myWP['latitude2'])/2/1000;
-	    $longwp=($myWP['longitude1'] + $myWP['longitude2'])/2/1000;
-	    if ( abs($myWP['longitude1'] - $myWP['longitude2'] ) > 180 ) {
-	      //on inverse le centre si un wp à l'air de faire plus de 180°
-	      $longwp += 180;
-	    }
+              $myWP=&$myRace->giveWPCoordinates($usersObj->users->nwp);
+              $centerwp = centerDualCoordMilli($myWP['latitude1'], $myWP['longitude1'], $myWP['latitude2'], $myWP['longitude2']);
+              $latwp = $centerwp['mlat']/1000.;
+              $longwp = $centerwp['mlon']/1000.;
           } else {
-	    $latwp=$usersObj->users->targetlat;
-	    $longwp=$usersObj->users->targetlong;
+              $latwp = $usersObj->users->targetlat;
+              $longwp = $usersObj->users->targetlong;
           }
       ?>
       <input type="hidden" name="latwp" value="<?php echo $latwp; ?>" />
