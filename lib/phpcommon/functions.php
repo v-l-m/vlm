@@ -1262,11 +1262,11 @@ function mailInformation($who, $title, $message = null) {
     $message .= "\n";
     $message .= getLocalizedString("See you soon on VLM !")."\n";
     $message .= WWW_SERVER_URL."\n";
-    $headers  = 'From: Virtual Loup-de-Mer <'.EMAIL_NOTIFY_VLM. ">\r\n" .
-                'Sender: '.EMAIL_NOTIFY_VLM. "\r\n" .
-                'Reply-To:  Virtual Loup-de-Mer <'.EMAIL_COMITE_VLM. ">\r\n" .
-                'X-Mailer: PHP/' . phpversion()."\r\n".
-                'Content-Type: text/plain\r\n';
+    $headers  = 'From: Virtual Loup-de-Mer <'.EMAIL_NOTIFY_VLM. ">\n" .
+                'Sender: '.EMAIL_NOTIFY_VLM. "\n" .
+                'Reply-To:  Virtual Loup-de-Mer <'.EMAIL_COMITE_VLM. ">\n" .
+                'X-Mailer: PHP/' . phpversion()."\n".
+                "Content-Type: text/plain\n";
     if (SERVER_IS_SENDING_EMAIL) {
         $res = mail($who , $title, $message, $headers);
         return $res;
