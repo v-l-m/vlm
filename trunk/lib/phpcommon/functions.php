@@ -1262,8 +1262,8 @@ function mailInformation($who, $title, $message = null) {
     $message .= "\n";
     $message .= getLocalizedString("See you soon on VLM !")."\n";
     $message .= WWW_SERVER_URL."\n";
-    $headers  = 'From: Virtual Loup-de-Mer <'.EMAIL_COMITE_VLM. ">\r\n" .
-                'Sender: '.EMAIL_COMITE_VLM. "\r\n" .
+    $headers  = 'From: Virtual Loup-de-Mer <'.EMAIL_NOTIFY_VLM. ">\r\n" .
+                'Sender: '.EMAIL_NOTIFY_VLM. "\r\n" .
                 'Reply-To:  Virtual Loup-de-Mer <'.EMAIL_COMITE_VLM. ">\r\n" .
                 'X-Mailer: PHP/' . phpversion()."\r\n".
                 'Content-Type: text/plain\r\n';
