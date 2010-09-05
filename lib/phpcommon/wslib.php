@@ -241,6 +241,7 @@ function get_error($code) {
         //prefs
         "PREFS01" => "prefs is unspecified",
         "PREFS02" => "key is not allowed",
+        "PREFS03" => "prefs should not excess 255 characters",
         //player
         "PLAYER01" => 'idp (id player) is required',
         "PLAYER02" => 'idp does not exist',

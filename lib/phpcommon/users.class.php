@@ -594,20 +594,20 @@ class fullUsers
   }
 
   function getMyPref($pref_name) {
-    if (!isset($this->preferences)) {
-      $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
-	            " WHERE idusers = ".$this->users->idusers;
-      $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
-      $this->preferences = array();
-      while( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
-	$this->preferences[$row['pref_name']] = $row['pref_value'];
+      if (!isset($this->preferences)) {
+          $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
+                        " WHERE idusers = ".$this->users->idusers;
+          $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
+          $this->preferences = array();
+          while( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
+              $this->preferences[$row['pref_name']] = $row['pref_value'];
+          }
       }
-    }
-    if (array_key_exists($pref_name, $this->preferences)) {
-      return $this->preferences[$pref_name];
-    } else {
-      return NOTSET;
-    }
+      if (array_key_exists($pref_name, $this->preferences)) {
+        return $this->preferences[$pref_name];
+      } else {
+          return NOTSET;
+      }
   }
 
   //====================================================================================
@@ -1130,7 +1130,7 @@ class fullUsers
       " WHERE idraces  = " . $this->users->engaged .
       "  AND  idusers  = " . $this->users->idusers ;
 
-    wrapper_mysql_db_query_writer($query_ranking);
+    wrapper_mysql_db_query_writer($query_ranking); 
 
   }
   
