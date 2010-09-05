@@ -82,6 +82,9 @@ define("PROXY_AGENT_PASS", "PROXYPASS");
 define_if_not("EMAIL_COMITE_VLM", "vlm@virtual-winds.com");
 define_if_not("MAIL_PREFIX", "VLM");
 
+//EMAIL NOTIFY
+define_if_not("EMAIL_NOTIFY_VLM", "noreply@virtual-loup-de-mer.org");
+
 /******** MAP_SERVER_URL A VERIFIER AVANT MISE EN PROD *****************/
 //define("VMG_SERVER_URL", "http://www.virtual-loup-de-mer.org/vmg/vmg_vlm.php");
 define_if_not("WWW_SERVER_URL", "http://www.virtual-loup-de-mer.org");
