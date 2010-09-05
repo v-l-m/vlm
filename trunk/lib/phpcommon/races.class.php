@@ -666,8 +666,8 @@ class fullRaces {
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
       // N'entrent dans les tableaux que les bateaux effectivement en course
-      if ( $row['nwp'] == "" ) {
-	        continue;
+      if ( !array_key_exists('nwp',$row) || ($row['nwp'] == 0 ) || ($row['nwp'] == "")) {
+	  continue;
       }
 
       if ( $key == 0 ) {
