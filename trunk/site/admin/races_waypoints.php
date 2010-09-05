@@ -86,7 +86,9 @@ $opts['fdd']['wptype'] = array(
   'sort'     => true
 );
 
-//$opts['triggers']['update']['pre'][0] = 'races_waypoints.TPU.trigger.php';
+$opts['triggers']['update']['pre'][0] = 'waypoints.img.trigger.php';
+$opts['triggers']['select']['pre'][0] = 'waypoints.img.trigger.php';
+$opts['triggers']['delete']['pre'][0] = 'waypoints.img.trigger.php';
 $opts['triggers']['update']['before'][0] = 'races_waypoints.TBU.trigger.php';
 
 //force basic pme class.

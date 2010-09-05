@@ -131,6 +131,9 @@ $opts['fdd']['maparea'] = array(
   'sort'     => true
 );
 
+$opts['triggers']['update']['pre'][0] = 'waypoints.img.trigger.php';
+$opts['triggers']['select']['pre'][0] = 'waypoints.img.trigger.php';
+$opts['triggers']['delete']['pre'][0] = 'waypoints.img.trigger.php';
 
 include('adminfooter.php');
 
