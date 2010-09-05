@@ -9,7 +9,7 @@
 
     function printAttachmentSummary($boatid = "", $boatpseudo = "") {
         $player = getLoggedPlayerObject();
-        echo "<h2>".getLocalizedString("Attachment to this account")."</h2";
+        echo "<h2>".getLocalizedString("Attachment to this account")."</h2>";
         echo "<ul>";
             echo "<li>".getLocalizedString("email")." : ".$player->email."</li>";
             echo "<li>".getLocalizedString("playername")." : ".$player->playername."</li>";
