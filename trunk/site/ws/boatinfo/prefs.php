@@ -14,14 +14,17 @@
     $fullusers = new fullUsers(0, $users);
 
     //FIXME : getter should use also json ?
-    $pkey = get_cgi_var("prefs");
-    if (is_null($pkey)) $ws->reply_with_error('PREFS02');
-    if (!in_array($pkey, explode(',', USER_PREF_ALLOWED))) {
-        $ws->reply_with_error('PREFS02', "BAD KEY:$pkey");
+    $pkeys = get_cgi_var("prefs");
+    if (is_null($pkeys)) $ws->reply_with_error('PREFS02');
+    
+    $keys = explode(',', $pkeys);
+    $ws->answer['prefs'] = Array();
+    foreach ($keys as $pkey) {
+        if (!in_array($pkey, explode(',', USER_PREF_ALLOWED))) {
+            $ws->reply_with_error('PREFS02', "BAD KEY:$pkey");
+        }
+        $ws->answer['prefs'][$pkey] = $fullusers->getMyPref($pkey);
     }
-    $ws->answer['value'] = $fullusers->getMyPref($pkey);
-    $ws->answer['key'] = $pkey;
-
     $ws->reply_with_success();
 
 ?>
