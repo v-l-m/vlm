@@ -13,7 +13,7 @@
             echo "<li>".getLocalizedString("email")." : $emailid</li>";
             echo "<li>".getLocalizedString("playername")." : $playername</li>";
         echo "</ul>";
-        echo "<h2>".getLocalizedString("Boat to attach")."</h2";
+        echo "<h2>".getLocalizedString("Boat to attach")."</h2>";
         echo "<ul>";
             echo "<li>".getLocalizedString("Boat id")." : ".getLoginId()."</li>";
             echo "<li>".getLocalizedString("Boat login")." : ".getLoginName()."</li>";
