@@ -14,7 +14,7 @@
             echo "<li>".getLocalizedString("email")." : ".$player->email."</li>";
             echo "<li>".getLocalizedString("playername")." : ".$player->playername."</li>";
         echo "</ul>";
-        echo "<h2>".getLocalizedString("Boat to attach")."</h2";
+        echo "<h2>".getLocalizedString("Boat to attach")."</h2>";
         echo "<ul>";
             echo "<li>".getLocalizedString("Boat id")." : ".$boatid."</li>";
             echo "<li>".getLocalizedString("Boat login")." : ".$boatpseudo."</li>";
