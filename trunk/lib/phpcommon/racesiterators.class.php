@@ -130,7 +130,7 @@
         }
 
         function end() {
-            $this->rssobject->setChannelElement('pubDate', date(DATE_RSS, $this->updateTime));
+            $this->rssobject->setChannelElement('pubDate', $this->updateTime);
             $this->rssobject->genarateFeed();
         }
     }
