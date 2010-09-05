@@ -1833,6 +1833,21 @@ function checkMapArea($value) {
   }
 }
 
+function centerDualCoordMilli($mlat1, $mlon1, $mlat2, $mlon2) {
+    $wp = centerDualCoord($mlat1/1000., $mlon1/1000., $mlat2/1000., $mlon2/1000.);
+    return Array('mlat' => $wp['lat']*1000., 'mlon' => $wp['lon']*1000.);
+}
+
+function centerDualCoord($lat1, $lon1, $lat2, $lon2) {
+    $latwp=($lat1 + $lat2)/2;
+    $longwp=($lon1 + $lon2)/2;
+    if ( abs($lon1 - $lon2 ) > 180 ) {
+      //on inverse le centre si ça fait plus de 180°
+      $longwp += 180;
+    }
+    return array("lat" => $latwp, "lon" => $longwp);
+}
+
 function logUserEvent($idusers, $idraces, $action) {
     if (isPlayerLoggedIn()) {
         $idplayers = getPlayerId();
