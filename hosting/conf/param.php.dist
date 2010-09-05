@@ -32,4 +32,15 @@ define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
 define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
 define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
 
+//LANG PREFS - Default is False, uncomment for dev server
+//define_if_not("DISPLAY_LANG_WARNINGS", True);
+
+//MAILING PREFS - Defaults are production prefs. uncomment for dev server
+//define("SERVER_IS_SENDING_EMAIL", False);
+//define_if_not("WWW_SERVER_URL", "http://localhost");
+//define("EMAIL_COMITE_VLM", "paparazzia@gmail.com");
+//define("MAIL_PREFIX", "VLM_".SERVER_NAME);
+
+
+
 ?>
