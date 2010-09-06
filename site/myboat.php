@@ -166,10 +166,6 @@ include_once("scripts/myboat.js");
          $wp_laisser_au=$wp['laisser_au'];
          $wp_maparea=$wp['maparea'];
   
-         $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . "&lt;/b&gt;&lt;br /&gt;";
-         $status_content.=$wp_libelle." (".$wp_label.")" ;
-         $status_content.="&lt;br /&gt;";
-  
 	 $wpsymbols = "";
 	 switch ($wp['wpformat'] & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) {
 	 case WP_CROSS_ANTI_CLOCKWISE:
@@ -193,6 +189,10 @@ include_once("scripts/myboat.js");
 	 default:
 	 }
 
+         $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . " ".$wpsymbols."&lt;/b&gt;&lt;br /&gt;";
+         $status_content.=$wp_libelle." (".$wp_label.")" ;
+         $status_content.="&lt;br /&gt;";
+  
          if ( ($wp['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
             $wp_north = max ($wp['latitude1'], $wp['latitude2']);
             $wp_east  = max ($wp['longitude1'], $wp['longitude2']);
