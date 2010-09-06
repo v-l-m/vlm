@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.9 2010-08-22 13:52:30 ylafon Exp $
+ * $Id: waypoint.c,v 1.10 2010-09-06 19:16:40 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -66,7 +66,7 @@ double get_waypoint_xing_ratio(double prev_x, double x,
     return (a - prev_x)/(x - prev_x);
   } 
   if ((b-prev_x)*(b-x)<0) {
-    return (b - prev_x)/x - prev_x;
+    return (b - prev_x)/(x - prev_x);
   }
   return -1.0;
 }
