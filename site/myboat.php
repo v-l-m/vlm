@@ -170,6 +170,17 @@ include_once("scripts/myboat.js");
          $status_content.=$wp_libelle." (".$wp_label.")" ;
          $status_content.="&lt;br /&gt;";
   
+	 $cwinfo = "";
+	 switch ($wp['wpformat'] & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) {
+	 case WP_CROSS_ANTI_CLOCKWISE:
+	   $cwinfo = "&#21BA;";
+	   break;
+	 case WP_CROSS_CLOCKWISE:
+	   $cwinfo = "&#21BB;";
+	   break;
+	 default:
+	   $cwinfo = "";
+	 }
          if ( ($wp['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
             $wp_north = max ($wp['latitude1'], $wp['latitude2']);
             $wp_east  = max ($wp['longitude1'], $wp['longitude2']);
@@ -178,13 +189,13 @@ include_once("scripts/myboat.js");
   
 	    $status_content.="Gate Coords=&lt;b&gt;" . 
 	      round($wp['latitude1']/1000,3) . "," . round($wp['longitude1']/1000,3) . 
-	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . "&lt;/b&gt;";
+	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . " $cwinfo &lt;/b&gt;";
          } else {
             $wp_south = $wp_north = $wp['latitude1'];
             $wp_west  = $wp_east  = $wp['longitude1'];
   
                 $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
+                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au) $cwinfo" . "&lt;/b&gt;&lt;br /&gt;"; 
   
          }
          if ( $wp_num > $usersObj->users->nwp ) {
