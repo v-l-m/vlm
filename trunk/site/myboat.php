@@ -201,13 +201,13 @@ include_once("scripts/myboat.js");
   
 	    $status_content.="Gate Coords=&lt;b&gt;" . 
 	      round($wp['latitude1']/1000,3) . "," . round($wp['longitude1']/1000,3) . 
-	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . " $wpsymbols &lt;/b&gt;";
+	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . "&lt;/b&gt;";
          } else {
             $wp_south = $wp_north = $wp['latitude1'];
             $wp_west  = $wp_east  = $wp['longitude1'];
   
                 $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au) $wpsymbols" . "&lt;/b&gt;&lt;br /&gt;"; 
+                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
   
          }
          if ( $wp_num > $usersObj->users->nwp ) {
