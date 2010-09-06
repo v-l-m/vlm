@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.11 2010-09-06 19:24:25 ylafon Exp $
+ * $Id: waypoint.c,v 1.12 2010-09-06 19:29:03 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -276,6 +276,7 @@ int check_waypoint(double prev_latitude, double prev_longitude,
 	    *isect_longitude = current_longitude;
 	    *intersection = 1;
 	  }
+	  isect = 1;
 	}
       }
     }
