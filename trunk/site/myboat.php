@@ -162,7 +162,7 @@ include_once("scripts/myboat.js");
       foreach ($myRace->getWPs() as $wp) {
          // label = colonne wptype de races_waypoints
          $wp_label=$wp['wptypelabel'];
-         $wp_libelle=htmlentities($wp['libelle']);
+         $wp_libelle=str_replace("'", "&amp;apos;", htmlentities($wp['libelle']));
          $wp_laisser_au=$wp['laisser_au'];
          $wp_maparea=$wp['maparea'];
   
