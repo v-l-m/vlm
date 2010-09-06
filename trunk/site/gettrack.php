@@ -49,9 +49,9 @@
     }
 
     if ($all) {
-        $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
-    } else {
         $pi = new fullPositionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
+    } else {
+        $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
     }
 
     printf ("============================\n");
