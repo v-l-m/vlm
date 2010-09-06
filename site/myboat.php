@@ -182,7 +182,7 @@ include_once("scripts/myboat.js");
 	   $cwinfo = "";
 	 }
 	 if (($wp['wpformat'] & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
-	   $coinfo = "&#x21AE;";
+	   $coinfo = "&#x2285;";
 	 } else {
 	   $coinfo = "";
 	 }
