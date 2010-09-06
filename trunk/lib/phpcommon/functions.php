@@ -1661,6 +1661,32 @@ function getWaypointBestTime($idraces,$idwaypoint)
   return ($wptime);
 }
 
+function getWaypointHTMLSymbols($wpformat) {
+  $wpsymbols = "";
+  switch ($wpformat & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) {
+  case WP_CROSS_ANTI_CLOCKWISE:
+    $wpsymbols .= "&#x21BA; ";
+    break;
+  case WP_CROSS_CLOCKWISE:
+    $wpsymbols .= "&#x21BB; ";
+    break;
+  default:
+  }
+  if (($wpformat & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
+    $wpsymbols .= "&#x2285; ";
+  } 
+  
+  switch ($wpformat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) {
+  case WP_ICE_GATE_S:
+    $wpsymbols .= "&#x2974;";
+    break;
+  case WP_ICE_GATE_N:
+    $wpsymbols .= "&#x2972;";
+  default:
+  }
+  return trim($wpsymbols);
+}
+
 // For a finished race, to give the Palmares
 function getRaceRanking($idusers, $idraces) {
   // search for old races for this player

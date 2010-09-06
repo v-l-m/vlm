@@ -3,7 +3,7 @@
     include_once("config.php");
 
     if ($idraces != 0) {
-        $ro = new Races($idraces);
+        $ro = new races($idraces);
         echo $ro->htmlRaceDescription();
     }
 

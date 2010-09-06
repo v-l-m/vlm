@@ -166,28 +166,7 @@ include_once("scripts/myboat.js");
          $wp_laisser_au=$wp['laisser_au'];
          $wp_maparea=$wp['maparea'];
   
-	 $wpsymbols = "";
-	 switch ($wp['wpformat'] & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) {
-	 case WP_CROSS_ANTI_CLOCKWISE:
-	   $wpsymbols .= "&#x21BA; ";
-	   break;
-	 case WP_CROSS_CLOCKWISE:
-	   $wpsymbols .= "&#x21BB; ";
-	   break;
-	 default:
-	 }
-	 if (($wp['wpformat'] & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
-	   $wpsymbols .= "&#x2285;";
-	 } 
-	 
-	 switch ($wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) {
-	 case WP_ICE_GATE_S:
-	   $wpsymbols .= "&#x2974;";
-	   break;
-	 case WP_ICE_GATE_N:
-	   $wpsymbols .= "&#x2972;";
-	 default:
-	 }
+	 $wpsymbols = getWaypointHTMLSymbols($wp['wpformat']);
 
          $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . " ".$wpsymbols."&lt;/b&gt;&lt;br /&gt;";
          $status_content.=$wp_libelle." (".$wp_label.")" ;
