@@ -311,26 +311,27 @@ class races {
     /* output du tableau de wp */
     function htmlWayPoints($startstring) {
         $ret  = "<table class=\"waypoints\">\n";
-        $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>@</th><th>Type</th><th>Name</th></tr>";
+        $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>@</th><th>Spec</th><th>Type</th><th>Name</th></tr>";
         $ret .= "<tr>\n";
         $ret .= "<td>WP0</td>"; 
-        $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $this->startlat/1000., $this->startlong/1000., $startstring);
+        $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $this->startlat/1000., $this->startlong/1000., $startstring);
         $ret .= "</tr>\n";
 
         foreach ($this->getWPs() as $num => $wp) {
             $ret .= "<tr>\n";
             $ret .= "<td>WP".$num."</td>";
+	    $wpsymbols = getWaypointHTMLSymbols($wp['wpformat']);
 	    switch($wp['wpformat'] & 0xF) {
 	    case WP_ONE_BUOY:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td>%s</td><td>%s</td>", 
+	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td>%s</td><td>%s</td><td>%s</td>", 
 			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
-			      $wp['laisser_au'],  $wp['wptypelabel'], htmlentities($wp['libelle']));
+			      $wp['laisser_au'], $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
 	      break;
 	    case WP_TWO_BUOYS:
 	    default:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>%s</td><td>%s</td>", 
+	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td>", 
 			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
-			      $wp['latitude2']/1000., $wp['longitude2']/1000.,  $wp['wptypelabel'], htmlentities($wp['libelle']));
+			      $wp['latitude2']/1000., $wp['longitude2']/1000., $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
 	    }
             $ret .= "</tr>\n";
         }
