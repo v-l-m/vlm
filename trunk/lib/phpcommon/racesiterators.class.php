@@ -119,7 +119,7 @@
             $newItem->setDescription($ro->htmlRaceDescription());
             //$newItem->setEncloser('http://www.attrtest.com', '1283629', 'audio/mpeg');
             //Use core addElement() function for other supported optional elements
-            $newItem->addElement('author', EMAIL_COMITE_VLM);
+            $newItem->addElement('author', EMAIL_COMITE_VLM." (VLM)");
             //Attributes have to passed as array in 3rd parameter
             $newItem->addElement('guid', $linkics, array('isPermaLink'=>'true'));
     
