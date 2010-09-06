@@ -136,6 +136,7 @@ class map
     $this->colorBlack = ImageColorAllocate($this->mapImage, 0, 0, 0);
     $this->colorWaypoints = ImageColorAllocate($this->mapImage, 230, 80, 0);
     $this->colorWaypointsArea = ImageColorAllocate($this->mapImage, 230, 120, 40);
+    $this->colorWaypointsIceGate = ImageColorAllocate($this->mapImage, 0, 51, 204);
     $this->colorBuoy = ImageColorAllocate($this->mapImage, 250, 150, 150);
     $this->colorWind = ImageColorAllocate($this->mapImage, 110, 130, 150);
     $this->colorCC = ImageColorAllocate($this->mapImage, 250, 50, 50);
@@ -731,10 +732,12 @@ class map
 			$wp2ProjLong, $wp2ProjLat,
 			IMG_COLOR_STYLED);
 	  } else {
+	  // NOTE: icegates are only of kind 'WP_TWO_BUOYS'
+	    $wpcolor = (($waypoint['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) ? $this->colorWaypointsIceGate : $this->colorWaypoints);
 	    imageline ( $this->mapImage, 
 			$wp1ProjLong, $wp1ProjLat,
 			$wp2ProjLong, $wp2ProjLat,
-			$this->colorWaypoints);
+			$wpcolor);
 	  }
 	} else {
 
