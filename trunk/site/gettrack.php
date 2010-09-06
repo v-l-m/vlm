@@ -55,7 +55,7 @@
     }
 
     printf ("============================\n");
-    printf ("====  %6d positions  ====\n", $nbresults);
+    printf ("====  %6d positions  ====\n", count($pi->records));
     printf ("============================\n");
     printf ("Timestamp;latitude;longitude\n") ;
     printf ("============================\n");
