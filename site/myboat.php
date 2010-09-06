@@ -191,7 +191,7 @@ include_once("scripts/myboat.js");
 	 case WP_ICE_GATE_N:
 	   $wpsymbols .= "&#x2972;";
 	 default:
-	 
+	 }
 
          if ( ($wp['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
             $wp_north = max ($wp['latitude1'], $wp['latitude2']);
