@@ -41,7 +41,7 @@
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
 
-    if ($users->hidden) die("User/Boat $idu is hidden");
+    if ($users->hidepos) die("User/Boat $idu is hidden");
             
     if ($races->bobegin < $now && $races->boend > $now) {
         //BlackOut in place
