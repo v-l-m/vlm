@@ -40,7 +40,8 @@
         $updateTime = max($updateTime, $row['updated']);
     }
 
-    $rssobject->setChannelElement('pubDate', $updateTime);
+    $rssobject->rssobject->setChannelElement('pubDate', date(DATE_RSS, strtotime($this->updateTime)));
+    $this->rssobject->setChannelElement('description', "VLM Modules Status");
     $rssobject->genarateFeed();
     
 ?>
