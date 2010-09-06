@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.10 2010-09-06 19:16:40 ylafon Exp $
+ * $Id: waypoint.c,v 1.11 2010-09-06 19:24:25 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -224,8 +224,13 @@ int check_waypoint(double prev_latitude, double prev_longitude,
 	    *isect_longitude = prev_longitude + 
 	      intersect_ratio * (current_longitude - prev_longitude);
 	    *intersection = intersect_ratio;
-	    isect = 1;
+	  } else {
+	    /* should not happen, but let's be safe here */
+	    *isect_latitude = yToLat(current_latitude);
+	    *isect_longitude = current_longitude;
+	    *intersection = 1;
 	  }
+	  isect = 1;
 	}
       }
     }
@@ -265,7 +270,11 @@ int check_waypoint(double prev_latitude, double prev_longitude,
 	    *isect_longitude = prev_longitude + 
 	      intersect_ratio * (current_longitude - prev_longitude);
 	    *intersection = intersect_ratio;
-	    isect = 1;
+	  } else {
+	    /* should not happen, but let's be safe here */
+	    *isect_latitude = yToLat(current_latitude);
+	    *isect_longitude = current_longitude;
+	    *intersection = 1;
 	  }
 	}
       }
