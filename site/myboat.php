@@ -170,22 +170,28 @@ include_once("scripts/myboat.js");
          $status_content.=$wp_libelle." (".$wp_label.")" ;
          $status_content.="&lt;br /&gt;";
   
-	 $cwinfo = "";
+	 $wpsymbols = "";
 	 switch ($wp['wpformat'] & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) {
 	 case WP_CROSS_ANTI_CLOCKWISE:
-	   $cwinfo = "&#x21BA;";
+	   $wpsymbols .= "&#x21BA; ";
 	   break;
 	 case WP_CROSS_CLOCKWISE:
-	   $cwinfo = "&#x21BB;";
+	   $wpsymbols .= "&#x21BB; ";
 	   break;
 	 default:
-	   $cwinfo = "";
 	 }
 	 if (($wp['wpformat'] & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
-	   $coinfo = "&#x2285;";
-	 } else {
-	   $coinfo = "";
-	 }
+	   $wpsymbols .= "&#x2285;";
+	 } 
+	 
+	 switch ($wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) {
+	 case WP_ICE_GATE_S:
+	   $wpsymbols .= "&#x2974;";
+	   break;
+	 case WP_ICE_GATE_N:
+	   $wpsymbols .= "&#x2972;";
+	 default:
+	 
 
          if ( ($wp['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
             $wp_north = max ($wp['latitude1'], $wp['latitude2']);
@@ -195,13 +201,13 @@ include_once("scripts/myboat.js");
   
 	    $status_content.="Gate Coords=&lt;b&gt;" . 
 	      round($wp['latitude1']/1000,3) . "," . round($wp['longitude1']/1000,3) . 
-	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . " $cwinfo $coinfo &lt;/b&gt;";
+	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . " $wpsymbols &lt;/b&gt;";
          } else {
             $wp_south = $wp_north = $wp['latitude1'];
             $wp_west  = $wp_east  = $wp['longitude1'];
   
                 $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au) $cwinfo $coinfo" . "&lt;/b&gt;&lt;br /&gt;"; 
+                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au) $wpsymbols" . "&lt;/b&gt;&lt;br /&gt;"; 
   
          }
          if ( $wp_num > $usersObj->users->nwp ) {
