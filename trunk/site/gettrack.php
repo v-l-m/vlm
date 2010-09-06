@@ -3,9 +3,9 @@
 
     header("content-type: text/plain; charset=UTF-8");
 
-    $idu=htmlentities(quote_smart($_REQUEST['idu']));
-    $idr=htmlentities(quote_smart($_REQUEST['idr']));
-    $all=array_key_exists('all', $_REQUEST);
+    $idu = get_cgi_var('idu', 0);
+    $idr = get_cgi_var('idr', 0);
+    $all = array_key_exists('all', $_REQUEST);
 
     if (  round($idr) == 0 || round($idu) == 0 
           || (strspn($idu, "0123456789") != strlen($idu)) 
@@ -30,31 +30,28 @@
     +---------+------------+------+-----+---------+-------+
     */
 
-    $query_race = "SELECT deptime FROM races WHERE idraces = ".round($idr);
-    $result = wrapper_mysql_db_query_reader($query_race) or die("Query [$query_race] failed \n");
-    if ($row = mysql_fetch_assoc($result)) {
-        $deptime = $row['deptime'];
-    } else {
-        die("No such race : $idr\n");
+    $now = time();
+    
+    $users = getUserObject($idu);
+    if (is_null($users)) die("No such user/boat : $idu");
+    
+    if (!raceExists($idr)) die("No such race : $idr\n"); //FIXME : select on races table made two times !
+    $races = new races($idr);
+
+    $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
+    $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
+
+    if ($users->hidden) die("User/Boat $idu is hidden");
+            
+    if ($races->bobegin < $now && $races->boend > $now) {
+        //BlackOut in place
+        $endtime = $races->bobegin;
     }
 
-    $query =  "SELECT histpos.time,histpos.lat,histpos.long FROM histpos" .
-              " WHERE histpos.idusers=" . round($idu) . 
-              " AND histpos.race=" . round($idr) . 
-              " AND histpos.time >= ".$deptime.
-              " ORDER BY time ASC";
-
-    $result = wrapper_mysql_db_query_reader($query) or die("Query [$query] failed \n");
-    $nbresults =  mysql_num_rows($result);
-
     if ($all) {
-        $querynow = "SELECT positions.time,positions.lat,positions.long FROM positions" .
-                    " WHERE positions.idusers=" . round($idu) .
-                    " AND positions.race=" . round($idr) .
-                    " AND positions.time >= $deptime".
-                    " ORDER BY time ASC";
-        $resultnow  = wrapper_mysql_db_query_reader($querynow) or die("Query [$querynow] failed \n");
-        $nbresults  += mysql_num_rows($resultnow);
+        $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
+    } else {
+        $pi = new fullPositionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
     }
 
     printf ("============================\n");
@@ -63,14 +60,9 @@
     printf ("Timestamp;latitude;longitude\n") ;
     printf ("============================\n");
 
-    while(  $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
-        printf ("%d;%5.6f;%5.6f\n", $row['time'],$row['lat']/1000,$row['long']/1000) ;
+    foreach ($pi->records as $row) {
+        printf ("%d;%5.6f;%5.6f\n", $row[0],$row[1]/1000,$row[2]/1000) ;
     }
 
-    if ($all) {
-        while(  $row = mysql_fetch_array($resultnow, MYSQL_ASSOC) ) {
-            printf ("%d;%5.6f;%5.6f\n", $row['time'],$row['lat']/1000,$row['long']/1000) ;
-        }
-    }
 
 ?>

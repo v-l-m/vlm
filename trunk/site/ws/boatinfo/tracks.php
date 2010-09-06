@@ -40,11 +40,7 @@
     if ($races->bobegin < $now && $races->boend > $now) {
         //BlackOut in place
         $endtime = $races->bobegin;
-    } else {
-        $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
     }
-    
-    $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
 
     $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
     $ws->answer['nb_tracks'] = count($pi->records);
