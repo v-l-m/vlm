@@ -29,7 +29,7 @@
         }
 
         //on détermine la "bonne largeur" pour le menu des wps
-        $nblines = round(count($tables)/10.);
+        $nblines = ceil(count($tables)/20.);
         $sizeline = ceil(count($tables)/$nblines);
         $colnum = 0;
         echo "<table>\n<tr>";
@@ -39,10 +39,10 @@
             if ( $table == $tableType ) {
                 $class="class=\"hilight\"";
                 if ( strstr(substr($table, 0, 2), "WP") ) {
-                    $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
-                    $cellcontent=$WP['libelle']."<br />(".$table.")";
+                    $WP = $fullRacesObj->races->giveWPCoordinates(substr($table,2));
+                    $cellcontent = $WP['libelle']."<br />(".$table.")";
                 } else {
-                    $cellcontent=ucfirst($table);
+                    $cellcontent = ucfirst($table);
                 }
             } else {
                 $class="class=\"nohilight\"";
@@ -52,8 +52,8 @@
                 } else {
                     $tlabel=$table;
                 }
-                $cellcontent="<a href=\"" . $_SERVER["PHP_SELF"] . "?idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. "\">";
-                $cellcontent.=ucfirst($tlabel);
+                $cellcontent="<a title=\"".ucfirst($tlabel)."\" href=\"" . $_SERVER["PHP_SELF"] . "?idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. "\">";
+                $cellcontent.=$table;
                 $cellcontent.="</a>";
             }
 
@@ -64,7 +64,7 @@
             
             //gère le multiligne quand il y a beaucoup de wp.
             $colnum += 1;
-            if ($colnum >= $sizeline && $colnum < $nblines) echo "</tr><tr>";
+            if ($colnum%$sizeline == 0 && $colnum < count($tables)) {echo "</tr><tr>";
         }
         echo "</tr></table>";
 
