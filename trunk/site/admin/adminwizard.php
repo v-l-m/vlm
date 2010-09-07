@@ -130,13 +130,13 @@ if ( $do == "yes" ) {
     switch ($action) {
         case "unlock_boat":
             $query = "UPDATE users " ;
-            if ( quote_smart($_REQUEST['lock']) ) {
+            if ( get_cgi_var('lock') ) {
                 $querysgo = "SELECT coastpenalty FROM races WHERE idraces = ".$race;
                 $resgo = wrapper_mysql_db_query_writer($querysgo) or die("Query [$query] failed \n");
                 $row = mysql_fetch_assoc($resgo);
                 $coastpenalty = $row['coastpenalty'];
-                if ( intval(quote_smart($_REQUEST['coastpenalty'])) != $coastpenalty ) {
-                    $coastpenalty = intval(quote_smart($_REQUEST['coastpenalty']));
+                if ( intval(get_cgi_var('coastpenalty')) != $coastpenalty ) {
+                    $coastpenalty = intval(get_cgi_var('coastpenalty'));
                 }
                 $reltime = time() + $coastpenalty;
                 $action_tracking = "LOCK boat for user $boat in race $race for ".$coastpenalty;
@@ -151,7 +151,7 @@ if ( $do == "yes" ) {
             $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
             break;
         case "maj_nextwp":
-             $nwp=quote_smart($_REQUEST['nwp']);
+             $nwp = get_cgi_var('nwp');
        $query = "update users set nextwaypoint= " .  $nwp . 
                "     where idusers = " .  $boat . 
           "     and engaged   = " .  $race .
@@ -162,8 +162,8 @@ if ( $do == "yes" ) {
 
        break;
         case "maj_position":
-             $longitude=quote_smart($_REQUEST['targetlong']);
-             $latitude=quote_smart($_REQUEST['targetlat']);
+             $longitude = get_cgi_var('targetlong');
+             $latitude  = get_cgi_var('targetlat');
        $query = "insert into positions (time, `long`, `lat`, idusers, race) " . 
                              "values   (" . 
                       time() . ", " .
@@ -177,7 +177,7 @@ if ( $do == "yes" ) {
 
        break;
         case "reset_pass":
-            $newpass=quote_smart($_REQUEST['newpass']);
+            $newpass = get_cgi_var('newpass');
             $query = "update users set password= '" .  $newpass . "'" .
                      "     where idusers = " .  $boat . 
                      "     and engaged   = " .  $race .
@@ -186,7 +186,7 @@ if ( $do == "yes" ) {
             $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "password", "rowkey" => $boat, "newval" => "********");
             break;
         case "reset_username":
-            $newusern=quote_smart($_REQUEST['newusern']);
+            $newusern = get_cgi_var('newusern');
             $query = "update users set username= '" .  addslashes($newusern) . "'" .
                      "     where idusers = " .  $boat . 
                      "     and engaged   = " .  $race .

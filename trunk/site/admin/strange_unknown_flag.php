@@ -3,7 +3,7 @@
     include ("htmlstart.php");
     include_once ("functions.php");
         
-    if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
+    if (get_cgi_var("action") == "go" and get_cgi_var('confirm') == "on" ) {
         wrapper_mysql_db_query_writer("UPDATE users SET country='000' WHERE country NOT IN (SELECT DISTINCT idflags FROM flags)");
         insertAdminChangelog(Array("operation" => "Update users with unknown flag"));
         echo "<h3>Done, following results should be empty.</h3>";

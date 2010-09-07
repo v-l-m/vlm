@@ -3,9 +3,8 @@
     $PAGETITLE = "Players pending since more than $pending_limit days";
     include ("htmlstart.php");
     include_once ("functions.php");
-    
         
-    if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
+    if (get_cgi_var("action") == "go" and get_cgi_var('confirm') == "on" ) {
         wrapper_mysql_db_query_writer("DELETE FROM players_pending WHERE updated < DATE_SUB(NOW(), INTERVAL $pending_limit DAY)");
         insertAdminChangelog(Array("operation" => "Deleting too old pending players"));
 

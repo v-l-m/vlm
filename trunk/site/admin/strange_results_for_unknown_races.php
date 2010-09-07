@@ -3,7 +3,7 @@
     include ("htmlstart.php");
     include_once ("functions.php");
         
-    if ($_REQUEST["action"] == "go" and $_REQUEST['confirm'] == "on" ) {
+    if (get_cgi_var("action") == "go" and get_cgi_var('confirm') == "on" ) {
         wrapper_mysql_db_query_writer("DELETE FROM races_results WHERE races_results.idraces NOT IN (SELECT DISTINCT idraces FROM races)");
         insertAdminChangelog(Array("operation" => "Delete results for unknown races"));
 
