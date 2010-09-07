@@ -3,9 +3,9 @@
     include ("htmlstart.php");
     include_once ("functions.php");
 
-    $idflags = "".$_REQUEST['idflags'] ; 
+    $idflags = "".get_cgi_var('idflags', ''); 
 
-    if ($_REQUEST["action"] == "upload") {
+    if (get_cgi_var("action") == "upload") {
         if (function_exists("exif_imagetype") and exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
             die("<h1>ERROR : Not a PNG file...</h1>");
         }  

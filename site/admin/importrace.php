@@ -179,7 +179,7 @@
 
 // Main code
 
-    if ($_REQUEST["action"] != "import") {
+    if (get_cgi_var("action") != "import") {
         //Display the import form, import not started
 ?>
         <h3>Ready to import a race, please input following values</h3>
@@ -195,9 +195,9 @@
         //import started
 
         //check from input
-        $idracefrom = intval($_REQUEST['idracefrom']) ;
-        $idraceto = intval($_REQUEST['idraceto']) ;
-        $importserver = htmlentities(quote_smart($_REQUEST['importserver']));
+        $idracefrom = intval(get_cgi_var('idracefrom')) ;
+        $idraceto = intval(get_cgi_var('idraceto')) ;
+        $importserver = htmlentities(get_cgi_var('importserver'));
 
         //Default is to print sql
         $printsql = true;    
@@ -208,7 +208,7 @@
 
         //FIXME: we should 'ping' the import server and check availability
 
-        if ($_REQUEST['confirm'] != 'yes') {
+        if (get_cgi_var('confirm') != 'yes') {
             //import first pass, checking in dryrun mode
             echo "<h3>Testing import of race #<b>$idracefrom</b> from server <b>$importserver</b> to race id #<b>$idraceto</b></h3>";
             
