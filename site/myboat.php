@@ -185,8 +185,10 @@ include_once("scripts/myboat.js");
             $wp_south = $wp_north = $wp['latitude1'];
             $wp_west  = $wp_east  = $wp['longitude1'];
   
-                $status_content.="Waypoint Coords=&lt;b&gt;" . 
-                                round($wp_south/1000,3) . "," . round($wp_east/1000,3) . " ($wp_laisser_au)" . "&lt;/b&gt;&lt;br /&gt;"; 
+            $status_content .= "Waypoint Coords=&lt;b&gt;" . 
+                               round($wp_south/1000,3) . "," .
+                               round($wp_east/1000,3) .
+                               " ($wp_laisser_au)" . "&lt;/b&gt;"; 
   
          }
          if ( $wp_num > $usersObj->users->nwp ) {
