@@ -40,7 +40,7 @@
                 $class="class=\"hilight\"";
                 if ( strstr(substr($table, 0, 2), "WP") ) {
                     $WP = $fullRacesObj->races->giveWPCoordinates(substr($table,2));
-                    $cellcontent = $WP['libelle']." (".$table." ".getWaypointHTMLSymbols(intval(substr($table,2)))." )";
+                    $cellcontent = $WP['libelle']." (".$table." ".getWaypointHTMLSymbols($WP['wpformat'])." )";
                 } else {
                     $cellcontent = ucfirst($table);
                 }
@@ -48,12 +48,12 @@
                 $class="class=\"nohilight\"";
                 if ( strstr(substr($table, 0, 2), "WP") ) {
                     $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
-                    $tlabel=$WP['libelle']." (".$table." ".getWaypointHTMLSymbols(intval(substr($table,2)))." )";
+                    $tlabel=$WP['libelle']." (".$table." ".getWaypointHTMLSymbols($WP['wpformat'])." )";
                 } else {
                     $tlabel=$table;
                 }
                 $cellcontent="<a title=\"".ucfirst($tlabel)."\" href=\"" . $_SERVER["PHP_SELF"] . "?idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. "\">";
-                $cellcontent.=$table;
+                $cellcontent.=$table." ".getWaypointHTMLSymbols($WP['wpformat']);
                 $cellcontent.="</a>";
             }
 
