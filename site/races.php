@@ -15,12 +15,12 @@
         // Ajout en début de tableau d'un classement par WP (uniquement si >1)
         $nbWPs = $fullRacesObj->races->getWPsCount();
         if ( $nbWPs > 1 ) {
-	  for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
-	    $WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
-	    if ( ($WP['wpformat'] & (WP_ICE_GATE_N | WP_ICE_GATE_S)) == 0 ) {
-	      array_push($tables, "WP" . $wp_num);
-	    }
-	  }
+            for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
+                $WP=$fullRacesObj->races->giveWPCoordinates($wp_num);
+                if ( ($WP['wpformat'] & (WP_ICE_GATE_N | WP_ICE_GATE_S)) == 0 ) {
+                    array_push($tables, "WP" . $wp_num);
+                }
+            }
         }
 
         array_push($tables, "arrived", "racing", "dnf", "abd", "htp", "hc");
@@ -29,7 +29,7 @@
         }
 
         //on détermine la "bonne largeur" pour le menu des wps
-        $nblines = ceil(count($tables)/20.);
+        $nblines = ceil(count($tables)/25.);
         $sizeline = ceil(count($tables)/$nblines);
         $colnum = 0;
         echo "<table>\n<tr>";
@@ -40,7 +40,7 @@
                 $class="class=\"hilight\"";
                 if ( strstr(substr($table, 0, 2), "WP") ) {
                     $WP = $fullRacesObj->races->giveWPCoordinates(substr($table,2));
-                    $cellcontent = $WP['libelle']."<br />(".$table.")";
+                    $cellcontent = $WP['libelle']." (".$table." ".getWaypointHTMLSymbols(intval(substr($table,2)))." )";
                 } else {
                     $cellcontent = ucfirst($table);
                 }
@@ -48,7 +48,7 @@
                 $class="class=\"nohilight\"";
                 if ( strstr(substr($table, 0, 2), "WP") ) {
                     $WP=$fullRacesObj->races->giveWPCoordinates(substr($table,2));
-                    $tlabel=$WP['libelle']."<br />(".$table.")";
+                    $tlabel=$WP['libelle']." (".$table." ".getWaypointHTMLSymbols(intval(substr($table,2)))." )";
                 } else {
                     $tlabel=$table;
                 }
@@ -64,7 +64,7 @@
             
             //gère le multiligne quand il y a beaucoup de wp.
             $colnum += 1;
-            if ($colnum%$sizeline == 0 && $colnum < count($tables)) {echo "</tr><tr>";
+            if ($colnum%$sizeline == 0 && $colnum < count($tables)) echo "</tr><tr>";
         }
         echo "</tr></table>";
 
