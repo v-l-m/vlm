@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.12 2010-09-06 19:29:03 ylafon Exp $
+ * $Id: waypoint.c,v 1.13 2010-09-07 16:08:16 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -211,7 +211,7 @@ int check_waypoint(double prev_latitude, double prev_longitude,
        */
       if((wp_long1-current_longitude)*(wp_long2-current_longitude)<0){
 	/* if no intersection, check if we ended up north of the gate */
-	if (current_latitude > wp_lat1) {
+	if (current_latitude < wp_lat1) {
 	  intersect_ratio = get_waypoint_xing_ratio(prev_longitude,
 						    current_longitude,
 						    wp_long1,
