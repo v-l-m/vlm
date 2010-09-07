@@ -28,9 +28,13 @@
              printf ("<h1>You should not do that, this type of ranking is not accepted : %s</h1>\n", $tableType); exit;
         }
 
+        //on détermine la "bonne largeur" pour le menu des wps
+        $nblines = round(count($tables)/10.);
+        $sizeline = ceil(count($tables)/$nblines);
+        $colnum = 0;
         echo "<table>\n<tr>";
 
-        // Affichage des classements classiques 
+        // Affichage des classements classiques
         foreach ($tables as $table) {
             if ( $table == $tableType ) {
                 $class="class=\"hilight\"";
@@ -57,6 +61,10 @@
             echo "$cellcontent";
 
             echo "</td>\n";
+            
+            //gère le multiligne quand il y a beaucoup de wp.
+            $colnum += 1;
+            if ($colnum >= $sizeline && $colnum < $nblines) echo "</tr><tr>";
         }
         echo "</tr></table>";
 
