@@ -137,7 +137,7 @@ class map
     $this->colorWaypoints = ImageColorAllocate($this->mapImage, 230, 80, 0);
     $this->colorWaypointsArea = ImageColorAllocate($this->mapImage, 230, 120, 40);
     $this->colorWaypointsIceGate = ImageColorAllocate($this->mapImage, 0, 51, 204);
-    $this->colorWaypointsIndication = imagecolorallocatealpha($this->mapImage, 102, 255, 51, 64);
+    $this->colorWaypointsIndication = imagecolorallocatealpha($this->mapImage, 0, 184, 46, 64);
     $this->colorBuoy = ImageColorAllocate($this->mapImage, 250, 150, 150);
     $this->colorWind = ImageColorAllocate($this->mapImage, 110, 130, 150);
     $this->colorCC = ImageColorAllocate($this->mapImage, 250, 50, 50);
