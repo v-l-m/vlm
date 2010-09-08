@@ -809,11 +809,11 @@ class map
 	  }
 	  // FIXME more arrows ?
 	  if ($waypoint['wpformat'] & WP_CROSS_CLOCKWISE) {
-	    $this->drawArrow($this->mapImage, $wp1ProjLong+20*cos(deg2rad(90-$waypoint['laisser_au'])), 
+	    $this->drawArrow($this->mapImage, $wp1ProjLong-20*cos(deg2rad(90-$waypoint['laisser_au'])), 
 			     $wp1ProjLat+20*sin(deg2rad(90-$waypoint['laisser_au'])), 
 			     $waypoint['laisser_au'], $this->colorWaypointsIndication);
 	  } else if ($waypoint['wpformat'] & WP_CROSS_ANTI_CLOCKWISE) {
-	    $this->drawArrow($this->mapImage, $wp1ProjLong+20*cos(deg2rad(90-$waypoint['laisser_au'])), 
+	    $this->drawArrow($this->mapImage, $wp1ProjLong-20*cos(deg2rad(90-$waypoint['laisser_au'])), 
 			     $wp1ProjLat+20*sin(deg2rad(90-$waypoint['laisser_au'])), 
 			     $waypoint['laisser_au']+180, $this->colorWaypointsIndication);
 	  }
