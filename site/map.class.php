@@ -137,6 +137,7 @@ class map
     $this->colorWaypoints = ImageColorAllocate($this->mapImage, 230, 80, 0);
     $this->colorWaypointsArea = ImageColorAllocate($this->mapImage, 230, 120, 40);
     $this->colorWaypointsIceGate = ImageColorAllocate($this->mapImage, 0, 51, 204);
+    $this->colorWaypointsIndication = imagecolorallocatealpha($this->mapImage, 102, 255, 51, 64);
     $this->colorBuoy = ImageColorAllocate($this->mapImage, 250, 150, 150);
     $this->colorWind = ImageColorAllocate($this->mapImage, 110, 130, 150);
     $this->colorCC = ImageColorAllocate($this->mapImage, 250, 50, 50);
@@ -199,8 +200,38 @@ class map
 
   }
 
+  // (-7 0) -> (-2 -5) -> (-2 -1) -> (7 -1) => (7 1) -> (-2 1) -> (-2 5) (-7 0)
 
-
+  function drawArrow($image, $x1, $y1, $angle, $color) {
+    $deg = round(fmod($angle, 360.0)); 
+    switch (intval($angle)) {
+    case 0:
+      $poly = array( $x1-7, $y1, $x1-2, $y1-5, $x1-2, $y1-1, $x1+7, $y1-1, $x1+7, $y1+1, $x1-2, $y1+1, $x1-2, $y1+5);
+      break;
+    case 90:
+      $poly = array( $x1, $y1-7, $x1-5, $y1-2, $x1-1, $y1-2, $x1-1, $y1+7, $x1+1, $y1+7, $x1+1, $y1-2, $x1+5, $y1-2);
+      break;
+    case 180:
+      $poly = array( $x1+7, $y1, $x1+2, $y1-5, $x1+2, $y1-1, $x1-7, $y1-1, $x1-7, $y1+1, $x1+2, $y1+1, $x1+2, $y1+5);
+      break;
+    case 270:
+      $poly = array( $x1, $y1+7, $x1-5, $y1+2, $x1-1, $y1+2, $x1-1, $y1-7, $x1+1, $y1-7, $x1+1, $y1+2, $x1+5, $y1+2);
+      break;
+    default:
+      $poly = array();
+      // (-7 0) -> (-2 -5) -> (-2 -1) -> (7 -1) => (7 1) -> (-2 1) -> (-2 5) (-7 0)
+      array_push($poly, $x1+7*cos((180-$deg)*M_PI/180.0), $y1-7*sin((180-$deg)*M_PI/180.0));
+      array_push($poly, $x1+5.385164807134504*cos((111.8014094863518-$deg)*M_PI/180.0), $y1-5.385164807134504*sin((111.8014094863518-$deg)*M_PI/180.0));
+      array_push($poly, $x1+2.23606797749979*cos((153.434948822922-$deg)*M_PI/180.0), $y1-2.23606797749979*sin((153.434948822922-$deg)*M_PI/180.0));
+      array_push($poly, $x1+7.071067811865476*cos((8.130102354156051-$deg)*M_PI/180.0), $y1-7.071067811865476*sin((8.130102354156051-$deg)*M_PI/180.0));
+      array_push($poly, $x1+7.071067811865476*cos((-8.130102354156051-$deg)*M_PI/180.0), $y1-7.071067811865476*sin((-8.130102354156051-$deg)*M_PI/180.0));
+      array_push($poly, $x1+2.23606797749979*cos((-153.434948822922-$deg)*M_PI/180.0), $y1-2.23606797749979*sin((-153.434948822922-$deg)*M_PI/180.0));
+      array_push($poly, $x1+5.385164807134504*cos((-111.8014094863518-$deg)*M_PI/180.0), $y1-5.385164807134504*sin((-111.8014094863518-$deg)*M_PI/180.0));
+      break;
+    }
+    imagefilledpolygon( $image, $poly, 7, $color);
+  }
+  
   //function draw Grid
   function drawGrid($projCallbackLong, $projCallbackLat) {
     $this->setFuncProjLat($projCallbackLat);
@@ -739,6 +770,15 @@ class map
 			$wp2ProjLong, $wp2ProjLat,
 			$wpcolor);
 	  }
+	  if ($waypoint['wpformat'] & WP_CROSS_CLOCKWISE) {
+	    $this->drawArrow($this->mapImage, ($wp1ProjLong+$wp2ProjLong)/2.0, 
+			     ($wp1ProjLat+$wp2ProjLat)/2.0,
+			     atan2(($wp2ProjLat-$wp1ProjLat),($wp1ProjLong-$wp2ProjLong)), $this->colorWaypointsIndication);
+	  } else if ($waypoint['wpformat'] & WP_CROSS_ANTI_CLOCKWISE) {
+	    $this->drawArrow($this->mapImage, ($wp1ProjLong+$wp2ProjLong)/2.0, 
+			     ($wp1ProjLat+$wp2ProjLat)/2.0,
+			     atan2(($wp2ProjLat-$wp1ProjLat),($wp1ProjLong-$wp2ProjLong))+180, $this->colorWaypointsIndication);
+	  }
 	} else {
 
           // On va tracer un arc de cercle sur les 200 premiers milles, tous les 10 milles
@@ -767,7 +807,17 @@ class map
 			$this->projLat($EP_coords['latitude']),
 			$this->colorBuoy);
 	  }
-	  
+	  // FIXME more arrows ?
+	  if ($waypoint['wpformat'] & WP_CROSS_CLOCKWISE) {
+	    $this->drawArrow($this->mapImage, $wp1ProjLong+20*cos(deg2rad(90-$waypoint['laisser_au'])), 
+			     $wp1ProjLat+20*sin(deg2rad(90-$waypoint['laisser_au'])), 
+			     $waypoint['laisser_au'], $this->colorWaypointsIndication);
+	  } else if ($waypoint['wpformat'] & WP_CROSS_ANTI_CLOCKWISE) {
+	    $this->drawArrow($this->mapImage, $wp1ProjLong+20*cos(deg2rad(90-$waypoint['laisser_au'])), 
+			     $wp1ProjLat+20*sin(deg2rad(90-$waypoint['laisser_au'])), 
+			     $waypoint['laisser_au']+180, $this->colorWaypointsIndication);
+	  }
+
           $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
           array_push($poly_coords, $this->projLong($EP_coords1['longitude']),
                      $this->projLat($EP_coords1['latitude']));
