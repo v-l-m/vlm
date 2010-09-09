@@ -29,7 +29,7 @@
         }
 
         //on détermine la "bonne largeur" pour le menu des wps
-        $nblines = ceil(count($tables)/25.);
+        $nblines = ceil(count($tables)/20.);
         $sizeline = ceil(count($tables)/$nblines);
         $colnum = 0;
         echo "<table>\n<tr>";
