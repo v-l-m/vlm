@@ -14,7 +14,7 @@
     
     $races = new races($ws->idr);
 
-    $query = "SELECT RR.position, RR.duration + RR.penalty duration, RR.idusers idusers, username as boatpseudo, 
+    $query = "SELECT RR.position as status, RR.duration + RR.penalty duration, RR.idusers idusers, username as boatpseudo, 
                         color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
               FROM      races_results RR, users US
               WHERE     idraces=".$races->idraces."
@@ -34,10 +34,14 @@
     $ws->answer['request'] = Array('idr' => $ws->idr, 'time' => $now, 'status' => $status);
     $ws->answer['results'] = Array();
     
+    $position = 0;
+    
     while ($row = mysql_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
         $row['latitude'] /= 1000.;
         $row['longitude'] /= 1000.;
+        $position += 1;
+        $row['rank'] = $position;
         $ws->answer['results'][$row['idusers']] = $row;
     }
 

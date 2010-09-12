@@ -23,7 +23,8 @@
 
     $ws->answer['request'] = Array('idr' => $ws->idr, 'time' => $now);
     $ws->answer['ranking'] = Array();
-    
+    $position = 0;
+
     while ($row = mysql_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
         if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) continue;
@@ -39,6 +40,9 @@
         unset($row['pip']);
         $row['latitude'] /= 1000.;
         $row['longitude'] /= 1000.;
+        $position += 1;
+        $row['rank'] = $position;
+
         $ws->answer['ranking'][$row['idusers']] = $row;
     }
 
