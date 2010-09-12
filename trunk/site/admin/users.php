@@ -58,7 +58,8 @@ $opts['fdd']['idusers'] = array(
 );
 
 $opts['fdd']['username'] = array(
-  'name'     => 'Name of the user',
+  'name'     => 'Boatpseudo',
+  'help'     => 'Pseudo of the boat (old-username)',
   'select'   => 'T',
   'escape'   => true,
   'maxlen'   => 255,
@@ -66,7 +67,8 @@ $opts['fdd']['username'] = array(
 );
 
 $opts['fdd']['password'] = array(
-  'name'     => 'Password of the user',
+  'name'     => 'Password',
+  'help'     => 'DEPRECATED - Password of the boat',
   'options'  => 'ACP',
   'input'    => 'W',
   'select'   => 'T',
@@ -77,7 +79,7 @@ $opts['fdd']['password'] = array(
 
 $opts['fdd']['boatname'] = array(
   'name'     => 'Boatname',
-  'help'     => 'Name of the boat (visible with mouse_over',
+  'help'     => 'Name of the boat (visible with mouse_over)',
   'select'   => 'T',
   'escape'   => true,
   'options'  => 'ACDPVF',
@@ -115,7 +117,7 @@ $opts['fdd']['engaged'] = array(
 
 $opts['fdd']['email'] = array(
   'name'     => 'eMail',
-  'help'     => 'Private mail address',
+  'help'     => 'DEPRECATED - Private mail address',
   'select'   => 'T',
   'escape'   => true,
   'options'  => 'ACDPVF',
@@ -153,8 +155,83 @@ $opts['fdd']['color'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['releasetime'] = array(
+  'name'     => 'Release Time',
+  'help'     => 'Time until boat is locked',
+  'select'   => 'T',
+  'options'  => 'CDV',
+  'maxlen'   => 8,
+  'sort'     => true
+);
 
-/* Doesn't work, it seems this field is useless.
+//RO fields
+
+$opts['fdd']['boatheading'] = array(
+  'name'     => 'Boat Heading',
+  'help'     => 'Boat heading',
+  'input'   => 'R',
+  'options'  => 'V'
+);
+
+$opts['fdd']['pilotmode'] = array(
+  'name'     => 'PIM',
+  'help'     => 'PIlot Mode',
+  'input'   => 'R',
+  'options'  => 'V'
+);
+
+$opts['fdd']['pilotparameter'] = array(
+  'name'     => 'PIP',
+  'help'     => 'PIlot Parameter',
+  'input'   => 'R',
+  'options'  => 'V'
+);
+
+$opts['fdd']['lastchange'] = array(
+  'name'     => 'Last change',
+  'help'     => 'Date of last change',
+  'input'   => 'R',
+  'sql|LFVD' => 'IF (lastchange=0,\'\',FROM_UNIXTIME(lastchange))',
+  'options'  => 'VL'
+);
+
+$opts['fdd']['nextwaypoint'] = array(
+  'name'     => 'Next WP',
+  'help'     => 'Number of next waypoint',
+  'options'  => 'CVF'
+);
+
+$opts['fdd']['userdeptime'] = array(
+  'name'     => 'User Deptime',
+  'help'     => 'Time boat started racing',
+  'input'   => 'R',
+  'sql|LFVD' => 'IF (userdeptime=0,\'\',FROM_UNIXTIME(userdeptime))',
+  'options'  => 'CV'
+);
+
+$opts['fdd']['mooringtime'] = array(
+  'name'     => 'Mooring time',
+  'help'     => 'Time boat is mooring',
+  'input'   => 'R',
+  'sql|LFVD' => 'IF (mooringtime=0,\'\',FROM_UNIXTIME(mooringtime))',
+  'options'  => 'CV'
+);
+
+$opts['fdd']['loch'] = array(
+  'name'     => 'Loch',
+  'help'     => 'Loch since the race started',
+  'input'   => 'R',
+  'options'  => 'V'
+);
+
+$opts['fdd']['ipaddr'] = array(
+  'name'     => 'IP Addr',
+  'help'     => 'Last used IP address',
+  'input'   => 'R',
+  'options'  => 'V'
+);
+
+/* Doesn't work, it seems this field is not used.
 $opts['fdd']['hidepos'] = array(
   'name'     => 'Pos. hidden',
   'select'   => 'D',
