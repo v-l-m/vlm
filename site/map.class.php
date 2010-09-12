@@ -995,8 +995,9 @@ class map
           if ( $usersObj->hidepos > 0 ) continue;
 
           // Si la couleur est précédée d'un signe "-", on cache la trace (si c'est pas le demandeur, bien sur)
-          if ( substr($usersObj->color,0,1) == "-" ) {
+          if ( $usersObj->hasTrackHidden() ) {
               $hidetrack="yes";
+              //FIXME : ce n'est pas prudent de réécrire temporairement dans la classe.
               $usersObj->color=substr($usersObj->color,1);
           } else {
             $hidetrack="no";

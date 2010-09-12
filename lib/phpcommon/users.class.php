@@ -467,6 +467,9 @@ class users extends baseClass
       return False;
   }
 
+  function hasTrackHidden() {
+      return substr($this->color,0,1) == "-";
+  }
 
 }
 
