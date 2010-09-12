@@ -1888,9 +1888,16 @@ function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     $idusers = is_null($idusers) ? -1 : $idusers;
     $idplayers = is_null($idplayers) ? -1 : $idplayers;
     $idraces = is_null($idraces) ? -1 : $idraces;
+    if (isset($_SESSION['IP'] && isset($_SESSION['FULLIP']) {
+        $ip = $_SESSION['IP'];
+        $fullip = $_SESSION['FULLIP'];
+    } else {
+        $fullip = getfullip();
+        $ip = getip();
+    }
 
     $query_user_event = "INSERT INTO `user_action` (`idplayers`, `idusers`, `ipaddr`, `fullipaddr`, `idraces`, `action`, `useragent`, `actionserver`) " .
-                        " values (" . $idplayers . ", " . $idusers . ", '" . $_SESSION['IP'] . "' , '" . $_SESSION['FULLIP'] . "' ," . $idraces .
+                        " values (" . $idplayers . ", " . $idusers . ", '" . $ip . "' , '" . $fullip . "' ," . $idraces .
                         ",'" . addslashes($action) . "', '". addslashes($ua) ."' , '".SERVER_NAME."' )";
     $result = wrapper_mysql_db_query_writer($query_user_event) or die("Query [$query_user_event] failed \n");
 }
