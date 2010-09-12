@@ -372,9 +372,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'Click below to reset your password.' => 'Click below to reset your password.',
     'An email has been sent. Click on the link inside.' => 'An email has been sent. Click on the link inside.',
     'Check your inbox to get your new password.' => 'Check your inbox to get your new password.',
+    'Lost your password ?' => 'Lost your password ?',
   ),
   'fr' => 
   array (
+    'Lost your password ?' => 'Mot de passe oublié ?',
     'Check your inbox to get your new password.' => 'Vérifiez vos courrier électroniques pour connaitre votre nouveau mot de passe.',
     'An email has been sent. Click on the link inside.' => 'Un courriel vous a été adressé. Cliquez sur le lien.',
     'Click below to reset your password.' => 'Cliquez ci-dessous pour réinitialiser votre mot de passe.',

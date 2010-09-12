@@ -80,7 +80,7 @@
                 $defaultuser = getUserObject($player->getDefaultBoat());
                 loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
             } else {
-                $msg = getLocalizedString("authfailed");
+                $msg = getLocalizedString("authfailed")."<br /><a href=\"reset_password.php\">".getLocalizedString("Lost your password ?")."</a>";
             }
         }
     }
