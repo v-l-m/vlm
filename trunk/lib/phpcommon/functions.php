@@ -929,13 +929,8 @@ function getNumOpponents($idraces) {
   $idraces = intval($idraces);
 
   // Verification si course existe
-  $query= "SELECT count(*)
-             FROM races
-       where idraces = " . $idraces . ";";
-  $result = wrapper_mysql_db_query_reader($query) ;
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  if  ( $row[0] != 1 ) {
-    return (array (0,0,0));
+  if  ( !raceExists($idraces) ) {
+      return (array (0,0,0));
   }
 
   // Nombre de classés / non classés
