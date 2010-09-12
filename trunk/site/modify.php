@@ -138,7 +138,7 @@ Notepad :<br />
   }
   echo "</table>\n";
 
-        if ( substr($fullUsersObj->users->color,0,1) == "-" ) {
+        if ( $fullUsersObj->users->hasTrackHidden() ) {
              $checked="checked ";
              $color=substr($fullUsersObj->users->color,1);
         } else {

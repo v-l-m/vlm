@@ -141,7 +141,7 @@ function get_info_array($idu) {
     $info['PIL'] = $userObj->users->pilototo;
 
     $info['THM'] = $userObj->users->theme;
-    $info['HID'] = $userObj->users->hidepos;
+    $info['HID'] = $userObj->users->hasTrackHidden();
   }
   return $info;
 }

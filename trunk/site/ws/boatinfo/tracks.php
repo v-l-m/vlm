@@ -31,7 +31,7 @@
         $ws->answer['blackout_end'] = $races->boend;
     }
 
-    if ($users->hidepos) {
+    if ($users->hasTrackHidden()) {
         $ws->answer['tracks_hidden'] = True;
         $ws->answer['nb_tracks'] = 0;
         $ws->reply_with_success();
