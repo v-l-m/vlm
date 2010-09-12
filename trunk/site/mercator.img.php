@@ -11,7 +11,7 @@
     $maparea=round(htmlentities(get_cgi_var('maparea', 10)),1); //Ici, maparea est 0.1 à 20.
     // avoid trouble with bad clients
     if ($maparea > 20.) $maparea = 20.;
-    if ($maparea < 0.01) $maparea = 0.01
+    if ($maparea < 0.01) $maparea = 0.01;
 
     $maille=round(htmlentities(get_cgi_var('maille', 1)),1);
     
