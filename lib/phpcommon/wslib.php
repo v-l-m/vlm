@@ -2,14 +2,34 @@
 
 include_once("functions.php");
 include_once('players.class.php');
+include_once('base.class.php');
 
-class WSBase {
+class WSBase extends baseClass {
 
     public $answer = Array();
 
     function __construct() {
+        parent::baseClass();
         // now start the real work
         login_if_not($this->usage());
+    }
+
+    function queryRead($query) {
+        $res = parent::queryRead($query);
+        if ($res) { 
+            return $res;
+        } else {
+            $this->reply_with_error("CORE01", $this->error_string);
+        }
+    }
+    
+    function queryWrite($query) {
+        $res = parent::queryWrite($query);
+        if ($res) { 
+            return $res;
+        } else {
+            $this->reply_with_error("CORE01", $this->error_string);
+        }
     }
 
     function usage() {
@@ -54,6 +74,17 @@ class WSBase {
         $ws->reply_with_error("CORE01");
     }
 
+    function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) {
+        $foo = get_cgi_var($var, $default);
+        if (is_null($foo)) $this->reply_with_error($err_exists);
+        $foo = intval($foo);
+        if (is_int($foo) && $foo > 0) {
+            return $foo;
+        } else {
+            $this->reply_with_error($err_gt_0);
+        }
+    }
+
 }
 
 class WSBasePlayer extends WSBase {
@@ -61,6 +92,21 @@ class WSBasePlayer extends WSBase {
         parent::__construct();
         if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03');
     }
+}
+
+class WSBaseRace extends WSBase {
+    var $idr = null;
+    function __construct() {
+        parent::__construct();
+        //if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03');
+    }
+    
+    function require_idr() {
+        $idr = $this->check_cgi_int('idr', 'IDR01', 'IDR02');
+        if (!raceExists($idr)) $this->reply_with_error('IDR03');
+        $this->idr = $idr;
+    }
+    
 }
 
 class WSBaseBoat extends WSBasePlayer {
@@ -72,17 +118,6 @@ class WSBaseBoat extends WSBasePlayer {
     
     function check_idu() {
         $this->idu = $this->check_cgi_int('idu', 'IDU01', 'IDU02');
-    }
-
-    function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) {
-        $foo = get_cgi_var($var, $default);
-        if (is_null($foo)) $this->reply_with_error($err_exists);
-        $foo = intval($foo);
-        if (is_int($foo) && $foo > 0) {
-            return $foo;
-        } else {
-            $this->reply_with_error($err_gt_0);
-        }
     }
 
 }
