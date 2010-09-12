@@ -454,9 +454,9 @@ include_once("scripts/myboat.js");
 
 
             // Email vide ?
-            if ( ! preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  ) {
+            if ( !preg_match ("/^.+@.+\..+$/",$usersObj->users->email)  && $usersObj->users->getOwnerId() == 0) {
                 $msg = "<b>NO E-MAIL ADDRESS</b>&nbsp;Please give one (".getLocalizedString("choose") . ")";
-                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "modify.php");
+                $messages[] = Array("id" => "voidemail", "txt" => $msg, "class" => "warn", "url" => "edit_boatprefs.php");
             }
             // OMOROB ?
             if ( $usersObj->users->country == "000" ) {
@@ -476,7 +476,7 @@ include_once("scripts/myboat.js");
             //BLOCNOTE
             if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
                 $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
-                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "modify.php");
+                $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "edit_boatprefs.php");
             }
 
             //Synthese

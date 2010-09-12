@@ -317,7 +317,7 @@
         <div id="pagesbox" class="leftbox">
             <a href="myboat.php"><?php echo getLocalizedString("control"); ?></a>
             <a href="mappref.php"><?php echo getLocalizedString("mymap"); ?></a>
-            <a href="modify.php"><?php echo getLocalizedString("choose"); ?></a>
+            <a href="edit_boatprefs.php"><?php echo getLocalizedString("choose"); ?></a>
             <?php if (isPlayerLoggedIn()) {
                 echo "<a href=\"palmares.php?type=player&idplayers=".getPlayerId()."\">".getLocalizedString("Profile")."</a>";
                 }
