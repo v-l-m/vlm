@@ -8,15 +8,18 @@
     // MAIN
     //================================================================
 
-    $maparea=round(htmlentities(get_cgi_var('maparea', 10)),1);
+    $maparea=round(htmlentities(get_cgi_var('maparea', 10)),1); //Ici, maparea est 0.1 à 20.
+    // avoid trouble with bad clients
+    if ($maparea > 20.) $maparea = 20.;
+    if ($maparea < 0.01) $maparea = 0.01
+
     $maille=round(htmlentities(get_cgi_var('maille', 1)),1);
     
     // ajustement du niveau de zoom (0.. 20/21)
     $maparea=max(exp($maparea/2.5)/10, MAPAREA_MIN);
     if ($maparea > MAPAREA_MAX ) $maparea=MAPAREA_MAX;
-    //echo "MAPAREA=".$maparea; exit;
     
-    // La maille
+    // ajustement de la maille
     if ( $maille <= 0 || !isset($maille) ) $maille=MAILLE_MIN;
     //$maille=max(round(sqrt($maille)*sqrt($maparea-MAPAREA_MIN),1),MAILLE_MIN);
     $maille=max(round(sqrt(($maille)/20)+sqrt($maparea/20),1),MAILLE_MIN);
@@ -231,6 +234,7 @@
     
     if ( $drawmap != "no" && $windonly != "true" ) {
         $time_start = time();
+        //NB: ici maparea est 0.1 à 300
         $mapObj->drawMap($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $coasts, $fullres, $maparea);
         $time_stop = time();
         if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 30, "Time drawMap = ". ($time_stop - $time_start) . "s", $mapObj->colorText);
