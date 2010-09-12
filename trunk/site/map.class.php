@@ -987,10 +987,12 @@ class map
           //opponent is a userid, get a fulluser is not required, users is sufficient
           // $fullUsersObj = new fullUsers($opponnent, $this->north, $this->south, $this->west, $this->east, $maxage, $minage);
           if (array_key_exists($opponnent, $this->fullRacesObj->opponents)) {
-            	$usersObj = &$this->fullRacesObj->opponents[$opponnent];
+	    $usersObj = &$this->fullRacesObj->opponents[$opponnent];
+          } else if (array_key_exists($opponnent, $this->fullRacesObj->excluded)) {
+	    $usersObj = &$this->fullRacesObj->excluded[$opponnent];
           } else {
-            	$usersObj = getUserObject($opponnent);
-          }
+	    continue;
+	  }
           // Si le pixel se cache, on passe au suivant
           if ( $usersObj->hidepos > 0 ) continue;
 
