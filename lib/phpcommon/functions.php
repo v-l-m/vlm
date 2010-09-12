@@ -1888,7 +1888,7 @@ function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     $idusers = is_null($idusers) ? -1 : $idusers;
     $idplayers = is_null($idplayers) ? -1 : $idplayers;
     $idraces = is_null($idraces) ? -1 : $idraces;
-    if (isset($_SESSION['IP'] && isset($_SESSION['FULLIP']) {
+    if (isset($_SESSION['IP']) && isset($_SESSION['FULLIP']) {
         $ip = $_SESSION['IP'];
         $fullip = $_SESSION['FULLIP'];
     } else {
