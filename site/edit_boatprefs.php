@@ -33,9 +33,10 @@ echo "<h2>".getLocalizedString("choose")."</h2>";
          echo "<br />";
 
      }
-
-        echo "<br />" . getLocalizedString("useremail");
-        echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
+        if ($fullUsersObj->users->getOwnerId() == 0) {
+            echo "<br />" . getLocalizedString("useremail");
+            echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
+        }
 
     $select_list = "";
     $flagres = getFlagsListCursor();
