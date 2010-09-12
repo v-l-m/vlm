@@ -191,6 +191,16 @@ class WSBaseBoatsetup extends WSSetup {
         return $prefs;
     }
 
+    function check_pilototo_list_on_success() {
+        if (isset($this->request['list_on_success']) && !$this->fullusers->users->error_status) {
+            if (!is_bool($this->request['list_on_success'])) {
+                $this->reply_with_error('PILOTOTO04');
+            }
+            return $this->request['list_on_success'];
+        }
+        return False;
+    }    
+
     function check_pilototo_tasktime() {
         $this->reply_with_error_if_not_exists('tasktime', 'PILOTOTO01');
         $tasktime = $this->request['tasktime'];
@@ -272,6 +282,7 @@ function get_error($code) {
         "PILOTOTO02" => "tasktime should be int (EPOC)",
         "PILOTOTO03" => "taskid is unspecified",
         "PILOTOTO04" => "taskid should be int",
+        "PILOTOTO04" => "list_on_success should be boolean",
         //wp (and also pip when pip = wp)
         "WP01" => "pip/wp is unspecified",
         "WP02" => "pip/wp should be an array",
