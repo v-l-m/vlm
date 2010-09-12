@@ -374,9 +374,13 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'Check your inbox to get your new password.' => 'Check your inbox to get your new password.',
     'Lost your password ?' => 'Lost your password ?',
     'Enter your email for resetting your password' => 'Enter your email for resetting your password',
+    'Your password has been updated.' => 'Your password has been updated.',
+    'An email has been sent for your information.' => 'An email has been sent for your information.',
   ),
   'fr' => 
   array (
+    'Your password has been updated.' => 'Votre mot de passe a été mis à jour.',
+    'An email has been sent for your information.' => 'Un courriel vous a été adressé pour information.',
     'Enter your email for resetting your password' => 'Entrez votre adresse de courriel pour réinitialiser votre mot de passe',
     'Lost your password ?' => 'Mot de passe oublié ?',
     'Check your inbox to get your new password.' => 'Vérifiez vos courrier électroniques pour connaitre votre nouveau mot de passe.',
