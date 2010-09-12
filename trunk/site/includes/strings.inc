@@ -369,9 +369,15 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     "Recently boatsitted" => "Recently boatsitted",
     "This boat is already boatsitted by the player" => "This boat is already boatsitted by the player",
     'incomingblackout' => 'Incoming blackout',
+    'Click below to reset your password.' => 'Click below to reset your password.',
+    'An email has been sent. Click on the link inside.' => 'An email has been sent. Click on the link inside.',
+    'Check your inbox to get your new password.' => 'Check your inbox to get your new password.',
   ),
   'fr' => 
   array (
+    'Check your inbox to get your new password.' => 'Vérifiez vos courrier électroniques pour connaitre votre nouveau mot de passe.',
+    'An email has been sent. Click on the link inside.' => 'Un courriel vous a été adressé. Cliquez sur le lien.',
+    'Click below to reset your password.' => 'Cliquez ci-dessous pour réinitialiser votre mot de passe.',
     'incomingblackout' => 'Blackout à venir',
     "This boat is already boatsitted by the player" => "Ce bateau est déjà boat-sitté par ce joueur",
     "Recently boatsitted" => "Boat-sittings récents",
