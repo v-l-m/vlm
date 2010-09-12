@@ -9,7 +9,7 @@
     $now = time();
     
     $ws->require_idr();
-    $limit = intval($ws->check_cgi('limit', "LIMIT01", "LIMIT02", 99999));
+    $limit = intval($ws->check_cgi('limit', "LIMIT01", 99999));
     $races = new races($ws->idr);
     
     $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
