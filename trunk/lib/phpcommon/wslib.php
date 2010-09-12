@@ -293,6 +293,9 @@ function get_error($code) {
         "IDR01"  => 'idr is required',
         "IDR02"  => 'idr should be int and > 0',
         "IDR03"  => 'idr is not valid',
+        //limit - mainly for ranking/results
+        "LIMIT01" => "limit is required",
+        "LIMIT02" => 'limit should be int and > 0 if specified',
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);

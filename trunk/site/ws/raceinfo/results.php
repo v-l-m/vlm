@@ -9,8 +9,8 @@
     $now = time();
     
     $ws->require_idr();
-    $status = $ws->check_cgi('status', "", BOAT_STATUS_ARR);
-    $status = intval($status);
+    $status = intval($ws->check_cgi('status', "", BOAT_STATUS_ARR));
+    $limit = intval($ws->check_cgi_int('limit', "LIMIT01", "LIMIT02", 99999));
     
     $races = new races($ws->idr);
 
@@ -20,14 +20,14 @@
               WHERE     idraces=".$races->idraces."
               AND       US.idusers = RR.idusers
               AND       position=" . $status . " " ;
-
     if ( $races->racetype == RACE_TYPE_RECORD ) {
         // Pour une course record : c'est le temps de course par défaut
         $query .= " ORDER BY duration ASC";
     } else {
-      // Pour une course classique, c'est tout simplement la date d'arrivée (on l'a avec deptime + duration)
+        // Pour une course classique, c'est tout simplement la date d'arrivée (on l'a avec deptime + duration)
         $query .= " ORDER BY duration + penalty + deptime ASC";
-    }
+    }    
+    $query .= " LIMIT ".$limit;
 
     $res = $ws->queryRead($query);
 
