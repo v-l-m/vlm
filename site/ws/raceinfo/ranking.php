@@ -27,7 +27,7 @@
 
     while ($row = mysql_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
-        if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) continue;
+        //if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) continue;
         // Calcul du status
         if ( $row['releasetime'] > $now ) {
             $row['status'] = 'locked';

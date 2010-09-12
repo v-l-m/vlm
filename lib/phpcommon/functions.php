@@ -954,7 +954,7 @@ function getNumOpponents($idraces) {
   // Nombre de bateaux en course
   $query= "SELECT count(*) 
              FROM races_ranking 
-       WHERE dnm is not null AND idraces = $idraces ;";
+       WHERE idraces = $idraces ;";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $num_racing=$row[0];
