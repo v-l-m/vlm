@@ -74,9 +74,14 @@ class WSBase extends baseClass {
         $ws->reply_with_error("CORE01");
     }
 
-    function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) {
+    function check_cgi($var, $err_exists, $default=null) {
         $foo = get_cgi_var($var, $default);
         if (is_null($foo)) $this->reply_with_error($err_exists);
+        return $foo;
+    }
+
+    function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) {
+        $foo = $this->check_cgi($var, $err_exists, $default);
         $foo = intval($foo);
         if (is_int($foo) && $foo > 0) {
             return $foo;
