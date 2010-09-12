@@ -35,6 +35,8 @@
         }
         unset($row['pim']);
         unset($row['pip']);
+        $row['latitude'] /= 1000.;
+        $row['longitude'] /= 1000.;
         $ws->answer['ranking'][$row['idusers']] = $row;
     }
 
