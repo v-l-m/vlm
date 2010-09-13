@@ -872,7 +872,7 @@ class fullUsers
       $logmsg = "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" ;
       if ($result = wrapper_mysql_db_query_writer($query)) {
           $this->users->logUserEvent($logmsg);
-          //$this->updateAngles();
+          $this->updateAngles(1);
           return True;
       } else {
           //Error d'accès sql ?
