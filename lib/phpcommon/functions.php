@@ -219,26 +219,7 @@ function longitudeConstraintDegrees($longitude) {
 function polar2cartesian($a, $r)
 {
   //convert $a from geographic angle to trigonometric angle
-  // Modulo : real -> int
-  // $a_trigo = (360 - $a)%360 + 90;
-
-  // Version FM du 01/03/2008
-  //$a_trigo = 360 -$a; 
-  //while ( $a_trigo > 360 ) { $a_trigo-=360; };
-  //while ( $a_trigo < 0 )   { $a_trigo+=360; };
-  //$a_trigo+=90;
-  
-  // Simplification JFD du 03/01/2008 
-  $a_trigo = deg2rad(fmod(360+90-$a, 360));
-
-  // Propositon Maitai du 03/01/2008 (plus couteux en CPU)
-  /*
-    if ( sin(deg2rad($a)>=0){
-    $a_trigo=rad2deg(acos(cos(deg2rad($a + 90))))
-    } else {
-    $a_trigo=360-rad2deg(acos(cos(deg2rad($a + 90))))
-    }
-  */
+  $a_trigo = (90.0-$a)*M_PI/180.0;
 
   $result[0] = $r*cos($a_trigo);
   $result[1] = $r*sin($a_trigo);
@@ -251,8 +232,8 @@ function polar2cartesian($a, $r)
 function polar2cartesianDrawing($a, $r)
 {
   //convert $a from geographic angle to drawing angle
-  $a = deg2rad(fmod($a-90 ,360)); // FIXME as $a is used only in cos and sin
-                                  // there is need to normalize it
+  $a = ($a-90.0)*M_PI/180.0;
+  
   $result[0] = $r*cos($a);
   $result[1] = $r*sin($a);
   //echo "\npolar2cartesian angle_trigo = $a_trigo, x = $result[0], y = $result[1] \n";
@@ -1957,15 +1938,14 @@ function insertAdminChangelog($argarray) {
     $arglist = Array("operation", "tab", "rowkey", "col", "oldval", "newval");
     $values = "";
     foreach ($arglist as $varname) {
-        if (!array_key_exists($varname, $argarray) or is_null($argarray[$varname])) {
-            $values .= ", NULL ";
-        } else {
-            $values .= ", '".addslashes($argarray[$varname])."'";
-        }
+      if (!array_key_exists($varname, $argarray) or is_null($argarray[$varname])) {
+	$values .= ", NULL ";
+      } else {
+	$values .= ", '".addslashes($argarray[$varname])."'";
+      }
     }
     $query = sprintf("INSERT INTO admin_changelog (user, host, operation, tab, rowkey, col, oldval, newval) VALUES ('%s', '%s' %s )",
-                      getAdminName(), getip(), $values
-                       );
+		     getAdminName(), getip(), $values);
     wrapper_mysql_db_query_writer($query);
 }
 
