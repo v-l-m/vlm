@@ -1469,9 +1469,7 @@ class map
           $coordi = windtrianglecoordinates($Tbl, $fullGridObj->wheading, 
                                             $fullGridObj->wspeed);
           $col = windspeedtocolorbeaufort($fullGridObj->wspeed, $this->mapImage);
-          imagefilledpolygon( $this->mapImage, 
-                              $coordi,
-                              4, $col);
+          imagefilledpolygon( $this->mapImage, $coordi, 3, $col);
     
           if ( $this->windtext != "off" ) {
             // Write wind strength (knots)
