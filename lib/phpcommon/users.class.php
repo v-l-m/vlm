@@ -596,6 +596,17 @@ class fullUsers
 
   }
 
+  function updateNM() {
+    if ( $this->users->targetlat == 0 && $this->users->targetlong == 0 ) {
+      //echo "*Race WP*";
+      $rc = $this->bestWayToWaypoint($this->nwp);
+    } else {
+      //echo "*User WP*";
+      $this->LatNM = $this->users->targetlat*1000;
+      $this->LongNM = $this->users->targetlong*1000;
+    }
+  }
+  
   function getMyPref($pref_name) {
       if (!isset($this->preferences)) {
           $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
@@ -652,6 +663,7 @@ class fullUsers
     $query_deptime = "UPDATE users set userdeptime = " . $time . " WHERE idusers = ". $this->users->idusers  ;
     //echo ( "Query failed : " . mysql_error." ".$query_deptime );
     wrapper_mysql_db_query_writer($query_deptime) or die ( "Query failed : " . mysql_error." ".$query_deptime );
+    $this->users->userdeptime = $time;
   }
 
   //this function will delete all the positions of the boat for this race
@@ -872,6 +884,7 @@ class fullUsers
       $logmsg = "Update Target (lat=" . $this->users->targetlat. ", lon=" . $this->users->targetlong. ", @wph=" . $this->users->targetandhdg. ")" ;
       if ($result = wrapper_mysql_db_query_writer($query)) {
           $this->users->logUserEvent($logmsg);
+	  $this->updateNM();
           $this->updateAngles(1);
           return True;
       } else {
@@ -1023,7 +1036,7 @@ class fullUsers
     }
 
     // Cumul du loch sauf si bout au vent...
-    if ( $moved == 1)  {
+    if ( $moved == 1 && ($this->anteLastPositions != 0))  {
       //FIXME : loch devrait être un DECIMAL
       $this->users->loch += ortho($this->anteLastPositions->lat, $this->anteLastPositions->long,
 				  $this->lastPositions->lat, $this->lastPositions->long);
@@ -1269,11 +1282,11 @@ class fullUsers
       $this->users->pilototoPurge(0);
 
       // insert an initial position
-      $query7 = "INSERT INTO positions SET     `time` = ". time().
-        ",    `long` =". $this->races->startlong .
-        ",     `lat` =". $this->races->startlat.
+      $query7 = "INSERT INTO positions SET`time` = ". time().
+        ", `long` =". $this->races->startlong .
+        ", `lat` =". $this->races->startlat.
         ", `idusers` = ".$this->users->idusers.
-        ", `race`    = ".$id;
+        ", `race` = ".$id;
       wrapper_mysql_db_query_writer($query7);
 
       // Delete old positions from races_results (in case of sub/unsub/sub again) (only if not TYPE_RECORD)
