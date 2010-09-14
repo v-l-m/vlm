@@ -1647,10 +1647,10 @@ function getWaypointHTMLSymbols($wpformat) {
   
   switch ($wpformat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) {
   case WP_ICE_GATE_S:
-    $wpsymbols .= "&#x2974;";
+    $wpsymbols .= "&#x27F1;";
     break;
   case WP_ICE_GATE_N:
-    $wpsymbols .= "&#x2972;";
+    $wpsymbols .= "&#x27F0;";
   default:
   }
   return trim($wpsymbols);
