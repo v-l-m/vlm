@@ -672,22 +672,15 @@ function trianglecoordinates($A, $heading)
 function windtrianglecoordinates($A, $wheading, $wspeed)
 {
   //everything in pixels
+  $a0 = $A[0];
+  $a1 = $A[1];
+  $wspdlog = log($wspeed);
 
-  $v = polar2cartesianDrawing( $wheading, WINDARROW_MINSIZE+log($wspeed)*4);
-  $B = array($A[0] + $v[0], $A[1] + $v[1]);
-
-  $moins90 = $wheading - 90;
-  if ($moins90 < 0)
-    $moins90 += 360;
-
-  $v = polar2cartesianDrawing( $moins90, WINDARROW_MINWIDTH+log($wspeed));
-  $C = array($A[0] + $v[0], $A[1] + $v[1]);
-
-  $v = polar2cartesianDrawing( fmod($wheading + 90, 360), WINDARROW_MINWIDTH+log($wspeed));
-  $D = array($A[0] + $v[0], $A[1] + $v[1]);
-
-  // die($A[0]." ". $A[1]." ".$C[0]." ". $C[1]." ".$D[0]." ". $D[1]."\n");
-  $coord = array($B[0], $B[1],  $C[0], $C[1], $D[0], $D[1],$B[0], $B[1]);
+  $va = polar2cartesianDrawing( $wheading     , WINDARROW_MINSIZE+$wspdlog*4);
+  $vb = polar2cartesianDrawing( $wheading-90.0, WINDARROW_MINWIDTH+$wspdlog);
+  $vc = polar2cartesianDrawing( $wheading+90.0, WINDARROW_MINWIDTH+$wspdlog);
+  
+  $coord = array($a0+$va[0], $a1+$va[1], $a0+$vb[0], $a1+$vb[1], $a0+$vc[0], $a1+$vc[1]);
   return $coord;
 }
 
