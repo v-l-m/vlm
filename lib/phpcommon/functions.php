@@ -421,54 +421,36 @@ function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_
 		   'latitude2' => $lat2, 'longitude2' => $long2, 
 		   'wptype' => WPTYPE_PORTE);
   }
-
 }
 
-
-function windspeedtocolorbeaufort($windspeed, $im)
+function windspeedtocolorbeaufort($wspeed, $im)
 {
-  //fromhex("ff0000")
   // <=F0 : blanc
-  if ($windspeed <= 1) { $colo = ImageColorAllocate($im, 255, 255, 255); }
-
+  if ($wspeed <=  1.0) { return 0xFFFFFF; }
   // <=F1 : bleu clair legerement gris
-  else if ($windspeed <= 3) { $colo = ImageColorAllocate($im, 150, 150, 225 ); }
-
+  if ($wspeed <=  3.0) { return 0x9696E1; }
   // <=F2 : bleu un peu plus soutenu
-  else if ($windspeed <= 6) { $colo = ImageColorAllocate($im, 80, 140, 205); }
-
+  if ($wspeed <=  6.0) { return 0x508CCD; }
   // <=F3 : bleu plus foncé 
-  else if ($windspeed <= 10) { $colo = ImageColorAllocate($im, 60, 100, 180); }
-
+  if ($wspeed <= 10.0) { return 0x3C64B4; }
   // <=F4 : vert
-  else if ($windspeed <= 15) { $colo = ImageColorAllocate($im, 65, 180, 100); }
-
+  if ($wspeed <= 15.0) { return 0x41B464; }
   // <=F5 : jaune légèrement vert
-  else if ($windspeed <= 21) { $colo = ImageColorAllocate($im, 180, 205, 10); }
-
+  if ($wspeed <= 21.0) { return 0xB4CD0A; }
   // <=F6 : jaune orangé
-  else if ($windspeed <= 26) { $colo = ImageColorAllocate($im, 210, 210, 22); }
-  //else if ($windspeed <= 26) { $colo = ImageColorAllocate($im, 215, 210, 32); }
-
+  if ($wspeed <= 26.0) { return 0xD2D216; }
   // <=F7 : jaune orangé un peu plus rougeatre
-  else if ($windspeed <= 33) { $colo = ImageColorAllocate($im, 225, 210, 32); }
-
+  if ($wspeed <= 33.0) { return 0xE1D220; }
   // <=F8 : orange foncé
-  else if ($windspeed <= 40) { $colo = ImageColorAllocate($im, 255, 179, 0); }
-
+  if ($wspeed <= 40.0) { return 0xFFB300; }
   // <=F9 : rouge 
-  else if ($windspeed <= 47) { $colo = ImageColorAllocate($im, 255, 111, 0); }
-
+  if ($wspeed <= 47.0) { return 0xFF6F00; }
   // <=F10 rouge / marron
-  else if ($windspeed <= 55) { $colo = ImageColorAllocate($im, 255, 43, 0); }
-
+  if ($wspeed <= 55.0) { return 0xFF2B00; }
   // <=F11 marron
-  else if ($windspeed <= 63) { $colo = ImageColorAllocate($im, 230, 0, 0); }
-
+  if ($wspeed <= 63.0) { return 0xE60000; }
   // F12  rouge/noir
-  else $colo = ImageColorAllocate($im, 127, 0, 0);
-
-  return $colo;
+  return 0x7F0000;
 }
 
 function hexcolor($image,$string)
