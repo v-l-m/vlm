@@ -44,7 +44,7 @@
     if (!isPlayerLoggedIn()) { //il ne faut pas être loggué en tant que player, il faut être loggué en tant que boat
         echo "<div id=\"attachboatbox\">";
         echo "<p>";
-        echo getLocalizedString("You have to be logklmged with the user/boat credential to attach the boat.");
+        echo getLocalizedString("You have to be logged with the user/boat credential to attach the boat.");
         echo "</p></div>";
         include_once("includes/footer.inc");
         exit();
