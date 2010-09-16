@@ -1217,6 +1217,7 @@ function mailInformation($who, $title, $message = null) {
                 'Sender: '.EMAIL_NOTIFY_VLM. "\n" .
                 'Reply-To:  Virtual Loup-de-Mer <'.EMAIL_COMITE_VLM. ">\n" .
                 'X-Mailer: PHP/' . phpversion()."\n".
+                'Content-Type: text/plain; charset="UTF-8"\n'.
                 "Content-Type: text/plain\n";
     if (SERVER_IS_SENDING_EMAIL) {
         $res = mail($who , $title, $message, $headers);
