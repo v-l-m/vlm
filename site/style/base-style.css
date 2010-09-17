@@ -270,7 +270,7 @@ table
 
 #racebox { display:block; width:100%; }
 #racenamebox { display:inline; float:left;}
-#minimapbox { display:inline; float:left; }
+#minimapbox { display:inline; float:left; margin-right:0.5em; }
 #raceicbox {display:inline; float:right; }
 
 /* BOATBOX */
