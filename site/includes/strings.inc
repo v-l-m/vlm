@@ -377,9 +377,15 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'Your password has been updated.' => 'Your password has been updated.',
     'An email has been sent for your information.' => 'An email has been sent for your information.',
     'Attachment successful.' => 'Attachment successful.',
+    "Your playername should have at least 3 characters." => "Your playername should have at least 3 characters.",
+    "Your playername is already in use." => "Your playername is already in use.",
+    "Your email is already in use." => "Your email is already in use.",
   ),
   'fr' => 
   array (
+    "Your playername should have at least 3 characters." => "Votre nom de joueur doit avoir au moins 3 caractères.",
+    "Your playername is already in use." => "Votre nom de joueur est déjà utilisé.",
+    "Your email is already in use." => "Il y a déjà un compte avec cette adresse de couriel.",
     'Attachment successful.' => 'Rattachement réussi',
     'Your password has been updated.' => 'Votre mot de passe a été mis à jour.',
     'An email has been sent for your information.' => 'Un courriel vous a été adressé pour information.',
