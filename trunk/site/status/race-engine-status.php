@@ -31,10 +31,15 @@ include("../includes/header-status.inc");
         $result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
         $row2     = mysql_fetch_assoc($result2);
         $delay    = $current_time - (int)$row2['time'];
-	$query2   = "SELECT count(*) AS numengaged FROM users WHERE engaged=".$idraces
+	$query2   = "SELECT count(*) AS numactive FROM users WHERE engaged=".$idraces
 	  ." AND userdeptime != -1 AND loch > 0";
 	$result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
         $row3     = mysql_fetch_assoc($result2);
+	$active_p = $row3['numactive'];
+	$query2   = "SELECT count(*) AS numengaged FROM users WHERE engaged=".$idraces;
+	$result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
+        $row3     = mysql_fetch_assoc($result2);
+
         if ($delay > 60*(int)$vacfreq) {
             $cssklass = "maybelate";
         } else {
@@ -43,7 +48,7 @@ include("../includes/header-status.inc");
 	echo "<tr>\n";
         echo "<td class=\"idraces\">$idraces</td>";
         echo "<td class=\"racename\">$racename</td>";
-	echo "<td class=\"numengaged\">".$row3['numengaged']."</td>";
+	echo "<td class=\"numengaged\">".$active_p." / ".$row3['numengaged']."</td>";
         echo "<td class=\"time\">".gmdate("H:i:s", $row2['time'])."</td>";
         echo "<td class=\"duration\">".($vacfreq*60)."</td>";
         echo "<td class=\"$cssklass\">".sprintf("%03d", $delay)." sec. ago</td>\n";
