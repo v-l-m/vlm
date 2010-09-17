@@ -15,9 +15,9 @@ include("../includes/header-status.inc");
     <span class="hidden"><?php echo $current_time ?></span>
     </p>
     <div id="racesdetailstatus">
-    <h2>Race detailled status</h2>
+    <h2>Race detailed status</h2>
     <table>
-    <th>id</th><th>Racename</th><th>Last update</th><th>Crank frequency</th><th>Time from update</th>
+    <th>id</th><th>Racename</th><th>Participants</th><th>Last update</th><th>Crank frequency</th><th>Time from update</th>
 <?php
 
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
@@ -31,6 +31,9 @@ include("../includes/header-status.inc");
         $result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
         $row2     = mysql_fetch_assoc($result2);
         $delay    = $current_time - (int)$row2['time'];
+	$query2   = "SELECT count(*) AS numengaged FROM users WHERE engaged=".$idraces;
+	$result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
+        $row3     = mysql_fetch_assoc($result2);
         if ($delay > 60*(int)$vacfreq) {
             $cssklass = "maybelate";
         } else {
@@ -39,6 +42,7 @@ include("../includes/header-status.inc");
 	echo "<tr>\n";
         echo "<td class=\"idraces\">$idraces</td>";
         echo "<td class=\"racename\">$racename</td>";
+	echo "<td class=\"numengaged\">".$row3['numengaged']."</td>";
         echo "<td class=\"time\">".gmdate("H:i:s", $row2['time'])."</td>";
         echo "<td class=\"duration\">".($vacfreq*60)."</td>";
         echo "<td class=\"$cssklass\">".sprintf("%03d", $delay)." sec. ago</td>\n";
