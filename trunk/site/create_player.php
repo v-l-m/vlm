@@ -59,7 +59,7 @@
             echo "</div>";
         } else {
             echo "<h2>".getLocalizedString("Input invalid")."</h2>";
-            echo "<h2>".nl2br($player->error_string)."</h2>";
+            echo "<div>".nl2br($player->error_string)."</div>";
             printFormRequest($emailid, $password, $playername);
         }
     } else if ($actioncreate == "confirmed") { //CONFIRMED
@@ -77,7 +77,7 @@
                echo "</div>";
            } else {
                echo "<h2>".getLocalizedString("Input invalid")."</h2>";
-               echo "<h2>".nl2br($player->error_string)."</h2>";
+               echo "<div>".nl2br($player->error_string)."</div>";
                printFormRequest($emailid, $password, $playername);
            }   
        }
