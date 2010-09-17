@@ -70,7 +70,7 @@ include("../includes/header-status.inc");
           $lastupdate     = (int)$row2['time'];
           $races          = $row2['races'];
           $boats          = $row2['boats'];
-          $duration       = max($row2['duration'],1);
+          $duration       = max($row2['duration'],0.01);
           $update_comment = $row2['update_comment'];
           if ($duration > 60) {
               $cssklass = "maybelate";
@@ -85,7 +85,7 @@ include("../includes/header-status.inc");
 	    $odd = 0;
 	  }
           printf("<td class=\"time\">%s</td>\n", gmdate('Y-m-d \T H:i:s', $lastupdate) );
-          printf("<td class=\"$cssklass\">%d sec.</td>", $duration );
+          printf("<td class=\"$cssklass\">%.3f sec.</td>", $duration );
           printf("<td class=\"count\" title=\"%s\">%d</td>", $update_comment, $races );
           printf("<td class=\"count\">%d</td>", $boats );
           printf("<td class=\"float\">%.3f</td>", (float)$boats/$duration );          
