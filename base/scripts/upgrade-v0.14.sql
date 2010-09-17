@@ -79,4 +79,6 @@ CREATE TABLE `playerstocontactmedias` (
   KEY `players` (`idplayers`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='contact infos for players';
 
+#table updates
+ALTER TABLE updates MODIFY duration float;
 

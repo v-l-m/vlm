@@ -109,7 +109,7 @@ if ( $flagglobal == true ) {
      $query5 = "INSERT INTO updates (races, boats, duration, update_comment) VALUES (" 
       .$nb_races . ","
       .$nb_boats . ","
-      .$engine_elapsed. ","
+      .$engine_elapsed_float. ","
       ."'" . $update_races ."'"
       . ")";
      echo "writing timestamp...";
