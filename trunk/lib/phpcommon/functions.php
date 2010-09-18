@@ -1429,8 +1429,9 @@ function getTheme()
           $users = getLoggedUserObject();
           if ( $users->engaged != 0 ) {
               //Le joueur est engagé dans une course
+              //FIXME : il faudraut cacher les races comme on a caché les users
               $race = new races($users->engaged);
-              if ( !is_null($race->theme) and (strlen($race->theme) > 1)) {
+              if ( !is_null($race->theme) and (strlen($race->theme) > 1) and ($race->theme != "default")) {
                   //La course possède un thème, on l'utilise
                   return ( $race->theme);
               }
@@ -1889,7 +1890,6 @@ function htmlQuery($sql) {
 
 function insertAdminChangelog($argarray) {
     if (!is_array($argarray)) die("Not an array for insertAdminChangelog");
-    global $_SERVER;
 
     $arglist = Array("operation", "tab", "rowkey", "col", "oldval", "newval");
     $values = "";
