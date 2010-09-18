@@ -90,7 +90,11 @@ class races {
   // ====================================================
   function giveWPCoordinates($idwp) {
     $this->retrieveWPs();
-    return $this->waypoints[$idwp];
+    if (isset($this->waypoints[$idwp])) {
+        return $this->waypoints[$idwp];
+    } else {
+        return ($this->waypoints[0]);
+    }
   }
   
   function retrieveWPs() {
