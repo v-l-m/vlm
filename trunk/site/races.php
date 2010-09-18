@@ -53,7 +53,7 @@
                     $tlabel=$table;
                 }
                 $cellcontent="<a title=\"".ucfirst($tlabel)."\" href=\"" . $_SERVER["PHP_SELF"] . "?idraces=" . $fullRacesObj->races->idraces . "&amp;type=".$table. "\">";
-                $cellcontent.=$table." ".getWaypointHTMLSymbols($WP['wpformat']);
+                $cellcontent.=$tlabel;
                 $cellcontent.="</a>";
             }
 
