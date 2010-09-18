@@ -148,6 +148,7 @@ class races {
             $this->stop1long = $this->startlong;
             $this->stop2lat  = $this->startlat;
             $this->stop2long = $this->startlong;
+        }
     }
 }
 
