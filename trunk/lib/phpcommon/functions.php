@@ -257,14 +257,14 @@ function lastUpdate()
     $lastupdate = $row2['time'];
     $races = $row2['races'];
     $boats = $row2['boats'];
-    $duration = max($row2['duration'],1);
+    $duration = max($row2['duration'],0.001);
     $update_comment = $row2['update_comment'];
     $interval = time() - $lastupdate;
 
     $intervalarray = duration2string($interval);
     printf ( getLocalizedString("lastupdate"). " <br />\n",
              gmdate('H:i:s', time() ) . ' GMT', $intervalarray['hours'],$intervalarray['minutes'],$intervalarray['seconds'] );
-    printf ("%s seconds (<span title=\"%s\">%d race(s)</span>, %d boat(s)), %2.2f boats/sec (<a target=\"_blank\" href=\"status/race-engine-status.php\" rel=\"nofollow\">status page</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
+    printf ("%.2f seconds (<span title=\"%s\">%d race(s)</span>, %d boat(s)), %2.2f boats/sec (<a target=\"_blank\" href=\"status/race-engine-status.php\" rel=\"nofollow\">status page</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
   }
 }
 
@@ -712,10 +712,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
     $max = 0;
     for ($a = 30 ; $a <= 180 ; $a = $a + 5) {   
 	// on boucle aec un step de 5 pour limiter la conso cpu
-        $bs = findboatspeed( abs($a),
-                       $windspeed,
-                       $boattype
-                     );
+        $bs = findboatspeed( abs($a), $windspeed, $boattype);
         if ($bs > $max) {
             $max = $bs;
         }
@@ -725,10 +722,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
     $radius = 1.2*$max;
 
     for ($a = 1 ; $a <= 180 ; $a = $a + 2) {
-        $bs = findboatspeed( abs($a),
-                       $windspeed,
-                       $boattype
-                     );
+        $bs = findboatspeed( abs($a), $windspeed, $boattype);
                      
         $newx = cos(deg2rad(-$a+90+$whdg))*$center_x*$bs/$radius + $center_x;
         $newy = sin(deg2rad(-$a+90+$whdg))*$center_y*$bs/$radius + $center_y;
@@ -742,28 +736,14 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
             $c = $color;
         }
 
-        imageline ( $im,
-                    $dotx,
-                    $doty,
-                    $newx,
-                    $newy,
-                    $c
-                  );
-        imageline ( $im,
-                    $rdotx,
-                    $rdoty,
-                    $rnewx,
-                    $rnewy,
-                    $c
-                  );
+        imageline ($im, $dotx, $doty, $newx, $newy, $c);
+        imageline ( $im, $rdotx, $rdoty, $rnewx, $rnewy, $c);
             
         $dotx = $newx;
         $doty = $newy;
         $rdotx = $rnewx;
         $rdoty = $rnewy;
-        
      }
-
 }
 
 // Returns a string : lat / long in deg°min'sec"
