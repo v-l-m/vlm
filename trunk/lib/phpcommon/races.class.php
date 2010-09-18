@@ -110,39 +110,46 @@ class races {
     // printf ("Request Races_Waypoints : %s\n" , $query);
     
     if (defined('MOTEUR')) {
-      while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
-	$vlm_wp = new waypoint();
-	VLM_init_waypoint(&$vlm_wp, $row['wpformat'],$row['wporder'],
-			  $row['latitude1'], $row['longitude1'], 
-			  $row['latitude2'], $row['longitude2'], 
-			  $row['laisser_au'], WPLL);
-	$this->waypoints[$row['wporder']] = $vlm_wp;
-      }
+        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+            $vlm_wp = new waypoint();
+            VLM_init_waypoint(&$vlm_wp, $row['wpformat'],$row['wporder'],
+                              $row['latitude1'], $row['longitude1'], 
+                              $row['latitude2'], $row['longitude2'], 
+                              $row['laisser_au'], WPLL);
+            $this->waypoints[$row['wporder']] = $vlm_wp;
+        }
     } else {
-      while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
-	// FIXME reduce code path 
-	$WPCoords = internalGiveWaypointCoordinates($row['latitude1'],
-						    $row['longitude1'], 
-						    $row['latitude2'], 
-						    $row['longitude2'],
-						    $row['laisser_au'], WPLL);
-	// On push dans le tableau des coordonnées le wptype 
-	// (classement ou son nom), et le libellé et le "laisser_au" du WP
-	// ainsi que le maparea adapt
-	$WPCoords['wptypelabel'] = $row['wptype'];
-	$WPCoords['wpformat']    = $row['wpformat'];
-	$WPCoords['libelle']     = $row['libelle'];
-	$WPCoords['laisser_au']  = $row['laisser_au'];
-	$WPCoords['maparea']     = $row['maparea'];
-	// On push ce WP dans la liste des WP
-	$this->waypoints[$row['wporder']] = $WPCoords;
-      }
-      $this->stop1lat  = $WPCoords['latitude1'];
-      $this->stop1long = $WPCoords['longitude1'];
-      $this->stop2lat  = $WPCoords['latitude2'];
-      $this->stop2long = $WPCoords['longitude2'];
+        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+            // FIXME reduce code path 
+            $WPCoords = internalGiveWaypointCoordinates($row['latitude1'],
+                                                        $row['longitude1'], 
+                                                        $row['latitude2'], 
+                                                        $row['longitude2'],
+                                                        $row['laisser_au'], WPLL);
+            // On push dans le tableau des coordonnées le wptype 
+            // (classement ou son nom), et le libellé et le "laisser_au" du WP
+            // ainsi que le maparea adapt
+            $WPCoords['wptypelabel'] = $row['wptype'];
+            $WPCoords['wpformat']    = $row['wpformat'];
+            $WPCoords['libelle']     = $row['libelle'];
+            $WPCoords['laisser_au']  = $row['laisser_au'];
+            $WPCoords['maparea']     = $row['maparea'];
+            // On push ce WP dans la liste des WP
+            $this->waypoints[$row['wporder']] = $WPCoords;
+        }
+        if (isset($WPCoords)) {
+            $this->stop1lat  = $WPCoords['latitude1'];
+            $this->stop1long = $WPCoords['longitude1'];
+            $this->stop2lat  = $WPCoords['latitude2'];
+            $this->stop2long = $WPCoords['longitude2'];
+        } else {
+            //Robustesse : évite les notices si par bizarrerie il n'y a pas de WP.
+            $this->stop1lat  = $this->startlat;
+            $this->stop1long = $this->startlong;
+            $this->stop2lat  = $this->startlat;
+            $this->stop2long = $this->startlong;
     }
-  }
+}
 
   function getRaceDistance($force = 0) {
     if (!isset($this->racedistance) OR ($force != 0) ) {
@@ -1199,6 +1206,7 @@ class fullRaces {
 
   function getRacesBoundaries()
   {
+    //FIXME : pas sur que ce soit Antemeridien bug-free
     $S = min ( $this->races->startlat, $this->races->stop1lat, $this->races->stop2lat )/1000 - 0.5;
     $N = max ( $this->races->startlat, $this->races->stop1lat, $this->races->stop2lat )/1000 + 0.5;
     $W = min ( $this->races->startlong, $this->races->stop1long, $this->races->stop2long )/1000 - 0.5;
