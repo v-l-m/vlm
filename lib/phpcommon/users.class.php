@@ -1036,7 +1036,7 @@ class fullUsers
     }
 
     // Cumul du loch sauf si bout au vent...
-    if ( $moved == 1 && ($this->anteLastPositions != 0))  {
+    if ( $moved == 1 && ($this->anteLastPositions->time != 0))  {
       //FIXME : loch devrait être un DECIMAL
       $this->users->loch += ortho($this->anteLastPositions->lat, $this->anteLastPositions->long,
 				  $this->lastPositions->lat, $this->lastPositions->long);
