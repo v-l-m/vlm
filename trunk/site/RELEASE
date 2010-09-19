@@ -8,15 +8,15 @@ What'us up for ...
 ... players ?
     * enhancements & major changes :
         * NEW playermode (mainly paparazzia)
-            You (as a player) are now managing boat. This means :
-            * You have to create a player account (with your email) and attach your olds boat to it
+            You (as a player) are now managing boats. This means :
+            * You have to create a player account (with your email) and attach your old boats to it
             * There is an interface for boatsitting management (you may choose which boat you are allowing someone else to pilot)
             * You may change your password & recover if lost.
-            * BC compatibility for tools (like TCV) is supported for this release.
+            * Backward compatibility for tools (like TCV), it will be removed in the next release.
         * NEW full gates support (mainly spf) :
-            * cross once gates
+            * cross-once-only gates
             * oriented gates
-            * type of gates are displayed on maps
+            * type of gates are displayed on maps and in the instructions
             * ice gates are fully supported by the engine
         * Wind interpolation has changed... (spf)
         * VLM is now using up-to-date maps (gshhs2) (spf)
@@ -26,7 +26,7 @@ What'us up for ...
     * bugfixes : 
       * private WP is now displayed, when International Date Line is visible on the map (paparazzia)
       * WP across Greenwich meridian are displayed as well, (paparazzia) 
-      * loch is not changing anymore during blackout (spf)
+      * loch is no longer changing during blackout (spf)
       * it is not possible anymore to validate two gates in the wrong order in the same crank (spf)
       * coast around Behring have been fixed (may be a new race in this area... ;) (spf)
       * Pilototo orders are now purged during engagement (paparazzia)
@@ -36,7 +36,7 @@ What'us up for ...
       * and more...
     
 ... players in the future (What for are we ready in the next releases ?) ?
-    * ready to language & communication preferences management on a per player basis
+    * language & communication preferences management on a per player basis
     * ready for rich & interactive web client
     * ... and more...
 
@@ -49,7 +49,7 @@ What'us up for ...
     * Webservices (WS) for ranking & results & tracks & fleet management (paparazzia)
     * it's possible to store preferences for your tool in VLM (please ask on the developers list) (paparazzia)
     * enhancements & bugfixes in WS for pilototo management (paparazzia)
-    * WS are BC for old auth mode & new one (paparazzia)
+    * WS are backward compatible for old auth mode & new one (paparazzia)
     * S&G information in boatinfo (paparazzia)
     * heading is recomputed when changing WP only (spf)
     * these WS are DEPRECATED and will vanish in the next release :
@@ -70,7 +70,7 @@ What'us up for ...
         * language is now managed in SESSION, which means shorter url and future enhancement for users. (paparazzia)
         * input for map.img.php are checked to avoid side effect when misused (paparazzia)
         * A big work has been done to avoid PHP Notices (and some bugs found and fixed) (paparazzia & spf)
-        * No more warning during vlm-c compilation (spf)
+        * No more warnings during vlm-c compilation (spf)
     * performance 
         * vlm-c is faster in gshhs reading & grib reading (spf)
         * better SQL for retrieving positions (paparazzia)
@@ -85,12 +85,12 @@ This is the biggest release (counting the number of tickets) of the last two yea
 We are now looking at interface refactoring & communication tools around or in VLM.
 
 A final word : VLM is OPEN. Which means :
-- free software : people can find and point a possible bug
-- open datas, open interfaces, open format : free datas are accessible in a documented format, externals interfaces are provided when possible : people can build tools that are fullfilling hole in VLM feature set, or even just for fun.
+- free software : people can find and report bugs
+- open datas, open interfaces, open format : free datas are accessible in a documented format, externals interfaces are provided when possible : people can build tools prodiving a new experience of VLM, or whatever is fun to write :)
 - open developement : new developers have just to jump in : please ask and join the developers mailing list.
-- open window : We strongly rely on users to find & explains bugs.
+- open window : We strongly rely on users to find bugs and explains how to reproduce them.
 
-A big thanks to all the admins and all the tools developers for their help and their support.
+A big thanks to all the admins and all the tools developers for their help and support.
 
 --spf & paparazzia.
 
