@@ -52,6 +52,7 @@ What'us up for ...
     * WS are backward compatible for old auth mode & new one (paparazzia)
     * S&G information in boatinfo (paparazzia)
     * heading is recomputed when changing WP only (spf)
+    * boatpseudo/password authentification is DEPRECATED and will be removed in the next release (around Christmas).
     * these WS are DEPRECATED and will vanish in the next release :
         * gettrack.php (but support blackout now ;)) (Please use /ws/boatinfo/tracks/php)
         * /gmap/ json services (same as above)
