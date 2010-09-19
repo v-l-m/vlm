@@ -23,6 +23,7 @@ What'us up for ...
         * Default theme is now OceanExpress (paparazzia)
         * Engine performance enhancements  (mainly spf)
         * site rendering performance enhancements (spf & paparazzia)
+        * IE6 is no longer supported counting from the next release.
     * bugfixes : 
       * private WP is now displayed, when International Date Line is visible on the map (paparazzia)
       * WP across Greenwich meridian are displayed as well, (paparazzia) 
