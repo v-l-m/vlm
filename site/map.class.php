@@ -671,7 +671,7 @@ class map
     }
 
     // Boat , to know about the newt wp ?
-    $user=htmlentities($_GET['boat']);
+    $user=htmlentities(get_cgi_var('boat', 0));
     if ( round($user) != 0 ) {
       if (array_key_exists($user, $this->fullRacesObj->opponents)) {
 	$usersObj = &$this->fullRacesObj->opponents[$user];
