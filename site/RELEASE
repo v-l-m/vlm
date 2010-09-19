@@ -1,5 +1,98 @@
 RELEASE NOTES
-See http://dev.virtual- loup-de-mer.org for detailed Changelog & tickets by milestone.
+See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
+
+v0.14 aka "Sirocco et ses frères".
+
+What'us up for ...
+
+... players ?
+    * enhancements & major changes :
+        * NEW playermode (mainly paparazzia)
+            You (as a player) are now managing boat. This means :
+            * You have to create a player account (with your email) and attach your olds boat to it
+            * There is an interface for boatsitting management (you may choose which boat you are allowing someone else to pilot)
+            * You may change your password & recover if lost.
+            * BC compatibility for tools (like TCV) is supported for this release.
+        * NEW full gates support (mainly spf) :
+            * cross once gates
+            * oriented gates
+            * type of gates are displayed on maps
+            * ice gates are fully supported by the engine
+        * Wind interpolation has changed... (spf)
+        * VLM is now using up-to-date maps (gshhs2) (spf)
+        * Default theme is now OceanExpress (paparazzia)
+        * Engine performance enhancements  (mainly spf)
+        * site rendering performance enhancements (spf & paparazzia)
+    * bugfixes : 
+      * private WP is now displayed, when International Date Line is visible on the map (paparazzia)
+      * WP across Greenwich meridian are displayed as well, (paparazzia) 
+      * loch is not changing anymore during blackout (spf)
+      * it is not possible anymore to validate two gates in the wrong order in the same crank (spf)
+      * coast around Behring have been fixed (may be a new race in this area... ;) (spf)
+      * Pilototo orders are now purged during engagement (paparazzia)
+      * Constant WA pilot bug is (except for the start part) corrected. (spf)
+      * Loch was not null for some boats although they didn't start the race (paparazzia & spf)
+      * minor UI tweaking (useless or wrong messages, ranking more readable when too much WP, style adjustments, ...) (paparazzia)
+      * and more...
+    
+... players in the future (What for are we ready in the next releases ?) ?
+    * ready to language & communication preferences management on a per player basis
+    * ready for rich & interactive web client
+    * ... and more...
+
+... race commitee/admins :
+    * More admin management & reporting tools, mainly for managing players (paparazzia)
+    * WP Map is visible in admin interface (paparazzia)
+    * All the fun that is possible with new gates, new coast database & a new boat type (Transpac52) (spf, phille)
+    
+... tools developers :
+    * Webservices (WS) for ranking & results & tracks & fleet management (paparazzia)
+    * it's possible to store preferences for your tool in VLM (please ask on the developers list) (paparazzia)
+    * enhancements & bugfixes in WS for pilototo management (paparazzia)
+    * WS are BC for old auth mode & new one (paparazzia)
+    * S&G information in boatinfo (paparazzia)
+    * heading is recomputed when changing WP only (spf)
+    * these WS are DEPRECATED and will vanish in the next release :
+        * gettrack.php (but support blackout now ;)) (Please use /ws/boatinfo/tracks/php)
+        * /gmap/ json services (same as above)
+        * /getuserlist.php (please use /ws/raceinfo/results.php & /ws/raceinfo/ranking.php) 
+    * these WS don't exist anymore :
+        * /getinfo.php & getinfo2.php (please use /ws/boatinfo/php & /ws/boatinfo/*)
+        * /getraceinfo.php (please use /ws/raceinfo.php)
+        * /getwind.php (please use /ws/windinfo.php)
+
+... developers  ?
+    * deployment
+        * DB can be automatically populated with maps from gshhs2 (spf)
+        * update of INSTALL documentation (paparazzia)
+        * more configurability (paparazzia)
+    * robustness
+        * language is now managed in SESSION, which means shorter url and future enhancement for users. (paparazzia)
+        * input for map.img.php are checked to avoid side effect when misused (paparazzia)
+        * A big work has been done to avoid PHP Notices (and some bugs found and fixed) (paparazzia & spf)
+        * No more warning during vlm-c compilation (spf)
+    * performance 
+        * vlm-c is faster in gshhs reading & grib reading (spf)
+        * better SQL for retrieving positions (paparazzia)
+        * WP are cached to avoid useless MySQL queries (spf)
+        * User objects are cached to avoid useless queries (paparazzia)
+        * performance : map display use polygons (spf)
+    * management
+        * fix module update rss feed. (paparazzia)
+        * finer grain for engine speed metrics (spf)
+
+This is the biggest release (counting the number of tickets) of the last two years. A lot of work still happen in the backoffice.
+We are now looking at interface refactoring & communication tools around or in VLM.
+
+A final word : VLM is OPEN. Which means :
+- free software : people can find and point a possible bug
+- open datas, open interfaces, open format : free datas are accessible in a documented format, externals interfaces are provided when possible : people can build tools that are fullfilling hole in VLM feature set, or even just for fun.
+- open developement : new developers have just to jump in : please ask and join the developers mailing list.
+- open window : We strongly rely on users to find & explains bugs.
+
+A big thanks to all the admins and all the tools developers for their help and their support.
+
+--spf & paparazzia.
 
 v0.13 aka "En voiture Simoun" : What's up for ...
 
