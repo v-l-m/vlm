@@ -32,6 +32,10 @@ body
   font-size: 80%;
 }
 
+.wpsymbolbig { 
+  font-size: 130%;
+}
+
 #messagebox ul {
         margin-top: 0em;
         margin-left: 0.5em;

@@ -333,17 +333,18 @@ class races {
             $ret .= "<tr>\n";
             $ret .= "<td>WP".$num."</td>";
 	    $wpsymbols = getWaypointHTMLSymbols($wp['wpformat']);
+	    $wpsymdesc = getWaypointHTMLSymbolsDescription($wp['wpformat']);
 	    switch($wp['wpformat'] & 0xF) {
 	    case WP_ONE_BUOY:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td>%s</td><td>%s</td><td>%s</td>", 
+	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td><span title=\"%s\" class=\"wpsymbolbig\">%s</span></td><td>%s</td><td>%s</td>", 
 			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
-			      $wp['laisser_au'], $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
+			      $wp['laisser_au'], $wpsymdesc, $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
 	      break;
 	    case WP_TWO_BUOYS:
 	    default:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td>%s</td><td>%s</td><td>%s</td>", 
+	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td><span title=\"%s\" class=\"wpsymbolbig\">%s</span></td><td>%s</td><td>%s</td>", 
 			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
-			      $wp['latitude2']/1000., $wp['longitude2']/1000., $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
+			      $wp['latitude2']/1000., $wp['longitude2']/1000., $wpsymdesc, $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
 	    }
             $ret .= "</tr>\n";
         }
