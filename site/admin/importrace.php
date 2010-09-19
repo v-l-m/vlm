@@ -7,7 +7,7 @@
     //escape and quote if type is "string"
     //null => 0 if type is int
     function sqlit(&$import, $t, $type = 'int', $coma = true, $default = null) {
-        if (!is_null($default)) $import[$t] = $default;
+        if (!is_null($default) && !isset($import[$t])) $import[$t] = $default;
         switch ($type) {
             case 'string' :
                 $ret = "'".addslashes($import[$t])."'";

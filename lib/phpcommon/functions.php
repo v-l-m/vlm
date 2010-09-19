@@ -1623,6 +1623,34 @@ function getWaypointHTMLSymbols($wpformat) {
   return trim($wpsymbols);
 }
 
+function getWaypointHTMLSymbolsDescription($wpformat) {
+  $wpdesc = "";
+  switch ($wpformat & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) {
+  case WP_CROSS_ANTI_CLOCKWISE:
+    $wpdesc .= getLocalizedString("Anti-clockwise")." ";
+    break;
+  case WP_CROSS_CLOCKWISE:
+    $wpdesc .= getLocalizedString("Clockwise")." ";
+    break;
+  default:
+  }
+  if (($wpformat & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
+    $wpdesc .= getLocalizedString("Only once");
+  } 
+  
+  switch ($wpformat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) {
+  case WP_ICE_GATE_S:
+    $wpdesc .= getLocalizedString("Ice gate")."(".getLocalizedString("South").") ";
+    break;
+  case WP_ICE_GATE_N:
+    $wpdesc .= getLocalizedString("Ice gate")."(".getLocalizedString("North").") ";
+  default:
+  }
+  if ($wpdesc != "") $wpdesc = getLocalizedString("Crossing")." : ".$wpdesc;
+  return trim($wpdesc);
+}
+
+
 // For a finished race, to give the Palmares
 function getRaceRanking($idusers, $idraces) {
   // search for old races for this player
