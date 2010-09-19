@@ -188,6 +188,8 @@
     //little trick : if update_angle page, display and then redirect to myboat
     if ($CurrentFile == "update_angle.php" ) {
         echo "  <meta http-equiv=\"refresh\" content=\"0; url=myboat.php\" />";
+    } elseif ($CurrentFile == "myboat.php" && isPlayerLoggedIn() && is_null(getLoginId())) {
+        echo "  <meta http-equiv=\"refresh\" content=\"0; url=palmares.php?type=player\" />";        
     } elseif ($CurrentFile == "myboat.php" ) {
         echo "  <meta http-equiv=\"refresh\" content=\"1200\" />";
     } //No refresh for other pages
