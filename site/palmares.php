@@ -56,7 +56,7 @@
             echo "<h2>".getLocalizedString('You are not logged in with a player account.')."</h2>";
             echo "<h2>".getLocalizedString('You are not allowed to view player info.')."</h2>";
         } else {
-            $idplayers=htmlentities(quote_smart($_REQUEST['idplayers']));
+            $idplayers = get_cgi_var('idplayers', getPlayerId());
             $player = getPlayerObject($idplayers);
             if (!is_null($player)) {
                 echo "<h2>".getLocalizedString('playername') . ' : ' . $player->htmlPlayername().'</h2>';
