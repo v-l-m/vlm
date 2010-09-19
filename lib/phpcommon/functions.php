@@ -1287,9 +1287,11 @@ function login($idus, $pseudo)
   //if (!isset($_SESSION['idusers']))
   {
     if (!isset($_SESSION)) session_start();
-    $_SESSION['idu'] = $idus;
-    $_SESSION['loggedin'] = 1;
-    $_SESSION['login'] = $pseudo;
+    if ($idus > 0) {
+        $_SESSION['idu'] = $idus;
+        $_SESSION['loggedin'] = 1;
+        $_SESSION['login'] = $pseudo;
+    }
     if (isset($_SERVER['HTTP_VLM_PROXY_AGENT']) && $_SERVER['HTTP_VLM_PROXY_PASS']==PROXY_AGENT_PASS) $_SESSION['activeproxy'] = 1;
 
     // IP memorise "toutes les" adresses qu'on peut memoriser
@@ -1396,7 +1398,8 @@ function getUserObject($id) {
     
     if (array_key_exists($id, $uobjects)) return $uobjects[$id];
     $u = new users($id);
-    if ($u->idusers == $id) {
+
+    if ($u->idusers == $id and $id > 0) {
         $uobjects[$id] = $u;
         return $u;
     } else {

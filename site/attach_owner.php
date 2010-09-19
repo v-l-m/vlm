@@ -5,7 +5,7 @@
 
     $actionattach = get_cgi_var("claimownership");
     $boatpseudo = get_cgi_var("boatpseudo");
-    $password = get_cgi_var("password");
+    $boatpassword = get_cgi_var("boatpassword");
 
     function printAttachmentSummary($boatid = "", $boatpseudo = "") {
         $player = getLoggedPlayerObject();
@@ -22,7 +22,7 @@
 
     }
 
-    function printFormRequest($boatpseudo = "", $password = "") {
+    function printFormRequest($boatpseudo = "", $boatpassword = "") {
         echo "<div id=\"attachboatbox\">";
         echo "<h2>".getLocalizedString("Here you can attach your boat to your player account. Please input your credentials.")."</h2>";
 ?>
@@ -30,8 +30,8 @@
             <input size="25" maxlength="64" name="boatpseudo" value="<?php echo $boatpseudo; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("boatpseudo"); ?></span>
             <br />
-            <input size="25" maxlength="15" name="password" value="<?php echo $password; ?>" />
-            <span class="texthelpers"><?php echo getLocalizedString("password"); ?></span>
+            <input size="25" maxlength="15" name="boatpassword" value="<?php echo $boatpassword; ?>" />
+            <span class="texthelpers"><?php echo getLocalizedString("boatpassword"); ?></span>
             <input type="hidden" name="claimownership" value="requested" />
             <br />
             <input type="submit" />
@@ -55,11 +55,10 @@
      * - we are logged in as a player
      * - the boat is not already attached to your account
      */
-     
+
     if ($actionattach == "requested") { //REQUESTED
-        if ($idu = checkAccount($boatpseudo, $password)) {
-            $users = new users($idu);
-    
+        if ($idu = checkAccount($boatpseudo, $boatpassword)) {
+            $users = getUserObject($idu);
             if ($users->getOwnerId() > 0) { //no way to reattach a boat
                 $player = getPlayerObject($users->getOwnerId());
                 echo "<div id=\"attachboatbox\">";
@@ -70,14 +69,13 @@
                 include_once("includes/footer.inc");
                 exit();
             }
-          
             echo "<h2>".getLocalizedString("Here is your request for attaching this boat")."&nbsp;:</h2>";
             echo "<div id=\"attachboatbox-request\">";
             printAttachmentSummary($users->idusers, $users->username);
 ?>
             <form action="#" method="post" name="attachboat">
                 <input type="hidden" name="boatpseudo" value="<?php echo $boatpseudo; ?>"/>
-                <input type="hidden" name="password" value="<?php echo $password; ?>"/>
+                <input type="hidden" name="boatpassword" value="<?php echo $boatpassword; ?>"/>
                 <input type="hidden" name="claimownership" value="confirmed"/>
                 <input type="submit" value="<?php echo getLocalizedString("Confirm attachment request ?"); ?>" />
             </form> 
@@ -85,11 +83,11 @@
             echo "</div>";
         } else {
             echo "<h2>".getLocalizedString("Boat account is not valid.")."</h2>";
-            printFormRequest($boatpseudo, $password);
+            printFormRequest($boatpseudo, $boatpassword);
         }
     } else if ($actionattach == "confirmed") { //CONFIRMED
 
-        if ($idu = checkAccount($boatpseudo, $password)) {
+        if ($idu = checkAccount($boatpseudo, $boatpassword)) {
             $users = getUserObject($idu);
             if ($users->setOwnerId(getPlayerId())) {
                 echo "<div id=\"attachboatbox\">";
@@ -101,11 +99,11 @@
                 if ($users->error_status) {
                     print nl2br($users->error_string);
                 }
-                printFormRequest($boatpseudo, $password);
+                printFormRequest($boatpseudo, $boatpassword);
            }   
        }
     } else {
-        printFormRequest($boatpseudo, $password);
+        printFormRequest($boatpseudo, $boatpassword);
     }
     include_once("includes/footer.inc");
   
