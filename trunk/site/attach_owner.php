@@ -91,7 +91,7 @@
             $users = getUserObject($idu);
             if ($users->setOwnerId(getPlayerId())) {
                 echo "<div id=\"attachboatbox\">";
-                echo '<h2>'.getLocalizedString("Attachment successful.").'</h2>';
+                echo '<h2>'.getLocalizedString("Attachment successful").'.</h2>';
                 printAttachmentSummary($idu, $boatpseudo);
                 echo "</div>";
             } else {

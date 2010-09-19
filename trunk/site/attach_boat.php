@@ -92,7 +92,7 @@
         if (!$player->error_status && $player->checkPassword($password)) {
             if ($users->setOwnerId($player->idplayers) && !$users->error_status) {
                 echo "<div id=\"attachboatbox\">";
-                echo '<h2>'.getLocalizedString("Attachment successful.").'</h2>';
+                echo '<h2>'.getLocalizedString("Attachment successful").'.</h2>';
                 printAttachmentSummary($player->email, $player->playername);
                 echo "</div>";
             } else {
