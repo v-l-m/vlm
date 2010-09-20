@@ -57,6 +57,9 @@ foreach ($langs as $lg) {
     echo implode("', '", $missing);
     echo "'\nUntranslated : '";
     echo implode("', '", $untranslated);
+    echo "\nCODE :\n";
+    foreach ($missing as $k) echo "\"$k\" => \"".$strings['en'][$k]."\",\n";
+    foreach ($untranslated as $k) echo "\"$k\" => \"".$strings['en'][$k]."\",\n";
     echo "'\n\n";
 }
     
