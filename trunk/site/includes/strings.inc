@@ -895,7 +895,7 @@ Allowed characters for both: a-z 0-9 _
 Use the following url :',
     'icforum' => 'Istruzioni di Regata (Forum)',
     'images' => 'Immagini',
-    'incomingblackout' => 'Incoming blackout',
+    'incomingblackout' => 'Próximo blackout',
     'knots' => '%5.2f Kts',
     'lambert' => 'lambert (sperimantale)',
     'lang_version' => 'Italian Version',
