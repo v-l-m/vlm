@@ -103,7 +103,7 @@ define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
 define("DEFAULT_POSITION_AGE", 1 * 3600);
 define("MAX_POSITION_AGE", 1 * 604800);
 // Max number of boats on each map
-define("MAX_BOATS_ON_RANKINGS", 100);
+define_if_not("MAX_BOATS_ON_RANKINGS", 100);
 define("MAX_BOATS_ON_MAPS", 31);
 define("MAX_MAP_X", 2000);
 define("MAX_MAP_Y", 2000);
