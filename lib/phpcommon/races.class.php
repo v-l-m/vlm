@@ -674,7 +674,7 @@ class fullRaces {
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
 
-    $key = 0; $printed =0;
+    $key = 0; $printed =0; $dtl = 0;
     while( $row = mysql_fetch_assoc( $result ) ) {
       // Si on a déjà affiché suffisament de lignes, on rend la main
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
