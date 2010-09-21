@@ -387,10 +387,10 @@ include_once("scripts/myboat.js");
         <div id="windanglebox"  class="instrument">
     <!-- Affichage de windangle -->
         <img alt="wind angle" src="<?php
-        printf( 'windangle.php?wheading=%03d&amp;boatheading=%03d&amp;wspeed=%d&amp;roadtoend=%4.1f&amp;boattype=%s',
+        printf( 'windangle.php?wheading=%03d&amp;boatheading=%03d&amp;wspeed=%.2f&amp;roadtoend=%4.1f&amp;boattype=%s',
                 $usersObj->wheading,
                 $usersObj->users->boatheading,
-                intval($usersObj->wspeed),
+                $usersObj->wspeed,
                 $usersObj->orthoangletoend,
                 $usersObj->users->boattype
                 );
