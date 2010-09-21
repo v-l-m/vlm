@@ -276,60 +276,39 @@ class gridList
   // car elle ne prend que les points se situant sur la zone à cartographier
   function gridList($north, $south, $west, $east, $maille, $timestamp = 0)
   {
-      $idgrid=0;
-
-      //printf ("West=%f, East=%f\n" , $west, $east);
-      $pas_latitude=$maille*abs($north - $south)/10000;
-
-      $min_longitude = floor($west/1000);
-      if ( $west > 0 && $east < 0 ) {
-         $pas_longitude=$maille*abs($east+360000 - $west)/10000;
-   $max_longitude = 180;
-      } else {
-         $pas_longitude=$maille*abs($east - $west)/10000;
-         $max_longitude = ceil($east/1000) ;
-      }
-
-      //printf ("Minlong=%f, Maxlong=%f\n" , $min_longitude, $max_longitude);
-
-      $latitude = ceil($north/1000) ;
-      // Boucle sur des parallèles (N->S), 
-      while ( $latitude >= floor($south/1000)  ) {
-
-    // Boucle sur les méridiens (W->E)
-          $longitude = $min_longitude  ;
-    // Pour les longitudes à l'ouest de Day Changing Line
-    while ( $longitude <= $max_longitude +1 )  {
-        // Instanciation du point de grille (Long, Lat, wspeed, wheading)
-        $fullGridObj = new fullGrid ( $latitude*1000, $longitude*1000 , $timestamp);
-        array_push ($this->records, $fullGridObj);
-              //printf("Latitude : %d, Longitude : %d, idgrid : %d\n", $latitude, $longitude, $idgrid);
-        //printf ("Vent : %d au %d\n" , $fullGridObj->wspeed, $fullGridObj->wheading);
-        $idgrid++;
-
-        $longitude+=$pas_longitude;
-          }
-    //printf ("Num gridpoints = %f, " , $idgrid);
-
-    // Pour les longitudes à l'est de Day Changing Line
-    if ( $west >0 && $east< 0 ) {
-              $longitude -=360  ;
-        while ( $longitude <= ceil($east/1000) )  {
-            // Instanciation du point de grille (Long, Lat, wspeed, wheading)
-            $fullGridObj = new fullGrid ( $latitude*1000, $longitude*1000 , $timestamp);
-            array_push ($this->records, $fullGridObj);
-            $idgrid++;
-
-            $longitude+=$pas_longitude;
-              }
+    $lat_step=$maille*abs($north - $south)/10;
+    
+    $min_lon = floor($west/1000)*1000;
+    if ($west > 0 && $east < 0) {
+      $lon_step=$maille*abs($east+360000-$west)/10;
+      $max_lon = 180000;
+    } else {
+      $lon_step=$maille*abs($east-$west)/10;
+      $max_lon = ceil($east/1000)*1000;
     }
-    //printf ("Num gridpoints = %f\n" , $idgrid);
+    
+    $south_limit = floor($south/1000)*1000;
+    $north_limit =  ceil($north/1000)*1000;
 
-          $latitude-=$pas_latitude;
+    // For longitudes west of the International Date Line
+    for ($lat=$north_limit; $lat >= $south_limit; $lat-=$lat_step) {
+      for ($lon=$min_lon; $lon <= $max_lon; $lon+=$lon_step)  {
+        $fullGridObj = new fullGrid($lat, $lon, $timestamp);
+        array_push($this->records, $fullGridObj);
       }
+    }
+
+    if ($west >0 && $east< 0) {
+      // recompute min_lon for longitudes east of the IDL
+      $min_lon = -180000+$lon_step-fmod((180000-$min_lon), $lon_step);
+      $east_limit = ceil($east/1000)*1000;
+      for ($lat = $north_limit; $lat >= $south_limit; $lat-=$lat_step) {
+	for ($lon = $min_lon; $lon <= $east_limit; $lon+=$lon_step) {
+	  $fullGridObj = new fullGrid($lat, $lon, $timestamp);
+	  array_push($this->records, $fullGridObj);
+	}
+      }
+    }
   }
-
 }
-
-
 ?>
