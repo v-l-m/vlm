@@ -59,13 +59,13 @@ function get_info_array($_lat, $_long, $_time) {
   
   $wind_boat = new wind_info();
 
-  VLM_get_wind_info_latlong_millideg_selective_TWSA_context(
+  VLM_get_wind_info_latlong_millideg_context(
   				     $temp_vlmc_context, $_lat, $_long,
 					     $_time, $wind_boat);
   shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
   
   return array (
-    'MLAT' => $_lat, 'MLON'=> $_long, 'TWS' => $wind_boat->speed, 'TWD' => fmod($wind_boat->angle+180., 360.), 'NOW' => $_time,
+    'MLAT' => $_lat, 'MLON'=> $_long, 'TWS' => $wind_boat->speed, 'TWD' => fmod($wind_boat->angle+180., 360.), 'NOW' => $_time, 'CWI' => get_vlm_wind_interpolation_scheme()
     );
 }
 
