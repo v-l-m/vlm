@@ -11,7 +11,7 @@ What'us up for ...
             You (as a player) are now managing boats. This means :
             * You have to create a player account (with your email) and attach your old boats to it
             * There is an interface for boatsitting management (you may choose which boat you are allowing someone else to pilot)
-            * You may change your password & recover if lost.
+            * You may change your password & recover it if lost.
             * Backward compatibility for tools (like TCV), it will be removed in the next release.
         * NEW full gates support (mainly spf) :
             * cross-once-only gates
@@ -25,8 +25,8 @@ What'us up for ...
         * site rendering performance enhancements (spf & paparazzia)
         * MSIE6 support will be dropped for the next release (0.15)
     * bugfixes : 
-      * private WP is now displayed, when International Date Line is visible on the map (paparazzia)
-      * WP across Greenwich meridian are displayed as well, (paparazzia) 
+      * private WPs are now displayed, when International Date Line is visible on the map (paparazzia)
+      * WPs across Greenwich meridian are displayed as well, (paparazzia) 
       * loch is no longer changing during blackout (spf)
       * it is not possible anymore to validate two gates in the wrong order in the same crank (spf)
       * coast around Behring have been fixed (may be a new race in this area... ;) (spf)
@@ -91,7 +91,7 @@ A final word : VLM is OPEN. Which means :
 - free software : people can find and report bugs
 - open datas, open interfaces, open format : free datas are accessible in a documented format, externals interfaces are provided when possible : people can build tools prodiving a new experience of VLM, or whatever is fun to write :)
 - open developement : new developers have just to jump in : please ask and join the developers mailing list.
-- open window : We strongly rely on users to find bugs and explains how to reproduce them.
+- open window : We strongly rely on users to find bugs and explain how to reproduce them.
 
 A big thanks to all the admins and all the tools developers for their help and support.
 Special thanks to Jose, who did this time the spanish translation.
