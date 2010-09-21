@@ -709,7 +709,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
     $doty = $rdoty = $center_y;
 
 
-    $max = 0;
+    $max = 0.00001;
     for ($a = 30 ; $a <= 180 ; $a = $a + 5) {   
 	// on boucle aec un step de 5 pour limiter la conso cpu
         $bs = findboatspeed( abs($a), $windspeed, $boattype);
