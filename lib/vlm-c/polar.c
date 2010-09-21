@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.23 2010-09-02 13:43:20 ylafon Exp $
+ * $Id: polar.c,v 1.24 2010-09-21 20:13:33 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -46,7 +46,7 @@ void add_polar(char *pname, char *fname) {
   int    p_i, p_j, i,j, wspeed, wangle, ok, nb_polar;
   int    idx, interp_idx, idx_diff;
   int    *polar_check_table;
-  int    wspeedidx[61];
+  int    wspeedidx[(MAX_SPEED_IN_POLARS+1)];
   double speed, p_speed;
 
   /* safety check */
@@ -62,9 +62,9 @@ void add_polar(char *pname, char *fname) {
 
   /* ok so far, process it */
   pol = calloc(1, sizeof(pol));
-  pol->polar_tab = calloc(181*61, sizeof(double));
-  polar_check_table = calloc(181*61, sizeof(int));
-  for (i=0;i<61;i++) {
+  pol->polar_tab = calloc(181*(MAX_SPEED_IN_POLARS+1), sizeof(double));
+  polar_check_table = calloc(181*(MAX_SPEED_IN_POLARS+1), sizeof(int));
+  for (i=0;i<(MAX_SPEED_IN_POLARS+1);i++) {
     wspeedidx[i] = -1;
   }
   idx = -1;
@@ -117,8 +117,8 @@ void add_polar(char *pname, char *fname) {
       ok = *token;
       *token = 0;
       sscanf(ptoken, "%lf", &speed);
-      pol->polar_tab[wangle*61+wspeed] = speed;
-      polar_check_table[wangle*61+wspeed] = 1;
+      pol->polar_tab[wangle*(MAX_SPEED_IN_POLARS+1)+wspeed] = speed;
+      polar_check_table[wangle*(MAX_SPEED_IN_POLARS+1)+wspeed] = 1;
       if (!ok) {
 	break;
       }
@@ -136,50 +136,53 @@ void add_polar(char *pname, char *fname) {
 
   /* First, for all known angles, fill all speeds */
   for (i=0; i<=180; i++) {
-    if (polar_check_table[i*61]) {
+    if (polar_check_table[i*(MAX_SPEED_IN_POLARS+1)]) {
       p_j = 0;
-      p_speed = pol->polar_tab[i*61];
+      p_speed = pol->polar_tab[i*(MAX_SPEED_IN_POLARS+1)];
       for (idx=1; wspeedidx[idx]>=0; idx++) {
 	j = wspeedidx[idx];
 	idx_diff = (j - p_j);
-	speed =  pol->polar_tab[i*61+j];
+	speed =  pol->polar_tab[i*(MAX_SPEED_IN_POLARS+1)+j];
 	if (idx_diff > 1 ) { /* we have something to interpolate */
 	  for (interp_idx = 1; interp_idx < idx_diff; interp_idx++ ) {
-	    pol->polar_tab[i*61+p_j+interp_idx] = p_speed + 
-	             (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
-	    polar_check_table[i*61+p_j+interp_idx] = 1;
+	    pol->polar_tab[i*(MAX_SPEED_IN_POLARS+1)+p_j+interp_idx] = p_speed 
+	      + (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
+	    polar_check_table[i*(MAX_SPEED_IN_POLARS+1)+p_j+interp_idx] = 1;
 	  }
 	}
 	p_j = j;
 	p_speed = speed;
       }
-      if (j < 60) {
+      if (j < MAX_SPEED_IN_POLARS) {
 	assert((j!=0) && (idx_diff !=0));
 	p_j = wspeedidx[idx-2];
-	p_speed = pol->polar_tab[i*61+p_j];
-	for (interp_idx = j - p_j +1 ; interp_idx < 61 - p_j ; interp_idx++ ) {
-	  pol->polar_tab[i*61+p_j+interp_idx] = p_speed + 
-	         (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
-	  polar_check_table[i*61+p_j+interp_idx] = 1;
+	p_speed = pol->polar_tab[i*(MAX_SPEED_IN_POLARS+1)+p_j];
+	for (interp_idx = j - p_j +1 ; 
+	     interp_idx < (MAX_SPEED_IN_POLARS+1) - p_j ; 
+	     interp_idx++ ) {
+	  pol->polar_tab[i*(MAX_SPEED_IN_POLARS+1)+p_j+interp_idx] = p_speed + 
+	    (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
+	  polar_check_table[i*(MAX_SPEED_IN_POLARS+1)+p_j+interp_idx] = 1;
 	}
       }
     }
   }
 
   /* The fill all the missing values for non-defined angles */
-  for (j=0; j<=60; j++) {
+  for (j=0; j<=MAX_SPEED_IN_POLARS; j++) {
     assert (polar_check_table[j] == 1);
     p_i = 0;
     p_speed = pol->polar_tab[j];
     for (i=1; i<=180; i++) {
-      if (polar_check_table[i*61+j]) { /* got one value */
+      if (polar_check_table[i*(MAX_SPEED_IN_POLARS+1)+j]) { /* got one value */
 	idx_diff = i-p_i;
-	speed = pol->polar_tab[i*61+j];
+	speed = pol->polar_tab[i*(MAX_SPEED_IN_POLARS+1)+j];
 	if ( idx_diff > 1) { /* if we have something to interpolate */
 	  for (interp_idx = 1; interp_idx < idx_diff; interp_idx++ ) {
-	    pol->polar_tab[(p_i+interp_idx)*61+j] = p_speed + 
-	             (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
-	    polar_check_table[(p_i+interp_idx)*61+j] = 1;
+	    pol->polar_tab[(p_i+interp_idx)*(MAX_SPEED_IN_POLARS+1)+j] = 
+	      p_speed + 
+	      (speed-p_speed)*((double)interp_idx) / ((double) idx_diff);
+	    polar_check_table[(p_i+interp_idx)*(MAX_SPEED_IN_POLARS+1)+j] = 1;
 	  }
 	}
 	p_i = i;
@@ -190,8 +193,8 @@ void add_polar(char *pname, char *fname) {
  
   /* final check (might be removed later) */
   for (i=0; i<=180; i++) {
-    for (j=0; j<=60; j++) {
-      assert( polar_check_table[i*61+j] == 1);
+    for (j=0; j<=MAX_SPEED_IN_POLARS; j++) {
+      assert( polar_check_table[i*(MAX_SPEED_IN_POLARS+1)+j] == 1);
     }
   }
   free(polar_check_table);
@@ -341,8 +344,8 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
 #endif /* !ROUND_WIND_ANGLE_IN_POLAR */
 
   intspeed  = floor(wind_speed);
-  if (intspeed > 59) {
-    intspeed = 59;
+  if (intspeed > (MAX_SPEED_IN_POLARS-1)) {
+    intspeed = (MAX_SPEED_IN_POLARS-1);
   }
   /* nothing set? return 0 */
   if (aboat->polar == NULL) {
@@ -367,8 +370,8 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   if (intangle > 180) {
     intangle = 360 - intangle;
   }
-  valfloor  = polar_tab[intangle*61+intspeed];
-  valceil   = polar_tab[intangle*61+intspeed+1];
+  valfloor  = polar_tab[intangle*(MAX_SPEED_IN_POLARS+1)+intspeed];
+  valceil   = polar_tab[intangle*(MAX_SPEED_IN_POLARS+1)+intspeed+1];
 #else
   /* higher reolution mode, where bilinear interpolation is performed
      (angle and speed) */
@@ -384,15 +387,15 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
   } else {
     intangle_p1 = intangle+1;
   }
-  valfloor  = polar_tab[intangle*61+intspeed];
-  tvalfloor = polar_tab[intangle_p1*61+intspeed];
+  valfloor  = polar_tab[intangle*(MAX_SPEED_IN_POLARS+1)+intspeed];
+  tvalfloor = polar_tab[intangle_p1*(MAX_SPEED_IN_POLARS+1)+intspeed];
   valfloor  = valfloor + (tvalfloor - valfloor)*(tangle - floor(tangle));
   /* if we reach the limit, return the right value now */
-  if (intspeed == 60) {
+  if (intspeed == MAX_SPEED_IN_POLARS) {
     return valfloor;
   }
-  valceil  = polar_tab[intangle*61+intspeed+1];
-  tvalceil = polar_tab[intangle_p1*61+intspeed+1];
+  valceil  = polar_tab[intangle*(MAX_SPEED_IN_POLARS+1)+intspeed+1];
+  tvalceil = polar_tab[intangle_p1*(MAX_SPEED_IN_POLARS+1)+intspeed+1];
   valceil  = valceil + (tvalceil - valceil)*(tangle - floor(tangle));
 #endif /* ROUND_WIND_ANGLE_IN_POLAR */
   /* linear interpolation for wind speed */

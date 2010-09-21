@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.27 2010-08-31 16:03:59 ylafon Exp $
+ * $Id: defs.h,v 1.28 2010-09-21 20:13:05 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -104,6 +104,9 @@
 #define GSHHS_MAX_DETAILS 3
 
 #define MAX_LAT_GSHHS 88 /* in degrees */
+
+/* max speed in polars */
+#define MAX_SPEED_IN_POLARS 60
 
 /**
  * Strict check will check intersection only between 0 and 1 (inclusive)
