@@ -386,9 +386,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'youengaged' => 'You\'re subscribed to the race ',
     'youlogin' => 'Logged',
     'yourboat' => 'Your boat',
+    "Your email address doesn't seem to be valid" => "Your email address doesn't seem to be valid",
   ),
   'fr' => 
   array (
+    "Your email address doesn't seem to be valid" => "Votre adresse de courriel semble être non-valide",
     'Account validation error' => 'Erreur de validation de compte',
     'An email has been sent for your information.' => 'Un courriel vous a été adressé pour information.',
     'An email has been sent. Click on the link inside.' => 'Un courriel vous a été adressé. Cliquez sur le lien.',
