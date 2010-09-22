@@ -329,7 +329,11 @@
 <?php
             $langs= getLocalizedString(null);
             foreach ($langs as $lg) {
-                echo "<a href=\"".$_SERVER['SCRIPT_NAME']."?lang=$lg\"><img src=\"images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
+                if (!is_null($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING'] != "") {
+                    $querystring = $_SERVER['QUERY_STRING']."&";
+                }
+                $querystring .= "lang=$lg";
+                echo "<a href=\"".$_SERVER['SCRIPT_NAME']."?$querystring\"><img src=\"images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
             }            
 ?>
         </div> <!-- fin div langbox-->
