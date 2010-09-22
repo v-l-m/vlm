@@ -29,11 +29,12 @@ function get_wind_info_deg($_lat, $_long, $_time) {
   return array ("speed" => $wind_boat->speed, "heading" => fmod($wind_boat->angle+180., 360.));
 }
 
-$north = floatval(get_cgi_var('north'));
-$south = floatval(get_cgi_var('south')); 
-$east  = floatval(get_cgi_var('east')); 
-$west  = floatval(get_cgi_var('west')); 
-$step  = floatval(get_cgi_var('step')); 
+$north = ceil(floatval(get_cgi_var('north')));
+$south = floor(floatval(get_cgi_var('south'))); 
+$east  = ceil(floatval(get_cgi_var('east'))); 
+$west  = floor(floatval(get_cgi_var('west'))); 
+//$step  = floatval(get_cgi_var('step')); 
+$step  = 0.5;
 
 $time_offset = intval(get_cgi_var('timeoffset'), 0);
 
