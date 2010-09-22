@@ -82,13 +82,13 @@ class users extends baseClass
 
     $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
-    initFromArray($row);
+    $this->initFromArray($row);
   }
 
   function users($id, $init = TRUE) {
     $this->idusers = intval($id);
     if ($init) {
-      initFromId();
+      $this->initFromId();
     }
   }
 
