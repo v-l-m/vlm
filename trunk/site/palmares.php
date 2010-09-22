@@ -3,7 +3,7 @@
     include_once("players.class.php");
     include_once("config.php");
 
-    $palmares_type = htmlentities(quote_smart($_REQUEST['type']));
+    $palmares_type = htmlentities(get_cgi_var('type'));
     
     if ( $palmares_type == 'user' ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
