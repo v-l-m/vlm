@@ -36,17 +36,7 @@ class users extends baseClass
 
   var $idowner = null;
     
-  function users($id) {
-    $id = intval($id);
-    $query= "SELECT idusers, boattype, username, password,".
-      " boatname, color, boatheading, pilotmode, pilotparameter,".
-      " engaged, lastchange, email, nextwaypoint, userdeptime, " .
-      " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
-      " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
-
-    $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
-    $row = mysql_fetch_array($result, MYSQL_ASSOC);
-
+  function initFromArray($row) {
     $this->idusers        = $row['idusers'];
     $this->boattype       = $row['boattype'];
     $this->username       = $row['username'];
@@ -81,6 +71,29 @@ class users extends baseClass
       $this->theme = 'default';
     }
   }
+
+  function initFromId() {
+    $id = $this->idusers;
+    $query= "SELECT idusers, boattype, username, password,".
+      " boatname, color, boatheading, pilotmode, pilotparameter,".
+      " engaged, lastchange, email, nextwaypoint, userdeptime, " .
+      " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
+      " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
+
+    $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    initFromArray($row);
+  }
+
+  function users($id, $init = TRUE) {
+    $this->idusers = intval($id);
+    if ($init) {
+      initFromId();
+    }
+  }
+
+  // end of init block
+
 
   //Wrapper
   function logUserEvent($logmsg) {
@@ -1525,10 +1538,5 @@ class excludedUsers
     $this->hours = (time() - $time )/3600 ;//everything is in GMT
 
   }
-
-
 }
-
-
-
 ?>
