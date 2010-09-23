@@ -54,7 +54,9 @@ switch ($type) {
 
                         if ( $bobegin < $now && $now < $boend ) {
            $time_clause = " AND `time` < $bobegin ";
-                        }
+                        } else {
+          $time_clause = "";
+      }
 
       switch ($riquette) {
         // Renvoie la position d'un joueurs
