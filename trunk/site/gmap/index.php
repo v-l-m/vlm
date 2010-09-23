@@ -152,7 +152,7 @@ switch ($type) {
           WHERE engaged = $idraces
           ORDER BY username;";
       $listplayers = mysql_query($sql);
-      $strListPlayes = "";
+      $strListPlayers = "";
       // construit le tableau html
       while ($row = mysql_fetch_array($listplayers, MYSQL_ASSOC)) {
         $strListPlayers .= "<a href ='javascript:";
