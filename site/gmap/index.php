@@ -17,19 +17,10 @@
 
 // A change le lien vers la base de donnée VLM
 $localDBPages=array();
-include_once "param.php";
+include_once "config.php";
 
 mysql_connect(DBSLAVESERVER, DBSLAVEUSER, DBSLAVEPASSWORD) or die("Impossible de se connecter : " . mysql_error());
 mysql_select_db(DBNAME);
-
-// Protège la variable
-function quote_smart($value) {
-  // Stripslashes
-  if (get_magic_quotes_gpc()) {
-    $value = stripslashes($value);
-  }
-  return $value;
-}
 
 $longGmap;
 $latGmap;
