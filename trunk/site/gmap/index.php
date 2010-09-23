@@ -31,7 +31,7 @@ $idraces = get_cgi_var("idraces");
 $type = get_cgi_var("type");
 $riquette = get_cgi_var("riq");
 
-if (!defined(VLMGMAPKEY)) {
+if (!defined("VLMGMAPKEY")) {
     define("VLMGMAPKEY", "ABQIAAAAU9L35N6EdAtdkT4Cb2abDRR9fpxOiyHPEX_8YzC8CNXvq83W-hRDmTj4GD1F8DLKiaJ97BAfcB5i7w");
     }
 
