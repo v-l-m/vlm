@@ -1481,7 +1481,8 @@ class fullUsers
   }
 
   function getCurrentUserRanking() {
-      $query = "SELECT idusers from races_ranking where idusers >0 and idraces = " . $this->users->engaged . " order by nwp DESC, dnm ASC" ;
+      $query = "SELECT idusers FROM races_ranking WHERE idusers >0 AND dnm IS NOT NULL AND idraces = " . 
+	$this->users->engaged . " ORDER BY nwp DESC, dnm ASC" ;
       $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
       $nbu=0; $rank = 0;
       while ($row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
@@ -1495,8 +1496,6 @@ class fullUsers
       return array("rankracing" => $rank, "nbu" => $nbu+$rowarrived['nbarrived'],
                     "rank" => $rank+$rowarrived['nbarrived']);
   }
-
-
 }
 
 
