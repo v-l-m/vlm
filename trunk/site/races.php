@@ -155,10 +155,6 @@
 
         $fullRacesObj = new fullRaces($idraces);
         list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
-        if ( $startnum > 0 ) {
-            $startnum-=$num_arrived;
-        }
-
         //show alls races
         echo "<div id=\"raceheader\">\n";
             printf("<h3>".getLocalizedString("racestarted")."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));
