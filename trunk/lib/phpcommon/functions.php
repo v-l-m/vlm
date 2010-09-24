@@ -6,11 +6,13 @@ require_once('players.class.php');
 
 function wrapper_mysql_map_db_query_reader($cmd) {
   if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
+    global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
     $res = mysql_query($cmd, $GLOBALS['mapdblink']);
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
+    $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
   return mysql_query($cmd, $GLOBALS['slavedblink']);
@@ -18,11 +20,13 @@ function wrapper_mysql_map_db_query_reader($cmd) {
 
 function wrapper_mysql_db_query_reader($cmd) {
   if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
+    global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
     $res = mysql_query($cmd, $GLOBALS['slavedblink']);
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
+    $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
   return mysql_query($cmd, $GLOBALS['slavedblink']);
@@ -30,11 +34,13 @@ function wrapper_mysql_db_query_reader($cmd) {
 
 function wrapper_mysql_db_query_writer($cmd) {
   if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
+    global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
     $res = mysql_query($cmd, $GLOBALS['masterdblink']);
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
+    $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
   return mysql_query($cmd, $GLOBALS['masterdblink']);
