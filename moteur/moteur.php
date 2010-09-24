@@ -4,6 +4,10 @@ include_once("functions.php");
 
 define('MOTEUR','Yes');
 
+if (defined('TRACE_SQL_QUERIES')) {
+  $db_total_time = 0;
+}
+
 /**
  * This script is the engine of VLM
  * launched every vacation (like 5mn), it will make a number of thing that will
@@ -120,4 +124,7 @@ echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". 
 echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
 echo "  TIMINGS: Time race check=" . $step2_elapsed_float . "sec.  rate=". $nb_boats/$step2_elapsed_float . " boats/sec\n";
 
+if (defined('TRACE_SQL_QUERIES')) {
+  echo "  SQL TIMINGS: ".$db_total_time."s\n";
+}
 ?>
