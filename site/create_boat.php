@@ -64,7 +64,7 @@
         $player = getLoggedPlayerObject();
 
         echo "<div id=\"createboatbox\">";
-        if (!checkLoginExists($boatpseudo) && $idu = createBoat($boatpseudo, $password = generatePassword($boatpseudo), $player->email, $boatname)) {
+        if (!checkLoginExists($boatpseudo) && ($boatname != $player->password) && $idu = createBoat($boatpseudo, $password = generatePassword($boatpseudo), $player->email, $boatname)) {
             $users = getUserObject($idu);
             echo "<h2>".getLocalizedString("Your boat has been created")."</h2>";
             printBoatSummary($boatpseudo, $boatname);
