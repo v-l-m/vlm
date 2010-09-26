@@ -46,7 +46,7 @@ class users extends baseClass
     $this->boatheading    = $row['boatheading'];
     $this->pilotmode      = $row['pilotmode'];
     $this->pilotparameter = $row['pilotparameter'];
-    $this->engaged        = $row['engaged'];
+    $this->engaged        = (array_key_exists('engaged', $row) ? $row['engaged'] : 0);
     $this->lastchange     = $row['lastchange'];
     $this->email          = $row['email'];
     $this->nwp            = $row['nextwaypoint'];
