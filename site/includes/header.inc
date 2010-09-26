@@ -95,7 +95,7 @@
             loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
          }
     }
-
+    
     if ($type == "savemywp")
     {
         $users = new fullUsers(getLoginId());
@@ -233,6 +233,14 @@
     }
 ?>
 <?php
+    if (isPlayerLoggedIn() && !isLoggedIn()) {
+        $player = getLoggedPlayerObject();
+        $defb = $player->getDefaultBoat();
+        if ($defb >0) {
+            $defaultuser = getUserObject($defb);
+            loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
+        }   
+    }
 
     if (!isLoggedIn() && !isPlayerLoggedIn()) //if not connected
     {
@@ -253,7 +261,7 @@
 ?>
         </div> <!-- fin div pleasecreatebox-->
 <?php
-    } else if (isPlayerLoggedIn() && !isLoggedIn()) {
+    } else if (isPlayerLoggedIn() && !isLoggedIn()) {    
 ?>
         <div id="pleasecreatebox" class="leftbox">
 <?php
@@ -273,7 +281,6 @@
         </div> <!-- fin div logoutbox-->
 
 <?php
-
     } else { //if loggedin
 ?>
         <div id="loggedbox" class="leftbox">
