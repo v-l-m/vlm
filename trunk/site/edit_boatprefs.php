@@ -2,8 +2,17 @@
 include_once("includes/header.inc");
 include_once("config.php");
 
-
-$fullUsersObj = new fullUsers(getLoginId());
+$current_idu = getLoginId();
+if ($current_idu == null) {
+  $current_player = getLoggedPlayerObject();
+  if ($current_player != null) {
+    list($current_idu) = $current_player->getOwnedBoatIdList();
+  } else {
+    // can't figure out the current player, need to print a decent
+    // error message...
+  }
+}
+$fullUsersObj = new fullUsers($current_idu);
 //Hello $username modify your account data : 
 
 echo "<h2>".getLocalizedString("choose")."</h2>";
