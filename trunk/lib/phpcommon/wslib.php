@@ -415,8 +415,13 @@ function login_if_not($usage = "No usage given", $allow_boatauth = True) {
                         //select_idb is not correct, selecting default
                         $idu = $player->getDefaultBoat();
                     }
-                    $user = getUserObject($idu);
-                    loginPlayer($user->idusers, $user->username, $player->idplayers, $player->playername);
+                    
+                    if ($idu > 0) {
+                        $user = getUserObject($idu);
+                        loginPlayer($user->idusers, $user->username, $player->idplayers, $player->playername);
+                    } else {
+                        loginPlayer(0, "noboat", $player->idplayers, $player->playername);
+                    }
                     return $_SESSION['idu'];
                 } else {
                     ask_for_auth($usage);
