@@ -18,14 +18,15 @@
         echo "<h2>".getLocalizedString("chooseaccount")."</h2>";
 ?>
         <form action="#" method="post" name="createplayer">
+            <input size="25" maxlength="15" name="playername" value="<?php echo $playername; ?>" />
+            <span class="texthelpers"><?php echo getLocalizedString("playername"); ?></span>
+            <br />
+            <hr />
             <input size="25" maxlength="64" name="emailid" value="<?php echo $emailid; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("email"); ?></span>
             <br />
-            <input size="25" maxlength="15" name="password" value="<?php echo $password; ?>" />
+            <input size="25" type="password" maxlength="15" name="password" value="<?php echo $password; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("password"); ?></span>
-            <br />
-            <input size="25" maxlength="15" name="playername" value="<?php echo $playername; ?>" />
-            <span class="texthelpers"><?php echo getLocalizedString("playername"); ?></span>
             <input type="hidden" name="createplayer" value="requested" />
             <br />
             <input type="submit" />
