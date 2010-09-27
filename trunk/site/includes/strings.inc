@@ -81,6 +81,7 @@ $strings = array (
 Please, click on the link below or copy/paste it in your browser.' => 'You have requested to create an account on VLM.
 Please, click on the link below or copy/paste it in your browser.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'You have to be logged with the user/boat credential to attach the boat.',
+    'You have to be logged with the player credential to attach the boat.' => 'You have to be logged with the player credential to attach the boat.',
     'You may also attach a pre-existing boat' => 'You may also attach a pre-existing boat',
     'You own this boat' => 'You own this boat',
     'Your account has been created' => 'Your account has been created',
@@ -391,6 +392,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'You have to be logged with the player credential to attach the boat.' => 'Vous devez être connecté avec votre compte de joueur pour rattacher un bateau.',
     'OK, player is not anymore boatsitter of this boat.' => 'OK, le joueur n\'est plus boat-sitter de ce bateau',
     'Account validation error' => 'Erreur de validation de compte',
     'An email has been sent for your information.' => 'Un courriel vous a été adressé pour information.',
