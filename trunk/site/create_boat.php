@@ -30,8 +30,6 @@
             <input type="submit" />
         </form> 
         <p><?php echo nl2br(getLocalizedString("The boatpseudo is unique and not changeable later.")); ?></p>
-    //FIXME
-    <?php echo "<h2>OLD INTERFACE to create a single boat account is available <a href=\"create.php\">HERE</a> for testing purpose</h2>"; ?>
 
         </div>        <p><?php echo "<a href=\"attach_owner.php\">".getLocalizedString("You may also attach a pre-existing boat").".</a>"; ?></p>
 
@@ -76,6 +74,7 @@
                 echo "<div id=\"attachboatbox\">";
                 echo '<h2>'.getLocalizedString("Attachment successful").'.</h2>';
                 echo '<p>'.getLocalizedString('You own this boat').'.</p>';
+                echo '<p><b>'.getLocalizedString('Click here').'</b>&nbsp;:&nbsp;'.$users->htmlIdusers().'</p>';
                 echo "</div>";
             } else {
                 echo "<h2>".getLocalizedString("It was not possible to attach this boat. Please report this error.")."</h2>";
