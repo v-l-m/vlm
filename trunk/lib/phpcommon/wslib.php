@@ -422,7 +422,7 @@ function login_if_not($usage = "No usage given", $allow_boatauth = True) {
                     } else {
                         loginPlayer(0, "noboat", $player->idplayers, $player->playername);
                     }
-                    return $_SESSION['idu'];
+                    return $idu;
                 } else {
                     ask_for_auth($usage);
                     exit();
