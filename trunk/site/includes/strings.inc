@@ -544,7 +544,7 @@ Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur
     'country' => 'Pays/Pavillon',
     'crank' => 'vac.',
     'create' => 'Cr&eacute;er',
-    'createaccountrules' => 'Le pseudo doit être comporter au moins 4 caractères.
+    'createaccountrules' => 'Le pseudo doit comporter au moins 4 caractères.
 Le mot de passe ne peut pas être vide.
 Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _
 ',
