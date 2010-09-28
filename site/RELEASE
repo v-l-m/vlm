@@ -48,6 +48,7 @@ What'us up for ...
     
 ... tools developers :
     * Webservices (WS) for ranking & results & tracks & fleet management (paparazzia)
+    * Ws for windinfo (spf, 0.15 is on the way, yeah !)
     * it's possible to store preferences for your tool in VLM (please ask on the developers list) (paparazzia)
     * enhancements & bugfixes in WS for pilototo management (paparazzia)
     * WS are backward compatible for old auth mode & new one (paparazzia)
@@ -84,7 +85,7 @@ What'us up for ...
         * finer grain for engine speed metrics (spf)
 
 This is the biggest release (counting the number of tickets) of the last two years. A lot of work still happen in the backoffice.
-The nice story is that there has been about ten different people for testing.
+The nice story is that there has been about ten different people for tests & documentation tasks.
 We are now looking at interface refactoring & communication tools around or in VLM.
 
 A final word : VLM is OPEN. Which means :
@@ -93,7 +94,7 @@ A final word : VLM is OPEN. Which means :
 - open developement : new developers have just to jump in : please ask and join the developers mailing list.
 - open window : We strongly rely on users to find bugs and explain how to reproduce them.
 
-A big thanks to all the admins and all the tools developers for their help and support.
+A big thanks to all the admins, tools developers, testers, wikify-ers for their help and support.
 Special thanks to Jose, who did this time the spanish translation.
 
 --spf & paparazzia.
