@@ -52,7 +52,7 @@
         if ($player->idplayers != 0 && $player->password == $hashpassword) {
             $newpass = generatePassword($emailid);
             $player->modifyPassword($newpass);
-            $player->mailInformation("Here is your new password", "Your password is now : $newpass\nPlease change it asap.");
+            $player->mailInformation(getLocalizedString("Here is your new password"), getLocalizedString("Your password is now")." : $newpass\n".getLocalizedString("Please change it quickly").".");
             echo "<div id=\"resetpasswordbox-confirmed\">";
             echo "<h2>".getLocalizedString("Check your inbox to get your new password.")."</h2>";
             echo "</div>";
