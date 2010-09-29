@@ -34,6 +34,12 @@ From 0.13 to Next:
 
 = Master Server =
 
+  RUN (for easier recovery)
+    ./scripts/dump.sh
+
+  TAKE A BREAK, you are going to stop the engine !
+  stop the engine in the crontab
+
   RUN
     ./scripts/maj_module.sh base
     cd ./vlmcode/base/scripts/
@@ -43,7 +49,7 @@ From 0.13 to Next:
   RUN
     ./scripts/maj_module.sh moteur
 
-  RUN
+  RUN (Warning, this is a long op. of a few minutes)
     source $VLMRACINE/conf/conf_script
     rm $VLMGSHHS/*.b
     ./scripts/maj_module.sh maps
@@ -58,6 +64,8 @@ From 0.13 to Next:
     ./scripts/maj_module.sh site
     ./scripts/maj_module.sh medias
 
+= Master Server =
+  RESTART the engine in the crontab
 
 From 0.12 to Next :
 
