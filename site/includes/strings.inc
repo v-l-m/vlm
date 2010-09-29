@@ -389,9 +389,15 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'youlogin' => 'Logged',
     'yourboat' => 'Your boat',
     'OK, player is not anymore boatsitter of this boat.' => 'OK, player is not anymore boatsitter of this boat.',
+    "Here is your new password" => "Here is your new password",
+    "Your password is now" => "Your password is now",
+    "Please change it quickly" => "Please change it quickly",
   ),
   'fr' => 
   array (
+    "Here is your new password" => "Voici votre nouveau mot de passe",
+    "Your password is now" => "Votre mot de passe est maintenant",
+    "Please change it quickly" => "Merci de le changer rapidement",
     'You have to be logged with the player credential to attach the boat.' => 'Vous devez être connecté avec votre compte de joueur pour rattacher un bateau.',
     'OK, player is not anymore boatsitter of this boat.' => 'OK, le joueur n\'est plus boat-sitter de ce bateau',
     'Account validation error' => 'Erreur de validation de compte',
