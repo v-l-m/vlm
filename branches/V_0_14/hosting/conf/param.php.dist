@@ -1,0 +1,46 @@
+<?php
+define("SERVER_NAME", "DEV");
+
+/********to_be_change ****************/
+
+//define("DBMAPSERVER", "databaseserver"); //uncomment and change if you have more than one server
+//define("DBMAPUSER", "databaseuser"); //uncomment and change if you have more than one server
+//define("DBMAPPASSWORD", "databasepassword"); //uncomment and change if you have more than one server
+
+//define("DBSLAVESERVER", "databaseserver"); //uncomment and change if you have more than one server
+//define("DBSLAVEUSER", "databaseuser"); //uncomment and change if you have more than one server
+//define("DBSLAVEPASSWORD", "databasepassword"); //uncomment and change if you have more than one server
+
+define("DBMASTERSERVER", "databaseserver");
+define("DBMASTERUSER", "databaseuser");
+define("DBMASTERPASSWORD", "databasepassword");
+
+define("DBNAME", "databasename");
+
+// Stockage des gshhs, idem que VLMGSHHS dans conf_script
+define("GSHHS_DIRECTORY", "/same/as/VLMGSHHS");
+
+// Stockage des polaires en 1x1, idem que VLMPOLARS dans conf_script
+define("POLARS_DIRECTORY", "/same/as/VLMPOLARS");
+
+//TEMPORARY DIR : idem que $VLMTEMP = $VLMRACINE/tmp dans conf_script
+define("VLMTEMP", "/path/to/VLMRACINE/tmp");
+
+//LIST OF WEB INSTANCES - please note that it is not possible to define an array(), thus the method below
+define("WEBINSTANCE_COUNT", 3);
+define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
+define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
+define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
+
+//LANG PREFS - Default is False, uncomment for dev server
+//define_if_not("DISPLAY_LANG_WARNINGS", True);
+
+//MAILING PREFS - Defaults are production prefs. uncomment for dev server
+//define("SERVER_IS_SENDING_EMAIL", False);
+//define_if_not("WWW_SERVER_URL", "http://localhost");
+//define("EMAIL_COMITE_VLM", "paparazzia@gmail.com");
+//define("MAIL_PREFIX", "VLM_".SERVER_NAME);
+
+
+
+?>

@@ -1,0 +1,487 @@
+body
+{
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial,Sans-serif;
+  margin: 1px; /*need to be forced*/
+
+}
+
+#contenaire{
+  width:982px;
+}
+#leftcolumn
+{
+  width: 150px;
+  float: left;
+  font-size: 70%;
+  margin-left: 0px;
+  min-height: 180px;
+  margin-bottom: 0 ;/*0 important sinon menu va pas en dessous*/
+}
+
+.leftbox {
+  padding: 3px;
+  text-align: left;
+}
+
+.icbox {
+  margin: 1em;
+  padding: 1em;
+}
+
+#serverbox {
+  font-size: 80%;
+}
+
+.wpsymbolbig { 
+  font-size: 130%;
+}
+
+#messagebox ul {
+        margin-top: 0em;
+        margin-left: 0.5em;
+        padding-left: 1em;
+        text-indent: 0em;
+}
+
+#loggedbox {
+  text-align: center;
+}
+
+#langbox img {
+    width: 25px;
+}
+
+#main
+{
+  width: 825px;
+  float: right;
+  font-size: 70%;
+  margin-bottom: 5px;
+  margin-right: 1px;
+  margin-left: 0px;
+  margin-top:0px;
+}
+
+#menu
+{
+  min-width: 100px;
+  min-height: 20px;
+  float: left;
+  margin: 1px;
+  margin-right: 0px;
+  margin-left: 5px;
+  width: 20%;
+}
+
+#baneer
+{
+  margin: 0px;
+  height: 84px;
+  width: 980px;
+  margin-left:1px;
+  margin-bottom:2px;
+}
+
+#baneerrightbox
+{
+  float:right;
+  margin:0px;
+  height:80px;
+}
+
+#baneerleftbox
+{
+  position:absolute;
+  left:50px;
+  top:5px;
+  margin: 0px;
+  height: 75px;
+  width:150px;
+}
+
+#abandon {
+  width: 805px;
+  margin: 10px;
+}
+
+#time
+{ 
+  clear:both;
+  width: 100%;
+  margin-left:  1px;
+  margin-right: 1px;
+}
+
+#user_action
+{ 
+  width: 100%;
+  margin-left:  1px;
+  margin-right: 1px;
+  text-align: center;
+}
+
+#infobulle
+{
+  position: absolute; 
+  visibility : hidden;
+}
+
+#boat
+{
+  width: 821px;
+  float: left;
+  margin-left: 1px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+#boatimg
+{
+  float: left;
+  margin-top: 10px;
+  margin-left: 2px;
+  width: 150px;
+  height: 150px;
+}
+
+
+#expert
+{
+  float: right;
+  min-height: 100px;
+  min-width: 823px;
+  margin-right: 1px;
+  margin-top: 1px;
+  margin-left: 1px;
+}
+
+#displaymode
+{
+  float: right;
+  min-height: 100px;
+  min-width: 572px;
+  margin-right: 1px;
+  margin-top: 1px;
+  margin-left: 1px;
+}
+
+#footer{
+  clear: both;
+  width: 740px;
+  height: 30px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+#grid td {height: 21px; width: 21px; padding: 0; line-height: 21px;}
+
+img.map
+{
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+img.babord
+{
+  margin-top: 1px;
+}
+
+img.tribord
+{
+  margin-top: 1px;
+}
+
+h1
+{
+  font-size: 100%;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+  padding-right:10px;
+  margin-top:0px;
+  padding-top:10px;
+  line-height:10px;
+}
+
+h1.info
+{
+  font-size: 14px;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+  padding-right:10px;
+  margin-top:2px;
+  line-height:18px;
+}
+
+h2
+{
+  font-size: 100%; 
+  color: #222222;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif; 
+  padding-right:10px;
+  line-height:0px;
+}
+
+h3
+{
+  font-size: 100%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+}
+
+h4
+{
+  font-size: 100%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+}
+
+h4.tribord
+{
+  font-size: 80%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+}
+h4.babord
+{
+  font-size: 80%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+}
+
+
+acronym 
+{
+  cursor: help;
+}
+
+
+center
+{
+  display: none;
+}
+
+table 
+{
+  border-collapse: collapse;
+}
+
+#pubbox1 {
+  height:0px;
+}
+
+#pubbox2 {
+  height:0px;
+}
+
+
+/* RACEBOX */
+
+#racebox { display:block; width:100%; }
+#racenamebox { display:inline; float:left;}
+#minimapbox { display:inline; float:left; margin-right:0.5em; }
+#raceicbox {display:inline; float:right; }
+
+/* BOATBOX */
+
+#yourboatbox { clear:both; display:block; width:100%; min-height:50px;}
+#sosbox { display:block; float:right;}
+
+#yourboatsummarybox { display:inline; float:left; }
+#yourboatstatusbox { display:inline; float:left; margin-left: 1em; margin-right: 1em; }
+
+img.minimap {
+  width:50px;
+  height:34px;
+}
+
+/* INSTRUMENT BOXES (+message) */
+
+#instrumentbox
+{
+  clear:both; display:block; width:100%;
+  margin-top: 3px;
+  min-width: 821px;
+  margin-top: 1px;
+  margin-right: 1px;
+  margin-left: 1px;
+}
+
+#messagebox {
+  display:block;
+  float:right;
+  width: 220px;
+  height:100%;
+  border-bottom: 0px;
+  margin-bottom: 0px;
+  /* 821 - 3*140 - 1 */
+}
+
+div.instrument {
+  display:inline;
+  float:left;
+}
+
+#instrumentbox img {
+}
+
+
+#messagelist {
+  display:block;
+  overflow:auto;
+  height:200px;
+}
+
+#messagebox div {
+  display:list-item;
+  margin-left: 1.5em;
+}
+
+#blocnotebox {
+  display:list-item;
+  margin-left: 1.5em;
+}
+
+/* CONTROL BOX */
+
+#controlbox
+{
+  clear:both; display:block; width:100%;
+  margin-top: 3px;
+  min-width: 821px;
+}
+
+div.controlitem {
+  display:inline;
+  float:left;
+  margin: 0em;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.controlform {
+  display: block ;
+}
+
+#morecontrolbox {
+  display:block;
+  float:right;
+}
+
+#createbox div {display:block;}
+
+#autopilotcontrolbox div {display:block;}
+#windanglecontrolbox div {display:block;}
+
+#wpbasedcontrolbox div {
+  display:block;
+  float:none;
+  margin: 0px;
+}
+
+#wpcontrolbox {
+  float:left;
+  display:block;
+}
+
+#wpaction {display:block;}
+#wphcontrolbox {display:inline;}
+
+
+#wpcoordscontrolbox { display:block; width:125px;}
+#wpmorecontrolbox {display:block; }
+
+#morecontrolbox div {
+  display:block;
+  float:none;
+  margin: 0px;
+}
+
+
+.texthelpers {display:inline;}
+.texthelpers * {display:inline;}
+.titlehelpers{display:inline; }
+.subtitlehelpers { display:inline;}
+
+/* MAPBOX */
+
+#mapbox
+{
+  clear:both; display:block; width:100%;
+}
+
+div.mapboxitem {
+  display:inline;
+  float:left;
+  margin: 0em;
+  margin-top:3px;
+}
+
+div.mapboxsubitem {
+  display:block;
+}
+
+#mapinputbox {
+  float:right;
+}
+
+.mapboxitem p {
+  margin: 0em;
+}
+
+/* Pour les form de IE */
+form {
+  margin-top:0px;
+}
+
+/* MAPLAYERS */
+/* This maybe should be in a dedicated css */
+
+#windcontrollayer {
+  top:20px;
+  left:200px;
+  position:absolute;
+  background-color: #ffffff;
+}
+
+.controlonmap {
+  background:none;
+  border:none;
+  margin:0px;
+}
+
+#griboffset {
+  text-align:right;
+  border-width:1px;
+} 
+
+#deplacable {
+  top:150px;
+  left:250px;
+  position:absolute;
+}
+
+.mapcell {
+  text-align: center;
+}
+
+.racestatscell {
+  text-align: center;
+}
+
+td.racesummary-minimap {
+  width: 200px;
+  border:none;
+}
+
+.racesummary-type0, .racesummary-type1 {
+  border:none;
+}
+
+tr.racesummary-type0, tr.racesummary-type1 {
+  border-top: groove 3px #DDDDF0
+}
+
+table.racesummary-type0, table.racesummary-type1 {
+  width:100%;
+}
+
+
+.racesummary-type1 {
+  font-style: italic;
+}

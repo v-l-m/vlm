@@ -1,0 +1,26 @@
+#/base/testing/ est le chemin d'hébergement des fichiers de vlm
+#/base/testing/site/ est le vhost servi par apache
+
+<VirtualHost *:80>
+        ServerAdmin admin@actilis.net
+
+        DocumentRoot /home/vlm/vlmcode/site
+        ServerName vlm
+        ServerAlias vlmdev
+
+        ErrorLog    /var/log/apache2/vlm_error_log
+        CustomLog   /var/log/apache2/vlm_access_log combined
+
+        <Directory /base/testing/site>
+                DirectoryIndex index.php index.html
+
+                Order Allow,Deny
+                Allow from All
+
+                AllowOverride All
+                Options Indexes Includes
+
+                AddType application/x-httpd-php .php
+
+        </Directory>
+</VirtualHost>
