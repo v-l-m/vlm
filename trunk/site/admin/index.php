@@ -22,6 +22,7 @@
 
     $tablepages = Array(
         "adminwizard.php" => "Admin Wizard (old admin interface)",
+        "connectas.php" => "Connect as... (use with caution)",
         );
     adminlistbox($tablepages, "Miscellaneous");
 
