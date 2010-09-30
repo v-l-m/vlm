@@ -1419,6 +1419,7 @@ function getPlayerList($where = null) {
     if (!is_null($where)) {
         $query .= " WHERE ".$where;
     }
+    $query .= " ORDER BY playername";
     $res = wrapper_mysql_db_query_reader($query) or die($query);
     while ($row = mysql_fetch_assoc($res)) {
         $list[$row['idplayers']] = $row;
