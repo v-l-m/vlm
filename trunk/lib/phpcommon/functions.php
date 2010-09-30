@@ -1293,6 +1293,7 @@ function login($idus, $pseudo)
   //if (!isset($_SESSION['idusers']))
   {
     if (!isset($_SESSION)) session_start();
+    if (isset($_SESSION['theme'])) unset($_SESSION['theme']);
     if ($idus > 0) {
         $_SESSION['idu'] = $idus;
         $_SESSION['loggedin'] = 1;
