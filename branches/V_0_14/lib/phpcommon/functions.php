@@ -1434,25 +1434,31 @@ function getTheme()
       if ( isset($_SESSION['theme']) ) {
           //On utilise la session
           return ($_SESSION['theme']);
-      } else {
-          //La première fois, la session ne contient pas le theme
-          $users = getLoggedUserObject();
-          if ( $users->engaged != 0 ) {
-              //Le joueur est engagé dans une course
-              //FIXME : il faudraut cacher les races comme on a caché les users
-              $race = new races($users->engaged);
-              if ( !is_null($race->theme) and (strlen($race->theme) > 1) and ($race->theme != "default")) {
-                  //La course possède un thème, on l'utilise
-                  return ( $race->theme);
-              }
+      }
+
+      //La première fois, la session ne contient pas le theme
+      $users = getLoggedUserObject();
+      if ( $users->engaged != 0 ) {
+          //Le joueur est engagé dans une course
+          //FIXME : il faudrait cacher les races comme on a caché les users
+          $race = new races($users->engaged);
+          if ( !is_null($race->theme) and (strlen($race->theme) > 1) and ($race->theme != "default")) {
+              //La course possède un thème, on l'utilise
+              $_SESSION['theme'] = $race->theme;
+              return ($_SESSION['theme']);
           }
       }
+
       // Dans tous les autres cas ou on est identifié, on renvoie le thème de l'utilisateur (éventuellement 'default')
-      return ( $users->theme );
+      if (!is_null($users->theme) and (strlen($users->theme) > 1) ) {
+          $_SESSION['theme'] = $users->theme;
+      } else {
+          $_SESSION['theme'] = "default";
+      }
+      return ($_SESSION['theme']);
    }
    //Non connecté, on utilise le thème par defaut
    return ( "default" );
-
 }
 
 function setUserPref($idusers,$pref_name,$pref_value, $save=true) {
