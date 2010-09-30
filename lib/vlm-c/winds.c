@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.29 2010-08-31 15:44:17 ylafon Exp $
+ * $Id: winds.c,v 1.30 2010-09-30 13:11:42 ylafon Exp $
  *
  * (c) 2008-2010 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -1067,6 +1067,7 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
     }
 #else
     c = - v - _Complex_I * u;
+    angle = carg(c);
 #endif /* OLD_C_COMPILER */
 #ifdef DEBUG
     printf("time stamps: prev %ld, boat_time %ld", prev->prevision_time,
@@ -1074,6 +1075,7 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
     printf(", next %ld, time ratio %.3f\n", next->prevision_time, t_ratio);
 #endif /* DEBUG */
   } else {
+    ro = roprev;
 #ifdef OLD_C_COMPILER
     t_speed = sqrt(uprev*uprev+vprev*vprev);
     angle = acos(-vprev / t_speed);
@@ -1082,23 +1084,15 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
     }
 #else
     c = - vprev - _Complex_I * uprev;
+    angle = carg(c);
 #endif /* OLD_C_COMPILER */
   }
-#ifndef OLD_C_COMPILER
-  angle = carg(c);
-  if (angle < 0) {
-    angle += TWO_PI;
-  }
-#endif /* !OLD_C_COMPILER */
+
 #ifdef DEBUG
   printf("U component %.3f, V component %.3f, speed %.3f, angle %.3f\n",
 	 -cimag(c), -creal(c), msToKts(ro), radToDeg(angle));
 #endif /* DEBUG */
-#ifdef OLD_C_COMPILER
   wind->speed = ro;
-#else
-  wind->speed = msToKts(cabs(c));
-#endif /* OLD_C_COMPILER */
   wind->angle = angle;
   return wind;
 }
