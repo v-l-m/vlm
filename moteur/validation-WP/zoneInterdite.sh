@@ -41,9 +41,9 @@ function interditSUD()
 # USAGE : positionner numero de course (RACE=) 
 #    et   ...  interditSUD longitude-ouest longitude-est latitude 
 
-RACE=201082
-BOAT=C5g3
-interditSUD   -180000     180000  -60000  
+BOAT=C5bp5
+RACE=201085
+interditSUD   -180000     180000  -60000
 
 BOAT=C5bp5
 RACE=81
