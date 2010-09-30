@@ -773,11 +773,11 @@ class map
 	  if ($waypoint['wpformat'] & WP_CROSS_CLOCKWISE) {
 	    $this->drawArrow($this->mapImage, ($wp1ProjLong+$wp2ProjLong)/2.0, 
 			     ($wp1ProjLat+$wp2ProjLat)/2.0,
-			     atan2(($wp2ProjLat-$wp1ProjLat),($wp1ProjLong-$wp2ProjLong))+180, $this->colorWaypointsIndication);
+			     270+rad2deg(atan2(($wp2ProjLat-$wp1ProjLat),($wp2ProjLong-$wp1ProjLong))), $this->colorWaypointsIndication);
 	  } else if ($waypoint['wpformat'] & WP_CROSS_ANTI_CLOCKWISE) {
 	    $this->drawArrow($this->mapImage, ($wp1ProjLong+$wp2ProjLong)/2.0, 
 			     ($wp1ProjLat+$wp2ProjLat)/2.0,
-			     atan2(($wp2ProjLat-$wp1ProjLat),($wp1ProjLong-$wp2ProjLong)), $this->colorWaypointsIndication);
+			     90+rad2deg(atan2(($wp2ProjLat-$wp1ProjLat),($wp2ProjLong-$wp1ProjLong))), $this->colorWaypointsIndication);
 	  }
 	} else {
 
