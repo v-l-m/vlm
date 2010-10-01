@@ -4,7 +4,7 @@
     include_once("config.php");
 
     $actionattach = get_cgi_var("claimownership");
-    $boatpseudo = get_cgi_var("boatpseudo");
+    $boatpseudo = htmlentities(get_cgi_var("boatpseudo"));
     $boatpassword = get_cgi_var("boatpassword");
 
     function printAttachmentSummary($boatid = "", $boatpseudo = "") {
