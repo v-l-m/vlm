@@ -50,7 +50,7 @@ function wrapper_mysql_db_query($cmd) {
   return  wrapper_mysql_db_query_reader($cmd);
 }
 
-// Protège la variable
+// Protege la variable
 function quote_smart($value) {
   // Stripslashes if required
     static $magic_quotes_gpc = null;
@@ -163,7 +163,7 @@ function angle($x, $y)
   //$xknt = $x*MS2KNT;
   //$angle_trigo = rad2deg(acos ($xknt / norm ($x, $y)));
   $hyp=sqrt(pow($x, 2) + pow($y, 2));
-  // Petite modif pour éviter les divisions/0 sur les zones sans vent.
+  // Petite modif pour Ã©viter les divisions/0 sur les zones sans vent.
   if ( $hyp == 0 ) $hyp=0.0001;
   $angle_trigo = rad2deg(acos($x/$hyp));
   if ($y < 0) {
@@ -274,7 +274,7 @@ function lastUpdate()
   }
 }
 
-/* Dernière IP de l'utilisateur */
+/* DerniÃ¨re IP de l'utilisateur */
 function lastUserAction() {
     if ( isLoggedIn() ) {
         $query2 = "SELECT * FROM user_action WHERE idusers = ".getLoginId()." ORDER BY `time` DESC LIMIT 1";
@@ -403,7 +403,7 @@ function giveEndPointCoordinates( $latitude, $longitude, $distance, $heading  )
 // Since june/2007 this function takes care of another parameter
 // "laisser_au" : heading where the WP should be let
 // If "laisser_au" is 90, then boats have to cross a "line"
-// by sailing in the west of it (to see the WP at head 90° when "crossing")
+// by sailing in the west of it (to see the WP at head 90Â° when "crossing")
 // ========================================================
 function internalGiveWaypointCoordinates($lat1, $long1, $lat2, $long2, $laisser_au, $wplength = WPLL) {
   // Cas d'un WP : long1=long2 && lat1=lat2
@@ -437,17 +437,17 @@ function windspeedtocolorbeaufort($wspeed, $im)
   if ($wspeed <=  3.0) { return 0x9696E1; }
   // <=F2 : bleu un peu plus soutenu
   if ($wspeed <=  6.0) { return 0x508CCD; }
-  // <=F3 : bleu plus foncé 
+  // <=F3 : bleu plus foncÃ© 
   if ($wspeed <= 10.0) { return 0x3C64B4; }
   // <=F4 : vert
   if ($wspeed <= 15.0) { return 0x41B464; }
-  // <=F5 : jaune légèrement vert
+  // <=F5 : jaune lÃ©gÃ¨rement vert
   if ($wspeed <= 21.0) { return 0xB4CD0A; }
-  // <=F6 : jaune orangé
+  // <=F6 : jaune orangÃ©
   if ($wspeed <= 26.0) { return 0xD2D216; }
-  // <=F7 : jaune orangé un peu plus rougeatre
+  // <=F7 : jaune orangÃ© un peu plus rougeatre
   if ($wspeed <= 33.0) { return 0xE1D220; }
-  // <=F8 : orange foncé
+  // <=F8 : orange foncÃ©
   if ($wspeed <= 40.0) { return 0xFFB300; }
   // <=F9 : rouge 
   if ($wspeed <= 47.0) { return 0xFF6F00; }
@@ -557,7 +557,7 @@ function addforecast2date($grib, $datestart)
   compute line equation
   Si (Xa = Xb), alors : m = Xa, 
   Si (Ya = Yb), alors : p = Ya
-  Sinon,  pas // à axe des ordonnées (Xa != Xb) , ni des abscisses : y = mx + p (m = meridien, p = parallèle)
+  Sinon,  pas // Ã  axe des ordonnÃ©es (Xa != Xb) , ni des abscisses : y = mx + p (m = meridien, p = parallÃ¨le)
 
   return m and p in a vector*/
 function linear($Xa, $Ya, $Xb, $Yb)
@@ -724,7 +724,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
         }
     }
 
-    //on fixe le max Ã  120% du max trouvÃ© pour esquiver les indications du cadrans
+    //on fixe le max ÃƒÂ  120% du max trouvÃƒÂ© pour esquiver les indications du cadrans
     $radius = 1.2*$max;
 
     for ($a = 1 ; $a <= 180 ; $a = $a + 2) {
@@ -735,7 +735,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
         $rnewx = cos(deg2rad($a+90+$whdg))*$center_x*$bs/$radius + $center_x;
         $rnewy = sin(deg2rad($a+90+$whdg))*$center_y*$bs/$radius + $center_y;
 
-        //FIXME : affichage différent du max speed le principe est à affiner
+        //FIXME : affichage diffÃ©rent du max speed le principe est Ã  affiner
         if ($bs > $max*.99) {
             $c = $colormax;
         } else {
@@ -752,18 +752,18 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
      }
 }
 
-// Returns a string : lat / long in deg°min'sec"
-// type = img / html  for the ° sign.
+// Returns a string : lat / long in degÂ°min'sec"
+// type = img / html  for the Â° sign.
 function giveDegMinSec($type, $latitude, $longitude)
 {
   if ( $type == "img" ) {
-    $degsign="°";
+    $degsign="Â°";
   } else if ( $type == "engine" ) {
     $degsign=".";
   } else { 
     $degsign="&deg;";
   }
-  //$lat= "46°55'30\"N";
+  //$lat= "46Â°55'30\"N";
   $l=abs($latitude);
 
   $deg=floor($l);
@@ -782,7 +782,7 @@ function giveDegMinSec($type, $latitude, $longitude)
   }
   //printf ("LAT = %s, Lat = %s\n" , $latitude, $lat);
 
-  //$long="10°38'25\"W";
+  //$long="10Â°38'25\"W";
   if ($longitude < -180) $longitude+=360;
   if ($longitude > 180)  $longitude-=360;
   $l=abs($longitude);
@@ -875,7 +875,7 @@ function getNumOpponents($idraces) {
       return (array (0,0,0));
   }
 
-  // Nombre de classés / non classés
+  // Nombre de classÃ©s / non classÃ©s
   $query= "SELECT count(*) 
              FROM races_results 
        where position = " . BOAT_STATUS_ARR . "
@@ -884,7 +884,7 @@ function getNumOpponents($idraces) {
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $num_arrived=$row[0];
 
-  // Nombre de bateaux non classés mais sortis de la course
+  // Nombre de bateaux non classÃ©s mais sortis de la course
   $query= "SELECT count(*) 
              FROM races_results 
        where position != " . BOAT_STATUS_ARR . "
@@ -901,7 +901,7 @@ function getNumOpponents($idraces) {
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $num_racing=$row[0];
 
-  //              arrivés     en course       inscrits (arr + out + en course)
+  //              arrivÃ©s     en course       inscrits (arr + out + en course)
   return (array ($num_arrived,$num_racing,$num_arrived + $num_out + $num_racing));
 }
 
@@ -922,7 +922,7 @@ function htmlRacesListRow($rowdatas) {
       $html .= htmlRacenameLink($rowdatas['idraces'], $rowdatas['racename']);
       $html .= "</td>\n";
       $html .= "<td class=\"departurecell\">&nbsp;" ;
-      //Affiche une date de départ ou un statut.
+      //Affiche une date de dÃ©part ou un statut.
       if ( $rowdatas['started'] == 0 ) {
           // Not started
           $html .= "<img src=\"/images/site/greenarrow.gif\" alt=\"not started\" />" ;
@@ -1027,7 +1027,7 @@ function getFlag($idflags, $force = 'no') {
 
     $original = DIRECTORY_COUNTRY_FLAGS . "/" . $idflags . ".png";
     
-    // Création et mise en cache du flag si il n'existe pas ou est trop vieux
+    // CrÃ©ation et mise en cache du flag si il n'existe pas ou est trop vieux
     if ( 
          ( ! file_exists($original) ) 
           ||  ($force == 'yes')
@@ -1035,11 +1035,11 @@ function getFlag($idflags, $force = 'no') {
     
           $req = "SELECT idflags, flag ".
                  "FROM flags WHERE idflags = '".$idflags."'";
-          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "systÃ¨me" / applicative
           $col = mysql_fetch_array ($ret);
           if ( !$col['idflags'] )
           {
-              //Ceci est une erreur de données absentes
+              //Ceci est une erreur de donnÃ©es absentes
               die("Not there : \"$idflags\"");
               return False;
           }
@@ -1075,7 +1075,7 @@ function getRacemap($idraces, $force = 'no') {
     $image = "regate".$idraces;
     $original = DIRECTORY_RACEMAPS . "/" . $image . ".jpg";
     
-    // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
+    // CrÃ©ation et mise en cache de la racemap si elle n'existe pas ou est trop vieille
     if ( 
          ( ! file_exists($original) ) 
           ||  ($force == 'yes')
@@ -1083,11 +1083,11 @@ function getRacemap($idraces, $force = 'no') {
     
           $req = "SELECT idraces, racemap ".
                  "FROM racesmap WHERE idraces = '".$idraces."'";
-          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "systÃ¨me" / applicative
           $col = mysql_fetch_array ($ret, MYSQL_ASSOC);
           if ( !$col['idraces'] )
           {
-              //Ceci est une erreur de données absentes
+              //Ceci est une erreur de donnÃ©es absentes
               return False;
           }
           else
@@ -1396,22 +1396,27 @@ function getLoggedUserObject() {
 }
 
 
-function getUserObject($id) {
-    static $uobjects = Array();
-    $id = intval($id);
+function getUserObject($id, $initrow = NULL) {
+  static $uobjects = Array();
+  $id = intval($id);
 
-    //TO PROTECT FROM POTENTIAL SIDE EFFECTS (?)
-    if (defined('MOTEUR')) return new users($id);
+  //TO PROTECT FROM POTENTIAL SIDE EFFECTS (?)
+  if (defined('MOTEUR')) return new users($id);
     
-    if (array_key_exists($id, $uobjects)) return $uobjects[$id];
+  if (array_key_exists($id, $uobjects)) return $uobjects[$id];
+  if (is_null($initrow)) {
     $u = new users($id);
+  } else {
+    $u = new users($id, FALSE);
+    $u->initFromArray($initrow);
+  }
 
-    if ($u->idusers == $id and $id > 0) {
-        $uobjects[$id] = $u;
-        return $u;
-    } else {
-        return null;
-    }
+  if ($u->idusers == $id and $id > 0) {
+    $uobjects[$id] = $u;
+    return $u;
+  } else {
+    return NULL;
+  }
 }
 
 function getPlayerList($where = null) {
@@ -1431,26 +1436,26 @@ function getPlayerList($where = null) {
 function getTheme()
 {
    if (isLoggedIn() ) {
-      //Connecté
+      //ConnectÃ©
       if ( isset($_SESSION['theme']) ) {
           //On utilise la session
           return ($_SESSION['theme']);
       }
 
-      //La première fois, la session ne contient pas le theme
+      //La premiÃ¨re fois, la session ne contient pas le theme
       $users = getLoggedUserObject();
       if ( $users->engaged != 0 ) {
-          //Le joueur est engagé dans une course
-          //FIXME : il faudrait cacher les races comme on a caché les users
+          //Le joueur est engagÃ© dans une course
+          //FIXME : il faudrait cacher les races comme on a cachÃ© les users
           $race = new races($users->engaged);
           if ( !is_null($race->theme) and (strlen($race->theme) > 1) and ($race->theme != "default")) {
-              //La course possède un thème, on l'utilise
+              //La course possÃ¨de un thÃ¨me, on l'utilise
               $_SESSION['theme'] = $race->theme;
               return ($_SESSION['theme']);
           }
       }
 
-      // Dans tous les autres cas ou on est identifié, on renvoie le thème de l'utilisateur (éventuellement 'default')
+      // Dans tous les autres cas ou on est identifiÃ©, on renvoie le thÃ¨me de l'utilisateur (Ã©ventuellement 'default')
       if (!is_null($users->theme) and (strlen($users->theme) > 1) ) {
           $_SESSION['theme'] = $users->theme;
       } else {
@@ -1458,7 +1463,7 @@ function getTheme()
       }
       return ($_SESSION['theme']);
    }
-   //Non connecté, on utilise le thème par defaut
+   //Non connectÃ©, on utilise le thÃ¨me par defaut
    return ( "default" );
 }
 
@@ -1590,7 +1595,7 @@ function getWaypointCrossingTime($idraces,$idwaypoint, $idusers)
 
 function getWaypointBestTime($idraces,$idwaypoint)
 {
-  // Recherche temps de passage du meilleur à un waypoint
+  // Recherche temps de passage du meilleur Ã  un waypoint
   $query_wptime = "SELECT idusers, `time` - `userdeptime`" . 
     "  FROM waypoint_crossing " .
     " WHERE idraces = $idraces " .
@@ -1817,7 +1822,7 @@ function availableRaces($idusers = 0)
     if ( $row[2] == "" ) {
       array_push ($records, $row[0]);
     } else {
-      // Sinon, on vérifie que le bateau est qualifié (a fini une courses de qualif)
+      // Sinon, on vÃ©rifie que le bateau est qualifiÃ© (a fini une courses de qualif)
       $qualraces = explode(' ', $row[2]);
       foreach ($qualraces as $qr) {
         if ( userFinishedThisRace($idusers, $qr ) ) {
@@ -1846,7 +1851,7 @@ function centerDualCoord($lat1, $lon1, $lat2, $lon2) {
     $latwp=($lat1 + $lat2)/2;
     $longwp=($lon1 + $lon2)/2;
     if ( abs($lon1 - $lon2 ) > 180 ) {
-      //on inverse le centre si ça fait plus de 180°
+      //on inverse le centre si Ã§a fait plus de 180Â°
       $longwp += 180;
     }
     return array("lat" => $latwp, "lon" => $longwp);
@@ -1955,7 +1960,7 @@ function htmlShouldNotDoThat() {
 }
 
 function generatePassword($strseed) {
-    //un peu basique, mais pour l'usage ça ira
+    //un peu basique, mais pour l'usage Ã§a ira
     return substr(base_convert(md5(mt_rand()+crc32($strseed)), 16, 36), mt_rand(0, 16), 8);
 }
 

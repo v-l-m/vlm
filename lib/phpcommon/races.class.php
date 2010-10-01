@@ -411,11 +411,15 @@ class fullRaces {
     }
     //select all the boats
     //create an array of users
-    $query6 = "SELECT RR.idusers idusers " .
-      " FROM  races_ranking RR, users US " .
-      " WHERE RR.idusers = US.idusers " .
-      " AND   RR.idraces = "  . $this->races->idraces .
-      " AND   US.engaged = "  . $this->races->idraces .
+    $query6 = "SELECT US.idusers AS idusers, boattype, username, password, ".
+      "boatname, color, boatheading, pilotmode, pilotparameter, engaged, ".
+      "lastchange, email, nextwaypoint, userdeptime, lastupdate, ".
+      "US.loch AS loch, country, class, targetlat,targetlong, targetandhdg, ".
+      "mooringtime, releasetime, hidepos, blocnote, ipaddr, theme ".
+      "FROM  races_ranking RR, users US" .
+      " WHERE RR.idusers=US.idusers" .
+      " AND   RR.idraces="  . $this->races->idraces .
+      " AND   US.engaged="  . $this->races->idraces .
       " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
 
     $result6 = wrapper_mysql_db_query_reader($query6);
@@ -424,7 +428,7 @@ class fullRaces {
       //because fullRaces contains fullUsers that contain fullRaces ..
       $userid = $row['idusers'];
       //FIXME : est ce bien d'utiliser getUserObject ici (il met en cache)
-      $this->opponents[$userid] = getUserObject($userid);
+      $this->opponents[$userid] = getUserObject($userid, $row);
       //we should sort them!
     }
     
