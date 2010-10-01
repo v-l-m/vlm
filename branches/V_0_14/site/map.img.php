@@ -190,7 +190,7 @@
       // Sinon rien, long/lat sont le centre de la carte
       if ( $mapcenter == "roadtowp" ) {
           $centerwp = centerDualCoord($lat, $long, $latwp, $longwp);      
-          $long = longitudeConstraintDegrees($centerwp['lat']);
+          $long = longitudeConstraintDegrees($centerwp['lon']);
           $lat = $centerwp['lat'];
       } else if ( $mapcenter == "mywp" ) {
           $long = $longwp;
