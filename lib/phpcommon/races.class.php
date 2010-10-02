@@ -434,15 +434,18 @@ class fullRaces {
     
     // On prend aussi les utilisateurs de la table "races_results", 
     // pour les retrouver une fois la course terminée. 
-    $query6b = "SELECT DISTINCT races_results.idusers FROM races_results, ".
-      "users WHERE idraces = ".$this->races->idraces.
-      " AND users.idusers = races_results.idusers AND users.engaged != ".
-      $this->races->idraces;
+    $query6b = "SELECT DISTINCT US.idusers AS idusers, boattype, username, ".
+      "password, boatname, color, boatheading, pilotmode, pilotparameter, ".
+      "engaged, lastchange, email, nextwaypoint, userdeptime, lastupdate, ".
+      "US.loch AS loch, country, class, targetlat,targetlong, targetandhdg, ".
+      "mooringtime, releasetime, hidepos, blocnote, ipaddr, theme ".
+      "FROM races_results RR, users US WHERE idraces=".$this->races->idraces.
+      " AND US.idusers = RR.idusers AND US.engaged != ".$this->races->idraces;
     $result6b = wrapper_mysql_db_query_reader($query6b);
     while($row = mysql_fetch_array($result6b, MYSQL_ASSOC)) {
       $userid = $row['idusers'];
       //FIXME : est ce bien d'utiliser getUserObject ici (il met en cache)
-      $this->excluded[$userid] = getUserObject($userid);
+      $this->excluded[$userid] = getUserObject($userid, $row);
     }
   }
   
