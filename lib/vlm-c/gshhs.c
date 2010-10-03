@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.21 2010-08-09 16:56:46 ylafon Exp $
+ * $Id: gshhs.c,v 1.23 2010-10-03 19:43:13 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -87,10 +87,20 @@ void internal_init_partial_coastline(int minlat, int minlong,
   int n, px, py, max_n;
   int nb_read, level, greenwich,i,k, nb_seg, idx;
   int x,y, prev_x, prev_y;
+#ifdef USE_GSHHS_20
+  int first_x, first_y;
+#endif /* USE_GSHHS_20 */
+
 #ifdef SAVE_MEMORY
   int longitude, latitude, prev_longitude, prev_latitude;
+# ifdef USE_GSHHS_20
+  int first_longitude, first_latitude;
+# endif /* USE_GSHHS_20 */
 #else
   double longitude, latitude, prev_longitude, prev_latitude;
+# ifdef USE_GSHHS_20
+  double first_longitude, first_latitude;
+# endif /* USE_GSHHS_20 */
 #endif /* SAVE_MEMORY */
   coast_seg *segment;
   coast *wholecoast;
@@ -137,9 +147,22 @@ void internal_init_partial_coastline(int minlat, int minlong,
   prev_y = 0;
 #ifdef SAVE_MEMORY
   prev_longitude = prev_latitude = 0;
+# ifdef USE_GSHHS_20
+  first_longitude = first_latitude = 0;
+# endif /* USE_GSHHS_20 */
 #else
   prev_longitude = prev_latitude = 0.0;
+# ifdef USE_GSHHS_20
+  first_longitude = first_latitude = 0.0;
+# endif /* USE_GSHHS_20 */
 #endif /* SAVE MEMORY */
+
+#ifdef USE_GSHHS_20
+  first_x = 0;
+  first_y = 0;
+  x = 0;
+  y = 0;
+#endif /* USE_GSHHS_20 */
 
   coastfile = fopen(global_vlmc_context->gshhs_filename, "r");
   if (coastfile == NULL) {
@@ -226,30 +249,41 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	if (prev_x == -1) {
 	  prev_x = x;
 	  prev_y = y;
+#ifdef USE_GSHHS_20
+	  first_x = x;
+	  first_y = y;
+#endif /* USE_GSHHS_20 */
 	  continue;
 	}
-	if (prev_x == x) {
-	  if (prev_y == y) {
-	    segnum[x*1800+y]++;
-	  } else {
-	    segnum[x*1800+y]++;
-	    segnum[x*1800+prev_y]++;
-	  } 
-	} else {
-	  if (prev_y == y) {
-	    segnum[x*1800+y]++;
-	    segnum[prev_x*1800+y]++;
-	  } else {
-	    segnum[x*1800+y]++;
-	    segnum[x*1800+prev_y]++;
-	    segnum[prev_x*1800+y]++;
-	    segnum[prev_x*1800+prev_y]++;
-	  }
+#define _increment_array(x1,y1,x2,y2)		\
+	if (x1 == x2) {				\
+	  if (y1 == y2) {			\
+	    segnum[x2*1800+y2]++;		\
+	  } else {				\
+	    segnum[x2*1800+y2]++;		\
+	    segnum[x2*1800+y1]++;		\
+	  }					\
+	} else {				\
+	  if (y1 == y2) {			\
+	    segnum[x2*1800+y2]++;		\
+	    segnum[x1*1800+y2]++;		\
+	  } else {				\
+	    segnum[x2*1800+y2]++;		\
+	    segnum[x2*1800+y1]++;		\
+	    segnum[x1*1800+y2]++;		\
+	    segnum[x1*1800+y1]++;		\
+	  }					\
 	}
+	_increment_array(prev_x, prev_y, x, y);
 	prev_x = x;
 	prev_y = y;
 	p++;
       }
+#ifdef USE_GSHHS_20
+      if (n > 1) {
+	_increment_array(x, y, first_x, first_y);
+      }
+#endif /* USE_GSHHS_20 */
     }
     nb_read = fread((void *)&h, (size_t)sizeof (struct GSHHS), (size_t)1, 
 		    coastfile);
@@ -370,6 +404,12 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	  prev_y = y;
 	  prev_longitude = longitude;
 	  prev_latitude  = latitude;
+#ifdef USE_GSHHS_20
+	  first_x = x;
+	  first_y = y;
+	  first_longitude = longitude;
+	  first_latitude = latitude;
+#endif /* USE_GSHHS_20 */
 	  continue;
 	}
 
@@ -384,30 +424,42 @@ void internal_init_partial_coastline(int minlat, int minlong,
 	  segment->latitude_b = latitude;			\
 	}
 
-	if (prev_x == x) {
-	  if (prev_y == y) {
-	    _add_segment(x,y);
-	  } else {
-	    _add_segment(x,y);
-	    _add_segment(x, prev_y);
-	  } 
-	} else {
-	  if (prev_y == y) {
-	    _add_segment(x,y);
-	    _add_segment(prev_x,y);
-	  } else {
-	    _add_segment(x,y);
-	    _add_segment(x,prev_y);
-	    _add_segment(prev_x,y);
-	    _add_segment(prev_x,prev_y);
-	  }
+#define _add_segment_in_array(x1, y1, x2, y2)	\
+	if (x1 == x2) {				\
+	  if (y1 == y2) {			\
+	    _add_segment(x2,y2);		\
+	  } else {				\
+	    _add_segment(x2,y2);		\
+	    _add_segment(x2,y1);		\
+	  }					\
+	} else {				\
+	  if (y1 == y2) {			\
+	    _add_segment(x2,y2);		\
+	    _add_segment(x1,y2);		\
+	  } else {				\
+	    _add_segment(x2,y2);		\
+	    _add_segment(x2,y1);		\
+	    _add_segment(x1,y2);		\
+	    _add_segment(x1,y1);		\
+	  }					\
 	}
+
+	_add_segment_in_array(prev_x, prev_y, x, y);
+
 	prev_x = x;
 	prev_y = y;
 	prev_longitude = longitude;
 	prev_latitude = latitude;
 	p++;
       }
+#ifdef USE_GSHHS_20
+      if (n>1) {
+	// add the last one
+	longitude = first_longitude;
+	latitude  = first_latitude;
+	_add_segment_in_array(first_x, first_y, x, y);
+      }
+#endif /* USE_GSHHS_20 */
     }
     nb_read = fread((void *)&h, (size_t)sizeof (struct GSHHS), (size_t)1, 
 		    coastfile);
