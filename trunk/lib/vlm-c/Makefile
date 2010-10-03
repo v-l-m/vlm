@@ -64,6 +64,10 @@ coast: coast.o libvlm.a wgrib/libgrib.a
 	$(RM) $@
 	$(CC) -o $@ $(CFLAGS) coast.o $(LIBOBJS) wgrib/libgrib.a $(EXTRA_LIBRARIES)
 
+check_coast: check_coast.o libvlm.a wgrib/libgrib.a
+	$(RM) $@
+	$(CC) -o $@ $(CFLAGS) check_coast.o $(LIBOBJS) wgrib/libgrib.a $(EXTRA_LIBRARIES)
+
 unittest: unittest.o libvlmc.a wgrib/libgrib.a
 	$(RM) $@
 	$(CC) -o $@ $(CFLAGS) unittest.o libvlmc.a wgrib/libgrib.a $(EXTRA_LIBRARIES)
