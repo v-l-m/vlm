@@ -4,7 +4,7 @@ From 0.14 to Next:
 
 = All servers =
 
-  EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_14
+  EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_15
 
   RUN
     ./scripts/maj_scripts.sh
