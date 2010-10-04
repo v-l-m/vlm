@@ -800,7 +800,7 @@ class map
           array_push($poly_coords, $this->projLong($EP_coords2['longitude']),
                      $this->projLat($EP_coords2['latitude']));
 
-          imagefilledpolygon( $this->mapImage, $poly_coords, 5, $this->colorBuoy );
+          imagefilledpolygon( $this->mapImage, $poly_coords, 4, $this->colorBuoy );
 
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
