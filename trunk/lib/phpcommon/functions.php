@@ -919,7 +919,8 @@ function htmlRacesListRow($rowdatas) {
       }
       $html .= htmlIdracesLink($rowdatas['idraces'])."</td>\n";
       $html .= "<td>";
-      $html .= htmlRacenameLink($rowdatas['idraces'], $rowdatas['racename']);
+      $html .= htmlRacenameLink($rowdatas['idraces'], $rowdatas['racename'],
+				$rowdatas['started']);
       $html .= "</td>\n";
       $html .= "<td class=\"departurecell\">&nbsp;" ;
       //Affiche une date de départ ou un statut.
@@ -982,8 +983,8 @@ function dispHtmlRacesList($where = "") {
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
   while ( $row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-      echo htmlRacesListRow($row);
-      }
+    echo htmlRacesListRow($row);
+  }
   
   echo "</tbody>\n";
   echo "</table>\n  ";
@@ -1019,8 +1020,10 @@ function htmlBoattypeLink($boattype) {
     return sprintf("<a href=\"/speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
 }
 
-function htmlRacenameLink($idraces, $racename) {
-    return sprintf("<a href=\"/races.php?type=racing&amp;idraces=%d\">%s</a>", $idraces, $racename);
+function htmlRacenameLink($idraces, $racename, $started) {
+    return sprintf("<a href=\"/races.php?type=%s&amp;idraces=%d\">%s</a>", 
+		   ($started == -1) ? "arrived" : "racing",
+		   $idraces, $racename);
 }
 
 function getFlag($idflags, $force = 'no') {
@@ -1771,10 +1774,10 @@ function displayPalmares($idusers) {
 
   while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
     $racesObj= new races($row[0]);
-    printf ("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", htmlIdracesLink($row[0]),
-              htmlRacenameLink($row[0], $racesObj->racename),
-              getRaceRanking($idusers,$row[0])); // Le classement
-
+    printf ("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", 
+	    htmlIdracesLink($row[0]),
+	    htmlRacenameLink($row[0], $racesObj->racename, -1), //link to arr.
+	    getRaceRanking($idusers,$row[0])); // Le classement
   }
   printf ("</tbody></table>");
   return(0);
