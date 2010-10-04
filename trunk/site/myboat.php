@@ -200,16 +200,18 @@ include_once("scripts/myboat.js");
              $WPCLASS="nextwp";
          }
   
-         $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
-         if ( $wp_racetime[0] != "N/A" ) {
-              $racetime = duration2string ($wp_racetime[1]);
-	      $status_content.="&lt;br /&gt;&lt;b&gt;";
-	      $status_content.=sprintf(getLocalizedString("bestwptime")."(%d)" , $racetime['days'],$racetime['hours'],
-				       $racetime['minutes'], $wp_racetime[0]);
-	      $status_content.="&lt;/b&gt;";
+	 if (($wp['format'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) == 0) {
+	   $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
+	   if ( $wp_racetime[0] != "N/A" ) {
+	     $racetime = duration2string ($wp_racetime[1]);
+	     $status_content.="&lt;br /&gt;&lt;b&gt;";
+	     $status_content.=sprintf(getLocalizedString("bestwptime")."(%d)" , $racetime['days'],$racetime['hours'],
+				      $racetime['minutes'], $wp_racetime[0]);
+	     $status_content.="&lt;/b&gt;";
+	   }
 	 }
 
-             $status_content .= "&lt;/div&gt;";
+	 $status_content .= "&lt;/div&gt;";
 
          $centerwp = centerDualCoordMilli($wp_north, $wp_east, $wp_south, $wp_west);
          echo "<a href=\"" .  MAP_SERVER_URL . "/mercator.img.php?idraces=" . $usersObj->users->engaged .
