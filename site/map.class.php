@@ -792,6 +792,15 @@ class map
           $distEP=10  ; $EP_coords=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
 	  
           array_push($poly_coords, $this->projLong($EP_coords['longitude']), $this->projLat($EP_coords['latitude']));
+          $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
+          array_push($poly_coords, $this->projLong($EP_coords1['longitude']),
+                     $this->projLat($EP_coords1['latitude']));
+
+          $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
+          array_push($poly_coords, $this->projLong($EP_coords2['longitude']),
+                     $this->projLat($EP_coords2['latitude']));
+
+          imagefilledpolygon( $this->mapImage, $poly_coords, 5, $this->colorBuoy );
 
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWP);
@@ -818,14 +827,6 @@ class map
 			     $waypoint['laisser_au']+180, $this->colorWaypointsIndication);
 	  }
 
-          $distEP=500 ; $EP_coords1=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
-          array_push($poly_coords, $this->projLong($EP_coords1['longitude']),
-                     $this->projLat($EP_coords1['latitude']));
-
-          $distEP=2000; $EP_coords2=giveEndPointCoordinates( $waypoint['latitude1'], $waypoint['longitude1'], $distEP, $wpheading );
-          array_push($poly_coords, $this->projLong($EP_coords2['longitude']),
-                     $this->projLat($EP_coords2['latitude']));
-
           $style = array ($this->colorWaypoints, $this->colorSea);
 	  if ($waypoint['wpformat'] & WP_CROSS_ONCE) {
 	    imagesetstyle($this->mapImage, $this->styleCrossOnceWPLong);
@@ -838,10 +839,6 @@ class map
                       $this->projLong($EP_coords2['longitude']),
                       $this->projLat($EP_coords2['latitude']),
                       IMG_COLOR_STYLED);
-
-          array_push ($poly_coords, $wp1ProjLong, $wp1ProjLat);
-	  
-          imagefilledpolygon( $this->mapImage, $poly_coords, 5, $this->colorBuoy );
 
           /*
           // pointillé sur les WP après 1% de leur longueur.
