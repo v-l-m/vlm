@@ -1404,9 +1404,10 @@ function getUserObject($id, $initrow = NULL) {
   $id = intval($id);
 
   //TO PROTECT FROM POTENTIAL SIDE EFFECTS (?)
-  if (defined('MOTEUR')) return new users($id);
+  if (!defined('MOTEUR') && array_key_exists($id, $uobjects)) {
+    return $uobjects[$id];
+  }
     
-  if (array_key_exists($id, $uobjects)) return $uobjects[$id];
   if (is_null($initrow)) {
     $u = new users($id);
   } else {
@@ -1415,7 +1416,9 @@ function getUserObject($id, $initrow = NULL) {
   }
 
   if ($u->idusers == $id and $id > 0) {
-    $uobjects[$id] = $u;
+    if (!defined('MOTEUR')) {
+      $uobjects[$id] = $u;
+    }
     return $u;
   } else {
     return NULL;
