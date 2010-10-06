@@ -285,7 +285,7 @@ class races {
 
   function htmlRacenameLink() {
       //Convenient wrapper
-      return htmlRacenameLink($this->idraces, $this->racename);
+    return htmlRacenameLink($this->idraces, $this->racename, $this->started);
   }
 
     function htmlIC($icforum) {
