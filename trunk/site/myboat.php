@@ -200,7 +200,7 @@ include_once("scripts/myboat.js");
              $WPCLASS="nextwp";
          }
   
-	 if (($wp['format'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) == 0) {
+	 if (($wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) == 0) {
 	   $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
 	   if ( $wp_racetime[0] != "N/A" ) {
 	     $racetime = duration2string ($wp_racetime[1]);
