@@ -59,7 +59,7 @@
             //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
             $urlidraces = htmlIdracesLink($idraces); // pointe vers les ICS
             $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
-            $urlracename = htmlRacenameLink($idraces, $racename); // pointe vers le classement de la course
+            $urlracename = htmlRacenameLink($idraces, $racename, 0); // pointe vers le classement de la course
             
             $urlnumengaged = sprintf("<a href=\"races.php?type=racing&amp;idraces=%d\">%s</a>", $idraces, $num_engaged);
             if ( $maxboats != 0 ) {            
