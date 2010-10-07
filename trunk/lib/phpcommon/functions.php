@@ -757,7 +757,7 @@ function drawWindPolar($im, $color, $colormax, $boattype, $windspeed, $thick, $w
 function giveDegMinSec($type, $latitude, $longitude)
 {
   if ( $type == "img" ) {
-    $degsign="°";
+    $degsign="\260";
   } else if ( $type == "engine" ) {
     $degsign=".";
   } else { 
