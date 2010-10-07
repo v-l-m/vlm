@@ -521,7 +521,7 @@ class fullUsers
       " FROM positions WHERE idusers=".$this->users->idusers.
       " AND race = ".$this->users->engaged.
       " ORDER BY `time` DESC LIMIT 2";
-    $result = wrapper_mysql_db_query_reader($query);
+    $result = wrapper_mysql_db_query_reader($querypos);
     $this->lastPositions     = new positions;
     $this->anteLastPositions = new positions;
     
