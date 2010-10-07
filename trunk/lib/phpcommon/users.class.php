@@ -143,10 +143,8 @@ class users extends baseClass
 
     $now=time();
     // lookup for a task to do
-    $query = "SELECT `taskid`, `pilotmode`, `pilotparameter` FROM `auto_pilot`
-              WHERE `status`='" . PILOTOTO_PENDING . "'
-              AND `idusers` = ".$this->idusers."
-              AND `time` <= $now";
+    $query = "SELECT `taskid`, `pilotmode`, `pilotparameter` FROM `auto_pilot` WHERE `status`='". 
+      PILOTOTO_PENDING . "' AND `idusers`=".$this->idusers." AND `time`<=".$now;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
 
     while ( $row = mysql_fetch_array($result, MYSQL_ASSOC) ) {
@@ -566,7 +564,8 @@ class fullUsers
 
     // windAtPosition returns a small array : (wspeed, wheading);
     // see functions.php
-    $wind = windAtPosition($this->lastPositions->lat, $this->lastPositions->long, 0);
+    $wind = windAtPosition($this->lastPositions->lat, 
+			   $this->lastPositions->long, 0);
     $this->wspeed = $wind['speed'];
     $this->wheading = $wind['windangle'];
 
