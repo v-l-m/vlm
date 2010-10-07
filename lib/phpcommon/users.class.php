@@ -517,32 +517,37 @@ class fullUsers
     // if boat not engage in a race, nothing else to do ....
     if ($this->users->engaged == 0) return;
 
-    //find last position and time interval from now
-    $lastPositionsObject = new positions;
-    $lastPositionsObject->getLastPositions($this->users->idusers, $this->users->engaged);
-
+    $querypos = "SELECT `time`, `long`, `lat`, `idusers` , `race` ".
+      " FROM positions WHERE idusers=".$this->users->idusers.
+      " AND race = ".$this->users->engaged.
+      " ORDER BY `time` DESC LIMIT 2";
+    $result = wrapper_mysql_db_query_reader($query);
+    $this->lastPositions     = new positions;
+    $this->anteLastPositions = new positions;
+    
+    if ($result) {
+      $row = mysql_fetch_array($result, MYSQL_ASSOC);
+      if ($row) {
+	$this->lastPositions->init($row);
+	$row = mysql_fetch_array($result, MYSQL_ASSOC);
+	if ($row) {
+	  $this->anteLastPositions->init($row);
+	}
+      }
+    }
     // inherit of nwp
     $this->nwp = &$this->users->nwp;
 
-    if ($lastPositionsObject->idusers == 0 )
-      {
-        //if object is empty
-        //that shouldnot happen if base is written automaticaly
-        //but it's dangerous
-        //write a default position
-
-        //echo "writing default positions ".$this->users->idusers."\n";
-        $lastPositionsObject->writeDefaultPositions(
-                                                    $this->users->idusers, $this->users->engaged);
-      }
-    $this->lastPositions = $lastPositionsObject;
-
-
-    $anteLastPositionsObject = new positions;
-    //  echo "Avant appel anteLast depuis users.class.php 2\n";
-    $anteLastPositionsObject->getAnteLastPositions(
-                                                   $this->users->idusers, $this->users->engaged);
-    $this->anteLastPositions = $anteLastPositionsObject;
+    if ($this->lastPositions->idusers == 0 ) {
+      //if object is empty
+      //that shouldnot happen if base is written automaticaly
+      //but it's dangerous
+      //write a default position
+      
+      //echo "writing default positions ".$this->users->idusers."\n";
+      $this->lastPositions->writeDefaultPositions($this->users->idusers, 
+						  $this->users->engaged);
+    }
 
     // this->hours (temps depuis la dernière VAC)
     if ( $this->users->userdeptime == -1 ) {

@@ -18,6 +18,14 @@ class positions
     
   }
 
+  function init($row) {
+    $this->time    = $row['time'];
+    $this->long    = $row['long'];
+    $this->lat     = $row['lat'];
+    $this->idusers = $row['idusers'];
+    $this->race    = $row['race'];
+  }
+
   function getLastPositions($id, $race)
   {
     // same query as getAnteLastPositions do use the DB cache.
@@ -35,12 +43,7 @@ class positions
     if (!$row) {
       return;
     }
-    $this->time    = $row['time'];
-    $this->long    = $row['long'];
-    $this->lat     = $row['lat'];
-    $this->idusers = $row['idusers'];
-    $this->race    = $row['race'];
-
+    $this->init($row);
   }
 
 
@@ -62,12 +65,7 @@ class positions
     if (!$row) {
       return;
     }
-    $this->time    = $row['time'];
-    $this->long    = $row['long'];
-    $this->lat     = $row['lat'];
-    $this->idusers = $row['idusers'];
-    $this->race    = $row['race'];
-
+    $this->init($row);
   }
 
   // Used by ranking_results for last1h, last3h, last24h
