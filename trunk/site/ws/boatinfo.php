@@ -12,7 +12,7 @@ function get_info_array($idu) {
   $info     = array();
   $userObj  = new fullUsers($idu);
   $ownerId  = intval($userObj->users->getOwnerId());
-  $ownerObj = ($ownerId != 0) ? getPlayerObject($ownerid) : NULL;
+  $ownerObj = ($ownerId != 0) ? getPlayerObject($ownerId) : NULL;
 
   $info['IDU'] = $userObj->users->idusers;
   $info['IDP'] = $ownerId;
