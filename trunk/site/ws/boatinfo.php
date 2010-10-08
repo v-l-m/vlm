@@ -9,10 +9,10 @@ function get_output_format() {
 }
 
 function get_info_array($idu) {
-  var $info     = array();
-  var $userObj  = new fullUsers($idu);
-  var $ownerId  = intval($userObj->users->getOwnerId());
-  var $ownerObj = ($ownerId != 0) getPlayerObject($ownerid) : NULL;
+  $info     = array();
+  $userObj  = new fullUsers($idu);
+  $ownerId  = intval($userObj->users->getOwnerId());
+  $ownerObj = ($ownerId != 0) getPlayerObject($ownerid) : NULL;
 
   $info['IDU'] = $userObj->users->idusers;
   $info['IDP'] = $ownerId;
