@@ -9,17 +9,23 @@ function get_output_format() {
 }
 
 function get_info_array($idu) {
-  $info = array();
-  $userObj = new fullUsers($idu);
+  var $info     = array();
+  var $userObj  = new fullUsers($idu);
+  var $ownerId  = intval($userObj->users->getOwnerId());
+  var $ownerObj = ($ownerId != 0) getPlayerObject($ownerid) : NULL;
 
   $info['IDU'] = $userObj->users->idusers;
-  $info['IDP'] = intval($userObj->users->getOwnerId());
+  $info['IDP'] = $ownerId;
   $info['IDB'] = $userObj->users->boatname;
   $info['EML'] = $userObj->users->email;
   $info['COL'] = $userObj->users->color;
   $info['CNT'] = $userObj->users->country;
   $info['POL'] = $userObj->users->boattype;
 
+  if ($ownerObj != NULL) {
+    $info['OWN'] = $ownerObj->playername;
+  }
+  
   if ( $userObj->users->engaged == 0 ) {
     // Race is 0
     $info['RAC'] = "0";
