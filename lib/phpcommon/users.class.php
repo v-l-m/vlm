@@ -1429,7 +1429,7 @@ class fullUsers
     if ($when == 0) {
       $when = time();
     }
-    $query7 = "INSERT INTO races_ranking SET `time`=". $when .
+    $query7 = "INSERT INTO races_loch SET `time`=". $when .
       ", `idusers`=".$this->users->idusers .
       ", `idraces`=".$this->users->engaged;
     wrapper_mysql_db_query_writer($query7);
