@@ -1031,10 +1031,11 @@ class fullUsers
     //  printf ("Request RACES_RANKING : %s\n" , $query);
   }
 
-  function writeCurrentRanking ( $moved = 1 )
+  function writeCurrentRanking ( $moved = 1 , $now = 0)
   {
-    $now = time();
-
+    if ($now == 0) {
+      $now = time();
+    }
     // Record classification data
     //"        (idraces , idusers , nwp , dnm, latitude, longitude, last1h, last3h, last24h)  " .
     // ICI, on appelle vraiment la fonction bWTW, pour indiquer la bonne distance dans les classements
@@ -1043,7 +1044,7 @@ class fullUsers
     // =======================================================================================
     // On met à jour les colonnes lastupdate + lastchange et la colonne loch de la table users
     // =======================================================================================
-    $query_update = "UPDATE users set ";
+    $query_update = "UPDATE users SET ";
 
     // On maj Lastchange uniquement pour les bateaux qui ne sont pas bout au vent.
     if ( $this->users->pilotmode != 2

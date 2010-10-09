@@ -121,7 +121,7 @@ if ( $usersObj->engaged != 0 ) {
     $latApres  = $fullUsersObj->lastPositions->lat;
     $timeApres = $fullUsersObj->lastPositions->time;
 
-    $distVac=round($fullUsersObj->boatspeed*$fullUsersObj->hours,3);
+    $distVac=$fullUsersObj->boatspeed*$fullUsersObj->hours;
 
     echo "\tPosition update (WSpd=" . round($fullUsersObj->wspeed,1) . 
       ", WHdg=".((round($fullUsersObj->wheading,1)+180)%360). 
@@ -150,12 +150,11 @@ if ( $usersObj->engaged != 0 ) {
 	$fullUsersObj->lastPositions->lat=$latApres;
 	$fullUsersObj->lastPositions->long=$lonApres;
 	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position at thisplace
-	$fullUsersObj->writeLoch($now);
       } else {
 	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position
-	$fullUsersObj->writeLoch($now);
       }
-      $fullUsersObj->writeCurrentRanking();
+      $fullUsersObj->writeCurrentRanking(1, $now);
+      $fullUsersObj->writeLoch($now);
       
       // =========================================================================
       // Check if boat uses its own WP and is close to it (only if PIM != 1 or 2 )
