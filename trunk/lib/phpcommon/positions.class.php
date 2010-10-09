@@ -1,6 +1,7 @@
 <?php
 
 require_once("base.class.php");
+require_once("vlmc.php");
 
 class positions
 {
@@ -93,8 +94,6 @@ class positions
 
   function addDistance2Positions( $distance, $heading  )
   {
-    include_once("vlmc.php");
-
     $new_lat = new doublep();
     $new_long = new doublep();
     
