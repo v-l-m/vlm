@@ -150,8 +150,10 @@ if ( $usersObj->engaged != 0 ) {
 	$fullUsersObj->lastPositions->lat=$latApres;
 	$fullUsersObj->lastPositions->long=$lonApres;
 	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position at thisplace
+	$fullUsersObj->writeLoch($now);
       } else {
 	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position
+	$fullUsersObj->writeLoch($now);
       }
       $fullUsersObj->writeCurrentRanking();
       
