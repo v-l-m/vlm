@@ -12,3 +12,8 @@ KEY `idusers` (`idusers`),
 KEY `entry` (`time`,`idraces`,`idusers`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
   
+# On enleve les colonnes 'wind' de 'positions' et 'histpos'
+# (Non utilisees, et ne comportant pas toutes les informations qui
+# pourraient etre desirables)
+ALTER TABLE `histpos` DROP COLUMN `wind`;
+ALTER TABLE `positions` DROP COLUMN `wind`;
