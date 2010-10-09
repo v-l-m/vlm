@@ -1055,8 +1055,7 @@ class fullUsers
     // Cumul du loch sauf si bout au vent...
     if ( $moved == 1 && ($this->anteLastPositions->time != 0))  {
       //FIXME : loch devrait être un DECIMAL
-      $this->users->loch += ortho($this->anteLastPositions->lat, $this->anteLastPositions->long,
-				  $this->lastPositions->lat, $this->lastPositions->long);
+      $this->users->loch += $this->boatspeed*$this->hours;
       $query_update .= " loch = " . $this->users->loch . "," ;
     }
 
@@ -1423,17 +1422,38 @@ class fullUsers
        $this->LatNM, $this->LongNM);
   }
 
+  /**
+   * Write current loch in the loch table
+   */
+  function writeLoch($when = 0) {
+    if ($when == 0) {
+      $when = time();
+    }
+    $query7 = "INSERT INTO races_ranking SET `time`=". $when .
+      ", `idusers`=".$this->users->idusers .
+      ", `idraces`=".$this->users->engaged;
+    wrapper_mysql_db_query_writer($query7);
+  }
+
   //this function says how many milles the user travelled during the last
   //24hrs
-  function distRecords($duration)
-  {
-
+  function distRecords($duration) {
     $timestamp = time();
-    $position = $this->lastPositions->getOldPosition($this->users->idusers, $this->users->engaged, $timestamp - $duration);
 
-    $lastPos = $this->lastPositions;
-    $distance = ortho( $lastPos->lat, $lastPos->long, $position[2], $position[1]);
-    $time_elapsed = max($timestamp - $position[0], 1);
+    $query = "SELECT `time`, `loch` ".
+      " FROM races_loch WHERE idusers=".$this->users->idusers.
+      " AND idraces=".$this->users->engaged.
+      " AND  time > " . ( $timestamp - $duration - DELAYBETWEENUPDATE ) .
+      " ORDER BY time ASC LIMIT 1";
+
+    $result = wrapper_mysql_db_query_reader($query);
+    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    if (!$row) {
+      return array(0,0);
+    }
+
+    $distance = $this->users->loch - $row['loch'];
+    $time_elapsed = max($timestamp - $row['time'], 1);
 
     if ($time_elapsed == 1 && $distance > 10) {
       $distance = 0;
@@ -1444,34 +1464,6 @@ class fullUsers
     //printf ("\ndistRecords for duration = %d s , elapsed = %d, dur/ela = %f,\n distance=%f, corrected=%f\n", $duration, $time_elapsed, $duration/$time_elapsed,$distance,$corrected_distance);
     //return ($corrected_distance);
     return (array($distance,$corrected_distance));
-  }
-
-
-  //this function says how many milles the user travelled during the last
-  //24hrs
-  function olddistRecords($duration)
-  {
-    $sum = 0;
-
-    // A REECRIRE pour sortie de allPositions de la classe fullUsers et correction de l'imprécision
-    // CF mail avec Phille du 09/03 le soir.
-    // Concerne uniquement le moteur
-
-    $lastPos = $this->allPositions->records[0];
-    $pos = $this->allPositions[0];//scope of this var?
-
-    foreach($this->allPositions->records as $pos)
-      {
-        //echo "sum = $sum, checking : ";
-        //print_r($pos);
-        if ( (time() - $pos->time) > $duration)
-          break;
-        $sum = $sum + ortho($pos->lat, $pos->long, $lastPos->lat, $lastPos->long);
-        $lastPos = $pos;
-      }
-
-
-    return $sum;
   }
 
   function getCurrentRanking() {
