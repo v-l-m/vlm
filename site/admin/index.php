@@ -23,6 +23,7 @@
     $tablepages = Array(
         "adminwizard.php" => "Admin Wizard (old admin interface)",
         "connectas.php" => "Connect as... (use with caution)",
+        "reinit_player_password.php" => "Change player password (use with caution)",
         );
     adminlistbox($tablepages, "Miscellaneous");
 
