@@ -52,7 +52,7 @@ class users extends baseClass
     $this->nwp            = $row['nextwaypoint'];
     $this->userdeptime    = $row['userdeptime'];
     $this->lastupdate     = $row['lastupdate'];
-    $this->loch           = $row['loch'];
+    $this->loch           = float($row['loch']);
     $this->country        = (strlen($row['country']) < 3 ) ? "" : $row['country'];
     $this->class          = $row['class'];
     $this->targetlat      = $row['targetlat'];
@@ -490,7 +490,7 @@ class fullUsers
 {
   var $users, //a user object
     //var deduced from others
-    $lastPositions,     //a postions object
+    $lastPositions,     //a positions object
     $hours,
     $wspeed, $wheading,
     $boatanglewithwind, $boatspeed,
