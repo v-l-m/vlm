@@ -33,8 +33,8 @@ function get_info_array($idu) {
     $info['RAC'] = $userObj->users->engaged;
     $racesObj = &$userObj->races;
     $info['RAN'] = $racesObj->racename;
-    $info['LAT'] = float($userObj->lastPositions->lat);
-    $info['LON'] = float($userObj->lastPositions->long);
+    $info['LAT'] = (float)$userObj->lastPositions->lat;
+    $info['LON'] = (float)$userObj->lastPositions->long;
     $info['BSP'] = round($userObj->boatspeed, 2);
     $info['HDG'] = round($userObj->users->boatheading, 2);
     $info['NWP'] = $userObj->users->nwp;
@@ -85,7 +85,7 @@ function get_info_array($idu) {
     $rnkinfo = $userObj->getCurrentUserRanking();
     $info['POS'] = $rnkinfo['rankracing']."/".$rnkinfo['nbu'];
     $info['RNK'] = $rnkinfo['rank'];
-    $info['LOC'] = float($userObj->users->loch);
+    $info['LOC'] = (float)$userObj->users->loch;
     $info['LUP'] = $userObj->users->lastupdate;
     $info['NUP'] = 10*round($userObj->users->lastupdate + 
                    60*$racesObj->vacfreq - time())/10;
