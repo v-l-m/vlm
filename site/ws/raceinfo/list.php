@@ -21,7 +21,7 @@
             $row['started'] = (int) $row['started'];
             $row['deptime'] = (int) $row['deptime'];
             $row['closetime'] = (int) $row['closetime'];
-            $row['startlong'] = (float) $row['starlong']/1000.;
+            $row['startlong'] = (float) $row['startlong']/1000.;
             $row['startlat'] = (float) $row['startlat']/1000.;
             $row['racetype'] = (int) $row['racetype'];
             $row['firstpcttime'] = (int) $row['firstpcttime'];
