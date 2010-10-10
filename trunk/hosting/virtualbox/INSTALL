@@ -7,6 +7,7 @@ Ce document décrit l'utilisation/l'installation sur votre système d'une image 
  * Nom d'hôte virtuel : ce nom d'hôte est le hostname linux (actuellement : {{{vlmlucid}})
  * Nom d'hôte local : il s'agit du nom d'hôte
  * Login/password générique : vlm/vlm
+ * Appliquer les prérequis systèmes pour donner les droits de redémarrage apache à l'utilisateur vlm
 
 1. Télécharger l'image VirtualBox :
   FIXME {{{wget ....}}}
