@@ -10,7 +10,7 @@ CREATE TABLE `races_loch` (
 KEY `idraces` (`idraces`),
 KEY `idusers` (`idusers`),
 KEY `entry` (`time`,`idraces`,`idusers`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MEMORY DEFAULT CHARSET=latin1;
   
 # On enleve les colonnes 'wind' de 'positions' et 'histpos'
 # (Non utilisees, et ne comportant pas toutes les informations qui
