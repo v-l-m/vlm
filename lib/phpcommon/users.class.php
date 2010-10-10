@@ -1430,33 +1430,43 @@ class fullUsers
     if ($when == 0) {
       $when = time();
     }
+    $when -= ($when % 60); // clamp to lower minute
     $query7 = "INSERT INTO races_loch SET `time`=". $when .
       ", `loch`=".$this->users->loch.
       ", `idusers`=".$this->users->idusers.
       ", `idraces`=".$this->users->engaged;
     wrapper_mysql_db_query_writer($query7);
   }
-
-  //this function says how many milles the user travelled during the last
-  //24hrs
+  
+  //this function says how many milles the user travelled during the last <duration>
   function distRecords($duration) {
     $timestamp = time();
-
+    $timestamp -= ($timestamp % 60);
+    
     $query = "SELECT `time`, `loch` ".
       " FROM races_loch WHERE idusers=".$this->users->idusers.
       " AND idraces=".$this->users->engaged.
-      " AND  time > " . ( $timestamp - $duration - DELAYBETWEENUPDATE ) .
-      " ORDER BY time ASC LIMIT 1";
-
+      " AND time=" . ( $timestamp - $duration);
+    
     $result = wrapper_mysql_db_query_reader($query);
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
     if (!$row) {
-      return array(0,0);
+      $query = "SELECT `time`, `loch` ".
+	" FROM races_loch WHERE idusers=".$this->users->idusers.
+	" AND idraces=".$this->users->engaged.
+	" AND time > " . ( $timestamp - $duration - DELAYBETWEENUPDATE/2 ) .
+	" ORDER BY time ASC LIMIT 1";
+      
+      $result = wrapper_mysql_db_query_reader($query);
+      $row = mysql_fetch_array($result, MYSQL_ASSOC);
+      if (!$row) {
+	return array(0,0);
+      }
     }
-
+    
     $distance = $this->users->loch - $row['loch'];
     $time_elapsed = max($timestamp - $row['time'], 1);
-
+    
     if ($time_elapsed == 1 && $distance > 10) {
       $distance = 0;
       $corrected_distance = 0;
