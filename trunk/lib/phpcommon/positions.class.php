@@ -20,11 +20,11 @@ class positions
   }
 
   function init($row) {
-    $this->time    = int($row['time']);
-    $this->long    = float($row['long']);
-    $this->lat     = float($row['lat']);
-    $this->idusers = int($row['idusers']);
-    $this->race    = int($row['race']);
+    $this->time    = (int)$row['time'];
+    $this->long    = (float)$row['long'];
+    $this->lat     = (float)$row['lat'];
+    $this->idusers = (int)$row['idusers'];
+    $this->race    = (int)$row['race'];
   }
 
   function getLastPositions($id, $race)
