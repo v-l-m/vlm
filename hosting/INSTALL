@@ -40,6 +40,14 @@ Merci
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
    * 0.4 Prérequis de données
      * 0.4.1 Pour l'instant, vous devez récupérer un export d'un des serveurs de dev pour disposer à la fois des schémas et des données de base pour votre instance. Adressez vous aux développeurs.
+   * 0.5 Prérequis systèmes
+     * 0.5.1 Optionnel : pour plus de confort, il est préférable de donner les droits à l'utilisateur de redémarrer le démon apache, en editant via visudo le fichiers {{{sudoers}}} et en donnant par exemple cette configuration :
+     {{{
+    User_Alias      APACHEMASTERS = vlm
+    Cmnd_Alias      APACHE = /etc/init.d/apache2 restart
+    APACHEMASTERS   ALL = NOPASSWD: APACHE
+    }}}
+       
 
 = Les outils de déploiement, l'installation de base =
 
