@@ -53,7 +53,8 @@ if ( $usersObj->engaged != 0 ) {
       } else {
 	//FIXME : Couldn't we just update the "same place" ?
 	$fullUsersObj->lastPositions->writePositions();
-	$fullUsersObj->writeCurrentRanking(0);
+	$fullUsersObj->writeCurrentRanking(0, $now);
+	$fullUsersObj->writeLoch($now);
       }
     }
     echo "\t** DONE ** " ;
