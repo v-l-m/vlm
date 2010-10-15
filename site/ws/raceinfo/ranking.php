@@ -65,6 +65,7 @@
     $ws->answer['nb_arrived'] = $num_arrived;
     $ws->answer['nb_racing']  = $num_racing;
     $ws->answer['nb_engaged'] = $num_engaged;
+    $ws->answer['nb_not_started'] = count($not_started);
 
     $ws->reply_with_success();
 
