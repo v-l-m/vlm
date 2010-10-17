@@ -1711,18 +1711,15 @@ function findNearestOpponents($idraces,$idusers,$num) {
 
   $ret_array=array();
   // search for nwp and dnm of this player
-  $query = "SELECT nwp, dnm from races_ranking where idraces = $idraces and idusers=$idusers;";
+  $query = "SELECT nwp, dnm FROM races_ranking WHERE idraces=$idraces AND idusers=$idusers;";
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
   if ( $row = mysql_fetch_array($result, MYSQL_NUM)) {
 
     $nwp=$row[0];
     $dnm=$row[1];
-    $query = "SELECT idusers from races_ranking 
-             where idraces=$idraces 
-         and nwp=$nwp 
-       order by abs($dnm - dnm) asc 
-       limit " . $num .";"    ;
-
+    $query = "SELECT idusers FROM races_ranking WHERE idraces=$idraces AND ".
+      "dnm!=0 AND nwp=$nwp ORDER BY abs($dnm - dnm) ASC LIMIT $num;";
+    // FIXME dnm!=0 ORDER BY abs($nwp-nwp), abs($dnm - dnm) ASC LIMIT $num ?
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
     while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
 
@@ -1743,17 +1740,12 @@ function findTopUsers($idraces,$num) {
   $ret_array=array();
   // search for nwp and dnm of this player
   
-  $query = "SELECT idusers from races_ranking 
-             where idraces=$idraces 
-                     and idusers >1
-       order by nwp desc, dnm asc 
-       limit " . $num .";"    ;
+  $query = "SELECT idusers FROM races_ranking WHERE idraces=$idraces AND ".
+    "dnm != 0 AND idusers >1 ORDER BY nwp DESC, dnm ASC LIMIT ".$num .";";
 
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
   while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
-
     array_push ($ret_array, $row[0]);
-
   }
 
   return($ret_array);
