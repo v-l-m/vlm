@@ -15,7 +15,7 @@
     // spf - we optimize the race object calls by creating the whole tab in one db call
     $result1 = queryRacesBatch("WHERE ((started=0 AND deptime>UNIX_TIMESTAMP()) OR ".
 			       "(closetime > UNIX_TIMESTAMP())) ORDER BY started ASC,".
-			       " deptime ASC, closetime ASC";
+			       " deptime ASC, closetime ASC");
 
     // Recherche de toutes les courses prévues
     while($row = mysql_fetch_array($result1, MYSQL_ASSOC)) {
