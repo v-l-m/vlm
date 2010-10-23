@@ -1873,7 +1873,8 @@ function availableRaces($idusers = 0)
   $allNumOpponents = getNumOpponentBatch($allRacesIds);
 
   foreach($allRacesRows as $row) {
-    $numopps = $allNumOpponents[$idraces];
+    $idraces     = $row['idraces'];
+    $numopps     = $allNumOpponents[$idraces];
     $num_arrived = $numopps['num_arrived'];
     $num_racing  = $numopps['num_racing'];
     $num_engaged = $numopps['num_engaged'];
@@ -1884,13 +1885,13 @@ function availableRaces($idusers = 0)
 
     // si pas de course de qualification, on ajoute
     if ( $row['qualifying_races'] == "" ) {
-      array_push ($records, $row['idraces']);
+      array_push ($records, $idraces);
     } else {
       // Sinon, on vérifie que le bateau est qualifié (a fini une courses de qualif)
       $qualraces = explode(' ', $row['qualifying_races']);
       foreach ($qualraces as $qr) {
         if ( userFinishedThisRace($idusers, $qr ) ) {
-          array_push ($records, $row['idraces']);
+          array_push ($records, $idraces);
           break;
         }
       }
