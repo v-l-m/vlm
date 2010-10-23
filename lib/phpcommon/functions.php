@@ -257,7 +257,7 @@ function lastUpdate()
   if (file_exists(CRONVLMLOCK)) {
     printf (getLocalizedString("processing") );
   } else {
-    $query2 = "SELECT UNIX_TIMESTAMP(`time`) as time,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
+    $query2 = "SELECT UNIX_TIMESTAMP(`time`) AS time,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
     $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
     $row2 = mysql_fetch_assoc($result2);
     $lastupdate = $row2['time'];
@@ -866,37 +866,31 @@ function idusersIsAdmin($idusers) {
     return (!is_null($u) && $u->isAdmin());
 }
 
-function getNumOpponents($idraces) {
+function getNumOpponents($idraces, $check = TRUE) {
   //force type int
   $idraces = intval($idraces);
 
   // Verification si course existe
-  if  ( !raceExists($idraces) ) {
+  if  ($check && !raceExists($idraces) ) {
       return (array (0,0,0));
   }
 
   // Nombre de classés / non classés
-  $query= "SELECT count(*) 
-             FROM races_results 
-       where position = " . BOAT_STATUS_ARR . "
-       and   idraces = $idraces ;";
+  $query= "SELECT count(*) FROM races_results WHERE position=". 
+    BOAT_STATUS_ARR." AND idraces=$idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $num_arrived=$row[0];
 
   // Nombre de bateaux non classés mais sortis de la course
-  $query= "SELECT count(*) 
-             FROM races_results 
-       where position != " . BOAT_STATUS_ARR . "
-       and   idraces = $idraces ;";
+  $query= "SELECT count(*) FROM races_results WHERE position !=". 
+    BOAT_STATUS_ARR . " AND idraces=$idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $num_out=$row[0];
-
+  
   // Nombre de bateaux en course
-  $query= "SELECT count(*) 
-             FROM races_ranking 
-       WHERE idraces = $idraces ;";
+  $query= "SELECT count(*) FROM races_ranking WHERE idraces=$idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
   $row = mysql_fetch_array($result, MYSQL_NUM);
   $num_racing=$row[0];
@@ -904,6 +898,72 @@ function getNumOpponents($idraces) {
   //              arrivés     en course       inscrits (arr + out + en course)
   return (array ($num_arrived,$num_racing,$num_arrived + $num_out + $num_racing));
 }
+
+function getNumOpponentBatch($racelist) {
+  $results=array();
+  $first = TRUE;
+  $in = "RR.idraces IN (";
+  foreach ($racelist as $idr) {
+    $results[$idr] = array('num_arrived' => 0, 'num_racing' => 0,
+			   'num_engaged' => 0);
+    if ($first) {
+      $first = FALSE;
+      $in.=$idr;
+    } else {
+      $in.=",".$idr;
+    }
+  }
+  $in.=")";
+  $query= "SELECT count(RR.idusers), RR.idraces FROM races_results AS RR, races WHERE ".
+    $in." AND races.idraces = RR.idraces AND RR.position=". BOAT_STATUS_ARR.
+    " GROUP BY RR.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $res = &$results[$row[1]];
+    $res['num_arrived']=$row[0];
+  }
+  
+  $query= "SELECT count(RR.idusers), RR.idraces FROM races_ranking AS RR, races WHERE ".
+    $in." AND races.idraces = RR.idraces GROUP BY RR.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $res = &$results[$row[1]];
+    $res['num_racing']=$row[0];
+  }
+
+  $query= "SELECT count(RR.idusers), RR.idraces FROM races_results AS RR, races WHERE ".
+    $in." AND races.idraces = RR.idraces AND RR.position!=". BOAT_STATUS_ARR.
+    " GROUP BY RR.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $res = &$results[$row[1]];
+    $res['num_engaged']=$row[0]+$res['num_racing']+$res['num_arrived'];
+  }
+  return $results;
+}
+
+function getNumEngaged($idraces, $check = TRUE) {
+  //force type int
+  $idraces = intval($idraces);
+
+  // Verification si course existe
+  if  ($check && !raceExists($idraces) ) {
+      return 0;
+  }
+
+  // Nombre de classÃ©s / non classÃ©s
+  $query= "SELECT count(*) FROM races_results WHERE idraces=$idraces"; 
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $num_engaged=$row[0];
+  $query= "SELECT count(*) FROM races_ranking WHERE idraces=$idraces"; 
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $num_engaged+=$row[0];
+  
+  return $num_engaged;
+}
+
 
 function htmlRacesListRow($rowdatas) {
 
@@ -973,11 +1033,10 @@ function dispHtmlRacesList($where = "") {
 
 
   // La requete qui donne la liste des courses en cours
-  $query= "SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype,
-             if(started=-1, 0, deptime) as deptimesort
-             FROM races
-             $where
-             ORDER by started desc, deptimesort asc, closetime desc, idraces desc;";
+  $query= "SELECT idraces, racename, started, deptime, startlong, startlat, ".
+    "boattype, closetime, racetype, if(started=-1, 0, deptime) AS deptimesort ".
+    "FROM races $where ORDER by started DESC, deptimesort ASC, closetime DESC, ".
+    "idraces DESC";
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
@@ -1591,13 +1650,12 @@ function getWaypointCrossingTime($idraces,$idwaypoint, $idusers)
 function getWaypointBestTime($idraces,$idwaypoint)
 {
   // Recherche temps de passage du meilleur à un waypoint
-  $query_wptime = "SELECT idusers, `time` - `userdeptime`" . 
-    "  FROM waypoint_crossing " .
-    " WHERE idraces = $idraces " .
-    "   AND idwaypoint = $idwaypoint " .
-    "   AND validity = 1 ".
-    " ORDER by `time` - `userdeptime` ASC limit 1";
-
+  $query_wptime = "SELECT idusers, `time`-`userdeptime` " . 
+    "FROM waypoint_crossing " .
+    "WHERE idraces = $idraces " .
+    "AND idwaypoint = $idwaypoint " .
+    "AND validity = 1 ".
+    "ORDER by `time` - `userdeptime` ASC limit 1";
 
   //echo $query_wptime;
 
@@ -1668,7 +1726,8 @@ function getWaypointHTMLSymbolsDescription($wpformat) {
 // For a finished race, to give the Palmares
 function getRaceRanking($idusers, $idraces) {
   // search for old races for this player
-  $query = "SELECT idusers,position from races_results where idraces = " . $idraces . " order by position DESC, duration ASC" ;
+  $query = "SELECT idusers,position FROM races_results WHERE idraces=". 
+    $idraces . " ORDER BY position DESC, duration ASC" ;
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
   $nbu=0;
   while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
@@ -1801,34 +1860,50 @@ function availableRaces($idusers = 0)
                         ) ORDER BY deptime ASC;";
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
-  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
-    
-    //$racesObj = new races( $row[0] )  ;
-    //if ( $racesObj->depend_on == 0  or  userFinishedThisRace($idusers, $racesObj->depend_on) ) {
-    //if ( $row[1] == 0 or userFinishedThisRace($idusers, $row[1]) ) {
+  
+  $allRacesRows = array();
+  $allRacesIds  = array();
+  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    array_push($allRacesRows, $row);
+    array_push($allRacesIds, $row['idraces']);      
+  }
+  $allNumOpponents = getNumOpponentBatch($allRacesIds);
 
-    // Max inscrits ?
-    list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($row[0]);
-    if ( $row[3] != 0 && $num_engaged >= $row[3] ) {
+  foreach($allRacesRows as $row) {
+    $numopps = $allNumOpponents[$idraces];
+    $num_arrived = $numopps['num_arrived'];
+    $num_racing  = $numopps['num_racing'];
+    $num_engaged = $numopps['num_engaged'];
+
+    if ( $row['maxboats'] != 0 && $num_engaged >= $row['maxboats'] ) {
       continue;
     }
 
     // si pas de course de qualification, on ajoute
-    if ( $row[2] == "" ) {
-      array_push ($records, $row[0]);
+    if ( $row['qualifying_races'] == "" ) {
+      array_push ($records, $row['idraces']);
     } else {
       // Sinon, on vérifie que le bateau est qualifié (a fini une courses de qualif)
-      $qualraces = explode(' ', $row[2]);
+      $qualraces = explode(' ', $row['qualifying_races']);
       foreach ($qualraces as $qr) {
         if ( userFinishedThisRace($idusers, $qr ) ) {
-          array_push ($records, $row[0]);
+          array_push ($records, $row['idraces']);
           break;
         }
       }
     }
   }
-  
   return ($records);
+}
+
+function queryRacesBatch($where = NULL) {
+  $query="SELECT idraces,racename,started,deptime,startlong,startlat,".
+    "boattype,closetime,racetype,firstpcttime,depend_on,qualifying_races,".
+    "idchallenge,coastpenalty,bobegin,boend,maxboats,theme,vacfreq,".
+    "updated FROM races ".(($where==NULL)?"":$where);
+  
+  $result=wrapper_mysql_db_query_reader($query) or die("Query [$query] failed \n");
+  return $result;
 }
 
 function checkMapArea($value) {

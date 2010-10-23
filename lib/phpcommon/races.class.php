@@ -32,21 +32,16 @@ class races {
 
   function races($id=0, $row = null) {
     $id = intval($id);
-    if ($id != 0) {
-        $query= "SELECT idraces, racename, started, deptime, startlong, startlat, 
-                 boattype, closetime, racetype, firstpcttime, depend_on, 
-                 qualifying_races, idchallenge, coastpenalty, bobegin, boend,
-                 maxboats, theme, vacfreq, updated
-                 FROM races WHERE idraces = $id";
-        $result = wrapper_mysql_db_query_reader($query) or die($query);
-        if (mysql_num_rows($result) > 0) {
-            $row = mysql_fetch_array($result, MYSQL_ASSOC);
-        } else {
-            $row = null;
-        }
+    if ($id != 0 && is_null($row)) {
+      $result = queryRacesBatch("WHERE idraces = $id");
+      if (mysql_num_rows($result) > 0) {
+	$row = mysql_fetch_array($result, MYSQL_ASSOC);
+      } else {
+	$row = null;
+      }
     }
     if (is_null($row)) {
-        die("Races class was called with bad id=$id");
+      die("Races class was called with bad id=$id");
     }
     
     $this->idraces          = $row['idraces'];
@@ -198,7 +193,7 @@ class races {
         $this->ics = array();
 	
         $query = "SELECT instructions, flag FROM races_instructions" .
-          " WHERE idraces = 0 OR idraces = " . $this->idraces ; 
+          " WHERE idraces=0 OR idraces=" . $this->idraces ; 
 	
         $result = wrapper_mysql_db_query_reader($query);
 	
@@ -1250,7 +1245,7 @@ class racesList {
   var $records = array();
 
   function racesList() {
-    $query = "SELECT idraces FROM races order by deptime desc";
+    $query = "SELECT idraces FROM races ORDER BY deptime DESC";
     //printf ($query . "\n");
     $result = wrapper_mysql_db_query_reader($query);
     while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -1271,16 +1266,16 @@ class startedRacesList {
     $minute = date('i');
     
     if ( $minute % 10 == 0 ) {
-      $query .= " and vacfreq in (1,2,5,10) " ;
+      $query .= " AND vacfreq IN (1,2,5,10) " ;
     } else if ( $minute % 5 == 0 ) {
-      $query .= " and vacfreq in (1,5) " ;
+      $query .= " AND vacfreq IN (1,5) " ;
     } else if ( $minute % 2 == 0 ) {
-      $query .= " and vacfreq in (1,2) " ;
+      $query .= " AND vacfreq IN (1,2) " ;
     } else {
-      $query .= " and vacfreq = 1 " ;
+      $query .= " AND vacfreq=1 " ;
     }
 
-    $query .= " order by vacfreq ASC, deptime DESC";
+    $query .= " ORDER BY vacfreq ASC, deptime DESC";
     $result = wrapper_mysql_db_query_reader($query);
     
     while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
