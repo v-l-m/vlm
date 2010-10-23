@@ -11,14 +11,21 @@
       }
     }
 
-    $allRaces = array();
     // spf - we optimize the race object calls by creating the whole tab in one db call
     $result1 = queryRacesBatch("WHERE ((started=0 AND deptime>UNIX_TIMESTAMP()) OR ".
 			       "(closetime > UNIX_TIMESTAMP())) ORDER BY started ASC,".
 			       " deptime ASC, closetime ASC");
 
     // Recherche de toutes les courses prévues
+    $allRacesRows = array();
+    $allRacesIds  = array();
     while($row = mysql_fetch_array($result1, MYSQL_ASSOC)) {
+      array_push($allRacesRow, $row);
+      array_push($allRacesIds, $row['idraces']);      
+    }
+    $allNumOpponents = getNumOpponentBatch($allRacesIds);
+
+    foreach($allRacesRows as $row) {
       $cur_race = new races($row['idraces'], $row);
       $dep          = $row['deptime'];
       $idraces      = $row['idraces'];
@@ -29,7 +36,10 @@
       $maxboats     = $row['maxboats'];
       $racetype     = $row['racetype'];
       
-      list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
+      $numopps = $allNumOpponents[$idraces];
+      $num_arrived = $numopps['num_arrived'];
+      $num_racing  = $numopps['num_racing'];
+      $num_engaged = $numopps['num_engaged'];
       
       $time = time();
       $duration = $dep - time();
