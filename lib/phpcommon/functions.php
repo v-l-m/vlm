@@ -1863,27 +1863,34 @@ function availableRaces($idusers = 0)
                         ) ORDER BY deptime ASC;";
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
-  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
-    
-    //$racesObj = new races( $row[0] )  ;
-    //if ( $racesObj->depend_on == 0  or  userFinishedThisRace($idusers, $racesObj->depend_on) ) {
-    //if ( $row[1] == 0 or userFinishedThisRace($idusers, $row[1]) ) {
+  
+  $allRacesRows = array();
+  $allRacesIds  = array();
+  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    array_push($allRacesRows, $row);
+    array_push($allRacesIds, $row['idraces']);      
+  }
+  $allNumOpponents = getNumOpponentBatch($allRacesIds);
 
-    // Max inscrits ?
-    list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($row[0]);
-    if ( $row[3] != 0 && $num_engaged >= $row[3] ) {
+  foreach($allRacesRows as $row) {
+    $numopps = $allNumOpponents[$idraces];
+    $num_arrived = $numopps['num_arrived'];
+    $num_racing  = $numopps['num_racing'];
+    $num_engaged = $numopps['num_engaged'];
+
+    if ( $row['maxboats'] != 0 && $num_engaged >= $row['maxboats'] ) {
       continue;
     }
 
     // si pas de course de qualification, on ajoute
-    if ( $row[2] == "" ) {
-      array_push ($records, $row[0]);
+    if ( $row['qualifying_races'] == "" ) {
+      array_push ($records, $row['idraces']);
     } else {
       // Sinon, on vérifie que le bateau est qualifié (a fini une courses de qualif)
-      $qualraces = explode(' ', $row[2]);
+      $qualraces = explode(' ', $row['qualifying_races']);
       foreach ($qualraces as $qr) {
         if ( userFinishedThisRace($idusers, $qr ) ) {
-          array_push ($records, $row[0]);
+          array_push ($records, $row['idraces']);
           break;
         }
       }
