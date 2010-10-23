@@ -970,7 +970,10 @@ function htmlRacesListRow($rowdatas) {
       // Affichage de la course dans le tableau
       // idraces / racename / startdeparture / racenumboats / map
       $html = "";
-      list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($rowdatas['idraces']);
+      $numopps = $rowdatas['num_opps'];
+      $num_arrived = $numopps['num_arrived'];
+      $num_racing  = $numopps['num_racing'];
+      $num_engaged = $numopps['num_engaged'];
 
       $html .= "<tr>\n";
       $html .= "<td>";
@@ -1041,7 +1044,16 @@ function dispHtmlRacesList($where = "") {
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
-  while ( $row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  $allRacesRows = array();
+  $allRacesIds  = array();
+  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    array_push($allRacesRows, $row);
+    array_push($allRacesIds, $row['idraces']);      
+  }
+  $allNumOpponents = getNumOpponentBatch($allRacesIds);
+
+  foreach($allRacesRows as $row) {
+    $row['num_opps'] = $allNumOpponents[$row['idraces']];
     echo htmlRacesListRow($row);
   }
   
