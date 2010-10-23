@@ -2,37 +2,47 @@
     echo "<div id=\"raceslistbox\" class=\"basic\">";
 
     // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
-    $display_submit = "false";
-    if ( isLoggedIn() ) {
-        $users = getLoggedUserObject();
-        if ( $users->engaged == 0 ) {
-            $display_submit = "true";
-            $av_races=availableRaces($users->idusers);
-         }
+    $display_submit = FALSE;
+    if (isLoggedIn()) {
+      $users = getLoggedUserObject();
+      $display_submit = ($users->engaged == 0);
+      if ($display_submit) {
+	$av_races=availableRaces($users->idusers);
+      }
     }
 
-    //change that, no SQL should appear directly in scripts
-    $query1 = "SELECT deptime,idraces,racename,closetime,boattype,firstpcttime,maxboats,racetype FROM races  ";
-    $query1 .= " WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ";
-    $query1 .= " ORDER BY started ASC, deptime ASC, closetime ASC ";
-
-    $result1 = wrapper_mysql_db_query_reader($query1) or die("Query [$query1] failed \n");
+    // spf - we optimize the race object calls by creating the whole tab in one db call
+    $result1 = queryRacesBatch("WHERE ((started=0 AND deptime>UNIX_TIMESTAMP()) OR ".
+			       "(closetime > UNIX_TIMESTAMP())) ORDER BY started ASC,".
+			       " deptime ASC, closetime ASC");
 
     // Recherche de toutes les courses prévues
+    $allRacesRows = array();
+    $allRacesIds  = array();
     while($row = mysql_fetch_array($result1, MYSQL_ASSOC)) {
-        $dep = $row['deptime'];
-        $idraces = $row['idraces'];
-        $racename = $row['racename'];
-        $closetime = $row['closetime'];
-        $boattype = $row['boattype'];
-        $firstpcttime = $row['firstpcttime'];
-        $maxboats = $row['maxboats'];
-        $racetype = $row['racetype'];
+      array_push($allRacesRows, $row);
+      array_push($allRacesIds, $row['idraces']);      
+    }
+    $allNumOpponents = getNumOpponentBatch($allRacesIds);
 
-        list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($idraces);
-
-        $time = time();
-        $duration = $dep - time();
+    foreach($allRacesRows as $row) {
+      $cur_race = new races($row['idraces'], $row);
+      $dep          = $row['deptime'];
+      $idraces      = $row['idraces'];
+      $racename     = $row['racename'];
+      $closetime    = $row['closetime'];
+      $boattype     = $row['boattype'];
+      $firstpcttime = $row['firstpcttime'];
+      $maxboats     = $row['maxboats'];
+      $racetype     = $row['racetype'];
+      
+      $numopps = $allNumOpponents[$idraces];
+      $num_arrived = $numopps['num_arrived'];
+      $num_racing  = $numopps['num_racing'];
+      $num_engaged = $numopps['num_engaged'];
+      
+      $time = time();
+      $duration = $dep - time();
 
         if ( $dep < $time AND $closetime <$time ) { //no race planned
             printf("      ".getLocalizedString("norace")."\n");
@@ -44,7 +54,7 @@
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
                  "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
-            if ( $display_submit == "true" and in_array($idraces, $av_races) ) {
+            if ($display_submit AND in_array($idraces, $av_races)) {
                 // Subscribe button/form
                 echo "<form action=\"myboat.php\" method=\"post\">
                       <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
@@ -57,7 +67,7 @@
       
             echo "<td class=\"racesummary-type$racetype\">";
             //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
-            $urlidraces = htmlIdracesLink($idraces); // pointe vers les ICS
+            $urlidraces  = htmlIdracesLink($idraces); // pointe vers les ICS
             $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
             $urlracename = htmlRacenameLink($idraces, $racename); // pointe vers le classement de la course
             
@@ -93,10 +103,9 @@
                 printf("    <li>".getLocalizedString("endrace")." no limit</li>\n");
             }
             // Affichage des IC destinées à la racelist
-            $fullRacesObj = new fullRaces($idraces);
             printf("    <li><a href=\"/ics.php?idraces=%s\">WP(s)</a>" , $idraces);
-            printf(" - %s nm - %s : %d minutes</li>\n" , round($fullRacesObj->races->getRaceDistance()), getLocalizedString('crank'),  $fullRacesObj->races->vacfreq);
-            foreach ( $fullRacesObj->races->getICS() as $ic) {
+            printf(" - %s nm - %s : %d minutes</li>\n" , round($cur_race->getRaceDistance()), getLocalizedString('crank'),  $cur_race->vacfreq);
+            foreach ( $cur_race->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
  		        printf ("    <li class=\"icflagracelist\"><a class=\"icflagforum\" href=\"".htmlentities($ic['instructions'])."\" target=\"_ic\">".getLocalizedString("icforum")."</a></li>\n");
@@ -108,12 +117,8 @@
 
           printf ("  </ul>");
           echo "</td>\n";
-
           echo "</tr>\n</table>\n";
-
         }
     }
-
     echo "</div>";
-
 ?>
