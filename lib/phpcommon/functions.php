@@ -866,12 +866,12 @@ function idusersIsAdmin($idusers) {
     return (!is_null($u) && $u->isAdmin());
 }
 
-function getNumOpponents($idraces) {
+function getNumOpponents($idraces, $check = TRUE) {
   //force type int
   $idraces = intval($idraces);
 
   // Verification si course existe
-  if  ( !raceExists($idraces) ) {
+  if  ($check && !raceExists($idraces) ) {
       return (array (0,0,0));
   }
 
@@ -898,6 +898,72 @@ function getNumOpponents($idraces) {
   //              arrivés     en course       inscrits (arr + out + en course)
   return (array ($num_arrived,$num_racing,$num_arrived + $num_out + $num_racing));
 }
+
+function getNumOpponentBatch($racelist) {
+  $results=array();
+  $first = TRUE;
+  $in = "RR.idraces IN (";
+  foreach ($racelist as $idr) {
+    $results[$idr] = array('num_arrived' => 0, 'num_racing' => 0,
+			   'num_engaged' => 0);
+    if ($first) {
+      $first = FALSE;
+      $in.=$idr;
+    } else {
+      $in.=",".$idr;
+    }
+  }
+  $in.=")";
+  $query= "SELECT count(RR.idusers), RR.idraces FROM races_results AS RR, races WHERE ".
+    $in." AND races.idraces = RR.idraces AND RR.position=". BOAT_STATUS_ARR.
+    " GROUP BY RR.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $res = &$results[$row[1]];
+    $res['num_arrived']=$row[0];
+  }
+  
+  $query= "SELECT count(RR.idusers), RR.idraces FROM races_ranking AS RR, races WHERE ".
+    $in." AND races.idraces = RR.idraces GROUP BY RR.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $res = &$results[$row[1]];
+    $res['num_racing']=$row[0];
+  }
+
+  $query= "SELECT count(RR.idusers), RR.idraces FROM races_results AS RR, races WHERE ".
+    $in." AND races.idraces = RR.idraces AND RR.position!=". BOAT_STATUS_ARR.
+    " GROUP BY RR.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $res = &$results[$row[1]];
+    $res['num_engaged']=$row[0]+$res['num_racing']+$res['num_arrived'];
+  }
+  return $results;
+}
+
+function getNumEngaged($idraces, $check = TRUE) {
+  //force type int
+  $idraces = intval($idraces);
+
+  // Verification si course existe
+  if  ($check && !raceExists($idraces) ) {
+      return 0;
+  }
+
+  // Nombre de classés / non classés
+  $query= "SELECT count(*) FROM races_results WHERE idraces=$idraces"; 
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $num_engaged=$row[0];
+  $query= "SELECT count(*) FROM races_ranking WHERE idraces=$idraces"; 
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $num_engaged+=$row[0];
+  
+  return $num_engaged;
+}
+
 
 function htmlRacesListRow($rowdatas) {
 
