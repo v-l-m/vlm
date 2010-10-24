@@ -8,7 +8,8 @@
     
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
-    if ( empty($idusers) || $idusers != $boat ) {
+    //FIXME probablement pas optimum en tant qu'ordonnancement du test
+    if ( empty($boat) || !($idusers == $boat || (isPlayerLoggedIn() && in_array($idusers, getLoggedPlayerObject()->getManageableBoatIdList()) ) ) ) {
         // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
         $x=500;
         $y=250;
