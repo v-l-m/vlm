@@ -317,32 +317,52 @@ class races {
 
     /* output du tableau de wp */
     function htmlWayPoints($startstring) {
-        $ret  = "<table class=\"waypoints\">\n";
-        $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>@</th><th>Spec</th><th>Type</th><th>Name</th></tr>";
-        $ret .= "<tr>\n";
-        $ret .= "<td>WP0</td>"; 
-        $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $this->startlat/1000., $this->startlong/1000., $startstring);
-        $ret .= "</tr>\n";
-
-        foreach ($this->getWPs() as $num => $wp) {
-            $ret .= "<tr>\n";
-            $ret .= "<td>WP".$num."</td>";
-	    $wpsymbols = getWaypointHTMLSymbols($wp['wpformat']);
-	    $wpsymdesc = getWaypointHTMLSymbolsDescription($wp['wpformat']);
-	    switch($wp['wpformat'] & 0xF) {
-	    case WP_ONE_BUOY:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td><span title=\"%s\" class=\"wpsymbolbig\">%s</span></td><td>%s</td><td>%s</td>", 
-			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
-			      $wp['laisser_au'], $wpsymdesc, $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
-	      break;
-	    case WP_TWO_BUOYS:
-	    default:
-	      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td><span title=\"%s\" class=\"wpsymbolbig\">%s</span></td><td>%s</td><td>%s</td>", 
-			      $wp['latitude1']/1000., $wp['longitude1']/1000., 
-			      $wp['latitude2']/1000., $wp['longitude2']/1000., $wpsymdesc, $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
-	    }
-            $ret .= "</tr>\n";
-        }
+      $ret  = "<table class=\"waypoints\">\n";
+      $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>@</th><th>Spec</th><th>Type</th><th>Name</th></tr>";
+      $ret .= "<tr>\n";
+      $ret .= "<td>WP0</td>"; 
+      $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>%s</td><td>&nbsp;</td>", $this->startlat/1000., $this->startlong/1000., $startstring);
+      $ret .= "</tr>\n";
+      
+      foreach ($this->getWPs() as $num => $wp) {
+	switch($wp['wpformat'] & 0xF) {
+	case WP_ONE_BUOY:
+	  $wp_north = max ($wp['latitude1'], $wp['latitude2']);
+	  $wp_east  = max ($wp['longitude1'], $wp['longitude2']);
+	  $wp_south = min ($wp['latitude1'], $wp['latitude2']);
+	  $wp_west  = min ($wp['longitude1'], $wp['longitude2']);
+	  break;
+	case WP_TWO_BUOYS:
+	default:
+	  $wp_south = $wp_north = $wp['latitude1'];
+	  $wp_west  = $wp_east  = $wp['longitude1'];
+	  break;
+	}
+	$centerwp = centerDualCoordMilli($wp_north, $wp_east, $wp_south, $wp_west);
+	
+	$ret .= "<tr>\n";
+	$ret .= "<td><a href=\"".MAP_SERVER_URL . "/mercator.img.php?idraces=".
+	  $this->idraces."&amp;lat=". $centerwp['mlat']/1000.  .
+	  "&amp;long=" . $centerwp['mlon']/1000. .
+	  "&amp;maparea=" . $wp['maparea'] . "&amp;drawwind=no"."&amp;wp=" . $num .
+	  "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\">WP".$num."</a></td>";
+	
+	$wpsymbols = getWaypointHTMLSymbols($wp['wpformat']);
+	$wpsymdesc = getWaypointHTMLSymbolsDescription($wp['wpformat']);
+	switch($wp['wpformat'] & 0xF) {
+	case WP_ONE_BUOY:
+	  $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td colspan=\"2\">&nbsp;</td><td>%.0f&deg;</td><td><span title=\"%s\" class=\"wpsymbolbig\">%s</span></td><td>%s</td><td>%s</td>", 
+			  $wp['latitude1']/1000., $wp['longitude1']/1000., 
+			  $wp['laisser_au'], $wpsymdesc, $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
+	  break;
+	case WP_TWO_BUOYS:
+	default:
+	  $ret .= sprintf("<td>%.3f</td><td>%.3f</td><td>%.3f</td><td>%.3f</td><td>&nbsp;</td><td><span title=\"%s\" class=\"wpsymbolbig\">%s</span></td><td>%s</td><td>%s</td>", 
+			  $wp['latitude1']/1000., $wp['longitude1']/1000., 
+			  $wp['latitude2']/1000., $wp['longitude2']/1000., $wpsymdesc, $wpsymbols, $wp['wptypelabel'], htmlentities($wp['libelle']));
+	}
+	$ret .= "</tr>\n";
+      }
         $ret .= "</table>\n";
         return $ret;
     }
