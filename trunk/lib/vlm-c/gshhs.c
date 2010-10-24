@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.c,v 1.23 2010-10-03 19:43:13 ylafon Exp $
+ * $Id: gshhs.c,v 1.24 2010-10-24 20:28:25 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -164,7 +164,7 @@ void internal_init_partial_coastline(int minlat, int minlong,
   y = 0;
 #endif /* USE_GSHHS_20 */
 
-  coastfile = fopen(global_vlmc_context->gshhs_filename, "r");
+  coastfile = fopen(global_vlmc_context->gshhs_filename, "rb");
   if (coastfile == NULL) {
     printf("Fatal error trying to read %s\n", 
 	   global_vlmc_context->gshhs_filename);
@@ -331,7 +331,7 @@ void internal_init_partial_coastline(int minlat, int minlong,
     }
   }
 
-  coastfile = fopen(global_vlmc_context->gshhs_filename, "r");
+  coastfile = fopen(global_vlmc_context->gshhs_filename, "rb");
   if (coastfile == NULL) {
     printf("Fatal error trying to read %s\n", 
 	   global_vlmc_context->gshhs_filename);
