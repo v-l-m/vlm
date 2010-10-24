@@ -886,12 +886,15 @@ class fullRaces {
     $result = wrapper_mysql_db_query_reader($query_listusers) or die ($query_listusers);
 
     $key = 0;
-    $lastrace=0;
-    $printtd=0;
+    $lastrace = 0;
+    $raceobj = null;
+    $printtd = 0;
+    $currentengaged = getLoggedUserObject()->engaged;
 
     while( $row = mysql_fetch_assoc( $result ) ) {
       if ( $row['engaged'] != $lastrace ) {
         $lastrace = $row['engaged'];
+        $raceobj = new races($lastrace);
         if ( $printtd != 0 ) {
           echo "</tr>" ;
           $printtd = 1;
@@ -899,7 +902,7 @@ class fullRaces {
         echo "<tr class=\"htmltable\">";
         echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . getLocalizedString("valider") . "\" /></td>";
         echo "</tr><tr class=\"htmltable\">";
-        echo "<td class=\"htmltable\" colspan=\"8\"><b>RACE " . $lastrace . "</b></td>";
+        echo "<td class=\"htmltable\" colspan=\"8\">" . $lastrace . "&nbsp;-&nbsp;" . $raceobj->htmlRacenameLink() . "</td>";
         echo "</tr><tr class=\"htmltable\">";
         $key=0;
       }
@@ -909,21 +912,19 @@ class fullRaces {
       echo "<td class=\"htmltable\">";
 
       // ============= Affichage des noms de bateaux en acronyme
-      //echo "<td class=htmltable>" ;
       printf("<input type=\"checkbox\" name=\"list[]\" value=\"%s\" ", $row['idusers'] );
       if ( in_array($row['idusers'], $list  ) || (empty($list[0]) ))
         echo " checked=\"checked\"";
       echo " />";
 
-      echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
-      /*FIXME
-      if ( $row['engaged'] == $this->races->idraces ) {
-        echo "<b>" . $row['username'] . "</b>";
+      if ($row['engaged'] == $currentengaged) {
+          //Bold font to please to Phille old eyes.
+          echo "<b>";
+          echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
+          echo "</b>";
       } else {
-        echo $row['username'] ;
+          echo htmlIdusersUsernameLink($row['country'], $row['color'], $row['idusers'], $row['boatname'], $row['username']);
       }
-      */
-
       echo "</td>";
 
       if ( $key/4 == floor($key/4) ) echo "</tr></tr>\n";
