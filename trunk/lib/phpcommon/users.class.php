@@ -587,7 +587,7 @@ class fullUsers
     */
     if ( $this->users->targetlat == 0 && $this->users->targetlong == 0 ) {
       //echo "*Race WP*";
-      $rc = $this->bestWayToWaypoint($this->nwp);
+      $rc = $this->bestWayToWaypoint($this->getCurrentClassificationWaypointIdx());
     } else {
       //echo "*User WP*";
       $this->LatNM = $this->users->targetlat*1000;
@@ -616,7 +616,7 @@ class fullUsers
   function updateNM() {
     if ( $this->users->targetlat == 0 && $this->users->targetlong == 0 ) {
       //echo "*Race WP*";
-      $rc = $this->bestWayToWaypoint($this->nwp);
+      $rc = $this->bestWayToWaypoint($this->getCurrentClassificationWaypointIdx());
     } else {
       //echo "*User WP*";
       $this->LatNM = $this->users->targetlat*1000;
@@ -845,7 +845,7 @@ class fullUsers
       }  else  {
           // On ne touche pas au pilotmode (c'est peut-être Ortho ou BestVMG ou VBMG)
           // Mais il faut remettre à jour LatNM et LongNM
-          $rc = $this->bestWayToWaypoint($this->nwp);
+	$rc = $this->bestWayToWaypoint($this->getCurrentClassificationWaypointIdx());
       }
       $this->users->targetandhdg = -1;
       $this->users->targetlat    = 0;
@@ -1114,7 +1114,7 @@ class fullUsers
     $sauvlat=$this->LatNM;
     //==> On restore quand on a plus besoin des "vraies valeurs"...
 
-    $rc = $this->bestWayToWaypoint($this->nwp);
+    $rc = $this->bestWayToWaypoint($this->getCurrentClassificationWaypointIdx());
     $this->distancefromend = ortho($this->lastPositions->lat, $this->lastPositions->long,
            $this->LatNM, $this->LongNM);
 
