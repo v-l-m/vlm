@@ -960,10 +960,17 @@ class fullUsers
     $max_wp_idx = count($raceWPs);
     $wpidx = $this->users->nwp;
     $cur_wp = $raceWPs[$wpidx];
-    
-    while(($cur_wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) != 0) {
-      $wpixd++;
-      $cur_wp = $raceWPs[$wpidx];
+
+    if (defined('MOTEUR')) {
+      while(($cur_wp->type & (WP_ICE_GATE_N|WP_ICE_GATE_S)) != 0) {
+	$wpixd++;
+	$cur_wp = $raceWPs[$wpidx];
+      }
+    } else {
+      while(($cur_wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) != 0) {
+	$wpixd++;
+	$cur_wp = $raceWPs[$wpidx];
+      }
     }
     return $wpidx;
   }
