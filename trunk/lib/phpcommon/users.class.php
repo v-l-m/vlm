@@ -1169,9 +1169,23 @@ class fullUsers
   
   function setPref($key, $value) {
       //FIXME: this is a duplicate of setUserPref. Putting here to catch the mysql error if needed
-      $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
-                    " VALUES ( " . $this->users->idusers . 
-                    ", " . " '" . mysql_real_escape_string($key) .  "', '" . mysql_real_escape_string($value) . "')" ;
+      if (!in_array($key, explode(',', USER_PREF_ALLOWED))) {
+          $this->users->set_error("UNALLOWED PREFS KEY");
+          return False;
+      }
+      
+      $value = mysql_real_escape_string(strip_tags($value));
+      
+      //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
+      if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) {
+          $query_pref = "UPDATE users SET `$key` = '" . $value . "'" .
+                        " WHERE idusers = " . $this->users->idusers;
+      } else {
+          $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
+                        " VALUES ( " . $this->users->idusers . 
+                        ", " . " '" . mysql_real_escape_string($key) .  "', '" . $value . "')" ;
+      }
+
       if(wrapper_mysql_db_query_writer($query_pref)) {
           return True;
       } else {
