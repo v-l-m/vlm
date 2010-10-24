@@ -9,7 +9,7 @@
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
     //FIXME probablement pas optimum en tant qu'ordonnancement du test
-    if ( empty($boat) || !($idusers == $boat || (isPlayerLoggedIn() && in_array($idusers, getLoggedPlayerObject()->getManageableBoatIdList()) ) ) ) {
+    if ( empty($boat) || !($idusers == $boat || (isPlayerLoggedIn() && in_array($boat, getLoggedPlayerObject()->getManageableBoatIdList()) ) ) ) {
         // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
         $x=500;
         $y=250;
@@ -23,7 +23,7 @@
     
         imagestring($im, 5, 20, $y/2,  "You should not do that...your IP : " . getip() , $noir);
         imagestring($im, 5, 20, $y/2+20,  "Connected : ".$idusers ." is not BOAT=(".$boat.")" , $noir);
-        imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat= that is not yours changes the user's prefs" , $noir);
+        imagestring($im, 3, 20, $y/2+40,  "Asking a map for a boat that is not yours changes the user's prefs" , $noir);
         imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
     
         // Affichage de l'image
@@ -81,7 +81,7 @@
 ?>
 <html>
   <head>
-    <title>VLM Map (<?php echo $idusers; ?>)</title>
+    <title>VLM Map (<?php echo $boat; ?>)</title>
     <link rel="stylesheet" type="text/css" href="style/<?php echo getTheme(); ?>/style.css" />
     <script>
         clicEnCours = false;
