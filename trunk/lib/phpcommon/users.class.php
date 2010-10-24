@@ -955,6 +955,23 @@ class fullUsers
     return ($this->users->nwp - 1);
   }
   
+  function getCurrentClassificationWaypointIdx() {
+    $raceWPs = $this->races->getWPs();
+    $max_wp_idx = count($raceWPs);
+    $wpidx = $this->users->nwp;
+    $cur_wp = $raceWPs[$wpidx];
+    
+    while(($cur_wp['format'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) != 0) {
+      $wpixd++;
+      $cur_wp = $raceWPs[$wpidx];
+    }
+    return $wpidx;
+  }
+
+  function getCurrentClassificationWaypoint() {
+    $this->races->giveWPCoordinates(getCurrentClassificationWaypointIdx());
+  }
+  
   // Function updateWaypoints
   function recordWaypointCrossing($xingtime, $validity = 1)
   {
@@ -1488,7 +1505,6 @@ class fullUsers
       $corrected_distance =  $distance *  $duration / $time_elapsed ;
     }
     //printf ("\ndistRecords for duration = %d s , elapsed = %d, dur/ela = %f,\n distance=%f, corrected=%f\n", $duration, $time_elapsed, $duration/$time_elapsed,$distance,$corrected_distance);
-    //return ($corrected_distance);
     return (array($distance,$corrected_distance));
   }
 
