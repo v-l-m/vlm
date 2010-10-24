@@ -712,7 +712,7 @@ include_once("scripts/myboat.js");
 </div> <!-- Fin des controlbox -->
 
 <!-- Mapbox -->
-<form name="mapprefs" id="mercator" action="map.img.php" onSubmit="mapprefSubmitted();" target="_new" method="get">
+<form name="mapprefs" id="mercator" action="map.img.php" onSubmit="mapprefSubmitted();" target="_newmap<?php echo getLoginId(); ?>" method="get">
 <div id="mapbox">
 <!--    <?php echo "<h3>".getLocalizedString("navigation"). "</h3>"?> -->
     <div id="maplayerbox" class="mapboxitem">
