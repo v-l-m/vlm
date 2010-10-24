@@ -690,7 +690,7 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="wp1long" value="<?php echo longitudeConstraintDegrees($usersObj->users->targetlong); ?>" />
             <?php
         
-            $nwp_coords=$myRace->giveWPCoordinates($usersObj->users->getCurrentClassificationWaypointIdx());
+            $nwp_coords=$myRace->giveWPCoordinates($usersObj->getCurrentClassificationWaypointIdx());
             // print_r($nwp_coords);
             //                                Lat              Long
             $lat_xing = new doublep();
