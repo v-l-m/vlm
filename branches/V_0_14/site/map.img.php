@@ -34,8 +34,12 @@
 
     $save= (htmlentities($_GET['save']) == 'on');
 
-    $maptype= htmlentities($_GET['maptype']);
-
+    $maptype = htmlentities(get_cgi_var('maptype', 'compas'));
+    if ( in_array($maptype, Array("floatingcompas", "bothcompass", "compas" ) ) ) {
+        setUserPref($boat, "mapTools" , $maptype, $save);
+    } else {
+        setUserPref($boat, "mapTools" , "none", $save);
+    }
     $list= htmlentities($_GET['list']) ;
     
     $maparea= htmlentities(get_cgi_var('maparea', round(MAPAREA_MAX/2)));
@@ -96,7 +100,7 @@
         {
             var png_path;
             if (msiesix) {
-                document.write('<img id="dynimg" src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" >');
+                document.write('<img id="dynimg" src="images/site/blank.gif" style="width:'+width+'px; height:'+height+'px; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+img_path+'\', sizingMethod=\'scale\');" />');
             } else if (netscape) {
                 document.write('<img id="dynimg" src="'+img_path+'" />');
             } else {
@@ -214,6 +218,7 @@
           "estime=". $estime . "&" . 
           "list=". $list . "&" . 
           "boat=". $boat . "&" . 
+          "maptype=" . $maptype . "&" .
           "text=". $text ;
 
     // **** And now, draw the map **** 
@@ -231,6 +236,7 @@
           $URL_TS.="drawgrid=no&drawmap=no&drawrace=no&drawscale=no";
           $URL_TS.="&drawpositions=no&drawlogos=no&drawlibelle=no&drawortho=no";
           $URL_TS.="&seacolor=transparent";
+          $URL_TS.="&maptype=" . $maptype ;
           $URL_TS.="&". $query_string_base ;
           $URL_TS_BASE = $URL_TS;
           $URL_TS.="&drawwind=".$timestamp;
@@ -282,12 +288,7 @@
       // ****  Le compas deplacable en dernier, sinon il est dessous.. *** 
       // Que met t'on sur la carte ?
       if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
-          setUserPref($boat, "mapTools" , $maptype, $save);
-          echo "<div id=\"deplacable\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><img src=\"images/site/compas-transparent.gif\"></div>";
-      } else if ( $maptype == "compas" ) {
-          setUserPref($boat, "mapTools" , "compas", $save);
-      } else {
-          setUserPref($boat, "mapTools" , "none", $save);
+          echo "<div id=\"deplacable\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><img src=\"images/site/compas-transparent.gif\" /></div>";
       }
     ?>
 
