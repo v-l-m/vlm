@@ -908,7 +908,7 @@ class map
   function drawPositions($projCallbackLong, $projCallbackLat, $age, $estime, $mapTools) {
       $this->setFuncProjLat($projCallbackLat);
       $this->setFuncProjLong($projCallbackLong);  
-
+      $font = 5; //FIXME HARDCODED
       $boat = get_cgi_var('boat');
       if ( $this->list == "" ) return (0);
 
@@ -921,10 +921,10 @@ class map
       // Si plus de trop de bateaux... on rend la main tout de suite.
       if ( !isAdminLogged() ) {
           if ( count($this->list) > MAX_BOATS_ON_MAPS ) {
-              imagestring ( $this->mapImage, $font+5, $this->xSize/2 - 290, $this->ySize/2 ,
+              imagestring ( $this->mapImage, $font, $this->xSize/2 - 290, $this->ySize/2 ,
                             "No boat drawn. Please select no more than " . MAX_BOATS_ON_MAPS . " boats on maps please !" ,
                             $this->colorWarning);
-              imagestring ( $this->mapImage, $font+5, $this->xSize/2 - 289, $this->ySize/2 ,
+              imagestring ( $this->mapImage, $font, $this->xSize/2 - 289, $this->ySize/2 ,
                             "No boat drawn. Please select no more than " . MAX_BOATS_ON_MAPS . " boats on maps please !" ,
                             $this->colorBlack);
               return (0);
