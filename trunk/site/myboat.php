@@ -828,7 +828,7 @@ include_once("scripts/myboat.js");
      <input type="hidden" name="long" value="<?php echo $usersObj->lastPositions->long/1000; ?>" />
       <?php
           if ( abs($usersObj->users->targetlat) < 0.0001 && abs($usersObj->users->targetlong) < 0.0001 ) {
-	    $myWP=&$myRace->giveWPCoordinates($usersObj->users->getCurrentClassificationWaypointIdx());
+	    $myWP=&$myRace->giveWPCoordinates($usersObj->getCurrentClassificationWaypointIdx());
 	    $centerwp = centerDualCoordMilli($myWP['latitude1'], $myWP['longitude1'], $myWP['latitude2'], $myWP['longitude2']);
 	    $latwp = $centerwp['mlat']/1000.;
 	    $longwp = $centerwp['mlon']/1000.;
