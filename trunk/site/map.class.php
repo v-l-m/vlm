@@ -921,12 +921,11 @@ class map
       // Si plus de trop de bateaux... on rend la main tout de suite.
       if ( !isAdminLogged() ) {
           if ( count($this->list) > MAX_BOATS_ON_MAPS ) {
+              $msg = "No boat drawn. Please select no more than " . MAX_BOATS_ON_MAPS . " boats on maps please ! (selected : ".count($this->list).")";
               imagestring ( $this->mapImage, $font, $this->xSize/2 - 290, $this->ySize/2 ,
-                            "No boat drawn. Please select no more than " . MAX_BOATS_ON_MAPS . " boats on maps please !" ,
-                            $this->colorWarning);
+                            $msg , $this->colorWarning);
               imagestring ( $this->mapImage, $font, $this->xSize/2 - 289, $this->ySize/2 ,
-                            "No boat drawn. Please select no more than " . MAX_BOATS_ON_MAPS . " boats on maps please !" ,
-                            $this->colorBlack);
+                            $msg , $this->colorBlack);
               return (0);
           }
       }
