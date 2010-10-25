@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include_once("config.php");
     include_once("mapfunctions.php");
     include_once("map.class.php");
@@ -161,7 +162,7 @@
     
     
     // Age (si list = all alors max age = 1 jour)
-    if ( $age == 0 OR $list == "all" ) {
+    if ( $age == 0 || $list == "all" ) {
         $age = min(24*3600,$age*3600);
     } else {
         $age = $age*3600;
