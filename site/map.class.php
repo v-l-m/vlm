@@ -905,7 +905,7 @@ class map
 
 
   /////////////////////Draw boat positions and tracks
-  function drawPositions($projCallbackLong, $projCallbackLat, $age, $estime) {
+  function drawPositions($projCallbackLong, $projCallbackLat, $age, $estime, $mapTools) {
       $this->setFuncProjLat($projCallbackLat);
       $this->setFuncProjLong($projCallbackLong);  
 
@@ -916,7 +916,6 @@ class map
     
       $this->drawBlackoutWarning();
 
-      $mapTools=getUserPref(htmlentities($boat),"mapTools") ;
       $num_boats_to_draw=0;
 
       // Si plus de trop de bateaux... on rend la main tout de suite.
