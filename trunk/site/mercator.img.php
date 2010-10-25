@@ -30,6 +30,7 @@
     
     $age=max(0,htmlentities(get_cgi_var('age', 0)));
     $estime=max(0,htmlentities(get_cgi_var('estime', 0)));
+    $maptype = htmlentities(get_cgi_var('maptype', 'compas'));
     
     $coasts=trim(htmlentities(get_cgi_var('coasts')));
     
@@ -267,7 +268,7 @@
         if ( $raceover == "true") {
           $mapObj->drawExcludedPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $idraces, $boat, $age, $estime);
         } else {
-          $mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age, $estime);
+          $mapObj->drawPositions($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $age, $estime, $maptype);
           if ( $drawortho == "yes" ) {
               $mapObj->drawOrtho($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $estime);
           }

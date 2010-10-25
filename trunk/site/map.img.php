@@ -35,8 +35,14 @@
 
     $save= (htmlentities($_GET['save']) == 'on');
 
-    $maptype= htmlentities($_GET['maptype']);
-
+    $maptype = htmlentities($_GET['maptype'], 'compas');
+    if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
+        setUserPref($boat, "mapTools" , $maptype, $save);
+    } else if ( $maptype == "compas" ) {
+        setUserPref($boat, "mapTools" , "compas", $save);
+    } else {
+        setUserPref($boat, "mapTools" , "none", $save);
+    }
     $list= htmlentities($_GET['list']) ;
     
     $maparea= htmlentities(get_cgi_var('maparea', round(MAPAREA_MAX/2)));
@@ -215,6 +221,7 @@
           "estime=". $estime . "&" . 
           "list=". $list . "&" . 
           "boat=". $boat . "&" . 
+          "maptype=" . $maptype . "&" .
           "text=". $text ;
 
     // **** And now, draw the map **** 
@@ -283,12 +290,7 @@
       // ****  Le compas deplacable en dernier, sinon il est dessous.. *** 
       // Que met t'on sur la carte ?
       if ( $maptype == "floatingcompas" || $maptype == "bothcompass" ) {
-          setUserPref($boat, "mapTools" , $maptype, $save);
           echo "<div id=\"deplacable\" onMouseDown=\"boutonPresse()\" onMouseUp=\"boutonRelache()\"><img src=\"images/site/compas-transparent.gif\"></div>";
-      } else if ( $maptype == "compas" ) {
-          setUserPref($boat, "mapTools" , "compas", $save);
-      } else {
-          setUserPref($boat, "mapTools" , "none", $save);
       }
     ?>
 
