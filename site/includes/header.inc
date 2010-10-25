@@ -299,7 +299,10 @@
                     if ($idb == getLoginId()) {
                         echo " selected";
                     }
-                    echo ">".$u->username."</option>";
+                    echo ">";
+                    if (!($u->engaged > 0)) echo '_';
+                    echo $u->username;
+                    echo "</option>";
                 }
                 echo "</select>";
                 echo "</form>";
