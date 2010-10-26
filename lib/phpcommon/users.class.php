@@ -431,6 +431,7 @@ class users extends baseClass
 
   function setRelationship($idplayer, $relationship, $done_by_idplayer = null) {
       $idplayer = intval($idplayer);
+      $playername = getPlayerObject($idplayer)->playername;
       if (is_null($done_by_idplayer)) $done_by_idplayer = $idplayer;
       $relationship = intval($relationship);
       if ($idplayer > 0) {
@@ -438,13 +439,13 @@ class users extends baseClass
           if ($this->queryWrite($query)) {
               switch($relationship) {
                   case PU_FLAG_OWNER :
-                      $logmsg = "Player take ownership of this boat.";
+                      $logmsg = "Took ownership of this boat.";
                       break;
                   case PU_FLAG_BOATSIT :
-                      $logmsg = "Player $idplayer granted boatsitter of this boat.";
+                      $logmsg = "Granted $playername @$idplayer as boatsitter of this boat.";
                       break;
                   default :
-                      $logmsg = "Boat attached to player $idplayer with linktype = ".$relationship;
+                      $logmsg = "Attached boat to $playername @$idplayer with linktype = ".$relationship;
               }
               logPlayerEvent($done_by_idplayer, $this->idusers, $this->engaged, $logmsg);
               return True;
@@ -1242,7 +1243,7 @@ class fullUsers
     // Then subscribe to race 0
     $this->subscribeToRaces(0);
 
-    logUserEvent($this->users->idusers , $oldengaged, "Abandon." );
+    logUserEvent($this->users->idusers , $oldengaged, "Abandon in race ~$oldengaged." );
 
   }
 
@@ -1371,7 +1372,7 @@ class fullUsers
         " WHERE idusers = " . $this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
 
-      logUserEvent($this->users->idusers , $id, "Engaged." );
+      logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
 
     } else {
       $this->deleteCurrentRanking();
