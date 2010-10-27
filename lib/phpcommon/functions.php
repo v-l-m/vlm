@@ -940,7 +940,7 @@ function getNumOpponentBatch($racelist) {
     $res['num_engaged']=$row[0];
   }
   foreach ($racelist as $idr) {
-    $res = &$result[$idr];
+    $res = &$results[$idr];
     $res['num_engaged']+=$res['num_racing']+$res['num_arrived'];
   }
   return $results;
