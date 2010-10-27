@@ -88,7 +88,7 @@
     if ( is_numeric($list) ) {
         $list=array($list);
     }
-    $text=htmlentities(get_cgi_var('text', 'left'));
+    $text=htmlentities(get_cgi_var('text', 'right'));
     $save=htmlentities(get_cgi_var('save', 'off'));
     $tracks=htmlentities(get_cgi_var('tracks'));
     $raceover=htmlentities(get_cgi_var('raceover'));
