@@ -31,7 +31,7 @@
     
     $age=max(0,htmlentities(get_cgi_var('age', 0)));
     $estime=max(0,htmlentities(get_cgi_var('estime', 0)));
-    $maptype = htmlentities(get_cgi_var('maptype', 'compas'));
+    $maptype = htmlentities(get_cgi_var('maptype', 'none'));
     
     $coasts=trim(htmlentities(get_cgi_var('coasts')));
     

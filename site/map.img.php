@@ -34,7 +34,7 @@
 
     $save= (htmlentities($_GET['save']) == 'on');
 
-    $maptype = htmlentities(get_cgi_var('maptype', 'compas'));
+    $maptype = htmlentities(get_cgi_var('maptype', 'none'));
     if ( in_array($maptype, Array("floatingcompas", "bothcompass", "compas" ) ) ) {
         setUserPref($boat, "mapTools" , $maptype, $save);
     } else {
