@@ -937,7 +937,11 @@ function getNumOpponentBatch($racelist) {
   $result = wrapper_mysql_db_query_reader($query) or die($query);
   while($row = mysql_fetch_array($result, MYSQL_NUM)) {
     $res = &$results[$row[1]];
-    $res['num_engaged']=$row[0]+$res['num_racing']+$res['num_arrived'];
+    $res['num_engaged']=$row[0];
+  }
+  foreach ($racelist as $idr) {
+    $res = &$results[$idr];
+    $res['num_engaged']+=$res['num_racing']+$res['num_arrived'];
   }
   return $results;
 }
