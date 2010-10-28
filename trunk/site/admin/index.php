@@ -61,7 +61,7 @@
     echo "</div>";
     echo "<div style=\"display:inline;float:left;\">";
     $tablepages = Array(
-        "user_action.php" => "Browse Boat (User) Actions",
+        "user_action.php" => "Browse Boat/Player Actions",
         "admin_changelog.php" => "Browser Admin Changelog",
         );
     adminlistbox($tablepages, "Actions watch");
