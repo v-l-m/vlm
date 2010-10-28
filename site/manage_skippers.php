@@ -13,9 +13,17 @@
         $ret .= "<form name=\"linktype\" method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">";
         $ret .= "<input type=\"hidden\" name=\"pu_idusers\" value=\"".$rel['idusers']."\" />";
         $ret .= "<input type=\"hidden\" name=\"pu_idplayers\" value=\"".$rel['idplayers']."\" />";
-        $ret .= "<input type=\"hidden\" name=\"pu_linktype\" value=\"".$rel['linktype']."\" />";        
-        $ret .= "<input type=\"hidden\" name=\"actionskipper\" value=\"request_delete\" />";
-        $ret .= "<input type=\"submit\" value=\"".getLocalizedString("delete")."\" />";
+        $ret .= "<input type=\"hidden\" name=\"pu_linktype\" value=\"".$rel['linktype']."\" />";
+        $actionskipper = get_cgi_var("actionskipper", "confirm_cancel");
+        $pu_idusers = get_cgi_var("pu_idusers", '');
+        $pu_idplayers = get_cgi_var("pu_idplayers", '');
+        if ($actionskipper == 'request_delete' && $pu_idusers == $rel['idusers'] && $pu_idplayers == $rel['idplayers']) {
+            $ret .= "<input type=\"hidden\" name=\"actionskipper\" value=\"confirm_delete\" />";
+            $ret .= "<input type=\"submit\" value=\"".getLocalizedString("Confirm")." - ".getLocalizedString("delete")."\" />";        
+        } else {
+            $ret .= "<input type=\"hidden\" name=\"actionskipper\" value=\"request_delete\" />";
+            $ret .= "<input type=\"submit\" value=\"".getLocalizedString("delete")."\" />";
+        }
         $ret .= "</form>";
         return $ret;
     }
