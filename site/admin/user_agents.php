@@ -6,7 +6,7 @@
     $q = "SELECT ".
          "useragent, count(*) ".
          "FROM user_action ".
-         "GROUP BY useragent ;";
+         "GROUP BY useragent ORDER BY count(*) DESC;";
 
     htmlQuery($q);
 
