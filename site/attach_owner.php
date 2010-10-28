@@ -3,6 +3,11 @@
     include_once("players.class.php");
     include_once("config.php");
 
+    requireLoggedPlayer("You have to be logged with the player credential to attach the boat.");
+    if (getLoggedPlayerObject()->hasMaxBoats() ) {
+        printErrorAndDie("Restriction", "You already reached the maximum boats per player");
+    }
+
     $actionattach = get_cgi_var("claimownership");
     $boatpseudo = htmlentities(get_cgi_var("boatpseudo"));
     $boatpassword = get_cgi_var("boatpassword");
@@ -40,14 +45,6 @@
 <?php
     }
 
-    if (!isPlayerLoggedIn()) { //il faut être loggué en tant que player
-        echo "<div id=\"attachboatbox\">";
-        echo "<p>";
-        echo getLocalizedString("You have to be logged with the player credential to attach the boat.");
-        echo "</p></div>";
-        include_once("includes/footer.inc");
-        exit();
-    }
         
     /* At this point :
      * - player credentials are checked

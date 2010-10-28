@@ -3,8 +3,11 @@
     include_once("players.class.php");
     include_once("config.php");
 
-    //FIXME
-    if (!isPlayerLoggedIn()) die('ERROR');
+    requireLoggedPlayer();
+    
+    if (getLoggedPlayerObject()->hasMaxBoats() ) {
+        printErrorAndDie("Restriction", "You already reached the maximum boats per player");
+    }
 
     $actioncreate = get_cgi_var("createboat");
 

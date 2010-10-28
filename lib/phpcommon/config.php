@@ -204,7 +204,7 @@ define("PILOTMODE_VBVMG", 5);
 define("PILOTMODE_BESTSPEED", 6);
 
 // Define strings used (see strings.inc) to describe the pilot mode
-$pilotmodeList = Array(1 => "autopilotengaged", 2 => "constantengaged", 3 => "orthoengaged", 4 => "bestvmgengaged", 5 => "vbvmgengaged");
+$pilotmodeList = Array(1 => "autopilotengaged", 2 => "constantengaged", 3 => "orthoengaged", 4 => "bestvmgengaged", 5 => "vbvmgengaged", 6 => "bestspeed");
 
 // Define the boat status (ARRIVE, HORS TEMPS, DNF, ABANDON)
 define("BOAT_STATUS_ARR", 1);
@@ -222,6 +222,9 @@ define ("PILOTOTO_MAX_EVENTS", 5);
 // Type de courses
 define ("RACE_TYPE_CLASSIC",0);
 define ("RACE_TYPE_RECORD", 1);
+
+//Player mode
+define ("MAX_BOATS_OWNED_PER_PLAYER", 12); //mesure anti-abus
 
 //constant for speedchart
 //knots between two graduations
