@@ -32,13 +32,14 @@
         "races_instructions.php" => "Races instructions",
         "flags.php" => "Flags definitions (no uploading, see below)",
         "races.php" => "Races definitions (no uploading, see below)",
-        "waypoints.php" => "[Experimental] Waypoints definitions",
-        "races_waypoints.php" => "[Experimental] Races_waypoints definitions",
+        "waypoints.php" => "Waypoints definitions",
+        "races_waypoints.php" => "Races_waypoints definitions",
         "users.php" => "Users",
         "user_action.php" => "Browse User Actions",
-        "players.php" => "[Experimental] Players",
-        "players_pending.php" => "[Experimental] Players Pending",
-        "playerstousers.php" => "[Experimental] Links between players & users",
+        "admin_changelog.php" => "Browser Admin Changelog",
+        "players.php" => "Players",
+        "players_pending.php" => "Players Pending",
+        "playerstousers.php" => "Links between players & users",
         );
     adminlistbox($tablepages, "Table administration/browsing");
 
