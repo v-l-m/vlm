@@ -422,9 +422,14 @@ class users extends baseClass
   }
   
   function setOwnerId($idowner) {
+      if (getPlayerObject($idowner)->hasMaxBoats() ) {
+          $this->users->set_error("Player reached max boats");
+          return False;
+      }
+
       if ($this->setRelationship($idowner, PU_FLAG_OWNER)) {
-              $this->idowner = $idowner;
-              return True;
+          $this->idowner = $idowner;
+          return True;
       }          
       return False;
   }
