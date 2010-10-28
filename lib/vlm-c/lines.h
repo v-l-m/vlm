@@ -1,5 +1,5 @@
 /**
- * $Id: lines.h,v 1.6 2008-12-16 16:09:23 ylafon Exp $
+ * $Id: lines.h,v 1.7 2010-10-28 10:23:16 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -85,5 +85,26 @@ double distance_to_line_ratio_xing PARAM9(double, double, double, double,
  */
 double check_coast PARAM6(double, double, double, double,
 			  double *, double *);
+
+/**
+ * compute an approximative distance to a segment. Useful to estimate 
+ * distance to a gate. 
+ * Parameters: lat/long of point, then lat and long of A & B defining the
+ * segment, and pointers to lat/long of closest point
+ */
+double distance_to_line_dichotomy_xing PARAM8(double, double,
+					      double, double,
+					      double, double,
+					      double *, double *);
+
+/**
+ * compute an approximative distance to a segment. Useful to estimate 
+ * distance to a gate.
+ * Parameters: lat/long of point, then lat and long of A & B defining the
+ * segment
+ */
+double distance_to_line_dichotomy PARAM6(double, double,
+					 double, double,
+					 double, double);
 
 #endif /* _LINES_H_ */
