@@ -149,41 +149,34 @@ class races {
             $this->stop2long = $this->startlong;
         }
     }
-}
+  }
 
   function getRaceDistance($force = 0) {
-    if (!isset($this->racedistance) OR ($force != 0) ) {
-      if ( $this->idraces == 35 OR $this->idraces >=40 ) {
-	$this->racedistance=0;
-	$lastlong=$this->startlong;
-	$lastlat=$this->startlat;
+    if (!isset($this->racedistance) OR ($this->racedistance == 0) OR ($force != 0) ) {
+      if ( ($this->idraces >=40) OR ($this->idraces == 35)) {
+	$lat_xing   = new doublep();
+	$long_xing  = new doublep();
+	$xing_ratio = new doublep();
+	$racedist   = 0;
+	$lastlong   = $this->startlong;
+	$lastlat    = $this->startlat;
 	$this->retrieveWPs();
-	foreach ( $this->waypoints as $WP ) {
-	  $d1=ortho($lastlat,$lastlong,$WP['latitude1'], $WP['longitude1'] );
-	  $d2=ortho($lastlat,$lastlong,$WP['latitude2'],$WP['longitude2']);
-	  if ( $d1 < $d2 ) {
-	    $lastlat=$WP['latitude1'];
-	    $lastlong=$WP['longitude1'];
-	    $this->racedistance+=$d1;
-	  } else {
-	    $lastlat=$WP['latitude2'];
-	    $lastlong=$WP['longitude2'];
-	    $this->racedistance+=$d2;
-	  }
+	foreach ($this->waypoints as $WP) {
+	  $xing_dist = VLM_distance_to_line_ratio_xing($lastlat, $lastlong,
+						       $WP['latitude1'], $WP['longitude1'],
+						       $WP['latitude2'], $WP['longitude2'],
+						       $lat_xing, $long_xing, $xing_ratio);
+	  $racedist+=$xing_dist;
+	  $lastlat = doublep_value($lat_xing);
+	  $lastlong = doublep_value($long_xing);
 	}
-	// + la distance entre l'avant dernier WP et le dernier
-	$this->racedistance+=min(ortho($lastlat,$lastlong,
-				       $WP['latitude1'], $WP['longitude1'] ), 
-				 ortho($lastlat,$lastlong,
-				       $WP['latitude2'], $WP['longitude2'] ));
+	$this->racedistance = $racedist;
       } else {
 	$this->racedistance=0;
       }
     }
     return $this->racedistance;
   }
-
-
 
   /* retrieve the Race Instructions */
   function getICS($force = 0) {
