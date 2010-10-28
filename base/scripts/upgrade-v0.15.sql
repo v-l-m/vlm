@@ -17,3 +17,6 @@ KEY `entry` (`time`,`idraces`,`idusers`)
 # pourraient etre desirables)
 ALTER TABLE `histpos` DROP COLUMN `wind`;
 ALTER TABLE `positions` DROP COLUMN `wind`;
+
+#On ajoute une clef indexee dans admin_changelog pour pouvoir naviguer plus facilement dedans
+ALTER TABLE admin_changelog ADD id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
