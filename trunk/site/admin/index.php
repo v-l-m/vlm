@@ -11,6 +11,10 @@
         echo "<h3>$title</h3>";
         echo "<ul>";
         foreach ($list as $page => $pagedef) {
+            if ($pagedef == "block") {
+                echo "</ul><ul>";
+                continue;
+            }
             echo "<li>";
             echo "<a href=\"$page\">$pagedef</a>";
             echo "</li>";
@@ -30,18 +34,21 @@
 
     $tablepages = Array(
         "races_instructions.php" => "Races instructions",
-        "flags.php" => "Flags definitions (no uploading, see below)",
         "races.php" => "Races definitions (no uploading, see below)",
         "waypoints.php" => "Waypoints definitions",
         "races_waypoints.php" => "Races_waypoints definitions",
-        "users.php" => "Users",
-        "user_action.php" => "Browse User Actions",
-        "admin_changelog.php" => "Browser Admin Changelog",
+        );
+    adminlistbox($tablepages, "Race administration");
+
+    $tablepages = Array(
+        "users.php" => "Boats (Users)",
         "players.php" => "Players",
         "players_pending.php" => "Players Pending",
         "playerstousers.php" => "Links between players & users",
+        "block3" => "block",
+        "flags.php" => "Flags definitions (no uploading, see below)",
         );
-    adminlistbox($tablepages, "Table administration/browsing");
+    adminlistbox($tablepages, "Boats & players administration");
 
     $uploadpages = Array(
         "uploadracemap.php" => "Race map upload",
@@ -53,10 +60,23 @@
 
     echo "</div>";
     echo "<div style=\"display:inline;float:left;\">";
+    $tablepages = Array(
+        "user_action.php" => "Browse Boat (User) Actions",
+        "admin_changelog.php" => "Browser Admin Changelog",
+        );
+    adminlistbox($tablepages, "Actions watch");
 
     $reportpages = Array(
         "user_agents.php"                   => "User_agent statistics",
         "possible_duplicates.php"           => "Duplicates by IP",
+        "boat_action_count.report.php" => "Boats actions count(*)",
+        "player_action_count.report.php" => "Players actions count(*)",
+        "player_boat_owned_count.report.php" => "Boat per player count(*)",
+        );
+
+    adminlistbox($reportpages, "Stats");
+
+    $reportpages = Array(
         "racemaps_without_race.report.php"  => "Racemaps with no corresponding race",
         "races_without_racemap.report.php"  => "Races with no corresponding racemap",
         "boats_with_more_than_one_owner.report.php" => "Boats with more than one owner",
