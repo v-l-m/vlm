@@ -1,5 +1,5 @@
 /**
- * $Id: unittest.c,v 1.16 2010-08-31 16:03:47 ylafon Exp $
+ * $Id: unittest.c,v 1.18 2010-10-28 10:34:23 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -107,7 +107,9 @@ int main (int argc, char **argv) {
 							      latb, longb));
   printf("Distance Point1 -> Line A-B: %.3f\n", 
 	 distance_to_line(lat1, long1, lata, longa, latb, longb));
-
+  printf("Distance Point1 (dicho) -> Line A-B: %.3f\n", 
+	 distance_to_line_dichotomy(lat1, long1, lata, longa, latb, longb));
+  
   printf("\nUnit test: distance from Point 2 to Line A-B\n");
   printf("Point2: lat %.3f, long %.3f\n", radToDeg(lat2), radToDeg(long2));
   printf("Line A: lat %.3f, long %.3f\n", radToDeg(lata), radToDeg(longa));
@@ -119,6 +121,8 @@ int main (int argc, char **argv) {
 							      latb, longb));
   printf("Distance Point2 -> Line A-B: %.3f\n", 
 	 distance_to_line(lat2, long2, lata, longa, latb, longb));
+  printf("Distance Point1 (dicho) -> Line A-B: %.3f\n", 
+	 distance_to_line_dichotomy(lat2, long2, lata, longa, latb, longb));
 
   printf("\nUnit test: distance from Point 3 to Line A-B\n");
   printf("Point3: lat %.3f, long %.3f\n", radToDeg(lat3), radToDeg(long3));
@@ -131,6 +135,8 @@ int main (int argc, char **argv) {
 							      latb, longb));
   printf("Distance Point3 -> Line A-B: %.3f\n", 
 	 distance_to_line(lat3, long3, lata, longa, latb, longb));
+  printf("Distance Point1 (dicho) -> Line A-B: %.3f\n", 
+	 distance_to_line_dichotomy(lat3, long3, lata, longa, latb, longb));
 
   init_polar();
   printf("\nWind test\n");
