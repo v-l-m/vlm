@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    'Restriction' => 'Restriction',
+    'You already reached the maximum boats per player' => 'You already reached the maximum boats per player',
     'Account validation error' => 'Account validation error',
     'An email has been sent for your information.' => 'An email has been sent for your information.',
     'An email has been sent. Click on the link inside.' => 'An email has been sent. Click on the link inside.',

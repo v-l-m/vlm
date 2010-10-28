@@ -2062,4 +2062,32 @@ function getLinktypeString($linktype) {
     }
 }
 
+function requireLoggedPlayer($msg = null) {
+    if (!isPlayerLoggedIn()) {
+        if (is_null($msg)) $msg = "You are not logged in !";
+        printErrorAndDie("Forbidden", $msg);
+    }
+}
+
+function printErrorAndDie($title, $msg = null, $link = null) {
+    echo "<div class=\"error\">";
+    echo "<h1 class=\"error\">";
+    echo getLocalizedString($title);
+    echo "</h1>";
+    if (!is_null($msg)) {
+        echo "<p>";
+        echo getLocalizedString($msg);
+        echo "</p>";
+    }
+    if (!is_null($link)) {
+        echo "<p>";
+        echo "<a href=\"$link\">".getLocalizedString("Click here")."</a>";
+        echo "</p>";
+    }
+
+    echo "</div>";
+    include('includes/footer.inc');
+    exit();
+}
+
 ?>
