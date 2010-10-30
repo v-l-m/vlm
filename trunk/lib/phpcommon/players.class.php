@@ -246,7 +246,7 @@ class players extends baseClass {
         }
         
         if (strlen($this->playername) < 3 && $this->playername != "fm") $this->set_error(getLocalizedString("Your playername should have at least 3 characters."));
-        if (stripos($this->playername, '--') !== False || stripos($this->playername, '  ') !== False) $this->set_error(getLocalizedString("Your playername should not be ascii art")); 
+        if (strripos($this->playername, '--') !== False || strripos($this->playername, '  ') !== False) $this->set_error(getLocalizedString("Your playername should not be ascii art")); 
 
         $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
         $result = $this->queryRead($query);        
