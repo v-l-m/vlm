@@ -173,7 +173,7 @@ if ( $do == "yes" ) {
                       $race      . 
            "                                            );";
              $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
-            $action_tracking = "UPDATE coords (Long=$longitude,Lat=$latitude) for user $boat in race $race";
+            $action_tracking = "UPDATE coords (Lat=$latitude,Long=$longitude) for user $boat in race $race";
 
        break;
         case "reset_pass":
@@ -242,22 +242,18 @@ switch ($action) {
         break;
     case "maj_position":
         echo "<hr />";
-        echo "<table border=\"0\">
-             <tr>
-           <td>&nbsp;</td><td>Millidegres</td><td>Deg/Min/Sec</td>
+        echo "<table border=\"0\"><tr><td>&nbsp;</td><td>Millidegres</td><td>Deg/Min/Sec</td>
        </tr>";
 
-        echo "<tr>
-            <td align=\"right\">Lon : </td>";
-        echo "<td><input type=\"text\" name=\"targetlong\" onKeyup=\"convertdmslong();\" value=\"" . $usersObj->lastPositions->long/1000 . "\"/></td>";
-//       echo "<td><input type=\"text\" name=\"longdms\" disabled=\"disabled\" value=\"" . $usersObj->lastPositions->long . "\"/></td>";
-        echo "<td><input type=\"button\" class=\"blue\" name=\"longdms\"></td>";
-        echo "</tr>";
-        echo "<tr>
-            <td align=\"right\">Lat : </td>";
+        echo "<tr>";
+        echo "<td align=\"right\">Lat : </td>";
         echo "<td><input type=\"text\" name=\"targetlat\" onKeyup=\"convertdmslat();\" value=\"" . $usersObj->lastPositions->lat/1000 . "\"/></td>";
-//       echo "<td><input type=\"text\" name=\"latdms\" disabled=\"disabled\" value=\"" . $usersObj->lastPositions->long . "\"/></td>";
         echo "<td><input type=\"button\"  class=\"blue\" name=\"latdms\" /></td>";
+        echo "</tr>";
+        echo "<tr>";
+        echo "<td align=\"right\">Lon : </td>";
+        echo "<td><input type=\"text\" name=\"targetlong\" onKeyup=\"convertdmslong();\" value=\"" . $usersObj->lastPositions->long/1000 . "\"/></td>";
+        echo "<td><input type=\"button\" class=\"blue\" name=\"longdms\"></td>";
         echo "</tr>";
         echo "</table>";
         break;
