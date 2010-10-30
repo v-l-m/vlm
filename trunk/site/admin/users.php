@@ -66,17 +66,6 @@ $opts['fdd']['username'] = array(
   'sort'     => true
 );
 
-$opts['fdd']['password'] = array(
-  'name'     => 'Password',
-  'help'     => 'DEPRECATED - Password of the boat',
-  'options'  => 'ACP',
-  'input'    => 'W',
-  'select'   => 'T',
-  'escape'   => true,
-  'maxlen'   => 255,
-  'sort'     => true
-);
-
 $opts['fdd']['boatname'] = array(
   'name'     => 'Boatname',
   'help'     => 'Name of the boat (visible with mouse_over)',
