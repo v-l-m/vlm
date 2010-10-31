@@ -22,7 +22,8 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC)) {
     //race has not started
     if ($racesSmallObj->deptime <= time()) {
       //start the race
-      // Deleting old results, waypoint_crossing, rankings... updating positions...
+      // Deleting old results, waypoint_crossing, rankings... 
+      // updating positions...
       $racesObj = new fullRaces(&$racesSmallObj);
 
       echo "Cleaning Race...";
@@ -48,18 +49,19 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC)) {
 	if (!wrapper_mysql_db_query_writer($query_positions)) {
 	  echo "REQUEST FAILED " . $query_positions . "\n";
 	}
-	// Update Users to First Waypoint, lastupdate, ...and Loch=0
-	$query_users = "UPDATE users" . 
-	  " SET nextwaypoint=1, " .
-	  " userdeptime=" . $racesObj->races->deptime . ", " .
-	  " boattype='" . $racesObj->races->boattype . "', " .
-	  " lastupdate=" . $racesObj->races->deptime . ", " .
-	  " lastchange=" . $racesObj->races->deptime . ", " .
-	  " loch= 0" .
-	  " WHERE idusers = " . $users->idusers . ";";
-	if (!wrapper_mysql_db_query_writer($query_users)) {
-	  echo "REQUEST FAILED " . $query_users . "\n";
-	}
+      }
+      // Update Users to First Waypoint, lastupdate, ...and Loch=0
+      // for all engaged users in that race
+      $query_users = "UPDATE users" . 
+	" SET nextwaypoint=1, " .
+	" userdeptime=" . $racesObj->races->deptime . ", " .
+	" boattype='" . $racesObj->races->boattype . "', " .
+	" lastupdate=" . $racesObj->races->deptime . ", " .
+	" lastchange=" . $racesObj->races->deptime . ", " .
+	" loch=0" .
+	" WHERE engaged=" . $idraces;
+      if (!wrapper_mysql_db_query_writer($query_users)) {
+	echo "REQUEST FAILED " . $query_users . "\n";
       }
     }
     //else nothing, race wont start this time :-(
