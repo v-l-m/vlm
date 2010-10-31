@@ -34,22 +34,17 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC)) {
 
       echo "RACE $racename STARTING!!!\n\n";
 
-      //for every boat
-      foreach ($racesObj->opponents as $users) {
-	// Insert a first position at start point
-	$query_positions = "INSERT into positions " . 
-	  " ( `time` , `long` , `lat` , `idusers` , `race` ) " .
-	  " values ( " . 
-	  $racesObj->races->deptime . ", " .
-	  $racesObj->races->startlong . ", " .
-	  $racesObj->races->startlat . ", " .
-	  $users->idusers . ", " .
-	  $idraces  . 
-	  ") ; ";
-	if (!wrapper_mysql_db_query_writer($query_positions)) {
-	  echo "REQUEST FAILED " . $query_positions . "\n";
-	}
+      // update positions
+      $query_position = "INSERT INTO positions ".
+	"(`time`,`long`,`lat`,`idusers`,`race`) SELECT ".
+	$racesObj->races->deptime . "," .
+	$racesObj->races->startlong . "," .
+	$racesObj->races->startlat . ",idusers," .
+	$idraces." FROM users WHERE engaged=".$idraces;
+      if (!wrapper_mysql_db_query_writer($query_positions)) {
+	echo "REQUEST FAILED " . $query_positions . "\n";
       }
+
       // Update Users to First Waypoint, lastupdate, ...and Loch=0
       // for all engaged users in that race
       $query_users = "UPDATE users" . 
