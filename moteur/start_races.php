@@ -24,7 +24,7 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC)) {
       //start the race
       // Deleting old results, waypoint_crossing, rankings... 
       // updating positions...
-      $racesObj = new fullRaces(&$racesSmallObj);
+      $racesObj = new fullRaces($idraces, &$racesSmallObj);
 
       echo "Cleaning Race...";
       $racesObj->cleanRaces();
@@ -35,7 +35,7 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC)) {
       echo "RACE $racename STARTING!!!\n\n";
 
       // update positions
-      $query_position = "INSERT INTO positions ".
+      $query_positions = "INSERT INTO positions ".
 	"(`time`,`long`,`lat`,`idusers`,`race`) SELECT ".
 	$racesObj->races->deptime . "," .
 	$racesObj->races->startlong . "," .
