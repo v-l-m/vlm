@@ -1261,7 +1261,7 @@ function checkLoginExists($login) {
 function createBoat($log, $pass, $mail, $boatname = 'boat') {
   $query3 = "INSERT INTO `users` ( `boattype` , `username` , `password` , `email`,"
     ."`boatname`, `color`, `boatheading`, `pilotmode`, `engaged` )"
-    ."VALUES ( 'boat_imoca60', '$log', '$pass', '$mail', '$boatname', '000000', '0', '1', '0')";
+    ."VALUES ( 'boat_imoca60', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '000000', '0', '1', '0')";
   $result3 = wrapper_mysql_db_query_writer($query3);//or die("Query [$query3] failed \n");
 
   //is there another solution than reread from db?
