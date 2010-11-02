@@ -164,7 +164,10 @@ int main (int argc, char **argv) {
 	px = ntohl(p->x);
 	py = ntohl(p->y);
 	longitude = ((double)px * GSHHS_SCL);
-	if ((greenwich && longitude > 270.0) || (poly.west > 180000000)) {
+	// in the db we don't need to keep the continuity, as
+	// the php code will take care of that if needed.
+	// so stick strictly to -180 / +180
+	if (longitude > 180.0)
 	  longitude -= 360.0;
 	}
 	latitude  = ((double)py * GSHHS_SCL);
