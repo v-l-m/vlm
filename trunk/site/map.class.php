@@ -505,7 +505,7 @@ class map
       // Du coup, Si W > E, il faut prendre :
       // W à 180 + -180 à E
       if ( $this->flag_E_W == true ) {
-          $filtre_longitude = " AND ( longitude BETWEEN " . $west_x1000 . " AND 191.0 OR longitude BETWEEN -180.0 AND " . $east_x1000 . ")";
+          $filtre_longitude = " AND ((longitude >" . $west_x1000 . " ) OR (longitude < " . $east_x1000 . "))";
       } else {
           $filtre_longitude = " AND longitude BETWEEN " . $west_x1000 . " AND " . $east_x1000 ; 
       }
