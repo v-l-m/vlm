@@ -264,7 +264,7 @@ define_if_not("SERVER_IS_SENDING_EMAIL", True);
 //PREFS
 // NOTSET (for user_prefs)
 define("NOTSET", "NULL");
-define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas");
+define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname");
 
 // WAYPOINTS
 define("WP_TWO_BUOYS", 0);
