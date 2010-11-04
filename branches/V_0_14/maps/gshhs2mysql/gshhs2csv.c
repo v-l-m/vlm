@@ -167,7 +167,7 @@ int main (int argc, char **argv) {
 	// in the db we don't need to keep the continuity, as
 	// the php code will take care of that if needed.
 	// so stick strictly to -180 / +180
-	if (longitude > 180.0)
+	if (longitude > 180.0) {
 	  longitude -= 360.0;
 	}
 	latitude  = ((double)py * GSHHS_SCL);
