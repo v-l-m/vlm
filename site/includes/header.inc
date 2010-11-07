@@ -333,7 +333,7 @@
                 <a href="edit_boatprefs.php"><?php echo getLocalizedString("choose"); ?></a>
             <?php } ?>
             <?php if (isPlayerLoggedIn()) {
-                echo "<a href=\"palmares.php?type=player&idplayers=".getPlayerId()."\">".getLocalizedString("Profile")."</a>";
+                echo "<a href=\"palmares.php?type=player&amp;idplayers=".getPlayerId()."\">".getLocalizedString("Profile")."</a>";
                 }
             ?>
         </div> <!-- fin div pagesbox -->
