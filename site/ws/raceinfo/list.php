@@ -5,7 +5,7 @@
     
     class JsonRacesIterator extends RacesIterator {
         var $query = "SELECT * FROM races
-                      WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) )
+                      WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( started = 1 ) )
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
         var $jsonarray;
 
