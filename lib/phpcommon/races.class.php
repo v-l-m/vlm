@@ -88,7 +88,7 @@ class races {
     if (isset($this->waypoints[$idwp])) {
         return $this->waypoints[$idwp];
     } else {
-        return ($this->waypoints[0]);
+        return ($this->waypoints[1]);
     }
   }
   
