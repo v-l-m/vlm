@@ -101,7 +101,7 @@ define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
 
 // Max position age (engine speedup on long races) => 1 week since we have "histpos" table
 define("DEFAULT_POSITION_AGE", 1 * 3600);
-define("MAX_POSITION_AGE", 1 * 604800);
+define("MAX_POSITION_AGE", 1 * 172800);
 // Max number of boats on each map
 define_if_not("MAX_BOATS_ON_RANKINGS", 100);
 define("MAX_BOATS_ON_MAPS", 31);
