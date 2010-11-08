@@ -8,9 +8,6 @@ define('MOTEUR','Yes');
  * This script is in charge of the cleanup of position tables in VLM
  * launched every X minutes (like 5mn) 
 */
-header("Cache-Control: no-store, no-cache\n\n");
-header("Content-Type: text/plain\n\n");
-
 include("config.php");
 
 //$verbose=$_REQUEST['verbose'];
@@ -30,6 +27,7 @@ if ( $argc > 2 ) {
   $USER_NUM=$argv[2];
 }
 
+$engine_start=time();
 $engine_start_float=microtime(true);
 
 // Purge des anciennes positions (on ne garde une trace que sur MAX_POSITION_AGE)
