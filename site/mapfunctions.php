@@ -145,8 +145,6 @@ function arrow($im, $x1, $y1, $x2, $y2, $color, $alength = 10, $awidth = 2 ) {
    imageline($im, $x3, $y3, $x4, $y4, $color);
    imageline($im, $x3, $y3, $x2, $y2, $color);
    imageline($im, $x2, $y2, $x4, $y4, $color);
-
 }
-
 
 ?>
