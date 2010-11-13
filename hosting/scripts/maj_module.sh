@@ -67,7 +67,14 @@ case $confmodule in
     oldpwd=$PWD
     cd $destmodulepath
     make tiles_g || exit 1
-    #this should also wget to testing to get a valid bd for further use
+    echo -n "+$confmodule: installation de tiles_g dans $VLMBIN..."
+    cp tiles_g $VLMBIN/tiles_g
+    echo 'OK !'
+    echo "+$confmodule: Download de la base gshhs 1-f"
+    wget --output-document="$VLMTEMP/poly-f-1.dat" "http://dev.virtual-loup-de-mer.org/poly-f-1.dat"
+    echo -n "+$confmodule: copie dans  $VLMGSHHS..."
+    mv "$VLMTEMP/poly-f-1.dat" "$VLMGSHHS/"
+    echo 'OK !'
     cd $oldpwd
     ;;
     site)
