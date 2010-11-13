@@ -62,6 +62,13 @@ case $confmodule in
     make
     ./import-gshhs.sh
     ;;
+    clip_gshhs)
+    echo "+$confmodule : Fabrication de tiles_g"
+    oldpwd=$PWD
+    cd $destmodulepath
+    make tiles_g || exit 1
+    #this should also wget to testing to get a valid bd for further use
+    cd $oldpwd
     site)
     echo -n "+$confmodule: Constitution et copie du fichier de version..."
     echo "$VLMSVNBRANCH" >> $destmodulepath/version.txt

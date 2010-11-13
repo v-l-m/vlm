@@ -26,8 +26,10 @@ case $svnmodule in
     ;;
     lib/phpcommon)
     ;;
+    clip_gshhs)
+    ;;
     *)
-    echo "Précisez : medias, base, moteur, site, grib, maps, lib/vlm-c, lib/phpcommon..."
+    echo "Précisez : medias, base, moteur, site, grib, maps, lib/vlm-c, lib/phpcommon, clip_gshhs..."
     exit 1
     ;;
 esac
