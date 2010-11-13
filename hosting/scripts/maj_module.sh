@@ -70,11 +70,16 @@ case $confmodule in
     echo -n "+$confmodule: installation de tiles_g dans $VLMBIN..."
     cp tiles_g $VLMBIN/tiles_g
     echo 'OK !'
-    echo "+$confmodule: Download de la base gshhs 1-f"
-    wget --output-document="$VLMTEMP/poly-f-1.dat" "http://dev.virtual-loup-de-mer.org/poly-f-1.dat"
-    echo -n "+$confmodule: copie dans  $VLMGSHHS..."
-    mv "$VLMTEMP/poly-f-1.dat" "$VLMGSHHS/"
-    echo 'OK !'
+    if test -e "$VLMGSHHS/poly-f-1.dat" ; then
+        echo "++$confmodule: la base de polygone existe déjà !"
+        exit 0
+    else 
+        echo "+$confmodule: Download de la base gshhs 1-f"
+        wget --output-document="$VLMTEMP/poly-f-1.dat" "http://dev.virtual-loup-de-mer.org/poly-f-1.dat"
+        echo -n "+$confmodule: copie dans  $VLMGSHHS..."
+        mv "$VLMTEMP/poly-f-1.dat" "$VLMGSHHS/"
+        echo 'OK !'
+    fi
     cd $oldpwd
     ;;
     site)
