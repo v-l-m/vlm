@@ -237,7 +237,7 @@
     if ( $drawmap != "no" && $windonly != "true" ) {
         $time_start = time();
         //NB: ici maparea est 0.1 à 300
-        $mapObj->drawMap($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $coasts, $fullres, $maparea);
+        $mapObj->drawMap($mapObj->proj.'Long2x', $mapObj->proj.'Lat2y', $coasts, $fullres);
         $time_stop = time();
         if ( $timings == "true" ) imagestring($mapObj->mapImage, 2, 30, 30, "Time drawMap = ". ($time_stop - $time_start) . "s", $mapObj->colorText);
     }

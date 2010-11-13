@@ -451,7 +451,7 @@ class map
   }
   
   //draw shoreline (search for coasts to draw and call drawOneCoast)
-  function drawMap($projCallbackLong, $projCallbackLat, $coasts , $fullres, $maparea=2 ) {
+  function drawMap($projCallbackLong, $projCallbackLat, $coasts , $fullres, $print_gshhs=True ) {
       $this->setFuncProjLat($projCallbackLat);
       $this->setFuncProjLong($projCallbackLong);  
       //FIXME : HARDCODED
@@ -490,7 +490,7 @@ class map
           $coastline_table="coastline_l";
           //$min_coast_points = 5;
       }
-      imagestring( $this->mapImage, $font+2, 40 , 10 , "GSHHS_" . substr($coastline_table,10) , $this->colorBlack);
+      if ($print_gshhs) imagestring( $this->mapImage, $font+2, 40 , 10 , "GSHHS_" . substr($coastline_table,10) , $this->colorBlack);
 
       // Détermination de la zone à cartographier
       // Si W > 180, W = W-360
