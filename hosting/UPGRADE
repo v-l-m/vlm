@@ -5,9 +5,14 @@ From 0.14 to Next:
 = All servers =
 
   EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_15
+  CHECK file ./conf/conf_script : it should be setting $VLMGSHHS correctly
 
   RUN
     ./scripts/maj_scripts.sh
+    
+  RUN
+    ./scripts/maj_module.sh clip_gshhs
+
 
 = Master Server =
 
