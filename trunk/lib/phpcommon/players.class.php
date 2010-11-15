@@ -251,8 +251,7 @@ class players extends baseClass {
         $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
         $result = $this->queryRead($query);        
         if (!($result && mysql_num_rows($result) === 0)) $this->set_error(getLocalizedString("Your email is already in use."));
-        $query = sprintf("SELECT * FROM pla
-        yers WHERE `playername` = '%s'", $this->playername);
+        $query = sprintf("SELECT * FROM players WHERE UPPER(`playername`) = UPPER('%s')", $this->playername);
         $result = $this->queryRead($query);
         if (!($result && mysql_num_rows($result) === 0)) $this->set_error(getLocalizedString("Your playername is already in use."));
 
