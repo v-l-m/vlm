@@ -1251,7 +1251,7 @@ function boatExists($idboat) {
 
 /*return true if login already exist*/
 function checkLoginExists($login) {
-    $query2 = 'SELECT idusers FROM users WHERE username = "'.$login.'"';
+    $query2 = "SELECT idusers FROM users WHERE UPPER(`username`) = UPPER('".$login."')";
     $result2 = wrapper_mysql_db_query_reader($query2);
 
     return ($row2=mysql_fetch_array($result2, MYSQL_NUM));
