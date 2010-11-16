@@ -33,17 +33,22 @@ function wrapper_mysql_db_query_reader($cmd) {
 }
 
 function wrapper_mysql_db_query_writer($cmd) {
+  if (defined('MOTEUR')&& defined('DRY_RUN')&& strncasecmp($cmd,"SELECT",6))) {
+    $realcmd = "SELECT 1";
+  } else {
+    $realcmd = &$cmd;
+  }
   if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
     global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
-    $res = mysql_query($cmd, $GLOBALS['masterdblink']);
+    $res = mysql_query($realcmd, $GLOBALS['masterdblink']);
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
     $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
-  return mysql_query($cmd, $GLOBALS['masterdblink']);
+  return mysql_query($realcmd, $GLOBALS['masterdblink']);
 }
 
 function wrapper_mysql_db_query($cmd) {
