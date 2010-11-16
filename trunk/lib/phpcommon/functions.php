@@ -33,7 +33,7 @@ function wrapper_mysql_db_query_reader($cmd) {
 }
 
 function wrapper_mysql_db_query_writer($cmd) {
-  if (defined('MOTEUR')&& defined('DRY_RUN')&& strncasecmp($cmd,"SELECT",6))) {
+  if (defined('MOTEUR') && defined('DRY_RUN') && strncasecmp($cmd,"SELECT",6)) {
     $realcmd = "SELECT 1";
   } else {
     $realcmd = &$cmd;
