@@ -1,5 +1,5 @@
 /**
- * $Id: grib.h,v 1.8 2008/05/15 14:31:24 ylafon Exp $
+ * $Id: grib.h,v 1.9 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _GRIB_H_
-#define _GRIB_H_
+#ifndef _VLMC_GRIB_H_
+#define _VLMC_GRIB_H_
 
 #include <math.h>
 
@@ -90,4 +90,4 @@ winds *generate_interim_grib_TWSA PARAM1(time_t);
  */
 void interpolate_and_merge_grib();
 
-#endif /* _GRIB_H_ */
+#endif /* _VLMC_GRIB_H_ */

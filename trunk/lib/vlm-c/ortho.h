@@ -1,5 +1,5 @@
 /**
- * $Id: ortho.h,v 1.3 2008/06/06 16:37:25 ylafon Exp $
+ * $Id: ortho.h,v 1.4 2010-11-16 07:08:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _ORTHO_H_
-#define _ORTHO_H_
+#ifndef _VLMC_ORTHO_H_
+#define _VLMC_ORTHO_H_
 
 #include "defs.h"
 #include "types.h"
@@ -29,4 +29,4 @@ double ortho_initial_angle PARAM4(double, double, double, double);
 void ortho_distance_initial_angle PARAM6(double, double, double, double,
 					 double *, double *);
 
-#endif /* _ORTHO_H_ */
+#endif /* _VLMC_ORTHO_H_ */

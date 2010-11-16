@@ -1,5 +1,5 @@
 /**
- * $Id: winds.h,v 1.10 2010-02-25 13:53:45 ylafon Exp $
+ * $Id: winds.h,v 1.11 2010-11-16 07:08:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _WINDS_H_
-#define _WINDS_H_
+#ifndef _VLMC_WINDS_H_
+#define _VLMC_WINDS_H_
 
 #include <math.h>
 #include <time.h>
@@ -152,4 +152,4 @@ int get_prevision_count_context PARAM1(vlmc_context *);
 time_t get_prevision_time_index PARAM1(int);
 time_t get_prevision_time_index_context PARAM2(vlmc_context *, int);
 
-#endif /* _WINDS_H_ */
+#endif /* _VLMC_WINDS_H_ */

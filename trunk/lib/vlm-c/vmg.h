@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.h,v 1.12 2009-09-07 15:54:36 ylafon Exp $
+ * $Id: vmg.h,v 1.13 2010-11-16 07:08:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _VMG_H_
-#define _VMG_H_
+#ifndef _VLMC_VMG_H_
+#define _VLMC_VMG_H_
 
 #include "defs.h"
 #include "types.h"
@@ -53,4 +53,4 @@ void   do_vbvmg_context              PARAM11(vlmc_context *, boat *, int,
 void   do_bvmg                      PARAM4(boat *, int, double *, double *);
 void   do_bvmg_context              PARAM5(vlmc_context *, boat *, int, 
 					   double *, double *);
-#endif /* _VMG_H_ */
+#endif /* _VLMC_VMG_H_ */

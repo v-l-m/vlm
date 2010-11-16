@@ -1,5 +1,5 @@
 /**
- * $Id: useshmem.h,v 1.6 2009-08-31 13:34:20 ylafon Exp $
+ * $Id: useshmem.h,v 1.7 2010-11-16 07:08:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _USESHMEM_H_
-#define _USESHMEM_H_
+#ifndef _VLMC_USESHMEM_H_
+#define _VLMC_USESHMEM_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,4 +51,4 @@ void shm_unlock_sem_destroy_polar_context    PARAM2(vlmc_context *, int);
 
 void create_and_fill_polar_shm ();
 
-#endif /* _USESHMEM_H_ */
+#endif /* _VLMC_USESHMEM_H_ */

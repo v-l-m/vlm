@@ -1,5 +1,5 @@
 /**
- * $Id: lines.h,v 1.7 2010-10-28 10:23:16 ylafon Exp $
+ * $Id: lines.h,v 1.8 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _LINES_H_
-#define _LINES_H_
+#ifndef _VLMC_LINES_H_
+#define _VLMC_LINES_H_
 
 #include "defs.h"
 #include "types.h"
@@ -107,4 +107,4 @@ double distance_to_line_dichotomy PARAM6(double, double,
 					 double, double,
 					 double, double);
 
-#endif /* _LINES_H_ */
+#endif /* _VLMC_LINES_H_ */

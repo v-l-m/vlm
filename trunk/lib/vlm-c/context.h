@@ -1,5 +1,5 @@
 /**
- * $Id: context.h,v 1.3 2008/07/08 14:12:01 ylafon Exp $
+ * $Id: context.h,v 1.4 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _CONTEXT_H_
-#define _CONTEXT_H_
+#ifndef _VLMC_CONTEXT_H_
+#define _VLMC_CONTEXT_H_
 
 #include "defs.h"
 #include "types.h"
@@ -35,4 +35,4 @@ void init_context PARAM1(vlmc_context *);
  */
 int is_init_done PARAM1(vlmc_context *);
 
-#endif /* _CONTEXT_H_ */
+#endif /* _VLMC_CONTEXT_H_ */

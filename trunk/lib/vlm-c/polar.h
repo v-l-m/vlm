@@ -1,5 +1,5 @@
 /**
- * $Id: polar.h,v 1.4 2009-08-31 22:06:43 ylafon Exp $
+ * $Id: polar.h,v 1.5 2010-11-16 07:08:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _POLAR_H_
-#define _POLAR_H_
+#ifndef _VLMC_POLAR_H_
+#define _VLMC_POLAR_H_
 
 #include "defs.h"
 #include "types.h"
@@ -30,4 +30,4 @@ boat_polar *get_polar_by_name_context    PARAM2(vlmc_context *, char *);
 int        get_nb_polars_context         PARAM1(vlmc_context *);
 char       *get_polar_name_index_context PARAM2(vlmc_context *, int);
 
-#endif /* _POLAR_H_ */
+#endif /* _VLMC_POLAR_H_ */
