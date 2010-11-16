@@ -1,5 +1,5 @@
 /**
- * $Id: move.h,v 1.1 2008/05/20 17:07:20 ylafon Exp $
+ * $Id: move.h,v 1.2 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _MOVE_H_
-#define _MOVE_H_
+#ifndef _VLMC_MOVE_H_
+#define _VLMC_MOVE_H_
 
 #include <math.h>
 
@@ -38,4 +38,4 @@ void move_boat PARAM1(boat *);
  */
 int move_boat_n_vac PARAM2(boat *, int);
 
-#endif /* _MOVE_H_ */
+#endif /* _VLMC_MOVE_H_ */

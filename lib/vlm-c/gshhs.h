@@ -1,5 +1,5 @@
 /**
- * $Id: gshhs.h,v 1.4 2008/08/11 12:56:07 ylafon Exp $
+ * $Id: gshhs.h,v 1.5 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _GSHHS_H_
-#define _GSHHS_H_
+#ifndef _VLMC_GSHHS_H_
+#define _VLMC_GSHHS_H_
 
 #include "defs.h"
 #include "types.h"
@@ -38,4 +38,4 @@ coast_zone *get_coastzone PARAM2(int, int);
 
 coast_seg *get_coastseg PARAM2(coast_zone *, int);
 
-#endif /* _GSHHS_H_ */
+#endif /* _VLMC_GSHHS_H_ */

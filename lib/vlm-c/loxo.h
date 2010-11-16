@@ -1,5 +1,5 @@
 /**
- * $Id: loxo.h,v 1.8 2009-09-04 14:10:07 ylafon Exp $
+ * $Id: loxo.h,v 1.9 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _LOXO_H_
-#define _LOXO_H_
+#ifndef _VLMC_LOXO_H_
+#define _VLMC_LOXO_H_
 
 #include <math.h>
 
@@ -41,4 +41,4 @@ void get_loxo_coord_from_dist_angle PARAM6(double, double, double, double,
 void loxo_distance_angle            PARAM6(double, double, double, double,
 					   double *, double *);
 
-#endif /* _LOXO_H_ */
+#endif /* _VLMC_LOXO_H_ */

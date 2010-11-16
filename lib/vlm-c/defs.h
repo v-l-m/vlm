@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.28 2010-09-21 20:13:05 ylafon Exp $
+ * $Id: defs.h,v 1.29 2010-11-16 07:07:59 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _DEFS_H_
-#define _DEFS_H_
+#ifndef _VLMC_DEFS_H_
+#define _VLMC_DEFS_H_
 
 #include <math.h>
 
@@ -194,4 +194,4 @@
 #  define const
 #endif /* __STDC__ */
 
-#endif /* _DEFS_H_ */
+#endif /* _VLMC_DEFS_H_ */

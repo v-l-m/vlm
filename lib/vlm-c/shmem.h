@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.h,v 1.11 2009-08-25 13:38:07 ylafon Exp $
+ * $Id: shmem.h,v 1.12 2010-11-16 07:08:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -16,8 +16,8 @@
  * Contact: <yves@raubacapeu.net>
  */
 
-#ifndef _SHMEM_H_
-#define _SHMEM_H_
+#ifndef _VLMC_SHMEM_H_
+#define _VLMC_SHMEM_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -163,4 +163,4 @@ int copy_polar_array_to_shmem PARAM3(int, boat_polar_list *, void *);
  */
 void construct_polar_array_from_shmem PARAM2(boat_polar_list *, void *);
 
-#endif /* _SHMEM_H_ */
+#endif /* _VLMC_SHMEM_H_ */
