@@ -214,9 +214,8 @@ class races {
 
     // On est encore là... c'est une course classique
     // Recherche du temps de course du premier (dans races_results)
-    $query = "SELECT duration FROM races_results WHERE idraces=".
-      $this->idraces." AND position=".BOAT_STATUS_ARR." ORDER BY duration ASC".
-      " LIMIT 1";
+    $query = "SELECT min(duration) FROM races_results WHERE idraces=".
+      $this->idraces." AND position=".BOAT_STATUS_ARR;
 
     $result = wrapper_mysql_db_query_reader($query);
     if ( mysql_num_rows($result) == 0) {
