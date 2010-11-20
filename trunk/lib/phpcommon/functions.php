@@ -1834,7 +1834,7 @@ function findTopUsers($idraces,$num) {
 function displayPalmares($idusers) {
 
   // search for old races for this player
-  $query = "SELECT idraces from races_results where idusers = " . $idusers ;
+  $query = "SELECT idraces from races_results where idusers = " . $idusers . " ORDER BY (deptime+duration) DESC";
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
 
   echo "<table>\n";
