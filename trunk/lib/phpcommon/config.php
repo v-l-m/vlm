@@ -4,6 +4,12 @@ function define_if_not($k, $v) {
     if (!defined($k)) define($k, $v);
 }
 
+function die503($msg) {
+      header("HTTP/1.1 503 Service Temporarily Unavailable");
+      header("Status: 503 Service Temporarily Unavailable");
+      die($msg);
+}
+
 /************** restricted pages ******/
 $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercator1.php", "/subscribe_race.php", "/pilototo.php");
 
@@ -60,20 +66,18 @@ if (defined('MOTEUR')) {
   mysql_select_db(DBNAME, $link) or die("Could not select database");
 } else {
   $link = mysql_connect(DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
-    die("Could not connect : " . mysql_error());
+    die503("Could not connect : " . mysql_error());
   $GLOBALS['masterdblink']=$link;
-  mysql_select_db(DBNAME, $link) or die("Could not select database");
+  mysql_select_db(DBNAME, $link) or die503("Could not select database");
   $link = mysql_connect(DBMAPSERVER, DBMAPUSER, DBMAPPASSWORD) or 
-    die("Could not connect : " . mysql_error());
+    die503("Could not connect : " . mysql_error());
   $GLOBALS['mapdblink']=$link;
-  mysql_select_db(DBNAME, $link) or die("Could not select database");
+  mysql_select_db(DBNAME, $link) or die503("Could not select database");
   $link = mysql_connect(DBSLAVESERVER, DBSLAVEUSER, DBSLAVEPASSWORD) or 
-    die("Could not connect : " . mysql_error());
+    die503("Could not connect : " . mysql_error());
   $GLOBALS['slavedblink']=$link;
-  mysql_select_db(DBNAME, $link) or die("Could not select database");
+  mysql_select_db(DBNAME, $link) or die503("Could not select database");
 } 
-   
-mysql_select_db(DBNAME, $link) or die("Could not select database");
 
 //PROXY AGENTS AUTH - please overide in param.php
 define("PROXY_AGENT_PASS", "PROXYPASS");
