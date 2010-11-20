@@ -23,4 +23,5 @@ ALTER TABLE admin_changelog ADD id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, ADD 
 
 #On ajoute une clef dans races_results pour optimiser les requetes
 ALTER TABLE `races_results` ADD KEY(`position`);
+ALTER TABLE `races_results` ADD INDEX(`idusers`,`deptime`,`duration`);
 
