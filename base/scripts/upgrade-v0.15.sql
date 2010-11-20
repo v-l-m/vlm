@@ -20,3 +20,7 @@ ALTER TABLE `positions` DROP COLUMN `wind`;
 
 #On ajoute une clef indexee dans admin_changelog pour pouvoir naviguer plus facilement dedans
 ALTER TABLE admin_changelog ADD id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+
+#On ajoute une clef dans races_results pour optimiser les requetes
+ALTER TABLE `races_results` ADD KEY(`position`);
+
