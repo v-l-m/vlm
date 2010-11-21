@@ -25,3 +25,5 @@ ALTER TABLE admin_changelog ADD id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT, ADD 
 ALTER TABLE `races_results` ADD KEY(`position`);
 ALTER TABLE `races_results` ADD INDEX(`idusers`,`deptime`,`duration`);
 
+#On mets à standard tous les _boats_ admins
+UPDATE users SET class = 'standard' WHERE class = 'admin';
