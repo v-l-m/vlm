@@ -40,7 +40,11 @@
     $password = get_cgi_var("password");
     $playername = get_cgi_var("playername");
 
-    if ($actioncreate == "requested") { //REQUESTED
+    if (!ALLOW_ACCOUNT_CREATION) {
+            echo "<div id=\"createplayerbox-request\">";
+            echo "<h1>".getLocalizedString("Account creation is disabled on this server, you should ask to the admins")."</h1>";
+            echo "</div>";    
+    } else if ($actioncreate == "requested") { //REQUESTED
         $player = new playersPending();
         $player->email = $emailid;
         $player->playername = $playername;

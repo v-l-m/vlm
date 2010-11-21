@@ -2,6 +2,7 @@
 $strings = array (
   'en' => 
   array (
+    'Account creation is disabled on this server, you should ask to the admins' => "Account creation is disabled on this server, you should ask to the admins",
     'Restriction' => 'Restriction',
     'You already reached the maximum boats per player' => 'You already reached the maximum boats per player',
     'Account validation error' => 'Account validation error',
@@ -398,6 +399,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'Account creation is disabled on this server, you should ask to the admins' => "La création de compte est désactivée sur ce serveur, vous devez demander aux admins",
     'Account validation error' => 'Erreur de validation de compte',
     'An email has been sent for your information.' => 'Un courriel vous a été adressé pour information.',
     'An email has been sent. Click on the link inside.' => 'Un courriel vous a été adressé. Cliquez sur le lien.',

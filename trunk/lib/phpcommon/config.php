@@ -288,8 +288,9 @@ define("WP_CROSS_ANTI_CLOCKWISE", 512);
 // for future releases
 define("WP_CROSS_ONCE", 1024);
 
-//TRANSLATIONS
+//TESTING FLAG
 define_if_not("DISPLAY_LANG_WARNINGS", False);
+define_if_not("ALLOW_ACCOUNT_CREATION", True);
 
 include_once("functions.php");
 include_once("f_windAtPosition.php");
