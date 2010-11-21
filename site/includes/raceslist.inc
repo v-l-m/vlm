@@ -4,11 +4,11 @@
     // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
     $display_submit = FALSE;
     if (isLoggedIn()) {
-      $users = getLoggedUserObject();
-      $display_submit = ($users->engaged == 0);
-      if ($display_submit) {
-	$av_races=availableRaces($users->idusers);
-      }
+        $users = getLoggedUserObject();
+        $display_submit = ($users->engaged == 0);
+        if ($display_submit) {
+          	$av_races=availableRaces($users->idusers);
+        }
     }
 
     // spf - we optimize the race object calls by creating the whole tab in one db call
@@ -54,7 +54,7 @@
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
                  "<img src=\"minimap.php?idraces=" . $idraces . 
                  "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
-            if ($display_submit AND in_array($idraces, $av_races)) {
+            if ($display_submit && in_array($idraces, $av_races)) {
                 // Subscribe button/form
                 echo "<form action=\"myboat.php\" method=\"post\">
                       <input type=\"hidden\" name=\"idraces\" value=" . $idraces . ">
