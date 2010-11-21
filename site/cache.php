@@ -20,7 +20,7 @@
             break;
             case "gshhstiles" :
                 if (preg_match("/(-?\d+)\/(-?\d+)\/(-?\d+)\.png/", $matches[2], $components)) {
-                    headeranddie(sprintf("/gshhstiles.php?z=%d&amp;x=%d&amp;y=%d", $components[1], $components[2], $components[3]));
+                    headeranddie(sprintf("/gshhstiles.php?z=%d&x=%d&y=%d", $components[1], $components[2], $components[3]));
                 }
             break;
             case "racemaps" :
