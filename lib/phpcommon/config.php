@@ -236,9 +236,6 @@ define("STEP", 2);
 //pixels between two graduations
 define("STEPSIZE", 12);
 
-// CLASS_ADMIN
-define("CLASS_ADMIN","admin");
-
 //constant for orthodromic route calculation
 //TODO check if deprecated
 define("ORTHOSTEP", 2);
