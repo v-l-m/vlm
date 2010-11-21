@@ -133,10 +133,6 @@ class users extends baseClass
     wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysql_error." ".$query);
   }
 
-  function isAdmin() {
-      return (!is_null($this->class) && ($this->class == CLASS_ADMIN));
-  }
-
   // Check pilote auto returns true if an action was done, else false
   function pilototoCheck() {
     $flag_pilototo=false;

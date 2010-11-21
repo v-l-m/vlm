@@ -839,36 +839,13 @@ function checkAccount($login, $passwd)
   }
 }
 
-function isAdmin($login, $passwd)
-{
-  //find account
-  $query = 'SELECT idusers,password,class FROM users WHERE username = "'.$login.'"';
-
-  $result = wrapper_mysql_db_query_reader($query)  ;
-  $row = mysql_fetch_array($result, MYSQL_NUM);
-  if (!$row) {
-    return FALSE;
-  } else {
-    if ( $row[1] == $passwd && $row[2] == CLASS_ADMIN ) {
-      return TRUE;
-    } else {
-      return FALSE;
-    }
-  }
-}
-
 function isPlayerAdmin($idplayers) {
     $p = getPlayerObject($idplayers);
     return (!is_null($p) && $p->isAdmin());
 }
 
 function isAdminLogged() {
-    return (isPlayerAdmin(getPlayerId()) || idusersIsAdmin(getLoginId()));
-}
-
-function idusersIsAdmin($idusers) {
-    $u = getUserObject($idusers);
-    return (!is_null($u) && $u->isAdmin());
+    return (isPlayerAdmin(getPlayerId()));
 }
 
 function getNumOpponents($idraces, $check = TRUE) {
