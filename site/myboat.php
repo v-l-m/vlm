@@ -248,7 +248,7 @@ include_once("scripts/myboat.js");
         / &quot;<? echo $usersObj->users->boatname ?>&quot;
 <?php
         echo " / " . $usersObj->users->htmlBoattypeLink() . "&nbsp;";
-        echo "<img src=\"/flagimg.php?idflags=".$usersObj->users->country."\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
+        echo "<img src=\"/".DIRECTORY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
         echo  "<br />".getLocalizedString("ranking") . " : " . $user_ranking;
 
         // Estimation de la prochaine VAC pour ce bateau là

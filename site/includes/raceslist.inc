@@ -50,9 +50,9 @@
             echo "<table class=\"racesummary-type$racetype\">\n<tr class=\"racesummary-type$racetype\">\n";
             echo "<td class=\"racesummary-minimap\">";
             // Carte de la course
-            $href = "/racemap.php?idraces=".$idraces;
+            $href = "/".DIRECTORY_RACEMAPS."/".$idraces.".png";
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
-                 "<img src=\"minimap.php?idraces=" . $idraces . 
+                 "<img src=\"/".DIRECTORY_MINIMAPS."/" . $idraces . ".png"
                  "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
             if ($display_submit && in_array($idraces, $av_races)) {
                 // Subscribe button/form

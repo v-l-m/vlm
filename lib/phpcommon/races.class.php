@@ -293,7 +293,7 @@ class races {
 
     /* output de la racemap */
     function htmlRaceMap($alttemplate) {
-        $href = "/cache/racemaps/".$this->idraces.".png";
+        $href = "/".DIRECTORY_RACEMAPS."/".$this->idraces.".png";
         return "<img src=\"$href\" alt=\"" .$alttemplate. "\" />\n";
     }
 
