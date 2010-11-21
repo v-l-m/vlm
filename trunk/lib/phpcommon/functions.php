@@ -1887,6 +1887,17 @@ function availableRaces($idusers = 0)
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
   if (!mysql_num_rows($result)) return $records;
+
+  $omorob_restriction = Array();
+  $oid = getUserObject($idusers)->getOwnerId();
+  if ($oid > 0) {
+      $ownerlist = getPlayerObject($oid)->getOwnedBoatIdList();
+      foreach ($ownerlist as $idb) {
+          $boat = getUserObject($idb);
+          if ($boat->engaged >0) $omorob_restriction[] = $boat->engaged;
+      }
+  }
+
   
   $allRacesRows = array();
   $allRacesIds  = array();
@@ -1906,6 +1917,7 @@ function availableRaces($idusers = 0)
     if ( $row['maxboats'] != 0 && $num_engaged >= $row['maxboats'] ) {
       continue;
     }
+    if ( in_array($idraces, $omorob_restriction)) continue;
     
     // si pas de course de qualification, on ajoute
     if ( $row['qualifying_races'] == "" ) {

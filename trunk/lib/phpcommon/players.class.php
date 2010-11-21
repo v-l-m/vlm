@@ -283,7 +283,7 @@ class players extends baseClass {
         $this->ownedboatidlist = $this->getBoatIdList("linktype =".PU_FLAG_OWNER);
         return $this->ownedboatidlist;
     }
-    
+
     function hasMaxBoats() {
         return ( count($this->getOwnedBoatIdList()) >= MAX_BOATS_OWNED_PER_PLAYER );
     }
