@@ -166,12 +166,9 @@ case $confmodule in
     cp $destmodulepath/windserver.sh $VLMBIN/windserver.sh
     echo 'OK !'
     ;;
-    medias)
-    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps & racemaps & pavillons"
-    chmod -R 777 $destmodulepath/images/minimaps
-    chmod -R 777 $destmodulepath/images/racemaps
-    chmod -R 777 $destmodulepath/images/pavillons
-    ;;
+#    medias)
+#    echo -n "+$confmodule: Nothing to do"
+#    ;;
     *)
     #Tous les autres modules
     echo "+$confmodule: Pas de post déploiement"
