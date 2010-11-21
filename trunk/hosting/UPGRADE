@@ -7,7 +7,9 @@ From 0.14 to Next:
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_15
     - add VLMCACHE=~/cached (autre exemple : VLMCACHE=$VLMDATAS/cache
-  CHECK file ./conf/conf_script : it should be setting $VLMGSHHS correctly
+  CHECK file ./conf/conf_script : it should be setting $VLMGSHHS correctly, and this should be consistent with the GSHHS_DIRECTORY in your param.php file.
+  EDIT file ./conf/param.php, and add following lines !
+      define("TILES_G_PATH", "/home/commun/bin/tiles_g"); #tiles_g is moved in your $VLMBIN (read you conf_script file)
 
   RUN
     ./scripts/maj_scripts.sh

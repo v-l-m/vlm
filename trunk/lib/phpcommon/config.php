@@ -41,6 +41,9 @@ include_once("param.php");
 
 // The full path of the gshhs coast file in use (the "full" version)
 define("GSHHS_FILENAME", "".GSHHS_DIRECTORY."/gshhs_f.b");
+// the full path of the gshhs clipped file (for tiles)
+define("GSHHS_CLIPPED_FILENAME", GSHHS_DIRECTORY."/poly-f-1.dat");
+
 // The full path of the polar definition filename  (the "full" version)
 define("POLAR_DEFINITION_FILENAME", "".POLARS_DIRECTORY."/polars.list");
 
@@ -142,12 +145,14 @@ define ("BUOY_W", "buoy_west.png");
 define ("BUOY_E", "buoy_south.png");
 
 //Those are relatives to the document root
+define ("DIRECTORY_GSHHSTILES", "cache/gshhstiles"); #see VLMCACHE parameter in your conf script
 define ("DIRECTORY_COUNTRY_FLAGS","cache/flags");
 define ("DIRECTORY_RACEMAPS","cache/racemaps");
 define ("DIRECTORY_MINIMAPS","cache/minimaps");
 define ("DIRECTORY_THEMES","style");
 define ("DIRECTORY_POLARS","Polaires");
 define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
+
 
 //define ("PROFILE_PLAYER_URL", "/palmares.php?type=player&idplayers=");
 
