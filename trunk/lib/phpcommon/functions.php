@@ -1053,19 +1053,21 @@ function dispHtmlRacesList($where = "") {
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
-  $allRacesRows = array();
-  $allRacesIds  = array();
-  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    array_push($allRacesRows, $row);
-    array_push($allRacesIds, $row['idraces']);      
-  }
-  $allNumOpponents = getNumOpponentBatch($allRacesIds);
+  if (mysql_num_rows($result)) {
+      $allRacesRows = array();
+      $allRacesIds  = array();
+      while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        array_push($allRacesRows, $row);
+        array_push($allRacesIds, $row['idraces']);      
+      }
+      $allNumOpponents = getNumOpponentBatch($allRacesIds);
 
-  foreach($allRacesRows as $row) {
-    $row['num_opps'] = $allNumOpponents[$row['idraces']];
-    echo htmlRacesListRow($row);
-  }
-  
+      foreach($allRacesRows as $row) {
+        $row['num_opps'] = $allNumOpponents[$row['idraces']];
+        echo htmlRacesListRow($row);
+      }
+  }  
+
   echo "</tbody>\n";
   echo "</table>\n  ";
 }
@@ -1884,6 +1886,7 @@ function availableRaces($idusers = 0)
                         ) ORDER BY deptime ASC;";
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
+  if (!mysql_num_rows($result)) return $records;
   
   $allRacesRows = array();
   $allRacesIds  = array();
@@ -1891,7 +1894,7 @@ function availableRaces($idusers = 0)
     array_push($allRacesRows, $row);
     array_push($allRacesIds, $row['idraces']);      
   }
-  $allNumOpponents = getNumOpponentBatch($allRacesIds);
+  $allNumOpponents = getNumOpponentBatch($allRacesIds);  
 
   foreach($allRacesRows as $row) {
     $idraces     = $row['idraces'];
@@ -1903,7 +1906,7 @@ function availableRaces($idusers = 0)
     if ( $row['maxboats'] != 0 && $num_engaged >= $row['maxboats'] ) {
       continue;
     }
-
+    
     // si pas de course de qualification, on ajoute
     if ( $row['qualifying_races'] == "" ) {
       array_push ($records, $idraces);
