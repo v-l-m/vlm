@@ -1050,7 +1050,7 @@ function dispHtmlRacesList($where = "") {
 }
 
 function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
-      $href = "/cache/racemaps/".$idraces.".png";
+      $href = "/".DIRECTORY_RACEMAPS."/".$idraces.".png";
       $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
       return "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"".strip_tags($alt)."\">" .
              "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" />" .
@@ -1058,7 +1058,7 @@ function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
 }
 
 function htmlFlagImg($idflag) {
-    return "<img src=\"/flagimg.php?idflags=".$idflag. "\" alt=\"Flag_". $idflag."\" />";
+    return "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/".$idflag. ".png\" alt=\"Flag_". $idflag."\" />";
 }
 
 function htmlIdusersUsernameLink($country, $color, $idusers, $boatname, $username) {

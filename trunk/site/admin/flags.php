@@ -62,7 +62,7 @@ $opts['fdd']['flagimg'] = array(
   //'select'   => 'T',
   'escape'   => 0,
   'sql'      => 'idflags', 
-  'mask'     => "<img src=\"/flagimg.php?idflags=%s\" />",
+  'mask'     => "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/%s.png\" />",
   'URL'      => '/admin/uploadflag.php?idflags=$key',
   'help'     => 'Click to upload the [new] flag',
   'input'    => 'R',
