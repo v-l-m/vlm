@@ -58,5 +58,5 @@ fi
 echo "Ok !"
 echo "Recuperation de $current... depuis $svncurrent"
 cd $VLMTEMP || exit 1
-$VLMSVNPATH export $svncurrent $current --username anonymous --password ""
+$VLMSVNPATH export $svncurrent $current --username anonymous --password "vlm"
 echo "Ok !"
