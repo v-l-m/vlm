@@ -1050,8 +1050,7 @@ function dispHtmlRacesList($where = "") {
 }
 
 function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
-
-      $href="/racemap.php?idraces=".$idraces;
+      $href = "/cache/racemaps/".$idraces.".png";
       $status_content = "&lt;img width=&quot;720&quot; src=&quot;$href&quot; alt=&quot;".$idraces."&quot;/&gt;";
       return "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"".strip_tags($alt)."\">" .
              "<img style=\"width:45px; height:30px;\" src=\"/images/site/cartemarine.png\" />" .
@@ -1134,7 +1133,7 @@ function getFlagsListCursor($with_customs = True) {
 
 function getRacemap($idraces, $force = 'no') {
 
-    $image = "regate".$idraces;
+    $image = $idraces;
     $original = DIRECTORY_RACEMAPS . "/" . $image . ".jpg";
     
     // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille

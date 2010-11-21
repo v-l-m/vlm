@@ -10,8 +10,8 @@ $idflags = get_cgi_var("idflags");
 $original = getFlag($idflags,  get_cgi_var('force'));
 
 if ($original === False) {
-            header("Cache-Control: no-cache"); // no cache for dummy answer
-            die("No flags with such id");
+    header("Cache-Control: no-cache"); // no cache for dummy answer
+    die("No flags with such id");
 }
 
 // Envoi de la miniature

@@ -1,3 +1,3 @@
 ExpiresActive On
-
 ExpiresDefault A2592000
+ErrorDocument 404 /cache.php

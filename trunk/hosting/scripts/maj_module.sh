@@ -94,10 +94,14 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     echo 'OK !'
-    echo -n "+$confmodule: Mise a jour des permissions de media/images/minimaps & racemaps & pavillons"
-    chmod -R 777 $destmodulepath/../medias/images/minimaps
-    chmod -R 777 $destmodulepath/../medias/images/racemaps
-    chmod -R 777 $destmodulepath/../medias/images/pavillons
+    echo -n "+$confmodule: Création du cache si nécessaire"
+    mkdir -p $VLMCACHE/racemaps --mode=777
+    mkdir -p $VLMCACHE/minimaps --mode=777
+    mkdir -p $VLMCACHE/flags --mode=777
+    mv $destmodulepath/cache.htaccess $VLMCACHE/.htaccess
+    echo 'OK !'    
+    echo -n "+$confmodule: Mise en place du lien symbolique vers le cache..."
+    ln -s $VLMCACHE $destmodulepath/cache
     echo 'OK !'
 
     echo -n "+$confmodule: Constitution de la liste des polaires..."

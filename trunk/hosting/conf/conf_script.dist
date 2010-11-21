@@ -34,6 +34,9 @@ export VLMVLMCSO=$VLMRACINE/bin/lib
 #Racine des datas du jeu
 export VLMDATAS=$VLMRACINE/vlmdatas
 
+#Emplacement du cache
+export VLMCACHE=$VLMRACINE/cache
+
 #Les gshhs seront (par défaut) dans VLMDATAS/gshhs
 export VLMGSHHS=$VLMDATAS/gshhs
 

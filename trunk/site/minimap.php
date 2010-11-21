@@ -4,8 +4,8 @@
 
     $idraces = get_cgi_var("idraces", 0);
     // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
-    $image = "regate".$idraces;
-    $thumb = "images/minimaps/" . $image . ".png";
+    $image = $idraces;
+    $thumb = DIRECTORY_MINIMAPS."/" . $image . ".png";
     $force = get_cgi_var('force', 'no');
     $original = getRacemap($idraces, $force);
 
