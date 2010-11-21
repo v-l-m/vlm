@@ -52,7 +52,7 @@
             // Carte de la course
             $href = "/".DIRECTORY_RACEMAPS."/".$idraces.".png";
             echo "<a href=\"$href\" rel=\"lightbox[vlm]\" title=\"$racename\">" .
-                 "<img src=\"/".DIRECTORY_MINIMAPS."/" . $idraces . ".png"
+                 "<img src=\"/" . DIRECTORY_MINIMAPS . "/" . $idraces . ".png".
                  "\" alt=\"" .getLocalizedString("racemap"). "\" /></a>";
             if ($display_submit && in_array($idraces, $av_races)) {
                 // Subscribe button/form
