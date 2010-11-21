@@ -141,8 +141,10 @@ define ("BUOY_S", "buoy_south.png");
 define ("BUOY_W", "buoy_west.png");
 define ("BUOY_E", "buoy_south.png");
 
-define ("DIRECTORY_COUNTRY_FLAGS","images/pavillons");
-define ("DIRECTORY_RACEMAPS","images/racemaps");
+//Those are relatives to the document root
+define ("DIRECTORY_COUNTRY_FLAGS","cache/flags");
+define ("DIRECTORY_RACEMAPS","cache/racemaps");
+define ("DIRECTORY_MINIMAPS","cache/minimaps");
 define ("DIRECTORY_THEMES","style");
 define ("DIRECTORY_POLARS","Polaires");
 define ("DIRECTORY_JSCALENDAR","externals/jscalendar");

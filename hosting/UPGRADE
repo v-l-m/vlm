@@ -4,7 +4,9 @@ From 0.14 to Next:
 
 = All servers =
 
-  EDIT file ./conf/conf_script and change VLM SVNBRANCH to V_0_15
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_15
+    - add VLMCACHE=~/cached (autre exemple : VLMCACHE=$VLMDATAS/cache
   CHECK file ./conf/conf_script : it should be setting $VLMGSHHS correctly
 
   RUN

@@ -93,7 +93,7 @@ $opts['fdd']['raceminimap'] = array(
   //'select'   => 'T',
   'escape'   => 0,
   'sql'      => 'idraces', 
-  'mask'     => "<img style=\"height:40px; \" src=\"/minimap.php?idraces=%s\" />",
+  'mask'     => "<img style=\"height:40px; \" src=\"/cache/minimaps/%s.png\" />",
   'URL'      => '/admin/uploadracemap.php?idnewrace=$key',
   'help'     => 'Click the minimapto upload the racemap',
   'input'    => 'R',
