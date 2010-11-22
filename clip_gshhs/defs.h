@@ -1,10 +1,10 @@
 /**
- *    Filename          : read_gshhs.h
+ *    Filename          : defs.h
 
  *    Created           : 07 January 2009 (23:08:51)
  *    Created by        : StephPen - stephpen@gmail.com
 
- *    Last Updated      : 23:25 21/11/2010
+ *    Last Updated      : 23:24 21/11/2010
  *    Updated by        : StephPen - stephpen@gmail.com
 
  *    (c) 2008 by Stephane PENOT
@@ -27,10 +27,9 @@
  *     
  *    Contact: <stephpen@gmail.com>
 */
-
-
-#ifndef _READ_GSHHS_H_
-#define _READ_GSHHS_H_
+ 
+#ifndef _DEFS_H_
+#define _DEFS_H_
 /*
 ===========================================================================
                                Constants
@@ -105,24 +104,13 @@ typedef struct
 ===========================================================================
 */
 
-void GshhsToGpcFile         (FILE *gpc_file,
-                            gshhs_polygons *polygons,
-                            int id_poly);
-
-void read_gshhs             (FILE               *gshhs_file,
-                            gshhs_polygons      *polygons,
-                            int                 debug);
-                            
-void free_gshhs             (gshhs_polygons     *polygons,
-                            int                 nb_poly);
-
 
 
 #endif
 
 /*
 ===========================================================================
-                           End of file: gpc.h
+                           End of file: defs.h
 ===========================================================================
 */ 
 

@@ -1,20 +1,32 @@
 /**
- * $Id: carto.c,v 0.0 2008/06/18 $
- *
- * (c) 2008 by Stephane PENOT
- *      See COPYING file for copying and redistribution conditions.
- *
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; version 2 of the License.
- *
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
- *
- * Contact: <stephpen@gmail.com>
- */
+ *    Filename          : readgshhs.c
+
+ *    Created           : 07 May 2009 (23:08:51)
+ *    Created by        : StephPen - stephpen@gmail.com
+
+ *    Last Updated      : 23:24 21/11/2010
+ *    Updated by        : StephPen - stephpen@gmail.com
+
+ *    (c) 2008 by Stephane PENOT
+ *        See COPYING file for copying and redistribution conditions.
+ *     
+ *        This program is free software; you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation; version 2 of the License.
+ *     
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
+ *     
+ *    Comments          : 
+ *     
+ *     
+ *     
+ *     
+ *     
+ *    Contact: <stephpen@gmail.com>
+*/
 
 #include "gshhs.h"
 #include "read_gshhs.h"
@@ -61,10 +73,10 @@ int main (int argc, char **argv)
     
     /* Ouverture du fichier GSHHS */
     sprintf(gshhs_name, "./gshhs/gshhs_%s.b", argv[1]);
-	if ((gshhs_file = fopen (gshhs_name, "rb")) == NULL ) {
-		fprintf (stderr, "gshhs:  Could not find file %s\n", gshhs_name);
-		exit (EXIT_FAILURE);
-	}
+    if ((gshhs_file = fopen (gshhs_name, "rb")) == NULL ) {
+        fprintf (stderr, "gshhs:  Could not find file %s\n", gshhs_name);
+        exit (EXIT_FAILURE);
+    }
     
     /*Allocation de la mémoire pour stocker toutes les données du GSHHS */
     polygons = NULL;
@@ -90,36 +102,36 @@ int main (int argc, char **argv)
     
     sprintf(path_gpc_file_1, "./bd/%s1.dat", argv[1]);
     if ((gpc_file_1 = fopen (path_gpc_file_1, "w")) == NULL ) {
-		fprintf (stderr, "Echec 1\n");
-		exit (EXIT_FAILURE);
-	}
+        fprintf (stderr, "Echec 1\n");
+        exit (EXIT_FAILURE);
+    }
     sprintf(path_gpc_file_2, "./bd/%s2.dat", argv[1]);
     if ((gpc_file_2 = fopen (path_gpc_file_2, "w")) == NULL ) {
-		fprintf (stderr, "Echec 1\n");
-		exit (EXIT_FAILURE);
-	}
+        fprintf (stderr, "Echec 1\n");
+        exit (EXIT_FAILURE);
+    }
     sprintf(path_gpc_file_3, "./bd/%s3.dat", argv[1]);
     if ((gpc_file_3 = fopen (path_gpc_file_3, "w")) == NULL ) {
-		fprintf (stderr, "Echec 1\n");
-		exit (EXIT_FAILURE);
-	}
+        fprintf (stderr, "Echec 1\n");
+        exit (EXIT_FAILURE);
+    }
     sprintf(path_gpc_file_4, "./bd/%s4.dat", argv[1]);
     if ((gpc_file_4 = fopen (path_gpc_file_4, "w")) == NULL ) {
-		fprintf (stderr, "Echec 1\n");
-		exit (EXIT_FAILURE);
-	}
+        fprintf (stderr, "Echec 1\n");
+        exit (EXIT_FAILURE);
+    }
     sprintf(path_gpc_file_5, "./bd/%s5.dat", argv[1]);
     if ((gpc_file_5 = fopen (path_gpc_file_5, "w")) == NULL ) {
-		fprintf (stderr, "Echec 1\n");
-		exit (EXIT_FAILURE);
-	}
+        fprintf (stderr, "Echec 1\n");
+        exit (EXIT_FAILURE);
+    }
     
     n1 = 0;
     n2 = 0;
     n3 = 0;
     n4 = 0;
     n5 = 0;
-	for(n = 0; n <= polygons->nb_poly; n++ ) {
+    for(n = 0; n <= polygons->nb_poly; n++ ) {
         if (polygons->contour[n].type == 0) {
             if (polygons->contour[n].level == 1) n1++;
             if (polygons->contour[n].level == 2) n2++;
@@ -137,7 +149,7 @@ int main (int argc, char **argv)
     fprintf(gpc_file_4, "%d\n", n4);
     fprintf(gpc_file_5, "%d\n", n5);
     
-	for(n = 0; n <= polygons->nb_poly; n++ ) {
+    for(n = 0; n <= polygons->nb_poly; n++ ) {
         if (polygons->contour[n].type == 0) {
             if (polygons->contour[n].level == 1){
                 fprintf(gpc_file_1, "%d\n", polygons->contour[n].nb_point - 1);
@@ -169,7 +181,7 @@ int main (int argc, char **argv)
     
     
 
-	
+    
 
 
 

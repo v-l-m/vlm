@@ -1,31 +1,31 @@
-/*
- *	Filename		: map.c
+/**
+ *    Filename          : map2gml.c
 
- *	Created			: 07 January 2009 (23:08:51)
- *	Created by		: StephPen - stephpen@gmail.com
+ *    Created           : 07 January 2009 (23:08:51)
+ *    Created by        : StephPen - stephpen@gmail.com
 
- *	Last Updated	: 08 January 2009 (23:09:12)
- *	Updated by		: steph
+ *    Last Updated      : 23:23 21/11/2010
+ *    Updated by        : StephPen - stephpen@gmail.com
 
- *	(c) 2008 by Stephane PENOT
- *	    See COPYING file for copying and redistribution conditions.
- *	 
- *	    This program is free software; you can redistribute it and/or modify
- *	    it under the terms of the GNU General Public License as published by
- *	    the Free Software Foundation; version 2 of the License.
- *	 
- *	    This program is distributed in the hope that it will be useful,
- *	    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	    GNU General Public License for more details.
- *	 
- *	Comments		: 
- *	 
- *	 
- *	 
- *	 
- *	 
- *	Contact: <stephpen@gmail.com>
+ *    (c) 2008 by Stephane PENOT
+ *        See COPYING file for copying and redistribution conditions.
+ *     
+ *        This program is free software; you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation; version 2 of the License.
+ *     
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
+ *     
+ *    Comments          : 
+ *     
+ *     
+ *     
+ *     
+ *     
+ *    Contact: <stephpen@gmail.com>
 */
 
 
@@ -57,7 +57,7 @@ int main (int argc, char **argv)
     PolygonFileHeader     header, header_borders, header_rivers;
     gpc_polygon p1, p2, p3, p4, p5;
     
-    int x, y;
+    int x, y, xx, trans;
     
     gdImagePtr image; /* Pointeur vers notre image */
     FILE *image_png; /* Fichier image PNG */
@@ -67,8 +67,18 @@ int main (int argc, char **argv)
     int long_max_int, long_min_int, lat_max_int, lat_min_int;
     double origine_x, origine_y;
     gshhs_contour borders_contour, rivers_contour;
-        
     
+    FILE  *gml_file_1;
+    char path_gml_file_1[256];
+    FILE  *gml_file_2;
+    char path_gml_file_2[256];
+    FILE  *gml_file_3;
+    char path_gml_file_3[256];
+    FILE  *gml_file_4;
+    char path_gml_file_4[256];
+    FILE  *gml_file_5;
+    char path_gml_file_5[256];
+
     if (argc < 2 || argc > 3) {
         fprintf (stderr, "Map Generator V0.0 - 02/01/2009\n");
         fprintf (stderr, "Stephpen@gmail.com\n");
@@ -129,6 +139,9 @@ int main (int argc, char **argv)
     if (long_max>=0)    long_max_int=   ceil(fabs(long_max));
     else                long_max_int=  -floor(fabs(long_max));
 
+    long_min_int=0;
+    long_max_int=360;
+
     origine_x = -long_min * cmd.Zoom;
 
     printf("long_min: %d, long_max: %d, origine_x: %lf\n", long_min_int, long_max_int, origine_x);
@@ -143,6 +156,9 @@ int main (int argc, char **argv)
     else               lat_min_int=    -ceil(fabs(lat_min));
     if (lat_max>=0)    lat_max_int=     ceil(fabs(lat_max));
     else               lat_max_int=    -floor(fabs(lat_max));
+    
+    lat_min_int=-90;
+    lat_max_int=90;
 
     origine_y = -MercatorLatitudeSimple(lat_min)*180.0*cmd.Zoom/M_PI;
 
@@ -159,7 +175,7 @@ int main (int argc, char **argv)
     coast_color =   gdImageColorAllocate(image, cmd.CoastColorR,    cmd.CoastColorG,    cmd.CoastColorB);
     grid_color  =   gdImageColorAllocate(image, cmd.GridColorR,     cmd.GridColorG,     cmd.GridColorB);
     text_color  =   gdImageColorAllocate(image, 0,                  0,                  0); 
-    borders_color = gdImageColorAllocate(image, cmd.CoastColorR,    cmd.CoastColorG,    cmd.CoastColorB); 
+    borders_color = gdImageColorAllocate(image, 0, 255, 0); 
     
     
     // Cas où tout va bien
@@ -171,24 +187,79 @@ int main (int argc, char **argv)
             {
                 ReadPolygonFile(polyfile, x, y, header.pasx, header.pasy, &p1, &p2, &p3, &p4, &p5);
 
+                /*
                 DrawPolygonFilled(image, &p1, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
                 DrawPolygonFilled(image, &p2, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
                 DrawPolygonFilled(image, &p3, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
                 DrawPolygonFilled(image, &p4, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
                 DrawPolygonFilled(image, &p5, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
-                
+                */
+                /*
                 DrawPolygonContour(image, &p1, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p2, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p3, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p4, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p5, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
-                
+                */
+                /*
                 ReadLineFile(bordersfile, x, y, &borders_contour);
                 DrawLine(image, &borders_contour, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, borders_color);
 
                 ReadLineFile(riversfile, x, y, &rivers_contour);
                 DrawLine(image, &rivers_contour, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
+                */
                 
+                if (x>=180)
+                {
+                    xx=x-360;
+                    trans=-360;
+                }
+                else
+                {
+                    xx=x;
+                    trans=0;
+                }
+                sprintf(path_gml_file_1, "%s/land/land_%d_%d_f.gml", cmd.bd_path, xx, y);
+                if ((gml_file_1 = fopen (path_gml_file_1, "w")) == NULL ) {
+                    fprintf (stderr, "Echec 1\n");
+                    exit (EXIT_FAILURE);
+                }
+                PolygonToGML(&p1, gml_file_1, trans);
+                fclose(gml_file_1);
+
+                sprintf(path_gml_file_2, "%s/lake/lake_%d_%d_f.gml", cmd.bd_path, xx, y);
+                if ((gml_file_2 = fopen (path_gml_file_2, "w")) == NULL ) {
+                    fprintf (stderr, "Echec 1\n");
+                    exit (EXIT_FAILURE);
+                }
+                PolygonToGML(&p2, gml_file_2, trans);
+                fclose(gml_file_2);
+
+                sprintf(path_gml_file_3, "%s/isl/isl_%d_%d_f.gml", cmd.bd_path, xx, y);
+                if ((gml_file_3 = fopen (path_gml_file_3, "w")) == NULL ) {
+                    fprintf (stderr, "Echec 1\n");
+                    exit (EXIT_FAILURE);
+                }
+                PolygonToGML(&p3, gml_file_3, trans);
+                fclose(gml_file_3);
+
+                sprintf(path_gml_file_4, "%s/pond/pond_%d_%d_f.gml", cmd.bd_path, xx, y);
+                if ((gml_file_4 = fopen (path_gml_file_4, "w")) == NULL ) {
+                    fprintf (stderr, "Echec 1\n");
+                    exit (EXIT_FAILURE);
+                }
+                PolygonToGML(&p4, gml_file_4, trans);
+                fclose(gml_file_4);
+
+                sprintf(path_gml_file_5, "%s/rec/rec_%d_%d_f.gml", cmd.bd_path, xx, y);
+                if ((gml_file_5 = fopen (path_gml_file_5, "w")) == NULL ) {
+                    fprintf (stderr, "Echec 1\n");
+                    exit (EXIT_FAILURE);
+                }
+                PolygonToGML(&p5, gml_file_5, trans);
+                fclose(gml_file_5);
+
+
                 
                 FreePolygon(&p1);
                 FreePolygon(&p2);
@@ -196,11 +267,11 @@ int main (int argc, char **argv)
                 FreePolygon(&p4);
                 FreePolygon(&p5);
                
-                FreeLine(&borders_contour);
-                FreeLine(&rivers_contour);
+                //FreeLine(&borders_contour);
+                //FreeLine(&rivers_contour);
             }
         }
-        //DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color, text_color);
+        DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color, text_color);
 
     }
     // Cas où long_min <0
@@ -217,13 +288,13 @@ int main (int argc, char **argv)
                 DrawPolygonFilled(image, &p3, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
                 DrawPolygonFilled(image, &p4, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
                 DrawPolygonFilled(image, &p5, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
-                
+                /*
                 DrawPolygonContour(image, &p1, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p2, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p3, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p4, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p5, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
-                
+                */
                 ReadLineFile(bordersfile, x, y, &borders_contour);
                 DrawLine(image, &borders_contour, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, borders_color);
 
@@ -252,13 +323,13 @@ int main (int argc, char **argv)
                 DrawPolygonFilled(image, &p3, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
                 DrawPolygonFilled(image, &p4, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
                 DrawPolygonFilled(image, &p5, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
-                
+                /*
                 DrawPolygonContour(image, &p1, x, y, header.pasx, header.pasy, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p2, x, y, header.pasx, header.pasy, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p3, x, y, header.pasx, header.pasy, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p4, x, y, header.pasx, header.pasy, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p5, x, y, header.pasx, header.pasy, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
-                
+                */
                 ReadLineFile(bordersfile, x, y, &borders_contour);
                 DrawLine(image, &borders_contour, x, y, header.pasx, header.pasy, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, borders_color);
 
@@ -275,8 +346,8 @@ int main (int argc, char **argv)
             
             }
         }
-        //DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color, text_color);
-        ////DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color);
+        DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color, text_color);
+        //DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x-360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color);
 
     }
     
@@ -294,13 +365,13 @@ int main (int argc, char **argv)
                 DrawPolygonFilled(image, &p3, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
                 DrawPolygonFilled(image, &p4, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
                 DrawPolygonFilled(image, &p5, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
-                
+                /*
                 DrawPolygonContour(image, &p1, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p2, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p3, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p4, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p5, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
-                
+                */
                 ReadLineFile(bordersfile, x, y, &borders_contour);
                 DrawLine(image, &borders_contour, x, y, header.pasx, header.pasy, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, borders_color);
 
@@ -329,13 +400,13 @@ int main (int argc, char **argv)
                 DrawPolygonFilled(image, &p3, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
                 DrawPolygonFilled(image, &p4, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, water_color);
                 DrawPolygonFilled(image, &p5, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, land_color);
-                
+                /*
                 DrawPolygonContour(image, &p1, x, y, header.pasx, header.pasy, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p2, x, y, header.pasx, header.pasy, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p3, x, y, header.pasx, header.pasy, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p4, x, y, header.pasx, header.pasy, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
                 DrawPolygonContour(image, &p5, x, y, header.pasx, header.pasy, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, coast_color);
-                
+                */
                 ReadLineFile(bordersfile, x, y, &borders_contour);
                 DrawLine(image, &borders_contour, x, y, header.pasx, header.pasy, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, borders_color);
 
@@ -352,8 +423,8 @@ int main (int argc, char **argv)
             
             }
         }
-        //DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color, text_color);
-        ////DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color);
+        DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color, text_color);
+        //DrawGrid(image, cmd.MapWidth, cmd.MapHeight, long_min, long_max, lat_min, lat_max, origine_x+360*cmd.Zoom, cmd.MapHeight-origine_y, cmd.Zoom, cmd.grid_space, grid_color);
 
     }
      

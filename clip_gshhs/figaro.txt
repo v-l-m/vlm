@@ -1,7 +1,7 @@
 [Map_Center]
-282 20 2000 2000
+-5 48 2000 3000
 [Zoom]
-100
+120
 [Resol]
 c
 [Projection]
@@ -23,4 +23,4 @@ poly-f-1.dat
 [Map_Path]
 /home/steph/gshhs/new2/map
 [Map_Name]
-name
+
