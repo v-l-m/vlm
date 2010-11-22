@@ -1,0 +1,61 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	margin: 0 auto;
+	width: 100%;
+	/* max-width: 240px; */
+	/* max-width: 320px; */
+}
+
+.smallmap {
+    width: 512px;
+    height: 256px;
+    border: 1px solid #ccc;
+}
+
+
+.maindiv {
+	background-color: #CCFFFF;
+	/* width: 320px;
+	 height: 480px; */
+	 
+}
+
+#tab_listrace {
+	background-color: #FFFFFF;
+	width: 100%;
+	height: 100%;
+	 
+}
+
+#map_canvas {
+	width: 800px; height: 700px;
+}
+
+#tab_ranking {
+	height:700px;overflow: auto;
+}
+
+.tr_listrace {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	background-color: #cccccc;
+
+}
+
+.txt1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.txtbold1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+}
+.txtbold2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight:bold;
+}
