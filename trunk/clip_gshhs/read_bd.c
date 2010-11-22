@@ -1,3 +1,34 @@
+/**
+ *    Filename        : read_bd.c
+
+ *    Created            : 07 January 2009 (23:13:57)
+ *    Created by        : StephPen - stephpen@gmail.com
+
+ *    Last Updated    : 23:24 21/11/2010
+ *    Updated by        : StephPen - stephpen@gmail.com
+
+ *    (c) 2008 by Stephane PENOT
+ *        See COPYING file for copying and redistribution conditions.
+ *     
+ *        This program is free software; you can redistribute it and/or modify
+ *        it under the terms of the GNU General Public License as published by
+ *        the Free Software Foundation; version 2 of the License.
+ *     
+ *        This program is distributed in the hope that it will be useful,
+ *        but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *        GNU General Public License for more details.
+ *     
+ *    Comments        : 
+ *     
+ *     
+ *     
+ *     
+ *     
+ *    Contact: <stephpen@gmail.com>
+*/
+
+
 #include <stdio.h>
 #include "gpc.h"
 #include "gshhs.h"
@@ -31,43 +62,43 @@ int main (int argc, char **argv)
     };
     
     struct st_02 file_end[4];
-	
-	char bd_path[256];
+    
+    char bd_path[256];
     char gpc_path[256];
     char gpc_file[256];
     
     struct st_01 bd_end[4];
-	
-	int pas[] = {45, 15, 5, 1};
-	int level = 3;
-	int i;
-	long pos_data;
-	long tab_data;
-    	
-	int x, y;
-	int c;
-	
-	struct header_01 header_end[4];
-	
-	FILE *polygon_file;
-	gpc_polygon polygon;
-	
-	int n_contour;
-	int n_point;
-	
     
-	if (argc < 2 || argc > 3) {
-		fprintf (stderr, "Sorry !!\n");
-		fprintf (stderr, "Usage:  read_bd [f|h|i|l|c]\n\n");
-		
-		exit (EXIT_FAILURE);
-	}
-	
-	pos_data = 0;
-	sprintf(bd_path, "./bd/bd_%s", argv[1]);
-	
-	for (i=0; i<=level; i++)
-	{
+    int pas[] = {45, 15, 5, 1};
+    int level = 3;
+    int i;
+    long pos_data;
+    long tab_data;
+        
+    int x, y;
+    int c;
+    
+    struct header_01 header_end[4];
+    
+    FILE *polygon_file;
+    gpc_polygon polygon;
+    
+    int n_contour;
+    int n_point;
+    
+    
+    if (argc < 2 || argc > 3) {
+        fprintf (stderr, "Sorry !!\n");
+        fprintf (stderr, "Usage:  read_bd [f|h|i|l|c]\n\n");
+        
+        exit (EXIT_FAILURE);
+    }
+    
+    pos_data = 0;
+    sprintf(bd_path, "./bd/bd_%s", argv[1]);
+    
+    for (i=0; i<=level; i++)
+    {
         printf("i: %d\n", i);
         sprintf(bd_end[i].file, "%s/poly-%s-%d.dat", bd_path, argv[1], pas[i]);
         if ((file_end[i].file = fopen (bd_end[i].file, "wb")) == NULL )
@@ -75,7 +106,7 @@ int main (int argc, char **argv)
             fprintf (stderr, "Impossible d'ouvrir le fichier %s\n", bd_end[i].file);
             exit (EXIT_FAILURE);
         }
-        header_end[i].version=  111;
+        header_end[i].version=  210;
         header_end[i].pasx=     pas[i];
         header_end[i].pasy=     pas[i];
         header_end[i].xmin=     0;
@@ -151,7 +182,7 @@ int main (int argc, char **argv)
     fclose(file_end[i].file);
 
     }
-	
+    
     return 0;
     
 }

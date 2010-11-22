@@ -1,0 +1,26 @@
+[Map_Center]
+9 44 800 600
+[Zoom]
+300
+[Resol]
+c
+[Projection]
+Mercator
+[Water_Color]
+99 164 255
+[Coast_Color]
+204 117 59
+[Land_Color]
+255 213 162
+[Grib_Color]
+250 250 250
+[Grib_Space]
+2
+[BD_Path]
+/home/steph/gshhs/new2/bd
+[BD_Name]
+poly-f-1.dat
+[Map_Path]
+/home/steph/gshhs/new2/map
+[Map_Name]
+name
