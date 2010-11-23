@@ -64,7 +64,7 @@ $.ajax({
 		{
 		if(answer[k].started > 0) { race_started = "Commenc&eacute;e"; } else { race_started = "Inscriptions en cours"; }
 		if(answer[k].closetime < cur_tsp) { race_open = "Ferm&eacute;e"; } else { race_open = "Ouverte"; }
-		races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.php?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
+		races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.html?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
 		}
 		document.getElementById('tab_listrace').innerHTML = "<div align='center'><h2>Courses en cours et &agrave; venir</h2><br/><br/><table bgcolor='#000000'><tr class='tr_listrace'><td>Num</td><td>Course</td><td></td><td></td></tr>" + races + "</table></div><br/><br/><br/><br/><br/><br/>";
 
