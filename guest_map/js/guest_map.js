@@ -64,7 +64,7 @@ $.ajax({
 		{
 		if(answer[k].started > 0) { race_started = "Commenc&eacute;e"; } else { race_started = "Inscriptions en cours"; }
 		if(answer[k].closetime < cur_tsp) { race_open = "Ferm&eacute;e"; } else { race_open = "Ouverte"; }
-		races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.php?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
+		races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.html?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
 		}
 		document.getElementById('tab_listrace').innerHTML = "<div align='center'><h2>Courses en cours et &agrave; venir</h2><br/><br/><table bgcolor='#000000'><tr class='tr_listrace'><td>Num</td><td>Course</td><td>Arrived/On race/Engaged</td><td>Status</td></tr>" + races + "</table></div><br/><br/><br/><br/><br/><br/>";
 
@@ -126,7 +126,7 @@ function get_raceinfo(map,idr)
 			// INFOS GENERALES COURSE
 			// "idraces" "racename" "started" "deptime" "startlong" "startlat" "boattype" "closetime" "racetype" "firstpcttime" "depend_on" "qualifying_races" "idchallenge" "coastpenalty" "bobegin" "boend" "maxboats" "theme" "vacfreq" "races_waypoints"
 			racename = answer.racename;
-			titre_carte = "<span class='txtbold2'>Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='txt1' onclick=\"document.location.href='index.php';\" />";
+			titre_carte = "<span class='txtbold2'>Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='txt1' onclick=\"document.location.href='index.html';\" />";
 			document.getElementById('titre_carte').innerHTML = titre_carte;
 			startlong = answer.startlong/1000;
 			startlat= answer.startlat/1000;

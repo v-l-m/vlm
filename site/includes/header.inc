@@ -360,6 +360,7 @@
 ?>
             <a href="races.php"><?echo getLocalizedString("races"); ?></a>
             <a href="calendar.php"><?echo getLocalizedString("calendar"); ?></a>
+            <a href="guest_map/"><?echo getLocalizedString("Spectator"); ?></a>
             <a href="http://ranking.virtual-loup-de-mer.org/" target="_rankings"><?php echo getLocalizedString("ranking"); ?></a> 
             <a href="<?php echo MOBILE_SERVER_URL; ?>" target="_mobile" title="<?php echo getLocalizedString("Interface for mobiles devices"); ?> ">
                 <?php echo getLocalizedString("Mobiles"); ?>
