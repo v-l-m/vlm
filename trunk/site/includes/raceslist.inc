@@ -104,7 +104,7 @@
             }
             // Affichage des IC destinées à la racelist
             printf("    <li><a href=\"/ics.php?idraces=%s\">WP(s)</a>" , $idraces);
-            printf(" - %s nm - %s : %d minutes</li>\n" , round($cur_race->getRaceDistance()), getLocalizedString('crank'),  $cur_race->vacfreq);
+            printf(" - %s nm - %s : %d minutes - %s</li>\n" , round($cur_race->getRaceDistance()), getLocalizedString('crank'),  $cur_race->vacfreq, htmlRaceSpectatorLink($idraces));
             foreach ( $cur_race->getICS() as $ic) {
                 if (($ic['flag'] & IC_FLAG_VISIBLE) and (IC_FLAG_RACELIST & $ic['flag']) ) {
                     if ($ic['flag'] & IC_FLAG_LINKFORUM) {
