@@ -952,7 +952,7 @@ function getNumEngaged($idraces, $check = TRUE) {
 
 function htmlRaceSpectatorLink($idraces = 0) {
     $url = "/guest_map/index.html";
-    if ($idraces > 0) $url .= "?idraces=$idraces";
+    if ($idraces > 0) $url .= "?idr=$idraces";
     return "<a href=\"$url\" target=\"_spectator\">".getLocalizedString('Spectator')."</a>";
 }   
 
