@@ -950,6 +950,11 @@ function getNumEngaged($idraces, $check = TRUE) {
   return $num_engaged;
 }
 
+function htmlRaceSpectatorLink($idraces = 0) {
+    $url = "/guest_map/index.html";
+    if ($idraces > 0) $url .= "?idraces=$idraces";
+    return "<a href=\"$url\" target=\"_spectator\">".getLocalizedString('Spectator')."</a>";
+}   
 
 function htmlRacesListRow($rowdatas) {
 
