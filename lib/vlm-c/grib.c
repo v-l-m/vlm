@@ -1,5 +1,5 @@
 /**
- * $Id: grib.c,v 1.27 2010-11-23 21:23:23 ylafon Exp $
+ * $Id: grib.c,v 1.28 2010-11-23 22:42:21 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -26,7 +26,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #ifndef OLD_C_COMPILER
 #include <complex.h>
 #endif /* OLD_C_COMPILER */
