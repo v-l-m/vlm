@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<acces-policy>
- <cross-domain-acces>
+<access-policy>
+ <cross-domain-access>
    <policy>
      <allow-from http-request-headers="*">
        <domain uri="*"/>
@@ -9,5 +9,5 @@
        <ressource include-subpaths="true" path="/"/>
      </grant-to>
    </policy>
- </cross-domain-acces>
-</acces-policy>
+ </cross-domain-access>
+</access-policy>
