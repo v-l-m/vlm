@@ -64,9 +64,9 @@ $.ajax({
 		{
 		if(answer[k].started > 0) { race_started = "Commenc&eacute;e"; } else { race_started = "Inscriptions en cours"; }
 		if(answer[k].closetime < cur_tsp) { race_open = "Ferm&eacute;e"; } else { race_open = "Ouverte"; }
-		races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.html?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
+		races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.php?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
 		}
-		document.getElementById('tab_listrace').innerHTML = "<div align='center'><h2>Courses en cours et &agrave; venir</h2><br/><br/><table bgcolor='#000000'><tr class='tr_listrace'><td>Num</td><td>Course</td><td>Arrived/On race/Engaged</td><td>Status</td></tr>" + races + "</table></div><br/><br/><br/><br/><br/><br/>";
+		document.getElementById('tab_listrace').innerHTML = "<div align='center'><h2>Courses en cours et &agrave; venir</h2><br/><br/><table bgcolor='#000000'><tr class='tr_listrace'><td>Num</td><td>Course</td><td></td><td></td></tr>" + races + "</table></div><br/><br/><br/><br/><br/><br/>";
 
 	},
 	error:  function() { alert("erreur => display_races_list()!");}
@@ -78,7 +78,17 @@ $.ajax({
 function display_race() {
 	document.getElementById('map_canvas').innerHTML = "<div align='center' style='width: 800px; height: 700px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
 	//boats=refresh_ranking(idr);
-	var centre = new google.maps.LatLng(map_lat,map_lon);
+	if( (map_lat == "0" && map_lon == "0") || (map_lat == "" && map_lon == "") || (typeof(map_lat) == 'undefined' && typeof(map_lon) == 'undefined') )
+	{
+		map_lat = "0";
+		map_lon = "0";
+		var centre = new google.maps.LatLng(map_lat,map_lon);
+		map.setCenter(new_map_latlon);
+	}
+	else
+	{
+		var centre = new google.maps.LatLng(map_lat,map_lon);
+	}
 	var myOptions = {
 		zoom: 9,
 		center: centre,
@@ -88,7 +98,14 @@ function display_race() {
 	
 	//RACE INFOS
 	get_raceinfo(map,idr);
-	
+	// If position null for the first boat or no boats center map on the start
+	if( (map_lat == "0" && map_lon == "0") )
+	{
+		map_lat = startlat;
+		map_lon = startlong;
+		new google.maps.LatLng(map_lat,map_lon);
+		map.setCenter(new_map_latlon);
+	}
 	//SHOW BOATS
 	draw_all_boats();
 	
@@ -126,7 +143,7 @@ function get_raceinfo(map,idr)
 			// INFOS GENERALES COURSE
 			// "idraces" "racename" "started" "deptime" "startlong" "startlat" "boattype" "closetime" "racetype" "firstpcttime" "depend_on" "qualifying_races" "idchallenge" "coastpenalty" "bobegin" "boend" "maxboats" "theme" "vacfreq" "races_waypoints"
 			racename = answer.racename;
-			titre_carte = "<span class='txtbold2'>Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='txt1' onclick=\"document.location.href='index.html';\" />";
+			titre_carte = "<span class='txtbold2'>Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='txt1' onclick=\"document.location.href='index.php';\" />";
 			document.getElementById('titre_carte').innerHTML = titre_carte;
 			startlong = answer.startlong/1000;
 			startlat= answer.startlat/1000;
@@ -416,7 +433,7 @@ function refresh_ranking(idr)
 						//"idusers","boatpseudo","boatname","color","country","nwp","dnm","deptime","loch","releasetime","latitude","longitude","last1h","last3h","last24h","status","rank"
 						i = d2[k2].idusers
 						boats[i] = d2[k2];
-						if(boats[i].rank == "1")
+						if(boats[i].rank == "1" )
 						{
 							map_lat = boats[i].latitude;
 							map_lon = boats[i].longitude;
