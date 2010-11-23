@@ -6,7 +6,7 @@
        <domain uri="*"/>
      </allow-from>
      <grant-to>
-       <ressource include-subpaths="true" path="/"/>
+       <resource include-subpaths="true" path="/"/>
      </grant-to>
    </policy>
  </cross-domain-access>
