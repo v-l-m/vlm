@@ -21,11 +21,38 @@ body {
 	 
 }
 
+.bouton1 {
+	background-color: #006699;
+	border: medium outset #006699;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color:#FFFFFF;
+}
+
+#banniere {
+	background-image: url(http://www.virtual-loup-de-mer.org/images/site/banniere_haut.jpg);
+	position:relative;
+	width:1015px;
+	height:90px;
+}
+
+#titre_carte {
+	position:absolute;
+	top:65px;
+	left:1px;
+	width:1014px;
+	height:5px;
+	display:
+	inline-table;
+	background-color:#cccccc;
+	opacity: 0.7; 
+}
+
 #tab_listrace {
 	background-color: #FFFFFF;
 	width: 100%;
-	height: 100%;
-	 
+	height: 100%; 
 }
 
 #map_canvas {
