@@ -2,7 +2,7 @@
 <acces-policy>
  <cross-domain-acces>
    <policy>
-     <allow-from http-request-headers="Content-Type,Authorization">
+     <allow-from http-request-headers="*">
        <domain uri="*"/>
      </allow-from>
      <grant-to>
