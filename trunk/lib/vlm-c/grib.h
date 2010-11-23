@@ -1,5 +1,5 @@
 /**
- * $Id: grib.h,v 1.9 2010-11-16 07:07:59 ylafon Exp $
+ * $Id: grib.h,v 1.10 2010-11-16 13:07:53 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -83,6 +83,15 @@ winds *generate_interim_grib_UV PARAM1(time_t);
  * Interpolation takes place in the TWSA domain
  */
 winds *generate_interim_grib_TWSA PARAM1(time_t);
+
+/**
+ * generate interim grib for a specific time (real time, further
+ * corrected depending on offset
+ * One usage is to generate a grib with a date of 'now' prior merging
+ * new gribs, and purge the old ones
+ * Interpolation is done using the Hybrid mode (TWSA for speed, UB for angle)
+ */
+winds *generate_interim_grib_hybrid PARAM1(time_t);
 
 /**
  * generate a snapshot of current time (offset corrected), then merge with
