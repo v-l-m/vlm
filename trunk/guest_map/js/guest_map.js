@@ -143,7 +143,7 @@ function get_raceinfo(map,idr)
 			// INFOS GENERALES COURSE
 			// "idraces" "racename" "started" "deptime" "startlong" "startlat" "boattype" "closetime" "racetype" "firstpcttime" "depend_on" "qualifying_races" "idchallenge" "coastpenalty" "bobegin" "boend" "maxboats" "theme" "vacfreq" "races_waypoints"
 			racename = answer.racename;
-			titre_carte = "<span class='txtbold2'>Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='txt1' onclick=\"document.location.href='index.php';\" />";
+			titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />";
 			document.getElementById('titre_carte').innerHTML = titre_carte;
 			startlong = answer.startlong/1000;
 			startlat= answer.startlat/1000;
