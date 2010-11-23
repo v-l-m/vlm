@@ -25,8 +25,7 @@
     $ws->answer['ranking'] = array();
     $position = 0;
 
-    var $not_started = array();
-    var $has_not_started;
+    $not_started = array();
 
     while ($row = mysql_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
