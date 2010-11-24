@@ -36,7 +36,7 @@ cur_tsp = Math.ceil(new Date().getTime()/1000);
 // 2 heures
 //starttime = cur_tsp-7200;
 // 8 heures
-starttime = cur_tsp-28800;
+starttime = cur_tsp-86400;
 endtime = cur_tsp;
 
 user_pass_ajax = "username=la.playa@free.fr&password=la.playa";
