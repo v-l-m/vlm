@@ -33,7 +33,11 @@ current_date = dday + "/" + dmonth + "/" + dyear + " " + hrs + ":" + mns + ":" +
 cur_tsp = Math.ceil(new Date().getTime()/1000);
 
 // 12 heures
-starttime = cur_tsp-43200;
+//starttime = cur_tsp-43200;
+
+// 24 heures
+starttime = cur_tsp-86400;
+
 endtime = cur_tsp;
 
 user_pass_ajax = "username=la.playa@free.fr&password=la.playa";

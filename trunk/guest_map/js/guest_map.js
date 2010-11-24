@@ -185,6 +185,21 @@ function get_raceinfo(map,idr)
 			mark_wp = new Array();
 			var wp_pos = new Array();
 			var texte = new Array();
+			
+			// INITIALIZE RACE TRACK
+			var RaceLineOptions = {
+					geodesic: true,
+					strokeColor: "#006699",
+					strokeOpacity: 0.2,
+					strokeWeight: 6
+				};
+			RaceLine = new google.maps.Polyline(RaceLineOptions);
+			RaceLine.setMap(map);
+			
+			// add start to the race track
+			var path = RaceLine.getPath();
+			path.push(start);
+			
 			for(k in rwps)
 				{ // "idwaypoint" "wpformat" "wporder" "laisser_au" "wptype" "latitude1" "longitude1" "latitude2" "longitude2" "libelle" "maparea"
 				var wporder = rwps[k].wporder;
@@ -192,6 +207,13 @@ function get_raceinfo(map,idr)
 				
 				var lat1 = rwps[k].latitude1/1000;
 				var long1 = rwps[k].longitude1/1000;
+				
+				// add WP to the race track
+				WPlatLng = new google.maps.LatLng(lat1, long1);
+				var path = RaceLine.getPath();
+				path.push(WPlatLng);
+				
+				
 				wp_pos[i] = new google.maps.LatLng(lat1,long1);
 				texte[i] = "<span class=\'txtbold2\'>" + rwps[k].libelle + "</span><hr><strong>Latitude : </strong>" + lat1 + ", <strong>Longitude : </strong>" + long1 + "<br> <strong>Ordre : </strong>" + wporder + "<br><strong>Type WP : </strong>" + wptype;
 				race_wps(map,wp_pos[i],wptype,texte[i],i);
@@ -317,10 +339,10 @@ function draw_all_boats()
 	if(i>32)
 	{
 		// if the race is started we draw the first boat track
-		if( first_idu != "")
-			{
-			get_track(first_idu,first_color);
-			}
+		//if( first_idu != "")
+			//{
+			//get_track(first_idu,first_color);
+			//}
 		return;
 	}
 	
