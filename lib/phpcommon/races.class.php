@@ -477,8 +477,8 @@ class fullRaces {
 
   function startRaces() {
     //set started to 1
-    $this->races->started = 1;
-    $query5 = "UPDATE races SET `started` = 1 WHERE idraces = ".
+    $this->races->started = RACE_STARTED;
+    $query5 = "UPDATE races SET `started`=".RACE_STARTED." WHERE idraces=".
       $this->races->idraces;
     wrapper_mysql_db_query_writer($query5);
   }
@@ -488,15 +488,15 @@ class fullRaces {
     $this->races->started =  -1;
     echo "=> CLOSING RACE " . $this->races->idraces ."\n";
     
-    $query  = "UPDATE races SET `started` = -1 WHERE idraces = ".
+    $query  = "UPDATE races SET `started`=".RACE_ENDED." WHERE idraces=".
       $this->races->idraces ;
     wrapper_mysql_db_query_writer($query);
     
-    $query  = "DELETE FROM races_ranking WHERE idraces = ".
+    $query  = "DELETE FROM races_ranking WHERE idraces=".
       $this->races->idraces ;
     wrapper_mysql_db_query_writer($query);
     
-    $query  = "UPDATE users SET engaged = 0 WHERE engaged = ".
+    $query  = "UPDATE users SET engaged=0 WHERE engaged=".
       $this->races->idraces ;
     wrapper_mysql_db_query_writer($query);
     
@@ -1284,7 +1284,7 @@ class startedRacesList {
 
   function startedRacesList() {
     $this->records = array();
-    $query = "SELECT idraces FROM races WHERE started > 0 ";
+    $query = "SELECT idraces FROM races WHERE started=".RACE_STARTED;
     
     $minute = date('i');
     

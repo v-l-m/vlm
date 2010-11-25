@@ -22,7 +22,7 @@
 
     class IcalRacesIterator extends RacesIterator {
         var $query = "SELECT * FROM races
-                      WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
+                      WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
         var $icalobject;
 
@@ -83,7 +83,7 @@
 
     class RssRacesIterator extends RacesIterator {
         var $query = "SELECT * FROM races
-                      WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
+                      WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
         var $rssobject;
         var $lang;
