@@ -1862,7 +1862,7 @@ function availableRaces($idusers = 0)
   if ( $idusers == 0 ) return ($records);
 
   $timestamp = time();
-  $query = "SELECT idraces,depend_on,qualifying_races,maxboats FROM races " 
+  $query = "SELECT idraces,depend_on,qualifying_races,maxboats FROM races ".
     "WHERE started=".RACE_PENDING.
     " OR ( closetime > $timestamp OR closetime=0) ORDER BY deptime ASC";
   //printf ("Query : %s\n", $query);
