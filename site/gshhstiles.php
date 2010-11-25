@@ -6,7 +6,7 @@
     $tilez = intval(get_cgi_var('z', 0));
     $force = get_cgi_var('force', 'no');
 
-    if ( $tilez < 0 && $tilez > 20 ) die("bad z index");
+    if ( $tilez < 0 && $tilez > 20 ) die("Bad z index");
     $sizetile = pow(2, $tilez);
     $tilex = $tilex % $sizetile;
     $tiley = $tiley % $sizetile;
@@ -19,8 +19,12 @@
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
         if (!is_dir($originaldir)) mkdir($originaldir, 0777, True);
-        $execcmd = sprintf("%s %d %d %d %s %s", TILES_G_PATH, pow(2, $tilez), $tilex, $tiley, GSHHS_CLIPPED_FILENAME, $original);
-        shell_exec($execcmd);
+        if (defined("TILES_SOURCE_SERVER")) {
+            copy(sprintf("%s/%s", TILES_SOURCE_SERVER, $original), $original);
+        } else {
+            $execcmd = sprintf("%s %d %d %d %s %s", TILES_G_PATH, pow(2, $tilez), $tilex, $tiley, GSHHS_CLIPPED_FILENAME, $original);
+            shell_exec($execcmd);
+        }
     }
     header("Content-Type: image/png");
     header("Cache-Control: max-age=864000"); // default 10 days should be tunable.
