@@ -63,11 +63,31 @@ function display_races_list()
 			races = "";
 			for (k in answer)
 			{
-			if(answer[k].started > 0) { race_started = "Commenc&eacute;e"; } else { race_started = "Inscriptions en cours"; }
-			if(answer[k].closetime < cur_tsp) { race_open = "Ferm&eacute;e"; } else { race_open = "Ouverte"; }
-			races = races + "<tr class='txtbold1' bgcolor='#ffffff'><td>" + answer[k].idraces + "</td><td><a href='index.html?idr=" + answer[k].idraces + "'>" + answer[k].racename + "</a></td><td>" + race_started + "</td><td>" + race_open + "</td></tr>\n";
+			if(answer[k].started > 0)
+				{
+					race_started = "Commenc&eacute;e";
+					classc1 = "TxtRaceRun";
+				}
+				else
+				{
+					race_started = "En attente";
+					classc1 = "TxtRaceOpen";
+				}
+				
+			if(answer[k].closetime < cur_tsp)
+				{
+					race_open = "Ferm&eacute;e";
+					classc2 = "TxtRaceClosed";
+				}
+				else
+				{
+					race_open = "Ouverte";
+					classc2 = "TxtRaceOpen";
+				}
+			
+			races = races + "<tr bgcolor='#ffffff'><td class='txtbold1'>" + answer[k].idraces + "</td><td align='center' class='txtbold1'><a href='index.html?idr=" + answer[k].idraces + "' align='center'>" + answer[k].racename + "</a></td><td class='" + classc1 + "' align='center'>" + race_started + "</td><td class='" + classc2 + "' align='center'>" + race_open + "</td><td><a href='index.html?idr=" + answer[k].idraces + "'><img src='http://virtual-loup-de-mer.org/images/site/cartemarine.png' border='0'><a/></tr>\n";
 			}
-			document.getElementById('tab_listrace').innerHTML = "<div align='center'><h2>Courses en cours et &agrave; venir</h2><br/><br/><table bgcolor='#000000'><tr class='tr_listrace'><td>Num</td><td>Course</td><td></td><td></td></tr>" + races + "</table></div><br/><br/><br/><br/><br/><br/>";
+			document.getElementById('tab_listrace').innerHTML = "<div align='center'><h2>Courses en cours ou courses dont le d&eacute;part est &agrave; venir</h2><br/><br/><table bgcolor='#000000'><tr class='STxtRank'><td></td><td>Course</td><td>Etat</td><td>Inscription</td><td>Carte</td></tr>" + races + "</table></div><br/><br/><br/><br/><br/><br/>";
 	
 		},
 		error:  function() { alert("erreur => display_races_list()!");}
@@ -137,7 +157,7 @@ function get_raceinfo(map,idr)
 			// INFOS GENERALES COURSE
 			// "idraces" "racename" "started" "deptime" "startlong" "startlat" "boattype" "closetime" "racetype" "firstpcttime" "depend_on" "qualifying_races" "idchallenge" "coastpenalty" "bobegin" "boend" "maxboats" "theme" "vacfreq" "races_waypoints"
 			racename = answer.racename;
-			titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 32 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />";
+			titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 200 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />";
 			document.getElementById('titre_carte').innerHTML = titre_carte;
 			startlong = answer.startlong/1000;
 			startlat = answer.startlat/1000;
@@ -261,12 +281,17 @@ function race_wps(map,wpos,wptype,texte,i)
 	var image = new google.maps.MarkerImage('img/placemark_circle.png',
 		new google.maps.Size(32, 32),
 		new google.maps.Point(0,0),
-		new google.maps.Point(16, 16));
+		new google.maps.Point(16,16));
+	
+	var shape = {
+		coord: [16,32,40],
+		type: 'circle' };
+	/*
 	var shape = {
 	coord: [1, 1, 1, 20, 18, 20, 18 , 1],
 	type: 'poly' };
+	*/
 	}
-
 	mark_wp[i] = new google.maps.Marker({
 		position: wpos,
 		map: map,
@@ -313,15 +338,18 @@ function draw_all_boats()
 	}
 
 	var image = new google.maps.MarkerImage(img_b,
-		new google.maps.Size(32, 32),
+		new google.maps.Size(32,32),
 		new google.maps.Point(0,0),
-		new google.maps.Point(16, 16));
+		new google.maps.Point(16,16));
 
+	var shape = {
+		coord: [0,0,32],
+		type: 'circle' };
+/*
 	var shape = {
 		coord: [1, 1, 1, 20, 18, 20, 18 , 1],
 		type: 'poly' };
-
-
+*/
 	boat_mark[k] = new google.maps.Marker({
 		position: boat_pos[k],
 		map: map,
@@ -336,7 +364,7 @@ function draw_all_boats()
 	
 	
 		
-	if(i>32)
+	if(i>200)
 	{
 		// if the race is started we draw the first boat track
 		//if( first_idu != "")
@@ -362,15 +390,18 @@ boat_texte[idu] = make_boat_texte(boats[idu].idusers);
 boat_pos[idu] = new google.maps.LatLng(boats[idu].latitude,boats[idu].longitude);
 var img_b = 'img/bateauEnCourse.png';
 var image = new google.maps.MarkerImage(img_b,
-		new google.maps.Size(32, 32),
+		new google.maps.Size(32,32),
 		new google.maps.Point(0,0),
-		new google.maps.Point(16, 16));
-
+		new google.maps.Point(16,16));
+	/*
 	var shape = {
 		coord: [1, 1, 1, 20, 18, 20, 18 , 1],
 		type: 'poly' };
-
-
+	*/
+	var shape = {
+		coord: [0,0,32],
+		type: 'circle' };
+		
 	boat_mark[idu] = new google.maps.Marker({
 		position: boat_pos[idu],
 		map: map,
@@ -427,8 +458,8 @@ function get_track(idu,color)
 		success: function(answer){
 				var polyOptions = {
 				 strokeColor: '#'+color,
-				strokeOpacity: 1.0,
-				strokeWeight: 1
+				strokeOpacity: 0.4,
+				strokeWeight: 2
 				};
 
 				poly = new google.maps.Polyline(polyOptions);
@@ -478,7 +509,7 @@ function refresh_ranking(idr)
 				
 				if(k=="ranking")
 					{
-					tab_ranking = "<table bgcolor='#000000'><tr class='txtbold1' bgcolor='#ffffff'><td>rank</td><td>Navigateur</td></tr>";
+					tab_ranking = "<table bgcolor='#000000'><tr class='txtbold1' bgcolor='#ffffff'><td>Pos</td><td>Navigateur</td></tr>";
 					var d2 = answer[k];
 					
 					boats = new Array();
@@ -493,9 +524,13 @@ function refresh_ranking(idr)
 						}
 						bgcolor="ffffff";
 						statusb = d2[k2].status;
+						colorb = d2[k2].color;
 						if(statusb == "on_coast") { bgcolor = "999999"; }
 						if(statusb == "locked") { bgcolor = "ff6600"; }
-						tab_ranking = tab_ranking + "<tr class='txt1' bgcolor='#" + bgcolor + "'><td width='25'>"+ d2[k2].rank + "</td><td width='175'><div  onclick='get_boat(" + d2[k2].idusers + ");' onmouseover=\"this.style.cursor='help';\" onmouseout=\"this.style.cursor='auto';\"><font color='"+ d2[k2].color + "'><img src='http://www.virtual-loup-de-mer.org/flagimg.php?idflags=" + d2[k2].country + "' width='30' height='20'>No "+ d2[k2].idusers + " - " + d2[k2].boatpseudo + "</font></div></td></tr>";
+						// when paparazzia is in white no we can see then in the ranking
+						if(colorb == "ffffff") { colorb = "cccccc"; }
+						
+						tab_ranking = tab_ranking + "<tr class='txt1' bgcolor='#" + bgcolor + "'><td width='25' class='STxtRank' align='center'>"+ d2[k2].rank + "</td><td width='175'><div  onclick='get_boat(" + d2[k2].idusers + ");' onmouseover=\"this.style.cursor='help';\" onmouseout=\"this.style.cursor='auto';\"><font color='"+ colorb + "'><img src='http://www.virtual-loup-de-mer.org/flagimg.php?idflags=" + d2[k2].country + "' width='30' height='20'>No "+ d2[k2].idusers + " - " + d2[k2].boatpseudo + "</font></div></td></tr>";
 						}
 						
 					tab_ranking = tab_ranking + "</table>";
@@ -522,7 +557,7 @@ function get_boat(idu)
 function make_boat_texte(idu)
 {
 var boat_texte = "<img src='http://www.virtual-loup-de-mer.org/flagimg.php?idflags=" + boats[idu].country + "' width='30' height='20'>" +
-	"&nbsp;&nbsp;<span class='txtbold2'>" + boats[idu].boatpseudo + "</span>&nbsp;&nbsp;<i>" + boats[idu].idusers + "</i><hr>" +
+	"&nbsp;&nbsp;<span class='txtbold2'>" + boats[idu].boatpseudo + "</span>&nbsp;&nbsp;<i>" + boats[idu].idusers + "</i>&nbsp;&nbsp;&nbsp;&nbsp;<span class='TxtRank'>&nbsp;" + boats[idu].rank + "&nbsp;</span><hr>" +
 	"<strong>Distance parcourue : </strong>" + boats[idu].loch + "<br>" +
 	"<strong>Latitude : </strong>" + Math.round( (boats[idu].latitude) * 1000)/1000 + ",<strong>Longitude : </strong>" + Math.round( (boats[idu].longitude) * 1000)/1000 + "<br>" +
 	"<strong>Next WP : </strong>[" + boats[idu].nwp + "] " + boats[idu].dnm + "<br>" +

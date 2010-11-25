@@ -85,3 +85,38 @@ body {
 	font-size: 13px;
 	font-weight:bold;
 }
+.TxtRank {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #006699;
+}
+.STxtRank {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #006699;
+}
+.TxtRaceOpen {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #009966;
+}
+.TxtRaceClosed {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color: #FF0000;
+	background-color: #FFCC00;
+}
+.TxtRaceRun {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #0099FF;
+}
