@@ -1,7 +1,7 @@
 <?php
     function headeranddie($h) {
         header("Cache-Control: no-cache"); // no cache for dummy answer
-//        header("Status: 302 Moved Temporarily", false, 302);
+        header("Status: 302 Moved Temporarily", false, 302);
         header("Location: $h");
         exit();
     }
