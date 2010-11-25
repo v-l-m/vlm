@@ -234,6 +234,13 @@ define ("PILOTOTO_MAX_EVENTS", 5);
 define ("RACE_TYPE_CLASSIC",0);
 define ("RACE_TYPE_RECORD", 1);
 
+// Race codes
+define ("RACE_ENDED"  , -1);
+define ("RACE_PENDING",  0);
+define ("RACE_STARTED",  1);
+
+define ("RACE_EXPORT_DURATION", 180*86400); // ~6 monthes
+
 //Player mode
 define ("MAX_BOATS_OWNED_PER_PLAYER", 12); //mesure anti-abus
 

@@ -978,11 +978,11 @@ function htmlRacesListRow($rowdatas) {
       $html .= "</td>\n";
       $html .= "<td class=\"departurecell\">&nbsp;" ;
       //Affiche une date de départ ou un statut.
-      if ( $rowdatas['started'] == 0 ) {
+      if ( $rowdatas['started'] == RACE_PENDING ) {
           // Not started
           $html .= "<img src=\"/images/site/greenarrow.gif\" alt=\"not started\" />" ;
           $html .= gmdate("Y/m/d H:i:s",$rowdatas['deptime']);
-      } else if ( $rowdatas['started'] == -1 ) {
+      } else if ( $rowdatas['started'] == RACE_ENDED ) {
           // Finished
           $html .= getLocalizedString("finished");
       } else {
@@ -1008,7 +1008,7 @@ function htmlRacesListRow($rowdatas) {
 }
 
 function dispHtmlCurrentRacesList() {
-    dispHtmlRacesList("WHERE started != -1");
+    dispHtmlRacesList("WHERE started != ".RACE_ENDED);
 }
 
 function dispHtmlRacesList($where = "") {
@@ -1029,9 +1029,9 @@ function dispHtmlRacesList($where = "") {
 
   // La requete qui donne la liste des courses en cours
   $query= "SELECT idraces, racename, started, deptime, startlong, startlat, ".
-    "boattype, closetime, racetype, if(started=-1, 0, deptime) AS deptimesort ".
-    "FROM races $where ORDER by started DESC, deptimesort ASC, closetime DESC, ".
-    "idraces DESC";
+    "boattype, closetime, racetype, if(started=".RACE_ENDED.", 0, deptime) ".
+    "AS deptimesort FROM races $where ORDER by started DESC, deptimesort ASC, ".
+    "closetime DESC, idraces DESC";
 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
 
@@ -1085,7 +1085,7 @@ function htmlBoattypeLink($boattype) {
 
 function htmlRacenameLink($idraces, $racename, $started) {
     return sprintf("<a href=\"/races.php?type=%s&amp;idraces=%d\">%s</a>", 
-		   ($started == -1) ? "arrived" : "racing",
+		   ($started == RACE_ENDED) ? "arrived" : "racing",
 		   $idraces, $racename);
 }
 
@@ -1862,9 +1862,9 @@ function availableRaces($idusers = 0)
   if ( $idusers == 0 ) return ($records);
 
   $timestamp = time();
-  $query = "SELECT idraces,depend_on,qualifying_races,maxboats FROM races 
-               WHERE started = 0 OR ( closetime > $timestamp OR closetime=0
-                        ) ORDER BY deptime ASC;";
+  $query = "SELECT idraces,depend_on,qualifying_races,maxboats FROM races " 
+    "WHERE started=".RACE_PENDING.
+    " OR ( closetime > $timestamp OR closetime=0) ORDER BY deptime ASC";
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
   if (!mysql_num_rows($result)) return $records;
