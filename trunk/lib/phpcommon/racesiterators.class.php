@@ -21,10 +21,10 @@
     }
 
     class IcalRacesIterator extends RacesIterator {
-        var $query = "SELECT * FROM races
+        $query = "SELECT * FROM races
                       WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
-        var $icalobject;
+       $icalobject;
 
         function start() {
             require_once( 'iCalcreator/iCalcreator.class.php' );
