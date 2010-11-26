@@ -2,7 +2,7 @@
     require_once('functions.php');
 
     abstract class RacesIterator {
-        $query = "SELECT * FROM races";
+        var $query = "SELECT * FROM races";
 
         function RacesIterator() {
             $this->listing();
@@ -21,10 +21,10 @@
     }
 
     class IcalRacesIterator extends RacesIterator {
-        $query = "SELECT * FROM races
+       var $query = "SELECT * FROM races
                       WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
-       $icalobject;
+       var $icalobject;
 
         function start() {
             require_once( 'iCalcreator/iCalcreator.class.php' );
@@ -56,10 +56,10 @@
 
 
     class FullcalendarRacesIterator extends RacesIterator {
-        $query = "SELECT * FROM races
+        var $query = "SELECT * FROM races
                       WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND racetype = 0
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
-        $jsonarray;
+        var $jsonarray;
 
         function start() {
             $this->jsonarray = Array();
@@ -82,12 +82,12 @@
 
 
     class RssRacesIterator extends RacesIterator {
-        $query = "SELECT * FROM races
+       var $query = "SELECT * FROM races
                       WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
                       ORDER BY started ASC, deptime ASC, closetime ASC ";
-        $rssobject;
-        $lang;
-        $updateTime = 0;
+        var $rssobject;
+        var $lang;
+        var $updateTime = 0;
 
         function start() {
             $this->lang = getCurrentLang();
