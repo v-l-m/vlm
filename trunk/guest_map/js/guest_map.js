@@ -42,9 +42,17 @@ function start()
 		}
 }
 
-// REFRESH ONLY THE RANKING AND THE BOATS (NOT IN USE FOR NOW)
+// REFRESH ONLY THE RANKING AND THE BOATS
 function refresh_all()
 {
+	// REMOVE ALL BOATS MARKER
+	if (boat_mark) {
+      for (i in boat_mark) {
+        boat_mark[i].setMap(null);
+      }
+      boat_mark.length = 0;
+    }
+
 boats=refresh_ranking(idr);
 draw_all_boats();
 }
@@ -157,7 +165,7 @@ function get_raceinfo(map,idr)
 			// INFOS GENERALES COURSE
 			// "idraces" "racename" "started" "deptime" "startlong" "startlat" "boattype" "closetime" "racetype" "firstpcttime" "depend_on" "qualifying_races" "idchallenge" "coastpenalty" "bobegin" "boend" "maxboats" "theme" "vacfreq" "races_waypoints"
 			racename = answer.racename;
-			titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 200 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />";
+			titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 200 premiers bateaux en course - "+ current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='refresh' value='Actualiser' class='bouton1'  onclick=\"refresh_all();\" />";
 			document.getElementById('titre_carte').innerHTML = titre_carte;
 			startlong = answer.startlong/1000;
 			startlat = answer.startlat/1000;
@@ -286,11 +294,7 @@ function race_wps(map,wpos,wptype,texte,i)
 	var shape = {
 		coord: [16,32,40],
 		type: 'circle' };
-	/*
-	var shape = {
-	coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-	type: 'poly' };
-	*/
+		
 	}
 	mark_wp[i] = new google.maps.Marker({
 		position: wpos,
@@ -330,26 +334,22 @@ function draw_all_boats()
 	{
 		first_idu = boat_idu[k];
 		first_color = boat_color[k];
-		var img_b = 'img/bateauPremier.png';
+		var img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=1';
 	}
 	else
 	{
-		var img_b = 'img/bateauEnCourse.png';
+		var img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=n';
 	}
 
 	var image = new google.maps.MarkerImage(img_b,
-		new google.maps.Size(32,32),
+		new google.maps.Size(40,32),
 		new google.maps.Point(0,0),
 		new google.maps.Point(16,16));
 
 	var shape = {
 		coord: [0,0,32],
 		type: 'circle' };
-/*
-	var shape = {
-		coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-		type: 'poly' };
-*/
+
 	boat_mark[k] = new google.maps.Marker({
 		position: boat_pos[k],
 		map: map,
@@ -363,16 +363,8 @@ function draw_all_boats()
 	i++;
 	
 	
-		
-	if(i>200)
-	{
-		// if the race is started we draw the first boat track
-		//if( first_idu != "")
-			//{
-			//get_track(first_idu,first_color);
-			//}
-		return;
-	}
+	// BOAT DISPLAY LIMIT
+	if(i>200) { return; }
 	
 	} //for k
 	
@@ -384,20 +376,19 @@ function draw_one_boat(idu)
 {
 //if(boats[idu].rank > 32)
 //{
+boat_mark[idu].setMap(null);
 get_track(idu,boats[idu].color);
 
 boat_texte[idu] = make_boat_texte(boats[idu].idusers);
 boat_pos[idu] = new google.maps.LatLng(boats[idu].latitude,boats[idu].longitude);
-var img_b = 'img/bateauEnCourse.png';
+
+if(boats[idu].rank =="1") { q_rank = "1"; } else { q_rank = "n"; }
+var img_b = 'img/boat.php?idu=' + idu + '&rank=' + q_rank;
 var image = new google.maps.MarkerImage(img_b,
 		new google.maps.Size(32,32),
 		new google.maps.Point(0,0),
 		new google.maps.Point(16,16));
-	/*
-	var shape = {
-		coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-		type: 'poly' };
-	*/
+
 	var shape = {
 		coord: [0,0,32],
 		type: 'circle' };
@@ -408,7 +399,6 @@ var image = new google.maps.MarkerImage(img_b,
         	icon: image,
         	shape: shape
 		});
-
 //} 
 
 attachOpenInfoWindow(boat_mark[idu], boat_texte[idu])
