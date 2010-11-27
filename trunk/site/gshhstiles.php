@@ -1,5 +1,5 @@
 <?php
-    include_once("config.php");
+    include_once("config-defines.php");
 
     $tilex = intval(get_cgi_var('x', 0));
     $tiley = intval(get_cgi_var('y', 0));
