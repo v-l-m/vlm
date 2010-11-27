@@ -1,5 +1,6 @@
 <?php
 include_once("config.php");
+require_once('functions.php');
 
 $trigram_mapping = Array(
 /*
