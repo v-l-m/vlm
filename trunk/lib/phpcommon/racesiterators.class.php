@@ -1,5 +1,6 @@
 <?php
     require_once('functions.php');
+    require_once('races.class.php');
 
     abstract class RacesIterator {
         var $query = "SELECT * FROM races";
