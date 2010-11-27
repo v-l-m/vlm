@@ -5,6 +5,8 @@
     session_start();
     include_once("config.php");
     include_once("players.class.php");
+    include_once("users.class.php");
+    include_once("functions.php");
     
     header("Content-type: text/html; charset=utf-8");
 
