@@ -1,6 +1,7 @@
 <?php
     session_start();
     include_once("config.php");
+    include_once("functions.php");
     
     header("Content-type: text/html; charset=UTF-8");
     
