@@ -465,6 +465,7 @@ form {
 }
 
 td.racesummary-minimap {
+  vertical-align: top;
   width: 200px;
   border:none;
 }
