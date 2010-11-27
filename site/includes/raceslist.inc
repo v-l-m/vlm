@@ -1,4 +1,6 @@
 <?php 
+    include_once('races.class.php');
+    
     echo "<div id=\"raceslistbox\" class=\"basic\">";
 
     // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
