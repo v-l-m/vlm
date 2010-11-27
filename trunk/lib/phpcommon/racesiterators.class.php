@@ -4,7 +4,7 @@
     abstract class RacesIterator {
         var $query = "SELECT * FROM races";
 
-        function RacesIterator() {
+        function __construct() {
             $this->listing();
         }
 
@@ -21,10 +21,14 @@
     }
 
     class IcalRacesIterator extends RacesIterator {
-        var $query = "SELECT * FROM `races` ".
-                     "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0 ".
-                     "ORDER BY started ASC, deptime ASC, closetime ASC " ;
         var $icalobject;
+
+        function __construct() {
+            $this->query = "SELECT * FROM `races` ".
+                           "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
+                           "AND racetype = ".RACE_TYPE_CLASSIC. " ORDER BY started ASC, deptime ASC, closetime ASC " ;
+            parent::__construct();
+        }
 
         function start() {
             require_once( 'iCalcreator/iCalcreator.class.php' );
@@ -56,10 +60,14 @@
 
 
     class FullcalendarRacesIterator extends RacesIterator {
-        var $query = "SELECT * FROM races
-                      WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND racetype = 0
-                      ORDER BY started ASC, deptime ASC, closetime ASC ";
         var $jsonarray;
+
+        function __construct() {
+            $this->query = "SELECT * FROM races ".
+                           " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND racetype = ".RACE_TYPE_CLASSIC.
+                           " ORDER BY started ASC, deptime ASC, closetime ASC ";
+            parent::__construct();
+        }
 
         function start() {
             $this->jsonarray = Array();
@@ -82,12 +90,16 @@
 
 
     class RssRacesIterator extends RacesIterator {
-       var $query = "SELECT * FROM races
-                      WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
-                      ORDER BY started ASC, deptime ASC, closetime ASC ";
         var $rssobject;
         var $lang;
         var $updateTime = 0;
+
+        function __construct() {
+          $this->query = "SELECT * FROM races ".
+                          "WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
+                          "AND racetype = ".RACE_TYPE_CLASSIC." ORDER BY started ASC, deptime ASC, closetime ASC ";
+          parent::__construct();
+        }
 
         function start() {
             $this->lang = getCurrentLang();
