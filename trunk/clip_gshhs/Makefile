@@ -33,7 +33,7 @@ CC = gcc
 CFLAGS = -Wall -O3 -std=gnu99
 LDFLAGS = -lm -lgd -lpng
 
-EXEC=readgshhs read_bd map_g tiles_g readcontour map2gml
+EXEC=tiles_g
 
 all: $(EXEC)
 
