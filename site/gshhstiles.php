@@ -26,7 +26,7 @@
             shell_exec($execcmd);
         }
     }
-    die ($execcmd);
+
     header("Content-Type: image/png");
     header("Cache-Control: max-age=864000"); // default 10 days should be tunable.
     readfile($original);
