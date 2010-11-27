@@ -1,5 +1,4 @@
 <?php
-    require_once('config.php');
     require_once('functions.php');
 
     abstract class RacesIterator {
@@ -22,10 +21,10 @@
     }
 
     class IcalRacesIterator extends RacesIterator {
-       var $query = "SELECT * FROM races
-                      WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0
-                      ORDER BY started ASC, deptime ASC, closetime ASC ";
-       var $icalobject;
+        var $query = "SELECT * FROM `races` ".
+                     "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) AND racetype = 0 ".
+                     "ORDER BY started ASC, deptime ASC, closetime ASC " ;
+        var $icalobject;
 
         function start() {
             require_once( 'iCalcreator/iCalcreator.class.php' );

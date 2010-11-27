@@ -3,6 +3,7 @@
     include_once("config.php");
     include_once("mapfunctions.php");
     include_once("map.class.php");
+    include_once("functions.php");
     
 
     //================================================================
