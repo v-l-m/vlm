@@ -2,6 +2,9 @@
 include_once("vlmc.php");
 include_once("functions.php");
 include_once("base.class.php");
+include_once("positions.class.php");
+include_once("races.class.php");
+include_once('f_windAtPosition.php');
 
 class users extends baseClass
 {

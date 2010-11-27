@@ -2,6 +2,7 @@
 /********Functions*********/
 
 include_once("vlmc.php");
+include_once("config.php");
 
 function wrapper_mysql_map_db_query_reader($cmd) {
   if (defined('MOTEUR') && defined('TRACE_SQL_QUERIES')) {
@@ -1470,7 +1471,8 @@ function getUserObject($id, $initrow = NULL) {
   if (!defined('MOTEUR') && array_key_exists($id, $uobjects)) {
     return $uobjects[$id];
   }
-    
+  
+  require_once('users.class.php');
   if (is_null($initrow)) {
     $u = new users($id);
   } else {
