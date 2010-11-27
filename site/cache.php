@@ -9,8 +9,7 @@
 
     //Check that the want to catch this url
     if (preg_match("/\/cache\/(.*?)\/(.+)/", $_SERVER['REQUEST_URI'], $matches)) {
-        include_once ("config.php");
-        include_once ("functions.php");
+        include_once ("config-funcs.php");
 
         switch($matches[1]) {
             case "legacytiles" :
