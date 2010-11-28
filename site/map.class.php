@@ -1,4 +1,7 @@
 <?php
+
+require_once("races.class.php");
+
 // Création carte MERCATOR CONFORME
 // x = long
 // y = ln(tan(PI/4 + lat/2))
