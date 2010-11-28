@@ -1,6 +1,6 @@
 <?php
-include_once("config.php");
 include_once("wslib.php");
+require_once("users.class.php");
 
 header("content-type: text/plain; charset=UTF-8");
 
