@@ -56,7 +56,7 @@ class users extends baseClass
     $this->userdeptime    = $row['userdeptime'];
     $this->lastupdate     = $row['lastupdate'];
     $this->loch           = (float)$row['loch'];
-    $this->country        = (strlen($row['country']) < 3 ) ? "" : $row['country'];
+    $this->country        = (strlen($row['country']) < 1 ) ? "00-UN" : $row['country'];
     $this->class          = $row['class'];
     $this->targetlat      = $row['targetlat'];
     $this->targetlong     = $row['targetlong'];

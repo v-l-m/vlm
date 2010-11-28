@@ -30,3 +30,7 @@ UPDATE users SET class = 'standard' WHERE class = 'admin';
 
 #Meilleure indexation de races
 ALTER TABLE `races` ADD INDEX filter (started, deptime, closetime);
+
+#Mise à ONU de tous les countrys inconnus
+DELETE FROM `flags` WHERE length(`idflags`) < 1;
+UPDATE `users` SET `country`= '00-UN' WHERE `country` NOT IN (SELECT DISTINCT idflags FROM flags);
