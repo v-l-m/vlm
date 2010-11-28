@@ -520,7 +520,7 @@ function refresh_ranking(idr)
 						// when paparazzia is in white no we can see then in the ranking
 						if(colorb == "ffffff") { colorb = "cccccc"; }
 						
-						tab_ranking = tab_ranking + "<tr class='txt1' bgcolor='#" + bgcolor + "'><td width='25' class='STxtRank' align='center'>"+ d2[k2].rank + "</td><td width='175'><div  onclick='get_boat(" + d2[k2].idusers + ");' onmouseover=\"this.style.cursor='help';\" onmouseout=\"this.style.cursor='auto';\"><font color='"+ colorb + "'><img src='http://www.virtual-loup-de-mer.org/flagimg.php?idflags=" + d2[k2].country + "' width='30' height='20'>No "+ d2[k2].idusers + " - " + d2[k2].boatpseudo + "</font></div></td></tr>";
+						tab_ranking = tab_ranking + "<tr class='txt1' bgcolor='#" + bgcolor + "'><td width='25' class='STxtRank' align='center'>"+ d2[k2].rank + "</td><td width='175'><div  onclick='get_boat(" + d2[k2].idusers + ");' onmouseover=\"this.style.cursor='help';\" onmouseout=\"this.style.cursor='auto';\"><font color='"+ colorb + "'><img src='http://www.virtual-loup-de-mer.org/cache/flags/" + d2[k2].country + ".png' width='30' height='20'>No "+ d2[k2].idusers + " - " + d2[k2].boatpseudo + "</font></div></td></tr>";
 						}
 						
 					tab_ranking = tab_ranking + "</table>";
@@ -546,7 +546,7 @@ function get_boat(idu)
 // make content for boat info window
 function make_boat_texte(idu)
 {
-var boat_texte = "<img src='http://www.virtual-loup-de-mer.org/flagimg.php?idflags=" + boats[idu].country + "' width='30' height='20'>" +
+var boat_texte = "<img src='http://www.virtual-loup-de-mer.org/cache/flags/" + boats[idu].country + ".png' width='30' height='20'>" +
 	"&nbsp;&nbsp;<span class='txtbold2'>" + boats[idu].boatpseudo + "</span>&nbsp;&nbsp;<i>" + boats[idu].idusers + "</i>&nbsp;&nbsp;&nbsp;&nbsp;<span class='TxtRank'>&nbsp;" + boats[idu].rank + "&nbsp;</span><hr>" +
 	"<strong>Distance parcourue : </strong>" + boats[idu].loch + "<br>" +
 	"<strong>Latitude : </strong>" + Math.round( (boats[idu].latitude) * 1000)/1000 + ",<strong>Longitude : </strong>" + Math.round( (boats[idu].longitude) * 1000)/1000 + "<br>" +
