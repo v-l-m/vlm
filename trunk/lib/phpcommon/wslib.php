@@ -3,6 +3,7 @@
 include_once("functions.php");
 include_once('players.class.php');
 include_once('base.class.php');
+require_once('users.class.php');
 
 class WSBase extends baseClass {
 
