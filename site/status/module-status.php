@@ -2,7 +2,7 @@
 
 # Contact: <paparazzia@gmail.com>
 
-include_once('config.php');
+include_once('functions.php');
 
 $PAGETITLE="Module Status";
 $RSSLINK="/feed/modules.updates.rss2.php";
