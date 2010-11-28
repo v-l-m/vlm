@@ -1,6 +1,8 @@
 <?php
 include_once("vlmc.php");
 include_once("functions.php");
+include_once("races.class.php");
+include_once("users.class.php");
 
 define('MOTEUR','Yes');
 
