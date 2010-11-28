@@ -2,7 +2,7 @@
 
 # Contact: <paparazzia@gmail.com>
 
-include_once('config.php');
+include_once('functions.php');
 
 $current_time = time();
 $PAGETITLE="Race engine status check";
