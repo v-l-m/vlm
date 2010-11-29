@@ -23,13 +23,17 @@ function get_polar_list_array() {
 }
 
 $fmt = get_output_format();
-$polar_list = get_polar_list_array();
+$answer = array();
+$answer['list'] = get_polar_list_array();
+$answer['urls'] = Array();
+$answer['urls']['pol'] = '/speedchart.php?format=pol&boattype=%s';
+$answer['urls']['csv'] = '/Polaires/boat_%s.csv';
 
 switch ($fmt) {
 case "json":
 default:
   header('Content-type: application/json; charset=UTF-8');
-  echo json_encode($polar_list);
+  echo json_encode($answer);
 }
 
 ?>
