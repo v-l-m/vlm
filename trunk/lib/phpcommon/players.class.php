@@ -312,12 +312,17 @@ class players extends baseClass {
 
     function getDefaultBoat() {
         $boatlist = array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList());
-        //Fixme : should be configurable, and should select a racing boat
+        //Fixme : should be configurable
+        $default = 0;
         if (count($boatlist) > 0) {
-            return $boatlist[0];
-        } else {
-            return 0;
+            $default = $boatlist[0]; //fallback to firstboat
+            foreach($boatlist as $idb) {
+                $uo = getUserObject($idb);
+                if ($uo->engaged > 0) $default = $idb; //betterchoice : racing boat
+                if ($uo->engaged > 0 && $uo->getOwnerId() == $this->idplayers) return $idb; //found owned and racing boat
+            }
         }
+        return $default;
     }
 
     function getBoatIdList($linkfilter) {
