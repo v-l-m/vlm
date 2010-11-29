@@ -1,5 +1,6 @@
 <?php
 header ("Content-type: image/png");
+header("Cache-Control: max-age=864000"); // default 10 days should be tunable.
 $image = imagecreate(40,32);
 
 $orange = imagecolorallocate($image, 255, 128, 0); // Le fond est orange (car c'est la première couleur)
