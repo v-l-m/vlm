@@ -1959,7 +1959,7 @@ function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
 
 function htmlAbandonButton($idusers, $idraces) {
 
-    return "<form id=\"abandonform\" name=\"abandon\" action=\"subscribe.php\">
+    return "<form id=\"abandonform\" name=\"abandon\" action=\"subscribe.php\" method=\"post\">
             <input type=\"hidden\" name=\"idusers\" value=\"$idusers\" />
             <input type=\"hidden\" name=\"idraces_unsubscribe\" value=\"".$idraces."\" />     
             <input type=\"hidden\" name=\"type\" value=\"unsubscribe\" />
