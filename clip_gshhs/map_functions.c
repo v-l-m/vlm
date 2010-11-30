@@ -208,14 +208,14 @@ void ReadPolygonFile (FILE *polyfile,
                         gpc_polygon *p1, gpc_polygon *p2, gpc_polygon *p3, gpc_polygon *p4, gpc_polygon *p5)
 {
 
-    long pos_data;
-    long tab_data;
+    int pos_data;
+    int tab_data;
     int c, v;
 
 
     tab_data = (x/pas_x)*(180/pas_y) + (y+90)/pas_y;
-    fseek(polyfile, sizeof(PolygonFileHeader) + tab_data*sizeof(long), SEEK_SET);
-    fread(&pos_data, sizeof(long), 1, polyfile);
+    fseek(polyfile, sizeof(PolygonFileHeader) + tab_data*sizeof(int), SEEK_SET);
+    fread(&pos_data, sizeof(int), 1, polyfile);
     
     //printf("tabdata: %d, posdata: %d\n", tab_data, pos_data);
     
@@ -571,14 +571,14 @@ void ReadLineFile(  FILE *linefile,
                     gshhs_contour *contour)
 {
 
-    long pos_data;
-    long tab_data;
+    int pos_data;
+    int tab_data;
     int c;
 
 
     tab_data = x*180 + (y+90);
-    fseek(linefile, sizeof(PolygonFileHeader) + tab_data*sizeof(long), SEEK_SET);
-    fread(&pos_data, sizeof(long), 1, linefile);
+    fseek(linefile, sizeof(PolygonFileHeader) + tab_data*sizeof(int), SEEK_SET);
+    fread(&pos_data, sizeof(int), 1, linefile);
     
     fseek(linefile, pos_data, SEEK_SET);
     
