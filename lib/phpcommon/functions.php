@@ -1339,7 +1339,7 @@ function login($idus, $pseudo)
         $_SESSION['loggedin'] = 1;
         $_SESSION['login'] = $pseudo;
     }
-    if (isset($_SERVER['HTTP_VLM_PROXY_AGENT']) && $_SERVER['HTTP_VLM_PROXY_PASS']==PROXY_AGENT_PASS) $_SESSION['activeproxy'] = 1;
+    if (isset($_SERVER['HTTP_VLM_PROXY_AGENT']) && isset($_SERVER['HTTP_VLM_PROXY_PASS']) && $_SERVER['HTTP_VLM_PROXY_PASS']==PROXY_AGENT_PASS) $_SESSION['activeproxy'] = 1;
 
     // IP memorise "toutes les" adresses qu'on peut memoriser
     // ==> Faire la difference entre 2 PCs derriere un meme proxy
@@ -1936,7 +1936,7 @@ function logUserEvent($idusers, $idraces, $action) {
 function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     //tracking...
     if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"])) {
-        $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"];
+        $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"]." ".$_SERVER["HTTP_USER_AGENT"];
     } else {
         $ua = $_SERVER["HTTP_USER_AGENT"];
     }
