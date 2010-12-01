@@ -162,65 +162,67 @@ function usage() {
   $usage .= "et pourra disparaitre dans les version ultérieures. Merci d'utiliser ";
   $usage .= "le format json, via Accept: application/json ou via ?forcefmt=json";
   $usage .= "\n\nVariables = \n
-    #* WPL : liste de Waypoints (liste)
-    #* RAC : numéro de la course (string)
-    #* IDB : nom du bateau (string)
-    #* RAN : nom de la course (string)
-    #* POS : classement dans la course (string - xxx/yyy)
-    #* PIP : pilot parameter (string - doit le rester à causes des WP: x.xx,y.yy
-    #* POL : nom de la polaire (sans boat_) (string)
-    #* MCR : 'mapCenter' (string), ie centre de la carte
-    #* MLY : 'mapLayers' (string), ie type de layers
-    #* MOP : 'mapOpponents' (string), ie type d'affichage des concurrents
-    #* MTL : 'mapTools' (string), ie 
-    #* MPO : 'mapPrefOpponents' (liste), ie concurrents à suivre
+    #* AVG : vitesse moyenne (float)
+    #* BSP : vitesse du bateau (Boat SPeed) (float)
+    #* CNT : Country 
+    #* COL : Color
+    #* DNM : Distance to next mark (float)
+    #* EML : EMail
     #* ETA : Date estimée d'arrivé, seulement si pas de wp perso (string)
+    #* HDG : direction (HeaDinG)
+    #* HID: trace cachée (1) ou visible (0)
+    #* H@WP : mode Heading@WP, (float, degré)
+    #* IDB : nom du bateau (string)
+    #* IDP : Id player
     #* IDU : numéro de bateau (int)
-    #* NWP : numéro du prochain waypoing (int)
-    #* PIM : Pilot mode (int)
-    #* NUP : nombre de secondes jusqu'à la prochaine VAC (int)
-    #* MWD : 'mapX' (int), ie taille largeur en pixel
-    #* MHT : 'mapY' (int), ie taille hauteur en pixel
+    #* LAT : latitude (float, degré)
+    #* LOC : loch (float)
+    #* LON : longitude (float, degré)
+    #* LOX : Cap loxo to next mark (float)
+    #* LUP: date de la vacation pour ce boat
     #* MAG : 'mapAge' (int), ie age des trajectoires
     #* MAR : 'maparea' (int), ie taille de la carte
+    #* MCR : 'mapCenter' (string), ie centre de la carte
+    #* MDT : 'mapDrawtextwp' (string) on/off
     #* MES : 'mapEstime' (int), ie estime
     #* MGD : 'mapMaille' (int), ie taille de la grid de vent
-    #* MDT : 'mapDrawtextwp' (string) on/off
-    #* BSP : vitesse du bateau (Boat SPeed) (float)
-    #* HDG : direction (HeaDinG)
-    #* DNM : Distance to next mark (float)
-    #* ORT : Cap ortho to next mark (float)
-    #* LOX : Cap loxo to next mark (float)
-    #* VMG : VMG (float)
-    #* TWD : Wind direction (float)
-    #* TWS : Wind speed (float)
-    #* TWA : Wind angle - Allure (float)
-    #* LOC : loch (float)
-    #* AVG : vitesse moyenne (float)
-    #* WPLAT : latitude du wp perso (float, en degré)
-    #* WPLON : longitude du wp perso (float, en degré)
-    #* H@WP : mode Heading@WP, (float, degré)
-    #* LAT : latitude (float, degré)
-    #* LON : longitude (float, degré)
-    #* TUP : Time to Update (à partir de NUP) (int)
-    #* TFS : Time From Start (int)
-    #* RNK : Rank : classement dans la course (int)
+    #* MHT : 'mapY' (int), ie taille hauteur en pixel
+    #* MLY : 'mapLayers' (string), ie type de layers
+    #* MOP : 'mapOpponents' (string), ie type d'affichage des concurrents
+    #* MPO : 'mapPrefOpponents' (liste), ie concurrents à suivre
+    #* MTL : 'mapTools' (string), ie 
+    #* MWD : 'mapX' (int), ie taille largeur en pixel
     #* NBS : Number of Boat subscribed (int)
     #* NPD : Notepad (blocnote)
-    #* EML : EMail
-    #* COL : Color
-    #* CNT : Country 
-    #* SRV : Servername 
+    #* NUP : nombre de secondes jusqu'à la prochaine VAC (int)
+    #* NWP : numéro du prochain waypoing (int)
+    #* ORT : Cap ortho to next mark (float)
+    #* OWN : Owner (Playername)
     #* PIL1: Pilototo instruction 1 (id,time,PIM,PIP,status)
     #* PIL2: Pilototo instruction 2 (id,time,PIM,PIP,status)
     #* PIL3: Pilototo instruction 3 (id,time,PIM,PIP,status)
     #* PIL4: Pilototo instruction 4 (id,time,PIM,PIP,status)
     #* PIL5: Pilototo instruction 5 (id,time,PIM,PIP,status)
     #* PIL : List of Piloto instruction (json only)
+    #* PIM : Pilot mode (int)
+    #* PIP : pilot parameter (string - doit le rester à causes des WP: x.xx,y.yy
+    #* POL : nom de la polaire (sans boat_) (string)
+    #* POS : classement dans la course (string - xxx/yyy)
+    #* RAC : numéro de la course (string)
+    #* RAN : nom de la course (string)
+    #* RNK : Rank : classement dans la course (int)
+    #* SRV : Servername 
+    #* TFS : Time From Start (int)
     #* THM: nom du theme
-    #* HID: trace cachée (1) ou visible (0)
+    #* TUP : Time to Update (à partir de NUP) (int)
+    #* TWA : Wind angle - Allure (float)
+    #* TWD : Wind direction (float)
+    #* TWS : Wind speed (float)
     #* VAC: durée de la vacation (en secondes)
-    #* LUP: date de la vacation pour ce boat
+    #* VMG : VMG (float)
+    #* WPLAT : latitude du wp perso (float, en degré)
+    #* WPL : liste de Waypoints (liste)
+    #* WPLON : longitude du wp perso (float, en degré)
     ";
     return $usage;
 }
