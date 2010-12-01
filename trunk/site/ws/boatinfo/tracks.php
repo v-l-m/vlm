@@ -17,13 +17,15 @@
  
     if (!raceExists($idr)) $ws->reply_with_error('IDR03'); //FIXME : select on races table made two times !
     $races = new races($idr);
+    
+    $notmine = (!in_array($ws->idu, getLoggedPlayerObject()->getManageableBoatIdList())); //impact sur les perfs ?
 
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
     //FIXME if debug
     $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
 
-    if ($races->bobegin < $now && $races->boend > $now) {
+    if ($races->bobegin < $now && $races->boend > $now && $notmine) {
         //BlackOut in place
         $endtime = $races->bobegin;
         $ws->answer['blackout'] = True;
@@ -31,17 +33,12 @@
         $ws->answer['blackout_end'] = $races->boend;
     }
 
-    if ($users->hasTrackHidden()) {
+    if ($users->hasTrackHidden() && $notmine) {
         $ws->answer['tracks_hidden'] = True;
         $ws->answer['nb_tracks'] = 0;
         $ws->reply_with_success();
     }
         
-    if ($races->bobegin < $now && $races->boend > $now) {
-        //BlackOut in place
-        $endtime = $races->bobegin;
-    }
-
     $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
     $ws->answer['nb_tracks'] = count($pi->records);
     $ws->answer['tracks'] = $pi->records;
