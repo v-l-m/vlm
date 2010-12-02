@@ -7,14 +7,15 @@
 
     //FIXME : types are badly checked
 
-    //Note : this ws doesn't check if this is your boat or not, to be more efficient.
-    //You should use tracks_private.php for yours manageable boats
-
     $ws = new WSBaseBoat();
     $now = time();
     
     $users = getUserObject($ws->idu);
     if (is_null($users)) $ws->reply_with_error('IDU03');
+
+    if (!in_array($ws->idu, getLoggedPlayerObject()->getManageableBoatIdList())) {
+       $ws->reply_with_error('IDU04');
+    }
 
     $idr = $ws->check_cgi_int('idr', 'IDR01', 'IDR02', $users->engaged);
  
@@ -25,20 +26,6 @@
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
     //FIXME if debug
     $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
-
-    if ($races->bobegin < $now && $races->boend > $now) {
-        //BlackOut in place
-        $endtime = $races->bobegin;
-        $ws->answer['blackout'] = True;
-        $ws->answer['blackout_start'] = $races->bobegin;
-        $ws->answer['blackout_end'] = $races->boend;
-    }
-
-    if ($users->hasTrackHidden()) {
-        $ws->answer['tracks_hidden'] = True;
-        $ws->answer['nb_tracks'] = 0;
-        $ws->reply_with_success();
-    }
         
     $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
     $ws->answer['nb_tracks'] = count($pi->records);
