@@ -1,5 +1,5 @@
 /**
- * $Id: types.h,v 1.19 2010-11-16 07:08:00 ylafon Exp $
+ * $Id: types.h,v 1.22 2010-11-27 15:32:35 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -76,11 +76,15 @@ typedef struct race_str {
   int                 started;
   time_t              deptime;
   time_t              closetime;
+  time_t              bobegin;
+  time_t              boend;
+  time_t              maxarrivaltime;
   long                startlong;
   long                startlat;
   boat_polar          *boattype;     /* point to the polar */
   int                 racetype;
-  time_t              firstpcttime;  /* first arrival ? */
+  int                 firstpcttime;  
+  int                 coastpenalty;
   struct boat_str     *boat_list;
   int                 nb_boats;
   struct waypoint_str *waypoint_list;
@@ -128,10 +132,15 @@ typedef struct boat_str {
   double      wp_distance;     /* distance to the WP in nm           */
   double      heading;         /* actual heading in rad              */
   double      loch;            /* loch                               */
-  int         last_gate_id;    /* The last gate ID targeted          */
+  int         pim;             /* pilot mode                         */
+  int         nwp;             /* The target gate ID                 */
+  double      pip;             /* pilot parameter                    */
   struct race_str *in_race;    /* the race it belongs to             */
   struct boat_polar_str *polar;/* The polar in use                   */
   time_t      last_vac_time;   /* time of last move                  */
+  time_t      last_update;     /* time of last pilot change          */
+  time_t      departure_time;  /* departure time in the race         */
+  time_t      release_time;    /* release time (after a penalty)     */
   struct wind_info_str wind;   /* the computed wind                  */
   void   (*set_heading_func)();
 } boat;
