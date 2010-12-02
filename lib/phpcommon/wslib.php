@@ -303,6 +303,7 @@ function get_error($code) {
         "IDU01" => 'idu (iduser = idboat) is required',
         "IDU02" => 'idu should be int and > 0',
         "IDU03" => 'idu is not valid user',
+        "IDU04" => 'idu is not a manageable boat for current player',
         //idr
         "IDR01"  => 'idr is required',
         "IDR02"  => 'idr should be int and > 0',
