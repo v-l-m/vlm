@@ -33,7 +33,7 @@ $north = ceil(floatval(get_cgi_var('north')));
 $south = floor(floatval(get_cgi_var('south'))); 
 $east  = ceil(floatval(get_cgi_var('east'))); 
 $west  = floor(floatval(get_cgi_var('west'))); 
-$step  = floatval(get_cgi_var('step', 0.5)); 
+$step  = 0.5;
 
 $time_offset = intval(get_cgi_var('timeoffset'), 0);
 
