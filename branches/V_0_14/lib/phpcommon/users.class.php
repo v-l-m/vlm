@@ -72,7 +72,7 @@ class users extends baseClass
     }
   }
 
-  function initFromId() {
+  function initFromId($forceMaster = False) {
     $id = $this->idusers;
     $query= "SELECT idusers, boattype, username, password,".
       " boatname, color, boatheading, pilotmode, pilotparameter,".
@@ -80,7 +80,11 @@ class users extends baseClass
       " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
       " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
 
-    $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
+    if ($forceMaster) {
+        $result = wrapper_mysql_db_query_writer($query) or die("\n FAILED !!\n");
+    } else {
+        $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
+    }
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
     $this->initFromArray($row);
   }
