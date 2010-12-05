@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.h,v 1.7 2010-11-16 07:08:00 ylafon Exp $
+ * $Id: waypoint.h,v 1.8 2010-12-05 16:47:00 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -24,17 +24,38 @@
 #include "defs.h"
 #include "types.h"
 
-void init_waypoint          PARAM9(waypoint *, int, int,
-				   double, double,
-				   double, double,
-				   double, double);
+/**
+ * Create a two buoys wp structure out of any buoy definition
+ * leave_at is an angle in rad
+ */
+void   init_waypoint          PARAM9(waypoint *, int, int,
+				     double, double,
+				     double, double,
+				     double, double);
+/**
+ * check if a waypoint was in the way
+ * populates the time when the wp was crossed
+ * @returns a boolean, 1 if waypoint was crossed, 0 otherwise
+ */
+int    check_waypoint_crossed PARAM8(double, double, time_t,
+				     double, double, time_t,
+				     waypoint *, time_t *);
+/**
+ * check if a waypoint was in the way
+ * populates the time when the wp was crossed
+ * @returns an int,  1 if waypoint was crossed, 
+ *                  -1 if waypoint is incorrectly crossed 
+ *                   0 if not crossed
+ */
+int    check_waypoint         PARAM8(double, double,  
+				     double, double,  
+				     waypoint *, double *,
+				     double *, double *);
+/**
+ * Find the "closest" point of a WP, it populates the real targeted WP
+ * of the boat and return the distance to that point.
+ */
+double best_way_to_waypoint   PARAM2(boat *, waypoint *);
 
-int  check_waypoint_crossed PARAM8(double, double, time_t,
-				   double, double, time_t,
-				   waypoint *, time_t *);
-int  check_waypoint         PARAM8(double, double,  
-				   double, double,  
-				   waypoint *, double *,
-				   double *, double *);
 
 #endif /* _VLMC_WAYPOINT_H_ */
