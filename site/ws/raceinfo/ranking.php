@@ -21,13 +21,16 @@
 
     $res = $ws->queryRead($query_ranking);
 
-    $ws->answer['request'] = Array('idr' => $ws->idr, 'time' => $now);
-    $ws->answer['ranking'] = Array();
+    $ws->answer['request'] = array('idr' => $ws->idr, 'time' => $now);
+    $ws->answer['ranking'] = array();
     $position = 0;
+
+    $not_started = array();
 
     while ($row = mysql_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
-        //if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) continue;
+        $has_not_started = (!array_key_exists('nwp',$row) || 
+			    (($row['dnm'] == 0.0) && ($row['loch'] == 0.0)));
         // Calcul du status
         if ( $row['releasetime'] > $now ) {
             $row['status'] = 'locked';
@@ -40,16 +43,28 @@
         unset($row['pip']);
         $row['latitude'] /= 1000.;
         $row['longitude'] /= 1000.;
+	
+	if ($has_not_started) {
+	  array_push($not_started, $row);
+	} else {
+	  $position += 1;
+	  $row['rank'] = $position;
+	  $ws->answer['ranking'][$row['idusers']] = $row;
+	}
+    }
+    // et on copie a la fin les bateaux non partis.
+    foreach($not_started as $key => $ns_row) {
         $position += 1;
-        $row['rank'] = $position;
-
-        $ws->answer['ranking'][$row['idusers']] = $row;
+        $ns_row['rank'] = $position;
+        $ws->answer['ranking'][$ns_row['idusers']] = $ns_row;
     }
 
-    list ($num_arrived , $num_racing, $num_engaged) = getNumOpponents($races->idraces);    
+    list ($num_arrived , $num_racing, 
+	  $num_engaged) = getNumOpponents($races->idraces);    
     $ws->answer['nb_arrived'] = $num_arrived;
-    $ws->answer['nb_racing'] = $num_racing;
+    $ws->answer['nb_racing']  = $num_racing;
     $ws->answer['nb_engaged'] = $num_engaged;
+    $ws->answer['nb_not_started'] = count($not_started);
 
     $ws->reply_with_success();
 
