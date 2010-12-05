@@ -442,9 +442,9 @@ function get_track(idu,color)
 		url: "/ws/boatinfo/tracks.php?idu="+idu+"&starttime=" + starttime,
 		dataType: "json",
 		cache: false,
-		data: user_pass_ajax,
-		username: username,
-		password: password,
+		//data: user_pass_ajax,
+		//username: username,
+		//password: password,
 		success: function(answer){
 				var polyOptions = {
 				 strokeColor: '#'+color,
@@ -481,9 +481,9 @@ function refresh_ranking(idr)
 		url: "/ws/raceinfo/ranking.php?idr="+idr,
 		dataType: "json",
 		cache: false,
-		data: user_pass_ajax,
-		username: username,
-		password: password,
+		//data: user_pass_ajax,
+		//username: username,
+		//password: password,
 		success: function(answer){
 			test_engaged = answer['nb_engaged'];
 			if(test_engaged == "0")
