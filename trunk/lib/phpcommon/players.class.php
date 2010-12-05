@@ -319,10 +319,10 @@ class players extends baseClass {
             foreach($boatlist as $idb) {
                 $uo = getUserObject($idb);
                 if ($uo->engaged > 0) $default = $idb; //betterchoice : racing boat
-                if ($uo->engaged > 0 && $uo->getOwnerId() == $this->idplayers) return $idb; //found owned and racing boat
+                if ($uo->engaged > 0 && $uo->getOwnerId() == $this->idplayers) return intval($idb); //found owned and racing boat
             }
         }
-        return $default;
+        return intval($default);
     }
 
     function getBoatIdList($linkfilter) {
