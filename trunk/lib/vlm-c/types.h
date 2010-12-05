@@ -1,5 +1,5 @@
 /**
- * $Id: types.h,v 1.22 2010-11-27 15:32:35 ylafon Exp $
+ * $Id: types.h,v 1.23 2010-12-05 15:52:34 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -128,6 +128,8 @@ typedef struct boat_str {
   double      longitude;       /* longitude in rad                   */
   double      wp_latitude;     /* latitude  in rad                   */
   double      wp_longitude;    /* longitude in rad                   */
+  double      real_wp_lat;     /* real targeted WP latitude          */
+  double      real_wp_lon;     /* real targeted WP longitude         */
   double      wp_heading;      /* for fixed angle/wind_angle in rad  */
   double      wp_distance;     /* distance to the WP in nm           */
   double      heading;         /* actual heading in rad              */

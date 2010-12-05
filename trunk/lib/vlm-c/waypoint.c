@@ -1,5 +1,5 @@
 /**
- * $Id: waypoint.c,v 1.13 2010-09-07 16:08:16 ylafon Exp $
+ * $Id: waypoint.c,v 1.15 2010-12-05 16:47:41 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -327,4 +327,51 @@ int check_waypoint(double prev_latitude, double prev_longitude,
   }
   // final result
   return isect;
+}
+
+/**
+ * Find the "closest" point of a WP, it populates the real targeted WP
+ * of the boat and return the distance to that point.
+ */
+double best_way_to_waypoint(boat *b, waypoint *wp) {
+  double x_lat, x_long, dist, ratio;
+  double latitude_a, longitude_a, latitude_b, longitude_b;
+  double latitude, longitude;
+  
+  /* sanity check */
+  latitude    = b->latitude;
+  longitude   = fmod(b->longitude, TWO_PI);
+  if (longitude < 0.0) {
+    longitude += TWO_PI;
+  }
+  latitude_a  = wp->latitude1;
+  longitude_a = fmod(wp->longitude1, TWO_PI);
+  if (longitude_a < 0.0) {
+    longitude_a += TWO_PI;
+  }
+  latitude_b  = wp->latitude2;
+  longitude_b = fmod(wp->longitude2, TWO_PI);
+  if (longitude_b < 0.0) {
+    longitude_b += TWO_PI;
+  }
+  
+  /* if something goes wrong, return -1 */
+  if (latitude   < -PI || latitude   > PI ||
+      latitude_a < -PI || latitude_a > PI ||
+      latitude_b < -PI || latitude_b > PI) {
+    return -1.0;
+  }
+  
+  dist = distance_to_line_ratio_xing(latitude  , longitude,
+				     latitude_a, longitude_a,
+				     latitude_b, longitude_b,
+				     &x_lat, &x_long, &ratio);
+  if (x_long > PI) {
+    x_long -= TWO_PI;
+  } else if (x_long < -PI) {
+    x_long += TWO_PI;
+  }
+  b->real_wp_lat = x_lat;
+  b->real_wp_lon = x_long;
+  return dist;
 }
