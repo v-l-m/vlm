@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.37 2009-10-10 08:36:24 ylafon Exp $
+ * $Id: vmg.c,v 1.38 2010-12-05 21:09:05 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -127,11 +127,22 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
 
 /* the algorith used is to maximize the speed vector projection
    on the orthodromic vector */
-void set_heading_bvmg(boat *aboat) {
-  double angle;
+void set_heading_bvmg(boat *aboat, int mode) {
+  double hdg, wangle;
+  
+  do_bvmg(aboat, mode, &hdg, &wangle);
+  set_heading_direct(aboat, hdg);
+  aboat->wangle = wangle;
+}
 
-  angle = get_heading_bvmg(aboat, 1);
-  set_heading_direct(aboat, angle);
+/* the algorith used is the VBVMG */
+void set_heading_vbvmg(boat *aboat, int mode) {
+  double hdg1, hdg2, wangle1, wangle2, time1, time2, dist1, dist2;
+  
+  do_vbvmg(aboat, mode, &hdg1, &hdg2, &wangle1, &wangle2, 
+	   &time1, &time2, &dist1, &dist2);
+  set_heading_direct(aboat, hdg1);
+  aboat->wangle = wangle1;
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- * $Id: types.h,v 1.23 2010-12-05 15:52:34 ylafon Exp $
+ * $Id: types.h,v 1.24 2010-12-05 21:08:33 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *      See COPYING file for copying and redistribution conditions.
@@ -136,7 +136,7 @@ typedef struct boat_str {
   double      loch;            /* loch                               */
   int         pim;             /* pilot mode                         */
   int         nwp;             /* The target gate ID                 */
-  double      pip;             /* pilot parameter                    */
+  double      wangle;          /* computed/stored wind angle         */
   struct race_str *in_race;    /* the race it belongs to             */
   struct boat_polar_str *polar;/* The polar in use                   */
   time_t      last_vac_time;   /* time of last move                  */
