@@ -68,7 +68,9 @@
         if (!checkLoginExists($boatpseudo)
 	    && (hash('sha256',$boatname) != $player->password) 
 	    && $idu = createBoat($boatpseudo, $password = generatePassword($boatpseudo), $player->email, $boatname)) {
-            $users = getUserObject($idu);
+            //Manual creation of users, forcing use of MASTER server
+            $users = new users($idu, FALSE);
+            $users->initFromId($idu, True);
             echo "<h2>".getLocalizedString("Your boat has been created")."</h2>";
             printBoatSummary($boatpseudo, $boatname);
             echo "</div>";
