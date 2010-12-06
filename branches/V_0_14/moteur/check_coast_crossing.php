@@ -29,7 +29,7 @@ if ($crosses_the_coast) {
   
   /* NOTE the encounter coordinates are the real ones */
   
-  echo "\nVLMMAP http://s9.virtual-loup-de-mer.org/mercator.img.php?idraces=" . $fullUsersObj->users->engaged ;
+  echo "\nVLMMAP http://virtual-loup-de-mer.org/mercator.img.php?idraces=" . $fullUsersObj->users->engaged ;
   echo "&lat=" . $latAvant/1000;  
   echo "&long=" .$lonAvant/1000;
   echo "&maparea=18&tracks=on&age=6";
@@ -73,7 +73,7 @@ if ($crosses_the_coast) {
     }
   }
 
-  echo "\nVLMMAP corrected position http://s9.virtual-loup-de-mer.org/mercator.img.php?idraces=" . $fullUsersObj->users->engaged ;
+  echo "\nVLMMAP corrected position http://virtual-loup-de-mer.org/mercator.img.php?idraces=" . $fullUsersObj->users->engaged ;
   echo "&lat=" . $latAvant/1000;  
   echo "&long=" .$lonAvant/1000;
   echo "&maparea=18&tracks=on&age=6";
