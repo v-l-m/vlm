@@ -2,10 +2,10 @@
  *    Filename        : map_functions.c
 
  *    Created            : 07 January 2009 (23:08:16)
- *    Created by        : StephPen - stephpen@gmail.com
+ *    Created by        : StephPen - stephpen @at@ gmail . com
 
  *    Last Updated    : 23:23 21/11/2010
- *    Updated by        : StephPen - stephpen@gmail.com
+ *    Updated by        : StephPen - stephpen @at@ gmail . com
 
  *    (c) 2008 by Stephane PENOT
  *        See COPYING file for copying and redistribution conditions.
@@ -25,7 +25,7 @@
  *     
  *     
  *     
- *    Contact: <stephpen@gmail.com>
+ *    Contact: <stephpen @at@ gmail . com>
 */
 
 #include <stdlib.h>
@@ -237,6 +237,7 @@ void ReadPolygonFile (FILE *polyfile,
             {
                 fread(&(p1->contour[c].vertex[v].x), sizeof(double), 1, polyfile);
                 fread(&(p1->contour[c].vertex[v].y), sizeof(double), 1, polyfile);
+                //printf("xx: %lf, yy: %lf\n", p1->contour[c].vertex[v].x, p1->contour[c].vertex[v].y);
             }
         }
     
@@ -527,8 +528,6 @@ void    DrawGrid(   gdImagePtr Image, int MapWidth, int MapHeight,
 }
 
 void    DrawLine(   gdImagePtr Image, gshhs_contour *p,
-                    int x, int y,
-                    int pas_x, int pas_y,
                     double X_Origine, double Y_Origine,
                     double Zoom,
                     int Contour_Color)
@@ -537,14 +536,9 @@ void    DrawLine(   gdImagePtr Image, gshhs_contour *p,
     int c;
     double r;
     double x1, y1, x2, y2;
-    double long_max, lat_max, long_min, lat_min;
     
     r = 180.0*Zoom/M_PI;
     
-    long_min=(double)x/GSHHS_SCL;
-    lat_min=(double)y/GSHHS_SCL;
-    long_max=((double)x+(double)pas_x)/GSHHS_SCL;
-    lat_max=((double)y+(double)pas_y)/GSHHS_SCL;
 
     //printf("nb line: %d\n", p->nb_line);
     if (p->nb_line>0)
@@ -558,8 +552,8 @@ void    DrawLine(   gdImagePtr Image, gshhs_contour *p,
             //printf("x1: %lf - y1: %lf - x2: %lf - y2: %lf\n", x1, y1, x2, y2);
             
             gdImageLine(Image,  (int)round(X_Origine + MercatorLongitudeSimple(x1 * GSHHS_SCL) *r), (int)round(Y_Origine - MercatorLatitudeSimple(y1 * GSHHS_SCL)  *r),
-                                    (int)round(X_Origine + MercatorLongitudeSimple(x2 * GSHHS_SCL) *r), (int)round(Y_Origine - MercatorLatitudeSimple(y2 * GSHHS_SCL)  *r),
-                                    Contour_Color);
+                                (int)round(X_Origine + MercatorLongitudeSimple(x2 * GSHHS_SCL) *r), (int)round(Y_Origine - MercatorLatitudeSimple(y2 * GSHHS_SCL)  *r),
+                                Contour_Color);
             
         }
     }
@@ -674,6 +668,197 @@ void PolygonToGML(gpc_polygon *p, FILE *gmlfile, int translate)
     
 }
 
+void ReadETOPOFile(FILE *etopofile,
+                    int TileDim, int bord,
+                    int origine_x, int origine_y,
+                    double zoom)
+{
+    ETOPO_Header Header;
+    int pos_data;
+    short int z;
+    int i, j;
+    double lat_img, lon_img;
+    int lat_min_int, lat_max_int;
+    int lon_min_int, lon_max_int;
+    double lon_min;
+    int ii, jj;
+    double lc;
+    double dec;
+    
+     
+    fseek(etopofile, 0 , SEEK_SET);
+    fread(&Header, sizeof(Header), 1, etopofile);	
+    printf("Header.NCOLS=%d\n", Header.NCOLS);
+    printf("Header.NROWS=%d\n", Header.NROWS);
+    printf("Header.START_X=%lf\n", Header.START_X);
+    printf("Header.START_Y=%lf\n", Header.START_Y);
+    printf("Header.FINISH_X=%lf\n", Header.FINISH_X);
+    printf("Header.FINISH_Y=%lf\n", Header.FINISH_Y);
+    printf("Header.CELLSIZE=%lf\n", Header.CELLSIZE);
+    printf("Header.NODATA_VALUE=%d\n", Header.NODATA_VALUE);
+    printf("Header.NUMBERTYPE=%s\n", Header.NUMBERTYPE);
+    printf("Header.ZUNITS=%s\n", Header.ZUNITS);
+    printf("Header.MIN_VALUE=%d\n", Header.MIN_VALUE);
+    printf("Header.MAX_VALUE=%d\n", Header.MAX_VALUE);
+    
+    
+    for (i=0; i<TileDim; i++)
+    {
+        for (j=0; j<TileDim; j++)
+        {
+        // Latitude du pixel
+        lat_img = MercatorInverseLatitudeSimple((-j+TileDim-origine_y)*M_PI / (180.0*zoom));
+        // Longitude du pixel
+        lon_img = (i-origine_x)/zoom;
+        printf("Longitude = %lf, Latitude = %lf\n", lon_img, lat_img);
+        
+        if (lon_img>=0) lon_min_int = floor(fabs(lon_img));
+        else            lon_min_int= -ceil(fabs(lon_img));
+        //lon_max_int = lon_min_int + 1;
+        dec=lon_img-lon_min_int;
+        printf("lon_min_int = %d, dec= %lf\n", lon_min_int, dec);
+        
+        
+        ii=0;
+        while(ii<=Header.CELLSIZE)
+        {
+            lc =(lon_min_int+ii*1/Header.CELLSIZE);
+            if (lc>= lon_img)
+            {
+                lon_min=(lon_min_int+(ii-1)*1/Header.CELLSIZE);
+                printf("%d, %lf, %lf\n", ii, lc, lon_min);
+                break;
+            }
+            ii++;
+        }
 
+        
+        
+        
+        }
+    }
+
+    
+    
+    // pos_data=(10800+long_img*60)+(5400-lat_img*60)*21601;  
+    //pos_data=((Header.NCOLS-1)+long_img*(int)Header.CELLSIZE)+((Header.NROWS-1)-lat_img*(int)Header.CELLSIZE)*Header.NCOLS;
+    //fseek(etopofile, sizeof(ETOPO_Header)+pos_data*sizeof(short int), SEEK_SET);
+    //fread(&z, sizeof(short int), 1, etopofile);
+    
+    
+    //fclose(etopofile);
+
+}
+
+unsigned int compute_outcode(Point p, Rectangle r)
+{
+    unsigned int oc = 0;
+ 
+    if (p.y > r.p2.y)
+	oc |= TOP;
+    else if (p.y < r.p1.y)
+	oc |= BOTTOM;
+ 
+ 
+    if (p.x > r.p2.x)
+	oc |= RIGHT;
+    else if (p.x < r.p1.x)
+	oc |= LEFT;
+ 
+    return oc;
+}
+ 
+int cohen_sutherland (Line LineStart, Rectangle ClippingRectangle, Line *LineFinish)
+{
+    int accept;
+    int done;
+    unsigned int outcode1, outcode2;
+ 
+    accept = FALSE;
+    done = FALSE;
+    
+    double check;
+    
+    
+    if (ClippingRectangle.p1.x > ClippingRectangle.p2.x)
+    {
+        check = ClippingRectangle.p1.x;
+        ClippingRectangle.p1.x = ClippingRectangle.p2.x;
+        ClippingRectangle.p2.x = check;
+    }
+    
+    if (ClippingRectangle.p1.y > ClippingRectangle.p2.y)
+    {
+        check = ClippingRectangle.p1.y;
+        ClippingRectangle.p1.y = ClippingRectangle.p2.y;
+        ClippingRectangle.p2.y = check;
+    }
+    
+    
+    outcode1 = compute_outcode (LineStart.p1, ClippingRectangle);
+    outcode2 = compute_outcode (LineStart.p2, ClippingRectangle);
+    do
+    {
+        if (outcode1 == 0 && outcode2 == 0)
+        {
+            accept = TRUE;
+            done = TRUE;
+        }
+        else if (outcode1 & outcode2)
+        {
+            done = TRUE;
+        }
+        else
+        {
+            double x, y;
+            int outcode_ex = outcode1 ? outcode1 : outcode2;
+            if (outcode_ex & TOP)
+            {
+                x = LineStart.p1.x + (LineStart.p2.x - LineStart.p1.x) * (ClippingRectangle.p2.y - LineStart.p1.y) / (LineStart.p2.y - LineStart.p1.y);
+                y = ClippingRectangle.p2.y;
+            }
+ 
+            else if (outcode_ex & BOTTOM)
+            {
+                x = LineStart.p1.x + (LineStart.p2.x - LineStart.p1.x) * (ClippingRectangle.p1.y - LineStart.p1.y) / (LineStart.p2.y - LineStart.p1.y);
+                y = ClippingRectangle.p1.y;
+            }
+            else if (outcode_ex & RIGHT)
+            {
+                y = LineStart.p1.y + (LineStart.p2.y - LineStart.p1.y) * (ClippingRectangle.p2.x - LineStart.p1.x) / (LineStart.p2.x - LineStart.p1.x);
+                x = ClippingRectangle.p2.x;
+            }
+            else
+            {
+                y = LineStart.p1.y + (LineStart.p2.y - LineStart.p1.y) * (ClippingRectangle.p1.x - LineStart.p1.x) / (LineStart.p2.x - LineStart.p1.x);
+                x = ClippingRectangle.p1.x;
+            }
+            if (outcode_ex == outcode1)
+            {
+                LineStart.p1.x = x;
+                LineStart.p1.y = y;
+                outcode1 = compute_outcode (LineStart.p1, ClippingRectangle);
+            }
+            else
+            {
+                LineStart.p2.x = x;
+                LineStart.p2.y = y;
+                outcode2 = compute_outcode (LineStart.p2, ClippingRectangle);
+            }
+        }
+    } while (done == FALSE);
+ 
+    if (accept == TRUE)
+    {
+        LineFinish->p1.x = LineStart.p1.x;
+        LineFinish->p1.y = LineStart.p1.y;
+        LineFinish->p2.x = LineStart.p2.x;
+        LineFinish->p2.y = LineStart.p2.y;
+        
+        return TRUE;
+    }
+    else return FALSE;
+	
+}
 
 
