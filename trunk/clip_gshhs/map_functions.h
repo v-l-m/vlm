@@ -2,10 +2,10 @@
  *    Filename          : map_functions.h
 
  *    Created           : 07 January 2009 (23:08:51)
- *    Created by        : StephPen - stephpen@gmail.com
+ *    Created by        : StephPen - stephpen @at@ gmail . com
 
  *    Last Updated      : 23:24 21/11/2010
- *    Updated by        : StephPen - stephpen@gmail.com
+ *    Updated by        : StephPen - stephpen @at@ gmail . com
 
  *    (c) 2008 by Stephane PENOT
  *        See COPYING file for copying and redistribution conditions.
@@ -25,7 +25,7 @@
  *     
  *     
  *     
- *    Contact: <stephpen@gmail.com>
+ *    Contact: <stephpen @at@ gmail . com>
 */
 
 
@@ -38,7 +38,7 @@
 ===========================================================================
 */
 
-#define DEBUG           1
+#define DEBUG           0
 
 #ifndef M_PI
 #define M_PI          3.14159265358979323846264338327950288
@@ -125,6 +125,43 @@ typedef struct
         int p5;
     } PolygonFileHeader;
     
+typedef struct
+    {
+        int NCOLS;
+        int NROWS;
+        double START_X;
+        double START_Y;
+        double FINISH_X;
+        double FINISH_Y;
+        double CELLSIZE;
+        short int NODATA_VALUE;
+        char NUMBERTYPE[32];
+        char ZUNITS[32];
+        short int MIN_VALUE;
+        short int MAX_VALUE;
+    } ETOPO_Header ;
+
+typedef struct
+    {
+        double x;
+        double y;
+    } Point;
+    
+typedef struct
+    {
+        Point p1;
+        Point p2;
+    } Line;
+
+typedef struct
+    {
+        Point p1;
+        Point p2;
+    } Rectangle;
+
+enum { TOP = 0x1, BOTTOM = 0x2, RIGHT = 0x4, LEFT = 0x8 };
+ 
+enum { FALSE, TRUE };
 
 
 /*
@@ -163,8 +200,6 @@ void    DrawGrid                (gdImagePtr Image, int MapWidth, int MapHeight,
                                 double Grid_Space, int Grid_Color, int Text_Color);
 
 void    DrawLine                (gdImagePtr Image, gshhs_contour *p,
-                                int x, int y,
-                                int pas_x, int pas_y,
                                 double X_Origine, double Y_Origine, double Zoom,
                                 int Contour_Color);
 
@@ -177,6 +212,14 @@ void    FreeLine                (gshhs_contour *p);
 void    PolygonToGML            (gpc_polygon *p,
                                 FILE *gmlfile,
                                 int translate);
+                                
+void    ReadETOPOFile           (FILE *etopofile,
+                                int TileDim, int bord,
+                                int origine_x, int origine_y,
+                                double zoom);
+
+unsigned int compute_outcode    (Point p, Rectangle r);
+int cohen_sutherland            (Line LineStart, Rectangle ClippingRectangle, Line *LineFinish);
 
 
 #endif
