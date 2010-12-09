@@ -1,17 +1,22 @@
 /**
- * $Id: unittest.c,v 1.18 2010-10-28 10:34:23 ylafon Exp $
+ * $Id: unittest.c,v 1.19 2010-12-09 13:54:26 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
+ *
  *      See COPYING file for copying and redistribution conditions.
  *
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; version 2 of the License.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published
+ *  by the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Contact: <yves@raubacapeu.net>
  */
@@ -24,6 +29,7 @@
 
 #include "defs.h"
 #include "types.h"
+#include "boat.h"
 #include "ortho.h"
 #include "lines.h"
 #include "winds.h"
@@ -46,6 +52,7 @@ int main (int argc, char **argv) {
   int i;
   wind_info wind_boat;
   waypoint fake_waypoint;
+  boat a_boat;
 
   printf("VERSION: %s\n", get_vlm_build_information());
   printf("WIND INTERPOLATION: %s\n", get_vlm_wind_interpolation_scheme());
@@ -281,6 +288,12 @@ int main (int argc, char **argv) {
 	   crossing_time - current_time + 1000, ctime(&crossing_time));
   } else {
     printf("Edge case 6 failed\n");
+  }
+  printf("\nPolar test\n");
+  associate_polar_boat(&a_boat, "Class40");
+  for (i=0; i<1790; i++) {
+    printf("%3.2f => %2.6lf kts\n", ((double)i)/10.0, 
+	   find_speed(&a_boat, 12.2, degToRad(((double)i)/10.)));
   }
   return 0;
 }
