@@ -1,24 +1,29 @@
 /**
- * $Id: grib.c,v 1.28 2010-11-23 22:42:21 ylafon Exp $
+ * $Id: grib.c,v 1.29 2010-12-09 13:54:26 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
  * Parts of this code are taken from 
  * wgrib-c v1.8.0.12o (5-07) by Wesley Ebisuzaki
- * and adapted to fit our data structures.
+ * and adapted to fit our data structures (in the gribs reading part)
  *
  * See http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html
  *
  *      See COPYING file for copying and redistribution conditions.
  *
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; version 2 of the License.
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as published
+ *  by the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  *
  * Contact: <yves@raubacapeu.net>
  */
