@@ -686,7 +686,7 @@ class fullUsers
     //TODO write a positions->deletepositions that will be called here for every positions
     //delete old positions from database
     //printf ("Time = %d\n",$time);
-    $query_deptime = "UPDATE users set userdeptime = " . $time . " WHERE idusers = ". $this->users->idusers  ;
+    $query_deptime = "UPDATE users SET userdeptime = " . $time . " WHERE idusers = ". $this->users->idusers  ;
     //echo ( "Query failed : " . mysql_error." ".$query_deptime );
     wrapper_mysql_db_query_writer($query_deptime) or die ( "Query failed : " . mysql_error." ".$query_deptime );
     $this->users->userdeptime = $time;
@@ -1309,13 +1309,13 @@ class fullUsers
     // replace into races_results (idraces , idusers , position , duration, longitude, latitude)
     //                       values ($1, $2, 0, $la_date, $longitude, $latitude);
     $timestamp=time();
-    $this->users->pilotmode      = 2;
+    $this->users->pilotmode      = PILOTMODE_WINDANGLE;
     $this->users->pilotparameter = 0;
 
-    $query = "UPDATE users SET `pilotmode` = 2, " .
-      " `pilotparameter` = 0 , " .
-      " `lastchange` = " . $timestamp .
-      " WHERE idusers = ".$this->users->idusers;
+    $query = "UPDATE users SET `pilotmode`=".PILOTMODE_WINDANGLE.
+      ",`pilotparameter`=0," .
+      "`lastchange`=" . $timestamp .
+      " WHERE idusers=".$this->users->idusers;
     wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysql_error." ".$query);
 
     $this->updateAngles();
