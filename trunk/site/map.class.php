@@ -944,7 +944,7 @@ class map
           }
 
           // DRAW MyWP
-          if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
+          if ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) {
               if ($this->west > $this->east && $fullUsersObj->users->targetlong < 0) {
                   //case with wp east of AM and AM is visible
                   $mywpoffset = 360000;
