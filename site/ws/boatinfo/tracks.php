@@ -15,8 +15,14 @@
     
     $users = getUserObject($ws->idu);
     if (is_null($users)) $ws->reply_with_error('IDU03');
-
-    $idr = $ws->check_cgi_int('idr', 'IDR01', 'IDR02', $users->engaged);
+    if ($users->engaged < 0) {
+        $defidr = 99999999;
+    } else {
+        $defidr = $users->engaged;
+    }
+    
+    $idr = $ws->check_cgi_int('idr', 'IDR01', 'IDR02', $defidr);
+    if ($idr == 99999999) $ws->reply_with_error("RTFM01");
  
     if (!raceExists($idr)) $ws->reply_with_error('IDR03'); //FIXME : select on races table made two times !
     $races = new races($idr);
