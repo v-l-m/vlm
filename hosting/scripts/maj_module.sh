@@ -97,6 +97,9 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers le mode spectateur"
     ln -s $destmodulepath/../guest_map $destmodulepath/guest_map
     echo 'OK !'
+    echo -n "+$confmodule: Mise en place du lien symbolique vers jvlm"
+    ln -s $destmodulepath/../jvlm $destmodulepath/jvlm
+    echo 'OK !'
     echo -n "+$confmodule: Création du cache si nécessaire"
     mkdir -p $VLMCACHE/racemaps --mode=777
     mkdir -p $VLMCACHE/minimaps --mode=777
