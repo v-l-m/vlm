@@ -30,8 +30,10 @@ case $svnmodule in
     ;;
     guest_map)
     ;;
+    jvlm)
+    ;;
     *)
-    echo "Précisez : medias, base, moteur, site, grib, maps, lib/vlm-c, lib/phpcommon, clip_gshhs, guest_map..."
+    echo "Précisez : medias, base, moteur, site, grib, maps, lib/vlm-c, lib/phpcommon, clip_gshhs, guest_map, jvlm..."
     exit 1
     ;;
 esac
