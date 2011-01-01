@@ -1,3 +1,7 @@
+/* Contributors : paparazzia@gmail.com, ...
+ * Code is licencesed under the AGPL license
+ * See Copying file
+ */
 
 /** 
  * @requires OpenLayers/ControlSwitch.js
