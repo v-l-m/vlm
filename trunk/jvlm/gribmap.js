@@ -457,7 +457,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.getGribList(); //Async call
 
       //init resolutions      
-      for (i = 0; i < this.resols.length; i++) {
+      for (i = 0; i < 3; i++) {
           this.windLevels[this.resols[i].griblevel] = new Gribmap.WindLevel(
               this.resols[i].griblevel, this.resols[i].stepx, this.resols[i].stepy,
               this.resols[i].blocx, this.resols[i].blocy, this
