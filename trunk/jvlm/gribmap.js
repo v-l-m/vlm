@@ -1,6 +1,7 @@
 /*
- * paparazzia@gmail.com - December 2010.
- *
+/* Contributors : paparazzia@gmail.com, ...
+ * Code is licencesed under the AGPL license
+ * See Copying file
  */
 
 /**
