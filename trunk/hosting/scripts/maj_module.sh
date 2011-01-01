@@ -70,14 +70,22 @@ case $confmodule in
     echo -n "+$confmodule: installation de tiles_g dans $VLMBIN..."
     cp tiles_g $VLMBIN/tiles_g
     echo 'OK !'
-    if test -e "$VLMGSHHS/poly-f-1.dat" ; then
-        echo "++$confmodule: la base de polygone existe déjà !"
+    if test -e "$VLMGSHHS/rivers-f-1.dat" ; then
+        echo "++$confmodule: les fichiers de bdd gshhs existent déjà !"
         exit 0
     else 
-        echo "+$confmodule: Download de la base gshhs 1-f"
+        echo "+$confmodule: Download des fichiers poly, rivers et borders"
         wget --output-document="$VLMTEMP/poly-f-1.dat" "http://dev.virtual-loup-de-mer.org/poly-f-1.dat"
         echo -n "+$confmodule: copie dans  $VLMGSHHS..."
         mv "$VLMTEMP/poly-f-1.dat" "$VLMGSHHS/"
+        echo 'OK !'
+        wget --output-document="$VLMTEMP/rivers-f-1.dat" "http://dev.virtual-loup-de-mer.org/rivers-f-1.dat"
+        echo -n "+$confmodule: copie dans  $VLMGSHHS..."
+        mv "$VLMTEMP/rivers-f-1.dat" "$VLMGSHHS/"
+        echo 'OK !'
+        wget --output-document="$VLMTEMP/borders-f-1.dat" "http://dev.virtual-loup-de-mer.org/borders-f-1.dat"
+        echo -n "+$confmodule: copie dans  $VLMGSHHS..."
+        mv "$VLMTEMP/borders-f-1.dat" "$VLMGSHHS/"
         echo 'OK !'
     fi
     cd $oldpwd
