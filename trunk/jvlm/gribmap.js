@@ -126,13 +126,28 @@ Gribmap.WindLevel = OpenLayers.Class({
         if (typeof (this.windAreas[windarea.toString()]) == 'undefined') {
             //Unknown windarea, we just use it.
             this.windAreas[windarea.toString()] = windarea;
+        } else {
+            windarea = this.windAreas[windarea.toString()];
         }
         //FIXME : better test ?
         if (this.layer.gribtimeBefore != 0) {
-            this.windAreas[windarea.toString()].checkWindArray(this.layer.gribtimeBefore);
-            this.windAreas[windarea.toString()].checkWindArray(this.layer.gribtimeAfter);
+            windarea.checkWindArray(this.layer.gribtimeBefore);
+            windarea.checkWindArray(this.layer.gribtimeAfter);
         }
-        return this.windAreas[windarea.toString()];
+        return windarea;
+    },
+    
+    getWindInfo: function(lat, lon) {
+        var left = this.getGribLeftLimit(lon);
+        var bottom = this.getGribBottomLimit(lat);
+        var wa = new Gribmap.WindArea(left, bottom, this);
+        //on n'appelle pas checkWindArea car on suppose que c'est déjà OK.
+        //mais on mets ça dans une clausse d'exception pour ne pas avoir de soucis
+        try {
+            return(this.windAreas[wa.toString()].getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter));
+        } catch (error) {
+            return null;
+        }
     },
 
     CLASS_NAME: "Gribmap.WindLevel"
@@ -267,10 +282,9 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         return 'gribresol=('+this.windlevel['griblevel']+") "+OpenLayers.Bounds.prototype.toString.apply(this, arguments);
     },
 
-    windAtPosition: function(lonLat) {
-        //FIXME
-        if (true || this.wind_array == null) return new Wind(0,0);
-        return this.getWindInfo(lonLat.lat, lonLat.lon); 
+    getWindInfo: function(lat, lon, time, time_ante, time_post) {
+        //FIXME should clean all these API
+        return this.getWindInfo2(lat, lon, time, this.windArrays[time_ante], this.windArrays[time_post]);
     },
 
     getWindInfo2: function(lat, lon, time, windarray_ante, windarray_post) {
@@ -529,7 +543,6 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.gribtimeBefore = gribtimebefore;
       this.gribtimeAfter = gribtimeafter;
       this.time = time;
-//      alert(""+this.gribtimeBefore+"/"+this.gribtimeAfter+"/"+this.time);
       this.redraw();
   },
 
@@ -545,16 +558,8 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       return(i);
   },
 
-  windAtPosition: function(lonLat) {
-      return this.getWindInfo(lonLat.lat, lonLat.lon, 2);
-  },
-
-  getWindInfo: function(lat, lon) {
-      return null; //FIXME
-      var left = this.windLevels[this.windLevel].getGribLeftLimit(lon);
-      var bottom = this.windLevels[this.windLevel].getGribBottomLimit(lat);
-      var wa = new Gribmap.WindArea(left, bottom, this.resols[gl]);
-      return this.windAreas[wa.toString()].getWindInfo(lat, lon);
+  windAtPosition: function(latlon) {
+      return this.windLevels[this.gribLevel].getWindInfo(latlon.lat, latlon.lon);
   },
 
   /** 
@@ -672,7 +677,6 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
               } catch (error) {
                   if (ErrorCatching > 0) {
                       alert(LonLat+" / "+winfo.wspeed+" / "+winfo.wheading);
-                      
                       ErrorCatching -= 1;
                   }
               }
@@ -856,7 +860,6 @@ Gribmap.ControlWind =
         l = this.getGribmapLayer();
         l.timereset();
         this.timeOffsetSpan.innerHTML = " "+Math.round(l.timeoffset/3600)+"h ";
-        alert(l.time);
     },
 
     onClickForward: function (ctrl, evt) {
