@@ -4,6 +4,12 @@
  * See Copying file
  */
 
+/* TODO:
+ * this is rough draft
+ * - for better drawing an BC compatibility with OL, the Grimap layer should use the renderer or the vector base layer (?)
+ * - windarea are stored in an objet (pseudo key=>value array) => should be stored in arrays with indexes
+ */
+
 /**
  * @requires OpenLayers.js 
  * @requires ControlSwitch.js
@@ -66,19 +72,20 @@ Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel, {
 
 //Store information (windAreas, i.e. bloc of grib datas)
 Gribmap.WindLevel = OpenLayers.Class({
+    basestep: 0.5,
     griblevel: 0,
-    stepx: 8,
-    stepy: 6,
     blocx: 360,
     blocy: 180,
+    step: 2.0,
+    stepmultiple: 4.0,
     windAreas: {},
     layer: null,
 
-    initialize: function(griblevel, stepx, stepy, blocx, blocy, layer) {
+    initialize: function(griblevel, stepmultiple, blocx, blocy, layer) {
         this.griblevel = griblevel;
         this.windAreas = new Array();
-        this.stepx = stepx; //FIXME: useless without proper step handling
-        this.stepy = stepy;
+        this.stepmultiple = stepmultiple;
+        this.step = this.basestep*stepmultiple; //FIXME: useless without proper step handling
         this.blocx = blocx;
         this.blocy = blocy;
         this.layer = layer;
@@ -221,7 +228,7 @@ Gribmap.WindArray = OpenLayers.Class({
         var request = OpenLayers.Request.GET({
             url: Gribmap.windgrid_uribase,
             params: { north: this.windArea.top, south: this.windArea.bottom, east: this.windArea.right, west: this.windArea.left,
-                      timerequest: this.time}, //FIXME : resolution, griblevel: this.gribresol.griblevel},
+                      timerequest: this.time, stepmultiple: this.windArea.windlevel.stepmultiple},
             async: true,
             headers: {
                 'Accept' : 'application/json',
@@ -295,7 +302,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         var n_wspeed, s_wspeed, wspeed, wspeed_ante, wspeed_post;
         var t_angle1, t_angle2, wangle, t_val1, t_val2;
         var n_u, n_v, s_u, s_v, u_ante, v_ante, u_post, v_post, u, v;
-        var stepwind = 0.5;
+        var stepwind = this.windlevel.step;
         var timecoeff, loncoeff, latcoeff;
 
         //Normalisation & coeff
@@ -413,24 +420,8 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
    */
   canvas: null,
   
-  /* Property: griblist
-   * List of timestamp for gribs
-   */  
-  griblist: null,
-  
-  /* Property: resols
-   * hasharray : list of resolution
-   * FIXME : could we use the native resolution concept of OL ?
-   */
-
-  resols: [
-      { griblevel: 0, stepx: 8, stepy: 6, blocx: 360, blocy: 180},
-      { griblevel: 1, stepx: 2, stepy: 1, blocx: 60, blocy: 30},
-      { griblevel: 2, stepx: 0.5, stepy: 0.5, blocx: 20, blocy: 20},
-      ],
-
-  /* List of windAreas */
-  windLevels: new Array(),
+  /* List of windLevels */
+  windLevels: [],
 
   /* define pixel grid */
   arrowstep: 48,
@@ -442,6 +433,11 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   time: 0,
   gribtimeBefore: 0,
   gribtimeAfter: 0,
+
+  /* Property: griblist
+   * List of timestamp for gribs
+   */  
+  griblist: null,
 
   /* Constructor: Gribmap.Layer
    * Create a gribmap layer.
@@ -457,12 +453,9 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.getGribList(); //Async call
 
       //init resolutions      
-      for (i = 0; i < 3; i++) {
-          this.windLevels[this.resols[i].griblevel] = new Gribmap.WindLevel(
-              this.resols[i].griblevel, this.resols[i].stepx, this.resols[i].stepy,
-              this.resols[i].blocx, this.resols[i].blocy, this
-              );
-          }
+      this.windLevels[0] = new Gribmap.WindLevel(0,   4,  120,  60, this);
+      this.windLevels[1] = new Gribmap.WindLevel(1,   2,  60,  30, this);
+      this.windLevels[2] = new Gribmap.WindLevel(2,   1,  20,  20, this);
 
       this.canvas = document.createElement('canvas');
 
@@ -481,7 +474,6 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   },
 
   //Time management
-  
   addTimeOffset: function(delta) {
       this.timeoffset += delta;
       this.setTimeSegmentFromOffset();
@@ -553,9 +545,9 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       widthlon = Math.abs(bounds.left - bounds.right);
       heightlat = Math.abs(bounds.top - bounds.bottom);
       for (i=this.windLevels.length-1; i >= 0; i--) {
-          if ( (widthlon < 2*this.windLevels[i].blocx) && (heightlat < 3*this.windLevels[i].blocy) ) break;
+          if ( (widthlon < 2*this.windLevels[i].blocx) && (heightlat < 2*this.windLevels[i].blocy) ) break;
       }
-      this.gribLevel = i;
+      this.gribLevel = Math.max(i,0);
       return(i);
   },
 
@@ -607,15 +599,16 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
       //Get griblevel // FIXME : should use the native zoom level
       this.setGribLevel(boundsLonLat);        
-      if (this.gribLevel == 2) {
+//      if (this.gribLevel > 0) {
             //get windareas for current griblevel
             var bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
+/*            if (this.gribLevel == 1) alert('griblevel 1');
         } else {
           //Currently, we don't handle the multireso case
           ctx.canvas.width = 0;
           ctx.canvas.height = 0;
           return;
-      }
+      }*/
 
       for (i = 0; i < bl.length; i++) {
 
