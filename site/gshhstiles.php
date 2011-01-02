@@ -24,7 +24,7 @@
         } else {
             $rivers = "";
             if ($tilez > 4) $rivers = sprintf("--rivers %s ", GSHHS_CLIPPED_RIVER_FILENAME);
-            $execcmd = sprintf("%s --n_tiles %d --x_tile %d --y_tile %d -d -f --coast_file %s %s --water_alpha 0x7F -t %s", TILES_G_PATH, pow(2, $tilez), $tilex, $tiley, GSHHS_CLIPPED_FILENAME, $rivers, $original);
+            $execcmd = sprintf("%s --n_tiles %d --x_tile %d --y_tile %d -d --coast_file %s %s -a %s --water_alpha 0x7F -t %s", TILES_G_PATH, pow(2, $tilez), $tilex, $tiley, GSHHS_CLIPPED_FILENAME, $rivers, GSHHS_CLIPPED_TOPO_FILENAME, $original);
 //            print $execcmd; die();
             shell_exec($execcmd);
         }

@@ -10,6 +10,7 @@
     // the full path of the gshhs clipped file (for tiles)
     define("GSHHS_CLIPPED_FILENAME", GSHHS_DIRECTORY."/poly-f-1.dat");
     define("GSHHS_CLIPPED_RIVER_FILENAME", GSHHS_DIRECTORY."/rivers-f-1.dat");
+    define("GSHHS_CLIPPED_TOPO_FILENAME", GSHHS_DIRECTORY."/ETOPO1_Ice.dat");
 
     // The full path of the polar definition filename  (the "full" version)
     define("POLAR_DEFINITION_FILENAME", "".POLARS_DIRECTORY."/polars.list");
