@@ -35,7 +35,7 @@
     //Le temps  - c'est au caller d'appeler list.php avant pour connaitre la date du grib si nécessaire
     $timerequest = intval(get_cgi_var('timerequest', time()));
 
-    if ((time()-$timerequest < -MAX_GRIBTIME_HISTORY) || ($timerequest - time() > MAX_GRIBTIME_FUTURE)) {
+    if (($timerequest-time() < -MAX_GRIBTIME_HISTORY) || ($timerequest - time() > MAX_GRIBTIME_FUTURE)) {
         invalid_values("bad time requested : $timerequest");
     }
 
