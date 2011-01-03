@@ -11,7 +11,9 @@ What's up for ...
     * map service available for all your favorites tools (paparazzia, stephpen)
         * already in use by sbsRouteur (sbs)
         * coming soon with a froggy thing ;) (frog)
-    * real 1h/3h/24h loch
+    * real 1h/3h/24h loch (spifou)
+    * db access optimizations (spifou)
+    * default WP (0,0) can never be an Ice Gate (spifou)
 
 ... players in the future ?
     * enhanced map display 
@@ -19,10 +21,11 @@ What's up for ...
 ... tools developpers ?
     * tiles with topographic rendering (stephpen)
     * enhanced wind service (paparazzia, spifou)
+    * existing services updates (paparazzia, spifou)
 
 ... developpers ?
     * VLM code base is now licensed with AGPLv3 (all developpers)
-
+      http://en.wikipedia.org/wiki/Affero_General_Public_License
 
 v0.14 aka "Sirocco et ses frères".
 
