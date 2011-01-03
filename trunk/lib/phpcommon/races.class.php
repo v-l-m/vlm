@@ -885,6 +885,8 @@ class fullRaces {
     //table header
     echo "\n<table>\n";
     echo "<tbody class=\"htmltable\">\n";
+    $currentengaged = getLoggedUserObject()->engaged;
+
     //echo "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>\n";
     //for xhtml  compliance, find other solution
     // we need to join the races_ranking query to know order of boats
@@ -892,7 +894,8 @@ class fullRaces {
                        " US.color color, US.country country , US.engaged engaged" . 
                        " FROM  races_ranking RR, users US " . 
                        " WHERE RR.idusers = US.idusers " . 
-                       " AND   engaged != 0 " . 
+   //PAPARAZZIA: quick fix to display only boat in the race (for easier use)
+                       " AND   engaged = $currentengaged " . 
                        " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
 
     $result = wrapper_mysql_db_query_reader($query_listusers) or die ($query_listusers);
@@ -901,7 +904,6 @@ class fullRaces {
     $lastrace = 0;
     $raceobj = null;
     $printtd = 0;
-    $currentengaged = getLoggedUserObject()->engaged;
 
     while( $row = mysql_fetch_assoc( $result ) ) {
       if ( $row['engaged'] != $lastrace ) {
