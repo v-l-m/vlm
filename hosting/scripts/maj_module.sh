@@ -87,6 +87,10 @@ case $confmodule in
         echo -n "+$confmodule: copie dans  $VLMGSHHS..."
         mv "$VLMTEMP/borders-f-1.dat" "$VLMGSHHS/"
         echo 'OK !'
+        wget --output-document="$VLMTEMP/ETOPO1_Ice.dat" "http://dev.virtual-loup-de-mer.org/ETOPO1_Ice.dat"
+        echo -n "+$confmodule: copie dans  $VLMGSHHS..."
+        mv "$VLMTEMP/ETOPO1_Ice.dat" "$VLMGSHHS/"
+        echo 'OK !'
     fi
     cd $oldpwd
     ;;
