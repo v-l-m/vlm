@@ -1,9 +1,31 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.15 aka "No more oil in my Chocolatero":
+
+What's up for ...
+
+... players ?
+    * guest_map is now hosted and part of vlm (kernel panic)
+    * jvlm demo as online map and grib viewer (stephpen, spifou & paparazzia)
+    * map service available for all your favorites tools (paparazzia, stephpen)
+        * already in use by sbsRouteur (sbs)
+        * coming soon with a froggy thing ;) (frog)
+
+... players in the future ?
+    * enhanced map display 
+
+... tools developpers ?
+    * tiles with topographic rendering (stephpen)
+    * enhanced wind service (paparazzia, spifou)
+
+... developpers ?
+    * VLM code base is now licensed with AGPLv3 (all developpers)
+
+
 v0.14 aka "Sirocco et ses frères".
 
-What'us up for ...
+What's up for ...
 
 ... players ?
     * enhancements & major changes :
