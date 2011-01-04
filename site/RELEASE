@@ -37,9 +37,8 @@ What's up for ...
     * more option (dry run, account creation flag, ...) (spifou, paparazzia)
     * support of loadbalancing (paparazzia, spifou, fm)
 
-Some of these items were already backported in vlm 0.14.
-
-Thanks to all the admins, tools developpers, bug reporters and translators.
+With 85 tickets closed, this is a solid release.
+Some of these items were already backported in vlm 0.14. Thanks to all the admins, tools developpers, bug reporters and translators.
 
 ____
 v0.14 aka "Sirocco et ses frères".

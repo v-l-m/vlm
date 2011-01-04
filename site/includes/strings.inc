@@ -400,6 +400,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'You already reached the maximum boats per player' => 'Vous avez atteint le nombre maximum de bateaux par joueur', 
     'Spectator' => 'Spectateur',
     'Account creation is disabled on this server, you should ask to the admins' => "La création de compte est désactivée sur ce serveur, vous devez demander aux admins",
     'Account validation error' => 'Erreur de validation de compte',
