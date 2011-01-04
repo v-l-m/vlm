@@ -6,27 +6,42 @@ v0.15 aka "No more oil in my Chocolatero":
 What's up for ...
 
 ... players ?
-    * guest_map is now hosted and part of vlm (kernel panic)
+    * guest_map is now hosted and part of vlm + bugfixes (kernel panic)
     * jvlm demo as online map and grib viewer (stephpen, spifou & paparazzia)
-    * map service available for all your favorites tools (paparazzia, stephpen)
-        * already in use by sbsRouteur (sbs)
-        * coming soon with a froggy thing ;) (frog)
+    * map service available for all your favorites tools, already in use by sbsRouteur (paparazzia, stephpen)
     * real 1h/3h/24h loch (spifou)
-    * db access optimizations (spifou)
-    * default WP (0,0) can never be an Ice Gate (spifou)
+    * performance for the players : db access and php optimizations (spifou, paparazzia)
+    * WP bugfixes (Icegate handling, WP_once, custom wp) (spifou, paparazzia)
+    * Ihm tuning and fixes (spifou, paparazzia)
+    * portugese translation was too old, and has been deactivated (paparazzia)
+    * enhancement and bugfixes in player account and boat creation (paparazzia)
 
 ... players in the future ?
-    * enhanced map display 
+    * enhanced map display and boat management...
+    * ... as shown by the incoming frog project (frog)    
 
 ... tools developpers ?
-    * tiles with topographic rendering (stephpen)
-    * enhanced wind service (paparazzia, spifou)
-    * existing services updates (paparazzia, spifou)
+    * static url for flags, racemaps and minimaps (paparazzia)
+    * tiles service with topographic rendering (stephpen)
+    * new enhanced wind services, serverinfo & profile services (paparazzia, spifou)
+    * deprecation of old services : gettrack, getuserlist et gmap (paparazzia)
+    * existing services updates and bugfixes (paparazzia, spifou)
+    
+... admin ?
+    * bugfix and enhancement related to player and boatsit management (paparazzia)
+    * full browsing of admin actions (paparazzia)
 
 ... developpers ?
     * VLM code base is now licensed with AGPLv3 (all developpers)
       http://en.wikipedia.org/wiki/Affero_General_Public_License
+    * more option (dry run, account creation flag, ...) (spifou, paparazzia)
+    * support of loadbalancing (paparazzia, spifou, fm)
 
+Some of these items were already backported in vlm 0.14.
+
+Thanks to all the admins, tools developpers, bug reporters and translators.
+
+____
 v0.14 aka "Sirocco et ses frères".
 
 What's up for ...
