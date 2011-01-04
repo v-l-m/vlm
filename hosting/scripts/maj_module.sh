@@ -102,7 +102,7 @@ case $confmodule in
     echo 'OK !'
     echo -n "+$confmodule: Mise en place du .htaccess..."
     cp $VLMRACINE/conf/conf_htaccess_site $destmodulepath/.htaccess
-    echo 'OK !'    
+    echo 'OK !'
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     echo 'OK !'

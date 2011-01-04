@@ -1197,7 +1197,7 @@ function raceExists($race) {
     }
 }
 
-/*return true if login already exist*/
+/*return true if idboat already exist*/
 function boatExists($idboat) {
     //find a boat
     $query = 'SELECT idusers FROM users WHERE idusers = "'.$idboat.'"';
