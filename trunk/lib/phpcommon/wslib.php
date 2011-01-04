@@ -379,7 +379,7 @@ function wsCheckLogin($usage) {
     return login_if_not($usage, False);
 }
 
-function login_if_not($usage = "No usage given", $allow_boatauth = True) {
+function login_if_not($usage = "No usage given", $allow_boatauth = False) {
     
     session_start();
     // do we know the player from a previous login session?
