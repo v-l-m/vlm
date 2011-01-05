@@ -3,7 +3,8 @@
  <cross-domain-access>
    <policy>
      <allow-from http-request-headers="*">
-       <domain uri="*"/>
+       <domain uri="http://frogeater.dyndns.org"/> 
+       <domain uri="http://frogeater.net23.net"/>
      </allow-from>
      <grant-to>
        <resource include-subpaths="true" path="/"/>
