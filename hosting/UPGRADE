@@ -13,9 +13,12 @@ From 0.14 to Next:
 
   RUN
     ./scripts/maj_scripts.sh
-    
+
+  Check if gd-dev is available for your distro and install it if it is not already.
+
   RUN
     ./scripts/maj_module.sh clip_gshhs
+      (this could take some time because of maps bd downloading)
 
   RUN
     ./scripts/maj_module.sh guest_map
@@ -35,7 +38,6 @@ From 0.14 to Next:
     cd 
 
   RUN
-    ./scripts/maj_module.sh lib/phpcommon
     ./scripts/maj_module.sh moteur
 
 = All servers =
