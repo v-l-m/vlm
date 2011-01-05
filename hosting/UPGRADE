@@ -8,7 +8,7 @@ From 0.14 to Next:
     - change VLM SVNBRANCH to V_0_15
     - add VLMCACHE=~/cached (autre exemple : VLMCACHE=$VLMDATAS/cache
   CHECK file ./conf/conf_script : it should be setting $VLMGSHHS correctly, and this should be consistent with the GSHHS_DIRECTORY in your param.php file.
-  EDIT file ./conf/param.php, and add following lines !
+  EDIT file ./conf/param.php, and add (with correct path) following lines !
       define("TILES_G_PATH", "/home/commun/bin/tiles_g"); #tiles_g is moved in your $VLMBIN (read you conf_script file)
 
   RUN
@@ -16,6 +16,12 @@ From 0.14 to Next:
     
   RUN
     ./scripts/maj_module.sh clip_gshhs
+
+  RUN
+    ./scripts/maj_module.sh guest_map
+
+  RUN
+    ./scripts/maj_module.sh jvlm
 
 
 = Master Server =
@@ -29,6 +35,7 @@ From 0.14 to Next:
     cd 
 
   RUN
+    ./scripts/maj_module.sh lib/phpcommon
     ./scripts/maj_module.sh moteur
 
 = All servers =
@@ -40,6 +47,10 @@ From 0.14 to Next:
     ./scripts/maj_module.sh lib/phpcommon
     ./scripts/maj_module.sh site
     ./scripts/maj_module.sh medias
+
+= Master Server =
+
+  RESTART VLM Engine (uncomment in the crontab)
 
 
 From 0.13 to Next:
