@@ -1,0 +1,894 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>calcul distance - latitude longitude - conversion LEXILOGOS &gt;&gt;</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Description" content="calcul des distances entre 2 lieux ou villes, en fonction de la latitude et longitude, localisation sur la carte et photo satellite">
+<meta name="Keywords" content="calcul, distances, distance, latitude, longitude, localisation, photo, satellite, carte">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="scripts/_degr.js"></script>
+</head>
+<body>
+<table cellpadding=2 width="100%">
+<tr valign=top>
+<td width="8%" rowspan="2"><a href="nouveau.htm"><img src="images/lexilogos_papagai.gif" border="0" title="quoi de neuf ? le sommaire du mois"></a></td>
+<td width="26%" rowspan="2"><a href="index.htm"><img src="images/lexilogo.gif" border="0" title="dictionnaire en ligne &gt; index"></a></td>
+    <td width="63%" class=ti>calcul distances</td>
+<td width="3%" align="right"><a href="bouscateur.htm"><img src="images/w_bouscateur.gif" border="0" title="Recherche sur le site &amp; sur le net"></a><br>
+<a href="communication.htm"><img src="images/cor.gif" title="Soutenez &amp; Recommandez Lexilogos !" border="0"></a></td>
+</tr>
+<tr valign=top>
+    <td colspan="2" align="right"><font size="1"><font face="Webdings" color="#CC0033">4</font> 
+    <a href="cartotheque.htm">cartes</a> &nbsp; &nbsp; <font face="Webdings" color="#CC0033">4</font> 
+    <a href="photos_satellite.htm">photo satellite</a></font></td>
+</tr>
+</table>
+<div align="center"><br>
+  <br>
+  <b>Calcul des distances &agrave; partir de la latitude &amp; longitude</b> <br>
+</div>
+<form name="convdeg">
+    
+  <table width=80% align=center>
+  <tr valign=top> 
+    <td width="5%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td width="15%">&nbsp;</td>
+    <td width="30%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td width="5%">&nbsp;</td>
+    <td width="15%">&nbsp;</td>
+    <td width="21%">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10"><div align="center"></div></td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="5"><font size="+1">latitude &nbsp; &nbsp; <font color="#339900">lieu 
+    1</font></font></td>
+    <td colspan="5"><font size="+1">latitude &nbsp; &nbsp; <font color="#CC33CC">lieu 
+    2</font></font></td>
+  </tr>
+  <tr valign=top> 
+    <td><font size="1">degr&eacute;s&nbsp;&nbsp;</font></td>
+    <td><font size="1">minutes</font></td>
+    <td><font size="1">secondes</font></td>
+    <td>&nbsp;</td>
+    <td><font size="1">décimaux1</font></td>
+    <td><font size="1">degr&eacute;s&nbsp;&nbsp;</font></td>
+    <td><font size="1">minutes</font></td>
+    <td><font size="1">secondes</font></td>
+    <td>&nbsp;</td>
+    <td><font size="1">décimaux</font></td>
+  </tr>
+  <tr valign=top> 
+    <td> <input size=3 maxlength=3 name="txtdeg1"  onKeyup="dmsdec1();caldis()" tabindex=1> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtmin1"  onKeyup="dmsdec1();caldis()" tabindex=2> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtsec1"  onKeyup="dmsdec1();caldis()" tabindex=3> 
+    </td>
+    <td><select name="or1" onChange="dmsdec1();caldis()" tabindex=4>
+      <option value=N>N</option>
+      <option value=S>S</option>
+    </select></td>
+    <td> <input size=8 maxlength=8 name="txtdec1" onKeyup="decdms1();caldis()" tabindex=17> 
+    </td>
+    <td> <input size=3 maxlength=3 name="txtdeg3"  onKeyup="dmsdec3();caldis()" tabindex=9> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtmin3"  onKeyup="dmsdec3();caldis()" tabindex=10> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtsec3"  onKeyup="dmsdec3();caldis()" tabindex=11> 
+    </td>
+    <td><select name="or3" onChange="dmsdec3();caldis()" tabindex=12>
+      <option value=N>N</option>
+      <option value=S>S</option>
+    </select></td>
+    <td><input size=8 maxlength=8 name="txtdec3" onKeyup="decdms3();caldis()" tabindex=19></td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="5"><font size="+1">longitude &nbsp; <font color="#339900">lieu 
+    1</font></font></td>
+    <td colspan="5"><font size="+1">longitude &nbsp; <font color="#CC33CC">lieu 
+    2</font></font></td>
+  </tr>
+  <tr valign=top> 
+    <td><font size="1">degr&eacute;s&nbsp;&nbsp;</font></td>
+    <td><font size="1">minutes</font></td>
+    <td><font size="1">secondes</font></td>
+    <td>&nbsp;</td>
+    <td><font size="1">décimaux</font></td>
+    <td><font size="1">degr&eacute;s&nbsp;&nbsp;</font></td>
+    <td><font size="1">minutes</font></td>
+    <td><font size="1">secondes</font></td>
+    <td>&nbsp;</td>
+    <td><font size="1">décimaux</font></td>
+  </tr>
+  <tr valign=top> 
+    <td> <input size=3 maxlength=3 name="txtdeg2"  onKeyup="dmsdec2();caldis()" tabindex=5> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtmin2"  onKeyup="dmsdec2();caldis()" tabindex=6> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtsec2"  onKeyup="dmsdec2();caldis()" tabindex=7> 
+    </td>
+    <td><select name="or2" onChange="dmsdec2();caldis()" tabindex=8>
+      <option value=E>E</option>
+      <option value=W>W</option>
+    </select></td>
+    <td width="30%"><input size=8 maxlength=8 name="txtdec2"  onKeyup="decdms2();caldis()" tabindex=18></td>
+    <td> <input size=3 maxlength=3 name="txtdeg4"  onKeyup="dmsdec4();caldis()" tabindex=13> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtmin4"  onKeyup="dmsdec4();caldis()" tabindex=14> 
+    </td>
+    <td> <input size=2 maxlength=2 name="txtsec4"  onKeyup="dmsdec4();caldis()" tabindex=15> 
+    </td>
+    <td><select name="or4" onChange="dmsdec4();caldis()" tabindex=16>
+      <option value=E>E</option>
+      <option value=W>W</option>
+    </select></td>
+    <td width="21%"><input size=8 maxlength=8 name="txtdec4" onKeyup="decdms4();caldis()" tabindex=20></td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10" align="center"><b>distance en km</b></td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10" align="center"> <input size=8 maxlength=8 name="km"> </td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10" align="center"><b>distance en milles nautiques</b></td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10" align="center"> <input size=8 maxlength=8 name="mn"> </td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10" align="right"> <input type=button class=bf onClick="reset()"  value=effacer> 
+    </td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10" align="center">localisation sur la photo satellite</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="10">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+    <td colspan="5"><div align="center"><a class=lb href=""  onClick='href="http://maps.google.com/maps?t=k&spn=0.01,0.01&q=" + convdeg.txtdec1.value + "," + convdeg.txtdec2.value'  target=_blank>Lieu 
+      1</a> </div></td>
+    <td colspan="5"><div align="center"><a class=lb href=""  onClick='href="http://maps.google.com/maps?t=k&spn=0.01,0.01&q=" + convdeg.txtdec3.value + "," + convdeg.txtdec4.value'  target=_blank>Lieu 
+      2</a></div></td>
+  </tr>
+  </table>
+</form> 
+<br>
+<br>
+<br>
+<table border=0 cellpadding=2 width="100%">
+  <tr valign=top> 
+  <td width="12%">&nbsp;</td>
+  <td width="2%">&nbsp;</td>
+  <td width="12%">&nbsp;</td>
+  <td width="64%">&nbsp;</td>
+  <td width="10%">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"><b>latitude</b> : 0 (&eacute;quateur) s'&eacute;tend jusqu'au 
+    p&ocirc;le nord (90&deg;) et p&ocirc;le sud (-90&deg;) <br>
+    (+ pour le nord, - pour le sud) </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"><b>longitude</b> : 0 (Greenwich) s'&eacute;tend &agrave; l'est 
+    jusqu'&agrave; 180&deg; et &agrave; l'ouest jusqu'&agrave; -180&deg; <br>
+    (+ pour l'est, - pour l'ouest)</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.geology.enr.state.nc.us/gis/latlon.html" target="_blank">conversion 
+    degr&eacute;s</a> d&eacute;cimaux &amp; sexag&eacute;simaux </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"> en degr&eacute;s sexag&eacute;simaux : 43&deg; 17' 47&quot; 
+    (43 degr&eacute;s, 17 minutes et 47 secondes)<br>
+    en degr&eacute;s d&eacute;cimaux : 43 + (17 / 60) + (47 / 3600) = 43.2964</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.movable-type.co.uk/scripts/latlong.html" target="_blank">calcul 
+      des distances</a> en fonction de la latitude &amp; longitude </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.fai.org/distance_calculation/" target="_blank">calcul 
+    des distances</a> en km &amp; milles nautiques &amp; miles am&eacute;ricains 
+  </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.indo.com/cgi-bin/dist" target="_blank">calcul 
+    de distance</a> entre deux villes <br>
+    entrer 2 noms <font size="1">(exemple : Marseille, France &amp; Montr&eacute;al, 
+    Qu&eacute;bec)</font></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"> <form action="http://www.indo.com/cgi-bin/dist" method="get" target="_blank">
+    de 
+    <input size="25" name="place1">
+    &nbsp; &nbsp; &agrave; 
+    <input size="25" value="" name="place2">
+    <input type=submit class=sub value="" title="envoi !">
+    </form></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://e-ships.net/dist.htm" target="_blank">calcul 
+    des distances</a> entre deux ports, par mer</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top>
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5" class=st>D&eacute;termination des latitude &amp; longitude</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.geonames.org/search.html" target="_blank">geonames</a> 
+    : localisation d'une commune dans tous les pays &amp; localisation sur la 
+    carte ou photo satellite <font color="#999999">(google)</font> </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"><iframe src="z/localisation_commune.htm" height=30 width="100%" frameborder=0 marginheight=0 marginwidth=0 scrolling="no"> 
+    </iframe></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.getty.edu/research/conducting_research/vocabularies/tgn/" target="_blank">getty</a> 
+    : localisation d'une commune dans tous les pays ou par pays (degr&eacute;s 
+    d&eacute;cimaux &amp; sexag&eacute;simaux) <br> <font size="1">on peut &eacute;crire 
+    le d&eacute;but d'un nom puis la touche *</font> </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"><form action="http://www.getty.edu/vow/TGNServlet" target=_blank>
+    <input type=hidden name=nation value="">
+    <input type=hidden name=english value=Y>
+    <input size=25 name=find>
+    <input type=hidden name=place value="">
+    <input type=hidden name=page value=1>
+    <input type=submit class=sub value="" title="envoi !">
+    </form></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://middleware.alexandria.ucsb.edu/client/gaz/adl/index.jsp" target="_blank">Alexandria 
+    Library</a> : localisation d'un lieu dans tous les pays </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.heavens-above.com/countries.aspx" target="_blank">Heavens 
+    above</a> : localisation d'une commune par pays (degr&eacute;s d&eacute;cimaux) 
+    <br> <font size="1">on peut &eacute;crire le d&eacute;but d'un nom puis 
+    la touche *</font> </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"><form action="http://www.heavens-above.com/selecttownquery.asp?lat=0&lng=0&alt=0&loc=Unspecified&TZ=CET" method="POST" target="_blank">
+    <input name=Search  size="25">
+    <input type=submit class=sub value="" title="envoi !">
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+    <select name=CountryID style="color:#330066">
+      <option value=FR selected>France 
+      <option value=AF>Afghanistan 
+      <option value=SF>Afrique du sud 
+      <option value=AL>Albanie 
+      <option value=AG>Alg&eacute;rie 
+      <option value=GM>Allemagne 
+      <option value=AN>Andorre 
+      <option value=AO>Angola 
+      <option value=AV>Anguilla 
+      <option value=AT>Antarctique 
+      <option value=AC>Antigua et Barbuda 
+      <option value=NT>Antilles n&eacute;erlandaises 
+      <option value=SA>Arabie Saoudite 
+      <option value=AR>Argentine 
+      <option value=AM>Arm&eacute;nie 
+      <option value=AA>Aruba 
+      <option value=AS>Australie 
+      <option value=AU>Autriche 
+      <option value=AJ>Azerba&iuml;djan 
+      <option value=BF>Bahamas 
+      <option value=BA>Bahrain 
+      <option value=BG>Bangladesh 
+      <option value=BB>Barbades 
+      <option value=BO>Bi&eacute;lorussie 
+      <option value=BE>Belgique 
+      <option value=BH>B&eacute;lize 
+      <option value=BN>Benin 
+      <option value=BD>Bermude 
+      <option value=BT>Bhoutan 
+      <option value=BL>Bolivie 
+      <option value=BK>Bosnie-Herz&eacute;govine 
+      <option value=BC>Botswana 
+      <option value=BR>Br&eacute;sil 
+      <option value=BX>Brunei 
+      <option value=BU>Bulgarie 
+      <option value=UV>Burkina Faso 
+      <option value=BM>Birmanie 
+      <option value=BY>Burundi 
+      <option value=CB>Cambodge 
+      <option value=CM>Cameroun 
+      <option value=CA>Canada 
+      <option value=CV>Cap Vert 
+      <option value=CJ>Cayman 
+      <option value=CT>Centrafrique 
+      <option value=CI>Chili 
+      <option value=CH>Chine 
+      <option value=KT>Christmas 
+      <option value=CK>Cocos 
+      <option value=CO>Colombie 
+      <option value=CG>Congo Kinshasa 
+      <option value=CF>Congo Brazzaville 
+      <option value=CW>Cook 
+      <option value=KN>Cor&eacute;e du nord 
+      <option value=KS>Cor&eacute;e du sud 
+      <option value=CS>Costa Rica 
+      <option value=IV>C&ocirc;te d'Ivoire 
+      <option value=HR>Croatie 
+      <option value=CU>Cuba 
+      <option value=CY>Chypre 
+      <option value=DA>Danemark 
+      <option value=DJ>Djibouti 
+      <option value=DR>Dominicaine rep 
+      <option value=DO>Dominique 
+      <option value=EC>&Eacute;quateur 
+      <option value=EG>&Eacute;gypte 
+      <option value=AE>&Eacute;mirats Arabes Unis 
+      <option value=ER>&Eacute;rytr&eacute;e 
+      <option value=EN>Estonie 
+      <option value=SP>Espagne 
+      <option value=US>&Eacute;tats Unis 
+      <option value=ET>Ethiopie 
+      <option value=FO>F&eacute;ro&eacute; 
+      <option value=FJ>Fidji 
+      <option value=FI>Finlande 
+      <option value=FR>France 
+      <option value=GB>Gabon 
+      <option value=GA>Gambie 
+      <option value=GG>G&eacute;orgie 
+      <option value=GH>Ghana 
+      <option value=GI>Gibraltar 
+      <option value=UK>Grande-Bretagne 
+      <option value=GR>Gr&egrave;ce 
+      <option value=GJ>Grenada 
+      <option value=GU>Guam 
+      <option value=GT>Guatemala 
+      <option value=GK>Guernesey 
+      <option value=GV>Guin&eacute;e 
+      <option value=EK>Guin&eacute;e Equatoriale 
+      <option value=GY>Guyana 
+      <option value=FG>Guyane fran&ccedil;aise 
+      <option value=HA>Ha&iuml;ti 
+      <option value=HO>Honduras 
+      <option value=HK>Hong Kong 
+      <option value=HU>Hongrie 
+      <option value=IC>Islande 
+      <option value=IN>Inde 
+      <option value=ID>Indon&eacute;sie 
+      <option value=IR>Iran 
+      <option value=IZ>Iraq 
+      <option value=EI>Irlande 
+      <option value=IS>Israel 
+      <option value=IT>Italie 
+      <option value=JM>Jama&iuml;que 
+      <option value=JA>Japon 
+      <option value=JE>Jersey 
+      <option value=JO>Jordan 
+      <option value=KZ>Kazakhstan 
+      <option value=KE>Kenya 
+      <option value=KR>Kiribati 
+      <option value=KU>Koweit 
+      <option value=KG>Kyrgyzstan 
+      <option value=LA>Laos 
+      <option value=LG>Lettonie 
+      <option value=LE>Liban 
+      <option value=LT>Lesotho 
+      <option value=LI>Liberia 
+      <option value=LY>Libye 
+      <option value=LS>Liechtenstein 
+      <option value=LH>Lituanie 
+      <option value=LU>Luxembourg 
+      <option value=MK>Mac&eacute;doine 
+      <option value=MA>Madagascar 
+      <option value=MI>Malawi 
+      <option value=MY>Malaysie 
+      <option value=MV>Maldives 
+      <option value=ML>Mali 
+      <option value=MT>Malte 
+      <option value=RM>Marshall 
+      <option value=MR>Mauritanie 
+      <option value=MP>Maurice 
+      <option value=MX>Mexique 
+      <option value=MD>Moldovie 
+      <option value=MN>Monaco 
+      <option value=MG>Mongolie 
+      <option value=MW>Mont&eacute;n&eacute;gro 
+      <option value=MO>Maroc 
+      <option value=MZ>Mozambique 
+      <option value=WA>Namibie 
+      <option value=NP>N&eacute;pal 
+      <option value=NZ>Nouvelle Z&eacute;lande 
+      <option value=NU>Nicaragua 
+      <option value=NG>Niger 
+      <option value=NI>Nig&eacute;ria 
+      <option value=NF>Norfolk 
+      <option value=NO>Norv&egrave;ge 
+      <option value=MU>Oman 
+      <option value=UZ>Ouzbekistan 
+      <option value=PK>Pakistan 
+      <option value=PM>Panama 
+      <option value=PP>Papouasie Nouvelle-Guinee 
+      <option value=PA>Paraguay 
+      <option value=NL>Pays-Bas 
+      <option value=PE>Perou 
+      <option value=RP>Philippines 
+      <option value=PL>Pologne 
+      <option value=FP>Polyn&eacute;sie fran&ccedil;aise 
+      <option value=PO>Portugal 
+      <option value=PR>Porto Rico 
+      <option value=QA>Qatar 
+      <option value=RO>Roumanie 
+      <option value=UK>Royaume-Uni 
+      <option value=RS>Russie 
+      <option value=SH>Sainte Helene 
+      <option value=SC>Saint Kitts Nevis 
+      <option value=ST>Sainte Lucie 
+      <option value=VC>Saint Vincent Grenadines 
+      <option value=ES>Salvador 
+      <option value=AX>Samoa 
+      <option value=SG>S&eacute;n&eacute;gal 
+      <option value=SR>Serbie 
+      <option value=SL>Sierra Leone 
+      <option value=SN>Singapour 
+      <option value=LO>Slovaquie 
+      <option value=SI>Slov&eacute;nie 
+      <option value=BP>Solomon 
+      <option value=SO>Somalie 
+      <option value=CE>Sri Lanka 
+      <option value=SU>Soudan 
+      <option value=NS>Surinam 
+      <option value=WZ>Swaziland 
+      <option value=SW>Su&egrave;de 
+      <option value=SZ>Suisse 
+      <option value=SY>Syrie 
+      <option value=TW>Taiwan 
+      <option value=TI>Tajikistan 
+      <option value=TZ>Tanzanie 
+      <option value=CD>Tchad 
+      <option value=EZ>Tch&eacute;quie 
+      <option value=TH>Thailande 
+      <option value=TO>Togo 
+      <option value=TN>Tonga 
+      <option value=TD>Trinidad Tobago 
+      <option value=TS>Tunisie 
+      <option value=TU>Turquie 
+      <option value=TX>Turkmenistan 
+      <option value=TK>Turks Caicos 
+      <option value=TV>Tuvalu 
+      <option value=UG>Ouganda 
+      <option value=UP>Ukraine 
+      <option value=UY>Uruguay 
+      <option value=NH>Vanuatu 
+      <option value=VE>Venezuela 
+      <option value=VM>Vietnam 
+      <option value=WF>Wallis Futuna 
+      <option value=YM>Yemen 
+      <option value=ZA>Zambie 
+      <option value=ZI>Zimbabwe 
+    </select>
+    </form></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"> <a href="http://world.maporama.com/idl/maporama/" target="_blank">Maporama</a> 
+    : recherche par adresse (pour un lieu plus pr&eacute;cis) </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"> <form METHOD="GET" action="http://world.maporama.com/idl/maporama/drawaddress.aspx" target="_blank">
+    <input name="JsEnable" type="hidden" value="1">
+    <input name="xml" type="hidden" value="map">
+    <input name="MD_zoomToFit" type="hidden" value="0">
+    <input name="MD_scale" type="hidden" value="0.0002">
+    <input name="MD_size" type="hidden" value="500x380">
+    <input name="SESSIONID" type="hidden" value="02d6d72d-4c9d-4577-92f6-388b97900e3d">
+    <table width="100%" border=0 cellspacing="2">
+      <tr valign=top> 
+      <td><font size="1">ville</font></td>
+      <td nowrap><font size="1">code postal</font></td>
+      <td><font size="1">adresse</font></td>
+      </tr>
+      <tr> 
+      <td width="22%"> <input name="GC_city" size="25" maxlength="70"></td>
+      <td width="12%"> <input name="GC_zip" size="8" maxlength="15"></td>
+      <td width="66%" nowrap> <input name="GC_address" size="25" maxlength="255"> 
+        <input type=submit class=sub value="" title="envoi !"> &nbsp; &nbsp; 
+        &nbsp; &nbsp; &nbsp; <select name="GC_country" style="color:#330066">
+        <option value="AF">Afghanistan</option>
+        <option value="ZA">Afrique du Sud</option>
+        <option value="AL">Albanie</option>
+        <option value="DZ">Alg&eacute;rie</option>
+        <option value="DE">Allemagne</option>
+        <option value="AD">Andorre</option>
+        <option value="AO">Angola</option>
+        <option value="AG">Antigua &amp; Barbuda</option>
+        <option value="AN">Antilles N&eacute;erlandaises</option>
+        <option value="SA">Arabie Saoudite</option>
+        <option value="AR">Argentine</option>
+        <option value="AM">Arm&eacute;nie</option>
+        <option value="AU">Australie</option>
+        <option value="AT">Autriche</option>
+        <option value="AJ">Azerba&iuml;djan</option>
+        <option value="BS">Bahamas</option>
+        <option value="BH">Bahre&iuml;n</option>
+        <option value="BD">Bangladesh</option>
+        <option value="BB">Barbades</option>
+        <option value="BE">Belgique</option>
+        <option value="BZ">Belize</option>
+        <option value="BJ">B&eacute;nin</option>
+        <option value="BT">Bhoutan</option>
+        <option value="BY">Bi&eacute;lorussie</option>
+        <option value="BO">Bolivie</option>
+        <option value="BA">Bosnie-Herz&eacute;govine</option>
+        <option value="BW">Botswana</option>
+        <option value="BR">Br&eacute;sil</option>
+        <option value="BN">Brunei</option>
+        <option value="BG">Bulgarie</option>
+        <option value="BF">Burkina Faso</option>
+        <option value="BI">Burundi</option>
+        <option value="KH">Cambodge</option>
+        <option value="CM">Cameroun</option>
+        <option value="CA">Canada</option>
+        <option value="CV">Cap Vert</option>
+        <option value="CF">Centrafrique</option>
+        <option value="CL">Chili</option>
+        <option value="CN">Chine</option>
+        <option value="CY">Chypre</option>
+        <option value="CO">Colombie</option>
+        <option value="KM">Comores</option>
+        <option value="CG">Congo Brazzaville</option>
+        <option value="ZR">Congo Kinshasa </option>
+        <option value="KP">Cor&eacute;e du Nord</option>
+        <option value="KR">Cor&eacute;e du Sud</option>
+        <option value="CR">Costa Rica</option>
+        <option value="CI">C&ocirc;te d'Ivoire</option>
+        <option value="HR">Croatie</option>
+        <option value="CU">Cuba</option>
+        <option value="DK">Danemark</option>
+        <option value="DJ">Djibouti</option>
+        <option value="DO">Dominicaine r&eacute;p.</option>
+        <option value="DM">Dominique</option>
+        <option value="EG">&Eacute;gypte</option>
+        <option value="AE">&Eacute;mirats Arabes Unis</option>
+        <option value="EC">&Eacute;quateur</option>
+        <option value="ER">&Eacute;ritr&eacute;e</option>
+        <option value="ES">Espagne</option>
+        <option value="EE">Estonie</option>
+        <option value="US">&Eacute;tats-Unis</option>
+        <option value="ET">&Eacute;thiopie</option>
+        <option value="FO">F&eacute;ro&eacute;</option>
+        <option value="FI">Finlande</option>
+        <option value="FR" selected="1">France</option>
+        <option value="GA">Gabon</option>
+        <option value="GM">Gambie</option>
+        <option value="GE">G&eacute;orgie</option>
+        <option value="GH">Ghana</option>
+        <option value="GI">Gibraltar</option>
+        <option value="UK">Grande-Bretagne</option>
+        <option value="GR">Gr&egrave;ce</option>
+        <option value="GD">Grenada</option>
+        <option value="GP">Guadeloupe</option>
+        <option value="GT">Guatemala</option>
+        <option value="IC">Guernesey</option>
+        <option value="GN">Guin&eacute;e</option>
+        <option value="GQ">Guin&eacute;e &eacute;quatoriale</option>
+        <option value="GW">Guin&eacute;e-Bissau</option>
+        <option value="GY">Guyane</option>
+        <option value="GF">Guyane fran&ccedil;aise</option>
+        <option value="HT">Ha&iuml;ti</option>
+        <option value="HN">Honduras</option>
+        <option value="HK">Hong Kong</option>
+        <option value="HU">Hongrie</option>
+        <option value="IN">Inde</option>
+        <option value="ID">Indonesie</option>
+        <option value="IQ">Irak</option>
+        <option value="IR">Iran</option>
+        <option value="IE">Irlande</option>
+        <option value="IS">Islande</option>
+        <option value="IL">Isra&euml;l</option>
+        <option value="IT">Italie</option>
+        <option value="JM">Jama&iuml;que</option>
+        <option value="JP">Japon</option>
+        <option value="IC">Jersey</option>
+        <option value="JO">Jordanie</option>
+        <option value="KZ">Kazakhstan</option>
+        <option value="KE">Kenya</option>
+        <option value="KG">Kirghizie</option>
+        <option value="KW">Kowe&iuml;t</option>
+        <option value="LA">Laos</option>
+        <option value="LS">Lesotho</option>
+        <option value="LV">Lettonie</option>
+        <option value="LB">Liban</option>
+        <option value="LR">Lib&eacute;ria</option>
+        <option value="LY">Libye</option>
+        <option value="LI">Liechtenstein</option>
+        <option value="LT">Lituanie</option>
+        <option value="LU">Luxembourg</option>
+        <option value="MO">Macao</option>
+        <option value="MK">Mac&eacute;doine</option>
+        <option value="MG">Madagascar</option>
+        <option value="MY">Malaisie</option>
+        <option value="MW">Malawi</option>
+        <option value="ML">Mali</option>
+        <option value="FK">Malouines</option>
+        <option value="MT">Malte</option>
+        <option value="MI">Man</option>
+        <option value="MA">Maroc</option>
+        <option value="MQ">Martinique</option>
+        <option value="MU">Maurice</option>
+        <option value="MR">Mauritanie</option>
+        <option value="YT">Mayotte</option>
+        <option value="MX">Mexique</option>
+        <option value="MD">Moldavie</option>
+        <option value="MC">Monaco</option>
+        <option value="MN">Mongolie</option>
+        <option value="MS">Montserrat</option>
+        <option value="MZ">Mozambique</option>
+        <option value="MM">Myanmar</option>
+        <option value="NA">Namibie</option>
+        <option value="NP">N&eacute;pal</option>
+        <option value="NI">Nicaragua</option>
+        <option value="NE">Niger</option>
+        <option value="NG">Nigeria</option>
+        <option value="NO">Norv&egrave;ge</option>
+        <option value="NZ">Nouvelle-Z&eacute;lande</option>
+        <option value="OM">Oman</option>
+        <option value="UG">Ouganda</option>
+        <option value="UZ">Ouzb&eacute;kistan</option>
+        <option value="PK">Pakistan</option>
+        <option value="PA">Panama</option>
+        <option value="PG">Papouasie Nouvelle-Guin&eacute;e</option>
+        <option value="PY">Paraguay</option>
+        <option value="NL">Pays-Bas</option>
+        <option value="PE">P&eacute;rou</option>
+        <option value="PH">Philippines</option>
+        <option value="PL">Pologne</option>
+        <option value="PR">Porto Rico</option>
+        <option value="PT">Portugal</option>
+        <option value="QA">Qatar</option>
+        <option value="RE">R&eacute;union</option>
+        <option value="RO">Roumanie</option>
+        <option value="UK">Royaume-Uni</option>
+        <option value="RU">Russie</option>
+        <option value="RW">Rwanda</option>
+        <option value="KN">Saint Kitts &amp; Nevis</option>
+        <option value="VC">Saint Vincent</option>
+        <option value="LC">Sainte-Lucie</option>
+        <option value="SV">Salvador</option>
+        <option value="SM">San Marin</option>
+        <option value="ST">S&atilde;o Tom&eacute; Pr&iacute;ncipe</option>
+        <option value="SN">S&eacute;n&eacute;gal</option>
+        <option value="SL">Sierra Leone</option>
+        <option value="SG">Singapour</option>
+        <option value="SK">Slovaquie</option>
+        <option value="SI">Slov&eacute;nie</option>
+        <option value="SO">Somalie</option>
+        <option value="SD">Soudan</option>
+        <option value="LK">Sri Lanka</option>
+        <option value="SE">Su&egrave;de</option>
+        <option value="CH">Suisse</option>
+        <option value="SR">Suriname</option>
+        <option value="SZ">Swaziland</option>
+        <option value="SY">Syrie</option>
+        <option value="TJ">Tadjikistan</option>
+        <option value="TW">Taiwan</option>
+        <option value="TZ">Tanzanie</option>
+        <option value="TD">Tchad</option>
+        <option value="CZ">Tch&egrave;quie</option>
+        <option value="TH">Tha&iuml;lande</option>
+        <option value="TG">Togo</option>
+        <option value="TT">Trinit&eacute; et Tobago</option>
+        <option value="TN">Tunisie</option>
+        <option value="TM">Turkm&eacute;nistan</option>
+        <option value="TR">Turquie</option>
+        <option value="UA">Ukraine</option>
+        <option value="UY">Uruguay</option>
+        <option value="US">USA</option>
+        <option value="VA">Vatican</option>
+        <option value="UE">V&eacute;n&eacute;zuela</option>
+        <option value="VN">Vi&ecirc;tnam</option>
+        <option value="YE">Y&eacute;men</option>
+        <option value="YU">Yougoslavie</option>
+        <option value="ZM">Zambie</option>
+        <option value="ZW">Zimbabwe</option>
+        </select> </td>
+      </tr>
+    </table>
+    </form></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5" class=st>Le point de r&eacute;f&eacute;rence</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_blu.gif" vspace="3"></td>
+  <td colspan="3"><a href="http://www.rog.nmm.ac.uk/" target="_blank">observatoire 
+    de Greenwich</a> </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">la position de l'observatoire de Greenwich (pr&egrave;s de 
+    Londres) <br>
+    latitude 51&deg; 28' 38&quot; longitude 0&deg; 0' 0&quot;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3"><a href="http://www.rog.nmm.ac.uk/" target="_blank"><img src="images/greenwich_obs.jpg" border="0"></a></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/perl_red.gif" vspace="3"></td>
+  <td colspan="3"><a href="satellite/greenwich.htm">photo satellite de Greenwich</a></td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td colspan="3">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/puce_r.gif" vspace="3"></td>
+  <td colspan="3"><a href="conversion.htm">conversion des distances</a> kilom&egrave;tres, 
+    milles nautiques, miles </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/puce_r.gif" vspace="3"></td>
+  <td colspan="3"><a href="cartotheque.htm">cartes</a> : tous les pays </td>
+  </tr>
+  <tr valign=top> 
+  <td>&nbsp;</td>
+  <td><img src="images/puce_r.gif" vspace="3"></td>
+  <td colspan="3"><a href="satellite/index.htm">photo satellite</a> avec d&eacute;termination 
+    de la latitude &amp; longitude </td>
+  </tr>
+  <tr valign=top> 
+  <td width="12%">&nbsp;</td>
+  <td width="2%"><img src="images/puce_r.gif" vspace="3"></td>
+  <td colspan="3"><a href="carte_ciel.htm">carte du ciel</a> </td>
+  </tr>
+  <tr valign=top> 
+  <td width="12%">&nbsp;</td>
+  <td width="2%"><img src="images/puce_r.gif" vspace="3"></td>
+  <td colspan="3"><a href="calendrier.htm">calendriers</a> :fuseaux horaires 
+  </td>
+  </tr>
+</table>
+<iframe src="index_lexilogos.htm" height=180 width="100%" frameborder=0 marginheight=0 marginwidth=0 scrolling="no"></iframe> 
+<br>
+  <a href="http://www.xiti.com/xiti.asp?s=133232" target="_blank">
+  <script language="JavaScript1.1">
+<!--
+hsh = new Date();
+hsd = document;
+hsr = hsd.referrer.replace(/[<>]/g, '');
+hsi = '<img width="39" height="25" border=0 ';
+hsi += 'src="http://logv24.xiti.com/hit.xiti?s=133232';
+hsi += '&p=';
+hsi += '&hl=' + hsh.getHours() + 'x' + hsh.getMinutes() + 'x' + hsh.getSeconds();
+if(parseFloat(navigator.appVersion)>=4)
+{Xiti_s=screen;hsi += '&r=' + Xiti_s.width + 'x' + Xiti_s.height + 'x' + Xiti_s.pixelDepth + 'x' + Xiti_s.colorDepth;}
+hsd.writeln(hsi + '&ref=' + hsr.replace(/&/g, '$') + '" title="Mesurez votre audience"><\!--');
+//-->
+</script>
+  <noscript><img width="39" height="25" border=0 src="http://logv24.xiti.com/hit.xiti?s=133232&p=&" title="Mesurez votre audience"> 
+  </noscript><!--//--></a>
+</body></html>

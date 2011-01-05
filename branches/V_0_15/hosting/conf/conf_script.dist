@@ -1,0 +1,68 @@
+#NB : ce fichier présuppose que VLMRACINE est déja configuré...
+#VLMRACINE est normalement le ~/
+# source d'inspiration : v2.openesub.org / Auteur : paparazzia@gmail.com / Licence : GPL2
+
+#Définition de la branche
+export VLMSVNBRANCH=trunk
+
+#Utilisateur en charge de recuperer les gribs
+export VLMGRIBUSER=devvlm
+
+#Racine du jeu
+export VLMJEUROOT=$VLMRACINE/vlmcode
+
+#Répertoire de travail temporaire
+export VLMTEMP=$VLMRACINE/tmp
+
+#Répertoire de stockage des logs
+export VLMLOG=$VLMTEMP
+
+#Chemin du binaire svn
+export VLMSVNPATH=/usr/bin/svn
+
+#Chemin des binaires VLM
+export VLMBIN=$VLMRACINE/bin
+
+#Chemin du binaire PHP et autres
+# Please add following flag for developement servers --define error_reporting=E_ALL --define display_errors=stderr
+export VLMPHPPATH="/opt/php/bin/php --define extension=vlmc.so --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
+export VLMVLMCPHP=$VLMRACINE/bin/lib
+export VLMVLMCSO=$VLMRACINE/bin/lib
+#DEBIAN:
+#export VLMPHPPATH="/usr/bin/php --define include_path=.:/usr/share/php5:$VLMJEUROOT/lib/phpcommon"
+
+#Racine des datas du jeu
+export VLMDATAS=$VLMRACINE/vlmdatas
+
+#Emplacement du cache
+export VLMCACHE=$VLMRACINE/cache
+
+#Les gshhs seront (par défaut) dans VLMDATAS/gshhs
+export VLMGSHHS=$VLMDATAS/gshhs
+
+#Les polaires seront (par défaut) dans VLMDATAS/polars
+export VLMPOLARS=$VLMDATAS/polars
+
+#Chemin vers le stockage des gribs
+export VLMGRIBS=$VLMDATAS/gribs
+export VLMGRIBSURL=http://grib.example.com
+export VLM_GRIB_MAX_TIME=24
+
+export MAIL_FOR_COASTCROSSING=false
+
+##########################################
+#Le reste n'est normalement pas à modifier
+
+#Définition de la racine svn
+export VLMSVNROOT=http://dev.virtual-loup-de-mer.org/svn/vlm
+
+#Les chemins pour les scripts et la conf
+export VLMSCRIPTS=$VLMRACINE/scripts
+export VLMCONF=$VLMRACINE/conf
+
+#Helpers pour le svn
+export VLMSVNBASE=branches/
+if test "$VLMSVNBRANCH" = "trunk"; then
+  VLMSVNBASE=
+fi
+export VLMSVNFULL=$VLMSVNROOT/$VLMSVNBASE$VLMSVNBRANCH

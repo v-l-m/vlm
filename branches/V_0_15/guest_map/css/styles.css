@@ -1,0 +1,122 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	margin: 0 auto;
+	width: 100%;
+	/* max-width: 240px; */
+	/* max-width: 320px; */
+}
+
+.smallmap {
+    width: 512px;
+    height: 256px;
+    border: 1px solid #ccc;
+}
+
+
+.maindiv {
+	background-color: #CCFFFF;
+	/* width: 320px;
+	 height: 480px; */
+	 
+}
+
+.bouton1 {
+	background-color: #006699;
+	border: thin outset #006699;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color:#FFFFFF;
+}
+
+#banniere {
+	background-image: url(http://www.virtual-loup-de-mer.org/images/site/banniere_haut.jpg);
+	position:relative;
+	width:1015px;
+	height:90px;
+}
+
+#titre_carte {
+	position:absolute;
+	top:65px;
+	left:1px;
+	width:1014px;
+	height:5px;
+	display: inline-table;
+	background-color:#cccccc;
+	opacity: 0.7; 
+}
+
+#tab_listrace {
+	background-color: #FFFFFF;
+	width: 100%;
+	height: 100%; 
+}
+
+#map_canvas {
+	width: 800px; height: 700px;
+}
+
+#tab_ranking {
+	height:700px;overflow: auto;
+}
+
+.tr_listrace {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	background-color: #cccccc;
+
+}
+
+.txt1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.txtbold1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+}
+.txtbold2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight:bold;
+}
+.TxtRank {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #006699;
+}
+.STxtRank {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #006699;
+}
+.TxtRaceOpen {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #009966;
+}
+.TxtRaceClosed {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color: #FF0000;
+	background-color: #FFCC00;
+}
+.TxtRaceRun {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight:bold;
+	color: #FFFFFF;
+	background-color: #0099FF;
+}

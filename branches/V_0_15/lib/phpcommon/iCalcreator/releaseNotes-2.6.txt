@@ -1,0 +1,94 @@
+2.4.4 ###########################################  thanks / james
+Typo error / sourceforge bug 1899059
+Function createDtstart
+
+2.4.5 ###########################################  thanks / Mork
+Bug when deleting property
+Function deleteProperty
+All properties which allow multiple occurence:
+ATTACH, ATTENDEE, CATEGORIES, COMMENT, CONTACT, DESCRIPTION, EXDATE, EXRULE,
+FREEBUSY, RDATE, RELATED-TO, REQUEST-STATUS, RESOURCES, RRULE, TZNAME
+
+2.4.6 ###########################################  thanks / Mork
+Implemented replace Property functionality, added index parameter
+Function setProperty
+All properties which allow multiple occurence:
+ATTACH, ATTENDEE, CATEGORIES, COMMENT, CONTACT, DESCRIPTION, EXDATE, EXRULE,
+FREEBUSY, RDATE, RELATED-TO, REQUEST-STATUS, RESOURCES, RRULE, TZNAME
+
+2.4.7 ###########################################
+Adapt xcal output format for Related-To
+Function createRelatedTo
+
+2.4.8 ########################################### 
+Recoding all set/createFunctions, empty input value, impl. config allowEmpty
+Functions _createElement, _format_date_time, duration2date
+Any calendar config changes now updates subComponents directly
+All setProperty functions returns TRUE on success, FALSE on ERROR
+
+2.4.9 ###########################################
+Include components from function selectComponents in function sort
+Updated functions selectComponents, sort
+
+2.4.10 ###########################################
+Index bug
+Function deleteComponent
+
+2.4.11 ###########################################
+All properties with only one occurence now allows consecutive fetch
+Functions getProperty and setXprop
+Updated fetch of properties with multiple occurence:
+ATTACH, ATTENDEE, CATEGORIES, COMMENT, CONTACT, DESCRIPTION, EXDATE, EXRULE,
+FREEBUSY, RDATE, RELATED-TO, REQUEST-STATUS, RESOURCES, RRULE, TZNAME
+
+2.4.12 ###########################################
+Index bug when parsing multiple categories/resources
+Function parse
+
+2.4.13 ###########################################
+Manage standard/daylight components as vtimezone
+Functions getConfig, deleteProperty, getProperty, setComponent
+
+2.4.14 ###########################################
+Updated default setting of unique_id
+Function getConfig on component level
+
+2.4.15 ###########################################
+return FALSE when property not set
+Function getProperty
+
+2.4.16 ###########################################
+Major bug UTC offset
+Refactored all date setfunctions
+COMPLETED, CREATED, DTSTAMP, LAST-MODIFIED
+DTEND, DTSTART, DUE, RECURRENCE-ID
+EXDATE, RDATE
+EXRULE, RRULE
+DURATION
+TRIGGER
+FREEBUSY
+Changed set parameters for TRIGGER and FREEBUSY
+Verifying input date combinations using 24000 phpunit testcases
+Updated internal functions _existRem , _format_duration
+New internal functions: _isArrayDate, _isArrayTimestampDate, _isOffset,
+ _timestamp2date
+
+2.4.17 ###########################################
+Bug, missing input date combinations
+Functions _setDate, _setDate2
+Verifying input date combinations using 24000 phpunit testcases
+
+2.5.1 ###########################################  thanks / Noel
+Memory consumption problem
+
+2.5.2 ###########################################
+Bug parsing Request-Status
+Function parse
+
+2.5.3 ###########################################  thanks / Noel
+Command-line execute adaptation
+If no $_SERVER exists, 'localhost' is set (PHP gethostbyname)
+
+2.5.4 ###########################################
+Obsolete function removed
+Function validDate
