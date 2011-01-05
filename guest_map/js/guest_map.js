@@ -475,6 +475,8 @@ function get_track(idu,color)
 // get and display the ranking
 function refresh_ranking(idr)
 	{
+	var tab_ranking;
+	var test_engaged;
 	//document.getElementById('tab_ranking').innerHTML = "<div align='center' style='width:210px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
 	$.ajax({
 		async: false,
