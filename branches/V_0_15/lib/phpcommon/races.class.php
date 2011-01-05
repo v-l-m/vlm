@@ -225,7 +225,11 @@ class races {
     // On est encore là, on a donc un enregistrement "duration"
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
     $WinnersRaceDuration = $row['duration'];
-    
+
+    if ($WinnersRaceDuration == 0) {
+            return(1);  // on s'arrete là si personne n'est arrivé !
+    }
+
     // Sur course RECORD, c'est 2 * le pourcentage du temps du premier
     if ( $this->racetype == RACE_TYPE_RECORD ) {
       $maxArrivalTime = $this->closetime + ($WinnersRaceDuration *
