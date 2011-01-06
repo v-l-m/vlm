@@ -104,6 +104,17 @@ $opts['fdd']['engaged'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['boattype'] = array(
+  'name'     => 'Boat type',
+  'help'     => 'Type of the boat',
+  'select'   => 'T',
+  'escape'   => true,
+  'options'  => 'ACDPVF',
+  'maxlen'   => 20,
+  'sort'     => true
+);
+
+
 $opts['fdd']['email'] = array(
   'name'     => 'eMail',
   'help'     => 'DEPRECATED - Private mail address',
