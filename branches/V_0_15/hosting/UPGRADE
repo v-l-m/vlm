@@ -14,7 +14,8 @@ From 0.14 to Next:
   RUN
     ./scripts/maj_scripts.sh
 
-  Check if gd-dev is available for your distro and install it if it is not already.
+  Check if gd-dev (libgd-dev) is available for your distro and install it if it is not already.
+      Debian: apt-get install libgd2-xpm-dev
 
   RUN
     ./scripts/maj_module.sh clip_gshhs
