@@ -69,6 +69,7 @@ if ( $boat != "" ) {
      exit;
    } else {
    // On a un bateau qui existe, on est content, on instancie l'objet
+      require_once('users.class.php');
       $usersObj = new fullUsers($boat);
       if ( $usersObj->users->engaged == $race ) {
 
