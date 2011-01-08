@@ -1,16 +1,20 @@
 <?php
     include_once("config.php");
     include_once("wslib.php");
-    include_once('positions.class.php');
 
     header("content-type: text/plain; charset=UTF-8");
 
     //FIXME : types are badly checked
 
     $ws = new WSBaseBoat();
+
+    if (!in_array($ws->idu, getLoggedPlayerObject()->getManageableBoatIdList())) {
+       $ws->reply_with_error('IDU04');
+    }
     
     $users = getUserObject($ws->idu);
     if (is_null($users)) $ws->reply_with_error('IDU03');
+
     $fullusers = new fullUsers(0, $users);
 
     //FIXME : getter should use also json ?
