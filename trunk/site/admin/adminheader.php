@@ -58,7 +58,7 @@ $opts['filters'] = "section_id = 9";
 $opts['filters'] = "PMEtable0.sessions_count > 200";
 */
 
-$opts['url'] = array('images' => '/images/pme/');
+$opts['url'] = array('images' => '/externals/phpMyEdit/images/');
 $opts['logtable'] = 'admin_changelog';
 
 ?>
