@@ -1,6 +1,8 @@
 #!/bin/sh
 
-TILESCACHEDIR=./gshhstiles/
+source $VLMRACINE/conf/conf_script || exit 1
+
+TILESCACHEDIR=$VLMCACHE/gshhstiles
 
 SEAFILE=sea.png
 FIXEDTILESDIR=f
