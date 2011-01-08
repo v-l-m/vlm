@@ -32,6 +32,8 @@ case $svnmodule in
     ;;
     jvlm)
     ;;
+    externals)
+    ;;
     *)
     echo "Précisez : medias, base, moteur, site, grib, maps, lib/vlm-c, lib/phpcommon, clip_gshhs, guest_map, jvlm, externals..."
     exit 1
