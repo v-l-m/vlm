@@ -32,7 +32,8 @@
     //FIXME if debug
     $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
 
-    if ($races->bobegin < $now && $races->boend > $now) {
+    $isBo = ($races->bobegin < $now && $races->boend > $now);
+    if ($isBo) {
         //BlackOut in place
         $endtime = $races->bobegin;
         $ws->answer['blackout'] = True;
@@ -42,10 +43,12 @@
 
     if ($users->hasTrackHidden()) {
         $ws->answer['tracks_hidden'] = True;
-        $ws->answer['nb_tracks'] = 0;
-        $ws->reply_with_success();
+        if (!($isBo)) {
+            $endtime = $now; //Pas de BO => Force to now()
+        }
+        $starttime = $endtime - DELAYBETWEENUPDATE; // seulement la dernière trace
     }
-        
+
     $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
     $ws->answer['nb_tracks'] = count($pi->records);
     $ws->answer['tracks'] = $pi->records;
