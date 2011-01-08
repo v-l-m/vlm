@@ -1,5 +1,46 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.15 to Next:
+
+= All servers =
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_15
+
+  RUN
+    ./scripts/maj_scripts.sh
+    
+= Master Server =
+
+  RUN
+    ./scripts/maj_module.sh base
+
+  STOP VLM Engine (comment in the crontab)
+  
+  BACKUP the database
+
+    cd ./vlmcode/base/scripts/
+    ./runupgrade.sh 0.16 > log.txt
+    cd 
+
+  RUN
+    ./scripts/maj_module.sh moteur
+
+= All servers =
+
+  RUN
+    ./scripts/maj_module.sh lib/vlm-c
+    (as root) /etc/init.d/apache2 restart (or service apache2 restart)
+
+    ./scripts/maj_module.sh lib/phpcommon
+    ./scripts/maj_module.sh site
+    ./scripts/maj_module.sh guest_map
+    ./scripts/maj_module.sh jvlm
+
+= Master Server
+
+  RESTART VLM Engine (un-comment)
+
 From 0.14 to Next:
 
 = All servers =
