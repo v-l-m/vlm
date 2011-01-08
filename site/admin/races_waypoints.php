@@ -92,7 +92,7 @@ $opts['triggers']['delete']['pre'][0] = 'waypoints.img.trigger.php';
 $opts['triggers']['update']['before'][0] = 'races_waypoints.TBU.trigger.php';
 
 //force basic pme class.
-require_once('pme/phpMyEdit.class.php');
+require_once('../externals/phpMyEdit/phpMyEdit.class.php');
 $pmeinstance = new phpMyEdit($opts);
 
 include('adminfooter.php');

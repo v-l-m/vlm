@@ -106,13 +106,13 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers les images du module medias..."
     ln -s $destmodulepath/../medias/images $destmodulepath/images
     echo 'OK !'
-    echo -n "+$confmodule: Mise en place du lien symbolique vers le mode spectateur"
+    echo -n "+$confmodule: Mise en place du lien symbolique vers le mode spectateur..."
     ln -s $destmodulepath/../guest_map $destmodulepath/guest_map
     echo 'OK !'
-    echo -n "+$confmodule: Mise en place du lien symbolique vers jvlm"
+    echo -n "+$confmodule: Mise en place du lien symbolique vers jvlm..."
     ln -s $destmodulepath/../jvlm $destmodulepath/jvlm
     echo 'OK !'
-    echo -n "+$confmodule: Mise en place du lien symbolique vers externals"
+    echo -n "+$confmodule: Mise en place du lien symbolique vers externals..."
     ln -s $destmodulepath/../externals $destmodulepath/externals
     echo 'OK !'
 
