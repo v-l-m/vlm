@@ -78,6 +78,7 @@ From 0.14 to Next:
     ./scripts/maj_module.sh lib/vlm-c
     (as root) /etc/init.d/apache2 restart (or service apache2 restart)
 
+    ./scripts/maj_module.sh externals
     ./scripts/maj_module.sh lib/phpcommon
     ./scripts/maj_module.sh site
     ./scripts/maj_module.sh medias
