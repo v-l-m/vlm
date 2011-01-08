@@ -88,7 +88,7 @@
         $idusers=htmlentities(quote_smart($_REQUEST['idflag']));
         //TODO
     } else {
-        echo "Nothing to display";
+        echo getLocalizedString("Nothing to display");
     }
 
 

@@ -2,6 +2,7 @@
 $strings = array (
   'en' => 
   array (
+    'Nothing to display' => 'Nothing to display',
     'Spectator' => 'Spectator',
     'Account creation is disabled on this server, you should ask to the admins' => "Account creation is disabled on this server, you should ask to the admins",
     'Restriction' => 'Restriction',
@@ -400,6 +401,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'Nothing to display' => 'Rien à afficher',
     'You already reached the maximum boats per player' => 'Vous avez atteint le nombre maximum de bateaux par joueur', 
     'Spectator' => 'Spectateur',
     'Account creation is disabled on this server, you should ask to the admins' => "La création de compte est désactivée sur ce serveur, vous devez demander aux admins",
