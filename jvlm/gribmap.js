@@ -76,8 +76,6 @@ Gribmap.WindLevel = OpenLayers.Class({
     gribLevel: 0,
     blocx: 360.0,
     blocy: 180.0,
-    nblocx: 1,
-    nblocy: 1,
     step: 2.0,
     stepmultiple: 4.0,
     windAreas: {},
@@ -90,8 +88,6 @@ Gribmap.WindLevel = OpenLayers.Class({
         this.step = this.basestep*stepmultiple; //FIXME: useless without proper step handling
         this.blocx = blocx;
         this.blocy = blocy;
-        this.nblocx = 360.0/blocx;
-        this.nblocy = 180.0/blocy;
         this.layer = layer;
     },
 
@@ -101,7 +97,7 @@ Gribmap.WindLevel = OpenLayers.Class({
     },
 
     getGribLeftId: function(lon) {
-        return Math.floor((lon+180)/this.blocx) % this.nblocx;
+        return Math.floor((lon+180)/this.blocx);
     },
     
     getGribBottomLimit: function(lat) {
