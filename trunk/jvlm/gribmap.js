@@ -117,6 +117,7 @@ Gribmap.WindLevel = OpenLayers.Class({
                     new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
                     ).intersectsBounds(windarea)
             ) {
+            this.extendWindArea(windarea);
             this.layer.redraw();
         }
     },      
@@ -150,16 +151,16 @@ Gribmap.WindLevel = OpenLayers.Class({
         } else {
             windarea = this.windAreas[windarea.toString()];
         }
-        //FIXME : better test ? 
-        if (this.layer.gribtimeBefore != 0) {
-            var tl = this.layer.getGribTimeList();
-            for (var i = 0; i < tl.length; i++) {
-                windarea.checkWindArray(tl[i]);
-//              windarea.checkWindArray(this.layer.gribtimeBefore);
-//              windarea.checkWindArray(this.layer.gribtimeAfter);
-            }
-        }
+        windarea.checkWindArray(this.layer.gribtimeBefore);
+        windarea.checkWindArray(this.layer.gribtimeAfter);
         return windarea;
+    },
+
+    extendWindArea: function(windarea) {
+        var tl = this.layer.getGribTimeList();
+        for (var i = 0; i < tl.length; i++) {
+            windarea.checkWindArray(tl[i]);
+        }
     },
     
     getWindInfo: function(lat, lon) {
