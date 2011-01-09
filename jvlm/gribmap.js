@@ -73,21 +73,25 @@ Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel, {
 //Store information (windAreas, i.e. bloc of grib datas)
 Gribmap.WindLevel = OpenLayers.Class({
     basestep: 0.5,
-    griblevel: 0,
-    blocx: 360,
-    blocy: 180,
+    gribLevel: 0,
+    blocx: 360.0,
+    blocy: 180.0,
+    nblocx: 1,
+    nblocy: 1,
     step: 2.0,
     stepmultiple: 4.0,
     windAreas: {},
     layer: null,
 
     initialize: function(griblevel, stepmultiple, blocx, blocy, layer) {
-        this.griblevel = griblevel;
+        this.gribLevel = griblevel;
         this.windAreas = new Array();
         this.stepmultiple = stepmultiple;
         this.step = this.basestep*stepmultiple; //FIXME: useless without proper step handling
         this.blocx = blocx;
         this.blocy = blocy;
+        this.nblocx = 360.0/blocx;
+        this.nblocy = 180.0/blocy;
         this.layer = layer;
     },
 
@@ -97,7 +101,7 @@ Gribmap.WindLevel = OpenLayers.Class({
     },
 
     getGribLeftId: function(lon) {
-        return Math.floor((lon+180)/this.blocx);
+        return Math.floor((lon+180)/this.blocx) % this.nblocx;
     },
     
     getGribBottomLimit: function(lat) {
@@ -107,6 +111,19 @@ Gribmap.WindLevel = OpenLayers.Class({
     getGribBottomId: function(lat) {
         return Math.floor((lat+90)/this.blocy);
     },
+
+    notifyLoad: function(time, windarea) {
+        if (   this.layer != null
+            && this.gribLevel == this.layer.gribLevel
+            && this.layer.isInTimeRange(time)
+            && this.layer.getExtent().transform(
+                    new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
+                    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
+                    ).intersectsBounds(windarea)
+            ) {
+            this.layer.redraw();
+        }
+    },      
 
     //Get all wind areas inside bounds, and call checkWindArea() for each
     getWindAreas: function(bounds) {
@@ -137,10 +154,14 @@ Gribmap.WindLevel = OpenLayers.Class({
         } else {
             windarea = this.windAreas[windarea.toString()];
         }
-        //FIXME : better test ?
+        //FIXME : better test ? 
         if (this.layer.gribtimeBefore != 0) {
-            windarea.checkWindArray(this.layer.gribtimeBefore);
-            windarea.checkWindArray(this.layer.gribtimeAfter);
+            var tl = this.layer.getGribTimeList();
+            for (var i = 0; i < tl.length; i++) {
+                windarea.checkWindArray(tl[i]);
+//              windarea.checkWindArray(this.layer.gribtimeBefore);
+//              windarea.checkWindArray(this.layer.gribtimeAfter);
+            }
         }
         return windarea;
     },
@@ -184,14 +205,17 @@ Gribmap.WindArray = OpenLayers.Class({
         return (this.status == 'loading');
     },
 
+    notifyLoad: function() {
+        if (this.windArea != null) this.windArea.notifyLoad(this.time);
+    },
+
     handleWindGridReply: function(request) {
         if (request.status == 200) {
             var jsonArray;
             jsonArray = JSON.parse(request.responseText);
             this.winddatas = this.transformRawWindArray(jsonArray);
             this.status = 'loaded';
-            //FIXME
-            if (this.windArea != null) this.windArea.redraw();
+            this.notifyLoad();
         } else {
             this.status = "void";
         }
@@ -259,12 +283,9 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         this.top = bottom+windlevel.blocy;
     },
 
-    redraw: function() {
-        if (    (this.windlevel != null)
-              && this.isLoaded(this.windlevel.layer.gribtimeBefore)
-              && this.isLoaded(this.windlevel.layer.gribtimeAfter)
-                ) {
-            this.windlevel.layer.redraw();
+    notifyLoad: function(time) {
+        if ( (this.windlevel != null) ) {
+            this.windlevel.notifyLoad(time, this);
         }
     },
 
@@ -287,6 +308,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
     },
 
     toString: function() {   
+//        return 'gribresol=('+this.windlevel['griblevel']+") coord=("+normalizeLongitude0(this.left)+","+this.bottom+")";
         return 'gribresol=('+this.windlevel['griblevel']+") "+OpenLayers.Bounds.prototype.toString.apply(this, arguments);
     },
 
@@ -438,6 +460,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
    * List of timestamp for gribs
    */  
   griblist: null,
+  timeDelta: 6*3600,
 
   /* Constructor: Gribmap.Layer
    * Create a gribmap layer.
@@ -477,7 +500,6 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   addTimeOffset: function(delta) {
       this.timeoffset += delta;
       this.setTimeSegmentFromOffset();
-//      this.redraw();
   },
   
   timereset: function() {
@@ -517,6 +539,22 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   setTimeSegmentFromOffset: function() {
       var now = new Date();
       this.setTimeSegment(now.getTime()/1000+this.timeoffset);
+  },
+
+  isInTimeRange: function(time) {
+      return ( (time >= this.gribtimeBefore) && (time <= this.gribtimeAfter) );
+  },
+
+  getGribTimeList: function() {
+      var timelist = [];
+      
+      for (var i = 0; i < this.griblist.length; i++) {
+          if ( (this.griblist[i] >= (this.time-this.timeDelta) ) && (this.griblist[i] <= (this.time+this.timeDelta) ) ) {
+              timelist.push(this.griblist[i]);
+          }
+      }
+      
+      return timelist;
   },
 
   setTimeSegment: function(time) {
@@ -564,7 +602,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
    * dragging - {Boolean} 
    */
   moveTo: function(bounds, zoomChanged, dragging) {
-      var windarea, bounds;
+      var windarea, bounds, bl;
 
       OpenLayers.Layer.prototype.moveTo.apply(this, arguments);
 
@@ -599,16 +637,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
       //Get griblevel // FIXME : should use the native zoom level
       this.setGribLevel(boundsLonLat);        
-//      if (this.gribLevel > 0) {
-            //get windareas for current griblevel
-            var bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
-/*            if (this.gribLevel == 1) alert('griblevel 1');
-        } else {
-          //Currently, we don't handle the multireso case
-          ctx.canvas.width = 0;
-          ctx.canvas.height = 0;
-          return;
-      }*/
+      bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
 
       for (i = 0; i < bl.length; i++) {
 

@@ -16,11 +16,13 @@ div.olControlLayerSwitcher {
 div.GribmapMousePosition {
   bottom: none;
   top: 0em;
-  height: 10px;
+  height: 12px;
   text-align: center;
   font-size: 10px;
   left: 60px;
+  color: darkBlue;
   background-color: white;
+  border-color: darkBlue;
 }
 
 .GribmapControlWind {
