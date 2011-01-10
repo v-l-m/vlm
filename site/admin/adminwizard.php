@@ -176,6 +176,15 @@ if ( $do == "yes" ) {
             $action_tracking = "UPDATE coords (Lat=$latitude,Long=$longitude) for user $boat in race $race";
 
        break;
+        case "reset_pass": 
+            $newpass = get_cgi_var('newpass'); 
+            $query = "update users set password= '" .  $newpass . "'" . 
+                     "     where idusers = " .  $boat .  
+                     "     and engaged   = " .  $race . 
+                     "    ;"; 
+            $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n"); 
+            $action_tracking = Array("operation" => "update", "tab" => "users", "col" => "password", "rowkey" => $boat, "newval" => "********"); 
+            break; 
         case "reset_username":
             $newusern = get_cgi_var('newusern');
             $query = "update users set username= '" .  addslashes($newusern) . "'" .
@@ -248,12 +257,15 @@ switch ($action) {
         echo "</tr>";
         echo "</table>";
         break;
+    case "reset_pass": 
+        echo "<hr />Mot de passe : <input type=\"text\" name=\"newpass\" value=\"" . $usersObj->users->password . "\" /><br />"; 
+        break; 
     case "reset_username":
         echo "<hr />Nouveau pseudo de bateau : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
         break;
     default:
         // Choix de l'action à réaliser
-        $actions=array("maj_nextwp","unlock_boat","maj_position","reset_username");
+        $actions=array("maj_nextwp","unlock_boat","maj_position","reset_pass","reset_username"); 
         $select_list="<option value=\"#\">--- CHOISIR ---</option>";
         foreach ($actions as $a) {
             $select_list = $select_list . "<option value=\"". 
