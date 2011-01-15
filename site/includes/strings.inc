@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    'Popularity of your boat' => 'Popularity of your boat',
+    'Number of boats selected (checked below)' => 'Number of boats selected (checked below)',
     'Nothing to display' => 'Nothing to display',
     'Spectator' => 'Spectator',
     'Account creation is disabled on this server, you should ask to the admins' => "Account creation is disabled on this server, you should ask to the admins",
@@ -401,6 +403,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'Popularity of your boat' => 'Popularité de votre bateau',
+    'Number of boats selected (checked below)' => 'Nombre de concurrents selectionnés (cochés ci-dessous)',
     'Nothing to display' => 'Rien à afficher',
     'You already reached the maximum boats per player' => 'Vous avez atteint le nombre maximum de bateaux par joueur', 
     'Spectator' => 'Spectateur',
