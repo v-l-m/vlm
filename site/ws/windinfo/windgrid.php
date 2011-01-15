@@ -120,6 +120,6 @@
         } 
     }
     send_json_header();
-    echo json_encode($windgrid);
+    echo json_encode($windgrid, JSON_FORCE_OBJECT);
 
 ?>
