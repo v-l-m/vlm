@@ -3,7 +3,7 @@
     include_once("config.php");
 ?>
 <div>
-    <h2><?php echo getLocalizedString("mymappref"); ?></h2>
+    <h2><?php echo getLocalizedString("chooseopp"); ?></h2>
 </div>
 <?php 
     $fullUsersObj = new fullUsers(getLoginId());
@@ -63,7 +63,14 @@
           <td class="map" align="left" valign="top"></td>
           <!-- //Colonne 2 : les trajectoires et les noms des bateaux -->
           <td class="map" align="left" valign="top">
-            <h3><?php echo getLocalizedString("chooseopp") . " (You = " . getBoatPopularity($fullUsersObj->users->idusers, $fullUsersObj->users->engaged) . " times)";  ?> : </h3>
+            <?php 
+            $nbo = count(explode(",", $prefOpponents));
+            echo "<h3";
+            if ($nbo > MAX_BOATS_ON_MAPS) echo " class=\"warnmessage\"";
+            echo ">".getLocalizedString("Number of boats selected (checked below)")."&nbsp;:&nbsp;".$nbo.".&nbsp;";
+            echo getLocalizedString("Popularity of your boat")."&nbsp;:&nbsp;".getBoatPopularity($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
+            echo "</h3>";
+            ?>
 <?
         //List of players, check boxes
         $fullRacesObj->dispHtmlForm(explode(",", $prefOpponents));
