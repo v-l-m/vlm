@@ -121,6 +121,6 @@
     }
     send_json_header();
     if (empty($windgrid)) $windgrid = (object) null;
-    echo json_encode($windgrid);
+    echo json_encode((object)$windgrid);
 
 ?>
