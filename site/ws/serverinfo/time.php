@@ -1,8 +1,4 @@
 <?php
-    include_once("config.php");
-    include_once("wslib.php");
-
-
     function get_info_array() {
       $info = array();
       $info['time'] = time();
