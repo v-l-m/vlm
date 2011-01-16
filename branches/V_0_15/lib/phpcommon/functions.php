@@ -1113,7 +1113,7 @@ function getFlagsListCursor($with_customs = True) {
 function getRacemap($idraces, $force = 'no') {
 
     $image = $idraces;
-    $original = DIRECTORY_RACEMAPS . "/" . $image . ".jpg";
+    $original = DIRECTORY_RACEMAPS . "/" . $image . ".png";
     
     // Création et mise en cache de la racemap si elle n'existe pas ou est trop vieille
     if ( 
