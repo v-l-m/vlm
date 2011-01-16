@@ -158,7 +158,7 @@
         }
         
         //Fetching racemap directly from the importserver
-        $fp = fopen("http://$importserver/".DIRECTORY_RACEMAPS."$idracefrom.png","rb") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
+        $fp = fopen("http://$importserver/".DIRECTORY_RACEMAPS."/$idracefrom.png","rb") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
         $racemapcontent = "";
         //FIXME : this is not optimal
         while (!feof($fp)) { //on parcourt toutes les lignes
