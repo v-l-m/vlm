@@ -13,8 +13,8 @@
         die("No racemap with such id");
     }
 
-    // Envoi de la miniature
-    header("Content-Type: image/jpg");
+    // Envoi de l'image
+    header("Content-Type: image/png");
     header("Content-Length: " . filesize($original));
     header("Cache-Control: max-age=864000"); // default 10 days should be tunable.
     header("Content-Location: " . $original );
