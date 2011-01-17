@@ -2,6 +2,9 @@
 #VLMRACINE est normalement le ~/
 # source d'inspiration : v2.openesub.org / Auteur : paparazzia@gmail.com / Licence : GPL2
 
+# Ajout depuis ip failover pour prod VLM
+SERVER_IP=x.y.z.t
+
 #Définition de la branche
 export VLMSVNBRANCH=trunk
 

@@ -43,7 +43,7 @@ echo 'OK !'
 source $VLMRACINE/conf/conf_base
 if test $? -eq 0 ; then
     REVID=`svn info $VLMSVNFULL --username anonymous --password="vlm" | sed -n '/vision/ s/[^0-9]//g p'|head -n 1`
-    echo "INSERT INTO modules_status (serverid, moduleid, revid) VALUES ('`hostname -i`', '$confmodule', $REVID);"|mysql -h $DBSERVER -u $DBUSER --password=$DBPASSWORD $DBNAME
+    echo "INSERT INTO modules_status (serverid, moduleid, revid) VALUES ('$SERVER_IP', '$confmodule', $REVID);"|mysql -h $DBSERVER -u $DBUSER --password=$DBPASSWORD $DBNAME
     echo "Log du deploiement : OK !"
 fi
 

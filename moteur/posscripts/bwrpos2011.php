@@ -13,8 +13,17 @@ if ($fd = fopen ($filename, "r")){
   while (!feof ($fd)) {
         $buffer = fgets($fd, 4096);
 
+        // La mise en forme est faite par html2text : toute ligne doit donc être considérée
+        /* Format :
+1.      Virbac-Paprec 3           14/01/2011 08:  21 586          -                      0.0                     32 07.58'       5 10.50'        14.7            227             3               14.5            15              225             4.6             113             216
+        */
         if (ereg('^[0-9]+\.',$buffer)){
-           $ligne = preg_split ("/\;/",$buffer);
+            // Nom du bateau col 9 à 36
+            $boatname=substr($buffer,8,25);
+            printf ("BOAT=%s\n", $boatname);
+        
+           // Tout ce qui suit nous intéresse
+           $ligne = preg_split ("/  */",substr($buffer,36));
 
            print_r($ligne);
         }
