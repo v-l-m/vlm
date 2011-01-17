@@ -3,7 +3,7 @@
 include_once "config.php";
 
 $boat_num= array(
-    -10=>'Groupama 3',
+    -5=>'BP5',
   );
 
 
