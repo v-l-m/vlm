@@ -3,9 +3,8 @@
 include_once "config.php";
 
 $boat_num= array(
-    -10=>'Groupama 3',
+    -5=>'BP5',
   );
-
 
 
 //$filename="http://trimaran-idec.geovoile.com/tourdumonde2007/positions.asp";
@@ -59,21 +58,16 @@ if ($fd = fopen ($filename, "r")) {
   if ( $latb != 0 
     && $lonb != 0 ) {
 
-     //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
-     // A partir de la tentative sur le Jules Verne de Groupama 3, on conserve les positions
-     //$query  ="delete from positions where idusers=-3;" ;
-     //mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
+     $query  ="delete from positions where idusers=-5;" ;
+     mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
-     $vent = windAtPosition($latb*1000, $lonb*1000, 0, 'NEW' ) ;
      $query ="insert into positions values ";
-     $query .= "( $time , $lonb*1000, $latb*1000, -5, 81, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360) . "') ;";
+     $query .= "( $time , $lonb*1000, $latb*1000, -5, 81 ) ;";
 
-     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("BP5POS : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
 
 
-//     $fullUsersObj = new fullUsers(-3);
-//     $fullUsersObj->writeCurrentRanking();
 
    }
 

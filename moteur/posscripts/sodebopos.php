@@ -3,12 +3,11 @@
 include_once "config.php";
 
 $boat_num= array(
-    -11=>'SODEBO',
+    -11=>'SO',
   );
 
 
 
-$filename="http://trimaran-idec.geovoile.com/tourdumonde2007/positions.asp";
 $filename="http://sodebo-voile.geovoile.com/tourdumonde/positions.asp";
 
 if ($fd = fopen ($filename, "r")) {
@@ -63,9 +62,9 @@ if ($fd = fopen ($filename, "r")) {
      mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
-     $query .= "( $time , $lonb*1000, $latb*1000, -11, 80, '') ;";
+     $query .= "( $time , $lonb*1000, $latb*1000, -11, 80) ;";
 
-     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("SODEBO : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
    }
 
