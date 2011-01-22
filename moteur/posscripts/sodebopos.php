@@ -8,7 +8,7 @@ $boat_num= array(
 
 
 
-$filename="http://sodebo-voile.geovoile.com/tourdumonde/positions.asp";
+$filename="http://sodebo-voile.geovoile.com/tourdumonde/2011/positions.asp?lg=fr";
 
 if ($fd = fopen ($filename, "r")) {
   while (!feof ($fd)) {
@@ -23,9 +23,8 @@ if ($fd = fopen ($filename, "r")) {
 
     $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
-
-          $lat = preg_split("/[°, ]/",$ligne[2]);
-    //print_r($lat);
+          $lat = preg_split("/[°, ']/",$ligne[2]);
+//    print_r($lat);
           if ($lat[3] == "S"){
                  $latb=-1*($lat[0]+ $lat[1]/60 + $lat[2]/3600);
           }
@@ -35,7 +34,7 @@ if ($fd = fopen ($filename, "r")) {
 
     $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
-          $lon = preg_split("/[°, ]/",$ligne[2]);
+          $lon = preg_split("/[°, ']/",$ligne[2]);
     //print_r($lon);
 
           if ($lon[3] == "W"){
@@ -44,7 +43,7 @@ if ($fd = fopen ($filename, "r")) {
           if ($lon[3] == "E"){
                  $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600;
           }
-          //printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
+//          printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
     break;
         }
 
