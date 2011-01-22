@@ -9,7 +9,7 @@ $boat_num= array(
 
 //$filename="http://trimaran-idec.geovoile.com/tourdumonde2007/positions.asp";
 //$filename="http://cammas-groupama.geovoile.com/julesverne/positions.asp?lg=fr";
-$filename="http://banquepopulaire.geovoile.fr/julesverne/positions.asp?lg=fr";
+$filename="http://banquepopulaire.geovoile.fr/julesverne/2010/positions.asp?lg=fr";
 
 if ($fd = fopen ($filename, "r")) {
   while (!feof ($fd)) {
@@ -25,8 +25,8 @@ if ($fd = fopen ($filename, "r")) {
     $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
 
-          $lat = preg_split("/[°, ]/",$ligne[2]);
-    //print_r($lat);
+          $lat = preg_split("/[°, ']/",$ligne[2]);
+//    print_r($lat);
           if ($lat[3] == "S"){
                  $latb=-1*($lat[0]+ $lat[1]/60 + $lat[2]/3600);
           }
@@ -36,8 +36,8 @@ if ($fd = fopen ($filename, "r")) {
 
     $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
-          $lon = preg_split("/[°, ]/",$ligne[2]);
-    //print_r($lon);
+          $lon = preg_split("/[°, ']/",$ligne[2]);
+//    print_r($lon);
 
           if ($lon[3] == "W"){
                  $lonb=-1*($lon[0]+ $lon[1]/60 + $lon[2]/3600);
@@ -52,7 +52,6 @@ if ($fd = fopen ($filename, "r")) {
   }
 }
 
-exit;
   // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
   $time=time();
 
