@@ -3,7 +3,9 @@
 source $VLMRACINE/conf/conf_script || exit 1
 
 # G3
-nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/g3pos.php
+# nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/g3pos.php
+# Sodebo
+nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/sodebopos.php
 # BP5
 nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bp5pos.php
 # KAWA !
