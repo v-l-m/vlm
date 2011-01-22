@@ -45,13 +45,14 @@ if ($fd = fopen ($filename, "r")) {
           if ($lon[3] == "E"){
                  $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600;
           }
-          //printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
+          printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
     break;
         }
 
   }
 }
 
+exit;
   // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
   $time=time();
 

@@ -34,7 +34,7 @@ if ($fd = fopen ($filename, "r")){
         if (ereg('^[0-9]+\.',$buffer)){
             // Nom du bateau col 9 à 36
 
-            $boat=str_replace(' ','_',substr($buffer,8,25));
+            $boat=str_replace(' ','_',substr($buffer,8,6));
             $idusers=array_search($boat , $boat_id);
 
             printf ("%s/%s\n", $boat , $idusers);
