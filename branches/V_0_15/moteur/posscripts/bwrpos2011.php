@@ -56,8 +56,8 @@ if ($fd = fopen ($filename, "r")) {
                 $query ="insert into positions values ";
                 $query .= "( $time , $lonb * 1000, $latb * 1000, $boat, 20101231) ;";
 
-                //mysql_query($query) or die("BWR : Query failed : " . mysql_error." ".$query);
-                echo "$query\n";
+                mysql_query($query) or die("BWR : Query failed : " . mysql_error." ".$query);
+//                echo "$query\n";
            }
 
 
