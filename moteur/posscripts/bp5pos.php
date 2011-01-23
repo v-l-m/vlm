@@ -76,7 +76,7 @@ if ($fd = fopen ($filename, "r")) {
   if ( $latb != 0 
     && $lonb != 0 ) {
 
-     $query  ="delete from positions where idusers=-5 and time < $time - 86400;" ;
+     $query  ="delete from positions where idusers=-5 and time < ($time - 86400) ;" ;
      mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
