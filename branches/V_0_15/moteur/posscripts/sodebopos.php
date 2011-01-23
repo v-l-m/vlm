@@ -76,7 +76,7 @@ if ($fd = fopen ($filename, "r")) {
     && $lonb != 0 ) {
 
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
-     $query  ="delete from positions where idusers=-11 and time < $time - 86400 ;" ;
+     $query  ="delete from positions where idusers=-11 and time < ( $time - 86400 ) ;" ;
      mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
