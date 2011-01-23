@@ -8,7 +8,6 @@ $time = time();
 //parse fichier b2b
 // $filename="http://www.barcelonaworldrace.com/ftp/leaderboard/posmaxseaterre.txt";
 $filename="http://www.barcelonaworldrace.org/fr/ranking/";
-$filename="/tmp/bwr.txt";
 if ($fd = fopen ($filename, "r")) {
   while (!feof ($fd)) {
         $buffer = fgets($fd, 4096);
