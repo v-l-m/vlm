@@ -1,6 +1,8 @@
 <?php
 
 include_once "config.php";
+include_once('f_windAtPosition.php');
+
 
 $boat_num= array(
     -11=>'SO',
@@ -44,6 +46,23 @@ if ($fd = fopen ($filename, "r")) {
                  $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600;
           }
 //          printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
+
+
+    // Colecte cap
+    $buffer= fgets($fd , 4096);
+          $ligne = preg_split ("/[<>]/",$buffer);
+          $fields = preg_split("/[°]/",$ligne[2]);
+          $cap = $fields[0];
+
+    // Collecte BS
+    $buffer= fgets($fd , 4096); // DTF
+    $buffer= fgets($fd , 4096); // AVANCE
+    $buffer= fgets($fd , 4096); // VMG
+    $buffer= fgets($fd , 4096); // BS
+          $ligne = preg_split ("/[<>]/",$buffer);
+          $fields = preg_split("/[ ]/",$ligne[2]);
+          $bs = $fields[0];
+
     break;
         }
 
@@ -57,13 +76,28 @@ if ($fd = fopen ($filename, "r")) {
     && $lonb != 0 ) {
 
      //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
-     $query  ="delete from positions where idusers=-11;" ;
+     $query  ="delete from positions where idusers=-11 and time < $time - 86400 ;" ;
      mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
      $query .= "( $time , $lonb*1000, $latb*1000, -11, 80) ;";
 
      mysql_query($query) or die("SODEBO : Query failed : " . mysql_error." ".$query);
+
+     // Collecte pour adapter la polaire SODEBO
+     $fhandle=fopen (VLMTEMP . "/collecte-sodebo.txt" , "a");
+     $vent = windAtPosition($latb*1000, $lonb*1000, 0 ) ;
+     $WS=round($vent['speed'],1);
+     $WD=round(($vent['windangle']+180)%360);
+
+     fputs( $fhandle, $time . ";" . $lonb*1000 . ";". $latb*1000 . ";" . $bs . ";" . $cap . ";" . $WS . ";" . $WD  . "\n");
+
+     fclose ($fhandle);
+
+     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
+
+
+
      //echo "$query\n";
    }
 
