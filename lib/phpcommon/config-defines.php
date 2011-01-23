@@ -240,5 +240,10 @@
     //TESTING FLAG
     define_if_not("DISPLAY_LANG_WARNINGS", False);
     define_if_not("ALLOW_ACCOUNT_CREATION", True);
+    
+    //WIND management
+    define_if_not('MAX_WIND_POINTS', 2048);
+    define_if_not('MAX_GRIBTIME_HISTORY', 6*3600);
+    define_if_not('MAX_GRIBTIME_FUTURE', 3*24*3600);
 
 ?>

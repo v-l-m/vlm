@@ -113,7 +113,7 @@ OpenLayers.Control.ControlSwitch =
             return this.div; 
         } */
 
-        this.baseDiv.innerHtml = "";        
+        this.baseDiv.innerHTML = "";        
         this.drawBaseDiv();
 /*
         OpenLayers.Event.observe(labelSpan, "click", 
@@ -125,7 +125,7 @@ OpenLayers.Control.ControlSwitch =
     },
 
     drawBaseDiv: function() {
-        this.baseDiv.innerHtml = "Base Class, Control Switch";
+        this.baseDiv.innerHTML = "Base Class, Control Switch";
     },
 
 

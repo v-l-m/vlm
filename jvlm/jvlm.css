@@ -52,6 +52,29 @@ div.GribmapMousePosition {
   top: 5px;
 }    
 
+.VlminfoControlPlayer {
+  color: white;
+  font-family: sans-serif;
+  font-size: smaller;
+  font-weight: bold;
+  top: 100px;
+  right: 0px;
+}
+.VlminfoControlPlayer .baseDiv {
+  background-color: darkBlue;
+  height: 100%;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 75px;
+  padding-top: 5px;
+  width: 100%;
+}      
+
+.VlminfoControlPlayer .maximizeDiv, .VlminfoControlPlayer .minimizeDiv {
+  right: 0px;
+  top: 5px;
+}    
+
 #logovlm {
   display: fixed;
   position: absolute;
