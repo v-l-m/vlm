@@ -1,16 +1,17 @@
 <?php
 
 include_once "config.php";
+include_once('f_windAtPosition.php');
+
 
 $boat_num= array(
-    -10=>'Groupama 3',
+    -5=>'BP5',
   );
-
 
 
 //$filename="http://trimaran-idec.geovoile.com/tourdumonde2007/positions.asp";
 //$filename="http://cammas-groupama.geovoile.com/julesverne/positions.asp?lg=fr";
-$filename="http://banquepopulaire.geovoile.fr/julesverne/positions.asp?lg=fr";
+$filename="http://banquepopulaire.geovoile.fr/julesverne/2010/positions.asp?lg=fr";
 
 if ($fd = fopen ($filename, "r")) {
   while (!feof ($fd)) {
@@ -26,8 +27,8 @@ if ($fd = fopen ($filename, "r")) {
     $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
 
-          $lat = preg_split("/[°, ]/",$ligne[2]);
-    //print_r($lat);
+          $lat = preg_split("/[°, ']/",$ligne[2]);
+//    print_r($lat);
           if ($lat[3] == "S"){
                  $latb=-1*($lat[0]+ $lat[1]/60 + $lat[2]/3600);
           }
@@ -37,8 +38,8 @@ if ($fd = fopen ($filename, "r")) {
 
     $buffer= fgets($fd , 4096);
           $ligne = preg_split ("/[<>]/",$buffer);
-          $lon = preg_split("/[°, ]/",$ligne[2]);
-    //print_r($lon);
+          $lon = preg_split("/[°, ']/",$ligne[2]);
+//    print_r($lon);
 
           if ($lon[3] == "W"){
                  $lonb=-1*($lon[0]+ $lon[1]/60 + $lon[2]/3600);
@@ -46,7 +47,23 @@ if ($fd = fopen ($filename, "r")) {
           if ($lon[3] == "E"){
                  $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600;
           }
-          //printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
+
+ 
+    // Colecte cap
+    $buffer= fgets($fd , 4096);
+          $ligne = preg_split ("/[<>]/",$buffer);
+          $fields = preg_split("/[°]/",$ligne[2]);
+          $cap = $fields[0];
+ 
+    // Collecte BS
+    $buffer= fgets($fd , 4096); // DTF
+    $buffer= fgets($fd , 4096); // AVANCE
+    $buffer= fgets($fd , 4096); // VMG
+    $buffer= fgets($fd , 4096); // BS
+          $ligne = preg_split ("/[<>]/",$buffer);
+          $fields = preg_split("/[ ]/",$ligne[2]);
+          $bs = $fields[0];
+
     break;
         }
 
@@ -59,21 +76,28 @@ if ($fd = fopen ($filename, "r")) {
   if ( $latb != 0 
     && $lonb != 0 ) {
 
-     //echo "Bateau $boat_num[$i] - classement $class[$i] / pos(lat,lon) : $latb[$i] , $lonb[$i]<br>\n";
-     // A partir de la tentative sur le Jules Verne de Groupama 3, on conserve les positions
-     //$query  ="delete from positions where idusers=-3;" ;
-     //mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
+     $query  ="delete from positions where idusers=-5 and time < $time - 86400;" ;
+     mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
-     $vent = windAtPosition($latb*1000, $lonb*1000, 0, 'NEW' ) ;
      $query ="insert into positions values ";
-     $query .= "( $time , $lonb*1000, $latb*1000, -5, 81, '" . round($vent['speed'],1) . "," . round(($vent['windangle']+180)%360) . "') ;";
+     $query .= "( $time , $lonb*1000, $latb*1000, -5, 81 ) ;";
 
-     mysql_query($query) or die("BTOB : Query failed : " . mysql_error." ".$query);
+     mysql_query($query) or die("BP5POS : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
 
+     // Collecte pour future polaire BP5v2
+     $fhandle=fopen (VLMTEMP . "/collecte-bp5.txt" , "a");
+     $vent = windAtPosition($latb*1000, $lonb*1000, 0 ) ;
+     $WS=round($vent['speed'],1);
+     $WD=round(($vent['windangle']+180)%360);
+ 
+     fputs( $fhandle, $time . ";" . $lonb*1000 . ";". $latb*1000 . ";" . $bs . ";" . $cap . ";" . $WS . ";" . $WD  . "\n");
+ 
+     fclose ($fhandle);
+ 
+     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
+ 
 
-//     $fullUsersObj = new fullUsers(-3);
-//     $fullUsersObj->writeCurrentRanking();
 
    }
 
