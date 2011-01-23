@@ -95,7 +95,7 @@ if ($fd = fopen ($filename, "r")) {
  
      fclose ($fhandle);
  
-     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
+//     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
  
 
 
