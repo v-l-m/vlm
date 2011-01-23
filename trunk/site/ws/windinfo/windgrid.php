@@ -4,10 +4,6 @@
     include_once("functions.php");
     date_default_timezone_set('UTC');
 
-    define ('MAX_WIND_POINTS', 2048);
-    define ('MAX_GRIBTIME_HISTORY', 6*3600);
-    define ('MAX_GRIBTIME_FUTURE', 3*24*3600); //FIXME: should be setup according vlm-c real config.
-
     //FIXME: should use wslib with custom class.
     function invalid_values($msg) {
         header("HTTP/1.1 400 Bad Request");

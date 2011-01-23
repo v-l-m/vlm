@@ -44,4 +44,8 @@ define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
 //TILES PREFS - DEFINE ONLY IF YOUR VLM INSTANCE HAS NOT PROPER TILES_G BINARY
 //define("TILES_SOURCE_SERVER", "http://testing.virtual-loup-de-mer.org");
 
+//WIND PREFS
+define('MAX_GRIBTIME_FUTURE', 3*24*3600);
+
+
 ?>

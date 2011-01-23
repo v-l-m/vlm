@@ -1271,19 +1271,19 @@ class map
           $xlogo +=8;
           $ylogo +=8;
 
-        } elseif ( $boat[0] == -11 ) {
-          $logo_name= "images/bateaux_reels/SODEBO.png";
-          $VDGLogo= imagecreatefrompng($logo_name);
-          imagecopy  ( $this->mapImage  , $VDGLogo  , 
-                       $xlogo, $ylogo,
-                       0 ,0  , 76  , 82  );
-          imageline ( $this->mapImage, $xlogo-POSITIONSIZE/2, $ylogo, $xlogo+POSITIONSIZE/2, $ylogo, $this->colorBlack);
-          imageline ( $this->mapImage, $xlogo, $ylogo-POSITIONSIZE/2, $xlogo, $ylogo+POSITIONSIZE/2, $this->colorBlack);
+//        } elseif ( $boat[0] == -11 ) {
+//          $logo_name= "images/bateaux_reels/SODEBO.png";
+//          $VDGLogo= imagecreatefrompng($logo_name);
+//          imagecopy  ( $this->mapImage  , $VDGLogo  , 
+//                       $xlogo, $ylogo,
+//                       0 ,0  , 76  , 82  );
+//          imageline ( $this->mapImage, $xlogo-POSITIONSIZE/2, $ylogo, $xlogo+POSITIONSIZE/2, $ylogo, $this->colorBlack);
+//          imageline ( $this->mapImage, $xlogo, $ylogo-POSITIONSIZE/2, $xlogo, $ylogo+POSITIONSIZE/2, $this->colorBlack);
 
-          $boatname = $boat[4];
-          // Maj de Ylogo pour descendre un peu le libellé
-          $xlogo +=8;
-          $ylogo +=8;
+//          $boatname = $boat[4];
+//          // Maj de Ylogo pour descendre un peu le libellé
+//         $xlogo +=8;
+//         $ylogo +=8;
 
         } else { 
           // Pas de logo disponible, on dessine des bulles avec numero
@@ -1303,6 +1303,8 @@ class map
 
           if ( $boat[0] == -3 ) {
               $boatname = "G3";
+          } elseif ( $boat[0] == -11 ) {    
+              $boatname = "SO";
           } elseif ( $boat[0] == -5 ) {    
               $boatname = "BP";
           } else {
