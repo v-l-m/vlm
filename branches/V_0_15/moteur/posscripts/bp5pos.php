@@ -1,6 +1,8 @@
 <?php
 
 include_once "config.php";
+include_once('f_windAtPosition.php');
+
 
 $boat_num= array(
     -5=>'BP5',
@@ -45,7 +47,23 @@ if ($fd = fopen ($filename, "r")) {
           if ($lon[3] == "E"){
                  $lonb=$lon[0]+ $lon[1]/60 + $lon[2]/3600;
           }
-          printf ("Time=%s, LAT=%s, LON=%s\n", $time, $latb, $lonb);
+
+ 
+    // Colecte cap
+    $buffer= fgets($fd , 4096);
+          $ligne = preg_split ("/[<>]/",$buffer);
+          $fields = preg_split("/[°]/",$ligne[2]);
+          $cap = $fields[0];
+ 
+    // Collecte BS
+    $buffer= fgets($fd , 4096); // DTF
+    $buffer= fgets($fd , 4096); // AVANCE
+    $buffer= fgets($fd , 4096); // VMG
+    $buffer= fgets($fd , 4096); // BS
+          $ligne = preg_split ("/[<>]/",$buffer);
+          $fields = preg_split("/[ ]/",$ligne[2]);
+          $bs = $fields[0];
+
     break;
         }
 
@@ -67,6 +85,18 @@ if ($fd = fopen ($filename, "r")) {
      mysql_query($query) or die("BP5POS : Query failed : " . mysql_error." ".$query);
      //echo "$query\n";
 
+     // Collecte pour future polaire BP5v2
+     $fhandle=fopen (VLMTEMP . "/collecte-bp5.txt" , "a");
+     $vent = windAtPosition($latb*1000, $lonb*1000, 0 ) ;
+     $WS=round($vent['speed'],1);
+     $WD=round(($vent['windangle']+180)%360);
+ 
+     fputs( $fhandle, $time . ";" . $lonb*1000 . ";". $latb*1000 . ";" . $bs . ";" . $cap . ";" . $WS . ";" . $WD  . "\n");
+ 
+     fclose ($fhandle);
+ 
+     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
+ 
 
 
    }
