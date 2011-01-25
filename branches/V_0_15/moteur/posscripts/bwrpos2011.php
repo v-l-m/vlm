@@ -65,5 +65,6 @@ if ($fd = fopen ($filename, "r")) {
       }
 }
 
+mysql_close($link);
 
 ?>
