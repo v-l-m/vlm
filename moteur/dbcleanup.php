@@ -52,6 +52,9 @@ $result = wrapper_mysql_db_query_writer($locktables);
 $queryloch = "DELETE FROM races_loch WHERE time < " . ($engine_start - 86700) .";";
 $result = wrapper_mysql_db_query_writer($queryloch);
 
+$lochrebuild = "ALTER TABLE races_loch ENGINE=MEMORY";
+$result = wrapper_mysql_db_query_writer($lochrebuild);
+
 //echo "\n".$querypurgepositions;
 $step_stop_float=microtime(true);
 echo "\n  TIMINGS: duration step 1 - ".($step_stop_float-$engine_start_float).
