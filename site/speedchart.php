@@ -38,9 +38,9 @@
         printf ("\n");
         // Display .XML pour MaxSea Time Zero v1.9
 
-        for ($wspeed = 0; $wspeed <= 60 ; $wspeed+=5) {
+        for ($wspeed = 5; $wspeed <= 60 ; $wspeed+=5) {
             printf ("<PolarCurve>\n");
-            printf ("    <PolarCurveIndex value =\"%d\"/>\n", $wspeeed);
+            printf ("    <PolarCurveIndex value =\"%d\"/>\n", $wspeed);
             
             for ($wheading = 0; $wheading <= 180 ; $wheading+=5) {  
                 $boatspeed = findboatspeed ($wheading, $wspeed, $boattype);
