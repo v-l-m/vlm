@@ -10,6 +10,10 @@
 
     // first the headers
     switch ($format) {
+    case "xml":
+        header("Content-Type: text/xml");
+        header('Content-Disposition: attachment; filename=TimeZero_WindPolar_"' . $boattype . '.xml"');
+        break;
     case "pol":
         header("Content-Type: text/pol");
         header('Content-Disposition: attachment; filename="' . $boattype . '.pol"');
@@ -26,6 +30,30 @@
 
     // then the content
     switch ($format) {
+    case "xml":
+
+        printf ("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>\n");
+        printf ("<Polar xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
+
+        printf ("\n");
+        // Display .XML pour MaxSea Time Zero v1.9
+
+        for ($wspeed = 0; $wspeed <= 60 ; $wspeed+=5) {
+            printf ("<PolarCurve>\n");
+            printf ("    <PolarCurveIndex value =\"%d\"/>\n", $wspeeed);
+            
+            for ($wheading = 0; $wheading <= 180 ; $wheading+=5) {  
+                $boatspeed = findboatspeed ($wheading, $wspeed, $boattype);
+                printf ("    <PolarItem>\n");
+                printf ("        <Angle value = \"%d\"/>\n", $wheading);
+                printf ("        <Value value = \"%.2f\"/>\n", $boatspeed);
+                printf ("    </PolarItem>\n");
+            }
+            printf ("</PolarCurve>\n");
+        }
+        printf ("</Polar>");
+        break;
+
     case "pol":
         printf ("TWA\\TWS\t");
         for ($wspeed = 0; $wspeed <= 60 ; $wspeed+=5) {
@@ -72,6 +100,7 @@
       ';
         echo "<h3>";
         echo "<a href=\"".DOC_SERVER_URL.$boattype."\">".$boattype."</a>";       
+        echo " - <a href=\"/speedchart.php?boattype=".$boattype."&amp;format=xml\">(xml)</a>";
         echo " - <a href=\"/speedchart.php?boattype=".$boattype."&amp;format=pol\">(pol)</a>";
         echo " - <a href=\"/Polaires/".$boattype.".csv\">(csv)</a>";
         echo "</h3><p>";
