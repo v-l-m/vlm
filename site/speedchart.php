@@ -11,8 +11,8 @@
     // first the headers
     switch ($format) {
     case "xml":
-        header("Content-Type: text/xml");
-        header('Content-Disposition: attachment; filename=TimeZero_WindPolar_"' . $boattype . '.xml"');
+        header("Content-Type: application/xml");
+        header('Content-Disposition: attachment; filename="TimeZero_WindPolar_' . $boattype . '.xml"');
         break;
     case "pol":
         header("Content-Type: text/pol");
@@ -32,7 +32,7 @@
     switch ($format) {
     case "xml":
 
-        printf ("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>\n");
+        printf ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
         printf ("<Polar xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
 
         printf ("\n");
