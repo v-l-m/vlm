@@ -1,12 +1,12 @@
 <?php
 
     /* Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connecté */
-    
+
     session_start();
     include_once("config.php");
     include_once("functions.php");
 
-    //helper pour construire la page    
+    //helper pour construire la page
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $pilotmodeList;
         if ($row === 0) {
@@ -27,8 +27,8 @@
         echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." /></td>\n";
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
-        
-        echo "    <td><select onKeyup=\"checkpip($numline);\" name=\"pim\">\n"; 
+
+        echo "    <td><select onKeyup=\"checkpip($numline);\" name=\"pim\">\n";
         for ($i = 1; $i <= count($pilotmodeList); $i++) {
             echo "    <option ";
             if ($i == $pim) {
@@ -45,7 +45,7 @@
         echo "  </tr>\n";
         echo "</form>\n";
     }
-    
+
     // Les entêtes
     // FIXME : disposer d'un fichier d'en tête commun plus complet !
     include("includes/doctypeheader.html");
@@ -64,13 +64,13 @@
     var calendars = new Array();
 
     function calbuttonsetup(n) {
-    
+
         for (i=0;i<=n;i++) {
             calendars[i] = Calendar.setup({
                 inputField     :    "ts_value_"+i,     // id of the input field
                 ifFormat       :    "%s",      // format of the input field
                 button         :    "trigger_jscal_"+i,  // trigger for the calendar (button ID)
-                align          :    "Br",           // alignment 
+                align          :    "Br",           // alignment
                 singleClick    :    false,
                 showsTime      :    true,
                 firstDay       :    1,
@@ -78,7 +78,7 @@
             });
         }
     }
-    
+
     function dateobj(i) {
         var da = eval(document.forms[i].time.value);
         document.forms[i].time.value = da;
@@ -87,14 +87,14 @@
     }
 
     function majhrdate(i) {
-        var d = dateobj(i);    
+        var d = dateobj(i);
         document.forms[i].gmtdate.value=d.toGMTString();
         //FIXME : Risque de réentrance ?
         //calendars[i].setDate(d);
     }
-    
+
     function checkpip(i) {
-    
+
         var pim = eval(document.forms[i].pim.value);
         if ( pim >= 3 && pim <= 5 ) {
             //document.forms[i].pip.disabled=true;
@@ -102,6 +102,24 @@
         } else {
             document.forms[i].pip.disabled=false;
         }
+    }
+
+    function validate_pim(i) {
+        var ordre = document.forms[i].pip.value;
+        // alert(document.forms[i].pim.value);
+        switch(document.forms[i].pim.value)
+        {
+            case '1':
+                var reg=new RegExp("^([0-9]{1}|[1-9][0-9]|[1-2][0-9][0-9]|3[0-5][0-9])([.]{1}[0-9]{1,5})?$","i");
+                break;
+            case '2':
+                var reg=new RegExp("^[-]?(([1-9][0-9]|[0-9]{1}|1[0-7][0-9])([.]{1}[0-9]{1,5})?|180)$","i");
+                break;
+            case '3': case'4': case '5' :
+                var reg=new RegExp("^[-]?(([0-9]{1}|[1-8]{1}[0-9]{1})([.]{1}[0-9]{1,5})?| 90)[,]{1}[-]?(([1-9][0-9]|[0-9]{1}|1[0-7][0-9])([.]{1}[0-9]{1,5})?|180)([@]([0-9]{1}|[1-9][0-9]|[1-2][0-9][0-9]|3[0-5][0-9])([.]{1}[0-9]{1,5})?)?$","i");
+        }
+        //alert(ordre + " is tested -" + reg.test(ordre) + "-");
+        return(reg.test(ordre));
     }
 
 </script>
@@ -114,7 +132,7 @@
     if ( empty($idusers) ) {
         echo htmlShouldNotDoThat();
         exit();
-    } 
+    }
 
     echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
     $usersObj = getLoggedUserObject();
@@ -137,7 +155,7 @@
                 $time=quote_smart($_POST['time']);
                 $pim=quote_smart($_POST['pim']);
                 $pip=quote_smart($_POST['pip']);
-                
+
                 if ( !empty($time) && !(empty($pim)) && ( !empty($pip) || $pip == 0 ))  {
                     if ( $pim <1 || $pim >5) {
                         echo "ERROR ADD : PIM between 1 and 5 please.";
@@ -145,8 +163,8 @@
                         echo "ERROR ADD : With PIM=1, PIP should be between 0 and 359.9  please";
                     } else if ( ( $pim == 2 ) && (!is_numeric($pip) or $pip <-180 or $pip >180)  ) {
                         echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
-                    } else if (  ( $pim == 3 or $pim == 4 or $pim == 5) 
-                            &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )  
+                    } else if (  ( $pim == 3 or $pim == 4 or $pim == 5)
+                            &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )
                         ) {
                         echo "ERROR ADD : With PIM=3, 4 or 5, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
                     } else {
@@ -193,19 +211,19 @@
 
     // On affiche la liste des actions
     $rc=$usersObj->pilototoList($pilotolist_force_master);
-    
+
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">\n
          <th>&nbsp</th><th>".getLocalizedString("Epoch Time")."</th><th></th><th>PIM</th><th>PIP</th><th>".getLocalizedString("Status")."</th><th>".getLocalizedString("Human Readable date")."</th><th>N&deg;</th>\n";
     $numligne=0;
     if ( count($usersObj->pilototo) != 0) {
         foreach ($usersObj->pilototo as $pilototo_row) {
-            echoPilototoRow($numligne, $pilototo_row['TID'], $pilototo_row['TTS'], $pilototo_row['PIM'], $pilototo_row['PIP'], $pilototo_row['STS']);  
+            echoPilototoRow($numligne, $pilototo_row['TID'], $pilototo_row['TTS'], $pilototo_row['PIM'], $pilototo_row['PIP'], $pilototo_row['STS']);
             $numligne++;
         }
     } else {
         echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . getLocalizedString("pilototo_no_event") . "</td></tr>\n" ;
     }
-    
+
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
         echoPilototoRow($numligne);
         echo "<script type=\"text/javascript\">calbuttonsetup($numligne);</script>\n";
@@ -214,9 +232,9 @@
               <td colspan=8>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
               </tr>\n";
     }
-    
+
     echo "</table></div>\n";
-    
+
     echo "<div id=\"helpvaluespilototobox\">\n";
     echo nl2br(getLocalizedString('pilototohelp1'));
     echo "</div>\n";
@@ -231,6 +249,6 @@
     echo "<input type=\"button\" value=\"Close\" onClick=\"javascript:self.close();\" />\n";
     echo "<input type=\"button\" value=\"Refresh\" onClick=\"javascript:location.reload();\" />\n";
     echo "</div>\n";
-    
+
     echo "</body></html>";
 ?>
