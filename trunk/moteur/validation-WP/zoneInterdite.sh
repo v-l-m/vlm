@@ -1,4 +1,9 @@
 #!/bin/bash
+
+source $VLMRACINE/conf/conf_base || exit 1
+
+MYSQL="mysql -u $DBUSER -h $DBSERVER -p$DBPASSWORD $DBNAME"
+
 function interditSUD()
 {
 	WEST=$1
@@ -9,30 +14,32 @@ function interditSUD()
         NOW=$(date +%s -u)
         let NOW+=300
 
-        # On met en mode IceBreaker les pixels au sud de 60 sud
-	mysql -e "select distinct P.idusers from positions P ,users U 
+        ## Non optimal : Remise de la bonne polaire à tous les bateaux pour traiter le cas
+         #               des bateaux ressortis d'une nosailzone par l'est ou l'ouest.
+ 	$MYSQL -e "update users set boattype='boat_$BOAT' where engaged=$RACE;"
+
+        # On met en mode IceBreaker les pixels dans la nosailzone
+	$MYSQL -e "select distinct P.idusers from positions P ,users U 
                          where (\`long\` between $WEST and $EAST) 
                          and lat <= $LATITUDE 
                          and P.idusers>0 and P.idusers=U.idusers 
                          and P.time > $NOW - 600
                          and P.race=U.engaged and U.engaged=$RACE" | tail -n +2 | while read idusers ; do 
 
-		mysql -e "update users set boattype='boat_IceBreaker', blocnote='IceBreaker mode (60 South Limit)' where idusers=$idusers;"
+		$MYSQL -e "update users set boattype='boat_IceBreaker', blocnote='IceBreaker mode (60 South Limit)' where idusers=$idusers;"
 	done 
 
-        # A prevoir : Remettre automatiquement une polaire de $BOAT 
-        # à ceux  ne s'étant pas trouvés dans la zone interdite depuis plus de 30 minutes
-        mysql -e "select distinct P.idusers from positions P ,users U 
-                          where (\`long\` between $WEST and $EAST) 
-                          and lat >= $LATITUDE 
-                          and P.idusers>0 and P.idusers=U.idusers 
-                          and P.time > $NOW - 600
-                          and P.race=U.engaged and U.engaged=$RACE" | tail -n +2 | while read idusers ; do 
- 
- 		mysql -e "update users set boattype='boat_$BOAT' where idusers=$idusers;"
- 	done 
-
-
+##        # A prevoir : Remettre automatiquement une polaire de $BOAT 
+##        # à ceux ne s'étant pas trouvés dans la zone interdite depuis plus de X minutes
+##        $MYSQL -e "select distinct P.idusers from positions P ,users U 
+##                          where (\`long\` between $WEST and $EAST) 
+##                          and lat >= $LATITUDE 
+##                          and P.idusers>0 and P.idusers=U.idusers 
+##                          and P.time > $NOW - 600
+##                          and P.race=U.engaged and U.engaged=$RACE" | tail -n +2 | while read idusers ; do 
+## 
+## 		$MYSQL -e "update users set boattype='boat_$BOAT' where idusers=$idusers;"
+## 	done 
 
 }
 
