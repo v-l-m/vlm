@@ -48,14 +48,17 @@ function interditSUD()
 # USAGE : positionner numero de course (RACE=) 
 #    et   ...  interditSUD longitude-ouest longitude-est latitude 
 
+# Tour du monde à l'envers
 BOAT=C5bp5
 RACE=201085
 interditSUD   -180000     180000  -60000
 
+# TJV
 BOAT=C5bp5
 RACE=81
 interditSUD   -180000     180000  -60000  
 
+# BWR
 BOAT=Imoca2008
 RACE=20101231
 interditSUD   105000     120000  -46000  
