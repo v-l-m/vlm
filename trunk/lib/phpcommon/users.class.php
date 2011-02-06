@@ -968,7 +968,7 @@ class fullUsers
     $raceWPs = $this->races->getWPs();
     $max_wp_idx = count($raceWPs);
     $wpidx = $this->users->nwp;
-    if (is_null($wpidx) $wpidx = 1;
+    if (is_null($wpidx)) $wpidx = 1;
     $cur_wp = $raceWPs[$wpidx];
 
     if (defined('MOTEUR')) {
