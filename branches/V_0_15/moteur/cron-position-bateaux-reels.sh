@@ -12,6 +12,7 @@ nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bp5pos.php
 #nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_kawa20091108.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
 #nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_kawa20091110.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
 
+
 # BWR 2011
 nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bwrpos2011.php
 

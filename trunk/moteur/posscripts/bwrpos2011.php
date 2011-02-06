@@ -1,100 +1,70 @@
 <?php
 
-//include_once "config.php";
+include_once "config.php";
 
-$boat_id = array (
-          101 => "Estrella Damm Sailing"      ,
-          102 => "Groupe Bel"                 ,
-          103 => "Mapfre"                     ,
-          104 => "Mirabaud"                   ,
-          105 => "Virbac-Paprec 3"            ,
-          106 => "Foncia"                     ,
-          107 => "Neutrogena Formula Noru"    ,
-          108 => "Gaes Centros Auditivos"     ,
-          109 => "Renault"                    ,
-          110 => "Hugo_Boss"                  ,
-          111 => "Central Lechera Asturia"    ,
-          112 => "We are water"               ,
-          113 => "Forum Maritim Catala"       
-);
-
-//parse fichier b2b
-//define("VLMTEMP", "/home/vlm/tmp");
-define("VLMTEMP", "/tmp");
-$filename=VLMTEMP."/bwr-ranking.txt";
-
+$boat_num = array(-157, -163 , -152 , -150 , -161 , -164 , -158 , -159 , -162 , -160 , -151 , -166 , -153);
 $time = time();
 
-if ($fd = fopen ($filename, "r")){
-
+//parse fichier b2b
+// $filename="http://www.barcelonaworldrace.com/ftp/leaderboard/posmaxseaterre.txt";
+$filename="http://www.barcelonaworldrace.org/fr/ranking/";
+if ($fd = fopen ($filename, "r")) {
   while (!feof ($fd)) {
         $buffer = fgets($fd, 4096);
-
-        // La mise en forme est faite par html2text : toute ligne doit donc être considérée
-        if (ereg('^[0-9]+\.',$buffer)){
-            // Nom du bateau col 9 à 36
-
-            $boat=str_replace(' ','_',substr($buffer,8,6));
-            $idusers=array_search($boat , $boat_id);
-
-            printf ("%s/%s\n", $boat , $idusers);
+        if (ereg('equipiers',$buffer)) {
+           $ligne = preg_split ("/[\/\"]/",$buffer);
+    
+           // recup numero : avant dernier champ numérique
+           $ligne = preg_split("/-/" , $ligne[8]);
+           $boat = -1 * $ligne[count($ligne)-2];
         
-            // Tout ce qui suit nous intéresse
-            $ligne = preg_split ("/  */",substr($buffer,36));
+           // On se positionne juste au dessus de la ligne "longitude"
+           while (! ereg('precedent',$buffer) ){
+               $buffer = fgets($fd, 4096);
+           }
+      
+           // longitude
+           $buffer = fgets($fd, 4096);
+           $coord = preg_split("/[<> '\.]/" , $buffer);
+           $lonb=$coord[2]+ $coord[3]/60 + $coord[4]/3600;
 
-            $coord = preg_split ("/\./",$ligne[7]);
-            $lonb=$ligne[6]+$coord[0]/60 + $coord[1]/3600;
+           // latitude
+           $buffer = fgets($fd, 4096);
+           $coord = preg_split("/[<> '\.]/" , $buffer);
+           $latb=$coord[2]+ $coord[3]/60 + $coord[4]/3600;
 
-            $coord = preg_split ("/\./",$ligne[9]);
-            $latb=$ligne[8]+$coord[0]/60 + $coord[1]/3600;
+           // On recherche les lignes donnant les "polarités"
+           while (! ereg('precedent_details.*[WENS]',$buffer) ){
+               $buffer = fgets($fd, 4096);
+           }
 
-
-            // recherche polarité N/S et W/E : seconde ligne
-            $buffer = fgets($fd, 4096);
-            if (ereg('^R] +',$buffer)) {
-                preg_match_all("/ [NSWE] /",$buffer, $quarts);
-           //                print_r($quarts);  //$quarts[0] => W/E   $quarts[1] => N/S
-
-               if ( strcmp($quarts[0][0], 'W') ) {
-                   $lonb=-1*$lonb;
-               }
-
-               if ( strcmp($quarts[0][1], 'S') ){
-                   $latb=-1*$latb;
-               }
-            }
-
-
-           // Enregistrement dans la base
-//           echo "Bateau $idusers / pos(lat,lon) : $latb , $lonb<br>\n";
-           $query  ="delete from positions where idusers=" . $idusers . ";" ;
-//           mysql_query($query) or die("BWR: Query failed : " . mysql_error." ".$query);
-
-
-           $query ="insert into positions values ";
-           $query .= "( $time , $lonb*1000, $latb*1000, $idusers, 20101231) ;";
-
- //          mysql_query($query) or die("BWR : Query failed : " . mysql_error." ".$query);
-           echo "$query\n";
+           // signe longitude
+           $pol_tab = preg_split("/[<>]/" , $buffer);
+           if ( $pol_tab[2] == 'W' ) {
+                $lonb = -1 * $lonb;
+           }
            
+           // signe longitude
+           $buffer = fgets($fd, 4096);
+           $pol_tab = preg_split("/[<>]/" , $buffer);
+           if ( $pol_tab[2] == 'S' ) {
+                $latb = -1 * $latb;
+           }
 
-        } 
+//           printf ("Boat=%s, lat=%s, lon=%s\n",  $boat, $latb, $lonb);
+           if ( $lonb != 0 && $latb != 0 ) {
+                $query ="insert into positions values ";
+                $query .= "( $time , $lonb * 1000, $latb * 1000, $boat, 20101231) ;";
 
-   }
+                mysql_query($query) or die("BWR : Query failed : " . mysql_error." ".$query);
+//                echo "$query\n";
+           }
+
+
+        }
+      }
 }
 
-
-/*
-mysql> desc positions;
-+---------+------------+------+-----+---------+-------+
-| Field   | Type       | Null | Key | Default | Extra |
-+---------+------------+------+-----+---------+-------+
-| time    | bigint(20) | YES  | MUL | NULL    |       |
-| long    | double     | YES  |     | NULL    |       |
-| lat     | double     | YES  |     | NULL    |       |
-| idusers | int(11)    | NO   | MUL | 0       |       |
-| race    | int(11)    | YES  | MUL | NULL    |       |
-+---------+------------+------+-----+---------+-------+
-*/
+mysql_close($link);
 
 ?>

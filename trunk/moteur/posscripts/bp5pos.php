@@ -76,7 +76,7 @@ if ($fd = fopen ($filename, "r")) {
   if ( $latb != 0 
     && $lonb != 0 ) {
 
-     $query  ="delete from positions where idusers=-5 and time < $time - 86400;" ;
+     $query  ="delete from positions where idusers=-5 and time < ($time - 86400) ;" ;
      mysql_query($query) or die("Query failed : " . mysql_error." ".$query);
 
      $query ="insert into positions values ";
@@ -94,8 +94,9 @@ if ($fd = fopen ($filename, "r")) {
      fputs( $fhandle, $time . ";" . $lonb*1000 . ";". $latb*1000 . ";" . $bs . ";" . $cap . ";" . $WS . ";" . $WD  . "\n");
  
      fclose ($fhandle);
+     mysql_close($link);
  
-     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
+//     printf ("Time=%s, LAT=%s, LON=%s, BS=%s, HDG=%s, WS=%s, WD=%s\n", $time, $latb, $lonb, $bs, $cap, $WS, $WD);
  
 
 

@@ -14,7 +14,5 @@ nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bp5pos.php
 
 
 # BWR 2011
-rm -f ${VLMTEMP}/bwr-ranking.txt
-wget -O - http://www.barcelonaworldrace.org/fr/ranking/ | html2text | grep -E '^[0-9]+\.|^R\]' > ${VLMTEMP}/bwr-ranking.txt 2>/dev/null
-#nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bwrpos2011.php
+nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bwrpos2011.php
 
