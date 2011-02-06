@@ -46,6 +46,7 @@ From 0.15 to Next:
 = Master Server
 
   RESTART VLM Engine (un-comment)
+  EDIT crontab, and add tiles clean-up (see crontab example)
 
 From 0.14 to Next:
 
