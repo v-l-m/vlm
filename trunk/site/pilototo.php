@@ -24,7 +24,7 @@
         echo "<form action=\"pilototo.php\" method=\"post\">\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
         echo "  <tr class=\"linepilototobox-$klasssuffix\">\n";
-        echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." onclick=\"if (validate_pim(1)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" /></td>\n";
+        echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." onclick=\"if (validate_pim($numline)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" /></td>\n";
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
 
