@@ -258,7 +258,7 @@
     echo "<div id=\"buttonspilototobox\">\n";
     echo "<input type=\"button\" value=\"Close\" onClick=\"javascript:self.close();\" />\n";
     echo "<input type=\"button\" value=\"Refresh\" onClick=\"javascript:location.reload();\" />\n";
-    echo "<span>allure".$usersObj->users->pilotparameter."</span>";
+    echo "<span>allure " . $usersObj->users->targetlat . "</span>";
     echo "</div>\n";
 
     echo "</body></html>";
