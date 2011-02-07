@@ -675,7 +675,7 @@ include_once("scripts/myboat.js");
 
         <form class="controlform" name="callpilototo" action="<?php echo "pilototo.php?idusers=" . $idusers ?>" target="_Pilototo"> <!-- FIXME POST -->
             <div id="vlmvmgaction">
-                <input type="submit" value="<?php echo getLocalizedString("pilototo_prog");?> " (#542) />
+                <input type="submit" value="<?php echo getLocalizedString("pilototo_prog");?> (#542)" />
             </div>
              <!--ticket 542-->
             <input type="hidden" name="pilotmode" value="<?php echo $usersObj->users->pilotmode; ?>"/>
