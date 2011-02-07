@@ -139,9 +139,15 @@
 
     echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
     $usersObj = getLoggedUserObject();
+
     /* ticket 542*/
-    echo "<h3>wplat " . $_REQUEST['targetlat'] . "</h3>";
-    echo "<h3>heading " . $_POST['boatheading'] . "</h3>";
+    $targetlat =    $_REQUEST['targetlat'];
+    $targetlon =    $_REQUEST['targetlat'];
+    $boatheading =  $_REQUEST['boatheading'];
+    $pilotmode =    $_REQUEST['pilotmode'];
+    $targetandhdg = $_REQUEST['targetandhdg'];
+    $windangle =    $_REQUEST['windangle'];
+    echo "<h4>pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $targetlat . "," . $targetlat . "@" . $targetandhdg . " </h4>" ;
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
