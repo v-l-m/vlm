@@ -674,11 +674,11 @@ include_once("scripts/myboat.js");
         </div>
         <!--ticket 542-->
         <input type="hidden" name="pilotmode" value="<?php echo $usersObj->users->pilotmode; ?>"/>
-        <input type="hidden" name="boatheading" value="<?php echo $usersObj->users->boatheading; ?>"/>
+        <input type="hidden" name="boatheading" value="<?php echo round($usersObj->users->boatheading,1); ?>"/>
         <input type="hidden" name="targetlat" value="<?php echo $usersObj->users->targetlat; ?>"/>
         <input type="hidden" name="targetlong" value="<?php echo $usersObj->users->targetlong; ?>"/>
         <input type="hidden" name="targetandhdg" value="<?php echo $usersObj->users->targetandhdg; ?>"/>
-        <input type="hidden" name="pilotparameter" value="<?php echo $usersObj->users->pilotparameter; ?>"/>
+        <input type="hidden" name="windangle" value="<?php echo $baww; ?>"/>
 
     </div>
 

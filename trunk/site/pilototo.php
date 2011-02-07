@@ -141,7 +141,7 @@
     $usersObj = getLoggedUserObject();
     /* ticket 542*/
     echo "<h3>wplat " . $_REQUEST['targetlat'] . "</h3>";
-    echo "<h3>heading " . $_REQUEST['boatheading'] . "</h3>";
+    echo "<h3>heading " . $_POST['boatheading'] . "</h3>";
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
