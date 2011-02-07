@@ -672,7 +672,7 @@ include_once("scripts/myboat.js");
         <div id="pilototoaction">
             <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
         </div>
-        //ticket 542
+        <!--ticket 542-->
         <input type="hidden" name="pilotmode" value="<?php echo $usersObj->users->pilotmode; ?>"/>
         <input type="hidden" name="boatheading" value="<?php echo $usersObj->users->boatheading; ?>"/>
         <input type="hidden" name="targetlat" value="<?php echo $usersObj->users->targetlat; ?>"/>
