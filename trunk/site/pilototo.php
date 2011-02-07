@@ -141,12 +141,12 @@
     $usersObj = getLoggedUserObject();
 
     /* ticket 542*/
-  	$targetlat =    isset($_REQUEST['targetlat']) ? isset($_REQUEST['targetlat']) : 0;
-    $targetlong =   $_REQUEST['targetlong'];
-    $boatheading =  $_REQUEST['boatheading'];
-    $pilotmode =    $_REQUEST['pilotmode'];
-    $targetandhdg = $_REQUEST['targetandhdg'];
-    $windangle =    $_REQUEST['windangle'];
+  	$targetlat =    isset($_REQUEST['targetlat']) ? $_REQUEST['targetlat'] : 0;
+    $targetlong =   isset($_REQUEST['targetlong']) ? $_REQUEST['targetlong'] : 0;
+    $boatheading =  isset($_REQUEST['boatheading']) ? $_REQUEST['boatheading'] : 0;
+    $pilotmode =    isset($_REQUEST['pilotmode']) ? $_REQUEST['pilotmode'] : 0;
+    $targetandhdg = isset($_REQUEST['targetandhdg']) ? $_REQUEST['targetandhdg'] : 0;
+    $windangle =    isset($_REQUEST['windangle']) ? $_REQUEST['windangle'] : 0;
     $myWP= $targetlat.",".$targetlong;
     if ($targetandhdg>0) {
         $myWP=$myWP."@".$targetandhdg;
