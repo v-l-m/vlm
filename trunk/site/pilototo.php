@@ -17,7 +17,7 @@
         } else {
             $klasssuffix = $status;
             $firstcolaction = "pilototo_prog_upd";
-            $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . getLocalizedString("pilototo_prog_del") . " onclick="if (validate_pim(1)) {this.form.submit();} else {alert('Incorrect PIM');return(false);} />";
+            $statusstring = "$status&nbsp;<input type=\"submit\" name=\"action\" value=" . getLocalizedString("pilototo_prog_del") . " onclick=\"if (validate_pim(1)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" />";
         }
         $timestring = gmdate("Y/m/d H:i:s", $ts)." GMT";
 
