@@ -5,8 +5,6 @@
     session_start();
     include_once("config.php");
     include_once("functions.php");
-	//ticket 542
-	include_once("includes/header.inc");
 
     //helper pour construire la page
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
@@ -141,6 +139,8 @@
 
     echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
     $usersObj = getLoggedUserObject();
+    echo "<h3>wplat " . $usersObj->users->targetlat . "</h3>";
+    echo "<h3>heading " . get_cgi_var('boatheading') . "</h3>";
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
@@ -260,7 +260,6 @@
     echo "<div id=\"buttonspilototobox\">\n";
     echo "<input type=\"button\" value=\"Close\" onClick=\"javascript:self.close();\" />\n";
     echo "<input type=\"button\" value=\"Refresh\" onClick=\"javascript:location.reload();\" />\n";
-    echo "<span>allure " . $usersObj->users->targetlat . "</span>";
     echo "</div>\n";
 
     echo "</body></html>";
