@@ -151,7 +151,7 @@
     if ($targetandhdg>0) {
         $myWP=$myWP."@".$targetandhdg;
         }
-    echo "<span style="font-size:8pt;color:red>[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
+    echo "<span style="font-size:8pt;color:red">[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
