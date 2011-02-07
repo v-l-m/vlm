@@ -141,6 +141,7 @@
     $usersObj = getLoggedUserObject();
 
     /* ticket 542*/
+  	$targettest =    isset($_GET['targetlat']) ? $_GET['targetlat'] : 0;
   	$targetlat =    isset($_REQUEST['targetlat']) ? $_REQUEST['targetlat'] : 0;
     $targetlong =   isset($_REQUEST['targetlong']) ? $_REQUEST['targetlong'] : 0;
     $boatheading =  isset($_REQUEST['boatheading']) ? $_REQUEST['boatheading'] : 0;
