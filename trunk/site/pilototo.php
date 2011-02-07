@@ -148,7 +148,9 @@
     $targetandhdg = $_REQUEST['targetandhdg'];
     $windangle =    $_REQUEST['windangle'];
     $myWP= $targetlat.",".$targetlon;
-    if ($targetandhdg>0) { $myWP=$myWP."@".$targetandhdg);
+    if ($targetandhdg>0) {
+        $myWP=$myWP."@".$targetandhdg);
+        }
     echo "<span style="font-size:8pt;color:red>[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
 
     /* PILOTO (class users) Functions
