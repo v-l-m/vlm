@@ -319,6 +319,7 @@ or the next mark if your WP is 0/0',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
+    'pilototohelp3' => '<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00',
     'playername' => 'Playername',
     'playersengaged' => 'Number of player',
     'pleasecreate' => 'If you do not have any account, please %s create one %s.',
@@ -727,6 +728,7 @@ sinon vise la prochaine marque',
     'pilototohelp2' => 'Conseil 1 : &lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...
 Conseil 2 : pour mettre &agrave; jour, modifiez une valeur et cliquez sur modifier,
 Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cut&eacute;, \'done\' sinon',
+    'pilototohelp3' => '<b>Temps Epoch</b> : GMT, en seconds depuis 01/01/1970 00:00',
     'playername' => 'Pseudo',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Si vous n\'avez pas de compte, vous pouvez en %s cr&eacute;er un %s.',
@@ -1118,6 +1120,7 @@ verso il prossimo mark si Mia WP=0/0',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : per un aggiornamento, cambiare un valore, poi cliccare on aggiornare
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
+    'pilototohelp3' => '<b>TIME</b> : GMT, in secondi dal 01/01/1970 00:00',
     'playername' => 'Nome del giocatore',
     'playersengaged' => 'Numero degli iscritti',
     'pleasecreate' => 'Se non sei registrato %s fallo da qui %s.',
@@ -1507,6 +1510,7 @@ Use la siguiente URL:',
     'pilototohelp2' => 'Consejo 1 : &lt;tiempo del servidor&gt; + 3600 es dentro de una hora, &lt;tiempo del servidor&gt;+5*3600 es en 5 horas...
 Consejo 2 : para actualizar, modificar el valor, y pulsar en Actualizar
 Consejo 3 : el estado es \'pendiente\' si la órden aún no ha sido ejecutada, es \'hecho\' en otro caso',
+    'pilototohelp3' => '<b>TIEMPO</b> : GMT, en segundos desde 01/01/1970 00:00',
     'playername' => 'Nombre del jugador',
     'playersengaged' => 'Número de jugadores',
     'pleasecreate' => 'Si usted no tiene un nombre de usuario, %s creelo aquí %s .',
@@ -1692,7 +1696,7 @@ Please, click on the link below or copy/paste it in your browser.',
     'Your password is now' => 'Your password is now',
     'Your playername is already in use.' => 'Your playername is already in use.',
     'Your playername should have at least 3 characters.' => 'Your playername should have at least 3 characters.',
-    'a1' => 'Es ist ein Echtzeit-Simulation Strategie und Wetter-Routing im Rahmen von Segelregatten. Die meteorologischen Daten sind diejenigen der GRIB, die auch von echten Seglern zur Bestimmung ihrer Strategie verwendet werden. Es handelt sich um Wettervorhersagedaten (Windstärke und richtung), die alle drei Stunden aktualisiert werden (zugänglich nach GMT 0h:30, 3h:30) Geschwindigkeitspolare echter Boote werden zugrunde gelegt und das Programm aktualisiert die Standorte der Boote alle 5 Minuten. Rennen mit festgelegter Startzeit werden oft organisiert; Rennen mit freigestellter Startzeit ermöglichen das Trainieren oder das Aufstellen eines Rekordes. VLM ist ein uneigennütziges Projekt, alles ist kostenlos und es herrscht eine gute Stimmung. Diese auf Realismus abzielende Simulation mag zunächst etwas schwer zugänglich erscheinen. Sie wird vom Internetportal Virtual-Wind.com unterstützt und verfügt über ein Forum <i>(die Kneipe)</i> und über <i>Chats</i>.   Dies sind Stätten der Geselligkeit in denen Sie Kontakt zu Spielern aller Länder und aller Altersklassen finden werden. Dort erhalten Sie jede Hilfe und werden in die Lage versetzt, Anfangsschwierigkeiten zu überwinden, um sich mit den anderen Spielern bei den anstehenden Rennen zu messen, gleich ob Sie tatsächlich Segelerfahrung haben oder nicht.',
+    'a1' => 'Es ist ein Echtzeit-Simulation Strategie und Wetter-Routing im Rahmen von Segelregatten. Die meteorologischen Daten sind diejenigen der GRIB, die auch von echten Seglern zur Bestimmung ihrer Strategie verwendet werden. Es handelt sich um Wettervorhersagedaten (Windstärke und ?richtung), die alle drei Stunden aktualisiert werden (zugänglich nach GMT 0h:30, 3h:30?) Geschwindigkeitspolare echter Boote werden zugrunde gelegt und das Programm aktualisiert die Standorte der Boote alle 5 Minuten. Rennen mit festgelegter Startzeit werden oft organisiert; Rennen mit freigestellter Startzeit ermöglichen das Trainieren oder das Aufstellen eines Rekordes. VLM ist ein uneigennütziges Projekt, alles ist kostenlos und es herrscht eine gute Stimmung. Diese auf Realismus abzielende Simulation mag zunächst etwas schwer zugänglich erscheinen. Sie wird vom Internetportal Virtual-Wind.com unterstützt und verfügt über ein Forum <i>(die Kneipe)</i> und über <i>Chats</i>.   Dies sind Stätten der Geselligkeit in denen Sie Kontakt zu Spielern aller Länder und aller Altersklassen finden werden. Dort erhalten Sie jede Hilfe und werden in die Lage versetzt, Anfangsschwierigkeiten zu überwinden, um sich mit den anderen Spielern bei den anstehenden Rennen zu messen, gleich ob Sie tatsächlich Segelerfahrung haben oder nicht.',
     'a10' => ' L\'orthodromie est le chemin le plus court entre deux points d\'une sph&egrave;re, c\'est-&agrave;-dire l\'arc de grand cercle qui passe par ces deux points. Une loxodromie est une courbe qui coupe sous un angle constant les m&eacute;ridiens (cercles passant par deux points diam&eacute;tralement oppos&eacute;s d\'une sph&egrave;re).
 Voir <a href="http://perso.club-internet.fr/equasim/div/ondes.htm">ce site </a> pour une explication simple.
 Voir <a href="http://www.univ-lemans.fr/~hainry/articles/loxonavi.html">celui-ci</a> pour une explication plus math&eacute;matique.',
@@ -1705,7 +1709,7 @@ Voir <a href="http://www.univ-lemans.fr/~hainry/articles/loxonavi.html">celui-ci
     'a17' => 'Vous devez calculer votre VMG (Velocity Made Good). Celle-ci est obtenue en tra&ccedil;ant le vecteur vitesse de votre bateau sur une carte, et en le projetant sur la direction d&eacute;sir&eacute;e. Maximiser cette projection, c\'est maximiser votre louvoyage.',
     'a18' => 'Vous devez d\'abord cr&eacute;er un compte sur le forum, ind&eacute;pendamment de votre compte Virtual Loup-De-Mer',
     'a2' => 'Ja. Der Sourcecode ist jedermann für Änderungen gemäß den Bedingungen der General Public License zugänglich. (GPL) Wenn Sie mehr über freie Software erfahren wollen, besuchen Sie <a href="http://www.gnu.org/philosophy/">diese Seite</a> ',
-    'a3' => 'Zum spielen, müssen Sie zunächst ein Konto besitzen. Wenn Sie Ihr Boot in einem Rennen angemeldet haben, wird die Position auf der Übersichtskarte angezeigt. Wenn das Rennen beginnt, wird das Boot automatisch auf den Ausgangspunkt gebracht werden. Anschließend können Sie Ihr Boot mit der Seite: Mein Boot steuern.',
+    'a3' => 'Zum spielen, müssen Sie zunächst ein Konto besitzen. Wenn Sie Ihr Boot in einem Rennen angemeldet haben, wird die Position auf der Übersichtskarte angezeigt. Wenn das Rennen beginnt, wird das Boot automatisch auf den Ausgangspunkt gebracht werden. Anschließend können Sie Ihr Boot mit der Seite: ?Mein Boot? steuern.',
     'a4' => '- Auswählen <b>Fixer Kurs</b> einen konstanten Kurs (z.B. nach Westen 270°) halten.<br/>- Wählen <b>Fahrtwindregler</b> einen konstanten Winkel zum Wind halten (z.B.: Raumschots = - 130° Backbordbug oder Backbordbug + 130°). - oder + ? : Wenn Ihr Kurs über der Windrichtung liegt, dann sind Sie auf Backbordbug.<br/>- Wählen <b> Orthodromischer Pilot</b> Ihr Schiff folgt automatisch dem Kurs, der zum Ziel führen wird. Achtung, der orthodromische Pilot kann die Steine nicht sehen. Er weiß nicht, ob der Wind von vorne kommt (das Boot bewegt sich nicht) oder günstig ist. Er steuert den gesetzten Zielpunkt auf dem kürzesten Weg an; d.h. er sieht die Küste nicht und beachtet nicht unbedingt die vorgegebene Route.<br/>',
     'a5' => 'Utiliser le lien <b>Créer un compte</b>. Choisissez un pseudonyme et un mot de passe, et fournissez une adresse mail si vous souhaitez recevoir des informations concernant les nouvelles courses ou votre bateau. Cliquez sur Créer. Si la création de compte réussit, vous êtes maintenant connecté. Vous pouvez à présent personnaliser votre bateau sur la page <b>Préférences</b>.',
     'a6' => 'Créer un nouveau compte et bien noter les paramètres ;-). Ou alors contacter un administrateur, qui pourra réinitialiser votre mot de passe, si vous avez saisi une adresse mail valide lors de votre inscription,.',
@@ -1797,7 +1801,7 @@ Allowed characters for both: a-z 0-9 _
     'estimated' => 'Vitesse Estim&eacute;e',
     'estime' => 'Estime (nm)',
     'faq' => 'FAQ',
-    'faqtitle' => ' FAQ  Virtual Loup-de-mer.',
+    'faqtitle' => ' FAQ ? Virtual Loup-de-mer.',
     'finished' => 'Achev&eacute;e',
     'finished_races' => 'Courses termin&eacute;es',
     'forum' => 'Forum',
@@ -1933,6 +1937,7 @@ sinon vise la prochaine marque',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
+    'pilototohelp1' => '<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00',
     'playername' => 'Playername',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Ein Konto einrichten',
