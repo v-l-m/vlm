@@ -139,8 +139,9 @@
 
     echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
     $usersObj = getLoggedUserObject();
-    echo "<h3>wplat " . $usersObj->users->targetlat . "</h3>";
-    echo "<h3>heading " . get_cgi_var('boatheading') . "</h3>";
+    ' ticket 542
+    echo "<h3>wplat " . $_REQUEST['targetlat'] . "</h3>";
+    echo "<h3>heading " . $_REQUEST['boatheading'] . "</h3>";
 
     /* PILOTO (class users) Functions
         function pilototoCheck()

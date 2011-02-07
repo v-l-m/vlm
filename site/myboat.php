@@ -24,13 +24,13 @@ include_once("includes/header.inc");
     //include ("subscribe_race.php");
     include ("includes/raceslist.inc");
   } else {
-    
+
     $myRace = &$usersObj->races;
 
     echo "<!-- DELAY_BETWEEN_UPDATES=" .  60*$myRace->vacfreq . "-->\n";
 
     // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
-    // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis 
+    // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis
 
     $autoUpdateAngles = $usersObj->getMyPref("autoUpdateAngles");
     if ( $autoUpdateAngles != "false" ) {
@@ -41,9 +41,9 @@ include_once("includes/header.inc");
     while ( $winddir > 360 ) $winddir-=360;
     while ( $winddir < 0 ) $winddir+=360;
 
-    if ( $usersObj->users->pilotmode == PILOTMODE_HEADING 
-        OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG  
-        OR $usersObj->users->pilotmode == PILOTMODE_VBVMG  
+    if ( $usersObj->users->pilotmode == PILOTMODE_HEADING
+        OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG
+        OR $usersObj->users->pilotmode == PILOTMODE_VBVMG
 //      OR $usersObj->users->pilotmode == PILOTMODE_BESTSPD
         ) {
 
@@ -98,7 +98,7 @@ include_once("includes/header.inc");
     if ( $mapY == "NULL" ) $mapY = 600;
     $mapDrawtextwp = $usersObj->getMyPref("mapDrawtextwp");
     if ( $mapDrawtextwp == "NULL" ) $mapDrawtextwp = "on";
-    
+
     //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
     //printf("amure=%s<BR/>",$amure);
 
@@ -130,19 +130,19 @@ include_once("scripts/myboat.js");
       $oppList="&amp;maptype=compas&amp;wp=1&amp;list=myboat" .
                 "&amp;boat=" . $usersObj->users->idusers .
                 "&amp;age=0&amp;ext=right";
-                
+
       if ( $myRace->started ) {
           $WPCLASS = "passedwp";
       } else {
           $WPCLASS = "notpassedwp";
       }
       $status_content  = "&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;" . htmlentities(getLocalizedString("startmap")) . "&lt;/b&gt;&lt;br /&gt;";
-      $status_content .= "Waypoint Coords=&lt;b&gt;" . 
-                         round($myRace->startlat/1000,3) . "," . round($myRace->startlong/1000,3) . "&lt;/b&gt;&lt;br /&gt;"; 
+      $status_content .= "Waypoint Coords=&lt;b&gt;" .
+                         round($myRace->startlat/1000,3) . "," . round($myRace->startlong/1000,3) . "&lt;/b&gt;&lt;br /&gt;";
 
 //      $status_content.="&lt;br /&gt;";
       $status_content .= "&lt;/div&gt;";
-      
+
 ?>
         <a class="passedwp" href="<?php echo MAP_SERVER_URL ; ?>/mercator.img.php?idraces=<?php
                    echo $usersObj->users->engaged ?>&amp;lat=<?php
@@ -154,8 +154,8 @@ include_once("scripts/myboat.js");
 
 <?php
       // On va afficher des liens vers des waypoints
-      // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage 
-  
+      // Ces derniers possèdent un acronym qui affiche le meilleur temps de passage
+
       // Cartes des Waypoints
       $wp_num=1;
       //echo "NWP = " . $usersObj->users->nwp;
@@ -165,31 +165,31 @@ include_once("scripts/myboat.js");
          $wp_libelle=str_replace("'", "&amp;apos;", htmlentities($wp['libelle']));
          $wp_laisser_au=$wp['laisser_au'];
          $wp_maparea=$wp['maparea'];
-  
+
 	 $wpsymbols = getWaypointHTMLSymbols($wp['wpformat']);
 
          $status_content="&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;WP" . $wp_num . " ".$wpsymbols."&lt;/b&gt;&lt;br /&gt;";
          $status_content.=$wp_libelle." (".$wp_label.")" ;
          $status_content.="&lt;br /&gt;";
-  
+
          if ( ($wp['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
             $wp_north = max ($wp['latitude1'], $wp['latitude2']);
             $wp_east  = max ($wp['longitude1'], $wp['longitude2']);
             $wp_south = min ($wp['latitude1'], $wp['latitude2']);
             $wp_west  = min ($wp['longitude1'], $wp['longitude2']);
-  
-	    $status_content.="Gate Coords=&lt;b&gt;" . 
-	      round($wp['latitude1']/1000,3) . "," . round($wp['longitude1']/1000,3) . 
+
+	    $status_content.="Gate Coords=&lt;b&gt;" .
+	      round($wp['latitude1']/1000,3) . "," . round($wp['longitude1']/1000,3) .
 	      " &lt;----&gt; " . round($wp['latitude2']/1000,3) . "," . round($wp['longitude2']/1000,3) . "&lt;/b&gt;";
          } else {
             $wp_south = $wp_north = $wp['latitude1'];
             $wp_west  = $wp_east  = $wp['longitude1'];
-  
-            $status_content .= "Waypoint Coords=&lt;b&gt;" . 
+
+            $status_content .= "Waypoint Coords=&lt;b&gt;" .
                                round($wp_south/1000,3) . "," .
                                round($wp_east/1000,3) .
-                               " ($wp_laisser_au)" . "&lt;/b&gt;"; 
-  
+                               " ($wp_laisser_au)" . "&lt;/b&gt;";
+
          }
          if ( $wp_num > $usersObj->users->nwp ) {
              $WPCLASS="notpassedwp";
@@ -199,7 +199,7 @@ include_once("scripts/myboat.js");
               // This one if the next one : we put it YELLOW (class=nextwp)
              $WPCLASS="nextwp";
          }
-  
+
 	 if (($wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) == 0) {
 	   $wp_racetime = getWaypointBestTime($usersObj->users->engaged, $wp_num);
 	   if ( $wp_racetime[0] != "N/A" ) {
@@ -218,19 +218,19 @@ include_once("scripts/myboat.js");
            "&amp;lat=". $centerwp['mlat']/1000.  .
            "&amp;long=" . $centerwp['mlon']/1000. .
            "&amp;maparea=" . $wp_maparea . "&amp;drawwind=no"  .
-           "&amp;tracks=on" . $oppList . 
-           "&amp;wp=" . $wp_num . 
-           "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS . 
+           "&amp;tracks=on" . $oppList .
+           "&amp;wp=" . $wp_num .
+           "&amp;x=800&amp;y=600&amp;proj=mercator\" target=\"_new\" class=\"" . $WPCLASS .
            "\" onmouseover=\"return overlib('" . $status_content . "', FULLHTML, HAUTO);" .
            "\" onmouseout=\"return nd();\"" .
-           ">" . $wp_num ;         
+           ">" . $wp_num ;
          echo "</a> \n";
-         
+
          $wp_num++;
       }
 ?>&nbsp;
       </div> <!-- fin de wplistbox -->
-  
+
 <?php
       if ( $myRace->coastpenalty  >= 3600 ) {
           echo '<div id="costpenaltybox">'.getLocalizedString("locktime")."<span id=\"costpenaltynumber\">".($myRace->coastpenalty/3600). " h</span></div>";
@@ -319,7 +319,7 @@ include_once("scripts/myboat.js");
 	  break;
 	}
         // Ligne complémentaire si pilote ortho
-        if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC or 
+        if ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC or
 	     $usersObj->users->pilotmode == PILOTMODE_BESTVMG     or
 	     $usersObj->users->pilotmode == PILOTMODE_VBVMG )  {
 	  echo "--&gt;" . giveDegMinSec ('html', $usersObj->LatNM/1000, $usersObj->LongNM/1000);
@@ -347,7 +347,7 @@ include_once("scripts/myboat.js");
       <div id="sosbox">
 <?php
           echo "<a href=\"mailto:" . EMAIL_COMITE_VLM .
-          "?Subject=PAN-PAN" . 
+          "?Subject=PAN-PAN" .
           "%20%2F%20RACE%3D" . $usersObj->users->engaged .
           "%20%2F%20IDU%3D".$usersObj->users->idusers .
           "%20%2F%20USERNAME%3D".$usersObj->users->username .
@@ -422,8 +422,8 @@ include_once("scripts/myboat.js");
                 $boduration = round(($myRace->boend - $myRace->bobegin ) /3600);
                 $messages[] = Array("id" => "incomingbo", "txt" => getLocalizedString("incomingblackout")." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
             }
-            if ( $now > $myRace->bobegin && $now < $myRace->boend ) {    
-                $msg = getLocalizedString("blackout") . " : <b>". gmdate(getLocalizedString("dateClassificationFormat") . "</b>", 
+            if ( $now > $myRace->bobegin && $now < $myRace->boend ) {
+                $msg = getLocalizedString("blackout") . " : <b>". gmdate(getLocalizedString("dateClassificationFormat") . "</b>",
                    $myRace->boend);
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }
@@ -463,7 +463,7 @@ include_once("scripts/myboat.js");
             // OMOROB ?
             if ( $usersObj->users->country == "000" ) {
                 $msg = "<b>** ONE BOAT PER PLAYER PER RACE **</b>&nbsp;<b>Please contact race Comittee, click on the SOS icon</b><";
-                $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");   
+                $messages[] = Array("id" => "omorob", "txt" => $msg, "class" => "warn");
             }
             //affichage de la deadline pour les départs en ligne
             $mtr = $myRace->maxTimeRemaining();
@@ -474,7 +474,7 @@ include_once("scripts/myboat.js");
                 $msg = sprintf(getLocalizedString("endracein"), round($mtr/3600) );
                 $messages[] = Array("id" => "endrace", "txt" => $msg, "class" => "warn");
             }
-                
+
             //BLOCNOTE
             if ( $usersObj->users->blocnote != "" and $usersObj->users->blocnote != null  ) {
                 $msg = nl2br(substr($usersObj->users->blocnote,0,250)); //nombre max de caractères à ajuster...
@@ -501,15 +501,15 @@ include_once("scripts/myboat.js");
                 echo "</span></div>";
             }
         ?>
-        
-</div> <!-- fin de instrumentbox -->        
-        
+
+</div> <!-- fin de instrumentbox -->
+
 
 
 <div id="controlbox">
     <!-- Pilote automatique -->
     <div id="autopilotcontrolbox" class="controlitem">
-        <?php        
+        <?php
         if ($usersObj->users->pilotmode == PILOTMODE_HEADING ) {
             $autopilotclass = "inputwarn";
         } else {
@@ -517,7 +517,7 @@ include_once("scripts/myboat.js");
         }
         ?>
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_HEADING . ": " .getLocalizedString("autopilotengaged")."</span>\n"; ?>
-        <form class="controlform" name="autopilot" action="update_angle.php" method="post"> 
+        <form class="controlform" name="autopilot" action="update_angle.php" method="post">
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>" />
             <input type="hidden" name="pilotmode" value="autopilot" />
             <div id="autopilotrange">
@@ -529,7 +529,7 @@ include_once("scripts/myboat.js");
                 <?php echo getLocalizedString("estimated") ?>
                 <input type="text" size="4" maxlength="4" name="speed" readonly="readonly" value="<?php echo round($usersObj->boatspeed, 2); ?>"/>
             </span>
-            <div id="autopilotaction">          
+            <div id="autopilotaction">
                 <input class="actionbutton" type="submit" value="<?php echo getLocalizedString("autopilot")?>"/>
             </div>
         </form>
@@ -537,7 +537,7 @@ include_once("scripts/myboat.js");
 
     <!-- Régulateur d'allure -->
     <div id="windanglecontrolbox" class="controlitem">
-        <?php        
+        <?php
         if ($usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
             $inputclass = "inputwarn";
         } else {
@@ -545,7 +545,7 @@ include_once("scripts/myboat.js");
         }
         ?>
         <?php echo "<span class=\"texthelpers\">". PILOTMODE_WINDANGLE . ": ".getLocalizedString("constantengaged")."</span>"?>
-        <form class="controlform" name="angle" action="update_angle.php" method="post"> 
+        <form class="controlform" name="angle" action="update_angle.php" method="post">
             <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
             <input type="hidden" name="pilotmode" value="windangle"/>
             <div id="windanglerange">
@@ -564,7 +564,7 @@ include_once("scripts/myboat.js");
     <!--WP pilot based -->
     <div id="wpbasedcontrolbox" class="controlitem">
         <!-- Pilote Orthodromique -->
-        <?php        
+        <?php
         if ($usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
             $buttonclass = "actionbuttonwarn";
         } else {
@@ -573,15 +573,15 @@ include_once("scripts/myboat.js");
         ?>
         <div id="orthocontrolbox"  class="controlitem">
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_ORTHODROMIC . ": ".getLocalizedString("orthoengaged")."</span>"?>
-            <form class="controlform" name="ortho" action="update_angle.php" method="post"> 
+            <form class="controlform" name="ortho" action="update_angle.php" method="post">
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="pilotmode" value="orthodromic"/>
                 <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("orthodromic")?>" />
             </form>
         </div>
-        
+
         <!-- BEST VMG -->
-        <?php        
+        <?php
         if ($usersObj->users->pilotmode == PILOTMODE_BESTVMG ) {
             $buttonclass = "actionbuttonwarn";
         } else {
@@ -590,7 +590,7 @@ include_once("scripts/myboat.js");
         ?>
         <div id="bvmgcontrolbox" class="controlitem">
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_BESTVMG . ": ".getLocalizedString("bestvmgengaged")."</span>"?>
-            <form class="controlform" name="bestvmg" action="update_angle.php" method="post"> 
+            <form class="controlform" name="bestvmg" action="update_angle.php" method="post">
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="pilotmode" value="bestvmg"/>
                 <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("bestvmgengaged")?>" />
@@ -598,7 +598,7 @@ include_once("scripts/myboat.js");
         </div>
 
         <!-- VBVMG -->
-        <?php        
+        <?php
         if ($usersObj->users->pilotmode == PILOTMODE_VBVMG ) {
             $buttonclass = "actionbuttonwarn";
         } else {
@@ -607,7 +607,7 @@ include_once("scripts/myboat.js");
         ?>
         <div id="vbvmgcontrolbox" class="controlitem">
             <?php echo "<span class=\"texthelpers\">". PILOTMODE_VBVMG . ": ".getLocalizedString("vbvmgengaged")."</span>"?>
-            <form class="controlform" name="vbvmg" action="update_angle.php" method="post"> 
+            <form class="controlform" name="vbvmg" action="update_angle.php" method="post">
                 <input type="hidden" name="idusers" value="<?php echo $usersObj->users->idusers?>"/>
                 <input type="hidden" name="pilotmode" value="vbvmg"/>
                 <input title="<?php echo getLocalizedString("orthodromic_comment"); ?>" class="<?php echo $buttonclass; ?>" type="submit" value="<?php  echo getLocalizedString("vbvmgengaged")?>" />
@@ -657,8 +657,8 @@ include_once("scripts/myboat.js");
 
 <div id="morecontrolbox" class="controlitem">
     <!-- Pilote programmable -->
-    <div id="pilototocontrolbox">       
-        <?php 
+    <div id="pilototocontrolbox">
+        <?php
             echo "<span class=\"texthelpers\">".getLocalizedString("pilototoengaged");
             $pilototoTasks=$usersObj->users->pilototoCountTasks(PILOTOTO_PENDING);
             if ( $pilototoTasks > 0 ) {
@@ -672,6 +672,14 @@ include_once("scripts/myboat.js");
         <div id="pilototoaction">
             <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
         </div>
+        //ticket 542
+        <input type="hidden" name="pilotmode" value="<?php echo $usersObj->users->pilotmode; ?>"/>
+        <input type="hidden" name="boatheading" value="<?php echo $usersObj->users->boatheading; ?>"/>
+        <input type="hidden" name="targetlat" value="<?php echo $usersObj->users->targetlat; ?>"/>
+        <input type="hidden" name="targetlong" value="<?php echo $usersObj->users->targetlong; ?>"/>
+        <input type="hidden" name="targetandhdg" value="<?php echo $usersObj->users->targetandhdg; ?>"/>
+        <input type="hidden" name="pilotparameter" value="<?php echo $usersObj->users->pilotparameter; ?>"/>
+
     </div>
 
     <!-- VMG POUR VLM -->
@@ -689,14 +697,14 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="wp1lat" value="<?php echo $usersObj->users->targetlat; ?>" />
             <input type="hidden" name="wp1long" value="<?php echo longitudeConstraintDegrees($usersObj->users->targetlong); ?>" />
             <?php
-        
+
             $nwp_coords=$myRace->giveWPCoordinates($usersObj->getCurrentClassificationWaypointIdx());
             // print_r($nwp_coords);
             //                                Lat              Long
             $lat_xing = new doublep();
             $long_xing = new doublep();
             $xing_ratio = new doublep();
-        
+
             $xing_dist = VLM_distance_to_line_ratio_xing($usersObj->lastPositions->lat, $usersObj->lastPositions->long,
 							 $nwp_coords['latitude1'], $nwp_coords['longitude1'],
 							 $nwp_coords['latitude2'], $nwp_coords['longitude2'],
@@ -705,7 +713,7 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="wp2lat" value="<?php echo (doublep_value($lat_xing) / 1000.0); ?>" />
             <input type="hidden" name="wp2long" value="<?php echo (doublep_value($long_xing) / 1000.0); ?>" />
         </form>
-    
+
     </div>
 
     </div>
@@ -720,11 +728,11 @@ include_once("scripts/myboat.js");
         <div id="mapgriblayerbox"  class="mapboxsubitem">
             <span class="titlehelpers"><?php echo getLocalizedString("maplayers"); ?></span>
             <p>
-            <input onChange="mapprefChanged();" type="radio" name="maplayers" value="multi" 
-            <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  /> 
+            <input onChange="mapprefChanged();" type="radio" name="maplayers" value="multi"
+            <?php if ($mapLayers == "multi" ) echo " checked=\"checked\""; ?>  />
             <?php echo getLocalizedString("maplayersmulti"); ?>
             </p>
-            <p>        
+            <p>
             <input onChange="mapprefChanged();" type="radio" name="maplayers" value="merged"
             <?php if ($mapLayers == "merged" )  echo " checked=\"checked\""; ?>  />
             <?php echo getLocalizedString("maplayersone"); ?>
@@ -739,11 +747,11 @@ include_once("scripts/myboat.js");
             <?php echo getLocalizedString("mapcompas"); ?>
             </p>
             <p>
-            <input onChange="mapprefChanged();" type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> /> 
+            <input onChange="mapprefChanged();" type="radio" name="maptype" value="floatingcompas" <?php if ($mapTools == "floatingcompas" ) echo " checked=\"checked\""; ?> />
             <?php echo getLocalizedString("mapfloatingcompas"); ?>
             </p>
             <p>
-            <input onChange="mapprefChanged();" type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> /> 
+            <input onChange="mapprefChanged();" type="radio" name="maptype" value="bothcompass" <?php if ($mapTools == "bothcompass" ) echo " checked=\"checked\""; ?> />
             <?php echo getLocalizedString("mapbothcompas"); ?>
             </p>
             <p>
@@ -795,11 +803,11 @@ include_once("scripts/myboat.js");
     </div>
 
     <div id="mapinputbox" class="mapboxitem">
-    
+
         <div class="mapboxsubitem" id="displaymapaction"><input type="submit" value="<?php echo getLocalizedString("map") ?>" /></div>
         <div  id="mapparameters"  class="mapboxsubitem">
             <p>
-                
+
                 <span class="subtitlehelpers"><?php echo getLocalizedString("maille"); ?></span>
                 <input onChange="mapprefChanged();" title="0..9" type="text" size="3" maxlength="1" name="maille" value="<?php echo $mapMaille;?>" />
             </p>
