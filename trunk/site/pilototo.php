@@ -149,7 +149,7 @@
     $windangle =    $_REQUEST['windangle'];
     $myWP= $targetlat.",".$targetlon;
     if ($targetandhdg>0) {
-        $myWP=$myWP."@".$targetandhdg);
+        $myWP=$myWP."@".$targetandhdg;
         }
     echo "<span style="font-size:8pt;color:red>[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
 
