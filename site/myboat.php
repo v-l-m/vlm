@@ -672,12 +672,11 @@ include_once("scripts/myboat.js");
         <div id="pilototoaction">
             <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
         </div>
-
+        <!-- ticket 542: passage de paramètres style StephPen -->
         <form class="controlform" name="callpilototo" action="<?php echo "pilototo.php?idusers=" . $idusers ?>" target="_Pilototo"> <!-- FIXME POST -->
             <div id="vlmvmgaction">
                 <input type="submit" value="<?php echo getLocalizedString("pilototo_prog");?> (#542)" />
             </div>
-             <!--ticket 542-->
             <input type="hidden" name="pilotmode" value="<?php echo $usersObj->users->pilotmode; ?>"/>
             <input type="hidden" name="boatheading" value="<?php echo round($usersObj->users->boatheading,1); ?>"/>
             <input type="hidden" name="targetlat" value="<?php echo $usersObj->users->targetlat; ?>"/>
@@ -685,6 +684,7 @@ include_once("scripts/myboat.js");
             <input type="hidden" name="targetandhdg" value="<?php echo $usersObj->users->targetandhdg; ?>"/>
             <input type="hidden" name="windangle" value="<?php echo $baww; ?>"/>
         </form>
+        <!-- end ticket 542-->
     </div>
 
     <!-- VMG POUR VLM -->
