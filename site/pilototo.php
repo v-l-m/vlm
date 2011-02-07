@@ -147,7 +147,7 @@
     $pilotmode =    $_REQUEST['pilotmode'];
     $targetandhdg = $_REQUEST['targetandhdg'];
     $windangle =    $_REQUEST['windangle'];
-    echo "<h4>pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $targetlat . "," . $targetlat . "@" . $targetandhdg . " </h4>" ;
+    echo "<span>[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $targetlat . "," . $targetlon . "@" . $targetandhdg . " </span>" ;
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
