@@ -230,7 +230,7 @@
 
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
          <th>&nbsp</th>
-         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;Temps Epoch&lt;/b&gt;&lt;br /&gt;GMT, en seconds depuis 01/01/1970 00:00&lt;/b&gt;&lt;br /&gt;Le temps du serveur est actuellement&nbsp;<b>1296030687 (2011/01/26 08:31:27 GMT)&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
+         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;".nl2br(getLocalizedString('pilototohelp3'))."/b&gt;&lt;br /&gt;Le temps du serveur est actuellement&nbsp;<b>1296030687 (2011/01/26 08:31:27 GMT)&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
          <th></th>
          <th>PIM</th>
          <th>PIP</th>
