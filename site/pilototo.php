@@ -5,6 +5,8 @@
     session_start();
     include_once("config.php");
     include_once("functions.php");
+	//ticket 542
+	include_once("includes/header.inc");
 
     //helper pour construire la page
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
