@@ -60,6 +60,8 @@
 <script type="text/javascript" src="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-setup.js"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="<?php echo DIRECTORY_JSCALENDAR; ?>/calendar-system.css">
 
+<script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+
 <script type="text/javascript">
     var calendars = new Array();
 
@@ -104,6 +106,7 @@
         }
     }
 
+    // ticket#550
     function validate_pim(i) {
         var ordre = document.forms[i].pip.value;
         // alert(document.forms[i].pim.value);
