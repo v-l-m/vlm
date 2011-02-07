@@ -216,7 +216,13 @@
     $rc=$usersObj->pilototoList($pilotolist_force_master);
 
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">\n
-         <th>&nbsp</th><th>".getLocalizedString("Epoch Time")."</th><th></th><th>PIM</th><th>PIP</th><th>".getLocalizedString("Status")."</th><th>".getLocalizedString("Human Readable date")."</th><th>N&deg;</th>\n";
+         <th>&nbsp</th><th>".getLocalizedString("Epoch Time")."</th>\n
+         <th></th>\n
+         <th>PIM</th>\n
+         <th>PIP</th>\n
+         <th>".getLocalizedString("Status")."</th>\n
+         <th>".getLocalizedString("Human Readable date")."</th>\n
+         <th>N&deg;</th>\n";
     $numligne=0;
     if ( count($usersObj->pilototo) != 0) {
         foreach ($usersObj->pilototo as $pilototo_row) {
