@@ -142,12 +142,12 @@
 
     /* ticket 542*/
     $targetlat =    $_REQUEST['targetlat'];
-    $targetlon =    $_REQUEST['targetlon'];
+    $targetlong =   $_REQUEST['targetlong'];
     $boatheading =  $_REQUEST['boatheading'];
     $pilotmode =    $_REQUEST['pilotmode'];
     $targetandhdg = $_REQUEST['targetandhdg'];
     $windangle =    $_REQUEST['windangle'];
-    $myWP= $targetlat.",".$targetlon;
+    $myWP= $targetlat.",".$targetlong;
     if ($targetandhdg>0) {
         $myWP=$myWP."@".$targetandhdg;
         }
