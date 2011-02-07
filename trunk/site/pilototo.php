@@ -142,12 +142,14 @@
 
     /* ticket 542*/
     $targetlat =    $_REQUEST['targetlat'];
-    $targetlon =    $_REQUEST['targetlat'];
+    $targetlon =    $_REQUEST['targetlon'];
     $boatheading =  $_REQUEST['boatheading'];
     $pilotmode =    $_REQUEST['pilotmode'];
     $targetandhdg = $_REQUEST['targetandhdg'];
     $windangle =    $_REQUEST['windangle'];
-    echo "<span>[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $targetlat . "," . $targetlon . "@" . $targetandhdg . " </span>" ;
+    $myWP= $targetlat.",".$targetlon;
+    if ($targetandhdg>0) { $myWP=$myWP."@".$targetandhdg);
+    echo "<span style="font-size:8pt;color:red>[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
