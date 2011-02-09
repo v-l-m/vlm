@@ -152,7 +152,7 @@
     if ($targetandhdg>0) {
         $myWP=$myWP."@".$targetandhdg;
         }
-    echo "<span style=\"font-size:8pt;color:red;\">[debug ". $targettest ."] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
+    //echo "<span style=\"font-size:8pt;color:red;\">[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
 
     /* PILOTO (class users) Functions
         function pilototoCheck()
@@ -233,7 +233,7 @@
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
          <th>&nbsp</th>
          <!-- <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;br /&gt;". getLocalizedString("Server(s) time is now")."&nbsp;&lt;b&gt;" . nl2br($time) . " " . nl2br(gmdate("Y/m/d H:i:s", $time)) . " GMT&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th> -->
-         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
+         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt;sp&eacute;cifie une date dans une heure, &lt;server_time&gt;sp&eacute;cifie une date dans 5 heures&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
          <th></th>
          <th>PIM</th>
          <th>PIP</th>
