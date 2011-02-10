@@ -39,10 +39,9 @@
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
         echo "  <tr class=\"linepilototobox-$klasssuffix\">\n";
         echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." ". (($status=='done') ? 'disabled' :'') ." onclick=\"if (validate_pim($numline)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" /></td>\n";
-        echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
+        echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
-
-        echo "    <td><select onchange=\"checkpip($numline); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\">\n";
+        echo "    <td><select onchange=\"checkpip($numline); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\" ". (($status=='done') ? "disabled=\"disabled\"" : "") .">\n";
         for ($i = 1; $i <= count($pilotmodeList); $i++) {
             echo "    <option ";
             if (($i == $pim) or (($row === 0) and ($i == $pilotmode)) ) {
@@ -51,7 +50,7 @@
             echo "value=\"$i\">$i:".getLocalizedString($pilotmodeList[$i])."</option>";
         }
         echo "    </select></td>\n";
-        echo "    <td><input type=\"text\" name=\"pip\" width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
+        echo "    <td><input type=\"text\" name=\"pip\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
         echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
         echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled=\"disabled\" value=\"" . $timestring . "\" /></td>\n";
