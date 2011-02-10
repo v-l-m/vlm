@@ -669,23 +669,19 @@ include_once("scripts/myboat.js");
                 $pilototocssclass = "actionbutton";
             }
         ?>
-        <!-- ticket 542: -->
         <form class="controlform" name="callpilototo" action="<?php echo "pilototo.php?idusers=" . $idusers ?>" target="_Pilototo"> <!-- FIXME POST -->
-        <div id="pilototoaction">
-            <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
-        </div>
-        <!-- ticket 542: passage de paramètres style StephPen -->
-        <!--
-            <div id="vlmvmgaction">
-                <input type="submit" value="<?php echo getLocalizedString("pilototo_prog");?> (#542)" />
+            <!-- ticket 542: paramètre par variable de sessions -->
+            <?php
+                $_SESSION['pttpilotmode']=$usersObj->users->pilotmode;
+                $_SESSION['pttboatheading']=round($usersObj->users->boatheading,1);
+                $_SESSION['ptttargetlat']=$usersObj->users->targetlat;
+                $_SESSION['ptttargetlong']=$usersObj->users->targetlong;
+                $_SESSION['ptttargetandhdg']=$usersObj->users->targetandhdg;
+                $_SESSION['pttwindangle']=$baww;
+            ?>
+            <div id="pilototoaction">
+                <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
             </div>
-        -->
-        	<input type="hidden" name="pilotmode" value="<?php echo $usersObj->users->pilotmode; ?>"/>
-            <input type="hidden" name="boatheading" value="<?php echo round($usersObj->users->boatheading,1); ?>"/>
-            <input type="hidden" name="targetlat" value="<?php echo $usersObj->users->targetlat; ?>"/>
-            <input type="hidden" name="targetlong" value="<?php echo $usersObj->users->targetlong; ?>"/>
-            <input type="hidden" name="targetandhdg" value="<?php echo $usersObj->users->targetandhdg; ?>"/>
-            <input type="hidden" name="windangle" value="<?php echo $baww; ?>"/>
         </form>
         <!-- end ticket 542-->
     </div>

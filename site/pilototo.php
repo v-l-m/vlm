@@ -52,6 +52,18 @@
     echo "\n<title>".getLocalizedString("VLM Programmable Auto Pilot")."</title>";
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/" . getTheme() . "/style.css\" />";
 
+    /* ticket 542 : recuperer la conduite du pixel afin d'alimenter les PIM*/
+    $targetlat =    isset($_SESSION['ptttargetlat']) ? $_SESSION['ptttargetlat'] : 0;
+    $targetlong =   isset($_SESSION['ptttargetlong']) ? $_SESSION['ptttargetlong'] : 0;
+    $boatheading =  isset($_SESSION['pttboatheading']) ? $_SESSION['pttboatheading'] : 0;
+    $pilotmode =    isset($_SESSION['pttpilotmode']) ? $_SESSION['pttpilotmode'] : 0;
+    $targetandhdg = isset($_SESSION['ptttargetandhdg']) ? $_SESSION['ptttargetandhdg'] : 0;
+    $windangle =    isset($_SESSION['pttwindangle']) ? $_SESSION['pttwindangle'] : 0;
+    $myWP= $targetlat.",".$targetlong;
+    if ($targetandhdg>0) {
+        $myWP=$myWP."@".$targetandhdg;
+    }
+
 ///   CODE JAVASCRIPT
 ?>
 <!-- widget calendrier -->
@@ -96,6 +108,22 @@
     }
 
     function checkpip(i) {
+        var pilotmode="<?php echo $pilotmode;?>";
+        var boatheading = "<?php echo $boatheading;?>";
+        var myWP = "<?php echo $myWP;?>";
+        var windangle = "<?php echo $windangle;?>";
+        var oRed = '#ff0000';
+        switch(document.forms[i].pim.value) {
+            case "1" : 
+                document.forms[i].pip.value = boatheading;
+                break;
+            case "2" :
+                document.forms[i].pip.value = windangle;
+                break;
+            case "3" : case "4" : case "5" : 
+                document.forms[i].pip.value = myWP;
+                break;
+        }
 
         var pim = eval(document.forms[i].pim.value);
         if ( pim >= 3 && pim <= 5 ) {
@@ -109,7 +137,6 @@
     // ticket#550
     function validate_pim(i) {
         var ordre = document.forms[i].pip.value;
-        // alert(document.forms[i].pim.value);
         switch(document.forms[i].pim.value)
         {
             case '1':
@@ -140,18 +167,6 @@
     echo "<h4>" . getLocalizedString("pilototo_prog_title") . "</h4>" ;
     $usersObj = getLoggedUserObject();
 
-    /* ticket 542*/
-  	/* $targettest =    isset($_GET['targetlat']) ? $_GET['targetlat'] : 0;*/
-  	$targetlat =    isset($_REQUEST['targetlat']) ? $_REQUEST['targetlat'] : 0;
-    $targetlong =   isset($_REQUEST['targetlong']) ? $_REQUEST['targetlong'] : 0;
-    $boatheading =  isset($_REQUEST['boatheading']) ? $_REQUEST['boatheading'] : 0;
-    $pilotmode =    isset($_REQUEST['pilotmode']) ? $_REQUEST['pilotmode'] : 0;
-    $targetandhdg = isset($_REQUEST['targetandhdg']) ? $_REQUEST['targetandhdg'] : 0;
-    $windangle =    isset($_REQUEST['windangle']) ? $_REQUEST['windangle'] : 0;
-    $myWP= $targetlat.",".$targetlong;
-    if ($targetandhdg>0) {
-        $myWP=$myWP."@".$targetandhdg;
-        }
     //echo "<span style=\"font-size:8pt;color:red;\">[debug] pilot:" . $pilotmode . ";windangle:" . $windangle . ";heading:" . $boatheading . ";myWP:" . $myWP . " </span>" ;
 
     /* PILOTO (class users) Functions
@@ -233,7 +248,7 @@
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
          <th>&nbsp</th>
          <!-- <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;br /&gt;". getLocalizedString("Server(s) time is now")."&nbsp;&lt;b&gt;" . nl2br($time) . " " . nl2br(gmdate("Y/m/d H:i:s", $time)) . " GMT&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th> -->
-         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt;sp&eacute;cifie une date dans une heure, &lt;server_time&gt;sp&eacute;cifie une date dans 5 heures&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
+         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;/b&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
          <th></th>
          <th>PIM</th>
          <th>PIP</th>
