@@ -6,6 +6,19 @@
     include_once("config.php");
     include_once("functions.php");
 
+
+    /* ticket 542 : recuperer la conduite du pixel afin d'alimenter les PIM*/
+    $targetlat =    isset($_SESSION['ptttargetlat']) ? $_SESSION['ptttargetlat'] : 0;
+    $targetlong =   isset($_SESSION['ptttargetlong']) ? $_SESSION['ptttargetlong'] : 0;
+    $boatheading =  isset($_SESSION['pttboatheading']) ? $_SESSION['pttboatheading'] : 0;
+    $pilotmode =    isset($_SESSION['pttpilotmode']) ? $_SESSION['pttpilotmode'] : 0;
+    $targetandhdg = isset($_SESSION['ptttargetandhdg']) ? $_SESSION['ptttargetandhdg'] : 0;
+    $windangle =    isset($_SESSION['pttwindangle']) ? $_SESSION['pttwindangle'] : 0;
+    $myWP= $targetlat.",".$targetlong;
+    if ($targetandhdg>0) {
+        $myWP=$myWP."@".$targetandhdg;
+    }
+
     //helper pour construire la page
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $pilotmodeList;
@@ -24,14 +37,14 @@
         echo "<form action=\"pilototo.php\" method=\"post\">\n";
         echo "  <input type=\"hidden\" name=\"taskid\" value=\"$row\" />\n";
         echo "  <tr class=\"linepilototobox-$klasssuffix\">\n";
-        echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." onclick=\"if (validate_pim($numline)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" /></td>\n";
+        echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." ". (($status=='done') ? 'disabled' :'') ." onclick=\"if (validate_pim($numline)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" /></td>\n";
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
 
         echo "    <td><select onchange=\"checkpip($numline); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\">\n";
         for ($i = 1; $i <= count($pilotmodeList); $i++) {
             echo "    <option ";
-            if ($i == $pim) {
+            if (($i == $pim) or (($row === 0) and ($i == $pilotmode)) ) {
                 echo "selected=\"selected\" ";
             }
             echo "value=\"$i\">$i:".getLocalizedString($pilotmodeList[$i])."</option>";
@@ -51,18 +64,6 @@
     include("includes/doctypeheader.html");
     echo "\n<title>".getLocalizedString("VLM Programmable Auto Pilot")."</title>";
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/" . getTheme() . "/style.css\" />";
-
-    /* ticket 542 : recuperer la conduite du pixel afin d'alimenter les PIM*/
-    $targetlat =    isset($_SESSION['ptttargetlat']) ? $_SESSION['ptttargetlat'] : 0;
-    $targetlong =   isset($_SESSION['ptttargetlong']) ? $_SESSION['ptttargetlong'] : 0;
-    $boatheading =  isset($_SESSION['pttboatheading']) ? $_SESSION['pttboatheading'] : 0;
-    $pilotmode =    isset($_SESSION['pttpilotmode']) ? $_SESSION['pttpilotmode'] : 0;
-    $targetandhdg = isset($_SESSION['ptttargetandhdg']) ? $_SESSION['ptttargetandhdg'] : 0;
-    $windangle =    isset($_SESSION['pttwindangle']) ? $_SESSION['pttwindangle'] : 0;
-    $myWP= $targetlat.",".$targetlong;
-    if ($targetandhdg>0) {
-        $myWP=$myWP."@".$targetandhdg;
-    }
 
 ///   CODE JAVASCRIPT
 ?>
@@ -267,7 +268,8 @@
 
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
         echoPilototoRow($numligne);
-        echo "<script type=\"text/javascript\">calbuttonsetup($numligne);</script>\n";
+        // #542 : focus sur le time de la ligne de ADD, preremplissage de la combo PIM
+        echo "<script type=\"text/javascript\">calbuttonsetup($numligne);checkpip($numligne);document.forms[$numligne].time.focus();</script>\n";
     } else {
         echo "<tr id=\"pilototo-max-event\" class=\"pilototoinfo\">
               <td colspan=8>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
