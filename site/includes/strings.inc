@@ -311,15 +311,14 @@ or the next mark if your WP is 0/0',
     'pilototo_prog_title' => 'Schedule events',
     'pilototo_prog_upd' => 'update',
     'pilototoengaged' => 'Pilot Instructions',
-    'pilototohelp1' => '<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00
-<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG
+    'pilototohelp1' => '<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG
 <b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long. Please give <b>0,0</b> for nextrace WP, 
 <b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet
 <b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
-    'pilototohelp3' => '<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00',
+    'pilototohelp3' => '&lt;b&gt;TIME&lt;/b&gt; : GMT, in seconds since 01/01/1970 00:00',
     'playername' => 'Playername',
     'playersengaged' => 'Number of player',
     'pleasecreate' => 'If you do not have any account, please %s create one %s.',
@@ -720,15 +719,14 @@ sinon vise la prochaine marque',
     'pilototo_prog_title' => 'Programmation du Pilototo',
     'pilototo_prog_upd' => 'modifie',
     'pilototoengaged' => 'Pilototo',
-    'pilototohelp1' => '<b>Temps Epoch</b> : GMT, en seconds depuis 01/01/1970 00:00
-<b>PIM</b> : type de pilote : 1/Mode cap, 2/R&eacute;gulateur d\'allure 3/Pilode orthodromique 4/Best VMG 5/VBVMG
+    'pilototohelp1' => '<b>PIM</b> : type de pilote : 1/Mode cap, 2/R&eacute;gulateur d\'allure 3/Pilode orthodromique 4/Best VMG 5/VBVMG
 <b>PIP</b> : Param&egrave;tre : Pour PIM=1: cap &agrave; suivre, pour PIM=2:angle au vent, pour PIM=3,4 or 5: Lat<b>,</b>Long. Mettre <b>0,0</b> pour le prochain WP de course,
 <b>LATITUDE,LONGITUDE</b>(<0 pour le Sud ou l\'Ouest) pour sp&eacute;cifier un nouveau WP et viser l prochain wp de course une fois atteint. Ex:47.899,-3.973 pour Port Laforet,
 <b>LATITUDE,LONGITUDE@HEADING</b> : idem, mais passage au cap HEADING quand le wp sera atteint (0..360)',
     'pilototohelp2' => 'Conseil 1 : &lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...
 Conseil 2 : pour mettre &agrave; jour, modifiez une valeur et cliquez sur modifier,
 Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cut&eacute;, \'done\' sinon',
-    'pilototohelp3' => '<b>Temps Epoch</b> : GMT, en seconds depuis 01/01/1970 00:00',
+    'pilototohelp3' => '&lt;b&gt;Temps Epoch&lt;/b&gt; : GMT, en seconds depuis 01/01/1970 00:00',
     'playername' => 'Pseudo',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Si vous n\'avez pas de compte, vous pouvez en %s cr&eacute;er un %s.',
@@ -1112,15 +1110,14 @@ verso il prossimo mark si Mia WP=0/0',
     'pilototo_prog_title' => 'Programma evento',
     'pilototo_prog_upd' => 'Modifica',
     'pilototoengaged' => 'Autopilota programma ',
-    'pilototohelp1' => '<b>TIME</b> : GMT, in secondi dal 01/01/1970 00:00
-<b>PIM</b> : pilotmode : 1/Direzione Constante, 2/Angolo Constante 3/Ortho Pilot 4/Migliore VMG 5/VBVMG
+    'pilototohelp1' => '<b>PIM</b> : pilotmode : 1/Direzione Constante, 2/Angolo Constante 3/Ortho Pilot 4/Migliore VMG 5/VBVMG
 <b>PIP</b> : pilotparameter : per PIM=1:boatheading, per PIM=2:angolo col vento, per PIM=3,4 o 5: Lat<b>,</b>Long. Dare per favore <b>0,0</b> per la prossima gara WP, 
 <b>LATITUDE,LONGITUDE</b>(<0 Per Sud è Ovest) per puntare un nuovo WP è quando é raggiunto, puntare il prossimo WP della gara. Ex:47.899,-3.973 for Port Laforet
 <b>LATITUDE,LONGITUDE@HEADING</b> : uguale ma quando é raggiunto, mettere il boatheading a HEADING (0..360)',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : per un aggiornamento, cambiare un valore, poi cliccare on aggiornare
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
-    'pilototohelp3' => '<b>TIME</b> : GMT, in secondi dal 01/01/1970 00:00',
+    'pilototohelp3' => '&lt;b&gt;TIME&lt;/b&gt; : GMT, in secondi dal 01/01/1970 00:00',
     'playername' => 'Nome del giocatore',
     'playersengaged' => 'Numero degli iscritti',
     'pleasecreate' => 'Se non sei registrato %s fallo da qui %s.',
@@ -1502,15 +1499,14 @@ Use la siguiente URL:',
     'pilototo_prog_title' => 'Calendario de eventos',
     'pilototo_prog_upd' => 'actualizar',
     'pilototoengaged' => 'Instruciones de piloto',
-    'pilototohelp1' => '<b>TIEMPO</b> : GMT, en segundos desde 01/01/1970 00:00
-<b>PIM</b> : Modo de piloto : 1/Rumbo constante, 2/Ángulo constante 3/Ortodrómico 4/Mejor VMG 5/VBVMG
+    'pilototohelp1' => '<b>PIM</b> : Modo de piloto : 1/Rumbo constante, 2/Ángulo constante 3/Ortodrómico 4/Mejor VMG 5/VBVMG
 <b>PIP</b> : Parámetros : Para PIM=1:rumbo, Para PIM=2:ángulo con el viento, para PIM=3,4 ó 5: Lat<b>,</b>Long. Por favor, usar <b>0,0</b> para el siguiente WP, 
 <b>LATITUD,LONGITUD</b>(<0 para Sur y Oeste) para el nuevo WP y al llegar a el, sigue al siguiente WP en la carrera. Ej:47.899,-3.973 para Port Laforet
 <b>LATITUD,LONGITUD@RUMBO</b> : igual, pero al llegar al WP, fijar rumbo a RUMBO (0..360)',
     'pilototohelp2' => 'Consejo 1 : &lt;tiempo del servidor&gt; + 3600 es dentro de una hora, &lt;tiempo del servidor&gt;+5*3600 es en 5 horas...
 Consejo 2 : para actualizar, modificar el valor, y pulsar en Actualizar
 Consejo 3 : el estado es \'pendiente\' si la órden aún no ha sido ejecutada, es \'hecho\' en otro caso',
-    'pilototohelp3' => '<b>TIEMPO</b> : GMT, en segundos desde 01/01/1970 00:00',
+    'pilototohelp3' => '&lt;b&gt;TIEMPO&lt;/b&gt; : GMT, en segundos desde 01/01/1970 00:00',
     'playername' => 'Nombre del jugador',
     'playersengaged' => 'Número de jugadores',
     'pleasecreate' => 'Si usted no tiene un nombre de usuario, %s creelo aquí %s .',
@@ -1929,15 +1925,14 @@ sinon vise la prochaine marque',
     'pilototo_prog_title' => 'Programmation du Pilototo',
     'pilototo_prog_upd' => 'modifie',
     'pilototoengaged' => 'Pilototo',
-    'pilototohelp1' => '<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00
-<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG
+    'pilototohelp1' => '<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG
 <b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long. Please give <b>0,0</b> for nextrace WP, 
 <b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet
 <b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
-    'pilototohelp1' => '<b>TIME</b> : GMT, in seconds since 01/01/1970 00:00',
+    'pilototohelp3' => '&lt;b&gt;TIME&lt;/b&gt; : GMT, in seconds since 01/01/1970 00:00',
     'playername' => 'Playername',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Ein Konto einrichten',
