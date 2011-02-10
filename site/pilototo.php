@@ -22,6 +22,7 @@
     //helper pour construire la page
     function echoPilototoRow($numline, $row = 0, $ts = "", $pim = "", $pip = "", $status = "") {
         global $pilotmodeList;
+        global $pilotmode;
         if ($row === 0) {
             $klasssuffix = "blank";
             $ts = time();
