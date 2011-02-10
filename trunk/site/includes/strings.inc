@@ -318,7 +318,7 @@ or the next mark if your WP is 0/0',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
-    'pilototohelp3' => '&lt;b&gt;TIME&lt;/b&gt; : GMT, in seconds since 01/01/1970 00:00',
+    'pilototohelp3' => '&gt;&lt;b&gt;TIME&lt;/b&gt;&lt;br /&gt;GMT, in seconds since 01/01/1970 00:00',
     'playername' => 'Playername',
     'playersengaged' => 'Number of player',
     'pleasecreate' => 'If you do not have any account, please %s create one %s.',
@@ -726,7 +726,7 @@ sinon vise la prochaine marque',
     'pilototohelp2' => 'Conseil 1 : &lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...
 Conseil 2 : pour mettre &agrave; jour, modifiez une valeur et cliquez sur modifier,
 Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cut&eacute;, \'done\' sinon',
-    'pilototohelp3' => '&lt;b&gt;Temps Epoch&lt;/b&gt; : GMT, en seconds depuis 01/01/1970 00:00',
+    'pilototohelp3' => '&gt;&lt;b&gt;Temps Epoch&lt;/b&gt;&lt;br /&gt; GMT, en seconds depuis 01/01/1970 00:00',
     'playername' => 'Pseudo',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Si vous n\'avez pas de compte, vous pouvez en %s cr&eacute;er un %s.',
@@ -1117,7 +1117,7 @@ verso il prossimo mark si Mia WP=0/0',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : per un aggiornamento, cambiare un valore, poi cliccare on aggiornare
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
-    'pilototohelp3' => '&lt;b&gt;TIME&lt;/b&gt; : GMT, in secondi dal 01/01/1970 00:00',
+    'pilototohelp3' => '&gt;&lt;b&gt;Temps Epoch&lt;/b&gt;&lt;br /&gt; GMT, in secondi dal 01/01/1970 00:00',
     'playername' => 'Nome del giocatore',
     'playersengaged' => 'Numero degli iscritti',
     'pleasecreate' => 'Se non sei registrato %s fallo da qui %s.',
@@ -1506,7 +1506,7 @@ Use la siguiente URL:',
     'pilototohelp2' => 'Consejo 1 : &lt;tiempo del servidor&gt; + 3600 es dentro de una hora, &lt;tiempo del servidor&gt;+5*3600 es en 5 horas...
 Consejo 2 : para actualizar, modificar el valor, y pulsar en Actualizar
 Consejo 3 : el estado es \'pendiente\' si la órden aún no ha sido ejecutada, es \'hecho\' en otro caso',
-    'pilototohelp3' => '&lt;b&gt;TIEMPO&lt;/b&gt; : GMT, en segundos desde 01/01/1970 00:00',
+    'pilototohelp3' => '&gt;&lt;b&gt;TIEMPO&lt;/b&gt;&lt;br /&gt;GMT, en segundos desde 01/01/1970 00:00',
     'playername' => 'Nombre del jugador',
     'playersengaged' => 'Número de jugadores',
     'pleasecreate' => 'Si usted no tiene un nombre de usuario, %s creelo aquí %s .',
@@ -1932,7 +1932,7 @@ sinon vise la prochaine marque',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
-    'pilototohelp3' => '&lt;b&gt;TIME&lt;/b&gt; : GMT, in seconds since 01/01/1970 00:00',
+    'pilototohelp3' => '&gt;&lt;b&gt;TIME&lt;/b&gt;&lt;br /&gt; GMT, in seconds since 01/01/1970 00:00',
     'playername' => 'Playername',
     'playersengaged' => 'Liste des engag&eacute;s',
     'pleasecreate' => 'Ein Konto einrichten',
