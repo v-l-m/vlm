@@ -249,7 +249,7 @@
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
          <th>&nbsp</th>
          <!-- <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;br /&gt;". getLocalizedString("Server(s) time is now")."&nbsp;&lt;b&gt;" . nl2br($time) . " " . nl2br(gmdate("Y/m/d H:i:s", $time)) . " GMT&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th> -->
-         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;/b&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
+         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;".nl2br(getLocalizedString('pilototohelp3')) . ";&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
          <th></th>
          <th>PIM</th>
          <th>PIP</th>
@@ -265,15 +265,15 @@
     } else {
         echo  "<tr id=\"pilototo-no-event\" class=\"pilototoinfo\"><td  colspan=\"8\">" . getLocalizedString("pilototo_no_event") . "</td></tr>\n" ;
     }
-
+    
     if ( $numligne < PILOTOTO_MAX_EVENTS ) {
         echoPilototoRow($numligne);
         // #542 : focus sur le time de la ligne de ADD, preremplissage de la combo PIM
         echo "<script type=\"text/javascript\">calbuttonsetup($numligne);checkpip($numligne);document.forms[$numligne].time.focus();</script>\n";
     } else {
         echo "<tr id=\"pilototo-max-event\" class=\"pilototoinfo\">
-              <td colspan=8>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
-              </tr>\n";
+            <td colspan=8>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
+            </tr>\n";
     }
 
     echo "</table></div>\n";
