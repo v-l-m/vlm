@@ -41,6 +41,7 @@
         echo "    <td><input type=\"submit\" name=\"action\" value=" . getLocalizedString($firstcolaction)  ." ". (($status=='done') ? 'disabled' :'') ." onclick=\"if (validate_pim($numline)) {this.form.submit();} else {alert('Incorrect PIM');return(false);}\" /></td>\n";
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
+        echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled=\"disabled\" value=\"" . $timestring . "\" /></td>\n";
         echo "    <td><select onchange=\"checkpip($numline); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\" ". (($status=='done') ? "disabled=\"disabled\"" : "") .">\n";
         for ($i = 1; $i <= count($pilotmodeList); $i++) {
             echo "    <option ";
@@ -53,7 +54,6 @@
         echo "    <td><input type=\"text\" name=\"pip\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
         echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
-        echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled=\"disabled\" value=\"" . $timestring . "\" /></td>\n";
         echo "    <td>" . $row . "</td>\n";
         echo "  </tr>\n";
         echo "</form>\n";
@@ -248,13 +248,12 @@
     $time=time();
     echo "<div id=\"pilototolistbox\"><table class=\"pilotolist\">
          <th>&nbsp</th>
-         <!-- <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;&gt;&lt;b&gt;".nl2br(getLocalizedString('pilototohelp3')) . "&lt;br /&gt;". getLocalizedString("Server(s) time is now")."&nbsp;&lt;b&gt;" . nl2br($time) . " " . nl2br(gmdate("Y/m/d H:i:s", $time)) . " GMT&lt;/b&gt;&lt;br /&gt;\n&lt;/b&gt;&lt;br /&gt;Conseil&lt;/b&gt;&lt;br /&gt;&lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...&lt;/b&gt;&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th> -->
-         <th><span onmouseover=\"return overlib('&lt;div class=&quot;infobulle&quot;".nl2br(getLocalizedString('pilototohelp3')) . ";&lt;br /&gt;&lt;/div&gt;', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
+         <th><span onmouseover=\"return overlib('<div class=&quot;infobulle&quot;>".nl2br(getLocalizedString('pilototohelp3')) . "</div>', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Epoch Time")."</span></th>
          <th></th>
-         <th>PIM</th>
-         <th>PIP</th>
-         <th>".getLocalizedString("Status")."</th>
          <th>".getLocalizedString("Human Readable date")."</th>
+         <th><span onmouseover=\"return overlib('<div class=&quot;infobulle&quot;>".nl2br(getLocalizedString('pilototohelp4')) . "</div>', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">PIM</span></th>
+         <th><span onmouseover=\"return overlib('<div class=&quot;infobulle&quot;>".nl2br(getLocalizedString('pilototohelp5')) . "</div>', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">PIP</span></th>
+         <th><span onmouseover=\"return overlib('<div class=&quot;infobulle&quot;>".nl2br(getLocalizedString('pilototohelp6')) . "</div>', FULLHTML, HAUTO);\" onmouseout=\"return nd();\">".getLocalizedString("Status")."</span></th>
          <th>N&deg;</th>\n";
     $numligne=0;
     if ( count($usersObj->pilototo) != 0) {
@@ -275,16 +274,10 @@
             <td colspan=8>MAX " . PILOTOTO_MAX_EVENTS . " events</td>
             </tr>\n";
     }
-
     echo "</table></div>\n";
-
-    echo "<div id=\"helpvaluespilototobox\">\n";
-    echo nl2br(getLocalizedString('pilototohelp1'));
-    echo "</div>\n";
-    echo "<hr />";
     echo "<div id=\"helptimepilototobox\">\n";
     echo getLocalizedString("Server(s) time is now")."&nbsp;<b>" . $time  . " (" .gmdate("Y/m/d H:i:s", $time). " GMT)</b><br />\n";
-    echo nl2br(getLocalizedString('pilototohelp2'));
+    //echo nl2br(getLocalizedString('pilototohelp2'));
     echo "</div>\n";
     echo "<hr />";
     echo "<div id=\"buttonspilototobox\">\n";
