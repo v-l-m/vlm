@@ -41,6 +41,8 @@ define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
 //define("EMAIL_COMITE_VLM", "paparazzia@gmail.com");
 //define("MAIL_PREFIX", "VLM_".SERVER_NAME);
 
+
+define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
 //TILES PREFS - DEFINE ONLY IF YOUR VLM INSTANCE HAS NOT PROPER TILES_G BINARY
 //define("TILES_SOURCE_SERVER", "http://testing.virtual-loup-de-mer.org");
 
