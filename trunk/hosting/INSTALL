@@ -18,10 +18,11 @@ Merci
      * 0.1.2 répertoire de déploiement = racine du jeu = VLMJEUROOT = {{{VLMRACINE/vlmcode}}}
      * 0.1.3 répertoire de conf = {{{VLMRACINE/conf}}}
      * 0.1.4 répertoire de scripts = {{{VLMRACINE/scripts}}}
-     * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_13''' (pour la version de maintenance actuelle)
+     * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_15''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
    * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip gunzip zip gzip python-json}}}
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo}}}
+
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
      * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig}}}).
@@ -34,7 +35,9 @@ Merci
      * 0.2.4 apache (debian: {{{apt-get install apache2}}})
      * 0.2.5 mysql (debian: {{{apt-get install mysql-server}}}) donner un mot de passe pour la base MySQL, il vous sera demandé plus tard.
      * 0.2.6 unzip dans votre path et installé (debian: {{{apt-get install unzip}}})
-     * 0.2.7 python-json (debian {{{apt-get install python-json}}} (optionnel, pour les unittests des webservices)
+     * 0.2.7 gfortran (debian: {{{apt-get install gfortran}}} (pour cnvgrib)
+     * 0.2.8 libgd, jasper, png (debian: {{{apt-get install libgd2-xpm-dev libpng12-dev libjasper-dev}}}
+     * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
    * 0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
@@ -52,19 +55,28 @@ Merci
 = Les outils de déploiement, l'installation de base =
 
  * 1. Installation de base
+   * 1.0 Système :
+     * 1.0.1 Installer les dépendances (Cf. 0.2)
+     * 1.0.2 Créer un utilisateur ad-hoc
+       * Debian : {{{adduser vlm}}}
    * 1.1 Début installation : 
-     * 1.1.1 se placer à la racine
+     * 1.1.1 se placer à la racine (exemple : {{{/home/vlm}}}
      * 1.1.2 {{{$ wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/scripts/install.sh?format=txt -O install.sh }}}
-     * 1.1.3 {{{$ source  install.sh V_0_13}}} (pour la branche V_0_13)
+     * 1.1.3 {{{$ source  install.sh V_0_15}}} (pour la branche V_0_15)
+     * 1.1.4 Editer le fichier {{{~/.subversion/servers}}} et ajouter : 
+{{{
+    store-passwords = yes
+    store-plaintext-passwords = yes
+}}}
    * 1.2 Configuration :
-     * 1.2.1 vérifier que la variable VLMRACINE est fixée de façon permanente (optionnel)
-       * 1.2.1.1 exemple via le .bashrc et le .profile de l'user:
-         * ajouter {{{export VLMRACINE=/home/vlm}}} à la fin du fichier ~/.bashrc ou /etc/bashrc :
+     * 1.2.1 vérifier que la variable VLMRACINE est fixée de façon permanente
+       * 1.2.1.0 configuration globale (en root) :
+         * via /etc/profile {{{$ cp /home/vlm/conf/profile.d.vlm_global.sh.dist /etc/profile.d/vlm_global.sh}}}
+         * via /etc/bash.bashrc : ajouter {{{export VLMRACINE=/home/vlm}}} à la fin du fichier.
+       * 1.2.1.1 configuration au niveau user, exemple via le .bashrc et le .profile:
           * {{echo "export VLMRACINE=/home/vlm" >> .bashrc}}}
           * {{echo "export VLMRACINE=/home/vlm" >> .profile}}}
-       * 1.2.1.2 exemple pour un paramètrage global sur le serveur
-         * (debian/ubuntu) {{{sudo cp ~/scripts/vlm.profile.sh /etc/profile.d/}}}
-       * 1.2.1.3 '''NB: IL FAUDRA AUSSI AJOUTER {{{VLMRACINE=/home/vlm}}} en tête des crontab'''
+       * 1.2.1.2 '''NB: IL FAUDRA AUSSI AJOUTER {{{VLMRACINE=/home/vlm}}} en tête des crontab'''
      * 1.2.2 adapter les options de configuration dans conf/*.dist en supprimant l'extension .dist
        * attention aux chemins php, notamment (Cf. commentaires pour les chemins debian types)
        * activez les notices php (Cf. commentaire dans la conf) pour le moteur
@@ -79,7 +91,6 @@ Merci
      * 1.4.1 {{{$ ~/scripts/maj_module.sh hosting}}}
      * 1.4.2 => on doit avoir le module hosting qui se crée dans le répertoire de déploiement (~/vlmcode/hosting). Ce déploiement ne sert à rien à proprement parler, il teste juste la disponibilité de VLMJEUROOT
 
-
 = Serveur de vent : grib & vlm-c =
 
    * 1.5 Test du déploiement (et de la compilation) de vlmc
@@ -89,15 +100,17 @@ Merci
 
    * 1.6 Configuration pour php & vlm-c
      * 1.6.1 Créer le lien symbolique depuis le répertoire des extensions php vers bin/lib
-       * exemple: {{{$ ln -s /home/vlm/bin/lib/vlmc.so `php-config --extension-dir`/vlmc.so}}}
+       * exemple (en root): {{{$ ln -s /home/vlm/bin/lib/vlmc.so `php-config --extension-dir`/vlmc.so}}}
        * Si PHP est compilé manuellement par vous, le répertoire des extensions de PHP n'est peut-être pas créé. Son nom est donné par la commande "php-config --extension-dir". S'il n'existe pas, créez le avant de continuer.
 
      * 1.6.2 Créer le lien symbolique depuis le répertoire inclus par défaut par php vers bin/lib
-       * exemple: {{{$ ln -s /home/vlm/bin/lib/vlmc.php /usr/share/php/vlmc.php}}}
+       * exemple (en root): {{{$ ln -s /home/vlm/bin/lib/vlmc.php /usr/share/php/vlmc.php}}}
        * Ce chemin d'accès peut être différent, par exemple /opt/php/lib/php, pour un php compilé et installé avec un prefix=/opt/php
 
-     * 1.6.3 Ajouter les lignes suivantes au fichier /etc/sysctl.conf
+     * 1.6.3 Copier le fichier sysctl de vlm dans sysctl.d
+        {{{$ cp /home/vlm/conf/sysctl.d.vlm.sysctl.conf.dist /etc/sysctl.d/vlm.sysctl.conf}}}
 
+     * 1.6.4 (Alternative) Ajouter les lignes suivantes au fichier /etc/sysctl.conf
        {{{
        # Controls the maximum size of a message, in bytes
        kernel.msgmnb=65536
@@ -110,16 +123,36 @@ Merci
        }}}
 
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
-     * 1.7.1 Déployer le module grib : {{{$ ~∕scripts/maj_module.sh grib}}}
+     * 1.7.1 Déployer le module grib : {{{$ ~/scripts/maj_module.sh grib}}}
      * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)
+cd ~/tmp
+wget http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/cnvgrib-1.2.1.tar
+tar -xvf cnvgrib-1.2.1.tar
+cd cnvgrib-1.2.1
+nano makefile (REMPLACER g95 par f95)
+make
+<<marche pas>>
+gfortran -O3 -g -I /pub/share/ncoops/g2lib-1.2.1  -c -o pds2pdt.o pds2pdt.f
+pds2pdt.f:48.72:
+        use params                                                                                                                              1
+Fatal Error: Can't open module file 'params.mod' for reading at (1): No such file or directory
+make: *** [pds2pdt.o] Error 1
+<</marche pas>>
+NB: il faut ajouter les dépendances de cnvgrib...
+g2lib + edition makefile (voir plus haut)
+ => presque ok, mais erreur en fin de compilation
+ @@ libpng12-dev libjasper-dev
+Compiler aussi g2clib (et rajouter aux libs a linked de cnvgrib), ne pas oublier les options pour x_64, s'assurer dans g2clib que les fonctions ont le bon nom (au besoin editer enc/dec_jpeg2000 enc/dec_png pour avoir les symboles qui vont bien (voir les erreurs au link de cnvgrib, ex: #define SUB_NAME enc_png_ )
+
      * 1.7.3 Lancer manuellement {{{$ ~/bin/noaa.sh 00|06|12|18}}} (suivant l'horaire GMT).
+       * Vérifier le retour dans vlmdatas/grib/logs.txt
      * 1.7.4 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.sample comme exemple)
      * 1.7.5 Déclarer VLMGRIBUSER dans le script de configuration (voir VLMRACINE/conf/conf_script)
      * 1.7.6 Déclarer l'init du windserver au boot (script d'init en exemple fournit dans VLMJEUROOT/grib)
-      * 1.7.7 Lien symbolique dans l'init.d :
-      * 1.7.8 Prise en charge suivant les runlevels
+      * 1.7.6.1 Copie : {{{cp ~/vlmcode/grib/windserver.sh /etc/init.d/windserver}}}
+      * 1.7.6.2 Prise en charge suivant les runlevels
                 {{{update-rc.d windserver start 30 2 3 4 5 . stop 70 0 1 6 .}}}
-      * 1.7.9 N'oubliez pas que VLMRACINE doit être déclaré
+      * 1.7.6.3 N'oubliez pas que VLMRACINE doit être déclaré
      * 1.7.7 Pour démarrer le windserver en manuel (utile pour une installation en local) 
        {{{
        $ $VLMRACINE/vlmcode/grib/windserver.sh start
@@ -138,12 +171,17 @@ Merci
  * 2 Install de la base mysql sur le serveur maître (NB: si elle existe déjà, sauter cette étape mais lire le fichier UPDATE du module base)
    * 2.1 Déploiement du module base : {{{$ ~/scripts/maj_module.sh base}}}
    * 2.2 Installation de la base de données mysql...
-     * 2.2.1 vérifiez que vous avez bien paramétré le fichier ~/conf/conf_base (NB: l'utilisateur configuré dans ~/conf/conf_base ne dois pas exister, l'utilisateur 'temporary' non plus)
-     * 2.2.2 allez dans ~/vlmcode (ou VLMJEUROOT), puis dans base/scripts
+     * 2.2.1 vérifiez que vous avez bien paramétré le fichier ~/conf/conf_base (NB: l'utilisateur configuré dans ~/conf/conf_base ne dois pas exister, l'utilisateur 'temporary' non plus) (cf base_conf)
+     * 2.2.2 allez dans ~/vlmcode (ou VLMJEUROOT), puis dans base/scripts {{chmod u+x init.sh}}
      * 2.2.3 Lancez {{{$ ./init.sh}}}. il vous demande le mot de passe administrateur de la base de donnée et crée l'utilisateur vlm et sa base
    * 2.3 Importation des données
      * 2.3.1 Récupèrez (demandez sur la ml) un dump mysql gzippé (il est produit avec le script base/scripts/dump.sh)
-       * 2.3.2 Suivant la version d'origine, ce fichier ne contient pas les maps !
+       For the record, mode op sur testing
+       * 2.3.1.1 {{{$ chmod u+x dump.sh}}}
+       * 2.3.1.2 {{{$ ./dump.sh}}}
+       * 2.3.1.3 {{{$ mv vlmdump.sql.gz /home/commun/dev/}}}
+
+       {{{$ wget http://dev.virtual-loup-de-mer.org/vlmdump.sql.gz}}}
      * 2.3.2 lancez {{{$ ./importdump.sh vlmdump.sql.gz}}}
      * 2.3.3 Lisez le fichier UPDATE au cas ou
    * 2.4 Configuration du fichier param.php
@@ -158,10 +196,12 @@ Merci
    * 3.1 déploiement des autres modules
      * 3.1.1 lister les modules via {{{~/scripts/maj_module.sh}}}
      * 3.1.2 installer (ou réinstaller) chaque module de la liste via {{{~/scripts/maj_module.sh NOMDUMODULE}}}
-     * 3.1.3 configurer le vhost en le pointant vers ~/vlmcode/site en s'inspirant de l'exemple apache.vhost.example qui est dans le répertoire conf)[[BR]]
-       
-       Exemple de configuration d'Apache en local (localhost):[[BR]]
-       Fichier /etc/apache2/sites-available/vlm [[BR]]
+     (site, lib/phpcommon medias guest_map jvlm)
+
+     * 3.1.3 configurer le vhost en le pointant vers ~/vlmcode/site en s'inspirant de l'exemple apache.vhost.example qui est dans le répertoire conf). Les logs doivent aller dans $VLMLOG/apache2
+
+     Exemple de configuration d'Apache en local (localhost):
+       Fichier /etc/apache2/sites-available/vlm
        {{{
        #/home/vlm/vlmcode est le chemin d'hébergement des fichiers de vlm
        #/home/vlm/vlmcode/site/ est le vhost servi par apache
@@ -178,38 +218,34 @@ Merci
 
            <Directory /home/vlm/vlmcode/site>
                DirectoryIndex index.php index.html
-
                Order Allow,Deny
                Allow from All
-
                AllowOverride All
                Options Indexes Includes
-
                AddType application/x-httpd-php .php
-
            </Directory>
-
        </VirtualHost>
        }}}
+       
+        * 3.1.4 créer le répertoire $VLMLOG s'il n'existe pas déjà
+        * 3.1.5 Compléter le fichier /etc/hosts si nécessaire
+            Exemple : 
+               {{{
+                   127.0.1.1       vlm
+               }}}
 
-       Ligne à ajouter au fichier /etc/hosts [[BR]]
-       {{{
-       127.0.1.1       vlm
-       }}}
-
-       Activation de l'hôte virtuel [[BR]]
+        * 3.1.6 Activation de l'hôte virtuel
        {{{
        $ sudo a2ensite vlm
        }}}
        
-       On redémarre apache
+       * 3.1.7 On redémarre apache
        {{{
        $ sudo /etc/init.d/apache2 reload
        }}}
 
-
-     * 3.1.4 vérifiez vos fichiers de configuration (notamment conf_htaccess)[[BR]]
-       Exemple de fichier $VLMRACINE/vlmcode/site/.htaccess[[BR]]
+     * 3.1.4 vérifiez vos fichiers de configuration (notamment conf_htaccess)
+       Exemple de fichier $VLMRACINE/vlmcode/site/.htaccess
        {{{
        <Files /f_windAtPosition.php>
               Order Allow,Deny
@@ -222,23 +258,33 @@ Merci
        }}}
 
      * 3.1.5 activez le module 'expires' de apache : {{{$ a2enmod expires}}}
-     * 3.1.6 activez l'extension vlmc dans le fichier php.ini [[BR]]
-       Ajouter la ligne au fichier php.ini [[BR]]
+     * 3.1.6 activez l'extension vlmc dans le fichier php.ini
+       Ajouter la ligne au fichier php.ini
        {{{
        extension=vlmc.so
        }}}
+       
+       ou (debian way)
+        {{{
+           mv conf/vlmc.ini.dist /etc/php5/apache2/conf.d/vlmc.ini
+        }}}
 
-     * 3.1.7 (Optionnel pour debian, ok pour ubuntu depuis la 10.4) : recompiler php-gd : http://cumu.li/2008/5/13/recompiling-php5-with-bundled-support-for-gd-on-ubuntu
+     * 3.1.7 (Optionnel pour debian < 6 et ubuntu < 10.4)
+         Recompiler php-gd : http://cumu.li/2008/5/13/recompiling-php5-with-bundled-support-for-gd-on-ubuntu
      * 3.1.8 redémarrer apache {{{$ /etc/init.d/apache restart}}}
 
        En configuration local, si tout va bien, quand vous tapez {{{http://vlm/}}} dans votre navigateur préféré votre VLM arrive :)
 
-   * 3.2 Installer les cartes gshhs :
+   * 3.2 Installer les cartes gshhs (Opération longues a cause des downloads):
      * 3.2.1 déployer le module 'maps'
      * 3.3.2 Automatique, le script suivant va se lancer {{{./init-gshhs.sh}}}
        * le téléchargement s'opère et les fichiers sont décompressés dans le même répertoire
        * si vous avez plusieurs serveurs à déployer, vous pouvez éviter de retélécharger les maps en les copiant d'un serveur à l'autre depuis {{{VLMDATAS/maps/}}}
      * 3.3.3 Automatiquement, les maps vont être regénérées dans mysql par le script gshhs2mysql/import-gshhs.sh
+
+     * 3.2.2 déployer le module clip_gshhs
+         Il faudra peut être ajuster l'url de récupération (vlm) des fichiers de bd pour les côtes.
+        (penser à configurer le TILES_G_PATH si nécessaire dans le conf/param.php)
 
 = Le moteur sur le serveur maître =
  * 4. Mise en place du moteur 
