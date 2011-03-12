@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #pour récupérer le VLMJEUROOT
 source $VLMRACINE/conf/conf_script
 source $VLMRACINE/conf/conf_base
