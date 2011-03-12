@@ -125,25 +125,11 @@ Merci
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
      * 1.7.1 Déployer le module grib : {{{$ ~/scripts/maj_module.sh grib}}}
      * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)
-cd ~/tmp
-wget http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/cnvgrib-1.2.1.tar
-tar -xvf cnvgrib-1.2.1.tar
-cd cnvgrib-1.2.1
-nano makefile (REMPLACER g95 par f95)
-make
-<<marche pas>>
-gfortran -O3 -g -I /pub/share/ncoops/g2lib-1.2.1  -c -o pds2pdt.o pds2pdt.f
-pds2pdt.f:48.72:
-        use params                                                                                                                              1
-Fatal Error: Can't open module file 'params.mod' for reading at (1): No such file or directory
-make: *** [pds2pdt.o] Error 1
-<</marche pas>>
-NB: il faut ajouter les dépendances de cnvgrib...
-g2lib + edition makefile (voir plus haut)
- => presque ok, mais erreur en fin de compilation
- @@ libpng12-dev libjasper-dev
-Compiler aussi g2clib (et rajouter aux libs a linked de cnvgrib), ne pas oublier les options pour x_64, s'assurer dans g2clib que les fonctions ont le bon nom (au besoin editer enc/dec_jpeg2000 enc/dec_png pour avoir les symboles qui vont bien (voir les erreurs au link de cnvgrib, ex: #define SUB_NAME enc_png_ )
-
+       * le paquet de base de debian est le gfortran (g95 au lieu de f95, éditer le makefile)
+       * il faut ajouter les dépendances (g2lib, g2clib) (éditer le makefile pour le path)
+       * les dépendances libpng12-dev et libjasper-dev ont normalement été installées plus haute
+       * ne pas oublier les options de compilation pour x_64
+       * s'assurer dans g2clib que les fonctions ont le bon nom (au besoin editer enc/dec_jpeg2000 enc/dec_png pour avoir les symboles qui vont bien (voir les erreurs au link de cnvgrib, ex: #define SUB_NAME enc_png_ )
      * 1.7.3 Lancer manuellement {{{$ ~/bin/noaa.sh 00|06|12|18}}} (suivant l'horaire GMT).
        * Vérifier le retour dans vlmdatas/grib/logs.txt
      * 1.7.4 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.sample comme exemple)
