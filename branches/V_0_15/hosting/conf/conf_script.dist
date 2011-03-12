@@ -20,7 +20,7 @@ export VLMJEUROOT=$VLMRACINE/vlmcode
 export VLMTEMP=$VLMRACINE/tmp
 
 #Répertoire de stockage des logs
-export VLMLOG=$VLMTEMP
+export VLMLOG=$VLMRACINE/logs
 
 #Chemin du binaire svn
 export VLMSVNPATH=/usr/bin/svn
