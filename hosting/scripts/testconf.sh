@@ -19,6 +19,7 @@ mkdir -p $VLMGRIBS
 mkdir -p $VLMBIN
 mkdir -p $VLMDATAS
 mkdir -p $VLMGSHHS
+mkdir -p $VLMPOLARS
 
 echo "N'oubliez pas de créer si nécessaire les liens symboliques :"
 echo "- vers $VLMVLMCPHP/vlmc.php"
