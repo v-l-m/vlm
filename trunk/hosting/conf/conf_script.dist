@@ -5,7 +5,9 @@
 # Ajout depuis ip failover pour prod VLM
 SERVER_IP=`hostname -i`
 
-#Définition de la branche
+#Définition de la branche (trunk ou V_<majeur>_<mineur>
+# Exemple : export VLMSVNBRANCH=V_0_15
+# Exemple : export VLMSVNBRANCH=trunk
 export VLMSVNBRANCH=trunk
 
 #Utilisateur en charge de recuperer les gribs
@@ -18,7 +20,7 @@ export VLMJEUROOT=$VLMRACINE/vlmcode
 export VLMTEMP=$VLMRACINE/tmp
 
 #Répertoire de stockage des logs
-export VLMLOG=$VLMTEMP
+export VLMLOG=$VLMRACINE/logs
 
 #Chemin du binaire svn
 export VLMSVNPATH=/usr/bin/svn

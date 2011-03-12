@@ -19,7 +19,7 @@ mkdir -p $VLMGRIBS
 mkdir -p $VLMBIN
 mkdir -p $VLMDATAS
 mkdir -p $VLMGSHHS
+mkdir -p $VLMPOLARS
+mkdir -p $VLMCACHE
+mkdir -p $VLMLOG
 
-echo "N'oubliez pas de créer si nécessaire les liens symboliques :"
-echo "- vers $VLMVLMCPHP/vlmc.php"
-echo "- vers $VLMVLMCSO/vlmc.so"
