@@ -6,7 +6,7 @@
 #FIXER VLMRACINE ici s'il n'est pas défini comme variable d'environnement à ce stade.
 #VLMRACINE=/path/to/vlmracine
 
-source $VLMRACINE/conf/conf_script
+. $VLMRACINE/conf/conf_script
 
 GRIBPATH=$VLMGRIBS
 LATEST=latest.grb
