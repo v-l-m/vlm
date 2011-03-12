@@ -6,7 +6,7 @@ From 0.15 to Next:
 
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_15
-    - check SERVER_IP value, depending of your Centos centrics trouble shooting ;)
+    - check SERVER_IP value, depending of your Centos centrics troubleshooting ;)
     
   EDIT file ./conf/param.php
     - add """ define('MAX_GRIBTIME_FUTURE', 3*24*3600); """ 
