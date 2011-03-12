@@ -8,7 +8,7 @@ source $VLMRACINE/conf/conf_script
 
 PATH=$VLMBIN:$PATH
 
-#GRIBPATH=/path/to/gribfiles/grib - fixé dans le conf_script
+#GRIBPATH=/path/to/gribfiles/grib - fixe dans le conf_script
 GRIBPATH=$VLMGRIBS
 
 TMPGRIBPATH=$GRIBPATH/tmpgrib
@@ -66,21 +66,22 @@ for TSTAMP in `echo $allindexes` ; do
     echo $GRIBFILE converted >> $LOG 2>&1
     cat $GRIBFILE.grib1 >> ${PREFIX}-${DAT}${HH}.grb
     if [ $TSTAMP -gt $TIME_THRESHOLD ]; then
-    if [ ! -f $GRIBPATH/$INTERIM_NAME ]; then
-      cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_NAME
-    fi
-  # we change the weather now
-  windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
-  updated=1
+      if [ ! -f $GRIBPATH/$INTERIM_NAME ]; then
+        cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_NAME
+      fi
+      # we change the weather now
+      if [ $updated -eq 0 ]; then
+        windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
+        updated=1
+      fi
     fi
 done
 
 rm -f $GRIBPATH/$PREFIX*${HH}.grb
 
-# we change the weather now (if not done yet)
-if [ $updated -eq 0 ]; then
-    windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
-fi
+# we update the weather now 
+windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
+
 # then cleanup
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
