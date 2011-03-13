@@ -155,6 +155,11 @@ Merci
 = La base Mysql =
 
  * 2 Install de la base mysql sur le serveur maître (NB: si elle existe déjà, sauter cette étape mais lire le fichier UPDATE du module base)
+   * 2.0 Serveur mysql
+     * 2.0.1 Paramètrage de la base mysql : Voir le fichier my.cnf.debian.diff notamment pour les différences avec une stock debian.
+     * 2.0.2 Outils de monitoring
+       * mytop : {{{apt-get install mytop}}}
+       * mysqltuner : {{{apt-get install mysqltuner}}}
    * 2.1 Déploiement du module base : {{{$ ~/scripts/maj_module.sh base}}}
    * 2.2 Installation de la base de données mysql...
      * 2.2.1 vérifiez que vous avez bien paramétré le fichier ~/conf/conf_base (NB: l'utilisateur configuré dans ~/conf/conf_base ne dois pas exister, l'utilisateur 'temporary' non plus) (cf base_conf)
