@@ -49,5 +49,6 @@ define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
 //WIND PREFS
 define('MAX_GRIBTIME_FUTURE', 3*24*3600);
 
+define("VLM_PROXY_PASS", "password");
 
 ?>
