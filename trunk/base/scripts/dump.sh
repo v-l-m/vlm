@@ -6,7 +6,7 @@ dumpname="vlmdump.sql"
 
 echo "Dumping sql to $dumpname"
 
-mysqldump -h $DBSERVER -u $DBUSER --password=$DBPASSWORD --add-drop-table $DBNAME > $dumpname
+mysqldump -h $DBSERVER -u $DBUSER --password=$DBPASSWORD -add-locks --add-drop-table --insert-ignore --no-create-db --disable-keys $DBNAME > $dumpname
 
 echo "Zipping file to $dumpname.gz"
 
