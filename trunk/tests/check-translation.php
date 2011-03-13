@@ -25,6 +25,9 @@ $false_errors = Array(
       'images', 'faq', 'doc', 'forum', 'tchat', 'taverne', 'a12', 'contact', 'version', 'position', 'loch', 'estime', 'mapsize', 'proj', 'mercator', 'lambert', 'degrees',
       'vbvmgengaged', 'Mobiles', 'action',
       ),
+     'de' => Array(
+       'home', 'faq', 'email', 'forum', 'version', 'vbvmgengaged',
+      ),
     );
 
 $langs= array_keys($strings);
