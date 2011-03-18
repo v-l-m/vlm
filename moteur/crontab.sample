@@ -1,5 +1,11 @@
 # Moteur toutes les 5 minutes
 VLMRACINE=/base/de/vlm
 */5 * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm.sh
-2-59/5 * * * *     $VLMRACINE/testing/moteur/cron-vlm-clean.sh
+2-59/5 * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm-clean.sh
+
+# On the db
+0 2 * * 5	$VLMRACINE/vlmcode/moteur/cron-vlm-optimize.sh
+
+# On the tiles servers
+0 2 * * *	$VLMRACINE/vlmcode/moteur/clean_tilescache.sh > /dev/null
 
