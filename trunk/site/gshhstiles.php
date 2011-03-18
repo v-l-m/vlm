@@ -25,7 +25,10 @@
     
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
-        if (!is_dir($originaldir)) mkdir($originaldir, 0777, True);
+        if (!is_dir($originaldir)) {
+            umask(0002);
+            mkdir($originaldir, 0777, True);
+        }
         if (defined("TILES_SOURCE_SERVER")) {
             copy(sprintf("%s/%s", TILES_SOURCE_SERVER, $original), $original);
         } else if (file_exists($regular) ) {
