@@ -1,5 +1,55 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.15.2 to 0.15.5
+
+= NEPTUNE =
+
+  RUN (for each <module>)
+    ./maj_module.sh <module>
+  
+  EDIT crontab
+    and deactivate all jobs
+
+= S9 =
+
+  RUN
+    ./maj_module.sh base
+
+  EDIT crontab
+    deactivate vlm-cron-clean.sh
+    
+  RUN
+    ./vlmcode/base/dump-history.sh /var/www/tmpdump/vlm-history.sql
+
+= NEPTUNE =
+  
+  get the dump, and ./vlmcode/base/script/import.sh <it>
+
+= S9 = (From here, you have to be quick !)
+
+  EDIT crontab
+    deactivate vlm-cron.sh
+
+  RUN
+    ./vlmcode/base/dump-alive.sh
+
+= NEPTUNE =
+  
+  get the dump, and ./vlmcode/base/script/import.sh <it>
+
+= S9 & S11 =
+
+  EDIT
+    conf/param.php
+    and change database to be neptune
+
+  RUN
+    ./maj_module.sh lib/phpcommon
+
+= NEPTUNE =
+  
+  reactivate engine
+  
 From 0.14 to Next:
 
 = All servers =
