@@ -1439,7 +1439,7 @@ int main (int argc, char **argv)
 
     gdImageCopy(image_f, image, 0, 0, bord, bord, TileDim, TileDim);
 
-    umask(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+    umask(S_IWOTH);
     image_png = fopen(TilePath, "w");
     gdImagePng(image_f, image_png);
 
