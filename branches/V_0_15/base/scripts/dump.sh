@@ -2,7 +2,11 @@
 
 source $VLMRACINE/conf/conf_base
 
-dumpname="vlmdump.sql"
+dumpname=$1
+
+if test "$dumpname" = ""; then
+    dumpname="vlmdump.sql"
+fi
 
 echo "Dumping sql to ${dumpname}.gz"
 

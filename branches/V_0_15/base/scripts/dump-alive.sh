@@ -2,7 +2,11 @@
 
 source $VLMRACINE/conf/conf_base
 
-dumpname="vlmdump-alive.sql"
+dumpname=$1
+
+if test "$dumpname" = ""; then
+    dumpname="vlmdump-alive.sql"
+fi
 
 #dont dump : histpos modules_status
 TBNAMES="admin_changelog auto_pilot flags players players_pending playerstousers positions races races_instructions races_loch races_ranking races_results races_waypoints racesmap updates user_action user_prefs users waypoint_crossing waypoints"
