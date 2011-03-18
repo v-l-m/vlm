@@ -2,7 +2,11 @@
 
 source $VLMRACINE/conf/conf_base
 
-dumpname="vlmdump-history.sql"
+dumpname=$1
+
+if test "$dumpname" = ""; then
+    dumpname="vlmdump-history.sql"
+fi
 
 TBNAMES="histpos"
 
