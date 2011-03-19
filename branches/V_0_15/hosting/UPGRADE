@@ -1,5 +1,5 @@
 This file traces the changes that are required for upgrading from a previous VLM version
-
+___
 From 0.15.2 to 0.15.5
 
 = NEPTUNE =
@@ -8,7 +8,13 @@ From 0.15.2 to 0.15.5
     ./maj_module.sh <module>
   
   EDIT crontab
-    and deactivate all jobs
+    and deactivate clean-up and moteur
+
+= S9 & S11 =
+
+  EDIT
+    conf/param.php
+    and change database to be neptune
 
 = S9 =
 
@@ -37,19 +43,22 @@ From 0.15.2 to 0.15.5
   
   get the dump, and ./vlmcode/base/script/import.sh <it>
 
-= S9 & S11 =
+= DNS SERVER =
+  point virtual-loup-de-mer.org on Neptune.
 
-  EDIT
-    conf/param.php
-    and change database to be neptune
+= S9 & S11 =
 
   RUN
     ./maj_module.sh lib/phpcommon
 
 = NEPTUNE =
   
-  reactivate engine
+  reactivate engine (moteur & clean)
   
+= S9 & S11 =
+  make them slave for grib downloading
+
+____  
 From 0.14 to Next:
 
 = All servers =
