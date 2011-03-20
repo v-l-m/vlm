@@ -1,5 +1,14 @@
 #!/bin/sh
 
+### BEGIN INIT INFO
+# Provides:        windserver
+# Required-Start:  $network $remote_fs $syslog
+# Required-Stop:   $network $remote_fs $syslog
+# Default-Start:   2 3 4 5
+# Default-Stop: 
+# Short-Description: Start Windserver init
+### END INIT INFO
+
 # init script, be sure to call this before cron and apache are started
 # this script has been copied to $VLMBIN
 
