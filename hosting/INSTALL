@@ -144,6 +144,7 @@ Merci
        $ $VLMRACINE/vlmcode/grib/windserver.sh start
        }}}
        (stop pour le stopper)
+     * 1.7.8 (optionnel) déclarer un vhost grib.vlm.org en se basant sur l'exemple grib.vhost.example et vérifier le param.php pour l'url de gribs
 
    * 1.8 Configuration de la récupération des gribs (serveur esclave) 
      * 1.8.1 faire les 1.7.1 & 1.7.2 & 1.7.5 & 1.7.6
