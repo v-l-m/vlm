@@ -1,0 +1,7 @@
+ErrorDocument 403 /maintenance.html
+deny from all
+allow from 1.2.3.4 # Votre adresse IP
+ 
+<Files maintenance.php>
+  allow from all
+</Files>
