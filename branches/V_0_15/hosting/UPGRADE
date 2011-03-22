@@ -8,13 +8,18 @@ From 0.15.2 to 0.15.5
     ./maj_module.sh <module>
   
   EDIT crontab
-    and deactivate clean-up and moteur
+    and deactivate clean-up and moteur and other crontasks (except grib tasks)
 
 = S9 & S11 =
+
+  RUN
+    ./scripts/maj_module.sh scripts
+    ./scripts/maj_scripts.sh
 
   EDIT
     conf/param.php
     and change database to be neptune
+    (don't do anything else for now, this is just a preparation step)
 
 = S9 =
 
@@ -31,12 +36,18 @@ From 0.15.2 to 0.15.5
   
   get the dump, and ./vlmcode/base/script/import.sh <it>
 
+= S11 =
+
+  RUN
+    ./scripts/maintenance.sh "Calling Neptune..."
+
 = S9 = (From here, you have to be quick !)
 
   EDIT crontab
-    deactivate vlm-cron.sh
+    deactivate vlm-cron.sh (and others as well)
 
   RUN
+    ./scripts/maintenance.sh "Calling Neptune..."
     ./vlmcode/base/dump-alive.sh
 
 = NEPTUNE =
@@ -49,7 +60,8 @@ From 0.15.2 to 0.15.5
 = S9 & S11 =
 
   RUN
-    ./maj_module.sh lib/phpcommon
+    ./scripts/maj_module.sh lib/phpcommon
+    ./scripts/maj_module.sh site
 
 = NEPTUNE =
   
