@@ -19,7 +19,7 @@
                 Allow from All
 
                 AllowOverride All
-                Options Indexes Includes
+                Options Indexes Includes FollowSymLinks
 
                 AddType application/x-httpd-php .php
 
