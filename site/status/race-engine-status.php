@@ -17,7 +17,7 @@ include("../includes/header-status.inc");
     <div id="racesdetailstatus">
     <h2>Race detailed status</h2>
     <table>
-    <tr><th>id</th><th>Racename</th><th>Participants</th><th>Last update</th><th>Crank frequency</th><th>Time from update</th></tr>
+    <tr><th>id</th><th>Racename</th><th>Participants</th><th>Last update</th><th>Crank frequency</th><th>Time since update</th></tr>
 <?php
 
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
