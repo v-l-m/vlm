@@ -5,7 +5,7 @@ From 0.15 to Next:
 = All servers =
 
   EDIT file ./conf/conf_script 
-    - change VLM SVNBRANCH to V_0_15
+    - change VLM SVNBRANCH to V_0_16
     - check SERVER_IP value, depending of your Centos centrics troubleshooting ;)
     
   EDIT file ./conf/param.php
@@ -48,6 +48,83 @@ From 0.15 to Next:
   RESTART VLM Engine (un-comment)
   EDIT crontab, and add tiles clean-up (see crontab example)
 
+___
+From 0.15.2 to 0.15.5
+
+= DNS =
+  TTL DNS a zero (à 6)
+
+= NEPTUNE =
+
+  RUN (for each <module>)
+    ./maj_module.sh <module>
+
+  EDIT crontab
+    and deactivate clean-up and moteur and other crontasks (except grib tasks)
+
+= S9 & S11 =
+
+  RUN
+    ./scripts/maj_scripts.sh
+    ./scripts/maj_module.sh site
+
+  EDIT
+    conf/param.php
+    and change database to be neptune
+    (don't do anything else for now, this is just a preparation step)
+
+= S9 =
+
+  RUN
+    ./maj_module.sh base
+
+  EDIT crontab
+    deactivate vlm-cron-clean.sh
+
+  RUN
+    ./vlmcode/base/dump-history.sh /var/www/tmpdump/vlm-history.sql
+
+= NEPTUNE =
+
+  get the dump, and ./vlmcode/base/script/import.sh <it>
+
+= S11 =
+
+  RUN
+    ./scripts/maintenance.sh "Calling Neptune..."
+
+= S9 = (From here, you have to be quick !)
+
+  EDIT crontab
+    deactivate vlm-cron.sh (and others as well)
+
+  RUN
+    ./scripts/maintenance.sh "Calling Neptune..."
+    ./vlmcode/base/dump-alive.sh
+
+= NEPTUNE =
+
+  get the dump, and ./vlmcode/base/script/import.sh <it>
+
+= DNS SERVER =
+  point virtual-loup-de-mer.org on Neptune.
+
+= S9 & S11 =
+
+  RUN
+    ./scripts/maj_module.sh lib/phpcommon
+    ./scripts/maj_module.sh site
+
+= NEPTUNE =
+
+  reactivate engine (moteur & clean)
+
+= S9 & S11 =
+
+  make them slave for grib downloading
+  Dans conf/conf_script, on mentionne l'url : grib.virtual-loup-de-mer.org.
+  Dans crontab de S9, passer de "noaa.sh" à noaa-slave.sh".  OK
+___
 From 0.14 to Next:
 
 = All servers =
