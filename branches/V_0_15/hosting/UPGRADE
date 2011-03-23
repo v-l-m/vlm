@@ -2,6 +2,9 @@ This file traces the changes that are required for upgrading from a previous VLM
 ___
 From 0.15.2 to 0.15.5
 
+= DNS =
+  TTL DNS a zero (à 6)
+
 = NEPTUNE =
 
   RUN (for each <module>)
@@ -13,8 +16,8 @@ From 0.15.2 to 0.15.5
 = S9 & S11 =
 
   RUN
-    ./scripts/maj_module.sh scripts
     ./scripts/maj_scripts.sh
+    ./scripts/maj_module.sh site
 
   EDIT
     conf/param.php
@@ -68,8 +71,10 @@ From 0.15.2 to 0.15.5
   reactivate engine (moteur & clean)
   
 = S9 & S11 =
-  make them slave for grib downloading
 
+  make them slave for grib downloading
+  Dans conf/conf_script, on mentionne l'url : grib.virtual-loup-de-mer.org.
+  Dans crontab de S9, passer de "noaa.sh" à noaa-slave.sh".  OK
 ____  
 From 0.14 to Next:
 
