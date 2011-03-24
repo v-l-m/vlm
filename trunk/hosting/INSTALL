@@ -122,6 +122,9 @@ Merci
        kernel.shmall=2097152
        }}}
 
+     * 1.6.5 prise en compte du nouveau systcl :
+       {{{sysctl -p /etc/sysctl.d/vlm.sysctl.conf}}}
+
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
      * 1.7.1 Déployer le module grib : {{{$ ~/scripts/maj_module.sh grib}}}
      * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)

@@ -30,11 +30,10 @@ export VLMBIN=$VLMRACINE/bin
 
 #Chemin du binaire PHP et autres
 # Please add following flag for developement servers --define error_reporting=E_ALL --define display_errors=stderr
-export VLMPHPPATH="/opt/php/bin/php --define extension=vlmc.so --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
+export VLMPHPPATH="/usr/bin/php --define include_path=.:/usr/share/php:$VLMJEUROOT/lib/phpcommon"
+#CENTOS export VLMPHPPATH="/opt/php/bin/php --define extension=vlmc.so --define include_path=.:/opt/php/lib/php:$VLMJEUROOT/lib/phpcommon"
 export VLMVLMCPHP=$VLMRACINE/bin/lib
 export VLMVLMCSO=$VLMRACINE/bin/lib
-#DEBIAN:
-#export VLMPHPPATH="/usr/bin/php --define include_path=.:/usr/share/php5:$VLMJEUROOT/lib/phpcommon"
 
 #Racine des datas du jeu
 export VLMDATAS=$VLMRACINE/vlmdatas

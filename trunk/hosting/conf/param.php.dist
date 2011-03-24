@@ -27,10 +27,8 @@ define("POLARS_DIRECTORY", "/same/as/VLMPOLARS");
 define("VLMTEMP", "/path/to/VLMRACINE/tmp");
 
 //LIST OF WEB INSTANCES - please note that it is not possible to define an array(), thus the method below
-define("WEBINSTANCE_COUNT", 3);
-define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
-define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
-define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
+define("WEBINSTANCE_COUNT", 1);
+define("WEBINSTANCE_1", "testing.virtual-loup-de-mer.org" );
 
 //LANG PREFS - Default is False, uncomment for dev server
 //define_if_not("DISPLAY_LANG_WARNINGS", True);
