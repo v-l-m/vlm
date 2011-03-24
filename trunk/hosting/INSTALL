@@ -21,11 +21,10 @@ Merci
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_15''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
    * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo}}}
-
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo mysqltuner apachetop mytop make}}}
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
-     * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig}}}).
+     * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig make}}}).
        * Sur d'autres systemes (RHEL / CentOS), le compiler (choisir pour l'instant 1.3.36, même si 1.3.37 est disponible) :
              {{{wget -O - http://downloads.sourceforge.net/swig/swig-1.3.36.tar.gz | tar xz && chown -R 0.0 swig-1.3.36 ; }}}
              {{{cd swig-1.3.36 && ./configure --prefix=/opt/swig --with-php=$(\which php) && make && make install}}}
@@ -38,6 +37,7 @@ Merci
      * 0.2.7 gfortran (debian: {{{apt-get install gfortran}}} (pour cnvgrib)
      * 0.2.8 libgd, jasper, png (debian: {{{apt-get install libgd2-xpm-dev libpng12-dev libjasper-dev}}}
      * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
+     * 0.2.10 mytop apachetop mysqltuner {{{apt-get install mytop apachetop mysqltuner}}} pour le monitoring
    * 0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
@@ -135,7 +135,7 @@ Merci
      * 1.7.4 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.sample comme exemple)
      * 1.7.5 Déclarer VLMGRIBUSER dans le script de configuration (voir VLMRACINE/conf/conf_script)
      * 1.7.6 Déclarer l'init du windserver au boot (script d'init en exemple fournit dans VLMJEUROOT/grib)
-      * 1.7.6.1 Copie : {{{cp ~/vlmcode/grib/windserver.sh /etc/init.d/windserver}}}
+      * 1.7.6.1 Copie : {{{cp $VLMRACINE/vlmcode/grib/windserver.sh /etc/init.d/windserver}}}
       * 1.7.6.2 Prise en charge suivant les runlevels
                 {{{update-rc.d windserver start 30 2 3 4 5 . stop 70 0 1 6 .}}}
       * 1.7.6.3 N'oubliez pas que VLMRACINE doit être déclaré
@@ -158,7 +158,7 @@ Merci
  * 2 Install de la base mysql sur le serveur maître (NB: si elle existe déjà, sauter cette étape mais lire le fichier UPDATE du module base)
    * 2.0 Serveur mysql
      * 2.0.1 Paramètrage de la base mysql : Voir le fichier my.cnf.debian.diff notamment pour les différences avec une stock debian.
-     * 2.0.2 Outils de monitoring
+     * 2.0.2 (Optionnel) Outils de monitoring
        * mytop : {{{apt-get install mytop}}}
        * mysqltuner : {{{apt-get install mysqltuner}}}
    * 2.1 Déploiement du module base : {{{$ ~/scripts/maj_module.sh base}}}
@@ -188,7 +188,7 @@ Merci
    * 3.1 déploiement des autres modules
      * 3.1.1 lister les modules via {{{~/scripts/maj_module.sh}}}
      * 3.1.2 installer (ou réinstaller) chaque module de la liste via {{{~/scripts/maj_module.sh NOMDUMODULE}}}
-     (site, lib/phpcommon medias guest_map jvlm)
+     (site, lib/phpcommon medias guest_map jvlm externals)
 
      * 3.1.3 configurer le vhost en le pointant vers ~/vlmcode/site en s'inspirant de l'exemple apache.vhost.example qui est dans le répertoire conf). Les logs doivent aller dans $VLMLOG/apache2
 
@@ -258,7 +258,7 @@ Merci
        
        ou (debian way)
         {{{
-           mv conf/vlmc.ini.dist /etc/php5/apache2/conf.d/vlmc.ini
+           mv /home/vlm/conf/vlmc.ini.dist /etc/php5/apache2/conf.d/vlmc.ini
         }}}
 
      * 3.1.7 (Optionnel pour debian < 6 et ubuntu < 10.4)
