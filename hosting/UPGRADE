@@ -9,7 +9,7 @@ From 0.15 to Next:
     - check SERVER_IP value, depending of your Centos centrics troubleshooting ;)
     
   EDIT file ./conf/param.php
-    - add """ define('MAX_GRIBTIME_FUTURE', 3*24*3600); """ 
+    - add """ define('MAX_GRIBTIME_FUTURE', 4*24*3600); """
       check the consistency of this value according to conf_script VLM_GRIB_MAX_TIME value.
       warning, MAX_GRIBTIME_FUTURE is in seconds, VLM_GRIB_MAX_TIME is in hours
 
