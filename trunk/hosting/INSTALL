@@ -285,6 +285,12 @@ Merci
  * 4. Mise en place du moteur 
    * 4.1 déployer le moteur si ce n'est déjà fait via {{{~/scripts/maj_modules.sh moteur}}}
    * 4.2 utiliser le crontab.example comme exemple pour paramètrer le cron
+   
+= (Optionnel) Les ajouts systems =
+ * 5. Logrotate
+   * 5.1 {{{apt-get install logrotate}}}
+   * 5.2 Installer la rotation pour les logs apache de vlm
+       {{{cp /home/vlm/conf/vlm-apache2.logrotate.dist /etc/logrotate.d/}}}   
 
 = Notes pour les versions futures =
 

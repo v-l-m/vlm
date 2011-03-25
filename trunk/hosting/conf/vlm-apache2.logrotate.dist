@@ -1,0 +1,14 @@
+/home/vlm/logs/apache2/*.log {
+        daily
+        missingok
+        rotate 52
+        compress
+        delaycompress
+        notifempty
+        create 640 vlm vlm
+        sharedscripts
+        postrotate
+                /etc/init.d/apache2 reload > /dev/null
+        endscript
+}
+
