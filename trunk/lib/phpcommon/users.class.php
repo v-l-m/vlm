@@ -1355,7 +1355,7 @@ class fullUsers
       wrapper_mysql_db_query_writer($query7);
 
       // Delete old positions from races_results (in case of sub/unsub/sub again) (only if not TYPE_RECORD)
-      if ( $this->races->racetype != RACE_TYPE_RECORD ) {
+      if ( !$this->races->isRacetype(RACE_TYPE_RECORD) ) {
         $query_clean_races_results = "DELETE FROM races_results WHERE `idraces` = ". $id .
           " AND `idusers` = " . $this->users->idusers;
         wrapper_mysql_db_query_writer($query_clean_races_results);
