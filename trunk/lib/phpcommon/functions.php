@@ -1436,7 +1436,6 @@ function getLoggedUserObject() {
     return $user;
 }
 
-
 function getUserObject($id, $initrow = NULL) {
   static $uobjects = Array();
   $id = intval($id);
@@ -1463,6 +1462,35 @@ function getUserObject($id, $initrow = NULL) {
     return NULL;
   }
 }
+
+function getRaceObject($id, $initrow = NULL) {
+  static $robjects = Array();
+  $id = intval($id);
+
+  //TO PROTECT FROM POTENTIAL SIDE EFFECTS (?)
+  //Need testing to remove
+  if (!defined('MOTEUR') && array_key_exists($id, $robjects)) {
+    return $robjects[$id];
+  }
+  
+  require_once('races.class.php');
+  if (is_null($initrow)) {
+    $r = new races($id);
+  } else {
+    $r = new users($id, FALSE);
+    $r->initFromArray($initrow);
+  }
+
+  if ($r->idraces == $id and $id > 0) {
+    if (!defined('MOTEUR')) {
+      $robjects[$id] = $r;
+    }
+    return $r;
+  } else {
+    return NULL;
+  }
+}
+
 
 function getPlayerList($where = null) {
     $list = array();
@@ -1838,7 +1866,7 @@ function availableRaces($idusers = 0)
   if ( $idusers == 0 ) return ($records);
 
   $timestamp = time();
-  $query = "SELECT idraces,depend_on,qualifying_races,maxboats FROM races ".
+  $query = "SELECT idraces,depend_on,qualifying_races,maxboats,racetype FROM races ".
     "WHERE started=".RACE_PENDING.
     " OR ( closetime > $timestamp OR closetime=0) ORDER BY deptime ASC";
   //printf ("Query : %s\n", $query);
@@ -1855,7 +1883,6 @@ function availableRaces($idusers = 0)
       }
   }
 
-  
   $allRacesRows = array();
   $allRacesIds  = array();
   while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -1870,11 +1897,10 @@ function availableRaces($idusers = 0)
     $num_arrived = $numopps['num_arrived'];
     $num_racing  = $numopps['num_racing'];
     $num_engaged = $numopps['num_engaged'];
-
-    if ( $row['maxboats'] != 0 && $num_engaged >= $row['maxboats'] ) {
+	 {
       continue;
     }
-    if ( in_array($idraces, $omorob_restriction)) continue;
+    if ( in_array($idraces, $omorob_restriction) && !($row['racetype'] & RACE_TYPE_OMORMB) ) continue;
     
     // si pas de course de qualification, on ajoute
     if ( $row['qualifying_races'] == "" ) {

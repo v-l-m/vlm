@@ -40,7 +40,7 @@ $opts['fdd']['idwaypoint'] = array(
 
 $opts['fdd']['wpformat'] = array(
   'name'     => 'Wpformat',
-  'help'     => nl2br("Wp format (for future v0.14)"),
+  'help'     => nl2br("Wp format"),
   'select|FLDV'   => 'M',
   'select|ACP'   => 'C',
   'values2' => Array(
