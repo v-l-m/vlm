@@ -168,9 +168,10 @@
     define ("PILOTOTO_KEEP", 7*86400);
     define ("PILOTOTO_MAX_EVENTS", 5);
 
-    // Type de courses
-    define ("RACE_TYPE_CLASSIC",0);
+    // Bitmask pour spécifier les types de course
+    define ("RACE_TYPE_CLASSIC",0); //For the record
     define ("RACE_TYPE_RECORD", 1);
+    define ("RACE_TYPE_OMORMB", 2); // Deactivate OMOROB (MB = Many boats)
 
     // Race codes
     define ("RACE_ENDED"  , -1);

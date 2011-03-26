@@ -69,7 +69,7 @@ class races {
   }
 
   function isRacetype($type) {
-      return ($this->racetype & $type);
+      return (($this->racetype & $type) > 0);
   }
   
   function getWPs() {

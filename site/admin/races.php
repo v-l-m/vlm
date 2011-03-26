@@ -168,10 +168,17 @@ $opts['fdd']['closetime'] = array(
 );
 $opts['fdd']['racetype'] = array(
   'name'     => 'Race type',
-  'select'   => 'D',
-  'values2'  => Array('0' => 'One shot', '1' => 'Permanent'), 
+  'help'     => nl2br("1 => Permanent/record race\n2 => OMORMB"),
+  'select'   => 'T',
   'maxlen'   => 11,
-  'sort'     => true
+//  'select|FLDV'   => 'M',
+//  'select|ACP'   => 'C',
+//  'values2' => Array(
+//      RACE_TYPE_RECORD => "RACE_TYPE_RECORD",
+//      RACE_TYPE_OMORMB => "RACE_TYPE_OMORMB",
+//      ),
+//  'sql' => 'MAKE_SET(`racetype`, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096)',
+    'sort'     => true
 );
 $opts['fdd']['firstpcttime'] = array(
   'name'     => 'Firstpct time',
@@ -271,6 +278,11 @@ $opts['triggers']['delete']['after'][0] = 'races.TAD.trigger.php';
 $opts['triggers']['insert']['pre'][0] = 'races.TPI.trigger.php';
 $opts['triggers']['insert']['after'][0] = 'races.TAI.trigger.php';
 //$opts['triggers']['select']['pre'][0] = 'races.TPS.trigger.php';
+//$opts['triggers']['update']['before'][0] = 'races.TBU.trigger.php';
+
+//force basic pme class.
+//require_once('../externals/phpMyEdit/phpMyEdit.class.php');
+//$pmeinstance = new phpMyEdit($opts);
 
 include('adminfooter.php');
 
