@@ -524,6 +524,11 @@ class fullRaces {
   //                                           //
   //===========================================//
 
+  static function cmpEngaged($a, $b) {
+      return (($a->country."_".$a->idusers) < ($b->country."_".$b->idusers)) ? -1 : 1;
+  }
+    
+
   function dispHtmlEngaged()
   {
     //table header
@@ -540,6 +545,9 @@ class fullRaces {
     //for xhtml  compliance, find other solution - tbody can't be void
 
     $num_inscrits=0;
+
+    uasort($this->opponents, array("Fullraces", "cmpEngaged"));
+
     foreach ($this->opponents as $users) {
         echo "    <tr class=ranking>\n";
         // ============= Affichage des noms de bateaux en acronyme
