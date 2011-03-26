@@ -181,7 +181,7 @@
             if ( isset($sortkey) && $sortkey != "" ) {
                 $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, $sortkey , $sortorder, 0, $startnum);
             } else {
-                if ( $fullRacesObj->races->racetype == RACE_TYPE_RECORD ) {
+                if ( $fullRacesObj->races->isRacetype(RACE_TYPE_RECORD) ) {
                     // dispHtmlResults : 2 derniers paramètres = critère de tri + ordre (asc/desc)
                     // Pour une course record : c'est le temps de course par défaut
                     $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "duration" , "asc" ,0,  $startnum);
@@ -194,7 +194,7 @@
 
         if ( strstr($q, "WP") ) {
             //echo "<H1>Classement au WP ".substr($q,2) ."</H1>";
-            if ( $fullRacesObj->races->racetype == RACE_TYPE_RECORD ) {
+            if ( $fullRacesObj->races->isRacetype(RACE_TYPE_RECORD) ) {
                 // Pour une course record : c'est le temps de course par défaut
                 $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "duration" , "asc" , substr($q,2), 0, $startnum);
             } else {

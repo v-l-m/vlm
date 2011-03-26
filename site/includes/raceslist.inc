@@ -37,6 +37,7 @@
       $firstpcttime = $row['firstpcttime'];
       $maxboats     = $row['maxboats'];
       $racetype     = $row['racetype'];
+      $racerecord   = $racetype & RACE_TYPE_RECORD ? 1 : 0;
       
       $numopps = $allNumOpponents[$idraces];
       $num_arrived = $numopps['num_arrived'];
@@ -49,7 +50,7 @@
         if ( $dep < $time AND $closetime <$time ) { //no race planned
             printf("      ".getLocalizedString("norace")."\n");
         } else {
-            echo "<table class=\"racesummary-type$racetype\">\n<tr class=\"racesummary-type$racetype\">\n";
+            echo "<table class=\"racesummary-type$racerecord\">\n<tr class=\"racesummary-type$racerecord\">\n";
             echo "<td class=\"racesummary-minimap\">";
             // Carte de la course
             $href = "/".DIRECTORY_RACEMAPS."/".$idraces.".png";
@@ -67,7 +68,7 @@
             } 
             echo "</td>\n";
       
-            echo "<td class=\"racesummary-type$racetype\">";
+            echo "<td class=\"racesummary-type$racerecord\">";
             //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
             $urlidraces  = htmlIdracesLink($idraces); // pointe vers les ICS
             $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
@@ -91,7 +92,7 @@
                 $duration = duration2string(-$duration);
                 printf("    <li>".getLocalizedString("openrace") . $strengaged."</li>\n", $duration['days'],$duration['hours'],$duration['minutes']);
             }
-            if ($racetype == RACE_TYPE_RECORD) {
+            if ($racetype & RACE_TYPE_RECORD) {
                 echo "<li>".getLocalizedString("This is a permanent/record race").".</li>";
             }
         

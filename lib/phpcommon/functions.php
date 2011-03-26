@@ -942,7 +942,7 @@ function htmlRacesListRow($rowdatas) {
 
       $html .= "<tr>\n";
       $html .= "<td>";
-      if ( $rowdatas['racetype'] == RACE_TYPE_RECORD ) {
+      if ( $rowdatas['racetype'] & RACE_TYPE_RECORD ) {
           $html .= "<img src=\"/images/site/P.png\" alt=\"Permanent\" />";
       }
       $html .= htmlIdracesLink($rowdatas['idraces'])."</td>\n";

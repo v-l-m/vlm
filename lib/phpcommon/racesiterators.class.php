@@ -27,7 +27,7 @@
         function __construct() {
             $this->query = "SELECT * FROM `races` ".
                            "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
-                           "AND racetype = ".RACE_TYPE_CLASSIC. " ORDER BY started ASC, deptime ASC, closetime ASC " ;
+                           "AND !(racetype & ".RACE_TYPE_RECORD. ") ORDER BY started ASC, deptime ASC, closetime ASC " ;
             parent::__construct();
         }
 
@@ -65,7 +65,7 @@
 
         function __construct() {
             $this->query = "SELECT * FROM races ".
-                           " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND racetype = ".RACE_TYPE_CLASSIC.
+                           " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND !(racetype & ".RACE_TYPE_RECORD.") ".
                            " ORDER BY started ASC, deptime ASC, closetime ASC ";
             parent::__construct();
         }
@@ -98,7 +98,7 @@
         function __construct() {
           $this->query = "SELECT * FROM races ".
                           "WHERE ( ( started = ".RACE_PENDING." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
-                          "AND racetype = ".RACE_TYPE_CLASSIC." ORDER BY started ASC, deptime ASC, closetime ASC ";
+                          "AND !(racetype & ".RACE_TYPE_RECORD.") ORDER BY started ASC, deptime ASC, closetime ASC ";
           parent::__construct();
         }
 

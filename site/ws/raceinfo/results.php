@@ -20,7 +20,7 @@
               WHERE     idraces=".$races->idraces."
               AND       US.idusers = RR.idusers
               AND       position=" . $status . " " ;
-    if ( $races->racetype == RACE_TYPE_RECORD ) {
+    if ( $races->isRacetype(RACE_TYPE_RECORD) ) {
         // Pour une course record : c'est le temps de course par défaut
         $query .= " ORDER BY duration ASC";
     } else {

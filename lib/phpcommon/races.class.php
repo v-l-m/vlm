@@ -67,6 +67,10 @@ class races {
                                                //frequence des runs du moteur
     $this->updated          = $row['updated']; //derniere mise à jour de l'enregistrement
   }
+
+  function isRacetype($type) {
+      return ($this->racetype & $type);
+  }
   
   function getWPs() {
     $this->retrieveWPs();
@@ -206,11 +210,6 @@ class races {
   //                  => on calcule cette valeur
   //        <0 lorsque pourcentage en plus du temps du premier est dépassé
   function maxTimeRemaining($verbose = 0) {
-    // Si course "record", il n'y avait pas de temps limite... 
-    // if ( $this->races->racetype == RACE_TYPE_RECORD ) {
-    //     return (0);
-    //  }
-    // => depuis le 14/10/2007, il y en a un : 2*PCT du temps du premier
 
     // On est encore là... c'est une course classique
     // Recherche du temps de course du premier (dans races_results)
@@ -231,7 +230,7 @@ class races {
     }
     
     // Sur course RECORD, c'est 2 * le pourcentage du temps du premier
-    if ( $this->racetype == RACE_TYPE_RECORD ) {
+    if ( $this->isRacetype(RACE_TYPE_RECORD) ) {
       $maxArrivalTime = $this->closetime + ($WinnersRaceDuration *
 					    (1 + $this->firstpcttime/100));
     } else {
@@ -1161,7 +1160,7 @@ class fullRaces {
           if ( $rank == 1 ) {
             printf("<td>%s</td>\n",getLocalizedString("winner"));
           } else {
-            if ( $this->races->racetype == RACE_TYPE_CLASSIC) { // && $WP == 0 ) { - Cf. ticket #237
+            if ( !$this->races->isRacetype(RACE_TYPE_RECORD)) { // Pas de condition $WP == 0 ) { - Cf. ticket #237
               // ARRIVAL DATE IS THE SORTING KEY
               $ecart = duration2string($arrivaltime - $ref_arrivaltime);
               // PCT =      difference de temps de course / temps de course du vainqueur

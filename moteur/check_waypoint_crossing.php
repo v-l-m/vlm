@@ -161,15 +161,15 @@ if (!$wp_invalidated) {
       // Temps de course (entre départ et passage de la ligne )
       // ======================================================
       // Calcul exact de duration. 
-      // On en prend $fullRacesObj->races-deptime (si racetype =0),
-      // mais on prend $fullUsersObj->users->userdeptime si racetype = 1
-      if ( $fullRacesObj->races->racetype == RACE_TYPE_CLASSIC ) {
-	$deptime = $fullRacesObj->races->deptime  ;
+      // On en prend $fullRacesObj->races-deptime (si racetype n'est pas un record),
+      // mais on prend $fullUsersObj->users->userdeptime si racetype = 1 (record race)
+      if ( !$fullRacesObj->races->isRacetype(RACE_TYPE_RECORD) ) {
+        	$deptime = $fullRacesObj->races->deptime  ;
       } else {
-	// Cas RACE_TYPE_RECORD
-	$deptime = $fullUsersObj->users->userdeptime  ;
-	// Au cas où problème de MAJ de userdeptime (cf arrivée de la 46)
-	//$deptime = $fullRacesObj->races->deptime  ;
+	        // Cas RACE_TYPE_RECORD
+	        $deptime = $fullUsersObj->users->userdeptime  ;
+	        // Au cas où problème de MAJ de userdeptime (cf arrivée de la 46)
+	        //$deptime = $fullRacesObj->races->deptime  ;
       }
       
       // Duration c'est la somme de :
@@ -214,7 +214,7 @@ if (!$wp_invalidated) {
 	}
 	
 	//insert score in database (or update if it is a "TYPE_RECORD" race)
-	if ( $fullRacesObj->races->racetype == RACE_TYPE_CLASSIC ) {
+	if ( !$fullRacesObj->races->isRacetype(RACE_TYPE_RECORD) ) {
 	  $query = "INSERT INTO races_results 
                              ( idraces, idusers, position,  deptime, duration, loch, longitude, latitude)
                              VALUES ("  . $fullRacesObj->races->idraces .
