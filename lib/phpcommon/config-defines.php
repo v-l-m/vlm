@@ -220,7 +220,7 @@
     //PREFS
     // NOTSET (for user_prefs)
     define("NOTSET", "NULL");
-    define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname");
+    define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname,frogDatas");
 
     // WAYPOINTS
     define("WP_TWO_BUOYS", 0);
