@@ -4,7 +4,8 @@
    <policy>
      <allow-from http-request-headers="*">
        <domain uri="http://frogeater.dyndns.org"/> 
-       <domain uri="http://frogeater.net23.net"/>
+       <domain uri="http://virtual-winds.com"/>
+       <domain uri="http://silverlight.virtual-loup-de-mer.org"/>
      </allow-from>
      <grant-to>
        <resource include-subpaths="true" path="/"/>
