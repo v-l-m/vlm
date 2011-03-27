@@ -1222,6 +1222,7 @@ class map
   function drawRealBoatPositions($projCallbackLong, $projCallbackLat) {
     $this->setFuncProjLat($projCallbackLat);
     $this->setFuncProjLong($projCallbackLong);  
+    $font = 1; //FIXME HARDCODED
 
     $boats=getRealBoats();
     $drawn=array();
