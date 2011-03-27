@@ -332,20 +332,22 @@ function get_requested_output_format($allowed_fmt = null) {
       //else, we still try to autodetect...
   }
 
-  if (preg_match(',application/json(;q=(d?.d+))?,i', 
+  if (isset($_SERVER['HTTP_ACCEPT'])) { // because some clients like tcv don't send http_accept headers
+      if (preg_match(',application/json(;q=(d?.d+))?,i', 
+                      $_SERVER['HTTP_ACCEPT'], $res)) {
+        $qjson = (isset($res[2]))? $res[2] : 1;
+        $sjson = true;
+      }
+      
+      if (preg_match(',text/plain(;q=(d?.d+))?,i', 
+                      $_SERVER['HTTP_ACCEPT'], $res)) {
+        $qplain = (isset($res[2]))? $res[2] : 1;
+        $splain = true;
+      } else if (preg_match(',text/\*(;q=(d?.d+))?,i', 
                   $_SERVER['HTTP_ACCEPT'], $res)) {
-    $qjson = (isset($res[2]))? $res[2] : 1;
-    $sjson = true;
-  }
-  
-  if (preg_match(',text/plain(;q=(d?.d+))?,i', 
-                  $_SERVER['HTTP_ACCEPT'], $res)) {
-    $qplain = (isset($res[2]))? $res[2] : 1;
-    $splain = true;
-  } else if (preg_match(',text/\*(;q=(d?.d+))?,i', 
-              $_SERVER['HTTP_ACCEPT'], $res)) {
-    $qplain = (isset($res[2]))? $res[2] : 1;
-    $splain = true;
+        $qplain = (isset($res[2]))? $res[2] : 1;
+        $splain = true;
+      }
   }
   if ($qplain > $qjson) {
     return "text";
