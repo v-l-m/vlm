@@ -21,7 +21,7 @@ Merci
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_15''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
    * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo mysqltuner apachetop mytop make libmysqlclient-dev}}}
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo mysqltuner apachetop mytop make libmysqlclient-dev less gfortran libgfortran3}}}
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
      * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig make}}}).
@@ -34,7 +34,7 @@ Merci
      * 0.2.4 apache (debian: {{{apt-get install apache2}}})
      * 0.2.5 mysql (debian: {{{apt-get install mysql-server}}}) donner un mot de passe pour la base MySQL, il vous sera demandé plus tard.
      * 0.2.6 unzip dans votre path et installé (debian: {{{apt-get install unzip}}})
-     * 0.2.7 gfortran (debian: {{{apt-get install gfortran}}} (pour cnvgrib)
+     * 0.2.7 gfortran (debian: {{{apt-get install gfortran libgfortran3}}} (pour cnvgrib)
      * 0.2.8 libgd, jasper, png (debian: {{{apt-get install libgd2-xpm-dev libpng12-dev libjasper-dev}}}
      * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
      * 0.2.10 mytop apachetop mysqltuner {{{apt-get install mytop apachetop mysqltuner}}} pour le monitoring
