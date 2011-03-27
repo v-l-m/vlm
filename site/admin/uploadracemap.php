@@ -9,8 +9,8 @@
         if ($idnewrace <1 ) {
             die("<h1>ERROR : Racemap id malformed</h1>");
             }
-        if (function_exists("exif_imagetype") and exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_JPEG) {
-            die("<h1>ERROR : Not a Jpeg file...</h1>");
+        if (function_exists("exif_imagetype") and exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
+            die("<h1>ERROR : Not a Png file...</h1>");
         }
 
         echo "<h3>Image uploaded for race : $idnewrace.</h3>";
@@ -35,7 +35,7 @@
             <input type="hidden" name="MAX_FILE_SIZE" value="2500000" />
             <input type="hidden" name="action" value="upload" />
             Idraces:&nbsp;<input type="text" name="idnewrace" size="12" <?php if ($idnewrace > 0) echo "value=\"$idnewrace\""; ?> /><br />
-            Fichier jpeg:&nbsp;<input type="file" name="fic" maxlength="250" size="50" /><br />
+            Fichier png:&nbsp;<input type="file" name="fic" maxlength="250" size="50" /><br />
             <input type="submit" value="Envoyer" />
         </form>
 <?php
