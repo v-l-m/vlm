@@ -116,7 +116,9 @@
         } 
     }
     send_json_header();
-    if (empty($windgrid)) $windgrid = (object) null;
-    echo json_encode((object)$windgrid);
+    //REVERT : object format is not mandatory for json
+    //if (empty($windgrid)) $windgrid = (object) null;
+    //echo json_encode((object)$windgrid);
+    echo json_encode($windgrid);
 
 ?>
