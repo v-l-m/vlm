@@ -28,7 +28,16 @@
         $new_x = 180;
         $new_y = $new_x/$ratio;
 
-        $img_in  = imagecreatefromjpeg( $original ) or die("Cannot Initialize new GD image stream");
+        switch(exif_imagetype($original)) {
+            case IMAGETYPE_JPEG :
+                $img_in  = imagecreatefromjpeg( $original ) or die("Cannot Initialize new GD image stream");
+                break;
+            case IMAGETYPE_PNG :
+                $img_in  = imagecreatefrompng( $original ) or die("Cannot Initialize new GD image stream");
+                break;
+            default :
+                die("Not JPG or PNG image file");
+        }
         $img_out = imagecreatetruecolor($new_x, $new_y);
 
         imagecopyresampled($img_out, $img_in, 0, 0, 0, 0, imagesx($img_out), imagesy($img_out), imagesx($img_in), imagesy($img_in));
