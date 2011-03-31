@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source $VLMRACINE/conf/conf_script || exit 1
+. $VLMRACINE/conf/conf_script || exit 1
 
 TILESCACHEDIR=$VLMCACHE/gshhstiles
 
