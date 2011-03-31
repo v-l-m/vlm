@@ -1,6 +1,32 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.16 aka "Un typhon, phon, phon"
+
+What's up for ...
+
+... players ?
+
+  * engaged list of races that are not already started is now sorted by flag / id (thanks jib for the report)
+  * vlm is now ready to accept connections from a new tool
+  * it's possible to deactivate OMOROB for specific races
+  * wind infos on mouse over are now more readable in jvlm
+  * small bugfixes
+  * german translation (thanks Captain B)
+  * pilototo improvement (mesosaure)
+  * availability of maxsea time zero format for polars
+  * display counter for selected boat in preferences
+
+... tools developers ?
+  * localization strings available by webservices
+  * only last tracks for hidden boats
+
+... vlm devs ?
+  * all externals dependencies are now in a separate module
+  * automatic tiles clean-up (spifou)
+  * new server since 0.15.5
+
+
 v0.15 aka "No more oil in my Chocolatero":
 
 What's up for ...
