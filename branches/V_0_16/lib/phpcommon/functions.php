@@ -1897,8 +1897,8 @@ function availableRaces($idusers = 0)
     $num_arrived = $numopps['num_arrived'];
     $num_racing  = $numopps['num_racing'];
     $num_engaged = $numopps['num_engaged'];
-	 {
-      continue;
+    if ( $row['maxboats'] != 0 && $num_engaged >= $row['maxboats'] ) {
+       continue;
     }
     if ( in_array($idraces, $omorob_restriction) && !($row['racetype'] & RACE_TYPE_OMORMB) ) continue;
     
