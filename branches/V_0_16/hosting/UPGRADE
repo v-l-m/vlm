@@ -1,6 +1,6 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
-From 0.15 to Next:
+From 0.15.5 to Next:
 
 = All servers =
 
@@ -21,7 +21,7 @@ From 0.15 to Next:
   RUN
     ./scripts/maj_module.sh base
 
-  STOP VLM Engine (comment in the crontab)
+  STOP VLM CLEAN Engine (comment in the crontab)
   
   BACKUP the database (dump-alive.sh)
   
@@ -43,6 +43,8 @@ From 0.15 to Next:
     ./scripts/maj_module.sh site
     ./scripts/maj_module.sh guest_map
     ./scripts/maj_module.sh jvlm
+    ./scripts/maj_module.sh externals
+    ./scripts/maj_module.sh medias
 
 = Master Server
 

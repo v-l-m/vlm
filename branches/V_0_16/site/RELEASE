@@ -6,7 +6,6 @@ v0.16 aka "Un typhon, phon, phon"
 What's up for ...
 
 ... players ?
-
   * engaged list of races that are not already started is now sorted by flag / id (thanks jib for the report)
   * vlm is now ready to accept connections from a new tool
   * it's possible to deactivate OMOROB for specific races
@@ -25,7 +24,6 @@ What's up for ...
   * all externals dependencies are now in a separate module
   * automatic tiles clean-up (spifou)
   * new server since 0.15.5
-
 
 v0.15 aka "No more oil in my Chocolatero":
 
