@@ -1,0 +1,31 @@
+@import url("../blue_1/style.css");
+
+#baneercenterbox
+{
+  position:absolute;
+  top:5px;
+  left:610px;
+  background-image:  url('/images/logos/logobateaux-x60.jpg');
+  background-repeat: no-repeat;
+  height:75px;
+  width:290px;
+  /* CSS3 standard */
+  opacity:0.9;
+  /* for IE - FIXME : remove me one day */
+  filter:alpha(opacity=90);
+}
+
+#pubbox1 {
+  background-image:  url('/images/logos/logomarinepool.jpg');
+  background-repeat: no-repeat;
+  height:90px;
+  width:140px;
+  margin:5px;
+}
+
+#pubbox2 {
+  background-image:  url('/images/logos/logonavicom.png');
+  background-repeat: no-repeat;
+  height:32px;
+  width:150px;
+}

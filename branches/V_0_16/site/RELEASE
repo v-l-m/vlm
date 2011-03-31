@@ -1,0 +1,354 @@
+RELEASE NOTES
+See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
+
+v0.15 aka "No more oil in my Chocolatero":
+
+What's up for ...
+
+... players ?
+    * guest_map is now hosted and part of vlm + bugfixes (kernel panic)
+    * jvlm demo as online map and grib viewer (stephpen, spifou & paparazzia)
+    * map service available for all your favorites tools, already in use by sbsRouteur (paparazzia, stephpen)
+    * real 1h/3h/24h loch (spifou)
+    * performance for the players : db access and php optimizations (spifou, paparazzia)
+    * WP bugfixes (Icegate handling, WP_once, custom wp) (spifou, paparazzia)
+    * Ihm tuning and fixes (spifou, paparazzia)
+    * portugese translation was too old, and has been deactivated (paparazzia)
+    * enhancement and bugfixes in player account and boat creation (paparazzia)
+
+... players in the future ?
+    * enhanced map display and boat management...
+    * ... as shown by the incoming frog project (frog)    
+
+... tools developpers ?
+    * static url for flags, racemaps and minimaps (paparazzia)
+    * tiles service with topographic rendering (stephpen)
+    * new enhanced wind services, serverinfo & profile services (paparazzia, spifou)
+    * deprecation of old services : gettrack, getuserlist et gmap (paparazzia)
+    * existing services updates and bugfixes (paparazzia, spifou)
+    
+... admin ?
+    * bugfix and enhancement related to player and boatsit management (paparazzia)
+    * full browsing of admin actions (paparazzia)
+
+... developpers ?
+    * VLM code base is now licensed with AGPLv3 (all developpers)
+      http://en.wikipedia.org/wiki/Affero_General_Public_License
+    * more option (dry run, account creation flag, ...) (spifou, paparazzia)
+    * support of loadbalancing (paparazzia, spifou, fm)
+
+With 85 tickets closed, this is a solid release.
+Some of these items were already backported in vlm 0.14. Thanks to all the admins, tools developpers, bug reporters and translators.
+
+____
+v0.14 aka "Sirocco et ses frères".
+
+What's up for ...
+
+... players ?
+    * enhancements & major changes :
+        * NEW playermode (mainly paparazzia)
+            You (as a player) are now managing boats. This means :
+            * You have to create a player account (with your email) and attach your old boats to it
+            * There is an interface for boatsitting management (you may choose which boat you are allowing someone else to pilot)
+            * You may change your password & recover it if lost.
+            * Backward compatibility for tools (like TCV), it will be removed in the next release.
+        * NEW full gates support (mainly spf) :
+            * cross-once-only gates
+            * oriented gates
+            * type of gates are displayed on maps and in the instructions
+            * ice gates are fully supported by the engine
+        * Wind interpolation has changed... (spf)
+        * VLM is now using up-to-date maps (gshhs2) (spf)
+        * Default theme is now OceanExpress (paparazzia)
+        * Engine performance enhancements  (mainly spf)
+        * site rendering performance enhancements (spf & paparazzia)
+        * MSIE6 support will be dropped for the next release (0.15)
+    * bugfixes : 
+      * private WPs are now displayed, when International Date Line is visible on the map (paparazzia)
+      * WPs across Greenwich meridian are displayed as well, (paparazzia) 
+      * loch is no longer changing during blackout (spf)
+      * it is not possible anymore to validate two gates in the wrong order in the same crank (spf)
+      * coast around Behring have been fixed (may be a new race in this area... ;) (spf)
+      * Pilototo orders are now purged during engagement (paparazzia)
+      * Constant WA pilot bug is (except for the start part) corrected. (spf)
+      * Loch was not null for some boats although they didn't start the race (paparazzia & spf)
+      * minor UI tweaking (useless or wrong messages, ranking more readable when too much WP, style adjustments, ...) (paparazzia)
+      * and more...
+    
+... players in the future (What for are we ready in the next releases ?) ?
+    * language & communication preferences management on a per player basis
+    * ready for rich & interactive web client
+    * ... and more...
+
+... race commitee/admins :
+    * More admin management & reporting tools, mainly for managing players (paparazzia)
+    * WP Map is visible in admin interface (paparazzia)
+    * All the fun that is possible with new gates, new coast database & a new boat type (Transpac52) (spf, phille)
+    
+... tools developers :
+    * Webservices (WS) for ranking & results & tracks & fleet management (paparazzia)
+    * Ws for windinfo (spf, 0.15 is on the way, yeah !)
+    * it's possible to store preferences for your tool in VLM (please ask on the developers list) (paparazzia)
+    * enhancements & bugfixes in WS for pilototo management (paparazzia)
+    * WS are backward compatible for old auth mode & new one (paparazzia)
+    * S&G information in boatinfo (paparazzia)
+    * heading is recomputed when changing WP only (spf)
+    * boatpseudo/password authentification is DEPRECATED and will be removed in the next release (around Christmas).
+    * these WS are DEPRECATED and will vanish in the next release :
+        * gettrack.php (but support blackout now ;)) (Please use /ws/boatinfo/tracks/php)
+        * /gmap/ json services (same as above)
+        * /getuserlist.php (please use /ws/raceinfo/results.php & /ws/raceinfo/ranking.php) 
+    * these WS don't exist anymore :
+        * /getinfo.php & getinfo2.php (please use /ws/boatinfo/php & /ws/boatinfo/*)
+        * /getraceinfo.php (please use /ws/raceinfo.php)
+        * /getwind.php (please use /ws/windinfo.php)
+
+... developers  ?
+    * deployment
+        * DB can be automatically populated with maps from gshhs2 (spf)
+        * update of INSTALL documentation (paparazzia)
+        * more configurability (paparazzia)
+    * robustness
+        * language is now managed in SESSION, which means shorter url and future enhancement for users. (paparazzia)
+        * input for map.img.php are checked to avoid side effect when misused (paparazzia)
+        * A big work has been done to avoid PHP Notices (and some bugs found and fixed) (paparazzia & spf)
+        * No more warnings during vlm-c compilation (spf)
+    * performance 
+        * vlm-c is faster in gshhs reading & grib reading (spf)
+        * better SQL for retrieving positions (paparazzia)
+        * WP are cached to avoid useless MySQL queries (spf)
+        * User objects are cached to avoid useless queries (paparazzia)
+        * performance : map display use polygons (spf)
+    * management
+        * fix module update rss feed. (paparazzia)
+        * finer grain for engine speed metrics (spf)
+
+This is the biggest release (counting the number of tickets) of the last two years. A lot of work still happen in the backoffice.
+The nice story is that there has been about ten different people for tests & documentation tasks.
+We are now looking at interface refactoring & communication tools around or in VLM.
+
+A final word : VLM is OPEN. Which means :
+- free software : people can find and report bugs
+- open datas, open interfaces, open format : free datas are accessible in a documented format, externals interfaces are provided when possible : people can build tools prodiving a new experience of VLM, or whatever is fun to write :)
+- open developement : new developers have just to jump in : please ask and join the developers mailing list.
+- open window : We strongly rely on users to find bugs and explain how to reproduce them.
+
+A big thanks to all the admins, tools developers, testers, wikify-ers for their help and support.
+Special thanks to Jose, who did this time the spanish translation.
+
+--spf & paparazzia.
+
+v0.13 aka "En voiture Simoun" : What's up for ...
+
+... players ?
+    * various bugfixes, interfaces improvement and translation (paparazzia, spf & all translators - Cf. le wiki)
+    * feeds RSS and ICAL for races (so you can at last display races in your favorite feed reader or calendar application) (paparazzia)
+    * (start of) rewrite of Palmares/Profil's userpage (paparazzia)
+    * statically display racemap (paparazzia)
+    * ranking display bugfix (?) (paparazzia)
+    * pilototo : bugfix and more strict input checking (paparazzia, spf)
+    * report : "Who connected to my boat ?" (paparazzia - special dedication to the revatua team)
+    * clean race list (paparazzia)
+    * wiki now hold about and faq pages (paparazzia)
+    * visual race calendar (paparazzia)
+    * mobile interface by Kernel_Panic
+    * minor map bugfixes (paparazzia)
+    * engine bugfixes (spf) 
+
+... developers and tools developers (Tcv, SbsRouteur, QtVlm, MobiVlm, ...) :
+
+    * more webservices read and write (paparazzia)
+    * new interpolation method available in vlm-c (spf) 
+
+... race committee :
+
+    * ability to change WP online (paparazzia)
+    * new admin reports (paparazzia)
+
+v0.12 aka Take Five : what's new since 0.11 for ...
+
+... players ?
+* some bugfixes already backported to 0.11 ;)
+* various small bug and security fixes (you like security, don't you ?) (spf, paparazzia)
+* better handling of coast crossing penalty (spf)
+* @WPH is now in 1/10 of degrees (paparazzia)
+* performance mysql improvement (spf)
+* grid's color is now tunable (paparazzia)
+
+... tools developers ?
+* start of json webservices for race and boatinfo (spf, paparazzia)
+
+... race committee ?
+* easy import of races (paparazzia)
+* more loging of admins actions (paparazzia)
+* and more for the admin (you love your admins, don't you ?) (paparazzia)
+
+... developers ?
+* online module status (paparazzia, spf)
+* html & w3 compliance fixes (paparazzia)
+* base cleanup (indexes, timestamp types, charsets, etc...) (paparazzia)
+
+v0.11 aka "Autant en emporte l'autan" : what's new since 0.10 ...
+
+... players ?
+    * bugfix in handling wp in pilototo (paparazzia)
+    * bugfix in vbvmg computing (spifou)
+    * more tests to avoid coast line traversal (spifou)
+    * database handling optimizations mean quicker interface (spifou)
+    * current polar displayed in windangle control, ability to hide the wp infos on map (paparazzia)
+    * misc interface fixes and better integration with the wiki (paparazzia)
+    * as always, some new races (race commitee)
+
+... tools developpers ?
+    * change of regular url to fetch images (flags, racemaps, minimaps)
+
+... race committee ?
+    * interface for Race Instructions (paparazzia)
+    * upload interface for racemaps and flags (paparazzia
+
+... developpers ?
+    * mysql performance optimizations (spifou)
+    * racemaps and flags are now stored in database in order to prepare high-availability (paparazzia)
+    * status pages enhancements (spifou)
+    * better mysql upgrade scripts (paparazzia)
+
+v0.10 aka Have Foehn (Part III) : What's new since the 0.9.6...
+
+... for players ?
+* interfaces improvement (dropdown for the pilotmode, wp number in ranking pages, theme clean-up, ...) (paparazzia)
+* bugfixes (for example, no more overlapping wind arrows in MS-IE...) (paparazzia, spf)
+* new pilotmode : VBVMG which is the automatic version of "VMG for VLM" button (spf, stephpen)
+* global performance improvement (spf) that everybody will notice (speed computing of cranks is 2 times faster)
+* new Mono650 polar available (Phille)
+* localization improvement
+* a shadow test to check if you watch out what happens to the chat links
+* BONUS TRACK : 72h of gribs datas (fm)
+
+... for developpers ?
+* engine performance enhancement by integrating polar and bvmg computing in vlm-c (spf)
+* optimization of lot of mysql usage (spf, paparazzia)
+* more status pages for server health reporting (spf, paparazzia)
+
+Next time, we will try to make this 20minutes upgrade faster, we promise.
+
+v0.9.6 aka Have Foehn (part II) : what's new for ...
+... players ?
+* engine more reliable, easier way to set up 1 min. races (fm)
+* home page more compact & more links from (paparazzia)
+* verbose race engine status (paparazzia)
+* updates of the translations (tigarou, enzo_vr, NecasMarinheiro)
+* various fixes, some cosmetics, some not... (paparazzia, fm, spf)
+
+v0.9.5 aka Have Foehn (part I): what's new for ...
+... players ?
+* useful links for beginner on the homepage body (DocteurX)
+* start position (WP0) displayed in NOR and overlay added in myboat.php (paparazzia)
+* correct time offset for the grib layer & ability to choose a different time offset (spf, paparazzia)
+* more informations available _before_ choosing a race (paparazzia)
+* calendar widget to help EPOC input in pilototo (paparazzia)
+* time to finish displayed in messages (paparazzia)
+* as always, some new races... (fm & the committee)
+
+... race committee ?
+* map forced on "myboat" mode when the race is not started (less noise on the commitee list) (paparazzia)
+
+... vlm developers ?
+* various configuration options (fm, paparazzia)
+* various fixes and clean-up (fm, spf, paparazzia)
+
+v0.9 aka Like the Wind: what's new for ...
+... players ?
+* spanish translation now available (tigarou)
+* shorter vacation update (spf)
+* wind interpolation is now TWSA (spf)
+* you may choose a different theme for the web interface (paparazzia)
+* page for race instructions & waypoint list, management of external link for them (paparazzia)
+* better messagebox handling (race instructions warnings, etc...) (paparazzia)
+* date line bugfixes : displaying of wp, map centering and realboats (paparazzia, fm)
+* better default theme and visual feedback (paparazzia)
+* new logo (stephpen)
+* weather links are now handled using a page of the wiki for better flexibility (paparazzia)
+* bugfix for the small islands not always visible (fm)
+* various fixes (fm, spf)
+
+... tools developpers ?
+* gettrack now return only running positions (spf, steph)
+
+... vlm developers ?
+* fully optimized engine (better mysql handling & coast detection in C) (spf)
+* use of full acuracy (0.5°) available in noaa datas (spf) 
+* maps module to handle gshhs datas (spf, paparazzia)
+* bugfix : it was possible to validate a gate behind the coast... (spf) 
+* better themability (paparazzia)
+* theme is forcable on a per race basis (paparazzia)
+* different type of wind interpolatio (spf)
+* use of the swig 'outdir' option (spf)
+
+=> http://dev.virtual-loup-de-mer.org/vlm/query?group=status&milestone=Like+the+wind
+
+v0.8 aka Community Powered what's new for ...
+... players ?
+ * more realistic distance to gate (spf)
+ * ortho/bvmg now heads toward the closest point of the gate for 0,0 (spf)
+ * oblique large gate crossing fixed (spf)
+ * gate crossing real time [no more rounded to the vacation timer] (spf)
+ * new type of gate [ice gate] (fm)
+ * BVMG pilot mode works now around change date line. (spf)
+ * Estime now works across the prime meridian (spf)
+ * HTP / DNF ranking now displays more than the first 100's. (paparazzia)
+ 
+... tools developpers :
+ * HTML clean-up, check your scripts ! (spf)
+ * getinfo.php now returns piloto parameters (oxygen77)
+ * now possible to hide (using GET parameter 'drawrealboats=no') the real boats on the map (paparazzia)
+ 
+... vlm developpers :
+ * first version of vlm developped using a dedicated hosting (fm, paparazzia)
+ * wind management using Vlm-C module (spf) 
+ * gribs are now handled with their embedded time information (spf)
+ * loxo/ortho computing handled by Vlm-C (spf)
+ * code split into modules (paparazzia, Line28)
+ * clean-up in the code (tab, charset, ...) (spf, paparazzia, Line28)
+ * new script for downloading grib files (spf, paparazzia)
+ * escaping/quoting more parameters for bullet-proof & security reasons (fm)
+ * "vmg for vlm" knows where to find the list of the polars (stephpen)
+ * documentation (all)
+ * hosting scripts to make life easier (paparazzia)
+
+v.>0.7 (november 2008) : See http://dev.virtual-loup-de-mer.org
+
+v.0.3.1 (April 2005)
+- new installation process : files _install.php and params.php
+- new colors in maps
+- less verbose update_grid.php
+
+v.0.3 (march 2005)
+- "strong wind only" bug fixed
+- new css and logo
+- lot of code rewriting to implement an ObjectOriented approach
+- a javascript to compute estimated boatspeed on myboat.php
+- orthodromic pilot added permanently
+- add some info and colors to image boat.php : heading to finish
+- better compression of png images (use palette) 
+- add a default position to a boat if it hasnot, that way it wont break anything
+- migration to tuxfamily.org and php4.3.8
+- XHTML valid
+
+v.0.2 (Nov 2004)
+- languages support : french
+- forum miniBB added
+- info added to myboat.php : heading to finish and VMG
+- correct session behaviour
+- 2 bugs corrected from findboatspeed function
+- add a map with the player only
+- orthodromic pilot almost ready, just test it
+- finish line bug corrected
+- about page added
+- addings to FAQ
+- CSS improved
+- change database format for dates : unix time stamp only
+- shadow password 
+
+v0.1 (Oct 2004)
+first version !

@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# named           This shell script takes care of starting and stopping
+#                 PolarServer (VLM)
+#
+# chkconfig: 2345 81 19
+# description: Polarserver
+
+
+#FIXER VLMRACINE ici s'il n'est pas défini comme variable 
+d'environnement à ce stade.
+VLMRACINE=/home/vlm
+
+source $VLMRACINE/conf/conf_script
+
+case "$1" in
+  start)
+    su - $VLMGRIBUSER -c "$VLMBIN/polarserver $VLMPOLARS/polars.list"
+    exit 0
+  ;;
+  stop)
+    ipcrm -M 0x2cc6c1ec
+    exit 0
+  ;;
+  *)
+  echo "Usage: $0 start|stop"
+  exit 1
+  ;;
+esac
+
+exit 0
