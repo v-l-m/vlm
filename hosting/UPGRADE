@@ -23,8 +23,9 @@ From 0.15 to Next:
 
   STOP VLM Engine (comment in the crontab)
   
-  BACKUP the database
-
+  BACKUP the database (dump-alive.sh)
+  
+  UPGRADE to 0.16, RUN
     cd ./vlmcode/base/scripts/
     ./runupgrade.sh 0.16 > log.txt
     cd 
