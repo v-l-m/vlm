@@ -95,6 +95,9 @@
             if ($racetype & RACE_TYPE_RECORD) {
                 echo "<li>".getLocalizedString("This is a permanent/record race").".</li>";
             }
+            if ($racetype & RACE_TYPE_OMORMB) {
+                echo "<li>".getLocalizedString("The OMOROB rule is NOT applicable for this race !").".</li>";
+            }
         
             if ( $closetime > $dep ) {
                 printf("    <li>".getLocalizedString("closerace"). gmdate("Y/m/d H:i:s", $closetime)." GMT</li>\n");
