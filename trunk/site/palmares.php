@@ -4,7 +4,7 @@
     include_once("config.php");
 
     $palmares_type = htmlentities(get_cgi_var('type'));
-    
+
     if ( $palmares_type == 'user' ) {
         $idusers=htmlentities(quote_smart($_REQUEST['idusers']));
         if (!(intval($idusers) > 0)) $idusers = getLoginId();
