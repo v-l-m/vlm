@@ -2,6 +2,7 @@
 $strings = array (
   'en' => 
   array (
+    "The OMOROB rule is NOT applicable for this race !" => "The OMOROB rule is NOT applicable for this race !",
     "Join Virtual-Loup-De-Mer.Org, it's free !" => "Join Virtual-Loup-De-Mer.Org, it's free !",
     'Account creation is disabled on this server, you should ask to the admins' => 'Account creation is disabled on this server, you should ask to the admins',
     'Account validation error' => 'Account validation error',
@@ -407,6 +408,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "The OMOROB rule is NOT applicable for this race !" => "La règle OMOROB ne s'applique pas à cette course !",
     "Join Virtual-Loup-De-Mer.Org, it's free !" => "Rejoignez Virtual-Loup-De-Mer.Org, c'est gratuit !",
     'Account creation is disabled on this server, you should ask to the admins' => 'La création de compte est désactivée sur ce serveur, vous devez demander aux admins',
     'Account validation error' => 'Erreur de validation de compte',
@@ -1605,6 +1607,7 @@ Consejo 3 : el estado es \'pendiente\' si la órden aún no ha sido ejecutada, e
   ),
   'de' => 
   array (
+    "The OMOROB rule is NOT applicable for this race !" => 'OMOROB-Regel gilt nicht für dieses Rennen',
     "Join Virtual-Loup-De-Mer.Org, it's free !" => "Spielen Sie doch mit ! Virtual-Loup-de-Mer.org ist kostenlos !",
     'Account creation is disabled on this server, you should ask to the admins' => 'Die Erstellung eines Kontos ist auf diesem Server nicht aktiviert ; wenden sie sich an die Systemadministratoren.',
     'Account validation error' => 'Fehler beim Erstellen des Kontos',
