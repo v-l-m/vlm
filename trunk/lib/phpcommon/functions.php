@@ -249,7 +249,7 @@ function lastUpdate()
     $intervalarray = duration2string($interval);
     printf ( getLocalizedString("lastupdate"). " <br />\n",
              gmdate('H:i:s', time() ) . ' GMT', $intervalarray['hours'],$intervalarray['minutes'],$intervalarray['seconds'] );
-    printf ("%.2f seconds (<span title=\"%s\">%d race(s)</span>, %d boat(s)), %2.2f boats/sec (<a target=\"_blank\" href=\"status/race-engine-status.php\" rel=\"nofollow\">status page</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
+    printf ("%.2f ".getLocalizedString("seconds")." (<span title=\"%s\">%d ".getLocalizedString("race(s)")."</span>, %d ".getLocalizedString("boat(s)")."), %2.2f ".getLocalizedString("boat/sec")." (<a target=\"_blank\" href=\"status/race-engine-status.php\" rel=\"nofollow\">".getLocalizedString("status page")."</a>)", $duration, $update_comment, $races, $boats, $boats/$duration);
   }
 }
 
