@@ -286,12 +286,25 @@ Merci
    * 4.1 déployer le moteur si ce n'est déjà fait via {{{~/scripts/maj_modules.sh moteur}}}
    * 4.2 utiliser le crontab.example comme exemple pour paramètrer le cron
    
-= (Optionnel) Les ajouts systems =
+= (Optionnel) Les ajouts =
  * 5. Logrotate
    * 5.1 {{{apt-get install logrotate}}}
    * 5.2 Installer la rotation pour les logs apache de vlm
        {{{cp /home/vlm/conf/vlm-apache2.logrotate.dist /etc/logrotate.d/}}}   
-
+ * 6. Awstats
+   * 6.1 {{{apt-get install awstats}}} et se référer à la documentation d'installation (ou ici, par exemple : 
+   * 6.2 Configurer :
+     {{{
+       HostAliases="localhost 127.0.0.1 REGEX[.*(virtual-loup-de-mer|v-l-m)\.org$]"
+       LogFile="/home/vlm/logs/apache2/vlm_access_log"
+       LogFormat=1
+       SiteDomain="virtual-loup-de-mer.org"
+       LoadPlugin=tooltips
+       LoadPlugin=ipv6
+       LoadPlugin=hostinfo
+     }}}
+   * 6.4 Ne pas laisser Awstat en libre accès
+   
 = Notes pour les versions futures =
 
 
