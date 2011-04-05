@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.39 2010-12-09 13:54:27 ylafon Exp $
+ * $Id: vmg.c,v 1.40 2011-04-05 12:15:32 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -278,7 +278,8 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
   double speed_alpha, speed_beta;
   double vmg_alpha, vmg_beta;
   int i,j, min_i, min_j, max_i, max_j;
-  
+  double w_speed_cache[90];
+
   b_t1 = b_t2 = b_l1 = b_l2 = b_alpha = b_beta = beta = 0.0;
 
   dist = ortho_distance(aboat->latitude, aboat->longitude,
@@ -327,6 +328,11 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
     max_j = 90;
   }
 
+  for (j=min_j; j<max_j; j++) {
+      beta = degToRad((double)j);
+      w_speed_cache[j-min_j] = find_speed(aboat, w_speed, angle-beta);
+  }
+
   for (i=min_i; i<max_i; i++) {
     alpha = degToRad((double)i);
     tanalpha = tan(alpha);
@@ -344,7 +350,8 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
 	continue;
       }
       d2 = dist - d1; 
-      speed_t2 = find_speed(aboat, w_speed, angle-beta);
+      //      speed_t2 = find_speed(aboat, w_speed, angle-beta);
+      speed_t2 = w_speed_cache[j-min_j];
       if (speed_t2 <= 0.0) {
 	continue;
       }
