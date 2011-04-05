@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.40 2011-04-05 12:15:32 ylafon Exp $
+ * $Id: vmg.c,v 1.42 2011-04-05 22:26:48 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -48,7 +48,19 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
   double maxheading, t, t_max, t_max2;
   double wanted_heading, t_heading;
   double w_speed, w_angle;
+  double *polar_tab;
   int i;
+
+  /* nothing set? return 0 */
+  if (aboat->polar == NULL) {
+    /* check if we can find the polar form the race */
+    if (aboat->in_race && aboat->in_race->boattype) {
+      aboat->polar = aboat->in_race->boattype;
+    } else {
+      return;
+    }
+  }
+  polar_tab = aboat->polar->polar_tab;
 
   if (mode) {
     imax = 900;
@@ -76,7 +88,7 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
   /* -90 to +90 form desired diretion */
   for (i=0; i<imax; i++) {
     t_heading = wanted_heading + degToRad(((double)i)/anglediv);
-    speed = find_speed(aboat, w_speed, w_angle - t_heading);
+    speed = find_speed_polar(polar_tab, w_speed, w_angle - t_heading);
     if (speed < 0.0) {
       continue;
     }
@@ -93,7 +105,7 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
 
   for (i=0; i<imax; i++) {
     t_heading = wanted_heading - degToRad(((double)i)/anglediv);
-    speed = find_speed(aboat, w_speed, w_angle - t_heading);
+    speed = find_speed_polar(polar_tab, w_speed, w_angle - t_heading);
     if (speed < 0.0) {
       continue;
     }
@@ -161,6 +173,18 @@ double get_best_angle_close_hauled(boat *aboat, double speed, int mode) {
   int i;
   int istart, iend;
   double anglediv, comp;
+  double *polar_tab;
+
+  /* nothing set? return 0 */
+  if (aboat->polar == NULL) {
+    /* check if we can find the polar form the race */
+    if (aboat->in_race && aboat->in_race->boattype) {
+      aboat->polar = aboat->in_race->boattype;
+    } else {
+      return 0.0;
+    }
+  }
+  polar_tab = aboat->polar->polar_tab;
 
   if (mode) {
     istart = 0;
@@ -182,7 +206,7 @@ double get_best_angle_close_hauled(boat *aboat, double speed, int mode) {
 
   for (i=0; i<iend; i++) {
     t_angle =  degToRad(((double)i+comp)/anglediv);
-    t_speed = find_speed(aboat, speed, t_angle);
+    t_speed = find_speed_polar(polar_tab, speed, t_angle);
     t = t_speed * cos(t_angle);
     if (t > t_max) {
       t_max = t;
@@ -205,6 +229,18 @@ double get_best_angle_broad_reach(boat *aboat, double speed, int mode) {
   int i;
   int istart, iend;
   double anglediv, comp;
+  double *polar_tab;
+
+  /* nothing set? return 0 */
+  if (aboat->polar == NULL) {
+    /* check if we can find the polar form the race */
+    if (aboat->in_race && aboat->in_race->boattype) {
+      aboat->polar = aboat->in_race->boattype;
+    } else {
+      return 0.0;
+    }
+  }
+  polar_tab = aboat->polar->polar_tab;
 
   if (mode) {
     istart = 1800;
@@ -227,7 +263,7 @@ double get_best_angle_broad_reach(boat *aboat, double speed, int mode) {
 
   for (i=istart; i>iend; i--) {
     t_angle =  degToRad(((double)i+comp)/anglediv);
-    t_speed = find_speed(aboat, speed, t_angle);
+    t_speed = find_speed_polar(polar_tab, speed, t_angle);
     t = t_speed * cos(M_PI - t_angle);
     if (t > t_max) {
       t_max = t;
@@ -279,6 +315,18 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
   double vmg_alpha, vmg_beta;
   int i,j, min_i, min_j, max_i, max_j;
   double w_speed_cache[90];
+  double *polar_tab;
+
+  /* nothing set? return 0 */
+  if (aboat->polar == NULL) {
+    /* check if we can find the polar form the race */
+    if (aboat->in_race && aboat->in_race->boattype) {
+      aboat->polar = aboat->in_race->boattype;
+    } else {
+      return;
+    }
+  }
+  polar_tab = aboat->polar->polar_tab;
 
   b_t1 = b_t2 = b_l1 = b_l2 = b_alpha = b_beta = beta = 0.0;
 
@@ -295,7 +343,7 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
   w_angle = aboat->wind.angle;
   
   /* first compute the time for the "ortho" heading */
-  speed = find_speed(aboat, w_speed, w_angle - wanted_heading);
+  speed = find_speed_polar(polar_tab, w_speed, w_angle - wanted_heading);
   if (speed > 0.0) {
     t_min = dist / speed;
   } else {
@@ -328,16 +376,16 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
     max_j = 90;
   }
 
+  // pre-compute resulting speed for the inner-loop values.
   for (j=min_j; j<max_j; j++) {
-      beta = degToRad((double)j);
-      w_speed_cache[j-min_j] = find_speed(aboat, w_speed, angle-beta);
+    w_speed_cache[j-min_j] = find_speed_polar(polar_tab, w_speed, angle-((double)j));
   }
-
+  
   for (i=min_i; i<max_i; i++) {
     alpha = degToRad((double)i);
     tanalpha = tan(alpha);
     d1hypotratio = hypot(1, tan(alpha));
-    speed_t1 = find_speed(aboat, w_speed, angle-alpha);
+    speed_t1 = find_speed_polar(polar_tab, w_speed, angle-alpha);
     if (speed_t1 <= 0.0) {
       continue;
     }
@@ -350,7 +398,6 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
 	continue;
       }
       d2 = dist - d1; 
-      //      speed_t2 = find_speed(aboat, w_speed, angle-beta);
       speed_t2 = w_speed_cache[j-min_j];
       if (speed_t2 <= 0.0) {
 	continue;
@@ -382,7 +429,7 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
       alpha = b1_alpha + degToRad(((double)i)/10.0);
       tanalpha = tan(alpha);
       d1hypotratio = hypot(1, tan(alpha));
-      speed_t1 = find_speed(aboat, w_speed, angle-alpha);
+      speed_t1 = find_speed_polar(polar_tab, w_speed, angle-alpha);
       if (speed_t1 <= 0.0) {
 	continue;
       }
@@ -395,7 +442,7 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
 	  continue;
 	}
 	d2 = dist - d1; 
-	speed_t2 = find_speed(aboat, w_speed, angle-beta);
+	speed_t2 = find_speed_polar(polar_tab, w_speed, angle-beta);
 	if (speed_t2 <= 0) {
 	  continue;
 	}
@@ -421,9 +468,9 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
 	   radToDeg(b_beta));
 #endif /* DEBUG */
   }
-  speed_alpha = find_speed(aboat, w_speed, angle-b_alpha);
+  speed_alpha = find_speed_polar(polar_tab, w_speed, angle-b_alpha);
   vmg_alpha = speed_alpha * cos(b_alpha);
-  speed_beta = find_speed(aboat, w_speed, angle-b_beta);
+  speed_beta = find_speed_polar(polar_tab, w_speed, angle-b_beta);
   vmg_beta = speed_beta * cos(b_beta);
 
 #if DEBUG
