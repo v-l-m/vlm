@@ -1,5 +1,5 @@
 /**
- * $Id: polar.h,v 1.6 2010-12-09 13:32:14 ylafon Exp $
+ * $Id: polar.h,v 1.7 2011-04-05 22:29:13 ylafon Exp $
  *
  * (c) 2010 by Yves Lafon
  *
@@ -29,6 +29,7 @@
 
 void       init_polar ();
 double     find_speed                    PARAM3(boat *, double, double);
+double     find_speed_polar              PARAM3(double *, double, double);
 boat_polar *get_polar_by_name            PARAM1(char *);
 boat_polar *get_polar_by_name_context    PARAM2(vlmc_context *, char *);
 

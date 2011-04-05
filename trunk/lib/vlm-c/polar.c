@@ -1,5 +1,5 @@
 /**
- * $Id: polar.c,v 1.25 2010-12-09 13:54:26 ylafon Exp $
+ * $Id: polar.c,v 1.26 2011-04-05 22:28:39 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -334,38 +334,24 @@ void read_polars() {
 }
 
 /**
- * finds current speed based on boat location,
+ * finds current boat speed based on polar tab (taken from boat's struct
  * wind_speed (in kts), wind_angle from boat's heading (in rad)
  * return boat speed (in kts)
  */
-double find_speed(boat *aboat, double wind_speed, double wind_angle) {
+double find_speed_polar(double *polar_tab, double wind_speed, double wind_angle) {
   int intangle;
   int intspeed;
   double valfloor, valceil;
-  double *polar_tab;
 #ifndef ROUND_WIND_ANGLE_IN_POLAR
   double tvalfloor, tvalceil, tangle;
   int intangle_p1;
 #endif /* !ROUND_WIND_ANGLE_IN_POLAR */
 
   intspeed  = floor(wind_speed);
-  if (intspeed > (MAX_SPEED_IN_POLARS-1)) {
-    intspeed = (MAX_SPEED_IN_POLARS-1);
+  if (intspeed > MAX_SPEED_IN_POLARS) {
+    intspeed = MAX_SPEED_IN_POLARS;
   }
-  /* nothing set? return 0 */
-  if (aboat->polar == NULL) {
-    /* check if we can find the polar form the race */
-    if (aboat->in_race) {
-      if (aboat->in_race->boattype) {
-	aboat->polar = aboat->in_race->boattype;
-      } else {
-	return 0.0;
-      }
-    } else {
-      return 0.0;
-    }
-  }
-  polar_tab = aboat->polar->polar_tab;
+
 #ifdef ROUND_WIND_ANGLE_IN_POLAR
   /* in VLM compatibility mode, we interpolate only speed, not angle
      which is rounded to nearest integer */
@@ -405,6 +391,27 @@ double find_speed(boat *aboat, double wind_speed, double wind_angle) {
 #endif /* ROUND_WIND_ANGLE_IN_POLAR */
   /* linear interpolation for wind speed */
   return (valfloor + (valceil-valfloor)*(wind_speed-(double)intspeed));
+}
+
+/**
+ * finds current speed based on boat location,
+ * wind_speed (in kts), wind_angle from boat's heading (in rad)
+ * return boat speed (in kts)
+ */
+double find_speed(boat *aboat, double wind_speed, double wind_angle) {
+  double *polar_tab;
+
+  /* nothing set? return 0 */
+  if (aboat->polar == NULL) {
+    /* check if we can find the polar form the race */
+    if (aboat->in_race && aboat->in_race->boattype) {
+      aboat->polar = aboat->in_race->boattype;
+    } else {
+      return 0.0;
+    }
+  }
+  polar_tab = aboat->polar->polar_tab;
+  return find_speed_polar(polar_tab, wind_speed, wind_angle);
 }
 
 
