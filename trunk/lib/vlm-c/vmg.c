@@ -1,5 +1,5 @@
 /**
- * $Id: vmg.c,v 1.42 2011-04-05 22:26:48 ylafon Exp $
+ * $Id: vmg.c,v 1.43 2011-04-06 06:37:34 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -378,7 +378,7 @@ void do_vbvmg_context(vlmc_context *context, boat *aboat, int mode,
 
   // pre-compute resulting speed for the inner-loop values.
   for (j=min_j; j<max_j; j++) {
-    w_speed_cache[j-min_j] = find_speed_polar(polar_tab, w_speed, angle-((double)j));
+    w_speed_cache[j-min_j] = find_speed_polar(polar_tab, w_speed, angle-degToRad((double)j));
   }
   
   for (i=min_i; i<max_i; i++) {

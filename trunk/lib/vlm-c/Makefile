@@ -13,9 +13,9 @@ else
 endif
 
 CDEBUGFLAGS     = -Wall -pedantic -g
-COPTIMFLAGS     = -O3 -ftree-vectorize -march=native
+#COPTIMFLAGS     = -O3 -ftree-vectorize -march=native
 #COPTIMFLAGS     = -O3  -ftree-vectorize -march=nocona
-#COPTIMFLAGS     = -O3
+COPTIMFLAGS     = -O3
 #COPTIMFLAGS     = -O0
 EXTRA_CFLAGS    = -fPIC -pipe
 EXTRA_DEFINES   = -DVLM_BUILD_DATE=\""`date -u +%Y-%m-%d\ T\ %T\ %Z`"\"
