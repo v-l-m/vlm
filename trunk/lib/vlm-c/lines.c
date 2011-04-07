@@ -1,5 +1,5 @@
 /**
- * $Id: lines.c,v 1.33 2010-12-09 13:54:26 ylafon Exp $
+ * $Id: lines.c,v 1.34 2011-04-07 21:03:50 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -39,6 +39,9 @@
 double __intersects_no_norm PARAM10(double, double, double, double,
 				    double, double, double, double,
 				    double *, double *);
+
+int __check_intersects_no_norm PARAM8(double, double, double, double,
+				      double, double, double, double);
 
 #ifdef SAVE_MEMORY
 #  include "dist_gshhs.h"
@@ -225,6 +228,116 @@ double __intersects_no_norm(double latitude, double longitude,
     return t;
   }
   return -1;
+}
+
+/**
+ * input: longitude/latitude of old position -> new position
+ * longitude/latitude of wpa->wpb or coast segment
+ * return an integer with a value of 1 if it intersects, 0 otherwise */
+int check_intersects(double latitude, double longitude,
+		     double new_latitude, double new_longitude,
+		     double seg_a_latitude, double seg_a_longitude,
+		     double seg_b_latitude, double seg_b_longitude) {
+
+  /* then move to 0 -> TWO_PI interval */
+  if (longitude <0) {
+    longitude += TWO_PI;
+  }
+  if (new_longitude <0) {
+    new_longitude += TWO_PI;
+  }
+  if (seg_a_longitude <0) {
+    seg_a_longitude += TWO_PI;
+  }
+  if (seg_b_longitude <0) {
+    seg_b_longitude += TWO_PI;
+  }
+  /* now check if the segments are crossing the '0' line */
+  if (fabs(longitude - new_longitude) > PI) {
+    if (longitude > new_longitude) {
+      longitude -= TWO_PI;
+    } else {
+      new_longitude -= TWO_PI;
+    }
+  }
+  if (fabs(seg_a_longitude - seg_b_longitude) > PI) {
+    if (seg_a_longitude > seg_b_longitude) {
+      seg_a_longitude -= TWO_PI;
+    } else {
+      seg_b_longitude -= TWO_PI;
+    }
+  }
+  /* 
+     and the last check, is one segment on the negative side, but 
+     in the TWO-PI range, while the other one is across the 0 line in the 0
+     range
+  */
+  if (fabs(longitude - seg_a_longitude) > PI) {
+    if (longitude > seg_a_longitude) {
+      longitude -= TWO_PI;
+      new_longitude -= TWO_PI;
+    } else {
+      seg_a_longitude -= TWO_PI;
+      seg_b_longitude -= TWO_PI;
+    }
+  }
+  /* normalization done, perform regular checks */
+
+  return __check_intersects_no_norm(latitude, longitude, new_latitude, new_longitude,
+				    seg_a_latitude, seg_a_longitude,
+				    seg_b_latitude, seg_b_longitude);
+}
+
+/**
+ * input: longitude/latitude of old position -> new position
+ * longitude/latitude of wpa->wpb or coast segment
+ * return a double is intersects, with inter_longitude/latitude filled
+ * -1 otherwise */
+
+int __check_intersects_no_norm(double latitude, double longitude,
+			       double new_latitude, double new_longitude,
+			       double seg_a_latitude, double seg_a_longitude,
+			       double seg_b_latitude, double seg_b_longitude) {
+  double x, y, x1, x2, t, t_seg,d;
+  
+  /* normalization done, perform regular checks */
+#ifdef DEBUG
+  printf("Checking intersection between %.10fx%.10f->%.10fx%.10f and %.10fx%.10f->%.10fx%.10f\n",
+	 radToDeg(latitude), radToDeg(longitude),
+	 radToDeg(new_latitude), radToDeg(new_longitude),
+	 radToDeg(seg_a_latitude), radToDeg(seg_a_longitude),
+	 radToDeg(seg_b_latitude), radToDeg(seg_b_longitude));
+#endif /* DEBUG */
+  
+  x1 = (new_longitude - longitude);
+  x2 = (seg_b_longitude - seg_a_longitude);
+  
+  d = ((seg_b_latitude - seg_a_latitude)*x1 - x2 * (new_latitude - latitude));
+  
+  if (d == 0.0) {
+    return 0;
+  }
+  x = (longitude - seg_a_longitude);
+  y = (latitude - seg_a_latitude);
+  
+  t = (x2*y - (seg_b_latitude - seg_a_latitude)*x) / d;
+  /* out of the first segment... return ASAP */
+  if (t < INTER_MIN_LIMIT || t > INTER_MAX_LIMIT) {
+    return 0;
+  }
+  
+  t_seg = (x1*y - (new_latitude - latitude)*x) / d;
+  
+#ifdef DEBUG
+  printf("segment ratio: %.20f %.4f and %.4f\n", d, t_seg, t);
+#endif /* DEBUG */
+  if (t_seg>=INTER_MIN_LIMIT && t_seg <=INTER_MAX_LIMIT) {
+#ifdef DEBUG
+    printf(" -> YES\n");
+#endif /* DEBUG */
+    return 1;
+  }
+  return 0;
 }
 
 #ifdef PARANOID_COAST_CHECK
