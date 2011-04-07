@@ -1,5 +1,5 @@
 /**
- * $Id: lines.h,v 1.9 2010-12-09 13:32:14 ylafon Exp $
+ * $Id: lines.h,v 1.10 2011-04-07 21:03:35 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -37,6 +37,15 @@
 double intersects PARAM10(double, double, double, double,
 			  double, double, double, double,
 			  double *, double *);
+
+/**
+ * All latitude/longitude in rad
+ * latitude/longitude of segment 1, latitude/longitude of segment 2
+ * latitude/longitude addresses of intersection point (99% of seg1-A -> seg1-B)
+ * @returns an integer, 1 if an intersction occurs, 0 otherwise
+ */
+int check_intersects PARAM8(double, double, double, double,
+			    double, double, double, double);
 
 #ifdef PARANOID_COAST_CHECK
 /**
