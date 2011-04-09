@@ -35,6 +35,9 @@
         if (isPlayerLoggedIn() && in_array($userobj->idusers, getLoggedPlayerObject()->getManageableBoatIdList())) {
             echo "<hr /><ul>";
             echo "<li><a href=\"userlogs.php?idusers=".$userobj->idusers."\">".getLocalizedString('Recent actions') . '</a></li>';
+            if (isPlayerLoggedIn() && in_array($userobj->idusers, getLoggedPlayerObject()->getBoatsitIdList())) {
+                echo "<li><a href=\"revoke_boatsitting.php?idusers=".$userobj->idusers."\">".getLocalizedString('Revoke boatsitting') . '</a></li>';
+            }
             echo "</ul>";
         }
         echo "<hr />";
