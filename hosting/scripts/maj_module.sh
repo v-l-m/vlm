@@ -142,6 +142,12 @@ case $confmodule in
 
     echo -n "+$confmodule: Mise à jour polarserver"
     $VLMBIN/polarserver $VLMPOLARS/polars.list
+
+    echo -n "+$confmodule: Mise en place du lien symbolique vers les fichiers gshhs..."
+    ln -s $VLMGSHHS $destmodulepath/gshhs
+    echo 'OK !'
+
+
     ;;
 
     moteur)
