@@ -2,6 +2,12 @@
 $strings = array (
   'en' => 
   array (
+    "Revoke boatsitting" => "Revoke boatsitting",
+    'You are no longer boatsitter of this boat' => 'You are no longer boatsitter of this boat',
+    'You are not allowed to do that !' => 'You are not allowed to do that !',    
+    "You are currently allowed to boatsit this boat :" => "You are currently allowed to boatsit this boat :",
+    "Confirm boatsitting revocation ?" => "Confirm boatsitting revocation ?",
+    "You will not be allowed to boatsit this boat anymore if you confirm" => "You will not be allowed to boatsit this boat anymore if you confirm",
     'seconds' => 'seconds',
     'race(s)' => 'race(s)',
     'boat(s)' => 'boat(s)',
@@ -413,6 +419,12 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'You are no longer boatsitter of this boat' => 'Vous n\'êtes plus boatsitter de ce bateau',
+    'You are not allowed to do that !' => 'Vous n\'êtes pas autorisé à faire ça !',    
+    "You are currently allowed to boatsit this boat :" => "Vous êtes actuellement boatsitter de ce bateau :",
+    "Confirm boatsitting revocation ?" => "Confirmer la révocation du boatsitting ?",
+    "You will not be allowed to boatsit this boat anymore if you confirm" => 'Vous ne serez plus boatsitter de ce bateau si vous confirmez',
+    "Revoke boatsitting" => "Révoquer ce boatsitting",
     'seconds' => 'secondes',
     'race(s)' => 'course(s)',
     'boat(s)' => 'bateau(x)',
