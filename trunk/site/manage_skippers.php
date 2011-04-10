@@ -168,11 +168,11 @@
         echo "<tr>";
         echo "<td>".$p->htmlIdplayersPlayername()."</td>";
         echo "<td>";
-        if (getPlayerId() != $p->idplayers) echo "<a onclick=\"document.forms.manage.pu_idplayers.value='".$p->idplayers."'\"><img src=\"images/pme/pme-copy.png\" /></a>";
+        if (getPlayerId() != $p->idplayers) echo "<a onclick=\"document.forms.manage.pu_idplayers.value='".$p->idplayers."'\"><img src=\"externals/phpMyEdit/images/pme-copy.png\" /></a>";
         echo "</td>";
         echo "<td>".getLinktypeString($rel['linktype'])."</td>";
         echo "<td>".$u->htmlIdusersUsernameLink()."</td>";
-        echo "<td><a onclick=\"document.forms.manage.pu_idusers.value='".$u->idusers."'\"><img src=\"images/pme/pme-copy.png\" /></a></td>";
+        echo "<td><a onclick=\"document.forms.manage.pu_idusers.value='".$u->idusers."'\"><img src=\"externals/phpMyEdit/images/pme-copy.png\" /></a></td>";
         echo "<td>";
         if ($rel['linktype'] != PU_FLAG_OWNER) {
             echo htmlDelLinktype($rel);
