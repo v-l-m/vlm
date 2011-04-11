@@ -554,7 +554,7 @@ class map
 	    if ($idcoast != -1 ) {
 	      if ( $polymode ) {
 		// only needed to close the polygon, not in multiline mode
-		$this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, 
+		$this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, 
 					$x, $y, $idcoast, true);
 	      }
 	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
@@ -579,7 +579,7 @@ class map
 
 	  if ($idpoint != -1) {
 	    if ($point[1]-$idpoint != 1) {
-	      $this->addFakeMapPoints(&$coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
+	      $this->addFakeMapPoints($coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
 	    }
 	  } else {
 	    $first_x = $x;
@@ -602,7 +602,7 @@ class map
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
       if ($idcoast != -1 ) {
 	if ( $polymode ) {
-	  $this->addFakeMapPoints(&$coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
+	  $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
 	}
 	$this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
       }
