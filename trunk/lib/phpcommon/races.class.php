@@ -115,7 +115,7 @@ class races {
     if (defined('MOTEUR')) {
         while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
             $vlm_wp = new waypoint();
-            VLM_init_waypoint(&$vlm_wp, $row['wpformat'],$row['wporder'],
+            VLM_init_waypoint($vlm_wp, $row['wpformat'],$row['wporder'],
                               $row['latitude1'], $row['longitude1'], 
                               $row['latitude2'], $row['longitude2'], 
                               $row['laisser_au'], WPLL);
