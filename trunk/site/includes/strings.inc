@@ -997,7 +997,7 @@ Password can\'t be empty for security reasons.
 Allowed characters for both: a-z 0-9 _
 ',
     'current_races' => 'Regate in corso e partite',
-    'dateClassificationFormat' => ' a/m/g H:i \\G\\M\\T',
+    'dateClassificationFormat' => ' Y/m/d H:i \\G\\M\\T',
     'days' => '%dj, %dh,%dm,%ds. ',
     'degrees' => '&deg;',
     'delete' => 'cancellare',
@@ -1817,7 +1817,7 @@ Voir <a href="http://www.univ-lemans.fr/~hainry/articles/loxonavi.html">celui-ci
 Das Kennwort muss eingegeben werden.
 Erlaubte Zeichen für den Namen und das Kennwort sind: a-z 0-9 _',
     'current_races' => 'Geöffnete oder laufende Rennen',
-    'dateClassificationFormat' => ' J./M./T. Std.: \\G\\M\\T',
+    'dateClassificationFormat' => ' Y/m/d H:i \\U\\T\\C',
     'days' => '%dT. %dStd. %dMin. %dSek. ',
     'degrees' => 'Grad',
     'delete' => 'Löschen',
