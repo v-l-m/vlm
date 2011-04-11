@@ -1053,7 +1053,7 @@ function htmlIdracesLink($idraces) {
 }
 
 function htmlBoattypeLink($boattype) {
-    $boattypename = strtoupper(ereg_replace('^.*_', '' ,$boattype));
+    $boattypename = strtoupper(preg_replace('/^.*_/', '' ,$boattype));
     return sprintf("<a href=\"/speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
 }
 
