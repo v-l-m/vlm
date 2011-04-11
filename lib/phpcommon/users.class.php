@@ -65,7 +65,7 @@ class users extends baseClass
     $this->releasetime    = $row['releasetime'];
     $this->hidepos        = $row['hidepos'];
     $this->blocnote       = $row['blocnote'];
-    if ( eregi("^http|://|script|language|<|>", $this->blocnote) ) {
+    if ( preg_match("/^http|:\/\/|script|language|<|>/i", $this->blocnote) ) {
         $this->blocnote="Some characters are not valid in your notepad. (Code inclusion, &gt;, &lt;, ...)";
     }
     $this->ipaddr         = $row['ipaddr'];

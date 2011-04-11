@@ -18,7 +18,7 @@
     $class = get_cgi_var('class');
     $email = get_cgi_var('email', '');
     $blocnote = get_cgi_var('blocnote');
-    if (eregi("^http", $blocnote) || eregi("://", $blocnote)) {
+    if (preg_match("/^http/i", $blocnote) || preg_match("/:\/\//i", $blocnote)) {
         $blocnote="BAD NOTEPAD (code inclusion (url, &lt;&gt; characters, ...) is forbidden)";
     }
     $theme = get_cgi_var('theme');
@@ -180,7 +180,7 @@
 
 <?php
     // finds current file name
-    if(ereg("([^/?]+)(\?.*)?$",$_SERVER["PHP_SELF"] , $regs)) {
+    if(preg_match("/([^/?]+)(\?.*)?$/i",$_SERVER["PHP_SELF"] , $regs)) {
           $CurrentFile = $regs[1];
     } else {   // it should not be possible :-(
           $CurrentFile = '';
