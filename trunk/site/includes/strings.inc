@@ -324,10 +324,8 @@ or the next mark if your WP is 0/0',
     'pilototo_prog_title' => 'Schedule events',
     'pilototo_prog_upd' => 'update',
     'pilototoengaged' => 'Pilot Instructions',
-    'pilototohelp1' => '<b>PIM</b> : pilotmode : 1/Constant Heading, 2/Constant Angle 3/Ortho Pilot 4/Best VMG 5/VBVMG
-<b>PIP</b> : pilotparameter : For PIM=1:boatheading, For PIM=2:angle with wind, for PIM=3,4 or 5: Lat<b>,</b>Long. Please give <b>0,0</b> for nextrace WP, 
-<b>LATITUDE,LONGITUDE</b>(<0 for South and West) to target a new WP and when reached, target next WP in the race. Ex:47.899,-3.973 for Port Laforet
-<b>LATITUDE,LONGITUDE@HEADING</b> : same but when reached, set boatheading to HEADING (0..360)',
+    'pilototo_PIM_error' => 'Incorrect PIM.',
+    'pilototohelp1' => 'no more used',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : for an update, modify a value, then click on update
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
@@ -748,10 +746,8 @@ sinon vise la prochaine marque',
     'pilototo_prog_title' => 'Programmation du Pilototo',
     'pilototo_prog_upd' => 'modifie',
     'pilototoengaged' => 'Pilototo',
-    'pilototohelp1' => '<b>PIM</b> : type de pilote : 1/Mode cap, 2/R&eacute;gulateur d&quot;allure 3/Pilode orthodromique 4/Best VMG 5/VBVMG
-<b>PIP</b> : Param&egrave;tre : Pour PIM=1: cap &agrave; suivre, pour PIM=2:angle au vent, pour PIM=3,4 or 5: Lat<b>,</b>Long. Mettre <b>0,0</b> pour le prochain WP de course,
-<b>LATITUDE,LONGITUDE</b>(<0 pour le Sud ou l\'Ouest) pour sp&eacute;cifier un nouveau WP et viser l prochain wp de course une fois atteint. Ex:47.899,-3.973 pour Port Laforet,
-<b>LATITUDE,LONGITUDE@HEADING</b> : idem, mais passage au cap HEADING quand le wp sera atteint (0..360)',
+    'pilototo_PIM_error' => 'Incorrect PIM.',
+    'pilototohelp1' => 'no more used',
     'pilototohelp2' => 'Conseil 1 : &lt;server_time&gt; + 3600 sp&eacute;cifie une date dans une heure, &lt;server_time&gt;+5*3600 sp&eacute;cifie une date dans 5 heures...
 Conseil 2 : pour mettre &agrave; jour, modifiez une valeur et cliquez sur modifier,
 Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cut&eacute;, \'done\' sinon',
@@ -1142,10 +1138,8 @@ verso il prossimo mark si Mia WP=0/0',
     'pilototo_prog_title' => 'Programma evento',
     'pilototo_prog_upd' => 'Modifica',
     'pilototoengaged' => 'Autopilota programma ',
-    'pilototohelp1' => '<b>PIM</b> : pilotmode : 1/Direzione Constante, 2/Angolo Constante 3/Ortho Pilot 4/Migliore VMG 5/VBVMG
-<b>PIP</b> : pilotparameter : per PIM=1:boatheading, per PIM=2:angolo col vento, per PIM=3,4 o 5: Lat<b>,</b>Long. Dare per favore <b>0,0</b> per la prossima gara WP, 
-<b>LATITUDE,LONGITUDE</b>(<0 Per Sud è Ovest) per puntare un nuovo WP è quando é raggiunto, puntare il prossimo WP della gara. Ex:47.899,-3.973 for Port Laforet
-<b>LATITUDE,LONGITUDE@HEADING</b> : uguale ma quando é raggiunto, mettere il boatheading a HEADING (0..360)',
+    'pilototo_PIM_error' => 'Incorrect PIM.',
+    'pilototohelp1' => 'no more used',
     'pilototohelp2' => 'Tip 1 : &lt;server_time&gt; + 3600 is in one hour, &lt;server_time&gt;+5*3600 is in 5 hours...
 Tip 2 : per un aggiornamento, cambiare un valore, poi cliccare on aggiornare
 Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwise',
@@ -1541,10 +1535,8 @@ Use la siguiente URL:',
     'pilototo_prog_title' => 'Calendario de eventos',
     'pilototo_prog_upd' => 'actualizar',
     'pilototoengaged' => 'Instruciones de piloto',
-    'pilototohelp1' => '<b>PIM</b> : Modo de piloto : 1/Rumbo constante, 2/Ángulo constante 3/Ortodrómico 4/Mejor VMG 5/VBVMG
-<b>PIP</b> : Parámetros : Para PIM=1:rumbo, Para PIM=2:ángulo con el viento, para PIM=3,4 ó 5: Lat<b>,</b>Long. Por favor, usar <b>0,0</b> para el siguiente WP, 
-<b>LATITUD,LONGITUD</b>(<0 para Sur y Oeste) para el nuevo WP y al llegar a el, sigue al siguiente WP en la carrera. Ej:47.899,-3.973 para Port Laforet
-<b>LATITUD,LONGITUD@RUMBO</b> : igual, pero al llegar al WP, fijar rumbo a RUMBO (0..360)',
+    'pilototo_PIM_error' => 'Incorrect PIM.',
+    'pilototohelp1' => 'no more used',
     'pilototohelp2' => 'Consejo 1 : &lt;tiempo del servidor&gt; + 3600 es dentro de una hora, &lt;tiempo del servidor&gt;+5*3600 es en 5 horas...
 Consejo 2 : para actualizar, modificar el valor, y pulsar en Actualizar
 Consejo 3 : el estado es \'pendiente\' si la órden aún no ha sido ejecutada, es \'hecho\' en otro caso',
@@ -1970,12 +1962,8 @@ Pour ce qui concerne l\'entraide et les question sur l\'utilisation du logiciel,
     'pilototo_prog_title' => 'Programmierung des Totopiloten',
     'pilototo_prog_upd' => 'Ändern',
     'pilototoengaged' => 'Totopilot',
-    'pilototohelp1' => '<b>Epoch Zeit</b> : GMT, in Sekunden seit 01/01/1970 00:00
-<b>PIM</b> : Pilottyp : 1/ Kursmodus, 2/ Geschwindigkeitsregler 3/ orthodromischer Pilot 4/ Bester VMG 5/VBVMG
-<b>PIP</b> : Parameter : für PIM=1: Kurs folgen für PIM=2: Windwinkel, für PIM=3,4 oder 5: Lat<b>,</b>Long. Setzen <b>0,0</b> für den nächsten WP des Rennens, 
-<b>Breitengrad, Längengrad</b>(<0 Für den Süden oder den Westen) um einen neuen WP zu bestimmen und den nächsten WP anzusteuern, sobald er erreicht ist.
-z.B.: 47.899,-3.973 für Port Laforet,
-<b>Breitengrad, Längengrad@HEADING</b> : idem, aber Wechsel zum Kurs HEADING wenn der WP erreicht ist (0..360)',
+    'pilototo_PIM_error' => 'Incorrect PIM.',
+    'pilototohelp1' => 'no more used',
     'pilototohelp2' => 'Ratschlag 1: &lt;server_time&gt; + 3600 bestimmt ein Datum in einer Stunde, &lt;server_time&gt;+5*3600 bestimmt ein Datum in 5 Stunden...
 Ratschlag 2: zum Updaten, einen Wert verändern und auf «Ändern» klicken
 Tip 3 : Ratschlag 3: der Status ist "pending" wenn ein Befehl noch nicht ausgeführt ist, ansonsten "done"',
