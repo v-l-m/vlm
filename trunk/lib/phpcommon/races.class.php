@@ -87,7 +87,7 @@ class races {
   // returns an array of 2 points (lat1,long1,lat2,long2) 
   // beeing the coordinates in millidegrees of a waypoint
   // ====================================================
-  function giveWPCoordinates($idwp) {
+  function &giveWPCoordinates($idwp) {
     $this->retrieveWPs();
     if (isset($this->waypoints[$idwp])) {
         return $this->waypoints[$idwp];
