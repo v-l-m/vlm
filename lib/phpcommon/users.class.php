@@ -665,7 +665,7 @@ class fullUsers
     // Get the best crossing point
     if (defined('MOTEUR')) {
       $xing_dist = VLM_distance_to_wp_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
-						 &$nextwaypoint, $lat_xing, $long_xing, $xing_ratio);
+						 $nextwaypoint, $lat_xing, $long_xing, $xing_ratio);
     } else {
       $xing_dist = VLM_distance_to_line_ratio_xing($this->lastPositions->lat, $this->lastPositions->long,
 						   $nextwaypoint['latitude1'], $nextwaypoint['longitude1'],
