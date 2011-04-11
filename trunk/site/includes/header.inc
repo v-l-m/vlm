@@ -180,11 +180,7 @@
 
 <?php
     // finds current file name
-    if(preg_match("/([^/?]+)(\?.*)?$/i",$_SERVER["PHP_SELF"] , $regs)) {
-          $CurrentFile = $regs[1];
-    } else {   // it should not be possible :-(
-          $CurrentFile = '';
-    }
+    $CurrentFile = basename($_SERVER["PHP_SELF"]);
 
     //echo "current file =".$CurrentFile."SCrIPT name = ".$_SERVER["PHP_SELF"]."\n";
     //little trick : if update_angle page, display and then redirect to myboat
