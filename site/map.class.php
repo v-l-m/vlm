@@ -121,7 +121,7 @@ class map
     $this->colorContinent= ImageColorAllocate($this->mapImage, 185, 100, 50);
     $this->colorCoastCross= ImageColorAllocate($this->mapImage, 250, 20, 20);
     // Meridiens et Parallèles (10, 5, 1)
-    $colgrid = split(",", $defaultgridcolor);
+    $colgrid = explode(",", $defaultgridcolor);
 
     if ($defaultgridcolor != 'yes' and count($colgrid) == 3) {
         $this->colorLines = $this->fromhex($colgrid[0]);
