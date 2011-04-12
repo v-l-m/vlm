@@ -993,7 +993,7 @@ function dispHtmlRacesList($where = "") {
   echo "    <th>".getLocalizedString("raceid")."</th>\n";
   echo "    <th>".getLocalizedString("racename")."</th>\n";
   echo "    <th>".getLocalizedString("departuredate")." (GMT)</th>\n";
-  echo "    <th>". join('<br />', split("/", getLocalizedString("racenumboats")))."</th>\n";
+  echo "    <th>". join('<br />', explode("/", getLocalizedString("racenumboats")))."</th>\n";
   echo "    <th>".getLocalizedString("map")."</th>\n";
   echo "    </tr>\n";
   echo "   </thead>\n";
