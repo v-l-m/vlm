@@ -87,9 +87,9 @@
         for ($lat = $south; $lat <= $north; $lat += $step) {
             for ($lon = $west; $lon <= $east; $lon += $step) {
                 $twa = get_wind_info_deg($lat, $lon, $now);
-                array_push(&$windgrid, array("lat" => $lat, "lon" => $lon,
-          				         "wspd" => $twa['speed'], 
-          				         "whdg" => $twa['heading']));
+                array_push($windgrid, array("lat" => $lat, "lon" => $lon,
+					    "wspd" => $twa['speed'], 
+					    "whdg" => $twa['heading']));
             }
         }
     } else {
@@ -98,27 +98,23 @@
             invalid_values("max wind points reached : ( > ".MAX_WIND_POINTS.")");
         } 
         for ($lat = $south; $lat <= $north; $lat += $step) {
-          for ($lon = $west; $lon <= 180.; $lon += $step) {
-                $twa = get_wind_info_deg($lat, $lon, $now);
-                array_push(&$windgrid, array("lat" => $lat, "lon" => $lon,
-				                   "wspd" => $twa['speed'], 
-				                   "whdg" => $twa['heading']));
-          }
+            for ($lon = $west; $lon <= 180.; $lon += $step) {
+	        $twa = get_wind_info_deg($lat, $lon, $now);
+                array_push($windgrid, array("lat" => $lat, "lon" => $lon,
+					    "wspd" => $twa['speed'], 
+					    "whdg" => $twa['heading']));
+	    }
         } 
         $min_lon = -180.+$step-fmod((180.-$west), $step);
         for ($lat = $south; $lat <= $north; $lat += $step) {
-            for ($lon = $min_lon; $lon <= $east; $lon += $step) {
-                $twa = get_wind_info_deg($lat, $lon, $now);
-                array_push(&$windgrid, array("lat" => $lat, "lon" => $lon,
-				                   "wspd" => $twa['speed'], 
-				                   "whdg" => $twa['heading']));
-            }
+	    for ($lon = $min_lon; $lon <= $east; $lon += $step) {
+	        $twa = get_wind_info_deg($lat, $lon, $now);
+		array_push($windgrid, array("lat" => $lat, "lon" => $lon,
+					    "wspd" => $twa['speed'], 
+					    "whdg" => $twa['heading']));
+	    }
         } 
     }
     send_json_header();
-    //REVERT : object format is not mandatory for json
-    //if (empty($windgrid)) $windgrid = (object) null;
-    //echo json_encode((object)$windgrid);
     echo json_encode($windgrid);
-
 ?>
