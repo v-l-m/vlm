@@ -72,7 +72,7 @@ class races {
       return (($this->racetype & $type) > 0);
   }
   
-  function getWPs() {
+  function &getWPs() {
     $this->retrieveWPs();
     return $this->waypoints;
   }
