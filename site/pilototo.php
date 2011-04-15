@@ -1,6 +1,6 @@
 <?php
 
-    /* Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connecté */
+    /* Page pilototo re-entrante : gestion de la table auto_pilot pour l'utilisateur connectÃ© */
 
     session_start();
     include_once("config.php");
@@ -42,7 +42,7 @@
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
         echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled=\"disabled\" value=\"" . $timestring . "\" /></td>\n";
-        echo "    <td><select onchange=\"checkpip($numline,true,'$pip'); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\" ". (($status=='done') ? "disabled=\"disabled\"" : "") .">\n";
+        echo "    <td><select onchange=\"checkpip($numline,true,'".$pip."'); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\" ". (($status=='done') ? "disabled=\"disabled\"" : "") .">\n";
         for ($i = 1; $i <= count($pilotmodeList); $i++) {
             echo "    <option ";
             if (($i == $pim) or (($row === 0) and ($i == $pilotmode)) ) {
@@ -59,8 +59,8 @@
         echo "</form>\n";
     }
 
-    // Les entêtes
-    // FIXME : disposer d'un fichier d'en tête commun plus complet !
+    // Les entÃªtes
+    // FIXME : disposer d'un fichier d'en tÃªte commun plus complet !
     include("includes/doctypeheader.html");
     echo "\n<title>".getLocalizedString("VLM Programmable Auto Pilot")."</title>";
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/" . getTheme() . "/style.css\" />";
@@ -104,7 +104,7 @@
     function majhrdate(i) {
         var d = dateobj(i);
         document.forms[i].gmtdate.value=d.toGMTString();
-        //FIXME : Risque de réentrance ?
+        //FIXME : Risque de rÃ©entrance ?
         //calendars[i].setDate(d);
     }
 
@@ -160,7 +160,7 @@
 <?php
     echo "</head><body>";
 
-    // Test si connecté ou pas.
+    // Test si connectÃ© ou pas.
     $idusers = getLoginId() ;
     if ( empty($idusers) ) {
         echo htmlShouldNotDoThat();
@@ -183,7 +183,7 @@
     $action = get_cgi_var('action');
     $pilotolist_force_master = False;
     if ( !empty($action)) {
-        // Action donnée, on exécute l'action
+        // Action donnÃ©e, on exÃ©cute l'action
         $pilotolist_force_master = True; // We will need the freshest datas after update, thus we force data fetching from the master
         switch ($action) {
             case getLocalizedString("pilototo_prog_add"):
@@ -289,3 +289,4 @@
 
     echo "</body></html>";
 ?>
+Ã 4Ãƒ!
