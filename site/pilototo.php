@@ -42,7 +42,7 @@
         echo "    <td><input id=\"ts_value_$numline\" type=\"text\" name=\"time\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." onChange=\"majhrdate($numline);\" width=\"15\" size=\"15\" value=\"$ts\" /></td>\n";
         echo "    <td><img src=\"".DIRECTORY_JSCALENDAR."/img.gif\" id=\"trigger_jscal_$numline\" class=\"calendarbutton\" title=\"Date selector\" onmouseover=\"this.style.background='red';\" onmouseout=\"this.style.background=''\" /></td>\n";
         echo "    <td><input type=\"text\" size=\"22\" width=\"22\" name=\"gmtdate\" disabled=\"disabled\" value=\"" . $timestring . "\" /></td>\n";
-        echo "    <td><select onchange=\"checkpip($numline,".(($row === 0) ? "false" : "true").",'".$pip."'); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\" ". (($status=='done') ? "disabled=\"disabled\"" : "") .">\n";
+        echo "    <td><select onchange=\"checkpip($numline,".(($row === 0) ? "false" : "true").",'".$pim.",".$pip."'); document.forms[$numline].pip.focus(); document.forms[$numline].pip.style.color = '#0000FF';\" name=\"pim\" ". (($status=='done') ? "disabled=\"disabled\"" : "") .">\n";
         for ($i = 1; $i <= count($pilotmodeList); $i++) {
             echo "    <option ";
             if (($i == $pim) or (($row === 0) and ($i == $pilotmode)) ) {
@@ -108,7 +108,7 @@
         //calendars[i].setDate(d);
     }
 
-    function checkpip(i,bmodify,pipinit) {
+    function checkpip(i,bmodify,piminit,pipinit) {
         var pilotmode="<?php echo $pilotmode;?>";
         var boatheading = "<?php echo $boatheading;?>";
         var myWP = "<?php echo $myWP;?>";
@@ -122,9 +122,8 @@
                 document.forms[i].pip.value = windangle;
                 break;
             case "3" : case "4" : case "5" :
-                //if (bmodify && (pilotmode == "1" || pilotmode == "2")) {
-                if (!bmodify ||  (pilotmode == "1" || pilotmode == "2")) {
-                    document.forms[i].pip.value = myWP;
+                if (!bmodify ||  (piminit == "1" || piminit == "2")) {
+                     document.forms[i].pip.value = myWP;
                 } else {
                     document.forms[i].pip.value = pipinit;
                 }
