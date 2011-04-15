@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.23 2010-12-09 13:54:26 ylafon Exp $
+ * $Id: shmem.c,v 1.24 2011-04-15 20:05:27 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -130,7 +130,7 @@ int create_grib_shmid(winds_prev *windtable) {
            ((windtable) ? windtable->nb_prevs : DEFAULT_NB_SHARED_GRIB_ENTRIES);
   
   /* create the shared memory segment */
-  shmid = shmget(VLM_GRIB_MEM_KEY, needed_bytes, IPC_CREAT|0644);
+  shmid = shmget(VLM_GRIB_MEM_KEY, needed_bytes, IPC_CREAT|0664);
   if (shmid == -1) {
     /* failed */
     fprintf(stderr, "Unable to create shared memory segment VLMGRB\n");
@@ -150,7 +150,7 @@ int get_grib_shmid(int readonly) {
   if (readonly) {
     shmid = shmget(VLM_GRIB_MEM_KEY, 0, 0444);
   } else {
-    shmid = shmget(VLM_GRIB_MEM_KEY, 0, 0644);
+    shmid = shmget(VLM_GRIB_MEM_KEY, 0, 0664);
   }
   return shmid;
 }
@@ -183,7 +183,7 @@ int create_polar_shmid(boat_polar_list *polars) {
   }
 
   /* create the shared memory segment */
-  shmid = shmget(VLM_POLAR_MEM_KEY, needed_bytes, IPC_CREAT|0644);
+  shmid = shmget(VLM_POLAR_MEM_KEY, needed_bytes, IPC_CREAT|0664);
   if (shmid == -1) {
     /* failed */
     fprintf(stderr, "Unable to create shared memory segment VLMPOL\n");
@@ -201,7 +201,7 @@ int get_polar_shmid(int readonly) {
   if (readonly) {
     shmid = shmget(VLM_POLAR_MEM_KEY, 0, 0444);
   } else {
-    shmid = shmget(VLM_POLAR_MEM_KEY, 0, 0644);
+    shmid = shmget(VLM_POLAR_MEM_KEY, 0, 0664);
   }
   return shmid;
 }
@@ -275,7 +275,7 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
       if (shmid == -1) {
 	/* ok we are in trouble, we destroyed the previous existing segment
 	   now we can't create a bigger new one */
-	shmid = shmget(VLM_GRIB_MEM_KEY, shminfo.shm_segsz, IPC_CREAT|0644);
+	shmid = shmget(VLM_GRIB_MEM_KEY, shminfo.shm_segsz, IPC_CREAT|0664);
 	if (shmid == -1) {
 	  /* we are in deeeeeeep trouble, abort */
 	  return -1;
@@ -446,7 +446,7 @@ int copy_polar_array_to_shmem(int shmid, boat_polar_list *polars,
       if (shmid == -1) {
 	/* ok we are in trouble, we destroyed the previous existing segment
 	   now we can't create a bigger new one */
-	shmid = shmget(VLM_POLAR_MEM_KEY, shminfo.shm_segsz, IPC_CREAT|0644);
+	shmid = shmget(VLM_POLAR_MEM_KEY, shminfo.shm_segsz, IPC_CREAT|0664);
 	if (shmid == -1) {
 	  /* we are in deeeeeeep trouble, abort */
 	  return -1;
