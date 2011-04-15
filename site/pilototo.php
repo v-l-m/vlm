@@ -199,7 +199,7 @@
                     } else if ( ( $pim == 2 ) && (!is_numeric($pip) or $pip <-180 or $pip >180)  ) {
                         echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
                     } else if (  ( $pim == 3 or $pim == 4 or $pim == 5)
-                            &&    ( strlen($pip)==0 or strpos($pip, ',')==false or eregi(",.*,", $pip) )
+                            &&    ( strlen($pip)==0 or strpos($pip, ',')==false or preg_match(",.*,", $pip) )
                         ) {
                         echo "ERROR ADD : With PIM=3, 4 or 5, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
                     } else {
@@ -289,4 +289,3 @@
 
     echo "</body></html>";
 ?>
-à4Ã!
