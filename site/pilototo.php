@@ -124,7 +124,7 @@
             case "3" : case "4" : case "5" : 
                 if (bmodify && (pilotmode == "1" || pilotmode == "2")) {
                     document.forms[i].pip.value = myWP;
-                } else
+                } else {
                     document.forms[i].pip.value = pipinit;
                 }
                 break;
