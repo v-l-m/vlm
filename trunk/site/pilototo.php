@@ -121,8 +121,9 @@
             case "2" :
                 document.forms[i].pip.value = windangle;
                 break;
-            case "3" : case "4" : case "5" : 
-                if (bmodify && (pilotmode == "1" || pilotmode == "2")) {
+            case "3" : case "4" : case "5" :
+                //if (bmodify && (pilotmode == "1" || pilotmode == "2")) {
+                if (!bmodify ||  (pilotmode == "1" || pilotmode == "2")) {
                     document.forms[i].pip.value = myWP;
                 } else {
                     document.forms[i].pip.value = pipinit;
@@ -199,7 +200,7 @@
                     } else if ( ( $pim == 2 ) && (!is_numeric($pip) or $pip <-180 or $pip >180)  ) {
                         echo "ERROR ADD : With PIM=2, PIP should be between -180 and 180 please";
                     } else if (  ( $pim == 3 or $pim == 4 or $pim == 5)
-                            &&    ( strlen($pip)==0 or strpos($pip, ',')==false or preg_match(",.*,", $pip) )
+                            &&    ( strlen($pip)==0 or strpos($pip, ',')==false or preg_match("@,.*,@i", $pip) )
                         ) {
                         echo "ERROR ADD : With PIM=3, 4 or 5, PIP should be 0,0 or LATITUDE,LONGITUDE (',' between lat and long, and '.' between units and decimals)";
                     } else {
