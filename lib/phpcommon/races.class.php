@@ -26,6 +26,8 @@ class races {
     $boend,
     $maxboats,
     $theme,
+    $vacfreq,
+    $updated,
     $waypoints,
     $racedistance,
     $ics;

@@ -49,7 +49,7 @@
         $starttime = $endtime - DELAYBETWEENUPDATE; // seulement la dernière trace
     }
 
-    $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
+    $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
     $ws->answer['nb_tracks'] = count($pi->records);
     $ws->answer['tracks'] = $pi->records;
 
