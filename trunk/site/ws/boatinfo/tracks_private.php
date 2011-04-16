@@ -27,7 +27,7 @@
     //FIXME if debug
     $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
         
-    $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime);
+    $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
     $ws->answer['nb_tracks'] = count($pi->records);
     $ws->answer['tracks'] = $pi->records;
 
