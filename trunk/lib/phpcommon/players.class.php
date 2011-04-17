@@ -427,6 +427,10 @@ class players extends baseClass {
     function isAdmin() {
         return ($this->permissions & VLM_PLAYER_ADMIN);
     }
+    
+    function isOwner($idu) {
+        return in_array($idu, $this->getOwnedBoatIdList());
+    }
 
     //html renderers
     function htmlPlayername() {

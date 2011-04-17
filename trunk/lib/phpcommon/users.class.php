@@ -1228,8 +1228,10 @@ class fullUsers
       }
   }
 
-  function setABD()
-  {
+  function setABD() {
+      //Forbid Abandon for non owner
+      if ($this->users->getOwnerId() == getPlayerId()) return;
+      
     // Record classification only if this is not a "TYPE_RECORD" race and if no oldDuration is known
     $oldDuration=getOldDuration($this->races->idraces, $this->users->idusers);
     if ( $oldDuration == 0 ) {
@@ -1550,6 +1552,24 @@ class fullUsers
       $rowarrived = mysql_fetch_array($result, MYSQL_ASSOC);
       return array("rankracing" => $rank, "nbu" => $nbu+$rowarrived['nbarrived'],
                     "rank" => $rank+$rowarrived['nbarrived']);
+  }
+  
+  function displayAbandonDiv() {
+      //FIXME should be player logged !
+      echo '<div id="abandon">';
+      echo "<p>" . getLocalizedString("warning") . "</p>";
+      $racesObj = $this->races;
+      echo "<p>" . getLocalizedString("youengaged");
+      echo " <b>" .   $racesObj->htmlRacenameLink() .  " (" . $racesObj->htmlIdracesLink()    .  ") " . "</b></p>";
+  
+      if ($this->users->engaged  != 0 && getLoggedPlayerObject()->isOwner(getLoginId())) {
+          // The user may want to unsubscribe from this race
+          echo htmlAbandonButton($this->users->idusers, $this->users->engaged);
+      } else {
+          //User is not owner of this boat !
+          echo getLocalizedString("This is not your boat, only boat owner may abandon !");
+      }
+      echo '</div>';
   }
 }
 
