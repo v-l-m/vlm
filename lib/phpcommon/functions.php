@@ -70,14 +70,13 @@ function quote_smart($value) {
 }
 
 
-//     String $lang NavigatorLanguage()
-//
+// String $lang NavigatorLanguage()
 // Return navigator language or en if not supported
 //--------------------------------------------
 
-function NavigatorLanguage($allowed = array("fr", "en", "pt", "it", "es")) {
+function NavigatorLanguage($allowed = array("fr", "en", "pt", "it", "es", "de")) {
     $lang = getenv("HTTP_ACCEPT_LANGUAGE");
-    $lang = substr($lang,0,2);
+    $lang = substr($lang, 0, 2);
     if (in_array($lang, $allowed)) {
         return $lang;
     } else  {
@@ -1348,7 +1347,7 @@ function login($idus, $pseudo)
     //     ==> UPGRADE BDD : V0.13, ipaddr => varchar(255)
     $_SESSION['FULLIP'] = getfullip();
     $_SESSION['IP'] = getip();
-    $_SESSION['LANG'] = NavigatorLanguage();
+//    $_SESSION['LANG'] = getCurrentLang(); //NavigatorLanguage();
   }
 }
 
@@ -1356,6 +1355,7 @@ function loginPlayer($idus, $pseudo, $idp, $playername) {
     login($idus, $pseudo);
     $_SESSION['idp'] = $idp;
     $_SESSION['playername'] = $playername;
+    $_SESSION['LANG'] = getLoggedPlayerObject()->getLang(NavigatorLanguage());
 }
 
 function logout()

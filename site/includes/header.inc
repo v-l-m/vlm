@@ -12,7 +12,6 @@
 
     ob_start();
     //all GET and POST variables
-    $lang = getCurrentLang();
     $pseudo = get_cgi_var('pseudo');
     $password = get_cgi_var('password');
     $class = get_cgi_var('class');
@@ -167,7 +166,7 @@
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang ?>">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo getCurrentLang() ?>">
 
  <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -381,10 +380,10 @@
         </div> <!-- fin div menucommunicationbox -->
         <div id="docbox" class="leftbox">
             <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki"><?php echo getLocalizedString("doc"); ?></a>
-            <a href="<?echo DOC_SERVER_URL.'FAQ/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a> 
+            <a href="<?echo DOC_SERVER_URL.'FAQ/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a> 
             <a href="<?php echo TOOLS_SERVER_URL; ?>" target="_outils"><?php echo getLocalizedString("tools"); ?></a>            
             <a href="<?php echo DEV_SERVER_URL; ?>" target="_vlmdev"><?php echo getLocalizedString("dev"); ?></a>
-            <a href="<?echo DOC_SERVER_URL.'About/'.$lang; ?>" target="_vlmwiki"><?echo getLocalizedString("about"); ?></a>
+            <a href="<?echo DOC_SERVER_URL.'About/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("about"); ?></a>
 
         </div>
         <div id="weatherbox" class="leftbox">

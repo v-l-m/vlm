@@ -273,7 +273,63 @@ class players extends baseClass {
         $this->password = hash('sha256', $password);
     }
 
+    function unsetPref($key) {
+    
+        $query = sprintf("DELETE FROM `players_prefs` WHERE `idplayers` = %d AND `pref_name` = '%s';",
+            intval($this->idplayers), $key);
+        if ($this->queryWrite($query)) {
+            $this->logPlayerEvent("Player prefs(".$key.') deleted');
+            //$this->prefs[$key] = $value;
+            return True;
+        } else {
+            return False;
+        }
+    }          
+
+    function setPref($key, $val, $perm = null) {
+        if (is_null($val)) return $this->unsetPref($key);
+        $query = sprintf("REPLACE `players_prefs` SET `idplayers` = %d, `pref_name` = '%s', `pref_value` = '%s'",
+            intval($this->idplayers), $key, mysql_real_escape_string($val) );
+        if (!is_null($perm)) $query .= sprintf(", `permissions` = %d", $perm);
+        if ($this->queryWrite($query)) {
+            $this->logPlayerEvent("Player prefs(".$key.') updated');
+            //$this->prefs[$key] = $value;
+            return True;
+        } else {
+            return False;
+        }
+    }
+    
+    function setPrefPerm($key, $perm) {
+        $query = sprintf("UPDATE `players_prefs` SET `permissions` = %d WHERE `idplayers` = %d AND `pref_name` = '%s'",
+            $perm, intval($this->idplayers), $key);
+        if ($this->queryWrite($query)) {
+            $this->logPlayerEvent("Player prefs(".$key.') updated');
+            //$this->prefs[$key] = $value;
+            return True;
+        } else {
+            return False;
+        }
+    }
+    
     //getters
+    function getLang($deflang = 'en') {
+        $val = $this->getPref("lang_ihm");
+        if (is_null($val)) return $deflang;
+        return $val['pref_value'];
+    }
+    
+    function getPref($key) {
+        $query = sprintf("SELECT `pref_name`, `pref_value`, `permissions` FROM `players_prefs` WHERE `idplayers` = %d AND `pref_name` = '%s'",
+            intval($this->idplayers), $key);
+        $result = $this->queryRead($query);
+        if ($result && mysql_num_rows($result) === 1)  {
+            return mysql_fetch_array($result, MYSQL_ASSOC);
+        } else {
+            return null;
+        }
+    }
+
     function getManageableBoatIdList() {
         return array_unique(array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList()));
     }

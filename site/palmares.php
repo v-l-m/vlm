@@ -80,6 +80,7 @@
                     echo "<li><a href=\"create_boat.php\">".getLocalizedString('Create your boat') . "</a>. <a href=\"attach_owner.php\">".getLocalizedString("You may also attach a pre-existing boat").'.</a></li>';
                     echo "<li><a href=\"modify_password.php\">".getLocalizedString('Change your password') . '</a></li>';
                     echo "<li><a href=\"manage_skippers.php\">".getLocalizedString("Boat-sitting management") . '</a></li>';
+                    echo "<li><a href=\"manage_profil.php\">".getLocalizedString("Profile Management") . '</a></li>';
                 }
 
 
