@@ -2,6 +2,18 @@
 $strings = array (
   'en' => 
   array (
+    "Profile Management" => 'Profile Management',
+    "Save" => "Save",
+    "Cancel" => "Annuler",
+    'prefsgroup_lang' => 'Language Preferences',
+    'pref_lang_ihm' => 'Favorite interface language',
+    'pref_lang_communication' => 'Language you enough to communicate with',
+    'prefsgroup_contact' => 'Contact information',
+    'pref_contact_email' => 'Email',
+    'pref_contact_jabber' => 'Jabber',
+    'Permissions' => 'Permissions',
+    'Public' => 'Public',
+
     "Revoke boatsitting" => "Revoke boatsitting",
     'You are no longer boatsitter of this boat' => 'You are no longer boatsitter of this boat',
     'You are not allowed to do that !' => 'You are not allowed to do that !',    
