@@ -1,27 +1,16 @@
 <?php
-include_once("includes/header.inc");
-include_once("config.php");
+    include_once("includes/header.inc");
+    include_once("config.php");
 
-$fullUsersObj = new fullUsers(getLoginId());
+    if (!isPlayerLoggedIn()) die("Not logged");
 
-// If engaged on a race, display Warning
-if ($fullUsersObj->users->engaged  != 0)
-{
-    echo "<h2>". getLocalizedString("warning")."</h2>";
+    $fullUsersObj = new fullUsers(getLoginId());
 
-    $racesListObj = new racesList();
-    foreach($racesListObj->records as $racesObj) {
-        if (  $racesObj->races->idraces == $fullUsersObj->users->engaged ) {
-            echo "<p>Engaged on Race : <b>" .     $fullUsersObj->users->engaged .  " (" .
-                 $racesObj->races->racename    .  ") " .
-                 "</b></p>";
-        }
-    }
-
-    // The user may want to unsubscribe from this race
-    htmlAbandonButton($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
-// Else display list of available races
-} else {
+    // If engaged on a race, display Warning
+    if ($fullUsersObj->users->engaged  != 0) {
+        $fullUsersObj->displayAbandonDiv();
+    // Else display list of available races
+    } else {
 
     //select races not started or permanent and available for this boat
     $races=availableRaces($fullUsersObj->users->idusers);

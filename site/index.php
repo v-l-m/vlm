@@ -36,7 +36,8 @@
     } else {
         $users = new Users(getLoginId());
         if ( $users->engaged != 0 ) {
-            include("abandon_race.php");
+            $fullUsersObj = new fullUsers($users->idusers, $users);
+            $fullUsersObj->displayAbandonDiv();
         }
     }
 ?>    

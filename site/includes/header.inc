@@ -134,7 +134,7 @@
         //  setUserPref($users->users->idusers,"hidePos","on");
     }
     
-    if ($type == "unsubscribe")
+    if ($type == "unsubscribe" && getLoggedPlayerObject()->isOwner(getLoginId()))
     {
         $users = new fullUsers(getLoginId());
         $idraces_unsubscribe = quote_smart($_REQUEST['idraces_unsubscribe']);
