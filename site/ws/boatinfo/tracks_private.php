@@ -24,11 +24,18 @@
     
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
+    if ($starttime != 0 && $endtime != 0 && $starttime > $endtime) $ws->reply_with_error("RTFM02");
+    
     //FIXME if debug
     $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
         
     $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
-    $ws->answer['nb_tracks'] = count($pi->records);
+    $nbtracks = count($pi->records);
+    if ($nbtracks < 1) {
+        $pi = new fullPositionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
+        $nbtracks = count($pi->records);
+    }
+    $ws->answer['nb_tracks'] = $nbtracks;
     $ws->answer['tracks'] = $pi->records;
 
     $ws->reply_with_success();

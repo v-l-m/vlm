@@ -178,6 +178,7 @@
     define ("RACE_PENDING",  0);
     define ("RACE_STARTED",  1);
 
+    //Tracks parameters
     define ("RACE_EXPORT_DURATION", 180*86400); // ~6 monthes
 
     //Player mode
@@ -201,8 +202,8 @@
     // default limits
     define("MAX_WEST", -180000);
     define("MAX_EAST", 180000);
-    define("MAX_NORTH", 80000);
-    define("MAX_SOUTH", -80000);
+    define("MAX_NORTH", 85000);
+    define("MAX_SOUTH", -85000);
 
     //IC FLAGS
     define("IC_FLAG_VISIBLE", 1);
