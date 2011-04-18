@@ -309,6 +309,8 @@ function get_error($code) {
         "IDR02"  => 'idr should be int and > 0',
         "IDR03"  => 'idr is not valid',
         "RTFM01"  => 'RTFM : please input idr when the boat is not racing',
+        "RTFM02"  => 'RTFM : starttime should be lesser than endtime',
+
         //limit - mainly for ranking/results
         "LIMIT01" => "limit is required",
         "LIMIT02" => 'limit should be int and > 0 if specified',
