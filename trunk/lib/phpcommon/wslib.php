@@ -380,10 +380,10 @@ function ask_for_auth($usage) {
 }
 
 function wsCheckLogin($usage) {
-    return login_if_not($usage, False);
+    return login_if_not($usage);
 }
 
-function login_if_not($usage = "No usage given", $allow_boatauth = False) {
+function login_if_not($usage = "No usage given") {
     
     session_start();
     // do we know the player from a previous login session?
@@ -396,11 +396,6 @@ function login_if_not($usage = "No usage given", $allow_boatauth = False) {
             login($user->idusers, $user->username); //Boat login, to change idu in session
         }
         return $_SESSION['idu'];
-    // Backward compatible authentification during v14 lifetime
-    // do we know the user from a previous login session?
-    } else if ($allow_boatauth && isLoggedIn()) {
-        //OK, we are BW logged
-        return $_SESSION['idu'];
     } else {
         // fallback to HTTP auth
         if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) ) {
@@ -411,31 +406,25 @@ function login_if_not($usage = "No usage given", $allow_boatauth = False) {
             $pseudo = $_SERVER['PHP_AUTH_USER'];
             $passwd = $_SERVER['PHP_AUTH_PW'];
 
-            if ($allow_boatauth && ($idu = checkAccount($pseudo, $passwd)) != FALSE ) {
-                // Backward compatible authentification during v14 lifetime
-                login($idu, $pseudo);
-                return $_SESSION['idu'];
-            } else {
-                //New player auth
-                $player = new players(0, $pseudo);
-                if (!$player->error_status && $player->checkPassword($passwd) ) {
-                    $idu = get_cgi_var('select_idu');
-                    if (is_null($idu) || !in_array($idu, $player->getManageableBoatIdList())) {
-                        //select_idb is not correct, selecting default
-                        $idu = $player->getDefaultBoat();
-                    }
-                    
-                    if ($idu > 0) {
-                        $user = getUserObject($idu);
-                        loginPlayer($user->idusers, $user->username, $player->idplayers, $player->playername);
-                    } else {
-                        loginPlayer(0, "noboat", $player->idplayers, $player->playername);
-                    }
-                    return $idu;
-                } else {
-                    ask_for_auth($usage);
-                    exit();
+            //New player auth
+            $player = new players(0, $pseudo);
+            if (!$player->error_status && $player->checkPassword($passwd) ) {
+                $idu = get_cgi_var('select_idu');
+                if (is_null($idu) || !in_array($idu, $player->getManageableBoatIdList())) {
+                     //select_idb is not correct, selecting default
+                     $idu = $player->getDefaultBoat();
                 }
+                    
+                if ($idu > 0) {
+                    $user = getUserObject($idu);
+                    loginPlayer($user->idusers, $user->username, $player->idplayers, $player->playername);
+                } else {
+                    loginPlayer(0, "noboat", $player->idplayers, $player->playername);
+                }
+                return $idu;
+            } else {
+                ask_for_auth($usage);
+                exit();
             }
         }
     }
