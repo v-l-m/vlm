@@ -255,7 +255,7 @@ function lastUpdate()
 /* Dernière IP de l'utilisateur */
 function lastUserAction() {
     if ( isLoggedIn() ) {
-        $query2 = "SELECT * FROM user_action WHERE idusers = ".getLoginId()." ORDER BY `time` DESC LIMIT 1";
+        $query2 = "SELECT * FROM user_action WHERE idusers = ".getUserId()." ORDER BY `time` DESC LIMIT 1";
         $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
         $row2 = mysql_fetch_assoc($result2);
         return $row2;
@@ -1400,8 +1400,13 @@ function getPlayername() {
     return getSessionValue('playername');
 }
 
-function getLoginId() {
+function getUserId() {
+    //userid is BOAT id
     return getSessionValue('idu');
+}
+
+function getLoginId() {
+    return getUserId();
 }
 
 function getPlayerId() {
@@ -1432,7 +1437,7 @@ function getPlayerObject($id) {
 function getLoggedUserObject() {
     static $user = null;
     if (!is_null($user)) return $user;
-    $user = getUserObject(getLoginId());
+    $user = getUserObject(getUserId());
     return $user;
 }
 
