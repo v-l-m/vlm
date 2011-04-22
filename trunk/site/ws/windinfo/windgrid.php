@@ -1,7 +1,8 @@
 <?php
 
-    include_once("config.php");
-    include_once("functions.php");
+    include_once("config-defines.php");
+    include_once("config-funcs.php");
+    include_once("vlmc.php");
     date_default_timezone_set('UTC');
 
     //FIXME: should use wslib with custom class.
