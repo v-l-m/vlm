@@ -1,6 +1,6 @@
 <?php
-include_once("config.php");
-include_once("vlmc.php");
+    include_once("config-defines.php");
+    include_once("vlmc.php");
 
 function get_grib_timestamp_array() {
   $ts_array = array();
