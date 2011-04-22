@@ -38,6 +38,8 @@ define("WEBINSTANCE_1", "testing.virtual-loup-de-mer.org" );
 //define_if_not("WWW_SERVER_URL", "http://localhost");
 //define("EMAIL_COMITE_VLM", "paparazzia@gmail.com");
 //define("MAIL_PREFIX", "VLM_".SERVER_NAME);
+//define("ALLOW_ACCOUNT_CREATION", Fakse);
+
 
 
 define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
