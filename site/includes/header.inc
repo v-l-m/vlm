@@ -46,43 +46,18 @@
         $msg = getLocalizedString("loggedout");
     }
 
-    if ($type == "create") {
-        //FIXME : on laisse ce code le temps des tests pour pouvoir créer des bateaux "old style"
-        $pseudo = htmlentities($pseudo);
-        $password = htmlentities($password);
-        //check if login exists
-        //$msg2 ="";
-        $tmp="";
-        if (checkLoginExists($pseudo))
-        {
-            $msg = getLocalizedString("loginexist");
-        } else if (($pseudo == "") || ($password == "")) {
-            $msg = getLocalizedString("loginempty");
-        } else {
-            $idu = createBoat($pseudo, $password, $email);
-            login($idu, $pseudo);
-            $msg = getLocalizedString("accountcreated")." ".$pseudo." ".$password;
-        }
-    }
-
     //if password and pseudo try to connect
     if ($type=="login" && $pseudo!="" && $password!="") {
         //FIXME : check this
         $pseudo = htmlentities($pseudo);
         $password = htmlentities($password);
-        if (  ($id = checkAccount($pseudo, $password)) != FALSE ) {
-            //create session info
-            login($id, $pseudo);
-            //$msg = getLocalizedString("nowlogin");
+        $player = new players(0, $pseudo);
+        if (!$player->error_status && $player->checkPassword($password)) {
+            //Choosing a default boat is here possible because we give feedback to the user.
+            $defaultuser = getUserObject($player->getDefaultBoat());
+            loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
         } else {
-            $player = new players(0, $pseudo);
-            if (!$player->error_status && $player->checkPassword($password)) {
-                //Choosing a default boat is here possible because we give feedback to the user.
-                $defaultuser = getUserObject($player->getDefaultBoat());
-                loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
-            } else {
-                $msg = getLocalizedString("authfailed")."<br /><a href=\"reset_password.php\">".getLocalizedString("Lost your password ?")."</a>";
-            }
+            $msg = getLocalizedString("authfailed")."<br /><a href=\"reset_password.php\">".getLocalizedString("Lost your password ?")."</a>";
         }
     }
 
