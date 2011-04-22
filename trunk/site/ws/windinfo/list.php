@@ -16,6 +16,7 @@ function get_grib_timestamp_array() {
   return $ts_array;
 }
 
+//FIXME: devrait être factorisé avec windgrid
 $answer = get_grib_timestamp_array();
 // check if we have a full grib or a 
 if (count($answer) > 10) {

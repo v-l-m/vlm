@@ -12,7 +12,16 @@
     }
 
     function send_json_header() {
-        header("content-type: application/json");
+        header("Content-type: application/json; charset=UTF-8");
+        //FIXME devrait être factorisé quelque part cf. ws/windinfo/list.php)
+        $answer = get_grib_timestamp_array();
+        // check if we have a full grib or a 
+        if (count($answer) > 10) {
+          $cache = $answer[0] + 34200 - time(); /* grib offset + 9h30 */ 
+        } else {
+          $cache = 10; /* we use 10s as the default */
+        }
+        header("Cache-Control: max-age=".$cache.", must-revalidate");
     }
 
     function get_wind_info_deg($_lat, $_long, $_time) {
