@@ -2,7 +2,8 @@
 
     include_once("config-defines.php");
     include_once("config-funcs.php");
-    include_once("vlmc.php");
+    require_once("vlmc.php");
+    require_once("griblib.php");
     date_default_timezone_set('UTC');
 
     //FIXME: should use wslib with custom class.
@@ -14,28 +15,8 @@
 
     function send_json_header() {
         header("Content-type: application/json; charset=UTF-8");
-        //FIXME devrait être factorisé quelque part cf. ws/windinfo/list.php)
-        $answer = get_grib_timestamp_array();
-        // check if we have a full grib or a 
-        if (count($answer) > 10) {
-          $cache = $answer[0] + 34200 - time(); /* grib offset + 9h30 */ 
-        } else {
-          $cache = 10; /* we use 10s as the default */
-        }
+        $cache = get_grib_validity();
         header("Cache-Control: max-age=".$cache.", must-revalidate");
-    }
-
-    function get_wind_info_deg($_lat, $_long, $_time) {
-        $temp_vlmc_context = new vlmc_context();
-        shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
-        
-        $wind_boat = new wind_info();
-
-        VLM_get_wind_info_latlong_deg_context($temp_vlmc_context, $_lat, $_long,
-					      $_time, $wind_boat);
-        shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
-        
-        return array ("speed" => $wind_boat->speed, "heading" => fmod($wind_boat->angle+180., 360.));
     }
 
     //Le temps  - c'est au caller d'appeler list.php avant pour connaitre la date du grib si nécessaire
@@ -44,7 +25,6 @@
     if (($timerequest-time() < -MAX_GRIBTIME_HISTORY) || ($timerequest - time() > MAX_GRIBTIME_FUTURE)) {
         invalid_values("bad time requested : $timerequest");
     }
-
 
     //Le coefficient de magnification du step ((c) spifou)
     // entre 1 et 8.
@@ -84,7 +64,6 @@
       invalid_values("bad longitude requested : (west : $west, esat : $east)");
     } 
 
-
     $now = $timerequest;
     $windgrid = array();
 
@@ -98,8 +77,8 @@
             for ($lon = $west; $lon <= $east; $lon += $step) {
                 $twa = get_wind_info_deg($lat, $lon, $now);
                 array_push($windgrid, array("lat" => $lat, "lon" => $lon,
-					    "wspd" => $twa['speed'], 
-					    "whdg" => $twa['heading']));
+                    "wspd" => $twa['speed'], 
+                    "whdg" => $twa['heading']));
             }
         }
     } else {
@@ -109,20 +88,20 @@
         } 
         for ($lat = $south; $lat <= $north; $lat += $step) {
             for ($lon = $west; $lon <= 180.; $lon += $step) {
-	        $twa = get_wind_info_deg($lat, $lon, $now);
+                $twa = get_wind_info_deg($lat, $lon, $now);
                 array_push($windgrid, array("lat" => $lat, "lon" => $lon,
-					    "wspd" => $twa['speed'], 
-					    "whdg" => $twa['heading']));
-	    }
+                    "wspd" => $twa['speed'], 
+                    "whdg" => $twa['heading']));
+          }
         } 
         $min_lon = -180.+$step-fmod((180.-$west), $step);
         for ($lat = $south; $lat <= $north; $lat += $step) {
-	    for ($lon = $min_lon; $lon <= $east; $lon += $step) {
-	        $twa = get_wind_info_deg($lat, $lon, $now);
-		array_push($windgrid, array("lat" => $lat, "lon" => $lon,
-					    "wspd" => $twa['speed'], 
-					    "whdg" => $twa['heading']));
-	    }
+            for ($lon = $min_lon; $lon <= $east; $lon += $step) {
+                $twa = get_wind_info_deg($lat, $lon, $now);
+                array_push($windgrid, array("lat" => $lat, "lon" => $lon,
+                    "wspd" => $twa['speed'], 
+                    "whdg" => $twa['heading']));
+            }
         } 
     }
     send_json_header();
