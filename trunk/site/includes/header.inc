@@ -57,6 +57,7 @@
             $defaultuser = getUserObject($player->getDefaultBoat());
             loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
         } else {
+            $error_auth = True;
             $msg = getLocalizedString("authfailed")."<br /><a href=\"reset_password.php\">".getLocalizedString("Lost your password ?")."</a>";
         }
     }
@@ -384,6 +385,13 @@ end of firstcolumn
 
    <div id="main">
 <?php
+if ( isset($error_auth) && $error_auth )
+{
+   include_once("includes/login_error.inc");
+   include_once("includes/footer.inc");
+   die();
+}
+
 if ( !isLoggedIn() && (in_array($_SERVER["PHP_SELF"], $restrictedPages) ) )
 {
    echo "Access restricted\n<br />";
