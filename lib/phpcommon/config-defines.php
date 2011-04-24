@@ -3,7 +3,7 @@
     include_once('param.php');
 
     /************** restricted pages ******/
-    $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercator1.php", "/subscribe_race.php", "/pilototo.php");
+    $restrictedPages = array("/modify.php", "/myboat.php", "/mappref.php", "/mercator1.php", "/subscribe_race.php", "/pilototo.php", "/edit_boatprefs.php", "/modify_password.php");
 
     // The full path of the gshhs coast file in use (the "full" version)
     define("GSHHS_FILENAME", "".GSHHS_DIRECTORY."/gshhs_f.b");
