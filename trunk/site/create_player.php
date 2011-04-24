@@ -116,6 +116,7 @@
         } else {
             echo "<h2>".getLocalizedString("Your account has been created")."</h2>";
             printAccountSummary($player->email, "****", $player->playername);
+            echo "<h2>".getLocalizedString('Please connect to create your first boat')."</h2>";    
         }
         echo "</div>";
     } else {
