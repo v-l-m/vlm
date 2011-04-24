@@ -91,6 +91,17 @@ class WSBase extends baseClass {
         }
     }
 
+    function check_cgi_intzero($var, $err_exists, $err_notint, $default = null) {
+        $foo = $this->check_cgi($var, $err_exists, $default);
+        $foo = intval($foo);
+        if (is_int($foo)) {
+            return $foo;
+        } else {
+            $this->reply_with_error($err_notint);
+        }
+    }
+
+
 }
 
 class WSBasePlayer extends WSBase {
@@ -314,6 +325,9 @@ function get_error($code) {
         //limit - mainly for ranking/results
         "LIMIT01" => "limit is required",
         "LIMIT02" => 'limit should be int and > 0 if specified',
+        //wpid
+        "WPID01" => "wp is required",
+        "WPID02" => "wp should be int",
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
