@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    "Please connect to create your first boat" => "Please connect to create your first boat",
+    
     "You seem to try to use an old account with boat" => "You seem to try to use an old account with boat",
     "You should do following steps" => "You should do following steps",
     "Read the documentation" => "Read the documentation",
