@@ -50,7 +50,9 @@
         }
         echo "<h1>" . sprintf (getLocalizedString("palmares"), $userobj->boatname) . "</h1>";
         displayPalmares($idusers);
+
     } else if ( $palmares_type == 'player' ) {
+
         if (!isPlayerLoggedIn()) {
             echo "<h2>".getLocalizedString('You are not logged in with a player account.')."</h2>";
             echo "<h2>".getLocalizedString('You are not allowed to view player info.')."</h2>";
@@ -58,11 +60,36 @@
             $idplayers = get_cgi_var('idplayers', getPlayerId());
             $player = getPlayerObject($idplayers);
             if (!is_null($player)) {
+                require_once("playersPrefs.class.php");
+                //DISPLAY OR NOT CONTACT INFO
+                $pp = new playersPrefsHtml($player->idplayers);
+                $clist = $pp->getPrefGroup("contact_");
+                if (count($clist) > 0) {
+                    echo "<div id=\"contactinfos\">";
+                    echo "<h3>".getLocalizedString("Contact")."</h3>";
+                    echo "<ul>";
+                    //decide permission
+                    $currentperm = VLM_ACL_PUBLIC;
+                    if (in_array(getPlayerId(),$player->getBoatsitterList())) $currentperm |= VLM_ACL_BOATSIT;
+
+                    foreach($clist as $k=>$v) {
+
+                        if (getPlayerId() == $player->idplayers || ($v['permissions'] & $currentperm) ) {
+                            echo "<li class=\"$k\">";
+                            print $pp->htmlPref($k);
+                            echo "</li>";
+                        }
+                    }
+                    echo "</ul>";
+                    echo "</div>";
+                }
+
                 echo "<h2>".getLocalizedString('playername') . ' : ' . $player->htmlPlayername().'</h2>';
                 echo "<ul>";
                 echo "<li>".getLocalizedString("idplayer") . ' : @' . $idplayers .'</li>';
                 echo "</ul>";
-                echo "<hr />";
+
+                echo "<hr style=\"clear:both; display:block;\"/>";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
                 if ($player->idplayers == getPlayerId()) {
                     echo $player->htmlBoatManageableList();
@@ -82,7 +109,6 @@
                     echo "<li><a href=\"manage_skippers.php\">".getLocalizedString("Boat-sitting management") . '</a></li>';
                     echo "<li><a href=\"manage_profil.php\">".getLocalizedString("Profile Management") . '</a></li>';
                 }
-
 
             } else {
                 echo "<h2>".getLocalizedString("This player account does not exist.")."</h2>";

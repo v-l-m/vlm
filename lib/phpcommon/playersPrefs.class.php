@@ -3,7 +3,15 @@
 include_once("functions.php");
 include_once("base.class.php");
 
-$playersPrefsList = explode(',', PLAYER_PREF_LIST); //Array("lang_ihm", "lang_communication", "contact_email", "contact_jabber");
+$playersPrefsList = explode(',', PLAYER_PREF_ALLOWED); //Array("lang_ihm", "lang_communication", "contact_email", "contact_jabber");
+
+$playersPrefsContactLinkPattern = Array(
+    "contact_revatua" => "http://revatua.forumactif.com/u%scontact",
+    "contact_fmv" => "http://forum-marinsvirtuels.forumactif.com/u%scontact",
+    "contact_taverne" => "http://www.virtual-winds.com/forum/index.php?showuser=%s",
+    "contact_twitter" => "https://twitter.com/#!/%s",
+    "contact_identica" => "http://identi.ca/%s",
+    );
 
 //NB: par défaut, tout est privé.
 define("VLM_ACL_BOATSIT", 1);
@@ -39,6 +47,9 @@ class playersPrefs extends baseClass {
         return $value['pref_value'];
     }
     
+    function getPrefGroup($prefix) {
+        return $this->playerclass->getPrefGroup($prefix);
+    }
 }
 
 class playersPrefsHtml extends playersPrefs {
@@ -117,15 +128,46 @@ class playersPrefsHtml extends playersPrefs {
     }
     
     function checkPrefValue($key, $val) {
+        if (is_null($val) || $val == "") return "";
         switch($key) {
-            case "lang_ihm" :
-                return null;
+            case "contact_email":
+            case "contact_jabber":
+                $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
+                if (preg_match($pattern  ,  $val) < 1) {
+                    $this->set_error(getLocalizedString("pref_".$key)." : ".getLocalizedString("Your id doesn't seem to be valid"));
+                    return null;
+                }
+                return $val;
+            case "contact_taverne":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/www\.virtual-winds\.com\/forum\/index.php\?showuser=(\d+)$/i", "/^(\d+)$/i");
+            case "contact_fmv":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/forum-marinsvirtuels\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
+            case "contact_revatua":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/revatua\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
+            case "contact_twitter":
+                return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
+            case "contact_identica":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/identi.ca\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
             case "lang_communication" :
                 if (is_array($val)) $val = implode(',', $val);
+            case "lang_ihm" :
             default :
                 return $val;
         }
+        return $val;
     }
+    
+    function checkDoublePattern($key, $val, $pattern, $pattern2) {
+                if (is_null($val) || $val == "") return "";
+                if (preg_match($pattern  ,  $val, $matches) > 0) {
+                    $val = $matches[1];
+                }
+                if (preg_match($pattern2  ,  $val) <  1) {
+                    $this->set_error(getLocalizedString("pref_".$key)." : ".getLocalizedString("Your id doesn't seem to be valid"));
+                    return null;
+                }
+                return $val;
+    }    
     
     function checkCgiPref($key) {
    
@@ -157,7 +199,27 @@ class playersPrefsHtml extends playersPrefs {
         }
         return !($this->playerclass->error_status || $this->error_status);
     }
+    
+    function htmlPref($key) {
+        global $playersPrefsContactLinkPattern;
+        $val = $this->getPrefValue($key);
+    
+        switch($key) {
+            case "contact_email":
+            case "contact_jabber":
+                return "<b>".getLocalizedString("pref_$key")."</b> : ".$val;
+            case "contact_taverne":
+            case "contact_fmv":
+            case "contact_revatua":
+            case "contact_twitter":
+            case "contact_identica":
+                return "<a href=\"".sprintf($playersPrefsContactLinkPattern[$key], $val)."\">".getLocalizedString("pref_$key")."</a>";
         
+            default :
+                  return $val;
+        }
+        return $val;
+    }
 }
 
 

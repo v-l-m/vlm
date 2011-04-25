@@ -2,6 +2,10 @@
 $strings = array (
   'en' => 
   array (
+    'pref_contact_taverne' => 'Forum La taverne - User profile',
+    'pref_contact_fmv' => 'Forum des marins virtuels - User profile',
+    'pref_contact_revatua' => 'Forum Revatua - User profile',
+
     "This is not your boat, only boat owner may abandon !" => "This is not your boat, only boat owner may abandon !",
     "Please connect to create your first boat" => "Please connect to create your first boat",
     

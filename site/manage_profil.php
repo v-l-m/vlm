@@ -13,8 +13,6 @@
         echo "</tr>";
     }
 
-    print_r($_REQUEST);
-
     if (!isPlayerLoggedIn()) die("Not logged");
     $player = getLoggedPlayerObject();
         
