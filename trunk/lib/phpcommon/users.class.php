@@ -490,6 +490,10 @@ class users extends baseClass
   function hasTrackHidden() {
       return substr($this->color,0,1) == "-";
   }
+  
+  function isEngaged() {
+      return $this->engaged > 0;
+  }
 
 }
 
@@ -1232,7 +1236,7 @@ class fullUsers
 
   function setABD() {
       //Forbid Abandon for non owner
-      if ($this->users->getOwnerId() == getPlayerId()) return;
+      if ($this->users->getOwnerId() != getPlayerId()) return;
       
     // Record classification only if this is not a "TYPE_RECORD" race and if no oldDuration is known
     $oldDuration=getOldDuration($this->races->idraces, $this->users->idusers);
