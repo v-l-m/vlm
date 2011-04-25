@@ -329,7 +329,21 @@ class players extends baseClass {
             return null;
         }
     }
+    
+    function getPrefGroup($prefix) {
+        $query = sprintf("SELECT `pref_name`, `pref_value`, `permissions` FROM `players_prefs` WHERE `idplayers` = %d AND `pref_name` LIKE '%s%%'",
+            intval($this->idplayers), $prefix);
+        $result = $this->queryRead($query);
+        $grouplist = array();
 
+        if ($result) {
+            while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                if (!is_null($row["pref_value"]) && $row["pref_value"] != "") $grouplist[$row["pref_name"]] = $row;
+            }
+        }
+        return $grouplist;
+    }
+    
     function getManageableBoatIdList() {
         return array_unique(array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList()));
     }
@@ -365,6 +379,22 @@ class players extends baseClass {
         return $this->boatsitidlist;
     }
 
+    function getBoatsitterList() {
+        $ol = $this->getOwnedBoatIdList();
+        if (count($ol) < 1) return Array();
+        $olmysql = implode(',', $ol);
+        $boatsitterlist = array();
+        $query  = "SELECT DISTINCT `idplayers` FROM `playerstousers` WHERE `idusers` IN (".$olmysql.") AND linktype = ".PU_FLAG_BOATSIT;
+        if ($res = $this->queryRead($query)) {
+            while ($row = mysql_fetch_assoc($res)) {
+                $boatsitterlist[$row['idplayers']] = $row['idplayers'];
+                //FIXME : check result ?
+            }
+        }
+//        $this->recentlyboatsittedidlist = $boatidlist;
+        //FIXME : mettre en cache
+        return $boatsitterlist;
+    }
 
     function getDefaultBoat() {
         $boatlist = array_merge($this->getOwnedBoatIdList(), $this->getBoatsitIdList());

@@ -486,3 +486,7 @@ table.racesummary-type0, table.racesummary-type1 {
 .racesummary-type1 {
   font-style: italic;
 }
+
+#contactinfos {
+	  float: right;
+}
