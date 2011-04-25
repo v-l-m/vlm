@@ -1210,6 +1210,8 @@ class fullUsers
       
       $value = mysql_real_escape_string(strip_tags($value));
       
+      //FIXME: we should check prefs values !
+      
       //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
       if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) {
           $query_pref = "UPDATE users SET `$key` = '" . $value . "'" .
