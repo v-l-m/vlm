@@ -47,7 +47,7 @@
             }
             setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );    
         } else if ( $action == getLocalizedString("aucun") ) {
-            setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , " "  );
+            setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , ""  );
         } 
         $prefOpponents=getUserPref($fullUsersObj->users->idusers,"mapPrefOpponents");
   ?>
@@ -63,17 +63,21 @@
           <td class="map" align="left" valign="top"></td>
           <!-- //Colonne 2 : les trajectoires et les noms des bateaux -->
           <td class="map" align="left" valign="top">
-            <?php 
-            $nbo = count(explode(",", $prefOpponents));
+            <?php
+            //FIXME : we are not sure of the prefOpponents format
+            $prefOpponentsList = explode(",", $prefOpponents);
+            if (strlen($prefOpponents) == 0) $prefOpponentsList = Array();
+            $nbo = count($prefOpponentsList);
+
             echo "<h3";
             if ($nbo > MAX_BOATS_ON_MAPS) echo " class=\"warnmessage\"";
-            echo ">".getLocalizedString("Number of boats selected (checked below)")."&nbsp;:&nbsp;".$nbo.".&nbsp;";
-            echo getLocalizedString("Popularity of your boat")."&nbsp;:&nbsp;".getBoatPopularity($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
-            echo "</h3>";
+            echo ">".getLocalizedString("Number of boats selected (checked below)")."&nbsp;:&nbsp;".$nbo.".</h3>";
+            echo "<h3>".getLocalizedString("Popularity of your boat")."&nbsp;:&nbsp;".getBoatPopularity($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
+            echo ".</h3>";
             ?>
 <?
         //List of players, check boxes
-        $fullRacesObj->dispHtmlForm(explode(",", $prefOpponents));
+        $fullRacesObj->dispHtmlForm($prefOpponentsList);
 ?>
           </td>
         </tr>
