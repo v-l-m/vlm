@@ -2,6 +2,7 @@
 $strings = array (
   'en' => 
   array (
+    "This is not your boat, only boat owner may abandon !" => "This is not your boat, only boat owner may abandon !",
     "Please connect to create your first boat" => "Please connect to create your first boat",
     
     "You seem to try to use an old account with boat" => "You seem to try to use an old account with boat",
@@ -438,6 +439,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "This is not your boat, only boat owner may abandon !" => "Ce bateau n'est pas le vôtre, seul le propriétaire du bateau peut abandonner !",
+    "Please connect to create your first boat" => "Connectez vous pour créer votre premier bateau",
     "You seem to try to use an old account with boat" => "Il semble que vous vouliez utiliser un vieux compte avec le bateau",
     "You should do following steps" => "Vous devez suivre les étapes suivantes",
     "Read the documentation" => "Lire la documentation",
