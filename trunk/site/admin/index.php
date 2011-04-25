@@ -46,6 +46,9 @@
         "players_pending.php" => "Players Pending",
         "playerstousers.php" => "Links between players & users",
         "block3" => "block",
+        "user_prefs.php" => "Prefs (Boats/Users)",
+        "players_prefs.php" => "Prefs (Players)",
+        "block4" => "block",
         "flags.php" => "Flags definitions (no uploading, see below)",
         );
     adminlistbox($tablepages, "Boats & players administration");

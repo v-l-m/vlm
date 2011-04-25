@@ -223,6 +223,7 @@
     // NOTSET (for user_prefs)
     define("NOTSET", "NULL");
     define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname,frogDatas");
+    define("PLAYER_PREF_ALLOWED", "lang_ihm,lang_communication,contact_email,contact_jabber");
 
     // WAYPOINTS
     define("WP_TWO_BUOYS", 0);
