@@ -75,6 +75,7 @@
         "boat_action_count.report.php" => "Boats actions count(*)",
         "player_action_count.report.php" => "Players actions count(*)",
         "player_boat_owned_count.report.php" => "Boat per player count(*)",
+        "server_action_count.report.php" => "Servers actions count(*)",
         );
 
     adminlistbox($reportpages, "Stats");
