@@ -9,7 +9,7 @@ CREATE TABLE `players_prefs` (
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`idplayers_prefs`),
   UNIQUE KEY `idp_key` (`idplayers`, `pref_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='preferences of players'
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='preferences of players';
 
 #On ajoute une clef indexee dans user_prefs pour pouvoir naviguer plus facilement dedans
 ALTER TABLE `user_prefs` DROP PRIMARY KEY;
