@@ -234,6 +234,13 @@ class WSBaseBoatsetup extends WSSetup {
         if (!is_int($pim)) $this->reply_with_error('PIM02');
         return $pim;
     }
+    
+    function check_idr() {
+        $this->reply_with_error_if_not_exists('idr', 'IDR01');
+        $idr = $this->request['idr'];
+        if (!is_int($idr) || !($idr > 0)) $this->reply_with_error('IDR02');
+        return $idr;
+    }
 
     function check_pip_with_float() {
         $this->reply_with_error_if_not_exists('pip', 'PIP01');
@@ -321,6 +328,11 @@ function get_error($code) {
         "IDR03"  => 'idr is not valid',
         "RTFM01"  => 'RTFM : please input idr when the boat is not racing',
         "RTFM02"  => 'RTFM : starttime should be lesser than endtime',
+
+        //ENGAGE
+        "ENG01"   => 'the boat is already engaged',
+        "ENG02"   => 'the race is not available for engagement',
+        "ENG03"   => 'engagement error',
 
         //limit - mainly for ranking/results
         "LIMIT01" => "limit is required",

@@ -113,7 +113,7 @@
     if ($type == "unsubscribe" && getLoggedPlayerObject()->isOwner(getLoginId()))
     {
         $users = new fullUsers(getLoginId());
-        $idraces_unsubscribe = quote_smart($_REQUEST['idraces_unsubscribe']);
+        $idraces_unsubscribe = quote_smart(get_cgi_var('idraces_unsubscribe'));
         if ($users->users->engaged == $idraces_unsubscribe) $users->setABD();
     }
     
