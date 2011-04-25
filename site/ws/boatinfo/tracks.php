@@ -33,8 +33,8 @@
     //Protect against restart in the same record race
     if ($users->engaged == $idr) $starttime = max(intval($users->userdeptime), $starttime);
 
-    //FIXME if debug
-    $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
+    //Fill request only if debug
+    if ($ws->debug) $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
 
     $isBo = ($races->bobegin < $now && $races->boend > $now);
     if ($isBo) {

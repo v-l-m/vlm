@@ -136,6 +136,13 @@ class WSBaseBoat extends WSBasePlayer {
     function check_idu() {
         $this->idu = $this->check_cgi_int('idu', 'IDU01', 'IDU02');
     }
+    
+    function check_debug() {
+        $dbg = get_cgi_var('debug', 0);
+        if (!is_int($dbg) $this->reply_with_error('DBG02');
+        $dbg = intval($dbg);
+        $this->debug = ($dbg > 0);
+    }
 
 }
 
@@ -333,6 +340,10 @@ function get_error($code) {
         "ENG01"   => 'the boat is already engaged',
         "ENG02"   => 'the race is not available for engagement',
         "ENG03"   => 'engagement error',
+
+        //DEBUG
+        "DBG01"   => 'debug is required',
+        "DBG02"   => 'debug should be 0 or 1',
 
         //limit - mainly for ranking/results
         "LIMIT01" => "limit is required",
