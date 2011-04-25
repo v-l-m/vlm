@@ -940,8 +940,8 @@ class fullRaces {
 
       // ============= Affichage des noms de bateaux en acronyme
       printf("<input type=\"checkbox\" name=\"list[]\" value=\"%s\" ", $row['idusers'] );
-      if ( in_array($row['idusers'], $list  ) || (empty($list[0]) ))
-        echo " checked=\"checked\"";
+      // if ( in_array($row['idusers'], $list  || (empty($list[0]) ))
+      if ( in_array($row['idusers'], $list ) )  echo " checked=\"checked\"";
       echo " />";
 
       if ($row['engaged'] == $currentengaged) {
