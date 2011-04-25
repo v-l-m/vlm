@@ -3,7 +3,7 @@
 include_once("functions.php");
 include_once("base.class.php");
 
-$playersPrefsList = Array("lang_ihm", "lang_communication", "contact_email", "contact_jabber");
+$playersPrefsList = explode(',', PLAYER_PREF_LIST); //Array("lang_ihm", "lang_communication", "contact_email", "contact_jabber");
 
 //NB: par défaut, tout est privé.
 define("VLM_ACL_BOATSIT", 1);
@@ -33,6 +33,11 @@ class playersPrefs extends baseClass {
         }
     }
 
+    function getPrefValue($key) {
+        $value = $this->playerclass->getPref($key);
+        if (is_null($value)) return null;
+        return $value['pref_value'];
+    }
     
 }
 
@@ -63,11 +68,6 @@ class playersPrefsHtml extends playersPrefs {
         }
     }
     
-    function getPrefValue($key) {
-        $value = $this->playerclass->getPref($key);
-        if (is_null($value)) return null;
-        return $value['pref_value'];
-    }    
     function baseInput($key) {
         $value = $this->getPrefValue($key);
         $str = "<input size=32 name=\"pref_$key\" class=\"inputpref\" id=\"".$this->getId($key)."\" value=\"$value\" />";
@@ -118,6 +118,8 @@ class playersPrefsHtml extends playersPrefs {
     
     function checkPrefValue($key, $val) {
         switch($key) {
+            case "lang_ihm" :
+                return null;
             case "lang_communication" :
                 if (is_array($val)) $val = implode(',', $val);
             default :
@@ -128,7 +130,10 @@ class playersPrefsHtml extends playersPrefs {
     function checkCgiPref($key) {
    
         $val = get_cgi_var("pref_$key");
-        if (is_null($val = $this->checkPrefValue($key, $val))) return False;
+        if (is_null($val = $this->checkPrefValue($key, $val))) {
+             $this->set_error(getLocalizedString("Bad value for key")." : ".getLocalizedString("pref_$key"));
+             return False;
+        }
         if ($val == "") $val = null;
         
         $permint = 0;
