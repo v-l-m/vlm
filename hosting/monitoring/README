@@ -1,0 +1,3 @@
+Exemple de crontab
+
+4 * * * * python $VLMRACINE/vlmcode/hosting/monitoring/service-monitor.py http http://virtual-loup-de-mer.org/status/alive-status.php dev@virtual-loup-de-mer.org
