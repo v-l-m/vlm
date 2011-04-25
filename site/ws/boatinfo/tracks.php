@@ -30,6 +30,8 @@
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
     if ($starttime != 0 && $endtime != 0 && $starttime > $endtime) $ws->reply_with_error("RTFM02");
+    //Protect against restart in the same record race
+    if ($users->engaged == $idr) $starttime = max(intval($users->userdeptime), $starttime);
 
     //FIXME if debug
     $ws->answer['request'] = Array('time_request' => $now, 'idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
