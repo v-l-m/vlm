@@ -3,7 +3,7 @@
 include_once("functions.php");
 include_once("base.class.php");
 
-$playersPrefsList = explode(',', PLAYER_PREF_ALLOWED); //Array("lang_ihm", "lang_communication", "contact_email", "contact_jabber");
+$playersPrefsList = explode(',', PLAYER_PREF_ALLOWED);
 
 $playersPrefsContactLinkPattern = Array(
     "contact_revatua" => "http://revatua.forumactif.com/u%scontact",
@@ -12,6 +12,21 @@ $playersPrefsContactLinkPattern = Array(
     "contact_twitter" => "https://twitter.com/#!/%s",
     "contact_identica" => "http://identi.ca/%s",
     );
+    
+function sortPref($k1, $k2) {
+    $ks = Array(
+        "contact_revatua" => 32,
+        "contact_fmv" => 31,
+        "contact_taverne" => 30,
+        "contact_twitter" => 40,
+        "contact_identica" => 41,
+        "contact_email" => 10,
+        "contact_jabber" => 20,
+    );
+    if (!isset($ks[$k2])) return -1;
+    if (!isset($ks[$k1])) return 1;
+    return ($ks[$k1] < $ks[$k2]) ? -1 : 1 ;
+}
 
 //NB: par défaut, tout est privé.
 define("VLM_ACL_BOATSIT", 1);
@@ -48,7 +63,9 @@ class playersPrefs extends baseClass {
     }
     
     function getPrefGroup($prefix) {
-        return $this->playerclass->getPrefGroup($prefix);
+        $r = $this->playerclass->getPrefGroup($prefix);
+        uksort($r, sortPref);
+        return $r;
     }
 }
 
@@ -66,22 +83,26 @@ class playersPrefsHtml extends playersPrefs {
                 }
                 return $this->baseDropDown($key, $langs);
             case "lang_communication" :
-                $langfile = file_get_contents('./includes/ISO-639-2_utf-8.txt', FILE_USE_INCLUDE_PATH);
-                $langlines = explode("\n", $langfile);
-                $langlist = Array();
-                foreach($langlines as $line) {
-                    $lexp = explode('|', $line);
-                    if ($lexp[2] != '') $langlist[$lexp[0]] = $lexp[3];
-                }
-                return $this->baseDropdownMultiple($key, $langlist);
+                return $this->baseDropdownMultiple($key, $this->getLangList());
             default :
                 return $this->baseInput($key);
         }
     }
     
+    function getLangList() {
+        $langfile = file_get_contents('./includes/ISO-639-2_utf-8.txt', FILE_USE_INCLUDE_PATH);
+        $langlines = explode("\n", $langfile);
+        $langlist = Array();
+        foreach($langlines as $line) {
+            $lexp = explode('|', $line);
+            if ($lexp[2] != '') $langlist[$lexp[0]] = $lexp[3];
+        }
+        return $langlist;
+    }
+    
     function baseInput($key) {
         $value = $this->getPrefValue($key);
-        $str = "<input size=32 name=\"pref_$key\" class=\"inputpref\" id=\"".$this->getId($key)."\" value=\"$value\" />";
+        $str = "<input title=\"".getLocalizedString("pref_helper_$key")."\" size=32 name=\"pref_$key\" class=\"inputpref\" id=\"".$this->getId($key)."\" value=\"$value\" />";
         return $str;
     }
 
@@ -100,7 +121,7 @@ class playersPrefsHtml extends playersPrefs {
     function baseDropDownMultiple($key, $list) {
         $value = $this->playerclass->getPref($key);
         $values = explode(',', $value['pref_value']);
-        $str = "<select name=\"pref_$key"."[]\" multiple class=\"selectpref\" id=\"".$this->getId($key)."\">";
+        $str = "<select title=\"".getLocalizedString("pref_helper_$key")."\" name=\"pref_$key"."[]\" multiple class=\"selectpref\" id=\"".$this->getId($key)."\">";
         foreach ($list as $k =>$v) {
             $str .= "<option value=\"$k\"";
             if (in_array($k,$values)) $str .= " selected";
@@ -113,7 +134,7 @@ class playersPrefsHtml extends playersPrefs {
     function permissions($key) {
         $value = $this->playerclass->getPref($key);
         $plist = Array(VLM_ACL_BOATSIT => getLocalizedString('Boatsitter'), VLM_ACL_AUTH => getLocalizedString('VLM Players'));
-        $str = "<select size=\"3\"name=\"perm_$key"."[]\" multiple class=\"selectperm\" id=\"perm-".$this->getId($key)."\">";
+        $str = "<select size=\"2\" name=\"perm_$key"."[]\" multiple class=\"selectperm\" id=\"perm-".$this->getId($key)."\">";
         foreach ($plist as $k =>$v) {
             $str .= "<option value=\"$k\"";
             if ($value['permissions'] & $k) $str .= " selected";
@@ -206,6 +227,7 @@ class playersPrefsHtml extends playersPrefs {
     
         switch($key) {
             case "contact_email":
+                return "<b>".getLocalizedString("pref_$key")."</b> : ".sprintf("<a href=\"mailto:%s\">%s</a>", $val, $val);
             case "contact_jabber":
                 return "<b>".getLocalizedString("pref_$key")."</b> : ".$val;
             case "contact_taverne":
@@ -213,12 +235,46 @@ class playersPrefsHtml extends playersPrefs {
             case "contact_revatua":
             case "contact_twitter":
             case "contact_identica":
-                return "<a href=\"".sprintf($playersPrefsContactLinkPattern[$key], $val)."\">".getLocalizedString("pref_$key")."</a>";
+                return "<a target=\"vlm_contact\" href=\"".sprintf($playersPrefsContactLinkPattern[$key], $val)."\">".getLocalizedString("pref_$key")."</a>";
         
             default :
                   return $val;
         }
         return $val;
+    }
+    
+    function htmlContactList() {
+        $clist = $this->getPrefGroup("contact_");
+        if (count($clist) > 0) {
+            echo "<div id=\"contactinfos\">";
+            echo "<h3>".getLocalizedString("prefsgroup_contact")."</h3>";
+            echo "<ul>";
+            //decide permission
+            $currentperm = VLM_ACL_AUTH;
+            if (in_array(getPlayerId(),$this->playerclass->getBoatsitterList())) $currentperm |= VLM_ACL_BOATSIT;
+
+            foreach($clist as $k=>$v) {
+
+                if (getPlayerId() == $this->playerclass->idplayers || ($v['permissions'] & $currentperm) ) {
+                    echo "<li class=\"$k\">";
+                    print $this->htmlPref($k);
+                    echo "</li>";
+                }
+            }
+            echo "</ul>";
+            $langpref = explode(',',$this->getPrefValue("lang_communication"));
+            if (!empty($langpref[0])) {
+                echo "<h3>".getLocalizedString("pref_lang_communication")."</h3>";
+                $langlist = $this->getLangList();
+                $langnames = Array();
+                foreach ($langpref as $v) {
+                    $langnames[] = $langlist[$v];
+                }
+                echo implode(',', $langnames);
+            }
+
+            echo "</div>";
+        }
     }
 }
 

@@ -475,7 +475,7 @@ td.racesummary-minimap {
 }
 
 tr.racesummary-type0, tr.racesummary-type1 {
-  border-top: groove 3px #DDDDF0
+  border-top: groove 3px #DDDDF0;
 }
 
 table.racesummary-type0, table.racesummary-type1 {
@@ -489,8 +489,5 @@ table.racesummary-type0, table.racesummary-type1 {
 
 #contactinfos {
 	  float: right;
-}
-
-select[selected] {
-        background-color: 11ff11;
+	  background-color: #eeeeee;
 }
