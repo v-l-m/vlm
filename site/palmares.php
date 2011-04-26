@@ -66,10 +66,10 @@
                 $clist = $pp->getPrefGroup("contact_");
                 if (count($clist) > 0) {
                     echo "<div id=\"contactinfos\">";
-                    echo "<h3>".getLocalizedString("Contact")."</h3>";
+                    echo "<h3>".getLocalizedString("Contact infos")."</h3>";
                     echo "<ul>";
                     //decide permission
-                    $currentperm = VLM_ACL_PUBLIC;
+                    $currentperm = VLM_ACL_AUTH;
                     if (in_array(getPlayerId(),$player->getBoatsitterList())) $currentperm |= VLM_ACL_BOATSIT;
 
                     foreach($clist as $k=>$v) {
@@ -89,7 +89,7 @@
                 echo "<li>".getLocalizedString("idplayer") . ' : @' . $idplayers .'</li>';
                 echo "</ul>";
 
-                echo "<hr style=\"clear:both; display:block;\"/>";
+                echo "<hr />"; //style=\"clear:both; display:block;\"/>";
                 echo "<h2>".getLocalizedString('Boats of this player') . ' : </h2>';
                 if ($player->idplayers == getPlayerId()) {
                     echo $player->htmlBoatManageableList();

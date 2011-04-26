@@ -42,7 +42,7 @@
         echo "<td colspan=\"2\">";
         echo "<h1>".getLocalizedString("prefsgroup_$g")."</h1>";
         echo "</td>";
-        echo "<td>".getLocalizedString("Permissions")."</td>";
+        echo "<td>".getLocalizedString("Permissions")."<br />".getLocalizedString("Visible for")."...</td>";
         echo "</tr>";
 
         foreach ($pg as $pkey) {
