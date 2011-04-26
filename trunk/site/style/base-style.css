@@ -490,3 +490,7 @@ table.racesummary-type0, table.racesummary-type1 {
 #contactinfos {
 	  float: right;
 }
+
+select[selected] {
+        background-color: 11ff11;
+}

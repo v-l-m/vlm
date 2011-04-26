@@ -15,7 +15,7 @@ $playersPrefsContactLinkPattern = Array(
 
 //NB: par défaut, tout est privé.
 define("VLM_ACL_BOATSIT", 1);
-define("VLM_ACL_PUBLIC", 2);
+define("VLM_ACL_AUTH", 2);
 
 function playersPrefsGroups() {
     global $playersPrefsList;
@@ -112,7 +112,7 @@ class playersPrefsHtml extends playersPrefs {
 
     function permissions($key) {
         $value = $this->playerclass->getPref($key);
-        $plist = Array(VLM_ACL_BOATSIT => getLocalizedString('Boatsitter'), VLM_ACL_PUBLIC => getLocalizedString('Public'));
+        $plist = Array(VLM_ACL_BOATSIT => getLocalizedString('Boatsitter'), VLM_ACL_AUTH => getLocalizedString('VLM Players'));
         $str = "<select size=\"3\"name=\"perm_$key"."[]\" multiple class=\"selectperm\" id=\"perm-".$this->getId($key)."\">";
         foreach ($plist as $k =>$v) {
             $str .= "<option value=\"$k\"";
