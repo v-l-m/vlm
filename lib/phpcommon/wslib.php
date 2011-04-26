@@ -139,7 +139,7 @@ class WSBaseBoat extends WSBasePlayer {
     
     function check_debug() {
         $dbg = get_cgi_var('debug', 0);
-        if (!is_int($dbg) $this->reply_with_error('DBG02');
+        if (!is_int($dbg)) $this->reply_with_error('DBG02');
         $dbg = intval($dbg);
         $this->debug = ($dbg > 0);
     }
