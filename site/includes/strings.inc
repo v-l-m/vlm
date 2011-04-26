@@ -1,9 +1,15 @@
 <?php
 $strings = array (
   'en' => 
-  array (
-    'Contact infos' => 'Contact infos',
-    'pref_contact_taverne' => 'Forum La taverne',
+  array(
+    'pref_helper_contact_taverne' => 'Copy your profile url or input your numeric id',
+    'pref_helper_contact_revatua' => 'Copy your profile url or input your numeric id',
+    'pref_helper_contact_fmv' => 'Copy your profile url or input your numeric id',
+    'pref_helper_contact_email' => 'Input your email address',
+    'pref_helper_contact_jabber' => 'Input your jabber id',
+    'pref_helper_lang_ihm' => 'Select VLM language',
+    'pref_helper_lang_communication' => 'Select language(s) you know enough to communicate with. You may select several languages.',
+    'pref_contact_taverne' => 'Forum VLM - La Taverne',
     'pref_contact_fmv' => 'Forum des marins virtuels',
     'pref_contact_revatua' => 'Forum Revatua',
     'pref_contact_twitter' => 'Twitter',
@@ -24,8 +30,8 @@ $strings = array (
     "Cancel" => "Cancel",
     'prefsgroup_lang' => 'Language Preferences',
     'pref_lang_ihm' => 'Favorite interface language',
-    'pref_lang_communication' => 'Language you know enough to communicate with',
-    'prefsgroup_contact' => 'Contact information',
+    'pref_lang_communication' => 'Communication Languages',
+    'prefsgroup_contact' => 'Contact informations',
     'pref_contact_email' => 'Email',
     'pref_contact_jabber' => 'Jabber',
     'Permissions' => 'Permissions',
@@ -447,6 +453,19 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'pref_helper_contact_taverne' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
+    'pref_helper_contact_revatua' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
+    'pref_helper_contact_fmv' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
+    'pref_helper_contact_email' => 'Entrez votre adresse de courriel',
+    'pref_helper_contact_jabber' => 'Entrez votre identifiant jabber',
+    'pref_helper_lang_ihm' => 'Sélectionnez la langue de VLM',
+    'pref_helper_lang_communication' => 'Sélectionnez les langues que vous parlez. Vous pouvez en sélectionner plusieurs.',
+    'pref_contact_taverne' => 'Forum VLM - La Taverne',
+    'pref_contact_fmv' => 'Forum des marins virtuels',
+    'pref_contact_revatua' => 'Forum Revatua',
+    'pref_contact_twitter' => 'Twitter',
+    'pref_contact_identica' => 'Identi.ca',
+
     "This is not your boat, only boat owner may abandon !" => "Ce bateau n'est pas le vôtre, seul le propriétaire du bateau peut abandonner !",
     "Please connect to create your first boat" => "Connectez vous pour créer votre premier bateau",
     "You seem to try to use an old account with boat" => "Il semble que vous vouliez utiliser un vieux compte avec le bateau",
