@@ -128,6 +128,8 @@ class WSBaseRace extends WSBase {
 
 class WSBaseBoat extends WSBasePlayer {
     var $idu = null;
+    var $debug = true;
+
     function __construct() {
         parent::__construct();
         $this->check_idu();
