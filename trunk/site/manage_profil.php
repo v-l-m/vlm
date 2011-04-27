@@ -33,7 +33,7 @@
     
     echo "<div>";
     echo "<form name=\"prefs\" method=\"post\">";
-    echo "<table>";
+    echo "<table class=\"prefsetter\">";
 
     echoSaveCancel();
 
@@ -47,9 +47,9 @@
 
         foreach ($pg as $pkey) {
             echo "<tr class=\"prefsetter\">";
-            echo "<td>".getLocalizedString("pref_$pkey")."</td>";
-            echo "<td>".$pp->getform($pkey)."</td>";
-            echo "<td>".$pp->permissions($pkey)."</td>";
+            echo "<td class=\"prefsetter\">".getLocalizedString("pref_$pkey")."</td>";
+            echo "<td class=\"prefsetter\">".$pp->getform($pkey)."</td>";
+            echo "<td class=\"prefsetter\">".$pp->permissions($pkey)."</td>";
             echo "</tr>";
         }
     }

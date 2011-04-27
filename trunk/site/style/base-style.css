@@ -482,7 +482,6 @@ table.racesummary-type0, table.racesummary-type1 {
   width:100%;
 }
 
-
 .racesummary-type1 {
   font-style: italic;
 }
@@ -490,4 +489,18 @@ table.racesummary-type0, table.racesummary-type1 {
 #contactinfos {
 	  float: right;
 	  background-color: #eeeeee;
+}
+
+td.prefsetter {
+  vertical-align: top;
+}
+
+select.selectperm {
+	background-color: #eeeeee;
+	overflow: auto;
+	empty-cells: hide;	
+}
+
+option {
+	background-color: #eeeeee;
 }

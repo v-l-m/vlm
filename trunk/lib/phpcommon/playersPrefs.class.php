@@ -58,7 +58,14 @@ class playersPrefs extends baseClass {
 
     function getPrefValue($key) {
         $value = $this->playerclass->getPref($key);
-        if (is_null($value)) return null;
+        if (is_null($value)) {
+            switch($key) {
+                case 'lang_ihm' :
+                    return getCurrentLang();
+                default :
+                    return null;
+            }
+        }
         return $value['pref_value'];
     }
     
@@ -107,11 +114,11 @@ class playersPrefsHtml extends playersPrefs {
     }
 
     function baseDropDown($key, $list) {
-        $value = $this->playerclass->getPref($key);
+        $value = $this->getPrefValue($key);
         $str = "<select name=\"pref_$key\" class=\"selectpref\" id=\"".$this->getId($key)."\">";
         foreach ($list as $k =>$v) {
             $str .= "<option value=\"$k\"";
-            if ($k == $value['pref_value']) $str .= " selected";
+            if ($k == $value) $str .= " selected";
             $str .= ">$v</option>";
         }
         $str .= "</select>";
@@ -119,8 +126,8 @@ class playersPrefsHtml extends playersPrefs {
     }
 
     function baseDropDownMultiple($key, $list) {
-        $value = $this->playerclass->getPref($key);
-        $values = explode(',', $value['pref_value']);
+        $value = $this->getPrefValue($key);
+        $values = explode(',', $value);
         $str = "<select title=\"".getLocalizedString("pref_helper_$key")."\" name=\"pref_$key"."[]\" multiple class=\"selectpref\" id=\"".$this->getId($key)."\">";
         foreach ($list as $k =>$v) {
             $str .= "<option value=\"$k\"";
@@ -136,7 +143,7 @@ class playersPrefsHtml extends playersPrefs {
         $plist = Array(VLM_ACL_BOATSIT => getLocalizedString('Boatsitter'), VLM_ACL_AUTH => getLocalizedString('VLM Players'));
         $str = "<select size=\"2\" name=\"perm_$key"."[]\" multiple class=\"selectperm\" id=\"perm-".$this->getId($key)."\">";
         foreach ($plist as $k =>$v) {
-            $str .= "<option value=\"$k\"";
+            $str .= "<option class=\"selectperm\" value=\"$k\"";
             if ($value['permissions'] & $k) $str .= " selected";
             $str .= ">$v</option>";
         }

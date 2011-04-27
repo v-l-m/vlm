@@ -4,7 +4,7 @@
 $PAGETITLE = "Admin of Players_prefs table [EXPERIMENTAL]";
 
 include('adminheader.php');
-
+require('playersPrefs.class.php');
 /* RACE TABLE */
 
 $opts['tb'] = 'players_prefs';
@@ -60,12 +60,34 @@ $opts['fdd']['pref_value'] = array(
   'sort'     => false
 );
 
+$opts['fdd']['permissions'] = array(
+  'name'     => 'Permissions',
+  'help'     => nl2br("Permissions"),
+  'select|FLDV'   => 'M',
+  'select|ACP'   => 'C',
+  'values2' => Array(
+      VLM_ACL_BOATSIT => "Boatsitter",
+      VLM_ACL_AUTH => "VLM Players",
+      ),
+  'sql' => 'MAKE_SET(`PMEtable0`.`permissions`, 1, 2)',
+//  'maxlen'   => 11,
+//  'default'  => '0',
+  'sort'     => true
+);
+
+
 $opts['fdd']['updated'] = array(
   'name'     => 'Last change',
   'help'     => 'Date of last change',
   'input'   => 'R',
   'options'  => 'VL'
 );
+
+$opts['triggers']['update']['before'][0] = 'players_prefs.TBU.trigger.php';
+
+//force basic pme class.
+require_once('../externals/phpMyEdit/phpMyEdit.class.php');
+$pmeinstance = new phpMyEdit($opts);
 
 include('adminfooter.php');
 
