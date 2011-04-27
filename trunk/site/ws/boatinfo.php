@@ -54,6 +54,7 @@ function get_info_array($idu) {
     } else {
       $info['ETA'] = -1;
     }
+    $info['NOW'] = time();
     $twd=fmod($userObj->wheading+3780, 360); 
     $info['TWD'] = round($twd, 2);
     $info['TWS'] = round($userObj->wspeed, 2);
@@ -120,9 +121,8 @@ function get_info_array($idu) {
          'mapDrawtextwp' => 'MDT'
          );
     $prefs=listUserPref($idu, "map");
-    while ( $pref = current($prefs) ) { 
-      $info[$mapvar[key($prefs)]] = $pref;
-      next($prefs);
+    foreach($prefs as $k => $v) {
+        $info[$mapvar[$k]] = $v;
     }
     $info['SRV'] = SERVER_NAME;
     $info['NPD'] = sprintf ("\"%s\"", $userObj->users->blocnote);
