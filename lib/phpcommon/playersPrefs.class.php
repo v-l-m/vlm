@@ -64,7 +64,7 @@ class playersPrefs extends baseClass {
     
     function getPrefGroup($prefix) {
         $r = $this->playerclass->getPrefGroup($prefix);
-        uksort($r, sortPref);
+        uksort($r, "sortPref");
         return $r;
     }
 }
