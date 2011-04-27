@@ -246,7 +246,5 @@
     
     //WIND management
     define_if_not('MAX_WIND_POINTS', 2048);
-    define_if_not('MAX_GRIBTIME_HISTORY', 6*3600);
-    define_if_not('MAX_GRIBTIME_FUTURE', 3*24*3600);
 
 ?>

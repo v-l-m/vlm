@@ -32,6 +32,17 @@
         shm_unlock_sem_destroy_grib(1);
         return $ts_array;
     }
+    
+    function get_grib_minmax_time() {
+        $minmax = Array();
+        $global_vlmc_context = new vlmc_context();
+        global_vlmc_context_set($global_vlmc_context);
+        shm_lock_sem_construct_grib(1);
+        $minmax['max'] = get_prevision_time_index(get_prevision_count()-1);
+        $minmax['min'] = get_prevision_time_index(0);
+        shm_unlock_sem_destroy_grib(1);
+        return $minmax;
+    }
 
     function get_grib_validity_from_array($ts_array) {
     
