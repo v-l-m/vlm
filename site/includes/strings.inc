@@ -16,8 +16,7 @@ $strings = array (
     'pref_contact_identica' => 'Identi.ca',
 
     "This is not your boat, only boat owner may abandon !" => "This is not your boat, only boat owner may abandon !",
-    "Please connect to create your first boat" => "Please connect to create your first boat",
-    
+    "Please connect to create your first boat" => "Please connect to create your first boat",    
     "You seem to try to use an old account with boat" => "You seem to try to use an old account with boat",
     "You should do following steps" => "You should do following steps",
     "Read the documentation" => "Read the documentation",
@@ -453,6 +452,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'Visible for' => 'Visible pour',
     'pref_helper_contact_taverne' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
     'pref_helper_contact_revatua' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
     'pref_helper_contact_fmv' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
@@ -480,7 +480,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     "Cancel" => "Annuler",
     'prefsgroup_lang' => 'Préférences de langue',
     'pref_lang_ihm' => 'Langue de l\'interface',
-    'pref_lang_communication' => 'Langue(s) que vous parlez suffisament pour communiquer',
+    'pref_lang_communication' => 'Langue(s) connue(s)',
     'prefsgroup_contact' => 'Infos pour vous contacter',
     'pref_contact_email' => 'Courriel',
     'pref_contact_jabber' => 'Jabber',
