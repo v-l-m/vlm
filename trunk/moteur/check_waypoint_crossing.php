@@ -183,12 +183,6 @@ if (!$wp_invalidated) {
       
       $fullUsersObj->recordWaypointCrossing($timeAvant + $timeSinceLastUpdate);
       
-      // record where we crossed the line
-      $fullUsersObj->lastPositions->lat=$latPreCheck;
-      $fullUsersObj->lastPositions->long=$lonPreCheck;
-      $fullUsersObj->lastPositions->time=($timeAvant + $timeSinceLastUpdate);
-      $fullUsersObj->lastPositions->writePositions();
-      
       // Is it the last one (aka finish line ?)
       // getNextWaypoint returns -1 if this was the finish line
       // else it gives the next waypoint
@@ -207,6 +201,12 @@ if (!$wp_invalidated) {
 	
 	// RACE IS FINISHED FOR THIS BOAT : record result and continue the loop
 	$is_arrived=true;
+
+	// record where we crossed the line
+	$fullUsersObj->lastPositions->lat=$latPreCheck;
+	$fullUsersObj->lastPositions->long=$lonPreCheck;
+	$fullUsersObj->lastPositions->time=($timeAvant + $timeSinceLastUpdate);
+	$fullUsersObj->lastPositions->writePositions();	
 	
 	echo "\t==>Course =" . $fullRacesObj->races->idraces . "\n";
 	echo "\t==>encounterCoordinates = " . $encounterCoordinates['latitude'] . "/" . $encounterCoordinates['longitude'] . "\n";
