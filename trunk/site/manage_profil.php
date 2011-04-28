@@ -38,6 +38,7 @@
     echoSaveCancel();
 
     foreach (playersPrefsGroups() as $g => $pg) {
+        if (!in_array($g, array('lang', 'contact'))) continue;
         echo "<tr>";
         echo "<td colspan=\"2\">";
         echo "<h1>".getLocalizedString("prefsgroup_$g")."</h1>";

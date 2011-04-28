@@ -130,6 +130,7 @@ class positions
   /*returns FALSE if it's false*/
   // N'est utilisée que par le moteur.
   // N'a plus de sens avec la nouvelle gestion meteo qui couvre tout le globe
+  //FIXME : remove it ?
   function isInsideGrid()
   {
       return (TRUE);

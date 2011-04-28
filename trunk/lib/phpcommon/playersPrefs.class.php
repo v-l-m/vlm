@@ -11,6 +11,7 @@ $playersPrefsContactLinkPattern = Array(
     "contact_taverne" => "http://www.virtual-winds.com/forum/index.php?showuser=%s",
     "contact_twitter" => "https://twitter.com/#!/%s",
     "contact_identica" => "http://identi.ca/%s",
+    "contact_facebook" => "http://facebook.com/%s",
     );
     
 function sortPref($k1, $k2) {
@@ -20,8 +21,10 @@ function sortPref($k1, $k2) {
         "contact_taverne" => 30,
         "contact_twitter" => 40,
         "contact_identica" => 41,
+        "contact_facebook" => 42,
         "contact_email" => 10,
         "contact_jabber" => 20,
+        "contact_msn" => 21,
     );
     if (!isset($ks[$k2])) return -1;
     if (!isset($ks[$k1])) return 1;
@@ -159,6 +162,7 @@ class playersPrefsHtml extends playersPrefs {
         if (is_null($val) || $val == "") return "";
         switch($key) {
             case "contact_email":
+            case "contact_msn":
             case "contact_jabber":
                 $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
                 if (preg_match($pattern  ,  $val) < 1) {
@@ -173,9 +177,11 @@ class playersPrefsHtml extends playersPrefs {
             case "contact_revatua":
                 return $this->checkDoublePattern($key, $val, "/^http:\/\/revatua\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
             case "contact_twitter":
-                return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
+                return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter\.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
             case "contact_identica":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/identi.ca\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/identi\.ca\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
+            case "contact_facebook":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/.*?facebook\.com\/(.*)$/i", "/^([^:\s;<>'\"]*)$/i");
             case "lang_communication" :
                 if (is_array($val)) $val = implode(',', $val);
             case "lang_ihm" :
@@ -236,12 +242,14 @@ class playersPrefsHtml extends playersPrefs {
             case "contact_email":
                 return "<b>".getLocalizedString("pref_$key")."</b> : ".sprintf("<a href=\"mailto:%s\">%s</a>", $val, $val);
             case "contact_jabber":
+            case "contact_msn":
                 return "<b>".getLocalizedString("pref_$key")."</b> : ".$val;
             case "contact_taverne":
             case "contact_fmv":
             case "contact_revatua":
             case "contact_twitter":
             case "contact_identica":
+            case "contact_facebook":
                 return "<a target=\"vlm_contact\" href=\"".sprintf($playersPrefsContactLinkPattern[$key], $val)."\">".getLocalizedString("pref_$key")."</a>";
         
             default :

@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array(
+    'pref_helper_contact_facebook' => 'Copy your profile url',
+    'pref_helper_contact_msn' => 'Input your msn id',    
     'pref_helper_contact_taverne' => 'Copy your profile url or input your numeric id',
     'pref_helper_contact_revatua' => 'Copy your profile url or input your numeric id',
     'pref_helper_contact_fmv' => 'Copy your profile url or input your numeric id',
@@ -14,6 +16,8 @@ $strings = array (
     'pref_contact_revatua' => 'Forum Revatua',
     'pref_contact_twitter' => 'Twitter',
     'pref_contact_identica' => 'Identi.ca',
+    'pref_contact_facebook' => 'Facebook',
+    'pref_contact_msn' => 'Msn',
 
     "This is not your boat, only boat owner may abandon !" => "This is not your boat, only boat owner may abandon !",
     "Please connect to create your first boat" => "Please connect to create your first boat",    
@@ -452,12 +456,14 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'pref_helper_contact_facebook' => 'Copiez l\'url de votre profile',
+    'pref_helper_contact_msn' => 'Entrez votre identifiant Msn',    
     'Visible for' => 'Visible pour',
     'pref_helper_contact_taverne' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
     'pref_helper_contact_revatua' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
     'pref_helper_contact_fmv' => 'Copiez l\'url de votre profil ou entrez votre identifiant numérique',
     'pref_helper_contact_email' => 'Entrez votre adresse de courriel',
-    'pref_helper_contact_jabber' => 'Entrez votre identifiant jabber',
+    'pref_helper_contact_jabber' => 'Entrez votre identifiant Jabber',
     'pref_helper_lang_ihm' => 'Sélectionnez la langue de VLM',
     'pref_helper_lang_communication' => 'Sélectionnez les langues que vous parlez. Vous pouvez en sélectionner plusieurs.',
     'pref_contact_taverne' => 'Forum VLM - La Taverne',
@@ -465,6 +471,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'pref_contact_revatua' => 'Forum Revatua',
     'pref_contact_twitter' => 'Twitter',
     'pref_contact_identica' => 'Identi.ca',
+    'pref_contact_facebook' => 'Facebook',
+    'pref_contact_msn' => 'Msn',
 
     "This is not your boat, only boat owner may abandon !" => "Ce bateau n'est pas le vôtre, seul le propriétaire du bateau peut abandonner !",
     "Please connect to create your first boat" => "Connectez vous pour créer votre premier bateau",
