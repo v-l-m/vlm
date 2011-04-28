@@ -183,6 +183,12 @@ if (!$wp_invalidated) {
       
       $fullUsersObj->recordWaypointCrossing($timeAvant + $timeSinceLastUpdate);
       
+      // record where we crossed the line
+      $fullUsersObj->lastPositions->lat=$latPreCheck;
+      $fullUsersObj->lastPositions->long=$lonPreCheck;
+      $fullUsersObj->lastPositions->time=($timeAvant + $timeSinceLastUpdate);
+      $fullUsersObj->lastPositions->writePositions();
+      
       // Is it the last one (aka finish line ?)
       // getNextWaypoint returns -1 if this was the finish line
       // else it gives the next waypoint
