@@ -223,7 +223,7 @@
     // NOTSET (for user_prefs)
     define("NOTSET", "NULL");
     define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname,frogDatas");
-    define("PLAYER_PREF_ALLOWED", "lang_ihm,lang_communication,contact_email,contact_jabber,contact_taverne,contact_fmv,contact_revatua,contact_twitter,contact_identica");
+    define("PLAYER_PREF_ALLOWED", "lang_ihm,lang_communication,contact_email,contact_jabber,contact_taverne,contact_fmv,contact_revatua,contact_twitter,contact_identica,contact_facebook,contact_msn");
 
     // WAYPOINTS
     define("WP_TWO_BUOYS", 0);
