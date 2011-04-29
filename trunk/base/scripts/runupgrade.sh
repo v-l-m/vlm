@@ -12,8 +12,9 @@ echo " : OK"
 
 echo "Running v$1 upgrade scripts"
 
-sqlfile=upgrade-v$1.sql
-phpfile=upgrade-v$1.php
+baseupgradescripts=$VLMJEUROOT/base/scripts
+sqlfile=$baseupgradescripts/upgrade-v$1.sql
+phpfile=$baseupgradescripts/upgrade-v$1.php
 if [ -f $sqlfile ]; then
     echo -n "Looking for $VLMRACINE/conf/conf_base"
     source $VLMRACINE/conf/conf_base || exit 1
