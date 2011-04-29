@@ -1379,8 +1379,9 @@ class fullUsers
       wrapper_mysql_db_query_writer($query_clean_waypoint_crossing);
 
       // Prepare the table races_ranking
-      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch, nwp ) values " .
-        " ( ". $id . ", " . $this->users->idusers . ", 0, 1)";
+      $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch, nwp, latitude, longitude) values " .
+        " ( ". $id . ", " . $this->users->idusers . ", 0, 1, ".$races->startlong.", ".$races->startlat.")";
+
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
       // Update boattype
