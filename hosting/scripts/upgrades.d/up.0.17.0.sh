@@ -7,7 +7,6 @@ $VLMJEUROOT/base/scripts/runupgrade.sh $VLMRELEASE
 $VLMRACINE/scripts/maj_module.sh moteur
 
 $VLMRACINE/scripts/maj_module.sh lib/vlm-c
-/etc/init.d/apache2 restart
 
 $VLMRACINE/scripts/maj_module.sh lib/phpcommon
 $VLMRACINE/scripts/maj_module.sh site
