@@ -12,7 +12,7 @@ echo " : OK"
 
 VLMRELEASE=$1
 step=$2
-upfile=$VLMJEUROOT/hosting/scripts/upgrades.d/up.$VLMRELEASE.$step.sh
+upfile=$VLMRACINE/scripts/upgrades.d/up.$VLMRELEASE.$step.sh
 lockfile=$VLMTEMP/vlmup.$VLMRELEASE.$step.lock
 logfile=$VLMTEMP/vlmup.$VLMRELEASE.$step.log
 
