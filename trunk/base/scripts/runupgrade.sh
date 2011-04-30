@@ -11,7 +11,7 @@ source $VLMRACINE/conf/conf_script || exit 1
 echo " : OK"
 
 echo "Running v$1 upgrade scripts"
-
+VLMJEUROOT=/home/vlmtest/svn/trunk
 baseupgradescripts=$VLMJEUROOT/base/scripts
 sqlfile=$baseupgradescripts/upgrade-v$1.sql
 phpfile=$baseupgradescripts/upgrade-v$1.php
