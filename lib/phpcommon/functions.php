@@ -236,7 +236,7 @@ function getLastUpdateRow($master = false) {
     } else {
         $result = wrapper_mysql_db_query_reader($query) or die("Query [$query] failed on SLAVE\n");
     }
-    $result = wrapper_mysql_db_query_reader($query)
+    $result = wrapper_mysql_db_query_reader($query);
     $row = mysql_fetch_assoc($result);
     return $row;
 }
