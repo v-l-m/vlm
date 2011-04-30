@@ -17,3 +17,5 @@ ALTER TABLE `user_prefs` ADD UNIQUE KEY(`idusers`, `pref_name`);
 ALTER TABLE `user_prefs` ADD COLUMN `idusers_prefs` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`idusers_prefs`);
 ALTER TABLE `user_prefs` ADD COLUMN `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
 
+#On ajoute une clef sur la table races_loch qui est purgée régulièrement sur la base du `time`
+ALTER TABLE `races_loch` ADD INDEX (`time`);
