@@ -6,15 +6,15 @@ if test "$1" = ""; then
   exit 0
 fi
 
+echo -n "Looking for $VLMRACINE/conf/conf_script"
+source $VLMRACINE/conf/conf_script || exit 1
+echo " : OK"
+
 VLMRELEASE=$1
 step=$2
 upfile=$VLMJEUROOT/hosting/scripts/upgrades.d/up.$VLMRELEASE.$step.sh
 lockfile=$VLMTEMP/vlmup.$VLMRELEASE.$step.lock
 logfile=$VLMTEMP/vlmup.$VLMRELEASE.$step.log
-
-echo -n "Looking for $VLMRACINE/conf/conf_script"
-source $VLMRACINE/conf/conf_script || exit 1
-echo " : OK"
 
 echo "Upgrading scripts"
 $VLMRACINE/scripts/maj_scripts.sh
