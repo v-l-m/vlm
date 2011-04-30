@@ -10,14 +10,16 @@ echo -n "Looking for $VLMRACINE/conf/conf_script"
 source $VLMRACINE/conf/conf_script || exit 1
 echo " : OK"
 
-VLMRELEASE=$1
+export VLMRELEASE=$1
 step=$2
-upfile=$VLMRACINE/scripts/upgrades.d/up.$VLMRELEASE.$step.sh
+upfile=$VLMRACINE/scripts/upgrades.d/up-$VLMRELEASE-$step.sh
 lockfile=$VLMTEMP/vlmup.$VLMRELEASE.$step.lock
 logfile=$VLMTEMP/vlmup.$VLMRELEASE.$step.log
 
-echo "Upgrading scripts"
-$VLMRACINE/scripts/maj_scripts.sh
+if test "$1" = "0"; then
+    echo "Step 0 - Upgrading scripts"
+    $VLMRACINE/scripts/maj_scripts.sh
+fi
 
 if [ -f $lockfile ]; then
     echo "LOCKFILE $lockfile found. Back to manual upgrade !"

@@ -31,7 +31,7 @@ echo ' '
 echo -n "+Nettoyage de $destmodulepath..."
 rm -Rf $destmodulepath
 if test -d $destmodulepath ; then
-  echo "!!! Le repertoire $destmodulepath existe !!!"
+  echo "!!! Le repertoire $destmodulepath existe !!!" 1>&2
   exit 1
 fi
 mkdir -p $destmodulepath
@@ -49,7 +49,7 @@ fi
 
 #Recopie de la conf si nécessaire // Postdéploiement
 echo " "
-echo "+Post-déploiement, mise en place de droits et de la configuration... pour $confmodule ..."
+echo "+Post-déploiement, mise en place de droits et de la configuration... pour $confmodule ..." 1>&2
 
 case $confmodule in
     #base)
@@ -186,6 +186,7 @@ case $confmodule in
 
     cd $oldpwd
     echo "!!! ATTENTION /// VOUS ALLEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?"
+    echo "Tentative de redémarrage d'apache" 1>&2
     sudo /etc/init/apache2 restart
     ;;
     grib)
@@ -206,4 +207,4 @@ case $confmodule in
     ;;
 esac
 
-echo "Mise à jour du module $confmodule OK!"
+echo "Mise à jour du module $confmodule OK!" 1>&2
