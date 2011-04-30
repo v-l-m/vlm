@@ -62,7 +62,7 @@ if test -d $current; then
   exit 1
 fi
 echo "Ok !"
-echo "Recuperation de $current... depuis $svncurrent"
+echo "Recuperation de $current... depuis $svncurrent" 1>&2
 cd $VLMTEMP || exit 1
 $VLMSVNPATH export $svncurrent $current --username anonymous --password "vlm"
 echo "Ok !"
