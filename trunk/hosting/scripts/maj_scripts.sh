@@ -15,3 +15,4 @@ fi
 
 cp $VLMTEMP/hosting/scripts/*.sh $VLMSCRIPTS/
 cp $VLMTEMP/hosting/conf/* $VLMCONF/
+cp -R $VLMTEMP/hosting/scripts/upgrades.d $VLMSCRIPTS/
