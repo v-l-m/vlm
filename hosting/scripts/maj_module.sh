@@ -16,7 +16,7 @@ confmodule=$1
 $VLMSCRIPTS/svn_maj_module.sh $confmodule
 
 if test $? -ne 0 ; then
-    echo "!!! Erreur lors de la récupération depuis le subversion"
+    echo "!!! Erreur lors de la récupération depuis le subversion" 1>&2
     exit 1
 fi
 
