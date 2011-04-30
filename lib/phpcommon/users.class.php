@@ -1380,7 +1380,7 @@ class fullUsers
 
       // Prepare the table races_ranking
       $query_clean_races_ranking = "INSERT INTO races_ranking ( idraces, idusers, loch, nwp, latitude, longitude) values " .
-        " ( ". $id . ", " . $this->users->idusers . ", 0, 1, ".$races->startlat.", ".$races->startlong.")";
+        " ( ". $id . ", " . $this->users->idusers . ", 0, 1, ".$this->races->startlat.", ".$this->races->startlong.")";
 
       wrapper_mysql_db_query_writer($query_clean_races_ranking);
 
