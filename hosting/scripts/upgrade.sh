@@ -33,3 +33,6 @@ if [ -f $upfile ]; then
 else
     echo "Did not find $upfile"
 fi
+
+echo "Step $step for $VLMRELEASE : OK"
+
