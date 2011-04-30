@@ -22,7 +22,7 @@ if test "$1" = "0"; then
 fi
 
 if [ -f $lockfile ]; then
-    echo "LOCKFILE $lockfile found. Back to manual upgrade !"
+    echo "LOCKFILE $lockfile found. Back to manual upgrade !" 1>&2
     exit 0
 fi
 
@@ -31,7 +31,7 @@ if [ -f $upfile ]; then
     echo "Running upgrade script $upfile"
     bash  $upfile > $logfile 
 else
-    echo "Did not find $upfile"
+    echo "Did not find $upfile" 1>&2
 fi
 
 echo "Step $step for $VLMRELEASE : OK"
