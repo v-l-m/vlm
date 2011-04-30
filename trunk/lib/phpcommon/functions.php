@@ -229,15 +229,25 @@ function errorprint($message) {
   printf ("<h1>" . $message . "</h1>" );
 }
 
+function getLastUpdateRow($master = false) {
+    $query = "SELECT UNIX_TIMESTAMP(`time`) AS `time`, `races`, `boats` , `duration`, `update_comment` FROM `updates` ORDER BY `time` DESC LIMIT 1";
+    if ($master) {
+        $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed on MASTER\n");
+    } else {
+        $result = wrapper_mysql_db_query_reader($query) or die("Query [$query] failed on SLAVE\n");
+    }
+    $result = wrapper_mysql_db_query_reader($query)
+    $row = mysql_fetch_assoc($result);
+    return $row;
+}
+
 /*display a string containing the difference between now and the last update*/
 function lastUpdate()
 {
   if (file_exists(CRONVLMLOCK)) {
     printf (getLocalizedString("processing") );
   } else {
-    $query2 = "SELECT UNIX_TIMESTAMP(`time`) AS time,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 1";
-    $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-    $row2 = mysql_fetch_assoc($result2);
+    $row2 = getLastUpdateRow();
     $lastupdate = $row2['time'];
     $races = $row2['races'];
     $boats = $row2['boats'];
@@ -266,13 +276,7 @@ function lastUserAction() {
 
 /* return the last known update for the local database (or master if master is true) */
 function lastUpdateTime($master = false) {
-    $query = "SELECT UNIX_TIMESTAMP(time) AS time FROM updates ORDER BY time DESC LIMIT 1";
-    if ($master) {
-        $result = wrapper_mysql_db_query_writer($query);
-    } else {
-        $result = wrapper_mysql_db_query_reader($query);
-    }
-    $row = mysql_fetch_assoc($result);
+    $row = getLastUpdateRow();
     return $row['time'];
 }
 
