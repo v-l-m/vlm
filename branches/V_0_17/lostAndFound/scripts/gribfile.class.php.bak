@@ -1,0 +1,160 @@
+<?php
+class gribFile
+{
+  var 
+	$minlat,
+	$maxlat,
+	$minlong,
+	$maxlong,
+	$validity;
+
+  function store($filename)
+  {
+    // Todo : tester le nombre d'arguments. Attention, en PHP, $argc compte le nom du script
+    $handle = fopen($filename, "r");
+    if ( $handle ) 
+    	printf ("Gribfile opened filename=%s\n", $filename);
+    else
+    	printf ("Gribfile can not be opened filename=%s\n", $filename);
+
+    // get latitudes for the zone (min/max)
+    $buffer = fscanf ($handle, "%s\t%s\n");
+    list ($this->maxlat , $this->minlat) = $buffer;
+
+    printf ("Lat min/max = %f / %f\n", $this->minlat, $this->maxlat);
+
+    // get longitudes for the zone (min/max)
+    $buffer = fscanf ($handle, "%s\t%s\n");
+    list ($this->minlong , $this->maxlong) = $buffer;
+
+    // Handle case of a square near -180 W / 180E (if longi <0 the loop will fail in a 0 length "grid" )
+    if ( $this->minlong < 0 ) $this->minlong+=360;
+    if ( $this->maxlong < 0 ) $this->maxlong+=360;
+    printf ("Long min/max = %f / %f\n", $this->minlong, $this->maxlong);
+    // Those values are corrected in the longi loop.
+
+
+    $i=0;
+    for ($lati=$this->maxlat; $lati >= $this->minlat ; $lati-=0.5 )	
+    {
+    //printf ("%f\n", $lati);
+      for ($longi=$this->minlong; $longi <= $this->maxlong ; $longi+=0.5 )
+      {
+          //printf ("%f\n", $longi);
+          if ( $longi > 180 ) {
+	  	$corrected_longi = $longi - 360;
+	  } else {
+	  	$corrected_longi = $longi;
+	  }
+
+          $buffer = fscanf ($handle, "%s\t%s\t%s\t%s\n");  
+       	  list ($uwind , $vwind, $uwind3, $vwind3) = $buffer;
+	
+	  $query0 = "REPLACE INTO wind "  
+	     .      " (latitude, longitude, wspeed, wheading, time, uwind, vwind, uwind3, vwind3)" 
+	     .      "   VALUES ( " 
+	     .                    $lati  . ", " 
+	     .                    $corrected_longi . ", "  
+	     .                    norm($uwind, $vwind) . ", " 
+	     .                    angle($uwind, $vwind)  . ", "
+	     .			  time() . ", "
+	     .                    $uwind . ", "
+	     .                    $vwind . ", "
+	     .			  $uwind3 . ", "
+	     .			  $vwind3
+	     .                   ");"     ;
+
+	  if ($verbose != 0) echo $query0."\n";
+
+	  if ( $longi == round ($longi ) && $lati == round ($lati) ) {
+	    mysql_db_query(DBNAME,$query0);
+	  }
+
+    	  $i++;
+        }
+      }
+      printf ("Gridsize = %d\n", $i);
+      fclose($handle);
+   }
+
+
+
+  // Deletes old wind data (> 1 day)
+  function clean()
+  {
+      $query0 = "DELETE FROM wind WHERE time < " . (time() - 86400)  ;
+
+      mysql_db_query(DBNAME,$query0);
+      echo $query0 ."\n";
+      if ($verbose != 0) echo $query0."\n";
+   }
+
+  function newstore($filename)
+  {
+    // Todo : tester le nombre d'arguments. Attention, en PHP, $argc compte le nom du script
+    $handle = fopen($filename, "r");
+    if ( $handle ) 
+    	printf ("Gribfile opened filename=%s\n", $filename);
+    else
+    	printf ("Gribfile can not be opened filename=%s\n", $filename);
+
+    // get latitudes for the zone (min/max)
+    $buffer = fscanf ($handle, "%s\t%s\n");
+    list ($this->maxlat , $this->minlat) = $buffer;
+
+    printf ("Lat min/max = %f / %f\n", $this->minlat, $this->maxlat);
+
+    // get longitudes for the zone (min/max)
+    $buffer = fscanf ($handle, "%s\t%s\n");
+    list ($this->minlong , $this->maxlong) = $buffer;
+
+    // Handle case of a square near -180 W / 180E (if longi <0 the loop will fail in a 0 length "grid" )
+    if ( $this->minlong < 0 ) $this->minlong+=360;
+    if ( $this->maxlong < 0 ) $this->maxlong+=360;
+    printf ("Long min/max = %f / %f\n", $this->minlong, $this->maxlong);
+    // Those values are corrected in the longi loop.
+
+    // get GribValidity
+    $buffer=fscanf ($handle, "%s\n");
+    list($this->validity) =$buffer; 
+
+    $i=0;
+    for ($lati=$this->maxlat; $lati >= $this->minlat ; $lati-=0.5 )	
+    {
+    //printf ("%f\n", $lati);
+      for ($longi=$this->minlong; $longi <= $this->maxlong ; $longi+=0.5 )
+      {
+          //printf ("%f\n", $longi);
+          if ( $longi > 180 ) {
+	  	$corrected_longi = $longi - 360;
+	  } else {
+	  	$corrected_longi = $longi;
+	  }
+
+          $buffer = fscanf ($handle, "%s\t%s\n");  
+       	  list ($uwind , $vwind) = $buffer;
+	
+	  $query0 = "REPLACE INTO winds "  
+	     .      " (latitude, longitude, time, uwind, vwind)" 
+	     .      "   VALUES ( " 
+	     .                    $lati  . ", " 
+	     .                    $corrected_longi . ", "  
+	     .			  $this->validity  . ", "
+	     .                    $uwind . ", "
+	     .                    $vwind . ");"     ;
+
+	  if ($verbose != 0) echo $query0."\n";
+
+	  if ( $longi == round ($longi ) && $lati == round ($lati) ) {
+	    mysql_db_query(DBNAME,$query0);
+	  }
+
+    	  $i++;
+        }
+      }
+      printf ("Gridsize = %d\n", $i);
+      fclose($handle);
+   }
+
+}
+?>
