@@ -1,6 +1,7 @@
 <?php
 
-header("Content-Type: application/force-download");
+header("Content-Type: application/force-download; charset=utf-8");
+
 header('Content-Disposition: attachment; filename="vlm-translation-report.txt"');
 include "../site/includes/strings.inc";
 
