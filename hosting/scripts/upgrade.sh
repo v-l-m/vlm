@@ -34,5 +34,5 @@ else
     echo "Did not find $upfile" 1>&2
 fi
 
-echo "Step $step for $VLMRELEASE : OK"
-
+echo "End Step $step for $VLMRELEASE, grepping logfile"
+grep _i "error" $logfile
