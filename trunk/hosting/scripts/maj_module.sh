@@ -185,9 +185,9 @@ case $confmodule in
     echo 'OK !'
 
     cd $oldpwd
-    echo "!!! ATTENTION /// VOUS ALLEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?"
-    echo "Tentative de redémarrage d'apache" 1>&2
-    sudo /etc/init/apache2 restart
+    echo "!!! ATTENTION /// VOUS ALLEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?" 1>&2
+    echo "Exemple : sudo /etc/init/apache2 restart" 1>&2
+    
     ;;
     grib)
     echo -n "+$confmodule: installation du script de récupération des gribs dans $VLMBIN..."
