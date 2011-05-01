@@ -13,16 +13,23 @@ include_once("includes/header.inc");
   $usersObj = new fullUsers(getLoginId());
 
   if ( $usersObj->users->engaged == 0 ) {
+      echo "<div id=\"yourboatsummarybox\">";
+      echo "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
+      echo "<b>";
+      echo $usersObj->users->username;
+      echo "</b>&nbsp;n&deg; <b>";
+      echo $usersObj->users->htmlIdusers();
+      echo "</b>&nbsp;/&nbsp;&quot;";
+      echo $usersObj->users->boatname;
+      echo "&quot; ";
+      echo "</div>";
 
-
-    // Le palmares du joueur
-    echo "<h1>" ; printf (getLocalizedString("palmares"), $usersObj->users->htmlIdusers()); echo "</h1>";
-    displayPalmares($usersObj->users->idusers);
-
-    // S'engager dans une course
-    printf("<h3>" . getLocalizedString("notengaged") . "</h3>");
-    //include ("subscribe_race.php");
-    include ("includes/raceslist.inc");
+      echo "<div style=\"display: block; clear: both;\">";
+      // S'engager dans une course
+      printf("<h3>" . getLocalizedString("notengaged") . "</h3>");
+      //include ("subscribe_race.php");
+      include ("includes/raceslist.inc");
+      echo "</div>";
   } else {
 
     $myRace = &$usersObj->races;
