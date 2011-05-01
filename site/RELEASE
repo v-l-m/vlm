@@ -5,8 +5,24 @@ v0.17 aka Chamallow
 
 What's up for ...
 ... players ?
-  * 
+  * Players may share contacts and lang info, that are displayed in the player and boat profile
+  * Final end of boat authentification support
+  * Players may revoke a boatsitting that they have been granted and boatsitters can't abandon anymore
+  * update of german translation (thanks JL), portugese translation is back
+  * bugfixes in pilototo (mesosaure)
+  * Map bugfixes (spifou)
 
+... translaters ?
+  * automatic report to point out untranslated strings
+
+... admins ?
+  * duplicate IP report for players
+
+... tools developers and developers ?
+  * finish position is now recorded (spifou)
+  * 'NOW' is available in boatinfo.php and ranking provide intermediate wp times
+  * tracks.php fixes, and better http header for some ws
+  * new ws for subscribing to a race
 
 v0.16 aka "Un typhon, phon, phon"
 
