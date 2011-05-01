@@ -1,53 +1,33 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
-From 0.16.x to Next:
+From 0.16.x to 0.17 :
 
-= All servers =
+= Step 0, can be done at any time =
 
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_17
 
   EDIT file ./conf/param.php
-    - remove reference to define('MAX_GRIBTIME_FUTURE', ...)
+    - remove reference to define('MAX_GRIBTIME_FUTURE', ...) which is now useless
 
   RUN
     ./scripts/maj_scripts.sh
 
-= Master Server =
+  RUN
+    ./scripts/upgrade.sh 0.17 0
+
+= Step 1, maintenance mode, backup base, upgrade core =
 
   RUN
-    ./scripts/maj_module.sh base
+    ./scripts/upgrade.sh 0.17 1 && sudo /etc/init.d/apache2 restart
 
-  STOP VLM CLEAN Engine (comment in the crontab)
+  - if something goes wrong, EDIT crontab and comment vlm crons
 
-  cd ./vlmcode/base/scripts/
- 
-  BACKUP the database
-    ./dump-alive.sh
-  
-  UPGRADE to 0.17, RUN
-    ./runupgrade.sh 0.17 > log.txt
-  
-  cd 
+= Step 2, end of release, unlock engine =
 
-  RUN
-    ./scripts/maj_module.sh moteur
+    ./scripts/upgrade.sh 0.17 2
 
-= All servers =
-
-  RUN
-    ./scripts/maj_module.sh lib/vlm-c
-    (as root) /etc/init.d/apache2 restart (or service apache2 restart)
-
-    ./scripts/maj_module.sh lib/phpcommon
-    ./scripts/maj_module.sh site
-    ./scripts/maj_module.sh externals
-    ./scripts/maj_module.sh medias
-
-= Master Server
-
-  RESTART VLM Engine (un-comment in crontab)
-
+THE END
 
 From 0.15.5 to Next:
 
