@@ -521,6 +521,7 @@ class fullUsers
 
     if (is_null($origuser)) {
       $this->users = getUserObject($id);
+      if (is_null($this->users)) die("Exception : you should report this error (unable to build users obj in fullusers) !");
     } else {
       $this->users = &$origuser;
     }
