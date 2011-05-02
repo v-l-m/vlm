@@ -2,7 +2,6 @@
   </div> <!-- fin div contenaire -->
 
   <div id="footer">
-    <!-- <hr/> horinzontal line-->
     <!--
       <p>
         <a href="http://validator.w3.org/check?uri=referer">
@@ -12,7 +11,7 @@
       </p>
     -->
   </div> <!--footer-->
-	<!-- TIMINGS: <?php echo "generated in ".(microtime(1)-$page_start_time)."s" ?> -->
+	<!-- TIMINGS: <?php if(isset($page_start_time)) echo "generated in ".(microtime(1)-$page_start_time)."s"; ?> -->
 </body>
 </html>
 <?php
