@@ -3,7 +3,7 @@
     include ("htmlstart.php");
     include_once ("functions.php");
 
-    $q = "select idraces, ipaddr, group_concat(distinct concat('@', PL.idplayers, '/', PL.playername)) as playernames from user_action as UA LEFT JOIN players as PL ON (PL.idplayers = UA.idplayers) where idraces > 0 and UA.idplayers > 0 group by ipaddr, idraces having count(distinct UA.idplayers) > 1 order by count(distinct UA.idplayers);"
+    $q = "select idraces, ipaddr, group_concat(distinct concat('@', PL.idplayers, '/', PL.playername)) as playernames from user_action as UA LEFT JOIN players as PL ON (PL.idplayers = UA.idplayers) where idraces > 0 and UA.idplayers > 0 group by ipaddr, idraces having count(distinct UA.idplayers) > 1 order by count(distinct UA.idplayers);";
 
     htmlQuery($q);
 
