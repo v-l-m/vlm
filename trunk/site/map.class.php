@@ -942,6 +942,7 @@ class map
             	$fullUsersObj = new fullUsers($t_userid, NULL, $this->fullRacesObj,
             	                              $this->north, $this->south, $this->west, $this->east, $age);
           }
+          if (is_null($fullUsersObj->users)) return(0);
 
           // DRAW MyWP
           if ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) {
