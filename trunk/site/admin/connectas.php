@@ -15,7 +15,11 @@
             insertAdminChangelog(Array("operation" => "Connect as", "rowkey" => $idp));
             $player = getPlayerObject(intval($idp));
             $defaultuser = getUserObject($player->getDefaultBoat());
-            loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
+            if (is_null($defaultuser)) {
+                loginPlayer(0, "", $player->idplayers, $player->playername);
+            } else {
+                loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
+            }
             echo "<h3>OK, you are now logged as ".$player->playername."</h3>";
             echo "<p><a href=\"/\">Click here to go to the welcome page.</a></p>";
     } else {
