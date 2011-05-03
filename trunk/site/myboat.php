@@ -379,7 +379,7 @@ include_once("scripts/myboat.js");
         <div id="gpsbox"  class="instrument">
         <img alt="GPS" src="<?php
         if (time() != $usersObj->users->userdeptime) {
-            $hourmoy = 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)
+            $hourmoy = 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime);
         } else {
             $hourmoy = 0;
         }
