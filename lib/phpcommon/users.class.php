@@ -494,6 +494,15 @@ class users extends baseClass
   function isEngaged() {
       return $this->engaged > 0;
   }
+  
+  function computeAvgNow() {
+      $dt = time() - $this->userdeptime;
+      if ($dt != 0) {
+          return(3600*$this->loch/$dt);
+      } else {
+          return(0);
+      }
+  }
 
 }
 
