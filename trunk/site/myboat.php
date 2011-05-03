@@ -389,7 +389,7 @@ include_once("scripts/myboat.js");
                 $usersObj->loxoangletoend,
                 round($usersObj->VMGortho, 2),
                 round($usersObj->users->loch, 1),
-                $usersObj->users->computeAvg();
+                $usersObj->users->computeAvg()
                 );
         ?>" />
         </div>
