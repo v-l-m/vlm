@@ -1355,6 +1355,16 @@ function login($idus, $pseudo)
   }
 }
 
+function loginPlayerDefaultBoat($idp) {
+    $player = getPlayerObject($idp);
+    $defaultuser = getUserObject($player->getDefaultBoat());
+    if (is_null($defaultuser)) {
+        loginPlayer(0, "", $player->idplayers, $player->playername);
+    } else {
+        loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
+    }
+}
+
 function loginPlayer($idus, $pseudo, $idp, $playername) {
     login($idus, $pseudo);
     $_SESSION['idp'] = $idp;

@@ -382,7 +382,7 @@ include_once("scripts/myboat.js");
                 $usersObj->loxoangletoend,
                 round($usersObj->VMGortho, 2),
                 round($usersObj->users->loch, 1),
-                3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)
+                $usersObj->users->computeAvg();
                 );
         ?>" />
         </div>

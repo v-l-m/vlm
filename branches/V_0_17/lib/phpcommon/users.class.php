@@ -494,6 +494,15 @@ class users extends baseClass
   function isEngaged() {
       return $this->engaged > 0;
   }
+  
+  function computeAvgNow() {
+      $dt = time() - $this->userdeptime;
+      if ($dt != 0) {
+          return(3600*$this->loch/$dt);
+      } else {
+          return(0);
+      }
+  }
 
 }
 
@@ -521,7 +530,7 @@ class fullUsers
 
     if (is_null($origuser)) {
       $this->users = getUserObject($id);
-      if (is_null($this->users)) die("Exception : you should report this error (unable to build users obj in fullusers) !");
+      if (is_null($this->users)) return;
     } else {
       $this->users = &$origuser;
     }
