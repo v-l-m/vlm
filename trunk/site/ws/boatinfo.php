@@ -93,12 +93,7 @@ function get_info_array($idu) {
                    60*$racesObj->vacfreq - time())/10;
     $info['VAC'] =  60*$racesObj->vacfreq;
 
-    if (time() != $usersObj->users->userdeptime) {
-        $avg = 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime);
-    } else {
-        $avg = 0;
-    }
-    $info['AVG'] = round($avg, 2);
+    $info['AVG'] = round($usersObj->users->computeAvg(), 2);
     
     $info['WPLAT'] = $userObj->users->targetlat;
     $info['WPLON'] = $userObj->users->targetlong;
