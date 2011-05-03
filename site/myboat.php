@@ -378,6 +378,12 @@ include_once("scripts/myboat.js");
     <!-- le beau GPS multifonctions -->
         <div id="gpsbox"  class="instrument">
         <img alt="GPS" src="<?php
+        if (time() != $usersObj->users->userdeptime) {
+            $hourmoy = 3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)
+        } else {
+            $hourmoy = 0;
+        }
+
         printf( 'gps.php?latitude=%d&amp;longitude=%d&amp;speed=%2.2f&amp;cap=%04.1f&amp;dnm=%4.2f&amp;'.
                 'cnmo=%03.1f&amp;cnml=%03.1f&amp;vmg=%2.2f&amp;loch=%02.1f&amp;avg=%02.1f',
                 $usersObj->lastPositions->lat,
@@ -389,7 +395,7 @@ include_once("scripts/myboat.js");
                 $usersObj->loxoangletoend,
                 round($usersObj->VMGortho, 2),
                 round($usersObj->users->loch, 1),
-                3600*$usersObj->users->loch/(time() - $usersObj->users->userdeptime)
+                $hourmoy
                 );
         ?>" />
         </div>
