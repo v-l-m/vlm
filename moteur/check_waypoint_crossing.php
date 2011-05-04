@@ -264,7 +264,7 @@ if (!$wp_invalidated) {
 	} else {
 	  printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);
 	}
-	
+	logUserEvent($fullUsersObj->users->idusers,  $fullRacesObj->races->idraces, "Boat arrived in race ".$fullRacesObj->races->idraces);
 	//remove player from race
 	$fullUsersObj->removeFromRaces();
 	
