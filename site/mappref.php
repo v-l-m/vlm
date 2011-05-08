@@ -7,11 +7,7 @@
 </div>
 <?php 
     $fullUsersObj = new fullUsers(getLoginId());
-    if (isset($_POST['action'])) {
-        $action = htmlentities($_POST['action']);
-    } else {
-        $action = "none";
-    }
+    $action = htmlentities(get_cgi_var('action', 'none'));
     if ($fullUsersObj->users->engaged != 0) {  
         //echo "PO=".$prefOpponents;
         $fullRacesObj = new fullRaces ($fullUsersObj->users->engaged, $fullUsersObj->races);
@@ -19,7 +15,7 @@
         // Sauvegarde des préférences
         // Check si liste vide, dans ce cas, on précoche l'utilisateur demandeur (bug implode signalé par Phille le 27/06/07)
         if ( $action == getLocalizedString("valider") ) {
-            $list=$_POST['list'];
+            $list= get_cgi_var('list', "");
             //print_r($list);
             //echo implode(",",$list);
             if ( $list == "" || count($list) == 0 ) $list = array($fullUsersObj->users->idusers) ;
