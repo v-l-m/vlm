@@ -53,9 +53,8 @@
         $password = htmlentities($password);
         $player = new players(0, $pseudo);
         if (!$player->error_status && $player->checkPassword($password)) {
-            //Choosing a default boat is here possible because we give feedback to the user.
-            $defaultuser = getUserObject($player->getDefaultBoat());
-            loginPlayer($defaultuser->idusers, $defaultuser->username, $player->idplayers, $player->playername);
+            //login player should be a method of playerobject ?
+            loginPlayerDefaultBoat($player->idplayers);
         } else {
             $error_auth = True;
             $msg = getLocalizedString("authfailed")."<br /><a href=\"reset_password.php\">".getLocalizedString("Lost your password ?")."</a>";
