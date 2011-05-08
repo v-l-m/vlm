@@ -720,7 +720,7 @@ class fullUsers
   // we are not filtering on the race id, as this is a transient table, so
   // no need to keep values for finished races
   function deleteRaceLoch() {
-    $query = "DELETE FROM races_loch WHERE idusers=.".$this->users->idusers;
+    $query = "DELETE FROM races_loch WHERE idusers=".$this->users->idusers;
     wrapper_mysql_db_query_writer($query);
   }
 
