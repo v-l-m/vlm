@@ -304,6 +304,9 @@ Merci
        LoadPlugin=hostinfo
      }}}
    * 6.4 Ne pas laisser Awstat en libre accès
+ * 7. Paramètrage optionnel des vhosts dédiés au cache
+    * 7.1 Activer mod rewrite {{{a2enmod rewrite}}}
+    * 7.2 configurer le vhost en utilisant hosting/conf/apache.vhost.cache.example
    
 = Notes pour les versions futures =
 
