@@ -19,7 +19,7 @@
         ErrorLog    /home/vlm/logs/apache2/vlmcache_error_log
         CustomLog   /home/vlm/logs/apache2/vlm_access_log combined
 
-        <Directory /home/vlmtest/cache>
+        <Directory /home/vlm/cache>
                 Order Allow,Deny
                 Allow from All
                 #Don't use the .htaccess for cache vhost

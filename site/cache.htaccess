@@ -7,5 +7,5 @@ ExpiresDefault A2592000
     RewriteCond %{SCRIPT_FILENAME} !-d
     RewriteRule ^(.*)$ /cache.php
 </IfModule>
-
+Options -Indexes
 ErrorDocument 404 /cache.php
