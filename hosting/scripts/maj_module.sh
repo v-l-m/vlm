@@ -119,6 +119,7 @@ case $confmodule in
     echo -n "+$confmodule: Création du cache si nécessaire"
     mkdir -p $VLMCACHE/racemaps --mode=777
     mkdir -p $VLMCACHE/minimaps --mode=777
+    mkdir -p $VLMCACHE/tinymaps --mode=777
     mkdir -p $VLMCACHE/flags --mode=777
     mkdir -p $VLMCACHE/gshhstiles --mode=777
     mv $destmodulepath/cache.htaccess $VLMCACHE/.htaccess

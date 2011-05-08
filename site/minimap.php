@@ -3,9 +3,16 @@
     include_once ("functions.php");
 
     $idraces = get_cgi_var("idraces", 0);
+    $typethumb = get_cgi_var("type", "mini");
     // Récupération des dimensions (x et y) : valeurs mini par défaut = 250
     $image = $idraces;
-    $thumb = DIRECTORY_MINIMAPS."/" . $image . ".png";
+    if ($typethumb == "tiny") {
+        $thumb = DIRECTORY_TINYMAPS."/" . $image . ".png";    
+        $new_x = 50;
+    } else {
+        $thumb = DIRECTORY_MINIMAPS."/" . $image . ".png";
+        $new_x = 180;
+    }
     $force = get_cgi_var('force', 'no');
     $original = getRacemap($idraces, $force);
 
@@ -25,7 +32,6 @@
 
         list($x, $y, $type, $attr) = getimagesize($original);
         $ratio = $x/$y;
-        $new_x = 180;
         $new_y = $new_x/$ratio;
 
         switch(exif_imagetype($original)) {

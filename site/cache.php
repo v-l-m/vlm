@@ -32,6 +32,11 @@
                     headeranddie(sprintf("/minimap.php?idraces=%d", $components[1]));
                 }
             break;
+            case "tinymaps" :
+                if (preg_match("/(\d+)\.png/", $matches[2], $components)) {
+                    headeranddie(sprintf("/minimap.php?idraces=%d&type=tiny", $components[1]));
+                }
+            break;
             case "flags" :
                 if (preg_match("/(.+)\.png/", $matches[2], $components)) {
                     headeranddie(sprintf("/flagimg.php?idflags=%s", $components[1]));
