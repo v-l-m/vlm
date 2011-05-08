@@ -716,6 +716,14 @@ class fullUsers
     wrapper_mysql_db_query_writer($query65);// or die("Query failed : " . mysql_error." ".$query65);
   }
 
+  // delete entries in the races_loch table for this user
+  // we are not filtering on the race id, as this is a transient table, so
+  // no need to keep values for finished races
+  function deleteRaceLoch() {
+    $query = "DELETE FROM races_loch WHERE idusers=.".$this->users->idusers;
+    wrapper_mysql_db_query_writer($query);
+  }
+
   function updateAngles($write = 1)
   {
     switch ($this->users->pilotmode) {
@@ -1358,8 +1366,10 @@ class fullUsers
       $this->races = new races($id);
       $this->users->boattype = $this->races->boattype;
 
-      //delete old positions from database for this race
+      // delete old positions from database for this race
       $this->deletePositions($id);
+      // clear the races_loch table
+      $this->deleteRaceLoch();
 
       // Purge all Pilototo tasks
       $this->users->pilototoPurge(0);
