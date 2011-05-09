@@ -176,6 +176,8 @@
   <script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
   <script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
   <link rel="stylesheet" href="externals/lightbox/css/lightbox.css" type="text/css" media="screen" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/logovlm-57x57.png"/>
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/logos/logovlm-114x114.png"/>
 
   <script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 
