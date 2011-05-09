@@ -1969,6 +1969,13 @@ function centerDualCoord($lat1, $lon1, $lat2, $lon2) {
     return array("lat" => $latwp, "lon" => $longwp);
 }
 
+function forceUTF8($str) {
+    if (mb_check_encoding($str, "UTF-8")) return $str;
+    $enc = mb_detect_encoding($str, Array("ASCII", "ISO-8859-15", "Windows-1251", "UTF-8"));
+    if ($enc === False) $enc = "ASCII";
+    return iconv($enc, "UTF-8//TRANSLIT//IGNORE", $str);
+}
+
 function logUserEvent($idusers, $idraces, $action) {
     if (isPlayerLoggedIn()) {
         $idplayers = getPlayerId();
