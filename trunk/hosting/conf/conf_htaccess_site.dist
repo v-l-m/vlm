@@ -9,5 +9,5 @@
 #Take care of old path
 RedirectMatch permanent images\/racemaps\/regate(\d+)\.jpg$ http://virtual-loup-de-mer.org/cache/racemaps/$1.png
 RedirectMatch permanent images\/pavillons\/(.*)$ http://virtual-loup-de-mer.org/cache/flags/$1
-RedirectMatch permanent \/fr.png$ http://virtual-loup-de-mer.org/images/site/fr.png
+RedirectMatch permanent ^\/fr.png$ http://virtual-loup-de-mer.org/images/site/fr.png
 Options Indexes Includes FollowSymLinks
