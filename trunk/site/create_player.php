@@ -17,7 +17,7 @@
         echo "<div id=\"createplayerbox\">";
         echo "<h2>".getLocalizedString("chooseaccount")."</h2>";
 ?>
-        <form action="#" method="post" name="createplayer">
+        <form action="#" method="post" accept-charset="utf-8" name="createplayer">
             <input size="25" maxlength="15" name="playername" value="<?php echo $playername; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("playername"); ?></span>
             <br />
@@ -53,7 +53,7 @@
             echo "<h2>".getLocalizedString("Here is your request for creating an account")."&nbsp;:</h2>";
             printAccountSummary($emailid, $password, $playername);
 ?>
-            <form action="#" method="post" name="createplayer">
+            <form action="#" method="post" accept-charset="utf-8" name="createplayer">
                 <input type="hidden" name="emailid" value="<?php echo $emailid; ?>"/>
                 <input type="hidden" name="password" value="<?php echo $password; ?>"/>
                 <input type="hidden" name="playername" value="<?php echo $playername; ?>"/>
@@ -97,7 +97,7 @@
             echo "<h2>".getLocalizedString("Your account is ready to be created")."</h2>";
             printAccountSummary($player->email, "****", $player->playername);
 ?>
-            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" name="createplayer">
+            <form accept-charset="utf-8" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" name="createplayer">
                 <input type="hidden" name="seed" value="<?php echo $seed; ?>" />
                 <input type="hidden" name="emailid" value="<?php echo $emailid; ?>" />
                 <input type="hidden" name="createplayer" value="create" />

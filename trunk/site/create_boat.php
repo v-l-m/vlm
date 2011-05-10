@@ -22,7 +22,7 @@
         echo "<div id=\"createboatbox\">";
         echo "<h2>".getLocalizedString("Create your boat")."&nbsp;:</h2>";
 ?>
-        <form action="#" method="post" name="createboat">
+        <form action="#" method="post" accept-charset="utf-8" name="createboat">
             <input size="25" maxlength="32" name="boatpseudo" value="<?php echo $boatpseudo; ?>" />
             <span class="texthelpers"><?php echo getLocalizedString("boatpseudo"); ?></span>
             <br />
@@ -49,7 +49,7 @@
             echo "<h2>".getLocalizedString("Here is your request for creating a boat")."&nbsp;:</h2>";
             printBoatSummary($boatpseudo, $boatname);
 ?>
-            <form action="#" method="post" name="createboat">
+            <form action="#" method="post" accept-charset="utf-8" name="createboat">
                 <input type="hidden" name="boatpseudo" value="<?php echo $boatpseudo; ?>"/>
                 <input type="hidden" name="boatname" value="<?php echo $boatname; ?>"/>
                 <input type="hidden" name="createboat" value="create"/>

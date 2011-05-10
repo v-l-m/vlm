@@ -32,7 +32,7 @@
     }
     
     echo "<div>";
-    echo "<form name=\"prefs\" method=\"post\">";
+    echo "<form accept-charset=\"utf-8\" name=\"prefs\" method=\"post\">";
     echo "<table class=\"prefsetter\">";
 
     echoSaveCancel();
