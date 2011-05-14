@@ -11,13 +11,6 @@
 
     $actioncreate = get_cgi_var("createboat");
 
-    function printBoatSummary($boatpseudo = "", $boatname = "") {
-        echo "<ul>";
-            echo "<li>".getLocalizedString("boatpseudo")." : $boatpseudo</li>";
-            echo "<li>".getLocalizedString("boatname")." : $boatname</li>";
-        echo "</ul>";
-    }
-
     function printFormRequest($boatpseudo = "", $boatname = "") {
         echo "<div id=\"createboatbox\">";
         echo "<h2>".getLocalizedString("Create your boat")."&nbsp;:</h2>";

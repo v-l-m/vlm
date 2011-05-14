@@ -3,6 +3,8 @@
     include_once("players.class.php");
     include_once("config.php");
 
+    if (isPlayerLoggedIn()) printErrorAndDie("You are already logged.", "Click here if you want to create a boat.", "create_boat.php");
+
     $actioncreate = get_cgi_var("createplayer");
 
     function printAccountSummary($emailid = "", $password = "", $playername = "") {
@@ -115,10 +117,37 @@
             echo $player->error_string;
         } else {
             echo "<h2>".getLocalizedString("Your account has been created")."</h2>";
+            $player = new players(0, $player->email);
             printAccountSummary($player->email, "****", $player->playername);
-            echo "<h2>".getLocalizedString('Please connect to create your first boat')."</h2>";    
+
+            if (!checkLoginExists($player->playername)
+                && $idu = createBoat($player->playername, $password = generatePassword($player->playername), $player->email, $player->playername)) {
+                //Manual creation of users, forcing use of MASTER server
+                //FIXME : factorise with create_boat.php
+                $users = new users($idu, FALSE);
+                $users->initFromId($idu, True);
+                echo "<h2>".getLocalizedString("Your boat has been created")."</h2>";
+                printBoatSummary($player->playername, $player->playername);
+                echo "</div>";
+
+                echo "<div id=\"attachboatbox\">";
+                if ($users->setOwnerId($player->idplayers) && !$users->error_status) {
+
+                    echo '<h2>'.getLocalizedString("Attachment successful").'.</h2>';
+                    echo '<p>'.getLocalizedString('You own this boat').'.</p>';
+                    echo '<p><b>'.getLocalizedString('Click here').'</b>&nbsp;:&nbsp;'.$users->htmlIdusers().'</p>';
+                } else {
+                    echo "<h2>".getLocalizedString("It was not possible to attach this boat. Please report this error.")."</h2>";
+                    if ($users->error_status) {
+                        print nl2br($users->error_string);
+                    }
+                }
+                echo "</div>";
+            } else {
+                echo "<h2>".getLocalizedString('Please connect to create your first boat')."</h2>";    
+                echo "</div>";
+            }
         }
-        echo "</div>";
     } else {
         printFormRequest();
     }
