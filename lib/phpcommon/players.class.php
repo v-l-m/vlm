@@ -543,5 +543,4 @@ function htmlIdplayersPlayername($idplayers, $playername) {
     return $ret;
 }
 
-
 ?>

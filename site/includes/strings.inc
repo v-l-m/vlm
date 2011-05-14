@@ -2,6 +2,7 @@
 $strings = array (
   'en' => 
   array (
+    "Click here if you want to create a boat." => "Click here if you want to create a boat.",
     'Login id' => 'Login id',
     'After activation, use your email address to connect.' => 'After activation, use your email address to connect.',
     'Account creation is disabled on this server, you should ask to the admins' => 'Account creation is disabled on this server, you should ask to the admins',
@@ -456,6 +457,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "Click here if you want to create a boat." => "Cliquez ici pour créer un bateau",
     'Login id' => 'Identifiant de connexion',
     'After activation, use your email address to connect.' => 'Après activation, utilisez votre adresse électronique pour vous connecter.',
     'Account creation is disabled on this server, you should ask to the admins' => 'La création de compte est désactivée sur ce serveur, vous devez demander aux admins',

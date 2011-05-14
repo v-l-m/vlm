@@ -1224,6 +1224,7 @@ function checkLoginExists($login) {
 
 /*create a new account with default values and return idusers*/
 function createBoat($log, $pass, $mail, $boatname = 'boat') {
+  if (is_null($log)) return False;
   $query3 = "INSERT INTO `users` ( `boattype` , `username` , `password` , `email`,"
     ."`boatname`, `color`, `boatheading`, `pilotmode`, `engaged`, `country` )"
     ."VALUES ( 'boat_imoca60', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '000000', '0', '1', '0', '00-UN')";
@@ -2118,5 +2119,14 @@ function printErrorAndDie($title, $msg = null, $link = null) {
     include('includes/footer.inc');
     exit();
 }
+
+function printBoatSummary($boatpseudo = "", $boatname = "") {
+    echo "<ul>";
+        echo "<li>".getLocalizedString("boatpseudo")." : $boatpseudo</li>";
+        echo "<li>".getLocalizedString("boatname")." : $boatname</li>";
+    echo "</ul>";
+}
+
+
 
 ?>
