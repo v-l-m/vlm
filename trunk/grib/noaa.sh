@@ -77,6 +77,20 @@ for TSTAMP in `echo $allindexes` ; do
     fi
 done
 
+#archiving if needed
+if [ "yes" = "$ARCHIVE_GRIB" ]; then
+  if [ ! -d $GRIBPATH/archives ]; then
+    mkdir $GRIBPATH/archives
+  fi
+  if [ ! -d $GRIBPATH/archives/${DAT} ]; then
+    mkdir $GRIBPATH/archives/${DAT}
+  fi
+  for TSTAMP in 03 06 09 12 ; do
+    GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
+    cp $GRIBFILE $GRIBPATH/archives/${DAT}
+  done
+fi
+
 rm -f $GRIBPATH/$PREFIX*${HH}.grb
 
 # we update the weather now 
