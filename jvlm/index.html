@@ -49,7 +49,8 @@
             options);
 
         //FIXME : Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
-        var urlArray = "/cache/gshhstiles/${z}/${x}/${y}.png";
+        //var urlArray = "/cache/gshhstiles/${z}/${x}/${y}.png";
+        var urlArray = [ "http://c1.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http://c2.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http://c3.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http://c4.v-l-m.org/gshhstiles/${z}/${x}/${y}.png" ];
 
         var vlm = new OpenLayers.Layer.XYZ(
             "VLM Layer",
