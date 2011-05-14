@@ -82,12 +82,17 @@ if [ "yes" = "$ARCHIVE_GRIB" ]; then
   if [ ! -d $GRIBPATH/archives ]; then
     mkdir $GRIBPATH/archives
   fi
-  if [ ! -d $GRIBPATH/archives/${DAT} ]; then
-    mkdir $GRIBPATH/archives/${DAT}
+  YEAR=`date '+%Y'`
+  if [ ! -d $GRIBPATH/archives/${YEAR} ]; then
+    mkdir $GRIBPATH/archives/${YEAR}
+  fi
+  YDAT=`date '+%Y/%m%d'
+  if [ ! -d $GRIBPATH/archives/${YDAT} ]; then
+    mkdir $GRIBPATH/archives/${YDAT}
   fi
   for TSTAMP in 03 06 09 12 ; do
     GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
-    cp $GRIBFILE $GRIBPATH/archives/${DAT}
+    cp $GRIBFILE $GRIBPATH/archives/${YDAT}
   done
 fi
 
