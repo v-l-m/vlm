@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    'Login id' => 'Login id',
+    'After activation, use your email address to connect.' => 'After activation, use your email address to connect.',
     'Account creation is disabled on this server, you should ask to the admins' => 'Account creation is disabled on this server, you should ask to the admins',
     'Account validation error' => 'Account validation error',
     'An email has been sent for your information.' => 'An email has been sent for your information.',
@@ -454,6 +456,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    'Login id' => 'Identifiant de connexion',
+    'After activation, use your email address to connect.' => 'Après activation, utilisez votre adresse électronique pour vous connecter.',
     'Account creation is disabled on this server, you should ask to the admins' => 'La création de compte est désactivée sur ce serveur, vous devez demander aux admins',
     'Account validation error' => 'Erreur de validation de compte',
     'An email has been sent for your information.' => 'Un courriel vous a été adressé pour information.',
@@ -558,7 +562,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'You are not logged in with a player account.' => 'Vous n\'êtes pas connecté en tant que joueur.',
     'You can recover a lost password' => 'Vous pouvez récupérer un mot de passe perdu',
     'You have requested to create an account on VLM.
-Please, click on the link below or copy/paste it in your browser.' => 'Vous avez demandé la création d\'un compte sur VLM
+Please, click on the link below or copy/paste it in your browser.' => 'Vous avez demandé la création d\'un compte sur VLM.
 Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur.',
     'You have to be logged with the player credential to attach the boat.' => 'Vous devez être connecté avec votre compte de joueur pour rattacher un bateau.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'Vous devez être connecté avec le compte du bateau pour pouvoir le rattacher.',
