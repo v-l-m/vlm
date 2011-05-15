@@ -289,6 +289,7 @@ class players extends baseClass {
     }          
 
     function setPref($key, $val, $perm = null) {
+        //FIXME : Should not be used except from playersPrefs class ?
         if (is_null($val)) return $this->unsetPref($key);
         $query = sprintf("REPLACE `players_prefs` SET `idplayers` = %d, `pref_name` = '%s', `pref_value` = '%s'",
             intval($this->idplayers), $key, mysql_real_escape_string($val) );
@@ -326,13 +327,15 @@ class players extends baseClass {
             intval($this->idplayers), $key);
         $result = $this->queryRead($query);
         if ($result && mysql_num_rows($result) === 1)  {
-            return mysql_fetch_array($result, MYSQL_ASSOC);
+            $ret = mysql_fetch_array($result, MYSQL_ASSOC);
+            $ret['permissions'] = intval($ret['permissions']);
+            return $ret;
         } else {
             return null;
         }
     }
     
-    function getPrefGroup($prefix) {
+    function getPrefGroup($prefix = "") {
         $query = sprintf("SELECT `pref_name`, `pref_value`, `permissions` FROM `players_prefs` WHERE `idplayers` = %d AND `pref_name` LIKE '%s%%'",
             intval($this->idplayers), $prefix);
         $result = $this->queryRead($query);

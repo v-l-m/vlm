@@ -107,6 +107,7 @@ class WSBase extends baseClass {
 class WSBasePlayer extends WSBase {
     function __construct() {
         parent::__construct();
+        //FIXME : is this useless now that only players may log in ?
         if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03');
     }
 }
@@ -115,7 +116,6 @@ class WSBaseRace extends WSBase {
     var $idr = null;
     function __construct() {
         parent::__construct();
-        //if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03');
     }
     
     function require_idr() {
@@ -179,6 +179,50 @@ class WSSetup extends WSBase {
 
     
 }
+
+class WSBasePlayersetup extends WSSetup {
+
+    public $player = null;
+
+    function __construct() {
+        //l'auth a été checké dans WSBase
+        parent::__construct();
+
+        //OK, on peut instancier le joueur
+        $this->player = getLoggedPlayerObject();
+    }
+
+    function check_prefs_list() {
+        $this->reply_with_error_if_not_exists('prefs', 'PREFS01');
+        $prefs = $this->request['prefs'];
+        foreach($prefs as $k => $v) {
+            if (!in_array($k, explode(',', PLAYER_PREF_ALLOWED))) {
+                $this->reply_with_error('PREFS02', "BAD KEY:$k");
+            }
+            if (is_array($v)) {
+                if (!isset($v['pref_value'])) $this->reply_with_error("PREFS04", "With key=$k");
+                if (isset($v['permissions']) && !is_int($v['permissions'])) $this->reply_with_error("PREFS05", "With key=$k");
+            } else {
+                $prefs[$k] = Array('pref_value' => $v);
+            }
+            if (strlen($v['pref_value'])>255) $this->reply_with_error("PREFS03", "With key=$k");
+
+        }
+        return $prefs;
+    }
+
+    function finish() {
+        if ($this->player->error_status) {
+            $this->reply_with_error("CORE01", $this->player->error_string);
+        } else {
+            $this->reply_with_success();
+        }
+    }
+
+}
+
+
+
 
 class WSBaseBoatsetup extends WSSetup {
     public $fullusers = null;
@@ -322,7 +366,11 @@ function get_error($code) {
         //prefs
         "PREFS01" => "prefs is unspecified",
         "PREFS02" => "key is not allowed",
-        "PREFS03" => "prefs should not excess 255 characters",
+        "PREFS03" => "prefs value should not excess 255 characters",
+        "PREFS04" => "prefs 'pref_value' not given",
+        "PREFS05" => "prefs 'permissions' should be int",
+        "PREFS06" => "pref not valid",
+
         //player
         "PLAYER01" => 'idp (id player) is required',
         "PLAYER02" => 'idp does not exist',
