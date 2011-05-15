@@ -34,6 +34,7 @@ function sortPref($k1, $k2) {
 //NB: par défaut, tout est privé.
 define("VLM_ACL_BOATSIT", 1);
 define("VLM_ACL_AUTH", 2);
+define("VLM_ACL_ALL", 3);
 
 function playersPrefsGroups() {
     global $playersPrefsList;
@@ -77,6 +78,75 @@ class playersPrefs extends baseClass {
         uksort($r, "sortPref");
         return $r;
     }
+    
+    function checkPrefValue($key, $val) {
+        if (is_null($val) || $val == "") return "";
+        switch($key) {
+            case "contact_email":
+            case "contact_msn":
+            case "contact_jabber":
+                $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
+                if (preg_match($pattern  ,  $val) < 1) {
+                    $this->set_error(getLocalizedString("pref_".$key)." : ".getLocalizedString("Your id doesn't seem to be valid"));
+                    return null;
+                }
+                return $val;
+            case "contact_taverne":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/www\.virtual-winds\.com\/forum\/index.php\?showuser=(\d+)$/i", "/^(\d+)$/i");
+            case "contact_fmv":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/forum-marinsvirtuels\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
+            case "contact_revatua":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/revatua\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
+            case "contact_twitter":
+                return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter\.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
+            case "contact_identica":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/identi\.ca\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
+            case "contact_facebook":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/.*?facebook\.com\/(.*)$/i", "/^([^:\s;<>'\"]*)$/i");
+            case "lang_communication" :
+                if (is_array($val)) $val = implode(',', $val);
+            case "lang_ihm" :
+            default :
+                return $val;
+        }
+        return $val;
+    }
+    
+    function checkDoublePattern($key, $val, $pattern, $pattern2) {
+                if (is_null($val) || $val == "") return "";
+                if (preg_match($pattern  ,  $val, $matches) > 0) {
+                    $val = $matches[1];
+                }
+                if (preg_match($pattern2  ,  $val) <  1) {
+                    $this->set_error(getLocalizedString("pref_".$key)." : ".getLocalizedString("Your id doesn't seem to be valid"));
+                    return null;
+                }
+                return $val;
+    }    
+
+    function checkInputPref($key, $val, $permint) {
+        if (is_null($val = $this->checkPrefValue($key, $val))) {
+             $this->set_error(getLocalizedString("Bad value for key")." : ".getLocalizedString("pref_$key"));
+             return False;
+        }
+        if ($val == "") $val = null;
+        
+        //FIXME : constraint on availaible flags
+        $permint &= VLM_ACL_ALL;
+        
+        $old = $this->playerclass->getPref($key);
+        if (is_null($old)) {
+            if (!is_null($val)) {
+                $this->playerclass->setPref($key, $val, $permint);
+            }
+        } else {
+            if ($old['pref_value'] != $val || $old['permissions'] != $permint) {
+                $this->playerclass->setPref($key, $val, $permint);
+            }
+        }
+        return !($this->playerclass->error_status || $this->error_status);
+    }
+
 }
 
 class playersPrefsHtml extends playersPrefs {
@@ -157,81 +227,18 @@ class playersPrefsHtml extends playersPrefs {
     function getId($key) {
         return "inputpref-$key";
     }
-    
-    function checkPrefValue($key, $val) {
-        if (is_null($val) || $val == "") return "";
-        switch($key) {
-            case "contact_email":
-            case "contact_msn":
-            case "contact_jabber":
-                $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
-                if (preg_match($pattern  ,  $val) < 1) {
-                    $this->set_error(getLocalizedString("pref_".$key)." : ".getLocalizedString("Your id doesn't seem to be valid"));
-                    return null;
-                }
-                return $val;
-            case "contact_taverne":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/www\.virtual-winds\.com\/forum\/index.php\?showuser=(\d+)$/i", "/^(\d+)$/i");
-            case "contact_fmv":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/forum-marinsvirtuels\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
-            case "contact_revatua":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/revatua\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
-            case "contact_twitter":
-                return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter\.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
-            case "contact_identica":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/identi\.ca\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
-            case "contact_facebook":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/.*?facebook\.com\/(.*)$/i", "/^([^:\s;<>'\"]*)$/i");
-            case "lang_communication" :
-                if (is_array($val)) $val = implode(',', $val);
-            case "lang_ihm" :
-            default :
-                return $val;
-        }
-        return $val;
-    }
-    
-    function checkDoublePattern($key, $val, $pattern, $pattern2) {
-                if (is_null($val) || $val == "") return "";
-                if (preg_match($pattern  ,  $val, $matches) > 0) {
-                    $val = $matches[1];
-                }
-                if (preg_match($pattern2  ,  $val) <  1) {
-                    $this->set_error(getLocalizedString("pref_".$key)." : ".getLocalizedString("Your id doesn't seem to be valid"));
-                    return null;
-                }
-                return $val;
-    }    
-    
-    function checkCgiPref($key) {
-   
-        $val = get_cgi_var("pref_$key");
-        if (is_null($val = $this->checkPrefValue($key, $val))) {
-             $this->set_error(getLocalizedString("Bad value for key")." : ".getLocalizedString("pref_$key"));
-             return False;
-        }
-        if ($val == "") $val = null;
         
+    function checkCgiPref($key) {
+        $val = get_cgi_var("pref_$key");
+
         $permint = 0;
         $perm = get_cgi_var("perm_$key", array());
         if (!is_array($perm)) return False;
         foreach($perm as $pv) {
             $permint += $pv;
         }
-        //FIXME
-        $permint &= 3;
-        
-        $old = $this->playerclass->getPref($key);
-        if (is_null($old)) {
-            if (!is_null($val)) {
-                $this->playerclass->setPref($key, $val, $permint);
-            }
-        } else {
-            if ($old['pref_value'] != $val || $old['permissions'] != $permint) {
-                $this->playerclass->setPref($key, $val, $permint);
-            }
-        }
-        return !($this->playerclass->error_status || $this->error_status);
+
+        return $this->checkInputPref($key, $val, $permint);
     }
     
     function htmlPref($key) {

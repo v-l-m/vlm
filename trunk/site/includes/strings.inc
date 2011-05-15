@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    "Bad value for key" => "Bad value for key",
+    "Your id doesn't seem to be valid" => "Your id doesn't seem to be valid",
     "Click here if you want to create a boat." => "Click here if you want to create a boat.",
     'Login id' => 'Login id',
     'After activation, use your email address to connect.' => 'After activation, use your email address to connect.',
@@ -457,6 +459,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "Bad value for key" => "Mauvaise valeur pour la clef",
+    "Your id doesn't seem to be valid" => "Votre identifiant semble invalide",
     "Click here if you want to create a boat." => "Cliquez ici pour créer un bateau",
     'Login id' => 'Identifiant de connexion',
     'After activation, use your email address to connect.' => 'Après activation, utilisez votre adresse électronique pour vous connecter.',
