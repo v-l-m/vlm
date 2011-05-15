@@ -86,7 +86,7 @@ if [ "yes" = "$ARCHIVE_GRIB" ]; then
   if [ ! -d $GRIBPATH/archives/${YEAR} ]; then
     mkdir $GRIBPATH/archives/${YEAR}
   fi
-  YDAT=`date '+%Y/%m%d'
+  YDAT=`date '+%Y/%m%d'`
   if [ ! -d $GRIBPATH/archives/${YDAT} ]; then
     mkdir $GRIBPATH/archives/${YDAT}
   fi
