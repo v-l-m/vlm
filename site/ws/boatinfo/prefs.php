@@ -18,7 +18,7 @@
     $fullusers = new fullUsers(0, $users);
 
     //FIXME : getter should use also json ?
-    $pkeys = get_cgi_var("prefs");
+    $pkeys = get_cgi_var("prefs", USER_PREF_ALLOWED);
     if (is_null($pkeys)) $ws->reply_with_error('PREFS02');
     
     $keys = explode(',', $pkeys);

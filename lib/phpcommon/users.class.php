@@ -656,6 +656,12 @@ class fullUsers
           while( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
               $this->preferences[$row['pref_name']] = $row['pref_value'];
           }
+          //Special case for "old" prefs
+          $this->preferences['blocnote'] = $this->users->blocnote;
+          $this->preferences['color'] = $this->users->color;
+          $this->preferences['theme'] = $this->users->theme;
+          $this->preferences['country'] = $this->users->country;
+          $this->preferences['boatname'] = $this->users->boatname;
       }
       if (array_key_exists($pref_name, $this->preferences)) {
         return $this->preferences[$pref_name];
