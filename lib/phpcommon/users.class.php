@@ -158,7 +158,8 @@ class users extends baseClass
 
         $PIP=$row['pilotparameter'];
 
-        printf( "** AUTO_PILOT : executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
+        $logmsg = sprintf( "executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
+        printf("** AUTO_PILOT : $logmsg");
         $query="UPDATE users SET pilotmode=$PIM ";
 
         switch ($PIM) {
@@ -199,6 +200,7 @@ class users extends baseClass
         // Don't forget to add the where clause... and execute the query
         $query .= " WHERE idusers=$this->idusers;";
         wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysql_error." ".$query);
+        $this->logUserEvent($logmsg);
 
         // Mark the task as DONE
         $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
@@ -1033,6 +1035,7 @@ class fullUsers
       $udt . ");"   ;
 
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
+  	$this->users->logUserEvent("Boat crossed WP " . this->nwp . " in race : " . $this->users->engaged );
   }
   // clear prior invalid waypoint crossing, if any
   function clearInvalidWaypointCrossing() 

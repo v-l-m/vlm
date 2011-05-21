@@ -149,8 +149,8 @@ if (!$wp_invalidated) {
       // reverse order (bugs #294)
       $latPreCheck = $encounterCoordinates['latitude'];
       $lonPreCheck = $encounterCoordinates['longitude'];
-      echo "\t==>Player ".$fullUsersObj->users->idusers . " crossed waypoint " .
-	$fullUsersObj->nwp ;
+      echo "\t==>Boat ".$fullUsersObj->users->idusers . " crossed waypoint " . $fullUsersObj->nwp ;
+      
       // If it is a start line (nwp == 0), we have to compute the crossing coordinates
       // Then to compute the crossing time, and compare it to deptime + prestart-duration
       
@@ -264,7 +264,7 @@ if (!$wp_invalidated) {
 	} else {
 	  printf ("Boat arrived, but (%d) is not better (%d)\n", $duration, $oldDuration);
 	}
-	logUserEvent($fullUsersObj->users->idusers,  $fullRacesObj->races->idraces, "Boat arrived in race ".$fullRacesObj->races->idraces);
+	$fullUsersObj->users->logUserEvent("Boat arrived in race ".$fullRacesObj->races->idraces);
 	//remove player from race
 	$fullUsersObj->removeFromRaces();
 	

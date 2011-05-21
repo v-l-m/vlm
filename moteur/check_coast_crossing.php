@@ -26,6 +26,8 @@ if ($crosses_the_coast) {
     "\n\nGoogleMap http://maps.google.fr/maps?f=q&hl=fr&geocode=&q=".
     $encounter_lat/1000 . "," . $encounter_long/1000 .
     "&ie=UTF8&spn=0.0191,0.082998&t=p&z=11&iwloc=addr. \n";
+
+	$fullUsersObj->users->logUserEvent("Coast has been crossed at " . $encounter_lat/1000 . ", " . $encounter_long/1000);
   
   /* NOTE the encounter coordinates are the real ones */
   
