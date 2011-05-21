@@ -1035,7 +1035,7 @@ class fullUsers
       $udt . ");"   ;
 
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
-  	$this->users->logUserEvent("Boat crossed WP " . this->nwp . " in race : " . $this->users->engaged );
+  	$this->users->logUserEvent("Boat crossed WP " . $this->nwp . " in race : " . $this->users->engaged );
   }
   // clear prior invalid waypoint crossing, if any
   function clearInvalidWaypointCrossing() 
