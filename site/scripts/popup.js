@@ -16,3 +16,22 @@
       }
   }
 
+function sendLogout()
+{ 
+    var xhr; 
+    try {
+        xhr = new ActiveXObject('Msxml2.XMLHTTP');
+    } catch (e) {
+        try {
+            xhr = new ActiveXObject('Microsoft.XMLHTTP');
+        } catch (e2) {
+          try {
+              xhr = new XMLHttpRequest();
+          } catch (e3) { xhr = false;   }
+        }
+     }
+
+   xhr.open( "GET", "/ws/logout.php",  false, 'test', 'ko'); 
+   xhr.send(null);
+   return true;
+} 

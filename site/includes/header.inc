@@ -246,7 +246,7 @@
 ?>
         </div> <!-- fin div pleasecreatebox-->
         <div id="logoutbox" class="leftbox">
-            <form method="post" action="index.php">
+            <form method="post" action="index.php" onsubmit="sendLogout();">
                 <input type="hidden" name="type" value="logout" />
                 <p class="leftbutton">
                     <input type="submit" value="<?php echo getLocalizedString("logout"); ?>" />
@@ -290,7 +290,7 @@
 ?>
         </div> <!-- fin div loggedbox-->
         <div id="logoutbox" class="leftbox">
-            <form method="post" action="index.php">
+            <form method="post" action="index.php" onsubmit="sendLogout();">
                 <input type="hidden" name="type" value="logout" />
                 <p class="leftbutton">
                     <input type="submit" value="<?php echo getLocalizedString("logout"); ?>" />
