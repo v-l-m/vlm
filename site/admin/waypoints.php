@@ -132,6 +132,7 @@ $opts['fdd']['maparea'] = array(
 );
 
 $opts['triggers']['update']['pre'][0] = 'waypoints.img.trigger.php';
+$opts['triggers']['update']['after'][0] = 'waypoints.TAU.trigger.php';
 $opts['triggers']['select']['pre'][0] = 'waypoints.img.trigger.php';
 $opts['triggers']['delete']['pre'][0] = 'waypoints.img.trigger.php';
 
