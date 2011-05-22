@@ -90,6 +90,7 @@ $opts['triggers']['update']['pre'][0] = 'waypoints.img.trigger.php';
 $opts['triggers']['select']['pre'][0] = 'waypoints.img.trigger.php';
 $opts['triggers']['delete']['pre'][0] = 'waypoints.img.trigger.php';
 $opts['triggers']['update']['before'][0] = 'races_waypoints.TBU.trigger.php';
+$opts['triggers']['update']['after'][0] = 'races.TAU.trigger.php';
 
 //force basic pme class.
 require_once('../externals/phpMyEdit/phpMyEdit.class.php');
