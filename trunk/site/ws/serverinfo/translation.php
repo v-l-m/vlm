@@ -14,6 +14,8 @@
     }
 
     $ws = new WSStrings();
+    $ws->maxage = 3600*24;
+
     $ws->answer['request'] = Array('lang' => $ws->lang);
     if (!array_key_exists($ws->lang, $ws->stringarray)) $ws->answser['warn'] = "Requested lang doesn't exists in strings file";
 

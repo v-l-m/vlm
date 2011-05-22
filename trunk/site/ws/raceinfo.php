@@ -31,6 +31,7 @@ function map_trigram($ar) {
 }
 
 function get_info_array($idrace) {
+    //FIXME : tout cela devrait être partiellement factorisé dans wslib et déplacé dans /ws/raceinfo/*
     $res = wrapper_mysql_db_query_reader("SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq FROM races WHERE idraces = ".$idrace);
     
     //if nothing, then return null.
@@ -43,29 +44,23 @@ function get_info_array($idrace) {
     $info["races_waypoints"] = Array();
     $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wpformat, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
     while ($wp = mysql_fetch_assoc($res)) {
-      // remove irrelevant information
-      /*
-       *       UNCOMMENT THIS AFTER PUBLICATION of 0.14
-
-      switch ($wp["wpformat"] & 0xF) {
-      case WP_ONE_BUOY:
-	if (array_key_exists('latitude2', $wp)) {
-	    unset($wp["latitude2"]);
-	}
-	if (array_key_exists('longitude2', $wp)) {
-	    unset($wp["longitude2"]);
-	}
-	break;
-      case WP_TWO_BUOYS:
-      default:
-	if (array_key_exists('laisser_au', $wp)) {
-	    unset($wp["laisser_au"]);
-	}
-      }
-
-      *    REMOVE ABOVE AFTER PUBLICATION OF 0.14
-      */
-      $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
+        // remove irrelevant information
+        switch ($wp["wpformat"] & 0xF) {
+            case WP_ONE_BUOY:
+                if (array_key_exists('latitude2', $wp)) {
+                    unset($wp["latitude2"]);
+            }
+                if (array_key_exists('longitude2', $wp)) {
+                    unset($wp["longitude2"]);
+                }
+                break;
+            case WP_TWO_BUOYS:
+            default:
+                if (array_key_exists('laisser_au', $wp)) {
+                    unset($wp["laisser_au"]);
+                }
+        }
+        $info["races_waypoints"][$wp["wporder"]] = map_trigram($wp);
     }
 
     //... and the race instructions
@@ -100,7 +95,9 @@ switch ($fmt) {
     case "json":
     default:
         header('Content-type: application/json; charset=UTF-8');
-	echo json_encode($info_array);
+        //le cas est suffisament rare d'un changement après publication pour qu'on mette un cache de 24h coté client.
+        header("Cache-Control: max-age=". (24*3600) .", must-revalidate");
+        echo json_encode($info_array);
 }
 
 ?>

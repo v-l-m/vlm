@@ -7,6 +7,7 @@
     //FIXME : types are badly checked
 
     $ws = new WSBaseBoat();
+    $ws->maxage = 3600; //client cache duration
     
     $users = getUserObject($ws->idu);
     if (is_null($users)) $ws->reply_with_error('IDU03');

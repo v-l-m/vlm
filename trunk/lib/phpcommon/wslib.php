@@ -8,6 +8,7 @@ require_once('users.class.php');
 class WSBase extends baseClass {
 
     public $answer = Array();
+    public $maxage = 0;
 
     function __construct() {
         parent::baseClass();
@@ -52,6 +53,11 @@ class WSBase extends baseClass {
             case "json":
             default:
                 header('Content-type: application/json; charset=UTF-8');
+                if ($this->maxage > 0 && !isset($_GET(['nocache']) {
+                    header("Cache-Control: max-age=".$this->maxage.", must-revalidate");
+                } else {
+                    header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+                }
                 echo json_encode($this->answer);
         }
         exit();
@@ -457,7 +463,7 @@ function get_requested_output_format($allowed_fmt = null) {
   return "text";
 }
 
-function ask_for_auth($usage) {
+function ask_for_auth($usage = "") {
     unset($_SERVER['PHP_AUTH_USER']);
     unset($_SERVER['PHP_AUTH_PW']);
     header('WWW-Authenticate: Basic realm="VLM Access"');
@@ -466,8 +472,14 @@ function ask_for_auth($usage) {
     echo $usage;
 }
 
-function wsCheckLogin($usage) {
-    return login_if_not($usage);
+function checkPlayerLogin($pseudo, $passwd) {
+    //New player auth
+    $player = new players(0, $pseudo);
+    if (!$player->error_status && $player->checkPassword($passwd) ) {
+        return $player;
+    } else {
+        return null;
+    }
 }
 
 function login_if_not($usage = "No usage given") {
@@ -478,7 +490,7 @@ function login_if_not($usage = "No usage given") {
         //OK, we are logged
         $idu = get_cgi_var('select_idu');
         if (!is_null($idu) && $idu != getLoginId() && in_array($idu, getLoggedPlayerObject()->getManageableBoatIdList())) {
-            //select_idb is correct, change login
+            //select_idu is correct, change login
             $user = getUserObject($idu);
             login($user->idusers, $user->username); //Boat login, to change idu in session
         }
@@ -493,12 +505,11 @@ function login_if_not($usage = "No usage given") {
             $pseudo = $_SERVER['PHP_AUTH_USER'];
             $passwd = $_SERVER['PHP_AUTH_PW'];
 
-            //New player auth
-            $player = new players(0, $pseudo);
-            if (!$player->error_status && $player->checkPassword($passwd) ) {
+            
+            if (!is_null($player = checkPlayerLogin($pseudo, $passwd)) ) {
                 $idu = get_cgi_var('select_idu');
                 if (is_null($idu) || !in_array($idu, $player->getManageableBoatIdList())) {
-                     //select_idb is not correct, selecting default
+                     //select_idu is not correct, selecting default
                      $idu = $player->getDefaultBoat();
                 }
                     
