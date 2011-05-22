@@ -53,7 +53,7 @@ class WSBase extends baseClass {
             case "json":
             default:
                 header('Content-type: application/json; charset=UTF-8');
-                if ($this->maxage > 0 && !isset($_GET(['nocache']) {
+                if ($this->maxage > 0 && !isset($_GET['nocache'])) {
                     header("Cache-Control: max-age=".$this->maxage.", must-revalidate");
                 } else {
                     header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
