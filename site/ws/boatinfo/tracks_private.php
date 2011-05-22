@@ -22,6 +22,9 @@
     if (!raceExists($idr)) $ws->reply_with_error('IDR03'); //FIXME : select on races table made two times !
     $races = new races($idr);
     
+    //cache headers
+    $ws->maxtime = $races->getTimeToUpdate($now);
+    
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now
     if ($starttime != 0 && $endtime != 0 && $starttime > $endtime) $ws->reply_with_error("RTFM02");

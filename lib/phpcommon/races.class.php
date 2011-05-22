@@ -74,6 +74,21 @@ class races {
       return (($this->racetype & $type) > 0);
   }
   
+  function getTimeToUpdate($time = null) {
+      //C'est un calcul théorique du ts de la prochaine vac.
+      if(is_null($time)) $time = time();
+      $vacstep = $this->vacfreq*60;
+      $timeoflastupdate = intval($time/$vacstep)*intval($vacstep);
+      //FIXME : on pourrait améliorer en utilisant la vraie date de la dernière maj
+      if (($time - $timeoflastupdate) < UPDATEDURATION) {
+          //on est peut être en train de faire la maj, donc dans le doute on renvoie 0
+
+          return 0;
+      } else {
+          return $timeoflastupdate+$vacstep-$time;
+      }
+  }
+  
   function &getWPs() {
     $this->retrieveWPs();
     return $this->waypoints;

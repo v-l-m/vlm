@@ -25,5 +25,7 @@
     $info_array = get_info_array();
     
     header('Content-type: application/json; charset=UTF-8');
+    header("Cache-Control: max-age=0, must-revalidate");
+
     echo json_encode($info_array);
 ?>

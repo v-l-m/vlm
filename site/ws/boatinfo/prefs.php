@@ -7,6 +7,7 @@
     //FIXME : types are badly checked
 
     $ws = new WSBaseBoat();
+    $ws->maxage = 60; //client cache duration
 
     if (!in_array($ws->idu, getLoggedPlayerObject()->getManageableBoatIdList())) {
        $ws->reply_with_error('IDU04');
