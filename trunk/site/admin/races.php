@@ -273,6 +273,15 @@ $opts['fdd']['vacfreq'] = array(
   'default'  => '0',
   'sort'     => true
 );
+$opts['fdd']['updated'] = array(
+  'name'     => 'Updated',
+  'input'    => 'R',
+//  'sql|LFVD' => 'FROM_UNIXTIME(updated)',
+  'maxlen'   => 20,
+  'sort'     => true,
+  'help'=> 'Last change',
+);
+
 $opts['triggers']['delete']['before'][0] = 'races.TBD.trigger.php';
 $opts['triggers']['delete']['after'][0] = 'races.TAD.trigger.php';
 $opts['triggers']['insert']['pre'][0] = 'races.TPI.trigger.php';

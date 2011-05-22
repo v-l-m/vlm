@@ -30,7 +30,7 @@
             $row['boend'] = (int) $row['boend'];
             $row['maxboats'] = (int) $row['maxboats'];
             $row['vacfreq'] = (int) $row['vacfreq'];
-
+            $row['updated'] = $row['updated'];
             $this->jsonarray[$row['idraces']] = $row;
         }
             
