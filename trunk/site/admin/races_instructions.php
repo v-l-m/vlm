@@ -63,7 +63,7 @@ $opts['fdd']['flag'] = array(
 <ul><br /><a href=\"http://dev.virtual-loup-de-mer.org/vlm/wiki/phpcommon\">Voir la doc</a>"
 );
 
-$opts['triggers']['update']['before'][0] = 'races.TAU.trigger.php';
+$opts['triggers']['update']['after'][0] = 'races.TAU.trigger.php';
 
 include('adminfooter.php');
 
