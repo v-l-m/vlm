@@ -1,5 +1,32 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.17.x to 0.18 :
+
+= Step 0, can be done at any time =
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_18
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  RUN
+    ./scripts/upgrade.sh 0.18 0
+
+= Step 1, maintenance mode, backup base, upgrade core =
+
+  RUN
+    ./scripts/upgrade.sh 0.18 1 && sudo /etc/init.d/apache2 restart
+
+  - if something goes wrong, EDIT crontab and comment vlm crons
+
+= Step 2, end of release, unlock engine =
+
+    ./scripts/upgrade.sh 0.18 2
+
+THE END
+
+
 From 0.16.x to 0.17 :
 
 = Step 0, can be done at any time =
