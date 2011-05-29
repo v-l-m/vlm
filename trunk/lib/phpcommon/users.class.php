@@ -1333,6 +1333,7 @@ class fullUsers
         $this->lastPositions->lat . ");"   ;
 
       wrapper_mysql_db_query_writer($query_abandon);
+      $this->logUserEvent(sprintf("Timelimit reached : HTP at %f , %f", $this->lastPositions->lat, $this->lastPositions->long ));
     }
 
     // Then subscribe to race 0
