@@ -42,6 +42,13 @@ cd $TMPGRIBPATH/$DAT$HH
 rm -Rf  ${PREFIX}*
 declare -i retry=1
 
+# check if we have another instance running (FIXME kill & cleanup)
+ps -d -o pid,ppid,command | grep $0 | grep -v $$ | while read scriptpid
+do
+        echo "Another instance of $0 is running under PID $scriptpid" >> $LOG 2>&1
+done
+
+
 if [ $GRIB_MAX_TIME -lt 100 ]; then
     allindexes=`seq -w 0 3 ${GRIB_MAX_TIME}`
 else
