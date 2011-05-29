@@ -172,8 +172,8 @@ class positionsIterator extends baseClass {
                   " FROM `positions` " . 
                   " WHERE `idusers` = " . $this->idusers . 
                   " AND `race` = " .  $this->idraces  .
-                  " AND `time` > " . $this->mintime .  
-                  " AND `time` < " . $this->maxtime .  
+                  " AND `time` >= " . $this->mintime .  
+                  " AND `time` <= " . $this->maxtime .  
                   " ORDER BY `time` ASC";
 
         return $query;
