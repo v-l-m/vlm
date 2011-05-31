@@ -1,6 +1,27 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.18 aka Vieux Chinook
+
+What's up for ...
+... players ?
+  * More user action available : planned pilototo action, waypoint crossing, coast crossing, finish time (paparazzia)
+  * when possible, creating a new account result in first boat creation (paparazzia)
+  * small enhancements : tinymaps, better validation mail content (paparazzia)
+  * bugfixes : 24h loch computing was sometime wrong (spf)
+  * grib file are now stored ad lib (spf)
+  * automatic thumbnail for iPod shortcuts (paparazzia)
+
+... tools developers and developers ?
+  * finish position (beyond finish line) is now stored (spf)
+  * new webservices playersetup/prefs_set and login.php (paparazzia)
+  * webservices enhancements : better maxlife headers, less useless datas and updated field for raceinfo.php (paparazzia)
+  * webservices bugfixes : boat and player prefs, logout, tracks.php (paparazzia)
+  * no more getwind webservice (use /ws/windinfo/ (paparazzia)
+  * apache log and performance fixes (paparazzia) 
+  * dedicated url for tiles (paparazzia)
+
+
 v0.17 aka Chamallow
 
 What's up for ...
