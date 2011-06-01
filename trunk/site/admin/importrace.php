@@ -91,7 +91,7 @@
                     sqlit($import, "closetime").
                     sqlit($import, "racetype").
                     sqlit($import, "firstpcttime")."\n                   ".
-                    sqlit($import, "depends_on").
+                    sqlit($import, "depend_on").
                     sqlit($import, "qualifying_races",'string').
                     sqlit($import, "idchallenge",'string').
                     sqlit($import, "coastpenalty").
