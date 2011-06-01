@@ -1319,9 +1319,6 @@ class map
     } // foreach opponent
   }
 
-
-  /////////////////////Draw boat positions and tracks
-
   /////////////////////Draw boat positions and tracks
   function drawOrtho($projCallbackLong, $projCallbackLat, $estime) {
       $this->setFuncProjLat($projCallbackLat);
@@ -1332,69 +1329,64 @@ class map
       if ( intval($opponent)  == 0 ) return(0);
 
       //opponent is a userid, get a fulluser
-      if (array_key_exists($opponent, $this->fullRacesObj->opponents)) {
-          $fullUsersObj = new fullUsers($opponent, $this->fullRacesObj->opponents[$opponent], $this->fullRacesObj,
-                                        $this->north, $this->south, $this->west, $this->east,
-                                        0); //FIXME: why 0 ?(was $age)
-      } else {
-          $fullUsersObj = new fullUsers($opponent, NULL, $this->fullRacesObj,
-                                        $this->north, $this->south, $this->west, $this->east,
-                                        0); //FIXME: why 0 ?(was $age)
+      if (!array_key_exists($opponent, $this->fullRacesObj->opponents)) {
+          return(0);
       }
+      $fullUsersObj = new fullUsers($opponent, $this->fullRacesObj->opponents[$opponent], $this->fullRacesObj,
+                                        $this->north, $this->south, $this->west, $this->east,
+                                        0); //FIXME: why 0 ?(was $age)
       // Dessin de la trajectoire correspondant aux premiers pas de temps de la route ortho (morceaux de ORTHOSTEP miles)
-      if ( $fullUsersObj->users->idusers == htmlentities($opponent) ) {
-          // Des traces de ORTHOSTEP miles pour l'ortho
-          //$nbpos=floor($fullUsersObj->distancefromend/ORTHOMAX);
-          $nbpos=floor(($this->xSize+$this->ySize)/2);
-          $np=0;
-          while ( $np <= $nbpos && $np <= ORTHOMAX ) {
-              $_lastlong=$fullUsersObj->lastPositions->long;
-              $_lastlat=$fullUsersObj->lastPositions->lat;
-              //addDistance2Positions
-              $Estime=giveEndPointCoordinates( $fullUsersObj->lastPositions->lat,
-                              					       $fullUsersObj->lastPositions->long,
-					                                     ORTHOSTEP, 
-					                                     $fullUsersObj->orthodromicHeading());
-	
-              $fullUsersObj->lastPositions->addDistance2Positions(ORTHOSTEP,$fullUsersObj->orthodromicHeading());
+      // Des traces de ORTHOSTEP miles pour l'ortho
+      //$nbpos=floor($fullUsersObj->distancefromend/ORTHOMAX);
+      $nbpos=floor(($this->xSize+$this->ySize)/2);
+      $np=0;
+      while ( $np <= $nbpos && $np <= ORTHOMAX ) {
+          $_lastlong = $fullUsersObj->lastPositions->long;
+          $_lastlat  = $fullUsersObj->lastPositions->lat;
+          //addDistance2Positions
+          $Estime=giveEndPointCoordinates( $fullUsersObj->lastPositions->lat,
+                          					       $fullUsersObj->lastPositions->long,
+			                                     ORTHOSTEP, 
+			                                     $fullUsersObj->orthodromicHeading());
 
-              // Controle sur l'antemeridien
-              if ( $fullUsersObj->lastPositions->long <0 and $Estime['longitude'] > 0) {
-                  $Estime['longitude']-=360000;
-              }
-              if ( $fullUsersObj->lastPositions->long >0 and $Estime['longitude'] < 0) {
-                  $Estime['longitude']+=360000;
-              }
-              if ( $Estime['longitude'] < $this->west || $Estime['longitude'] > $this->east ) {
-                  //echo "EAST=$this->east, WEST=$this->west, ESTIME1=".$Estime[1]."\n";
-                  break;
-              }
-              if ( $Estime['latitude'] < $this->south || $Estime['latitude'] > $this->north ) {
-                  //echo "NORTH=$this->north, SOUTH=$this->south, ESTIME1=".$Estime[1]."\n";
-                  break;
-              }
+          $fullUsersObj->lastPositions->addDistance2Positions(ORTHOSTEP,$fullUsersObj->orthodromicHeading());
 
-              $style = array($this-> fromhex( $fullUsersObj->users->color), $this->colorSea);
-              imagesetstyle ($this->mapImage, $style);
+          // Controle sur l'antemeridien
+          if ( $fullUsersObj->lastPositions->long <0 and $Estime['longitude'] > 0) {
+              $Estime['longitude']-=360000;
+          }
+          if ( $fullUsersObj->lastPositions->long >0 and $Estime['longitude'] < 0) {
+              $Estime['longitude']+=360000;
+          }
+          if ( $Estime['longitude'] < $this->west || $Estime['longitude'] > $this->east ) {
+              //echo "EAST=$this->east, WEST=$this->west, ESTIME1=".$Estime[1]."\n";
+              break;
+          }
+          if ( $Estime['latitude'] < $this->south || $Estime['latitude'] > $this->north ) {
+              //echo "NORTH=$this->north, SOUTH=$this->south, ESTIME1=".$Estime[1]."\n";
+              break;
+          }
 
-              $A = array($this->projLong($fullUsersObj->lastPositions->long), $this->projLat($fullUsersObj->lastPositions->lat));
-              $B = array($this->projLong($fullUsersObj->lastPositions->long+360000), $this->projLat($fullUsersObj->lastPositions->lat));
-              if ( $this->am_on_map == true ) {
-                  if ( $fullUsersObj->lastPositions->long < 0 )  {
-                      $DepOrtho=$B;
-                  } else { 
-                      $DepOrtho=$A;
-                  }
-              } else {
+          $style = array($this-> fromhex( $fullUsersObj->users->color), $this->colorSea);
+          imagesetstyle ($this->mapImage, $style);
+
+          $A = array($this->projLong($fullUsersObj->lastPositions->long), $this->projLat($fullUsersObj->lastPositions->lat));
+          $B = array($this->projLong($fullUsersObj->lastPositions->long+360000), $this->projLat($fullUsersObj->lastPositions->lat));
+          if ( $this->am_on_map == true ) {
+              if ( $fullUsersObj->lastPositions->long < 0 )  {
+                  $DepOrtho=$B;
+              } else { 
                   $DepOrtho=$A;
               }
-
-              $E = array($this->projLong($Estime['longitude']), $this->projLat($Estime['latitude']));
-              imageline ( $this->mapImage, $DepOrtho[0], $DepOrtho[1], $E[0], $E[1] , IMG_COLOR_STYLED);
-              //imageline ( $this->mapImage, $A[0], $A[1], $E[0], $E[1] , $this->colorTextOrtho);
-
-              $np++;
+          } else {
+              $DepOrtho=$A;
           }
+
+          $E = array($this->projLong($Estime['longitude']), $this->projLat($Estime['latitude']));
+          imageline ( $this->mapImage, $DepOrtho[0], $DepOrtho[1], $E[0], $E[1] , IMG_COLOR_STYLED);
+          //imageline ( $this->mapImage, $A[0], $A[1], $E[0], $E[1] , $this->colorTextOrtho);
+
+          $np++;
           
           if ($np == 0) return;
           
