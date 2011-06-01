@@ -72,13 +72,13 @@
          }
     }
     
-    if ($type == "savemywp")
+    if ($type == "savemywp" && isPlayerLoggedIn())
     {
         $users = new fullUsers(getLoginId());
         $users->updateTarget($targetlat, $targetlong,  $targetandhdg);
     }
 
-    if ($type == "change") {
+    if ($type == "change" && isPlayerLoggedIn()) {
         $users = new fullUsers(getLoginId());
         $users->users->boatname = $boatname;
         if ( $invisible == "on" ) {
@@ -109,14 +109,14 @@
         //  setUserPref($users->users->idusers,"hidePos","on");
     }
     
-    if ($type == "unsubscribe" && getLoggedPlayerObject()->isOwner(getLoginId()))
+    if ($type == "unsubscribe" && isPlayerLoggedIn() && getLoggedPlayerObject()->isOwner(getLoginId()))
     {
         $users = new fullUsers(getLoginId());
         $idraces_unsubscribe = quote_smart(get_cgi_var('idraces_unsubscribe'));
         if ($users->users->engaged == $idraces_unsubscribe) $users->setABD();
     }
     
-    if ($type == "subscribe")
+    if ($type == "subscribe" && isPlayerLoggedIn())
     {
         $users = new fullUsers(getLoginId());
         // On vérifie que le joueur n'est pas déjà en course
