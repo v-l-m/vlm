@@ -37,7 +37,7 @@ echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 $locktables = "LOCK TABLE histpos WRITE, positions WRITE, updates WRITE, positions AS pos READ";
 $result = wrapper_mysql_db_query_writer($locktables);
 
-$queryhistopositions = "INSERT INTO histpos SELECT * FROM pos WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
+$queryhistopositions = "INSERT INTO histpos SELECT * FROM positions AS pos WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($queryhistopositions);
 
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
