@@ -44,17 +44,22 @@ Merci
    * 0.4 Prérequis de données
      * 0.4.1 Pour l'instant, vous devez récupérer un export d'un des serveurs de dev pour disposer à la fois des schémas et des données de base pour votre instance. Adressez vous aux développeurs.
    * 0.5 Prérequis systèmes
-     * 0.5.1 Optionnel : pour plus de confort, il est préférable de donner les droits à l'utilisateur de redémarrer le démon apache, en editant via visudo le fichiers {{{sudoers}}} et en donnant par exemple cette configuration :
+     * 0.5.1 Optionnel : pour plus de confort, il est préférable de donner les droits à l'utilisateur de redémarrer le démon apache
+        * en editant via visudo le fichiers {{{sudoers}}} et en donnant par exemple cette configuration :
      {{{
     User_Alias      APACHEMASTERS = vlm
     Cmnd_Alias      APACHE = /etc/init.d/apache2 restart
     APACHEMASTERS   ALL = NOPASSWD: APACHE
     }}}
-       
+        * OU en copiant le fichier ad-hoc
+     {{{
+     sudo cp /home/vlm/conf/sudo.vlm.dist /etc/sudoers.d/vlm
+     sudo chmod 0440 /etc/sudoers.d/vlm
+     }}}
 
 = Les outils de déploiement, l'installation de base =
 
- * 1. Installation de base
+ * 1. Base de l'installation
    * 1.0 Système :
      * 1.0.1 Installer les dépendances (Cf. 0.2)
      * 1.0.2 Créer un utilisateur ad-hoc
@@ -80,8 +85,8 @@ Merci
      * 1.2.2 adapter les options de configuration dans conf/*.dist en supprimant l'extension .dist
        * attention aux chemins php, notamment (Cf. commentaires pour les chemins debian types)
        * activez les notices php (Cf. commentaire dans la conf) pour le moteur
-     * 1.2.3 (Optionnel) Nommer l'hôte dans l'etc/host
-      * par exemple : 127.0.1.1 vlm
+     * 1.2.3 (Optionnel) Nommer l'hôte dans l'{{{etc/hosts}}}
+      * par exemple : 127.0.1.1 vlm (NB: vboxvlm pour une VM virtualbox)
    * 1.3 Test de la configuration de base :
      * 1.3.0 executer {{{$ ~/scripts/testconf.sh}}}
      * 1.3.1 => les répertoires VLMGSHHS, VLMGRIBS, VLMTEMP et VLMJEUROOT sont créés conformément à la configuration
