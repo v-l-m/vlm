@@ -186,8 +186,8 @@ case $confmodule in
     echo 'OK !'
 
     cd $oldpwd
-    echo "!!! ATTENTION /// VOUS ALLEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?" 1>&2
-    echo "Exemple : sudo /etc/init/apache2 restart" 1>&2
+    echo "!!! ATTENTION /// VOUS DEVEZ REDEMARRER APACHE... ETES VOUS ROOT OU SUDOER ?" 1>&2
+    echo "Exemple : sudo /etc/init.d/apache2 restart" 1>&2
     
     ;;
     grib)

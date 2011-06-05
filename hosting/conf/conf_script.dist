@@ -59,6 +59,8 @@ export MAIL_FOR_COASTCROSSING=false
 
 #Définition de la racine svn
 export VLMSVNROOT=http://dev.virtual-loup-de-mer.org/svn/vlm
+#OU Définition du dépôt local
+#export VLMFAKESVN=$VLMRACINE/svn
 
 #Les chemins pour les scripts et la conf
 export VLMSCRIPTS=$VLMRACINE/scripts
