@@ -62,7 +62,13 @@ if test -d $current; then
   exit 1
 fi
 echo "Ok !"
-echo "Recuperation de $current... depuis $svncurrent" 1>&2
 cd $VLMTEMP || exit 1
-$VLMSVNPATH export $svncurrent $current --username anonymous --password "vlm"
+if test -n "$VLMFAKESVN" ; then
+    echo "Recopie de $current ... depuis $VLMFAKESVN/$svnmodule" 1>&2
+    mkdir -p $current
+    cp -Raf $VLMFAKESVN/$svnmodule/* $current
+else
+    echo "Recuperation de $current... depuis $svncurrent" 1>&2
+    $VLMSVNPATH export $svncurrent $current --username anonymous --password "vlm"
+fi
 echo "Ok !"
