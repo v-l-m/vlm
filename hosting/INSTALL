@@ -21,7 +21,7 @@ Merci
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_15''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
    * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo mysqltuner apachetop mytop make libmysqlclient-dev less gfortran libgfortran3}}}
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo mysqltuner apachetop mytop make libmysqlclient-dev less gfortran libgfortran3 ntpdate}}}
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
      * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig make}}}).
@@ -38,6 +38,7 @@ Merci
      * 0.2.8 libgd, jasper, png (debian: {{{apt-get install libgd2-xpm-dev libpng12-dev libjasper-dev}}}
      * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
      * 0.2.10 mytop apachetop mysqltuner {{{apt-get install mytop apachetop mysqltuner}}} pour le monitoring
+     * 0.2.11 ntpdate (debian: {{{apt-get install ntpdate}}} pour synchroniser le temps du serveur
    * 0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
@@ -135,8 +136,8 @@ Merci
      * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)
        * le paquet de base de debian est le gfortran (g95 au lieu de f95, éditer le makefile)
        * il faut ajouter les dépendances (g2lib, g2clib) (éditer le makefile pour le path)
-       * les dépendances libpng12-dev et libjasper-dev ont normalement été installées plus haute
-       * ne pas oublier les options de compilation pour x_64
+       * les dépendances libpng12-dev et libjasper-dev ont normalement été installées plus haut
+       * ne pas oublier les options de compilation pour x_64 (si nécessaire)
        * s'assurer dans g2clib que les fonctions ont le bon nom (au besoin editer enc/dec_jpeg2000 enc/dec_png pour avoir les symboles qui vont bien (voir les erreurs au link de cnvgrib, ex: #define SUB_NAME enc_png_ )
      * 1.7.3 Lancer manuellement {{{$ ~/bin/noaa.sh 00|06|12|18}}} (suivant l'horaire GMT).
        * Vérifier le retour dans vlmdatas/grib/logs.txt
@@ -172,7 +173,7 @@ Merci
    * 2.1 Déploiement du module base : {{{$ ~/scripts/maj_module.sh base}}}
    * 2.2 Installation de la base de données mysql...
      * 2.2.1 vérifiez que vous avez bien paramétré le fichier ~/conf/conf_base (NB: l'utilisateur configuré dans ~/conf/conf_base ne dois pas exister, l'utilisateur 'temporary' non plus) (cf base_conf)
-     * 2.2.2 allez dans ~/vlmcode (ou VLMJEUROOT), puis dans base/scripts {{chmod u+x init.sh}}
+     * 2.2.2 allez dans ~/vlmcode (ou VLMJEUROOT), puis dans base/scripts
      * 2.2.3 Lancez {{{$ ./init.sh}}}. il vous demande le mot de passe administrateur de la base de donnée et crée l'utilisateur vlm et sa base
    * 2.3 Importation des données
      * 2.3.1 Récupèrez (demandez sur la ml) un dump mysql gzippé (il est produit avec le script base/scripts/dump.sh)
@@ -215,6 +216,7 @@ Merci
 
            ErrorLog    /var/log/apache2/vlm_error_log
            CustomLog   /var/log/apache2/vlm_access_log combined
+mail
 
            <Directory /home/vlm/vlmcode/site>
                DirectoryIndex index.php index.html
@@ -287,15 +289,18 @@ Merci
         (penser à configurer le TILES_G_PATH si nécessaire dans le conf/param.php)
 
 = Le moteur sur le serveur maître =
+
  * 4. Mise en place du moteur 
    * 4.1 déployer le moteur si ce n'est déjà fait via {{{~/scripts/maj_modules.sh moteur}}}
    * 4.2 utiliser le crontab.example comme exemple pour paramètrer le cron
    
 = (Optionnel) Les ajouts =
+
  * 5. Logrotate
    * 5.1 {{{apt-get install logrotate}}}
    * 5.2 Installer la rotation pour les logs apache de vlm
        {{{cp /home/vlm/conf/vlm-apache2.logrotate.dist /etc/logrotate.d/}}}   
+
  * 6. Awstats
    * 6.1 {{{apt-get install awstats}}} et se référer à la documentation d'installation (ou ici, par exemple : 
    * 6.2 Configurer :
@@ -309,9 +314,17 @@ Merci
        LoadPlugin=hostinfo
      }}}
    * 6.4 Ne pas laisser Awstat en libre accès
+
  * 7. Paramètrage optionnel des vhosts dédiés au cache
     * 7.1 Activer mod rewrite {{{a2enmod rewrite}}}
     * 7.2 configurer le vhost en utilisant hosting/conf/apache.vhost.cache.example
+
+ * 8. Synchro NTP
+    * ajouter un fichier dans /etc/cron.hourly/ contenant
+    {{{
+    #!/bin.sh
+    ntpdate-debian
+    }}}
    
 = Notes pour les versions futures =
 

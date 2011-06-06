@@ -42,7 +42,11 @@ echo 'OK !'
 
 source $VLMRACINE/conf/conf_base
 if test $? -eq 0 ; then
-    REVID=`svn info $VLMSVNFULL --username anonymous --password="vlm" | sed -n '/vision/ s/[^0-9]//g p'|head -n 1`
+    if test -n "$VLMFAKESVN" ; then
+        REVID=`svn info $VLMFAKESVN --username anonymous --password="vlm" | sed -n '/vision/ s/[^0-9]//g p'|head -n 1`
+    else
+        REVID=`svn info $VLMSVNFULL --username anonymous --password="vlm" | sed -n '/vision/ s/[^0-9]//g p'|head -n 1`
+    fi
     echo "INSERT INTO modules_status (serverid, moduleid, revid) VALUES ('$SERVER_IP', '$confmodule', $REVID);"|mysql -h $DBSERVER -u $DBUSER --password=$DBPASSWORD $DBNAME
     echo "Log du deploiement : OK !"
 fi
@@ -194,6 +198,7 @@ case $confmodule in
     echo -n "+$confmodule: installation du script de récupération des gribs dans $VLMBIN..."
     cp $destmodulepath/noaa.sh $VLMBIN/noaa.sh
     cp $destmodulepath/noaa-slave.sh $VLMBIN/noaa-slave.sh
+    echo 'OK !'
     echo -n "+$confmodule: installation du script init.d de démarrage du (wind|polar)server dans $VLMBIN..."
     cp $destmodulepath/windserver.sh $VLMBIN/windserver.sh
     echo 'OK !'
