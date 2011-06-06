@@ -13,6 +13,6 @@ if test $? -ne 0 ; then
     exit 1
 fi
 
-cp $VLMTEMP/hosting/scripts/*.sh $VLMSCRIPTS/
-cp $VLMTEMP/hosting/conf/* $VLMCONF/
-cp -R $VLMTEMP/hosting/scripts/upgrades.d $VLMSCRIPTS/
+cp -f $VLMTEMP/hosting/scripts/*.sh $VLMSCRIPTS/
+cp -f $VLMTEMP/hosting/conf/* $VLMCONF/
+cp -Rf $VLMTEMP/hosting/scripts/upgrades.d $VLMSCRIPTS/
