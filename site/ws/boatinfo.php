@@ -38,6 +38,7 @@ function get_info_array($idu) {
     $info['BSP'] = round($userObj->boatspeed, 2);
     $info['HDG'] = round($userObj->users->boatheading, 2);
     $info['NWP'] = $userObj->users->nwp;
+    $info['CWP'] = $userObj->getCurrentClassificationWaypointIdx();
     $info['DNM'] = round($userObj->distancefromend, 2);
     $info['ORT'] = round($userObj->orthoangletoend, 2);
     $info['LOX'] = round($userObj->loxoangletoend, 2);
