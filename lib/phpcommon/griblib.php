@@ -46,7 +46,6 @@
 
     function get_grib_validity_from_array($ts_array) {
     
-        $ts_array = get_grib_timestamp_array();
         // check if we have a full grib or a 
         if (count($ts_array) > 10) {
             $cache = $ts_array[0] + 34200 - time(); /* grib offset + 9h30 */ 
