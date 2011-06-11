@@ -46,8 +46,8 @@
 
     function get_grib_validity_from_array($ts_array) {
     
-        // check if we have a full grib or a 
-        if (count($ts_array) > 10) {
+        // check if we have a full grib or a partial one
+        if (count($ts_array) > 3) {
             $cache = $ts_array[0] + 34200 - time(); /* grib offset + 9h30 */ 
         } else {
             $cache = 10; /* we use 10s as the default */
