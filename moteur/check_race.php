@@ -23,7 +23,7 @@
        echo "   Setting user ".$usersObj->idusers . " HTP... ";
        
        //need to get fullUsers Object
-       $fullUsersObj = new fullUsers($usersObj->idusers, $userObj);
+       $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj);
        $fullUsersObj->setHTP();
        echo " done !\n";
      }
