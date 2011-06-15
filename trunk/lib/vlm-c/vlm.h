@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.h,v 1.30 2010-12-09 13:32:15 ylafon Exp $
+ * $Id: vlm.h,v 1.31 2011-06-11 14:20:55 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -344,8 +344,33 @@ double VLM_loxo_heading PARAM4(double, double, double, double);
  *        in <em>milli-degrees</em>
  * @param xing_longitude, a pointer to a <code>double</code>, 
  *        in <em>milli-degrees</em>
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_line_xing PARAM8( double, double,
+					 double, double,
+					 double, double,
+					 double *, double *);
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param xing_latitude, a pointer to a <code>double</code>, 
+ *        in <em>milli-degrees</em>
+ * @param xing_longitude, a pointer to a <code>double</code>, 
+ *        in <em>milli-degrees</em>
  * @param ratio, a pointer to a <code>double</code>, value between 0 and 1
  *        ratio = position of the point from a to b.
+ *        NOTE that if computing is done using the dichotomy mode, the 
+ *        value will always be 0
  * @return a double, the distance, a <code>double</code> in nautic miles.
  * If the parameters are incorrect, -1.0 is returned.
  */
@@ -364,6 +389,33 @@ double VLM_distance_to_line_ratio_xing PARAM9( double, double,
  * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param wp, a pointer to a <code>waypoint</code> structure
+ * @param xing_lat, a pointer to a <code>double</code>, the latitude of
+ *        the closest point of the WP
+ * @param xing_ong, a pointer to a <code>double</code>, the longitude of
+ *        the closest point of the WP
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_wp_xing PARAM5(double, double, waypoint *,
+				      double *, double *);
+
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B from a waypoint struct
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp, a pointer to a <code>waypoint</code> structure
+ * @param xing_lat, a pointer to a <code>double</code>, the latitude of
+ *        the closest point of the WP
+ * @param xing_ong, a pointer to a <code>double</code>, the longitude of
+ *        the closest point of the WP
+ * @param ratio, a pointer to a <code>double</code>, the ratio from 
+ *        the first point (0) to the second point (1) of the WP.
+ *        NOTE that if computing is done using the dichotomy mode, the 
+ *        value will always be 0
  * @return a double, the distance, a <code>double</code> in nautic miles.
  * If the parameters are incorrect, -1.0 is returned.
  */

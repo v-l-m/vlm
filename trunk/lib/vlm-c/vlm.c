@@ -1,5 +1,5 @@
 /**
- * $Id: vlm.c,v 1.42 2010-12-09 13:54:27 ylafon Exp $
+ * $Id: vlm.c,v 1.43 2011-06-11 14:20:55 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -569,10 +569,15 @@ double VLM_distance_to_line(double latitude, double longitude,
       latitude_b < -90.0 || latitude_b > 90.0) {
     return -1.0;
   }
-
+#ifdef VLM_USE_LINE_DICHOTOMY
+  return distance_to_line_dichotomy(degToRad(latitude)  ,degToRad(longitude),
+				    degToRad(latitude_a),degToRad(longitude_a),
+				    degToRad(latitude_b),degToRad(longitude_b));
+#else
   return distance_to_line(degToRad(latitude)  , degToRad(longitude),
 			  degToRad(latitude_a), degToRad(longitude_a),
 			  degToRad(latitude_b), degToRad(longitude_b));
+#endif /* VLM_USE_LINE_DICHOTOMY */
 }
 
 /**
@@ -587,6 +592,44 @@ double VLM_distance_to_line(double latitude, double longitude,
  * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
  * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
  * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param xing_lat, a pointer to a <code>double</code>, the latitude of
+ *        the closest point of the WP
+ * @param xing_ong, a pointer to a <code>double</code>, the longitude of
+ *        the closest point of the WP
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_line_xing(double latitude, double longitude, 
+				 double latitude_a, double longitude_a, 
+				 double latitude_b, double longitude_b,
+				 double *xing_lat, double *xing_long) {
+  double ratio;
+  return  VLM_distance_to_line_ratio_xing(latitude, longitude,
+					  latitude_a, longitude_a,
+					  latitude_b, longitude_b,
+					  xing_lat, xing_long, &ratio);
+}
+
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_a, a <code>double</code>, in <em>milli-degrees</em>
+ * @param latitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude_b, a <code>double</code>, in <em>milli-degrees</em>
+ * @param xing_lat, a pointer to a <code>double</code>, the latitude of
+ *        the closest point of the WP
+ * @param xing_ong, a pointer to a <code>double</code>, the longitude of
+ *        the closest point of the WP
+ * @param ratio, a pointer to a <code>double</code>, the ratio from 
+ *        the first point (0) to the second point (1) of the WP.
+ *        NOTE that if computing is done using the dichotomy mode, the 
+ *        value will always be 0
  * @return a double, the distance, a <code>double</code> in nautic miles.
  * If the parameters are incorrect, -1.0 is returned.
  */
@@ -621,10 +664,22 @@ double VLM_distance_to_line_ratio_xing(double latitude, double longitude,
     return -1.0;
   }
 
+#ifdef VLM_USE_LINE_DICHOTOMY
+  *ratio = 0.0;
+  dist = distance_to_line_dichotomy_xing(degToRad(latitude),
+					 degToRad(longitude),
+					 degToRad(latitude_a),
+					 degToRad(longitude_a),
+					 degToRad(latitude_b),
+					 degToRad(longitude_b),
+					 &x_lat, &x_long);
+#else
   dist = distance_to_line_ratio_xing(degToRad(latitude)  ,degToRad(longitude),
 				     degToRad(latitude_a),degToRad(longitude_a),
 				     degToRad(latitude_b),degToRad(longitude_b),
 				     &x_lat, &x_long, ratio);
+#endif /* VLM_USE_LINE_DICHOTOMY */
+
   if (x_long > PI) {
     x_long -= TWO_PI;
   } else if (x_long < -PI) {
@@ -644,6 +699,39 @@ double VLM_distance_to_line_ratio_xing(double latitude, double longitude,
  * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
  * @param wp, a pointer to a <code>waypoint</code> structure
+ * @param xing_lat, a pointer to a <code>double</code>, the latitude of
+ *        the closest point of the WP
+ * @param xing_ong, a pointer to a <code>double</code>, the longitude of
+ *        the closest point of the WP
+ * @return a double, the distance, a <code>double</code> in nautic miles.
+ * If the parameters are incorrect, -1.0 is returned.
+ */
+double VLM_distance_to_wp_xing(double latitude, double longitude, 
+			       waypoint *wp,
+			       double *xing_lat, double *xing_long) {
+  double ratio;
+
+  return VLM_distance_to_wp_ratio_xing(latitude, longitude, wp,
+				       xing_lat, xing_long, &ratio);
+}
+
+/**
+ * Compute the orthodromic distance between a point and a line defined
+ * by two points, A & B from a waypoint struct
+ * This is done in cartesian coordinates to find the intersection point
+ * which is a _bad_ approximation for long distances. Then ortho is used
+ * to get the real distance.
+ * @param latitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param longitude, a <code>double</code>, in <em>milli-degrees</em>
+ * @param wp, a pointer to a <code>waypoint</code> structure
+ * @param xing_lat, a pointer to a <code>double</code>, the latitude of
+ *        the closest point of the WP
+ * @param xing_ong, a pointer to a <code>double</code>, the longitude of
+ *        the closest point of the WP
+ * @param ratio, a pointer to a <code>double</code>, the ratio from 
+ *        the first point (0) to the second point (1) of the WP.
+ *        NOTE that if computing is done using the dichotomy mode, the 
+ *        value will always be 0
  * @return a double, the distance, a <code>double</code> in nautic miles.
  * If the parameters are incorrect, -1.0 is returned.
  */
@@ -678,10 +766,20 @@ double VLM_distance_to_wp_ratio_xing(double latitude, double longitude,
     return -1.0;
   }
 
+#ifdef VLM_USE_LINE_DICHOTOMY
+  *ratio = 0.0;
+  dist = distance_to_line_dichotomy_xing(degToRad(latitude),
+					 degToRad(longitude),
+					 latitude_a, longitude_a,
+					 latitude_b, longitude_b,
+					 &x_lat, &x_long);
+#else
   dist = distance_to_line_ratio_xing(degToRad(latitude)  ,degToRad(longitude),
 				     latitude_a, longitude_a,
 				     latitude_b, longitude_b,
 				     &x_lat, &x_long, ratio);
+#endif /* VLM_USE_LINE_DICHOTOMY */
+
   if (x_long > PI) {
     x_long -= TWO_PI;
   } else if (x_long < -PI) {
