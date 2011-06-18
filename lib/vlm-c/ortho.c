@@ -1,5 +1,5 @@
 /**
- * $Id: ortho.c,v 1.7 2010-12-09 13:54:26 ylafon Exp $
+ * $Id: ortho.c,v 1.8 2011-06-18 14:24:47 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -85,7 +85,7 @@ double ortho_distance(double latitude, double longitude,
 
 double ortho_initial_angle(double latitude, double longitude, 
 			   double wp_latitude, double wp_longitude) {
-  double g,d, den;
+  double g,d,a,den;
   
   g = fmod(wp_longitude - longitude, TWO_PI);
   if (fabs(g) < 0.0000001) { /* close enough to vertical, clamp to vertical*/
@@ -101,10 +101,14 @@ double ortho_initial_angle(double latitude, double longitude,
 	   cos(wp_latitude)*cos(latitude) * cos(g));
   
   den = cos(latitude) * sin(d);
+  a = (sin(wp_latitude)-sin(latitude)*cos(d)) / den;
+  if ((a > 1.0) || (a < -1.0)) {
+     return (wp_latitude>latitude) ? 0: PI;
+  }
   if (g<0) {
-    return TWO_PI - acos((sin(wp_latitude)-sin(latitude)*cos(d)) / den);
+    return TWO_PI - acos(a);
   } else {
-    return acos((sin(wp_latitude)-sin(latitude)*cos(d)) / den);
+    return acos(a);
   }
 }
 
