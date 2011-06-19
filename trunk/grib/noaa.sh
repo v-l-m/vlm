@@ -32,7 +32,7 @@ if [ $GRIB_MAX_TIME -lt 12 ]; then
 fi
 
 if test "$1" = ""; then
-  HH= expr  \( `date +%H` + \( `date +%M` / 30 \) - 4 + 24 \) / 6 \* 6 % 24
+  let "HH=( `date -u +%H`  + ( `date -u +%M` / 30 ) - 4 + 24 ) / 6 * 6 % 24"
   echo "No argument, auto-computing to HH=$HH"
 else
   HH=$1

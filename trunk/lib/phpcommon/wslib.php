@@ -110,6 +110,10 @@ class WSBase extends baseClass {
 
 }
 
+class WSBaseTracks extends WSBase {
+
+}
+
 class WSBasePlayer extends WSBase {
     function __construct() {
         parent::__construct();
