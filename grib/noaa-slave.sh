@@ -21,7 +21,12 @@ TIME_THRESHOLD=09
 LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
 
-HH=$1
+if test "$1" = ""; then
+  let "HH=( `date -u +%H`  + ( `date -u +%M` / 30 ) - 4 + 24 ) / 6 * 6 % 24"
+  echo "No argument, auto-computing to HH=$HH"
+else
+  HH=$1
+fi
 DAT=`date '+%Y%m%d'`
 LOG=log.txt
 
