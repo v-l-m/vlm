@@ -31,7 +31,13 @@ if [ $GRIB_MAX_TIME -lt 12 ]; then
     exit 0
 fi
 
-HH=$1
+if test "$1" = ""; then
+  HH= expr  \( `date +%H` + \( `date +%M` / 30 \) - 4 + 24 \) / 6 \* 6 % 24
+  echo "No argument, auto-computing to HH=$HH"
+else
+  HH=$1
+fi
+
 DAT=`date '+%Y%m%d'`
 LOG=log.txt
 
