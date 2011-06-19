@@ -134,8 +134,11 @@ Merci
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
      * 1.7.1 Déployer le module grib : {{{$ ~/scripts/maj_module.sh grib}}}
      * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)
-       * le paquet de base de debian est le gfortran (g95 au lieu de f95, éditer le makefile)
-       * il faut ajouter les dépendances (g2lib, g2clib) (éditer le makefile pour le path)
+       * le paquet de base de debian est le {{{gfortran}}}
+         * C'est f95 qui est installé à la place de g95
+         * On peut faire en root un ln -s /usr/bin/f95 /usr/bin/g95
+       * il faut ajouter les dépendances (g2lib, g2clib, w3lib, libjasper)
+         * éditer les différents makefile pour mettre les paths corrects.
        * les dépendances libpng12-dev et libjasper-dev ont normalement été installées plus haut
        * ne pas oublier les options de compilation pour x_64 (si nécessaire)
        * s'assurer dans g2clib que les fonctions ont le bon nom (au besoin editer enc/dec_jpeg2000 enc/dec_png pour avoir les symboles qui vont bien (voir les erreurs au link de cnvgrib, ex: #define SUB_NAME enc_png_ )
