@@ -79,19 +79,19 @@ case $confmodule in
         exit 0
     else 
         echo "+$confmodule: Download des fichiers poly, rivers et borders"
-        wget --output-document="$VLMTEMP/poly-f-1.dat" "http://dev.virtual-loup-de-mer.org/poly-f-1.dat"
+        wget --output-document="$VLMTEMP/poly-f-1.dat" "http://dev.virtual-loup-de-mer.org/datas/poly-f-1.dat"
         echo -n "+$confmodule: copie dans  $VLMGSHHS..."
         mv "$VLMTEMP/poly-f-1.dat" "$VLMGSHHS/"
         echo 'OK !'
-        wget --output-document="$VLMTEMP/rivers-f-1.dat" "http://dev.virtual-loup-de-mer.org/rivers-f-1.dat"
+        wget --output-document="$VLMTEMP/rivers-f-1.dat" "http://dev.virtual-loup-de-mer.org/datas/rivers-f-1.dat"
         echo -n "+$confmodule: copie dans  $VLMGSHHS..."
         mv "$VLMTEMP/rivers-f-1.dat" "$VLMGSHHS/"
         echo 'OK !'
-        wget --output-document="$VLMTEMP/borders-f-1.dat" "http://dev.virtual-loup-de-mer.org/borders-f-1.dat"
+        wget --output-document="$VLMTEMP/borders-f-1.dat" "http://dev.virtual-loup-de-mer.org/datas/borders-f-1.dat"
         echo -n "+$confmodule: copie dans  $VLMGSHHS..."
         mv "$VLMTEMP/borders-f-1.dat" "$VLMGSHHS/"
         echo 'OK !'
-        wget --output-document="$VLMTEMP/ETOPO1_Ice.dat" "http://dev.virtual-loup-de-mer.org/ETOPO1_Ice.dat"
+        wget --output-document="$VLMTEMP/ETOPO1_Ice.dat" "http://dev.virtual-loup-de-mer.org/datas/ETOPO1_Ice.dat"
         echo -n "+$confmodule: copie dans  $VLMGSHHS..."
         mv "$VLMTEMP/ETOPO1_Ice.dat" "$VLMGSHHS/"
         echo 'OK !'
