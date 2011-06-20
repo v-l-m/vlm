@@ -46,9 +46,6 @@ define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
 //TILES PREFS - DEFINE ONLY IF YOUR VLM INSTANCE HAS NOT PROPER TILES_G BINARY
 //define("TILES_SOURCE_SERVER", "http://testing.virtual-loup-de-mer.org");
 
-//WIND PREFS
-define('MAX_GRIBTIME_FUTURE', 3*24*3600);
-
 define("VLM_PROXY_PASS", "password");
 
 ?>
