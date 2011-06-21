@@ -40,8 +40,6 @@ define("WEBINSTANCE_1", "testing.virtual-loup-de-mer.org" );
 //define("MAIL_PREFIX", "VLM_".SERVER_NAME);
 //define("ALLOW_ACCOUNT_CREATION", Fakse);
 
-
-
 define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
 //TILES PREFS - DEFINE ONLY IF YOUR VLM INSTANCE HAS NOT PROPER TILES_G BINARY
 //define("TILES_SOURCE_SERVER", "http://testing.virtual-loup-de-mer.org");

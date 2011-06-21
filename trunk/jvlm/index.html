@@ -10,6 +10,7 @@
     <script src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=euzuro-openlayers"></script>
     <script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAU9L35N6EdAtdkT4Cb2abDRR9fpxOiyHPEX_8YzC8CNXvq83W-hRDmTj4GD1F8DLKiaJ97BAfcB5i7w'></script>
     <script src="/externals/OpenLayers/OpenLayers.js"></script>
+    <script src="config.js"></script>
     <script src='ControlSwitch.js' type='text/javascript'></script>
     <script src='gribmap.js' type='text/javascript'></script>
     <link rel="stylesheet" type="text/css" href="jvlm.css" />
@@ -48,9 +49,8 @@
             "jVlmMap", //identifiant du div contenant la carte openlayer
             options);
 
-        //FIXME : Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
-        //var urlArray = "/cache/gshhstiles/${z}/${x}/${y}.png";
-        var urlArray = [ "http://c1.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http://c2.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http://c3.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http://c4.v-l-m.org/gshhstiles/${z}/${x}/${y}.png" ];
+        //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
+        var urlArray = tilesUrlArray;
 
         var vlm = new OpenLayers.Layer.XYZ(
             "VLM Layer",

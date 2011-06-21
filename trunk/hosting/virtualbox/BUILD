@@ -13,11 +13,10 @@ Les opérations sont décrites pour une base debian/ubuntu.
  
 2. Exportation depuis un serveur de production/développement existant.
  * {{{./base/scripts/dump.sh}}}
- * NB: le dump est assez lourd à cause des racemaps.
+ * NB: le dump est assez lourd à cause des racemaps et des traces.
  * poser le fichier vlmdump.sql.gz quelque part
  
 3. Suivre les étapes d'installations comme documentées dans hosting/INSTALL, en tenant compte du contexte
- 
 
 4. Créer l'environnement lié au subversion
  * Utiliser la doc du wiki : http://dev.virtual-loup-de-mer.org/vlm/wiki/developpment
