@@ -206,6 +206,12 @@ case $confmodule in
 #    medias)
 #    echo -n "+$confmodule: Nothing to do"
 #    ;;
+    jvlm)
+    echo -n "+$confmodule: installation de la configuration dans $destmodulepath"
+    cp $VLMRACINE/conf/conf_jvlm $destmodulepath/config.js
+    echo 'OK !'
+    ;;
+    
     *)
     #Tous les autres modules
     echo "+$confmodule: Pas de post déploiement"
