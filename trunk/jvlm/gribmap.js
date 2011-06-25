@@ -244,6 +244,7 @@ Gribmap.WindArray = OpenLayers.Class({
 
     getWindGrid: function() {
         if (this.isLoaded() || this.isLoading()) return;
+        if (this.time == 0) return;
         this.status = 'loading';
 
         var request = OpenLayers.Request.GET({
@@ -287,7 +288,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
     },
 
     checkWindArray: function(ts) {
-        if (this.exists(ts)) return;
+        if (this.exists(ts) || ts == 0) return;
         this.windArrays[ts] = new Gribmap.WindArray(ts, this);
         this.windArrays[ts].getWindGrid();
     },
