@@ -10,10 +10,19 @@ if (webhost.match("virtual-loup-de-mer.org"))
     gmap_key = "ABQIAAAAU9L35N6EdAtdkT4Cb2abDRR9fpxOiyHPEX_8YzC8CNXvq83W-hRDmTj4GD1F8DLKiaJ97BAfcB5i7w";
 }
 
-    if (webhost.match("paparazzia.info"))
-    {
+
+if (webhost.match("v-l-m.org"))
+{
+    // virtual-loup-de-mer.org
     baseurl = "";
-gmap_key = "ABQIAAAAt-TNu1jygAUkY20DVJC9EBQzFwCcMhfsDTv_S48r6nw_wx5DpRRymYw5m7qN4i_Kpwt-w5ZRvgYCQA";
+    gmap_key = "ABQIAAAAt-TNu1jygAUkY20DVJC9EBQiRJWtMgCXYC-aY29DJsyyjFhxYRRiuD66kgnawCurNFPlPb4Rfiznqw";
+}
+
+
+
+if (webhost.match("paparazzia.info")) {
+    baseurl = "";
+    gmap_key = "ABQIAAAAt-TNu1jygAUkY20DVJC9EBQzFwCcMhfsDTv_S48r6nw_wx5DpRRymYw5m7qN4i_Kpwt-w5ZRvgYCQA";
 }
 
 if (webhost.match("caraibes.hd.free.fr"))
