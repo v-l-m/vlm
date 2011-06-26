@@ -5,8 +5,7 @@
     <title>jVLM alpha (grib viewer only)</title>
     <meta http-equiv="X-UA-Compatible" content="IE=8">
     <!--[if IE]><script src="excanvas.js"></script><![endif]-->
-    <script type="text/javascript" src="http://clients.multimap.com/API/maps/1.1/metacarta_04"></script>
-    <script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
+    <!-- script type="text/javascript" src="http://clients.multimap.com/API/maps/1.1/metacarta_04"></script -->
     <script src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=euzuro-openlayers"></script>
     <script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script> 
     <script src="/externals/OpenLayers/OpenLayers.js"></script>
@@ -58,9 +57,37 @@
             layeroption
             );
 
-        //Le Layer Virtual Earth = Bing
-        //FIXME : utiliser le nouveau module OpenLayers.Bing()
-        var ve = new OpenLayers.Layer.VirtualEarth( "VE", layeroption);
+        //Les layers Bing
+        //FIXME : roads... what for ;) ?
+        var bingroad = new OpenLayers.Layer.Bing({
+            key: bingApiKey,
+            type: "Road",
+            sphericalMercator: true,
+            //FIXME: voir s'il y a des effets spécifiques au layer ?
+            transitionEffect: "resize",
+            //pour passer l'ante-meridien sans souci
+            wrapDateLine:true,
+        });
+        var bingaerial = new OpenLayers.Layer.Bing({
+            key: bingApiKey,
+            type: "Aerial",
+            sphericalMercator: true,
+            //FIXME: voir s'il y a des effets spécifiques au layer ?
+            transitionEffect: "resize",
+            //pour passer l'ante-meridien sans souci
+            wrapDateLine:true,
+
+        });
+        var binghybrid = new OpenLayers.Layer.Bing({
+            key: bingApiKey,
+            type: "AerialWithLabels",
+            name: "Bing Aerial With Labels",
+            sphericalMercator: true,
+            //FIXME: voir s'il y a des effets spécifiques au layer ?
+            transitionEffect: "resize",
+            //pour passer l'ante-meridien sans souci
+            wrapDateLine:true,
+        });
         
         //Le Layer Yahoo
         //FIXME: Bug avec Opera
@@ -120,7 +147,7 @@
         var vlmoverview = vlm.clone();
         
         //Et on ajoute tous les layers à la map.
-        map.addLayers([vlm, wms, ve, yahoo, gphy, ghyb, gsat, grib]);
+        map.addLayers([vlm, wms, bingroad, bingaerial, binghybrid, yahoo, gphy, ghyb, gsat, grib]);
         //map.addLayers([vlm, grib]); //FOR DEBUG
        
        //Controle l'affichage des layers
