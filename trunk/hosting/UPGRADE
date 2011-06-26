@@ -4,6 +4,8 @@ From 0.18.x to 0.19 :
 
 = Step 0, can be done at any time =
 
+  RUN AS ROOT : a2enmod headers
+
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_19
 

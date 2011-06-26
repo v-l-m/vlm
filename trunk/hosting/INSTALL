@@ -259,7 +259,7 @@ Merci
        Options Indexes Includes FollowSymLinks
        }}}
 
-     * 3.1.5 activez le module 'expires' de apache : {{{$ a2enmod expires}}}
+     * 3.1.5 activez le module 'expires' et le module 'headers' de apache : {{{$ a2enmod expires}}} {{{$ a2enmod headers}}}
      * 3.1.6 activez l'extension vlmc dans le fichier php.ini
        Ajouter la ligne au fichier php.ini
        {{{
