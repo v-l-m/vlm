@@ -1239,9 +1239,28 @@ class fullUsers
           return False;
       }
       
-      $value = mysql_real_escape_string(strip_tags($value));
-      
-      //FIXME: we should check prefs values !
+      $value = strip_tags(trim($value));
+      //FIXME: we should check prefs values better !
+      switch($key) {
+          //numeric 
+          case "maparea":
+          case "mapMaille" :
+          case "mapX" :
+          case "mapY" :
+          case "mapAge" :
+          case "mapEstime" :
+              if (!is_numeric($value)) {
+                  $this->users->set_error("Value of $key not numeric");
+                  return False;
+              }
+          case "blocnote" :
+          case "boatname" :
+          //more cases
+              //Should check here that UTF8 is valid
+          default :
+      }
+
+      $value = mysql_real_escape_string($value);
       
       //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
       if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) {
