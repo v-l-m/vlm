@@ -28,7 +28,11 @@ From 0.18.x to 0.19 :
 
 = Step 2, end of release, unlock engine =
 
+  RUN
     ./scripts/upgrade.sh 0.19 2
+
+  INSTALL
+    monitoring of health-status
 
 THE END
 
