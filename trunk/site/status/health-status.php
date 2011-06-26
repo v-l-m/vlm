@@ -2,6 +2,7 @@
   //smallest possible code
   @include_once('config-defines.php');
   @require_once('griblib.php');
+  @require_once('functions.php');
 
   $row = getLastUpdateRow();
   $lastupdate = $row2['time'];
