@@ -82,3 +82,11 @@ div.GribmapMousePosition {
   left: 10px;
   z-index:99999;
 }
+
+.olControlAttribution {
+  left: 100px;
+  right: inherit;
+  bottom: 0px;
+  top: inherit;
+  line-height: 11px; 
+}
