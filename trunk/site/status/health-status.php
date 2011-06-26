@@ -6,8 +6,8 @@
 
   $now = time();
   $row = getLastUpdateRow();
-  $lastupdate = $row2['time'];
-  $duration = max($row2['duration'],0.001);
+  $lastupdate = $row['time'];
+  $duration = max($row['duration'],0.001);
   $minmax = get_grib_minmax_time();
   $min = $minmax['min'];
 
