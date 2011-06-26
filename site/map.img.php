@@ -4,7 +4,7 @@
     include_once("functions.php");
     include_once("mapfunctions.php");
 
-    $boat= htmlentities(get_cgi_var('boat', "");
+    $boat= htmlentities(get_cgi_var('boat', ""));
     
     // Test si connecté ou pas.
     $idusers = getLoginId() ;
