@@ -188,9 +188,10 @@ class positionsIterator extends baseClass {
     }
 
     function onerow($row) {
-        array_push ($this->records, $row);
+        $p = Array(intval($row[0]), doubleval($row[1]), doubleval($row[2]));
+        array_push ($this->records, $p);
     }
-
+    
     function start() {
         $this->records = Array();
     }
