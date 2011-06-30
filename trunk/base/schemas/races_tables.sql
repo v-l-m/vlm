@@ -91,7 +91,6 @@ CREATE TABLE `histpos` (
   `lat` double default NULL,
   `idusers` int(11) NOT NULL default '0',
   `race` int(11) default NULL,
-  `wind` text,
   KEY `race` (`race`),
   KEY `idusers` (`idusers`),
   KEY `time` (`time`,`race`,`idusers`)
@@ -108,7 +107,6 @@ CREATE TABLE `positions` (
   `lat` double default NULL,
   `idusers` int(11) NOT NULL default '0',
   `race` int(11) default NULL,
-  `wind` text,
   KEY `race` (`race`),
   KEY `idusers` (`idusers`),
   KEY `time` (`time`,`race`,`idusers`)
@@ -127,7 +125,7 @@ CREATE TABLE `waypoint_crossing` (
   `validity` int(11) NOT NULL default '1',
   `time` int(11) default NULL,
   `userdeptime` int(20) default NULL,
-  PRIMARY KEY  (`idraces`,`idwaypoint`,`idusers`)
+  UNIQUE KEY  (`idraces`,`idwaypoint`,`idusers`,`validity`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
