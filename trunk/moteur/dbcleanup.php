@@ -34,7 +34,23 @@ $engine_start_float=microtime(true);
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 
-$locktables = "LOCK TABLE histpos WRITE, positions WRITE, updates WRITE, positions AS pos READ";
+# lock tables to remove positions of players not in a race (or in a different race)
+
+$locktables = "LOCK TABLE histpos WRITE, positions WRITE, positions AS pos READ, users AS us READ";
+$result = wrapper_mysql_db_query_writer($locktables);
+
+$queryarrivedpositions = "INSERT INTO histpos SELECT `time`,`long`,`lat`,pos.idusers AS idusers, pos.race FROM positions AS pos, users AS us WHERE pos.idusers=us.idusers AND race!=engaged ORDER BY pos.idusers,`time`;";
+$result = wrapper_mysql_db_query_writer($queryarrivedpositions);
+
+$queryarrivedpositionsdel = "DELETE positions FROM positions INNER JOIN users AS us WHERE positions.idusers=us.idusers AND positions.race!=us.engaged;";
+$result = wrapper_mysql_db_query_writer($queryarrivedpositionsdel);
+
+$locktables = "UNLOCK TABLES";
+$result = wrapper_mysql_db_query_writer($locktables);
+
+# we unlock/relock to release the users table, to clean up old positions
+
+$locktables = "LOCK TABLE histpos WRITE, positions WRITE, positions AS pos READ";
 $result = wrapper_mysql_db_query_writer($locktables);
 
 $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions AS pos WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
@@ -43,11 +59,13 @@ $result = wrapper_mysql_db_query_writer($queryhistopositions);
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($querypurgepositions);
 
-$querypurgeupdates = "DELETE FROM updates WHERE UNIX_TIMESTAMP(time) < " . ($engine_start - MAX_POSITION_AGE) .";";
-$result = wrapper_mysql_db_query_writer($querypurgeupdates);
-
 $locktables = "UNLOCK TABLES";
 $result = wrapper_mysql_db_query_writer($locktables);
+
+# and now more cleanup where table lock is not needed
+
+$querypurgeupdates = "DELETE FROM updates WHERE UNIX_TIMESTAMP(time) < " . ($engine_start - MAX_POSITION_AGE) .";";
+$result = wrapper_mysql_db_query_writer($querypurgeupdates);
 
 $queryloch = "DELETE FROM races_loch WHERE time < " . ($engine_start - 86700) .";";
 $result = wrapper_mysql_db_query_writer($queryloch);
