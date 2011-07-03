@@ -27,7 +27,7 @@
 
 #define GSHHS_MAX_DETAILS 3
 #define GSHHS_SCL 1.0e-6
-#ifdef USE_GSHHS_20
+#if defined USE_GSHHS_20 || USE_GSHHS_22
 struct GSHHS {  /* Global Self-consistent Hierarchical High-resolution 
 		   Shorelines */
   int id;         /* Unique polygon id number, starting at 0 */
@@ -56,7 +56,7 @@ struct GSHHS {  /* Global Self-consistent Hierarchical High-resolution
 		     set that was the source of this polygon 
 		     (-1 if none) */
 };
-#else /* USE_GSHHS_20 */
+#else /* USE_GSHHS_20 || USE_GSHHS_22 */
 struct GSHHS {	/* Global Self-consistent Hierarchical High-resolution 
 		   Shorelines */
   int id;				/* Unique polygon id number, 
@@ -77,7 +77,7 @@ struct GSHHS {	/* Global Self-consistent Hierarchical High-resolution
   int west, east, south, north;	/* min/max extent in micro-degrees */
   int area;			/* Area of polygon in 1/10 km^2 */
 };
-#endif /* USE_GSHHS_20 */
+#endif /* USE_GSHHS_20 || USE_GSHHS_22 */
 
 struct	POINT {	/* Each lon, lat pair is stored in micro-degrees in 
 		   4-byte integer format */
@@ -90,6 +90,9 @@ int main (int argc, char **argv) {
   struct GSHHS poly;
   struct POINT *plist, *p;
   int level, greenwich;
+#ifdef USE_GSHHS_22
+  int dateline;
+#endif /* USE_GSHHS_22 */
   int n, max_n, i;
   int px, py;
   double latitude, longitude;
@@ -122,20 +125,23 @@ int main (int argc, char **argv) {
     poly.south     = ntohl(poly.south);
     poly.north     = ntohl(poly.north);
     poly.area      = ntohl(poly.area);
-#ifdef USE_GSHHS_20
+#if defined USE_GSHHS_20 || USE_GSHHS_22
     poly.area_full = ntohl(poly.area_full);
     poly.container = ntohl(poly.container);
     poly.ancestor  = ntohl(poly.ancestor);
-#endif /* USE_GSHHS_20 */
+#endif /* USE_GSHHS_20 || USE_GSHHS_22 */
 
     level     = poly.flag & 0xff;
-#ifdef USE_GSHHS_20
+#if defined USE_GSHHS_20 || defined USE_GSHHS_22
     /* the previous version should work, but be ready for 
        future releases */
-    greenwich = (poly.flag >>16) & 0x01;
+    greenwich = (h.flag >>16) & 0x01;
+#ifdef USE_GSHHS_22
+    dateline  = (h.flag >>16) & 0x02;
+#endif /* USE_GSHHS_22 */
 #else
-    greenwich = (poly.flag >>16) & 0xff;
-#endif /* USE_GSHHS_20 */
+    greenwich = (h.flag >>16) & 0xff;
+#endif /* USE_GSHHS_20 || USE_GSHHS_22 */
     if (level > GSHHS_MAX_DETAILS) { 
       /* keep only land ?, not lake, island in lake, 
 	 pond in island in lake => take everything now */
