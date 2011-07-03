@@ -1,4 +1,4 @@
-/*	$Id: dist_gshhs.h,v 1.3 2010-08-09 13:39:09 ylafon Exp $
+/*	$Id: dist_gshhs.h,v 1.4 2011-07-03 08:41:12 ylafon Exp $
  *
  * Include file defining structures used in gshhs.c
  *
@@ -46,12 +46,16 @@
 #endif
 
 #ifdef USE_GSHHS_20
-#define GSHHS_DATA_RELEASE      8       /* For v2.1.0 data set */
-#define GSHHS_DATA_VERSION      "2.1.0" /* For v2.1.0 data set */
-#define GSHHS_PROG_VERSION      "1.12"
-#else /* USE_GSHHS_20 */
-#define GSHHS_DATA_VERSION	6	/* For v1.5 data set */
-#define GSHHS_PROG_VERSION	"1.9"
+# define GSHHS_DATA_RELEASE      8       /* For v2.1.0 data set */
+# define GSHHS_DATA_VERSION      "2.1.0" /* For v2.1.0 data set */
+# define GSHHS_PROG_VERSION      "1.12"
+#elif defined USE_GSHHS_22
+# define GSHHS_DATA_RELEASE      9       /* For v2.1.0 data set */
+# define GSHHS_DATA_VERSION      "2.2.0" /* For v2.1.0 data set */
+# define GSHHS_PROG_VERSION      "1.13"
+#else
+# define GSHHS_DATA_VERSION	6	/* For v1.5 data set */
+# define GSHHS_PROG_VERSION	"1.9"
 #endif /* USE_GSHHS_20 */
 
 #define GSHHS_SCL	1.0e-6	/* COnvert micro-degrees to degrees */
@@ -60,7 +64,7 @@
 /* OBSOLETE, use ntohl instead (more optimized) -- spf */
 #define swabi4(i4) (((i4) >> 24) + (((i4) >> 8) & 65280) + (((i4) & 65280) << 8) + (((i4) & 255) << 24))
 
-#ifdef USE_GSHHS_20
+#if defined USE_GSHHS_20 || defined USE_GSHHS_22
 struct GSHHS {  /* Global Self-consistent Hierarchical High-resolution Shorelines */
         int id;         /* Unique polygon id number, starting at 0 */
         int n;          /* Number of points in this polygon */
@@ -78,7 +82,7 @@ struct GSHHS {  /* Global Self-consistent Hierarchical High-resolution Shoreline
         int container;  /* Id of container polygon that encloses this polygon (-1 if none) */
         int ancestor;   /* Id of ancestor polygon in the full resolution set that was the source of this polygon (-1 if none) */
 };
-#else /* USE_GSHHS_20 */
+#else /* USE_GSHHS_20 || USE_GSHHS_22 */
 struct GSHHS {	/* Global Self-consistent Hierarchical High-resolution Shorelines */
 	int id;				/* Unique polygon id number, starting at 0 */
 	int n;				/* Number of points in this polygon */
@@ -92,7 +96,7 @@ struct GSHHS {	/* Global Self-consistent Hierarchical High-resolution Shorelines
 	int west, east, south, north;	/* min/max extent in micro-degrees */
 	int area;			/* Area of polygon in 1/10 km^2 */
 };
-#endif /* USE_GSHHS_20 */
+#endif /* USE_GSHHS_20 || USE_GSHHS_22 */
 
 struct	POINT {	/* Each lon, lat pair is stored in micro-degrees in 4-byte integer format */
 	int	x;
