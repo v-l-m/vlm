@@ -135,12 +135,12 @@ int main (int argc, char **argv) {
 #if defined USE_GSHHS_20 || defined USE_GSHHS_22
     /* the previous version should work, but be ready for 
        future releases */
-    greenwich = (h.flag >>16) & 0x01;
+    greenwich = (poly.flag >>16) & 0x01;
 #ifdef USE_GSHHS_22
-    dateline  = (h.flag >>16) & 0x02;
+    dateline  = (poly.flag >>16) & 0x02;
 #endif /* USE_GSHHS_22 */
 #else
-    greenwich = (h.flag >>16) & 0xff;
+    greenwich = (poly.flag >>16) & 0xff;
 #endif /* USE_GSHHS_20 || USE_GSHHS_22 */
     if (level > GSHHS_MAX_DETAILS) { 
       /* keep only land ?, not lake, island in lake, 
