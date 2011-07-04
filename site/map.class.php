@@ -1389,14 +1389,13 @@ class map
           $np++;
           
           if ($np == 0) return;
-          
-          // Label pour l'estime
-          $ortho_string="Ortho ";
-          if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
-              $ortho_string .= "to your WP";
-          }
-          imagestring ( $this->mapImage, $font, $E[0], $E[1]-5 , $ortho_string , $this->colorTextOrtho);
       }
+      // Label pour l'estime
+      $ortho_string="Ortho ";
+      if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
+	$ortho_string .= "to your WP";
+      }
+      imagestring ( $this->mapImage, $font, $E[0], $E[1]-5 , $ortho_string , $this->colorTextOrtho);
   }
 
 
