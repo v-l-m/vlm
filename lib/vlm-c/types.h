@@ -1,5 +1,5 @@
 /**
- * $Id: types.h,v 1.25 2010-12-09 13:32:14 ylafon Exp $
+ * $Id: types.h,v 1.26 2011-07-05 13:10:34 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -105,7 +105,11 @@ typedef struct winds_str {
 } winds;
 
 typedef struct wind_prev_str {
+#ifdef USE_GRIB_UPDATE_TIME
+  time_t update_time; /* difference from T0 grib, update time */
+#else
   long time_offset;
+#endif /* USE_GRIB_UPDATE_TIME */
   int nb_prevs;
   struct winds_str **wind;
 } winds_prev;

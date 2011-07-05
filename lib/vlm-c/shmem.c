@@ -1,5 +1,5 @@
 /**
- * $Id: shmem.c,v 1.24 2011-04-15 20:05:27 ylafon Exp $
+ * $Id: shmem.c,v 1.25 2011-07-05 13:10:34 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -300,8 +300,13 @@ int copy_grib_array_to_shmem(int shmid, winds_prev *windtable, void *memseg) {
   }
 
   tarray = (time_t *) (((char *)memseg) + used_bytes);
-  *tarray = windtable->time_offset; /* might be changed to interpolation date */
+#ifdef USE_GRIB_UPDATE_TIME
+  *tarray = windtable->update_time;
   used_bytes += sizeof(time_t);
+#else
+  *tarray = windtable->time_offset; /* might be changed to interpolation date */
+  used_bytes += sizeof(long);
+#endif /* USE_GRIB_UPDATE_TIME */
 
   /* now copy the relevant stuff */
   windarray = (winds *) (((char *)memseg) + used_bytes);
@@ -329,8 +334,13 @@ void construct_grib_array_from_shmem(winds_prev *windtable, void *memseg) {
   }
 
   tarray = (time_t *) (((char *)memseg) + used_bytes);
-  windtable->time_offset = *tarray; /* might be changed to interpolation date */
+#ifdef USE_GRIB_UPDATE_TIME
+  windtable->update_time = *tarray;
   used_bytes += sizeof(time_t);
+#else
+  windtable->time_offset = *tarray; /* might be changed to interpolation date */
+  used_bytes += sizeof(long);
+#endif /* USE_GRIB_UPDATE_TIME */
 
   windarray = (winds *) (((char *)memseg) + used_bytes);
   if (windtable->wind != NULL) {
@@ -359,8 +369,13 @@ void allocate_grib_array_from_shmem(winds_prev *windtable, void *memseg) {
   }
 
   tarray = (time_t *) (((char *)memseg) + used_bytes);
-  windtable->time_offset = *tarray; /* might be changed to interpolation date */
+#ifdef USE_GRIB_UPDATE_TIME
+  windtable->update_time = *tarray;
   used_bytes += sizeof(time_t);
+#else
+  windtable->time_offset = *tarray; /* might be changed to interpolation date */
+  used_bytes += sizeof(long);
+#endif /* USE_GRIB_UPDATE_TIME */
 
   windarray = (winds *) (((char *)memseg) + used_bytes);
   /* free the internal structure completely */

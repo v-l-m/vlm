@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.33 2010-12-09 13:54:27 ylafon Exp $
+ * $Id: winds.c,v 1.34 2011-07-05 13:10:34 ylafon Exp $
  *
  * (c) 2008-2010 by Yves Lafon
  *
@@ -163,8 +163,10 @@ wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
     
   prev = next = NULL;
 
+#ifndef USE_GRIB_UPDATE_TIME
   /* correct the grib time, currently variable in VLM */
   vac_time -= windtable->time_offset;
+#endif /* !USE_GRIB_UPDATE_TIME */
 
   for (i=0; i< windtable->nb_prevs; i++) {
     if (windtable->wind[i]->prevision_time > vac_time) {
@@ -379,8 +381,10 @@ wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
     
   prev = next = NULL;
 
+#ifndef USE_GRIB_UPDATE_TIME
   /* correct the grib time, currently variable in VLM */
   vac_time -= windtable->time_offset;
+#endif /* !USE_GRIB_UPDATE_TIME */
 
   for (i=0; i< windtable->nb_prevs; i++) {
     if (windtable->wind[i]->prevision_time > vac_time) {
@@ -621,8 +625,10 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
     
   prev = next = NULL;
 
+#ifndef USE_GRIB_UPDATE_TIME
   /* correct the grib time, currently variable in VLM */
   vac_time -= windtable->time_offset;
+#endif /* !USE_GRIB_UPDATE_TIME */
 
   for (i=0; i< windtable->nb_prevs; i++) {
     if (windtable->wind[i]->prevision_time > vac_time) {
@@ -905,8 +911,10 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
     
   prev = next = NULL;
 
+#ifndef USE_GRIB_UPDATE_TIME
   /* correct the grib time, currently variable in VLM */
   vac_time -= windtable->time_offset;
+#endif /* !USE_GRIB_UPDATE_TIME */
 
   for (i=0; i< windtable->nb_prevs; i++) {
     if (windtable->wind[i]->prevision_time > vac_time) {
