@@ -1,5 +1,5 @@
 /**
- * $Id: grib.h,v 1.11 2010-12-09 13:32:14 ylafon Exp $
+ * $Id: grib.h,v 1.12 2011-07-05 13:10:34 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -38,12 +38,17 @@
  */
 void init_grib();
 
+
+#ifdef USE_GRIB_UPDATE_TIME
 /**
- * init global wind structures in the context based on a grib file
- * containing only UGRD/VGRD entries in matched pairs.
- * time offest is given as a parameter (see above)
+ * set the grib update time without having to re-read the grib
  */
-void init_grib_offset PARAM1(long);
+void set_grib_update_time PARAM1(time_t);
+/**
+ * get the current grib update time 
+ */
+time_t get_grib_update_time ();
+#else
 /**
  * set the grib offset (see above) without having to re-read the grib
  */
@@ -52,6 +57,15 @@ void set_grib_offset PARAM1(long);
  * get the current grib offset (see above)
  */
 long get_grib_offset ();
+#endif /* USE_GRIB_UPDATE_TIME */
+
+/**
+ * init global wind structures in the context based on a grib file
+ * containing only UGRD/VGRD entries in matched pairs.
+ * time offest is given as a parameter (see above)
+ * (ignored if USE_GRIB_UPDATE_TIME is defined)
+ */
+void init_grib_offset PARAM1(long);
 
 /**
  * get rid of past gribs entry and free structure 

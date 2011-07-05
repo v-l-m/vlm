@@ -1,5 +1,5 @@
 /**
- * $Id: windserver.c,v 1.10 2010-12-09 13:54:27 ylafon Exp $
+ * $Id: windserver.c,v 1.11 2011-07-05 13:10:34 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -44,6 +44,11 @@ void usage(char *argv0) {
 
 int main(int argc, char **argv) {
   int merge, interp, purge, i, gotfile;
+#ifdef USE_GRIB_UPDATE_TIME
+  int    update;
+  time_t prev_update_time;
+#endif /* USE_GRIB_UPDATE_TIME */
+
   int shmid, semid;
   void *segmaddr;
   struct sembuf sem_op[2];
@@ -56,8 +61,18 @@ int main(int argc, char **argv) {
     usage(*argv);
   }
   
+#ifdef USE_GRIB_UPDATE_TIME
+  gotfile = merge = interp = purge = update = 0;
+#else
   gotfile = merge = interp = purge = 0;
+#endif /* USE_GRIB_UPDATE_TIME */
   for (i=1; i<argc; i++) {
+#ifdef USE_GRIB_UPDATE_TIME
+    if (!strncmp(argv[i], "-update", 8)) {
+      update = 1;
+      continue;
+    }
+#endif /* USE_GRIB_UPDATE_TIME */
     if (!strncmp(argv[i], "-merge", 7)) {
       merge = 1;
       continue;
@@ -66,8 +81,6 @@ int main(int argc, char **argv) {
       purge = 1;
       continue;
     }
-    /* FIXME, should we consume another token (time_t) to ensure replication
-       on different servers? UNUSED FOR NOW */
     if (!strncmp(argv[i], "-interp", 8)) {
       interp = 1;
       continue;
@@ -83,6 +96,31 @@ int main(int argc, char **argv) {
   shmid = -1;
   segmaddr = NULL;
   /* first we read the grib before locking things */
+#ifdef USE_GRIB_UPDATE_TIME
+  if (merge||update) {
+    /* first we need to read the grib from the segment */
+    /* no need to lock as we are the one to lock it when doing the update */
+    shmid = get_grib_shmid(0);
+    if (shmid == -1) {
+      fprintf(stderr, "Can't attach segment, impossible to merge data\n");
+    } else {
+      segmaddr = get_shmem(shmid, 0);
+      allocate_grib_array_from_shmem(&global_vlmc_context->windtable, segmaddr);
+      if (merge) {
+	merge_gribs(purge);
+      } else if (update) { /* no need for the if there, but for sanity... */
+	/* we save the previous timestamp, as it's only an update
+	   and not a replacement */
+	prev_update_time = get_grib_update_time();
+	init_grib();
+	if (purge) {
+	  purge_gribs();
+	}
+	set_grib_update_time(prev_update_time);
+      }
+    }
+  } 
+#else
   if (merge) {
     /* first we need to read the grib from the segment */
     /* no need to lock as we are the one to lock it when doing the update */
@@ -95,7 +133,8 @@ int main(int argc, char **argv) {
       merge_gribs(purge);
     }
   } 
-  
+#endif /* USE_GRIB_UPDATE_TIME */
+
   if (!segmaddr) { /* no merge, or failed one */
     init_grib();
     if (purge) {

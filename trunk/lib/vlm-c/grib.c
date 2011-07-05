@@ -1,5 +1,5 @@
 /**
- * $Id: grib.c,v 1.29 2010-12-09 13:54:26 ylafon Exp $
+ * $Id: grib.c,v 1.30 2011-07-05 13:10:33 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -35,6 +35,9 @@
 #ifndef OLD_C_COMPILER
 #include <complex.h>
 #endif /* OLD_C_COMPILER */
+#ifdef USE_GRIB_UPDATE_TIME
+#include <time.h>
+#endif /* USE_GRIB_UPDATE_TIME */
 
 #include "defs.h"
 #include "types.h"
@@ -53,6 +56,15 @@ winds **read_gribs PARAM1(int *);
 #define MSEEK 4096
 #define BUFF_ALLOC0  1048576
 
+#ifdef USE_GRIB_UPDATE_TIME
+void set_grib_update_time(time_t update_time) {
+  global_vlmc_context->windtable.update_time = update_time;
+}
+
+time_t get_grib_update_time() {
+  return global_vlmc_context->windtable.update_time;
+}
+#else
 void set_grib_offset(long time_offset) {
   global_vlmc_context->windtable.time_offset = time_offset;
 }
@@ -60,9 +72,14 @@ void set_grib_offset(long time_offset) {
 long get_grib_offset() {
   return global_vlmc_context->windtable.time_offset;
 }
+#endif /* USE_GRIB_UPDATE_TIME */
 
 void init_grib() {
+#ifdef USE_GRIB_UPDATE_TIME
   init_grib_offset(GRIB_TIME_OFFSET);
+#else
+  init_grib_offset(0);
+#endif /* USE_GRIB_UPDATE_TIME */
 }
 
 void init_grib_offset(long time_offset) {
@@ -76,7 +93,11 @@ void init_grib_offset(long time_offset) {
     oldw = global_vlmc_context->windtable.wind;
     global_vlmc_context->windtable.nb_prevs    = nb_prevs; 
     global_vlmc_context->windtable.wind        = w;
+#ifdef USE_GRIB_UPDATE_TIME
+    global_vlmc_context->windtable.update_time = time(NULL);
+#else
     global_vlmc_context->windtable.time_offset = time_offset;
+#endif /* USE_GRIB_UPDATE_TIME */
     if (oldw != NULL) {
       for (i=0; i<oldcount; i++) {
 	free(oldw[i]);
@@ -527,8 +548,12 @@ winds *generate_interim_grib_UV(time_t grib_time) {
   if (windtable->wind == NULL) {
     return NULL;
   }
+#ifdef USE_GRIB_UPDATE_TIME
+  corrected_time = grib_time;
+#else
   /* correct the time according to the offset */
   corrected_time = grib_time - windtable->time_offset;
+#endif /* USE_GRIB_UPDATE_TIME */
   /* find the surrounding grib entries */
   prev = next = NULL;
   for (i=0; i< windtable->nb_prevs; i++) {
@@ -597,8 +622,12 @@ winds *generate_interim_grib_hybrid(time_t grib_time) {
   if (windtable->wind == NULL) {
     return NULL;
   }
+#ifdef USE_GRIB_UPDATE_TIME
+  corrected_time = grib_time;
+#else
   /* correct the time according to the offset */
   corrected_time = grib_time - windtable->time_offset;
+#endif /* USE_GRIB_UPDATE_TIME */
   /* find the surrounding grib entries */
   prev = next = NULL;
   for (i=0; i< windtable->nb_prevs; i++) {
@@ -677,8 +706,12 @@ winds *generate_interim_grib_TWSA(time_t grib_time) {
   if (windtable->wind == NULL) {
     return NULL;
   }
+#ifdef USE_GRIB_UPDATE_TIME
+  corrected_time = grib_time;
+#else
   /* correct the time according to the offset */
   corrected_time = grib_time - windtable->time_offset;
+#endif /* USE_GRIB_UPDATE_TIME */
   /* find the surrounding grib entries */
   prev = next = NULL;
   for (i=0; i< windtable->nb_prevs; i++) {
