@@ -50,7 +50,11 @@ while [ $updated = 0 ]; do
     wget $GRIBURLPATH/$PREFIX-${DAT}${HH}.grb >>$LOG 2>&1
     if [ $? -eq 0 ]; then
         updated=1
-        windserver $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
+	if [ $interim -eq 0 ]; then
+            windserver $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
+	else
+            windserver -update $PREFIX-${DAT}${HH}.grb  >>$LOG 2>&1
+	fi
     else
         if [ $interim -eq 0 ]; then
             sleep 1
