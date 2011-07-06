@@ -10,7 +10,7 @@ function get_grib_timestamp_array() {
   shm_lock_sem_construct_grib(1);
   $nb_grib = get_prevision_count();
   for ($i=0; $i < $nb_grib; $i++) { 
-    array_push(ts_polar, get_prevision_time_index($i));
+    array_push($ts_polar, get_prevision_time_index($i));
   }
   shm_unlock_sem_destroy_grib(1);
   return $ts_polar;
