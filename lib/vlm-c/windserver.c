@@ -1,5 +1,5 @@
 /**
- * $Id: windserver.c,v 1.11 2011-07-05 13:10:34 ylafon Exp $
+ * $Id: windserver.c,v 1.12 2011-07-06 06:12:28 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -38,7 +38,11 @@ vlmc_context *global_vlmc_context;
 
 
 void usage(char *argv0) {
+#ifdef USE_GRIB_UPDATE_TIME
+  printf("Usage: %s [-merge] [-update] [-purge] <grib filename>\n", argv0);
+#else
   printf("Usage: %s [-merge] [-purge] <grib filename>\n", argv0);
+#endif /* USE_GRIB_UPDATE_TIME */
   exit(1);
 }
 
