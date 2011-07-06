@@ -112,7 +112,7 @@ fi
 rm -f $GRIBPATH/$PREFIX*${HH}.grb
 
 # we update the weather now 
-windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
+windserver -update $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
 
 # then cleanup
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
