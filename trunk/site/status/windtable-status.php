@@ -29,7 +29,7 @@
       Current time: <span id="currenttime">
       <?php echo gmdate("Y-m-d \T H:i:s", $current_time) ?> GMT
     </span>
-    <span class="hidden"><?php echo $current_time ?></span>
+    <span id=curtime" class="hidden"><?php echo $current_time ?></span>
     </p>
     <?php
       shm_lock_sem_construct_grib(1);
@@ -44,6 +44,9 @@ if ( $nb_grib == 0 ) {
       <?php echo $nb_grib ?>
     </span> GRIB entries.
     </p>
+    <p>Update time: <?php
+    $update_time = get_grib_update_time();
+    echo gmdate("Y-m-d \T H:i:s", $update_time); ?> GMT <span id="updatetime" class="hidden"><?php echo $update_time ?></span></p>
     <ol id="gribdates">
       <?php
         for ($i=0; $i < $nb_grib; $i++) { 
