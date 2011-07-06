@@ -105,6 +105,8 @@
 # define GRIB_RESOLUTION_0_5
 #endif /* GRIB_RESOLUTION_1 */
 
+#define USE_GRIB_UPDATE_TIME 1
+
 /* 1 land, 2 lake, 3 island_in_lake, 4 pond_in_island_in_lake */
 #define GSHHS_MAX_DETAILS 3
 
