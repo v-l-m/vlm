@@ -526,7 +526,9 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
   handleGribListReply: function( request ) {
       if (request.status == 200) {
-          this.griblist = JSON.parse(request.responseText);
+	  var rep = JSON.parse(request.responseText);
+          this.griblist = rep.grib_timestamps;
+	  this.gribupdatetime = rep.update_time;
           this.maxtime = Math.max.apply(null, this.griblist);
           this.mintime = Math.min.apply(null, this.griblist);
       }
