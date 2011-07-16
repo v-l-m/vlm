@@ -15,6 +15,7 @@
 
     function send_json_header() {
         header("Content-type: application/json; charset=UTF-8");
+	header("Content-Encoding: gzip");
         $cache = get_grib_validity();
         header("Cache-Control: max-age=".$cache.", must-revalidate");
     }
@@ -107,5 +108,5 @@
         } 
     }
     send_json_header();
-    echo json_encode($windgrid);
+    echo gzencode(json_encode($windgrid));
 ?>
