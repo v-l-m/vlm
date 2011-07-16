@@ -6,6 +6,7 @@
        <domain uri="http://frogeater.dyndns.org"/> 
        <domain uri="http://virtual-winds.com"/>
        <domain uri="http://silverlight.virtual-loup-de-mer.org"/>
+       <domain uri="http://silverlight.v-l-m.org"/>
      </allow-from>
      <grant-to>
        <resource include-subpaths="true" path="/"/>
