@@ -246,11 +246,19 @@ Gribmap.WindArray = OpenLayers.Class({
         if (this.isLoaded() || this.isLoading()) return;
         if (this.time == 0) return;
         this.status = 'loading';
+        var reqeast = this.windArea.right%360;
+        var reqwest = this.windArea.left%360;
+        if (reqeast < -180) { reqeast +=360 };
+        if (reqeast > 180) { reqeast -=360 };
+        if (reqwest < -180) { reqwest +=360 };
+        if (reqwest > 180) { reqwest -=360 };
 
         var request = OpenLayers.Request.GET({
             url: Gribmap.windgrid_uribase,
-            params: { north: this.windArea.top, south: this.windArea.bottom, east: this.windArea.right, west: this.windArea.left,
-                      timerequest: this.time, stepmultiple: this.windArea.windlevel.stepmultiple},
+            params: { north: this.windArea.top, south: this.windArea.bottom,
+                      east: reqeast, west: reqwest,
+                      timerequest: this.time, 
+		      stepmultiple: this.windArea.windlevel.stepmultiple},
             async: true,
             headers: {
                 'Accept' : 'application/json',
@@ -259,10 +267,7 @@ Gribmap.WindArray = OpenLayers.Class({
             scope: this,
         });
     },
-
-
     CLASS_NAME: "Gribmap.WindArray"
-
 });
 
 /* Class: WindArea
