@@ -59,6 +59,10 @@
         } else {
 	  $cache = 10; /* we use 10s as the default */
         }
+	/* for overdue gribs */
+	if ($cache < 0) {
+	  return 0;
+	}
         return $cache;
     }
     
