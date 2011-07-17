@@ -7,6 +7,7 @@ TILESCACHEDIR=$VLMCACHE/gshhstiles
 SEAFILE=sea.png
 FIXEDTILESDIR=f
 CHECKFILE=.lastcheck
+HARDLINKLIMIT=64000
 
 if [ ! -d ${TILESCACHEDIR} ]; then
     echo "You must configure TILESCACHEDIR in clean_tilescache.sh" >&2
@@ -43,14 +44,14 @@ find . -type f ${findmod} -print | grep -v ${SEAFILE} | while read tilename ; do
             mv $tilename ${FIXEDTILESDIR}/${SEAFILE}
             sea=1
         fi
-	if [ $nblinks -lt 65000 ]; then
+	if [ $nblinks -lt $HARDLINKLIMIT ]; then
 	    nblinks=`expr $nblinks + 1`
             ln -f ${FIXEDTILESDIR}/${SEAFILE} $tilename
 	else
 	    tstamp=`date +"%s"`
 	    mv ${FIXEDTILESDIR}/${SEAFILE} ${FIXEDTILESDIR}/${tstamp}-${SEAFILE}
 	    cp ${FIXEDTILESDIR}/${tstamp}-${SEAFILE} ${FIXEDTILESDIR}/${SEAFILE}
-	    nblinks=1
+	    nblinks=2
 	    echo "limit reached, storing ${SEAFILE} as ${tstamp}-${SEAFILE}"
 	fi
 	ln -f ${FIXEDTILESDIR}/${SEAFILE} $tilename
