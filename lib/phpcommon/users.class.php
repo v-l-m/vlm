@@ -179,8 +179,11 @@ class users extends baseClass
                 if ( strlen($PIP) != 0 && $PIP != "0" ) {
                     $values = explode("@", $PIP);
                     $Coords = explode(",", $values[0]);
-                    $query .= ", targetlat=round($Coords[0],4), targetlong=round($Coords[1],4) ";
-                    if ( round($values[1]) > 0 ) {
+		    $tlat   = floatval($Coords[0]);
+		    $tlon   = floatval($Coords[1]);
+		    // FIXME sanity check
+                    $query .= ", targetlat=$tlat, targetlong=$tlon ";
+                    if ( round($values[1]) >= 0 ) {
                         $query .= ", targetandhdg=" . $values[1] ;
                         // Setup the userclass for immediate use
                         $this->targetandhdg = $values[1];
@@ -192,8 +195,8 @@ class users extends baseClass
 
                     echo $query;
                     // Setup the userclass for immediate use
-                    $this->targetlat = round($Coords[0],4);
-                    $this->targetlong = round($Coords[1],4);
+                    $this->targetlat  = $tlat;
+                    $this->targetlong = $tlon;
                 }
                 break;
         }
