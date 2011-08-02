@@ -1035,8 +1035,13 @@ class fullUsers
       $udt . ");"   ;
 
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
-  	$this->users->logUserEvent("Boat crossed WP " . $this->nwp . " in race : " . $this->users->engaged );
+    if ($validity == 1) {
+      $this->users->logUserEvent("Boat crossed WP " . $this->nwp . " in race : " . $this->users->engaged );
+    } else {
+      $this->users->logUserEvent("Invalid WP crossing " . $this->nwp . " in race : " . $this->users->engaged );
+    }
   }
+
   // clear prior invalid waypoint crossing, if any
   function clearInvalidWaypointCrossing() 
   {
@@ -1044,6 +1049,7 @@ class fullUsers
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp;
     wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysql_error." ".$query);
+    $this->users->logUserEvent("Cleared invalid WP crossing " . $this->nwp . " in race : " . $this->users->engaged );
   }
 
   // clear prior valid waypoint crossing, if any
