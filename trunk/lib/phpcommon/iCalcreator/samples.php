@@ -1,7 +1,7 @@
 <?php
 /**
- * iCalcreator class v2.6
- * copyright (c) 2007-2008 Kjell-Inge Gustafsson, kigkonsult
+ * iCalcreator class v2.10
+ * copyright (c) 2007-2011 Kjell-Inge Gustafsson, kigkonsult
  * www.kigkonsult.se/iCalcreator/index.php
  * ical@kigkonsult.se
  *
@@ -22,9 +22,10 @@
 require_once '../iCalcreator.class.php';
 echo "Use browser function to show source!<br />\n<br />\n";
 
-$v = new vcalendar();                          // initiate new CALENDAR
+$v = new vcalendar( array( 'unique_id' => 'test.org' ));
+                                                // initiate new CALENDAR
 
-$e = new vevent();                             // initiate a new EVENT
+$e = & $v->newComponent( 'vevent' );           // initiate a new EVENT
 $e->setProperty( 'categories'
                , 'FAMILY' );                   // catagorize
 $e->setProperty( 'dtstart'
@@ -36,10 +37,9 @@ $e->setProperty( 'description'
 $e->setProperty( 'location'
                , 'Home' );                     // locate the event
 
-$v->addComponent( $e );                        // add component to calendar
-
 /* alt. production */
 // $v->returnCalendar();                       // generate and redirect output to user browser
+
 /* alt. dev. and test */
 $str = $v->createCalendar();                   // generate and get output in string, for testing?
 echo $str;
@@ -47,9 +47,9 @@ echo "<br />\n\n";
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-$v = new vcalendar();                          // initiate new CALENDAR
-$v->setConfig( 'unique_id'
-             , 'testdomain.com' );             // config with site domain
+$v = new vcalendar( array( 'unique_id' => 'test.org' ));
+                                                // initiate new CALENDAR
+
 $v->setProperty( 'X-WR-CALNAME'
                , 'Sample calendar' );          // set some X-properties, name, content.. .
 $v->setProperty( 'X-WR-CALDESC'
@@ -57,7 +57,7 @@ $v->setProperty( 'X-WR-CALDESC'
 $v->setProperty( 'X-WR-TIMEZONE'
                , 'Europe/Stockholm' );
 
-$e = new vevent();                             // initiate EVENT
+$e = & $v->newComponent( 'vevent' );           // initiate a new EVENT
 $e->setProperty( 'categories'
                , 'FAMILY' );                   // catagorize
 $e->setProperty( 'dtstart'
@@ -69,17 +69,13 @@ $e->setProperty( 'description'
 $e->setProperty( 'location'
                , 'Home' );                     // locate the event
 
-$a = new valarm();                             // initiate ALARM
+$a = & $e->newComponent( 'valarm' );           // initiate ALARM
 $a->setProperty( 'action'
                , 'DISPLAY' );                  // set what to do
 $a->setProperty( 'description'
                , 'Buy X-mas gifts' );          // describe alarm
 $a->setProperty( 'trigger'
                , array( 'week' => 1 ));        // set trigger one week before
-
-$e->setComponent( $a );                        // add alarm component to event component as subcomponent
-
-$v->setComponent( $e );                        // add event component to calendar
 
 /* alt. production */
 // $v->returnCalendar();                          // generate and redirect output to user browser
@@ -90,15 +86,14 @@ echo "<br />\n\n";
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*                                                define timezone           */
-$v = new vcalendar();                          // initiate new CALENDAR
-
-$t = new vtimezone();                          // initiate TIMEZONE
+$v = new vcalendar( array( 'unique_id' => 'test.org' ));
+$t = & $v->newComponent( 'vtimezone' );
 $t->setProperty( 'tzid'
                , 'US-Eastern');
 $t->setProperty( 'last-modified'
                , 1987, 1, 1 );
 
-$ts = new vtimezone( 'standard' );
+$ts = & $t->newComponent( 'standard' );        // initiate timezone standard
 $ts->setProperty( 'dtstart'
                 , 1997, 10, 26, 2 );
 $rdate1 = array ( 'year' => 1997, 'month' => 10, 'day' => 26, 'hour' => 02, 'min' => 0, 'sec' => 0 );
@@ -110,9 +105,8 @@ $ts->setProperty( 'tzoffsetto'
                 , '-0500' );
 $ts->setProperty( 'tzname'
                 , 'EST' );
-$t->setComponent( $ts );
 
-$td = new vtimezone( 'daylight' );
+$td = & $t->newComponent( 'daylight' );        // initiate timezone daylight
 $td->setProperty( 'dtstart'
                 , 1997, 10, 26, 2 );
 $rdate1 = array ( 'year' => 1997, 'month' => 4, 'day' => 6, 'hour' => 02, 'min' => 0, 'sec' => 0 );
@@ -124,14 +118,11 @@ $td->setProperty( 'tzoffsetto'
                 , '-0400' );
 $td->setProperty( 'tzname'
                 , 'EDT' );
-$t->setComponent( $td );
 
-$v->setComponent( $t );
-
-/* alt. production 
+/* alt. production
 $v->returnCalendar();                          // generate and redirect output to user browser
 */
-/* alt. dev. and test */ 
+/* alt. dev. and test */
 $str = $v->createCalendar();                   // generate and get output in string, for testing?
 echo $str;
 echo "<br />\n\n";
@@ -156,8 +147,8 @@ echo "<br />\n\n";
  *   CATEGORIES:BUSINESS,HUMAN RESOURCES
  *   END:VEVENT
  */
-$c = new vcalendar ();
-$e = new vevent();
+$c = new vcalendar( array( 'unique_id' => 'test.org' ));
+$e = & $c->newComponent( 'vevent' );
 $e->setProperty( 'dtstart'
                , '19970901T163000Z' );
 $e->setProperty( 'dtend'
@@ -170,7 +161,6 @@ $e->setProperty( 'categories'
                , 'BUSINESS' );
 $e->setProperty( 'categories'
                , 'HUMAN RESOURCES' );
-$c->setComponent( $e );
 
 $str = $c->createCalendar();
 echo $str;
@@ -192,8 +182,8 @@ echo "<br />\n\n";
  *   END:VEVENT
  */
 
-$c = new vcalendar ();
-$e = new vevent();
+$c = new vcalendar( array( 'unique_id' => 'test.org' ));
+$e = & $c->newComponent( 'vevent' );
 $e->setProperty( 'dtstart'
                , '19970401T163000Z' );
 $e->setProperty( 'dtend'
@@ -208,7 +198,6 @@ $e->setProperty( 'categories'
                , 'HUMAN RESOURCES' );
 $e->setProperty( 'transp'
                , 'TRANSPARENT' );
-$c->setComponent( $e );
 $str = $c->createCalendar();
 echo $str;
 echo "<br />\n\n";
@@ -229,8 +218,8 @@ echo "<br />\n\n";
  *   END:VEVENT
  */
 
-$c = new vcalendar ();
-$e = new vevent();
+$c = new vcalendar( array( 'unique_id' => 'test.org' ));
+$e = & $c->newComponent( 'vevent' );
 $e->setProperty( 'dtstart'
                , '19971102' );
 $e->setProperty( 'summary'
@@ -245,7 +234,6 @@ $e->setProperty( 'categories'
                , 'SPECIAL OCCASION' );
 $e->setProperty( 'rrule'
                , array( 'FREQ' => 'YEARLY' ));
-$c->setComponent( $e );
 
 $str = $c->createCalendar();
 echo $str;
@@ -263,8 +251,8 @@ echo "<br />\n\n";
  *   STATUS:NEEDS-ACTION
  *   END:VTODO
  */
-$c = new vcalendar ();
-$t = new vtodo();
+$c = new vcalendar( array( 'unique_id' => 'test.org' ));
+$t = & $c->newComponent( 'vtodo' );
 $t->setProperty( 'dtstart'
                , '19970415T133000 GMT' );
 $t->setProperty( 'due'
@@ -281,7 +269,6 @@ $t->setProperty( 'priority'
                , 1 );
 $t->setProperty( 'status'
                , 'NEEDS-ACTION' );
-$c->setComponent( $t );
 
 $str = $c->createCalendar();
 echo $str;
