@@ -1,8 +1,8 @@
 <?php
 /*********************************************************************************/
 /**
- * iCalcreator class v2.6
- * copyright (c) 2007-2008 Kjell-Inge Gustafsson kigkonsult
+ * iCalcreator class v2.10
+ * copyright (c) 2007-2011 Kjell-Inge Gustafsson kigkonsult
  * www.kigkonsult.se/iCalcreator/index.php
  * ical@kigkonsult.se
  *
@@ -43,18 +43,26 @@ if ($pos   !== false) {
   define( 'ICAL_LANG', $langstr );
 }
 */
-            /* only for phpversion 5.x, date management, default timezone setting */
-if( substr( phpversion(), 0, 1) >= '5' ) // && ( 'UTC' == date_default_timezone_get() )) {
+/*********************************************************************************/
+/*         only for phpversion 5.1 and later,                                    */
+/*         date management, default timezone setting                             */
+/*         since 2.6.36 - 2010-12-31 */
+if( substr( phpversion(), 0, 3) >= '5.1' )
+  // && ( 'UTC' == date_default_timezone_get()))
   date_default_timezone_set( 'Europe/Stockholm' );
-            /* version string, do NOT remove!! */
-define( 'ICALCREATOR_VERSION', 'iCalcreator 2.6' );
+/*********************************************************************************/
+/*         since 2.6.22 - 2010-09-25, do NOT remove!!                            */
+require_once ( 'iCalUtilityFunctions.class.php' );
+/*********************************************************************************/
+/*         version, do NOT remove!!                                              */
+define( 'ICALCREATOR_VERSION', 'iCalcreator 2.10' );
 /*********************************************************************************/
 /*********************************************************************************/
 /**
  * vcalendar class
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.13 - 2007-12-30
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
  */
 class vcalendar {
             //  calendar property variables
@@ -75,37 +83,43 @@ class vcalendar {
   var $delimiter;
   var $nl;
   var $format;
+  var $dtzid;
             //  component internal variables
   var $attributeDelimiter;
   var $valueInit;
             //  component xCal declaration container
   var $xcaldecl;
-/*
+/**
  * constructor for calendar object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.13 - 2007-12-30
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
+ * @param array $config
  * @return void
  */
-  function vcalendar () {
+  function vcalendar ( $config = array()) {
     $this->_makeVersion();
     $this->calscale   = null;
     $this->method     = null;
     $this->_makeUnique_id();
     $this->prodid     = null;
     $this->xprop      = array();
-/**
- *   language = <Text identifying a language, as defined in [RFC 1766]>
- */
-    if( defined( 'ICAL_LANG' ))
-      $this->setConfig( 'language', ICAL_LANG );
-    $this->setConfig( 'allowEmpty', TRUE );
-    $this->setConfig( 'nl',         "\n" );
-    $this->setConfig( 'format',     'iCal');
+    $this->language   = null;
     $this->directory  = null;
     $this->filename   = null;
     $this->url        = null;
-    $this->setConfig( 'delimiter',  DIRECTORY_SEPARATOR );
+    $this->dtzid      = null;
+/**
+ *   language = <Text identifying a language, as defined in [RFC 1766]>
+ */
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
     $this->xcaldecl   = array();
     $this->components = array();
   }
@@ -116,7 +130,7 @@ class vcalendar {
 /**
  * creates formatted output for calendar property calscale
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -134,7 +148,7 @@ class vcalendar {
 /**
  * set calendar property calscale
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @param string $value
  * @return void
@@ -150,7 +164,7 @@ class vcalendar {
 /**
  * creates formatted output for calendar property method
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.9.7 - 2006-11-20
  * @return string
  */
@@ -168,7 +182,7 @@ class vcalendar {
 /**
  * set calendar property method
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-20-23
  * @param string $value
  * @return bool
@@ -189,7 +203,7 @@ class vcalendar {
 /**
  * creates formatted output for calendar property prodid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.9.7 - 2006-11-20
  * @return string
  */
@@ -208,12 +222,12 @@ class vcalendar {
 /**
  * make default value for calendar prodid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 0.3.0 - 2006-08-10
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.8 - 2009-12-30
  * @return void
  */
   function _makeProdid() {
-    $this->prodid  = '-//'.$this->unique_id.'//NONSGML '.ICALCREATOR_VERSION.'//'.strtoupper( $this->language );
+    $this->prodid  = '-//'.$this->unique_id.'//NONSGML kigkonsult.se '.ICALCREATOR_VERSION.'//'.strtoupper( $this->language );
   }
 /**
  * Conformance: The property MUST be specified once in an iCalendar object.
@@ -224,7 +238,7 @@ class vcalendar {
 /**
  * make default unique_id for calendar prodid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.3.0 - 2006-08-10
  * @return void
  */
@@ -241,7 +255,7 @@ class vcalendar {
  * creates formatted output for calendar property version
 
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.9.7 - 2006-11-20
  * @return string
  */
@@ -260,7 +274,7 @@ class vcalendar {
 /**
  * set default calendar version
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.3.0 - 2006-08-10
  * @return void
  */
@@ -270,7 +284,7 @@ class vcalendar {
 /**
  * set calendar version
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @param string $value
  * @return void
@@ -287,22 +301,19 @@ class vcalendar {
 /**
  * creates formatted output for calendar property x-prop, iCal format only
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.11 - 2008-11-03
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @return string
  */
   function createXprop() {
     if( 'xcal' == $this->format )
       return false;
-    if( 0 >= count( $this->xprop ))
-      return;
+    if( empty( $this->xprop ) || !is_array( $this->xprop )) return FALSE;
     $output = null;
     $toolbox = new calendarComponent();
-    $toolbox->setConfig( 'language', $this->getConfig( 'language' ));
-    $toolbox->setConfig( 'nl',       $this->getConfig( 'nl' ));
-    $toolbox->_createFormat(         $this->getConfig( 'format' ));
+    $toolbox->setConfig( $this->getConfig());
     foreach( $this->xprop as $label => $xpropPart ) {
-      if( empty( $xpropPart['value'] )) {
+      if( !isset($xpropPart['value']) || ( empty( $xpropPart['value'] ) && !is_numeric( $xpropPart['value'] ))) {
         $output  .= $toolbox->_createElement( $label );
         continue;
       }
@@ -321,19 +332,18 @@ class vcalendar {
 /**
  * set calendar property x-prop
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.11 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @param string $label
  * @param string $value
  * @param array $params optional
  * @return bool
  */
   function setXprop( $label, $value, $params=FALSE ) {
-    if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
     if( empty( $label )) return FALSE;
+    if( empty( $value ) && !is_numeric( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
     $xprop           = array( 'value' => $value );
-    $toolbox         = new calendarComponent();
-    $xprop['params'] = $toolbox->_setParams( $params );
+    $xprop['params'] = iCalUtilityFunctions::_setParams( $params );
     if( !is_array( $this->xprop )) $this->xprop = array();
     $this->xprop[strtoupper( $label )] = $xprop;
     return TRUE;
@@ -342,16 +352,16 @@ class vcalendar {
 /**
  * delete calendar property value
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.5 - 2008-11-14
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param mixed $propName, bool FALSE => X-property
- * @param int @propix, optional, if specific property is wanted in case of multiply occurences
+ * @param int $propix, optional, if specific property is wanted in case of multiply occurences
  * @return bool, if successfull delete
  */
-  function deleteProperty( $propName, $propix=FALSE ) {
+  function deleteProperty( $propName=FALSE, $propix=FALSE ) {
     $propName = ( $propName ) ? strtoupper( $propName ) : 'X-PROP';
     if( !$propix )
-      $propix = ( isset( $this->propdelix[$propName] )) ? $this->propdelix[$propName] + 2 : 1;
+      $propix = ( isset( $this->propdelix[$propName] ) && ( 'X-PROP' != $propName )) ? $this->propdelix[$propName] + 2 : 1;
     $this->propdelix[$propName] = --$propix;
     $return = FALSE;
     switch( $propName ) {
@@ -370,7 +380,7 @@ class vcalendar {
       default:
         $reduced = array();
         if( $propName != 'X-PROP' ) {
-          if( !isset( $this->xprop[$propName] )) return FALSE;
+          if( !isset( $this->xprop[$propName] )) { unset( $this->propdelix[$propName] ); return FALSE; }
           foreach( $this->xprop as $k => $a ) {
             if(( $k != $propName ) && !empty( $a ))
               $reduced[$k] = $a;
@@ -386,6 +396,10 @@ class vcalendar {
           }
         }
         $this->xprop = $reduced;
+        if( empty( $this->xprop )) {
+          unset( $this->propdelix[$propName] );
+          return FALSE;
+        }
         return TRUE;
     }
     return $return;
@@ -393,10 +407,10 @@ class vcalendar {
 /**
  * get calendar property value/params
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-02
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-04-16
  * @param string $propName, optional
- * @param int @propix, optional, if specific property is wanted in case of multiply occurences
+ * @param int $propix, optional, if specific property is wanted in case of multiply occurences
  * @param bool $inclParam=FALSE
  * @return mixed
  */
@@ -408,11 +422,66 @@ class vcalendar {
       $this->propix[$propName] = --$propix;
     }
     switch( $propName ) {
+      case 'ATTENDEE':
+      case 'CATEGORIES':
+      case 'DTSTART':
+      case 'LOCATION':
+      case 'ORGANIZER':
+      case 'PRIORITY':
+      case 'RESOURCES':
+      case 'STATUS':
+      case 'SUMMARY':
+      case 'RECURRENCE-ID-UID':
+      case 'R-UID':
+      case 'UID':
+        $output = array();
+        foreach ( $this->components as $cix => $component) {
+          if( !in_array( $component->objName, array('vevent', 'vtodo', 'vjournal', 'vfreebusy' )))
+            continue;
+          if(( 'ATTENDEE' == $propName ) || ( 'CATEGORIES' == $propName ) || ( 'RESOURCES' == $propName )) {
+            $component->_getProperties( $propName, $output );
+            continue;
+          }
+          elseif(( 3 < strlen( $propName )) && ( 'UID' == substr( $propName, -3 ))) {
+            if( FALSE !== ( $content = $component->getProperty( 'RECURRENCE-ID' )))
+              $content = $component->getProperty( 'UID' );
+          }
+          elseif( FALSE === ( $content = $component->getProperty( $propName )))
+            continue;
+          if( FALSE === $content )
+            continue;
+          elseif( is_array( $content )) {
+            if( isset( $content['year'] )) {
+              $key  = sprintf( '%04d%02d%02d', $content['year'], $content['month'], $content['day'] );
+              if( !isset( $output[$key] ))
+                $output[$key] = 1;
+              else
+                $output[$key] += 1;
+            }
+            else {
+              foreach( $content as $partValue => $partCount ) {
+                if( !isset( $output[$partValue] ))
+                  $output[$partValue] = $partCount;
+                else
+                  $output[$partValue] += $partCount;
+              }
+            }
+          } // end elseif( is_array( $content )) {
+          elseif( !isset( $output[$content] ))
+            $output[$content] = 1;
+          else
+            $output[$content] += 1;
+        } // end foreach ( $this->components as $cix => $component)
+        if( !empty( $output ))
+          ksort( $output );
+        return $output;
+        break;
+
       case 'CALSCALE':
-        return ( !empty( $this->calscale )) ? $this->calscale : null;
+        return ( !empty( $this->calscale )) ? $this->calscale : FALSE;
         break;
       case 'METHOD':
-        return ( !empty( $this->method )) ? $this->method : null;
+        return ( !empty( $this->method )) ? $this->method : FALSE;
         break;
       case 'PRODID':
         if( empty( $this->prodid ))
@@ -420,7 +489,7 @@ class vcalendar {
         return $this->prodid;
         break;
       case 'VERSION':
-        return ( !empty( $this->version )) ? $this->version : null;
+        return ( !empty( $this->version )) ? $this->version : FALSE;
         break;
       default:
         if( $propName != 'X-PROP' ) {
@@ -438,6 +507,7 @@ class vcalendar {
             else
               $xpropno++;
           }
+          unset( $this->propix[$propName] );
           return FALSE; // not found ??
         }
     }
@@ -446,7 +516,7 @@ class vcalendar {
 /**
  * general vcalendar property setting
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.2.13 - 2007-11-04
  * @param mixed $args variable number of function arguments,
  *                    first argument is ALWAYS component name,
@@ -477,12 +547,30 @@ class vcalendar {
 /**
  * get vcalendar config values or * calendar components
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-10-23
- * @param string $config
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
+ * @param mixed $config
  * @return value
  */
-  function getConfig( $config ) {
+  function getConfig( $config = FALSE ) {
+    if( !$config ) {
+      $return = array();
+      $return['ALLOWEMPTY']  = $this->getConfig( 'ALLOWEMPTY' );
+      $return['DELIMITER']   = $this->getConfig( 'DELIMITER' );
+      $return['DIRECTORY']   = $this->getConfig( 'DIRECTORY' );
+      $return['FILENAME']    = $this->getConfig( 'FILENAME' );
+      $return['DIRFILE']     = $this->getConfig( 'DIRFILE' );
+      $return['FILESIZE']    = $this->getConfig( 'FILESIZE' );
+      $return['FORMAT']      = $this->getConfig( 'FORMAT' );
+      if( FALSE !== ( $lang  = $this->getConfig( 'LANGUAGE' )))
+        $return['LANGUAGE']  = $lang;
+      $return['NEWLINECHAR'] = $this->getConfig( 'NEWLINECHAR' );
+      $return['UNIQUE_ID']   = $this->getConfig( 'UNIQUE_ID' );
+      if( FALSE !== ( $url   = $this->getConfig( 'URL' )))
+        $return['URL']       = $url;
+      $return['TZID']        = $this->getConfig( 'TZID' );
+      return $return;
+    }
     switch( strtoupper( $config )) {
       case 'ALLOWEMPTY':
         return $this->allowEmpty;
@@ -492,13 +580,11 @@ class vcalendar {
         $info = array();
         foreach( $this->components as $cix => $component ) {
           if( empty( $component )) continue;
-          unset( $component->propix );
           $info[$cix]['ordno'] = $cix + 1;
           $info[$cix]['type']  = $component->objName;
           $info[$cix]['uid']   = $component->getProperty( 'uid' );
           $info[$cix]['props'] = $component->getConfig( 'propinfo' );
           $info[$cix]['sub']   = $component->getConfig( 'compsinfo' );
-          unset( $component->propix );
         }
         return $info;
         break;
@@ -531,14 +617,14 @@ class vcalendar {
         $size    = 0;
         if( empty( $this->url )) {
           $dirfile = $this->getConfig( 'dirfile' );
-          if( FALSE === ( $size = filesize( $dirfile )))
+          if( !is_file( $dirfile ) || ( FALSE === ( $size = filesize( $dirfile ))))
             $size = 0;
           clearstatcache();
         }
         return $size;
         break;
       case 'FORMAT':
-        return $this->format;
+        return ( $this->format == 'xcal' ) ? 'xCal' : 'iCal';
         break;
       case 'LANGUAGE':
          /* get language for calendar component as defined in [RFC 1766] */
@@ -547,6 +633,9 @@ class vcalendar {
       case 'NL':
       case 'NEWLINECHAR':
         return $this->nl;
+        break;
+      case 'TZID':
+        return $this->dtzid;
         break;
       case 'UNIQUE_ID':
         return $this->unique_id;
@@ -562,13 +651,20 @@ class vcalendar {
 /**
  * general vcalendar config setting
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-24
- * @param string $config
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
+ * @param mixed  $config
  * @param string $value
  * @return void
  */
-  function setConfig( $config, $value ) {
+  function setConfig( $config, $value = FALSE) {
+    if( is_array( $config )) {
+      foreach( $config as $cKey => $cValue ) {
+        if( FALSE === $this->setConfig( $cKey, $cValue ))
+          return FALSE;
+      }
+      return TRUE;
+    }
     $res = FALSE;
     switch( strtoupper( $config )) {
       case 'ALLOWEMPTY':
@@ -582,9 +678,9 @@ class vcalendar {
         break;
       case 'DIRECTORY':
         $value   = trim( $value );
-        $nl      = $this->getConfig('delimiter');
-        if( $nl == substr( $value, ( 0 - strlen( $nl ))))
-          $value = substr( $value, 0, ( strlen( $value ) - strlen( $nl )));
+        $del     = $this->getConfig('delimiter');
+        if( $del == substr( $value, ( 0 - strlen( $del ))))
+          $value = substr( $value, 0, ( strlen( $value ) - strlen( $del )));
         if( is_dir( $value )) {
             /* local directory */
           clearstatcache();
@@ -598,13 +694,13 @@ class vcalendar {
       case 'FILENAME':
         $value   = trim( $value );
         if( !empty( $this->url )) {
-            /* remote directory+file - URL */
+            /* remote directory+file -> URL */
           $this->filename = $value;
           return TRUE;
         }
         $dirfile = $this->getConfig( 'directory' ).$this->getConfig( 'delimiter' ).$value;
         if( file_exists( $dirfile )) {
-            /* local existing file */
+            /* local file exists */
           if( is_readable( $dirfile ) || is_writable( $dirfile )) {
             clearstatcache();
             $this->filename = $value;
@@ -613,8 +709,8 @@ class vcalendar {
           else
             return FALSE;
         }
-        elseif( FALSE !== touch( $dirfile )) {
-            /* new local file created */
+        elseif( is_readable($this->getConfig( 'directory' ) ) || is_writable( $this->getConfig( 'directory' ) )) {
+            /* read- or writable directory */
           $this->filename = $value;
           return TRUE;
         }
@@ -622,8 +718,8 @@ class vcalendar {
           return FALSE;
         break;
       case 'FORMAT':
-        $value   = trim( $value );
-        if( 'xcal' == strtolower( $value )) {
+        $value   = trim( strtolower( $value ));
+        if( 'xcal' == $value ) {
           $this->format             = 'xcal';
           $this->attributeDelimiter = $this->nl;
           $this->valueInit          = null;
@@ -649,6 +745,11 @@ class vcalendar {
         $subcfg  = array( 'NL' => $value );
         $res = TRUE;
         break;
+      case 'TZID':
+        $this->dtzid = $value;
+        $subcfg  = array( 'TZID' => $value );
+        $res = TRUE;
+        break;
       case 'UNIQUE_ID':
         $value   = trim( $value );
         $this->unique_id = $value;
@@ -666,12 +767,14 @@ class vcalendar {
         $parts     = pathinfo( $value );
         return $this->setConfig( 'filename',  $parts['basename'] );
         break;
+      default:  // any unvalid config key.. .
+        return TRUE;
     }
     if( !$res ) return FALSE;
     if( isset( $subcfg ) && !empty( $this->components )) {
       foreach( $subcfg as $cfgkey => $cfgvalue ) {
         foreach( $this->components as $cix => $component ) {
-          $res = $component->setConfig( $cfgkey, $cfgvalue );
+          $res = $component->setConfig( $cfgkey, $cfgvalue, TRUE );
           if( !$res )
             break 2;
           $this->components[$cix] = $component->copy(); // PHP4 compliant
@@ -686,7 +789,7 @@ class vcalendar {
  *
  * alias to setComponent
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 1.x.x - 2007-04-24
  * @param object $component calendar component
  * @return void
@@ -697,8 +800,8 @@ class vcalendar {
 /**
  * delete calendar component from container
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-08-05
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param mixed $arg1 ordno / component type / component uid
  * @param mixed $arg2 optional, ordno if arg1 = component type
  * @return void
@@ -716,7 +819,6 @@ class vcalendar {
     $cix1dC = 0;
     foreach ( $this->components as $cix => $component) {
       if( empty( $component )) continue;
-      unset( $component->propix );
       if(( 'INDEX' == $argType ) && ( $index == $cix )) {
         unset( $this->components[$cix] );
         return TRUE;
@@ -738,66 +840,170 @@ class vcalendar {
 /**
  * get calendar component from container
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-08-06
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.1 - 2011-04-16
  * @param mixed $arg1 optional, ordno/component type/ component uid
  * @param mixed $arg2 optional, ordno if arg1 = component type
  * @return object
  */
   function getComponent( $arg1=FALSE, $arg2=FALSE ) {
     $index = $argType = null;
-    if ( !$arg1 ) {
+    if ( !$arg1 ) { // first or next in component chain
       $argType = 'INDEX';
-      $index   = $this->compix['INDEX'] =
-        ( isset( $this->compix['INDEX'] )) ? $this->compix['INDEX'] + 1 : 1;
+      $index   = $this->compix['INDEX'] = ( isset( $this->compix['INDEX'] )) ? $this->compix['INDEX'] + 1 : 1;
     }
-    elseif ( ctype_digit( (string) $arg1 )) {
+    elseif ( ctype_digit( (string) $arg1 )) { // specific component in chain
       $argType = 'INDEX';
       $index   = (int) $arg1;
       unset( $this->compix );
     }
-    elseif(( strlen( $arg1 ) <= strlen( 'vfreebusy' )) && ( FALSE === strpos( $arg1, '@' ))) {
+    elseif( is_array( $arg1 )) { // array( *[propertyName => propertyValue] )
+      $arg2  = implode( '-', array_keys( $arg1 ));
+      $index = $this->compix[$arg2] = ( isset( $this->compix[$arg2] )) ? $this->compix[$arg2] + 1 : 1;
+      $dateProps  = array( 'DTSTART', 'DTEND', 'DUE', 'CREATED', 'COMPLETED', 'DTSTAMP', 'LAST-MODIFIED', 'RECURRENCE-ID' );
+      $otherProps = array( 'ATTENDEE', 'CATEGORIES', 'LOCATION', 'ORGANIZER', 'PRIORITY', 'RESOURCES', 'STATUS', 'SUMMARY', 'UID' );
+    }
+    elseif(( strlen( $arg1 ) <= strlen( 'vfreebusy' )) && ( FALSE === strpos( $arg1, '@' ))) { // object class name
       unset( $this->compix['INDEX'] );
       $argType = strtolower( $arg1 );
       if( !$arg2 )
-        $index = $this->compix[$argType] =
-        ( isset( $this->compix[$argType] )) ? $this->compix[$argType] + 1 : 1;
-      else
+        $index = $this->compix[$argType] = ( isset( $this->compix[$argType] )) ? $this->compix[$argType] + 1 : 1;
+      elseif( isset( $arg2 ) && ctype_digit( (string) $arg2 ))
         $index = (int) $arg2;
     }
-    $index  -= 1;
-    $ckeys =  array_keys( $this->components );
+    elseif(( strlen( $arg1 ) > strlen( 'vfreebusy' )) && ( FALSE !== strpos( $arg1, '@' ))) { // UID as 1st argument
+      if( !$arg2 )
+        $index = $this->compix[$arg1] = ( isset( $this->compix[$arg1] )) ? $this->compix[$arg1] + 1 : 1;
+      elseif( isset( $arg2 ) && ctype_digit( (string) $arg2 ))
+        $index = (int) $arg2;
+    }
+    if( isset( $index ))
+      $index  -= 1;
+    $ckeys = array_keys( $this->components );
     if( !empty( $index) && ( $index > end(  $ckeys )))
       return FALSE;
     $cix1gC = 0;
     foreach ( $this->components as $cix => $component) {
       if( empty( $component )) continue;
-      unset( $component->propix );
       if(( 'INDEX' == $argType ) && ( $index == $cix ))
         return $component->copy();
       elseif( $argType == $component->objName ) {
-         if( $index == $cix1gC )
-           return $component->copy();
-         $cix1gC++;
+        if( $index == $cix1gC )
+          return $component->copy();
+        $cix1gC++;
       }
-      elseif( !$argType && ($arg1 == $component->getProperty( 'uid' ))) {
-        unset( $component->propix );
-        return $component->copy();
+      elseif( is_array( $arg1 )) { // array( *[propertyName => propertyValue] )
+        $hit = FALSE;
+        foreach( $arg1 as $pName => $pValue ) {
+          $pName = strtoupper( $pName );
+          if( !in_array( $pName, $dateProps ) && !in_array( $pName, $otherProps ))
+            continue;
+          if(( 'ATTENDEE' == $pName ) || ( 'CATEGORIES' == $pName ) || ( 'RESOURCES' == $pName )) { // multiple ocurrence may occur
+            $propValues = array();
+            $component->_getProperties( $pName, $propValues );
+            $propValues = array_keys( $propValues );
+            $hit = ( in_array( $pValue, $propValues )) ? TRUE : FALSE;
+            continue;
+          } // end   if(( 'CATEGORIES' == $propName ) || ( 'RESOURCES' == $propName )) { // multiple ocurrence may occur
+          if( FALSE === ( $value = $component->getProperty( $pName ))) { // single ocurrency
+            $hit = FALSE; // missing property
+            continue;
+          }
+          if( 'SUMMARY' == $pName ) { // exists within (any case)
+            $hit = ( FALSE !== stripos( $d, $pValue )) ? TRUE : FALSE;
+            continue;
+          }
+          if( in_array( strtoupper( $pName ), $dateProps )) {
+            $valuedate = sprintf( '%04d%02d%02d', $value['year'], $value['month'], $value['day'] );
+            if( 8 < strlen( $pValue )) {
+              if( isset( $value['hour'] )) {
+                if( 'T' == substr( $pValue, 8, 1 ))
+                  $pValue = str_replace( 'T', '', $pValue );
+                $valuedate .= sprintf( '%02d%02d%02d', $value['hour'], $value['min'], $value['sec'] );
+              }
+              else
+                $pValue = substr( $pValue, 0, 8 );
+            }
+            $hit = ( $pValue == $valuedate ) ? TRUE : FALSE;
+            continue;
+          }
+          elseif( !is_array( $value ))
+            $value = array( $value );
+          foreach( $value as $part ) {
+            $part = ( FALSE !== strpos( $part, ',' )) ? explode( ',', $part ) : array( $part );
+            foreach( $part as $subPart ) {
+              if( $pValue == $subPart ) {
+                $hit = TRUE;
+                continue 2;
+              }
+            }
+          }
+          $hit = FALSE; // no hit in property
+        } // end  foreach( $arg1 as $pName => $pValue )
+        if( $hit ) {
+          if( $index == $cix1gC )
+            return $component->copy();
+          $cix1gC++;
+        }
+      } // end elseif( is_array( $arg1 )) { // array( *[propertyName => propertyValue] )
+      elseif( !$argType && ($arg1 == $component->getProperty( 'uid' ))) { // UID
+        if( $index == $cix1gC )
+          return $component->copy();
+        $cix1gC++;
       }
-    }
+    } // end foreach ( $this->components.. .
             /* not found.. . */
     unset( $this->compix );
     return FALSE;
   }
 /**
- * select components from calendar on date basis
+ * create new calendar component, already included within calendar
+ *
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.33 - 2011-01-03
+ * @param string $compType component type
+ * @return object (reference)
+ */
+  function & newComponent( $compType ) {
+    $config = $this->getConfig();
+    $keys   = array_keys( $this->components );
+    $ix     = end( $keys) + 1;
+    switch( strtoupper( $compType )) {
+      case 'EVENT':
+      case 'VEVENT':
+        $this->components[$ix] = new vevent( $config );
+        break;
+      case 'TODO':
+      case 'VTODO':
+        $this->components[$ix] = new vtodo( $config );
+        break;
+      case 'JOURNAL':
+      case 'VJOURNAL':
+        $this->components[$ix] = new vjournal( $config );
+        break;
+      case 'FREEBUSY':
+      case 'VFREEBUSY':
+        $this->components[$ix] = new vfreebusy( $config );
+        break;
+      case 'TIMEZONE':
+      case 'VTIMEZONE':
+        array_unshift( $this->components, new vtimezone( $config ));
+        $ix = 0;
+        break;
+      default:
+        return FALSE;
+    }
+    return $this->components[$ix];
+  }
+/**
+ * select components from calendar on date or selectOption basis
  *
  * Ensure DTSTART is set for every component.
  * No date controls occurs.
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-18
- * @param int $startY optional,  start Year, default current Year
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.7 - 2011-06-04
+ * @param mixed $startY optional, start Year, default current Year ALT. array selecOptions
  * @param int $startM optional,  start Month, default current Month
  * @param int $startD optional,  start Day, default current Day
  * @param int $endY optional,    end Year, default $startY
@@ -810,12 +1016,14 @@ class vcalendar {
  *                               FALSE - only components that starts within period
  * @param bool $split optional,  TRUE (default) - one component copy every day it take place during the
  *                                       period (implies flat=FALSE)
- *                               FALSE - one occurance of component only in output array</tr>
+ *                               FALSE - one occurance of component only in output array
  * @return array or FALSE
  */
   function selectComponents( $startY=FALSE, $startM=FALSE, $startD=FALSE, $endY=FALSE, $endM=FALSE, $endD=FALSE, $cType=FALSE, $flat=FALSE, $any=TRUE, $split=TRUE ) {
             /* check  if empty calendar */
     if( 0 >= count( $this->components )) return FALSE;
+    if( is_array( $startY ))
+      return $this->selectComponents2( $startY );
             /* check default dates */
     if( !$startY ) $startY = date( 'Y' );
     if( !$startM ) $startM = date( 'm' );
@@ -825,6 +1033,7 @@ class vcalendar {
     if( !$endM )   $endM   = $startM;
     if( !$endD )   $endD   = $startD;
     $endDate   = mktime( 23, 59, 59, $endM, $endD, $endY );
+//echo 'selectComp arg='.date( 'Y-m-d H:i:s', $startDate).' -- '.date( 'Y-m-d H:i:s', $endDate)."<br />\n"; $tcnt = 0;// test ###
             /* check component types */
     $validTypes = array('vevent', 'vtodo', 'vjournal', 'vfreebusy' );
     if( is_array( $cType )) {
@@ -846,18 +1055,22 @@ class vcalendar {
       $cType = $validTypes;
     if( 0 >= count( $cType ))
       $cType = $validTypes;
+    if(( TRUE === $flat ) && ( TRUE === $split )) // invalid combination
+      $split = FALSE;
             /* iterate components */
     $result = array();
     foreach ( $this->components as $cix => $component ) {
       if( empty( $component )) continue;
-      unset( $component->propix, $start );
+      unset( $start );
             /* deselect unvalid type components */
       if( !in_array( $component->objName, $cType )) continue;
-            /* deselect components without dtstart set */
-      if( FALSE === ( $start = $component->getProperty( 'dtstart' ))) continue;
+      $start = $component->getProperty( 'dtstart' );
+            /* select due when dtstart is missing */
+      if( empty( $start ) && ( $component->objName == 'vtodo' ) && ( FALSE === ( $start = $component->getProperty( 'due' ))))
+        continue;
       $dtendExist = $dueExist = $durationExist = $endAllDayEvent = FALSE;
-      unset( $end, $startWdate, $endWdate, $rdurWsecs, $rdur, $exdatelist, $workstart, $workend ); // clean up
-      $startWdate = $component->_date2timestamp( $start );
+      unset( $end, $startWdate, $endWdate, $rdurWsecs, $rdur, $exdatelist, $workstart, $workend, $endDateFormat ); // clean up
+      $startWdate = iCalUtilityFunctions::_date2timestamp( $start );
       $startDateFormat = ( isset( $start['hour'] )) ? 'Y-m-d H:i:s' : 'Y-m-d';
             /* get end date from dtend/due/duration properties */
       $end = $component->getProperty( 'dtend' );
@@ -865,14 +1078,12 @@ class vcalendar {
         $dtendExist = TRUE;
         $endDateFormat = ( isset( $end['hour'] )) ? 'Y-m-d H:i:s' : 'Y-m-d';
       }
-   // if( !empty($end))  echo 'selectComp 1 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
-      if( empty($end) && ( $component->objName == 'vtodo' )) {
+      if( empty( $end ) && ( $component->objName == 'vtodo' )) {
         $end = $component->getProperty( 'due' );
         if( !empty( $end )) {
           $dueExist = TRUE;
           $endDateFormat = ( isset( $end['hour'] )) ? 'Y-m-d H:i:s' : 'Y-m-d';
         }
-   // if( !empty($end))  echo 'selectComp 2 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
       }
       if( !empty( $end ) && !isset( $end['hour'] )) {
           /* a DTEND without time part regards an event that ends the day before,
@@ -884,34 +1095,34 @@ class vcalendar {
         $end['day']   = date( 'd', $endWdate );
         $end['hour']  = 23;
         $end['min']   = $end['sec'] = 59;
-   // if( !empty($end))  echo 'selectComp 3 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
       }
       if( empty( $end )) {
         $end = $component->getProperty( 'duration', FALSE, FALSE, TRUE );// in dtend (array) format
         if( !empty( $end ))
           $durationExist = TRUE;
-   // if( !empty($end))  echo 'selectComp 4 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
+          $endDateFormat = ( isset( $start['hour'] )) ? 'Y-m-d H:i:s' : 'Y-m-d';
+// if( !empty($end))  echo 'selectComp 4 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
       }
       if( empty( $end )) { // assume one day duration if missing end date
         $end = array( 'year' => $start['year'], 'month' => $start['month'], 'day' => $start['day'], 'hour' => 23, 'min' => 59, 'sec' => 59 );
-   // if( isset($end))  echo 'selectComp 5 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
       }
-      $endWdate = $component->_date2timestamp( $end );
+// if( isset($end))  echo 'selectComp 5 start='.implode('-',$start).' end='.implode('-',$end)."<br />\n"; // test ###
+      $endWdate = iCalUtilityFunctions::_date2timestamp( $end );
       if( $endWdate < $startWdate ) { // MUST be after start date!!
         $end = array( 'year' => $start['year'], 'month' => $start['month'], 'day' => $start['day'], 'hour' => 23, 'min' => 59, 'sec' => 59 );
-        $endWdate = $component->_date2timestamp( $end );
+        $endWdate = iCalUtilityFunctions::_date2timestamp( $end );
       }
       $rdurWsecs  = $endWdate - $startWdate; // compute component duration in seconds
-      $rdur       = $component->_date2duration( $start, $end ); // compute component duration, array
             /* make a list of optional exclude dates for component occurence from exrule and exdate */
       $exdatelist = array();
-      $workstart  = $component->_timestamp2date(( $startDate - $rdurWsecs ), 6);
-      $workend    = $component->_timestamp2date(( $endDate + $rdurWsecs ), 6);
+      $workstart  = iCalUtilityFunctions::_timestamp2date(( $startDate - $rdurWsecs ), 6);
+      $workend    = iCalUtilityFunctions::_timestamp2date(( $endDate + $rdurWsecs ), 6);
       while( FALSE !== ( $exrule = $component->getProperty( 'exrule' )))    // check exrule
-        $component->_recur2date( $exdatelist, $exrule, $start, $workstart, $workend );
+        iCalUtilityFunctions::_recur2date( $exdatelist, $exrule, $start, $workstart, $workend );
       while( FALSE !== ( $exdate = $component->getProperty( 'exdate' ))) {  // check exdate
         foreach( $exdate as $theExdate ) {
-          $exWdate = $component->_date2timestamp( $theExdate );
+          $exWdate = iCalUtilityFunctions::_date2timestamp( $theExdate );
+          $exWdate = mktime( 0, 0, 0, date( 'm', $exWdate ), date( 'd', $exWdate ), date( 'Y', $exWdate ) ); // on a day-basis !!!
           if((( $startDate - $rdurWsecs ) <= $exWdate ) && ( $endDate >= $exWdate ))
             $exdatelist[$exWdate] = TRUE;
         }
@@ -921,427 +1132,517 @@ class vcalendar {
             /* make a list of optional repeating dates for component occurence, rrule, rdate */
         $recurlist = array();
         while( FALSE !== ( $rrule = $component->getProperty( 'rrule' )))    // check rrule
-          $component->_recur2date( $recurlist, $rrule, $start, $workstart, $workend );
+          iCalUtilityFunctions::_recur2date( $recurlist, $rrule, $start, $workstart, $workend );
         foreach( $recurlist as $recurkey => $recurvalue ) // key=match date as timestamp
           $recurlist[$recurkey] = $rdurWsecs; // add duration in seconds
         while( FALSE !== ( $rdate = $component->getProperty( 'rdate' ))) {  // check rdate
           foreach( $rdate as $theRdate ) {
             if( is_array( $theRdate ) && ( 2 == count( $theRdate )) &&  // all days within PERIOD
                    array_key_exists( '0', $theRdate ) &&  array_key_exists( '1', $theRdate )) {
-              $rstart = $component->_date2timestamp( $theRdate[0] );
+              $rstart = iCalUtilityFunctions::_date2timestamp( $theRdate[0] );
               if(( $rstart < ( $startDate - $rdurWsecs )) || ( $rstart > $endDate ))
                 continue;
               if( isset( $theRdate[1]['year'] )) // date-date period
-                $rend = $component->_date2timestamp( $theRdate[1] );
+                $rend = iCalUtilityFunctions::_date2timestamp( $theRdate[1] );
               else {                             // date-duration period
-                $rend = $component->duration2date( $theRdate[0], $theRdate[1] );
-                $rend = $component->_date2timestamp( $rend );
+                $rend = iCalUtilityFunctions::_duration2date( $theRdate[0], $theRdate[1] );
+                $rend = iCalUtilityFunctions::_date2timestamp( $rend );
               }
-              if((( $startDate - $rdurWsecs ) <= $rstart ) && ( $endDate >= $rstart ))
-                $recurlist[$rstart] = ( $rstart - $rend ); // set start date + rdate duration in seconds
+              while( $rstart < $rend ) {
+                $recurlist[$rstart] = $rdurWsecs; // set start date for recurrence instance + rdate duration in seconds
+                $rstart = mktime( date( 'H', $rstart ), date( 'i', $rstart ), date( 's', $rstart ), date( 'm', $rstart ), date( 'd', $rstart ) + 1, date( 'Y', $rstart ) ); // step one day
+              }
             } // PERIOD end
             else { // single date
-              $theRdate = $component->_date2timestamp( $theRdate );
+              $theRdate = iCalUtilityFunctions::_date2timestamp( $theRdate );
               if((( $startDate - $rdurWsecs ) <= $theRdate ) && ( $endDate >= $theRdate ))
-                $recurlist[$theRdate] = $rdurWsecs; // set start date + event duration in seconds
+                $recurlist[$theRdate] = $rdurWsecs; // set start date for recurrence instance + event duration in seconds
             }
           }
         }
         if( 0 < count( $recurlist )) {
           ksort( $recurlist );
+          $xRecurrence = 1;
           foreach( $recurlist as $recurkey => $durvalue ) {
+// echo "recurKey=".date( 'Y-m-d H:i:s', $recurkey ).' dur='.iCalUtilityFunctions::offsetSec2His( $durvalue )."<br />\n"; // test ###;
             if((( $startDate - $rdurWsecs ) > $recurkey ) || ( $endDate < $recurkey )) // not within period
               continue;
-            if( isset( $exdatelist[$recurkey] )) // check excluded dates
+            $checkDate = mktime( 0, 0, 0, date( 'm', $recurkey ), date( 'd', $recurkey ), date( 'Y', $recurkey ) ); // on a day-basis !!!
+            if( isset( $exdatelist[$checkDate] )) // check excluded dates
               continue;
             if( $startWdate >= $recurkey ) // exclude component start date
               continue;
             $component2   = $component->copy();
-            $rstart       = $component2->_timestamp2date( $recurkey, 6);
-            $datevalue    = $rstart['month'].'/'.$rstart['day'].'/'.$rstart['year'];
-            if( isset( $start['hour'] ) || isset( $start['min'] ) || isset( $start['sec'] )) {
-              $datevalue .= ( isset( $rstart['hour'] )) ? ' '.$rstart['hour'] : ' 00';
-              $datevalue .= ( isset( $rstart['min'] ))  ? ':'.$rstart['min']  : ':00';
-              $datevalue .= ( isset( $rstart['sec'] ))  ? ':'.$rstart['sec']  : ':00';
-            }
-            $datestring = date( $startDateFormat, strtotime( $datevalue ));
-            if( isset( $start['tz'] ))
-              $datestring .= ' '.$start['tz'];
-            $component2->setProperty( 'X-CURRENT-DTSTART', $datestring );
-            $rend   = $component2->_timestamp2date(( $recurkey + $durvalue ), 6);
-            if( $dtendExist || $dueExist ) {
-              if( $endAllDayEvent ) {
-                $rend2 = mktime( 0, 0, 0, $rend['month'], ($rend['day'] + 1), $rend['year'] );
-                $datevalue  = date( 'm', $rend2 ).'/'.date( 'd', $rend2 ).'/'.date( 'Y', $rend2 );
-              }
-              else {
-                $datevalue  = $rend['month'].'/'.$rend['day'].'/'.$rend['year'];
-                if( isset( $end['hour'] ) || isset( $end['min'] ) || isset( $end['sec'] )) {
-                  $datevalue .= ( isset( $rend['hour'] )) ? ' '.$rend['hour'] : ' 00';
-                  $datevalue .= ( isset( $rend['min'] ))  ? ':'.$rend['min']  : ':00';
-                  $datevalue .= ( isset( $rend['sec'] ))  ? ':'.$rend['sec']  : ':00';
-                }
-              }
-              $datestring = date( $endDateFormat, strtotime( $datevalue ));
-              if( isset( $end['tz'] ))
-                $datestring .= ' '.$end['tz'];
-              if( $dtendExist )
-                $component2->setProperty( 'X-CURRENT-DTEND', $datestring );
-              elseif( $dueExist )
-                $component2->setProperty( 'X-CURRENT-DUE', $datestring );
-            }
-            $rend   = $component2->_date2timestamp( $rend );
             $rstart = $recurkey;
-            /* add repeating components within valid dates to output array, only start date */
-            if( $flat )
-              $result[] = $component2->copy(); // copy to output
+            $rend   = $recurkey + $durvalue;
+           /* add repeating components within valid dates to output array, only start date set */
+            if( $flat ) {
+              $datestring = date( $startDateFormat, $recurkey );
+              if( isset( $start['tz'] ))
+                $datestring .= ' '.$start['tz'];
+// echo "X-CURRENT-DTSTART 0 =$datestring tcnt =".++$tcnt."<br />";$component2->setProperty( 'X-CNT', $tcnt ); // test ###
+              $component2->setProperty( 'X-CURRENT-DTSTART', $datestring );
+              if( $dtendExist || $dueExist || $durationExist ) {
+                $datestring = date( $endDateFormat, $recurkey + $durvalue );   // fixa korrekt sluttid
+                if( isset( $end['tz'] ))
+                  $datestring .= ' '.$end['tz'];
+                $propName = ( !$dueExist ) ? 'X-CURRENT-DTEND' : 'X-CURRENT-DUE';
+                $component2->setProperty( $propName, $datestring );
+              } // end if( $dtendExist || $dueExist || $durationExist )
+              $component2->setProperty( 'X-RECURRENCE', ++$xRecurrence );
+              $result[$component2->getProperty( 'UID' )] = $component2->copy(); // copy to output
+            }
+           /* add repeating components within valid dates to output array, one each day */
             elseif( $split ) {
               if( $rend > $endDate )
                 $rend = $endDate;
-              while( $rstart <= $rend ) { // iterate
+              $startYMD = date( 'Ymd', $rstart );
+              $endYMD   = date( 'Ymd', $rend );
+// echo "splitStart=".date( 'Y-m-d H:i:s', $rstart ).' end='.date( 'Y-m-d H:i:s', $rend )."<br />\n"; // test ###;
+              while( $rstart <= $rend ) { // iterate.. .
+                $checkDate = mktime( 0, 0, 0, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ) ); // on a day-basis !!!
+                if( isset( $exdatelist[$checkDate] ))  // exclude any recurrence START date, found in exdatelist
+                  break;
+// echo "checking date after startdate=".date( 'Y-m-d H:i:s', $rstart ).' mot '.date( 'Y-m-d H:i:s', $startDate )."<br />"; // test ###;
+                if( $rstart >= $startDate ) {    // date after dtstart
+                  if( date( 'Ymd', $rstart ) > $startYMD ) // date after dtstart
+                    $datestring = date( $startDateFormat, $checkDate );
+                  else
+                    $datestring = date( $startDateFormat, $rstart );
+                  if( isset( $start['tz'] ))
+                    $datestring .= ' '.$start['tz'];
+//echo "X-CURRENT-DTSTART 1 = $datestring xRecurrence=$xRecurrence tcnt =".++$tcnt."<br />";$component2->setProperty( 'X-CNT', $tcnt ); // test ###
+                  $component2->setProperty( 'X-CURRENT-DTSTART', $datestring );
+                  if( $dtendExist || $dueExist || $durationExist ) {
+                    if( date( 'Ymd', $rstart ) < $endYMD ) // not the last day
+                      $tend = mktime( 23, 59, 59, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ));
+                    else
+                      $tend = mktime( date( 'H', $endWdate ), date( 'i', $endWdate ), date( 's', $endWdate ), date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ) ); // on a day-basis !!!
+                    $datestring = date( $endDateFormat, $tend );
+                    if( isset( $end['tz'] ))
+                      $datestring .= ' '.$end['tz'];
+                    $propName = ( !$dueExist ) ? 'X-CURRENT-DTEND' : 'X-CURRENT-DUE';
+                    $component2->setProperty( $propName, $datestring );
+                  } // end if( $dtendExist || $dueExist || $durationExist )
+                  $component2->setProperty( 'X-RECURRENCE', $xRecurrence );
+                  $wd = getdate( $rstart );
+                  $result[$wd['year']][$wd['mon']][$wd['mday']][$component2->getProperty( 'UID' )] = $component2->copy(); // copy to output
+                } // end if( $checkDate > $startYMD ) {    // date after dtstart
+                $rstart = mktime( date( 'H', $rstart ), date( 'i', $rstart ), date( 's', $rstart ), date( 'm', $rstart ), date( 'd', $rstart ) + 1, date( 'Y', $rstart ) ); // step one day
+              } // end while( $rstart <= $rend )
+              $xRecurrence += 1;
+            } // end elseif( $split )
+            elseif( $rstart >= $startDate ) {     // date within period   //* flat=FALSE && split=FALSE *//
+              $checkDate = mktime( 0, 0, 0, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ) ); // on a day-basis !!!
+              if( !isset( $exdatelist[$checkDate] )) { // exclude any recurrence START date, found in exdatelist
+                $xRecurrence += 1;
+                $datestring = date( $startDateFormat, $rstart );
+                if( isset( $start['tz'] ))
+                  $datestring .= ' '.$start['tz'];
+//echo "X-CURRENT-DTSTART 2 = $datestring xRecurrence=$xRecurrence tcnt =".++$tcnt."<br />";$component2->setProperty( 'X-CNT', $tcnt ); // test ###
+                $component2->setProperty( 'X-CURRENT-DTSTART', $datestring );
+                if( $dtendExist || $dueExist || $durationExist ) {
+                  $rstart += $rdurWsecs;
+                  if( date( 'Ymd', $rstart ) < date( 'Ymd', $endWdate ))
+                    $tend = mktime( 23, 59, 59, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ));
+                  else
+                    $tend = mktime( date( 'H', $endWdate ), date( 'i', $endWdate ), date( 's', $endWdate ), date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ) ); // on a day-basis !!!
+                  $datestring = date( $endDateFormat, $tend );
+                  if( isset( $end['tz'] ))
+                    $datestring .= ' '.$end['tz'];
+                  $propName = ( !$dueExist ) ? 'X-CURRENT-DTEND' : 'X-CURRENT-DUE';
+                  $component2->setProperty( $propName, $datestring );
+                } // end if( $dtendExist || $dueExist || $durationExist )
+                $component2->setProperty( 'X-RECURRENCE', $xRecurrence );
                 $wd = getdate( $rstart );
-                if(( $rstart > $startDate ) &&      // date after dtstart
-                    !isset( $exdatelist[$rstart] )) // check exclude date
-                  $result[$wd['year']][$wd['mon']][$wd['mday']][] = $component2->copy(); // copy to output
-                $rstart += ( 24*60*60 ); // step one day
-              }
-            }
-            elseif(( $rstart >= $startDate ) &&     // date within period
-                  !isset( $exdatelist[$rstart] )) { // check exclude date
-              $wd = getdate( $rstart );
-              $result[$wd['year']][$wd['mon']][$wd['mday']][] = $component2->copy(); // copy to output
-            }
-          }
-        }
+                $result[$wd['year']][$wd['mon']][$wd['mday']][$component2->getProperty( 'UID' )] = $component2->copy(); // copy to output
+              } // end if( !isset( $exdatelist[$checkDate] ))
+            } // end elseif( $rstart >= $startDate )
+          } // end foreach( $recurlist as $recurkey => $durvalue )
+        } // end if( 0 < count( $recurlist ))
             /* deselect components with startdate/enddate not within period */
-        if(( $endWdate < $startDate ) || ( $startWdate > $endDate )) continue;
-      }
+        if(( $endWdate < $startDate ) || ( $startWdate > $endDate ))
+          continue;
+      } // end if( TRUE === $any )
             /* deselect components with startdate not within period */
-      elseif(( $startWdate < $startDate ) || ( $startWdate > $endDate )) continue;
-            /* add selected components within valid dates to output array */
+      elseif(( $startWdate < $startDate ) || ( $startWdate > $endDate ))
+        continue;
+            /* add the selected component (WITHIN valid dates) to output array */
       if( $flat )
-        $result[] = $component->copy(); // copy to output;
-      elseif( $split ) {
+        $result[$component->getProperty( 'UID' )] = $component->copy(); // copy to output;
+      elseif( $split ) { // split the original component
         if( $endWdate > $endDate )
           $endWdate = $endDate;     // use period end date
-        if( !isset( $exdatelist[$startWdate] ))  { // check excluded dates
-          if( $startWdate < $startDate )
-            $startWdate = $startDate; // use period start date
-          while( $startWdate <= $endWdate ) { // iterate
-            $wd = getdate( $startWdate );
-            $result[$wd['year']][$wd['mon']][$wd['mday']][] = $component->copy(); // copy to output
-            $startWdate += ( 24*60*60 ); // step one day
-          }
+        $rstart = $startWdate;
+        if( $rstart < $startDate )
+          $rstart = $startDate; // use period start date
+        $checkDate = mktime( 0, 0, 0, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ) ); // on a day-basis !!!
+        if( !isset( $exdatelist[$checkDate] )) { // exclude any recurrence START date, found in exdatelist
+          foreach( array( 'X-CURRENT-DTSTART','X-CURRENT-DTEND','X-CURRENT-DUE','X-RECURRENCE' ) as $propName )
+            $component->deleteProperty( $propName ); // remove any x-props, if set
+          while( $rstart <= $endWdate ) { // iterate
+            if( $rstart > $startWdate ) { // if NOT startdate, set X-properties
+              $datestring = date( $startDateFormat, mktime( 0, 0, 0, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart )));
+              if( isset( $start['tz'] ))
+                $datestring .= ' '.$start['tz'];
+// echo "X-CURRENT-DTSTART 3 = $datestring xRecurrence=$xRecurrence tcnt =".++$tcnt."<br />";$component->setProperty( 'X-CNT', $tcnt ); // test ###
+              $component->setProperty( 'X-CURRENT-DTSTART', $datestring );
+              if( $dtendExist || $dueExist || $durationExist ) {
+                if( date( 'Ymd', $rstart ) < date( 'Ymd', $endWdate ))
+                  $tend = mktime( 0, 0, 0, date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ));
+                else
+                  $tend = mktime( date( 'H', $endWdate ), date( 'i', $endWdate ), date( 's', $endWdate ), date( 'm', $rstart ), date( 'd', $rstart ), date( 'Y', $rstart ) ); // on a day-basis !!!
+                $datestring = date( $endDateFormat, $tend );
+                if( isset( $end['tz'] ))
+                  $datestring .= ' '.$end['tz'];
+                $propName = ( !$dueExist ) ? 'X-CURRENT-DTEND' : 'X-CURRENT-DUE';
+                $component->setProperty( $propName, $datestring );
+              } // end if( $dtendExist || $dueExist || $durationExist )
+            } // end if( $rstart > $startWdate )
+            $wd = getdate( $rstart );
+            $result[$wd['year']][$wd['mon']][$wd['mday']][$component->getProperty( 'UID' )] = $component->copy(); // copy to output
+            $rstart = mktime( date( 'H', $rstart ), date( 'i', $rstart ), date( 's', $rstart ), date( 'm', $rstart ), date( 'd', $rstart ) + 1, date( 'Y', $rstart ) ); // step one day
+          } // end while( $rstart <= $endWdate )
+        } // end if( !isset( $exdatelist[$checkDate] ))
+      } // end if( $split )   -  else use component date
+      elseif( $startWdate >= $startDate ) {          // within period
+        $checkDate = mktime( 0, 0, 0, date( 'm', $startWdate ), date( 'd', $startWdate ), date( 'Y', $startWdate ) ); // on a day-basis !!!
+        if( !isset( $exdatelist[$checkDate] )) { // exclude any recurrence START date, found in exdatelist
+          foreach( array( 'X-CURRENT-DTSTART','X-CURRENT-DTEND','X-CURRENT-DUE','X-RECURRENCE' ) as $propName )
+            $component->deleteProperty( $propName ); // remove any x-props, if set
+          $wd = getdate( $startWdate );
+          $result[$wd['year']][$wd['mon']][$wd['mday']][$component->getProperty( 'UID' )] = $component->copy(); // copy to output
         }
-      } // use component date
-      elseif( !isset( $exdatelist[$startWdate] ) &&   // check excluded dates
-            ( $startWdate >= $startDate )) {          // within period
-        $wd = getdate( $startWdate );
-        $result[$wd['year']][$wd['mon']][$wd['mday']][] = $component->copy(); // copy to output
       }
-    }
+    } // end foreach ( $this->components as $cix => $component )
     if( 0 >= count( $result )) return FALSE;
     elseif( !$flat ) {
       foreach( $result as $y => $yeararr ) {
         foreach( $yeararr as $m => $montharr ) {
+          foreach( $montharr as $d => $dayarr )
+            $result[$y][$m][$d] = array_values( $dayarr ); // skip tricky UID-index
           ksort( $result[$y][$m] );
         }
         ksort( $result[$y] );
       }
       ksort( $result );
-    }
+    } // end elseif( !$flat )
     return $result;
+  }
+/**
+ * select components from calendar on based on Categories, Location, Resources and/or Summary
+ *
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-05-03
+ * @param array $selectOptions, (string) key => (mixed) value, (key=propertyName)
+ * @return array
+ */
+  function selectComponents2( $selectOptions ) {
+    $output = array();
+    $allowedProperties = array( 'ATTENDEE', 'CATEGORIES', 'LOCATION', 'ORGANIZER', 'RESOURCES', 'PRIORITY', 'STATUS', 'SUMMARY', 'UID' );
+    foreach( $this->components as $cix => $component3 ) {
+      if( !in_array( $component3->objName, array('vevent', 'vtodo', 'vjournal', 'vfreebusy' )))
+        continue;
+      $uid = $component3->getProperty( 'UID' );
+      foreach( $selectOptions as $propName => $pvalue ) {
+        $propName = strtoupper( $propName );
+        if( !in_array( $propName, $allowedProperties ))
+          continue;
+        if( !is_array( $pvalue ))
+          $pvalue = array( $pvalue );
+        if(( 'UID' == $propName ) && in_array( $uid, $pvalue )) {
+          $output[] = $component3->copy();
+          continue;
+        }
+        elseif(( 'ATTENDEE' == $propName ) || ( 'CATEGORIES' == $propName ) || ( 'RESOURCES' == $propName )) {
+          $propValues = array();
+          $component3->_getProperties( $propName, $propValues );
+          $propValues = array_keys( $propValues );
+          foreach( $pvalue as $theValue ) {
+            if( in_array( $theValue, $propValues ) && !isset( $output[$uid] )) {
+              $output[$uid] = $component3->copy();
+              break;
+            }
+          }
+          continue;
+        } // end   elseif(( 'ATTENDEE' == $propName ) || ( 'CATEGORIES' == $propName ) || ( 'RESOURCES' == $propName ))
+        elseif( FALSE === ( $d = $component3->getProperty( $propName ))) // single ocurrence
+          continue;
+        if( is_array( $d )) {
+          foreach( $d as $part ) {
+            if( in_array( $part, $pvalue ) && !isset( $output[$uid] ))
+              $output[$uid] = $component3->copy();
+          }
+        }
+        elseif(( 'SUMMARY' == $propName ) && !isset( $output[$uid] )) {
+          foreach( $pvalue as $pval ) {
+            if( FALSE !== stripos( $d, $pval )) {
+              $output[$uid] = $component3->copy();
+              break;
+            }
+          }
+        }
+        elseif( in_array( $d, $pvalue ) && !isset( $output[$uid] ))
+          $output[$uid] = $component3->copy();
+      } // end foreach( $selectOptions as $propName => $pvalue ) {
+    } // end foreach( $this->components as $cix => $component3 ) {
+    if( !empty( $output )) {
+      ksort( $output );
+      $output = array_values( $output );
+    }
+    return $output;
   }
 /**
  * add calendar component to container
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-08-06
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param object $component calendar component
  * @param mixed $arg1 optional, ordno/component type/ component uid
  * @param mixed $arg2 optional, ordno if arg1 = component type
  * @return void
  */
   function setComponent( $component, $arg1=FALSE, $arg2=FALSE  ) {
-    if( '' >= $component->getConfig( 'language'))
-      $component->setConfig( 'language',  $this->getConfig( 'language' ));
-    $component->setConfig( 'allowEmpty',  $this->getConfig( 'allowEmpty' ));
-    $component->setConfig( 'nl',          $this->getConfig( 'nl' ));
-    $component->setConfig( 'unique_id',   $this->getConfig( 'unique_id' ));
-    $component->setConfig( 'format',      $this->getConfig( 'format' ));
+    $component->setConfig( $this->getConfig(), FALSE, TRUE );
     if( !in_array( $component->objName, array( 'valarm', 'vtimezone' ))) {
-      unset( $component->propix );
             /* make sure dtstamp and uid is set */
       $dummy1 = $component->getProperty( 'dtstamp' );
       $dummy2 = $component->getProperty( 'uid' );
     }
-    if( !$arg1 ) {
+    if( !$arg1 ) { // plain insert, last in chain
       $this->components[] = $component->copy();
       return TRUE;
     }
     $argType = $index = null;
-    if ( ctype_digit( (string) $arg1 )) {
+    if ( ctype_digit( (string) $arg1 )) { // index insert/replace
       $argType = 'INDEX';
       $index   = (int) $arg1 - 1;
     }
-    elseif(( strlen( $arg1 ) <= strlen( 'vfreebusy' )) && ( FALSE === strpos( $arg1, '@' ))) {
+    elseif( in_array( strtolower( $arg1 ), array( 'vevent', 'vtodo', 'vjournal', 'vfreebusy', 'valarm', 'vtimezone' ))) {
       $argType = strtolower( $arg1 );
       $index = ( ctype_digit( (string) $arg2 )) ? ((int) $arg2) - 1 : 0;
     }
+    // else if arg1 is set, arg1 must be an UID
     $cix1sC = 0;
     foreach ( $this->components as $cix => $component2) {
       if( empty( $component2 )) continue;
-      unset( $component2->propix );
-      if(( 'INDEX' == $argType ) && ( $index == $cix )) {
+      if(( 'INDEX' == $argType ) && ( $index == $cix )) { // index insert/replace
         $this->components[$cix] = $component->copy();
         return TRUE;
       }
-      elseif( $argType == $component2->objName ) {
+      elseif( $argType == $component2->objName ) { // component Type index insert/replace
         if( $index == $cix1sC ) {
           $this->components[$cix] = $component->copy();
           return TRUE;
         }
         $cix1sC++;
       }
-      elseif( !$argType && ( $arg1 == $component2->getProperty( 'uid' ))) {
+      elseif( !$argType && ( $arg1 == $component2->getProperty( 'uid' ))) { // UID insert/replace
         $this->components[$cix] = $component->copy();
         return TRUE;
       }
     }
-            /* not found.. . insert last in chain anyway .. .*/
-    $this->components[] = $component->copy();
+            /* arg1=index and not found.. . insert at index .. .*/
+    if( 'INDEX' == $argType ) {
+      $this->components[$index] = $component->copy();
+      ksort( $this->components, SORT_NUMERIC );
+    }
+    else    /* not found.. . insert last in chain anyway .. .*/
+      $this->components[] = $component->copy();
     return TRUE;
   }
 /**
- * sort iCal compoments, only local date sort
+ * sort iCal compoments
  *
  * ascending sort on properties (if exist) x-current-dtstart, dtstart,
  * x-current-dtend, dtend, x-current-due, due, duration, created, dtstamp, uid
+ * if no arguments, otherwise sorting on argument CATEGORIES, LOCATION, SUMMARY or RESOURCES
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-09-24
- * @return sort param
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.4 - 2011-06-02
+ * @param string $sortArg, optional
+ * @return void
  *
  */
-  function sort() {
+  function sort( $sortArg=FALSE ) {
     if( is_array( $this->components )) {
-      $this->_sortkeys = array( 'year', 'month', 'day', 'hour', 'min', 'sec' );
+      if( $sortArg ) {
+        $sortArg = strtoupper( $sortArg );
+        if( !in_array( $sortArg, array( 'ATTENDEE', 'CATEGORIES', 'DTSTAMP', 'LOCATION', 'ORGANIZER', 'RESOURCES', 'PRIORITY', 'STATUS', 'SUMMARY' )))
+          $sortArg = FALSE;
+      }
+            /* set sort parameters for each component */
+      foreach( $this->components as $cix => & $c ) {
+        $c->srtk = array( '0', '0', '0', '0' );
+        if( 'vtimezone' == $c->objName ) {
+          if( FALSE === ( $c->srtk[0] = $c->getProperty( 'tzid' )))
+            $c->srtk[0] = 0;
+          continue;
+        }
+        elseif( $sortArg ) {
+          if(( 'ATTENDEE' == $sortArg ) || ( 'CATEGORIES' == $sortArg ) || ( 'RESOURCES'  == $sortArg )) {
+            $propValues = array();
+            $c->_getProperties( $sortArg, $propValues );
+            $c->srtk[0] = reset( array_keys( $propValues ));
+          }
+          elseif( FALSE !== ( $d = $c->getProperty( $sortArg )))
+            $c->srtk[0] = $d;
+          continue;
+        }
+        if( FALSE !== ( $d = $c->getProperty( 'X-CURRENT-DTSTART' )))
+          $c->srtk[0] = iCalUtilityFunctions::_date_time_string( $d[1] );
+        elseif( FALSE === ( $c->srtk[0] = $c->getProperty( 'dtstart' )))
+          $c->srtk[1] = 0;                                                  // sortkey 0 : dtstart
+        if( FALSE !== ( $d = $c->getProperty( 'X-CURRENT-DTEND' )))
+          $c->srtk[1] = iCalUtilityFunctions::_date_time_string( $d[1] );   // sortkey 1 : dtend/due(/dtstart+duration)
+        elseif( FALSE === ( $c->srtk[1] = $c->getProperty( 'dtend' ))) {
+          if( FALSE !== ( $d = $c->getProperty( 'X-CURRENT-DUE' )))
+            $c->srtk[1] = iCalUtilityFunctions::_date_time_string( $d[1] );
+          elseif( FALSE === ( $c->srtk[1] = $c->getProperty( 'due' )))
+            if( FALSE === ( $c->srtk[1] = $c->getProperty( 'duration', FALSE, FALSE, TRUE )))
+              $c->srtk[1] = 0;
+        }
+        if( FALSE === ( $c->srtk[2] = $c->getProperty( 'created' )))      // sortkey 2 : created/dtstamp
+          if( FALSE === ( $c->srtk[2] = $c->getProperty( 'dtstamp' )))
+            $c->srtk[2] = 0;
+        if( FALSE === ( $c->srtk[3] = $c->getProperty( 'uid' )))          // sortkey 3 : uid
+          $c->srtk[3] = 0;
+      } // end foreach( $this->components as & $c
+            /* sort */
       usort( $this->components, array( $this, '_cmpfcn' ));
     }
   }
   function _cmpfcn( $a, $b ) {
-    if( empty( $a ))                                   return -1;
-    if( empty( $b ))                                   return  1;
-    if(  'vtimezone' == $a->objName)                   return -1;
-    if(  'vtimezone' == $b->objName)                   return  1;
-    $astart = ( isset( $a->xprop['X-CURRENT-DTSTART']['value'] )) ? $a->_date_time_string( $a->xprop['X-CURRENT-DTSTART']['value'] ) : null;
-    if( empty( $astart ) && isset( $a->dtstart['value'] ))
-      $astart = & $a->dtstart['value'];
-    $bstart = ( isset( $b->xprop['X-CURRENT-DTSTART']['value'] )) ? $b->_date_time_string( $b->xprop['X-CURRENT-DTSTART']['value'] ) : null;
-    if( empty( $bstart ) && isset( $b->dtstart['value'] ))
-      $bstart = & $b->dtstart['value'];
-    if(     empty( $astart ))                          return -1;
-    elseif( empty( $bstart ))                          return  1;
-    foreach( $this->_sortkeys as $key ) {
-      if    ( empty( $astart[$key] ))                  return -1;
-      elseif( empty( $bstart[$key] ))                  return  1;
-      if    (        $astart[$key] == $bstart[$key])   continue;
-      if    (( (int) $astart[$key] ) < ((int) $bstart[$key] ))
-                                                       return -1;
-      elseif(( (int) $astart[$key] ) > ((int) $bstart[$key] ))
-                                                       return  1;
+    if(        empty( $a ))                       return -1;
+    if(        empty( $b ))                       return  1;
+    if( 'vtimezone' == $a->objName ) {
+      if( 'vtimezone' != $b->objName )            return -1;
+      elseif( $a->srtk[0] <= $b->srtk[0] )        return -1;
+      else                                        return  1;
     }
-    $c   = ( isset( $a->xprop['X-CURRENT-DTEND']['value'] )) ? $a->_date_time_string( $a->xprop['X-CURRENT-DTEND']['value'] ) : null;
-    if(     empty( $c ) && !empty( $a->dtend['value'] ))
-      $c = & $a->dtend['value'];
-    if(     empty( $c ) && isset( $a->xprop['X-CURRENT-DUE']['value'] ))
-      $c = $a->_date_time_string( $a->xprop['X-CURRENT-DUE']['value'] );
-    if(     empty( $c ) && !empty( $a->due['value'] ))
-      $c = & $a->due['value'];
-    if(     empty( $c ) && !empty( $a->duration['value'] ))
-      $c = $a->duration2date();
-    $d   = ( isset( $b->xprop['X-CURRENT-DTEND']['value'] )) ? $b->_date_time_string( $b->xprop['X-CURRENT-DTEND']['value'] ) : null;
-    if(     empty( $d ) && !empty( $b->dtend['value'] ))
-      $d = & $b->dtend['value'];
-    if(     empty( $d ) && isset( $b->xprop['X-CURRENT-DUE']['value'] ))
-      $d = $b->_date_time_string( $b->xprop['X-CURRENT-DUE']['value'] );
-    if(     empty( $d ) && !empty( $b->due['value'] ))
-      $d = & $b->due['value'];
-    if(     empty( $d ) && !empty( $b->duration['value'] ))
-      $d = $b->duration2date();
-    if(     empty( $c ))                               return -1;
-    elseif( empty( $d ))                               return  1;
-    foreach( $this->_sortkeys as $key ) {
-      if    ( !isset( $c[$key] ))                      return -1;
-      elseif( !isset( $d[$key] ))                      return  1;
-      if    (         $c[$key] == $d[$key] )           continue;
-      if    ((  (int) $c[$key] ) < ((int) $d[$key]))   return -1;
-      elseif((  (int) $c[$key] ) > ((int) $d[$key]))   return  1;
+    elseif( 'vtimezone' == $b->objName )          return  1;
+    $sortkeys = array( 'year', 'month', 'day', 'hour', 'min', 'sec' );
+    for( $k = 0; $k < 4 ; $k++ ) {
+      if(        empty( $a->srtk[$k] ))           return -1;
+      elseif(    empty( $b->srtk[$k] ))           return  1;
+      if( is_array( $a->srtk[$k] )) {
+        if( is_array( $b->srtk[$k] )) {
+          foreach( $sortkeys as $key ) {
+            if    (  empty( $a->srtk[$k][$key] )) return -1;
+            elseif(  empty( $b->srtk[$k][$key] )) return  1;
+            if    (         $a->srtk[$k][$key] == $b->srtk[$k][$key])
+                                                  continue;
+            if    ((  (int) $a->srtk[$k][$key] ) < ((int) $b->srtk[$k][$key] ))
+                                                  return -1;
+            elseif((  (int) $a->srtk[$k][$key] ) > ((int) $b->srtk[$k][$key] ))
+                                                  return  1;
+          }
+        }
+        else                                      return -1;
+      }
+      elseif( is_array( $b->srtk[$k] ))           return  1;
+      elseif( $a->srtk[$k] < $b->srtk[$k] )       return -1;
+      elseif( $a->srtk[$k] > $b->srtk[$k] )       return  1;
     }
-    if( isset( $a->created['value'] ))
-     $e = & $a->created['value'];
-    else
-     $e = & $a->dtstamp['value'];
-    if( isset( $b->created['value'] ))
-      $f = & $b->created['value'];
-    else
-      $f = & $b->dtstamp['value'];
-    foreach( $this->_sortkeys as $key ) {
-      if(       !isset( $e[$key] ))                    return -1;
-      elseif(   !isset( $f[$key] ))                    return  1;
-      if    (           $e[$key] == $f[$key] )         continue;
-      if    ((    (int) $e[$key] ) < ((int) $f[$key])) return -1;
-      elseif((    (int) $e[$key] ) > ((int) $f[$key])) return  1;
-    }
-    if    ((            $a->uid['value'] ) <
-           (            $b->uid['value'] ))            return -1;
-    elseif((            $a->uid['value'] ) >
-           (            $b->uid['value'] ))            return  1;
     return 0;
   }
 /**
- * parse iCal file into vcalendar, components, properties and parameters
+ * parse iCal text/file into vcalendar, components, properties and parameters
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-08-06
- * @param string $filename optional filname (incl. opt. directory/path) or URL
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-21
+ * @param mixed $unparsedtext, optional, strict rfc2445 formatted, single property string or array of property strings
  * @return bool FALSE if error occurs during parsing
  *
  */
-  function parse( $filename=FALSE ) {
-    if( !$filename ) {
-            /* directory/filename previous set via setConfig directory+filename / url */
+  function parse( $unparsedtext=FALSE ) {
+    $nl = $this->getConfig( 'nl' );
+    if(( FALSE === $unparsedtext ) || empty( $unparsedtext )) {
+            /* directory+filename is set previously via setConfig directory+filename or url */
       if( FALSE === ( $filename = $this->getConfig( 'url' )))
         $filename = $this->getConfig( 'dirfile' );
-    }
-    elseif(( 'http://'   == strtolower( substr( $filename, 0, 7 ))) ||
-           ( 'webcal://' == strtolower( substr( $filename, 0, 9 ))))  {
-            /* remote file - URL */
-      $this->setConfig( 'URL', $filename );
-      if( !$filename = $this->getConfig( 'url' ))
-        return FALSE;                 /* err 2 */
-    }
-    else {
-            /* local directory/filename */
-      $parts = pathinfo( $filename );
-      if( !empty( $parts['dirname'] ) && ( '.' != $parts['dirname'] )) {
-        if( !$this->setConfig( 'directory', $parts['dirname'] ))
-          return FALSE;               /* err 3 */
-      }
-      if( !$this->setConfig( 'filename', $parts['basename'] ))
-        return FALSE;                 /* err 4 */
-    }
-    if( 'http://' != substr( $filename, 0, 7 )) {
-            /* local file error tests */
-      if( !is_file( $filename ))      /* err 5 */
-        return FALSE;
-      if( !is_readable( $filename ))
-        return FALSE;                 /* err 6 */
-      if( !filesize( $filename ))
-        return FALSE;                 /* err 7 */
-      clearstatcache();
-    }
             /* READ FILE */
-    if( FALSE === ( $rows = file( $filename )))
-      return FALSE;                   /* err 1 */
+      if( FALSE === ( $rows = file_get_contents( $filename )))
+        return FALSE;                 /* err 1 */
+    }
+    elseif( is_array( $unparsedtext ))
+      $rows =  implode( '\n'.$nl, $unparsedtext );
+    else
+      $rows = & $unparsedtext;
             /* identify BEGIN:VCALENDAR, MUST be first row */
-    if( 'BEGIN:VCALENDAR' != strtoupper( trim( $rows[0] )))
+    if( 'BEGIN:VCALENDAR' != strtoupper( substr( $rows, 0, 15 )))
       return FALSE;                   /* err 8 */
-            /* remove empty trailing lines */
-    while( '' == trim( $rows[count( $rows ) - 1] )) {
-      unset( $rows[count( $rows ) - 1] );
-      $rows  = array_values( $rows );
+            /* fix line folding */
+    $eolchars = array( "\r\n", "\n\r", "\n", "\r" ); // check all line endings
+    $EOLmark = FALSE;
+    foreach( $eolchars as $eolchar ) {
+      if( !$EOLmark  && ( FALSE !== strpos( $rows, $eolchar ))) {
+        $rows = str_replace( $eolchar." ",  '',  $rows );
+        $rows = str_replace( $eolchar."\t", '',  $rows );
+        if( $eolchar != $nl )
+          $rows = str_replace( $eolchar,    $nl, $rows );
+        $EOLmark = TRUE;
+      }
     }
-            /* identify ending END:VCALENDAR row */
-    if( 'END:VCALENDAR'   != strtoupper( trim( $rows[count( $rows ) - 1] ))) {
+    $tmp = explode( $nl, $rows );
+    $rows = array();
+    foreach( $tmp as $tmpr )
+      if( !empty( $tmpr ))
+        $rows[] = $tmpr;
+            /* skip trailing empty lines */
+    $lix = count( $rows ) - 1;
+    while( empty( $rows[$lix] ) && ( 0 < $lix ))
+      $lix -= 1;
+            /* identify ending END:VCALENDAR row, MUST  be last row */
+    if( 'END:VCALENDAR'   != strtoupper( substr( $rows[$lix], 0, 13 )))
       return FALSE;                   /* err 9 */
-    }
     if( 3 > count( $rows ))
       return FALSE;                   /* err 10 */
-    $comp    = $subcomp = null;
-    $actcomp = & $this;
-    $nl      = $this->getConfig( 'nl' );
+    $comp    = & $this;
     $calsync = 0;
             /* identify components and update unparsed data within component */
+    $config = $this->getConfig();
     foreach( $rows as $line ) {
       if( '' == trim( $line ))
         continue;
-      if( $nl == substr( $line, 0 - strlen( $nl )))
-        $line = substr( $line, 0, ( strlen( $line ) - strlen( $nl ))).'\n';
-      if( 'BEGIN:VCALENDAR' == strtoupper( substr( $line, 0, 15 ))) {
+      if(     'BEGIN:VCALENDAR' == strtoupper( substr( $line, 0, 15 ))) {
         $calsync++;
         continue;
       }
-      elseif( 'END:VCALENDAR' == strtoupper( substr( $line, 0, 13 ))) {
+      elseif( 'END:VCALENDAR'   == strtoupper( substr( $line, 0, 13 ))) {
         $calsync--;
-        continue;
+        break;
       }
       elseif( 1 != $calsync )
         return FALSE;                 /* err 20 */
-      if( 'END:' == strtoupper( substr( $line, 0, 4 ))) {
-        if( null != $subcomp ) {
-          $comp->setComponent( $subcomp );
-          $subcomp = null;
-        }
-        else {
-          $this->setComponent( $comp );
-          $comp = null;
-        }
-        $actcomp = null;
+      elseif( in_array( strtoupper( substr( $line, 0, 6 )), array( 'END:VE', 'END:VF', 'END:VJ', 'END:VT' ))) {
+        $this->components[] = $comp->copy();
         continue;
-      } // end - if ( 'END:' ==.. .
-      elseif( 'BEGIN:' == strtoupper( substr( $line, 0, 6 ))) {
-        $line = str_replace( '\n', '', $line );
-        $compname = trim (strtoupper( substr( $line, 6 )));
-        if( null != $comp ) {
-          if( 'VALARM' == $compname )
-            $subcomp = new valarm();
-          elseif( 'STANDARD' == $compname )
-            $subcomp = new vtimezone( 'STANDARD' );
-          elseif( 'DAYLIGHT' == $compname )
-            $subcomp = new vtimezone( 'DAYLIGHT' );
-          else
-            return FALSE; /* err 6 */
-          $actcomp = & $subcomp;
-        }
-        else {
-          switch( $compname ) {
-            case 'VALARM':
-              $comp = new valarm();
-              break;
-            case 'VEVENT':
-              $comp = new vevent();
-              break;
-            case 'VFREEBUSY';
-              $comp = new vfreebusy();
-              break;
-            case 'VJOURNAL':
-              $comp = new vjournal();
-              break;
-            case 'VTODO':
-              $comp = new vtodo();
-              break;
-            case 'VTIMEZONE':
-              $comp = new vtimezone();
-              break;
-            default:
-              return FALSE; // err 7
-              break;
-          } // end - switch
-          $actcomp = & $comp;
-        }
-        continue;
-      } // end - elsif ( 'BEGIN:'.. .
-            /* update selected component with unparsed data */
-      $actcomp->unparsed[] = $line;
+      }
+
+      if(     'BEGIN:VEVENT'    == strtoupper( substr( $line, 0, 12 )))
+        $comp = new vevent( $config );
+      elseif( 'BEGIN:VFREEBUSY' == strtoupper( substr( $line, 0, 15 )))
+        $comp = new vfreebusy( $config );
+      elseif( 'BEGIN:VJOURNAL'  == strtoupper( substr( $line, 0, 14 )))
+        $comp = new vjournal( $config );
+      elseif( 'BEGIN:VTODO'     == strtoupper( substr( $line, 0, 11 )))
+        $comp = new vtodo( $config );
+      elseif( 'BEGIN:VTIMEZONE' == strtoupper( substr( $line, 0, 15 )))
+        $comp = new vtimezone( $config );
+      else  /* update component with unparsed data */
+        $comp->unparsed[] = $line;
     } // end - foreach( rows.. .
+    unset( $config );
             /* parse data for calendar (this) object */
-    if( is_array( $this->unparsed ) && ( 0 < count( $this->unparsed ))) {
+    if( isset( $this->unparsed ) && is_array( $this->unparsed ) && ( 0 < count( $this->unparsed ))) {
             /* concatenate property values spread over several lines */
       $lastix    = -1;
       $propnames = array( 'calscale','method','prodid','version','x-' );
       $proprows  = array();
       foreach( $this->unparsed as $line ) {
+        if( '' == trim( $line ))
+          continue;
         $newProp = FALSE;
         foreach ( $propnames as $propname ) {
           if( $propname == strtolower( substr( $line, 0, strlen( $propname )))) {
@@ -1354,27 +1655,21 @@ class vcalendar {
           $lastix++;
           $proprows[$lastix]  = $line;
         }
-        else {
-            /* remove line breaks */
-          if(( '\n' == substr( $proprows[$lastix], -2 )) &&
-             (  ' ' == substr( $line, 0, 1 ))) {
-            $proprows[$lastix] = substr( $proprows[$lastix], 0, strlen( $proprows[$lastix] ) - 2 );
-            $line = substr( $line, 1 );
-          }
-          $proprows[$lastix] .= $line;
-        }
+        else
+          $proprows[$lastix] .= '!"#¤%&/()=?'.$line;
       }
-      $toolbox = new calendarComponent();
       foreach( $proprows as $line ) {
+        $line = str_replace( '!"#¤%&/()=? ', '', $line );
+        $line = str_replace( '!"#¤%&/()=?', '', $line );
         if( '\n' == substr( $line, -2 ))
           $line = substr( $line, 0, strlen( $line ) - 2 );
-            /* get propname */
+            /* get property name */
         $cix = $propname = null;
-        for( $cix=0; $cix < strlen( $line ); $cix++ ) {
-          if( in_array( $line{$cix}, array( ':', ';' )))
+        for( $cix=0, $clen = strlen( $line ); $cix < $clen; $cix++ ) {
+          if( in_array( $line[$cix], array( ':', ';' )))
             break;
           else
-            $propname .= $line{$cix};
+            $propname .= $line[$cix];
         }
             /* ignore version/prodid properties */
         if( in_array( strtoupper( $propname ), array( 'VERSION', 'PRODID' )))
@@ -1385,8 +1680,10 @@ class vcalendar {
         $attrix = -1;
         $strlen = strlen( $line );
         for( $cix=0; $cix < $strlen; $cix++ ) {
-          if((       ':'   == $line{$cix} )             &&
+          if((       ':'   == $line[$cix] )             &&
                    ( '://' != substr( $line, $cix, 3 )) &&
+             ( !in_array( strtolower( substr( $line, $cix - 3, 4 )), array( 'fax:', 'cid:', 'sms:', 'tel:', 'urn:' ))) &&
+             ( !in_array( strtolower( substr( $line, $cix - 4, 5 )), array( 'crid:', 'news:', 'pres:' ))) &&
              ( 'mailto:'   != strtolower( substr( $line, $cix - 6, 7 )))) {
             $attrEnd = TRUE;
             if(( $cix < ( $strlen - 4 )) &&
@@ -1403,10 +1700,10 @@ class vcalendar {
               break;
             }
           }
-          if( ';' == $line{$cix} )
+          if( ';' == $line[$cix] )
             $attr[++$attrix] = null;
           else
-            $attr[$attrix] .= $line{$cix};
+            $attr[$attrix] .= $line[$cix];
         }
 
             /* make attributes in array format */
@@ -1431,22 +1728,25 @@ class vcalendar {
           }
           if( 1 < count( $content )) {
             foreach( $content as $cix => $contentPart )
-              $content[$cix] = $toolbox->_strunrep( $contentPart );
+              $content[$cix] = calendarComponent::_strunrep( $contentPart );
             $this->setProperty( $propname, $content, $propattr );
             continue;
           }
           else
             $line = reset( $content );
-          $line = $toolbox->_strunrep( $line );
+          $line = calendarComponent::_strunrep( $line );
         }
         $this->setProperty( $propname, trim( $line ), $propattr );
       } // end - foreach( $this->unparsed.. .
     } // end - if( is_array( $this->unparsed.. .
+    unset( $unparsedtext, $rows, $this->unparsed, $proprows );
             /* parse Components */
     if( is_array( $this->components ) && ( 0 < count( $this->components ))) {
-      for( $six = 0; $six < count( $this->components ); $six++ ) {
-        if( !empty( $this->components[$six] ))
-          $this->components[$six]->parse();
+      $ckeys = array_keys( $this->components );
+      foreach( $ckeys as $ckey ) {
+        if( !empty( $this->components[$ckey] ) && !empty( $this->components[$ckey]->unparsed )) {
+          $this->components[$ckey]->parse();
+        }
       }
     }
     else
@@ -1457,8 +1757,8 @@ class vcalendar {
 /**
  * creates formatted output for calendar object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-08-06
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.1 - 2011-03-12
  * @return string
  */
   function createCalendar() {
@@ -1475,10 +1775,10 @@ class vcalendar {
         $calendarStart = 'BEGIN:VCALENDAR'.$this->nl;
         break;
     }
+    $calendarStart .= $this->createVersion();
+    $calendarStart .= $this->createProdid();
     $calendarStart .= $this->createCalscale();
     $calendarStart .= $this->createMethod();
-    $calendarStart .= $this->createProdid();
-    $calendarStart .= $this->createVersion();
     switch( $this->format ) {
       case 'xcal':
         $nlstrlen = strlen( $this->nl );
@@ -1492,12 +1792,7 @@ class vcalendar {
     $calendar .= $this->createXprop();
     foreach( $this->components as $component ) {
       if( empty( $component )) continue;
-      if( '' >= $component->getConfig( 'language'))
-        $component->setConfig( 'language',  $this->getConfig( 'language' ));
-      $component->setConfig( 'allowEmpty',  $this->getConfig( 'allowEmpty' ));
-      $component->setConfig( 'nl',          $this->getConfig( 'nl' ));
-      $component->setConfig( 'unique_id',   $this->getConfig( 'unique_id' ));
-      $component->setConfig( 'format',      $this->getConfig( 'format' ));
+      $component->setConfig( $this->getConfig(), FALSE, TRUE );
       $calendar .= $component->createComponent( $this->xcaldecl );
     }
     if(( 0 < count( $this->xcaldecl )) && ( 'xcal' == $this->format )) { // xCal only
@@ -1550,16 +1845,23 @@ class vcalendar {
 /**
  * a HTTP redirect header is sent with created, updated and/or parsed calendar
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.12 - 2007-10-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.12 - 2011-07-13
+ * @param bool $utf8Encode
+ * @param bool $gzip
  * @return redirect
  */
-  function returnCalendar() {
+  function returnCalendar( $utf8Encode=FALSE, $gzip=FALSE ) {
     $filename = $this->getConfig( 'filename' );
     $output   = $this->createCalendar();
+    if( $utf8Encode )
+      $output = utf8_encode( $output );
+    if( $gzip ) {
+      $output = gzencode( $output, 9 );
+      header( 'Content-Encoding: gzip');
+      header( 'Vary: *');
+    }
     $filesize = strlen( $output );
-//    if( headers_sent( $filename, $linenum ))
-//      die( "Headers already sent in $filename on line $linenum\n" );
     if( 'xcal' == $this->format )
       header( 'Content-Type: application/calendar+xml; charset=utf-8' );
     else
@@ -1573,7 +1875,7 @@ class vcalendar {
 /**
  * save content in a file
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.2.12 - 2007-12-30
  * @param string $directory optional
  * @param string $filename optional
@@ -1603,7 +1905,7 @@ class vcalendar {
  * if recent version of calendar file exists (default one hour), an HTTP redirect header is sent
  * else FALSE is returned
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.2.12 - 2007-10-28
  * @param string $directory optional alt. int timeout
  * @param string $filename optional
@@ -1639,7 +1941,7 @@ class vcalendar {
       header( 'Content-Length: '.$filesize );
       header( 'Content-Disposition: attachment; filename="'.$filename.'"' );
       header( 'Cache-Control: max-age=10' );
-      $fp = @$fopen( $dirfile, 'r' );
+      $fp = @fopen( $dirfile, 'r' );
       if( $fp ) {
         fpassthru( $fp );
         fclose( $fp );
@@ -1655,8 +1957,8 @@ class vcalendar {
 /**
  *  abstract class for calendar components
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.19 - 2008-10-12
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
  */
 class calendarComponent {
             //  component property variables
@@ -1670,6 +1972,7 @@ class calendarComponent {
   var $unique_id;
   var $format;
   var $objName; // created automatically at instance creation
+  var $dtzid;   // default (local) timezone
             //  component internal variables
   var $componentStart1;
   var $componentStart2;
@@ -1687,8 +1990,8 @@ class calendarComponent {
 /**
  * constructor for calendar component object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.19 - 2008-10-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-17
  */
   function calendarComponent() {
     $this->objName         = ( isset( $this->timezonetype )) ?
@@ -1700,6 +2003,7 @@ class calendarComponent {
     $this->nl              = null;
     $this->unique_id       = null;
     $this->format          = null;
+    $this->dtzid           = null;
     $this->allowEmpty      = TRUE;
     $this->xcaldecl        = array();
 
@@ -1713,7 +2017,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property action
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -1727,7 +2031,7 @@ class calendarComponent {
 /**
  * set calendar component property action
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value  "AUDIO" / "DISPLAY" / "EMAIL" / "PROCEDURE"
  * @param mixed $params
@@ -1735,7 +2039,7 @@ class calendarComponent {
  */
   function setAction( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->action = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->action = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -1745,7 +2049,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property attach
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.9.7 - 2006-11-23
  * @return string
  */
@@ -1764,7 +2068,7 @@ class calendarComponent {
 /**
  * set calendar component property attach
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-06
  * @param string $value
  * @param array $params, optional
@@ -1773,7 +2077,7 @@ class calendarComponent {
  */
   function setAttach( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->_setMval( $this->attach, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->attach, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -1783,8 +2087,8 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property attendee
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-09-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.8 - 2011-05-30
  * @return string
  */
   function createAttendee() {
@@ -1796,64 +2100,70 @@ class calendarComponent {
           $output .= $this->_createElement( 'ATTENDEE' );
         continue;
       }
-      $attendee1 = $attendee2 = $attendeeLANG = $attendeeCN = null;
+      $attendee1 = $attendee2 = null;
       foreach( $attendeePart as $paramlabel => $paramvalue ) {         // start foreach 2
         if( 'value' == $paramlabel )
-          $attendee2  .= 'MAILTO:'.$paramvalue;
+          $attendee2     .= $paramvalue;
         elseif(( 'params' == $paramlabel ) && ( is_array( $paramvalue ))) { // start elseif
+        // set attenddee parameters in rfc2445 order
+          if( isset( $paramvalue['CUTYPE'] ))
+            $attendee1   .= $this->intAttrDelimiter.'CUTYPE='.$paramvalue['CUTYPE'];
+          if( isset( $paramvalue['MEMBER'] )) {
+            $attendee1   .= $this->intAttrDelimiter.'MEMBER=';
+            foreach( $paramvalue['MEMBER'] as $cix => $opv )
+              $attendee1 .= ( $cix ) ? ', "'.$opv.'"' : '"'.$opv.'"' ;
+          }
+          if( isset( $paramvalue['ROLE'] ))
+            $attendee1   .= $this->intAttrDelimiter.'ROLE='.$paramvalue['ROLE'];
+          if( isset( $paramvalue['PARTSTAT'] ))
+            $attendee1   .= $this->intAttrDelimiter.'PARTSTAT='.$paramvalue['PARTSTAT'];
+          if( isset( $paramvalue['RSVP'] ))
+            $attendee1   .= $this->intAttrDelimiter.'RSVP='.$paramvalue['RSVP'];
+          if( isset( $paramvalue['DELEGATED-TO'] )) {
+            $attendee1   .= $this->intAttrDelimiter.'DELEGATED-TO=';
+            foreach( $paramvalue['DELEGATED-TO'] as $cix => $opv )
+              $attendee1 .= ( $cix ) ? ', "'.$opv.'"' : '"'.$opv.'"' ;
+          }
+          if( isset( $paramvalue['DELEGATED-FROM'] )) {
+            $attendee1   .= $this->intAttrDelimiter.'DELEGATED-FROM=';
+            foreach( $paramvalue['DELEGATED-FROM'] as $cix => $opv )
+              $attendee1 .= ( $cix ) ? ', "'.$opv.'"' : '"'.$opv.'"' ;
+          }
+          if( isset( $paramvalue['SENT-BY'] ))
+            $attendee1   .= $this->intAttrDelimiter.'SENT-BY="'.$paramvalue['SENT-BY'].'"';
+          if( isset( $paramvalue['CN'] ))
+            $attendee1   .= $this->intAttrDelimiter.'CN="'.$paramvalue['CN'].'"';
+          if( isset( $paramvalue['DIR'] ))
+            $attendee1   .= $this->intAttrDelimiter.'DIR="'.$paramvalue['DIR'].'"';
+          if( isset( $paramvalue['LANGUAGE'] ))
+            $attendee1   .= $this->intAttrDelimiter.'LANGUAGE='.$paramvalue['LANGUAGE'];
+          $xparams = array();
           foreach( $paramvalue as $optparamlabel => $optparamvalue ) { // start foreach 3
-            $attendee11 = $attendee12 = null;
-            if( is_int( $optparamlabel )) {
-              $attendee1 .= $this->intAttrDelimiter.$optparamvalue;
+            if( ctype_digit( (string) $optparamlabel )) {
+              $xparams[]  = $optparamvalue;
               continue;
             }
-            switch( $optparamlabel ) {                                 // start switch
-              case 'CUTYPE':
-              case 'PARTSTAT':
-              case 'ROLE':
-              case 'RSVP':
-                $attendee1 .= $this->intAttrDelimiter.$optparamlabel.'="'.$optparamvalue.'"';
-                break;
-              case 'SENT-BY':
-                $attendee1 .= $this->intAttrDelimiter.'SENT-BY="MAILTO:'.$optparamvalue.'"';
-                break;
-              case 'MEMBER':
-                $attendee11 = $this->intAttrDelimiter.'MEMBER=';
-              case 'DELEGATED-TO':
-                $attendee11 = ( !$attendee11 ) ? $this->intAttrDelimiter.'DELEGATED-TO='   : $attendee11;
-              case 'DELEGATED-FROM':
-                $attendee11 = ( !$attendee11 ) ? $this->intAttrDelimiter.'DELEGATED-FROM=' : $attendee11;
-                foreach( $optparamvalue  as $cix => $calUserAddress ) {
-                  $attendee12 .= ( $cix ) ? ',' : null;
-                  $attendee12 .= '"MAILTO:'.$calUserAddress.'"';
-                }
-                $attendee1  .= $attendee11.$attendee12;
-                break;
-              case 'CN':
-                $attendeeCN .= $this->intAttrDelimiter.'CN="'.$optparamvalue.'"';
-                break;
-              case 'DIR':
-                $attendee1 .= $this->intAttrDelimiter.'DIR="'.$optparamvalue.'"';
-                break;
-              case 'LANGUAGE':
-                $attendeeLANG .= $this->intAttrDelimiter.'LANGUAGE='.$optparamvalue;
-                break;
-              default:
-                $attendee1 .= $this->intAttrDelimiter."$optparamlabel=$optparamvalue";
-                break;
-            }    // end switch
+            if( !in_array( $optparamlabel, array( 'CUTYPE', 'MEMBER', 'ROLE', 'PARTSTAT', 'RSVP', 'DELEGATED-TO', 'DELEGATED-FROM', 'SENT-BY', 'CN', 'DIR', 'LANGUAGE' )))
+              $xparams[$optparamlabel] = $optparamvalue;
+          } // end foreach 3
+          ksort( $xparams, SORT_STRING );
+          foreach( $xparams as $paramKey => $paramValue ) {
+            if( ctype_digit( (string) $paramKey ))
+              $attendee1 .= $this->intAttrDelimiter.$paramValue;
+            else
+              $attendee1 .= $this->intAttrDelimiter."$paramKey=$paramValue";
           }      // end foreach 3
-        }        // end elseif
+        }        // end elseif(( 'params' == $paramlabel ) && ( is_array( $paramvalue )))
       }          // end foreach 2
-      $output .= $this->_createElement( 'ATTENDEE', $attendee1.$attendeeLANG.$attendeeCN, $attendee2 );
+      $output .= $this->_createElement( 'ATTENDEE', $attendee1, $attendee2 );
     }              // end foreach 1
     return $output;
   }
 /**
  * set calendar component property attach
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-05
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.34 - 2010-12-18
  * @param string $value
  * @param array $params, optional
  * @param integer $index, optional
@@ -1861,8 +2171,11 @@ class calendarComponent {
  */
   function setAttendee( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $value = str_replace ( 'MAILTO:', '', $value );
-    $value = str_replace ( 'mailto:', '', $value );
+          // ftp://, http://, mailto:, file://, gopher://, news:, nntp://, telnet://, wais://, prospero://  may exist.. . also in params
+    if( FALSE !== ( $pos = strpos( substr( $value, 0, 9 ), ':' )))
+      $value = strtoupper( substr( $value, 0, $pos )).substr( $value, $pos );
+    elseif( !empty( $value ))
+      $value = 'MAILTO:'.$value;
     $params2 = array();
     if( is_array($params )) {
       $optarrays = array();
@@ -1872,31 +2185,30 @@ class calendarComponent {
           case 'MEMBER':
           case 'DELEGATED-TO':
           case 'DELEGATED-FROM':
-            if( is_array( $optparamvalue )) {
-              foreach( $optparamvalue as $part ) {
-                $part = str_replace( 'MAILTO:', '', $part );
-                $part = str_replace( 'mailto:', '', $part );
-                if(( '"' == $part{0} ) && ( '"' == $part{strlen($part)-1} ))
-                  $part = substr( $part, 1, ( strlen($part)-2 ));
-                $optarrays[$optparamlabel][] = $part;
-              }
-            }
-            else {
-              $part = str_replace( 'MAILTO:', '', $optparamvalue );
-              $part = str_replace( 'mailto:', '', $part );
-              if(( '"' == $part{0} ) && ( '"' == $part{strlen($part)-1} ))
-                $part = substr( $part, 1, ( strlen($part)-2 ));
+            if( !is_array( $optparamvalue ))
+              $optparamvalue = array( $optparamvalue );
+            foreach( $optparamvalue as $part ) {
+              $part = trim( $part );
+              if(( '"' == substr( $part, 0, 1 )) &&
+                 ( '"' == substr( $part, -1 )))
+                $part = substr( $part, 1, ( strlen( $part ) - 2 ));
+              if( 'mailto:' != strtolower( substr( $part, 0, 7 )))
+                $part = "MAILTO:$part";
+              else
+                $part = 'MAILTO:'.substr( $part, 7 );
               $optarrays[$optparamlabel][] = $part;
             }
             break;
           default:
-            if( 'SENT-BY' ==  $optparamlabel ) {
-              $optparamvalue = str_replace( 'MAILTO:', '', $optparamvalue );
-              $optparamvalue = str_replace( 'mailto:', '', $optparamvalue );
-            }
             if(( '"' == substr( $optparamvalue, 0, 1 )) &&
                ( '"' == substr( $optparamvalue, -1 )))
               $optparamvalue = substr( $optparamvalue, 1, ( strlen( $optparamvalue ) - 2 ));
+            if( 'SENT-BY' ==  $optparamlabel ) {
+              if( 'mailto:' != strtolower( substr( $optparamvalue, 0, 7 )))
+                $optparamvalue = "MAILTO:$optparamvalue";
+              else
+                $optparamvalue = 'MAILTO:'.substr( $optparamvalue, 7 );
+            }
             $params2[$optparamlabel] = $optparamvalue;
             break;
         } // end switch( $optparamlabel.. .
@@ -1905,17 +2217,17 @@ class calendarComponent {
         $params2[$optparamlabel] = $optparams;
     }
         // remove defaults
-    $this->_existRem( $params2, 'CUTYPE',   'INDIVIDUAL' );
-    $this->_existRem( $params2, 'PARTSTAT', 'NEEDS-ACTION' );
-    $this->_existRem( $params2, 'ROLE',     'REQ-PARTICIPANT' );
-    $this->_existRem( $params2, 'RSVP',     'FALSE' );
+    iCalUtilityFunctions::_existRem( $params2, 'CUTYPE',   'INDIVIDUAL' );
+    iCalUtilityFunctions::_existRem( $params2, 'PARTSTAT', 'NEEDS-ACTION' );
+    iCalUtilityFunctions::_existRem( $params2, 'ROLE',     'REQ-PARTICIPANT' );
+    iCalUtilityFunctions::_existRem( $params2, 'RSVP',     'FALSE' );
         // check language setting
     if( isset( $params2['CN' ] )) {
       $lang = $this->getConfig( 'language' );
       if( !isset( $params2['LANGUAGE' ] ) && !empty( $lang ))
         $params2['LANGUAGE' ] = $lang;
     }
-    $this->_setMval( $this->attendee, $value, $params2, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->attendee, $value, $params2, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -1925,7 +2237,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property categories
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -1953,7 +2265,7 @@ class calendarComponent {
 /**
  * set calendar component property categories
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-06
  * @param mixed $value
  * @param array $params, optional
@@ -1962,7 +2274,7 @@ class calendarComponent {
  */
   function setCategories( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->_setMval( $this->categories, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->categories, $value, $params, FALSE, $index );
     return TRUE;
  }
 /*********************************************************************************/
@@ -1972,7 +2284,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property class
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.9.7 - 2006-11-20
  * @return string
  */
@@ -1986,7 +2298,7 @@ class calendarComponent {
 /**
  * set calendar component property class
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value "PUBLIC" / "PRIVATE" / "CONFIDENTIAL" / iana-token / x-name
  * @param array $params optional
@@ -1994,7 +2306,7 @@ class calendarComponent {
  */
   function setClass( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->class = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->class = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2004,7 +2316,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property comment
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2025,7 +2337,7 @@ class calendarComponent {
 /**
  * set calendar component property comment
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-06
  * @param string $value
  * @param array $params, optional
@@ -2034,7 +2346,7 @@ class calendarComponent {
  */
   function setComment( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->_setMval( $this->comment, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->comment, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2044,7 +2356,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property completed
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2059,14 +2371,14 @@ class calendarComponent {
       if( $this->getConfig( 'allowEmpty' ))
         return $this->_createElement( 'COMPLETED' );
       else return FALSE;
-    $formatted  = $this->_format_date_time( $this->completed['value'], 7 );
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->completed['value'], 7 );
     $attributes = $this->_createParams( $this->completed['params'] );
     return $this->_createElement( 'COMPLETED', $attributes, $formatted );
   }
 /**
  * set calendar component property completed
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @param mixed $year
  * @param mixed $month optional
@@ -2080,13 +2392,13 @@ class calendarComponent {
   function setCompleted( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=FALSE ) {
     if( empty( $year )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->completed = array( 'value' => null, 'params' => $this->_setParams( $params ));
+        $this->completed = array( 'value' => null, 'params' => iCalUtilityFunctions::_setParams( $params ));
         return TRUE;
       }
       else
         return FALSE;
     }
-    $this->completed = $this->_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
+    $this->completed = iCalUtilityFunctions::_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2096,7 +2408,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property contact
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @return string
  */
@@ -2116,7 +2428,7 @@ class calendarComponent {
 /**
  * set calendar component property contact
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param string $value
  * @param array $params, optional
@@ -2125,7 +2437,7 @@ class calendarComponent {
  */
   function setContact( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->_setMval( $this->contact, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->contact, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2135,20 +2447,20 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property created
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
   function createCreated() {
     if( empty( $this->created )) return FALSE;
-    $formatted  = $this->_format_date_time( $this->created['value'], 7 );
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->created['value'], 7 );
     $attributes = $this->_createParams( $this->created['params'] );
     return $this->_createElement( 'CREATED', $attributes, $formatted );
   }
 /**
  * set calendar component property created
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @param mixed $year optional
  * @param mixed $month optional
@@ -2163,7 +2475,7 @@ class calendarComponent {
     if( !isset( $year )) {
       $year = date('Ymd\THis', mktime( date( 'H' ), date( 'i' ), date( 's' ) - date( 'Z'), date( 'm' ), date( 'd' ), date( 'Y' )));
     }
-    $this->created = $this->_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
+    $this->created = iCalUtilityFunctions::_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2173,7 +2485,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property description
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2193,8 +2505,8 @@ class calendarComponent {
 /**
  * set calendar component property description
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-05
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.24 - 2010-11-06
  * @param string $value
  * @param array $params, optional
  * @param integer $index, optional
@@ -2202,7 +2514,9 @@ class calendarComponent {
  */
   function setDescription( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) { if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE; }
-    $this->_setMval( $this->description, $value, $params, FALSE, $index );
+    if( 'vjournal' != $this->objName )
+      $index = 1;
+    iCalUtilityFunctions::_setMval( $this->description, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2212,8 +2526,8 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property dtend
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-21
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
  * @return string
  */
   function createDtend() {
@@ -2227,15 +2541,19 @@ class calendarComponent {
       if( $this->getConfig( 'allowEmpty' ))
         return $this->_createElement( 'DTEND' );
       else return FALSE;
-    $formatted  = $this->_format_date_time( $this->dtend['value'] );
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->dtend['value'] );
+    if(( FALSE !== ( $tzid = $this->getConfig( 'TZID' ))) &&
+       ( !isset( $this->dtend['params']['VALUE'] )        || ( $this->dtend['params']['VALUE'] != 'DATE' )) &&
+         !isset( $this->dtend['params']['TZID'] ))
+      $this->dtend['params']['TZID'] = $tzid;
     $attributes = $this->_createParams( $this->dtend['params'] );
     return $this->_createElement( 'DTEND', $attributes, $formatted );
   }
 /**
  * set calendar component property dtend
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
  * @param mixed $year
  * @param mixed $month optional
  * @param int $day optional
@@ -2249,13 +2567,13 @@ class calendarComponent {
   function setDtend( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=FALSE ) {
     if( empty( $year )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->dtend = array( 'value' => null, 'params' => $this->_setParams( $params ));
+        $this->dtend = array( 'value' => null, 'params' => iCalUtilityFunctions::_setParams( $params ));
         return TRUE;
       }
       else
         return FALSE;
     }
-    $this->dtend = $this->_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params );
+    $this->dtend = iCalUtilityFunctions::_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params, null, null, $this->getConfig( 'TZID' ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2265,7 +2583,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property dtstamp
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.4 - 2008-03-07
  * @return string
  */
@@ -2277,30 +2595,31 @@ class calendarComponent {
         !isset( $this->dtstamp['value']['min'] )   &&
         !isset( $this->dtstamp['value']['sec'] ))
       $this->_makeDtstamp();
-    $formatted  = $this->_format_date_time( $this->dtstamp['value'], 7 );
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->dtstamp['value'], 7 );
     $attributes = $this->_createParams( $this->dtstamp['params'] );
     return $this->_createElement( 'DTSTAMP', $attributes, $formatted );
   }
 /**
  * computes datestamp for calendar component object instance dtstamp
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 1.x.x - 2007-05-13
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.25 - 2010-11-09
  * @return void
  */
   function _makeDtstamp() {
-    $this->dtstamp['value'] = array( 'year'  => date( 'Y' )
-                                   , 'month' => date( 'm' )
-                                   , 'day'   => date( 'd' )
-                                   , 'hour'  => date( 'H' )
-                                   , 'min'   => date( 'i' )
-                                   , 'sec'   => date( 's' ) - date( 'Z' ));
+    $d = mktime( date('H'), date('m'), (date('s') - date( 'Z' )), date('m'), date('d'), date('Y'));
+    $this->dtstamp['value'] = array( 'year'  => date( 'Y', $d )
+                                   , 'month' => date( 'm', $d )
+                                   , 'day'   => date( 'd', $d )
+                                   , 'hour'  => date( 'H', $d )
+                                   , 'min'   => date( 'i', $d )
+                                   , 'sec'   => date( 's', $d ));
     $this->dtstamp['params'] = null;
   }
 /**
  * set calendar component property dtstamp
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @param mixed $year
  * @param mixed $month optional
@@ -2315,7 +2634,7 @@ class calendarComponent {
     if( empty( $year ))
       $this->_makeDtstamp();
     else
-      $this->dtstamp = $this->_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
+      $this->dtstamp = iCalUtilityFunctions::_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2325,8 +2644,8 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property dtstart
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-26
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-15
  * @return string
  */
   function createDtstart() {
@@ -2336,21 +2655,26 @@ class calendarComponent {
         !isset( $this->dtstart['value']['day'] )   &&
         !isset( $this->dtstart['value']['hour'] )  &&
         !isset( $this->dtstart['value']['min'] )   &&
-        !isset( $this->dtstart['value']['sec'] ))
-    if( $this->getConfig( 'allowEmpty' ))
-      return $this->_createElement( 'DTSTART' );
-    else return FALSE;
+        !isset( $this->dtstart['value']['sec'] )) {
+      if( $this->getConfig( 'allowEmpty' ))
+        return $this->_createElement( 'DTSTART' );
+      else return FALSE;
+    }
     if( in_array( $this->objName, array( 'vtimezone', 'standard', 'daylight' )))
       unset( $this->dtstart['value']['tz'], $this->dtstart['params']['TZID'] );
-    $formatted  = $this->_format_date_time( $this->dtstart['value'] );
+    elseif(( FALSE !== ( $tzid = $this->getConfig( 'TZID' ))) &&
+       ( !isset( $this->dtstart['params']['VALUE'] ) || ( $this->dtstart['params']['VALUE'] != 'DATE' ))  &&
+         !isset( $this->dtstart['params']['TZID'] ))
+      $this->dtstart['params']['TZID'] = $tzid;
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->dtstart['value'] );
     $attributes = $this->_createParams( $this->dtstart['params'] );
     return $this->_createElement( 'DTSTART', $attributes, $formatted );
   }
 /**
  * set calendar component property dtstart
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.22 - 2010-09-22
  * @param mixed $year
  * @param mixed $month optional
  * @param int $day optional
@@ -2364,13 +2688,13 @@ class calendarComponent {
   function setDtstart( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=FALSE ) {
     if( empty( $year )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->dtstart = array( 'value' => null, 'params' => $this->_setParams( $params ));
+        $this->dtstart = array( 'value' => null, 'params' => iCalUtilityFunctions::_setParams( $params ));
         return TRUE;
       }
       else
         return FALSE;
     }
-    $this->dtstart = $this->_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params, 'dtstart' );
+    $this->dtstart = iCalUtilityFunctions::_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params, 'dtstart', $this->objName, $this->getConfig( 'TZID' ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2380,7 +2704,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property due
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2391,18 +2715,24 @@ class calendarComponent {
         !isset( $this->due['value']['day'] )   &&
         !isset( $this->due['value']['hour'] )  &&
         !isset( $this->due['value']['min'] )   &&
-        !isset( $this->due['value']['sec'] ))
+        !isset( $this->due['value']['sec'] )) {
       if( $this->getConfig( 'allowEmpty' ))
         return $this->_createElement( 'DUE' );
-      else return FALSE;
-    $formatted  = $this->_format_date_time( $this->due['value'] );
+      else
+       return FALSE;
+    }
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->due['value'] );
+    if(( FALSE !== ( $tzid = $this->getConfig( 'TZID' ))) &&
+       ( !isset( $this->due['params']['VALUE'] ) || ( $this->due['params']['VALUE'] != 'DATE' ))  &&
+         !isset( $this->due['params']['TZID'] ))
+      $this->due['params']['TZID'] = $tzid;
     $attributes = $this->_createParams( $this->due['params'] );
     return $this->_createElement( 'DUE', $attributes, $formatted );
   }
 /**
  * set calendar component property due
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param mixed $year
  * @param mixed $month optional
@@ -2416,13 +2746,13 @@ class calendarComponent {
   function setDue( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=FALSE ) {
     if( empty( $year )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->due = array( 'value' => null, 'params' => $this->_setParams( $params ));
+        $this->due = array( 'value' => null, 'params' => iCalUtilityFunctions::_setParams( $params ));
         return TRUE;
       }
       else
         return FALSE;
     }
-    $this->due = $this->_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params );
+    $this->due = iCalUtilityFunctions::_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params, null, null, $this->getConfig( 'TZID' ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2432,7 +2762,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property duration
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -2447,12 +2777,12 @@ class calendarComponent {
         return $this->_createElement( 'DURATION', array(), null );
       else return FALSE;
     $attributes = $this->_createParams( $this->duration['params'] );
-    return $this->_createElement( 'DURATION', $attributes, $this->_format_duration( $this->duration['value'] ));
+    return $this->_createElement( 'DURATION', $attributes, iCalUtilityFunctions::_format_duration( $this->duration['value'] ));
   }
 /**
  * set calendar component property duration
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param mixed $week
  * @param mixed $day optional
@@ -2465,17 +2795,17 @@ class calendarComponent {
   function setDuration( $week, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=FALSE ) {
     if( empty( $week )) if( $this->getConfig( 'allowEmpty' )) $week = null; else return FALSE;
     if( is_array( $week ) && ( 1 <= count( $week )))
-      $this->duration = array( 'value' => $this->_duration_array( $week ), 'params' => $this->_setParams( $day ));
+      $this->duration = array( 'value' => iCalUtilityFunctions::_duration_array( $week ), 'params' => iCalUtilityFunctions::_setParams( $day ));
     elseif( is_string( $week ) && ( 3 <= strlen( trim( $week )))) {
       $week = trim( $week );
       if( in_array( substr( $week, 0, 1 ), array( '+', '-' )))
         $week = substr( $week, 1 );
-      $this->duration = array( 'value' => $this->_duration_string( $week ), 'params' => $this->_setParams( $day ));
+      $this->duration = array( 'value' => iCalUtilityFunctions::_duration_string( $week ), 'params' => iCalUtilityFunctions::_setParams( $day ));
     }
     elseif( empty( $week ) && empty( $day ) && empty( $hour ) && empty( $min ) && empty( $sec ))
       return FALSE;
     else
-      $this->duration = array( 'value' => $this->_duration_array( array( $week, $day, $hour, $min, $sec )), 'params' => $this->_setParams( $params ));
+      $this->duration = array( 'value' => iCalUtilityFunctions::_duration_array( array( $week, $day, $hour, $min, $sec )), 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2485,7 +2815,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property exdate
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2500,7 +2830,7 @@ class calendarComponent {
       $content = $attributes = null;
       foreach( $theExdate['value'] as $eix => $exdatePart ) {
         $parno = count( $exdatePart );
-        $formatted = $this->_format_date_time( $exdatePart, $parno );
+        $formatted = iCalUtilityFunctions::_format_date_time( $exdatePart, $parno );
         if( isset( $theExdate['params']['TZID'] ))
           $formatted = str_replace( 'Z', '', $formatted);
         if( 0 < $eix ) {
@@ -2526,7 +2856,7 @@ class calendarComponent {
 /**
  * set calendar component property exdate
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param array exdates
  * @param array $params, optional
@@ -2536,31 +2866,31 @@ class calendarComponent {
   function setExdate( $exdates, $params=FALSE, $index=FALSE ) {
     if( empty( $exdates )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->_setMval( $this->exdate, null, $params, FALSE, $index );
+        iCalUtilityFunctions::_setMval( $this->exdate, null, $params, FALSE, $index );
         return TRUE;
       }
       else
         return FALSE;
     }
-    $input  = array( 'params' => $this->_setParams( $params, array( 'VALUE' => 'DATE-TIME' )));
+    $input  = array( 'params' => iCalUtilityFunctions::_setParams( $params, array( 'VALUE' => 'DATE-TIME' )));
             /* ev. check 1:st date and save ev. timezone **/
-    $this->_chkdatecfg( reset( $exdates ), $parno, $input['params'] );
-    $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME' ); // remove default parameter
+    iCalUtilityFunctions::_chkdatecfg( reset( $exdates ), $parno, $input['params'] );
+    iCalUtilityFunctions::_existRem( $input['params'], 'VALUE', 'DATE-TIME' ); // remove default parameter
     foreach( $exdates as $eix => $theExdate ) {
-      if( $this->_isArrayTimestampDate( $theExdate ))
-        $exdatea = $this->_timestamp2date( $theExdate, $parno );
+      if( iCalUtilityFunctions::_isArrayTimestampDate( $theExdate ))
+        $exdatea = iCalUtilityFunctions::_timestamp2date( $theExdate, $parno );
       elseif(  is_array( $theExdate ))
-        $exdatea = $this->_date_time_array( $theExdate, $parno );
+        $exdatea = iCalUtilityFunctions::_date_time_array( $theExdate, $parno );
       elseif( 8 <= strlen( trim( $theExdate ))) // ex. 2006-08-03 10:12:18
-        $exdatea = $this->_date_time_string( $theExdate, $parno );
+        $exdatea = iCalUtilityFunctions::_date_time_string( $theExdate, $parno );
       if( 3 == $parno )
         unset( $exdatea['hour'], $exdatea['min'], $exdatea['sec'], $exdatea['tz'] );
       elseif( isset( $exdatea['tz'] ))
         $exdatea['tz'] = (string) $exdatea['tz'];
       if(  isset( $input['params']['TZID'] ) ||
-         ( isset( $exdatea['tz'] ) && !$this->_isOffset( $exdatea['tz'] )) ||
+         ( isset( $exdatea['tz'] ) && !iCalUtilityFunctions::_isOffset( $exdatea['tz'] )) ||
          ( isset( $input['value'][0] ) && ( !isset( $input['value'][0]['tz'] ))) ||
-         ( isset( $input['value'][0]['tz'] ) && !$this->_isOffset( $input['value'][0]['tz'] )))
+         ( isset( $input['value'][0]['tz'] ) && !iCalUtilityFunctions::_isOffset( $input['value'][0]['tz'] )))
         unset( $exdatea['tz'] );
       $input['value'][] = $exdatea;
     }
@@ -2570,7 +2900,7 @@ class calendarComponent {
       $input['params']['VALUE'] = 'DATE';
       unset( $input['params']['TZID'] );
     }
-    $this->_setMval( $this->exdate, $input['value'], $input['params'], FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->exdate, $input['value'], $input['params'], FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2580,7 +2910,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property exrule
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2591,7 +2921,7 @@ class calendarComponent {
 /**
  * set calendar component property exdate
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param array $exruleset
  * @param array $params, optional
@@ -2600,7 +2930,7 @@ class calendarComponent {
  */
   function setExrule( $exruleset, $params=FALSE, $index=FALSE ) {
     if( empty( $exruleset )) if( $this->getConfig( 'allowEmpty' )) $exruleset = null; else return FALSE;
-    $this->_setMval( $this->exrule, $this->_setRexrule( $exruleset ), $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->exrule, iCalUtilityFunctions::_setRexrule( $exruleset ), $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2610,7 +2940,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property freebusy
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2634,7 +2964,7 @@ class calendarComponent {
       $fno = 1;
       $cnt = count( $freebusyPart['value']);
       foreach( $freebusyPart['value'] as $periodix => $freebusyPeriod ) {
-        $formatted   = $this->_format_date_time( $freebusyPeriod[0] );
+        $formatted   = iCalUtilityFunctions::_format_date_time( $freebusyPeriod[0] );
         $content .= $formatted;
         $content .= '/';
         $cnt2 = count( $freebusyPeriod[1]);
@@ -2646,10 +2976,10 @@ class calendarComponent {
             isset( $freebusyPeriod[1]['year'] )  &&
             isset( $freebusyPeriod[1]['month'] ) &&
             isset( $freebusyPeriod[1]['day'] )) {
-          $content .= $this->_format_date_time( $freebusyPeriod[1] );
+          $content .= iCalUtilityFunctions::_format_date_time( $freebusyPeriod[1] );
         }
         else {                                  // period=  -> dur-time
-          $content .= $this->_format_duration( $freebusyPeriod[1] );
+          $content .= iCalUtilityFunctions::_format_duration( $freebusyPeriod[1] );
         }
         if( $fno < $cnt )
           $content .= ',';
@@ -2662,8 +2992,8 @@ class calendarComponent {
 /**
  * set calendar component property freebusy
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-05
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.10 - 2011-03-24
  * @param string $fbType
  * @param array $fbValues
  * @param array $params, optional
@@ -2673,7 +3003,7 @@ class calendarComponent {
   function setFreebusy( $fbType, $fbValues, $params=FALSE, $index=FALSE ) {
     if( empty( $fbValues )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->_setMval( $this->freebusy, null, $params, FALSE, $index );
+        iCalUtilityFunctions::_setMval( $this->freebusy, null, $params, FALSE, $index );
         return TRUE;
       }
       else
@@ -2685,37 +3015,39 @@ class calendarComponent {
       $fbType = 'BUSY';
     $input = array( 'fbtype' => $fbType );
     foreach( $fbValues as $fbPeriod ) {   // periods => period
+      if( empty( $fbPeriod ))
+        continue;
       $freebusyPeriod = array();
       foreach( $fbPeriod as $fbMember ) { // pairs => singlepart
         $freebusyPairMember = array();
         if( is_array( $fbMember )) {
-          if( $this->_isArrayDate( $fbMember )) { // date-time value
-            $freebusyPairMember       = $this->_date_time_array( $fbMember, 7 );
+          if( iCalUtilityFunctions::_isArrayDate( $fbMember )) { // date-time value
+            $freebusyPairMember       = iCalUtilityFunctions::_date_time_array( $fbMember, 7 );
             $freebusyPairMember['tz'] = 'Z';
           }
-          elseif( $this->_isArrayTimestampDate( $fbMember )) { // timestamp value
-            $freebusyPairMember       = $this->_timestamp2date( $fbMember['timestamp'], 7 );
+          elseif( iCalUtilityFunctions::_isArrayTimestampDate( $fbMember )) { // timestamp value
+            $freebusyPairMember       = iCalUtilityFunctions::_timestamp2date( $fbMember['timestamp'], 7 );
             $freebusyPairMember['tz'] = 'Z';
           }
           else {                                         // array format duration
-            $freebusyPairMember = $this->_duration_array( $fbMember );
+            $freebusyPairMember = iCalUtilityFunctions::_duration_array( $fbMember );
           }
         }
         elseif(( 3 <= strlen( trim( $fbMember ))) &&    // string format duration
                ( in_array( $fbMember{0}, array( 'P', '+', '-' )))) {
           if( 'P' != $fbMember{0} )
             $fbmember = substr( $fbMember, 1 );
-          $freebusyPairMember = $this->_duration_string( $fbMember );
+          $freebusyPairMember = iCalUtilityFunctions::_duration_string( $fbMember );
         }
         elseif( 8 <= strlen( trim( $fbMember ))) { // text date ex. 2006-08-03 10:12:18
-          $freebusyPairMember       = $this->_date_time_string( $fbMember, 7 );
+          $freebusyPairMember       = iCalUtilityFunctions::_date_time_string( $fbMember, 7 );
           $freebusyPairMember['tz'] = 'Z';
         }
         $freebusyPeriod[]   = $freebusyPairMember;
       }
       $input[]              = $freebusyPeriod;
     }
-    $this->_setMval( $this->freebusy, $input, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->freebusy, $input, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2725,7 +3057,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property geo
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -2743,7 +3075,7 @@ class calendarComponent {
 /**
  * set calendar component property geo
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param float $latitude
  * @param float $longitude
@@ -2755,10 +3087,10 @@ class calendarComponent {
       if( !is_array( $this->geo )) $this->geo = array();
       $this->geo['value']['latitude']  = $latitude;
       $this->geo['value']['longitude'] = $longitude;
-      $this->geo['params'] = $this->_setParams( $params );
+      $this->geo['params'] = iCalUtilityFunctions::_setParams( $params );
     }
     elseif( $this->getConfig( 'allowEmpty' ))
-      $this->geo = array( 'value' => null, 'params' => $this->_setParams( $params ) );
+      $this->geo = array( 'value' => null, 'params' => iCalUtilityFunctions::_setParams( $params ) );
     else
       return FALSE;
     return TRUE;
@@ -2770,20 +3102,20 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property last-modified
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
   function createLastModified() {
     if( empty( $this->lastmodified )) return FALSE;
     $attributes = $this->_createParams( $this->lastmodified['params'] );
-    $formatted  = $this->_format_date_time( $this->lastmodified['value'], 7 );
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->lastmodified['value'], 7 );
     return $this->_createElement( 'LAST-MODIFIED', $attributes, $formatted );
   }
 /**
  * set calendar component property completed
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @param mixed $year optional
  * @param mixed $month optional
@@ -2797,7 +3129,7 @@ class calendarComponent {
   function setLastModified( $year=FALSE, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=FALSE ) {
     if( empty( $year ))
       $year = date('Ymd\THis', mktime( date( 'H' ), date( 'i' ), date( 's' ) - date( 'Z'), date( 'm' ), date( 'd' ), date( 'Y' )));
-    $this->lastmodified = $this->_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
+    $this->lastmodified = iCalUtilityFunctions::_setDate2( $year, $month, $day, $hour, $min, $sec, $params );
     return TRUE;
   }
 /*********************************************************************************/
@@ -2807,7 +3139,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property location
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @return string
  */
@@ -2822,7 +3154,7 @@ class calendarComponent {
 /**
  * set calendar component property location
  '
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param array params optional
@@ -2830,7 +3162,7 @@ class calendarComponent {
  */
   function setLocation( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->location = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->location = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2840,8 +3172,8 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property organizer
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-21
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.33 - 2010-12-17
  * @return string
  */
   function createOrganizer() {
@@ -2849,27 +3181,31 @@ class calendarComponent {
     if( empty( $this->organizer['value'] ))
       return ( $this->getConfig( 'allowEmpty' )) ? $this->_createElement( 'ORGANIZER' ) : FALSE;
     $attributes = $this->_createParams( $this->organizer['params']
-                                      , array( 'CN', 'DIR', 'LANGUAGE', 'SENT-BY' ));
-    $content    = 'MAILTO:'.$this->organizer['value'];
-    return $this->_createElement( 'ORGANIZER', $attributes, $content );
+                                      , array( 'CN', 'DIR', 'SENT-BY', 'LANGUAGE' ));
+    return $this->_createElement( 'ORGANIZER', $attributes, $this->organizer['value'] );
   }
 /**
  * set calendar component property organizer
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.27 - 2010-11-29
  * @param string $value
  * @param array params optional
  * @return bool
  */
   function setOrganizer( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $value = str_replace ( 'MAILTO:', '', $value );
-    $value = str_replace ( 'mailto:', '', $value );
-    $this->organizer = array( 'value' => $value, 'params' => $this->_setParams( $params ));
-    if( isset( $this->organizer['params']['SENT-BY'] )) {
-      if( 'MAILTO' == strtoupper( substr( $this->organizer['params']['SENT-BY'], 0, 6 )))
-        $this->organizer['params']['SENT-BY'] = substr( $this->organizer['params']['SENT-BY'], 7 );
+    if( FALSE === ( $pos = strpos( substr( $value, 0, 9 ), ':' )))
+      $value = 'MAILTO:'.$value;
+    else
+      $value = strtolower( substr( $value, 0, $pos )).substr( $value, $pos );
+    $value = str_replace( 'mailto:', 'MAILTO:', $value );
+    $this->organizer = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
+    if( isset( $this->organizer['params']['SENT-BY'] )){
+      if( 'mailto:' !== strtolower( substr( $this->organizer['params']['SENT-BY'], 0, 7 )))
+        $this->organizer['params']['SENT-BY'] = 'MAILTO:'.$this->organizer['params']['SENT-BY'];
+      else
+        $this->organizer['params']['SENT-BY'] = 'MAILTO:'.substr( $this->organizer['params']['SENT-BY'], 7 );
     }
     return TRUE;
   }
@@ -2880,13 +3216,13 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property percent-complete
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-22
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @return string
  */
   function createPercentComplete() {
-    if( empty( $this->percentcomplete )) return FALSE;
-    if( empty( $this->percentcomplete['value'] ))
+    if( !isset($this->percentcomplete) || ( empty( $this->percentcomplete ) && !is_numeric( $this->percentcomplete ))) return FALSE;
+    if( !isset( $this->percentcomplete['value'] ) || ( empty( $this->percentcomplete['value'] ) && !is_numeric( $this->percentcomplete['value'] )))
       return ( $this->getConfig( 'allowEmpty' )) ? $this->_createElement( 'PERCENT-COMPLETE' ) : FALSE;
     $attributes = $this->_createParams( $this->percentcomplete['params'] );
     return $this->_createElement( 'PERCENT-COMPLETE', $attributes, $this->percentcomplete['value'] );
@@ -2894,15 +3230,15 @@ class calendarComponent {
 /**
  * set calendar component property percent-complete
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @param int $value
  * @param array $params optional
  * @return bool
  */
   function setPercentComplete( $value, $params=FALSE ) {
-    if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->percentcomplete = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    if( empty( $value ) && !is_numeric( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
+    $this->percentcomplete = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2912,13 +3248,13 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property priority
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-21
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @return string
  */
   function createPriority() {
-    if( empty( $this->priority )) return FALSE;
-    if( empty( $this->priority['value'] ))
+    if( !isset($this->priority) || ( empty( $this->priority ) && !is_numeric( $this->priority ))) return FALSE;
+    if( !isset( $this->priority['value'] ) || ( empty( $this->priority['value'] ) && !is_numeric( $this->priority['value'] )))
       return ( $this->getConfig( 'allowEmpty' )) ? $this->_createElement( 'PRIORITY' ) : FALSE;
     $attributes = $this->_createParams( $this->priority['params'] );
     return $this->_createElement( 'PRIORITY', $attributes, $this->priority['value'] );
@@ -2926,15 +3262,15 @@ class calendarComponent {
 /**
  * set calendar component property priority
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @param int $value
  * @param array $params optional
  * @return bool
  */
   function setPriority( $value, $params=FALSE  ) {
-    if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->priority = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    if( empty( $value ) && !is_numeric( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
+    $this->priority = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -2944,7 +3280,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property rdate
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.16 - 2008-10-26
  * @return string
  */
@@ -2971,11 +3307,11 @@ class calendarComponent {
             isset( $theRdate['params']['VALUE'] ) && ( 'PERIOD' == $theRdate['params']['VALUE'] )) { // PERIOD
           if( $utctime )
             unset( $rdatePart[0]['tz'] );
-          $formatted = $this->_format_date_time( $rdatePart[0]); // PERIOD part 1
+          $formatted = iCalUtilityFunctions::_format_date_time( $rdatePart[0]); // PERIOD part 1
           if( $utctime || !empty( $theRdate['params']['TZID'] ))
             $formatted = str_replace( 'Z', '', $formatted);
           if( 0 < $rpix ) {
-            if( !empty( $rdatePart[0]['tz'] ) && $this->_isOffset( $rdatePart[0]['tz'] )) {
+            if( !empty( $rdatePart[0]['tz'] ) && iCalUtilityFunctions::_isOffset( $rdatePart[0]['tz'] )) {
               if( 'Z' != substr( $formatted, -1 )) $formatted .= 'Z';
             }
             else
@@ -2998,10 +3334,10 @@ class calendarComponent {
               isset( $rdatePart[1]['day'] )) {
             if( $utctime )
               unset( $rdatePart[1]['tz'] );
-            $formatted = $this->_format_date_time( $rdatePart[1] ); // PERIOD part 2
+            $formatted = iCalUtilityFunctions::_format_date_time( $rdatePart[1] ); // PERIOD part 2
             if( $utctime || !empty( $theRdate['params']['TZID'] ))
               $formatted = str_replace( 'Z', '', $formatted);
-            if( !empty( $rdatePart[0]['tz'] ) && $this->_isOffset( $rdatePart[0]['tz'] )) {
+            if( !empty( $rdatePart[0]['tz'] ) && iCalUtilityFunctions::_isOffset( $rdatePart[0]['tz'] )) {
               if( 'Z' != substr( $formatted, -1 )) $formatted .= 'Z';
             }
             else
@@ -3009,17 +3345,17 @@ class calendarComponent {
            $contentPart .= $formatted;
           }
           else {                                  // period=  -> dur-time
-            $contentPart .= $this->_format_duration( $rdatePart[1] );
+            $contentPart .= iCalUtilityFunctions::_format_duration( $rdatePart[1] );
           }
         } // PERIOD end
         else { // SINGLE date start
           if( $utctime )
             unset( $rdatePart['tz'] );
-          $formatted = $this->_format_date_time( $rdatePart);
+          $formatted = iCalUtilityFunctions::_format_date_time( $rdatePart);
           if( $utctime || !empty( $theRdate['params']['TZID'] ))
             $formatted = str_replace( 'Z', '', $formatted);
           if( !$utctime && ( 0 < $rpix )) {
-            if( !empty( $theRdate['value'][0]['tz'] ) && $this->_isOffset( $theRdate['value'][0]['tz'] )) {
+            if( !empty( $theRdate['value'][0]['tz'] ) && iCalUtilityFunctions::_isOffset( $theRdate['value'][0]['tz'] )) {
               if( 'Z' != substr( $formatted, -1 ))
                 $formatted .= 'Z';
             }
@@ -3040,7 +3376,7 @@ class calendarComponent {
 /**
  * set calendar component property rdate
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-07
  * @param array $rdates
  * @param array $params, optional
@@ -3050,13 +3386,13 @@ class calendarComponent {
   function setRdate( $rdates, $params=FALSE, $index=FALSE ) {
     if( empty( $rdates )) {
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->_setMval( $this->rdate, null, $params, FALSE, $index );
+        iCalUtilityFunctions::_setMval( $this->rdate, null, $params, FALSE, $index );
         return TRUE;
       }
       else
         return FALSE;
     }
-    $input = array( 'params' => $this->_setParams( $params, array( 'VALUE' => 'DATE-TIME' )));
+    $input = array( 'params' => iCalUtilityFunctions::_setParams( $params, array( 'VALUE' => 'DATE-TIME' )));
     if( in_array( $this->objName, array( 'vtimezone', 'standard', 'daylight' ))) {
       unset( $input['params']['TZID'] );
       $input['params']['VALUE'] = 'DATE-TIME';
@@ -3066,7 +3402,7 @@ class calendarComponent {
           isset( $rdates[0] )    && is_array( $rdates[0] ) && ( 2 == count( $rdates[0] )) &&
           isset( $rdates[0][0] ) &&    isset( $rdates[0][1] ) && !isset( $rdates[0]['timestamp'] ) &&
     (( is_array( $rdates[0][0] ) && ( isset( $rdates[0][0]['timestamp'] ) ||
-                                      $this->_isArrayDate( $rdates[0][0] ))) ||
+                                      iCalUtilityFunctions::_isArrayDate( $rdates[0][0] ))) ||
                                     ( is_string( $rdates[0][0] ) && ( 8 <= strlen( trim( $rdates[0][0] )))))  &&
      ( is_array( $rdates[0][1] ) || ( is_string( $rdates[0][1] ) && ( 3 <= strlen( trim( $rdates[0][1] ))))))
       $input['params']['VALUE'] = 'PERIOD';
@@ -3074,57 +3410,57 @@ class calendarComponent {
     $date  = reset( $rdates );
     if( isset( $input['params']['VALUE'] ) && ( 'PERIOD' == $input['params']['VALUE'] )) // PERIOD
       $date  = reset( $date );
-    $this->_chkdatecfg( $date, $parno, $input['params'] );
+    iCalUtilityFunctions::_chkdatecfg( $date, $parno, $input['params'] );
     if( in_array( $this->objName, array( 'vtimezone', 'standard', 'daylight' )))
       unset( $input['params']['TZID'] );
-    $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME' ); // remove default
+    iCalUtilityFunctions::_existRem( $input['params'], 'VALUE', 'DATE-TIME' ); // remove default
     foreach( $rdates as $rpix => $theRdate ) {
       $inputa = null;
       if( is_array( $theRdate )) {
         if( isset( $input['params']['VALUE'] ) && ( 'PERIOD' == $input['params']['VALUE'] )) { // PERIOD
           foreach( $theRdate as $rix => $rPeriod ) {
             if( is_array( $rPeriod )) {
-              if( $this->_isArrayTimestampDate( $rPeriod ))      // timestamp
-                $inputab  = ( isset( $rPeriod['tz'] )) ? $this->_timestamp2date( $rPeriod, $parno ) : $this->_timestamp2date( $rPeriod, 6 );
-              elseif( $this->_isArrayDate( $rPeriod ))
-                $inputab  = ( 3 < count ( $rPeriod )) ? $this->_date_time_array( $rPeriod, $parno ) : $this->_date_time_array( $rPeriod, 6 );
+              if( iCalUtilityFunctions::_isArrayTimestampDate( $rPeriod ))      // timestamp
+                $inputab  = ( isset( $rPeriod['tz'] )) ? iCalUtilityFunctions::_timestamp2date( $rPeriod, $parno ) : iCalUtilityFunctions::_timestamp2date( $rPeriod, 6 );
+              elseif( iCalUtilityFunctions::_isArrayDate( $rPeriod ))
+                $inputab  = ( 3 < count ( $rPeriod )) ? iCalUtilityFunctions::_date_time_array( $rPeriod, $parno ) : iCalUtilityFunctions::_date_time_array( $rPeriod, 6 );
               elseif (( 1 == count( $rPeriod )) && ( 8 <= strlen( reset( $rPeriod ))))  // text-date
-                $inputab  = $this->_date_time_string( reset( $rPeriod ), $parno );
+                $inputab  = iCalUtilityFunctions::_date_time_string( reset( $rPeriod ), $parno );
               else                                               // array format duration
-                $inputab  = $this->_duration_array( $rPeriod );
+                $inputab  = iCalUtilityFunctions::_duration_array( $rPeriod );
             }
             elseif(( 3 <= strlen( trim( $rPeriod ))) &&          // string format duration
-                   ( in_array( $rPeriod{0}, array( 'P', '+', '-' )))) {
-              if( 'P' != $rPeriod{0} )
+                   ( in_array( $rPeriod[0], array( 'P', '+', '-' )))) {
+              if( 'P' != $rPeriod[0] )
                 $rPeriod  = substr( $rPeriod, 1 );
-              $inputab    = $this->_duration_string( $rPeriod );
+              $inputab    = iCalUtilityFunctions::_duration_string( $rPeriod );
             }
             elseif( 8 <= strlen( trim( $rPeriod )))              // text date ex. 2006-08-03 10:12:18
-              $inputab    = $this->_date_time_string( $rPeriod, $parno );
+              $inputab    = iCalUtilityFunctions::_date_time_string( $rPeriod, $parno );
             if(  isset( $input['params']['TZID'] ) ||
-               ( isset( $inputab['tz'] )   && !$this->_isOffset( $inputab['tz'] )) ||
+               ( isset( $inputab['tz'] )   && !iCalUtilityFunctions::_isOffset( $inputab['tz'] )) ||
                ( isset( $inputa[0] )       && ( !isset( $inputa[0]['tz'] )))       ||
-               ( isset( $inputa[0]['tz'] ) && !$this->_isOffset( $inputa[0]['tz'] )))
+               ( isset( $inputa[0]['tz'] ) && !iCalUtilityFunctions::_isOffset( $inputa[0]['tz'] )))
               unset( $inputab['tz'] );
             $inputa[]     = $inputab;
           }
         } // PERIOD end
-        elseif ( $this->_isArrayTimestampDate( $theRdate ))      // timestamp
-          $inputa = $this->_timestamp2date( $theRdate, $parno );
-        else                                                     // date[-time]
-          $inputa = $this->_date_time_array( $theRdate, $parno );
+        elseif ( iCalUtilityFunctions::_isArrayTimestampDate( $theRdate ))      // timestamp
+          $inputa = iCalUtilityFunctions::_timestamp2date( $theRdate, $parno );
+        else                                                                    // date[-time]
+          $inputa = iCalUtilityFunctions::_date_time_array( $theRdate, $parno );
       }
       elseif( 8 <= strlen( trim( $theRdate )))                   // text date ex. 2006-08-03 10:12:18
-        $inputa       = $this->_date_time_string( $theRdate, $parno );
+        $inputa       = iCalUtilityFunctions::_date_time_string( $theRdate, $parno );
       if( !isset( $input['params']['VALUE'] ) || ( 'PERIOD' != $input['params']['VALUE'] )) { // no PERIOD
         if( 3 == $parno )
           unset( $inputa['hour'], $inputa['min'], $inputa['sec'], $inputa['tz'] );
         elseif( isset( $inputa['tz'] ))
           $inputa['tz'] = (string) $inputa['tz'];
         if(  isset( $input['params']['TZID'] ) ||
-           ( isset( $inputa['tz'] )            && !$this->_isOffset( $inputa['tz'] ))     ||
+           ( isset( $inputa['tz'] )            && !iCalUtilityFunctions::_isOffset( $inputa['tz'] ))     ||
            ( isset( $input['value'][0] )       && ( !isset( $input['value'][0]['tz'] )))  ||
-           ( isset( $input['value'][0]['tz'] ) && !$this->_isOffset( $input['value'][0]['tz'] )))
+           ( isset( $input['value'][0]['tz'] ) && !iCalUtilityFunctions::_isOffset( $input['value'][0]['tz'] )))
           unset( $inputa['tz'] );
       }
       $input['value'][] = $inputa;
@@ -3133,7 +3469,7 @@ class calendarComponent {
       $input['params']['VALUE'] = 'DATE';
       unset( $input['params']['TZID'] );
     }
-    $this->_setMval( $this->rdate, $input['value'], $input['params'], FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->rdate, $input['value'], $input['params'], FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -3143,23 +3479,27 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property recurrence-id
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-21
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-15
  * @return string
  */
   function createRecurrenceid() {
     if( empty( $this->recurrenceid )) return FALSE;
     if( empty( $this->recurrenceid['value'] ))
       return ( $this->getConfig( 'allowEmpty' )) ? $this->_createElement( 'RECURRENCE-ID' ) : FALSE;
-    $formatted  = $this->_format_date_time( $this->recurrenceid['value'] );
+    $formatted  = iCalUtilityFunctions::_format_date_time( $this->recurrenceid['value'] );
+    if(( FALSE !== ( $tzid = $this->getConfig( 'TZID' ))) &&
+       ( !isset( $this->recurrenceid['params']['VALUE'] ) || ( $this->recurrenceid['params']['VALUE'] != 'DATE' ))  &&
+         !isset( $this->recurrenceid['params']['TZID'] ))
+      $this->recurrenceid['params']['TZID'] = $tzid;
     $attributes = $this->_createParams( $this->recurrenceid['params'] );
     return $this->_createElement( 'RECURRENCE-ID', $attributes, $formatted );
   }
 /**
  * set calendar component property recurrence-id
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-15
  * @param mixed $year
  * @param mixed $month optional
  * @param int $day optional
@@ -3178,7 +3518,7 @@ class calendarComponent {
       else
         return FALSE;
     }
-    $this->recurrenceid = $this->_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params );
+    $this->recurrenceid = iCalUtilityFunctions::_setDate( $year, $month, $day, $hour, $min, $sec, $tz, $params, null, null, $this->getConfig( 'TZID' ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3188,7 +3528,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property related-to
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @return string
  */
@@ -3211,7 +3551,7 @@ class calendarComponent {
 /**
  * set calendar component property related-to
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-07
  * @param float $relid
  * @param array $params, optional
@@ -3222,8 +3562,8 @@ class calendarComponent {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
     if(( '<' == substr( $value, 0, 1 )) && ( '>' == substr( $value, -1 )))
       $value = substr( $value, 1, ( strlen( $value ) - 2 ));
-    $this->_existRem( $params, 'RELTYPE', 'PARENT', TRUE ); // remove default
-    $this->_setMval( $this->relatedto, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_existRem( $params, 'RELTYPE', 'PARENT', TRUE ); // remove default
+    iCalUtilityFunctions::_setMval( $this->relatedto, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -3233,13 +3573,13 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property repeat
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-21
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @return string
  */
   function createRepeat() {
-    if( empty( $this->repeat )) return FALSE;
-    if( empty( $this->repeat['value'] ))
+    if( !isset( $this->repeat ) || ( empty( $this->repeat ) && !is_numeric( $this->repeat ))) return FALSE;
+    if( !isset( $this->repeat['value']) || ( empty( $this->repeat['value'] ) && !is_numeric( $this->repeat['value'] )))
       return ( $this->getConfig( 'allowEmpty' )) ? $this->_createElement( 'REPEAT' ) : FALSE;
     $attributes = $this->_createParams( $this->repeat['params'] );
     return $this->_createElement( 'REPEAT', $attributes, $this->repeat['value'] );
@@ -3247,15 +3587,15 @@ class calendarComponent {
 /**
  * set calendar component property transp
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @param string $value
  * @param array $params optional
  * @return void
  */
   function setRepeat( $value, $params=FALSE ) {
-    if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->repeat = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    if( empty( $value ) && !is_numeric( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
+    $this->repeat = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3264,7 +3604,7 @@ class calendarComponent {
  */
 /**
  * creates formatted output for calendar component property request-status
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @return string
  */
@@ -3288,7 +3628,7 @@ class calendarComponent {
 /**
  * set calendar component property request-status
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param float $statcode
  * @param string $text
@@ -3302,7 +3642,7 @@ class calendarComponent {
     $input              = array( 'statcode' => $statcode, 'text' => $text );
     if( $extdata )
       $input['extdata'] = $extdata;
-    $this->_setMval( $this->requeststatus, $input, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->requeststatus, $input, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -3312,7 +3652,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property resources
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-23
  * @return string
  */
@@ -3339,7 +3679,7 @@ class calendarComponent {
 /**
  * set calendar component property recources
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param mixed $value
  * @param array $params, optional
@@ -3348,7 +3688,7 @@ class calendarComponent {
  */
   function setResources( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->_setMval( $this->resources, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->resources, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -3358,7 +3698,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property rrule
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3369,7 +3709,7 @@ class calendarComponent {
 /**
  * set calendar component property rrule
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param array $rruleset
  * @param array $params, optional
@@ -3378,7 +3718,7 @@ class calendarComponent {
  */
   function setRrule( $rruleset, $params=FALSE, $index=FALSE ) {
     if( empty( $rruleset )) if( $this->getConfig( 'allowEmpty' )) $rruleset = null; else return FALSE;
-    $this->_setMval( $this->rrule, $this->_setRexrule( $rruleset ), $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->rrule, iCalUtilityFunctions::_setRexrule( $rruleset ), $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -3387,29 +3727,30 @@ class calendarComponent {
  */
 /**
  * creates formatted output for calendar component property sequence
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 0.9.7 - 2006-11-20
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @return string
  */
   function createSequence() {
-    if( empty( $this->sequence )) return FALSE;
-    if( empty( $this->sequence['value'] ))
+    if( !isset( $this->sequence ) || ( empty( $this->sequence ) && !is_numeric( $this->sequence ))) return FALSE;
+    if(( !isset($this->sequence['value'] ) || ( empty( $this->sequence['value'] ) && !is_numeric( $this->sequence['value'] ))) &&
+       ( '0' != $this->sequence['value'] ))
       return ( $this->getConfig( 'allowEmpty' )) ? $this->_createElement( 'SEQUENCE' ) : FALSE;
     $attributes = $this->_createParams( $this->sequence['params'] );
     return $this->_createElement( 'SEQUENCE', $attributes, $this->sequence['value'] );
   }
 /**
  * set calendar component property sequence
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @param int $value optional
  * @param array $params optional
  * @return bool
  */
   function setSequence( $value=FALSE, $params=FALSE ) {
-    if( empty( $value ))
+    if(( empty( $value ) && !is_numeric( $value )) && ( '0' != $value ))
       $value = ( isset( $this->sequence['value'] ) && ( 0 < $this->sequence['value'] )) ? $this->sequence['value'] + 1 : 1;
-    $this->sequence = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->sequence = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3419,7 +3760,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property status
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3433,7 +3774,7 @@ class calendarComponent {
 /**
  * set calendar component property status
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param array $params optional
@@ -3441,7 +3782,7 @@ class calendarComponent {
  */
   function setStatus( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->status = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->status = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3451,7 +3792,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property summary
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3466,7 +3807,7 @@ class calendarComponent {
 /**
  * set calendar component property summary
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3474,7 +3815,7 @@ class calendarComponent {
  */
   function setSummary( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->summary = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->summary = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3484,7 +3825,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property transp
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3498,7 +3839,7 @@ class calendarComponent {
 /**
  * set calendar component property transp
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3506,7 +3847,7 @@ class calendarComponent {
  */
   function setTransp( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->transp = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->transp = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3516,7 +3857,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property trigger
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.16 - 2008-10-21
  * @return string
  */
@@ -3528,13 +3869,13 @@ class calendarComponent {
     if( isset( $this->trigger['value']['year'] )   &&
         isset( $this->trigger['value']['month'] )  &&
         isset( $this->trigger['value']['day'] ))
-      $content      .= $this->_format_date_time( $this->trigger['value'] );
+      $content      .= iCalUtilityFunctions::_format_date_time( $this->trigger['value'] );
     else {
       if( TRUE !== $this->trigger['value']['relatedStart'] )
         $attributes .= $this->intAttrDelimiter.'RELATED=END';
       if( $this->trigger['value']['before'] )
         $content    .= '-';
-      $content      .= $this->_format_duration( $this->trigger['value'] );
+      $content      .= iCalUtilityFunctions::_format_duration( $this->trigger['value'] );
     }
     $attributes     .= $this->_createParams( $this->trigger['params'] );
     return $this->_createElement( 'TRIGGER', $attributes, $content );
@@ -3542,8 +3883,8 @@ class calendarComponent {
 /**
  * set calendar component property trigger
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.9 - 2011-06-17
  * @param mixed $year
  * @param mixed $month optional
  * @param int $day optional
@@ -3559,23 +3900,23 @@ class calendarComponent {
   function setTrigger( $year, $month=null, $day=null, $week=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $relatedStart=TRUE, $before=TRUE, $params=FALSE ) {
     if( empty( $year ) && empty( $month ) && empty( $day ) && empty( $week ) && empty( $hour ) && empty( $min ) && empty( $sec ))
       if( $this->getConfig( 'allowEmpty' )) {
-        $this->trigger = array( 'value' => null, 'params' => $this->_setParams( $params ) );
+        $this->trigger = array( 'value' => null, 'params' => iCalUtilityFunctions::_setParams( $params ) );
         return TRUE;
       }
       else
         return FALSE;
-    if( $this->_isArrayTimestampDate( $year )) { // timestamp
-      $params = $this->_setParams( $month );
-      $date   = $this->_timestamp2date( $year, 7 );
+    if( iCalUtilityFunctions::_isArrayTimestampDate( $year )) { // timestamp
+      $params = iCalUtilityFunctions::_setParams( $month );
+      $date   = iCalUtilityFunctions::_timestamp2date( $year, 7 );
       foreach( $date as $k => $v )
         $$k = $v;
     }
     elseif( is_array( $year ) && ( is_array( $month ) || empty( $month ))) {
-      $params = $this->_setParams( $month );
+      $params = iCalUtilityFunctions::_setParams( $month );
       if(!(array_key_exists( 'year',  $year ) &&   // exclude date-time
            array_key_exists( 'month', $year ) &&
-           array_key_exists( 'day',   $year ))) {  // so this must be a duration
-        if( isset( $params['RELATED'] ) && ( 'END' == $params['RELATED'] ))
+           array_key_exists( 'day',   $year ))) {  // when this must be a duration
+        if( isset( $params['RELATED'] ) && ( 'END' == strtoupper( $params['RELATED'] )))
           $relatedStart = FALSE;
         else
           $relatedStart = ( array_key_exists( 'relatedStart', $year ) && ( TRUE !== $year['relatedStart'] )) ? FALSE : TRUE;
@@ -3591,22 +3932,25 @@ class calendarComponent {
       $year  = $SSYY;
     }
     elseif(is_string( $year ) && ( is_array( $month ) || empty( $month ))) {  // duration or date in a string
-      $params = $this->_setParams( $month );
-      if( in_array( $year{0}, array( 'P', '+', '-' ))) { // duration
-        $relatedStart = ( isset( $params['RELATED'] ) && ( 'END' == $params['RELATED'] )) ? FALSE : TRUE;
-        $before       = ( '-'  == $year{0} ) ? TRUE : FALSE;
-        if(     'P'  != $year{0} )
+      $params = iCalUtilityFunctions::_setParams( $month );
+      if( in_array( $year[0], array( 'P', '+', '-' ))) { // duration
+        $relatedStart = ( isset( $params['RELATED'] ) && ( 'END' == strtoupper( $params['RELATED'] ))) ? FALSE : TRUE;
+        $before       = ( '-'  == $year[0] ) ? TRUE : FALSE;
+        if(     'P'  != $year[0] )
           $year       = substr( $year, 1 );
-        $date         = $this->_duration_string( $year);
+        $date         = iCalUtilityFunctions::_duration_string( $year);
       }
       else   // date
-        $date    = $this->_date_time_string( $year, 7 );
+        $date    = iCalUtilityFunctions::_date_time_string( $year, 7 );
       unset( $year, $month, $day );
-      foreach( $date as $k => $v )
-        $$k = $v;
+      if( empty( $date ))
+        $sec = 0;
+      else
+        foreach( $date as $k => $v )
+          $$k = $v;
     }
     else // single values in function input parameters
-      $params = $this->_setParams( $params );
+      $params = iCalUtilityFunctions::_setParams( $params );
     if( !empty( $year ) && !empty( $month ) && !empty( $day )) { // date
       $params['VALUE'] = 'DATE-TIME';
       $hour = ( $hour ) ? $hour : 0;
@@ -3623,19 +3967,28 @@ class calendarComponent {
       return TRUE;
     }
     elseif(( empty( $year ) && empty( $month )) &&    // duration
-           (!empty( $week ) || !empty( $day ) || !empty( $hour ) || !empty( $min ) || !empty( $sec ))) {
+           (( !empty( $week ) || ( 0 == $week )) ||
+            ( !empty( $day )  || ( 0 == $day  )) ||
+            ( !empty( $hour ) || ( 0 == $hour )) ||
+            ( !empty( $min )  || ( 0 == $min  )) ||
+            ( !empty( $sec )  || ( 0 == $sec  )))) {
       unset( $params['RELATED'] ); // set at output creation (END only)
       unset( $params['VALUE'] );   // 'DURATION' default
       $this->trigger = array( 'params' => $params );
-      $relatedStart = ( FALSE !== $relatedStart ) ? TRUE : FALSE;
-      $before       = ( FALSE !== $before )       ? TRUE : FALSE;
-      $this->trigger['value']  = array( 'relatedStart' => $relatedStart
-                                      , 'before'       => $before );
+      $this->trigger['value']  = array();
       if( !empty( $week )) $this->trigger['value']['week'] = $week;
       if( !empty( $day  )) $this->trigger['value']['day']  = $day;
       if( !empty( $hour )) $this->trigger['value']['hour'] = $hour;
       if( !empty( $min  )) $this->trigger['value']['min']  = $min;
       if( !empty( $sec  )) $this->trigger['value']['sec']  = $sec;
+      if( empty( $this->trigger['value'] )) {
+        $this->trigger['value']['sec'] = 0;
+        $before                        = FALSE;
+      }
+      $relatedStart = ( FALSE !== $relatedStart ) ? TRUE : FALSE;
+      $before       = ( FALSE !== $before )       ? TRUE : FALSE;
+      $this->trigger['value']['relatedStart'] = $relatedStart;
+      $this->trigger['value']['before']       = $before;
       return TRUE;
     }
     return FALSE;
@@ -3647,7 +4000,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property tzid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3661,7 +4014,7 @@ class calendarComponent {
 /**
  * set calendar component property tzid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param array $params optional
@@ -3669,7 +4022,7 @@ class calendarComponent {
  */
   function setTzid( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->tzid = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->tzid = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3680,7 +4033,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property tzname
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3699,7 +4052,7 @@ class calendarComponent {
 /**
  * set calendar component property tzname
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param string $value
  * @param string $params, optional
@@ -3708,7 +4061,7 @@ class calendarComponent {
  */
   function setTzname( $value, $params=FALSE, $index=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->_setMval( $this->tzname, $value, $params, FALSE, $index );
+    iCalUtilityFunctions::_setMval( $this->tzname, $value, $params, FALSE, $index );
     return TRUE;
   }
 /*********************************************************************************/
@@ -3718,7 +4071,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property tzoffsetfrom
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3732,7 +4085,7 @@ class calendarComponent {
 /**
  * set calendar component property tzoffsetfrom
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3740,7 +4093,7 @@ class calendarComponent {
  */
   function setTzoffsetfrom( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->tzoffsetfrom = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->tzoffsetfrom = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3750,7 +4103,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property tzoffsetto
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3764,7 +4117,7 @@ class calendarComponent {
 /**
  * set calendar component property tzoffsetto
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3772,7 +4125,7 @@ class calendarComponent {
  */
   function setTzoffsetto( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->tzoffsetto = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->tzoffsetto = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3782,7 +4135,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property tzurl
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3796,7 +4149,7 @@ class calendarComponent {
 /**
  * set calendar component property tzurl
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3804,7 +4157,7 @@ class calendarComponent {
  */
   function setTzurl( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->tzurl = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->tzurl = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3814,7 +4167,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property uid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 0.9.7 - 2006-11-20
  * @return string
  */
@@ -3827,7 +4180,7 @@ class calendarComponent {
 /**
  * create an unique id for this calendar component object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.2.7 - 2007-09-04
  * @return void
  */
@@ -3847,7 +4200,7 @@ class calendarComponent {
 /**
  * set calendar component property uid
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3855,7 +4208,7 @@ class calendarComponent {
  */
   function setUid( $value, $params=FALSE ) {
     if( empty( $value )) return FALSE; // no allowEmpty check here !!!!
-    $this->uid = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->uid = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3865,7 +4218,7 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property url
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-21
  * @return string
  */
@@ -3879,7 +4232,7 @@ class calendarComponent {
 /**
  * set calendar component property url
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-11-04
  * @param string $value
  * @param string $params optional
@@ -3887,7 +4240,7 @@ class calendarComponent {
  */
   function setUrl( $value, $params=FALSE ) {
     if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
-    $this->url = array( 'value' => $value, 'params' => $this->_setParams( $params ));
+    $this->url = array( 'value' => $value, 'params' => iCalUtilityFunctions::_setParams( $params ));
     return TRUE;
   }
 /*********************************************************************************/
@@ -3897,15 +4250,15 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property x-prop
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.11 - 2008-10-22
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @return string
  */
   function createXprop() {
     if( empty( $this->xprop )) return FALSE;
     $output = null;
     foreach( $this->xprop as $label => $xpropPart ) {
-      if( empty( $xpropPart['value'] )) {
+      if( !isset($xpropPart['value']) || ( empty( $xpropPart['value'] ) && !is_numeric( $xpropPart['value'] ))) {
         if( $this->getConfig( 'allowEmpty' )) $output .= $this->_createElement( $label );
         continue;
       }
@@ -3924,8 +4277,8 @@ class calendarComponent {
 /**
  * set calendar component property x-prop
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
-	* @since 2.4.11 - 2008-11-04
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-14
  * @param string $label
  * @param mixed $value
  * @param array $params optional
@@ -3933,10 +4286,9 @@ class calendarComponent {
  */
   function setXprop( $label, $value, $params=FALSE ) {
     if( empty( $label )) return;
-    if( empty( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
+    if( empty( $value ) && !is_numeric( $value )) if( $this->getConfig( 'allowEmpty' )) $value = null; else return FALSE;
     $xprop           = array( 'value' => $value );
-    $toolbox         = new calendarComponent();
-    $xprop['params'] = $toolbox->_setParams( $params );
+    $xprop['params'] = iCalUtilityFunctions::_setParams( $params );
     if( !is_array( $this->xprop )) $this->xprop = array();
     $this->xprop[strtoupper( $label )] = $xprop;
     return TRUE;
@@ -3946,7 +4298,7 @@ class calendarComponent {
 /**
  * create element format parts
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.0.6 - 2006-06-20
  * @return string
  */
@@ -3985,15 +4337,22 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.22 - 2010-12-06
  * @param string $label property name
  * @param string $attributes property attributes
  * @param string $content property content (optional)
  * @return string
  */
   function _createElement( $label, $attributes=null, $content=FALSE ) {
-    $label  = $this->_formatPropertyName( $label );
+    switch( $this->format ) {
+      case 'xcal':
+        $label = strtolower( $label );
+        break;
+      default:
+        $label = strtoupper( $label );
+        break;
+    }
     $output = $this->elementStart1.$label;
     $categoriesAttrLang = null;
     $attachInlineBinary = FALSE;
@@ -4066,7 +4425,7 @@ class calendarComponent {
       $content = $this->nl.$this->_createElement( 'b64bin', $attachfmttype, $content ); // max one attribute
     }
     $output .= $attributes;
-    if( !$content ) {
+    if( !$content && ( '0' != $content )) {
       switch( $this->format ) {
         case 'xcal':
           $output .= ' /';
@@ -4093,562 +4452,82 @@ class calendarComponent {
 /**
  * creates formatted output for calendar component property parameters
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 0.9.22 - 2007-04-10
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.33 - 2010-12-18
  * @param array $params  optional
  * @param array $ctrKeys optional
  * @return string
  */
   function _createParams( $params=array(), $ctrKeys=array() ) {
-    $attrLANG = $attr1 = $attr2 = null;
+    if( !is_array( $params ) || empty( $params ))
+      $params = array();
+    $attrLANG = $attr1 = $attr2 = $lang = null;
     $CNattrKey   = ( in_array( 'CN',       $ctrKeys )) ? TRUE : FALSE ;
     $LANGattrKey = ( in_array( 'LANGUAGE', $ctrKeys )) ? TRUE : FALSE ;
     $CNattrExist = $LANGattrExist = FALSE;
-    if( is_array( $params )) {
-      foreach( $params as $paramKey => $paramValue ) {
-        if( is_int( $paramKey ))
-          $attr2            .= $this->intAttrDelimiter.$paramValue;
-        elseif(( 'LANGUAGE' == $paramKey ) && $LANGattrKey ) {
-          $attrLANG         .= $this->intAttrDelimiter."LANGUAGE=$paramValue";
-          $LANGattrExist     = TRUE;
-        }
-        elseif(( 'CN'       == $paramKey ) && $CNattrKey ) {
-          $attr1             = $this->intAttrDelimiter.'CN="'.$paramValue.'"';
-          $CNattrExist       = TRUE;
-        }
-        elseif(( 'ALTREP'   == $paramKey ) && in_array( $paramKey, $ctrKeys ))
-          $attr2            .= $this->intAttrDelimiter.'ALTREP="'.$paramValue.'"';
-        elseif(( 'DIR'      == $paramKey ) && in_array( $paramKey, $ctrKeys ))
-          $attr2            .= $this->intAttrDelimiter.'DIR="'.$paramValue.'"';
-        elseif(( 'SENT-BY'  == $paramKey ) && in_array( $paramKey, $ctrKeys ))
-          $attr2            .= $this->intAttrDelimiter.'SENT-BY="MAILTO:'.$paramValue.'"';
-        else
-          $attr2            .= $this->intAttrDelimiter."$paramKey=$paramValue";
+    $xparams = array();
+    foreach( $params as $paramKey => $paramValue ) {
+      if( ctype_digit( (string) $paramKey )) {
+        $xparams[]          = $paramValue;
+        continue;
       }
+      $paramKey             = strtoupper( $paramKey );
+      if( !in_array( $paramKey, array( 'ALTREP', 'CN', 'DIR', 'ENCODING', 'FMTTYPE', 'LANGUAGE', 'RANGE', 'RELTYPE', 'SENT-BY', 'TZID', 'VALUE' )))
+        $xparams[$paramKey] = $paramValue;
+      else
+        $params[$paramKey]  = $paramValue;
+    }
+    ksort( $xparams, SORT_STRING );
+    foreach( $xparams as $paramKey => $paramValue ) {
+      if( ctype_digit( (string) $paramKey ))
+        $attr2             .= $this->intAttrDelimiter.$paramValue;
+      else
+        $attr2             .= $this->intAttrDelimiter."$paramKey=$paramValue";
+    }
+    if( isset( $params['FMTTYPE'] )  && !in_array( 'FMTTYPE', $ctrKeys )) {
+      $attr1               .= $this->intAttrDelimiter.'FMTTYPE='.$params['FMTTYPE'].$attr2;
+      $attr2                = null;
+    }
+    if( isset( $params['ENCODING'] ) && !in_array( 'ENCODING',   $ctrKeys )) {
+      if( !empty( $attr2 )) {
+        $attr1             .= $attr2;
+        $attr2              = null;
+      }
+      $attr1               .= $this->intAttrDelimiter.'ENCODING='.$params['ENCODING'];
+    }
+    if( isset( $params['VALUE'] )    && !in_array( 'VALUE',   $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'VALUE='.$params['VALUE'];
+    if( isset( $params['TZID'] )     && !in_array( 'TZID',    $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'TZID='.$params['TZID'];
+    if( isset( $params['RANGE'] )    && !in_array( 'RANGE',   $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'RANGE='.$params['RANGE'];
+    if( isset( $params['RELTYPE'] )  && !in_array( 'RELTYPE', $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'RELTYPE='.$params['RELTYPE'];
+    if( isset( $params['CN'] )       && $CNattrKey ) {
+      $attr1                = $this->intAttrDelimiter.'CN="'.$params['CN'].'"';
+      $CNattrExist          = TRUE;
+    }
+    if( isset( $params['DIR'] )      && in_array( 'DIR',      $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'DIR="'.$params['DIR'].'"';
+    if( isset( $params['SENT-BY'] )  && in_array( 'SENT-BY',  $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'SENT-BY="'.$params['SENT-BY'].'"';
+    if( isset( $params['ALTREP'] )   && in_array( 'ALTREP',   $ctrKeys ))
+      $attr1               .= $this->intAttrDelimiter.'ALTREP="'.$params['ALTREP'].'"';
+    if( isset( $params['LANGUAGE'] ) && $LANGattrKey ) {
+      $attrLANG            .= $this->intAttrDelimiter.'LANGUAGE='.$params['LANGUAGE'];
+      $LANGattrExist        = TRUE;
     }
     if( !$LANGattrExist ) {
       $lang = $this->getConfig( 'language' );
       if(( $CNattrExist || $LANGattrKey ) && $lang )
         $attrLANG .= $this->intAttrDelimiter.'LANGUAGE='.$lang;
     }
-    return $attrLANG.$attr1.$attr2;
-  }
-/**
- * check a date(-time) for an opt. timezone and if it is a DATE-TIME or DATE
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-25
- * @param array $date, date to check
- * @param int $parno, no of date parts (i.e. year, month.. .)
- * @return array $params, property parameters
- */
-  function _chkdatecfg( $theDate, & $parno, & $params ) {
-    if( isset( $params['TZID'] ))
-      $parno = 6;
-    elseif( isset( $params['VALUE'] ) && ( 'DATE' == $params['VALUE'] ))
-      $parno = 3;
-    else {
-      if( isset( $params['VALUE'] ) && ( 'PERIOD' == $params['VALUE'] ))
-        $parno = 7;
-      if( is_array( $theDate )) {
-        if( isset( $theDate['timestamp'] ))
-          $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : null;
-        else
-          $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : ( 7 == count( $theDate )) ? end( $theDate ) : null;
-        if( !empty( $tzid )) {
-          $parno = 7;
-          if( !$this->_isOffset( $tzid ))
-            $params['TZID'] = $tzid; // save only timezone
-        }
-        elseif( !$parno && ( 3 == count( $theDate )) && 
-          ( isset( $params['VALUE'] ) && ( 'DATE' == $params['VALUE'] )))
-          $parno = 3;
-        else
-          $parno = 6;
-      }
-      else { // string
-        $date = trim( $theDate );
-        if( 'Z' == substr( $date, -1 ))
-          $parno = 7; // UTC DATE-TIME
-        elseif((( 8 == strlen( $date ) && ctype_digit( $date )) || ( 11 >= strlen( $date ))) && 
-          ( !isset( $params['VALUE'] ) || !in_array( $params['VALUE'], array( 'DATE-TIME', 'PERIOD' ))))
-          $parno = 3; // DATE
-        $date = $this->_date_time_string( $date, $parno );
-        if( !empty( $date['tz'] )) {
-          $parno = 7;
-          if( !$this->_isOffset( $date['tz'] ))
-            $params['TZID'] = $date['tz']; // save only timezone
-        }
-        elseif( empty( $parno ))
-          $parno = 6;
-      }
-      if( isset( $params['TZID'] ))
-        $parno = 6;
-    }
-  }
-/**
- * convert local startdate/enddate (Ymd[His]) to duration
- *
- * uses this component dates if missing input dates
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.11 - 2007-11-03
- * @param array $startdate, optional
- * @param array $duration, optional
- * @return array duration
- */
-  function _date2duration( $startdate=FALSE, $enddate=FALSE ) {
-    if( !$startdate || !$enddate ) {
-      if(   FALSE === ( $startdate = $this->getProperty( 'dtstart' )))
-        return null;
-      if(   FALSE === ( $enddate   = $this->getProperty( 'dtend' )))    // vevent/vfreebusy
-        if( FALSE === ( $enddate   = $this->getProperty( 'due' )))      // vtodo
-          return null;
-    }
-    if( !$startdate || !$enddate )
-      return null;
-    $startWdate  = mktime( 0, 0, 0, $startdate['month'], $startdate['day'], $startdate['year'] );
-    $endWdate    = mktime( 0, 0, 0, $enddate['month'],   $enddate['day'],   $enddate['year'] );
-    $wduration   = $endWdate - $startWdate;
-    $dur         = array();
-    $dur['week'] = (int) floor( $wduration / ( 7 * 24 * 60 * 60 ));
-    $wduration   =              $wduration % ( 7 * 24 * 60 * 60 );
-    $dur['day']  = (int) floor( $wduration / ( 24 * 60 * 60 ));
-    $wduration   =              $wduration % ( 24 * 60 * 60 );
-    $dur['hour'] = (int) floor( $wduration / ( 60 * 60 ));
-    $wduration   =              $wduration % ( 60 * 60 );
-    $dur['min']  = (int) floor( $wduration / ( 60 ));
-    $dur['sec']  = (int)        $wduration % ( 60 );
-    return $dur;
-  }
-/**
- * convert date/datetime to timestamp
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-30
- * @param array  $datetime  datetime/(date)
- * @param string $tz        timezone
- * @return timestamp
- */
-  function _date2timestamp( $datetime, $tz=null ) {
-    $output = null;
-    if( !isset( $datetime['hour'] )) $datetime['hour'] = '0';
-    if( !isset( $datetime['min'] ))  $datetime['min']  = '0';
-    if( !isset( $datetime['sec'] ))  $datetime['sec']  = '0';
-    foreach( $datetime as $dkey => $dvalue ) {
-      if( 'tz' != $dkey )
-        $datetime[$dkey] = (integer) $dvalue;
-    }
-    if( $tz )
-      $datetime['tz'] = $tz;
-    $offset = ( isset( $datetime['tz'] ) && ( '' < trim ( $datetime['tz'] ))) ? $this->_tz2offset( $datetime['tz'] ) : 0;
-    $output = mktime( $datetime['hour'], $datetime['min'], ($datetime['sec'] + $offset), $datetime['month'], $datetime['day'], $datetime['year'] );
-    return $output;
-  }
-/**
- * ensures internal date-time/date format for input date-time/date in array format
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 0.3.0 - 2006-08-15
- * @param array $datetime
- * @param int $parno optional, default FALSE
- * @return array
- */
-  function _date_time_array( $datetime, $parno=FALSE ) {
-    $output = array();
-    foreach( $datetime as $dateKey => $datePart ) {
-      switch ( $dateKey ) {
-        case '0': case 'year':   $output['year']  = $datePart; break;
-        case '1': case 'month':  $output['month'] = $datePart; break;
-        case '2': case 'day':    $output['day']   = $datePart; break;
-      }
-      if( 3 != $parno ) {
-        switch ( $dateKey ) {
-          case '0':
-          case '1':
-          case '2': break;
-          case '3': case 'hour': $output['hour']  = $datePart; break;
-          case '4': case 'min' : $output['min']   = $datePart; break;
-          case '5': case 'sec' : $output['sec']   = $datePart; break;
-          case '6': case 'tz'  : $output['tz']    = $datePart; break;
-        }
-      }
-    }
-    if( 3 != $parno ) {
-      if( !isset( $output['hour'] ))
-        $output['hour'] = 0;
-      if( !isset( $output['min']  ))
-        $output['min'] = 0;
-      if( !isset( $output['sec']  ))
-        $output['sec'] = 0;
-    }
-    return $output;
-  }
-/**
- * ensures internal date-time/date format for input date-time/date in string fromat
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.10 - 2007-10-19
- * @param array $datetime
- * @param int $parno optional, default FALSE
- * @return array
- */
-  function _date_time_string( $datetime, $parno=FALSE ) {
-    $datetime = (string) trim( $datetime );
-    $tz  = null;
-    $len = strlen( $datetime ) - 1;
-    if( 'Z' == substr( $datetime, -1 )) {
-      $tz = 'Z';
-      $datetime = trim( substr( $datetime, 0, $len ));
-    }
-    elseif( ( ctype_digit( substr( $datetime, -2, 2 ))) && // time or date
-                  ( '-' == substr( $datetime, -3, 1 )) ||
-                  ( ':' == substr( $datetime, -3, 1 )) ||
-                  ( '.' == substr( $datetime, -3, 1 ))) {
-      $continue = TRUE;
-    }
-    elseif( ( ctype_digit( substr( $datetime, -4, 4 ))) && // 4 pos offset
-            ( ' +' == substr( $datetime, -6, 2 )) ||
-            ( ' -' == substr( $datetime, -6, 2 ))) {
-      $tz = substr( $datetime, -5, 5 );
-      $datetime = substr( $datetime, 0, ($len - 5));
-    }
-    elseif( ( ctype_digit( substr( $datetime, -6, 6 ))) && // 6 pos offset
-            ( ' +' == substr( $datetime, -8, 2 )) ||
-            ( ' -' == substr( $datetime, -8, 2 ))) {
-      $tz = substr( $datetime, -7, 7 );
-      $datetime = substr( $datetime, 0, ($len - 7));
-    }
-    elseif( ( 6 < $len ) && ( ctype_digit( substr( $datetime, -6, 6 )))) {
-      $continue = TRUE;
-    }
-    elseif( 'T' ==  substr( $datetime, -7, 1 )) {
-      $continue = TRUE;
-    }
-    else {
-      $cx  = $tx = 0;    //  19970415T133000 US-Eastern
-      for( $cx = -1; $cx > ( 9 - $len ); $cx-- ) {
-        if(( ' ' == substr( $datetime, $cx, 1 )) || ctype_digit( substr( $datetime, $cx, 1 )))
-          break; // if exists, tz ends here.. . ?
-        elseif( ctype_alpha( substr( $datetime, $cx, 1 )) ||
-             ( in_array( substr( $datetime, $cx, 1 ), array( '-', '/' ))))
-          $tx--; // tz length counter
-      }
-      if( 0 > $tx ) {
-        $tz = substr( $datetime, $tx );
-        $datetime = trim( substr( $datetime, 0, $len + $tx + 1 ));
-      }
-    }
-    if( 0 < substr_count( $datetime, '-' )) {
-      $datetime = str_replace( '-', '/', $datetime );
-    }
-    elseif( ctype_digit( substr( $datetime, 0, 8 )) &&
-           ( 'T' ==      substr( $datetime, 8, 1 )) &&
-            ctype_digit( substr( $datetime, 9, 6 ))) {
-      $datetime = substr( $datetime,  4, 2 )
-             .'/'.substr( $datetime,  6, 2 )
-             .'/'.substr( $datetime,  0, 4 )
-             .' '.substr( $datetime,  9, 2 )
-             .':'.substr( $datetime, 11, 2 )
-             .':'.substr( $datetime, 13);
-    }
-    $datestring = date( 'Y-m-d H:i:s', strtotime( $datetime ));
-    $tz                = trim( $tz );
-    $output            = array();
-    $output['year']    = substr( $datestring, 0, 4 );
-    $output['month']   = substr( $datestring, 5, 2 );
-    $output['day']     = substr( $datestring, 8, 2 );
-    if(( 6 == $parno ) || ( 7 == $parno )) {
-      $output['hour']  = substr( $datestring, 11, 2 );
-      $output['min']   = substr( $datestring, 14, 2 );
-      $output['sec']   = substr( $datestring, 17, 2 );
-      if( !empty( $tz ))
-        $output['tz']  = $tz;
-    }
-    elseif( 3 != $parno ) {
-      if(( '00' < substr( $datestring, 11, 2 )) ||
-         ( '00' < substr( $datestring, 14, 2 )) ||
-         ( '00' < substr( $datestring, 17, 2 ))) {
-        $output['hour']  = substr( $datestring, 11, 2 );
-        $output['min']   = substr( $datestring, 14, 2 );
-        $output['sec']   = substr( $datestring, 17, 2 );
-      }
-      if( !empty( $tz ))
-        $output['tz']  = $tz;
-    }
-    return $output;
-  }
-/**
- * ensures internal duration format for input in array format
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.1.1 - 2007-06-24
- * @param array $duration
- * @return array
- */
-  function _duration_array( $duration ) {
-    $output = array();
-    if(    is_array( $duration )        &&
-       ( 1 == count( $duration ))       &&
-              isset( $duration['sec'] ) &&
-              ( 60 < $duration['sec'] )) {
-      $durseconds  = $duration['sec'];
-      $output['week'] = floor( $durseconds / ( 60 * 60 * 24 * 7 ));
-      $durseconds  =           $durseconds % ( 60 * 60 * 24 * 7 );
-      $output['day']  = floor( $durseconds / ( 60 * 60 * 24 ));
-      $durseconds  =           $durseconds % ( 60 * 60 * 24 );
-      $output['hour'] = floor( $durseconds / ( 60 * 60 ));
-      $durseconds  =           $durseconds % ( 60 * 60 );
-      $output['min']  = floor( $durseconds / ( 60 ));
-      $output['sec']  =      ( $durseconds % ( 60 ));
-    }
-    else {
-      foreach( $duration as $durKey => $durValue ) {
-        if( empty( $durValue )) continue;
-        switch ( $durKey ) {
-          case '0': case 'week': $output['week']  = $durValue; break;
-          case '1': case 'day':  $output['day']   = $durValue; break;
-          case '2': case 'hour': $output['hour']  = $durValue; break;
-          case '3': case 'min':  $output['min']   = $durValue; break;
-          case '4': case 'sec':  $output['sec']   = $durValue; break;
-        }
-      }
-    }
-    if( isset( $output['week'] ) && ( 0 < $output['week'] )) {
-      unset( $output['day'], $output['hour'], $output['min'], $output['sec'] );
-      return $output;
-    }
-    unset( $output['week'] );
-    if( empty( $output['day'] ))
-      unset( $output['day'] );
-    if ( isset( $output['hour'] ) || isset( $output['min'] ) || isset( $output['sec'] )) {
-      if( !isset( $output['hour'] )) $output['hour'] = 0;
-      if( !isset( $output['min']  )) $output['min']  = 0;
-      if( !isset( $output['sec']  )) $output['sec']  = 0;
-      if(( 0 == $output['hour'] ) && ( 0 == $output['min'] ) && ( 0 == $output['sec'] ))
-        unset( $output['hour'], $output['min'], $output['sec'] );
-    }
-    return $output;
-  }
-/**
- * convert duration to date in array format based on input or dtstart value
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-30
- * @param array $startdate, optional
- * @param array $duration, optional
- * @return array, date format
- */
-  function duration2date( $startdate=FALSE, $duration=FALSE ) {
-    if( $startdate && $duration ) {
-      $d1               = $startdate;
-      $dur              = $duration;
-    }
-    elseif( isset( $this->dtstart['value'] ) && isset( $this->duration['value'] )) {
-      $d1               = $this->dtstart['value'];
-      $dur              = $this->duration['value'];
-    }
-    else
-      return null;
-    $dateOnly         = ( isset( $d1['hour'] ) || isset( $d1['min'] ) || isset( $d1['sec'] )) ? FALSE : TRUE;
-    $d1['hour']       = ( isset( $d1['hour'] )) ? $d1['hour'] : 0;
-    $d1['min']        = ( isset( $d1['min'] ))  ? $d1['min']  : 0;
-    $d1['sec']        = ( isset( $d1['sec'] ))  ? $d1['sec']  : 0;
-    $dtend = mktime( $d1['hour'], $d1['min'], $d1['sec'], $d1['month'], $d1['day'], $d1['year'] );
-    if( isset( $dur['week'] ))
-      $dtend += ( $dur['week'] * 7 * 24 * 60 * 60 );
-    if( isset( $dur['day'] ))
-      $dtend += ( $dur['day'] * 24 * 60 * 60 );
-    if( isset( $dur['hour'] ))
-      $dtend += ( $dur['hour'] * 60 *60 );
-    if( isset( $dur['min'] ))
-      $dtend += ( $dur['min'] * 60 );
-    if( isset( $dur['sec'] ))
-      $dtend +=   $dur['sec'];
-    $dtend2 = array();
-    $dtend2['year']   = date('Y', $dtend );
-    $dtend2['month']  = date('m', $dtend );
-    $dtend2['day']    = date('d', $dtend );
-    $dtend2['hour']   = date('H', $dtend );
-    $dtend2['min']    = date('i', $dtend );
-    $dtend2['sec']    = date('s', $dtend );
-    if( isset( $d1['tz'] ))
-      $dtend2['tz']   = $d1['tz'];
-    if( $dateOnly && (( 0 == $dtend2['hour'] ) && ( 0 == $dtend2['min'] ) && ( 0 == $dtend2['sec'] )))
-      unset( $dtend2['hour'], $dtend2['min'], $dtend2['sec'] );
-    return $dtend2;
-  }
-/**
- * ensures internal duration format for input in string format
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.0.5 - 2007-03-14
- * @param string $duration
- * @return array
- */
-  function _duration_string( $duration ) {
-   $duration = (string) trim( $duration );
-   while( 'P' != strtoupper( substr( $duration, 0, 1 ))) {
-     if( 0 < strlen( $duration ))
-       $duration = substr( $duration, 1 );
-     else
-       return false; // no leading P !?!?
-   }
-   $duration = substr( $duration, 1 ); // skip P
-   $duration = str_replace ( 't', 'T', $duration );
-   $duration = str_replace ( 'T', '', $duration );
-   $output = array();
-   $val    = null;
-   for( $ix=0; $ix < strlen( $duration ); $ix++ ) {
-     switch( strtoupper( $duration{$ix} )) {
-      case 'W':
-        $output['week'] = $val;
-        $val            = null;
-        break;
-      case 'D':
-        $output['day']  = $val;
-        $val            = null;
-        break;
-      case 'H':
-        $output['hour'] = $val;
-        $val            = null;
-        break;
-      case 'M':
-        $output['min']  = $val;
-        $val            = null;
-        break;
-      case 'S':
-        $output['sec']  = $val;
-        $val            = null;
-        break;
-      default:
-        if( !ctype_digit( $duration{$ix} ))
-          return false; // unknown duration controll character  !?!?
-        else
-          $val .= $duration{$ix};
-     }
-   }
-   return $this->_duration_array( $output );
-  }
-/**
- * if not preSet, if exist, remove key with expected value from array and return hit value else return elseValue
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-11-08
- * @param array $array
- * @param string $expkey, expected key
- * @param string $expval, expected value
- * @param int $hitVal optional, return value if found
- * @param int $elseVal optional, return value if not found
- * @param int $preSet optional, return value if already preset
- * @return int
- */
-  function _existRem( &$array, $expkey, $expval=FALSE, $hitVal=null, $elseVal=null, $preSet=null ) {
-    if( $preSet )
-      return $preSet;
-    if( !is_array( $array ) || ( 0 == count( $array )))
-      return $elseVal;
-    foreach( $array as $key => $value ) {
-      if( strtoupper( $expkey ) == strtoupper( $key )) {
-        if( !$expval || ( strtoupper( $expval ) == strtoupper( $array[$key] ))) {
-          unset( $array[$key] );
-          return $hitVal;
-        }
-      }
-    }
-    return $elseVal;
-  }
-/**
- * creates formatted output for calendar component property data value type date/date-time
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-30
- * @param array   $datetime
- * @param int     $parno, optional, default 6
- * @return string
- */
-  function _format_date_time( $datetime, $parno=6 ) {
-    if( !isset( $datetime['year'] )  &&
-        !isset( $datetime['month'] ) &&
-        !isset( $datetime['day'] )   &&
-        !isset( $datetime['hour'] )  &&
-        !isset( $datetime['min'] )   &&
-        !isset( $datetime['sec'] ))
-      return ;
-    $output = null;
-    // if( !isset( $datetime['day'] )) { $o=''; foreach($datetime as $k=>$v) {if(is_array($v)) $v=implode('-',$v);$o.=" $k=>$v";} echo " day SAKNAS : $o <br />\n"; }
-    foreach( $datetime as $dkey => $dvalue ) {
-      if( 'tz' != $dkey )
-        $datetime[$dkey] = (integer) $dvalue;
-    }
-    $output = date('Ymd', mktime( 0, 0, 0, $datetime['month'], $datetime['day'], $datetime['year']));
-    if( isset( $datetime['hour'] )  ||
-        isset( $datetime['min'] )   ||
-        isset( $datetime['sec'] )   ||
-        isset( $datetime['tz'] )) {
-      if( isset( $datetime['tz'] )  &&
-         !isset( $datetime['hour'] ))
-        $datetime['hour'] = 0;
-      if( isset( $datetime['hour'] )  &&
-         !isset( $datetime['min'] ))
-        $datetime['min'] = 0;
-      if( isset( $datetime['hour'] )  &&
-          isset( $datetime['min'] )   &&
-         !isset( $datetime['sec'] ))
-        $datetime['sec'] = 0;
-      $date = mktime( $datetime['hour'], $datetime['min'], $datetime['sec'], $datetime['month'], $datetime['day'], $datetime['year']);
-      $output .= date('\THis', $date );
-      if( isset( $datetime['tz'] ) && ( '' < trim ( $datetime['tz'] ))) {
-        $datetime['tz'] = trim( $datetime['tz'] );
-        if( 'Z' == $datetime['tz'] )
-          $output .= 'Z';
-        $offset = $this->_tz2offset( $datetime['tz'] );
-        if( 0 != $offset ) {
-          $date = mktime( $datetime['hour'], $datetime['min'], ($datetime['sec'] + $offset), $datetime['month'], $datetime['day'], $datetime['year']);
-          $output    = date( 'Ymd\THis\Z', $date );
-        }
-      }
-      elseif( 7 == $parno )
-        $output .= 'Z';
-    }
-    return $output;
-  }
-/**
- * creates formatted output for calendar component property data value type duration
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-10
- * @param array $duration ( week, day, hour, min, sec )
- * @return string
- */
-  function _format_duration( $duration ) {
-    if( !isset( $duration['week'] ) &&
-        !isset( $duration['day'] )  &&
-        !isset( $duration['hour'] ) &&
-        !isset( $duration['min'] )  &&
-        !isset( $duration['sec'] ))
-      return;
-    $output = 'P';
-    if( isset( $duration['week'] ) && ( 0 < $duration['week'] ))
-      $output   .= $duration['week'].'W';
-    else {
-      if( isset($duration['day'] ) && ( 0 < $duration['day'] ))
-        $output .= $duration['day'].'D';
-      if(( isset( $duration['hour']) && ( 0 < $duration['hour'] )) ||
-         ( isset( $duration['min'])  && ( 0 < $duration['min'] ))  ||
-         ( isset( $duration['sec'])  && ( 0 < $duration['sec'] ))) {
-        $output .= 'T';
-        $output .= ( isset( $duration['hour']) && ( 0 < $duration['hour'] )) ? $duration['hour'].'H' : '0H';
-        $output .= ( isset( $duration['min'])  && ( 0 < $duration['min'] ))  ? $duration['min']. 'M' : '0M';
-        $output .= ( isset( $duration['sec'])  && ( 0 < $duration['sec'] ))  ? $duration['sec']. 'S' : '0S';
-      }
-    }
-    return $output;
+    return $attr1.$attrLANG.$attr2;
   }
 /**
  * creates formatted output for calendar component property data value type recur
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.4.8 - 2008-10-22
  * @param array $recurlabel
  * @param array $recurdata
@@ -4671,7 +4550,7 @@ class calendarComponent {
           }
           case 'UNTIL': {
             $content2 .= ";UNTIL=";
-            $content2 .= $this->_format_date_time( $rulevalue );
+            $content2 .= iCalUtilityFunctions::_format_date_time( $rulevalue );
             break;
           }
           case 'COUNT':
@@ -4739,90 +4618,9 @@ class calendarComponent {
     return $output;
   }
 /**
- * create property name case - lower/upper
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 0.9.7 - 2006-11-20
- * @param string $propertyName
- * @return string
- */
-  function _formatPropertyName( $propertyName ) {
-    switch( $this->format ) {
-      case 'xcal':
-        return strtolower( $propertyName );
-        break;
-      default:
-        return strtoupper( $propertyName );
-        break;
-    }
-  }
-/**
- * checks if input array contains a date
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-25
- * @param array $input
- * @return bool
- */
-  function _isArrayDate( $input ) {
-    if( isset( $input['week'] ) || ( !in_array( count( $input ), array( 3, 6, 7 ))))
-      return FALSE;
-    if( 7 == count( $input ))
-      return TRUE;
-    if( isset( $input['year'] ) && isset( $input['month'] ) && isset( $input['day'] ))
-      return checkdate( (int) $input['month'], (int) $input['day'], (int) $input['year'] );
-    if( isset( $input['day'] ) || isset( $input['hour'] ) || isset( $input['min'] ) || isset( $input['sec'] ))
-      return FALSE;
-    if( in_array( 0, $input ))
-      return FALSE;
-    if(( 1970 > $input[0] ) || ( 12 < $input[1] ) || ( 31 < $input[2] ))
-      return FALSE;
-    if(( isset( $input[0] ) && isset( $input[1] ) && isset( $input[2] )) &&
-         checkdate( (int) $input[1], (int) $input[2], (int) $input[0] ))
-      return TRUE;
-    $input = $this->_date_time_string( $input[1].'/'.$input[2].'/'.$input[0], 3 ); //  m - d - Y
-    if( isset( $input['year'] ) && isset( $input['month'] ) && isset( $input['day'] ))
-      return checkdate( (int) $input['month'], (int) $input['day'], (int) $input['year'] );
-    return FALSE;
-  }
-/**
- * checks if input array contains a timestamp date
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-18
- * @param array $input
- * @return bool
- */
-  function _isArrayTimestampDate( $input ) {
-    return ( is_array( $input ) && isset( $input['timestamp'] )) ? TRUE : FALSE ;
-  }
-/**
- * controll if input string contains traling UTC offset
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-19
- * @param string $input
- * @return bool
- */
-  function _isOffset( $input ) {
-    $input         = trim( (string) $input );
-    if( 'Z' == substr( $input, -1 ))
-      return TRUE;
-    elseif((   5 <= strlen( $input )) &&
-       ( in_array( substr( $input, -5, 1 ), array( '+', '-' ))) &&
-       (   '0000'  < substr( $input, -4 )) && (   '9999' >= substr( $input, -4 )))
-      return TRUE;
-    elseif((    7 <= strlen( $input )) &&
-       ( in_array( substr( $input, -7, 1 ), array( '+', '-' ))) &&
-       ( '000000'  < substr( $input, -6 )) && ( '999999' >= substr( $input, -6 )))
-      return TRUE;
-    return FALSE;
-
-  }
-/**
  * check if property not exists within component
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-15
  * @param string $propName
  * @return bool
@@ -4838,701 +4636,28 @@ class calendarComponent {
     elseif((       'x-' != substr($propName,0,2)) && !isset( $this->$propName ))       return TRUE;
     return FALSE;
   }
-/**
- * remakes a recur pattern to an array of dates
- *
- * if missing, UNTIL is set 1 year from startdate (emergency break)
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-18
- * @param array $result, array to update, array([timestamp] => timestamp)
- * @param array $recur, pattern for recurrency (only value part, params ignored)
- * @param array $wdate, component start date
- * @param array $startdate, start date
- * @param array $enddate, optional
- * @return array of recurrence (start-)dates as index
- * @todo BYHOUR, BYMINUTE, BYSECOND, ev. BYSETPOS due to ambiguity, WEEKLY at year end/start
- */
-  function _recur2date( & $result, $recur, $wdate, $startdate, $enddate=FALSE ) {
-    foreach( $wdate as $k => $v ) if( ctype_digit( $v )) $wdate[$k] = (int) $v;
-    $wdatets     = $this->_date2timestamp( $wdate );
-    $startdatets = $this->_date2timestamp( $startdate );
-    if( !$enddate ) {
-      $enddate = $startdate;
-      $enddate['year'] += 1;
-// echo "recur __in_ ".implode('-',$startdate)." period start ".implode('-',$wdate)." period end ".implode('-',$enddate)."<br />\n";print_r($recur);echo "<br />\n";//test###
-    }
-    $endDatets = $this->_date2timestamp( $enddate ); // fix break
-    if( !isset( $recur['COUNT'] ) && !isset( $recur['UNTIL'] ))
-      $recur['UNTIL'] = $enddate; // create break
-    if( isset( $recur['UNTIL'] )) {
-      $tdatets = $this->_date2timestamp( $recur['UNTIL'] );
-      if( $endDatets > $tdatets ) {
-        $endDatets = $tdatets; // emergency break
-        $enddate   = $this->_timestamp2date( $endDatets, 6 );
-      }
-      else
-        $recur['UNTIL'] = $this->_timestamp2date( $endDatets, 6 );
-    }
-    if( $wdatets > $endDatets ) {
-     //echo "recur out of date ".implode('-',$this->_date_time_string(date('Y-m-d H:i:s',$wdatets),6))."<br />\n";//test
-      return array(); // nothing to do.. .
-    }
-    if( !isset( $recur['FREQ'] )) // "MUST be specified.. ."
-      $recur['FREQ'] = 'DAILY'; // ??
-    $wkst = ( isset( $recur['WKST'] ) && ( 'SU' == $recur['WKST'] )) ? 24*60*60 : 0; // ??
-    if( !isset( $recur['INTERVAL'] ))
-      $recur['INTERVAL'] = 1;
-    $countcnt = ( !isset( $recur['BYSETPOS'] )) ? 1 : 0; // DTSTART counts as the first occurrence
-            /* find out how to step up dates and set index for interval count */
-    $step = array();
-    if( 'YEARLY' == $recur['FREQ'] )
-      $step['year']  = 1;
-    elseif( 'MONTHLY' == $recur['FREQ'] )
-      $step['month'] = 1;
-    elseif( 'WEEKLY' == $recur['FREQ'] )
-      $step['day']   = 7;
-    else
-      $step['day']   = 1;
-    if( isset( $step['year'] ) && isset( $recur['BYMONTH'] ))
-      $step = array( 'month' => 1 );
-    if( empty( $step ) && isset( $recur['BYWEEKNO'] )) // ??
-      $step = array( 'day' => 7 );
-    if( isset( $recur['BYYEARDAY'] ) || isset( $recur['BYMONTHDAY'] ) || isset( $recur['BYDAY'] ))
-      $step = array( 'day' => 1 );
-    $intervalarr = array();
-    if( 1 < $recur['INTERVAL'] ) {
-      $intervalix = $this->_recurIntervalIx( $recur['FREQ'], $wdate, $wkst );
-      $intervalarr = array( $intervalix => 0 );
-    }
-    if( isset( $recur['BYSETPOS'] )) { // save start date + weekno
-      $bysetposymd1 = $bysetposymd2 = $bysetposw1 = $bysetposw2 = array();
-      $bysetposWold = (int) date( 'W', ( $wdatets + $wkst ));
-      $bysetposYold = $wdate['year'];
-      $bysetposMold = $wdate['month'];
-      $bysetposDold = $wdate['day'];
-      if( is_array( $recur['BYSETPOS'] )) {
-        foreach( $recur['BYSETPOS'] as $bix => $bval )
-          $recur['BYSETPOS'][$bix] = (int) $bval;
-      }
-      else
-        $recur['BYSETPOS'] = array( (int) $recur['BYSETPOS'] );
-      $this->_stepdate( $enddate, $endDatets, $step); // make sure to count whole last period
-    }
-    $this->_stepdate( $wdate, $wdatets, $step);
-    $year_old     = null;
-    $daynames     = array( 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA' );
-             /* MAIN LOOP */
-     // echo "recur start ".implode('-',$wdate)." end ".implode('-',$enddate)."<br />\n";//test
-    while( TRUE ) {
-      if( isset( $endDatets ) && ( $wdatets > $endDatets ))
-        break;
-      if( isset( $recur['COUNT'] ) && ( $countcnt >= $recur['COUNT'] ))
-        break;
-      if( $year_old != $wdate['year'] ) {
-        $year_old   = $wdate['year'];
-        $daycnts    = array();
-        $yeardays   = $weekno = 0;
-        $yeardaycnt = array();
-        for( $m = 1; $m <= 12; $m++ ) { // count up and update up-counters
-          $daycnts[$m] = array();
-          $weekdaycnt = array();
-          foreach( $daynames as $dn )
-            $yeardaycnt[$dn] = $weekdaycnt[$dn] = 0;
-          $mcnt     = date( 't', mktime( 0, 0, 0, $m, 1, $wdate['year'] ));
-          for( $d   = 1; $d <= $mcnt; $d++ ) {
-            $daycnts[$m][$d] = array();
-            if( isset( $recur['BYYEARDAY'] )) {
-              $yeardays++;
-              $daycnts[$m][$d]['yearcnt_up'] = $yeardays;
-            }
-            if( isset( $recur['BYDAY'] )) {
-              $day    = date( 'w', mktime( 0, 0, 0, $m, $d, $wdate['year'] ));
-              $day    = $daynames[$day];
-              $daycnts[$m][$d]['DAY'] = $day;
-              $weekdaycnt[$day]++;
-              $daycnts[$m][$d]['monthdayno_up'] = $weekdaycnt[$day];
-              $yeardaycnt[$day]++;
-              $daycnts[$m][$d]['yeardayno_up'] = $yeardaycnt[$day];
-            }
-            if(  isset( $recur['BYWEEKNO'] ) || ( $recur['FREQ'] == 'WEEKLY' ))
-              $daycnts[$m][$d]['weekno_up'] =(int)date('W',mktime(0,0,$wkst,$m,$d,$wdate['year']));
-          }
-        }
-        $daycnt = 0;
-        $yeardaycnt = array();
-        if(  isset( $recur['BYWEEKNO'] ) || ( $recur['FREQ'] == 'WEEKLY' )) {
-          $weekno = null;
-          for( $d=31; $d > 25; $d-- ) { // get last weekno for year
-            if( !$weekno )
-              $weekno = $daycnts[12][$d]['weekno_up'];
-            elseif( $weekno < $daycnts[12][$d]['weekno_up'] ) {
-              $weekno = $daycnts[12][$d]['weekno_up'];
-              break;
-            }
-          }
-        }
-        for( $m = 12; $m > 0; $m-- ) { // count down and update down-counters
-          $weekdaycnt = array();
-          foreach( $daynames as $dn )
-            $yeardaycnt[$dn] = $weekdaycnt[$dn] = 0;
-          $monthcnt = 0;
-          $mcnt     = date( 't', mktime( 0, 0, 0, $m, 1, $wdate['year'] ));
-          for( $d   = $mcnt; $d > 0; $d-- ) {
-            if( isset( $recur['BYYEARDAY'] )) {
-              $daycnt -= 1;
-              $daycnts[$m][$d]['yearcnt_down'] = $daycnt;
-            }
-            if( isset( $recur['BYMONTHDAY'] )) {
-              $monthcnt -= 1;
-              $daycnts[$m][$d]['monthcnt_down'] = $monthcnt;
-            }
-            if( isset( $recur['BYDAY'] )) {
-              $day  = $daycnts[$m][$d]['DAY'];
-              $weekdaycnt[$day] -= 1;
-              $daycnts[$m][$d]['monthdayno_down'] = $weekdaycnt[$day];
-              $yeardaycnt[$day] -= 1;
-              $daycnts[$m][$d]['yeardayno_down'] = $yeardaycnt[$day];
-            }
-            if(  isset( $recur['BYWEEKNO'] ) || ( $recur['FREQ'] == 'WEEKLY' ))
-              $daycnts[$m][$d]['weekno_down'] = ($daycnts[$m][$d]['weekno_up'] - $weekno - 1);
-          }
-        }
-      }
-            /* check interval */
-      if( 1 < $recur['INTERVAL'] ) {
-            /* create interval index */
-        $intervalix = $this->_recurIntervalIx( $recur['FREQ'], $wdate, $wkst );
-            /* check interval */
-        $currentKey = array_keys( $intervalarr );
-        $currentKey = end( $currentKey ); // get last index
-        if( $currentKey != $intervalix )
-          $intervalarr = array( $intervalix => ( $intervalarr[$currentKey] + 1 ));
-        if(( $recur['INTERVAL'] != $intervalarr[$intervalix] ) &&
-           ( 0 != $intervalarr[$intervalix] )) {
-            /* step up date */
-    //echo "skip: ".implode('-',$wdate)." ix=$intervalix old=$currentKey interval=".$intervalarr[$intervalix]."<br />\n";//test
-          $this->_stepdate( $wdate, $wdatets, $step);
-          continue;
-        }
-        else // continue within the selected interval
-          $intervalarr[$intervalix] = 0;
-   //echo "cont: ".implode('-',$wdate)." ix=$intervalix old=$currentKey interval=".$intervalarr[$intervalix]."<br />\n";//test
-      }
-      $updateOK = TRUE;
-      if( $updateOK && isset( $recur['BYMONTH'] ))
-        $updateOK = $this->_recurBYcntcheck( $recur['BYMONTH']
-                                           , $wdate['month']
-                                           ,($wdate['month'] - 13));
-      if( $updateOK && isset( $recur['BYWEEKNO'] ))
-        $updateOK = $this->_recurBYcntcheck( $recur['BYWEEKNO']
-                                           , $daycnts[$wdate['month']][$wdate['day']]['weekno_up']
-                                           , $daycnts[$wdate['month']][$wdate['day']]['weekno_down'] );
-      if( $updateOK && isset( $recur['BYYEARDAY'] ))
-        $updateOK = $this->_recurBYcntcheck( $recur['BYYEARDAY']
-                                           , $daycnts[$wdate['month']][$wdate['day']]['yearcnt_up']
-                                           , $daycnts[$wdate['month']][$wdate['day']]['yearcnt_down'] );
-      if( $updateOK && isset( $recur['BYMONTHDAY'] ))
-        $updateOK = $this->_recurBYcntcheck( $recur['BYMONTHDAY']
-                                           , $wdate['day']
-                                           , $daycnts[$wdate['month']][$wdate['day']]['monthcnt_down'] );
-    //echo "efter BYMONTHDAY: ".implode('-',$wdate).' status: '; echo ($updateOK) ? 'TRUE' : 'FALSE'; echo "<br />\n";//test###
-      if( $updateOK && isset( $recur['BYDAY'] )) {
-        $updateOK = FALSE;
-        $m = $wdate['month'];
-        $d = $wdate['day'];
-        if( isset( $recur['BYDAY']['DAY'] )) { // single day, opt with year/month day order no
-          $daynoexists = $daynosw = $daynamesw =  FALSE;
-          if( $recur['BYDAY']['DAY'] == $daycnts[$m][$d]['DAY'] )
-            $daynamesw = TRUE;
-          if( isset( $recur['BYDAY'][0] )) {
-            $daynoexists = TRUE;
-            if(( isset( $recur['FREQ'] ) && ( $recur['FREQ'] == 'MONTHLY' )) || isset( $recur['BYMONTH'] ))
-              $daynosw = $this->_recurBYcntcheck( $recur['BYDAY'][0]
-                                                , $daycnts[$m][$d]['monthdayno_up']
-                                                , $daycnts[$m][$d]['monthdayno_down'] );
-            elseif( isset( $recur['FREQ'] ) && ( $recur['FREQ'] == 'YEARLY' ))
-              $daynosw = $this->_recurBYcntcheck( $recur['BYDAY'][0]
-                                                , $daycnts[$m][$d]['yeardayno_up']
-                                                , $daycnts[$m][$d]['yeardayno_down'] );
-          }
-          if((  $daynoexists &&  $daynosw && $daynamesw ) ||
-             ( !$daynoexists && !$daynosw && $daynamesw )) {
-            $updateOK = TRUE;
-          }
-        //echo "daynoexists:$daynoexists daynosw:$daynosw daynamesw:$daynamesw<br />\n"; // test ###
-        }
-        else {
-          foreach( $recur['BYDAY'] as $bydayvalue ) {
-            $daynoexists = $daynosw = $daynamesw = FALSE;
-            if( isset( $bydayvalue['DAY'] ) &&
-                     ( $bydayvalue['DAY'] == $daycnts[$m][$d]['DAY'] ))
-              $daynamesw = TRUE;
-            if( isset( $bydayvalue[0] )) {
-              $daynoexists = TRUE;
-              if(( isset( $recur['FREQ'] ) && ( $recur['FREQ'] == 'MONTHLY' )) ||
-                   isset( $recur['BYMONTH'] ))
-                $daynosw = $this->_recurBYcntcheck( $bydayvalue['0']
-                                                  , $daycnts[$m][$d]['monthdayno_up']
-                                                  , $daycnts[$m][$d]['monthdayno_down'] );
-              elseif( isset( $recur['FREQ'] ) && ( $recur['FREQ'] == 'YEARLY' ))
-                $daynosw = $this->_recurBYcntcheck( $bydayvalue['0']
-                                                  , $daycnts[$m][$d]['yeardayno_up']
-                                                  , $daycnts[$m][$d]['yeardayno_down'] );
-            }
-        //echo "daynoexists:$daynoexists daynosw:$daynosw daynamesw:$daynamesw<br />\n"; // test ###
-            if((  $daynoexists &&  $daynosw && $daynamesw ) ||
-               ( !$daynoexists && !$daynosw && $daynamesw )) {
-              $updateOK = TRUE;
-              break;
-            }
-          }
-        }
-      }
-      //echo "efter BYDAY: ".implode('-',$wdate).' status: '; echo ($updateOK) ? 'TRUE' : 'FALSE'; echo "<br />\n"; // test ###
-            /* check BYSETPOS */
-      if( $updateOK ) {
-        if( isset( $recur['BYSETPOS'] ) &&
-          ( in_array( $recur['FREQ'], array( 'YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY' )))) {
-          if( isset( $recur['WEEKLY'] )) {
-            if( $bysetposWold == $daycnts[$wdate['month']][$wdate['day']]['weekno_up'] )
-              $bysetposw1[] = $wdatets;
-            else
-              $bysetposw2[] = $wdatets;
-          }
-          else {
-            if(( isset( $recur['FREQ'] ) && ( 'YEARLY'      == $recur['FREQ'] )  &&
-                                            ( $bysetposYold == $wdate['year'] ))   ||
-               ( isset( $recur['FREQ'] ) && ( 'MONTHLY'     == $recur['FREQ'] )  &&
-                                           (( $bysetposYold == $wdate['year'] )  &&
-                                            ( $bysetposMold == $wdate['month'] ))) ||
-               ( isset( $recur['FREQ'] ) && ( 'MONTHLY'     == $recur['FREQ'] )  &&
-                                           (( $bysetposYold == $wdate['year'] )  &&
-                                            ( $bysetposMold == $wdate['month'])  &&
-                                            ( $bysetposDold == $wdate['sday'] ))))
-              $bysetposymd1[] = $wdatets;
-            else
-              $bysetposymd2[] = $wdatets;
-          }
-        }
-        else {
-            /* update result array if BYSETPOS is set */
-          $countcnt++;
-          if( $startdatets <= $wdatets ) { // only output within period
-            $result[$wdatets] = TRUE;
-          //echo "recur ".implode('-',$this->_date_time_string(date('Y-m-d H:i:s',$wdatets),6))."<br />\n";//test
-          }
-         //else echo "recur undate ".implode('-',$this->_date_time_string(date('Y-m-d H:i:s',$wdatets),6))." okdatstart ".implode('-',$this->_date_time_string(date('Y-m-d H:i:s',$startdatets),6))."<br />\n";//test
-          $updateOK = FALSE;
-        }
-      }
-            /* step up date */
-      $this->_stepdate( $wdate, $wdatets, $step);
-            /* check if BYSETPOS is set for updating result array */
-      if( $updateOK && isset( $recur['BYSETPOS'] )) {
-        $bysetpos       = FALSE;
-        if( isset( $recur['FREQ'] ) && ( 'YEARLY'  == $recur['FREQ'] ) &&
-          ( $bysetposYold != $wdate['year'] )) {
-          $bysetpos     = TRUE;
-          $bysetposYold = $wdate['year'];
-        }
-        elseif( isset( $recur['FREQ'] ) && ( 'MONTHLY' == $recur['FREQ'] &&
-         (( $bysetposYold != $wdate['year'] ) || ( $bysetposMold != $wdate['month'] )))) {
-          $bysetpos     = TRUE;
-          $bysetposYold = $wdate['year'];
-          $bysetposMold = $wdate['month'];
-        }
-        elseif( isset( $recur['FREQ'] ) && ( 'WEEKLY'  == $recur['FREQ'] )) {
-          $weekno = (int) date( 'W', mktime( 0, 0, $wkst, $wdate['month'], $wdate['day'], $wdate['year']));
-          if( $bysetposWold != $weekno ) {
-            $bysetposWold = $weekno;
-            $bysetpos     = TRUE;
-          }
-        }
-        elseif( isset( $recur['FREQ'] ) && ( 'DAILY'   == $recur['FREQ'] ) &&
-         (( $bysetposYold != $wdate['year'] )  ||
-          ( $bysetposMold != $wdate['month'] ) ||
-          ( $bysetposDold != $wdate['sday'] ))) {
-          $bysetpos     = TRUE;
-          $bysetposYold = $wdate['year'];
-          $bysetposMold = $wdate['month'];
-          $bysetposDold = $wdate['day'];
-        }
-        if( $bysetpos ) {
-          if( isset( $recur['BYWEEKNO'] )) {
-            $bysetposarr1 = & $bysetposw1;
-            $bysetposarr2 = & $bysetposw2;
-          }
-          else {
-            $bysetposarr1 = & $bysetposymd1;
-            $bysetposarr2 = & $bysetposymd2;
-          }
-          foreach( $recur['BYSETPOS'] as $ix ) {
-            if( 0 > $ix ) // both positive and negative BYSETPOS allowed
-              $ix = ( count( $bysetposarr1 ) + $ix + 1);
-            $ix--;
-            if( isset( $bysetposarr1[$ix] )) {
-              if( $startdatets <= $bysetposarr1[$ix] ) { // only output within period
-                $result[$bysetposarr1[$ix]] = TRUE;
-       //echo "recur ".implode('-',$this->_date_time_string(date('Y-m-d H:i:s',$bysetposarr1[$ix]),6))."<br />\n";//test
-              }
-              $countcnt++;
-            }
-            if( isset( $recur['COUNT'] ) && ( $countcnt >= $recur['COUNT'] ))
-              break;
-          }
-          $bysetposarr1 = $bysetposarr2;
-          $bysetposarr2 = array();
-        }
-      }
-    }
-  }
-  function _recurBYcntcheck( $BYvalue, $upValue, $downValue ) {
-    if( is_array( $BYvalue ) &&
-      ( in_array( $upValue, $BYvalue ) || in_array( $downValue, $BYvalue )))
-      return TRUE;
-    elseif(( $BYvalue == $upValue ) || ( $BYvalue == $downValue ))
-      return TRUE;
-    else
-      return FALSE;
-  }
-  function _recurIntervalIx( $freq, $date, $wkst ) {
-            /* create interval index */
-    switch( $freq ) {
-      case 'YEARLY':
-        $intervalix = $date['year'];
-        break;
-      case 'MONTHLY':
-        $intervalix = $date['year'].'-'.$date['month'];
-        break;
-      case 'WEEKLY':
-        $wdatets    = $this->_date2timestamp( $date );
-        $intervalix = (int) date( 'W', ( $wdatets + $wkst ));
-       break;
-      case 'DAILY':
-           default:
-        $intervalix = $date['year'].'-'.$date['month'].'-'.$date['day'];
-        break;
-    }
-    return $intervalix;
-  }
-/**
- * convert input format for exrule and rrule to internal format
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-19
- * @param array $rexrule
- * @return array
- */
-  function _setRexrule( $rexrule ) {
-    $input          = array();
-    if( empty( $rexrule ))
-      return $input;
-    foreach( $rexrule as $rexrulelabel => $rexrulevalue ) {
-      $rexrulelabel = strtoupper( $rexrulelabel );
-      if( 'UNTIL'  != $rexrulelabel )
-        $input[$rexrulelabel]   = $rexrulevalue;
-      else {
-        if( $this->_isArrayTimestampDate( $rexrulevalue )) // timestamp date
-          $input[$rexrulelabel] = $this->_timestamp2date( $rexrulevalue, 6 );
-        elseif( $this->_isArrayDate( $rexrulevalue )) // date-time
-          $input[$rexrulelabel] = $this->_date_time_array( $rexrulevalue, 6 );
-        elseif( 8 <= strlen( trim( $rexrulevalue ))) // ex. 2006-08-03 10:12:18
-          $input[$rexrulelabel] = $this->_date_time_string( $rexrulevalue );
-        if(( 3 < count( $input[$rexrulelabel] )) && !isset( $input[$rexrulelabel]['tz'] ))
-          $input[$rexrulelabel]['tz'] = 'Z';
-      }
-    }
-    return $input;
-  }
-/**
- * convert format for input date to internal date with parameters
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.17 - 2008-10-31
- * @param mixed $year
- * @param mixed $month optional
- * @param int $day optional
- * @param int $hour optional
- * @param int $min optional
- * @param int $sec optional
- * @param array $params optional
- * @param string $caller optional
- * @return array
- */
-  function _setDate( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $tz=FALSE, $params=FALSE, $caller=null ) {
-    $input = $parno = null;
-    $localtime = (( 'dtstart' == $caller ) && in_array( $this->objName, array( 'vtimezone', 'standard', 'daylight' ))) ? TRUE : FALSE;
-    if( $this->_isArrayDate( $year )) {
-      if( $localtime ) unset ( $month['VALUE'], $month['TZID'] );
-      $input['params'] = $this->_setParams( $month, array( 'VALUE' => 'DATE-TIME' ));
-      if( isset( $input['params']['TZID'] )) {
-        $input['params']['VALUE'] = 'DATE-TIME';
-        unset( $year['tz'] );
-      }
-      $hitval          = (( !empty( $year['tz'] ) || !empty( $year[6] ))) ? 7 : 6;
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME', $hitval );
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE', 3, count( $year ), $parno );
-      $input['value']  = $this->_date_time_array( $year, $parno );
-    }
-    elseif( $this->_isArrayTimestampDate( $year )) {
-      if( $localtime ) unset ( $month['VALUE'], $month['TZID'] );
-      $input['params'] = $this->_setParams( $month, array( 'VALUE' => 'DATE-TIME' ));
-      if( isset( $input['params']['TZID'] )) {
-        $input['params']['VALUE'] = 'DATE-TIME';
-        unset( $year['tz'] );
-      }
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE', 3 );
-      $hitval          = ( isset( $year['tz'] )) ? 7 : 6;
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME', $hitval, $parno );
-      $input['value']  = $this->_timestamp2date( $year, $parno );
-    }
-    elseif( 8 <= strlen( trim( $year ))) { // ex. 2006-08-03 10:12:18
-      if( $localtime ) unset ( $month['VALUE'], $month['TZID'] );
-      $input['params'] = $this->_setParams( $month, array( 'VALUE' => 'DATE-TIME' ));
-      if( isset( $input['params']['TZID'] )) {
-        $input['params']['VALUE'] = 'DATE-TIME';
-        $parno = 6;
-      }
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME', 7, $parno );
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE', 3, $parno, $parno );
-      $input['value']  = $this->_date_time_string( $year, $parno );
-    }
-    else {
-      if( is_array( $params )) {
-        if( $localtime ) unset ( $params['VALUE'], $params['TZID'] );
-        $input['params'] = $this->_setParams( $params, array( 'VALUE' => 'DATE-TIME' ));
-      }
-      elseif( is_array( $tz )) {
-        $input['params'] = $this->_setParams( $tz,     array( 'VALUE' => 'DATE-TIME' ));
-        $tz = FALSE;
-      }
-      elseif( is_array( $hour )) {
-        $input['params'] = $this->_setParams( $hour,   array( 'VALUE' => 'DATE-TIME' ));
-        $hour = $min = $sec = $tz = FALSE;
-      }
-      if( isset( $input['params']['TZID'] )) {
-        $tz            = null;
-        $input['params']['VALUE'] = 'DATE-TIME';
-      }
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE', 3 );
-      $hitval          = ( !empty( $tz )) ? 7 : 6;
-      $parno           = $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME', $hitval, $parno, $parno );
-      $input['value']  = array( 'year'  => $year, 'month' => $month, 'day'   => $day );
-      if( 3 != $parno ) {
-        $input['value']['hour'] = ( $hour ) ? $hour : '0';
-        $input['value']['min']  = ( $min )  ? $min  : '0';
-        $input['value']['sec']  = ( $sec )  ? $sec  : '0';
-        if( !empty( $tz ))
-          $input['value']['tz'] = $tz;
-      }
-    }
-    if( 3 == $parno ) {
-      $input['params']['VALUE'] = 'DATE';
-      unset( $input['value']['tz'] );
-      unset( $input['params']['TZID'] );
-    }
-    elseif( isset( $input['params']['TZID'] ))
-      unset( $input['value']['tz'] );
-    if( $localtime ) unset( $input['value']['tz'], $input['params']['TZID'] );
-    if( isset( $input['value']['tz'] ))
-      $input['value']['tz'] = (string) $input['value']['tz'];
-    if( !empty( $input['value']['tz'] ) && ( 'Z' != $input['value']['tz'] ) &&
-      ( !$this->_isOffset( $input['value']['tz'] )))
-      $input['params']['TZID'] = $input['value']['tz'];
-    return $input;
-  }
-/**
- * convert format for input date (UTC) to internal date with parameters
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.17 - 2008-10-31
- * @param mixed $year
- * @param mixed $month optional
- * @param int $day optional
- * @param int $hour optional
- * @param int $min optional
- * @param int $sec optional
- * @param array $params optional
- * @return array
- */
-  function _setDate2( $year, $month=FALSE, $day=FALSE, $hour=FALSE, $min=FALSE, $sec=FALSE, $params=FALSE ) {
-    $input = null;
-    if( $this->_isArrayDate( $year )) {
-      $input['value']  = $this->_date_time_array( $year, 7 );
-      $input['params'] = $this->_setParams( $month, array( 'VALUE' => 'DATE-TIME' ) );
-    }
-    elseif( $this->_isArrayTimestampDate( $year )) {
-      $input['value']  = $this->_timestamp2date( $year, 7 );
-      $input['params'] = $this->_setParams( $month, array( 'VALUE' => 'DATE-TIME' ) );
-    }
-    elseif( 8 <= strlen( trim( $year ))) { // ex. 2006-08-03 10:12:18
-      $input['value']  = $this->_date_time_string( $year, 7 );
-      $input['params'] = $this->_setParams( $month, array( 'VALUE' => 'DATE-TIME' ) );
-    }
-    else {
-      $input['value']  = array( 'year'  => $year
-                              , 'month' => $month
-                              , 'day'   => $day
-                              , 'hour'  => $hour
-                              , 'min'   => $min
-                              , 'sec'   => $sec );
-      $input['params'] = $this->_setParams( $params, array( 'VALUE' => 'DATE-TIME' ));
-    }
-    $parno = $this->_existRem( $input['params'], 'VALUE', 'DATE-TIME', 7 ); // remove default
-    if( !isset( $input['value']['hour'] ))
-      $input['value']['hour'] = 0;
-    if( !isset( $input['value']['min'] ))
-      $input['value']['min'] = 0;
-    if( !isset( $input['value']['sec'] ))
-      $input['value']['sec'] = 0;
-    if( !isset( $input['value']['tz'] ) || !$this->_isOffset( $input['value']['tz'] ))
-      $input['value']['tz'] = 'Z';
-    return $input;
-  }
-/**
- * check index and set (an indexed) content in multiple value array
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-06
- * @param array $valArr
- * @param mixed $value
- * @param array $params
- * @param array $defaults
- * @param int $index
- * @return void
- */
-  function _setMval( & $valArr, $value, $params=FALSE, $defaults=FALSE, $index=FALSE ) {
-    if( !is_array( $valArr )) $valArr = array();
-    if( $index )
-      $index = $index - 1;
-    elseif( 0 < count( $valArr )) {
-      $index = end( array_keys( $valArr ));
-      $index += 1;
-    }
-    else
-      $index = 0;
-    $valArr[$index] = array( 'value' => $value, 'params' => $this->_setParams( $params, $defaults ));
-    ksort( $valArr );
-  }
-/**
- * set input (formatted) parameters- component property attributes
- *
- * default parameters can be set, if missing
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 1.x.x - 2007-05-01
- * @param array $params
- * @param array $defaults
- * @return array
- */
-  function _setParams( $params, $defaults=FALSE ) {
-    if( !is_array( $params))
-      $params = array();
-    $input = array();
-    foreach( $params as $paramKey => $paramValue ) {
-      if( is_array( $paramValue )) {
-        foreach( $paramValue as $pkey => $pValue ) {
-          if(( '"' == substr( $pValue, 0, 1 )) && ( '"' == substr( $pValue, -1 )))
-            $paramValue[$pkey] = substr( $pValue, 1, ( strlen( $pValue ) - 2 ));
-        }
-      }
-      elseif(( '"' == substr( $paramValue, 0, 1 )) && ( '"' == substr( $paramValue, -1 )))
-        $paramValue = substr( $paramValue, 1, ( strlen( $paramValue ) - 2 ));
-      if( 'VALUE' == strtoupper( $paramKey ))
-        $input['VALUE']                 = strtoupper( $paramValue );
-      else
-        $input[strtoupper( $paramKey )] = $paramValue;
-    }
-    if( is_array( $defaults )) {
-      foreach( $defaults as $paramKey => $paramValue ) {
-        if( !isset( $input[$paramKey] ))
-          $input[$paramKey] = $paramValue;
-      }
-    }
-    return (0 < count( $input )) ? $input : null;
-  }
-/**
- * step date, return updated date, array and timpstamp
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-18
- * @param array $date, date to step
- * @param int $timestamp
- * @param array $step, default array( 'day' => 1 )
- * @return void
- */
-  function _stepdate( &$date, &$timestamp, $step=array( 'day' => 1 )) {
-    foreach( $step as $stepix => $stepvalue )
-      $date[$stepix] += $stepvalue;
-    $timestamp  = $this->_date2timestamp( $date );
-    $date       = $this->_timestamp2date( $timestamp, 6 );
-    foreach( $date as $k => $v ) {
-      if( ctype_digit( $v ))
-        $date[$k] = (int) $v;
-    }
-  }
-/**
- * convert timestamp to date array
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-11-01
- * @param mixed $timestamp
- * @param int $parno
- * @return array
- */
-  function _timestamp2date( $timestamp, $parno=6 ) {
-    if( is_array( $timestamp )) {
-      if(( 7 == $parno ) && !empty( $timestamp['tz'] ))
-        $tz = $timestamp['tz'];
-      $timestamp = $timestamp['timestamp'];
-    }
-    $output = array( 'year'  => date( 'Y', $timestamp )
-                   , 'month' => date( 'm', $timestamp )
-                   , 'day'   => date( 'd', $timestamp ));
-    if( 3 != $parno ) {
-             $output['hour'] =  date( 'H', $timestamp );
-             $output['min']  =  date( 'i', $timestamp );
-             $output['sec']  =  date( 's', $timestamp );
-      if( isset( $tz ))
-        $output['tz'] = $tz;
-    }
-    return $output;
-  }
-/**
- * convert (numeric) local time offset to seconds correcting localtime to GMT
- *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.16 - 2008-10-19
- * @param string $offset
- * @return integer
- */
-  function _tz2offset( $tz ) {
-    $tz           = trim( (string) $tz );
-    $offset       = 0;
-    if(((     5  != strlen( $tz )) && ( 7  != strlen( $tz ))) ||
-       ((    '+' != substr( $tz, 0, 1 )) && ( '-' != substr( $tz, 0, 1 ))) ||
-       (( '0000' >= substr( $tz, 1, 4 )) && ( '9999' < substr( $tz, 1, 4 ))) ||
-           (( 7  == strlen( $tz )) && ( '00' > substr( $tz, 5, 2 )) && ( '99' < substr( $tz, 5, 2 ))))
-      return $offset;
-    $hours2sec    = (int) substr( $tz, 1, 2 ) * 3600;
-    $min2sec      = (int) substr( $tz, 3, 2 ) *   60;
-    $sec          = ( 7  == strlen( $tz )) ? (int) substr( $tz, -2 ) : '00';
-    $offset       = $hours2sec + $min2sec + $sec;
-    $offset       = ('-' == substr( $tz, 0, 1 )) ? $offset : -1 * $offset;
-    return $offset;
-  }
 /*********************************************************************************/
 /*********************************************************************************/
 /**
  * get general component config variables or info about subcomponents
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-02
- * @param string $config
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
+ * @param mixed $config
  * @return value
  */
-  function getConfig( $config ) {
+  function getConfig( $config = FALSE) {
+    if( !$config ) {
+      $return = array();
+      $return['ALLOWEMPTY']  = $this->getConfig( 'ALLOWEMPTY' );
+      $return['FORMAT']      = $this->getConfig( 'FORMAT' );
+      if( FALSE !== ( $lang  = $this->getConfig( 'LANGUAGE' )))
+        $return['LANGUAGE']  = $lang;
+      $return['NEWLINECHAR'] = $this->getConfig( 'NEWLINECHAR' );
+      $return['TZTD']        = $this->getConfig( 'TZID' );
+      $return['UNIQUE_ID']   = $this->getConfig( 'UNIQUE_ID' );
+      return $return;
+    }
     switch( strtoupper( $config )) {
       case 'ALLOWEMPTY':
         return $this->allowEmpty;
@@ -5543,13 +4668,11 @@ class calendarComponent {
         if( isset( $this->components )) {
           foreach( $this->components as $cix => $component ) {
             if( empty( $component )) continue;
-            unset( $component->propix );
             $info[$cix]['ordno'] = $cix + 1;
             $info[$cix]['type']  = $component->objName;
             $info[$cix]['uid']   = $component->getProperty( 'uid' );
             $info[$cix]['props'] = $component->getConfig( 'propinfo' );
             $info[$cix]['sub']   = $component->getConfig( 'compsinfo' );
-            unset( $component->propix );
           }
         }
         return $info;
@@ -5604,17 +4727,21 @@ class calendarComponent {
         if( !empty( $this->requeststatus ))   $output['REQUEST-STATUS']   = count( $this->requeststatus );
         if( !empty( $this->resources ))       $output['RESOURCES']        = count( $this->resources );
         if( !empty( $this->sequence ))        $output['SEQUENCE']         = 1;
+        if( !empty( $this->sequence ))        $output['SEQUENCE']         = 1;
         if( !empty( $this->status ))          $output['STATUS']           = 1;
         if( !empty( $this->transp ))          $output['TRANSP']           = 1;
         if( !empty( $this->trigger ))         $output['TRIGGER']          = 1;
         if( !empty( $this->tzid ))            $output['TZID']             = 1;
         if( !empty( $this->tzname ))          $output['TZNAME']           = count( $this->tzname );
-        if( !empty( $this->tzoffsetfrom ))    $output['TZOFFSETTFROM']    = 1;
+        if( !empty( $this->tzoffsetfrom ))    $output['TZOFFSETFROM']     = 1;
         if( !empty( $this->tzoffsetto ))      $output['TZOFFSETTO']       = 1;
         if( !empty( $this->tzurl ))           $output['TZURL']            = 1;
         if( !empty( $this->url ))             $output['URL']              = 1;
         if( !empty( $this->xprop ))           $output['X-PROP']           = count( $this->xprop );
         return $output;
+        break;
+      case 'TZID':
+        return $this->dtzid;
         break;
       case 'UNIQUE_ID':
         if( empty( $this->unique_id ))
@@ -5626,13 +4753,21 @@ class calendarComponent {
 /**
  * general component config setting
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.8 - 2008-10-24
- * @param string $config
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.6 - 2011-05-14
+ * @param mixed  $config
  * @param string $value
+ * @param bool   $softUpdate
  * @return void
  */
-  function setConfig( $config, $value ) {
+  function setConfig( $config, $value = FALSE, $softUpdate = FALSE ) {
+    if( is_array( $config )) {
+      foreach( $config as $cKey => $cValue ) {
+        if( FALSE === $this->setConfig( $cKey, $cValue, $softUpdate ))
+          return FALSE;
+      }
+      return TRUE;
+    }
     $res = FALSE;
     switch( strtoupper( $config )) {
       case 'ALLOWEMPTY':
@@ -5641,7 +4776,7 @@ class calendarComponent {
         $res    = TRUE;
         break;
       case 'FORMAT':
-        $value  = trim( $value );
+        $value  = trim( strtolower( $value ));
         $this->format = $value;
         $this->_createFormat();
         $subcfg = array( 'FORMAT' => $value );
@@ -5650,7 +4785,8 @@ class calendarComponent {
       case 'LANGUAGE':
          // set language for calendar component as defined in [RFC 1766]
         $value  = trim( $value );
-        $this->language = $value;
+        if( empty( $this->language ) || !$softUpdate )
+          $this->language = $value;
         $subcfg = array( 'LANGUAGE' => $value );
         $res    = TRUE;
         break;
@@ -5660,21 +4796,28 @@ class calendarComponent {
         $subcfg = array( 'NL' => $value );
         $res    = TRUE;
         break;
+      case 'TZID':
+        $this->dtzid = $value;
+        $subcfg = array( 'TZID' => $value );
+        $res    = TRUE;
+        break;
       case 'UNIQUE_ID':
         $value  = trim( $value );
         $this->unique_id = $value;
         $subcfg = array( 'UNIQUE_ID' => $value );
         $res    = TRUE;
         break;
+      default:  // any unvalid config key.. .
+        return TRUE;
     }
     if( !$res ) return FALSE;
     if( isset( $subcfg ) && !empty( $this->components )) {
       foreach( $subcfg as $cfgkey => $cfgvalue ) {
         foreach( $this->components as $cix => $component ) {
-          $res = $component->setConfig( $cfgkey, $cfgvalue );
+          $res = $component->setConfig( $cfgkey, $cfgvalue, $softUpdate );
           if( !$res )
             break 2;
-          $this->components[$cix] = $component; // PHP4 compliant
+          $this->components[$cix] = $component->copy(); // PHP4 compliant
         }
       }
     }
@@ -5684,19 +4827,19 @@ class calendarComponent {
 /**
  * delete component property value
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-14
- * @param string $propName
- * @param int @propix, optional, if specific property is wanted in case of multiply occurences
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
+ * @param mixed $propName, bool FALSE => X-property
+ * @param int   $propix, optional, if specific property is wanted in case of multiply occurences
  * @return bool, if successfull delete TRUE
  */
-  function deleteProperty( $propName, $propix=FALSE ) {
+  function deleteProperty( $propName=FALSE, $propix=FALSE ) {
     if( $this->_notExistProp( $propName )) return FALSE;
     $propName = strtoupper( $propName );
     if( in_array( $propName, array( 'ATTACH',   'ATTENDEE', 'CATEGORIES', 'COMMENT',   'CONTACT', 'DESCRIPTION',    'EXDATE', 'EXRULE',
                                     'FREEBUSY', 'RDATE',    'RELATED-TO', 'RESOURCES', 'RRULE',   'REQUEST-STATUS', 'TZNAME', 'X-PROP'  ))) {
       if( !$propix )
-        $propix = ( isset( $this->propdelix[$propName] )) ? $this->propdelix[$propName] + 2 : 1;
+        $propix = ( isset( $this->propdelix[$propName] ) && ( 'X-PROP' != $propName )) ? $this->propdelix[$propName] + 2 : 1;
       $this->propdelix[$propName] = --$propix;
     }
     $return = FALSE;
@@ -5708,13 +4851,13 @@ class calendarComponent {
         }
         break;
       case 'ATTACH':
-        return $this->deletePropertyM( $this->attach, $propix );
+        return $this->deletePropertyM( $this->attach, $this->propdelix[$propName] );
         break;
       case 'ATTENDEE':
-        return $this->deletePropertyM( $this->attendee, $propix );
+        return $this->deletePropertyM( $this->attendee, $this->propdelix[$propName] );
         break;
       case 'CATEGORIES':
-        return $this->deletePropertyM( $this->categories, $propix );
+        return $this->deletePropertyM( $this->categories, $this->propdelix[$propName] );
         break;
       case 'CLASS':
         if( !empty( $this->class )) {
@@ -5723,7 +4866,7 @@ class calendarComponent {
         }
         break;
       case 'COMMENT':
-        return $this->deletePropertyM( $this->comment, $propix );
+        return $this->deletePropertyM( $this->comment, $this->propdelix[$propName] );
         break;
       case 'COMPLETED':
         if( !empty( $this->completed )) {
@@ -5732,7 +4875,7 @@ class calendarComponent {
         }
         break;
       case 'CONTACT':
-        return $this->deletePropertyM( $this->contact, $propix );
+        return $this->deletePropertyM( $this->contact, $this->propdelix[$propName] );
         break;
       case 'CREATED':
         if( !empty( $this->created )) {
@@ -5741,7 +4884,7 @@ class calendarComponent {
         }
         break;
       case 'DESCRIPTION':
-        return $this->deletePropertyM( $this->description, $propix );
+        return $this->deletePropertyM( $this->description, $this->propdelix[$propName] );
         break;
       case 'DTEND':
         if( !empty( $this->dtend )) {
@@ -5776,13 +4919,13 @@ class calendarComponent {
         }
         break;
       case 'EXDATE':
-        return $this->deletePropertyM( $this->exdate, $propix );
+        return $this->deletePropertyM( $this->exdate, $this->propdelix[$propName] );
         break;
       case 'EXRULE':
-        return $this->deletePropertyM( $this->exrule, $propix );
+        return $this->deletePropertyM( $this->exrule, $this->propdelix[$propName] );
         break;
       case 'FREEBUSY':
-        return $this->deletePropertyM( $this->freebusy, $propix );
+        return $this->deletePropertyM( $this->freebusy, $this->propdelix[$propName] );
         break;
       case 'GEO':
         if( !empty( $this->geo )) {
@@ -5821,7 +4964,7 @@ class calendarComponent {
         }
         break;
       case 'RDATE':
-        return $this->deletePropertyM( $this->rdate, $propix );
+        return $this->deletePropertyM( $this->rdate, $this->propdelix[$propName] );
         break;
       case 'RECURRENCE-ID':
         if( !empty( $this->recurrenceid )) {
@@ -5830,7 +4973,7 @@ class calendarComponent {
         }
         break;
       case 'RELATED-TO':
-        return $this->deletePropertyM( $this->relatedto, $propix );
+        return $this->deletePropertyM( $this->relatedto, $this->propdelix[$propName] );
         break;
       case 'REPEAT':
         if( !empty( $this->repeat )) {
@@ -5839,13 +4982,13 @@ class calendarComponent {
         }
         break;
       case 'REQUEST-STATUS':
-        return $this->deletePropertyM( $this->requeststatus, $propix );
+        return $this->deletePropertyM( $this->requeststatus, $this->propdelix[$propName] );
         break;
       case 'RESOURCES':
-        return $this->deletePropertyM( $this->resources, $propix );
+        return $this->deletePropertyM( $this->resources, $this->propdelix[$propName] );
         break;
       case 'RRULE':
-        return $this->deletePropertyM( $this->rrule, $propix );
+        return $this->deletePropertyM( $this->rrule, $this->propdelix[$propName] );
         break;
       case 'SEQUENCE':
         if( !empty( $this->sequence )) {
@@ -5884,7 +5027,7 @@ class calendarComponent {
         }
         break;
       case 'TZNAME':
-        return $this->deletePropertyM( $this->tzname, $propix );
+        return $this->deletePropertyM( $this->tzname, $this->propdelix[$propName] );
         break;
       case 'TZOFFSETFROM':
         if( !empty( $this->tzoffsetfrom )) {
@@ -5928,7 +5071,7 @@ class calendarComponent {
           }
         }
         else {
-          if( count( $this->xprop ) <= $propix )  return FALSE;
+          if( count( $this->xprop ) <= $propix ) { unset( $this->propdelix[$propName] ); return FALSE; }
           $xpropno = 0;
           foreach( $this->xprop as $xpropkey => $xpropvalue ) {
             if( $propix != $xpropno )
@@ -5937,6 +5080,10 @@ class calendarComponent {
           }
         }
         $this->xprop = $reduced;
+        if( empty( $this->xprop )) {
+          unset( $this->propdelix[$propName] );
+          return FALSE;
+        }
         return TRUE;
     }
     return $return;
@@ -5945,25 +5092,30 @@ class calendarComponent {
 /**
  * delete component property value, fixing components with multiple occurencies
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.5 - 2008-11-07
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param array $multiprop, reference to a component property
- * @param int @propix, default 0
+ * @param int   $propix, reference to removal counter
  * @return bool TRUE
  */
-  function deletePropertyM( & $multiprop, $propix=0 ) {
-    if( !isset( $multiprop[$propix])) return FALSE;
-    unset( $multiprop[$propix] );
-    if( empty( $multiprop )) $multiprop = '';
-    return ( isset( $this->multiprop[$propix] )) ? FALSE : TRUE;
+  function deletePropertyM( & $multiprop, & $propix ) {
+    if( isset( $multiprop[$propix] ))
+      unset( $multiprop[$propix] );
+    if( empty( $multiprop )) {
+      $multiprop = '';
+      unset( $propix );
+      return FALSE;
+    }
+    else
+      return TRUE;
   }
 /**
  * get component property value/params
  *
  * if property has multiply values, consequtive function calls are needed
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-11-02
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.9.3 - 2011-05-18
  * @param string $propName, optional
  * @param int @propix, optional, if specific property is wanted in case of multiply occurences
  * @param bool $inclParam=FALSE
@@ -5984,36 +5136,48 @@ class calendarComponent {
         if( !empty( $this->action['value'] )) return ( $inclParam ) ? $this->action : $this->action['value'];
         break;
       case 'ATTACH':
-        if( !isset( $this->attach[$propix] )) return FALSE;
+        while( is_array( $this->attach ) && !isset( $this->attach[$propix] ) && ( 0 < count( $this->attach )) && ( $propix < end( array_keys( $this->attach ))))
+          $propix++;
+        if( !isset( $this->attach[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->attach[$propix] : $this->attach[$propix]['value'];
         break;
       case 'ATTENDEE':
-        if( !isset( $this->attendee[$propix] )) return FALSE;
+        while( is_array( $this->attendee ) && !isset( $this->attendee[$propix] ) && ( 0 < count( $this->attendee )) && ( $propix < end( array_keys( $this->attendee ))))
+          $propix++;
+        if( !isset( $this->attendee[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->attendee[$propix] : $this->attendee[$propix]['value'];
         break;
       case 'CATEGORIES':
-        if( !isset( $this->categories[$propix] )) return FALSE;
+        while( is_array( $this->categories ) && !isset( $this->categories[$propix] ) && ( 0 < count( $this->categories )) && ( $propix < end( array_keys( $this->categories ))))
+          $propix++;
+        if( !isset( $this->categories[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->categories[$propix] : $this->categories[$propix]['value'];
         break;
       case 'CLASS':
         if( !empty( $this->class['value'] )) return ( $inclParam ) ? $this->class : $this->class['value'];
         break;
       case 'COMMENT':
-        if( !isset( $this->comment[$propix] )) return FALSE;
+        while( is_array( $this->comment ) && !isset( $this->comment[$propix] ) && ( 0 < count( $this->comment )) && ( $propix < end( array_keys( $this->comment ))))
+          $propix++;
+        if( !isset( $this->comment[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->comment[$propix] : $this->comment[$propix]['value'];
         break;
       case 'COMPLETED':
         if( !empty( $this->completed['value'] )) return ( $inclParam ) ? $this->completed : $this->completed['value'];
         break;
       case 'CONTACT':
-        if( !isset( $this->contact[$propix] )) return FALSE;
+        while( is_array( $this->contact ) && !isset( $this->contact[$propix] ) && ( 0 < count( $this->contact )) && ( $propix < end( array_keys( $this->contact ))))
+          $propix++;
+        if( !isset( $this->contact[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->contact[$propix] : $this->contact[$propix]['value'];
         break;
       case 'CREATED':
         if( !empty( $this->created['value'] )) return ( $inclParam ) ? $this->created : $this->created['value'];
         break;
       case 'DESCRIPTION':
-        if( !isset( $this->description[$propix] )) return FALSE;
+        while( is_array( $this->description ) && !isset( $this->description[$propix] ) && ( 0 < count( $this->description )) && ( $propix < end( array_keys( $this->description ))))
+          $propix++;
+        if( !isset( $this->description[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->description[$propix] : $this->description[$propix]['value'];
         break;
       case 'DTEND':
@@ -6034,19 +5198,25 @@ class calendarComponent {
         break;
       case 'DURATION':
         if( !isset( $this->duration['value'] )) return FALSE;
-        $value = ( $specform ) ? $this->duration2date() : $this->duration['value'];
+        $value = ( $specform && isset( $this->dtstart['value'] ) && isset( $this->duration['value'] )) ? iCalUtilityFunctions::_duration2date( $this->dtstart['value'], $this->duration['value'] ) : $this->duration['value'];
         return ( $inclParam ) ? array( 'value' => $value, 'params' =>  $this->duration['params'] ) : $value;
         break;
       case 'EXDATE':
-        if( !isset( $this->exdate[$propix] )) return FALSE;
+        while( is_array( $this->exdate ) && !isset( $this->exdate[$propix] ) && ( 0 < count( $this->exdate )) && ( $propix < end( array_keys( $this->exdate ))))
+          $propix++;
+        if( !isset( $this->exdate[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->exdate[$propix] : $this->exdate[$propix]['value'];
         break;
       case 'EXRULE':
-        if( !isset( $this->exrule[$propix] )) return FALSE;
+        while( is_array( $this->exrule ) && !isset( $this->exrule[$propix] ) && ( 0 < count( $this->exrule )) && ( $propix < end( array_keys( $this->exrule ))))
+          $propix++;
+        if( !isset( $this->exrule[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->exrule[$propix] : $this->exrule[$propix]['value'];
         break;
       case 'FREEBUSY':
-        if( !isset( $this->freebusy[$propix] )) return FALSE;
+        while( is_array( $this->freebusy ) && !isset( $this->freebusy[$propix] ) && ( 0 < count( $this->freebusy )) && ( $propix < end( array_keys( $this->freebusy ))))
+          $propix++;
+        if( !isset( $this->freebusy[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->freebusy[$propix] : $this->freebusy[$propix]['value'];
         break;
       case 'GEO':
@@ -6062,39 +5232,49 @@ class calendarComponent {
         if( !empty( $this->organizer['value'] )) return ( $inclParam ) ? $this->organizer : $this->organizer['value'];
         break;
       case 'PERCENT-COMPLETE':
-        if( !empty( $this->percentcomplete['value'] )) return ( $inclParam ) ? $this->percentcomplete : $this->percentcomplete['value'];
+        if( !empty( $this->percentcomplete['value'] ) || ( isset( $this->percentcomplete['value'] ) && ( '0' == $this->percentcomplete['value'] ))) return ( $inclParam ) ? $this->percentcomplete : $this->percentcomplete['value'];
         break;
       case 'PRIORITY':
-        if( !empty( $this->priority['value'] )) return ( $inclParam ) ? $this->priority : $this->priority['value'];
+        if( !empty( $this->priority['value'] ) || ( isset( $this->priority['value'] ) && ('0' == $this->priority['value'] ))) return ( $inclParam ) ? $this->priority : $this->priority['value'];
         break;
       case 'RDATE':
-        if( !isset( $this->rdate[$propix] )) return FALSE;
+        while( is_array( $this->rdate ) && !isset( $this->rdate[$propix] ) && ( 0 < count( $this->rdate )) && ( $propix < end( array_keys( $this->rdate ))))
+          $propix++;
+        if( !isset( $this->rdate[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->rdate[$propix] : $this->rdate[$propix]['value'];
         break;
       case 'RECURRENCE-ID':
         if( !empty( $this->recurrenceid['value'] )) return ( $inclParam ) ? $this->recurrenceid : $this->recurrenceid['value'];
         break;
       case 'RELATED-TO':
-        if( !isset( $this->relatedto[$propix] )) return FALSE;
+        while( is_array( $this->relatedto ) && !isset( $this->relatedto[$propix] ) && ( 0 < count( $this->relatedto )) && ( $propix < end( array_keys( $this->relatedto ))))
+          $propix++;
+        if( !isset( $this->relatedto[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->relatedto[$propix] : $this->relatedto[$propix]['value'];
         break;
       case 'REPEAT':
-        if( !empty( $this->repeat['value'] )) return ( $inclParam ) ? $this->repeat : $this->repeat['value'];
+        if( !empty( $this->repeat['value'] ) || ( isset( $this->repeat['value'] ) && ( '0' == $this->repeat['value'] ))) return ( $inclParam ) ? $this->repeat : $this->repeat['value'];
         break;
       case 'REQUEST-STATUS':
-        if( !isset( $this->requeststatus[$propix] )) return FALSE;
+        while( is_array( $this->requeststatus ) && !isset( $this->requeststatus[$propix] ) && ( 0 < count( $this->requeststatus )) && ( $propix < end( array_keys( $this->requeststatus ))))
+          $propix++;
+        if( !isset( $this->requeststatus[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->requeststatus[$propix] : $this->requeststatus[$propix]['value'];
         break;
       case 'RESOURCES':
-        if( !isset( $this->resources[$propix] )) return FALSE;
+        while( is_array( $this->resources ) && !isset( $this->resources[$propix] ) && ( 0 < count( $this->resources )) && ( $propix < end( array_keys( $this->resources ))))
+          $propix++;
+        if( !isset( $this->resources[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->resources[$propix] : $this->resources[$propix]['value'];
         break;
       case 'RRULE':
-        if( !isset( $this->rrule[$propix] )) return FALSE;
+        while( is_array( $this->rrule ) && !isset( $this->rrule[$propix] ) && ( 0 < count( $this->rrule )) && ( $propix < end( array_keys( $this->rrule ))))
+          $propix++;
+        if( !isset( $this->rrule[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->rrule[$propix] : $this->rrule[$propix]['value'];
         break;
       case 'SEQUENCE':
-        if( !empty( $this->sequence['value'] )) return ( $inclParam ) ? $this->sequence : $this->sequence['value'];
+        if( isset( $this->sequence['value'] ) && ( isset( $this->sequence['value'] ) && ( '0' <= $this->sequence['value'] ))) return ( $inclParam ) ? $this->sequence : $this->sequence['value'];
         break;
       case 'STATUS':
         if( !empty( $this->status['value'] )) return ( $inclParam ) ? $this->status : $this->status['value'];
@@ -6112,7 +5292,9 @@ class calendarComponent {
         if( !empty( $this->tzid['value'] )) return ( $inclParam ) ? $this->tzid : $this->tzid['value'];
         break;
       case 'TZNAME':
-        if( !isset( $this->tzname[$propix] )) return FALSE;
+        while( is_array( $this->tzname ) && !isset( $this->tzname[$propix] ) && ( 0 < count( $this->tzname )) && ( $propix < end( array_keys( $this->tzname ))))
+          $propix++;
+        if( !isset( $this->tzname[$propix] )) { unset( $this->propix[$propName] ); return FALSE; }
         return ( $inclParam ) ? $this->tzname[$propix] : $this->tzname[$propix]['value'];
         break;
       case 'TZOFFSETFROM':
@@ -6156,9 +5338,69 @@ class calendarComponent {
     return FALSE;
   }
 /**
+ * returns calendar property unique values for 'CATEGORIES', 'RESOURCES' or 'ATTENDEE' and each number of ocurrence
+ *
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-04-13
+ * @param string $propName
+ * @param array  $output, incremented result array
+ */
+  function _getProperties( $propName, & $output ) {
+    if( !in_array( strtoupper( $propName ), array( 'ATTENDEE', 'CATEGORIES', 'RESOURCES' )))
+      return output;
+    while( FALSE !== ( $content = $this->getProperty( $propName ))) {
+      if( is_array( $content )) {
+        foreach( $content as $part ) {
+          if( FALSE !== strpos( $part, ',' )) {
+            $part = explode( ',', $part );
+            foreach( $part as $thePart ) {
+              $thePart = trim( $thePart );
+              if( !empty( $thePart )) {
+                if( !isset( $output[$thePart] ))
+                  $output[$thePart] = 1;
+                else
+                  $output[$thePart] += 1;
+              }
+            }
+          }
+          else {
+            $part = trim( $part );
+            if( !isset( $output[$part] ))
+              $output[$part] = 1;
+            else
+              $output[$part] += 1;
+          }
+        }
+      }
+      elseif( FALSE !== strpos( $content, ',' )) {
+        $content = explode( ',', $content );
+        foreach( $content as $thePart ) {
+          $thePart = trim( $thePart );
+          if( !empty( $thePart )) {
+            if( !isset( $output[$thePart] ))
+              $output[$thePart] = 1;
+            else
+              $output[$thePart] += 1;
+          }
+        }
+      }
+      else {
+        $content = trim( $content );
+        if( !empty( $content )) {
+          if( !isset( $output[$content] ))
+            $output[$content] = 1;
+          else
+            $output[$content] += 1;
+        }
+      }
+    }
+    ksort( $output );
+    return $output;
+  }
+/**
  * general component property setting
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-05
  * @param mixed $args variable number of function arguments,
  *                    first argument is ALWAYS component name,
@@ -6273,36 +5515,63 @@ class calendarComponent {
 /**
  * parse component unparsed data into properties
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.2 - 2008-10-23
- * @param mixed $unparsedtext, optional, strict rfc2445 formatted, single property string or array of property strings
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-21
+ * @param mixed $unparsedtext, optional, strict rfc2445 formatted, single property string or array of strings
  * @return bool FALSE if error occurs during parsing
  *
  */
   function parse( $unparsedtext=null ) {
-    if( $unparsedtext ) {
-      $this->unparsed = array();
-      if( is_array( $unparsedtext )) {
-        $comp = & $this;
-        foreach ( $unparsedtext as $line ) {
-          if( 'END:VALARM' == strtoupper( substr( $line, 0, 10 ))) {
-            $this->setComponent( $comp );
-            $comp =  & $this;
-            continue;
-          }
-          elseif( 'BEGIN:VALARM' == strtoupper( substr( $line, 0, 12 ))) {
-            $comp = new valarm();
-            continue;
-          }
-          else
-            $comp->unparsed[] = $line;
+    if( !empty( $unparsedtext )) {
+      $nl = $this->getConfig( 'nl' );
+      if( is_array( $unparsedtext ))
+        $unparsedtext = implode( '\n'.$nl, $unparsedtext );
+            /* fix line folding */
+      $eolchars = array( "\r\n", "\n\r", "\n", "\r" ); // check all line endings
+      $EOLmark = FALSE;
+      foreach( $eolchars as $eolchar ) {
+        if( !$EOLmark  && ( FALSE !== strpos( $unparsedtext, $eolchar ))) {
+          $unparsedtext = str_replace( $eolchar." ",  '',  $unparsedtext );
+          $unparsedtext = str_replace( $eolchar."\t", '',  $unparsedtext );
+          if( $eolchar != $nl )
+            $unparsedtext = str_replace( $eolchar,    $nl, $unparsedtext );
+          $EOLmark = TRUE;
         }
       }
-      else
-        $this->unparsed = array( trim( $unparsedtext ));
+      $tmp = explode( $nl, $unparsedtext );
+      $unparsedtext = array();
+      foreach( $tmp as $tmpr )
+        if( !empty( $tmpr ))
+          $unparsedtext[] = $tmpr;
     }
     elseif( !isset( $this->unparsed ))
-      $this->unparsed = array();
+      $unparsedtext = array();
+    else
+      $unparsedtext = $this->unparsed;
+    $this->unparsed = array();
+    $comp = & $this;
+    $config = $this->getConfig();
+    foreach ( $unparsedtext as $line ) {
+ // echo $comp->objName.": $line<br />"; // test ###
+      if( in_array( strtoupper( substr( $line, 0, 6 )), array( 'END:VA', 'END:ST', 'END:DA' )))
+        $this->components[] = $comp->copy();
+      elseif( 'END:' == strtoupper( substr( $line, 0, 4 )))
+        break;
+      elseif( 'BEGIN:VALARM'   == strtoupper( substr( $line, 0, 12 )))
+        $comp = new valarm( $config);
+      elseif( 'BEGIN:STANDARD' == strtoupper( substr( $line, 0, 14 )))
+        $comp = new vtimezone( 'standard', $config );
+      elseif( 'BEGIN:DAYLIGHT' == strtoupper( substr( $line, 0, 14 )))
+        $comp = new vtimezone( 'daylight', $config );
+      elseif( 'BEGIN:'         == strtoupper( substr( $line, 0, 6 )))
+        continue;
+      else {
+        $comp->unparsed[] = $line;
+// echo $comp->objName.": $line<br />\n"; // test ###
+      }
+    }
+    unset( $config );
+// echo $this->objName.'<br />'.var_export( $this->unparsed, TRUE )."<br />\n"; // test ###
             /* concatenate property values spread over several lines */
     $lastix    = -1;
     $propnames = array( 'action', 'attach', 'attendee', 'categories', 'comment', 'completed'
@@ -6323,32 +5592,28 @@ class calendarComponent {
         }
       }
       if( $newProp ) {
+        if( -1 < $lastix )
+          $proprows[$lastix] = $proprows[$lastix];
         $newProp = FALSE;
         $lastix++;
         $proprows[$lastix]  = $line;
       }
-      else {
-            /* remove line breaks */
-        if(( '\n' == substr( $proprows[$lastix], -2 )) &&
-           (  ' ' == substr( $line, 0, 1 ))) {
-          $proprows[$lastix] = substr( $proprows[$lastix], 0, strlen( $proprows[$lastix] ) - 2 );
-          $line = substr( $line, 1 );
-        }
-        $proprows[$lastix] .= $line;
-      }
+      else
+        $proprows[$lastix] .= '!"#¤%&/()=?'.$line;
     }
             /* parse each property 'line' */
     foreach( $proprows as $line ) {
-      $line = str_replace( "\n ", '', $line );
+      $line = str_replace( '!"#¤%&/()=? ', '', $line );
+      $line = str_replace( '!"#¤%&/()=?', '', $line );
       if( '\n' == substr( $line, -2 ))
         $line = substr( $line, 0, strlen( $line ) - 2 );
             /* get propname, (problem with x-properties, otherwise in previous loop) */
       $cix = $propname = null;
-      for( $cix=0; $cix < strlen( $line ); $cix++ ) {
-        if( in_array( $line{$cix}, array( ':', ';' )))
+      for( $cix=0, $clen = strlen( $line ); $cix < $clen; $cix++ ) {
+        if( in_array( $line[$cix], array( ':', ';' )))
           break;
         else {
-          $propname .= $line{$cix};
+          $propname .= $line[$cix];
         }
       }
       if(( 'x-' == substr( $propname, 0, 2 )) || ( 'X-' == substr( $propname, 0, 2 ))) {
@@ -6360,13 +5625,15 @@ class calendarComponent {
             /* separate attributes from value */
       $attr   = array();
       $attrix = -1;
-      $strlen = strlen( $line );
-      for( $cix=0; $cix < $strlen; $cix++ ) {
-        if((       ':'   == $line{$cix} )             &&
+      $clen = strlen( $line );
+      for( $cix=0; $cix < $clen; $cix++ ) {
+        if((       ':'   == $line[$cix] )             &&
                  ( '://' != substr( $line, $cix, 3 )) &&
+             ( !in_array( strtolower( substr( $line, $cix - 3, 4 )), array( 'fax:', 'cid:', 'sms:', 'tel:', 'urn:' ))) &&
+             ( !in_array( strtolower( substr( $line, $cix - 4, 5 )), array( 'crid:', 'news:', 'pres:' ))) &&
            ( 'mailto:'   != strtolower( substr( $line, $cix - 6, 7 )))) {
           $attrEnd = TRUE;
-          if(( $cix < ( $strlen - 4 )) &&
+          if(( $cix < ( $clen - 4 )) &&
                ctype_digit( substr( $line, $cix+1, 4 ))) { // an URI with a (4pos) portnr??
             for( $c2ix = $cix; 3 < $c2ix; $c2ix-- ) {
               if( '://' == substr( $line, $c2ix - 2, 3 )) {
@@ -6380,10 +5647,10 @@ class calendarComponent {
             break;
           }
         }
-        if( ';' == $line{$cix} )
+        if( ';' == $line[$cix] )
           $attr[++$attrix] = null;
         else
-          $attr[$attrix] .= $line{$cix};
+          $attr[$attrix] .= $line[$cix];
       }
             /* make attributes in array format */
       $propattr = array();
@@ -6395,7 +5662,7 @@ class calendarComponent {
           $propattr[] = $attribute;
       }
             /* call setProperty( $propname.. . */
-      switch( $propname ) {
+      switch( strtoupper( $propname )) {
         case 'ATTENDEE':
           foreach( $propattr as $pix => $attr ) {
             $attr2 = explode( ',', $attr );
@@ -6419,7 +5686,7 @@ class calendarComponent {
             if( 1 < count( $content )) {
               $content = array_values( $content );
               foreach( $content as $cix => $contentPart )
-                $content[$cix] = $this->_strunrep( $contentPart );
+                $content[$cix] = calendarComponent::_strunrep( $contentPart );
               $this->setProperty( $propname, $content, $propattr );
               break;
             }
@@ -6435,13 +5702,13 @@ class calendarComponent {
         case 'SUMMARY':
           if( empty( $line ))
             $propattr = null;
-          $this->setProperty( $propname, $this->_strunrep( $line ), $propattr );
+          $this->setProperty( $propname, calendarComponent::_strunrep( $line ), $propattr );
           unset( $propname2 );
           break;
         case 'REQUEST-STATUS':
           $values    = explode( ';', $line, 3 );
-          $values[1] = ( !isset( $values[1] )) ? null : $this->_strunrep( $values[1] );
-          $values[2] = ( !isset( $values[2] )) ? null : $this->_strunrep( $values[2] );
+          $values[1] = ( !isset( $values[1] )) ? null : calendarComponent::_strunrep( $values[1] );
+          $values[2] = ( !isset( $values[2] )) ? null : calendarComponent::_strunrep( $values[2] );
           $this->setProperty( $propname
                             , $values[0]  // statcode
                             , $values[1]  // statdesc
@@ -6541,32 +5808,43 @@ class calendarComponent {
           } // end - foreach( $values.. .
           $this->setProperty( $propname, $recur, $propattr );
           break;
+        case 'ACTION':
+        case 'CLASSIFICATION':
+        case 'STATUS':
+        case 'TRANSP':
+        case 'UID':
+        case 'TZID':
+        case 'RELATED-TO':
+        case 'TZNAME':
+          $line = calendarComponent::_strunrep( $line );
         default:
           $this->setProperty( $propname, $line, $propattr );
           break;
       } // end  switch( $propname.. .
     } // end - foreach( $proprows.. .
-    unset( $this->unparsed, $proprows );
+    unset( $unparsedtext, $this->unparsed, $proprows );
     if( isset( $this->components ) && is_array( $this->components ) && ( 0 < count( $this->components ))) {
-      for( $six = 0; $six < count( $this->components ); $six++ ) {
-        if( !empty( $this->components[$six]->unparsed ))
-          $this->components[$six]->parse();
+      $ckeys = array_keys( $this->components );
+      foreach( $ckeys as $ckey ) {
+        if( !empty( $this->components[$ckey] ) && !empty( $this->components[$ckey]->unparsed )) {
+          $this->components[$ckey]->parse();
+        }
       }
     }
+    return TRUE;
   }
 /*********************************************************************************/
 /*********************************************************************************/
 /**
  * return a copy of this component
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.16 - 2007-11-07
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @return object
  */
   function copy() {
-    $serialized_contents = serialize($this);
-    $copy = unserialize($serialized_contents);
-    unset( $copy->propix );
+    $serialized_contents = serialize( $this );
+    $copy = unserialize( $serialized_contents );
     return $copy;
  }
 /*********************************************************************************/
@@ -6574,8 +5852,8 @@ class calendarComponent {
 /**
  * delete calendar subcomponent from component container
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-15
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param mixed $arg1 ordno / component type / component uid
  * @param mixed $arg2 optional, ordno if arg1 = component type
  * @return void
@@ -6594,7 +5872,6 @@ class calendarComponent {
     $cix2dC = 0;
     foreach ( $this->components as $cix => $component) {
       if( empty( $component )) continue;
-      unset( $component->propix );
       if(( 'INDEX' == $argType ) && ( $index == $cix )) {
         unset( $this->components[$cix] );
         return TRUE;
@@ -6616,8 +5893,8 @@ class calendarComponent {
 /**
  * get calendar component subcomponent from component container
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-15
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param mixed $arg1 optional, ordno/component type/ component uid
  * @param mixed $arg2 optional, ordno if arg1 = component type
  * @return object
@@ -6639,8 +5916,7 @@ class calendarComponent {
       unset( $this->compix['INDEX'] );
       $argType = strtolower( $arg1 );
       if( !$arg2 )
-        $index = $this->compix[$argType] =
-        ( isset( $this->compix[$argType] )) ? $this->compix[$argType] + 1 : 1;
+        $index = $this->compix[$argType] = ( isset( $this->compix[$argType] )) ? $this->compix[$argType] + 1 : 1;
       else
         $index = (int) $arg2;
     }
@@ -6651,7 +5927,6 @@ class calendarComponent {
     $cix2gC = 0;
     foreach( $this->components as $cix => $component ) {
       if( empty( $component )) continue;
-      unset( $component->propix );
       if(( 'INDEX' == $argType ) && ( $index == $cix ))
         return $component->copy();
       elseif( $argType == $component->objName ) {
@@ -6659,10 +5934,8 @@ class calendarComponent {
            return $component->copy();
          $cix2gC++;
       }
-      elseif( !$argType && ( $arg1 == $component->getProperty( 'uid' ))) {
-        unset( $component->propix );
+      elseif( !$argType && ( $arg1 == $component->getProperty( 'uid' )))
         return $component->copy();
-      }
     }
             /* not found.. . */
     unset( $this->compix );
@@ -6671,7 +5944,7 @@ class calendarComponent {
 /**
  * add calendar component as subcomponent to container for subcomponents
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 1.x.x - 2007-04-24
  * @param object $component calendar component
  * @return void
@@ -6680,10 +5953,39 @@ class calendarComponent {
     $this->setComponent( $component );
   }
 /**
+ * create new calendar component subcomponent, already included within component
+ *
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.33 - 2011-01-03
+ * @param string $compType subcomponent type
+ * @return object (reference)
+ */
+  function & newComponent( $compType ) {
+    $config = $this->getConfig();
+    $keys   = array_keys( $this->components );
+    $ix     = end( $keys) + 1;
+    switch( strtoupper( $compType )) {
+      case 'ALARM':
+      case 'VALARM':
+        $this->components[$ix] = new valarm( $config );
+        break;
+      case 'STANDARD':
+        array_unshift( $this->components, new vtimezone( 'STANDARD', $config ));
+        $ix = 0;
+        break;
+      case 'DAYLIGHT':
+        $this->components[$ix] = new vtimezone( 'DAYLIGHT', $config );
+        break;
+      default:
+        return FALSE;
+    }
+    return $this->components[$ix];
+  }
+/**
  * add calendar component as subcomponent to container for subcomponents
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.13 - 2008-09-24
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.8 - 2011-03-15
  * @param object $component calendar component
  * @param mixed $arg1 optional, ordno/component type/ component uid
  * @param mixed $arg2 optional, ordno if arg1 = component type
@@ -6691,72 +5993,66 @@ class calendarComponent {
  */
   function setComponent( $component, $arg1=FALSE, $arg2=FALSE  ) {
     if( !isset( $this->components )) return FALSE;
-    if( '' >= $component->getConfig( 'language'))
-      $component->setConfig( 'language',  $this->getConfig( 'language' ));
-    $component->setConfig( 'allowEmpty',  $this->getConfig( 'allowEmpty' ));
-    $component->setConfig( 'nl',          $this->getConfig( 'nl' ));
-    $component->setConfig( 'unique_id',   $this->getConfig( 'unique_id' ));
-    $component->setConfig( 'format',      $this->getConfig( 'format' ));
+    $component->setConfig( $this->getConfig(), FALSE, TRUE );
     if( !in_array( $component->objName, array( 'valarm', 'vtimezone', 'standard', 'daylight' ))) {
-      unset( $component->propix );
             /* make sure dtstamp and uid is set */
       $dummy = $component->getProperty( 'dtstamp' );
       $dummy = $component->getProperty( 'uid' );
     }
-    if( !$arg1 ) {
+    if( !$arg1 ) { // plain insert, last in chain
       $this->components[] = $component->copy();
       return TRUE;
     }
     $argType = $index = null;
-    if ( ctype_digit( (string) $arg1 )) {
+    if ( ctype_digit( (string) $arg1 )) { // index insert/replace
       $argType = 'INDEX';
       $index   = (int) $arg1 - 1;
     }
-    elseif(( strlen( $arg1 ) <= strlen( 'vfreebusy' )) && ( FALSE === strpos( $arg1, '@' ))) {
+    elseif( in_array( strtolower( $arg1 ), array( 'vevent', 'vtodo', 'vjournal', 'vfreebusy', 'valarm', 'vtimezone' ))) {
       $argType = strtolower( $arg1 );
       $index = ( ctype_digit( (string) $arg2 )) ? ((int) $arg2) - 1 : 0;
     }
+    // else if arg1 is set, arg1 must be an UID
     $cix2sC = 0;
     foreach ( $this->components as $cix => $component2 ) {
       if( empty( $component2 )) continue;
-      unset( $component2->propix );
-      if(( 'INDEX' == $argType ) && ( $index == $cix )) {
+      if(( 'INDEX' == $argType ) && ( $index == $cix )) { // index insert/replace
         $this->components[$cix] = $component->copy();
         return TRUE;
       }
-      elseif( $argType == $component2->objName ) {
+      elseif( $argType == $component2->objName ) { // component Type index insert/replace
         if( $index == $cix2sC ) {
           $this->components[$cix] = $component->copy();
           return TRUE;
         }
         $cix2sC++;
       }
-      elseif( !$argType && ($arg1 == $component2->getProperty( 'uid' ))) {
+      elseif( !$argType && ( $arg1 == $component2->getProperty( 'uid' ))) { // UID insert/replace
         $this->components[$cix] = $component->copy();
         return TRUE;
       }
     }
-            /* not found.. . insert anyway.. .*/
+            /* arg1=index and not found.. . insert at index .. .*/
+    if( 'INDEX' == $argType ) {
+      $this->components[$index] = $component->copy();
+      ksort( $this->components, SORT_NUMERIC );
+    }
+    else    /* not found.. . insert last in chain anyway .. .*/
     $this->components[] = $component->copy();
     return TRUE;
   }
 /**
  * creates formatted output for subcomponents
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.4.10 - 2008-08-06
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.27 - 2010-12-12
  * @return string
  */
   function createSubComponent() {
     $output = null;
     foreach( $this->components as $component ) {
       if( empty( $component )) continue;
-      if( '' >= $component->getConfig( 'language'))
-        $component->setConfig( 'language',  $this->getConfig( 'language' ));
-      $component->setConfig( 'allowEmpty',  $this->getConfig( 'allowEmpty' ));
-      $component->setConfig( 'nl',          $this->getConfig( 'nl' ));
-      $component->setConfig( 'unique_id',   $this->getConfig( 'unique_id' ));
-      $component->setConfig( 'format',      $this->getConfig( 'format' ));
+      $component->setConfig( $this->getConfig(), FALSE, TRUE );
       $output .= $component->createComponent( $this->xcaldecl );
     }
     return $output;
@@ -6779,34 +6075,93 @@ class calendarComponent {
  * folding of lines, causing ambiguity in the return string.
  * Fix uses var $breakAtChar=75 and breaks the line at $breakAtChar-1 if need be.
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.2.8 - 2006-09-03
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.13 - 2010-12-06
  * @param string $value
  * @return string
  */
   function _size75( $string ) {
-    $strlen = strlen( $string );
     $tmp    = $string;
     $string = null;
-    while( $strlen > 75 ) {
-       $breakAtChar = 75;
-       if( substr( $tmp, ( $breakAtChar - 1 ), strlen( '\n' )) == '\n' )
-         $breakAtChar = $breakAtChar - 1;
-       $string .= substr( $tmp, 0, $breakAtChar );
-       $string .= $this->nl;
-       $tmp     = ' '.substr( $tmp, $breakAtChar );
-       $strlen  = strlen( $tmp );
-    } // while
-    $string .= rtrim( $tmp ); // the rest
-    if( $this->nl != substr( $string, ( 0 - strlen( $this->nl ))))
-      $string .= $this->nl;
+            /* if PHP is config with  mb_string.. . */
+    if( defined( MB_OVERLOAD_STRING )) {
+      $strlen  = mb_strlen( $tmp );
+      while( $strlen > 75 ) {
+        $breakAtChar = 75;
+        if( substr( $tmp, ( $breakAtChar - 1 ), strlen( '\n' )) == '\n' )
+          $breakAtChar = $breakAtChar - 1;
+        $string .= mb_substr( $tmp, 0, $breakAtChar );
+        if( '\n' == substr( $string, ( 0 - strlen( '\n' ))))
+          $string = substr( $string, 0, ( strlen( $string ) - strlen( '\n' )));
+        if( $this->nl != mb_substr( $string, ( 0 - strlen( $this->nl ))))
+          $string .= $this->nl;
+        $tmp     = ' '.mb_substr( $tmp, $breakAtChar );
+        $strlen  = mb_strlen( $tmp );
+      } // end while
+      if( 0 < $strlen ) {
+        $string .= $tmp; // the rest
+        if( '\n' == substr( $string, ( 0 - strlen( '\n' ))))
+          $string = substr( $string, 0, ( strlen( $string ) - strlen( '\n' )));
+        if( $this->nl != mb_substr( $string, ( 0 - strlen( $this->nl ))))
+          $string .= $this->nl;
+      }
+      return $string;
+    }
+            /* if PHP is not config with  mb_string.. . */
+    $eolcharlen = strlen( '\n' );
+    while( TRUE ) {
+      $bytecnt = strlen( $tmp );
+      $charCnt = $ix = 0;
+      for( $ix = 0; $ix < $bytecnt; $ix++ ) {
+        if(( 73 < $charCnt ) && ( '\n' == substr( $tmp, $ix, $eolcharlen ))) {
+          $ix += $eolcharlen;
+          break;                                    // break when '\n' and eol
+        }
+        elseif( 74 < $charCnt )
+          break;                                    // always break for-loop here
+        else {
+          $byte = ord( $tmp[$ix] );
+          if ($byte <= 127) {                       // add a one byte character
+            $string .= substr( $tmp, $ix, 1 );
+            $charCnt += 1;
+          }
+          else if ($byte >= 194 && $byte <= 223) {  // start byte in two byte character
+            $string .= substr( $tmp, $ix, 2 );      // add a two bytes character
+            $charCnt += 1;
+          }
+          else if ($byte >= 224 && $byte <= 239) {  // start byte in three bytes character
+            $string .= substr( $tmp, $ix, 3 );      // add a three bytes character
+            $charCnt += 1;
+          }
+          else if ($byte >= 240 && $byte <= 244) {  // start byte in four bytes character
+            $string .= substr( $tmp, $ix, 4 );      // add a four bytes character
+            $charCnt += 1;
+          }
+        }
+      } // end for
+      if( '\n' == substr( $string, ( 0 - strlen( '\n' ))))
+        $string = substr( $string, 0, ( strlen( $string ) - strlen( '\n' )));
+      if( $this->nl != substr( $string, ( 0 - strlen( $this->nl ))))
+        $string .= $this->nl;
+      $tmp     = substr( $tmp, $ix );
+      if( empty( $tmp ))
+        break; // while-loop breakes here
+      else
+        $tmp  = ' '.$tmp;
+    } // end while
+    if( !empty( $tmp )) {
+      if( '\n' == substr( $string, ( 0 - strlen( '\n' ))))
+        $string = substr( $string, 0, ( strlen( $string ) - strlen( '\n' ))).$this->nl;
+      if( $this->nl != substr( $string, ( 0 - strlen( $this->nl ))))
+        $string .= $this->nl;
+    }
     return $string;
   }
 /**
  * special characters management output
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.3.3 - 2007-12-20
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.15 - 2010-09-24
  * @param string $string
  * @return string
  */
@@ -6818,11 +6173,12 @@ class calendarComponent {
         break;
       default:
         $pos = 0;
+        $specChars = array( 'n', 'N', 'r', ',', ';' );
         while( $pos <= strlen( $string )) {
           $pos = strpos( $string, "\\", $pos );
           if( FALSE === $pos )
             break;
-          if( !in_array( $string{($pos + 1)}, array( 'n', 'N', 'r', ',', ';' ))) {
+          if( !in_array( substr( $string, $pos, 1 ), $specChars )) {
             $string = substr( $string, 0, $pos )."\\".substr( $string, ( $pos + 1 ));
             $pos += 1;
           }
@@ -6834,10 +6190,15 @@ class calendarComponent {
           $string = str_replace(',',   '\,',      $string);
         if( FALSE !== strpos( $string, ';' ))
           $string = str_replace(';',   '\;',      $string);
+
         if( FALSE !== strpos( $string, "\r\n" ))
           $string = str_replace( "\r\n", '\n',    $string);
         elseif( FALSE !== strpos( $string, "\r" ))
           $string = str_replace( "\r", '\n',      $string);
+
+        elseif( FALSE !== strpos( $string, "\n" ))
+          $string = str_replace( "\n", '\n',      $string);
+
         if( FALSE !== strpos( $string, '\N' ))
           $string = str_replace( '\N', '\n',      $string);
 //        if( FALSE !== strpos( $string, $this->nl ))
@@ -6849,12 +6210,12 @@ class calendarComponent {
 /**
  * special characters management input (from iCal file)
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.3.3 - 2007-11-23
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.6.22 - 2010-10-17
  * @param string $string
  * @return string
  */
-  function _strunrep( $string ) {
+  static function _strunrep( $string ) {
     $string = str_replace( '\\\\', '\\',     $string);
     $string = str_replace( '\,',   ',',      $string);
     $string = str_replace( '\;',   ';',      $string);
@@ -6867,7 +6228,7 @@ class calendarComponent {
 /**
  * class for calendar component VEVENT
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  */
 class vevent extends calendarComponent {
@@ -6906,11 +6267,12 @@ class vevent extends calendarComponent {
 /**
  * constructor for calendar component VEVENT object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-31
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-01
+ * @param  array $config
  * @return void
  */
-  function vevent() {
+  function vevent( $config = array()) {
     $this->calendarComponent();
 
     $this->attach          = '';
@@ -6946,11 +6308,19 @@ class vevent extends calendarComponent {
 
     $this->components      = array();
 
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
   }
 /**
  * create formatted output for calendar component VEVENT object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-07
  * @param array $xcaldecl
  * @return string
@@ -7004,7 +6374,7 @@ class vevent extends calendarComponent {
 /**
  * class for calendar component VTODO
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  */
 class vtodo extends calendarComponent {
@@ -7044,11 +6414,12 @@ class vtodo extends calendarComponent {
 /**
  * constructor for calendar component VTODO object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-31
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-01
+ * @param array $config
  * @return void
  */
-  function vtodo() {
+  function vtodo( $config = array()) {
     $this->calendarComponent();
 
     $this->attach          = '';
@@ -7084,11 +6455,20 @@ class vtodo extends calendarComponent {
     $this->xprop           = '';
 
     $this->components      = array();
+
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
   }
 /**
  * create formatted output for calendar component VTODO object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-11-07
  * @param array $xcaldecl
  * @return string
@@ -7143,7 +6523,7 @@ class vtodo extends calendarComponent {
 /**
  * class for calendar component VJOURNAL
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  */
 class vjournal extends calendarComponent {
@@ -7173,11 +6553,12 @@ class vjournal extends calendarComponent {
 /**
  * constructor for calendar component VJOURNAL object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-31
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-01
+ * @param array $config
  * @return void
  */
-  function vjournal() {
+  function vjournal( $config = array()) {
     $this->calendarComponent();
 
     $this->attach          = '';
@@ -7203,11 +6584,20 @@ class vjournal extends calendarComponent {
     $this->summary         = '';
     $this->url             = '';
     $this->xprop           = '';
+
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
   }
 /**
  * create formatted output for calendar component VJOURNAL object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  * @param array $xcaldecl
  * @return string
@@ -7253,7 +6643,7 @@ class vjournal extends calendarComponent {
 /**
  * class for calendar component VFREEBUSY
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  */
 class vfreebusy extends calendarComponent {
@@ -7273,11 +6663,12 @@ class vfreebusy extends calendarComponent {
 /**
  * constructor for calendar component VFREEBUSY object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-31
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-01
+ * @param array $config
  * @return void
  */
-  function vfreebusy() {
+  function vfreebusy( $config = array()) {
     $this->calendarComponent();
 
     $this->attendee        = '';
@@ -7291,11 +6682,20 @@ class vfreebusy extends calendarComponent {
     $this->requeststatus   = '';
     $this->url             = '';
     $this->xprop           = '';
+
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
   }
 /**
  * create formatted output for calendar component VFREEBUSY object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.3.1 - 2007-11-19
  * @param array $xcaldecl
  * @return string
@@ -7329,7 +6729,7 @@ class vfreebusy extends calendarComponent {
 /**
  * class for calendar component VALARM
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  */
 class valarm extends calendarComponent {
@@ -7345,11 +6745,12 @@ class valarm extends calendarComponent {
 /**
  * constructor for calendar component VALARM object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-31
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-01
+ * @param array $config
  * @return void
  */
-  function valarm() {
+  function valarm( $config = array()) {
     $this->calendarComponent();
 
     $this->action          = '';
@@ -7361,11 +6762,20 @@ class valarm extends calendarComponent {
     $this->summary         = '';
     $this->trigger         = '';
     $this->xprop           = '';
+
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
   }
 /**
  * create formatted output for calendar component VALARM object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-22
  * @param array $xcaldecl
  * @return string
@@ -7391,7 +6801,7 @@ class valarm extends calendarComponent {
 /**
  * class for calendar component VTIMEZONE
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-12
  */
 class vtimezone extends calendarComponent {
@@ -7413,12 +6823,17 @@ class vtimezone extends calendarComponent {
 /**
  * constructor for calendar component VTIMEZONE object
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
- * @since 2.5.1 - 2008-10-31
- * @param string $timezonetype optional, default FALSE ( STANDARD / DAYLIGHT )
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
+ * @since 2.8.2 - 2011-05-01
+ * @param mixed $timezonetype optional, default FALSE ( STANDARD / DAYLIGHT )
+ * @param array $config
  * @return void
  */
-  function vtimezone( $timezonetype=FALSE ) {
+  function vtimezone( $timezonetype=FALSE, $config = array()) {
+    if( is_array( $timezonetype )) {
+      $config       = $timezonetype;
+      $timezonetype = FALSE;
+    }
     if( !$timezonetype )
       $this->timezonetype = 'VTIMEZONE';
     else
@@ -7438,11 +6853,20 @@ class vtimezone extends calendarComponent {
     $this->xprop           = '';
 
     $this->components      = array();
+
+    if( defined( 'ICAL_LANG' ) && !isset( $config['language'] ))
+                                          $config['language']   = ICAL_LANG;
+    if( !isset( $config['allowEmpty'] ))  $config['allowEmpty'] = TRUE;
+    if( !isset( $config['nl'] ))          $config['nl']         = "\r\n";
+    if( !isset( $config['format'] ))      $config['format']     = 'iCal';
+    if( !isset( $config['delimiter'] ))   $config['delimiter']  = DIRECTORY_SEPARATOR;
+    $this->setConfig( $config );
+
   }
 /**
  * create formatted output for calendar component VTIMEZONE object instance
  *
- * @author Kjell-Inge Gustafsson <ical@kigkonsult.se>
+ * @author Kjell-Inge Gustafsson, kigkonsult <ical@kigkonsult.se>
  * @since 2.5.1 - 2008-10-25
  * @param array $xcaldecl
  * @return string
