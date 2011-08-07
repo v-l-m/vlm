@@ -1,5 +1,5 @@
 /**
- * $Id: windserver.c,v 1.12 2011-07-06 06:12:28 ylafon Exp $
+ * $Id: windserver.c,v 1.13 2011-08-07 11:18:01 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -39,7 +39,8 @@ vlmc_context *global_vlmc_context;
 
 void usage(char *argv0) {
 #ifdef USE_GRIB_UPDATE_TIME
-  printf("Usage: %s [-merge] [-update] [-purge] <grib filename>\n", argv0);
+  printf("Usage: %s [-merge] [-update] [-purge] [-set epoch] <grib filename>\n",
+	 argv0);
 #else
   printf("Usage: %s [-merge] [-purge] <grib filename>\n", argv0);
 #endif /* USE_GRIB_UPDATE_TIME */
@@ -49,8 +50,8 @@ void usage(char *argv0) {
 int main(int argc, char **argv) {
   int merge, interp, purge, i, gotfile;
 #ifdef USE_GRIB_UPDATE_TIME
-  int    update;
-  time_t prev_update_time;
+  int    update, tsset;
+  time_t update_time;
 #endif /* USE_GRIB_UPDATE_TIME */
 
   int shmid, semid;
@@ -66,7 +67,8 @@ int main(int argc, char **argv) {
   }
   
 #ifdef USE_GRIB_UPDATE_TIME
-  gotfile = merge = interp = purge = update = 0;
+  gotfile = merge = interp = purge = update = tsset = 0;
+  update_time = 0;
 #else
   gotfile = merge = interp = purge = 0;
 #endif /* USE_GRIB_UPDATE_TIME */
@@ -74,6 +76,14 @@ int main(int argc, char **argv) {
 #ifdef USE_GRIB_UPDATE_TIME
     if (!strncmp(argv[i], "-update", 8)) {
       update = 1;
+      continue;
+    }
+    if (!strncmp(argv[i], "-set", 5)) {
+      i++;
+      if (i<argc) {
+	update_time = atol(argv[i]);
+	tsset = 1;
+      }
       continue;
     }
 #endif /* USE_GRIB_UPDATE_TIME */
@@ -115,12 +125,12 @@ int main(int argc, char **argv) {
       } else if (update) { /* no need for the if there, but for sanity... */
 	/* we save the previous timestamp, as it's only an update
 	   and not a replacement */
-	prev_update_time = get_grib_update_time();
+	update_time = get_grib_update_time();
+	tsset = 1; /* force setting the time stamp */
 	init_grib();
 	if (purge) {
 	  purge_gribs();
 	}
-	set_grib_update_time(prev_update_time);
       }
     }
   } 
@@ -150,7 +160,12 @@ int main(int argc, char **argv) {
     fprintf(stderr, "Invalid GRIB entry\n");
     exit(1);
   }
-
+#ifdef USE_GRIB_UPDATE_TIME
+  if (tsset) {
+    set_grib_update_time(update_time);
+  }
+#endif /* USE_GRIB_UPDATE_TIME */
+  
   semid = get_semaphore_id();
   if (semid == -1) {
     semid = create_semaphore();
