@@ -1,2 +1,4 @@
-ExpiresActive On
-ExpiresDefault A2592000
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault A2592000
+</IfModule>
