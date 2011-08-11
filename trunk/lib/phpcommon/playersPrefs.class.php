@@ -12,6 +12,7 @@ $playersPrefsContactLinkPattern = Array(
     "contact_twitter" => "https://twitter.com/#!/%s",
     "contact_identica" => "http://identi.ca/%s",
     "contact_facebook" => "http://facebook.com/%s",
+    "contact_googleplus" => "http://plus.google.com/%s",
     );
     
 function sortPref($k1, $k2) {
@@ -21,7 +22,8 @@ function sortPref($k1, $k2) {
         "contact_taverne" => 30,
         "contact_twitter" => 40,
         "contact_identica" => 41,
-        "contact_facebook" => 42,
+        "contact_googleplus" => 42,
+        "contact_facebook" => 43,
         "contact_email" => 10,
         "contact_jabber" => 20,
         "contact_msn" => 21,
@@ -97,6 +99,8 @@ class playersPrefs extends baseClass {
                 return $this->checkDoublePattern($key, $val, "/^http:\/\/forum-marinsvirtuels\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
             case "contact_revatua":
                 return $this->checkDoublePattern($key, $val, "/^http:\/\/revatua\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
+            case "contact_googleplus":
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/plus\.google\.com\/(\d+)$/i", "/^(\d+)$/i");
             case "contact_twitter":
                 return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter\.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
             case "contact_identica":
@@ -257,6 +261,7 @@ class playersPrefsHtml extends playersPrefs {
             case "contact_twitter":
             case "contact_identica":
             case "contact_facebook":
+            case "contact_googleplus":
                 return "<a target=\"vlm_contact\" href=\"".sprintf($playersPrefsContactLinkPattern[$key], $val)."\">".getLocalizedString("pref_$key")."</a>";
         
             default :
