@@ -35,14 +35,14 @@ function get_info_array($idu) {
     $info['RAN'] = $racesObj->racename;
     $info['LAT'] = (float)$userObj->lastPositions->lat;
     $info['LON'] = (float)$userObj->lastPositions->long;
-    $info['BSP'] = round($userObj->boatspeed, 2);
-    $info['HDG'] = round($userObj->users->boatheading, 2);
+    $info['BSP'] = $userObj->boatspeed;
+    $info['HDG'] = $userObj->users->boatheading;
     $info['NWP'] = $userObj->users->nwp;
     $info['CWP'] = $userObj->getCurrentClassificationWaypointIdx();
-    $info['DNM'] = round($userObj->distancefromend, 2);
-    $info['ORT'] = round($userObj->orthoangletoend, 2);
-    $info['LOX'] = round($userObj->loxoangletoend, 2);
-    $info['VMG'] = round($userObj->VMGortho, 2);
+    $info['DNM'] = $userObj->distancefromend;
+    $info['ORT'] = $userObj->orthoangletoend;
+    $info['LOX'] = $userObj->loxoangletoend;
+    $info['VMG'] = $userObj->VMGortho;
     $info['STS'] = (int)$racesObj->started;
     
     if ( $userObj->VMGortho != 0 ) {
@@ -57,29 +57,28 @@ function get_info_array($idu) {
     }
     $info['NOW'] = time();
     $twd=fmod($userObj->wheading+3780, 360); 
-    $info['TWD'] = round($twd, 2);
-    $info['TWS'] = round($userObj->wspeed, 2);
+    $info['TWD'] = $twd;
+    $info['TWS'] = $userObj->wspeed;
     
     // Calcul du TWA signé
-    $twa=round($userObj->boatanglewithwind,2);
-    $info['TWA'] = $twa;
+    $info['TWA'] = $userObj->boatanglewithwind;
     $info['PIM'] = $userObj->users->pilotmode;
     switch ( $userObj->users->pilotmode ) {
     case 1: 
-      $info['PIP'] = round($userObj->users->boatheading, 2);
+      $info['PIP'] = $userObj->users->boatheading;
       break;
     case 2:
-      $info['PIP'] = round($userObj->users->pilotparameter, 2);
+      $info['PIP'] = $userObj->users->pilotparameter;
       break;
     case 3:
     case 4:
     case 5:
         if ( $userObj->users->targetlat == 0 && $userObj->users->targetlong == 0 ) {
-            $info['PIP'] = sprintf ("%5.4f,%5.4f", 
+            $info['PIP'] = sprintf ("%5.7f,%5.7f", 
             $userObj->LatNM, 
             $userObj->LongNM );
         } else {
-            $info['PIP'] = sprintf ("%5.4f,%5.4f@%d", 
+            $info['PIP'] = sprintf ("%5.7f,%5.7f@%3.7f", 
             $userObj->users->targetlat, 
             $userObj->users->targetlong, 
             $userObj->users->targetandhdg );
@@ -94,7 +93,7 @@ function get_info_array($idu) {
                    60*$racesObj->vacfreq - time())/10;
     $info['VAC'] =  60*$racesObj->vacfreq;
 
-    $info['AVG'] = round($userObj->users->computeAvg(), 2);
+    $info['AVG'] = $userObj->users->computeAvg();
     
     $info['WPLAT'] = $userObj->users->targetlat;
     $info['WPLON'] = $userObj->users->targetlong;
