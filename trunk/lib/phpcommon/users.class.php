@@ -183,7 +183,7 @@ class users extends baseClass
 		    $tlon   = floatval($Coords[1]);
 		    // FIXME sanity check
                     $query .= ", targetlat=$tlat, targetlong=$tlon ";
-                    if ( round($values[1]) >= 0 ) {
+                    if ( $values[1] >= 0 ) {
                         $query .= ", targetandhdg=" . $values[1] ;
                         // Setup the userclass for immediate use
                         $this->targetandhdg = $values[1];
@@ -1484,8 +1484,8 @@ class fullUsers
               if (!is_null($param)) $this->users->pilotparameter = $param;
               $this->users->pilotmode = PILOTMODE_WINDANGLE;
               $query .= "SET `pilotmode`=". PILOTMODE_WINDANGLE.", " .
-                      " `pilotparameter` = " . round($this->users->pilotparameter,3) . ", " .
-                        $query_suffix;
+                      " `pilotparameter` = " . $this->users->pilotparameter . 
+		      ", " . $query_suffix;
               $logmsg = "Update Angles : pim=" . $this->users->pilotmode . ", pip=" . $this->users->pilotparameter;
               break;
           case PILOTMODE_ORTHODROMIC :
