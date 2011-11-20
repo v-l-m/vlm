@@ -27,6 +27,7 @@
     while ($row = mysql_fetch_assoc($res)) {
         if (!isset($ws->answer['realpositions'][$row['idusers']])) $ws->answer['realpositions'][$row['idusers']] = Array();
         $ws->answer['realpositions'][$row['idusers']][] = Array($row['time'], $row['lat'], $row['long']);
+    }
 
     $ws->answer['nb_boats']  = $ws->answer['realpositions'];
 
