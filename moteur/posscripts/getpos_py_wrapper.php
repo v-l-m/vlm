@@ -32,7 +32,7 @@
             //echo "$query\n";
 
 
-            $query ="insert into positions values ";
+            $query ="REPLACE INTO `positions` VALUES ";
             $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race ) ;";
 
             mysql_query($query) or die("KAWA : Query failed : " . mysql_error()." ".$query);
