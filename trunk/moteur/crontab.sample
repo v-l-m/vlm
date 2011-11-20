@@ -9,3 +9,6 @@ VLMRACINE=/base/de/vlm
 # On the tiles servers
 0 2 * * *	$VLMRACINE/vlmcode/moteur/clean_tilescache.sh > /dev/null
 
+# Positions reels
+4-59/20 * * * * $VLMRACINE/vlmcode/moteur/cron-position-bateaux-reels.sh > /dev/null
+
