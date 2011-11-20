@@ -1306,7 +1306,7 @@ class map
           if (is_null($boat[4])) $boat[4] = -$boat[0];
           $boatname = $boat[4];
         }
-        imagestring ( $this->mapImage, $font+1, $xlogo-4, $ylogo-3, $boatname , $numcolor);
+        imagestring ( $this->mapImage, $font, $xlogo-4, $ylogo-4, $boatname , $numcolor);
       }
 
     } // foreach opponent
