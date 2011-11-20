@@ -13,25 +13,22 @@ function getRealBoats($race = 0, $age = 10800 ) {
         // Le retour
         $boatarr = array();
 
-  $query = "SELECT P.idusers, P.lat, P.long, U.color, U.boatname  
-            FROM positions P, users U 
-      WHERE  P.idusers < 0 
-                  AND    P.time > $reftime - $age
-      AND    U.idusers = P.idusers ";
+        $query = "SELECT P.idusers, P.lat, P.long, U.color, U.boatname".
+                 " FROM positions P, users U".
+                 " WHERE P.idusers < 0".
+                 " AND P.time > $reftime - $age".
+                 " AND U.idusers = P.idusers ";
         if ( $race != 0 ) $query .= "AND race = $race ";
 
-  // On se limite le nombre de positions pour les bateaux réels pour l'instant
-  $query .= " ORDER BY P.race DESC, P.idusers ASC , P.time DESC  ";
-  // Dans la mise en tableau, on arrête la boucle si le numéro de bateau est supérieur au dernier qu'on a ajouté
+        // On se limite le nombre de positions pour les bateaux réels pour l'instant
+        $query .= " ORDER BY P.race DESC, P.idusers ASC , P.time DESC  ";
 
         $result = mysql_query($query) or die("Query [$query] failed \n");
-        $num_rows = mysql_num_rows($result);
-//echo "NUM=$num_rows\n";
 
         while ( $boat = mysql_fetch_array($result, MYSQL_NUM) ) {
               array_push($boatarr, $boat);
         }
-//print_r($boatarr);
+
         return ($boatarr);
 }
 
