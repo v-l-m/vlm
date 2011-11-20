@@ -1,5 +1,5 @@
 <?php
-    //include_once "config.php";
+    include_once("config-mysql.php");
 
     // Main : open stdin and wait for lines
     if ($fd = fopen('php://stdin', 'r') ) {
@@ -33,9 +33,9 @@
 
 
             $query ="insert into positions values ";
-            $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race, '' ) ;";
+            $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race ) ;";
 
-            mysql_query($query) or die("KAWA : Query failed : " . mysql_error." ".$query);
+            mysql_query($query) or die("KAWA : Query failed : " . mysql_error()." ".$query);
             #echo "$query\n";
         }
     }
