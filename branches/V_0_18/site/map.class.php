@@ -1288,7 +1288,7 @@ class map
 //         $ylogo +=8;
 
         } else { 
-          // Pas de logo disponible, on dessine des bulles avec numero
+          // Pas de logo disponible, on dessine des bulles en utilisant le boatname
           imagefilledellipse($this->mapImage, $xlogo, $ylogo,
                              $drawn[$boat[0]], $drawn[$boat[0]],  $this->fromhex($boat[3])
                              );
@@ -1303,15 +1303,8 @@ class map
             $numcolor=$this->colorSea;
           }
 
-          if ( $boat[0] == -3 ) {
-              $boatname = "G3";
-          } elseif ( $boat[0] == -11 ) {    
-              $boatname = "SO";
-          } elseif ( $boat[0] == -5 ) {    
-              $boatname = "BP";
-          } else {
-              $boatname = -$boat[0];
-          }
+          if is_null($boat[4]) $boat[4] = -$boat[0];
+          $boatname = $boat[4];
         }
         imagestring ( $this->mapImage, $font+1, $xlogo-4, $ylogo-3, $boatname , $numcolor);
       }
