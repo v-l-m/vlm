@@ -19,7 +19,7 @@
             $dnm=$ligne[9];
 
             // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
-            $time = time();
+            if ($time <1) $time = time();
             printf ("Boat=%s, Num=%d, Time=%s, LAT=%s, LON=%s\n", $boatname, $idusers,$time, $latb, $lonb);
             //$query="replace into users (idusers,password,username,engaged,nextwaypoint,userdeptime,loch)
             //            values ($idusers, 'xxxxxxxx', '".$boatname."', $race,1,1210510800,$loch);";

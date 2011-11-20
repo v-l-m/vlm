@@ -21,7 +21,7 @@ data = ' '.join(data)
 tree = ElementTree.fromstring(data)
 for outline in tree.findall(".//track"):
   l = outline.text.split(';')
-  lat, lon, t = 0, 0, 0
+  lat, lon, t = 0, 0, 1320498000
   rid = int(outline.attrib['id'])
   id = -1200-rid
   for i in l[:-1]:
@@ -29,7 +29,7 @@ for outline in tree.findall(".//track"):
     lat += int(tup[0])
     lon += int(tup[1])
     t += int(tup[2])
-  if t > 900000:
+  if time.time() - t < 48*3600:
     #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
-    print "20111105|0|%d|%d|%s|BAR|%f|%f|0.|0." % (int(time.time()), id, boats[rid]['name'].encode('utf-8'), lat/1000., lon/1000.)
+    print "20111105|0|%d|%d|%s|BAR|%f|%f|0.|0." % (int(t), id, boats[rid]['name'].encode('utf-8'), lat/1000., lon/1000.)
 
