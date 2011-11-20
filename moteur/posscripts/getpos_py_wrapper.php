@@ -1,5 +1,5 @@
 <?php
-    //include_once "config.php";
+    include_once("config-mysql.php");
 
     // Main : open stdin and wait for lines
     if ($fd = fopen('php://stdin', 'r') ) {
@@ -19,7 +19,7 @@
             $dnm=$ligne[9];
 
             // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
-            $time = time();
+            if ($time <1) $time = time();
             printf ("Boat=%s, Num=%d, Time=%s, LAT=%s, LON=%s\n", $boatname, $idusers,$time, $latb, $lonb);
             //$query="replace into users (idusers,password,username,engaged,nextwaypoint,userdeptime,loch)
             //            values ($idusers, 'xxxxxxxx', '".$boatname."', $race,1,1210510800,$loch);";
@@ -32,10 +32,10 @@
             //echo "$query\n";
 
 
-            $query ="insert into positions values ";
-            $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race, '' ) ;";
+            $query ="REPLACE INTO `positions` VALUES ";
+            $query .= "( $time , $lonb*1000, $latb*1000, $idusers, $race ) ;";
 
-            mysql_query($query) or die("KAWA : Query failed : " . mysql_error." ".$query);
+            mysql_query($query) or die("KAWA : Query failed : " . mysql_error()." ".$query);
             #echo "$query\n";
         }
     }
