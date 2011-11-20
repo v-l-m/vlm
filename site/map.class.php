@@ -1303,7 +1303,7 @@ class map
             $numcolor=$this->colorSea;
           }
 
-          if is_null($boat[4]) $boat[4] = -$boat[0];
+          if (is_null($boat[4])) $boat[4] = -$boat[0];
           $boatname = $boat[4];
         }
         imagestring ( $this->mapImage, $font+1, $xlogo-4, $ylogo-3, $boatname , $numcolor);
