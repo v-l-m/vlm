@@ -24,7 +24,7 @@ for outline in tree.findall(".//track"):
   lat, lon, t = 0, 0, 1320498000
   rid = int(outline.attrib['id'])
   id = -1200-rid
-  for i in l[:-1]:
+  for i in l:
     tup = i.split(',')
     lat += int(tup[0])
     lon += int(tup[1])
