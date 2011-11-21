@@ -5,7 +5,7 @@
 // Retourne un tableau avec numero, latitide, longitude, couleur   //
 // Si un parametre est passé, c'est le nuémro de la course, sinon toutes //
 //=================================================================//
-function getRealBoats($race = 0, $age = 10800 ) {
+function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus afficher une position
 
         // Temps de référence
         $reftime = time();
@@ -21,12 +21,15 @@ function getRealBoats($race = 0, $age = 10800 ) {
         if ( $race != 0 ) $query .= "AND race = $race ";
 
         // On se limite le nombre de positions pour les bateaux réels pour l'instant
-        $query .= " ORDER BY P.race DESC, P.idusers ASC , P.time DESC  ";
+        $query .= " ORDER BY P.race DESC, P.time DESC, P.idusers DESC";
 
         $result = mysql_query($query) or die("Query [$query] failed \n");
 
+        $refid = 0;
         while ( $boat = mysql_fetch_array($result, MYSQL_NUM) ) {
+              if ($refid < $boat[0]) break; //on s'arrÃªte quand on reboucle sur une deuxiÃ¨me serie de coordonnÃ©e
               array_push($boatarr, $boat);
+              $refid = $boat[0];
         }
 
         return ($boatarr);
