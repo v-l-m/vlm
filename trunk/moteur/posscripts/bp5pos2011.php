@@ -1,6 +1,7 @@
 <?php
 
-    include_once("config-mysql.php");
+    include_once("config.php");
+    include_once("f_windAtPosition.php");
 
     $filename="http://banquepopulaire.geovoile.fr/julesverne/2011/positions.asp?lg=fr";
 
