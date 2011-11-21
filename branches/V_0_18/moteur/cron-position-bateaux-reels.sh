@@ -7,7 +7,7 @@ source $VLMRACINE/conf/conf_script || exit 1
 # Sodebo
 #nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/sodebopos.php
 # BP5
-#nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bp5pos.php
+nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bp5pos2011.php
 # KAWA !
 #nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_kawa20091108.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
 #nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_kawa20091110.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php

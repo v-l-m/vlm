@@ -21,7 +21,7 @@ function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus af
         if ( $race != 0 ) $query .= "AND race = $race ";
 
         // On se limite le nombre de positions pour les bateaux réels pour l'instant
-        $query .= " ORDER BY P.race DESC, P.time DESC, P.idusers DESC";
+        $query .= " ORDER BY P.time DESC, P.idusers DESC";
 
         $result = mysql_query($query) or die("Query [$query] failed \n");
 
