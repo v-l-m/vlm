@@ -158,6 +158,16 @@ class WSBaseBoat extends WSBasePlayer {
 
 }
 
+class WSRealBoat extends WSBaseBoat {
+    
+    function check_idreals() {
+        $this->idu = $this->check_cgi_int('idreals', 'IDREALS01', 'IDREALS02');
+    }
+    
+
+}
+
+
 class WSSetup extends WSBase {
     //should be an extends from WSBaseBoat(?) starting from v0.15
     public $input = null;
