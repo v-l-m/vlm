@@ -44,7 +44,7 @@ class WSBase extends baseClass {
         if (!isset($this->answer['warnings'])) $this->answer['warnings'] = Array();
         $this->answer['warnings'][] = $msg;
     }
-    
+
     function reply() {
         $fmt = "json";
 
@@ -158,12 +158,25 @@ class WSBaseBoat extends WSBasePlayer {
 
 }
 
-class WSRealBoat extends WSBaseBoat {
-    
-    function check_idreals() {
-        $this->idu = $this->check_cgi_int('idreals', 'IDREALS01', 'IDREALS02');
+class WSRealBoat extends WSBasePlayer {
+    var $idreals = null;
+    var $debug = true;
+
+    function __construct() {
+        parent::__construct();
+        $this->check_idreals();
     }
     
+    function check_idreals() {
+        $this->idreals = $this->check_cgi_int('idreals', 'REALS01', 'REALS02');
+    }
+    
+    function check_debug() {
+        $dbg = get_cgi_var('debug', 0);
+        if (!is_int($dbg)) $this->reply_with_error('DBG02');
+        $dbg = intval($dbg);
+        $this->debug = ($dbg > 0);
+    }    
 
 }
 
@@ -399,6 +412,11 @@ function get_error($code) {
         "IDU02" => 'idu should be int and > 0',
         "IDU03" => 'idu is not valid user',
         "IDU04" => 'idu is not a manageable boat for current player',
+        //boat/reals
+        "REALS01" => 'idreals is required',
+        "REALS02" => 'idreals should be int and > 0',
+        "REALS03" => 'idreals is not valid user',
+
         //idr
         "IDR01"  => 'idr is required',
         "IDR02"  => 'idr should be int and > 0',
