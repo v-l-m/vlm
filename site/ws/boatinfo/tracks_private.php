@@ -23,7 +23,7 @@
     $races = new races($idr);
     
     //cache headers
-    $ws->maxtime = $races->getTimeToUpdate($now);
+    $ws->maxage = $races->getTimeToUpdate($now);
     
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now

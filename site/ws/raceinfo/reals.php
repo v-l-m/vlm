@@ -10,25 +10,26 @@
     
     $ws->require_idr();
     $races = new races($ws->idr);
-    
-    $query_positions = "SELECT `time`, `idusers`, `lat`, `long` FROM `positions`" .
-      " WHERE `race` = "  . $races->idraces .
-      " AND `time` > ".($now - 24*3600) .
-      " AND `idusers` < 0" .
-      " ORDER BY `time` desc, `idusers`";
+    if (!raceExists($ws->idr)) $ws->reply_with_error('IDR03'); //FIXME : select on races table made two times !
 
-    $res = $ws->queryRead($query_positions);
+    
+    $query_reals = "SELECT -`idusers`as `idreals`, MAX(`time`) as `tracks_updated`, COUNT(DISTINCT `time`) as `nb_tracks` FROM `positions`" .
+      " WHERE `race` = "  . $races->idraces .
+      " AND `time` > ".($now - 48*3600) . //FIXME : hardcoded
+      " AND `idusers` < 0" .
+      " GROUP BY `idusers` ". //
+      " ORDER BY `idusers`";
+
+    $res = $ws->queryRead($query_reals);
 
     $ws->answer['request'] = array('idr' => $ws->idr, 'time_request' => $now);
-    $ws->answer['realpositions'] = array();
+    $ws->answer['reals'] = array();
 
     while ($row = mysql_fetch_assoc($res)) {
-        if (!isset($ws->answer['realpositions'][$row['idusers']])) $ws->answer['realpositions'][$row['idusers']] = Array();
-        $ws->answer['realpositions'][$row['idusers']][] = Array($row['time'], $row['lat'], $row['long']);
+        $ws->answer['reals'][] = $row; //Array("idreals" => -$row['idusers'], "tracks_updated" => $row['track_updated'], "nb_tracks" => $row['nbtracks']);
     }
 
-    $ws->answer['nb_boats']  = count($ws->answer['realpositions']);
-
+    $ws->answer['nb_boats'] = count($ws->answer['reals']);
     $ws->reply_with_success();
 
 ?>
