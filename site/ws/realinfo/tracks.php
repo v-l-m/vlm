@@ -7,9 +7,6 @@
 
     //FIXME : types are badly checked
 
-    //Note : this ws doesn't check if this is your boat or not, to be more efficient.
-    //You should use tracks_private.php for yours manageable boats
-
     $ws = new WSBaseBoat();
     $now = time();
     

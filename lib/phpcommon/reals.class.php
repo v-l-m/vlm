@@ -10,6 +10,8 @@ class reals extends baseClass {
     //DB attributes
     var $idreals = null;
     var $boatname = null;
+    var $shortname = null;
+    var $flag = null;
     var $color = null;
     var $updated = null;
     var $description = null;
@@ -38,11 +40,14 @@ class reals extends baseClass {
     }
 
     function constructFromRow($row) {
-        $this->idreals = -$row['idusers'];
+        //For now, mapping inside users class
+        $this->idreals = -$row['idusers']; //Note the minus before
         $this->boatname = $row['boatname'];
+        $this->shortname = trim(substr($row['boatname'], 0, 3));
         $this->engaged = $row['engaged'];
         $this->color = $row['color'];
         $this->description = $row['blocnote'];
+        $this->flag = $row['country'];
         $this->updated = $row['lastchange'];
         //FIXME : et les autres attributs
         return True;
