@@ -9,7 +9,7 @@
     $ws->maxage = 24*3600; //client cache duration : 24h
 
     $reals = new reals($ws->idreals);
-    if (is_null($reals)) $ws->reply_with_error('IDU03');
+    if (is_null($reals)) $ws->reply_with_error('REALS03');
 
     $info['idreals'] = $reals->idreals;
     $info['boatname'] = $reals->boatname;
