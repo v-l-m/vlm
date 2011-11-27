@@ -33,7 +33,7 @@
 
     $pi = new positionsIterator(-$reals->idreals, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
     $nbtracks = count($pi->records);
-    if ($nbtracks < 1 && !$isBo) {
+    if ($nbtracks < 1) {
         $pi = new fullPositionsIterator(-$reals->idreals, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
         $nbtracks = count($pi->records);
     }
