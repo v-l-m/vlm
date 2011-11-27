@@ -388,8 +388,8 @@ s.parentNode.insertBefore(po, s);
               include("version.txt");
             ?>
         </div>
-        <!-- Google+ badge-->
-<a href="https://plus.google.com/u/0/b/110426006609687431139/?prsrc=3" style="text-decoration:none;"><img src="https://ssl.gstatic.com/images/icons/gplus-64.png" alt="" style="border:0;width:64px;height:64px;"/></a>
+        <!-- Google+ medium icon -->
+        <a href="https://plus.google.com/u/0/b/110426006609687431139/?prsrc=3" style="text-decoration:none;"><img src="https://ssl.gstatic.com/images/icons/gplus-32.png" alt="" style="border:0;width:32px;height:32px;"/></a>
    </div>
 <!--
 end of firstcolumn
