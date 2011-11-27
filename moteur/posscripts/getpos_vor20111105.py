@@ -7,6 +7,13 @@ import xml.etree.ElementTree as ElementTree
 urlopen = urllib2.urlopen
 
 page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/static.xml")
+#<factors coord="1000" speed="10" distance="10" timecode="1" coef="1000"/>
+#  Indique les facteurs de conversions des coordonnées
+#<boat id="26" name="CAMPER Emirates Team NZ" sail="4" nbhulls="1" hullcolor="FFFFFF" trackcolor="FFFFFF" coef="1000">
+#<virtualboat id="126" classid="1" boatid="26"/>
+# correspondance id technique <=> numéro de dossard
+
+
 data = page.readlines()
 data = ' '.join(data)
 tree = ElementTree.fromstring(data)
@@ -15,6 +22,17 @@ for outline in tree.findall(".//boat"):
   boats[int(outline.attrib['id'])] = outline.attrib
 
 page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/update.xml")
+#Un peu de doc
+#<reports><report  id="208" date="2011/11/27 01:02:11Z"><v i="121" st="" d="5993" l="5993" s="211" c="93" o="-431"/>...
+#id = id du report
+#date = date de la publication
+#i = id (dossard+100)
+#st = status (DNF, ARV, STA (at start), "" => en course)
+#d = distance from finish (en 10ème de miles)
+#l = difference of distance to finish from nearest best opponent (en 10ème de miles)
+#s = speeed (10ème de noeuds)
+#c = cap / heading
+#o = offset de temps entre la date de publication et la mesure en secondes
 data = page.readlines()
 data = ' '.join(data)
 
