@@ -29,7 +29,7 @@
         $ws->answer['reals'][] = $row; //Array("idreals" => -$row['idusers'], "tracks_updated" => $row['track_updated'], "nb_tracks" => $row['nbtracks']);
     }
 
-    $ws->answer['nb_boats'];
+    $ws->answer['nb_boats'] = count($ws->answer['reals']);
     $ws->reply_with_success();
 
 ?>
