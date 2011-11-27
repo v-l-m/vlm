@@ -39,8 +39,8 @@
     }
     $ws->answer['nb_tracks'] = $nbtracks;
     $ws->answer['tracks'] = $pi->records;
-    //cache headers = distance temps moyenne entre chaque trace
-    $ws->maxage = ($pi->maxtime - $pi->mintime)/$nbtracks;
+    //cache headers = distance temps moyenne entre chaque trace /2
+    $ws->maxage = ($pi->maxtime - $pi->mintime)/(2*$nbtracks+1);
 
     $ws->reply_with_success();
 
