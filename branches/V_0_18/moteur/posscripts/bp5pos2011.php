@@ -13,7 +13,8 @@
                 // Le timestamp
                 $buffer= fgets($fd , 4096);
                 $ligne = preg_split ("/[<>]/",$buffer);
-                $time=$ligne[2];
+                $time = str_replace('/', '-', $ligne[2]);
+                //print "*$time*\n";
                 $time= strtotime($time);
 
                 $buffer= fgets($fd , 4096);
@@ -58,7 +59,7 @@
             }
         }
     }
-
+    //print strftime("%H:%M ", $time); print "LAT: "; print_r($lat); print "LON: "; print_r( $lon); print "\n";
     // On n'utilise pas le timestamp disponible dans l'URL, mais l'heure de prise en compte
     if ($time < 1) $time=time();
 
