@@ -14,4 +14,6 @@ nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bp5pos2011.php
 # BWR 2011
 #nice -1 $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/bwrpos2011.php
 # VOR 2011
-nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_vor20111105.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_vor20111211.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+# Back to 2011
+nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_b2b20111205.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
