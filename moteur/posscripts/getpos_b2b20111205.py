@@ -47,5 +47,5 @@ for outline in tree.findall(".//location"):
   #print boats[id]
   if time.time() - boats[id]['t'] < 48*3600: #FIXME : HARDCODED
     #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
-    print "20111105|0|%d|%d|%s|BAR|%f|%f|0.|0." % (boats[id]['t'], boats[id]['vid'], boats[id]['name'], boats[id]['lat'], boats[id]['lon'])
+    print "20111205|0|%d|%d|%s|BAR|%f|%f|0.|0." % (boats[id]['t'], boats[id]['vid'], boats[id]['name'], boats[id]['lat'], boats[id]['lon'])
 
