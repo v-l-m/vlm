@@ -24,7 +24,7 @@ tree = ElementTree.parse('b2b.tmp.gl')
 timezero = int(tree.getroot().attrib['timezero'])
 
 #matching realid and virtual id
-kboats = {6 : -1231, 41 : -1232, 331 : -1232, 337 : -1233, 341 : -1234, 343 : -1235, 347 : -1236, 349 : -1237}
+kboats = {6 : -1231, 41 : -1232, 331 : -1233, 337 : -1234, 341 : -1235, 343 : -1236, 347 : -1237, 349 : -1238}
 
 #array of boats
 boats = {}
