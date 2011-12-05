@@ -650,7 +650,7 @@ class fullRaces {
 	}
 	return ($a['dnm'] < $b['dnm']) ? -1 : 1;
       }
-      return ($a['rnwp'] < $b['rnwp']) ? -1 : 1;
+      return ($a['rnwp'] > $b['rnwp']) ? -1 : 1;
     }   
     // real sort
     usort($cl_arr, "c_cmp");
