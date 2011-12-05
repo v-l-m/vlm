@@ -38,11 +38,16 @@ for outline in tree.findall("./boats/boat"):
 #location 
 for outline in tree.findall(".//location"):
   id = int(outline.attrib['boatid'])
-  lat, lon, t = outline.text.split(',')
-  boats[id]['lat'] = float(lat)/1000.
-  boats[id]['lon'] = float(lon)/1000.
-  boats[id]['t'] = int(t) + timezero
   boats[id]['vid'] = kboats[id]
+
+  boats[id]['lat'] = 0.
+  boats[id]['lon'] = 0.
+  boats[id]['t'] = timezero
+  for p in outline.text.split(';'):
+      lat, lon, t = p.split(',')
+      boats[id]['lat'] += float(lat)/1000.
+      boats[id]['lon'] += float(lon)/1000.
+      boats[id]['t'] += int(t)
 
   #print boats[id]
   if time.time() - boats[id]['t'] < 48*3600: #FIXME : HARDCODED
