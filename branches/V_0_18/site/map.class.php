@@ -1305,6 +1305,7 @@ class map
 
           if (is_null($boat[4])) $boat[4] = -$boat[0];
           $boatname = $boat[4];
+          $boatname = trim(substr($boatname, 0, 3));
         }
         imagestring ( $this->mapImage, $font, $xlogo-4, $ylogo-4, $boatname , $numcolor);
       }
