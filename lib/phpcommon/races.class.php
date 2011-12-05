@@ -621,11 +621,39 @@ class fullRaces {
     $query_ranking = "SELECT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
       " FROM  races_ranking RR, users US " . 
       " WHERE RR.idusers = US.idusers " . 
-      " AND   RR.idraces = "  . $this->races->idraces . 
-      " ORDER by " . $sortclause ;
+      " AND   RR.idraces = "  . $this->races->idraces;
 
     $result = wrapper_mysql_db_query_reader($query_ranking) or die ($query_ranking);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
+    // On calcule les vrais nwp
+    $cl_arr = array();
+    $raceWP = $this->races->getWPs();
+    while( $row = mysql_fetch_assoc( $result ) ) {
+      // N'entrent dans les tableaux que les bateaux effectivement en course
+      if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) {
+	  continue;
+      }
+      $cur_idx = $row['nwp'];
+      $cur_wp = $raceWP[$cur_idx];
+      while(($cur_wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) != 0) {
+            $cur_idx++;
+            $cur_wp = $raceWPs[$cur_idx];
+      }
+      $row['rnwp'] = $cur_idx;
+      array_push($cl_arr, $row);
+    }
+    // On trie
+    function c_cmp($a, $b) {
+      if ($a['rnwp'] == $b['rnwp']) {
+	if ($a['dnm'] == $b['dnm']) {
+	  return 0;
+	}
+	return ($a['dnm'] < $b['dnm']) ? -1 : 1;
+      }
+      return ($a['rnwp'] < $b['rnwp']) ? -1 : 1;
+    }   
+    // real sort
+    usort($cl_arr, "c_cmp");
 
     // On est encore là, on affiche le classement
     // Si on est en cours de Blackout, on prévient
@@ -720,14 +748,12 @@ class fullRaces {
     //for xhtml  compliance, find other solution
 
     $key = 0; $printed =0; $dtl = 0;
-    while( $row = mysql_fetch_assoc( $result ) ) {
+    $mnum = count($cl_arr);
+    for ($i = 0; $i < $mnum; $i++) {
+      $row = $cl_arr[$i];
+      //    while( $row = mysql_fetch_assoc( $result ) ) {
       // Si on a déjà affiché suffisament de lignes, on rend la main
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
-
-      // N'entrent dans les tableaux que les bateaux effectivement en course
-      if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) {
-	  continue;
-      }
 
       if ( $key == 0 ) {
           $FirstNwp = $row['nwp'];
