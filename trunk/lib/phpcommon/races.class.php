@@ -595,7 +595,7 @@ class fullRaces {
   //==================================================//
 
   function dispHtmlClassification($numarrived = 0 , 
-                                  $sortclause="nwp desc, dnm asc", 
+                                  $sortclause="", 
                                   $disttype ="tonm", 
                                   $startnum = 1) {
     
@@ -621,7 +621,8 @@ class fullRaces {
     $query_ranking = "SELECT RR.idusers idusers, US.username username, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
       " FROM  races_ranking RR, users US " . 
       " WHERE RR.idusers = US.idusers " . 
-      " AND   RR.idraces = "  . $this->races->idraces;
+      " AND   RR.idraces = "  . $this->races->idraces.
+      (($sortclause == "") ? "" : " ORDER by " . $sortclause) ;
 
     $result = wrapper_mysql_db_query_reader($query_ranking) or die ($query_ranking);
     if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
@@ -642,7 +643,7 @@ class fullRaces {
       $row['rnwp'] = $cur_idx;
       array_push($cl_arr, $row);
     }
-    // On trie
+    // On trie ?
     function c_cmp($a, $b) {
       if ($a['rnwp'] == $b['rnwp']) {
 	if ($a['dnm'] == $b['dnm']) {
@@ -653,8 +654,9 @@ class fullRaces {
       return ($a['rnwp'] > $b['rnwp']) ? -1 : 1;
     }   
     // real sort
-    usort($cl_arr, "c_cmp");
-
+    if ($sortclause == "" ) {
+      usort($cl_arr, "c_cmp");
+    }
     // On est encore là, on affiche le classement
     // Si on est en cours de Blackout, on prévient
     echo "<h3>";
