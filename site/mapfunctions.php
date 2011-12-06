@@ -17,6 +17,7 @@ function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus af
                  " FROM positions P, users U".
                  " WHERE P.idusers < 0".
                  " AND P.time > $reftime - $age".
+                 " AND P.time <=  unix_timestamp(now())".
                  " AND U.idusers = P.idusers ";
         if ( $race != 0 ) $query .= "AND race = $race ";
 
