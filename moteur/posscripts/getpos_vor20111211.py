@@ -15,7 +15,7 @@ def unzip_file_into_dest(src, dest):
 
 
 #page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/static.xml")
-urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/event/static.hwz", "vor20111211.static.tmp.hwz")
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/static.hwz", "vor20111211.static.tmp.hwz")
 unzip_file_into_dest('vor20111211.static.tmp.hwz', 'vor20111211.static.xml')
 
 #<factors coord="1000" speed="10" distance="10" timecode="1" coef="1000"/>
@@ -29,8 +29,8 @@ boats = {}
 for outline in tree.findall(".//boat"):
   boats[int(outline.attrib['id'])] = outline.attrib
 
-#page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/update.xml")
-urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/event/update.hwz", "vor20111211.tmp.hwz")
+#page = urlopen("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.xml")
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.hwz", "vor20111211.tmp.hwz")
 unzip_file_into_dest('vor20111211.tmp.hwz', 'vor20111211.xml')
 
 #parse
