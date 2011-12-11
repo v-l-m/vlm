@@ -1,28 +1,42 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import urllib2
+import urllib
+import sys, zipfile
 import time
 import xml.etree.ElementTree as ElementTree
-urlopen = urllib2.urlopen
 
-page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/static.xml")
+def unzip_file_into_dest(src, dest):
+    zfobj = zipfile.ZipFile(src)
+    for name in zfobj.namelist():
+        outfile = open(dest, 'wb')
+        outfile.write(zfobj.read(name))
+        outfile.close()
+
+
+#page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/static.xml")
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/event/static.hwz", "vor20111211.static.tmp.hwz")
+unzip_file_into_dest('vor20111211.static.tmp.hwz', 'vor20111211.static.xml')
+
 #<factors coord="1000" speed="10" distance="10" timecode="1" coef="1000"/>
 #  Indique les facteurs de conversions des coordonnées
 #<boat id="26" name="CAMPER Emirates Team NZ" sail="4" nbhulls="1" hullcolor="FFFFFF" trackcolor="FFFFFF" coef="1000">
 #<virtualboat id="126" classid="1" boatid="26"/>
 # correspondance id technique <=> numéro de dossard
 
-
-data = page.readlines()
-data = ' '.join(data)
-tree = ElementTree.fromstring(data)
+tree = ElementTree.parse('vor20111211.static.xml')
 boats = {}
 for outline in tree.findall(".//boat"):
   boats[int(outline.attrib['id'])] = outline.attrib
 
-page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/update.xml")
-#Un peu de doc
+#page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/update.xml")
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/event/update.hwz", "vor20111211.tmp.hwz")
+unzip_file_into_dest('vor20111211.tmp.hwz', 'vor20111211.xml')
+
+#parse
+tree = ElementTree.parse('vor20111211.xml')
+
+#Un peu de doc: 
 #<reports><report  id="208" date="2011/11/27 01:02:11Z"><v i="121" st="" d="5993" l="5993" s="211" c="93" o="-431"/>...
 #id = id du report
 #date = date de la publication
@@ -33,13 +47,9 @@ page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/update.xml"
 #s = speeed (10ème de noeuds)
 #c = cap / heading
 #o = offset de temps entre la date de publication et la mesure en secondes
-data = page.readlines()
-data = ' '.join(data)
-
-tree = ElementTree.fromstring(data)
 for outline in tree.findall(".//track"):
   l = outline.text.split(';')
-  lat, lon, t = 0, 0, 1320498000
+  lat, lon, t = 0, 0, 1323608400
   rid = int(outline.attrib['id'])
   id = -1200-rid
   for i in l:
@@ -47,7 +57,7 @@ for outline in tree.findall(".//track"):
     lat += int(tup[0])
     lon += int(tup[1])
     t += int(tup[2])
-  if time.time() - t < 48*3600:
-    #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
-    print "20111211|0|%d|%d|%s|BAR|%f|%f|0.|0." % (int(t), id, boats[rid]['name'].encode('utf-8'), lat/1000., lon/1000.)
+    if time.time() - t < 48*3600:
+        #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
+        print "20111211|0|%d|%d|%s|BAR|%f|%f|0.|0." % (int(t), id, boats[rid]['name'].encode('utf-8'), lat/1000., lon/1000.)
 
