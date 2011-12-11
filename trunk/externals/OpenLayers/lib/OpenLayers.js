@@ -99,6 +99,7 @@
                 "OpenLayers/Util.js",
                 "OpenLayers/BaseTypes.js",
                 "OpenLayers/BaseTypes/Bounds.js",
+                "OpenLayers/BaseTypes/Date.js",
                 "OpenLayers/BaseTypes/Element.js",
                 "OpenLayers/BaseTypes/LonLat.js",
                 "OpenLayers/BaseTypes/Pixel.js",
@@ -230,6 +231,7 @@
                 "OpenLayers/Renderer/Canvas.js",
                 "OpenLayers/Renderer/VML.js",
                 "OpenLayers/Layer/Vector.js",
+                "OpenLayers/Layer/PointGrid.js",
                 "OpenLayers/Layer/Vector/RootContainer.js",
                 "OpenLayers/Strategy.js",
                 "OpenLayers/Strategy/Filter.js",
@@ -265,6 +267,7 @@
                 "OpenLayers/Format.js",
                 "OpenLayers/Format/QueryStringFilter.js",
                 "OpenLayers/Format/XML.js",
+                "OpenLayers/Format/XML/VersionedOGC.js",
                 "OpenLayers/Format/Context.js",
                 "OpenLayers/Format/ArcXML.js",
                 "OpenLayers/Format/ArcXML/Features.js",
@@ -294,6 +297,7 @@
                 "OpenLayers/Format/SLD.js",
                 "OpenLayers/Format/SLD/v1.js",
                 "OpenLayers/Format/SLD/v1_0_0.js",
+                "OpenLayers/Format/OWSCommon.js",
                 "OpenLayers/Format/OWSCommon/v1.js",
                 "OpenLayers/Format/OWSCommon/v1_0_0.js",
                 "OpenLayers/Format/OWSCommon/v1_1_0.js",
@@ -312,6 +316,7 @@
                 "OpenLayers/Format/WMC/v1.js",
                 "OpenLayers/Format/WMC/v1_0_0.js",
                 "OpenLayers/Format/WMC/v1_1_0.js",
+                "OpenLayers/Format/WCSGetCoverage.js",
                 "OpenLayers/Format/WMSCapabilities.js",
                 "OpenLayers/Format/WMSCapabilities/v1.js",
                 "OpenLayers/Format/WMSCapabilities/v1_1.js",
@@ -329,9 +334,14 @@
                 "OpenLayers/Format/OWSContext/v0_3_1.js",
                 "OpenLayers/Format/WMTSCapabilities.js",
                 "OpenLayers/Format/WMTSCapabilities/v1_0_0.js",
+                "OpenLayers/Format/WPSCapabilities.js",
+                "OpenLayers/Format/WPSCapabilities/v1_0_0.js",
+                "OpenLayers/Format/WPSDescribeProcess.js",
+                "OpenLayers/Format/WPSExecute.js",
                 "OpenLayers/Format/XLS.js",
                 "OpenLayers/Format/XLS/v1.js",
                 "OpenLayers/Format/XLS/v1_1_0.js",
+                "OpenLayers/Format/OGCExceptionReport.js",
                 "OpenLayers/Layer/WFS.js",
                 "OpenLayers/Control/GetFeature.js",
                 "OpenLayers/Control/MouseToolbar.js",
@@ -371,4 +381,4 @@
 /**
  * Constant: VERSION_NUMBER
  */
-OpenLayers.VERSION_NUMBER="Release 2.11-rc1";
+OpenLayers.VERSION_NUMBER="Release 2.11";

@@ -172,21 +172,23 @@ OpenLayers.Layer.ArcGISCache = OpenLayers.Class(OpenLayers.Layer.XYZ, {
                 
                 this.lods = [];
                 for(var key in info.tileInfo.lods) {
-                    var lod = info.tileInfo.lods[key];
-                    if (this.useScales) {
-                        this.scales.push(lod.scale);
-                    } else {
-                        this.resolutions.push(lod.resolution);
+                    if (info.tileInfo.lods.hasOwnProperty(key)) {
+                        var lod = info.tileInfo.lods[key];
+                        if (this.useScales) {
+                            this.scales.push(lod.scale);
+                        } else {
+                            this.resolutions.push(lod.resolution);
+                        }
+                    
+                        var start = this.getContainingTileCoords(upperLeft, lod.resolution);
+                        lod.startTileCol = start.x;
+                        lod.startTileRow = start.y;
+                    
+                        var end = this.getContainingTileCoords(bottomRight, lod.resolution);
+                        lod.endTileCol = end.x;
+                        lod.endTileRow = end.y;    
+                        this.lods.push(lod);
                     }
-                    
-                    var start = this.getContainingTileCoords(upperLeft, lod.resolution);
-                    lod.startTileCol = start.x;
-                    lod.startTileRow = start.y;
-                    
-                    var end = this.getContainingTileCoords(bottomRight, lod.resolution);
-                    lod.endTileCol = end.x;
-                    lod.endTileRow = end.y;    
-                    this.lods.push(lod);
                 }
 
                 this.maxExtent = this.calculateMaxExtentWithLOD(this.lods[0]);
@@ -430,7 +432,7 @@ OpenLayers.Layer.ArcGISCache = OpenLayers.Class(OpenLayers.Layer.XYZ, {
         var url = this.url;
         var s = '' + x + y + z;
 
-        if (url instanceof Array) {
+        if (OpenLayers.Util.isArray(url)) {
             url = this.selectUrl(s, url);
         }
 
