@@ -638,7 +638,7 @@ class fullRaces {
       $cur_wp = $raceWP[$cur_idx];
       while(($cur_wp['wpformat'] & (WP_ICE_GATE_N|WP_ICE_GATE_S)) != 0) {
             $cur_idx++;
-            $cur_wp = $raceWPs[$cur_idx];
+            $cur_wp = $raceWP[$cur_idx];
       }
       $row['rnwp'] = $cur_idx;
       array_push($cl_arr, $row);
