@@ -4,6 +4,7 @@
 import urllib2
 import time
 import xml.etree.ElementTree as ElementTree
+#import json
 urlopen = urllib2.urlopen
 
 page = urlopen("http://rolexsydneyhobart.com/ge/getGEyachtracing.aspx")
@@ -110,10 +111,15 @@ offsetid = 1240
 t = int(time.time()) #trop compliqué de récupérer les ts exacts pour cette course de 2 jours...
 t = 1200*int(t/1200) #arrondi à 20min pour simplifier
 
+#datas = {}
+#datas['boats'] = {}
+
 for outline in tree.findall("./"+prefix+"Document/"+prefix+"Folder/"+prefix+"Placemark"):
   try :
       boatname = outline.find(prefix+"name").text
-      boatid = -offsetid - nametoid[boatname]
+      iid = nametoid[boatname]
+      username = "SHYR%d" % iid
+      boatid = - offsetid - iid
       latitude = float(outline.find(prefix+"LookAt/"+prefix+"latitude").text)
       longitude = float(outline.find(prefix+"LookAt/"+prefix+"longitude").text)
   except :
@@ -122,4 +128,8 @@ for outline in tree.findall("./"+prefix+"Document/"+prefix+"Folder/"+prefix+"Pla
       #print boatid, boatname, latitude, longitude
       #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
       print "111226|0|%d|%d|%s|BAR|%f|%f|0.|0." % (int(t), boatid, boatname, latitude, longitude)
+      #datas['boats'][boatid] = {'idreals' : -boatid, 'idusers' : boatid, 'boatname' : boatname, 'username': username}
+      
+#print json.dumps(datas)
+
 
