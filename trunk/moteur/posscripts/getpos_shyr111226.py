@@ -109,7 +109,7 @@ prefix = "{http://earth.google.com/kml/2.0}"
 offsetid = 1240
 
 t = int(time.time()) #trop compliqué de récupérer les ts exacts pour cette course de 2 jours...
-t = 1200*int(t/1200) #arrondi à 20min pour simplifier
+t = 600*int(t/600) #arrondi à 20min pour simplifier
 
 #datas = {}
 #datas['boats'] = {}
@@ -120,7 +120,7 @@ for outline in tree.findall("./"+prefix+"Document/"+prefix+"Folder/"+prefix+"Pla
       iid = nametoid[boatname]
       username = "SHYR%d" % iid
       boatid = - offsetid - iid
-      latitude = float(outline.find(prefix+"LookAt/"+prefix+"latitude").text)
+      latitude = float(outline.find(prefix+"LookAt/"+prefix+"latitude").text) - 1. #Because we use "LookAt" - there is 1° offset south.
       longitude = float(outline.find(prefix+"LookAt/"+prefix+"longitude").text)
   except :
       pass
