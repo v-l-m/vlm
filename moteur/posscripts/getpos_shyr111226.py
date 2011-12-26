@@ -105,9 +105,10 @@ data = ' '.join(data)
 tree = ElementTree.fromstring(data)
 
 prefix = "{http://earth.google.com/kml/2.0}"
-offsetid = 1300
+offsetid = 1240
 
 t = int(time.time()) #trop compliqué de récupérer les ts exacts pour cette course de 2 jours...
+t = 1200*int(t/1200) #arrondi à 20min pour simplifier
 
 for outline in tree.findall("./"+prefix+"Document/"+prefix+"Folder/"+prefix+"Placemark"):
   try :
