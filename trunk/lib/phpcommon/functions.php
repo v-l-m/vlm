@@ -1214,6 +1214,11 @@ function boatExists($idboat) {
     }
 }
 
+/* Return random hex color - 6 chars */
+function random_hex_color(){
+    return strtolower(sprintf("%02X%02X%02X", mt_rand(0, 255), mt_rand(0, 255), mt_rand(0, 255)));
+}
+
 /*return true if login already exist*/
 function checkLoginExists($login) {
     $query2 = "SELECT idusers FROM users WHERE UPPER(`username`) = UPPER('".$login."')";
@@ -1225,13 +1230,14 @@ function checkLoginExists($login) {
 /*create a new account with default values and return idusers*/
 function createBoat($log, $pass, $mail, $boatname = 'boat') {
   if (is_null($log)) return False;
+  $color = random_hex_color();
   $query3 = "INSERT INTO `users` ( `boattype` , `username` , `password` , `email`,"
     ."`boatname`, `color`, `boatheading`, `pilotmode`, `engaged`, `country` )"
-    ."VALUES ( 'boat_imoca60', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '000000', '0', '1', '0', '00-UN')";
+    ."VALUES ( 'boat_imoca60', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '$color', '0', '1', '0', '00-UN')";
   $result3 = wrapper_mysql_db_query_writer($query3);//or die("Query [$query3] failed \n");
 
   //is there another solution than reread from db?
-  $query4 = "SELECT idusers FROM users WHERE username = \"$log\" ";
+  $query4 = "SELECT `idusers` FROM `users` WHERE `username` = \"$log\" ";
   $result4 = wrapper_mysql_db_query_writer($query4);// or die($query4);
   $row4 = mysql_fetch_array($result4, MYSQL_NUM);
   return ($row4[0]);
