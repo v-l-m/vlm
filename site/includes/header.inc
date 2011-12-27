@@ -181,15 +181,7 @@
 
   <script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 <!-- Google+ page -->
-<link href="https://plus.google.com/u/0/b/110426006609687431139/" rel="publisher" /><script type="text/javascript">
-window.___gcfg = {lang: 'fr'};
-(function() 
-{var po = document.createElement("script");
-po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
-var s = document.getElementsByTagName("script")[0];
-s.parentNode.insertBefore(po, s);
-})();</script>
-
+<link href="https://plus.google.com/u/0/b/110426006609687431139/" rel="publisher" />
  </head>
 
  <body>

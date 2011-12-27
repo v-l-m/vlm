@@ -29,10 +29,6 @@
             echo getLocalizedString("tchat");
             ?>
       </a></p>
-
-      <!-- Google+ badge-->
-      <g:plus href="https://plus.google.com/u/0/b/110426006609687431139/" size="badge"></g:plus>
-
     </div>
 <?php
     } else {
