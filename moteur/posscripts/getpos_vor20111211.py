@@ -2,10 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import urllib
-import sys, zipfile
+import sys, zipfile, os
 import time
 import xml.etree.ElementTree as ElementTree
 
+def vlm_get_tmp():
+    if os.environ.has_key('VLMTEMP'):
+        return os.environ['VLMTEMP']
+    else :
+        print "ERROR: VLMTEMP undefined"
+        sys.exit()
+    
 def unzip_file_into_dest(src, dest):
     zfobj = zipfile.ZipFile(src)
     for name in zfobj.namelist():
@@ -15,8 +22,15 @@ def unzip_file_into_dest(src, dest):
 
 
 #page = urlopen("http://volvooceanrace.geovoile.com/2011/shared/event/static.xml")
-urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/static.hwz", "vor20111211.static.tmp.hwz")
-unzip_file_into_dest('vor20111211.static.tmp.hwz', 'vor20111211.static.xml')
+basefilename = "vor20111211"
+vlmtmp = vlm_get_tmp()
+statichwz = os.path.join(vlmtmp, basefilename+".static.tmp.hwz")
+staticxml = os.path.join(vlmtmp, basefilename+".static.xml")
+updatehwz = os.path.join(vlmtmp, basefilename+".update.tmp.hwz")
+updatexml = os.path.join(vlmtmp, basefilename+".update.xml")
+
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/static.hwz", statichwz)
+unzip_file_into_dest(statichwz, staticxml)
 
 #<factors coord="1000" speed="10" distance="10" timecode="1" coef="1000"/>
 #  Indique les facteurs de conversions des coordonnées
@@ -24,17 +38,17 @@ unzip_file_into_dest('vor20111211.static.tmp.hwz', 'vor20111211.static.xml')
 #<virtualboat id="126" classid="1" boatid="26"/>
 # correspondance id technique <=> numéro de dossard
 
-tree = ElementTree.parse('vor20111211.static.xml')
+tree = ElementTree.parse(staticxml)
 boats = {}
 for outline in tree.findall(".//boat"):
   boats[int(outline.attrib['id'])] = outline.attrib
 
 #page = urlopen("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.xml")
-urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.hwz", "vor20111211.tmp.hwz")
-unzip_file_into_dest('vor20111211.tmp.hwz', 'vor20111211.xml')
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.hwz", updatehwz)
+unzip_file_into_dest(updatehwz, updatexml)
 
 #parse
-tree = ElementTree.parse('vor20111211.xml')
+tree = ElementTree.parse(updatexml)
 
 #Un peu de doc: 
 #<reports><report  id="208" date="2011/11/27 01:02:11Z"><v i="121" st="" d="5993" l="5993" s="211" c="93" o="-431"/>...
