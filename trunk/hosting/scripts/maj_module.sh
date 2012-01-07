@@ -76,7 +76,6 @@ case $confmodule in
     echo 'OK !'
     if test -e "$VLMGSHHS/rivers-f-1.dat" ; then
         echo "++$confmodule: les fichiers de bdd gshhs existent déjà !"
-        exit 0
     else 
         echo "+$confmodule: Download des fichiers poly, rivers et borders"
         wget --output-document="$VLMTEMP/poly-f-1.dat" "$VLMGSHHSURL/poly-f-1.dat"
@@ -98,6 +97,7 @@ case $confmodule in
     fi
     echo -n "Deleting tiles cache"
     rm -Rf "$VLMCACHE/gshhstiles/*"
+    echo 'OK !'
     cd $oldpwd
     ;;
     site)
