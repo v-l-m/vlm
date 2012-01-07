@@ -8,6 +8,7 @@ From 0.18.x to 0.19 :
 
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_19
+    - add "export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs/"
 
   RUN
     ./scripts/maj_scripts.sh
