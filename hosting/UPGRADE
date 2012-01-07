@@ -8,7 +8,8 @@ From 0.18.x to 0.19 :
 
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_19
-    - add "export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs/"
+    - add "export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs"
+    - add "export VLMURL=http://virtual-loup-de-mer.org"
 
   RUN
     ./scripts/maj_scripts.sh
@@ -33,9 +34,6 @@ From 0.18.x to 0.19 :
 
   RUN
     ./scripts/upgrade.sh 0.19 2
-
-  INSTALL
-    monitoring of health-status
 
 THE END
 

@@ -58,6 +58,9 @@ export MAIL_FOR_COASTCROSSING=false
 #URL de récupération des fichiers gshhs
 export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs/
 
+#URL par défaut
+export VLMURL=http://v-l-m.org
+
 ##########################################
 #Le reste n'est normalement pas à modifier
 
