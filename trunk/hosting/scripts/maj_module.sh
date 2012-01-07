@@ -96,6 +96,8 @@ case $confmodule in
         mv "$VLMTEMP/ETOPO1_Ice.dat" "$VLMGSHHS/"
         echo 'OK !'
     fi
+    echo -n "Deleting tiles cache"
+    rm -Rf "$VLMCACHE/gshhstiles/*"
     cd $oldpwd
     ;;
     site)

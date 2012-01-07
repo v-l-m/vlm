@@ -1,7 +1,6 @@
 #!/bin/sh
 
 . $VLMRACINE/conf/conf_script || exit 1
-
 TILESCACHEDIR=$VLMCACHE/gshhstiles
 
 SEAFILE=sea.png
@@ -16,18 +15,24 @@ fi
 
 cd ${TILESCACHEDIR}
 
-emptysum="40d1d7d1e1b9bcaae0d69a5900dabf85"
-
 sea=0
 nblinks=0
 if [ ! -d f ]; then
     mkdir ${FIXEDTILESDIR}
     echo "Creating fixed dir"
-else
-    if [ -f ${FIXEDTILESDIR}/${SEAFILE} ]; then
-	sea=1
-	nblinks=`ls -l ${FIXEDTILESDIR}/${SEAFILE} | awk '{ print $2}'`
-    fi
+fi
+if [ ! -f ${FIXEDTILESDIR}/${SEAFILE} ]; then
+    wget --output-document=${FIXEDTILESDIR}/${SEAFILE} "$VLMURL/gshhstiles.php?z=18&x=173651&y=116199&force=yes"
+fi
+
+if [ -f ${FIXEDTILESDIR}/${SEAFILE} ]; then
+    #emptysum="40d1d7d1e1b9bcaae0d69a5900dabf85"
+    emptysum=`md5sum ${FIXEDTILESDIR}/${SEAFILE}| awk '{print $1}'`
+    sea=1
+    nblinks=`ls -l ${FIXEDTILESDIR}/${SEAFILE} | awk '{ print $2}'`
+else 
+    echo "!!! Unable to use sea.png"""
+    exit 2
 fi
 
 findmod=""
@@ -41,6 +46,7 @@ find . -type f ${findmod} -print | grep -v ${SEAFILE} | while read tilename ; do
     if [ $? -eq 0 ]; then
         echo "Is empty!"
         if [ "$sea" -eq "0" ]; then
+            #On recree le fichier sea.png s'il n'existe pas encore.
             mv $tilename ${FIXEDTILESDIR}/${SEAFILE}
             sea=1
         fi
