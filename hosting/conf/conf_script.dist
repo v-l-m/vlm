@@ -52,7 +52,11 @@ export VLMGRIBS=$VLMDATAS/gribs
 export VLMGRIBSURL=http://grib.example.com
 export VLM_GRIB_MAX_TIME=24
 
+#Pas de mail par défaut en cas d'echouage
 export MAIL_FOR_COASTCROSSING=false
+
+#URL de récupération des fichiers gshhs
+export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs/
 
 ##########################################
 #Le reste n'est normalement pas à modifier
