@@ -35,11 +35,25 @@
     $tablepages = Array(
         "racespreview.php" => "Incoming Races - Calendar Management",
         "races_instructions.php" => "Races instructions",
+        "block3" => "block",
         "races.php" => "Races definitions (no uploading, see below)",
+        "importrace.php" => "Import race from another server",
+        "uploadracemap.php" => "Race map upload",
+        "block4" => "block",
         "waypoints.php" => "Waypoints definitions",
         "races_waypoints.php" => "Races_waypoints definitions",
         );
     adminlistbox($tablepages, "Race administration");
+
+
+    $tablepages = Array(
+        "flags.php" => "Flags definitions (no uploading, see below)",
+        "uploadflag.php" => "Flag upload",
+        );
+    adminlistbox($tablepages, "Flag management");
+
+    echo "</div>";
+    echo "<div style=\"display:inline;float:left;\">";
 
     $tablepages = Array(
         "users.php" => "Boats (Users)",
@@ -49,21 +63,9 @@
         "block3" => "block",
         "user_prefs.php" => "Prefs (Boats/Users)",
         "players_prefs.php" => "Prefs (Players)",
-        "block4" => "block",
-        "flags.php" => "Flags definitions (no uploading, see below)",
         );
     adminlistbox($tablepages, "Boats & players administration");
 
-    $uploadpages = Array(
-        "uploadracemap.php" => "Race map upload",
-        "uploadflag.php" => "Flag upload",
-        "importrace.php" => "Import race from another server",
-        );
-
-    adminlistbox($uploadpages, "Upload and import operations");
-
-    echo "</div>";
-    echo "<div style=\"display:inline;float:left;\">";
     $tablepages = Array(
         "user_action.php" => "Browse Boat/Player Actions",
         "admin_changelog.php" => "Browser Admin Changelog",
@@ -80,6 +82,9 @@
         );
 
     adminlistbox($reportpages, "Stats");
+
+    echo "</div>";
+    echo "<div style=\"display:inline;float:left;\">";
 
     $reportpages = Array(
         "racemaps_without_race.report.php"  => "Racemaps with no corresponding race",
