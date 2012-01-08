@@ -1,6 +1,30 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.19 aka Pôle Auster
+
+What's up for ...
+... players ?
+  * better default parameters for new boats
+  * up to date coastline
+  * better real world boats integration
+  * show the difference between valid and invalid wp crossing in boat logging
+  * Google Plus link for VLM, and preference handling.
+  * new polar BP5, VO70 et Malgache
+  * display up to 500 boats in guest maps.
+  
+... developers ?
+  * long terme race/event scheduling now available
+  * webservices for real world boat
+  * gshhs 2.2 coastline database
+  * bugfix and enhancement for track history
+  * Less rounding, better type handling in webservices
+  * CWP available for tools (Classification WP)
+  * Server monitoring
+  * small jvlm adjustments
+  * Misc. fixes
+
+
 v0.18 aka Vieux Chinook
 
 What's up for ...
