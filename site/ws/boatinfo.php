@@ -153,7 +153,7 @@ function get_info_array($idu) {
 }
 
 function usage() {
-  $usage = "usage : http://virtual-loup-de-mer.org/ws/boatinfo.php\n";
+  $usage = "usage : ".WWW_SERVER_URL."/ws/boatinfo.php\n";
   $usage .= "l'acces utilise l'authentification HTTP";
   $usage .= "\nlogin = votre nom d'utilisateur";
   $usage .= "\npassword = votre mot de passe";

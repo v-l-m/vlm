@@ -70,7 +70,7 @@ function get_info_array($_lat, $_long, $_time) {
 }
 
 function usage() {
-  echo "usage : http://virtual-loup-de-mer.org/ws/windinfo.php\n";
+  echo "usage : ".WWW_SERVER_URL."/ws/windinfo.php\n";
   echo "l'acces utilise l'authentification HTTP";
   echo "\nlogin = votre nom d'utilisateur";
   echo "\npassword = votre mot de passe";

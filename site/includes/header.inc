@@ -342,7 +342,7 @@
             </a> 
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
-            <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo getLocalizedString("forum")?></a>
+            <a href="<?php echo FORUM_SERVER_URL; ?>" target="_forum"><?echo getLocalizedString("forum")?></a>
             <?php
                 $ircpseudo = preg_replace("([^a-zA-Z0-9-\[\]\\`^{}])", "-", getLoginName(). "-" . getLoginId());
                 $ircpseudo = preg_replace("(-+)", "-", $ircpseudo);

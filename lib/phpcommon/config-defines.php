@@ -43,6 +43,7 @@
     define("TOOLS_SERVER_URL", DOC_SERVER_URL."Les_accessoires_et_outils_autour_de_VLM");
     define("GRIB_TOOLS_URL", DOC_SERVER_URL."Outils_m%C3%A9t%C3%A9os");
     define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
+    define("FORUM_SERVER_URL", "http://www.virtual-winds.com/forum/index.php?showforum=276");
 
     // Max position age (engine speedup on long races) => 1 week since we have "histpos" table
     define("DEFAULT_POSITION_AGE", 1 * 3600);
