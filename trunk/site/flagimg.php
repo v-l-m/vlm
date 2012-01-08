@@ -20,5 +20,5 @@
     header("Content-Location: " . $original );
 
     readfile($original);
-
-?> 
+    exit(0); //To prevent bad spaces appended from php script
+?>

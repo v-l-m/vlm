@@ -21,5 +21,6 @@
     // FIXME do we want to send a redirect, here ?
 
     readfile($original);
+    exit(0); //To prevent bad spaces appended from php script
 
-?> 
+?>

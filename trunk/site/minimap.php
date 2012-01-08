@@ -64,5 +64,5 @@
     // FIXME do we want to send a redirect, here ?
 
     readfile($thumb);
-
-?> 
+    exit(0); //To prevent bad spaces appended from php script
+?>
