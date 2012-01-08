@@ -25,9 +25,12 @@
         var $icalobject;
 
         function __construct() {
-            $this->query = "SELECT * FROM `races` ".
+            $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
                            "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
-                           "AND !(racetype & ".RACE_TYPE_RECORD. ") ORDER BY started ASC, deptime ASC, closetime ASC " ;
+                           "AND !(racetype & ".RACE_TYPE_RECORD. ") ORDER BY started ASC, deptime ASC, closetime ASC ) ".
+                           "UNION ( SELECT deptime, deptime+3600 as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
+                           "FROM `racespreview` ".
+                           "WHERE deptime > UNIX_TIMESTAMP() )";
             parent::__construct();
         }
 
@@ -48,9 +51,15 @@
             $vevent->setProperty( "organizer" , EMAIL_COMITE_VLM );
             $vevent->setProperty( 'dtend', array('timestamp' => $row['closetime']) );
             $vevent->setProperty( 'summary', html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8") );
-            $vevent->setProperty( 'description', html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8")." ( ".substr($row['boattype'], 5 )." ) " );
+            if (!is_null($row['boattype'])) {
+                $vevent->setProperty( 'description', html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8")." ( ".substr($row['boattype'], 5 )." ) " );
+            } else {
+                $vevent->setProperty( 'description', html_entity_decode($row['description'], ENT_COMPAT, "UTF-8") );
+            }
             //FIXME: construction de l'url ???
-            $vevent->setProperty( 'url', sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']));
+            if (!is_null($row['idraces'])) {
+                $vevent->setProperty( 'url', sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']));
+            }
             $this->icalobject->setComponent ( $vevent ); // add event to calendar
         }
 
@@ -64,9 +73,14 @@
         var $jsonarray;
 
         function __construct() {
-            $this->query = "SELECT * FROM races ".
+            $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
                            " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND !(racetype & ".RACE_TYPE_RECORD.") ".
-                           " ORDER BY started ASC, deptime ASC, closetime ASC ";
+                           " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
+                           "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
+                           "FROM `racespreview` ".
+                           "WHERE deptime > UNIX_TIMESTAMP() )";
+
+                           ;
             parent::__construct();
         }
 
@@ -79,8 +93,8 @@
             $jsonarray['start'] = $row['deptime'];
             $jsonarray['end'] = $row['closetime'];
             $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
-            $jsonarray['allDay'] = False;
-            $jsonarray['url'] = sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
+            $jsonarray['allDay'] = is_null($row['closetime']);
+            if (!is_null($row['idraces'])) $jsonarray['url'] = sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
             $this->jsonarray[] = $jsonarray;
         }
 
