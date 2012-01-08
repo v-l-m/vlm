@@ -36,10 +36,10 @@
     $save= (htmlentities($_GET['save']) == 'on');
 
     $maptype = htmlentities(get_cgi_var('maptype', 'compas'));
-    if ( in_array($maptype, Array("floatingcompas", "bothcompass", "compas" ) ) ) {
+    if ( in_array($maptype, Array("floatingcompas", "bothcompass", "compas", "none" ) ) ) {
         setUserPref($boat, "mapTools" , $maptype, $save);
     } else {
-        setUserPref($boat, "mapTools" , "none", $save);
+        setUserPref($boat, "mapTools" , "compas", $save);
     }
     $list= htmlentities($_GET['list']) ;
     
@@ -171,7 +171,7 @@
       setUserPref($boat, "mapOpponents" , $list, $save);
 
       $maplayers=htmlentities($_GET['maplayers']);
-      if ( $maplayers == "" ) $maplayers = "merged";
+      if ( $maplayers == "" ) $maplayers = "multi";
       setUserPref($boat, "mapLayers" , $maplayers, $save);
 
       $mapcenter=htmlentities($_GET['mapcenter']);
