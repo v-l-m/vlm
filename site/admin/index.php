@@ -33,6 +33,7 @@
 
 
     $tablepages = Array(
+        "racespreview.php" => "Incoming Races - Calendar Management",
         "races_instructions.php" => "Races instructions",
         "races.php" => "Races definitions (no uploading, see below)",
         "waypoints.php" => "Waypoints definitions",

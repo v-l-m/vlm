@@ -1,5 +1,5 @@
 #Creation de la table racespreview
-DROP TABLE IF EXISTS `racepreview`;
+DROP TABLE IF EXISTS `racespreview`;
 CREATE TABLE `racespreview` (
   `idracespreview` int(11) NOT NULL auto_increment,
   `idraces` int(11) NOT NULL,

@@ -19,7 +19,7 @@ $opts['key_type'] = 'int';
 $opts['sort_field'] = array('-idraces');
 
 $opts['fdd']['autoid'] = array(
-  'help'     => 'Unique id of the race',
+  'help'     => 'Unique id of the race instruction',
   'select'   => 'T',
   'input'  => 'R',
   'options' => 'H',
