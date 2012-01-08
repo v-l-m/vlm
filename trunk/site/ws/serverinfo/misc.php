@@ -18,6 +18,7 @@
       $versionarray = split("\n", $versiontxt);
       $info['version'] = $versionarray[0];
       $info['branch'] = $versionarray[1];
+      $info['gshhs_version'] = "2.2.0"; #fixme, synchroniser avec maps, vlm-c, clip_gshhs
 
       return $info;
     }
