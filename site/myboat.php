@@ -82,27 +82,32 @@ include_once("includes/header.inc");
        $amure = "babord";
     }
 
-    // Retrive user_prefs
+    // Retrieve user_prefs
     $mapOpponents = $usersObj->getMyPref("mapOpponents");
     if ( $mapOpponents == "NULL" ) $mapOpponents="myboat";
+
     $mapTools = $usersObj->getMyPref("mapTools");
-    if ( $mapTools == "NULL" ) $mapTools="compas";
+    if ( !in_array($mapTools, Array("floatingcompas", "bothcompass", "compas", "none" )) ) $mapTools = "compas";
+
     $mapCenter = $usersObj->getMyPref("mapCenter");
-    if ( $mapCenter == "NULL" ) $mapCenter="myboat";
+    if ( !in_array($mapCenter, Array("myboat", "mywp", "roadtowp")) ) $mapCenter = "myboat";
+
     $mapArea = $usersObj->getMyPref("maparea");
     if ( $mapArea == "NULL" ) $mapArea=10;
     $mapAge = $usersObj->getMyPref("mapAge");
     if ( $mapAge == "NULL" ) $mapAge=3;
+
     $mapLayers = $usersObj->getMyPref("mapLayers");
-    if ( $mapLayers == "NULL" ) $mapLayers="merged";
+    if ( !in_array($mapLayers, Array("multi", "merged")) ) $mapLayers = "multi";
+    
     $mapMaille = $usersObj->getMyPref("mapMaille");
     if ( $mapMaille == "NULL" ) $mapMaille=3;
     $mapEstime = $usersObj->getMyPref("mapEstime");
     if ( $mapEstime == "NULL" ) $mapEstime=50;
     $mapX = $usersObj->getMyPref("mapX");
-    if ( $mapX == "NULL" ) $mapX = 800;
+    if ( $mapX == "NULL" ) $mapX = 1024;
     $mapY = $usersObj->getMyPref("mapY");
-    if ( $mapY == "NULL" ) $mapY = 600;
+    if ( $mapY == "NULL" ) $mapY = 768;
     $mapDrawtextwp = $usersObj->getMyPref("mapDrawtextwp");
     if ( $mapDrawtextwp == "NULL" ) $mapDrawtextwp = "on";
 
