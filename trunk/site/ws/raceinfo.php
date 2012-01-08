@@ -75,7 +75,7 @@ function get_info_array($idrace) {
 }
 
 function usage() {
-    $usage = "usage : http://virtual-loup-de-mer.org/ws/raceinfo.php?idrace=X\n";
+    $usage = "usage : ".WWW_SERVER_URL."/ws/raceinfo.php?idrace=X\n";
     $usage .= "\nX = numero de la course";
     return $usage;
 }

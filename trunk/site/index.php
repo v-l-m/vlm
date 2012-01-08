@@ -13,16 +13,16 @@
       <p><?php echo getLocalizedString("a1"); ?></p>
 
       <p><?php echo getLocalizedString("sh1"); ?>
-      <a href="http://wiki.virtual-loup-de-mer.org/" target="_vlmwiki">
+      <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki">
           <?php echo getLocalizedString("doc"); ?>
       </a>
       <?php echo getLocalizedString("sh2"); ?>
-      <a href="http://wiki.virtual-loup-de-mer.org/index.php/Les_accessoires_et_outils_autour_de_VLM" target="_outils">
+      <a href="<?php echo TOOLS_SERVER_URL; ?>" target="_outils">
       <?php echo getLocalizedString("tools"); ?>
       </a></p>
 
       <p><?php echo getLocalizedString("sh3"); ?>
-      <a href="http://www.virtual-winds.com/forum/index.php?showforum=276" target="_forum"><?echo getLocalizedString("forum")?></a>
+      <a href="<?php echo FORUM_SERVER_URL; ?>" target="_forum"><?echo getLocalizedString("forum")?></a>
       <?php echo getLocalizedString("sh4"); ?>
             <?php
             echo "<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
@@ -73,7 +73,7 @@
     </div>
     
     <div id="joinvlmbox"  class="basic">
-      <h1 class="info"><?php echo getLocalizedString("Join Virtual-Loup-De-Mer.Org, it's free !"); ?></h1>;
+      <h1 class="info"><?php echo getLocalizedString("Join Virtual Loup de Mer, it's free !"); ?></h1>;
     </div>
 
 <?php
