@@ -1,0 +1,7 @@
+#Fichier utilisé uniquement pour les opérations sur la base de données depuis un shell
+
+#Partie à modifier
+export DBSERVER=databaseserver
+export DBUSER=databaseuser
+export DBPASSWORD=databasepassword
+export DBNAME=databasename

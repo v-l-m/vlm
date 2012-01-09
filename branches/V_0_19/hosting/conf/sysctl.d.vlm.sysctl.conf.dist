@@ -1,0 +1,8 @@
+       # Controls the maximum size of a message, in bytes
+       kernel.msgmnb=65536
+       # Controls the default maximum size of a message queue
+       kernel.msgmax=65536
+       # Controls the maximum shared segment size, in bytes
+       kernel.shmmax=2147483648
+       # Controls the maximum number of shared memory segments, in pages
+       kernel.shmall=2097152
