@@ -7,6 +7,9 @@ $VLMRACINE/scripts/maintenance.sh
 $VLMJEUROOT/base/scripts/dump-alive.sh $VLMTEMP/vlmdump-alive.sql 
 $VLMJEUROOT/base/scripts/runupgrade.sh $VLMRELEASE
 
+rm -f $VLMGSHHS/gshhs_f.b
+$VLMRACINE/scripts/maj_module.sh maps
+
 $VLMRACINE/scripts/maj_module.sh moteur
 $VLMRACINE/scripts/maj_module.sh lib/phpcommon
 $VLMRACINE/scripts/maj_module.sh lib/vlm-c
