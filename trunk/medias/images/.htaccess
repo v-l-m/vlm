@@ -4,6 +4,6 @@ Options +Indexes
     ExpiresDefault A2592000
 </IfModule>
 
-</IfModule mod_headers.c>
+<IfModule mod_headers.c>
     Header set Cache-Control "public"
 </IfModule>
