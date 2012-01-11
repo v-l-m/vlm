@@ -352,7 +352,7 @@ class map
   }
 
         
-  function addFakeMapPoints($coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid, $c = false) {
+  function addFakeMapPoints(&$coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid, $c = false) {
     $new_x = -1;
     $new_y = -1;
     $new2_x = -1;
