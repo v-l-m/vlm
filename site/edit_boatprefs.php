@@ -148,18 +148,11 @@ Notepad :<br />
   }
   echo "</table>\n";
 
-        if ( $fullUsersObj->users->hasTrackHidden() ) {
-             $checked="checked ";
-             $color=substr($fullUsersObj->users->color,1);
-        } else {
-             $checked=" ";
-             $color=$fullUsersObj->users->color;
-        }
-        echo "<input type=\"text\" name=\"color\" size=\"6\" ";
-        echo "value = \"" . $color . "\"";
-        echo " onfocus=\"document.forms.modify.color.blur()\" />";
+    $color=$fullUsersObj->users->color;
+    echo "<input type=\"text\" name=\"color\" size=\"6\" ";
+    echo "value = \"" . $color . "\"";
+    echo " onfocus=\"document.forms.modify.color.blur()\" />";
 
-        echo "<input type=\"checkbox\" name=\"invisible\" " . $checked . " /> Invisible";
 ?>
 
 
