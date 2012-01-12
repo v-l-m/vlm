@@ -23,7 +23,7 @@
     $theme = get_cgi_var('theme');
     $country = get_cgi_var('country');
     $hidepos = get_cgi_var('hidepos');
-    $invisible = get_cgi_var('invisible');
+    //#658 $invisible = get_cgi_var('invisible');
     $type  = get_cgi_var('type');
     $action = get_cgi_var('action');
     $boatname = get_cgi_var('boatname');
@@ -81,11 +81,7 @@
     if ($type == "change" && isPlayerLoggedIn()) {
         $users = new fullUsers(getLoginId());
         $users->users->boatname = $boatname;
-        if ( $invisible == "on" ) {
-             $users->users->color = "-" . $color ;
-        } else {
-             $users->users->color = $color;
-        }
+        $users->users->color = $color;
         if ($users->users->getOwnerId() > 0) { //attached boats can't change this deprecated prefs
             $users->users->email = getLoggedPlayerObject()->email;
         } else {
