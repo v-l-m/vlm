@@ -493,7 +493,7 @@ class users extends baseClass
   }
 
   function hasTrackHidden() {
-      return substr($this->color,0,1) == "-";
+      return False; //#658 - substr($this->color,0,1) == "-";
   }
   
   function isEngaged() {
