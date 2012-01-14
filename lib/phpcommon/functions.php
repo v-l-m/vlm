@@ -1320,6 +1320,7 @@ function getip() {
         return $_SERVER["REMOTE_ADDR"];
     } else {
         return "127.0.0.1";
+    }
 }
 
 function getfullip() {
