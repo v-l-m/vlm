@@ -1316,9 +1316,10 @@ function getip() {
         return $_SERVER["HTTP_FORWARDED_FOR"];
     } elseif (isset($_SERVER["HTTP_FORWARDED"]) && validip($_SERVER["HTTP_FORWARDED"])) {
         return $_SERVER["HTTP_FORWARDED"];
-    } else {
+    } elseif (isset($_SERVER["REMOTE_ADDR"])) {
         return $_SERVER["REMOTE_ADDR"];
-    }
+    } else {
+        return "127.0.0.1";
 }
 
 function getfullip() {
@@ -1996,8 +1997,10 @@ function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     //tracking...
     if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"])) {
         $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"]." ".$_SERVER["HTTP_USER_AGENT"];
-    } else {
+    } elseif(isset($_SERVER['HTTP_USER_AGENT'])) {
         $ua = $_SERVER["HTTP_USER_AGENT"];
+    } else {
+        $ua = "VlmEngine";
     }
     $idusers = is_null($idusers) ? -1 : $idusers;
     $idplayers = is_null($idplayers) ? -1 : $idplayers;
