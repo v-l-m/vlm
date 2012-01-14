@@ -183,7 +183,7 @@ class users extends baseClass
 		    $tlon   = floatval($Coords[1]);
 		    // FIXME sanity check
                     $query .= ", targetlat=$tlat, targetlong=$tlon ";
-                    if ( $values[1] >= 0 ) {
+                    if ( isset($values[1]) && $values[1] >= 0 ) {
                         $query .= ", targetandhdg=" . $values[1] ;
                         // Setup the userclass for immediate use
                         $this->targetandhdg = $values[1];
