@@ -1316,9 +1316,10 @@ function getip() {
         return $_SERVER["HTTP_FORWARDED_FOR"];
     } elseif (isset($_SERVER["HTTP_FORWARDED"]) && validip($_SERVER["HTTP_FORWARDED"])) {
         return $_SERVER["HTTP_FORWARDED"];
-    } else {
+    } elseif (isset($_SERVER["REMOTE_ADDR"]) {
         return $_SERVER["REMOTE_ADDR"];
-    }
+    } else {
+        return "127.0.0.1";
 }
 
 function getfullip() {
