@@ -9,7 +9,7 @@ if test "$dumpname" = ""; then
 fi
 
 #dont dump : histpos modules_status
-TBNAMES="admin_changelog auto_pilot flags players players_pending playerstousers positions races races_instructions races_loch races_ranking races_results races_waypoints racesmap updates user_action user_prefs users waypoint_crossing waypoints"
+TBNAMES="admin_changelog auto_pilot flags players players_pending playerstousers positions races racespreview races_instructions races_loch races_ranking races_results races_waypoints racesmap updates user_action user_prefs users waypoint_crossing waypoints"
 
 echo "Dumping live sql tables (gzipped) to $dumpname.gz"
 
