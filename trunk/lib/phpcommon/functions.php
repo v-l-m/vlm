@@ -1997,7 +1997,7 @@ function logPlayerEvent($idplayers, $idusers, $idraces, $action) {
     //tracking...
     if (isset($_SERVER["HTTP_VLM_PROXY_AGENT"])) {
         $ua = $_SERVER["HTTP_VLM_PROXY_AGENT"]." ".$_SERVER["HTTP_USER_AGENT"];
-    } else if(isset($_SERVER['HTTP_USER_AGENT'])) {
+    } elseif(isset($_SERVER['HTTP_USER_AGENT'])) {
         $ua = $_SERVER["HTTP_USER_AGENT"];
     } else {
         $ua = "VlmEngine";
