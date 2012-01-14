@@ -435,7 +435,7 @@ include_once("scripts/myboat.js");
                 $messages[] = Array("id" => "incomingbo", "txt" => getLocalizedString("incomingblackout")." : $bobegin ($boduration h)", "class" => "ic", "url" => $ichref);
             }
             if ( $now > $myRace->bobegin && $now < $myRace->boend ) {
-                $msg = getLocalizedString("blackout") . " : <b>". gmdate(getLocalizedString("dateClassificationFormat") . "</b>",
+                $msg = getLocalizedString("blackout") . ' ===> '. " : <b>". gmdate(getLocalizedString("dateClassificationFormat") . "</b>",
                    $myRace->boend);
                 $messages[] = Array("id" => "activebo", "txt" => $msg, "class" => "ic", "url" => $ichref);
             }

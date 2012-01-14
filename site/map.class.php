@@ -895,11 +895,11 @@ class map
       if ( $now > $this->fullRacesObj->races->bobegin && $now < $this->fullRacesObj->races->boend ) {
           //FIXME what is this $font var ? (I guess it's zero, this the font size is 15)
           imagestring ( $this->mapImage, $font+15, 10, $this->ySize - 40 ,
-                        getLocalizedString("blackout").gmdate(getLocalizedString("dateClassificationFormat"),
+                        getLocalizedString("blackout").' ==> '.gmdate(getLocalizedString("dateClassificationFormat"),
                           $this->fullRacesObj->races->boend),
                         $this->colorWarning);
           imagestring ( $this->mapImage, $font+15, 9, $this->ySize - 39 ,
-                        getLocalizedString("blackout").gmdate(getLocalizedString("dateClassificationFormat"),
+                        getLocalizedString("blackout").' ==> '.gmdate(getLocalizedString("dateClassificationFormat"),
                           $this->fullRacesObj->races->boend),
                         $this->colorBlack);
       }
