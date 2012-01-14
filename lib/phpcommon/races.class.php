@@ -665,7 +665,7 @@ class fullRaces {
           .gmdate(getLocalizedString("dateClassificationFormat"), $this->races->bobegin);
         echo "<br />\n";
         echo getLocalizedString("blackout")
-          .gmdate(getLocalizedString("dateClassificationFormat"), $this->races->boend);
+          . ' ===> '.gmdate(getLocalizedString("dateClassificationFormat"), $this->races->boend);
     } else {
         echo getLocalizedString("classification")
           .gmdate(getLocalizedString("dateClassificationFormat"), $classification_time);
