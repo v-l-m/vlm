@@ -152,8 +152,8 @@
             case '3': case'4': case '5' :
                 var reg=new RegExp("^[-]?(([0-9]{1}|[1-8]{1}[0-9]{1})([.]{1}[0-9]{1,10})?|90)[,]{1}[-]?(([1-9][0-9]|[0-9]{1}|1[0-7][0-9])([.]{1}[0-9]{1,10})?|180)([@](([0-9]{1}|[1-9][0-9]|[1-2][0-9][0-9]|3[0-5][0-9])([.]{1}[0-9]{1,6})?|([-]1([.][0]{1,6})?)?))?$","i");
         }
-		alert("<?php echo getLocalizedString("pilototo_prog_del");?>");
-        return((document.activeElement.value == "efface" ? true : reg.test(ordre)));
+		//#562 : don't check grammar if del button : alert("<?php echo getLocalizedString("pilototo_prog_del");?>");
+        return((document.activeElement.value == "<?php echo getLocalizedString("pilototo_prog_del");?>" ? true : reg.test(ordre)));
     }
 
 </script>
