@@ -42,6 +42,9 @@
         "block4" => "block",
         "waypoints.php" => "Waypoints definitions",
         "races_waypoints.php" => "Races_waypoints definitions",
+        "block2" => "block",
+        "racesgroups.php" => "Races groups definitions",
+        "racestogroups.php" => "Join Races to RacesGroups",
         );
     adminlistbox($tablepages, "Race administration");
 
