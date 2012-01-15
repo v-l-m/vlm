@@ -51,7 +51,7 @@
             echo "value=\"$i\">$i:".getLocalizedString($pilotmodeList[$i])."</option>";
         }
         echo "    </select></td>\n";
-        echo "    <td><input type=\"text\" name=\"pip\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." width=\"20\" size=\"20\" value=\"$pip\" /></td>\n";
+        echo "    <td><input type=\"text\" name=\"pip\" ". (($status=='done') ? "disabled=\"disabled\"" : "") ." width=\"30\" size=\"30\" value=\"$pip\" /></td>\n";
         echo "    <td>$statusstring</td>\n";
         //taskid, time, pilotmode, pilotparameter, status .. + Human readable date
         echo "    <td>" . $row . "</td>\n";
