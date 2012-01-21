@@ -100,7 +100,7 @@ class playersPrefs extends baseClass {
             case "contact_revatua":
                 return $this->checkDoublePattern($key, $val, "/^http:\/\/revatua\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
             case "contact_googleplus":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/plus\.google\.com\/u\/0\/(\d+).*?$/i", "/^(\d+)$/i");
+                return $this->checkDoublePattern($key, $val, "/^https:\/\/plus\.google\.com\/u\/0\/(\d+).*?$/i", "/^(\d+)$/i");
             case "contact_twitter":
                 return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter\.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
             case "contact_identica":
