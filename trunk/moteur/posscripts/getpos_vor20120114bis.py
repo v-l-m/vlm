@@ -30,7 +30,7 @@ staticxml = os.path.join(vlmtmp, basefilename+".static.xml")
 updatehwz = os.path.join(vlmtmp, basefilename+".update.tmp.hwz")
 updatexml = os.path.join(vlmtmp, basefilename+".update.xml")
 
-urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg3/shared/event/static.hwz", statichwz)
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/leg3/event/static.hwz", statichwz)
 unzip_file_into_dest(statichwz, staticxml)
 
 #<factors coord="1000" speed="10" distance="10" timecode="1" coef="1000"/>
@@ -45,7 +45,7 @@ for outline in tree.findall(".//boat"):
   boats[int(outline.attrib['id'])] = outline.attrib
 
 #page = urlopen("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.xml")
-urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/leg3/shared/event/update.hwz", updatehwz)
+urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/leg3/event/update.hwz", updatehwz)
 unzip_file_into_dest(updatehwz, updatexml)
 
 #parse
@@ -64,7 +64,7 @@ tree = ElementTree.parse(updatexml)
 #o = offset de temps entre la date de publication et la mesure en secondes
 for outline in tree.findall(".//track"):
   l = outline.text.split(';')
-  lat, lon, t = 0, 0, startime
+  lat, lon, t = 0, 0, starttime
   rid = int(outline.attrib['id'])
   id = -1200-rid
   for i in l:
