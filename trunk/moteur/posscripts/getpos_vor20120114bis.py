@@ -44,6 +44,8 @@ boats = {}
 for outline in tree.findall(".//boat"):
   boats[int(outline.attrib['id'])] = outline.attrib
 
+coordfactor = float(tree.find("./factors").attrib['coord'])
+
 #page = urlopen("http://volvooceanrace.geovoile.com/2011/leg2/shared/event/update.xml")
 urllib.urlretrieve("http://volvooceanrace.geovoile.com/2011/shared/leg3/event/update.hwz", updatehwz)
 unzip_file_into_dest(updatehwz, updatexml)
@@ -74,6 +76,6 @@ for outline in tree.findall(".//track"):
     t += int(tup[2])
     if time.time() - t < 48*3600:
         #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
-        print "%d|0|%d|%d|%s|BAR|%f|%f|0.|0." % (vlmidrace,int(t), id, boats[rid]['name'].encode('utf-8'), lat/1000., lon/1000.)
+        print "%d|0|%d|%d|%s|BAR|%f|%f|0.|0." % (vlmidrace,int(t), id, boats[rid]['name'].encode('utf-8'), lat/coordfactor, lon/coordfactor)
         #print time.gmtime(int(t))
 
