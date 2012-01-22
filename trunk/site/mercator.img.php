@@ -147,10 +147,11 @@
     }
     
     if ( $list == "mylist" ) {
-      $list = explode ("," , getUserPref($boat,"mapPrefOpponents") ); 
+      $list = explode ("," , getUserPref($boat,"mapPrefOpponents") );
       //print_r($list);
     }
-    
+    if (!in_array($boat, $list))  array_push($list, $boat);
+   
     
     // Le pas de temps du vent
     if ( $drawwind == "no" ) {
