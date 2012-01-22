@@ -12,7 +12,7 @@ $playersPrefsContactLinkPattern = Array(
     "contact_twitter" => "https://twitter.com/#!/%s",
     "contact_identica" => "http://identi.ca/%s",
     "contact_facebook" => "http://facebook.com/%s",
-    "contact_googleplus" => "http://plus.google.com/%s",
+    "contact_googleplus" => "https://plus.google.com/u/0/%s",
     );
     
 function sortPref($k1, $k2) {
