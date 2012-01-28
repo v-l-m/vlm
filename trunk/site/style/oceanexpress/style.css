@@ -12,6 +12,7 @@ a:hover
   background-color: #ff652e;
 }
 
+
 #baneer
 {
   background-color: #2b597b;
@@ -53,6 +54,18 @@ color: #44505a;
 
 .leftbox, .icbox  {
   border-bottom: solid 1px #15214b;
+}
+
+#menubox {
+  background-color: #f9f1e8;
+  right:130px;
+  opacity:0.7;
+  filter:alpha(opacity=70); /* For IE8 and earlier */
+  position:absolute;
+  top:2px;
+  margin: 0px;
+  height: 15px;
+  font-weight: bold;  
 }
 
 #main {
