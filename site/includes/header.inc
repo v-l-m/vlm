@@ -383,7 +383,7 @@
         <!-- Twitter medium icon -->
         <a href="https://twitter.com/#!/virtualloupmer" style="text-decoration:none;"><img src="/images/logos/twitter-32.png" alt="" style="border:0;width:32px;height:32px;" target="_twittervlm"/></a>
         <!-- Identi.ca medium icon -->
-        <a href="https://twitter.com/#!/virtualloupmer" style="text-decoration:none;"><img src="/images/logos/identica-32.png" alt="" style="border:0;width:32px;height:32px;" target="_identicavlm"/></a>
+        <a href="http://identi.ca/virtualloupmer" style="text-decoration:none;"><img src="/images/logos/identica-32.png" alt="" style="border:0;width:32px;height:32px;" target="_identicavlm"/></a>
 
 
    </div>
