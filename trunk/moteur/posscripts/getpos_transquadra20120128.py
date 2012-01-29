@@ -24,7 +24,7 @@ boats = geotree.boats()
 
 for rid in boats.keys() :
     bb = baseboat(int(rid))
-    boats[rid]['vlmid'] = bb['vlmid']
+    boats[rid]['vlmid'] = -bb['vlmid']
     boats[rid]['vlmboatname'] = "%03d - %s" % (rid, boats[rid]['name'])
     boats[rid]['vlmusername'] = "%s%03d" % (vlmusernameprefix, rid)
 
