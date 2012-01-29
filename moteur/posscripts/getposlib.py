@@ -51,7 +51,7 @@ def unzipurl(url, basefilename, suffix = 'static'):
 
 def sqlusers(boats, engaged):
     for rid in boats.keys() :
-        print "INSERT INTO `users` (idusers, username, boatname, engaged) VALUES (%d, '%s', '%s', %d);" % (boats[rid]['vlmid'], boats[rid]['vlmusername'], boats[rid]['vlmboatname'], engaged)
+        print "INSERT INTO `users` (idusers, username, boatname, engaged) VALUES (%d, \"%s\", \"%s\", %d);" % (boats[rid]['vlmid'], boats[rid]['vlmusername'], boats[rid]['vlmboatname'], engaged)
 
 def basedatas(boats, firstid):
     text = ""
