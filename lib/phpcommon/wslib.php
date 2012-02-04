@@ -137,6 +137,23 @@ class WSBaseRace extends WSBase {
     
 }
 
+class WSBaseRaceGroup extends WSBase {
+    var $idg = null;
+    var $rgo = null;
+
+    function __construct() {
+        parent::__construct();
+    }
+    
+    function require_idg() {
+        $idg = $this->check_cgi('idg', 'IDG01');
+        $rgo = new racesgroups($idg);
+        if (is_null($rgo->grouptag)) $this->reply_with_error('IDG03');
+        $this->rgo = $rgo;
+        $this->idg = $idg;
+    }
+}
+
 class WSBaseBoat extends WSBasePlayer {
     var $idu = null;
     var $debug = true;
@@ -422,6 +439,12 @@ function get_error($code) {
         "IDR01"  => 'idr is required',
         "IDR02"  => 'idr should be int and > 0',
         "IDR03"  => 'idr is not valid',
+
+        //idg
+        "IDG01"  => 'idg is required',
+        "IDG02"  => 'idg : report this error ?',
+        "IDG03"  => 'idg is not valid',
+
         "RTFM01"  => 'RTFM : please input idr when the boat is not racing',
         "RTFM02"  => 'RTFM : starttime should be lesser than endtime',
 
