@@ -1006,7 +1006,7 @@ function htmlRacesListRow($rowdatas) {
       $html .= htmlTinymap($rowdatas['idraces'], $rowdatas['racename']);
       $html .= "</td>\n";
       $html .= " <td class=\"grouptaglist\">";
-      foreach (split(',', $rowdatas['grouptaglist']) as $g) {
+      foreach (explode(',', $rowdatas['grouptaglist']) as $g) {
           $html .= htmlRacesGroupLink($g);
           $html .= " ";
       }
