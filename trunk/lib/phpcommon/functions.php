@@ -825,6 +825,7 @@ function isAdminLogged() {
     return (isPlayerAdmin(getPlayerId()));
 }
 
+
 function getNumOpponents($idraces, $check = TRUE) {
   //force type int
   $idraces = intval($idraces);
@@ -856,6 +857,30 @@ function getNumOpponents($idraces, $check = TRUE) {
 
   //              arrivés     en course       inscrits (arr + out + en course)
   return (array ($num_arrived,$num_racing,$num_arrived + $num_out + $num_racing));
+}
+
+function getRacesGroupsBatch($racelist) {
+  $ret = Array();
+  $in = "races.idraces IN (";
+  $first = TRUE;
+  foreach ($racelist as $idr) {
+    if ($first) {
+      $first = FALSE;
+      $in.=$idr;
+    } else {
+      $in.=",".$idr;
+    }
+  }
+  $in.=")";
+
+  $query = "SELECT races.`idraces`, group_concat(grouptag) AS grouptaglist ".
+           "FROM races LEFT JOIN racestogroups ON (races.idraces = racestogroups.idraces) WHERE ".$in." ".
+           "GROUP BY races.idraces";
+  $result = wrapper_mysql_db_query_reader($query) or die($query);
+  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    $ret[$row['idraces']] = $row;
+  }
+  return $ret;
 }
 
 function getNumOpponentBatch($racelist) {
@@ -980,6 +1005,12 @@ function htmlRacesListRow($rowdatas) {
       $html .= "  <td class=\"mapcell\">"; 
       $html .= htmlTinymap($rowdatas['idraces'], $rowdatas['racename']);
       $html .= "</td>\n";
+      $html .= " <td class=\"grouptaglist\">";
+      foreach (split(',', $rowdatas['grouptaglist']) as $g) {
+          $html .= htmlRacesGroupLink($g);
+          $html .= " ";
+      }
+      $html .= "</td>\n";
       $html .= " </tr>\n";
       return $html;
 }
@@ -988,47 +1019,60 @@ function dispHtmlCurrentRacesList() {
     dispHtmlRacesList("WHERE started != ".RACE_ENDED);
 }
 
-function dispHtmlRacesList($where = "") {
+function dispHtmlRacesList($where = "", $limit = 100) {
 
-  echo "<table>\n";
-  echo "<thead>\n";
-  echo "    <tr>\n";
-  echo "    <th>".getLocalizedString("raceid")."</th>\n";
-  echo "    <th>".getLocalizedString("racename")."</th>\n";
-  echo "    <th>".getLocalizedString("departuredate")." (GMT)</th>\n";
-  echo "    <th>". join('<br />', explode("/", getLocalizedString("racenumboats")))."</th>\n";
-  echo "    <th>".getLocalizedString("map")."</th>\n";
-  echo "    </tr>\n";
-  echo "   </thead>\n";
-  echo "  <tbody>\n";
-//  echo "<tr><td></td><td></td><td></td><td></td></tr>";
+    // La requete qui donne la liste des courses en cours
+    $query= "SELECT races.idraces, racename, started, deptime, startlong, startlat, ".
+      "boattype, closetime, racetype, if(started=".RACE_ENDED.", 0, deptime) ".
+      "AS deptimesort, group_concat(grouptag) AS grouptaglist ".
+      "FROM races LEFT JOIN racestogroups ON (races.idraces = racestogroups.idraces) $where ".
+      "GROUP BY races.idraces ORDER by started DESC, deptimesort ASC, closetime DESC, idraces DESC ".
+      "LIMIT $limit";
 
+    $result = wrapper_mysql_db_query_reader($query) or die($query);
 
-  // La requete qui donne la liste des courses en cours
-  $query= "SELECT idraces, racename, started, deptime, startlong, startlat, ".
-    "boattype, closetime, racetype, if(started=".RACE_ENDED.", 0, deptime) ".
-    "AS deptimesort FROM races $where ORDER by started DESC, deptimesort ASC, ".
-    "closetime DESC, idraces DESC";
+    if (mysql_num_rows($result)) {
+        $allRacesRows = array();
+        while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+            $allRacesRows[$row['idraces']] = $row;
+        }
+        echo htmlRacesList($allRacesRows);
+    }
+}
 
-  $result = wrapper_mysql_db_query_reader($query) or die($query);
+function htmlRacesList($raceslist) {
+  $html = "";
+      $html .= "<table>\n";
+  $html .= "<thead>\n";
+  $html .= "    <tr>\n";
+  $html .= "    <th>".getLocalizedString("raceid")."</th>\n";
+  $html .= "    <th>".getLocalizedString("racename")."</th>\n";
+  $html .= "    <th>".getLocalizedString("departuredate")." (GMT)</th>\n";
+  $html .= "    <th>". join('<br />', explode("/", getLocalizedString("racenumboats")))."</th>\n";
+  $html .= "    <th>".getLocalizedString("map")."</th>\n";
+  $html .= "    <th>".getLocalizedString("Group(s)")."</th>\n";
+  $html .= "    </tr>\n";
+  $html .= "   </thead>\n";
+  $html .= "  <tbody>\n";
 
-  if (mysql_num_rows($result)) {
-      $allRacesRows = array();
-      $allRacesIds  = array();
-      while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-        array_push($allRacesRows, $row);
-        array_push($allRacesIds, $row['idraces']);      
-      }
-      $allNumOpponents = getNumOpponentBatch($allRacesIds);
-
-      foreach($allRacesRows as $row) {
-        $row['num_opps'] = $allNumOpponents[$row['idraces']];
-        echo htmlRacesListRow($row);
-      }
+  $allNumOpponents = getNumOpponentBatch(array_keys($raceslist));
+  $allRacesGroups = getRacesGroupsBatch(array_keys($raceslist));
+ 
+  foreach ($raceslist as $idraces => $row) {
+      $row['num_opps'] = $allNumOpponents[$row['idraces']];
+      $row['grouptaglist'] = $allRacesGroups[$row['idraces']]['grouptaglist'];
+      $html .= htmlRacesListRow($row);
   }  
 
-  echo "</tbody>\n";
-  echo "</table>\n  ";
+  $html .= "</tbody>\n";
+  $html .= "</table>\n  ";
+
+  return $html;
+}
+
+function htmlRacesGroupLink($grouptag) {
+    if (is_null($grouptag) || $grouptag == "") return "";
+    return "<a href=\"/racesgroups.php?grouptag=$grouptag\">!$grouptag</a>";
 }
 
 function htmlTinymap($idraces, $alt, $where="Left", $width=720) {
@@ -1464,6 +1508,14 @@ function getLoggedUserObject() {
     return $user;
 }
 
+function getFullUserObject($id, $initrow = NULL) {
+    if (!is_null($uo = getUserObject($id, $initrow))) {
+        return new fullUsers($id, $uo);
+    } else {
+        return null;
+    }
+}
+
 function getUserObject($id, $initrow = NULL) {
   static $uobjects = Array();
   $id = intval($id);
@@ -1568,7 +1620,7 @@ function getTheme()
    return ( "default" );
 }
 
-function setUserPref($idusers,$pref_name,$pref_value, $save=true) {
+function setUserPref($idusers, $pref_name, $pref_value, $save=true) {
     //FIXME : this is duplicated in users.class
     if ($idusers != "" and $save) {
         $query_pref = "REPLACE into user_prefs (idusers, pref_name, pref_value) " . 
@@ -1582,7 +1634,6 @@ function setUserPref($idusers,$pref_name,$pref_value, $save=true) {
 }
 
 function getUserPref($idusers,$pref_name) {
-
     if ($idusers != "") {
         $query_pref = "SELECT `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers AND `pref_name` = '$pref_name'";
         $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
@@ -1593,20 +1644,6 @@ function getUserPref($idusers,$pref_name) {
         }
 
         return ($pref_value);
-    }
-}
-
-function listUserPref($idusers, $prefix = null) {
-    if ($idusers != "") {
-        $prefs=array();
-        $query_pref = "SELECT `pref_name`, `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers";
-        if (!is_null($prefix)) $query_pref .= " AND `pref_name` LIKE '".$prefix."%'";
-        $query_pref .= " ORDER BY `pref_name`";
-        $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
-        while ( $row = mysql_fetch_array($result_pref, MYSQL_ASSOC) ) {
-            $prefs[$row["pref_name"]]=$row["pref_value"];
-        }
-        return($prefs);
     }
 }
 
