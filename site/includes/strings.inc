@@ -2,6 +2,11 @@
 $strings = array (
   'en' => 
   array (
+    "Group Title" => "Group's title",
+    "Group Tag" => "Group's !tag",
+    "Group Name" => "Group's name",
+    "Group Description" => "Group's description",
+    "Group(s)" => "Group(s)",
     "Bad value for key" => "Bad value for key",
     "Your id doesn't seem to be valid" => "Your id doesn't seem to be valid",
     "Click here if you want to create a boat." => "Click here if you want to create a boat.",
@@ -461,6 +466,11 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "Group Title" => "Intitulé du groupe",
+    "Group Tag" => "!Tag du groupe",
+    "Group Name" => "Nom du groupe",
+    "Group Description" => "Description du groupe",
+    "Group(s)" => "Groupe(s)",
     "Bad value for key" => "Mauvaise valeur pour la clef",
     "Your id doesn't seem to be valid" => "Votre identifiant semble invalide",
     "Click here if you want to create a boat." => "Cliquez ici pour créer un bateau",
