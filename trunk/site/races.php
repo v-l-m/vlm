@@ -255,7 +255,7 @@
         echo "</tr></table>";
 
     } else  { //idraces ==0 means display all races
-        if (isset($_REQUEST['fulllist']) and $_REQUEST['fulllist']=1) {
+        if (get_cgi_var('fulllist', 0)) {
             echo "<h4>".getLocalizedString("races")."</h4>";
             dispHtmlRacesList();
         } else {

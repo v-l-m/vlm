@@ -119,8 +119,9 @@ function get_info_array($idu) {
          'mapY' => 'MHT',
          'mapDrawtextwp' => 'MDT'
          );
-    $prefs=listUserPref($idu, "map");
-    foreach($prefs as $k => $v) {
+    $prefs= $userObj->feedPrefs();
+    
+    foreach($userObj->preferences as $k => $v) {
         $info[$mapvar[$k]] = $v;
     }
     $info['SRV'] = SERVER_NAME;
