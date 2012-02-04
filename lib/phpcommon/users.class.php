@@ -651,8 +651,8 @@ class fullUsers
       $this->LongNM = $this->users->targetlong*1000;
     }
   }
-  
-  function getMyPref($pref_name) {
+
+  function feedPrefs() {
       if (!isset($this->preferences)) {
           $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
                         " WHERE idusers = ".$this->users->idusers;
@@ -668,6 +668,10 @@ class fullUsers
           $this->preferences['country'] = $this->users->country;
           $this->preferences['boatname'] = $this->users->boatname;
       }
+  }
+  
+  function getMyPref($pref_name) {
+      $this->feedPrefs();
       if (array_key_exists($pref_name, $this->preferences)) {
         return $this->preferences[$pref_name];
       } else {
