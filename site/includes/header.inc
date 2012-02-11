@@ -379,7 +379,7 @@
         <!-- Google+ medium icon -->
         <a href="https://plus.google.com/u/0/b/110426006609687431139/?prsrc=3" style="text-decoration:none;" target="_gplusvlm"><img src="https://ssl.gstatic.com/images/icons/gplus-32.png" alt="" style="border:0;width:32px;height:32px;" /></a>
         <!-- Facebook medium icon -->
-        <a href="https://www.facebook.com/pages/Virtual-Loup-de-Mer/201999359896107" style="text-decoration:none;" target="_twittervlm"><img src="/images/logos/facebook-32.png" alt="" style="border:0;width:32px;height:32px;" target="_fbvlm"/></a>
+        <a href="https://www.facebook.com/virtualloupmer" style="text-decoration:none;" target="_twittervlm"><img src="/images/logos/facebook-32.png" alt="" style="border:0;width:32px;height:32px;" target="_fbvlm"/></a>
         <!-- Twitter medium icon -->
         <a href="https://twitter.com/#!/virtualloupmer" style="text-decoration:none;"><img src="/images/logos/twitter-32.png" alt="" style="border:0;width:32px;height:32px;" /></a>
         <!-- Identi.ca medium icon -->
