@@ -1,6 +1,26 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.20 aka Evil Barber
+
+What's up for ...
+... players ?
+  * v-l-m.org is the new main url
+  * there are now arbitrary "groups" for races. A race may be in several groups. Waiting for future use case and enhancements.
+  * fix pilototo bug when deleting order from web interface initially set up by tools (mesosaure)
+  * fix pilototo PIP width in web interfaces (mesosaure)
+  * fix links to polar csv
+  * fix bug in engine (some orders where not taken into account)
+  * your boat is now checked by default in the opponents boat list
+  * links to facebook, twitter and identi.ca pages
+  * (for the record) new polar Pogo650JL
+  * deactivate "invisible" mode : it's not possible to hide your tracks anymore
+  * misc bugfixes
+
+... developpers ?
+  * webservices for race groups
+
+
 v0.19 aka Pôle Auster
 
 What's up for ...
