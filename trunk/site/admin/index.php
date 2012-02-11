@@ -94,7 +94,6 @@
         "races_without_racemap.report.php"  => "Races with no corresponding racemap",
         "boats_with_more_than_one_owner.report.php" => "Boats with more than one owner",
         "boats_without_owner.report.php" => "Boats without owner",
-        "players_without_boat.report.php" => "Players without boats",
         "boats_with_boatsitter_but_without_owner.report.php" => "Boats with boatsitter(s) but without owner",
 
         );
@@ -106,6 +105,7 @@
         "strange_engaged_in_unknown.php"    => "Engaged in unknown race.",
         "strange_unknown_flag.php"          => "Boat with Unknown flag.",
         "players_pending_for_too_much_time.fixreport.php" => "Players pending for too much time",
+        "players_without_boat.report.php" => "Players without boats for too much time",
         );
     
     adminlistbox($strangepages, "Report & fix [Use with caution to fix inconsistencies]");
