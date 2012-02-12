@@ -17,7 +17,24 @@ From 0.19.x to 0.20 :
     - add define('VLM_NOTIFY_*', ...)
 
   RUN
-    ./scripts/upgrade.sh 0.19 0
+    ./scripts/upgrade.sh 0.20 0
+    
+= Step 1, maintenance mode, backup base, upgrade core =
+
+  RUN
+    ./scripts/upgrade.sh 0.20 1 && sudo /etc/init.d/apache2 restart
+
+  - if something goes wrong, EDIT crontab and comment vlm crons
+
+= Step 2, end of release, unlock engine =
+
+  RUN
+    ./scripts/upgrade.sh 0.20 2
+    
+  ACTIVATE News feeding and notification in crontab
+
+THE END
+
 
 From 0.18.x to 0.19 :
 

@@ -19,6 +19,11 @@ What's up for ...
 
 ... developpers ?
   * webservices for race groups
+  * fix grib webservices in case of late noaa update
+
+... admins ?
+  * infrastructure for feeding social networks
+  * new report to delete old ghosts players
 
 
 v0.19 aka Pôle Auster
