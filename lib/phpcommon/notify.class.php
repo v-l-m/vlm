@@ -1,5 +1,7 @@
 <?
-    abstract class VlmNotify /*extends baseClass */ {
+    require_once('base.class.php');
+
+    abstract class VlmNotify extends baseClass {
         var $rate_limit = 2;
         var $media = null;
         var $messages = Array();
@@ -8,12 +10,42 @@
         }
         
         function fetch() {
+            $now = intval(time());
+            # idnews | media   | summary         | timetarget | published |
+            $query = "SELECT * FROM `news` ";
+            $query .= "WHERE `media` = '".$this->media."' ";
+            $query .= "AND `published` = 0 ";
+            $query .= "AND `timetarget` < $now ";
+            $query .= "ORDER BY `timetarget` ASC ";
+            $query .= "LIMIT ".$this->rate_limit;
+            $res = $this->queryRead($query);
+            if ($res) {
+                while ($line = mysql_fetch_assoc($res)) {
+                    $this->messages[] = $line;
+                }
+            }
+            
+        }
+
+        function postone() {
+            return True;
         }
         
-        function post($messages) {
+        function post() {
+            foreach ($this->messages as $k => $m) {
+                $res = $this->postone($m);
+                $this->messages[$k]['success'] = $res;
+                $this->messages[$k]['published'] = intval(time());
+            }
         }
                 
-        function close() {}
+        function close() {
+            foreach ($this->messages as $k => $m) {
+                if ($m['success']) {
+                    $this->queryWrite("UPDATE `news` SET published = ".$m['published']." WHERE idnews = ".$m['idnews']);
+                }
+            }
+        }
     }
     
     class VlmNotifyCurl extends VlmNotify {
@@ -27,12 +59,15 @@
             $this->mh = curl_multi_init();
         }
         
+        function postone($m) {
+            $ch = $this->init_handle($m);
+            $handles[] = $ch;
+            curl_multi_add_handle($this->mh,$ch);
+            return True; //#FIXME ?
+        }
+
         function post() {
-            foreach ($this->messages as $m) {
-                $ch = $this->init_handle($m);
-                $handles[] = $ch;
-                curl_multi_add_handle($this->mh,$ch);
-            }
+            parent::post();
             $active = null;
             //execute the handles
             do {
@@ -49,6 +84,7 @@
         }
 
         function close() {
+            parent::close();
             //close the handles
             foreach ($this->handles as $ch) {
                 curl_multi_remove_handle($this->mh, $ch);
