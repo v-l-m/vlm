@@ -49,6 +49,10 @@
       invalid_values("bad latitude requested : (north : $north, south : $south)");
     } 
 
+    if (intval(get_cgi_var('x', 0)) != 0) {
+      invalid_values("invalid query");
+    }
+
     $east = fmod($east, 360.);
     if ($east < -180.) {
       $east += 360.;

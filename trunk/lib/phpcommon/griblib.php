@@ -47,15 +47,8 @@
     function get_grib_validity_from_array($ts_array, $update_time = 0) {
         // check if we have a full grib or a partial one
         if (count($ts_array) > 5) {
-	  if ($update_time != 0) {
-	    $fgrib = $ts_array[0] + 34200 - time();
-	    $cache = $update_time + 21600 - time(); /* last udpdate +6h */
-	    if (abs($fgrib - $cache) > 3600) { /* last update was problematic */
-	      $cache = $fgrib; /* use the inferred one */
-	    }
-	  } else {
+	  // we get only last ref grib + 9h30 to cope with late updates.
             $cache = $ts_array[0] + 34200 - time(); /* grib offset + 9h30 */ 
-	  }
         } else {
 	  $cache = 10; /* we use 10s as the default */
         }
