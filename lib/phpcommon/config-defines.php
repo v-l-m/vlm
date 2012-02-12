@@ -251,4 +251,10 @@
     //WIND management
     define_if_not('MAX_WIND_POINTS', 2048);
 
+    //VLM NOTIFY
+    define_if_not("VLM_NOTIFY_IDENTICA_URL", "http://identi.ca/api/statuses/update.xml");
+    define_if_not("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
+    define_if_not("VLM_NOTIFY_FACEBOOK_URL", "https://graph.facebook.com/201999359896107/feed");
+    define_if_not("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "big_hashed_string");
+
 ?>
