@@ -1,5 +1,24 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.19.x to 0.20 :
+
+= Step 0, can be done at any time =
+
+  RUN AS ROOT :
+    apt-get install php5-curl curl ca-certificates
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_20
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    - add define('VLM_NOTIFY_*', ...)
+
+  RUN
+    ./scripts/upgrade.sh 0.19 0
+
 From 0.18.x to 0.19 :
 
 = Step 0, can be done at any time =

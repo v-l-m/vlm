@@ -9,7 +9,7 @@ CREATE TABLE `racesgroups` (
   `groupname` varchar(255) NOT NULL default '',
   `grouptitle` varchar(255) NOT NULL default '',
   `description` varchar(255) default NULL,
-  `admincomments` varchar(255) default NULL,
+  `admincomments` varchar(255) default NULL, 
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`idracesgroups`),
   UNIQUE KEY `grouptag_idx` (`grouptag`)
@@ -25,4 +25,16 @@ CREATE TABLE `racestogroups` (
   PRIMARY KEY  (`idracestogroups`),
   UNIQUE KEY `join_idx` (`idraces`, `grouptag`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Join races with groups';
+
+#Creation de la table news
+DROP TABLE IF EXISTS `news`;
+CREATE TABLE `news` (
+  `idnews` int(11) NOT NULL auto_increment,
+  `media` varchar(32) NOT NULL,
+  `summary` varchar(140) NOT NULL default '',
+  `timetarget` bigint default 0,
+  `published` bigint default 0,
+  PRIMARY KEY  (`idnews`),
+  UNIQUE KEY `hashnews_idx` (`media`, `summary`, `timetarget`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='News table';
 
