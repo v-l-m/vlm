@@ -122,8 +122,8 @@ function get_info_array($idu) {
     
     $userObj->feedPrefs();
     
-    foreach($userObj->preferences as $k => $v) {
-        if isset($mapvar[$k]) $info[$mapvar[$k]] = $v;
+    foreach ($userObj->preferences as $k => $v) {
+        if (isset($mapvar[$k])) $info[$mapvar[$k]] = $v;
     }
     $info['SRV'] = SERVER_NAME;
     $info['NPD'] = sprintf ("\"%s\"", $userObj->users->blocnote);
