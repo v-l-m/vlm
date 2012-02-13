@@ -59,6 +59,11 @@
     echo "<div style=\"display:inline;float:left;\">";
 
     $tablepages = Array(
+        "news.php" => "News management",
+        );
+    adminlistbox($tablepages, "News & Notifications (EXPERIMENTAL)");
+
+    $tablepages = Array(
         "users.php" => "Boats (Users)",
         "players.php" => "Players",
         "players_pending.php" => "Players Pending",
@@ -74,17 +79,6 @@
         "admin_changelog.php" => "Browser Admin Changelog",
         );
     adminlistbox($tablepages, "Actions watch");
-
-    $reportpages = Array(
-        "user_agents.php"                   => "User_agent statistics",
-        "possible_duplicates.php"           => "Duplicates by IP",
-        "boat_action_count.report.php" => "Boats actions count(*)",
-        "player_action_count.report.php" => "Players actions count(*)",
-        "player_boat_owned_count.report.php" => "Boat per player count(*)",
-        "server_action_count.report.php" => "Servers actions count(*)",
-        );
-
-    adminlistbox($reportpages, "Stats");
 
     echo "</div>";
     echo "<div style=\"display:inline;float:left;\">";
@@ -109,6 +103,18 @@
         );
     
     adminlistbox($strangepages, "Report & fix [Use with caution to fix inconsistencies]");
+
+    $reportpages = Array(
+        "user_agents.php"                   => "User_agent statistics",
+        "possible_duplicates.php"           => "Duplicates by IP",
+        "boat_action_count.report.php" => "Boats actions count(*)",
+        "player_action_count.report.php" => "Players actions count(*)",
+        "player_boat_owned_count.report.php" => "Boat per player count(*)",
+        "server_action_count.report.php" => "Servers actions count(*)",
+        );
+
+    adminlistbox($reportpages, "Stats");
+
     echo "</div>";
 
     echo "<div class=\"adminbox\" id=\"adminlastopbox\">";
