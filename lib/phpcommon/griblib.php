@@ -50,11 +50,11 @@
 	  // we get only last ref grib + 9h30 to cope with late updates.
             $cache = $ts_array[0] + 34200 - time(); /* grib offset + 9h30 */ 
         } else {
-	  $cache = 10; /* we use 10s as the default */
+	  return 30; /* we use 30s as the default */
         }
 	/* for overdue gribs */
-	if ($cache < 0) {
-	  return 0;
+	if ($cache < 30) {
+	  return 30;
 	}
         return $cache;
     }
