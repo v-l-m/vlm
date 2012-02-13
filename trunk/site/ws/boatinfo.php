@@ -119,10 +119,11 @@ function get_info_array($idu) {
          'mapY' => 'MHT',
          'mapDrawtextwp' => 'MDT'
          );
-    $prefs= $userObj->feedPrefs();
+    
+    $userObj->feedPrefs();
     
     foreach($userObj->preferences as $k => $v) {
-        $info[$mapvar[$k]] = $v;
+        if isset($mapvar[$k]) $info[$mapvar[$k]] = $v;
     }
     $info['SRV'] = SERVER_NAME;
     $info['NPD'] = sprintf ("\"%s\"", $userObj->users->blocnote);
