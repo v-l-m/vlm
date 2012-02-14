@@ -24,7 +24,7 @@ From 0.19.x to 0.20 :
 = Step 1, maintenance mode, backup base, upgrade core =
 
   RUN
-    ./scripts/upgrade.sh 0.20 1 && sudo /etc/init.d/apache2 restart
+    ./scripts/upgrade.sh 0.20 1
 
   - if something goes wrong, EDIT crontab and comment vlm crons
 
