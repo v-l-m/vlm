@@ -56,17 +56,19 @@ color: #44505a;
   border-bottom: solid 1px #15214b;
 }
 
+/*
 #menubox {
   background-color: #f9f1e8;
   right:130px;
   opacity:0.7;
-  filter:alpha(opacity=70); /* For IE8 and earlier */
+  filter:alpha(opacity=70);
   position:absolute;
   top:2px;
   margin: 0px;
   height: 15px;
   font-weight: bold;  
 }
+*/
 
 #main {
   background-color: #f4f4f4;
