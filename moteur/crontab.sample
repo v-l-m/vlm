@@ -13,11 +13,11 @@ VLMRACINE=/base/de/vlm
 4-59/20 * * * * $VLMRACINE/vlmcode/moteur/cron-position-bateaux-reels.sh > /dev/null
 
 # News feeding
-0 * * * * $VLMRACE/vlmcode/moteur/feed/feed.sh 7*24*3600 3600
-0 * * * * $VLMRACE/vlmcode/moteur/feed/feed.sh 2*24*3600 3600
-*/10 * * * * $VLMRACE/vlmcode/moteur/feed/feed.sh 1*24*3600 600
-* * * * * $VLMRACE/vlmcode/moteur/feed/feed.sh 3600 60
+0 * * * * $VLMRACINE/vlmcode/moteur/feed/feed.sh 7*24*3600 3600
+0 * * * * $VLMRACINE/vlmcode/moteur/feed/feed.sh 2*24*3600 3600
+*/10 * * * * $VLMRACINE/vlmcode/moteur/feed/feed.sh 1*24*3600 600
+* * * * * $VLMRACINE/vlmcode/moteur/feed/feed.sh 3600 60
 
 #News notification
-* * * * * $VLMRACE/vlmcode/moteur/notify/notify.sh identica
-* * * * * $VLMRACE/vlmcode/moteur/notify/notify.sh facebook
+* * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh identica
+* * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh facebook

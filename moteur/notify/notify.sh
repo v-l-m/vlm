@@ -9,5 +9,5 @@ LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-$1-vlmnotify.log
 
 media=$1
 
-$VLMPHPPATH $media.php >> $LOG 2>&1
+$VLMPHPPATH $VLMJEUROOT/moteur/notify/$media.php >> $LOG 2>&1
 
