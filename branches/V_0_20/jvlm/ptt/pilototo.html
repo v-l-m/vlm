@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="pilototo.js"></script>
+<script type="text/javascript" src="pilototoSVC.js"></script>
+<script type="text/javascript" src="pilototoEO.js"></script>
+<script type="text/javascript" src="pilototoNO.js"></script>
+<script type="text/javascript" src="vlmstringtable.js"></script>
+<script type="text/javascript" src="../../externals/ptt_includes/jquery-1.6.2.min.js"></script>
+	<!--   <script src="http://code.jquery.com/jquery-git.js"></script> -->
+	<!--  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>  -->
+<script src="../../externals/ptt_includes/jqueryui1.8.14/jquery-ui-1.8.14.custom.min.js"></script> 
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script> -->
+<link rel="stylesheet" type="text/css" href="../../externals/ptt_includes/jqueryui1.8.14/jquery-ui-1.8.14.custom.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="http://jqueryui.com/themes/base/jquery.ui.all.css" /> -->
+<script type="text/javascript" src="../../externals/ptt_includes/jqueryui1.8.14/trentrichardson096/jquery-ui-timepicker-addon.js"></script>
+	<!-- <script type="text/javascript" src="http://trentrichardson.com/examples/timepicker/js/jquery-ui-timepicker-addon.js"></script>-->
+<link rel="stylesheet" type="text/css" href="../../externals/ptt_includes/pilototo.css" />
+	<!-- les style VLM classiques <link rel="stylesheet" type="text/css" href="/style/default/style.css" /> -->
+<script type="text/javascript">
+
+function initStringTable() {
+	// appel WS synchrone sinon les String Table ne sont pas chargées lors de la construction de l'IHM...
+	// TODO : le cache: true c'est comme faire pipi dans un script...
+ 	var tS=new Date().getTime();
+ 	$.ajaxSetup({ cache: true });
+	$.ajax({  
+		type: "GET",
+		//data: {timestamp:tS},
+		//data: { 'cache': 'true' },
+		cache: true,
+		url: '/ws/serverinfo/translation.php', // 'translation.json'
+		dataType: 'json',  
+		async: false,  
+		success: function(stringtable){  
+			new VST().init(stringtable);
+			  }  
+		});  
+}
+function alertModal(_msg , _code, _custom_error_string) {
+	$dialog.get(0).innerHTML="<p><span class=\"ui-icon ui-icon-circle-check\" style=\"float:left; margin:0 7px 50px 0;\"></p>An error occured.</span><p><b>" + _msg +"</b>.</p><p>" + _code + "</p><p>"+ _custom_error_string + "</p>";
+	$dialog.dialog('open');	
+}
+var $dialog;
+$(document).ready(function() {
+	//debug("document.ready");
+	initStringTable();
+	initPilototo();
+});  
+$(window).load(function() {
+	//debug("window.load");
+	$dialog = $('<div/>').dialog({id:"dialog-message",autoOpen: false,title: 'Pilototo'});
+});
+</script>
+<title>VLM Pilototo Release -.2</title>
+</head>
+
+<body>
+<form>
+<div id="pttzone"></div>
+</form>
+<div id="tracezone"></div>
+</body>
+</html>

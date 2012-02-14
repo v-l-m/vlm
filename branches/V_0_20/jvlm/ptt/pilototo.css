@@ -1,0 +1,34 @@
+.ui-tabs-vertical { width: 23em; }
+.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 7em; }
+.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+.ui-tabs-vertical .ui-tabs-nav li a { display:block; font-size: 11px;} /* color: darkgrey;*/
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
+.ui-tabs-vertical .ui-tabs-panel { padding: .1em .1em .1em .1em; float: right; width: 15em;}
+#tabs li .ui-icon-close {float:right ; margin: 0.4em 0.2em 0 0; cursor: pointer;}
+/* Own */  
+INPUT.small {width: 65px;}
+table.ptt{
+	width:260px; /*220*/
+	border:#909090 1px solid;
+}
+table.ptt td{
+	border:#303030 1px dotted;
+}
+table.ptt td.neworder {
+	border: lightgreen 1px dotted;
+	border-width: 1px;	
+}
+p { text-indent:2px; display:block; font-size: 11px;} /* color: darkgrey;*/
+p.help { text-align:left; text-indent:2px; font-size: 11px;} /* color: darkgrey;*/
+ul {margin-left: 1em; padding-left: 0.5em;}
+li {
+/*	border: 1px solid #000;*/
+	margin-left: 0;
+/*	padding-left: 1em;
+	text-indent: -1em;
+	margin: 1em;
+	width: 5em;
+	padding: 2px;*/
+}
+/* css for timepicker */
+#ui-datepicker-div{ font-size: 11px; }
