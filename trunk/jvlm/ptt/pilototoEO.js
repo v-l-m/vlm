@@ -1,4 +1,4 @@
-// EO : Existing order
+﻿// EO : Existing order
 function EO(_idu,_order,_key) {
 	this.to='EO';
 	this.idu=_idu;
@@ -95,12 +95,13 @@ function EO(_idu,_order,_key) {
 				}
 */
 			if (this.status=="pending") {
-				$('<IMG/>', {'src': '../../externals/ptt_includes/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
+				$('<IMG/>', {'src': 'includes/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
 					.appendTo(action$)
 					.css({'border': '2px dotted #fff'})
 					.hover(function(){ $(this).css({'border': '2px dotted red'}); }, function(){ $(this).css({'border': '2px solid #fff'});})
 					.bind("click", function(event) {
-						bascToEdit($(event.target).get(0).name)
+						//bascToEdit($(event.target).get(0).name)
+						debug("invalide");
 					});
 					//.dblclick( function () { alert("Hello World!"); });
 			}

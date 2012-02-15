@@ -1,3 +1,11 @@
+﻿function createdialog() {
+	//return $(":div:first").dialog({id:"dialog-message",autoOpen: false,title: 'Pilototo'});
+	return $("<div/>").dialog({id:"dialog-message",autoOpen: false,title: 'Pilototo'});
+}
+function alertModal(_msg , _code, _custom_error_string) {
+	$dialog.get(0).innerHTML="<p><span class=\"ui-icon ui-icon-circle-check\" style=\"float:left; margin:0 7px 50px 0;\"></p>An error occured.</span><p><b>" + _msg +"</b>.</p><p>" + _code + "</p><p>"+ _custom_error_string + "</p>";
+	$dialog.dialog('open');	
+}
 function debug(str) 
 {
 	$('<p/>', {text : str}).appendTo($("#tracezone"));
@@ -16,8 +24,6 @@ function pad(val)
     var s = val.toString();
     return s.length < 2 ? "0" + s : s
 }
-
-	
 function validate_pim(pim$,pip1$,pip2$,pip3$) {
 	var test;
 	switch(pim$.find(":selected").val()) {
@@ -96,6 +102,8 @@ function GO() {
 					break;
 			}
 			myJSONObject.debug=true;
+			//var test= JSON.encode(myJSONObject);
+
 			return JSON.stringify(myJSONObject,null);
 		}		
 		GO.prototype.renderPIM = function (_hdg, _twac, _wplat, _wplon, _hwp) {
@@ -191,7 +199,7 @@ function GO() {
 
 			GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);
 			// ACTIONS	
-			img$=$('<IMG/>', {'src': '../../externals/ptt_includes/imgplus.gif', 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
+			img$=$('<IMG/>', {'src': 'includes/imgplus.gif', 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
 				.appendTo($('<TD/>', {'class':'neworder'}).appendTo(row$)); 
 			img$.css({'border': '2px dotted #fff'})
 				.hover(
