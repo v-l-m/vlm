@@ -1,4 +1,4 @@
-function initPilototo() {
+ï»¿function initPilototo() {
 	$("#pttzone").find("div#tabs").remove();
 	//$.getJSON('meso.json', 
 	$.getJSON('/ws/boatinfo.php?select_idu=0', 
@@ -16,7 +16,7 @@ function initPilototo() {
 function Pilototo(_orig,_json) {
 	this.orig=_orig;
 	Pilototo.TTS = _json.NOW;
-	debug("Pilototo.TTS :" + _json.NOW);
+	//debug("Pilototo.TTS :" + _json.NOW);
 	Pilototo.idu = _json.IDU;
 	Pilototo.nom=_json.IDB;
 	Pilototo.currentpip=_json.PIP;
@@ -87,7 +87,7 @@ function Pilototo(_orig,_json) {
 					} else {
 						//debug("Successfully removed " + data.request.taskid + " for " + data.request.idu);
 						Pilototo.myPttDivTab.tabs( "remove", index );
-						//TODO remettre éventuellement un new order...
+						//TODO remettre eventuellement un new order...
 					}
 				}, 'json');
 			});
@@ -119,13 +119,13 @@ function Pilototo(_orig,_json) {
 	for (pils=0;pils < _json["PIL"].length;pils++) {
 		Pilototo.PILS[_json["PIL"][pils].TID]=new EO(Pilototo.idu,_json["PIL"][pils],pils);
 	}
-	// préparation du nouvel ordre
+	// preparation du nouvel ordre
 	if (_json["PIL"].length<5){ 
 		Pilototo.PILS['new']=new NO(Pilototo.idu, Pilototo.TTS, Pilototo.currentpip, Pilototo.currentpim,_json.WPLAT,_json.WPLON,_json["H@WP"],_json.TWD);
 	}
 
 	if(typeof Pilototo.initialized == "undefined") {
-		// display du pilototo et de ses MAX5élémnents
+		// display du pilototo et de ses MAX5 elements
 		Pilototo.prototype.render = function() {
 			Pilototo.myPttDivTab = createDivTab(this._idu);
 			//debug("into render step1");
@@ -187,7 +187,7 @@ function Pilototo(_orig,_json) {
 						myJSONObject.taskid = parseInt(this.name);
 						myJSONObject.pim=parseInt(this.PIM.value);
 						myJSONObject.debug=true;
-
+						// ToDo et pourquoi pas utiliser JSON.encode
 						var mypost= '/ws/boatsetup/pilototo_update.php?parms=' + escape(JSON.stringify(myJSONObject,null));
 						debug(mypost);
 						$.post(mypost, function(data) {
@@ -217,7 +217,7 @@ function Pilototo(_orig,_json) {
 			$(":input:visible:first").focus();
 		}
 		if ($.browser.msie) {
-			$.getScript('includes/json2.js', function() {});
+			$.getScript('/externals/ptt_includes/json2.js', function() {});
 		}
 		Pilototo.initialized=true;
 	} 
