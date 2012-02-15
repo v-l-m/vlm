@@ -19,8 +19,8 @@ function initStringTable() {
 		//data: {timestamp:tS},
 		//data: { 'cache': 'true' },
 		cache: true,
-		//url: '/ws/serverinfo/translation.php', 
-		url: 'translation.json',
+		url: '/ws/serverinfo/translation.php', 
+		//url: 'translation.json',
 		dataType: 'json',  
 		async: false,  
 		success: function(stringtable){  
