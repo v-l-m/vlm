@@ -1910,6 +1910,12 @@ function displayPalmares($idusers) {
   return(0);
 }
 
+//Insert news
+function insertNews($media, $summary, $timetarget) {
+   $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, $summary, $timetarget);
+   $result = wrapper_mysql_db_query_writer($sql) or die("Query [$sql] failed \n");
+}
+
 // This function returns true if user arg1 has finished race arg2
 function userFinishedThisRace($idusers, $idraces)
 {

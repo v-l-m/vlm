@@ -51,7 +51,7 @@
             $timedelay = $this->timetoevent; #$line['deptime'] - intval(time());
             $timetarget = $line['deptime'] - $this->timetoevent;
             $t = sprintf("%s (~%s) starts in %s", $line['racename'], $line['idraces'], $this->secs_to_h($timedelay));
-            $medias = Array("twitter", "identica", "facebook");
+            $medias = explode(",", VLM_NOTIFY_LIST);
             foreach ($medias as $media) {
                 $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, $t, $timetarget);
                 $this->queryWrite($sql);

@@ -48,6 +48,6 @@ define("VLM_PROXY_PASS", "password");
 
 define("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
 define("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "hashed_string");
-
+define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,identica");
 
 ?>
