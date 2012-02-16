@@ -1,4 +1,4 @@
-﻿// NO : New Order
+// NO : New Order
 function NO(_idu,_est,_pip,_pim, _wplat,_wplon,_hwp,_twd) {
 	this.to='NO';
 	NO.idu=_idu;

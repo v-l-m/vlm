@@ -1,4 +1,4 @@
-﻿//VST : VLM String Table 
+//VST : VLM String Table 
 function VST() {
 	VST.dico;
 	if(typeof VST.initialized == "undefined") {
