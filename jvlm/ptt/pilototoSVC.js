@@ -199,7 +199,7 @@ function GO() {
 
 			GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);
 			// ACTIONS	
-			img$=$('<IMG/>', {'src': '../externals/ptt_includes/imgplus.gif', 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
+			img$=$('<IMG/>', {'src': '/jvlm/ptt/img/imgplus.gif', 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
 				.appendTo($('<TD/>', {'class':'neworder'}).appendTo(row$)); 
 			img$.css({'border': '2px dotted #fff'})
 				.hover(
