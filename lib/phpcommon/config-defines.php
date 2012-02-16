@@ -256,5 +256,6 @@
     define_if_not("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
     define_if_not("VLM_NOTIFY_FACEBOOK_URL", "https://graph.facebook.com/201999359896107/feed");
     define_if_not("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "big_hashed_string");
-
+    
+    define_if_not("VLM_NOTIFY_LIST", "test");
 ?>

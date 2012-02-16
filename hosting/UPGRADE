@@ -1,5 +1,37 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.20.x to 0.21 :
+
+= Step 0, can be done at any time =
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_21
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    - add define_if_not("VLM_NOTIFY_LIST", "facebook,twitter,identica");
+
+  RUN
+    ./scripts/upgrade.sh 0.20 0
+    
+= Step 1, maintenance mode, backup base, upgrade core =
+
+  RUN
+    ./scripts/upgrade.sh 0.20 1 && /etc/init.d/apache restart
+
+  - if something goes wrong, EDIT crontab and comment vlm crons
+
+= Step 2, end of release, unlock engine =
+
+  RUN
+    ./scripts/upgrade.sh 0.20 2
+    
+  ACTIVATE News feeding and notification in crontab (see crontab example)
+
+THE END
+
 From 0.19.x to 0.20 :
 
 = Step 0, can be done at any time =
