@@ -1,4 +1,4 @@
-﻿function initPilototo() {
+function initPilototo() {
 	$("#pttzone").find("div#tabs").remove();
 	//$.getJSON('meso.json', 
 	$.getJSON('/ws/boatinfo.php?select_idu=0', 
