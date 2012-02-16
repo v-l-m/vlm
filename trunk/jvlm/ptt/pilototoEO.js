@@ -88,14 +88,14 @@ function EO(_idu,_order,_key) {
 			//debug(" EO.Render3 ");
 /*
 			if (this.status=="done" || this.status=="pending") {
-				$('<IMG/>', {'src': 'includes/imgrem.gif', 'name': 'Remove', 'key':this.TID,'title': 'Remove'})
+				$('<IMG/>', {'src': '/jvlm/ptt/img/imgrem.gif', 'name': 'Remove', 'key':this.TID,'title': 'Remove'})
 					.appendTo(action$)
 					.css({'border': '2px dotted #fff'})
 					.hover(function(){ $(this).css({'border': '2px dotted yellow'}); }, function(){ $(this).css({'border': '2px solid #fff'});});
 				}
 */
 			if (this.status=="pending") {
-				$('<IMG/>', {'src': '../externals/ptt_includes/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
+				$('<IMG/>', {'src': '/jvlm/ptt/img/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
 					.appendTo(action$)
 					.css({'border': '2px dotted #fff'})
 					.hover(function(){ $(this).css({'border': '2px dotted red'}); }, function(){ $(this).css({'border': '2px solid #fff'});})
