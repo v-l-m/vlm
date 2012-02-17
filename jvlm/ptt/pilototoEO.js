@@ -8,13 +8,38 @@ function EO(_idu,_order,_key) {
 	this.pip=_order.PIP;
 	this.pim=_order.PIM;
 	this.status=_order.STS;
-	this.cellTTS$;
+	//this.cellTTS$;
 	this.myTb$;
-	this.hdg="180";
-	this.twac="100"; 
-	this.wplat="20";
-	this.wplon="30";
-	this.hwp="180";
+
+	switch(this.pim) 
+	{
+		case '1' :
+			this.hdg=_order.PIP;
+			this.twac=Pilototo.twac; 
+			this.wplat=Pilototo.WPLAT;
+			this.wplon=Pilototo.WPLON;
+			this.hwp=Pilototo.HWP;
+			debug( this.pim + '-' + _order.PIP);
+			break;
+		case '2':
+			this.hdg=Pilototo.HDG;
+			this.twac=_order.PIP; 
+			this.wplat=Pilototo.WPLAT;
+			this.wplon=Pilototo.WPLON;
+			this.hwp=Pilototo.HWP;
+			debug( this.pim + '-' + _order.PIP);
+			break;
+		case '3': case '4': case '5' :
+			var reg=new RegExp("[,@]+", "g");
+			var elts=this.pip.split(reg);
+			this.hdg=Pilototo.HDG;
+			this.twac=Pilototo.twac; 
+			this.wplat=elts[0];
+			this.wplon=elts[1];
+			this.hwp=elts[2];
+			debug( this.pim + '-' + parseFloat(elts[0]) + '(,)' + parseFloat(elts[1]) +'(at)' + parseFloat(elts[2]));
+		}
+
 	EO.myGO = new GO();	
 
 	
@@ -32,7 +57,6 @@ function EO(_idu,_order,_key) {
 		EO.prototype.bascEdit = function() {
 			//hdg pour le pim=1, twa pour pim=2
 			//mytabletosw$ = $("#tabs-" + this.key + ">form>table>tbody");
-			//mytabletosw$.
 			$("tbody", this.myTb$).children().remove();
 			//pilototo_prog_upd
 /*
@@ -45,6 +69,7 @@ function EO(_idu,_order,_key) {
 			$('<p/>', {'text': this.pip}).appendTo($('<TD/>').appendTo(row$));	
 			//alert("bascule EDIT : " + this.TID + "-" + this.TTS);
 */
+			debug(_order.PIP);
 			EO.myGO.insertGO(this.myTb$,this.pim,eval(this.TTS),this.hdg, Pilototo.twac, this.wplat, this.wplon, this.hwp, true);
 			this.myTb$.closest("form").find(':input').addClass('ui-corner-all').css({'font-size': '11px'});
 
@@ -53,7 +78,7 @@ function EO(_idu,_order,_key) {
 
 		EO.prototype.render = function() {
 			//debug(" EO.Render1 ");
-			var mytable = Pilototo.initTable();
+			var mytable = Pilototo.initTable('Existing ' + this.status + ' order #' + this.TID);
 			this.myTb$=mytable;
 			//debug(" EO.Render2 ");
 			row$ = $('<TR/>', {'name':this.key}).appendTo($("tbody", mytable));

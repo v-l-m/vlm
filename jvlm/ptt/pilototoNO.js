@@ -22,7 +22,7 @@ function NO(_idu,_est,_pip,_pim, _wplat,_wplon,_hwp,_twd) {
 		NO.prototype.myGO = function() {return NO.myGO;}
 
 		NO.prototype.render = function() {
-			NO.mytable= Pilototo.initTable();
+			NO.mytable= Pilototo.initTable('new order');
 			NO.myGO.insertGO(NO.mytable,NO.pim,NO.TTS,Pilototo.HDG, Pilototo.twac, NO.wplat, NO.wplon, NO.hwp, false);
 			return NO.mytable;
 		}

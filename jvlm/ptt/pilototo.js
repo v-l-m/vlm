@@ -21,6 +21,9 @@ function Pilototo(_orig,_json) {
 	Pilototo.nom=_json.IDB;
 	Pilototo.currentpip=_json.PIP;
 	Pilototo.currentpim=_json.PIM;
+	Pilototo.WPLAT= _json.WPLAT;
+	Pilototo.WPLON=_json.WPLON;
+	Pilototo.HWP=_json["H@WP"];
 	//this.wp=_json.WPLAT+","+_json.WPLON+"@"+_json["H@WP"];
 	Pilototo.PILS=new Array;
 	Pilototo.thcell;
@@ -28,12 +31,17 @@ function Pilototo(_orig,_json) {
 	Pilototo.twac=(wa < -180 ? wa + 360:(wa > 180 ? wa - 360 : wa)).toFixed(4);
 	Pilototo.HDG = _json.HDG;
 
-	Pilototo.initTable = function() {
+	Pilototo.initTable = function(_str) {
 		var mytable = $('<TABLE/>', {'class':'ptt'});
+		$('<THEAD/>').appendTo(mytable);
+		$('<TR/>').appendTo($("thead", mytable));
+		$('<TH/>', {'colspan':'2','scope':'col'}).appendTo($("thead>tr", mytable));
 		$('<TFOOT/>').appendTo(mytable);
 		$('<TR/>').appendTo($("tfoot", mytable));
 		$('<TH/>', {'colspan':'2','scope':'col'}).appendTo($("tfoot>tr", mytable));
-		$('<p/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")"}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("tfoot>tr>th", mytable));
+		$('<P/>', {'id': 'whatsup','name': 'whatsup', 'text' : _str}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("thead>tr>th", mytable));
+// TODO A REMETTRE AUTRE PART
+				$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")"}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("tfoot>tr>th", mytable));
 		$('<TBODY/>').appendTo(mytable);
 		return mytable;
 	}
@@ -165,7 +173,9 @@ function Pilototo(_orig,_json) {
 					});
 					myform$.submit(function() {
 						debug('GUI update order : ' + this.name + ' PIM:' + $(this).find('select[name$="mypim"]').val());// + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
-						var myJSONObject = {};
+// TODO
+						//						if (Pilototo.PILS["new"].myGO().validOrder()) {
+						//							var myorder=Pilototo.PILS["new"].myGO().getOrder(); //						var myJSONObject = {};
 						switch($(this).find('select[name$="mypim"]').val()) 
 						{
 							case '1' : case '2':
@@ -216,7 +226,7 @@ function Pilototo(_orig,_json) {
 			$(":input:visible:first").focus();
 		}
 		if ($.browser.msie) {
-			$.getScript('/externals/ptt_includes/json2.js', function() {});
+			$.getScript('../externals/ptt_includes/json2.js', function() {});
 		}
 		Pilototo.initialized=true;
 	} 
