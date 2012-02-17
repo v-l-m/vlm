@@ -23,7 +23,7 @@ function NO(_idu,_est,_pip,_pim, _wplat,_wplon,_hwp,_twd) {
 
 		NO.prototype.render = function() {
 			NO.mytable= Pilototo.initTable();
-			NO.myGO.insertGO(NO.mytable,NO.pim,NO.TTS,Pilototo.HDG, Pilototo.twac, NO.wplat, NO.wplon, NO.hwp);
+			NO.myGO.insertGO(NO.mytable,NO.pim,NO.TTS,Pilototo.HDG, Pilototo.twac, NO.wplat, NO.wplon, NO.hwp, false);
 			return NO.mytable;
 		}
 		NO.initialized=true;

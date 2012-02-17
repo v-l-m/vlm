@@ -105,7 +105,8 @@ function GO() {
 			//var test= JSON.encode(myJSONObject);
 
 			return JSON.stringify(myJSONObject,null);
-		}		
+		}
+		
 		GO.prototype.renderPIM = function (_hdg, _twac, _wplat, _wplon, _hwp) {
 			switch(GO.selPIM.find(":selected").val()) {
 				case "1":
@@ -123,7 +124,8 @@ function GO() {
 					break;
 			}
 		}
-		GO.prototype.insertGO = function (_tb,_pim,_tts, _hdg, _twac, _wplat, _wplon, _hwp) {
+		
+		GO.prototype.insertGO = function (_tb,_pim,_tts, _hdg, _twac, _wplat, _wplon, _hwp, _bupdate) {
 			row$ = $('<TR/>').appendTo($("tbody", _tb));
 
 			// CALENDRIER
@@ -162,7 +164,7 @@ function GO() {
 			dt$=$('<input/>', {'type': 'hidden', 'id': 'calendar', 'name': 'calendar', 'value': datea})
 				.appendTo(cell$);
 			dt$.datetimepicker({showOn: "button",
-				buttonImage: "/externals/jscalendar/img.gif", buttonImageOnly: true,
+				buttonImage: "../externals/jscalendar/img.gif", buttonImageOnly: true,
 				defaultDate: datea,	showSecond: true, dateFormat: 'dd/mm/yy', timeFormat: 'hh:mm:ss', showButtonPanel: false	});
 			//debug(datea + "-" + datec.getUTCHours());
 			dt$.datetimepicker('setDate', datec );
@@ -199,7 +201,7 @@ function GO() {
 
 			GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);
 			// ACTIONS	
-			img$=$('<IMG/>', {'src': '/jvlm/ptt/img/imgplus.gif', 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
+			img$=$('<IMG/>', {'src': (_bupdate ? 'ptt/img/actn022.gif' : 'ptt/img/imgplus.gif'), 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
 				.appendTo($('<TD/>', {'class':'neworder'}).appendTo(row$)); 
 			img$.css({'border': '2px dotted #fff'})
 				.hover(
