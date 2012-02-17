@@ -16,31 +16,8 @@ function EO(_idu,_order,_key) {
 	this.wplon="30";
 	this.hwp="180";
 	EO.myGO = new GO();	
-	function bascToEdit(key) {
-		//NO.mytable.parent().submit();
-		//key=$(event.target).get(0).name;
-		// debug('Being implemented ' + key);
-		mytabletosw$ = $("#tabs-" + key + ">form>table>tbody");
-		mytabletosw$.children().remove();
-		//$("tbody", mytable).children().remove();
 
-		row$ = $('<TR/>', {'name':'TTS'}).appendTo(mytabletosw$);
-		$('<p/>', {'text': 'TTS'}).appendTo($('<TD/>').appendTo(row$));			
-		this.cellTTS$ = $('<input/>', {'name': 'TTS', 'type': 'text', 'value': Pilototo.PILS[key].TTS}).appendTo($('<TD/>').appendTo(row$));
-		this.cellTTS$.addClass('ui-corner-all').css({'font-size': '11px'}).focus();
-
-		row$ = $('<TR/>', {'name':'PIM'}).appendTo(mytabletosw$);
-		$('<p/>', {'text': 'PIM'}).appendTo($('<TD/>').appendTo(row$));			
-		cellpim$ = $('<input/>', {'name': 'PIM', 'type': 'text', 'value': Pilototo.PILS[key].pim}).appendTo($('<TD/>').appendTo(row$));
-		cellpim$.addClass('ui-corner-all').css({'font-size': '11px'});
-
-
-		row$ = $('<TR/>', {'name':'PIP'}).appendTo(mytabletosw$);
-		$('<p/>', {'text': 'PIP'}).appendTo($('<TD/>').appendTo(row$));			
-		cellpip$ = $('<input/>', {'name': 'PIP', 'type': 'text', 'value': Pilototo.PILS[key].pip}).appendTo($('<TD/>').appendTo(row$));
-		cellpip$.addClass('ui-corner-all').css({'font-size': '11px'});
-	}
-
+	
 	if(typeof EO.initialized == "undefined") {
 		EO.prototype.getDeletion = function() {
 			//hdg pour le pim=1, twa pour pim=2
@@ -58,6 +35,7 @@ function EO(_idu,_order,_key) {
 			//mytabletosw$.
 			$("tbody", this.myTb$).children().remove();
 			//pilototo_prog_upd
+/*
 			row$ = $('<TR/>', {'name':"ModHeader"}).appendTo($("tbody", this.myTb$));
 			$('<p/>', {'text': "Order " + this.TID}).appendTo($('<TD/>').appendTo(row$));			
 			$('<p/>', {'text': this.TTS}).appendTo($('<TD/>').appendTo(row$));	
@@ -66,8 +44,10 @@ function EO(_idu,_order,_key) {
 			$('<p/>', {'text': "PIM : " + this.pim}).appendTo($('<TD/>').appendTo(row$));			
 			$('<p/>', {'text': this.pip}).appendTo($('<TD/>').appendTo(row$));	
 			//alert("bascule EDIT : " + this.TID + "-" + this.TTS);
-			EO.myGO.insertGO(this.myTb$,this.pim,eval(this.TTS),this.hdg, Pilototo.twac, this.wplat, this.wplon, this.hwp);
-			
+*/
+			EO.myGO.insertGO(this.myTb$,this.pim,eval(this.TTS),this.hdg, Pilototo.twac, this.wplat, this.wplon, this.hwp, true);
+			this.myTb$.closest("form").find(':input').addClass('ui-corner-all').css({'font-size': '11px'});
+
 		}
 
 
@@ -86,24 +66,14 @@ function EO(_idu,_order,_key) {
 			$('<p/>', {'text': this.status}).appendTo($('<TD/>').appendTo(row$));			
 			action$=$('<TD/>').appendTo(row$)
 			//debug(" EO.Render3 ");
-/*
-			if (this.status=="done" || this.status=="pending") {
-				$('<IMG/>', {'src': '/jvlm/ptt/img/imgrem.gif', 'name': 'Remove', 'key':this.TID,'title': 'Remove'})
-					.appendTo(action$)
-					.css({'border': '2px dotted #fff'})
-					.hover(function(){ $(this).css({'border': '2px dotted yellow'}); }, function(){ $(this).css({'border': '2px solid #fff'});});
-				}
-*/
 			if (this.status=="pending") {
-				$('<IMG/>', {'src': '/jvlm/ptt/img/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
+				$('<IMG/>', {'src': 'ptt/img/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
 					.appendTo(action$)
 					.css({'border': '2px dotted #fff'})
 					.hover(function(){ $(this).css({'border': '2px dotted red'}); }, function(){ $(this).css({'border': '2px solid #fff'});})
 					.bind("click", function(event) {
-						//bascToEdit($(event.target).get(0).name)
-						debug("invalide");
+						Pilototo.PILS[this.name].bascEdit();
 					});
-					//.dblclick( function () { alert("Hello World!"); });
 			}
 			return mytable;
 		}
