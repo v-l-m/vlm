@@ -1,7 +1,7 @@
 function initPilototo() {
 	$("#pttzone").find("div#tabs").remove();
-	$.getJSON('ptt/meso.json', 
-	//$.getJSON('/ws/boatinfo.php?select_idu=0', 
+	//$.getJSON('ptt/meso.json', 
+	$.getJSON('/ws/boatinfo.php?select_idu=0', 
 		{format: "json"}, 
 		function(json){ 
 			new Pilototo("relative onload",json);
