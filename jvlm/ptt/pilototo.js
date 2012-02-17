@@ -1,7 +1,7 @@
 function initPilototo() {
 	$("#pttzone").find("div#tabs").remove();
-	//$.getJSON('meso.json', 
-	$.getJSON('/ws/boatinfo.php?select_idu=0', 
+	$.getJSON('ptt/meso.json', 
+	//$.getJSON('/ws/boatinfo.php?select_idu=0', 
 		{format: "json"}, 
 		function(json){ 
 			new Pilototo("relative onload",json);
@@ -164,28 +164,27 @@ function Pilototo(_orig,_json) {
 						Pilototo.PILS[$(event.target).closest("form").get(0).name].bascEdit();
 					});
 					myform$.submit(function() {
-						//debug('GUI update order : ' + this.name + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
+						debug('GUI update order : ' + this.name + ' PIM:' + $(this).find('select[name$="mypim"]').val());// + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
 						var myJSONObject = {};
-						
-						switch(this.PIM.value) // ou switch($(this).find('input[name$="PIM"]').val())
+						switch($(this).find('select[name$="mypim"]').val()) 
 						{
 							case '1' : case '2':
-								myJSONObject.pip=parseFloat(this.PIP.value);
+								myJSONObject.pip=parseFloat($(this).find('input[name$="pipinput1"]').val());
 								break;
 							case '3': case '4': case '5' :
 								var myPIP={};
-								var reg=new RegExp("[,@]+", "g");
-								var elts=this.PIP.value.split(reg);
-								myPIP.targetlat=parseFloat(elts[0]);
-								myPIP.targetlong=parseFloat(elts[1]);
-								myPIP.targetandhdg=parseFloat(elts[2]);
+								//var reg=new RegExp("[,@]+", "g");
+								//var elts=$(this).find('input[name$="pipinput1"]').val().split(reg);
+								myPIP.targetlat=parseFloat($(this).find('input[name$="pipinput1"]').val());
+								myPIP.targetlong=parseFloat($(this).find('input[name$="pipinput2"]').val());
+								myPIP.targetandhdg=parseFloat($(this).find('input[name$="pipinput3"]').val());
 								myJSONObject.pip=myPIP;
 						}
 						//debug("chrome2");
 						myJSONObject.idu=Pilototo.idu;
-						myJSONObject.tasktime = parseInt(this.TTS.value);
+						myJSONObject.tasktime = parseInt($(this).find('input[name$="ttsinput"]').val());
 						myJSONObject.taskid = parseInt(this.name);
-						myJSONObject.pim=parseInt(this.PIM.value);
+						myJSONObject.pim=parseInt($(this).find('select[name$="mypim"]').val());
 						myJSONObject.debug=true;
 						// ToDo et pourquoi pas utiliser JSON.encode
 						var mypost= '/ws/boatsetup/pilototo_update.php?parms=' + escape(JSON.stringify(myJSONObject,null));
