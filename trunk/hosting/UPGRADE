@@ -11,7 +11,7 @@ From 0.20.x to 0.21 :
     ./scripts/maj_scripts.sh
 
   EDIT file ./conf/param.php
-    - add define_if_not("VLM_NOTIFY_LIST", "facebook,twitter,identica");
+    - add define("VLM_NOTIFY_LIST", "facebook,twitter,identica");
 
   RUN
     ./scripts/upgrade.sh 0.20 0
