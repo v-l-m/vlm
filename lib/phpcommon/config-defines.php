@@ -258,4 +258,5 @@
     define_if_not("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "big_hashed_string");
     
     define_if_not("VLM_NOTIFY_LIST", "test");
+    define_if_not("VLM_NOTIFY_NEWS_MAX_AGE", 14*24*3600); #2 weeks
 ?>
