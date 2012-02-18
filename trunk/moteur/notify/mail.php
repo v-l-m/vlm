@@ -2,17 +2,17 @@
     require("config.php");
     require('notify.class.php');
     
-    class VlmNotifyTest extends VlmNotify {
-        var $media = "test";
-        var $rate_limit = 2;
+    class VlmNotifyMail extends VlmNotify {
+        var $media = "mail";
+        var $rate_limit = 3;
     
         function postone($message) {
-            print "ECHO : ${message['summary']}\n";
+            mailInformation(VLM_NOTIFY_MAIL, $message['summary'], $message['summary'], False);
             return True;
         }
     }
         
-    $identica = new VlmNotifyTest();
+    $identica = new VlmNotifyMail();
     $identica->fetch();
     $identica->post();
     $identica->close();

@@ -21,6 +21,7 @@ VLMRACINE=/base/de/vlm
 #News notification
 * * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh identica
 */5 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh facebook
+*/5 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh mail
 
 #Cron Daily
 3 2 * * * $VLMRACINE/vlmcode/moteur/cron-vlm-daily.sh

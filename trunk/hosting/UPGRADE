@@ -11,7 +11,8 @@ From 0.20.x to 0.21 :
     ./scripts/maj_scripts.sh
 
   EDIT file ./conf/param.php
-    - add define("VLM_NOTIFY_LIST", "facebook,twitter,identica");
+    - add define("VLM_NOTIFY_LIST", "facebook,twitter,identica,mail");
+    - add define("VLM_NOTIFY_MAIL", "vlm-news+garchive-XXXXXX@googlegroups.com");
 
   RUN
     ./scripts/upgrade.sh 0.20 0
@@ -29,7 +30,10 @@ From 0.20.x to 0.21 :
     ./scripts/upgrade.sh 0.20 2
     
   ACTIVATE in crontab
-    cron-vlm-cleannews.sh (daily)
+    3 3 * * * $VLMRACINE/vlmcode/moteur/cron-vlm-cleannews.sh
+    */5 * * * * $VLMRACINE/vlmcode/moteur/feed/feedresults.sh
+    */5 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh mail
+
   
 
 THE END

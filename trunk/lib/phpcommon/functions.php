@@ -1287,12 +1287,14 @@ function createBoat($log, $pass, $mail, $boatname = 'boat') {
   return ($row4[0]);
 }
 
-function mailInformation($who, $title, $message = null) {
+function mailInformation($who, $title, $message = null, $with_footer = True) {
     if (is_null($message)) $message = $title;
     $title = "[".MAIL_PREFIX."] ".$title;
     $message .= "\n";
-    $message .= getLocalizedString("See you soon on VLM !")."\n";
-    $message .= WWW_SERVER_URL."\n";
+    if ($with_footer) {
+        $message .= getLocalizedString("See you soon on VLM !")."\n";
+        $message .= WWW_SERVER_URL."\n";
+    }
     $headers  = 'From: Virtual Loup-de-Mer <'.EMAIL_NOTIFY_VLM. ">\n" .
                 'Sender: '.EMAIL_NOTIFY_VLM. "\n" .
                 'Reply-To:  Virtual Loup-de-Mer <'.EMAIL_COMITE_VLM. ">\n" .
