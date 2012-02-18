@@ -25,15 +25,15 @@
         
         function secs_to_h($secs) {
                 $units = array(
-                        "week"   => 7*24*3600,
-                        "day"    =>   24*3600,
-                        "hour"   =>      3600,
-                        "minute" =>        60,
-                        "second" =>         1,
+                        "semaine" => 7*24*3600,
+                        "jour"    =>   24*3600,
+                        "h"   =>      3600,
+                        "min"  =>        60,
+                        "sec" =>         1,
                 );
 
       	        // specifically handle zero
-                if ( $secs == 0 ) return "0 seconds";
+                if ( $secs == 0 ) return "0 sec";
 
                 $s = "";
 
@@ -50,7 +50,7 @@
         function feedone($line) {
             $timedelay = $this->timetoevent; #$line['deptime'] - intval(time());
             $timetarget = $line['deptime'] - $this->timetoevent;
-            $t = sprintf("%s (~%s) starts in %s", $line['racename'], $line['idraces'], $this->secs_to_h($timedelay));
+            $t = sprintf("Départ de %s (~%s) dans %s", $line['racename'], $line['idraces'], $this->secs_to_h($timedelay));
             $medias = explode(",", VLM_NOTIFY_LIST);
             foreach ($medias as $media) {
                 $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, $t, $timetarget);

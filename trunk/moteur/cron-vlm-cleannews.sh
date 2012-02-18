@@ -11,6 +11,7 @@ nice -1 $VLMPHPPATH notify/clean_news.php $* >> $LOG 2>&1
 cd $VLMLOG
 [ $(pwd) == "$VLMLOG" ] && find . -name "*-cronvlm-cleannews.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
 [ $(pwd) == "$VLMLOG" ] && find . -name "*-cronvlm-feed.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
+[ $(pwd) == "$VLMLOG" ] && find . -name "*-cronvlm-feedresults.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
 [ $(pwd) == "$VLMLOG" ] && find . -name "*-cronvlm-notify.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
 #===8<===
 

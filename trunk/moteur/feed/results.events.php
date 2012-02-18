@@ -1,0 +1,96 @@
+<?
+    require_once("base.class.php");
+
+    class RacesResultsEvents extends baseClass {
+        var $idraces = 0;
+        var $timedelta = 300;
+        function __construct($idraces, $timedelta = 300) {
+            if (intval($idraces)) < 1 die("Bad idraces");
+            $this->idraces = intval($timetoevent);
+            $this->timedelta = intval($timedelta);
+            $this->now = intval(time());
+        }
+
+        function feed() {
+            $query = "SELECT `idraces`, `racename`, U.`idusers`, `username`, `boatname`, `deptime`, `duration` ".
+                     "FROM `races_results`, `users` U ".
+                     "WHERE `races_results`.`idusers` = U.`idusers` ".
+                     "AND `idraces` = '".$this->idraces."' ".
+                     "AND `position` = 1 ".
+                     "AND ABS(`duration` + `deptime` - ".$this->now." ) < ".$this->timedelta." ".
+                     "ORDER BY `duration` ASC LIMIT 4";
+            $res = $this->queryRead($query);
+            
+            $c = 0;
+            while ($line = mysql_fetch_assoc($res)) {
+                $c += 1;
+                $line['rank'] = $c;
+                $this->feedone($line);
+            }
+        }
+        
+        function secs_to_h($secs) {
+                $units = array(
+                        "semaine" => 7*24*3600,
+                        "jour"    =>   24*3600,
+                        "h"   =>      3600,
+                        "min"  =>        60,
+                        "sec" =>         1,
+                );
+
+      	        // specifically handle zero
+                if ( $secs == 0 ) return "0 sec";
+
+                $s = "";
+
+                foreach ( $units as $name => $divisor ) {
+                        if ( $quot = intval($secs / $divisor) ) {
+                                $s .= "$quot $name";
+                                $s .= (abs($quot) > 1 ? "s" : "") . ", ";
+                                $secs -= $quot * $divisor;
+                        }
+                }
+                return substr($s, 0, -2);
+        }        
+
+        function feedone($line) {
+            $timetarget = intval($line['deptime']+$line['duration']);
+            if ($line['boatname'] != $line['username']) $line['boatname'] = sprintf("%s - %s", $line['username'], $line['boatname']);
+            switch ($line['rank']) {
+                case 1 :
+                    $t = sprintf("Victoire pour %s (#%s) dans %s (~%s) en %s", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces'], $this->secs_to_h(intval($line['duration'])));
+                    break;
+                case 2 :
+                    $t = sprintf("Seconde marche du podium pour %s (#%d) dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
+                    break;
+                case 3 :
+                    $t = sprintf("%s (#%d) termine 3ème dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
+                    break;
+                case 4 :
+                    $t = sprintf("Accessit pour %s (#%d), au pied du podium dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
+                    break;
+            }                    
+                
+            $medias = explode(",", VLM_NOTIFY_LIST);
+            foreach ($medias as $media) {
+                $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, $t, $timetarget);
+                $this->queryWrite($sql);
+            }
+            print $t."\n";
+        }
+
+    }
+
+    sleep(10);
+
+    $query = "SELECT idraces FROM races WHERE started > 0 AND !(racetype & ".RACE_TYPE_RECORD. ") ";
+    $query .= " ORDER BY idraces ASC";
+    $result = wrapper_mysql_db_query_reader($query);
+
+    while($row = mysql_fetch_assoc($result)) {
+        print "--Watching results for ".$row['idraces']."\n";
+        $re = new RacesResultsEvents($row['idraces']);
+        $re->feed();
+    }
+        
+?>
