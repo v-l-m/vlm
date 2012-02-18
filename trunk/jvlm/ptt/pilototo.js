@@ -226,7 +226,7 @@ function Pilototo(_orig,_json) {
 			$(":input:visible:first").focus();
 		}
 		if ($.browser.msie) {
-			$.getScript('../externals/ptt_includes/json2.js', function() {});
+			$.getScript('../externals/douglascrockford/json2.js', function() {});
 		}
 		Pilototo.initialized=true;
 	} 
