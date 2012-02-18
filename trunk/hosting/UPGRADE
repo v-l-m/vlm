@@ -2,7 +2,7 @@ This file traces the changes that are required for upgrading from a previous VLM
 
 From 0.20.x to 0.21 :
 
-= Step 0, can be done at any time =
+= Step 0, can be done at any time = 
 
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_21
@@ -28,7 +28,9 @@ From 0.20.x to 0.21 :
   RUN
     ./scripts/upgrade.sh 0.20 2
     
-  ACTIVATE News feeding and notification in crontab (see crontab example)
+  ACTIVATE in crontab
+    cron-vlm-cleannews.sh (daily)
+  
 
 THE END
 
