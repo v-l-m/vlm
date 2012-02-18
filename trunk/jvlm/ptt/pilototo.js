@@ -175,7 +175,8 @@ function Pilototo(_orig,_json) {
 						debug('GUI update order : ' + this.name + ' PIM:' + $(this).find('select[name$="mypim"]').val());// + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
 // TODO
 						//						if (Pilototo.PILS["new"].myGO().validOrder()) {
-						//							var myorder=Pilototo.PILS["new"].myGO().getOrder(); //						var myJSONObject = {};
+						//							var myorder=Pilototo.PILS["new"].myGO().getOrder(); 						
+						var myJSONObject = {};
 						switch($(this).find('select[name$="mypim"]').val()) 
 						{
 							case '1' : case '2':
