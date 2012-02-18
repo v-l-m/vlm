@@ -59,6 +59,7 @@
     echo "<div style=\"display:inline;float:left;\">";
 
     $tablepages = Array(
+        "post_news.php" => "Quick news posting !",
         "news.php" => "News management",
         );
     adminlistbox($tablepages, "News & Notifications (EXPERIMENTAL)");
