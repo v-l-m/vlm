@@ -5,20 +5,20 @@
         var $idraces = 0;
         var $timedelta = 300;
         function __construct($idraces, $timedelta = 300) {
-            if (intval($idraces)) < 1 die("Bad idraces");
-            $this->idraces = intval($timetoevent);
+            if (intval($idraces) < 1) die("Bad idraces");
+            $this->idraces = intval($idraces);
             $this->timedelta = intval($timedelta);
             $this->now = intval(time());
         }
 
         function feed() {
-            $query = "SELECT `idraces`, `racename`, U.`idusers`, `username`, `boatname`, `deptime`, `duration` ".
-                     "FROM `races_results`, `users` U ".
-                     "WHERE `races_results`.`idusers` = U.`idusers` ".
-                     "AND `idraces` = '".$this->idraces."' ".
+            $query = "SELECT R.`idraces`, R.`racename`, U.`idusers`, `username`, `boatname`, RR.`deptime`, `duration` ".
+                     "FROM `races_results` RR LEFT JOIN `races` R ON (R.idraces = RR.idraces) LEFT JOIN `users` U ON (RR.`idusers` = U.`idusers`) ".
+                     "WHERE R.`idraces` = '".$this->idraces."' ".
                      "AND `position` = 1 ".
-                     "AND ABS(`duration` + `deptime` - ".$this->now." ) < ".$this->timedelta." ".
+                     "AND ABS(`duration` + RR.`deptime` - ".$this->now." ) < ".$this->timedelta." ".
                      "ORDER BY `duration` ASC LIMIT 4";
+#            print "$query\n";
             $res = $this->queryRead($query);
             
             $c = 0;
