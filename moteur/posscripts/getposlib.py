@@ -33,7 +33,12 @@ def vlm_get_tmp():
 
 def unzip_file_into_dest(src, dest):
     """Décompresse un fichier"""
-    zfobj = zipfile.ZipFile(src)
+    try :
+        zfobj = zipfile.ZipFile(src)
+    except :
+        print "ERROR when unzipping ressource %s" % src
+        sys.exit()
+
     for name in zfobj.namelist():
         outfile = open(dest, 'wb')
         outfile.write(zfobj.read(name))
