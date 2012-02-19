@@ -164,18 +164,18 @@
 
 ?>
 
-  <script type="text/javascript" src="scripts/popup.js"></script>
-  <script type="text/javascript" src="scripts/dms.js"></script>
-  <script type="text/javascript" src="scripts/hashtable.js"></script>
+  <script type="text/javascript" src="/scripts/popup.js"></script>
+  <script type="text/javascript" src="/scripts/dms.js"></script>
+  <script type="text/javascript" src="/scripts/hashtable.js"></script>
 
-  <script type="text/javascript" src="externals/lightbox/js/prototype.js"></script>
-  <script type="text/javascript" src="externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
-  <script type="text/javascript" src="externals/lightbox/js/lightbox.js"></script>
+  <script type="text/javascript" src="/externals/lightbox/js/prototype.js"></script>
+  <script type="text/javascript" src="/externals/lightbox/js/scriptaculous.js?load=effects,builder"></script>
+  <script type="text/javascript" src="/externals/lightbox/js/lightbox.js"></script>
   <link rel="stylesheet" href="externals/lightbox/css/lightbox.css" type="text/css" media="screen" />
   <link rel="apple-touch-icon" sizes="57x57" href="/images/logos/logovlm-57x57.png"/>
   <link rel="apple-touch-icon" sizes="114x114" href="/images/logos/logovlm-114x114.png"/>
 
-  <script type="text/javascript" src="externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+  <script type="text/javascript" src="/externals/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 <!-- Google+ page -->
 <link href="https://plus.google.com/u/0/b/110426006609687431139/" rel="publisher" />
  </head>
@@ -316,7 +316,7 @@
                     $querystring = $_SERVER['QUERY_STRING']."&";
                 }
                 $querystring .= "lang=$lg";
-                echo "<a href=\"".$_SERVER['SCRIPT_NAME']."?$querystring\"><img src=\"images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
+                echo "<a href=\"".$_SERVER['SCRIPT_NAME']."?$querystring\"><img src=\"/images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";
             }            
 ?>
         </div> <!-- fin div langbox-->
