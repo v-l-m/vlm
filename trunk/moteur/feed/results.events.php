@@ -3,8 +3,8 @@
 
     class RacesResultsEvents extends baseClass {
         var $idraces = 0;
-        var $timedelta = 300;
-        function __construct($idraces, $timedelta = 300) {
+        var $timedelta = 600;
+        function __construct($idraces, $timedelta = 600) {
             if (intval($idraces) < 1) die("Bad idraces");
             $this->idraces = intval($idraces);
             $this->timedelta = intval($timedelta);
@@ -16,7 +16,7 @@
                      "FROM `races_results` RR LEFT JOIN `races` R ON (R.idraces = RR.idraces) LEFT JOIN `users` U ON (RR.`idusers` = U.`idusers`) ".
                      "WHERE R.`idraces` = '".$this->idraces."' ".
                      "AND `position` = 1 ".
-                     "AND ABS(`duration` + RR.`deptime` - ".$this->now." ) < ".$this->timedelta." ".
+#                     "AND ABS(`duration` + RR.`deptime` - ".$this->now." ) < ".$this->timedelta." ".
                      "ORDER BY `duration` ASC LIMIT 4";
 #            print "$query\n";
             $res = $this->queryRead($query);
@@ -25,7 +25,7 @@
             while ($line = mysql_fetch_assoc($res)) {
                 $c += 1;
                 $line['rank'] = $c;
-                $this->feedone($line);
+                if ($this->now - intval($line['deptime']+$line['duration']) < $this->timedelta) $this->feedone($line);
             }
         }
         
@@ -80,8 +80,6 @@
         }
 
     }
-
-    sleep(10);
 
     $query = "SELECT idraces FROM races WHERE started > 0 AND !(racetype & ".RACE_TYPE_RECORD. ") ";
     $query .= " ORDER BY idraces ASC";
