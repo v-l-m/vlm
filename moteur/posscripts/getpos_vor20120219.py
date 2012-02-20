@@ -25,10 +25,6 @@ timezero = 1329634800 #geotree.timezero() #FIXME
 
 boats = geotree.boats()
 
-print boats
-print timezero
-print coordfactor
-
 geotree = gp.GeovoileTree("http://volvooceanrace.geovoile.com/2011/shared/data/leg4.update.hwz", basefilename+"update")
 
 for rid in boats.keys() :
