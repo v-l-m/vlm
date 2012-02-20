@@ -7,7 +7,7 @@
     <link rel='stylesheet' type='text/css' href='externals/fullcalendar/fullcalendar.css' />
     <script type='text/javascript'>
 		var $jq = jQuery.noConflict();
-		$(document).ready(function() {
+		$jq(document).ready(function() {
             $jq('#calendar').fullCalendar({
                 editable: false,
                 header: { left: 'title', center: '', right:  'today prev,next'},
