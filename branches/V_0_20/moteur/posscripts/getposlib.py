@@ -23,6 +23,7 @@ import urllib
 import zipfile, os
 import time
 import xml.etree.ElementTree as ElementTree
+import sys
 
 def vlm_get_tmp():
     """Utilise le VLMTEMP s'il est défini"""
@@ -33,7 +34,12 @@ def vlm_get_tmp():
 
 def unzip_file_into_dest(src, dest):
     """Décompresse un fichier"""
-    zfobj = zipfile.ZipFile(src)
+    try :
+        zfobj = zipfile.ZipFile(src)
+    except :
+        print "ERROR when unzipping ressource %s" % src
+        sys.exit()
+
     for name in zfobj.namelist():
         outfile = open(dest, 'wb')
         outfile.write(zfobj.read(name))
@@ -84,7 +90,7 @@ class GeovoileTree(object):
         #<factors coord="1000" speed="10" distance="10" timecode="1" coef="1000"/>
         if self.tree.find("./factor") != None:
             return float(self.tree.find("./factor").attrib['coord'])
-        elif tree.find("./factors") != None:
+        elif self.tree.find("./factors") != None:
             return float(self.tree.find("./factors").attrib['coord'])
         else :
             return 1.
@@ -105,12 +111,12 @@ class GeovoileTree(object):
         except :
            return 0
 
-    def tracks(self, path = ".//track"):
+    def tracks(self, path = ".//track", tagid = 'boatid'):
         tracks = []
         for outline in self.tree.findall(path):
             l = outline.text.split(';')
             lat, lon, t = 0, 0, 0
-            rid = int(outline.attrib['boatid'])
+            rid = int(outline.attrib[tagid])
             for i in l:
                 tup = i.split(',')
                 lat += float(tup[0])
