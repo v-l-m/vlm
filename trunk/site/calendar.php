@@ -6,16 +6,17 @@
     <script type='text/javascript' src='externals/fullcalendar/fullcalendar.min.js'></script>
     <link rel='stylesheet' type='text/css' href='externals/fullcalendar/fullcalendar.css' />
     <script type='text/javascript'>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
+		var $jq = jQuery.noConflict();
+		$(document).ready(function() {
+            $jq('#calendar').fullCalendar({
                 editable: false,
                 header: { left: 'title', center: '', right:  'today prev,next'},
                 firstDay: 1,
                 events: "/feed/races.fullcalendar.php",
                 timeFormat: 'H:mm',
                 loading: function(bool) {
-                    if (bool) $('#loading').show();
-                    else $('#loading').hide();
+                    if (bool) $jq('#loading').show();
+                    else $jq('#loading').hide();
                 }
             });
         });
