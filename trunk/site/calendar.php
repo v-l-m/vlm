@@ -3,7 +3,7 @@
     include_once("config.php");
 ?>
     <script type='text/javascript' src='externals/jquery/jquery.js'></script>
-    <script type='text/javascript' src='externals/fullcalendar/fullcalendar.min.js'></script>
+    <script type='text/javascript' src='externals/fullcalendar/fullcalendar.js'></script>
     <link rel='stylesheet' type='text/css' href='externals/fullcalendar/fullcalendar.css' />
     <script type='text/javascript'>
 		//var $jq = jQuery.noConflict();
