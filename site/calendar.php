@@ -17,7 +17,7 @@
                 events: "/feed/races.fullcalendar.php",
                 timeFormat: 'H:mm',
                 loading: function(bool) {
-                    if (bool) $('#loading').show();
+                    if (bool) jQuery('#loading').show();
                     else jQuery('#loading').hide();
                 }
             });
