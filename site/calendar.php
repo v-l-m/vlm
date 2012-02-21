@@ -7,8 +7,10 @@
     <link rel='stylesheet' type='text/css' href='externals/fullcalendar/fullcalendar.css' />
     <script type='text/javascript'>
 		//var $jq = jQuery.noConflict();
-		$(document).ready(function() {
-            $('#calendar').fullCalendar({
+		jQuery.noConflict();
+		//$(document).ready(function() {
+		jQuery(document).ready(function() {
+			jQuery('#calendar').fullCalendar({
                 editable: false,
                 header: { left: 'title', center: '', right:  'today prev,next'},
                 firstDay: 1,
@@ -16,7 +18,7 @@
                 timeFormat: 'H:mm',
                 loading: function(bool) {
                     if (bool) $('#loading').show();
-                    else $('#loading').hide();
+                    else jQuery('#loading').hide();
                 }
             });
         });
