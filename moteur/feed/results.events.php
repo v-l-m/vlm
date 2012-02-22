@@ -61,13 +61,13 @@
                     $t = sprintf("Victoire pour %s (#%s) dans %s (~%s) en %s", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces'], $this->secs_to_h(intval($line['duration'])));
                     break;
                 case 2 :
-                    $t = sprintf("Seconde marche du podium pour %s (#%d) dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
+                    $t = sprintf("2nde marche du podium pour %s (#%d) dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
                     break;
                 case 3 :
                     $t = sprintf("%s (#%d) termine 3ème dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
                     break;
                 case 4 :
-                    $t = sprintf("Accessit pour %s (#%d), au pied du podium dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
+                    $t = sprintf("Accessit pour %s (#%d), 4eme dans %s (~%s)", $line['boatname'], $line['idusers'], $line['racename'], $line['idraces']);
                     break;
             }                    
                 
