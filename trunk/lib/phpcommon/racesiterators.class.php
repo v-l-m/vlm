@@ -141,7 +141,13 @@
   
             //Add elements to the feed item
             //Use wrapper functions to add common feed elements
-            $newItem->setTitle($row['racename']);
+            
+			//old #700 $newItem->setTitle($row['racename']);
+			if (!is_null($row['racename']))
+				$newItem->setTitle($row['racename']);
+			else
+				$newItem->setTitle("-no title found-");
+
             $newItem->setLink($linkics);
             //The parameter is a timestamp for setDate() function
             $newItem->setDate($row['updated']);
