@@ -92,7 +92,7 @@
             $jsonarray = Array();
             $jsonarray['start'] = $row['deptime'];
             $jsonarray['end'] = $row['closetime'];
-			if (is_null($row['racename']))
+			if (!is_null($row['racename']))
 				$jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
 			else
 				$jsonarray['title'] = "-no title found-";
