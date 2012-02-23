@@ -1,7 +1,7 @@
 <?php
     function headeranddie($h) {
         header("Cache-Control: no-cache"); // no cache for dummy answer
-        header("Status: 302 Moved Temporarily", false, 302);
+        header("Status: 307 Temporary Redirect", false, 307);
         header("Location: $h");
         exit();
     }
@@ -12,6 +12,12 @@
         include_once ("config-funcs.php");
 
         switch($matches[1]) {
+            case "tracks" :
+                if (preg_match("/(\d\d\d\d\d\d)\/(\d\d)\/(\d\d)\/(\d+)\/(\d\d)\/(\d+)\.json/", $matches[2], $components)) {
+                    headeranddie(sprintf("/ws/boatinfo/statictracks.php?ym=%d&d=%d&h=%d&r=%d&u=%d", $components[1], $components[2], $components[3], $components[4], $components[5]+100*$components[6]));
+                }   
+            break;         
+
             case "legacytiles" :
                 if (preg_match("/(-?\d+)\/(-?\d+)\/(-?\d+)\.png/", $matches[2], $components)) {
                     headeranddie(sprintf("/tileslegacy.img.php?z=%d&amp;x=%d&amp;y=%d", $components[1], $components[2], $components[3]));
