@@ -115,7 +115,7 @@ class GeovoileTree(object):
         tracks = []
         for outline in self.tree.findall(path):
             l = outline.text.split(';')
-            lat, lon, t = 0, 0, 0
+            lat, lon, t = 0., 0., 0
             rid = int(outline.attrib[tagid])
             for i in l:
                 tup = i.split(',')

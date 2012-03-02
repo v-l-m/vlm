@@ -38,6 +38,6 @@ for track in geotree.tracks(tagid='id'):
       #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
      rid, t, lat, lon = track
      t += timezero
-     if time.time() - t < 48*3600:
+     if time.time() - t < 48*3600 and t < time.time():
          print "%d|0|%d|%d|%s|BAR|%f|%f|0.|0." % (vlmidrace, t, -boats[rid]['vlmid'], boats[rid]['name'], lat/coordfactor, lon/coordfactor)
 
