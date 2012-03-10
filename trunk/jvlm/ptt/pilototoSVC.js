@@ -9,15 +9,21 @@ function alertModal(_msg , _code, _custom_error_string) {
 function debug(str) 
 {
 	$('<p/>', {text : str}).appendTo($("#tracezone"));
-
 }
-function help(table$,keyst) 
+function helpin(table$,keyst) 
 {
 	$("tfoot>tr>th", table$).find("p#Aide").remove();
 	$('<p/>', {id: 'Aide', name: 'Aide', html : VST.dico[keyst]})
 		.addClass('ui-state-default ui-corner-all help')
 		.css({'font-size': '11px'})
 		.appendTo($("tfoot>tr>th", table$));
+}
+function helpout(keyst){
+	$("#helpzone").find("p#AideOut").remove();
+	$('<p/>', {id: 'AideOut', name: 'AideOut', html : VST.dico[keyst]})
+		.addClass('ui-state-default ui-corner-all help')
+		.css({'font-size': '11px'})
+		.appendTo("#helpzone");
 }
 function pad(val)
 {
@@ -80,9 +86,10 @@ function GO() {
 		GO.prototype.validOrder = function() {
 			return validate_pim(GO.selPIM, GO.pipinput1,GO.pipinput2,GO.pipinput3);
 		}
-		GO.prototype.getOrder = function() {
+		GO.prototype.getOrder = function(_tid) {
 			//hdg pour le pim=1, twa pour pim=2
 			var myJSONObject = {};
+			if (_tid != null) myJSONObject.taskid=_tid;
 			myJSONObject.idu=NO.idu;
 			myJSONObject.tasktime = parseInt(GO.ttsinput.val());
 			myJSONObject.pim=parseInt(GO.selPIM.find(":selected").val());
@@ -153,7 +160,7 @@ function GO() {
 						.css({'font-size': '11px'})
 						.appendTo($("tfoot>tr>th", _tb));
 					//var $tableHeaders = $("thead > th", _tb).filter(":not([colspan]),[colspan='1']");					
-					help(_tb,"pilototohelp3");
+					helpout("pilototohelp3");
 				},
 				function(){ 
 					$("tfoot>tr>th", _tb).find("p#GMTTring").remove();
@@ -191,12 +198,12 @@ function GO() {
 				GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);
 				GO.pipcell.find("input").addClass('ui-corner-all').css({'font-size': '11px'});
 			});
-			GO.selPIM.hover(function(){ help(_tb,"pilototohelp4")},function(){ $("tfoot>tr>th", _tb).find("p#Aide").remove();})
+			GO.selPIM.hover(function(){ helpout("pilototohelp4")},function(){ $("tfoot>tr>th", _tb).find("p#Aide").remove();})
 
 			row$ = $('<TR/>').appendTo($("tbody", _tb));
 			// PIP
 			GO.pipcell = $('<TD/>', {'class':'neworder'}).appendTo(row$); 
-			GO.pipcell.hover(function(){ help(_tb,"pilototohelp5")},function(){$("tfoot>tr>th", _tb).find("p#Aide").remove();})
+			GO.pipcell.hover(function(){ helpout("pilototohelp5")},function(){$("tfoot>tr>th", _tb).find("p#Aide").remove();})
 
 
 			GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);

@@ -19,7 +19,7 @@ function EO(_idu,_order,_key) {
 			this.wplat=Pilototo.WPLAT;
 			this.wplon=Pilototo.WPLON;
 			this.hwp=Pilototo.HWP;
-			debug( this.pim + '-' + _order.PIP);
+			//debug( this.pim + '-' + _order.PIP);
 			break;
 		case '2':
 			this.hdg=Pilototo.HDG;
@@ -27,7 +27,7 @@ function EO(_idu,_order,_key) {
 			this.wplat=Pilototo.WPLAT;
 			this.wplon=Pilototo.WPLON;
 			this.hwp=Pilototo.HWP;
-			debug( this.pim + '-' + _order.PIP);
+			//debug( this.pim + '-' + _order.PIP);
 			break;
 		case '3': case '4': case '5' :
 			var reg=new RegExp("[,@]+", "g");
@@ -37,7 +37,7 @@ function EO(_idu,_order,_key) {
 			this.wplat=elts[0];
 			this.wplon=elts[1];
 			this.hwp=elts[2];
-			debug( this.pim + '-' + parseFloat(elts[0]) + '(,)' + parseFloat(elts[1]) +'(at)' + parseFloat(elts[2]));
+			//debug( this.pim + '-' + parseFloat(elts[0]) + '(,)' + parseFloat(elts[1]) +'(at)' + parseFloat(elts[2]));
 		}
 
 	EO.myGO = new GO();	
@@ -52,7 +52,7 @@ function EO(_idu,_order,_key) {
 			myJSONObject.debug=true;
 			return JSON.stringify(myJSONObject,null);
 		}
-
+		EO.prototype.myGO = function() {return EO.myGO;}
 
 		EO.prototype.bascEdit = function() {
 			//hdg pour le pim=1, twa pour pim=2
@@ -69,7 +69,7 @@ function EO(_idu,_order,_key) {
 			$('<p/>', {'text': this.pip}).appendTo($('<TD/>').appendTo(row$));	
 			//alert("bascule EDIT : " + this.TID + "-" + this.TTS);
 */
-			debug(_order.PIP);
+			//debug(_order.PIP);
 			EO.myGO.insertGO(this.myTb$,this.pim,eval(this.TTS),this.hdg, Pilototo.twac, this.wplat, this.wplon, this.hwp, true);
 			this.myTb$.closest("form").find(':input').addClass('ui-corner-all').css({'font-size': '11px'});
 

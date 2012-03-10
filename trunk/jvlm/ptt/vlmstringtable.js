@@ -19,8 +19,7 @@ function initStringTable() {
 		//data: {timestamp:tS},
 		//data: { 'cache': 'true' },
 		cache: true,
-		url: '/ws/serverinfo/translation.php', 
-		//url: 'translation.json',
+		url: ((typeof strlocvlmstringtable=="undefined")?'/ws/serverinfo/translation.php':strlocvlmstringtable),
 		dataType: 'json',  
 		async: false,  
 		success: function(stringtable){  

@@ -1,11 +1,12 @@
 function initPilototo() {
 	$("#pttzone").find("div#tabs").remove();
-	//$.getJSON('ptt/meso.json', 
-	$.getJSON('/ws/boatinfo.php?select_idu=0', 
+	//$.getJSON('ptt/testlocal/meso.json', 
+	$.getJSON(((typeof strlocvlmgetinfo=="undefined")?'/ws/boatinfo.php?select_idu=0':strlocvlmgetinfo), 
 		{format: "json"}, 
 		function(json){ 
 			new Pilototo("relative onload",json);
 			//debug("Boatinfo initialized.");
+			Pilototo.prototype.rendertitle();
 			Pilototo.prototype.render();
 			//debug("Render done");
 			}
@@ -41,7 +42,7 @@ function Pilototo(_orig,_json) {
 		$('<TH/>', {'colspan':'2','scope':'col'}).appendTo($("tfoot>tr", mytable));
 		$('<P/>', {'id': 'whatsup','name': 'whatsup', 'text' : _str}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("thead>tr>th", mytable));
 // TODO A REMETTRE AUTRE PART
-				$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")"}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("tfoot>tr>th", mytable));
+//				$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")"}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("tfoot>tr>th", mytable));
 		$('<TBODY/>').appendTo(mytable);
 		return mytable;
 	}
@@ -133,6 +134,22 @@ function Pilototo(_orig,_json) {
 	}
 
 	if(typeof Pilototo.initialized == "undefined") {
+		Pilototo.prototype.rendertitle  = function() {
+			//debug("Pilototo.TTS :" + _json.NOW);
+			p$=$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")  "}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo("#titlezone");
+			img$=$('<IMG/>', {'src': 'ptt/img/actn045.gif', 'name': 'ViewHelper', 'title': "helper"}).appendTo(p$); 
+			img$.bind("click", function(event) {
+				if ($("DIV#helpzone").is(':hidden')) {
+					$("DIV#helpzone").show("fast");
+				} else {
+					$("DIV#helpzone").hide("fast");
+				}
+			});
+
+			
+			// TODO : mais quoi ??
+		}
+		
 		// display du pilototo et de ses MAX5 elements
 		Pilototo.prototype.render = function() {
 			Pilototo.myPttDivTab = createDivTab(this._idu);
@@ -145,7 +162,7 @@ function Pilototo(_orig,_json) {
 					myform$=addToDivTab(order,Pilototo.PILS[order].render(),'new','','','');
 					myform$.submit(function() {
 						if (Pilototo.PILS["new"].myGO().validOrder()) {
-							var myorder=Pilototo.PILS["new"].myGO().getOrder(); //
+							var myorder=Pilototo.PILS["new"].myGO().getOrder(null); //
 							var mypost= '/ws/boatsetup/pilototo_add.php?parms=' + escape(myorder);
 							$.post(mypost, function(data) {
 								if (!data.success) {
@@ -165,50 +182,25 @@ function Pilototo(_orig,_json) {
 						Pilototo.PILS[order].pip, 
 						Pilototo.PILS[order].pim,
 						Pilototo.PILS[order].TTS);
-
 					myform$.dblclick( function (event) { 
 						//alert("DblClick on form : " + $(event.target).closest("form").get(0).name); 
 						//$(event.target).closest("form").get(0).name
 						Pilototo.PILS[$(event.target).closest("form").get(0).name].bascEdit();
 					});
 					myform$.submit(function() {
-						debug('GUI update order : ' + this.name + ' PIM:' + $(this).find('select[name$="mypim"]').val());// + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
-// TODO
-						//						if (Pilototo.PILS["new"].myGO().validOrder()) {
-						//							var myorder=Pilototo.PILS["new"].myGO().getOrder(); 						
-						var myJSONObject = {};
-						switch($(this).find('select[name$="mypim"]').val()) 
-						{
-							case '1' : case '2':
-								myJSONObject.pip=parseFloat($(this).find('input[name$="pipinput1"]').val());
-								break;
-							case '3': case '4': case '5' :
-								var myPIP={};
-								//var reg=new RegExp("[,@]+", "g");
-								//var elts=$(this).find('input[name$="pipinput1"]').val().split(reg);
-								myPIP.targetlat=parseFloat($(this).find('input[name$="pipinput1"]').val());
-								myPIP.targetlong=parseFloat($(this).find('input[name$="pipinput2"]').val());
-								myPIP.targetandhdg=parseFloat($(this).find('input[name$="pipinput3"]').val());
-								myJSONObject.pip=myPIP;
+						//debug('GUI update order : ' + this.name + ' PIM:' + $(this).find('select[name$="mypim"]').val());// + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
+						if (Pilototo.PILS[$(this)[0].name].myGO().validOrder()) {
+							var mypost= '/ws/boatsetup/pilototo_update.php?parms=' + escape(Pilototo.PILS[order].myGO().getOrder(parseInt(this.name)));
+							// debug(mypost);
+							$.post(mypost, function(data) {
+								if (!data.success) {
+									alertModal(data.error.msg , data.error.code, data.error.custom_error_string);
+								} else {
+									debug("Successfully modified for " + data.request.idu);
+									initPilototo();
+								}
+							}, 'json');
 						}
-						//debug("chrome2");
-						myJSONObject.idu=Pilototo.idu;
-						myJSONObject.tasktime = parseInt($(this).find('input[name$="ttsinput"]').val());
-						myJSONObject.taskid = parseInt(this.name);
-						myJSONObject.pim=parseInt($(this).find('select[name$="mypim"]').val());
-						myJSONObject.debug=true;
-						// ToDo et pourquoi pas utiliser JSON.encode
-						var mypost= '/ws/boatsetup/pilototo_update.php?parms=' + escape(JSON.stringify(myJSONObject,null));
-						debug(mypost);
-						$.post(mypost, function(data) {
-							if (!data.success) {
-								alertModal(data.error.msg , data.error.code, data.error.custom_error_string);
-							} else {
-								debug("Successfully modified for " + data.request.idu);
-								initPilototo();
-							}
-						}, 'json');
-
 						return false;
 					});		
 
@@ -226,9 +218,12 @@ function Pilototo(_orig,_json) {
 			//un peu de confort 
 			$(":input:visible:first").focus();
 		}
+
+
 		if ($.browser.msie) {
 			$.getScript('../externals/douglascrockford/json2.js', function() {});
 		}
+
 		Pilototo.initialized=true;
 	} 
 
