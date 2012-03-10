@@ -17,18 +17,22 @@
 <script type="text/javascript" src="ptt/pilototoEO.js"></script>
 <script type="text/javascript" src="ptt/pilototoNO.js"></script>
 <script type="text/javascript" src="ptt/vlmstringtable.js"></script>
-<script type="text/javascript" src="/externals/jquery/jquery.js"></script>
+<script type="text/javascript" src="../externals/jquery/jquery.js"></script>
 	<!--   <script src="http://code.jquery.com/jquery-git.js"></script> -->
 	<!--  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>  -->
-<script  type="text/javascript" src="/externals/jquery/jquery-ui-latest.js"></script> 
+<script  type="text/javascript" src="../externals/jquery/jquery-ui-latest.js"></script> 
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script> -->
-<link rel="stylesheet" type="text/css" href="/externals/jquery/jquery-ui-latest.css" />
+<link rel="stylesheet" type="text/css" href="../externals/jquery/jquery-ui-latest.css" />
 	<!-- <link rel="stylesheet" type="text/css" href="http://jqueryui.com/themes/base/jquery.ui.all.css" /> -->
-<script type="text/javascript" src="/externals/trentrichardson/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="../externals/trentrichardson/jquery-ui-timepicker-addon.js"></script>
 	<!-- <script type="text/javascript" src="http://trentrichardson.com/examples/timepicker/js/jquery-ui-timepicker-addon.js"></script>-->
 <link rel="stylesheet" type="text/css" href="ptt/pilototo.css" />
 	<!-- les style VLM classiques <link rel="stylesheet" type="text/css" href="/style/default/style.css" /> -->
 <script type="text/javascript">
+
+// next line to uncomment for local tests
+var strlocvlmstringtable='ptt/testlocal/translation.json';
+var strlocvlmgetinfo='ptt/testlocal/meso.json';
 
 $(document).ready(function() {
 	initStringTable();
@@ -56,7 +60,9 @@ $(window).load(function() {
 
 <body>
 <form action="javascript:void(0);" method="get">
+<div id="titlezone" style="width: 26em;"></div>
 <div id="pttzone"></div>
+<div id="helpzone" style="display: none; width: 26em;"></div>
 </form>
 <div id="tracezone"></div>
 <div id="glop-valid-xhtml11" style="display: none">
