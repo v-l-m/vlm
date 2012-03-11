@@ -48,5 +48,5 @@ for track in geotree.tracks(tagid='id'):
      rid, t, lat, lon = track
      t += timezero
      if time.time() - t < 48*3600 and t < time.time():
-         print "%d|0|%d|%d|%s|BAR|%f|%f|0.|0." % (vlmidrace, t, -boats[rid]['vlmid'], boats[rid]['name'], lat/coordfactor, lon/coordfactor)
+         print "%d|0|%d|%d|%s|BAR|%f|%f|0.|0." % (vlmidrace, t, -boats[rid]['vlmid'], boats[rid]['name'].encode('utf-8'), lat/coordfactor, lon/coordfactor)
 
