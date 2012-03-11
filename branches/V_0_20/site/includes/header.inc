@@ -15,7 +15,6 @@
     $pseudo = get_cgi_var('pseudo');
     $password = get_cgi_var('password');
     $class = get_cgi_var('class');
-    $email = get_cgi_var('email', '');
     $blocnote = get_cgi_var('blocnote');
     if (preg_match("/^http/i", $blocnote) || preg_match("/:\/\//i", $blocnote)) {
         $blocnote="BAD NOTEPAD (code inclusion (url, &lt;&gt; characters, ...) is forbidden)";
@@ -82,11 +81,6 @@
         $users = new fullUsers(getLoginId());
         $users->users->boatname = $boatname;
         $users->users->color = $color;
-        if ($users->users->getOwnerId() > 0) { //attached boats can't change this deprecated prefs
-            $users->users->email = getLoggedPlayerObject()->email;
-        } else {
-            $users->users->email = $email;
-        }
         //FIXME : no escaping ?
         $users->users->blocnote = $blocnote;
         $users->users->country = $country;

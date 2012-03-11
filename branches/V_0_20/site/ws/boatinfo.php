@@ -17,7 +17,7 @@ function get_info_array($idu) {
   $info['IDU'] = $userObj->users->idusers;
   $info['IDP'] = $ownerId;
   $info['IDB'] = $userObj->users->boatname;
-  $info['EML'] = $userObj->users->email;
+  $info['EML'] = "email.for.boat@is.deprecated.com";
   $info['COL'] = $userObj->users->color;
   $info['CNT'] = $userObj->users->country;
   $info['POL'] = $userObj->users->boattype;
@@ -168,7 +168,7 @@ function usage() {
     #* CNT : Country 
     #* COL : Color
     #* DNM : Distance to next mark (float)
-    #* EML : EMail
+    #* EML : EMail (Deprecated)
     #* ETA : Date estimée d'arrivé, seulement si pas de wp perso (string)
     #* HDG : direction (HeaDinG)
     #* HID: trace cachée (1) ou visible (0)
