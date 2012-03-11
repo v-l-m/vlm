@@ -23,7 +23,7 @@ geotree = gp.GeovoileTree("http://lasolidaireduchocolat.geovoile.com/2012/shared
 
 coordfactor = geotree.factors()
 
-timezero = 1331483400 #geotree.timezero() #FIXME
+timezero = 1331483880 #16:38 (origin of tracks) #geotree.timezero() #FIXME
 
 boats = geotree.boats()
 
