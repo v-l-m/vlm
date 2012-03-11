@@ -82,11 +82,6 @@
         $users = new fullUsers(getLoginId());
         $users->users->boatname = $boatname;
         $users->users->color = $color;
-        if ($users->users->getOwnerId() > 0) { //attached boats can't change this deprecated prefs
-            $users->users->email = getLoggedPlayerObject()->email;
-        } else {
-            $users->users->email = $email;
-        }
         //FIXME : no escaping ?
         $users->users->blocnote = $blocnote;
         $users->users->country = $country;
