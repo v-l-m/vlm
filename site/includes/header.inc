@@ -15,7 +15,6 @@
     $pseudo = get_cgi_var('pseudo');
     $password = get_cgi_var('password');
     $class = get_cgi_var('class');
-    $email = get_cgi_var('email', '');
     $blocnote = get_cgi_var('blocnote');
     if (preg_match("/^http/i", $blocnote) || preg_match("/:\/\//i", $blocnote)) {
         $blocnote="BAD NOTEPAD (code inclusion (url, &lt;&gt; characters, ...) is forbidden)";
