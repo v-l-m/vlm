@@ -1,7 +1,8 @@
 <?php
     function headeranddie($h) {
         header("Cache-Control: no-cache"); // no cache for dummy answer
-        header("Status: 307 Temporary Redirect", false, 307);
+        header("Status: 302 Moved Temporarily", false, 302);
+        //FIXME (better, but maybe side effects for tools) header("Status: 307 Temporary Redirect", false, 307);
         header("Location: $h");
         exit();
     }
