@@ -57,7 +57,7 @@ def unzipurl(url, basefilename, suffix = 'static'):
 
 def sqlusers(boats, engaged):
     for rid in boats.keys() :
-        print "INSERT INTO `users` (idusers, username, boatname, engaged) VALUES (%d, \"%s\", \"%s\", %d);" % (boats[rid]['vlmid'], boats[rid]['vlmusername'], boats[rid]['vlmboatname'], engaged)
+        print "INSERT INTO `users` (idusers, username, boatname, engaged) VALUES (%d, \"%s\", \"%s\", %d);" % (-boats[rid]['vlmid'], boats[rid]['vlmusername'], boats[rid]['vlmboatname'], engaged)
 
 def basedatas(boats, firstid):
     text = ""
@@ -99,10 +99,14 @@ class GeovoileTree(object):
         for outline in self.tree.findall("./boats/boat"):
             rid = int(outline.attrib['id'])
             boats[rid] = outline.attrib
-            try :
-                boats[rid]['name'] = outline.find("name").text.encode('utf-8')
-            except :
-                boats[rid]['name'] = "%d" % rid
+            if not boats[rid].has_key('sail') :
+                boats[rid]['sail'] = rid
+            boats[rid]['sail'] = int(boats[rid]['sail'])
+            if not boats[rid].has_key('name') :
+                try :
+                    boats[rid]['name'] = outline.find("name").text.encode('utf-8')
+                except :
+                    boats[rid]['name'] = "%s" % boats[rid]['sail']
         return boats
     
     def timezero(self, offset = 0):
