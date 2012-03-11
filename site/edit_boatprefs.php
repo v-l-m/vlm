@@ -8,6 +8,7 @@ if ($current_idu == null) {
   if ($current_player != null) {
     list($current_idu) = $current_player->getOwnedBoatIdList();
   } else {
+    die("ERROR : Can't figure out the current player");
     // can't figure out the current player, need to print a decent
     // error message...
   }
@@ -42,10 +43,6 @@ echo "<h2>".getLocalizedString("choose")."</h2>";
          echo "<br />";
 
      }
-        if ($fullUsersObj->users->getOwnerId() == 0) {
-            echo "<br />" . getLocalizedString("useremail");
-            echo "<input type=\"text\" name=\"email\" size=\"50\" maxlength=\"60\" value=\"" . $fullUsersObj->users->email . "\" />";
-        }
 
     $select_list = "";
     $flagres = getFlagsListCursor();
