@@ -136,8 +136,14 @@ function Pilototo(_orig,_json) {
 	if(typeof Pilototo.initialized == "undefined") {
 		Pilototo.prototype.rendertitle  = function() {
 			//debug("Pilototo.TTS :" + _json.NOW);
-			p$=$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")  "}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo("#titlezone");
-			img$=$('<IMG/>', {'src': 'ptt/img/actn045.gif', 'name': 'ViewHelper', 'title': "helper"}).appendTo(p$); 
+			$("#titlezone").children().remove(); //find("p#GMTTring").remove();
+			var tbtitle = $('<TABLE/>', {'class':'ptttitle'}).addClass('ui-state-default ui-corner-all').appendTo($("#titlezone"));
+			$('<TBODY/>').appendTo(tbtitle);
+			$('<TR/>').appendTo($("tbody", tbtitle));
+			var tdtitle = $('<TD/>', {'id': 'tdtitle'}).appendTo($("tbody>tr", tbtitle));
+			p$=$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")  "}).css({'font-size': '11px'}).appendTo(tdtitle);
+			var tdhelper = $('<TD/>', {'id': 'tdhelper'}).appendTo($("tbody>tr", tbtitle));
+			img$=$('<IMG/>', {'src': 'ptt/img/actn045.gif', 'name': 'ViewHelper', 'title': "helper"}).appendTo(tdhelper); 
 			img$.bind("click", function(event) {
 				if ($("DIV#helpzone").is(':hidden')) {
 					$("DIV#helpzone").show("fast");
