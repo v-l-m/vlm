@@ -188,11 +188,13 @@ function Pilototo(_orig,_json) {
 						Pilototo.PILS[order].pip, 
 						Pilototo.PILS[order].pim,
 						Pilototo.PILS[order].TTS);
-					myform$.dblclick( function (event) { 
-						//alert("DblClick on form : " + $(event.target).closest("form").get(0).name); 
-						//$(event.target).closest("form").get(0).name
-						Pilototo.PILS[$(event.target).closest("form").get(0).name].bascEdit();
-					});
+					if (Pilototo.PILS[order].status <> "done") {
+						myform$.dblclick( function (event) { 
+							//alert("DblClick on form : " + $(event.target).closest("form").get(0).name); 
+							//$(event.target).closest("form").get(0).name
+							Pilototo.PILS[$(event.target).closest("form").get(0).name].bascEdit();
+						});
+					}
 					myform$.submit(function() {
 						//debug('GUI update order : ' + this.name + ' PIM:' + $(this).find('select[name$="mypim"]').val());// + ' with ' + this.TTS.value +',' + this.PIM.value + ',' + this.PIP.value)
 						if (Pilototo.PILS[$(this)[0].name].myGO().validOrder()) {
