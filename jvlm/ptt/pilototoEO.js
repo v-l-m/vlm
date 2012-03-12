@@ -82,15 +82,21 @@ function EO(_idu,_order,_key) {
 			this.myTb$=mytable;
 			//debug(" EO.Render2 ");
 			row$ = $('<TR/>', {'name':this.key}).appendTo($("tbody", mytable));
-			$('<p/>', {'text': this.TID}).appendTo($('<TD/>').appendTo(row$));			
-			$('<p/>', {'text': this.TTS}).appendTo($('<TD/>').appendTo(row$));			
+			//$('<p/>', {'text': this.TID}).appendTo($('<TD/>').appendTo(row$));
+			$('<p/>', {'text': 'tts:'}).appendTo($('<TD/>').appendTo(row$));			
+			var d = new Date(parseInt(this.TTS)*1000).toUTCString();
+			var mytts = $('<p/>', {'html': this.TTS + "<br/><i>" + d + "</i>"}).appendTo($('<TD/>').appendTo(row$));			
+			
 			row$ = $('<TR/>').appendTo($("tbody", mytable));
+			$('<p/>', {'text': 'pim:'}).appendTo($('<TD/>').appendTo(row$));			
 			$('<p/>', {'text': this.pim}).appendTo($('<TD/>').appendTo(row$));			
-			$('<p/>', {'text': disp_pip(this.pip,this.pim) }).appendTo($('<TD/>').appendTo(row$));			
 			row$ = $('<TR/>').appendTo($("tbody", mytable));
-			$('<p/>', {'text': this.status}).appendTo($('<TD/>').appendTo(row$));			
+			$('<p/>', {'text': 'pip:'}).appendTo($('<TD/>').appendTo(row$));			
+			$('<p/>', {'text': disp_pip(this.pip,this.pim) }).appendTo($('<TD/>').appendTo(row$));			
+
+			row$ = $('<TR/>', {'name':this.key}).appendTo($("tbody", mytable));
+			$('<p/>', {'text': 'switch on edit:'}).appendTo($('<TD/>').appendTo(row$));			
 			action$=$('<TD/>').appendTo(row$)
-			//debug(" EO.Render3 ");
 			if (this.status=="pending") {
 				$('<IMG/>', {'src': 'ptt/img/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
 					.appendTo(action$)
@@ -100,6 +106,11 @@ function EO(_idu,_order,_key) {
 						Pilototo.PILS[this.name].bascEdit();
 					});
 			}
+/*
+			row$ = $('<TR/>').appendTo($("tbody", mytable));
+			$('<p/>', {'text': this.status}).appendTo($('<TD/>').appendTo(row$));			
+*/
+			//debug(" EO.Render3 ");
 			return mytable;
 		}
 		EO.initialized=true;

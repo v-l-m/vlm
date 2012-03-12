@@ -7,6 +7,11 @@
 #tabs li .ui-icon-close {float:right ; margin: 0.4em 0.2em 0 0; cursor: pointer;}
 /* Own */  
 INPUT.small {width: 65px;}
+table.ptttitle{
+	width:415px; /*220*/
+	border:#909090 1px solid;
+}
+
 table.ptt{
 	width:260px; /*220*/
 	border:#909090 1px solid;
@@ -22,7 +27,6 @@ p { text-indent:2px; display:block; font-size: 11px;} /* color: darkgrey;*/
 p.help { text-align:left; text-indent:2px; font-size: 11px;} /* color: darkgrey;*/
 ul {margin-left: 1em; padding-left: 0.5em;}
 li {
-/*	border: 1px solid #000;*/
 	margin-left: 0;
 /*	padding-left: 1em;
 	text-indent: -1em;
