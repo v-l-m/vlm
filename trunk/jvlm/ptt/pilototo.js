@@ -188,7 +188,7 @@ function Pilototo(_orig,_json) {
 						Pilototo.PILS[order].pip, 
 						Pilototo.PILS[order].pim,
 						Pilototo.PILS[order].TTS);
-					if (Pilototo.PILS[order].status <> "done") {
+					if (Pilototo.PILS[order].status != 'done') {
 						myform$.dblclick( function (event) { 
 							//alert("DblClick on form : " + $(event.target).closest("form").get(0).name); 
 							//$(event.target).closest("form").get(0).name
