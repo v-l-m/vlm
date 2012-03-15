@@ -58,18 +58,8 @@ function EO(_idu,_order,_key) {
 			//hdg pour le pim=1, twa pour pim=2
 			//mytabletosw$ = $("#tabs-" + this.key + ">form>table>tbody");
 			$("tbody", this.myTb$).children().remove();
-			//pilototo_prog_upd
-/*
-			row$ = $('<TR/>', {'name':"ModHeader"}).appendTo($("tbody", this.myTb$));
-			$('<p/>', {'text': "Order " + this.TID}).appendTo($('<TD/>').appendTo(row$));			
-			$('<p/>', {'text': this.TTS}).appendTo($('<TD/>').appendTo(row$));	
-
-			row$ = $('<TR/>', {'name':"ModDetail"}).appendTo($("tbody", this.myTb$));
-			$('<p/>', {'text': "PIM : " + this.pim}).appendTo($('<TD/>').appendTo(row$));			
-			$('<p/>', {'text': this.pip}).appendTo($('<TD/>').appendTo(row$));	
-			//alert("bascule EDIT : " + this.TID + "-" + this.TTS);
-*/
 			//debug(_order.PIP);
+			$("thead>tr>th#bt", this.myTb$).children().remove();
 			EO.myGO.insertGO(this.myTb$,this.pim,eval(this.TTS),this.hdg, Pilototo.twac, this.wplat, this.wplon, this.hwp, true);
 			this.myTb$.closest("form").find(':input').addClass('ui-corner-all').css({'font-size': '11px'});
 
@@ -78,39 +68,29 @@ function EO(_idu,_order,_key) {
 
 		EO.prototype.render = function() {
 			//debug(" EO.Render1 ");
-			var mytable = Pilototo.initTable('Existing ' + this.status + ' order #' + this.TID);
+			var mytable = Pilototo.initTable(this.status + ' order #' + this.TID);
 			this.myTb$=mytable;
-			//debug(" EO.Render2 ");
 			row$ = $('<TR/>', {'name':this.key}).appendTo($("tbody", mytable));
-			//$('<p/>', {'text': this.TID}).appendTo($('<TD/>').appendTo(row$));
-			$('<p/>', {'text': 'tts:'}).appendTo($('<TD/>').appendTo(row$));			
 			var d = new Date(parseInt(this.TTS)*1000).toUTCString();
-			var mytts = $('<p/>', {'html': this.TTS + "<br/><i>" + d + "</i>"}).appendTo($('<TD/>').appendTo(row$));			
-			
-			row$ = $('<TR/>').appendTo($("tbody", mytable));
-			$('<p/>', {'text': 'pim:'}).appendTo($('<TD/>').appendTo(row$));			
-			$('<p/>', {'text': this.pim}).appendTo($('<TD/>').appendTo(row$));			
-			row$ = $('<TR/>').appendTo($("tbody", mytable));
-			$('<p/>', {'text': 'pip:'}).appendTo($('<TD/>').appendTo(row$));			
-			$('<p/>', {'text': disp_pip(this.pip,this.pim) }).appendTo($('<TD/>').appendTo(row$));			
+			var myp = $('<p/>', {'html': this.TTS, 'title':d}).appendTo($('<TD/>', {'colspan':'3'}).appendTo(row$));
+			myp.hover(function(){ helpin(mytable,this.title);},function(){$("tfoot>tr>th", mytable).find("p#Aide").remove();});
 
-			row$ = $('<TR/>', {'name':this.key}).appendTo($("tbody", mytable));
-			$('<p/>', {'text': 'switch on edit:'}).appendTo($('<TD/>').appendTo(row$));			
-			action$=$('<TD/>').appendTo(row$)
+			row$ = $('<TR/>').appendTo($("tbody", mytable));
+			myp=$('<p/>', {'text': disp_pip(this.pip,this.pim), 'title' : render_pip(this.pip,this.pim) }).appendTo($('<TD/>', {'colspan':'2'}).appendTo(row$));
+			myp.hover(function(){ helpin(mytable,this.title);},function(){$("tfoot>tr>th", mytable).find("p#Aide").remove();});
+
+			myp=$('<p/>', {'text': this.pim, 'title':GO.pimData[this.pim].Text}).appendTo($('<TD/>', {'colspan':'2'}).appendTo(row$));
+			myp.hover(function(){ helpin(mytable,this.title);},function(){$("tfoot>tr>th", mytable).find("p#Aide").remove();});
+
 			if (this.status=="pending") {
 				$('<IMG/>', {'src': 'ptt/img/imgupd.gif', 'name': this.TID, 'title':'Edit this element to modify order'})
-					.appendTo(action$)
+					.appendTo($("thead>tr>th#bt", mytable)) 
 					.css({'border': '2px dotted #fff'})
 					.hover(function(){ $(this).css({'border': '2px dotted red'}); }, function(){ $(this).css({'border': '2px solid #fff'});})
 					.bind("click", function(event) {
 						Pilototo.PILS[this.name].bascEdit();
 					});
-			}
-/*
-			row$ = $('<TR/>').appendTo($("tbody", mytable));
-			$('<p/>', {'text': this.status}).appendTo($('<TD/>').appendTo(row$));			
-*/
-			//debug(" EO.Render3 ");
+			} 
 			return mytable;
 		}
 		EO.initialized=true;

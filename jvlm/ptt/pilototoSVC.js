@@ -6,23 +6,37 @@ function alertModal(_msg , _code, _custom_error_string) {
 	$dialog.get(0).innerHTML="<p><span class=\"ui-icon ui-icon-circle-check\" style=\"float:left; margin:0 7px 50px 0;\"></p>An error occured.</span><p><b>" + _msg +"</b>.</p><p>" + _code + "</p><p>"+ _custom_error_string + "</p>";
 	$dialog.dialog('open');	
 }
+function htmlDecode(value){ 
+  return $('<div/>').html(value).text(); 
+}
+/*
+function htmlEncode(value){ 
+    if (value) {
+        return $('<div/>').text(value).html(); 
+    } else {
+        return '';
+    }
+}
+*/
 function debug(str) 
 {
 	$('<p/>', {text : str}).appendTo($("#tracezone"));
 }
-function helpin(table$,keyst) 
+function helpin(table$,sztext) 
 {
 	$("tfoot>tr>th", table$).find("p#Aide").remove();
-	$('<p/>', {id: 'Aide', name: 'Aide', html : VST.dico[keyst]})
+	$('<p/>', {id: 'Aide', name: 'Aide', html : sztext})
 		.addClass('ui-state-default ui-corner-all help')
 		.css({'font-size': '11px'})
 		.appendTo($("tfoot>tr>th", table$));
 }
 function helpout(keyst){
 	$("#helpzone").find("p#AideOut").remove();
-	$('<p/>', {id: 'AideOut', name: 'AideOut', html : VST.dico[keyst]})
+	//debug(VST.dico[keyst]);
+	//debug(htmlDecode(VST.dico[keyst]));
+	$('<p/>', {id: 'AideOut', name: 'AideOut', html : VST.dico[keyst]}) 
 		.addClass('ui-state-default ui-corner-all help')
-		.css({'font-size': '11px'})
+		.css({'font-size': '11px', 'width': '31em'})
 		.appendTo("#helpzone");
 }
 function pad(val)
@@ -68,17 +82,34 @@ function disp_pip(_pip,_pim) {
 	}
 	return(disppip);
 }
+function render_pip(_pip,_pim) {
+	var disppip='';
+	switch(_pim)
+	{
+		case '1' : 
+			disppip="HEADING:"+parseFloat(_pip);
+			break;
+		case '2':
+			disppip="WIND ANGLE:"+parseFloat(_pip);
+			break;
+		case '3': case'4': case '5' :
+			var reg=new RegExp("[,@]+", "g");
+			var elts=_pip.split(reg);
+			disppip = "LAT:"+parseFloat(elts[0])+"<br \/>LON:"+parseFloat(elts[1])+"<br \/>WPH:"+parseFloat(elts[2]);
+	}
+	return(disppip);
+}
 //GUI Order
 function GO() {
 	//pim constant 
-	GO.pimData = [
-	    { Text: "1:" + (VST.initialized?VST.dico["autopilotengaged"]:"Constant Heading"), Value: "1" },
-	    { Text: "2:" + (VST.initialized?VST.dico["constantengaged"]:"Constant Wind Angle"), Value: "2" },
-	    { Text: "3:" + (VST.initialized?VST.dico["orthoengaged"]:"Orthodromic pilot"), Value: "3"},
-	    { Text: "4:" + (VST.initialized?VST.dico["bestvmgengaged"]:"Best VMG"), Value: "4"},
-	    { Text: "5:" + (VST.initialized?VST.dico["vbvmgengaged"]:"VBVMG"), Value: "5"}];
-
-		// declares graphical component
+	GO.pimData = {
+	    "1":{ Text: "1:" + (VST.initialized?VST.dico["autopilotengaged"]:"Constant Heading"), Value: "1" },
+	    "2":{ Text: "2:" + (VST.initialized?VST.dico["constantengaged"]:"Constant Wind Angle"), Value: "2" },
+	    "3":{ Text: "3:" + (VST.initialized?VST.dico["orthoengaged"]:"Orthodromic pilot"), Value: "3"},
+	    "4":{ Text: "4:" + (VST.initialized?VST.dico["bestvmgengaged"]:"Best VMG"), Value: "4"},
+	    "5":{ Text: "5:" + (VST.initialized?VST.dico["vbvmgengaged"]:"VBVMG"), Value: "5"}};
+	//GO.pimDataParsed = $.parseJSON( GO.pimData );//JSON.parse(GO.pimData);
+	// declares graphical component
 	GO.ttsinput; GO.selPIM; GO.pipcell; GO.pipinput1; GO.pipinput2; GO.pipinput3;
 
 	if(typeof GO.initialized == "undefined") {
@@ -139,7 +170,7 @@ function GO() {
 			var datec = new Date(parseInt($(_tts).get(0))*1000);
 			var datea = pad(datec.getUTCDate()) + '/' + pad((datec.getUTCMonth() + 1 )) + '/' + datec.getUTCFullYear() + ' ' +
 						pad(datec.getUTCHours()) + ":" +  pad(datec.getUTCMinutes()) + ":" + pad(datec.getUTCSeconds());
-			cell$=$('<TD/>', {'class':'neworder','colspan':'2'}).appendTo(row$)
+			cell$=$('<TD/>', {'class':'neworder','colspan':'3'}).appendTo(row$)
 
 			//TTSnew
 			GO.ttsinput=$('<input/>', {'name': 'ttsinput', 'type': 'text', 'value': _tts})
@@ -154,17 +185,11 @@ function GO() {
 			GO.ttsinput.hover(
                		function(){ 
 					var d = new Date(parseInt($(this).val())*1000).toUTCString();
-					$("tfoot>tr>th", _tb).find("p#GMTTring").remove();
-					$('<p/>', {'id': 'GMTTring','name': 'GMTTring', 'text': d})
-						.addClass('ui-state-default ui-corner-all')
-						.css({'font-size': '11px'})
-						.appendTo($("tfoot>tr>th", _tb));
+					helpin(_tb,d);
 					//var $tableHeaders = $("thead > th", _tb).filter(":not([colspan]),[colspan='1']");					
 					helpout("pilototohelp3");
 				},
-				function(){ 
-					$("tfoot>tr>th", _tb).find("p#GMTTring").remove();
-					$("tfoot>tr>th", _tb).find("p#Aide").remove();
+				function(){  helpout(""); $("tfoot>tr>th", _tb).find("p#Aide").remove();
 				}
 			);
 			
@@ -172,12 +197,11 @@ function GO() {
 				.appendTo(cell$);
 			dt$.datetimepicker({showOn: "button",
 				buttonImage: "../externals/jscalendar/img.gif", buttonImageOnly: true,
-				defaultDate: datea,	showSecond: true, dateFormat: 'dd/mm/yy', timeFormat: 'hh:mm:ss', showButtonPanel: false	});
+				defaultDate: datea,	showSecond: true, dateFormat: 'dd/mm/yy', timeFormat: 'hh:mm:ss', showButtonPanel: false});
 			//debug(datea + "-" + datec.getUTCHours());
+
 			dt$.datetimepicker('setDate', datec );
 			//dt$.datetimepicker('setTime', datec );
-
-
 			//dt$.datetimepicker('setDate', (new Date()) );
 			dt$.bind("change", function(){ 
 				var reg=new RegExp("[/ :]+", "g");var elts=$(this).val().split(reg);
@@ -188,7 +212,7 @@ function GO() {
 			// PIM : 
 			row$ = $('<TR/>').appendTo($("tbody", _tb));
 			GO.selPIM = $('<select/>', {'name': 'mypim'})
-				.appendTo($('<TD/>', {'class':'neworder','colspan':'2'})
+				.appendTo($('<TD/>', {'class':'neworder','colspan':'3'})
 					.appendTo(row$));
 			$.each(GO.pimData, function(val, text) {
     				$('<option/>', {'id': text.Value, 'value': text.Value, 'html': text.Text, 'selected':(_pim==text.Value)}).appendTo(GO.selPIM);
@@ -198,18 +222,22 @@ function GO() {
 				GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);
 				GO.pipcell.find("input").addClass('ui-corner-all').css({'font-size': '11px'});
 			});
-			GO.selPIM.hover(function(){ helpout("pilototohelp4")},function(){ $("tfoot>tr>th", _tb).find("p#Aide").remove();})
+			GO.selPIM.hover(function(){ helpout("pilototohelp4")},function(){ helpout("")});
 
 			row$ = $('<TR/>').appendTo($("tbody", _tb));
 			// PIP
-			GO.pipcell = $('<TD/>', {'class':'neworder'}).appendTo(row$); 
-			GO.pipcell.hover(function(){ helpout("pilototohelp5")},function(){$("tfoot>tr>th", _tb).find("p#Aide").remove();})
+			GO.pipcell = $('<TD/>', {'class':'neworder','colspan':'3'}).appendTo(row$); 
+			GO.pipcell.hover(function(){ helpout("pilototohelp5")},function(){ helpout("")});
 
 
 			GO.prototype.renderPIM(_hdg, _twac, _wplat, _wplon, _hwp);
 			// ACTIONS	
-			img$=$('<IMG/>', {'src': (_bupdate ? 'ptt/img/actn022.gif' : 'ptt/img/imgplus.gif'), 'name': 'AddNewOrder', 'title': (VST.initialized?VST.dico["pilototo_prog_add"]:"Add the new order")})
-				.appendTo($('<TD/>', {'class':'neworder'}).appendTo(row$)); 
+			img$=$('<IMG/>', {
+					'src': (_bupdate ? 'ptt/img/actn022.gif' : 'ptt/img/imgplus.gif'), 
+					'name': 'AddNewOrder', 
+					'title': (VST.initialized?VST.dico[(_bupdate ? "pilototo_prog_upd":"pilototo_prog_add")]:(_bupdate ? "Modify the order":"Add the new order"))
+				}).appendTo($("thead>tr>th#bt", _tb)); 
+				//.appendTo($('<TD/>', {'class':'neworder'}).appendTo(row$)); 
 			img$.css({'border': '2px dotted #fff'})
 				.hover(
 					function(){ $(this).css({'border': '2px dotted lightgreen'}); }, //$(this).get(0).src='includes/actn046.gif';

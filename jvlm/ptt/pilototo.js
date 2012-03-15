@@ -37,12 +37,11 @@ function Pilototo(_orig,_json) {
 		$('<THEAD/>').appendTo(mytable);
 		$('<TR/>').appendTo($("thead", mytable));
 		$('<TH/>', {'colspan':'2','scope':'col'}).appendTo($("thead>tr", mytable));
+		$('<TH/>', {'id':'bt','scope':'col'}).css({'width':'20px'}).appendTo($("thead>tr", mytable));
 		$('<TFOOT/>').appendTo(mytable);
 		$('<TR/>').appendTo($("tfoot", mytable));
-		$('<TH/>', {'colspan':'2','scope':'col'}).appendTo($("tfoot>tr", mytable));
-		$('<P/>', {'id': 'whatsup','name': 'whatsup', 'text' : _str}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("thead>tr>th", mytable));
-// TODO A REMETTRE AUTRE PART
-//				$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")"}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("tfoot>tr>th", mytable));
+		$('<TH/>', {'colspan':'3','scope':'col'}).appendTo($("tfoot>tr", mytable));
+		$('<P/>', {'id': 'whatsup','name': 'whatsup', 'text' : _str}).addClass('ui-state-default ui-corner-all').css({'font-size': '11px'}).appendTo($("thead>tr>th:first", mytable));
 		$('<TBODY/>').appendTo(mytable);
 		return mytable;
 	}
@@ -108,13 +107,14 @@ function Pilototo(_orig,_json) {
 		$(_orderHTMLElement).find("tbody>tr>td>input").addClass('ui-corner-all').css({'font-size': '11px'});
 		$(_orderHTMLElement).find("tbody>tr>td>select").addClass('ui-corner-all').css({'font-size': '11px'});
 		$(_orderHTMLElement).find("tbody>tr>td>p").addClass('ui-corner-all').css({'font-size': '11px'});
-		var divform$=$('<FORM/>', {'name':idx, 'action':"javascript:"});
+		var divform$=$('<FORM/>', {'name':idx, 'action':"javascript:"}).css({'margin': '0px', 'padding': '0px', 'height': '8em'});
+		//STYLE="margin: 0px; padding: 0px;"
 		divform$.append(_orderHTMLElement);
 		var mysubmit$ = $('<input/>',{'type':'submit'}).appendTo(divform$);
 		if ($.browser.msie) {
 			mysubmit$.css({'height': '0px', 'width': '0px'}); //mysubmit$.css({'display':'none'});
 		} else {
-			mysubmit$.css({'visibility': 'hidden'}); //mysubmit$.css({'display': 'none'});
+			mysubmit$.css({'visibility': 'hidden', 'height':'0.1em'}); //mysubmit$.css({'display': 'none'});
 		}
 		//debug(" > divtab3 ");
 
@@ -141,7 +141,7 @@ function Pilototo(_orig,_json) {
 			$('<TBODY/>').appendTo(tbtitle);
 			$('<TR/>').appendTo($("tbody", tbtitle));
 			var tdtitle = $('<TD/>', {'id': 'tdtitle'}).appendTo($("tbody>tr", tbtitle));
-			p$=$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'text' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"V-L-M pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")  "}).css({'font-size': '11px'}).appendTo(tdtitle);
+			p$=$('<P/>', {'id': 'GMTTring','name': 'GMTTring', 'html' : (VST.initialized?VST.dico["VLM Programmable Auto Pilot"]:"JVLM pilototo") + " for " + Pilototo.nom + " (" + Pilototo.idu + ")  "}).css({'font-size': '11px'}).appendTo(tdtitle);
 			var tdhelper = $('<TD/>', {'id': 'tdhelper'}).appendTo($("tbody>tr", tbtitle));
 			img$=$('<IMG/>', {'src': 'ptt/img/actn045.gif', 'name': 'ViewHelper', 'title': "helper"}).appendTo(tdhelper); 
 			img$.bind("click", function(event) {
@@ -151,9 +151,6 @@ function Pilototo(_orig,_json) {
 					$("DIV#helpzone").hide("fast");
 				}
 			});
-
-			
-			// TODO : mais quoi ??
 		}
 		
 		// display du pilototo et de ses MAX5 elements
@@ -217,14 +214,16 @@ function Pilototo(_orig,_json) {
 			//debug("into render step2");
 
 			// UI JQuery Tabs
-			Pilototo.myPttDivTab.tabs({event: "mouseover"});
+			// abandonné c'est moche finalement : Pilototo.myPttDivTab.tabs({event: "mouseover"});
 			Pilototo.myPttDivTab.tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
 			Pilototo.myPttDivTab.tabs().children('ul').children('li').removeClass('ui-corner-top').addClass('ui-corner-left');
 
-			//positionne l'index sur le new order ... to be fixed if existing (<5)
-			Pilototo.myPttDivTab.tabs('select', '#tabs-new');
-			//un peu de confort 
-			$(":input:visible:first").focus();
+			//positionne l'index sur le new order
+			if (_json["PIL"].length<5) {
+				Pilototo.myPttDivTab.tabs('select', '#tabs-new');
+				//un peu de confort 
+				$(":input:visible:first").focus();
+			}
 		}
 
 
