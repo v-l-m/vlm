@@ -108,12 +108,23 @@ class GeovoileTree(object):
                 except :
                     boats[rid]['name'] = "%s" % boats[rid]['sail']
         return boats
+
+    def strptime(self, strtime):
+        """Convert geovoile string time to epoch"""
+        from calendar import timegm
+        return int(timegm(time.strptime(strtime, "%Y/%m/%d %H:%M:%SZ")))
     
     def timezero(self, offset = 0):
+        """Try to compute timezero (for tracks)"""
+        timezero = 0
         try:
-           return int(self.tree.getroot().attrib['timezero'])+offset
+            if self.tree.getroot().attrib.has_key('timezero'):
+                timezero = int(self.tree.getroot().attrib['timezero'])+offset
+            if self.tree.getroot().attrib.has_key('date'):
+                timezero = self.strptime(self.tree.getroot().attrib['date'])+offset
         except :
-           return 0
+           print "oops"
+        return offset+timezero
 
     def tracks(self, path = ".//track", tagid = 'boatid'):
         tracks = []
