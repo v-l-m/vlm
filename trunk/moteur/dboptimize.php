@@ -16,12 +16,14 @@ $engine_start=microtime(true);
 
 echo "\n1- === OPTIMIZE TABLES ===\n";
 // we avoid coastline_* and histpos
-$alltables = array("admin_changelog", "auto_pilot", "flags", "modules_status",
-		   "players", "players_pending", "playerstousers",
-		   "positions", "races", "races_instructions", "races_ranking",
-		   "races_results", "races_waypoints", "racesmap", "updates",
-		   "user_action", "user_prefs", "users", 
-		   "waypoints", "waypoints_crossing");
+$alltables = array(
+       "admin_changelog", "auto_pilot", "flags", "modules_status", "news",
+       "players", "players_pending", "playerstousers",
+       "positions", "races", "races_instructions", "races_ranking",
+       "races_results", "races_waypoints", "racesgroups", "racesmap", "racespreview", "racestogroups", "updates",
+       "user_action", "user_prefs", "users", 
+       "waypoints", "waypoints_crossing"
+       );
 
 foreach ($alltables as $table) {
   $opt_start = microtime(true); 
