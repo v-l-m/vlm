@@ -49,37 +49,67 @@ function Pilototo(_orig,_json) {
 	function createDivTab(_idu) {
 		var divtabs = $('<DIV/>', {'id': 'tabs'}).appendTo("#pttzone");
 		$('<UL/>').appendTo(divtabs);
+
 		return divtabs;
 	}
 	function addToDivTab(idx,_orderHTMLElement,_status,_pip,_pim,_TTS) {
 		//debug(" > divtab0 ");
-		var liN = $('<LI/>').appendTo(Pilototo.myPttDivTab.find("ul"));
+		var liN = $('<LI/>', {'id':idx}).appendTo(Pilototo.myPttDivTab.find("ul"));
+		liN.bind('keydown', function (e) {
+			var selectedTab = Pilototo.myPttDivTab.tabs().tabs('option', 'selected');
+			var nbtab = Pilototo.myPttDivTab.tabs("length");
+			switch (e.which) {
+				case 39:
+					//debug('right arrow on ' + Pilototo.myPttDivTab.tabs('option', 'selected')); //div id="tabs-"+id
+					if (selectedTab<_json["PIL"].length) Pilototo.PILS[_json["PIL"][selectedTab].TID].bascEdit();
+					e.preventDefault();
+					$(":input:visible:first").focus();
+					break;
+				case 40:
+					if (selectedTab<nbtab-1) {
+						Pilototo.myPttDivTab.tabs('select', selectedTab + 1);
+					} else {
+						Pilototo.myPttDivTab.tabs('select', 0);
+					}
+					break;
+				case 38:
+					if (selectedTab==0) {
+						Pilototo.myPttDivTab.tabs('select', nbtab-1);
+					} else {
+						Pilototo.myPttDivTab.tabs('select', selectedTab-1);
+					}
+					break;
+				default:
+					console.log(e.which + ' wrong on ' + selectedTab);
+			} 
+		});
+
 		var myLabel;
 		//debug(" > divtab1 ");
 		switch (_status) {
-				case "pending" :
-					var myDiff = parseInt(_TTS)-Pilototo.TTS;
-					var myDisp;
-					var nbDay=parseInt(myDiff/86400);
-					myDiff -= nbDay*86400;
-					var nbHour=parseInt(myDiff/3600);
-					myDiff -= nbHour*3600;
-					var nbMin=parseInt(myDiff/60);
-					var nbSec=myDiff%60;
-					myDisp=(nbDay>0?nbDay+'d':'') + (nbHour>0?nbHour+'h':'') + (nbMin>0?nbMin+'\'':'') + (nbSec>0?nbSec+'\'\'':'');		
-					myLabel= (myDisp !='' ? myDisp : '-late order-'); 
-					break;
-				case "done" : 
-					myLabel="Done";
-					break;
-				case "new" :
-					myLabel="New order";
-					break;
-				default :
-					myLabel="??";
+			case "pending" :
+				var myDiff = parseInt(_TTS)-Pilototo.TTS;
+				var myDisp;
+				var nbDay=parseInt(myDiff/86400);
+				myDiff -= nbDay*86400;
+				var nbHour=parseInt(myDiff/3600);
+				myDiff -= nbHour*3600;
+				var nbMin=parseInt(myDiff/60);
+				var nbSec=myDiff%60;
+				myDisp=(nbDay>0?nbDay+'d':'') + (nbHour>0?nbHour+'h':'') + (nbMin>0?nbMin+'\'':'') + (nbSec>0?nbSec+'\'\'':'');		
+				myLabel= (myDisp !='' ? myDisp : '-late order-'); 
+				break;
+			case "done" : 
+				myLabel="Done";
+				break;
+			case "new" :
+				myLabel="New order";
+				break;
+			default :
+				myLabel="??";
 		}			
 		//debug(" > divtab2 ");
-		var monA=$('<A/>', {'href': '#tabs-' + idx.toString(), 'text': myLabel}).appendTo(liN);
+		var monA=$('<A/>', {'href': '#tabs-' + idx.toString(), 'text': myLabel,'id':'a-'+idx}).appendTo(liN);
 		if (_status!="new"){
 			monRem$=$('<SPAN/>', {'class':'ui-icon', 'TID':idx.toString()});
 			monRem$.addClass("ui-icon-close");
@@ -214,7 +244,7 @@ function Pilototo(_orig,_json) {
 			//debug("into render step2");
 
 			// UI JQuery Tabs
-			// abandonné c'est moche finalement : Pilototo.myPttDivTab.tabs({event: "mouseover"});
+			// Pilototo.myPttDivTab.tabs({event: "mouseover"}); //abandonné c'est moche finalement 
 			Pilototo.myPttDivTab.tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
 			Pilototo.myPttDivTab.tabs().children('ul').children('li').removeClass('ui-corner-top').addClass('ui-corner-left');
 
@@ -224,6 +254,19 @@ function Pilototo(_orig,_json) {
 				//un peu de confort 
 				$(":input:visible:first").focus();
 			}
+			else {
+				console.log('first is ' + _json["PIL"][0].TID); //div id="tabs-"+id
+				Pilototo.myPttDivTab.tabs('select', 0);
+				$(Pilototo.myPttDivTab.find('A'),':first').focus();
+			}
+			Pilototo.myPttDivTab.bind('keydown', function (e) {
+				if ((e.which) == 36) {
+					//alert('home sweet home');
+					Pilototo.myPttDivTab.tabs('select', 0);
+					$(Pilototo.myPttDivTab.find('A'),':first').focus();
+
+				};
+			});
 		}
 
 
