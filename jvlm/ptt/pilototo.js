@@ -80,7 +80,7 @@ function Pilototo(_orig,_json) {
 					}
 					break;
 				default:
-					console.log(e.which + ' wrong on ' + selectedTab);
+					//console.log(e.which + ' wrong on ' + selectedTab);
 			} 
 		});
 
@@ -255,7 +255,7 @@ function Pilototo(_orig,_json) {
 				$(":input:visible:first").focus();
 			}
 			else {
-				console.log('first is ' + _json["PIL"][0].TID); //div id="tabs-"+id
+				//console.log('first is ' + _json["PIL"][0].TID); //div id="tabs-"+id
 				Pilototo.myPttDivTab.tabs('select', 0);
 				$(Pilototo.myPttDivTab.find('A'),':first').focus();
 			}
