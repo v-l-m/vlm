@@ -23,7 +23,7 @@ GRIB_MAX_TIME=$VLM_GRIB_MAX_TIME
 
 LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
-NOAA_SERVICE_URI=http://www.ftp.ncep.noaa.gov/data/nccf/com/gfs/prod
+NOAA_SERVICE_URI=http://nomads.ncep.noaa.gov/data/nccf/com/gfs/prod
 
 if [ $GRIB_MAX_TIME -lt 12 ]; then
     echo "GRIB_MAX_TIME must be > 12"
