@@ -23,7 +23,8 @@ GRIB_MAX_TIME=$VLM_GRIB_MAX_TIME
 
 LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
-NOAA_SERVICE_URI=http://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod
+NOAA_SERVICE_MAIN_URI=http://www.ftp.ncep.noaa.gov/data/nccf/com/gfs/prod
+NOAA_SERVICE_BACKUP_URI=http://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod
 
 if [ $GRIB_MAX_TIME -lt 12 ]; then
     echo "GRIB_MAX_TIME must be > 12"
@@ -68,12 +69,25 @@ for TSTAMP in `echo $allindexes` ; do
     GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
     let retry=1
     while [ $retry -gt 0 ]; do
-      wget --waitretry 600 -nc -c ${NOAA_SERVICE_URI}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
+      wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
       let retry=$?
       if [ $retry -gt 0 ] ; then 
         sleep 30
       fi
     done
+    if [ $retry == 4 ]; then
+      while [ $retry -gt 0 ]; do
+        wget --waitretry 600 -nc -c ${NOAA_SERVICE_BACKUP_URI}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
+        let retry=$?
+        if [ $retry -gt 0 ] ; then
+          sleep 30
+        else
+	  let serv=${NOAA_SERVICE_BACKUP_URI}
+          NOAA_SERVICE_BACKUP_URI=${NOAA_SERVICE_MAIN_URI}
+          NOAA_SERVICE_MAIN_URI=$serv
+        fi
+      done
+    fi
     echo  $DAT $GRIBFILE downloaded... >> $LOG 2>&1
     cnvgrib -g21 $GRIBFILE $GRIBFILE.grib1
     echo $GRIBFILE converted >> $LOG 2>&1
