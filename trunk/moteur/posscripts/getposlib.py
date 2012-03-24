@@ -75,6 +75,27 @@ def basedatas(boats, firstid):
     return {'vlmid' : -vlmboatidfirst-int(rid)}
     """
 
+class CsvPositions(object):
+    def __init__(self, url, basefilename, delimiter=';', quotechar='"'):
+        super(CsvPositions, self).__init__()
+        self.csv = self.url2csv(url, basefilename, delimiter, quotechar)
+
+    def url2csv(self, url, basefilename, delimiter, quotechar):
+        """Récupère une url et charge le csv"""
+        import csv
+        vlmtmp = vlm_get_tmp()
+        pathcsv = os.path.join(vlmtmp, basefilename+".tmp.csv")
+        urllib.urlretrieve(url, pathcsv)
+
+        return csv.reader(open(pathcsv, 'rb'), delimiter=delimiter, quotechar=quotechar)
+
+    def strptime(self, strtime):
+        """Convert string time to epoch"""
+        from calendar import timegm
+        return int(timegm(time.strptime(strtime, "%Y/%m/%d %H:%M:%S")))
+
+
+
 class GeovoileTree(object):
     def __init__(self, url, basefilename, suffix = 'static'):
         super(GeovoileTree, self).__init__()
