@@ -95,11 +95,11 @@ $opts['fdd']['country'] = array(
 
 $opts['fdd']['engaged'] = array(
   'name'     => 'Engaged',
-  'help'     => 'Race the boat is engaged to',
+  'help'     => 'Race the boat is engaged to - USE WITH CAUTION',
   'select'   => 'T',
   'escape'   => true,
   'options'  => 'LACDPVF',
-  'input'    => 'R',
+//  'input'    => 'R',
   'maxlen'   => 12,
   'sort'     => true
 );
