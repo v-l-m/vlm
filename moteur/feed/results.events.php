@@ -16,9 +16,7 @@
                      "FROM `races_results` RR LEFT JOIN `races` R ON (R.idraces = RR.idraces) LEFT JOIN `users` U ON (RR.`idusers` = U.`idusers`) ".
                      "WHERE R.`idraces` = '".$this->idraces."' ".
                      "AND `position` = 1 ".
-#                     "AND ABS(`duration` + RR.`deptime` - ".$this->now." ) < ".$this->timedelta." ".
                      "ORDER BY `duration` ASC LIMIT 4";
-#            print "$query\n";
             $res = $this->queryRead($query);
             
             $c = 0;
