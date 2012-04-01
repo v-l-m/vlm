@@ -4,19 +4,22 @@
     include_once ("functions.php");
     
     $polarlist = get_polar_list_array();
-    print_r($polarlist);
-    $defpolar = $polarlist[0];
-    die();
+    $insql = "( ";
+    foreach ($polarlist as $p) {
+        $insql .= "'boat_$p', ";
+    }
+    $insql .= "'bidon' )";
+    $defpolar = "boat_".$polarlist[0];
         
     if (get_cgi_var("action") == "go" and get_cgi_var('confirm') == "on" ) {
-        wrapper_mysql_db_query_writer("DELETE FROM players_pending WHERE updated < DATE_SUB(NOW(), INTERVAL $pending_limit DAY)");
-        insertAdminChangelog(Array("operation" => "Deleting too old pending players"));
+        wrapper_mysql_db_query_writer("UPDATE users SET boattype = '$defpolar' WHERE boattype NOT IN $insql");
+        insertAdminChangelog(Array("operation" => "Fix unknown polars"));
 
         echo "<h3>Done, following results should be empty.</h3>";
     }
-    $query  = "SELECT email, playername, updated AS `request date` ";
-    $query .= "FROM players_pending ";
-    $query .= "WHERE updated < DATE_SUB(NOW(), INTERVAL $pending_limit DAY)";
+    $query  = "SELECT idusers, username, trim(boatname), engaged, boattype ";
+    $query .= "FROM users ";
+    $query .= "WHERE boattype NOT IN $insql";
     htmlQuery($query);
 ?>
         <form action="#" method="post">
