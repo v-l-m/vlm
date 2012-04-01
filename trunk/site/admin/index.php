@@ -90,6 +90,7 @@
         "boats_with_more_than_one_owner.report.php" => "Boats with more than one owner",
         "boats_without_owner.report.php" => "Boats without owner",
         "boats_with_boatsitter_but_without_owner.report.php" => "Boats with boatsitter(s) but without owner",
+        "boats_with_strange_polar.report.php" => "Boats engaged with strange polar",
 
         );
 
@@ -101,6 +102,7 @@
         "strange_unknown_flag.php"          => "Boat with Unknown flag.",
         "players_pending_for_too_much_time.fixreport.php" => "Players pending for too much time",
         "players_without_boat.report.php" => "Players without boats for too much time",
+        "boats_with_unknown_polar.fixreport.php" => "Boats with unknown polar",
         );
     
     adminlistbox($strangepages, "Report & fix [Use with caution to fix inconsistencies]");
