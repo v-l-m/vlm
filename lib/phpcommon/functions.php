@@ -526,6 +526,35 @@ function get_polar_list_array() {
     return $boat_polar;
 }
 
+/* Retrieve polarlist id */
+function get_polar_id_array() {
+    $boat_polar = array();
+
+    foreach (get_polar_list_array() as $p) {
+        $boat_polar[] = get_polar_name2id($p);
+    }
+
+    return $boat_polar;
+}
+
+/* polar name to polar id (filename without extension) */
+function get_polar_name2id($p) {
+    return "boat_$p";
+}
+
+/* polar name to polar csv */
+function get_polar_name2csv($p) {
+    return get_polar_name2id($p).".csv";
+}
+
+function speedchart_link($pname, $type = 'www') {
+    return "/speedchart.php?boattype=".get_polar_name2id($pname)."&amp;format=$type";
+}
+
+function get_polar_id2name($boattype) {
+    return substr($boattype, 5);
+}
+
 /*in the grib file, collect the date (like 04 09 17 00 00 = 23rd sept
   midnight GMT) and the forecast interval (00 for now data, 0c for 12 hours)
   return an unix timestamp
@@ -1115,7 +1144,7 @@ function htmlIdracesLink($idraces) {
 
 function htmlBoattypeLink($boattype) {
     $boattypename = strtoupper(preg_replace('/^.*_/', '' ,$boattype));
-    return sprintf("<a href=\"/speedchart.php?boattype=%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", $boattype, $boattypename);
+    return sprintf("<a href=\"%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", speedchart_link($boattypename), $boattypename);
 }
 
 function htmlRacenameLink($idraces, $racename, $started) {
@@ -1291,7 +1320,7 @@ function createBoat($log, $pass, $mail, $boatname = 'boat') {
   $color = random_hex_color();
   $query3 = "INSERT INTO `users` ( `boattype` , `username` , `password` , `email`,"
     ."`boatname`, `color`, `boatheading`, `pilotmode`, `engaged`, `country` )"
-    ."VALUES ( 'boat_imoca60', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '$color', '0', '1', '0', '00-UN')";
+    ."VALUES ( '".get_polar_name2id("imoca60")."', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '$color', '0', '1', '0', '00-UN')";
   $result3 = wrapper_mysql_db_query_writer($query3);//or die("Query [$query3] failed \n");
 
   //is there another solution than reread from db?

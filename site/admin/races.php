@@ -20,20 +20,7 @@ $opts['sort_field'] = array('-deptime');
 
 /* Fields def. helpers */
 
-//suboptimal, should not be done for each load of the page but only when allowing to change something
-$dir = "../".DIRECTORY_POLARS ; 
-$dh  = opendir($dir);
-$select_list="";
-while (false !== ($filename = readdir($dh))) {
-    if ( !is_dir("$dir/$filename") and ($filename != ".") and ($filename != "..")) {
-        //Taking only files
-        $keypolar =  substr($filename, 0, -4);
-        $list_polars[$keypolar] = substr($keypolar, 5); 
-//        print $filename;
-    }
-}
-asort($list_polars);
-closedir($dh);
+$list_polars = get_polar_id_array();
 
 //suboptimal, should not be done for each load of the page but only when allowing to change something
 
@@ -150,7 +137,7 @@ $opts['fdd']['startlong'] = array(
 $opts['fdd']['boattype'] = array(
   'name'     => 'Boat type',
   'select'   => 'D',
-  'values2'  => $list_polars,
+  'values'  => $list_polars,
   'maxlen'   => 255,
   'sort'     => true
 );

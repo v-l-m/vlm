@@ -3,13 +3,13 @@
     include ("htmlstart.php");
     include_once ("functions.php");
     
-    $polarlist = get_polar_list_array();
+    $polarlist = get_polar_id_array();
     $insql = "( ";
     foreach ($polarlist as $p) {
-        $insql .= "'boat_$p', ";
+        $insql .= "'$p', ";
     }
     $insql .= "'bidon' )";
-    $defpolar = "boat_".$polarlist[0];
+    $defpolar = $polarlist[0];
         
     if (get_cgi_var("action") == "go" and get_cgi_var('confirm') == "on" ) {
         wrapper_mysql_db_query_writer("UPDATE users SET boattype = '$defpolar' WHERE boattype NOT IN $insql");
