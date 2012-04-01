@@ -108,6 +108,7 @@ $opts['fdd']['boattype'] = array(
   'name'     => 'Boat type',
   'help'     => 'Type of the boat',
   'select'   => 'T',
+  'values'   => get_polar_id_array(),
   'escape'   => true,
   'options'  => 'ACDPVF',
   'maxlen'   => 20,

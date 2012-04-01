@@ -1,6 +1,7 @@
 <?php
 include_once('config.php');
 include_once('vlmc.php');
+include_once("functions.php");
 
 $current_time = time();
 $PAGETITLE="Polars status check";
@@ -28,13 +29,13 @@ $nb_polars = get_nb_polars_context($temp_vlmc_context);
 for ($i=0; $i<$nb_polars; $i++) {
   echo "  <tr>\n";
   $pname = get_polar_name_index_context($temp_vlmc_context, $i); 
-  echo "    <td class=\"racename\"><a href=\"/speedchart.php?boattype=".$pname."\">";
+  echo "    <td class=\"racename\"><a href=\"".speedchart_link($pname, "www")."\">";
   echo "".$pname."</a></td>\n";
   echo "    <td><a href=\"".DOC_SERVER_URL.$pname."\">";
   echo "Wiki</a></td>\n";
-  echo "    <td><a href=\"/speedchart.php?format=pol&amp;boattype=".$pname."\">";
+  echo "    <td><a href=\"".speedchart_link($pname, "pol")."\">";
   echo "(pol)</a></td>\n";
-  echo "    <td><a href=\"/Polaires/boat_".$pname.".csv\">(csv)</a></td>\n";
+  echo "    <td><a href=\"/Polaires/".get_polar_name2csv($pname)."\">(csv)</a></td>\n";
   echo "  </tr>\n";
 }
 shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);  

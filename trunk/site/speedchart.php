@@ -3,8 +3,8 @@
     include_once("functions.php");
 
     $noHeader = get_cgi_var('noHeader', 'no');
-    $boattype = get_cgi_var('boattype', 'boat_Class40');
-    $boattypeshort = substr($boattype, 5);
+    $boattype = get_cgi_var('boattype', get_polar_name2id('Class40'));
+    $boattypeshort = get_polar_id2name($boattype);
     $format   = get_cgi_var('format', 'www');
 
     include_once("config.php");
@@ -101,9 +101,9 @@
       ';
         echo "<h3>";
         echo "<a href=\"".DOC_SERVER_URL.$boattypeshort."\">".$boattypeshort."</a>";       
-        echo " - <a href=\"/speedchart.php?boattype=".$boattype."&amp;format=xml\">(xml)</a>";
-        echo " - <a href=\"/speedchart.php?boattype=".$boattype."&amp;format=pol\">(pol)</a>";
-        echo " - <a href=\"/Polaires/boat_".$boattypeshort.".csv\">(csv)</a>";
+        echo " - <a href=\"".speedchart_link($boattypeshort, "xml")."\">(xml)</a>";
+        echo " - <a href=\"".speedchart_link($boattypeshort, "pol")."\">(pol)</a>";
+        echo " - <a href=\"/Polaires/".get_polar_name2csv($boattypeshort)."\">(csv)</a>";
         echo "</h3><p>";
         
         $pas=15;
