@@ -15,7 +15,7 @@ def baseboat(rid):
     vlmboatidfirst = 1200
     return {'vlmid' : -vlmboatidfirst-int(rid)}
     
-vlmidrace = 20120318
+vlmidrace = 20120422
 vlmusernameprefix = "VOR2012_"
 basefilename = "vor%d" % vlmidrace
 geotree = gp.GeovoileTree("http://volvooceanrace.geovoile.com/2011/shared/data/leg6.static.hwz", basefilename)
