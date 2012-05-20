@@ -25,7 +25,7 @@ timezero = 1337544000 #geotree.timezero() #FIXME (20 may 2012 - 20:00:00 GMT)
 
 boats = geotree.boats()
 
-geotree = gp.GeovoileTree("http://volvooceanrace.geovoile.com/2011/shared/data/leg6.update.hwz", basefilename+"update")
+geotree = gp.GeovoileTree("http://volvooceanrace.geovoile.com/2011/shared/data/leg7.update.hwz", basefilename+"update")
 
 for rid in boats.keys() :
     bb = baseboat(int(rid))
