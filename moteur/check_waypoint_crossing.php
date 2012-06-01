@@ -24,7 +24,7 @@ $wp_xinglong  = new doublep();
 
 // if we crossed the coast, get the crossing point and not the computed
 // point (as it can hide a potential waypoint xing)
-if ($crosses_the_coast) {
+if ($crosses_the_coast && $fullRacesObj->races->isLastWPIdx($fullUsersObj->users->nw)) {
   $latCheck = doublep_value($coast_xinglat);
   $lonCheck = doublep_value($coast_xinglong);
 } else {
