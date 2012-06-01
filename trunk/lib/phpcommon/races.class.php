@@ -99,6 +99,9 @@ class races {
     return count($this->waypoints);
   }
 
+  function isLastWPIdx($idwp) {
+    return ($idwp == count($this->waypoints));
+  }
 
   // ====================================================
   // returns an array of 2 points (lat1,long1,lat2,long2) 
