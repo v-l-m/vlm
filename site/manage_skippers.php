@@ -164,6 +164,7 @@
     echo "<tr><th colspan=\"2\">".getLocalizedString("idplayer")."</th><th>".getLocalizedString("linktype")."</th><th colspan=\"2\">".getLocalizedString("login_id")."</th><th>".ucfirst(getLocalizedString("action"))."</tr>";
     foreach ($grantlist as $rel) {
         $p = getPlayerObject($rel['idplayers']);
+        if (is_null($p)) continue; #protect against bad idp
         $u = getUserObject($rel['idusers']);
         echo "<tr>";
         echo "<td>".$p->htmlIdplayersPlayername()."</td>";
