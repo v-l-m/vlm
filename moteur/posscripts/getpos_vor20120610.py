@@ -21,7 +21,7 @@ basefilename = "vor%d" % vlmidrace
 geotree = gp.GeovoileTree("http://volvooceanrace.geovoile.com/2011/shared/data/leg8.static.hwz", basefilename)
 coordfactor = geotree.factors()
 
-timezero = 1339336800 #geotree.timezero() #FIXME (10 jun 2012 - 14:00:00 GMT)
+timezero = 0# 1339336800 #geotree.timezero() #FIXME (10 jun 2012 - 14:00:00 GMT)
 
 boats = geotree.boats()
 
