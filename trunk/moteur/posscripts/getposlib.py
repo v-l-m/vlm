@@ -55,6 +55,15 @@ def unzipurl(url, basefilename, suffix = 'static'):
     unzip_file_into_dest(statichwz, staticxml)
     return staticxml
 
+def geturl(url, basefilename, suffix = 'static'):
+    """Récupère une url et renvoie le nom temporaire"""
+    vlmtmp = vlm_get_tmp()
+    tmpxml = os.path.join(vlmtmp, basefilename+"."+suffix+".tmp.xml")
+
+    urllib.urlretrieve(url, tmpxml)
+    return tmpxml
+
+
 def sqlusers(boats, engaged):
     for rid in boats.keys() :
         print "INSERT INTO `users` (idusers, username, boatname, engaged) VALUES (%d, \"%s\", \"%s\", %d);" % (-boats[rid]['vlmid'], boats[rid]['vlmusername'], boats[rid]['vlmboatname'], engaged)
@@ -93,7 +102,6 @@ class CsvPositions(object):
         """Convert string time to epoch"""
         from calendar import timegm
         return int(timegm(time.strptime(strtime, "%Y/%m/%d %H:%M:%S")))
-
 
 
 class GeovoileTree(object):
@@ -148,6 +156,54 @@ class GeovoileTree(object):
         return offset+timezero
 
     def tracks(self, path = ".//track", tagid = 'boatid'):
+        tracks = []
+        for outline in self.tree.findall(path):
+            l = outline.text.split(';')
+            lat, lon, t = 0., 0., 0
+            rid = int(outline.attrib[tagid])
+            for i in l:
+                tup = i.split(',')
+                lat += float(tup[0])
+                lon += float(tup[1])
+                t += int(tup[2])
+                pos = [rid, t, lat, lon]
+                tracks.append(pos)
+        return tracks
+        
+class AddvisoTree(object):
+    def __init__(self, url, basefilename, suffix = 'positions'):
+        super(AddvisoTree, self).__init__()
+        self.tree = self.url2xml(url, basefilename, suffix)
+    
+    def url2xml(self, url, basefilename, suffix = 'static'):
+        """Récupère une url  et charge le treexml"""
+        fn = geturl(url, basefilename, suffix)
+        return ElementTree.parse(fn)
+    
+    def factors(self):
+        """Récupère le facteur de conversion des coordonnées"""
+        return 1.
+
+    def boats(self, boats = {}):
+        for outline in self.tree.findall("./pollings/sk"):
+            rid = outline.attrib['sp']
+            boats[rid] = outline.attrib
+            if not boats[rid].has_key('name') :
+                boats[rid]['name'] = boats[rid]['bat']
+        return boats
+
+    def strptime(self, strtime):
+        """Convert string time to epoch"""
+        from calendar import timegm
+        return int(timegm(time.strptime(strtime, "%Y/%m/%d %H:%M:%SZ")))
+    
+    def timezero(self, offset = 0):
+        """Try to compute timezero (for tracks)"""
+        timezero = 0
+        return offset+timezero
+
+    def tracks(self, path = ".//track", tagid = 'boatid'):
+        #FIXME
         tracks = []
         for outline in self.tree.findall(path):
             l = outline.text.split(';')
