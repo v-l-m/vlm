@@ -194,12 +194,13 @@ class AddvisoTree(object):
 
     def strptime(self, strtime):
         """Convert string time to epoch"""
-        from calendar import timegm
-        return int(timegm(time.strptime(strtime, "%Y/%m/%d %H:%M:%SZ")))
+        ts = time.strptime(strtime, "%A %d %b %H:%M")
+        return int(time.mktime((2012, ts.tm_mon, ts.tm_mday, ts.tm_hour, ts.tm_min, 0, ts.tm_wday, ts.tm_yday, 0)))
     
     def timezero(self, offset = 0):
         """Try to compute timezero (for tracks)"""
-        timezero = 0
+        p = self.tree.findall("./pollings")
+        timezero = self.strptime(p[0].attrib['dt'])
         return offset+timezero
 
     def tracks(self, path = ".//track", tagid = 'boatid'):
