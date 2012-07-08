@@ -37,6 +37,6 @@ tfv = Tfv2012(etape = 509372) #509372">Dieppe - St Cast - Parcours 1
 tfv.fill()
 
 #Envoie les tracks
-tfv.printTracks()
-#tfv.printSqlBoats()
+#tfv.printTracks()
+tfv.printSqlBoats()
 

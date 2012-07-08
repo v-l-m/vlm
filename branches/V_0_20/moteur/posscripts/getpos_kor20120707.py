@@ -32,7 +32,7 @@ coordfactor = addvisotree.factors()
 import locale
 locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
 
-timezero = addvisotree.timezero(3600) #GMT Offset 1341680400 #addvisotree.timezero() #FIXME 07/07/2012 - 17:00 GMT
+timezero = addvisotree.timezero() #GMT Offset 1341680400 #addvisotree.timezero() #FIXME 07/07/2012 - 17:00 GMT
 
 boats = addvisotree.boats()
 
