@@ -110,8 +110,8 @@ class VlmHttp(VlmObject):
         if get != "":
             get = "?"+get
         if debug :
-            print url
-            print get
+            print(url)
+            print(get)
         page = self._urlopen(url+get,post)
         data = page.readlines()
         data = ' '.join(data)
