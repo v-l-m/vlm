@@ -80,7 +80,7 @@ class BasePositions(VlmHttp.VlmHttp):
     #- (tracks) Créer une liste de traces
     defaults = {
         'idrace' :0,
-        'basefilename' : "base",
+        'basename' : "base",
         'timezero' : 0,
         'firstidboat' : 0,
         'suffix' : ".xml",
@@ -93,9 +93,9 @@ class BasePositions(VlmHttp.VlmHttp):
         self.param.update(self.defaults)
         self.param.update(kvargs)
         if self.param['idrace'] != 0:
-            self.baseFileName = "%s%d" % (self.param['basefilename'], self.param['idrace'])
+            self.baseFileName = "%s%d" % (self.param['basename'], self.param['idrace'])
         else :
-            self.baseFileName = self.param['basefilename']
+            self.baseFileName = self.param['basename']
         self.boats = {}
         self.positions = []
 
@@ -136,7 +136,7 @@ class BasePositions(VlmHttp.VlmHttp):
         """Récupère une url et renvoie le nom temporaire"""
         if url == None:
             url = self.param['url']
-        self.lastFileName = self._fetch(url, **kvargs)
+        self.lastFileName = self._fetch(url, basefilename = self.baseFileName, **kvargs)
         return self.lastFileName
         
     def read(self, fname = None):
@@ -184,7 +184,7 @@ class BasePositions(VlmHttp.VlmHttp):
             txt = "INSERT INTO users SET idusers = %d, username = '%s', boatname = '%s', engaged = %d" % (
                 -boats[bid]['vlmid'],
                 boats[bid]['vlmusername'],
-                boats[bid]['vlmboatname'],
+                boats[bid]['vlmboatname'].replace("'", " "),
                 self.param['idrace']
                 )
             if boats[bid].has_key('color'):
@@ -192,9 +192,13 @@ class BasePositions(VlmHttp.VlmHttp):
             txt += " ;"
             print(txt)
 
+    def _timezero(self, offset = 0):
+        return offset
+
 
     #sub API : customize here
     def _fetch(self, url, **kvargs):
+        self.lastFileName = self.geturl(url, **kvargs)
         return self.lastFileName
     
     def _read(self, fname):
@@ -212,7 +216,7 @@ class BasePositions(VlmHttp.VlmHttp):
 class DolinkPositions(BasePositions):
     defaults = {
         'idrace' : 0,
-        'basefilename' : "dolink",
+        'basename' : "dolink",
         'timezero' : 0,
         'firstidboat' : 0,
         'suffix' : ".json",
@@ -260,7 +264,7 @@ class DolinkPositions(BasePositions):
                 boat['sailid'] = m['voile'].replace(' ', '')
                 boat['vlmid'] = self._rid2vlmid(boat['rid'])
                 boat['vlmboatname'] = "%s - %s" % (boat['sailid'], boat['title'])
-                boat['vlmusername'] = "%s%03d" % (self.param['basefilename'].upper(), boat['vlmid'] - self.param['firstidboat']+1)
+                boat['vlmusername'] = "%s%03d" % (self.param['basename'].upper(), boat['vlmid'] - self.param['firstidboat']+1)
 
                 self.boats[boat['rid']] = boat
         return self.boats
@@ -354,36 +358,52 @@ class GeovoileTree(object):
                 tracks.append(pos)
         return tracks
         
-class AddvisoTree(object):
-    def __init__(self, url, basefilename, suffix = 'positions'):
-        super(AddvisoTree, self).__init__()
-        self.tree = self.url2xml(url, basefilename, suffix)
-    
-    def url2xml(self, url, basefilename, suffix = 'static'):
-        """Récupère une url  et charge le treexml"""
-        fn = geturl(url, basefilename, suffix)
-        return ElementTree.parse(fn)
-    
-    def factors(self):
-        """Récupère le facteur de conversion des coordonnées"""
-        return 1.
-
-    def boats(self, boats = {}):
-        for outline in self.tree.findall("./pollings/sk"):
+class AddvisoPositions(BasePositions):
+    defaults = {
+        'idrace' : 0,
+        'basename' : "addviso",
+        'timezero' : 0,
+        'firstidboat' : 0,
+        'suffix' : ".xml",
+        'url' : None
+        }
+    def __init__(self, **kvargs):
+        super(AddvisoPositions, self).__init__(**kvargs)
+            
+    def _read(self, fname):
+        return ElementTree.parse(fname)
+        
+    def _opponents(self, datas):
+        for outline in datas.findall("./pollings/sk"):
             rid = outline.attrib['sp']
-            boats[rid] = outline.attrib
-            if not boats[rid].has_key('name') :
-                boats[rid]['name'] = boats[rid]['bat']
-        return boats
+            b = outline.attrib
+            b['boatname'] = b['bat']
+            b['rid'] = rid
+            b['vlmid'] = self._rid2vlmid(rid)
+            b['vlmboatname'] = "%s - %s" % (rid[0:3].upper(), b['boatname'])
+            b['vlmusername'] = "%s%s" % (self.param['basename'].upper(), rid[0:3].upper())
+            self.boats[rid] = b
+        return self.boats
 
     def strptime(self, strtime):
         """Convert string time to epoch"""
         ts = time.strptime(strtime, "%A %d %b %H:%M")
         return int(time.mktime((2012, ts.tm_mon, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_isdst, ts.tm_wday, ts.tm_yday, 0)))
     
-    def timezero(self, offset = 0):
+    def _timezero(self, offset = 0):
         """Try to compute timezero (for tracks)"""
-        p = self.tree.findall("./pollings")
-        timezero = self.strptime(p[0].attrib['dt'])
-        return offset+timezero
+        p = self.datas.findall("./pollings")
+        return offset + self.strptime(p[0].attrib['dt'])
+
+    def _tracks(self, datas):
+        ts = self._timezero()
+        for bid in self.boats:
+            b = self.boats[bid]
+            tr = {}
+            tr['time'] = ts
+            tr['lat'] = b['lt']
+            tr['lon'] = b['ln']
+            tr['rid'] = bid
+            self.positions.append(tr)
+        return self.positions
 
