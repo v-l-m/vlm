@@ -19,6 +19,10 @@
         //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
         OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
 
+        var default_latitude = 45.5;
+        var default_longitude = -30.0;
+        var default_zoom = 4;
+
         var options = {
             //Projection mercator sphérique (type google map ou osm)
             projection: new OpenLayers.Projection("EPSG:900913"),
@@ -187,7 +191,9 @@
         //Pour centrer quand on a pas de permalink dans l'url
         if (!map.getCenter()) {
             // Don't do this if argparser already did something...
-            map.zoomToMaxExtent(); 
+            var lonlat = new OpenLayers.LonLat(default_longitude,default_latitude).transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+	    map.setCenter(lonlat);
+	    map.zoomTo(default_zoom);
         }
     }
     </script>
