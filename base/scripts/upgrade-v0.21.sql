@@ -15,7 +15,7 @@ CREATE TABLE `users_Trophies` (
   `RefTrophy` int(11) NOT NULL,
   `quitdate` datetime DEFAULT NULL,
   PRIMARY KEY (`idUsersTrophies`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8$$
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `trophies`;
 CREATE TABLE `trophies` (
@@ -26,7 +26,7 @@ CREATE TABLE `trophies` (
   `LastRun` datetime DEFAULT NULL,
   PRIMARY KEY (`idTrophies`),
   UNIQUE KEY `idTrophies_UNIQUE` (`idTrophies`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8$$
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 
 -- recherche des users éligibles dans users_trophies, étude dans user actions et inscription dans racetrophycontrol
