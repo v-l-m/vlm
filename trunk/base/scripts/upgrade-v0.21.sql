@@ -6,7 +6,7 @@ CREATE TABLE `racetrophycontrol` (
   PRIMARY KEY (`controldate`,`idusertrophy`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `racetrophycontrol`;
+DROP TABLE IF EXISTS `users_Trophies`;
 CREATE TABLE `users_Trophies` (
   `idUsersTrophies` int(11) NOT NULL AUTO_INCREMENT,
   `idusers` int(11) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE `users_Trophies` (
   PRIMARY KEY (`idUsersTrophies`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8$$
 
-DROP TABLE IF EXISTS `racetrophycontrol`;
+DROP TABLE IF EXISTS `trophies`;
 CREATE TABLE `trophies` (
   `idTrophies` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
