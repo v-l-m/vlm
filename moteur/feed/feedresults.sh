@@ -3,12 +3,15 @@
 
 source $VLMRACINE/conf/conf_script || exit 1
 
-LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-cronvlm-feedresults.log
+LOG=$VLMLOG/$(date +%Y%m%d)-cronvlm-feedresults.log
 
 #export VLMPHPPATH="/usr/bin/php --define extension=vlmc.so --define include_path=.:/usr/share/php:/home/vlmtest/svn/trunk/lib/phpcommon"
 
 #we wait to be sure crank has been computed
 sleep 10;
+
+echo . >> $LOG
+echo `date +%Y%m%d_%H%M` >> $LOG
 
 $VLMPHPPATH $VLMJEUROOT/moteur/feed/results.events.php >> $LOG 2>&1
 

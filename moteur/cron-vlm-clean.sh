@@ -9,6 +9,7 @@ MAXMOTEURTIME=120
 source $VLMRACINE/conf/conf_script || exit 1
 
 LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-$1-cronvlm-clean.log
+#FIXME should be a global setup
 export LOGFILE_MAX_AGE=7
 
 # Si on trouve un lock, c'est qu'une instance du moteur est en fonctionnement
