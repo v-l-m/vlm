@@ -1,5 +1,6 @@
 <?php
   include("config.php");
+  include("functions.php");
 
   // Cleaning News_results only 
    $query = " DELETE FROM `news`
