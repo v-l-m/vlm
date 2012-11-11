@@ -3,9 +3,11 @@
 
 source $VLMRACINE/conf/conf_script || exit 1
 
-LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-cronvlm-feed.log
+LOG=$VLMLOG/$(date +%Y%m%d)-cronvlm-feed.log
 
 #export VLMPHPPATH="/usr/bin/php --define extension=vlmc.so --define include_path=.:/usr/share/php:/home/vlmtest/svn/trunk/lib/phpcommon"
 
-$VLMPHPPATH $VLMJEUROOT/moteur/feed/races.events.php $1 $2 >> $LOG 2>&1
+echo . >> $LOG
+echo `date +%Y%m%d_%H%M` >> $LOG
 
+$VLMPHPPATH $VLMJEUROOT/moteur/feed/races.events.php $1 $2 >> $LOG 2>&1
