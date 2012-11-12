@@ -58,18 +58,21 @@ for outline in tree.findall(".//poll"):
   rid = 0
   #print(outline.attrib)
   for c in outline.findall("./c"):
-      #print(outline.attrib)
+      
       rid += 1
       #<c p="17" r="18" a="0" x="-2.53230" y="45.47560" v="7.3" d="16.7" c="210"/>
       if 'x' not in c.attrib:
           continue
       lat = float(c.attrib['y'])
       lon = float(c.attrib['x'])
+      cap = spd = 0.
       if 'k' in outline.keys() and int(outline.attrib['k']) == 1:
-          cap = float(c.attrib['c'])
-          spd = float(c.attrib['v'])
-      else :
-          cap = spd = 0.
+          try :
+              cap = float(c.attrib['c'])
+              spd = float(c.attrib['v'])
+          except :
+              pass
+          
       if time.time() - t < 48*3600:
           #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
           boat = boats[rid]
