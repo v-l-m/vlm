@@ -7,10 +7,10 @@ MYSQL="mysql -u $DBUSER -h $DBSERVER -p$DBPASSWORD $DBNAME"
 function lauchTrophyControl()
 {
 
-        NOW=$(date +%s -u)
-        let NOW+=300
+        # NOW=$(date +%s -u)
+        # let NOW+=300
 
- 	$MYSQL -e "call $1();"
+ 	$MYSQL -e "call $1(NULL);"
 
 	done 
 }
@@ -18,6 +18,6 @@ function lauchTrophyControl()
 
 
 # USAGE : lancement des vérifs de trophées  
-launchTrophyControl sptrophycontrolperdays
+# launchTrophyControl sptrophycontrolperdays
 launchTrophyControl sptrophycontrolconnexion
 
