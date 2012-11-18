@@ -1389,7 +1389,7 @@ class map
       if ( $fullUsersObj->users->targetlong != 0 && $fullUsersObj->users->targetlat != 0 ) {
 	$ortho_string .= "to your WP";
       }
-      imagestring ( $this->mapImage, $font, $E[0], $E[1]-5 , $ortho_string , $this->colorTextOrtho);
+      if (isset($E)) imagestring ( $this->mapImage, $font, $E[0], $E[1]-5 , $ortho_string , $this->colorTextOrtho);
   }
 
 
