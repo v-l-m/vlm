@@ -72,6 +72,7 @@ for outline in tree.findall(".//poll"):
               spd = float(c.attrib['v'])
           except :
               pass
+              
           
       if time.time() - t < 48*3600:
           #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
