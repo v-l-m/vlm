@@ -407,3 +407,41 @@ class AddvisoPositions(BasePositions):
             self.positions.append(tr)
         return self.positions
 
+class YellowBrickTree(object):
+    def __init__(self, url, basefilename, suffix = 'static'):
+        super(YellowBrickTree, self).__init__()
+        self.tree = self.url2xml(url, basefilename, suffix)
+    
+    def url2xml(self, url, basefilename, suffix = 'static'):
+        """Récupère une url et charge le treexml"""
+        fn = geturl(url, basefilename, suffix)
+        return ElementTree.parse(fn)
+
+    def boats(self, boats = {}):
+        for outline in self.tree.findall("./teams/team"):
+            rid = int(outline.attrib['id'])
+            boats[rid] = outline.attrib
+            boats[rid]['rid'] = rid
+            sk = outline.find('skipper')
+            if sk != None :
+                boats[rid]['skipper'] = sk.attrib
+            else :
+                boats[rid]['skipper'] = {'name' : outline.attrib['owner']}
+            image = outline.find('img')
+            if image != None :
+                boats[rid]['image'] = image.attrib
+            else :
+                boats[rid]['image'] = {'url' : ''}
+        return boats
+    
+    def tracks(self):
+        tracks = []
+        for outline in self.tree.findall('./team'):
+            rid = int(outline.attrib['id'])
+            for p in outline.findall('./pos'):
+                d = p.attrib
+                pos = [rid, int(d['w']) , float(d['a']), float(d['o'])]
+                #We could have cap and speed
+                tracks.append(pos)
+        return tracks
+
