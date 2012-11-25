@@ -13,7 +13,7 @@ else :
     cmd = "positions"
     
 
-vlmfirstid = 1600    
+vlmfirstid = 1536 - 21
 vlmidrace = 20121125
 vlmusernameprefix = "ARC2012_"
 basefilename = "ts%d" % vlmidrace
