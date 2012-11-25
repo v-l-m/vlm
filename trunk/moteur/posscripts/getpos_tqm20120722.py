@@ -5,8 +5,6 @@ import getposlib as gp
 
 # wget "http://transat.korem.com/data?mobile=true&action=full&antiCaching=1341780268414&callback=korem.initialDataLoaded"
 
-
-
 class Kor2012(gp.AddvisoPositions):
     def _rid2vlmid(self, rid):
         vlmboatidfirst = self.param['firstidboat']
