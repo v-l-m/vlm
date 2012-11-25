@@ -44,5 +44,5 @@ for outline in tree.findall("./poll"):
                     lon += 360
                 lat = float(p.attrib['y'])/1000.
                 #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000
-                print "%d|0|%d|%d|FOO|BAR|%f|%f|0.|0." % (vlmidrace, int(t), vlmid,  lat, lon)
+                print "%d|0|%d|%d|FOO|BAR|%f|%f|0.|0." % (vlmidrace, int(tt), vlmid,  lat, lon)
 
