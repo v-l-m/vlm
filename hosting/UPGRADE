@@ -15,25 +15,19 @@ From 0.20.x to 0.21 :
     - add define("VLM_NOTIFY_MAIL", "vlm-news+garchive-XXXXXX@googlegroups.com");
 
   RUN
-    ./scripts/upgrade.sh 0.20 0
+    ./scripts/upgrade.sh 0.21 0
     
 = Step 1, maintenance mode, backup base, upgrade core =
 
   RUN
-    ./scripts/upgrade.sh 0.20 1 && /etc/init.d/apache restart
+    ./scripts/upgrade.sh 0.21 1 && /etc/init.d/apache restart
 
   - if something goes wrong, EDIT crontab and comment vlm crons
 
 = Step 2, end of release, unlock engine =
 
   RUN
-    ./scripts/upgrade.sh 0.20 2
-    
-  ACTIVATE in crontab
-    3 3 * * * $VLMRACINE/vlmcode/moteur/cron-vlm-cleannews.sh
-    */5 * * * * $VLMRACINE/vlmcode/moteur/feed/feedresults.sh
-    */5 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh mail
-
+    ./scripts/upgrade.sh 0.21 2
   
 
 THE END
