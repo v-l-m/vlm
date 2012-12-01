@@ -82,7 +82,7 @@
       <button type="submit" name="action" value="tous"><? echo getLocalizedString("tous") ?></button>
       <button type="submit" name="action" value="top20"><? echo getLocalizedString("top20") ?></button>
       <button type="submit" name="action" value="top10"><? echo getLocalizedString("top10") ?></button>
-      <button type="submit" name="action" value="valider"><? echo getLocalizedString("aucun") ?></button>
+      <button type="submit" name="action" value="aucun"><? echo getLocalizedString("aucun") ?></button>
     </form>
 <?php
     } else {
