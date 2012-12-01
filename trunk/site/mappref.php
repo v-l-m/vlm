@@ -12,19 +12,19 @@
         //echo "PO=".$prefOpponents;
         $fullRacesObj = new fullRaces ($fullUsersObj->users->engaged, $fullUsersObj->races);
         //$bounds = $fullRacesObj->getRacesBoundaries();
-        // Sauvegarde des préférences
-        // Check si liste vide, dans ce cas, on précoche l'utilisateur demandeur (bug implode signalé par Phille le 27/06/07)
-        if ( $action == getLocalizedString("valider") ) {
+        // Sauvegarde des prÃ©fÃ©rences
+        // Check si liste vide, dans ce cas, on prÃ©coche l'utilisateur demandeur (bug implode signalÃ© par Phille le 27/06/07)
+        if ( $action == "valider") {
             $list= get_cgi_var('list', "");
             //print_r($list);
             //echo implode(",",$list);
             if ( $list == "" || count($list) == 0 ) $list = array($fullUsersObj->users->idusers) ;
             setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $list)   );
-        } else if ( $action == getLocalizedString("tous") ) {
+        } else if ( $action == "tous") {
             $oppList=array();
             foreach ( $fullRacesObj->opponents as $opp) array_push($oppList, $opp->idusers);
             setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );   
-        } else if ( $action == getLocalizedString("top20") ) {
+        } else if ( $action == "top20") {
             $oppList=array();
             $num_opp=0;
             foreach ( $fullRacesObj->opponents as $opp) {
@@ -33,7 +33,7 @@
                 if ( $num_opp == 20 ) break;
             }
             setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );
-        } else if ( $action == getLocalizedString("top10") ) {
+        } else if ( $action == "top10") {
             $oppList=array();
             $num_opp=0;
             foreach ( $fullRacesObj->opponents as $opp) {
@@ -42,7 +42,7 @@
                 if ( $num_opp == 10 ) break;
             }
             setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , implode(",", $oppList)   );    
-        } else if ( $action == getLocalizedString("aucun") ) {
+        } else if ( $action == "aucun") {
             setUserPref($fullUsersObj->users->idusers, "mapPrefOpponents" , ""  );
         } 
         $prefOpponents=getUserPref($fullUsersObj->users->idusers,"mapPrefOpponents");
@@ -78,11 +78,11 @@
           </td>
         </tr>
       </table>
-      <input type="submit" name="action" value="<? echo getLocalizedString("valider") ?>" />
-      <input type="submit" name="action" value="<? echo getLocalizedString("tous") ?>" />
-      <input type="submit" name="action" value="<? echo getLocalizedString("top20") ?>" />
-      <input type="submit" name="action" value="<? echo getLocalizedString("top10") ?>" />
-      <input type="submit" name="action" value="<? echo getLocalizedString("aucun") ?>" />
+      <button type="submit" name="action" value="valider"><? echo getLocalizedString("valider") ?></button>
+      <button type="submit" name="action" value="tous"><? echo getLocalizedString("tous") ?></button>
+      <button type="submit" name="action" value="top20"><? echo getLocalizedString("top20") ?></button>
+      <button type="submit" name="action" value="top10"><? echo getLocalizedString("top10") ?></button>
+      <button type="submit" name="action" value="valider"><? echo getLocalizedString("aucun") ?></button>
     </form>
 <?php
     } else {
