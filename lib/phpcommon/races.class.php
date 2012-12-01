@@ -973,7 +973,7 @@ class fullRaces {
           $printtd = 1;
         }
         echo "<tr class=\"htmltable\">";
-        echo "<td class=\"htmltable\" colspan=\"8\"><input type=\"submit\" name=\"action\" value=\"" . getLocalizedString("valider") . "\" /></td>";
+        echo "<td class=\"htmltable\" colspan=\"8\"><button type=\"submit\" name=\"action\" value=\"valider\">" . getLocalizedString("valider") . "</button></td>";
         echo "</tr><tr class=\"htmltable\">";
         echo "<td class=\"htmltable\" colspan=\"8\">" . $lastrace . "&nbsp;-&nbsp;" . $raceobj->htmlRacenameLink() . "</td>";
         echo "</tr><tr class=\"htmltable\">";
