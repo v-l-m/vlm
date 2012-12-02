@@ -8,7 +8,7 @@ if test "$dumpname" = ""; then
     dumpname="vlmdump-history.sql"
 fi
 
-TBNAMES="histpos"
+TBNAMES="histpos modules_status"
 
 echo "Dumping big archive sql tables (gzipped) to $dumpname.gz"
 
