@@ -6,7 +6,7 @@
 Il est probable que cette documentation n'est pas à jour au moment ou vous essayez de l'appliquer pour installer votre propre serveur Vlm.
 
 Merci
- * de lire l'historique des fichiers UPGRADE (dans hosting et dans base) notamment
+ * de lire l'historique des fichiers RELEASE (dans hosting) et UPGRADE (dans base) notamment
  * de mettre à jour cette page
 
 = Prérequis =
@@ -21,10 +21,11 @@ Merci
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_15''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
    * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo mysqltuner apachetop mytop make libmysqlclient-dev less gfortran libgfortran3 ntpdate}}}
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo make}}}
+
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
-     * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig make}}}).
+     * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig}}}).
        * Sur d'autres systemes (RHEL / CentOS), le compiler (choisir pour l'instant 1.3.36, même si 1.3.37 est disponible) :
              {{{wget -O - http://downloads.sourceforge.net/swig/swig-1.3.36.tar.gz | tar xz && chown -R 0.0 swig-1.3.36 ; }}}
              {{{cd swig-1.3.36 && ./configure --prefix=/opt/swig --with-php=$(\which php) && make && make install}}}
@@ -39,6 +40,7 @@ Merci
      * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
      * 0.2.10 mytop apachetop mysqltuner {{{apt-get install mytop apachetop mysqltuner}}} pour le monitoring
      * 0.2.11 ntpdate (debian: {{{apt-get install ntpdate}}} pour synchroniser le temps du serveur
+     * 0.2.12 make (debian : {{{apt-get install make}}} pour MAKE)
    * 0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
@@ -137,6 +139,7 @@ Merci
        * le paquet de base de debian est le {{{gfortran}}}
          * C'est f95 qui est installé à la place de g95
          * On peut faire en root un ln -s /usr/bin/f95 /usr/bin/g95
+         * on peut utiliser directement g95 via : http://www.g95.org/ ou utiliser f95
        * il faut ajouter les dépendances (g2lib, g2clib, w3lib, libjasper)
          * éditer les différents makefile pour mettre les paths corrects.
        * les dépendances libpng12-dev et libjasper-dev ont normalement été installées plus haut
@@ -176,7 +179,7 @@ Merci
    * 2.1 Déploiement du module base : {{{$ ~/scripts/maj_module.sh base}}}
    * 2.2 Installation de la base de données mysql...
      * 2.2.1 vérifiez que vous avez bien paramétré le fichier ~/conf/conf_base (NB: l'utilisateur configuré dans ~/conf/conf_base ne dois pas exister, l'utilisateur 'temporary' non plus) (cf base_conf)
-     * 2.2.2 allez dans ~/vlmcode (ou VLMJEUROOT), puis dans base/scripts
+     * 2.2.2 allez dans ~/vlmcode (ou VLMJEUROOT), puis dans base/scripts {{chmod u+x init.sh}}
      * 2.2.3 Lancez {{{$ ./init.sh}}}. il vous demande le mot de passe administrateur de la base de donnée et crée l'utilisateur vlm et sa base
    * 2.3 Importation des données
      * 2.3.1 Récupèrez (demandez sur la ml) un dump mysql gzippé (il est produit avec le script base/scripts/dump.sh)
@@ -216,8 +219,10 @@ Merci
            DocumentRoot /home/vlm/vlmcode/site
            ServerName vlm
            ServerAlias vlm
+
            ErrorLog    /var/log/apache2/vlm_error_log
            CustomLog   /var/log/apache2/vlm_access_log combined
+
            <Directory /home/vlm/vlmcode/site>
                DirectoryIndex index.php index.html
                Order Allow,Deny
