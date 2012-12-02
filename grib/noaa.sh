@@ -131,7 +131,7 @@ windserver -update $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
 # then cleanup
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
-rm $GRIBPATH/$LATEST
+rm -f $GRIBPATH/$LATEST
 ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/$LATEST
 mv $LOG $GRIBPATH/
 rm -Rf $TMPGRIBPATH/$DAT$HH
