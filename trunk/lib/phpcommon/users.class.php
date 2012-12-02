@@ -158,7 +158,7 @@ class users extends baseClass
 
         $PIP=$row['pilotparameter'];
 
-        $logmsg = sprintf( "executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
+        $logmsg = sprintf( "Executing task %d, PIM=%d, PIP=%s... ** ", $row['taskid'], $PIM, $PIP);
         printf("** AUTO_PILOT : $logmsg");
         $query="UPDATE users SET pilotmode=$PIM ";
 
