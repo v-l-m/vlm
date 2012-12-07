@@ -1,6 +1,28 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.21 aka Hurry Khan
+
+What's up for ...
+... players ?
+* work in progress to make OAD management easier
+* jvlm : pilototo improvement, removing yahoo maps
+* bugfix when grounding and finishing at the same crank
+
+... developers ?
+* complete mysql optimization with the recent tables
+* pre-work for caching tracks
+* backup script update
+* data model for trophies (OAD)
+* openlayers upgraded to 2.12, datetime picker updated, fullcalendar upgraded to 1.5.3, jquery upgraded to 1.7.1
+* various fixes and improvements
+
+... admins ?
+* better news management and interface, ready to send automatic emails
+* grib downloading secured
+* more reports for fixing polars problems
+* allow admin to engage boats at hand.
+
 v0.20 aka Evil Barber
 
 What's up for ...
