@@ -30,7 +30,7 @@ if cmd == "insert" :
         vlmusername = "%s%d" % (vlmusernameprefix, int(b['marker']))
         vlmboatname = "%03d - %s" % (int(b['marker']), b['name'].encode('utf8'))
         color = b['trackC'].lower()
-        print("INSERT INTO `users` SET idusers = %d, username = '%s', boatname = '%s', engaged = %d, color = '%s';" % (-vlmid, vlmusername, vlmboatname, vlmidrace, color))
+        print("INSERT IGNORE INTO `users` SET idusers = %d, username = '%s', boatname = '%s', engaged = %d, color = '%s';" % (-vlmid, vlmusername, vlmboatname, vlmidrace, color))
 else :
 
     ybtree = gp.YellowBrickTree("http://yb.tl/Flash/arc2012/AllPositions/", basefilename, "pos")
