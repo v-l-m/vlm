@@ -5,6 +5,7 @@ include_once('players.class.php');
 include_once('base.class.php');
 require_once('users.class.php');
 
+
 class WSBase extends baseClass {
 
     public $answer = Array();
@@ -62,7 +63,7 @@ class WSBase extends baseClass {
         }
         exit();
     }
-
+    
     function reply_with_error($code, $error_string = null) {
         $this->answer['success'] = False;
         $this->answer['error'] = get_error($code);
@@ -75,6 +76,35 @@ class WSBase extends baseClass {
         $this->answer['success'] = True;
         $this->reply();
     }
+
+    function try_reply_with_cache($fname, $fdir) {
+        $original = sprintf("%s/%s/%s.json", DIRECTORY_CACHE_WS, $fdir, $fname);
+        if ( file_exists($original) && !isset($_GET['nocache']) ) {
+            if ($this->maxage > 0) {
+                header("Cache-Control: max-age=".$this->maxage.", must-revalidate");
+            } else {
+                header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+            }
+            readfile($original);
+            exit();
+        }
+        return False;
+    }
+
+    function cache_success($fname, $fdir) {
+        $original = sprintf("%s/%s/%s.json", DIRECTORY_CACHE_WS, $fdir, $fname);
+        $originaldir = sprintf("%s/%s", DIRECTORY_CACHE_WS, $fdir);
+        if (!is_dir($originaldir)) {
+            umask(0002);
+            mkdir($originaldir, 0777, True) or die("Can't make $originaldir");
+        }
+        $this->answer['success'] = True;
+        $json = json_encode($this->answer);
+        $file = fopen($original,'w+');
+        fwrite($file, $json);
+        fclose($file);
+    }
+
 
     function finish() {
         //Must be surcharged (?) by inherited classes
@@ -125,6 +155,7 @@ class WSBasePlayer extends WSBase {
 
 class WSBaseRace extends WSBase {
     var $idr = null;
+    var $maxage = 10;
     function __construct() {
         parent::__construct();
     }

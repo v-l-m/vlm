@@ -49,6 +49,11 @@
                     headeranddie(sprintf("/flagimg.php?idflags=%s", $components[1]));
                 }
             break;
+            case "ws":
+                if (preg_match("/rankings\/(\d+)\.json/", $matches[2], $components)) {
+                    headeranddie(sprintf("/ws/raceinfo/ranking.php?idr=%s", $components[1]));
+                }
+            break;                
 
         }
     }
