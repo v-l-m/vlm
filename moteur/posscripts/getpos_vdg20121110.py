@@ -13,7 +13,7 @@ vlmtmp = getposlib.vlm_get_tmp()
 updatexml = os.path.join(vlmtmp, basefilename+".update.xml")
 now = int(time.time())
 
-urllib.urlretrieve("http://tracking2012.vendeeglobe.org/data/class1.xml?%d" % now, updatexml)
+urllib.urlretrieve("http://tracking2012.vendeeglobe.org/data/class2.xml?%d" % now, updatexml)
 
 tree = ElementTree.parse(updatexml)
 vlmids = {

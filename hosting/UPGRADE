@@ -11,7 +11,7 @@ From 0.20.x to 0.21 :
     ./scripts/maj_scripts.sh
 
   EDIT file ./conf/param.php
-    - add define("VLM_NOTIFY_LIST", "facebook,identica,mail");
+    - change define("VLM_NOTIFY_LIST", "facebook,identica,mail");
     - add define("VLM_NOTIFY_MAIL", "vlm-news+garchive-XXXXXX@googlegroups.com");
 
   RUN
