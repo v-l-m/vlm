@@ -82,8 +82,7 @@ class races {
       //FIXME : on pourrait améliorer en utilisant la vraie date de la dernière maj
       if (($time - $timeoflastupdate) < UPDATEDURATION) {
           //on est peut être en train de faire la maj, donc dans le doute on renvoie 0
-
-          return 0;
+          return UPDATEDURATION;
       } else {
           return $timeoflastupdate+$vacstep-$time;
       }

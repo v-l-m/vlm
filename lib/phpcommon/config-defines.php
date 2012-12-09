@@ -130,7 +130,7 @@
     //"real" update delay is in the crontab 
     //define("DELAYBETWEENUPDATE", 3 * 3600);
     define("DELAYBETWEENUPDATE", 300);
-    define("UPDATEDURATION", 5); //Temps considéré comme maximum pour que le moteur tourne - a ajuster suivant le nombre de joueur de vlm et les perfs du moteur.
+    define("UPDATEDURATION", 10); //Temps considéré comme maximum pour que le moteur tourne - a ajuster suivant le nombre de joueur de vlm et les perfs du moteur.
     //define("DELAYBETWEENUPDATE", 300);
     // Distance around the boat for which we select coast points in the engine
     // when evaluating if a boat crosses the coast. (in degrees) 

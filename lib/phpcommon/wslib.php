@@ -12,8 +12,6 @@ class WSBase extends baseClass {
 
     function __construct() {
         parent::baseClass();
-        // now start the real work
-        login_if_not($this->usage());
     }
 
     function queryRead($query) {
@@ -111,11 +109,14 @@ class WSBase extends baseClass {
 
 }
 
-class WSBaseTracks extends WSBase {
-
+class WSBaseAuthent extends WSBase {
+    function __construct() {
+        parent::__construct();
+        login_if_not($this->usage()); // WHY SHOULD WE LOGIN ?
+    }
 }
 
-class WSBasePlayer extends WSBase {
+class WSBasePlayer extends WSBaseAuthent {
     function __construct() {
         parent::__construct();
         //FIXME : is this useless now that only players may log in ?
@@ -134,7 +135,6 @@ class WSBaseRace extends WSBase {
         if (!raceExists($idr)) $this->reply_with_error('IDR03');
         $this->idr = $idr;
     }
-    
 }
 
 class WSBaseRaceGroup extends WSBase {
@@ -199,14 +199,13 @@ class WSRealBoat extends WSBasePlayer {
 }
 
 
-class WSSetup extends WSBase {
+class WSSetup extends WSBaseAuthent {
     //should be an extends from WSBaseBoat(?) starting from v0.15
     public $input = null;
     public $request = null;
 
     function __construct() {
         parent::__construct();
-        
         //surface test
         $this->input = get_cgi_var('parms', null);
         if (is_null($this->input)) $this->reply_with_error('PARM01');
@@ -538,8 +537,7 @@ function checkPlayerLogin($pseudo, $passwd) {
     }
 }
 
-function login_if_not($usage = "No usage given") {
-    
+function login_if_not($usage = "No usage given") {  
     session_start();
     // do we know the player from a previous login session?
     if (isPlayerLoggedIn() && isLoggedIn() ) {
