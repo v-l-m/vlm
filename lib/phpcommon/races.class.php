@@ -84,7 +84,7 @@ class races {
           //on est peut être en train de faire la maj, donc dans le doute on renvoie 0
           return UPDATEDURATION;
       } else {
-          return $timeoflastupdate+$vacstep-$time;
+          return $timeoflastupdate+$vacstep-$time+UPDATEDURATION;
       }
   }
   
