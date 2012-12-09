@@ -66,6 +66,9 @@
     $ws->answer['nb_engaged'] = $num_engaged;
     $ws->answer['nb_not_started'] = count($not_started);
 
+    /*Compute MaxAge - minimum maxage is UPDATEDURATION*/
+    $ws->maxage = $races->getTimeToUpdate($now);
+
     $ws->reply_with_success();
 
 ?>
