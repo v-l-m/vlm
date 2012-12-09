@@ -3,19 +3,13 @@
     include_once("wslib.php");
 
     header("content-type: text/plain; charset=UTF-8");
-    
+
     //FIXME : types are badly checked
-    //FIXME : Why did we put authentification ?
     $ws = new WSBaseRace();
     $now = time();
     
     $ws->require_idr();
     $limit = intval($ws->check_cgi('limit', "LIMIT01", 99999));
-    
-    $cacheid = $ws->idr;
-    $cachepath = "rankings";
-    $ws->try_reply_with_cache($cacheid, $cachepath);    
-    
     $races = new races($ws->idr);
     
     $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
@@ -71,7 +65,7 @@
     $ws->answer['nb_racing']  = $num_racing;
     $ws->answer['nb_engaged'] = $num_engaged;
     $ws->answer['nb_not_started'] = count($not_started);
-    $ws->cache_success($cacheid, $cachepath);
-    if (!$ws->try_reply_with_cache($cacheid, $cachepath)) $ws->reply_with_success();
+
+    $ws->reply_with_success();
 
 ?>
