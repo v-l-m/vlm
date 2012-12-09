@@ -90,7 +90,6 @@
     define ("DIRECTORY_RACEMAPS","cache/racemaps");
     define ("DIRECTORY_MINIMAPS","cache/minimaps");
     define ("DIRECTORY_TINYMAPS","cache/tinymaps");
-    define ("DIRECTORY_CACHE_WS", $_SERVER['DOCUMENT_ROOT']."/cache/ws");
     define ("DIRECTORY_TRACKS", $_SERVER['DOCUMENT_ROOT']."/cache/tracks");
     define ("DIRECTORY_THEMES","style");
     define ("DIRECTORY_POLARS","Polaires");
