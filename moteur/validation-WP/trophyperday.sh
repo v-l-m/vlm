@@ -4,7 +4,7 @@ source $VLMRACINE/conf/conf_base || exit 1
 
 MYSQL="mysql -u $DBUSER -h $DBSERVER -p$DBPASSWORD $DBNAME"
 
-function lauchTrophyControl {
+function launchTrophyControl {
   # NOW=$(date +%s -u)
   # let NOW+=300
 
