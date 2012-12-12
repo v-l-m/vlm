@@ -78,3 +78,10 @@ UPDATE users_Trophies SET quitdate=par_dt
 		WHERE getTrophy(idusertrophy)=ID_TROPHY AND R.Score>3600 AND R.controldate=par_dt);
 commit ;
 END
+
+CREATE DEFINER=`vlm`@`%` FUNCTION `getTrophy`(par_Trf INT) RETURNS int(11) DETERMINISTIC READS SQL DATA
+BEGIN
+DECLARE TRF INT;
+SELECT RefTrophy into TRF FROM users_Trophies WHERE idUsersTrophies=par_Trf;
+RETURN TRF;
+END
