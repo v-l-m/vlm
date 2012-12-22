@@ -18,14 +18,25 @@ $opts['key_type'] = 'int';
 // Sorting field(s)
 $opts['sort_field'] = array('idUsersTrophies');
 
+
+$calendar_specifications = array(
+     'ifFormat'    => '%Y-%m-%d %H:%M:%S', // defaults to the ['strftimemask']
+     'firstDay'    => 1,          // 0 = Sunday, 1 = Monday
+     'singleClick' => true,       // single or double click to close
+     'weekNumbers' => true,       // Show week numbers
+     'showsTime'   => true,      // Show time as well as date
+     'timeFormat'  => '24',       // 12 or 24 hour clock
+     'button'      => true,       // Display button (rather then clickable area)
+     'label'       => '...',      // button label (used by phpMyEdit)
+     );
+
 //Fields definitions
 
 $opts['fdd']['idUsersTrophies'] = array(
   'name'     => '#Id',
   'help'     => 'Internal id',
   'select'   => 'T',
-  'input|LVCD'  => 'R',
-  'input|AP' => '',
+  'input'  => 'R',
   'maxlen'   => 11,
   'default'  => '0',
   'sort'     => true
@@ -68,8 +79,8 @@ $opts['fdd']['idraces'] = array(
 );
 
 $opts['fdd']['RefTrophy'] = array(
-  'name'     => 'user #id',
-  'help'     => 'Which Trophy',
+  'name'     => 'Trophy +Id',
+  'help'     => 'Which Trophy ?',
   'select'   => 'T',
   'values'   => Array(
                     'table' => 'trophies',
@@ -85,20 +96,24 @@ $opts['fdd']['RefTrophy'] = array(
   'sort'     => true
 );
 
-//FIXME : DAtetime handling
-
 $opts['fdd']['joindate'] = array(
-  'name'     => 'Close time',
+  'name'     => 'Join Date',
   'select'   => 'T',
-//  'sql|LFVD' => 'FROM_UNIXTIME(closetime)',
   'maxlen'   => 20,
   'calendar' => $calendar_specifications,
-  'help|LVFD'=> 'Close time',
-  //FIXME: on peut mieux faire / on peut factoriser
-  'help|PCA' => '<span id="PME_dhtml_fld_closetime_help" onClick="computeFromEpoc(\'PME_dhtml_fld_closetime\');">Click to check the EPOC value</span>',
-//  'js'       => Array('required' => true, 'regexp' => '/^[0-9]+$/'),
+  'help|LVFD'=> 'Starting time',
   'sort'     => true
 );
+
+$opts['fdd']['quitdate'] = array(
+  'name'     => 'Leave Date',
+  'select'   => 'T',
+  'maxlen'   => 20,
+  'calendar' => $calendar_specifications,
+  'help|LVFD'=> 'Leave time',
+  'sort'     => true
+);
+
 
 
 include('adminfooter.php');

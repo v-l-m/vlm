@@ -58,8 +58,12 @@ $opts['fdd']['ControlPeriod'] = array(
   'sort'     => true
 );
 
-
-// FIXME : datetime for LastRun
+$opts['fdd']['LastRun'] = array(
+  'name'     => 'Last Run',
+  'input'    => 'R',
+  'maxlen'   => 20,
+  'sort'     => true
+);
 
 
 include('adminfooter.php');
