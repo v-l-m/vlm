@@ -78,6 +78,8 @@
     $tablepages = Array(
         "userstotrophies.php" => "Manage users engaged in trophies",
         "trophies.php" => "Manage trophies",
+        "block3" => "block",
+        "boats_OAD.report.php"  => "List Boats engaged on Once a day trophy",
         );
     adminlistbox($tablepages, "Trophies administration [EXPERIMENTAL]");
 
@@ -98,7 +100,6 @@
         "boats_without_owner.report.php" => "Boats without owner",
         "boats_with_boatsitter_but_without_owner.report.php" => "Boats with boatsitter(s) but without owner",
         "boats_with_strange_polar.report.php" => "Boats engaged with strange polar",
-		"boats_OAD.report.php"  => "Boats engaged on Once a day trophy",
         );
 
     adminlistbox($reportpages, "Reports");
