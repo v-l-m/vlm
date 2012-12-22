@@ -1,11 +1,11 @@
 <?php
 
 // headers
-$PAGETITLE = "Admin of PLAYERSTOUSERS table";
+$PAGETITLE = "Admin of Users_Trophies table";
 
 include('adminheader.php');
 
-/* PLAYERS TABLE */
+/* Users_Trophies TABLE */
 
 $opts['tb'] = 'users_Trophies';
 
@@ -16,7 +16,7 @@ $opts['key'] = 'idUsersTrophies';
 $opts['key_type'] = 'int';
 
 // Sorting field(s)
-$opts['sort_field'] = array('-updated');
+$opts['sort_field'] = array('idUsersTrophies');
 
 //Fields definitions
 
@@ -84,6 +84,8 @@ $opts['fdd']['RefTrophy'] = array(
   'default'  => '0',
   'sort'     => true
 );
+
+//FIXME : DAtetime handling
 
 $opts['fdd']['joindate'] = array(
   'name'     => 'Close time',
