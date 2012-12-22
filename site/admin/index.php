@@ -76,6 +76,13 @@
     adminlistbox($tablepages, "Boats & players administration");
 
     $tablepages = Array(
+        "userstotrophies.php" => "Manage users engaged in trophies",
+        "trophies.php" => "Manage trophies",
+        );
+    adminlistbox($tablepages, "Trophies administration [EXPERIMENTAL]");
+
+
+    $tablepages = Array(
         "user_action.php" => "Browse Boat/Player Actions",
         "admin_changelog.php" => "Browser Admin Changelog",
         );
