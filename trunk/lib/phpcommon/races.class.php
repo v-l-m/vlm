@@ -104,17 +104,25 @@ class races {
       $vacstep = $this->vacfreq*60; //vacfreq est en minute, vacstep est en secondes
       $lastrun = $this->getLastRun(); // $lastrun est le dernier run moteur, null si pas de run
 
-      //nextrunth théorique - on arrondi à UPDATEDURATION le plus proche, en prenant au moins UPDATEDURATION+le début de la vac courante
-      $nextrunth = max(intval($time/UPDATEDURATION)*intval(UPDATEDURATION)+UPDATEDURATION, intval(($time)/$vacstep)*intval($vacstep)+UPDATEDURATION);
+      /* nextrunth théorique
+       * on arrondi à UPDATEDURATION le plus proche,
+       * en prenant au moins UPDATEDURATION+le début de la vac courante
+       * en prenans au moins un vacstep par rapport au début de la vac précédente
+       */
+      $nextrunth = max(
+          intval($time/UPDATEDURATION)*intval(UPDATEDURATION)+UPDATEDURATION, //Cas ou on attends le run moteur courant qui est vraiment trop long
+          intval(($time)/$vacstep)*intval($vacstep)+UPDATEDURATION, //Cas ou on attends le run moteur un peu 
+          intval(($lastrun+$vacstep)/$vacstep)*intval($vacstep)+UPDATEDURATION
+          );
 
       /* On prends le nextrun théorique dans les cas suivant :
        * - lastrun est null
        * - nextrun est dans le passé
-       * - nextrun est plus loin que le nextrun théorique ET on est à + de vacstep du lastrun
+       * - nextrun est plus loin que le nextrun théorique
        */
 
       $nextrun = $lastrun + $vacstep;      
-      if (is_null($lastrun) || $lastrun == 0 || $nextrun < $time || ($nextrun > $nextrunth && ($time-$lastrun) > $vacstep ) ) {
+      if (is_null($lastrun) || $lastrun == 0 || $nextrun < $time || ($nextrun > $nextrunth)) { 
           $nextrun = $nextrunth; // la vac dure trop longtemps ou la vac d'avant a duré trop longtemps
       }
 
