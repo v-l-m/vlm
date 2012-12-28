@@ -30,7 +30,8 @@ class races {
     $updated,
     $waypoints,
     $racedistance,
-    $ics;
+    $ics,
+    $lastrun;
 
   function races($id=0, $row = null) {
     $id = intval($id);
@@ -68,24 +69,58 @@ class races {
     $this->vacfreq          = $row['vacfreq']; // 1, 5, ou 10, 
                                                //frequence des runs du moteur
     $this->updated          = $row['updated']; //derniere mise à jour de l'enregistrement
+    $this->lastrun          = null; //FIXME : it could be a real field in db, updated by the engine
   }
 
   function isRacetype($type) {
       return (($this->racetype & $type) > 0);
   }
   
-  function getTimeToUpdate($time = null) {
-      //C'est un calcul théorique du ts de la prochaine vac.
-      if(is_null($time)) $time = time();
-      $vacstep = $this->vacfreq*60;
-      $timeoflastupdate = intval($time/$vacstep)*intval($vacstep);
-      //FIXME : on pourrait améliorer en utilisant la vraie date de la dernière maj
-      if (($time - $timeoflastupdate) < UPDATEDURATION) {
-          //on est peut être en train de faire la maj, donc dans le doute on renvoie 0
-          return UPDATEDURATION;
-      } else {
-          return $timeoflastupdate+$vacstep-$time+UPDATEDURATION;
+  function getLastRun() {
+      /* Détermine le dernier run moteur pour la course et le met en cache
+         FIXME : Ca pourrait être utile d'avoir directement un champ lastrun dans la base
+         */
+      if (!is_null($this->lastrun)) return $this->lastrun; // Reuse live cache.
+      
+      //FIXME : est ce que le update_comment est optimisé pour ce type de requête ? NON
+      $query = "SELECT UNIX_TIMESTAMP(`time`) AS `time` FROM `updates` WHERE `update_comment` LIKE '%".$this>idraces."%' ORDER BY `time` DESC LIMIT 1";
+      $result = wrapper_mysql_db_query_reader($query);
+
+      if ( mysql_num_rows($result) > 0) {
+          //Ok, il y a un résultat
+          $row = mysql_fetch_assoc($result);
+          $this->lastrun = intval($row['time']);
       }
+      
+      //NB: renvoie null s'il n'y avait pas de résultat
+      return($this->lastrun);
+  }
+  
+  
+  function getTimeToUpdate($time = null) {
+
+      if(is_null($time)) $time = time();
+      
+      $vacstep = $this->vacfreq*60; //vacfreq est en minute, vacstep est en secondes
+      $lastrun = $this->getLastRun(); // $lastrun est le dernier run moteur, null si pas de run
+
+      //nextrunth théorique - on arrondi à UPDATEDURATION le plus proche, en prenant au moins UPDATEDURATION+le début de la vac courante
+      $nextrunth = max(intval($time/UPDATEDURATION)*intval(UPDATEDURATION)+UPDATEDURATION, intval(($time)/$vacstep)*intval($vacstep)+UPDATEDURATION);
+
+      /* On prends le nextrun théorique dans les cas suivant :
+       * - lastrun est null
+       * - nextrun est dans le passé
+       * - nextrun est plus loin que le nextrun théorique ET on est à + de vacstep du lastrun
+       */
+
+      $nextrun = $lastrun + $vacstep;      
+      if (is_null($lastrun) || $lastrun == 0 || $nextrun < $time || ($nextrun > $nextrunth && ($time-$lastrun) > $vacstep ) ) {
+          $nextrun = $nextrunth; // la vac dure trop longtemps ou la vac d'avant a duré trop longtemps
+      }
+
+      $timetoupdate = $nextrun - $time;
+
+      return($timetoupdate);
   }
   
   function &getWPs() {
