@@ -1143,8 +1143,8 @@ function htmlIdracesLink($idraces) {
 }
 
 function htmlBoattypeLink($boattype) {
-    $boattypename = strtoupper(preg_replace('/^.*_/', '' ,$boattype));
-    return sprintf("<a href=\"%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", speedchart_link($boattypename), $boattypename);
+    $boattypename = preg_replace('/^.*_/', '' ,$boattype);
+    return sprintf("<a href=\"%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", speedchart_link($boattypename), strtoupper($boattypename));
 }
 
 function htmlRacenameLink($idraces, $racename, $started) {
