@@ -55,5 +55,6 @@
    $timings_race_end = microtime(TRUE);
    echo "\n*** *** Checking duration for race ". $fullRacesObj->races->idraces . " was " . ($timings_race_end - $timings_race_start) . " seconds";
    echo "\n*** *** Engine end for this race : " . ($nb_boats - $nboatinrace) . " boats => " .  round(($nb_boats - $nboatinrace )/($timings_race_end - $timings_race_start),3) . " boats/seconds\n";
+   $fullRacesObj->races->setLastRun($timings_race_end);
    echo "****************************************************************************\n";
 ?>
