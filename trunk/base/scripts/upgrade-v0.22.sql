@@ -1,3 +1,7 @@
+#Adding field for storing last run time
+ALTER TABLE `races` ADD COLUMN `lastrun` timestamp default NULL;
+
+
 -- Using cursor on UserTrophyTable make it more easy for maintenance...
 drop procedure `vlm`.`sptrophycontrolconnexion`;
 -- --------------------------------------------------------------------------------

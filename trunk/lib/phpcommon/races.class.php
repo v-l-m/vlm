@@ -68,41 +68,27 @@ class races {
                                              // force le theme de l'interface
     $this->vacfreq          = $row['vacfreq']; // 1, 5, ou 10, 
                                                //frequence des runs du moteur
-    $this->updated          = $row['updated']; //derniere mise à jour de l'enregistrement
-    $this->lastrun          = null; //FIXME : it could be a real field in db, updated by the engine
+    $this->updated          = intval($row['updated']); //derniere mise à jour de l'enregistrement
+    $this->lastrun          = intval($row['lastrun']);
   }
 
   function isRacetype($type) {
       return (($this->racetype & $type) > 0);
   }
   
-  function getLastRun() {
-      /* Détermine le dernier run moteur pour la course et le met en cache
-         FIXME : Ca pourrait être utile d'avoir directement un champ lastrun dans la base
-         */
-      if (!is_null($this->lastrun)) return $this->lastrun; // Reuse live cache.
-      
-      //FIXME : est ce que le update_comment est optimisé pour ce type de requête ? NON
-      $query = "SELECT UNIX_TIMESTAMP(`time`) AS `time` FROM `updates` WHERE `update_comment` LIKE '%".$this>idraces."%' ORDER BY `time` DESC LIMIT 1";
-      $result = wrapper_mysql_db_query_reader($query);
-
-      if ( mysql_num_rows($result) > 0) {
-          //Ok, il y a un résultat
-          $row = mysql_fetch_assoc($result);
-          $this->lastrun = intval($row['time']);
-      }
-      
-      //NB: renvoie null s'il n'y avait pas de résultat
-      return($this->lastrun);
+  function setLastRun($time = null) {
+      if(is_null($time)) $time = time();
+      $this->lastrun = intval($time);
+      $query = "UPDATE `races` SET `lastrun` = ".$this->lastrun." WHERE `idraces` = ". $this->races->idraces;
+      wrapper_mysql_db_query_writer($query5);    
   }
-  
   
   function getTimeToUpdate($time = null) {
 
       if(is_null($time)) $time = time();
       
       $vacstep = $this->vacfreq*60; //vacfreq est en minute, vacstep est en secondes
-      $lastrun = $this->getLastRun(); // $lastrun est le dernier run moteur, null si pas de run
+      $lastrun = $this->lastrun; // $lastrun est le dernier run moteur, null si pas de run
 
       /* nextrunth théorique
        * on arrondi à UPDATEDURATION le plus proche,
