@@ -79,7 +79,7 @@ class races {
   function setLastRun($time = null) {
       if(is_null($time)) $time = time();
       $this->lastrun = intval($time);
-      $query = "UPDATE `races` SET `lastrun` = ".$this->lastrun." WHERE `idraces` = ". $this->races->idraces;
+      $query = "UPDATE `races` SET `lastrun` = ".$this->lastrun." WHERE `idraces` = ". $this->idraces;
       wrapper_mysql_db_query_writer($query5);    
   }
   

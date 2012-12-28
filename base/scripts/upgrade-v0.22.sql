@@ -1,5 +1,5 @@
 #Adding field for storing last run time
-ALTER TABLE `races` ADD COLUMN `lastrun` timestamp default NULL;
+ALTER TABLE `races` ADD COLUMN `lastrun` timestamp default 0;
 
 
 -- Using cursor on UserTrophyTable make it more easy for maintenance...
