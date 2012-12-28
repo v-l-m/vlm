@@ -2039,7 +2039,7 @@ function queryRacesBatch($where = NULL) {
   $query="SELECT idraces,racename,started,deptime,startlong,startlat,".
     "boattype,closetime,racetype,firstpcttime,depend_on,qualifying_races,".
     "idchallenge,coastpenalty,bobegin,boend,maxboats,theme,vacfreq,".
-    "UNIX_TIMESTAMP(updated), UNIX_TIMESTAMP(lastrun) FROM races ".(($where==NULL)?"":$where);
+    "UNIX_TIMESTAMP(updated) as updated, UNIX_TIMESTAMP(lastrun) as lastrun FROM races ".(($where==NULL)?"":$where);
   
   $result=wrapper_mysql_db_query_reader($query) or die("Query [$query] failed \n");
   return $result;
