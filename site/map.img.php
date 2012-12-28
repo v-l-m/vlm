@@ -27,6 +27,7 @@
         imagestring($im, 3, 20, $y/2+60,  "SRV = " . SERVER_NAME , $noir);
     
         // Affichage de l'image
+        header("Cache-Control: max-age=0");
         header("Content-type: image/png");
         imagepng($im);
         imagedestroy($im);
@@ -242,7 +243,7 @@
           $URL_TS_BASE = $URL_TS;
           $URL_TS.="&drawwind=".$timestamp;
 
-          echo "<div id=ts".$timestamp." style=\"top:10; left:10; position:absolute; background-image:url(".$URL_MAP.");\">";
+          echo "<div id=ts".$timestamp." style=\"top:10; left:10; position:absolute; background-image:url(".$URL_MAP."&seed=".intval(time()).");\">";
           echo "  <script language=\"javascript\">";
           echo "      var path_png = DisplayPngByBrowser(navigator.appName, ' " . $URL_TS . "', " . $x . ", " . $y.");";
           echo "  </script>";
