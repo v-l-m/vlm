@@ -41,7 +41,7 @@
     $isBo = ($races->bobegin < $now && $races->boend > $now);
     if ($isBo) {
         //BlackOut in place
-        //FIXME BO could be just a specifi WHERE clause : AND NOT (time > bobegin AND time < boend)
+        //FIXME BO could be just a specific WHERE clause : AND NOT (time > bobegin AND time < boend)
         $endtime = $races->bobegin;
         $ws->answer['blackout'] = True;
         $ws->answer['blackout_start'] = $races->bobegin;
