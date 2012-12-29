@@ -443,9 +443,14 @@ function get_error($code) {
         "IDG01"  => 'idg is required',
         "IDG02"  => 'idg : report this error ?',
         "IDG03"  => 'idg is not valid',
-
+        
+        //tracks
+        "TRK01"  =>  'hh should be >0 and <= 24',
+        
+        //RTFM
         "RTFM01"  => 'RTFM : please input idr when the boat is not racing',
-        "RTFM02"  => 'RTFM : starttime should be lesser than endtime',
+        "RTFM02"  => 'RTFM : starttime should be lesser than endtime and both < $now',
+        "RTFM03"  => 'RTFM : BO covering the time period',
 
         //ENGAGE
         "ENG01"   => 'the boat is already engaged',

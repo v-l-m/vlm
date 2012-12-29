@@ -42,10 +42,9 @@
     $min = 0; $s = 0;
 
     $h = $hh;
-    if ($hh > 24 or $hh < 0) {
-        die("bad hh");
-    } else if ($hh == 24) {
-        $h = 0;
+    if ($hh > 24 or $hh <= 0) {
+        $ws->reply_with_error('TRK01');
+    } else if ($hh == 0) {
         $l = 24*3600;
     } else if ( $hh % 8 == 0 ) {
         $l = 8*3600;
@@ -56,12 +55,14 @@
     } else {
         $l = 3600;
     }    
-    $starttime = gmmktime($h, $min, $s, $m, $d, $y);
-    $endtime = $starttime + $l;
+    $endtime = gmmktime($h, $min, $s, $m, $d, $y);
+    $starttime = $endtime - $l;
 
-    if ($starttime > $now or $endtime > $now) $ws->reply_with_error('RTFM02');
+    //On ne veut rien dans le futur
+    if ($endtime > $now) $ws->reply_with_error('RTFM02');
 
-    $isBo = ($races->bobegin < $startime && $races->boend > $endtime && $races->bobegin > $now && $races->boend < $now );
+    //On ne veut rien faire s'il y a un BO : EN COURS, et qu'on demande la période du BO
+    $isBo = ($races->bobegin < $endtime && $races->boend > $starttime && $races->bobegin < $now && $races->boend > $now );
     if ($isBo) {
         $ws->reply_with_error('RTFM02');
     }
@@ -87,5 +88,4 @@
     $ws->maxage = 2592000;
     $ws->saveJson($filepath);
     $ws->reply_with_success();
-
 ?>
