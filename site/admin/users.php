@@ -232,6 +232,17 @@ $opts['fdd']['ipaddr'] = array(
   'options'  => 'V'
 );
 
+$opts['fdd']['kml'] = array(
+  'name'     => 'KML',
+  'help'     => 'Link to KML',
+  'input'   => 'RU',
+  'sql'     => 'idusers',
+  'URL'     => '/admin/kml.php?idu=$value',
+  'URLdisp' => 'Link to KML',
+  'options'  => 'V'
+);
+
+
 /* Doesn't work, it seems this field is not used.
 $opts['fdd']['hidepos'] = array(
   'name'     => 'Pos. hidden',
