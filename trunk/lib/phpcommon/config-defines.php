@@ -46,7 +46,7 @@
     define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
     define("FORUM_SERVER_URL", "http://www.virtual-winds.com/forum/index.php?showforum=276");
 
-    // Max position age (engine speedup on long races) => 1 week since we have "histpos" table
+    // Max position age (engine speedup on long races) => 2 days since we have "histpos" table
     define("DEFAULT_POSITION_AGE", 1 * 3600);
     define("MAX_POSITION_AGE", 1 * 172800);
     // Max number of boats on each map

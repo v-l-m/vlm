@@ -47,14 +47,8 @@
         $ws->answer['blackout_start'] = $races->bobegin;
         $ws->answer['blackout_end'] = $races->boend;
     }
-
-    if ($users->hasTrackHidden()) {
-        $ws->answer['tracks_hidden'] = True;
-        if (!($isBo)) {
-            $endtime = $now; //Pas de BO => Force to now()
-        }
-        $starttime = $endtime - DELAYBETWEENUPDATE; // seulement la dernière trace
-    }
+    
+    //OK, here we are, with correct starttime and endtime
 
     $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
     $nbtracks = count($pi->records);

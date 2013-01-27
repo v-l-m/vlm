@@ -15,7 +15,7 @@
         switch($matches[1]) {
             case "tracks" :
                 if (preg_match("/(\d\d\d\d\d\d)\/(\d\d)\/(\d\d)\/(\d+)\/(\d\d)\/(\d+)\.json/", $matches[2], $components)) {
-                    headeranddie(sprintf("/ws/boatinfo/statictracks.php?ym=%d&d=%d&h=%d&r=%d&u=%d", $components[1], $components[2], $components[3], $components[4], $components[5]+100*$components[6]));
+                    headeranddie(sprintf("/ws/boatinfo/statictracks.php?ym=%d&d=%d&h=%d&idr=%d&idu=%d", $components[1], $components[2], $components[3], $components[4], $components[5]+100*$components[6]));
                 }   
             break;         
 

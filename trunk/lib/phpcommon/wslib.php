@@ -9,9 +9,11 @@ class WSBase extends baseClass {
 
     public $answer = Array();
     public $maxage = 0;
+    public $now = 0;
 
     function __construct() {
         parent::baseClass();
+        $this->now = time();
     }
 
     function queryRead($query) {
@@ -106,8 +108,84 @@ class WSBase extends baseClass {
         }
     }
 
+    function saveJson($filename, $force = 'no') {
+        $path = dirname($filename);
+        // Création et mise en cache
+        if ( ( ! file_exists($filename) ) ||  ($force == 'yes') ) {
+            if (!is_dir($path)) mkdir($path, 0777, True);
+            return file_put_contents ($filename , json_encode($this->answer));
+        }
+        return True;
+    }
 
 }
+
+class WSTracks extends WSBase {
+    public $users = null;
+    public $races = null;
+    
+    function __construct() {
+        parent::__construct();
+
+        $this->users = getUserObject($this->check_cgi_int('idu', 'IDU01', 'IDU02'));
+        if (is_null($this->users)) $this->reply_with_error('IDU03');
+        $idr = $this->check_cgi_int('idr', 'IDR01', 'IDR02');
+        if (!raceExists($idr)) $this->reply_with_error('IDR03'); //FIXME : select on races table made two times !
+        $this->races = new races($idr);
+
+    }
+
+    function isBo($starttime, $endtime) {
+        return ($this->races->bobegin < $endtime && $this->races->boend > $starttime && $this->races->bobegin < $this->now && $this->races->boend > $this->now );
+    }
+
+    function H($lt) {
+        //Heure ronde immédiatement inférieure
+        $lt['minutes'] = 0;
+        $lt['seconds'] = 0;
+        return($lt);
+    }
+    
+    function M($lt) {
+        $hh = $lt['hours'];
+        if ($hh == 0) {
+            $lt = getdate($lt["0"]-24*3600);
+            $hh = 24;
+        }        
+        return $this->delay_modulo($hh);
+    }
+    
+    function delay_modulo($hh) {
+        if ($hh == 0 or $hh == 24) {
+            $l = 24*3600;
+        } else if ( $hh % 8 == 0 ) {
+            $l = 8*3600;
+        } else if ( $hh % 4 == 0 ) {
+            $l = 4*3600;
+        } else if ( $hh % 2 == 0 ) {
+            $l = 2*3600;
+        } else {
+            $l = 3600;
+        }
+        return($l);
+    }
+    
+    function trackurl($lt, $idr, $idu) {
+
+        $hh = $lt['hours'];
+        if ($hh == 0) {
+            $lt = getdate($lt["0"]-24*3600);
+            $hh = 24;
+        }
+        $u2 = intval($this->users->idusers/100);
+        $u1 = $idu - 100*$u2;
+
+        $url = sprintf("%04d%02d/%02d/%02d/%d/%02d/%d.json", $lt['year'], $lt['mon'], $lt['mday'], $hh, $this->races->idraces, $u1, $u2);
+        return ($url);
+    }
+    
+}
+
 
 class WSBaseAuthent extends WSBase {
     function __construct() {
