@@ -25,12 +25,6 @@
         $ws->reply_with_error('TRK01');
     }
     $l = $ws->delay_modulo($hh);
-    //we help browser to clean-up cache
-    if ($l < 24*3600) {
-        $ws->maxage = 24*3600;
-    } else {
-        $ws->maxage = 2592000;
-    }
     $endtime = gmmktime($h, $min, $s, $m, $d, $y);
     $starttime = $endtime - $l;
 
@@ -57,6 +51,13 @@
     $filepath = sprintf("%s/%s", DIRECTORY_TRACKS, $fileref);
     $ws->answer['urlref'] = $fileref;
     $ws->answer['success'] = True;
+  
+    //we help browser to clean-up cache
+    if ($l < 24*3600) {
+        $ws->maxage = 24*3600; //avoid keeping adlib "temporary" block of 1, 2, 4, 8 hours
+    } else {
+        $ws->maxage = 2592000;
+    }
 
     $ws->saveJson($filepath);
     $ws->reply_with_success();
