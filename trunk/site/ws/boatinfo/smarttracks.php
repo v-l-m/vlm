@@ -30,10 +30,11 @@
     $ws->answer['tracks_url'] = Array();
     
     //BO en cours (test sur $ws->now) et BO concerné par la période demandée
-    if ($ws->isBo($starttime, $endtime)) {
+    if ($isbo = $ws->isBo($starttime, $endtime)) {
         //BlackOut in place
         //FIXME BO could be just a specific WHERE clause : AND NOT (time > bobegin AND time < boend)
         $endtime = $ws->races->bobegin;
+        $ws->maxage = $this->races->boend - $ws->now; //Set up maxage just to the end of the BO. // FIXME : is it safe ?
         $ws->answer['blackout'] = True;
         $ws->answer['blackout_start'] = $ws->races->bobegin;
         $ws->answer['blackout_end'] = $ws->races->boend;
@@ -56,9 +57,11 @@
         $pi = new positionsIterator($ws->users->idusers, $ws->races->idraces, $cur_lt["0"], $endtime, $ws->races->vacfreq*60);        
         $ws->answer['nb_tracks'] = count($pi->records);
         $ws->answer['tracks'] = $pi->records;
+        $ws->maxage = $ws->races->getTimeToUpdate($ws->now); //cache headers, wait for next crank
     } else {
         //on est dans le passé de plus d'une heure, on prends l'heure supérieure comme début
         $cur_lt = $ws->H(getdate($endtime+3600));
+        $ws->maxage = 2592000; //cache headers, adlib
     }
     
     while ($cur_lt["0"] > $starttime_lt["0"]) { // Tant qu'on a pas atteint le début de la plage
@@ -68,6 +71,7 @@
         $cur_lt = $ws->H(getdate($cur_lt["0"]-$delay));
     }
 
-    $ws->maxage = $ws->races->getTimeToUpdate($ws->now); //cache headers
+    //On restaure le maxage lié au BO si nécessaire.
+    if ($isbo) $ws->maxage = $this->races->boend - $ws->now; //Set up maxage just to the end of the BO.
     $ws->reply_with_success();
 ?>
