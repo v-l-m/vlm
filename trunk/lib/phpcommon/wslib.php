@@ -141,6 +141,7 @@ class WSTracks extends WSBase {
 
     function H($lt) {
         //Heure ronde immédiatement inférieure
+        $lt['0'] = $lt['0'] - 60*$lt['minutes'] - $lt['seconds'];
         $lt['minutes'] = 0;
         $lt['seconds'] = 0;
         return($lt);
