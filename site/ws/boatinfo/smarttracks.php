@@ -63,6 +63,7 @@
     
     while ($cur_lt["0"] > $starttime_lt["0"]) { // Tant qu'on a pas atteint le début de la plage
         $delay = $ws->M($cur_lt);
+        //$ws->answer['tracks_url'][] = Array("url" => $ws->trackurl($cur_lt), "delai" => $delay, "curlt" => $cur_lt);
         $ws->answer['tracks_url'][] = $ws->trackurl($cur_lt);
         $cur_lt = $ws->H(getdate($cur_lt["0"]-$delay));
     }
