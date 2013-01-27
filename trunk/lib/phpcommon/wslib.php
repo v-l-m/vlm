@@ -170,8 +170,7 @@ class WSTracks extends WSBase {
         return($l);
     }
     
-    function trackurl($lt, $idr, $idu) {
-
+    function trackurl($lt) {
         $hh = $lt['hours'];
         if ($hh == 0) {
             $lt = getdate($lt["0"]-24*3600);
