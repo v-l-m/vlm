@@ -4,35 +4,14 @@
     include_once('positions.class.php');
 
     header("content-type: text/plain; charset=UTF-8");
-
-    class StaticTracks extends WSBase {
-        #FIXME coulde be generic
-        public $answer = Array();
-
-        function __construct() {
-        }
-        
-        function saveJson($filename, $force = 'no') {
-            $path = dirname($filename);
-            // Création et mise en cache
-            if ( ( ! file_exists($filename) ) ||  ($force == 'yes') ) {
-                if (!is_dir($path)) mkdir($path, 0777, True);
-                return file_put_contents ($filename , json_encode($this->answer));
-            }
-            return True;
-        }
-    }
-
-
-    $ws = new StaticTracks();
-    $now = time();
     
-    $users = getUserObject($ws->check_cgi_int('u', 'IDU01', 'IDU02'));
-    if (is_null($users)) $ws->reply_with_error('IDR03');
-    $idr = $ws->check_cgi_int('r', 'IDR01', 'IDR02');
-    if (!raceExists($idr)) $ws->reply_with_error('IDR03'); //FIXME : select on races table made two times !
-    $races = new races($idr);
+    //Note : You normally shouldn't call directly statictracks.php, but use it when redirect
+    //this ws doesn't check if this is your boat or not, to be more efficient. 
+    //You should use tracks_private.php for yours manageable boats
+    // NOT AUTHENTIFIED
 
+    $ws = new WSTracks();
+    
     //DECODE TIME PATH
     $y = intval(substr(get_cgi_var('ym'), 0, 4));
     $m = intval(substr(get_cgi_var('ym'), 4, 2));
@@ -44,48 +23,41 @@
     $h = $hh;
     if ($hh > 24 or $hh <= 0) {
         $ws->reply_with_error('TRK01');
-    } else if ($hh == 0) {
-        $l = 24*3600;
-    } else if ( $hh % 8 == 0 ) {
-        $l = 8*3600;
-    } else if ( $hh % 4 == 0 ) {
-        $l = 4*3600;
-    } else if ( $hh % 2 == 0 ) {
-        $l = 2*3600;
+    }
+    $l = $ws->delay_modulo($hh);
+    //we help browser to clean-up cache
+    if ($l < 24*3600) {
+        $ws->maxage = 24*3600;
     } else {
-        $l = 3600;
-    }    
+        $ws->maxage = 2592000;
+    }
     $endtime = gmmktime($h, $min, $s, $m, $d, $y);
     $starttime = $endtime - $l;
 
     //On ne veut rien dans le futur
-    if ($endtime > $now) $ws->reply_with_error('RTFM02');
+    if ($endtime > $ws->now) $ws->reply_with_error('RTFM02');
 
     //On ne veut rien faire s'il y a un BO : EN COURS, et qu'on demande la période du BO
-    $isBo = ($races->bobegin < $endtime && $races->boend > $starttime && $races->bobegin < $now && $races->boend > $now );
-    if ($isBo) {
+    if ($ws->isBo($starttime, $endtime)) {
         $ws->reply_with_error('RTFM02');
     }
+    $ws->answer['request'] = Array('idu' => $ws->users->idusers, 'idr' => $ws->races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
 
-    $ws->answer['request'] = Array('idu' => $users->idusers, 'idr' => $races->idraces, 'starttime' => $starttime, 'endtime' => $endtime);
-
-    $pi = new positionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
-    $nbtracks = count($pi->records);
-    if ($nbtracks < 1) {
-        $pi = new fullPositionsIterator($users->idusers, $races->idraces, $starttime, $endtime, $races->vacfreq*60);
-        $nbtracks = count($pi->records);
+    // si on demande des traces récentes, on prends la table positions, sinon, on prends large
+    if ( ($ws->now - $starttime) < MAX_POSITION_AGE) {
+        $pi = new positionsIterator($ws->users->idusers, $ws->races->idraces, $starttime, $endtime, $ws->races->vacfreq*60);
+    } else {
+        $pi = new fullPositionsIterator($ws->users->idusers, $ws->races->idraces, $starttime, $endtime, $ws->races->vacfreq*60);
     }
+    $nbtracks = count($pi->records);
     $ws->answer['nb_tracks'] = $nbtracks;
     $ws->answer['tracks'] = $pi->records;
 
-    $u2 = intval($users->idusers/100);
-    $u1 = $users->idusers - 100*$u2;
-
-    $fileref = sprintf("%04d%02d/%02d/%02d/%d/%02d/%d.json", $y, $m, $d, $hh, $races->idraces, $u1, $u2);
+    $fileref = $ws->trackurl(getdate($endtime));
     $filepath = sprintf("%s/%s", DIRECTORY_TRACKS, $fileref);
-    $ws->answer['fileref'] = $fileref;
+    $ws->answer['urlref'] = $fileref;
     $ws->answer['success'] = True;
-    $ws->maxage = 2592000;
+
     $ws->saveJson($filepath);
     $ws->reply_with_success();
 ?>

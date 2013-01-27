@@ -246,7 +246,7 @@ function lastUpdate()
 {
   if (file_exists(CRONVLMLOCK)) {
     printf (getLocalizedString("processing") );
-  } else {
+  } else {  
     $row2 = getLastUpdateRow();
     $lastupdate = $row2['time'];
     $races = $row2['races'];
