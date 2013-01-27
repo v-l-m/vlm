@@ -178,7 +178,7 @@ class WSTracks extends WSBase {
             $hh = 24;
         }
         $u2 = intval($this->users->idusers/100);
-        $u1 = $idu - 100*$u2;
+        $u1 = $this->users->idusers - 100*$u2;
 
         $url = sprintf("%04d%02d/%02d/%02d/%d/%02d/%d.json", $lt['year'], $lt['mon'], $lt['mday'], $hh, $this->races->idraces, $u1, $u2);
         return ($url);
