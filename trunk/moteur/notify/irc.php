@@ -9,23 +9,26 @@
         
         function __construct() {
             parent::__construct();
-            $strServeur = "irc.epiknet.org"; // serveur IRC
+            $strServeur = VLM_NOTIFY_IRC_SERVER; // serveur IRC
             $intPort = 6667; // port..
-            $strNickCMD = "NICK vlm[POSTMAN]";
+            $strNickCMD = "NICK ".VLM_NOTIFY_IRC_USER;
             $strNick = ":postman";
             $strInfo = 'USER vlmpostman 0 * :bot';
-            $strChannel = "JOIN #vlm"; // channel IRC
-
+            $strChannel = "JOIN ".VLM_NOTIFY_IRC_CHAN; // channel IRC
+        }
+        
+        function post() {
             $this->socket = @fsockopen($strServeur, $intPort); // ouverture socket sur le serveur
             if (feof ($this->socket)) {
                 die ("Couldn't connect to IRC" );
             } else {
                 $this->send_data ($strInfo);
                 $this->send_data ($strNickCMD);
-            $this->read_some_data();                
+                $this->read_some_data();                
                 $this->send_data ($strChannel);
-                            $this->read_some_data();
+                $this->read_some_data();
             }
+            parent::post();
         }
 
         function close() {
