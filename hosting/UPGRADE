@@ -13,6 +13,9 @@ From 0.21.x to 0.22 :
   EDIT file ./conf/param.php
     - change define("VLM_NOTIFY_LIST", "facebook,identica,mail,irc");
 
+  EDIT CRONTAB to add
+      * * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh irc  
+  
   RUN
     ./scripts/upgrade.sh 0.22 0
     
