@@ -9,15 +9,16 @@
         
         function __construct() {
             parent::__construct();
+        }
+        
+        function post() {
             $strServeur = VLM_NOTIFY_IRC_SERVER; // serveur IRC
             $intPort = 6667; // port..
             $strNickCMD = "NICK ".VLM_NOTIFY_IRC_USER;
             $strNick = ":postman";
             $strInfo = 'USER vlmpostman 0 * :bot';
             $strChannel = "JOIN ".VLM_NOTIFY_IRC_CHAN; // channel IRC
-        }
-        
-        function post() {
+
             $this->socket = @fsockopen($strServeur, $intPort); // ouverture socket sur le serveur
             if (feof ($this->socket)) {
                 die ("Couldn't connect to IRC" );
