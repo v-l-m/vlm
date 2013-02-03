@@ -284,6 +284,7 @@ class WSSetup extends WSBaseAuthent {
 
     function __construct() {
         parent::__construct();
+        
         //surface test
         $this->input = get_cgi_var('parms', null);
         if (is_null($this->input)) $this->reply_with_error('PARM01');
@@ -620,7 +621,7 @@ function checkPlayerLogin($pseudo, $passwd) {
     }
 }
 
-function login_if_not($usage = "No usage given") {  
+function login_if_not($usage = "No usage given") {
     session_start();
     // do we know the player from a previous login session?
     if (isPlayerLoggedIn() && isLoggedIn() ) {

@@ -123,6 +123,7 @@ case $confmodule in
     echo 'OK !'
 
     echo -n "+$confmodule: Création du cache si nécessaire"
+    mkdir -p $VLMCACHE/tracks --mode=777
     mkdir -p $VLMCACHE/racemaps --mode=777
     mkdir -p $VLMCACHE/minimaps --mode=777
     mkdir -p $VLMCACHE/tinymaps --mode=777
