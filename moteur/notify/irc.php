@@ -7,11 +7,8 @@
         var $rate_limit = 4;
         var $socket = null;
         
-        function __construct() {
-            parent::__construct();
-        }
-        
-        function post() {
+        function open() {
+            if (!is_null($this->socket)) return;
             $strServeur = VLM_NOTIFY_IRC_SERVER; // serveur IRC
             $intPort = 6667; // port..
             $strNickCMD = "NICK ".VLM_NOTIFY_IRC_USER;
@@ -29,7 +26,6 @@
                 $this->send_data ($strChannel);
                 $this->read_some_data();
             }
-            parent::post();
         }
 
         function close() {
@@ -61,6 +57,7 @@
         }
 
         function postone($message) {
+            $this->open(); //Ouvre le chan s'il n'est pas encore ouvert
             $this->read_some_data();
             $this->send_data("PRIVMSG ".VLM_NOTIFY_IRC_CHAN." :".$message['summary']);
             $this->read_some_data();
