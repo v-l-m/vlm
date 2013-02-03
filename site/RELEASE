@@ -1,6 +1,22 @@
 RELEASE NOTES
 See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
 
+v0.22 aka Epik Nik
+
+What's up for ...
+... players ?
+* Sodebo positions available
+* Treasure Ship polar available for incoming race...
+* IRC Notifications
+* Tools can now (subject to conditions) gather more than 48 hours of tracks.
+
+... developers ?
+* Use of smarttrack and static cache track is removing the duration limit (48h).
+
+... admins ?
+* Admin interface for OAD
+* KML track export to help when players appeal
+
 v0.21 aka Hurry Khan
 
 What's up for ...
