@@ -1,0 +1,28 @@
+Ce document décrit l'utilisation/l'installation sur votre système d'une image de développement VirtualBox pour VLM
+
+= Linux =
+
+0. Sémantique
+ * Nom de l'instance virtualbox : {{{vlmvbox}}}. Il s'agit du nom de la machine virtuelle dans VirtualBox (le nom affiché dans les préférences et le nom de la fenêtre)
+ * Nom d'hôte virtuel : ce nom d'hôte est le hostname linux (actuellement : {{{vlmlucid}})
+ * Nom d'hôte local : il s'agit du nom d'hôte
+ * Login/password générique : vlm/vlm
+ * Appliquer les prérequis systèmes pour donner les droits de redémarrage apache à l'utilisateur vlm
+
+1. Télécharger l'image VirtualBox :
+  FIXME {{{wget ....}}}
+  
+2. La déclarer dans VirtualBox et la configurer
+  * Nommage : {{{vlmvbox}}}
+  * FIXME mémoire, audio, usb, etc...
+  * configurer le port forwarding
+   * Télécharger le script : {{{wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/virtualbox/natforward.sh?format=txt -O natforward.sh}}}
+   * L'executer : {{{./natforward.sh vlmvbox}}}
+  * Règler l'offset de temps
+   * La machine virtuelle est en UTC. Elle prend le temps sur votre PC. Si ce dernier n'est pas en UTC, vous allez avoir un décalage
+     VBoxManage modifyvm vlmvbox --biossystemtimeoffset -7200000
+  * partager votre clef publique ssh dans .ssh/authorized_keys
+
+3. Pour démarrer en ligne de commande :
+ * VBoxManage startvlm vlmvbox --type headless
+ * OU utiliser le script vlmvbox.sh
