@@ -86,7 +86,6 @@ class races {
   function getTimeToUpdate($time = null) {
 
       if(is_null($time)) $time = time();
-      
       $vacstep = $this->vacfreq*60; //vacfreq est en minute, vacstep est en secondes
       $lastrun = $this->lastrun; // $lastrun est le dernier run moteur, null si pas de run
 
