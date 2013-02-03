@@ -62,7 +62,7 @@
 
         function postone($message) {
             $this->read_some_data();
-            $this->send_data("PRIVMSG #vlm :".$message['summary']);
+            $this->send_data("PRIVMSG ".VLM_NOTIFY_IRC_CHAN." :".$message['summary']);
             $this->read_some_data();
             echo $message['summary']."\n";
             return True;
