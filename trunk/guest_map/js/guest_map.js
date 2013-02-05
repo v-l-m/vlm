@@ -34,6 +34,7 @@ function start()
 		{
 		boats=refresh_ranking(idr);
 		// Asynchronously Loading the GMAP API for best performances
+		//gmap_key = "ABQIAAAAt-TNu1jygAUkY20DVJC9EBQiRJWtMgCXYC-aY29DJsyyjFhxYRRiuD66kgnawCurNFPlPb4Rfiznqw"
 		var script = document.createElement("script");
 		script.type = "text/javascript";
 		script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;key=" + gmap_key + "&callback=display_race";
@@ -475,37 +476,48 @@ function get_track(idu,color)
 // get and display the ranking
 function refresh_ranking(idr)
 	{
-	var tab_ranking;
-	var test_engaged;
+
 	//document.getElementById('tab_ranking').innerHTML = "<div align='center' style='width:210px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
 	$.ajax({
 		async: false,
+		type: "GET",
 		url: "/ws/raceinfo/ranking.php?idr="+idr,
+		//url: "unittest.json",
 		dataType: "json",
 		cache: false,
 		//data: user_pass_ajax,
 		//username: username,
 		//password: password,
 		success: function(answer){
-			test_engaged = answer['nb_engaged'];
-			if(test_engaged == "0")
-			{
-				map_lat = 0;
-				map_lon = 0;
-				tab_ranking = "<table bgcolor='#ffffff' height='100'><tr class='txtbold2'><td>Pas de bateaux engag&eacute;s dans cette course pour le moment</td></tr></table>";
-				document.getElementById('tab_ranking').innerHTML = tab_ranking;
-			}
-			else
-			{
-			for (k in answer) {
-				
-				if(k=="ranking")
-					{
-					tab_ranking = "<table bgcolor='#000000'><tr class='txtbold1' bgcolor='#ffffff'><td>Pos</td><td>Navigateur</td></tr>";
-					var d2 = answer[k];
+			if (answer != null) {
+				test_engaged = answer['nb_engaged'];
+				if(test_engaged == "0")
+				{
+					map_lat = 0;
+					map_lon = 0;
+					tab_ranking = "<table bgcolor='#ffffff' height='100'><tr class='txtbold2'><td>Pas de bateaux engag&eacute;s dans cette course pour le moment</td></tr></table>";
+					document.getElementById('tab_ranking').innerHTML = tab_ranking;
+				}
+				else
+				{
+					var mytable = $('<TABLE/>', {'id':'tbranking'}).appendTo($("DIV#tab_ranking"));
+					$('<THEAD/>').appendTo(mytable);
+					$('<TR/>').appendTo($("thead", mytable));
+					$('<TH/>', {'data-placeholder':'>20','scope':'col','html':'&nbsp;'}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
+					$('<TH/>', {'data-placeholder':'<12','scope':'col','html':'#'}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
+					$('<TH/>', {'data-placeholder':'','scope':'col','html':'navigateur'}).css({'width':'160px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
+					th$=$('<TH/>', {'scope':'col','html':''}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
+					a$=$('<A/>',{'href':'#'}).addClass('reset').appendTo(th$);
+					$('<IMG/>',{'src':'./img/reset.gif', 'alt':'RAZ des filtres'}).appendTo(a$);
 					
+					$('<TBODY/>').appendTo(mytable);
+					var nl;var nb;
+					//Old20130128
+					//tab_ranking = "<table bgcolor='#000000'><tr class='txtbold1' bgcolor='#ffffff'><td>Pos</td><td>Navigateur</td></tr>";
+					var d2 = answer.ranking;
 					boats = new Array();
 					for (k2 in d2) {
+						// console.log('treating:'+k2 + ' - rank:' + d2[k2].rank);
 						//"idusers","boatpseudo","boatname","color","country","nwp","dnm","deptime","loch","releasetime","latitude","longitude","last1h","last3h","last24h","status","rank"
 						i = d2[k2].idusers
 						boats[i] = d2[k2];
@@ -521,13 +533,59 @@ function refresh_ranking(idr)
 						if(statusb == "locked") { bgcolor = "ff6600"; }
 						// when paparazzia is in white no we can see then in the ranking
 						if(colorb == "ffffff") { colorb = "cccccc"; }
-						
-						tab_ranking = tab_ranking + "<tr class='txt1' bgcolor='#" + bgcolor + "'><td width='25' class='STxtRank' align='center'>"+ d2[k2].rank + "</td><td width='175'><div  onclick='get_boat(" + d2[k2].idusers + ");' onmouseover=\"this.style.cursor='help';\" onmouseout=\"this.style.cursor='auto';\"><font color='"+ colorb + "'><img src='" + baseurl + "/cache/flags/" + d2[k2].country + ".png' width='30' height='20'>No "+ d2[k2].idusers + " - " + d2[k2].boatpseudo + "</font></div></td></tr>";
-						}
-						
-					tab_ranking = tab_ranking + "</table>";
-					document.getElementById('tab_ranking').innerHTML = tab_ranking;
+
+						//Old20130128
+						// tab_ranking = tab_ranking + "<tr class='txt1' bgcolor='#" + bgcolor + "'><td width='25' class='STxtRank' align='center'>"+ d2[k2].rank + "</td><td width='175'><div  onclick='get_boat(" + d2[k2].idusers + ");' onmouseover=\"this.style.cursor='help';\" onmouseout=\"this.style.cursor='auto';\"><font color='"+ colorb + "'><img src='" + baseurl + "/cache/flags/" + d2[k2].country + ".png' width='30' height='20'>No "+ d2[k2].idusers + " - " + d2[k2].boatpseudo + "</font></div></td></tr>";
+
+						nl = $('<TR/>', {'scope':'col'}).addClass('txt1').css({'background-color':'#'+bgcolor}).appendTo($("tbody", mytable));
+
+						// col pos
+						nb=$('<TD/>').addClass('STxtRank').appendTo(nl);
+						$('<P/>',{'html': d2[k2].rank }).css({'font-color':colorb}).appendTo(nb);
+						// col boat#
+						nb=$('<TD/>').appendTo(nl);
+						$('<P/>',{'boat': d2[k2].idusers, 'html': d2[k2].idusers}).addClass('clckb').css({'font-color':colorb}).appendTo(nb);
+						//col boat name
+						nb=$('<TD/>').appendTo(nl);
+						$('<P/>',{'boat': d2[k2].idusers, 'html':d2[k2].boatpseudo }).addClass('clckb').css({'font-color':colorb}).appendTo(nb);
+						//col flag
+						$('<IMG/>',{'src':baseurl + '/cache/flags/' + d2[k2].country + '.png'}).css({ width:'30', height:'20px'}).appendTo($('<TD/>')).appendTo(nl);
+
 					}
+					// Old20130128
+					// tab_ranking = tab_ranking + "</table>";
+					// document.getElementById('tab_ranking').innerHTML = tab_ranking;
+
+					// bind tout paragraphe de classe clckb
+					$(".clckb").bind('click', function(event) {
+						get_boat($(this).attr("boat"));
+					});
+					
+					// TABLESORT $("table#tbranking")
+					mytable.tablesorter({
+						theme: 'blue',
+						widthFixed : true,
+						widgets: ["filter"],
+						headers: { 
+							0: { sorter: true, filter: true },
+							1: { sorter: true, filter: true },
+							2: { sorter: true, filter: true }, 
+							3: { sorter: false, filter: false }
+							},
+						widgetOptions : {
+							filter_childRows : false,
+							filter_columnFilters : true,
+							filter_cssFilter : 'tablesorter-filter',
+							filter_functions : null,
+							filter_hideFilters : true,
+							filter_ignoreCase : true,
+							filter_reset : 'a.reset',
+							filter_searchDelay : 100,
+							filter_startsWith : false,
+							filter_useParsedData : false
+						},
+						sortList: [[0,0]]
+					});
 				}
 			}},
 		error: function(){ alert("erreur => refresh_ranking !"); }
