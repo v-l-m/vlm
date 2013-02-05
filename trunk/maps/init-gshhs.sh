@@ -4,11 +4,11 @@
 source $VLMRACINE/conf/conf_script
 
 destpath=$VLMGSHHS
-gshhsfile=gshhs+wdbii_2.2.0.zip
+gshhsfile=gshhg-bin-2.2.2.zip
 if test -n "$VLMGSHHSURL" ; then
     urlgshhs=$VLMGSHHSURL/$gshhsfile
 else    
-    urlgshhs=http://www.ngdc.noaa.gov/mgg/shorelines/data/gshhs/version2.2.0/$gshhsfile
+    urlgshhs=http://www.ngdc.noaa.gov/mgg/shorelines/data/gshhs/latest/$gshhsfile
 fi
 
 mkdir -p $destpath
