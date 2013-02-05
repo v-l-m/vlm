@@ -8,7 +8,7 @@
 	$query  .= "FROM racetrophycontrol U ";
 	$query  .= "left join users_Trophies UT on U.idusertrophy = UT.idUsersTrophies ";
 	$query  .= "right join users US on UT.idusers = US.idUsers ";
-	$query  .= "WHERE UT.idusers IS NOT NULL AND UT.quitdate IS NULL AND UT.RefTrophy=2 ";
+	$query  .= "WHERE UT.idusers IS NOT NULL AND (UT.quitdate IS NULL OR UT.quitdate=0) AND UT.RefTrophy=2 ";
 	$query  .= "ORDER BY UT.idraces DESC, U.controldate DESC, UT.idUsers ASC; ";
     htmlQuery($query);
 
@@ -17,7 +17,7 @@
 	$query  .= "FROM racetrophycontrol U ";
 	$query  .= "left join users_Trophies UT on U.idusertrophy = UT.idUsersTrophies AND UT.quitdate = U.controldate ";
 	$query  .= "right join users US on UT.idusers = US.idUsers ";
-	$query  .= "WHERE UT.idusers IS NOT NULL AND NOT UT.quitdate IS NULL AND UT.RefTrophy=2 ";
+	$query  .= "WHERE UT.idusers IS NOT NULL AND NOT (UT.quitdate IS NULL OR UT.quitdate=0) AND UT.RefTrophy=2 ";
 	$query  .= "ORDER BY UT.idraces DESC, U.controldate DESC, UT.idUsers ASC; ";
     htmlQuery($query);
 	
