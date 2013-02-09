@@ -503,8 +503,8 @@ function refresh_ranking(idr)
 					var mytable = $('<TABLE/>', {'id':'tbranking'}).appendTo($("DIV#tab_ranking"));
 					$('<THEAD/>').appendTo(mytable);
 					$('<TR/>').appendTo($("thead", mytable));
-					$('<TH/>', {'data-placeholder':'>20','scope':'col','html':'&nbsp;'}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
-					$('<TH/>', {'data-placeholder':'<12','scope':'col','html':'#'}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
+					$('<TH/>', {'data-placeholder':'>2','scope':'col','html':'&nbsp;'}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
+					$('<TH/>', {'data-placeholder':'>2','scope':'col','html':'#'}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
 					$('<TH/>', {'data-placeholder':'','scope':'col','html':'navigateur'}).css({'width':'160px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
 					th$=$('<TH/>', {'scope':'col','html':''}).css({'width':'20px'}).addClass('STxtRank').appendTo($("thead>tr", mytable));
 					a$=$('<A/>',{'href':'#'}).addClass('reset').appendTo(th$);
