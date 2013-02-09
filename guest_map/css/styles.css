@@ -193,12 +193,12 @@ table.tablesorter thead tr .tablesorter-headerAsc{
 .tablesorter-filter {
   width: 95%;
   height: inherit;
-  margin: 4px;
-  padding: 4px;
+  margin: 2px 0px 2px 0px;
+  padding: 2px 0px 2px 0px;
   background-color: #fff;
   border: 1px solid #bbb;
   color: #333;
-  font-size: 9px;
+  font-size: 10px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
