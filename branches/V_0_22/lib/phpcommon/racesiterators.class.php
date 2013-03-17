@@ -47,6 +47,7 @@
 
         function onerow($row) {
             $vevent = new vevent(); // create an event calendar component
+            $vevent->setProperty("uid", $row['idraces']."@".$_SERVER['SERVER_NAME']);
             $vevent->setProperty( 'dtstart', array('timestamp' => $row['deptime']) );
             $vevent->setProperty( "organizer" , EMAIL_COMITE_VLM );
             $vevent->setProperty( 'dtend', array('timestamp' => $row['closetime']) );
