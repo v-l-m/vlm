@@ -43,7 +43,7 @@ REPEAT
     IF NOT done THEN
 		SET condOAD = (SELECT TIME_TO_SEC(TIMEDIFF(MAX(user_action.time),MIN(user_action.time))) 
 		FROM user_action 
-		WHERE user_action.idraces=race AND user_action.idusers=idu AND user_action.ipaddr <>'127.0.0.1' AND DATE(user_action.time)=par_dt LIMIT 1);
+		WHERE user_action.idraces=race AND user_action.idusers=idu AND user_action.ipaddr <>'127.0.0.1' AND user_action.action<>'Update prefs.' AND DATE(user_action.time)=par_dt LIMIT 1);
 		insert into racetrophycontrol (controldate,idusertrophy,Score) SELECT par_dt, idut, condOAD;
 		IF NOT (condOAD IS NULL OR condOAD < 3600) THEN
 			-- insert into racetrophycontrol (controldate,idusertrophy,Score) SELECT par_dt, idut, condOAD;
