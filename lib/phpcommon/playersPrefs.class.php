@@ -8,13 +8,13 @@ $playersPrefsList = explode(',', PLAYER_PREF_ALLOWED);
 $playersPrefsContactLinkPattern = Array(
     "contact_revatua" => "http://revatua.forumactif.com/u%scontact",
     "contact_fmv" => "http://forum-marinsvirtuels.forumactif.com/u%scontact",
-    "contact_taverne" => "http://www.virtual-winds.com/forum/index.php?showuser=%s",
+    "contact_taverne" => "http://www.virtual-winds.org/forum/index.php?showuser=%s",
     "contact_twitter" => "https://twitter.com/#!/%s",
     "contact_identica" => "http://identi.ca/%s",
     "contact_facebook" => "http://facebook.com/%s",
     "contact_googleplus" => "https://plus.google.com/u/0/%s",
     );
-    
+
 function sortPref($k1, $k2) {
     $ks = Array(
         "contact_revatua" => 32,
@@ -40,7 +40,7 @@ define("VLM_ACL_ALL", 3);
 
 function playersPrefsGroups() {
     global $playersPrefsList;
-    
+
     $pg = Array();
     foreach ($playersPrefsList as $key) {
         $path = explode('_', $key);
@@ -94,7 +94,7 @@ class playersPrefs extends baseClass {
                 }
                 return $val;
             case "contact_taverne":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/www\.virtual-winds\.com\/forum\/index.php\?showuser=(\d+)$/i", "/^(\d+)$/i");
+                return $this->checkDoublePattern($key, $val, "/^http:\/\/www\.virtual-winds\.org\/forum\/index.php\?showuser=(\d+)$/i", "/^(\d+)$/i");
             case "contact_fmv":
                 return $this->checkDoublePattern($key, $val, "/^http:\/\/forum-marinsvirtuels\.forumactif\.com\/u(\d+)$/i", "/^(\d+)$/i");
             case "contact_revatua":
