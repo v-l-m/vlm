@@ -24,7 +24,7 @@
     define("PROXY_AGENT_PASS", "PROXYPASS");
 
     // EMAIL COMITE
-    define_if_not("EMAIL_COMITE_VLM", "vlm@virtual-winds.com");
+    define_if_not("EMAIL_COMITE_VLM", "vlm@virtual-winds.org");
     define_if_not("MAIL_PREFIX", "VLM");
 
     //EMAIL NOTIFY
@@ -44,7 +44,7 @@
     define("GRIB_TOOLS_URL", DOC_SERVER_URL."Outils_m%C3%A9t%C3%A9os");
     //define("DOC_SERVER_URL_BO", DOC_SERVER_URL."Vocabulaire_%26_Jargon#BlackOut_.28BO.29");
     define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
-    define("FORUM_SERVER_URL", "http://www.virtual-winds.com/forum/index.php?showforum=276");
+    define("FORUM_SERVER_URL", "http://www.virtual-winds.org/forum/index.php/forum/276-virtual-loup-de-mer/");
 
     // Max position age (engine speedup on long races) => 2 days since we have "histpos" table
     define("DEFAULT_POSITION_AGE", 1 * 3600);
@@ -248,7 +248,7 @@
     //TESTING FLAG
     define_if_not("DISPLAY_LANG_WARNINGS", False);
     define_if_not("ALLOW_ACCOUNT_CREATION", True);
-    
+
     //WIND management
     define_if_not('MAX_WIND_POINTS', 2048);
 
@@ -257,7 +257,7 @@
     define_if_not("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
     define_if_not("VLM_NOTIFY_FACEBOOK_URL", "https://graph.facebook.com/201999359896107/feed");
     define_if_not("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "big_hashed_string");
-    
+
     define_if_not("VLM_NOTIFY_LIST", "test");
     define_if_not("VLM_NOTIFY_NEWS_MAX_AGE", 14*24*3600); #2 weeks
     define_if_not("VLM_NOTIFY_MAIL", EMAIL_COMITE_VLM);

@@ -12,7 +12,7 @@
     $ws = new WSTracks();
         
     //Il faut déterminer les bons starttime / endtime comme pour les tracks
-    //FIXME: shouldn't this be explicit ?
+    //endtime should not be setup if player wants "now", in order to help cache
     $starttime = intval(get_cgi_var('starttime', 0)); //0 means now -1h
     if ($starttime == 0) $starttime = $ws->now -3600;
     $endtime = intval(get_cgi_var('endtime', 0)); //0 means now

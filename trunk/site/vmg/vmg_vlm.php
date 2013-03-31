@@ -1480,10 +1480,10 @@ PHP by </span></font><span style="font-size: 9pt;"><font color="black" face="ver
 
         <div align="center">
         <p style="line-height: 100%; margin-top: 0pt; margin-bottom: 0pt;"><font face="verdana"><span style="font-size: 9pt;"><?php echo $strings[$lang]["help"] ?>
-: </span></font><span style="font-size: 9pt;"><a href="http://www.virtual-winds.com/forum/index.php?showtopic=4948" target="_blank"><font color="blue" face="verdana"><?php echo $strings[$lang]["taverne"] ?></font></a></span></p>
+: </span></font><span style="font-size: 9pt;"><a href="http://www.virtual-winds.org/forum/index.php?showtopic=4948" target="_blank"><font color="blue" face="verdana"><?php echo $strings[$lang]["taverne"] ?></font></a></span></p>
 
         <p style="line-height: 100%; margin-top: 0pt; margin-bottom: 0pt;"><font face="verdana"><span style="font-size: 9pt;">@
-Virtual-Winds.com</span></font></p>
+Virtual-Winds.org</span></font></p>
 
         </div>
 
