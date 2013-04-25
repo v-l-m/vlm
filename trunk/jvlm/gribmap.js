@@ -11,7 +11,7 @@
  */
 
 /**
- * @requires OpenLayers.js 
+ * @requires OpenLayers.js
  * @requires ControlSwitch.js
  * @requires OpenLayers/Pixel.js
  */
@@ -65,7 +65,7 @@ Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel, {
         this.x += ro*Math.cos(angle);
         this.y += ro*Math.sin(angle);
     },
-    
+
     CLASS_NAME: "Gribmap.Pixel"
 });
 
@@ -99,11 +99,11 @@ Gribmap.WindLevel = OpenLayers.Class({
     getGribLeftId: function(lon) {
         return Math.floor((lon+180)/this.blocx);
     },
-    
+
     getGribBottomLimit: function(lat) {
         return this.getGribBottomId(lat)*this.blocy-90;
     },
-    
+
     getGribBottomId: function(lat) {
         return Math.floor((lat+90)/this.blocy);
     },
@@ -120,7 +120,7 @@ Gribmap.WindLevel = OpenLayers.Class({
             this.extendWindArea(windarea);
             this.layer.redraw();
         }
-    },      
+    },
 
     //Get all wind areas inside bounds, and call checkWindArea() for each
     getWindAreas: function(bounds) {
@@ -130,7 +130,7 @@ Gribmap.WindLevel = OpenLayers.Class({
         var left = this.getGribLeftLimit(bounds.left);
         var bottom = null;
         var newblock = null;
-        
+
         while (left < bounds.right) {
             bottom = this.getGribBottomLimit(bounds.bottom);
             while (bottom < bounds.top) {
@@ -162,7 +162,7 @@ Gribmap.WindLevel = OpenLayers.Class({
             windarea.checkWindArray(tl[i]);
         }
     },
-    
+
     getWindInfo: function(lat, lon) {
         var left = this.getGribLeftLimit(lon);
         var bottom = this.getGribBottomLimit(lat);
@@ -193,7 +193,7 @@ Gribmap.WindArray = OpenLayers.Class({
         this.time = time;
         this.windArea = windArea;
     },
-    
+
     isLoaded: function() {
         return (this.status == 'loaded');
     },
@@ -217,7 +217,7 @@ Gribmap.WindArray = OpenLayers.Class({
             this.status = "void";
         }
     },
-  
+
     // transform the information retrieved in JSON form the wind service
     // in VLM into a two-dimensional pseudo-array
     // parameter:
@@ -237,7 +237,7 @@ Gribmap.WindArray = OpenLayers.Class({
             wind_array[windNode.lat][windNode.lon] = windInfo;
             if (windNode.lon == 180.0) {
                 wind_array[windNode.lat][-windNode.lon] = windInfo;
-            }      
+            }
         }
         return wind_array;
     },
@@ -257,14 +257,14 @@ Gribmap.WindArray = OpenLayers.Class({
             url: Gribmap.windgrid_uribase,
             params: { north: this.windArea.top, south: this.windArea.bottom,
                       east: reqeast, west: reqwest,
-                      timerequest: this.time, 
+                      timerequest: this.time,
 		      stepmultiple: this.windArea.windlevel.stepmultiple},
             async: true,
             headers: {
-                'Accept' : 'application/json',
+                'Accept' : 'application/json'
             },
             callback: this.handleWindGridReply,
-            scope: this,
+            scope: this
         });
     },
     CLASS_NAME: "Gribmap.WindArray"
@@ -297,11 +297,11 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         this.windArrays[ts] = new Gribmap.WindArray(ts, this);
         this.windArrays[ts].getWindGrid();
     },
-    
+
     exists: function(ts) {
         return (typeof (this.windArrays[ts]) != 'undefined');
     },
-    
+
     isLoaded: function(ts) {
         return (this.exists(ts) && this.windArrays[ts].isLoaded());
     },
@@ -310,7 +310,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         return (this.exists(ts) && this.windArrays[ts].isLoading());
     },
 
-    toString: function() {   
+    toString: function() {
 //        return 'gribresol=('+this.windlevel['griblevel']+") coord=("+normalizeLongitude0(this.left)+","+this.bottom+")";
         return 'gribresol=('+this.windlevel['griblevel']+") "+OpenLayers.Bounds.prototype.toString.apply(this, arguments);
     },
@@ -363,7 +363,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         t_val1 = nw_wind.wspeed*Math.sin(t_angle1);
         t_val2 = ne_wind.wspeed*Math.sin(t_angle2);
         n_v = t_val1 + loncoeff*(t_val2 - t_val1);
-        
+
         t_angle1 = sw_wind.wheading*Math.PI/180.0;
         t_angle2 = se_wind.wheading*Math.PI/180.0;
         t_val1 = sw_wind.wspeed*Math.cos(t_angle1);
@@ -398,7 +398,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         t_val1 = nw_wind.wspeed*Math.sin(t_angle1);
         t_val2 = ne_wind.wspeed*Math.sin(t_angle2);
         n_v = t_val1 + loncoeff*(t_val2 - t_val1);
-        
+
         t_angle1 = sw_wind.wheading*Math.PI/180.0;
         t_angle2 = se_wind.wheading*Math.PI/180.0;
         t_val1 = sw_wind.wspeed*Math.cos(t_angle1);
@@ -423,7 +423,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
 
         return new Wind(wspeed, wangle);
     },
-    
+
     CLASS_NAME: "Gribmap.WindArea"
 });
 
@@ -435,8 +435,8 @@ Layer
  */
 Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
-  /* APIProperty: isBaseLayer 
-   * {Boolean} Gribmap layer is never a base layer.  
+  /* APIProperty: isBaseLayer
+   * {Boolean} Gribmap layer is never a base layer.
    */
   isBaseLayer: false,
 
@@ -444,7 +444,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
    * {DOMElement} Canvas element.
    */
   canvas: null,
-  
+
   /* List of windLevels */
   windLevels: [],
 
@@ -453,7 +453,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
   /* offset from now */
   timeoffset: 0,
-  
+
   /* current grib timestamp */
   time: 0,
   gribtimeBefore: 0,
@@ -461,7 +461,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
   /* Property: griblist
    * List of timestamp for gribs
-   */  
+   */
   griblist: null,
   timeDelta: 6*3600,
 
@@ -475,10 +475,10 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   initialize: function(name, options) {
       var i;
       OpenLayers.Layer.prototype.initialize.apply(this, arguments);
-      
+
       this.getGribList(); //Async call
 
-      //init resolutions      
+      //init resolutions
       this.windLevels[0] = new Gribmap.WindLevel(0,   4,  120,  60, this);
       this.windLevels[1] = new Gribmap.WindLevel(1,   2,  60,  30, this);
       this.windLevels[2] = new Gribmap.WindLevel(2,   1,  20,  20, this);
@@ -495,7 +495,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       // an additional div between the layer's div and its contents.
       var sub = document.createElement('div');
       sub.appendChild(this.canvas);
-      this.div.appendChild(sub); 
+      this.div.appendChild(sub);
 
   },
 
@@ -504,7 +504,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.timeoffset += delta;
       this.setTimeSegmentFromOffset();
   },
-  
+
   timereset: function() {
       this.addTimeOffset(-this.timeoffset);
   },
@@ -512,7 +512,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   timeforward: function() {
       this.addTimeOffset(3600);
   },
-  
+
   timebackward: function() {
       this.addTimeOffset(-3600);
   },
@@ -522,10 +522,10 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
           url: Gribmap.griblist_uribase,
           async: true,
           headers: {
-              'Accept' : 'application/json',
+              'Accept' : 'application/json'
           },
           callback: this.handleGribListReply,
-          scope: this,
+          scope: this
       });
   },
 
@@ -552,13 +552,13 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
   getGribTimeList: function() {
       var timelist = [];
-      
+
       for (var i = 0; i < this.griblist.length; i++) {
           if ( (this.griblist[i] >= (this.time-this.timeDelta) ) && (this.griblist[i] <= (this.time+this.timeDelta) ) ) {
               timelist.push(this.griblist[i]);
           }
       }
-      
+
       return timelist;
   },
 
@@ -598,13 +598,13 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       return this.windLevels[this.gribLevel].getWindInfo(latlon.lat, latlon.lon);
   },
 
-  /** 
+  /**
    * Method: moveTo
    *
    * Parameters:
-   * bounds - {<OpenLayers.Bounds>} 
-   * zoomChanged - {Boolean} 
-   * dragging - {Boolean} 
+   * bounds - {<OpenLayers.Bounds>}
+   * zoomChanged - {Boolean}
+   * dragging - {Boolean}
    */
   moveTo: function(bounds, zoomChanged, dragging) {
       var windarea, bounds, bl;
@@ -619,15 +619,15 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       var poslimit = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
       poslimit.x -= posstart.x;
       poslimit.y -= posstart.y;
-      
+
       var boundsLonLat = bounds.transform(
                     new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
                     new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
                     );
-                    
+
       //canvas object
       var ctx = this.canvas.getContext('2d');
-      
+
       // Unfortunately OpenLayers does not currently support layers that
       // remain in a fixed position with respect to the screen location
       // of the base layer, so this puts this layer manually back into
@@ -641,7 +641,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.drawContext(ctx);
 
       //Get griblevel // FIXME : should use the native zoom level
-      this.setGribLevel(boundsLonLat);        
+      this.setGribLevel(boundsLonLat);
       bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
 
       for (i = 0; i < bl.length; i++) {
@@ -687,8 +687,8 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       var wante = windarea.windArrays[this.gribtimeBefore];
       var wpost = windarea.windArrays[this.gribtimeAfter];
 
-      //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()    
-      
+      //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
+
       while (p.x < poslimit.x) {
           p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
           while (p.y < poslimit.y) {
@@ -712,7 +712,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
           }
           p.x += bstep;
       }
-  },     
+  },
 
   // return the color based on the wind speed
   // parameters:
@@ -779,7 +779,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   },
 
   // draw wind information around the arrow
-  // parameters: 
+  // parameters:
   // context, the canvas context
   // x, y, the coordinates in the window
   // wspeed, wheading, wind speed and wind heading
@@ -827,15 +827,15 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
 /**
  * Class: Gribmap.ControlWind
- * 
+ *
  * Inherits from:
  *  - <OpenLayers.Control.ControlSwitch>
  */
-Gribmap.ControlWind = 
+Gribmap.ControlWind =
   OpenLayers.Class(OpenLayers.Control.ControlSwitch, {
 
     label: "Gribmap.ControlWind",
-    
+
     timeOffsetSpan: null,
 
     initialize: function(options) {
@@ -851,17 +851,17 @@ Gribmap.ControlWind =
     },
 
     imgButton: function(imgname, imgid, callback) {
-    
+
         var imgLocation = OpenLayers.Util.getImagesLocation();
-        var sz = new OpenLayers.Size(18,18);        
+        var sz = new OpenLayers.Size(18,18);
 
         // maximize button div
         var img = imgLocation + imgname;
         var button = OpenLayers.Util.createAlphaImageDiv(
                                     imgid,
-                                    null, 
-                                    sz, 
-                                    img, 
+                                    null,
+                                    sz,
+                                    img,
                                     "relative");
         OpenLayers.Event.observe(button, "click", OpenLayers.Function.bind(callback, this, img));
         return button;
@@ -910,11 +910,11 @@ Gribmap.ControlWind =
 
 /**
  * Class: Gribmap.MousePosition
- * 
+ *
  * Inherits from:
  *  - <OpenLayers.Control.MousePosition>
  */
-Gribmap.MousePosition = 
+Gribmap.MousePosition =
   OpenLayers.Class(OpenLayers.Control.MousePosition, {
 
     gribmap: null,
@@ -922,7 +922,7 @@ Gribmap.MousePosition =
     initialize: function(options) {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
     },
-    
+
     formatOutput: function(lonLat) {
        var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
        retstr += " "+OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
