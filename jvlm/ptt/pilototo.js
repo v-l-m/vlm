@@ -141,11 +141,11 @@ function Pilototo(_orig,_json) {
 		//STYLE="margin: 0px; padding: 0px;"
 		divform$.append(_orderHTMLElement);
 		var mysubmit$ = $('<input/>',{'type':'submit'}).appendTo(divform$);
-		if ($.browser.msie) {
-			mysubmit$.css({'height': '0px', 'width': '0px'}); //mysubmit$.css({'display':'none'});
-		} else {
+//		if ($.browser.msie) {
+//			mysubmit$.css({'height': '0px', 'width': '0px'}); //mysubmit$.css({'display':'none'});
+//		} else {
 			mysubmit$.css({'visibility': 'hidden', 'height':'0.1em'}); //mysubmit$.css({'display': 'none'});
-		}
+//		}
 		//debug(" > divtab3 ");
 
 		divtab1.append(divform$);
@@ -270,9 +270,9 @@ function Pilototo(_orig,_json) {
 		}
 
 
-		if ($.browser.msie) {
-			$.getScript('../externals/douglascrockford/json2.js', function() {});
-		}
+//		if ($.browser.msie) {
+//			$.getScript('../externals/douglascrockford/json2.js', function() {});
+//		}
 
 		Pilototo.initialized=true;
 	} 
