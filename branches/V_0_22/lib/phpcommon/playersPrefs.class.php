@@ -8,7 +8,7 @@ $playersPrefsList = explode(',', PLAYER_PREF_ALLOWED);
 $playersPrefsContactLinkPattern = Array(
     "contact_revatua" => "http://revatua.forumactif.com/u%scontact",
     "contact_fmv" => "http://forum-marinsvirtuels.forumactif.com/u%scontact",
-    "contact_taverne" => "http://www.virtual-winds.com/forum/index.php?showuser=%s",
+    "contact_taverne" => "http://www.virtual-winds.org/forum/index.php?showuser=%s",
     "contact_twitter" => "https://twitter.com/#!/%s",
     "contact_identica" => "http://identi.ca/%s",
     "contact_facebook" => "http://facebook.com/%s",
