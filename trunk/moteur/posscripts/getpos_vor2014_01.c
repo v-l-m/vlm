@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <string.h>
+
+//#define _CRT_SECURE_NO_WARNINGS (1)
+//#pragma warning(disable:4996) 
+
+#define BOAT_ID_ADOR (-1470)
+#define BOAT_ID_DFRT (-1471)
+#define BOAT_ID_TBRU (-3)
+#define BOAT_ID_SCA1 (-4)
+#define BOAT_ID_VEST (-5)
+#define BOAT_ID_MAPF (-6)
+
+#define RACE_ID		(20141009)
+
+int GetBoatId(char * Data)
+{
+	if (!strncmp( Data, "ADOR",1))
+	{
+		return BOAT_ID_ADOR;
+	}
+
+	if (!strncmp( Data, "DFRT",1))
+	{
+		return BOAT_ID_DFRT;
+	}
+
+	if (!strncmp( Data, "TBRU",1))
+	{
+		return BOAT_ID_TBRU;
+	}
+
+	if (!strncmp( Data, "SCA1",1))
+	{
+		return BOAT_ID_SCA1;
+	}
+
+	if (!strncmp( Data, "VEST",1))
+	{
+		return BOAT_ID_VEST;
+	}
+	
+	if (!strncmp( Data, "MAPF",1))
+	{
+		return BOAT_ID_MAPF;
+	}
+	printf("%s\n",Data);
+	return 0;
+}
+
+void main()
+{
+	FILE *f = fopen("./Res.Bin","r");
+	//FILE *fEpoch = fopen("./LastEpoch","r");
+	int LastEpoch=0;
+
+	//fscanf (fEpoch,"%d",&LastEpoch);
+	if (f)
+	{
+		char DataLine[0x47];
+		int RowCount = 0;
+
+//printf("LastEpoch %d\n",LastEpoch);
+		while (fread(DataLine,sizeof(char),0x47,f))
+		{
+			int Epoch = *(int*) (DataLine+14);
+			float Lon = *(float*) (DataLine+6);
+			float Lat = *(float*) (DataLine+10);
+			int BoatId = GetBoatId(DataLine);
+
+			//	printf("%d|%d|%f|%f\n",BoatId,Epoch,Lon,Lat);
+			if (BoatId && (Epoch > LastEpoch))
+			{
+//20091108|1|1257681600|-729|BT|Sï¿œbastien Josse - Jean Franï¿œois Cuzon|50.016000|-1.891500|85.252725|4651.600000
+				printf("%d|1|%d|%d| | |%f|%f|0|0\n",RACE_ID,Epoch,BoatId,Lon,Lat);
+			}
+//			else
+//			{
+//				printf("%d %d %d\n",Epoch,LastEpoch,Epoch > LastEpoch);
+//			}
+			RowCount ++;	
+		}
+//printf("RowCount %d",RowCount);
+	}
+	else
+	{
+		printf("File Not Opened!!!\n");
+	}
+	return ;
+}
+
+
+
+
