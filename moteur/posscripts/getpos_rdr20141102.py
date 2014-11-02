@@ -12,11 +12,12 @@ import sys, time
 
 #Generate with basedatas
 def baseboat(rid):
-    vlmboatidfirst = 1200
+    vlmboatidfirst = 1500
     return {'vlmid' : -vlmboatidfirst-int(rid)}
     
 vlmidrace = 20141102
-vlmusernameprefix = "RDR2012_"
+#vlmidrace = 20141009
+vlmusernameprefix = "RDR2014_"
 basefilename = "vor%d" % vlmidrace
 geotree = gp.GeovoileTree("http://routedurhum.geovoile.com/2014/_elements/data/race/static.hwz", basefilename)
 coordfactor = geotree.factors()

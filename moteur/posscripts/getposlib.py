@@ -318,10 +318,13 @@ class GeovoileTree(object):
             boats[rid] = outline.attrib
             if not boats[rid].has_key('sail') :
                 boats[rid]['sail'] = rid
+	    elif boats[rid]['sail'] == "" :
+		 boats[rid]['sail'] = rid
+
             boats[rid]['sail'] = int(boats[rid]['sail'])
             if not boats[rid].has_key('name') :
                 try :
-                    boats[rid]['name'] = outline.find("name").text.encode('utf-8')
+                    boats[rid]['name'] = outline.find("name").text.replace('\'','').encode('utf-8')
                 except :
                     boats[rid]['name'] = "%s" % boats[rid]['sail']
         return boats
