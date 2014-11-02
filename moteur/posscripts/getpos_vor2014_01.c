@@ -4,43 +4,49 @@
 //#define _CRT_SECURE_NO_WARNINGS (1)
 //#pragma warning(disable:4996) 
 
-#define BOAT_ID_ADOR (-1470)
-#define BOAT_ID_DFRT (-1471)
-#define BOAT_ID_TBRU (-3)
-#define BOAT_ID_SCA1 (-4)
-#define BOAT_ID_VEST (-5)
-#define BOAT_ID_MAPF (-6)
+#define BOAT_ID_ALVI (-2200)
+#define BOAT_ID_ADOR (-2201)
+#define BOAT_ID_DFRT (-2202)
+#define BOAT_ID_TBRU (-2203)
+#define BOAT_ID_VEST (-2204)
+#define BOAT_ID_SCA1 (-2205)
+#define BOAT_ID_MAPF (-2206)
 
-#define RACE_ID		(20141009)
+#define RACE_ID		(141501)
 
 int GetBoatId(char * Data)
 {
-	if (!strncmp( Data, "ADOR",1))
+	if (!strncmp( Data, "ALVI",4))
+	{
+		return BOAT_ID_ALVI;
+	}
+	
+	if (!strncmp( Data, "ADOR",4))
 	{
 		return BOAT_ID_ADOR;
 	}
 
-	if (!strncmp( Data, "DFRT",1))
+	if (!strncmp( Data, "DFRT",4))
 	{
 		return BOAT_ID_DFRT;
 	}
 
-	if (!strncmp( Data, "TBRU",1))
+	if (!strncmp( Data, "TBRU",4))
 	{
 		return BOAT_ID_TBRU;
 	}
 
-	if (!strncmp( Data, "SCA1",1))
+	if (!strncmp( Data, "SCA1",4))
 	{
 		return BOAT_ID_SCA1;
 	}
 
-	if (!strncmp( Data, "VEST",1))
+	if (!strncmp( Data, "VEST",4))
 	{
 		return BOAT_ID_VEST;
 	}
 	
-	if (!strncmp( Data, "MAPF",1))
+	if (!strncmp( Data, "MAPF",4))
 	{
 		return BOAT_ID_MAPF;
 	}
