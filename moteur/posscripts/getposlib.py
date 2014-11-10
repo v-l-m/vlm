@@ -354,9 +354,9 @@ class GeovoileTree(object):
             rid = int(outline.attrib[tagid])
             for i in l:
                 tup = i.split(',')
-                lat += float(tup[0])
-                lon += float(tup[1])
-                t += int(tup[2])
+                lat = float(tup[0])
+                lon = float(tup[1])
+                t = int(tup[2])
                 pos = [rid, t, lat, lon]
                 tracks.append(pos)
         return tracks
