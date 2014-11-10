@@ -19,14 +19,14 @@ vlmidrace = 20141102
 #vlmidrace = 20141009
 vlmusernameprefix = "RDR2014_"
 basefilename = "vor%d" % vlmidrace
-geotree = gp.GeovoileTree("http://routedurhum.geovoile.com/2014/_elements/data/race/static.hwz", basefilename)
+geotree = gp.GeovoileTree("http://routedurhum.geovoile.com/2014/_elements/data/race/static.hwz?v=" + str(int(time.time())), basefilename)
 coordfactor = geotree.factors()
 
 timezero = 0# 1339336800 #geotree.timezero() #FIXME (10 jun 2012 - 14:00:00 GMT)
 
 boats = geotree.boats()
 
-geotree = gp.GeovoileTree("http://routedurhum.geovoile.com/2014/_elements/data/race/update.hwz", basefilename+"update")
+geotree = gp.GeovoileTree("http://routedurhum.geovoile.com/2014/_elements/data/race/live.hwz?v=" + str(int(time.time())), basefilename+"update")
 
 for rid in boats.keys() :
     bb = baseboat(int(rid))
