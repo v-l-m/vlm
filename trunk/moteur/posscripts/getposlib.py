@@ -354,12 +354,27 @@ class GeovoileTree(object):
             rid = int(outline.attrib[tagid])
             for i in l:
                 tup = i.split(',')
+                lat += float(tup[0])
+                lon += float(tup[1])
+                t += int(tup[2])
+                pos = [rid, t, lat, lon]
+                tracks.append(pos)
+        return tracks
+
+    def tracks_live(self, path = ".//track", tagid = 'boatid'):
+        tracks_live = []
+        for outline in self.tree.findall(path):
+            l = outline.text.split(';')
+            lat, lon, t = 0., 0., 0
+            rid = int(outline.attrib[tagid])
+            for i in l:
+                tup = i.split(',')
                 lat = float(tup[0])
                 lon = float(tup[1])
                 t = int(tup[2])
                 pos = [rid, t, lat, lon]
-                tracks.append(pos)
-        return tracks
+                tracks_live.append(pos)
+        return tracks_live
         
 class AddvisoPositions(BasePositions):
     defaults = {
