@@ -12,7 +12,7 @@ import sys, time
 
 #Generate with basedatas
 def baseboat(rid):
-    vlmboatidfirst = 1500
+    vlmboatidfirst = 2700
     return {'vlmid' : -vlmboatidfirst-int(rid)}
     
 vlmidrace = 20141102
