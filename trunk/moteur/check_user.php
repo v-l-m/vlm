@@ -139,6 +139,12 @@ if ( $usersObj->engaged != 0 ) {
     //  Do they cross the coast ?
     // ==========================
     include "check_coast_crossing.php";
+
+    // ====================================
+    // Do they cross an exclusion zone line
+    // ====================================
+    inclue "check_exclusion_zone_crossing.php";
+
     // ==========================
     // Does he cross a waypoint
     // ==========================
