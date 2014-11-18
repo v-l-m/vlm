@@ -12,7 +12,6 @@
 #define BOAT_ID_SCA1 (-2205)
 #define BOAT_ID_MAPF (-2206)
 
-#define RACE_ID		(141501)
 
 int GetBoatId(char * Data)
 {
@@ -54,12 +53,23 @@ int GetBoatId(char * Data)
 	return 0;
 }
 
-void main()
+void main(int argc, char *argv[])
 {
+	int RaceID = -1;
 	FILE *f = fopen("./Res.Bin","r");
 	//FILE *fEpoch = fopen("./LastEpoch","r");
 	int LastEpoch=0;
 
+	// Check argcount and get raceid if one only
+	if (argc == 2)
+	{
+		sscanf(argv[1],"%d",&RaceID);
+	}
+	else
+	{
+		printf("Invalid arg count. Usage getpos_vor2014 <RaceId>\n");
+		return;
+	}
 	//fscanf (fEpoch,"%d",&LastEpoch);
 	if (f)
 	{
@@ -78,7 +88,7 @@ void main()
 			if (BoatId && (Epoch > LastEpoch))
 			{
 //20091108|1|1257681600|-729|BT|Sï¿œbastien Josse - Jean Franï¿œois Cuzon|50.016000|-1.891500|85.252725|4651.600000
-				printf("%d|1|%d|%d| | |%f|%f|0|0\n",RACE_ID,Epoch,BoatId,Lon,Lat);
+				printf("%d|1|%d|%d| | |%f|%f|0|0\n",RaceID,Epoch,BoatId,Lon,Lat);
 			}
 //			else
 //			{
