@@ -3,7 +3,7 @@
 	include_once("check_exclusion_lib.php");
 	include_once("exclusionzonedefs.php");
 
-	echo "*** Processing exclusion zones *** \n";
+	echo "\t*** Processing exclusion zones *** \n";
 	// Exclusion zones
 	foreach  ($Exclusions as $Exclusion)
 	{
@@ -17,7 +17,7 @@
 		if (IntersectOrthodromes($Lon1,$Lat1,0,$fullUsersObj->lastPositions->long,$fullUsersObj->lastPositions->lat,$fullUsersObj->users->targetandhdg, $Lon, $Lat)==1)
 		{
 			$distintersect = SurfaceDistance($Lon,$Lat,$fullUsersObj->lastPositions->long,$fullUsersObj->lastPositions->lat);
-			echo "Check intersect distance ".$distintersect. ">".$distVac."?";
+			echo "\tCheck intersect distance ".$distintersect. ">".$distVac."?\n";
 			if ($distVac >= $distintersect)
 			{
 				echo "intersection @ ".$Lon." ".$Lat." ".$distintersect."\n";
