@@ -11,6 +11,16 @@ echo "\tUsing: ".GSHHS_FILENAME."\n ";
 $crosses_the_coast = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
 					   $coast_xinglat, $coast_xinglong, 
 					   $coast_xingratio);
+					   
+// ====================================
+// Do they cross an exclusion zone line
+// Only check if not coast crossing happened
+// ====================================
+	if (!$crosses_the_coast) 
+	{
+		include "check_exclusion_zone_crossing.php";
+	}
+
 
 if ($crosses_the_coast) {
   echo "\t*** YES player " . $fullUsersObj->users->idusers . " CROSSED (vlmc), ";
