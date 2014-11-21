@@ -3,14 +3,14 @@
 // Return distance in Naut. Miles between 2 points
 function SurfaceDistance($lon1, $lat1, $lon2, $lat2)
 {
-	define (EARTH_RADIUS,3443.84);
+	$EARTH_RADIUS = 3443.84;
 	// Convert all angles, pos to radians (and reverse E/W to match formula standard)
 	$lon1=-$lon1/180*pi();
 	$lat1=$lat1/180*pi();
 	$lon2=-$lon2/180*pi();
 	$lat2=$lat2/180*pi();
 	
-	return 2*asin(sqrt(pow(sin(($lat1-$lat2)/2),2) + pow(cos($lat1)*cos($lat2)*(sin(($lon1-$lon2)/2)),2))) * EARTH_RADIUS;
+	return 2*asin(sqrt(pow(sin(($lat1-$lat2)/2),2) + pow(cos($lat1)*cos($lat2)*(sin(($lon1-$lon2)/2)),2))) * $EARTH_RADIUS;
 }
 
 // Return intersection point for orthodromes defined with Lon1, Lat1, Bearing1 and 
