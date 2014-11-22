@@ -3,7 +3,7 @@
 	
 	$Exclusions = array();
 	
-	if ($fullRacesObj->races->idraces == 20141009)
+	if ($fullRacesObj->races->idraces == 141502)
 	{
 		// VOR 2014 Leg2 Madagascar
 		$p1= array(-25.976217, 32.98825); // 25° 58.573'S 32° 59.295'E
