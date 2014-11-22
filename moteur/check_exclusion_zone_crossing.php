@@ -1,7 +1,8 @@
 <?php
 
 	include_once("check_exclusion_lib.php");
-	include_once("exclusionzonedefs.php");
+	
+	include("exclusionzonedefs.php");
 
 	echo "\t*** Processing exclusion zones *** \n";
 	// Exclusion zones
