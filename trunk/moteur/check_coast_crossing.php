@@ -8,6 +8,8 @@ $coast_xinglong  = new doublep();
 echo "\n\tChecking for coast crossing (vlm-c)\n ";
 echo "\tUsing: ".GSHHS_FILENAME."\n ";
 
+$coast_crossing_type = "coast";
+
 $crosses_the_coast = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
 					   $coast_xinglat, $coast_xinglong, 
 					   $coast_xingratio);
@@ -16,15 +18,17 @@ $crosses_the_coast = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lon
 // Do they cross an exclusion zone line
 // Only check if not coast crossing happened
 // ====================================
-	if (!$crosses_the_coast) 
-	{
-		include "check_exclusion_zone_crossing.php";
-	}
+if (!$crosses_the_coast) 
+{
+	$coast_crossing_type = "Exclusion Zone";
+	include "check_exclusion_zone_crossing.php";
+}
 
 
-if ($crosses_the_coast) {
+if ($crosses_the_coast) 
+{
   echo "\t*** YES player " . $fullUsersObj->users->idusers . " CROSSED (vlmc), ";
-  echo "\n\t\tCoast has been crossed : \n\t\t\t" ; 
+  echo "\n\t\t".$coast_crossing_type." has been crossed : \n\t\t\t" ; 
   printf ("BOAT : %f,%f <----> %f,%f",
     $latAvant/1000,$lonAvant/1000 , $latApres/1000,$lonApres/1000);
   
@@ -37,7 +41,7 @@ if ($crosses_the_coast) {
     $encounter_lat/1000 . "," . $encounter_long/1000 .
     "&ie=UTF8&spn=0.0191,0.082998&t=p&z=11&iwloc=addr. \n";
 
-	$fullUsersObj->users->logUserEvent("Coast has been crossed at " . $encounter_lat/1000 . ", " . $encounter_long/1000);
+	$fullUsersObj->users->logUserEvent($coast_crossing_type." has been crossed at " . $encounter_lat/1000 . ", " . $encounter_long/1000);
   
   /* NOTE the encounter coordinates are the real ones */
   
@@ -50,6 +54,7 @@ if ($crosses_the_coast) {
   echo "&seg1=".$encounter_lat/1000 . "," . $encounter_long/1000 . ":" . $encounter_lat/1000 . "," . $encounter_long/1000;
   echo "&seg2=".$latAvant/1000 . "," . $lonAvant/1000 . ":" . $latApres/1000 . "," . $lonApres/1000;
   echo "\n\n";
+  
   /*
     echo "\n\t ==> Position Avant " . 
     $latAvant/1000 . ", " . $lonAvant/1000 . 
@@ -69,20 +74,36 @@ if ($crosses_the_coast) {
   // We can tune the 0.9 to whatever we want, to avoid putting the boat on the line
   // and have rounding errors having fun with us.
   
-  $latApres = $latAvant + ($encounter_lat - $latAvant) * 0.9;
-  $lonApres = $lonAvant + ($encounter_long - $lonAvant) * 0.9;
+	if ($coast_crossing_type == "coast")
+	{
+		  $latApres = $latAvant + ($encounter_lat - $latAvant) * 0.9;
+		  $lonApres = $lonAvant + ($encounter_long - $lonAvant) * 0.9;
 
-  for ( $coast_ratio = 8; $coast_ratio >= 0; $coast_ratio--) {
-    $npcc = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
-				  $coast_xinglat, $coast_xinglong, 
-				  $coast_xingratio);
-    if ($npcc) {
-      echo "*** Safety engaged for new point, moving to ".$coast_ratio."0%\n";
-      $latApres = $latAvant + ($encounter_lat - $latAvant) * ($coast_ratio / 10.);
-      $lonApres = $lonAvant + ($encounter_long - $lonAvant) * ($coast_ratio / 10.);
-    } else {
-      break;
-    }
+		  for ( $coast_ratio = 8; $coast_ratio >= 0; $coast_ratio--) 
+			{
+		  
+				echo "ici".$coast_ratio."\n";
+				$npcc = VLM_check_cross_coast($latAvant, $lonAvant, $latApres, $lonApres, 
+							  $coast_xinglat, $coast_xinglong, 
+							  $coast_xingratio);
+				if ($npcc) 
+				{
+				  echo "*** Safety engaged for new point, moving to ".$coast_ratio."0%\n";
+				  $latApres = $latAvant + ($encounter_lat - $latAvant) * ($coast_ratio / 10.);
+				  $lonApres = $lonAvant + ($encounter_long - $lonAvant) * ($coast_ratio / 10.);
+				} 
+				else 
+				{
+				  break;
+				}
+			}
+	}
+	else
+	{
+		// For exclusion zone boat gets stuck at original point
+		$latApres = $latAvant;
+		$lonApres = $lonAvant;
+	}
   }
 
   echo "\nVLMMAP corrected position http://virtual-loup-de-mer.org/mercator.img.php?idraces=" . $fullUsersObj->users->engaged ;
@@ -94,5 +115,4 @@ if ($crosses_the_coast) {
   echo "&seg2=".$latAvant/1000 . "," . $lonAvant/1000 . ":" . $latApres/1000 . "," . $lonApres/1000;
   echo "\n\n";
 
-}
 ?>
