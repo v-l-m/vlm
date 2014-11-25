@@ -2,4 +2,7 @@
 
 source $VLMRACINE/conf/conf_script || exit 1
 
-nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_ag2r20140406.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+#VOR 2014
+#nice -1 $VLMRACINE/vlmcode/moteur/posscripts/GetVOR2014|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+# RDR 2014
+nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_rdr20141102.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
