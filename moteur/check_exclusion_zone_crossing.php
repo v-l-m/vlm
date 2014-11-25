@@ -87,10 +87,10 @@
 				break;
 			}
 		}
-		else
+		/*else
 		{
 			echo " No intersect : ".$Ratio."\n";
-		}
+		}*/
 		
 		/*if (IntersectOrthodromes($Lon1,$Lat1,$tc,$CurLon,$CurLat,$fullUsersObj->users->boatheading, $Lon, $Lat)==1)
 		{
