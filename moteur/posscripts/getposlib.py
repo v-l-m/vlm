@@ -318,10 +318,13 @@ class GeovoileTree(object):
             boats[rid] = outline.attrib
             if not boats[rid].has_key('sail') :
                 boats[rid]['sail'] = rid
+	    elif boats[rid]['sail'] == "" :
+		 boats[rid]['sail'] = rid
+
             boats[rid]['sail'] = int(boats[rid]['sail'])
             if not boats[rid].has_key('name') :
                 try :
-                    boats[rid]['name'] = outline.find("name").text.encode('utf-8')
+                    boats[rid]['name'] = outline.find("name").text.replace('\'','').encode('utf-8')
                 except :
                     boats[rid]['name'] = "%s" % boats[rid]['sail']
         return boats
@@ -357,6 +360,21 @@ class GeovoileTree(object):
                 pos = [rid, t, lat, lon]
                 tracks.append(pos)
         return tracks
+
+    def tracks_live(self, path = ".//track", tagid = 'boatid'):
+        tracks_live = []
+        for outline in self.tree.findall(path):
+            l = outline.text.split(';')
+            lat, lon, t = 0., 0., 0
+            rid = int(outline.attrib[tagid])
+            for i in l:
+                tup = i.split(',')
+                lat = float(tup[0])
+                lon = float(tup[1])
+                t = int(tup[2])
+                pos = [rid, t, lat, lon]
+                tracks_live.append(pos)
+        return tracks_live
         
 class AddvisoPositions(BasePositions):
     defaults = {
