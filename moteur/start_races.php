@@ -24,7 +24,7 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC)) {
       //start the race
       // Deleting old results, waypoint_crossing, rankings... 
       // updating positions...
-      $racesObj = new fullRaces($idraces, &$racesSmallObj);
+      $racesObj = new fullRaces($idraces, $racesSmallObj);
 
       echo "Cleaning Race...";
       $racesObj->cleanRaces();
