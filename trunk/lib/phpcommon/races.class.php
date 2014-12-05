@@ -459,7 +459,7 @@ class fullRaces {
     $opponents = array(); //array with users engaged
 
 
-  function fullRaces($id = 0, $origrace = NULL)
+  function fullRaces($id = 0, &$origrace = NULL)
   {
     if ($origrace == NULL) {
       $this->races = new races($id);
