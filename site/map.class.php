@@ -1219,7 +1219,7 @@ class map
       //  imagestring ( $this->mapImage, $font, 100,100 , "NB = " . $num_boats_to_draw, $this->colorText);
   }
 
-  /////////////////////Draw boat positions and tracks
+  /////////////////////Draw Real boat positions and tracks
   function drawRealBoatPositions($projCallbackLong, $projCallbackLat) {
     $this->setFuncProjLat($projCallbackLat);
     $this->setFuncProjLong($projCallbackLong);  
@@ -1313,7 +1313,7 @@ class map
     } // foreach opponent
   }
 
-  /////////////////////Draw boat positions and tracks
+  /////////////////////Draw ortho line
   function drawOrtho($projCallbackLong, $projCallbackLat, $estime) {
       $this->setFuncProjLat($projCallbackLat);
       $this->setFuncProjLong($projCallbackLong);
