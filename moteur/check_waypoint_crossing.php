@@ -47,7 +47,7 @@ if ($prevwpidx != 0) {
 	    rad2deg($prevwaypoint->latitude2), rad2deg($prevwaypoint->longitude2), 
 	    $prevwaypoint->type);
     $wp_xed = VLM_check_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck,
-			   &$prevwaypoint, $wp_xinglat, $wp_xinglong, $wp_xingratio);
+			   $prevwaypoint, $wp_xinglat, $wp_xinglong, $wp_xingratio);
     
     switch ($wp_xed) {
     case -1:
@@ -102,7 +102,7 @@ if (!$wp_invalidated) {
     $invalid_crossing = false;
     
     $wp_xed = VLM_check_WP($latPreCheck, $lonPreCheck, $latCheck, $lonCheck,
-			   &$nextwaypoint, $wp_xinglat, $wp_xinglong, $wp_xingratio);
+			   $nextwaypoint, $wp_xinglat, $wp_xinglong, $wp_xingratio);
     
     switch ($wp_xed) {
     case -1:
