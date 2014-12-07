@@ -53,7 +53,7 @@ class exclusionZone
     return $this->Exclusions;
   }
   
-  // Return the active exclusion zone name
+  // Return the active exclusion zone name.
   function getActiveZoneName()
   {
     return $this->activeZoneName;
