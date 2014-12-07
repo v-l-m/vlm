@@ -2,13 +2,15 @@
 
 	include_once("check_exclusion_lib.php");
 	
-	include("exclusionzonedefs.php");
+	require_once("exclusionzone.class.php");
 	
-	TestExclusionLib();
+	//TestExclusionLib();
 
-	echo "\t*** Processing exclusion zones *** \n";
-	// Exclusion zones
-	foreach  ($Exclusions as $Exclusion)
+	// Load and test Exclusion zones
+ 
+  $zones = new exclusionZone($fullRacesObj->races->idraces);
+	echo "\t*** Processing exclusion zones (".$zones->getActiveZoneName().")*** \n";
+	foreach  ($zones->Exclusions as $Exclusion)
 	{
 		$StartSeg=$Exclusion[0];
 		$EndSeg=$Exclusion[1];
