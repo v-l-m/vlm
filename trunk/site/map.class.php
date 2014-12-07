@@ -1,6 +1,7 @@
 <?php
 
 require_once("races.class.php");
+require_once("exclusionzone.class.php");
 
 // Création carte MERCATOR CONFORME
 // x = long
@@ -33,7 +34,9 @@ class map
     $am_on_map,
     $wp_only,
     $drawtextwp,
-    $maille;
+    $maille,
+    $exclusionZones; // Exclusion zones object
+    
   var $arrayFuncProj, $arrayFuncProjLong;
   
   //constructor that set all constants and values
@@ -48,8 +51,11 @@ class map
     } else {
       $this->fullRacesObj = new fullRaces($idraces);
     }
+    
+    // Get Exclusion zones object
+    $this->exclusionZones = new exclusionZone($this->fullRacesObj->races->idraces);
+    
     // Limits of the geographic zone to draw
-
     $this->north = $north;
     $this->south = $south;
 
@@ -351,7 +357,7 @@ class map
       }
   }
 
-        
+  // Add       
   function addFakeMapPoints(&$coastarray, $fullres, $prev_x, $prev_y, $curr_x, $curr_y, $coastid, $c = false) {
     $new_x = -1;
     $new_y = -1;
@@ -539,8 +545,8 @@ class map
       $polymode = ($fullres == MAP_POLYLINE_FULL_MODE || $fullres = MAP_POLYLINE_MODE);
       while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) ) {
 
-      // On parcourt tous les points résultant de la requête (ils sont classé par  idcoast, idpoint
-      //  - Chaque fois qu'on trouve un point : 
+        // On parcourt tous les points résultant de la requête (ils sont classé par  idcoast, idpoint
+        //  - Chaque fois qu'on trouve un point : 
 
           //    1/ C'est un point d'un trait de cote différent de celui mentionné par "$idcoast"
           //       ==> Il faut tracer le trait de côte terminé (fonction drawOneCoast)
@@ -550,62 +556,91 @@ class map
           //    2/ C'est un point du meme trait de cote que le repère "$idcoast", 
           //       +   ==> on ajoute ce point au tableau 
 
-          if ( $point[0] != $idcoast ) {            
-	    if ($idcoast != -1 ) {
-	      if ( $polymode ) {
-		// only needed to close the polygon, not in multiline mode
-		$this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, 
-					$x, $y, $idcoast, true);
-	      }
-	      $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
-	    }
-	    unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
-	    $points_count = 0;
-	    $coastpoints_array = array(); 
-	    $idcoast = $point[0];      
-	    $idpoint = -1;
+         if ( $point[0] != $idcoast ) {            
+          if ($idcoast != -1 ) {
+            if ( $polymode ) {
+              // only needed to close the polygon, not in multiline mode
+              $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, 
+              $x, $y, $idcoast, true);
+            }
+            $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
           }
-          // + ajout au tableau (dans tous les cas, donc factorisé)
+          unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
+          $points_count = 0;
+          $coastpoints_array = array(); 
+          $idcoast = $point[0];      
+          $idpoint = -1;
+        }
+        // + ajout au tableau (dans tous les cas, donc factorisé)
 
-          // latitude
-          $y = $this->projLat($point[2]*1000);
-          // longitude
-          if ( $this->flag_E_W == true && $point[3] < 0 ) {
-              $x = $this->projLong(360000+$point[3]*1000);
-              //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
-          } else {
-              $x = $this->projLong($point[3]*1000);
-          }
+        // latitude
+        $y = $this->projLat($point[2]*1000);
+        // longitude
+        if ( $this->flag_E_W == true && $point[3] < 0 ) {
+          $x = $this->projLong(360000+$point[3]*1000);
+          //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
+        } else {
+          $x = $this->projLong($point[3]*1000);
+        }
 
-	  if ($idpoint != -1) {
-	    if ($point[1]-$idpoint != 1) {
-	      $this->addFakeMapPoints($coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
-	    }
-	  } else {
-	    $first_x = $x;
-	    $first_y = $y;
-	  }
-	  $idpoint = $point[1];
-	  $prev_x = $x;
-	  $prev_y = $y;
-          // On prépare un tableau que la fonction drawOneCoast mangera. 
-          // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
-          if ( $polymode ) {
-	    array_push ($coastpoints_array, $x, $y);
-          } else {
-	    // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher 
-	    // les numéros de cote
-	    array_push ($coastpoints_array, array($point[0],$x,$y));
+        if ($idpoint != -1) {
+          if ($point[1]-$idpoint != 1) {
+            $this->addFakeMapPoints($coastpoints_array, $fullres, $prev_x, $prev_y, $x, $y, $idcoast);
           }
+        } else {
+          $first_x = $x;
+          $first_y = $y;
+        }
+        
+        $idpoint = $point[1];
+        $prev_x = $x;
+        $prev_y = $y;
+        // On prépare un tableau que la fonction drawOneCoast mangera. 
+        // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
+        if ( $polymode ) {
+          array_push ($coastpoints_array, $x, $y);
+        } else {
+          // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher 
+          // les numéros de cote
+          array_push ($coastpoints_array, array($point[0],$x,$y));
+        }
       }
       
       // En fin de parcours, on appelle la fonction de tracage, qui trace si idcoast != -1 
       if ($idcoast != -1 ) {
-	if ( $polymode ) {
-	  $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
-	}
-	$this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
+        if ( $polymode ) {
+          $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
+        }
+        //On ajoute les zones d'exclusions
+        $index = 0;
+        
+        foreach  ($this->exclusionZones->exclusions() as $Exclusion)
+        {
+          $index ++ ;
+          $StartSeg=$Exclusion[0];
+          $EndSeg=$Exclusion[1];
+          if ( $this->flag_E_W == true && $point[3] < 0 ) 
+          {
+            $x1=$this->projLong(360+$StartSeg[1]*1000);
+            $x2=$this->projLong(360+$EndSeg[1]*1000);
+          }
+          else
+          {
+            $x1=$this->projLong($StartSeg[1]*1000);
+            $x2=$this->projLong($EndSeg[1]*1000);
+          }
+          
+          $y1 = $this->projLat($StartSeg[0]*1000);
+          $y2 = $this->projLat($EndSeg[0]*1000);
+ 
+          // imagestring( $this->mapImage, $font+2, 40 , 50+15 * $index , $x1." ".$y1."->".$x2." ".$y2 , $this->colorBlack);
+          imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
+        }
+        
+        $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
       }
+      
+      
       
       // Puis on supprime le tableau
       unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
