@@ -611,36 +611,37 @@ class map
         if ( $polymode ) {
           $this->addFakeMapPoints($coastpoints_array, $fullres, $first_x, $first_y, $x, $y, $idcoast, true);
         }
-        //On ajoute les zones d'exclusions
-        $index = 0;
-        
-        foreach  ($this->exclusionZones->exclusions() as $Exclusion)
-        {
-          $index ++ ;
-          $StartSeg=$Exclusion[0];
-          $EndSeg=$Exclusion[1];
-          if ( $this->flag_E_W == true && $point[3] < 0 ) 
-          {
-            $x1=$this->projLong(360+$StartSeg[1]*1000);
-            $x2=$this->projLong(360+$EndSeg[1]*1000);
-          }
-          else
-          {
-            $x1=$this->projLong($StartSeg[1]*1000);
-            $x2=$this->projLong($EndSeg[1]*1000);
-          }
-          
-          $y1 = $this->projLat($StartSeg[0]*1000);
-          $y2 = $this->projLat($EndSeg[0]*1000);
- 
-          // imagestring( $this->mapImage, $font+2, 40 , 50+15 * $index , $x1." ".$y1."->".$x2." ".$y2 , $this->colorBlack);
-          imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
-        }
         
         $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
       }
       
+      //On ajoute les zones d'exclusions
+      $index = 0;
       
+      foreach  ($this->exclusionZones->exclusions() as $Exclusion)
+      {
+        $index ++ ;
+        $StartSeg=$Exclusion[0];
+        $EndSeg=$Exclusion[1];
+        if ( $this->flag_E_W == true && $point[3] < 0 ) 
+        {
+          $x1=$this->projLong(360+$StartSeg[1]*1000);
+          $x2=$this->projLong(360+$EndSeg[1]*1000);
+        }
+        else
+        {
+          $x1=$this->projLong($StartSeg[1]*1000);
+          $x2=$this->projLong($EndSeg[1]*1000);
+        }
+        
+        $y1 = $this->projLat($StartSeg[0]*1000);
+        $y2 = $this->projLat($EndSeg[0]*1000);
+        
+        
+        //imagestring( $this->mapImage, $font+2, 40 , 50+15 * $index , $x1." ".$y1."->".$x2." ".$y2 , $this->colorBlack);
+        imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
+      }
+        
       
       // Puis on supprime le tableau
       unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
