@@ -37,24 +37,24 @@ if ( $usersObj->engaged != 0 ) {
     if ( $fullUsersObj->users->userdeptime == -1 ) {
       //user certainly waiting for a record start.
       if ( $fullRacesObj->races->closetime < $now ) {
-	// Race has not started, if race is closed, set this boat to ABD
-	// (Race has been closed as the player was in the starting blocks)
-	$fullUsersObj->setDNF();
-	printf ("========= Player %d set to DNF (Late Start) ========\n",$fullUsersObj->users->idusers);
-      } else {
-	printf ("========= Player %d did not start yet ========\n",$fullUsersObj->users->idusers);
-      }
+      // Race has not started, if race is closed, set this boat to ABD
+      // (Race has been closed as the player was in the starting blocks)
+      $fullUsersObj->setDNF();
+      printf ("========= Player %d set to DNF (Late Start) ========\n",$fullUsersObj->users->idusers);
+          } else {
+      printf ("========= Player %d did not start yet ========\n",$fullUsersObj->users->idusers);
+          }
     } else {
       // If the boat has been mooring for too long, set it DNF
       if ( $fullUsersObj->users->lastchange + MAX_STOPTIME < $timestamp ) {
-	$fullUsersObj->setDNF();
-	printf ("========= Player %d set to DNF =========\n",$fullUsersObj->users->idusers);
-	// Else write a new position at the same place, boat won't move this time
+        $fullUsersObj->setDNF();
+        printf ("========= Player %d set to DNF =========\n",$fullUsersObj->users->idusers);
+      // Else write a new position at the same place, boat won't move this time
       } else {
-	//FIXME : Couldn't we just update the "same place" ?
-	$fullUsersObj->lastPositions->writePositions();
-	$fullUsersObj->writeCurrentRanking(0, $now);
-	$fullUsersObj->writeLoch($now);
+        //FIXME : Couldn't we just update the "same place" ?
+        $fullUsersObj->lastPositions->writePositions();
+        $fullUsersObj->writeCurrentRanking(0, $now);
+        $fullUsersObj->writeLoch($now);
       }
     }
     echo "\t** DONE ** " ;
@@ -80,21 +80,21 @@ if ( $usersObj->engaged != 0 ) {
     echo "Heading=". $fullUsersObj->users->boatheading ;
 	  
     if ( $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC
-	 or $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG
-	 or $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG ) {
+     or $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG
+     or $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG ) {
 	    
       echo ", Reaching position=" . giveDegMinSec("engine",$fullUsersObj->LatNM/1000, $fullUsersObj->LongNM/1000);
       if ( $fullUsersObj->users->targetlong == $fullUsersObj->LongNM/1000 
-	   && $fullUsersObj->users->targetlat == $fullUsersObj->LatNM/1000   ) {
+        && $fullUsersObj->users->targetlat == $fullUsersObj->LatNM/1000   ) {
         	      
-	echo " MyWP=(" . $fullUsersObj->users->targetlat . "," . $fullUsersObj->users->targetlong . ")" ;
-	if ( $fullUsersObj->users->targetandhdg != -1 ) {
-	  printf(" @WHP=%d", $fullUsersObj->users->targetandhdg);
-	} else {
-	  echo " NO WPH ";
-	}
+        echo " MyWP=(" . $fullUsersObj->users->targetlat . "," . $fullUsersObj->users->targetlong . ")" ;
+        if ( $fullUsersObj->users->targetandhdg != -1 ) {
+          printf(" @WHP=%d", $fullUsersObj->users->targetandhdg);
+        } else {
+          echo " NO WPH ";
+        }
       } else {
-	echo " bestWayToWP = (" . $fullUsersObj->LatNM/1000 . "," . $fullUsersObj->LongNM/1000 . ")" ;
+        echo " bestWayToWP = (" . $fullUsersObj->LatNM/1000 . "," . $fullUsersObj->LongNM/1000 . ")" ;
       }
 
       $dist=ortho($fullUsersObj->lastPositions->lat, $fullUsersObj->lastPositions->long, 
@@ -146,14 +146,14 @@ if ( $usersObj->engaged != 0 ) {
     include "check_waypoint_crossing.php";
     if (!$is_arrived) {
       if ($crosses_the_coast) {
-	$fullUsersObj->setSTOPPED(); // sets the boat mooring
-	$fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
-	
-	$fullUsersObj->lastPositions->lat=$latApres;
-	$fullUsersObj->lastPositions->long=$lonApres;
-	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position at thisplace
+        $fullUsersObj->setSTOPPED(); // sets the boat mooring
+        $fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
+        
+        $fullUsersObj->lastPositions->lat=$latApres;
+        $fullUsersObj->lastPositions->long=$lonApres;
+        $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at thisplace
       } else {
-	$fullUsersObj->lastPositions->writePositions(); //important, will write a new position
+        $fullUsersObj->lastPositions->writePositions(); //important, will write a new position
       }
       $fullUsersObj->writeCurrentRanking(1, $now);
       $fullUsersObj->writeLoch($now);
@@ -168,25 +168,25 @@ if ( $usersObj->engaged != 0 ) {
       if (  $fullUsersObj->users->pilotmode >= PILOTMODE_ORTHODROMIC 
 	    && ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) ) {
 	
-	$distAvant=ortho($latAvant, $lonAvant,
-			 $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
-	$distApres=ortho($latApres, $lonApres,
-			 $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
+        $distAvant=ortho($latAvant, $lonAvant,
+             $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
+        $distApres=ortho($latApres, $lonApres,
+             $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
 	
-	// On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
-	if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
-	     || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
+        // On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
+        if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
+             || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
 	  
-	  printf("\n\t** BOAT POSITION (Lon=%f, Lat=%f) **\n", 
-		 $lonApres/1000, $latApres/1000);
-	  printf("\t** USER WP (Lon=%f, Lat=%f) reached (dist=%f), deactivating it **\n", 
-		 $fullUsersObj->users->targetlong, 
-		 $fullUsersObj->users->targetlat, 
-		 $dist);
-	  
-	  // ABANDON DU WP PERSO
-	  $fullUsersObj->abandonWpAndTarget();    
-	}
+          printf("\n\t** BOAT POSITION (Lon=%f, Lat=%f) **\n", 
+           $lonApres/1000, $latApres/1000);
+          printf("\t** USER WP (Lon=%f, Lat=%f) reached (dist=%f), deactivating it **\n", 
+           $fullUsersObj->users->targetlong, 
+           $fullUsersObj->users->targetlat, 
+           $dist);
+          
+          // ABANDON DU WP PERSO
+          $fullUsersObj->abandonWpAndTarget();    
+        }
       }
       
       // ==========================
@@ -194,7 +194,7 @@ if ( $usersObj->engaged != 0 ) {
       // ==========================
       echo "\t** Pilotmode=" . $fullUsersObj->users->pilotmode ;
       if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-	echo "/" .$fullUsersObj->users->pilotparameter ;
+        echo "/" .$fullUsersObj->users->pilotparameter ;
       }
     
       // ===================================================================
@@ -203,12 +203,12 @@ if ( $usersObj->engaged != 0 ) {
       // * Pour MAJ du pilote orthodromique si on a passe un WP
       // ===================================================================
       if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE 
-	   OR $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC 
-	   OR $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG 
-	   OR $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG )  {
+           OR $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC 
+           OR $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG 
+           OR $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG )  {
 	
-	$fullUsersObj->updateAngles();
-	echo ", Angle updated";
+        $fullUsersObj->updateAngles();
+        echo ", Angle updated";
       }
       echo ", Heading = " . $fullUsersObj->users->boatheading;
     }
