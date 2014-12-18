@@ -19,7 +19,6 @@
 		$Lat1=$StartSeg[0];
 		$Lat2=$EndSeg[0];
 		// echo "\n Processing ".$Lon1."-".$Lat1;
-		$tc = GetTrueCourse($Lon1, $Lat1,$Lon2,$Lat2);
 		
 		if ($Lon1 > $Lon2)
 		{
@@ -69,16 +68,20 @@
 			}
 			
 		}*/
-		$Nextlat = new doublep();
+		/*$Nextlat = new doublep();
 		$Nextlon = new doublep();
 		VLM_raw_move_loxo($CurLat, $CurLon, $distVac, $tc, $Nextlat, $Nextlon);
-		
-		if (SegmentsIntersect($CurLon,$CurLat,doublep_value($Nextlon),doublep_value($Nextlat),$Lon1,$Lat1,$Lon2,$Lat2,$Ratio)==1)
+		*/
+    
+		if (SegmentsIntersect($lonAvant/1000,$latAvant/1000,$lonApres/1000,$latApres/1000,$Lon1,$Lat1,$Lon2,$Lat2,$Ratio)==1)
 		{
-			echo "Intersection ration ".$Ratio."\n";
+			echo "Intersection ratio ".$Ratio."\n";
 			
 			if ($Ratio>=0 && $Ratio <=1)
 			{
+        $tc = GetTrueCourse($Lon1, $Lat1,$Lon2,$Lat2);
+        $Nextlat = new doublep();
+        $Nextlon = new doublep();
 				VLM_raw_move_loxo($CurLat*1000, $CurLon*1000, $distVac*$Ratio, $tc, $Nextlat, $Nextlon);
 				
 				echo "\nIntersection ".(doublep_value($Nextlon)/1000)." ".(doublep_value($Nextlat)/1000)."\n";

@@ -123,8 +123,13 @@ function GetTrueCourse($lon1, $lat1, $lon2, $lat2)
 	return $Tc;
 }
 
+
+//
+// Unit test of the GetTrueCourseFunction
+//
 function TestGetTrueCourse()
 {
+  echo "\nTesting GetTrueCourse\n";
 	$tc = GetTrueCourse(0,0,1,0);
 	echo $tc."=90\n";
 	if ($tc <> 90) 
@@ -207,7 +212,67 @@ function GetGCLonAtLat($lon1,$lat1,$lon2,$lat2,$curlon,$lat3, &$lon3)
 	
 function TestExclusionLib()
 {
-	//TestGetTrueCourse();
+	TestGetTrueCourse();
+  testIntersect1();
+}
+
+function testIntersect1()
+{
+  echo "\n Test basic segments intersections\n";
+  
+  $ret = SegmentsIntersect(0,0,1,0,0,0,0,1,$ratio);
+  echo "1 ".$ret."=1 ".$ratio."=0\n";
+  if (!$ret || $ratio!=0)
+  {
+    die;
+  }
+  
+  $ret = SegmentsIntersect(0,0,1,0,0,1,1,0,$ratio);
+  echo "2 ".$ret."=1 ".$ratio."=1\n";
+  if (!$ret || $ratio!=1)
+  {
+    die;
+  }
+  
+  $ret = SegmentsIntersect(0,0,1,0,1,2,2,2,$ratio);
+  echo "3 ".$ret."=0 R=".$ratio."\n";
+  if ($ret )
+  {
+    die;
+  }
+  
+  
+  $ret = SegmentsIntersect(1,1,2,2,0,0,1,0,$ratio);
+  echo "4 ".$ret."=0 R=".$ratio."\n";
+  if ($ret )
+  {
+    die;
+  }
+  
+  $ret = SegmentsIntersect(1,1,2,2,1.5,1.5,2,1.5,$ratio);
+  echo "5 ".$ret."=1 ".$ratio."=0.5\n";
+  if (!$ret || abs($ratio -0.5) > 1e-10)
+  {
+    echo "\ndying\n";
+    if (!$ret)
+    {
+      echo "wrong return value\n";
+    }
+    if ($ratio != 0.5)
+    {
+      echo "wrong ratio value".$ratio." ".($ratio-0.5)."\n" ;
+    }
+    
+    die;
+  }
+  
+  $ret = SegmentsIntersect(0,0,1,0,1,1,2,2,$ratio);
+  echo "6 ".$ret."=0 R=".$ratio."\n";
+  if ($ret )
+  {
+    die;
+  }
+  
 }
 
 // Return is both segments intersects and return the ratio on segment AB from A for intersection
@@ -216,11 +281,11 @@ function TestExclusionLib()
 
 
 
-//  Determines the intersection point of the line defined by points A and B with the
-//  line defined by points C and D.
+//  Determines the intersection point of the segment defined by points A and B with the
+//  segment defined by points C and D.
 //
-//  Returns YES if the intersection point was found, and stores that point in X,Y.
-//  Returns NO if there is no determinable intersection point, in which case X,Y will
+//  Returns YES if the intersection point was found, and return in $Ratio the ratio from A on distance AB.
+//  Returns NO if there is no determinable intersection point, in which case Ratio will
 //  be unmodified.
 
 function SegmentsIntersect($Ax, $Ay, $Bx, $By, $Cx, $Cy, $Dx, $Dy,&$Ratio)
@@ -235,6 +300,7 @@ function SegmentsIntersect($Ax, $Ay, $Bx, $By, $Cx, $Cy, $Dx, $Dy,&$Ratio)
 	$Bx-=$Ax; $By-=$Ay;
 	$Cx-=$Ax; $Cy-=$Ay;
 	$Dx-=$Ax; $Dy-=$Ay;
+  $Ax = 0; $Ay=0;
 
 	//  Discover the length of segment A-B.
 	$DistAB=sqrt($Bx*$Bx+$By*$By);
@@ -255,17 +321,51 @@ function SegmentsIntersect($Ax, $Ay, $Bx, $By, $Cx, $Cy, $Dx, $Dy,&$Ratio)
 
 	//  (3) Discover the position of the intersection point along line A-B.
 	$ABpos=$Dx+($Cx-$Dx)*$Dy/($Dy-$Cy);
-
+  //echo "\n".$ABpos."=".$Dx."+(".$Cx."-".$Dx.")*".$Dy."/(".$Dy."-".$Cy.")\n";
+ 
 	$Ratio = $ABpos / $DistAB;
-	
+	//echo "\n Segments Intersect dist : ".$ABpos." ratio : ".$Ratio."\n";
+  
 	if ($Ratio >= 0 && $Ratio <=1)
 	{
-		// Success
-		return 1;
-	}
+		// Possible Success
+    // Check other segment ratio
+    
+    // Get Intersect coords
+    $Ix = $Ax+$ABpos;
+    $Iy = $Ay;
+    //echo " intersect ".$Ix." ".$Iy."\n";
+
+    if (($Dx - $Cx) != 0)
+    {
+      // Seg is not vertical
+      $Ratio2 = ($Ix - $Cx) / ($Dx - $Cx);
+    }
+    elseif ( ($Dy - $Cy) != 0)
+    {
+      // Seg is vertical
+      $Ratio2 = ($Iy - $Cy) / ($Dy - $Cy);
+    }
+    else
+    {
+      // No segment !!
+      return 0;
+    }
+    
+    //echo "\n Ratio2 ".$Ratio2."\n";
+    if ( ($Ratio2>=0) && ($Ratio2 <=1))
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+
+  }
 	else
 	{
-		// Segment do not intersect
+		// Segments do not intersect
 		return 0;
 	}
 	
