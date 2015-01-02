@@ -346,19 +346,27 @@ class GeovoileTree(object):
            print "oops"
         return offset+timezero
 
-    def tracks(self, path = ".//track", tagid = 'boatid'):
+    def tracks(self, path = ".//track", tagid = 'boatid', liveData = 1):
         tracks = []
         for outline in self.tree.findall(path):
             l = outline.text.split(';')
             lat, lon, t = 0., 0., 0
             rid = int(outline.attrib[tagid])
             for i in l:
-                tup = i.split(',')
-                lat += float(tup[0])
-                lon += float(tup[1])
-                t += int(tup[2])
-                pos = [rid, t, lat, lon]
-                tracks.append(pos)
+                if liveData == 1:
+                  tup = i.split(',')
+                  lat = float(tup[0])
+                  lon = float(tup[1])
+                  t = int(tup[2])
+                  pos = [rid, t, lat, lon]
+                  tracks.append(pos)
+                else:
+                  tup = i.split(',')
+                  lat += float(tup[0])
+                  lon += float(tup[1])
+                  t += int(tup[2])
+                  pos = [rid, t, lat, lon]
+                  tracks.append(pos)
         return tracks
 
     def tracks_live(self, path = ".//track", tagid = 'boatid'):
