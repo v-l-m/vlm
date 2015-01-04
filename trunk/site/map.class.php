@@ -642,8 +642,8 @@ class map
           if (abs($dx) >= abs($dy))
           {
             // Interpolate points along x axis
-            $t_x1 = $this->getPointInBounds($x1,$x2,$this->east /1000, $x1);
-            $t_x2 = $this->getPointInBounds($x1,$x2,$this->west /1000, $x2);
+            $t_x1 = $this->getPointInBounds($x1,$x2,$this->west /1000, $x1);
+            $t_x2 = $this->getPointInBounds($x1,$x2,$this->east /1000, $x2);
             
             $t_y1 = $this->getYFromXInLine($x1,$y1,$x2,$y2,$t_x1);
             $t_y2 = $this->getYFromXInLine($x1,$y1,$x2,$y2,$t_x2);
