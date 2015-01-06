@@ -1,0 +1,24 @@
+#/home/vlm est le chemin d'hébergement des fichiers de vlm
+#/home/vlm/vlmdatas/gribs/ est le vhost servi par apache
+
+<VirtualHost *:80>
+        ServerAdmin admin@actilis.net
+
+        DocumentRoot /home/vlm/vlmdatas/gribs
+        ServerName grib.virtual-loup-de-mer.org
+
+        ErrorLog    /home/vlm/logs/apache2/grib_error_log
+        CustomLog   /home/vlm/logs/apache2/grib_access_log combined
+
+        <Directory /home/vlm/vlmdatas/gribs>
+                DirectoryIndex index.php index.html
+
+                Order Allow,Deny
+                Allow from All
+
+                AllowOverride All
+                Options Indexes Includes
+
+        </Directory>
+</VirtualHost>
+
