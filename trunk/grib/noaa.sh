@@ -72,12 +72,16 @@ for TSTAMP in `echo $allindexes` ; do
     GRIBFILE="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}"
     let retry=1
     while [ $retry -gt 0 ]; do
-      rm $GRIBFILE
       wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
       let retry=$?
       if [ $retry -gt 0 ] ; then 
+        rm -f $GRIBFILE
         sleep 30
       fi
+      if [ ! -s $GRIBFILE ] ; then
+            rm -f $GRIBFILE
+            let retry=1
+         fi
     done
 #   if [ $retry == 4 ]; then
 #     while [ $retry -gt 0 ]; do
@@ -121,9 +125,9 @@ if [ "yes" = "$ARCHIVE_GRIB" ]; then
   if [ ! -d $GRIBPATH/archives/${YDAT} ]; then
     mkdir $GRIBPATH/archives/${YDAT}
   fi
-  for TSTAMP in 03 06 09 12 ; do
-    GRIBFILE=gfs.t${HH}z.master.grbf${TSTAMP}.10m.uv.grib2
-    cp $GRIBFILE $GRIBPATH/archives/${YDAT}
+  for TSTAMP in 003 006 009 012 ; do
+    GRIBFILE=gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}
+    cp $GRIBFILE $GRIBPATH/archives/${YDAT}/$GRIBFILE.grib2
   done
 fi
 
