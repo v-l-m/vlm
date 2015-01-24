@@ -70,6 +70,7 @@ fi
 for TSTAMP in `echo $allindexes` ; do
     GRIBURL="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}&lev_10_m_above_ground=on&var_UGRD=on&var_VGRD=on&leftlon=0&rightlon=360&toplat=90&bottomlat=-90&dir=%2Fgfs.$DAT$HH"
     GRIBFILE="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}"
+    rm -f $GRIBFILE
     let retry=1
     while [ $retry -gt 0 ]; do
       wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
