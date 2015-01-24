@@ -1,6 +1,8 @@
 <?php
 
-class exclusionZone
+require_once('base.class.php');
+
+class exclusionZone extends baseclass
 {
 	// Declare local members.
   var $Exclusions=array();
@@ -50,6 +52,27 @@ class exclusionZone
                   array($p4,$p5), array($p5,$p6), array($p6,$p7),array($p7,$p8), array($p8,$p9), array($p9,$p10),
                   array($p10,$p11), array($p11,$p12), array($p12,$p13),array($p13,$p14), array($p14,$p15), array($p16,$p17)
                 );
+    }
+    else
+    {
+      // Get exclusion zones def from database
+      $query = "select lon1, lat1, lon2, lat2 from nszsegment S inner join nszracesegment RS on S.idsegment = RS.idsegment and RS.idraces = ".$idRace.";";
+      //echo "sql : ".$query;
+      $res = $this->queryRead($query);
+      if ($res) 
+      {
+          while ($line = mysql_fetch_assoc($res)) 
+          {
+            $lon1 =$line["lon1"];
+            $lat1 =$line["lat1"];
+            $lon2 =$line["lon2"];
+            $lat2 =$line["lat2"];
+            
+            $this->Exclusions[] = array(array($lat1,$lon1),array($lat2,$lon2)); 
+          }
+          $this->activeZoneName="DB Loaded exclusion zone ".$idRace;
+      }
+      
     }
   }
   
