@@ -45,6 +45,9 @@
         "block2" => "block",
         "racesgroups.php" => "Races groups definitions",
         "racestogroups.php" => "Join Races to RacesGroups",
+        "block5" => "block",
+        "nszsegments.php" => "NSZ Segments definitions",
+        "nszracesegment.php" => "NSZ Segments to races definitions",
         );
     adminlistbox($tablepages, "Race administration");
 
