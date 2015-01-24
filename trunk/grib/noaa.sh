@@ -19,6 +19,8 @@ if [ ! -n "$VLM_GRIB_MAX_TIME" ]; then
     VLM_GRIB_MAX_TIME=24
 fi
 
+# Minimum grib file size for validity
+minimumsize=450000
 GRIB_MAX_TIME=$VLM_GRIB_MAX_TIME
 
 LATEST=latest.grb
@@ -66,6 +68,7 @@ else
     allindexes=`echo $firstindexes" "$lastindexes`
 fi
 
+      
 # Now get the individual grib entry convert in grib1 and merge
 for TSTAMP in `echo $allindexes` ; do
     GRIBURL="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}&lev_10_m_above_ground=on&var_UGRD=on&var_VGRD=on&leftlon=0&rightlon=360&toplat=90&bottomlat=-90&dir=%2Fgfs.$DAT$HH"
@@ -75,14 +78,23 @@ for TSTAMP in `echo $allindexes` ; do
     while [ $retry -gt 0 ]; do
       wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
       let retry=$?
+      echo "wget returned $retry" >>$LOG
       if [ $retry -gt 0 ] ; then 
         rm -f $GRIBFILE
         sleep 30
       fi
+      # Check null size file
       if [ ! -s $GRIBFILE ] ; then
-            rm -f $GRIBFILE
-            let retry=1
-         fi
+        rm -f $GRIBFILE
+        let retry=1
+      fi
+      #check minimum size for file
+      actualsize=$(wc -c "$GRIBFILE" | cut -f 1 -d ' ')
+      if [ $actualsize -le $minimumsize ]; then
+          echo "grib file too small $actualsize < $minimumsize bytes" >>$LOG
+          rm -f $GRIBFILE
+          let retry=1
+      fi
     done
 #   if [ $retry == 4 ]; then
 #     while [ $retry -gt 0 ]; do
