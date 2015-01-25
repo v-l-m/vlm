@@ -63,10 +63,10 @@ class exclusionZone extends baseclass
       {
           while ($line = mysql_fetch_assoc($res)) 
           {
-            $lon1 =$line["lon1"];
-            $lat1 =$line["lat1"];
-            $lon2 =$line["lon2"];
-            $lat2 =$line["lat2"];
+            $lon1 =$line["lon1"]/1000;
+            $lat1 =$line["lat1"]/1000;
+            $lon2 =$line["lon2"]/1000;
+            $lat2 =$line["lat2"]/1000;
             
             $this->Exclusions[] = array(array($lat1,$lon1),array($lat2,$lon2)); 
           }
