@@ -60,10 +60,9 @@ appear in generated list. Here are some most used field options documented.
 
 
 $opts['fdd']['idsegment'] = array(
-  'name'     => '#Id',
+  'name'     => 'Segment Id #',
   'help'     => 'Unique id of the segment',
-  'select'   => 'N',
-  'options'  => 'VR',
+  'select'   => 'Y',
   'sort'     => true
 );
 
