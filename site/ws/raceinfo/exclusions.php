@@ -11,57 +11,10 @@ function get_output_format() {
 function get_info_array($idRace) 
 {
   $zones = new exclusionZone($idRace);
+
+  $info=$zones;
   
-    //FIXME : tout cela devrait être partiellement factorisé dans wslib
-    $res = wrapper_mysql_db_query_reader("SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq FROM races WHERE idraces = ".$idrace);
-    
-    /*
-    //if nothing, then return null.
-    if (mysql_num_rows($res) == 0) return 0;
-    
-    //Race info in the main table
-    $info = mysql_fetch_assoc($res);
-
-    //Now fetch the waypoints
-    $info["races_waypoints"] = Array();
-    $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wpformat, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idrace);
-    while ($wp = mysql_fetch_assoc($res)) {
-        // remove irrelevant information
-        switch ($wp["wpformat"] & 0xF) {
-            case WP_ONE_BUOY:
-                if (array_key_exists('latitude2', $wp)) {
-                    unset($wp["latitude2"]);
-            }
-                if (array_key_exists('longitude2', $wp)) {
-                    unset($wp["longitude2"]);
-                }
-                break;
-            case WP_TWO_BUOYS:
-            default:
-                if (array_key_exists('laisser_au', $wp)) {
-                    unset($wp["laisser_au"]);
-                }
-        }
-        $info["races_waypoints"][$wp["wporder"]] = $wp;
-    }
-
-    //... and the race instructions
-    $info["races_instructions"] = Array();
-    $res = wrapper_mysql_db_query_reader("SELECT * FROM races_instructions WHERE idraces  = ".$idrace." AND MOD(flag, 2) = 1");
-    while ($ri = mysql_fetch_assoc($res)) {
-        $info["races_instructions"][] = $ri;
-    }
-
-    //... and the races groups
-    $info["races_groups"] = Array();
-    $res = wrapper_mysql_db_query_reader("SELECT * FROM racestogroups WHERE idraces  = ".$idrace);
-    while ($ri = mysql_fetch_assoc($res)) {
-        $info["races_groups"][] = $ri['grouptag'];
-    }
-    */
-    $info=$zones;
-    
-    return $info;
+  return $info;
 }
 
 function usage() {
