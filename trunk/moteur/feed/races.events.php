@@ -50,7 +50,7 @@
         function feedone($line) {
             $timedelay = $this->timetoevent; #$line['deptime'] - intval(time());
             $timetarget = $line['deptime'] - $this->timetoevent;
-            $t = sprintf("Départ de %s (~%s) dans %s", $line['racename'], $line['idraces'], $this->secs_to_h($timedelay));
+            $t = sprintf("Depart de %s (~%s) dans %s", $line['racename'], $line['idraces'], $this->secs_to_h($timedelay));
             $medias = explode(",", VLM_NOTIFY_LIST);
             foreach ($medias as $media) {
                 $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, $t, $timetarget);
