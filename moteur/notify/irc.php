@@ -69,6 +69,7 @@
     $irc = new VlmNotifyIrc();
     $irc->fetch();
     $irc->post();
+    sleep(2); //do not rush to end the connection to allow clean closing
     $irc->close();
 
 ?>
