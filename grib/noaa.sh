@@ -20,7 +20,7 @@ if [ ! -n "$VLM_GRIB_MAX_TIME" ]; then
 fi
 
 # Minimum grib file size for validity
-minimumsize=450000
+minimumsize=300000
 GRIB_MAX_TIME=$VLM_GRIB_MAX_TIME
 
 LATEST=latest.grb
