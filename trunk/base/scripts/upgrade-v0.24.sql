@@ -19,3 +19,5 @@ CREATE TABLE nszracesegment(
   `updated` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
   
 )CHARSET=utf8 COMMENT='NSZ Segments to races association table';
+
+create unique index idx_idraces_idsegment on nszracesegment (idraces,idsegment);
