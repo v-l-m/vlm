@@ -61,6 +61,17 @@ $opts['fdd']['summary'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['url'] = array(
+  'name'     => 'url',
+  'options'  => 'ACDVP',
+  'help'     => 'Url associée à la news',
+  'select'   => 'T',
+  'escape'   => true,
+  'maxlen'   => 250,
+  'sort'     => true
+);
+
+
 $opts['fdd']['timetarget'] = array(
   'name'     => 'News date',
   'select'   => 'T',
