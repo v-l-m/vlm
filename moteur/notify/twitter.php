@@ -22,7 +22,7 @@
         function __construct() {
             parent::__construct();
             //create the twitter handle
-            $this->handle = new TwitterOAuth($config);
+            $this->handle = new TwitterOAuth($this->config);
         }
         
         function postone($m) {
