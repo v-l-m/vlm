@@ -1,6 +1,6 @@
 <?
     require("config.php");
-    require_once('notify.class.php');
+    require('notify.class.php');
     require_once('TwitterOAuth/TwitterOAuth.php');
     require_once('TwitterOAuth/Exception/TwitterException.php');
 
@@ -26,7 +26,7 @@
         }
         
         function postone($m) {
-            $response = $this->handle->post('statuses/update', array('status' => $m));
+            $response = $this->handle->post('statuses/update', array('status' => $m['summary']));
             return $response;
         }
                         
