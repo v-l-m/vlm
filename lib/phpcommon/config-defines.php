@@ -258,6 +258,11 @@
     define_if_not("VLM_NOTIFY_FACEBOOK_URL", "https://graph.facebook.com/201999359896107/feed");
     define_if_not("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "big_hashed_string");
 
+    define_if_not("VLM_NOTIFY_TWITTER_CONSUMER_KEY", "big_hashed_string");
+    define_if_not("VLM_NOTIFY_TWITTER_CONSUMER_SECRET", "big_hashed_string");
+    define_if_not("VLM_NOTIFY_TWITTER_OAUTH_TOKEN", "big_hashed_string");
+    define_if_not("VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "big_hashed_string");
+
     define_if_not("VLM_NOTIFY_LIST", "test");
     define_if_not("VLM_NOTIFY_NEWS_MAX_AGE", 14*24*3600); #2 weeks
     define_if_not("VLM_NOTIFY_MAIL", EMAIL_COMITE_VLM);
