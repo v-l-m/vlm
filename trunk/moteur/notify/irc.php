@@ -30,7 +30,7 @@
 
         function close() {
             parent::close();
-            it (is_null($this->socket)) return;
+            if (is_null($this->socket)) return;
             fputs($this->socket, "QUIT\r\n" );
             /* fermeture sock */
             fclose($this->socket);
