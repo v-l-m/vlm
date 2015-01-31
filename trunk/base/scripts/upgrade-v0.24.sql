@@ -21,3 +21,9 @@ CREATE TABLE nszracesegment(
 )CHARSET=utf8 COMMENT='NSZ Segments to races association table';
 
 create unique index idx_idraces_idsegment on nszracesegment (idraces,idsegment);
+
+
+
+
+ALTER TABLE news ADD COLUMN url VARCHAR(250);
+

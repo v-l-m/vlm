@@ -7,12 +7,16 @@
         var $rate_limit = 2;
     
         function init_handle($message) {
-            return $this->init_curl_handle_from_url(
-                VLM_NOTIFY_FACEBOOK_URL,
-                Array(
+            $param = Array(
                   "message" => $message['summary'],
                   "access_token" => VLM_NOTIFY_FACEBOOK_ACCESSTOKEN
-                  )
+                  );
+            if ($message['url'] != "") {
+                $param['link'] = $url;
+            }
+            return $this->init_curl_handle_from_url(
+                VLM_NOTIFY_FACEBOOK_URL,
+                $param
                 );
         }
     }
