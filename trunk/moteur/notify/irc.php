@@ -57,11 +57,16 @@
         }
 
         function postone($message) {
+            if ($message['url'] != '') {
+                $status = sprintf("%s - %s", $message['summary'], $message['url']);
+            } else {
+                $status = $message['summary'];
+            }
             $this->open(); //Ouvre le chan s'il n'est pas encore ouvert
             $this->read_some_data();
-            $this->send_data("PRIVMSG ".VLM_NOTIFY_IRC_CHAN." :".$message['summary']);
+            $this->send_data("PRIVMSG ".VLM_NOTIFY_IRC_CHAN." :".$status);
             $this->read_some_data();
-            echo $message['summary']."\n";
+            echo $status."\n";
             sleep(1);
             return True;
         }
