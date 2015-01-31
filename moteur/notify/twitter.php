@@ -26,7 +26,12 @@
         }
         
         function postone($m) {
-            $response = $this->handle->post('statuses/update', array('status' => $m['summary']));
+            if ($m['url'] != '') {
+                $status = sprintf("%s - %s", $m['summary'], $m['url']);
+            } else {
+                $status = $m['url'];
+            }
+            $response = $this->handle->post('statuses/update', array('status' => $status));
             return $response;
         }
                         
