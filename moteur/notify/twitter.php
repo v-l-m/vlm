@@ -29,7 +29,7 @@
             if ($m['url'] != '') {
                 $status = sprintf("%s - %s", $m['summary'], $m['url']);
             } else {
-                $status = $m['url'];
+                $status = $m['summary'];
             }
             $response = $this->handle->post('statuses/update', array('status' => $status));
             return $response;
