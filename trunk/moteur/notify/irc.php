@@ -30,7 +30,7 @@
 
         function close() {
             parent::close();
-
+            it (is_null($this->socket)) return;
             fputs($this->socket, "QUIT\r\n" );
             /* fermeture sock */
             fclose($this->socket);
@@ -62,6 +62,7 @@
             $this->send_data("PRIVMSG ".VLM_NOTIFY_IRC_CHAN." :".$message['summary']);
             $this->read_some_data();
             echo $message['summary']."\n";
+            sleep(1);
             return True;
         }
     }
