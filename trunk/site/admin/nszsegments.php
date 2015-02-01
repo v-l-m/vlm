@@ -73,14 +73,20 @@ $opts['fdd']['segname'] = array(
   'sort'     => true
 );
 
+$opts['fdd']['lat1'] = array(
+  'name'     => 'Latitude (1)',
+  'select'   => 'N',
+  'sort'     => true
+);
+
 $opts['fdd']['lon1'] = array(
   'name'     => 'Longitude (1)',
   'select'   => 'N',
   'sort'     => true
 );
 
-$opts['fdd']['lat1'] = array(
-  'name'     => 'Latitude (1)',
+$opts['fdd']['lat2'] = array(
+  'name'     => 'Latitude (2)',
   'select'   => 'N',
   'sort'     => true
 );
@@ -88,12 +94,6 @@ $opts['fdd']['lat1'] = array(
 
 $opts['fdd']['lon2'] = array(
   'name'     => 'Longitude (2)',
-  'select'   => 'N',
-  'sort'     => true
-);
-
-$opts['fdd']['lat2'] = array(
-  'name'     => 'Latitude (2)',
   'select'   => 'N',
   'sort'     => true
 );
