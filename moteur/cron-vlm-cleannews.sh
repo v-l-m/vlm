@@ -7,6 +7,7 @@ LOG=$VLMLOG/$(date +%Y%m%d_%H%M)-$1-cronvlm-cleannews.log
 #FIXME should be a global setup
 export LOGFILE_MAX_AGE=7
 
+cd $VLMJEUROOT/moteur
 nice -1 $VLMPHPPATH notify/clean_news.php $* >> $LOG 2>&1
 
 # Purge des anciens logs
