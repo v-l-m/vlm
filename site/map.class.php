@@ -623,70 +623,22 @@ class map
         $index ++ ;
         $StartSeg=$Exclusion[0];
         $EndSeg=$Exclusion[1];
-        
-        
-        $x1 = $StartSeg[1];
-        $x2 = $EndSeg[1];
-        $y1 = $StartSeg[0];
-        $y2 = $EndSeg[0];
-
-        //imagestring( $this->mapImage, $font+2, 40 , 50+30 * $index , $x1." ".$y1." ".$x2." ".$y2."->" , $this->colorBlack);
-        
-        // Get segment points at map bounds (to avoid segment wrongly placed at high zoom factors
-        if (($StartSeg[1] != $EndSeg[1]) && $StartSeg[0] != $EndSeg[0])
-        {
-           // Random Segment
-          $dx = $x2 - $x1;
-          $dy = $y2 - $y1;
-          
-          if (abs($dx) >= abs($dy))
-          {
-            // Interpolate points along x axis
-            $t_x1 = $this->getPointInBounds($x1,$x2,$this->west /1000, $x1);
-            $t_x2 = $this->getPointInBounds($x1,$x2,$this->east /1000, $x2);
-            
-            $t_y1 = $this->getYFromXInLine($x1,$y1,$x2,$y2,$t_x1);
-            $t_y2 = $this->getYFromXInLine($x1,$y1,$x2,$y2,$t_x2);
-            
-            $x1 = $t_x1;
-            $x2 = $t_x2;
-            $y1 = $t_y1;
-            $y2 = $t_y2;
-            
-            }
-          else
-          {
-            // or Y axis
-            $t_y1 = $this->getPointInBounds($y1,$y2,$this->south /1000, $y1);
-            $t_y2 = $this->getPointInBounds($y1,$y2,$this->north /1000, $y2);
-            
-            $t_x1 = $this->getXFromYInLine($x1,$y1, $x2,$y2,$t_y1);
-            $t_x2 = $this->getXFromYInLine($x1,$y1, $x2,$y2,$t_y2);
-            
-            $y1 = $t_y1;
-            $y2 = $t_y2;
-            $x1 = $t_x1;
-            $x2 = $t_x2;
-          } 
-        }
-        
-        //imagestring( $this->mapImage, $font+2, 40 , 50+15+30 * $index , $x1." ".$y1." ".$x2." ".$y2 , $this->colorBlack);
-        
         if ( $this->flag_E_W == true && $point[3] < 0 ) 
         {
-          $x1=$this->projLong(360000+$x1*1000);
-          $x2=$this->projLong(360000+$x2*1000);
+          $x1=$this->projLong(360+$StartSeg[1]*1000);
+          $x2=$this->projLong(360+$EndSeg[1]*1000);
         }
         else
         {
-          $x1=$this->projLong($x1*1000);
-          $x2=$this->projLong($x2*1000);
+          $x1=$this->projLong($StartSeg[1]*1000);
+          $x2=$this->projLong($EndSeg[1]*1000);
         }
         
-        $y1 = $this->projLat($y1*1000);
-        $y2 = $this->projLat($y2*1000);
+        $y1 = $this->projLat($StartSeg[0]*1000);
+        $y2 = $this->projLat($EndSeg[0]*1000);
         
         
+        //imagestring( $this->mapImage, $font+2, 40 , 50+15 * $index , $x1." ".$y1."->".$x2." ".$y2 , $this->colorBlack);
         imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
       }
         
@@ -694,36 +646,9 @@ class map
       // Puis on supprime le tableau
       unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
   }
-  
-  //
-  // Function returns a value x3 if it is in a specified range (x1-x2) otherwise return x4, 
-  function getPointInBounds ($x1, $x2, $x3, $x4)
-  {
-    if ((($x3 - $x1) * ($x2 - $x3)) >= 0)
-    {
-      // point is in range return point
-      return $x3;
-    }
-    else
-    {
-      // Point is not in range return ref point
-      return $x4;
-    }
-  }
-  
         
-  // Function returns the Y value corresponding to a given X along a line defined by points (x1, y1) and (x2,y2) 
-  function getYFromXInLine($x1,$y1,$x2,$y2,$x)
-  {
-    return ($y1+($x-$x1) * (($y2-$y1)/($x2-$x1)));
-  }
 
-        
-  // Function returns the X value corresponding to a given Y along a line defined by points (x1, y1) and (x2,y2) 
-  function getXFromYInLine($x1,$y1,$x2,$y2,$y)
-  {
-    return ($x1+(float)($y-$y1)*($x2-$x1)/($y2-$y1));
-  }
+
 
   function drawScale($projCallbackLong, $projCallbackLat)
   {
