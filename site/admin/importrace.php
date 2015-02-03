@@ -208,8 +208,8 @@
           $SqlRaceSeg .= " values ";
         }
         
-        $SqlSeg .= " ($SqlSegId,".$excl[0][1].",".$excl[0][0].",".$excl[1][0].",".$excl[1][1].")";
-        $SqlRaceSeg .= " ($idracefrom,$SqlSegId)";
+        $SqlSeg .= " ($SqlSegId,".($excl[0][1]*1000).",".($excl[0][0]*1000).",".($excl[1][0]*1000).",".($excl[1][1]*1000).") \n";
+        $SqlRaceSeg .= " ($idracefrom,$SqlSegId) \n";
         $SegId++;
         $FirstSeg = 1;
       }
