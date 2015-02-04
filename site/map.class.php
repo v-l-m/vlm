@@ -625,8 +625,8 @@ class map
         $EndSeg=$Exclusion[1];
         if ( $this->flag_E_W == true && $point[3] < 0 ) 
         {
-          $x1=$this->projLong(360+$StartSeg[1]*1000);
-          $x2=$this->projLong(360+$EndSeg[1]*1000);
+          $x1=$this->projLong(360000+$StartSeg[1]*1000);
+          $x2=$this->projLong(360000+$EndSeg[1]*1000);
         }
         else
         {
