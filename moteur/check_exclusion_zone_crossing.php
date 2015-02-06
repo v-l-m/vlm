@@ -38,17 +38,18 @@
 		if ($Ratio!=-1)
 		{
 			echo "Intersection ratio ".$Ratio."\n";
-      
-      $rlat = doublep_value($IntLat)/pi()*180;
-      $rlon = doublep_value($IntLon)/pi()*180;
-			
-      echo "\nIntersection ".$rlon." ".$rlat."\n";
-      $coast_xinglat = $rlat;
-      $coast_xinglong = $rlon;
+      $tc = GetTrueCourse($lonAvant/1000, $latAvant/1000,$lonApres/1000,$latApres/1000);
+		
+      VLM_raw_move_loxo($latAvant, $lonAvant, $distVac*$Ratio, $tc, $IntLat, $IntLon);
+				
+      echo "\nIntersection ".(doublep_value($IntLon)/1000)." ".(doublep_value($IntLat)/1000)."\n";
+      $coast_xinglat = $IntLat;
+      $coast_xinglong = $IntLon;
       $coast_xingratio = new doublep;
+      $coast_xingratio = $Ratio;
       $crosses_the_coast=1;
+      // Break the loop, once the 1st intersection has been crossed.
       break;
-    
 		}
 		/*else
 		{
