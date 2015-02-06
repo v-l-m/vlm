@@ -212,8 +212,58 @@ function GetGCLonAtLat($lon1,$lat1,$lon2,$lat2,$curlon,$lat3, &$lon3)
 	
 function TestExclusionLib()
 {
-	TestGetTrueCourse();
-  testIntersect1();
+	//TestGetTrueCourse();
+  //testIntersect1();
+  testVlmIntersect();
+}
+
+function TestVlmIntersect()
+{
+
+ echo "\n Test basic segments intersections\n";
+  
+  $lat = new doublep();
+  $lon = new doublep();
+  
+  $ret = intersects(0,0,1/180*pi(),0,0,0,0,1/180*pi(),$lat,$lon);
+  $rlat = doublep_value($lat)/pi()*180;
+  $rlon = doublep_value($lon)/pi()*180;
+			
+  echo "1 ".$ret."=0 ".$rlat."=0 ".$rlon."=0 \n";
+  if ($ret == -1)
+  {
+    die;
+  }
+  
+  $ret = intersects(0,0,1/180*pi(),0,0,1/180*pi(),1/180*pi(),0,$lat,$lon);
+  $rlat = doublep_value($lat)/pi()*180;
+  $rlon = doublep_value($lon)/pi()*180;
+			
+  echo "2 ".$ret."=1 ".$rlat."=1 ".$rlon."=0 \n";
+  if ($ret == -1)
+  {
+    die;
+  }
+  
+  $ret = intersects(0,0,0,1/180*pi(),2/180*pi(),1/180*pi(),2/180*pi(),2/180*pi(),$lat,$lon);
+  $rlat = doublep_value($lat)/pi()*180;
+  $rlon = doublep_value($lon)/pi()*180;
+			
+  echo "3 ".$ret."=-1 ".$rlat."=0 ".$rlon."=0 \n";
+  if ($ret != -1)
+  {
+    die;
+  }
+  
+  $ret = intersects(1/180*pi(),1/180*pi(),2/180*pi(),2/180*pi(),1.5/180*pi(),1.5/180*pi(),1.5/180*pi(),2/180*pi(),$lat,$lon);
+  $rlat = doublep_value($lat)/pi()*180;
+  $rlon = doublep_value($lon)/pi()*180;
+	echo "4 ".$ret."=0.5 ".$rlat."=1.5 ".$rlon."=1.5 \n";
+  if (abs($ret - 0.5)>1e-10)
+  {
+    die;
+  }
+  
 }
 
 function testIntersect1()
