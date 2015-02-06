@@ -39,8 +39,8 @@
 		{
 			echo "Intersection ratio ".$Ratio."\n";
       
-      $rlat = doublep_value($Intlat)/pi()*180;
-      $rlon = doublep_value($Intlon)/pi()*180;
+      $rlat = doublep_value($IntLat)/pi()*180;
+      $rlon = doublep_value($IntLon)/pi()*180;
 			
       echo "\nIntersection ".$rlon." ".$rlat."\n";
       $coast_xinglat = $rlat;
