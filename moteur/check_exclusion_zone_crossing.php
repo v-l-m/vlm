@@ -30,16 +30,16 @@
 			$Lat2 = $t2;
 		}
 		
-    $IntLon = new doublep();
-    $IntLat = new doublep();
-    
     echo " ".$lonAvant ." ". $latAvant ." " .$lonApres . " " .$latApres ." ".$Lon1. " " .$Lat1." ".$Lon2." ".$Lat2."\n";
-    $Ratio=intersects($latAvant/1000/180*pi(),$lonAvant/1000/180*pi(),$latApres/1000/180*pi(),$lonApres/1000/180*pi(),$Lat1/180*pi(),$Lon1/180*pi(),$Lat2/180*pi(),$Lon2/180*pi(),$IntLat,$IntLon);
-		if ($Ratio!=-1)
+    $Ratio=SegmentsIntersect($lonAvant/1000,$latAvant/1000,$lonApres/1000,$latApres/1000,$Lon1,$Lat1,$Lon2,$Lat2);
+		if ($Ratio != -1)
 		{
 			echo "Intersection ratio ".$Ratio."\n";
       $tc = GetTrueCourse($lonAvant/1000, $latAvant/1000,$lonApres/1000,$latApres/1000);
 		
+      $IntLat = new doublep();
+      $IntLon = new doublep();
+      
       VLM_raw_move_loxo($latAvant, $lonAvant, $distVac*$Ratio, $tc, $IntLat, $IntLon);
 				
       echo "\nIntersection ".(doublep_value($IntLon)/1000)." ".(doublep_value($IntLat)/1000)."\n";
