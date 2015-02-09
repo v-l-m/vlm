@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS nszracesegment;
-DROP TABLE IF EXISTS nszsegment;
 
 
 CREATE TABLE nszsegment(
