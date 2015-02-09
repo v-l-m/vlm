@@ -1,0 +1,263 @@
+body
+{
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial,Sans-serif;
+  background-color: #cde2f6;
+  color: black;
+  margin: 0px; /*need to be forced*/
+}
+
+#login
+{
+  width: 20%;
+  height: 180;
+  float: left;
+  font-size: 70%;
+ /* padding: 1%;*/
+  background-color: #829adf;
+  border: 1px solid #2c4897;
+  margin: 0.5%;
+
+  margin-right: 0;
+
+  /*margin-bottom: 1%;*/
+  color: black;
+  margin-bottom: 0 ;/*0 important sinon menu va pas en dessous*/
+/*  -moz-border-radius: 15px  ;*/
+}
+
+#main
+{
+  background-color: #829adf;
+  color: black;
+  font-size: 70%;
+  float: right;
+  border: 1px solid #2c4897;
+  width: 77%;
+
+  margin: 0.5%;
+ /* margin-left: 0;*/
+  margin-bottom: 15px;
+/*  -moz-border-radius: 15px;*/
+  min-height:400px;
+}
+
+#text
+{
+  padding: 0.5%;
+}
+
+#menu
+{
+ /* left: 1%;*/
+  float: left;
+  color: black;
+  background-color: #829adf;
+  border: 1px solid #2c4897;
+  margin: 0.5%;
+  margin-right: 0;
+  /*margin-left: 1%;*/
+  width: 20%;
+  /*padding: 1%;*/
+ /* -moz-border-radius: 15px;*/
+}
+
+#minimap
+{
+text-align: center;
+}
+
+#baneer
+{
+  margin: 1px;
+  height: 110px;
+  width: 100%;
+  background-image:  url('baneer.png');
+}
+
+#time
+{ 
+  background-color: #FF0000;
+  text-align: center;
+
+}
+
+#boat
+{
+  width: 49%;
+  float: left;
+  border: 0px solid black;
+  height: 100px;
+}
+
+#links
+{
+  width: 49%;
+  float: right;
+  border: 0px solid black;
+height: 100px;
+}
+
+#boatimg
+{
+  width: 49%;
+  float: left;
+  right : 20px;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+
+
+}
+
+#simple
+{
+  width: 49%;
+  float: right;
+  border-left: 0px solid black;
+  border-right: 0px solid black;
+/*border-bottom:  0px solid black;*/
+}
+
+
+#expert
+{
+  width: 100% ;
+  float: left;
+/*  background-color: #a77929;*/
+  border-top: 0px solid black;
+
+}
+
+#displaymode
+{
+  width: 100% ;
+  text-align: center;
+float: left;
+  border-top: 0px solid black;
+
+}
+
+
+#footer{
+	clear: both;
+	width: 750px;
+	height: 30px;
+	margin: 0 auto;
+	padding: 0;
+	/*background: url(img/footer.png) no-repeat center;*/
+	text-align: center;
+}
+
+
+/*a.link*/
+a
+{
+  color: #E1EDF5;
+  /*background-color: transparent;*/
+  text-decoration: underline;
+
+}
+
+a:hover
+{
+  /*color: black;*/
+  background-color: #9cf;
+  /*text-decoration: underline;*/
+}
+
+#grid td {height: 21px; width: 21px; padding: 0; line-height: 21px;}
+
+img.babord
+{
+	border: 5px solid #E02020;
+}
+
+img.tribord
+{
+	border: 5px solid #00A020;
+}
+
+img
+{
+	border: 0;
+}
+
+
+h1
+{
+  font-size: 130%;
+  font-weight: bold;
+  color: #E1EDF5;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+  padding-right:10px;
+  margin-top:0px;
+  padding-top:10px;
+  line-height:10px;
+}
+
+h2
+{
+  font-size: 110%; 
+  font-weight: bold; 
+  color: #E1EDF5;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif; 
+  padding-right:10px;
+  
+  line-height:0px;
+}
+
+h3
+{
+  font-size: 100%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+}
+
+h4.tribord
+{
+  font-size: 100%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+  color : #00A020;
+  text-align: center;
+}
+h4.babord
+{
+  font-size: 100%; 
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Lucida, Helvetica, Verdana, Arial, Sans-serif;
+  color : #E02020;
+  text-align: center;
+}
+
+
+acronym 
+{
+  border-bottom: dashed 1px white;
+  cursor: help;
+}
+
+
+center
+{
+  display: none;
+}
+
+table 
+{
+  border-collapse: collapse;
+}
+
+td 
+{ 
+  border: 1px solid black 
+}
+
+td.map
+{ 
+  border: 0px solid black 
+}
+
+th 
+{ 
+  border: 1px solid black 
+}
+
+

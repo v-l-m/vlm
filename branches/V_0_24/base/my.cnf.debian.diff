@@ -1,0 +1,108 @@
+--- /etc/mysql/my.cnf.backup	2011-03-13 08:58:58.924866480 +0000
++++ /etc/mysql/my.cnf	2011-03-13 08:56:51.276869476 +0000
+@@ -44,25 +44,44 @@
+ #
+ # Instead of skip-networking the default is now to listen only on
+ # localhost which is more compatible and is not less secure.
++
++#VLM Comment this for enabling slave to join the master. Only when firewall is active...
+ bind-address		= 127.0.0.1
+ #
+ # * Fine Tuning
+ #
+-key_buffer		= 16M
++key_buffer		= 512M
+ max_allowed_packet	= 16M
+ thread_stack		= 192K
+-thread_cache_size       = 8
++thread_cache_size       = 32
+ # This replaces the startup script and checks MyISAM tables if needed
+ # the first time they are touched
+ myisam-recover         = BACKUP
+-#max_connections        = 100
+-#table_cache            = 64
+-#thread_concurrency     = 10
++max_connections        = 400
++table_cache            = 512
++thread_concurrency     = 10
+ #
+ # * Query Cache Configuration
+ #
+-query_cache_limit	= 1M
+-query_cache_size        = 16M
++query_cache_limit	= 2M
++query_cache_size        = 128M
++
++#VLM Optims MGA
++sort_buffer_size = 2M
++read_buffer_size = 1M
++read_rnd_buffer_size = 1M
++join_buffer_size = 2M
++
++tmp_table_size = 64M
++
++# Pour tables "in memory"
++max_heap_table_size = 64M
++
++myisam_sort_buffer_size = 16M
++myisam_max_extra_sort_file_size = 1024M
++myisam_max_sort_file_size = 2048M
++bulk_insert_buffer_size = 16M
++
+ #
+ # * Logging and Replication
+ #
+@@ -75,24 +94,47 @@
+ # Error logging goes to syslog due to /etc/mysql/conf.d/mysqld_safe_syslog.cnf.
+ #
+ # Here you can see queries with especially long duration
+-#log_slow_queries	= /var/log/mysql/mysql-slow.log
+-#long_query_time = 2
+-#log-queries-not-using-indexes
++log_slow_queries	= /var/log/mysql/mysql-slow.log
++long_query_time = 1
++log-queries-not-using-indexes
+ #
+ # The following can be used as easy to replay backup logs or for replication.
+ # note: if you are setting up a replication slave, see README.Debian about
+ #       other settings you may need to change.
++
++#VLM : was 9 in S9
+ #server-id		= 1
+-#log_bin			= /var/log/mysql/mysql-bin.log
+-expire_logs_days	= 10
++log_bin			= /var/log/mysql/mysql-bin.log
++
++#VLM : expire_logs_days was 3 in S9
++expire_logs_days	= 3
++
++#VLM : max_binlog_size was 10M in S9
+ max_binlog_size         = 100M
+-#binlog_do_db		= include_database_name
++binlog_cache_size       = 1M
++
++#VLM : From S9
++replicate-ignore-table  = vlm.histpos
++replicate-ignore-table  = vlm.races_loch
++
++binlog_do_db		= vlm
+ #binlog_ignore_db	= include_database_name
++
++#VLM: Pour la replication dual-master
++#replicate-same-server-id = 0
++#log-slave-updates        = 1
++#auto-increment-increment = 2
++#auto-increment-offset = 1
++#relay-log = /var/log/mysql/mysql-relay.log
++#relay-log-index = /var/log/mysql/mysql-relay-log.index 
++
+ #
+ # * InnoDB
+ #
+ # InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
+ # Read the manual for more InnoDB related options. There are many!
++skip-innodb
++
+ #
+ # * Security Features
+ #
