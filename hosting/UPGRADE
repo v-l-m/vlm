@@ -4,6 +4,8 @@ From 0.23.x to 0.24 :
 
 = Step 0, can be done at any time = 
 
+  Avoir  un backup de la base et faire un backup de vlmcode avant de commencer
+
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_24
 
@@ -22,10 +24,11 @@ From 0.23.x to 0.24 :
   RUN
     ./scripts/upgrade.sh 0.24 0
     
+    
 = Step 1, maintenance mode, backup base, upgrade core =
 
   RUN
-    ./scripts/upgrade.sh 0.24 1 && /etc/init.d/apache restart
+    ./scripts/upgrade.sh 0.24 1 && /etc/init.d/apache2 restart
 
   - if something goes wrong, EDIT crontab and comment vlm crons
 
