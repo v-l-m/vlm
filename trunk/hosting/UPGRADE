@@ -28,7 +28,7 @@ From 0.23.x to 0.24 :
 = Step 1, maintenance mode, backup base, upgrade core =
 
   RUN
-    ./scripts/upgrade.sh 0.24 1 && /etc/init.d/apache2 restart
+    ./scripts/upgrade.sh 0.24 1 && sudo /etc/init.d/apache2 restart
 
   - if something goes wrong, EDIT crontab and comment vlm crons
 
