@@ -1,6 +1,9 @@
 # Moteur toutes les 5 minutes
+TZ='UTC+0'
+MAILTO=admin@virtual-loup-de-mer.org
 VLMRACINE=/base/de/vlm
-*/5 * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm.sh
+
+* * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm.sh
 2-59/5 * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm-clean.sh
 
 # On the db
@@ -12,6 +15,9 @@ VLMRACINE=/base/de/vlm
 # Positions reels
 4-59/20 * * * * $VLMRACINE/vlmcode/moteur/cron-position-bateaux-reels.sh > /dev/null
 
+# Validation WP
+4-54/10 * * * * $VLMRACINE/vlmcode/moteur/validation-WP/cron-validation.sh >/dev/null 2>&1
+
 # News feeding
 0 * * * * $VLMRACINE/vlmcode/moteur/feed/feed.sh 7*24*3600 3600
 0 * * * * $VLMRACINE/vlmcode/moteur/feed/feed.sh 2*24*3600 3600
@@ -20,7 +26,8 @@ VLMRACINE=/base/de/vlm
 */5 * * * * $VLMRACINE/vlmcode/moteur/feed/feedresults.sh
 
 #News notification
-* * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh identica
+* * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh twitter
+* * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh irc
 */5 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh facebook
 */5 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh mail
 
