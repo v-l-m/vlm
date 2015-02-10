@@ -12,7 +12,7 @@
                   "access_token" => VLM_NOTIFY_FACEBOOK_ACCESSTOKEN
                   );
             if ($message['url'] != "") {
-                $param['link'] = $url;
+                $param['link'] = $message['url'];
             }
             return $this->init_curl_handle_from_url(
                 VLM_NOTIFY_FACEBOOK_URL,
