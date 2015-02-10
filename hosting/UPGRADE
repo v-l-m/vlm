@@ -17,9 +17,11 @@ From 0.23.x to 0.24 :
         define("VLM_NOTIFY_TWITTER_CONSUMER_KEY", "big_hashed_string");
         define("VLM_NOTIFY_TWITTER_CONSUMER_SECRET", "big_hashed_string");
         define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN", "big_hashed_string");
-        define"VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "big_hashed_string"); 
+        define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "big_hashed_string"); 
     - change key :
         define("VLM_NOTIFY_LIST", "facebook,twitter,mail,irc");
+    - edit crontab and add :
+      * * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh twitter
 
   RUN
     ./scripts/upgrade.sh 0.24 0
