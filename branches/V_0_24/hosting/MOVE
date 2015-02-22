@@ -1,0 +1,55 @@
+#Documentation pour migrer un serveur VLM vers un autre
+
+##Contexte
+On veut migrer :
+- les services svn+trac du /home/dev
+- les service vlm du /home/vlm
+- minimiser le temps d'interruption
+
+##Stratégie de bascule
+- STEP 1 : préparation du serveur NEPTUNE2
+- STEP 2 : copie de /home/dev
+- STEP 3 : installation from scratch du /home/vlm + copie base
+- STEP 4 : tests à réaliser
+- STEP 5 : sync J-1
+- STEP 6 : bascule de l'ip du serveur nouveau (dit NEPTUNE2) sur l'ancienne ip du serveur actuel (dit NEPTUNE2)
+- STEP 7 : Phase de surveillance
+- STEP 8 : shutdown de NEPTUNE
+
+## STEP1 : Préparation Serveur
+- install debian (fm)
+- rsync du /root/.ssh (fm)
+- maj du sytème (apt-get update && apt-get upgrade)
+- rsync du /etc/ dans /root/etc/ for the record
+
+## STEP2 : Préparation env de dev
+* Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/ConfigurationServeur
+* Sync du /home/dev de Neptune vers Neptune2
+* Ajustements conf apache ?
+
+## STEP3 : Installation VLM
+* Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
+* Suivre la doc (en s'aidant de la conf /etc/ précédente) pour catcher les manques
+* Si un fqdn existe, le paramètrer dans apache en plus des autres
+* Tester avec un client en changeant son /etc/hosts
+
+## STEP4 : TESTS, TESTS, TESTS
+
+## STEP5 : Sync J-1
+* (permettra de documenter ce qu'il y a faire comme sync "just in time")
+
+## STEP6 : BASCULE
+* Reboot du serveur NEPTUNE2 (cible)
+* Arrêter les crons sur NEPTUNE et NEPTUNE2
+* Passer les instances VLM en maintenance
+* Sync finale
+* Bascule IP
+* Sortie de la maintenance pour NEPTUNE2
+* Relance des crons
+
+## STEP7
+* Quoi surveiller ?
+
+##STEP 8
+Fin de Neptune (so long)
+
