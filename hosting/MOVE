@@ -24,8 +24,14 @@ On veut migrer :
 
 ## STEP2 : Préparation env de dev
 * Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/ConfigurationServeur
-* Sync du /home/dev de Neptune vers Neptune2
-* Ajustements conf apache ?
+* RSync du /home/dev de Neptune vers Neptune2
+* Ajustements conf apache
+* Test commit
+* Test ticket trac
+* Resync final
+* Bascule dns du dev.v-l-m.org (CNAME vers neptune2.v-l-m.org)
+* Test commit
+* test ticket trac
 
 ## STEP3 : Installation VLM
 * Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
@@ -34,6 +40,9 @@ On veut migrer :
 * Tester avec un client en changeant son /etc/hosts
 
 ## STEP4 : TESTS, TESTS, TESTS
+* Test d'import de course depuis testing
+* Test de mails
+* Test de publication de news
 
 ## STEP5 : Sync J-1
 * (permettra de documenter ce qu'il y a faire comme sync "just in time")
@@ -46,9 +55,15 @@ On veut migrer :
 * Bascule IP
 * Sortie de la maintenance pour NEPTUNE2
 * Relance des crons
+* Test de publication news
 
-## STEP7
-* Quoi surveiller ?
+## STEP7 : 
+* Vérifier la publication des news
+* Vérifier l'import de course la première fois
+* Vérifier les envois de mails
+* Import de course en réel
+* Quoi surveiller d'autre ?
+* 
 
 ##STEP 8
 Fin de Neptune (so long)
