@@ -17,21 +17,45 @@ On veut migrer :
 - STEP 8 : shutdown de NEPTUNE
 
 ## STEP1 : Préparation Serveur
-- install debian (fm)
-- rsync du /root/.ssh (fm)
-- maj du sytème (apt-get update && apt-get upgrade)
-- rsync du /etc/ dans /root/etc/ for the record
+* OK : install debian (fm)
+* OK : rsync du /root/.ssh (fm)
+* OK : authorisation de la clef publique du root neptune sur lui meme
+* OK : apt-get install rsync : OK
+* OK : maj du sytème (apt-get update && apt-get upgrade)
+* OK : rsync du /etc/ dans /root/etc/ for the record
+  * rsync -avz root@neptune.v-l-m.org:/etc ./
+  * dans /root/sync-etc.sh
+* OK : Script de comparaison des paquets installés dans /root/cmp-dpkg.sh
 
 ## STEP2 : Préparation env de dev
+* OK : Création du user dev (uuid : 1001)
 * Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/ConfigurationServeur
-* RSync du /home/dev de Neptune vers Neptune2
+* OK : Rsync du /home/dev de Neptune vers Neptune2
+  * rsync -avz root@v-l-m.org:/home/dev/* /home/dev/
+  * dans /root/sync-dev.sh
+* OK : Ajustements conf svn :
+  * DONE : suppression du post-commit hook pour le bot cia (cause des lenteurs en commit)
 * Ajustements conf apache
-* Test commit
-* Test ticket trac
-* Resync final
-* Bascule dns du dev.v-l-m.org (CNAME vers neptune2.v-l-m.org)
-* Test commit
-* test ticket trac
+  * DONE : copie de la conf apache de dev dans sites-available
+  * DONE : a2ensite dev.virtual-loup-de-mer.org
+  * DONE : apt-get install apache2
+  * DONE : a2enmod dav
+  * DONE : apt-get install libapache2-svn
+  * DONE : a2enmod authz_svn
+  * DONE : apt-get install python-setuptools trac trac-accountmanager
+  ********** Argh... c'est le bordel de reprendre à l'identique
+  * TODO : désinstaller le superflu
+
+##STEP2BIS : Migration vers GitHub
+* DONE : Test import dans github du svn
+  * ~OK, mais pb d'attribution de certains commits (ceux de paparazzia par exemple ;))
+  * A refaire à la main avec git-svn ?
+* DONE : Test import trac avec trac2github
+  * ~OK mais pb de dispositif anti-abuse
+  * A ajuster (tempo de 4 secondes + bugfix sur les commentaires
+* Association des comptes des membres de vlm au projet
+  * Done : Phille, FM, Sbs, spf, pzia
+  * Todo ?
 
 ## STEP3 : Installation VLM
 * Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
@@ -46,6 +70,7 @@ On veut migrer :
 
 ## STEP5 : Sync J-1
 * (permettra de documenter ce qu'il y a faire comme sync "just in time")
+* ? Backup serveur via sauvegarde hébergement ?
 
 ## STEP6 : BASCULE
 * Reboot du serveur NEPTUNE2 (cible)
@@ -62,8 +87,7 @@ On veut migrer :
 * Vérifier l'import de course la première fois
 * Vérifier les envois de mails
 * Import de course en réel
-* Quoi surveiller d'autre ?
-* 
+Quoi surveiller d'autre ?
 
 ##STEP 8
 Fin de Neptune (so long)
