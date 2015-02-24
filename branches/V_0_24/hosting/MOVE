@@ -53,9 +53,12 @@ On veut migrer :
 * DONE : Test import trac avec trac2github
   * ~OK mais pb de dispositif anti-abuse
   * A ajuster (tempo de 4 secondes + bugfix sur les commentaires
-* Association des comptes des membres de vlm au projet
-  * Done : Phille, FM, Sbs, spf, pzia
-  * Todo ?
+* OK : Association des comptes des membres de vlm au projet Phille, FM, Sbs, spf, pzia... to be continued...
+* OK : Conversion des pages wiki trac en markdown avec un peu d'aide du gist https://gist.github.com/somebox/619537
+* OK : git-svn local pour importer et réattribuer les usernames
+* Importer le git local dans github, projet 'v-l-m/vlm'
+* Importer les tickets+comments+milesones+tags dans le projet 'vlm'
+* Importer le wiki une fois le projet 'vlm' stabilisé
 
 ## STEP3 : Installation VLM
 * Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
