@@ -76,6 +76,6 @@ if test -n "$VLMFAKESVN" ; then
     find $current  -depth -name "*.svn*" -exec rm -Rf {} \;
 else
     echo "Recuperation de $current... depuis $svncurrent" 1>&2
-    $VLMSVNPATH export $svncurrent $current --username anonymous --password "vlm"
+    $VLMSVNPATH export $svncurrent $current
 fi
 echo "Ok !"
