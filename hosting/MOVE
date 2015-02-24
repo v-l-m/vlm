@@ -66,11 +66,11 @@ On veut migrer :
 * Convertir les fichiers INSTALL, README, etc... en .md ?
 
 ## STEP3 : Installation VLM
-* Importer les clefs ssh
-* Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
-* Ajuster le script de déploiement
+* DONE : Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
 * Suivre la doc (en s'aidant de la conf /etc/ précédente) pour catcher les manques
 * Mettre à jour INSTALL en parallèle
+* Ajuster le script de déploiement pour github
+* Importer les clefs ssh
 * Paramètrer neptune2 dans apache en plus des autres
 * Tester avec un client en changeant son /etc/hosts
 

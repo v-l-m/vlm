@@ -1,17 +1,16 @@
- This file describes how to install a virtual loup-de-mer server on your plateform.
- See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (french) version
+#INSTALL VLM
 
-= Notes pour le lecteur =
+  This file describes how to install virtual-loup-de-mer on your plateform.
+  See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (french) version
 
-Il est probable que cette documentation n'est pas à jour au moment ou vous essayez de l'appliquer pour installer votre propre serveur Vlm.
+  Il est probable que cette documentation n'est pas à jour au moment ou vous essayez de l'appliquer pour installer votre propre serveur Vlm.
 
-Merci
- * de lire l'historique des fichiers RELEASE (dans hosting) et UPGRADE (dans base) notamment
- * de mettre à jour cette page
+  Merci
+    * de lire l'historique des fichiers RELEASE (dans hosting) et UPGRADE (dans base) notamment
+    * de mettre à jour cette page
 
-= Prérequis =
-
- * 0. Préalables
+#Prérequis
+##0.1 Préalables
    * 0.1 Sémantique de la configuration
      * 0.1.1 répertoire de base = racine de vlm = {{{VLMRACINE}}}
        * par exemple {{{/home/vlm}}}
@@ -20,9 +19,8 @@ Merci
      * 0.1.4 répertoire de scripts = {{{VLMRACINE/scripts}}}
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_20''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
-   * 0.2 Prérequis logiciels
-     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo make}}}
-
+##0.2 Prérequis logiciels
+     * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo make mytop apachetop mysqltuner ntpdate}}}
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
      * 0.2.2 php5 (debian: {{{apt-get install php5 php5-cli php-config php5-dev php5-mysql php5-gd}}})
      * 0.2.3 swig 1.3.36 ou > (debian: {{{apt-get install swig}}}).
@@ -31,21 +29,20 @@ Merci
              {{{cd swig-1.3.36 && ./configure --prefix=/opt/swig --with-php=$(\which php) && make && make install}}}
 
              Il est alors installé dans /opt/swig. Cela suppose que vous ayez pour la suite /opt/swig/bin dans votre PATH.
-
      * 0.2.4 apache (debian: {{{apt-get install apache2}}})
      * 0.2.5 mysql (debian: {{{apt-get install mysql-server}}}) donner un mot de passe pour la base MySQL, il vous sera demandé plus tard.
-     * 0.2.6 unzip dans votre path et installé (debian: {{{apt-get install unzip}}})
-     * 0.2.7 gfortran (debian: {{{apt-get install gfortran libgfortran3}}} (pour cnvgrib)
+     * 0.2.6 unzip dans votre path et installé (debian: {{{apt-get install unzip gzip}}})
+?     * 0.2.7 gfortran (debian: {{{apt-get install gfortran libgfortran3}}} (pour cnvgrib)
      * 0.2.8 libgd, jasper, png (debian: {{{apt-get install libgd2-xpm-dev libpng12-dev libjasper-dev}}}
      * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
      * 0.2.10 mytop apachetop mysqltuner {{{apt-get install mytop apachetop mysqltuner}}} pour le monitoring
      * 0.2.11 ntpdate (debian: {{{apt-get install ntpdate}}} pour synchroniser le temps du serveur
      * 0.2.12 make (debian : {{{apt-get install make}}} pour MAKE)
-   * 0.3 Attention à :
+##0.3 Attention à :
      * 0.3.1 Lancer les opérations avec le bon user. Il est recommandé d'avoir un seul utilisateur (unix) '''vlm''' qui lance tous les scripts et qui sert aux déploiements.
      * 0.3.2 Le VLMRACINE doit toujours être exporté d'une manière ou d'une autre. Cela peut vouloir dire par exemple ajouter {{{VLMRACINE=/home/vlm}}} en tête des crontab
-   * 0.4 Prérequis de données
-     * 0.4.1 Pour l'instant, vous devez récupérer un export d'un des serveurs de dev pour disposer à la fois des schémas et des données de base pour votre instance. Adressez vous aux développeurs.
+##0.4 Prérequis de données
+?     * 0.4.1 Pour l'instant, vous devez récupérer un export d'un des serveurs de dev pour disposer à la fois des schémas et des données de base pour votre instance. Adressez vous aux développeurs.
    * 0.5 Prérequis systèmes
      * 0.5.1 Optionnel : pour plus de confort, il est préférable de donner les droits à l'utilisateur de redémarrer le démon apache
         * en editant via visudo le fichiers {{{sudoers}}} et en donnant par exemple cette configuration :
@@ -60,13 +57,14 @@ Merci
      sudo chmod 0440 /etc/sudoers.d/vlm
      }}}
 
-= Les outils de déploiement, l'installation de base =
+#Les outils de déploiement, l'installation de base =
 
- * 1. Base de l'installation
+##Base de l'installation
    * 1.0 Système :
      * 1.0.1 Installer les dépendances (Cf. 0.2)
      * 1.0.2 Créer un utilisateur ad-hoc
        * Debian : {{{adduser vlm}}}
+
    * 1.1 Début installation : 
      * 1.1.1 se placer à la racine (exemple : {{{/home/vlm}}}
      * 1.1.2 {{{$ wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/scripts/install.sh?format=txt -O install.sh }}}
@@ -90,16 +88,18 @@ Merci
        * activez les notices php (Cf. commentaire dans la conf) pour le moteur
      * 1.2.3 (Optionnel) Nommer l'hôte dans l'{{{etc/hosts}}}
       * par exemple : 127.0.1.1 vlm (NB: vboxvlm pour une VM virtualbox)
+
    * 1.3 Test de la configuration de base :
      * 1.3.0 executer {{{$ ~/scripts/testconf.sh}}}
      * 1.3.1 => les répertoires VLMGSHHS, VLMGRIBS, VLMTEMP et VLMJEUROOT sont créés conformément à la configuration
      * 1.3.1 faire la maj de scripts avec {{{$ ~/scripts/maj_scripts.sh}}}
      * 1.3.2 => on doit avoir une mise à jour de ~/scripts
+
    * 1.4 Test de la configuration de déploiement :
      * 1.4.1 {{{$ ~/scripts/maj_module.sh hosting}}}
-     * 1.4.2 => on doit avoir le module hosting qui se crée dans le répertoire de déploiement (~/vlmcode/hosting). Ce déploiement ne sert à rien à proprement parler, il teste juste la disponibilité de VLMJEUROOT
+     * 1.4.2 => on doit avoir le module hosting qui se crée dans le répertoire de déploiement (~/vlmcode/hosting). Ce déploiement ne sert à rien à proprement parler, il teste juste la disponibilité de VLMJEUROOT. Si vous n'avez pas encore créé la base, vous aurez une erreur d'accès interdit à vlm@localhost que vous pouvez ignorer
 
-= Serveur de vent : grib & vlm-c =
+##Serveur de vent : grib & vlm-c =
 
    * 1.5 Test du déploiement (et de la compilation) de vlmc
      * 1.5.1 {{{$ ~/scripts/maj_module.sh lib/vlm-c}}} => la compilation doit avoir lieu modulo quelques warnings,
@@ -115,10 +115,10 @@ Merci
        * exemple (en root): {{{$ ln -s /home/vlm/bin/lib/vlmc.php /usr/share/php/vlmc.php}}}
        * Ce chemin d'accès peut être différent, par exemple /opt/php/lib/php, pour un php compilé et installé avec un prefix=/opt/php
 
-     * 1.6.3 Copier le fichier sysctl de vlm dans sysctl.d
+     * 1.6.3 Copier le fichier sysctl de vlm dans sysctl.d (en root)
         {{{$ cp /home/vlm/conf/sysctl.d.vlm.sysctl.conf.dist /etc/sysctl.d/vlm.sysctl.conf}}}
 
-     * 1.6.4 (Alternative au 1.6.3) Ajouter les lignes suivantes au fichier /etc/sysctl.conf
+     * 1.6.4 (Alternative au 1.6.3) Ajouter les lignes suivantes au fichier /etc/sysctl.conf (en root)
        {{{
        # Controls the maximum size of a message, in bytes
        kernel.msgmnb=65536
@@ -130,7 +130,7 @@ Merci
        kernel.shmall=2097152
        }}}
 
-     * 1.6.5 prise en compte du nouveau systcl :
+     * 1.6.5 prise en compte du nouveau systcl (en root):
        {{{sysctl -p /etc/sysctl.d/vlm.sysctl.conf}}}
 
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
