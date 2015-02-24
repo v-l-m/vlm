@@ -1,0 +1,105 @@
+#Documentation pour migrer un serveur VLM vers un autre
+
+##Contexte
+On veut migrer :
+- les services svn+trac du /home/dev
+- les service vlm du /home/vlm
+- minimiser le temps d'interruption
+
+##Stratégie de bascule
+- STEP 1 : préparation du serveur NEPTUNE2
+- STEP 2 : copie de /home/dev
+- STEP 3 : installation from scratch du /home/vlm + copie base
+- STEP 4 : tests à réaliser
+- STEP 5 : sync J-1
+- STEP 6 : bascule de l'ip du serveur nouveau (dit NEPTUNE2) sur l'ancienne ip du serveur actuel (dit NEPTUNE2)
+- STEP 7 : Phase de surveillance
+- STEP 8 : shutdown de NEPTUNE
+
+## STEP1 : Préparation Serveur : OK
+* OK : install debian (fm)
+* OK : rsync du /root/.ssh (fm)
+* OK : authorisation de la clef publique du root neptune sur lui meme
+* OK : apt-get install rsync : OK
+* OK : maj du sytème (apt-get update && apt-get upgrade)
+* OK : rsync du /etc/ dans /root/etc/ for the record
+  * rsync -avz root@neptune.v-l-m.org:/etc ./
+  * dans /root/sync-etc.sh
+* OK : Script de comparaison des paquets installés dans /root/cmp-dpkg.sh
+
+## STEP2 : Préparation env de dev
+* OK : Création du user dev (uuid : 1001)
+* Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/ConfigurationServeur
+* OK : Rsync du /home/dev de Neptune vers Neptune2
+  * rsync -avz root@v-l-m.org:/home/dev/* /home/dev/
+  * dans /root/sync-dev.sh
+* OK : Ajustements conf svn :
+  * DONE : suppression du post-commit hook pour le bot cia (cause des lenteurs en commit)
+* Ajustements conf apache
+  * DONE : copie de la conf apache de dev dans sites-available
+  * DONE : a2ensite dev.virtual-loup-de-mer.org
+  * DONE : apt-get install apache2
+  * DONE : a2enmod dav
+  * DONE : apt-get install libapache2-svn
+  * DONE : a2enmod authz_svn
+  * DONE : apt-get install python-setuptools trac trac-accountmanager
+  ********** Argh... c'est le bordel de reprendre à l'identique
+  * DONE : a2dissite dev.virtual-loup-de-mer.org
+  * DONE : apt-get remove libapache2-svn
+  * DONE : apt-get remove python-setuptools trac trac-accountmanager
+* Installer awstats ?
+
+##STEP2BIS : Migration vers GitHub
+* DONE : Test import dans github du svn
+  * ~OK, mais pb d'attribution de certains commits (ceux de paparazzia par exemple ;))
+* DONE : Test import trac avec trac2github
+  * ~OK mais pb de dispositif anti-abuse
+  * A ajuster (tempo de 4 secondes + bugfix sur les commentaires)
+* OK : Association des comptes des membres de vlm au projet Phille, FM, Sbs, spf, pzia... to be continued...
+* OK : Conversion des pages wiki trac en markdown avec un peu d'aide du gist https://gist.github.com/somebox/619537
+* OK : Import Github avec les auteurs (on ne touche plus à rien)
+* DONE : Test import wiki dans projet test
+* Importer les tickets+comments+milesones+tags dans le projet 'vlm' :
+  NB : les assignee doivent exister dans le projet
+* Importer le wiki une fois le projet 'vlm' stabilisé
+* Copier le MOVE dans trunk
+* Convertir les fichiers INSTALL, README, etc... en .md ?
+
+## STEP3 : Installation VLM
+* Importer les clefs ssh
+* Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
+* Ajuster le script de déploiement
+* Suivre la doc (en s'aidant de la conf /etc/ précédente) pour catcher les manques
+* Mettre à jour INSTALL en parallèle
+* Paramètrer neptune2 dans apache en plus des autres
+* Tester avec un client en changeant son /etc/hosts
+
+## STEP4 : TESTS, TESTS, TESTS
+* Test d'import de course depuis testing
+* Test de mails
+* Test de publication de news
+
+## STEP5 : Sync J-1
+* (permettra de documenter ce qu'il y a faire comme sync "just in time")
+* ? Backup serveur via sauvegarde hébergement ?
+
+## STEP6 : BASCULE
+* Reboot du serveur NEPTUNE2
+* Arrêter les crons sur NEPTUNE et NEPTUNE2
+* Passer les instances VLM en maintenance sur les 2 serveurs
+* Sync finale
+* Bascule IP
+* Sortie de la maintenance pour NEPTUNE2
+* Relance des crons
+* Test de publication news
+
+## STEP7 : 
+* Vérifier la publication des news
+* Vérifier l'import de course la première fois
+* Vérifier les envois de mails
+* Import de course en réel
+Quoi surveiller d'autre ?
+
+##STEP 8
+Fin de Neptune (so long)
+
