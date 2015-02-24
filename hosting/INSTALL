@@ -17,7 +17,7 @@
      * 0.1.2 répertoire de déploiement = racine du jeu = VLMJEUROOT = {{{VLMRACINE/vlmcode}}}
      * 0.1.3 répertoire de conf = {{{VLMRACINE/conf}}}
      * 0.1.4 répertoire de scripts = {{{VLMRACINE/scripts}}}
-     * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_20''' (pour la version de maintenance actuelle)
+     * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_24''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
 ##0.2 Prérequis logiciels
      * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo make mytop apachetop mysqltuner ntpdate}}}
@@ -68,7 +68,7 @@
    * 1.1 Début installation : 
      * 1.1.1 se placer à la racine (exemple : {{{/home/vlm}}}
      * 1.1.2 {{{$ wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/scripts/install.sh?format=txt -O install.sh }}}
-     * 1.1.3 {{{$ source  install.sh V_0_15}}} (pour la branche V_0_15)
+     * 1.1.3 {{{$ source  install.sh V_0_24}}} (pour la branche V_0_24)
      * 1.1.4 Editer le fichier {{{~/.subversion/servers}}} et ajouter : 
 {{{
     store-passwords = yes
@@ -76,13 +76,14 @@
 }}}
    * 1.2 Configuration :
      * 1.2.1 vérifier que la variable VLMRACINE est fixée de façon permanente
-       * 1.2.1.0 configuration globale (en root) :
+       * 1.2.1.0 Se déconnecter de l'user vlm et se reconnecter, puis echo $VLMRACINE. Si ce n'est pas renseigné, faire une des étapes qui suit.
+       * 1.2.1.1 configuration globale (en root) :
          * via /etc/profile {{{$ cp /home/vlm/conf/profile.d.vlm_global.sh.dist /etc/profile.d/vlm_global.sh}}}
          * via /etc/bash.bashrc : ajouter {{{export VLMRACINE=/home/vlm}}} à la fin du fichier.
-       * 1.2.1.1 configuration au niveau user, exemple via le .bashrc et le .profile:
+       * 1.2.1.2 configuration au niveau user, exemple via le .bashrc et le .profile:
           * {{echo "export VLMRACINE=/home/vlm" >> .bashrc}}}
           * {{echo "export VLMRACINE=/home/vlm" >> .profile}}}
-       * 1.2.1.2 '''NB: IL FAUDRA AUSSI AJOUTER {{{VLMRACINE=/home/vlm}}} en tête des crontab'''
+       * 1.2.1.3 '''NB: IL FAUDRA AUSSI AJOUTER {{{VLMRACINE=/home/vlm}}} en tête des crontab'''
      * 1.2.2 adapter les options de configuration dans conf/*.dist en supprimant l'extension .dist
        * attention aux chemins php, notamment (Cf. commentaires pour les chemins debian types)
        * activez les notices php (Cf. commentaire dans la conf) pour le moteur

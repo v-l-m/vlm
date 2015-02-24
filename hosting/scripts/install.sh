@@ -35,9 +35,10 @@ svn export http://dev.virtual-loup-de-mer.org/svn/vlm/$VLMSVNBASE/hosting/script
 #on fixe (temporairement) le VLMRACINE
 export VLMRACINE=`pwd`
 echo "+La variable VLMRACINE a été fixée temporairement à la valeur $VLMRACINE pour la durée de la session courante"
-
+echo "export VLMRACINE=`pwd`" >> .bashrc
+echo "export VLMRACINE=`pwd`" >> .profile
+echo "+La variable VLMRACINE a été fixée à la valeur $VLMRACINE dans .bashrc et .profile pour les sessions suivantes"
 echo " "
 echo "La suite : "
-echo "* fixer de façon permanente (dans /etc/profile ou dans le bashrc) la variable VLMRACINE au path courant"
 echo "* editer les fichiers ./conf/*.dist et supprimer l'extension .dist"
 echo "* lancer le scripts ./scripts/testconf.sh"
