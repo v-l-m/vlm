@@ -32,7 +32,7 @@
      * 0.2.4 apache (debian: {{{apt-get install apache2}}})
      * 0.2.5 mysql (debian: {{{apt-get install mysql-server}}}) donner un mot de passe pour la base MySQL, il vous sera demandé plus tard.
      * 0.2.6 unzip dans votre path et installé (debian: {{{apt-get install unzip gzip}}})
-?     * 0.2.7 gfortran (debian: {{{apt-get install gfortran libgfortran3}}} (pour cnvgrib)
+     * 0.2.7 gfortran (debian: {{{apt-get install gfortran libgfortran3}}} (pour cnvgrib)
      * 0.2.8 libgd, jasper, png (debian: {{{apt-get install libgd2-xpm-dev libpng12-dev libjasper-dev}}}
      * 0.2.9 sudo (debian: {{{apt-get install sudo}}} pour certains scripts.
      * 0.2.10 mytop apachetop mysqltuner {{{apt-get install mytop apachetop mysqltuner}}} pour le monitoring
@@ -136,19 +136,10 @@
 
    * 1.7 Configuration de la récupération des gribs (serveur maitre)
      * 1.7.1 Déployer le module grib : {{{$ ~/scripts/maj_module.sh grib}}}
-     * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN)
-       * le paquet de base de debian est le {{{gfortran}}}
-         * C'est f95 qui est installé à la place de g95
-         * On peut faire en root un ln -s /usr/bin/f95 /usr/bin/g95
-         * on peut utiliser directement g95 via : http://www.g95.org/ ou utiliser f95
-       * il faut ajouter les dépendances (g2lib, g2clib, w3lib, libjasper)
-         * éditer les différents makefile pour mettre les paths corrects.
-       * les dépendances libpng12-dev et libjasper-dev ont normalement été installées plus haut
-       * ne pas oublier les options de compilation pour x_64 (si nécessaire)
-       * s'assurer dans g2clib que les fonctions ont le bon nom (au besoin editer enc/dec_jpeg2000 enc/dec_png pour avoir les symboles qui vont bien (voir les erreurs au link de cnvgrib, ex: #define SUB_NAME enc_png_ )
+     * 1.7.2 Compiler [http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/ cnvgrib] et l'installer dans ~/bin (VLMBIN) Cf. Wiki
      * 1.7.3 Lancer manuellement {{{$ ~/bin/noaa.sh 00|06|12|18}}} (suivant l'horaire GMT).
        * Vérifier le retour dans vlmdatas/grib/logs.txt
-     * 1.7.4 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.sample comme exemple)
+     * 1.7.4 Déclarer le crontab (utiliser VLMJEUROOT/grib/crontab.example comme exemple)
      * 1.7.5 Déclarer VLMGRIBUSER dans le script de configuration (voir VLMRACINE/conf/conf_script)
      * 1.7.6 Déclarer l'init du windserver au boot (script d'init en exemple fournit dans VLMJEUROOT/grib)
       * 1.7.6.1 Copie : {{{cp $VLMRACINE/vlmcode/grib/windserver.sh /etc/init.d/windserver}}}
@@ -186,10 +177,8 @@
      * 2.3.1 Récupèrez (demandez sur la ml) un dump mysql gzippé (il est produit avec le script base/scripts/dump.sh)
        For the record, mode op sur testing
        * 2.3.1.1 {{{$ chmod u+x dump.sh}}}
-       * 2.3.1.2 {{{$ ./dump.sh}}}
-       * 2.3.1.3 {{{$ mv vlmdump.sql.gz /home/commun/dev/}}}
+       * 2.3.1.2 {{{$ ./dump.sh}}} et transférer le vlmdump sur votre instance
 
-       {{{$ wget http://dev.virtual-loup-de-mer.org/vlmdump.sql.gz}}}
      * 2.3.2 lancez {{{$ ./importdump.sh vlmdump.sql.gz}}}
      * 2.3.3 Lisez le fichier UPDATE au cas ou
    * 2.4 Configuration du fichier param.php

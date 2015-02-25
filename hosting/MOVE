@@ -26,6 +26,7 @@ On veut migrer :
   * rsync -avz root@neptune.v-l-m.org:/etc ./
   * dans /root/sync-etc.sh
 * OK : Script de comparaison des paquets installés dans /root/cmp-dpkg.sh
+* OK : Passer le serveur en UTC
 
 ## STEP2 : Préparation env de dev
 * OK : Création du user dev (uuid : 1001)
@@ -59,19 +60,21 @@ On veut migrer :
 * OK : Conversion des pages wiki trac en markdown avec un peu d'aide du gist https://gist.github.com/somebox/619537
 * OK : Import Github avec les auteurs (on ne touche plus à rien)
 * DONE : Test import wiki dans projet test
+* OK : Faire débloquer le quota anti abuse par github pour pouvoir poster 3000 commentaires + les tickets sans se faire virer
+* OK : Copier le MOVE dans trunk
 * Importer les tickets+comments+milesones+tags dans le projet 'vlm' :
   NB : les assignee doivent exister dans le projet
 * Importer le wiki une fois le projet 'vlm' stabilisé
-* Copier le MOVE dans trunk
-* Convertir les fichiers INSTALL, README, etc... en .md ?
+* Convertir les fichiers INSTALL, README, etc... en .md
 
 ## STEP3 : Installation VLM
 * DONE : Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
 * Suivre la doc (en s'aidant de la conf /etc/ précédente) pour catcher les manques
 * Mettre à jour INSTALL en parallèle
-* Ajuster le script de déploiement pour github
+* Ajuster le script de déploiement pour github (et le script install.sh)
 * Importer les clefs ssh
 * Paramètrer neptune2 dans apache en plus des autres
+* Sync histpos ?
 * Tester avec un client en changeant son /etc/hosts
 
 ## STEP4 : TESTS, TESTS, TESTS
@@ -89,6 +92,7 @@ On veut migrer :
 * Passer les instances VLM en maintenance sur les 2 serveurs
 * Sync finale
 * Bascule IP
+* Changement des paramètres (réactivation des mails, etc...)
 * Sortie de la maintenance pour NEPTUNE2
 * Relance des crons
 * Test de publication news
