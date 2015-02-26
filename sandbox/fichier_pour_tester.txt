@@ -8,3 +8,4 @@ Mais que tout ça ne vous préoccupe pas trop, si vous vouliez simplement tester
 glop
 
 neptune are you there ?
+Test IRC bot
