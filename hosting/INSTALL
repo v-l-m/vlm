@@ -1,17 +1,15 @@
-#INSTALL VLM
+ This file describes how to install virtual-loup-de-mer on your plateform.
+ See https://github.com/v-l-m/vlm/wiki/Installation for the last (french) version
 
-  This file describes how to install virtual-loup-de-mer on your plateform.
-  See http://dev.virtual-loup-de-mer.org/vlm/wiki/installation for the last (french) version
+Il est probable que cette documentation n'est pas à jour au moment ou vous essayez de l'appliquer pour installer votre propre serveur Vlm.
 
-  Il est probable que cette documentation n'est pas à jour au moment ou vous essayez de l'appliquer pour installer votre propre serveur Vlm.
-
-  Merci
-    * de lire l'historique des fichiers RELEASE (dans hosting) et UPGRADE (dans base) notamment
-    * de mettre à jour cette page
+Merci
+* de lire l'historique des fichiers RELEASE (dans hosting) et UPGRADE (dans base) notamment
+* de mettre à jour cette page
 
 #Prérequis
-##0.1 Préalables
-   * 0.1 Sémantique de la configuration
+
+##0.1Sémantique de la configuration
      * 0.1.1 répertoire de base = racine de vlm = {{{VLMRACINE}}}
        * par exemple {{{/home/vlm}}}
      * 0.1.2 répertoire de déploiement = racine du jeu = VLMJEUROOT = {{{VLMRACINE/vlmcode}}}
@@ -19,6 +17,7 @@
      * 0.1.4 répertoire de scripts = {{{VLMRACINE/scripts}}}
      * 0.1.5 branche utilisée = {{{VLMSVNBRANCH}}} = '''V_0_24''' (pour la version de maintenance actuelle)
      * 0.1.6 utilisateur utilisé pour le serveur de vent = {{{VLMGRIBUSER}}}
+
 ##0.2 Prérequis logiciels
      * 0.2.0 Tous les prérequis debian en une seule commande : {{{apt-get install subversion php5 php5-cli php-config php5-dev php5-mysql php5-gd swig apache2 mysql-server unzip zip gzip libgd2-xpm-dev libpng12-dev libjasper-dev sudo make mytop apachetop mysqltuner ntpdate}}}
      * 0.2.1 subversion (debian: {{{apt-get install subversion}}})
@@ -57,7 +56,7 @@
      sudo chmod 0440 /etc/sudoers.d/vlm
      }}}
 
-#Les outils de déploiement, l'installation de base =
+#Les outils de déploiement, l'installation de base 
 
 ##Base de l'installation
    * 1.0 Système :
