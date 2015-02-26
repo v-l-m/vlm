@@ -1,5 +1,5 @@
 RELEASE NOTES
-See http://dev.virtual-loup-de-mer.org/vlm/roadmap for detailed Changelog & tickets by milestone.
+See https://github.com/v-l-m/vlm/milestones for detailed Changelog & tickets by milestone.
 
 v0.24 aka Stick Lips
 
@@ -449,8 +449,6 @@ v0.9 aka Like the Wind: what's new for ...
 * different type of wind interpolatio (spf)
 * use of the swig 'outdir' option (spf)
 
-=> http://dev.virtual-loup-de-mer.org/vlm/query?group=status&milestone=Like+the+wind
-
 v0.8 aka Community Powered what's new for ...
 ... players ?
  * more realistic distance to gate (spf)
@@ -480,7 +478,7 @@ v0.8 aka Community Powered what's new for ...
  * documentation (all)
  * hosting scripts to make life easier (paparazzia)
 
-v.>0.7 (november 2008) : See http://dev.virtual-loup-de-mer.org
+v.>0.7 (november 2008) : See https://github.com/v-l-m/vlm/milestones
 
 v.0.3.1 (April 2005)
 - new installation process : files _install.php and params.php

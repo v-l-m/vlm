@@ -60,7 +60,7 @@ $opts['fdd']['flag'] = array(
 <li>(4) => Pour rendre une IC visible sur la racelist</li>
 <li>(8) => Pour mettre une URL dont le texte sera 'Instructions de courses sur le forum' </li>
 <li>(16) => Pour ne pas rendre visible dans la page des ics </li>
-<ul><br /><a href=\"http://dev.virtual-loup-de-mer.org/vlm/wiki/phpcommon\">Voir la doc</a>"
+<ul><br /><a href=\"https://github.com/v-l-m/vlm/wiki/ModulePhpcommon\">Voir la doc</a>"
 );
 
 $opts['triggers']['update']['after'][0] = 'races.TAU.trigger.php';
