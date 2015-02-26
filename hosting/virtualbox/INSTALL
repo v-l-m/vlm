@@ -16,7 +16,7 @@ Ce document décrit l'utilisation/l'installation sur votre système d'une image 
   * Nommage : {{{vlmvbox}}}
   * FIXME mémoire, audio, usb, etc...
   * configurer le port forwarding
-   * Télécharger le script : {{{wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/virtualbox/natforward.sh?format=txt -O natforward.sh}}}
+   * Télécharger le script : {{{wget https://github.com/v-l-m/trunk/hosting/virtualbox/natforward.sh?format=txt -O natforward.sh}}}
    * L'executer : {{{./natforward.sh vlmvbox}}}
   * Règler l'offset de temps
    * La machine virtuelle est en UTC. Elle prend le temps sur votre PC. Si ce dernier n'est pas en UTC, vous allez avoir un décalage

@@ -39,7 +39,7 @@
     define("CHAT_SERVER_URL", "http://chat.virtual-loup-de-mer.org");
     define("GRIB_SERVER_URL", "http://grib.virtual-loup-de-mer.org");
     define("DOC_SERVER_URL", "http://wiki.virtual-loup-de-mer.org/index.php/");
-    define("DEV_SERVER_URL", "http://dev.virtual-loup-de-mer.org/vlm/");
+    define("DEV_SERVER_URL", "http://v-l-m.github.io/vlm/");
     define("TOOLS_SERVER_URL", DOC_SERVER_URL."Les_accessoires_et_outils_autour_de_VLM");
     define("GRIB_TOOLS_URL", DOC_SERVER_URL."Outils_m%C3%A9t%C3%A9os");
     //define("DOC_SERVER_URL_BO", DOC_SERVER_URL."Vocabulaire_%26_Jargon#BlackOut_.28BO.29");

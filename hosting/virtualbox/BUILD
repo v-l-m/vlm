@@ -19,8 +19,8 @@ Les opérations sont décrites pour une base debian/ubuntu.
 3. Suivre les étapes d'installations comme documentées dans hosting/INSTALL, en tenant compte du contexte
 
 4. Créer l'environnement lié au subversion
- * Utiliser la doc du wiki : http://dev.virtual-loup-de-mer.org/vlm/wiki/developpment
- * svn co http://dev.virtual-loup-de-mer.org/svn/vlm $VLMRACINE/svn
+ * Utiliser la doc du wiki : https://github.com/v-l-m/vlm/wiki/developpment
+ * svn co https://github.com/v-l-m/vlm $VLMRACINE/svn
  * autoriser subversion à stocker votre mot de passe : 
     editer : ~/.subversion/servers
     ajouter {{{store-passwords = yes}}} dans {{{[Global]}}}
