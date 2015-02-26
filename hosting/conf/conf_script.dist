@@ -6,7 +6,7 @@
 SERVER_IP=`hostname -i`
 
 #Définition de la branche (trunk ou V_<majeur>_<mineur>
-# Exemple : export VLMSVNBRANCH=V_0_15
+# Exemple : export VLMSVNBRANCH=V_0_24
 # Exemple : export VLMSVNBRANCH=trunk
 export VLMSVNBRANCH=trunk
 
@@ -65,7 +65,7 @@ export VLMURL=http://v-l-m.org
 #Le reste n'est normalement pas à modifier
 
 #Définition de la racine svn
-export VLMSVNROOT=http://dev.virtual-loup-de-mer.org/svn/vlm
+export VLMSVNROOT=https://github.com/v-l-m/vlm
 #OU Définition du dépôt local
 #export VLMFAKESVN=$VLMRACINE/svn
 

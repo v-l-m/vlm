@@ -29,8 +29,8 @@ rm -Rf scripts
 
 #installation de la conf (non paramètrée) et des scripts
 echo "+Installation de $pwd/conf & $pwd/scripts"
-svn export http://dev.virtual-loup-de-mer.org/svn/vlm/$VLMSVNBASE/hosting/conf conf  --username anonymous --password "vlm"
-svn export http://dev.virtual-loup-de-mer.org/svn/vlm/$VLMSVNBASE/hosting/scripts scripts  --username anonymous --password "vlm"
+svn export https://github.com/v-l-m/vlm/$VLMSVNBASE/hosting/conf conf
+svn export https://github.com/v-l-m/vlm/$VLMSVNBASE/hosting/scripts scripts
 
 #on fixe (temporairement) le VLMRACINE
 export VLMRACINE=`pwd`

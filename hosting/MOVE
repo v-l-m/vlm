@@ -62,18 +62,20 @@ On veut migrer :
 * DONE : Test import wiki dans projet test
 * OK : Faire débloquer le quota anti abuse par github pour pouvoir poster 3000 commentaires + les tickets sans se faire virer
 * OK : Copier le MOVE dans trunk
-* Importer les tickets+comments+milesones+tags dans le projet 'vlm' :
+* OK : Importer les tickets+comments+milesones+tags dans le projet 'vlm' :
   NB : les assignee doivent exister dans le projet
-* Importer le wiki une fois le projet 'vlm' stabilisé
+* OK : Importer le wiki une fois le projet 'vlm' stabilisé
 * Convertir les fichiers INSTALL, README, etc... en .md
+* OK : Mettre en place bot irc #769
+* Déplacer MOVE dans le wiki
 
 ## STEP3 : Installation VLM
 * DONE : Relire : http://dev.virtual-loup-de-mer.org/vlm/wiki/installation
 * Suivre la doc (en s'aidant de la conf /etc/ précédente) pour catcher les manques
-* Mettre à jour INSTALL en parallèle
-* Ajuster le script de déploiement pour github (et le script install.sh)
-* Importer les clefs ssh
-* Paramètrer neptune2 dans apache en plus des autres
+* RUNNING : Mettre à jour INSTALL en parallèle
+* OK : Ajuster le script de déploiement pour github (et le script install.sh)
+* Importer les clefs ssh pour l'user vlm
+* OK : Paramètrer neptune2 dans apache en plus des autres
 * Sync histpos ?
 * Tester avec un client en changeant son /etc/hosts
 
