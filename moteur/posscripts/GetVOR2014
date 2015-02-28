@@ -1,2 +1,2 @@
-curl http://vorcdn.virtualeye.tv/STA_LEG04_2014_BIN.bin > Res.Bin 2>/dev/null
-$VLMRACINE/vlmcode/moteur/posscripts/getpos_vor2014 141504 
+curl http://vorcdn.virtualeye.tv/STA_LEG05_2014_BIN.bin > Res.Bin 2>/dev/null
+$VLMRACINE/vlmcode/moteur/posscripts/getpos_vor2014 141505 
