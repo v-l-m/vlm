@@ -53,6 +53,11 @@ Merci
         User_Alias      APACHEMASTERS = vlm
         Cmnd_Alias      APACHE = /etc/init.d/apache2 restart
         APACHEMASTERS   ALL = NOPASSWD: APACHE
+        
+        User_Alias      MYSQLMASTERS = vlm
+        Cmnd_Alias      MYSQL = /etc/init.d/mysql restart
+        MYSQLMASTERS    ALL = NOPASSWD: MYSQL
+
 
       * OU en copiant le fichier ad-hoc
 
@@ -280,4 +285,19 @@ Merci
     #!/bin.sh
     ntpdate-debian
 
-disk_ca
+  * 9. modcache
+    * `a2enmod cache`
+    * `cp ~/conf/disk_cache.conf.dist /etc/apache2/mods-available/disk_cache.conf`
+    * `cp ~/conf/default.apache2.dist /etc/default/apache2`
+
+  * 10. Perf apache (pour 8Go de ram), dans `/etc/apache2/apache2.conf` 
+        Timeout     60
+
+        #Prefork MPM
+        StartServers             10
+        MinSpareServers           5
+        MaxSpareServers          10
+        ServerLimit	            512
+        MaxClients              256
+        MaxRequestsPerChild     255
+
