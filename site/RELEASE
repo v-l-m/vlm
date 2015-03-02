@@ -1,6 +1,18 @@
 RELEASE NOTES
 See https://github.com/v-l-m/vlm/milestones for detailed Changelog & tickets by milestone.
 
+v0.25 aka Stick Lips Reloaded
+
+No new feature, this was a technical milestone to track the change:
+- from Neptune1 to Neptune2 (servers)
+- from custom svn+trac to https://github.com (see http://dev.v-l-m.org for more)
+
+Incidentally, we have been catching some bugs :
+- #774 : There were some tables missing in our export scripts
+- #770 : nicer (and smaller...) index management for our track history
+- And the documentation has been updated
+
+
 v0.24 aka Stick Lips
 
 What's up for ...
