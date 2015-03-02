@@ -49,6 +49,11 @@ define("VLM_PROXY_PASS", "password");
 define("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
 define("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "hashed_string");
 define("VLM_NOTIFY_MAIL", "mailling@url.com");
-define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,identica");
+define("VLM_NOTIFY_TWITTER_CONSUMER_KEY", "89tblGxZUVg99efAaBalA");
+define("VLM_NOTIFY_TWITTER_CONSUMER_SECRET", "4D94eYI31m8klASQI3Qv3SZjmMUklPP463z0RMt6U");
+define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN", "288991946-jcuGdQq6449Lo3hb208MPKt1joHwITV1Jce9u5Gm");
+define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "CG6yuNfdx4OgwIh9REKCz6lqk8qgJYI1nwHqJRFZgE");
+define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,irc,mail");
+
 
 ?>

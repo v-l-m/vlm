@@ -1,3 +1,8 @@
     User_Alias      APACHEMASTERS = vlm
     Cmnd_Alias      APACHE = /etc/init.d/apache2 restart
     APACHEMASTERS   ALL = NOPASSWD: APACHE
+
+    User_Alias      MYSQLMASTERS = vlm
+    Cmnd_Alias      MYSQL = /etc/init.d/mysql restart
+    MYSQLMASTERS    ALL = NOPASSWD: MYSQL
+

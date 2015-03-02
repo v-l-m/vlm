@@ -3,10 +3,10 @@
 # source d'inspiration : v2.openesub.org / Auteur : paparazzia@gmail.com / Licence : GPL2
 
 # Ajout depuis ip failover pour prod VLM
-SERVER_IP=`hostname -i`
+SERVER_IP=`hostname -I | cut -f 1 -d " "`
 
 #Définition de la branche (trunk ou V_<majeur>_<mineur>
-# Exemple : export VLMSVNBRANCH=V_0_24
+# Exemple : export VLMSVNBRANCH=V_0_25
 # Exemple : export VLMSVNBRANCH=trunk
 export VLMSVNBRANCH=trunk
 
@@ -51,6 +51,8 @@ export VLMPOLARS=$VLMDATAS/polars
 export VLMGRIBS=$VLMDATAS/gribs
 export VLMGRIBSURL=http://grib.example.com
 export VLM_GRIB_MAX_TIME=24
+#export ARCHIVE_GRIB=yes
+
 
 #Pas de mail par défaut en cas d'echouage
 export MAIL_FOR_COASTCROSSING=false
