@@ -623,7 +623,7 @@ class map
         $index ++ ;
         $StartSeg=$Exclusion[0];
         $EndSeg=$Exclusion[1];
-        if ( $this->flag_E_W == true && $point[3] < 0 ) 
+        if ( $this->flag_E_W == true  && ($StartSeg[1] <=0) ||($EndSeg[1] <= 0) ) 
         {
           $x1=$this->projLong(360000+$StartSeg[1]*1000);
           $x2=$this->projLong(360000+$EndSeg[1]*1000);
@@ -633,6 +633,7 @@ class map
           $x1=$this->projLong($StartSeg[1]*1000);
           $x2=$this->projLong($EndSeg[1]*1000);
         }
+        
         
         $y1 = $this->projLat($StartSeg[0]*1000);
         $y2 = $this->projLat($EndSeg[0]*1000);
