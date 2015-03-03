@@ -376,8 +376,6 @@
         <a href="https://www.facebook.com/virtualloupmer" style="text-decoration:none;" target="_facebookvlm"><img src="/images/logos/facebook-32.png" alt="" style="border:0;width:32px;height:32px;" target="_fbvlm"/></a>
         <!-- Twitter medium icon -->
         <a href="https://twitter.com/#!/virtualloupmer" style="text-decoration:none;" target="_twittervlm"><img src="/images/logos/twitter-32.png" alt="" style="border:0;width:32px;height:32px;" /></a>
-        <!-- Identi.ca medium icon -->
-        <a href="http://identi.ca/virtualloupmer" style="text-decoration:none;" target="_identicavlm"><img src="/images/logos/identica-32.png" alt="" style="border:0;width:32px;height:32px;" /></a>
 
 
    </div>

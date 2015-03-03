@@ -10,7 +10,6 @@ $playersPrefsContactLinkPattern = Array(
     "contact_fmv" => "http://forum-marinsvirtuels.forumactif.com/u%scontact",
     "contact_taverne" => "http://www.virtual-winds.org/forum/index.php?showuser=%s",
     "contact_twitter" => "https://twitter.com/#!/%s",
-    "contact_identica" => "http://identi.ca/%s",
     "contact_facebook" => "http://facebook.com/%s",
     "contact_googleplus" => "https://plus.google.com/u/0/%s",
     );
@@ -21,7 +20,6 @@ function sortPref($k1, $k2) {
         "contact_fmv" => 31,
         "contact_taverne" => 30,
         "contact_twitter" => 40,
-        "contact_identica" => 41,
         "contact_googleplus" => 42,
         "contact_facebook" => 43,
         "contact_email" => 10,
@@ -103,8 +101,6 @@ class playersPrefs extends baseClass {
                 return $this->checkDoublePattern($key, $val, "/^https:\/\/plus\.google\.com\/u\/0\/(\d+).*?$/i", "/^(\d+)$/i");
             case "contact_twitter":
                 return $this->checkDoublePattern($key, $val, "/^https:\/\/twitter\.com\/#!\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
-            case "contact_identica":
-                return $this->checkDoublePattern($key, $val, "/^http:\/\/identi\.ca\/([a-zA-Z0-9]+)$/i", "/^([a-zA-Z0-9]+)$/i");
             case "contact_facebook":
                 return $this->checkDoublePattern($key, $val, "/^http:\/\/.*?facebook\.com\/(.*)$/i", "/^([^:\s;<>'\"]*)$/i");
             case "lang_communication" :
@@ -259,7 +255,6 @@ class playersPrefsHtml extends playersPrefs {
             case "contact_fmv":
             case "contact_revatua":
             case "contact_twitter":
-            case "contact_identica":
             case "contact_facebook":
             case "contact_googleplus":
                 return "<a target=\"vlm_contact\" href=\"".sprintf($playersPrefsContactLinkPattern[$key], $val)."\">".getLocalizedString("pref_$key")."</a>";
