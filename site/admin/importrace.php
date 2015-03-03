@@ -196,7 +196,7 @@
       $FirstSeg = 0;
       foreach ($import[Exclusions] as $excl)
       {
-        $SqlSegId = sprintf("%d%03d",$idracefrom,$SegId);
+        $SqlSegId = sprintf("%d%03d",$idraceto,$SegId);
         if ($FirstSeg == 1 )
         {
           $SqlSeg .= " , ";
@@ -209,7 +209,7 @@
         }
         
         $SqlSeg .= " ($SqlSegId,".($excl[0][1]*1000).",".($excl[0][0]*1000).",".($excl[1][1]*1000).",".($excl[1][0]*1000).") \n";
-        $SqlRaceSeg .= " ($idracefrom,$SqlSegId) \n";
+        $SqlRaceSeg .= " ($idraceto,$SqlSegId) \n";
         $SegId++;
         $FirstSeg = 1;
       }
