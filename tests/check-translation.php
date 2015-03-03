@@ -7,7 +7,7 @@ $false_errors = Array(
       'images', 'faq', 'doc', 'forum', 'contact', 'version', 'position', 'degrees', 'taverne', 'tchat', 'loch', 'estime', 'mapsize',
       'proj', 'mercator', 'lambert', 'a12', 
       'vbvmgengaged', 'Mobiles', 'action',
-      'pref_contact_taverne', 'pref_contact_fmv', 'pref_contact_revatua', 'pref_contact_twitter', 'pref_contact_identica',
+      'pref_contact_taverne', 'pref_contact_fmv', 'pref_contact_revatua', 'pref_contact_twitter',
       'pref_contact_facebook', 'pref_contact_msn', 'pref_contact_jabber', 'Restriction', 'pilototohelp1',
 
       ),
@@ -27,7 +27,7 @@ $false_errors = Array(
     'en' => Array(
       'images', 'faq', 'doc', 'forum', 'tchat', 'taverne', 'a12', 'contact', 'version', 'position', 'loch', 'estime', 'mapsize', 'proj', 'mercator', 'lambert', 'degrees',
       'vbvmgengaged', 'Mobiles', 'action',
-      'pref_contact_taverne', 'pref_contact_fmv', 'pref_contact_revatua', 'pref_contact_twitter', 'pref_contact_identica', 'pref_contact_facebook', 'pref_contact_msn', 'pref_contact_jabber', 'Restriction', 'pilototohelp1',
+      'pref_contact_taverne', 'pref_contact_fmv', 'pref_contact_revatua', 'pref_contact_twitter', 'pref_contact_facebook', 'pref_contact_msn', 'pref_contact_jabber', 'Restriction', 'pilototohelp1',
 
       ),
      'de' => Array(

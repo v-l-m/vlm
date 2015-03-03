@@ -228,7 +228,7 @@
     // NOTSET (for user_prefs)
     define("NOTSET", "NULL");
     define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname,frogDatas");
-    define("PLAYER_PREF_ALLOWED", "lang_ihm,lang_communication,contact_email,contact_jabber,contact_taverne,contact_fmv,contact_revatua,contact_twitter,contact_identica,contact_facebook,contact_msn,contact_googleplus");
+    define("PLAYER_PREF_ALLOWED", "lang_ihm,lang_communication,contact_email,contact_jabber,contact_taverne,contact_fmv,contact_revatua,contact_twitter,contact_facebook,contact_msn,contact_googleplus");
 
     // WAYPOINTS
     define("WP_TWO_BUOYS", 0);
@@ -253,8 +253,6 @@
     define_if_not('MAX_WIND_POINTS', 2048);
 
     //VLM NOTIFY
-    define_if_not("VLM_NOTIFY_IDENTICA_URL", "http://identi.ca/api/statuses/update.xml");
-    define_if_not("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
     define_if_not("VLM_NOTIFY_FACEBOOK_URL", "https://graph.facebook.com/201999359896107/feed");
     define_if_not("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "big_hashed_string");
 
