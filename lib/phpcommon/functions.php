@@ -1956,9 +1956,9 @@ function displayPalmares($idusers) {
 }
 
 //Insert news
-function insertNews($media, $summary, $timetarget, $longstory = "") {
+function insertNews($media, $summary, $timetarget, $longstory = "", $url = "") {
    if ($longstory == "") $longstory = $summary;
-   $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', longstory='%s', timetarget=%d ;", $media, mysql_real_escape_string($summary), mysql_real_escape_string($longstory), $timetarget);
+   $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', longstory='%s', url='%s', timetarget=%d ;", $media, mysql_real_escape_string($summary), mysql_real_escape_string($longstory), mysql_real_escape_string($url), $timetarget);
    $result = wrapper_mysql_db_query_writer($sql) or die("Query [$sql] failed \n");
 }
 
