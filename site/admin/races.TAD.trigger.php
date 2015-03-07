@@ -8,9 +8,10 @@
     $res = $this->myQuery("DELETE FROM races_waypoints WHERE idraces = '".$this->rec."';");
     $res = $this->myQuery("DELETE FROM races_instructions WHERE idraces = '".$this->rec."';");
     $res = $this->myQuery("DELETE FROM racesmap WHERE idraces = '".$this->rec."';");
+    $res = $this->myQuery("DELETE FROM nszracesegment WHERE idraces = '".$this->rec."';");
     
     echo "<div class=\"adminbox\">";
-    insertAdminChangelog(Array("operation" => "Delete all race datas (racesmap, waypoints, waypoints links, instructions)", "rowkey" => "".$this->rec));
+    insertAdminChangelog(Array("operation" => "Delete all race datas (racesmap, waypoints, waypoints links, instructions, nszracessegments)", "rowkey" => "".$this->rec));
     echo "  <h3>Corresponding waypoints and race instructions have been also deleted.</h3>";
     echo "</div>";
     return True;
