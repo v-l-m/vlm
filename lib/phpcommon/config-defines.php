@@ -267,4 +267,6 @@
     define_if_not("VLM_NOTIFY_IRC_SERVER", "irc.epiknet.org");
     define_if_not("VLM_NOTIFY_IRC_CHAN", "#vlm");
     define_if_not("VLM_NOTIFY_IRC_USER", "vlm[POSTMAN]");
+
+    define_if_not("WS_MAX_MAXAGE", 2592000); // Default is no max
 ?>

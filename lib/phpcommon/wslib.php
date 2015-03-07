@@ -48,6 +48,8 @@ class WSBase extends baseClass {
     function reply() {
         $fmt = "json";
 
+        $this->maxage = min($this->maxage, WS_MAX_MAXAGE);
+
         switch ($fmt) {
             //retourne du json par défaut, mais peut être qu'on pourra supporter autre chose plus tard
             case "json":
