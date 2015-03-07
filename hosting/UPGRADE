@@ -1,5 +1,40 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.25.x to 0.26 :
+
+= Step 0, can be done at any time = 
+
+  Avoir  un backup de la base et faire un backup de vlmcode avant de commencer
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_26
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    - edit crontab and add :
+      #* * * * * $VLMRACINE/vlmcode/moteur/feed/feedmodules.sh irc 60
+
+  RUN
+    ./scripts/upgrade.sh 0.26 0
+    
+= Step 1, maintenance mode, backup base, upgrade core =
+
+  RUN
+    ./scripts/upgrade.sh 0.26 1 && sudo /etc/init.d/apache2 restart
+
+  - if something goes wrong, EDIT crontab and comment vlm crons
+
+= Step 2, end of release, unlock engine =
+
+  RUN
+    ./scripts/upgrade.sh 0.26 2
+
+From 0.24.x to 0.25 :
+
+  From Neptune1 to Neptune2
+
 From 0.23.x to 0.24 :
 
 = Step 0, can be done at any time = 
