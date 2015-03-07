@@ -5,6 +5,7 @@
     $newsmedias = explode(",", VLM_NOTIFY_LIST);
     $medias = get_cgi_var('medias', '');
     $news = get_cgi_var('news', '');
+    $longnews = get_cgi_var('longnews', '');
     $now = intval(time());
 
     if (get_cgi_var("action") == "postnews") {
@@ -12,7 +13,7 @@
         echo "<hr>";
         foreach ($medias as $m) {
             print "Posting '$news' in '$m' at $now\n";
-            insertNews($m, $news, $now);
+            insertNews($m, $news, $now, $longnews);
         }
     } else {
 ?>
@@ -20,6 +21,7 @@
         <form name="postnews" action="#" method="post">
             <input type="hidden" name="action" value="postnews" />
             <textarea name="news" cols="60" rows="3"></textarea><br/>
+            <textarea name="longnews" cols="60" rows="20"></textarea><br/>
 <?php
     foreach ($newsmedias as $nm) {
         echo "<input type=\"checkbox\"  name=\"medias[]\" value=\"$nm\">$nm<br/>";

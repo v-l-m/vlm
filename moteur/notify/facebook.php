@@ -7,8 +7,13 @@
         var $rate_limit = 2;
     
         function init_handle($message) {
+            if ($message['longstory'] != '') {
+                $text = $message['longstory'];
+            } else {
+                $text = $message['summary'];
+            }
             $param = Array(
-                  "message" => $message['summary'],
+                  "message" => $text,
                   "access_token" => VLM_NOTIFY_FACEBOOK_ACCESSTOKEN
                   );
             if ($message['url'] != "") {

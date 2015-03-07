@@ -5,9 +5,15 @@
     class VlmNotifyMail extends VlmNotify {
         var $media = "mail";
         var $rate_limit = 3;
-    
+
         function postone($message) {
-            mailInformation(VLM_NOTIFY_MAIL, $message['summary'], $message['summary'], False);
+            if ($message['longstory'] != '') {
+                $text = $message['longstory'];
+            } else {
+                $text = $message['summary'];
+            }
+
+            mailInformation(VLM_NOTIFY_MAIL, $message['summary'], $text, False);
             return True;
         }
     }

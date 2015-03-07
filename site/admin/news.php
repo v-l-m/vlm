@@ -53,8 +53,17 @@ $opts['fdd']['hashnews'] = array(
 */
 
 $opts['fdd']['summary'] = array(
-  'name'     => 'summary',
-  'help'     => 'Message',
+  'name'     => 'title',
+  'help'     => '(140 characters, for irc and twitter, mainly)',
+  'select'   => 'T',
+  'escape'   => true,
+  'maxlen'   => 140,
+  'sort'     => true
+);
+
+$opts['fdd']['longstory'] = array(
+  'name'     => 'message',
+  'help'     => 'Long story',
   'select'   => 'T',
   'escape'   => true,
   'maxlen'   => 140,
