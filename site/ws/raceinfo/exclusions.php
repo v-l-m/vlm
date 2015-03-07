@@ -1,47 +1,24 @@
-<?php
-include_once("config.php");
-require_once('functions.php');
-require_once('exclusionzone.class.php');
+<?
+    include_once("config.php");
+    include_once("wslib.php");
+    require_once('exclusionzone.class.php');
 
-function get_output_format() {
-    //nothing more for now
-    return "json";
-}
+    $ws = new WSBaseRace();
+    $now = time();
 
-function get_info_array($idRace) 
-{
-  $zones = new exclusionZone($idRace);
+    //COMPAT with previous params idrace => idr
+    if (!isset($_REQUEST['idr']) && isset($_REQUEST['idrace'])) $_REQUEST['idr'] = $_REQUEST['idrace'];    
+    $ws->require_idr();
 
-  $info=$zones;
-  
-  return $info;
-}
+    //All good, get the zones
+    $zones = new exclusionZone($ws->idr);
 
-function usage() {
-    $usage = "usage : ".WWW_SERVER_URL."/ws/raceinfo/exclusions.php?idrace=X\n";
-    $usage .= "\nX = numero de la course";
-    return $usage;
-}
+    $ws->answer['request'] = array('idr' => $ws->idr, 'time' => $now);
+    $ws->answer['Exclusions'] = $zones->Exclusions;
+    $ws->answer['activeZoneName'] = $zones->activeZoneName;
 
-// now start the real work
-
-$idrace=htmlentities(quote_smart($_REQUEST['idrace']));
-if (intval($idrace) == 0) {
-    header("Content-type: text/plain; charset=UTF-8");
-    echo usage();
-    exit();
-}
-
-$fmt = get_output_format();
-$info_array = get_info_array($idrace);
-switch ($fmt) {
-    case "json":
-    default:
-        header('Content-type: application/json; charset=UTF-8');
-        //le cas est suffisament rare d'un changement après publication pour qu'on mette un cache de 24h coté client.
-        header("Cache-Control: max-age=". (24*3600) .", must-revalidate");
-        echo json_encode($info_array);
-}
+    //le cas est suffisament rare d'un changement après publication pour qu'on mette un cache de 24h coté client.   
+    $ws->maxage = 24*3600;
+    $ws->reply_with_success();
 
 ?>
-
