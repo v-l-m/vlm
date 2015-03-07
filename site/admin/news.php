@@ -39,19 +39,6 @@ $opts['fdd']['media'] = array(
   'sort'     => true
 );
 
-/*
-$opts['fdd']['hashnews'] = array(
-  'name'     => 'hashnews',
-  'help'     => 'unique id from media, message',
-  'select'   => 'T',
-  'input'  => 'R',
-  'sqlw|CA'     => 'md5(concat(summary, timetarget, media))',
-  'escape'   => true,
-  'maxlen'   => 32,
-  'sort'     => true
-);
-*/
-
 $opts['fdd']['summary'] = array(
   'name'     => 'title',
   'help'     => '(140 characters, for irc and twitter, mainly)',
@@ -64,9 +51,10 @@ $opts['fdd']['summary'] = array(
 $opts['fdd']['longstory'] = array(
   'name'     => 'message',
   'help'     => 'Long story',
+  'options'  => 'ACDVP',
   'select'   => 'T',
   'escape'   => true,
-  'maxlen'   => 140,
+  'maxlen'   => 5000,
   'sort'     => true
 );
 

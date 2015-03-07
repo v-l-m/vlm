@@ -7,12 +7,15 @@
         var $rate_limit = 3;
 
         function postone($message) {
-            if ($message['longstory'] != '') {
-                $text = $message['longstory'];
-            } else {
-                $text = $message['summary'];
+            $text = "";
+            if ($message['url'] != "") {
+                $text = "Lien : ".$message['url']."\n\n";
             }
-
+            if ($message['longstory'] != '') {
+                $text .= $message['longstory'];
+            } else {
+                $text .= $message['summary'];
+            }
             mailInformation(VLM_NOTIFY_MAIL, $message['summary'], $text, False);
             return True;
         }
