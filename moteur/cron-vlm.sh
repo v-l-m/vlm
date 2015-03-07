@@ -40,9 +40,10 @@ nice -1 $VLMPHPPATH moteur.php $* >> $LOG 2>&1
 # Voir Option MAIL_FOR_COASTCROSSING dans conf_script
 [ "$MAIL_FOR_COASTCROSSING" == true ] && grep CROSSED $LOG | sed 's/.*player //g' | sed 's/ CROSSED.*$//g' | while read idusers ; do
         sed -n "/user $idusers:/,/DONE/p"  $LOG >$VLMTEMP/CC-$idusers.log
-#sendmail syntax        mail -s "COAST CROSSING : BOAT $idusers" vlm@virtual-winds.org -- -F "VLM-ENGINE" -f "vlm@virtual-winds.org" <$VLMTEMP/CC-$idusers.log
-#mailx syntax
-	mail -s "COAST CROSSING : BOAT $idusers" -r "VLM-ENGINE <vlm@virtual-winds.org>" vlm@virtual-winds.org <$VLMTEMP/CC-$idusers.log 
+        #sendmail syntax
+        mail -s "COAST CROSSING : BOAT $idusers" vlm@virtual-winds.org -- -F "VLM-ENGINE" -f "vlm@virtual-winds.org" <$VLMTEMP/CC-$idusers.log
+        #mailx syntax
+        #mail -s "COAST CROSSING : BOAT $idusers" -r "VLM-ENGINE <vlm@virtual-winds.org>" vlm@virtual-winds.org <$VLMTEMP/CC-$idusers.log 
         rm -f $VLMTEMP/CC-$idusers.log
 done
 
