@@ -211,7 +211,9 @@ class WSBaseRace extends WSBase {
     }
     
     function require_idr() {
-        $idr = $this->check_cgi_int('idr', 'IDR01', 'IDR02');
+        //compat with old apis
+        $idrace = get_cgi_var('idrace', null);
+        $idr = $this->check_cgi_int('idr', 'IDR01', 'IDR02', $idrace);
         if (!raceExists($idr)) $this->reply_with_error('IDR03');
         $this->idr = $idr;
     }

@@ -6,8 +6,6 @@
     $ws = new WSBaseRace();
     $now = time();
 
-    //COMPAT with previous params idrace => idr
-    if (!isset($_REQUEST['idr']) && isset($_REQUEST['idrace'])) $_REQUEST['idr'] = $_REQUEST['idrace'];    
     $ws->require_idr();
 
     //All good, get the zones
