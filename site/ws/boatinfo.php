@@ -44,7 +44,8 @@ function get_info_array($idu) {
     $info['LOX'] = $userObj->loxoangletoend;
     $info['VMG'] = $userObj->VMGortho;
     $info['STS'] = (int)$racesObj->started;
-    
+    $info['UDT'] = $userObj->userdeptime;
+
     if ( $userObj->VMGortho != 0 ) {
       $_timetogo = 3600 * $userObj->distancefromend / $userObj->VMGortho;
       if ( $_timetogo < 0 ) {
@@ -213,12 +214,12 @@ function usage() {
     #* RAN : nom de la course (string)
     #* RNK : Rank : classement dans la course (int)
     #* SRV : Servername 
-    #* TFS : Time From Start (int)
     #* THM: nom du theme
     #* TUP : Time to Update (à partir de NUP) (int)
     #* TWA : Wind angle - Allure (float)
     #* TWD : Wind direction (float)
     #* TWS : Wind speed (float)
+    #* UDT : User departure time (int) (useful for record races)
     #* VAC: durée de la vacation (en secondes)
     #* VMG : VMG (float)
     #* WPLAT : latitude du wp perso (float, en degré)
