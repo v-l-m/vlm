@@ -227,7 +227,9 @@
     //PREFS
     // NOTSET (for user_prefs)
     define("NOTSET", "NULL");
-    define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname,frogDatas,qtvlmDatas");
+    define("USER_PREF_ALLOWED", "maparea,mapMaille,mapX,mapY,mapAge,mapEstime,mapDrawtextwp,mapOpponents,mapLayers,mapCenter,mapTools,mapPrefOpponents,mobiVlmDatas,blocnote,color,theme,country,boatname,frogDatas,qtvlmDatas,sbsrouteurDatas");
+    //USERS PREFS that can be larger than 255 chars.
+    define_if_not("LARGE_USER_PREF_ALLOWED", "frogDatas,qtvlmDatas,sbsrouteurDatas");    
     define("PLAYER_PREF_ALLOWED", "lang_ihm,lang_communication,contact_email,contact_jabber,contact_taverne,contact_fmv,contact_revatua,contact_twitter,contact_facebook,contact_msn,contact_googleplus");
 
     // WAYPOINTS
