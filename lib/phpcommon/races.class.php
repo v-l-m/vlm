@@ -128,7 +128,7 @@ class races {
   }
 
   function isLastWPIdx($idwp) {
-    return ($idwp == count($this->waypoints));
+    return ($idwp == $this->getWPsCount());
   }
 
   // ====================================================
