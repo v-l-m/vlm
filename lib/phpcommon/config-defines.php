@@ -269,7 +269,8 @@
     define_if_not("VLM_NOTIFY_IRC_USER", "vlm[POSTMAN]");
 
     define_if_not("WS_DEFAULT_CACHE_DURATION", 0); //Default is no cache, but it's overiden on a by service basis (look the code, luke)
-    define_if_not("WS_MAX_MAXAGE", 2592000); // Default is no max
+    define_if_not("WS_MAX_MAXAGE", 2592000); // Default is no max (can be overriden to "cap" globally the cache setup by ws)
+    define_if_not("WS_MIN_MAXAGE", 0); // Default is no minimum (can be overriden to lighten the server load)
     define_if_not("WS_NSZ_CACHE_DURATION", 24*3600);
 
 ?>

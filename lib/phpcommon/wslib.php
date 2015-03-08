@@ -48,7 +48,8 @@ class WSBase extends baseClass {
     function reply() {
         $fmt = "json";
 
-        $this->maxage = min($this->maxage, WS_MAX_MAXAGE);
+        $this->maxage = min($this->maxage, WS_MAX_MAXAGE); //Max Lifetime is the minimum between ws setup and MAX_MAXAGE
+        $this->maxage = max($this->maxage, WS_MIN_MAXAGE); //Min lifetime is the maximum between ws setup and MIN_MAXAGE
 
         switch ($fmt) {
             //retourne du json par défaut, mais peut être qu'on pourra supporter autre chose plus tard
