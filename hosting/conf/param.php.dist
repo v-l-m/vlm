@@ -55,5 +55,8 @@ define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN", "288991946-jcuGdQq6449Lo3hb208MPKt1joHw
 define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "CG6yuNfdx4OgwIh9REKCz6lqk8qgJYI1nwHqJRFZgE");
 define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,irc,mail");
 
+// WS Caching defaults
+define("WS_DEFAULT_CACHE_DURATION",24*3600);
+define("WS_NSZ_CACHE_DURATION",24*3600);
 
 ?>

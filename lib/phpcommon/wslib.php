@@ -8,7 +8,7 @@ require_once('users.class.php');
 class WSBase extends baseClass {
 
     public $answer = Array();
-    public $maxage = 0;
+    public $maxage = WS_DEFAULT_CACHE_DURATION;
     public $now = 0;
 
     function __construct() {

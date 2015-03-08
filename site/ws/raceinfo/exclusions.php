@@ -16,7 +16,7 @@
     $ws->answer['activeZoneName'] = $zones->activeZoneName;
 
     //le cas est suffisament rare d'un changement après publication pour qu'on mette un cache de 24h coté client.   
-    $ws->maxage = 24*3600;
+    $ws->maxage = WS_NSZ_CACHE_DURATION;
     $ws->reply_with_success();
 
 ?>
