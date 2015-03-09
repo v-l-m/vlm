@@ -44,7 +44,7 @@ function get_info_array($idu) {
     $info['LOX'] = $userObj->loxoangletoend;
     $info['VMG'] = $userObj->VMGortho;
     $info['STS'] = (int)$racesObj->started;
-    $info['UDT'] = $userObj->userdeptime;
+    $info['UDT'] = $userObj->users->userdeptime;
 
     if ( $userObj->VMGortho != 0 ) {
       $_timetogo = 3600 * $userObj->distancefromend / $userObj->VMGortho;
