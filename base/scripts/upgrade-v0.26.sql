@@ -1,2 +1,2 @@
-ALTER TABLE news ADD COLUMN longstory LONGTEXT;
+ALTER TABLE news ADD COLUMN longstory TEXT;
 
