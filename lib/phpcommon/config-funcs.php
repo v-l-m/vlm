@@ -32,6 +32,7 @@
         } else {
             $var = @$default_value;
         }
+        if (is_string($var)) $var = trim($var);
         return $var;
     }
 
