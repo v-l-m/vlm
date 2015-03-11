@@ -27,14 +27,3 @@ Component "vhf.v-l-m.org" "muc"
 --Component "gateway.example.com"
 --      component_secret = "password"
 
-authentification = "sql"
-
--- Setup Authent on Vlm database
-sql = {
-    driver = "MySQL"; -- May also be "MySQL" or "SQLite3" (case sensitive!)
-    database = "vlm"; -- The database name to use. For SQLite3 this the database filename (relative to the data storage directory).
-    host = "localhost"; -- The address of the database server (delete this line for Postgre
-    username = "vlm"; -- The username to authenticate to the database
-    password = "secretpassword"; -- The password to authenticate to the database
-}
-
