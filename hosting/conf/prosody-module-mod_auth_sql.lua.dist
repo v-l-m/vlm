@@ -72,7 +72,7 @@ local function getsql(sql, ...)
 end
 
 local function get_password(username)
-	local stmt, err = getsql("SELECT MD5(`password`) as password FROM `players` WHERE `playername`=?", username);
+	local stmt, err = getsql("SELECT `password` FROM `players` WHERE `playername`=?", username);
 	if stmt then
 		for row in stmt:rows(true) do
 			return row.password;
@@ -84,7 +84,7 @@ end
 provider = { name = "sql" };
 
 function provider.test_password(username, password)
-	return password and get_password(username) == password;
+	return password and get_password(username) == util.hashes.sha256(password);
 end
 function provider.get_password(username)
 	return get_password(username);
