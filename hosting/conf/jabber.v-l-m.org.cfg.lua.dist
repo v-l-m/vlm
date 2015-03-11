@@ -1,0 +1,22 @@
+-- Section for xmpp on v-l-m.org
+
+--loop
+for _, host in ipairs { "v-l-m.org", "virtual-loup-de-mer.org" } do
+  VirtualHost ("iridium." .. host)
+    -- VirtualHost "iridium.v-l-m.org"
+    --enabled = false -- Remove this line to enable this host
+  
+    -- Assign this host a certificate for TLS, otherwise it would use the one
+    -- set in the global section (if any).
+    -- Note that old-style SSL on port 5223 only supports one certificate, and will always
+    -- use the global one.
+    ssl = {
+      key = "/etc/prosody/certs/iridium.v-l-m.org.key";
+      certificate = "/etc/prosody/certs/iridium.v-l-m.org.cert";
+      }
+
+-- Set up a MUC (multi-user chat) room server on conference.example.com:
+Component "vhf." .. host "muc"
+
+end
+--end vhost loop
