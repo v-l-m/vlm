@@ -21,7 +21,7 @@
         <h3>Ecrivez votre message</h3>
         <form name="postnews" action="#" method="post">
             <input type="hidden" name="action" value="postnews" />
-            <textarea name="news" cols="60" rows="3" maxlength="140"></textarea><br/>
+            <textarea name="news" cols="60" rows="3" maxlength="120"></textarea><br/>
             <textarea name="longnews" cols="60" rows="20" maxlength="5000"></textarea><br/>
             <input name="url" maxlength="250"/><br/>
 <?php
