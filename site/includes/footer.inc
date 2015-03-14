@@ -13,6 +13,7 @@
   </div> <!--footer-->
 	<!-- TIMINGS: <?php if(isset($page_start_time)) echo "generated in ".(microtime(1)-$page_start_time)."s"; ?> -->
 </body>
+<script type="text/javascript">
 require(['converse'], function (converse) {
     converse.initialize({
         hide_muc_server: false, // ?
@@ -31,6 +32,7 @@ require(['converse'], function (converse) {
 //        allow_logout (NOn documenté : nécessaire pour le prebinding)
     });
 });
+</script>
 </html>
 <?php
 
