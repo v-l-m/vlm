@@ -139,8 +139,8 @@
    <link rel="icon" type="image/png" href="/images/site/favicon.png" />
    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed/races.rss2.php" />
    <link rel="alternate" type="text/ical" title="ICAL" href="/feed/races.ical.php" />
-   <link rel="stylesheet" type="text/css" media="screen" href="/externals/css/converse.min.css">
-   <script src="/externals/converse.min.js"></script>
+   <link rel="stylesheet" type="text/css" media="screen" href="/externals/conversejs/css/converse.min.css">
+   <script src="/externals/conversejs/builds/converse.min.js"></script>
 
    <title>Virtual Loup-De-Mer </title>
 
