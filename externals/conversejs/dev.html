@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Converse.js</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Converse.js: A free chat client for your website" />
+    <meta name="author" content="JC Brand" />
+    <meta name="keywords" content="xmpp chat webchat converse.js" />
+    <link rel="shortcut icon" type="image/ico" href="css/images/favicon.ico"/>
+    <link type="text/css" rel="stylesheet" media="screen" href="components/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" media="screen" href="components/fontawesome/css/font-awesome.min.css" />
+    <link type="text/css" rel="stylesheet" media="screen" href="css/theme.css" />
+    <link type="text/css" rel="stylesheet" media="screen" href="css/converse.css" />
+    <script data-main="main" src="components/requirejs/require.js"></script>
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav"><li> <a href="/docs/html/index.html">Documentation</a> </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="brand-heading"><i class="icon-conversejs"></i>Converse.js</h1>
+                        <p class="intro-text">Developer page.</p>
+                        <p class="intro-text">
+                            Converse.js will only work on this page if you have 
+                            <a href="https://conversejs.org/docs/html/development.html">set up the development environment</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+<script>
+    require(['converse'], function (converse) {
+        converse.initialize({
+            bosh_service_url: 'https://conversejs.org/http-bind/', // Please use this connection manager only for testing purposes
+            i18n: locales['en'], // Refer to ./locale/locales.js to see which locales are supported
+            keepalive: true,
+            message_carbons: true,
+            play_sounds: true,
+            roster_groups: true,
+            show_controlbox_by_default: true,
+            xhr_user_search: false,
+            debug: true
+        });
+    });
+</script>
+</html>

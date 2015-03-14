@@ -1,0 +1,12 @@
+body {
+  font-family: "Lora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+.navbar-brand {
+    padding-top: 7px;
+}
+

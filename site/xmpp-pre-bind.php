@@ -29,6 +29,6 @@ $xmppPrebind->connect($p->playername, $p->password);
 $sessionInfo = $xmppPrebind->getSessionInfo(); // array containing sid, rid and jid
 
 header("Content-type: application/json; charset=UTF-8");
-echo json_encode($sessionInfo)
+echo json_encode($sessionInfo);
 
 ?>
