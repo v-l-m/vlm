@@ -46,7 +46,6 @@ define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
 
 define("VLM_PROXY_PASS", "password");
 
-define("VLM_NOTIFY_IDENTICA_USERPWD", "virtualloupmer:password");
 define("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "hashed_string");
 define("VLM_NOTIFY_MAIL", "mailling@url.com");
 define("VLM_NOTIFY_TWITTER_CONSUMER_KEY", "89tblGxZUVg99efAaBalA");
