@@ -5,6 +5,7 @@
 
 local log = require "util.logger".init("auth_sql");
 local new_sasl = require "util.sasl".new;
+local sha256 = require "util.hashes".sha256;
 local nodeprep = require "util.encodings".stringprep.nodeprep;
 local DBI = require "DBI"
 
@@ -73,6 +74,7 @@ end
 
 local function get_password(username)
 	local stmt, err = getsql("SELECT `password` FROM `players` WHERE `playername`=?", username);
+	module:log("debug","Query for %s", username);
 	if stmt then
 		for row in stmt:rows(true) do
 			return row.password;
@@ -84,9 +86,11 @@ end
 provider = { name = "sql" };
 
 function provider.test_password(username, password)
-	return password and get_password(username) == util.hashes.sha256(password);
+  module:log("debug", "Provider:test_password : Username %s Password %s Hash %s ", username, password, sha256(password, true));
+	return password and get_password(username) == sha256(password, true);
 end
 function provider.get_password(username)
+  module:log("debug", "Provider:get_password : Username %", username);
 	return get_password(username);
 end
 function provider.set_password(username, password)
@@ -98,20 +102,19 @@ end
 function provider.create_user(username, password)
 	return nil, "Account creation/modification not supported.";
 end
+
 function provider.get_sasl_handler()
-	local profile = {
-		plain = function(sasl, username, realm)
+  local profile = {
+    plain_test = function(sasl, username, password, realm)
 			local prepped_username = nodeprep(username);
 			if not prepped_username then
 				module:log("debug", "NODEprep failed on username: %s", username);
 				return "", nil;
 			end
-			local password = get_password(prepped_username);
-			if not password then return "", nil; end
-			return password, true;
-		end
-	};
-	return new_sasl(module.host, profile);
+      return provider.test_password(username, password), true;
+    end
+  };
+  return new_sasl(module.host, profile);
 end
 
 function provider.users()

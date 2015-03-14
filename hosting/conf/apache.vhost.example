@@ -8,6 +8,13 @@
         ServerName vlm
         ServerAlias vlmdev
 
+        #Uncomment to enable boch proxy
+        #RewriteEngine On
+        #RewriteRule /http-bind$ http://127.0.0.1:5280/http-bind [P]
+        #<Proxy http://127.0.0.1>
+        #        Allow from all
+        #</Proxy>
+
         ErrorLog    /home/vlm/logs/apache2/vlm_error_log
         CustomLog   /home/vlm/logs/apache2/vlm_access_log combined
 
@@ -23,4 +30,5 @@
                 AddType application/x-httpd-php .php
 
         </Directory>
+        
 </VirtualHost>
