@@ -175,6 +175,9 @@ class XmppPrebind {
 			$this->mechanisms[] = $value->nodeValue;
 		}
 
+    //VLM FIX - PAPARAZZIA - detection of mechanisms doesn't work
+    $this->encryption = self::ENCRYPTION_PLAIN;
+    /*
 		if (in_array(self::ENCRYPTION_DIGEST_MD5, $this->mechanisms)) {
 			$this->encryption = self::ENCRYPTION_DIGEST_MD5;
 		} elseif (in_array(self::ENCRYPTION_CRAM_MD5, $this->mechanisms)) {
@@ -184,7 +187,7 @@ class XmppPrebind {
 		} else {
 			throw new XmppPrebindConnectionException("No encryption supported by the server is supported by this library.");
 		}
-
+    */
 		$this->debug($this->encryption, 'encryption used');
 
 		// Assign session creation response
