@@ -277,7 +277,7 @@
 
     //Jabber
     define_if_not("VLM_XMPP_HOST", "ir.testing.v-l-m.org");
-    define_id_not("VLM_XMPP_HTTP_BIND", "https://conversejs.org/http-bind/"); //"http://ir.testing.v-l-m.org:5280/http-bind/");
+    define_if_not("VLM_XMPP_HTTP_BIND", "https://conversejs.org/http-bind/"); //"http://ir.testing.v-l-m.org:5280/http-bind/");
 
 
 ?>
