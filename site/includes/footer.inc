@@ -13,6 +13,9 @@
   </div> <!--footer-->
 	<!-- TIMINGS: <?php if(isset($page_start_time)) echo "generated in ".(microtime(1)-$page_start_time)."s"; ?> -->
 </body>
+<?php
+  if (isPlayerLoggedIn() && VLM_XMPP_ON) {
+?>
 <script type="text/javascript">
 require(['converse'], function (converse) {
     converse.initialize({
@@ -27,13 +30,16 @@ require(['converse'], function (converse) {
         message_carbons : true, // pour permettre de chatter indifférement et en meme temps dans les outils et dans le site
       	keepalive : true,
         prebind : true,
-        prebind_url : 'http://testing.v-l-m.org/xmpp-pre-bind.php', //Pour maintenir la session
+        prebind_url : '/xmpp-pre-bind.php', //Pour maintenir la session
         show_controlbox_by_default : false
 //        xhr_user_search et xhr_user_search_url : Pour avoir un annuaire des joueurs (ticket #798)
 //        allow_logout (NOn documenté : nécessaire pour le prebinding)
     });
 });
 </script>
+<?php
+}
+?>
 </html>
 <?php
 
