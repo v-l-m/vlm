@@ -20,11 +20,11 @@
 -- for the server. Note that you must create the accounts separately
 -- (see http://prosody.im/doc/creating_accounts for info)
 -- Example: admins = { "user1@example.com", "user2@example.net" }
-admins = { "paparazzia@ir.testing.v-l-m.org" }
+admins = { "testingzia@ir.testing.v-l-m.org" }
 
 -- Enable use of libevent for better performance under high load
 -- For more information see: http://prosody.im/doc/libevent
---use_libevent = true;
+-- use_libevent = true;
 
 -- This is the list of modules Prosody will load on startup.
 -- It looks for mod_modulename.lua in the plugins folder, so make sure that exists too.
@@ -42,16 +42,16 @@ modules_enabled = {
 		"private"; -- Private XML storage (for room bookmarks, etc.)
 		"vcard"; -- Allow users to set vCards
 		--"privacy"; -- Support privacy lists
-		--"compression"; -- Stream compression (Debian: requires lua-zlib module to work)
+		-- "compression"; -- Stream compression (Debian: requires lua-zlib module to work)
 
 	-- Nice to have
-		"legacyauth"; -- Legacy authentication. Only used by some old clients and bots.
+		-- "legacyauth"; -- Legacy authentication. Only used by some old clients and bots.
 		"version"; -- Replies to server version requests
 		"uptime"; -- Report how long server has been running
 		"time"; -- Let others know the time here on this server
 		"ping"; -- Replies to XMPP pings with pongs
 		"pep"; -- Enables users to publish their mood, activity, playing music and more
-		"register"; -- Allow users to register on this server using a client and change passwords
+		-- "register"; -- Allow users to register on this server using a client and change passwords
 		"adhoc"; -- Support for "ad-hoc commands" that can be executed with an XMPP client
 
 	-- Admin interfaces
@@ -109,8 +109,8 @@ ssl = {
 -- encryption or have it disabled, including gmail.com and Google Apps
 -- domains.
 
---c2s_require_encryption = false
---s2s_require_encryption = false
+c2s_require_encryption = false
+s2s_require_encryption = false
 
 -- Select the authentication backend to use. The 'internal' providers
 -- use Prosody's configured data storage to store the authentication data.
@@ -195,10 +195,19 @@ VirtualHost "example.com"
 
 --Bosh
   bosh_ports = { 5280 }
-
+  cross_domain_bosh = true
+  consider_bosh_secure = true
+  bosh_max_inactivity = 60
 ------ Additional config files ------
 -- For organizational purposes you may prefer to add VirtualHost and
 -- Component definitions in their own config files. This line includes
 -- all config files in /etc/prosody/conf.d/
+
+  log = {
+       debug = "/var/log/prosody/prosody.log"; -- Send debug and higher here
+       error = "*syslog"; -- Send error and higher to the syslog sink
+   }
+
+
 
 Include "conf.d/*.cfg.lua"

@@ -275,4 +275,9 @@
     define_if_not("WS_MIN_MAXAGE", 0); // Default is no minimum (can be overriden to lighten the server load)
     define_if_not("WS_NSZ_CACHE_DURATION", 24*3600);
 
+    //Jabber
+    define_if_not("VLM_XMPP_HOST", "ir.testing.v-l-m.org");
+    define_id_not("VLM_XMPP_HTTP_BIND", "https://conversejs.org/http-bind/"); //"http://ir.testing.v-l-m.org:5280/http-bind/");
+
+
 ?>
