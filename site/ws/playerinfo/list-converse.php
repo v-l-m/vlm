@@ -19,7 +19,9 @@
         }
     }
 
-    $ws->reply_with_success();
+    //Start custom reply for conversejs
+    $ws->answer = $ws->answer['list'];
+    $ws->reply();
 
 ?>
 
