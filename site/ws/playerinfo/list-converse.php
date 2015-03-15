@@ -10,11 +10,11 @@
 
     $ws->answer['list'] = Array();
 
-    $query = sprintf("SELECT idplayers AS idp, playername FROM players WHERE playername LIKE '%%%s%%' ORDER BY playername LIMIT 20", $q);
+    //FIXME : Strip space !
+    $query = sprintf("SELECT Concat(playername, '@', idplayers) AS fullname, playername AS id FROM players WHERE UPPER(playername) LIKE '%%%s%%' ORDER BY playername LIMIT 20", str2upper($q));
     $result = $ws->queryRead($query);
     if ($result)  {
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $row['jid'] = $row['playername'].'@'.VLM_XMPP_HOST;
             $ws->answer['list'][] = $row;
         }
     }
