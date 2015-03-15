@@ -32,6 +32,7 @@ require(['converse'], function (converse) {
         prebind : true,
         prebind_url : '/xmpp-pre-bind.php', //Pour maintenir la session
         show_controlbox_by_default : false, // Ne pas encombrer l'écran par défaut
+        hide_muc_server : true,
         xhr_user_search :true,
         xhr_user_search_url : '/ws/playerinfo/list-converse.php' //Pour avoir un annuaire des joueurs (ticket #798)
 //        allow_logout (NOn documenté : nécessaire pour le prebinding)
