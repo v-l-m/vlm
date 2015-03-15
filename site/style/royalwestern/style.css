@@ -103,7 +103,7 @@ a:hover {
 }
 
 
-#controlbox, #instrumentbox, #mapbox, #time {
+#vlmcontrolbox, #instrumentbox, #mapbox, #time {
   border-top: 5px groove #0E3680;
 }
 

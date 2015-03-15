@@ -33,7 +33,7 @@ body
   background-color: #ffffe5;
 }
 
-#controlbox, #instrumentbox, #mapbox, #time {
+#vlmcontrolbox, #instrumentbox, #mapbox, #time {
   border-top: 5px groove #2b597b;
 }
 

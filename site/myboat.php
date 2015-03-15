@@ -518,7 +518,7 @@ include_once("scripts/myboat.js");
 
 
 
-<div id="controlbox">
+<div id="vlmcontrolbox">
     <!-- Pilote automatique -->
     <div id="autopilotcontrolbox" class="controlitem">
         <?php
