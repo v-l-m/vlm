@@ -31,8 +31,9 @@ require(['converse'], function (converse) {
       	keepalive : true,
         prebind : true,
         prebind_url : '/xmpp-pre-bind.php', //Pour maintenir la session
-        show_controlbox_by_default : false
-//        xhr_user_search et xhr_user_search_url : Pour avoir un annuaire des joueurs (ticket #798)
+        show_controlbox_by_default : false, // Ne pas encombrer l'écran par défaut
+        xhr_user_search :true,
+        xhr_user_search_url : '/ws/playerinfo/list-converse.php' //Pour avoir un annuaire des joueurs (ticket #798)
 //        allow_logout (NOn documenté : nécessaire pour le prebinding)
     });
 });

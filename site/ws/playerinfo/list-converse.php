@@ -2,7 +2,8 @@
     include_once("config.php");
     include_once("wslib.php");
 
-    $ws = new WSBasePlayer();
+    $ws = new WSBase();
+    if (!isPlayerLoggedIn()) die("Not allowed");
     $ws->maxage = WS_PLAYER_LIST_CACHE_DURATION;
 
     $q = $ws->check_cgi('q', 'PLAYERLIST01');
@@ -10,8 +11,8 @@
 
     $ws->answer['list'] = Array();
 
-    //FIXME : Strip space !
-    $query = sprintf("SELECT Concat(playername, '@', idplayers) AS fullname, playername AS id FROM players WHERE UPPER(playername) LIKE '%%%s%%' ORDER BY playername LIMIT 20", strtoupper($q));
+    //FIXME : Strip space or change jid base name
+    $query = sprintf("SELECT Concat(playername, ' @', idplayers) AS fullname, playername AS id FROM players WHERE UPPER(playername) LIKE '%%%s%%' ORDER BY playername LIMIT 20", strtoupper($q));
     $result = $ws->queryRead($query);
     if ($result)  {
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
