@@ -3,6 +3,7 @@
     include_once("wslib.php");
 
     $ws = new WSBase();
+    session_start();
     if (!isPlayerLoggedIn()) die("Not allowed");
     $ws->maxage = WS_PLAYER_LIST_CACHE_DURATION;
 
