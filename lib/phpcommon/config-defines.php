@@ -274,6 +274,7 @@
     define_if_not("WS_MAX_MAXAGE", 2592000); // Default is no max (can be overriden to "cap" globally the cache setup by ws)
     define_if_not("WS_MIN_MAXAGE", 0); // Default is no minimum (can be overriden to lighten the server load)
     define_if_not("WS_NSZ_CACHE_DURATION", 24*3600);
+    define_if_not("WS_PLAYER_LIST_CACHE_DURATION", 3600);
 
     //Jabber
     define_if_not("VLM_XMPP_ON", true);

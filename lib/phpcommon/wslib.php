@@ -508,6 +508,8 @@ function get_error($code) {
         //player
         "PLAYER01" => 'idp (id player) is required',
         "PLAYER02" => 'idp does not exist',
+        "PLAYERLIST01" => 'q is required',
+        "PLAYERLIST02" => 'q should be defined and have at least 2 chars',
         //boat/user
         "IDU01" => 'idu (iduser = idboat) is required',
         "IDU02" => 'idu should be int and > 0',
