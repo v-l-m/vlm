@@ -19,13 +19,12 @@
 <script type="text/javascript">
 require(['converse'], function (converse) {
     converse.initialize({
-        hide_muc_server: false, // ?
-        i18n: locales['fr'], // Refer to ./locale/locales.js to see which locales are supported
+        i18n: locales['<?echo getCurrentLang();?>'], // Refer to ./locale/locales.js to see which locales are supported
         roster_groups: false,
         allow_otr : false, //pour éviter les problèmes inter-clients ?
         allow_registration : false, // (pour mémoire)
-        auto_list_rooms : false, // (pour afficher les chat rooms de races, notamment)
-        auto_subscribe : false, // (pour épargner un clic aux joueurs qui pourront toujours blacklister par la suite ?)
+        auto_list_rooms : true, // (pour afficher les chat rooms de races, notamment)
+        auto_subscribe : true, // (pour épargner un clic aux joueurs qui pourront toujours blacklister par la suite ?)
         bosh_service_url : 'https://conversejs.org/http-bind/', //Obligatoire pour que ça marche
         message_carbons : true, // pour permettre de chatter indifférement et en meme temps dans les outils et dans le site
       	keepalive : true,
@@ -34,8 +33,8 @@ require(['converse'], function (converse) {
         show_controlbox_by_default : false, // Ne pas encombrer l'écran par défaut
         hide_muc_server : true,
         xhr_user_search :true,
-        xhr_user_search_url : '/ws/playerinfo/list-converse.php' //Pour avoir un annuaire des joueurs (ticket #798)
-//        allow_logout (NOn documenté : nécessaire pour le prebinding)
+        xhr_user_search_url : '/ws/playerinfo/list-converse.php', //Pour avoir un annuaire des joueurs (ticket #798)
+        allow_logout: false
     });
 });
 </script>
