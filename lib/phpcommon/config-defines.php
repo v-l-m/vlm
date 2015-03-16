@@ -36,7 +36,6 @@
     define("VMG_SERVER_URL", "/vmg/vmg_vlm.php");
     define("MAP_SERVER_URL", "");
     //define("MAP_SERVER_URL", "http://map.virtual-loup-de-mer.org");
-    define("CHAT_SERVER_URL", "http://chat.virtual-loup-de-mer.org");
     define("GRIB_SERVER_URL", "http://grib.virtual-loup-de-mer.org");
     define("DOC_SERVER_URL", "http://wiki.virtual-loup-de-mer.org/index.php/");
     define("DEV_SERVER_URL", "http://v-l-m.github.io/vlm/");
