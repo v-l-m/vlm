@@ -261,7 +261,9 @@ include_once("scripts/myboat.js");
 <?php
         echo " / " . $usersObj->users->htmlBoattypeLink() . "&nbsp;";
         echo "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
-        echo  "<br />".getLocalizedString("ranking") . " : " . $user_ranking;
+        if ( time() >= $myRace->deptime ) {
+            echo  "<br />".getLocalizedString("ranking") . " : " . $user_ranking;
+        }
 
         // Estimation de la prochaine VAC pour ce bateau là
 
