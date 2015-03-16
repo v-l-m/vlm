@@ -12,7 +12,7 @@ $p = getLoggedPlayerObject();
 $res = get_cgi_var('res', 'site');
 
 $xmppPrebind = new XmppPrebind(VLM_XMPP_HOST, VLM_XMPP_HTTP_BIND, $res, false, false);
-$xmppPrebind->connect($p->playername, $p->password);
+$xmppPrebind->connect($p->getJid(), $p->password);
 $xmppPrebind->auth();
 
 $sessionInfo = $xmppPrebind->getSessionInfo(); // array containing sid, rid and jid
