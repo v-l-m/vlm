@@ -9,7 +9,9 @@ require_once("externals/xmpp-prebind-php/lib/XmppPrebind.php");
 if (!isPlayerLoggedIn() or !VLM_XMPP_ON) die("Not logged");
 $p = getLoggedPlayerObject();
 
-$xmppPrebind = new XmppPrebind(VLM_XMPP_HOST, VLM_XMPP_HTTP_BIND, 'site', false, false);
+$res = get_cgi_var('res', 'site');
+
+$xmppPrebind = new XmppPrebind(VLM_XMPP_HOST, VLM_XMPP_HTTP_BIND, $res, false, false);
 $xmppPrebind->connect($p->playername, $p->password);
 $xmppPrebind->auth();
 

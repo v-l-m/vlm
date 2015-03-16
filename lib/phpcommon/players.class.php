@@ -457,6 +457,16 @@ class players extends baseClass {
         }
         return $boatidlist;
     }
+    
+    //produit le Jid du player
+    function getJid() {
+        /* FIXME : Decision to make for good Jid as in <jid>@vlm_xmpp_host.v-l-m.org
+         * - jid = idp is good because unicity and integrity but could be not very user friendly
+         * - jid = "stripped" playername could be enough, but we need to check
+         * => Using playername for now as a test (but unsafe and not for production)
+         */
+        return $this->playername;
+    }
 
     //is ...
     function isAdmin() {
