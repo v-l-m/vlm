@@ -24,11 +24,8 @@
       <p><?php echo getLocalizedString("sh3"); ?>
       <a href="<?php echo FORUM_SERVER_URL; ?>" target="_forum"><?echo getLocalizedString("forum")?></a>
       <?php echo getLocalizedString("sh4"); ?>
-            <?php
-            echo "<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
-            echo getLocalizedString("tchat");
-            ?>
-      </a></p>
+            <a href="<?echo DOC_SERVER_URL.'Chat/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("tchat"); ?></a> 
+            </p>
     </div>
 <?php
     } else {

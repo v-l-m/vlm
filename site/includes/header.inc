@@ -341,18 +341,7 @@
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
             <a href="<?php echo FORUM_SERVER_URL; ?>" target="_forum"><?echo getLocalizedString("forum")?></a>
-            <?php
-                $ircpseudo = preg_replace("([^a-zA-Z0-9-\[\]\\`^{}])", "-", getLoginName(). "-" . getLoginId());
-                $ircpseudo = preg_replace("(-+)", "-", $ircpseudo);
-                echo "<a href=\"http://widget.mibbit.com/?settings=6039fdaa49195f3d8c578c16d1b3ae63&amp;server=mibbit.epiknet.org&amp;channel=%23vlm&amp;noServerTab=false&amp;autoConnect=true&amp;customprompt=Welcome%20To%20VLM%20Chat&amp;charset=iso-8859-15&amp;nick=" . $ircpseudo . "\" target=\"_blank\" >";
-                echo getLocalizedString("tchat");
-            ?>
-            </a>
-            <?php 
-                echo "(<a href=\"javascript:popUp('" . CHAT_SERVER_URL . "/index.php?username=" . getLoginName() . "(" . getLoginId() . ")". "','chat')\">";
-                echo "old".getLocalizedString("tchat");
-                ?>
-            </a>)
+            <a href="<?echo DOC_SERVER_URL.'Chat/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("tchat"); ?></a> 
         </div> <!-- fin div menucommunicationbox -->
         <div id="docbox" class="leftbox">
             <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki"><?php echo getLocalizedString("doc"); ?></a>
