@@ -465,7 +465,7 @@ class players extends baseClass {
          * - jid = "stripped" playername could be enough, but we need to check
          * => Using playername for now as a test (but unsafe and not for production)
          */
-        return $this->playername;
+        return strtolower($this->playername);
     }
     
     function getFullJid() {
@@ -550,7 +550,7 @@ function htmlPlayername($idplayers, $playername, $jid = null) {
     $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
     $ret .= $idplayers;
     $ret .= "\">".$playername."</a>";
-    if (!is_null($jid)) $ret .= "&nbsp;<img src=\"/images/site/chaticon.png\" onclick=\"converse.chats.open('".$jid."');\" title=\"".getLocalizedString("Click to chat")."\"/>";
+    if (!is_null($jid)) $ret .= "&nbsp;<a href=\"#\" onClick=\"converse.chats.open('".$jid."');\" title=\"".getLocalizedString("Click to chat")."><img src=\"/images/site/chaticon.png\" /></a>";
     return $ret;
 }
 
