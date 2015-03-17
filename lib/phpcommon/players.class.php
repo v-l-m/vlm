@@ -467,6 +467,10 @@ class players extends baseClass {
          */
         return $this->playername;
     }
+    
+    function getFullJid() {
+        return $this->playername.'@'.VLM_XMPP_HOST;
+    }
 
     //is ...
     function isAdmin() {
@@ -479,7 +483,7 @@ class players extends baseClass {
 
     //html renderers
     function htmlPlayername() {
-        return htmlPlayername($this->idplayers, $this->playername);
+        return htmlPlayername($this->idplayers, $this->playername, $this->getFullJid());
     }
 
     function htmlIdplayersPlayername() {
@@ -542,10 +546,11 @@ class players extends baseClass {
 }
 
 //convenient htmlrenderes for inlining (see iterators)
-function htmlPlayername($idplayers, $playername) {
+function htmlPlayername($idplayers, $playername, $jid = null) {
     $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
     $ret .= $idplayers;
     $ret .= "\">".$playername."</a>";
+    if (!is_null($jid)) $ret. = "&nbsp;<img src=\"/images/chaticon.png\" onclick=\"converse.chats.open('".$jid."');\" />";
     return $ret;
 }
 
