@@ -550,7 +550,7 @@ function htmlPlayername($idplayers, $playername, $jid = null) {
     $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
     $ret .= $idplayers;
     $ret .= "\">".$playername."</a>";
-    if (!is_null($jid)) $ret. = "&nbsp;<img src=\"/images/chaticon.png\" onclick=\"converse.chats.open('".$jid."');\" />";
+    if (!is_null($jid)) $ret .= "&nbsp;<img src=\"/images/site/chaticon.png\" onclick=\"converse.chats.open('".$jid."');\" title=\"".getLocalizedString("Click to chat")."\"/>";
     return $ret;
 }
 
