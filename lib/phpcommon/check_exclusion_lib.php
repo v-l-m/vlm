@@ -212,9 +212,8 @@ function GetGCLonAtLat($lon1,$lat1,$lon2,$lat2,$curlon,$lat3, &$lon3)
 	
 function TestExclusionLib()
 {
-	//TestGetTrueCourse();
-  testIntersect1();
-  //testVlmIntersect();
+	//testIntersect1();
+  
 }
 
 function TestVlmIntersect()
@@ -319,6 +318,19 @@ function testIntersect1()
     die;
   }
   
+  $ratio = SegmentsIntersect( -179.9981968585, -45.297374609434, 179.99838190506, -45.298593053817,-40, -48, -35, -45);
+  echo "7 Bug#812 R=".$ratio."\n";
+  if ($ratio != -1 )
+  {
+    die;
+  }
+  $ratio = SegmentsIntersect( 179.9981968585, -45.297374609434, -179.99838190506, -45.298593053817,-40, -48, -35, -45);
+  echo "8 Bug#812 R=".$ratio."\n";
+  if ($ratio != -1 )
+  {
+    die;
+  }
+  
 }
 function LatToMercatorY($lat)
 {
@@ -362,6 +374,23 @@ function SegmentsIntersect($Ax, $Ay, $Bx, $By, $Cx, $Cy, $Dx, $Dy)
 	{
 		return -1;
 	}
+  
+  // If AM Crossing denormalize segments and retry
+  if (abs($Ax-$Bx) > 180)
+  {
+    if ($Ax > 0)
+    {
+      // East-West Crossing
+      $Bx += 360;
+      echo "Pass Antemeridian....Bx:".$Bx."\n";
+    }
+    else
+    {
+      // West-East Crossing
+      $Bx -= 360;
+      echo "Pass Antemeridian....Bx:".$Bx."\n";
+    }
+  }
   
   // convert all latitudes to mercator coordinate space
   $Ay=LatToMercatorY($Ay);
