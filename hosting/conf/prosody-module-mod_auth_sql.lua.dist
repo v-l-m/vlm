@@ -73,7 +73,7 @@ local function getsql(sql, ...)
 end
 
 local function get_password(username)
-	local stmt, err = getsql("SELECT `password` FROM `players` WHERE `playername`=?", username);
+	local stmt, err = getsql("SELECT `password` FROM `players` WHERE `idplayers`=?", username);
 	module:log("debug","Query for %s", username);
 	if stmt then
 		for row in stmt:rows(true) do
@@ -118,7 +118,7 @@ function provider.get_sasl_handler()
 end
 
 function provider.users()
-  local stmt, err = getsql("SELECT `playername` FROM `players`");
+  local stmt, err = getsql("SELECT `idplayers` as username FROM `players`");
   if stmt then
     local next, state = stmt:rows(true)
     return function()
