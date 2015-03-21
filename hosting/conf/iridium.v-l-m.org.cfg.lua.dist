@@ -1,10 +1,8 @@
 -- Section for xmpp on v-l-m.org
 
---loop
-for _, host in ipairs { "v-l-m.org", "virtual-loup-de-mer.org" } do
-  VirtualHost ("iridium." .. host)
+VirtualHost "iridium.v-l-m.org"
     -- VirtualHost "iridium.v-l-m.org"
-    --enabled = false -- Remove this line to enable this host
+    -- enabled = false -- Remove this line to enable this host
   
     -- Assign this host a certificate for TLS, otherwise it would use the one
     -- set in the global section (if any).
@@ -16,7 +14,7 @@ for _, host in ipairs { "v-l-m.org", "virtual-loup-de-mer.org" } do
       }
 
 -- Set up a MUC (multi-user chat) room server on conference.example.com:
-Component "vhf." .. host "muc"
+Component "vhf.iridium.v-l-m.org" "muc"
+Component "search.iridium.v-l-m.org" "vjud"
 
-end
---end vhost loop
+authentification = "sql";
