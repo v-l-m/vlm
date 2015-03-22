@@ -14,7 +14,7 @@
     $result = $ws->queryRead($query);
     if ($result)  {
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $row['jid'] = $row['idp'].'@'.VLM_XMPP_HOST;
+            $row['jid'] = $row['playername'].'@'.VLM_XMPP_HOST;
             $ws->answer['list'][] = $row;
         }
     }

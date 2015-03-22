@@ -12,7 +12,7 @@ $ws->answer['profile'] = Array();
 $ws->answer['profile']['idp'] = intval($player->idplayers);
 $ws->answer['profile']['playername'] = $player->playername;
 $ws->answer['profile']['admin'] = $player->isAdmin();
-$ws->answer['profile']['jid'] = $player->getFullJid();
+$ws->answer['profile']['jid'] = $player->getJid();
 
 $ws->reply_with_success();
 

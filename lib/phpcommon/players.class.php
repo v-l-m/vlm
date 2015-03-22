@@ -465,7 +465,7 @@ class players extends baseClass {
          * - jid = "stripped" playername could be enough, but we need to check
          * => Using playername for now as a test (but unsafe and not for production)
          */
-        return $this->idplayers;
+        return strtolower($this->playername);
     }
     
     function getFullJid() {

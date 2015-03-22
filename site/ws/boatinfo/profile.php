@@ -26,7 +26,6 @@
 
     if ($ownerObj != NULL) {
       $info['OWN'] = $ownerObj->playername;
-      $info['JID'] = $ownerObj->getFullJid()
     }   
   
     $ws->answer['profile'] = $info;
