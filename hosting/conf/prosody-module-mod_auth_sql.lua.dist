@@ -87,7 +87,7 @@ provider = { name = "sql" };
 
 function provider.test_password(username, password)
   module:log("debug", "Provider:test_password : Username %s Password %s Hash %s ", username, password, sha256(password, true));
-	return password and (get_password(username) = password or get_password(username) == sha256(password, true));
+	return password and (get_password(username) == password or get_password(username) == sha256(password, true));
 end
 function provider.get_password(username)
   module:log("debug", "Provider:get_password : Username %", username);
