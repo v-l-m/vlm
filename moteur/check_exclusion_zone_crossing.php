@@ -30,11 +30,11 @@
 			$Lat2 = $t2;
 		}
 		
-    echo " ".$lonAvant ." ". $latAvant ." " .$lonApres . " " .$latApres ." ".$Lon1. " " .$Lat1." ".$Lon2." ".$Lat2."\n";
     $Ratio=SegmentsIntersect($lonAvant/1000,$latAvant/1000,$lonApres/1000,$latApres/1000,$Lon1,$Lat1,$Lon2,$Lat2);
 		if ($Ratio != -1)
 		{
-			echo "Intersection ratio ".$Ratio."\n";
+			echo " ".$lonAvant ." ". $latAvant ." " .$lonApres . " " .$latApres ." ".$Lon1. " " .$Lat1." ".$Lon2." ".$Lat2."\n";
+      echo "Intersection ratio ".$Ratio."\n";
       $tc = GetTrueCourse($lonAvant/1000, $latAvant/1000,$lonApres/1000,$latApres/1000);
 		
       $IntLat = new doublep();
