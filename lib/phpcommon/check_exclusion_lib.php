@@ -213,7 +213,6 @@ function GetGCLonAtLat($lon1,$lat1,$lon2,$lat2,$curlon,$lat3, &$lon3)
 function TestExclusionLib()
 {
 	//testIntersect1();
-  
 }
 
 function TestVlmIntersect()
@@ -324,6 +323,7 @@ function testIntersect1()
   {
     die;
   }
+  
   $ratio = SegmentsIntersect( 179.9981968585, -45.297374609434, -179.99838190506, -45.298593053817,-40, -48, -35, -45);
   echo "8 Bug#812 R=".$ratio."\n";
   if ($ratio != -1 )
@@ -331,6 +331,19 @@ function testIntersect1()
     die;
   }
   
+  $ratio = SegmentsIntersect( 179.9981968585, -45.297374609434, -179.99838190506, -45.298593053817,-180, -45.298, -150, -45.298);
+  echo "9 Bug#812 R=".$ratio."\n";
+  if ($ratio != -1 )
+  {
+    die;
+  }
+  
+  $ratio = SegmentsIntersect( -179.9981968585, -45.297374609434, 179.99838190506, -45.298593053817,-180, -45.298, -150, -45.298);
+  echo "9 Bug#812 R=".$ratio."\n";
+  if ($ratio == -1 )
+  {
+    die;
+  }
 }
 function LatToMercatorY($lat)
 {
@@ -366,7 +379,8 @@ function MercatorYToLat($lat)
 //  Returns -1 if there is no determinable intersection point, in which case Ratio will
 //  be unmodified.
 //  Function is unit Agnostic, as long as all coordinates are expressed in the same unit system
-
+//  AM Handling feature assumes that AB is boat segment and can cross AM, while CD is NSZ and
+//  does not cross
 function SegmentsIntersect($Ax, $Ay, $Bx, $By, $Cx, $Cy, $Dx, $Dy)
 {
 	//  Fail if either line is undefined.
@@ -375,21 +389,46 @@ function SegmentsIntersect($Ax, $Ay, $Bx, $By, $Cx, $Cy, $Dx, $Dy)
 		return -1;
 	}
   
-  // If AM Crossing denormalize segments and retry
+  // If AM Crossing denormalize segments, split, normalize, and try each segment
   if (abs($Ax-$Bx) > 180)
   {
     if ($Ax > 0)
     {
-      // East-West Crossing
-      $Bx += 360;
-      echo "Pass Antemeridian....Bx:".$Bx."\n";
+      $NormOffset = +360;
+      $AM1 = +180;
+      $AM2 = -180;
     }
     else
     {
-      // West-East Crossing
-      $Bx -= 360;
-      echo "Pass Antemeridian....Bx:".$Bx."\n";
+      $NormOffset = -360;
+      $AM1 = -180;
+      $AM2 = 180;
     }
+    
+      // Convert to mercator space
+      $P1x = $Ax;
+      $P1y = LatToMercatorY($Ay);
+      $P2x = $Bx + $NormOffset;
+      $P2y = LatToMercatorY($By);
+      
+      // Compute AM intersect in coords space
+      $P3x = $AM1;
+      $P3y = MercatorYToLat($P1y + ($P2y - $P1y) * ($P3x - $P1x) / ($P2x - $P1x));
+      
+      //echo $Ax,$Ay, $P3x, $P3y, $Cx, $Cy, $Dx, $Dy, "\n";
+      $R1 = SegmentsIntersect($Ax,$Ay, $P3x, $P3y, $Cx, $Cy, $Dx, $Dy);
+      if ($R1 != -1)
+      {
+        return $R1;
+      }
+      else
+      {
+        $P3x = $AM2;
+        $R2 = SegmentsIntersect($P3x, $P3y,$Bx, $By, $Cx, $Cy, $Dx, $Dy);
+        //echo $P3x, $P3y,$Bx, $By, $Cx, $Cy, $Dx, $Dy,"\n";
+        return $R2;
+      }
+      
   }
   
   // convert all latitudes to mercator coordinate space
