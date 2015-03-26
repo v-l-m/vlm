@@ -1,5 +1,5 @@
 /**
- * $Id: winds.c,v 1.34 2011-07-05 13:10:34 ylafon Exp $
+ * $Id: winds.c,v 1.35 2015/03/04 16:52:13 ylafon Exp $
  *
  * (c) 2008-2010 by Yves Lafon
  *
@@ -183,10 +183,13 @@ wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
-#ifdef GRIB_RESOLUTION_0_5
+#if defined(GRIB_RESOLUTION_0_25)
+  d_long = d_long*4.0;
+  d_lat  = d_lat*4.0;
+#elif defined(GRIB_RESOLUTION_0_5)
   d_long = d_long*2.0;
   d_lat = d_lat*2.0;
-#endif /* GRID_RESOLUTION_0_5 */
+#endif /* GRID_RESOLUTION_0_25 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
 
@@ -401,10 +404,13 @@ wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
-#ifdef GRIB_RESOLUTION_0_5
+#if defined(GRIB_RESOLUTION_0_25)
+  d_long = d_long*4.0;
+  d_lat  = d_lat*4.0;
+#elif defined(GRIB_RESOLUTION_0_5)
   d_long = d_long*2.0;
   d_lat = d_lat*2.0;
-#endif /* GRID_RESOLUTION_0_5 */
+#endif /* GRID_RESOLUTION_0_25 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
 
@@ -645,10 +651,13 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
-#ifdef GRIB_RESOLUTION_0_5
+#if defined(GRIB_RESOLUTION_0_25)
+  d_long = d_long*4.0;
+  d_lat  = d_lat*4.0;
+#elif defined(GRIB_RESOLUTION_0_5)
   d_long = d_long*2.0;
   d_lat = d_lat*2.0;
-#endif /* GRID_RESOLUTION_0_5 */
+#endif /* GRID_RESOLUTION_0_25 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
 
@@ -931,10 +940,13 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
-#ifdef GRIB_RESOLUTION_0_5
+#if defined(GRIB_RESOLUTION_0_25)
+  d_long = d_long*4.0;
+  d_lat  = d_lat*4.0;
+#elif defined(GRIB_RESOLUTION_0_5)
   d_long = d_long*2.0;
   d_lat = d_lat*2.0;
-#endif /* GRID_RESOLUTION_0_5 */
+#endif /* GRID_RESOLUTION_0_25 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
 

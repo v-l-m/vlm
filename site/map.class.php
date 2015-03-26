@@ -30,8 +30,8 @@ class map
     $proj,
     $windtext,
     $text, $tracks,
-    $flag_E_W,
-    $am_on_map,
+    $flag_E_W,    
+    $am_on_map,   // Flag thet AM is visible on the map
     $wp_only,
     $drawtextwp,
     $maille,
@@ -617,16 +617,21 @@ class map
       
       //On ajoute les zones d'exclusions
       $index = 0;
-      
+        
       foreach  ($this->exclusionZones->exclusions() as $Exclusion)
       {
         $index ++ ;
         $StartSeg=$Exclusion[0];
         $EndSeg=$Exclusion[1];
-        if ( $this->flag_E_W == true  && ($StartSeg[1] <=0) ||($EndSeg[1] <= 0) ) 
+        
+        $y1 = $this->projLat($StartSeg[0]*1000);
+        $y2 = $this->projLat($EndSeg[0]*1000);
+        if ( $this->east-$this->west < 0 )
         {
+          // Coords got shifted by 360° since AM is on map (the case -360° is not handled here)
           $x1=$this->projLong(360000+$StartSeg[1]*1000);
           $x2=$this->projLong(360000+$EndSeg[1]*1000);
+          imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
         }
         else
         {
@@ -634,16 +639,10 @@ class map
           $x2=$this->projLong($EndSeg[1]*1000);
         }
         
-        
-        $y1 = $this->projLat($StartSeg[0]*1000);
-        $y2 = $this->projLat($EndSeg[0]*1000);
-        
-        
-        //imagestring( $this->mapImage, $font+2, 40 , 50+15 * $index , $x1." ".$y1."->".$x2." ".$y2 , $this->colorBlack);
+        //imagestring( $this->mapImage, $font+2, 40 , 50+15 * $index , $x1." ".$y1."->".$x2." ".$y2." ".$this->flag_E_W , $this->colorBlack);
         imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
       }
         
-      
       // Puis on supprime le tableau
       unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
   }

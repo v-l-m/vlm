@@ -1,5 +1,5 @@
 /**
- * $Id: grib.c,v 1.30 2011-07-05 13:10:33 ylafon Exp $
+ * $Id: grib.c,v 1.31 2015/03/04 16:52:13 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -447,34 +447,36 @@ winds **read_gribs(int *nb_prevs) {
     } 
     /* fill depending on grid type */
     if (gribtype == 34) { /* VGRD */
-#ifdef GRIB_RESOLUTION_1
-      for (y=0; y<ny; y+=2) {
-	for (x=0; x<nx; x+=2) {
-	  winds_t->wind_v[x/2][180 - y/2] = (double) array[y*nx+x];
+#if defined(GRIB_DOWNGRADE)
+      for (y=0; y<ny; y+=GRIB_DOWNGRADE) {
+	for (x=0; x<nx; x+=GRIB_DOWNGRADE) {
+	  winds_t->wind_v[x/GRIB_DOWNGRADE][WIND_GRID_LAT-1-y/GRIB_DOWNGRADE] =
+	                                                 (double) array[y*nx+x];
 	}
       }
 #else
       for (y=0; y<ny; y++) {
 	for (x=0; x<nx; x++) {
-	  winds_t->wind_v[x][360 - y] = (double) array[y*nx+x];
+	  winds_t->wind_v[x][WIND_GRID_LAT - 1 - y] = (double) array[y*nx+x];
 	}
       }
-#endif /* GRIB_RESOLUTION_1 */
+#endif /* defined(GRIB_DOWNGRADE) */
       winds_t = NULL;
     } else if (gribtype == 33) { /* UGRD */
-#ifdef GRIB_RESOLUTION_1
-      for (y=0; y<ny; y+=2) {	
-	for (x=0; x<nx; x+=2) {
-	  winds_t->wind_u[x/2][180 - y/2] = (double) array[y*nx+x];
+#if defined(GRIB_DOWNGRADE)
+      for (y=0; y<ny; y+=GRIB_DOWNGRADE) {
+	for (x=0; x<nx; x+=GRIB_DOWNGRADE) {
+	  winds_t->wind_u[x/GRIB_DOWNGRADE][WIND_GRID_LAT-1-y/GRIB_DOWNGRADE] =
+	                                                 (double) array[y*nx+x];
 	}
       }
-#else /* should we check we match GRIB_REOLUTION_0_5 ? */
+#else 
       for (y=0; y<ny; y++) {	
 	for (x=0; x<nx; x++) {
-	  winds_t->wind_u[x][360 - y] = (double) array[y*nx+x];
+	  winds_t->wind_u[x][WIND_GRID_LAT - 1 - y] = (double) array[y*nx+x];
 	}
       }
-#endif /* GRIB_RESOLUTION_1 */
+#endif /* defined(GRIB_DOWNGRADE) */
     } else {
       in_error = 1;
       break;

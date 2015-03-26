@@ -1,5 +1,5 @@
 /**
- * $Id: defs.h,v 1.30 2010-12-09 10:47:33 ylafon Exp $
+ * $Id: defs.h,v 1.31 2015/03/04 16:52:13 ylafon Exp $
  *
  * (c) 2008 by Yves Lafon
  *
@@ -87,8 +87,14 @@
 #  define GRIB_RESOLUTION_0_5
 #  define DEFAULT_INTERPOLATION_HYBRID
 #  define VLM_WIND_INTERPOLATION "Hybrid"
+# elif  VLM_MINOR_VERSION == 12
+#  define GRIB_SOURCE_RESOLUTION 25
+#  define GRIB_RESOLUTION_0_25
+#  define DEFAULT_INTERPOLATION_HYBRID
+#  define VLM_WIND_INTERPOLATION "Hybrid"
 # else /* default */
-#  define GRIB_RESOLUTION_0_5
+#  define GRIB_SOURCE_RESOLUTION 25
+#  define GRIB_RESOLUTION_0_25
 #  define DEFAULT_INTERPOLATION_HYBRID
 #  define VLM_WIND_INTERPOLATION "Hybrid"
 # endif /* VLM_MINOR_VERSION */
@@ -96,16 +102,46 @@
 
 /* for now, no default when major != 0 */
 
-#ifdef GRIB_RESOLUTION_1
-# define WIND_GRID_LONG   360
-# define WIND_GRID_LAT    181
-#else
-# define WIND_GRID_LONG   720
-# define WIND_GRID_LAT    361
+#if !defined(GRIB_RESOLUTION_1)
+# if !defined(GRIB_RESOLUTION_0_25)
 # define GRIB_RESOLUTION_0_5
-#endif /* GRIB_RESOLUTION_1 */
+# endif /* !defined(GRIB_RESOLUTION_0_25) */
+#endif /* !defined(GRIB_RESOLUTION_1) */
 
-#define USE_GRIB_UPDATE_TIME 1
+/*
+  For now, Grib sources are 0.5
+  when the source will be 0.25, things 
+  will need an update
+*/
+
+#if !defined(GRIB_SOURCE_RESOLUTION)
+#  define GRIB_SOURCE_RESOLUTION 50
+#endif /* !defined(GRIB_SOURCE_RESOLUTION) */
+
+#if GRIB_SOURCE_RESOLUTION == 50
+#  if defined(GRIB_RESOLUTION_1)
+#    define GRIB_DOWNGRADE    2
+#  elif defined(GRIB_RESOLUTION_0_25)
+  /* THIS SHOULD NEVER HAPPEN!!! */
+#  endif /* GRIB_RESOLUTION_1 */
+#elif GRIB_SOURCE_RESOLUTION == 25
+#  if defined(GRIB_RESOLUTION_1)
+#    define GRIB_DOWNGRADE    4
+#  elif defined(GRIB_RESOLUTION_0_5)
+#    define GRIB_DOWNGRADE    2
+#  endif /* GRIB_RESOLUTION_1 */
+#endif /* GRIB_SOURCE_RESOLUTION */
+
+#if defined(GRIB_RESOLUTION_1)
+# define WIND_GRID_LONG  360
+# define WIND_GRID_LAT   181
+#elif defined(GRIB_RESOLUTION_0_5)
+# define WIND_GRID_LONG  720
+# define WIND_GRID_LAT   361
+#elif defined(GRIB_RESOLUTION_0_25)
+# define WIND_GRID_LONG 1440
+# define WIND_GRID_LAT   721
+#endif /* GRIB_RESOLUTION_1 */
 
 /* 1 land, 2 lake, 3 island_in_lake, 4 pond_in_island_in_lake */
 #define GSHHS_MAX_DETAILS 3
@@ -122,8 +158,8 @@
  * the boat is not a single pixel, it makes sense :)
  */
 #ifdef SAFE_LINE_CHECK
-#  define INTER_MAX_LIMIT 1.0000001
-#  define INTER_MIN_LIMIT -0.0000001
+#  define INTER_MAX_LIMIT 1.000000001
+#  define INTER_MIN_LIMIT -0.000000001
 #else
 #  define INTER_MAX_LIMIT 1.0
 #  define INTER_MIN_LIMIT 0.0
