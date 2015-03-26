@@ -20,6 +20,7 @@
 require(['converse'], function (converse) {
     converse.initialize({
         i18n: locales['<?echo getCurrentLang();?>'], // Refer to ./locale/locales.js to see which locales are supported
+        jid: '<?echo getLoggedPlayerObject()->getFullJid(); ?>',
         roster_groups: true,
         allow_otr : false, //pour éviter les problèmes inter-clients ?
         allow_registration : false, // (pour mémoire)
