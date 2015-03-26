@@ -125,19 +125,6 @@
         return this;
     };
 
-    var playNotification = function () {
-        var audio;
-        if (converse.play_sounds && typeof Audio !== "undefined"){
-            audio = new Audio("sounds/msg_received.ogg");
-            if (audio.canPlayType('/audio/ogg')) {
-                audio.play();
-            } else {
-                audio = new Audio("/sounds/msg_received.mp3");
-                audio.play();
-                }
-            }
-    };
-
     var converse = {
         plugins: {},
         templates: templates,
@@ -359,6 +346,19 @@
 
         // Module-level functions
         // ----------------------
+        this.playNotification = function () {
+            var audio;
+            if (converse.play_sounds && typeof Audio !== "undefined"){
+                audio = new Audio("sounds/msg_received.ogg");
+                if (audio.canPlayType('/audio/ogg')) {
+                    audio.play();
+                } else {
+                    audio = new Audio("/sounds/msg_received.mp3");
+                    audio.play();
+                    }
+                }
+        };
+
         this.giveFeedback = function (message, klass) {
             $('.conn-feedback').each(function (idx, el) {
                 var $el = $(el);
@@ -431,7 +431,6 @@
 
         this.reconnect = function () {
             converse.giveFeedback(__('Reconnecting'), 'error');
-            converse.emit('reconnect');
             if (!converse.prebind) {
                 this.connection.connect(
                     this.connection.jid,
@@ -443,6 +442,10 @@
                     this.connection.hold,
                     this.connection.route
                 );
+            } else if (converse.prebind_url) {
+                this.clearSession();
+                this._tearDown();
+                this.startNewBOSHSession();
             }
         };
 
@@ -479,6 +482,7 @@
                 converse.giveFeedback(__('Authentication Failed'), 'error');
                 converse.connection.disconnect(__('Authentication Failed'));
             } else if (status === Strophe.Status.DISCONNECTING) {
+                // FIXME: what about prebind?
                 if (!converse.connection.connected) {
                     converse.renderLoginPanel();
                 }
@@ -554,8 +558,8 @@
         this.clearSession = function () {
             this.roster.browserStorage._clear();
             this.session.browserStorage._clear();
-            // XXX: this should perhaps go into the beforeunload handler
-            converse.chatboxes.get('controlbox').save({'connected': false});
+            var controlbox = converse.chatboxes.get('controlbox');
+            controlbox.save({'connected': false});
         };
 
         this.setSession = function () {
@@ -1760,6 +1764,7 @@
                     this.$el.html(
                         converse.templates.room_panel({
                             'server_input_type': converse.hide_muc_server && 'hidden' || 'text',
+                            'server_label_global_attr': converse.hide_muc_server && ' hidden' || '',
                             'label_room_name': __('Room name'),
                             'label_nickname': __('Nickname'),
                             'label_server': __('Server'),
@@ -2972,7 +2977,7 @@
                 }
                 this.model.createMessage($message);
                 if (!delayed && sender !== this.model.get('nick') && (new RegExp("\\b"+this.model.get('nick')+"\\b")).test(body)) {
-                    playNotification();
+                    converse.playNotification();
                 }
                 if (sender !== this.model.get('nick')) {
                     // We only emit an event if it's not our own message
@@ -3142,7 +3147,7 @@
                     return true; // We already have this message stored.
                 }
                 if (!this.isOnlyChatStateNotification($message) && from !== converse.bare_jid) {
-                    playNotification();
+                    converse.playNotification();
                 }
                 chatbox.receiveMessage($message);
                 converse.roster.addResource(contact_jid, resource);
@@ -5289,20 +5294,32 @@
             }
         };
 
+        this.startNewBOSHSession = function () {
+            $.ajax({
+                url:  this.prebind_url,
+                type: 'GET',
+                success: function (response) {
+                    this.session.save({rid: response.rid});
+                    this.connection.attach(
+                            response.jid,
+                            response.sid,
+                            response.rid,
+                            this.onConnect
+                    );
+                }.bind(this),
+                error: function (response) {
+                    delete this.connection;
+                    this.emit('noResumeableSession');
+                }.bind(this)
+            });
+        };
+
         this.initConnection = function () {
             var rid, sid, jid;
             if (this.connection && this.connection.connected) {
                 this.setUpXMLLogging();
                 this.onConnected();
             } else {
-                // XXX: it's not yet clear what the order of preference should
-                // be between RID and SID received via the initialize method or
-                // those received from sessionStorage.
-                //
-                // What do you we if we receive values from both avenues?
-                //
-                // Also, what do we do when the keepalive session values are
-                // expired? Do we try to fall back?
                 if (!this.bosh_service_url && ! this.websocket_url) {
                     throw("Error: you must supply a value for the bosh_service_url or websocket_url");
                 }
@@ -5315,46 +5332,38 @@
                 }
                 this.setUpXMLLogging();
 
-                if (this.prebind) {
-                    if (this.jid && this.sid && this.rid) {
-                        this.connection.attach(this.jid, this.sid, this.rid, this.onConnect);
-                    }
-                    if (!this.keepalive) {
-                        throw("If you use prebind and don't use keepalive, "+
-                              "then you MUST supply JID, RID and SID values");
-                    }
-                }
                 if (this.keepalive) {
                     rid = this.session.get('rid');
                     sid = this.session.get('sid');
                     jid = this.session.get('jid');
-                    if (rid && jid && sid) {
-                        // The RID needs to be increased with each request.
-                        this.session.save({rid: rid});
-                        this.connection.attach(jid, sid, rid, this.onConnect);
-                    } else if (this.prebind) {
-                        if (this.prebind_url) {
-                            $.ajax({
-                                url:  this.prebind_url,
-                                type: 'GET',
-                                success: function (response) {
-                                    this.session.save({rid: rid});
-                                    this.connection.attach(
-                                            response.jid,
-                                            response.sid,
-                                            response.rid,
-                                            this.onConnect
-                                    );
-                                }.bind(this),
-                                error: function (response) {
-                                    delete this.connection;
-                                    this.emit('noResumeableSession');
-                                }.bind(this)
-                            });
+                    if (this.prebind) {
+                        if (!this.jid) {
+                            throw("When using 'keepalive' with 'prebind, you must supply the JID of the current user.");
+                        }
+                        if (rid && sid && jid && Strophe.getBareJidFromJid(jid) === Strophe.getBareJidFromJid(this.jid)) {
+                            this.session.save({rid: rid}); // The RID needs to be increased with each request.
+                            this.connection.attach(jid, sid, rid, this.onConnect);
+                        } else if (this.prebind_url) {
+                            this.startNewBOSHSession();
                         } else {
                             delete this.connection;
                             this.emit('noResumeableSession');
                         }
+                    } else {
+                        // Non-prebind case.
+                        if (rid && sid && jid) {
+                            this.session.save({rid: rid}); // The RID needs to be increased with each request.
+                            this.connection.attach(jid, sid, rid, this.onConnect);
+                        }
+                    }
+
+                // Prebind without keepalive
+                } else if (this.prebind) {
+                    if (this.jid && this.sid && this.rid) {
+                        this.connection.attach(this.jid, this.sid, this.rid, this.onConnect);
+                    } else {
+                        throw("If you use prebind and don't use keepalive, "+
+                            "then you MUST supply JID, RID and SID values");
                     }
                 }
             }
@@ -5433,6 +5442,14 @@
     return {
         'initialize': function (settings, callback) {
             converse.initialize(settings, callback);
+        },
+        'disconnect': function () {
+              converse.connection.disconnect();
+        },
+        'account': {
+            'logout': function () {
+                converse.logOut();
+            },
         },
         'settings': {
             'get': function (key) {

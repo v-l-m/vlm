@@ -162,6 +162,17 @@ Default: ``e.g. conversejs.org``
 
 The placeholder text shown in the domain input on the registration form.
 
+jid
+---
+
+The Jabber ID or "JID" of the current user. The JID uniquely identifies a user
+on the XMPP network. It looks like an email address, but it's used for instant
+messaging instead.
+
+This value needs to be provided when using the :ref:`keepalive` option together
+with `prebind`_.
+
+
 .. _`keepalive`:
 
 keepalive
@@ -171,6 +182,12 @@ Default:    ``true``
 
 Determines whether Converse.js will maintain the chat session across page
 loads.
+
+This setting should also be used in conjunction with :ref:`prebind`.
+
+When using ``keepalive`` and ``prebind``, you will have to provide the `jid`_
+of the current user to ensure that a cached session is only resumed if it
+belongs to the current user.
 
 See also:
 
@@ -310,12 +327,13 @@ There are two complementary configuration settings to ``prebind``.
 They are :ref:`keepalive` and :ref:`prebind_url`.
 
 ``keepalive`` can be used keep the session alive without having to pass in
-new tokens to ``converse.initialize`` every time you reload the page. This
-removes the need to set up a new BOSH session every time a page loads.
+new RID and SID tokens to ``converse.initialize`` every time you reload the page.
+This removes the need to set up a new BOSH session every time a page loads.
+You do however still need to supply the user's JID so that converse.js can be
+sure that the session it's resuming is for the right user.
 
 ``prebind_url`` lets you specify a URL which converse.js will call whenever a
 new BOSH session needs to be set up.
-
 
 Here's an example of converse.js being initialized with these three options:
 
@@ -324,6 +342,7 @@ Here's an example of converse.js being initialized with these three options:
     converse.initialize({
         bosh_service_url: 'https://bind.example.com',
         keepalive: true,
+        jid: me@example.com,
         prebind: true,
         prebind_url: 'http://example.com/api/prebind',
         allow_logout: false
@@ -332,8 +351,9 @@ Here's an example of converse.js being initialized with these three options:
 .. note:: The ``prebind_url`` configuration setting is new in version 0.9 and
     simplifies the code needed to set up and maintain prebinded sessions.
 
-    When using ``prebind_url`` and ``keepalive``, you don't need to manually pass in
-    the RID, SID and JID tokens anymore.
+    When using ``prebind``, ``prebind_url`` and ``keepalive``, you don't need
+    to manually pass in the RID, SID tokens anymore, but you still need to
+    provide the JID.
 
 
 .. _`prebind_url`:
