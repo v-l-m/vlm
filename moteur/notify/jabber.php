@@ -90,7 +90,7 @@
             // join a channel
             $channel = new Presence;
             $channel->setTo(VLM_NOTIFY_JABBER_MAIN);
-            $channel->setNickName('Postman'); //FIXME : Add servername ?
+            $channel->setNickName('Postman['.SERVER_NAME.']');
             $this->client->send($channel);
         }
         
