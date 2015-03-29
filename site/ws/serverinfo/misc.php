@@ -9,6 +9,7 @@
       $info['time'] = time();
       $info['servername'] = SERVER_NAME;
       $info['xmppserver'] = VLM_XMPP_HOST;
+      $info['main_muc_jid'] = VLM_NOTIFY_JABBER_MAIN;
       $info['warning'] = "Do not rely on this ws without asking to the dev mailing list";
       
       $versiontxt = "";
