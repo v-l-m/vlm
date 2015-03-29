@@ -79,6 +79,7 @@
             echo "<h2>".getLocalizedString('playername') . ' : ' . $player->htmlPlayername().'</h2>';
             echo "<ul>";
             echo "<li>".getLocalizedString("idplayer") . ' : @' . $idplayers .'</li>';
+            echo "<li>".getLocalizedString("jid") . ' : ' . $player->getFullJid() .'</li>';
             echo "</ul>";
 
             echo "<hr />"; //style=\"clear:both; display:block;\"/>";
