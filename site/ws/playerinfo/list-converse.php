@@ -13,11 +13,11 @@
     $ws->answer['list'] = Array();
 
     //FIXME : Strip space or change jid base name
-    $query = sprintf("SELECT Concat(playername, ' @', idplayers) AS fullname, playername AS id FROM players WHERE UPPER(playername) LIKE '%%%s%%' ORDER BY playername LIMIT 20", strtoupper($q));
+    $query = sprintf("SELECT idplayers, playername FROM players WHERE UPPER(playername) LIKE '%%%s%%' ORDER BY playername LIMIT 20", strtoupper($q));
     $result = $ws->queryRead($query);
     if ($result)  {
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $ws->answer['list'][] = $row;
+            $ws->answer['list'][] = Array('id' => makeJid($row['playername']), 'fullname' => $row['playername'].' @'.$row['idplayers']);
         }
     }
 

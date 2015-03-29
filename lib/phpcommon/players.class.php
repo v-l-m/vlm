@@ -465,11 +465,11 @@ class players extends baseClass {
          * - jid = "stripped" playername could be enough, but we need to check
          * => Using playername for now as a test (but unsafe and not for production)
          */
-        return strtolower($this->playername);
+        return makeJid($this->playername);
     }
     
     function getFullJid() {
-        return $this->getJid().'@'.VLM_XMPP_HOST;
+        return makeFullJid($this->playername);
     }
 
     //is ...
@@ -543,6 +543,15 @@ class players extends baseClass {
         return $this->htmlBoatlist($list);
     }
 
+}
+
+function makeJid($playername) {
+    //FIXME : should normalize more
+    return strtolower($playername);
+}
+
+function makeFullJid($playername) {
+    return makeJid($playername).'@'.strtolower(VLM_XMPP_HOST);
 }
 
 //convenient htmlrenderes for inlining (see iterators)
