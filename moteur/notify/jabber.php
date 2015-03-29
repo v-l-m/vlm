@@ -73,9 +73,8 @@
             'username' => VLM_NOTIFY_JABBER_USER,
             'password' => VLM_NOTIFY_JABBER_PASS
         );
-
-        function __construct() {
-            parent::__construct();
+        
+        function connect() {
             $this->logger = new Logger('xmpp');
             $this->logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
             $address = $this->config['connectionType']."://".$this->config['hostname'].':'.$this->config['port'];
@@ -92,11 +91,12 @@
             $channel = new Presence;
             $channel->setTo(VLM_NOTIFY_JABBER_MAIN);
             $channel->setNickName('Postman'); //FIXME : Add servername ?
-            $client->send($channel);
-
+            $this->client->send($channel);
         }
         
+        
         function postone($m) {
+            if (is_null($this->logger)) $this->connect();
             if ($m['url'] != '') {
                 $status = sprintf("%s - %s", $m['summary'], $m['url']);
             } else {
