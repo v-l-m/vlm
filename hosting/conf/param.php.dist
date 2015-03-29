@@ -48,14 +48,18 @@ define("VLM_PROXY_PASS", "password");
 
 define("VLM_NOTIFY_FACEBOOK_ACCESSTOKEN", "hashed_string");
 define("VLM_NOTIFY_MAIL", "mailling@url.com");
-define("VLM_NOTIFY_TWITTER_CONSUMER_KEY", "89tblGxZUVg99efAaBalA");
-define("VLM_NOTIFY_TWITTER_CONSUMER_SECRET", "4D94eYI31m8klASQI3Qv3SZjmMUklPP463z0RMt6U");
-define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN", "288991946-jcuGdQq6449Lo3hb208MPKt1joHwITV1Jce9u5Gm");
-define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "CG6yuNfdx4OgwIh9REKCz6lqk8qgJYI1nwHqJRFZgE");
+define("VLM_NOTIFY_TWITTER_CONSUMER_KEY", "xxx");
+define("VLM_NOTIFY_TWITTER_CONSUMER_SECRET", "xxx");
+define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN", "xxx");
+define("VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET", "xxx");
 define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,irc,mail");
 
 // WS Caching defaults
 //define("WS_MIN_MAXAGE", 0); //Use with caution, as it may cause delays on the tool side
 //define("WS_NSZ_CACHE_DURATION",24*3600); //reduce for dev purpose
+
+//Jabber chat is off by default, and default are for production
+//define_if_not("VLM_XMPP_ON", true);
+//define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://v-l-m.org/http-bind");
 
 ?>

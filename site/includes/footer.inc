@@ -26,7 +26,7 @@ require(['converse'], function (converse) {
         allow_registration : false, // (pour mémoire)
         auto_list_rooms : true, // (pour afficher les chat rooms de races, notamment)
         auto_subscribe : true, // (pour épargner un clic aux joueurs qui pourront toujours blacklister par la suite ?)
-        bosh_service_url : '<?echo VLM_XMPP_HTTP_BIND ?>', //Obligatoire pour que ça marche
+        bosh_service_url : '<?echo VLM_XMPP_HTTP_BIND_URL ?>', //Obligatoire pour que ça marche
         message_carbons : true, // pour permettre de chatter indifférement et en meme temps dans les outils et dans le site
       	keepalive : true,
         prebind : true,

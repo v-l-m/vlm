@@ -276,9 +276,9 @@
     define_if_not("WS_PLAYER_LIST_CACHE_DURATION", 3600);
 
     //Jabber
-    define_if_not("VLM_XMPP_ON", true);
-    define_if_not("VLM_XMPP_HOST", "ir.testing.v-l-m.org");
-    define_if_not("VLM_XMPP_HTTP_BIND", "https://conversejs.org/http-bind/"); //"http://ir.testing.v-l-m.org:5280/http-bind/");
-
+    define_if_not("VLM_XMPP_ON", false);
+    define_if_not("VLM_XMPP_HOST", "iridium.v-l-m.org");
+    define_if_not("VLM_XMPP_HTTP_BIND_PATH", "/http-bind/");
+    define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://"._SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
 
 ?>
