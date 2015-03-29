@@ -280,5 +280,8 @@
     define_if_not("VLM_XMPP_HOST", "iridium.v-l-m.org");
     define_if_not("VLM_XMPP_HTTP_BIND_PATH", "/http-bind/");
     define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://"._SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
-
+    define_if_not("VLM_XMPP_CHAT_JID_MAIN", "capitainerie@vhf.iridium.v-l-m.org");
+    define_if_not("VLM_XMPP_CHAT_JID_ADMINS", "comite@vhf.iridium.v-l-m.org");
+    define_if_not("VLM_XMPP_POSTMAN_USER", "arsenal");
+    define_if_not("VLM_XMPP_POSTMAN_PASS", "pass");
 ?>
