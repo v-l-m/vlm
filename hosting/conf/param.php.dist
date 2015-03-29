@@ -61,7 +61,7 @@ define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,irc,mail");
 //Jabber chat is off by default, and default are for production
 //define_if_not("VLM_XMPP_ON", true);
 //define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://v-l-m.org/http-bind");
-//define_if_not("VLM_NOTIFY_JABBER_USER", "arsenal@iridium.v-l-m.org");
+//define_if_not("VLM_NOTIFY_JABBER_USER", "vlm");
 //define_if_not("VLM_NOTIFY_JABBER_PASS", "pass");
 //define_if_not("VLM_NOTIFY_JABBER_MAIN", "capitainerie@vhf.iridium.v-l-m.org");
 //define_if_not("VLM_NOTIFY_JABBER_ADMINS", "comite@vhf.iridium.v-l-m.org");

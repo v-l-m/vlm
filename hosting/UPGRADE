@@ -1,5 +1,48 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.26.x to 0.27 aka Vent Tri Loch
+
+= Step 0, can be done at any time = 
+
+  Avoir  un backup de la base et faire un backup de vlmcode avant de commencer
+  
+  Suivre et adapter : https://github.com/v-l-m/vlm/wiki/Jabber
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_27
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    define_if_not("VLM_XMPP_ON", true);
+    define_if_not("VLM_NOTIFY_JABBER_USER", "comite\20de\20course");
+    define_if_not("VLM_NOTIFY_JABBER_PASS", "pass");
+
+  RUN
+    ./scripts/upgrade.sh 0.27 0
+    
+= Step 1, maintenance mode, backup base, upgrade core =
+
+  RUN
+    ./scripts/upgrade.sh 0.27 1 && sudo /etc/init.d/apache2 restart
+
+  - if something goes wrong, EDIT crontab and comment vlm crons
+
+= Step 2, end of release, unlock engine =
+
+  RUN
+    ./scripts/upgrade.sh 0.27 2
+
+= Step 3, post release =
+
+  EDIT file ./conf/param.php
+    - add "jabber" dans VLM_NOTIFY_LIST
+    - edit crontab and add :
+      * * * * * $VLMRACINE/vlmcode/moteur/feed/feedmodules.sh jabber 60
+      */1 * * * * $VLMRACINE/vlmcode/moteur/notify/notify.sh jabber
+
+
 From 0.25.x to 0.26 :
 
 = Step 0, can be done at any time = 
