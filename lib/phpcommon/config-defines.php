@@ -268,6 +268,11 @@
     define_if_not("VLM_NOTIFY_IRC_SERVER", "irc.epiknet.org");
     define_if_not("VLM_NOTIFY_IRC_CHAN", "#vlm");
     define_if_not("VLM_NOTIFY_IRC_USER", "vlm[POSTMAN]");
+    define_if_not("VLM_NOTIFY_JABBER_USER", "arsenal");
+    define_if_not("VLM_NOTIFY_JABBER_PASS", "pass");
+    define_if_not("VLM_NOTIFY_JABBER_MAIN", "capitainerie@vhf.iridium.v-l-m.org");
+    define_if_not("VLM_NOTIFY_JABBER_ADMINS", "comite@vhf.iridium.v-l-m.org");
+
 
     define_if_not("WS_DEFAULT_CACHE_DURATION", 0); //Default is no cache, but it's overiden on a by service basis (look the code, luke)
     define_if_not("WS_MAX_MAXAGE", 2592000); // Default is no max (can be overriden to "cap" globally the cache setup by ws)
@@ -279,9 +284,5 @@
     define_if_not("VLM_XMPP_ON", false);
     define_if_not("VLM_XMPP_HOST", "iridium.v-l-m.org");
     define_if_not("VLM_XMPP_HTTP_BIND_PATH", "/http-bind/");
-    define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://"._SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
-    define_if_not("VLM_XMPP_CHAT_JID_MAIN", "capitainerie@vhf.iridium.v-l-m.org");
-    define_if_not("VLM_XMPP_CHAT_JID_ADMINS", "comite@vhf.iridium.v-l-m.org");
-    define_if_not("VLM_XMPP_POSTMAN_USER", "arsenal");
-    define_if_not("VLM_XMPP_POSTMAN_PASS", "pass");
+    define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://".$_SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
 ?>

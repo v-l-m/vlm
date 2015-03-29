@@ -70,8 +70,8 @@
             'hostname' => VLM_XMPP_HOST,
             'port' => 5222,
             'connectionType' => 'tcp',
-            'username' => VLM_XMPP_POSTMAN_USER,
-            'password' => VLM_XMPP_POSTMAN_PASS
+            'username' => VLM_NOTIFY_JABBER_USER,
+            'password' => VLM_NOTIFY_JABBER_PASS
         );
 
         function __construct() {
@@ -90,7 +90,7 @@
 
             // join a channel
             $channel = new Presence;
-            $channel->setTo(VLM_XMPP_CHAT_JID_MAIN);
+            $channel->setTo(VLM_NOTIFY_JABBER_MAIN);
             $channel->setNickName('Postman'); //FIXME : Add servername ?
             $client->send($channel);
 
@@ -104,7 +104,7 @@
             }
 
             $message = new Message($status);
-            $message->setTo(VLM_XMPP_CHAT_JID_MAIN);
+            $message->setTo(VLM_NOTIFY_JABBER_MAIN);
             $message->setType(Message::TYPE_GROUPCHAT);
             $this->client->send($message);
             return True;
