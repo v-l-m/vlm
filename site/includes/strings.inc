@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    "Click to chat" => "Click to chat",
+    "jid" => "Jabber Id",
     "Group Title" => "Group's title",
     "Group Tag" => "Group's !tag",
     "Group Name" => "Group's name",
@@ -465,6 +467,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "Click to chat" => "Cliquer pour tchatter",
+    "jid" => "Identifiant Jabber",
     "Group Title" => "Intitulé du groupe",
     "Group Tag" => "!Tag du groupe",
     "Group Name" => "Nom du groupe",
