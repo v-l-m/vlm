@@ -18,6 +18,8 @@ From 0.26.x to 0.27 aka Vent Tri Loch
     define_if_not("VLM_XMPP_ON", true);
     define_if_not("VLM_NOTIFY_JABBER_USER", "comite\20de\20course");
     define_if_not("VLM_NOTIFY_JABBER_PASS", "pass");
+    define_if_not("VLM_NOTIFY_JABBER_MAIN", "capitainerie@vhf.iridium.v-l-m.org"$
+    define_if_not("VLM_NOTIFY_JABBER_ADMINS", "comite@vhf.iridium.v-l-m.org");
 
   RUN
     ./scripts/upgrade.sh 0.27 0
