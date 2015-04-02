@@ -110,7 +110,7 @@
             return True;
         }
         
-        function close($m) {
+        function close() {
             parent::close();
             sleep(5);
             $this->client->disconnect();
