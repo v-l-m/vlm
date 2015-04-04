@@ -242,10 +242,17 @@ class players extends baseClass {
 
     function checkNonconformity() {
         $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
-        if (preg_match($pattern  ,  $this->email) < 1) {
+        if (preg_match($pattern, $this->email) < 1) {
             $this->set_error("Your email address doesn't seem to be valid");
             return False;
         }
+
+        $pattern = "/^([\w\!\#_$\*\+\-\=\^\`{\|\}\~\.]+)*$/i";
+        if (preg_match($pattern, $this->playername) < 1) {
+            $this->set_error("Your playername contains invalid characters");
+            return False;
+        }
+
         
         if (strlen($this->playername) < 3 && $this->playername != "fm") $this->set_error(getLocalizedString("Your playername should have at least 3 characters."));
         if (strripos($this->playername, '--') !== False || strripos($this->playername, '  ') !== False) $this->set_error(getLocalizedString("Your playername should not be ascii art")); 
