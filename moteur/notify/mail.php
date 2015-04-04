@@ -5,6 +5,7 @@
     class VlmNotifyMail extends VlmNotify {
         var $media = "mail";
         var $rate_limit = 3;
+        var $sleep = 5;
 
         function postone($message) {
             $text = "";
@@ -17,7 +18,7 @@
                 $text .= $message['summary'];
             }
             mailInformation(VLM_NOTIFY_MAIL, $message['summary'], $text, False);
-            return True;
+            return parent::postone($message);
         }
     }
         
