@@ -5,6 +5,7 @@
         var $rate_limit = 2;
         var $media = null;
         var $messages = Array();
+        var $sleep = 0;
         
         function __construct() {
         }
@@ -28,6 +29,7 @@
         }
 
         function postone($m) {
+            if ($this->sleep > 0) sleep($this->sleep);
             return True;
         }
         
@@ -63,7 +65,7 @@
             $ch = $this->init_handle($m);
             $handles[] = $ch;
             curl_multi_add_handle($this->mh,$ch);
-            return True; //#FIXME ?
+            return parent::postone($m); //#FIXME ?
         }
 
         function post() {

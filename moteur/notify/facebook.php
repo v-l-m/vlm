@@ -5,6 +5,7 @@
     class VlmNotifyFacebook extends VlmNotifyCurl {
         var $media = "facebook";
         var $rate_limit = 2;
+        var $sleep = 1;
     
         function init_handle($message) {
             if ($message['longstory'] != '') {

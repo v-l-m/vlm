@@ -18,6 +18,7 @@
             'oauth_token_secret' => VLM_NOTIFY_TWITTER_OAUTH_TOKEN_SECRET,
             'output_format' => 'object'
         );
+        var $sleep = 1;
 
         function __construct() {
             parent::__construct();
@@ -32,7 +33,7 @@
                 $status = $m['summary'];
             }
             $response = $this->handle->post('statuses/update', array('status' => $status));
-            return $response;
+            return $response && parent::postone($m);
         }
                         
     }    
