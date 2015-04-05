@@ -490,7 +490,11 @@ class players extends baseClass {
 
     //html renderers
     function htmlPlayername() {
-        return htmlPlayername($this->idplayers, $this->playername, $this->getFullJid());
+        if (getPlayerId() === $this->idplayers) {
+            return htmlPlayername($this->idplayers, $this->playername);
+        } else {
+            return htmlPlayername($this->idplayers, $this->playername, $this->getFullJid());
+        }
     }
 
     function htmlIdplayersPlayername() {
