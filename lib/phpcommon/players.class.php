@@ -570,7 +570,7 @@ function htmlPlayername($idplayers, $playername, $jid = null) {
     $ret  = "<a href=\"palmares.php?type=player&amp;idplayers=";
     $ret .= $idplayers;
     $ret .= "\">".$playername."</a>";
-    if (!is_null($jid)) $ret .= "&nbsp;<a href=\"#\" onClick=\"converse.chats.open('".$jid."');\" title=\"".getLocalizedString("Click to chat")."\"><img src=\"/images/site/chaticon.png\" /></a>";
+    if (!is_null($jid) and VLM_XMPP_ON) $ret .= "&nbsp;<a href=\"#\" onClick=\"converse.chats.open('".$jid."');\" title=\"".getLocalizedString("Click to chat")."\"><img src=\"/images/site/chaticon.png\" /></a>";
     return $ret;
 }
 
