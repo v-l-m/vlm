@@ -10784,7 +10784,7 @@ define('jquery-private',['jquery'], function (jq) {
   java, location, Components, FileUtils */
 
 define('text',['module'], function (module) {
-    
+    'use strict';
 
     var text, fs, Cc, Ci, xpcIsWindows,
         progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
@@ -11165,7 +11165,7 @@ define('text',['module'], function (module) {
     return text;
 });
 
-//     Underscore.js 1.8.2
+//     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
@@ -11222,7 +11222,7 @@ define('text',['module'], function (module) {
   }
 
   // Current version.
-  _.VERSION = '1.8.2';
+  _.VERSION = '1.8.3';
 
   // Internal function that returns an efficient (for current engines) version
   // of the passed-in callback, to be repeatedly applied in other Underscore
@@ -11289,12 +11289,20 @@ define('text',['module'], function (module) {
     return result;
   };
 
+  var property = function(key) {
+    return function(obj) {
+      return obj == null ? void 0 : obj[key];
+    };
+  };
+
   // Helper for collection methods to determine whether a collection
   // should be iterated as an array or as an object
   // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
+  // Avoids a very nasty iOS 8 JIT bug on ARM-64. #2094
   var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+  var getLength = property('length');
   var isArrayLike = function(collection) {
-    var length = collection && collection.length;
+    var length = getLength(collection);
     return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
   };
 
@@ -11419,11 +11427,12 @@ define('text',['module'], function (module) {
     return false;
   };
 
-  // Determine if the array or object contains a given value (using `===`).
+  // Determine if the array or object contains a given item (using `===`).
   // Aliased as `includes` and `include`.
-  _.contains = _.includes = _.include = function(obj, target, fromIndex) {
+  _.contains = _.includes = _.include = function(obj, item, fromIndex, guard) {
     if (!isArrayLike(obj)) obj = _.values(obj);
-    return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
+    if (typeof fromIndex != 'number' || guard) fromIndex = 0;
+    return _.indexOf(obj, item, fromIndex) >= 0;
   };
 
   // Invoke a method (with arguments) on every item in a collection.
@@ -11647,7 +11656,7 @@ define('text',['module'], function (module) {
   // Internal implementation of a recursive `flatten` function.
   var flatten = function(input, shallow, strict, startIndex) {
     var output = [], idx = 0;
-    for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
+    for (var i = startIndex || 0, length = getLength(input); i < length; i++) {
       var value = input[i];
       if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
         //flatten current level of array or arguments object
@@ -11678,7 +11687,6 @@ define('text',['module'], function (module) {
   // been sorted, you have the option of using a faster algorithm.
   // Aliased as `unique`.
   _.uniq = _.unique = function(array, isSorted, iteratee, context) {
-    if (array == null) return [];
     if (!_.isBoolean(isSorted)) {
       context = iteratee;
       iteratee = isSorted;
@@ -11687,7 +11695,7 @@ define('text',['module'], function (module) {
     if (iteratee != null) iteratee = cb(iteratee, context);
     var result = [];
     var seen = [];
-    for (var i = 0, length = array.length; i < length; i++) {
+    for (var i = 0, length = getLength(array); i < length; i++) {
       var value = array[i],
           computed = iteratee ? iteratee(value, i, array) : value;
       if (isSorted) {
@@ -11714,10 +11722,9 @@ define('text',['module'], function (module) {
   // Produce an array that contains every item shared between all the
   // passed-in arrays.
   _.intersection = function(array) {
-    if (array == null) return [];
     var result = [];
     var argsLength = arguments.length;
-    for (var i = 0, length = array.length; i < length; i++) {
+    for (var i = 0, length = getLength(array); i < length; i++) {
       var item = array[i];
       if (_.contains(result, item)) continue;
       for (var j = 1; j < argsLength; j++) {
@@ -11746,7 +11753,7 @@ define('text',['module'], function (module) {
   // Complement of _.zip. Unzip accepts an array of arrays and groups
   // each array's elements on shared indices
   _.unzip = function(array) {
-    var length = array && _.max(array, 'length').length || 0;
+    var length = array && _.max(array, getLength).length || 0;
     var result = Array(length);
 
     for (var index = 0; index < length; index++) {
@@ -11760,7 +11767,7 @@ define('text',['module'], function (module) {
   // the corresponding values.
   _.object = function(list, values) {
     var result = {};
-    for (var i = 0, length = list && list.length; i < length; i++) {
+    for (var i = 0, length = getLength(list); i < length; i++) {
       if (values) {
         result[list[i]] = values[i];
       } else {
@@ -11770,42 +11777,11 @@ define('text',['module'], function (module) {
     return result;
   };
 
-  // Return the position of the first occurrence of an item in an array,
-  // or -1 if the item is not included in the array.
-  // If the array is large and already in sort order, pass `true`
-  // for **isSorted** to use binary search.
-  _.indexOf = function(array, item, isSorted) {
-    var i = 0, length = array && array.length;
-    if (typeof isSorted == 'number') {
-      i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-    } else if (isSorted && length) {
-      i = _.sortedIndex(array, item);
-      return array[i] === item ? i : -1;
-    }
-    if (item !== item) {
-      return _.findIndex(slice.call(array, i), _.isNaN);
-    }
-    for (; i < length; i++) if (array[i] === item) return i;
-    return -1;
-  };
-
-  _.lastIndexOf = function(array, item, from) {
-    var idx = array ? array.length : 0;
-    if (typeof from == 'number') {
-      idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
-    }
-    if (item !== item) {
-      return _.findLastIndex(slice.call(array, 0, idx), _.isNaN);
-    }
-    while (--idx >= 0) if (array[idx] === item) return idx;
-    return -1;
-  };
-
   // Generator function to create the findIndex and findLastIndex functions
-  function createIndexFinder(dir) {
+  function createPredicateIndexFinder(dir) {
     return function(array, predicate, context) {
       predicate = cb(predicate, context);
-      var length = array != null && array.length;
+      var length = getLength(array);
       var index = dir > 0 ? 0 : length - 1;
       for (; index >= 0 && index < length; index += dir) {
         if (predicate(array[index], index, array)) return index;
@@ -11815,16 +11791,15 @@ define('text',['module'], function (module) {
   }
 
   // Returns the first index on an array-like that passes a predicate test
-  _.findIndex = createIndexFinder(1);
-
-  _.findLastIndex = createIndexFinder(-1);
+  _.findIndex = createPredicateIndexFinder(1);
+  _.findLastIndex = createPredicateIndexFinder(-1);
 
   // Use a comparator function to figure out the smallest index at which
   // an object should be inserted so as to maintain order. Uses binary search.
   _.sortedIndex = function(array, obj, iteratee, context) {
     iteratee = cb(iteratee, context, 1);
     var value = iteratee(obj);
-    var low = 0, high = array.length;
+    var low = 0, high = getLength(array);
     while (low < high) {
       var mid = Math.floor((low + high) / 2);
       if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
@@ -11832,11 +11807,43 @@ define('text',['module'], function (module) {
     return low;
   };
 
+  // Generator function to create the indexOf and lastIndexOf functions
+  function createIndexFinder(dir, predicateFind, sortedIndex) {
+    return function(array, item, idx) {
+      var i = 0, length = getLength(array);
+      if (typeof idx == 'number') {
+        if (dir > 0) {
+            i = idx >= 0 ? idx : Math.max(idx + length, i);
+        } else {
+            length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
+        }
+      } else if (sortedIndex && idx && length) {
+        idx = sortedIndex(array, item);
+        return array[idx] === item ? idx : -1;
+      }
+      if (item !== item) {
+        idx = predicateFind(slice.call(array, i, length), _.isNaN);
+        return idx >= 0 ? idx + i : -1;
+      }
+      for (idx = dir > 0 ? i : length - 1; idx >= 0 && idx < length; idx += dir) {
+        if (array[idx] === item) return idx;
+      }
+      return -1;
+    };
+  }
+
+  // Return the position of the first occurrence of an item in an array,
+  // or -1 if the item is not included in the array.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = createIndexFinder(1, _.findIndex, _.sortedIndex);
+  _.lastIndexOf = createIndexFinder(-1, _.findLastIndex);
+
   // Generate an integer Array containing an arithmetic progression. A port of
   // the native Python `range()` function. See
   // [the Python documentation](http://docs.python.org/library/functions.html#range).
   _.range = function(start, stop, step) {
-    if (arguments.length <= 1) {
+    if (stop == null) {
       stop = start || 0;
       start = 0;
     }
@@ -12215,6 +12222,15 @@ define('text',['module'], function (module) {
   // Fill in a given object with default properties.
   _.defaults = createAssigner(_.allKeys, true);
 
+  // Creates an object that inherits from the given prototype object.
+  // If additional properties are provided then they will be added to the
+  // created object.
+  _.create = function(prototype, props) {
+    var result = baseCreate(prototype);
+    if (props) _.extendOwn(result, props);
+    return result;
+  };
+
   // Create a (shallow-cloned) duplicate of an object.
   _.clone = function(obj) {
     if (!_.isObject(obj)) return obj;
@@ -12292,7 +12308,7 @@ define('text',['module'], function (module) {
     }
     // Assume equality for cyclic structures. The algorithm for detecting cyclic
     // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-    
+
     // Initializing stack of traversed objects.
     // It's done here since we only need them for objects and arrays comparison.
     aStack = aStack || [];
@@ -12443,11 +12459,7 @@ define('text',['module'], function (module) {
 
   _.noop = function(){};
 
-  _.property = function(key) {
-    return function(obj) {
-      return obj == null ? void 0 : obj[key];
-    };
-  };
+  _.property = property;
 
   // Generates a function for a given object that returns a given property.
   _.propertyOf = function(obj) {
@@ -12456,7 +12468,7 @@ define('text',['module'], function (module) {
     };
   };
 
-  // Returns a predicate for checking whether an object has a given set of 
+  // Returns a predicate for checking whether an object has a given set of
   // `key:value` pairs.
   _.matcher = _.matches = function(attrs) {
     attrs = _.extendOwn({}, attrs);
@@ -12683,7 +12695,7 @@ define('text',['module'], function (module) {
   // Provide unwrapping proxy for some methods used in engine operations
   // such as arithmetic and JSON stringification.
   _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
-  
+
   _.prototype.toString = function() {
     return '' + this._wrapped;
   };
@@ -12736,7 +12748,7 @@ define('text',['module'], function (module) {
 /*global define: false */
 
 define('tpl',['text', 'underscore'], function (text, _) {
-    
+    'use strict';
 
     var buildMap = {},
         buildTemplateSource = "define('{pluginName}!{moduleName}', function () { return {source}; });\n";
@@ -14922,7 +14934,7 @@ return parser;
         root.utils = factory(jQuery, templates);
     }
 }(this, function ($, templates, locales) {
-    
+    "use strict";
 
     var XFORM_TYPE_MAP = {
         'text-private': 'password',
@@ -25591,7 +25603,7 @@ return Backbone.BrowserStorage;
       factory(_, Backbone);
    }
 }(this, function (_, Backbone) {
-    
+    "use strict";
     var Overview = Backbone.Overview = function (options) {
         /* An Overview is a View that contains and keeps track of sub-views.
          * Kind of like what a Collection is to a Model.
@@ -25649,7 +25661,7 @@ return Backbone.BrowserStorage;
     factory(jQuery, root);
   }
 }(this, function(jQuery, window) {
-  
+  "use strict";
 
   var matched, browser;
 
@@ -25812,7 +25824,7 @@ return Backbone.BrowserStorage;
     }
 }(this, function($, window) {
     var _ = function() {
-        
+        "use strict";
         return {
             isMsie: function() {
                 return /(msie|trident)/i.test(navigator.userAgent) ? navigator.userAgent.match(/(msie |rv:)(\d+(.\d+)?)/i)[2] : false;
@@ -25942,7 +25954,7 @@ return Backbone.BrowserStorage;
         };
     }();
     var css = function() {
-        
+        "use strict";
         var css = {
             wrapper: {
                 position: "relative",
@@ -26004,7 +26016,7 @@ return Backbone.BrowserStorage;
         return css;
     }();
     var EventBus = function() {
-        
+        "use strict";
         var namespace = "typeahead:";
         function EventBus(o) {
             if (!o || !o.el) {
@@ -26021,7 +26033,7 @@ return Backbone.BrowserStorage;
         return EventBus;
     }();
     var EventEmitter = function() {
-        
+        "use strict";
         var splitter = /\s+/, nextTick = getNextTick();
         return {
             onSync: onSync,
@@ -26111,7 +26123,7 @@ return Backbone.BrowserStorage;
         }
     }();
     var highlight = function(doc) {
-        
+        "use strict";
         var defaults = {
             node: null,
             pattern: null,
@@ -26163,7 +26175,7 @@ return Backbone.BrowserStorage;
         }
     }(window.document);
     var Input = function() {
-        
+        "use strict";
         var specialKeyCodeMap;
         specialKeyCodeMap = {
             9: "tab",
@@ -26358,7 +26370,7 @@ return Backbone.BrowserStorage;
         }
     }();
     var Dataset = function() {
-        
+        "use strict";
         var datasetKey = "ttDataset", valueKey = "ttValue", datumKey = "ttDatum";
         function Dataset(o) {
             o = o || {};
@@ -26492,7 +26504,7 @@ return Backbone.BrowserStorage;
         }
     }();
     var Dropdown = function() {
-        
+        "use strict";
         function Dropdown(o) {
             var that = this, onSuggestionClick, onSuggestionMouseEnter, onSuggestionMouseLeave;
             o = o || {};
@@ -26652,7 +26664,7 @@ return Backbone.BrowserStorage;
         }
     }();
     var Typeahead = function() {
-        
+        "use strict";
         var attrsKey = "ttAttrs";
         function Typeahead(o) {
             var $menu, $input, $hint;
@@ -26899,7 +26911,7 @@ return Backbone.BrowserStorage;
         }
     }();
     (function() {
-        
+        "use strict";
         var old, typeaheadKey, methods;
         old = $.fn.typeahead;
         typeaheadKey = "ttTypeahead";
@@ -27061,7 +27073,7 @@ define("converse-dependencies", [
         );
     }
 }(this, function (templates, $, $iq, $msg, $pres, $build, DSA, OTR, Strophe, _, moment, utils, b64_sha1) {
-    // 
+    // "use strict";
     // Cannot use this due to Safari bug.
     // See https://github.com/jcbrand/converse.js/issues/196
     if (typeof console === "undefined" || typeof console.log === "undefined") {
@@ -27088,7 +27100,7 @@ define("converse-dependencies", [
             } else if (typeof attr === 'string') {
                 return item.get(attr).toLowerCase().indexOf(query.toLowerCase()) !== -1;
             } else {
-                throw new Error('Wrong attribute type. Must be string or array.');
+                throw new TypeError('contains: wrong attribute type. Must be string or array.');
             }
         };
     };
@@ -27862,7 +27874,7 @@ define("converse-dependencies", [
                         }
                         break;
                     default:
-                        throw new Error('Unknown type.');
+                        throw new TypeError('ChatBox.onSMP: Unknown type for SMP');
                 }
             },
 
@@ -28030,12 +28042,7 @@ define("converse-dependencies", [
 
                 this.updateVCard();
                 this.$el.insertAfter(converse.chatboxviews.get("controlbox").$el);
-                this.render().model.messages.fetch({add: true});
-                if (this.model.get('minimized')) {
-                    this.hide();
-                } else {
-                    this.show();
-                }
+                this.hide().render().model.messages.fetch({add: true});
                 if ((_.contains([UNVERIFIED, VERIFIED], this.model.get('otr_status'))) || converse.use_otr_by_default) {
                     this.model.initiateOTR();
                 }
@@ -28173,7 +28180,10 @@ define("converse-dependencies", [
                 if ((message.get('sender') != 'me') && (converse.windowState == 'blur')) {
                     converse.incrementMsgCounter();
                 }
-                return this.scrollDown();
+                this.scrollDown();
+                if (!this.model.get('minimized') && !this.$el.is(':visible')) {
+                    this.show();
+                }
             },
 
             sendMessageStanza: function (text) {
@@ -28259,12 +28269,11 @@ define("converse-dependencies", [
                  *    (string) state - The chat state (consts ACTIVE, COMPOSING, PAUSED, INACTIVE, GONE)
                  *    (no_save) no_save - Just do the cleanup or setup but don't actually save the state.
                  */
-                if (_.contains([ACTIVE, INACTIVE, GONE], state)) {
-                    if (typeof this.chat_state_timeout !== 'undefined') {
-                        clearTimeout(this.chat_state_timeout);
-                        delete this.chat_state_timeout;
-                    }
-                } else if (state === COMPOSING) {
+                if (typeof this.chat_state_timeout !== 'undefined') {
+                    clearTimeout(this.chat_state_timeout);
+                    delete this.chat_state_timeout;
+                }
+                if (state === COMPOSING) {
                     this.chat_state_timeout = setTimeout(
                             $.proxy(this.setChatState, this), converse.TIMEOUTS.PAUSED, PAUSED);
                 } else if (state === PAUSED) {
@@ -28631,7 +28640,7 @@ define("converse-dependencies", [
                     this.initDragResize();
                 }
                 this.setChatState(ACTIVE);
-                return this;
+                return this.focus();
             },
 
             scrollDown: function () {
@@ -29202,11 +29211,7 @@ define("converse-dependencies", [
         });
 
         this.ChatRoomOccupants = Backbone.Collection.extend({
-            model: converse.ChatRoomOccupant,
-            initialize: function (options) {
-                this.browserStorage = new Backbone.BrowserStorage[converse.storage](
-                    b64_sha1('converse.occupants'+converse.bare_jid+options.nick));
-            }
+            model: converse.ChatRoomOccupant
         });
 
         this.ChatRoomOccupantsView = Backbone.Overview.extend({
@@ -29364,6 +29369,10 @@ define("converse-dependencies", [
                 this.occupantsview = new converse.ChatRoomOccupantsView({
                     model: new converse.ChatRoomOccupants({nick: this.model.get('nick')})
                 });
+                var id =  b64_sha1('converse.occupants'+converse.bare_jid+this.model.get('id')+this.model.get('nick'));
+                this.occupantsview.model.id = id; // Appears to be necessary for backbone.browserStorage
+                this.occupantsview.model.browserStorage = new Backbone.BrowserStorage[converse.storage](id);
+
                 this.occupantsview.chatroomview = this;
                 this.render();
                 this.occupantsview.model.fetch({add:true});
@@ -30089,6 +30098,8 @@ define("converse-dependencies", [
             },
 
             onMessage: function (message) {
+                /* Handler method for all incoming single-user chat "message" stanzas.
+                 */
                 var $message = $(message);
                 var contact_jid, $forwarded, $received, $sent,
                     msgid = $message.attr('id'),
@@ -30133,12 +30144,15 @@ define("converse-dependencies", [
 
                 chatbox = this.get(contact_jid);
                 if (!chatbox) {
-                    /* FIXME: there is a bug here. If chat state notifications
-                     * (because a roster contact closed a chat box of yours
-                     * they had open) are received and we don't have a chat with
-                     * the user, then a chat box is created here which then
-                     * opens automatically :(
+                    /* If chat state notifications (because a roster contact
+                     * closed a chat box of yours they had open) are received
+                     * and we don't have a chat with the user, then we do not
+                     * want to open a chat box. We only open a new chat box when
+                     * the message has a body.
                      */
+                    if ($message.find('body').length === 0) {
+                        return true;
+                    }
                     var fullname = roster_item.get('fullname');
                     fullname = _.isEmpty(fullname)? contact_jid: fullname;
                     chatbox = this.create({
@@ -30154,7 +30168,7 @@ define("converse-dependencies", [
                     // FIXME: There's still a bug here..
                     // If a duplicate message is received just after the chat
                     // box was closed, then it'll open again (due to it being
-                    // created here above), with now new messages.
+                    // created here above), with no new messages.
                     // The solution is mostly likely to not let chat boxes show
                     // automatically when they are created, but to require
                     // "show" to be called explicitly.
@@ -30291,7 +30305,6 @@ define("converse-dependencies", [
             showChat: function (attrs) {
                 /* Find the chat box and show it. If it doesn't exist, create it.
                  */
-                // TODO: Send the chat state ACTIVE to the contact once the chat box is opened.
                 var chatbox  = this.model.get(attrs.jid);
                 if (!chatbox) {
                     chatbox = this.model.create(attrs, {
@@ -32335,33 +32348,24 @@ define("converse-dependencies", [
                 this.onConnected();
             } else {
                 if (!this.bosh_service_url && ! this.websocket_url) {
-                    throw("Error: you must supply a value for the bosh_service_url or websocket_url");
+                    throw new Error("initConnection: you must supply a value for either the bosh_service_url or websocket_url or both.");
                 }
                 if (('WebSocket' in window || 'MozWebSocket' in window) && this.websocket_url) {
                     this.connection = new Strophe.Connection(this.websocket_url);
                 } else if (this.bosh_service_url) {
                     this.connection = new Strophe.Connection(this.bosh_service_url);
                 } else {
-                    throw("Error: this browser does not support websockets and no bosh_service_url specified.");
+                    throw new Error("initConnection: this browser does not support websockets and bosh_service_url wasn't specified.");
                 }
                 this.setUpXMLLogging();
 
-                if (this.prebind) {
-                    if (this.jid && this.sid && this.rid) {
-                        this.connection.attach(this.jid, this.sid, this.rid, this.onConnect);
-                    }
-                    if (!this.keepalive) {
-                        throw("If you use prebind and don't use keepalive, "+
-                              "then you MUST supply JID, RID and SID values");
-                    }
-                }
                 if (this.keepalive) {
                     rid = this.session.get('rid');
                     sid = this.session.get('sid');
                     jid = this.session.get('jid');
                     if (this.prebind) {
                         if (!this.jid) {
-                            throw("When using 'keepalive' with 'prebind, you must supply the JID of the current user.");
+                            throw new Error("initConnection: when using 'keepalive' with 'prebind, you must supply the JID of the current user.");
                         }
                         if (rid && sid && jid && Strophe.getBareJidFromJid(jid) === Strophe.getBareJidFromJid(this.jid)) {
                             this.session.save({rid: rid}); // The RID needs to be increased with each request.
@@ -32378,6 +32382,15 @@ define("converse-dependencies", [
                             this.session.save({rid: rid}); // The RID needs to be increased with each request.
                             this.connection.attach(jid, sid, rid, this.onConnect);
                         }
+                    }
+
+                // Prebind without keepalive
+                } else if (this.prebind) {
+                    if (this.jid && this.sid && this.rid) {
+                        this.connection.attach(this.jid, this.sid, this.rid, this.onConnect);
+                    } else {
+                        throw new Error("initConnection: If you use prebind and not keepalive, "+
+                            "then you MUST supply JID, RID and SID values");
                     }
                 }
             }
@@ -32443,6 +32456,7 @@ define("converse-dependencies", [
     var wrappedChatBox = function (chatbox) {
         var view = converse.chatboxviews.get(chatbox.get('jid'));
         return {
+            'open': $.proxy(view.show, view),
             'close': $.proxy(view.close, view),
             'endOTR': $.proxy(chatbox.endOTR, chatbox),
             'focus': $.proxy(view.focus, view),
@@ -32453,6 +32467,27 @@ define("converse-dependencies", [
             'set': $.proxy(chatbox.set, chatbox)
         };
     };
+
+    var getWrappedChatBox = function (jid) {
+        var chatbox = converse.chatboxes.get(jid);
+        if (!chatbox) {
+            var roster_item = converse.roster.get(jid);
+            if (roster_item === undefined) {
+                converse.log('Could not get roster item for JID '+jid, 'error');
+                return null;
+            }
+            chatbox = converse.chatboxes.create({
+                'id': jid,
+                'jid': jid,
+                'fullname': _.isEmpty(roster_item.get('fullname'))? jid: roster_item.get('fullname'),
+                'image_type': roster_item.get('image_type'),
+                'image': roster_item.get('image'),
+                'url': roster_item.get('url')
+            });
+        }
+        return wrappedChatBox(chatbox);
+    };
+
     return {
         'initialize': function (settings, callback) {
             converse.initialize(settings, callback);
@@ -32496,51 +32531,82 @@ define("converse-dependencies", [
                     return _transform(jids);
                 }
                 return _.map(jids, _transform);
+            },
+            'add': function (jid, name) {
+                if (typeof jid !== "string" || jid.indexOf('@') < 0) {
+                    throw new TypeError('contacts.add: invalid jid');
+                }
+                converse.connection.roster.add(jid, _.isEmpty(name)? jid: name, [], function (iq) {
+                    converse.connection.roster.subscribe(jid, null, converse.xmppstatus.get('fullname'));
+                });
+                return true;
             }
         },
         'chats': {
             'open': function (jids) {
-                var _transform = function (jid) {
-                    var chatbox = converse.chatboxes.get(jid);
-                    if (!chatbox) {
-                        var roster_item = converse.roster.get(jid);
-                        if (roster_item === undefined) {
-                            converse.log('Could not get roster item for JID '+jid, 'error');
-                            return null;
-                        }
-                        chatbox = converse.chatboxes.create({
-                            'id': jid,
-                            'jid': jid,
-                            'fullname': _.isEmpty(roster_item.get('fullname'))? jid: roster_item.get('fullname'),
-                            'image_type': roster_item.get('image_type'),
-                            'image': roster_item.get('image'),
-                            'url': roster_item.get('url')
-                        });
-                    }
-                    return wrappedChatBox(chatbox);
-                };
+                var chatbox;
                 if (typeof jids === "undefined") {
                     converse.log("chats.open: You need to provide at least one JID", "error");
                     return null;
+                } else if (typeof jids === "string") {
+                    chatbox = getWrappedChatBox(jids);
+                    chatbox.open();
+                    return chatbox;
+                }
+                return _.map(jids, function (jid) {
+                    var chatbox = getWrappedChatBox(jid);
+                    chatbox.open();
+                    return chatbox;
+                });
+            },
+            'get': function (jids) {
+                if (typeof jids === "undefined") {
+                    converse.log("chats.get: You need to provide at least one JID", "error");
+                    return null;
+                } else if (typeof jids === "string") {
+                    return getWrappedChatBox(jids);
+                }
+                return _.map(jids, getWrappedChatBox);
+            }
+        },
+        'rooms': {
+            'open': function (jids, nick) {
+                if (!nick) {
+                    nick = Strophe.getNodeFromJid(converse.bare_jid)
+                }
+                if (typeof nick !== "string") {
+                    throw new TypeError('rooms.open: invalid nick, must be string');
+                }
+                var _transform = function (jid) {
+                    var chatroom = converse.chatboxes.get(jid);
+                    converse.log('jid');
+                    if (!chatroom) {
+                        var chatroom = converse.chatboxviews.showChat({
+                            'id': jid,
+                            'jid': jid,
+                            'name': Strophe.unescapeNode(Strophe.getNodeFromJid(jid)),
+                            'nick': nick,
+                            'chatroom': true,
+                            'box_id' : b64_sha1(jid)
+                        });
+                    }
+                    return wrappedChatBox(chatroom);
+                };
+                if (typeof jids === "undefined") {
+                    throw new TypeError('rooms.open: You need to provide at least one JID');
                 } else if (typeof jids === "string") {
                     return _transform(jids);
                 }
                 return _.map(jids, _transform);
             },
             'get': function (jids) {
-                var _transform = function (jid) {
-                    var chatbox = converse.chatboxes.get(jid);
-                    if (!chatbox) {
-                        return null;
-                    }
-                    return wrappedChatBox(chatbox);
-                };
                 if (typeof jids === "undefined") {
-                    jids = converse.roster.pluck('jid');
+                    throw new TypeError("rooms.get: You need to provide at least one JID");
+                    return null;
                 } else if (typeof jids === "string") {
-                    return _transform(jids);
+                    return getWrappedChatBox(jids);
                 }
-                return _.filter(_.map(jids, _transform), function (i) {return i !== null;});
+                return _.map(jids, getWrappedChatBox);
             }
         },
         'tokens': {
@@ -32592,7 +32658,7 @@ define("converse-dependencies", [
                     if (key === 'events') {
                         obj.prototype[key] = _.extend(value, obj.prototype[key]);
                     } else {
-                        if (typeof key === 'function') {
+                        if (typeof value === 'function') {
                             obj.prototype._super[key] = obj.prototype[key];
                         }
                         obj.prototype[key] = value;
