@@ -341,11 +341,12 @@
         </div> <!-- fin div menubox-->
         <div id="menucommunicationbox" class="leftbox">
             <a href="<?php echo FORUM_SERVER_URL; ?>" target="_forum"><?echo getLocalizedString("forum")?></a>
-            <a href="<?echo DOC_SERVER_URL.'Chat/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("tchat"); ?></a> 
+            <a href="#" title="<?echo getLocalizedString("tchat"); ?>" onClick="converse.rooms.open('<?echo VLM_NOTIFY_JABBER_MAIN; ?>');"><img src="/images/site/chaticon.png" /></a>
         </div> <!-- fin div menucommunicationbox -->
         <div id="docbox" class="leftbox">
             <a href="<?php echo DOC_SERVER_URL; ?>" target="_vlmwiki"><?php echo getLocalizedString("doc"); ?></a>
-            <a href="<?echo DOC_SERVER_URL.'FAQ/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a> 
+            <a href="<?echo DOC_SERVER_URL.'FAQ/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("faq"); ?></a>
+            <a href="<?echo DOC_SERVER_URL.'Chat/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("tchat"); ?></a> 
             <a href="<?php echo TOOLS_SERVER_URL; ?>" target="_outils"><?php echo getLocalizedString("tools"); ?></a>            
             <a href="<?php echo DEV_SERVER_URL; ?>" target="_vlmdev"><?php echo getLocalizedString("dev"); ?></a>
             <a href="<?echo DOC_SERVER_URL.'About/'.getCurrentLang(); ?>" target="_vlmwiki"><?echo getLocalizedString("about"); ?></a>
