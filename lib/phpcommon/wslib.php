@@ -37,7 +37,7 @@ class WSBase extends baseClass {
     function usage() {
         return "Usage:
         Documentation is in progress and should be available at the following url :
-        http://v-l-m.github.io/vlm/wiki/WebServices";
+        https://github.com/v-l-m/vlm/wiki/WebServices";
     }
 
     function warning($msg) {
