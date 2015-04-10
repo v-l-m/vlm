@@ -1147,10 +1147,14 @@ function htmlBoattypeLink($boattype) {
     return sprintf("<a href=\"%s\" target=\"_speedchart\" rel=\"nofollow\">%s</a>", speedchart_link($boattypename), strtoupper($boattypename));
 }
 
-function htmlRacenameLink($idraces, $racename, $started) {
-    return sprintf("<a href=\"/races.php?type=%s&amp;idraces=%d\">%s</a>", 
+function htmlRacenameLink($idraces, $racename, $started, $jid = null) {
+    $ret = sprintf("<a href=\"/races.php?type=%s&amp;idraces=%d\">%s</a>", 
 		   ($started == RACE_ENDED) ? "arrived" : "racing",
 		   $idraces, $racename);
+		if (VLM_XMPP_ON && !is_null($jid)) {
+        $ret .= "&nbsp;<a href=\"#\" onClick=\"converse.rooms.open('".$jid."');\" title=\"".getLocalizedString("Click to chat")."\"><img src=\"/images/site/chaticon.png\" /></a>";
+		}
+		return $ret;
 }
 
 function getFlag($idflags, $force = 'no') {
