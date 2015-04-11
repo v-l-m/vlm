@@ -29,7 +29,7 @@
 
     $dlname = sprintf("%d.%02d.%d.%d.grb", DIRECTORY_GRIBTILES, $grib_date, $step, $south, $west);
     $originaldir = sprintf("%s/%d/%d", DIRECTORY_GRIBTILES, $south, $west);
-    $original = sprintf("%s/%s", $originaldir, $dlname);
+    $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_date, $step);
 
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
