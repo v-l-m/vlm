@@ -85,6 +85,7 @@
 
     //Those are relatives to the document root
     define ("DIRECTORY_GSHHSTILES", "cache/gshhstiles"); #see VLMCACHE parameter in your conf script
+    define ("DIRECTORY_GRIBTILES", "cache/gribtiles"); #see VLMCACHE parameter in your conf script
     define ("DIRECTORY_COUNTRY_FLAGS","cache/flags");
     define ("DIRECTORY_RACEMAPS","cache/racemaps");
     define ("DIRECTORY_MINIMAPS","cache/minimaps");

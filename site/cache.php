@@ -29,6 +29,11 @@
                     headeranddie(sprintf("/gshhstiles.php?z=%d&x=%d&y=%d", $components[1], $components[2], $components[3]));
                 }
             break;
+            case "gribtiles" :
+                if (preg_match("/(-?\d+)\/(-?\d+)\/(\d+)\/(\d\d\d\d\d\d\d\d\d\d)\.(\d\d)\.grb/", $matches[2], $components)) {
+                    headeranddie(sprintf("/gribtiles.php?south=%d&west=%d&step=%d&date=%d", $components[1], $components[2], $components[3], $components[4]));
+                }
+            break;
             case "racemaps" :
                 if (preg_match("/(\d+)\.png/", $matches[2], $components)) {
                     headeranddie(sprintf("/racemap.php?idraces=%d", $components[1]));
