@@ -15,8 +15,6 @@
      */
     include_once("config-defines.php");
 
-    
-
     $step = get_cgi_var('step', 15);
     if ($step != "05" && $step != "15") die("Bad step");
     $step = intval($step);
@@ -31,7 +29,7 @@
 
     $original = sprintf("%s/%d/%d/%d.%02d.grb", DIRECTORY_GRIBTILES, $south, $west, $grib_date, $step);
     $originaldir = sprintf("%s/%d/%d", DIRECTORY_GRIBTILES, $south, $west);
-  
+
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
         if (!is_dir($originaldir)) {
@@ -42,7 +40,6 @@
         $execcmd = sprintf("%s %s %s %d %d %d %d", GGRIB_PATH, $gribfile, $original, $west, $south, $west+$step, $south+$step);
 //            print $execcmd; die();
             shell_exec($execcmd);
-        }
     }
 
     header("Content-Type: image/png");

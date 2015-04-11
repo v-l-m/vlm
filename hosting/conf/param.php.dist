@@ -66,4 +66,7 @@ define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,irc,mail");
 //define_if_not("VLM_NOTIFY_JABBER_MAIN", "capitainerie@vhf.iridium.v-l-m.org");
 //define_if_not("VLM_NOTIFY_JABBER_ADMINS", "comite@vhf.iridium.v-l-m.org");
 
+define("GRIB_DIRECTORY", "/home/vlm/vlmdatas/gribs");
+define("GGRIB_PATH", "/home/vlm/bin/ggrib");
+
 ?>
