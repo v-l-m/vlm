@@ -533,6 +533,11 @@ function get_error($code) {
         //tracks
         "TRK01"  =>  'hh should be >0 and <= 24',
         
+        //gribs
+        "GRB01" => "step should be 5 or 15",
+        "GRB02" => "north should be greater than south",
+        "GRB03" => "requested grib is not available",
+        
         //RTFM
         "RTFM01"  => 'RTFM : please input idr when the boat is not racing',
         "RTFM02"  => 'RTFM : starttime should be lesser than endtime and both < $now',
