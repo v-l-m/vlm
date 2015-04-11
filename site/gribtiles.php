@@ -45,7 +45,7 @@
 
     header("Content-Type: image/png");
     header("Cache-Control: max-age=86400"); // default 1 day
-    header(sprintf("Content-Disposition: attachment; filename=", $dlname));
+    header(sprintf("Content-Disposition: attachment; filename=%s", $dlname));
     readfile($original);
     exit(0); //To prevent bad spaces appended from php script
 ?>
