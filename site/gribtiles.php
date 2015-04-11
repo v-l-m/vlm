@@ -27,8 +27,9 @@
     $gribfile = sprintf("%s/gfs_NOAA-%s.grb", GRIB_DIRECTORY, $grib_date);
     if (! file_exists($gribfile)) die("Grib unavailable");
 
-    $original = sprintf("%s/%d/%d/%d.%02d.grb", DIRECTORY_GRIBTILES, $south, $west, $grib_date, $step);
+    $dlname = sprintf("%d.%02d.%d.%d.grb", DIRECTORY_GRIBTILES, $grib_date, $step, $south, $west);
     $originaldir = sprintf("%s/%d/%d", DIRECTORY_GRIBTILES, $south, $west);
+    $original = sprintf("%s/%s", $originaldir, $dlname);
 
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
@@ -44,6 +45,7 @@
 
     header("Content-Type: image/png");
     header("Cache-Control: max-age=86400"); // default 1 day
+    header(sprintf("Content-Disposition: attachment; filename=", $dlname));
     readfile($original);
     exit(0); //To prevent bad spaces appended from php script
 ?>
