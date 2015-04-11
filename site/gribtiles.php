@@ -27,7 +27,7 @@
     $gribfile = sprintf("%s/gfs_NOAA-%s.grb", GRIB_DIRECTORY, $grib_date);
     if (! file_exists($gribfile)) die("Grib unavailable");
 
-    $dlname = sprintf("%d.%02d.%d.%d.grb", DIRECTORY_GRIBTILES, $grib_date, $step, $south, $west);
+    $dlname = sprintf("%d.%02d.%d.%d.grb", $grib_date, $step, $south, $west);
     $originaldir = sprintf("%s/%d/%d", DIRECTORY_GRIBTILES, $south, $west);
     $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_date, $step);
 
