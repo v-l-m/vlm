@@ -1,9 +1,32 @@
 RELEASE NOTES
 See https://github.com/v-l-m/vlm/milestones for detailed Changelog & tickets by milestone.
 
+v0.28 aka Bora Bora
+
+What's new ...
+
+... for players ?
+
+... for developpers ? : https://github.com/v-l-m/vlm/wiki/WebServicesWindinfo
+  * grib files as square tiles of 15x15 if you nicely ask for
+  * new webservice /ws/windinfo/smartgrib.php to help selecting the tiles you need.
+
+
 v0.27 aka Vent Tri Loch
 
-Chat and group chat vlm for players.
+What's new ...
+
+... for players ?
+
+- Chat and group chat vlm
+
+... for the devs?
+
+- Chat is XMPP based, so the tools will "easily" be able to directly communicate with it, since the protocol is standard and well documented. Additional WS can be adde if required, but the standard XMPP service set should meet all your needs.
+
+ ... For the geeks?
+
+- The chat can be accessed through your favorite standard chat client (as long as it is xmpp compatible). The configuration procedure is described in the wiki
 
 v0.25 aka Stick Lips Reloaded
 

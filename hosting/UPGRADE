@@ -1,5 +1,43 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+From 0.27 to 0.28 aka Bora Bora :
+
+= Step 0, can be done at any time = 
+
+  * Avoir un backup de la base et faire un backup de vlmcode avant de commencer
+  * Compiler [http://ftp.cpc.ncep.noaa.gov/wd51we/gribw/gribw.tar](ggrib) et l'installer dans `~/bin` (VLMBIN)
+    * Vérifier que le binaire est OK en le lançant sans argument
+
+  EDIT file ./conf/conf_script 
+    - change VLM SVNBRANCH to V_0_28
+
+  RUN
+    ./scripts/maj_scripts.sh
+
+  EDIT file ./conf/param.php
+    define("GRIB_DIRECTORY", "/home/vlm/vlmdatas/gribs");
+    define("GGRIB_PATH", "/home/vlm/bin/ggrib");
+
+  RUN
+    ./scripts/upgrade.sh 0.28 0
+    
+= Step 1, maintenance mode, backup base, upgrade core =
+
+  RUN
+    ./scripts/upgrade.sh 0.28 1 && sudo /etc/init.d/apache2 restart
+
+  - if something goes wrong, EDIT crontab and comment vlm crons
+
+= Step 2, end of release, unlock engine =
+
+  RUN
+    ./scripts/upgrade.sh 0.28 2
+
+= Step 3, post release =
+
+ ...
+ 
+
 From 0.26.x to 0.27 aka Vent Tri Loch
 
 = Step 0, can be done at any time = 
