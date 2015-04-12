@@ -3,7 +3,7 @@
     include_once("wslib.php");
     include_once('positions.class.php');
 
-    header("content-type: text/plain; charset=UTF-8");
+    header("content-type: text/plain; charset=UTF-8"); //FIXME ?
 
     // NOT AUTHENTIFIED
 
@@ -32,7 +32,11 @@
     while ($south < $north) {
         $twest = $west;
         while ($twest < $east) {
-            $originaldir = sprintf("%d/%d", $south, $twest);
+            $rwest = $twest;
+            while ($rwest < -180) {
+                $rwest += 360;
+            }
+            $originaldir = sprintf("%d/%d", $south, $rwest);
             $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_date, $step);
             $ws->answer['gribs_url'][] = $original;
             $count += 1;

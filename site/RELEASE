@@ -10,6 +10,7 @@ What's new ...
 ... for developpers ? : https://github.com/v-l-m/vlm/wiki/WebServicesWindinfo
   * grib files as square tiles of 15x15 if you nicely ask for
   * new webservice /ws/windinfo/smartgrib.php to help selecting the tiles you need.
+  * various bugfixes
 
 
 v0.27 aka Vent Tri Loch

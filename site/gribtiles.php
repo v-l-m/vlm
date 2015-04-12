@@ -15,9 +15,8 @@
      */
     include_once("config-defines.php");
 
-    $step = get_cgi_var('step', 15);
-    if ($step != "05" && $step != "15") die("Bad step");
-    $step = intval($step);
+    $step = intval(get_cgi_var('step', 15));
+    if ($step != 5 && $step != 15) die("Bad step");
     $south = intval(get_cgi_var('south', 0));
     if (($south % $step) != 0 || $south < -90 || $south+$step > 90) die("South invalid");
     $west = intval(get_cgi_var('west', 0));

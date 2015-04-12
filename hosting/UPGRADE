@@ -5,7 +5,15 @@ From 0.27 to 0.28 aka Bora Bora :
 = Step 0, can be done at any time = 
 
   * Avoir un backup de la base et faire un backup de vlmcode avant de commencer
-  * Compiler [http://ftp.cpc.ncep.noaa.gov/wd51we/gribw/gribw.tar](ggrib) et l'installer dans `~/bin` (VLMBIN)
+  * Compiler [http://ftp.cpc.ncep.noaa.gov/wd51we/gribw/gribw.tar](ggrib) et l'installer dans `~/bin` (VLMBIN) : **DONE**
+    * cd ~/tmp
+    * wget http://ftp.cpc.ncep.noaa.gov/wd51we/gribw/gribw.tar
+    * tar -xvf gribw.tar 
+    * cd gribw/
+    * make -f gribwlib.make 
+    * cd ggrib/
+    * make -f ggrib.make 
+    * cp ggrib ~/bin/
     * Vérifier que le binaire est OK en le lançant sans argument
 
   EDIT file ./conf/conf_script 
