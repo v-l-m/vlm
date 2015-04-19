@@ -32,7 +32,12 @@
     //Le coefficient de magnification du step ((c) spifou)
     // entre 1 et 8.
     $stepmultiple  = floor(intval(get_cgi_var('stepmultiple', 1.)));
-    $step  = 0.5*$stepmultiple;
+    //Le coefficient de précision du step. defaut = 1. => 0.5 la maille plus fine
+    //Mettre à 2 pour pouvoir obtenir de la précision 0.25
+    $stepbasedivider  = floor(intval(get_cgi_var('stepbasedivider', 1.)));
+    
+    // $step est la combinaison du multiple et du diviser. Ce dernier a été ajouté pour permettre une compatibilité ascendante sans empêcher de demander plus de précision
+    $step  = 0.5*floatval($stepmultiple)/floatval($stepbasedivider);
 
     if (($step <= 0.) || ($step > 4.)) { // on se limite à des steps raisonables
         invalid_values("bad step requested : $step");
@@ -48,10 +53,6 @@
     if (($north < $south) || ($north > 90.) || ($south < -90.)) {
       invalid_values("bad latitude requested : (north : $north, south : $south)");
     } 
-
-    if (intval(get_cgi_var('x', 0)) != 0) {
-      invalid_values("invalid query");
-    }
 
     $east = fmod($east, 360.);
     if ($east < -180.) {
