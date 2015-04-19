@@ -1,7 +1,6 @@
 <?php
     include_once("config.php");
     include_once("wslib.php");
-    include_once('positions.class.php');
 
     header("content-type: text/plain; charset=UTF-8"); //FIXME ?
 
@@ -15,12 +14,31 @@
     //La zone, arrondie, au step le plus proche
     $north = $step*ceil(floatval(get_cgi_var('north'))/$step);
     $south = $step*floor(floatval(get_cgi_var('south'))/$step);
-    if ($south >= $north) $ws->reply_with_error("GRB02");
+    if (is_null($south) || is_null($north) || $south >= $north) $ws->reply_with_error("GRB02");
     $east  = $step*ceil(floatval(get_cgi_var('east'))/$step); 
     $west  = $step*floor(floatval(get_cgi_var('west'))/$step);
+    if (is_null($west) || is_null($east)) $ws->reply_with_error("GRB02");
     if ($west >= $east) $west -= 360;
 
-    $grib_date = intval(get_cgi_var("date", date("Ymd")."00"));
+    $grib_date = intval(get_cgi_var("date", 0));
+    if ($grib_date === 0) {
+        require_once("vlmc.php");
+        $global_vlmc_context = new vlmc_context();
+        global_vlmc_context_set($global_vlmc_context);
+        shm_lock_sem_construct_grib(1);
+        $nb_grib = get_prevision_count();
+        $ts = get_prevision_time_index(0);
+        shm_unlock_sem_destroy_grib(1);
+        if ($nb_grib <= 5) {
+            $ts -= 6*3600; // 6 hours before
+            $ws->maxage = 30; // update is running, retry very soon
+        } else {
+            $ws->maxage = $ts - time() + 34200; //grib offset + 9h30
+        }
+        //we change maxage only when no date has been given.
+        $grib_date = intval(date("YmdH", $ts));
+    }
+    
     $gribfile = sprintf("%s/gfs_NOAA-%s.grb", GRIB_DIRECTORY, $grib_date);
     if (! file_exists($gribfile)) $ws->reply_with_error("GRB03");
     
