@@ -454,10 +454,10 @@ class races {
           {
             $StartSeg=$Exclusion[0];
             $EndSeg=$Exclusion[1];
-            $Lon1=$StartSeg[1];
-            $Lon2=$EndSeg[1];
-            $Lat1=$StartSeg[0];
-            $Lat2=$EndSeg[0];
+            $Lon1=$StartSeg[0];
+            $Lon2=$EndSeg[0];
+            $Lat1=$StartSeg[1];
+            $Lat2=$EndSeg[1];
             $ret .= "<td>Seg# ".$index."</td>";
             $ret .= "<td>".$Lon1."</td>";
             $ret .= "<td>".$Lat1."</td>";
