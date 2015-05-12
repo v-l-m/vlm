@@ -196,6 +196,19 @@
                     
                     $fullUsersObj->updateNextWaypoint();
                     $is_arrived=false;
+                    
+                    // Add small hack for VOR9 1415 24h pitstop at lahaye
+                    // If race has right number and waypoint is 1st one then
+                    // Block boat as if it is coast crossing for 24h
+                    $VOR9RACEID = 150101;
+                    $VORPITSTOPWP= 1;
+                    
+                    if (($nextwaypointid == VORPITSTOPWP) && ($raceid == $VOR9RACEID ))
+                    {
+                      // Lock boat for 24h
+                      $fullUsersObj->setSTOPPED(); // sets the boat mooring
+                      $fullUsersObj->users->lockBoat(24*3600); // Boat is locked
+                    }
       
                 } else {
       
