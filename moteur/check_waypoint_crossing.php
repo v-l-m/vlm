@@ -201,13 +201,16 @@
                     // If race has right number and waypoint is 1st one then
                     // Block boat as if it is coast crossing for 24h
                     $VOR9RACEID = 150101;
-                    $VORPITSTOPWP= 1;
+                    $NEXTVORPITSTOPWP= 2;
                     
-                    if (($nextwaypointid == VORPITSTOPWP) && ($raceid == $VOR9RACEID ))
+                    $fullUsersObj->users->logUserEvent("Pit Stop check ".$fullRacesObj->races->idraces." ".$nextwaypointid );
+                    if (($nextwaypointid == $NEXTVORPITSTOPWP) && ($fullRacesObj->races->idraces == $VOR9RACEID ))
                     {
                       // Lock boat for 24h
                       $fullUsersObj->setSTOPPED(); // sets the boat mooring
                       $fullUsersObj->users->lockBoat(24*3600); // Boat is locked
+                      $fullUsersObj->users->logUserEvent("Pit Stop at waypoint crossing" );
+  
                     }
       
                 } else {
