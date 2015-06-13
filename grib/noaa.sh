@@ -76,27 +76,32 @@ for TSTAMP in `echo $allindexes` ; do
     rm -f $GRIBFILE
     let retry=1
     while [ $retry -gt 0 ]; do
-      wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
-      let retry=$?
-      echo "wget returned $retry" >>$LOG
-      if [ $retry -gt 0 ] ; then 
+      if [ $retry -gt 1 ] ; then 
         rm -f $GRIBFILE
         sleep 30
       fi
+      
+      wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
+      #let retry=$?
+      echo "wget returned $retry" >>$LOG
+      
       # Check null size file
       if [ ! -s $GRIBFILE ] ; then
         rm -f $GRIBFILE
         let retry=1
       fi
       #check minimum size for file
-      actualsize=$(wc -c "$GRIBFILE" | cut -f 1 -d ' ')
+      if [ -e "$GRIBFILE" ] ; then
+        actualsize=$(wc -c "$GRIBFILE" | cut -f 1 -d ' ')
+      else
+        actualsize=0
+      fi
       if [ $actualsize -le $minimumsize ]; then
           echo "grib file too small $actualsize < $minimumsize bytes" >>$LOG
           rm -f $GRIBFILE
           let retry=1
       fi
-    done
-#   if [ $retry == 4 ]; then
+#    if [ $retry == 4 ]; then
 #     while [ $retry -gt 0 ]; do
 #       wget --waitretry 600 -nc -c ${NOAA_SERVICE_BACKUP_URI}/gfs.$DAT$HH/$GRIBFILE >>$LOG 2>&1
 #       let retry=$?
@@ -109,9 +114,25 @@ for TSTAMP in `echo $allindexes` ; do
 #        fi
 #      done
 #    fi
-    echo  $DAT $GRIBFILE downloaded... >> $LOG 2>&1
-    cnvgrib -g21 $GRIBFILE $GRIBFILE.grib1
-    echo $GRIBFILE converted >> $LOG 2>&1
+      echo  $DAT $GRIBFILE downloaded... >> $LOG 2>&1
+      cnvgrib -g21 $GRIBFILE $GRIBFILE.grib1
+      echo $GRIBFILE converted >> $LOG 2>&1
+      actualsize=$(wc -c "$GRIBFILE.grib1" | cut -f 1 -d ' ')
+      if [ $actualsize -ne 844908 ]; then
+        let retry++
+        echo "Invalid grib file size, retry #" $retry  >> $LOG 2>&1
+        
+      else
+        echo "Grib1 size ok. File complete"  >> $LOG 2>&1
+        let retry=0
+      fi
+      
+      if [ $retry -eq 4 ]; then
+        #Enough retries for this file pray for the best
+        let retry=0
+      fi
+      
+    done
     cat $GRIBFILE.grib1 >> ${PREFIX}-${DAT}${HH}.grb
     if [ $TSTAMP -gt $TIME_THRESHOLD ]; then
       if [ ! -f $GRIBPATH/$INTERIM_NAME ]; then
