@@ -198,9 +198,9 @@
                     $is_arrived=false;
                     
                     // Add small hack for VOR9 1415 24h pitstop at lahaye
-                    // If race has right number and waypoint is 1st one then
+                    // If race has right number and waypoint has right number then
                     // Block boat as if it is coast crossing for 24h
-                    $VOR9RACEID = 150101;
+                    $VOR9RACEID = 141509;
                     $NEXTVORPITSTOPWP= 2;
                     
                     $fullUsersObj->users->logUserEvent("Pit Stop check ".$fullRacesObj->races->idraces." ".$nextwaypointid );
