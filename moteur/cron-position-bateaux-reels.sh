@@ -10,5 +10,5 @@ source $VLMRACINE/conf/conf_script || exit 1
 
 # Minitransat
 nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_getpos_SpinDrift.py.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
-#nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_IDEC.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_IDEC.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
 
