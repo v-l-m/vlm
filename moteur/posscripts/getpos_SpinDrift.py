@@ -10,7 +10,7 @@ url ="http://spindrift2-julesverne.addviso.org/data/tracking/sdt/leg1/locs.json"
 #second= "http://www.whatusea.com/positions/get/?assetId=1078&isSharingMode=1"
 vlmidrace = 1581
 realid = -3900
-realname = "IDEC"
+realname = "SpinDrift"
 
 # headers = {
     # 'Host' : 'www.whatusea.com',
@@ -54,7 +54,7 @@ for pos in Positions:
   lon = float(pos['locs'][0]['B'])
   heading = float(pos['locs'][0]['D'])
   speed =  float(pos['locs'][0]['I'])
-  print("%d|1|%d|%d|%s|IDEC|%f|%f|%f|%f\n" % (vlmidrace, epoch, realid, realname, lat, lon, speed, heading))
+  print("%d|1|%d|%d|%s|SpinDrift|%f|%f|%f|%f\n" % (vlmidrace, epoch, realid, realname, lat, lon, speed, heading))
   
 #print (Positions)
   
