@@ -34,6 +34,7 @@ for rid in boats.keys() :
     boats[rid]['vlmid'] = -bb['vlmid']
     boats[rid]['vlmboatname'] = "%03d - %s" % (rid, boats[rid]['name'])
     boats[rid]['vlmusername'] = "%s%03d" % (vlmusernameprefix, rid)
+    print "insert into users (idusers,boattype,boatname,username,engaged) values (%d,'boat_figaro2','%s','%s',20150919);"%( +-boats[rid]['vlmid'], boats[rid]['vlmboatname'].replace("'","").encode('utf8'),boats[rid]['vlmusername'].encode('utf8'))
 
 for track in geotreeUpdate.tracks(tagid='id',liveData=0):
       #20091108|1|1257681600|-729|BT|Sébastien Josse - Jean François Cuzon|50.016000|-1.891500|85.252725|4651.600000

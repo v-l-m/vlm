@@ -8,3 +8,6 @@ source $VLMRACINE/conf/conf_script || exit 1
 # l'hermione 2015
 #nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_hermione.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
 
+# Minitransat
+nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_minitransat2015.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+
