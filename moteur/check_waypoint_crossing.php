@@ -203,7 +203,7 @@
                     $VOR9RACEID = 141509;
                     $NEXTVORPITSTOPWP= 2;
                     
-                    $fullUsersObj->users->logUserEvent("Pit Stop check ".$fullRacesObj->races->idraces." ".$nextwaypointid );
+                    //$fullUsersObj->users->logUserEvent("Pit Stop check ".$fullRacesObj->races->idraces." ".$nextwaypointid );
                     if (($nextwaypointid == $NEXTVORPITSTOPWP) && ($fullRacesObj->races->idraces == $VOR9RACEID ))
                     {
                       // Lock boat for 24h
