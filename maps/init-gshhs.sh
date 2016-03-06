@@ -4,7 +4,7 @@
 source $VLMRACINE/conf/conf_script
 
 destpath=$VLMGSHHS
-gshhsfile=gshhg-bin-2.3.3.zip
+gshhsfile=gshhg-bin-2.3.4.zip
 if test -n "$VLMGSHHSURL" ; then
     urlgshhs=$VLMGSHHSURL/$gshhsfile
 else
