@@ -25,7 +25,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-#define GSHHS_MAX_DETAILS 3
+#define GSHHS_MAX_DETAILS 300
 #define GSHHS_SCL 1.0e-6
 #if defined USE_GSHHS_20 || USE_GSHHS_22
 struct GSHHS {  /* Global Self-consistent Hierarchical High-resolution 
@@ -142,48 +142,90 @@ int main (int argc, char **argv) {
 #else
     greenwich = (poly.flag >>16) & 0xff;
 #endif /* USE_GSHHS_20 || USE_GSHHS_22 */
-    if (level > GSHHS_MAX_DETAILS) { 
-      /* keep only land ?, not lake, island in lake, 
+    /* keep only land ?, not lake, island in lake, 
 	 pond in island in lake => take everything now */
+   if (level > GSHHS_MAX_DETAILS) {       
       if (fseek(coastfile, n*sizeof(struct POINT), SEEK_CUR)) {
-	printf ("Fatal error reading Error reading file %s\n",
-		argv[1]);
-	exit(-1);
+        printf ("Fatal error reading Error reading file %s\n",
+          argv[1]);
+        exit(-1);
       }
     } else {
       if (n > max_n) {
-	if (max_n) {
-	  free(plist);
-	}
-	plist = malloc(n*sizeof(struct POINT));
-	max_n = n;
+        if (max_n) {
+          free(plist);
+        }
+      plist = malloc(n*sizeof(struct POINT));
+      max_n = n;
       }
+      
       /* now read all the points from the polygon */
       if (fread ((void *)plist, (size_t)sizeof(struct POINT), 
-		 (size_t)n, coastfile) != n) {
-	printf ("Fatal error reading Error reading file %s\n", argv[1]);
-	exit(2);
+           (size_t)n, coastfile) != n) {
+        printf ("Fatal error reading Error reading file %s\n", argv[1]);
+        exit(2);
       }
       p = plist;
       /* and iterate on all points */
+      int pos=1;
+      int     lastx, lasty, fakey;
+      //fprintf(stderr," poly id=%x south=%d\n",poly.id, poly.south);
+	    
       for (i=0; i<n; i++) {
-	px = ntohl(p->x);
-	py = ntohl(p->y);
-	longitude = ((double)px * GSHHS_SCL);
-	// in the db we don't need to keep the continuity, as
-	// the php code will take care of that if needed.
-	// so stick strictly to -180 / +180
-	if (longitude > 180.0) {
-	  longitude -= 360.0;
-	}
-	latitude  = ((double)py * GSHHS_SCL);
-	printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, 
-	       latitude, longitude);
-	p++;
+        px = ntohl(p->x);
+        py = ntohl(p->y);
+        
+        if (poly.south == -90000000) {
+          // Add before 1st point
+          //if (px < 0) {
+            if (pos) {
+              fprintf(stderr,"Adding points to poly id=%x \n",poly.id);
+	    
+              // ok, we need to create some fake points...
+              //fakey = lasty + (int)( ((double)(p->y - lasty)) * ((double)lastx)/(double)(lastx - p->x) );
+              pos = 0;
+              longitude =180;
+              latitude = -90;
+              printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);
+              fprintf(stderr,"%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);
+              /*longitude = 0;
+              latitude = -90;
+              printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);
+              longitude  = 180;
+              latitude  = -90;
+              printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);
+              longitude  = 180;
+              latitude  = fakey;
+              printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);*/
+            }
+          //}
+        }
+        longitude = ((double)px * GSHHS_SCL);
+        // in the db we don't need to keep the continuity, as
+        // the php code will take care of that if needed.
+        // so stick strictly to -180 / +180
+        if (longitude > 180.0) {
+          longitude -= 360.0;
+        }
+        latitude  = ((double)py * GSHHS_SCL);
+        printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);
+        
+        //lastx = ((double)px * GSHHS_SCL);;
+        //lasty = ((double)py * GSHHS_SCL);;
+        
+        p++;
+      }
+      if (poly.south == -90000000) {
+        // Add after last point
+        longitude=-180;
+        latitude=-90;
+        printf("%lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);
+        fprintf(stderr," last %lu,%u,%.7g,%.7g\n",  idpoint++, poly.id, latitude, longitude);       
       }
     }
-      nb_read = fread ((void *)&poly, (size_t)sizeof (struct GSHHS), 
-		       (size_t)1, coastfile);
+    
+    nb_read = fread ((void *)&poly, (size_t)sizeof (struct GSHHS), 
+         (size_t)1, coastfile);
   }
   exit(1);
 }
