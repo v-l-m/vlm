@@ -8,11 +8,11 @@
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
       <!--[if IE]>
       <script src="excanvas.js"></script><![endif]-->
-      <script src="http://maps.google.com/maps/api/js?v=3.20&amp;sensor=false"/>
-      <script src="/externals/OpenLayers/OpenLayers.js"/>
-      <script src="config.js"/>
-      <script src='ControlSwitch.js' type='text/javascript'/>
-      <script src='gribmap.js' type='text/javascript'/>
+      <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
+      <script src="/externals/OpenLayers/OpenLayers.js"></script>
+      <script src="config.js"></script>
+      <script src='ControlSwitch.js' type='text/javascript'></script>
+      <script src='gribmap.js' type='text/javascript'></script>
       <script>
           function init() {
 
@@ -195,7 +195,7 @@
       </script>
   </head>
   <body onload="init();">
-    <div id="jVlmControl"/>
+    <div id="jVlmControl"></div>
     <div id="jVlmMap">
       <div id="logovlm">
         <img src="/images/logos/logovlmnew.png"/>

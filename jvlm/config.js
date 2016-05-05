@@ -12,7 +12,7 @@ if (webhost.match("virtual-loup-de-mer.org"))
     bingApiKey = "AkBdZQ5s2ay67yXs9xruMVOPDAikz_CycgDXLoFwJGrfi2rjsGNq8ijo4DddYF7t";
 }
 
-if (webhost.match("v-l-m.org"))
+if (webhost.match("v-l-m.org") || webhost.match("vlm-dev"))
 {
     // v-l-m.org
     bingApiKey = "AmcAzdaZ8u4cWpQo9qPF7_U4q-vW_u3bsprZ4rqu1kJppx_porBOvOELFXWZiHLE";
