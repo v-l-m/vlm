@@ -5,6 +5,24 @@ html, body, #jVlmMap {
   background-color: #e0e0f0;
 }
 
+div.LoginPanel {
+  position: absolute;
+  width: 450px;
+  height: 250px;
+  left: 10px;
+  top: 10px;
+  background-color: #15214b;
+  color: white; 
+  z-index: 1000;
+}
+
+div.LoginButton{
+  background-color: lightBlue;
+  position: absolute;
+  width: 50px;
+}
+
+
 div.olControlLayerSwitcher {
   top: 50px;
  }
@@ -90,3 +108,4 @@ div.GribmapMousePosition {
   top: inherit;
   line-height: 11px; 
 }
+

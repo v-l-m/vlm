@@ -1,5 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
+<?php
+
+    include_once("includes/header.inc");
+
+?>
 <html>
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -8,15 +13,19 @@
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
       <!--[if IE]>
       <script src="excanvas.js"></script><![endif]-->
+      <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
       <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
       <script src="/externals/OpenLayers/OpenLayers.js"></script>
       <script src="config.js"></script>
+      <script src="localize.js"></script>
+      <script src="user.js"></script>
       <script src='ControlSwitch.js' type='text/javascript'></script>
       <script src='gribmap.js' type='text/javascript'></script>
       <script>
+      
           function init() {
 
-              //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
+             //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
               OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
 
               var default_latitude = 45.5;
@@ -195,6 +204,54 @@
       </script>
   </head>
   <body onload="init();">
+    <div class="LoginPanel" visibility="hidden" >
+      <h1 I18n="email">Identification</h1>
+          <table>
+            <tr>
+              <td>Adresse de courriel : 
+              </td>
+              <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
+              </td>
+            </tr>
+            <tr>
+              <td>Mot de passe : 
+              </td>
+              <td>
+                <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+              </td>
+            </tr>            
+            <tr>
+              <td/>
+              <td>
+                  <div class="LoginButton">
+                  <p class="LoginButton">Valider</p>
+                  </div>
+              </td>
+            </tr>
+          </table>
+          <BR><BR>
+          <div id="langbox" >
+            <a href="/index.php?&amp;lang=en"><img src="/images/site/en.png" title="English Version" alt="English Version"></a>
+            <a href="/index.php?&amp;lang=fr"><img src="/images/site/fr.png" title="Version Française" alt="Version Française"></a>
+            <a href="/index.php?&amp;lang=it"><img src="/images/site/it.png" title="Italian Version" alt="Italian Version"></a>
+            <a href="/index.php?&amp;lang=es"><img src="/images/site/es.png" title="Spanish Version" alt="Spanish Version"></a>
+            <a href="/index.php?&amp;lang=de"><img src="/images/site/de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></a>
+            <a href="/index.php?&amp;lang=pt"><img src="/images/site/pt.png" title="Portugese Version" alt="Portugese Version"></a>
+        </div>
+      
+    </div>
+    <div class="UserMenu" visibility="hidden" >
+    <div class="PlayerName">
+      <table>
+        <tr>
+          <td id="PlayerId">
+          </td>
+          <td>v
+          </td>
+        </tr>
+      </table>
+    </div>
+    </div>
     <div id="jVlmControl"></div>
     <div id="jVlmMap">
       <div id="logovlm">
