@@ -2,9 +2,23 @@
 
 function LocalizeString()
 {
-  console.log("Localizing...");
+  //console.log("Localizing...");
   LocalizeItem($("[I18n]").get());
+  
+  // Handle flag clicks
+  $(".LngFlag").click(
+    function(event,ui)
+    {
+      OnLangFlagClick($(this).attr('lang'));
+    }
+  );
+  
   return true;
+}
+
+function OnLangFlagClick(Lang)
+{
+  InitLocale(Lang)
 }
 
 function LocalizeItem( Elements )
@@ -32,9 +46,15 @@ function LocalizeItem( Elements )
   return true
 }
 
-function InitLocale()
+function InitLocale(Lang)
 {
-  $.get("/ws/serverinfo/translation.php",
+  var query = "/ws/serverinfo/translation.php"
+  
+  if (Lang)
+  {
+    query += "?lang=" + Lang;
+  }
+  $.get( query,
           function(result)
           {
             if (result.success == true)

@@ -14,6 +14,14 @@ div.LoginPanel {
   background-color: #15214b;
   color: white; 
   z-index: 1000;
+  visibility: hidden;
+}
+
+div.UserMenu {
+  position: absolute;
+  background-color: #15214b;
+  color: white; 
+  z-index: 1000;
 }
 
 div.LoginButton{
@@ -109,3 +117,9 @@ div.GribmapMousePosition {
   line-height: 11px; 
 }
 
+.ui-menu{
+  position: absolute;
+  top : 20px;
+  background-color: darkBlue;
+  
+}

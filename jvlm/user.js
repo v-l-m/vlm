@@ -1,33 +1,15 @@
  var _IsLoggedIn;
  
-// On ready get started with vlm management
-// This should be somewhere else...
-$(document).ready(
-  function(){
-    // Load translation strings
-    InitLocale()
-    
-    // Init event handlers
-    // Login button click event handler
-    $(".LoginButton").click( 
-      function()
-      {
-        OnLoginRequest();
-      }
-    );   
 
-    // Create user object
-    CreateUser();
-    
-    // CheckLogin
-    CheckLogin();
-     
-  }  
-);
 
 function CreateUser()
 {
+  var Player = {IdPlayer:0, IsAdmin:false, PlayerName:'', PlayerJID:'',
+                Fleet : [],
+                BSFleet: []
+                };
   
+  return Player;
 };
 
 function IsLoggedIn()
@@ -42,6 +24,7 @@ function ShowLoginPanel()
   if (IsLoggedIn())
   {
    $(".LoginPanel").hide();
+   SetupUserMenu();
   }
   else
   {
@@ -54,11 +37,13 @@ function ShowLoginPanel()
     
     console.log( "dest " + destx + " " + desty );
     // Show Panel
+    $(".LoginPanel").css({visibility: "visible"});
+    
     $(".LoginPanel").show();
     $(".LoginPanel").animate({left: destx,
                               top: desty},0);
     
-    $(".LoginPanel").show();
+    $(".UserMenu").hide();
     }
 };
 
@@ -76,9 +61,9 @@ function OnLoginRequest()
           },
           function(result)
           {
-            var LoginResult = JSON.parse(result);
-            
-            _IsLoggedIn= LoginResult.success==true;
+            // :( calls login twice but avoid coding twice
+            // Should use events to splits GUI from WS processing
+            CheckLogin();
           }
         );
   
@@ -94,13 +79,83 @@ function CheckLogin()
           
           _IsLoggedIn= LoginResult.success==true;
           ShowLoginPanel();
-  
+              
+          if (_IsLoggedIn)
+          {
+            GetPlayerInfo();
+          }
         }
       );
   
   }
 
+function Logout()
+{
+  $.get("/ws/logout.php",
+        function(result)
+        {
+          var i = result;
+          if (!result.success)
+          {
+            alert("Something bad happened while logging out. Restart browser...");
+          }
+        }
+        );
+  _IsLoggedIn=false;
+  ShowLoginPanel();
+}
+  
+function GetPlayerInfo()
+ {
+   $.get("/ws/playerinfo/profile.php",
+          function(result)
+          {
+            if (result.success)
+            {
+              // Ok, create a user from profile
+              _CurPlayer = CreateUser()
+              _CurPlayer.IdPlayer = result.profile.idp;
+              _CurPlayer.IsAdmin  = result.profile.admin;
+              _CurPlayer.PlayerName  = result.profile.playername;
+              
+              RefreshPlayerMenu();
+            }
+            else
+            {
+              // Something's wrong, act as not logged in
+              Logout();
+              return;
+            }
+          }
+        );
+   $.get("/ws/playerinfo/fleet_private.php",
+          function(result)
+          {
+            var i = result;
+          }
+        )
+        
+   
+ }
 
+function RefreshPlayerMenu()
+{
+  // Update GUI for current player
+   $("#PlayerId").text(_CurPlayer.PlayerName);
+   
+}
 
+function SetupUserMenu()
+{
+  // Set position in center of screen
+  var destx = $(document).width()/2 - $(".UserMenu").width() /2 + 'px';
+  var desty = 0;
+  
+  // Show Panel
+  $(".UserMenu").show();
+  $(".UserMenu").animate({left: destx,
+                          top: desty},0);
+    
+}
 
 
