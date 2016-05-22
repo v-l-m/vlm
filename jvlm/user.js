@@ -1,15 +1,32 @@
  var _IsLoggedIn;
  
-
-
-function CreateUser()
+function Boat()
 {
-  var Player = {IdPlayer:0, IsAdmin:false, PlayerName:'', PlayerJID:'',
-                Fleet : [],
-                BSFleet: []
-                };
+  this.IdBoat=-1;
+  this.Engaged=false;
+  this.BoatName='';
+  this.BoatPseudo='';
+  this.VLMInfo={};  // LastBoatInfoResult
   
-  return Player;
+}
+
+function Boat(vlmboat)
+{
+  this.IdBoat=vlmboat.idu;
+  this.Engaged=vlmboat.engaged;
+  this.BoatName=vlmboat.boatname;
+  this.BoatPseudo=vlmboat.boatpseudo;
+}
+
+
+function User()
+{
+  this.IdPlayer=-1;
+  this.IsAdmin=false;
+  this.PlayerName='';
+  this.PlayerJID='';
+  this.Fleet = [];
+  this.BSFleet= [];
 };
 
 function IsLoggedIn()
@@ -113,7 +130,10 @@ function GetPlayerInfo()
             if (result.success)
             {
               // Ok, create a user from profile
-              _CurPlayer = CreateUser()
+              if ( typeof _CurPlayer == 'undefined' )
+              {
+                _CurPlayer = new User();
+              }
               _CurPlayer.IdPlayer = result.profile.idp;
               _CurPlayer.IsAdmin  = result.profile.admin;
               _CurPlayer.PlayerName  = result.profile.playername;
@@ -132,6 +152,21 @@ function GetPlayerInfo()
           function(result)
           {
             var i = result;
+            
+            if (typeof _CurPlayer == 'undefined')
+              {
+                _CurPlayer = new User();
+              }
+            for (boat in result.fleet)
+            {  
+              _CurPlayer.Fleet.push (new Boat(result.fleet[boat]));
+            }
+            for (boat in result.fleet_boatsit)
+            {  
+              _CurPlayer.BSFleet.push (new Boat(result.fleet_boatsit[boat]));
+            }
+            
+            RefreshPlayerMenu();
           }
         )
         
@@ -142,6 +177,19 @@ function RefreshPlayerMenu()
 {
   // Update GUI for current player
    $("#PlayerId").text(_CurPlayer.PlayerName);
+   
+  // Update the combo to select the current boat
+  ClearBoatSelector();
+  for (boat in _CurPlayer.Fleet)
+  {
+    AddBoatToSelector(_CurPlayer.Fleet[boat],true);
+  }
+  for (boat in _CurPlayer.BSFleet)
+  {
+    AddBoatToSelector(_CurPlayer.BSFleet[boat],false);
+  }
+  
+  ShowUserBoatSelector();
    
 }
 
@@ -158,4 +206,26 @@ function SetupUserMenu()
     
 }
 
+function GetBoatFromIdu(Id)
+{
+  var RetBoat= GetBoatFromBoatArray(_CurPlayer.Fleet,Id);
+  
+  if (typeof RetBoat == 'undefined')
+  {
+    RetBoat= GetBoatFromBoatArray(_CurPlayer.BSFleet,Id);
+  }
+  
+  return RetBoat;
+ }
 
+function GetBoatFromBoatArray(BoatsArray, Id)
+{
+  for (boat in BoatsArray)
+  {
+    if (BoatsArray[boat].IdBoat == Id)
+    {
+      return BoatsArray[boat];
+    }
+  }
+  return ;
+}

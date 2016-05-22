@@ -13,16 +13,22 @@
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
       <!--[if IE]>
       <script src="excanvas.js"></script><![endif]-->
-      <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
+      <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
       <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+      -->
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
       <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
-      <script src="/externals/OpenLayers/OpenLayers.js"></script>
+      <!--<script src="/externals/OpenLayers/OpenLayers.js"></script>
+      -->
+      <script src="OpenLayers/OpenLayers.js"></script>
       <script src="config.js"></script>
       <script src="localize.js"></script>
       <script src="user.js"></script>
       <script src="GUI.js"></script>
       <script src='ControlSwitch.js' type='text/javascript'></script>
       <script src='gribmap.js' type='text/javascript'></script>
+      <script src='vlmboats.js' type='text/javascript'></script>
       <script>
       
           function init() {
@@ -33,20 +39,6 @@
               var default_latitude = 45.5;
               var default_longitude = -30.0;
               var default_zoom = 4;
-
-              var options = {
-                  //Projection mercator sphérique (type google map ou osm)
-                  projection: new OpenLayers.Projection("EPSG:900913"),
-                  //projection pour l'affichage des coordonnées
-                  displayProjection: new OpenLayers.Projection("EPSG:4326"),
-                  //unité : le m
-                  units: "m",
-                  maxResolution: 156543.0339,
-                  maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
-                          20037508.34, 20037508.34),
-                  restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34,
-                          40037508.34, 20037508.34)
-              };
 
               var layeroption = {
                   //sphérique
@@ -61,7 +53,7 @@
 
               map = new OpenLayers.Map(
                       "jVlmMap", //identifiant du div contenant la carte openlayer
-                      options);
+                      MapOptions);
 
               //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
               var urlArray = tilesUrlArray;
@@ -113,7 +105,10 @@
                       "http://vmap0.tiles.osgeo.org/wms/vmap0",
                       {layers: 'basic', sphericalMercator: true}
               );
-
+              
+              // Le Calque de render des boats et de jeu
+              //var BoatsLayer = new VlmBoats.Layer("VlmBoats", layeroption);
+              
               //Le calque de vent made in Vlm
               var grib = new Gribmap.Layer("Gribmap", layeroption);
               //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
@@ -158,7 +153,7 @@
               var vlmoverview = vlm.clone();
 
               //Et on ajoute tous les layers à la map.
-              map.addLayers([vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
+              map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
               //map.addLayers([vlm, grib]); //FOR DEBUG
 
               //Controle l'affichage des layers
@@ -199,73 +194,65 @@
               if (!map.getCenter()) {
                   // Don't do this if argparser already did something...
                   var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
-                  lonlat.transform(options.displayProjection, options.projection);
+                  lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
                   map.setCenter(lonlat, default_zoom);
               }
           }
       </script>
   </head>
   <body onload="init();">
+    <div id="jVlmControl"></div>
+    <div id="jVlmMap"></div>
     <div class="LoginPanel" visibility="hidden" >
-      <span>
-        <h1 >Identification</h1>
-      </span>
+      <h1 I18n="Identification" align="center">Identification</h1>
       <table>
         <tr>
-          <td I18n="email">Adresse de courriel : 
+          <td width="50%" I18n="email">Adresse de courriel : 
           </td>
           <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
           </td>
         </tr>
         <tr>
-          <td I18n="email">Mot de passe : 
+          <td I18n="password">Mot de passe : 
           </td>
           <td>
-            <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+            <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
           </td>
         </tr>            
         <tr>
           <td/>
-          <td>
-              <p class="LoginButton" I18n="login">Valider...</p>
+          <td align:center>
+              <button class="LoginButton" I18n="login">Valider...</button>
           </td>
         </tr>
-        <tr>
-          <td />
-          <td>
-            <div id="langbox" >
-                <a class="LngFlag" lang="en"><img src="/images/site/en.png" title="English Version" alt="English Version"></a>
-                <a class="LngFlag" lang="fr"><img src="/images/site/fr.png" title="Version Française" alt="Version Française"></a>
-                <a class="LngFlag" lang="it"><img src="/images/site/it.png" title="Italian Version" alt="Italian Version"></a>
-                <a class="LngFlag" lang="es"><img src="/images/site/es.png" title="Spanish Version" alt="Spanish Version"></a>
-                <a class="LngFlag" lang="de"><img src="/images/site/de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></a>
-                <a class="LngFlag" lang="pt"><img src="/images/site/pt.png" title="Portugese Version" alt="Portugese Version"></a>
-            </div>
-          </td>
-        <tr>
-      </table>
+        </table>
+        <div id="langbox" >
+            <img class="LngFlag" lang="en" src="/images/site/en.png" title="English Version" alt="English Version">
+            <img class="LngFlag" lang="fr" src="images/lng-fr.gif" title="Version Française" alt="Version Française">
+            <img class="LngFlag" lang="it" src="/images/site/it.png" title="Italian Version" alt="Italian Version">
+            <img class="LngFlag" lang="es" src="/images/site/es.png" title="Spanish Version" alt="Spanish Version">
+            <img class="LngFlag" lang="de" src="/images/site/de.png" title="Deutsche Fassung" alt="Deutsche Fassung">
+            <img class="LngFlag" lang="pt" src="/images/site/pt.png" title="Portugese Version" alt="Portugese Version">
+        </div>
+      
     </div>
     <div class="UserMenu" visibility="hidden" >
       <div class="PlayerName">
-        <table>
-          <tr>
-            <td >
-              <p id="PlayerId">Not Logged in...</p>
-            </td>
-            <td id="DropLogoutMenu">v
-            </td>
-          </tr>
-        </table>
-      </div>
+        <div id="PlayerId" style="float:left">Login in progress ... </div>
+        <div style="float:left">
+          <select id="BoatSelector" visibility="hidden">
+          </select>
+        </div>
+        <div style="float:left" id="DropLogoutMenu">v
+        </div>
+        </div>
         <ul id="Menu">
           <li I18n="logout">Logout</li>
-          <li>...</li>
         </ul>
       
     </div>
     
-    <div id="jVlmControl"></div>
-    <div id="jVlmMap">
+
       <div id="logovlm">
         <img src="/images/logos/logovlmnew.png"/>
       </div>
