@@ -11,14 +11,39 @@ $(document).ready(
     
     // Init event handlers
     // Login button click event handler
-    $(".LoginButton").click( 
+    $("#LoginButton").click( 
       function()
       {
         OnLoginRequest();
       }
     );   
     
-    // Show logout menu on drop icon click
+    $("#loginButton").on ('click',
+          function (e)
+          {
+            // Get localization key to figure out action
+            var i=0;
+            switch (e.currentTarget.attributes["I18n"].nodeValue)
+            {
+              case "login":
+                if (_IsLoggedIn)
+                {
+                  $("#Menu").toggle();
+                  Logout();
+                }
+                else
+                {
+                  $("#LoginForm").modal('show');
+                  //OnLoginRequest();
+                }
+
+            }
+            
+          }
+    );
+    
+    /*
+    TBD // Show logout menu on drop icon click
     $("#DropLogoutMenu").click(
       function()
       {
@@ -43,19 +68,15 @@ $(document).ready(
                         }
                     }
     );
-    
+    */
     // Set BoatSelector as JQuery UI Selector 
     // Handle boat selector selection change
     //
-    $("#BoatSelector").selectmenu();
-    $("#BoatSelector").selectmenu({
-        select: function( event, ui ) {}
-      }
-    );
-      
+    $("#BoatSelector").selectmenu();  
     $("#BoatSelector").on( "selectmenuselect", function(event,ui)
       {
         SetCurrentBoat(GetBoatFromIdu(ui.item.value));
+        $("#BoatSelector").selectmenu('close');
       }
     );
     
@@ -112,10 +133,21 @@ function AddBoatToSelector(boat, isfleet)
                                 }
                               )
                             )
+                            
   $("option[value="+ boat.IdBoat +"]").toggleClass(false).addClass(boatclass);
 }
 
 function   ShowUserBoatSelector()
 {
   //$("#BoatSelector").show();
+}
+
+function ShowBgLoad()
+{
+  $("#BgLoadProgress").css("display","block");
+}
+
+function HideBgLoad()
+{
+  $("#BgLoadProgress").css("display","block");
 }

@@ -34,38 +34,10 @@ function IsLoggedIn()
   return _IsLoggedIn;
 };
 
-// Show or hides login panel according to login state
-function ShowLoginPanel()
-{
-  // Handle login panel
-  if (IsLoggedIn())
-  {
-   $(".LoginPanel").hide();
-   SetupUserMenu();
-  }
-  else
-  {
-    //var output = 'before ' + $(".LoginPanel:first").offsetleft + ' ' + $(".LoginPanel").offsettop + ' ' + $(".LoginPanel").width();
-    //console.log( output );
-    
-    // Set position in center of screen
-    var destx = $(document).width()/2 - $(".LoginPanel").width() /2 + 'px';
-    var desty = $(document).height()/2 - $(".LoginPanel").height() /2 +'px';
-    
-    console.log( "dest " + destx + " " + desty );
-    // Show Panel
-    $(".LoginPanel").css({visibility: "visible"});
-    
-    $(".LoginPanel").show();
-    $(".LoginPanel").animate({left: destx,
-                              top: desty},0);
-    
-    $(".UserMenu").hide();
-    }
-};
 
 function OnLoginRequest()
 {
+  
   
   var user = $(".UserName").val();
   var password = $(".UserPassword").val();
@@ -84,7 +56,6 @@ function OnLoginRequest()
           }
         );
   
-  ShowLoginPanel();
 };
 
 function CheckLogin()
@@ -95,7 +66,6 @@ function CheckLogin()
           var LoginResult = JSON.parse(result);
           
           _IsLoggedIn= LoginResult.success==true;
-          ShowLoginPanel();
               
           if (_IsLoggedIn)
           {
@@ -108,6 +78,7 @@ function CheckLogin()
 
 function Logout()
 {
+  $("#LoggedInNav").hide();
   $.get("/ws/logout.php",
         function(result)
         {
@@ -119,11 +90,12 @@ function Logout()
         }
         );
   _IsLoggedIn=false;
-  ShowLoginPanel();
+  
 }
   
 function GetPlayerInfo()
  {
+   ShowBgLoad();
    $.get("/ws/playerinfo/profile.php",
           function(result)
           {
@@ -175,6 +147,8 @@ function GetPlayerInfo()
 
 function RefreshPlayerMenu()
 {
+  
+  
   // Update GUI for current player
    $("#PlayerId").text(_CurPlayer.PlayerName);
    
@@ -191,6 +165,8 @@ function RefreshPlayerMenu()
   
   ShowUserBoatSelector();
    
+  $("#LoggedInNav").css("display","block");
+  HideBgLoad();
 }
 
 function SetupUserMenu()

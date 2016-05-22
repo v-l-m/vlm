@@ -1,13 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<?php
+<!--<?php
 
     include_once("includes/header.inc");
 
-?>
+?>-->
 <html>
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>jVLM alpha (grib viewer only)</title>
       <meta http-equiv="X-UA-Compatible" content="IE=8">
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
@@ -17,7 +18,8 @@
       <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
       -->
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+      <script src="jquery-ui.min.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
       <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
       <!--<script src="/externals/OpenLayers/OpenLayers.js"></script>
       -->
@@ -106,9 +108,7 @@
                       {layers: 'basic', sphericalMercator: true}
               );
               
-              // Le Calque de render des boats et de jeu
-              //var BoatsLayer = new VlmBoats.Layer("VlmBoats", layeroption);
-              
+               
               //Le calque de vent made in Vlm
               var grib = new Gribmap.Layer("Gribmap", layeroption);
               //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
@@ -201,31 +201,88 @@
       </script>
   </head>
   <body onload="init();">
-    <div id="jVlmControl"></div>
-    <div id="jVlmMap"></div>
-    <div class="LoginPanel" visibility="hidden" >
-      <h1 I18n="Identification" align="center">Identification</h1>
-      <table>
-        <tr>
-          <td width="50%" I18n="email">Adresse de courriel : 
-          </td>
-          <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
-          </td>
-        </tr>
-        <tr>
-          <td I18n="password">Mot de passe : 
-          </td>
-          <td>
-            <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
-          </td>
-        </tr>            
-        <tr>
-          <td/>
-          <td align:center>
-              <button class="LoginButton" I18n="login">Valider...</button>
-          </td>
-        </tr>
-        </table>
+    
+    <div class="container-fluid">
+      <div class="row main-row">
+        <div id="jVlmControl" class="col-sm-12"></div>
+        <div id="jVlmMap" class="col-sm-12"></div>
+      </div>
+    </div>
+    <div class="progress" height="0.5em" position="absolute" style="display: none; margin-bottom: 0px;">
+      <div class="progress-bar progress-bar-striped active" role="progressbar"
+      aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">loading ...
+      </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span> 
+            <span class="icon-bar"></span>             
+          </button>
+          <a class="navbar-brand" href="#"><img src="/images/logos/logovlmnew.png"/></a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul  class="nav navbar-nav"  id="LoggedInNav" style="display: none;>
+            <li  class="active" ><a href="#" id="PlayerId">Not Logged in </a></li>
+            <li  >
+              <select id="BoatSelector" visibility="hidden" width="50px">
+                <option>no option </option>
+              </select> 
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <span class="glyphicon glyphicon-log-in"></span> 
+              <button id="loginButton" type="button" class="btn btn-default" I18n="login">Login</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+
+    <!-- Modal -->
+    <div id="LoginForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div id="LoginPanel" class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="Identification" class="modal-title">Identification</h4>
+          </div>
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td width="50%" I18n="email">Adresse de courriel : 
+                </td>
+                <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
+                </td>
+              </tr>
+              <tr>
+                <td I18n="password">Mot de passe : 
+                </td>
+                <td>
+                  <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
+                </td>
+              </tr>            
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button id="LoginButton" I18n="login" type="button" class="btn " data-dismiss="modal">login</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+   
+    <!--
+    <div  visibility="hidden" >
+      <h1  align="center"></h1>
+      
         <div id="langbox" >
             <img class="LngFlag" lang="en" src="/images/site/en.png" title="English Version" alt="English Version">
             <img class="LngFlag" lang="fr" src="images/lng-fr.gif" title="Version Française" alt="Version Française">
@@ -236,12 +293,11 @@
         </div>
       
     </div>
-    <div class="UserMenu" visibility="hidden" >
+    <div class="UserMenu"  >
       <div class="PlayerName">
-        <div id="PlayerId" style="float:left">Login in progress ... </div>
+        
         <div style="float:left">
-          <select id="BoatSelector" visibility="hidden">
-          </select>
+          
         </div>
         <div style="float:left" id="DropLogoutMenu">v
         </div>
@@ -256,7 +312,7 @@
       <div id="logovlm">
         <img src="/images/logos/logovlmnew.png"/>
       </div>
-    </div>
+    </div>-->
   </body>
 </html>
 
