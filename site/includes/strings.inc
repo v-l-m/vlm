@@ -737,7 +737,7 @@ Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _
     'locked' => 'Stop &amp; Go (temps restant) : ',
     'locktime' => 'Stop &amp; Go pour &eacute;chouement : ',
     'loggedout' => 'Vous &ecirc;tes d&eacute;connect&eacute;.',
-    'login' => 'Valider',
+    'login' => 'Connexion',
     'login_id' => '#Id du bateau',
     'login_name' => 'Pseudonyme',
     'loginempty' => 'Vos pseudonyme et mot de passe ne peuvent pas être vides. Merci de recommencer.',
