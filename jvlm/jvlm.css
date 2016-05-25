@@ -147,6 +147,8 @@ option.RacingBoat{
 }
 
 .LngFlag{
+  padding-top: 2px;
+  padding-bottom: 2px;
   width: 24px;
   height: 24px;
 }

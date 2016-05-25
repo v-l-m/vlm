@@ -60,6 +60,7 @@ function OnLoginRequest()
 
 function CheckLogin()
 {
+  ShowPb("#PbLoginProgress");
   $.post("/ws/login.php", 
         function(result)
         {
@@ -71,6 +72,7 @@ function CheckLogin()
           {
             GetPlayerInfo();
           }
+          HidePb("#PbLoginProgress");
         }
       );
   
@@ -124,6 +126,7 @@ function GetPlayerInfo()
           function(result)
           {
             var i = result;
+            var select
             
             if (typeof _CurPlayer == 'undefined')
               {
@@ -132,6 +135,11 @@ function GetPlayerInfo()
             for (boat in result.fleet)
             {  
               _CurPlayer.Fleet.push (new Boat(result.fleet[boat]));
+              if ( typeof select == "undefined")
+              {
+                //SetCurrentBoat(GetBoatFromIdu(boat));
+                select = boat;
+              }
             }
             for (boat in result.fleet_boatsit)
             {  
@@ -150,7 +158,7 @@ function RefreshPlayerMenu()
   
   
   // Update GUI for current player
-   $("#PlayerId").text(_CurPlayer.PlayerName);
+  $("#PlayerId").text(_CurPlayer.PlayerName);
    
   // Update the combo to select the current boat
   ClearBoatSelector();
@@ -164,7 +172,11 @@ function RefreshPlayerMenu()
   }
   
   ShowUserBoatSelector();
-   
+  $('#BoatSelector').prop("selectedIndex",0);
+  $('#BoatSelector').selectmenu('refresh');
+            //$('#BoatSelector').val(boat);
+            //$('#BoatSelector').selectmenu("refresh");
+            
   $("#LoggedInNav").css("display","block");
   HideBgLoad();
 }

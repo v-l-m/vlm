@@ -208,11 +208,7 @@
         <div id="jVlmMap" class="col-sm-12"></div>
       </div>
     </div>
-    <div class="progress" height="0.5em" position="absolute" style="display: none; margin-bottom: 0px;">
-      <div class="progress-bar progress-bar-striped active" role="progressbar"
-      aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">loading ...
-      </div>
-    </div>
+    
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -225,12 +221,30 @@
           <a class="navbar-brand" href="#"><img src="/images/logos/logovlmnew.png"/></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-          <ul  class="nav navbar-nav"  id="LoggedInNav" style="display: none;>
+          <ul  class="nav navbar-nav"  id="LoggedInNav" style="display:none">
             <li  class="active" ><a href="#" id="PlayerId">Not Logged in </a></li>
             <li  >
               <select id="BoatSelector" visibility="hidden" width="50px">
-                <option>no option </option>
               </select> 
+            </li>
+          </ul>
+          <ul class="navbar-nav" id="LoggedInNav" style="display:none" >
+            <li>
+              <div id="PbLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
+                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">Processing Login...
+                </div>
+              </div>
+              <div id="PbGetBoatProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
+                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">Loading Boat Information...
+                </div>
+              </div>
+              <div id="PbGribLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
+                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">loading gribs...
+                </div>
+              </div>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -255,21 +269,38 @@
             <h4 I18n="Identification" class="modal-title">Identification</h4>
           </div>
           <div class="modal-body">
-            <table>
-              <tr>
-                <td width="50%" I18n="email">Adresse de courriel : 
-                </td>
-                <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
-                </td>
-              </tr>
-              <tr>
-                <td I18n="password">Mot de passe : 
-                </td>
-                <td>
-                  <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
-                </td>
-              </tr>            
-            </table>
+            <div class="container">
+              <div class="row">
+                <!-- Language bar -->
+                <div class="col-sm-9">
+                  <table>
+                    <tr>
+                      <td width="50%" I18n="email">Adresse de courriel : 
+                      </td>
+                      <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td I18n="password">Mot de passe : 
+                      </td>
+                      <td>
+                        <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
+                      </td>
+                    </tr>            
+                  </table>
+                </div>
+                <div class="col-sm-1">
+                  <ul id="langbox" class="nav navbar-nav" >
+                    <li><img class="LngFlag" lang="en" src="/images/site/en.png" title="English Version" alt="English Version"></li>
+                    <li><img class="LngFlag" lang="fr" src="images/lng-fr.gif" title="Version Française" alt="Version Française"></li>
+                    <li><img class="LngFlag" lang="it" src="/images/site/it.png" title="Italian Version" alt="Italian Version"></li>
+                    <li><img class="LngFlag" lang="es" src="/images/site/es.png" title="Spanish Version" alt="Spanish Version"></li>
+                    <li><img class="LngFlag" lang="de" src="/images/site/de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
+                    <li><img class="LngFlag" lang="pt" src="/images/site/pt.png" title="Portugese Version" alt="Portugese Version"></li>
+                  </ul>
+                </div>
+               </div>
+              </div>
           </div>
           <div class="modal-footer">
             <button id="LoginButton" I18n="login" type="button" class="btn " data-dismiss="modal">login</button>
@@ -283,14 +314,7 @@
     <div  visibility="hidden" >
       <h1  align="center"></h1>
       
-        <div id="langbox" >
-            <img class="LngFlag" lang="en" src="/images/site/en.png" title="English Version" alt="English Version">
-            <img class="LngFlag" lang="fr" src="images/lng-fr.gif" title="Version Française" alt="Version Française">
-            <img class="LngFlag" lang="it" src="/images/site/it.png" title="Italian Version" alt="Italian Version">
-            <img class="LngFlag" lang="es" src="/images/site/es.png" title="Spanish Version" alt="Spanish Version">
-            <img class="LngFlag" lang="de" src="/images/site/de.png" title="Deutsche Fassung" alt="Deutsche Fassung">
-            <img class="LngFlag" lang="pt" src="/images/site/pt.png" title="Portugese Version" alt="Portugese Version">
-        </div>
+        
       
     </div>
     <div class="UserMenu"  >

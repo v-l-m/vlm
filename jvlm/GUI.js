@@ -76,7 +76,6 @@ $(document).ready(
     $("#BoatSelector").on( "selectmenuselect", function(event,ui)
       {
         SetCurrentBoat(GetBoatFromIdu(ui.item.value));
-        $("#BoatSelector").selectmenu('close');
       }
     );
     
@@ -150,4 +149,14 @@ function ShowBgLoad()
 function HideBgLoad()
 {
   $("#BgLoadProgress").css("display","block");
+}
+
+function ShowPb(PBName)
+{
+  $(PBName).show();
+}
+
+function HidePb(PBName)
+{
+  $(PBName).hide();
 }

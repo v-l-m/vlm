@@ -39,6 +39,7 @@ function CheckBoatRefreshRequired(Boat)
       CurDate >= NextUpdate)
   {
     // request current boat info
+    ShowPb("#PbGetBoatProgress");
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu="+Boat.IdBoat,
             function(result)
             {
@@ -61,7 +62,7 @@ function CheckBoatRefreshRequired(Boat)
                   DrawBoat(Boat);
                 }                
               }
-              
+              HidePb("#PbGetBoatProgress");
             }
           )
   }
