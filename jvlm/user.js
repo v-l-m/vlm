@@ -80,7 +80,7 @@ function CheckLogin()
 
 function Logout()
 {
-  $("#LoggedInNav").hide();
+  DisplayLoggedInMenus(false);
   $.get("/ws/logout.php",
         function(result)
         {
@@ -177,7 +177,8 @@ function RefreshPlayerMenu()
             //$('#BoatSelector').val(boat);
             //$('#BoatSelector').selectmenu("refresh");
             
-  $("#LoggedInNav").css("display","block");
+  
+  DisplayLoggedInMenus(true);
   HideBgLoad();
 }
 

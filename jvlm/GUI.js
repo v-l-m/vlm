@@ -18,7 +18,7 @@ $(document).ready(
       }
     );   
     
-    $("#loginButton").on ('click',
+    $("#logindlgButton").on ('click',
           function (e)
           {
             // Get localization key to figure out action
@@ -98,6 +98,11 @@ function InitMenusAndButtons()
         }
       );
   
+  
+  // Hide all progressbars
+  HidePb("#PbLoginProgress");
+  HidePb("#PbGetBoatProgress");
+  HidePb("#PbGribLoginProgress");
 }
 
 function ClearBoatSelector()
@@ -154,9 +159,36 @@ function HideBgLoad()
 function ShowPb(PBName)
 {
   $(PBName).show();
+  LocalizeString();
 }
 
 function HidePb(PBName)
 {
   $(PBName).hide();
+}
+
+function UpdateLoginButton(SetForLogin)
+{
+  if (SetForLogin)
+  {
+  }
+  else
+  {
+  }
+}
+
+function DisplayLoggedInMenus(LoggedIn)
+{
+  var AttrValue;
+  if (LoggedIn)
+  {
+    AttrValue="block";
+  }
+  else
+  {
+    AttrValue="none";
+  }
+  $("ul[LoggedInNav='true']").css("display",AttrValue);
+  
+  $("#BoatSelector").selectmenu("refresh");
 }

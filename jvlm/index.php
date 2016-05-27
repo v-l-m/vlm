@@ -1,15 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
-<!--<?php
 
-    include_once("includes/header.inc");
-
-?>-->
 <html>
   <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>jVLM alpha (grib viewer only)</title>
+      <title>VLM 2.0 alpha</title>
       <meta http-equiv="X-UA-Compatible" content="IE=8">
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
       <!--[if IE]>
@@ -221,28 +217,28 @@
           <a class="navbar-brand" href="#"><img src="/images/logos/logovlmnew.png"/></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
-          <ul  class="nav navbar-nav"  id="LoggedInNav" style="display:none">
-            <li  class="active" ><a href="#" id="PlayerId">Not Logged in </a></li>
+          <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
+            <li  class="active" ><a id="PlayerId">Not Logged in </a></li>
             <li  >
-              <select id="BoatSelector" visibility="hidden" width="50px">
+              <select id="BoatSelector" >
               </select> 
             </li>
           </ul>
-          <ul class="navbar-nav" id="LoggedInNav" style="display:none" >
-            <li>
+          <ul class="navbar-nav" >
+            <li class="active">
               <div id="PbLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
-                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">Processing Login...
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%" I18n="PbLogin">Processing Login...
                 </div>
               </div>
               <div id="PbGetBoatProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
-                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">Loading Boat Information...
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%" I18n="PbBoat">Loading Boat Information...
                 </div>
               </div>
               <div id="PbGribLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
-                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">loading gribs...
+                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%" I18n="PbGribs">loading gribs...
                 </div>
               </div>
             </li>
@@ -250,7 +246,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li>
               <span class="glyphicon glyphicon-log-in"></span> 
-              <button id="loginButton" type="button" class="btn btn-default" I18n="login">Login</button>
+              <button id="logindlgButton" type="button" class="btn btn-default" I18n="login">Login</button>
             </li>
           </ul>
         </div>
@@ -264,43 +260,43 @@
 
         <!-- Modal content-->
         <div id="LoginPanel" class="modal-content">
+               
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 I18n="Identification" class="modal-title">Identification</h4>
           </div>
           <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <!-- Language bar -->
-                <div class="col-sm-9">
-                  <table>
-                    <tr>
-                      <td width="50%" I18n="email">Adresse de courriel : 
-                      </td>
-                      <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td I18n="password">Mot de passe : 
-                      </td>
-                      <td>
-                        <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
-                      </td>
-                    </tr>            
-                  </table>
-                </div>
-                <div class="col-sm-1">
-                  <ul id="langbox" class="nav navbar-nav" >
-                    <li><img class="LngFlag" lang="en" src="/images/site/en.png" title="English Version" alt="English Version"></li>
-                    <li><img class="LngFlag" lang="fr" src="images/lng-fr.gif" title="Version Française" alt="Version Française"></li>
-                    <li><img class="LngFlag" lang="it" src="/images/site/it.png" title="Italian Version" alt="Italian Version"></li>
-                    <li><img class="LngFlag" lang="es" src="/images/site/es.png" title="Spanish Version" alt="Spanish Version"></li>
-                    <li><img class="LngFlag" lang="de" src="/images/site/de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
-                    <li><img class="LngFlag" lang="pt" src="/images/site/pt.png" title="Portugese Version" alt="Portugese Version"></li>
-                  </ul>
-                </div>
-               </div>
+            <div class="row">
+              <!-- Language bar -->
+              <div style="float:right; width:64 px">
+                <ul id="langbox" class="nav navbar-nav" >
+                  <li><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></li>
+                  <li><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></li>
+                  <li><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></li>
+                  <li><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></li>
+                  <li><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
+                  <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></li>
+                </ul>
               </div>
+              <div >
+                <table>
+                  <tr>
+                    <td width="50%" I18n="email">Adresse de courriel : 
+                    </td>
+                    <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td I18n="password">Mot de passe : 
+                    </td>
+                    <td>
+                      <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
+                    </td>
+                  </tr>            
+                </table>
+              </div>
+              
+             </div>
           </div>
           <div class="modal-footer">
             <button id="LoginButton" I18n="login" type="button" class="btn " data-dismiss="modal">login</button>

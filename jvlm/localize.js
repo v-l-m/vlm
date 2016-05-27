@@ -31,12 +31,13 @@ function LocalizeItem( Elements )
       var el = Elements[child];
       var Attr = el.attributes.I18n.value;
       
-      if (Attr in _LocaleDict)
+      if (typeof _LocaleDict != "undefined")
       {
-        el.innerHTML = _LocaleDict[Attr];
-      }
-      
-      //LocalizeItem(child);
+        if (Attr in _LocaleDict)
+        {
+          el.innerHTML = _LocaleDict[Attr];
+        }
+      }      
     }
 
   } 

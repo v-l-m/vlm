@@ -70,10 +70,12 @@ function CheckBoatRefreshRequired(Boat)
 
 function DrawBoat(Boat)
 {
+  var l = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON/1000, Boat.VLMInfo.LAT/1000).transform(MapOptions.displayProjection, MapOptions.projection);
+                  
   var feature = new OpenLayers.Feature.Vector(
-    new OpenLayers.Geometry.Point(Boat.VLMInfo.LON/1000, Boat.VLMInfo.LAT/1000),
+    l,
     {some:'Boat.IdBoat'},
-    {externalGraphic: 'images/target.jpg', graphicHeight: 32, graphicWidth: 32}
+    {externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64}
   );
   VLMBoatsLayer.addFeatures(feature);
 }

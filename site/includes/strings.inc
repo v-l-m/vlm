@@ -2,6 +2,9 @@
 $strings = array (
   'en' => 
   array (
+    "PbLogin" => "Login in progress...",
+    "PbBoat" => "Loading Boat Information...",
+    "PbGribs" => "Loading gribs...",
     "Click to chat" => "Click to chat",
     "jid" => "Jabber Id",
     "Group Title" => "Group's title",
@@ -468,6 +471,9 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "PbLogin" => "Connexion en cours...",
+    "PbBoat" => "Chargement données bateau...",
+    "PbGribs" => "Chargement météo...",
     "Click to chat" => "Cliquer pour tchatter",
     "jid" => "Identifiant Jabber",
     "Group Title" => "Intitulé du groupe",
