@@ -85,6 +85,7 @@ function DrawBoat(Boat)
   }
   else
   {
+    Boat.OLBoatFeatures[BOAT_ICON].lonlat = PosTransformed;
     Boat.OLBoatFeatures[BOAT_ICON].style.rotation= Boat.VLMInfo.HDG;
   };
   
