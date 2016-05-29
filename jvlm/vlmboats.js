@@ -2,7 +2,7 @@
 // VLMBoat layer handling displaying vlm boats, traj
 //
 
-VlmBoats = {};
+BOAT_ICON=0;
 
 MapOptions = {
                   //Projection mercator sphérique (type google map ou osm)
@@ -36,7 +36,7 @@ function CheckBoatRefreshRequired(Boat)
   }
   
   if (typeof Boat== 'undefined' ||  
-      CurDate >= NextUpdate)
+      CurDate >= NextUpdate || isNaN(NextUpdate))
   {
     // request current boat info
     ShowPb("#PbGetBoatProgress");
@@ -70,14 +70,24 @@ function CheckBoatRefreshRequired(Boat)
 
 function DrawBoat(Boat)
 {
-  var l = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON/1000, Boat.VLMInfo.LAT/1000).transform(MapOptions.displayProjection, MapOptions.projection);
-                  
-  var feature = new OpenLayers.Feature.Vector(
-    l,
-    {some:'Boat.IdBoat'},
-    {externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64}
-  );
-  VLMBoatsLayer.addFeatures(feature);
+  var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON/1000, Boat.VLMInfo.LAT/1000);
+  var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
+       
+  if (Boat.OLBoatFeatures.length == 0)
+  {
+    Boat.OLBoatFeatures.push( new OpenLayers.Feature.Vector(
+      PosTransformed,
+      {"Id":Boat.IdBoat},
+      {externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64,rotation: Boat.VLMInfo.HDG}
+      )
+    );
+    VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_ICON]);
+  }
+  else
+  {
+    Boat.OLBoatFeatures[BOAT_ICON].style.rotation= Boat.VLMInfo.HDG;
+  };
+  
 }
 // allow testing of specific renderers via "?renderer=Canvas", etc
 var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;

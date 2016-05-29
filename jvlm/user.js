@@ -7,7 +7,7 @@ function Boat()
   this.BoatName='';
   this.BoatPseudo='';
   this.VLMInfo={};  // LastBoatInfoResult
-  
+  this.OLBoatFeatures=[]; 
 }
 
 function Boat(vlmboat)
@@ -16,6 +16,8 @@ function Boat(vlmboat)
   this.Engaged=vlmboat.engaged;
   this.BoatName=vlmboat.boatname;
   this.BoatPseudo=vlmboat.boatpseudo;
+  this.VLMInfo={};  // LastBoatInfoResult
+  this.OLBoatFeatures=[]; 
 }
 
 
