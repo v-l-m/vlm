@@ -75,6 +75,8 @@ function CheckLogin()
             GetPlayerInfo();
           }
           HidePb("#PbLoginProgress");
+          DisplayLoggedInMenus(_IsLoggedIn);
+  
         }
       );
   
