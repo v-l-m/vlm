@@ -55,8 +55,39 @@
               <select id="BoatSelector" >
               </select> 
             </li>
-            <li><a id="BoatLon"></a></li>
-            <li><a id="BoatLat"></a></li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <span id="BoatSpdHdg"> </span><span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu" style="background-color:black">
+                  <li>
+                    <table width=100%>
+                      <tr>
+                        <td width=50%>Lat: </td>
+                        <td>Lon: </td>
+                        
+                      </tr>
+                      <tr>
+                        <td id="BoatLat" ></td>
+                        <td id="BoatLon" ></td>
+                      </tr>
+                    </table >
+                    <table width=100%>
+                      <tr>
+                        <td  width=33%>Spd</td>
+                        <td  width=33%>Avg</td>
+                        <td  >Hdg</td>
+                      </tr>
+                      <tr>
+                        <td id="BoatSpd" ></td>
+                        <td id="BoatAvg" ></td>
+                        <td id="BoatHdg" ></td>
+                      </tr>
+                    </table>
+                  </li>
+                </ul>
+            </li>
+            <li><a ></a></li>
+            <li><a ></a></li>
             <li><a id="BoatSpd"></a></li>
             <li><a id="BoatHdg"></a></li>
           </ul>

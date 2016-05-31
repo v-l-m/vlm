@@ -361,8 +361,9 @@ function UpdateInMenuBoatInfo(Boat)
   }
   $("#BoatLon").text(Math.round(Boat.VLMInfo.LON / 100)/10 + EastWest) ;
   $("#BoatLat").text(Math.round(Boat.VLMInfo.LAT / 100)/10 + NorthSouth) ;
-  $("#BoatSpd").text(Boat.VLMInfo.SPD) + " Kts" ;
-  $("#BoatHdg").text(Boat.VLMInfo.Hdg) + " °" ;
+  $("#BoatSpd").text(Math.round(Boat.VLMInfo.BSP * 10)/10 + " Kts" );
+  $("#BoatHdg").text(Boat.VLMInfo.HDG + " °" );
+  $("#BoatSpdHdg").text(Math.round(Boat.VLMInfo.BSP * 10)/10 + "@" + Boat.VLMInfo.HDG + "°") ;
   //.formatNumber({format:"#,###.00", locale:"us"})
   /*
   BoatLat
