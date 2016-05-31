@@ -55,8 +55,12 @@
               <select id="BoatSelector" >
               </select> 
             </li>
+            <li><a id="BoatLon"></a></li>
+            <li><a id="BoatLat"></a></li>
+            <li><a id="BoatSpd"></a></li>
+            <li><a id="BoatHdg"></a></li>
           </ul>
-          <ul class="navbar-nav" >
+          <ul class="nav navbar-nav" >
             <li class="active">
               <div id="PbLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
@@ -75,10 +79,14 @@
               </div>
             </li>
           </ul>
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
             <li>
-              <span class="glyphicon glyphicon-log-in"></span> 
-              <button id="logindlgButton" type="button" class="btn btn-default" I18n="login">Login</button>
+              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="btn btn-default"  I18n="login">Login</button></span> 
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
+            <li>
+              <span class="glyphicon glyphicon-log-out"><button id="loginOutButton" type="button" class="btn btn-default"  I18n="logout">Logout</button></span> 
             </li>
           </ul>
         </div>

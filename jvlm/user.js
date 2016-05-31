@@ -181,7 +181,7 @@ function RefreshPlayerMenu()
             
   
   DisplayLoggedInMenus(true);
-  HideBgLoad();
+  HideBgLoad("#PbLoginProgress");
 }
 
 function SetupUserMenu()

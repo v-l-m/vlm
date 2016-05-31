@@ -60,6 +60,9 @@ function CheckBoatRefreshRequired(Boat)
                   
                   // Draw Boat, course, track....
                   DrawBoat(Boat);
+                  
+                  // Update Boat info in main menu bar
+                  UpdateInMenuBoatInfo(Boat);
                 }                
               }
               HidePb("#PbGetBoatProgress");

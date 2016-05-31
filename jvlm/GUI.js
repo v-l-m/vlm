@@ -98,7 +98,7 @@ function OLInit() {
             layeroption
     );
 
-    //Les layers Bing
+    /*//Les layers Bing
     //FIXME : roads... what for ;) ?
     var bingroad = new OpenLayers.Layer.Bing({
         key: bingApiKey,
@@ -139,12 +139,13 @@ function OLInit() {
             "http://vmap0.tiles.osgeo.org/wms/vmap0",
             {layers: 'basic', sphericalMercator: true}
     );
-    
+    */
      
     //Le calque de vent made in Vlm
     var grib = new Gribmap.Layer("Gribmap", layeroption);
     //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
-
+    
+    /*
     //Layer Google Physical
     var gphy = new OpenLayers.Layer.Google(
             "Google Physical",
@@ -180,12 +181,14 @@ function OLInit() {
                 wrapDateLine: true
             }
     );
+    */
 
     //La minimap utilise le layer VLM
     var vlmoverview = vlm.clone();
 
     //Et on ajoute tous les layers à la map.
-    map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
+    //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
+    map.addLayers([ VLMBoatsLayer,vlm, grib]);
     //map.addLayers([vlm, grib]); //FOR DEBUG
 
     //Controle l'affichage des layers
@@ -314,28 +317,56 @@ function HidePb(PBName)
   $(PBName).hide();
 }
 
-function UpdateLoginButton(SetForLogin)
-{
-  if (SetForLogin)
-  {
-  }
-  else
-  {
-  }
-}
-
 function DisplayLoggedInMenus(LoggedIn)
 {
-  var AttrValue;
+  var LoggedInDisplay;
+  var LoggedOutDisplay;
   if (LoggedIn)
   {
-    AttrValue="block";
+    LoggedInDisplay="block";
+    LoggedOutDisplay="none";
   }
   else
   {
-    AttrValue="none";
+    LoggedInDisplay="none";
+    LoggedOutDisplay="block";
   }
-  $("ul[LoggedInNav='true']").css("display",AttrValue);
+  $("ul[LoggedInNav='true']").css("display",LoggedInDisplay);
+  $("ul[LoggedInNav='false']").css("display",LoggedOutDisplay);
   
   $("#BoatSelector").selectmenu("refresh");
 }
+
+function UpdateInMenuBoatInfo(Boat)
+{
+  var NorthSouth;
+  var EastWest;
+  
+  // Update GUI for current player
+  if (Boat.VLMInfo.LON >=0)
+  {
+    EastWest = "° E";
+  }
+  else
+  {
+    EastWest = "° W";
+  }
+  if (Boat.VLMInfo.LAT >=0)
+  {
+    NorthSouth = "° N";
+  }
+  else
+  {
+    NorthSouth = "° S";
+  }
+  $("#BoatLon").text(Math.round(Boat.VLMInfo.LON / 100)/10 + EastWest) ;
+  $("#BoatLat").text(Math.round(Boat.VLMInfo.LAT / 100)/10 + NorthSouth) ;
+  $("#BoatSpd").text(Boat.VLMInfo.SPD) + " Kts" ;
+  $("#BoatHdg").text(Boat.VLMInfo.Hdg) + " °" ;
+  //.formatNumber({format:"#,###.00", locale:"us"})
+  /*
+  BoatLat
+  
+  
+  */
+} 
