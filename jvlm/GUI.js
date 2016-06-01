@@ -345,22 +345,25 @@ function UpdateInMenuBoatInfo(Boat)
   // Update GUI for current player
   if (Boat.VLMInfo.LON >=0)
   {
-    EastWest = "° E";
+    EastWest = "E";
   }
   else
   {
-    EastWest = "° W";
+    EastWest = "W";
   }
   if (Boat.VLMInfo.LAT >=0)
   {
-    NorthSouth = "° N";
+    NorthSouth = "N";
   }
   else
   {
-    NorthSouth = "° S";
+    NorthSouth = "S";
   }
-  $("#BoatLon").text(Math.round(Boat.VLMInfo.LON / 100)/10 + EastWest) ;
-  $("#BoatLat").text(Math.round(Boat.VLMInfo.LAT / 100)/10 + NorthSouth) ;
+ 
+  var lon = new Coords(Boat.VLMInfo.LON/1000);
+  var lat = new Coords(Boat.VLMInfo.LAT/1000);
+  $("#BoatLon").text(lon.ToString() + ' ' + EastWest) ;
+  $("#BoatLat").text(lat.ToString() + ' ' + NorthSouth) ;
   $("#BoatSpd").text(Math.round(Boat.VLMInfo.BSP * 10)/10 + " Kts" );
   $("#BoatHdg").text(Boat.VLMInfo.HDG + " °" );
   $("#BoatSpdHdg").text(Math.round(Boat.VLMInfo.BSP * 10)/10 + "@" + Boat.VLMInfo.HDG + "°") ;

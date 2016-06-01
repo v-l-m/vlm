@@ -27,6 +27,7 @@
       <script src='ControlSwitch.js' type='text/javascript'></script>
       <script src='gribmap.js' type='text/javascript'></script>
       <script src='vlmboats.js' type='text/javascript'></script>
+      <script src='geomath.js' type='text/javascript'></script>
   </head>
   <body >
     
@@ -58,8 +59,10 @@
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <span id="BoatSpdHdg"> </span><span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu" style="background-color:black">
-                  <li>
+                <ul class="dropdown-menu" role="menu" style="background-image: url('images/afficheur.gif');background-size: 100%;height:163px">
+                  <div class="VLM100_Pos" id="BoatLon"></div>
+                  <div class="VLM100_Pos" id="BoatLat"></div>
+                  <!--<li>
                     <table width=100%>
                       <tr>
                         <td width=50%>Lat: </td>
@@ -83,7 +86,7 @@
                         <td id="BoatHdg" ></td>
                       </tr>
                     </table>
-                  </li>
+                  </li>-->
                 </ul>
             </li>
             <li><a ></a></li>

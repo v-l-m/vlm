@@ -163,3 +163,20 @@ option.RacingBoat{
 span.ui-selectmenu-text {
     line-height: 0.4;
 }
+
+.VLM100_Pos{
+  position:absolute;
+  width:125px;
+  text-align: center;
+  font-size: small;
+}
+
+#BoatLon{
+  top:18px;
+  left: 16px;
+}
+
+#BoatLat{
+  top:30px;
+  left: 16px;
+}
