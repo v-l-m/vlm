@@ -819,6 +819,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   drawWind: function(context, x, y, pos_wind) {
       context.fillStyle = this.windSpeedToColor(pos_wind.wspeed);
       this.drawWindTriangle(context, x, y, pos_wind);
+      context.fillStyle = '#626262';
       this.drawWindText(context, x, y, pos_wind);
   },
 
