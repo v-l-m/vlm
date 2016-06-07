@@ -118,14 +118,14 @@ for TSTAMP in `echo $allindexes` ; do
       cnvgrib -g21 $GRIBFILE $GRIBFILE.grib1
       echo $GRIBFILE converted >> $LOG 2>&1
       actualsize=$(wc -c "$GRIBFILE.grib1" | cut -f 1 -d ' ')
-      if [ $actualsize -ne 844908 ]; then
-        let retry++
-        echo "Invalid grib file size, retry #" $retry  >> $LOG 2>&1
+      # if [ $actualsize -ne 844908 ]; then
+        # let retry++
+        # echo "Invalid grib file size, retry #" $retry  >> $LOG 2>&1
         
-      else
+      # else
         echo "Grib1 size ok. File complete"  >> $LOG 2>&1
         let retry=0
-      fi
+      # fi
       
       if [ $retry -eq 4 ]; then
         #Enough retries for this file pray for the best
