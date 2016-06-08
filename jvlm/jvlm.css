@@ -109,7 +109,7 @@ div.GribmapMousePosition {
   right: 0px;
 }
 .VlminfoControlPlayer .baseDiv {
-  background-color: darkBlue;
+  background-color: #152249;
   height: 100%;
   padding-bottom: 5px;
   padding-left: 10px;
@@ -171,6 +171,12 @@ span.ui-selectmenu-text {
   font-size: small;
 }
 
+.VLM100_PosSmall{
+  position:absolute;
+  width:40px;
+  text-align: center;
+  font-size: x-small;
+}
 #BoatLon{
   top:18px;
   left: 16px;
@@ -179,4 +185,34 @@ span.ui-selectmenu-text {
 #BoatLat{
   top:30px;
   left: 16px;
+}
+
+#BoatSpeed{
+  top:58px;
+  left: 17px;
+}
+
+#BoatAvg{
+  top:58px;
+  left: 59px;
+}
+
+#BoatHeading{
+  top:58px;
+  left: 101px;
+}
+
+#StatSpeed{
+  top: 45px;
+  left: 16px;
+}
+
+#StatAvg{
+  top: 45px;
+  left: 59px;
+}
+
+#StatHeading{
+  top: 45px;
+  left: 101px;
 }

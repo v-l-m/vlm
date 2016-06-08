@@ -192,7 +192,7 @@ function OLInit() {
     //map.addLayers([vlm, grib]); //FOR DEBUG
 
     //Controle l'affichage des layers
-    map.addControl(new OpenLayers.Control.LayerSwitcher());
+    //map.addControl(new OpenLayers.Control.LayerSwitcher());
 
     //Controle l'affichage de la position ET DU VENT de la souris
     map.addControl(new Gribmap.MousePosition({gribmap: grib}));
@@ -364,9 +364,9 @@ function UpdateInMenuBoatInfo(Boat)
   var lat = new Coords(Boat.VLMInfo.LAT/1000);
   $("#BoatLon").text(lon.ToString() + ' ' + EastWest) ;
   $("#BoatLat").text(lat.ToString() + ' ' + NorthSouth) ;
-  $("#BoatSpd").text(Math.round(Boat.VLMInfo.BSP * 10)/10 + " Kts" );
-  $("#BoatHdg").text(Boat.VLMInfo.HDG + " °" );
-  $("#BoatSpdHdg").text(Math.round(Boat.VLMInfo.BSP * 10)/10 + "@" + Boat.VLMInfo.HDG + "°") ;
+  $("#BoatSpeed").text(Math.round(Boat.VLMInfo.BSP * 10)/10 );
+  $("#BoatHeading").text(Math.round(Boat.VLMInfo.HDG * 10)/10 );
+  $("#BoatAvg").text(Math.round(Boat.VLMInfo.AVG * 10)/10 ) ;
   //.formatNumber({format:"#,###.00", locale:"us"})
   /*
   BoatLat
