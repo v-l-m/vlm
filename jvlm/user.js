@@ -1,23 +1,25 @@
  var _IsLoggedIn;
- 
-function Boat()
+
+
+function Boat(vlmboat)
 {
+// Default init
   this.IdBoat=-1;
   this.Engaged=false;
   this.BoatName='';
   this.BoatPseudo='';
   this.VLMInfo={};  // LastBoatInfoResult
   this.OLBoatFeatures=[]; 
-}
-
-function Boat(vlmboat)
-{
-  this.IdBoat=vlmboat.idu;
-  this.Engaged=vlmboat.engaged;
-  this.BoatName=vlmboat.boatname;
-  this.BoatPseudo=vlmboat.boatpseudo;
-  this.VLMInfo={};  // LastBoatInfoResult
-  this.OLBoatFeatures=[]; 
+  
+  if (typeof vlmboat != 'undefined')
+  {
+    this.IdBoat=vlmboat.idu;
+    this.Engaged=vlmboat.engaged;
+    this.BoatName=vlmboat.boatname;
+    this.BoatPseudo=vlmboat.boatpseudo;
+    this.VLMInfo={};  // LastBoatInfoResult
+    this.OLBoatFeatures=[];
+  } 
 }
 
 

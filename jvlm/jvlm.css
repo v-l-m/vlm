@@ -215,7 +215,7 @@ span.ui-selectmenu-text {
   left: 110px;
 }
 
-#TDB-Icon{
+.TDB-Icon{
   width: 32px;
   height: 32px;
 }
@@ -253,4 +253,11 @@ span.ui-selectmenu-text {
 #StatWindDirection{
   Top:40px;
   Left:30px;
+}
+
+.Progress{
+  height:0.2em;
+  position:absolute;
+  display: block; 
+  margin-bottom: 0px;
 }

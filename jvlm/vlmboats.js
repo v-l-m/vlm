@@ -1,10 +1,11 @@
+/* global OpenLayers */
 //
 // VLMBoat layer handling displaying vlm boats, traj
 //
 
-BOAT_ICON=0;
+var BOAT_ICON=0;
 
-MapOptions = {
+var MapOptions = {
                   //Projection mercator sphérique (type google map ou osm)
                   projection: new OpenLayers.Projection("EPSG:900913"),
                   //projection pour l'affichage des coordonnées
@@ -32,11 +33,11 @@ function CheckBoatRefreshRequired(Boat)
   if (typeof Boat != 'undefined' && 
       typeof Boat.VLMInfo != 'undefined')
   {
-    NextUpdate=NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP);
+    NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP);
   }
   
   if (typeof Boat== 'undefined' ||  
-      CurDate >= NextUpdate || isNaN(NextUpdate))
+      CurDate >= NextUpdate )
   {
     // request current boat info
     ShowPb("#PbGetBoatProgress");

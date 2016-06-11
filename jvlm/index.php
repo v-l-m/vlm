@@ -57,24 +57,22 @@
               <select id="BoatSelector" >
               </select> 
             </li>
-            <li class="nav" data-toggle="collapse" data-target="#TDB-Panel"><a><img id="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
-            </li>
-            <li class="nav" data-toggle="collapse" data-target="#TDB-Panel2"><a><img id="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
+            <li class="nav" data-toggle="collapse" data-target="#TDB-Panel"><a ><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
             </li>
           </ul>
           <ul class="nav navbar-nav" >
             <li class="active">
-              <div id="PbLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
+              <div id="PbLoginProgress" class="progress" >
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%" I18n="PbLogin">Processing Login...
                 </div>
               </div>
-              <div id="PbGetBoatProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
+              <div id="PbGetBoatProgress" class="progress" >
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%" I18n="PbBoat">Loading Boat Information...
                 </div>
               </div>
-              <div id="PbGribLoginProgress" class="progress" height="0.2em" position="absolute" style="display: block; margin-bottom: 0px;">
+              <div id="PbGribLoginProgress" class="progress" >
                 <div class="progress-bar progress-bar-striped active" role="progressbar"
                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%" I18n="PbGribs">loading gribs...
                 </div>
@@ -127,7 +125,8 @@
             </tr>
           </table>
         </div>
-        <div  id = "TDB-Panel2" class="collapse">
+        <!--
+          <div  id = "TDB-Panel2" class="collapse">
           <table class="table" >
             <tr>
               <td>
@@ -137,7 +136,7 @@
             </tr>
           </table>
         </div>
-      
+        -->
     </nav>
     
 
@@ -192,34 +191,6 @@
 
       </div>
     </div>
-   
-    <!--
-    <div  visibility="hidden" >
-      <h1  align="center"></h1>
-      
-        
-      
-    </div>
-    <div class="UserMenu"  >
-      <div class="PlayerName">
-        
-        <div style="float:left">
-          
-        </div>
-        <div style="float:left" id="DropLogoutMenu">v
-        </div>
-        </div>
-        <ul id="Menu">
-          <li I18n="logout">Logout</li>
-        </ul>
-      
-    </div>
-    
-
-      <div id="logovlm">
-        <img src="/images/logos/logovlmnew.png"/>
-      </div>
-    </div>-->
   </body>
 </html>
 

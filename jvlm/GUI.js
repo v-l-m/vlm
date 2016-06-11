@@ -1,5 +1,5 @@
 // On ready get started with vlm management
-// This should be somewhere else...
+
 $(document).ready(
   function(){
     

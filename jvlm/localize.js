@@ -25,6 +25,8 @@ function LocalizeItem( Elements )
 {
   try
   {
+    var child;
+    
     //console.log(Elements);
     for ( child in Elements )
     {
