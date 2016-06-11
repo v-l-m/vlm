@@ -178,41 +178,81 @@ span.ui-selectmenu-text {
   font-size: x-small;
 }
 #BoatLon{
-  top:18px;
-  left: 16px;
+  top: 25px;
+  left: 30px;
 }
 
 #BoatLat{
-  top:30px;
-  left: 16px;
+  top:40px;
+  left: 30px;
 }
 
 #BoatSpeed{
-  top:58px;
-  left: 17px;
+  top: 68px;
+  left: 28px;
 }
 
 #BoatAvg{
-  top:58px;
-  left: 59px;
+  top: 68px;
+  left: 67px;
 }
 
 #BoatHeading{
-  top:58px;
-  left: 101px;
+  top: 68px;
+  left: 108px;
 }
 
 #StatSpeed{
-  top: 45px;
-  left: 16px;
+  top: 55px;
+  left: 29px;
 }
 
 #StatAvg{
-  top: 45px;
-  left: 59px;
+  top: 55px;
+  left: 70px;
 }
 
 #StatHeading{
-  top: 45px;
-  left: 101px;
+  top: 55px;
+  left: 110px;
+}
+
+#TDB-Icon{
+  width: 32px;
+  height: 32px;
+}
+
+#TDB-Panel{
+  position: absolute;
+}
+
+.TDB-Panel{
+  width: 163px;
+  height:163px;
+}
+
+.TDB-Panel2{
+  width: 489px;
+  height: 163px;
+}
+
+
+.VLM100_Label{
+  position: relative;
+  font-size: small;
+}
+
+.VLM100_Unit{
+  position: relative;
+  font-size: x-small;
+}
+
+#StatWindSpeed{
+  Top:17px;
+  Left:30px;
+}
+
+#StatWindDirection{
+  Top:40px;
+  Left:30px;
 }

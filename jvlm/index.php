@@ -49,6 +49,7 @@
           </button>
           <a class="navbar-brand" href="#"><img src="/images/logos/logovlmnew.png"/></a>
         </div>
+
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
             <li  class="active" ><a id="PlayerId">Not Logged in </a></li>
@@ -56,26 +57,10 @@
               <select id="BoatSelector" >
               </select> 
             </li>
-            <li class="nav">OO
-              <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <span id="BoatSpdHdg"> </span><span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu" >-->
-                  <div id="TDB" style="display:none;background-image: url('images/afficheur.gif');width: 163px%;height:163px">
-                    <div class="VLM100_Pos" id="BoatLon"></div>
-                    <div class="VLM100_Pos" id="BoatLat"></div>
-                    <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
-                    <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
-                    <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
-                    <div class="VLM100_PosSmall" id="BoatSpeed"></div>
-                    <div class="VLM100_PosSmall" id="BoatAvg"></div>
-                    <div class="VLM100_PosSmall" id="BoatHeading"></div>
-                  </div>
-                <!--</ul>-->
+            <li class="nav" data-toggle="collapse" data-target="#TDB-Panel"><a><img id="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
             </li>
-            <li><a ></a></li>
-            <li><a ></a></li>
-            <li><a id="BoatSpd"></a></li>
-            <li><a id="BoatHdg"></a></li>
+            <li class="nav" data-toggle="collapse" data-target="#TDB-Panel2"><a><img id="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
+            </li>
           </ul>
           <ul class="nav navbar-nav" >
             <li class="active">
@@ -108,6 +93,51 @@
           </ul>
         </div>
       </div>
+        <div  id = "TDB-Panel" class="collapse">
+          <table class="table" >
+            <tr>
+              <td>
+                <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
+                  <div class="VLM100_Pos" id="BoatLon"></div>
+                  <div class="VLM100_Pos" id="BoatLat"></div>
+                  <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
+                  <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
+                  <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
+                  <div class="VLM100_PosSmall" id="BoatSpeed"></div>
+                  <div class="VLM100_PosSmall" id="BoatAvg"></div>
+                  <div class="VLM100_PosSmall" id="BoatHeading"></div>
+                </div>
+              </td>
+              <td>
+                <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
+                  
+                </div>
+              </td>
+              <td>
+                <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
+                  <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
+                  <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
+                  <div class="VLM100_Label" >Wind Angle</div>
+                  <div class="VLM100_Unit" >kts</div>
+                  <div class="VLM100_Unit" >°</div>
+                  <div class="VLM100_Unit" >°</div>
+                  
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div  id = "TDB-Panel2" class="collapse">
+          <table class="table" >
+            <tr>
+              <td>
+                <div  class="TDB-Panel2" style="background-image: url('images/TdB-Projet-1-Fond-écran-jaune.png');">
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      
     </nav>
     
 
