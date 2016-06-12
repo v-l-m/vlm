@@ -91,10 +91,12 @@
           </ul>
         </div>
       </div>
-        <div  id = "TDB-Panel" class="collapse">
-          <table class="table" >
-            <tr>
-              <td>
+        <div id="TDB-Panel" class="TDB-Panel collapse">
+          <div class="container">
+            <div class="row">
+              <div class="TDB-EmptyCol col-xs-3"> 
+              </div>
+              <div class="TDB-Panel col-xs-3">            
                 <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
                   <div class="VLM100_Pos" id="BoatLon"></div>
                   <div class="VLM100_Pos" id="BoatLat"></div>
@@ -104,26 +106,39 @@
                   <div class="VLM100_PosSmall" id="BoatSpeed"></div>
                   <div class="VLM100_PosSmall" id="BoatAvg"></div>
                   <div class="VLM100_PosSmall" id="BoatHeading"></div>
+                  <div class="VLM100_PosSmall" id="StatDNM">DNM</div>
+                  <div class="VLM100_PosSmall" id="StatLoch">Loch</div>
+                  <div class="VLM100_PosSmall" id="StatOrtho">Ortho</div>
+                  <div class="VLM100_PosSmall" id="StatLoxo">Loxo</div>
+                  <div class="VLM100_PosSmall" id="StatVMG">VMG</div>
+                  <div class="VLM100_PosSmall" id="BoatDNM"></div>
+                  <div class="VLM100_PosSmall" id="BoatLoch"></div>
+                  <div class="VLM100_PosSmall" id="BoatOrtho"></div>
+                  <div class="VLM100_PosSmall" id="BoatLoxo"></div>
+                  <div class="VLM100_PosSmall" id="BoatVMG"></div>
                 </div>
-              </td>
-              <td>
+              </div>
+              <div class="TDB-Panel col-xs-3">
                 <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
                   
                 </div>
-              </td>
-              <td>
+              </div>
+              <div class="TDB-Panel col-xs-3">
                 <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
                   <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
                   <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
-                  <div class="VLM100_Label" >Wind Angle</div>
-                  <div class="VLM100_Unit" >kts</div>
-                  <div class="VLM100_Unit" >°</div>
-                  <div class="VLM100_Unit" >°</div>
+                  <div class="VLM100_Label" id="StatWindAngle">Wind Angle</div>
+                  <div class="VLM100_Unit" id="StatSpeedUnit">kts</div>
+                  <div class="VLM100_Unit" id="StatDirUnit">°</div>
+                  <div class="VLM100_Unit" id="StatAngleUnit">°</div>
+                  <div class="VLM100_Value" id="BoatWindSpeed" ></div>
+                  <div class="VLM100_Value" id="BoatWindDirection" ></div>
+                  <div class="VLM100_Value" id="BoatWindAngle"></div>
                   
                 </div>
-              </td>
-            </tr>
-          </table>
+              </div>
+            </div>
+          </div>
         </div>
         <!--
           <div  id = "TDB-Panel2" class="collapse">

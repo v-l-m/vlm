@@ -362,15 +362,35 @@ function UpdateInMenuBoatInfo(Boat)
  
   var lon = new Coords(Boat.VLMInfo.LON/1000);
   var lat = new Coords(Boat.VLMInfo.LAT/1000);
-  $("#BoatLon").text(lon.ToString() + ' ' + EastWest) ;
-  $("#BoatLat").text(lat.ToString() + ' ' + NorthSouth) ;
-  $("#BoatSpeed").text(Math.round(Boat.VLMInfo.BSP * 10)/10 );
-  $("#BoatHeading").text(Math.round(Boat.VLMInfo.HDG * 10)/10 );
-  $("#BoatAvg").text(Math.round(Boat.VLMInfo.AVG * 10)/10 ) ;
-  //.formatNumber({format:"#,###.00", locale:"us"})
-  /*
-  BoatLat
-  
-  
-  */
+
+  // Create field mapping array
+  var BoatFieldMappings=[];
+  BoatFieldMappings.push(["#BoatLon",lon.ToString() + ' ' + EastWest]);
+  BoatFieldMappings.push(["#BoatLat",lat.ToString() + ' ' + NorthSouth]);
+  BoatFieldMappings.push(["#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
+  BoatFieldMappings.push(["#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
+  BoatFieldMappings.push(["#BoatAvg",Math.round(Boat.VLMInfo.AVG * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatDNM",Math.round(Boat.VLMInfo.DNM * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatLoch",Math.round(Boat.VLMInfo.LOC * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatOrtho",Math.round(Boat.VLMInfo.ORT * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatLoxo",Math.round(Boat.VLMInfo.LOX * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
+  BoatFieldMappings.push(["#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+
+  // Loop all mapped fields to their respective location
+  for (index in BoatFieldMappings)
+  {
+    $(BoatFieldMappings[index][0]).text(BoatFieldMappings[index][1]);
+  }
+ 
+  // Change color depênding on windangle
+  var WindColor="red"
+  if (Boat.VLMInfo.TWA <0)
+  {
+WindColor="lime"
+  }
+  $("#BoatWindAngle").css("color",WindColor);
+
 } 

@@ -31,7 +31,7 @@ function CheckBoatRefreshRequired(Boat)
 
   
   if (typeof Boat != 'undefined' && 
-      typeof Boat.VLMInfo != 'undefined')
+      typeof Boat.VLMInfo != 'undefined' && typeof Boat.VLMInfo.LUP != 'undefined')
   {
     NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP);
   }

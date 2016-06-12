@@ -1,4 +1,4 @@
-// out: ./jvlm.css, compress: true, sourceMap: true
+// out: ./jvlm.css, compress: true, sourceMap: false
 
 /*
 @import url('http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css');
@@ -166,7 +166,7 @@ span.ui-selectmenu-text {
 
 .VLM100_Pos{
   position:absolute;
-  width:125px;
+  width:118px;
   text-align: center;
   font-size: small;
 }
@@ -177,83 +177,127 @@ span.ui-selectmenu-text {
   text-align: center;
   font-size: x-small;
 }
+
+.TDB-EmptyCol{
+  max-width: 100px;
+}
+
+// NAV Center lines
+@BoatPosTop: 15px;
+@StatSpeedAvgTop : 44px;
+@SpeedAvgTop : @StatSpeedAvgTop + 13px;
+@SpeedLeft:25px;
+
 #BoatLon{
-  top: 25px;
+  top: @BoatPosTop;
   left: 30px;
 }
 
 #BoatLat{
-  top:40px;
+  top:@BoatPosTop+15px;
   left: 30px;
 }
 
 #BoatSpeed{
-  top: 68px;
-  left: 28px;
+  top: @SpeedAvgTop;
+  left: @SpeedLeft;
 }
 
 #BoatAvg{
-  top: 68px;
-  left: 67px;
+  top: @SpeedAvgTop;
+  left: @SpeedLeft+40px;
 }
 
 #BoatHeading{
-  top: 68px;
-  left: 108px;
+  top: @SpeedAvgTop;
+  left: @SpeedLeft+2*40px;
 }
 
 #StatSpeed{
-  top: 55px;
-  left: 29px;
+  top: @StatSpeedAvgTop;
+  left: @SpeedLeft;
 }
 
 #StatAvg{
-  top: 55px;
-  left: 70px;
+  top: @StatSpeedAvgTop;
+  left: @SpeedLeft+40px;
 }
 
 #StatHeading{
-  top: 55px;
-  left: 110px;
+  top: @StatSpeedAvgTop;
+  left: @SpeedLeft+2*40px;
 }
 
+@StatLineDNM:75px;
+@StatLineOrtho:@StatLineDNM+25px;
+@BoatLineDNM:@StatLineDNM+10px;
+@BoatLineOrtho:@StatLineOrtho+10px;
+
 #StatDNM{
-  top: 86px;
-  left: 40px;
+  top: @StatLineDNM;
+  left: @SpeedLeft;
 }
 
 #StatLoch{
-  top: 86px;
-  left: 110px;
+  top: @StatLineDNM;
+  left: @SpeedLeft+2*40px;
 }
 
 #StatOrtho{
-  top: 110px;
-  left: 40px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft;
 }
 
 #StatLoxo{
-  top: 110px;
-  left: 75px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft+40px;
 }
 
 #StatVMG{
-  top: 110px;
-  left: 110px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft+2*40px;
 }
+
+#BoatDNM{
+  top: @BoatLineDNM;
+  left: @SpeedLeft;
+}
+
+#BoatLoch{
+  top: @BoatLineDNM;
+  left: @SpeedLeft+2*40px;
+}
+
+#BoatOrtho{
+  top: @BoatLineOrtho;
+  left: @SpeedLeft;
+}
+
+#BoatLoxo{
+  top: @BoatLineOrtho;
+  left: @SpeedLeft+40px;
+}
+
+#BoatVMG{
+  top: @BoatLineOrtho;
+  left: @SpeedLeft+2*40px;
+}
+
+@IconSize:40px;
 
 .TDB-Icon{
-  width: 32px;
-  height: 32px;
-}
-
-#TDB-Panel{
-  position: absolute;
+  width: @IconSize;
+  height: @IconSize;
 }
 
 .TDB-Panel{
   width: 163px;
   height:163px;
+  position: relative;
+}
+
+#TDB-Panel{
+  position: absolute;
 }
 
 .TDB-Panel2{
@@ -261,27 +305,74 @@ span.ui-selectmenu-text {
   height: 163px;
 }
 
+@VLM100WindLine1Top:15px;
+@VLM100LineOffset:40px;
+@VLM100WindLine2Top:@VLM100WindLine1Top+@VLM100LineOffset;
+@VLM100WindLine3Top:@VLM100WindLine1Top+2*@VLM100LineOffset;
+@VLM100Left:28px;
+@VLM100UnitLeft: @VLM100Left+70px;
+@VLM100StatFontSize:x-small;
+@VLM100ValueTopOffset:5px;
+@VLM100UnitTopOffset:0px;
 
 .VLM100_Label{
-  position: relative;
+  position: absolute;
   font-size: small;
 }
 
 .VLM100_Unit{
-  position: relative;
+  position: absolute;
   font-size: x-small;
+  left:@VLM100UnitLeft;
+  text-align: right;
+  width:40px;
+}
+
+.VLM100_Value{
+  position: absolute;
+  font-size: xx-large;
+  text-align: right;
+  width:100px;
+  left:@VLM100Left;
+}
+
+#StatWindSpeed, #StatWindDirection, #StatWindAngle{
+  Left: @VLM100Left;
+  font-size: @VLM100StatFontSize;
 }
 
 #StatWindSpeed{
-  Top:17px;
-  Left:30px;
+  Top:@VLM100WindLine1Top;
 }
 
 #StatWindDirection{
-  Top:40px;
-  Left:30px;
+  Top:@VLM100WindLine2Top;
 }
 
+#StatWindAngle{
+  Top:@VLM100WindLine3Top;
+}
+
+#StatSpeedUnit{
+  Top:@VLM100WindLine1Top+@VLM100UnitTopOffset;
+}
+#StatDirUnit{
+  Top:@VLM100WindLine2Top+@VLM100UnitTopOffset;
+}
+#StatAngleUnit{
+  Top:@VLM100WindLine3Top+@VLM100UnitTopOffset;
+}
+#BoatWindSpeed{
+  top:@VLM100WindLine1Top+@VLM100ValueTopOffset;
+}
+
+#BoatWindDirection{
+  top:@VLM100WindLine2Top+@VLM100ValueTopOffset;
+}
+
+#BoatWindAngle{
+  top:@VLM100WindLine3Top+@VLM100ValueTopOffset;
+}
 .Progress{
   height:0.2em;
   position:absolute;
