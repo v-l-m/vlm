@@ -389,8 +389,16 @@ function UpdateInMenuBoatInfo(Boat)
   var WindColor="red"
   if (Boat.VLMInfo.TWA <0)
   {
-WindColor="lime"
+    WindColor="lime"
   }
   $("#BoatWindAngle").css("color",WindColor);
+
+  // Get WindAngleImage
+  var wHeading=Math.round(Boat.VLMInfo.TWD * 100)/100;
+  var BoatType=Boat.VLMInfo.POL;
+  var BoatHeading=Math.round(Boat.VLMInfo.HDG*100)/100;
+
+   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed=2.00&roadtoend=180&boattype='+BoatType);
+   
 
 } 

@@ -34,7 +34,6 @@ $wheading=get_cgi_var('wheading');
 $wspeed=get_cgi_var('wspeed');
 $roadtoend=get_cgi_var('roadtoend');
 $boattype=get_cgi_var('boattype');
-$IsJvlm=get_cgi_var('jvlm');
 /* $vmg=quote_smart($_REQUEST['vmg']); */
 
 
@@ -46,24 +45,25 @@ if ($noHeader !=1)
 include_once("config.php");
 
 
-$im = imagecreatefrompng(IMAGE_SITE_PATH.COMPASS_IMAGE );
-$deck = imagecreatefrompng(IMAGE_SITE_PATH.BOAT_IMAGE );
+$im = imagecreatefrompng("images/".COMPASS_IMAGE );
+$deck = imagecreatefrompng("images/".BOAT_IMAGE );
 
-if ($IsJvlm != 1)
-{
-    $bg =  imagecolorallocate($deck, 173, 173, 173);
-}
-else 
-{
-   $bg =  imagecolorallocatealpha($deck, 0, 200, 0,0);
-}
+imagesavealpha($im,true);
+imagealphablending($deck,true);
+//$transparent = imagecolorallocatealpha( $img, 0, 0, 0, 127 ); 
+//imagefill( $im, 0, 0, $transparent ); 
+//imagefill( $deck, 0, 0, $transparent ); 
+$bg =  imagecolorallocatealpha($deck, 0, 0, 0,128);
+//imagealphablending($bg,true);
+imagefill( $deck, 0, 0, $transparent ); 
+//$deck = imagerotate($deck, geographic2drawing($boatheading), $bg);
+/*
 
-$deck = imagerotate($deck, geographic2drawing($boatheading), $bg);
+imagealphablending($deck,true);
 
 imagecopymerge ( $im, $deck, (imagesx($im)  - imagesx($deck))/2,  
      (imagesy($im)  - imagesy($deck))/2, 
      0, 0, imagesx($deck), imagesy($deck), 100);
-
 //draw windpolar
 $color = imagecolorallocate($im, 210, 200, 190);
 $maxcolor = imagecolorallocate($im, 250, 200, 190);
@@ -82,42 +82,6 @@ $color = imagecolorallocate($im, 0, 255, 0);
 drawWindVector($im, $color, 15, geographic2drawingforwind($vmg - 180), 2);
 */
 
-if ($IsJvlm !=1)
-{
-    // Chargement du fond d'image
-    $instrum = LoadGif ('images/site/Afficheur-vide.gif');
-
-    // D�finition de code de couleurs
-    $white = imagecolorallocate($instrum, 255, 255, 255);
-    $grey = imagecolorallocate($instrum, 160, 160, 160);
-    $or = imagecolorallocate($instrum, 220, 200, 140);
-    $black = imagecolorallocate($instrum, 0, 0, 0);
-
-    // Merge
-    //imagecopymerge ( resource dst_im, resource src_im, int dst_x, int dst_y, int src_x, int src_y, int src_w, int src_h, int pct )
-    imagecopymerge ( $instrum, $im, 30, 23, 0, 0, 141, 141, 95 );
-    //imagecopyresized ( resource dst_image, resource src_image, int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h )
-    //imagecopyresized($instrum, $im, 22, 23, 0, 0, 150, 150, 141, 141);
-
-    // =======================
-    // Nom de l'instrument
-    $instrname="VLM20 Wind-angle";
-    $fontsize=5;
-    $x_instrname=25;
-    $y_instrname=175;
-    imagestring($instrum, $fontsize, $x_instrname, $y_instrname+2, $instrname, $black);
-    imagestring($instrum, $fontsize, $x_instrname, $y_instrname, $instrname, $grey);
-    imagestring($instrum, $fontsize, $x_instrname+1, $y_instrname, $instrname, $or);
-
-
-    // affichage de l'image
-    //transform true color image in indexed image 
-    imagetruecolortopalette($instrum, true, 10);
-    imagepng($instrum);
-}
-else {
-    imagepng ($im);
-}
-
+imagepng ($deck);
 
 ?> 

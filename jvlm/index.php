@@ -120,7 +120,8 @@
               </div>
               <div class="TDB-Panel col-xs-3">
                 <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
-                  
+                    <img id="ImgWindAngle">
+                    </img>
                 </div>
               </div>
               <div class="TDB-Panel col-xs-3">
