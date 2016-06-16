@@ -152,33 +152,38 @@ if ($noHeader !=1)
 include_once("config.php");
 
 
-$im = imagecreatefrompng("images/".COMPASS_IMAGE );
-$deck = imagecreatefrompng("images/".BOAT_IMAGE );
+$im = imagecreatetruecolor(141,141);
+imagesavealpha($im,true);
 
-/*imagesavealpha($im,true);
-imagesavealpha($deck,true);
-imagealphablending($im,true);
-imagealphablending($deck,true);*/
-//$transparent = imagecolorallocatealpha( $im, 255, 255, 255, 0 ); 
-//imagefill( $im, 0, 0, $transparent ); 
+//$deck = imagecreatefrompng("images/".BOAT_IMAGE );
+
+imagesavealpha($im,true);
+
+//imagealphablending($im,true);
+//imagealphablending($deck,true);
+$transparent = imagecolorallocatealpha( $im, 255, 255, 255, 127 ); 
+imagefill( $im, 0, 0, $transparent ); 
+imagesavealpha($im,true);
 //imagefill( $deck, 0, 0, $transparent ); 
-//$bg =  imagecolorallocatealpha($deck, 0, 0, 0,255);
+//$bg =  imagecolorallocatealpha($deck, 255, 255, 255, 127);
 //imagealphablending($bg,true);
 //imagefill( $deck, 0, 0, $transparent ); 
 //$deck = imagerotate($deck, geographic2drawing($boatheading), 0X00FFFFFF,0);
-$deck=rotate_image_alpha($deck,geographic2drawing($boatheading), 0XFFFFFF, 127 );
+//$deck=rotate_image_alpha($deck,geographic2drawing($boatheading), 0XFFFFFF, 127 );
+//imagesavealpha($deck,true);
+//imagealphablending($deck,true);
 
-imagealphablending($deck,true);
-
-imagecopymerge( $im, $deck, (imagesx($im)  - imagesx($deck))/2,  
+/*imagecopymerge( $im, $deck, (imagesx($im)  - imagesx($deck))/2,  
      (imagesy($im)  - imagesy($deck))/2, 
      0, 0, imagesx($deck), imagesy($deck), 100);
-//imagesavealpha($im,true);
+//imagesavealpha($im,true);*/
 //draw windpolar
-/*
+
 $color = imagecolorallocate($im, 210, 200, 190);
 $maxcolor = imagecolorallocate($im, 250, 200, 190);
-drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, $wheading);
+
+drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, $wheading-90);
+
 
 //draw a line from the center of the circle to the circle
 //with a lenght and the color of the wind
@@ -188,10 +193,10 @@ drawWindVector($im, $windcolor, 50, geographic2drawingforwind($wheading), 5);
 $color = imagecolorallocate($im, 0, 0, 0);
 drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
 
-/*
+
 $color = imagecolorallocate($im, 0, 255, 0);
 drawWindVector($im, $color, 15, geographic2drawingforwind($vmg - 180), 2);
-*/
+
 
 imagepng ($im);
 

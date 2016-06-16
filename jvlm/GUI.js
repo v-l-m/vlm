@@ -395,10 +395,12 @@ function UpdateInMenuBoatInfo(Boat)
 
   // Get WindAngleImage
   var wHeading=Math.round(Boat.VLMInfo.TWD * 100)/100;
+  var wSpeed=Math.round(Boat.VLMInfo.TWS * 100)/100;
   var BoatType=Boat.VLMInfo.POL;
   var BoatHeading=Math.round(Boat.VLMInfo.HDG*100)/100;
 
-   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed=2.00&roadtoend=180&boattype='+BoatType);
-   
-
+   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed=2.00&roadtoend=180&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
+   $("#ImgWindAngle").css("transform","rotate("+BoatHeading+"deg)");
+   $("#DeckImage").css("transform","rotate("+BoatHeading+"deg)");
+    
 } 
