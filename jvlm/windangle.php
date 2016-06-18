@@ -188,7 +188,7 @@ drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, $wheading-90);
 //draw a line from the center of the circle to the circle
 //with a lenght and the color of the wind
 $windcolor = windspeedtocolorbeaufort($wspeed, $im);
-drawWindVector($im, $windcolor, 50, geographic2drawingforwind($wheading), 5);
+drawWindVector($im, $windcolor, 50, geographic2drawingforwind($wheading-90), 5);
 
 $color = imagecolorallocate($im, 0, 0, 0);
 drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
