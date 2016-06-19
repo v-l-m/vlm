@@ -182,20 +182,20 @@ imagesavealpha($im,true);
 $color = imagecolorallocate($im, 210, 200, 190);
 $maxcolor = imagecolorallocate($im, 250, 200, 190);
 
-drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, $wheading-90);
+drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, $wheading);
 
 
 //draw a line from the center of the circle to the circle
 //with a lenght and the color of the wind
 $windcolor = windspeedtocolorbeaufort($wspeed, $im);
-drawWindVector($im, $windcolor, 50, geographic2drawingforwind($wheading-90), 5);
+drawWindVector($im, $windcolor, 50, geographic2drawingforwind($wheading), 5);
 
 $color = imagecolorallocate($im, 0, 0, 0);
 drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
 
-
+ 
 $color = imagecolorallocate($im, 0, 255, 0);
-drawWindVector($im, $color, 15, geographic2drawingforwind($vmg - 180), 2);
+drawWindVector($im, $color, 15, geographic2drawingforwind($vmg), 2);
 
 
 imagepng ($im);

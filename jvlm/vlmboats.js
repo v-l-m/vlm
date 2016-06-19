@@ -87,7 +87,7 @@ function DrawBoat(Boat)
     );
     VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_ICON]);
     //Add a selector control to the vectorLayer with popup functions
-    var controls = {
+    /*var controls = {
       selector: new OpenLayers.Control.SelectFeature(VLMBoatsLayer, { onSelect: createPopup, onUnselect: destroyPopup })
     };
 
@@ -95,7 +95,7 @@ function DrawBoat(Boat)
       feature.popup = new OpenLayers.Popup.FramedCloud("pop",
           feature.geometry.getBounds().getCenterLonLat(),
           null,
-          '<div class="markerContent">'+"let's have fun"+'</div>',
+          '<div id="BoatControler"></div>',
           null,
           true,
           function() { controls['selector'].unselectAll(); }
@@ -111,6 +111,7 @@ function DrawBoat(Boat)
     
     map.addControl(controls['selector']);
     controls['selector'].activate();
+    */
   }
   else
   {
@@ -147,6 +148,14 @@ var VLMBoatsLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
     }}),
     renderers: renderer
 });
+
+// Background load controller from ext html file
+function GetBoatControllerPopup()
+{
+  $("#BoatController").load("BoatController.html")
+  return '<div id="BoatController"></div>';
+}
+
 //VlmBoats.Layer = OpenLayers.Class(OpenLayers.Layer.Vector, 
 //  {
       /* APIProperty: isBaseLayer
@@ -191,4 +200,34 @@ var VLMBoatsLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
           
  //);
           
+var PM_Mode= {
+  Heading:1,
+  Angle:2,
+  Ortho:3,
+  VMG:4,
+  VBVMG:5
+
+}
+function SendVLMBoatOrder(Mode, Order)
+{
+  var request={};;
+
+  var verb="pilot_set";
+
+  if (typeof _curplayer == 'undefined')
+  {
+    alert ("Must select a boat to send an order");
+    return;
+  }
+  switch (Mode)
+  {
+    case PM_Mode.Heading:
+      request={idu:BoatId,pim:2,pip:Order};
+      break;
+
+    default:
+      return;
+
+  }
+}          
           

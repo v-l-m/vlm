@@ -21,6 +21,15 @@ $(document).ready(
         OnLoginRequest();
       }
     );   
+
+    // Do fixed heading
+    $("#PM_Heading").click(
+      function()
+      {
+        SendVLMBoatOrder(PM_Mode.HEADING,$("#PM_Heading").text)
+      }
+
+    );
     
     $("#logindlgButton").on ('click',
           function (e)
@@ -57,7 +66,7 @@ $(document).ready(
         SetCurrentBoat(GetBoatFromIdu(ui.item.value));
       }
     );
-    
+     
     // CheckLogin
     CheckLogin();
     
@@ -369,6 +378,7 @@ function UpdateInMenuBoatInfo(Boat)
   BoatFieldMappings.push(["#BoatLat",lat.ToString() + ' ' + NorthSouth]);
   BoatFieldMappings.push(["#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
   BoatFieldMappings.push(["#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
+  BoatFieldMappings.push(["#PM_Heading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
   BoatFieldMappings.push(["#BoatAvg",Math.round(Boat.VLMInfo.AVG * 10)/10 ]);
   BoatFieldMappings.push(["#BoatDNM",Math.round(Boat.VLMInfo.DNM * 10)/10 ]);
   BoatFieldMappings.push(["#BoatLoch",Math.round(Boat.VLMInfo.LOC * 10)/10 ]);
