@@ -99,17 +99,32 @@
         <div class="Controler-Panel Container" style="padding-left:85px">
           <div class="col-*-12">
             <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                <li><a href="#BearingMode" data-toggle="tab" I18n="autopilotengaged">Cap</a></li>
-                <li><a href="#AngleMode" data-toggle="tab" I18n="constantengaged">Angle</a></li>
-                <li><a href="#OrthoMode" data-toggle="tab" I18n="orthodromic">Ortho</a></li>
-                <li><a href="#VMGMode" data-toggle="tab">VMG</a></li>
-                <li><a href="#VBVMGMode" data-toggle="tab">VBVMG</a></li>
+                <li><a href="#BearingMode" data-toggle="tab" >
+                  <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png"></img>
+                  <span I18n="autopilotengaged">Cap</span></a>
+                </li>
+                <li><a href="#AngleMode" data-toggle="tab">
+                  <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"></img>
+                  <span I18n="constantengaged">Angle</span></a>
+                </li>
+                <li><a href="#OrthoMode" data-toggle="tab">
+                  <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"></img>
+                  <span I18n="orthodromic">Ortho</span></a>
+                </li>
+                <li><a href="#VMGMode" data-toggle="tab">
+                  <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"></img>
+                  <span>VMG</span></a>
+                </li>
+                <li><a href="#VBVMGMode" data-toggle="tab">
+                  <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"></img>
+                  <span>VBVMG</a>
+                </li>
             </ul>
             <div id="my-tab-content" class="tab-content">
               <div class="tab-pane" id="BearingMode">
                 <div class=row>
                   <div class="col-xs-12">
-                    <span I18n="heading"> Cap</span>
+                    <span I18n="heading" > Cap</span>
                     <input class="input Boat_SimpleInput" id="PM_Heading"></input>
                   </div>
                   <div class="col-xs-12">
@@ -118,8 +133,16 @@
                 </div>
               </div>
               <div class="tab-pane" id="AngleMode">
-                  <h1>Orange</h1>
-                  <p>orange orange orange orange orange</p>
+                 <div class=row>
+                  <div class="col-xs-12">
+                    <span I18n="WindAngle"> Cap</span>
+                    <input class="input Boat_SimpleInput" id="PM_Angle"></input>
+                  </div>
+                  <div class="col-xs-12">
+                    <button class="button" id="BtnPM_Tack" I18n="tack">Do Angle</button>
+                    <button class="button" id="BtnPM_Angle" I18n="constant">Do Angle</button>
+                  </div>
+                </div>
               </div>
               <div class="tab-pane" id="OrthoMode">
                   <h1>Yellow</h1>

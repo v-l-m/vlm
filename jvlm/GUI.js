@@ -22,11 +22,20 @@ $(document).ready(
       }
     );   
 
-    // Do fixed heading
-    $("#PM_Heading").click(
+    // Do fixed heading button
+    $("#BtnPM_Heading").click(
       function()
       {
-        SendVLMBoatOrder(PM_Mode.HEADING,$("#PM_Heading").text)
+        SendVLMBoatOrder(PM_HEADING,$("#PM_Heading")[0].value)
+      }
+
+    );
+
+    // Do fixed angle button
+    $("#BtnPM_Angle").click(
+      function()
+      {
+        SendVLMBoatOrder(PM_ANGLE,$("#PM_Angle")[0].value)
       }
 
     );
@@ -350,6 +359,12 @@ function UpdateInMenuBoatInfo(Boat)
 {
   var NorthSouth;
   var EastWest;
+
+  // Put a sign to the TWA
+  if (Boat.VLMInfo.TWD+360 < Boat.VLMInfo.HDG+360)
+  {
+    Boat.VLMInfo.TWA = -Boat.VLMInfo.TWA;
+  }
   
   // Update GUI for current player
   if (Boat.VLMInfo.LON >=0)
@@ -374,25 +389,44 @@ function UpdateInMenuBoatInfo(Boat)
 
   // Create field mapping array
   var BoatFieldMappings=[];
-  BoatFieldMappings.push(["#BoatLon",lon.ToString() + ' ' + EastWest]);
-  BoatFieldMappings.push(["#BoatLat",lat.ToString() + ' ' + NorthSouth]);
-  BoatFieldMappings.push(["#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
-  BoatFieldMappings.push(["#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
-  BoatFieldMappings.push(["#PM_Heading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
-  BoatFieldMappings.push(["#BoatAvg",Math.round(Boat.VLMInfo.AVG * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatDNM",Math.round(Boat.VLMInfo.DNM * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatLoch",Math.round(Boat.VLMInfo.LOC * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatOrtho",Math.round(Boat.VLMInfo.ORT * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatLoxo",Math.round(Boat.VLMInfo.LOX * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
-  BoatFieldMappings.push(["#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatLon",lon.ToString() + ' ' + EastWest]);
+  BoatFieldMappings.push([0,"#BoatLat",lat.ToString() + ' ' + NorthSouth]);
+  BoatFieldMappings.push([0,"#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
+  BoatFieldMappings.push([0,"#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
+  BoatFieldMappings.push([1,"#PM_Heading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
+  BoatFieldMappings.push([0,"#BoatAvg",Math.round(Boat.VLMInfo.AVG * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatDNM",Math.round(Boat.VLMInfo.DNM * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatLoch",Math.round(Boat.VLMInfo.LOC * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatOrtho",Math.round(Boat.VLMInfo.ORT * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatLoxo",Math.round(Boat.VLMInfo.LOX * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+  if (Boat.VLMInfo.PIP==PM_HEADING)
+  {
+    BoatFieldMappings.push([1,"#PM_Angle",Boat.VLMInfo.PIP ]);
+  }
+  else
+  {
+    BoatFieldMappings.push([1,"#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+  }
 
   // Loop all mapped fields to their respective location
   for (index in BoatFieldMappings)
   {
-    $(BoatFieldMappings[index][0]).text(BoatFieldMappings[index][1]);
+    switch (BoatFieldMappings[index][0])
+    {
+      case 0:
+        $(BoatFieldMappings[index][1]).text(BoatFieldMappings[index][2]);
+        break;
+
+      case 1:
+        $(BoatFieldMappings[index][1]).val(BoatFieldMappings[index][2]);
+        break;
+
+
+    }
   }
  
   // Change color depênding on windangle
@@ -412,5 +446,34 @@ function UpdateInMenuBoatInfo(Boat)
    $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed=2.00&roadtoend=180&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
    $("#ImgWindAngle").css("transform","rotate("+BoatHeading+"deg)");
    $("#DeckImage").css("transform","rotate("+BoatHeading+"deg)");
-    
+
+   // Set active PM mode display
+   $(".PMActiveMode").css("display","none");
+
+   var TabID = ".ActiveMode_";
+
+   switch (Boat.VLMInfo.PIM)
+   {
+     case "1":
+      TabID += 'Heading';
+      break;
+     case "2":
+      TabID += 'Angle';
+      break;
+     case "3":
+      TabID += 'Ortho';
+      break;
+     case "4":
+      TabID += 'VMG';
+      break;
+     case "5":
+      TabID += 'VBVMG';
+      break;
+
+    default:
+      alert("Unsupported VLM PIM Mode, expect the unexpected....")
+      
+   }
+
+    $(TabID).css("display","inline");
 } 

@@ -47,6 +47,9 @@ function CheckBoatRefreshRequired(Boat)
               // Check that boat Id Matches expectations
               if (Boat.IdBoat == result.IDU)
               {
+                // Set Current Boat for player
+                _CurPlayer.CurBoat=Boat;
+
                 // Store BoatInfo, update map
                 Boat.VLMInfo = result;
                 // update map is racing
@@ -199,35 +202,64 @@ function GetBoatControllerPopup()
 //  }
           
  //);
-          
-var PM_Mode= {
-  Heading:1,
-  Angle:2,
-  Ortho:3,
-  VMG:4,
-  VBVMG:5
+     
+const PM_HEADING=1;
+const PM_ANGLE=2;
+const PM_ORTHO=3;
+const PM_VMG=4;
+const PM_VBVMG=5;
 
-}
-function SendVLMBoatOrder(Mode, Order)
+function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
 {
   var request={};;
 
   var verb="pilot_set";
 
-  if (typeof _curplayer == 'undefined')
+  if (typeof _CurPlayer == 'undefined' || typeof _CurPlayer.CurBoat == 'undefined')
   {
     alert ("Must select a boat to send an order");
     return;
   }
   switch (Mode)
   {
-    case PM_Mode.Heading:
-      request={idu:BoatId,pim:2,pip:Order};
+    case PM_HEADING:
+    case PM_ANGLE:
+      request={idu:_CurPlayer.CurBoat.IdBoat,pim:Mode,pip:AngleOrLon};
+      break;
+
+    case PM_ORTHO:
+    case PM_VBVMG:
+    case PM_VMG:
+      request={idu:_CurPlayer.CurBoat.IdBoat,pim:Mode,pip:AngleOrLon};
       break;
 
     default:
       return;
 
   }
-}          
+
+  // Post request
+  PostBoatSetupOrder (_CurPlayer.CurBoat.IdBoat,verb,request);
+
+  
+}         
+
+function PostBoatSetupOrder(idu, verb, orderdata)
+{
+  // Now Post the order
+  $.post("/ws/boatsetup/"+verb+".php?selectidu"+ idu,
+     "parms="+ JSON.stringify(orderdata),
+    function(Data, TextStatus)
+    {
+      if (TextStatus == 'success')
+      {
+
+      }
+      else
+      {
+        Alert(GetLocalizedString("BoatSetupError"))
+      }
+    });
+
+}
           

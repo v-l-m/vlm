@@ -195,7 +195,7 @@ drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
 
  
 $color = imagecolorallocate($im, 0, 255, 0);
-drawWindVector($im, $color, 15, geographic2drawingforwind($vmg), 2);
+drawWindVector($im, $color, 15, geographic2drawingforwind($vmg)-180, 2);
 
 
 imagepng ($im);

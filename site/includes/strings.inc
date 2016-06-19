@@ -2,6 +2,8 @@
 $strings = array (
   'en' => 
   array (
+    "WindAngle" => "Wind Angle",
+    "BoatSetupError" => "Error sending order to server. Try Again later",
     "PbLogin" => "Login in progress...",
     "PbBoat" => "Loading Boat Information...",
     "PbGribs" => "Loading gribs...",
@@ -471,6 +473,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
   ),
   'fr' => 
   array (
+    "WindAngle" => "Angle au vent",
+    "BoatSetupError" => "Erreur lors de l'envoir d'un ordre au serveur. Essayer à nouveau un peu plus tard...",
     "PbLogin" => "Connexion en cours...",
     "PbBoat" => "Chargement données bateau...",
     "PbGribs" => "Chargement météo...",

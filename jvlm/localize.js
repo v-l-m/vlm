@@ -1,4 +1,5 @@
  var _LocaleDict;
+ var _EnDict;
 
 function LocalizeString()
 {
@@ -35,10 +36,7 @@ function LocalizeItem( Elements )
       
       if (typeof _LocaleDict != "undefined")
       {
-        if (Attr in _LocaleDict)
-        {
-          el.innerHTML = _LocaleDict[Attr];
-        }
+        el.innerHTML=GetLocalizedString(Attr);
       }      
     }
 
@@ -71,4 +69,38 @@ function InitLocale(Lang)
             }
           }
          );
+
+	if (typeof _EnDict == 'undefined')
+  {
+    // Load english dictionnary as fall back on 1st call
+    $.get( "/ws/serverinfo/translation.php?lang=en",
+          function(result)
+          {
+            if (result.success == true)
+            {
+              _EnDict=result.strings;
+            }
+            else
+            {
+              alert("Fallback localization string table load failure....");
+            }
+          }
+         );
+  }  
+}
+
+function GetLocalizedString(StringId)
+{
+  if (StringId in _LocaleDict)
+  {
+    return _LocaleDict[StringId];
+  }
+  else if (StringId in _EnDict)
+  {
+    return _EnDict[StringId];
+  }
+  else
+  {
+    return StringId
+  }
 }

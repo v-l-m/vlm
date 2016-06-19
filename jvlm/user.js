@@ -10,6 +10,7 @@ function Boat(vlmboat)
   this.BoatPseudo='';
   this.VLMInfo={};  // LastBoatInfoResult
   this.OLBoatFeatures=[]; 
+  this.CurBoat={};
   
   if (typeof vlmboat != 'undefined')
   {
@@ -180,8 +181,6 @@ function RefreshPlayerMenu()
   ShowUserBoatSelector();
   $('#BoatSelector').prop("selectedIndex",0);
   $('#BoatSelector').selectmenu('refresh');
-            //$('#BoatSelector').val(boat);
-            //$('#BoatSelector').selectmenu("refresh");
             
   
   DisplayLoggedInMenus(true);
