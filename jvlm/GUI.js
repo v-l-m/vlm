@@ -442,9 +442,10 @@ function UpdateInMenuBoatInfo(Boat)
   var wSpeed=Math.round(Boat.VLMInfo.TWS * 100)/100;
   var BoatType=Boat.VLMInfo.POL;
   var BoatHeading=Math.round(Boat.VLMInfo.HDG*100)/100;
+  var WindSpeed=Math.round(Boat.VLMInfo.TWS*100)/100;
 
-   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed=2.00&roadtoend=180&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
-   $("#ImgWindAngle").css("transform","rotate("+BoatHeading+"deg)");
+   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed='+WindSpeed+'&roadtoend='+Boat.VLMInfo.ORT+'&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
+   $("#ImgWindAngle").css("transform","rotate("+wHeading+"deg)");
    $("#DeckImage").css("transform","rotate("+BoatHeading+"deg)");
 
    // Set active PM mode display
