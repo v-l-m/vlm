@@ -41,8 +41,7 @@ function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, 
         imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct); 
     }
 
-function rotate_image_alpha ($image, $angle, $bgcolor, $bgtransparency)
-{
+function rotate_image_alpha ($image, $angle, $bgcolor, $bgtransparency){
   // seen at http://www.php.net/manual/en/function.imagerotate.php
   
   $srcw = imagesx($image);
@@ -155,28 +154,13 @@ include_once("config.php");
 $im = imagecreatetruecolor(141,141);
 imagesavealpha($im,true);
 
-//$deck = imagecreatefrompng("images/".BOAT_IMAGE );
 
 imagesavealpha($im,true);
 
-//imagealphablending($im,true);
-//imagealphablending($deck,true);
 $transparent = imagecolorallocatealpha( $im, 255, 255, 255, 127 ); 
 imagefill( $im, 0, 0, $transparent ); 
 imagesavealpha($im,true);
-//imagefill( $deck, 0, 0, $transparent ); 
-//$bg =  imagecolorallocatealpha($deck, 255, 255, 255, 127);
-//imagealphablending($bg,true);
-//imagefill( $deck, 0, 0, $transparent ); 
-//$deck = imagerotate($deck, geographic2drawing($boatheading), 0X00FFFFFF,0);
-//$deck=rotate_image_alpha($deck,geographic2drawing($boatheading), 0XFFFFFF, 127 );
-//imagesavealpha($deck,true);
-//imagealphablending($deck,true);
 
-/*imagecopymerge( $im, $deck, (imagesx($im)  - imagesx($deck))/2,  
-     (imagesy($im)  - imagesy($deck))/2, 
-     0, 0, imagesx($deck), imagesy($deck), 100);
-//imagesavealpha($im,true);*/
 //draw windpolar
 
 $color = imagecolorallocate($im, 210, 200, 190);
@@ -188,14 +172,14 @@ drawWindPolar($im, $color, $maxcolor, $boattype, $wspeed, 1, 0);
 //draw a line from the center of the circle to the circle
 //with a lenght and the color of the wind
 $windcolor = windspeedtocolorbeaufort($wspeed, $im);
-drawWindVector($im, $windcolor, 50, geographic2drawingforwind(0), 5);
+drawWindVector($im, $windcolor, 50, geographic2drawingforwind(180), 5);
 
 $color = imagecolorallocate($im, 0, 0, 0);
-drawWindVector($im, $color, 15, geographic2drawingforwind($roadtoend - 180), 3);
+drawWindVector($im, $color, 15,  720 + $roadtoend - $wheading, 3);
 
  
 $color = imagecolorallocate($im, 0, 255, 0);
-drawWindVector($im, $color, 15, geographic2drawingforwind($vmg)-180, 2);
+drawWindVector($im, $color, 15, geographic2drawingforwind($vmg - $wheading)-180, 2);
 
 
 imagepng ($im);
