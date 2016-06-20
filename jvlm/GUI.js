@@ -430,10 +430,10 @@ function UpdateInMenuBoatInfo(Boat)
   }
  
   // Change color depênding on windangle
-  var WindColor="red"
-  if (Boat.VLMInfo.TWA <0)
+  var WindColor="lime"
+  if (Boat.VLMInfo.TWA >0)
   {
-    WindColor="lime"
+    WindColor="red"
   }
   $("#BoatWindAngle").css("color",WindColor);
 
@@ -443,8 +443,9 @@ function UpdateInMenuBoatInfo(Boat)
   var BoatType=Boat.VLMInfo.POL;
   var BoatHeading=Math.round(Boat.VLMInfo.HDG*100)/100;
   var WindSpeed=Math.round(Boat.VLMInfo.TWS*100)/100;
+  var OrthoToWP=Math.round(Boat.VLMInfo.ORT*100)/100;
 
-   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed='+WindSpeed+'&roadtoend='+Boat.VLMInfo.ORT+'&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
+   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed='+WindSpeed+'&roadtoend='+OrthoToWP+'&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
    $("#ImgWindAngle").css("transform","rotate("+wHeading+"deg)");
    $("#DeckImage").css("transform","rotate("+BoatHeading+"deg)");
 
