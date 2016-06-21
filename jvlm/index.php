@@ -122,22 +122,26 @@
             </ul>
             <div id="my-tab-content" class="tab-content">
               <div class="tab-pane" id="BearingMode">
-                <div class=row>
+                <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <span I18n="heading" > Cap</span>
                     <input class="input Boat_SimpleInput" id="PM_Heading"></input>
                   </div>
+                </div>
+                <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <button class="button" id="BtnPM_Heading" I18n="autopilot">Do Heading</button>
                   </div>
                 </div>
               </div>
               <div class="tab-pane" id="AngleMode">
-                 <div class=row>
+                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <span I18n="WindAngle"> Cap</span>
                     <input class="input Boat_SimpleInput" id="PM_Angle"></input>
                   </div>
+                </div>
+                <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <button class="button" id="BtnPM_Tack" I18n="tack">Do Angle</button>
                     <button class="button" id="BtnPM_Angle" I18n="constant">Do Angle</button>
