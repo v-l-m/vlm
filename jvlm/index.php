@@ -99,29 +99,29 @@
         <div class="Controler-Panel Container" style="padding-left:85px">
           <div class="col-*-12">
             <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                <li><a href="#BearingMode" data-toggle="tab" >
+                <li class="BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
                   <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png"></img>
                   <span I18n="autopilotengaged">Cap</span></a>
                 </li>
-                <li><a href="#AngleMode" data-toggle="tab">
+                <li class="BCPane AngleMode"><a href="#AngleMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"></img>
                   <span I18n="constantengaged">Angle</span></a>
                 </li>
-                <li><a href="#OrthoMode" data-toggle="tab">
+                <li class="BCPane OrthoMode"><a href="#OrthoMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"></img>
                   <span I18n="orthodromic">Ortho</span></a>
                 </li>
-                <li><a href="#VMGMode" data-toggle="tab">
+                <li class="BCPane VMGMode"><a href="#VMGMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"></img>
                   <span>VMG</span></a>
                 </li>
-                <li><a href="#VBVMGMode" data-toggle="tab">
+                <li class="BCPane VBVMGMode"><a href="#VBVMGMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"></img>
                   <span>VBVMG</a>
                 </li>
             </ul>
             <div id="my-tab-content" class="tab-content">
-              <div class="tab-pane" id="BearingMode">
+              <div class="BCPane tab-pane" id="BearingMode">
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <span I18n="heading" > Cap</span>
@@ -134,7 +134,7 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane" id="AngleMode">
+              <div class="BCPane tab-pane" id="AngleMode">
                  <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <span I18n="WindAngle"> Cap</span>
@@ -148,15 +148,15 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane" id="OrthoMode">
+              <div class="BCPane tab-pane" id="OrthoMode">
                   <h1>Yellow</h1>
                   <p>yellow yellow yellow yellow yellow</p>
               </div>
-              <div class="tab-pane" id="VMGMode">
+              <div class="BCPane tab-pane" id="VMGMode">
                   <h1>Green</h1>
                   <p>green green green green green</p>
               </div>
-              <div class="tab-pane" id="VBVMGMode">
+              <div class="BCPane tab-pane" id="VBVMGMode">
                   <h1>Blue</h1>
                   <p>blue blue blue blue blue</p>
               </div>

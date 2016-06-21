@@ -451,25 +451,31 @@ function UpdateInMenuBoatInfo(Boat)
 
    // Set active PM mode display
    $(".PMActiveMode").css("display","none");
-
+  $(".BCPane").removeClass("active");
    var TabID = ".ActiveMode_";
+   var ActivePane ="";
 
    switch (Boat.VLMInfo.PIM)
    {
      case "1":
       TabID += 'Heading';
+      ActivePane="BearingMode"
       break;
      case "2":
       TabID += 'Angle';
+      ActivePane="AngleMode"
       break;
      case "3":
       TabID += 'Ortho';
+      ActivePane="OrthoMode"
       break;
      case "4":
       TabID += 'VMG';
+      ActivePane="VMGMode"
       break;
      case "5":
       TabID += 'VBVMG';
+      ActivePane="VBVMGMode"
       break;
 
     default:
@@ -478,4 +484,6 @@ function UpdateInMenuBoatInfo(Boat)
    }
 
     $(TabID).css("display","inline");
+    $("."+ActivePane).addClass("active");
+    $("#"+ActivePane).addClass("active");
 } 
