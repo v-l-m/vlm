@@ -186,7 +186,7 @@ span.ui-selectmenu-text {
 @BoatPosTop: 15px;
 @StatSpeedAvgTop : 44px;
 @SpeedAvgTop : @StatSpeedAvgTop + 13px;
-@SpeedLeft:25px;
+@SpeedLeft:23px;
 
 #BoatLon{
   top: @BoatPosTop;
@@ -283,7 +283,34 @@ span.ui-selectmenu-text {
   left: @SpeedLeft+2*40px;
 }
 
+// CSS for Piloting/dashboard buttons
+
 @IconSize:40px;
+@BtnPadLeft:10px;
+@BtnPadTop:4px;
+@Btn2Left:(@IconSize + @BtnPadLeft)-4px;
+
+.BtnGroup{
+  position: relative;
+  padding-left: @BtnPadLeft;
+  padding-top: @BtnPadTop;
+  width: (2*@BtnPadLeft + 2* @IconSize);
+}
+
+.BtnTBDPanel{
+  position: absolute;
+  top:@BtnPadTop;
+}
+
+.BtnCtrlPanel
+{
+  position: absolute;
+  left: @Btn2Left;
+  padding-top: @BtnPadTop;
+  top:0px;
+}
+
+
 
 .TDB-Icon{
   width: @IconSize;

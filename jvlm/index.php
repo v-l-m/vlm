@@ -57,9 +57,15 @@
               <select id="BoatSelector" >
               </select> 
             </li>
-            <li class="nav" data-toggle="collapse" data-target="#TDB-Panel"><a ><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
-            </li>
-            <li class="nav" data-toggle="collapse" data-target="#Boat-Panel"><a ><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
+            <li class="nav">
+              <div class="BtnGroup">
+                <div class="BtnTDBPanel" >
+                  <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
+                </div>
+                <div class="BtnCtrlPanel" >
+                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
+                </div>
+              </div>
             </li>
           </ul>
           <ul class="nav navbar-nav" >
