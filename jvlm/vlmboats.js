@@ -24,6 +24,8 @@ function SetCurrentBoat(Boat)
   CheckBoatRefreshRequired(Boat);
 }
 
+var LastRequestedBoat=-1;
+
 function CheckBoatRefreshRequired(Boat)
 {
   var CurDate = new Date();
@@ -67,6 +69,24 @@ function CheckBoatRefreshRequired(Boat)
                   
                   // Update Boat info in main menu bar
                   UpdateInMenuBoatInfo(Boat);
+
+                  LastRequestedBoat =result.IDU;
+
+                  if (typeof Boat.RaceInfo.idraces == 'undefined')
+                  {
+                    // Get race info if first request for the boat
+                    $.get("/ws/raceinfo.php?idrace="+Boat.VLMInfo.RAC,
+                      function(result)
+                      {
+                        // Save raceinfo with boat
+                        Boat.RaceInfo=result;
+
+                        DrawRaceGates(Boat.RaceInfo);
+                      }
+                    );
+                    
+                  }
+                  
                 }                
               }
               HidePb("#PbGetBoatProgress");
@@ -88,33 +108,9 @@ function DrawBoat(Boat)
       {externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64,rotation: Boat.VLMInfo.HDG}
       )
     );
-    VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_ICON]);
-    //Add a selector control to the vectorLayer with popup functions
-    /*var controls = {
-      selector: new OpenLayers.Control.SelectFeature(VLMBoatsLayer, { onSelect: createPopup, onUnselect: destroyPopup })
-    };
-
-    function createPopup(feature) {
-      feature.popup = new OpenLayers.Popup.FramedCloud("pop",
-          feature.geometry.getBounds().getCenterLonLat(),
-          null,
-          '<div id="BoatControler"></div>',
-          null,
-          true,
-          function() { controls['selector'].unselectAll(); }
-      );
-      //feature.popup.closeOnMove = true;
-      map.addPopup(feature.popup);
-    }
-
-    function destroyPopup(feature) {
-      feature.popup.destroy();
-      feature.popup = null;
-    }
     
-    map.addControl(controls['selector']);
-    controls['selector'].activate();
-    */
+    VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_ICON]);
+
   }
   else
   {
@@ -137,7 +133,7 @@ var VLMBoatsLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
         pointRadius: 6,
         pointerEvents: "visiblePainted",
         // label with \n linebreaks
-        label : "name: ${name}\n\nage: ${age}",
+        label : "WP ${name} - ${Coords}",
         
         fontColor: "${favColor}",
         fontSize: "12px",
@@ -202,6 +198,32 @@ function GetBoatControllerPopup()
 //  }
           
  //);
+
+ function DrawRaceGates(RaceInfo)
+ {
+
+   // Loop all gates
+   for (index in RaceInfo.races_waypoints)
+   {
+      // Draw a single race gates
+      var WP = RaceInfo.races_waypoints[index];
+      // Draw WP1
+      
+      var WP1_Pos = new OpenLayers.Geometry.Point(WP.longitude1/1000, WP.latitude1/1000);
+      var WP1_PosTransformed = WP1_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
+      var WP1= new OpenLayers.Feature.Vector(WP1_PosTransformed,
+                                              {
+                                                "name":"WP"+index,
+                                                "Coords":WP1_Pos
+                                              }
+                                              );
+      
+    VLMBoatsLayer.addFeatures(WP1);
+
+   }
+
+
+ }
      
 const PM_HEADING=1;
 const PM_ANGLE=2;

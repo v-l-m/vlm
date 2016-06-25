@@ -10,7 +10,8 @@ function Boat(vlmboat)
   this.BoatPseudo='';
   this.VLMInfo={};  // LastBoatInfoResult
   this.OLBoatFeatures=[]; 
-  this.CurBoat={};
+  this.CurBoat={};  
+  this.RaceInfo={}; // Race Info for the boat
   
   if (typeof vlmboat != 'undefined')
   {
