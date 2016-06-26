@@ -87,7 +87,7 @@ function CheckBoatRefreshRequired(Boat)
                         // Save raceinfo with boat
                         Boat.RaceInfo=result;
 
-                        DrawRaceGates(Boat.RaceInfo);
+                        DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
                       }
                     );
                     
@@ -129,28 +129,112 @@ function DrawBoat(Boat)
 var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
 
+var VectorStyles = new OpenLayers.Style(
+  {
+    strokeColor: "#00FF00",
+    strokeOpacity: 1,
+    strokeWidth: 3,
+    fillColor: "#FF5500",
+    fillOpacity: 0.5,
+    
+  },
+  {
+    rules:
+    [
+      new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "buoy"
+              }),
+              symbolizer:{
+                // if a feature matches the above filter, use this symbolizer
+                label : "${name}${Coords}",
+                pointRadius: 6,
+                pointerEvents: "visiblePainted",
+                // label with \n linebreaks
+                
+                //fontColor: "${favColor}",
+                fontSize: "14 px",
+                fontFamily: "Courier New, monospace",
+                //fontWeight: "bold",
+                labelAlign: "left", //${align}",
+                labelXOffset: "${xOffset}",
+                labelYOffset: "-12",//${yOffset}",
+                labelOutlineColor: "white",
+                labelOutlineWidth: 2
+              }
+            }
+          ),
+        new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "NextGate"
+              }),
+              symbolizer:{
+                strokeColor: "#FF0000",
+                  strokeOpacity: 1,
+                  strokeWidth: 3              
+              }
+            }
+          ),
+        new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "ValidatedGate"
+              }),
+              symbolizer:{
+                strokeColor: "#0000FF",
+                  strokeOpacity: 0.5,
+                  strokeWidth: 3              
+              }
+            }
+          ),
+        new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "FutureGate"
+              }),
+              symbolizer:{
+                strokeColor: "#FF0000",
+                  strokeOpacity: 0.5,
+                  strokeWidth: 3              
+              }
+            }
+          ),
+        new OpenLayers.Rule
+            (
+              {
+                // a rule contains an optional filter
+                elsefilter: true,
+                symbolizer:{
+                }
+              }
+          
+            )
+
+
+    ]
+  }
+);
+
 var VLMBoatsLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
-    styleMap: new OpenLayers.StyleMap({'default':{
-        strokeColor: "#00FF00",
-        strokeOpacity: 1,
-        strokeWidth: 3,
-        fillColor: "#FF5500",
-        fillOpacity: 0.5,
-        pointRadius: 6,
-        pointerEvents: "visiblePainted",
-        // label with \n linebreaks
-        label : "${name}${Coords}",
-        
-        //fontColor: "${favColor}",
-        fontSize: "14 px",
-        fontFamily: "Courier New, monospace",
-        //fontWeight: "bold",
-        labelAlign: "left", //${align}",
-        labelXOffset: "${xOffset}",
-        labelYOffset: "-12",//${yOffset}",
-        labelOutlineColor: "white",
-        labelOutlineWidth: 2
-    }}),
+    styleMap: new OpenLayers.StyleMap(VectorStyles),
     renderers: renderer
 });
 
@@ -178,7 +262,7 @@ const WP_CROSS_ANTI_CLOCKWISE = (1 <<  9)
 /* for future releases */
 const WP_CROSS_ONCE           = (1 << 10)
 
- function DrawRaceGates(RaceInfo)
+ function DrawRaceGates(RaceInfo, NextGate)
  {
 
    // Loop all gates
@@ -209,7 +293,7 @@ const WP_CROSS_ONCE           = (1 << 10)
       }
 
       // Draw Gate Segment
-      AddGateSegment(VLMBoatsLayer,WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, false,false,(WP.wpformat & WP_GATE_KIND_MASK));
+      AddGateSegment(VLMBoatsLayer,WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate==index),false,(WP.wpformat & WP_GATE_KIND_MASK));
 
    }
  }
@@ -224,8 +308,25 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
 
   PointList.push(P1_PosTransformed);
   PointList.push(P2_PosTransformed);
-    
-  var WP= new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList),null,null);
+
+  var Attr=null;
+
+  if (IsNextWP)
+  {
+    Attr={type:"NextGate"};
+  }
+  else if (IsValidated)
+  {
+    Attr={type:"ValidatedGate"};
+  }
+  else
+  {
+    Attr={type:"FutureGate"};
+  }
+  var WP= new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.LineString(PointList),
+                Attr
+                ,null);
     
   Layer.addFeatures(WP);
   
@@ -240,7 +341,8 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
     var WP= new OpenLayers.Feature.Vector(WP_PosTransformed,
                                           {
                                             "name":Name,
-                                            "Coords": WP_Coords.ToString()
+                                            "Coords": WP_Coords.ToString(),
+                                            "type": 'buoy'
                                           }
                                           );
     
