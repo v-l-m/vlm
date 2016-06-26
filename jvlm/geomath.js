@@ -1,24 +1,47 @@
 ﻿
-
-function Coords(v)
+//
+// Coords Class
+// Basic coordinates conversions and formating
+//
+//
+function Coords(v, IsLon)
 {
-  this.value=Math.abs(v);
+  this.Value=Math.abs(v);
+  this.IsLon = IsLon;
+  
+  // Returns the degree part of a coordinate is floating format
   this.Deg=function()
   {
-    return this.value;
+    return this.Value;
   };
+
+  // Returns the minutes part of a coordinate in floating format
   this.Min=function()
   {
-    return (this.value - Math.floor(this.Deg()))*60;
+    return (this.Value - Math.floor(this.Deg()))*60;
   };
+
+  // Returns the second part of a coordinate in floating format
   this.Sec=function()
   {
     return (this.Min() - Math.floor(this.Min()))*60;
   };
   
+  // Basic string formatting of a floating coordinate
   this.ToString=function()
   {
-    return Math.floor(this.Deg()) +"° "+ Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"';
+    var Side=""
+
+    if (typeof this.IsLon == 'undefined' || this.IsLon==0)
+    {
+      Side = (this.Value>=0?'N':'S')
+    }
+    else
+    {
+      Side = (this.Value>=0?'E':'W')
+    }
+    
+    return Math.floor(this.Deg()) +"° "+ Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"' + Side;
   };
 }
 

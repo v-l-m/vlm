@@ -1,9 +1,10 @@
-/* global OpenLayers */
 //
 // VLMBoat layer handling displaying vlm boats, traj
 //
 
 var BOAT_ICON=0;
+
+const VLM_COORDS_FACTOR=1000;
 
 var MapOptions = {
                   //Projection mercator sphérique (type google map ou osm)
@@ -54,12 +55,17 @@ function CheckBoatRefreshRequired(Boat)
 
                 // Store BoatInfo, update map
                 Boat.VLMInfo = result;
+
+                // Fix Lon, and Lat scale
+                Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
+                Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
+                
                 // update map is racing
                 
                 if (Boat.VLMInfo.RAC != "0")
                 {
                   // Set Map Center to current boat position
-                  var l = new OpenLayers.LonLat(Boat.VLMInfo.LON/1000, Boat.VLMInfo.LAT/1000).transform(MapOptions.displayProjection, MapOptions.projection);
+                  var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
                   
                   // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
                   map.setCenter(l,7);
@@ -97,7 +103,7 @@ function CheckBoatRefreshRequired(Boat)
 
 function DrawBoat(Boat)
 {
-  var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON/1000, Boat.VLMInfo.LAT/1000);
+  var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
   var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
        
   if (Boat.OLBoatFeatures.length == 0)
@@ -133,17 +139,17 @@ var VLMBoatsLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
         pointRadius: 6,
         pointerEvents: "visiblePainted",
         // label with \n linebreaks
-        label : "WP ${name} - ${Coords}",
+        label : "${name}${Coords}",
         
-        fontColor: "${favColor}",
-        fontSize: "12px",
+        //fontColor: "${favColor}",
+        fontSize: "14 px",
         fontFamily: "Courier New, monospace",
-        fontWeight: "bold",
-        labelAlign: "${align}",
+        //fontWeight: "bold",
+        labelAlign: "left", //${align}",
         labelXOffset: "${xOffset}",
-        labelYOffset: "${yOffset}",
+        labelYOffset: "-12",//${yOffset}",
         labelOutlineColor: "white",
-        labelOutlineWidth: 3
+        labelOutlineWidth: 2
     }}),
     renderers: renderer
 });
@@ -155,49 +161,22 @@ function GetBoatControllerPopup()
   return '<div id="BoatController"></div>';
 }
 
-//VlmBoats.Layer = OpenLayers.Class(OpenLayers.Layer.Vector, 
-//  {
-      /* APIProperty: isBaseLayer
-       * {Boolean} vlmboats layer is never a base layer.
-       */
-      //isBaseLayer: false,
-
-      /* Property: canvas
-       * {DOMElement} Canvas element.
-       */
-      //canvas: null,
-
-      /* Constructor: Gribmap.Layer
-       * Create a gribmap layer.
-       *
-       * Parameters:
-       * name - {String} Name of the Layer
-       * options - {Object} Hashtable of extra options to tag onto the layer
-       */
-      /*initialize: function(name, options) 
-        {
-          var i;
-          OpenLayers.Layer.prototype.initialize.apply(this, arguments);
-
-          this.canvas = document.createElement('canvas');
-
-          // code for IE browsers
-          if (typeof G_vmlCanvasManager != 'undefined') {
-              G_vmlCanvasManager.initElement(this.canvas);
-          }
-          this.canvas.style.position = 'absolute';
-
-          // For some reason OpenLayers.Layer.setOpacity assumes there is
-          // an additional div between the layer's div and its contents.
-          var sub = document.createElement('div');
-          sub.appendChild(this.canvas);
-          this.div.appendChild(sub);
-
-        },*/
-//        CLASS_NAME: "VlmBoats.Layer"
-//  }
-          
- //);
+const WP_TWO_BUOYS =0
+const WP_ONE_BUOY  =1
+const WP_GATE_BUOY_MASK =0x000F
+/* leave space for 0-15 types of gates using buoys
+   next is bitmasks */
+const WP_DEFAULT              = 0
+const WP_ICE_GATE_N           = (1 <<  4)
+const WP_ICE_GATE_S           = (1 <<  5)
+const WP_ICE_GATE_E           = (1 <<  6)
+const WP_ICE_GATE_W           = (1 <<  7)
+const WP_GATE_KIND_MASK       = 0x00F0
+/* allow crossing in one direction only */
+const WP_CROSS_CLOCKWISE      = (1 <<  8)
+const WP_CROSS_ANTI_CLOCKWISE = (1 <<  9)
+/* for future releases */
+const WP_CROSS_ONCE           = (1 << 10)
 
  function DrawRaceGates(RaceInfo)
  {
@@ -207,22 +186,65 @@ function GetBoatControllerPopup()
    {
       // Draw a single race gates
       var WP = RaceInfo.races_waypoints[index];
+      
+      // Fix coords scales
+      WP.longitude1/= VLM_COORDS_FACTOR;
+      WP.latitude1/=VLM_COORDS_FACTOR;
+      WP.longitude2/= VLM_COORDS_FACTOR;
+      WP.latitude2/=VLM_COORDS_FACTOR;
+      
       // Draw WP1
+      AddBuoyMarker(VLMBoatsLayer, "WP"+index+" "+WP.libelle+'\n' , WP.longitude1, WP.latitude1);
       
-      var WP1_Pos = new OpenLayers.Geometry.Point(WP.longitude1/1000, WP.latitude1/1000);
-      var WP1_PosTransformed = WP1_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
-      var WP1= new OpenLayers.Feature.Vector(WP1_PosTransformed,
-                                              {
-                                                "name":"WP"+index,
-                                                "Coords":WP1_Pos
-                                              }
-                                              );
-      
-    VLMBoatsLayer.addFeatures(WP1);
+
+      // Second buoy (if any)
+      if ((WP.wpformat & WP_GATE_BUOY_MASK) == WP_TWO_BUOYS)
+      {
+        // Add 2nd buoy marker
+        AddBuoyMarker(VLMBoatsLayer,"",WP.longitude2, WP.latitude2);
+      }
+      {
+        // No Second buoy, compute segment end
+        // Todo
+      }
+
+      // Draw Gate Segment
+      AddGateSegment(VLMBoatsLayer,WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, false,false,(WP.wpformat & WP_GATE_KIND_MASK));
 
    }
+ }
 
+function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType)
+{
+  var P1 = new OpenLayers.Geometry.Point(lon1,lat1);
+  var P2 = new OpenLayers.Geometry.Point(lon2,lat2);
+  var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
+  var P2_PosTransformed = P2.transform(MapOptions.displayProjection, MapOptions.projection)
+  var PointList = [];
 
+  PointList.push(P1_PosTransformed);
+  PointList.push(P2_PosTransformed);
+    
+  var WP= new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList),null,null);
+    
+  Layer.addFeatures(WP);
+  
+
+}
+
+ function AddBuoyMarker(Layer, Name ,Lon, Lat)
+ {
+    var WP_Coords= new Position(Lon,Lat);    
+    var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
+    var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
+    var WP= new OpenLayers.Feature.Vector(WP_PosTransformed,
+                                          {
+                                            "name":Name,
+                                            "Coords": WP_Coords.ToString()
+                                          }
+                                          );
+    
+  Layer.addFeatures(WP);
  }
      
 const PM_HEADING=1;
