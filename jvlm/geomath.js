@@ -6,19 +6,19 @@
 //
 function Coords(v, IsLon)
 {
-  this.Value=Math.abs(v);
+  this.Value=v;
   this.IsLon = IsLon;
   
   // Returns the degree part of a coordinate is floating format
   this.Deg=function()
   {
-    return this.Value;
+    return Math.abs(this.Value);
   };
 
   // Returns the minutes part of a coordinate in floating format
   this.Min=function()
   {
-    return (this.Value - Math.floor(this.Deg()))*60;
+    return (Math.abs(this.Value) - Math.floor(this.Deg()))*60;
   };
 
   // Returns the second part of a coordinate in floating format
