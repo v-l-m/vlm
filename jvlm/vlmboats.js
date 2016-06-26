@@ -293,7 +293,7 @@ const WP_CROSS_ONCE           = (1 << 10)
       }
 
       // Draw Gate Segment
-      AddGateSegment(VLMBoatsLayer,WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate==index),false,(WP.wpformat & WP_GATE_KIND_MASK));
+      AddGateSegment(VLMBoatsLayer,WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate==index),(index < NextGate),(WP.wpformat & WP_GATE_KIND_MASK));
 
    }
  }
