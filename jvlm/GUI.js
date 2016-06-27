@@ -403,7 +403,7 @@ function UpdateInMenuBoatInfo(Boat)
   BoatFieldMappings.push([0,"#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
-  if (Boat.VLMInfo.PIP==PM_HEADING)
+  if (Boat.VLMInfo.PIP==PM_ANGLE)
   {
     BoatFieldMappings.push([1,"#PM_Angle",Boat.VLMInfo.PIP ]);
   }
