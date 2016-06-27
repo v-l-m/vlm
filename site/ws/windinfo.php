@@ -1,5 +1,6 @@
 <?php
 include_once("config.php");
+require_once('functions.php');
 include_once("vlmc.php");
   date_default_timezone_set('UTC');
 header("content-type: text/plain; charset=UTF-8");
