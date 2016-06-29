@@ -285,5 +285,9 @@
     define_if_not("VLM_XMPP_ON", false);
     define_if_not("VLM_XMPP_HOST", "iridium.v-l-m.org");
     define_if_not("VLM_XMPP_HTTP_BIND_PATH", "/http-bind/");
-    define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://".$_SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
+    //define_if-not('$_SERVER["HTTP_HOST"]'),"v-l-m.org");
+    if(isset($_SERVER["HTTP_HOST"]))
+    {
+        define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://".$_SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
+    }
 ?>
