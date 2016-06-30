@@ -78,10 +78,6 @@ if ( $argc > 2 ) {
 }
 
 
-$engine_start=time();
-$engine_start_float=microtime(true);
-
-$step_stop_float=microtime(true);
 
 echo "\n".gmdate("M d Y H:i:s",time()). "\n";
 $CurTick= microtime(true);
@@ -92,6 +88,12 @@ if ($CurTick < $EngineStartTick)
 }
  
 echo "\n".gmdate("M d Y H:i:s",time())." - ".microtime(true);
+
+$engine_start=time();
+$engine_start_float=microtime(true);
+
+$step_stop_float=microtime(true);
+
 // ========================================
 echo "\n2- === DO THE JOB FOR EACH RACE\n";
 
