@@ -1,4 +1,12 @@
 <?php
+
+$ENGINE_START_VAC_OFFSET = 29;
+
+$StartTick=microtime(true);
+$Epoch=floor($StartTick);
+
+$EngineStartTick = $Epoch - ($Epoch%60) + $ENGINE_START_VAC_OFFSET;
+
 include_once("vlmc.php");
 include_once("functions.php");
 include_once("races.class.php");
@@ -25,14 +33,24 @@ header("Cache-Control: no-store, no-cache, must-revalidate\n\n");
 header("Content-Type: text/plain\n\n");
 
 include("config.php");
+echo "\n1- === CRON JOB Init \n";
+echo "\nEngine Cron started at " . $StartTick ;
 
+$CurTick = microtime(true);
 $global_vlmc_context = new vlmc_context();
 init_context($global_vlmc_context);
 set_gshhs_filename($global_vlmc_context, GSHHS_FILENAME);
 set_polar_definition_filename($global_vlmc_context, POLAR_DEFINITION_FILENAME);
 global_vlmc_context_set($global_vlmc_context);
+$NextTick = microtime(true);
+//echo "\n VLMC context inited in ".($NextTick-$CurTick);
+//$CurTick=$NextTick;
 
 init_coastline();
+
+//$NextTick = microtime(true);
+//echo "\n CoastLine inited in ".($NextTick-$CurTick);
+//$CurTick=$NextTick;
 
 $polar_shmid = get_polar_shmid(1);
 if ( $polar_shmid < 0 ) { // safeline
@@ -49,8 +67,8 @@ $verbose=0;
 $RACE_NUM=0;
 $USER_NUM=0;
 $flagglobal=true;
-// Si on a un argument, c'est le numéro d'une course
-// Si on en a 2, c'est la course PUIS le numéro du bateau
+// Si on a un argument, c'est le numï¿½ro d'une course
+// Si on en a 2, c'est la course PUIS le numï¿½ro du bateau
 if ( $argc > 1 ) {
   $RACE_NUM=$argv[1];
   $flagglobal=false;
@@ -65,6 +83,15 @@ $engine_start_float=microtime(true);
 
 $step_stop_float=microtime(true);
 
+echo "\n".gmdate("M d Y H:i:s",time()). "\n";
+$CurTick= microtime(true);
+if ($CurTick < $EngineStartTick)
+{
+  echo "\n Sleep ". ($EngineStartTick-$CurTick);
+  usleep(($EngineStartTick-$CurTick)*1e6);
+}
+ 
+echo "\n".gmdate("M d Y H:i:s",time())." - ".microtime(true);
 // ========================================
 echo "\n2- === DO THE JOB FOR EACH RACE\n";
 
@@ -105,7 +132,7 @@ if (round($engine_elapsed_float) > 0 ) {
   $engine_elapsed = 1;
 }
 
-// Demarrage des courses à démarrer... 
+// Demarrage des courses ï¿½ dï¿½marrer... 
 echo "\n4- === CHECKING IF A RACE STARTS\n";
 include "start_races.php";
 
