@@ -1,6 +1,6 @@
 <?php
 
-$ENGINE_START_VAC_OFFSET = 29;
+$ENGINE_START_VAC_OFFSET = 6;
 
 $StartTick=microtime(true);
 $Epoch=floor($StartTick);
