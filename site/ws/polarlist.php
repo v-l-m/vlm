@@ -1,5 +1,6 @@
 <?php
 include_once('vlmc.php');
+require_once('functions.php');
 
 function get_output_format() {
   //nothing more for now
