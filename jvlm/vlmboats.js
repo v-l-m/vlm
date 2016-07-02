@@ -158,14 +158,50 @@ var VectorStyles = new OpenLayers.Style(
                 // label with \n linebreaks
                 
                 //fontColor: "${favColor}",
-                fontSize: "14 px",
-                fontFamily: "Courier New, monospace",
+                fontSize: "1.5em",
+                //fontFamily: "Courier New, monospace",
                 //fontWeight: "bold",
                 labelAlign: "left", //${align}",
                 labelXOffset: "${xOffset}",
                 labelYOffset: "-12",//${yOffset}",
                 labelOutlineColor: "white",
-                labelOutlineWidth: 2
+                labelOutlineWidth: 2 
+              }
+            }
+          ),
+        new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "crossonce"
+              }),
+              symbolizer:{
+                xOffset:1,
+                yOffset:1,
+                strokeColor:"black",
+                strokeOpacity:0.5,
+                strokeWidth:4,
+                strokeDashstyle:"dashdot"
+              }
+            }
+          ),
+        
+        new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "marker"
+              }),
+              symbolizer:{
+                externalGraphic: "images/${BuoyName}",
+                rotation:"${CrossingDir}",
+                graphicWidth:48
               }
             }
           ),
@@ -255,7 +291,7 @@ const WP_ICE_GATE_N           = (1 <<  4)
 const WP_ICE_GATE_S           = (1 <<  5)
 const WP_ICE_GATE_E           = (1 <<  6)
 const WP_ICE_GATE_W           = (1 <<  7)
-const WP_GATE_KIND_MASK       = 0x00F0
+const WP_GATE_KIND_MASK       = 0xFFF0
 /* allow crossing in one direction only */
 const WP_CROSS_CLOCKWISE      = (1 <<  8)
 const WP_CROSS_ANTI_CLOCKWISE = (1 <<  9)
@@ -329,9 +365,67 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
                 ,null);
     
   Layer.addFeatures(WP);
+
+  if (GateType != WP_DEFAULT)
+  {
+    // Debug testing of the geo calculation functions
+    {
+      // Rumb line LAX-JFK = 2164.6 nm
+      var P1 = new Position(  -(118+(24/60)),33+ (57/60));
+      var P2 = new Position (-(73+(47/60)),40+(38/60));
+      console.log("loxo dist : " + P1.GetLoxoDist(P2));
+      console.log("loxo angle: " + P1.GetLoxoCourse(P2));
+
+    }
+    var P1 = new Position(lon1,lat1); 
+    var P2 = new Position(lon2,lat2);
+    var MarkerDir = P1.GetLoxoCourse(P2);
+    var MarkerPos = P1.ReachDistLoxo(P2,0.5);
+    // Gate has special features, add markers
+    if (GateType & WP_CROSS_ANTI_CLOCKWISE)
+    {
+      MarkerDir-=90;
+      AddGateDirMarker(VLMBoatsLayer,MarkerPos.Lon.Value, MarkerPos.Lat.Value,MarkerDir);
+    }
+    else if (GateType & WP_CROSS_CLOCKWISE)
+    {
+      MarkerDir+=90;
+      AddGateDirMarker(VLMBoatsLayer,"toto",MarkerPos.Lon.Value, MarkerPos.Lat.Value,MarkerDir);
+    }
+
+    if (GateType & WP_CROSS_ONCE)
+    {
+      // Draw the segment again as dashed line for cross once gates
+      var WP= new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.LineString(PointList),
+                {type:"crossonce"}
+                ,null);
+    
+      Layer.addFeatures(WP);
+
+    }
+
+  }
   
 
 }
+
+ function AddGateDirMarker(Layer, Lon, Lat,Dir)
+ {
+    var MarkerCoords= new Position(Lon,Lat);    
+    var MarkerPos = new OpenLayers.Geometry.Point(MarkerCoords.Lon.Value, MarkerCoords.Lat.Value);
+    var MarkerPosTransformed = MarkerPos.transform(MapOptions.displayProjection, MapOptions.projection)
+    var Marker= new OpenLayers.Feature.Vector(MarkerPosTransformed,
+                                {
+                                  "type": 'marker',
+                                  "BuoyName" :"BuoyDir.png",
+                                  "CrossingDir":Dir
+                                }
+                                );
+    
+    Layer.addFeatures(Marker);
+ }
+
 
  function AddBuoyMarker(Layer, Name ,Lon, Lat)
  {
