@@ -32,7 +32,8 @@
       <script src='polar.js' type='text/javascript'></script>
   </head>
   <body >
-    
+
+    <!-- OpenLayer Map Div -->
     <div class="container-fluid">
       <div class="row main-row">
         <div id="jVlmControl" class="col-sm-12"></div>
