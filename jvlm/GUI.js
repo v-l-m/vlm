@@ -12,6 +12,9 @@ $(document).ready(
     // Init Menus()
     InitMenusAndButtons();
     
+    // Start-Up Polars manager
+    PolarsManager = new PolarManagerClass();
+    PolarsManager.Init();
     
     // Init event handlers
     // Login button click event handler

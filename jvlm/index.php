@@ -29,6 +29,7 @@
       <script src='vlmboats.js' type='text/javascript'></script>
       <script src='geomath.js' type='text/javascript'></script>
       <script src='position.js' type='text/javascript'></script>
+      <script src='polar.js' type='text/javascript'></script>
   </head>
   <body >
     
