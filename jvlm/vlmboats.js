@@ -2,7 +2,8 @@
 // VLMBoat layer handling displaying vlm boats, traj
 //
 
-var BOAT_ICON=0;
+const BOAT_ICON=0;
+const BOAT_WP_MARKER=1;
 
 const VLM_COORDS_FACTOR=1000;
 
@@ -68,7 +69,7 @@ function CheckBoatRefreshRequired(Boat)
                   var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
                   
                   // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
-                  map.setCenter(l,7);
+                  map.setCenter(l);
                   
                   // Draw Boat, course, track....
                   DrawBoat(Boat);
@@ -105,24 +106,56 @@ function DrawBoat(Boat)
 {
   var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
   var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
-       
-  if (Boat.OLBoatFeatures.length == 0)
+  //WP Marker
+  var WP = Boat.GetNextWPPosition();
+  var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value,WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
+  var UpdatedFeatures=[];
+    
+  // Remove features, before recreate and re-add
+  // Can't figure how to move/update the features properly
+  if (Boat.OLBoatFeatures.length !=0)
   {
+    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_ICON]);
+    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
+    
+    VLMBoatsLayer.removeFeatures(UpdatedFeatures);
+
+    // Cleanup OLBoatFeatures
+    Boat.OLBoatFeatures.length=0;
+    
+  }
+  //if (Boat.OLBoatFeatures.length == 0)
+  {
+    // On first pass, create all markers
+    // Boat Marker
     Boat.OLBoatFeatures.push( new OpenLayers.Feature.Vector(
       PosTransformed,
       {"Id":Boat.IdBoat},
       {externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64,rotation: Boat.VLMInfo.HDG}
       )
     );
-    
     VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_ICON]);
 
+    
+    Boat.OLBoatFeatures.push( new OpenLayers.Feature.Vector(
+      WPTransformed,
+      {},
+      {externalGraphic: 'images/WP_Marker.gif', graphicHeight: 64, graphicWidth: 64}
+      )
+    );
+    VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
+
   }
-  else
+  /*else
   {
-    Boat.OLBoatFeatures[BOAT_ICON].lonlat = PosTransformed;
+    
     Boat.OLBoatFeatures[BOAT_ICON].style.rotation= Boat.VLMInfo.HDG;
-  };
+    Boat.OLBoatFeatures[BOAT_ICON].move(PosTransformed);
+    Boat.OLBoatFeatures[BOAT_WP_MARKER].move(WPTransformed);
+
+    VLMBoatsLayer.addFeatures(UpdatedFeatures);
+
+  };*/
   
 }
 // allow testing of specific renderers via "?renderer=Canvas", etc
@@ -460,6 +493,8 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
     alert ("Must select a boat to send an order");
     return;
   }
+
+  // Build WS command accoridng to required pilot mode
   switch (Mode)
   {
     case PM_HEADING:
@@ -470,7 +505,16 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
     case PM_ORTHO:
     case PM_VBVMG:
     case PM_VMG:
-      request={idu:_CurPlayer.CurBoat.IdBoat,pim:Mode,pip:AngleOrLon};
+      request={idu:_CurPlayer.CurBoat.IdBoat,
+                pim:Mode,
+                pip:
+                {
+                  targetlong:parseFloat(AngleOrLon),
+                  targetlat:parseFloat(Lat),
+                  targetandhdg:WPAt
+                }
+              };
+      //PostBoatSetupOrder (_CurPlayer.CurBoat.IdBoat,"target_set",request);
       break;
 
     default:
@@ -491,13 +535,13 @@ function PostBoatSetupOrder(idu, verb, orderdata)
      "parms="+ JSON.stringify(orderdata),
     function(Data, TextStatus)
     {
-      if (TextStatus == 'success')
+      if (Data.success)
       {
 
       }
       else
       {
-        Alert(GetLocalizedString("BoatSetupError"))
+        alert(GetLocalizedString("BoatSetupError") + '\n' + Data.error.code + " " + Data.error.msg)
       }
     });
 

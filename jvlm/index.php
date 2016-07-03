@@ -115,15 +115,15 @@
                   <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"></img>
                   <span I18n="constantengaged">Angle</span></a>
                 </li>
-                <li class="BCPane OrthoMode"><a href="#OrthoMode" data-toggle="tab">
+                <li class="BCPane WP_PM_Mode OrthoMode "><a href="#OrthoMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"></img>
                   <span I18n="orthodromic">Ortho</span></a>
                 </li>
-                <li class="BCPane VMGMode"><a href="#VMGMode" data-toggle="tab">
+                <li class="BCPane WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"></img>
                   <span>VMG</span></a>
                 </li>
-                <li class="BCPane VBVMGMode"><a href="#VBVMGMode" data-toggle="tab">
+                <li class="BCPane WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"></img>
                   <span>VBVMG</a>
                 </li>
@@ -157,16 +157,57 @@
                 </div>
               </div>
               <div class="BCPane tab-pane" id="OrthoMode">
-                  <h1>Yellow</h1>
-                  <p>yellow yellow yellow yellow yellow</p>
+                <div id="PM_WPMode_Div">
+                  <div class="BoatControllerRow row">
+                    <div class="col-xs-12">
+                      <span I18n="mytargetpoint"> CurDest</span>
+                    </div>
+                  </div>
+                  <div class="BoatControllerRow row">
+                    <div class="BoatControllerRow col-xs-12">
+                      <span width="50px"> Lat</span>
+                      <input class="input Boat_SimpleInput" id="PM_Lat"></input>
+                      <span width="4px"></span>
+                      <span class="input Boat_SimpleInput" id="PM_CurWPLat">WpLat</span>
+                    </div>
+                    <div class="BoatControllerRow col-xs-12">
+                      <span width="50px"> Lon</span>
+                      <input class="input Boat_SimpleInput" id="PM_Lon"></input>
+                      <span width="4px"></span>
+                      <span class="input Boat_SimpleInput" id="PM_CurWPLon">WpLat</span>
+                    </div>
+                    <div class="BoatControllerRow col-xs-12">
+                      <div class="checkbox col-xs-1"> 
+                        <label>
+                          <input type="checkbox" id="PM_WithWPHeading"></input>
+                          @WPH
+                        </label>
+                      </div>
+                      <input class="input Boat_SimpleInput" id="PM_WPHeading"></input>
+                      <span width="4px"></span>
+                      <span class="input Boat_SimpleInput" id="PM_CurWPheading">WpLat</span>
+                    </div>
+                  </div>                  
+                </div>
+                <div class="BoatControllerRow row">
+                  <div class="col-xs-12">
+                    <button class="button" id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
+                  </div>
+                </div>
               </div>
               <div class="BCPane tab-pane" id="VMGMode">
-                  <h1>Green</h1>
-                  <p>green green green green green</p>
+                <div class="BoatControllerRow row">
+                  <div class="col-xs-12">
+                    <button class="button" id="BtnPM_VMG" I18n="bestvmgengaged">Do Angle</button>
+                  </div>
+                </div> 
               </div>
               <div class="BCPane tab-pane" id="VBVMGMode">
-                  <h1>Blue</h1>
-                  <p>blue blue blue blue blue</p>
+                <div class="BoatControllerRow row">
+                  <div class="col-xs-12">
+                    <button class="button" id="BtnPM_VBVMG" I18n="vbvmgengaged">Do Angle</button>
+                  </div>
+                </div>    
               </div>
             </div>
           </div>

@@ -21,7 +21,22 @@ function Boat(vlmboat)
     this.BoatPseudo=vlmboat.boatpseudo;
     this.VLMInfo={};  // LastBoatInfoResult
     this.OLBoatFeatures=[];
-  } 
+  }
+
+  this.GetNextWPPosition= function()
+  {
+    // Assume if we get there, there is a boat with RaceInfo and VLMInfo loaded
+    var WPIndex = this.VLMInfo.NWP;
+
+    //If there is a defined WP, then return it
+    if ((this.VLMInfo.WPLON!=0)||(this.VLMInfo.WPLAT!=0))
+    {
+      return new Position (this.VLMInfo.WPLON,this.VLMInfo.WPLAT);
+    }
+    
+    // Default, return 0,0 and hope use will figure it out...
+    return new Position(0,0);
+  }
 }
 
 

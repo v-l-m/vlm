@@ -42,6 +42,48 @@ $(document).ready(
       }
 
     );
+
+    // Tack
+    $("#BtnPM_Tack").click(
+      function()
+      {
+        $("#PM_Angle")[0].value= - $("#PM_Angle")[0].value;
+      }
+    )
+
+    // Go To WP OrthoMode
+    $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
+      function()
+      {
+        var WpH=-1;
+        var PMMode=PM_ORTHO;
+        var Lat = $("#PM_Lat")[0].value;
+        var Lon = $("#PM_Lon")[0].value;
+        
+
+        if ($("#PM_WithWPHeading")[0].value)
+        {
+          Wph = $("#PM_WPHeading").value
+        }
+
+        switch ($(this)[0].id)
+        {
+          case "BtnPM_Ortho":
+            PMMode=PM_ORTHO;
+            break;
+
+          case "BtnPM_VMG":
+            PMMode=PM_VMG;
+            break;
+
+          case "VBVMGMode":
+            PMMode=PM_VBVMG;
+            break;
+
+        }
+        SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
+      }
+    )
     
     $("#logindlgButton").on ('click',
           function (e)
@@ -274,6 +316,17 @@ function InitMenusAndButtons()
   HidePb("#PbLoginProgress");
   HidePb("#PbGetBoatProgress");
   HidePb("#PbGribLoginProgress");
+
+  // Add handler to set the WPMode controller in the proper tab
+  $(".BCPane.WP_PM_Mode").click(
+    function()
+    {
+      // Beurk , direct access by indexes :(
+      // Assumes second class element is the id of target
+      var target="#"+$(this)[0].classList[2];
+      MoveWPBoatControlerDiv(target)
+    }
+  )
 }
 
 function ClearBoatSelector()
@@ -391,6 +444,8 @@ function UpdateInMenuBoatInfo(Boat)
   var lat = new Coords(Boat.VLMInfo.LAT/1000);
 
   // Create field mapping array
+  // 0 for text fields
+  // 1 for input fields
   var BoatFieldMappings=[];
   BoatFieldMappings.push([0,"#BoatLon",lon.ToString() + ' ' + EastWest]);
   BoatFieldMappings.push([0,"#BoatLat",lat.ToString() + ' ' + NorthSouth]);
@@ -406,6 +461,17 @@ function UpdateInMenuBoatInfo(Boat)
   BoatFieldMappings.push([0,"#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+  WP = new Position(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
+  if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
+  {
+    WP = Boat.GetNextWPPosition();
+  }
+  BoatFieldMappings.push([1,"#PM_Lat", WP.Lat.Value]);
+  BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
+  BoatFieldMappings.push([0,"#PM_CurWPLat", WP.Lat.ToString()]);
+  BoatFieldMappings.push([0,"#PM_CurWPLon", WP.Lon.ToString()]);
+  //BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.H@WP * 10)/10 ]);
+  
   if (Boat.VLMInfo.PIP==PM_ANGLE)
   {
     BoatFieldMappings.push([1,"#PM_Angle",Boat.VLMInfo.PIP ]);
@@ -490,3 +556,8 @@ function UpdateInMenuBoatInfo(Boat)
     $("."+ActivePane).addClass("active");
     $("#"+ActivePane).addClass("active");
 } 
+
+function MoveWPBoatControlerDiv(target)
+{
+  var div = $(target).prepend($("#PM_WPMode_Div"));
+}
