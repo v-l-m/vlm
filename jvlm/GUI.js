@@ -440,8 +440,8 @@ function UpdateInMenuBoatInfo(Boat)
     NorthSouth = "S";
   }
  
-  var lon = new Coords(Boat.VLMInfo.LON/1000);
-  var lat = new Coords(Boat.VLMInfo.LAT/1000);
+  var lon = new Coords(Boat.VLMInfo.LON);
+  var lat = new Coords(Boat.VLMInfo.LAT);
 
   // Create field mapping array
   // 0 for text fields
