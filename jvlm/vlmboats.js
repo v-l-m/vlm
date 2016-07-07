@@ -484,7 +484,7 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
     else if (GateType & WP_CROSS_CLOCKWISE)
     {
       MarkerDir+=90;
-      AddGateDirMarker(VLMBoatsLayer,"toto",MarkerPos.Lon.Value, MarkerPos.Lat.Value,MarkerDir);
+      AddGateDirMarker(VLMBoatsLayer,MarkerPos.Lon.Value, MarkerPos.Lat.Value,MarkerDir);
     }
 
     if (GateType & WP_CROSS_ONCE)
