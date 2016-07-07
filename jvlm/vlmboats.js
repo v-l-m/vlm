@@ -101,13 +101,16 @@ function CheckBoatRefreshRequired(Boat)
                   $.get("/ws/boatinfo/tracks_private.php?idu="+Boat.IdBoat+"&idr="+Boat.VLMInfo.RAC+"&starttime="+start+"&endtime="+end,
                     function(result)
                     {
-                      Boat.Track.length=0;
-                      for (index in result.nbtracks)
+                      if (result.success)
                       {
-                        var P = new Position(result.nbtracks[index][1]/1000., result.nbtracks[index][2]/1000. )
-                        Boat.Track.push(P);
+                        Boat.Track.length=0;
+                        for (index in result.tracks)
+                        {
+                          var P = new Position(result.tracks[index][1]/1000., result.tracks[index][2]/1000. )
+                          Boat.Track.push(P);
+                        }
+                        DrawBoat(Boat)
                       }
-                      DrawBoat(Boat)
                     }
                   )
                   
@@ -183,7 +186,23 @@ function DrawBoat(Boat)
                 new OpenLayers.Geometry.LineString(PointList));
     
       VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
+    }
+    else
+    {
+      // Add single point out of the map for later having a feature to remove
+      var PointList = [];
 
+      var P = new Position(-180,90);
+      var P1 = new OpenLayers.Geometry.Point(P.Lon.Value,P.Lat.Value);
+      var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
+
+      PointList.push(P1_PosTransformed)
+
+    
+      Boat.OLBoatFeatures[BOAT_TRACK]= new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.LineString(PointList));
+    
+      VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
     }
 
   }
