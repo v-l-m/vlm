@@ -4,6 +4,7 @@
 
 const BOAT_ICON=0;
 const BOAT_WP_MARKER=1;
+const BOAT_TRACK = 2;
 
 const VLM_COORDS_FACTOR=1000;
 
@@ -93,12 +94,30 @@ function CheckBoatRefreshRequired(Boat)
                     );
                     
                   }
+
+                  // Get boat track for the last 24h
+                  var end = Math.floor(new Date()/1000.)
+                  var start = end - 24*3600
+                  $.get("/ws/boatinfo/tracks_private.php?idu="+Boat.IdBoat+"&idr="+Boat.VLMInfo.RAC+"&starttime="+start+"&endtime="+end,
+                    function(result)
+                    {
+                      Boat.Track.length=0;
+                      for (index in result.nbtracks)
+                      {
+                        var P = new Position(result.nbtracks[index][1]/1000., result.nbtracks[index][2]/1000. )
+                        Boat.Track.push(P);
+                      }
+                      DrawBoat(Boat)
+                    }
+                  )
                   
                 }                
               }
               HidePb("#PbGetBoatProgress");
             }
           )
+
+    
   }
 }
 
@@ -117,6 +136,7 @@ function DrawBoat(Boat)
   {
     UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_ICON]);
     UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
+    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_TRACK]);
     
     VLMBoatsLayer.removeFeatures(UpdatedFeatures);
 
@@ -145,6 +165,27 @@ function DrawBoat(Boat)
     );
     VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
 
+    if (Boat.Track.length > 0)
+    {
+      var PointList = [];
+
+      for (index in Boat.Track)
+      {
+        var P = Boat.Track[index];
+        var P1 = new OpenLayers.Geometry.Point(P.Lon.Value,P.Lat.Value);
+        var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
+  
+        PointList.push(P1_PosTransformed)
+
+      }
+
+      Boat.OLBoatFeatures[BOAT_TRACK]= new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.LineString(PointList));
+    
+      VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
+
+    }
+
   }
   /*else
   {
@@ -158,6 +199,7 @@ function DrawBoat(Boat)
   };*/
   
 }
+
 // allow testing of specific renderers via "?renderer=Canvas", etc
 var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;

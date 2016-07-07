@@ -21,6 +21,7 @@ function Boat(vlmboat)
     this.BoatPseudo=vlmboat.boatpseudo;
     this.VLMInfo={};  // LastBoatInfoResult
     this.OLBoatFeatures=[];
+    this.Track=[];
   }
 
   this.GetNextWPPosition= function()
