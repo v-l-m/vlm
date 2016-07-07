@@ -64,16 +64,28 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
         return EARTH_RADIUS *d;
     }
 
-    // Compute the position of point at r * distance to point P
+    // Reaches a point from position using rhumbline.
+    // Compute the position of point at r * distance to point P is 1st param is a Position
+    // Computes the position at Distance P, and heading r if P is a number
     // Along loxodrome from this to P
     this.ReachDistLoxo = function(P, r)
     {
+        var d = 0;
+        var tc= 0;
 
-        var d = this.GetLoxoDist(P)/EARTH_RADIUS*r;
-       
+       if (typeof P == "number")
+        {
+            d=P/EARTH_RADIUS;
+            tc=Deg2Rad(r);
+        }
+        else
+        {
+            d=this.GetLoxoDist(P)/EARTH_RADIUS*r;
+            tc  = Deg2Rad(this.GetLoxoCourse(P));
+        }
+        
         var Lat1  = Deg2Rad(this.Lat.Value);
         var Lon1  = -Deg2Rad(this.Lon.Value);
-        var tc  = Deg2Rad(this.GetLoxoCourse(P));
         var Lat =0; 
         var Lon =0;
         var TOL  = 0.000000000000001;
