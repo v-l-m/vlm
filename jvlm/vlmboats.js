@@ -283,8 +283,8 @@ var VectorStyles = new OpenLayers.Style(
                 labelAlign: "left", //${align}",
                 labelXOffset: "${xOffset}",
                 labelYOffset: "-12",//${yOffset}",
-                labelOutlineColor: "white",
-                labelOutlineWidth: 2 
+                //labelOutlineColor: "white",
+                //labelOutlineWidth: 2 
               }
             }
           ),
