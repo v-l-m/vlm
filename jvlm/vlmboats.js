@@ -134,7 +134,7 @@ function DrawBoat(Boat)
   var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value,WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
   var UpdatedFeatures=[];
 
-  var ForecastPos = new Position (Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12*Boat.VLMInfo.BSP/Boat.VL.VAC,Boat.VLMInfo.HDG);
+  var ForecastPos = new Position (Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12*Boat.VLMInfo.BSP/Boat.VLMInfo.VAC,Boat.VLMInfo.HDG);
   var ForecastPosTransformed = new OpenLayers.Geometry.Point(ForecastPos.Lon.Value,ForecastPos.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
     
   // Remove features, before recreate and re-add
@@ -189,7 +189,10 @@ function DrawBoat(Boat)
       }
 
       Boat.OLBoatFeatures[BOAT_TRACK]= new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.LineString(PointList));
+                new OpenLayers.Geometry.LineString(PointList),
+                {
+                  "type":"HistoryTrack"
+                });
     
       VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
     }
@@ -208,7 +211,7 @@ function DrawBoat(Boat)
       Boat.OLBoatFeatures[BOAT_TRACK]= new OpenLayers.Feature.Vector(
                 new OpenLayers.Geometry.LineString(PointList),
                     {
-                      "type":"forecasttrack"
+                      "type":"HistoryTrack"
                     });
     
       VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
@@ -220,7 +223,10 @@ function DrawBoat(Boat)
     TrackPointList.push(ForecastPosTransformed);
 
     Boat.OLBoatFeatures[BOAT_FORECAST_TRACK]= new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.LineString(TrackPointList));
+                new OpenLayers.Geometry.LineString(TrackPointList),
+                {
+                  "type":"ForecastPos"
+                });
     
       VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_FORECAST_TRACK]);
 
@@ -381,6 +387,21 @@ var VectorStyles = new OpenLayers.Style(
                   strokeWidth:1,
                   strokeDashstyle:"dot"
                               
+              }
+            }
+          ),
+        new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "HistoryTrack"
+              }),
+              symbolizer:{
+                  strokeOpacity:0.5,
+                  strokeWidth:2
               }
             }
           ),
