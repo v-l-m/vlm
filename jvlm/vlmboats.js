@@ -134,7 +134,7 @@ function DrawBoat(Boat)
   var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value,WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
   var UpdatedFeatures=[];
 
-  var ForecastPos = new Position (Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12*Boat.VLMInfo.BSP/Boat.VLMInfo.VAC,Boat.VLMInfo.HDG);
+  var ForecastPos = new Position (Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12*Boat.VLMInfo.BSP*Boat.VLMInfo.VAC/3600,Boat.VLMInfo.HDG);
   var ForecastPosTransformed = new OpenLayers.Geometry.Point(ForecastPos.Lon.Value,ForecastPos.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
     
   // Remove features, before recreate and re-add
