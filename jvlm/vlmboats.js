@@ -337,7 +337,7 @@ var VectorStyles = new OpenLayers.Style(
                   value: "marker"
               }),
               symbolizer:{
-                externalGraphic: "images/${BuoyName}",
+                externalGraphic: "images/BuoyDirs/${BuoyName}",
                 rotation:"${CrossingDir}",
                 graphicWidth:48
               }
@@ -597,6 +597,8 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
 
 }
 
+const MAX_BUOY_INDEX=16;
+var BuoyIndex = Math.floor(Math.random()*MAX_BUOY_INDEX);
  function AddGateDirMarker(Layer, Lon, Lat,Dir)
  {
     var MarkerCoords= new Position(Lon,Lat);    
@@ -605,10 +607,13 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
     var Marker= new OpenLayers.Feature.Vector(MarkerPosTransformed,
                                 {
                                   "type": 'marker',
-                                  "BuoyName" :"BuoyDir.png",
+                                  "BuoyName" :"BuoyDir"+BuoyIndex+".png",
                                   "CrossingDir":Dir
                                 }
                                 );
+    // Rotate buoys...
+    BuoyIndex++;
+    BuoyIndex%=(MAX_BUOY_INDEX+1);
     
     Layer.addFeatures(Marker);
  }
