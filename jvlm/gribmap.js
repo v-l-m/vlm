@@ -6,7 +6,7 @@
 
 /* TODO:
  * this is rough draft
- * - for better drawing an BC compatibility with OL, the Grimap layer should use the renderer or the vector base layer (?)
+ * - for better drawing an BC compatibility with OL, the Gribmap layer should use the renderer or the vector base layer (?)
  * - windarea are stored in an objet (pseudo key=>value array) => should be stored in arrays with indexes
  */
 
