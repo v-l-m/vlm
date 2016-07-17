@@ -6,6 +6,7 @@ const BOAT_ICON=0;
 const BOAT_WP_MARKER=1;
 const BOAT_TRACK = 2;
 const BOAT_FORECAST_TRACK = 3;
+const BOAT_POLAR = 4;
 
 const VLM_COORDS_FACTOR=1000;
 
@@ -131,7 +132,6 @@ function CheckBoatRefreshRequired(Boat)
 
 function DrawBoat(Boat)
 {
-  var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
   var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
   //WP Marker
   var WP = Boat.GetNextWPPosition();
@@ -291,7 +291,7 @@ var VectorStyles = new OpenLayers.Style(
               symbolizer:{
                 // if a feature matches the above filter, use this symbolizer
                 label : "${name}${Coords}",
-                pointRadius: 6,
+                //pointRadius: 6,
                 pointerEvents: "visiblePainted",
                 // label with \n linebreaks
                 
@@ -303,7 +303,10 @@ var VectorStyles = new OpenLayers.Style(
                 labelXOffset: "${xOffset}",
                 labelYOffset: "-12",//${yOffset}",
                 //labelOutlineColor: "white",
-                //labelOutlineWidth: 2 
+                //labelOutlineWidth: 2
+                externalGraphic:"images/${GateSide}",
+                graphicWidth:48 
+
               }
             }
           ),
@@ -425,6 +428,22 @@ var VectorStyles = new OpenLayers.Style(
             }
           ),
         new OpenLayers.Rule
+          (
+            {
+              // a rule contains an optional filter
+              filter: new OpenLayers.Filter.Comparison({
+                  type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                  property: "type", // the "foo" feature attribute
+                  value: "Polar"
+              }),
+              symbolizer:{
+                  strokeColor:"white",
+                  strokeOpacity:0.5,
+                  strokeWidth:2
+              }
+            }
+          ),  
+        new OpenLayers.Rule
             (
               {
                 // a rule contains an optional filter
@@ -500,15 +519,17 @@ const WP_CROSS_ONCE           = (1 << 10)
       WP.longitude2/= VLM_COORDS_FACTOR;
       WP.latitude2/=VLM_COORDS_FACTOR;
       
+      var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
+
       // Draw WP1
-      AddBuoyMarker(VLMBoatsLayer, "WP"+index+" "+WP.libelle+'\n' , WP.longitude1, WP.latitude1);
+      AddBuoyMarker(VLMBoatsLayer, "WP"+index+" "+WP.libelle+'\n' , WP.longitude1, WP.latitude1, cwgate);
       
 
       // Second buoy (if any)
       if ((WP.wpformat & WP_GATE_BUOY_MASK) == WP_TWO_BUOYS)
       {
         // Add 2nd buoy marker
-        AddBuoyMarker(VLMBoatsLayer,"",WP.longitude2, WP.latitude2);
+        AddBuoyMarker(VLMBoatsLayer,"",WP.longitude2, WP.latitude2, ! cwgate);
       }
       {
         // No Second buoy, compute segment end
@@ -556,14 +577,14 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
   if (GateType != WP_DEFAULT)
   {
     // Debug testing of the geo calculation functions
-    {
+    /*{
       // Rumb line LAX-JFK = 2164.6 nm
       var P1 = new Position(  -(118+(24/60)),33+ (57/60));
       var P2 = new Position (-(73+(47/60)),40+(38/60));
       console.log("loxo dist : " + P1.GetLoxoDist(P2));
       console.log("loxo angle: " + P1.GetLoxoCourse(P2));
 
-    }
+    }*/
     var P1 = new Position(lon1,lat1); 
     var P2 = new Position(lon2,lat2);
     var MarkerDir = P1.GetLoxoCourse(P2);
@@ -619,20 +640,38 @@ var BuoyIndex = Math.floor(Math.random()*MAX_BUOY_INDEX);
  }
 
 
- function AddBuoyMarker(Layer, Name ,Lon, Lat)
+ function AddBuoyMarker(Layer, Name ,Lon, Lat,CW_Crossing)
  {
     var WP_Coords= new Position(Lon,Lat);    
     var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
     var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
-    var WP= new OpenLayers.Feature.Vector(WP_PosTransformed,
+    var WP;
+    
+    if (CW_Crossing)
+    {
+      WP= new OpenLayers.Feature.Vector(WP_PosTransformed,
                                           {
                                             "name":Name,
                                             "Coords": WP_Coords.ToString(),
-                                            "type": 'buoy'
+                                            "type": 'buoy',
+                                            "GateSide":"Buoy1.png"
                                           }
                                           );
+    }
+    else
+    {
+      WP = new OpenLayers.Feature.Vector(WP_PosTransformed,
+                                          {
+                                            "name":Name,
+                                            "Coords": WP_Coords.ToString(),
+                                            "type": 'buoy',
+                                            "GateSide":"Buoy2.png"
+                                          }
+                                          );
+    }
     
-  Layer.addFeatures(WP);
+    
+    Layer.addFeatures(WP);
  }
      
 const PM_HEADING=1;
