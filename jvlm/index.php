@@ -17,19 +17,20 @@
       <script src="jquery-ui.min.js"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
       <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
-      <!--<script src="/externals/OpenLayers/OpenLayers.js"></script>
-      -->
-      <script src="OpenLayers/OpenLayers.js"></script>
+      <script src="external/jquery.csv.js"></script>
+      <script src="OpenLayers/OpenLayers.debug.js"></script>
       <script src="config.js"></script>
       <script src="localize.js"></script>
-      <script src="user.js"></script>
       <script src="GUI.js"></script>
       <script src='ControlSwitch.js' type='text/javascript'></script>
       <script src='gribmap.js' type='text/javascript'></script>
       <script src='vlmboats.js' type='text/javascript'></script>
       <script src='geomath.js' type='text/javascript'></script>
       <script src='position.js' type='text/javascript'></script>
+      <script src="user.js"></script>
       <script src='polar.js' type='text/javascript'></script>
+      <!--<script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>
+      -->
   </head>
   <body >
 
