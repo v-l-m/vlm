@@ -6,7 +6,14 @@
 //
 function Coords(v, IsLon)
 {
-  this.Value=v;
+  if (typeof v == 'number')
+  {
+    this.Value=v;
+  }
+  else
+  {
+    this.Value=parseFloat(v);
+  }
   this.IsLon = IsLon;
   
   // Returns the degree part of a coordinate is floating format
