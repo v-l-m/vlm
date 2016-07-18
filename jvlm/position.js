@@ -22,7 +22,7 @@ function Rad2Deg(v)
 
 
 // Constructor
-function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
+function VLMPosition(lon, lat,  format=POS_FORMAT_DEFAULT)
 {
 
     if (typeof format == 'undefined' || format == POS_FORMAT_DEFAULT)
@@ -112,7 +112,7 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
         dlon = -d * Math.sin(tc) / q;
         Lon = -(((Lon1 + dlon +Math.PI) % (2 *Math.PI) - Math.PI));
 
-        return new Position(Rad2Deg(Lon),Rad2Deg(Lat));
+        return new VLMPosition(Rad2Deg(Lon),Rad2Deg(Lat));
 
 
     };
@@ -157,6 +157,22 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
 
         return ret;
     };
+
+    this.ReachDistOrtho=function(dist,bearing)
+    {
+        var lat;
+        var dlon;
+        var d=dist/EARTH_RADIUS;
+        var tc = Deg2Rad(bearing);
+        var CurLat = Deg2Rad(this.Lat.Value);
+        var CurLon = Deg2Rad(-this.Lon.Value);
+
+        lat =Math.asin(Math.sin(CurLat)*Math.cos(d)+Math.cos(CurLat)*Math.sin(d)*Math.cos(tc))
+        dlon=Math.atan2(Math.sin(tc)*Math.sin(d)*Math.cos(CurLat),Math.cos(d)-Math.sin(CurLat)*Math.sin(lat))
+        lon=(( CurLon-dlon +Math.PI)%(2*Math.PI ))-Math.PI;
+        return new VLMPosition(Rad2Deg(-lon), Rad2Deg(lat));
+
+    }
 };
 
 

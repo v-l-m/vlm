@@ -112,7 +112,7 @@ function CheckBoatRefreshRequired(Boat)
                         Boat.Track.length=0;
                         for (index in result.tracks)
                         {
-                          var P = new Position(result.tracks[index][1]/1000., result.tracks[index][2]/1000. )
+                          var P = new VLMPosition(result.tracks[index][1]/1000., result.tracks[index][2]/1000. )
                           Boat.Track.push(P);
                         }
                         DrawBoat(Boat)
@@ -139,7 +139,7 @@ function DrawBoat(Boat)
   var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value,WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
   var UpdatedFeatures=[];
 
-  var ForecastPos = new Position (Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12*Boat.VLMInfo.BSP*Boat.VLMInfo.VAC/3600,Boat.VLMInfo.HDG);
+  var ForecastPos = new VLMPosition (Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12*Boat.VLMInfo.BSP*Boat.VLMInfo.VAC/3600,Boat.VLMInfo.HDG);
   var ForecastPosTransformed = new OpenLayers.Geometry.Point(ForecastPos.Lon.Value,ForecastPos.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
     
   // Remove features, before recreate and re-add
@@ -170,7 +170,7 @@ function DrawBoat(Boat)
                                       {
                                         var dest = map.getLonLatFromPixel(pixel);
                                         var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-                                        var PDest = new Position (WGSDest.lon, WGSDest.lat);
+                                        var PDest = new VLMPosition (WGSDest.lon, WGSDest.lat);
                                         
                                         // Use CurPlayer, since the drag layer is not associated to the proper boat
                                         SendVLMBoatWPPos(_CurPlayer.CurBoat,PDest)
@@ -231,7 +231,7 @@ function DrawBoat(Boat)
     // Add single point out of the map for later having a feature to remove
     var PointList = [];
 
-    var P = new Position(-180,90);
+    var P = new VLMPosition(-180,90);
     var P1 = new OpenLayers.Geometry.Point(P.Lon.Value,P.Lat.Value);
     var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
 
@@ -565,7 +565,7 @@ const WP_CROSS_ONCE           = (1 << 10)
       else
       {
         // No Second buoy, compute segment end
-        var P = new Position(WP.longitude1, WP.latitude1);
+        var P = new VLMPosition(WP.longitude1, WP.latitude1);
         var Dest = P.ReachDistLoxo(2500,180 + parseFloat( WP.laisser_au));
         WP.longitude2=Dest.Lon.Value;
         WP.latitude2 = Dest.Lat.Value;
@@ -620,8 +620,8 @@ function AddGateSegment(Layer,lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Gat
       console.log("loxo angle: " + P1.GetLoxoCourse(P2));
 
     }*/
-    var P1 = new Position(lon1,lat1); 
-    var P2 = new Position(lon2,lat2);
+    var P1 = new VLMPosition(lon1,lat1); 
+    var P2 = new VLMPosition(lon2,lat2);
     var MarkerDir = P1.GetLoxoCourse(P2);
     var MarkerPos = P1.ReachDistLoxo(P2,0.5);
     // Gate has special features, add markers
@@ -657,7 +657,7 @@ const MAX_BUOY_INDEX=16;
 var BuoyIndex = Math.floor(Math.random()*MAX_BUOY_INDEX);
  function AddGateDirMarker(Layer, Lon, Lat,Dir)
  {
-    var MarkerCoords= new Position(Lon,Lat);    
+    var MarkerCoords= new VLMPosition(Lon,Lat);    
     var MarkerPos = new OpenLayers.Geometry.Point(MarkerCoords.Lon.Value, MarkerCoords.Lat.Value);
     var MarkerPosTransformed = MarkerPos.transform(MapOptions.displayProjection, MapOptions.projection)
     var Marker= new OpenLayers.Feature.Vector(MarkerPosTransformed,
@@ -677,7 +677,7 @@ var BuoyIndex = Math.floor(Math.random()*MAX_BUOY_INDEX);
 
  function AddBuoyMarker(Layer, Name ,Lon, Lat,CW_Crossing)
  {
-    var WP_Coords= new Position(Lon,Lat);    
+    var WP_Coords= new VLMPosition(Lon,Lat);    
     var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
     var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
     var WP;

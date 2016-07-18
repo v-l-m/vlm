@@ -32,11 +32,16 @@ function Boat(vlmboat)
     //If there is a defined WP, then return it
     if ((this.VLMInfo.WPLON!=0)||(this.VLMInfo.WPLAT!=0))
     {
-      return new Position (this.VLMInfo.WPLON,this.VLMInfo.WPLAT);
+      return new VLMPosition (this.VLMInfo.WPLON,this.VLMInfo.WPLAT);
+    }
+    else
+    {
+      // Use boat ortho and distance to compute default WP
+      var P = new VLMPosition(this.VLMInfo.LON,this.VLMInfo.LAT)
+      return P.ReachDistOrtho(this.VLMInfo.DNM,this.VLMInfo.ORT)
     }
     
-    // Default, return 0,0 and hope use will figure it out...
-    return new Position(0,0);
+
   }
 }
 
@@ -197,7 +202,7 @@ function RefreshPlayerMenu()
   
   ShowUserBoatSelector();
   $('#BoatSelector').prop("selectedIndex",0);
-  $('#BoatSelector').selectmenu('refresh');
+  //$('#BoatSelector').selectmenu('refresh');
             
   
   DisplayLoggedInMenus(true);

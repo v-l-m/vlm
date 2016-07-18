@@ -460,7 +460,7 @@ function UpdateInMenuBoatInfo(Boat)
   BoatFieldMappings.push([0,"#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
-  WP = new Position(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
+  WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
   if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
   {
     WP = Boat.GetNextWPPosition();
