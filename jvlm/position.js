@@ -43,24 +43,24 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
     this.GetLoxoDist= function(P)
     {
 
-        var Lat1  = Deg2Rad(this.Lat.Value)
+        var Lat1  = Deg2Rad(this.Lat.Value);
         var Lat2  = Deg2Rad(P.Lat.Value);
-        var Lon1  = -Deg2Rad(this.Lon.Value)
-        var Lon2  = -Deg2Rad(P.Lon.Value)
+        var Lon1  = -Deg2Rad(this.Lon.Value);
+        var Lon2  = -Deg2Rad(P.Lon.Value);
 
-        var TOL  = 0.000000000000001
+        var TOL  = 0.000000000000001;
         var d =0;
         var q=0;
         if (Math.abs(Lat2 - Lat1) < Math.sqrt(TOL)) 
         {
-            q = Math.cos(Lat1)
+            q = Math.cos(Lat1);
         }
         else
         {
-        	 q = (Lat2 - Lat1) / Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 +Math.PI / 4))
+        	 q = (Lat2 - Lat1) / Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 +Math.PI / 4));
         }
 
-        d= Math.sqrt(Math.pow(Lat2 - Lat1, 2) + q * q * (Lon2 - Lon1) * (Lon2 - Lon1) )
+        d= Math.sqrt(Math.pow(Lat2 - Lat1, 2) + q * q * (Lon2 - Lon1) * (Lon2 - Lon1) );
         return EARTH_RADIUS *d;
     }
 
@@ -76,7 +76,7 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
        if (typeof P == "number")
         {
             d=P/EARTH_RADIUS;
-            tc=Deg2Rad(r);
+            tc=Deg2Rad(r % 360);
         }
         else
         {
@@ -97,35 +97,35 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
         if (Math.abs(Lat) > Math.PI / 2) 
         {
             //'"d too large. You can't go this far along this rhumb line!"
-            throw "Invalid distance, can't go that far"
+            throw "Invalid distance, can't go that far";
         }
 
         if (Math.abs(Lat - Lat1) < Math.sqrt(TOL))
         {
-            q = Math.cos(Lat1)
+            q = Math.cos(Lat1);
         }
         else
         {
-            dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 +Math.PI / 4))
-            q = (Lat - Lat1) / dPhi
+            dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 +Math.PI / 4));
+            q = (Lat - Lat1) / dPhi;
         }
-        dlon = -d * Math.sin(tc) / q
+        dlon = -d * Math.sin(tc) / q;
         Lon = -(((Lon1 + dlon +Math.PI) % (2 *Math.PI) - Math.PI));
 
         return new Position(Rad2Deg(Lon),Rad2Deg(Lat));
 
 
-    }
+    };
 
     //
     // Return loxodromic course from this to P in °
     //
     this.GetLoxoCourse = function(P)
     {
-        var Lon1  = -Deg2Rad(this.Lon.Value)
-        var Lon2  = -Deg2Rad(P.Lon.Value)
-        var Lat1  = Deg2Rad(this.Lat.Value)
-        var Lat2  = Deg2Rad(P.Lat.Value)
+        var Lon1  = -Deg2Rad(this.Lon.Value);
+        var Lon2  = -Deg2Rad(P.Lon.Value);
+        var Lat1  = Deg2Rad(this.Lat.Value);
+        var Lat2  = Deg2Rad(P.Lat.Value);
 
         /*if (Lon1 > 0)
         {
@@ -134,31 +134,30 @@ function Position(lon, lat,  format=POS_FORMAT_DEFAULT)
         else
         {   
             Lon2 -= 2 * Math.PI
-        }*/
-        var dlon_w  = (Lon2 - Lon1) % (2 * Math.PI)
-        var dlon_e  = (Lon1 - Lon2) % (2 * Math.PI)
-        var dphi  = Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4))
-        var tc 
+        }*/;
+        var dlon_w  = (Lon2 - Lon1) % (2 * Math.PI);
+        var dlon_e  = (Lon1 - Lon2) % (2 * Math.PI);
+        var dphi  = Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
+        var tc ;
 
         
         if (dlon_w < dlon_e) 
         { // Westerly rhumb line is the shortest
-            tc = Math.atan2(dlon_w, dphi) % (2 * Math.PI)
+            tc = Math.atan2(dlon_w, dphi) % (2 * Math.PI);
             
         }
         else
         {
-            tc = Math.atan2(-dlon_e, dphi) % (2 * Math.PI)
+            tc = Math.atan2(-dlon_e, dphi) % (2 * Math.PI);
            
 
         }
 
         var ret  = (720 - (tc / Math.PI * 180)) % 360;
 
-        return ret
-    }
-}
-
+        return ret;
+    };
+};
 
 
 
