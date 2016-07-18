@@ -29,8 +29,8 @@
       <script src='position.js' type='text/javascript'></script>
       <script src="user.js"  type='text/javascript'></script>
       <script src='polar.js' type='text/javascript'></script>
-      <!--<script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>
-      -->
+      <script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>
+      
   </head>
   <body >
 
