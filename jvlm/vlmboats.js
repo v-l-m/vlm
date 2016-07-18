@@ -132,6 +132,7 @@ function CheckBoatRefreshRequired(Boat)
 
 function DrawBoat(Boat)
 {
+  var Pos = new OpenLayers.Geometry.Point( Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
   var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
   //WP Marker
   var WP = Boat.GetNextWPPosition();
@@ -149,6 +150,7 @@ function DrawBoat(Boat)
     //UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
     UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_TRACK]);
     UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_FORECAST_TRACK]);
+    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_POLAR]);
     
     VLMBoatsLayer.removeFeatures(UpdatedFeatures);
     VLMDragLayer.removeFeatures(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
@@ -259,6 +261,31 @@ function DrawBoat(Boat)
     VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_FORECAST_TRACK]);
 
   // Draw polar
+  var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.BSP, DrawBoat, Boat);
+  var Polar=[];
+
+  // MakePolar in a 200x200 square
+  //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
+  var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
+  for (index in PolarPointList)
+  {
+    var Alpha=5*Math.floor(index);
+    var Speed = parseFloat(PolarPointList[index]);
+
+    var PixPos = new OpenLayers.Pixel(
+                      Math.cos(Deg2Rad(Alpha))*200*Speed,
+                      Math.sin(Deg2Rad(Alpha))*200*Speed);
+    var P = map.getLonLatFromPixel(PixPos);
+    var PPoint = new OpenLayers.Geometry.Point(P);
+    Polar.push(PPoint);
+  }
+  Boat.OLBoatFeatures[BOAT_POLAR]= new OpenLayers.Feature.Vector(
+              new OpenLayers.Geometry.LineString(Polar),
+                  {
+                    "type":"Polar"
+                  });
+  
+  VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_POLAR]);
 
   
 }
@@ -300,12 +327,13 @@ var VectorStyles = new OpenLayers.Style(
                 //fontFamily: "Courier New, monospace",
                 //fontWeight: "bold",
                 labelAlign: "left", //${align}",
-                labelXOffset: "${xOffset}",
+                labelXOffset: "4",//${xOffset}",
                 labelYOffset: "-12",//${yOffset}",
                 //labelOutlineColor: "white",
                 //labelOutlineWidth: 2
                 externalGraphic:"images/${GateSide}",
-                graphicWidth:48 
+                graphicWidth:48,
+                fillOpacity:1
 
               }
             }
