@@ -559,9 +559,13 @@ const WP_CROSS_ONCE           = (1 << 10)
         // Add 2nd buoy marker
         AddBuoyMarker(VLMBoatsLayer,"",WP.longitude2, WP.latitude2, ! cwgate);
       }
+      else
       {
         // No Second buoy, compute segment end
-        // Todo
+        var P = new Position(WP.longitude1, WP.latitude1);
+        var Dest = P.ReachDistLoxo(2500,180 + parseFloat( WP.laisser_au));
+        WP.longitude2=Dest.Lon.Value;
+        WP.latitude2 = Dest.Lat.Value;
       }
 
       // Draw Gate Segment
