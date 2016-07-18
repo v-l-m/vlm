@@ -267,22 +267,25 @@ function DrawBoat(Boat)
   // MakePolar in a 200x200 square
   //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
   var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
+  var scale = 50 * map.resolution;
   for (index in PolarPointList)
   {
     var Alpha=5*Math.floor(index);
     var Speed = parseFloat(PolarPointList[index]);
 
-    var PixPos = new OpenLayers.Pixel(
-                      Math.cos(Deg2Rad(Alpha))*200*Speed,
-                      Math.sin(Deg2Rad(Alpha))*200*Speed);
-    var P = map.getLonLatFromPixel(PixPos);
-    var PPoint = new OpenLayers.Geometry.Point(P);
-    Polar.push(PPoint);
+    var PixPos = new OpenLayers.Geometry.Point(
+                      PosTransformed.x + Math.sin(Deg2Rad(Alpha+ Boat.VLMInfo.TWD))*scale*Speed,
+                      PosTransformed.y + Math.cos(Deg2Rad(Alpha+ Boat.VLMInfo.TWD))*scale*Speed);
+
+    //var P = map.getLonLatFromPixel(PixPos);
+    //var PPoint = new OpenLayers.Geometry.Point(PixPos);
+    Polar.push(PixPos);
   }
   Boat.OLBoatFeatures[BOAT_POLAR]= new OpenLayers.Feature.Vector(
               new OpenLayers.Geometry.LineString(Polar),
                   {
-                    "type":"Polar"
+                    "type":"Polar",
+                    "WindDir":Boat.VLMInfo.TWD
                   });
   
   VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_POLAR]);
@@ -466,7 +469,7 @@ var VectorStyles = new OpenLayers.Style(
               }),
               symbolizer:{
                   strokeColor:"white",
-                  strokeOpacity:0.5,
+                  strokeOpacity:0.75,
                   strokeWidth:2
               }
             }

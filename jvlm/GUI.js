@@ -13,7 +13,6 @@ $(document).ready(
     InitMenusAndButtons();
     
     // Start-Up Polars manager
-    PolarsManager = new PolarManagerClass();
     PolarsManager.Init();
     
     // Init event handlers
@@ -408,7 +407,7 @@ function DisplayLoggedInMenus(LoggedIn)
   $("ul[LoggedInNav='true']").css("display",LoggedInDisplay);
   $("ul[LoggedInNav='false']").css("display",LoggedOutDisplay);
   
-  $("#BoatSelector").selectmenu("refresh");
+  //$("#BoatSelector").selectmenu("refresh");
 }
 
 function UpdateInMenuBoatInfo(Boat)
