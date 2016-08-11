@@ -22,9 +22,8 @@ function Rad2Deg(v)
 
 
 // Constructor
-function VLMPosition(lon, lat,  format=POS_FORMAT_DEFAULT)
-{
-
+function VLMPosition(lon, lat,  format)
+{   
     if (typeof format == 'undefined' || format == POS_FORMAT_DEFAULT)
     {
         // Default constructor, lon and lat in degs flaoting format
