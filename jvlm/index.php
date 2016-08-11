@@ -70,7 +70,7 @@
                   <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
                 </div>
                 <div class="BtnRankingPanel" >
-                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png></img></a>
+                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
                 </div>
               </div>
             </li>

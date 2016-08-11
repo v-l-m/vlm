@@ -469,6 +469,7 @@ function UpdateInMenuBoatInfo(Boat)
   BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
   BoatFieldMappings.push([0,"#PM_CurWPLat", WP.Lat.ToString()]);
   BoatFieldMappings.push([0,"#PM_CurWPLon", WP.Lon.ToString()]);
+  BoatFieldMappings.push([0,"#RankingBadge", Boat.VLMInfo.RNK]);
   //BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.H@WP * 10)/10 ]);
   
   if (Boat.VLMInfo.PIP==PM_ANGLE)
