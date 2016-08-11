@@ -13,6 +13,7 @@
       <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
       <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
       -->
+      <script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
       <script src="jquery-ui.min.js"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -29,8 +30,7 @@
       <script src='position.js' type='text/javascript'></script>
       <script src="user.js"  type='text/javascript'></script>
       <script src='polar.js' type='text/javascript'></script>
-      <!--<script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>
-      -->
+      
   </head>
   <body >
 
@@ -68,6 +68,9 @@
                 </div>
                 <div class="BtnCtrlPanel" >
                   <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
+                </div>
+                <div class="BtnRankingPanel" >
+                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png></img></a>
                 </div>
               </div>
             </li>
@@ -275,6 +278,13 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- COllapsable Race ranking -->
+    <div id="Ranking-Panel" class="TDB-Panel collapse">
+      <div class="container">
+        
       </div>
     </div>
 
