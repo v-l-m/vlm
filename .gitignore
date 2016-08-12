@@ -1,3 +1,6 @@
 # Visual Studio Code workspace settings and typings
 */.vscode/*
 */Typings/*
+*.db
+.vscode/.BROWSE.VC.DB-shm
+.vscode/.browse.VC.db
