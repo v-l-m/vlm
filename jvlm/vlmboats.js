@@ -39,6 +39,8 @@ function CheckBoatRefreshRequired(Boat)
   var CurDate = new Date();
   var NextUpdate = new Date(0);
 
+  // Update preference screen according to current selected boat
+  UpdatePrefsDialog(Boat);
   
   if (typeof Boat != 'undefined' && 
       typeof Boat.VLMInfo != 'undefined' && typeof Boat.VLMInfo.LUP != 'undefined')
@@ -795,3 +797,4 @@ function PostBoatSetupOrder(idu, verb, orderdata)
 
 }
           
+

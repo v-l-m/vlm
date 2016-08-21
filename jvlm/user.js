@@ -82,6 +82,8 @@ function OnLoginRequest()
             CheckLogin();
           }
         );
+
+    
   
 };
 
@@ -204,7 +206,7 @@ function RefreshPlayerMenu()
   $('#BoatSelector').prop("selectedIndex",0);
   //$('#BoatSelector').selectmenu('refresh');
             
-  
+
   DisplayLoggedInMenus(true);
   HideBgLoad("#PbLoginProgress");
 }
@@ -244,4 +246,29 @@ function GetBoatFromBoatArray(BoatsArray, Id)
     }
   }
   return ;
+}
+
+function GetFlagsList()
+{
+  $.get("/ws/serverinfo/flags.php",
+        function(result)
+        {
+          var i = result;
+          if (result.success)
+          {
+            var Selector=$("#FlagSelector")[0];
+
+            for (index in result.flags)
+            {
+              $("#FlagSelector").append($('<option />',
+                                { 
+                                  value: result.flags[index],
+                                  text: result.flags[index],
+                                }
+                              )
+                            );
+            }
+          }
+        }
+        );
 }

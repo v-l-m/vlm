@@ -24,6 +24,13 @@ $(document).ready(
       }
     );   
 
+    // Display setting dialog
+    $("#BtnSetting").click(
+      function()
+      {
+        $("#SettingsForm").modal("show");
+      }
+    )
     // Do fixed heading button
     $("#BtnPM_Heading").click(
       function()
@@ -119,11 +126,16 @@ $(document).ready(
         SetCurrentBoat(GetBoatFromIdu(ui.item.value));
       }
     );
+
+    $("#FlagSelector").selectmenu();  
+    
      
     // CheckLogin
     CheckLogin();
     
-     
+    // Load flags list (keep at the end since it takes a lot of time)
+    GetFlagsList();
+   
   }  
 );
 
@@ -408,6 +420,7 @@ function DisplayLoggedInMenus(LoggedIn)
   $("ul[LoggedInNav='false']").css("display",LoggedOutDisplay);
   
   //$("#BoatSelector").selectmenu("refresh");
+
 }
 
 function UpdateInMenuBoatInfo(Boat)
@@ -560,4 +573,11 @@ function UpdateInMenuBoatInfo(Boat)
 function MoveWPBoatControlerDiv(target)
 {
   var div = $(target).prepend($("#PM_WPMode_Div"));
+}
+
+function UpdatePrefsDialog(Boat)
+{
+  $("#pref_boatname").val(Boat.BoatName);
+  $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
+
 }

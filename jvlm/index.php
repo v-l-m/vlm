@@ -74,6 +74,11 @@
                 </div>
               </div>
             </li>
+            <li class="nav">
+              <div id="BtnSetting" class="BtnTBDPanel button">
+                <a ><img class="TDB-Icon" src=images/setting.png></img></a>
+              </div>
+            </li>
           </ul>
           <ul class="nav navbar-nav" >
             <li class="active">
@@ -334,6 +339,39 @@
           </div>
           <div class="modal-footer">
             <button id="LoginButton" I18n="login" type="button" class="btn " data-dismiss="modal">login</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+        <!-- Modal Settings form -->
+    <div id="SettingsForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div id="SettingsPanel" class="modal-content">
+               
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <legend I18n="choose" class="modal-title">Prefs</legend>
+          </div>
+          <div class="modal-body span6">
+            <form class="row form"> 
+              <fieldset class="fieldset row-fluid">
+                <span I18n="boatname">boatname</span>
+                <input class="input form-control" id="pref_boatname" value="fill it here"></input>  
+                <span I18n="boatnamethat" class="small">...</span>
+              </fieldset>
+              <fieldset class="fieldset row-fluid">
+                <select id="FlagSelector" class="select form-control"></select>  
+                <span I18n="choose_your_country" class="small">...</span>
+              </fieldset>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="SettingCancelButton" I18n="cancel" type="button" class="btn form-control" data-dismiss="modal">SettingCancel</button>          
+            <button id="SettingValidateButton"  type="button" class="btn form-control" data-dismiss="modal">SettingSave</button>
           </div>
         </div>
 
