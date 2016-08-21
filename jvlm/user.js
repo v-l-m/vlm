@@ -83,8 +83,6 @@ function OnLoginRequest()
           }
         );
 
-    
-  
 };
 
 function CheckLogin()
