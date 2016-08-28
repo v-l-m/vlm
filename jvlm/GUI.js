@@ -424,11 +424,34 @@ function DisplayLoggedInMenus(LoggedIn)
 
 }
 
-function UpdateInMenuBoatInfo(Boat)
+function   HandleRacingDockingButtons(IsRacing)
+{
+  if (IsRacing)
+  {
+    $('[RacingBtn="true"]').removeClass("hidden");
+    $('[RacingBtn="false"]').addClass("hidden");
+  }
+  else
+  {
+    $('[RacingBtn="true"]').addClass("hidden");
+    $('[RacingBtn="false"]').removeClass("hidden");
+  }
+}
+
+
+
+function UpdateInMenuDockingBoatInfo(Boat)
+{
+  HandleRacingDockingButtons(false);
+
+}
+
+function UpdateInMenuRacingBoatInfo(Boat)
 {
   var NorthSouth;
   var EastWest;
 
+  HandleRacingDockingButtons(true);
   // Put a sign to the TWA
   if (Boat.VLMInfo.TWD+360 < Boat.VLMInfo.HDG+360)
   {

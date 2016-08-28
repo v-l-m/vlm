@@ -65,13 +65,16 @@
               </select> 
             </li>
             <li class="nav">
-              <div class="BtnGroup">
+              <div class="BtnGroup" RacingBtn="true">
                 <div class="BtnTDBPanel" >
                   <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
                 </div>
-                <div class="BtnCtrlPanel" >
+                <div class="BtnCtrlPanel" RacingBtn="true">
                   <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
                 </div>
+              </div>
+            <li class="nav">
+              <div class="BtnGroup" >
                 <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
                 </div>

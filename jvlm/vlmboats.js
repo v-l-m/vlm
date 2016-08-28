@@ -90,7 +90,7 @@ function CheckBoatRefreshRequired(Boat)
                   DrawBoat(Boat);
                   
                   // Update Boat info in main menu bar
-                  UpdateInMenuBoatInfo(Boat);
+                  UpdateInMenuRacingBoatInfo(Boat);
 
                   LastRequestedBoat =result.IDU;
 
@@ -109,6 +109,7 @@ function CheckBoatRefreshRequired(Boat)
                     );
                     
                   }
+
 
                   // Get boat track for the last 24h
                   var end = Math.floor(new Date()/1000.)
@@ -129,8 +130,15 @@ function CheckBoatRefreshRequired(Boat)
                     }
                   )
                   
-                }                
+                }    
+                else
+                {
+                  // Boat is not racing
+                  //GetLastRacehistory();
+                  UpdateInMenuDockingBoatInfo(Boat);
+                }            
               }
+              
               HidePb("#PbGetBoatProgress");
             }
           )
