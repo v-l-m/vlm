@@ -38,7 +38,7 @@ function CheckBoatRefreshRequired(Boat)
 {
   var CurDate = new Date();
   var NextUpdate = new Date(0);
-  var NeedPrefsRefresh = typeof Boat.VLMInfo == "undefined";
+  var NeedPrefsRefresh = typeof Boat.VLMInfo.AVG === "undefined";
 
   // Update preference screen according to current selected boat
   UpdatePrefsDialog(Boat);

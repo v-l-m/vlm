@@ -578,6 +578,16 @@ function MoveWPBoatControlerDiv(target)
 
 function UpdatePrefsDialog(Boat)
 {
+  // Hide prefs setting button is not boat or no vlminfo yet...
+  if (typeof Boat === "undefined" || typeof Boat.VLMInfo.AVG === "undefined")
+  {
+    $("#BtnSetting").addClass("hidden");
+  }
+  else
+  {
+    $("#BtnSetting").removeClass("hidden");
+  }
+
   $("#pref_boatname").val(Boat.BoatName);
   $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
   $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);

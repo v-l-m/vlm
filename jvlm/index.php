@@ -78,7 +78,7 @@
               </div>
             </li>
             <li class="nav">
-              <div id="BtnSetting" class="BtnTBDPanel button">
+              <div id="BtnSetting" class="BtnTBDPanel button hidden">
                 <a ><img class="TDB-Icon" src=images/setting.png></img></a>
               </div>
             </li>
