@@ -38,6 +38,7 @@ function CheckBoatRefreshRequired(Boat)
 {
   var CurDate = new Date();
   var NextUpdate = new Date(0);
+  var NeedPrefsRefresh = typeof Boat.VLMInfo == "undefined";
 
   // Update preference screen according to current selected boat
   UpdatePrefsDialog(Boat);
@@ -68,6 +69,12 @@ function CheckBoatRefreshRequired(Boat)
                 // Fix Lon, and Lat scale
                 Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
                 Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
+
+                // force refresh of settings if was not initialized
+                if (NeedPrefsRefresh)
+                {
+                  UpdatePrefsDialog(Boat);
+                }
                 
                 // update map is racing
                 

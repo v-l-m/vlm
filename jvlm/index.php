@@ -19,6 +19,9 @@
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
       <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
       <script src="external/jquery.csv.js"></script>
+      <!--<script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js"></script>
+      -->
+      <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
       <script src="OpenLayers/OpenLayers.debug.js"></script>
       <script src="config.js"></script>
       <script src="localize.js"></script>
@@ -356,16 +359,22 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <legend I18n="choose" class="modal-title">Prefs</legend>
           </div>
-          <div class="modal-body span6">
+          <div class="modal-body span6" style="{overflow-y: visible}">
             <form class="row form"> 
               <fieldset class="fieldset row-fluid">
-                <span I18n="boatname">boatname</span>
-                <input class="input form-control" id="pref_boatname" value="fill it here"></input>  
+                <span class="span6" I18n="boatname">boatname</span>
+                <input class="input form-control span6" id="pref_boatname" value="fill it here"></input>  
                 <span I18n="boatnamethat" class="small">...</span>
               </fieldset>
               <fieldset class="fieldset row-fluid">
                 <select id="FlagSelector" class="select form-control"></select>  
                 <span I18n="choose_your_country" class="small">...</span>
+              </fieldset>
+               <fieldset class="fieldset row-fluid">
+                <div id="cp11" class="input-group colorpicker-component" style="z-index:9999;">
+                    <input id="pref_boatcolor" type="text" value="" class="form-control" />
+                    <span class="input-group-addon"><i></i></span>
+                </div>
               </fieldset>
             </form>
           </div>

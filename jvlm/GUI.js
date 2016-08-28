@@ -129,6 +129,7 @@ $(document).ready(
 
     // Remove JQuery/bootstrap conflict $("#FlagSelector").selectmenu();  
     
+    $('#cp11').colorpicker();
      
     // CheckLogin
     CheckLogin();
@@ -579,5 +580,7 @@ function UpdatePrefsDialog(Boat)
 {
   $("#pref_boatname").val(Boat.BoatName);
   $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
+  $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
+  
 
 }
