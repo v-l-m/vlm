@@ -64,8 +64,15 @@
               <select id="BoatSelector" >
               </select> 
             </li>
-            <li class="nav">
-              <div class="BtnGroup" RacingBtn="true">
+            <li class="nav hidden" RacingBtn="false">
+              <div class="BtnGroup" >
+                <div class="BtnRaceList" >
+                  <a data-toggle="collapse" data-target="#Races-Panel"><img class="TDB-Icon" src=images/races-list.png></img></a>
+                </div>
+              </div>
+            </li>
+            <li class="nav hidden" RacingBtn="true">
+              <div class="BtnGroup " >
                 <div class="BtnTDBPanel" >
                   <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
                 </div>
@@ -73,9 +80,10 @@
                   <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
                 </div>
               </div>
-            <li class="nav">
+            </li>
+            <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup" >
-                <div class="BtnRankingPanel" RacingBtn="true">
+                <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
                 </div>
               </div>
