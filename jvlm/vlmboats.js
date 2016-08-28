@@ -230,7 +230,8 @@ function DrawBoat(Boat)
     Boat.OLBoatFeatures[BOAT_TRACK]= new OpenLayers.Feature.Vector(
               new OpenLayers.Geometry.LineString(PointList),
               {
-                "type":"HistoryTrack"
+                "type":"HistoryTrack",
+                "TrackColor":"#"+Boat.VLMInfo.COL
               });
   
     VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
@@ -250,7 +251,8 @@ function DrawBoat(Boat)
     Boat.OLBoatFeatures[BOAT_TRACK]= new OpenLayers.Feature.Vector(
               new OpenLayers.Geometry.LineString(PointList),
                   {
-                    "type":"HistoryTrack"
+                    "type":"HistoryTrack",
+                    "TrackColor":"#"+Boat.VLMInfo.COL
                   });
   
     VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
@@ -463,7 +465,8 @@ var VectorStyles = new OpenLayers.Style(
               }),
               symbolizer:{
                   strokeOpacity:0.5,
-                  strokeWidth:2
+                  strokeWidth:2,
+                  strokeColor:"${TrackColor}"
               }
             }
           ),
@@ -794,7 +797,7 @@ function PostBoatSetupOrder(idu, verb, orderdata)
     {
       if (Data.success)
       {
-
+          // TODO : Force reload of boat info from server after successfull post.
       }
       else
       {
