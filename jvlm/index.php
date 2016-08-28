@@ -60,7 +60,7 @@
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
             <li  class="active" ><a id="PlayerId">Not Logged in </a></li>
-            <li  >
+            <li  class="BoatSelector">
               <select id="BoatSelector" >
               </select> 
             </li>
