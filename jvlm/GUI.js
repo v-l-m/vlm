@@ -127,7 +127,7 @@ $(document).ready(
       }
     );
 
-    $("#FlagSelector").selectmenu();  
+    // Remove JQuery/bootstrap conflict $("#FlagSelector").selectmenu();  
     
      
     // CheckLogin
