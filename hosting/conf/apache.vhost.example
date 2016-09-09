@@ -25,7 +25,7 @@
                 Allow from All
 
                 AllowOverride All
-                Options Indexes Includes FollowSymLinks
+                Options +Indexes +Includes +FollowSymLinks  +ExecCGI
 
                 AddType application/x-httpd-php .php
 
