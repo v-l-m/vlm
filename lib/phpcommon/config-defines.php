@@ -1,4 +1,4 @@
-<?
+<?php
     require_once('config-funcs.php');
     include_once('param.php');
 
