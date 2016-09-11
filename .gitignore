@@ -1,3 +1,4 @@
 # Visual Studio Code workspace settings and typings
 .vscode/.BROWSE.*
 .vscode/*.db
+*/.vscode/*
