@@ -31,6 +31,7 @@ $(document).ready(
         $("#SettingsForm").modal("show");
       }
     )
+
     // Do fixed heading button
     $("#BtnPM_Heading").click(
       function()
@@ -339,6 +340,17 @@ function InitMenusAndButtons()
       MoveWPBoatControlerDiv(target)
     }
   )
+
+  // Display setting dialog
+  $(".BtnRaceList").click(
+    function()
+    {
+      LoadRacesList();
+      $("#RacesListPanel").modal("show");
+    }
+  )
+
+
 }
 
 function ClearBoatSelector()
@@ -616,4 +628,65 @@ function UpdatePrefsDialog(Boat)
   $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
   
 
+}
+
+function LoadRacesList()
+{
+  $.get("/ws/raceinfo/list.php",
+    function (result)
+    {
+      var racelist= result;
+
+      for (index in racelist)
+      {
+        AddRaceToList(racelist[index]);
+      }
+    }
+  )
+}
+
+function AddRaceToList(race)
+{
+  var base = $("#RaceListPanel").first();
+
+  var d = new Date(0); // The there is the key, which sets the date to the epoch
+  //d.setUTCSeconds(utcSeconds);
+
+  var code = '<div class="raceheaderline panel panel-default")>' +
+             '  <div class="panel panel-body">'+
+             '    <div class="col-xs-2">'+
+             '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
+             '    </div>'+
+             '    <div class="col-xs-5">'+
+             '      <span>'+ race.racename +
+             '      </span>'+
+             '    </div>'+
+             '    <div class="col-xs-3">'+
+             '      <button id="JoinRaceButton" type="button" class="btn btn-default" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
+             '      </button>'+
+             '    </div>'
+             '  </div>'+
+             ' </div>'
+
+  base.prepend(code);
+
+  // Handler for the join race button
+  $("#JoinRaceButton").click(
+    function(e)
+    {
+      var RaceId  = e.currentTarget.attributes.idrace.value;
+
+      $.post("/ws/boatsetup/race_subscribe.php",
+          {idr:RaceId,
+            idu:_CurPlayer.CurBoat.IdBoat
+          },
+        function(data)
+        {
+          var i = 0;
+        }
+        
+      );
+
+    }
+  )
 }

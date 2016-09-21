@@ -67,7 +67,7 @@
             <li class="nav hidden" RacingBtn="false">
               <div class="BtnGroup" >
                 <div class="BtnRaceList" >
-                  <a data-toggle="collapse" data-target="#Races-Panel"><img class="TDB-Icon" src=images/races-list.png></img></a>
+                  <a data-toggle="collapse" data-target="#RacesListForm"><img class="TDB-Icon" src=images/races-list.png></img></a>
                 </div>
               </div>
             </li>
@@ -395,6 +395,26 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Modal Races List -->
+    <div id="RacesListForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div id="RacesListPanel" class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" I18n="current_races">racelist</h4>
+          </div>
+          <div id="RaceListBody" class="modal-body">
+            <div id="RaceListPanel" class="panel group">
+            </div>            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </body>

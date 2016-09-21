@@ -36,7 +36,7 @@ input {
   color: #000000;
 }
 
-#LoginPanel, #SettingsPanel {
+#LoginPanel, #SettingsPanel, #RacesListPanel {
   background-color: #15214b;
 }
 
@@ -481,4 +481,24 @@ span.ui-selectmenu-text {
 
 .BoatControllerRow{
   padding-top: 5px;
+}
+
+// Race list styling
+.panel-body{
+  background-color: #337ab7;
+}
+
+.racelistminimap{
+  width: 64px;
+  height: 64px;
+}
+
+.racelistminimap:hover {
+    position:relative;
+    top:-25px;
+    left:-35px;
+    width:256px;
+    height:auto;
+    display:block;
+    z-index:999;
 }
