@@ -346,7 +346,7 @@ function InitMenusAndButtons()
     function()
     {
       LoadRacesList();
-      $("#RacesListPanel").modal("show");
+      $("#RacesListForm").modal("show");
     }
   )
 
