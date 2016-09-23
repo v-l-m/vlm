@@ -814,5 +814,21 @@ function PostBoatSetupOrder(idu, verb, orderdata)
     });
 
 }
+
+function EngageBoatInRace(RaceID,BoatID)
+{
+  $.post("/ws/boatsetup/race_subscribe.php",
+    "parms="+JSON.stringify(
+        { 
+          idu:BoatID,
+          idr:parseInt(RaceID)
+        }
+      ),
+    function(data)
+    {
+      var i = 0;
+    }
+  );
+}
           
 

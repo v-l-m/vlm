@@ -637,6 +637,9 @@ function LoadRacesList()
     {
       var racelist= result;
 
+      // Clear previous elements
+      $("#RaceListPanel").empty();
+  
       for (index in racelist)
       {
         AddRaceToList(racelist[index]);
@@ -649,6 +652,7 @@ function AddRaceToList(race)
 {
   var base = $("#RaceListPanel").first();
 
+  
   var d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
 
@@ -676,16 +680,8 @@ function AddRaceToList(race)
     {
       var RaceId  = e.currentTarget.attributes.idrace.value;
 
-      $.post("/ws/boatsetup/race_subscribe.php",
-          {idr:RaceId,
-            idu:_CurPlayer.CurBoat.IdBoat
-          },
-        function(data)
-        {
-          var i = 0;
-        }
-        
-      );
+      EngageBoatInRace(RaceId,_CurPlayer.CurBoat.IdBoat);
+      
 
     }
   )
