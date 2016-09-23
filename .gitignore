@@ -2,3 +2,4 @@
 .vscode/.BROWSE.*
 .vscode/*.db
 */.vscode/*
+.vscode/
