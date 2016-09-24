@@ -82,16 +82,26 @@
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
-              <div class="BtnGroup" >
+              <div class="BtnGroup1" >
                 <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
                 </div>
               </div>
             </li>
             <li class="nav">
-              <div id="BtnSetting" class="BtnTBDPanel button hidden">
+              <div id="BtnSetting" class="BtnGroup1 button hidden">
                 <a ><img class="TDB-Icon" src=images/setting.png></img></a>
               </div>
+            </li>
+            <li class="nav hidden" RacingBtn="true">
+                <div class="RaceInfoDiv">
+                  <div class="NavRaceName">
+                    <Span id="RaceName">  </Span>
+                  </div>
+                  <div class="NavRaceClock">
+                    <Span id="RaceChrono"> </Span>
+                  </div>                                    
+                </div>
             </li>
           </ul>
           <ul class="nav navbar-nav" >

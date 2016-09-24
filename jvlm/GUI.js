@@ -134,6 +134,9 @@ $(document).ready(
      
     // CheckLogin
     CheckLogin();
+
+    // Start the page clocks
+    setInterval('PageClock()',1000);
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
@@ -542,8 +545,6 @@ function UpdateInMenuRacingBoatInfo(Boat)
       case 1:
         $(BoatFieldMappings[index][1]).val(BoatFieldMappings[index][2]);
         break;
-
-
     }
   }
  
@@ -604,6 +605,10 @@ function UpdateInMenuRacingBoatInfo(Boat)
     $(TabID).css("display","inline");
     $("."+ActivePane).addClass("active");
     $("#"+ActivePane).addClass("active");
+
+    // Add race name
+    $("#RaceName").text(Boat.RaceInfo.racename);
+
 } 
 
 function MoveWPBoatControlerDiv(target)
@@ -685,4 +690,78 @@ function AddRaceToList(race)
 
     }
   )
+}
+
+function PageClock()
+{
+  // Display race clock is a racing boat is selected
+  var CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat != "undefined" && typeof CurBoat.RaceInfo != "undefined")
+  {
+    var ClockValue=GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
+    var Chrono = $("#RaceChrono");
+    if (ClockValue < 0 )
+    {
+      Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
+    }
+    else
+    {
+      Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
+    }
+
+    Chrono.text(GetFormattedChronoString(ClockValue));
+  } 
+}
+
+function GetRaceClock(RaceInfo,UserStartTimeString)
+{
+  var CurDate=new Date();
+  var Epoch=new Date(RaceInfo.deptime*1000);
+
+  if (RaceInfo.racetype!="1")
+  {
+    // non Permanent  race chrono counts from race start time
+    return Math.floor((CurDate-Epoch)/1000);
+  }
+  else
+  {
+    var UDT = parseInt(UserStartTimeString);
+
+    if (UDT == -1)
+    {
+      return 0;
+    }
+    else
+    {
+      var StartDate = new Date(UDT*1000);
+      return Math.floor((CurDate-StartDate)/1000);
+    }
+  }
+  
+  
+}
+
+function GetFormattedChronoString(Value)
+{
+  if (Value < 0)
+  {
+    Value = -Value;
+  }
+  else if (Value == 0)
+  {
+    return "--:--:--";
+  }
+
+  var Sec = Value % 60;
+  var Min = Math.floor(Value/60) % 60;
+  var Hrs = Math.floor(Value/3600 ) % 24;
+  var Days = Math.floor(Value / 3600 / 24 );
+
+  var Ret = Hrs.toString() + ":" + Min.toString() +":"+Sec.toString(); 
+  if (Days > 0)
+  {
+    Ret = Days.toString()+" d "+Ret;
+  }
+  return Ret;
 }
