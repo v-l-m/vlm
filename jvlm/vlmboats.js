@@ -876,7 +876,18 @@ function EngageBoatInRace(RaceID, BoatID) {
       }
     ),
     function (data) {
-      var i = 0;
+      
+      if (data.success)
+      {
+        var Msg = GetLocalizedString("youengaged")
+        $("#RacesListForm").modal('hide');
+        alert(Msg);
+      }
+      else
+      {
+        var Msg = data.error.msg + '\n'+ data.error.custom_error_string;
+        alert(Msg);
+      }
     }
   );
 }
