@@ -353,6 +353,15 @@ function InitMenusAndButtons()
     }
   )
 
+  // Handle display ICS button
+  $("#ICSButton").click(
+    function()
+    {
+      var win = window.open("/ics.php?idraces="+_CurPlayer.CurBoat.VLMInfo.RAC)
+      win.focus();
+    }
+  )
+
 
 }
 

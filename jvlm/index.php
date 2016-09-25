@@ -94,6 +94,13 @@
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
+              <div class="BtnGroup1" >
+                <div class="BtnRaceInstruction" >
+                  <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
+                </div>
+              </div>
+            </li>
+            <li class="nav hidden" RacingBtn="true">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>
