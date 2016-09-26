@@ -353,7 +353,7 @@ function InitMenusAndButtons()
     }
   )
 
-  // Handle display ICS button
+  // Handle clicking on ICS button
   $("#ICSButton").click(
     function()
     {
@@ -361,6 +361,17 @@ function InitMenusAndButtons()
       win.focus();
     }
   )
+
+  // Handle clicking on ranking button
+  $("#RankingButton").click(
+    function()
+    {
+      var win = window.open("/races.php?type=racing&idraces="+ _CurPlayer.CurBoat.VLMInfo.RAC+ "&startnum="+_CurPlayer.CurBoat.VLMInfo.RNK)
+      win.focus();
+    }
+  )
+
+  
 
 
 }

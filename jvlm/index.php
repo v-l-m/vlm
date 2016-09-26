@@ -84,7 +84,7 @@
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
                 <div class="BtnRankingPanel" >
-                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
                 </div>
               </div>
             </li>
