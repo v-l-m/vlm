@@ -137,7 +137,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
             <li>
-              <span class="glyphicon glyphicon-log-out"><button id="loginOutButton" type="button" class="btn btn-default"  I18n="logout">Logout</button></span> 
+              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="btn btn-default"  I18n="logout">Logout</button></span> 
             </li>
           </ul>
         </div>

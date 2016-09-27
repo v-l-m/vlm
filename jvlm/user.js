@@ -118,6 +118,10 @@ function Logout()
           {
             alert("Something bad happened while logging out. Restart browser...");
           }
+          else
+          {
+            window.location.reload();
+          }
         }
         );
   _IsLoggedIn=false;
@@ -157,10 +161,12 @@ function GetPlayerInfo()
             var i = result;
             var select
             
-            if (typeof _CurPlayer == 'undefined')
-              {
-                _CurPlayer = new User();
-              }
+            if (typeof _CurPlayer === 'undefined')
+            {
+              _CurPlayer = new User();
+            }
+
+            _CurPlayer.Fleet = [];
             for (boat in result.fleet)
             {  
               _CurPlayer.Fleet.push (new Boat(result.fleet[boat]));
@@ -170,6 +176,8 @@ function GetPlayerInfo()
                 select = boat;
               }
             }
+
+            _CurPlayer.fleet_boatsit = [];
             for (boat in result.fleet_boatsit)
             {  
               _CurPlayer.BSFleet.push (new Boat(result.fleet_boatsit[boat]));

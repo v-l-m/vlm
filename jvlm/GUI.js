@@ -95,28 +95,19 @@ $(document).ready(
     $("#logindlgButton").on ('click',
           function (e)
           {
-            // Get localization key to figure out action
-            var i=0;
-            switch (e.currentTarget.attributes["I18n"].nodeValue)
-            {
-              case "login":
-                if (_IsLoggedIn)
-                {
-                  $("#Menu").toggle();
-                  Logout();
-                }
-                else
-                {
-                  $("#LoginForm").modal('show');
-                  //OnLoginRequest();
-                }
-
-            }
-            
+            // Show Login form
+            $("#LoginForm").modal('show');
           }
-          
-    
     );
+
+    $("#logOutButton").on ('click',
+          function (e)
+          {
+            // Logout user
+            Logout();
+          }
+    );
+
     
     // Set BoatSelector as JQuery UI Selector 
     // Handle boat selector selection change
