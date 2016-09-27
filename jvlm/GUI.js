@@ -776,3 +776,8 @@ function GetFormattedChronoString(Value)
   }
   return Ret;
 }
+
+function RefreshCurrentBoat()
+{
+  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()))
+}

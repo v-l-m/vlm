@@ -856,11 +856,14 @@ function PostBoatSetupOrder(idu, verb, orderdata) {
   // Now Post the order
   $.post("/ws/boatsetup/" + verb + ".php?selectidu" + idu,
     "parms=" + JSON.stringify(orderdata),
-    function (Data, TextStatus) {
-      if (Data.success) {
-        // TODO : Force reload of boat info from server after successfull post.
+    function (Data, TextStatus) 
+    {
+      if (Data.success)
+      {// TODO : Force reload of boat info from server after successfull post.
+        RefreshCurrentBoat();
       }
-      else {
+      else 
+      {
         alert(GetLocalizedString("BoatSetupError") + '\n' + Data.error.code + " " + Data.error.msg)
       }
     });
