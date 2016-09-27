@@ -172,11 +172,11 @@ function GetPlayerInfo()
               _CurPlayer.Fleet.push (new Boat(result.fleet[boat]));
               if ( typeof select == "undefined")
               {
-                //SetCurrentBoat(GetBoatFromIdu(boat));
                 select = boat;
               }
             }
 
+            
             _CurPlayer.fleet_boatsit = [];
             for (boat in result.fleet_boatsit)
             {  
@@ -184,6 +184,10 @@ function GetPlayerInfo()
             }
             
             RefreshPlayerMenu();
+            $("#BoatSelector").val(select);
+            $("#BoatSelector").selectmenu("refresh");
+            SetCurrentBoat(GetBoatFromIdu(select));                
+                
           }
         )
         
