@@ -334,40 +334,45 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 I18n="Identification" class="modal-title">Identification</h4>
+            <!-- Language bar -->
+            <div class="container-fluid">
+                  <div class="col-xs-1"><img class=" LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></div>
+                  <div class="col-xs-1"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></div>
+                  <div class="col-xs-1"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></div>
+                  <div class="col-xs-1"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></div>
+                  <div class="col-xs-1"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></div>
+                  <div class="col-xs-1"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></div>
+                
+              </div>
           </div>
           <div class="modal-body">
             <div class="row container-fluid">
-              <div class="col-xs-8 col-xm-8 col-md-6 col-lg-6">
-                <table>
-                  <tr>
-                    <td width="50%" I18n="email">Adresse de courriel : 
-                    </td>
-                    <td><input  class="UserName" size="15" maxlength="64" name="pseudo" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td I18n="password">Mot de passe : 
-                    </td>
-                    <td>
-                      <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
-                    </td>
-                  </tr>            
-                </table>
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <span I18n="email">eml_addr :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input  class="UserName " size="15" maxlength="64" name="pseudo" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-6">
+                    <span I18n="password">Mot de passe :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
+                  </div>
+                </div>
               </div>
-              <!-- Language bar -->
-              <div class="col-xs-4 col-xm-4 col-md-6 col-lg-6">
-                <ul id="langbox" class="nav navbar-nav" >
-                  <li><img class="col-xs-4 LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></li>
-                  <li><img class="col-xs-4 LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></li>
-                  <li><img class="col-xs-4 LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></li>
-                  <li><img class="col-xs-4 LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></li>
-                  <li><img class="col-xs-4 LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
-                  <li><img class="col-xs-4 LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></li>
-                </ul>
-              </div>
-              
+                         
              </div>
-          </div>
+          
+          
+            <div class="row container-fluid" style="padding-top:20px">
+              <span I18n="pleasecreate">plsc</span>
+              <button class="button">cre</button>
+            </div> </div>
           <div class="modal-footer">
             <button id="LoginButton" I18n="login" type="button" class="btn " data-dismiss="modal">login</button>
           </div>
