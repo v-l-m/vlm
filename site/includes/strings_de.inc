@@ -1,6 +1,8 @@
 <?php
 $strings['de'] = 
   array (
+    'PleaseCreateDlg'=> 'Wenn Sie kein Konto haben ',
+    'CreateAcctBtn' => 'können Sie eins erstellen',
     'Account creation is disabled on this server, you should ask to the admins' => 'Die Erstellung eines Kontos ist auf diesem Server nicht aktiviert ; wenden Sie sich an die Systemadministratoren.',
     'Account validation error' => 'Fehler beim Erstellen des Kontos',
     'An email has been sent for your information.' => 'Eine Informationsemail wurde Ihnen versandt.',

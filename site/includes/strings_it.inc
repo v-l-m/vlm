@@ -1,6 +1,8 @@
 <?php
 $strings['it'] = 
     array (
+    'PleaseCreateDlg'=> 'Se non sei registrato ',
+    'CreateAcctBtn' => 'fallo da qui',
     'Account validation error' => 'Errore nella convalidazione del conto',
     'An email has been sent for your information.' => 'Un email è stato mandato per la vostra informazione',
     'An email has been sent. Click on the link inside.' => 'Un email è stato mandato. Cliccare nel link a l\'interno.',

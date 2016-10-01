@@ -1,5 +1,7 @@
 <?php
 $strings['fr'] = array (
+    'PleaseCreateDlg'=> 'Si vous n\'avez pas de compte, vous pouvez en ',
+    'CreateAcctBtn' => 'cr&eacute;er un',
     "WindAngle" => "Angle au vent",
     "BoatSetupError" => "Erreur lors de l'envoir d'un ordre au serveur. Essayer à nouveau un peu plus tard...",
     "PbLogin" => "Connexion en cours...",

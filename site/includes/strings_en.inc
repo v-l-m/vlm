@@ -1,6 +1,8 @@
 <?php
 $strings['en'] = 
   array (
+    'PleaseCreateDlg'=> 'If you do not have any account, please',
+    'CreateAcctBtn' => 'Create On',
     "WindAngle" => "Wind Angle",
     "BoatSetupError" => "Error sending order to server. Try Again later",
     "PbLogin" => "Login in progress...",

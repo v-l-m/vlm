@@ -1,6 +1,8 @@
 <?php
 $strings['pt'] = 
     array (
+    'PleaseCreateDlg'=> 'Se ainda não se registou,',
+    'CreateAcctBtn' => 'crie uma conta',
     'ETA=' => 'Hora estimada de chegada : ',
     'ETR=' => 'Tempo restante estimado = menos de %d horas',
     'Interface for mobiles devices' => 'Interface for mobiles devices',

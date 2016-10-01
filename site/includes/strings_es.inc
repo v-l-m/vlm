@@ -1,6 +1,8 @@
 <?php
     $strings['es'] =
     array (
+    'PleaseCreateDlg'=> 'Si usted no tiene un nombre de usuario',
+    'CreateAcctBtn' => 'creelo aquí',
     'Account validation error' => 'Error de validación de cuenta',
     'An email has been sent for your information.' => 'Se le ha enviado un correo para su información.',
     'An email has been sent. Click on the link inside.' => 'Se le ha enviado un correo. Siga el link que contiene.',
