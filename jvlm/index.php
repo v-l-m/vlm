@@ -336,19 +336,8 @@
             <h4 I18n="Identification" class="modal-title">Identification</h4>
           </div>
           <div class="modal-body">
-            <div class="row">
-              <!-- Language bar -->
-              <div style="float:right; width:64 px">
-                <ul id="langbox" class="nav navbar-nav" >
-                  <li><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></li>
-                  <li><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></li>
-                  <li><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></li>
-                  <li><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></li>
-                  <li><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
-                  <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></li>
-                </ul>
-              </div>
-              <div >
+            <div class="row container-fluid">
+              <div class="col-xs-8 col-xm-8 col-md-6 col-lg-6">
                 <table>
                   <tr>
                     <td width="50%" I18n="email">Adresse de courriel : 
@@ -364,6 +353,17 @@
                     </td>
                   </tr>            
                 </table>
+              </div>
+              <!-- Language bar -->
+              <div class="col-xs-4 col-xm-4 col-md-6 col-lg-6">
+                <ul id="langbox" class="nav navbar-nav" >
+                  <li><img class="col-xs-4 LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></li>
+                  <li><img class="col-xs-4 LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></li>
+                  <li><img class="col-xs-4 LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></li>
+                  <li><img class="col-xs-4 LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></li>
+                  <li><img class="col-xs-4 LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
+                  <li><img class="col-xs-4 LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></li>
+                </ul>
               </div>
               
              </div>
