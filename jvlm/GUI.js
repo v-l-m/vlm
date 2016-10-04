@@ -127,90 +127,11 @@ function OLInit() {
             layeroption
     );
 
-    /*//Les layers Bing
-    //FIXME : roads... what for ;) ?
-    var bingroad = new OpenLayers.Layer.Bing({
-        key: bingApiKey,
-        type: "Road",
-        sphericalMercator: true,
-        //FIXME: voir s'il y a des effets spécifiques au layer ?
-        transitionEffect: "resize",
-        //pour passer l'ante-meridien sans souci
-        wrapDateLine: true
-    });
-    var bingaerial = new OpenLayers.Layer.Bing({
-        key: bingApiKey,
-        type: "Aerial",
-        sphericalMercator: true,
-        //FIXME: voir s'il y a des effets spécifiques au layer ?
-        transitionEffect: "resize",
-        //pour passer l'ante-meridien sans souci
-        wrapDateLine: true
-
-    });
-    var binghybrid = new OpenLayers.Layer.Bing({
-        key: bingApiKey,
-        type: "AerialWithLabels",
-        name: "Bing Aerial With Labels",
-        sphericalMercator: true,
-        //FIXME: voir s'il y a des effets spécifiques au layer ?
-        transitionEffect: "resize",
-        //pour passer l'ante-meridien sans souci
-        wrapDateLine: true
-    });
-
-    //Layer Multimap, désactivé car fonctionnement erratique
-    //var mm = new OpenLayers.Layer.MultiMap( "MultiMap", layeroption);
-
-    //Le layer openlayer classique
-    //FIXME: voir les types de layers
-    var wms = new OpenLayers.Layer.WMS("OpenLayers WMS",
-            "http://vmap0.tiles.osgeo.org/wms/vmap0",
-            {layers: 'basic', sphericalMercator: true}
-    );
-    */
+    
      
     //Le calque de vent made in Vlm
     var grib = new Gribmap.Layer("Gribmap", layeroption);
     //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
-    
-    /*
-    //Layer Google Physical
-    var gphy = new OpenLayers.Layer.Google(
-            "Google Physical",
-            {
-                type: google.maps.MapTypeId.TERRAIN,
-                sphericalMercator: true,
-                transitionEffect: "resize",
-                wrapDateLine: true
-            }
-    );
-
-    //Layer Google Hybrid
-    //FIXME: faut t il vraiment le conserver ?
-    var ghyb = new OpenLayers.Layer.Google(
-            "Google Hybrid",
-            {
-                type: google.maps.MapTypeId.HYBRID,
-                numZoomLevels: 20,
-                sphericalMercator: true,
-                transitionEffect: "resize",
-                wrapDateLine: true
-            }
-    );
-
-    //Layer Google Satelit
-    var gsat = new OpenLayers.Layer.Google(
-            "Google Satellite",
-            {
-                type: google.maps.MapTypeId.SATELLITE,
-                numZoomLevels: 22,
-                sphericalMercator: true,
-                transitionEffect: "resize",
-                wrapDateLine: true
-            }
-    );
-    */
 
     //La minimap utilise le layer VLM
     var vlmoverview = vlm.clone();
