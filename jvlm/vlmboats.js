@@ -26,6 +26,7 @@ var MapOptions = {
 
 // Control to handle drag of User WP
 var DrawControl = null;
+var BoatFeatures = [];
 
 function SetCurrentBoat(Boat) {
   CheckBoatRefreshRequired(Boat);
@@ -69,7 +70,7 @@ function CheckBoatRefreshRequired(Boat) {
             UpdatePrefsDialog(Boat);
           }
 
-          // update map is racing
+          // update map if racing
 
           if (Boat.VLMInfo.RAC != "0") {
             // Set Map Center to current boat position
@@ -86,7 +87,8 @@ function CheckBoatRefreshRequired(Boat) {
 
             LastRequestedBoat = result.IDU;
 
-            if (typeof Boat.RaceInfo.idraces == 'undefined') {
+            if (typeof Boat.RaceInfo.idraces == 'undefined') 
+            {
               // Get race info if first request for the boat
               $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC,
                 function (result) {
@@ -133,13 +135,19 @@ function CheckBoatRefreshRequired(Boat) {
                     }
 
                     Polygons.push(CurPolyPointsList)
-
+                    Boat.Exclusions=Polygons;
                     DrawRaceExclusionZones(VLMBoatsLayer,Polygons)
                   }
 
                 }
               )
 
+            }
+            else
+            {
+              //Redraw gates and exclusions from cache
+              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
+              DrawRaceExclusionZones(VLMBoatsLayer,Boat.Exclusions);
             }
 
 
@@ -175,6 +183,8 @@ function CheckBoatRefreshRequired(Boat) {
   }
 }
 
+
+
 function DrawBoat(Boat) {
   var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
   var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
@@ -188,64 +198,64 @@ function DrawBoat(Boat) {
 
   // Remove features, before recreate and re-add
   // Can't figure how to move/update the features properly
-  if (Boat.OLBoatFeatures.length != 0) {
-    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_ICON]);
-    //UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
-    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_TRACK]);
-    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_FORECAST_TRACK]);
-    UpdatedFeatures.push(Boat.OLBoatFeatures[BOAT_POLAR]);
-
-    VLMBoatsLayer.removeFeatures(UpdatedFeatures);
-    VLMDragLayer.removeFeatures(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
-    // Cleanup OLBoatFeatures
-    Boat.OLBoatFeatures.length = 0;
-
+  for (index in BoatFeatures)
+  {
+    VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
   }
 
-  if (DrawControl == null) {
-    DrawControl = new OpenLayers.Control.DragFeature(VLMDragLayer, {
-      /*onDrag: function(feature,pixel)
-              {
-                var i  = 0;
-              },*/
-      onComplete: function (feature, pixel) {
-        var dest = map.getLonLatFromPixel(pixel);
-        var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-        var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
+  BoatFeatures = [];
 
-        // Use CurPlayer, since the drag layer is not associated to the proper boat
-        SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest)
-      }
+  if (DrawControl != null) 
+  {
+    console.log("DrawControl Deactivate "+DrawControl)
+    DrawControl.deactivate();
+    map.removeControl(DrawControl);
+    DrawControl = null;
+  }
+  DrawControl = new OpenLayers.Control.DragFeature(VLMDragLayer, {
+    /*onDrag: function(feature,pixel)
+            {
+              var i  = 0;
+            },*/
+    onComplete: function (feature, pixel) {
+      var dest = map.getLonLatFromPixel(pixel);
+      var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
+      var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
+
+      console.log("DragComplete "+feature.id);
+    
+      // Use CurPlayer, since the drag layer is not associated to the proper boat
+      SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest)
     }
-    );
-    map.addControl(DrawControl)
-    DrawControl.activate();
-    //Boat.DrawControl.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
   }
-
-
+  );
+  map.addControl(DrawControl)
+  DrawControl.activate();
+    //Boat.DrawControl.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
+  
 
   // Boat Marker
-  Boat.OLBoatFeatures.push(new OpenLayers.Feature.Vector(
+  BoatFeatures.push(new OpenLayers.Feature.Vector(
     PosTransformed,
     { "Id": Boat.IdBoat },
     { externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64, rotation: Boat.VLMInfo.HDG }
   )
   );
-  VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_ICON]);
+  VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_ICON]);
 
   // Waypoint marker    
-  Boat.OLBoatFeatures.push(new OpenLayers.Feature.Vector(
+  BoatFeatures.push(new OpenLayers.Feature.Vector(
     WPTransformed,
     {},
     { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 64, graphicWidth: 64 }
   )
   );
 
-  VLMDragLayer.addFeatures(Boat.OLBoatFeatures[BOAT_WP_MARKER]);
-
+  VLMDragLayer.addFeatures(BoatFeatures[BOAT_WP_MARKER]);
+  console.log("Added Pos Feature "+ BoatFeatures[BOAT_WP_MARKER].id);
   // Last 24h track  
-  if (Boat.Track.length > 0) {
+  if (Boat.Track.length > 0)
+   {
     var PointList = [];
 
     for (index in Boat.Track) {
@@ -257,14 +267,14 @@ function DrawBoat(Boat) {
 
     }
 
-    Boat.OLBoatFeatures[BOAT_TRACK] = new OpenLayers.Feature.Vector(
+    BoatFeatures[BOAT_TRACK] = new OpenLayers.Feature.Vector(
       new OpenLayers.Geometry.LineString(PointList),
       {
         "type": "HistoryTrack",
         "TrackColor": "#" + Boat.VLMInfo.COL
       });
 
-    VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
+    VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_TRACK]);
   }
   else {
     // Add single point out of the map for later having a feature to remove
@@ -277,14 +287,14 @@ function DrawBoat(Boat) {
     PointList.push(PosTransformed)
 
 
-    Boat.OLBoatFeatures[BOAT_TRACK] = new OpenLayers.Feature.Vector(
+    BoatFeatures[BOAT_TRACK] = new OpenLayers.Feature.Vector(
       new OpenLayers.Geometry.LineString(PointList),
       {
         "type": "HistoryTrack",
         "TrackColor": "#" + Boat.VLMInfo.COL
       });
 
-    VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_TRACK]);
+    VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_TRACK]);
   }
 
   // Forecast Track
@@ -292,13 +302,13 @@ function DrawBoat(Boat) {
   TrackPointList.push(P1_PosTransformed);
   TrackPointList.push(ForecastPosTransformed);
 
-  Boat.OLBoatFeatures[BOAT_FORECAST_TRACK] = new OpenLayers.Feature.Vector(
+  BoatFeatures[BOAT_FORECAST_TRACK] = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(TrackPointList),
     {
       "type": "ForecastPos"
     });
 
-  VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_FORECAST_TRACK]);
+  VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_FORECAST_TRACK]);
 
   // Draw polar
   var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.BSP, DrawBoat, Boat);
@@ -320,14 +330,14 @@ function DrawBoat(Boat) {
     //var PPoint = new OpenLayers.Geometry.Point(PixPos);
     Polar.push(PixPos);
   }
-  Boat.OLBoatFeatures[BOAT_POLAR] = new OpenLayers.Feature.Vector(
+  BoatFeatures[BOAT_POLAR] = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(Polar),
     {
       "type": "Polar",
       "WindDir": Boat.VLMInfo.TWD
     });
 
-  VLMBoatsLayer.addFeatures(Boat.OLBoatFeatures[BOAT_POLAR]);
+  VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_POLAR]);
 
 
 }
@@ -592,8 +602,15 @@ const WP_CROSS_ANTI_CLOCKWISE = (1 << 9)
 /* for future releases */
 const WP_CROSS_ONCE = (1 << 10)
 
+var RaceGates = [];
+var Exclusions = [];
+
 function DrawRaceGates(RaceInfo, NextGate) {
 
+  for (index in RaceGates)
+  {
+    VLMBoatsLayer.removeFeatures(RaceGates[index]);
+  }
   // Loop all gates
   for (index in RaceInfo.races_waypoints) {
     // Draw a single race gates
@@ -608,13 +625,13 @@ function DrawRaceGates(RaceInfo, NextGate) {
     var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
     // Draw WP1
-    AddBuoyMarker(VLMBoatsLayer, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
+    AddBuoyMarker(VLMBoatsLayer,RaceGates, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
 
 
     // Second buoy (if any)
     if ((WP.wpformat & WP_GATE_BUOY_MASK) == WP_TWO_BUOYS) {
       // Add 2nd buoy marker
-      AddBuoyMarker(VLMBoatsLayer, "", WP.longitude2, WP.latitude2, !cwgate);
+      AddBuoyMarker(VLMBoatsLayer,RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
     }
     else {
       // No Second buoy, compute segment end
@@ -625,7 +642,7 @@ function DrawRaceGates(RaceInfo, NextGate) {
     }
 
     // Draw Gate Segment
-    AddGateSegment(VLMBoatsLayer, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
+    AddGateSegment(VLMBoatsLayer,RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
 
   }
 }
@@ -635,14 +652,19 @@ function DrawRaceExclusionZones(Layer,Zones)
 
   var index
 
+  for (index in Exclusions)
+  {
+    Layer.removeFeatures(Exclusions[index]);
+  }
+
   for (index in Zones)
   {
-    DrawRaceExclusionZone(Layer,Zones[index])
+    DrawRaceExclusionZone(Layer,Exclusions,Zones[index])
   }
 
 }
 
-function DrawRaceExclusionZone(Layer, Zone) 
+function DrawRaceExclusionZone(Layer,ExclusionZones, Zone) 
 {
 
   var index
@@ -666,9 +688,11 @@ function DrawRaceExclusionZone(Layer, Zone)
     , null);
 
   Layer.addFeatures(ExclusionZone);
+  ExclusionZones.push(ExclusionZone);
+
 }
 
-function AddGateSegment(Layer, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
+function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
   var P1 = new OpenLayers.Geometry.Point(lon1, lat1);
   var P2 = new OpenLayers.Geometry.Point(lon2, lat2);
   var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
@@ -695,7 +719,7 @@ function AddGateSegment(Layer, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Ga
     , null);
 
   Layer.addFeatures(WP);
-
+  Gates.push(WP);
   if (GateType != WP_DEFAULT) {
     // Debug testing of the geo calculation functions
     /*{
@@ -713,11 +737,11 @@ function AddGateSegment(Layer, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Ga
     // Gate has special features, add markers
     if (GateType & WP_CROSS_ANTI_CLOCKWISE) {
       MarkerDir -= 90;
-      AddGateDirMarker(VLMBoatsLayer, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
+      AddGateDirMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
     }
     else if (GateType & WP_CROSS_CLOCKWISE) {
       MarkerDir += 90;
-      AddGateDirMarker(VLMBoatsLayer, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
+      AddGateDirMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
     }
 
     if (GateType & WP_CROSS_ONCE) {
@@ -728,7 +752,7 @@ function AddGateSegment(Layer, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Ga
         , null);
 
       Layer.addFeatures(WP);
-
+      Gates.push(WP);
     }
 
   }
@@ -738,7 +762,7 @@ function AddGateSegment(Layer, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, Ga
 
 const MAX_BUOY_INDEX = 16;
 var BuoyIndex = Math.floor(Math.random() * MAX_BUOY_INDEX);
-function AddGateDirMarker(Layer, Lon, Lat, Dir) {
+function AddGateDirMarker(Layer,Gates, Lon, Lat, Dir) {
   var MarkerCoords = new VLMPosition(Lon, Lat);
   var MarkerPos = new OpenLayers.Geometry.Point(MarkerCoords.Lon.Value, MarkerCoords.Lat.Value);
   var MarkerPosTransformed = MarkerPos.transform(MapOptions.displayProjection, MapOptions.projection)
@@ -754,10 +778,11 @@ function AddGateDirMarker(Layer, Lon, Lat, Dir) {
   BuoyIndex %= (MAX_BUOY_INDEX + 1);
 
   Layer.addFeatures(Marker);
+  Gates.push(Marker);
 }
 
 
-function AddBuoyMarker(Layer, Name, Lon, Lat, CW_Crossing) {
+function AddBuoyMarker(Layer,Gates, Name, Lon, Lat, CW_Crossing) {
   var WP_Coords = new VLMPosition(Lon, Lat);
   var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
   var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
@@ -786,6 +811,7 @@ function AddBuoyMarker(Layer, Name, Lon, Lat, CW_Crossing) {
 
 
   Layer.addFeatures(WP);
+  Gates.push(WP);
 }
 
 const PM_HEADING = 1;

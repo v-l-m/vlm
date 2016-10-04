@@ -9,10 +9,11 @@ function Boat(vlmboat)
   this.BoatName='';
   this.BoatPseudo='';
   this.VLMInfo={};  // LastBoatInfoResult
-  this.OLBoatFeatures=[]; 
   this.CurBoat={};  
   this.RaceInfo={}; // Race Info for the boat
-  
+  this.Exclusions=[]; // Exclusions Zones for this boat
+  this.Track=[];
+
   if (typeof vlmboat != 'undefined')
   {
     this.IdBoat=vlmboat.idu;
@@ -20,8 +21,6 @@ function Boat(vlmboat)
     this.BoatName=vlmboat.boatname;
     this.BoatPseudo=vlmboat.boatpseudo;
     this.VLMInfo={};  // LastBoatInfoResult
-    this.OLBoatFeatures=[];
-    this.Track=[];
   }
 
   this.GetNextWPPosition= function()
