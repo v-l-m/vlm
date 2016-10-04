@@ -371,7 +371,7 @@
           
             <div class="row container-fluid" style="padding-top:20px">
               <span I18n="PleaseCreateDlg">plsc</span>
-              <button class="button" I18n="CreateAcctBtn">cre</button>
+              <button id="BtnCreateAccount" class="button" I18n="CreateAcctBtn">cre</button>
             </div> </div>
           <div class="modal-footer">
             <button id="LoginButton" I18n="login" type="button" class="button" data-dismiss="modal">login</button>

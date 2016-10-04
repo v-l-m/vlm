@@ -15,48 +15,7 @@ $(document).ready(
     // Start-Up Polars manager
     PolarsManager.Init();
     
-    // Init event handlers
-    // Login button click event handler
-    $("#LoginButton").click( 
-      function()
-      {
-        OnLoginRequest();
-      }
-    );   
-
-    // Display setting dialog
-    $("#BtnSetting").click(
-      function()
-      {
-        $("#SettingsForm").modal("show");
-      }
-    )
-
-    // Do fixed heading button
-    $("#BtnPM_Heading").click(
-      function()
-      {
-        SendVLMBoatOrder(PM_HEADING,$("#PM_Heading")[0].value)
-      }
-
-    );
-
-    // Do fixed angle button
-    $("#BtnPM_Angle").click(
-      function()
-      {
-        SendVLMBoatOrder(PM_ANGLE,$("#PM_Angle")[0].value)
-      }
-
-    );
-
-    // Tack
-    $("#BtnPM_Tack").click(
-      function()
-      {
-        $("#PM_Angle")[0].value= - $("#PM_Angle")[0].value;
-      }
-    )
+    
 
     // Go To WP OrthoMode
     $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
@@ -362,7 +321,55 @@ function InitMenusAndButtons()
     }
   )
 
-  
+  // Init event handlers
+    // Login button click event handler
+    $("#LoginButton").click( 
+      function()
+      {
+        OnLoginRequest();
+      }
+    );   
+
+    // Display setting dialog
+    $("#BtnSetting").click(
+      function()
+      {
+        $("#SettingsForm").modal("show");
+      }
+    )
+
+    // Do fixed heading button
+    $("#BtnPM_Heading").click(
+      function()
+      {
+        SendVLMBoatOrder(PM_HEADING,$("#PM_Heading")[0].value)
+      }
+
+    );
+
+    // Do fixed angle button
+    $("#BtnPM_Angle").click(
+      function()
+      {
+        SendVLMBoatOrder(PM_ANGLE,$("#PM_Angle")[0].value)
+      }
+
+    );
+
+    // Tack
+    $("#BtnPM_Tack").click(
+      function()
+      {
+        $("#PM_Angle")[0].value= - $("#PM_Angle")[0].value;
+      }
+    )
+
+    $("#BtnCreateAccount").click(
+      function()
+      {
+        alert("Function not implemented yet");
+      }
+    )
 
 
 }
