@@ -36,19 +36,21 @@ input {
   color: #000000;
 }
 
+@DialogBgColor: #15214b;
+
 #LoginPanel, #SettingsPanel, #RacesListPanel {
-  background-color: #15214b;
+  background-color: @DialogBgColor;
 }
 
 div.UserMenu {
   position: absolute;
-  background-color: #15214b;
+  background-color: @DialogBgColor;
   color: white; 
   z-index: 1000;
 }
 
 div.LoginButton{
-  background-color: lightBlue;
+  //background-color: lightBlue;
   position: absolute;
   width: 50px;
 }
@@ -522,4 +524,8 @@ span.ui-selectmenu-text {
 .ChronoRacePending {
   color: red;
   font-style: italic;
+}
+
+.button {
+  color: @DialogBgColor;
 }

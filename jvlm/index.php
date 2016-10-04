@@ -145,7 +145,7 @@
 
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-        <div class="Controler-Panel Container" style="padding-left:85px">
+        <div class="Controler-Panel Container-fluid" style="padding-left:85px">
           <div class="col-*-12">
             <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                 <li class="BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
@@ -374,7 +374,7 @@
               <button class="button" I18n="CreateAcctBtn">cre</button>
             </div> </div>
           <div class="modal-footer">
-            <button id="LoginButton" I18n="login" type="button" class="btn " data-dismiss="modal">login</button>
+            <button id="LoginButton" I18n="login" type="button" class="button" data-dismiss="modal">login</button>
           </div>
         </div>
 
