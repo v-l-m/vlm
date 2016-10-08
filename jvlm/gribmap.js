@@ -345,6 +345,20 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
 
         //ANTE
 
+        // Sanity checks
+        if ((!(n_limit in windarray_ante.winddatas)) || 
+            (!(s_limit in windarray_ante.winddatas))
+            )
+        {
+            return null;
+        }
+        else if ((!(e_limit in windarray_ante.winddatas[n_limit])) ||
+                (!(w_limit in windarray_ante.winddatas[n_limit])) ||
+                (!(e_limit in windarray_ante.winddatas[s_limit])) ||
+                (!(w_limit in windarray_ante.winddatas[s_limit])) )
+        {
+            return null;
+        }
         //4 corners
         ne_wind = windarray_ante.winddatas[n_limit][e_limit];
         nw_wind = windarray_ante.winddatas[n_limit][w_limit];
@@ -817,6 +831,10 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   // x, y, the coordinates in the window
   // wspeed, wheading, wind speed and wind heading
   drawWind: function(context, x, y, pos_wind) {
+      if (pos_wind === null)
+      {
+          return;
+      }
       context.fillStyle = this.windSpeedToColor(pos_wind.wspeed);
       this.drawWindTriangle(context, x, y, pos_wind);
       context.fillStyle = '#626262';
