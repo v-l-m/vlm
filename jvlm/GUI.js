@@ -633,23 +633,28 @@ function AddRaceToList(race)
 
 function PageClock()
 {
-  // Display race clock is a racing boat is selected
-  var CurBoat = _CurPlayer.CurBoat;
 
-  if (typeof CurBoat != "undefined" && typeof CurBoat.RaceInfo != "undefined")
+  if (typeof _CurPlayer !== "undefined" && typeof _CurPlayer.CurBoat !== "undefined")
   {
-    var ClockValue=GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
-    var Chrono = $("#RaceChrono");
-    if (ClockValue < 0 )
-    {
-      Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
-    }
-    else
-    {
-      Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
-    }
 
-    Chrono.text(GetFormattedChronoString(ClockValue));
+    // Display race clock is a racing boat is selected
+    var CurBoat = _CurPlayer.CurBoat;
+
+    if (typeof CurBoat != "undefined" && typeof CurBoat.RaceInfo != "undefined")
+    {
+      var ClockValue=GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
+      var Chrono = $("#RaceChrono");
+      if (ClockValue < 0 )
+      {
+        Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
+      }
+      else
+      {
+        Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
+      }
+
+      Chrono.text(GetFormattedChronoString(ClockValue));
+    }
   } 
 }
 
