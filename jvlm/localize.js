@@ -1,5 +1,6 @@
  var _LocaleDict;
  var _EnDict;
+ var _CurLocale= 'en';  // Default to english unless otherwise posted
 
 function LocalizeString()
 {
@@ -11,6 +12,7 @@ function LocalizeString()
     function(event,ui)
     {
       OnLangFlagClick($(this).attr('lang'));
+      UpdateLngDropDown();
     }
   );
   
@@ -60,8 +62,10 @@ function InitLocale(Lang)
           {
             if (result.success == true)
             {
+              _CurLocale = result.request.lang;
               _LocaleDict=result.strings;
               LocalizeString();
+              UpdateLngDropDown();
             }
             else
             {
@@ -103,4 +107,9 @@ function GetLocalizedString(StringId)
   {
     return StringId
   }
+}
+
+function GetCurrentLocale()
+{
+  return _CurLocale;
 }

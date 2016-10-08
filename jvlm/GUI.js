@@ -292,7 +292,6 @@ function InitMenusAndButtons()
       }
     )
 
-
 }
 
 function ClearBoatSelector()
@@ -713,4 +712,16 @@ function GetFormattedChronoString(Value)
 function RefreshCurrentBoat()
 {
   SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()))
+}
+
+function UpdateLngDropDown()
+{
+  // Init the language combo to current language
+  var lng = GetCurrentLocale();
+
+  $('#SelectionLanguageDropDown:first-child').html(
+    '<img class=" LngFlag" lang="'+lng+'" src="images/lng-'+lng+'.png" alt="'+lng+'">'+
+    '<span class="caret"></span>'
+    )
+
 }
