@@ -1,5 +1,12 @@
-// On ready get started with vlm management
 
+//
+//
+// Some consts 
+var RACE_TYPE_CLASSIC = 0;
+var RACE_TYPE_RECORD = 1;
+var RACE_TYPE_OMORMB = 2;
+
+// On ready get started with vlm management
 $(document).ready(
   function(){
     
@@ -662,7 +669,7 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
   var CurDate=new Date();
   var Epoch=new Date(RaceInfo.deptime*1000);
 
-  if (RaceInfo.racetype!="1")
+  if (!(RaceInfo.racetype & RACE_TYPE_RECORD))
   {
     // non Permanent  race chrono counts from race start time
     return Math.floor((CurDate-Epoch)/1000);
