@@ -102,7 +102,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat) {
                   // Save raceinfo with boat
                   Boat.RaceInfo = result;
 
-                  DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
+                  DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,true);
 
                   // Update the racename display if needed
                   var RaceName = $("#RaceName").first();
@@ -153,7 +153,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat) {
             else
             {
               //Redraw gates and exclusions from cache
-              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
+              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,false);
               DrawRaceExclusionZones(VLMBoatsLayer,Boat.Exclusions);
             }
 
@@ -625,7 +625,7 @@ const WP_CROSS_ONCE = (1 << 10)
 var RaceGates = [];
 var Exclusions = [];
 
-function DrawRaceGates(RaceInfo, NextGate) {
+function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords) {
 
   for (index in RaceGates)
   {
@@ -637,11 +637,13 @@ function DrawRaceGates(RaceInfo, NextGate) {
     var WP = RaceInfo.races_waypoints[index];
 
     // Fix coords scales
-    WP.longitude1 /= VLM_COORDS_FACTOR;
-    WP.latitude1 /= VLM_COORDS_FACTOR;
-    WP.longitude2 /= VLM_COORDS_FACTOR;
-    WP.latitude2 /= VLM_COORDS_FACTOR;
-
+    if (IsVLMCoords)
+    {
+      WP.longitude1 /= VLM_COORDS_FACTOR;
+      WP.latitude1 /= VLM_COORDS_FACTOR;
+      WP.longitude2 /= VLM_COORDS_FACTOR;
+      WP.latitude2 /= VLM_COORDS_FACTOR;
+    }
     var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
     // Draw WP1
