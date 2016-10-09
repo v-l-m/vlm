@@ -185,7 +185,7 @@ function GetPlayerInfo()
             RefreshPlayerMenu();
             $("#BoatSelector").val(select);
             $("#BoatSelector").selectmenu("refresh");
-            SetCurrentBoat(GetBoatFromIdu(select));                
+            SetCurrentBoat(GetBoatFromIdu(select),true);                
                 
           }
         )

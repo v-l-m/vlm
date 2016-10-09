@@ -2,12 +2,12 @@
 // VLMBoat layer handling displaying vlm boats, traj
 //
 
-const BOAT_ICON = 0
+/*const BOAT_ICON = 0
 const BOAT_WP_MARKER = 1
 const BOAT_TRACK = 2
 const BOAT_FORECAST_TRACK = 3
 const BOAT_POLAR = 4
-
+*/
 const VLM_COORDS_FACTOR = 1000
 
 var MapOptions = {
@@ -28,13 +28,13 @@ var MapOptions = {
 var DrawControl = null;
 var BoatFeatures = [];
 
-function SetCurrentBoat(Boat) {
-  CheckBoatRefreshRequired(Boat);
+function SetCurrentBoat(Boat, CenterMapOnBoat) {
+  CheckBoatRefreshRequired(Boat, CenterMapOnBoat);
 }
 
 var LastRequestedBoat = -1;
 
-function CheckBoatRefreshRequired(Boat) {
+function CheckBoatRefreshRequired(Boat, CenterMapOnBoat) {
   var CurDate = new Date();
   var NextUpdate = new Date(0);
   var NeedPrefsRefresh = typeof Boat.VLMInfo.AVG === "undefined";
@@ -77,7 +77,14 @@ function CheckBoatRefreshRequired(Boat) {
             var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
 
             // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
-            map.setCenter(l);
+            if (isNaN(l.lat) || isNaN(l.lon))
+            {
+              var i = 0;
+            }
+            if (CenterMapOnBoat)
+            {
+              map.setCenter(l);
+            }
 
             // Draw Boat, course, tracks....
             DrawBoat(Boat);
@@ -200,59 +207,68 @@ function DrawBoat(Boat) {
   // Can't figure how to move/update the features properly
   for (index in BoatFeatures)
   {
+    // Beurk, but does the job anyways
     VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
+    VLMDragLayer.removeFeatures(BoatFeatures[index]);
   }
 
   BoatFeatures = [];
 
-  if (DrawControl != null) 
+  if (DrawControl === null ) 
   {
-    console.log("DrawControl Deactivate "+DrawControl)
+  /*  console.log("DrawControl Deactivate "+DrawControl.id)
     DrawControl.deactivate();
     map.removeControl(DrawControl);
+    console.log("Remove drawcontrol" + DrawControl.id);
     DrawControl = null;
-  }
-  DrawControl = new OpenLayers.Control.DragFeature(VLMDragLayer, {
-    /*onDrag: function(feature,pixel)
-            {
-              var i  = 0;
-            },*/
-    onComplete: function (feature, pixel) {
-      var dest = map.getLonLatFromPixel(pixel);
-      var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-      var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
+  }*/
+    DrawControl = new OpenLayers.Control.DragFeature(VLMDragLayer, 
+      {
+        onDrag: function(feature,pixel)
+                {
+                  console.log("Dragging "+feature.id);;
+                },
+        onComplete: function (feature, pixel) 
+        {
+          var dest = map.getLonLatFromPixel(pixel);
+          var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
+          var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
 
-      console.log("DragComplete "+feature.id);
-    
-      // Use CurPlayer, since the drag layer is not associated to the proper boat
-      SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest)
-    }
+          console.log("DragComplete "+feature.id);
+          VLMBoatsLayer.removeFeatures(feature);
+          // Use CurPlayer, since the drag layer is not associated to the proper boat
+          SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest)
+          DrawControl.deactivate();
+          DrawControl.activate();
+        }
+      }
+    );
+    map.addControl(DrawControl)
+    DrawControl.activate();
+    console.log("Added & activated drawcontrol" + DrawControl.id);
   }
-  );
-  map.addControl(DrawControl)
-  DrawControl.activate();
+  
     //Boat.DrawControl.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
   
 
   // Boat Marker
-  BoatFeatures.push(new OpenLayers.Feature.Vector(
+  var BoatIcon = new OpenLayers.Feature.Vector(
     PosTransformed,
     { "Id": Boat.IdBoat },
     { externalGraphic: 'images/target.svg', graphicHeight: 64, graphicWidth: 64, rotation: Boat.VLMInfo.HDG }
-  )
   );
-  VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_ICON]);
-
+  VLMBoatsLayer.addFeatures(BoatIcon);
+  BoatFeatures.push(BoatIcon)
+  
   // Waypoint marker    
-  BoatFeatures.push(new OpenLayers.Feature.Vector(
+  var WPMarker=new OpenLayers.Feature.Vector(
     WPTransformed,
     {},
     { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 64, graphicWidth: 64 }
-  )
   );
-
-  VLMDragLayer.addFeatures(BoatFeatures[BOAT_WP_MARKER]);
-  console.log("Added Pos Feature "+ BoatFeatures[BOAT_WP_MARKER].id);
+  BoatFeatures.push(WPMarker);
+  VLMDragLayer.addFeatures(WPMarker);
+  console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
   if (Boat.Track.length > 0)
    {
@@ -267,16 +283,17 @@ function DrawBoat(Boat) {
 
     }
 
-    BoatFeatures[BOAT_TRACK] = new OpenLayers.Feature.Vector(
+    var BoatTrack = new OpenLayers.Feature.Vector(
       new OpenLayers.Geometry.LineString(PointList),
       {
         "type": "HistoryTrack",
         "TrackColor": "#" + Boat.VLMInfo.COL
       });
 
-    VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_TRACK]);
+    VLMBoatsLayer.addFeatures(BoatTrack);
+    BoatFeatures.push(BoatTrack);
   }
-  else {
+  /*else {
     // Add single point out of the map for later having a feature to remove
     var PointList = [];
 
@@ -295,20 +312,21 @@ function DrawBoat(Boat) {
       });
 
     VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_TRACK]);
-  }
+  }*/
 
   // Forecast Track
   var TrackPointList = [];
   TrackPointList.push(P1_PosTransformed);
   TrackPointList.push(ForecastPosTransformed);
 
-  BoatFeatures[BOAT_FORECAST_TRACK] = new OpenLayers.Feature.Vector(
+  var TrackForecast= new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(TrackPointList),
     {
       "type": "ForecastPos"
     });
 
-  VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_FORECAST_TRACK]);
+  BoatFeatures.push(TrackForecast);
+  VLMBoatsLayer.addFeatures(TrackForecast);
 
   // Draw polar
   var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.BSP, DrawBoat, Boat);
@@ -330,14 +348,15 @@ function DrawBoat(Boat) {
     //var PPoint = new OpenLayers.Geometry.Point(PixPos);
     Polar.push(PixPos);
   }
-  BoatFeatures[BOAT_POLAR] = new OpenLayers.Feature.Vector(
+  var BoatPolar = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(Polar),
     {
       "type": "Polar",
       "WindDir": Boat.VLMInfo.TWD
     });
 
-  VLMBoatsLayer.addFeatures(BoatFeatures[BOAT_POLAR]);
+  BoatFeatures.push(BoatPolar)
+  VLMBoatsLayer.addFeatures(BoatPolar);
 
 
 }
@@ -565,6 +584,7 @@ var LayerListeners = {
   },
   nofeatureclick: function (e) {
     console.log(e.object.name + " says: No feature clicked.");
+    return false;
   }
 };
 
@@ -886,7 +906,7 @@ function PostBoatSetupOrder(idu, verb, orderdata) {
     {
       if (Data.success)
       {// TODO : Force reload of boat info from server after successfull post.
-        RefreshCurrentBoat();
+        RefreshCurrentBoat(false);
       }
       else 
       {

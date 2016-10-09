@@ -74,7 +74,7 @@ $(document).ready(
     $("#BoatSelector").selectmenu();  
     $("#BoatSelector").on( "selectmenuselect", function(event,ui)
       {
-        SetCurrentBoat(GetBoatFromIdu(ui.item.value));
+        SetCurrentBoat(GetBoatFromIdu(ui.item.value),true);
       }
     );
 
@@ -709,9 +709,9 @@ function GetFormattedChronoString(Value)
   return Ret;
 }
 
-function RefreshCurrentBoat()
+function RefreshCurrentBoat(SetCenterOnBoat)
 {
-  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()))
+  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()), SetCenterOnBoat)
 }
 
 function UpdateLngDropDown()
