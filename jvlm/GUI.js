@@ -413,7 +413,7 @@ function UpdateInMenuRacingBoatInfo(Boat)
 
   HandleRacingDockingButtons(true);
   // Put a sign to the TWA
-  if (Boat.VLMInfo.TWD+360 < Boat.VLMInfo.HDG+360)
+  if (Boat.VLMInfo.TWD+360 < parseInt(Boat.VLMInfo.HDG)+360)
   {
     Boat.VLMInfo.TWA = -Boat.VLMInfo.TWA;
   }
@@ -456,7 +456,7 @@ function UpdateInMenuRacingBoatInfo(Boat)
   BoatFieldMappings.push([0,"#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+  BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
   if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
   {
@@ -469,7 +469,7 @@ function UpdateInMenuRacingBoatInfo(Boat)
   BoatFieldMappings.push([0,"#RankingBadge", Boat.VLMInfo.RNK]);
   //BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.H@WP * 10)/10 ]);
   
-  if (Boat.VLMInfo.PIP==PM_ANGLE)
+  if (Boat.VLMInfo.PIM==PM_ANGLE)
   {
     BoatFieldMappings.push([1,"#PM_Angle",Boat.VLMInfo.PIP ]);
   }

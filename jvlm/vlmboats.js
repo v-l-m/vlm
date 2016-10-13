@@ -21,7 +21,11 @@ var MapOptions = {
   maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
     20037508.34, 20037508.34),
   restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34,
-    40037508.34, 20037508.34)
+    40037508.34, 20037508.34),
+  eventListeners:
+    {
+      "zoomend":HandleMapZoomEnd
+    }
 };
 
 // Control to handle drag of User WP
@@ -944,3 +948,7 @@ function EngageBoatInRace(RaceID, BoatID) {
 }
 
 
+function HandleMapZoomEnd(object, element)
+{
+  console.log("ZoomEnded")
+}
