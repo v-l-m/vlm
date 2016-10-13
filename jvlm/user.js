@@ -236,6 +236,10 @@ function SetupUserMenu()
 
 function GetBoatFromIdu(Id)
 {
+  if (typeof _CurPlayer === "undefined")
+  {
+    return;
+  }
   var RetBoat= GetBoatFromBoatArray(_CurPlayer.Fleet,Id);
   
   if (typeof RetBoat == 'undefined')

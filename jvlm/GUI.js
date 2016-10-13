@@ -571,11 +571,11 @@ function UpdatePrefsDialog(Boat)
   else
   {
     $("#BtnSetting").removeClass("hidden");
+    $("#pref_boatname").val(Boat.BoatName);
+    $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
+    $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
   }
 
-  $("#pref_boatname").val(Boat.BoatName);
-  $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
-  $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
   
 
 }
