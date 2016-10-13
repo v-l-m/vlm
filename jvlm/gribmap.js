@@ -170,7 +170,15 @@ Gribmap.WindLevel = OpenLayers.Class({
         //on n'appelle pas checkWindArea car on suppose que c'est déjà OK.
         //mais on mets ça dans une clausse d'exception pour ne pas avoir de soucis
         try {
-            return(this.windAreas[wa.toString()].getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter));
+            var w_area = this.windAreas[wa.toString()];
+            if (typeof w_area !== "undefined" && w_area != null)
+            {
+                return(w_area.getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter));
+            }
+            else
+            {
+                return null;
+            }
         } catch (error) {
             return null;
         }
