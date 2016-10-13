@@ -109,13 +109,14 @@ function CheckLogin()
 function Logout()
 {
   DisplayLoggedInMenus(false);
-  $.get("/ws/logout.php",
+  $.post("/ws/logout.php",
         function(result)
         {
           var i = result;
           if (!result.success)
           {
             alert("Something bad happened while logging out. Restart browser...");
+            windows.location.reload();
           }
           else
           {
