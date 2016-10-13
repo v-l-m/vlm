@@ -38,10 +38,10 @@ function SetCurrentBoat(Boat, CenterMapOnBoat) {
 
 var LastRequestedBoat = -1;
 
-function CheckBoatRefreshRequired(Boat, CenterMapOnBoat) {
+function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) {
   var CurDate = new Date();
   var NextUpdate = new Date(0);
-  var NeedPrefsRefresh = typeof Boat.VLMInfo.AVG === "undefined";
+  var NeedPrefsRefresh = (typeof Boat!=="undefined" && (typeof Boat.VLMInfo==="undefined" || typeof Boat.VLMInfo.AVG === "undefined"));
 
   // Update preference screen according to current selected boat
   UpdatePrefsDialog(Boat);
@@ -51,8 +51,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat) {
     NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP);
   }
 
-  if (typeof Boat == 'undefined' ||
-    CurDate >= NextUpdate) {
+  if (((typeof Boat !== 'undefined') && (CurDate >= NextUpdate)) ||
+      ( (typeof Boat !== "undefined") && (ForceRefresh)) ) 
+  {
     // request current boat info
     ShowPb("#PbGetBoatProgress");
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
@@ -950,5 +951,5 @@ function EngageBoatInRace(RaceID, BoatID) {
 
 function HandleMapZoomEnd(object, element)
 {
-  console.log("ZoomEnded")
+  RefreshCurrentBoat(false);
 }
