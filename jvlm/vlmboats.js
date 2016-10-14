@@ -393,7 +393,7 @@ var VectorStyles = new OpenLayers.Style(
           }),
           symbolizer: {
             // if a feature matches the above filter, use this symbolizer
-            label: "${name}${Coords}",
+            label: "${name}\n${Coords}",
             //pointRadius: 6,
             pointerEvents: "visiblePainted",
             // label with \n linebreaks
@@ -408,7 +408,7 @@ var VectorStyles = new OpenLayers.Style(
             //labelOutlineColor: "white",
             //labelOutlineWidth: 2
             externalGraphic: "images/${GateSide}",
-            graphicWidth: 48,
+            graphicWidth: 36,
             fillOpacity: 1
 
           }
