@@ -411,6 +411,11 @@ function UpdateInMenuRacingBoatInfo(Boat)
   var NorthSouth;
   var EastWest;
 
+  if (!Boat || typeof Boat === "undefined")
+  {
+    return;
+  }
+
   HandleRacingDockingButtons(true);
   // Put a sign to the TWA
   if (Boat.VLMInfo.TWD+360 < parseInt(Boat.VLMInfo.HDG)+360)
@@ -552,8 +557,10 @@ function UpdateInMenuRacingBoatInfo(Boat)
     $("#"+ActivePane).addClass("active");
 
     // Add race name
-    $("#RaceName").text(Boat.RaceInfo.racename);
-
+    if (typeof Boat.RaceInfo !== "undefined")
+    {
+      $("#RaceName").text(Boat.RaceInfo.racename);
+    }
 } 
 
 function MoveWPBoatControlerDiv(target)
@@ -564,7 +571,7 @@ function MoveWPBoatControlerDiv(target)
 function UpdatePrefsDialog(Boat)
 {
   // Hide prefs setting button is not boat or no vlminfo yet...
-  if (typeof Boat === "undefined" || typeof Boat.VLMInfo.AVG === "undefined")
+  if (typeof Boat === "undefined" || typeof Boat.VLMInfo === "undefined"  || typeof Boat.VLMInfo.AVG === "undefined")
   {
     $("#BtnSetting").addClass("hidden");
   }
@@ -643,7 +650,7 @@ function PageClock()
   if (typeof _CurPlayer !== "undefined" && typeof _CurPlayer.CurBoat !== "undefined")
   {
 
-    // Display race clock is a racing boat is selected
+    // Display race clock if a racing boat is selected
     var CurBoat = _CurPlayer.CurBoat;
 
     if (typeof CurBoat != "undefined" && typeof CurBoat.RaceInfo != "undefined")

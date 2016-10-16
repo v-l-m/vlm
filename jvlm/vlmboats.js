@@ -37,8 +37,6 @@ function SetCurrentBoat(Boat, CenterMapOnBoat,ForceRefresh)
   CheckBoatRefreshRequired(Boat, CenterMapOnBoat,ForceRefresh);
 }
 
-var LastRequestedBoat = -1;
-
 function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) 
 {
   // Check Params.
@@ -79,23 +77,18 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
           Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
 
           // force refresh of settings if was not initialized
-          if (NeedPrefsRefresh) {
+          if (NeedPrefsRefresh) 
+          {
             UpdatePrefsDialog(Boat);
           }
 
           // update map if racing
+          if (Boat.VLMInfo.RAC != "0") 
+          {
 
-          if (Boat.VLMInfo.RAC != "0") {
+            
 
-            // Draw Boat, course, tracks....
-            DrawBoat(Boat, CenterMapOnBoat);
-
-            // Update Boat info in main menu bar
-            UpdateInMenuRacingBoatInfo(Boat);
-
-            LastRequestedBoat = result.IDU;
-
-            if (typeof Boat.RaceInfo.idraces == 'undefined') 
+            if (typeof Boat.RaceInfo ==="undefined" || typeof Boat.RaceInfo.idraces === 'undefined') 
             {
               // Get race info if first request for the boat
               $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC,
@@ -165,18 +158,35 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
             $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat + "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end,
               function (result) {
                 if (result.success) {
-                  Boat.Track.length = 0;
+                  if (typeof Boat.Track !== "undefined")
+                  {
+                    Boat.Track.length = 0;
+                  }
+                  else
+                  {
+                    Boat.Track=[];
+                  }
                   for (index in result.tracks) {
                     var P = new VLMPosition(result.tracks[index][1] / 1000., result.tracks[index][2] / 1000.)
                     Boat.Track.push(P);
                   }
-                  DrawBoat(Boat)
+                  DrawBoat(Boat);
                 }
               }
             )
 
+            // Get Rankings
+            LoadRankings(Boat);
+
+            // Draw Boat, course, tracks....
+            DrawBoat(Boat, CenterMapOnBoat);
+
+            // Update Boat info in main menu bar
+            UpdateInMenuRacingBoatInfo(Boat);
+
           }
-          else {
+          else 
+          {
             // Boat is not racing
             //GetLastRacehistory();
             UpdateInMenuDockingBoatInfo(Boat);
@@ -205,7 +215,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
   if (typeof Boat==="undefined" || !Boat)
   {
-    // Ignore call, if no boat if provided...
+    // Ignore call, if no boat is provided...
     return;
   }
   var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
@@ -285,7 +295,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   VLMDragLayer.addFeatures(WPMarker);
   //console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
-  if (Boat.Track.length > 0)
+  if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
    {
     var PointList = [];
 
@@ -372,6 +382,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
   BoatFeatures.push(BoatPolar)
   VLMBoatsLayer.addFeatures(BoatPolar);
+  DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures);
 
   if (CenterMapOnBoat)
   {
@@ -412,7 +423,7 @@ var VectorStyles = new OpenLayers.Style(
           filter: new OpenLayers.Filter.Comparison({
             type: OpenLayers.Filter.Comparison.EQUAL_TO,
             property: "type", // the "foo" feature attribute
-            value: "buoy"
+            value: 'buoy'
           }),
           symbolizer: {
             // if a feature matches the above filter, use this symbolizer
@@ -586,6 +597,38 @@ var VectorStyles = new OpenLayers.Style(
             strokeWidth: 2,
             fillColor: "#FF5500",
             fillOpacity: 0.5
+          }
+        }
+        ),
+      new OpenLayers.Rule
+        (
+        {
+          // a rule contains an optional filter
+          filter: new OpenLayers.Filter.Comparison({
+            type: OpenLayers.Filter.Comparison.EQUAL_TO,
+            property: "type", // the "foo" feature attribute
+            value: 'opponent'
+          }),
+          symbolizer: {
+            // if a feature matches the above filter, use this symbolizer
+            label: "${idboat} - ${name}",
+            //pointRadius: 6,
+            pointerEvents: "visiblePainted",
+            // label with \n linebreaks
+
+            //fontColor: "${favColor}",
+            fontSize: "1.5em",
+            //fontFamily: "Courier New, monospace",
+            //fontWeight: "bold",
+            labelAlign: "left", //${align}",
+            labelXOffset: "4",//${xOffset}",
+            labelYOffset: "-12",//${yOffset}",
+            //labelOutlineColor: "white",
+            //labelOutlineWidth: 2
+            externalGraphic: "images/opponent.svg",
+            graphicWidth: 12,
+            fillOpacity: 1
+
           }
         }
         ),
@@ -989,7 +1032,8 @@ function LoadRankings(Boat)
         {
           if (result.success)
           {
-            Boat.VLMInfo.Rankings=result;
+            Boat.Rankings=result;
+            DrawBoat(Boat,false);
           }
           else
           {
@@ -999,4 +1043,47 @@ function LoadRankings(Boat)
   );
 
 
+}
+
+function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
+{
+  if (!Boat || typeof Boat.Rankings ==="undefined" || Boat.Rankings.ranking.length ==0)
+  {
+    return;
+  }
+
+  for (index in Boat.Rankings.ranking )
+  {
+    var Opp = Boat.Rankings.ranking[index];
+
+    if (Opp.idusers != Boat.IdBoat)
+    {
+      AddOpponent(VLMBoatsLayer,BoatFeatures,Opp);
+    }
+  }
+}
+
+function AddOpponent(Layer,Features,Opponent)
+{
+  var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
+  var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
+  var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
+  var OL_Opp;
+
+  OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed,
+      {
+        "name": Opponent.boatname,
+        "Coords": Opp_Coords.ToString(),
+        "type": 'opponent',
+        "idboat": Opponent.idusers,
+        "rank":Opponent.rank,
+        "Last1h" : Opponent.last1h,
+        "Last3h" : Opponent.last3h,
+        "Last24h" : Opponent.last24h
+
+      }
+    );
+
+  Layer.addFeatures(OL_Opp);
+  Features.push(OL_Opp);
 }

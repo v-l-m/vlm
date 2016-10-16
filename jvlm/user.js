@@ -9,10 +9,10 @@ function Boat(vlmboat)
   this.BoatName='';
   this.BoatPseudo='';
   this.VLMInfo={};  // LastBoatInfoResult
-  this.CurBoat={};  
   this.RaceInfo={}; // Race Info for the boat
   this.Exclusions=[]; // Exclusions Zones for this boat
-  this.Track=[];
+  this.Track=[]; // Last 24H of boat Track
+  this.Rankings={};   // Ranking table
 
   if (typeof vlmboat != 'undefined')
   {
@@ -20,7 +20,11 @@ function Boat(vlmboat)
     this.Engaged=vlmboat.engaged;
     this.BoatName=vlmboat.boatname;
     this.BoatPseudo=vlmboat.boatpseudo;
-    this.VLMInfo={};  // LastBoatInfoResult
+    this.VLMInfo=vlmboat.VLMInfo;
+    this.RaceInfo=vlmboat.RaceInfo; 
+    this.Exclusions=vlmboat.Exclusions; 
+    this.Track=vlmboat.Track; 
+    this.Rankings=vlmboat.Rankings;  
   }
 
   this.GetNextWPPosition= function()
@@ -53,6 +57,8 @@ function User()
   this.PlayerJID='';
   this.Fleet = [];
   this.BSFleet= [];
+  this.CurBoat={};  
+  
 };
 
 function IsLoggedIn()
