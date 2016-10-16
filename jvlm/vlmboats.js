@@ -38,7 +38,13 @@ function SetCurrentBoat(Boat, CenterMapOnBoat) {
 
 var LastRequestedBoat = -1;
 
-function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) {
+function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) 
+{
+  // Check Params.
+  if (typeof Boat === "undefined" || !Boat)
+  {
+    return;
+  }
   var CurDate = new Date();
   var NextUpdate = new Date(0);
   var NeedPrefsRefresh = (typeof Boat!=="undefined" && (typeof Boat.VLMInfo==="undefined" || typeof Boat.VLMInfo.AVG === "undefined"));
@@ -48,12 +54,13 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) {
 
   if (typeof Boat != 'undefined' &&
     typeof Boat.VLMInfo != 'undefined' && typeof Boat.VLMInfo.LUP != 'undefined') {
-    NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP);
+    NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP+60);
   }
 
   if (((typeof Boat !== 'undefined') && (CurDate >= NextUpdate)) ||
       ( (typeof Boat !== "undefined") && (ForceRefresh)) ) 
   {
+    console.log("Loading boat info from server....")
     // request current boat info
     ShowPb("#PbGetBoatProgress");
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
@@ -78,21 +85,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) {
           // update map if racing
 
           if (Boat.VLMInfo.RAC != "0") {
-            // Set Map Center to current boat position
-            var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
-
-            // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
-            if (isNaN(l.lat) || isNaN(l.lon))
-            {
-              var i = 0;
-            }
-            if (CenterMapOnBoat)
-            {
-              map.setCenter(l);
-            }
 
             // Draw Boat, course, tracks....
-            DrawBoat(Boat);
+            DrawBoat(Boat, CenterMapOnBoat);
 
             // Update Boat info in main menu bar
             UpdateInMenuRacingBoatInfo(Boat);
@@ -193,11 +188,25 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) {
 
 
   }
+  else if (Boat)
+  {
+    // Draw from last request
+    DrawBoat(Boat, CenterMapOnBoat);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,false);
+    DrawRaceExclusionZones(VLMBoatsLayer,Boat.Exclusions);
+  }
 }
 
 
 
-function DrawBoat(Boat) {
+function DrawBoat(Boat, CenterMapOnBoat) 
+{
+
+  if (typeof Boat==="undefined" || !Boat)
+  {
+    // Ignore call, if no boat if provided...
+    return;
+  }
   var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
   var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
   //WP Marker
@@ -250,7 +259,7 @@ function DrawBoat(Boat) {
     );
     map.addControl(DrawControl)
     DrawControl.activate();
-    console.log("Added & activated drawcontrol" + DrawControl.id);
+    //console.log("Added & activated drawcontrol" + DrawControl.id);
   }
   
     //Boat.DrawControl.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
@@ -273,7 +282,7 @@ function DrawBoat(Boat) {
   );
   BoatFeatures.push(WPMarker);
   VLMDragLayer.addFeatures(WPMarker);
-  console.log("Added Pos Feature "+ WPMarker.id);
+  //console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
   if (Boat.Track.length > 0)
    {
@@ -363,7 +372,20 @@ function DrawBoat(Boat) {
   BoatFeatures.push(BoatPolar)
   VLMBoatsLayer.addFeatures(BoatPolar);
 
+  if (CenterMapOnBoat)
+  {
+    // Set Map Center to current boat position
+    var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
 
+    // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
+    if (isNaN(l.lat) || isNaN(l.lon))
+    {
+      var i = 0;
+    }
+    
+    map.setCenter(l);
+    
+  }
 }
 
 // allow testing of specific renderers via "?renderer=Canvas", etc
@@ -952,4 +974,28 @@ function EngageBoatInRace(RaceID, BoatID) {
 function HandleMapZoomEnd(object, element)
 {
   RefreshCurrentBoat(false);
+}
+
+function LoadRankings(Boat)
+{
+  if ((typeof Boat === "undefined") || ! Boat || (typeof Boat.VLMInfo === "undefined")  )
+  {
+    return;
+  }
+
+  $.get("/ws/raceinfo/ranking.php?idr="+Boat.VLMInfo.RAC, 
+        function (result)
+        {
+          if (result.success)
+          {
+            Boat.VLMInfo.Rankings=result;
+          }
+          else
+          {
+            Boat.VLMInfo.Rankings=null;
+          }
+        }
+  );
+
+
 }
