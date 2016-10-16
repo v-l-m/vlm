@@ -81,7 +81,7 @@ $(document).ready(
     $("#BoatSelector").selectmenu();  
     $("#BoatSelector").on( "selectmenuselect", function(event,ui)
       {
-        SetCurrentBoat(GetBoatFromIdu(ui.item.value),true);
+        SetCurrentBoat(GetBoatFromIdu(ui.item.value),true,false);
       }
     );
 
@@ -716,9 +716,9 @@ function GetFormattedChronoString(Value)
   return Ret;
 }
 
-function RefreshCurrentBoat(SetCenterOnBoat)
+function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh)
 {
-  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()), SetCenterOnBoat)
+  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()), SetCenterOnBoat,ForceRefresh)
 }
 
 function UpdateLngDropDown()

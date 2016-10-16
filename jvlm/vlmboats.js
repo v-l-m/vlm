@@ -32,8 +32,9 @@ var MapOptions = {
 var DrawControl = null;
 var BoatFeatures = [];
 
-function SetCurrentBoat(Boat, CenterMapOnBoat) {
-  CheckBoatRefreshRequired(Boat, CenterMapOnBoat);
+function SetCurrentBoat(Boat, CenterMapOnBoat,ForceRefresh) 
+{
+  CheckBoatRefreshRequired(Boat, CenterMapOnBoat,ForceRefresh);
 }
 
 var LastRequestedBoat = -1;
@@ -54,7 +55,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
 
   if (typeof Boat != 'undefined' &&
     typeof Boat.VLMInfo != 'undefined' && typeof Boat.VLMInfo.LUP != 'undefined') {
-    NextUpdate.setUTCSeconds(Boat.VLMInfo.LUP+60);
+    NextUpdate.setUTCSeconds(parseInt(Boat.VLMInfo.LUP)+60);
   }
 
   if (((typeof Boat !== 'undefined') && (CurDate >= NextUpdate)) ||
@@ -935,7 +936,7 @@ function PostBoatSetupOrder(idu, verb, orderdata) {
     {
       if (Data.success)
       {// TODO : Force reload of boat info from server after successfull post.
-        RefreshCurrentBoat(false);
+        RefreshCurrentBoat(false,true);
       }
       else 
       {
