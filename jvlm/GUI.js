@@ -329,7 +329,7 @@ function AddBoatToSelector(boat, isfleet)
   $("#BoatSelector").append($('<option />',
                                 { 
                                   value: boat.IdBoat,
-                                  text: decodeURI(boat.BoatName),
+                                  text: boat.BoatName,
                                 }
                               )
                             )
