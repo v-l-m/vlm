@@ -678,7 +678,7 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
 
   if (!(RaceInfo.racetype & RACE_TYPE_RECORD))
   {
-    // non Permanent  race chrono counts from race start time
+    // non Permanent race chrono counts from race start time
     return Math.floor((CurDate-Epoch)/1000);
   }
   else

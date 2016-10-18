@@ -24,7 +24,9 @@ var MapOptions = {
     40037508.34, 20037508.34),
   eventListeners:
     {
-      "zoomend":HandleMapZoomEnd
+      "zoomend":HandleMapZoomEnd,
+      "featureover": HandleFeatureOver,
+      "featureout": HandleFeatureOut
     }
 };
 
@@ -625,7 +627,7 @@ var VectorStyles = new OpenLayers.Style(
             labelYOffset: "-12",//${yOffset}",
             //labelOutlineColor: "white",
             //labelOutlineWidth: 2
-            externalGraphic: "images/opponent.svg",
+            externalGraphic: "images/opponent${IsTeam}.png",
             graphicWidth: 12,
             fillOpacity: 1
 
@@ -1058,12 +1060,12 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 
     if (Opp.idusers != Boat.IdBoat)
     {
-      AddOpponent(VLMBoatsLayer,BoatFeatures,Opp);
+      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp);
     }
   }
 }
 
-function AddOpponent(Layer,Features,Opponent)
+function AddOpponent(Boat,Layer,Features,Opponent)
 {
   var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
   var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
@@ -1079,11 +1081,57 @@ function AddOpponent(Layer,Features,Opponent)
         "rank":Opponent.rank,
         "Last1h" : Opponent.last1h,
         "Last3h" : Opponent.last3h,
-        "Last24h" : Opponent.last24h
-
+        "Last24h" : Opponent.last24h,
+        "IsTeam" : (Opponent.country==Boat.VLMInfo.CNT)?"team":""
       }
     );
 
   Layer.addFeatures(OL_Opp);
   Features.push(OL_Opp);
+}
+
+function HandleFeatureOver(e)
+{ 
+  var ObjType = e.feature.data.type;
+
+  if (ObjType == "opponent")
+  {
+    DrawOpponentTrack(e.feature.data)
+  }
+  console.log("HoverOn "+ ObjType)
+  /*e.feature.renderIntent = "select";
+  e.feature.layer.drawFeature(e.feature);
+  Console.log("Map says: Pointer entered " + e.feature.id + " on " + e.feature.layer.name);
+  */
+}
+
+function HandleFeatureOut(e)
+{
+
+}
+
+function DrawOpponentTrack(FeatureData)
+{
+  var B = _CurPlayer.CurBoat;
+
+  if (typeof B !== "undefined" && B)
+  {
+    /*if (IdBoat in B.OppTrack)
+    {
+
+    }
+    else*/
+    {
+      var StartTime = new Date()/1000-48*3600;
+      var IdRace = B.VLMInfo.RAC;
+      var IdBoat = FeatureData.idboat;
+
+      $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
+            function(e)
+            {
+var i=0;
+            }
+          )
+    }
+  }
 }
