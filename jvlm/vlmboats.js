@@ -26,7 +26,8 @@ var MapOptions = {
     {
       "zoomend":HandleMapZoomEnd,
       "featureover": HandleFeatureOver,
-      "featureout": HandleFeatureOut
+      "featureout": HandleFeatureOut,
+      "featureclick":HandleFeatureClick
     }
 };
 
@@ -1119,6 +1120,12 @@ function HandleFeatureOver(e)
   */
 }
 
+function HandleFeatureClick(e)
+{
+  // Clicking oppenent will show the track, and popup info (later)
+  HandleFeatureOver(e);
+}
+
 function HandleFeatureOut(e)
 {
 
@@ -1197,5 +1204,5 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
       lon:Pos[1]/1000};
   }
 
-  //Boat.OppTrack[IdBoat].Sort();
+  
 }
