@@ -350,8 +350,8 @@ function DrawBoat(Boat, CenterMapOnBoat)
     var Speed = parseFloat(PolarPointList[index]);
 
     var PixPos = new OpenLayers.Geometry.Point(
-      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
-      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
+      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD+180)) * scale * Speed,
+      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD+180)) * scale * Speed);
 
     //var P = map.getLonLatFromPixel(PixPos);
     //var PPoint = new OpenLayers.Geometry.Point(PixPos);

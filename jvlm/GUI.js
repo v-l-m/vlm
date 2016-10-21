@@ -507,7 +507,7 @@ function UpdateInMenuRacingBoatInfo(Boat)
   $("#BoatWindAngle").css("color",WindColor);
 
   // Get WindAngleImage
-  var wHeading=Math.round(Boat.VLMInfo.TWD * 100)/100;
+  var wHeading=Math.round((Boat.VLMInfo.TWD+180) * 100)/100;
   var wSpeed=Math.round(Boat.VLMInfo.TWS * 100)/100;
   var BoatType=Boat.VLMInfo.POL;
   var BoatHeading=Math.round(Boat.VLMInfo.HDG*100)/100;
