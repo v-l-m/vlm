@@ -463,12 +463,12 @@ function UpdateInMenuRacingBoatInfo(Boat)
   BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
+  BoatFieldMappings.push([1,"#PM_Lat", WP.Lat.Value]);
+  BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
   if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
   {
     WP = Boat.GetNextWPPosition();
   }
-  BoatFieldMappings.push([1,"#PM_Lat", WP.Lat.Value]);
-  BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
   BoatFieldMappings.push([0,"#PM_CurWPLat", WP.Lat.ToString()]);
   BoatFieldMappings.push([0,"#PM_CurWPLon", WP.Lon.ToString()]);
   BoatFieldMappings.push([0,"#RankingBadge", Boat.VLMInfo.RNK]);
