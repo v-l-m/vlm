@@ -337,7 +337,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   VLMBoatsLayer.addFeatures(TrackForecast);
 
   // Draw polar
-  var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.BSP, DrawBoat, Boat);
+  var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
   var Polar = [];
 
   // MakePolar in a 200x200 square
@@ -350,8 +350,8 @@ function DrawBoat(Boat, CenterMapOnBoat)
     var Speed = parseFloat(PolarPointList[index]);
 
     var PixPos = new OpenLayers.Geometry.Point(
-      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD+180)) * scale * Speed,
-      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD+180)) * scale * Speed);
+      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
+      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
 
     //var P = map.getLonLatFromPixel(PixPos);
     //var PPoint = new OpenLayers.Geometry.Point(PixPos);
