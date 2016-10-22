@@ -8,6 +8,8 @@
       <title>VLM 2.0 alpha</title>
       <meta http-equiv="X-UA-Compatible" content="IE=8">
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
+      <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.min.css">
+      
       <!--[if IE]>
       <script src="excanvas.js"></script><![endif]-->
       <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
@@ -17,12 +19,16 @@
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
       <script src="jquery-ui.min.js"></script>
       <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-      <script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>
+      <!--<script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>-->
+      
       <script src="external/jquery.csv.js"></script>
       <!--<script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js"></script>
       -->
       <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
       <script src="OpenLayers/OpenLayers.debug.js"></script>
+      
+      <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>-->
+
       <script src="config.js"></script>
       <script src="localize.js"></script>
       <script src="GUI.js"></script>
@@ -33,6 +39,8 @@
       <script src='position.js' type='text/javascript'></script>
       <script src="user.js"  type='text/javascript'></script>
       <script src='polar.js' type='text/javascript'></script>
+      <script src='xmpp.js' type='text/javascript'></script>
+      
       
   </head>
   <body >
@@ -455,5 +463,6 @@
       </div>
     </div>
   </body>
+  
 </html>
 

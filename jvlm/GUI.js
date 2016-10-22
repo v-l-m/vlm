@@ -9,7 +9,9 @@ var RACE_TYPE_OMORMB = 2;
 // On ready get started with vlm management
 $(document).ready(
   function(){
-    
+    // Start converse
+    //InitXmpp();
+
     // Init maps
     OLInit();
     
