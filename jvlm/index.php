@@ -233,7 +233,7 @@
                       <span class="input Boat_SimpleInput" id="PM_CurWPLon">WpLat</span>
                     </div>
                     <div class="BoatControllerRow col-xs-12">
-                      <div class="checkbox "> 
+                      <div class="checkbox col-xs-1"> 
                         <label>
                           <input type="checkbox" id="PM_WithWPHeading"></input>
                           @WPH
@@ -241,7 +241,7 @@
                       </div>
                       <input class="input Boat_SimpleInput" id="PM_WPHeading"></input>
                       <span width="4px"></span>
-                      <span class="input Boat_SimpleInput" id="PM_CurWPheading">@WPH</span>
+                      <span class="input Boat_SimpleInput" id="PM_CurWPheading">WpLat</span>
                     </div>
                   </div>                  
                 </div>

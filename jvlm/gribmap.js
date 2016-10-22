@@ -354,8 +354,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         //ANTE
 
         // Sanity checks
-        if ( (typeof windarray_ante.winddatas === "undefined") ||
-            (!(n_limit in windarray_ante.winddatas)) || 
+        if ((!(n_limit in windarray_ante.winddatas)) || 
             (!(s_limit in windarray_ante.winddatas))
             )
         {
