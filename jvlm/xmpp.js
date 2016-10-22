@@ -1,5 +1,5 @@
 
-require [converse];
+//require [converse];
 
 function InitXmpp()
 {
