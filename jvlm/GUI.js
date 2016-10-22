@@ -49,7 +49,7 @@ $(document).ready(
             PMMode=PM_VMG;
             break;
 
-          case "VBVMGMode":
+          case "BtnPM_VBVMG":
             PMMode=PM_VBVMG;
             break;
 
