@@ -100,15 +100,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
                   Boat.RaceInfo = result;
 
                   DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,true);
-
-                  // Update the racename display if needed
-                  var RaceName = $("#RaceName").first();
-
-                  if (typeof RaceName != "undefined") {
-                    if (_CurPlayer.CurBoat == Boat) {
-                      $("#RaceName").text(Boat.RaceInfo.racename);
-                    }
-                  }
+                  
                 }
 
               );
