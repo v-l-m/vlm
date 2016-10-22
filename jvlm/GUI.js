@@ -334,7 +334,6 @@ function AddBoatToSelector(boat, isfleet)
                               )
                             ).toggleClass(false).addClass(boatclass);
                             
-  //$("option[value="+ boat.IdBoat +"]")
 }
 
 function   ShowUserBoatSelector()
