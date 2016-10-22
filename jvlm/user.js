@@ -13,6 +13,7 @@ function Boat(vlmboat)
   this.Exclusions=[]; // Exclusions Zones for this boat
   this.Track=[]; // Last 24H of boat Track
   this.Rankings={};   // Ranking table
+  this.OppTrack=[]; // Opponents tracks table
 
   if (typeof vlmboat != 'undefined')
   {
