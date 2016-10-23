@@ -85,14 +85,14 @@
                   <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
                 </div>
                 <div class="BtnCtrlPanel" >
-                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span id="PilotOrdersBadge" class="label label-success badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span id="PilotOrdersBadge" class="pilot btnbadge badge">...</span></img></a>
                 </div>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
                 <div class="BtnRankingPanel" >
-                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking btnbadge badge">...</span></img></a>
                 </div>
               </div>
             </li>
