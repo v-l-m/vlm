@@ -100,7 +100,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
                   Boat.RaceInfo = result;
 
                   DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,true);
-                  
+                  UpdateInMenuRacingBoatInfo(Boat);
                 }
 
               );
