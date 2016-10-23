@@ -451,7 +451,8 @@ var VectorStyles = new OpenLayers.Style(
             //labelOutlineWidth: 2
             externalGraphic: "images/${GateSide}",
             graphicWidth: 36,
-            fillOpacity: 1
+            fillOpacity: 1,
+            graphicYOffset: -18
 
           }
         }
