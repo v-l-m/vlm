@@ -562,7 +562,42 @@ function UpdateInMenuRacingBoatInfo(Boat)
     {
       $("#RaceName").text(Boat.RaceInfo.racename);
     }
+
+    UpdatePilotBadge(Boat);
+
 } 
+
+function UpdatePilotBadge(Boat)
+{
+  var index;
+
+  if ((typeof Boat === "undefined") || (!Boat))
+  {
+    return;
+  }
+
+  var Pilot = Boat.VLMInfo.PIL;
+
+  if (Pilot.length)
+  {
+    var PendingOrdersCount = 0
+    for (index in Pilot)
+    {
+      if (Pilot[index].STS==="pending")
+      {
+        PendingOrdersCount++;
+      }
+    }
+
+    $("#PilotOrdersBadge").show();
+    $("#PilotOrdersBadge").text(PendingOrdersCount);
+    
+  }
+  else
+  {
+    $("#PilotOrdersBadge").hide();
+  }
+}
 
 function MoveWPBoatControlerDiv(target)
 {

@@ -85,7 +85,7 @@
                   <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
                 </div>
                 <div class="BtnCtrlPanel" >
-                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png></img></a>
+                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span id="PilotOrdersBadge" class="label label-success badge">...</span></img></a>
                 </div>
               </div>
             </li>
