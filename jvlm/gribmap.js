@@ -354,7 +354,9 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         //ANTE
 
         // Sanity checks
-        if ((!(n_limit in windarray_ante.winddatas)) || 
+        if ( (typeof windarray_ante.winddatas === "undefined") ||
+            ( !windarray_ante.winddatas) ||
+            (!(n_limit in windarray_ante.winddatas)) || 
             (!(s_limit in windarray_ante.winddatas))
             )
         {
@@ -401,6 +403,22 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
         v_ante = s_v + latcoeff*(n_v-s_v);
 
         //POST
+        // Sanity checks
+        if ( (typeof windarray_post.winddatas === "undefined") ||
+            ( !windarray_post.winddatas) ||
+            (!(n_limit in windarray_post.winddatas)) || 
+            (!(s_limit in windarray_post.winddatas))
+            )
+        {
+            return null;
+        }
+        else if ((!(e_limit in windarray_post.winddatas[n_limit])) ||
+                (!(w_limit in windarray_post.winddatas[n_limit])) ||
+                (!(e_limit in windarray_post.winddatas[s_limit])) ||
+                (!(w_limit in windarray_post.winddatas[s_limit])) )
+        {
+            return null;
+        }
 
         //4 corners
         ne_wind = windarray_post.winddatas[n_limit][e_limit];

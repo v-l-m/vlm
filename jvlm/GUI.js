@@ -9,7 +9,9 @@ var RACE_TYPE_OMORMB = 2;
 // On ready get started with vlm management
 $(document).ready(
   function(){
-    
+    // Start converse
+    //InitXmpp();
+
     // Init maps
     OLInit();
     
@@ -49,7 +51,7 @@ $(document).ready(
             PMMode=PM_VMG;
             break;
 
-          case "VBVMGMode":
+          case "BtnPM_VBVMG":
             PMMode=PM_VBVMG;
             break;
 
@@ -332,9 +334,8 @@ function AddBoatToSelector(boat, isfleet)
                                   text: boat.BoatName,
                                 }
                               )
-                            )
+                            ).toggleClass(false).addClass(boatclass);
                             
-  $("option[value="+ boat.IdBoat +"]").toggleClass(false).addClass(boatclass);
 }
 
 function   ShowUserBoatSelector()
@@ -463,12 +464,12 @@ function UpdateInMenuRacingBoatInfo(Boat)
   BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
   BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
+  BoatFieldMappings.push([1,"#PM_Lat", WP.Lat.Value]);
+  BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
   if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
   {
     WP = Boat.GetNextWPPosition();
   }
-  BoatFieldMappings.push([1,"#PM_Lat", WP.Lat.Value]);
-  BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
   BoatFieldMappings.push([0,"#PM_CurWPLat", WP.Lat.ToString()]);
   BoatFieldMappings.push([0,"#PM_CurWPLon", WP.Lon.ToString()]);
   BoatFieldMappings.push([0,"#RankingBadge", Boat.VLMInfo.RNK]);
@@ -561,7 +562,42 @@ function UpdateInMenuRacingBoatInfo(Boat)
     {
       $("#RaceName").text(Boat.RaceInfo.racename);
     }
+
+    UpdatePilotBadge(Boat);
+
 } 
+
+function UpdatePilotBadge(Boat)
+{
+  var index;
+
+  if ((typeof Boat === "undefined") || (!Boat))
+  {
+    return;
+  }
+
+  var Pilot = Boat.VLMInfo.PIL;
+
+  if (Pilot.length)
+  {
+    var PendingOrdersCount = 0
+    for (index in Pilot)
+    {
+      if (Pilot[index].STS==="pending")
+      {
+        PendingOrdersCount++;
+      }
+    }
+
+    $("#PilotOrdersBadge").show();
+    $("#PilotOrdersBadge").text(PendingOrdersCount);
+    
+  }
+  else
+  {
+    $("#PilotOrdersBadge").hide();
+  }
+}
 
 function MoveWPBoatControlerDiv(target)
 {
