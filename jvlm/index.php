@@ -229,10 +229,15 @@
                   </div>
                   <div class="BoatControllerRow row">
                     <div class="BoatControllerRow col-xs-12">
-                      <span width="50px"> Lat</span>
-                      <input class="input Boat_SimpleInput" id="PM_Lat"></input>
-                      <span width="4px"></span>
-                      <span class="input Boat_SimpleInput" id="PM_CurWPLat">WpLat</span>
+                      <div class="col-xs-3">
+                        <img id="SetWPOnClick" src="images/clickwp_pos.svg"></img>
+                      </div>
+                      <div class="col-xs-9">
+                        <span width="50px"> Lat</span>
+                        <input class="input Boat_SimpleInput" id="PM_Lat"></input>
+                        <span width="4px"></span>
+                        <span class="input Boat_SimpleInput" id="PM_CurWPLat">WpLat</span>
+                      </div>
                     </div>
                     <div class="BoatControllerRow col-xs-12">
                       <span width="50px"> Lon</span>

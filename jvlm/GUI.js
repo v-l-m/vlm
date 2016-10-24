@@ -196,6 +196,11 @@ function OLInit() {
         lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
         map.setCenter(lonlat, default_zoom);
     }
+
+    // Click handler
+    var click = new OpenLayers.Control.Click();
+    map.addControl(click);
+    click.activate();
 }
 
 
@@ -306,6 +311,13 @@ function InitMenusAndButtons()
       }
     )
 
+    $("#SetWPOnClick").click(HandleStartSetWPOnClick);
+
+}
+
+function HandleStartSetWPOnClick()
+{
+  SetWPPending = true;
 }
 
 function ClearBoatSelector()
