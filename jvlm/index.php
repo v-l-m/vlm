@@ -85,7 +85,7 @@
                   <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
                 </div>
                 <div class="BtnCtrlPanel" >
-                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span id="PilotOrdersBadge" class="pilot btnbadge badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span class="PilotOrdersBadge pilot btnbadge badge">...</span></img></a>
                 </div>
               </div>
             </li>
@@ -191,6 +191,11 @@
                   <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"></img>
                   <span>VBVMG</a>
                 </li>
+                <li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab">
+                  <img src="images/setting.png" style="width:21px;"></img>
+                  <span I18N="pilototoengaged">AutoPilot</span>
+                  <span class="PilotOrdersBadge pilottab btnbadge badge">...</span>
+                </li>
             </ul>
             <div id="my-tab-content" class="tab-content">
               <div class="BCPane tab-pane" id="BearingMode">
@@ -202,7 +207,11 @@
                 </div>
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
-                    <button class="button" id="BtnPM_Heading" I18n="autopilot">Do Heading</button>
+                    <button class="button" id="BtnPM_Heading">
+                      <span I18n="autopilot">Do Heading</span>
+                      
+                    </button>
+                    
                   </div>
                 </div>
               </div>
@@ -275,6 +284,13 @@
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
                     <button class="button" id="BtnPM_VBVMG" I18n="vbvmgengaged">Do Angle</button>
+                  </div>
+                </div>    
+              </div>
+              <div class="BCPane tab-pane" id="AutoPilotTab">
+                <div class="BoatControllerRow row">
+                  <div class="col-xs-12">
+                    
                   </div>
                 </div>    
               </div>

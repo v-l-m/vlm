@@ -615,13 +615,13 @@ function UpdatePilotBadge(Boat)
       }
     }
 
-    $("#PilotOrdersBadge").show();
-    $("#PilotOrdersBadge").text(PendingOrdersCount);
+    $(".PilotOrdersBadge").show();
+    $(".PilotOrdersBadge").text(PendingOrdersCount);
     
   }
   else
   {
-    $("#PilotOrdersBadge").hide();
+    $(".PilotOrdersBadge").hide();
   }
 }
 
