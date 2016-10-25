@@ -192,7 +192,7 @@
                   <span>VBVMG</a>
                 </li>
                 <li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab">
-                  <img src="images/setting.png" style="width:21px;"></img>
+                  <img src="images/autopilot.png" style="width:21px;"></img>
                   <span I18N="pilototoengaged">AutoPilot</span>
                   <span class="PilotOrdersBadge pilottab btnbadge badge">...</span>
                 </li>
