@@ -6,6 +6,11 @@ var RACE_TYPE_CLASSIC = 0;
 var RACE_TYPE_RECORD = 1;
 var RACE_TYPE_OMORMB = 2;
 
+var FIELD_MAPPING_TEXT = 0;
+var FIELD_MAPPING_VALUE = 1;
+var FIELD_MAPPING_CHECK = 2;
+
+
 // On ready get started with vlm management
 $(document).ready(
   function(){
@@ -26,7 +31,7 @@ $(document).ready(
     
     
 
-    // Go To WP OrthoMode
+    // Go To WP Ortho, VMG, VBVMG Modes
     $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
       function()
       {
@@ -36,9 +41,9 @@ $(document).ready(
         var Lon = $("#PM_Lon")[0].value;
         
 
-        if ($("#PM_WithWPHeading")[0].value)
+        if ($("#PM_WithWPHeading")[0].checked)
         {
-          Wph = $("#PM_WPHeading").value
+          WpH = parseInt($("#PM_WPHeading")[0].value)
         }
 
         switch ($(this)[0].id)
@@ -191,6 +196,11 @@ function OLInit() {
         lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
         map.setCenter(lonlat, default_zoom);
     }
+
+    // Click handler
+    var click = new OpenLayers.Control.Click();
+    map.addControl(click);
+    click.activate();
 }
 
 
@@ -301,6 +311,13 @@ function InitMenusAndButtons()
       }
     )
 
+    $("#SetWPOnClick").click(HandleStartSetWPOnClick);
+
+}
+
+function HandleStartSetWPOnClick()
+{
+  SetWPPending = true;
 }
 
 function ClearBoatSelector()
@@ -449,39 +466,42 @@ function UpdateInMenuRacingBoatInfo(Boat)
   // 0 for text fields
   // 1 for input fields
   var BoatFieldMappings=[];
-  BoatFieldMappings.push([0,"#BoatLon",lon.ToString() + ' ' + EastWest]);
-  BoatFieldMappings.push([0,"#BoatLat",lat.ToString() + ' ' + NorthSouth]);
-  BoatFieldMappings.push([0,"#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
-  BoatFieldMappings.push([0,"#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
-  BoatFieldMappings.push([1,"#PM_Heading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
-  BoatFieldMappings.push([0,"#BoatAvg",Math.round(Boat.VLMInfo.AVG * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatDNM",Math.round(Boat.VLMInfo.DNM * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatLoch",Math.round(Boat.VLMInfo.LOC * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatOrtho",Math.round(Boat.VLMInfo.ORT * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatLoxo",Math.round(Boat.VLMInfo.LOX * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
-  BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT,"#BoatLon",lon.ToString() + ' ' + EastWest]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat",lat.ToString() + ' ' + NorthSouth]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
+  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatAvg",Math.round(Boat.VLMInfo.AVG * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatDNM",Math.round(Boat.VLMInfo.DNM * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoch",Math.round(Boat.VLMInfo.LOC * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatOrtho",Math.round(Boat.VLMInfo.ORT * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoxo",Math.round(Boat.VLMInfo.LOX * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_CHECK,"#PM_WithWPHeading", Boat.VLMInfo['H@WP'] != "-1.0"]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
+  BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
+  
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
-  BoatFieldMappings.push([1,"#PM_Lat", WP.Lat.Value]);
-  BoatFieldMappings.push([1,"#PM_Lon", WP.Lon.Value]);
+  BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lat", WP.Lat.Value]);
+  BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lon", WP.Lon.Value]);
+  
   if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
   {
     WP = Boat.GetNextWPPosition();
   }
-  BoatFieldMappings.push([0,"#PM_CurWPLat", WP.Lat.ToString()]);
-  BoatFieldMappings.push([0,"#PM_CurWPLon", WP.Lon.ToString()]);
-  BoatFieldMappings.push([0,"#RankingBadge", Boat.VLMInfo.RNK]);
-  //BoatFieldMappings.push([0,"#BoatWindAngle",Math.round(Boat.VLMInfo.H@WP * 10)/10 ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
   
   if (Boat.VLMInfo.PIM==PM_ANGLE)
   {
-    BoatFieldMappings.push([1,"#PM_Angle",Boat.VLMInfo.PIP ]);
+    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Boat.VLMInfo.PIP ]);
   }
   else
   {
-    BoatFieldMappings.push([1,"#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
+    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
   }
 
   // Loop all mapped fields to their respective location
@@ -489,13 +509,19 @@ function UpdateInMenuRacingBoatInfo(Boat)
   {
     switch (BoatFieldMappings[index][0])
     {
-      case 0:
+      case FIELD_MAPPING_TEXT:
         $(BoatFieldMappings[index][1]).text(BoatFieldMappings[index][2]);
         break;
 
-      case 1:
+      case FIELD_MAPPING_VALUE:
         $(BoatFieldMappings[index][1]).val(BoatFieldMappings[index][2]);
         break;
+      
+      case FIELD_MAPPING_CHECK:
+        $(BoatFieldMappings[index][1]).prop('checked',(BoatFieldMappings[index][2]));
+        break;
+
+      
     }
   }
  

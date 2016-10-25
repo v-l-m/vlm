@@ -10,7 +10,9 @@ const BOAT_POLAR = 4
 */
 const VLM_COORDS_FACTOR = 1000
 
-var MapOptions = {
+// Default map options
+var MapOptions = 
+{
   // Projection mercator sphérique (type google map ou osm)
   projection: new OpenLayers.Projection("EPSG:900913"),
   // projection pour l'affichage des coordonnées
@@ -27,13 +29,49 @@ var MapOptions = {
       "zoomend":HandleMapZoomEnd,
       "featureover": HandleFeatureOver,
       "featureout": HandleFeatureOut,
-      "featureclick":HandleFeatureClick
+      "featureclick":HandleFeatureClick     
     }
 };
 
+// Click handler for handling map clicks.
+OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, 
+                                            {                
+                                              defaultHandlerOptions: {
+                                                  'single': true,
+                                                  'double': false,
+                                                  'pixelTolerance': 0,
+                                                  'stopSingle': false,
+                                                  'stopDouble': false
+                                              },
+
+                                              initialize: function(options) {
+                                                  this.handlerOptions = OpenLayers.Util.extend(
+                                                      {}, this.defaultHandlerOptions
+                                                  );
+                                                  OpenLayers.Control.prototype.initialize.apply(
+                                                      this, arguments
+                                                  ); 
+                                                  this.handler = new OpenLayers.Handler.Click(
+                                                      this, {
+                                                          'click': this.trigger
+                                                      }, this.handlerOptions
+                                                  );
+                                              }, 
+
+                                              trigger: function(e) {
+                                                  if (SetWPPending)
+                                                  {
+                                                    CompleteWPSetPosition(e,e.xy);
+                                                    SetWPPending=false;
+                                                  }
+                                              }
+
+                                          });
+
 // Control to handle drag of User WP
-var DrawControl = null;
+// var DrawControl = null;
 var BoatFeatures = [];
+var StartSetWPOnClick = false;
 
 function SetCurrentBoat(Boat, CenterMapOnBoat,ForceRefresh) 
 {
@@ -100,7 +138,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
                   Boat.RaceInfo = result;
 
                   DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,true);
-                  
+                  UpdateInMenuRacingBoatInfo(Boat);
                 }
 
               );
@@ -234,14 +272,14 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
   BoatFeatures = [];
 
-  if (DrawControl === null ) 
+  /*if (DrawControl === null ) 
   {
   /*  console.log("DrawControl Deactivate "+DrawControl.id)
     DrawControl.deactivate();
     map.removeControl(DrawControl);
     console.log("Remove drawcontrol" + DrawControl.id);
     DrawControl = null;
-  }*/
+  }
     DrawControl = new OpenLayers.Control.DragFeature(VLMDragLayer, 
       {
         onDrag: function(feature,pixel)
@@ -250,24 +288,15 @@ function DrawBoat(Boat, CenterMapOnBoat)
                 },
         onComplete: function (feature, pixel) 
         {
-          var dest = map.getLonLatFromPixel(pixel);
-          var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-          var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
-
-          console.log("DragComplete "+feature.id);
-          VLMBoatsLayer.removeFeatures(feature);
-          // Use CurPlayer, since the drag layer is not associated to the proper boat
-          SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest)
-          DrawControl.deactivate();
-          DrawControl.activate();
+          CompleteWPSetPosition(feature, pixel)
         }
       }
     );
-    map.addControl(DrawControl)
-    DrawControl.activate();
+    //map.addControl(DrawControl)
+    //DrawControl.activate();
     //console.log("Added & activated drawcontrol" + DrawControl.id);
   }
-  
+*/  
     //Boat.DrawControl.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
   
 
@@ -406,6 +435,20 @@ function DrawBoat(Boat, CenterMapOnBoat)
     map.setCenter(l);
     
   }
+}
+
+function CompleteWPSetPosition(feature, pixel)
+{
+  var dest = map.getLonLatFromPixel(pixel);
+  var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
+  var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
+
+  console.log("DragComplete "+feature.id);
+  VLMBoatsLayer.removeFeatures(feature);
+  // Use CurPlayer, since the drag layer is not associated to the proper boat
+  SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest)
+  //DrawControl.deactivate();
+  //DrawControl.activate();
 }
 
 // allow testing of specific renderers via "?renderer=Canvas", etc
@@ -1117,6 +1160,7 @@ function HandleFeatureClick(e)
 {
   // Clicking oppenent will show the track, and popup info (later)
   HandleFeatureOver(e);
+
 }
 
 function HandleFeatureOut(e)
