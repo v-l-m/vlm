@@ -290,7 +290,25 @@
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
-                    
+                    <table class='table'>
+                      <thead>
+                        <th></th>
+                        <th I18N="Epoch Time">...Epoch...</th>
+                        <th I18N="Human Readable date">..HD</th>
+                        <th >PIM</th>
+                        <th >PIP</th>
+                        <th >Status</th>
+                      </thead>
+                      <tr>
+                        <td>action button</td>
+                        <td>12346587</td>
+                        <td>12346587</td>
+                        <td>combo</td>
+                        <td>pip</td>
+                        <td>status</td>
+                      </tr>
+                      
+                    </table>
                   </div>
                 </div>    
               </div>
