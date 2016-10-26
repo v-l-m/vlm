@@ -239,7 +239,7 @@
                   <div class="BoatControllerRow row">
                     <div class="BoatControllerRow col-xs-12">
                       <div class="col-xs-3">
-                        <img id="SetWPOnClick" src="images/clickwp_pos.svg"></img>
+                        <img id="SetWPOnClick" src="images/clickwp_pos.png" style="width:32px;"></img>
                       </div>
                       <div class="col-xs-9">
                         <span width="50px"> Lat</span>
@@ -289,26 +289,38 @@
               </div>
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
-                  <div class="col-xs-12">
-                    <table class='table'>
-                      <thead>
-                        <th></th>
-                        <th I18N="Epoch Time">...Epoch...</th>
-                        <th I18N="Human Readable date">..HD</th>
-                        <th >PIM</th>
-                        <th >PIP</th>
-                        <th >Status</th>
-                      </thead>
-                      <tr>
-                        <td>action button</td>
-                        <td>12346587</td>
-                        <td>12346587</td>
-                        <td>combo</td>
-                        <td>pip</td>
-                        <td>status</td>
-                      </tr>
-                      
-                    </table>
+                  <div class="container-fluid">
+                    <div class='row'>
+                      <div class='PAHeader col-xs-2'>
+                        <span I18N="Human Readable date">..HD</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >PIM</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >PIP</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >Status</span>
+                      </div>
+                      <div class='PAHeader col-xs-4'></div>
+                    </div>
+                    <div id='PIL1' class='row'>
+                      <div class='PAHeader col-xs-2'>
+                        <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
+                        <span id='PIL1_DATE' >10 Oct 2016 22:06</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <input ty
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >PIP</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >Status</span>
+                      </div>
+                      <div class='PAHeader col-xs-4'></div>
+                    </div>
                   </div>
                 </div>    
               </div>
