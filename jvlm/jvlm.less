@@ -1,70 +1,55 @@
-// out: ./jvlm.css, compress: true, sourceMap: false
-// 
 
+// out: ./jvlm.css, compress: true, sourceMap: false // 
 /*
 @import url('http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css');
 */
-
 @import url('http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import url('/jvlm/jquery-ui.min.css');
-
 html, body, input {
   background-color: #e0e0f0;
   color: #FFFFFF;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
-
-    
-#jVlmMap{
+#jVlmMap {
   background-color: #82D1D4;
-  position: absolute; 
-  top: 70px; 
-  bottom: 0px; 
-  left: 0px; 
-  right: 0px; 
+  position: absolute;
+  top: 75px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
-#jVlmMap .ol-zoom { 
-  font-size: 0.5em; 
+#jVlmMap .ol-zoom {
+  font-size: 0.5em;
 }
-
-#BoatSelector{
-  Width: 120px;
+#BoatSelector {
+  width: 120px;
   top: 6px;
 }
-
 input {
   color: #000000;
 }
-
-@DialogBgColor: #15214b;
-
+ @DialogBgColor: #15214b;
 #LoginPanel, #SettingsPanel, #RacesListPanel {
-  background-color: @DialogBgColor;
+ background-color: @DialogBgColor;
 }
-
 div.UserMenu {
   position: absolute;
-  background-color: @DialogBgColor;
-  color: white; 
+ background-color: @DialogBgColor;
+  color: white;
   z-index: 1000;
 }
-
-div.LoginButton{
-  //background-color: lightBlue;
+div.LoginButton {
+ //background-color: lightBlue;
   position: absolute;
   width: 50px;
 }
-
-
 div.olControlLayerSwitcher {
   top: 50px;
- }
-
+}
 .olLayerDiv {
   font-size: 9px;
 }
-
 div.GribmapMousePosition {
   bottom: none;
   top: 0em;
@@ -76,7 +61,6 @@ div.GribmapMousePosition {
   background-color: white;
   border-color: darkBlue;
 }
-
 .GribmapControlWind {
   color: white;
   font-family: sans-serif;
@@ -85,7 +69,6 @@ div.GribmapMousePosition {
   top: 10px;
   right: 0px;
 }
-
 .GribmapControlWind .baseDiv {
   background-color: darkBlue;
   height: 100%;
@@ -94,17 +77,14 @@ div.GribmapMousePosition {
   padding-right: 75px;
   padding-top: 5px;
   width: 100%;
-}      
-
+}
 .baseDiv * {
-    display: inline;
- }
- 
+  display: inline;
+}
 .GribmapControlWind .maximizeDiv, .GribmapControlWind .minimizeDiv {
   right: 0px;
   top: 5px;
-}    
-
+}
 .VlminfoControlPlayer {
   color: white;
   font-family: sans-serif;
@@ -121,254 +101,238 @@ div.GribmapMousePosition {
   padding-right: 75px;
   padding-top: 5px;
   width: 100%;
-}      
-
+}
 .VlminfoControlPlayer .maximizeDiv, .VlminfoControlPlayer .minimizeDiv {
   right: 0px;
   top: 5px;
-}    
-
+}
 #logovlm {
   display: fixed;
   position: absolute;
   bottom: 50px;
   left: 10px;
-  z-index:99999;
+  z-index: 99999;
 }
-
 .olControlAttribution {
   left: 100px;
   right: inherit;
   bottom: 0px;
   top: inherit;
-  line-height: 11px; 
+  line-height: 11px;
 }
-
-.ui-menu{
-  z-index:20000;
+.ui-menu {
+  z-index: 20000;
 }
-
-option.Boat{
+option.Boat {
   font-style : italic;
 }
-
-option.RacingBoat{
+option.RacingBoat {
   font-weight: bold;
 }
-
-.LngFlag{
+.LngFlag {
   padding-top: 2px;
   padding-bottom: 2px;
-  padding-left:2px;
-  padding-right:2px;
+  padding-left: 2px;
+  padding-right: 2px;
   width: 24px;
   height: 24px;
 }
-
 span.ui-selectmenu-text {
-    line-height: 0.4;
+  line-height: 0.4;
 }
-
-.VLM100_Pos{
-  position:absolute;
-  width:118px;
+.VLM100_Pos {
+  position: absolute;
+  width: 118px;
   text-align: center;
   font-size: small;
 }
-
-.VLM100_PosSmall{
-  position:absolute;
-  width:40px;
+.VLM100_PosSmall {
+  position: absolute;
+  width: 40px;
   text-align: center;
   font-size: x-small;
 }
-
-.TDB-EmptyCol{
+.TDB-EmptyCol {
   max-width: 100px;
 }
-
-// NAV Center lines
+ // NAV Center lines 
 @BoatPosTop: 15px;
 @StatSpeedAvgTop : 44px;
 @SpeedAvgTop : @StatSpeedAvgTop + 13px;
 @SpeedLeft:23px;
-
-#BoatLon{
-  top: @BoatPosTop;
+#BoatLon {
+ top: @BoatPosTop;
   left: 30px;
 }
-
-#BoatLat{
-  top:@BoatPosTop+15px;
+#BoatLat {
+ top:@BoatPosTop+15px;
   left: 30px;
 }
-
-#BoatSpeed{
-  top: @SpeedAvgTop;
-  left: @SpeedLeft;
+#BoatSpeed {
+ top: @SpeedAvgTop;
+ left: @SpeedLeft;
 }
-
-#BoatAvg{
-  top: @SpeedAvgTop;
-  left: @SpeedLeft+40px;
+#BoatAvg {
+ top: @SpeedAvgTop;
+ left: @SpeedLeft+40px;
 }
-
-#BoatHeading{
-  top: @SpeedAvgTop;
-  left: @SpeedLeft+2*40px;
+#BoatHeading {
+ top: @SpeedAvgTop;
+ left: @SpeedLeft+2*40px;
 }
-
-#StatSpeed{
-  top: @StatSpeedAvgTop;
-  left: @SpeedLeft;
+#StatSpeed {
+ top: @StatSpeedAvgTop;
+ left: @SpeedLeft;
 }
-
-#StatAvg{
-  top: @StatSpeedAvgTop;
-  left: @SpeedLeft+40px;
+#StatAvg {
+ top: @StatSpeedAvgTop;
+ left: @SpeedLeft+40px;
 }
-
-#StatHeading{
-  top: @StatSpeedAvgTop;
-  left: @SpeedLeft+2*40px;
+#StatHeading {
+ top: @StatSpeedAvgTop;
+ left: @SpeedLeft+2*40px;
 }
-
-@StatLineDNM:75px;
+ @StatLineDNM:75px;
 @StatLineOrtho:@StatLineDNM+25px;
 @BoatLineDNM:@StatLineDNM+10px;
 @BoatLineOrtho:@StatLineOrtho+10px;
-
-#StatDNM{
-  top: @StatLineDNM;
-  left: @SpeedLeft;
+#StatDNM {
+ top: @StatLineDNM;
+ left: @SpeedLeft;
 }
-
-#StatLoch{
-  top: @StatLineDNM;
-  left: @SpeedLeft+2*40px;
+#StatLoch {
+ top: @StatLineDNM;
+ left: @SpeedLeft+2*40px;
 }
-
-#StatOrtho{
-  top: @StatLineOrtho;
-  left: @SpeedLeft;
+#StatOrtho {
+ top: @StatLineOrtho;
+ left: @SpeedLeft;
 }
-
-#StatLoxo{
-  top: @StatLineOrtho;
-  left: @SpeedLeft+40px;
+#StatLoxo {
+ top: @StatLineOrtho;
+ left: @SpeedLeft+40px;
 }
-
-#StatVMG{
-  top: @StatLineOrtho;
-  left: @SpeedLeft+2*40px;
+#StatVMG {
+ top: @StatLineOrtho;
+ left: @SpeedLeft+2*40px;
 }
-
-#BoatDNM{
-  top: @BoatLineDNM;
-  left: @SpeedLeft;
+#BoatDNM {
+ top: @BoatLineDNM;
+ left: @SpeedLeft;
 }
-
-#BoatLoch{
-  top: @BoatLineDNM;
-  left: @SpeedLeft+2*40px;
+#BoatLoch {
+ top: @BoatLineDNM;
+ left: @SpeedLeft+2*40px;
 }
-
-#BoatOrtho{
-  top: @BoatLineOrtho;
-  left: @SpeedLeft;
+#BoatOrtho {
+ top: @BoatLineOrtho;
+ left: @SpeedLeft;
 }
-
-#BoatLoxo{
-  top: @BoatLineOrtho;
-  left: @SpeedLeft+40px;
+#BoatLoxo {
+ top: @BoatLineOrtho;
+ left: @SpeedLeft+40px;
 }
-
-#BoatVMG{
-  top: @BoatLineOrtho;
-  left: @SpeedLeft+2*40px;
+#BoatVMG {
+ top: @BoatLineOrtho;
+ left: @SpeedLeft+2*40px;
 }
-
-// CSS for Piloting/dashboard buttons
-
+ // CSS for Piloting/dashboard buttons  
 @IconSize:40px;
 @BtnPadLeft:10px;
 @BtnPadTop:4px;
 @Btn2Left:(@IconSize + @BtnPadLeft)+2px;
-
-.BtnGroup{
+@Btn3Left:(2*@IconSize + 2*@BtnPadLeft)+2px;
+@BtnBorder:2px;
+@BtnBorderStyle:inset;
+@BtnBorderColor:#fffff;
+@BtnMargin:5px;
+.BtnGroup {
   position: relative;
-  padding-left: @BtnPadLeft;
-  padding-top: @BtnPadTop;
-  width: (2*@BtnPadLeft + 2* @IconSize);
+ padding-left: @BtnPadLeft;
+ padding-top: @BtnPadTop;
+ width: (2*@BtnPadLeft + 2* @IconSize);
 }
-
-.BtnGroup1{
-  position: relative;
-  padding-left: @BtnPadLeft;
-  padding-top: @BtnPadTop;
-  width: (1*@BtnPadLeft + 1* @IconSize);
+.BtnGroup-nav {
+ position: relative;
+ padding-left: @BtnPadLeft;
+ padding-top: @BtnPadTop;
+ width: (3*@BtnPadLeft + 3* @IconSize);
+ margin-left:@BtnMargin;
+ border-rihgt:@BtnBorder;
+ border-right-style:@BtnBorderStyle;
+ border-right-color:@BtnBorderColor;
+ border-left:@BtnBorder;
+ border-left-style:@BtnBorderStyle;
+ border-left-color:@BtnBorderColor;
 }
-
-.BtnTBDPanel{
+.BtnGroup1 {
+ position: relative;
+ padding-left: @BtnPadLeft;
+ padding-top: @BtnPadTop;
+ width: (1*@BtnPadLeft + 1* @IconSize);
+}
+.BtnTBDPanel {
   position: absolute;
-  top:@BtnPadTop;
+ top:@BtnPadTop;
 }
-
-.BtnCtrlPanel
-{
+.BtnCtrlPanel {
   position: absolute;
-  left: @Btn2Left;
-  padding-top: @BtnPadTop;
-  top:0px;
+ left: @Btn2Left;
+ padding-top: @BtnPadTop;
+  top: 0px;
 }
-
-.BtnRankingPanel
-{
+.BtnPilototo{
   position: absolute;
-  padding-top: @BtnPadTop;
-  top:0px;
+ left: @Btn3Left;
+ padding-top: @BtnPadTop;
+  top: 0px;
 }
-
-.BoatSelector
-{
-  padding-top: @BtnPadTop;
+.BtnRankingPanel {
+  position: absolute;
+ padding-top: @BtnPadTop;
+  top: 0px;
 }
-
-.TDB-Icon{
-  width: @IconSize;
-  height: @IconSize;
+.BoatSelector {
+ padding-top: @BtnPadTop;
 }
-
-.TDB-Panel{
+.TDB-Icon {
+ width: @IconSize;
+ height: @IconSize;
+}
+.TDB-Panel {
   width: 163px;
-  height:163px;
+  height: 163px;
   position: relative;
 }
-
-#TDB-Panel{
+#TDB-Panel {
   position: absolute;
 }
-
-.TDB-Panel2{
+.TDB-Panel2 {
   width: 489px;
   height: 163px;
 }
-
-.btnbadge{
+.btnbadge {
   position: absolute;
 }
-
-.ranking{
+.ranking {
   background-color: #c70000;
   left: 19px;
-    top: 5px;
+  top: 5px;
 }
-
-.pilot{
+.pilot {
   background-color: #00c700;
   left: 26px;
   top: 0px;
 }
+
+.panel{
+	background-color:transparent;
+}
+.panel-body{
+	padding:0px;
+}
+ @VLM100WindLine1Top:15px;
+
 
 .pilottab{
   background-color: #00c700;
@@ -377,7 +341,6 @@ span.ui-selectmenu-text {
 }
 
 
-@VLM100WindLine1Top:15px;
 @VLM100LineOffset:39px;
 @VLM100WindLine2Top:@VLM100WindLine1Top+@VLM100LineOffset;
 @VLM100WindLine3Top:@VLM100WindLine1Top+2*@VLM100LineOffset;
@@ -386,166 +349,283 @@ span.ui-selectmenu-text {
 @VLM100StatFontSize:x-small;
 @VLM100ValueTopOffset:5px;
 @VLM100UnitTopOffset:0px;
-@VLM100TextColor:#FFFFFF;
+@VLM100TextColor: #FFFFFF;
+
 
 .VLM100_Label, .VLM100_Pos, .VLM100_PosSmall, .VLM100_Unit, .VLM100_Value{
   color:@VLM100TextColor;
 }
+
 .VLM100_Label{
   position: absolute;
   font-size: small;
 }
-
-.VLM100_Unit{
+.VLM100_Unit {
   position: absolute;
   font-size: x-small;
-  left:@VLM100UnitLeft;
+ left:@VLM100UnitLeft;
   text-align: right;
-  width:40px;
+  width: 40px;
 }
-
-.VLM100_Value{
+.VLM100_Value {
   position: absolute;
   font-size: xx-large;
   text-align: right;
-  width:100px;
-  left:@VLM100Left;
+  width: 100px;
+ left:@VLM100Left;
 }
-
-#StatWindSpeed, #StatWindDirection, #StatWindAngle{
-  Left: @VLM100Left;
-  font-size: @VLM100StatFontSize;
+#StatWindSpeed, #StatWindDirection, #StatWindAngle {
+ left: @VLM100Left;
+ font-size: @VLM100StatFontSize;
 }
-
-#StatWindSpeed{
-  Top:@VLM100WindLine1Top;
+#StatWindSpeed {
+ top:@VLM100WindLine1Top;
 }
-
-#StatWindDirection{
-  Top:@VLM100WindLine2Top;
+#StatWindDirection {
+ top:@VLM100WindLine2Top;
 }
-
-#StatWindAngle{
-  Top:@VLM100WindLine3Top;
+#StatWindAngle {
+ top:@VLM100WindLine3Top;
 }
-
-#StatSpeedUnit{
-  Top:@VLM100WindLine1Top+@VLM100UnitTopOffset;
+#StatSpeedUnit {
+ top:@VLM100WindLine1Top+@VLM100UnitTopOffset;
 }
-#StatDirUnit{
-  Top:@VLM100WindLine2Top+@VLM100UnitTopOffset;
+#StatDirUnit {
+ top:@VLM100WindLine2Top+@VLM100UnitTopOffset;
 }
-#StatAngleUnit{
-  Top:@VLM100WindLine3Top+@VLM100UnitTopOffset;
+#StatAngleUnit {
+ top:@VLM100WindLine3Top+@VLM100UnitTopOffset;
 }
-#BoatWindSpeed{
-  top:@VLM100WindLine1Top+@VLM100ValueTopOffset;
+#BoatWindSpeed {
+ top:@VLM100WindLine1Top+@VLM100ValueTopOffset;
 }
-
-#BoatWindDirection{
-  top:@VLM100WindLine2Top+@VLM100ValueTopOffset;
+#BoatWindDirection {
+ top:@VLM100WindLine2Top+@VLM100ValueTopOffset;
 }
-
-#BoatWindAngle{
-  top:@VLM100WindLine3Top+@VLM100ValueTopOffset;
+#BoatWindAngle {
+ top:@VLM100WindLine3Top+@VLM100ValueTopOffset;
 }
-
-#ImgWindAngle{
+#ImgWindAngle {
   width: 142px;
   height: 133px;
   padding-left: 24px;
   padding-top: 13px;
 }
-
-.Progress{
-  height:0.2em;
-  position:absolute;
-  display: block; 
+.Progress {
+  height: 0.2em;
+  position: absolute;
+  display: block;
   margin-bottom: 0px;
 }
-
-
-#BearingRing{
-    padding-left: 23px;
-    padding-top: 13px;
-    width: 141px;
-    height: 132px;
+#BearingRing {
+  padding-left: 23px;
+  padding-top: 13px;
+  width: 141px;
+  height: 132px;
 }
-
-.WindAnglePanel{
-    position: absolute;
-    top: 0px;
-    left: 0px;
+.WindAnglePanel {
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
-
-#ImgWindAngle{
-    transform: rotate(0deg);
-    transform-origin: 82px 73px;
+#ImgWindAngle {
+  transform: rotate(0deg);
+  transform-origin: 82px 73px;
 }
-
-#DeckImage{
+#DeckImage {
   padding-left: 63px;
   padding-top: 32px;
   transform: rotate(0deg);
   transform-origin: 83px 75px;
 }
-
-#Controler-Panel{
-    position: absolute;
-    padding-left: 67px;
-    top: 82px;
-    left: 38px;
-    background-color: rgba(240, 248, 255,0.5);
+#Controler-Panel {
+  position: absolute;
+  padding-left: 67px;
+  top: 82px;
+  left: 38px;
+  background-color: rgba(240, 248, 255,0.5);
 }
-
-.Boat_SimpleInput{
-  width:75px;
+.Boat_SimpleInput {
+  width: 90px;
 }
-
-.PMActiveMode{
+.PMActiveMode {
   width: 25px;
-  padding-right:4px;
-  display:none; 
+  padding-right: 4px;
+  display: none;
 }
-
-.BoatControllerRow{
+.BoatControllerRow {
   padding-top: 5px;
 }
-
-// Race list styling
-.panel-body{
-  background-color: #337ab7;
-}
-
-.racelistminimap{
+ // Race list styling .panel-body {
+ //background-color: #337ab7;
+//}
+.racelistminimap {
   width: 64px;
   height: 64px;
 }
-
 .racelistminimap:hover {
-    position:relative;
-    top:-25px;
-    left:-35px;
-    width:256px;
-    height:auto;
-    display:block;
-    z-index:999;
+  position: relative;
+  top: -25px;
+  left: -35px;
+  width: 256px;
+  height: auto;
+  display: block;
+  z-index: 999;
 }
-
-.RaceInfoDiv{
+.RaceInfoDiv {
   padding-left: 4px;
 }
-
 .ChronoRaceStarted {
   color: white;
   font-style: normal;
 }
-
 .ChronoRacePending {
   color: red;
   font-style: italic;
 }
-
 .button {
-  color: @DialogBgColor;
+ color: @DialogBgColor;
+}
+//Modif Par Chris /* Classe principale de la barre de navigation */
+// defined in variables.css:
+@navtabs-gradient-start-color: #3c3c3c;
+@navtabs-gradient-stop-color: #252525;
+@navtabs-gradient: linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+@navbar-default-bg:#000;
+@button-gradient-start-color: #3c3c3c;
+@button-gradient-stop-color: #252525;
+@button-gradient: linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+// in your main definitions/ overrides:
+.navbar-toggle{
+  padding-top:0px;
+}
+ .BCOng {
+ background-image: -webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ background-image: -webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
+ background-image:         linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
+ filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+ background-repeat: repeat-x;
+ background-color:#161616;
+ height:35px;
+ max-width:150px;
+ min-width:75px;
+ border-radius: 3px 3px 0 0;
+}
+.tab-content {
+ background-color:@navtabs-gradient-stop-color;
+  color: #fffff;
+  padding: 10px;
+  margin-top: 4px;
+  border: 1px solid #CCC;
+}
+.BCOng > li {
+  margin-right: 2px;
+  border-radius: 3px 3px 0 0;
+}
+.BCOng > li > a {
+  color: #09F;
+  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+}
+.BCOng > li > a:hover {
+  background-color: #303136 !important;
+  border: medium none;
+  color: #c4c4c4;
+  border: 1px solid #CCC;
+  border-bottom: none;
+}
+.BCOng > li > a:active {
+  background-color: #303136 !important;
+  border: medium none;
+  border-radius: 0;
+  color: #c4c4c4;
+}
+.BCOng>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  color: #c4c4c4;
+  cursor: default;
+  background-color: #303136;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent
+}
+.button-black {
+  /*font-size: 12px;*/
+  height: 40px;
+  /*padding-top: 2px; /*permet le centrage vertical*/
+  text-align: center;
+  /*margin:10px;*/
+  border-color: #ccc;
+  border-radius: 5px;
+  color: #09F;
+  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+   /*box-shadow: 0 0 5px rgba( 0, 0, 0, 0.5),
+                 /*0 -1px 0 rgba( 255, 255, 255, 0.4);*/
+  background-image: -webkit-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+ background-image:      -o-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+ background-image: -webkit-gradient(linear, left top, left bottom, from(@button-gradient-start-color), to(@button-gradient-stop-color));
+ background-image:         linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@button-gradient-start-color, endColorstr=@button-gradient-stop-color, GradientType=0);
+ filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-repeat: repeat-x;
+}
+.button-black:hover {
+  color: #CCC;
+  background: #555;
+  background: linear-gradient( #777, #333);
+}
+.button-black:active {
+  color: #000;
+  background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+  background: #444;
+  box-shadow: 1px 1px 10px black inset,  0 1px 0 rgba( 255, 255, 255, 0.4);
+}
+.button-noir {
+  /*font-size: 12px;*/
+
+  height: 40px;
+  padding-top: 5px;
+  /*permet le centrage vertical*/
+
+  text-align: center;
+  margin: 10px;
+  border-color: #ccc;
+  border-radius: 5px;
+  color: #09F;
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+  /*box-shadow: 0 0 5px rgba( 0, 0, 0, 0.5),
+                 /*0 -1px 0 rgba( 255, 255, 255, 0.4);*/
+
+  background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #252525 100%);
+  background-image: -o-linear-gradient(top, #3c3c3c 0%, #252525 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#3c3c3c), to(#252525));
+  background-image: linear-gradient(to bottom, #3c3c3c 0%, #252525 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3c3c3c, endColorstr=#252525, GradientType=0);
+ filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  background-repeat: repeat-x;
+}
+.button-noir:hover {
+  color: #CCC;
+  background: #555;
+  background: linear-gradient(#777777, #333333);
+}
+.button-noir:active {
+  color: #000;
+  background-image: linear-gradient(to bottom, #3c3c3c 0%, #222222 100%);
+  background: #444;
+  box-shadow: 1px 1px 10px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.dropdown-menu {
+  background-color: #15214b;
+}
+.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+.navbar-brand {
+  float: left;
+  height: 50px;
+  padding: 0px;
+}
+.navbar-header{
+  height:75px;
 }

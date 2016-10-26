@@ -681,15 +681,15 @@ function AddRaceToList(race)
 
   var code = '<div class="raceheaderline panel panel-default")>' +
              '  <div class="panel panel-body">'+
-             '    <div class="col-xs-2">'+
+             '    <div class="col-xs-4">'+
              '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
              '    </div>'+
-             '    <div class="col-xs-5">'+
+             '    <div class="col-xs-4">'+
              '      <span>'+ race.racename +
              '      </span>'+
              '    </div>'+
-             '    <div class="col-xs-3">'+
-             '      <button id="JoinRaceButton" type="button" class="btn btn-default" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
+             '    <div class="col-xs-4">'+
+             '      <button id="JoinRaceButton" type="button" class="button-black" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
              '      </button>'+
              '    </div>'
              '  </div>'+
