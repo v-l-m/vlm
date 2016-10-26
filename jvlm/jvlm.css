@@ -245,7 +245,7 @@ span.ui-selectmenu-text {
   position: relative;
   padding-left: 10px;
   padding-top: 4px;
-  width: 100px;
+  width: 150px;
   margin-left: 5px;
   border-rihgt: 2px;
   border-right-style: inset;
@@ -267,6 +267,12 @@ span.ui-selectmenu-text {
 .BtnCtrlPanel {
   position: absolute;
   left: 52px;
+  padding-top: 4px;
+  top: 0px;
+}
+.BtnPilototo {
+  position: absolute;
+  left: 102px;
   padding-top: 4px;
   top: 0px;
 }
@@ -306,6 +312,12 @@ span.ui-selectmenu-text {
   background-color: #00c700;
   left: 26px;
   top: 0px;
+}
+.panel {
+  background-color: transparent;
+}
+.panel-body {
+  padding: 0px;
 }
 .VLM100_Label {
   position: absolute;
@@ -439,7 +451,7 @@ span.ui-selectmenu-text {
 .navbar-toggle {
   padding-top: 0px;
 }
-.nav-tabs {
+.BCOng {
   background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #252525 100%);
   background-image: -o-linear-gradient(top, #3c3c3c 0%, #252525 100%);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#3c3c3c), to(#252525));
@@ -449,6 +461,8 @@ span.ui-selectmenu-text {
   background-repeat: repeat-x;
   background-color: #161616;
   height: 35px;
+  max-width: 150px;
+  min-width: 75px;
   border-radius: 3px 3px 0 0;
 }
 .tab-content {
@@ -458,28 +472,28 @@ span.ui-selectmenu-text {
   margin-top: 4px;
   border: 1px solid #CCC;
 }
-.nav-tabs > li {
+.BCOng > li {
   margin-right: 2px;
   border-radius: 3px 3px 0 0;
 }
-.nav-tabs > li > a {
+.BCOng > li > a {
   color: #09F;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
-.nav-tabs > li > a:hover {
+.BCOng > li > a:hover {
   background-color: #303136 !important;
   border: medium none;
   color: #c4c4c4;
   border: 1px solid #CCC;
   border-bottom: none;
 }
-.nav-tabs > li > a:active {
+.BCOng > li > a:active {
   background-color: #303136 !important;
   border: medium none;
   border-radius: 0;
   color: #c4c4c4;
 }
-.nav-tabs > li.active > a,
+.BCOng > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
   color: #c4c4c4;
@@ -579,4 +593,7 @@ span.ui-selectmenu-text {
   float: left;
   height: 50px;
   padding: 0px;
+}
+.navbar-header {
+  height: 75px;
 }
