@@ -111,7 +111,7 @@
                   <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
                 </div>
                 <div class="BtnCtrlPanel" >
-                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span id="PilotOrdersBadge" class="pilot btnbadge badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span class="PilotOrdersBadge pilot btnbadge badge">...</span></img></a>
                 </div>
                 <div class="BtnPilototo" >
                   <a data-toggle="collapse" data-target="#Pilot-Panel"><img class="TDB-Icon" src=images/autopilot.png></img></a>
@@ -196,6 +196,7 @@
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
+
         <div class="Controler-Panel Container-fluid" >
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                       <div class="col-sm-2">
@@ -213,7 +214,15 @@
                       <div class="col-sm-2">
                         <li class="BCOng WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</a> </li>
                       </div>
+					  
+						<li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab">
+						  <img src="images/autopilot.png" style="width:21px;"></img>
+						  <span I18N="pilototoengaged">AutoPilot</span>
+						  <span class="PilotOrdersBadge pilottab btnbadge badge">...</span>
+						</li>
+
                 </ul>
+
             <div id="my-tab-content" class="tab-content">
               <div class="BCPane tab-pane" id="BearingMode">
                 <div class="BoatControllerRow row">
@@ -226,8 +235,12 @@
                     </div>
                 </div>
                 <div class="BoatControllerRow row">
-                  <div class="col-sm-2">
-                    <button class="btn-sm button-black " id="BtnPM_Heading" i18n="autopilot">Fixer ce cap</button>
+                  <div class="col-xs-12">
+                    <button class="button" id="BtnPM_Heading">
+                      <span I18n="autopilot">Do Heading</span>
+                      
+                    </button>
+                    
                   </div>
                 </div>
               </div>
@@ -316,11 +329,11 @@
                     <div class="col-sm-8">Cliquez sur la main puis sur la map pour positionner votre WP
                     </div>
                   </div>
-                  <div class="row">
-                      <div class="col-sm-2"> Latitude</div>
-                      <div class="col-sm-2">
-                      <input class="input Boat_SimpleInput" id="PM_Lat" size="100">
-                      </input>
+                  <div class="BoatControllerRow row">
+                    <div class="BoatControllerRow col-xs-12">
+                      <div class="col-xs-3">
+                        <img id="SetWPOnClick" src="images/clickwp_pos.png" style="width:32px;"></img>
+
                       </div>
                       <div class="col-sm-4"> <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
                     </div>
@@ -409,6 +422,43 @@
                 <div class="row">
                   <div class="col-sm-4">
                     <button class="button-black" id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
+                  </div>
+                </div>    
+              </div>
+              <div class="BCPane tab-pane" id="AutoPilotTab">
+                <div class="BoatControllerRow row">
+                  <div class="container-fluid">
+                    <div class='row'>
+                      <div class='PAHeader col-xs-2'>
+                        <span I18N="Human Readable date">..HD</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >PIM</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >PIP</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >Status</span>
+                      </div>
+                      <div class='PAHeader col-xs-4'></div>
+                    </div>
+                    <div id='PIL1' class='row'>
+                      <div class='PAHeader col-xs-2'>
+                        <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
+                        <span id='PIL1_DATE' >10 Oct 2016 22:06</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <input ty
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >PIP</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >Status</span>
+                      </div>
+                      <div class='PAHeader col-xs-4'></div>
+                    </div>
                   </div>
                 </div>    
               </div>

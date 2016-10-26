@@ -324,6 +324,7 @@ span.ui-selectmenu-text {
   left: 26px;
   top: 0px;
 }
+
 .panel{
 	background-color:transparent;
 }
@@ -331,6 +332,15 @@ span.ui-selectmenu-text {
 	padding:0px;
 }
  @VLM100WindLine1Top:15px;
+
+
+.pilottab{
+  background-color: #00c700;
+  left: 90px;
+  top: 0px;
+}
+
+
 @VLM100LineOffset:39px;
 @VLM100WindLine2Top:@VLM100WindLine1Top+@VLM100LineOffset;
 @VLM100WindLine3Top:@VLM100WindLine1Top+2*@VLM100LineOffset;
@@ -339,7 +349,14 @@ span.ui-selectmenu-text {
 @VLM100StatFontSize:x-small;
 @VLM100ValueTopOffset:5px;
 @VLM100UnitTopOffset:0px;
-.VLM100_Label {
+@VLM100TextColor: #FFFFFF;
+
+
+.VLM100_Label, .VLM100_Pos, .VLM100_PosSmall, .VLM100_Unit, .VLM100_Value{
+  color:@VLM100TextColor;
+}
+
+.VLM100_Label{
   position: absolute;
   font-size: small;
 }

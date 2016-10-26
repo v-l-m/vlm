@@ -596,7 +596,8 @@ function UpdateInMenuRacingBoatInfo(Boat)
 function UpdatePilotBadge(Boat)
 {
   var index;
-
+  var PendingOrdersCount = 0
+    
   if ((typeof Boat === "undefined") || (!Boat))
   {
     return;
@@ -606,7 +607,6 @@ function UpdatePilotBadge(Boat)
 
   if (Pilot.length)
   {
-    var PendingOrdersCount = 0
     for (index in Pilot)
     {
       if (Pilot[index].STS==="pending")
@@ -614,15 +614,19 @@ function UpdatePilotBadge(Boat)
         PendingOrdersCount++;
       }
     }
-
-    $("#PilotOrdersBadge").show();
-    $("#PilotOrdersBadge").text(PendingOrdersCount);
-    
+  }
+  
+  if (PendingOrdersCount >0)
+  {
+    $(".PilotOrdersBadge").show();
+    $(".PilotOrdersBadge").text(PendingOrdersCount);
   }
   else
   {
-    $("#PilotOrdersBadge").hide();
+    $(".PilotOrdersBadge").hide();
   }
+
+  
 }
 
 function MoveWPBoatControlerDiv(target)
