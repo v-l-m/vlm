@@ -388,10 +388,12 @@ span.ui-selectmenu-text {
 @VLM100UnitTopOffset:0px;
 @VLM100TextColor:#FFFFFF;
 
+.VLM100_Label, .VLM100_Pos, .VLM100_PosSmall, .VLM100_Unit, .VLM100_Value{
+  color:@VLM100TextColor;
+}
 .VLM100_Label{
   position: absolute;
   font-size: small;
-  color:@VLM100TextColor;
 }
 
 .VLM100_Unit{
@@ -400,7 +402,6 @@ span.ui-selectmenu-text {
   left:@VLM100UnitLeft;
   text-align: right;
   width:40px;
-  color:@VLM100TextColor;
 }
 
 .VLM100_Value{
@@ -409,13 +410,11 @@ span.ui-selectmenu-text {
   text-align: right;
   width:100px;
   left:@VLM100Left;
-  color:@VLM100TextColor;
 }
 
 #StatWindSpeed, #StatWindDirection, #StatWindAngle{
   Left: @VLM100Left;
   font-size: @VLM100StatFontSize;
-  color:@VLM100TextColor;
 }
 
 #StatWindSpeed{
