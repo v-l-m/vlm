@@ -108,29 +108,29 @@
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup-nav " >
                 <div class="BtnTDBPanel" >
-                  <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src=images/TdB-Icon-1.png></img></a>
+                  <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src="images/TdB-Icon-1.png" alt=""/></a>
                 </div>
                 <div class="BtnCtrlPanel" >
-                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span class="PilotOrdersBadge pilot btnbadge badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src="images/TdB-Icon-2.png" alt=""/><span class="PilotOrdersBadge pilot btnbadge badge">...</span></a>
                 </div>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
                 <div class="BtnRankingPanel" >
-                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src=images/ranking.png><span id="RankingBadge" class="ranking btnbadge badge">...</span></img></a>
+                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png" alt=""/><span id="RankingBadge" class="ranking btnbadge badge">...</span></a>
                 </div>
               </div>
             </li>
             <li class="nav">
               <div id="BtnSetting" class="BtnGroup1 button hidden">
-                <a ><img class="TDB-Icon" src=images/setting.png></img></a>
+                <a ><img class="TDB-Icon" src="images/setting.png" alt=""/></a>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
                 <div class="BtnRaceInstruction" >
-                  <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
+                  <a ><img id="ICSButton" class="TDB-Icon" src="images/raceinstructions.png" alt=""/></a>
                 </div>
               </div>
             </li>
@@ -174,25 +174,25 @@
         <div class="Controler-Panel Container-fluid" >
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                     <div class="col-sm-2">
-                      <li class="BCOng BearingMode"><a href="#BearingMode" data-toggle="tab" aria-expanded="true"> <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline"></img> <span I18n="autopilotengaged">Cap</span></a> </li>
+                      <li class="BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" > <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline" alt=""/> <span I18n="autopilotengaged">Cap</span></a> </li>
                      </div>
                     <div class="col-sm-2">
-                      <li class="BCOng AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
+                      <li class="BCPane AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
                      </div>
                     <div class="col-sm-2">
-                      <li class="BCOng WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
+                      <li class="BCPane WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
                       </div>
                     <div class="col-sm-2">
-                      <li class="BCOng WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
+                      <li class="BCPane WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
                       </div>
                     <div class="col-sm-2">
-                      <li class="BCOng WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</span></a> </li>
+                      <li class="BCPane WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</span></a> </li>
                     </div>
                     <div class="col-sm-2">
-                      <li class="BCOng WP_PM_Mode AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span></a></li>
+                      <li class="BCPane WP_PM_Mode AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span></a>
                         <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></li>
                     </div>
-                </ul>
+                  </ul>
 				<!-- Fin de la barre d'onglet-->
             <div id="my-tab-content" class="tab-content">
               <div class="BCPane tab-pane" id="BearingMode">
@@ -207,7 +207,7 @@
                 </div>
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
-                    <button class="button" id="BtnPM_Heading">
+                    <button class="button-black" id="BtnPM_Heading">
                       <span I18n="autopilot">Do Heading</span>
                       
                     </button>
@@ -238,7 +238,7 @@
               <!--Fin TWA debut Ortho-->
               <div class="BCPane tab-pane" id="OrthoMode">
                 <div id="PM_WPMode_Div">
-                  <div class="row">
+                  <div class="BoatControllerRow row">
                       <div class="col-sm-2">
                       <span I18n="mytargetpoint"> CurDest</span>
                       </div>
@@ -248,7 +248,7 @@
                       <div class="col-sm-8">Cliquez sur la main puis sur la map pour positionner votre WP
                       </div>
                   </div>
-                  <div class="row">
+                  <div class="BoatControllerRow row">
                       <div class="col-sm-2"> Latitude</div>
                       <div class="col-sm-2">
                       <input class="input Boat_SimpleInput" id="PM_Lat" size="100">
@@ -257,7 +257,7 @@
                       <div class="col-sm-4"> <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
                     </div>
                    </div>
-                  <div class="row">
+                  <div class="BoatControllerRow row">
                       <div class="col-sm-2" > Longitude</div>
                       <div class="col-sm-2">
                         <input class="input Boat_SimpleInput" id="PM_Lon">
@@ -267,8 +267,8 @@
                       <span class="input Boat_SimpleInput" id="PM_CurWPLon">Longitude du WP</span> 
                       </div>
                   </div>
-                  <div class="row">
-                    <div class="col-sm-1">
+                  <div class="BoatControllerRow row">
+                    <div class="col-sm-2">
                         <div class="checkbox "> 
                           <label>
                             <input type="checkbox" id="PM_WithWPHeading"></input>
@@ -284,7 +284,7 @@
                    </div>
                 </div>                  
                 </div>
-                <div class="row">
+                <div class="BoatControllerRow row">
                   <div class="col-sm-4">
                     <button class="button-black" id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
                   </div>
@@ -292,110 +292,17 @@
               </div>
               <!--Fin Ortho debut VMG-->
               <div class="BCPane tab-pane" id="VMGMode">
-                <div id="PM_WPMode_Div">
-                  <div class="row">
-                    <div class="col-sm-2">
-                        <span I18n="mytargetpoint"> CurDest</span>
-                    </div>
-                    <div class="col-sm-2">
-                          <img id="SetWPOnClick" src="images/clickwp_pos.svg"></img>
-                    </div>
-                    <div class="col-sm-8">Cliquez sur la main puis sur la map pour positionner votre WP
-                    </div>
-                  </div>
-                  <div class="BoatControllerRow row">
-                    <div class="BoatControllerRow col-xs-12">
-                      <div class="col-xs-3">
-                        <img id="SetWPOnClick" src="images/clickwp_pos.png" style="width:32px;"></img>
-
-                      </div>
-                      <div class="col-sm-4"> <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
-                    </div>
-                   </div>
-                  <div class="row">
-                      <div class="col-xs-2" > Longitude</div>
-                      <div class="col-xs-2">
-                        <input class="input Boat_SimpleInput" id="PM_Lon">
-                        </input>
-                      </div>
-                      <div class="col-xs-8">
-                      <span class="input Boat_SimpleInput" id="PM_CurWPLon">Longitude du WP</span> 
-                      </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-1">
-                        <div class="checkbox "> 
-                          <label>
-                            <input type="checkbox" id="PM_WithWPHeading"></input>
-                            @WPH
-                          </label>
-                        </div>
-                   </div>
-                   <div class="col-sm-2">
-                        <input class="input Boat_SimpleInput" id="PM_WPHeading"></input>
-                   </div>
-                   <div class="col-sm-2">
-                        <span class="input Boat_SimpleInput" id="PM_CurWPheading">@WPH</span>
-                   </div>
-                </div>  
-                </div> 
-                <div class="row">
+                
+                <div class="BoatControllerRow row">
                   <div class="col-sm-4">
                     <button class="button-black" id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
                   </div>
                 </div> 
               </div>
-              </div>
               <!-- Fin VMG debut VBVMG-->
               <div class="BCPane tab-pane" id="VBVMGMode">
-                <div id="PM_WPMode_Div">
-                <div class="row">
-                    <div class="col-sm-2">
-                    <span I18n="mytargetpoint"> CurDest</span>
-                    </div>
-                    <div class="col-sm-2">
-                      <img id="SetWPOnClick" src="images/clickwp_pos.svg"></img>
-                    </div>
-                    <div class="col-sm-8">Cliquez sur la main puis sur la map pour positionner votre WP
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2"> Latitude</div>
-                    <div class="col-sm-2">
-                    <input class="input Boat_SimpleInput" id="PM_Lat" size="100">
-                    </input>
-                    </div>
-                    <div class="col-sm-4"> <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
-                    </div>
-                 </div>
-                <div class="row">
-                    <div class="col-sm-2" > Longitude</div>
-                    <div class="col-sm-2">
-                      <input class="input Boat_SimpleInput" id="PM_Lon">
-                      </input>
-                    </div>
-                    <div class="col-sm-4">
-                    <span class="input Boat_SimpleInput" id="PM_CurWPLon">Longitude du WP</span> 
-                    </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-2">
-                      <div class="checkbox "> 
-                        <label>
-                          <input type="checkbox" id="PM_WithWPHeading"></input>
-                          @WPH
-                        </label>
-                      </div>
-                 </div>
-                 <div class="col-sm-2">
-                      <input class="input Boat_SimpleInput" id="PM_WPHeading"></input>
-                 </div>
-                 <div class="col-sm-2">
-                      <span class="input Boat_SimpleInput" id="PM_CurWPheading">@WPH</span>
-                 </div>
-              </div> 
-              </div>   
-                <div class="row">
+                
+                <div class="BoatControllerRow row">
                   <div class="col-sm-4">
                     <button class="button-black" id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
                   </div>
@@ -405,7 +312,7 @@
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
                   <div class="container-fluid">
-                    <div class='row'>
+                    <div class="BoatControllerRow row">
                       <div class='PAHeader col-sm-2'>
                         <span I18N="Human Readable date">..HD</span>
                       </div>
@@ -455,12 +362,13 @@
                       <div class='PAHeader col-sm-4'>
                       </div>
                     </div>
-                </div>
-              </div>    
+                </div>   
               </div>
             </div>
           </div>
         </div>
+      </div>
+	</nav>
       <!-- Collapsable Boat Dashboard (view only display) -->
       <div id="TDB-Panel" class="TDB-Panel collapse">
         <div class="container">
@@ -495,13 +403,13 @@
                 <div class="TDB-Panel col-xs-3">
                   <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
                       <div class="WindAnglePanel">
-                        <img id="BearingRing" src="images/compass-small-complete.png"></img>
+                        <img id="BearingRing" src="images/compass-small-complete.png">
                       </div>
                       <div class="WindAnglePanel">
-                        <img id="DeckImage" src="images/deck-small.png"></img>
+                        <img id="DeckImage" src="images/deck-small.png">
                       </div>
                       <div class="WindAnglePanel">
-                        <img id="ImgWindAngle"></img>
+                        <img id="ImgWindAngle">
                       </div>
                       
                   </div>
@@ -530,12 +438,10 @@
           
         </div>
       </div>
-
-	</nav>
-    <!-- Modal login form -->
-    <div id="LoginForm" class="modal fade" role="dialog">
+   <!-- Modal login form -->
+   <div id="LoginForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
-
+  
         <!-- Modal content-->
         <div id="LoginPanel" class="modal-content">
                
@@ -582,84 +488,82 @@
             <button id="LoginButton" I18n="login" type="button" class="button" data-dismiss="modal">login</button>
           </div>
         </div>
-
+  
       </div>
     </div>
-
- <!-- Modal Settings form -->
-<div id="SettingsForm" class="modal fade" role="dialog">
-	<div class="modal-dialog">
-        <!-- Modal content-->
-		<div class="modal-content" id="SettingsPanel">              
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 align="center" I18n="Identification" class="modal-title">Préférences</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row container-fluid">
-            <div class="col-xs-12">
-               <div class="row">
-              <fieldset class="fieldset row-fluid">
-                  <div class="col-xs-6" align="center">
-                <span I18n="boatname">boatname</span>
-                </div>
-                  <div class="col-xs-6" align="center">
-                <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
-                </div>
-              </fieldset>
-              </div>
+    <!-- Modal Settings form -->
+    <div id="SettingsForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content" id="SettingsPanel">              
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
             </div>
-            </div>
-            <div class="row container-fluid">
-            <div class="col-xs-12">
-                <div class="row">
-                  <div class="col-xs-6" align="center">
-                <span I18n="choose_your_country" >Choisir son drapeau</span>
+            <div class="modal-body">
+              <div class="row container-fluid">
+              <div class="col-xs-12">
+                 <div class="row">
+                <fieldset class="fieldset row-fluid">
+                    <div class="col-xs-6" align="center">
+                  <span I18n="boatname">boatname</span>
+                  </div>
+                    <div class="col-xs-6" align="center">
+                  <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                  </div>
+                </fieldset>
                 </div>
-              <fieldset class="fieldset row-fluid">
-                  <div class="col-xs-6" align="center">
-                <select id="FlagSelector" class="select form-control"></select>  
+              </div>
+              </div>
+              <div class="row container-fluid">
+              <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-6" align="center">
+                  <span I18n="choose_your_country" >Choisir son drapeau</span>
+                  </div>
+                <fieldset class="fieldset row-fluid">
+                    <div class="col-xs-6" align="center">
+                  <select id="FlagSelector" class="select form-control"></select>  
+                  </div>
+                </fieldset>
                 </div>
-              </fieldset>
-              </div>
-              </div>
-              </div>
-           <div class="row container-fluid">
-            <div class="col-xs-12">
-                <div class="row">
-                   <fieldset class="fieldset row-fluid">
-                      <div class="col-xs-6" align="center">
-                      	<span I18n="color" >Couleur du bateau</span>
-                      </div>
-                      <div class="col-xs-6" align="center">
-                        <div id="cp11" class="input-group colorpicker-component"> 
-                        <input type="text" value="" class="form-control input-" />					
-                        <span class="input-group-addon"><i></i></span>
+                </div>
+                </div>
+             <div class="row container-fluid">
+              <div class="col-xs-12">
+                  <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="color" >Couleur du bateau</span>
+                        </div>
+                        <div class="col-xs-6" align="center">
+                          <div id="cp11" class="input-group colorpicker-component"> 
+                          <input type="text" value="" class="form-control input-" />					
+                          <span class="input-group-addon"><i></i></span>
+                          </div> 
                         </div> 
-                      </div> 
-                   </fieldset>
-                </div>
+                     </fieldset>
+                  </div>
+              </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <div class="row container-fluid">
-            <div class="col-xs-12">
-               <div class="row">
-                <div class="col-xs-6" align="center">
-            <button id="SettingCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
-            	</div>
-                <div class="col-xs-6" align="center">
-            <button id="SettingValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
-            	</div>
-               </div>
-               </div>
+            <div class="modal-footer">
+              <div class="row container-fluid">
+              <div class="col-xs-12">
+                 <div class="row">
+                  <div class="col-xs-6" align="center">
+              <button id="SettingCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
+                  </div>
+                  <div class="col-xs-6" align="center">
+              <button id="SettingValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
+                  </div>
+                 </div>
+                 </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-		</div>
-	</div>
-</div>
+          </div>
+      </div>
     <!-- Modal Races List -->
     <div id="RacesListForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
