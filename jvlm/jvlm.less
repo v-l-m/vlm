@@ -123,6 +123,9 @@ div.GribmapMousePosition {
 .ui-menu {
   z-index: 20000;
 }
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover{
+  background-color:transparent;
+}
 option.Boat {
   font-style : italic;
 }
@@ -255,8 +258,9 @@ span.ui-selectmenu-text {
 .BtnGroup-nav {
  position: relative;
  padding-left: @BtnPadLeft;
+ padding-right: @BtnPadLeft;
  padding-top: @BtnPadTop;
- width: (3*@BtnPadLeft + 3* @IconSize);
+ width: (2*@BtnPadLeft + 2* @IconSize);
  margin-left:@BtnMargin;
  border-right:@BtnBorder;
  border-right-style:@BtnBorderStyle;
@@ -456,9 +460,9 @@ span.ui-selectmenu-text {
 .BoatControllerRow {
   padding-top: 5px;
 }
- // Race list styling .panel-body {
- //background-color: #337ab7;
-//}
+Race list styling .panel-body {
+  background-color: #337ab7;
+}
 .racelistminimap {
   width: 64px;
   height: 64px;
@@ -549,24 +553,30 @@ span.ui-selectmenu-text {
   border-bottom-color: transparent
 }
 .button-black {
-  /*font-size: 12px;*/
-  height: 40px;
-  /*padding-top: 2px; /*permet le centrage vertical*/
+  height: 35px;
   text-align: center;
-  /*margin:10px;*/
-  border-color: #ccc;
+  border-color: #cccccc;
+  border-style:outset;
   border-radius: 5px;
-  color: #09F;
-  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
-   /*box-shadow: 0 0 5px rgba( 0, 0, 0, 0.5),
-                 /*0 -1px 0 rgba( 255, 255, 255, 0.4);*/
-  background-image: -webkit-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-top:4px;
+  color: #0000FF;
+  background: #555 url("images/ui-bg_glass_20_555555_1x400.png") 50% 50% repeat-x;
+  text-shadow: 0px 1px 0px rgba( 36,38,60, 0.2);
+ -moz-box-shadow: 1px 1px 1px 0px #656565;
+ -webkit-box-shadow: 1px 1px 1px 0px #656565;
+ -o-box-shadow: 1px 1px 1px 0px #656565;
+ box-shadow: 1px 1px 1px 0px #656565;
+ filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=134, Strength=5);
+
+  /* background-image: -webkit-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  background-image: -webkit-gradient(linear, left top, left bottom, from(@button-gradient-start-color), to(@button-gradient-stop-color));
  background-image:         linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@button-gradient-start-color, endColorstr=@button-gradient-stop-color, GradientType=0);
  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-  background-repeat: repeat-x;
+  background-repeat: repeat-x;*/
 }
 .button-black:hover {
   color: #CCC;
