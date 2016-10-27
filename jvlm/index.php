@@ -66,30 +66,30 @@
             <span class="icon-bar"></span> 
             <span class="icon-bar"></span>             
           </button>
-          <ul class="nav navbar-header" LoggedInNav="false" style="display:none">
-             <li class="pull-right"> 
-              <div class="dropdown">
-                <button id="SelectionLanguageDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                  <li><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li>
-                  <li><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li>
-                  <li><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li>
-                  <li><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li>
-                  <li><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li>
-                  <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>
-                </ul>
-              </div>
-            </li>
-            <li class="pull-right">
-              <button id="logindlgButton" type="button" class="button-black "  I18n="login"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Login</button> 
-            </li>
-          </ul>           
-          <ul class="nav navbar-header" LoggedInNav="true" style="display:none">
-            <li class="pull-right">
-              <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span><button id="logOutButton" type="button" class="button-black"  I18n="logout"> Logout</button>
-            </li>
-          </ul>
+            <ul class="nav navbar-header" LoggedInNav="false" style="display:none">
+               <li class="pull-right"> 
+                <div class="dropdown">
+                  <button id="SelectionLanguageDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li>
+                    <li><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li>
+                    <li><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li>
+                    <li><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li>
+                    <li><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li>
+                    <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>
+                  </ul>
+                </div>
+              </li>
+              <li class="pull-right">
+                <button id="logindlgButton" type="button" class="button-black "  I18n="login"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Login</button> 
+              </li>
+            </ul>           
+            <ul class="nav navbar-header" LoggedInNav="true" style="display:none">
+              <li class="pull-right">
+                <button id="logOutButton" type="button" class="button-black"  I18n="logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</button>
+              </li>
+            </ul>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
@@ -113,11 +113,7 @@
                 <div class="BtnCtrlPanel" >
                   <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src=images/TdB-Icon-2.png><span class="PilotOrdersBadge pilot btnbadge badge">...</span></img></a>
                 </div>
-                <div class="BtnPilototo" >
-                  <a data-toggle="collapse" data-target="#Pilot-Panel"><img class="TDB-Icon" src=images/autopilot.png></img></a>
-                </div>
               </div>
-              <!--On pourrai rajouter le pilototo -->
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
@@ -149,6 +145,8 @@
                 </div>
             </li>
           </ul>
+          <!--Fin de la barre de bouton-->
+          <!--Affichage des barres de chargement-->
           <ul class="nav navbar-nav" >
             <li class="active">
               <div id="PbLoginProgress" class="progress" >
@@ -168,61 +166,34 @@
               </div>
             </li>
           </ul>
-          <!--<ul class="nav navbar-nav " LoggedInNav="false" style="display:none">
-            <li>
-              <div class="dropdown">
-                <button id="SelectionLanguageDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                  <li><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li>
-                  <li><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li>
-                  <li><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li>
-                  <li><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li>
-                  <li><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li>
-                  <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span><button id="logindlgButton" type="button" class="button-black"  I18n="login">Login</button> 
-            </li>
-          </ul>
-          <ul class="nav navbar-nav pull-right" LoggedInNav="true" style="display:none">
-            <li>
-              <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span><button id="logOutButton" type="button" class="button-black"  I18n="logout"> Logout</button>
-            </li>
-          </ul>-->
         </div>
       </div>
+      <!--Fin des barres de chargement-->
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-
         <div class="Controler-Panel Container-fluid" >
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                      <div class="col-sm-2">
-                        <li class="BCOng BearingMode"><a href="#BearingMode" data-toggle="tab" aria-expanded="true"> <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline"></img> <span I18n="autopilotengaged">Cap</span></a> </li>
-                       </div>
-                      <div class="col-sm-2">
-                        <li class="BCOng AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
-                       </div>
-                      <div class="col-sm-2">
-                        <li class="BCOng WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
-                        </div>
-                      <div class="col-sm-2">
-                        <li class="BCOng WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
-                        </div>
-                      <div class="col-sm-2">
-                        <li class="BCOng WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</a> </li>
+                    <div class="col-sm-2">
+                      <li class="BCOng BearingMode"><a href="#BearingMode" data-toggle="tab" aria-expanded="true"> <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline"></img> <span I18n="autopilotengaged">Cap</span></a> </li>
+                     </div>
+                    <div class="col-sm-2">
+                      <li class="BCOng AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
+                     </div>
+                    <div class="col-sm-2">
+                      <li class="BCOng WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
                       </div>
-					  
-						<li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab">
-						  <img src="images/autopilot.png" style="width:21px;"></img>
-						  <span I18N="pilototoengaged">AutoPilot</span>
-						  <span class="PilotOrdersBadge pilottab btnbadge badge">...</span>
-						</li>
-
+                    <div class="col-sm-2">
+                      <li class="BCOng WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
+                      </div>
+                    <div class="col-sm-2">
+                      <li class="BCOng WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</span></a> </li>
+                    </div>
+                    <div class="col-sm-2">
+                      <li class="BCOng WP_PM_Mode AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span></a></li>
+                        <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></li>
+                    </div>
                 </ul>
-
+				<!-- Fin de la barre d'onglet-->
             <div id="my-tab-content" class="tab-content">
               <div class="BCPane tab-pane" id="BearingMode">
                 <div class="BoatControllerRow row">
@@ -244,6 +215,7 @@
                   </div>
                 </div>
               </div>
+              <!--Fin HDG debut TWA-->
               <div class="BCPane tab-pane" id="AngleMode">
                  <div class="BoatControllerRow row">
                     <div class="col-sm-2"> <span I18n="WindAngle"> Angle du vent</span>
@@ -263,6 +235,7 @@
                   </div>
                 </div>
               </div>
+              <!--Fin TWA debut Ortho-->
               <div class="BCPane tab-pane" id="OrthoMode">
                 <div id="PM_WPMode_Div">
                   <div class="row">
@@ -317,6 +290,7 @@
                   </div>
                 </div>
               </div>
+              <!--Fin Ortho debut VMG-->
               <div class="BCPane tab-pane" id="VMGMode">
                 <div id="PM_WPMode_Div">
                   <div class="row">
@@ -371,6 +345,8 @@
                   </div>
                 </div> 
               </div>
+              </div>
+              <!-- Fin VMG debut VBVMG-->
               <div class="BCPane tab-pane" id="VBVMGMode">
                 <div id="PM_WPMode_Div">
                 <div class="row">
@@ -425,120 +401,116 @@
                   </div>
                 </div>    
               </div>
+              <!--Fin VBVMG debut Pilot-->
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
                   <div class="container-fluid">
                     <div class='row'>
-                      <div class='PAHeader col-xs-2'>
+                      <div class='PAHeader col-sm-2'>
                         <span I18N="Human Readable date">..HD</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-sm-1'>
                         <span >PIM</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-sm-1'>
                         <span >PIP</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-sm-1'>
                         <span >Status</span>
                       </div>
-                      <div class='PAHeader col-xs-4'></div>
-                    </div>
+                      <div class='PAHeader col-sm-4'>
+                      </div>
+                  </div>
                     <div id='PIL1' class='row'>
-                      <div class='PAHeader col-xs-2'>
+                      <div class='PAHeader col-sm-2'>
                         <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
                         <span id='PIL1_DATE' >10 Oct 2016 22:06</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
-                        <input ty
+                      <div class='PAHeader col-sm-1'>
+                        <input ></input>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-sm-1'>
                         <span >PIP</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-sm-1'>
                         <span >Status</span>
                       </div>
-                      <div class='PAHeader col-xs-4'></div>
+                      <div class='PAHeader col-sm-4'>
+                      </div>
                     </div>
+                </div>
+              </div>    
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- Collapsable Boat Dashboard (view only display) -->
+      <div id="TDB-Panel" class="TDB-Panel collapse">
+        <div class="container">
+          <div class="row">
+            <div class="TDB-EmptyCol col-xs-3"> 
+            </div>
+            <div class="TDB-Panel col-xs-3">            
+              <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
+                <div class="VLM100_Pos" id="BoatLon"></div>
+                <div class="VLM100_Pos" id="BoatLat"></div>
+                <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
+                <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
+                <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
+                <div class="VLM100_PosSmall" id="BoatSpeed"></div>
+                <div class="VLM100_PosSmall" id="BoatAvg"></div>
+                <div class="VLM100_PosSmall" id="BoatHeading"></div>
+                <div class="VLM100_PosSmall" id="StatDNM">DNM</div>
+                <div class="VLM100_PosSmall" id="StatLoch">Loch</div>
+                <div class="VLM100_PosSmall" id="StatOrtho">Ortho</div>
+                <div class="VLM100_PosSmall" id="StatLoxo">Loxo</div>
+                <div class="VLM100_PosSmall" id="StatVMG">VMG</div>
+                <div class="VLM100_PosSmall" id="BoatDNM"></div>
+                <div class="VLM100_PosSmall" id="BoatLoch"></div>
+                <div class="VLM100_PosSmall" id="BoatOrtho"></div>
+                <div class="VLM100_PosSmall" id="BoatLoxo"></div>
+                <div class="VLM100_PosSmall" id="BoatVMG"></div>
+              </div>
+            </div>
+            <div class="TDB-Panel col-xs-3">
+              <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
+                  <div class="WindAnglePanel">
+                    <img id="BearingRing" src="images/compass-small-complete.png"></img>
                   </div>
-                </div>    
+                  <div class="WindAnglePanel">
+                    <img id="DeckImage" src="images/deck-small.png"></img>
+                  </div>
+                  <div class="WindAnglePanel">
+                    <img id="ImgWindAngle"></img>
+                  </div>
+                  
+              </div>
+            </div>
+            <div class="TDB-Panel col-xs-3">
+              <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
+                <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
+                <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
+                <div class="VLM100_Label" id="StatWindAngle">Wind Angle</div>
+                <div class="VLM100_Unit" id="StatSpeedUnit">kts</div>
+                <div class="VLM100_Unit" id="StatDirUnit">°</div>
+                <div class="VLM100_Unit" id="StatAngleUnit">°</div>
+                <div class="VLM100_Value" id="BoatWindSpeed" ></div>
+                <div class="VLM100_Value" id="BoatWindDirection" ></div>
+                <div class="VLM100_Value" id="BoatWindAngle"></div>
+                
               </div>
             </div>
           </div>
         </div>
       </div>
-     
-    <!-- Collapsable Boat Dashboard (view only display) -->
-    <div id="TDB-Panel" class="TDB-Panel collapse">
-      <div class="container">
-        <div class="row">
-          <div class="TDB-EmptyCol col-xs-3"> 
-          </div>
-          <div class="TDB-Panel col-xs-3">            
-            <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
-              <div class="VLM100_Pos" id="BoatLon"></div>
-              <div class="VLM100_Pos" id="BoatLat"></div>
-              <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
-              <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
-              <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
-              <div class="VLM100_PosSmall" id="BoatSpeed"></div>
-              <div class="VLM100_PosSmall" id="BoatAvg"></div>
-              <div class="VLM100_PosSmall" id="BoatHeading"></div>
-              <div class="VLM100_PosSmall" id="StatDNM">DNM</div>
-              <div class="VLM100_PosSmall" id="StatLoch">Loch</div>
-              <div class="VLM100_PosSmall" id="StatOrtho">Ortho</div>
-              <div class="VLM100_PosSmall" id="StatLoxo">Loxo</div>
-              <div class="VLM100_PosSmall" id="StatVMG">VMG</div>
-              <div class="VLM100_PosSmall" id="BoatDNM"></div>
-              <div class="VLM100_PosSmall" id="BoatLoch"></div>
-              <div class="VLM100_PosSmall" id="BoatOrtho"></div>
-              <div class="VLM100_PosSmall" id="BoatLoxo"></div>
-              <div class="VLM100_PosSmall" id="BoatVMG"></div>
-            </div>
-          </div>
-          <div class="TDB-Panel col-xs-3">
-            <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
-                <div class="WindAnglePanel">
-                  <img id="BearingRing" src="images/compass-small-complete.png"></img>
-                </div>
-                <div class="WindAnglePanel">
-                  <img id="DeckImage" src="images/deck-small.png"></img>
-                </div>
-                <div class="WindAnglePanel">
-                  <img id="ImgWindAngle"></img>
-                </div>
-                
-            </div>
-          </div>
-          <div class="TDB-Panel col-xs-3">
-            <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
-              <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
-              <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
-              <div class="VLM100_Label" id="StatWindAngle">Wind Angle</div>
-              <div class="VLM100_Unit" id="StatSpeedUnit">kts</div>
-              <div class="VLM100_Unit" id="StatDirUnit">°</div>
-              <div class="VLM100_Unit" id="StatAngleUnit">°</div>
-              <div class="VLM100_Value" id="BoatWindSpeed" ></div>
-              <div class="VLM100_Value" id="BoatWindDirection" ></div>
-              <div class="VLM100_Value" id="BoatWindAngle"></div>
-              
-            </div>
-          </div>
+      <!-- COllapsable Race ranking -->
+      <div id="Ranking-Panel" class="TDB-Panel collapse">
+        <div class="container">
+          
         </div>
       </div>
-    </div>
 
-    <!-- COllapsable Race ranking -->
-    <div id="Ranking-Panel" class="TDB-Panel collapse">
-      <div class="container">
-        
-      </div>
-    </div>
-    <!-- COllapsable Pilototo -->
-    <div id="Pilot-Panel" class="TDB-Panel collapse">
-      <div class="container">
-        
-      </div>
-    </div>
+	</nav>
     <!-- Modal login form -->
     <div id="LoginForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -686,7 +658,6 @@
         </div>
       </div>
     </div>
-	</nav>
   </body>
   
 </html>
