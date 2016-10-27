@@ -174,22 +174,22 @@
         <div class="Controler-Panel Container-fluid" >
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                     <div class="col-sm-2">
-                      <li class="BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" > <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline" alt=""/> <span I18n="autopilotengaged">Cap</span></a> </li>
+                      <li class="BCOng BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" > <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline" alt=""/> <span I18n="autopilotengaged">Cap</span></a> </li>
                      </div>
                     <div class="col-sm-2">
-                      <li class="BCPane AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
+                      <li class="BCOng BCPane AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
                      </div>
                     <div class="col-sm-2">
-                      <li class="BCPane WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
+                      <li class="BCOng BCPane WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
                       </div>
                     <div class="col-sm-2">
-                      <li class="BCPane WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
+                      <li class="BCOng BCPane WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
                       </div>
                     <div class="col-sm-2">
-                      <li class="BCPane WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</span></a> </li>
+                      <li class="BCOng BCPane WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</span></a> </li>
                     </div>
                     <div class="col-sm-2">
-                      <li class="BCPane WP_PM_Mode AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span></a>
+                      <li class="BCOng BCPane WP_PM_Mode AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span></a>
                         <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></li>
                     </div>
                   </ul>
@@ -371,12 +371,12 @@
 	</nav>
       <!-- Collapsable Boat Dashboard (view only display) -->
       <div id="TDB-Panel" class="TDB-Panel collapse">
-        <div class="container">
+        <div class="container-instrument">
             <!--<div class="row">
               <div class="TDB-EmptyCol col-xs-3"> 
               </div>-->
               <div class="row">
-                <div class="TDB-Panel col-xs-3">            
+                <div class="TDB-Panel col-ms-1">            
                   <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
                     <div class="VLM100_Pos" id="BoatLon"></div>
                     <div class="VLM100_Pos" id="BoatLat"></div>
@@ -400,7 +400,7 @@
                 </div> 
               </div>
               <div class="row">
-                <div class="TDB-Panel col-xs-3">
+                <div class="TDB-Panel col-ms-1">
                   <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
                       <div class="WindAnglePanel">
                         <img id="BearingRing" src="images/compass-small-complete.png">
@@ -416,7 +416,7 @@
                 </div> 
               </div>
               <div class="row">
-                <div class="TDB-Panel col-xs-3">
+                <div class="TDB-Panel col-ms-1">
                   <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
                     <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
                     <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
