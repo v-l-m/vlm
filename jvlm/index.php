@@ -101,36 +101,36 @@
             <li class="nav hidden" RacingBtn="false">
               <div class="BtnGroup" >
                 <div class="BtnRaceList" >
-                  <a data-toggle="collapse" data-target="#RacesListForm"><img class="TDB-Icon" src=images/races-list.png></img></a>
+                  <a class="tooltips" data-toggle="collapse" data-target="#RacesListForm" href="#"><img class="TDB-Icon" src=images/races-list.png></img><span>Liste des courses</span></a>
                 </div>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup-nav " >
                 <div class="BtnTDBPanel" >
-                  <a data-toggle="collapse" data-target="#TDB-Panel"><img class="TDB-Icon" src="images/TdB-Icon-1.png" alt=""/></a>
+                  <a class="tooltips" data-toggle="collapse" data-target="#TDB-Panel" href="#"><img class="TDB-Icon" src="images/TdB-Icon-1.png" alt=""/><span>Instruments de bord</span></a>
                 </div>
                 <div class="BtnCtrlPanel" >
-                  <a data-toggle="collapse" data-target="#Boat-Panel"><img class="TDB-Icon" src="images/TdB-Icon-2.png" alt=""/><span class="PilotOrdersBadge pilot btnbadge badge">...</span></a>
+                  <a class="tooltips" data-toggle="collapse" data-target="#Boat-Panel" href="#" ><img class="TDB-Icon" src="images/TdB-Icon-2.png" alt=""/><span>Réglages du bateau</span></a><span class="PilotOrdersBadge pilot btnbadge badge">...</span>
                 </div>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
                 <div class="BtnRankingPanel" >
-                  <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png" alt=""/><span id="RankingBadge" class="ranking btnbadge badge">...</span></a>
+                  <a class="tooltips" data-toggle="collapse" data-target="#Ranking-Panel" href="#" ><img id="RankingButton" class="TDB-Icon" src="images/ranking.png" alt=""/><span>Voir le classement</span></a><span id="RankingBadge" class="ranking btnbadge badge">...</span>
                 </div>
               </div>
             </li>
             <li class="nav">
               <div id="BtnSetting" class="BtnGroup1 button hidden">
-                <a ><img class="TDB-Icon" src="images/setting.png" alt=""/></a>
+                <a class="tooltips" href="#" ><img class="TDB-Icon" src="images/setting.png" alt=""/><span>Préférence du bateau</span></a>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup1" >
                 <div class="BtnRaceInstruction" >
-                  <a ><img id="ICSButton" class="TDB-Icon" src="images/raceinstructions.png" alt=""/></a>
+                  <a class="tooltips" href="#" ><img id="ICSButton" class="TDB-Icon" src="images/raceinstructions.png" alt=""/><span>Détails de la course</span></a>
                 </div>
               </div>
             </li>
@@ -173,23 +173,23 @@
       <div Id="Boat-Panel" class="collapse">
         <div class="Controler-Panel Container-fluid" >
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                    <div class="col-sm-2">
-                      <li class="BCOng BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" > <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline" alt=""/> <span I18n="autopilotengaged">Cap</span></a> </li>
+                    <div class="col-sm-1">
+                      <li class="BCOng BCPane BearingMode"><a class="tooltips"  href="#BearingMode" data-toggle="tab" > <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" style="display: inline" alt=""/>HDG<span I18N="autopilot">HDG</span></a> </li>
                      </div>
-                    <div class="col-sm-2">
-                      <li class="BCOng BCPane AngleMode"> <a href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/> <span I18n="constantengaged">Angle</span></a> </li>
+                    <div class="col-sm-1">
+                      <li class="BCOng BCPane AngleMode"> <a class="tooltips"  href="#AngleMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"/>TWA<span I18N="WindAngle">TWA</span></a> </li>
                      </div>
-                    <div class="col-sm-2">
-                      <li class="BCOng BCPane WP_PM_Mode OrthoMode "> <a href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/> <span I18n="orthodromic">Ortho</span></a> </li>
+                    <div class="col-sm-1">
+                      <li class="BCOng BCPane WP_PM_Mode OrthoMode "> <a class="tooltips" href="#OrthoMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"/>Ortho<span I18n="orthodromic">Ortho</span></a> </li>
                       </div>
-                    <div class="col-sm-2">
-                      <li class="BCOng BCPane WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> <span>VMG</span></a> </li>
+                    <div class="col-sm-1">
+                      <li class="BCOng BCPane WP_PM_Mode VMGMode"><a class="tooltips"  href="#VMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"/> VMG<span I18N="vmgsheet">VMG</span></a> </li>
                       </div>
-                    <div class="col-sm-2">
-                      <li class="BCOng BCPane WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> <span>VBVMG</span></a> </li>
+                    <div class="col-sm-1">
+                      <li class="BCOng BCPane WP_PM_Mode VBVMGMode"><a class="tooltips"  href="#VBVMGMode" data-toggle="tab"> <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"/> VBVMG<span I18N="vbvmgengaged">VBVMG</span></a> </li>
                     </div>
-                    <div class="col-sm-2">
-                      <li class="BCOng BCPane WP_PM_Mode AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span></a>
+                    <div class="col-sm-1">
+                      <li class="BCOng BCPane WP_PM_Mode AutoPilot"><a class="tooltips"  href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img>Pilot<span I18N="pilototoengaged">AutoPilot</span></a>
                         <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></li>
                     </div>
                   </ul>

@@ -504,6 +504,7 @@ Race list styling .panel-body {
   padding-top:0px;
 }
  .BCOng {
+ text-align:center;
  background-image: -webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image: -webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
@@ -641,4 +642,51 @@ Race list styling .panel-body {
 }
 .container-instrument{
   width:170px;
+}
+a.tooltips {
+  position: relative;
+  display: inline;
+  font-size:14px
+}
+a.tooltips span {
+  position: absolute;
+  width:140px;
+  color: #DFFFFF;
+  background: #000000;
+  border: 2px solid #6D6D6D;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  visibility: hidden;
+  border-radius: 6px;
+}
+a.tooltips span:before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -12px;
+  width: 0; height: 0;
+  border-bottom: 12px solid #6D6D6D;
+  border-right: 12px solid transparent;
+  border-left: 12px solid transparent;
+}
+a.tooltips span:after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -8px;
+  width: 0; height: 0;
+  border-bottom: 8px solid #000000;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+}
+a:hover.tooltips span {
+  visibility: visible;
+  opacity: 0.8;
+  top: 30px;
+  left: 50%;
+  margin-left: -76px;
+  z-index: 999;
 }
