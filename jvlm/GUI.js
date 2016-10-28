@@ -278,6 +278,15 @@ function InitMenusAndButtons()
       }
     )
 
+    // Handle SettingsSave button
+    $('#SettingValidateButton').click(
+      function()
+      {
+        // Add here code to send to server current prefs values
+      }
+    )
+    
+
     // Do fixed heading button
     $("#BtnPM_Heading").click(
       function()
