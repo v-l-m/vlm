@@ -647,6 +647,8 @@ function UpdatePrefsDialog(Boat)
     $("#pref_boatname").val(Boat.BoatName);
     $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
     $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
+    $("#cp11").colorpicker({color:"#"+Boat.VLMInfo.COL});
+    
   }
 
   
