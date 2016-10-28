@@ -282,7 +282,14 @@ function InitMenusAndButtons()
     $('#SettingValidateButton').click(
       function()
       {
-        // Add here code to send to server current prefs values
+        $.post("/ws/boatinfo/prefs.php","parms=" + JSON.stringify({
+              idu:10657,
+              color:654321}),
+          function (e)
+          {
+            var i = 0;
+          }
+        )
       }
     )
     
