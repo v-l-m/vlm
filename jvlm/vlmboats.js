@@ -1241,3 +1241,18 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
 
   
 }
+
+function DeletePilotOrder(Boat,OrderId)
+{
+  $.post("/ws/boatsetup/pilototo_delete.php?","parms="+ JSON.stringify(
+              {idu:Boat.IdBoat,
+                taskid:parseInt(OrderId)}),
+      function(e)
+      {
+        if (e.success)
+        {
+          RefreshCurrentBoat(false,true);
+        }
+      }
+    )
+}

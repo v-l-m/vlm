@@ -329,6 +329,11 @@ function InitMenusAndButtons()
 
     $("#SetWPOnClick").click(HandleStartSetWPOnClick);
 
+    // Add handlers for autopilot buttons
+    $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
+    $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
+    
+
 }
 
 function HandleStartSetWPOnClick()
@@ -653,11 +658,32 @@ function ShowAutoPilotLine(Boat,Index)
   var PilOrder=Boat.VLMInfo.PIL[Index-1];
   var OrderDate = new Date(PilOrder.TTS*1000)
   var PIMText = GetPilotModeName(PilOrder.PIM);
-  
+
+  $(Id)[0].attributes['TID']=PilOrder.TID
   SetSubItemValue(Id,"#PIL_DATE",OrderDate)
   SetSubItemValue(Id,"#PIL_PIM",PIMText)
   SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
   SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+}
+
+function HandlePilotEditDelete(e)
+{
+  var ClickedItem = $(this)[0]
+  var ItemId = ClickedItem.attributes['class'].value;
+  var PilOrderElement = ClickedItem.parentElement.parentElement;
+  var Boat = _CurPlayer.CurBoat;
+
+  var OrderIndex = parseInt(PilOrderElement.attributes['id'].nodeValue.substring(3));
+
+  if (ItemId == "PIL_EDIT")
+  {
+    console.log("now edit pilototo order#" +OrderIndex)
+  }
+  else if (ItemId == "PIL_DELETE")
+  {
+    DeletePilotOrder(Boat,PilOrderElement.attributes['TID']);
+  }
+
 }
 
 function GetPilotModeName(PIM)
