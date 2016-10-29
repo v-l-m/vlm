@@ -327,7 +327,10 @@ function InitMenusAndButtons()
       }
     )
 
+    // Handler for Set WP on click
     $("#SetWPOnClick").click(HandleStartSetWPOnClick);
+    $("#SetWPOffClick").click(HandleCancelSetWPOnClick);
+    HandleCancelSetWPOnClick();
 
     // Add handlers for autopilot buttons
     $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
@@ -336,9 +339,19 @@ function InitMenusAndButtons()
 
 }
 
+function HandleCancelSetWPOnClick()
+{
+  SetWPPending = false;
+  $("#SetWPOnClick").show();
+  $("#SetWPOffClick").hide();
+}
+
 function HandleStartSetWPOnClick()
 {
   SetWPPending = true;
+  $("#SetWPOnClick").hide();
+  $("#SetWPOffClick").show();
+
 }
 
 function ClearBoatSelector()

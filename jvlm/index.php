@@ -244,7 +244,8 @@
                       <span I18n="mytargetpoint"> CurDest</span>
                       </div>
                       <div class="col-sm-2">
-                        <img id="SetWPOnClick" src="images/clickwp_pos.png"></img>
+                        <img id="SetWPOnClick" class="ClickWPPos_Off" src="images/clickwp_pos.png"></img>
+                        <img id="SetWPOffClick" class="ClickWPPos_On" src="images/clickwp_pos_on.png"></img>
                       </div>
                       <div class="col-sm-8">Cliquez sur la main puis sur la map pour positionner votre WP
                       </div>

@@ -62,7 +62,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
                                                   if (SetWPPending)
                                                   {
                                                     CompleteWPSetPosition(e,e.xy);
-                                                    SetWPPending=false;
+                                                    HandleCancelSetWPOnClick();
                                                   }
                                               }
 
