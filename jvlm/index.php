@@ -312,35 +312,36 @@
                 <div class="BoatControllerRow row">
                   <div class="container-fluid">
                     <div id='PIL_HEADER' class='row'>
-                      <div class='PAHeader col-xs-2'>
+                      <div class='PAHeader col-xs-4'>
                         <span I18N="Human Readable date">..HD</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-xs-2'>
                         <span >PIM</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-xs-2'>
                         <span >PIP</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='PAHeader col-xs-4'>
                         <span >Status</span>
                       </div>
-                      <div class='PAHeader col-xs-4'></div>
                     </div>
                     <div id='PIL1' class='row'>
-                      <div class='PAHeader col-xs-2'>
+                      <div class='col-xs-4'>
                         <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
                         <span id='PIL_DATE' >10 Oct 2016 22:06</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='col-xs-2'>
                         <span id='PIL_PIM'></span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='col-xs-2'>
                         <span id='PIL_PIP' >PIP</span>
                       </div>
-                      <div class='PAHeader col-xs-1'>
+                      <div class='col-xs-4'>
                         <span id='PIL_STATUS'>Status</span>
+                        <img class='PIL_EDIT' src="images/edit.png"></img>
+                        <img class='PIL_DELETE' src="images/delete.png"></img>
                       </div>
-                      <div class='PAHeader col-xs-4'></div>
+                      
                     </div>
                 </div>   
                   </div>

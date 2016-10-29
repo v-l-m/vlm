@@ -650,36 +650,49 @@ function UpdatePilotInfo(Boat)
 function ShowAutoPilotLine(Boat,Index)
 {
   var Id = "#PIL"+Index;
-
-  var El = GetSubElementById($(Id),"PIL_DATE")
-  el.text(Boat.VLMInfo.PIL[Index-1].TTS)
+  var PilOrder=Boat.VLMInfo.PIL[Index-1];
+  var OrderDate = new Date(PilOrder.TTS*1000)
+  var PIMText = GetPilotModeName(PilOrder.PIM);
+  
+  SetSubItemValue(Id,"#PIL_DATE",OrderDate)
+  SetSubItemValue(Id,"#PIL_PIM",PIMText)
+  SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
+  SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
 }
 
-function GetSubElementById(ElementArray, SubElementId)
+function GetPilotModeName(PIM)
 {
-  if (!ElementArray)
+  switch (parseInt(PIM))
   {
-    return null;
-  }
-  for (elindex in ElementArray)
-  {
-    var Element = ElementArray[elindex];
-    for (index in Element.Children)
-    {
-      if (Element.Children[index].id===SubElementId)
-      {
-        return Element.Children[index];
-      }
-      var SubE = GetSubElementById(Element.Children[index],SubElementId)
-      if (SubE)
-      {
-        return SubE;
-      }
-    }
-  }
+    case 1:
+      return GetLocalizedString('autopilotengaged')
+      
+    case 2:
+      return GetLocalizedString('constantengaged')
+      
+    case 3:
+      return GetLocalizedString('orthoengaged')
+      
+    case 4:
+      return GetLocalizedString('bestvmgengaged')
 
-  return null;
+    case 5:
+      return GetLocalizedString('vbvmgengaged')
+
+    default:
+      return "PIM ???"+PIM+"???" 
+  }
 }
+
+function SetSubItemValue(SourceElementName,TargetElementName,NewVaue)
+{
+  var El = $(SourceElementName).find(TargetElementName)
+  if (El.length>0)
+  {
+    El.text(NewVaue)
+  }
+}
+
 
 function UpdatePilotBadge(Boat)
 {
