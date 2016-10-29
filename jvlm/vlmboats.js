@@ -1256,3 +1256,21 @@ function DeletePilotOrder(Boat,OrderId)
       }
     )
 }
+
+function UpdateBoatPrefs(Boat,NewVals)
+{
+  NewVals["idu"]=Boat.IdBoat;
+  $.post("/ws/boatsetup/prefs_set.php","parms=" + JSON.stringify(NewVals),
+          function (e)
+          {
+            if (e.success)
+            {
+              RefreshCurrentBoat(false,true);
+            }
+            else
+            {
+              alert(GetLocalizedString("UpdateFailed"))
+            };
+          }
+        )
+}

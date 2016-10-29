@@ -282,14 +282,12 @@ function InitMenusAndButtons()
     $('#SettingValidateButton').click(
       function()
       {
-        $.post("/ws/boatinfo/prefs.php","parms=" + JSON.stringify({
-              idu:10657,
-              color:654321}),
-          function (e)
-          {
-            var i = 0;
-          }
-        )
+        var NewVals={};
+
+        NewVals["boatname"]=$("#pref_boatname")[0].value;
+        NewVals["country"]=$("#FlagSelector")[0].value;
+        NewVals["color"]=$("#pref_boatcolor")[0].value;
+        UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals})
       }
     )
     
@@ -787,8 +785,13 @@ function UpdatePrefsDialog(Boat)
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
     $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
-    $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
-    $("#cp11").colorpicker({color:"#"+Boat.VLMInfo.COL});
+    var ColString = Boat.VLMInfo.COL;
+    if (ColString.substring(0,1)!="#")
+    {
+      ColString="#"+ColString;
+    }
+    $("#pref_boatcolor").val(ColString);
+    $("#cp11").colorpicker({color:ColString});
     
   }
 
