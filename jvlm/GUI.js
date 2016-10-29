@@ -605,9 +605,81 @@ function UpdateInMenuRacingBoatInfo(Boat)
       $("#RaceName").text(Boat.RaceInfo.racename);
     }
 
-    UpdatePilotBadge(Boat);
+    UpdatePilotInfo(Boat);
 
 } 
+
+function UpdatePilotInfo(Boat)
+{
+  if ((typeof Boat === "undefined") || (!Boat))
+  {
+    return;
+  }
+
+// Nothing. Clean-up & hide PIL1 line
+  for (index=1;index < 6; index++)
+  {
+    $('#PIL'+index).hide();
+  } 
+   
+
+  var PIL_TEMPLATE = $("#PIL1");
+
+  if (Boat.VLMInfo.PIL.length >0)
+  {
+    for (index in Boat.VLMInfo.PIL)
+    {
+      var PilIndex = parseInt(index)+1;
+      var PrevIndex = PilIndex -1;
+      var PilLine = $("#PIL"+PilIndex).first();
+      if (!PilLine.length)
+      {
+        PilLine = PIL_TEMPLATE.clone();
+        PilLine.attr('id',"PIL"+PilIndex);
+        PilLine.insertAfter($("#PIL"+PrevIndex));
+      }
+
+      ShowAutoPilotLine(Boat,PilIndex);
+      PilLine.show();
+    } 
+  }
+  
+  UpdatePilotBadge(Boat);
+}
+
+function ShowAutoPilotLine(Boat,Index)
+{
+  var Id = "#PIL"+Index;
+
+  var El = GetSubElementById($(Id),"PIL_DATE")
+  el.text(Boat.VLMInfo.PIL[Index-1].TTS)
+}
+
+function GetSubElementById(ElementArray, SubElementId)
+{
+  if (!ElementArray)
+  {
+    return null;
+  }
+  for (elindex in ElementArray)
+  {
+    var Element = ElementArray[elindex];
+    for (index in Element.Children)
+    {
+      if (Element.Children[index].id===SubElementId)
+      {
+        return Element.Children[index];
+      }
+      var SubE = GetSubElementById(Element.Children[index],SubElementId)
+      if (SubE)
+      {
+        return SubE;
+      }
+    }
+  }
+
+  return null;
+}
 
 function UpdatePilotBadge(Boat)
 {

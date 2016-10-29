@@ -127,8 +127,6 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
           if (Boat.VLMInfo.RAC != "0") 
           {
 
-            
-
             if (typeof Boat.RaceInfo ==="undefined" || typeof Boat.RaceInfo.idraces === 'undefined') 
             {
               // Get race info if first request for the boat

@@ -311,7 +311,7 @@
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
                   <div class="container-fluid">
-                    <div class='row'>
+                    <div id='PIL_HEADER' class='row'>
                       <div class='PAHeader col-xs-2'>
                         <span I18N="Human Readable date">..HD</span>
                       </div>
@@ -329,35 +329,18 @@
                     <div id='PIL1' class='row'>
                       <div class='PAHeader col-xs-2'>
                         <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
-                        <span id='PIL1_DATE' >10 Oct 2016 22:06</span>
+                        <span id='PIL_DATE' >10 Oct 2016 22:06</span>
                       </div>
                       <div class='PAHeader col-xs-1'>
-                        <input ></input>
+                        <span id='PIL_PIM'></span>
                       </div>
                       <div class='PAHeader col-xs-1'>
-                        <span >PIP</span>
+                        <span id='PIL_PIP' >PIP</span>
                       </div>
                       <div class='PAHeader col-xs-1'>
-                        <span >Status</span>
+                        <span id='PIL_STATUS'>Status</span>
                       </div>
                       <div class='PAHeader col-xs-4'></div>
-                    </div>
-                    <div id='PIL2' class='row'>
-                      <div class='PAHeader col-xs-2'>
-                        <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
-                        <span id='PIL2_DATE' >12 Oct 2016 22:06</span>
-                      </div>
-                      <div class='PAHeader col-xs-1'>
-                        <input ></input>
-                      </div>
-                      <div class='PAHeader col-xs-1'>
-                        <span >PIP</span>
-                      </div>
-                      <div class='PAHeader col-xs-1'>
-                        <span >Status</span>
-                      </div>
-                      <div class='PAHeader col-xs-4'>
-                      </div>
                     </div>
                 </div>   
                   </div>
