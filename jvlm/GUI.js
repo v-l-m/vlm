@@ -605,9 +605,94 @@ function UpdateInMenuRacingBoatInfo(Boat)
       $("#RaceName").text(Boat.RaceInfo.racename);
     }
 
-    UpdatePilotBadge(Boat);
+    UpdatePilotInfo(Boat);
 
 } 
+
+function UpdatePilotInfo(Boat)
+{
+  if ((typeof Boat === "undefined") || (!Boat))
+  {
+    return;
+  }
+
+// Nothing. Clean-up & hide PIL1 line
+  for (index=1;index < 6; index++)
+  {
+    $('#PIL'+index).hide();
+  } 
+   
+
+  var PIL_TEMPLATE = $("#PIL1");
+
+  if (Boat.VLMInfo.PIL.length >0)
+  {
+    for (index in Boat.VLMInfo.PIL)
+    {
+      var PilIndex = parseInt(index)+1;
+      var PrevIndex = PilIndex -1;
+      var PilLine = $("#PIL"+PilIndex).first();
+      if (!PilLine.length)
+      {
+        PilLine = PIL_TEMPLATE.clone();
+        PilLine.attr('id',"PIL"+PilIndex);
+        PilLine.insertAfter($("#PIL"+PrevIndex));
+      }
+
+      ShowAutoPilotLine(Boat,PilIndex);
+      PilLine.show();
+    } 
+  }
+  
+  UpdatePilotBadge(Boat);
+}
+
+function ShowAutoPilotLine(Boat,Index)
+{
+  var Id = "#PIL"+Index;
+  var PilOrder=Boat.VLMInfo.PIL[Index-1];
+  var OrderDate = new Date(PilOrder.TTS*1000)
+  var PIMText = GetPilotModeName(PilOrder.PIM);
+  
+  SetSubItemValue(Id,"#PIL_DATE",OrderDate)
+  SetSubItemValue(Id,"#PIL_PIM",PIMText)
+  SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
+  SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+}
+
+function GetPilotModeName(PIM)
+{
+  switch (parseInt(PIM))
+  {
+    case 1:
+      return GetLocalizedString('autopilotengaged')
+      
+    case 2:
+      return GetLocalizedString('constantengaged')
+      
+    case 3:
+      return GetLocalizedString('orthoengaged')
+      
+    case 4:
+      return GetLocalizedString('bestvmgengaged')
+
+    case 5:
+      return GetLocalizedString('vbvmgengaged')
+
+    default:
+      return "PIM ???"+PIM+"???" 
+  }
+}
+
+function SetSubItemValue(SourceElementName,TargetElementName,NewVaue)
+{
+  var El = $(SourceElementName).find(TargetElementName)
+  if (El.length>0)
+  {
+    El.text(NewVaue)
+  }
+}
+
 
 function UpdatePilotBadge(Boat)
 {
