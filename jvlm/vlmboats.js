@@ -311,7 +311,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var WPMarker=new OpenLayers.Feature.Vector(
     WPTransformed,
     {},
-    { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 64, graphicWidth: 64 }
+    { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 48, graphicWidth: 48 }
   );
   BoatFeatures.push(WPMarker);
   VLMDragLayer.addFeatures(WPMarker);
