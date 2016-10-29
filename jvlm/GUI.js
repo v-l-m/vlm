@@ -278,6 +278,22 @@ function InitMenusAndButtons()
       }
     )
 
+    // Handle SettingsSave button
+    $('#SettingValidateButton').click(
+      function()
+      {
+        $.post("/ws/boatinfo/prefs.php","parms=" + JSON.stringify({
+              idu:10657,
+              color:654321}),
+          function (e)
+          {
+            var i = 0;
+          }
+        )
+      }
+    )
+    
+
     // Do fixed heading button
     $("#BtnPM_Heading").click(
       function()
@@ -647,6 +663,8 @@ function UpdatePrefsDialog(Boat)
     $("#pref_boatname").val(Boat.BoatName);
     $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
     $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
+    $("#cp11").colorpicker({color:"#"+Boat.VLMInfo.COL});
+    
   }
 
   
