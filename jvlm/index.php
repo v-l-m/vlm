@@ -45,6 +45,7 @@
       <script src="user.js"  type='text/javascript'></script>
       <script src='polar.js' type='text/javascript'></script>
       <script src='xmpp.js' type='text/javascript'></script>
+      <script src='autopilot.js' type='text/javascript'></script>
       
       
   </head>
@@ -347,9 +348,9 @@
                       
                     </div>
                     <div class="BoatControllerRow row">
-                    <div class="col-sm-4">
-                    <button class="button-black"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog">AddOrder</button>
-                    </div>
+                      <div class="col-sm-4">
+                        <button id="AutoPilotAddButton" class="button-black"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
+                      </div>
                     </div>
                   </div>   
                   </div>
@@ -572,63 +573,28 @@ $('#note').after(note);
             </div>
             <div class="modal-body">
               <div class="row container-fluid">
-              <div class="col-xs-12">
+                <div class="col-xs-12">
                   <div class="form-group">
-                 <div class="row">
-                       <label for="dtp_input2" class="col-md-4 control-label">Date Picking</label>
-                <div class="input-group date form_date col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                    <input class="form-control" size="12" type="text" value="" >
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input2" value="" /><br/>
-                  </div>
-            <div class="row">
+                    <div class="row">
+                      <label for="dtp_input2" class="col-md-4 control-label">Date Picking</label>
+                      <div class="input-group date form_date col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                        <input id="AP_Date" class="form-control" size="12" type="text" value="1/1/1970" >
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+				              <input type="hidden" id="dtp_input2" value="13:37" /><br/>
+                    </div>
+                    <div class="row">
                       <div class="form-group">
-                <label for="dtp_input3" class="col-md-4 control-label">Time Picking</label>
-                <div class="input-group date form_time col-md-8" data-date="" data-date-format="hh:ii:ss" data-link-field="dtp_input3" data-link-format="hh:ii:ss">
-                    <input class="form-control" size="12" type="text" value="" >
-					<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input3" value="" /><br/>
-            </div>
+                        <label for="dtp_input3" class="col-md-4 control-label">Time Picking</label>
+                        <div class="input-group date form_time col-md-8" data-date="" data-date-format="hh:ii:ss" data-link-field="dtp_input3" data-link-format="hh:ii:ss">
+                          <input id="AP_Time" class="form-control" size="12" type="text" value="" >
+					                <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                        </div>
+				                <input type="hidden" id="dtp_input3" value="" /><br/>
+                      </div>
+                    </div>
               </div>
-            </div>
-        <script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        language:  'fr',
-        defaultTime:'current',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 0
-    });
-    $('.form_date').datetimepicker({
-        language:  'fr',
-        defaultTime:'current',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-    });
-    $('.form_time').datetimepicker({
-        language:  'fr',
-        defaultTime:'current',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 1,
-		minView: 0,
-		maxView: 1,
-		forceParse: 0
-    });
-</script>
+        
 
             <div class="modal-footer">
               <div class="row container-fluid">

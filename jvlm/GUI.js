@@ -335,6 +335,45 @@ function InitMenusAndButtons()
     $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
     
 
+
+    // Init Datetime picker for autopilot
+    $('.form_datetime').datetimepicker({
+        language: 'fr',
+        defaultTime: 'current',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 0
+    });
+    $('.form_date').datetimepicker({
+        language: 'fr',
+        defaultTime: 'current',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+    $('.form_time').datetimepicker({
+        language: 'fr',
+        defaultTime: 'current',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0
+    });
+
+    $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
+    //$("#AutoPilotSettingForm").on("show", HandleOpenAutoPilotSetPoint);
 }
 
 function HandleCancelSetWPOnClick()
@@ -950,4 +989,26 @@ function UpdateLngDropDown()
     '<span class="caret"></span>'
     )
 
+}
+
+function HandleOpenAutoPilotSetPoint(e) 
+{
+  var Target = e.target;
+  var TargetId = Target.attributes["id"].nodeValue;
+  var Order = null;
+
+  switch(TargetId)
+    {
+      case "AutoPilotAddButton":
+        // Create a new autopilot order
+        Order = new AutoPilotOrder();
+               
+    }
+
+    $("#AP_Date").val(Order.GetOrderDateString());
+    $("#AP_Time").val(Order.GetOrderTimeString());
+    
+    $("#dtp_input2").datetimepicker('update');
+    $("#dtp_input3").datetimepicker('update');
+  
 }
