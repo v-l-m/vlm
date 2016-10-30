@@ -513,11 +513,19 @@
                 </div>
                   <div class="row">
                     <div class="col-xs-offset-6 col-xs-6">
-                    <div class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown-toggle pays" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         Drapeau <span class="caret"></span>
                     </div>
-                      <ul class="dropdown-menu" style="padding-left:15px;">
-                       <li><input type="text" value="drapeau"></input></li>
+                      <ul class="dropdown-menu note" style="padding-left:15px;">
+                       <li><img class="flag" src="/cache/flags/00-UN.png" title="00-UN" alt="00-UN"><span id="note" style="margin-left:10px;"></span> </li>
+<script type="text/javascript">
+$(function(){ 
+var note =  $('.note').find('img').attr('alt') ;
+$('#note').after(note);
+});
+</script> 
+
+
                       </ul>
                     </div>
                   </div>
