@@ -96,26 +96,24 @@
                 </div>
               </div>
             </li>
-            <li class="nav hidden" RacingBtn="true">
-              <div class="BtnGroup1" >
+            <li class="nav hidden" RacingBtn="true" style="float: left;">
+              <!--<div class="BtnGroup1" >-->
                 <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png"/></a><span id="RankingBadge" class="ranking btnbadge badge">...</span>
                 </div>
-              </div>
             </li>
-            <li class="nav">
-              <div id="BtnSetting" class="BtnGroup1 button hidden">
+            <li class="nav" style="float: left;">
+              <div id="BtnSetting" class="BtnGroup1 button hidden" style="float: left;">
                 <a ><img class="TDB-Icon" src=images/setting.png></img></a>
               </div>
             </li>
-            <li class="nav hidden" RacingBtn="true">
-              <div class="BtnGroup1" >
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
+             <!-- <div class="BtnGroup1" >-->
                 <div class="BtnRaceInstruction" >
                   <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
                 </div>
-              </div>
             </li>
-            <li class="nav hidden" RacingBtn="true">
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>

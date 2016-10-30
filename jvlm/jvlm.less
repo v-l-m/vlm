@@ -261,9 +261,8 @@ span.ui-selectmenu-text {
 }
 .BtnGroup1 {
  position: relative;
- padding-left: @BtnPadLeft;
+ padding-left: 2px;
  padding-top: @BtnPadTop;
- width: (1*@BtnPadLeft + 1* @IconSize);
 }
 .BtnTBDPanel {
   position: absolute;
@@ -276,8 +275,9 @@ span.ui-selectmenu-text {
   top: 0px;
 }
 .BtnRankingPanel {
-  position: absolute;
+  /*position: absolute;*/
  padding-top: @BtnPadTop;
+ padding-left:10px;
   top: 0px;
 }
 .BoatSelector {
@@ -286,6 +286,7 @@ span.ui-selectmenu-text {
 .TDB-Icon {
  width: @IconSize;
  height: @IconSize;
+ padding-left:2px;
 }
 .TDB-Panel {
   width: 163px;
@@ -542,8 +543,8 @@ span.ui-selectmenu-text {
   border-color: #ccc;
   border-radius: 5px;
   color: #60ABF9;
-  text-shadow:0px 2px 0 rgba(255,255,255,0.1) ,
-             0px -1px 0 rgba(0,0,0,0.4);
+  text-shadow:-1px -2px 0  rgba(0,0,0,0.4),
+             1px 2px 0 rgba(255,255,255,0.15);
   background-image: -webkit-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  background-image: -webkit-gradient(linear, left top, left bottom, from(@button-gradient-start-color), to(@button-gradient-stop-color));
