@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileZilla3 version="3.22.1" platform="windows">
+	<Servers>
+		<Server>
+			<Host>vlm-dev</Host>
+			<Port>21</Port>
+			<Protocol>6</Protocol>
+			<Type>0</Type>
+			<User>vlm</User>
+			<Pass encoding="base64">bWFkYWNocmkwMTA4</Pass>
+			<Logontype>1</Logontype>
+			<TimezoneOffset>0</TimezoneOffset>
+			<PasvMode>MODE_DEFAULT</PasvMode>
+			<MaximumMultipleConnections>0</MaximumMultipleConnections>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>1</BypassProxy>
+			<Name>VLMdev</Name>
+			<Comments />
+			<Colour>0</Colour>
+			<LocalDir>D:\Mes documents\GitHub_VLM\vlm</LocalDir>
+			<RemoteDir>1 0 4 home 3 vlm 7 vlmcode</RemoteDir>
+			<SyncBrowsing>1</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>VLMdev</Server>
+	</Servers>
+</FileZilla3>

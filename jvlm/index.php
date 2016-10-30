@@ -8,23 +8,27 @@
       <title>VLM 2.0 alpha</title>
       <meta http-equiv="X-UA-Compatible" content="IE=8">
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
-      <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.min.css">
+      <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
       <link rel="stylesheet/less" type="text/css" href="jvlm.less">
-      <link href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >
+      <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
       <!--[if IE]>
       <script src="excanvas.js"></script><![endif]-->
       <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
       <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
       -->
       <!--<script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-      <script src="jquery-ui.min.js"></script>
-      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.js"></script>
+      <script src="jquery-ui.js"></script>
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
       <!--<script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>-->
       
       <script src="external/jquery.csv.js"></script>
       <!--<script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js"></script>
       -->
+      <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+      <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
+	  <!--<script type="text/javascript" src="external/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>-->
       <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
       <script src="OpenLayers/OpenLayers.debug.js"></script>
       
@@ -70,7 +74,7 @@
 
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
-            <li  class="active" ><a id="PlayerId">Not Logged in </a></li>
+            <li  class="active" ><a class="player" id="PlayerId">Not Logged in </a></li>
             <li  class="BoatSelector">
               <select id="BoatSelector" >
               </select> 
@@ -92,26 +96,24 @@
                 </div>
               </div>
             </li>
-            <li class="nav hidden" RacingBtn="true">
-              <div class="BtnGroup1" >
+            <li class="nav hidden" RacingBtn="true" style="float: left;">
+              <!--<div class="BtnGroup1" >-->
                 <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png"/></a><span id="RankingBadge" class="ranking btnbadge badge">...</span>
                 </div>
-              </div>
             </li>
-            <li class="nav">
-              <div id="BtnSetting" class="BtnGroup1 button hidden">
+            <li class="nav" style="float: left;">
+              <div id="BtnSetting" class="BtnGroup1 button hidden" style="float: left;">
                 <a ><img class="TDB-Icon" src=images/setting.png></img></a>
               </div>
             </li>
-            <li class="nav hidden" RacingBtn="true">
-              <div class="BtnGroup1" >
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
+             <!-- <div class="BtnGroup1" >-->
                 <div class="BtnRaceInstruction" >
                   <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
                 </div>
-              </div>
             </li>
-            <li class="nav hidden" RacingBtn="true">
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>
@@ -344,13 +346,17 @@
                       </div>
                       
                     </div>
-                </div>   
+                    <div class="BoatControllerRow row">
+                    <div class="col-sm-4">
+                    <button class="button-black"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog">AddOrder</button>
+                    </div>
+                    </div>
+                  </div>   
                   </div>
-                </div>    
-              </div>
+                </div>    <!--Fin du pilot-->
+              </div>  <!--Fin de la table-->
             </div>
           </div>
-         </div>
        <!-- Collapsable Boat Dashboard (view only display) -->
     <div id="TDB-Panel" class="TDB-Panel collapse">
       <div class="container">
@@ -422,6 +428,7 @@
     </div>
       </div>
     </nav>
+    
     <!-- Modal login form -->
     <div id="LoginForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -485,8 +492,6 @@
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
             </div>
             <div class="modal-body">
-              <div class="row container-fluid">
-              <div class="col-xs-12">
                  <div class="row">
                 <fieldset class="fieldset row-fluid">
                     <div class="col-xs-6" align="center">
@@ -496,25 +501,27 @@
                   <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
                   </div>
                 </fieldset>
-                </div>
               </div>
-              </div>
-              <div class="row container-fluid">
-              <div class="col-xs-12">
                   <div class="row">
                     <div class="col-xs-6" align="center">
                   <span I18n="choose_your_country" >Choisir son drapeau</span>
                   </div>
-                <fieldset class="fieldset row-fluid">
-                    <div class="col-xs-6" align="center">
+                <fieldset class="fieldset col-xs-6">
+                    <div >
                   <select id="FlagSelector" class="select form-control"></select>  
                   </div>
                 </fieldset>
                 </div>
-                </div>
-                </div>
-             <div class="row container-fluid">
-              <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-offset-6 col-xs-6">
+                    <div class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Drapeau <span class="caret"></span>
+                    </div>
+                      <ul class="dropdown-menu" style="padding-left:15px;">
+                       <li><input type="text" value="drapeau"></input></li>
+                      </ul>
+                    </div>
+                  </div>
                   <div class="row">
                      <fieldset class="fieldset row-fluid">
                         <div class="col-xs-6" align="center">
@@ -527,8 +534,6 @@
                           </div> 
                         </div> 
                      </fieldset>
-                  </div>
-              </div>
             </div>
             <div class="modal-footer">
               <div class="row container-fluid">
@@ -547,6 +552,95 @@
         </div>
       </div>
           </div>
+      </div>
+      <!-- Modal addpilote order -->
+    <div id="AutoPilotSettingForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content" id="AutoPilotSettingDlg">              
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 align="center" I18n="pilototo_prog_title" class="modal-title">Pilot</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row container-fluid">
+              <div class="col-xs-12">
+                  <div class="form-group">
+                 <div class="row">
+                       <label for="dtp_input2" class="col-md-4 control-label">Date Picking</label>
+                <div class="input-group date form_date col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <input class="form-control" size="12" type="text" value="" >
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input2" value="" /><br/>
+                  </div>
+            <div class="row">
+                      <div class="form-group">
+                <label for="dtp_input3" class="col-md-4 control-label">Time Picking</label>
+                <div class="input-group date form_time col-md-8" data-date="" data-date-format="hh:ii:ss" data-link-field="dtp_input3" data-link-format="hh:ii:ss">
+                    <input class="form-control" size="12" type="text" value="" >
+					<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                </div>
+				<input type="hidden" id="dtp_input3" value="" /><br/>
+            </div>
+              </div>
+            </div>
+        <script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        language:  'fr',
+        defaultTime:'current',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 0
+    });
+    $('.form_date').datetimepicker({
+        language:  'fr',
+        defaultTime:'current',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0
+    });
+    $('.form_time').datetimepicker({
+        language:  'fr',
+        defaultTime:'current',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 1,
+		minView: 0,
+		maxView: 1,
+		forceParse: 0
+    });
+</script>
+
+            <div class="modal-footer">
+              <div class="row container-fluid">
+              <div class="col-xs-12">
+                 <div class="row">
+                  <div class="col-xs-6" align="center">
+              <button id="SettingCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
+                  </div>
+                  <div class="col-xs-6" align="center">
+              <button id="SettingValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          </div>
+          </div>
+        </div>
       </div>
     <!-- Modal Races List -->
     <div id="RacesListForm" class="modal fade" role="dialog">
@@ -567,6 +661,7 @@
         </div>
       </div>
     </div>
+
   </body>
   
 </html>

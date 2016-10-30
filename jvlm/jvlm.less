@@ -30,7 +30,7 @@ input {
   color: #000000;
 }
  @DialogBgColor: #15214b;
-#LoginPanel, #SettingsPanel, #RacesListPanel {
+#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg{
  background-color: @DialogBgColor;
 }
 div.UserMenu {
@@ -261,9 +261,8 @@ span.ui-selectmenu-text {
 }
 .BtnGroup1 {
  position: relative;
- padding-left: @BtnPadLeft;
+ padding-left: 2px;
  padding-top: @BtnPadTop;
- width: (1*@BtnPadLeft + 1* @IconSize);
 }
 .BtnTBDPanel {
   position: absolute;
@@ -276,8 +275,9 @@ span.ui-selectmenu-text {
   top: 0px;
 }
 .BtnRankingPanel {
-  position: absolute;
+  /*position: absolute;*/
  padding-top: @BtnPadTop;
+ padding-left:10px;
   top: 0px;
 }
 .BoatSelector {
@@ -286,6 +286,7 @@ span.ui-selectmenu-text {
 .TDB-Icon {
  width: @IconSize;
  height: @IconSize;
+ padding-left:2px;
 }
 .TDB-Panel {
   width: 163px;
@@ -480,7 +481,7 @@ span.ui-selectmenu-text {
 @navtabs-gradient-stop-color: #252525;
 @navtabs-gradient: linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
 @navbar-default-bg:#000;
-@button-gradient-start-color: #011BA0;
+@button-gradient-start-color: #001475;
 @button-gradient-stop-color: #252525;
 @button-gradient: linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
 // in your main definitions/ overrides:
@@ -489,15 +490,15 @@ span.ui-selectmenu-text {
 }
  .BCOng {
  text-align:center;
- background-image: -webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- background-image: -webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
- background-image:         linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
+ background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
  background-repeat: repeat-x;
  background-color:#161616;
- height:35px;
+ height:40px;
  max-width:150px;
  min-width:75px;
  border-radius: 3px 3px 0 0;
@@ -537,17 +538,13 @@ span.ui-selectmenu-text {
   border-bottom-color: transparent
 }
 .button-black {
-  font-size: 12px;
-  height: 30px;
-  /*padding-top: 2px; /*permet le centrage vertical*/
+  height: 40px;
   text-align: center;
-  /*margin:10px;*/
   border-color: #ccc;
   border-radius: 5px;
   color: #60ABF9;
-  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
-   /*box-shadow: 0 0 5px rgba( 0, 0, 0, 0.5),
-                 /*0 -1px 0 rgba( 255, 255, 255, 0.4);*/
+  text-shadow:-1px -1px 0  rgba(0,0,0,0.4),
+             1px 1px 0 rgba(255,255,255,0.15);
   background-image: -webkit-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
  background-image: -webkit-gradient(linear, left top, left bottom, from(@button-gradient-start-color), to(@button-gradient-stop-color));
@@ -559,7 +556,8 @@ span.ui-selectmenu-text {
 .button-black:hover {
   color: #011BA0;
   background: #3152F7;
-  background: linear-gradient( #777, #333);
+  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+  background: linear-gradient( #5486AD, #223941);
 }
 .button-black:active {
   color: #000;
@@ -615,6 +613,11 @@ span.ui-selectmenu-text {
 }
 .navbar-header{
   height:75px;
+}
+.navbar-inverse .navbar-nav > .active > a , 
+.navbar-inverse .navbar-nav > .active > a:hover , 
+.navbar-inverse .navbar-nav > .active > a:focus{
+background-color:transparent;
 }
 .container-instrument{
   width:170px;
