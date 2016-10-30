@@ -491,8 +491,6 @@
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
             </div>
             <div class="modal-body">
-              <div class="row container-fluid">
-              <div class="col-xs-12">
                  <div class="row">
                 <fieldset class="fieldset row-fluid">
                     <div class="col-xs-6" align="center">
@@ -502,25 +500,27 @@
                   <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
                   </div>
                 </fieldset>
-                </div>
               </div>
-              </div>
-              <div class="row container-fluid">
-              <div class="col-xs-12">
                   <div class="row">
                     <div class="col-xs-6" align="center">
                   <span I18n="choose_your_country" >Choisir son drapeau</span>
                   </div>
-                <fieldset class="fieldset row-fluid">
-                    <div class="col-xs-6" align="center">
+                <fieldset class="fieldset col-xs-6">
+                    <div >
                   <select id="FlagSelector" class="select form-control"></select>  
                   </div>
                 </fieldset>
                 </div>
-                </div>
-                </div>
-             <div class="row container-fluid">
-              <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-offset-6 col-xs-6">
+                    <div class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        Drapeau <span class="caret"></span>
+                    </div>
+                      <ul class="dropdown-menu" style="padding-left:15px;">
+                       <li><input type="text" value="drapeau"></input></li>
+                      </ul>
+                    </div>
+                  </div>
                   <div class="row">
                      <fieldset class="fieldset row-fluid">
                         <div class="col-xs-6" align="center">
@@ -533,8 +533,6 @@
                           </div> 
                         </div> 
                      </fieldset>
-                  </div>
-              </div>
             </div>
             <div class="modal-footer">
               <div class="row container-fluid">
