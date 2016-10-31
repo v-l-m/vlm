@@ -108,13 +108,13 @@
                 <a ><img class="TDB-Icon" src=images/setting.png></img></a>
               </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
              <!-- <div class="BtnGroup1" >-->
                 <div class="BtnRaceInstruction" >
                   <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
                 </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;margin-left: 150px;">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>
@@ -502,7 +502,7 @@
                   <div class="tab-pane fade in active" id="PrefJoueur">
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                           <span I18n="login_name">Pseudo</span>
                         </div>
                         <div class="col-xs-6">
@@ -512,7 +512,7 @@
                     </div>
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                           <span I18n="idplayer">IdPlayer</span>
                         </div>
                         <div class="col-xs-6">
@@ -522,7 +522,7 @@
                     </div>
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                           <span I18n="email">Mail Player</span>
                         </div>
                         <div class="col-xs-6">
@@ -558,15 +558,15 @@
                       </fieldset>
                     </div>
                     <hr/>
-                    <div class="row">
+                    <!--<div class="row">
                       <div>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/playerlogs.php"> Action récentes</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/create_boat.php">  Créer votre bateau.</a><a href="http://virtual-loup-de-mer.org/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/modify_password.php">Changez votre mot de passe</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_skippers.php">Gestion du boat-sitting</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_profil.php">Gestion du profil</a></p>
+                      <p> <a class="pref" href="/playerlogs.php"> Action récentes</a></p>
+                      <p> <a class="pref" href="/create_boat.php">  Créer votre bateau.</a><a class="pref" href="/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
+                      <p> <a class="pref" href="/modify_password.php">Changez votre mot de passe</a></p>
+                      <p> <a class="pref" href="/manage_skippers.php">Gestion du boat-sitting</a></p>
+                      <p> <a class="pref" href="/manage_profil.php">Gestion du profil</a></p>
                       </div>
-                    </div>
+                    </div>-->
                   </div>
                   <div class="tab-pane fade" id="PrefBoat">
                     <div class="row">
@@ -607,11 +607,11 @@
                      </div>
                   <div class="tab-pane fade" id="PrefAutre">
                     <div class="row">
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/playerlogs.php"> Action récentes</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/create_boat.php">  Créer votre bateau.</a><a href="http://virtual-loup-de-mer.org/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/modify_password.php">Changez votre mot de passe</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_skippers.php">Gestion du boat-sitting</a></p>
-                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_profil.php">Gestion du profil</a></p>
+                      <p> <a class="pref" href="/playerlogs.php"> Action récentes</a></p>
+                      <p> <a class="pref" href="/create_boat.php">  Créer votre bateau.</a><br/><a class="pref" href="/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
+                      <p> <a class="pref" href="/modify_password.php">Changez votre mot de passe</a></p>
+                      <p> <a class="pref" href="/manage_skippers.php">Gestion du boat-sitting</a></p>
+                      <p> <a class="pref" href="/manage_profil.php">Gestion du profil</a></p>
                       </div>
                     </div>
                  </div>
