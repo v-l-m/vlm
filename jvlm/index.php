@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="jvlm.css"/>
       <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
       <link rel="stylesheet/less" type="text/css" href="jvlm.less">
-      <link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >
+      <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
       <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
       <!--[if IE]>
       <script src="excanvas.js"></script><![endif]-->
@@ -359,62 +359,62 @@
             </div>
           </div>
        <!-- Collapsable Boat Dashboard (view only display) -->
-    <div id="TDB-Panel" class="TDB-Panel collapse">
-      <div class="container">
-        <div class="row">
-          <div class="TDB-EmptyCol col-xs-3"> 
+      <div id="TDB-Panel" class="TDB-Panel collapse">
+        <div class="container">
+          <div class="row">
+            <div class="TDB-EmptyCol col-xs-3"> 
+            </div>
+            <div class="TDB-Panel col-xs-3">            
+              <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
+                <div class="VLM100_Pos" id="BoatLon"></div>
+                <div class="VLM100_Pos" id="BoatLat"></div>
+                <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
+                <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
+                <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
+                <div class="VLM100_PosSmall" id="BoatSpeed"></div>
+                <div class="VLM100_PosSmall" id="BoatAvg"></div>
+                <div class="VLM100_PosSmall" id="BoatHeading"></div>
+                <div class="VLM100_PosSmall" id="StatDNM">DNM</div>
+                <div class="VLM100_PosSmall" id="StatLoch">Loch</div>
+                <div class="VLM100_PosSmall" id="StatOrtho">Ortho</div>
+                <div class="VLM100_PosSmall" id="StatLoxo">Loxo</div>
+                <div class="VLM100_PosSmall" id="StatVMG">VMG</div>
+                <div class="VLM100_PosSmall" id="BoatDNM"></div>
+                <div class="VLM100_PosSmall" id="BoatLoch"></div>
+                <div class="VLM100_PosSmall" id="BoatOrtho"></div>
+                <div class="VLM100_PosSmall" id="BoatLoxo"></div>
+                <div class="VLM100_PosSmall" id="BoatVMG"></div>
+                </div>
+                  </div>
+            <div class="TDB-Panel col-xs-3">
+              <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
+                  <div class="WindAnglePanel">
+                    <img id="BearingRing" src="images/compass-small-complete.png"></img>
+                  </div>
+                  <div class="WindAnglePanel">
+                    <img id="DeckImage" src="images/deck-small.png"></img>
+                  </div>
+                  <div class="WindAnglePanel">
+                    <img id="ImgWindAngle"></img>
+                  </div>
+                  </div>
+                  </div>
+            <div class="TDB-Panel col-xs-3">
+              <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
+                <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
+                <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
+                <div class="VLM100_Label" id="StatWindAngle">Wind Angle</div>
+                <div class="VLM100_Unit" id="StatSpeedUnit">kts</div>
+                <div class="VLM100_Unit" id="StatDirUnit">°</div>
+                <div class="VLM100_Unit" id="StatAngleUnit">°</div>
+                <div class="VLM100_Value" id="BoatWindSpeed" ></div>
+                <div class="VLM100_Value" id="BoatWindDirection" ></div>
+                <div class="VLM100_Value" id="BoatWindAngle"></div>
+                </div>
+            </div>
           </div>
-          <div class="TDB-Panel col-xs-3">            
-            <div  class="TDB-Panel" style="background-image: url('images/VLM100-Nav-Center.png');">
-              <div class="VLM100_Pos" id="BoatLon"></div>
-              <div class="VLM100_Pos" id="BoatLat"></div>
-              <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
-              <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
-              <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
-              <div class="VLM100_PosSmall" id="BoatSpeed"></div>
-              <div class="VLM100_PosSmall" id="BoatAvg"></div>
-              <div class="VLM100_PosSmall" id="BoatHeading"></div>
-              <div class="VLM100_PosSmall" id="StatDNM">DNM</div>
-              <div class="VLM100_PosSmall" id="StatLoch">Loch</div>
-              <div class="VLM100_PosSmall" id="StatOrtho">Ortho</div>
-              <div class="VLM100_PosSmall" id="StatLoxo">Loxo</div>
-              <div class="VLM100_PosSmall" id="StatVMG">VMG</div>
-              <div class="VLM100_PosSmall" id="BoatDNM"></div>
-              <div class="VLM100_PosSmall" id="BoatLoch"></div>
-              <div class="VLM100_PosSmall" id="BoatOrtho"></div>
-              <div class="VLM100_PosSmall" id="BoatLoxo"></div>
-              <div class="VLM100_PosSmall" id="BoatVMG"></div>
-              </div>
-                </div>
-          <div class="TDB-Panel col-xs-3">
-            <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
-                <div class="WindAnglePanel">
-                  <img id="BearingRing" src="images/compass-small-complete.png"></img>
-                </div>
-                <div class="WindAnglePanel">
-                  <img id="DeckImage" src="images/deck-small.png"></img>
-                </div>
-                <div class="WindAnglePanel">
-                  <img id="ImgWindAngle"></img>
-                </div>
-                </div>
-                </div>
-          <div class="TDB-Panel col-xs-3">
-            <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
-              <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
-              <div class="VLM100_Label" id="StatWindDirection">Wind Direction</div>
-              <div class="VLM100_Label" id="StatWindAngle">Wind Angle</div>
-              <div class="VLM100_Unit" id="StatSpeedUnit">kts</div>
-              <div class="VLM100_Unit" id="StatDirUnit">°</div>
-              <div class="VLM100_Unit" id="StatAngleUnit">°</div>
-              <div class="VLM100_Value" id="BoatWindSpeed" ></div>
-              <div class="VLM100_Value" id="BoatWindDirection" ></div>
-              <div class="VLM100_Value" id="BoatWindAngle"></div>
-              </div>
-          </div>
-        </div>
-                </div>
-                </div>
+                  </div>
+                  </div>
       <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="TDB-Panel collapse">
         <div class="container">
@@ -493,60 +493,144 @@
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                  <fieldset class="fieldset row-fluid">
-                    <div class="col-xs-6" align="center">
-                      <span I18n="boatname">boatname</span>
-                    </div>
-                    <div class="col-xs-6" align="center">
-                      <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
-                    </div>
-                  </fieldset>
-                </div>
-                <div class="row">
-                  <div class="col-xs-6" align="center">
-                    <span I18n="choose_your_country" >Choisir son drapeau</span>
-                  </div>
-                </div>
-                  <div class="row">
-                    <div class="col-xs-offset-6 col-xs-6">
-                    <div  class="dropdown-toggle pays" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        Drapeau <span class="caret"></span>
-                    </div>
-                      <ul id="CountryDropDown" class="dropdown-menu " style="padding-left:15px;">
-                       
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="row">
+                <ul class="nav nav-tabs" id="TabModal">
+                        <li><a href="#PrefJoueur" data-toggle="tab">Joueur</a></li>
+                        <li><a href="#PrefBoat" data-toggle="tab">Bateau</a></li>
+                        <li><a href="#PrefAutre" data-toggle="tab">Autre</a></li>
+                </ul>
+                <div id="TabModalContent" class="tab-content">
+                  <div class="tab-pane fade in active" id="PrefJoueur">
+                    <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-6" align="center">
-                          <span I18n="color" >Couleur du bateau</span>
+                        <div class="col-xs-3">
+                          <span I18n="login_name">Pseudo</span>
                         </div>
-                        <div class="col-xs-6" align="center">
-                          <div id="cp11" class="input-group colorpicker-component"> 
-                            <input id="pref_boatcolor" type="text" value="#123456" class="form-control input-" />					
-                            <span class="input-group-addon"><i></i></span>
-                          </div> 
-                        </div> 
-                     </fieldset>
-            </div>
-            <div class="modal-footer">
-              <div class="row container-fluid">
-              <div class="col-xs-12">
-                 <div class="row">
-                  <div class="col-xs-6" align="center">
-              <button id="SettingCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref_Pseudo" value="Pseudo"></input>    
+                        </div>
+                      </fieldset>
+                    </div>
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-3">
+                          <span I18n="idplayer">IdPlayer</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref_Id" value="Id"></input>    
+                        </div>
+                      </fieldset>
+                    </div>
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-3">
+                          <span I18n="email">Mail Player</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref_Id" value="Mail"></input>    
+                        </div>
+                      </fieldset>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-3">
+                          <span I18n="yourboat">Bateau-1</span>
+                        </div>
+                        <div class="col-xs-3">
+                          <input class="input form-control " id="Nom_Bateau-1" value=""></input>    
+                        </div>
+                        <div class="col-xs-6" >
+                          <input class="input form-control " id="Detail_Bateau-1" value=""></input>    
+                        </div>
+                      </fieldset>
+                    </div>
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-3">
+                          <span I18n="yourboat">Bateau-2</span>
+                        </div>
+                        <div class="col-xs-3">
+                          <input class="input form-control " id="Nom_Bateau-2" value=""></input>    
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="Detail_Bateau-2" value=""></input>    
+                        </div>
+                      </fieldset>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                      <div>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/playerlogs.php"> Action récentes</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/create_boat.php">  Créer votre bateau.</a><a href="http://virtual-loup-de-mer.org/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/modify_password.php">Changez votre mot de passe</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_skippers.php">Gestion du boat-sitting</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_profil.php">Gestion du profil</a></p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-xs-6" align="center">
-              <button id="SettingValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
-                  </div>
+                  <div class="tab-pane fade" id="PrefBoat">
+                    <div class="row">
+                      <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-6">
+                          <span I18n="boatname">boatname</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                        </div>
+                      </fieldset>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                          <span I18n="choose_your_country" >Choisir son drapeau</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <div  class="dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                              Drapeaux <span class="caret"></span>
+                          </div>
+                          <ul id="CountryDropDown" class="dropdown-menu  scrollable-menu" style="padding-left:15px; width:300px">
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row">
+                         <fieldset class="fieldset row-fluid">
+                            <div class="col-xs-6">
+                              <span I18n="color" >Couleur du bateau</span>
+                            </div>
+                            <div class="col-xs-6">
+                              <div id="cp11" class="input-group colorpicker-component"> 
+                                <input id="pref_boatcolor" type="text" value="#123456" class="form-control input-" />					
+                                <span class="input-group-addon"><i></i></span>
+                              </div> 
+                            </div> 
+                         </fieldset>
+                      </div>  
+                     </div>
+                  <div class="tab-pane fade" id="PrefAutre">
+                    <div class="row">
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/playerlogs.php"> Action récentes</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/create_boat.php">  Créer votre bateau.</a><a href="http://virtual-loup-de-mer.org/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/modify_password.php">Changez votre mot de passe</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_skippers.php">Gestion du boat-sitting</a></p>
+                      <p> <a class="pref" href="http://virtual-loup-de-mer.org/manage_profil.php">Gestion du profil</a></p>
+                      </div>
+                    </div>
                  </div>
                  </div>
+                  <div class="modal-footer">
+                    <div class="row container-fluid">
+                      <div class="col-xs-12">
+                         <div class="row">
+                          <div class="col-xs-6" align="center">
+                            <button id="SettingCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
+                          </div>
+                          <div class="col-xs-6" align="center">
+                            <button id="SettingValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
+                          </div>
+                         </div>
+                      </div>
+                  </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
           </div>
       </div>
       <!-- Modal addpilote order -->
