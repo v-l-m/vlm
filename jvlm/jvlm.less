@@ -5,6 +5,7 @@
 */
 @import url('http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 @import url('/jvlm/jquery-ui.min.css');
+@import url('external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css');
 html, body, input {
   background-color: #e0e0f0;
   color: #FFFFFF;
@@ -603,9 +604,32 @@ span.ui-selectmenu-text {
 .dropdown-menu {
   background-color: #15214b;
 }
-.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-2, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+.form-control {
+  height:auto;
+  padding:0px;
+}
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+.input-group-addon{
+padding-bottom:4px;
+padding-top:4px;
+}
+.colorpicker-element .input-group-addon i, .colorpicker-element .add-on i{
+height:12px;
+width:12px;
+}
+.pref {
+margin-left:15px;
+}
+.lien-pref {
+margin-top:15px;
+}
+.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
   margin-top: 10px;
-  margin-bottom: 10px
+  /*margin-bottom: 10px*/
 }
 .navbar-brand {
   float: left;
