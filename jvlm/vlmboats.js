@@ -62,7 +62,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
                                                   if (SetWPPending)
                                                   {
                                                     CompleteWPSetPosition(e,e.xy);
-                                                    SetWPPending=false;
+                                                    HandleCancelSetWPOnClick();
                                                   }
                                               }
 
@@ -311,7 +311,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var WPMarker=new OpenLayers.Feature.Vector(
     WPTransformed,
     {},
-    { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 64, graphicWidth: 64 }
+    { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 48, graphicWidth: 48 }
   );
   BoatFeatures.push(WPMarker);
   VLMDragLayer.addFeatures(WPMarker);
@@ -1240,4 +1240,37 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
   }
 
   
+}
+
+function DeletePilotOrder(Boat,OrderId)
+{
+  $.post("/ws/boatsetup/pilototo_delete.php?","parms="+ JSON.stringify(
+              {idu:Boat.IdBoat,
+                taskid:parseInt(OrderId)}),
+      function(e)
+      {
+        if (e.success)
+        {
+          RefreshCurrentBoat(false,true);
+        }
+      }
+    )
+}
+
+function UpdateBoatPrefs(Boat,NewVals)
+{
+  NewVals["idu"]=Boat.IdBoat;
+  $.post("/ws/boatsetup/prefs_set.php","parms=" + JSON.stringify(NewVals),
+          function (e)
+          {
+            if (e.success)
+            {
+              RefreshCurrentBoat(false,true);
+            }
+            else
+            {
+              alert(GetLocalizedString("UpdateFailed"))
+            };
+          }
+        )
 }

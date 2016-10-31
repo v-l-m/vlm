@@ -45,6 +45,7 @@
       <script src="user.js"  type='text/javascript'></script>
       <script src='polar.js' type='text/javascript'></script>
       <script src='xmpp.js' type='text/javascript'></script>
+      <script src='autopilot.js' type='text/javascript'></script>
       
       
   </head>
@@ -246,7 +247,8 @@
                       <span I18n="mytargetpoint"> CurDest</span>
                       </div>
                       <div class="col-sm-2">
-                        <img id="SetWPOnClick" src="images/clickwp_pos.png"></img>
+                        <img id="SetWPOnClick" class="ClickWPPos_Off" src="images/clickwp_pos.png"></img>
+                        <img id="SetWPOffClick" class="ClickWPPos_On" src="images/clickwp_pos_on.png"></img>
                       </div>
                       <div class="col-sm-8">Cliquez sur la main puis sur la map pour positionner votre WP
                       </div>
@@ -346,9 +348,9 @@
                       
                     </div>
                     <div class="BoatControllerRow row">
-                    <div class="col-sm-4">
-                    <button class="button-black"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog">AddOrder</button>
-                    </div>
+                      <div class="col-sm-4">
+                        <button id="AutoPilotAddButton" class="button-black"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
+                      </div>
                     </div>
                   </div>   
                   </div>
@@ -491,41 +493,28 @@
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
             </div>
             <div class="modal-body">
-                 <div class="row">
-                <fieldset class="fieldset row-fluid">
+                <div class="row">
+                  <fieldset class="fieldset row-fluid">
                     <div class="col-xs-6" align="center">
-                  <span I18n="boatname">boatname</span>
-                  </div>
+                      <span I18n="boatname">boatname</span>
+                    </div>
                     <div class="col-xs-6" align="center">
-                  <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                      <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="choose_your_country" >Choisir son drapeau</span>
                   </div>
-                </fieldset>
-              </div>
-                  <div class="row">
-                    <div class="col-xs-6" align="center">
-                  <span I18n="choose_your_country" >Choisir son drapeau</span>
-                  </div>
-                <fieldset class="fieldset col-xs-6">
-                    <div >
-                  <select id="FlagSelector" class="select form-control"></select>  
-                  </div>
-                </fieldset>
                 </div>
                   <div class="row">
                     <div class="col-xs-offset-6 col-xs-6">
-                    <div class="dropdown-toggle pays" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div  class="dropdown-toggle pays" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         Drapeau <span class="caret"></span>
                     </div>
-                      <ul class="dropdown-menu note" style="padding-left:15px;">
-                       <li><img class="flag" src="/cache/flags/00-UN.png" title="00-UN" alt="00-UN"><span id="note" style="margin-left:10px;"></span> </li>
-<script type="text/javascript">
-$(function(){ 
-var note =  $('.note').find('img').attr('alt') ;
-$('#note').after(note);
-});
-</script> 
-
-
+                      <ul id="CountryDropDown" class="dropdown-menu " style="padding-left:15px;">
+                       
                       </ul>
                     </div>
                   </div>
@@ -571,63 +560,28 @@ $('#note').after(note);
             </div>
             <div class="modal-body">
               <div class="row container-fluid">
-              <div class="col-xs-12">
+                <div class="col-xs-12">
                   <div class="form-group">
-                 <div class="row">
-                       <label for="dtp_input2" class="col-md-4 control-label">Date Picking</label>
-                <div class="input-group date form_date col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                    <input class="form-control" size="12" type="text" value="" >
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input2" value="" /><br/>
-                  </div>
-            <div class="row">
+                    <div class="row">
+                      <label for="dtp_input2" class="col-md-4 control-label">Date Picking</label>
+                      <div class="input-group date form_date col-md-8" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                        <input id="AP_Date" class="form-control" size="12" type="text" value="1/1/1970" >
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                      </div>
+				              <input type="hidden" id="dtp_input2" value="13:37" /><br/>
+                    </div>
+                    <div class="row">
                       <div class="form-group">
-                <label for="dtp_input3" class="col-md-4 control-label">Time Picking</label>
-                <div class="input-group date form_time col-md-8" data-date="" data-date-format="hh:ii:ss" data-link-field="dtp_input3" data-link-format="hh:ii:ss">
-                    <input class="form-control" size="12" type="text" value="" >
-					<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                </div>
-				<input type="hidden" id="dtp_input3" value="" /><br/>
-            </div>
+                        <label for="dtp_input3" class="col-md-4 control-label">Time Picking</label>
+                        <div class="input-group date form_time col-md-8" data-date="" data-date-format="hh:ii:ss" data-link-field="dtp_input3" data-link-format="hh:ii:ss">
+                          <input id="AP_Time" class="form-control" size="12" type="text" value="" >
+					                <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                        </div>
+				                <input type="hidden" id="dtp_input3" value="" /><br/>
+                      </div>
+                    </div>
               </div>
-            </div>
-        <script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        language:  'fr',
-        defaultTime:'current',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 0
-    });
-    $('.form_date').datetimepicker({
-        language:  'fr',
-        defaultTime:'current',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-    });
-    $('.form_time').datetimepicker({
-        language:  'fr',
-        defaultTime:'current',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 1,
-		minView: 0,
-		maxView: 1,
-		forceParse: 0
-    });
-</script>
+        
 
             <div class="modal-footer">
               <div class="row container-fluid">

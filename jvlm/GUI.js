@@ -282,14 +282,12 @@ function InitMenusAndButtons()
     $('#SettingValidateButton').click(
       function()
       {
-        $.post("/ws/boatinfo/prefs.php","parms=" + JSON.stringify({
-              idu:10657,
-              color:654321}),
-          function (e)
-          {
-            var i = 0;
-          }
-        )
+        var NewVals={};
+
+        NewVals["boatname"]=$("#pref_boatname")[0].value;
+        NewVals["country"]=$("#FlagSelector")[0].value;
+        NewVals["color"]=$("#pref_boatcolor")[0].value;
+        UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals})
       }
     )
     
@@ -327,13 +325,70 @@ function InitMenusAndButtons()
       }
     )
 
+    // Handler for Set WP on click
     $("#SetWPOnClick").click(HandleStartSetWPOnClick);
+    $("#SetWPOffClick").click(HandleCancelSetWPOnClick);
+    HandleCancelSetWPOnClick();
 
+    // Add handlers for autopilot buttons
+    $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
+    $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
+    
+
+
+    // Init Datetime picker for autopilot
+    $('.form_datetime').datetimepicker({
+        language: 'fr',
+        defaultTime: 'current',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 0
+    });
+    $('.form_date').datetimepicker({
+        language: 'fr',
+        defaultTime: 'current',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+    $('.form_time').datetimepicker({
+        language: 'fr',
+        defaultTime: 'current',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0
+    });
+
+    $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
+    //$("#AutoPilotSettingForm").on("show", HandleOpenAutoPilotSetPoint);
+}
+
+function HandleCancelSetWPOnClick()
+{
+  SetWPPending = false;
+  $("#SetWPOnClick").show();
+  $("#SetWPOffClick").hide();
 }
 
 function HandleStartSetWPOnClick()
 {
   SetWPPending = true;
+  $("#SetWPOnClick").hide();
+  $("#SetWPOffClick").show();
+
 }
 
 function ClearBoatSelector()
@@ -495,7 +550,6 @@ function UpdateInMenuRacingBoatInfo(Boat)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
   BoatFieldMappings.push([FIELD_MAPPING_CHECK,"#PM_WithWPHeading", Boat.VLMInfo['H@WP'] != "-1.0"]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
@@ -513,10 +567,12 @@ function UpdateInMenuRacingBoatInfo(Boat)
   
   if (Boat.VLMInfo.PIM==PM_ANGLE)
   {
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.PIP) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Boat.VLMInfo.PIP ]);
   }
   else
   {
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
   }
 
@@ -653,11 +709,32 @@ function ShowAutoPilotLine(Boat,Index)
   var PilOrder=Boat.VLMInfo.PIL[Index-1];
   var OrderDate = new Date(PilOrder.TTS*1000)
   var PIMText = GetPilotModeName(PilOrder.PIM);
-  
+
+  $(Id)[0].attributes['TID']=PilOrder.TID
   SetSubItemValue(Id,"#PIL_DATE",OrderDate)
   SetSubItemValue(Id,"#PIL_PIM",PIMText)
   SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
   SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+}
+
+function HandlePilotEditDelete(e)
+{
+  var ClickedItem = $(this)[0]
+  var ItemId = ClickedItem.attributes['class'].value;
+  var PilOrderElement = ClickedItem.parentElement.parentElement;
+  var Boat = _CurPlayer.CurBoat;
+
+  var OrderIndex = parseInt(PilOrderElement.attributes['id'].nodeValue.substring(3));
+
+  if (ItemId == "PIL_EDIT")
+  {
+    console.log("now edit pilototo order#" +OrderIndex)
+  }
+  else if (ItemId == "PIL_DELETE")
+  {
+    DeletePilotOrder(Boat,PilOrderElement.attributes['TID']);
+  }
+
 }
 
 function GetPilotModeName(PIM)
@@ -747,8 +824,13 @@ function UpdatePrefsDialog(Boat)
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
     $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
-    $("#pref_boatcolor").val("#"+Boat.VLMInfo.COL);
-    $("#cp11").colorpicker({color:"#"+Boat.VLMInfo.COL});
+    var ColString = Boat.VLMInfo.COL;
+    if (ColString.substring(0,1)!="#")
+    {
+      ColString="#"+ColString;
+    }
+    $("#pref_boatcolor").val(ColString);
+    $("#cp11").colorpicker({color:ColString});
     
   }
 
@@ -907,4 +989,26 @@ function UpdateLngDropDown()
     '<span class="caret"></span>'
     )
 
+}
+
+function HandleOpenAutoPilotSetPoint(e) 
+{
+  var Target = e.target;
+  var TargetId = Target.attributes["id"].nodeValue;
+  var Order = null;
+
+  switch(TargetId)
+    {
+      case "AutoPilotAddButton":
+        // Create a new autopilot order
+        Order = new AutoPilotOrder();
+               
+    }
+
+    $("#AP_Date").val(Order.GetOrderDateString());
+    $("#AP_Time").val(Order.GetOrderTimeString());
+    
+    $("#dtp_input2").datetimepicker('update');
+    $("#dtp_input3").datetimepicker('update');
+  
 }
