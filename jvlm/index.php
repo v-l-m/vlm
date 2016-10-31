@@ -493,41 +493,28 @@
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
             </div>
             <div class="modal-body">
-                 <div class="row">
-                <fieldset class="fieldset row-fluid">
+                <div class="row">
+                  <fieldset class="fieldset row-fluid">
                     <div class="col-xs-6" align="center">
-                  <span I18n="boatname">boatname</span>
-                  </div>
+                      <span I18n="boatname">boatname</span>
+                    </div>
                     <div class="col-xs-6" align="center">
-                  <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                      <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="choose_your_country" >Choisir son drapeau</span>
                   </div>
-                </fieldset>
-              </div>
-                  <div class="row">
-                    <div class="col-xs-6" align="center">
-                  <span I18n="choose_your_country" >Choisir son drapeau</span>
-                  </div>
-                <fieldset class="fieldset col-xs-6">
-                    <div >
-                  <select id="FlagSelector" class="select form-control"></select>  
-                  </div>
-                </fieldset>
                 </div>
                   <div class="row">
                     <div class="col-xs-offset-6 col-xs-6">
-                    <div class="dropdown-toggle pays" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div  class="dropdown-toggle pays" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         Drapeau <span class="caret"></span>
                     </div>
-                      <ul class="dropdown-menu note" style="padding-left:15px;">
-                       <li><img class="flag" src="/cache/flags/00-UN.png" title="00-UN" alt="00-UN"><span id="note" style="margin-left:10px;"></span> </li>
-<script type="text/javascript">
-$(function(){ 
-var note =  $('.note').find('img').attr('alt') ;
-$('#note').after(note);
-});
-</script> 
-
-
+                      <ul id="CountryDropDown" class="dropdown-menu " style="padding-left:15px;">
+                       
                       </ul>
                     </div>
                   </div>

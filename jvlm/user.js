@@ -277,17 +277,15 @@ function GetFlagsList()
           var i = result;
           if (result.success)
           {
-            var Selector=$("#FlagSelector")[0];
+            var DropDown=$("#CountryDropDown");
 
             for (index in result.flags)
             {
-              $("#FlagSelector").append($('<option />',
-                                { 
-                                  value: result.flags[index],
-                                  text: result.flags[index],
-                                }
-                              )
-                            );
+              var title = result.flags[index];
+              DropDown.append("<li>"+
+                              " <img class='flag' src='/cache/flags/"+title+".png' title='"+title+"' alt='"+title+"'></img>"+
+                              " <span style='margin-left:10px;'> - "+ title +"</span>"+
+                              "</li>")
             }
           }
         }
