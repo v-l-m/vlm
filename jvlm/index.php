@@ -498,76 +498,499 @@
                         <li><a href="#PrefBoat" data-toggle="tab">Bateau</a></li>
                         <li><a href="#PrefAutre" data-toggle="tab">Autre</a></li>
                 </ul>
-                <div id="TabModalContent" class="tab-content">
+                <div id="TabModalContent" class="tab-content modal-pref">
                   <div class="tab-pane fade in active" id="PrefJoueur">
+                    <!--Langue-->
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-6">
-                          <span I18n="login_name">Pseudo</span>
+                        <div class="col-xs-5">
+                          <span I18n="pref_helper_lang_ihm">Langue</span>
                         </div>
-                        <div class="col-xs-6">
-                          <input class="input form-control " id="pref_Pseudo" value="Pseudo"></input>    
+                        <div class="col-xs-5">
+                          <select name="pref_lang_ihm" class="input form-control selectpref" id="inputpref-lang_ihm">
+                              <option value="en">English Version</option>
+                              <option value="fr" selected>Version Française</option>
+                              <option value="it">Italian Version</option>
+                              <option value="es">Spanish Version</option>
+                              <option value="de">Deutsche Fassung</option>
+                              <option value="pt">Portugese Version</option>
+                          </select> 
                         </div>
+                          <div class="col-xs-2">
+                         <div class="btn-group" data-toggle="buttons">
+                                
+                                <label class="btn btn-pref btn-success active">
+                                  <input type="checkbox" autocomplete="off" checked>
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>
+
+                                <label class="btn btn-pref btn-warning">
+                                  <input type="checkbox" autocomplete="off">
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>			
+                              
+                              </div>
+                          </div>
                       </fieldset>
                     </div>
+                    <!--Langue parlées-->
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-6">
-                          <span I18n="idplayer">IdPlayer</span>
+                        <div class="col-xs-5">
+                          <span I18n="pref_lang_communication">Langue</span>
                         </div>
-                        <div class="col-xs-6">
-                          <input class="input form-control " id="pref_Id" value="Id"></input>    
+                        <div class="col-xs-5">
+                          <select title="Sélectionnez les langues que vous parlez. Vous pouvez en sélectionner plusieurs." name="pref_lang_communication[]" multiple class="input form-control selectpref" id="inputpref-lang_communication">
+                              <option value="﻿aar">Afar</option>
+                              <option value="abk">Abkhazian</option>
+                              <option value="afr">Afrikaans</option>
+                              <option value="aka">Akan</option>
+                              <option value="alb">Albanian</option>
+                              <option value="amh">Amharic</option>
+                              <option value="ara">Arabic</option>
+                              <option value="arg">Aragonese</option>
+                              <option value="arm">Armenian</option>
+                              <option value="asm">Assamese</option>
+                              <option value="ava">Avaric</option>
+                              <option value="ave">Avestan</option>
+                              <option value="aym">Aymara</option>
+                              <option value="aze">Azerbaijani</option>
+                              <option value="bak">Bashkir</option>
+                              <option value="bam">Bambara</option>
+                              <option value="baq">Basque</option>
+                              <option value="bel">Belarusian</option>
+                              <option value="ben">Bengali</option>
+                              <option value="bih">Bihari languages</option>
+                              <option value="bis">Bislama</option>
+                              <option value="bos">Bosnian</option>
+                              <option value="bre">Breton</option>
+                              <option value="bul">Bulgarian</option>
+                              <option value="bur">Burmese</option>
+                              <option value="cat">Catalan; Valencian</option>
+                              <option value="cha">Chamorro</option>
+                              <option value="che">Chechen</option>
+                              <option value="chi">Chinese</option>
+                              <option value="chu">Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic</option>
+                              <option value="chv">Chuvash</option>
+                              <option value="cor">Cornish</option>
+                              <option value="cos">Corsican</option>
+                              <option value="cre">Cree</option>
+                              <option value="cze">Czech</option>
+                              <option value="dan">Danish</option>
+                              <option value="div">Divehi; Dhivehi; Maldivian</option>
+                              <option value="dut">Dutch; Flemish</option>
+                              <option value="dzo">Dzongkha</option>
+                              <option value="eng">English</option>
+                              <option value="epo">Esperanto</option>
+                              <option value="est">Estonian</option>
+                              <option value="ewe">Ewe</option>
+                              <option value="fao">Faroese</option>
+                              <option value="fij">Fijian</option>
+                              <option value="fin">Finnish</option>
+                              <option value="fre">French</option>
+                              <option value="fry">Western Frisian</option>
+                              <option value="ful">Fulah</option>
+                              <option value="geo">Georgian</option>
+                              <option value="ger">German</option>
+                              <option value="gla">Gaelic; Scottish Gaelic</option>
+                              <option value="gle">Irish</option>
+                              <option value="glg">Galician</option>
+                              <option value="glv">Manx</option>
+                              <option value="gre">Greek, Modern (1453-)</option>
+                              <option value="grn">Guarani</option>
+                              <option value="guj">Gujarati</option>
+                              <option value="hat">Haitian; Haitian Creole</option>
+                              <option value="hau">Hausa</option>
+                              <option value="heb">Hebrew</option>
+                              <option value="her">Herero</option>
+                              <option value="hin">Hindi</option>
+                              <option value="hmo">Hiri Motu</option>
+                              <option value="hrv">Croatian</option>
+                              <option value="hun">Hungarian</option>
+                              <option value="ibo">Igbo</option>
+                              <option value="ice">Icelandic</option>
+                              <option value="ido">Ido</option>
+                              <option value="iii">Sichuan Yi; Nuosu</option>
+                              <option value="iku">Inuktitut</option>
+                              <option value="ile">Interlingue; Occidental</option>
+                              <option value="ina">Interlingua (International Auxiliary Language Association)</option>
+                              <option value="ind">Indonesian</option>
+                              <option value="ipk">Inupiaq</option>
+                              <option value="ita">Italian</option>
+                              <option value="jav">Javanese</option>
+                              <option value="jpn">Japanese</option>
+                              <option value="kal">Kalaallisut; Greenlandic</option>
+                              <option value="kan">Kannada</option>
+                              <option value="kas">Kashmiri</option>
+                              <option value="kau">Kanuri</option>
+                              <option value="kaz">Kazakh</option>
+                              <option value="khm">Central Khmer</option>
+                              <option value="kik">Kikuyu; Gikuyu</option>
+                              <option value="kin">Kinyarwanda</option>
+                              <option value="kir">Kirghiz; Kyrgyz</option>
+                              <option value="kom">Komi</option>
+                              <option value="kon">Kongo</option>
+                              <option value="kor">Korean</option>
+                              <option value="kua">Kuanyama; Kwanyama</option>
+                              <option value="kur">Kurdish</option>
+                              <option value="lao">Lao</option>
+                              <option value="lat">Latin</option>
+                              <option value="lav">Latvian</option>
+                              <option value="lim">Limburgan; Limburger; Limburgish</option>
+                              <option value="lin">Lingala</option>
+                              <option value="lit">Lithuanian</option>
+                              <option value="ltz">Luxembourgish; Letzeburgesch</option>
+                              <option value="lub">Luba-Katanga</option>
+                              <option value="lug">Ganda</option>
+                              <option value="mac">Macedonian</option>
+                              <option value="mah">Marshallese</option>
+                              <option value="mal">Malayalam</option>
+                              <option value="mao">Maori</option>
+                              <option value="mar">Marathi</option>
+                              <option value="may">Malay</option>
+                              <option value="mlg">Malagasy</option>
+                              <option value="mlt">Maltese</option>
+                              <option value="mon">Mongolian</option>
+                              <option value="nau">Nauru</option>
+                              <option value="nav">Navajo; Navaho</option>
+                              <option value="nbl">Ndebele, South; South Ndebele</option>
+                              <option value="nde">Ndebele, North; North Ndebele</option>
+                              <option value="ndo">Ndonga</option>
+                              <option value="nep">Nepali</option>
+                              <option value="nno">Norwegian Nynorsk; Nynorsk, Norwegian</option>
+                              <option value="nob">Bokmål, Norwegian; Norwegian Bokmål</option>
+                              <option value="nor">Norwegian</option>
+                              <option value="nya">Chichewa; Chewa; Nyanja</option>
+                              <option value="oci">Occitan (post 1500); Provençal</option>
+                              <option value="oji">Ojibwa</option>
+                              <option value="ori">Oriya</option>
+                              <option value="orm">Oromo</option>
+                              <option value="oss">Ossetian; Ossetic</option>
+                              <option value="pan">Panjabi; Punjabi</option>
+                              <option value="per">Persian</option>
+                              <option value="pli">Pali</option>
+                              <option value="pol">Polish</option>
+                              <option value="por">Portuguese</option>
+                              <option value="pus">Pushto; Pashto</option>
+                              <option value="que">Quechua</option>
+                              <option value="roh">Romansh</option>
+                              <option value="rum">Romanian; Moldavian; Moldovan</option>
+                              <option value="run">Rundi</option>
+                              <option value="rus">Russian</option>
+                              <option value="sag">Sango</option>
+                              <option value="san">Sanskrit</option>
+                              <option value="sin">Sinhala; Sinhalese</option>
+                              <option value="slo">Slovak</option>
+                              <option value="slv">Slovenian</option>
+                              <option value="sme">Northern Sami</option>
+                              <option value="smo">Samoan</option>
+                              <option value="sna">Shona</option>
+                              <option value="snd">Sindhi</option>
+                              <option value="som">Somali</option>
+                              <option value="sot">Sotho, Southern</option>
+                              <option value="spa">Spanish; Castilian</option>
+                              <option value="srd">Sardinian</option>
+                              <option value="srp">Serbian</option>
+                              <option value="ssw">Swati</option>
+                              <option value="sun">Sundanese</option>
+                              <option value="swa">Swahili</option>
+                              <option value="swe">Swedish</option>
+                              <option value="tah">Tahitian</option>
+                              <option value="tam">Tamil</option>
+                              <option value="tat">Tatar</option>
+                              <option value="tel">Telugu</option>
+                              <option value="tgk">Tajik</option>
+                              <option value="tgl">Tagalog</option>
+                              <option value="tha">Thai</option>
+                              <option value="tib">Tibetan</option>
+                              <option value="tir">Tigrinya</option>
+                              <option value="ton">Tonga (Tonga Islands)</option>
+                              <option value="tsn">Tswana</option>
+                              <option value="tso">Tsonga</option>
+                              <option value="tuk">Turkmen</option>
+                              <option value="tur">Turkish</option>
+                              <option value="twi">Twi</option>
+                              <option value="uig">Uighur; Uyghur</option>
+                              <option value="ukr">Ukrainian</option>
+                              <option value="urd">Urdu</option>
+                              <option value="uzb">Uzbek</option>
+                              <option value="ven">Venda</option>
+                              <option value="vie">Vietnamese</option>
+                              <option value="vol">Volapük</option>
+                              <option value="wel">Welsh</option>
+                              <option value="wln">Walloon</option>
+                              <option value="wol">Wolof</option>
+                              <option value="xho">Xhosa</option>
+                              <option value="yid">Yiddish</option>
+                              <option value="yor">Yoruba</option>
+                              <option value="zha">Zhuang; Chuang</option>
+                              <option value="zul">Zulu</option>
+                          </select>    
                         </div>
-                      </fieldset>
-                    </div>
-                    <div class="row">
-                     <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-6">
-                          <span I18n="email">Mail Player</span>
-                        </div>
-                        <div class="col-xs-6">
-                          <input class="input form-control " id="pref_Id" value="Mail"></input>    
-                        </div>
+                          <div class="col-xs-2">
+                         <div class="btn-group" data-toggle="buttons">
+                                
+                                <label class="btn btn-pref btn-success active">
+                                  <input type="checkbox" autocomplete="off" checked>
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>
+
+                                <label class="btn btn-pref btn-warning">
+                                  <input type="checkbox" autocomplete="off">
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>			
+                              
+                              </div>
+                          </div>
                       </fieldset>
                     </div>
                     <hr/>
                     <div class="row">
-                     <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-3">
-                          <span I18n="yourboat">Bateau-1</span>
+                        <div class="col-xs-12">
+                          <h4 ><span I18n="prefsgroup_contact">Information de connexion</span></h4>
                         </div>
-                        <div class="col-xs-3">
-                          <input class="input form-control " id="Nom_Bateau-1" value=""></input>    
-                        </div>
-                        <div class="col-xs-6" >
-                          <input class="input form-control " id="Detail_Bateau-1" value=""></input>    
-                        </div>
-                      </fieldset>
                     </div>
+                    <!--Mail-->
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
-                        <div class="col-xs-3">
-                          <span I18n="yourboat">Bateau-2</span>
-                        </div>
-                        <div class="col-xs-3">
-                          <input class="input form-control " id="Nom_Bateau-2" value=""></input>    
+                        <div class="col-xs-4" align="center">
+                          <img src="images/mail.svg" alt="mail"/>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="Detail_Bateau-2" value=""></input>    
+                          <input class="input form-control " id="pref_Id" value="Mail" style="margin-top:5px;"></input>    
+                        </div>
+                        <div class="col-xs-2">
+                            
+                            <div class="btn-group" data-toggle="buttons">
+                              
+                              <label class="btn btn-pref btn-success active">
+                                <input type="checkbox" autocomplete="off" checked>
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>
+
+                              <label class="btn btn-pref btn-warning">
+                                <input type="checkbox" autocomplete="off">
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>			
+                            
+                            </div>
+
+                          </div>
+                      </fieldset>
+                    </div>
+                    <!--Twiter-->
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-4" align="center" >
+                          <img src="images/twiter.svg" alt="mail"/>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref-twiter" value="twiter" style="margin-top:5px;"></input>    
+                        </div>
+                        <div class="col-xs-2">
+                       <div class="btn-group" data-toggle="buttons">
+                              
+                              <label class="btn btn-pref btn-success active">
+                                <input type="checkbox" autocomplete="off" checked>
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>
+
+                              <label class="btn btn-pref btn-warning">
+                                <input type="checkbox" autocomplete="off">
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>			
+                            
+                            </div>
                         </div>
                       </fieldset>
                     </div>
-                    <hr/>
-                    <!--<div class="row">
-                      <div>
-                      <p> <a class="pref" href="/playerlogs.php"> Action récentes</a></p>
-                      <p> <a class="pref" href="/create_boat.php">  Créer votre bateau.</a><a class="pref" href="/attach_owner.php"> Vous pouvez aussi rattacher un ancien bateau.</a></p>
-                      <p> <a class="pref" href="/modify_password.php">Changez votre mot de passe</a></p>
-                      <p> <a class="pref" href="/manage_skippers.php">Gestion du boat-sitting</a></p>
-                      <p> <a class="pref" href="/manage_profil.php">Gestion du profil</a></p>
+                    <!--Facebook-->
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-4" align="center" >
+                          <img src="images/facebook.svg" alt="mail"/>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref-facebook" value="facebook" style="margin-top:5px;"></input>    
+                        </div>
+                        <div class="col-xs-2">
+                       <div class="btn-group" data-toggle="buttons">
+                              
+                              <label class="btn btn-pref btn-success active">
+                                <input type="checkbox" autocomplete="off" checked>
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>
+
+                              <label class="btn btn-pref btn-warning">
+                                <input type="checkbox" autocomplete="off">
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>			
+                            
+                            </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                    <!--MSN-->
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-4" align="center" >
+                          <img src="images/msn.svg" alt="msn"/>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref-msn" value="msn" style="margin-top:5px;"></input>    
+                        </div>
+                        <div class="col-xs-2">
+                       <div class="btn-group" data-toggle="buttons">
+                              
+                              <label class="btn btn-pref btn-success active">
+                                <input type="checkbox" autocomplete="off" checked>
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>
+
+                              <label class="btn btn-pref btn-warning">
+                                <input type="checkbox" autocomplete="off">
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>			
+                            
+                            </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                    <!--Jabber-->
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-4" align="center" >
+                          <img src="images/jabber.svg" alt="jabber"/>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="input form-control " id="pref-jabber" value="jabber" style="margin-top:5px;"></input>    
+                        </div>
+                        <div class="col-xs-2">
+                       <div class="btn-group" data-toggle="buttons">
+                              
+                              <label class="btn btn-pref btn-success active">
+                                <input type="checkbox" autocomplete="off" checked>
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>
+
+                              <label class="btn btn-pref btn-warning">
+                                <input type="checkbox" autocomplete="off">
+                                <span class="glyphicon glyphicon-ok"></span>
+                              </label>			
+                            
+                            </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                    <!--google-->
+                     <div class="row">
+                       <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-4" align="center" >
+                            <img src="images/google.svg" alt="google"/>
+                          </div>
+                          <div class="col-xs-6">
+                            <input class="input form-control " id="pref-goolge" value="google" style="margin-top:5px;"></input>    
+                          </div>
+                          <div class="col-xs-2">
+                         <div class="btn-group" data-toggle="buttons">
+                                
+                                <label class="btn btn-pref btn-success active">
+                                  <input type="checkbox" autocomplete="off" checked>
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>
+
+                                <label class="btn btn-pref btn-warning">
+                                  <input type="checkbox" autocomplete="off">
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>			
+                              
+                              </div>
+                          </div>
+                        </fieldset>
                       </div>
-                    </div>-->
-                  </div>
+                  <hr/>
+                    <div class="row">
+                        <div class="col-xs-12">
+                          <h4 ><span I18n="forums">Forums voileux</span></h4>
+                        </div>
+                    </div>
+                     <div class="row">
+                       <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-5" >
+                            <span I18n="pref_contact_taverne">forum</span>
+                          </div>
+                          <div class="col-xs-5">
+                            <input class="input form-control " id="pref-taverne" value="taverne" style="margin-top:5px;"></input>    
+                          </div>
+                          <div class="col-xs-2">
+                         <div class="btn-group" data-toggle="buttons">
+                                
+                                <label class="btn btn-pref btn-success active">
+                                  <input type="checkbox" autocomplete="off" checked>
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>
+
+                                <label class="btn btn-pref btn-warning">
+                                  <input type="checkbox" autocomplete="off">
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>			
+                              
+                              </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                     <div class="row">
+                       <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-5" >
+                            <span I18n="pref_contact_revatua">forum</span>
+                          </div>
+                          <div class="col-xs-5">
+                            <input class="input form-control " id="pref-revatua" value="revatua" style="margin-top:5px;"></input>    
+                          </div>
+                          <div class="col-xs-2">
+                         <div class="btn-group" data-toggle="buttons">
+                                
+                                <label class="btn btn-pref btn-success active">
+                                  <input type="checkbox" autocomplete="off" checked>
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>
+
+                                <label class="btn btn-pref btn-warning">
+                                  <input type="checkbox" autocomplete="off">
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>			
+                              
+                              </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                     <div class="row">
+                       <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-5" >
+                            <span I18n="pref_contact_fmv">forum</span>
+                          </div>
+                          <div class="col-xs-5">
+                            <input class="input form-control " id="pref-fmv" value="fmv" style="margin-top:5px;"></input>    
+                          </div>
+                          <div class="col-xs-2">
+                         <div class="btn-group" data-toggle="buttons">
+                                
+                                <label class="btn btn-pref btn-success active">
+                                  <input type="checkbox" autocomplete="off" checked>
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>
+
+                                <label class="btn btn-pref btn-warning">
+                                  <input type="checkbox" autocomplete="off">
+                                  <span class="glyphicon glyphicon-ok"></span>
+                                </label>			
+                              
+                              </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                    
+                    </div>
                   <div class="tab-pane fade" id="PrefBoat">
                     <div class="row">
                       <fieldset class="fieldset row-fluid">
