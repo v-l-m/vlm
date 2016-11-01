@@ -373,7 +373,14 @@ function InitMenusAndButtons()
     });
 
     $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
-    //$("#AutoPilotSettingForm").on("show", HandleOpenAutoPilotSetPoint);
+    
+    // Catch flag selection change
+    $(".FlagLine").on('click',HandleFlagLineClick);
+}
+
+function HandleFlagLineClick(e)
+{
+  var i=0;
 }
 
 function HandleCancelSetWPOnClick()
