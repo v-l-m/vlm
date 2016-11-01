@@ -489,8 +489,16 @@
           <!-- Modal content-->
           <div class="modal-content" id="SettingsPanel">              
             <div class="modal-header">
+              <div class="col-xs-8">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
+              </div>
+              <div class="col-xs-2">
+                <label for="success" class="btn btn-success">BS <input type="checkbox" id="success" class="badgebox"></label>
+              </div>
+              <div class="col-xs-2">
+                <label for="warning" class="btn btn-warning">VLM <input type="checkbox" id="warning" class="badgebox"></label>
+              </div>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="TabModal">
@@ -519,7 +527,7 @@
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
                                 
-                                <label class="btn btn-pref btn-success active">
+                                <label class="btn btn-pref btn-success ">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>
@@ -730,7 +738,7 @@
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
                                 
-                                <label class="btn btn-pref btn-success active">
+                                <label class="btn btn-pref btn-success ">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>
@@ -763,7 +771,7 @@
                             
                             <div class="btn-group" data-toggle="buttons">
                               
-                              <label class="btn btn-pref btn-success active">
+                              <label class="btn btn-pref btn-success ">
                                 <input type="checkbox" autocomplete="off" checked>
                                 <span class="glyphicon glyphicon-ok"></span>
                               </label>
@@ -790,7 +798,7 @@
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
                               
-                              <label class="btn btn-pref btn-success active">
+                              <label class="btn btn-pref btn-success ">
                                 <input type="checkbox" autocomplete="off" checked>
                                 <span class="glyphicon glyphicon-ok"></span>
                               </label>
@@ -816,7 +824,7 @@
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
                               
-                              <label class="btn btn-pref btn-success active">
+                              <label class="btn btn-pref btn-success ">
                                 <input type="checkbox" autocomplete="off" checked>
                                 <span class="glyphicon glyphicon-ok"></span>
                               </label>
@@ -842,7 +850,7 @@
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
                               
-                              <label class="btn btn-pref btn-success active">
+                              <label class="btn btn-pref btn-success ">
                                 <input type="checkbox" autocomplete="off" checked>
                                 <span class="glyphicon glyphicon-ok"></span>
                               </label>
@@ -868,7 +876,7 @@
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
                               
-                              <label class="btn btn-pref btn-success active">
+                              <label class="btn btn-pref btn-success ">
                                 <input type="checkbox" autocomplete="off" checked>
                                 <span class="glyphicon glyphicon-ok"></span>
                               </label>
@@ -894,7 +902,7 @@
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
                                 
-                                <label class="btn btn-pref btn-success active">
+                                <label class="btn btn-pref btn-success ">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>
@@ -925,7 +933,7 @@
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
                                 
-                                <label class="btn btn-pref btn-success active">
+                                <label class="btn btn-pref btn-success">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>
@@ -950,7 +958,7 @@
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
                                 
-                                <label class="btn btn-pref btn-success active">
+                                <label class="btn btn-pref btn-success ">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>
@@ -975,7 +983,7 @@
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
                                 
-                                <label class="btn btn-pref btn-success active">
+                                <label class="btn btn-pref btn-success ">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>
