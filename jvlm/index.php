@@ -502,12 +502,12 @@
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="TabModal">
+                        <li class="active"><a href="#PrefBoat" data-toggle="tab" aria-expanded="true">Bateau</a></li>
                         <li><a href="#PrefJoueur" data-toggle="tab">Joueur</a></li>
-                        <li><a href="#PrefBoat" data-toggle="tab">Bateau</a></li>
                         <li><a href="#PrefAutre" data-toggle="tab">Autre</a></li>
                 </ul>
                 <div id="TabModalContent" class="tab-content modal-pref">
-                  <div class="tab-pane fade in active" id="PrefJoueur">
+                  <div class="tab-pane fade" id="PrefJoueur">
                     <!--Langue-->
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
@@ -999,7 +999,7 @@
                       </div>
                     
                     </div>
-                  <div class="tab-pane fade" id="PrefBoat">
+                  <div class="tab-pane fade in active" id="PrefBoat">
                     <div class="row">
                       <fieldset class="fieldset row-fluid">
                         <div class="col-xs-6">
