@@ -327,7 +327,6 @@
                     </div>
                     <div id='PIL1' class='row'>
                       <div class='col-xs-4'>
-                        <img src="/externals/jscalendar/img.gif" id="trigger_jscal_1" class="calendarbutton" title="Date selector" onmouseover="this.style.background='red';" onmouseout="this.style.background=''">
                         <span id='PIL_DATE' >10 Oct 2016 22:06</span>
                       </div>
                       <div class='col-xs-2'>
@@ -1075,8 +1074,8 @@
                   <div class="form-group">
                     <div class="row">
                       <label for="AP_Date" class="col-md-4 control-label">Date Picking</label>
-                      <div id="AP_Date" class="input-group date form_date col-md-8" data-date-format="dd MM yyyy" data-link-field="AP_Time" data-link-format="yyyy-mm-dd">
-                        <input class="form-control" size="12" type="text" value="" >
+                      <div id="AP_Date" class="input-group date form_date col-md-8" data-date-format="dd MM yyyy" >
+                        <input class="APField form-control" size="12" type="text" value="" >
                         <span class="input-group-addon">
                           <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -1085,13 +1084,36 @@
                     <div class="row">
                       <div class="form-group">
                         <label for="AP_Time" class="col-md-4 control-label">Time Picking</label>
-                        <div id="AP_Time" class="input-group date form_time col-md-8" data-date-format="hh:ii:ss" data-link-field="AP_Date" data-link-format="hh:ii:ss">
-                          <input class="form-control" size="12" type="text" value="" >
+                        <div id="AP_Time" class="input-group date form_time col-md-8" data-date-format="hh:ii:ss" >
+                          <input class="APField form-control" size="12" type="text" value="" >
 					                <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
                           </span>
                         </div>
                       </div>
+                    </div>
+                    <div class="row">
+                      <label for="AP_PIM" class="col-md-4 control-label">PIM</label>
+                      <div  class="APField dropdown col-md-8">
+                        <button id="AP_PIM" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li I18n="autopilotengaged"></li>
+                          <li I18n="constantengaged"></li>
+                          <li I18n="orthodromic"></li>
+                          <li I18n="VMG"></li>
+                          <li I18n="VBVMG"></li>
+                          
+                        </ul>
+                      </div>				              
+                    </div>
+                    <div class="row">
+                      <label for="AP_PIP" class="col-md-4 control-label">PIP</label>
+                      <div  class="APField input col-md-8">
+                        <input id="AP_PIP" class>Dropdown Example
+                        </input>
+                      </div>				              
                     </div>
               </div>
         
@@ -1101,10 +1123,10 @@
               <div class="col-xs-12">
                  <div class="row">
                   <div class="col-xs-6" align="center">
-              <button id="SettingCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
+                    <button id="APCancelButton" I18n="cancel" type="button" class="button-black" data-dismiss="modal">Annuler</button>          
                   </div>
                   <div class="col-xs-6" align="center">
-              <button id="SettingValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
+                    <button id="APValidateButton"  type="button" class="button-black" data-dismiss="modal">Valider</button>
                   </div>
                 </div>
               </div>

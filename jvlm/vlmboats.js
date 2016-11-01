@@ -1028,7 +1028,7 @@ function PostBoatSetupOrder(idu, verb, orderdata) {
     function (Data, TextStatus) 
     {
       if (Data.success)
-      {// TODO : Force reload of boat info from server after successfull post.
+      {
         RefreshCurrentBoat(false,true);
       }
       else 

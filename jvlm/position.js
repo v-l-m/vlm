@@ -172,6 +172,11 @@ function VLMPosition(lon, lat,  format)
         return new VLMPosition(Rad2Deg(-lon), Rad2Deg(lat));
 
     }
+
+    this.GetVLMString=function()
+    {
+        return lat.ToString() +','+lon.ToString();
+    }
 };
 
 

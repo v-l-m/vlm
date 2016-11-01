@@ -382,7 +382,8 @@ function InitMenusAndButtons()
     $("#AP_Time").datetimepicker();
     $("#AP_Date").on('changeDate', HandleDateChange);
     $("#AP_Time").on('changeDate', HandleDateChange);
-    
+    $("#APValidateButton").click(HandleSendAPUpdate)
+    $(".APField").on('change',HandleAPFieldChange);
 }
 
 function HandleFlagLineClick(e)
@@ -1019,9 +1020,16 @@ function HandleOpenAutoPilotSetPoint(e)
                
     }
 
+    // Update dialog content from APOrder object
     $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
     $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
   
+    $('#AP_PIM:first-child').html(
+    '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
+    '<span class="caret"></span>'
+    )
+    $("#AP_PIP").val(_CurAPOrder.GetPIPString());
+
 }
 
 var _DateChanging=false
