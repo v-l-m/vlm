@@ -18,14 +18,14 @@ function AutoPilotOrder(Boat,Number)
         this.PIM = PilOrder.PIM;
     }
 
-    this.GetOrderDateString = new function()
+    this.GetOrderDateString = function()
     {
-        return this.Date.getDate() +"/"+this.Date.getMonth()+"/"+this.Date.getFullYear();
+        return this.Date.getDate() +"/"+(this.Date.getMonth()+1)+"/"+this.Date.getFullYear();
     }
 
      this.GetOrderTimeString = function()
     {
-        return this.Date.getHours() +":"+this.Date.getMinutes()+"/"+this.Date.getSeconds();
+        return this.Date.getHours() +":"+this.Date.getMinutes()+":15";
     }
 
 }

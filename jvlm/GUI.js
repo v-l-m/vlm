@@ -376,6 +376,13 @@ function InitMenusAndButtons()
     
     // Catch flag selection change
     $(".FlagLine").on('click',HandleFlagLineClick);
+
+    // AP datetime pickers
+    $("#AP_Date").datetimepicker();
+    $("#AP_Time").datetimepicker();
+    $("#AP_Date").on('changeDate', HandleDateChange);
+    $("#AP_Time").on('changeDate', HandleDateChange);
+    
 }
 
 function HandleFlagLineClick(e)
@@ -998,24 +1005,35 @@ function UpdateLngDropDown()
 
 }
 
+var _CurAPOrder=null;
 function HandleOpenAutoPilotSetPoint(e) 
 {
   var Target = e.target;
   var TargetId = Target.attributes["id"].nodeValue;
-  var Order = null;
-
+  
   switch(TargetId)
     {
       case "AutoPilotAddButton":
         // Create a new autopilot order
-        Order = new AutoPilotOrder();
+        _CurAPOrder = new AutoPilotOrder();
                
     }
 
-    $("#AP_Date").val(Order.GetOrderDateString());
-    $("#AP_Time").val(Order.GetOrderTimeString());
-    
-    $("#dtp_input2").datetimepicker('update');
-    $("#dtp_input3").datetimepicker('update');
+    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
+    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
+  
+}
+
+var _DateChanging=false
+function HandleDateChange(ev)
+{
+  if (!_DateChanging)
+  {
+    _DateChanging=true;
+    _CurAPOrder.Date = ev.date;
+    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
+    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
+    _DateChanging=false;
+  }
   
 }
