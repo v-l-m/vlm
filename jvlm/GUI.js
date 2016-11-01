@@ -91,8 +91,6 @@ $(document).ready(
         SetCurrentBoat(GetBoatFromIdu(ui.item.value),true,false);
       }
     );
-
-    // Remove JQuery/bootstrap conflict $("#FlagSelector").selectmenu();  
     
     $('#cp11').colorpicker();
      
