@@ -282,7 +282,7 @@ function GetFlagsList()
             for (index in result.flags)
             {
               var title = result.flags[index];
-              DropDown.append("<li class='FlagLine'>"+GetCountryDropDownSelectorHTML(title)+"</li>")
+              DropDown.append("<li class='FlagLine DDLine'>"+GetCountryDropDownSelectorHTML(title)+"</li>")
             }
           }
         }
