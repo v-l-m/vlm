@@ -384,6 +384,7 @@ function InitMenusAndButtons()
     $("#AP_Time").on('changeDate', HandleDateChange);
     $("#APValidateButton").click(HandleSendAPUpdate)
     $(".APField").on('change',HandleAPFieldChange);
+    $(".APMode").on('click',HandleAPModeDDClick)
 }
 
 function HandleFlagLineClick(e)
@@ -1044,4 +1045,16 @@ function HandleDateChange(ev)
     _DateChanging=false;
   }
   
+}
+
+function HandleAPModeDDClick(e)
+{
+  var NewMode = e.target.attributes["PIM"].value;
+
+  _CurAPOrder.PIM=parseInt(NewMode);
+   $('#AP_PIM:first-child').html(
+    '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
+    '<span class="caret"></span>'
+    )
+    
 }
