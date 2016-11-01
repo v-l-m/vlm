@@ -236,6 +236,7 @@ Allowed characters for both: a-z 0-9 _
     'finished' => 'Finished',
     'finished_races' => 'Finished races',
     'forum' => 'Forum',
+    'forums' => 'Sailing forum',
     'hasnotstart' => 'Race : %s <br />This race has not started yet',
     'heading' => 'Heading',
     'here' => 'here',

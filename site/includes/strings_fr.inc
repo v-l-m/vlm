@@ -235,6 +235,7 @@ Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _
     'finished' => 'Achev&eacute;e',
     'finished_races' => 'Courses termin&eacute;es',
     'forum' => 'Forum',
+    'forums' => 'Forums voileux',
     'hasnotstart' => 'Course : %s <br />Cette course n\'a pas encore commenc&eacute;',
     'heading' => 'Cap',
     'here' => 'ici',
