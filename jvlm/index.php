@@ -3,49 +3,45 @@
 
 <html>
   <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>VLM 2.0 alpha</title>
-      <meta http-equiv="X-UA-Compatible" content="IE=8">
-      <link rel="stylesheet" type="text/css" href="jvlm.css"/>
-      <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
-      <link rel="stylesheet/less" type="text/css" href="jvlm.less">
-      <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
-      <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
-      <!--[if IE]>
-      <script src="excanvas.js"></script><![endif]-->
-      <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
-      <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-      -->
-      <!--<script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.js"></script>
-      <script src="jquery-ui.js"></script>
-      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
-      <!--<script src="http://maps.google.com/maps/api/js?v=3&amp;key=AIzaSyDnbDR01f8MheuxCMxth7w30A2OHtSv73U"></script>-->
-      
-      <script src="external/jquery.csv.js"></script>
-      <!--<script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js"></script>
-      -->
-      <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-      <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
-	  <!--<script type="text/javascript" src="external/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>-->
-      <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
-      <script src="OpenLayers/OpenLayers.debug.js"></script>
-      
-      <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VLM 2.0 alpha</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <link rel="stylesheet" type="text/css" href="jvlm.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
+    <link rel="stylesheet/less" type="text/css" href="jvlm.less">
+    <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
+    <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
+    <!--[if IE]>
+    <script src="excanvas.js"></script><![endif]-->
+    <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    -->
+    <!--<script src="http://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
 
-      <script src="config.js"></script>
-      <script src="localize.js"></script>
-      <script src="GUI.js"></script>
-      <script src='ControlSwitch.js' type='text/javascript'></script>
-      <script src='gribmap.js' type='text/javascript'></script>
-      <script src='vlmboats.js' type='text/javascript'></script>
-      <script src='geomath.js' type='text/javascript'></script>
-      <script src='position.js' type='text/javascript'></script>
-      <script src="user.js"  type='text/javascript'></script>
-      <script src='polar.js' type='text/javascript'></script>
-      <script src='xmpp.js' type='text/javascript'></script>
-      <script src='autopilot.js' type='text/javascript'></script>
+    <script src="external/jquery.csv.js"></script>
+    <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+    <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
+    <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
+    <script src="OpenLayers/OpenLayers.debug.js"></script>
+
+    <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>-->
+
+    <script src="config.js"></script>
+    <script src="localize.js"></script>
+    <script src="GUI.js"></script>
+    <script src='ControlSwitch.js' type='text/javascript'></script>
+    <script src='gribmap.js' type='text/javascript'></script>
+    <script src='vlmboats.js' type='text/javascript'></script>
+    <script src='geomath.js' type='text/javascript'></script>
+    <script src='position.js' type='text/javascript'></script>
+    <script src="user.js"  type='text/javascript'></script>
+    <script src='polar.js' type='text/javascript'></script>
+    <script src='xmpp.js' type='text/javascript'></script>
+    <script src='autopilot.js' type='text/javascript'></script>
       
       
   </head>
