@@ -509,7 +509,7 @@ function UpdateInMenuDockingBoatInfo(Boat)
 
 }
 
-function UpdateInMenuRacingBoatInfo(Boat)
+function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 {
   var NorthSouth;
   var EastWest;
@@ -649,6 +649,14 @@ function UpdateInMenuRacingBoatInfo(Boat)
       
    }
 
+   // Override PIM Tab if requested
+   /*if (typeof TargetTab !== "undefined" && TargetTab=='AutoPilot')
+   {
+     TabID+='AutoPilotTab';
+     ActivePane=TargetTab;
+     UpdatePilotInfo(Boat);
+   }*/
+
     $(TabID).css("display","inline");
     $("."+ActivePane).addClass("active");
     $("#"+ActivePane).addClass("active");
@@ -726,7 +734,7 @@ function HandlePilotEditDelete(e)
 
   if (ItemId == "PIL_EDIT")
   {
-    console.log("now edit pilototo order#" +OrderIndex)
+    HandleOpenAutoPilotSetPoint (e);
   }
   else if (ItemId == "PIL_DELETE")
   {
@@ -972,9 +980,9 @@ function GetFormattedChronoString(Value)
   return Ret;
 }
 
-function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh)
+function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh,TargetTab)
 {
-  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()), SetCenterOnBoat,ForceRefresh)
+  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()), SetCenterOnBoat,ForceRefresh,TargetTab)
 }
 
 function UpdateLngDropDown()
@@ -993,13 +1001,38 @@ var _CurAPOrder=null;
 function HandleOpenAutoPilotSetPoint(e) 
 {
   var Target = e.target;
-  var TargetId = Target.attributes["id"].nodeValue;
+  var TargetId;
   
+  if ('id' in Target.attributes )
+  {
+    TargetId = Target.attributes["id"].nodeValue;
+  }
+  else if ('class' in Target.attributes)
+  {
+    TargetId = Target.attributes["class"].nodeValue;
+  }
+  else
+  {
+    alert("Something bad has happened reload this page....");
+    return;
+  }
   switch(TargetId)
     {
       case "AutoPilotAddButton":
         // Create a new autopilot order
         _CurAPOrder = new AutoPilotOrder();
+        break;
+      case "PIL_EDIT":
+        // Load AP Order from vlminfo structure
+        var ParentDiv = Target.parentElement.parentElement;
+        var OrderIndex =ParentDiv.attributes["id"].value.substring(3) ;
+        _CurAPOrder = new AutoPilotOrder (_CurPlayer.CurBoat,OrderIndex)
+
+        $("#AutoPilotSettingForm").modal('show');
+        break;
+      default:
+        alert("Something bad has happened reload this page....");
+        return;
                
     }
 
@@ -1011,7 +1044,14 @@ function HandleOpenAutoPilotSetPoint(e)
     '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
     '<span class="caret"></span>'
     )
-    $("#AP_PIP").val(_CurAPOrder.GetPIPString());
+    $("#AP_PIP").val(_CurAPOrder.PIP_Value);
+    $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value);
+    $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value);
+    $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle);
+    
+
+    UpdatePIPFields(_CurAPOrder.PIM);
+    
 
 }
 
@@ -1038,5 +1078,35 @@ function HandleAPModeDDClick(e)
     '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
     '<span class="caret"></span>'
     )
+
+  UpdatePIPFields(_CurAPOrder.PIM);
     
+}
+
+function UpdatePIPFields(PIM)
+{
+  var IsPip = true
+  switch (PIM)
+  {
+    case PM_HEADING:
+    case PM_ANGLE:
+      IsPip=true
+      break;
+    case PM_ORTHO:
+    case PM_VMG:
+    case PM_VBVMG:
+      IsPip=false
+      break;
+  }
+
+  if (IsPip)
+  {
+    $(".AP_PIPRow").removeClass("hidden");
+    $(".AP_WPRow").addClass("hidden");
+  }
+  else
+  {
+    $(".AP_PIPRow").addClass("hidden");
+    $(".AP_WPRow").removeClass("hidden");
+  }
 }
