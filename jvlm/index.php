@@ -148,15 +148,15 @@
             <li>
               <div class="dropdown">
                 <button id="SelectionLanguageDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <span class="caret"></span></button>
+                  <span class="caret"></span>
+                </button>
                 <ul class="dropdown-menu">
                   <li><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></li>
                   <li><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></li>
                   <li><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></li>
                   <li><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></li>
                   <li><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></li>
-                  <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></li>
-                
+                  <li><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></li>        
                 </ul>
               </div>
             </li>
@@ -1014,11 +1014,11 @@
                         <div class="col-xs-6">
                           <span I18n="choose_your_country" >Choisir son drapeau</span>
                         </div>
-                        <div class="col-xs-6">
-                          <div  class="dropdown-toggle " data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                              Drapeaux <span class="caret"></span>
+                        <div class="col-xs-6 dropdown">
+                          <div id="CountryDropDown" class="dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
                           </div>
-                          <ul id="CountryDropDown" class="dropdown-menu  scrollable-menu" style="padding-left:15px; width:300px">
+                          <ul id="CountryDropDownList" class="dropdown-menu  scrollable-menu" style="padding-left:15px; width:300px">
                           </ul>
                         </div>
                       </div>

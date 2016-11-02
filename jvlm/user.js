@@ -277,17 +277,20 @@ function GetFlagsList()
           var i = result;
           if (result.success)
           {
-            var DropDown=$("#CountryDropDown");
+            var DropDown=$("#CountryDropDownList");
 
             for (index in result.flags)
             {
               var title = result.flags[index];
-              DropDown.append("<li>"+
-                              " <img class='flag' src='/cache/flags/"+title+".png' title='"+title+"' alt='"+title+"'></img>"+
-                              " <span style='margin-left:10px;'> - "+ title +"</span>"+
-                              "</li>")
+              DropDown.append("<li>"+GetCountryDropDownSelectorHTML(title)+"</li>")
             }
           }
         }
         );
+}
+
+function GetCountryDropDownSelectorHTML(title)
+{
+  return  " <img class='flag' src='/cache/flags/"+title+".png' title='"+title+"' alt='"+title+"'></img>"+
+          " <span style='margin-left:10px;'> - "+ title +"</span>";
 }

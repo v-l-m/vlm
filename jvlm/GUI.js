@@ -823,7 +823,7 @@ function UpdatePrefsDialog(Boat)
   {
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
-    $("#FlagSelector option[value='"+Boat.VLMInfo.CNT+"']").prop('selected', true);
+    $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Boat.VLMInfo.CNT)+'<span class="caret"></span></div>');
     var ColString = Boat.VLMInfo.COL;
     if (ColString.substring(0,1)!="#")
     {
