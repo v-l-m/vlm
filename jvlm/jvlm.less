@@ -1,10 +1,10 @@
 
 // out: ./jvlm.css, compress: true, sourceMap: false // 
 /*
-@import url('http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css');
+@import url('jquery-ui.css');
 */
-@import url('http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
-@import url('/jvlm/jquery-ui.min.css');
+@import url('external/bootstrap-master/css/bootstrap.min.css');
+@import url('jquery-ui.min.css');
 @import url('external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css');
 html, body, input {
   background-color: #e0e0f0;
@@ -482,61 +482,71 @@ span.ui-selectmenu-text {
 @navtabs-gradient-stop-color: #252525;
 @navtabs-gradient: linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
 @navbar-default-bg:#000;
-@button-gradient-start-color: #001475;
+@button-gradient-start-color: #3c3c3c;
 @button-gradient-stop-color: #252525;
 @button-gradient: linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
 // in your main definitions/ overrides:
 .navbar-toggle{
   padding-top:0px;
 }
+.tab-content {
+ background-color:@navtabs-gradient-stop-color;
+  color: #ffffff;
+  padding: 10px;
+ /* margin-top: 4px;*/
+  border: 1px solid #CCC;
+}
  .BCOng {
- text-align:center;
+ /*text-align:center;
  background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
  background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
- background-repeat: repeat-x;
+ background-repeat: repeat-x;*/
  background-color:#161616;
- height:40px;
- max-width:150px;
- min-width:75px;
- border-radius: 3px 3px 0 0;
+ /*height:40px;*/
+ margin-right: 2px;
+ border-top:1px beige solid;
+ border-right:1px beige solid;
+ border-left:1px beige solid;
+ /*max-width:150px;
+ min-width:75px;*/
+ border-radius: 4px 4px 0 0;
 }
-.tab-content {
- background-color:@navtabs-gradient-stop-color;
-  color: #ffffff;
-  padding: 10px;
-  margin-top: 4px;
-  border: 1px solid #CCC;
+.nav-tab > li {
+ margin-bottom:0px;
 }
-.BCOng > li {
-  margin-right: 2px;
-  border-radius: 3px 3px 0 0;
+#Boat-Panel #tabs  > li {
+ color: #021A9C;
+ background-color:#161616;
+ margin-right: 2px;
+ border-top:1px beige solid;
+ border-right:1px beige solid;
+ border-left:1px beige solid;
+ border-radius: 4px 4px 0 0;
+ text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
 }
-.BCOng > li > a {
-  color: #09F;
-  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+#Boat-Panel #tabs  > li >a{
+margin-right:0px;
 }
-.BCOng > li > a:hover {
-  background-color: #8F919C !important;
-  border: medium none;
-  color: #c4c4c4;
-  border: 1px solid #CCC;
+#Boat-Panel #tabs >li> a:focus, {
+  color: #021A9C;
+  background-color: #2791FE;
+}
+#Boat-Panel #tabs > li > a:hover {
+  background-color: #021A9C;
+  /*border: medium none;*/
+  color: #2791FE;
+  /*border: 1px solid #CCC;*/
   border-bottom: none;
 }
-.BCOng > li > a:active {
-  background-color: #484F73 !important;
-  border: medium none;
-  border-radius: 0;
-  color: #c4c4c4;
-}
-.BCOng>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-  color: #c4c4c4;
-  background-color: #7EAEBA;
-  border: 1px solid #ddd;
-  border-bottom-color: transparent
+#Boat-Panel #tabs >li.active> a, #Boat-Panel #tabs> li.active >a:focus, #Boat-Panel #tabs >li.active >a:hover {
+  color: #021A9C;
+  background-color: #237DDA;
+  /*border-top: 1px solid #ddd;*/
+  border-bottom: none
 }
 .button-black {
   height: 40px;

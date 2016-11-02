@@ -18,9 +18,9 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     -->
     <!--<script src="https://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.js"></script>
+    <script src="external/jquery/jquery.js"></script>
     <script src="jquery-ui.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+    <script src="external/bootstrap-master/js/bootstrap.js"></script>
 
     <script src="external/jquery.csv.js"></script>
     <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
@@ -157,12 +157,12 @@
               </div>
             </li>
             <li>
-              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="btn btn-default"  I18n="login">Login</button></span> 
+              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="btn button-black"  I18n="login">Login</button></span> 
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
             <li>
-              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="btn btn-default"  I18n="logout">Logout</button></span> 
+              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="btn button-black"  I18n="logout">Logout</button></span> 
             </li>
           </ul>
         </div>
@@ -191,8 +191,9 @@
                   <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"></img>
                   <span>VBVMG</span></a>
                 </li>
-                      <li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;"></img><span I18N="pilototoengaged">AutoPilot</span>
-                        <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></a></li>
+                <li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab"><img src="images/autopilot.png" style="width:21px;margin-right:5px"></img><span I18N="pilototoengaged">AutoPilot</span>
+                <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></a>
+                </li>
             </ul>
 				<!-- Fin de la barre d'onglet-->
 
@@ -312,30 +313,42 @@
                 <div class="BoatControllerRow row">
                   <div class="container-fluid">
                     <div id='PIL_HEADER' class='row'>
-                      <div class='PAHeader col-xs-4'>
+                      <div class='PAHeader col-xs-3'>
                         <span I18N="Human Readable date">..HD</span>
                       </div>
                       <div class='PAHeader col-xs-2'>
-                        <span >PIM</span>
+                        <span >Mode pilotage</span>
+                      </div>
+                      <div class='PAHeader col-xs-1'>
+                        <span >Prochain cap</span>
                       </div>
                       <div class='PAHeader col-xs-2'>
-                        <span >PIP</span>
+                        <span >Lat wp</span>
                       </div>
-                      <div class='PAHeader col-xs-4'>
+                      <div class='PAHeader col-xs-2'>
+                        <span >Lon WP</span>
+                      </div>
+                      <div class='PAHeader col-xs-2'>
                         <span >Status</span>
                       </div>
                     </div>
                     <div id='PIL1' class='row'>
-                      <div class='col-xs-4'>
+                      <div class='col-xs-3'>
                         <span id='PIL_DATE' >10 Oct 2016 22:06</span>
                       </div>
                       <div class='col-xs-2'>
                         <span id='PIL_PIM'></span>
                       </div>
-                      <div class='col-xs-2'>
-                        <span id='PIL_PIP' >PIP</span>
+                      <div class='col-xs-1'>
+                        <span id='PIL_PIP' ></span>
                       </div>
-                      <div class='col-xs-4'>
+                      <div class='col-xs-2'>
+                        <span id='PIL_Lat_target'></span>
+                      </div>
+                      <div class='col-xs-2'>
+                        <span id='PIL_lon_target'></span>
+                      </div>
+                      <div class='col-xs-2'>
                         <span id='PIL_STATUS'>Status</span>
                         <img class='PIL_EDIT' src="images/edit.png"></img>
                         <img class='PIL_DELETE' src="images/delete.png"></img>
@@ -484,8 +497,7 @@
           <!-- Modal content-->
           <div class="modal-content" id="SettingsPanel">              
             <div class="modal-header">
-              <div class="col-xs-8">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <div class="col-xs-7">
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
               </div>
               <div class="col-xs-2">
@@ -494,6 +506,10 @@
               <div class="col-xs-2">
                 <label for="warning" class="btn btn-warning">VLM <input type="checkbox" id="warning" class="badgebox"></label>
               </div>
+              </div>
+              <div class="col-xs-1">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="TabModal">
