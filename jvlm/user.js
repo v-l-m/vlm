@@ -282,7 +282,7 @@ function GetFlagsList()
             for (index in result.flags)
             {
               var title = result.flags[index];
-              DropDown.append("<li>"+GetCountryDropDownSelectorHTML(title)+"</li>")
+              DropDown.append("<li class='FlagLine DDLine'>"+GetCountryDropDownSelectorHTML(title)+"</li>")
             }
           }
         }
@@ -291,6 +291,6 @@ function GetFlagsList()
 
 function GetCountryDropDownSelectorHTML(title)
 {
-  return  " <img class='flag' src='/cache/flags/"+title+".png' title='"+title+"' alt='"+title+"'></img>"+
-          " <span style='margin-left:10px;'> - "+ title +"</span>";
+  return  " <img class='flag FlagLine' src='/cache/flags/"+title+".png' title='"+title+"' alt='"+title+"'></img>"+
+          " <span class='FlagLine' style='margin-left:10px;'> - "+ title +"</span>";
 }

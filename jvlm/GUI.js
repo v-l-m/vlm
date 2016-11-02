@@ -91,8 +91,6 @@ $(document).ready(
         SetCurrentBoat(GetBoatFromIdu(ui.item.value),true,false);
       }
     );
-
-    // Remove JQuery/bootstrap conflict $("#FlagSelector").selectmenu();  
     
     $('#cp11').colorpicker();
      
@@ -373,7 +371,23 @@ function InitMenusAndButtons()
     });
 
     $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
-    //$("#AutoPilotSettingForm").on("show", HandleOpenAutoPilotSetPoint);
+    
+    // Catch flag selection change
+    $(".FlagLine").on('click',HandleFlagLineClick);
+
+    // AP datetime pickers
+    $("#AP_Date").datetimepicker();
+    $("#AP_Time").datetimepicker();
+    $("#AP_Date").on('changeDate', HandleDateChange);
+    $("#AP_Time").on('changeDate', HandleDateChange);
+    $("#APValidateButton").click(HandleSendAPUpdate)
+    $(".APField").on('change',HandleAPFieldChange);
+    $(".APMode").on('click',HandleAPModeDDClick)
+}
+
+function HandleFlagLineClick(e)
+{
+  var i=0;
 }
 
 function HandleCancelSetWPOnClick()
@@ -991,24 +1005,54 @@ function UpdateLngDropDown()
 
 }
 
+var _CurAPOrder=null;
 function HandleOpenAutoPilotSetPoint(e) 
 {
   var Target = e.target;
   var TargetId = Target.attributes["id"].nodeValue;
-  var Order = null;
-
+  
   switch(TargetId)
     {
       case "AutoPilotAddButton":
         // Create a new autopilot order
-        Order = new AutoPilotOrder();
+        _CurAPOrder = new AutoPilotOrder();
                
     }
 
-    $("#AP_Date").val(Order.GetOrderDateString());
-    $("#AP_Time").val(Order.GetOrderTimeString());
-    
-    $("#dtp_input2").datetimepicker('update');
-    $("#dtp_input3").datetimepicker('update');
+    // Update dialog content from APOrder object
+    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
+    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
   
+    $('#AP_PIM:first-child').html(
+    '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
+    '<span class="caret"></span>'
+    )
+    $("#AP_PIP").val(_CurAPOrder.GetPIPString());
+
+}
+
+var _DateChanging=false
+function HandleDateChange(ev)
+{
+  if (!_DateChanging)
+  {
+    _DateChanging=true;
+    _CurAPOrder.Date = ev.date;
+    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
+    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
+    _DateChanging=false;
+  }
+  
+}
+
+function HandleAPModeDDClick(e)
+{
+  var NewMode = e.target.attributes["PIM"].value;
+
+  _CurAPOrder.PIM=parseInt(NewMode);
+   $('#AP_PIM:first-child').html(
+    '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
+    '<span class="caret"></span>'
+    )
+    
 }

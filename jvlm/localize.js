@@ -99,7 +99,7 @@ function GetLocalizedString(StringId)
   {
     return _LocaleDict[StringId];
   }
-  else if (StringId in _EnDict)
+  else if ((typeof _EnDict !=="undefined") && (_EnDict) &&  (StringId in _EnDict))
   {
     return _EnDict[StringId];
   }
