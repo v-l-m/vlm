@@ -527,32 +527,16 @@ function UpdateInMenuRacingBoatInfo(Boat)
   }
   
   // Update GUI for current player
-  if (Boat.VLMInfo.LON >=0)
-  {
-    EastWest = "E";
-  }
-  else
-  {
-    EastWest = "W";
-  }
-  if (Boat.VLMInfo.LAT >=0)
-  {
-    NorthSouth = "N";
-  }
-  else
-  {
-    NorthSouth = "S";
-  }
- 
-  var lon = new Coords(Boat.VLMInfo.LON);
+  // Todo Get Rid of Coords Class
+  var lon = new Coords(Boat.VLMInfo.LON,true);
   var lat = new Coords(Boat.VLMInfo.LAT);
 
   // Create field mapping array
   // 0 for text fields
   // 1 for input fields
   var BoatFieldMappings=[];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT,"#BoatLon",lon.ToString() + ' ' + EastWest]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat",lat.ToString() + ' ' + NorthSouth]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT,"#BoatLon",lon.ToString() ]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat",lat.ToString() ]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatSpeed",Math.round(Boat.VLMInfo.BSP * 10)/10]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatHeading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading",Math.round(Boat.VLMInfo.HDG * 10)/10]);
