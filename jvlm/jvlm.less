@@ -306,8 +306,9 @@ span.ui-selectmenu-text {
 }
 .ranking {
   background-color: #c70000;
-  left: 19px;
-  top: 5px;
+  left: 36px;
+  top: 0px;
+  z-index:999;
 }
 .pilot {
   background-color: #00c700;
@@ -623,13 +624,30 @@ margin-right:0px;
     max-height: 200px;
     overflow-x: hidden;
 }
-.input-group-addon{
-padding-bottom:4px;
-padding-top:4px;
+#PrefBoat #cp11 > .input-group-addon{
+padding-bottom:2px;
+padding-top:2px;
 }
-.colorpicker-element .input-group-addon i, .colorpicker-element .add-on i{
+#PrefBoat #cp11 > .colorpicker-element .input-group-addon i, .colorpicker-element .add-on i{
 height:12px;
 width:12px;
+}
+#pilot #AP_Time > .input-group-addon:last-child{
+padding-bottom:2px;
+padding-top:2px;
+}
+#pilot #AP_Date > .input-group-addon:last-child{
+padding-bottom:2px;
+padding-top:2px;
+}
+#pilot > .input{
+margin-top:4px;
+}
+#pilot .input-group[class*="col-"]{
+padding-bottom:5px;
+}
+#pilot .form-group{
+margin-bottom:0px
 }
 .pref {
 margin-left:15px;
