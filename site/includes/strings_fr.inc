@@ -1,5 +1,7 @@
 <?php
 $strings['fr'] = array (
+    'AP_OrderParam' => 'Paramètres ordre Pilototo',
+    'AP_Mode' => 'Mode Pilototo',
     'PleaseCreateDlg'=> 'Si vous n\'avez pas de compte, vous pouvez en ',
     'CreateAcctBtn' => 'cr&eacute;er un',
     "WindAngle" => "Angle au vent",

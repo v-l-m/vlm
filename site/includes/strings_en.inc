@@ -1,8 +1,10 @@
 <?php
 $strings['en'] = 
   array (
+    'AP_OrderParam' => 'AutoPilot order parameters',
+    'AP_Mode' => 'AutoPilot Mode',
     'PleaseCreateDlg'=> 'If you do not have any account, please',
-    'CreateAcctBtn' => 'Create On',
+    'CreateAcctBtn' => 'Create one',
     "WindAngle" => "Wind Angle",
     "BoatSetupError" => "Error sending order to server. Try Again later",
     "PbLogin" => "Login in progress...",

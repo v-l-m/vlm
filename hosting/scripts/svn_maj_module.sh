@@ -14,6 +14,8 @@ case $svnmodule in
     ;;
     site)
     ;;
+    site/includes)
+    ;;
     maps)
     ;;
     moteur)

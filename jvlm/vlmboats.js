@@ -73,12 +73,12 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
 var BoatFeatures = [];
 var StartSetWPOnClick = false;
 
-function SetCurrentBoat(Boat, CenterMapOnBoat,ForceRefresh) 
+function SetCurrentBoat(Boat, CenterMapOnBoat,ForceRefresh,TargetTab) 
 {
-  CheckBoatRefreshRequired(Boat, CenterMapOnBoat,ForceRefresh);
+  CheckBoatRefreshRequired(Boat, CenterMapOnBoat,ForceRefresh,TargetTab);
 }
 
-function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh) 
+function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab) 
 {
   // Check Params.
   if (typeof Boat === "undefined" || !Boat)
@@ -136,7 +136,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
                   Boat.RaceInfo = result;
 
                   DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,true);
-                  UpdateInMenuRacingBoatInfo(Boat);
+                  UpdateInMenuRacingBoatInfo(Boat,TargetTab);
                 }
 
               );
@@ -213,7 +213,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh)
             DrawBoat(Boat, CenterMapOnBoat);
 
             // Update Boat info in main menu bar
-            UpdateInMenuRacingBoatInfo(Boat);
+            UpdateInMenuRacingBoatInfo(Boat,TargetTab);
 
           }
           else 
@@ -1251,7 +1251,7 @@ function DeletePilotOrder(Boat,OrderId)
       {
         if (e.success)
         {
-          RefreshCurrentBoat(false,true);
+          RefreshCurrentBoat(false,true,'AutoPilot');
         }
       }
     )
