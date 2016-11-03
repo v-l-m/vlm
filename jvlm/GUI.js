@@ -278,15 +278,7 @@ function InitMenusAndButtons()
 
     // Handle SettingsSave button
     $('#SettingValidateButton').click(
-      function()
-      {
-        var NewVals={};
-
-        NewVals["boatname"]=$("#pref_boatname")[0].value;
-        NewVals["country"]=$("#FlagSelector")[0].value;
-        NewVals["color"]=$("#pref_boatcolor")[0].value;
-        UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals})
-      }
+      SaveBoatAndUserPrefs
     )
     
 
@@ -372,9 +364,6 @@ function InitMenusAndButtons()
 
     $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
     
-    // Catch flag selection change
-    $(".FlagLine").on('click',HandleFlagLineClick);
-
     // AP datetime pickers
     $("#AP_Date").datetimepicker();
     $("#AP_Time").datetimepicker();
@@ -387,7 +376,10 @@ function InitMenusAndButtons()
 
 function HandleFlagLineClick(e)
 {
-  var i=0;
+  var Flag = e.target.attributes['flag'].value;
+
+  SelectCountryDDFlag(Flag);
+  
 }
 
 function HandleCancelSetWPOnClick()
@@ -829,7 +821,7 @@ function UpdatePrefsDialog(Boat)
   {
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
-    $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Boat.VLMInfo.CNT)+'<span class="caret"></span></div>');
+    SelectCountryDDFlag(Boat.VLMInfo.CNT);
     var ColString = Boat.VLMInfo.COL;
     if (ColString.substring(0,1)!="#")
     {
@@ -1109,4 +1101,61 @@ function UpdatePIPFields(PIM)
     $(".AP_PIPRow").addClass("hidden");
     $(".AP_WPRow").removeClass("hidden");
   }
+}
+
+function SaveBoatAndUserPrefs(e)
+{
+  // Check boat prefs
+      {
+        var NewVals={};
+        var BoatUpdateRequired =false;
+        var PlayerUpdateRequired = false;
+
+        if (!ComparePrefString($("#pref_boatname")[0].value,_CurPlayer.CurBoat.BoatName))
+        {
+          NewVals["boatname"]=$("#pref_boatname")[0].value;
+          BoatUpdateRequired = true;
+        }
+        
+        if (!ComparePrefString($("#pref_boatcolor")[0].value,_CurPlayer.CurBoat.VLMInfo.COL))
+        {
+          NewVals["color"]=$("#pref_boatcolor")[0].value;
+          BoatUpdateRequired = true;
+        }
+
+        var NewCountry= GetPrefSelFlag();
+        if (!ComparePrefString(NewCountry,_CurPlayer.CurBoat.VLMInfo.CNT))
+        {
+          NewVals["country"]=NewCountry;
+          BoatUpdateRequired = true;
+        }
+
+        //NewVals["country"]=$("#FlagSelector")[0].value;
+        //NewVals["color"]=$("#pref_boatcolor")[0].value;
+        if (BoatUpdateRequired)
+          {
+            UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals})
+          }
+      }
+}
+
+function GetPrefSelFlag()
+{
+  var Item =$('#CountryDropDown:first-child')[0];
+  var img = Item.children[0].children[0]
+
+  return img.alt;
+    
+}
+
+function ComparePrefString(Obj1, Obj2)
+{
+
+  return Obj1.toString()==Obj2.toString()
+}
+
+function SelectCountryDDFlag(Country)
+{
+  $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Country)+'<span class="caret"></span></div>');
+    
 }
