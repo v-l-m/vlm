@@ -715,12 +715,41 @@ function ShowAutoPilotLine(Boat,Index)
   SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
 }
 
+function GetPILIdParentElement(item)
+{
+  var done = false;
+  var RetValue=item;
+  do
+  {
+    if (typeof RetValue === "undefined")
+    {
+      return
+    }
+    if ('id' in RetValue.attributes)
+    {
+      var ItemId = RetValue.attributes['id'].value;
+      if ((ItemId.length == 4) && (ItemId.substring(0,3)=="PIL") )
+      {
+        return RetValue;
+      }
+    }
+    
+    RetValue = RetValue.parentElement;
+    
+  } while (!done)
+}
+
 function HandlePilotEditDelete(e)
 {
   var ClickedItem = $(this)[0]
   var ItemId = ClickedItem.attributes['class'].value;
-  var PilOrderElement = ClickedItem.parentElement.parentElement;
+  var PilOrderElement = GetPILIdParentElement(ClickedItem);
   var Boat = _CurPlayer.CurBoat;
+
+  if (typeof PilOrderElement === "undefined")
+  {
+    return;
+  }
 
   var OrderIndex = parseInt(PilOrderElement.attributes['id'].nodeValue.substring(3));
 
@@ -1016,7 +1045,7 @@ function HandleOpenAutoPilotSetPoint(e)
         break;
       case "PIL_EDIT":
         // Load AP Order from vlminfo structure
-        var ParentDiv = Target.parentElement.parentElement;
+        var ParentDiv =  GetPILIdParentElement(Target);
         var OrderIndex =ParentDiv.attributes["id"].value.substring(3) ;
         _CurAPOrder = new AutoPilotOrder (_CurPlayer.CurBoat,OrderIndex)
 
