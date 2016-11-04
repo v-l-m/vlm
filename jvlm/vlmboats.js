@@ -1166,6 +1166,9 @@ function HandleFeatureOut(e)
 
 }
 
+var TrackPendingRequests=[];
+
+
 function DrawOpponentTrack(FeatureData)
 {
   var B = _CurPlayer.CurBoat;
@@ -1181,37 +1184,48 @@ function DrawOpponentTrack(FeatureData)
     {
       var StartTime = new Date()/1000-48*3600;
       var IdRace = B.VLMInfo.RAC;
+      var CurDate = new Date();
+      var PendingID = IdBoat.toString()+"/"+IdRace.toString();
       
-      $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
-            function(e)
-            {
-              if (e.success)
+      if (! (PendingID in TrackPendingRequests) || (CurDate > TrackPendingRequests[PendingID]))
+      {
+        TrackPendingRequests[PendingID]=CurDate + 60*1000;
+        console.log("GetTrack "+ PendingID + " " + StartTime)
+        $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
+              function(e)
               {
-                var index;
-
-                AddBoatOppTrackPoints(B, IdBoat ,e.tracks,FeatureData.color)
-                
-                for (index in e.tracks_url)
+                if (e.success)
                 {
-                  if (index > 10)
+                  var index;
+
+                  AddBoatOppTrackPoints(B, IdBoat ,e.tracks,FeatureData.color)
+                  
+                  for (index in e.tracks_url)
                   {
-                    break;
+                    if (index > 10)
+                    {
+                      break;
+                    }
+
+                    $.get('/cache/tracks/'+e.tracks_url[index],
+                      function (e)
+                      {
+                        if (e.success)
+                        {
+                          AddBoatOppTrackPoints(B, IdBoat ,e.tracks,FeatureData.color)
+                        }
+                      }
+                    )
                   }
 
-                  $.get('/cache/tracks/'+e.tracks_url[index],
-                    function (e)
-                    {
-                      if (e.success)
-                      {
-                        AddBoatOppTrackPoints(B, IdBoat ,e.tracks,FeatureData.color)
-                      }
-                    }
-                  )
                 }
-
               }
-            }
-          )
+            )
+      }
+      else
+      {
+        console.log("do not get pending request for GetTrack "+ PendingID + " " + StartTime)
+      }
     }
 
     DrawBoat(B);
@@ -1235,8 +1249,9 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
     var Pos = Track[index];
 
     Boat.OppTrack[IdBoat].DatePos[Pos[0]]= {
-      lat:Pos[2]/1000,
-      lon:Pos[1]/1000};
+                            lat:Pos[2]/1000,
+                            lon:Pos[1]/1000
+                          };
   }
 
   
