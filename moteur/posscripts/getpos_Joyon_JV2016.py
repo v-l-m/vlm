@@ -19,7 +19,7 @@ vlmidrace = 20150919
 vlmusernameprefix = "NYVendee - "
 basefilename = "NYVendee%d" % vlmidrace
 #URL http://imocaoceanmasters-nyvendee.geovoile.com/2016/_elements/data/race/tracker.tracks.hwz?v=1464551980
-raceBaseUrl = "http://imocaoceanmasters-nyvendee.geovoile.com/2016/_elements/data/race/"
+raceBaseUrl = "http://trimaran_idec.geovoile.com/julesverne/2016/_elements/data/race/"
 print raceBaseUrl+"tracker.tracks.hwz?v=" + str(int(time.time()))
 
 gp.unzipurl(raceBaseUrl+"tracker.tracks.hwz?v=" + str(int(time.time())),basefilename)
