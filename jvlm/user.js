@@ -282,15 +282,19 @@ function GetFlagsList()
             for (index in result.flags)
             {
               var title = result.flags[index];
-              DropDown.append("<li class='FlagLine DDLine'>"+GetCountryDropDownSelectorHTML(title)+"</li>")
+              DropDown.append("<li class='FlagLine DDLine' flag='"+ title +"'>"+GetCountryDropDownSelectorHTML(title)+"</li>")
             }
           }
+
+          // Catch flag selection change
+          $(".FlagLine").on('click',HandleFlagLineClick);
+
         }
         );
 }
 
 function GetCountryDropDownSelectorHTML(title)
 {
-  return  " <img class='flag FlagLine' src='/cache/flags/"+title+".png' title='"+title+"' alt='"+title+"'></img>"+
-          " <span class='FlagLine' style='margin-left:10px;'> - "+ title +"</span>";
+  return  " <img class='flag' src='/cache/flags/"+title+".png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"+
+          " <span  style='margin-left:10px;' flag='"+title+"'> - "+ title +"</span>";
 }
