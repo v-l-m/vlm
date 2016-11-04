@@ -1147,7 +1147,7 @@ function HandleFeatureOver(e)
   {
     DrawOpponentTrack(e.feature.data)
   }
-  console.log("HoverOn "+ ObjType)
+  //console.log("HoverOn "+ ObjType)
   /*e.feature.renderIntent = "select";
   e.feature.layer.drawFeature(e.feature);
   Console.log("Map says: Pointer entered " + e.feature.id + " on " + e.feature.layer.name);
