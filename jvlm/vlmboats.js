@@ -61,8 +61,23 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
                                               trigger: function(e) {
                                                   if (SetWPPending)
                                                   {
-                                                    CompleteWPSetPosition(e,e.xy);
-                                                    HandleCancelSetWPOnClick();
+                                                    if (WPPendingTarget=="WP")
+                                                    {
+                                                      CompleteWPSetPosition(e,e.xy);
+                                                      HandleCancelSetWPOnClick();
+                                                    }
+                                                    else if (WPPendingTarget == "AP")
+                                                    {
+                                                      SetWPPending=false;
+                                                      _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy)
+                                                      $("#AutoPilotSettingForm").modal("show");
+                                                      RefreshAPDialogFields()
+
+                                                    }
+                                                    else
+                                                    {
+                                                      SetWPPending=false;
+                                                    }
                                                   }
                                               }
 
@@ -435,11 +450,17 @@ function DrawBoat(Boat, CenterMapOnBoat)
   }
 }
 
-function CompleteWPSetPosition(feature, pixel)
+function GetVLMPositionFromClick(pixel)
 {
   var dest = map.getLonLatFromPixel(pixel);
   var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-  var PDest = new VLMPosition(WGSDest.lon, WGSDest.lat);
+  return new VLMPosition(WGSDest.lon, WGSDest.lat);
+}
+
+function CompleteWPSetPosition(feature, pixel)
+{
+
+  var PDest = GetVLMPositionFromClick(pixel);
 
   console.log("DragComplete "+feature.id);
   VLMBoatsLayer.removeFeatures(feature);

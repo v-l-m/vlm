@@ -10,6 +10,7 @@ var FIELD_MAPPING_TEXT = 0;
 var FIELD_MAPPING_VALUE = 1;
 var FIELD_MAPPING_CHECK = 2;
 
+var MAX_PILOT_ORDERS = 5;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -363,6 +364,7 @@ function InitMenusAndButtons()
     });
 
     $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
+    $("#AP_SetTargetWP").click(HandleClickToSetWP)
     
     // AP datetime pickers
     $("#AP_Date").datetimepicker();
@@ -392,6 +394,7 @@ function HandleCancelSetWPOnClick()
 function HandleStartSetWPOnClick()
 {
   SetWPPending = true;
+  WPPendingTarget = "WP";
   $("#SetWPOnClick").hide();
   $("#SetWPOffClick").show();
 
@@ -696,6 +699,15 @@ function UpdatePilotInfo(Boat)
       ShowAutoPilotLine(Boat,PilIndex);
       PilLine.show();
     } 
+
+    if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
+    {
+      $("#AutoPilotAddButton").removeClass("hidden");
+    }
+    else
+    {
+      $("#AutoPilotAddButton").addClass("hidden");  
+    }
   }
   
   UpdatePilotBadge(Boat);
@@ -1019,6 +1031,7 @@ function UpdateLngDropDown()
 }
 
 var _CurAPOrder=null;
+
 function HandleOpenAutoPilotSetPoint(e) 
 {
   var Target = e.target;
@@ -1057,25 +1070,29 @@ function HandleOpenAutoPilotSetPoint(e)
                
     }
 
-    // Update dialog content from APOrder object
-    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
-    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
-  
-    $('#AP_PIM:first-child').html(
-    '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
-    '<span class="caret"></span>'
-    )
-    $("#AP_PIP").val(_CurAPOrder.PIP_Value);
-    $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value);
-    $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value);
-    $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle);
-    
-
-    UpdatePIPFields(_CurAPOrder.PIM);
-    
+    RefreshAPDialogFields()
 
 }
 
+function RefreshAPDialogFields()
+{
+  // Update dialog content from APOrder object
+  $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
+  $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
+
+  $('#AP_PIM:first-child').html(
+  '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
+  '<span class="caret"></span>'
+  )
+  $("#AP_PIP").val(_CurAPOrder.PIP_Value);
+  $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value);
+  $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value);
+  $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle);
+  
+
+  UpdatePIPFields(_CurAPOrder.PIM);
+  
+}
 var _DateChanging=false
 function HandleDateChange(ev)
 {
@@ -1088,6 +1105,13 @@ function HandleDateChange(ev)
     _DateChanging=false;
   }
   
+}
+
+function HandleClickToSetWP()
+{
+  SetWPPending = true;
+  WPPendingTarget = "AP";
+  $("#AutoPilotSettingForm").modal("hide")
 }
 
 function HandleAPModeDDClick(e)
