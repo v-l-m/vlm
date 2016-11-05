@@ -915,7 +915,7 @@ function MoveWPBoatControlerDiv(target)
 function UpdatePrefsDialog(Boat)
 {
   // Hide prefs setting button is not boat or no vlminfo yet...
-  if (typeof Boat === "undefined" || typeof Boat.VLMInfo === "undefined"  || typeof Boat.VLMInfo.AVG === "undefined")
+  if (typeof Boat === "undefined")
   {
     $("#BtnSetting").addClass("hidden");
   }
@@ -923,15 +923,19 @@ function UpdatePrefsDialog(Boat)
   {
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
-    SelectCountryDDFlag(Boat.VLMInfo.CNT);
-    var ColString = Boat.VLMInfo.COL;
-    if (ColString.substring(0,1)!="#")
+
+    if (typeof Boat.VLMInfo != 'undefined')
     {
-      ColString="#"+ColString;
+      SelectCountryDDFlag(Boat.VLMInfo.CNT);
+      var ColString = Boat.VLMInfo.COL;
+      if (ColString.substring(0,1)!="#")
+      {
+        ColString="#"+ColString;
+      }
+      $("#pref_boatcolor").val(ColString);
+
+      $("#cp11").colorpicker({color:ColString});
     }
-    $("#pref_boatcolor").val(ColString);
-    $("#cp11").colorpicker({color:ColString});
-    
   }
 
   
@@ -1225,9 +1229,10 @@ function SaveBoatAndUserPrefs(e)
         var BoatUpdateRequired =false;
         var PlayerUpdateRequired = false;
 
+
         if (!ComparePrefString($("#pref_boatname")[0].value,_CurPlayer.CurBoat.BoatName))
         {
-          NewVals["boatname"]=$("#pref_boatname")[0].value;
+          NewVals["boatname"]=encodeURIComponent($("#pref_boatname")[0].value);
           BoatUpdateRequired = true;
         }
         
