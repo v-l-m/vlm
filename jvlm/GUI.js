@@ -12,6 +12,32 @@ var FIELD_MAPPING_CHECK = 2;
 
 var MAX_PILOT_ORDERS = 5;
 
+var entityMap = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': '&quot;',
+  "'": '&#39;',
+  "/": '&#x2F;'
+};
+
+function escapeHtml(string) 
+{
+  return String(string).replace(/[&<>"'\/]/g, 
+      function (s) 
+      {
+        return entityMap[s];
+      });
+}
+
+function unescapeHtml(string)
+{
+  for (index in entityMap)
+  {
+    String(string).replace(entityMap[index],index)
+  }
+}
+
 // On ready get started with vlm management
 $(document).ready(
   function(){

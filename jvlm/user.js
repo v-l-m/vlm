@@ -295,6 +295,6 @@ function GetFlagsList()
 
 function GetCountryDropDownSelectorHTML(title)
 {
-  return  " <img class='flag' src='/cache/flags/"+title+".png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"+
+  return  " <img class='flag' src='/cache/flags/"+encodeURIComponent( title)+".png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"+
           " <span  style='margin-left:10px;' flag='"+title+"'> - "+ title +"</span>";
 }
