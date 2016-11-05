@@ -10,6 +10,7 @@ var FIELD_MAPPING_TEXT = 0;
 var FIELD_MAPPING_VALUE = 1;
 var FIELD_MAPPING_CHECK = 2;
 
+var MAX_PILOT_ORDERS = 5;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -363,6 +364,7 @@ function InitMenusAndButtons()
     });
 
     $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
+    $("#AP_SetTargetWP").click(HandleClickToSetWP)
     
     // AP datetime pickers
     $("#AP_Date").datetimepicker();
@@ -392,6 +394,7 @@ function HandleCancelSetWPOnClick()
 function HandleStartSetWPOnClick()
 {
   SetWPPending = true;
+  WPPendingTarget = "WP";
   $("#SetWPOnClick").hide();
   $("#SetWPOffClick").show();
 
@@ -696,6 +699,15 @@ function UpdatePilotInfo(Boat)
       ShowAutoPilotLine(Boat,PilIndex);
       PilLine.show();
     } 
+
+    if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
+    {
+      $("#AutoPilotAddButton").removeClass("hidden");
+    }
+    else
+    {
+      $("#AutoPilotAddButton").addClass("hidden");  
+    }
   }
   
   UpdatePilotBadge(Boat);
@@ -715,12 +727,41 @@ function ShowAutoPilotLine(Boat,Index)
   SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
 }
 
+function GetPILIdParentElement(item)
+{
+  var done = false;
+  var RetValue=item;
+  do
+  {
+    if (typeof RetValue === "undefined")
+    {
+      return
+    }
+    if ('id' in RetValue.attributes)
+    {
+      var ItemId = RetValue.attributes['id'].value;
+      if ((ItemId.length == 4) && (ItemId.substring(0,3)=="PIL") )
+      {
+        return RetValue;
+      }
+    }
+    
+    RetValue = RetValue.parentElement;
+    
+  } while (!done)
+}
+
 function HandlePilotEditDelete(e)
 {
   var ClickedItem = $(this)[0]
   var ItemId = ClickedItem.attributes['class'].value;
-  var PilOrderElement = ClickedItem.parentElement.parentElement;
+  var PilOrderElement = GetPILIdParentElement(ClickedItem);
   var Boat = _CurPlayer.CurBoat;
+
+  if (typeof PilOrderElement === "undefined")
+  {
+    return;
+  }
 
   var OrderIndex = parseInt(PilOrderElement.attributes['id'].nodeValue.substring(3));
 
@@ -990,6 +1031,7 @@ function UpdateLngDropDown()
 }
 
 var _CurAPOrder=null;
+
 function HandleOpenAutoPilotSetPoint(e) 
 {
   var Target = e.target;
@@ -1016,7 +1058,7 @@ function HandleOpenAutoPilotSetPoint(e)
         break;
       case "PIL_EDIT":
         // Load AP Order from vlminfo structure
-        var ParentDiv = Target.parentElement.parentElement;
+        var ParentDiv =  GetPILIdParentElement(Target);
         var OrderIndex =ParentDiv.attributes["id"].value.substring(3) ;
         _CurAPOrder = new AutoPilotOrder (_CurPlayer.CurBoat,OrderIndex)
 
@@ -1028,25 +1070,29 @@ function HandleOpenAutoPilotSetPoint(e)
                
     }
 
-    // Update dialog content from APOrder object
-    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
-    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
-  
-    $('#AP_PIM:first-child').html(
-    '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
-    '<span class="caret"></span>'
-    )
-    $("#AP_PIP").val(_CurAPOrder.PIP_Value);
-    $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value);
-    $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value);
-    $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle);
-    
-
-    UpdatePIPFields(_CurAPOrder.PIM);
-    
+    RefreshAPDialogFields()
 
 }
 
+function RefreshAPDialogFields()
+{
+  // Update dialog content from APOrder object
+  $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
+  $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
+
+  $('#AP_PIM:first-child').html(
+  '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
+  '<span class="caret"></span>'
+  )
+  $("#AP_PIP").val(_CurAPOrder.PIP_Value);
+  $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value);
+  $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value);
+  $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle);
+  
+
+  UpdatePIPFields(_CurAPOrder.PIM);
+  
+}
 var _DateChanging=false
 function HandleDateChange(ev)
 {
@@ -1059,6 +1105,13 @@ function HandleDateChange(ev)
     _DateChanging=false;
   }
   
+}
+
+function HandleClickToSetWP()
+{
+  SetWPPending = true;
+  WPPendingTarget = "AP";
+  $("#AutoPilotSettingForm").modal("hide")
 }
 
 function HandleAPModeDDClick(e)
