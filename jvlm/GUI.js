@@ -523,7 +523,7 @@ function SetTWASign(Boat)
     var winddir = (360 - twd )%360 + 90;
     var boatdir = (360 - heading )%360 + 90;
 
-    if ( twa < 0 ) 
+    if ( twa * Boat.VLMInfo.TWA > 0 ) 
     {
       Boat.VLMInfo.TWA = - Boat.VLMInfo.TWA;
     }
