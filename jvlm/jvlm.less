@@ -6,6 +6,7 @@
 @import url('external/bootstrap-master/css/bootstrap.min.css');
 @import url('jquery-ui.min.css');
 @import url('external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css');
+@import url('external/footable-bootstrap/css/footable.bootstrap.css');
 html, body, input {
   background-color: #e0e0f0;
   color: #FFFFFF;
@@ -429,12 +430,30 @@ span.ui-selectmenu-text {
   transform: rotate(0deg);
   transform-origin: 83px 75px;
 }
-#Controler-Panel {
-  position: absolute;
-  padding-left: 67px;
-  top: 82px;
-  left: 38px;
-  background-color: rgba(240, 248, 255,0.5);
+@media all and (max-width: 370px)
+
+{
+
+    .Controler-Panel
+
+    {
+
+       padding-left:0px;
+       padding-top:10px;
+
+    }
+
+}
+@media all and (min-width: 370px)
+
+{
+.Controler-Panel {
+  /*position: absolute;*/
+  padding-left: 85px;
+  /*top: 82px;*/
+  /*left: 38px;*/
+  /*background-color: rgba(240, 248, 255,0.5);*/
+}
 }
 .Boat_SimpleInput {
   width: 90px;
@@ -654,6 +673,9 @@ padding-bottom:5px;
 }
 #pilot .form-group{
 margin-bottom:0px
+}
+#AutoPilotTab .table{
+background-color:transparent;
 }
 .pref {
 margin-left:15px;
