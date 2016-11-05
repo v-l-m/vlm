@@ -12,6 +12,32 @@ var FIELD_MAPPING_CHECK = 2;
 
 var MAX_PILOT_ORDERS = 5;
 
+var entityMap = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': '&quot;',
+  "'": '&#39;',
+  "/": '&#x2F;'
+};
+
+function escapeHtml(string) 
+{
+  return String(string).replace(/[&<>"'\/]/g, 
+      function (s) 
+      {
+        return entityMap[s];
+      });
+}
+
+function unescapeHtml(string)
+{
+  for (index in entityMap)
+  {
+    String(string).replace(entityMap[index],index)
+  }
+}
+
 // On ready get started with vlm management
 $(document).ready(
   function(){
@@ -26,6 +52,8 @@ $(document).ready(
     
     // Init Menus()
     InitMenusAndButtons();
+
+    
     
     // Start-Up Polars manager
     PolarsManager.Init();
@@ -94,7 +122,10 @@ $(document).ready(
     );
     
     $('#cp11').colorpicker();
-     
+
+    // Init footable                      
+    $('.footable').footable();
+                           
     // CheckLogin
     CheckLogin();
 
@@ -523,7 +554,7 @@ function SetTWASign(Boat)
     var winddir = (360 - twd )%360 + 90;
     var boatdir = (360 - heading )%360 + 90;
 
-    if ( twa < 0 ) 
+    if ( twa * Boat.VLMInfo.TWA > 0 ) 
     {
       Boat.VLMInfo.TWA = - Boat.VLMInfo.TWA;
     }
@@ -889,7 +920,7 @@ function MoveWPBoatControlerDiv(target)
 function UpdatePrefsDialog(Boat)
 {
   // Hide prefs setting button is not boat or no vlminfo yet...
-  if (typeof Boat === "undefined" || typeof Boat.VLMInfo === "undefined"  || typeof Boat.VLMInfo.AVG === "undefined")
+  if (typeof Boat === "undefined")
   {
     $("#BtnSetting").addClass("hidden");
   }
@@ -897,15 +928,19 @@ function UpdatePrefsDialog(Boat)
   {
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
-    SelectCountryDDFlag(Boat.VLMInfo.CNT);
-    var ColString = Boat.VLMInfo.COL;
-    if (ColString.substring(0,1)!="#")
+
+    if (typeof Boat.VLMInfo != 'undefined')
     {
-      ColString="#"+ColString;
+      SelectCountryDDFlag(Boat.VLMInfo.CNT);
+      var ColString = Boat.VLMInfo.COL;
+      if (ColString.substring(0,1)!="#")
+      {
+        ColString="#"+ColString;
+      }
+      $("#pref_boatcolor").val(ColString);
+
+      $("#cp11").colorpicker({color:ColString});
     }
-    $("#pref_boatcolor").val(ColString);
-    $("#cp11").colorpicker({color:ColString});
-    
   }
 
   
@@ -1199,9 +1234,10 @@ function SaveBoatAndUserPrefs(e)
         var BoatUpdateRequired =false;
         var PlayerUpdateRequired = false;
 
+
         if (!ComparePrefString($("#pref_boatname")[0].value,_CurPlayer.CurBoat.BoatName))
         {
-          NewVals["boatname"]=$("#pref_boatname")[0].value;
+          NewVals["boatname"]=encodeURIComponent($("#pref_boatname")[0].value);
           BoatUpdateRequired = true;
         }
         
@@ -1214,7 +1250,7 @@ function SaveBoatAndUserPrefs(e)
         var NewCountry= GetPrefSelFlag();
         if (!ComparePrefString(NewCountry,_CurPlayer.CurBoat.VLMInfo.CNT))
         {
-          NewVals["country"]=NewCountry;
+          NewVals["country"]=encodeURIComponent(NewCountry);
           BoatUpdateRequired = true;
         }
 

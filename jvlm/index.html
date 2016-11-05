@@ -26,7 +26,7 @@
     <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
     <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
-  <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
+    <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
     <script src="OpenLayers/OpenLayers.debug.js"></script>
 
     <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>-->
@@ -42,13 +42,7 @@
     <script src="user.js"  type='text/javascript'></script>
     <script src='polar.js' type='text/javascript'></script>
     <script src='xmpp.js' type='text/javascript'></script>
-    <script src='autopilot.js' type='text/javascript'></script>
-    
-                      <script>
-                          $(function () {
-                              $('.footable').footable();
-                          });
-                      </script>   
+    <script src='autopilot.js' type='text/javascript'></script> 
       
   </head>
   <body >
@@ -325,7 +319,7 @@
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
                   <div class="container-fluid">
-                    <div id='PIL_HEADER' class='row'>
+                    <!--<div id='PIL_HEADER' class='row'>
                       <div class='PAHeader col-xs-3'>
                         <span I18N="Human Readable date">..HD</span>
                       </div>
@@ -360,35 +354,27 @@
                       </div>
                      </div>
                     </div>
-                    <hr/>
+                    <hr/>-->
                   <div class="container-fluid">
                       <table  class="footable table toggle-default" data-show-toggle="true" data-expand-first="false">
                         <thead>
-                          <tr>
-                            <th data-toggle="true">Date</th>
-                            <th data-breakpoints="xs sm">PIM</th>
-                            <th data-breakpoints="xs sm">PIP</th>
-                            <th data-breakpoints="xs">Statut</th>
+                          <tr id="PIL_HEADER">
+                            <th data-toggle="true" data-type="html" I18N="Human Readable date">Date</th>
+                            <th data-breakpoints="xs sm" data-type="html">PIM</th>
+                            <th data-breakpoints="xs sm" data-type="html" I18n="AP_OrderParam">PIP</th>
+                            <th data-breakpoints="xs" data-type="html">Statut</th>
                             <th data-breakpoints="xs" data-type="html">edit</th>
                             <th data-breakpoints="xs" data-type="html">delet</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td><span id="PIL_DATE" >Fri Nov 04 2016 16:05:05 GMT+0300 (Pays arabes)</span></td>
-                            <td><span id="PIL_PIM"></span>Cap fixe</td>
-                            <td><span id="PIL_PIP" ></span>25</td>
-                            <td><span id="PIL_STATUS">Pending</span></td>
+                          <tr id="PIL1">
+                            <td><span id="PIL_DATE" >_</span></td>
+                            <td><span id="PIL_PIM">_</span></td>
+                            <td><span id="PIL_PIP" >_</span></td>
+                            <td><span id="PIL_STATUS">_</span></td>
                             <td><img class="PIL_EDIT" src="images/edit.png" alt=""/></td>
                             <td><img class="PIL_DELETE" src="images/delete.png" alt=""/></td>
-                          </tr>
-                          <tr>
-                            <td><span id="PIL_DATE" >Wed Nov 09 2016 09:24:53 GMT+0300 (Pays arabes)</span></td>
-                            <td><span id="PIL_PIM"></span>Pilote Orthodromique</td>
-                            <td><span id="PIL_PIP" ></span>36.000000,-14.000000@-1.000000</td>
-                            <td><span id="PIL_STATUS">Pending</span></td>
-                            <td><img class="PIL_EDIT" src="images/edit.png" alt=""/></td>
-                            <td><img class="PIL_DELETE"src="images/delete.png" alt=""/></td>
                           </tr>
                         </tbody>
                       </table> 
