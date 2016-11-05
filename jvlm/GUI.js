@@ -497,12 +497,39 @@ function   HandleRacingDockingButtons(IsRacing)
 }
 
 
-
 function UpdateInMenuDockingBoatInfo(Boat)
 {
   HandleRacingDockingButtons(false);
 
 }
+
+function SetTWASign(Boat)
+{
+  var twd = Boat.VLMInfo.TWD;
+  var heading = Boat.VLMInfo.HDG;
+  
+  twa = twd - heading;
+  if (twa < -180 ) 
+  {
+    twa +=360;
+  }
+  
+  if (twa > 180 ) 
+  {
+    twa -=360
+  };
+
+
+    var winddir = (360 - twd )%360 + 90;
+    var boatdir = (360 - heading )%360 + 90;
+
+    if ( twa < 0 ) 
+    {
+      Boat.VLMInfo.TWA = - Boat.VLMInfo.TWA;
+    }
+    
+}
+
 
 function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 {
@@ -516,10 +543,8 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   HandleRacingDockingButtons(true);
   // Put a sign to the TWA
-  if (Boat.VLMInfo.TWD+360 < parseInt(Boat.VLMInfo.HDG)+360)
-  {
-    Boat.VLMInfo.TWA = -Boat.VLMInfo.TWA;
-  }
+  SetTWASign(Boat)
+  
   
   // Update GUI for current player
   // Todo Get Rid of Coords Class
