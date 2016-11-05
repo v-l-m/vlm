@@ -26,6 +26,7 @@
     <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
     <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
+  <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
     <script src="OpenLayers/OpenLayers.debug.js"></script>
 
     <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>-->
@@ -42,7 +43,12 @@
     <script src='polar.js' type='text/javascript'></script>
     <script src='xmpp.js' type='text/javascript'></script>
     <script src='autopilot.js' type='text/javascript'></script>
-      
+    
+                      <script>
+                          $(function () {
+                              $('.footable').footable();
+                          });
+                      </script>   
       
   </head>
   <body >
@@ -169,7 +175,7 @@
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-        <div class="Controler-Panel Container-fluid" style="padding-left:85px">
+        <div class="Controler-Panel Container-fluid" >
                 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                 <li class="BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
                   <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png"></img>
@@ -322,7 +328,7 @@
                       <div class='PAHeader col-xs-4'>
                         <span I18n="AP_OrderParam">Prochain cap</span>
                       </div>
-                      <div class='PAHeader col-xs-3' style="text-align:center">
+                      <div class='PAHeader col-xs-1'>
                         <span I18n="status">Status</span>
                       </div>
                     </div>
@@ -336,27 +342,57 @@
                       <div class='col-xs-4'>
                         <span id='PIL_PIP' ></span>
                       </div>
-                      <div class='col-xs-3'>
-                          <div class="col-xs-4">
-                            <span id='PIL_STATUS'>Status</span>
-                            </div>
-                          <div class="col-xs-4">
-                            <img class='PIL_EDIT' src="images/edit.png"></img>
-                            </div>
-                          <div class="col-xs-4">
-                            <img class='PIL_DELETE' src="images/delete.png"></img>
-                          </div>
+                      <div class='col-xs-1'>
+                        <span id='PIL_STATUS'>Status</span>
                       </div>
-                      
+                      <div class="col-xs-1">
+                        <img class='PIL_EDIT' src="images/edit.png"></img>
+                      </div>
+                      <div class="col-xs-1">
+                        <img class='PIL_DELETE' src="images/delete.png"></img>
+                      </div>
+                     </div>
                     </div>
+                    <hr/>
+                  <div class="container-fluid">
+                      <table  class="footable table toggle-default" data-show-toggle="true" data-expand-first="false">
+                        <thead>
+                          <tr>
+                            <th data-toggle="true">Date</th>
+                            <th data-breakpoints="xs sm">PIM</th>
+                            <th data-breakpoints="xs sm">PIP</th>
+                            <th data-breakpoints="xs">Statut</th>
+                            <th data-breakpoints="xs" data-type="html">edit</th>
+                            <th data-breakpoints="xs" data-type="html">delet</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><span id="PIL_DATE" >Fri Nov 04 2016 16:05:05 GMT+0300 (Pays arabes)</span></td>
+                            <td><span id="PIL_PIM"></span>Cap fixe</td>
+                            <td><span id="PIL_PIP" ></span>25</td>
+                            <td><span id="PIL_STATUS">Pending</span></td>
+                            <td><img class="PIL_EDIT" src="images/edit.png" alt=""/></td>
+                            <td><img class="PIL_DELETE" src="images/delete.png" alt=""/></td>
+                          </tr>
+                          <tr>
+                            <td><span id="PIL_DATE" >Wed Nov 09 2016 09:24:53 GMT+0300 (Pays arabes)</span></td>
+                            <td><span id="PIL_PIM"></span>Pilote Orthodromique</td>
+                            <td><span id="PIL_PIP" ></span>36.000000,-14.000000@-1.000000</td>
+                            <td><span id="PIL_STATUS">Pending</span></td>
+                            <td><img class="PIL_EDIT" src="images/edit.png" alt=""/></td>
+                            <td><img class="PIL_DELETE"src="images/delete.png" alt=""/></td>
+                          </tr>
+                        </tbody>
+                      </table> 
+                  </div>
                     <div class="BoatControllerRow row">
                       <div class="col-sm-4">
                         <button id="AutoPilotAddButton" class="btn-default"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
                       </div>
                     </div>
                   </div>   
-                  </div>
-                </div>    <!--Fin du pilot-->
+                  </div>  <!--Fin du pilot-->
               </div>  <!--Fin de la table-->
             </div>
           </div>
