@@ -497,12 +497,39 @@ function   HandleRacingDockingButtons(IsRacing)
 }
 
 
-
 function UpdateInMenuDockingBoatInfo(Boat)
 {
   HandleRacingDockingButtons(false);
 
 }
+
+function SetTWASign(Boat)
+{
+  var twd = Boat.VLMInfo.TWD;
+  var heading = Boat.VLMInfo.HDG;
+  
+  twa = twd - heading;
+  if (twa < -180 ) 
+  {
+    twa +=360;
+  }
+  
+  if (twa > 180 ) 
+  {
+    twa -=360
+  };
+
+
+    var winddir = (360 - twd )%360 + 90;
+    var boatdir = (360 - heading )%360 + 90;
+
+    if ( twa < 0 ) 
+    {
+      Boat.VLMInfo.TWA = - Boat.VLMInfo.TWA;
+    }
+    
+}
+
 
 function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 {
@@ -516,10 +543,16 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   HandleRacingDockingButtons(true);
   // Put a sign to the TWA
-  if (Boat.VLMInfo.TWD+360 < parseInt(Boat.VLMInfo.HDG)+360)
+  SetTWASign(Boat)
+
+  // Fix HDG when boat is mooring
+  if (Boat.VLMInfo.PIM == "2" && Boat.VLMInfo.PIP =="0")
   {
-    Boat.VLMInfo.TWA = -Boat.VLMInfo.TWA;
+    // Mooring 
+    Boat.VLMInfo.HDG = Boat.VLMInfo.TWD;
+    Boat.VLMInfo.BSP = 0;
   }
+  
   
   // Update GUI for current player
   // Todo Get Rid of Coords Class
@@ -606,9 +639,11 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   var WindSpeed=Math.round(Boat.VLMInfo.TWS*100)/100;
   var OrthoToWP=Math.round(Boat.VLMInfo.ORT*100)/100;
 
-   $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed='+WindSpeed+'&roadtoend='+OrthoToWP+'&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
-   $("#ImgWindAngle").css("transform","rotate("+wHeading+"deg)");
-   $("#DeckImage").css("transform","rotate("+BoatHeading+"deg)");
+
+  $("#ImgWindAngle").attr('src','windangle.php?wheading='+wHeading+'&boatheading='+ BoatHeading +'&wspeed='+WindSpeed+'&roadtoend='+OrthoToWP+'&boattype='+BoatType+"&jvlm="+Boat.VLMInfo.NOW);
+  $("#ImgWindAngle").css("transform","rotate("+wHeading+"deg)");
+  $("#DeckImage").css("transform","rotate("+BoatHeading+"deg)");
+
 
    // Set active PM mode display
    $(".PMActiveMode").css("display","none");
