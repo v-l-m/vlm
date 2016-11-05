@@ -52,6 +52,8 @@ $(document).ready(
     
     // Init Menus()
     InitMenusAndButtons();
+
+    
     
     // Start-Up Polars manager
     PolarsManager.Init();
@@ -120,7 +122,10 @@ $(document).ready(
     );
     
     $('#cp11').colorpicker();
-     
+
+    // Init footable                      
+    $('.footable').footable();
+                           
     // CheckLogin
     CheckLogin();
 
