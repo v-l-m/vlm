@@ -110,7 +110,7 @@
                   <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
                 </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;margin-left: 150px;">
+            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>
@@ -319,10 +319,10 @@
                       <div class='PAHeader col-xs-2'>
                         <span >Mode pilotage</span>
                       </div>
-                      <div class='PAHeader col-xs-5'>
+                      <div class='PAHeader col-xs-4'>
                         <span I18n="AP_OrderParam">Prochain cap</span>
                       </div>
-                      <div class='PAHeader col-xs-2'>
+                      <div class='PAHeader col-xs-3' style="text-align:center">
                         <span I18n="status">Status</span>
                       </div>
                     </div>
@@ -333,10 +333,10 @@
                       <div class='col-xs-2'>
                         <span id='PIL_PIM'></span>
                       </div>
-                      <div class='col-xs-5'>
+                      <div class='col-xs-4'>
                         <span id='PIL_PIP' ></span>
                       </div>
-                      <div class='col-xs-2'>
+                      <div class='col-xs-3'>
                           <div class="col-xs-4">
                             <span id='PIL_STATUS'>Status</span>
                             </div>
@@ -1097,7 +1097,7 @@
                 <div class="col-xs-12">
                   <div id="pilot" class="form-group">
                     <div class="row">
-                      <label for="AP_Date" class="col-md-4 control-label">Date Picking</label>
+                      <label for="AP_Date" class="col-md-4 control-label" I18n="select_date">Date Picking</label>
                       <div id="AP_Date" class="input-group date form_date col-md-8" data-date-format="dd MM yyyy" >
                         <input class="APField form-control" size="12" type="text" value="" >
                         <span class="input-group-addon">
@@ -1107,7 +1107,7 @@
                     </div>
                     <div class="row">
                       <div class="form-group">
-                        <label for="AP_Time" class="col-md-4 control-label">Time Picking</label>
+                        <label for="AP_Time" class="col-md-4 control-label"  I18n="select_time">Time Picking</label>
                         <div id="AP_Time" class="input-group date form_time col-md-8" data-date-format="hh:ii:ss" >
                           <input class="APField form-control" size="12" type="text" value="" >
 					                <span class="input-group-addon">
@@ -1117,7 +1117,7 @@
                       </div>
                     </div>
                     <div class="row">
-                      <label for="AP_PIM" class="col-md-4 control-label">PIM</label>
+                      <label for="AP_PIM" class="col-md-4 control-label" I18n="PIM">PIM</label>
                       <div  class="APField dropdown input-group col-md-8">
                         <button id="AP_PIM" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
                           <span class="caret"></span>
@@ -1132,7 +1132,7 @@
                       </div>				              
                     </div>
                     <div class="AP_PIPRow row" style="margin-top:4px">
-                      <label for="AP_PIP" class="col-md-4 control-label">PIP</label>
+                      <label for="AP_PIP" class="col-md-4 control-label" I18n="PIP">PIP</label>
                       <div  class="input-group col-md-8">
                         <input id="AP_PIP" class="APField form-control" type="text"></input>
                       </div>				              
@@ -1140,13 +1140,13 @@
                     <div class="row">
                     <div class="col-md-10">
                     <div class="AP_WPRow row">
-                      <label for="AP_WPLat" class="col-md-5 control-label">Target Lat</label>
+                      <label for="AP_WPLat" class="col-md-5 control-label">Latitude</label>
                       <div  class="input col-md-7">
                         <input id="AP_WPLat" class="APField form-control" type="text"></input>
                       </div>				              
                     </div>
                     <div class="AP_WPRow row">
-                      <label for="AP_WPLon" class="col-md-5 control-label">Target Lon</label>
+                      <label for="AP_WPLon" class="col-md-5 control-label">Longitude</label>
                       <div  class="input col-md-7">
                         <input id="AP_WPLon" class="APField form-control" type="text"></input>
                       </div>				              
@@ -1157,7 +1157,7 @@
                     </div>
                     </div>
                     <div class="AP_WPRow row">
-                      <label for="AP_WPAt" class="col-md-4 control-label">Heading @ WP</label>
+                      <label for="AP_WPAt" class="col-md-4 control-label" I18n="Heading_WP">Heading @ WP</label>
                       <div  class="input-group col-md-8">
                         <input id="AP_WPAt" class="APField form-control" type="text"></input>
                       </div>				              
