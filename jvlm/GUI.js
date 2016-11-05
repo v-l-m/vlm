@@ -1240,7 +1240,7 @@ function SaveBoatAndUserPrefs(e)
         var NewCountry= GetPrefSelFlag();
         if (!ComparePrefString(NewCountry,_CurPlayer.CurBoat.VLMInfo.CNT))
         {
-          NewVals["country"]=NewCountry;
+          NewVals["country"]=encodeURIComponent(NewCountry);
           BoatUpdateRequired = true;
         }
 
