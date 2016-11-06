@@ -34,8 +34,9 @@ function unescapeHtml(string)
 {
   for (index in entityMap)
   {
-    String(string).replace(entityMap[index],index)
+    string=String(string).replace(entityMap[index],index)
   }
+  return string
 }
 
 // On ready get started with vlm management
@@ -123,8 +124,6 @@ $(document).ready(
     
     $('#cp11').colorpicker();
 
-    // Init footable                      
-    $('.footable').footable();
                            
     // CheckLogin
     CheckLogin();
@@ -484,7 +483,7 @@ function HideBgLoad()
 function ShowPb(PBName)
 {
   $(PBName).show();
-  LocalizeString();
+  //LocalizeString();
 }
 
 function HidePb(PBName)
@@ -732,6 +731,49 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
 } 
 
+function SetBtnPilClass(SourceObj,TargetClass,PilClassName)
+{
+
+  var CurObj = SourceObj;
+
+  if (typeof CurObj === 'undefined' || ! CurObj)
+  {
+    return false;
+  }
+
+  if (('class' in CurObj.attributes) && (String(CurObj.attributes['class'].value).indexOf(TargetClass) !=-1))
+  {
+    // target found
+    ChildObj.attributes['PIL_ID']=PilClassName;
+    return true;
+  }
+
+  
+  for (index in CurObj.children)
+  {
+    var ChildObj= CurObj.children[index]
+
+    if (typeof ChildObj != 'object')
+    {
+      return false;
+    }
+    if (('class' in ChildObj.attributes) && (String(ChildObj.attributes['class'].value).indexOf(TargetClass) !=-1))
+    {
+      // target found
+      ChildObj.attributes['PIL_ID']=PilClassName;
+      return true;
+    }
+
+    if (SetBtnPilClass(ChildObj,TargetClass,PilClassName))
+    {
+      // Stop if anyone below matched
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 function UpdatePilotInfo(Boat)
 {
   if ((typeof Boat === "undefined") || (!Boat))
@@ -750,6 +792,7 @@ function UpdatePilotInfo(Boat)
 
   if (Boat.VLMInfo.PIL.length >0)
   {
+    var TableLayoutChange=false;
     for (index in Boat.VLMInfo.PIL)
     {
       var PilIndex = parseInt(index)+1;
@@ -759,7 +802,17 @@ function UpdatePilotInfo(Boat)
       {
         PilLine = PIL_TEMPLATE.clone();
         PilLine.attr('id',"PIL"+PilIndex);
+        SetBtnPilClass(PilLine[0],"PIL_EDIT","PIL"+PilIndex);
+        SetBtnPilClass(PilLine[0],"PIL_DELETE","PIL"+PilIndex);
+        
         PilLine.insertAfter($("#PIL"+PrevIndex));
+        TableLayoutChange = true ;
+      }
+
+      if (TableLayoutChange)
+      {
+        // Init footable                      
+        $('.footable').footable();
       }
 
       ShowAutoPilotLine(Boat,PilIndex);
