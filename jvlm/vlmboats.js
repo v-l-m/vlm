@@ -1143,10 +1143,11 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
   {
     BoatList = Boat.OppList;
+    ratio=1;
   }
   for (index in  BoatList)
   {
-    var Opp = Boat.Rankings.ranking[index];
+    var Opp = BoatList[index];
 
     if ((Opp.idusers != Boat.IdBoat) && (Math.random()<=ratio) && (count < MAX_LEN))
     {
