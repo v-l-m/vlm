@@ -1123,18 +1123,33 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     return;
   }
 
+  // Get Friends
+  var friends = Boat.VLMInfo.MPO.split(',')
+  for (index in friends )
+  {
+    var Opp = Boat.Rankings.ranking[friends[index]];
+
+    if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
+    {
+      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+    }
+  }
+
+  var MAX_LEN = 150;
+  var ratio =MAX_LEN/ Object.keys(Boat.Rankings.ranking).length;
+  var count=0;
   for (index in Boat.Rankings.ranking )
   {
     var Opp = Boat.Rankings.ranking[index];
 
-    if (Opp.idusers != Boat.IdBoat)
+    if ((Opp.idusers != Boat.IdBoat) && (Math.random()<=ratio) && (count < MAX_LEN))
     {
-      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp);
+      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
     }
   }
 }
 
-function AddOpponent(Boat,Layer,Features,Opponent)
+function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
 {
   var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
   var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
@@ -1152,6 +1167,7 @@ function AddOpponent(Boat,Layer,Features,Opponent)
         "Last3h" : Opponent.last3h,
         "Last24h" : Opponent.last24h,
         "IsTeam" : (Opponent.country==Boat.VLMInfo.CNT)?"team":"",
+        "IsFriend": isFriend,
         "color" : Opponent.color
       }
     );
