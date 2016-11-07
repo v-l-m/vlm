@@ -65,8 +65,8 @@ for track in Tracks:
     tr=track[11][0]
     #print tr
     Time = tr[0]
-    lat = tr[2]
-    lon = tr[1]
+    lon = tr[2]
+    lat = tr[1]
     
     print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (vlmidrace, Time, realid, realname,realname, lat, lon, speed, heading))
   # epoch = pos['t'] * 60
