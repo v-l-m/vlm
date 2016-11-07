@@ -1138,13 +1138,25 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   var MAX_LEN = 150;
   var ratio =MAX_LEN/ Object.keys(Boat.Rankings.ranking).length;
   var count=0;
-  for (index in Boat.Rankings.ranking )
+  var BoatList = Boat.Rankings.ranking;
+
+  if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
+  {
+    BoatList = Boat.OppList;
+  }
+  for (index in  BoatList)
   {
     var Opp = Boat.Rankings.ranking[index];
 
     if ((Opp.idusers != Boat.IdBoat) && (Math.random()<=ratio) && (count < MAX_LEN))
     {
       AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
+
+      if (typeof Boat.OppList === "undefined")
+      {
+        Boat.OppList=[];
+      }
+      Boat.OppList[index]=Opp;
     }
   }
 }
