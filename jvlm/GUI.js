@@ -731,49 +731,6 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
 } 
 
-function SetBtnPilClass(SourceObj,TargetClass,PilClassName)
-{
-
-  var CurObj = SourceObj;
-
-  if (typeof CurObj === 'undefined' || ! CurObj)
-  {
-    return false;
-  }
-
-  if (('class' in CurObj.attributes) && (String(CurObj.attributes['class'].value).indexOf(TargetClass) !=-1))
-  {
-    // target found
-    ChildObj.attributes['PIL_ID']=PilClassName;
-    return true;
-  }
-
-  
-  for (index in CurObj.children)
-  {
-    var ChildObj= CurObj.children[index]
-
-    if (typeof ChildObj != 'object')
-    {
-      return false;
-    }
-    if (('class' in ChildObj.attributes) && (String(ChildObj.attributes['class'].value).indexOf(TargetClass) !=-1))
-    {
-      // target found
-      ChildObj.attributes['PIL_ID']=PilClassName;
-      return true;
-    }
-
-    if (SetBtnPilClass(ChildObj,TargetClass,PilClassName))
-    {
-      // Stop if anyone below matched
-      return true;
-    }
-  }
-  
-  return false;
-}
-
 function UpdatePilotInfo(Boat)
 {
   if ((typeof Boat === "undefined") || (!Boat))
@@ -802,10 +759,10 @@ function UpdatePilotInfo(Boat)
       {
         PilLine = PIL_TEMPLATE.clone();
         PilLine.attr('id',"PIL"+PilIndex);
-        SetBtnPilClass(PilLine[0],"PIL_EDIT","PIL"+PilIndex);
-        SetBtnPilClass(PilLine[0],"PIL_DELETE","PIL"+PilIndex);
         
         PilLine.insertAfter($("#PIL"+PrevIndex));
+        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);
+        
         TableLayoutChange = true ;
       }
 
@@ -1181,7 +1138,7 @@ function HandleOpenAutoPilotSetPoint(e)
         break;
       case "PIL_EDIT":
         // Load AP Order from vlminfo structure
-        var ParentDiv =  GetPILIdParentElement(Target);
+        var ParentDiv =  parseInt(Target.attributes("pil_id").value);
         var OrderIndex =ParentDiv.attributes["id"].value.substring(3) ;
         _CurAPOrder = new AutoPilotOrder (_CurPlayer.CurBoat,OrderIndex)
 
