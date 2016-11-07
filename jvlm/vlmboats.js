@@ -697,7 +697,7 @@ var VectorStyles = new OpenLayers.Style(
             //labelOutlineColor: "white",
             //labelOutlineWidth: 2
             externalGraphic: "images/opponent${IsTeam}.png",
-            graphicWidth: 12,
+            graphicWidth: "${IsFriend}",
             fillOpacity: 1
 
           }
@@ -1167,7 +1167,7 @@ function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
         "Last3h" : Opponent.last3h,
         "Last24h" : Opponent.last24h,
         "IsTeam" : (Opponent.country==Boat.VLMInfo.CNT)?"team":"",
-        "IsFriend": isFriend,
+        "IsFriend": (isFriend?24:12),
         "color" : Opponent.color
       }
     );
