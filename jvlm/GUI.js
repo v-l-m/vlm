@@ -765,13 +765,15 @@ function UpdatePilotInfo(Boat)
         
         TableLayoutChange = true ;
       }
-
-      if (TableLayoutChange)
+        
+      //if (TableLayoutChange)
       {
         // Init footable                      
         $('.footable').footable();
       }
-
+      
+      $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
+      
       ShowAutoPilotLine(Boat,PilIndex);
       PilLine.show();
     } 
@@ -831,15 +833,9 @@ function HandlePilotEditDelete(e)
 {
   var ClickedItem = $(this)[0]
   var ItemId = ClickedItem.attributes['class'].value;
-  var PilOrderElement = GetPILIdParentElement(ClickedItem);
   var Boat = _CurPlayer.CurBoat;
 
-  if (typeof PilOrderElement === "undefined")
-  {
-    return;
-  }
-
-  var OrderIndex = parseInt(PilOrderElement.attributes['id'].nodeValue.substring(3));
+  var OrderIndex = parseInt( ClickedItem.attributes['pil_id'].value);
 
   if (ItemId == "PIL_EDIT")
   {
@@ -847,7 +843,7 @@ function HandlePilotEditDelete(e)
   }
   else if (ItemId == "PIL_DELETE")
   {
-    DeletePilotOrder(Boat,PilOrderElement.attributes['TID']);
+    DeletePilotOrder(Boat,ClickedItem.attributes['TID'].value);
   }
 
 }
@@ -1138,8 +1134,7 @@ function HandleOpenAutoPilotSetPoint(e)
         break;
       case "PIL_EDIT":
         // Load AP Order from vlminfo structure
-        var ParentDiv =  parseInt(Target.attributes("pil_id").value);
-        var OrderIndex =ParentDiv.attributes["id"].value.substring(3) ;
+        var OrderIndex =parseInt(Target.attributes["pil_id"].value);
         _CurAPOrder = new AutoPilotOrder (_CurPlayer.CurBoat,OrderIndex)
 
         $("#AutoPilotSettingForm").modal('show');
