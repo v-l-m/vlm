@@ -697,7 +697,7 @@ var VectorStyles = new OpenLayers.Style(
             //labelOutlineColor: "white",
             //labelOutlineWidth: 2
             externalGraphic: "images/opponent${IsTeam}.png",
-            graphicWidth: 12,
+            graphicWidth: "${IsFriend}",
             fillOpacity: 1
 
           }
@@ -1123,18 +1123,46 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     return;
   }
 
-  for (index in Boat.Rankings.ranking )
+  // Get Friends
+  var friends = Boat.VLMInfo.MPO.split(',')
+  for (index in friends )
   {
-    var Opp = Boat.Rankings.ranking[index];
+    var Opp = Boat.Rankings.ranking[friends[index]];
 
-    if (Opp.idusers != Boat.IdBoat)
+    if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
     {
-      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp);
+      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+    }
+  }
+
+  var MAX_LEN = 150;
+  var ratio =MAX_LEN/ Object.keys(Boat.Rankings.ranking).length;
+  var count=0;
+  var BoatList = Boat.Rankings.ranking;
+
+  if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
+  {
+    BoatList = Boat.OppList;
+    ratio=1;
+  }
+  for (index in  BoatList)
+  {
+    var Opp = BoatList[index];
+
+    if ((Opp.idusers != Boat.IdBoat) && (Math.random()<=ratio) && (count < MAX_LEN))
+    {
+      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
+
+      if (typeof Boat.OppList === "undefined")
+      {
+        Boat.OppList=[];
+      }
+      Boat.OppList[index]=Opp;
     }
   }
 }
 
-function AddOpponent(Boat,Layer,Features,Opponent)
+function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
 {
   var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
   var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
@@ -1152,6 +1180,7 @@ function AddOpponent(Boat,Layer,Features,Opponent)
         "Last3h" : Opponent.last3h,
         "Last24h" : Opponent.last24h,
         "IsTeam" : (Opponent.country==Boat.VLMInfo.CNT)?"team":"",
+        "IsFriend": (isFriend?24:12),
         "color" : Opponent.color
       }
     );

@@ -14,6 +14,7 @@ function Boat(vlmboat)
   this.Track=[]; // Last 24H of boat Track
   this.Rankings={};   // Ranking table
   this.OppTrack=[]; // Opponents tracks table
+  this.OppList=[];  // Opponents list to limit how many boats are shown
 
   if (typeof vlmboat != 'undefined')
   {

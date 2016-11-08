@@ -76,7 +76,7 @@
               <div><select id="BoatSelector" >
               </select> </div>
                   <div class="dropdown">
-                       <button id="BoatDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+                       <button id="BoatDropDown" class="hidden btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
                        <ul id="dropdownBoat" class="dropdown-menu" aria-labelledby="dropdownBoat">
                            <li><img src="images/Docked.png" alt="" width="32px" height="32px"/>Bateau à quai</li>   
                            <li><img src="images/racing.png" alt="" width="32px" height="32px"/>Bateau en course</li>       
@@ -362,9 +362,9 @@
                             <th data-toggle="true" data-type="html" I18N="Human Readable date">Date</th>
                             <th data-breakpoints="xs sm" data-type="html">PIM</th>
                             <th data-breakpoints="xs sm" data-type="html" I18n="AP_OrderParam">PIP</th>
-                            <th  data-type="html">Statut</th>
-                            <th  data-type="html">edit</th>
-                            <th  data-type="html">delet</th>
+                            <th data-breakpoints="xs sm" data-type="html">Statut</th>
+                            <th data-breakpoints="xs sm" data-type="html">edit</th>
+                            <th data-breakpoints="xs sm" data-type="html">delet</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -373,8 +373,8 @@
                             <td><span id="PIL_PIM">_</span></td>
                             <td><span id="PIL_PIP" >_</span></td>
                             <td><span id="PIL_STATUS">_</span></td>
-                            <td><img class="PIL_EDIT" src="images/edit.png" alt=""/></td>
-                            <td><img class="PIL_DELETE" src="images/delete.png" alt=""/></td>
+                            <td><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></td>
+                            <td><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></td>
                           </tr>
                         </tbody>
                       </table> 

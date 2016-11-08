@@ -97,11 +97,11 @@ function GetLocalizedString(StringId)
 {
   if (StringId in _LocaleDict)
   {
-    return _LocaleDict[StringId];
+    return decodeURIComponent( _LocaleDict[StringId]);
   }
   else if ((typeof _EnDict !=="undefined") && (_EnDict) &&  (StringId in _EnDict))
   {
-    return _EnDict[StringId];
+    return decodeURIComponent(_EnDict[StringId]);
   }
   else
   {
