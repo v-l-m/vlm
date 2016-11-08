@@ -980,7 +980,7 @@ function AddRaceToList(race)
   //d.setUTCSeconds(utcSeconds);
 
   var code = '<div class="raceheaderline panel panel-default")>' +
-             '  <div class="panel panel-body">'+
+             '  <div data-toggle="collapse" href="#RaceDescription" class="panel panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
              '    <div class="col-xs-4">'+
              '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
              '    </div>'+
@@ -989,11 +989,46 @@ function AddRaceToList(race)
              '      </span>'+
              '    </div>'+
              '    <div class="col-xs-4">'+
-             '      <button id="JoinRaceButton" type="button" class="button-black" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
+             '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
              '      </button>'+
-             '    </div>'
-             '  </div>'+
-             ' </div>'
+             '    </div>'+
+             '<div id="RaceDescription" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">'+
+              '  <div class="col-xs-12"><h3>' + race.racename +'</h3></div>'+
+              '  <div class="col-xs-12"><img src="/cache/racemaps/'+race.idraces+'.png" width="530px"></div>'+
+              '  <div class="col-xs-12"><p> Course : '+ race.racename +'</p>'+
+              '     <p>Départ : ' + race.racestart + '</p>'+
+              '     <p>Type de bateau/polaire : ' + race.racetypeboat +'</p>'+
+              '     <p>Durée vaccation : '+ race.vactime + '</p>'+
+              '     <p>Fermeture de la ligne de d\'arrivée :'+ race.raceclosed + '</p>'+
+              '     <div id="waypoints">'+
+              '       <h3>Waypoints</h3>'+
+              '         <table class="waypoints">'+
+              '           <tbody>'+
+              '             <tr>'+
+              '               <th>#</th>'+
+              '               <th>Lat1</th>'+
+              '               <th>Lon1</th>'+
+              '               <th>Lat2</th>'+
+              '               <th>Lon2</th>'+
+              '               <th>@</th>'+
+              '               <th>Spec</th>'+
+              '               <th>Type</th>'+
+              '               <th>Name</th>'+
+              '              </tr>'+
+              '              <tr>'+
+              '               <td>WP0</td>'+
+              '               <td>22.210</td>'+
+              '               <td>114.335</td>'+
+              '               <td colspan="2">&nbsp;</td>'+
+              '               <td>&nbsp;</td>'+
+              '               <td>&nbsp;</td>'+
+              '               <td>Départ</td>'+
+              '               <td><span title="" class="wpsymbolbig">↻ ⊅</span></td>'+
+              '             </tr>'+
+              '           </tbody>'+
+              '          </table>'+
+              '       </div>'+
+              '   </div>'
 
   base.prepend(code);
 
