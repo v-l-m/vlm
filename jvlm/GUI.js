@@ -983,7 +983,7 @@ function AddRaceToList(race)
              '      </span>'+
              '    </div>'+
              '    <div class="col-xs-4">'+
-             '      <button id="JoinRaceButton" type="button" class="button-black" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
+             '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
              '      </button>'+
              '    </div>'
              '  </div>'+
