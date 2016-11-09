@@ -1124,7 +1124,13 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
 
   // Get Friends
-  var friends = Boat.VLMInfo.MPO.split(',')
+  var friends = []
+  
+  if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
+  {
+    Boat.VLMInfo.MPO.split(',')
+  }
+  
   for (index in friends )
   {
     var Opp = Boat.Rankings.ranking[friends[index]];
