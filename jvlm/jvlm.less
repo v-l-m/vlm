@@ -115,6 +115,17 @@ div.GribmapMousePosition {
   left: 10px;
   z-index: 99999;
 }
+.logo{
+  position: relative;
+  max-width:64px
+}
+.version{
+  position: absolute;
+  top:0px;
+  left:0px;
+  font-size:10px;
+  color:#7C7C7C;
+}
 .olControlAttribution {
   left: 100px;
   right: inherit;
@@ -320,6 +331,8 @@ span.ui-selectmenu-text {
 
 .panel{
 	background-color:transparent;
+  margin-bottom:5px;
+  margin-top:5px;
 }
 .panel-body{
 	padding:0px;
@@ -434,7 +447,14 @@ span.ui-selectmenu-text {
 @media all and (max-width: 430px)
 
 {
-
+  
+.btn-md,
+.btn-group-md > .btn {
+  padding: 8px 14px;
+  font-size: 10px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
     .Controler-Panel
 
     {
@@ -448,6 +468,14 @@ span.ui-selectmenu-text {
 @media all and (min-width: 430px)
 
 {
+  
+.btn-md,
+.btn-group-md > .btn {
+  padding: 8px 14px;
+  font-size: 16px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
 .Controler-Panel {
   /*position: absolute;*/
   padding-left: 85px;
@@ -570,13 +598,6 @@ margin-right:0px;
   border-bottom: none
 }*/
 
-.btn-md,
-.btn-group-md > .btn {
-  padding: 8px 14px;
-  font-size: 16px;
-  line-height: 1.3333333;
-  border-radius: 6px;
-}
 .button-black {
   height: 40px;
   text-align: center;
@@ -691,8 +712,18 @@ margin-left:15px;
 color:#ffffff;
 font-size:10px;
 }
+.modal-body{
+pad:10px;
+}
 .modal-pref{
 background-color:transparent;
+padding-left:15px;
+padding-right:15px;
+}
+.modal-race{
+background-color:transparent;
+padding-left:5px;
+padding-right:5px;
 }
 .selectpref{
 color:#000000 ;
@@ -739,9 +770,9 @@ margin-top:2px;
     /* Move the check mark back when checked */
 	text-indent: 0;
 }
-.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
-  margin-top: 10px;
-  /*margin-bottom: 10px*/
+.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+  padding: 5px;
+  /*margin-bottom: 5px*/
 }
 .navbar-brand {
   float: left;
