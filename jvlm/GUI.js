@@ -980,27 +980,27 @@ function AddRaceToList(race)
   //d.setUTCSeconds(utcSeconds);
 
   var code = '<div class="raceheaderline panel panel-default")>' +
-             '  <div data-toggle="collapse" href="#RaceDescription" class="panel panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
-             '    <div class="col-xs-4">'+
-             '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
-             '    </div>'+
-             '    <div class="col-xs-4">'+
-             '      <span>'+ race.racename +
-             '      </span>'+
-             '    </div>'+
-             '    <div class="col-xs-4">'+
-             '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
-             '      </button>'+
-             '    </div>'+
-             '<div id="RaceDescription" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">'+
+              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
+              '    <div class="col-xs-4">'+
+              '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
+              '    </div>'+
+              '    <div class="col-xs-4">'+
+              '      <span>'+ race.racename +
+              '      </span>'+
+              '    </div>'+
+              '    <div class="col-xs-4">'+
+              '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
+              '      </button>'+
+              '    </div>'+
+              '  <div id="RaceDescription'+race.idraces+'" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">'+
               '  <div class="col-xs-12"><h3>' + race.racename +'</h3></div>'+
               '  <div class="col-xs-12"><img src="/cache/racemaps/'+race.idraces+'.png" width="530px"></div>'+
-              '  <div class="col-xs-12"><p> Course : '+ race.racename +'</p>'+
-              '     <p>Départ : ' + race.racestart + '</p>'+
-              '     <p>Type de bateau/polaire : ' + race.racetypeboat +'</p>'+
-              '     <p>Durée vaccation : '+ race.vactime + '</p>'+
-              '     <p>Fermeture de la ligne de d\'arrivée :'+ race.raceclosed + '</p>'+
-              '     <div id="waypoints">'+
+              '  <div class="col-xs-12"><p>' + GetLocalizedString('race') +' : '+ race.racename +'</p>'+
+              '     <p>Départ : ' + new Date(race.deptime) + '</p>'+
+              '     <p>'+ GetLocalizedString('boattype') +' : ' + race.racetypeboat +'</p>'+
+              '     <p>'+ GetLocalizedString('crank') +' : '+ race.vacfreq + '\'</p>'+
+              '     <p>'+ GetLocalizedString('closerace') + new Date(race.closetime) + '</p>'+
+              /*'     <div id="waypoints">'+
               '       <h3>Waypoints</h3>'+
               '         <table class="waypoints">'+
               '           <tbody>'+
@@ -1027,7 +1027,7 @@ function AddRaceToList(race)
               '             </tr>'+
               '           </tbody>'+
               '          </table>'+
-              '       </div>'+
+              '       </div>'+*/
               '   </div>'
 
   base.prepend(code);
