@@ -980,7 +980,7 @@ function AddRaceToList(race)
   //d.setUTCSeconds(utcSeconds);
 
   var code = '<div class="raceheaderline panel panel-default")>' +
-              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
+              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
               '    <div class="col-xs-4">'+
               '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
               '    </div>'+
