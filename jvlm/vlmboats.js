@@ -285,34 +285,6 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
   BoatFeatures = [];
 
-  /*if (DrawControl === null ) 
-  {
-  /*  console.log("DrawControl Deactivate "+DrawControl.id)
-    DrawControl.deactivate();
-    map.removeControl(DrawControl);
-    console.log("Remove drawcontrol" + DrawControl.id);
-    DrawControl = null;
-  }
-    DrawControl = new OpenLayers.Control.DragFeature(VLMDragLayer, 
-      {
-        onDrag: function(feature,pixel)
-                {
-                  console.log("Dragging "+feature.id);;
-                },
-        onComplete: function (feature, pixel) 
-        {
-          CompleteWPSetPosition(feature, pixel)
-        }
-      }
-    );
-    //map.addControl(DrawControl)
-    //DrawControl.activate();
-    //console.log("Added & activated drawcontrol" + DrawControl.id);
-  }
-*/  
-    //Boat.DrawControl.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
-  
-
   // Boat Marker
   var BoatIcon = new OpenLayers.Feature.Vector(
     PosTransformed,
@@ -434,6 +406,8 @@ function DrawBoat(Boat, CenterMapOnBoat)
       }
     } 
   }
+
+
   if (CenterMapOnBoat)
   {
     // Set Map Center to current boat position
@@ -1124,7 +1098,13 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
 
   // Get Friends
-  var friends = Boat.VLMInfo.MPO.split(',')
+  var friends = []
+  
+  if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
+  {
+    Boat.VLMInfo.MPO.split(',')
+  }
+
   for (index in friends )
   {
     var Opp = Boat.Rankings.ranking[friends[index]];

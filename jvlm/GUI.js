@@ -996,7 +996,7 @@ function AddRaceToList(race)
               '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/'+race.idraces+'.png" width="530px"></div>'+
               '  <div class="col-xs-12"><p>' + GetLocalizedString('race') +' : '+ race.racename +'</p>'+
               '     <p>Départ : ' + new Date(race.deptime) + '</p>'+
-              '     <p>'+ GetLocalizedString('boattype') +' : ' + race.racetypeboat +'</p>'+
+              '     <p>'+ GetLocalizedString('boattype') +' : ' + race.boattype.substring(5) +'</p>'+
               '     <p>'+ GetLocalizedString('crank') +' : '+ race.vacfreq + '\'</p>'+
               '     <p>'+ GetLocalizedString('closerace') + new Date(race.closetime) + '</p>'+
               /*'     <div id="waypoints">'+
