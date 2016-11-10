@@ -317,11 +317,18 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
     }
 
+    var TrackColor =  Boat.VLMInfo.COL
+
+    if (TrackColor[0] != "#")
+    {
+      TrackColor = "#"+ TrackColor
+    }
+
     var BoatTrack = new OpenLayers.Feature.Vector(
       new OpenLayers.Geometry.LineString(PointList),
       {
         "type": "HistoryTrack",
-        "TrackColor": "#" + Boat.VLMInfo.COL
+        "TrackColor": TrackColor
       });
     VLMBoatsLayer.addFeatures(BoatTrack);
     BoatFeatures.push(BoatTrack);
