@@ -479,24 +479,15 @@ var VectorStyles = new OpenLayers.Style(
           symbolizer: {
             // if a feature matches the above filter, use this symbolizer
             label: "${name}\n${Coords}",
-            //pointRadius: 6,
             pointerEvents: "visiblePainted",
-            // label with \n linebreaks
-
-            //fontColor: "${favColor}",
             fontSize: "1.5em",
-            //fontFamily: "Courier New, monospace",
-            //fontWeight: "bold",
             labelAlign: "left", //${align}",
             labelXOffset: "4",//${xOffset}",
             labelYOffset: "-12",//${yOffset}",
-            //labelOutlineColor: "white",
-            //labelOutlineWidth: 2
             externalGraphic: "images/${GateSide}",
             graphicWidth: 36,
-            fillOpacity: 1,
-            graphicYOffset: -18
-
+            graphicHeight: 72,
+            fillOpacity: 1
           }
         }
         ),
