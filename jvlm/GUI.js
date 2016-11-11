@@ -121,6 +121,7 @@ $(document).ready(
         SetCurrentBoat(GetBoatFromIdu(ui.item.value),true,false);
       }
     );
+    $("#BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
     
     $('#cp11').colorpicker();
 
@@ -433,6 +434,8 @@ function HandleStartSetWPOnClick()
 function ClearBoatSelector()
 {
   $("#BoatSelector").empty();
+  $("#BoatSelectorDropDownList").empty();
+
 }
 
 function AddBoatToSelector(boat, isfleet)
@@ -467,33 +470,38 @@ function AddBoatToSelector(boat, isfleet)
 
 function BuildUserBoatList(boat,IsFleet)
 {
-  $("#BoatSelectorDropDownList").empty;
   $("#BoatSelectorDropDownList").append(GetBoatDDLine(boat,IsFleet));
 }
 
-function GetBoatDDLine(Boat, isfleet)
+function GetBoatDDLine(Boat, IsFleet)
 {
+   var Line = '<li class="DDLine" BoatID="'+Boat.IdBoat +'">'
+   Line = Line + GetBoatInfoLine(Boat,IsFleet) + '</li>';
+   return Line;
+}
+
+function GetBoatInfoLine(Boat,IsFleet)
+{
+  var Line = "";
   var BoatStatus="racing"
 
   if (!Boat.Engaged)
   {
     BoatStatus="Docked"
   }
-
-  var Line = '<li class="DDLine">'
   
-  if (!isfleet)
+  if (!IsFleet)
   {
     Line = Line + '<span class="badge">BS'
   }
   Line=Line+'<img class="BoatStatusIcon" src="images/'+BoatStatus+'.png" />'
-  if (!isfleet)
+  if (!IsFleet)
   {
     Line = Line + '</span>'
   }
   
-  Line=Line+'<span>-</span><span>'+Boat.BoatName+'</span></li>'
-  return Line   
+  Line=Line+'<span>-</span><span>'+Boat.BoatName+'</span>'
+  return Line  
 }
 
 function   ShowUserBoatSelector()
@@ -1130,6 +1138,14 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
   
 }
 
+function DisplayCurrentDDSelectedBoat(Boat)
+{
+  $('#BoatDropDown:first-child').html(
+  '<span>'+GetBoatInfoLine(Boat,Boat.IdBoat in _CurPlayer.Fleet)+'</span>'+
+  '<span class="caret"></span>'
+  )
+}
+
 function GetFormattedChronoString(Value)
 {
   if (Value < 0)
@@ -1352,4 +1368,11 @@ function SelectCountryDDFlag(Country)
 {
   $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Country)+'<span class="caret"></span></div>');
     
+}
+
+function HandleBoatSelectionChange(e)
+{
+  var BoatId= e.target.closest('li').attributes["BoatID"].value;
+  SetCurrentBoat(GetBoatFromIdu(BoatId),true,false); 
+  DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
 }
