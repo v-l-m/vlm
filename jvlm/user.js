@@ -192,8 +192,6 @@ function GetPlayerInfo()
             }
             
             RefreshPlayerMenu();
-            $("#BoatSelector").val(select);
-            $("#BoatSelector").selectmenu("refresh");
             DisplayCurrentDDSelectedBoat(select);
             SetCurrentBoat(GetBoatFromIdu(select),true);                
                 

@@ -115,12 +115,6 @@ $(document).ready(
     // Set BoatSelector as JQuery UI Selector 
     // Handle boat selector selection change
     //
-    $("#BoatSelector").selectmenu();  
-    $("#BoatSelector").on( "selectmenuselect", function(event,ui)
-      {
-        SetCurrentBoat(GetBoatFromIdu(ui.item.value),true,false);
-      }
-    );
     $("#BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
     
     $('#cp11').colorpicker();
@@ -433,38 +427,11 @@ function HandleStartSetWPOnClick()
 
 function ClearBoatSelector()
 {
-  $("#BoatSelector").empty();
   $("#BoatSelectorDropDownList").empty();
-
 }
 
 function AddBoatToSelector(boat, isfleet)
 {
-  var boatclass='';
-  if (boat.Engaged && isfleet)
-  {
-    boatclass = 'RacingBoat';
-  }
-  else if (boat.Engaged)
-  {
-    boatclass = 'RacingBSBoat';
-  }
-  else if (isfleet)
-  {
-    boatclass = 'Boat';
-  }
-  else
-  {
-    boatclass = 'BSBoat';
-  }
-  
-  $("#BoatSelector").append($('<option />',
-                                { 
-                                  value: boat.IdBoat,
-                                  text: boat.BoatName,
-                                }
-                              )
-                            ).toggleClass(false).addClass(boatclass);
   BuildUserBoatList(boat,isfleet);                          
 }
 
@@ -547,8 +514,6 @@ function DisplayLoggedInMenus(LoggedIn)
   $("ul[LoggedInNav='true']").css("display",LoggedInDisplay);
   $("ul[LoggedInNav='false']").css("display",LoggedOutDisplay);
   
-  //$("#BoatSelector").selectmenu("refresh");
-
 }
 
 function   HandleRacingDockingButtons(IsRacing)
@@ -1141,7 +1106,7 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
 function DisplayCurrentDDSelectedBoat(Boat)
 {
   $('#BoatDropDown:first-child').html(
-  '<span>'+GetBoatInfoLine(Boat,Boat.IdBoat in _CurPlayer.Fleet)+'</span>'+
+  '<span BoatID='+ Boat.IdBoat +'>'+GetBoatInfoLine(Boat,Boat.IdBoat in _CurPlayer.Fleet)+'</span>'+
   '<span class="caret"></span>'
   )
 }
@@ -1172,7 +1137,14 @@ function GetFormattedChronoString(Value)
 
 function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh,TargetTab)
 {
-  SetCurrentBoat(GetBoatFromIdu($("#BoatSelector").val()), SetCenterOnBoat,ForceRefresh,TargetTab)
+  var BoatIDSpan = $('#BoatDropDown > span')
+  
+  if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && 'BoatId' in BoatIDSpan[0].attributes)
+  {
+    BoatId=BoatIDSpan[0].attributes['BoatID'].value;
+    SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat,ForceRefresh,TargetTab)
+  }
+  
 }
 
 function UpdateLngDropDown()
