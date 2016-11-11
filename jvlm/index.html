@@ -21,7 +21,7 @@
     <script src="external/jquery/jquery.js"></script>
     <script src="jquery-ui.js"></script>
     <script src="external/bootstrap-master/js/bootstrap.js"></script>
-
+    <script src="jquery.ui.touch-punch.js"></script>
     <script src="external/jquery.csv.js"></script>
     <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
@@ -109,13 +109,13 @@
             </li>
             <li class="nav" style="float: left;">
               <div id="BtnSetting" class="BtnGroup1 button hidden" style="float: left;">
-                <a ><img class="TDB-Icon" src=images/setting.png></img></a>
+                <a ><img class="TDB-Icon" src="images/setting.png"></img></a>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
              <!-- <div class="BtnGroup1" >-->
                 <div class="BtnRaceInstruction" >
-                  <a ><img id="ICSButton" class="TDB-Icon" src=images/raceinstructions.png></img></a>
+                  <a ><img id="ICSButton" class="TDB-Icon" src="images/raceinstructions.png"></img></a>
                 </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
@@ -125,10 +125,65 @@
                   </div>
                   <div class="NavRaceClock">
                     <Span id="RaceChrono"> </Span>
-                  </div>                                    
+                  </div> 
+                  <div class="VacChrono">  
+                    <div id="progressBar">
+                      <div></div>
+                    </div>
+                  </div>
                 </div>
             </li>
+            <li>
+                <div style="margin-top:5px">
+                  <a class="pref" href="#mouseInfo" data-toggle="modal">Position</a></div>
+            </li>
           </ul>
+           <!-- Modal mouseInfo-->
+              <div id="mouseInfo" class="modal fade" role="dialog">
+               <div class="modal-header"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+               </div>
+              
+              <div style="text-align:center" class="modal-body">
+                  <fieldset>
+                    <legend>du bateau</legend>
+                  <div><label >Lat</label></div>
+                  <div><label>Long</label></div>
+                  <div><label >Dist Ortho</label></div>
+                  <div><label>Dist Loxo</label></div>
+                  </fieldset>
+                  <fieldset>
+                  <legend>du WP</legend>
+                  <div><label >Lat</label></div>
+                  <div><label>Long</label></div>
+                  <div><label >Dist Ortho</label></div>
+                  <div><label>Dist Loxo</label></div>
+                  </fieldset>
+             </div>
+             </div>
+             <script>
+               $("#mouseInfo").draggable({
+                handle: ".modal-header,.modal-body"
+              });
+             
+             function progress(timeleft, timetotal, $element) {
+                  var progressBarWidth = timeleft * $element.width() / timetotal;
+                  $element.find('div').animate({ width: progressBarWidth }, 500).html(timeleft );
+                  if(timeleft > 0) {
+                      setTimeout(function() {
+                          progress(timeleft - 1, timetotal, $element);
+                      }, 1000);
+                  }
+                      else
+                      progress(300,timetotal,$element);
+              };
+
+                  var time = 1000 * 60 * 5;
+                  var date = new Date();
+                  var rounded = new Date(date.getTime() + time - (date.getTime() % time));
+                  var vac = Math.round((rounded-date)/1000);
+                progress(vac, 300, $('#progressBar'));
+              </script>
+           
           <ul class="nav navbar-nav" >
             <li class="active">
               <div id="PbLoginProgress" class="progress" >
