@@ -1088,6 +1088,16 @@ function LoadRankings(Boat)
 
 }
 
+function contains(a, obj) 
+{
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 {
   if (!Boat || typeof Boat.Rankings ==="undefined" || Boat.Rankings.ranking.length ==0)
@@ -1127,7 +1137,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   {
     var Opp = Boat.Rankings.ranking[index];
 
-    if ((Opp.idusers != Boat.IdBoat) && !(Opp.idusers in friends) && (Math.random()<=ratio) && (count < MAX_LEN))
+    if ((Opp.idusers != Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
     {
       AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
 
@@ -1204,12 +1214,9 @@ function DrawOpponentTrack(FeatureData)
 
   if (typeof B !== "undefined" && B)
   {
-    if (typeof B.OppTrack !== "undefined" && IdBoat in B.OppTrack )
+    if (typeof B.OppTrack !== "undefined" || !(IdBoat in B.OppTrack) || (IdBoat in B.OppTrack && (B.OppTrack[IdBoat].LastShow <= new Date(B.VLMInfo.LUP*1000))) )
     {
-        B.OppTrack[IdBoat].LastShow=0;
-    }
-    else
-    {
+
       var StartTime = new Date()/1000-48*3600;
       var IdRace = B.VLMInfo.RAC;
       var CurDate = new Date();
@@ -1250,13 +1257,12 @@ function DrawOpponentTrack(FeatureData)
               }
             )
       }
-      else
-      {
-        console.log("do not get pending request for GetTrack "+ PendingID + " " + StartTime)
-      }
     }
-
-    DrawBoat(B);
+    else
+    {
+      console.log(" GetTrack ignore before next update"+ PendingID + " " + StartTime)
+    }
+    DrawBoat(B);  
   }
 }
 
@@ -1281,6 +1287,8 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
                             lon:Pos[1]/1000
                           };
   }
+  Boat.OppTrack[IdBoat].LastShow=0;
+        
 
   
 }
