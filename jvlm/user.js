@@ -194,7 +194,7 @@ function GetPlayerInfo()
             RefreshPlayerMenu();
             DisplayCurrentDDSelectedBoat(select);
             SetCurrentBoat(GetBoatFromIdu(select),true);                
-                
+            RefreshCurrentBoat (true,false)    
           }
         )
         
