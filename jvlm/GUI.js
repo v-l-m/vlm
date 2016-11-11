@@ -112,7 +112,6 @@ $(document).ready(
     );
 
     
-    // Set BoatSelector as JQuery UI Selector 
     // Handle boat selector selection change
     //
     $("#BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
@@ -469,11 +468,6 @@ function GetBoatInfoLine(Boat,IsFleet)
   
   Line=Line+'<span>-</span><span>'+Boat.BoatName+'</span>'
   return Line  
-}
-
-function   ShowUserBoatSelector()
-{
-  //$("#BoatSelector").show();
 }
 
 function ShowBgLoad()
