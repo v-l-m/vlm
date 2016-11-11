@@ -1100,7 +1100,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   
   if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
   {
-    Boat.VLMInfo.MPO.split(',')
+    friends = Boat.VLMInfo.MPO.split(',')
   }
 
   for (index in friends )
@@ -1125,9 +1125,9 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
   for (index in  BoatList)
   {
-    var Opp = BoatList[index];
+    var Opp = Boat.Rankings.ranking[index];
 
-    if ((Opp.idusers != Boat.IdBoat) && (Math.random()<=ratio) && (count < MAX_LEN))
+    if ((Opp.idusers != Boat.IdBoat) && !(Opp.idusers in friends) && (Math.random()<=ratio) && (count < MAX_LEN))
     {
       AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
 
