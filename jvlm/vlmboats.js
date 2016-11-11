@@ -391,7 +391,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
     {
       var T = Boat.OppTrack[TrackIndex];
 
-      if ( (T.DatePos.length>1) && ((!T.LastShow) || (T.LastShow < new Date()/1000+60)) )
+      if (T.DatePos.length>1)  
       {
         for (PointIndex in T.DatePos)
         {
@@ -1224,7 +1224,7 @@ function DrawOpponentTrack(FeatureData)
       
       if (! (PendingID in TrackPendingRequests) || (CurDate > TrackPendingRequests[PendingID]))
       {
-        TrackPendingRequests[PendingID]=CurDate + 60*1000;
+        TrackPendingRequests[PendingID]= new Date(CurDate.getTime() + 60*1000);
         console.log("GetTrack "+ PendingID + " " + StartTime)
         $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
               function(e)
