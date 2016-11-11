@@ -462,7 +462,38 @@ function AddBoatToSelector(boat, isfleet)
                                 }
                               )
                             ).toggleClass(false).addClass(boatclass);
-                            
+  BuildUserBoatList(boat,isfleet);                          
+}
+
+function BuildUserBoatList(boat,IsFleet)
+{
+  $("#BoatSelectorDropDownList").empty;
+  $("#BoatSelectorDropDownList").append(GetBoatDDLine(boat,IsFleet));
+}
+
+function GetBoatDDLine(Boat, isfleet)
+{
+  var BoatStatus="racing"
+
+  if (!Boat.Engaged)
+  {
+    BoatStatus="Docked"
+  }
+
+  var Line = '<li class="DDLine">'
+  
+  if (!isfleet)
+  {
+    Line = Line + '<span class="badge">BS'
+  }
+  Line=Line+'<img class="BoatStatusIcon" src="images/'+BoatStatus+'.png" />'
+  if (!isfleet)
+  {
+    Line = Line + '</span>'
+  }
+  
+  Line=Line+'<span>-</span><span>'+Boat.BoatName+'</span></li>'
+  return Line   
 }
 
 function   ShowUserBoatSelector()
