@@ -485,9 +485,11 @@ var VectorStyles = new OpenLayers.Style(
             labelXOffset: "4",//${xOffset}",
             labelYOffset: "-12",//${yOffset}",
             externalGraphic: "images/${GateSide}",
-            graphicWidth: 36,
-            graphicHeight: 72,
-            fillOpacity: 1
+            graphicWidth: 24,
+            graphicHeight: 24,
+            fillOpacity: 1,
+            graphicYOffset:-24,
+            graphicXOffset:-24
           }
         }
         ),
