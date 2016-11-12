@@ -12,7 +12,7 @@
     $limit = intval($ws->check_cgi('limit', "LIMIT01", 99999));
     $races = new races($ws->idr);
     
-    $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
+    $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, ifnull(dnm,99999) as dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
       " FROM  races_ranking RR, users US " . 
       " WHERE RR.idusers = US.idusers " . 
       " AND   RR.idraces = "  . $races->idraces .

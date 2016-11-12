@@ -391,7 +391,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
     {
       var T = Boat.OppTrack[TrackIndex];
 
-      if ( (T.DatePos.length>1) && ((!T.LastShow) || (T.LastShow < new Date()/1000+60)) )
+      if (T.DatePos.length>1)  
       {
         for (PointIndex in T.DatePos)
         {
@@ -479,24 +479,15 @@ var VectorStyles = new OpenLayers.Style(
           symbolizer: {
             // if a feature matches the above filter, use this symbolizer
             label: "${name}\n${Coords}",
-            //pointRadius: 6,
             pointerEvents: "visiblePainted",
-            // label with \n linebreaks
-
-            //fontColor: "${favColor}",
             fontSize: "1.5em",
-            //fontFamily: "Courier New, monospace",
-            //fontWeight: "bold",
             labelAlign: "left", //${align}",
             labelXOffset: "4",//${xOffset}",
             labelYOffset: "-12",//${yOffset}",
-            //labelOutlineColor: "white",
-            //labelOutlineWidth: 2
             externalGraphic: "images/${GateSide}",
             graphicWidth: 36,
-            fillOpacity: 1,
-            graphicYOffset: -18
-
+            graphicHeight: 72,
+            fillOpacity: 1
           }
         }
         ),
@@ -1097,6 +1088,16 @@ function LoadRankings(Boat)
 
 }
 
+function contains(a, obj) 
+{
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 {
   if (!Boat || typeof Boat.Rankings ==="undefined" || Boat.Rankings.ranking.length ==0)
@@ -1109,7 +1110,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   
   if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
   {
-    Boat.VLMInfo.MPO.split(',')
+    friends = Boat.VLMInfo.MPO.split(',')
   }
 
   for (index in friends )
@@ -1134,9 +1135,9 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
   for (index in  BoatList)
   {
-    var Opp = BoatList[index];
+    var Opp = Boat.Rankings.ranking[index];
 
-    if ((Opp.idusers != Boat.IdBoat) && (Math.random()<=ratio) && (count < MAX_LEN))
+    if ((Opp.idusers != Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
     {
       AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
 
@@ -1213,12 +1214,9 @@ function DrawOpponentTrack(FeatureData)
 
   if (typeof B !== "undefined" && B)
   {
-    if (typeof B.OppTrack !== "undefined" && IdBoat in B.OppTrack )
+    if (typeof B.OppTrack !== "undefined" || !(IdBoat in B.OppTrack) || (IdBoat in B.OppTrack && (B.OppTrack[IdBoat].LastShow <= new Date(B.VLMInfo.LUP*1000))) )
     {
-        B.OppTrack[IdBoat].LastShow=0;
-    }
-    else
-    {
+
       var StartTime = new Date()/1000-48*3600;
       var IdRace = B.VLMInfo.RAC;
       var CurDate = new Date();
@@ -1226,7 +1224,7 @@ function DrawOpponentTrack(FeatureData)
       
       if (! (PendingID in TrackPendingRequests) || (CurDate > TrackPendingRequests[PendingID]))
       {
-        TrackPendingRequests[PendingID]=CurDate + 60*1000;
+        TrackPendingRequests[PendingID]= new Date(CurDate.getTime() + 60*1000);
         console.log("GetTrack "+ PendingID + " " + StartTime)
         $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
               function(e)
@@ -1259,13 +1257,12 @@ function DrawOpponentTrack(FeatureData)
               }
             )
       }
-      else
-      {
-        console.log("do not get pending request for GetTrack "+ PendingID + " " + StartTime)
-      }
     }
-
-    DrawBoat(B);
+    else
+    {
+      console.log(" GetTrack ignore before next update"+ PendingID + " " + StartTime)
+    }
+    DrawBoat(B);  
   }
 }
 
@@ -1290,6 +1287,8 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
                             lon:Pos[1]/1000
                           };
   }
+  Boat.OppTrack[IdBoat].LastShow=0;
+        
 
   
 }
