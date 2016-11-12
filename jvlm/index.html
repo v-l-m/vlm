@@ -140,30 +140,32 @@
           </ul>
            <!-- Modal mouseInfo-->
               <div id="mouseInfo" class="modal fade" role="dialog">
-               <div class="modal-header"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-               </div>
+                <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
               
-              <div style="text-align:center" class="modal-body">
-                  <fieldset>
-                    <legend>du bateau</legend>
-                  <div><label >Lat</label></div>
-                  <div><label>Long</label></div>
-                  <div><label >Dist Ortho</label></div>
-                  <div><label>Dist Loxo</label></div>
-                  </fieldset>
-                  <fieldset>
-                  <legend>du WP</legend>
-                  <div><label >Lat</label></div>
-                  <div><label>Long</label></div>
-                  <div><label >Dist Ortho</label></div>
-                  <div><label>Dist Loxo</label></div>
-                  </fieldset>
-             </div>
-             </div>
+                <div style="text-align:center" class="modal-body">
+                    <fieldset class="MI_Coords">
+                      <div><label >Latitude</label><span> : </span><span id="MI_Lat"></span></div>
+                      <div><label>Longitude</label><span> : </span><label id="MI_Lon"></label></div>
+                    </fieldset>
+                    <fieldset class="MI_Coords">
+                      <legend class="MI_Legend" I18n="fromboat">du bateau</legend>
+                      <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_OrthoDist"></span></div>
+                      <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_Ortho"></span></div>
+                      <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_LoxoDist"></span></div>
+                      <div><label I18n="caploxo">Ortho</label><span> : </span><span id="MI_Loxo"></span></div>
+                    </fieldset>
+                    <fieldset class="MI_Coords">
+                      <legend class="MI_Legend">du WP</legend>
+                      <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_WPOrthoDist"></span></div>
+                      <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_WPOrtho"></span></div>
+                      <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_WPLoxoDist"></span></div>
+                      <div><label I18n="caploxo">Ortho</label><span> : </span><span id="MI_WPLoxo"></span></div>
+                    </fieldset>
+                </div>
+              </div>
              <script>
-               $("#mouseInfo").draggable({
-                handle: ".modal-header,.modal-body"
-              });
+               
              
              function progress(timeleft, timetotal, $element) {
                   var progressBarWidth = timeleft * $element.width() / timetotal;

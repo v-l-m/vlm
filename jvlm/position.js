@@ -20,6 +20,19 @@ function Rad2Deg(v)
     return v/Math.PI*180.0;
 }
 
+function RoundPow(v,P)
+{
+    if(P)
+    {
+        var Div = Math.pow(10,P);
+        return Math.round(v*Div)/Div;
+    }
+    else
+    {
+        return v
+    }
+}
+
 
 // Constructor
 function VLMPosition(lon, lat,  format)
@@ -36,16 +49,35 @@ function VLMPosition(lon, lat,  format)
     {
         return this.Lat.ToString() + " " + this.Lon.ToString();
     }
+
+    // Function GetOrthoDist
+    // Return ortho distance from this to P
+    this.GetOrthoDist = function(P,Precision)
+    {
+        var lon1  = -Deg2Rad(this.Lon.Value);
+        var lon2  = -Deg2Rad(P.Lon.Value);
+        var lat1  = Deg2Rad(this.Lat.Value);
+        var lat2  = Deg2Rad(P.Lat.Value);
+
+//        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
+//                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
+
+        var retval = 2*Math.asin(Math.sqrt((Math.sin((lat1-lat2)/2))**2 + 
+                 Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2))**2))
+
+        return RoundPow(EARTH_RADIUS* retval,Precision);
+    }
     
     // function GetLoxoDist
     // Returns the loxodromic distance to another point
-    this.GetLoxoDist= function(P)
+    this.GetLoxoDist= function(P,Precision)
     {
 
         var Lat1  = Deg2Rad(this.Lat.Value);
         var Lat2  = Deg2Rad(P.Lat.Value);
         var Lon1  = -Deg2Rad(this.Lon.Value);
         var Lon2  = -Deg2Rad(P.Lon.Value);
+
 
         var TOL  = 0.000000000000001;
         var d =0;
@@ -60,7 +92,10 @@ function VLMPosition(lon, lat,  format)
         }
 
         d= Math.sqrt(Math.pow(Lat2 - Lat1, 2) + q * q * (Lon2 - Lon1) * (Lon2 - Lon1) );
-        return EARTH_RADIUS *d;
+        var RetVal = EARTH_RADIUS *d;
+        
+        
+        return  RoundPow(RetVal,Precision);
     }
 
     // Reaches a point from position using rhumbline.
@@ -119,7 +154,7 @@ function VLMPosition(lon, lat,  format)
     //
     // Return loxodromic course from this to P in °
     //
-    this.GetLoxoCourse = function(P)
+    this.GetLoxoCourse = function(P,Precision)
     {
         var Lon1  = -Deg2Rad(this.Lon.Value);
         var Lon2  = -Deg2Rad(P.Lon.Value);
@@ -154,9 +189,26 @@ function VLMPosition(lon, lat,  format)
 
         var ret  = (720 - (tc / Math.PI * 180)) % 360;
 
-        return ret;
+        return RoundPow( ret,Precision);
     };
 
+    //
+    // Return orthodromic course from this to P
+    //
+    this.GetOrthoCourse = function(P,Precision)
+    {
+        var lon1  = -Deg2Rad(this.Lon.Value);
+        var lon2  = -Deg2Rad(P.Lon.Value);
+        var lat1  = Deg2Rad(this.Lat.Value);
+        var lat2  = Deg2Rad(P.Lat.Value);
+
+        //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
+        //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
+        var retval = tc1=Math.atan2(Math.sin(lon1-lon2)*Math.cos(lat2),Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
+        retval = Rad2Deg( retval % (2 * Math.PI));
+        return RoundPow( retval,Precision);
+    }
+    
     this.ReachDistOrtho=function(dist,bearing)
     {
         var lat;
