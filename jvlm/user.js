@@ -177,10 +177,10 @@ function GetPlayerInfo()
             _CurPlayer.Fleet = [];
             for (boat in result.fleet)
             {  
-              _CurPlayer.Fleet.push (new Boat(result.fleet[boat]));
+              _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
               if ( typeof select == "undefined")
               {
-                select = boat;
+                select = _CurPlayer.Fleet[boat];
               }
             }
 
@@ -192,8 +192,7 @@ function GetPlayerInfo()
             }
             
             RefreshPlayerMenu();
-            $("#BoatSelector").val(select);
-            $("#BoatSelector").selectmenu("refresh");
+            DisplayCurrentDDSelectedBoat(select);
             SetCurrentBoat(GetBoatFromIdu(select),true);                
                 
           }
@@ -220,11 +219,6 @@ function RefreshPlayerMenu()
     AddBoatToSelector(_CurPlayer.BSFleet[boat],false);
   }
   
-  ShowUserBoatSelector();
-  $('#BoatSelector').prop("selectedIndex",0);
-  //$('#BoatSelector').selectmenu('refresh');
-            
-
   DisplayLoggedInMenus(true);
   HideBgLoad("#PbLoginProgress");
 }
