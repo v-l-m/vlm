@@ -1,6 +1,11 @@
 <?php
 $strings['en'] = 
   array (
+    'distortho' => 'Orthodrimic dist.',
+    'distloxo' => 'Loxo. dist.',
+    'caportho' => 'Orthodromic bearing',
+    'caploxo' => 'Loxodromique bearing',
+    'fromboat' => 'from Boat',
     'AP_OrderParam' => 'AutoPilot order parameters',
     'AP_Mode' => 'AutoPilot Mode',
     'PleaseCreateDlg'=> 'If you do not have any account, please',

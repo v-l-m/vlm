@@ -29,7 +29,8 @@ var MapOptions =
       "zoomend":HandleMapZoomEnd,
       "featureover": HandleFeatureOver,
       "featureout": HandleFeatureOut,
-      "featureclick":HandleFeatureClick     
+      "featureclick":HandleFeatureClick,
+      "mousemove":HandleMapMouseMove     
     }
 };
 

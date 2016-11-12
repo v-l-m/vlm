@@ -973,6 +973,7 @@ Gribmap.MousePosition =
     formatOutput: function(lonLat) {
        var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
        retstr += " "+OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
+       GM_Pos = lonLat;
        var winfo = this.gribmap.windAtPosition(lonLat);
        if (winfo != null) retstr += " - "+Math.round(winfo.wspeed*10)/10+"n / "+Math.round(winfo.wheading*10)/10+"°";
        return retstr;

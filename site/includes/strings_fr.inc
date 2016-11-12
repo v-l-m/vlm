@@ -1,5 +1,10 @@
 <?php
 $strings['fr'] = array (
+    'distortho' => 'Distance Ortho.',
+    'distloxo' => 'Distance loxo.',
+    'caportho' => 'Cap Orthodromique.',
+    'caploxo' => 'Cap loxodromique.',
+    'fromboat' => 'depuis le bateau',
     'AP_OrderParam' => 'Paramètres ordre Pilototo',
     'AP_Mode' => 'Mode Pilototo',
     'PleaseCreateDlg'=> 'Si vous n\'avez pas de compte, vous pouvez en ',

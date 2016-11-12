@@ -12,32 +12,8 @@ var FIELD_MAPPING_CHECK = 2;
 
 var MAX_PILOT_ORDERS = 5;
 
-var entityMap = {
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': '&quot;',
-  "'": '&#39;',
-  "/": '&#x2F;'
-};
-
-function escapeHtml(string) 
-{
-  return String(string).replace(/[&<>"'\/]/g, 
-      function (s) 
-      {
-        return entityMap[s];
-      });
-}
-
-function unescapeHtml(string)
-{
-  for (index in entityMap)
-  {
-    string=String(string).replace(entityMap[index],index)
-  }
-  return string
-}
+// Global (beurk) holding last position return by OL mousemove.
+var GM_Pos=null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -398,6 +374,13 @@ function InitMenusAndButtons()
     $("#APValidateButton").click(HandleSendAPUpdate)
     $(".APField").on('change',HandleAPFieldChange);
     $(".APMode").on('click',HandleAPModeDDClick)
+
+    // Draggable info window
+    $("#mouseInfo").draggable(
+              {
+                handle: ".modal-header,.modal-body"
+              });
+    
 }
 
 function HandleFlagLineClick(e)
@@ -1341,4 +1324,27 @@ function HandleBoatSelectionChange(e)
   var BoatId= e.target.closest('li').attributes["BoatID"].value;
   SetCurrentBoat(GetBoatFromIdu(BoatId),true,false); 
   DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
+}
+
+function HandleMapMouseMove(e)
+{
+
+  if (GM_Pos && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo != "undefined"))
+  {
+    var Pos = new VLMPosition(GM_Pos.lon,GM_Pos.lat)
+    var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
+    var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
+
+    $("#MI_Lat").text(Pos.Lat.ToString());
+    $("#MI_Lon").text(Pos.Lon.ToString());
+    $("#MI_LoxoDist").text(CurPos.GetLoxoDist(Pos,2) + " nM");
+    $("#MI_OrthoDist").text(CurPos.GetOrthoDist(Pos,2) + " nM");
+    $("#MI_Loxo").text(CurPos.GetLoxoCourse(Pos,2) + " °");
+    $("#MI_Ortho").text(CurPos.GetOrthoCourse(Pos,2) + " °");
+    $("#MI_WPLoxoDist").text(Pos.GetLoxoDist(WPPos,2) + " nM");
+    $("#MI_WPOrthoDist").text(Pos.GetOrthoDist(WPPos,2) + " nM");
+    $("#MI_WPLoxo").text(Pos.GetLoxoCourse(WPPos,2) + " °");
+    $("#MI_WPOrtho").text(Pos.GetOrthoCourse(WPPos,2) + " °");
+    
+  }  
 }
