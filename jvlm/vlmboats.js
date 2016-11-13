@@ -385,14 +385,14 @@ function DrawBoat(Boat, CenterMapOnBoat)
   // opponents  and opponents tracks
   DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures);
 
-  if (typeof Boat.OppTrack !== "undefined" && Boat.OppTrack.length > 0)
+  if (typeof Boat.OppTrack !== "undefined"  && Boat.OppTrack.length > 0)
   {
     var TrackPoints=[];
     for (TrackIndex in Boat.OppTrack)
     {
       var T = Boat.OppTrack[TrackIndex];
 
-      if (T.DatePos.length>1)  
+      if (T.Visible &&T.DatePos.length>1)  
       {
         for (PointIndex in T.DatePos)
         {
@@ -1203,6 +1203,17 @@ function HandleFeatureClick(e)
 function HandleFeatureOut(e)
 {
 
+  if (typeof _CurPlayer === "undefined" || typeof _CurPlayer.CurBoat=== "undefined" || typeof _CurPlayer.CurBoat.OppTrack === "undefined")
+  {
+    return
+  }
+
+  for (index in _CurPlayer.CurBoat.OppTrack)
+  {
+    _CurPlayer.CurBoat.OppTrack[index].Visible=false;
+  }
+
+
 }
 
 var TrackPendingRequests=[];
@@ -1223,6 +1234,11 @@ function DrawOpponentTrack(FeatureData)
       var CurDate = new Date();
       var PendingID = IdBoat.toString()+"/"+IdRace.toString();
       
+      if (IdBoat in B.OppTrack)
+      {
+        B.OppTrack[IdBoat].Visible=true;
+      } 
+
       if (! (PendingID in TrackPendingRequests) || (CurDate > TrackPendingRequests[PendingID]))
       {
         TrackPendingRequests[PendingID]= new Date(CurDate.getTime() + 60*1000);
@@ -1276,7 +1292,8 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
     Boat.OppTrack[IdBoat]={
       LastShow : 0,
       TrackColor : TrackColor,
-      DatePos: []
+      DatePos: [],
+      Visible : true
     };
   }
   for (index in Track)
