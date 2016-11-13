@@ -137,6 +137,9 @@
             <li>
                 <div style="margin-top:5px">
                   <a class="pref" href="#mouseInfo" data-toggle="modal">Position</a></div>
+            <div>
+            <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value=""></input>
+            </div>
             </li>
           </ul>
            <!-- Modal mouseInfo-->
@@ -269,7 +272,7 @@
                     <div class="col-sm-2" > <span  i18n="heading">Cap à suivre</span>
                     </div>
                     <div class="col-sm-2">
-                      <input class="input Boat_SimpleInput" id="PM_Heading">
+                      <input type="number" class="input Boat_SimpleInput" id="PM_Heading">
                     </div>
                     <div class="col-sm-4">Entrer le cap à suivre en °
                     </div>
@@ -288,7 +291,7 @@
                     <div class="col-sm-2"> <span I18n="WindAngle"> Angle du vent</span>
                     </div>
                     <div class="col-sm-2">
-                      <input class="input Boat_SimpleInput" id="PM_Angle">
+                      <input tupe="number" class="input Boat_SimpleInput" id="PM_Angle">
                       </input>
                     </div>
                     <div class="col-sm-4">Entrer l'angle +/- par rapport au vent
@@ -506,10 +509,35 @@
           </div>
          </div>
        </div>
-      <!-- COllapsable Race ranking -->
-      <div id="Ranking-Panel" class="TDB-Panel collapse">
-        <div class="container">
-          
+       <!-- COllapsable Race ranking -->
+      <div id="Ranking-Panel" class="Ranking-Panel collapse">
+        <div class="container-fluid">
+          <table  class="footable table " data-show-toggle="true" data-expand-first="false">
+                        <thead>
+                          <tr id="PIL_HEADER">
+                            <th data-toggle="true" data-type="html" I18N="name">Nom</th>
+                            <th data-breakpoints="xs sm" data-type="html">Coordonnées</th>
+                            <th data-breakpoints="xs sm" data-type="html" I18n="idboat">IdBoat</th>
+                            <th data-breakpoints="xs sm" data-type="html">Place</th>
+                            <th data-breakpoints="xs sm" data-type="html">Next mark</th>
+                            <th data-breakpoints="xs sm" data-type="html">Last 1h</th>
+                            <th data-breakpoints="xs sm" data-type="html">Last 3h</th>
+                            <th data-breakpoints="xs sm" data-type="html">Last 24h</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr id="Opponent1">
+                            <td><span id="boatname" >_</span></td>
+                            <td><span id="coord">_</span></td>
+                            <td><span id="idboat" >_</span></td>
+                            <td><span id="rank">_</span></td>
+                            <td><span id="next_mark">_</span></td>
+                            <td><span id="last_1h">_</span></td>
+                            <td><span id="last_3h">_</span></td>
+                            <td><span id="last_24h">_</span></td>
+                          </tr>
+                        </tbody>
+           </table> 
         </div>
       </div>
     <!-- COllapsable Pilototo -->
