@@ -1,5 +1,6 @@
 <?php
 $strings['fr'] = array (
+    'VLM2' => 'Nouvelle Interface VLM disponible',
     'distortho' => 'Distance Ortho.',
     'distloxo' => 'Distance loxo.',
     'caportho' => 'Cap Orthodromique.',

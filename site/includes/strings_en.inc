@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'VLM2' => 'New VLM user interface available',
     'distortho' => 'Orthodrimic dist.',
     'distloxo' => 'Loxo. dist.',
     'caportho' => 'Orthodromic bearing',
