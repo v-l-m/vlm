@@ -390,9 +390,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
   if (typeof Boat.OppTrack !== "undefined"  && Boat.OppTrack.length > 0)
   {
-    var TrackPoints=[];
     for (TrackIndex in Boat.OppTrack)
     {
+      var TrackPoints=[];
       var T = Boat.OppTrack[TrackIndex];
 
       if (T.Visible &&T.DatePos.length>1)  
