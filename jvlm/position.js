@@ -62,8 +62,8 @@ function VLMPosition(lon, lat,  format)
 //        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
 //                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
 
-        var retval = 2*Math.asin(Math.sqrt((Math.sin((lat1-lat2)/2))*2 + 
-                 Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2))*2))
+        var retval = 2*Math.asin(Math.sqrt(Math.pow((Math.sin((lat1-lat2)/2)),2) + 
+                 Math.pow(Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2)),2)))
 
         return RoundPow(EARTH_RADIUS* retval,Precision);
     }
