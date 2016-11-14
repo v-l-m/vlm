@@ -30,6 +30,7 @@ html, body, input {
 }
 input {
   color: #000000;
+  height:auto;
 }
  @DialogBgColor: #15214b;
 #LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg{
@@ -351,7 +352,6 @@ span.ui-selectmenu-text {
 .panel-body{
 	padding:0px;
 }
- @VLM100WindLine1Top:15px;
 
 
 .pilottab{
@@ -361,6 +361,7 @@ span.ui-selectmenu-text {
 }
 
 
+@VLM100WindLine1Top:15px;
 @VLM100LineOffset:39px;
 @VLM100WindLine2Top:@VLM100WindLine1Top+@VLM100LineOffset;
 @VLM100WindLine3Top:@VLM100WindLine1Top+2*@VLM100LineOffset;
@@ -789,17 +790,22 @@ margin-top:2px;
     /* Taking the difference out of the padding */
 }
 .close{
-color:#ffffff;
+  color:#ffffff;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
+fieldset{
+margin-bottom:10px;
+}
 legend{
-text-align:center;
-font-size:14px;
-color:#337AB7;
+  margin-bottom:10px;
+  text-align:center;
+  font-size:1.2em;
+  color:#337AB7;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
 label{
-font-weight:normal;
+  font-weight:normal;
+  margin-bottom:0px;
 }
 #mouseInfo{
   cursor:move;
@@ -824,6 +830,14 @@ font-weight:normal;
     left:50%; 
     top:50%;
     border-radius:5px;
+}
+div.affich{
+height:1.4em;
+line-height:1.4em;
+}
+label.affich{
+padding-top:2px;
+font-size:.8em;
 }
 .VacChrono_Input {
     margin: 5px;
@@ -871,55 +885,19 @@ font-size:10px;
   /*position: relative;
   overflow: hidden;*/
 }
+.progressbarmin{
+  background-color: #337AB7;
+  z-index: 2; 
+  height: 5px; 
+  width: 100px;
+}
+.progressbarvac{
+  background-color: #A3A3A3;
+  z-index: 2; 
+  height: 5px; 
+  width: 100px;
+}
 
-.meter { 
-	height: 20px;  /* Can be anything */
-	position: relative;
-	background: #555;
-	-moz-border-radius: 25px;
-	-webkit-border-radius: 25px;
-	border-radius: 25px;
-	padding: 10px;
-	box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
-}
-.meter > span {
-  display: block;
-  height: 100%;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  background-color: rgb(43,194,83);
-  background-image: linear-gradient(
-    center bottom,
-    rgb(43,194,83) 37%,
-    rgb(84,240,84) 69%
-  );
-  box-shadow:
-    inset 0 2px 9px  rgba(255,255,255,0.3),
-    inset 0 -2px 6px rgba(0,0,0,0.4);
-  position: relative;
-  overflow: hidden;
-}
-.meter > span:after, .animate > span > span {
-  animation: move 2s linear infinite;
-}
-.meter > span:after, .animate > span > span 
-.animate > span:after {
-  display: none;
-}
-@keyframes expandWidth {
-   0% { width: 0; }
-   100% { width: auto; }
-}
-@keyframes move {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 50px 50px;
-  }
-}
 .badgebox:checked + .badge
 {
     /* Move the check mark back when checked */
@@ -996,19 +974,7 @@ a:hover.tooltips span {
 }
 
 .MI_Coords{
-  font-size: 0.7em;
-}
-.progressbarmin{
-  background-color: #337AB7;
-  z-index: 2; 
-  height: 5px; 
-  width: 100px;
-}
-.progressbarvac{
-  background-color: #A3A3A3;
-  z-index: 2; 
-  height: 5px; 
-  width: 100px;
+  font-size: 0.8em;
 }
 /* Cachons la case à cocher */
 [type="checkbox"]:not(:checked),
