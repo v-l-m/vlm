@@ -976,10 +976,10 @@ function AddRaceToList(race)
               '  <div id="RaceDescription'+race.idraces+'" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">'+
               '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/'+race.idraces+'.png" width="530px"></div>'+
               '  <div class="col-xs-12"><p>' + GetLocalizedString('race') +' : '+ race.racename +'</p>'+
-              '     <p>Départ : ' + new Date(race.deptime) + '</p>'+
+              '     <p>Départ : ' + new Date(race.deptime*1000) + '</p>'+
               '     <p>'+ GetLocalizedString('boattype') +' : ' + race.boattype.substring(5) +'</p>'+
               '     <p>'+ GetLocalizedString('crank') +' : '+ race.vacfreq + '\'</p>'+
-              '     <p>'+ GetLocalizedString('closerace') + new Date(race.closetime) + '</p>'+
+              '     <p>'+ GetLocalizedString('closerace') + new Date(race.closetime*1000) + '</p>'+
               /*'     <div id="waypoints">'+
               '       <h3>Waypoints</h3>'+
               '         <table class="waypoints">'+
@@ -1329,7 +1329,7 @@ function HandleBoatSelectionChange(e)
 function HandleMapMouseMove(e)
 {
 
-  if (GM_Pos && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo != "undefined"))
+  if (GM_Pos  && (typeof _CurPlayer!=="undefined") && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo != "undefined"))
   {
     var Pos = new VLMPosition(GM_Pos.lon,GM_Pos.lat)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)

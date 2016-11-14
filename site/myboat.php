@@ -495,6 +495,10 @@ include_once("scripts/myboat.js");
                 $messages[] = Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "edit_boatprefs.php");
             }
 
+            // VLM2 info link
+            $msg = '<a target="_jvlm" href= "/jvlm"> ' . getLocalizedString("VLM2") . '</a>';
+            $messages[]= Array("id" => "blocnote", "txt" => $msg, "class" => "info", "url" => "/jvlm");
+
             //Synthese
             if (count($messages) > 0) {
                 echo "<div id=\"messagebox\"><span id=\"messagelist\">\n";

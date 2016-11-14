@@ -15,6 +15,7 @@ function Boat(vlmboat)
   this.Rankings={};   // Ranking table
   this.OppTrack=[]; // Opponents tracks table
   this.OppList=[];  // Opponents list to limit how many boats are shown
+  this.Reals=[]; // Reals Boat array
 
   if (typeof vlmboat != 'undefined')
   {

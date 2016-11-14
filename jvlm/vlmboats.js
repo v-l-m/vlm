@@ -225,6 +225,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
             // Get Rankings
             LoadRankings(Boat);
 
+            // Get Reals
+            LoadRealsList(Boat);
+
             // Draw Boat, course, tracks....
             DrawBoat(Boat, CenterMapOnBoat);
 
@@ -385,14 +388,14 @@ function DrawBoat(Boat, CenterMapOnBoat)
   // opponents  and opponents tracks
   DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures);
 
-  if (typeof Boat.OppTrack !== "undefined" && Boat.OppTrack.length > 0)
+  if (typeof Boat.OppTrack !== "undefined"  && Boat.OppTrack.length > 0)
   {
-    var TrackPoints=[];
     for (TrackIndex in Boat.OppTrack)
     {
+      var TrackPoints=[];
       var T = Boat.OppTrack[TrackIndex];
 
-      if (T.DatePos.length>1)  
+      if (T.Visible &&T.DatePos.length>1)  
       {
         for (PointIndex in T.DatePos)
         {
@@ -1064,6 +1067,29 @@ function HandleMapZoomEnd(object, element)
   RefreshCurrentBoat(false);
 }
 
+function LoadRealsList(Boat)
+{
+  if ((typeof Boat === "undefined") || ! Boat || (typeof Boat.VLMInfo === "undefined")  )
+  {
+    return;
+  }
+
+  $.get("/ws/realinfo/realranking.php?idr="+Boat.VLMInfo.RAC, 
+        function (result)
+        {
+          if (result.success)
+          {
+            Boat.Reals=result;
+            DrawBoat(Boat,false);
+          }
+          else
+          {
+            Boat.Reals=[];
+          }
+        }
+  );
+}
+
 function LoadRankings(Boat)
 {
   if ((typeof Boat === "undefined") || ! Boat || (typeof Boat.VLMInfo === "undefined")  )
@@ -1107,7 +1133,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
 
   // Get Friends
-  var friends = []
+  var friends = [];
   
   if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
   {
@@ -1122,6 +1148,14 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     {
       AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
     }
+  }
+
+  // Get Reals
+  if ((typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
+  for (index in Boat.Reals.ranking)
+  {
+    var RealOpp = Boat.Reals.ranking[index];
+    AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,RealOpp,true);
   }
 
   var MAX_LEN = 150;
@@ -1203,6 +1237,17 @@ function HandleFeatureClick(e)
 function HandleFeatureOut(e)
 {
 
+  if (typeof _CurPlayer === "undefined" || typeof _CurPlayer.CurBoat=== "undefined" || typeof _CurPlayer.CurBoat.OppTrack === "undefined")
+  {
+    return
+  }
+
+  for (index in _CurPlayer.CurBoat.OppTrack)
+  {
+    _CurPlayer.CurBoat.OppTrack[index].Visible=false;
+  }
+
+
 }
 
 var TrackPendingRequests=[];
@@ -1223,18 +1268,56 @@ function DrawOpponentTrack(FeatureData)
       var CurDate = new Date();
       var PendingID = IdBoat.toString()+"/"+IdRace.toString();
       
+      if (IdBoat in B.OppTrack)
+      {
+        B.OppTrack[IdBoat].Visible=true;
+      } 
+
       if (! (PendingID in TrackPendingRequests) || (CurDate > TrackPendingRequests[PendingID]))
       {
         TrackPendingRequests[PendingID]= new Date(CurDate.getTime() + 60*1000);
         console.log("GetTrack "+ PendingID + " " + StartTime)
-        $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
+        if (IdBoat >0)
+        {
+          GetBoatTrack(B,IdBoat, IdRace,StartTime, FeatureData);
+        }
+        else
+        {
+          GetRealBoatTrack(B,IdBoat, IdRace,StartTime, FeatureData);
+        }
+      }
+    }
+    else
+    {
+      console.log(" GetTrack ignore before next update"+ PendingID + " " + StartTime)
+    }
+    DrawBoat(B);  
+  }
+}
+
+function GetRealBoatTrack(Boat,IdBoat,IdRace,StartTime, FeatureData)
+{
+  $.get("/ws/realinfo/tracks.php?idr="+IdRace+"&idreals="+(-IdBoat)+"&starttime="+StartTime,
+              function(e)
+              {
+                if (e.success)
+                {
+                  AddBoatOppTrackPoints(Boat, IdBoat ,e.tracks,FeatureData.color)
+                }
+              }
+            )
+}
+
+function GetBoatTrack (Boat,IdBoat,IdRace,StartTime, FeatureData)
+{
+  $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
               function(e)
               {
                 if (e.success)
                 {
                   var index;
 
-                  AddBoatOppTrackPoints(B, IdBoat ,e.tracks,FeatureData.color)
+                  AddBoatOppTrackPoints(Boat, IdBoat ,e.tracks,FeatureData.color)
                   
                   for (index in e.tracks_url)
                   {
@@ -1248,7 +1331,7 @@ function DrawOpponentTrack(FeatureData)
                       {
                         if (e.success)
                         {
-                          AddBoatOppTrackPoints(B, IdBoat ,e.tracks,FeatureData.color)
+                          AddBoatOppTrackPoints(Boat, IdBoat ,e.tracks,FeatureData.color)
                         }
                       }
                     )
@@ -1257,14 +1340,7 @@ function DrawOpponentTrack(FeatureData)
                 }
               }
             )
-      }
-    }
-    else
-    {
-      console.log(" GetTrack ignore before next update"+ PendingID + " " + StartTime)
-    }
-    DrawBoat(B);  
-  }
+
 }
 
 function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
@@ -1276,7 +1352,8 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
     Boat.OppTrack[IdBoat]={
       LastShow : 0,
       TrackColor : TrackColor,
-      DatePos: []
+      DatePos: [],
+      Visible : true
     };
   }
   for (index in Track)
