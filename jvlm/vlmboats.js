@@ -388,7 +388,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   // opponents  and opponents tracks
   DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures);
 
-  if (typeof Boat.OppTrack !== "undefined"  && Boat.OppTrack.length > 0)
+  if (typeof Boat.OppTrack !== "undefined"  && Object.keys(Boat.OppTrack).length > 0)
   {
     for (TrackIndex in Boat.OppTrack)
     {
