@@ -252,13 +252,12 @@ function InitMenusAndButtons()
   )
 
   // Handle clicking on ranking button
-  //$("#RankingButton").click(
-   // function()
-  //  {
-  //   var win = window.open("/races.php?type=racing&idraces="+ _CurPlayer.CurBoat.VLMInfo.RAC+ "&startnum="+_CurPlayer.CurBoat.VLMInfo.RNK)
-   //   win.focus();
-  //  }
- // )
+  $("#Ranking-Panel").on('shown.bs.collapse',
+        function()
+        {
+          FillRankingTable();
+        }
+)
 
   // Init event handlers
     // Login button click event handler
@@ -1088,6 +1087,11 @@ function DisplayCurrentDDSelectedBoat(Boat)
   )
 }
 
+function PadLeftZero(v)
+{
+  return ("00"+v).slice(-2);
+}
+
 function GetFormattedChronoString(Value)
 {
   if (Value < 0)
@@ -1099,10 +1103,10 @@ function GetFormattedChronoString(Value)
     return "--:--:--";
   }
 
-  var Sec = Value % 60;
-  var Min = Math.floor(Value/60) % 60;
-  var Hrs = Math.floor(Value/3600 ) % 24;
-  var Days = Math.floor(Value / 3600 / 24 );
+  var Sec = PadLeftZero(Value % 60);
+  var Min = PadLeftZero(Math.floor(Value/60) % 60);
+  var Hrs = PadLeftZero(Math.floor(Value/3600 ) % 24);
+  var Days = PadLeftZero(Math.floor(Value / 3600 / 24 ));
 
   var Ret = Hrs.toString() + ":" + Min.toString() +":"+Sec.toString(); 
   if (Days > 0)
@@ -1348,3 +1352,49 @@ function HandleMapMouseMove(e)
     
   }  
 }
+
+function FillRankingTable()
+{
+
+  $('#RankingTableBody').empty();
+  var Boat = _CurPlayer.CurBoat;
+
+  if (typeof Boat === "undefined" || !Boat)
+  {
+    return ;
+  }
+
+  
+  for (index in Boat.Rankings.ranking)
+  {
+    AddRankingLine(Boat.Rankings.ranking[index])
+  }
+
+  $('#Ranking-Panel').show();
+  $('.footable').footable();  
+
+}
+
+function AddRankingLine(Rank)
+{
+  var Row = $('<tr>')
+
+  Row.append(AppendColumn(Row,Rank['rank']))
+  Row.append(AppendColumn(Row,Rank['boatname']))
+  var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
+  Row.append(AppendColumn(Row,NextMark))
+  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'])*1000))/1000);
+  Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
+  
+  $('#RankingTableBody').append(Row);
+
+}
+
+function  AppendColumn(Row, ColumnValue)
+{
+  var Column = $("<td>")
+  Column.text(ColumnValue);
+  Row.append( Column);
+}
+
+
