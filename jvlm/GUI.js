@@ -1380,11 +1380,18 @@ function AddRankingLine(Rank)
   var Row = $('<tr>')
 
   Row.append(AppendColumn(Row,Rank['rank']))
-  Row.append(AppendColumn(Row,Rank['boatname']))
+  var boatsearchstring = '<img class="BoatFinder" src="images/search.png" id="'+Rank.idusers+'"></img>   '+Rank['boatname']
+  Row.append(AppendColumn(Row,boatsearchstring))
   var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
   Row.append(AppendColumn(Row,NextMark))
   var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'])*1000))/1000);
   Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
+  Row.append(AppendColumn(Row,Rank['loch']))
+  Row.append(AppendColumn(Row,Rank['longitude']))
+  Row.append(AppendColumn(Row,Rank['latitude']))
+  Row.append(AppendColumn(Row,Rank['last1h']))
+  Row.append(AppendColumn(Row,Rank['last3h']))
+  Row.append(AppendColumn(Row,Rank['last24h']))
   
   $('#RankingTableBody').append(Row);
 
@@ -1393,7 +1400,7 @@ function AddRankingLine(Rank)
 function  AppendColumn(Row, ColumnValue)
 {
   var Column = $("<td>")
-  Column.text(ColumnValue);
+  Column.html(ColumnValue);
   Row.append( Column);
 }
 
