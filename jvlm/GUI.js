@@ -1371,7 +1371,13 @@ function FillRankingTable()
   }
 
   $('#Ranking-Panel').show();
-  $('.footable').footable();  
+  $('.footable').footable(
+    {
+      "paging": 
+      {
+        "current": parseInt(_CurPlayer.CurBoat.VLMInfo.RNK/20)
+	  	}
+	  });
 
 }
 
