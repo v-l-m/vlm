@@ -272,6 +272,7 @@ function InitMenusAndButtons()
     $("#BtnSetting").click(
       function()
       {
+        LoadVLMPrefs()
         $("#SettingsForm").modal("show");
       }
     )
@@ -1045,6 +1046,19 @@ function PageClock()
       {
         Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
       }
+
+      var LastBoatUpdate = new Date(CurBoat.VLMInfo.LUP*1000);
+      var TotalVac = CurBoat.VLMInfo.VAC;
+      var TimeToNextUpdate = TotalVac - ((new Date() - LastBoatUpdate)/1000)%TotalVac;
+      var Delay = 1000;
+      if (TimeToNextUpdate >= TotalVac-1)
+      {
+        Delay=100;
+      }
+      $("#pbar_innerdivvac").animate({width:""+Math.round((TimeToNextUpdate%60)*100.0/60.0)+"px"},Delay);
+      $("#pbar_innerdivmin").animate({width:""+Math.round((TimeToNextUpdate/TotalVac)*100.0)+"px"},Delay);
+      
+       
 
       Chrono.text(GetFormattedChronoString(ClockValue));
     }

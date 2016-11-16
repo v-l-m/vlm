@@ -1403,3 +1403,30 @@ function UpdateBoatPrefs(Boat,NewVals)
           }
         )
 }
+
+function LoadVLMPrefs()
+{
+  var Boat;
+
+  if (typeof _CurPlayer === "undefined" )
+  {
+    return
+  }
+  Boat = _CurPlayer.CurBoat;
+
+  $.get("/ws/boatinfo/prefs.php?idu="+ Boat.IdBoat, HandlePrefsLoaded);
+}
+
+function HandlePrefsLoaded(e)
+{
+  if (e.success)
+  {
+    var Boat = _CurPlayer.CurBoat;
+
+    Boat.VLMPrefs = e.prefs; 
+  }
+  else
+  {
+    alert("Error communicating with VLM, try reloading the browser page...")
+  }
+}
