@@ -1,6 +1,8 @@
 <?php
 $strings['en'] = 
   array (
+    'ShowReals' => 'Show Reals',
+    'Map' => 'Map',
     'VLM2' => 'New VLM user interface available',
     'distortho' => 'Orthodrimic dist.',
     'distloxo' => 'Loxo. dist.',
