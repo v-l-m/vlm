@@ -30,13 +30,9 @@ $(document).ready(
     // Init Menus()
     InitMenusAndButtons();
 
-    
-    
     // Start-Up Polars manager
     PolarsManager.Init();
     
-    
-
     // Go To WP Ortho, VMG, VBVMG Modes
     $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
       function()
@@ -380,6 +376,16 @@ function InitMenusAndButtons()
               {
                 handle: ".modal-header,.modal-body"
               });
+
+    // Draggable display settings
+    $("#affichage").draggable(
+              {
+                handle: ".modal-header,.modal-body"
+              });
+
+    $("#MapPrefsToggle").click(HandleShowMapPrefs);
+
+    $(".chkprefstore").on('change',HandleMapPrefCheckBoxClick);
     
 }
 
@@ -1051,7 +1057,7 @@ function PageClock()
       var TotalVac = CurBoat.VLMInfo.VAC;
       var TimeToNextUpdate = TotalVac - ((new Date() - LastBoatUpdate)/1000)%TotalVac;
       var Delay = 1000;
-      if (TimeToNextUpdate >= TotalVac-1)
+      if (TimeToNextUpdate >= TotalVac-1  )
       {
         Delay=100;
       }
@@ -1424,4 +1430,39 @@ function  AppendColumn(Row, ColumnValue)
   Row.append( Column);
 }
 
+function HandleShowMapPrefs(e)
+{
+  //Load prefs
+  $("#DisplayReals").attr('checked',VLM2Prefs.MapPrefs.ShowReals);
+  $("#DisplayNames").attr('checked',VLM2Prefs.MapPrefs.ShowOppName);
+}
 
+function HandleMapPrefCheckBoxClick(e)
+{
+  var target=e.target;
+
+  if (typeof target === "undefined" || typeof target.attributes['id']==="undefined")
+  {
+    return;
+  }
+
+  var Id = target.attributes['id'].value;
+  var Value =target.checked;
+  
+  switch (Id)
+  {
+    case "DisplayReals":
+      VLM2Prefs.MapPrefs.ShowReals = Value
+      break;
+    case "DisplayNames":
+      VLM2Prefs.MapPrefs.ShowOppName = Value
+      break;
+
+    default:
+      return;
+      
+  }
+
+  VLM2Prefs.Save();
+  RefreshCurrentBoat(false,false);
+}

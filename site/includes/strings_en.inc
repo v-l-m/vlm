@@ -2,6 +2,7 @@
 $strings['en'] = 
   array (
     'ShowReals' => 'Show Reals',
+    'ShowOppNames' => 'Display Boat Names',
     'Map' => 'Map',
     'VLM2' => 'New VLM user interface available',
     'distortho' => 'Orthodrimic dist.',

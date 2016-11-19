@@ -1151,7 +1151,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
 
   // Get Reals
-  if ((typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
+  if (VLM2Prefs.MapPrefs.ShowReals && (typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
   for (index in Boat.Reals.ranking)
   {
     var RealOpp = Boat.Reals.ranking[index];
@@ -1191,9 +1191,19 @@ function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
   var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
   var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
   var OL_Opp;
+  var OppData = {
+        "name": "",
+        "Coords": Opp_Coords.ToString(),
+        "type": 'opponent',
+        "idboat": "",
+        "IsTeam" : (Opponent.country==Boat.VLMInfo.CNT)?"team":"",
+        "IsFriend": (isFriend?24:12),
+        "color" : Opponent.color
+      }
 
-  OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed,
-      {
+  if (VLM2Prefs.MapPrefs.ShowOppName)
+  {
+    OppData = {
         "name": Opponent.boatname,
         "Coords": Opp_Coords.ToString(),
         "type": 'opponent',
@@ -1206,7 +1216,9 @@ function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
         "IsFriend": (isFriend?24:12),
         "color" : Opponent.color
       }
-    );
+  }
+  
+  OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed,OppData);  
 
   Layer.addFeatures(OL_Opp);
   Features.push(OL_Opp);
