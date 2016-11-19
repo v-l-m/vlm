@@ -658,7 +658,7 @@ var VectorStyles = new OpenLayers.Style(
           }),
           symbolizer: {
             // if a feature matches the above filter, use this symbolizer
-            label: "${idboat} - ${name}",
+            label: "${name}",
             //pointRadius: 6,
             pointerEvents: "visiblePainted",
             // label with \n linebreaks
@@ -674,8 +674,8 @@ var VectorStyles = new OpenLayers.Style(
             //labelOutlineWidth: 2
             externalGraphic: "images/opponent${IsTeam}.png",
             graphicWidth: "${IsFriend}",
-            fillOpacity: 1
-
+            fillOpacity: 1,
+            
           }
         }
         ),
@@ -1192,19 +1192,7 @@ function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
   var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection)
   var OL_Opp;
   var OppData = {
-        "name": "",
-        "Coords": Opp_Coords.ToString(),
-        "type": 'opponent',
-        "idboat": "",
-        "IsTeam" : (Opponent.country==Boat.VLMInfo.CNT)?"team":"",
-        "IsFriend": (isFriend?24:12),
-        "color" : Opponent.color
-      }
-
-  if (VLM2Prefs.MapPrefs.ShowOppName)
-  {
-    OppData = {
-        "name": Opponent.boatname,
+        "name": Opponent.idusers + " - " + Opponent.boatname,
         "Coords": Opp_Coords.ToString(),
         "type": 'opponent',
         "idboat": Opponent.idusers,
@@ -1216,6 +1204,10 @@ function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
         "IsFriend": (isFriend?24:12),
         "color" : Opponent.color
       }
+
+  if (!VLM2Prefs.MapPrefs.ShowOppName)
+  {
+    OppData.name="";
   }
   
   OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed,OppData);  
@@ -1289,11 +1281,11 @@ function DrawOpponentTrack(FeatureData)
       {
         TrackPendingRequests[PendingID]= new Date(CurDate.getTime() + 60*1000);
         console.log("GetTrack "+ PendingID + " " + StartTime)
-        if (IdBoat >0)
+        if (parseInt(IdBoat) > 0)
         {
           GetBoatTrack(B,IdBoat, IdRace,StartTime, FeatureData);
         }
-        else
+        else if ( parseInt(IdBoat))
         {
           GetRealBoatTrack(B,IdBoat, IdRace,StartTime, FeatureData);
         }
@@ -1315,6 +1307,7 @@ function GetRealBoatTrack(Boat,IdBoat,IdRace,StartTime, FeatureData)
                 if (e.success)
                 {
                   AddBoatOppTrackPoints(Boat, IdBoat ,e.tracks,FeatureData.color)
+                  RefreshCurrentBoat(false,false)
                 }
               }
             )
@@ -1343,12 +1336,13 @@ function GetBoatTrack (Boat,IdBoat,IdRace,StartTime, FeatureData)
                       {
                         if (e.success)
                         {
-                          AddBoatOppTrackPoints(Boat, IdBoat ,e.tracks,FeatureData.color)
+                          AddBoatOppTrackPoints(Boat, IdBoat ,e.tracks,FeatureData.color);
+                          RefreshCurrentBoat(false,false);
                         }
                       }
                     )
                   }
-
+                  RefreshCurrentBoat(false,false);
                 }
               }
             )
