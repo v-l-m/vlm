@@ -29,21 +29,9 @@
     <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
     <script type="text/javascript" src="jquery.ui.touch-punch.js"></script>
     <script src="OpenLayers/OpenLayers.debug.js"></script>
+    <script src="external/store/store.min.js"></script>
 
-    <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>-->
-
-    <script src="config.js"></script>
-    <script src="localize.js"></script>
-    <script src="GUI.js"></script>
-    <script src='ControlSwitch.js' type='text/javascript'></script>
-    <script src='gribmap.js' type='text/javascript'></script>
-    <script src='vlmboats.js' type='text/javascript'></script>
-    <script src='geomath.js' type='text/javascript'></script>
-    <script src='position.js' type='text/javascript'></script>
-    <script src="user.js"  type='text/javascript'></script>
-    <script src='polar.js' type='text/javascript'></script>
-    <script src='xmpp.js' type='text/javascript'></script>
-    <script src='autopilot.js' type='text/javascript'></script> 
+    <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>--> 
       
   </head>
   <body >
@@ -140,7 +128,7 @@
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
                 <div style="margin-top:5px">
-                    <a class="pref" href="#mouseInfo" data-toggle="modal">Position</a><a class="pref" href="#affichage" data-toggle="modal">Affichage</a></div>
+                    <a class="pref" href="#mouseInfo" data-toggle="modal">Position</a><a id="MapPrefsToggle" class="pref" href="#affichage" data-toggle="modal">Affichage</a></div>
                 <div>
                     <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value=""></input>
                 </div>
@@ -154,15 +142,25 @@
                       <fieldset>
                         <legend>Route</legend>
                           <div class="affich">
-                            <input class="affich" type="checkbox" id="buoy">
-                            <label class="affich" for="buoy">Bouées</label>
+                            <input  class="chkprefstore" type="checkbox" id="DisplayReals">
+                            <label for="DisplayReals" I18n="ShowReals">Bouées</label>
                           </div>
                           <div class="affich">
-                            <input class="affich" type="checkbox" id="line">
-                            <label class="affich" for="line">Lignes</label>
+                            <input class="affich chkprefstore" type="checkbox" id="DisplayNames">
+                            <label class="affich chkprefstore" for="DisplayNames" I18n="ShowOppName">Bouées</label>
+                          </div>
+                          <div class="affich dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                            <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                              <li class="DDLine"><span I18n="mapmeandtop10"></span></li>
+                              <li class="DDLine"><span I18n="mapmy10opps"></span></li>
+                              <li class="DDLine"><span I18n="mapmy5opps"></span></li>
+                              <li class="DDLine"><span I18n="maponlyme"></span></li>                              
+                            </ul>
                           </div>
                           <div class="affich">
-                            <input class="affich" type="checkbox" id="Coordbuoy">
+                            <input class="MapPrefCheckBox affich" type="checkbox" id="Coordbuoy">
                             <label class="affich" for="Coordbuoy">Coordonnées bouées</label>
                           </div>
                           <div class="affich">
@@ -195,12 +193,7 @@
                       </fieldset>
                 </div>
             </div>
-            <script type="text/javascript">
-            $("#affichage").draggable(
-              {
-                handle: ".modal-header,.modal-body"
-              });
-              </script>
+
            <!-- Modal mouseInfo-->
               <div id="mouseInfo" class="modal fade" role="dialog">
                 <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -1362,6 +1355,20 @@
     </div>
 
   </body>
+  <script src="config.js"></script>
+  <script src="localize.js"></script>
+  <script src="GUI.js"></script>
+  <script src='ControlSwitch.js' type='text/javascript'></script>
+  <script src='gribmap.js' type='text/javascript'></script>
+  <script src='vlmboats.js' type='text/javascript'></script>
+  <script src='geomath.js' type='text/javascript'></script>
+  <script src='position.js' type='text/javascript'></script>
+  <script src="user.js"  type='text/javascript'></script>
+  <script src='polar.js' type='text/javascript'></script>
+  <script src='xmpp.js' type='text/javascript'></script>
+  <script src='autopilot.js' type='text/javascript'></script>
+  <script src='prefmgr.js' type='text/javascript'></script>
+  
   
 </html>
 

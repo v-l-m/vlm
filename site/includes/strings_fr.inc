@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = array (
     'ShowReals' => 'Afficher les réels',
+    'ShowOppNames' => 'Afficher les noms des bateaux',
     'Map' => 'Carte',
     'VLM2' => 'Nouvelle Interface VLM disponible',
     'distortho' => 'Distance Ortho.',
