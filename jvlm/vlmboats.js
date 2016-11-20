@@ -385,9 +385,10 @@ function DrawBoat(Boat, CenterMapOnBoat)
   BoatFeatures.push(BoatPolar)
   VLMBoatsLayer.addFeatures(BoatPolar);
   
-  // opponents  and opponents tracks
+  // opponents  
   DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures);
 
+  // Draw OppTracks, if any is selected
   if (typeof Boat.OppTrack !== "undefined"  && Object.keys(Boat.OppTrack).length > 0)
   {
     for (TrackIndex in Boat.OppTrack)
@@ -395,7 +396,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
       var TrackPoints=[];
       var T = Boat.OppTrack[TrackIndex];
 
-      if (T.Visible &&T.DatePos.length>1)  
+      if (T.Visible && T.DatePos.length>1)  
       {
         for (PointIndex in T.DatePos)
         {
@@ -409,7 +410,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
         new OpenLayers.Geometry.LineString(TrackPoints),
         {
           "type": "HistoryTrack",
-          "TrackColor": "#" + T.TrackColor
+          "TrackColor": T.TrackColor
         });
         T.LastShow = new Date();
         VLMBoatsLayer.addFeatures(OppTrack);
@@ -1222,6 +1223,12 @@ function HandleFeatureOver(e)
 
   if (ObjType == "opponent")
   {
+    // Clear previous tracks
+    for (index in _CurPlayer.CurBoat.OppTrack)
+    {
+      _CurPlayer.CurBoat.OppTrack[index].Visible=false;
+    }
+
     DrawOpponentTrack(e.feature.data)
   }
   //console.log("HoverOn "+ ObjType)
@@ -1246,6 +1253,7 @@ function HandleFeatureOut(e)
     return
   }
 
+  // Clear previously displayed tracks.
   for (index in _CurPlayer.CurBoat.OppTrack)
   {
     _CurPlayer.CurBoat.OppTrack[index].Visible=false;
@@ -1355,6 +1363,8 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
   
   if ( !(IdBoat in Boat.OppTrack))
   {
+    TrackColor = SafeHTMLColor(TrackColor)
+
     Boat.OppTrack[IdBoat]={
       LastShow : 0,
       TrackColor : TrackColor,

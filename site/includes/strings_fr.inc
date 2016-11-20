@@ -1,5 +1,6 @@
 <?php
-$strings['fr'] = array (
+$strings['fr'] = 
+  array (
     'ShowReals' => 'Afficher les réels',
     'ShowOppNames' => 'Afficher les noms des bateaux',
     'Map' => 'Carte',

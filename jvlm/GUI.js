@@ -444,11 +444,17 @@ function GetBoatInfoLine(Boat,IsFleet)
   {
     BoatStatus="Docked"
   }
+
+  if ((typeof Boat.VLMInfo !== "undefined") && Boat.VLMInfo["S&G"])
+  {
+    BoatStatus = "stranded"
+  }
   
   if (!IsFleet)
   {
     Line = Line + '<span class="badge">BS'
   }
+
   Line=Line+'<img class="BoatStatusIcon" src="images/'+BoatStatus+'.png" />'
   if (!IsFleet)
   {
@@ -1465,4 +1471,25 @@ function HandleMapPrefCheckBoxClick(e)
 
   VLM2Prefs.Save();
   RefreshCurrentBoat(false,false);
+}
+
+function SafeHTMLColor(Color)
+{
+    Color = "" + Color;
+
+    if (Color.length < 6)
+    {
+      Color = ("000000"+Color).slice(-6);
+    }
+
+    if (Color.substring(0,1) !== "#")
+    {
+      Color = "#" + Color
+    }
+    else if (Color.substring(1,2) === "#")
+    {
+      Color = Color.substring(1);
+    }
+
+    return Color;
 }
