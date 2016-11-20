@@ -26,6 +26,8 @@ function PrefMgr()
         switch (p.mapOpponents)
         {
             case "mylist":
+            case "NULL":
+            case "null":
                 this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowSel;
                 break;
 
