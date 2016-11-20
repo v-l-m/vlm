@@ -1263,17 +1263,21 @@ function CompareDist(a,b)
 function GetClosestOpps(Boat,NbOpps)
 {
   var CurDnm = parseFloat( Boat.Rankings.ranking[Boat.IdBoat].dnm);
+  var CurWP = Boat.Rankings.ranking[Boat.IdBoat].nwp
   var RetArray = [];
   var List = [];
 
   for (index in Boat.Rankings.ranking)
   {
-    var O = 
-      { 
-        id : index,
-        dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
-      }
+    if (CurWP === Boat.Rankings.ranking[index].nwp)
+    {
+      var O = 
+        { 
+          id : index,
+          dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
+        }
       List.push(O);
+    }
   }
 
   List = List.sort(CompareDist);
