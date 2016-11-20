@@ -529,7 +529,7 @@ var VectorStyles = new OpenLayers.Style(
             value: "marker"
           }),
           symbolizer: {
-            externalGraphic: "images/BuoyDirs/${BuoyName}",
+            externalGraphic: "images/${BuoyName}",
             rotation: "${CrossingDir}",
             graphicWidth: 48
           }
@@ -737,6 +737,7 @@ const WP_ICE_GATE_N = (1 << 4)
 const WP_ICE_GATE_S = (1 << 5)
 const WP_ICE_GATE_E = (1 << 6)
 const WP_ICE_GATE_W = (1 << 7)
+const WP_ICE_GATE = (WP_ICE_GATE_E | WP_ICE_GATE_N | WP_ICE_GATE_S | WP_ICE_GATE_W)
 const WP_GATE_KIND_MASK = 0xFFF0
 /* allow crossing in one direction only */
 const WP_CROSS_CLOCKWISE = (1 << 8)
@@ -887,6 +888,10 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
       MarkerDir += 90;
       AddGateDirMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
     }
+    else if (GateType & WP_ICE_GATE)
+    {
+      AddGateIceGateMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
+    }
 
     if (GateType & WP_CROSS_ONCE) {
       // Draw the segment again as dashed line for cross once gates
@@ -906,21 +911,37 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
 
 const MAX_BUOY_INDEX = 16;
 var BuoyIndex = Math.floor(Math.random() * MAX_BUOY_INDEX);
-function AddGateDirMarker(Layer,Gates, Lon, Lat, Dir) {
+function AddGateDirMarker(Layer,Gates, Lon, Lat, Dir) 
+{
+  AddGateCenterMarker (Layer,Gates,Lon,Lat,"BuoyDirs/BuoyDir" + BuoyIndex + ".png",Dir,true)
+  // Rotate dir marker...
+  BuoyIndex++;
+  BuoyIndex %= (MAX_BUOY_INDEX + 1);
+
+}
+
+function AddGateIceGateMarker(Layer,Gates, Lon, Lat) 
+{
+  AddGateCenterMarker (Layer,Gates,Lon,Lat,"icegate.png","")
+
+}
+
+
+
+function AddGateCenterMarker(Layer,Gates,Lon, Lat,Marker, Dir,IsIceGate)
+{
   var MarkerCoords = new VLMPosition(Lon, Lat);
   var MarkerPos = new OpenLayers.Geometry.Point(MarkerCoords.Lon.Value, MarkerCoords.Lat.Value);
   var MarkerPosTransformed = MarkerPos.transform(MapOptions.displayProjection, MapOptions.projection)
   var Marker = new OpenLayers.Feature.Vector(MarkerPosTransformed,
     {
-      "type": 'marker',
-      "BuoyName": "BuoyDir" + BuoyIndex + ".png",
-      "CrossingDir": Dir
+      "type": "marker",
+      "BuoyName": Marker,
+      "CrossingDir": Dir,
+      "yOffset": IsIceGate?-18:0
     }
   );
-  // Rotate buoys...
-  BuoyIndex++;
-  BuoyIndex %= (MAX_BUOY_INDEX + 1);
-
+  
   Layer.addFeatures(Marker);
   Gates.push(Marker);
 }
