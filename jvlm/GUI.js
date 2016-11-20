@@ -1441,6 +1441,12 @@ function HandleShowMapPrefs(e)
   //Load prefs
   $("#DisplayReals").attr('checked',VLM2Prefs.MapPrefs.ShowReals);
   $("#DisplayNames").attr('checked',VLM2Prefs.MapPrefs.ShowOppName);
+
+  $('#DDMapSelOption:first-child').html(
+  '<span Mode='+ VLM2Prefs.MapPrefs.MapOppShow +'>'+VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow)+'</span>'+
+  '<span class="caret"></span>'
+  );
+
 }
 
 function HandleMapPrefCheckBoxClick(e)

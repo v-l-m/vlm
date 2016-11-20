@@ -126,6 +126,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
+          // LoadPrefs
+          LoadVLMPrefs();
+
           // Store BoatInfo, update map
           Boat.VLMInfo = result;
 
@@ -1440,6 +1443,7 @@ function HandlePrefsLoaded(e)
     var Boat = _CurPlayer.CurBoat;
 
     Boat.VLMPrefs = e.prefs; 
+    VLM2Prefs.UpdateVLMPrefs(e.prefs)
   }
   else
   {
