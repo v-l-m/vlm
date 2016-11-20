@@ -386,7 +386,7 @@ function InitMenusAndButtons()
     $("#MapPrefsToggle").click(HandleShowMapPrefs);
 
     $(".chkprefstore").on('change',HandleMapPrefCheckBoxClick);
-    
+    $(".MapOppShowLi").click(HandleMapOppModeChange)
 }
 
 function HandleFlagLineClick(e)
@@ -1498,4 +1498,15 @@ function SafeHTMLColor(Color)
     }
 
     return Color;
+}
+
+function HandleMapOppModeChange(e)
+{
+  var t = e.target;
+  var Mode = parseInt(t.attributes["Mode"].value);
+
+  VLM2Prefs.MapPrefs.MapOppShow=Mode;
+  VLM2Prefs.Save();
+  HandleShowMapPrefs(e);
+
 }

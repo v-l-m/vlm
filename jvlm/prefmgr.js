@@ -26,13 +26,31 @@ function PrefMgr()
         switch (p.mapOpponents)
         {
             case "mylist":
+            case "mapselboats":
             case "NULL":
             case "null":
+            case "all":
                 this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowSel;
                 break;
 
             case "meandtop10":
                 this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowTop10;
+                break;
+
+            case "my10opps":
+                this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.Show10Around;
+                break;
+
+            case "my5opps":
+                this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.Show5Around;
+                break;
+
+            case "maponlyme":
+                this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.Show5Around;
+                break;
+
+            case "myboat":
+                this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowMineOnly;
                 break;
 
             default:
@@ -71,6 +89,30 @@ function MapPrefs()
             store.set("#ShowReals",this.ShowReals);
             store.set("#ShowOppName",this.ShowOppName);            
         }
+
+        var MapPrefVal="mapselboats"
+        switch(this.MapOppShow)
+        {
+            case this.MapOppShowOptions.ShowMineOnly:
+                MapPrefVal="myboat"
+                break;
+            case this.MapOppShowOptions.Show5Around:
+                MapPrefVal="my5opps";
+                break;
+                
+            case this.MapOppShowOptions.ShowTop10:
+                MapPrefVal="meandtop10";
+                break;
+                
+            case this.MapOppShowOptions.Show10Around:
+                MapPrefVal="my10opps";
+                break;
+                
+            
+        }
+
+        var NewVals={mapOpponents:MapPrefVal};
+        UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals});
     }
 
     this.GetOppModeString = function (Mode)

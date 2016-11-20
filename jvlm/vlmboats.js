@@ -1160,21 +1160,24 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   // Get Friends
   var friends = [];
   
-  if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
+  // Map friend only if selection is active
+  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel)
   {
-    friends = Boat.VLMInfo.MPO.split(',')
-  }
-
-  for (index in friends )
-  {
-    var Opp = Boat.Rankings.ranking[friends[index]];
-
-    if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
+    if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
     {
-      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+      friends = Boat.VLMInfo.MPO.split(',')
+    }
+
+    for (index in friends )
+    {
+      var Opp = Boat.Rankings.ranking[friends[index]];
+
+      if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
+      {
+        AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+      }
     }
   }
-
   // Get Reals
   if (VLM2Prefs.MapPrefs.ShowReals && (typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
   for (index in Boat.Reals.ranking)
@@ -1193,6 +1196,44 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     BoatList = Boat.OppList;
     ratio=1;
   }
+
+  switch (VLM2Prefs.MapPrefs.MapOppShow)
+  {
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.Show10Around:
+      BoatList = GetClosestOpps(Boat,10);
+      ratio=1;
+      break;
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.Show5Around:
+      BoatList = GetClosestOpps(Boat,5);
+      ratio=1;
+      break;
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
+      var BoatCount = 0;
+      BoatList = [];
+      
+      for (index in Boat.Rankings.ranking)
+      {
+        if (Boat.Rankings.ranking[index].rank < 10)
+        {
+          BoatList[index]=Boat.Rankings.ranking[index];
+          BoatCount++;
+          if (BoatCount > 10)
+          {
+            break;
+          }
+        }
+      }
+      ratio=1;
+      break;
+
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
+      BoatList = [];
+      ratio=1;
+      break;
+    
+    
+  }
+
   for (index in  BoatList)
   {
     var Opp = Boat.Rankings.ranking[index];
@@ -1208,6 +1249,41 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
       Boat.OppList[index]=Opp;
     }
   }
+}
+
+function CompareDist(a,b) 
+{
+  if (a.dnm < b.dnm)
+    return -1;
+  if (a.dnm > b.dnm)
+    return 1;
+  return 0;
+}
+
+function GetClosestOpps(Boat,NbOpps)
+{
+  var CurDnm = parseFloat( Boat.Rankings.ranking[Boat.IdBoat].dnm);
+  var RetArray = [];
+  var List = [];
+
+  for (index in Boat.Rankings.ranking)
+  {
+    var O = 
+      { 
+        id : index,
+        dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
+      }
+      List.push(O);
+  }
+
+  List = List.sort(CompareDist);
+  for (index in  List.slice(0,NbOpps-1))
+  {
+      RetArray[List[index].id]=Boat.Rankings.ranking[List[index].id];
+  }
+
+  return RetArray;
+
 }
 
 function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
