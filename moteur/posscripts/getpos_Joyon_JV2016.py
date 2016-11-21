@@ -69,6 +69,7 @@ for track in Tracks:
 
     
     print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (vlmidrace, Time, realid, realname,realname, lat, lon, speed, heading))
+    print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (20161106, Time, -4081, realname,realname, lat, lon, speed, heading))
     PrevTime = Time
     PrevLat = lat
     PrevLon = lon
