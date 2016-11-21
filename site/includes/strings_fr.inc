@@ -1,5 +1,6 @@
 <?php
-$strings['fr'] = array (
+$strings['fr'] = 
+  array (
     'ShowReals' => 'Afficher les réels',
     'ShowOppNames' => 'Afficher les noms des bateaux',
     'Map' => 'Carte',
@@ -319,9 +320,9 @@ Pour ce qui concerne l\'entraide et les question sur l\'utilisation du logiciel,
     'maplayersone' => 'fusionn&eacute;s',
     'mapline' => 'trac&eacute; de route',
     'mapmaxboat' => 'Pas plus de %d bateaux sur les cartes SVP.',
-    'mapmeandtop10' => ' le Top 10',
-    'mapmy10opps' => ' mes 10 voisins',
-    'mapmy5opps' => ' mes 5 voisins',
+    'mapmeandtop10' => 'le mien &amp; le Top 10',
+    'mapmy10opps' => 'le mien &amp; mes 10 voisins',
+    'mapmy5opps' => 'le mien &amp; mes 5 voisins',
     'maponlyme' => 'seulement le mien',
     'mapselboats' => 'ma s&eacute;lection',
     'mapsimple' => 'aucun',
