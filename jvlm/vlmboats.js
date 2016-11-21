@@ -126,6 +126,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
+          // LoadPrefs
+          LoadVLMPrefs();
+
           // Store BoatInfo, update map
           Boat.VLMInfo = result;
 
@@ -526,7 +529,7 @@ var VectorStyles = new OpenLayers.Style(
             value: "marker"
           }),
           symbolizer: {
-            externalGraphic: "images/BuoyDirs/${BuoyName}",
+            externalGraphic: "images/${BuoyName}",
             rotation: "${CrossingDir}",
             graphicWidth: 48
           }
@@ -734,6 +737,7 @@ const WP_ICE_GATE_N = (1 << 4)
 const WP_ICE_GATE_S = (1 << 5)
 const WP_ICE_GATE_E = (1 << 6)
 const WP_ICE_GATE_W = (1 << 7)
+const WP_ICE_GATE = (WP_ICE_GATE_E | WP_ICE_GATE_N | WP_ICE_GATE_S | WP_ICE_GATE_W)
 const WP_GATE_KIND_MASK = 0xFFF0
 /* allow crossing in one direction only */
 const WP_CROSS_CLOCKWISE = (1 << 8)
@@ -884,6 +888,10 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
       MarkerDir += 90;
       AddGateDirMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
     }
+    else if (GateType & WP_ICE_GATE)
+    {
+      AddGateIceGateMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
+    }
 
     if (GateType & WP_CROSS_ONCE) {
       // Draw the segment again as dashed line for cross once gates
@@ -903,21 +911,37 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
 
 const MAX_BUOY_INDEX = 16;
 var BuoyIndex = Math.floor(Math.random() * MAX_BUOY_INDEX);
-function AddGateDirMarker(Layer,Gates, Lon, Lat, Dir) {
+function AddGateDirMarker(Layer,Gates, Lon, Lat, Dir) 
+{
+  AddGateCenterMarker (Layer,Gates,Lon,Lat,"BuoyDirs/BuoyDir" + BuoyIndex + ".png",Dir,true)
+  // Rotate dir marker...
+  BuoyIndex++;
+  BuoyIndex %= (MAX_BUOY_INDEX + 1);
+
+}
+
+function AddGateIceGateMarker(Layer,Gates, Lon, Lat) 
+{
+  AddGateCenterMarker (Layer,Gates,Lon,Lat,"icegate.png","")
+
+}
+
+
+
+function AddGateCenterMarker(Layer,Gates,Lon, Lat,Marker, Dir,IsIceGate)
+{
   var MarkerCoords = new VLMPosition(Lon, Lat);
   var MarkerPos = new OpenLayers.Geometry.Point(MarkerCoords.Lon.Value, MarkerCoords.Lat.Value);
   var MarkerPosTransformed = MarkerPos.transform(MapOptions.displayProjection, MapOptions.projection)
   var Marker = new OpenLayers.Feature.Vector(MarkerPosTransformed,
     {
-      "type": 'marker',
-      "BuoyName": "BuoyDir" + BuoyIndex + ".png",
-      "CrossingDir": Dir
+      "type": "marker",
+      "BuoyName": Marker,
+      "CrossingDir": Dir,
+      "yOffset": IsIceGate?-18:0
     }
   );
-  // Rotate buoys...
-  BuoyIndex++;
-  BuoyIndex %= (MAX_BUOY_INDEX + 1);
-
+  
   Layer.addFeatures(Marker);
   Gates.push(Marker);
 }
@@ -1136,21 +1160,24 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   // Get Friends
   var friends = [];
   
-  if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
+  // Map friend only if selection is active
+  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel)
   {
-    friends = Boat.VLMInfo.MPO.split(',')
-  }
-
-  for (index in friends )
-  {
-    var Opp = Boat.Rankings.ranking[friends[index]];
-
-    if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
+    if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
     {
-      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+      friends = Boat.VLMInfo.MPO.split(',')
+    }
+
+    for (index in friends )
+    {
+      var Opp = Boat.Rankings.ranking[friends[index]];
+
+      if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
+      {
+        AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+      }
     }
   }
-
   // Get Reals
   if (VLM2Prefs.MapPrefs.ShowReals && (typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
   for (index in Boat.Reals.ranking)
@@ -1169,6 +1196,44 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     BoatList = Boat.OppList;
     ratio=1;
   }
+
+  switch (VLM2Prefs.MapPrefs.MapOppShow)
+  {
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.Show10Around:
+      BoatList = GetClosestOpps(Boat,10);
+      ratio=1;
+      break;
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.Show5Around:
+      BoatList = GetClosestOpps(Boat,5);
+      ratio=1;
+      break;
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
+      var BoatCount = 0;
+      BoatList = [];
+      
+      for (index in Boat.Rankings.ranking)
+      {
+        if (Boat.Rankings.ranking[index].rank < 10)
+        {
+          BoatList[index]=Boat.Rankings.ranking[index];
+          BoatCount++;
+          if (BoatCount > 10)
+          {
+            break;
+          }
+        }
+      }
+      ratio=1;
+      break;
+
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
+      BoatList = [];
+      ratio=1;
+      break;
+    
+    
+  }
+
   for (index in  BoatList)
   {
     var Opp = Boat.Rankings.ranking[index];
@@ -1184,6 +1249,45 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
       Boat.OppList[index]=Opp;
     }
   }
+}
+
+function CompareDist(a,b) 
+{
+  if (a.dnm < b.dnm)
+    return -1;
+  if (a.dnm > b.dnm)
+    return 1;
+  return 0;
+}
+
+function GetClosestOpps(Boat,NbOpps)
+{
+  var CurDnm = parseFloat( Boat.Rankings.ranking[Boat.IdBoat].dnm);
+  var CurWP = Boat.Rankings.ranking[Boat.IdBoat].nwp
+  var RetArray = [];
+  var List = [];
+
+  for (index in Boat.Rankings.ranking)
+  {
+    if (CurWP === Boat.Rankings.ranking[index].nwp)
+    {
+      var O = 
+        { 
+          id : index,
+          dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
+        }
+      List.push(O);
+    }
+  }
+
+  List = List.sort(CompareDist);
+  for (index in  List.slice(0,NbOpps-1))
+  {
+      RetArray[List[index].id]=Boat.Rankings.ranking[List[index].id];
+  }
+
+  return RetArray;
+
 }
 
 function AddOpponent(Boat,Layer,Features,Opponent,isFriend)
@@ -1440,6 +1544,7 @@ function HandlePrefsLoaded(e)
     var Boat = _CurPlayer.CurBoat;
 
     Boat.VLMPrefs = e.prefs; 
+    VLM2Prefs.UpdateVLMPrefs(e.prefs)
   }
   else
   {

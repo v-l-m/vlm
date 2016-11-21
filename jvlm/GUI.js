@@ -386,7 +386,7 @@ function InitMenusAndButtons()
     $("#MapPrefsToggle").click(HandleShowMapPrefs);
 
     $(".chkprefstore").on('change',HandleMapPrefCheckBoxClick);
-    
+    $(".MapOppShowLi").click(HandleMapOppModeChange)
 }
 
 function HandleFlagLineClick(e)
@@ -1441,6 +1441,12 @@ function HandleShowMapPrefs(e)
   //Load prefs
   $("#DisplayReals").attr('checked',VLM2Prefs.MapPrefs.ShowReals);
   $("#DisplayNames").attr('checked',VLM2Prefs.MapPrefs.ShowOppName);
+
+  $('#DDMapSelOption:first-child').html(
+  '<span Mode='+ VLM2Prefs.MapPrefs.MapOppShow +'>'+VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow)+'</span>'+
+  '<span class="caret"></span>'
+  );
+
 }
 
 function HandleMapPrefCheckBoxClick(e)
@@ -1492,4 +1498,15 @@ function SafeHTMLColor(Color)
     }
 
     return Color;
+}
+
+function HandleMapOppModeChange(e)
+{
+  var t = e.target;
+  var Mode = parseInt(t.attributes["Mode"].value);
+
+  VLM2Prefs.MapPrefs.MapOppShow=Mode;
+  VLM2Prefs.Save();
+  HandleShowMapPrefs(e);
+
 }

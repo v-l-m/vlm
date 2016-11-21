@@ -3,3 +3,5 @@
 .vscode/*.db
 */.vscode/*
 .vscode/
+jvlm/images/MapOptions.pdn
+jvlm/images/empty.png
