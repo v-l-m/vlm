@@ -6,7 +6,7 @@ import sys, zipfile, os
 import time
 #import xml.etree.ElementTree as ElementTree
 import json
-import requests
+#import requests
 import getposlib as gp
 import sys, time
 
@@ -15,43 +15,63 @@ def baseboat(rid):
     vlmboatidfirst = 3000
     return {'vlmid' : -vlmboatidfirst-int(rid)}
     
-vlmidrace = 20150919
-vlmusernameprefix = "NYVendee - "
-basefilename = "NYVendee%d" % vlmidrace
-#URL http://imocaoceanmasters-nyvendee.geovoile.com/2016/_elements/data/race/tracker.tracks.hwz?v=1464551980
-raceBaseUrl = "http://trimaran_idec.geovoile.com/julesverne/2016/_elements/data/race/"
-print raceBaseUrl+"tracker.tracks.hwz?v=" + str(int(time.time()))
+vlmidrace = 1681
+vlmusernameprefix = "JV - "
+basefilename = "JV%d" % vlmidrace
 
-gp.unzipurl(raceBaseUrl+"tracker.tracks.hwz?v=" + str(int(time.time())),basefilename)
 vlmtmp = gp.vlm_get_tmp()
 
+#recup du fichier de config
+configUrl = "http://trimaran-idec.geovoile.com/julesverne/2016/tracker/resources/versions/?v=" + str(int(time.time()))
+configFile = os.path.join(vlmtmp,"config")
+gp.geturl(configUrl,configFile,)
+with open(configFile+".static.tmp.xml") as data_file:    
+    conf = data_file.readlines()
+conf = conf[0].split(",")
+trackfile = conf[1].split(":")[1]
+reportfile = conf[2].split(":")[1]
+
+#URL http://imocaoceanmasters-nyvendee.geovoile.com/2016/_elements/data/race/tracker.tracks.hwz?v=1464551980
+raceBaseUrl = "http://trimaran-idec.geovoile.com/julesverne/2016/tracker/resources/"
+print raceBaseUrl
+
+gp.unzipurl(raceBaseUrl+"tracks/"+trackfile,basefilename)
+
 with open(os.path.join(vlmtmp,basefilename+".static.tmp.xml")) as data_file:    
-    res = json.load(data_file)
+    livedata = json.load(data_file)
 
-Tracks = res['tracks']
+#gp.unzipurl(raceBaseUrl+"reports/"+reportfile,basefilename+"_rep")
 
+#with open(os.path.join(vlmtmp,basefilename+"_rep.static.tmp.xml")) as data_file:    
+#    reportdata = json.load(data_file)
 
+#print livedata['tracks']
+reps = livedata['tracks'][0]
+#hist = reps['history'][0]
+Tracks = reps['loc']
+
+print Tracks
+
+PrevTime = 0
+PrevLat = 0
+PrevLon = 0
 for track in Tracks:
-  if track['id'] != 0:
-    #print track
-    Time = -1
-    lat = -1
-    lon = -1
-    realid = -4000-track['id']
-    realname = "NY Vendée - %d" % track['id']
+  #print track
+    realid = -3902
+    realname = "VDG - 3902" 
     speed = 0
     heading  = 0
-    for Pos in track['loc']:
-      print Pos
-      if Time==-1:
-        Time=Pos[0]
-        lat = Pos[1] /100000.0
-        lon = Pos[2] / 100000.0
-      else:
-        Time+=Pos[0]
-        lat += Pos[1] /100000.0
-        lon += Pos[2] / 100000.0
-      print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (vlmidrace, Time, realid, realname,realname, lat, lon, speed, heading))
+    #tr=track[11][0]
+    #print tr
+    Time = track[0]+PrevTime
+    lon = (track[2]/100000.)+PrevLon
+    lat = (track[1]/100000.)+PrevLat
+
+    
+    print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (vlmidrace, Time, realid, realname,realname, lat, lon, speed, heading))
+    PrevTime = Time
+    PrevLat = lat
+    PrevLon = lon
   # epoch = pos['t'] * 60
   # lat = float(pos['locs'][0]['A'])
   # lon = float(pos['locs'][0]['B'])
