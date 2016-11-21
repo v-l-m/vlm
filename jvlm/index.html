@@ -7,11 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VLM 2.0 alpha</title>
     <meta http-equiv="X-UA-Compatible" content="IE=8">
+    
     <link rel="stylesheet" type="text/css" href="jvlm.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
     <link rel="stylesheet/less" type="text/css" href="jvlm.less">
     <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
     <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
+    <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-Noir-bleu.css"/>
+    <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-Brun-pistache.css"/>
     <!--[if IE]>
     <script src="excanvas.js"></script><![endif]-->
     <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
@@ -30,7 +33,18 @@
     <script type="text/javascript" src="jquery.ui.touch-punch.js"></script>
     <script src="OpenLayers/OpenLayers.debug.js"></script>
     <script src="external/store/store.min.js"></script>
-
+    <script>
+    function setActiveStyleSheet(title) {
+   var i, a, main;
+   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
+     if(a.getAttribute("rel").indexOf("style") != -1
+        && a.getAttribute("title")) {
+       a.disabled = true;
+       if(a.getAttribute("title") == title) a.disabled = false;
+     }
+   }
+}
+</script>
     <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>--> 
       
   </head>
@@ -55,7 +69,7 @@
             <span class="icon-bar"></span> 
             <span class="icon-bar"></span>             
           </button>
-          <a class="navbar-brand" href="/" target="Orig_VLM">
+          <a class="navbar-brand" href="#">
             <div class="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
               <div class="version">v4</div>
@@ -68,7 +82,7 @@
             <li  class="active" ><a class="player" id="PlayerId">Not Logged in </a></li>
             <li  class="BoatSelector">
               <div id="BoatSelectorDropDown" class="dropdown">
-                <button id="BoatDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+                <button id="BoatDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
                 <ul id="BoatSelectorDropDownList" class="dropdown-menu" aria-labelledby="dropdownBoat">
                 </ul>
               </div>                     
@@ -127,10 +141,20 @@
                 </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
-                <div style="margin-top:5px">
+                <div class="button">
                   <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal"></img>
+                 </div>
+             </li>
+             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
+             <div class="button">
                   <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png"></img>
-                </div>
+                  </div>
+              </li>
+              <li>
+              <div class="choix">
+                    <a href="javascript:setActiveStyleSheet('bleu-noir')">Noir/bleu</a><br/>
+                    <a href="javascript:setActiveStyleSheet('brun-pistache')">Brun/pistache</a>
+              </div>
                 <div class ="hidden">
                     <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value=""></input>
                 </div>
@@ -188,7 +212,6 @@
                   </fieldset>-->
                 </div>
             </div>
-
            <!-- Modal mouseInfo-->
               <div id="mouseInfo" class="modal fade" role="dialog">
                 <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -270,25 +293,25 @@
               </div>
             </li>
             <li>
-              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="btn btn-default"  I18n="login">Login</button></span> 
+              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="ui-button ui-corner-all ui-widget"  I18n="login">Login</button></span> 
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
             <li>
-              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="btn btn-default"  I18n="logout">Logout</button></span> 
+              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
             </li>
           </ul>
         </div>
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-        <div class="Controler-Panel Container-fluid" >
-                <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                <li class="BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
+      <div id="tabs">
+          <ul>
+                <li class=" BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
                   <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png"></img>
                   <span I18n="autopilotengaged">Cap</span></a>
                 </li>
-                <li class="BCPane AngleMode"><a href="#AngleMode" data-toggle="tab">
+                <li class=" BCPane AngleMode"><a href="#AngleMode" data-toggle="tab">
                   <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"></img>
                   <span I18n="constantengaged">Angle</span></a>
                 </li>
@@ -323,7 +346,7 @@
                 </div>
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
-                    <button class="btn-default btn-md" id="BtnPM_Heading">
+                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Heading">
                       <span I18n="autopilot">Do Heading</span>
                     </button>
                   </div>
@@ -342,10 +365,10 @@
                     </div>                </div>
                 <div class="BoatControllerRow row">
                     <div class="col-sm-2">
-                    <button class="btn-default btn-md" id="BtnPM_Tack" I18n="tack">Virer / Empanner</button>
+                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Tack" I18n="tack">Virer / Empanner</button>
                     </div>
                     <div class="col-sm-2">
-                    <button class="btn-default btn-md" id="BtnPM_Angle" I18n="constant">Regler l'allure</button>
+                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Angle" I18n="constant">Regler l'allure</button>
                   </div>
                 </div>
               </div>
@@ -401,7 +424,7 @@
                 </div>
                 <div class="BoatControllerRow row">
                   <div class="col-sm-4">
-                    <button class="btn-default btn-md" id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
+                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
                   </div>
                 </div>
               </div>
@@ -409,7 +432,7 @@
               <div class="BCPane tab-pane" id="VMGMode">
                 <div class="BoatControllerRow row">
                   <div class="col-sm-4">
-                    <button class="btn-default btn-md" id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
+                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
                   </div>
                 </div> 
               </div>
@@ -417,7 +440,7 @@
               <div class="BCPane tab-pane" id="VBVMGMode">
                 <div class="BoatControllerRow row">
                   <div class="col-sm-4">
-                    <button class="btn-default btn-md" id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
+                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
                   </div>
                 </div>    
               </div>
@@ -487,7 +510,7 @@
                   </div>
                     <div class="BoatControllerRow row">
                       <div class="col-sm-4">
-                        <button id="AutoPilotAddButton" class="btn-default btn-md"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
+                        <button id="AutoPilotAddButton" class="ui-button ui-corner-all ui-widget"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
                       </div>
                     </div>
                   </div>   
@@ -496,6 +519,7 @@
             </div>
           </div>
         </div>
+        <script>$( "#tabs" ).tabs();</script>
        <!-- Collapsable Boat Dashboard (view only display) -->
       <div id="TDB-Panel" class="TDB-Panel collapse">
         <div class="container">
@@ -1215,10 +1239,10 @@
                       <div class="col-xs-12">
                          <div class="row">
                           <div class="col-xs-6" align="center">
-                            <button id="SettingCancelButton" I18n="cancel" type="button" class="btn-default btn-md" data-dismiss="modal">Annuler</button>          
+                            <button id="SettingCancelButton" I18n="cancel" type="button" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Annuler</button>          
                           </div>
                           <div class="col-xs-6" align="center">
-                            <button id="SettingValidateButton"  type="button" class="btn-default btn-md" data-dismiss="modal">Valider</button>
+                            <button id="SettingValidateButton"  type="button" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Valider</button>
                           </div>
                          </div>
                       </div>
@@ -1314,10 +1338,10 @@
               <div class="col-xs-12">
                  <div class="row">
                   <div class="col-xs-6" align="center">
-                    <button id="APCancelButton" I18n="cancel" type="button" class="btn-default btn-md" data-dismiss="modal">Annuler</button>          
+                    <button id="APCancelButton" I18n="cancel" type="button" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Annuler</button>          
                   </div>
                   <div class="col-xs-6" align="center">
-                    <button id="APValidateButton"  type="button" class="btn-default btn-md" data-dismiss="modal">Valider</button>
+                    <button id="APValidateButton"  type="button" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Valider</button>
                   </div>
                 </div>
               </div>
@@ -1343,7 +1367,7 @@
             </div>            
           </div>
            <div class="modal-footer">
-                <button type="button" class="btn-default btn-md" I18n="cancel" data-dismiss="modal">Close</button>
+                <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
            </div>
       </div>
       </div>
