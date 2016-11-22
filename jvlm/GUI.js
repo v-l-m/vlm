@@ -212,6 +212,9 @@ function InitMenusAndButtons()
         }
       );
   
+  // Theme tabs
+  $( "#tabs" ).tabs();
+  $( "#TabModal" ).tabs();
   
   // Hide all progressbars
   HidePb("#PbLoginProgress");
