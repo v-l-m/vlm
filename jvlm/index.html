@@ -166,7 +166,7 @@
                 </div>
                 <div class="modal-body">
                   <fieldset>
-                    <legend I18n='Map'>Route</legend>
+                    <legend class="ui-legend" I18n='Map'>Route</legend>
                     <div class="affich">
                       <input  class="chkprefstore" type="checkbox" id="DisplayReals">
                       <label for="DisplayReals" I18n="ShowReals">Bouées</label>
@@ -175,15 +175,16 @@
                       <input class="affich chkprefstore" type="checkbox" id="DisplayNames">
                       <label for="DisplayNames" I18n="ShowOppNames">Bouées</label>
                     </div>
+                    <legend class="ui-legend">Afficher le mien et ...</legend>
                     <div  class="affich dropdown">
-                      <button id="DDMapSelOption" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
+                      <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
                       <span class="caret"></span></button>
                       <ul class="dropdown-menu">
                         <li class="DDLine MapOppShowLi" ><span Mode="3" I18n="mapmeandtop10"></span></li>
                         <li class="DDLine MapOppShowLi"><span Mode="4" I18n="mapmy10opps"></span></li>
                         <li class="DDLine MapOppShowLi"><span Mode="2" I18n="mapmy5opps"></span></li>
                         <li class="DDLine MapOppShowLi"><span Mode="1" I18n="maponlyme"></span></li>  
-                        <li class="DDLine MapOppShowLi"><span Mode="0" I18n="mapselboats"></span></li>                            
+                        <li class="DDLine MapOppShowLi"><span Mode="0" I18n="mapselboats"></span></li>
                       </ul>
                     </div>
                   </fieldset>
@@ -222,14 +223,14 @@
                       <div><label>Longitude</label><span> : </span><label id="MI_Lon"></label></div>
                     </fieldset>
                     <fieldset class="MI_Coords">
-                      <legend class="MI_Legend" I18n="fromboat">du bateau</legend>
+                      <legend class="ui-legend MI_Legend" I18n="fromboat">du bateau</legend>
                       <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_OrthoDist"></span></div>
                       <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_Ortho"></span></div>
                       <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_LoxoDist"></span></div>
                       <div><label I18n="caploxo">Ortho</label><span> : </span><span id="MI_Loxo"></span></div>
                     </fieldset>
                     <fieldset class="MI_Coords">
-                      <legend class="MI_Legend">du WP</legend>
+                      <legend class="ui-legend MI_Legend">du WP</legend>
                       <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_WPOrthoDist"></span></div>
                       <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_WPOrtho"></span></div>
                       <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_WPLoxoDist"></span></div>
