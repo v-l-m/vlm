@@ -463,11 +463,10 @@ a.ui-button:active,
     border-radius:5px;
 }
 .dropdown-menu {
-  background-color: #15214b;
+  background-color:#15214b;
 }
-
-#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg{
-background-color: #000000;
+#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel{
+  background-color:#070B18;
 }
 .ui-tabs .ui-tabs-nav {
     margin: 0;
@@ -475,7 +474,7 @@ background-color: #000000;
 }
 
 .progressbarmin{
-  background-color: #337AB7;
+  background-color:#337AB7;
   z-index: 2; 
   height: 5px; 
   width: 100px;

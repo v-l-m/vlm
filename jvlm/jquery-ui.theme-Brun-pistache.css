@@ -461,21 +461,17 @@ a.ui-button:active,
     border-radius:5px;
 }
 .dropdown-menu {
-  background-color: #201913;
+  background-color:#201913;
 }
-#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg{
-background-color: #201913;
+#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel{
+background-color:#201913;
 }
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-    border-color: #080604;
+    border-color:#080604;
 }
-
 .progressbarmin{
-  background-color: #695444;
+  background-color:#695444;
   z-index: 2; 
   height: 5px; 
   width: 100px;
-}
-.dropdown-menu>li>a{
-  color:
 }

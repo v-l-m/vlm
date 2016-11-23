@@ -13,8 +13,8 @@
     <link rel="stylesheet/less" type="text/css" href="jvlm.less">
     <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
     <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
-    <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-Noir-bleu.css"/>
-    <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-Brun-pistache.css"/>
+    <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-noir-bleu.css"/>
+    <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-brun-pistache.css"/>
     <link rel="alternate stylesheet" type="text/css" title="vert-jaune" href="jquery-ui.theme-vert-jaune.css"/>
     <!--[if IE]>
     <script src="excanvas.js"></script><![endif]-->
@@ -118,8 +118,8 @@
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
              <!-- <div class="BtnGroup1" >-->
-                <div class="BtnRaceInstruction" >
-                  <a ><img id="ICSButton" class="TDB-Icon" src="images/raceinstructions.png"></img></a>
+                <div class="button" >
+                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png"></img>
                 </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
@@ -147,9 +147,9 @@
                  </div>
              </li>
              <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
-             <div class="button">
-                  <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png"></img>
-                  </div>
+               <div class="button">
+                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png"></img>
+               </div>
               </li>
               <li>
                 <div class ="hidden">
@@ -1142,7 +1142,6 @@
                           </div>
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
-                                
                                 <label class="btn btn-pref btn-success">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
@@ -1152,7 +1151,6 @@
                                   <input type="checkbox" autocomplete="off">
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>			
-                              
                               </div>
                           </div>
                         </fieldset>
@@ -1354,8 +1352,6 @@
                       </div>				              
                     </div>
               </div>
-        
-
             <div class="modal-footer">
               <div class="row container-fluid">
               <div class="col-xs-12">
@@ -1393,6 +1389,26 @@
                 <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
            </div>
       </div>
+      </div>
+    </div>
+    <!-- Modal Infos race -->
+    <div id="RacesInfoForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div id="RacesInfoPanel" class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo</h4><h4> : Nom de la course</h4>
+          </div>
+          <div id="RaceInfoBody" class="modal-body" >
+            <div id="RaceInfoPanel" class="panel group">
+            Informations sur la course en cours et les infos du bateau place, vitesse moyenne, ...
+            </div>            
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
 
