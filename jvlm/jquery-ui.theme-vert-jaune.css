@@ -8,7 +8,7 @@
  *
  * http://api.jqueryui.com/category/theming/
  *
- * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=dark-hive&bgImgOpacityHeader=44&bgImgOpacityContent=25&bgImgOpacityDefault=35&bgImgOpacityHover=33&bgImgOpacityActive=30&bgImgOpacityHighlight=80&bgImgOpacityError=40&cornerRadiusShadow=8px&offsetLeftShadow=4px&offsetTopShadow=4px&thicknessShadow=4px&opacityShadow=60&bgImgOpacityShadow=30&bgTextureShadow=flat&bgColorShadow=%23464444&opacityOverlay=80&bgImgOpacityOverlay=50&bgTextureOverlay=flat&bgColorOverlay=%235c5c5c&iconColorError=%23a83300&fcError=%23111111&borderColorError=%23ffb73d&bgTextureError=glass&bgColorError=%23ffc73d&iconColorHighlight=%234b8e0b&fcHighlight=%232e7db2&borderColorHighlight=%23cccccc&bgTextureHighlight=highlight_soft&bgColorHighlight=%23eeeeee&iconColorActive=%23222222&fcActive=%23ffffff&borderColorActive=%2326b3f7&bgTextureActive=highlight_hard&bgColorActive=%2302748d&iconColorHover=%23ffffff&fcHover=%23ffffff&borderColorHover=%230b93d5&bgTextureHover=highlight_soft&bgColorHover=%23202c32&iconColorDefault=%23cccccc&fcDefault=%230b93d5&borderColorDefault=%23444444&bgTextureDefault=highlight_soft&bgColorDefault=%23222222&iconColorContent=%23cccccc&fcContent=%23ffffff&borderColorContent=%23555555&bgTextureContent=highlight_soft&bgColorContent=%23000000&iconColorHeader=%23ffffff&fcHeader=%23ffffff&borderColorHeader=%23333333&bgTextureHeader=highlight_soft&bgColorHeader=%23444444&cornerRadius=6px&fwDefault=normal&fsDefault=1.1em&ffDefault=Segoe%20UI%2CHelvetica%2CArial%2Csans-serif
+ * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=custom-theme&bgImgOpacityError=95&bgImgOpacityHighlight=55&bgImgOpacityActive=30&bgImgOpacityHover=30&bgImgOpacityDefault=30&bgImgOpacityContent=10&bgImgOpacityHeader=33&cornerRadiusShadow=4px&offsetLeftShadow=4px&offsetTopShadow=4px&thicknessShadow=4px&opacityShadow=10&bgImgOpacityShadow=50&bgTextureShadow=spotlight&bgColorShadow=%23242323&opacityOverlay=30&bgImgOpacityOverlay=15&bgTextureOverlay=spotlight&bgColorOverlay=%23444444&iconColorError=%23cd0a0a&fcError=%232b2b2b&borderColorError=%23fad000&bgTextureError=diagonals_thick&bgColorError=%23ffdc2e&iconColorHighlight=%234eb305&fcHighlight=%23363636&borderColorHighlight=%23f9dd34&bgTextureHighlight=glass&bgColorHighlight=%23fbf5d0&iconColorActive=%23ffffff&fcActive=%23eae878&borderColorActive=%2372b42d&bgTextureActive=highlight_hard&bgColorActive=%23091201&iconColorHover=%23ffffff&fcHover=%23aad282&borderColorHover=%238bd83b&bgTextureHover=inset_soft&bgColorHover=%232c4d14&iconColorDefault=%23ffffff&fcDefault=%23edecba&borderColorDefault=%23265206&bgTextureDefault=highlight_soft&bgColorDefault=%231c3608&iconColorContent=%2372b42d&fcContent=%23fdf9b0&borderColorContent=%2372b42d&bgTextureContent=inset_soft&bgColorContent=%230d1e01&iconColorHeader=%23ffffff&fcHeader=%23e0de87&borderColorHeader=%233f7506&bgTextureHeader=highlight_soft&bgColorHeader=%232b2c02&cornerRadius=4px&fwDefault=normal&fsDefault=1.1em&ffDefault=Segoe%20UI%2CHelvetica%2CArial%2Csans-serif
  */
 
 
@@ -29,24 +29,24 @@
 	font-size: 1em;
 }
 .ui-widget.ui-widget-content {
-	border: 1px solid #444444;
+	border: 1px solid #265206;
 }
 .ui-widget-content {
-	border: 1px solid #555555;
-	background: #000000 url("images/ui-noir-bleu/ui-bg_highlight-soft_25_000000_1x100.png") 50% top repeat-x;
-	color: #ffffff;
+	border: 1px solid #72b42d;
+	background: #0d1e01 url("images/ui-vert-jaune/ui-bg_inset-soft_10_0d1e01_1x100.png") 50% bottom repeat-x;
+	color: #fdf9b0;
 }
 .ui-widget-content a {
-	color: #ffffff;
+	color: #fdf9b0;
 }
 .ui-widget-header {
-	border: 1px solid #333333;
-	background: #444444 url("images/ui-noir-bleu/ui-bg_highlight-soft_44_444444_1x100.png") 50% 50% repeat-x;
-	color: #ffffff;
+	border: 1px solid #3f7506;
+	background: #2b2c02 url("images/ui-vert-jaune/ui-bg_highlight-soft_33_2b2c02_1x100.png") 50% 50% repeat-x;
+	color: #e0de87;
 	font-weight: bold;
 }
 .ui-widget-header a {
-	color: #ffffff;
+	color: #e0de87;
 }
 
 /* Interaction states
@@ -60,10 +60,10 @@
 works properly when clicked or hovered */
 html .ui-button.ui-state-disabled:hover,
 html .ui-button.ui-state-disabled:active {
-	border: 1px solid #444444;
-	background: #222222 url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #265206;
+	background: #1c3608 url("images/ui-vert-jaune/ui-bg_highlight-soft_30_1c3608_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #0b93d5;
+	color: #edecba;
 }
 .ui-state-default a,
 .ui-state-default a:link,
@@ -72,7 +72,7 @@ a.ui-button,
 a:link.ui-button,
 a:visited.ui-button,
 .ui-button {
-	color: #0b93d5;
+	color: #edecba;
 	text-decoration: none;
 }
 .ui-state-hover,
@@ -83,10 +83,10 @@ a:visited.ui-button,
 .ui-widget-header .ui-state-focus,
 .ui-button:hover,
 .ui-button:focus {
-	border: 1px solid #0b93d5;
-	background: #202c32 url("images/ui-noir-bleu/ui-bg_highlight-soft_33_202c32_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #8bd83b;
+	background: #2c4d14 url("images/ui-vert-jaune/ui-bg_inset-soft_30_2c4d14_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #ffffff;
+	color: #aad282;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
@@ -98,7 +98,7 @@ a:visited.ui-button,
 .ui-state-focus a:visited,
 a.ui-button:hover,
 a.ui-button:focus {
-	color: #ffffff;
+	color: #aad282;
 	text-decoration: none;
 }
 
@@ -111,20 +111,20 @@ a.ui-button:focus {
 a.ui-button:active,
 .ui-button:active,
 .ui-button.ui-state-active:hover {
-	border: 1px solid #26b3f7;
-	background: #02748d url("images/ui-noir-bleu/ui-bg_highlight-hard_30_02748d_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #72b42d;
+	background: #091201 url("images/ui-vert-jaune/ui-bg_highlight-hard_30_091201_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #ffffff;
+	color: #eae878;
 }
 .ui-icon-background,
 .ui-state-active .ui-icon-background {
-	border: #26b3f7;
-	background-color: #ffffff;
+	border: #72b42d;
+	background-color: #eae878;
 }
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	color: #ffffff;
+	color: #eae878;
 	text-decoration: none;
 }
 
@@ -133,35 +133,35 @@ a.ui-button:active,
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #cccccc;
-	background: #eeeeee url("images/ui-noir-bleu/ui-bg_highlight-soft_80_eeeeee_1x100.png") 50% top repeat-x;
-	color: #2e7db2;
+	border: 1px solid #f9dd34;
+	background: #fbf5d0 url("images/ui-vert-jaune/ui-bg_glass_55_fbf5d0_1x400.png") 50% 50% repeat-x;
+	color: #363636;
 }
 .ui-state-checked {
-	border: 1px solid #cccccc;
-	background: #eeeeee;
+	border: 1px solid #f9dd34;
+	background: #fbf5d0;
 }
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
 .ui-widget-header .ui-state-highlight a {
-	color: #2e7db2;
+	color: #363636;
 }
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-	border: 1px solid #ffb73d;
-	background: #ffc73d url("images/ui-noir-bleu/ui-bg_glass_40_ffc73d_1x400.png") 50% 50% repeat-x;
-	color: #111111;
+	border: 1px solid #fad000;
+	background: #ffdc2e url("images/ui-vert-jaune/ui-bg_diagonals-thick_95_ffdc2e_40x40.png") 50% 50% repeat;
+	color: #2b2b2b;
 }
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a {
-	color: #111111;
+	color: #2b2b2b;
 }
 .ui-state-error-text,
 .ui-widget-content .ui-state-error-text,
 .ui-widget-header .ui-state-error-text {
-	color: #111111;
+	color: #2b2b2b;
 }
 .ui-priority-primary,
 .ui-widget-content .ui-priority-primary,
@@ -196,31 +196,31 @@ a.ui-button:active,
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_cccccc_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_72b42d_256x240.png");
 }
 .ui-widget-header .ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_ffffff_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_ffffff_256x240.png");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
 .ui-button:focus .ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_ffffff_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_ffffff_256x240.png");
 }
 .ui-state-active .ui-icon,
 .ui-button:active .ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_222222_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_ffffff_256x240.png");
 }
 .ui-state-highlight .ui-icon,
 .ui-button .ui-state-highlight.ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_4b8e0b_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_4eb305_256x240.png");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_a83300_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_cd0a0a_256x240.png");
 }
 .ui-button .ui-icon {
-	background-image: url("images/ui-noir-bleu/ui-icons_cccccc_256x240.png");
+	background-image: url("images/ui-vert-jaune/ui-icons_ffffff_256x240.png");
 }
 
 /* positioning */
@@ -410,50 +410,48 @@ a.ui-button:active,
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	border-top-left-radius: 6px;
+	border-top-left-radius: 4px;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	border-top-right-radius: 6px;
+	border-top-right-radius: 4px;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	border-bottom-left-radius: 6px;
+	border-bottom-left-radius: 4px;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	border-bottom-right-radius: 6px;
+	border-bottom-right-radius: 4px;
 }
 
 /* Overlays */
 .ui-widget-overlay {
-	background: #5c5c5c;
-	opacity: .8;
-	filter: Alpha(Opacity=80); /* support: IE8 */
+	background: #444444 url("images/ui-vert-jaune/ui-bg_spotlight_15_444444_600x600.png") 50% 2% repeat-x;
+	opacity: .3;
+	filter: Alpha(Opacity=30); /* support: IE8 */
 }
 .ui-widget-shadow {
-	-webkit-box-shadow: 4px 4px 4px #464444;
-	box-shadow: 4px 4px 4px #464444;
+	-webkit-box-shadow: 4px 4px 4px #242323;
+	box-shadow: 4px 4px 4px #242323;
 }
-
-
 .ui-legend{
    margin-bottom:10px;
   text-align:center;
   font-size:1.2em;
-  color:#337AB7;
+  color:#edecba;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
 #affichage{
   cursor:move;
-    border:1px solid #CCC;
-    background-color:#000000;
+    border:1px solid #edecba;
+    background-color:#172A08;
     width:200px;
     height:350px; 
     display:none;
@@ -463,18 +461,16 @@ a.ui-button:active,
     border-radius:5px;
 }
 .dropdown-menu {
-  background-color:#15214b;
+  background-color:#172A08 ;
 }
 #LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel{
-  background-color:#070B18;
+background-color:#172A08 ;
 }
-.ui-tabs .ui-tabs-nav {
-    margin: 0;
-    padding: .2em .2em 0;
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color:#091203;
 }
-
 .progressbarmin{
-  background-color:#337AB7;
+  background-color:#72b42d;
   z-index: 2; 
   height: 5px; 
   width: 100px;

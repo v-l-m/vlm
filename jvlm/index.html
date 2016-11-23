@@ -13,8 +13,9 @@
     <link rel="stylesheet/less" type="text/css" href="jvlm.less">
     <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
     <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
-    <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-Noir-bleu.css"/>
-    <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-Brun-pistache.css"/>
+    <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-noir-bleu.css"/>
+    <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-brun-pistache.css"/>
+    <link rel="alternate stylesheet" type="text/css" title="vert-jaune" href="jquery-ui.theme-vert-jaune.css"/>
     <!--[if IE]>
     <script src="excanvas.js"></script><![endif]-->
     <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
@@ -117,8 +118,8 @@
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
              <!-- <div class="BtnGroup1" >-->
-                <div class="BtnRaceInstruction" >
-                  <a ><img id="ICSButton" class="TDB-Icon" src="images/raceinstructions.png"></img></a>
+                <div class="button" >
+                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png"></img>
                 </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
@@ -146,15 +147,11 @@
                  </div>
              </li>
              <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
-             <div class="button">
-                  <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png"></img>
-                  </div>
+               <div class="button">
+                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png"></img>
+               </div>
               </li>
               <li>
-              <div class="choix">
-                    <a href="javascript:setActiveStyleSheet('bleu-noir')">Noir/bleu</a><br/>
-                    <a href="javascript:setActiveStyleSheet('brun-pistache')">Brun/pistache</a>
-              </div>
                 <div class ="hidden">
                     <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value=""></input>
                 </div>
@@ -214,7 +211,7 @@
                 </div>
             </div>
            <!-- Modal mouseInfo-->
-              <div id="mouseInfo" class="modal fade" role="dialog">
+              <div id="mouseInfo" class="dialog fade" role="dialog">
                 <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>  
                 <div style="text-align:left" class="modal-body">
@@ -280,7 +277,7 @@
           <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
             <li>
               <div class="dropdown">
-                <button id="SelectionLanguageDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                <button id="SelectionLanguageDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -522,7 +519,7 @@
             </div>
           </div>
         </div>
-        
+        <script>$( "#tabs" ).tabs();</script>
        <!-- Collapsable Boat Dashboard (view only display) -->
       <div id="TDB-Panel" class="TDB-Panel collapse">
         <div class="container">
@@ -657,10 +654,10 @@
              </div>          
             <div class="row container-fluid" style="padding-top:20px">
               <span I18n="PleaseCreateDlg">plsc</span>
-              <button id="BtnCreateAccount" class="button" I18n="CreateAcctBtn">cre</button>
+              <button id="BtnCreateAccount" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
             </div> </div>
           <div class="modal-footer">
-            <button id="LoginButton" I18n="login" type="button" class="button" data-dismiss="modal">login</button>
+            <button id="LoginButton" I18n="login" type="button" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
           </div>
         </div>
   
@@ -685,14 +682,37 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
             </div>
-            <div class="modal-body" id="TabModal">
-                <ul class="nav nav-tabs" >
+            <div  id="TabModal">
+                <ul>
                         <li class="active"><a href="#PrefBoat" data-toggle="tab" aria-expanded="true">Bateau</a></li>
                         <li><a href="#PrefJoueur" data-toggle="tab">Joueur</a></li>
                         <li><a href="#PrefAutre" data-toggle="tab">Autre</a></li>
                 </ul>
-                <div id="TabModalContent" class="tab-content modal-pref">
-                  <div class="tab-pane fade" id="PrefJoueur">
+                <div id="TabModalContent" class="tab-content ">
+                  <div class="BCPane tab-pane fade" id="PrefJoueur">
+                  <!--Theme-->
+                    <div class="row">
+                     <fieldset class="fieldset row-fluid">
+                        <div class="col-xs-5">
+                          <span I18n="choose_your_theme">Theme</span>
+                        </div>
+                          <div class="col-xs-5">
+                            <div class="dropdown">
+                                <button id="SelectionThemeDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
+                                  <span class="caret"></span>
+                                </button>
+                                <ul id="dropdowntheme" class="dropdown-menu" aria-labelledby="dropdowntheme">
+                                  <li class="DDLine">
+                                      <a style="color:#02748d" href="javascript:setActiveStyleSheet('bleu-noir')">Noir/bleu</a></li>
+                                  <li class="DDLine">
+                                      <a style="color:#8B6F5A" href="javascript:setActiveStyleSheet('brun-pistache')">Brun/pistache</a></li>
+                                  <li class="DDLine">
+                                      <a style="color:#9bcc60" href="javascript:setActiveStyleSheet('vert-jaune')"><span>Vert/jaune</span></a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
                     <!--Langue-->
                     <div class="row">
                      <fieldset class="fieldset row-fluid">
@@ -701,7 +721,7 @@
                         </div>
                           <div class="col-xs-5">
                             <div class="dropdown">
-                                <button id="SelectionLanguageDropDown" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                <button id="SelectionLanguageDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                                   <span class="caret"></span>
                                 </button>
                                 <ul id="dropdownlangue" class="dropdown-menu" aria-labelledby="dropdownlangue">
@@ -1122,7 +1142,6 @@
                           </div>
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
-                                
                                 <label class="btn btn-pref btn-success">
                                   <input type="checkbox" autocomplete="off" checked>
                                   <span class="glyphicon glyphicon-ok"></span>
@@ -1132,7 +1151,6 @@
                                   <input type="checkbox" autocomplete="off">
                                   <span class="glyphicon glyphicon-ok"></span>
                                 </label>			
-                              
                               </div>
                           </div>
                         </fieldset>
@@ -1290,7 +1308,7 @@
                     <div class="row">
                       <label for="AP_PIM" class="col-md-4 control-label" I18n="PIM">PIM</label>
                       <div  class="APField dropdown input-group col-md-8">
-                        <button id="AP_PIM" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                        <button id="AP_PIM" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
                           <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
@@ -1334,8 +1352,6 @@
                       </div>				              
                     </div>
               </div>
-        
-
             <div class="modal-footer">
               <div class="row container-fluid">
               <div class="col-xs-12">
@@ -1373,6 +1389,26 @@
                 <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
            </div>
       </div>
+      </div>
+    </div>
+    <!-- Modal Infos race -->
+    <div id="RacesInfoForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div id="RacesInfoPanel" class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo</h4><h4> : Nom de la course</h4>
+          </div>
+          <div id="RaceInfoBody" class="modal-body" >
+            <div id="RaceInfoPanel" class="panel group">
+            Informations sur la course en cours et les infos du bateau place, vitesse moyenne, ...
+            </div>            
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
 

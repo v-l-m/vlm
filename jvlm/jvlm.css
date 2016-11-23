@@ -294,6 +294,7 @@ span.ui-selectmenu-text {
   width: 40px;
   height: 40px;
   padding-left: 2px;
+  cursor: pointer;
 }
 .TDB-Panel {
   width: 163px;
@@ -506,9 +507,9 @@ span.ui-selectmenu-text {
   padding-top: 0px;
 }
 .tab-content {
-  background-color: #252525;
+  background-color: transparent;
   color: #ffffff;
-  padding: 10px;
+  padding: 20px;
   /* margin-top: 4px;*/
   border: 1px solid #CCC;
 }
