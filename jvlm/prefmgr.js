@@ -9,15 +9,34 @@ VLM2Prefs.Init();
 function PrefMgr()
 {
     this.MapPrefs=new MapPrefs();
+    this.CurTheme = "bleu-noir"
 
     this.MapPrefs
     this.Init = function()
     {
         this.MapPrefs.Load();
+        this.Load();
     } 
+
+    this.load = function()
+    {
+        if (store.enabled)
+        {
+            this.CurTheme = store.get('ColorTheme');
+            if (typeof this.CurTheme === "undefined")
+            {
+                this.CurTheme = "bleu-noir"
+            }
+        }
+    }
 
     this.Save = function()
     {
+        if (store.enabled)
+        {
+            store.set('ColorTheme',this.CurTheme);
+        }
+
         this.MapPrefs.Save();
     }
 
