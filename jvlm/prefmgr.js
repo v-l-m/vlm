@@ -18,7 +18,7 @@ function PrefMgr()
         this.Load();
     } 
 
-    this.load = function()
+    this.Load = function()
     {
         if (store.enabled)
         {

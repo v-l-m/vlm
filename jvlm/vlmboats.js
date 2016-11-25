@@ -1534,6 +1534,8 @@ function LoadVLMPrefs()
   }
   Boat = _CurPlayer.CurBoat;
 
+  SetDDTheme ( VLM2Prefs.CurTheme);
+
   $.get("/ws/boatinfo/prefs.php?idu="+ Boat.IdBoat, HandlePrefsLoaded);
 }
 

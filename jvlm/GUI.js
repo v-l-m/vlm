@@ -271,15 +271,19 @@ function InitMenusAndButtons()
     $("#BtnSetting").click(
       function()
       {
-        LoadVLMPrefs()
+        LoadVLMPrefs();
+        SetDDTheme(VLM2Prefs.CurTheme);
         $("#SettingsForm").modal("show");
       }
     )
 
     // Handle SettingsSave button
-    $('#SettingValidateButton').click(
-      SaveBoatAndUserPrefs
-    )
+    $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
+    // Handle SettingsSave button
+    $('#SettingCancelButton').click(function()
+    {
+      SetDDTheme(VLM2Prefs.CurTheme);
+    })
     
 
     // Do fixed heading button
@@ -390,6 +394,8 @@ function InitMenusAndButtons()
 
     $(".chkprefstore").on('change',HandleMapPrefCheckBoxClick);
     $(".MapOppShowLi").click(HandleMapOppModeChange)
+
+    $(".DDTheme").click(HandleDDlineClick)
 }
 
 function HandleFlagLineClick(e)
@@ -1302,6 +1308,17 @@ function SaveBoatAndUserPrefs(e)
         var BoatUpdateRequired =false;
         var PlayerUpdateRequired = false;
 
+        // Get Theme
+        var NewTheme = $("#SelectionThemeDropDown").attr("SelTheme");
+
+        if (typeof NewTheme  !== "undefined")
+        {
+          VLM2Prefs.CurTheme = NewTheme
+
+          
+        }
+
+        VLM2Prefs.Save();
 
         if (!ComparePrefString($("#pref_boatname")[0].value,_CurPlayer.CurBoat.BoatName))
         {
@@ -1512,4 +1529,31 @@ function HandleMapOppModeChange(e)
   VLM2Prefs.Save();
   HandleShowMapPrefs(e);
 
+}
+
+function SetActiveStyleSheet(title) 
+{
+  var i, a, main;
+  for(i=0; (a = document.getElementsByTagName("link")[i]); i++) 
+  {
+    if((a.getAttribute("rel").indexOf("style") != -1) && a.getAttribute("title")) 
+    {
+        a.disabled = true;
+        if(a.getAttribute("title") == title) a.disabled = false;
+    }
+  }
+}
+
+function SetDDTheme(Theme)
+{
+  SetActiveStyleSheet(Theme);
+  $("#SelectionThemeDropDown:first-child").html(Theme+'<span class="caret"></span>');
+  $("#SelectionThemeDropDown").attr("SelTheme",Theme);
+}
+
+function HandleDDlineClick(e)
+{
+  var Target = e.target;
+  var Theme = Target.closest(".DDTheme").attributes["DDTheme"].value;
+  SetDDTheme(Theme);
 }

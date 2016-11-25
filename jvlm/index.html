@@ -34,18 +34,6 @@
     <script type="text/javascript" src="jquery.ui.touch-punch.js"></script>
     <script src="OpenLayers/OpenLayers.debug.js"></script>
     <script src="external/store/store.min.js"></script>
-    <script>
-    function setActiveStyleSheet(title) {
-   var i, a, main;
-   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-     if(a.getAttribute("rel").indexOf("style") != -1
-        && a.getAttribute("title")) {
-       a.disabled = true;
-       if(a.getAttribute("title") == title) a.disabled = false;
-     }
-   }
-}
-</script>
     <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>--> 
       
   </head>
@@ -702,12 +690,15 @@
                                   <span class="caret"></span>
                                 </button>
                                 <ul id="dropdowntheme" class="dropdown-menu" aria-labelledby="dropdowntheme">
-                                  <li class="DDLine">
-                                      <a style="color:#02748d" href="javascript:setActiveStyleSheet('bleu-noir')">Noir/bleu</a></li>
-                                  <li class="DDLine">
-                                      <a style="color:#8B6F5A" href="javascript:setActiveStyleSheet('brun-pistache')">Brun/pistache</a></li>
-                                  <li class="DDLine">
-                                      <a style="color:#9bcc60" href="javascript:setActiveStyleSheet('vert-jaune')"><span>Vert/jaune</span></a></li>
+                                  <li class="DDLine DDTheme" DDTheme="bleu-noir">
+                                    <span style="color:#02748d" >Noir/bleu</a>
+                                  </li>
+                                  <li class="DDLine DDTheme" DDTheme="brun-pistache">
+                                    <span style="color:#8B6F5A" >Brun/pistache</span>
+                                  </li>
+                                  <li class="DDLine DDTheme" DDTheme="vert-jaune">
+                                    <span style="color:#9bcc60" >Vert/jaune</span>
+                                  </li>
                                 </ul>
                               </div>
                             </div>
