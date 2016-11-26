@@ -1383,14 +1383,15 @@ function HandleFeatureOut(e)
 
 var TrackPendingRequests=[];
 
-
+var LastTrackRequest = 0;
 function DrawOpponentTrack(FeatureData)
 {
   var B = _CurPlayer.CurBoat;
   var IdBoat = FeatureData.idboat;
-
-  if (typeof B !== "undefined" && B)
+  var CurDate = new Date();
+  if (typeof B !== "undefined" && B && CurDate > LastTrackRequest)
   {
+    LastTrackRequest = new Date(CurDate/1000 + .5);
     if (typeof B.OppTrack !== "undefined" || !(IdBoat in B.OppTrack) || (IdBoat in B.OppTrack && (B.OppTrack[IdBoat].LastShow <= new Date(B.VLMInfo.LUP*1000))) )
     {
 
