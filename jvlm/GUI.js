@@ -1076,10 +1076,8 @@ function PageClock()
       {
         Delay=100;
       }
-      $("#pbar_innerdivvac").animate({width:""+Math.round((TimeToNextUpdate%60)*100.0/60.0)+"px"},Delay);
-      $("#pbar_innerdivmin").animate({width:""+Math.round((TimeToNextUpdate/TotalVac)*100.0)+"px"},Delay);
-      
-       
+      $("#pbar_innerdivvac").css("width",+Math.round((TimeToNextUpdate%60)*100.0/60.0)+"px");
+      $("#pbar_innerdivmin").css("width",Math.round((TimeToNextUpdate/TotalVac)*100.0)+"px");
 
       Chrono.text(GetFormattedChronoString(ClockValue));
     }
