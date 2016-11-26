@@ -134,7 +134,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           Boat.VLMInfo = result;
 
           // Store next request Date (once per minute)
-          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+(parseInt(Boat.VLMInfo.VAC)*60))*1000) ;
+          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+parseInt(Boat.VLMInfo.VAC))*1000) ;
 
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
