@@ -17,6 +17,7 @@ function Boat(vlmboat)
   this.OppList=[];  // Opponents list to limit how many boats are shown
   this.Reals=[]; // Reals Boat array
   this.VLMPrefs=[]; // Preferences Array;
+  this.NextServerRequestDate;  // Next VAC Start date
 
   if (typeof vlmboat != 'undefined')
   {
