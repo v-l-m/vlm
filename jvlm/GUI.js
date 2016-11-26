@@ -95,7 +95,7 @@ $(document).ready(
     CheckLogin();
 
     // Start the page clocks
-    setInterval('PageClock()',1000);
+    setInterval(PageClock,1000);
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
@@ -549,16 +549,16 @@ function SetTWASign(Boat)
   if (twa > 180 ) 
   {
     twa -=360
-  };
+  }
 
 
-    var winddir = (360 - twd )%360 + 90;
-    var boatdir = (360 - heading )%360 + 90;
+  var winddir = (360 - twd )%360 + 90;
+  var boatdir = (360 - heading )%360 + 90;
 
-    if ( twa * Boat.VLMInfo.TWA > 0 ) 
-    {
-      Boat.VLMInfo.TWA = - Boat.VLMInfo.TWA;
-    }
+  if ( twa * Boat.VLMInfo.TWA > 0 ) 
+  {
+    Boat.VLMInfo.TWA = - Boat.VLMInfo.TWA;
+  }
     
 }
 
@@ -578,7 +578,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   SetTWASign(Boat)
 
   // Fix HDG when boat is mooring
-  if (Boat.VLMInfo.PIM == "2" && Boat.VLMInfo.PIP =="0")
+  if (Boat.VLMInfo.PIM === "2" && Boat.VLMInfo.PIP ==="0")
   {
     // Mooring 
     Boat.VLMInfo.HDG = Boat.VLMInfo.TWD;
@@ -608,7 +608,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG",Math.round(Boat.VLMInfo.VMG * 10)/10 ]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindSpeed",Math.round(Boat.VLMInfo.TWS * 10)/10 ]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection",Math.round(Boat.VLMInfo.TWD * 10)/10 ]);
-  BoatFieldMappings.push([FIELD_MAPPING_CHECK,"#PM_WithWPHeading", Boat.VLMInfo['H@WP'] != "-1.0"]);
+  BoatFieldMappings.push([FIELD_MAPPING_CHECK,"#PM_WithWPHeading", Boat.VLMInfo['H@WP'] !== "-1.0"]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
   
@@ -616,14 +616,14 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lat", WP.Lat.Value]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lon", WP.Lon.Value]);
   
-  if ((WP.Lon.Value)==0 && (WP.Lat.Value==0))
+  if ((WP.Lon.Value === 0) && (WP.Lat.Value === 0))
   {
     WP = Boat.GetNextWPPosition();
   }
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
   
-  if (Boat.VLMInfo.PIM==PM_ANGLE)
+  if (Boat.VLMInfo.PIM === PM_ANGLE)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.PIP) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Boat.VLMInfo.PIP ]);
@@ -657,7 +657,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
  
   // Change color depênding on windangle
   var WindColor="lime"
-  if (Boat.VLMInfo.TWA >0)
+  if (Boat.VLMInfo.TWA > 0)
   {
     WindColor="red"
   }
@@ -820,7 +820,7 @@ function GetPILIdParentElement(item)
     if ('id' in RetValue.attributes)
     {
       var ItemId = RetValue.attributes['id'].value;
-      if ((ItemId.length == 4) && (ItemId.substring(0,3)=="PIL") )
+      if ((ItemId.length == 4) && (ItemId.substring(0,3) === "PIL") )
       {
         return RetValue;
       }
@@ -839,11 +839,11 @@ function HandlePilotEditDelete(e)
 
   var OrderIndex = parseInt( ClickedItem.attributes['pil_id'].value);
 
-  if (ItemId == "PIL_EDIT")
+  if (ItemId === "PIL_EDIT")
   {
     HandleOpenAutoPilotSetPoint (e);
   }
-  else if (ItemId == "PIL_DELETE")
+  else if (ItemId === "PIL_DELETE")
   {
     DeletePilotOrder(Boat,ClickedItem.attributes['TID'].value);
   }
@@ -852,7 +852,7 @@ function HandlePilotEditDelete(e)
 
 function GetPilotModeName(PIM)
 {
-  switch (parseInt(PIM))
+  switch (parseInt(PIM ,10))
   {
     case 1:
       return GetLocalizedString('autopilotengaged')
@@ -1055,7 +1055,7 @@ function PageClock()
     // Display race clock if a racing boat is selected
     var CurBoat = _CurPlayer.CurBoat;
 
-    if (typeof CurBoat != "undefined" && typeof CurBoat.RaceInfo != "undefined")
+    if (typeof CurBoat !== "undefined" && typeof CurBoat.RaceInfo !== "undefined")
     {
       var ClockValue=GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
       var Chrono = $("#RaceChrono");
@@ -1096,9 +1096,9 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
   }
   else
   {
-    var UDT = parseInt(UserStartTimeString);
+    var UDT = parseInt(UserStartTimeString,10);
 
-    if (UDT == -1)
+    if (UDT === -1)
     {
       return 0;
     }
@@ -1201,7 +1201,7 @@ function HandleOpenAutoPilotSetPoint(e)
         break;
       case "PIL_EDIT":
         // Load AP Order from vlminfo structure
-        var OrderIndex =parseInt(Target.attributes["pil_id"].value);
+        var OrderIndex =parseInt(Target.attributes["pil_id"].value,10);
         _CurAPOrder = new AutoPilotOrder (_CurPlayer.CurBoat,OrderIndex)
 
         $("#AutoPilotSettingForm").modal('show');
@@ -1260,7 +1260,7 @@ function HandleAPModeDDClick(e)
 {
   var NewMode = e.target.attributes["PIM"].value;
 
-  _CurAPOrder.PIM=parseInt(NewMode);
+  _CurAPOrder.PIM=parseInt(NewMode,10);
    $('#AP_PIM:first-child').html(
     '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
     '<span class="caret"></span>'
@@ -1301,49 +1301,47 @@ function UpdatePIPFields(PIM)
 function SaveBoatAndUserPrefs(e)
 {
   // Check boat prefs
-      {
-        var NewVals={};
-        var BoatUpdateRequired =false;
-        var PlayerUpdateRequired = false;
+  var NewVals={};
+  var BoatUpdateRequired =false;
+  var PlayerUpdateRequired = false;
 
-        // Get Theme
-        var NewTheme = $("#SelectionThemeDropDown").attr("SelTheme");
+  // Get Theme
+  var NewTheme = $("#SelectionThemeDropDown").attr("SelTheme");
 
-        if (typeof NewTheme  !== "undefined")
-        {
-          VLM2Prefs.CurTheme = NewTheme
+  if (typeof NewTheme  !== "undefined")
+  {
+    VLM2Prefs.CurTheme = NewTheme
 
-          
-        }
+    
+  }
 
-        VLM2Prefs.Save();
+  VLM2Prefs.Save();
 
-        if (!ComparePrefString($("#pref_boatname")[0].value,_CurPlayer.CurBoat.BoatName))
-        {
-          NewVals["boatname"]=encodeURIComponent($("#pref_boatname")[0].value);
-          BoatUpdateRequired = true;
-        }
-        
-        if (!ComparePrefString($("#pref_boatcolor")[0].value,_CurPlayer.CurBoat.VLMInfo.COL))
-        {
-          NewVals["color"]=$("#pref_boatcolor")[0].value;
-          BoatUpdateRequired = true;
-        }
+  if (!ComparePrefString($("#pref_boatname")[0].value,_CurPlayer.CurBoat.BoatName))
+  {
+    NewVals["boatname"]=encodeURIComponent($("#pref_boatname")[0].value);
+    BoatUpdateRequired = true;
+  }
+  
+  if (!ComparePrefString($("#pref_boatcolor")[0].value,_CurPlayer.CurBoat.VLMInfo.COL))
+  {
+    NewVals["color"]=$("#pref_boatcolor")[0].value;
+    BoatUpdateRequired = true;
+  }
 
-        var NewCountry= GetPrefSelFlag();
-        if (!ComparePrefString(NewCountry,_CurPlayer.CurBoat.VLMInfo.CNT))
-        {
-          NewVals["country"]=encodeURIComponent(NewCountry);
-          BoatUpdateRequired = true;
-        }
+  var NewCountry= GetPrefSelFlag();
+  if (!ComparePrefString(NewCountry,_CurPlayer.CurBoat.VLMInfo.CNT))
+  {
+    NewVals["country"]=encodeURIComponent(NewCountry);
+    BoatUpdateRequired = true;
+  }
 
-        //NewVals["country"]=$("#FlagSelector")[0].value;
-        //NewVals["color"]=$("#pref_boatcolor")[0].value;
-        if (BoatUpdateRequired)
-          {
-            UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals})
-          }
-      }
+  //NewVals["country"]=$("#FlagSelector")[0].value;
+  //NewVals["color"]=$("#pref_boatcolor")[0].value;
+  if (BoatUpdateRequired)
+  {
+    UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals})
+  }
 }
 
 function GetPrefSelFlag()
@@ -1358,7 +1356,7 @@ function GetPrefSelFlag()
 function ComparePrefString(Obj1, Obj2)
 {
 
-  return Obj1.toString()==Obj2.toString()
+  return Obj1.toString() === Obj2.toString()
 }
 
 function SelectCountryDDFlag(Country)
@@ -1419,7 +1417,7 @@ function FillRankingTable()
     {
       "paging": 
       {
-        "current": parseInt(_CurPlayer.CurBoat.VLMInfo.RNK/20)
+        "current": parseInt(_CurPlayer.CurBoat.VLMInfo.RNK/20,10)
 	  	}
 	  });
 
@@ -1434,7 +1432,7 @@ function AddRankingLine(Rank)
   Row.append(AppendColumn(Row,boatsearchstring))
   var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
   Row.append(AppendColumn(Row,NextMark))
-  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'])*1000))/1000);
+  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'])*1000))/1000,10);
   Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
   Row.append(AppendColumn(Row,Rank['loch']))
   Row.append(AppendColumn(Row,Rank['longitude']))
@@ -1521,7 +1519,7 @@ function SafeHTMLColor(Color)
 function HandleMapOppModeChange(e)
 {
   var t = e.target;
-  var Mode = parseInt(t.attributes["Mode"].value);
+  var Mode = parseInt(t.attributes["Mode"].value,10);
 
   VLM2Prefs.MapPrefs.MapOppShow=Mode;
   VLM2Prefs.Save();
@@ -1534,7 +1532,7 @@ function SetActiveStyleSheet(title)
   var i, a, main;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) 
   {
-    if((a.getAttribute("rel").indexOf("style") != -1) && a.getAttribute("title")) 
+    if((a.getAttribute("rel").indexOf("style") !== -1) && a.getAttribute("title")) 
     {
         a.disabled = true;
         if(a.getAttribute("title") == title) a.disabled = false;
