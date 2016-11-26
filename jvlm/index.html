@@ -35,7 +35,18 @@
     <script src="external/OpenLayers/OpenLayers.debug.js"></script>
     <script src="external/store/store.min.js"></script>
     <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>--> 
-      
+      <script>
+    function setActiveStyleSheet(title) {
+   var i, a, main;
+   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
+     if(a.getAttribute("rel").indexOf("style") != -1
+        && a.getAttribute("title")) {
+       a.disabled = true;
+       if(a.getAttribute("title") == title) a.disabled = false;
+     }
+   }
+}
+</script>
   </head>
   <body >
 
