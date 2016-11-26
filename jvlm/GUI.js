@@ -531,8 +531,8 @@ function   HandleRacingDockingButtons(IsRacing)
 
 function UpdateInMenuDockingBoatInfo(Boat)
 {
-  HandleRacingDockingButtons(false);
-
+  var IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC);
+  HandleRacingDockingButtons(IsRacing);
 }
 
 function SetTWASign(Boat)
