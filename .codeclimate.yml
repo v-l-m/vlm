@@ -30,3 +30,5 @@ ratings:
   - "**.rb"
 exclude_paths:
 - tests/
+- jvlm/external
+- externals
