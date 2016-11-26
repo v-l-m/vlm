@@ -81,9 +81,9 @@ function PrefMgr()
 
 function MapPrefs()
 {
-    this.ShowReals=true;
-    this.ShowOppName=true;
-    this.MapOppShow = null;
+    this.ShowReals=true;            // Do we show reals?
+    this.ShowOppName=true;          // Do we show opponents names?
+    this.MapOppShow = null;         // Which opponents do we show on the map
     this.MapOppShowOptions = {
         ShowSel : 0,
         ShowMineOnly : 1,
@@ -91,6 +91,7 @@ function MapPrefs()
         ShowTop10 : 3,
         Show10Around : 4
     }
+    this.WindArrowsSpacing = 64;    // Spacing steps for wind arrow drawing
 
     this.Load = function()
     {

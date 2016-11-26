@@ -94,6 +94,7 @@ function SetCurrentBoat(Boat, CenterMapOnBoat,ForceRefresh,TargetTab)
   CheckBoatRefreshRequired(Boat, CenterMapOnBoat,ForceRefresh,TargetTab);
 }
 
+var BoatLoading = new Date(0);
 function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab) 
 {
   // Check Params.
@@ -102,35 +103,38 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
     return;
   }
   var CurDate = new Date();
-  var NextUpdate = new Date(0);
   var NeedPrefsRefresh = (typeof Boat!=="undefined" && (typeof Boat.VLMInfo==="undefined" || typeof Boat.VLMInfo.AVG === "undefined"));
-
+  
   // Update preference screen according to current selected boat
   UpdatePrefsDialog(Boat);
 
-  if (typeof Boat != 'undefined' &&
-    typeof Boat.VLMInfo != 'undefined' && typeof Boat.VLMInfo.LUP != 'undefined') {
-    NextUpdate.setUTCSeconds(parseInt(Boat.VLMInfo.LUP)+60);
+  if ((typeof Boat.VLMInfo === 'undefined') || (typeof Boat.VLMInfo.LUP == 'undefined')) 
+  {
+    ForceRefresh=true;
   }
 
-  if (((typeof Boat !== 'undefined') && (CurDate >= NextUpdate)) ||
-      ( (typeof Boat !== "undefined") && (ForceRefresh)) ) 
+  if (!(CurDate < BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))  
   {
+    BoatLoading = CurDate+500;
     console.log("Loading boat info from server....")
     // request current boat info
     ShowPb("#PbGetBoatProgress");
+    
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
       function (result) {
         // Check that boat Id Matches expectations
         if (Boat.IdBoat == result.IDU) {
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
-
+          
           // LoadPrefs
           LoadVLMPrefs();
 
           // Store BoatInfo, update map
           Boat.VLMInfo = result;
+
+          // Store next request Date (once per minute)
+          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+(parseInt(Boat.VLMInfo.VAC)*60))*1000) ;
 
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
@@ -255,6 +259,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
   else if (Boat)
   {
     // Draw from last request
+    UpdateInMenuDockingBoatInfo(Boat);
     DrawBoat(Boat, CenterMapOnBoat);
     DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP,false);
     DrawRaceExclusionZones(VLMBoatsLayer,Boat.Exclusions);
@@ -1237,24 +1242,26 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
       BoatList = [];
       ratio=1;
-      break;
-    
+      break;    
     
   }
 
   for (index in  BoatList)
   {
-    var Opp = Boat.Rankings.ranking[index];
-
-    if ((Opp.idusers != Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
+    if (index in Boat.Rankings.ranking)
     {
-      AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
+      var Opp = Boat.Rankings.ranking[index];
 
-      if (typeof Boat.OppList === "undefined")
+      if ((Opp.idusers != Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
       {
-        Boat.OppList=[];
+        AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
+
+        if (typeof Boat.OppList === "undefined")
+        {
+          Boat.OppList=[];
+        }
+        Boat.OppList[index]=Opp;
       }
-      Boat.OppList[index]=Opp;
     }
   }
 }
@@ -1376,14 +1383,15 @@ function HandleFeatureOut(e)
 
 var TrackPendingRequests=[];
 
-
+var LastTrackRequest = 0;
 function DrawOpponentTrack(FeatureData)
 {
   var B = _CurPlayer.CurBoat;
   var IdBoat = FeatureData.idboat;
-
-  if (typeof B !== "undefined" && B)
+  var CurDate = new Date();
+  if (typeof B !== "undefined" && B && CurDate > LastTrackRequest)
   {
+    LastTrackRequest = new Date(CurDate/1000 + .5);
     if (typeof B.OppTrack !== "undefined" || !(IdBoat in B.OppTrack) || (IdBoat in B.OppTrack && (B.OppTrack[IdBoat].LastShow <= new Date(B.VLMInfo.LUP*1000))) )
     {
 

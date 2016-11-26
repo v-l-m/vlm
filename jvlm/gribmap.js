@@ -491,7 +491,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
   windLevels: [],
 
   /* define pixel grid */
-  arrowstep: 48,
+  arrowstep: VLM2Prefs.MapPrefs.WindArrowsSpacing,
 
   /* offset from now */
   timeoffset: 0,
