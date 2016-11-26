@@ -314,8 +314,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
    {
     var PointList = [];
-
-    for (index in Boat.Track) {
+    var TrackLength = Boat.Track.length;
+    for (index=0 ; index < TrackLength ; index++) 
+    {
       var P = Boat.Track[index];
       var P1 = new OpenLayers.Geometry.Point(P.Lon.Value, P.Lat.Value);
       var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
@@ -396,21 +397,28 @@ function DrawBoat(Boat, CenterMapOnBoat)
   {
     for (TrackIndex in Boat.OppTrack)
     {
-      var TrackPoints=[];
       var T = Boat.OppTrack[TrackIndex];
 
       if (T.Visible && T.DatePos.length>1)  
       {
-        for (PointIndex in T.DatePos)
+        if (!T.OLTrackLine)
         {
-          var P = T.DatePos[PointIndex];
-          var Pi = new OpenLayers.Geometry.Point(P.lon, P.lat);
-          var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection)
+          var TrackPoints=[];
+          var TLen = Object.keys(T.DatePos).length
+          for (var PointIndex=0 ; PointIndex < TLen; PointIndex++)
+          {
+            var k = Object.keys(T.DatePos)[PointIndex];
+            var P = T.DatePos[k];
+            var Pi = new OpenLayers.Geometry.Point(P.lon, P.lat);
+            var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection)
 
-          TrackPoints.push(Pi_PosTransformed)
+            TrackPoints.push(Pi_PosTransformed)
+          }
+          T.OLTrackLine = TrackPoints;
         }
+        
         var OppTrack = new OpenLayers.Feature.Vector(
-        new OpenLayers.Geometry.LineString(TrackPoints),
+        new OpenLayers.Geometry.LineString(T.OLTrackLine),
         {
           "type": "HistoryTrack",
           "TrackColor": T.TrackColor
@@ -1473,9 +1481,12 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
       LastShow : 0,
       TrackColor : TrackColor,
       DatePos: [],
-      Visible : true
+      Visible : true,
+      OLTrackLine : null
     };
   }
+
+  //
   for (index in Track)
   {
     var Pos = Track[index];
@@ -1486,6 +1497,7 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
                           };
   }
   Boat.OppTrack[IdBoat].LastShow=0;
+  Boat.OppTrack[IdBoat].OLTrackLine=null;
         
 
   
