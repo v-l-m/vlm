@@ -45,7 +45,7 @@ $(document).ready(
 
         if ($("#PM_WithWPHeading")[0].checked)
         {
-          WpH = parseInt($("#PM_WPHeading")[0].value)
+          WpH = parseInt($("#PM_WPHeading")[0].value,10);
         }
 
         switch ($(this)[0].id)
@@ -754,7 +754,7 @@ function UpdatePilotInfo(Boat)
     var TableLayoutChange=false;
     for (index in Boat.VLMInfo.PIL)
     {
-      var PilIndex = parseInt(index)+1;
+      var PilIndex = parseInt(index,10)+1;
       var PrevIndex = PilIndex -1;
       var PilLine = $("#PIL"+PilIndex).first();
       if (!PilLine.length)
@@ -768,11 +768,8 @@ function UpdatePilotInfo(Boat)
         TableLayoutChange = true ;
       }
         
-      //if (TableLayoutChange)
-      {
-        // Init footable                      
-        $('.footable').footable();
-      }
+      // Init footable                      
+      $('.footable').footable();
       
       $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
       
@@ -820,7 +817,7 @@ function GetPILIdParentElement(item)
     if ('id' in RetValue.attributes)
     {
       var ItemId = RetValue.attributes['id'].value;
-      if ((ItemId.length == 4) && (ItemId.substring(0,3) === "PIL") )
+      if ((ItemId.length === 4) && (ItemId.substring(0,3) === "PIL") )
       {
         return RetValue;
       }
@@ -837,7 +834,7 @@ function HandlePilotEditDelete(e)
   var ItemId = ClickedItem.attributes['class'].value;
   var Boat = _CurPlayer.CurBoat;
 
-  var OrderIndex = parseInt( ClickedItem.attributes['pil_id'].value);
+  var OrderIndex = parseInt( ClickedItem.attributes['pil_id'].value,10);
 
   if (ItemId === "PIL_EDIT")
   {
@@ -937,16 +934,12 @@ function UpdatePrefsDialog(Boat)
     $("#BtnSetting").removeClass("hidden");
     $("#pref_boatname").val(Boat.BoatName);
 
-    if (typeof Boat.VLMInfo != 'undefined')
+    if (typeof Boat.VLMInfo !== 'undefined')
     {
       SelectCountryDDFlag(Boat.VLMInfo.CNT);
-      var ColString = Boat.VLMInfo.COL;
-      if (ColString.substring(0,1)!="#")
-      {
-        ColString="#"+ColString;
-      }
+      var ColString = SafeHTMLColor( Boat.VLMInfo.COL);
+      
       $("#pref_boatcolor").val(ColString);
-
       $("#cp11").colorpicker({color:ColString});
     }
   }
@@ -1131,7 +1124,7 @@ function GetFormattedChronoString(Value)
   {
     Value = -Value;
   }
-  else if (Value == 0)
+  else if (Value === 0)
   {
     return "--:--:--";
   }
@@ -1375,7 +1368,7 @@ function HandleBoatSelectionChange(e)
 function HandleMapMouseMove(e)
 {
 
-  if (GM_Pos  && (typeof _CurPlayer!=="undefined") && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo != "undefined"))
+  if (GM_Pos  && (typeof _CurPlayer!=="undefined") && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
   {
     var Pos = new VLMPosition(GM_Pos.lon,GM_Pos.lat)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
@@ -1534,8 +1527,11 @@ function SetActiveStyleSheet(title)
   {
     if((a.getAttribute("rel").indexOf("style") !== -1) && a.getAttribute("title")) 
     {
-        a.disabled = true;
-        if(a.getAttribute("title") == title) a.disabled = false;
+      a.disabled = true;
+      if(a.getAttribute("title") === title)
+      {
+        a.disabled = false;
+      } 
     }
   }
 }
