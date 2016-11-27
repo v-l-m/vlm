@@ -337,8 +337,8 @@ span.ui-selectmenu-text {
 }
 .pilottab {
   background-color: #00c700;
-  left: 90px;
-  top: 0px;
+  left: auto;
+  top: -5px;
 }
 .VLM100_Label,
 .VLM100_Pos,
