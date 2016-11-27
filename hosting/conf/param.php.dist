@@ -68,5 +68,6 @@ define("VLM_NOTIFY_LIST", "test"); //facebook,twitter,irc,mail");
 
 define("GRIB_DIRECTORY", "/home/vlm/vlmdatas/gribs");
 define("GGRIB_PATH", "/home/vlm/bin/ggrib");
+define("WGRIB_PATH", "/home/vlm/bin/wgrib");
 
 ?>
