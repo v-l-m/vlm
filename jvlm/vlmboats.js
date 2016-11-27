@@ -126,6 +126,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
         if (Boat.IdBoat == result.IDU) {
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
+
           
           // LoadPrefs
           LoadVLMPrefs();
@@ -139,7 +140,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
           Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
-
+          
+          GribMgr.WindAtPointInTime(new Date(),Boat.VLMInfo.LAT,Boat.VLMInfo.LON );
+          
           // force refresh of settings if was not initialized
           if (NeedPrefsRefresh) 
           {
