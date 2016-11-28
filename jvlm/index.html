@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <html>
   <head>
@@ -113,13 +112,13 @@
             </li>
             <li class="nav" style="float: left;">
               <div id="BtnSetting" class="BtnGroup1 button hidden" style="float: left;">
-                <a ><img class="TDB-Icon" src="images/setting.png"></img></a>
+                <a ><img class="TDB-Icon" src="images/setting.png" alt="setting"/></a>
               </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
              <!-- <div class="BtnGroup1" >-->
                 <div class="button" >
-                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png"></img>
+                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
                 </div>
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
@@ -143,17 +142,17 @@
             </li>
             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
                 <div class="button">
-                  <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal"></img>
+                  <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal" alt="compas"/>
                  </div>
              </li>
              <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
                <div class="button">
-                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png"></img>
+                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png" alt="MapOptions"/>
                </div>
               </li>
               <li>
                 <div class ="hidden">
-                    <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value=""></input>
+                    <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value="">
                 </div>
             </li>
           </ul>
@@ -199,12 +198,12 @@
                         <input type="checkbox" id="oppname">
                         <label class="affich" for="oppname">Nom</label>
                       </div>
-                        <!-- Slide ONE -
+                        Slide ONE 
                         <div class="col-xs-8">
                           <span>Test</span>
                         </div>
                         <div class="slideOne col-xs-4">	
-                          <input  type="checkbox" value="None" id="slideOne" name="check" />
+                          <input  type="checkbox" value="None" id="slideOne" name="check" >
                           <label for="slideOne"></label>
                         </div>
                   </fieldset>-->
@@ -303,30 +302,30 @@
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-      <div id="tabs">
+        <div id="tabs">
           <ul>
             <li class=" BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
-              <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png"></img>
+              <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span I18n="autopilotengaged">Cap</span></a>
             </li>
             <li class=" BCPane AngleMode"><a href="#AngleMode" data-toggle="tab">
-              <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png"></img>
+              <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span I18n="constantengaged">Angle</span></a>
             </li>
             <li class="BCPane WP_PM_Mode OrthoMode "><a href="#OrthoMode" data-toggle="tab">
-              <img class="PMActiveMode ActiveMode_Ortho" src="images/PMActiveMode.png"></img>
+              <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span I18n="orthodromic">Ortho</span></a>
             </li>
             <li class="BCPane WP_PM_Mode VMGMode"><a href="#VMGMode" data-toggle="tab">
-              <img class="PMActiveMode ActiveMode_VMG" src="images/PMActiveMode.png"></img>
+              <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span>VMG</span></a>
             </li>
             <li class="BCPane WP_PM_Mode VBVMGMode"><a href="#VBVMGMode" data-toggle="tab">
-              <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png"></img>
+              <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span>VBVMG</span></a>
             </li>
             <li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab">
-              <img src="images/autopilot.png" style="width:21px;margin-right:5px"></img>
+              <img src="images/autopilot.png" style="width:21px;margin-right:5px" alt="autopilot"/>
               <span I18N="pilototoengaged">AutoPilot</span>
               <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></a>
             </li>
@@ -359,7 +358,6 @@
                     </div>
                     <div class="col-sm-2">
                       <input tupe="number" class="input Boat_SimpleInput" id="PM_Angle">
-                      </input>
                     </div>
                     <div class="col-sm-4">Entrer l'angle +/- par rapport au vent
                     </div>                </div>
@@ -380,8 +378,8 @@
                       <span I18n="mytargetpoint"> CurDest</span>
                       </div>
                       <div class="col-sm-2">
-                        <img id="SetWPOnClick" class="ClickWPPos_Off" src="images/clickwp_pos.png"></img>
-                        <img id="SetWPOffClick" class="ClickWPPos_On" src="images/clickwp_pos_on.png"></img>
+                        <img id="SetWPOnClick" class="ClickWPPos_Off" src="images/clickwp_pos.png" alt="clickwp_pos"/>
+                        <img id="SetWPOffClick" class="ClickWPPos_On" src="images/clickwp_pos_on.png" alt="clickwp_pos_on"/>
                       </div>
                       <div class="col-sm-8">Cliquez sur le bouton puis sur la map pour positionner votre WP
                       </div>
@@ -390,7 +388,6 @@
                       <div class="col-sm-2"> Latitude</div>
                       <div class="col-sm-2">
                       <input class="input Boat_SimpleInput" id="PM_Lat" size="100">
-                      </input>
                       </div>
                       <div class="col-sm-4"> <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
                     </div>
@@ -399,7 +396,6 @@
                       <div class="col-sm-2" > Longitude</div>
                       <div class="col-sm-2">
                         <input class="input Boat_SimpleInput" id="PM_Lon">
-                        </input>
                       </div>
                       <div class="col-sm-4">
                       <span class="input Boat_SimpleInput" id="PM_CurWPLon">Longitude du WP</span> 
@@ -409,13 +405,13 @@
                     <div class="col-sm-2">
                         <div class="checkbox "> 
                           <label>
-                            <input type="checkbox" id="PM_WithWPHeading"></input>
+                            <input type="checkbox" id="PM_WithWPHeading">
                             @WPH
                           </label>
                         </div>
                    </div>
                    <div class="col-sm-2">
-                        <input class="input Boat_SimpleInput" id="PM_WPHeading"></input>
+                        <input class="input Boat_SimpleInput" id="PM_WPHeading">
                    </div>
                    <div class="col-sm-2">
                         <span class="input Boat_SimpleInput" id="PM_CurWPheading">@WPH</span>
@@ -476,10 +472,10 @@
                         <span id='PIL_STATUS'>Status</span>
                       </div>
                       <div class="col-xs-1">
-                        <img class='PIL_EDIT' src="images/edit.png"></img>
+                        <img class='PIL_EDIT' src="images/edit.png" alt=""/>
                       </div>
                       <div class="col-xs-1">
-                        <img class='PIL_DELETE' src="images/delete.png"></img>
+                        <img class='PIL_DELETE' src="images/delete.png" alt="">
                       </div>
                      </div>
                     </div>
@@ -551,13 +547,13 @@
             <div class="TDB-Panel col-xs-3">
               <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
                   <div class="WindAnglePanel">
-                    <img id="BearingRing" src="images/compass-small-complete.png"></img>
+                    <img id="BearingRing" src="images/compass-small-complete.png" alt="compass-small-complete"/>
                   </div>
                   <div class="WindAnglePanel">
-                    <img id="DeckImage" src="images/deck-small.png"></img>
+                    <img id="DeckImage" src="images/deck-small.png" alt="deck-small"/>
                   </div>
                   <div class="WindAnglePanel">
-                    <img id="ImgWindAngle"></img>
+                    <img id="ImgWindAngle" alt=""/>
                   </div>
                   </div>
                   </div>
@@ -602,11 +598,9 @@
         </div>
       </div>
     <!-- COllapsable Pilototo -->
-    <div id="Pilot-Panel" class="TDB-Panel collapse">
-      <div class="container">
-        
-      </div>
-    </div>
+      <div id="Pilot-Panel" class="TDB-Panel collapse">
+        <div class="container">
+        </div>
       </div>
     </nav>
     
@@ -639,7 +633,7 @@
                     <span I18n="email">Adresse mail :</span>
                   </div>
                   <div class="col-xs-6">
-                    <input  class="UserName " size="15" maxlength="64" name="pseudo" />
+                    <input  class="UserName " size="15" maxlength="64" name="pseudo" >
                   </div>
                 </div>
                 <div class="row">
@@ -647,7 +641,7 @@
                     <span I18n="password">Mot de passe :</span>
                   </div>
                   <div class="col-xs-6">
-                    <input class="UserPassword" size="15" maxlength="15" type="password" name="password"/> 
+                    <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
                   </div>
                 </div>
               </div>    
@@ -703,7 +697,7 @@
                                 </button>
                                 <ul id="dropdowntheme" class="dropdown-menu" aria-labelledby="dropdowntheme">
                                   <li class="DDLine DDTheme" DDTheme="bleu-noir">
-                                    <span style="color:#02748d" >Noir/bleu</a>
+                                    <span style="color:#02748d" >Noir/bleu</span>
                                   </li>
                                   <li class="DDLine DDTheme" DDTheme="brun-pistache">
                                     <span style="color:#8B6F5A" >Brun/pistache</span>
@@ -981,7 +975,7 @@
                           <img src="images/mail.svg" alt="mail"/>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="pref_Id" value="Mail" style="margin-top:5px;"></input>    
+                          <input class="input form-control " id="pref_Id" value="Mail" style="margin-top:5px;">    
                         </div>
                         <div class="col-xs-2">
                             
@@ -1009,7 +1003,7 @@
                           <img src="images/twiter.svg" alt="mail"/>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="pref-twiter" value="twiter" style="margin-top:5px;"></input>    
+                          <input class="input form-control " id="pref-twiter" value="twiter" style="margin-top:5px;">    
                         </div>
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
@@ -1035,7 +1029,7 @@
                           <img src="images/facebook.svg" alt="mail"/>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="pref-facebook" value="facebook" style="margin-top:5px;"></input>    
+                          <input class="input form-control " id="pref-facebook" value="facebook" style="margin-top:5px;">    
                         </div>
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
@@ -1061,7 +1055,7 @@
                           <img src="images/msn.svg" alt="msn"/>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="pref-msn" value="msn" style="margin-top:5px;"></input>    
+                          <input class="input form-control " id="pref-msn" value="msn" style="margin-top:5px;">    
                         </div>
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
@@ -1087,7 +1081,7 @@
                           <img src="images/jabber.svg" alt="jabber"/>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="pref-jabber" value="jabber" style="margin-top:5px;"></input>    
+                          <input class="input form-control " id="pref-jabber" value="jabber" style="margin-top:5px;">    
                         </div>
                         <div class="col-xs-2">
                        <div class="btn-group" data-toggle="buttons">
@@ -1113,7 +1107,7 @@
                             <img src="images/google.svg" alt="google"/>
                           </div>
                           <div class="col-xs-6">
-                            <input class="input form-control " id="pref-goolge" value="google" style="margin-top:5px;"></input>    
+                            <input class="input form-control " id="pref-goolge" value="google" style="margin-top:5px;">    
                           </div>
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
@@ -1144,7 +1138,7 @@
                             <span I18n="pref_contact_taverne">forum</span>
                           </div>
                           <div class="col-xs-5">
-                            <input class="input form-control " id="pref-taverne" value="taverne" style="margin-top:5px;"></input>    
+                            <input class="input form-control " id="pref-taverne" value="taverne" style="margin-top:5px;">    
                           </div>
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
@@ -1167,7 +1161,7 @@
                             <span I18n="pref_contact_revatua">forum</span>
                           </div>
                           <div class="col-xs-5">
-                            <input class="input form-control " id="pref-revatua" value="revatua" style="margin-top:5px;"></input>    
+                            <input class="input form-control " id="pref-revatua" value="revatua" style="margin-top:5px;">   
                           </div>
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
@@ -1192,7 +1186,7 @@
                             <span I18n="pref_contact_fmv">forum</span>
                           </div>
                           <div class="col-xs-5">
-                            <input class="input form-control " id="pref-fmv" value="fmv" style="margin-top:5px;"></input>    
+                            <input class="input form-control " id="pref-fmv" value="fmv" style="margin-top:5px;">   
                           </div>
                           <div class="col-xs-2">
                          <div class="btn-group" data-toggle="buttons">
@@ -1220,7 +1214,7 @@
                           <span I18n="boatname">boatname</span>
                         </div>
                         <div class="col-xs-6">
-                          <input class="input form-control " id="pref_boatname" value="fill it here"></input>    
+                          <input class="input form-control " id="pref_boatname" value="fill it here">   
                         </div>
                       </fieldset>
                     </div>
@@ -1243,7 +1237,7 @@
                             </div>
                             <div class="col-xs-6">
                               <div id="cp11" class="input-group colorpicker-component"> 
-                                <input id="pref_boatcolor" type="text" value="#123456" class="form-control input-" />					
+                                <input id="pref_boatcolor" type="text" value="#123456" class="form-control input-">					
                                 <span class="input-group-addon"><i></i></span>
                               </div> 
                             </div> 
@@ -1329,7 +1323,7 @@
                     <div class="AP_PIPRow row" style="margin-top:4px">
                       <label for="AP_PIP" class="col-md-4 control-label" I18n="PIP">PIP</label>
                       <div  class="input-group col-md-8">
-                        <input id="AP_PIP" class="APField form-control" type="text"></input>
+                        <input id="AP_PIP" class="APField form-control" type="text">
                       </div>				              
                     </div>
                     <div class="row">
@@ -1337,13 +1331,13 @@
                     <div class="AP_WPRow row">
                       <label for="AP_WPLat" class="col-md-5 control-label">Latitude</label>
                       <div  class="input col-md-7">
-                        <input id="AP_WPLat" class="APField form-control" type="text"></input>
+                        <input id="AP_WPLat" class="APField form-control" type="text">
                       </div>				              
                     </div>
                     <div class="AP_WPRow row">
                       <label for="AP_WPLon" class="col-md-5 control-label">Longitude</label>
                       <div  class="input col-md-7">
-                        <input id="AP_WPLon" class="APField form-control" type="text"></input>
+                        <input id="AP_WPLon" class="APField form-control" type="text">
                       </div>				              
                     </div>
                     </div>
@@ -1354,7 +1348,7 @@
                     <div class="AP_WPRow row">
                       <label for="AP_WPAt" class="col-md-4 control-label" I18n="Heading_WP">Heading @ WP</label>
                       <div  class="input-group col-md-8">
-                        <input id="AP_WPAt" class="APField form-control" type="text"></input>
+                        <input id="AP_WPAt" class="APField form-control" type="text">
                       </div>				              
                     </div>
               </div>
@@ -1417,12 +1411,10 @@
         </div>
       </div>
     </div>
-
-  </body>
-  <script src="config.js"></script>
+  <script src="config.js" type="text/javascript"></script>
   <script src='prefmgr.js' type='text/javascript'></script>
-  <script src="localize.js"></script>
-  <script src="GUI.js"></script>
+  <script src="localize.js" type="text/javascript"></script>
+  <script src="GUI.js" type="text/javascript"></script>
   <script src='ControlSwitch.js' type='text/javascript'></script>
   <script src='gribmap.js' type='text/javascript'></script>
   <script src='vlmboats.js' type='text/javascript'></script>
@@ -1432,6 +1424,8 @@
   <script src='polar.js' type='text/javascript'></script>
   <script src='xmpp.js' type='text/javascript'></script>
   <script src='autopilot.js' type='text/javascript'></script>
+
+  </body>
   
   
 </html>
