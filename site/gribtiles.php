@@ -4,17 +4,22 @@
      * called when origin url doesn't (yet) exists
      * origin cached url : /gribtiles/<south>/<west>/<AAAAMMJJHH>.<STEP>.grb
      * - AAAAMMJJHH : grib's date
-     * - STEP : 05 or 15° (size of the tile)
+     * - STEP : 05 or 15ï¿½ (size of the tile)
      * - <south> : South longitude (modulo STEP) of the tile
      * - <west> : West latitude (modulo STEP) of the tile
+     * - fmt : grb or txt. default is grb. use txt for raw text output
      * This should fail if :
      * - STEP is not 05 or 15
      * - south / west are not consistent with step
      * - no grib file available for AAAAMMJJHH
      * TODO : clean old files from cache in noaa scripts
+     *
+     * txt fmt is direct output from wgrib, content, then data
      */
     include_once("config-defines.php");
 
+    $fmt = get_cgi_var('fmt','grb');
+    if ($fmt != 'grb' && $fmt != 'txt') die ("invalid format request");
     $step = intval(get_cgi_var('step', 15));
     if ($step != 5 && $step != 15) die("Bad step");
     $south = intval(get_cgi_var('south', 0));
@@ -29,8 +34,10 @@
     $dlname = sprintf("%d.%02d.%d.%d.grb", $grib_date, $step, $south, $west);
     $originaldir = sprintf("%s/%d/%d", DIRECTORY_GRIBTILES, $south, $west);
     $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_date, $step);
-
-    // Création et mise en cache
+    $original_txt = sprintf("%s/%d.%02d.txt", $originaldir, $grib_date, $step);
+    $dlname_txt = sprintf("%d.%02d.%d.%d.txt", $grib_date, $step, $south, $west);
+    
+    // Crï¿½ation et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
         if (!is_dir($originaldir)) {
             umask(0002);
@@ -40,6 +47,30 @@
         $execcmd = sprintf("%s %s %s %d %d %d %d", GGRIB_PATH, $gribfile, $original, $west, $south, $west+$step, $south+$step);
 //            print $execcmd; die();
             shell_exec($execcmd);
+    }
+
+    // Ajout passe gÃ©nÃ©ration JSON si demandÃ©
+    if ($fmt == 'txt')
+    {
+        if ( ( ! file_exists($original_txt) ) ||  ($force == 'yes') ) 
+        {
+            if (!is_dir($originaldir)) {
+                umask(0002);
+                mkdir($originaldir, 0777, True);
+            }
+            //wgrib $original -d all -text -o $original_txt
+            $execcmd = sprintf("%s %s -d all -text -o %s.dat", WGRIB_PATH, $original, $original_txt);
+            $execcmd = $execcmd.sprintf("\n%s %s > %s.tmp", WGRIB_PATH, $original, $original_txt, $original_txt);
+            $execcmd = $execcmd.sprintf("\n cat %s.tmp>%s\n echo '--' >> %s \n cat %s.dat >>%s ",  $original_txt, $original_txt,  $original_txt, $original_txt, $original_txt);
+            $execcmd = $execcmd.sprintf("\nrm %s.dat \nrm %s.tmp", $original_txt, $original_txt);
+    //      
+             //   print $execcmd; die();
+                shell_exec($execcmd);
+            
+        }
+
+        $original = $original_txt;
+        $dlname = $dlname_txt;
     }
 
     header("Content-Type: image/png");
