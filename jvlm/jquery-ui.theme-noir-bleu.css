@@ -479,3 +479,31 @@ a.ui-button:active,
   height: 5px; 
   width: 100px;
 }
+/* We use html here because we need a greater specificity to make sure disabled
+works properly when clicked or hovered */
+.ui-button-noir{
+	border: 1px solid #444444;
+	background: #222222 url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #0b93d5;
+}
+.ui-button-noir {
+	background-image: url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png");
+  min-height:40px;
+}
+
+a.ui-button-noir:active,
+.ui-button-noir:active{
+	border: 1px solid #26b3f7;
+	background: #02748d url("images/ui-noir-bleu/ui-bg_highlight-hard_30_02748d_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #ffffff;
+}
+
+.ui-button-noir:hover,
+a.ui-button-noir:hover {
+	border: 1px solid #0b93d5;
+	background: #202c32 url("images/ui-noir-bleu/ui-bg_highlight-soft_33_202c32_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #ffffff;
+}
