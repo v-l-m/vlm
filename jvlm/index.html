@@ -16,6 +16,7 @@
     <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-brun-pistache.css"/>
     <link rel="alternate stylesheet" type="text/css" title="vert-jaune" href="jquery-ui.theme-vert-jaune.css"/>
     <link rel="alternate stylesheet" type="text/css" title="noir-jaune" href="jquery-ui.theme-noir-jaune.css"/>
+    <link rel="alternate stylesheet" type="text/css" title="noir-jaune-v2" href="jquery-ui.theme-noir-jaune-v2.css"/>
     <!--[if IE]>
     <script src="excanvas.js"></script><![endif]-->
     <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
@@ -82,7 +83,7 @@
             <li  class="active" ><a class="player" id="PlayerId">Not Logged in </a></li>
             <li  class="BoatSelector">
               <div id="BoatSelectorDropDown" class="dropdown">
-                <button id="BoatDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+                <button id="BoatDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
                 <ul id="BoatSelectorDropDownList" class="dropdown-menu" aria-labelledby="dropdownBoat">
                 </ul>
               </div>                     
@@ -276,7 +277,7 @@
           <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
             <li>
               <div class="dropdown">
-                <button id="SelectionLanguageDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
+                <button id="SelectionLanguageDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -290,12 +291,12 @@
               </div>
             </li>
             <li>
-              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="ui-button ui-corner-all ui-widget"  I18n="login">Login</button></span> 
+              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
             <li>
-              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
+              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
             </li>
           </ul>
         </div>
@@ -312,7 +313,7 @@
               <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span I18n="constantengaged">Angle</span></a>
             </li>
-            <li class="BCPane WP_PM_Mode OrthoMode "><a href="#OrthoMode" data-toggle="tab">
+            <li class="BCPane WP_PM_Mode OrthoMode"><a href="#OrthoMode" data-toggle="tab">
               <img class="PMActiveMode ActiveMode_Angle" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span I18n="orthodromic">Ortho</span></a>
             </li>
@@ -345,7 +346,7 @@
                 </div>
                 <div class="BoatControllerRow row">
                   <div class="col-xs-12">
-                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Heading">
+                    <button class="ui-button ui-corner-all " id="BtnPM_Heading">
                       <span I18n="autopilot">Do Heading</span>
                     </button>
                   </div>
@@ -363,10 +364,10 @@
                     </div>                </div>
                 <div class="BoatControllerRow row">
                     <div class="col-sm-2">
-                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Tack" I18n="tack">Virer / Empanner</button>
+                    <button class="ui-button ui-corner-all " id="BtnPM_Tack" I18n="tack">Virer / Empanner</button>
                     </div>
                     <div class="col-sm-2">
-                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Angle" I18n="constant">Regler l'allure</button>
+                    <button class="ui-button ui-corner-all " id="BtnPM_Angle" I18n="constant">Regler l'allure</button>
                   </div>
                 </div>
               </div>
@@ -420,7 +421,7 @@
                 </div>
                 <div class="BoatControllerRow row">
                   <div class="col-sm-4">
-                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
+                    <button class="ui-button ui-corner-all " id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
                   </div>
                 </div>
               </div>
@@ -428,7 +429,7 @@
               <div class="BCPane tab-pane" id="VMGMode">
                 <div class="BoatControllerRow row">
                   <div class="col-sm-4">
-                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
+                    <button class="ui-button ui-corner-all " id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
                   </div>
                 </div> 
               </div>
@@ -436,7 +437,7 @@
               <div class="BCPane tab-pane" id="VBVMGMode">
                 <div class="BoatControllerRow row">
                   <div class="col-sm-4">
-                    <button class="ui-button ui-corner-all ui-widget" id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
+                    <button class="ui-button ui-corner-all " id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
                   </div>
                 </div>    
               </div>
@@ -506,7 +507,7 @@
                   </div>
                     <div class="BoatControllerRow row">
                       <div class="col-sm-4">
-                        <button id="AutoPilotAddButton" class="ui-button ui-corner-all ui-widget"  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
+                        <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
                       </div>
                     </div>
                   </div>   
@@ -692,7 +693,7 @@
                         </div>
                           <div class="col-xs-5">
                             <div class="dropdown">
-                                <button id="SelectionThemeDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
+                                <button id="SelectionThemeDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                                   <span class="caret"></span>
                                 </button>
                                 <ul id="dropdowntheme" class="dropdown-menu" aria-labelledby="dropdowntheme">
@@ -708,6 +709,9 @@
                                   <li class="DDLine DDTheme" DDTheme="noir-jaune">
                                     <span style="color:#FCD755" >Noir/jaune</span>
                                   </li>
+                                  <li class="DDLine DDTheme" DDTheme="noir-jaune-v2">
+                                    <span style="color:#FCD755" >Noir/jaune-v2</span>
+                                  </li>
                                 </ul>
                               </div>
                             </div>
@@ -721,7 +725,7 @@
                         </div>
                           <div class="col-xs-5">
                             <div class="dropdown">
-                                <button id="SelectionLanguageDropDown" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
+                                <button id="SelectionLanguageDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                                   <span class="caret"></span>
                                 </button>
                                 <ul id="dropdownlangue" class="dropdown-menu" aria-labelledby="dropdownlangue">

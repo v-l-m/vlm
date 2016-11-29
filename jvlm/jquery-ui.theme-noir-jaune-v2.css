@@ -8,14 +8,14 @@
  *
  * http://api.jqueryui.com/category/theming/
  *
- * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=custom-theme&bgImgOpacityHeader=30&bgImgOpacityContent=40&bgImgOpacityDefault=40&bgImgOpacityHover=40&bgImgOpacityActive=40&bgImgOpacityHighlight=20&bgImgOpacityError=15&cornerRadiusShadow=8px&offsetLeftShadow=4px&offsetTopShadow=4px&thicknessShadow=4px&opacityShadow=10&bgImgOpacityShadow=0&bgTextureShadow=flat&bgColorShadow=%23aaaaaa&opacityOverlay=30&bgImgOpacityOverlay=0&bgTextureOverlay=flat&bgColorOverlay=%23aaaaaa&iconColorError=%23f1fd86&fcError=%23ffffff&borderColorError=%235f391b&bgTextureError=glass&bgColorError=%235f391b&iconColorHighlight=%23ffffff&fcHighlight=%23ffffff&borderColorHighlight=%23add978&bgTextureHighlight=highlight_soft&bgColorHighlight=%23619226&iconColorActive=%23e3ddc9&fcActive=%23e3ddc9&borderColorActive=%239c947c&bgTextureActive=highlight_soft&bgColorActive=%23271b11&iconColorHover=%23add978&fcHover=%231d2e09&borderColorHover=%239c947c&bgTextureHover=highlight_soft&bgColorHover=%23626225&iconColorDefault=%239bcc60&fcDefault=%239bcc60&borderColorDefault=%23695444&bgTextureDefault=highlight_soft&bgColorDefault=%23694d24&iconColorContent=%23222222&fcContent=%23ffffff&borderColorContent=%239c947c&bgTextureContent=highlight_soft&bgColorContent=%23271b11&iconColorHeader=%23e3ddc9&fcHeader=%23e3ddc9&borderColorHeader=%23451d02&bgTextureHeader=highlight_soft&bgColorHeader=%23a56e28&cornerRadius=4px&fwDefault=normal&fsDefault=1.1em&ffDefault=Segoe%20UI%2CHelvetica%2CArial%2Csans-serif
+ * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=dark-hive&bgImgOpacityError=40&bgImgOpacityHighlight=80&bgImgOpacityActive=20&bgImgOpacityHover=33&bgImgOpacityDefault=35&bgImgOpacityContent=25&bgImgOpacityHeader=44&cornerRadiusShadow=8px&offsetLeftShadow=4px&offsetTopShadow=4px&thicknessShadow=4px&opacityShadow=60&bgImgOpacityShadow=30&bgTextureShadow=flat&bgColorShadow=%232f2d2d&opacityOverlay=80&bgImgOpacityOverlay=50&bgTextureOverlay=flat&bgColorOverlay=%235c5c5c&iconColorError=%23a83300&fcError=%23111111&borderColorError=%23ffb73d&bgTextureError=glass&bgColorError=%23ffc73d&iconColorHighlight=%234b8e0b&fcHighlight=%232e7db2&borderColorHighlight=%23cccccc&bgTextureHighlight=highlight_soft&bgColorHighlight=%23eeeeee&iconColorActive=%23222222&fcActive=%23ffffff&borderColorActive=%23db020f&bgTextureActive=flat&bgColorActive=%23a59009&iconColorHover=%23ffffff&fcHover=%23ffffff&borderColorHover=%230b93d5&bgTextureHover=flat&bgColorHover=%23003147&iconColorDefault=%23cccccc&fcDefault=%23eeeeee&borderColorDefault=%23444444&bgTextureDefault=flat&bgColorDefault=%23222222&iconColorContent=%23cccccc&fcContent=%23ffffff&borderColorContent=%23555555&bgTextureContent=flat&bgColorContent=%23000000&iconColorHeader=%23ffffff&fcHeader=%23ffffff&borderColorHeader=%23333333&bgTextureHeader=flat&bgColorHeader=%23444444&cornerRadius=6px&fwDefault=normal&fsDefault=1.1em&ffDefault=Verdana%2CArial%2Csans-serif
  */
 
 
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: Segoe UI,Helvetica,Arial,sans-serif;
+	font-family: Verdana,Arial,sans-serif;
 	font-size: 1.1em;
 }
 .ui-widget .ui-widget {
@@ -25,54 +25,48 @@
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: Segoe UI,Helvetica,Arial,sans-serif;
+	font-family: Verdana,Arial,sans-serif;
 	font-size: 1em;
 }
 .ui-widget.ui-widget-content {
-	border: 1px solid #695444;
+	border: 1px solid #444444;
 }
 .ui-widget-content {
-	border: 1px solid #9c947c;
-	background: #271b11 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_271b11_1x100.png") 50% top repeat-x;
+	border: 1px solid #555555;
+	background: #000000;
 	color: #ffffff;
 }
 .ui-widget-content a {
 	color: #ffffff;
 }
 .ui-widget-header {
-	border: 1px solid #451d02;
-	background: #a56e28 url("images/ui-brun-pistache/ui-bg_highlight-soft_30_a56e28_1x100.png") 50% 50% repeat-x;
-	color: #e3ddc9;
+	border: 1px solid #333333;
+	background: #444444 url("images/ui-noir-bleu/ui-bg_highlight-soft_44_444444_1x100.png") 50% 50% repeat-x;
+	color: #ffffff;
 	font-weight: bold;
 }
 .ui-widget-header a {
-	color: #e3ddc9;
+	color: #ffffff;
 }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default,
-.ui-button,
 
 /* We use html here because we need a greater specificity to make sure disabled
 works properly when clicked or hovered */
-html .ui-button.ui-state-disabled:hover,
-html .ui-button.ui-state-disabled:active {
-	border: 1px solid #695444;
-	background: #694d24 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_694d24_1x100.png") 50% 50% repeat-x;
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default{
+	border: 1px solid #444444;
+	background: #222222 url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #9bcc60;
+	color: #0b93d5;
+  cursor:pointer;
 }
 .ui-state-default a,
 .ui-state-default a:link,
-.ui-state-default a:visited,
-a.ui-button,
-a:link.ui-button,
-a:visited.ui-button,
-.ui-button {
-	color: #9bcc60;
+.ui-state-default a:visited{
+	color: #337AB7;
 	text-decoration: none;
 }
 .ui-state-hover,
@@ -80,13 +74,11 @@ a:visited.ui-button,
 .ui-widget-header .ui-state-hover,
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus,
-.ui-button:hover,
-.ui-button:focus {
-	border: 1px solid #9c947c;
-	background: #626225 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_626225_1x100.png") 50% 50% repeat-x;
+.ui-widget-header .ui-state-focus{
+	border: 1px solid #0b93d5;
+	background: #202c32 url("images/ui-noir-bleu/ui-bg_highlight-soft_33_202c32_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #1d2e09;
+	color: #ffffff;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
@@ -95,73 +87,110 @@ a:visited.ui-button,
 .ui-state-focus a,
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
-.ui-state-focus a:visited,
-a.ui-button:hover,
-a.ui-button:focus {
-	color: #1d2e09;
+.ui-state-focus a:visited{
+	color: #255782;
 	text-decoration: none;
 }
 
 .ui-visual-focus {
-	box-shadow: 0 0 3px 1px rgb(94, 158, 214);
+	box-shadow: 0 0 0px 1px rgb(255, 0, 0,1.5);
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active,
-a.ui-button:active,
-.ui-button:active,
-.ui-button.ui-state-active:hover {
-	border: 1px solid #9c947c;
-	background: #271b11 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_271b11_1x100.png") 50% 50% repeat-x;
+.ui-state-active:hover {
+	border: 1px solid #26b3f7;
+	background: #02748d url("images/ui-noir-bleu/ui-bg_highlight-hard_30_02748d_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #e3ddc9;
+	color: #ffffff;
 }
 .ui-icon-background,
 .ui-state-active .ui-icon-background {
-	border: #9c947c;
-	background-color: #e3ddc9;
+	border: #db020f;
+	background-color: #FCD755;
 }
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-	color: #e3ddc9;
+	color: #ffffff;
+	text-decoration: none;
+}
+/* reglage button
+----------------------------------*/
+
+
+/* We use html here because we need a greater specificity to make sure disabled
+works properly when clicked or hovered */
+.ui-button{
+	border: 1px solid #444444;
+	background: #fecb35 url("images/ui-noir-jaune/ui-bg_highlight-hard_40_fecb35_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #01a7aa;
+  cursor:pointer;
+}
+
+a.ui-button,
+a:link.ui-button,
+a:visited.ui-button,
+.ui-button {
+	color: #337AB7;
+	text-decoration: none;
+}
+.ui-button:hover,
+.ui-button:focus {
+	border: 1px solid #0b93d5;
+	background: #f79e02 url("images/ui-noir-jaune/ui-bg_highlight-soft_30_f79e02_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #012f73;
+}
+a.ui-button:hover,
+a.ui-button:focus {
+	color: #255782;
 	text-decoration: none;
 }
 
+
+a.ui-button:active,
+.ui-button:active{
+	border: 1px solid #dc0021;
+	background: #c47d1b url("images/ui-noir-jaune/ui-bg_highlight-soft_40_c47d1b_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #01538a;
+}
 /* Interaction Cues
 ----------------------------------*/
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #add978;
-	background: #619226 url("images/ui-brun-pistache/ui-bg_highlight-soft_20_619226_1x100.png") 50% top repeat-x;
-	color: #ffffff;
+	border: 1px solid #cccccc;
+	background: #eeeeee url("images/ui-noir-jaune/ui-bg_highlight-soft_80_eeeeee_1x100.png") 50% top repeat-x;
+	color: #2e7db2;
 }
 .ui-state-checked {
-	border: 1px solid #add978;
-	background: #619226;
+	border: 1px solid #cccccc;
+	background: #eeeeee;
 }
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
 .ui-widget-header .ui-state-highlight a {
-	color: #ffffff;
+	color: #2e7db2;
 }
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-	border: 1px solid #5f391b;
-	background: #5f391b url("images/ui-brun-pistache/ui-bg_glass_15_5f391b_1x400.png") 50% 50% repeat-x;
-	color: #ffffff;
+	border: 1px solid #ffb73d;
+	background: #ffc73d url("images/ui-noir-jaune/ui-bg_glass_40_ffc73d_1x400.png") 50% 50% repeat-x;
+	color: #111111;
 }
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a {
-	color: #ffffff;
+	color: #111111;
 }
 .ui-state-error-text,
 .ui-widget-content .ui-state-error-text,
 .ui-widget-header .ui-state-error-text {
-	color: #ffffff;
+	color: #111111;
 }
 .ui-priority-primary,
 .ui-widget-content .ui-priority-primary,
@@ -196,31 +225,31 @@ a.ui-button:active,
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_222222_256x240.png");
+	background-image: url("images/ui-noir-jaune/ui-icons_cccccc_256x240.png");
 }
 .ui-widget-header .ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_e3ddc9_256x240.png");
+	background-image: url("images/ui-noir-jaune/ui-icons_ffffff_256x240.png");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
 .ui-button:focus .ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_add978_256x240.png");
+	background-image: url("images/ui-noir-jaune/Bouton-jaune-hover-Centre-1x100.png") repeat-x;
 }
 .ui-state-active .ui-icon,
 .ui-button:active .ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_e3ddc9_256x240.png");
+	background-image: url("images/ui-noir-jaune/Bouton-jaune-actif-Centre-1x100.png") repeat-x;
 }
 .ui-state-highlight .ui-icon,
 .ui-button .ui-state-highlight.ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_ffffff_256x240.png");
+	background-image: url("images/ui-noir-jaune/Bouton-jaune-actif-Centre-1x100.png") repeat-x;
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_f1fd86_256x240.png");
+	background-image: url("images/ui-noir-jaune/ui-icons_a83300_256x240.png");
 }
 .ui-button .ui-icon {
-	background-image: url("images/ui-brun-pistache/ui-icons_9bcc60_256x240.png");
+	background-image: url("images/ui-noir-jaune/Bouton-jaune-repos-Centre-1x100.png") repeat-x;
 }
 
 /* positioning */
@@ -410,49 +439,48 @@ a.ui-button:active,
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	border-top-left-radius: 4px;
+	border-top-left-radius: 6px;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	border-top-right-radius: 4px;
+	border-top-right-radius: 6px;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	border-bottom-left-radius: 4px;
+	border-bottom-left-radius: 6px;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	border-bottom-right-radius: 4px;
+	border-bottom-right-radius: 6px;
 }
 
 /* Overlays */
 .ui-widget-overlay {
-	background: #aaaaaa;
-	opacity: .3;
-	filter: Alpha(Opacity=30); /* support: IE8 */
+	background: #5c5c5c;
+	opacity: .8;
+	filter: Alpha(Opacity=80); /* support: IE8 */
 }
 .ui-widget-shadow {
-	-webkit-box-shadow: 4px 4px 4px #aaaaaa;
-	box-shadow: 4px 4px 4px #aaaaaa;
+	-webkit-box-shadow: 4px 4px 4px #2f2d2d;
+	box-shadow: 4px 4px 4px #2f2d2d;
 }
-
 .ui-legend{
    margin-bottom:10px;
   text-align:center;
   font-size:1.2em;
-  color:#9bcc60;
+  color:#337AB7;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
 #affichage{
   cursor:move;
-    border:1px solid #9c947c;
-    background-color:#201913;
+    border:1px solid #CCC;
+    background-color:#000000;
     width:200px;
     height:350px; 
     display:none;
@@ -462,16 +490,14 @@ a.ui-button:active,
     border-radius:5px;
 }
 .dropdown-menu {
-  background-color:#201913;
+  background-color:#15214b;
 }
 #LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel{
-background-color:#201913;
+  background-color:#070B18;
 }
-.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-    border-color:#080604;
-}
+
 .progressbarmin{
-  background-color:#695444;
+  background-color:#FFC90E;
   z-index: 2; 
   height: 5px; 
   width: 100px;
@@ -479,28 +505,28 @@ background-color:#201913;
 /* We use html here because we need a greater specificity to make sure disabled
 works properly when clicked or hovered */
 .ui-button-noir{
-	border: 1px solid #695444;
-	background: #694d24 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_694d24_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #444444;
+	background: #222222 url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #9bcc60;
+	color: #0b93d5;
 }
 .ui-button-noir {
-	background-image: url("images/ui-brun-pistache/ui-bg_highlight-soft_40_694d24_1x100.png");
-  min-height:35px;
+	background-image: url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png");
+  min-height:40px;
 }
 
 a.ui-button-noir:active,
 .ui-button-noir:active{
-	border: 1px solid #9c947c;
-	background: #271b11 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_271b11_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #26b3f7;
+	background: #02748d url("images/ui-noir-bleu/ui-bg_highlight-hard_30_02748d_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #e3ddc9;
+	color: #ffffff;
 }
 
 .ui-button-noir:hover,
 a.ui-button-noir:hover {
-	border: 1px solid #9c947c;
-	background: #626225 url("images/ui-brun-pistache/ui-bg_highlight-soft_40_626225_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #0b93d5;
+	background: #202c32 url("images/ui-noir-bleu/ui-bg_highlight-soft_33_202c32_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #1d2e09;
+	color: #ffffff;
 }

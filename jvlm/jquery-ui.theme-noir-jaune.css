@@ -51,29 +51,21 @@
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default,
-.ui-button,
 
 /* We use html here because we need a greater specificity to make sure disabled
 works properly when clicked or hovered */
-html .ui-button.ui-state-disabled:hover,
-html .ui-button.ui-state-disabled:active {
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default{
 	border: 1px solid #444444;
-	background: #FCD755 url("images/ui-noir-jaune/Bouton-jaune-repos-Centre-1x100.png") repeat-x;
-  background-size:100% 100%;
+	background: #222222 url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #337AB7;
+	color: #0b93d5;
   cursor:pointer;
 }
 .ui-state-default a,
 .ui-state-default a:link,
-.ui-state-default a:visited,
-a.ui-button,
-a:link.ui-button,
-a:visited.ui-button,
-.ui-button {
+.ui-state-default a:visited{
 	color: #337AB7;
 	text-decoration: none;
 }
@@ -82,14 +74,11 @@ a:visited.ui-button,
 .ui-widget-header .ui-state-hover,
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus,
-.ui-button:hover,
-.ui-button:focus {
-	border: 1px solid #0D80B8;
-	background:#FCD755 url("images/ui-noir-jaune/Bouton-jaune-hover-Centre-1x100.png") repeat-x; 
-  background-size:100% 100%;
+.ui-widget-header .ui-state-focus{
+	border: 1px solid #0b93d5;
+	background: #202c32 url("images/ui-noir-bleu/ui-bg_highlight-soft_33_202c32_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #337AB7;
+	color: #ffffff;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
@@ -98,9 +87,7 @@ a:visited.ui-button,
 .ui-state-focus a,
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
-.ui-state-focus a:visited,
-a.ui-button:hover,
-a.ui-button:focus {
+.ui-state-focus a:visited{
 	color: #255782;
 	text-decoration: none;
 }
@@ -111,14 +98,11 @@ a.ui-button:focus {
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active,
-a.ui-button:active,
-.ui-button:active,
-.ui-button.ui-state-active:hover {
-	border: 2px solid #C80000;
-	background: #FCD755 url("images/ui-noir-jaune/Bouton-jaune-actif-Centre-1x100.png")  repeat-x;
-  background-size:100% 100%;
+.ui-state-active:hover {
+	border: 1px solid #26b3f7;
+	background: #02748d url("images/ui-noir-bleu/ui-bg_highlight-hard_30_02748d_1x100.png") 50% 50% repeat-x;
 	font-weight: normal;
-	color: #337AB7;
+	color: #ffffff;
 }
 .ui-icon-background,
 .ui-state-active .ui-icon-background {
@@ -128,10 +112,54 @@ a.ui-button:active,
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
+	color: #ffffff;
+	text-decoration: none;
+}
+/* reglage button
+----------------------------------*/
+
+
+/* We use html here because we need a greater specificity to make sure disabled
+works properly when clicked or hovered */
+.ui-button{
+	border: 1px solid #444444;
+	background: #FCD755 url("images/ui-noir-jaune/Bouton-jaune-repos-Centre-1x100.png") repeat-x;
+  background-size:100% 100%;
+	font-weight: normal;
+	color: #337AB7;
+  cursor:pointer;
+}
+
+a.ui-button,
+a:link.ui-button,
+a:visited.ui-button,
+.ui-button {
 	color: #337AB7;
 	text-decoration: none;
 }
+.ui-button:hover,
+.ui-button:focus {
+	border: 1px solid #0D80B8;
+	background:#FCD755 url("images/ui-noir-jaune/Bouton-jaune-hover-Centre-1x100.png") repeat-x; 
+  background-size:100% 100%;
+	font-weight: normal;
+	color: #337AB7;
+}
+a.ui-button:hover,
+a.ui-button:focus {
+	color: #255782;
+	text-decoration: none;
+}
 
+
+a.ui-button:active,
+.ui-button:active{
+	border: 2px solid #C80000;
+	background: #FCD755 url("images/ui-noir-jaune/Bouton-jaune-actif-Centre-1x100.png")  repeat-x;
+  background-size:100% 100%;
+	font-weight: normal;
+	color: #337AB7;
+}
 /* Interaction Cues
 ----------------------------------*/
 .ui-state-highlight,
@@ -472,14 +500,38 @@ a.ui-button:active,
 #LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel{
   background-color:#070B18;
 }
-.ui-tabs .ui-tabs-nav {
-    margin: 0;
-    padding: .2em .2em 0;
-}
 
 .progressbarmin{
   background-color:#FFC90E;
   z-index: 2; 
   height: 5px; 
   width: 100px;
+}
+/* We use html here because we need a greater specificity to make sure disabled
+works properly when clicked or hovered */
+.ui-button-noir{
+	border: 1px solid #444444;
+	background: #222222 url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #0b93d5;
+}
+.ui-button-noir {
+	background-image: url("images/ui-noir-bleu/ui-bg_highlight-soft_35_222222_1x100.png");
+  min-height:40px;
+}
+
+a.ui-button-noir:active,
+.ui-button-noir:active{
+	border: 1px solid #26b3f7;
+	background: #02748d url("images/ui-noir-bleu/ui-bg_highlight-hard_30_02748d_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #ffffff;
+}
+
+.ui-button-noir:hover,
+a.ui-button-noir:hover {
+	border: 1px solid #0b93d5;
+	background: #202c32 url("images/ui-noir-bleu/ui-bg_highlight-soft_33_202c32_1x100.png") 50% 50% repeat-x;
+	font-weight: normal;
+	color: #ffffff;
 }
