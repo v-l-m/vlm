@@ -33,7 +33,7 @@ reportfile = conf[2].split(":")[1]
 
 #URL http://imocaoceanmasters-nyvendee.geovoile.com/2016/_elements/data/race/tracker.tracks.hwz?v=1464551980
 raceBaseUrl = "http://gitana-team.geovoile.com/vendeeglobe/2016/tracker/resources/"
-print raceBaseUrl
+#print basefilename
 
 gp.unzipurl(raceBaseUrl+"live/"+trackfile,basefilename)
 
@@ -60,9 +60,9 @@ for track in Tracks:
     lon = -1
     realid = -4050-int(track[0])
     realname = "VDG - %d" % int(track[0])
-    speed = track[7]
-    heading  = track[6]
-    tr=track[11][0]
+    speed = track[8]
+    heading  = track[7]
+    tr=track[17][0]
     #print tr
     Time = tr[0]
     lon = tr[2]
