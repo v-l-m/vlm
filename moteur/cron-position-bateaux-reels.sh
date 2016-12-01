@@ -13,3 +13,6 @@ $VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_coville_2016.php > $VLMT
 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_coville_2016.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
 #New-York Vendée 2016
 #nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_NewYorkVendee.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
+
+#Pellet VDG 2016
+nice -1 python $VLMRACINE/vlmcode/moteur/posscripts/getpos_Pellet_VDG2016.py|$VLMPHPPATH $VLMRACINE/vlmcode/moteur/posscripts/getpos_py_wrapper.php
