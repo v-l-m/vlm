@@ -1395,27 +1395,129 @@
       </div>
       </div>
     </div>
-    <!-- Modal Infos race -->
+                      <!-- Modal Infos race -->
     <div id="RacesInfoForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
         <div id="RacesInfoPanel" class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo</h4><h4> : Nom de la course</h4>
+            <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo : B2B</h4>
           </div>
           <div id="RaceInfoBody" class="modal-body" >
-            <div id="RaceInfoPanel" class="panel group">
-            Informations sur la course en cours et les infos du bateau place, vitesse moyenne, ...
-            </div>            
-          </div>
+            <div  id="TabsInfos">
+                <ul>
+                  <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true">Course</a></li>
+                  <li><a href="#InfosBoat" data-toggle="tab">Bateau</a></li>
+                  <li><a href="#PolarBoat" data-toggle="tab">Polaires</a></li>
+                </ul>
+                <div id="TabModalContent" class="tab-content ">
+                  <div class="BCPane tab-pane fade  in active" id="InfosRace" style="padding:0px">
+                  <div>
+                    Départ : 2016/01/04 17:00:00<br>
+                    Type de bateau / Polaire : IMOCA2007<br>
+                    vac. : 5 minutes<br>
+                    Fermeture de la ligne de d'arrivée : 200 % <br>
+                    <img src="../cache/racemaps/20141231.png" alt="B2B" style="max-width:100%"/>
+                    <div id="waypoints">
+                      <h3>Waypoints</h3>
+                        <table class="waypoints">
+                          <tbody>
+                                    <tr>
+                                    <th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>@</th><th>Spec</th><th>Type</th><th>Name</th>
+                                    </tr>
+                                    <tr>
+                                    <td>WP0</td><td>41.412</td><td>2.239</td><td colspan="2">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Départ</td><td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=36.001&amp;long=-5.61&amp;maparea=10&amp;drawwind=no&amp;wp=1&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP1</a></td><td>36.001</td><td>-5.610</td><td>35.830</td><td>-5.610</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Gibraltar</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=1&amp;maparea=5&amp;drawwind=no&amp;wp=2&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP2</a></td><td>-60.000</td><td>1.000</td><td>-60.000</td><td>11.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Atlantic Gate 1</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-34.345&amp;long=18.483&amp;maparea=2&amp;drawwind=no&amp;wp=3&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP3</a></td><td>-34.345</td><td>18.483</td><td>-60.000</td><td>18.483</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Cape of Good Hope</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=40.5&amp;maparea=5&amp;drawwind=no&amp;wp=4&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP4</a></td><td>-60.000</td><td>40.500</td><td>-60.000</td><td>50.500</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Kerguelen Gate 2</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=105&amp;maparea=3&amp;drawwind=no&amp;wp=5&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP5</a></td><td>-60.000</td><td>105.000</td><td>-60.000</td><td>120.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Australian Barrier 3</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-34.372&amp;long=115.133&amp;maparea=2&amp;drawwind=no&amp;wp=6&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP6</a></td><td>-34.372</td><td>115.133</td><td>-60.000</td><td>115.133</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Cape Leeuwin</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=136&amp;maparea=5&amp;drawwind=no&amp;wp=7&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP7</a></td><td>-60.000</td><td>136.000</td><td>-60.000</td><td>146.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Eastern Australian Gate 4</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=-180&amp;maparea=5&amp;drawwind=no&amp;wp=8&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP8</a></td><td>-60.000</td><td>-180.000</td><td>-60.000</td><td>-170.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>New Zealand Gate 5</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=-145&amp;maparea=5&amp;drawwind=no&amp;wp=9&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP9</a></td><td>-60.000</td><td>-145.000</td><td>-60.000</td><td>-135.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Western Pacific Gate 6</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=-110&amp;maparea=5&amp;drawwind=no&amp;wp=10&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP10</a></td><td>-60.000</td><td>-110.000</td><td>-60.000</td><td>-100.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Eastern Pacific Gate 7</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-55.98&amp;long=-67.262&amp;maparea=6&amp;drawwind=no&amp;wp=11&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP11</a></td><td>-55.980</td><td>-67.262</td><td>-60.000</td><td>-67.262</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Cape Horn</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=36.001&amp;long=-5.61&amp;maparea=10&amp;drawwind=no&amp;wp=12&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP12</a></td><td>36.001</td><td>-5.610</td><td>35.830</td><td>-5.610</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Gibraltar</td>
+                                    </tr>
+                                    <tr>
+                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=41.368&amp;long=2.25&amp;maparea=16&amp;drawwind=no&amp;wp=13&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP13</a></td><td>41.368</td><td>2.250</td><td>41.368</td><td>2.265</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Finish</td><td>Barcelona</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                     </div>
+                     </div>
+                   </div>
+                    <div class="BCPane tab-pane fade" id="InfosBoat">
+                        <h4>Type de bateau : Imoca</h4>
+                          <img  src="http://wiki.virtual-loup-de-mer.org/images/thumb/4/40/Britair_-_Brest_2008-2_vlm.jpg/525px-Britair_-_Brest_2008-2_vlm.jpg" alt="Imoca" style="max-width:100%"/>
+                                Gréement : 	sloop<br>
+                                Longueur hors-tout : 	60 pieds<br>
+                                (18,29 m)
+                                Maître-bau : 	3 à 5 m<br>
+                                Tirant d'eau : 	4,50m<br>
+                                Surface de voilure : 	250 et 300 m² au près<br>
+                                500 à 600 m² au portant<br>
+                                Déplacement : 	7 à 10 tonnes<br>
+                                Équipage : 	1<br>
+                                Débuts : 	1991 <br>
+                                source : <a href="http://wiki.virtual-loup-de-mer.org/index.php?title=Imoca" target="blanck">Wiki</a>
+                    </div><!--fin boatinfo-->
+                    <div class="BCPane tab-pane fade" id="PolarBoat">
+                              <h4>Polaires Imoca</h4>
+                              <div class="slideshow">
+                                <ul>
+                                  <li><img class="polaire" src="../cache/polaires/imoca-45-60.png" alt="imoca45-60" /></li>
+                                  <li><img class="polaire" src="../cache/polaires/imoca-30-45.png" alt="imoca30-45" /></li>
+                                  <li><img class="polaire" src="../cache/polaires/imoca-15-30.png" alt="imoca15-30" /></li>
+                                  <li><img class="polaire" src="../cache/polaires/imoca-0-15.png" alt="imoca0-15" /></li>
+                                </ul>
+                             </div>
+                             <button id="suivant" type="button" class="ui-button ui-corner-all ui-widget">suivant</button>
+          <script type="text/javascript">
+             $(function(){
+                $("#suivant").click(function(){
+                   $(".slideshow ul").animate({marginLeft:-300},800,function(){
+                      $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
+                   })
+                });
+             });
+          </script>
+                    </div>
+                </div>
+             </div>
+           </div>
           <div class="modal-footer">
               <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
-  <script src="config.js" type="text/javascript"></script>
    <script src="config.js" type="text/javascript"></script>
    <script src='prefmgr.js' type='text/javascript'></script>
   <script src="localize.js" type='text/javascript'></script>

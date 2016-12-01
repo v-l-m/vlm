@@ -1045,3 +1045,45 @@ hr {
 .slideOne input[type=checkbox]:not(:checked) + label {
   padding-left: 0px;
 }
+/*nav-tabs>li>a {
+ margin-right: 0px; 
+   line-height: 1.4;
+   border: 0px ; 
+ border-radius: 0 0 0 0; 
+}
+.nav-tabs>li>a :hover{
+background-color:transparent;
+}*/
+td,
+th {
+  padding: 0;
+  border: 1px solid;
+}
+/*.polaire{ 
+  width:300px;
+  height:auto;
+}
+#img1 {z-index: 4;}
+
+#img2 {z-index: 3;}
+
+#img3 {z-index: 2;}
+
+#img4 {z-index: 1;}*/
+.slideshow {
+  width: 300px;
+  height: 512px;
+  overflow: hidden;
+  border: 3px solid #F2F2F2;
+}
+.slideshow ul {
+  /* 4 images donc 4 x 100% */
+  width: 400%;
+  height: 512px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.slideshow li {
+  float: left;
+}
