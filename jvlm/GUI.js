@@ -215,6 +215,7 @@ function InitMenusAndButtons()
   // Theme tabs
   $( "#tabs" ).tabs();
   $( "#TabModal" ).tabs();
+  $( "#TabsInfos" ).tabs();
   
   // Hide all progressbars
   HidePb("#PbLoginProgress");
