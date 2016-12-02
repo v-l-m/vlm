@@ -339,6 +339,7 @@ span.ui-selectmenu-text {
   background-color: #00c700;
   left: auto;
   top: -5px;
+  display: inline;
 }
 .VLM100_Label,
 .VLM100_Pos,
