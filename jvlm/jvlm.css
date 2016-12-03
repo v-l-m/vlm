@@ -268,7 +268,7 @@ span.ui-selectmenu-text {
 }
 .BtnCtrlPanel {
   position: absolute;
-  left: 52px;
+  left: 50px;
   padding-top: 4px;
   top: 0px;
 }
@@ -276,6 +276,7 @@ span.ui-selectmenu-text {
   /*position: absolute;*/
   padding-top: 4px;
   padding-left: 10px;
+  padding-right: 10px;
   top: 0px;
 }
 .BoatSelector {
@@ -318,7 +319,7 @@ span.ui-selectmenu-text {
 }
 .ranking {
   background-color: #c70000;
-  right: -6px;
+  right: 0px;
   top: 0px;
   z-index: 999;
 }
@@ -503,6 +504,8 @@ span.ui-selectmenu-text {
 }
 .button {
   color: #15214b;
+  padding-top: 4px;
+  float: left;
 }
 .navbar-toggle {
   padding-top: 0px;
@@ -1058,7 +1061,7 @@ background-color:transparent;
 td,
 th {
   padding: 0;
-  border: 1px solid;
+  /*  border: 1px solid;*/
 }
 /*.polaire{ 
   width:300px;
