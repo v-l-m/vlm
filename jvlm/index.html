@@ -113,17 +113,17 @@
                 </div>
             </li>
             <li class="nav" style="float: left;">
-              <div id="BtnSetting" class="BtnGroup1 button hidden" style="float: left;">
-                <a ><img class="TDB-Icon" src="images/setting.png" alt="setting"/></a>
-              </div>
+                  <div id="BtnSetting" class="button hidden" style="float: left;">
+                      <a ><img class="TDB-Icon" src="images/setting.png" alt="setting"/></a>
+                  </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
+            <li class="nav hidden" RacingBtn="true" style="float:left">
              <!-- <div class="BtnGroup1" >-->
-                <div class="button" >
-                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
-                </div>
+                  <div class="button" style="float:left">
+                      <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
+                  </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
+            <li class="BoatSelector nav hidden" RacingBtn="true" style="padding-top:4px; float:left">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>
@@ -142,12 +142,10 @@
                   </div>-->
                 </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
-                <div class="button">
+            <li class="nav hidden" RacingBtn="true" style="float:left;">
+                <div class="button" style="float:left">
                   <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal" alt="compas"/>
                  </div>
-             </li>
-             <li class="nav hidden" RacingBtn="true" style="padding-top: 4px;float:left">
                <div class="button">
                     <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png" alt="MapOptions"/>
                </div>
@@ -276,7 +274,7 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
-            <li>
+            <li class="BoatSelector">
               <div class="dropdown">
                 <button id="SelectionLanguageDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                   <span class="caret"></span>
@@ -291,12 +289,12 @@
                 </ul>
               </div>
             </li>
-            <li>
-              <span class="glyphicon glyphicon-log-in"><button id="logindlgButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
+            <li class="BoatSelector">
+              <span class="glyphicon glyphicon-log-in" style="top:0px"><button id="logindlgButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
-            <li>
+            <li class="BoatSelector">
               <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
             </li>
           </ul>

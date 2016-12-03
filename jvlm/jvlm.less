@@ -254,8 +254,8 @@ span.ui-selectmenu-text {
 @IconSize:40px;
 @BtnPadLeft:10px;
 @BtnPadTop:4px;
-@Btn2Left:(@IconSize + @BtnPadLeft)+2px;
-@Btn3Left:(2*@IconSize + 2*@BtnPadLeft)+2px;
+@Btn2Left:(@IconSize + @BtnPadLeft);
+@Btn3Left:(2*@IconSize + 2*@BtnPadLeft);
 @BtnBorder:2px;
 @BtnBorderStyle:inset;
 @BtnBorderColor:#ffffff;
@@ -292,6 +292,7 @@ span.ui-selectmenu-text {
   /*position: absolute;*/
  padding-top: @BtnPadTop;
  padding-left:10px;
+ padding-right:10px;
   top: 0px;
 }
 .BoatSelector {
@@ -335,7 +336,7 @@ span.ui-selectmenu-text {
 }
 .ranking {
   background-color: #c70000;
-  right: -6px;
+  right: 0px;
   top: 0px;
   z-index:999;
 }
@@ -546,6 +547,8 @@ span.ui-selectmenu-text {
 }
 .button {
  color: @DialogBgColor;
+ padding-top:4px;
+ float:left;
 }
 //Modif Par Chris /* Classe principale de la barre de navigation */
 // defined in variables.css:
@@ -1111,7 +1114,7 @@ background-color:transparent;
 }*/
 td, th {
     padding: 0;
-    border: 1px solid;
+  /*  border: 1px solid;*/
 }
 
 /*.polaire{ 
