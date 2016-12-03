@@ -79,6 +79,31 @@
         </div>
 
         <div class="collapse navbar-collapse" id="myNavbar">
+         <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
+            <li class="BoatSelector">
+              <div class="dropdown">
+                <button id="SelectionLanguageDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li class="DDLine"><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li>
+                  <li class="DDLine"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li>
+                  <li class="DDLine"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li>
+                  <li class="DDLine"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li>
+                  <li class="DDLine"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li>
+                  <li class="DDLine"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>        
+                </ul>
+              </div>
+            </li>
+            <li class="BoatSelector">
+              <span class="glyphicon glyphicon-log-in" style="top:0px"><button id="logindlgButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
+            <li class="BoatSelector">
+              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
+            </li>
+          </ul>
           <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
             <li  class="active" ><a class="player" id="PlayerId">Not Logged in </a></li>
             <li  class="BoatSelector">
@@ -272,31 +297,7 @@
               </div>
             </li>
           </ul>
-          <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
-            <li class="BoatSelector">
-              <div class="dropdown">
-                <button id="SelectionLanguageDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li class="DDLine"><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li>
-                  <li class="DDLine"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li>
-                  <li class="DDLine"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li>
-                  <li class="DDLine"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li>
-                  <li class="DDLine"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li>
-                  <li class="DDLine"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>        
-                </ul>
-              </div>
-            </li>
-            <li class="BoatSelector">
-              <span class="glyphicon glyphicon-log-in" style="top:0px"><button id="logindlgButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
-            <li class="BoatSelector">
-              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
-            </li>
-          </ul>
+         
         </div>
       </div>
       <!-- Collapsable Boat Controler panel -->
