@@ -111,7 +111,11 @@ function VLM2GribManager()
       return false;
     }
 
-    if (!this.CheckGribLoaded(TableIndex, Lat,Lon) || ! this.CheckGribLoaded(TableIndex+1,Lat,Lon))
+    // Precheck to force loading the second grib, and avoid optimization not checking 2nd when first is needs loading
+    var t1 = this.CheckGribLoaded(TableIndex, Lat,Lon);
+    var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,Lon+this.GribStep);
+
+    if (!t1 || !t2 )
     {
       return false;
     }
@@ -136,7 +140,7 @@ function VLM2GribManager()
     })
 
     RetInfo.Heading = GInfo.Direction();
-    RetInfo.Strength = MI0.TWS + DteOffset / GribGrain * (MI1.TWS - MI0.TWS)
+    RetInfo.Speed = MI0.TWS + DteOffset / GribGrain * (MI1.TWS - MI0.TWS)
 
     return RetInfo;
   }
@@ -150,8 +154,8 @@ function VLM2GribManager()
     var LonIdx2 = (LonIdx1 +1) % (360/this.GribStep)
     var LatIdx2 = (LatIdx1 +1) % (360/this.GribStep)
     
-    var dX = 180 + Lon - LonIdx1 * this.GribStep
-    var dY = 90 + Lat - LatIdx1 * this.GribStep
+    var dX =  (Lon/this.GribStep - Math.floor(Lon/this.GribStep))
+    var dY =  ( Lat/this.GribStep - Math.floor(Lat/this.GribStep)) 
 
     // Get UVS for each 4 grid points
     var U00  = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD
@@ -196,7 +200,7 @@ function VLM2GribManager()
       var LatIdx2 = 90/this.GribStep + Math.ceil(Lat/this.GribStep);
       
       if (this.Tables[TableIndex][LonIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx1]  && this.Tables[TableIndex][LonIdx1][LatIdx2] 
-          && this.Tables[TableIndex][LonIdx2] && this.Tables[TableIndex][LonIdx2][LatIdx1] && this.Tables[TableIndex][LonIdx2][LatIdx2] )
+          && this.Tables[TableIndex][LonIdx2] && this.Tables[TableIndex][LonIdx2][LatIdx1] && this.Tables[TableIndex][LonIdx2][LatIdx2])
       {
         return true;
       }
@@ -208,7 +212,7 @@ function VLM2GribManager()
     var LatStep = Math.floor(Lat/10)*10;
     var LatStep2, LatStep2;
     
-    if (LonStep < 0)
+    if (LonStep <= 0)
     {
 
       LonStep2 = LonStep
@@ -216,17 +220,17 @@ function VLM2GribManager()
     }
     else
     {
-      LonStep2 = LonStep + 10;
+      LonStep2 = LonStep - 10;
     }
     
-    if (LatStep < 0)
+    if (LatStep <= 0)
     {
       LatStep2 = LatStep
       LatStep +=10;
     }
     else
     {
-      LatStep2 += LatStep+10;
+      LatStep2 = LatStep-10;
     }
     
     var LoadKey = TableIndex + "/" + LonStep + "/" + LonStep2 + "/" + LatStep + "/" + LatStep2 
@@ -236,11 +240,9 @@ function VLM2GribManager()
       $.get("/ws/windinfo/smartgribs.php?north="+LatStep+"&south="+(LatStep2)+"&west="+(LonStep) +"&east="+(LonStep2),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
-    else
-    {
-      return false;
-    }
-        
+
+    return false;  
+      
   }
 
   this.HandleGetSmartGribList = function (LoadKey, e)
@@ -294,8 +296,6 @@ function VLM2GribManager()
 
     // Now Process the data
     var ZoneOffsets = Url.split("/");
-    var StartLon = 180/this.GribStep+parseInt(ZoneOffsets[1],10)/this.GribStep;
-    var StartLat = 90/this.GribStep+parseInt(ZoneOffsets[0],10)/this.GribStep;
     var DataStartIndex = Catalog.length+1
     for (var i = 0; i< Catalog.length; i++)
     {
@@ -303,8 +303,12 @@ function VLM2GribManager()
       var NbLon = parseInt(DataSize[0],10);
       var NbLat = parseInt(DataSize[1],10);
       
+      var StartLon = 180/this.GribStep+parseInt(ZoneOffsets[1],10)/this.GribStep;
+    
       for (var LonIdx = 0 ; LonIdx < NbLon ; LonIdx ++)
       {
+        var StartLat = NbLat+90/this.GribStep+parseInt(ZoneOffsets[0],10)/this.GribStep;
+    
         for ( var LatIdx = 0 ; LatIdx < NbLat ; LatIdx ++)
         {
           if ( !(Catalog[i].DateIndex in this.Tables))
@@ -318,17 +322,17 @@ function VLM2GribManager()
           {
             CurTable[StartLon+LonIdx]=[];
           }
-          if ( ! (StartLat+LatIdx in CurTable[StartLon+LonIdx] ))
+          if ( ! ((StartLat-LatIdx-1) in CurTable[StartLon+LonIdx] ))
           {
-            CurTable[StartLon+LonIdx][StartLat+LatIdx]=null;
+            CurTable[StartLon+LonIdx][StartLat-LatIdx-1]=null;
           }
           
-          var GribPoint = this.Tables[Catalog[i].DateIndex][StartLon+LonIdx][StartLat+LatIdx]
+          var GribPoint = this.Tables[Catalog[i].DateIndex][StartLon+LonIdx][StartLat-LatIdx-1]
 
           if (typeof GribPoint === "undefined" || ! GribPoint)
           {
             GribPoint = new GribData();
-            this.Tables[Catalog[i].DateIndex][StartLon+LonIdx][StartLat+LatIdx] = GribPoint;
+            this.Tables[Catalog[i].DateIndex][StartLon+LonIdx][StartLat-LatIdx-1] = GribPoint;
           }
           
           GribPoint[Catalog[i].Type] = parseFloat(Lines[DataStartIndex+1+LatIdx*NbLon+LonIdx]);
@@ -383,4 +387,12 @@ function WindTable()
       }
     }
   }
+}
+
+function HandleGribTestClick(e)
+{
+  var Boat = _CurPlayer.CurBoat;
+  var time = new Date(Boat.VLMInfo.LUP*1000)
+  var Mi = GribMgr.WindAtPointInTime(time,Boat.VLMInfo.LAT,Boat.VLMInfo.LON);
+  console.log(Mi);
 }

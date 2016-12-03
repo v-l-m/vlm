@@ -18,6 +18,15 @@ var GM_Pos=null;
 // On ready get started with vlm management
 $(document).ready(
   function(){
+
+    //Debug only this should not stay when releasing
+    //
+    $("#TestGrib").click(HandleGribTestClick)
+    //
+    // End Debug only
+    //
+    ///////////////////////////////////////////////////
+
     // Start converse
     //InitXmpp();
 
