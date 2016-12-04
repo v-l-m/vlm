@@ -1,25 +1,46 @@
 
 
-function Estimator()
+function BoatEstimate()
 {
-    this.MaxVacEstimate = 7*24*3600;      // Compute for 7 Days
+    this.Position;
+    this.Date;
+    this.Mode;
+    this.Value;
+}
 
-    this.Start = function(Boat)
+function Estimator(Boat)
+{
+    if (typeof Boat === 'undefined' || ! Boat)
+    {
+        throw "Boat must exist for tracking...."
+    }
+
+    this.Boat = Boat;
+    this.MaxVacEstimate = 0;      // Compute for 7 Days
+    this.CurEstimate = new BoatEstimate()
+
+    this.Start = function()
     {
         GribMgr.Init();
-        setTimeout(this.Estimate(Boat),2000)
+
+        this.CurEstimate.Position = new VLMPosition(this.Boat.VlmInfo.LON,this.Boat.VlmInfo.LAT)
+            .Date = this.Boat.VlmInfo.LUP
+            .Mode = this.Boat.VlmInfo.PIM
+            .Value = this.Boat.VlmInfo.PIP
+            .PilOrders = new array(this.Boat.VlmInfo.PIL);
+            
+        setTimeout(this.Estimate(),2000)
     }
 
     this.Estimate = function(Boat)
     {
-
-        if ((typeof Boat === "undefined") || ! Boat || (typeof Boat.VlmInfo === "undefined"))
+        var VarMaxTime = new Date (Curtime + this.MaxVacEstimate*1000);
+        
+        if (this.CurEstimateTime >= VarMaxTime)
         {
+            //Estimate complete
             return;
         }
-
-        var CurTime = new Date( parseInt(Boat.VlmInfo.LUP,10));
-        var VarMaxTime = new Date (Curtime + this.MaxVacEstimate*1000);
         var VacInterval = Boat.VlmInfo.VAC;
         var CurPos = new latlon( Boat.VlmInfo.LON, Boat.VlmInfo.LAT)
 
@@ -30,5 +51,7 @@ function Estimator()
             //var WindInfo = 
         }
     }
+
+    this.Start()
 
 }
