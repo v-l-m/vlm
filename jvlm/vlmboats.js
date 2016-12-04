@@ -141,7 +141,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
           Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
           
-          //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
+          console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
           //GribMgr.WindAtPointInTime(new Date(),0,0 );
 
           // force refresh of settings if was not initialized
