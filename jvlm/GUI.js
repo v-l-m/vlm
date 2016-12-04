@@ -1326,9 +1326,9 @@ function SaveBoatAndUserPrefs(e)
     BoatUpdateRequired = true;
   }
   
-  if (!ComparePrefString($("#pref_boatcolor")[0].value,_CurPlayer.CurBoat.VLMInfo.COL))
+  if (!ComparePrefString($("#pref_boatcolor")[0].value,SafeHTMLColor(_CurPlayer.CurBoat.VLMInfo.COL)))
   {
-    NewVals["color"]=$("#pref_boatcolor")[0].value;
+    NewVals["color"]=$("#pref_boatcolor")[0].value.substring(1);
     BoatUpdateRequired = true;
   }
 
