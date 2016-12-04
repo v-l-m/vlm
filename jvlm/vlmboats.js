@@ -151,7 +151,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           }
 
           // update map if racing
-          if (Boat.VLMInfo.RAC != "0") 
+          if (Boat.VLMInfo.RAC != "0")
           {
 
             if (typeof Boat.RaceInfo ==="undefined" || typeof Boat.RaceInfo.idraces === 'undefined') 
