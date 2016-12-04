@@ -22,6 +22,8 @@ $(document).ready(
     //Debug only this should not stay when releasing
     //
     $("#TestGrib").click(HandleGribTestClick)
+    $("#StartEstimator").click(HandleEstimatorStart)
+    
     //
     // End Debug only
     //

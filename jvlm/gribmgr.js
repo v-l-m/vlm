@@ -299,6 +299,11 @@ function VLM2GribManager()
     var DataStartIndex = Catalog.length+1
     for (var i = 0; i< Catalog.length; i++)
     {
+      if (typeof Lines[DataStartIndex] === "undefined")
+      {
+        // Somehow sometimes, the data is incomplete, just get out, until next request.
+        break;
+      }
       var DataSize = Lines[DataStartIndex].split(" ");
       var NbLon = parseInt(DataSize[0],10);
       var NbLat = parseInt(DataSize[1],10);
