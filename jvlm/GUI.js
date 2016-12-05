@@ -22,6 +22,8 @@ $(document).ready(
     //Debug only this should not stay when releasing
     //
     $("#TestGrib").click(HandleGribTestClick)
+    $("#StartEstimator").click(HandleEstimatorStart)
+    
     //
     // End Debug only
     //
@@ -252,13 +254,14 @@ function InitMenusAndButtons()
   )
 
   // Handle clicking on ICS button
+  /* DEAD CODE to be deleted when ICS dialog is complete and released.
   $("#ICSButton").click(
     function()
     {
       var win = window.open("/ics.php?idraces="+_CurPlayer.CurBoat.VLMInfo.RAC)
       win.focus();
     }
-  )
+  )*/
 
   // Handle clicking on ranking button
   $("#Ranking-Panel").on('shown.bs.collapse',
@@ -1326,9 +1329,9 @@ function SaveBoatAndUserPrefs(e)
     BoatUpdateRequired = true;
   }
   
-  if (!ComparePrefString($("#pref_boatcolor")[0].value,_CurPlayer.CurBoat.VLMInfo.COL))
+  if (!ComparePrefString($("#pref_boatcolor")[0].value,SafeHTMLColor(_CurPlayer.CurBoat.VLMInfo.COL)))
   {
-    NewVals["color"]=$("#pref_boatcolor")[0].value;
+    NewVals["color"]=$("#pref_boatcolor")[0].value.substring(1);
     BoatUpdateRequired = true;
   }
 
