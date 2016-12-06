@@ -26,9 +26,39 @@ function PolarManagerClass()
                 )
         }
 
+    this.GetBoatSpeed=function(PolarName, WindSpeed, WindBearing, BoatBearing)
+    {
+        if (typeof this.Polars[PolarName] === "undefined")
+        {
+            return NaN;
+        }
+        if (this.Polars[PolarName]==null)
+        {
+            // Polar not loaded yet, load it
+            $.get("/Polaires/"+ PolarName +".csv",
+                   function(data)
+                   {
+                       var polar = $.csv.toArrays(data,{separator:";"});
+                       
+                       PolarsManager.Polars[PolarName]=polar;
+                   }
+            )
+
+            return NaN;
+        }
+        else
+        {
+            var alpha = BoatBearing - WindBearing;
+            var Speed = GetPolarAngleSpeed(this.Polars[PolarName],alpha, WindSpeed);
+
+            return Speed;
+        }
+
+    }
+
     this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
     {
-        if (typeof this.Polars[PolarName] == "undefined")
+        if (typeof this.Polars[PolarName] === "undefined")
         {
             alert("Unexpected polarname : " + PolarName)
             return null;
@@ -86,6 +116,13 @@ function GetPolarAngleSpeed  (Polar,Alpha, WindSpeed)
     var SpeedCol2;
     var AlphaRow1;
     var AlphaRow2;
+
+    while (Alpha < 0)
+    {
+        Alpha+=180;
+    }
+
+    Alpha %= 180.;
 
     // Loop and index index <= Speed
     for (index in Polar[0])
