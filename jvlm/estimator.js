@@ -100,7 +100,7 @@ function Estimator(Boat)
           // Going fixed bearing, get boat speed, move along loxo
           
           var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-          var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/this.Boat.VLMInfo.VAC, Hdg);
+          var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
           console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString())
           this.CurEstimate.Position = NewPos;
           this.Boat.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
