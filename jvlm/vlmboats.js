@@ -287,9 +287,6 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value, WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
   var UpdatedFeatures = [];
 
-  var ForecastPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).ReachDistLoxo(12 * Boat.VLMInfo.BSP * Boat.VLMInfo.VAC / 3600, Boat.VLMInfo.HDG);
-  var ForecastPosTransformed = new OpenLayers.Geometry.Point(ForecastPos.Lon.Value, ForecastPos.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
-
   // Remove features, before recreate and re-add
   // Can't figure how to move/update the features properly
   for (index in BoatFeatures)
@@ -353,10 +350,23 @@ function DrawBoat(Boat, CenterMapOnBoat)
   
   
   // Forecast Track
-  var TrackPointList = [];
-  TrackPointList.push(P1_PosTransformed);
-  TrackPointList.push(ForecastPosTransformed);
+  
+  if (Boat.EstimateTrack.length !== Boat.EstimatePoints.length)
+  {
+    Boat.EstimatePoints = [];
 
+    for (index in Boat.EstimateTrack)
+    {
+      var Est = Boat.EstimateTrack[index];
+      var P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
+      var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
+
+       Boat.EstimatePoints.push(P1_PosTransformed);
+
+    }
+  }
+  var TrackPointList = Boat.EstimatePoints;
+  
   var TrackForecast= new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(TrackPointList),
     {
@@ -613,7 +623,7 @@ var VectorStyles = new OpenLayers.Style(
             strokeColor: "black",
             strokeOpacity: 0.75,
             strokeWidth: 1,
-            strokeDashstyle: "dot"
+            //strokeDashstyle: "dot"
 
           }
         }

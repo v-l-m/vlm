@@ -50,13 +50,15 @@ function WindData(InitStruct)
 {
   this.Speed = NaN;
   this.Heading = NaN;
-  this.IsValid = false;
+  this.IsValid = function()
+  {
+    return (!isNaN(this.Speed)) && (!isNaN(this.Heading));
+  };
 
   if (typeof InitStruct !== "undefined")
   {
     this.Speed = InitStruct.Speed;
     this.Heading = InitStruct.Heading;
-    this.IsValid = (!isNaN(this.Speed)) && (!isNaN(this.Heading));
   }
 
 }
@@ -68,6 +70,7 @@ function VLM2GribManager()
   this.Inited = false;
   this.Initing = false;
   this.MinWindStamp = 0;
+  this.MaxWindStamp = 0;
   this.LoadQueue = [];
   this.GribStep = 0.5;    // Grib Grid resolution
 
@@ -87,6 +90,8 @@ function VLM2GribManager()
     this.Inited = true;
     this.Initing = false;
     this.MinWindStamp = new Date(this.TableTimeStamps[0]*1000);
+    this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps-1]*1000);
+    
   }
 
   this.WindAtPointInTime= function(Time, Lat, Lon)

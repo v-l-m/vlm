@@ -8,16 +8,18 @@ function Boat(vlmboat)
   this.Engaged=false;
   this.BoatName='';
   this.BoatPseudo='';
-  this.VLMInfo={};  // LastBoatInfoResult
-  this.RaceInfo={}; // Race Info for the boat
-  this.Exclusions=[]; // Exclusions Zones for this boat
-  this.Track=[]; // Last 24H of boat Track
-  this.Rankings={};   // Ranking table
-  this.OppTrack=[]; // Opponents tracks table
-  this.OppList=[];  // Opponents list to limit how many boats are shown
-  this.Reals=[]; // Reals Boat array
-  this.VLMPrefs=[]; // Preferences Array;
+  this.VLMInfo = {};  // LastBoatInfoResult
+  this.RaceInfo = {}; // Race Info for the boat
+  this.Exclusions = []; // Exclusions Zones for this boat
+  this.Track = []; // Last 24H of boat Track
+  this.Rankings = {};   // Ranking table
+  this.OppTrack = []; // Opponents tracks table
+  this.OppList = [];  // Opponents list to limit how many boats are shown
+  this.Reals = []; // Reals Boat array
+  this.VLMPrefs = []; // Preferences Array;
   this.NextServerRequestDate;  // Next VAC Start date
+  this.EstimateTrack = []; // List of positions and date of track EstimateTrack
+  this.EstimatePoints = []; // CachedTransformed trackpoints list
 
   if (typeof vlmboat != 'undefined')
   {
