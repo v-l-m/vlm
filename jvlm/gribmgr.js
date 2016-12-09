@@ -50,13 +50,15 @@ function WindData(InitStruct)
 {
   this.Speed = NaN;
   this.Heading = NaN;
-  this.IsValid = false;
+  this.IsValid = function()
+  {
+    return (!isNaN(this.Speed)) && (!isNaN(this.Heading));
+  };
 
   if (typeof InitStruct !== "undefined")
   {
     this.Speed = InitStruct.Speed;
     this.Heading = InitStruct.Heading;
-    this.IsValid = (!isNaN(this.Speed)) && (!isNaN(this.Heading));
   }
 
 }
@@ -68,6 +70,7 @@ function VLM2GribManager()
   this.Inited = false;
   this.Initing = false;
   this.MinWindStamp = 0;
+  this.MaxWindStamp = 0;
   this.LoadQueue = [];
   this.GribStep = 0.5;    // Grib Grid resolution
 
@@ -87,6 +90,8 @@ function VLM2GribManager()
     this.Inited = true;
     this.Initing = false;
     this.MinWindStamp = new Date(this.TableTimeStamps[0]*1000);
+    this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps-1]*1000);
+    
   }
 
   this.WindAtPointInTime= function(Time, Lat, Lon)
@@ -208,36 +213,36 @@ function VLM2GribManager()
 
     //Getting there means we need to load from server
     // Get samrtgrib list for the current request position
-    var LonStep = Math.floor(Lon/10)*10;
-    var LatStep = Math.floor(Lat/10)*10;
-    var LatStep2, LatStep2;
+    var RequestSize = 5;    // Assume 5° zone even though VLM request is for 15°. Most request will only return 1 zone.
+    var SouthStep = Math.floor(Lat/RequestSize)*RequestSize;
+    var WestStep = Math.floor(Lon/RequestSize)*RequestSize;
+    var NorthStep, EastStep;
     
-    if (LonStep <= 0)
+    if (Lat < SouthStep)
     {
-
-      LonStep2 = LonStep
-      LonStep = LonStep + 10;
+      NorthStep = SouthStep
+      SouthStep = NorthStep - 10
     }
     else
     {
-      LonStep2 = LonStep - 10;
+      NorthStep = SouthStep + 10
     }
     
-    if (LatStep <= 0)
+    if (Lat < WestStep)
     {
-      LatStep2 = LatStep
-      LatStep +=10;
+      EastStep = WestStep
+      WestStep = EastStep - 10;
     }
     else
     {
-      LatStep2 = LatStep-10;
+      EastStep = WestStep + 10;
     }
     
-    var LoadKey = TableIndex + "/" + LonStep + "/" + LonStep2 + "/" + LatStep + "/" + LatStep2 
+    var LoadKey = TableIndex + "/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
     if (!(LoadKey in this.LoadQueue))
     {
       this.LoadQueue[LoadKey]=0;
-      $.get("/ws/windinfo/smartgribs.php?north="+LatStep+"&south="+(LatStep2)+"&west="+(LonStep) +"&east="+(LonStep2),
+      $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
 
@@ -312,7 +317,8 @@ function VLM2GribManager()
     
       for (var LonIdx = 0 ; LonIdx < NbLon ; LonIdx ++)
       {
-        var StartLat = NbLat+90/this.GribStep+parseInt(ZoneOffsets[0],10)/this.GribStep;
+        // Offset by NbLat in grib since the zone is reference by bottom lat, but counts down from top lat
+        var StartLat = NbLat +90/this.GribStep+parseInt(ZoneOffsets[0],10)/this.GribStep;
     
         for ( var LatIdx = 0 ; LatIdx < NbLat ; LatIdx ++)
         {
