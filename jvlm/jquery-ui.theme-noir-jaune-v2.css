@@ -488,6 +488,20 @@ a.ui-button:active,
     left:50%; 
     top:50%;
     border-radius:5px;
+    z-index:998;
+}
+#mouseInfo{
+  cursor:move;
+    border:1px solid #CCC;
+    background-color:#000000;
+    width:200px;
+    height:350px; 
+    display:none;
+    position:absolute;
+    left:50%; 
+    top:50%;
+    border-radius:5px;
+    z-index:999;
 }
 .dropdown-menu {
   background-color:#15214b;
