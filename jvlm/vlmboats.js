@@ -384,19 +384,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
   //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
   var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
   var scale = 50 * map.resolution;
-  for (index in PolarPointList) 
-  {
-    var Alpha = 5 * Math.floor(index);
-    var Speed = parseFloat(PolarPointList[index]);
 
-    var PixPos = new OpenLayers.Geometry.Point(
-      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
-      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
-
-    //var P = map.getLonLatFromPixel(PixPos);
-    //var PPoint = new OpenLayers.Geometry.Point(PixPos);
-    Polar.push(PixPos);
-  }
+  BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, true);
+  BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
   
   var BoatPolar = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(Polar),
@@ -464,6 +454,29 @@ function DrawBoat(Boat, CenterMapOnBoat)
     map.setCenter(l);
     
   }
+}
+
+function BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, FirstSide)
+{
+  for (index in PolarPointList) 
+  {
+    var Alpha = 5 * Math.floor(index);
+    var Speed = parseFloat(PolarPointList[index]);
+
+    if (!FirstSide)
+    {
+      Alpha = 360 - Alpha;
+    }
+
+    var PixPos = new OpenLayers.Geometry.Point(
+      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
+      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
+
+    //var P = map.getLonLatFromPixel(PixPos);
+    //var PPoint = new OpenLayers.Geometry.Point(PixPos);
+    Polar.push(PixPos);
+  }
+  
 }
 
 function GetVLMPositionFromClick(pixel)
