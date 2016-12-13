@@ -27,7 +27,7 @@ function Estimator(Boat)
 {
   if (typeof Boat === 'undefined' || ! Boat)
   {
-      throw "Boat must exist for tracking...."
+    throw "Boat must exist for tracking...."
   }
 
   this.Boat = Boat;
@@ -36,58 +36,58 @@ function Estimator(Boat)
 
   this.Start = function()
   {
-      GribMgr.Init();
+    GribMgr.Init();
 
-      if (typeof this.Boat.VLMInfo === "undefined")
-      {
-          return;
-      }
+    if (typeof this.Boat.VLMInfo === "undefined")
+    {
+      return;
+    }
 
-      this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON,this.Boat.VLMInfo.LAT)
-      this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
-      this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
+    this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON,this.Boat.VLMInfo.LAT)
+    this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
+    this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
 
-      if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
-      {
-          this.CurEstimate.Value = parseFloat(this.Boat.VLMInfo.PIP);
-      }
-      this.CurEstimate.PilOrders = this.Boat.VLMInfo.PIL;
-      this.Boat.EstimateTrack=[];
-      this.Boat.EstimatePoints=[];
+    if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
+    {
+      this.CurEstimate.Value = parseFloat(this.Boat.VLMInfo.PIP);
+    }
+    this.CurEstimate.PilOrders = this.Boat.VLMInfo.PIL;
+    this.Boat.EstimateTrack=[];
+    this.Boat.EstimatePoints=[];
 
-      // FixMe : replace with actual grib horizon from gribmgr.
-      this.MaxVacEstimate = new Date(VLM2GribManager.MaxWindStamp); 
-      setTimeout(this.Estimate.bind(this),2000)
+    // FixMe : replace with actual grib horizon from gribmgr.
+    this.MaxVacEstimate = new Date(VLM2GribManager.MaxWindStamp); 
+    setTimeout(this.Estimate.bind(this),2000)
   }
 
   this.Estimate = function(Boat)
   {
       
-      if (this.CurEstimate.Date >= this.MaxVacEstimate)
-      {
-          //Estimate complete, DrawBoat track
-          DrawBoat(this.Boat);
-          return;
-      }
+    if (this.CurEstimate.Date >= this.MaxVacEstimate)
+    {
+      //Estimate complete, DrawBoat track
+      DrawBoat(this.Boat);
+      return;
+    }
 
-      var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
-      if (!MI)
-      {
-          setTimeout(this.Estimate.bind(this),1000);
-          return;
-      }
-      
-      this.CurEstimate.Meteo = MI;
+    var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
+    if (!MI)
+    {
+      setTimeout(this.Estimate.bind(this),1000);
+      return;
+    }
+    
+    this.CurEstimate.Meteo = MI;
 
-      // Ok, got meteo, move the boat, and ask for new METEO
+    // Ok, got meteo, move the boat, and ask for new METEO
 
-      // Check if an update is required from AutoPilot;
-      for (index in this.CurEstimate.PilOrders)
-      {
-          var i = 0;
-          //if (this.CurEstimate.PilOrders[Index])
-          throw "pilot not supported yet...."
-      }
+    // Check if an update is required from AutoPilot;
+    for (index in this.CurEstimate.PilOrders)
+    {
+      var i = 0;
+      //if (this.CurEstimate.PilOrders[Index])
+      throw "pilot not supported yet...."
+    }
 
       var Hdg = this.CurEstimate.Value;
       switch (parseInt(this.CurEstimate.Mode,10))
@@ -107,17 +107,25 @@ function Estimator(Boat)
 
           break;
 
-/*const PM_ANGLE = 2;
-const PM_ORTHO = 3;
-const PM_VMG = 4;
+        case PM_ORTHO:
+/*const PM_VMG = 4;
 const PM_VBVMG = 5;*/
-          default:
-              throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
+          var Dest = this.GetNextWPCoords(this.CurEstimate)
+
+
+        default:
+          throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
       }
 
       // Start next point computation....
       this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
       setTimeout(this.Estimate.bind(this),0);
+  }
+
+  this.GetNextWPCoords = function (Estimate)
+  {
+    var CurWP = Estimate.Boat.VLMInfo.CWP;
+    
   }
 
   this.Start()
