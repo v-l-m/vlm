@@ -56,56 +56,53 @@ function PolarManagerClass()
 
     }
 
-    this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
+  this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
+  {
+    if (typeof this.Polars[PolarName] === "undefined")
     {
-        if (typeof this.Polars[PolarName] === "undefined")
-        {
-            alert("Unexpected polarname : " + PolarName)
-            return null;
-        }
-        if (this.Polars[PolarName]==null)
-        {
-            // Polar not loaded yet, load it
-            $.get("/Polaires/"+ PolarName +".csv",
-                   function(data)
-                   {
-                       var polar = $.csv.toArrays(data,{separator:";"});
-                       
-                       PolarsManager.Polars[PolarName]=polar;
-
-                       callback(boat);
-                       
-                   }
-            )
-        }
-        else
-        {
-            var RetPolar = [];
-
-            var alpha;
-            var MaxSpeed = 0;
-            // Loop to get speedvalue per angle
-
-            for (alpha = 0; alpha <= 360 ; alpha+=5)
-            {
-                var Speed = GetPolarAngleSpeed(this.Polars[PolarName],alpha, WindSpeed);
-
-                if (MaxSpeed < Speed)
-                {
-                    MaxSpeed=Speed;
-                }
-                RetPolar.push(Speed);
-            }
-
-            // Scale Polar to 1
-            for (index in RetPolar)
-            {
-                RetPolar[index]/=MaxSpeed;
-            }
-
-            return RetPolar;
-        }
+        alert("Unexpected polarname : " + PolarName)
+        return null;
     }
+    if (this.Polars[PolarName]==null)
+    {
+      // Polar not loaded yet, load it
+      $.get("/Polaires/"+ PolarName +".csv",
+              function(data)
+              {
+                var polar = $.csv.toArrays(data,{separator:";"});
+                PolarsManager.Polars[PolarName]=polar;
+                callback(boat);
+              }
+      )
+    }
+    else
+    {
+      var RetPolar = [];
+
+      var alpha;
+      var MaxSpeed = 0;
+      // Loop to get speedvalue per angle
+
+      for (alpha = 0; alpha <= 180 ; alpha+=5)
+      {
+        var Speed = GetPolarAngleSpeed(this.Polars[PolarName],alpha, WindSpeed);
+
+        if (MaxSpeed < Speed)
+        {
+          MaxSpeed=Speed;
+        }
+        RetPolar.push (Speed);
+      }
+
+      // Scale Polar to 1
+      for (index in RetPolar)
+      {
+          RetPolar[index]/=MaxSpeed;
+      }
+
+      return RetPolar;
+    }
+  }
 
 }
 

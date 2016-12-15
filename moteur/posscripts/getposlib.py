@@ -4,6 +4,7 @@
 # auteur : paparazzia@gmail.com
 
 import urllib
+import urllib2
 import zipfile, os
 import time
 import xml.etree.ElementTree as ElementTree
@@ -49,6 +50,11 @@ def geturl(url, basefilename, suffix = 'static'):
     urllib.urlretrieve(url, tmpxml)
     return tmpxml
 
+def gethwxurl(url):
+    """Récupère une url HWX encodage"""
+    f= urllib2.urlopen(url)
+    data = f.read()
+    return data.decode('ISO-8859-1')
 
 def sqlusers(boats, engaged):
     for rid in boats.keys() :

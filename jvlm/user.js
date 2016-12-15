@@ -282,7 +282,7 @@ function GetFlagsList()
             for (index in result.flags)
             {
               var title = result.flags[index];
-              DropDown.append("<li class='FlagLine DDLine' flag='"+ title +"'>"+GetCountryDropDownSelectorHTML(title)+"</li>")
+              DropDown.append("<li class='FlagLine DDLine' flag='"+ title +"'>"+GetCountryDropDownSelectorHTML(title,true)+"</li>")
             }
           }
 
@@ -293,8 +293,17 @@ function GetFlagsList()
         );
 }
 
-function GetCountryDropDownSelectorHTML(title)
+function GetCountryDropDownSelectorHTML(title,loadflag)
 {
-  return  " <img class='flag' src='/cache/flags/"+encodeURIComponent( title)+".png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"+
-          " <span  style='margin-left:10px;' flag='"+title+"'> - "+ title +"</span>";
+  var RetString1 = " <img class='flag' src='/cache/flags/"+encodeURIComponent( title)+".png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
+  var RetString2 = " <span  style='margin-left:10px;' flag='"+title+"'> - "+ title +"</span>";
+
+  if (loadflag)
+  {
+    return RetString1+RetString2
+  }
+  else
+  {
+    return RetString2
+  }
 }

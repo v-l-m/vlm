@@ -35,7 +35,7 @@ reportfile = conf[2].split(":")[1]
 raceBaseUrl = "http://gitana-team.geovoile.com/vendeeglobe/2016/tracker/resources/"
 #print basefilename
 
-gp.unzipurl(raceBaseUrl+"live/"+trackfile,basefilename)
+livedata=gp.gethwxurl(raceBaseUrl+"live/"+trackfile)
 
 with open(os.path.join(vlmtmp,basefilename+".static.tmp.xml")) as data_file:    
     livedata = json.load(data_file)
