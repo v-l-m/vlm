@@ -49,7 +49,7 @@ with open(os.path.join(vlmtmp,trackfile+".static.tmp.xml")) as data_file:
 reps = livedata['reports']
 hist = reps['history'][0]
 Tracks = hist['lines']
-
+track = Tracks[0]
 #print Tracks
     
 #for track in Tracks:
