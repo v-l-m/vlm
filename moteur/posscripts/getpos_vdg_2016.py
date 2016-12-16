@@ -35,7 +35,7 @@ reportfile = conf[2].split(":")[1]
 raceBaseUrl = "http://gitana-team.geovoile.com/vendeeglobe/2016/tracker/resources/"
 #print basefilename
 
-gp.geturl("http://testing.v-l-m.org/jvlm/pos",trackfile)
+gp.geturl("http://testing.v-l-m.org/jvlm/pos0",trackfile)
 with open(os.path.join(vlmtmp,trackfile+".static.tmp.xml")) as data_file:    
   livedata = json.load(data_file)
   print(data_file)

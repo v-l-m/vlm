@@ -15,7 +15,7 @@ def baseboat(rid):
     vlmboatidfirst = 3000
     return {'vlmid' : -vlmboatidfirst-int(rid)}
     
-vlmidrace = 1681
+vlmidrace = 1682
 vlmusernameprefix = "JV - "
 basefilename = "JV%d" % vlmidrace
 
@@ -35,9 +35,9 @@ reportfile = conf[2].split(":")[1]
 raceBaseUrl = "http://trimaran-idec.geovoile.com/julesverne/2016/tracker/resources/"
 print raceBaseUrl
 
-gp.unzipurl(raceBaseUrl+"tracks/"+trackfile,basefilename)
+gp.geturl("http://testing.v-l-m.org/jvlm/pos1",trackfile)
 
-with open(os.path.join(vlmtmp,basefilename+".static.tmp.xml")) as data_file:    
+with open(os.path.join(vlmtmp,trackfile+".static.tmp.xml")) as data_file:    
     livedata = json.load(data_file)
 
 #gp.unzipurl(raceBaseUrl+"reports/"+reportfile,basefilename+"_rep")
@@ -45,37 +45,30 @@ with open(os.path.join(vlmtmp,basefilename+".static.tmp.xml")) as data_file:
 #with open(os.path.join(vlmtmp,basefilename+"_rep.static.tmp.xml")) as data_file:    
 #    reportdata = json.load(data_file)
 
-#print livedata['tracks']
-reps = livedata['tracks'][0]
-#hist = reps['history'][0]
-Tracks = reps['loc']
+#print livedata['reports']
+reps = livedata['reports']
+hist = reps['history'][0]
+Tracks = hist['lines']
 
-print Tracks
-
-PrevTime = 0
-PrevLat = 0
-PrevLon = 0
+#print Tracks
+    
 for track in Tracks:
   #print track
+  if track[0] != 0:
+    Time = -1
+    lat = -1
+    lon = -1
     realid = -3902
-    realname = "VDG - 3902" 
-    speed = 0
-    heading  = 0
-    #tr=track[11][0]
+    realname = "JV - %d" % int(track[0])
+    speed = track[8]
+    heading  = track[7]
+    tr=track[17][0]
     #print tr
-    Time = track[0]+PrevTime
-    lon = (track[2]/100000.)+PrevLon
-    lat = (track[1]/100000.)+PrevLat
-
+    Time = tr[0]
+    lon = tr[2]
+    lat = tr[1]
     
     print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (vlmidrace, Time, realid, realname,realname, lat, lon, speed, heading))
     print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (20161106, Time, -4081, realname,realname, lat, lon, speed, heading))
-    PrevTime = Time
-    PrevLat = lat
-    PrevLon = lon
-  # epoch = pos['t'] * 60
-  # lat = float(pos['locs'][0]['A'])
-  # lon = float(pos['locs'][0]['B'])
-  # heading = float(pos['locs'][0]['D'])
-  # speed =  float(pos['locs'][0]['I'])
-  # print("%d|1|%d|%d|%s|SpinDrift|%f|%f|%f|%f\n" % (vlmidrace, epoch, realid, realname, lat, lon, speed, heading))
+    
+
