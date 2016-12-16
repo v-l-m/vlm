@@ -52,9 +52,9 @@ Tracks = hist['lines']
 
 #print Tracks
     
-for track in Tracks:
+#for track in Tracks:
   #print track
-  if track[0] != 0:
+if track[0] != 0:
     Time = -1
     lat = -1
     lon = -1
@@ -67,7 +67,7 @@ for track in Tracks:
     Time = tr[0]
     lon = tr[2]
     lat = tr[1]
-    
+
     print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (vlmidrace, Time, realid, realname,realname, lat, lon, speed, heading))
     print("%d|1|%d|%d|%s|%s|%f|%f|%f|%f\n" % (20161106, Time, -4081, realname,realname, lat, lon, speed, heading))
     
