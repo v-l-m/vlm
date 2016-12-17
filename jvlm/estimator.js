@@ -7,6 +7,8 @@ function BoatEstimate(Est)
   this.Mode;
   this.Value;
   this.Meteo;
+  this.CurWP = new VLMPosition(0,0);
+  this.RaceWP = 1;
 
   if (typeof Est!== "undefined" && Est)
   {
@@ -19,6 +21,8 @@ function BoatEstimate(Est)
                           Speed : Est.Meteo.Speed,
                           Heading : Est.Meteo.Heading
                         });
+    this.CurWP = Est.CurWP;
+    this.RaceWP = Est.RaceWP;
   }
 
 }
@@ -46,6 +50,7 @@ function Estimator(Boat)
     this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON,this.Boat.VLMInfo.LAT)
     this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
+    this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT)
 
     if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
     {
@@ -90,7 +95,7 @@ function Estimator(Boat)
     }
 
       var Hdg = this.CurEstimate.Value;
-      switch (parseInt(this.CurEstimate.Mode,10))
+      switch (this.CurEstimate.Mode)
       {
         case PM_ANGLE:  // This goes just before Heading, since we only update the Hdg, rest is the same
           // Going fixed angle, get bearing, compute speed, move
@@ -102,20 +107,45 @@ function Estimator(Boat)
           var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
           var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
           console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString())
-          this.CurEstimate.Position = NewPos;
-          this.Boat.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
-
+          
           break;
 
         case PM_ORTHO:
-/*const PM_VMG = 4;
-const PM_VBVMG = 5;*/
+        case PM_VMG:
+        case PM_VBVMG:
           var Dest = this.GetNextWPCoords(this.CurEstimate)
+          
+          if (this.CurEstimate.Mode == PM_ORTHO)
+          {
+            Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
+            var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+            var NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
+          
+          }
+          else
+          {
+            if (this.CurEstimate.Mode == PM_VMG)
+            {
+              Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
+            }
+            else
+            {
+              Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
+            }
+            var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+            var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
+          
+          }
+          break;
 
 
         default:
           throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
       }
+
+      console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString())
+      this.CurEstimate.Position = NewPos;
+      this.Boat.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
       // Start next point computation....
       this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
@@ -124,7 +154,17 @@ const PM_VBVMG = 5;*/
 
   this.GetNextWPCoords = function (Estimate)
   {
-    var CurWP = Estimate.Boat.VLMInfo.CWP;
+    if (Estimate.CurWP.Lat.value || Estimate.CurWP.Lon.Value)
+    {
+      return Estimate.CurWP;
+    }
+    else
+    {
+      throw "unsupported estimating to AUTOWP"
+      // Get CurRaceWP
+      // Compute closest point (using bad euclidian method)
+      // Return computed point
+    }
     
   }
 

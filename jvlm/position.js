@@ -161,6 +161,11 @@ function VLMPosition(lon, lat,  format)
         var Lat1  = Deg2Rad(this.Lat.Value);
         var Lat2  = Deg2Rad(P.Lat.Value);
 
+        if (typeof Precision == "undefined" || typeof Precision != "number")
+        {
+            Precision = 17
+        }
+        
         /*if (Lon1 > 0)
         {
             Lon2 += 2 * Math.PI
@@ -201,6 +206,11 @@ function VLMPosition(lon, lat,  format)
         var lon2  = -Deg2Rad(P.Lon.Value);
         var lat1  = Deg2Rad(this.Lat.Value);
         var lat2  = Deg2Rad(P.Lat.Value);
+
+        if (typeof Precision == "undefined" || typeof Precision != "number")
+        {
+            Precision = 17
+        }
 
         //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
         //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
