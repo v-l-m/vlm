@@ -101,7 +101,7 @@ function VLM2GribManager()
       return false;
     }
 
-    const GribGrain = 3*3600 ;  // 1 grib every 3 hours.
+    const GribGrain = 3.*3600. ;  // 1 grib every 3 hours.
     var TableIndex = Math.floor((Time/1000. - this.MinWindStamp/1000)/(GribGrain))
 
     if (TableIndex < 0 )
@@ -403,7 +403,11 @@ function WindTable()
 function HandleGribTestClick(e)
 {
   var Boat = _CurPlayer.CurBoat;
-  var time = new Date(Boat.VLMInfo.LUP*1000)
-  var Mi = GribMgr.WindAtPointInTime(time,Boat.VLMInfo.LAT,Boat.VLMInfo.LON);
-  console.log(Mi);
+
+  for (var index = -1; index<=3 ; index++)
+  {
+    var time = new Date(Boat.VLMInfo.LUP*1000+index * Boat.VLMInfo.VAC*1000)
+    var Mi = GribMgr.WindAtPointInTime(time,Boat.VLMInfo.LAT,Boat.VLMInfo.LON);
+    console.log(time + " " +Mi.Speed + "@"+ Mi.Heading);
+  }
 }
