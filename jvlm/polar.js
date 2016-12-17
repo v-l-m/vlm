@@ -106,17 +106,17 @@ function PolarManagerClass()
 
   this.GetVMGCourse = function(Polar,WindSpeed,WindBearing,StartPos, DestPos)
   {
-    var OrthoBearing = StartPos.GetLoxoCourse(DestPos);
+    var OrthoBearing = StartPos.GetOrthoCourse(DestPos);
     var BestAngle = 0;
     var BestVMG = -1e10;
 
-    for (var angle = 0; angle <=180; angle += 0.1)
+    for (var angle = -90.; angle <=90; angle += 0.1)
     {
       for (var dir =-1 ; dir <= 1 ; dir +=2)
 
       {
-        var CurSpeed = this.GetBoatSpeed (Polar,WindSpeed,WindBearing,OrthoBearing+angle*dir)
-        var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle))
+        var CurSpeed = this.GetBoatSpeed (Polar,WindSpeed,WindBearing,OrthoBearing + angle*dir)
+        var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle * dir))
 
         if (CurVMG > BestVMG)
         {
@@ -168,7 +168,7 @@ function PolarManagerClass()
       alpha = i * Math.PI / 180
       TanAlpha = Math.tan(alpha)
       D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha)
-      SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho -i * ISigne)
+      SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne)
       
       if (SpeedT1 > 0) 
       {
