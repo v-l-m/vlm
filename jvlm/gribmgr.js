@@ -404,7 +404,7 @@ function HandleGribTestClick(e)
 {
   var Boat = _CurPlayer.CurBoat;
 
-  for (var index = -1; index<=3 ; index++)
+  for (var index = 0; index<=0 ; index++)
   {
     var time = new Date(Boat.VLMInfo.LUP*1000+index * Boat.VLMInfo.VAC*1000)
     var Mi = GribMgr.WindAtPointInTime(time,Boat.VLMInfo.LAT,Boat.VLMInfo.LON);
