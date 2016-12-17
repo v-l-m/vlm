@@ -60,7 +60,6 @@ function Estimator(Boat)
     this.Boat.EstimateTrack=[];
     this.Boat.EstimatePoints=[];
 
-    // FixMe : replace with actual grib horizon from gribmgr.
     this.MaxVacEstimate = new Date(VLM2GribManager.MaxWindStamp); 
     setTimeout(this.Estimate.bind(this),2000)
   }
