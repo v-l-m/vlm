@@ -94,6 +94,7 @@ function Estimator(Boat)
     }
 
       var Hdg = this.CurEstimate.Value;
+      var Speed = 0;
       switch (this.CurEstimate.Mode)
       {
         case PM_ANGLE:  // This goes just before Heading, since we only update the Hdg, rest is the same
@@ -116,7 +117,7 @@ function Estimator(Boat)
           if (this.CurEstimate.Mode == PM_ORTHO)
           {
             Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
-            var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+            Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
             var NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
           
           }
@@ -130,7 +131,7 @@ function Estimator(Boat)
             {
               Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
             }
-            var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+            Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
             var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
           
           }
@@ -141,7 +142,7 @@ function Estimator(Boat)
           throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
       }
 
-      console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + MI.Speed + "@" + MI.Heading )
+      console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
       this.CurEstimate.Position = NewPos;
       this.Boat.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
