@@ -106,7 +106,6 @@ function Estimator(Boat)
           
           var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
           var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
-          console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString())
           
           break;
 
@@ -143,7 +142,7 @@ function Estimator(Boat)
           throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
       }
 
-      console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString())
+      console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + MI.Speed + "@" + MI.Heading )
       this.CurEstimate.Position = NewPos;
       this.Boat.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
