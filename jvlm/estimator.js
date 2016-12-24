@@ -60,7 +60,7 @@ function Estimator(Boat)
     this.Boat.EstimateTrack=[];
     this.Boat.EstimatePoints=[];
 
-    this.MaxVacEstimate = new Date(VLM2GribManager.MaxWindStamp); 
+    this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp); 
     setTimeout(this.Estimate.bind(this),2000)
   }
 
