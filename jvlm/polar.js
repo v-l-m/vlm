@@ -104,21 +104,27 @@ function PolarManagerClass()
     }
   }
 
+  var DebugVMG = 0;
   this.GetVMGCourse = function(Polar,WindSpeed,WindBearing,StartPos, DestPos)
   {
     var OrthoBearing = StartPos.GetOrthoCourse(DestPos);
     var BestAngle = 0;
     var BestVMG = -1e10;
 
-    for (var angle = -90.; angle <=90; angle += 0.1)
+    for (var angle = 0.; angle <=90; angle += 0.1)
     {
       for (var dir =-1 ; dir <= 1 ; dir +=2)
 
       {
         var CurSpeed = this.GetBoatSpeed (Polar,WindSpeed,WindBearing,OrthoBearing + angle*dir)
-        var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle * dir))
+        var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle))
 
-        if (CurVMG > BestVMG)
+        if (DebugVMG )
+        {
+          console.log ("VMG "+ RoundPow((OrthoBearing + angle*dir+360.)%360.,3) + " " + RoundPow(CurSpeed,3) + " " + RoundPow(CurVMG,3) + " " + RoundPow(BestVMG,3) + " " + (CurVMG >= BestVMG?"BEST":"") )
+        }
+
+        if (CurVMG >= BestVMG)
         {
           BestVMG = CurVMG;
           BestAngle = OrthoBearing+angle*dir;
@@ -126,6 +132,7 @@ function PolarManagerClass()
       }   
     }
 
+    DebugVMG = 0;
     return BestAngle;
   }
 
