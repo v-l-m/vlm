@@ -19,7 +19,7 @@ function GribData(InitStruct)
 
   this.Strength = function()
   {
-    return Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD) * 3.6 / 1.852
+    return Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD) * 1.9438445 //* 3.6 / 1.852
   }
 
   this.Direction = function()
@@ -90,7 +90,7 @@ function VLM2GribManager()
     this.Inited = true;
     this.Initing = false;
     this.MinWindStamp = new Date(this.TableTimeStamps[0]*1000);
-    this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps-1]*1000);
+    this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps.length-1]*1000);
     
   }
 
@@ -408,6 +408,14 @@ function HandleGribTestClick(e)
   {
     var time = new Date(Boat.VLMInfo.LUP*1000+index * Boat.VLMInfo.VAC*1000)
     var Mi = GribMgr.WindAtPointInTime(time,Boat.VLMInfo.LAT,Boat.VLMInfo.LON);
-    console.log(time + " " +Mi.Speed + "@"+ Mi.Heading);
+
+    if (Mi)
+    {
+      console.log(time + " " +Mi.Speed + "@"+ Mi.Heading);
+    }
+    else
+    {
+      console.log("no meteo yet at time : " + time)
+    }
   }
 }
