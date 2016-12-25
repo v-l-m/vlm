@@ -73,6 +73,7 @@ function VLM2GribManager()
   this.MaxWindStamp = 0;
   this.LoadQueue = [];
   this.GribStep = 0.5;    // Grib Grid resolution
+  this.LastGribDate = new Date (0);
 
   this.Init= function()
   {
@@ -242,7 +243,7 @@ function VLM2GribManager()
     if (!(LoadKey in this.LoadQueue))
     {
       this.LoadQueue[LoadKey]=0;
-      $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep),
+      $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
 
@@ -254,6 +255,17 @@ function VLM2GribManager()
   {
     if (e.success)
     {
+
+      // Handle grib change
+      if (this.LastGribDate != parseInt(e.GribCacheIndex,10))
+      {
+        // Grib changed, record, and clear Tables, force reinit
+        this.LastGribDate = e.GribCacheIndex;
+        this.Tables = [];
+        this.Inited=false;
+        this.Init();
+      }
+
       for (index in e.gribs_url)
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
@@ -261,6 +273,7 @@ function VLM2GribManager()
         this.LoadQueue[LoadKey]++;
       }
 
+      
     }
     else
     {
