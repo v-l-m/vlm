@@ -7,54 +7,54 @@ var PolarsManager = new PolarManagerClass();
 
 function PolarManagerClass()
 {
-    this.Polars =[];
+  this.Polars =[];
 
-    this.Init = function()
-        {
-            this.Polars=new Array();
-            // Bg load the list of boats with a polar in VLM
-            $.get("/ws/polarlist.php",
-                    function (Data)
-                    {
-                        //Parse WS data, build polarlist and URL
-                        // Build list of boat for lazy loading
-                        for (index in Data.list)
-                        {
-                            PolarsManager.Polars["boat_"+Data.list[index]]=null;
-                        }
-                    }
-                )
-        }
+  this.Init = function()
+  {
+    this.Polars=new Array();
+    // Bg load the list of boats with a polar in VLM
+    $.get("/ws/polarlist.php",
+            function (Data)
+            {
+              //Parse WS data, build polarlist and URL
+              // Build list of boat for lazy loading
+              for (index in Data.list)
+              {
+                PolarsManager.Polars["boat_"+Data.list[index]]=null;
+              }
+            }
+        )
+  }
 
-    this.GetBoatSpeed=function(PolarName, WindSpeed, WindBearing, BoatBearing)
+  this.GetBoatSpeed=function(PolarName, WindSpeed, WindBearing, BoatBearing)
+  {
+    if (typeof this.Polars[PolarName] === "undefined")
     {
-        if (typeof this.Polars[PolarName] === "undefined")
-        {
-            return NaN;
-        }
-        if (this.Polars[PolarName]==null)
-        {
-            // Polar not loaded yet, load it
-            $.get("/Polaires/"+ PolarName +".csv",
-                   function(data)
-                   {
-                       var polar = $.csv.toArrays(data,{separator:";"});
-                       
-                       PolarsManager.Polars[PolarName]=polar;
-                   }
-            )
-
-            return NaN;
-        }
-        else
-        {
-            var alpha = BoatBearing - WindBearing;
-            var Speed = GetPolarAngleSpeed(this.Polars[PolarName],alpha, WindSpeed);
-
-            return Speed;
-        }
-
+        return NaN;
     }
+    if (this.Polars[PolarName]==null)
+    {
+      // Polar not loaded yet, load it
+      $.get("/Polaires/"+ PolarName +".csv",
+              function(data)
+              {
+                var polar = $.csv.toArrays(data,{separator:";"});
+                
+                PolarsManager.Polars[PolarName]=polar;
+              }
+      )
+
+      return NaN;
+    }
+    else
+    {
+      var alpha = WindAngle (BoatBearing , WindBearing)
+      var Speed = GetPolarAngleSpeed(this.Polars[PolarName],alpha, WindSpeed);
+
+      return Speed;
+    }
+
+  }
 
   this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
   {
@@ -111,10 +111,9 @@ function PolarManagerClass()
     var BestAngle = 0;
     var BestVMG = -1e10;
 
-    for (var angle = 0.; angle <=90; angle += 0.1)
+    for (var dir =-1 ; dir <= 1 ; dir +=2)
     {
-      for (var dir =-1 ; dir <= 1 ; dir +=2)
-
+      for (var angle = 0.; angle <=90; angle += 0.1)
       {
         var CurSpeed = this.GetBoatSpeed (Polar,WindSpeed,WindBearing,OrthoBearing + angle*dir)
         var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle))
@@ -127,7 +126,7 @@ function PolarManagerClass()
         if (CurVMG >= BestVMG)
         {
           BestVMG = CurVMG;
-          BestAngle = OrthoBearing+angle*dir;
+          BestAngle = OrthoBearing+ angle*dir;
         }
       }   
     }
@@ -140,6 +139,8 @@ function PolarManagerClass()
   {
     var Dist = StartPos.GetOrthoDist(DestPos)
     var CapOrtho  = StartPos.GetOrthoCourse(DestPos)
+    var b_Alpha = 0;
+    var b_Beta = 0;
         
     var Speed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho)
     if (Speed > 0) 
@@ -250,7 +251,7 @@ function GetPolarAngleSpeed  (Polar,Alpha, WindSpeed)
 
   while (Alpha < 0)
   {
-    Alpha+=180;
+    Alpha+=180.;
   }
 
   Alpha %= 180.;
@@ -286,6 +287,38 @@ function GetPolarAngleSpeed  (Polar,Alpha, WindSpeed)
   var v1 = GetAvgValue(WindSpeed,Polar[0][SpeedCol1], Polar[0][SpeedCol2],Polar[AlphaRow1][SpeedCol1], Polar[AlphaRow1][SpeedCol2]);
   var v2 = GetAvgValue(WindSpeed,Polar[0][SpeedCol1], Polar[0][SpeedCol2],Polar[AlphaRow2][SpeedCol1], Polar[AlphaRow2][SpeedCol2]);
   return  GetAvgValue(Alpha,Polar[AlphaRow1][0], Polar[AlphaRow2][0],v1,v2);   
+
+}
+
+function WindAngle (BoatBearing, WindBearing)
+{
+
+  var I = 0
+
+  if (BoatBearing >= WindBearing) 
+  {
+    if ((BoatBearing - WindBearing) <= 180.) 
+    {
+        I = BoatBearing - WindBearing
+    }
+    else
+    {
+      I = 360 - BoatBearing + WindBearing
+    }
+  }
+  else
+  {
+    if ((WindBearing - BoatBearing) <= 180.) 
+    {
+      I = WindBearing - BoatBearing
+    }
+    else
+    {
+      I = 360 - WindBearing + BoatBearing
+    }
+  }
+
+  return I
 
 }
 
