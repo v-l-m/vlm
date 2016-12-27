@@ -9,7 +9,7 @@ function BoatEstimate(Est)
   this.Meteo;
   this.CurWP = new VLMPosition(0,0);
   this.RaceWP = 1;
-
+  
   if (typeof Est!== "undefined" && Est)
   {
     this.Position =  new VLMPosition(Est.Position.Lon.Value, Est.Position.Lat.Value);
@@ -37,13 +37,22 @@ function Estimator(Boat)
   this.Boat = Boat;
   this.MaxVacEstimate = 0;      
   this.CurEstimate = new BoatEstimate()
+  this.Running = false;
 
   this.Start = function()
   {
+    if (this.Running)
+    {
+
+      return;
+    }
+
+    this.Running = true;
     GribMgr.Init();
 
     if (typeof this.Boat.VLMInfo === "undefined")
     {
+      this.Running = false;
       return;
     }
 
@@ -69,6 +78,7 @@ function Estimator(Boat)
       
     if (this.CurEstimate.Date >= this.MaxVacEstimate)
     {
+      this.Running = false;
       //Estimate complete, DrawBoat track
       DrawBoat(this.Boat);
       return;
@@ -77,6 +87,7 @@ function Estimator(Boat)
     var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
     if (!MI)
     {
+      // FIXME : have a way of going out if needed
       setTimeout(this.Estimate.bind(this),1000);
       return;
     }
