@@ -60,6 +60,16 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
                                               }, 
 
                                               trigger: function(e) {
+
+                                                  var MousePos = GetVLMPositionFromClick(e.xy);
+                                                  if (typeof GM_Pos != "object" || ! GM_Pos)
+                                                  {
+                                                    GM_Pos = {};
+                                                  }
+                                                  GM_Pos.lon = MousePos.Lon.Value;
+                                                  GM_Pos.lat = MousePos.Lat.Value;
+                                                  
+                                                  HandleMapMouseMove(e);
                                                   if (SetWPPending)
                                                   {
                                                     if (WPPendingTarget=="WP")
