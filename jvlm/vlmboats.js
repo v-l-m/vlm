@@ -293,7 +293,6 @@ function DrawBoat(Boat, CenterMapOnBoat)
   {
     // Beurk, but does the job anyways
     VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
-    VLMDragLayer.removeFeatures(BoatFeatures[index]);
   }
 
   BoatFeatures = [];
@@ -314,7 +313,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
     { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 48, graphicWidth: 48 }
   );
   BoatFeatures.push(WPMarker);
-  VLMDragLayer.addFeatures(WPMarker);
+  VLMBoatsLayer.addFeatures(WPMarker);
   //console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
@@ -739,26 +738,10 @@ var VectorStyles = new OpenLayers.Style(
   }
 );
 
-var LayerListeners = {
-  featureclick: function (e) {
-    console.log(e.object.name + " says: " + e.feature.id + " clicked.");
-    return false;
-  },
-  nofeatureclick: function (e) {
-    console.log(e.object.name + " says: No feature clicked.");
-    return false;
-  }
-};
 
 var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks", {
   styleMap: new OpenLayers.StyleMap(VectorStyles),
   renderers: renderer
-});
-
-var VLMDragLayer = new OpenLayers.Layer.Vector("VLM Waypoints", {
-  styleMap: new OpenLayers.StyleMap(VectorStyles),
-  renderers: renderer,
-  eventListeners: LayerListeners
 });
 
 // Background load controller from ext html file

@@ -158,7 +158,7 @@ function OLInit() {
 
     //Et on ajoute tous les layers à la map.
     //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-    map.addLayers([ grib, VLMBoatsLayer, VLMDragLayer,vlm]);
+    map.addLayers([ grib, VLMBoatsLayer,vlm]);
     //map.addLayers([vlm, grib]); //FOR DEBUG
 
     //Controle l'affichage des layers
