@@ -360,21 +360,21 @@ function DrawBoat(Boat, CenterMapOnBoat)
   
   // Forecast Track
   
-  if (Boat.EstimateTrack.length !== Boat.EstimatePoints.length)
+  if (Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length)
   {
-    Boat.EstimatePoints = [];
+    Boat.Estimator.EstimatePoints = [];
 
-    for (index in Boat.EstimateTrack)
+    for (index in Boat.Estimator.EstimateTrack)
     {
-      var Est = Boat.EstimateTrack[index];
+      var Est = Boat.Estimator.EstimateTrack[index];
       var P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
       var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
 
-       Boat.EstimatePoints.push(P1_PosTransformed);
+       Boat.Estimator.EstimatePoints.push(P1_PosTransformed);
 
     }
   }
-  var TrackPointList = Boat.EstimatePoints;
+  var TrackPointList = Boat.Estimator.EstimatePoints;
   
   var TrackForecast= new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(TrackPointList),

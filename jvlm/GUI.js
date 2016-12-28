@@ -21,8 +21,8 @@ $(document).ready(
 
     //Debug only this should not stay when releasing
     //
-    $("#TestGrib").click(HandleGribTestClick)
-    $("#StartEstimator").click(HandleEstimatorStart)
+    //$("#TestGrib").click(HandleGribTestClick)
+    //$("#StartEstimator").click(HandleEstimatorStart)
     
     //
     // End Debug only
@@ -409,6 +409,39 @@ function InitMenusAndButtons()
     $(".MapOppShowLi").click(HandleMapOppModeChange)
 
     $(".DDTheme").click(HandleDDlineClick)
+
+    // Handle Start Boat Estimator button
+    $("#StartEstimator").on('click',HandleStartEstimator)
+}
+
+function HandleStartEstimator(e)
+{
+  var CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat === "undefined" || ! CurBoat)
+  {
+    // Something's wrong, just ignore
+    return;
+  }
+
+  CurBoat.Estimator.Start(HandleEstimatorProgress);
+}
+
+function HandleEstimatorProgress(Complete, Pct)
+{
+  if (Complete)
+  {
+    $("#StartEstimator").removeClass("hidden")
+    $("#StartEstimator").addClass("hidden")
+    $("#StartEstimator").addClass("hidden")
+  }
+  else
+  {
+    $("#StartEstimator").addClass("hidden")
+    $("#StartEstimator").removeClass("hidden")
+    $("#StartEstimator").removeClass("hidden")
+    $("#StartEstimator").val(Pct)
+  }
 }
 
 function HandleFlagLineClick(e)

@@ -18,8 +18,7 @@ function Boat(vlmboat)
   this.Reals = []; // Reals Boat array
   this.VLMPrefs = []; // Preferences Array;
   this.NextServerRequestDate;  // Next VAC Start date
-  this.EstimateTrack = []; // List of positions and date of track EstimateTrack
-  this.EstimatePoints = []; // CachedTransformed trackpoints list
+  this.Estimator = new Estimator(this) ; // Estimator object for current boat
 
   if (typeof vlmboat != 'undefined')
   {

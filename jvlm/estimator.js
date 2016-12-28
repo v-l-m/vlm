@@ -38,6 +38,9 @@ function Estimator(Boat)
   this.MaxVacEstimate = 0;      
   this.CurEstimate = new BoatEstimate()
   this.Running = false;
+  this.EstimateTrack=[];
+  this.EstimatePoints=[];
+
 
   this.Start = function()
   {
@@ -66,8 +69,8 @@ function Estimator(Boat)
       this.CurEstimate.Value = parseFloat(this.Boat.VLMInfo.PIP);
     }
     this.CurEstimate.PilOrders = this.Boat.VLMInfo.PIL;
-    this.Boat.EstimateTrack=[];
-    this.Boat.EstimatePoints=[];
+    this.EstimateTrack=[];
+    this.EstimatePoints=[];
 
     this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp); 
     setTimeout(this.Estimate.bind(this),2000)
@@ -155,7 +158,7 @@ function Estimator(Boat)
 
       console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
       this.CurEstimate.Position = NewPos;
-      this.Boat.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
+      this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
       // Start next point computation....
       this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
@@ -178,11 +181,11 @@ function Estimator(Boat)
     
   }
 
-  this.Start()
-
 }
 
+/*
 function HandleEstimatorStart(e)
 {
   var e = new Estimator(_CurPlayer.CurBoat);
 }
+*/
