@@ -432,15 +432,16 @@ function HandleEstimatorProgress(Complete, Pct)
   if (Complete)
   {
     $("#StartEstimator").removeClass("hidden")
-    $("#StartEstimator").addClass("hidden")
-    $("#StartEstimator").addClass("hidden")
+    $("#PbEstimatorProgress").addClass("hidden")
+    $("#PbEstimatorProgressText").addClass("hidden")
   }
   else
   {
     $("#StartEstimator").addClass("hidden")
-    $("#StartEstimator").removeClass("hidden")
-    $("#StartEstimator").removeClass("hidden")
-    $("#StartEstimator").val(Pct)
+    $("#PbEstimatorProgress").removeClass("hidden")
+    $("#PbEstimatorProgressText").removeClass("hidden")
+    $("#PbEstimatorProgressText").text(Pct)
+    $("#PbEstimatorProgressText").css("width",Pct)
   }
 }
 

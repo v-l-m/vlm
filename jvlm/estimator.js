@@ -40,13 +40,13 @@ function Estimator(Boat)
   this.Running = false;
   this.EstimateTrack=[];
   this.EstimatePoints=[];
+  this.ProgressCallBack = null;
 
-
-  this.Start = function()
+  this.Start = function(ProgressCallBack)
   {
+    this.ProgressCallBack = ProgressCallBack
     if (this.Running)
     {
-
       return;
     }
 
@@ -56,6 +56,7 @@ function Estimator(Boat)
     if (typeof this.Boat.VLMInfo === "undefined")
     {
       this.Running = false;
+      this.ReportProgress(true);
       return;
     }
 
@@ -74,6 +75,7 @@ function Estimator(Boat)
 
     this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp); 
     setTimeout(this.Estimate.bind(this),2000)
+    this.ReportProgress(false);
   }
 
   this.Estimate = function(Boat)
@@ -84,6 +86,7 @@ function Estimator(Boat)
       this.Running = false;
       //Estimate complete, DrawBoat track
       DrawBoat(this.Boat);
+      this.ReportProgress(true)
       return;
     }
 
@@ -163,6 +166,7 @@ function Estimator(Boat)
       // Start next point computation....
       this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
       setTimeout(this.Estimate.bind(this),0);
+      this.ReportProgress(false)
   }
 
   this.GetNextWPCoords = function (Estimate)
@@ -179,6 +183,24 @@ function Estimator(Boat)
       // Return computed point
     }
     
+  }
+
+  this.ReportProgress = function (Complete)
+  {
+    var Pct = 0;
+
+    if (this.ProgressCallBack)
+    {
+      if (!Complete)
+      {
+        if (this.EstimateTrack.length > 1)
+        {
+          Pct =  (this.MaxVacEstimate - this.EstimateTrack[this.EstimateTrack.length - 1].Date)/ (this.MaxVacEstimate - this.EstimateTrack[0].Date)
+          Pct = RoundPow((1 - Pct)*100.,1)
+        }
+      }
+      this.ProgressCallBack(Complete,Pct);
+    }
   }
 
 }
