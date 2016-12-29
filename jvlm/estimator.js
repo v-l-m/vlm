@@ -105,68 +105,103 @@ function Estimator(Boat)
     // Check if an update is required from AutoPilot;
     for (index in this.CurEstimate.PilOrders)
     {
-      var i = 0;
-      //if (this.CurEstimate.PilOrders[Index])
-      throw "pilot not supported yet...."
+      var Order = this.CurEstimate.PilOrders[index];
+
+      if (Order && Order.STS === "pending")
+      {
+        var OrderTime = new Date(parseInt(Order.TTS,10)*1000.)
+
+        if (OrderTime <= this.CurEstimate.Date)
+        {
+          // Use pilot order to update the current Mode
+          this.CurEstimate.Mode = parseInt(Order.PIM,10);
+
+          switch(this.CurEstimate.Mode)
+          {
+            case PM_ANGLE:
+            case PM_HEADING:
+              this.CurEstimate.Value = parseFloat(Order.PIP);
+              break;
+
+            case PM_ORTHO:
+            case PM_VMG:
+            case PM_VBVMG:
+              var p1 = Order.PIP.split("@")
+              var Dest = p1[0].split(",")
+              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[0]),parseFloat(Dest[1])) 
+              break;
+              
+            default :
+              alert("unsupported pilototo mode");
+              this.ReportProgress(true);
+              return;
+          }
+
+
+          this.CurEstimate.PilOrders[index]=null;
+          break;
+        }
+      }
+      
     }
 
-      var Hdg = this.CurEstimate.Value;
-      var Speed = 0;
-      switch (this.CurEstimate.Mode)
-      {
-        case PM_ANGLE:  // This goes just before Heading, since we only update the Hdg, rest is the same
-          // Going fixed angle, get bearing, compute speed, move
-          Hdg = MI.Heading+this.CurEstimate.Value;
-              
-        case PM_HEADING:
-          // Going fixed bearing, get boat speed, move along loxo
-          
-          var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-          var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
-          
-          break;
+    var Hdg = this.CurEstimate.Value;
+    var Speed = 0;
+    switch (this.CurEstimate.Mode)
+    {
+      case PM_ANGLE:  // This goes just before Heading, since we only update the Hdg, rest is the same
+        // Going fixed angle, get bearing, compute speed, move
+        Hdg = MI.Heading+this.CurEstimate.Value;
+            
+      case PM_HEADING:
+        // Going fixed bearing, get boat speed, move along loxo
+        
+        var Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+        var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
+        
+        break;
 
-        case PM_ORTHO:
-        case PM_VMG:
-        case PM_VBVMG:
-          var Dest = this.GetNextWPCoords(this.CurEstimate)
-          
-          if (this.CurEstimate.Mode == PM_ORTHO)
+      case PM_ORTHO:
+      case PM_VMG:
+      case PM_VBVMG:
+        var Dest = this.GetNextWPCoords(this.CurEstimate)
+        
+        if (this.CurEstimate.Mode == PM_ORTHO)
+        {
+          Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
+          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+          var NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
+        
+        }
+        else
+        {
+          if (this.CurEstimate.Mode == PM_VMG)
           {
-            Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
-            Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-            var NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
-          
+            Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
           }
           else
           {
-            if (this.CurEstimate.Mode == PM_VMG)
-            {
-              Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
-            }
-            else
-            {
-              Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
-            }
-            Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-            var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
-          
+            Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
           }
-          break;
+          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
+          var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
+        
+        }
+        break;
 
 
-        default:
-          throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
-      }
+      default:
+        throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
+    }
 
-      console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
-      this.CurEstimate.Position = NewPos;
-      this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
+    console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
+    this.CurEstimate.Position = NewPos;
+    this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
-      // Start next point computation....
-      this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
-      setTimeout(this.Estimate.bind(this),0);
-      this.ReportProgress(false)
+    // Start next point computation....
+    this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
+    setTimeout(this.Estimate.bind(this),0);
+    this.ReportProgress(false)
   }
 
   this.GetNextWPCoords = function (Estimate)
