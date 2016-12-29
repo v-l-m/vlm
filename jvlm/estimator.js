@@ -69,7 +69,19 @@ function Estimator(Boat)
     {
       this.CurEstimate.Value = parseFloat(this.Boat.VLMInfo.PIP);
     }
-    this.CurEstimate.PilOrders = this.Boat.VLMInfo.PIL;
+
+    this.CurEstimate.PilOrders = [];
+    for (index in this.Boat.VLMInfo.PIL)
+    {
+      var Order =  this.Boat.VLMInfo.PIL[index];
+      var NewOrder = {PIP: Order.PIP,
+                      PIM: Order.PIM,
+                      STS: Order.STS,
+                      TTS: Order.TTS
+                    }
+      this.CurEstimate.PilOrders.push(NewOrder);
+    }
+    
     this.EstimateTrack=[];
     this.EstimatePoints=[];
 
@@ -128,7 +140,7 @@ function Estimator(Boat)
             case PM_VBVMG:
               var p1 = Order.PIP.split("@")
               var Dest = p1[0].split(",")
-              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[0]),parseFloat(Dest[1])) 
+              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[1]),parseFloat(Dest[0])) 
               break;
               
             default :
