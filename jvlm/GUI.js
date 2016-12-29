@@ -441,7 +441,7 @@ function HandleEstimatorProgress(Complete, Pct)
     $("#PbEstimatorProgress").removeClass("hidden")
     $("#PbEstimatorProgressText").removeClass("hidden")
     $("#PbEstimatorProgressText").text(Pct)
-    $("#PbEstimatorProgressText").css("width",Pct)
+    $("#PbEstimatorProgress").css("width",Pct+"%")
   }
 }
 
