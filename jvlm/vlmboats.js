@@ -62,7 +62,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
                                               trigger: function(e) {
 
                                                   var MousePos = GetVLMPositionFromClick(e.xy);
-                                                  if (typeof GM_Pos != "object" || ! GM_Pos)
+                                                  if (typeof GM_Pos !== "object" || ! GM_Pos)
                                                   {
                                                     GM_Pos = {};
                                                   }
@@ -72,12 +72,12 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
                                                   HandleMapMouseMove(e);
                                                   if (SetWPPending)
                                                   {
-                                                    if (WPPendingTarget=="WP")
+                                                    if (WPPendingTarget === "WP")
                                                     {
                                                       CompleteWPSetPosition(e,e.xy);
                                                       HandleCancelSetWPOnClick();
                                                     }
-                                                    else if (WPPendingTarget == "AP")
+                                                    else if (WPPendingTarget === "AP")
                                                     {
                                                       SetWPPending=false;
                                                       _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy)
@@ -118,7 +118,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
   // Update preference screen according to current selected boat
   UpdatePrefsDialog(Boat);
 
-  if ((typeof Boat.VLMInfo === 'undefined') || (typeof Boat.VLMInfo.LUP == 'undefined')) 
+  if ((typeof Boat.VLMInfo === 'undefined') || (typeof Boat.VLMInfo.LUP === 'undefined')) 
   {
     ForceRefresh=true;
   }
@@ -145,7 +145,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           Boat.VLMInfo = result;
 
           // Store next request Date (once per minute)
-          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+parseInt(Boat.VLMInfo.VAC))*1000) ;
+          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+parseInt(Boat.VLMInfo.VAC))*1000,10) ;
 
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
@@ -161,7 +161,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           }
 
           // update map if racing
-          if (Boat.VLMInfo.RAC != "0")
+          if (Boat.VLMInfo.RAC !== "0")
           {
 
             if (typeof Boat.RaceInfo ==="undefined" || typeof Boat.RaceInfo.idraces === 'undefined') 
@@ -188,8 +188,10 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
                     for (index in result.Exclusions) {
                       var Seg = result.Exclusions[index]
 
-                      if (typeof CurEndPoint === 'undefined' || (CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1])) {
-                        if (typeof CurEndPoint != 'undefined') {
+                      if (typeof CurEndPoint === 'undefined' || (CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1])) 
+                      {
+                        if (typeof CurEndPoint !== 'undefined') 
+                        {
                           // Changing Polygons
                           Polygons.push(CurPolyPointsList);
                           CurPolyPointsList = []

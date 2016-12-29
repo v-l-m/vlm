@@ -578,7 +578,7 @@ function   HandleRacingDockingButtons(IsRacing)
 
 function UpdateInMenuDockingBoatInfo(Boat)
 {
-  var IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC);
+  var IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC,10);
   HandleRacingDockingButtons(IsRacing);
 }
 
@@ -1472,7 +1472,7 @@ function AddRankingLine(Rank)
   Row.append(AppendColumn(Row,boatsearchstring))
   var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
   Row.append(AppendColumn(Row,NextMark))
-  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'])*1000))/1000,10);
+  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'],10)*1000))/1000);
   Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
   Row.append(AppendColumn(Row,Rank['loch']))
   Row.append(AppendColumn(Row,Rank['longitude']))
