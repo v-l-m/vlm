@@ -94,6 +94,9 @@
     define ("DIRECTORY_THEMES","style");
     define ("DIRECTORY_POLARS","Polaires");
     define ("DIRECTORY_JSCALENDAR","externals/jscalendar");
+    
+    // PATH for Grib files from windserver
+    define ("DIRECTORY_GRIBFILES","/home/vlm/vlmdatas/gribs");
 
 
     //define ("PROFILE_PLAYER_URL", "/palmares.php?type=player&idplayers=");

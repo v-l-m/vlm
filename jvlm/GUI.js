@@ -21,8 +21,8 @@ $(document).ready(
 
     //Debug only this should not stay when releasing
     //
-    $("#TestGrib").click(HandleGribTestClick)
-    $("#StartEstimator").click(HandleEstimatorStart)
+    //$("#TestGrib").click(HandleGribTestClick)
+    //$("#StartEstimator").click(HandleEstimatorStart)
     
     //
     // End Debug only
@@ -158,7 +158,7 @@ function OLInit() {
 
     //Et on ajoute tous les layers à la map.
     //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-    map.addLayers([ grib, VLMBoatsLayer, VLMDragLayer,vlm]);
+    map.addLayers([ grib, VLMBoatsLayer,vlm]);
     //map.addLayers([vlm, grib]); //FOR DEBUG
 
     //Controle l'affichage des layers
@@ -409,6 +409,40 @@ function InitMenusAndButtons()
     $(".MapOppShowLi").click(HandleMapOppModeChange)
 
     $(".DDTheme").click(HandleDDlineClick)
+
+    // Handle Start Boat Estimator button
+    $("#StartEstimator").on('click',HandleStartEstimator)
+}
+
+function HandleStartEstimator(e)
+{
+  var CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat === "undefined" || ! CurBoat)
+  {
+    // Something's wrong, just ignore
+    return;
+  }
+
+  CurBoat.Estimator.Start(HandleEstimatorProgress);
+}
+
+function HandleEstimatorProgress(Complete, Pct)
+{
+  if (Complete)
+  {
+    $("#StartEstimator").removeClass("hidden")
+    $("#PbEstimatorProgress").addClass("hidden")
+    $("#PbEstimatorProgressText").addClass("hidden")
+  }
+  else
+  {
+    $("#StartEstimator").addClass("hidden")
+    $("#PbEstimatorProgress").removeClass("hidden")
+    $("#PbEstimatorProgressText").removeClass("hidden")
+    $("#PbEstimatorProgressText").text(Pct)
+    $("#PbEstimatorProgress").css("width",Pct+"%")
+  }
 }
 
 function HandleFlagLineClick(e)
@@ -544,7 +578,7 @@ function   HandleRacingDockingButtons(IsRacing)
 
 function UpdateInMenuDockingBoatInfo(Boat)
 {
-  var IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC);
+  var IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC,10);
   HandleRacingDockingButtons(IsRacing);
 }
 
@@ -1438,7 +1472,7 @@ function AddRankingLine(Rank)
   Row.append(AppendColumn(Row,boatsearchstring))
   var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
   Row.append(AppendColumn(Row,NextMark))
-  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'])*1000))/1000,10);
+  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'],10)*1000))/1000);
   Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
   Row.append(AppendColumn(Row,Rank['loch']))
   Row.append(AppendColumn(Row,Rank['longitude']))

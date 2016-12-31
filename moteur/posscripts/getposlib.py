@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ElementTree
 import sys
 import VlmHttp
 import json
+from StringIO import StringIO
 
 def vlm_get_tmp():
     """Utilise le VLMTEMP s'il est défini"""
@@ -49,12 +50,6 @@ def geturl(url, basefilename, suffix = 'static'):
 
     urllib.urlretrieve(url, tmpxml)
     return tmpxml
-
-def gethwxurl(url):
-    """Récupère une url HWX encodage"""
-    f= urllib2.urlopen(url)
-    data = f.read()
-    return data.decode('ISO-8859-1')
 
 def sqlusers(boats, engaged):
     for rid in boats.keys() :

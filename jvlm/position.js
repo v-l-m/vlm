@@ -8,6 +8,7 @@
 const POS_FORMAT_DEFAULT = 0;
 // Earth radius for all calculation of distance in Naut. Miles
 const EARTH_RADIUS  = 3443.84;
+const VLM_DIST_ORTHO = 1;
         
 
 function Deg2Rad(v)
@@ -50,24 +51,6 @@ function VLMPosition(lon, lat,  format)
         return this.Lat.ToString() + " " + this.Lon.ToString();
     }
 
-    // Function GetOrthoDist
-    // Return ortho distance from this to P
-    this.GetOrthoDist = function(P,Precision)
-    {
-        var lon1  = -Deg2Rad(this.Lon.Value);
-        var lon2  = -Deg2Rad(P.Lon.Value);
-        var lat1  = Deg2Rad(this.Lat.Value);
-        var lat2  = Deg2Rad(P.Lat.Value);
-
-//        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
-//                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
-
-        var retval = 2*Math.asin(Math.sqrt(Math.pow((Math.sin((lat1-lat2)/2)),2) + 
-                 Math.pow(Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2)),2)))
-
-        return RoundPow(EARTH_RADIUS* retval,Precision);
-    }
-    
     // function GetLoxoDist
     // Returns the loxodromic distance to another point
     this.GetLoxoDist= function(P,Precision)
@@ -161,6 +144,11 @@ function VLMPosition(lon, lat,  format)
         var Lat1  = Deg2Rad(this.Lat.Value);
         var Lat2  = Deg2Rad(P.Lat.Value);
 
+        if (typeof Precision == "undefined" || typeof Precision != "number")
+        {
+            Precision = 17
+        }
+
         /*if (Lon1 > 0)
         {
             Lon2 += 2 * Math.PI
@@ -192,23 +180,111 @@ function VLMPosition(lon, lat,  format)
         return RoundPow( ret,Precision);
     };
 
-    //
-    // Return orthodromic course from this to P
-    //
-    this.GetOrthoCourse = function(P,Precision)
-    {
-        var lon1  = -Deg2Rad(this.Lon.Value);
-        var lon2  = -Deg2Rad(P.Lon.Value);
-        var lat1  = Deg2Rad(this.Lat.Value);
-        var lat2  = Deg2Rad(P.Lat.Value);
+if (VLM_DIST_ORTHO)
+{
 
-        //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
-        //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
-        var retval = tc1=Math.atan2(Math.sin(lon1-lon2)*Math.cos(lat2),Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
-        retval = Rad2Deg( retval % (2 * Math.PI));
-        return RoundPow( retval,Precision);
+  // Function GetOrthoDist
+  // Return ortho distance from this to P
+  this.GetOrthoDist = function(P,Precision)
+  {
+    var lon1  = -Deg2Rad(this.Lon.Value);
+    var lon2  = -Deg2Rad(P.Lon.Value);
+    var lat1  = Deg2Rad(this.Lat.Value);
+    var lat2  = Deg2Rad(P.Lat.Value);
+
+    if (typeof Precision == "undefined" || typeof Precision != "number")
+    {
+      Precision = 17
     }
     
+    //d=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2))
+    var retval = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2))
+
+    return RoundPow(60* Rad2Deg (retval),Precision);
+  }
+
+  //
+  // Return orthodromic course from this to P
+  //
+  this.GetOrthoCourse = function(P,Precision)
+  {
+    var lon1  = -Deg2Rad(this.Lon.Value);
+    var lon2  = -Deg2Rad(P.Lon.Value);
+    var lat1  = Deg2Rad(this.Lat.Value);
+    var lat2  = Deg2Rad(P.Lat.Value);
+
+    if (typeof Precision == "undefined" || typeof Precision != "number")
+    {
+      Precision = 17
+    }
+
+    /*IF sin(lon2-lon1)<0       
+      tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
+    ELSE       
+      tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
+    ENDIF*/
+    var d = Deg2Rad(this.GetOrthoDist(P)/60);
+    var retval
+    if (Math.sin(lon2-lon1)<0)       
+    {
+      retval=Math.acos((Math.sin(lat2)-Math.sin(lat1)*Math.cos(d))/(Math.sin(d)*Math.cos(lat1)))    
+    }
+    else       
+    {
+      retval=2*Math.PI-Math.acos((Math.sin(lat2)-Math.sin(lat1)*Math.cos(d))/(Math.sin(d)*Math.cos(lat1)))    
+    }
+    
+    retval = Rad2Deg( retval % (2 * Math.PI));
+    return RoundPow( retval,Precision);
+  }
+
+}
+else
+{
+  // Function GetOrthoDist
+  // Return ortho distance from this to P
+  this.GetOrthoDist = function(P,Precision)
+  {
+    var lon1  = -Deg2Rad(this.Lon.Value);
+    var lon2  = -Deg2Rad(P.Lon.Value);
+    var lat1  = Deg2Rad(this.Lat.Value);
+    var lat2  = Deg2Rad(P.Lat.Value);
+
+    if (typeof Precision == "undefined" || typeof Precision != "number")
+    {
+      Precision = 17
+    }
+//        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
+//                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
+
+    var retval = 2*Math.asin(Math.sqrt(Math.pow((Math.sin((lat1-lat2)/2)),2) + 
+              Math.pow(Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2)),2)))
+
+    return RoundPow(EARTH_RADIUS * retval,Precision);
+  }
+    
+  //
+  // Return orthodromic course from this to P
+  //
+  this.GetOrthoCourse = function(P,Precision)
+  {
+    var lon1  = -Deg2Rad(this.Lon.Value);
+    var lon2  = -Deg2Rad(P.Lon.Value);
+    var lat1  = Deg2Rad(this.Lat.Value);
+    var lat2  = Deg2Rad(P.Lat.Value);
+
+    if (typeof Precision == "undefined" || typeof Precision != "number")
+    {
+      Precision = 17
+    }
+
+    //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
+    //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
+    var retval = Math.atan2(Math.sin(lon1-lon2)*Math.cos(lat2),Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
+    retval = Rad2Deg( retval % (2 * Math.PI));
+    return RoundPow( retval,Precision);
+  }
+}
     this.ReachDistOrtho=function(dist,bearing)
     {
         var lat;

@@ -28,17 +28,17 @@ gp.geturl(configUrl,configFile,)
 with open(configFile+".static.tmp.xml") as data_file:    
     conf = data_file.readlines()
 conf = conf[0].split(",")
-trackfile = conf[1].split(":")[1]
+trackfile = "pos" #conf[1].split(":")[1]
 reportfile = conf[2].split(":")[1]
 
 #URL http://imocaoceanmasters-nyvendee.geovoile.com/2016/_elements/data/race/tracker.tracks.hwz?v=1464551980
 raceBaseUrl = "http://gitana-team.geovoile.com/vendeeglobe/2016/tracker/resources/"
 #print basefilename
 
-livedata=gp.gethwxurl(raceBaseUrl+"live/"+trackfile)
-
-with open(os.path.join(vlmtmp,basefilename+".static.tmp.xml")) as data_file:    
-    livedata = json.load(data_file)
+gp.geturl("http://testing.v-l-m.org/jvlm/pos0",trackfile)
+with open(os.path.join(vlmtmp,trackfile+".static.tmp.xml")) as data_file:    
+  livedata = json.load(data_file)
+  print(data_file)
 
 #gp.unzipurl(raceBaseUrl+"reports/"+reportfile,basefilename+"_rep")
 

@@ -134,6 +134,7 @@ for TSTAMP in `echo $allindexes` ; do
       if [ $updated -eq 0 ]; then
         windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
         updated=1
+        
       fi
     fi
 done
@@ -169,4 +170,6 @@ rm -f $GRIBPATH/$LATEST
 ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/$LATEST
 mv $LOG $GRIBPATH/
 rm -Rf $TMPGRIBPATH/$DAT$HH
+echo rm -rf $VLMRACINE/cache/gribtiles/* >> $LOG 2>&1 
+date +%s >  $GRIBPATH/GribCacheIndex
 

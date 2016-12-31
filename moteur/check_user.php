@@ -124,8 +124,8 @@ if ( $usersObj->engaged != 0 ) {
 
     $distVac=$fullUsersObj->boatspeed*$fullUsersObj->hours;
 
-    echo "\tPosition update (WSpd=" . round($fullUsersObj->wspeed,1) . 
-      ", WHdg=".((round($fullUsersObj->wheading,1)+180)%360). 
+    echo "\tPosition update (WSpd=" . round($fullUsersObj->wspeed,3) . 
+      ", WHdg=".(round(((($fullUsersObj->wheading+180)*1000)%360000)/1000,4)). 
       ", Hours=".round($fullUsersObj->hours,4). 
       ", ANG=".round($fullUsersObj->boatanglewithwind,2). 
       ", Hdg=" . $fullUsersObj->users->boatheading. 
