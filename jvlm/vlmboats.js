@@ -133,7 +133,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
       function (result) {
         // Check that boat Id Matches expectations
-        if (Boat.IdBoat === result.IDU) {
+        if (Boat.IdBoat === parseInt(result.IDU,10))
+        {
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
