@@ -133,7 +133,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
       function (result) {
         // Check that boat Id Matches expectations
-        if (Boat.IdBoat == result.IDU) {
+        if (Boat.IdBoat === result.IDU) {
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
@@ -145,7 +145,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           Boat.VLMInfo = result;
 
           // Store next request Date (once per minute)
-          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+parseInt(Boat.VLMInfo.VAC))*1000,10) ;
+          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP,10)+parseInt(Boat.VLMInfo.VAC,10))*1000) ;
 
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
@@ -185,24 +185,28 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
                     var CurPolyPointsList = []
                     var index
 
-                    for (index in result.Exclusions) {
-                      var Seg = result.Exclusions[index]
-
-                      if (typeof CurEndPoint === 'undefined' || (CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1])) 
+                    for (index in result.Exclusions) 
+                    {
+                      if (result.Exclusions[index])
                       {
-                        if (typeof CurEndPoint !== 'undefined') 
-                        {
-                          // Changing Polygons
-                          Polygons.push(CurPolyPointsList);
-                          CurPolyPointsList = []
-                        }
-                        // Add segment Start to current point list
-                        CurPolyPointsList.push(Seg[0])
-                      }
+                        var Seg = result.Exclusions[index]
 
-                      CurEndPoint = Seg[1];
-                      // Add segment end  to current point list
-                      CurPolyPointsList.push(Seg[1])
+                        if (typeof CurEndPoint === 'undefined' || (CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1])) 
+                        {
+                          if (typeof CurEndPoint !== 'undefined') 
+                          {
+                            // Changing Polygons
+                            Polygons.push(CurPolyPointsList);
+                            CurPolyPointsList = []
+                          }
+                          // Add segment Start to current point list
+                          CurPolyPointsList.push(Seg[0])
+                        }
+
+                        CurEndPoint = Seg[1];
+                        // Add segment end  to current point list
+                        CurPolyPointsList.push(Seg[1])
+                      }
                     }
 
                     Polygons.push(CurPolyPointsList)
@@ -344,7 +348,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
     var TrackColor =  Boat.VLMInfo.COL
 
-    if (TrackColor[0] != "#")
+    if (TrackColor[0] !== "#")
     {
       TrackColor = "#"+ TrackColor
     }
