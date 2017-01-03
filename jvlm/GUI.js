@@ -1449,7 +1449,7 @@ function FillRankingTable()
   
   for (index in Boat.Rankings.ranking)
   {
-    AddRankingLine(Boat.Rankings.ranking[index])
+    AddRankingLine(Boat.Rankings.ranking[index], parseInt(Boat.Rankings.nb_arrived,10))
   }
 
   $('#Ranking-Panel').show();
@@ -1457,18 +1457,18 @@ function FillRankingTable()
     {
       "paging": 
       {
-        "current": parseInt(_CurPlayer.CurBoat.VLMInfo.RNK/20,10)
+        "current": Math.round((parseInt(_CurPlayer.CurBoat.VLMInfo.RNK,10))/20)
 	  	}
 	  });
 
 }
 
-function AddRankingLine(Rank)
+function AddRankingLine(Rank, ArrivedCount)
 {
   var Row = $('<tr>')
 
-  Row.append(AppendColumn(Row,Rank['rank']))
-  var boatsearchstring = '<img class="BoatFinder" src="images/search.png" id="'+Rank.idusers+'"></img>   '+Rank['boatname']
+  Row.append(AppendColumn(Row,Rank['rank']+ArrivedCount))
+  var boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+Rank.idusers+'"></img>   '+Rank['boatname']
   Row.append(AppendColumn(Row,boatsearchstring))
   var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
   Row.append(AppendColumn(Row,NextMark))

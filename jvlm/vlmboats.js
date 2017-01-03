@@ -133,7 +133,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
     $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
       function (result) {
         // Check that boat Id Matches expectations
-        if (Boat.IdBoat == result.IDU) {
+        if (Boat.IdBoat === parseInt(result.IDU,10))
+        {
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
@@ -145,7 +146,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           Boat.VLMInfo = result;
 
           // Store next request Date (once per minute)
-          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP)+parseInt(Boat.VLMInfo.VAC))*1000,10) ;
+          Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP,10)+parseInt(Boat.VLMInfo.VAC,10))*1000) ;
 
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
@@ -185,24 +186,28 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
                     var CurPolyPointsList = []
                     var index
 
-                    for (index in result.Exclusions) {
-                      var Seg = result.Exclusions[index]
-
-                      if (typeof CurEndPoint === 'undefined' || (CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1])) 
+                    for (index in result.Exclusions) 
+                    {
+                      if (result.Exclusions[index])
                       {
-                        if (typeof CurEndPoint !== 'undefined') 
-                        {
-                          // Changing Polygons
-                          Polygons.push(CurPolyPointsList);
-                          CurPolyPointsList = []
-                        }
-                        // Add segment Start to current point list
-                        CurPolyPointsList.push(Seg[0])
-                      }
+                        var Seg = result.Exclusions[index]
 
-                      CurEndPoint = Seg[1];
-                      // Add segment end  to current point list
-                      CurPolyPointsList.push(Seg[1])
+                        if (typeof CurEndPoint === 'undefined' || (CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1])) 
+                        {
+                          if (typeof CurEndPoint !== 'undefined') 
+                          {
+                            // Changing Polygons
+                            Polygons.push(CurPolyPointsList);
+                            CurPolyPointsList = []
+                          }
+                          // Add segment Start to current point list
+                          CurPolyPointsList.push(Seg[0])
+                        }
+
+                        CurEndPoint = Seg[1];
+                        // Add segment end  to current point list
+                        CurPolyPointsList.push(Seg[1])
+                      }
                     }
 
                     Polygons.push(CurPolyPointsList)
@@ -236,9 +241,13 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
                   {
                     Boat.Track=[];
                   }
-                  for (index in result.tracks) {
-                    var P = new VLMPosition(result.tracks[index][1] / 1000., result.tracks[index][2] / 1000.)
-                    Boat.Track.push(P);
+                  for (index in result.tracks) 
+                  {
+                    if (result.tracks[index])
+                    {
+                      var P = new VLMPosition(result.tracks[index][1] / 1000., result.tracks[index][2] / 1000.)
+                      Boat.Track.push(P);
+                    }
                   }
                   DrawBoat(Boat);
                 }
@@ -304,7 +313,10 @@ function DrawBoat(Boat, CenterMapOnBoat)
   for (index in BoatFeatures)
   {
     // Beurk, but does the job anyways
-    VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
+    if (BoatFeatures[index])
+    {
+      VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
+    }
   }
 
   BoatFeatures = [];
@@ -344,7 +356,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
     var TrackColor =  Boat.VLMInfo.COL
 
-    if (TrackColor[0] != "#")
+    if (TrackColor[0] !== "#")
     {
       TrackColor = "#"+ TrackColor
     }
@@ -369,8 +381,8 @@ function DrawBoat(Boat, CenterMapOnBoat)
     for (index in Boat.Estimator.EstimateTrack)
     {
       var Est = Boat.Estimator.EstimateTrack[index];
-      var P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
-      var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
+      P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
+      P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
 
        Boat.Estimator.EstimatePoints.push(P1_PosTransformed);
 
@@ -419,7 +431,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
     {
       var T = Boat.OppTrack[TrackIndex];
 
-      if (T.Visible && T.DatePos.length>1)  
+      if (T && T.Visible && T.DatePos.length>1)  
       {
         if (!T.OLTrackLine)
         {
@@ -428,7 +440,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
           for (var PointIndex=0 ; PointIndex < TLen; PointIndex++)
           {
             var k = Object.keys(T.DatePos)[PointIndex];
-            var P = T.DatePos[k];
+            P = T.DatePos[k];
             var Pi = new OpenLayers.Geometry.Point(P.lon, P.lat);
             var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection)
 
@@ -471,21 +483,24 @@ function BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, First
 {
   for (index in PolarPointList) 
   {
-    var Alpha = 5 * Math.floor(index);
-    var Speed = parseFloat(PolarPointList[index]);
-
-    if (!FirstSide)
+    if (PolarPointList[index])
     {
-      Alpha = 360 - Alpha;
+      var Alpha = 5 * Math.floor(index);
+      var Speed = parseFloat(PolarPointList[index]);
+
+      if (!FirstSide)
+      {
+        Alpha = 360 - Alpha;
+      }
+
+      var PixPos = new OpenLayers.Geometry.Point(
+        PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
+        PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
+
+      //var P = map.getLonLatFromPixel(PixPos);
+      //var PPoint = new OpenLayers.Geometry.Point(PixPos);
+      Polar.push(PixPos);
     }
-
-    var PixPos = new OpenLayers.Geometry.Point(
-      PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
-      PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
-
-    //var P = map.getLonLatFromPixel(PixPos);
-    //var PPoint = new OpenLayers.Geometry.Point(PixPos);
-    Polar.push(PixPos);
   }
   
 }
@@ -520,8 +535,7 @@ var VectorStyles = new OpenLayers.Style(
     strokeOpacity: 1,
     strokeWidth: 3,
     fillColor: "#FF5500",
-    fillOpacity: 0.5,
-
+    fillOpacity: 0.5
   },
   {
     rules:
@@ -646,9 +660,8 @@ var VectorStyles = new OpenLayers.Style(
           symbolizer: {
             strokeColor: "black",
             strokeOpacity: 0.75,
-            strokeWidth: 1,
+            strokeWidth: 1
             //strokeDashstyle: "dot"
-
           }
         }
         ),
@@ -729,8 +742,7 @@ var VectorStyles = new OpenLayers.Style(
             //labelOutlineWidth: 2
             externalGraphic: "images/opponent${IsTeam}.png",
             graphicWidth: "${IsFriend}",
-            fillOpacity: 1,
-            
+            fillOpacity: 1
           }
         }
         ),
@@ -787,43 +799,49 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords) {
 
   for (index in RaceGates)
   {
-    VLMBoatsLayer.removeFeatures(RaceGates[index]);
+    if (RaceGates[index])
+    {
+      VLMBoatsLayer.removeFeatures(RaceGates[index]);
+    }
   }
   // Loop all gates
-  for (index in RaceInfo.races_waypoints) {
-    // Draw a single race gates
-    var WP = RaceInfo.races_waypoints[index];
-
-    // Fix coords scales
-    if (IsVLMCoords)
+  for (index in RaceInfo.races_waypoints) 
+  {
+    if (RaceInfo.races_waypoints[index])
     {
-      WP.longitude1 /= VLM_COORDS_FACTOR;
-      WP.latitude1 /= VLM_COORDS_FACTOR;
-      WP.longitude2 /= VLM_COORDS_FACTOR;
-      WP.latitude2 /= VLM_COORDS_FACTOR;
+      // Draw a single race gates
+      var WP = RaceInfo.races_waypoints[index];
+
+      // Fix coords scales
+      if (IsVLMCoords)
+      {
+        WP.longitude1 /= VLM_COORDS_FACTOR;
+        WP.latitude1 /= VLM_COORDS_FACTOR;
+        WP.longitude2 /= VLM_COORDS_FACTOR;
+        WP.latitude2 /= VLM_COORDS_FACTOR;
+      }
+      var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
+
+      // Draw WP1
+      AddBuoyMarker(VLMBoatsLayer,RaceGates, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
+
+
+      // Second buoy (if any)
+      if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS) {
+        // Add 2nd buoy marker
+        AddBuoyMarker(VLMBoatsLayer,RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
+      }
+      else {
+        // No Second buoy, compute segment end
+        var P = new VLMPosition(WP.longitude1, WP.latitude1);
+        var Dest = P.ReachDistLoxo(2500, 180 + parseFloat(WP.laisser_au));
+        WP.longitude2 = Dest.Lon.Value;
+        WP.latitude2 = Dest.Lat.Value;
+      }
+
+      // Draw Gate Segment
+      AddGateSegment(VLMBoatsLayer,RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate === index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
     }
-    var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
-
-    // Draw WP1
-    AddBuoyMarker(VLMBoatsLayer,RaceGates, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
-
-
-    // Second buoy (if any)
-    if ((WP.wpformat & WP_GATE_BUOY_MASK) == WP_TWO_BUOYS) {
-      // Add 2nd buoy marker
-      AddBuoyMarker(VLMBoatsLayer,RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
-    }
-    else {
-      // No Second buoy, compute segment end
-      var P = new VLMPosition(WP.longitude1, WP.latitude1);
-      var Dest = P.ReachDistLoxo(2500, 180 + parseFloat(WP.laisser_au));
-      WP.longitude2 = Dest.Lon.Value;
-      WP.latitude2 = Dest.Lat.Value;
-    }
-
-    // Draw Gate Segment
-    AddGateSegment(VLMBoatsLayer,RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
-
   }
 }
 
@@ -834,12 +852,18 @@ function DrawRaceExclusionZones(Layer,Zones)
 
   for (index in Exclusions)
   {
-    Layer.removeFeatures(Exclusions[index]);
+    if (Exclusions[index])
+    {
+      Layer.removeFeatures(Exclusions[index]);
+    }
   }
 
   for (index in Zones)
   {
-    DrawRaceExclusionZone(Layer,Exclusions,Zones[index])
+    if (Zones[index])
+    {
+      DrawRaceExclusionZone(Layer,Exclusions,Zones[index])
+    }
   }
 
 }
@@ -852,12 +876,13 @@ function DrawRaceExclusionZone(Layer,ExclusionZones, Zone)
 
   for (index in Zone) 
   {
+    if (Zone[index])
+    {
+      var P = new OpenLayers.Geometry.Point(Zone[index][1], Zone[index][0]);
+      var P_PosTransformed = P.transform(MapOptions.displayProjection, MapOptions.projection)
 
-    var P = new OpenLayers.Geometry.Point(Zone[index][1], Zone[index][0]);
-    var P_PosTransformed = P.transform(MapOptions.displayProjection, MapOptions.projection)
-
-    PointList.push(P_PosTransformed);
-
+      PointList.push(P_PosTransformed);
+  } 
   }
   var Attr = null;
 
@@ -900,7 +925,7 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
 
   Layer.addFeatures(WP);
   Gates.push(WP);
-  if (GateType != WP_DEFAULT) {
+  if (GateType !== WP_DEFAULT) {
     // Debug testing of the geo calculation functions
     /*{
       // Rumb line LAX-JFK = 2164.6 nm
@@ -915,11 +940,13 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
     var MarkerDir = P1.GetLoxoCourse(P2);
     var MarkerPos = P1.ReachDistLoxo(P2, 0.5);
     // Gate has special features, add markers
-    if (GateType & WP_CROSS_ANTI_CLOCKWISE) {
+    if (GateType & WP_CROSS_ANTI_CLOCKWISE) 
+    {
       MarkerDir -= 90;
       AddGateDirMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
     }
-    else if (GateType & WP_CROSS_CLOCKWISE) {
+    else if (GateType & WP_CROSS_CLOCKWISE) 
+    {
       MarkerDir += 90;
       AddGateDirMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
     }
@@ -928,7 +955,8 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
       AddGateIceGateMarker(VLMBoatsLayer,Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
     }
 
-    if (GateType & WP_CROSS_ONCE) {
+    if (GateType & WP_CROSS_ONCE) 
+    {
       // Draw the segment again as dashed line for cross once gates
       var WP = new OpenLayers.Feature.Vector(
         new OpenLayers.Geometry.LineString(PointList),
