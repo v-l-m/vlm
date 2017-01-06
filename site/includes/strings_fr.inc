@@ -212,7 +212,7 @@ Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur
     'color' => 'Couleur de votre voilier',
     'computerid' => 'Le champ <b>computer id</b> est calculé à partir de l\'adresse IP. Celle ci n\'est pas affichée pour des raisons de vie privée.',
     'constant' => 'Fixer cette allure',
-    'constantengaged' => 'R&eacute;gulateur d\'allure',
+    'constantengaged' => 'Régulateur d\'allure',
     'contact' => 'Contact',
     'contributors' => 'Contributeurs',
     'contributorstext' => 'John-Pet, Phille, Mike, Horn, Sunburn, Sleeso, Manta, Pascal, Fred, Fanch, Toto@home, Phavie, DedeVac, DocteurX, Spifou, Oxygen77, Line28, Paparazzia... et tous ceux que j\'oublie : MERCI ! ',

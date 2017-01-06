@@ -450,30 +450,12 @@ a.ui-button:active,
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
 #affichage{
-  cursor:move;
     border:1px solid #edecba;
     background-color:#172A08;
-    width:200px;
-    height:350px; 
-    display:none;
-    position:absolute;
-    left:50%; 
-    top:50%;
-    border-radius:5px;
-    z-index:998;
 }
 #mouseInfo{
-  cursor:move;
     border:1px solid #edecba;
     background-color:#172A08;
-    width:200px;
-    height:350px; 
-    display:none;
-    position:absolute;
-    left:50%; 
-    top:50%;
-    border-radius:5px;
-    z-index:999;
 }
 .dropdown-menu {
   background-color:#172A08 ;
