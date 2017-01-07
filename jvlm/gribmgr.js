@@ -300,6 +300,14 @@ function VLM2GribManager()
     var TotalLines = Lines.length
     var Catalog = [];
     var HeaderCompleted = false
+
+    // Handle cache mess
+    if (Data=== "--")
+    {
+      alert("Cache mess for URL"  & Url);
+      return;
+    }
+
     // Loop data catalog
     for (var i =0; i< TotalLines ; i++)
     {
