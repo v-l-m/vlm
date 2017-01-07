@@ -1558,7 +1558,8 @@ class fullUsers
   }
   
   //this function says how many milles the user travelled during the last <duration>
-  function distRecords($duration) {
+  function distRecords($duration) 
+  {
     $timestamp = time();
     $timestamp -= ($timestamp % 60);
     
@@ -1569,27 +1570,32 @@ class fullUsers
     
     $result = wrapper_mysql_db_query_reader($query);
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
-    if (!$row) {
+    if (!$row) 
+    {
       $query = "SELECT `time`, `loch` ".
-	" FROM races_loch WHERE idusers=".$this->users->idusers.
-	" AND idraces=".$this->users->engaged.
-	" AND time > " . ( $timestamp - $duration - DELAYBETWEENUPDATE/2 ) .
-	" ORDER BY time ASC LIMIT 1";
+                " FROM races_loch WHERE idusers=".$this->users->idusers.
+                " AND idraces=".$this->users->engaged.
+                " AND time > " . ( $timestamp - $duration - DELAYBETWEENUPDATE/2 ) .
+                " ORDER BY time ASC LIMIT 1";
       
       $result = wrapper_mysql_db_query_reader($query);
       $row = mysql_fetch_array($result, MYSQL_ASSOC);
-      if (!$row) {
-	return array(0,0);
+      if (!$row) 
+      {
+	      return array(0,0);
       }
     }
     
     $distance = $this->users->loch - $row['loch'];
     $time_elapsed = max($timestamp - $row['time'], 1);
     
-    if ($time_elapsed == 1 && $distance > 10) {
+    if ($time_elapsed == 1 && $distance > 10) 
+    {
       $distance = 0;
       $corrected_distance = 0;
-    } else {
+    } 
+    else 
+    {
       $corrected_distance =  $distance *  $duration / $time_elapsed ;
     }
     //printf ("\ndistRecords for duration = %d s , elapsed = %d, dur/ela = %f,\n distance=%f, corrected=%f\n", $duration, $time_elapsed, $duration/$time_elapsed,$distance,$corrected_distance);

@@ -168,8 +168,8 @@ mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
 rm -f $GRIBPATH/$LATEST
 ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/$LATEST
+rm -rf $VLMRACINE/cache/gribtiles/* >> $LOG 2>&1 
 mv $LOG $GRIBPATH/
 rm -Rf $TMPGRIBPATH/$DAT$HH
-echo rm -rf $VLMRACINE/cache/gribtiles/* >> $LOG 2>&1 
 date +%s >  $GRIBPATH/GribCacheIndex
 
