@@ -64,6 +64,7 @@ function Estimator(Boat)
     this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
     this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT)
+    this.CurEstimate.RaceWP = this.Boat.VLMInfo.NWP;
 
     if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
     {
@@ -224,12 +225,60 @@ function Estimator(Boat)
     }
     else
     {
-      throw "unsupported estimating to AUTOWP"
       // Get CurRaceWP
       // Compute closest point (using bad euclidian method)
       // Return computed point
+
+      var Seg = this.GetNextGateSegment(Estimate);
+      
+      var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
+      var Loxo2 = Seg.P1.GetLoxoCourse(Estimate.Position);
+      var Delta = Loxo1 - Loxo2;
+
+      if (Delta > 180) 
+      {
+        Delta -= 360.; 
+      }
+      else if ( Delta < -180) 
+      {
+       Delta += 360.; 
+      }
+
+      Delta = Math.abs(Delta);
+
+      if (Delta > 90)
+      {
+        return Seg.P1;
+      }
+      else
+      {
+        var PointDist = Seg.P1.GetLoxoDist(Estimate.Position);
+        return Seg.P1.ReachDistLoxo(Loxo2,PointDist*Math.cos(Deg2Rad(Delta)));
+      }
     }
     
+  }
+
+  this.GetNextGateSegment = function(Estimate)
+  {
+
+    var NWP = Estimate.RaceWP;
+    var Gate = this.Boat.RaceInfo.races_waypoints[NWP];
+
+    var P1 = new VLMPosition (Gate.longitude1, Gate.latitude1);
+    var P2 = {}
+    if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
+    {
+      P2 = new VLMPosition (Gate.longitude2, Gate.latitude2);
+    }
+    else
+    {
+      throw "not implemented 1 buoy gate"
+    }
+
+    return { P1 : P1, P2 : P2};
+
+
   }
 
   this.ReportProgress = function (Complete)
