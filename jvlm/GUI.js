@@ -427,6 +427,8 @@ function HandleStartEstimator(e)
   CurBoat.Estimator.Start(HandleEstimatorProgress);
 }
 
+var LastPct = -1
+  
 function HandleEstimatorProgress(Complete, Pct)
 {
   if (Complete)
@@ -434,14 +436,16 @@ function HandleEstimatorProgress(Complete, Pct)
     $("#StartEstimator").removeClass("hidden")
     $("#PbEstimatorProgress").addClass("hidden")
     $("#PbEstimatorProgressText").addClass("hidden")
+    LastPct = -1
   }
-  else
+  else if (Pct - LastPct > 0.15)
   {
     $("#StartEstimator").addClass("hidden")
     $("#PbEstimatorProgress").removeClass("hidden")
     $("#PbEstimatorProgressText").removeClass("hidden")
     $("#PbEstimatorProgressText").text(Pct)
     $("#PbEstimatorProgress").css("width",Pct+"%")
+    LastPct = Pct
   }
 }
 
