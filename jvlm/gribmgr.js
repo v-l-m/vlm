@@ -224,6 +224,12 @@ function VLM2GribManager()
 
   this.CheckGribLoadedIdx = function(LonIdx, LatIdx)
   {
+
+    if (isNaN(LonIdx) || isNaN(LatIdx))
+    {
+      var dbgpt=0;
+    }
+
     if (this.Tables.length && this.Tables[0][LonIdx] && this.Tables[0][LonIdx][LatIdx])
     {
       return;
