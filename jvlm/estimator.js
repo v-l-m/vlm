@@ -183,8 +183,7 @@ function Estimator(Boat)
         {
           Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-          var NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
-        
+          var NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);          
         }
         else
         {
@@ -200,6 +199,8 @@ function Estimator(Boat)
           var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
         
         }
+
+        this.CheckWPReached(Dest,this.CurEstimate.Position,NewPos)
         break;
 
 
@@ -208,6 +209,9 @@ function Estimator(Boat)
     }
 
     console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
+
+    
+
     this.CurEstimate.Position = NewPos;
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
@@ -215,6 +219,27 @@ function Estimator(Boat)
     this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
     setTimeout(this.Estimate.bind(this),0);
     this.ReportProgress(false)
+  }
+
+  this.CheckWPReached = function (Dest,PrevPos,NewPos)
+  {
+    if (!this.CurEstimate.CurWP.Lat.value && !this.CurEstimate.CurWP.Lon.Value)
+    {
+      // AutoWP, nothing to do
+      return;
+    }
+    // VLM REF from CheckWayPointCrossing
+    // On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
+    //if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
+    var BeforeDist = Dest.GetOrthoDist(PrevPos)
+    var AfterDist = Dest.GetOrthoDist(NewPos)
+    var CurDist = PrevPos.GetOrthoDist(NewPos)
+    if ((BeforeDist < CurDist)|| AfterDist < CurDist)
+    {
+      // WP Reached revert to AutoWP
+      this.CurEstimate.CurWP = new VLMPosition(0,0)
+    }
+    
   }
 
   this.GetNextWPCoords = function (Estimate)
