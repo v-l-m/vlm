@@ -210,15 +210,57 @@ function Estimator(Boat)
 
     console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
 
-    
+    var RaceComplete = false;
+
+    if (this.CheckGateValidation(NewPos))
+    {
+      RaceComplete = this.GetNextRaceWP()
+    }
 
     this.CurEstimate.Position = NewPos;
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
     // Start next point computation....
     this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
-    setTimeout(this.Estimate.bind(this),0);
-    this.ReportProgress(false)
+    if (RaceComplete)
+    {
+      this.ReportProgress(true);
+      return;
+    }
+    else
+    {
+      setTimeout(this.Estimate.bind(this),0);
+      this.ReportProgress(false)
+    }
+  }
+
+  this.GetNextRaceWP = function()
+  {
+    if ( this.CurEstimate.RaceWP+1 === this.Boat.RaceWP.races_waypoints.length-1)
+    {
+      //Race Complete
+      return true;
+    }
+    for (i = this.CurEstimate.RaceWP+1; i < this.Boat.RaceWP.races_waypoints.length; i++)
+    {
+        if (!(this.Boat.RaceWP.races_waypoints & WP_GATE_KIND_MASK))
+        {
+          this.CurEstimate.RaceWP = i;
+          break;
+        }
+    }
+    return false;
+  }
+
+  this.CheckGateValidation = function( NewPos)
+  {
+    var GateSeg = this.GetNextGateSegment(this.CurEstimate)
+    var Gate = this.Boat.RaceInfo.races_waypoints[this.CurEstimate.RaceWP];
+    var GateType = Gate.format;
+    var CurSeg = {P1 : this.CurEstimate.Position, P2 : NewPos}
+
+    return VLMMercatorTransform.SegmentsIntersect(GateSeg,CurSeg)
+    
   }
 
   this.CheckWPReached = function (Dest,PrevPos,NewPos)
@@ -238,6 +280,7 @@ function Estimator(Boat)
     {
       // WP Reached revert to AutoWP
       this.CurEstimate.CurWP = new VLMPosition(0,0)
+      console.log("WP Reached");
     }
     
   }
@@ -284,11 +327,30 @@ function Estimator(Boat)
     
   }
 
-  this.GetNextGateSegment = function(Estimate)
+  this.GetNextGateSegment = function(Estimate, GateKind )
   {
 
     var NWP = Estimate.RaceWP;
     var Gate = this.Boat.RaceInfo.races_waypoints[NWP];
+
+    if (typeof GateKind === "undefined")
+    {
+      GateKind = WP_DEFAULT;
+    }
+
+    do
+    {
+      if ((Gate.wpformat & WP_GATE_KIND_MASK) != GateKind)
+      {
+        NWP++;
+        if (NWP >= this.Boat.RaceInfo.races_waypoints)
+        {
+          throw "Oops could not find requested gate type"
+        }
+        Gate = this.Boat.RaceInfo.races_waypoints[NWP];
+      }
+
+    } while  ((Gate.wpformat & WP_GATE_KIND_MASK) != GateKind)
 
     var P1 = new VLMPosition (Gate.longitude1, Gate.latitude1);
     var P2 = {}
