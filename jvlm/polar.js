@@ -35,7 +35,7 @@ function PolarManagerClass()
     if (!this.Polars[PolarName])
     {
       // Polar not loaded yet, load it
-      $.get("/Polaires/"+ PolarName +".csv",HandlePolarLoaded.bind(this, PolarName,null, null))
+      $.get("/Polaires/"+ PolarName +".csv",this.HandlePolarLoaded.bind(this, PolarName,null, null))
 
       return NaN;
     }
