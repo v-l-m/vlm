@@ -52,6 +52,21 @@ function PolarManagerClass()
   this.HandlePolarLoaded = function(PolarName,callback,Boat, data)
   {
     var polar = $.csv.toArrays(data,{separator:";"});
+
+    // Convert back all values to floats.
+    for (row in polar)
+    {
+      if (polar[row])
+      {
+        for (col in polar[row])
+        {
+          if (polar[row][col])
+          {
+            polar[row][col]=parseFloat(polar[row][col]);
+          }
+        }
+      }
+    }
     PolarsManager.Polars[PolarName]={};
     PolarsManager.Polars[PolarName].SpeedPolar=polar;
     PolarsManager.Polars[PolarName].WindLookup=[];
