@@ -53,12 +53,8 @@ $(document).ready(
         var Lat = $("#PM_Lat")[0].value;
         var Lon = $("#PM_Lon")[0].value;
         
-
-        if ($("#PM_WithWPHeading")[0].checked)
-        {
-          WpH = parseInt($("#PM_WPHeading")[0].value,10);
-        }
-
+        WpH = parseInt($("#PM_WPHeading")[0].value,10);
+        
         switch ($(this)[0].id)
         {
           case "BtnPM_Ortho":

@@ -8,6 +8,7 @@ function BoatEstimate(Est)
   this.Value;
   this.Meteo;
   this.CurWP = new VLMPosition(0,0);
+  this.HdgAtWP = -1;
   this.RaceWP = 1;
   
   if (typeof Est!== "undefined" && Est)
@@ -64,6 +65,7 @@ function Estimator(Boat)
     this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
     this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT)
+    this.CurEstimate.HdgAtWP = parseFloat(this.Boat.VLMInfo["H@WP"])
     this.CurEstimate.RaceWP = this.Boat.VLMInfo.NWP;
 
     if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
@@ -103,13 +105,22 @@ function Estimator(Boat)
       return;
     }
 
-    var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
-    if (!MI)
+    do
     {
-      // FIXME : have a way of going out if needed
-      setTimeout(this.Estimate.bind(this),1000);
-      return;
-    }
+      var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
+      if (!MI)
+      {
+        // FIXME : have a way of going out if needed
+        setTimeout(this.Estimate.bind(this),1000);
+        return;
+      }
+
+      if (isNaN(MI.Speed))
+      {
+        var Bkpt=1;
+        alert("Looping on NaN WindSpeed")
+      }
+    } while (isNaN(MI.Speed))
     
     this.CurEstimate.Meteo = MI;
 
@@ -141,7 +152,8 @@ function Estimator(Boat)
             case PM_VBVMG:
               var p1 = Order.PIP.split("@")
               var Dest = p1[0].split(",")
-              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[1]),parseFloat(Dest[0])) 
+              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[1]),parseFloat(Dest[0]))
+              this.CurEstimate.HdgAtWP = parseFloat(p1[1]);
               break;
               
             default :
@@ -195,6 +207,7 @@ function Estimator(Boat)
           {
             Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
           }
+
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
           var NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.*this.Boat.VLMInfo.VAC, Hdg);
         
@@ -259,7 +272,12 @@ function Estimator(Boat)
     var GateType = Gate.format;
     var CurSeg = {P1 : this.CurEstimate.Position, P2 : NewPos}
 
-    return VLMMercatorTransform.SegmentsIntersect(GateSeg,CurSeg)
+    var RetVal =  VLMMercatorTransform.SegmentsIntersect(GateSeg,CurSeg)
+    if (RetVal)
+    {
+      var brkpt = 0;
+    }
+    return RetVal;
     
   }
 
@@ -280,6 +298,12 @@ function Estimator(Boat)
     {
       // WP Reached revert to AutoWP
       this.CurEstimate.CurWP = new VLMPosition(0,0)
+      if (this.CurEstimate.HdgAtWP != -1)
+      {
+        this.CurEstimate.Mode = PM_HEADING;
+        this.CurEstimate.Value = this.CurEstimate.HdgAtWP;
+
+      }
       console.log("WP Reached");
     }
     
@@ -321,26 +345,21 @@ function Estimator(Boat)
       else
       {
         var PointDist = Seg.P1.GetLoxoDist(Estimate.Position);
-        return Seg.P1.ReachDistLoxo(Loxo2,PointDist*Math.cos(Deg2Rad(Delta)));
+        return Seg.P1.ReachDistLoxo(PointDist*Math.cos(Deg2Rad(Delta)),Loxo1);
       }
     }
     
   }
 
-  this.GetNextGateSegment = function(Estimate, GateKind )
+  this.GetNextGateSegment = function(Estimate )
   {
 
     var NWP = Estimate.RaceWP;
     var Gate = this.Boat.RaceInfo.races_waypoints[NWP];
 
-    if (typeof GateKind === "undefined")
-    {
-      GateKind = WP_DEFAULT;
-    }
-
     do
     {
-      if ((Gate.wpformat & WP_GATE_KIND_MASK) != GateKind)
+      if (Gate.wpformat & WP_ICE_GATE) 
       {
         NWP++;
         if (NWP >= this.Boat.RaceInfo.races_waypoints)
@@ -350,7 +369,7 @@ function Estimator(Boat)
         Gate = this.Boat.RaceInfo.races_waypoints[NWP];
       }
 
-    } while  ((Gate.wpformat & WP_GATE_KIND_MASK) != GateKind)
+    } while  (Gate.wpformat & WP_ICE_GATE)
 
     var P1 = new VLMPosition (Gate.longitude1, Gate.latitude1);
     var P2 = {}
