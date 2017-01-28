@@ -66,7 +66,7 @@ function Estimator(Boat)
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
     this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT)
     this.CurEstimate.HdgAtWP = parseFloat(this.Boat.VLMInfo["H@WP"])
-    this.CurEstimate.RaceWP = this.Boat.VLMInfo.NWP;
+    this.CurEstimate.RaceWP = parseInt(this.Boat.VLMInfo.NWP,10);
 
     if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
     {
@@ -249,14 +249,15 @@ function Estimator(Boat)
 
   this.GetNextRaceWP = function()
   {
-    if ( this.CurEstimate.RaceWP+1 === this.Boat.RaceWP.races_waypoints.length-1)
+    var NbWP = Object.keys(this.Boat.RaceInfo.races_waypoints).length;
+    if ( this.CurEstimate.RaceWP === NbWP)
     {
       //Race Complete
       return true;
     }
-    for (i = this.CurEstimate.RaceWP+1; i < this.Boat.RaceWP.races_waypoints.length; i++)
+    for (i = this.CurEstimate.RaceWP+1; i <= NbWP; i++)
     {
-        if (!(this.Boat.RaceWP.races_waypoints & WP_GATE_KIND_MASK))
+        if (!(this.Boat.RaceInfo.races_waypoints[i].wpformat & WP_ICE_GATE))
         {
           this.CurEstimate.RaceWP = i;
           break;
@@ -269,14 +270,9 @@ function Estimator(Boat)
   {
     var GateSeg = this.GetNextGateSegment(this.CurEstimate)
     var Gate = this.Boat.RaceInfo.races_waypoints[this.CurEstimate.RaceWP];
-    var GateType = Gate.format;
     var CurSeg = {P1 : this.CurEstimate.Position, P2 : NewPos}
 
     var RetVal =  VLMMercatorTransform.SegmentsIntersect(GateSeg,CurSeg)
-    if (RetVal)
-    {
-      var brkpt = 0;
-    }
     return RetVal;
     
   }
