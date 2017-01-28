@@ -1156,6 +1156,9 @@ function EngageBoatInRace(RaceID, BoatID) {
 
 function HandleMapZoomEnd(object, element)
 {
+  var Zoom = VLMBoatsLayer.getZoomForResolution (VLMBoatsLayer.getResolution());
+  VLM2Prefs.MapPrefs.MapZoomLevel = Zoom;
+  VLM2Prefs.Save();
   RefreshCurrentBoat(false);
 }
 

@@ -92,6 +92,7 @@ function MapPrefs()
         Show10Around : 4
     }
     this.WindArrowsSpacing = 64;    // Spacing steps for wind arrow drawing
+    this.MapZoomLevel = 4;
 
     this.Load = function()
     {
@@ -99,6 +100,7 @@ function MapPrefs()
         {
             this.ShowReals = store.get('#ShowReals');
             this.ShowOppName = store.get("#ShowOppName");
+            this.MapZoomLevel = store.get("#MapZoomLevel");
         } 
     }
 
@@ -107,7 +109,8 @@ function MapPrefs()
         if(store.enabled)
         {
             store.set("#ShowReals",this.ShowReals);
-            store.set("#ShowOppName",this.ShowOppName);            
+            store.set("#ShowOppName",this.ShowOppName);   
+            store.set("#MapZoomLevel",this.MapZoomLevel);         
         }
 
         var MapPrefVal="mapselboats"
@@ -132,7 +135,10 @@ function MapPrefs()
         }
 
         var NewVals={mapOpponents:MapPrefVal};
-        UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals});
+        if (typeof _CurPlayer !== "undefined")
+        {
+            UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals});
+        }
     }
 
     this.GetOppModeString = function (Mode)

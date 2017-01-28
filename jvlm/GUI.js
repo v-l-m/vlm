@@ -119,6 +119,11 @@ function OLInit() {
     var default_longitude = -30.0;
     var default_zoom = 4;
 
+    if (typeof VLM2Prefs !== "undefined")
+    {
+      default_zoom = VLM2Prefs.MapPrefs.MapZoomLevel;
+    }
+
     var layeroption = {
         //sphérique
         sphericalMercator: true,
