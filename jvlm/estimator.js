@@ -237,6 +237,7 @@ function Estimator(Boat)
     this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
     if (RaceComplete)
     {
+      this.Running=false;
       this.ReportProgress(true);
       return;
     }
