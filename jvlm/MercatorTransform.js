@@ -7,7 +7,7 @@ function MercatorTransform ()
   this.Height = 10000;
   this.LonOffset = 0;
   this.LatOffset = 0
-  this.Scale = 1;
+  this.Scale = 10000/180;
 
   this.LonToMapX = function(Lon)
   {
@@ -68,7 +68,7 @@ function MercatorTransform ()
     Dx = newX
 
     // Fail if the lines are parallel.
-    if (Cy = Dy)
+    if (Cy === Dy)
     {
       return false
     }
