@@ -195,6 +195,10 @@ function PolarManagerClass()
       D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha)
       SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne)
       
+      if (isNaN(SpeedT1))
+      {
+        throw "Nan SpeedT1 exception"
+      }
       if (SpeedT1 > 0) 
       {
 
@@ -213,6 +217,11 @@ function PolarManagerClass()
           D2 = Dist - D1
           
           SpeedT2 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho -j * ISigne)
+          
+          if (isNaN(SpeedT2))
+          {
+            throw "Nan SpeedT2 exception"
+          }
           
           if (SpeedT2 <= 0) 
           {
@@ -245,6 +254,11 @@ function PolarManagerClass()
     
     VMGAlpha = SpeedAlpha * Math.cos(Deg2Rad(b_Alpha))
     VMGBeta = SpeedBeta * Math.cos(Deg2Rad(b_Beta))
+
+    if (isNaN(VMGAlpha) || isNaN(VMGBeta))
+    {
+      throw "NaN VMG found"
+    }
 
     if (VMGAlpha > VMGBeta) 
     {
