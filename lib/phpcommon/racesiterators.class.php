@@ -36,17 +36,20 @@
 
         function start() {
             require_once( 'iCalcreator/iCalcreator.class.php' );
+            date_default_timezone_set( 'UTC' );
             $this->icalobject = new vcalendar();
+            
             // create a new calendar instance
             $this->icalobject->setConfig( 'unique_id', 'virtual-loup-de-mer.org' ); // set Your unique id
             $this->icalobject->setProperty( 'method', 'PUBLISH' ); // required of some calendar software
             $this->icalobject->setProperty( "x-wr-calname", "Agenda VLM" ); // required of some calendar software
             $this->icalobject->setProperty( "X-WR-CALDESC", "Agenda VLM" ); // required of some calendar software
-            $this->icalobject->setProperty( "X-WR-TIMEZONE", "Europe/Paris" ); // required of some calendar software
+            $this->icalobject->setProperty( "X-WR-TIMEZONE", "UTC" ); // required of some calendar software
         }
 
         function onerow($row) {
             $vevent = new vevent(); // create an event calendar component
+            $vevent->SetConfig('TZID','UTC') ;
             $vevent->setProperty("uid", $row['idraces']."@".$_SERVER['SERVER_NAME']);
             $vevent->setProperty( 'dtstart', array('timestamp' => $row['deptime']) );
             $vevent->setProperty( "organizer" , EMAIL_COMITE_VLM );
