@@ -672,8 +672,16 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   {
     WP = Boat.GetNextWPPosition();
   }
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
+
+  if (typeof WP !== "undefined" && WP)
+  {
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
+  }
+  {
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", "N/A"]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", "N/A"]);
+  }
   
   if (Boat.VLMInfo.PIM === PM_ANGLE)
   {
@@ -1432,11 +1440,21 @@ function HandleMapMouseMove(e)
     $("#MI_OrthoDist").text(CurPos.GetOrthoDist(Pos,2) + " nM");
     $("#MI_Loxo").text(CurPos.GetLoxoCourse(Pos,2) + " °");
     $("#MI_Ortho").text(CurPos.GetOrthoCourse(Pos,2) + " °");
-    $("#MI_WPLoxoDist").text(Pos.GetLoxoDist(WPPos,2) + " nM");
-    $("#MI_WPOrthoDist").text(Pos.GetOrthoDist(WPPos,2) + " nM");
-    $("#MI_WPLoxo").text(Pos.GetLoxoCourse(WPPos,2) + " °");
-    $("#MI_WPOrtho").text(Pos.GetOrthoCourse(WPPos,2) + " °");
     
+    if (typeof WPPos !== "undefined" && WPPos)
+    {
+      $("#MI_WPLoxoDist").text(WPPos.GetLoxoDist(Pos,2) + " nM");
+      $("#MI_WPOrthoDist").text(WPPos.GetOrthoDist(Pos,2) + " nM");
+      $("#MI_WPLoxo").text(WPPos.GetLoxoCourse(Pos,2) + " °");
+      $("#MI_WPOrtho").text(WPPos.GetOrthoCourse(Pos,2) + " °");
+    }
+    else
+    {
+      $("#MI_WPLoxoDist").text("--- nM");
+      $("#MI_WPOrthoDist").text( "--- nM");
+      $("#MI_WPLoxo").text("--- °");
+      $("#MI_WPOrtho").text( "--- °");
+    }
   }  
 }
 

@@ -353,40 +353,9 @@ function Estimator(Boat)
     
   }
 
-  this.GetNextGateSegment = function(Estimate )
+  this.GetNextGateSegment = function(Estimate)
   {
-
-    var NWP = Estimate.RaceWP;
-    var Gate = this.Boat.RaceInfo.races_waypoints[NWP];
-
-    do
-    {
-      if (Gate.wpformat & WP_ICE_GATE) 
-      {
-        NWP++;
-        if (NWP >= this.Boat.RaceInfo.races_waypoints)
-        {
-          throw "Oops could not find requested gate type"
-        }
-        Gate = this.Boat.RaceInfo.races_waypoints[NWP];
-      }
-
-    } while  (Gate.wpformat & WP_ICE_GATE)
-
-    var P1 = new VLMPosition (Gate.longitude1, Gate.latitude1);
-    var P2 = {}
-    if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
-    {
-      P2 = new VLMPosition (Gate.longitude2, Gate.latitude2);
-    }
-    else
-    {
-      throw "not implemented 1 buoy gate"
-    }
-
-    return { P1 : P1, P2 : P2};
-
-
+    return this.Boat.GetNextGateSegment(Estimate.RaceWP);
   }
 
   this.ReportProgress = function (Complete)
