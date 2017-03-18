@@ -292,7 +292,8 @@ function VLM2GribManager()
       for (index in e.gribs_url)
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
-        $.get("/cache/gribtiles/"+url,this.HandleSmartGribData.bind(this,LoadKey, url));
+        var seed = (new Date).getTime();
+        $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey]++;
       }
 
