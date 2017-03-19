@@ -444,7 +444,7 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#StartEstimator").addClass("hidden")
     $("#PbEstimatorProgress").removeClass("hidden")
     $("#PbEstimatorProgressText").removeClass("hidden")
-    $("#PbEstimatorProgressText").text(Dte)
+    $("#PbEstimatorProgressText").text(Pct)
     $("#PbEstimatorProgress").css("width",Pct)
     LastPct = Pct
   }
