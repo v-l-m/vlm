@@ -330,7 +330,11 @@ function VLM2GribManager()
     {
       var Parms = Url.split("/")
       this.LoadQueue[LoadKey]++;
-      $.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, url));
+      if (Parms[2] != 15)
+      {
+        var i = 0;    
+      }
+      $.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
       return ;
     }
 
