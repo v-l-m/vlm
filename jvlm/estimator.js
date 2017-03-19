@@ -325,7 +325,7 @@ function Estimator(Boat)
     }
     else
     {
-     return this.Boat.GetNextWPPosition (Estimate.RaceWP, Estimate.Position);
+     return this.Boat.GetNextWPPosition (Estimate.RaceWP, Estimate.Position, Estimate.CurWP);
     }
   }
 
@@ -348,7 +348,7 @@ function Estimator(Boat)
           Pct = RoundPow((1 - Pct)*100.,1)
         }
       }
-      this.ProgressCallBack(Complete,Pct);
+      this.ProgressCallBack(Complete,Pct, this.CurEstimate.Date);
     }
   }
 
