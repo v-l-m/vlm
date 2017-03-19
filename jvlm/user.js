@@ -149,7 +149,7 @@ function Boat(vlmboat)
           var SegLength = Seg.P1.GetLoxoDist(Seg.P2);
           if (SegLength > SegDist)
           {
-            return CurPos.ReachDistLoxo(SegDist,Loxo1);
+            return Seg.P1.ReachDistLoxo(SegDist,Loxo1);
           }
           else
           {
