@@ -321,7 +321,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var WP = Boat.GetNextWPPosition();
   if (typeof WP !== "undefined" && WP)
   {
-    console.log ("WP : " + WP.Lon.Value);
+    //console.log ("WP : " + WP.Lon.Value);
   
     var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value, WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
     // Waypoint marker    

@@ -319,38 +319,8 @@ function Estimator(Boat)
     }
     else
     {
-      // Get CurRaceWP
-      // Compute closest point (using bad euclidian method)
-      // Return computed point
-
-      var Seg = this.GetNextGateSegment(Estimate);
-      
-      var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
-      var Loxo2 = Seg.P1.GetLoxoCourse(Estimate.Position);
-      var Delta = Loxo1 - Loxo2;
-
-      if (Delta > 180) 
-      {
-        Delta -= 360.; 
-      }
-      else if ( Delta < -180) 
-      {
-       Delta += 360.; 
-      }
-
-      Delta = Math.abs(Delta);
-
-      if (Delta > 90)
-      {
-        return Seg.P1;
-      }
-      else
-      {
-        var PointDist = Seg.P1.GetLoxoDist(Estimate.Position);
-        return Seg.P1.ReachDistLoxo(PointDist*Math.cos(Deg2Rad(Delta)),Loxo1);
-      }
+     return this.Boat.GetNextWPPosition (Estimate.RaceWP, Estimate.Position);
     }
-    
   }
 
   this.GetNextGateSegment = function(Estimate)

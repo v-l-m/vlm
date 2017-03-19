@@ -85,7 +85,7 @@ function Boat(vlmboat)
   }
 
 
-  this.GetNextWPPosition= function()
+  this.GetNextWPPosition= function(NWP,Position)
   {
     // Assume if we get there, there is a boat with RaceInfo and VLMInfo loaded
     var WPIndex = this.VLMInfo.NWP;
@@ -102,6 +102,10 @@ function Boat(vlmboat)
       // Return computed point
 
       var CurWP = this.VLMInfo.NWP;
+      if (typeof NWP !== "undefined" && NWP)
+      {
+        CurWP = NWP;
+      }
       var Seg = this.GetNextGateSegment(CurWP);
       
       if (typeof Seg === "undefined" || (! Seg))
@@ -109,7 +113,15 @@ function Boat(vlmboat)
         return null;
       }
       var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
-      var CurPos = new VLMPosition(this.VLMInfo.LON,this.VLMInfo.LAT)
+      var CurPos 
+      if (typeof Position != "undefined" && Position)
+      {
+        CurPos = Position;
+      }
+      else
+      {
+        CurPos = new VLMPosition(this.VLMInfo.LON,this.VLMInfo.LAT)
+      }
       var Loxo2 = Seg.P1.GetLoxoCourse(CurPos);
       var Delta = Loxo1 - Loxo2;
 
