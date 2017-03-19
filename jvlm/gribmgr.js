@@ -414,7 +414,7 @@ function VLM2GribManager()
     var Fields = Line.split(":");
 
     Ret.Type=Fields[POS_TYPE];
-    if (Fields[POS_INDEX]==="anl")
+    if ((typeof Fields[POS_INDEX]=== "undefined") || (Fields[POS_INDEX]==="anl"))
     {
       Ret.DateIndex = 0;
     }
