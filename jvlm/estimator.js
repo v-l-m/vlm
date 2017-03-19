@@ -17,11 +17,15 @@ function BoatEstimate(Est)
     this.Date = new Date(Est.Date);
     this.Mode = Est.Mode;
     this.Value = Est.Value;
-    this.Meteo = new WindData(
+
+    if (typeof Est.Meteo !== "undefined" && Est.Meteo)
+    {
+      this.Meteo = new WindData(
                         {
                           Speed : Est.Meteo.Speed,
                           Heading : Est.Meteo.Heading
                         });
+    }
     this.CurWP = Est.CurWP;
     this.RaceWP = Est.RaceWP;
   }
@@ -96,6 +100,8 @@ function Estimator(Boat)
     this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp); 
     setTimeout(this.Estimate.bind(this),2000)
     this.ReportProgress(false);
+    // Add Start point to estimate track
+    this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
   }
 
   this.Estimate = function(Boat)

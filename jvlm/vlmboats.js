@@ -385,10 +385,6 @@ function DrawBoat(Boat, CenterMapOnBoat)
   {
     Boat.Estimator.EstimatePoints = [];
 
-    // Psh currnet pos so that estimate starts from Boat.
-    Boat.Estimator.EstimatePoints.push(PosTransformed);
-
-    // Loop estimate points.
     for (index in Boat.Estimator.EstimateTrack)
     {
       var Est = Boat.Estimator.EstimateTrack[index];
