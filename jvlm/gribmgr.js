@@ -292,8 +292,8 @@ function VLM2GribManager()
       for (index in e.gribs_url)
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
-        var seed = (new Date).getTime();
-        $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
+        var seed =(new Date).getTime();
+        $.get("/cache/gribtiles/"+url+"&seed="+(0+seed),this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey]++;
       }
 
@@ -334,7 +334,8 @@ function VLM2GribManager()
       {
         var i = 0;    
       }
-      $.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
+      var seed = 0+(new Date).getTime();
+      $.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt&seed="+seed,this.HandleSmartGribData .bind(this,LoadKey, Url));
       return ;
     }
 
