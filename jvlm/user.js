@@ -33,21 +33,139 @@ function Boat(vlmboat)
     this.Rankings=vlmboat.Rankings;  
   }
 
-  this.GetNextWPPosition= function()
+  this.GetNextGateSegment = function( NWP)
+  {
+
+    if (typeof NWP === "string")
+    {
+      NWP = parseInt(NWP,10);
+    }
+
+    if (typeof this.RaceInfo === "undefined")
+    {
+      return null;
+    }
+
+    var Gate = this.RaceInfo.races_waypoints[NWP];
+
+    do
+    {
+      // Make sure gate type is handled as a number
+      if (typeof Gate === "string")
+      {
+        Gate = parseInt(Gate,10);
+      }
+
+      if (Gate.wpformat & WP_ICE_GATE) 
+      {
+        NWP++;
+        if (NWP >= this.Boat.RaceInfo.races_waypoints)
+        {
+          throw "Oops could not find requested gate type"
+        }
+        Gate = this.Boat.RaceInfo.races_waypoints[NWP];
+      }
+
+    } while  (Gate.wpformat & WP_ICE_GATE)
+
+    var P1 = new VLMPosition (Gate.longitude1, Gate.latitude1);
+    var P2 = {}
+    if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
+    {
+      P2 = new VLMPosition (Gate.longitude2, Gate.latitude2);
+    }
+    else
+    {
+      throw "not implemented 1 buoy gate"
+    }
+
+    return { P1 : P1, P2 : P2};
+
+
+  }
+
+
+  this.GetNextWPPosition = function(NWP,Position,NWPPosition)
   {
     // Assume if we get there, there is a boat with RaceInfo and VLMInfo loaded
     var WPIndex = this.VLMInfo.NWP;
 
     //If there is a defined WP, then return it
-    if ((this.VLMInfo.WPLON!=0)||(this.VLMInfo.WPLAT!=0))
+    if ((typeof NWPPosition === "undefined" || (!NWPPosition)) && ((this.VLMInfo.WPLON!=0)||(this.VLMInfo.WPLAT!=0)))
     {
       return new VLMPosition (this.VLMInfo.WPLON,this.VLMInfo.WPLAT);
     }
+    else if (typeof NWPPosition !== "undefined" && NWPPosition && NWPPosition.Lon.Value !=0 && NWPPosition.Lat.Value != 0)
+    {
+      return new VLMPosition (NWPPosition.Lon.Value,NWPPosition.Lat.Value);
+    }
     else
     {
-      // Use boat ortho and distance to compute default WP
-      var P = new VLMPosition(this.VLMInfo.LON,this.VLMInfo.LAT)
-      return P.ReachDistOrtho(this.VLMInfo.DNM,this.VLMInfo.ORT)
+      // Get CurRaceWP
+      // Compute closest point (using bad euclidian method)
+      // Return computed point
+
+      var CurWP = this.VLMInfo.NWP;
+      if (typeof NWP !== "undefined" && NWP)
+      {
+        CurWP = NWP;
+      }
+      var Seg = this.GetNextGateSegment(CurWP);
+      
+      if (typeof Seg === "undefined" || (! Seg))
+      {
+        return null;
+      }
+      var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
+      var CurPos 
+      if (typeof Position != "undefined" && Position)
+      {
+        CurPos = Position;
+      }
+      else
+      {
+        CurPos = new VLMPosition(this.VLMInfo.LON,this.VLMInfo.LAT)
+      }
+      var Loxo2 = Seg.P1.GetLoxoCourse(CurPos);
+      var Delta = Loxo1 - Loxo2;
+
+      if (Delta > 180) 
+      {
+        Delta -= 360.; 
+      }
+      else if ( Delta < -180) 
+      {
+       Delta += 360.; 
+      }
+
+      Delta = Math.abs(Delta);
+
+      if (Delta > 90)
+      {
+        return Seg.P1;
+      }
+      else
+      {
+        var PointDist = Seg.P1.GetLoxoDist(CurPos);
+        try
+        {
+          var SegDist = PointDist*Math.cos(Deg2Rad(Delta));
+          var SegLength = Seg.P1.GetLoxoDist(Seg.P2);
+          if (SegLength > SegDist)
+          {
+            return Seg.P1.ReachDistLoxo(SegDist,Loxo1);
+          }
+          else
+          {
+            return Seg.P2;
+          }
+        }
+        catch (e)
+        {
+          return null;
+        }
+
+      }
     }
     
 

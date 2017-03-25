@@ -198,12 +198,13 @@ function VLM2GribManager()
 
   this.CheckGribLoaded = function(TableIndex, Lat,Lon)
   {
+    var LonIdx1 = 180/this.GribStep + Math.floor(Lon/this.GribStep);
+    var LatIdx1 = 90/this.GribStep + Math.floor(Lat/this.GribStep);
+    var LonIdx2 = 180/this.GribStep + Math.ceil(Lon/this.GribStep);
+    var LatIdx2 = 90/this.GribStep + Math.ceil(Lat/this.GribStep);
+      
     if (TableIndex in this.Tables)
     {
-      var LonIdx1 = 180/this.GribStep + Math.floor(Lon/this.GribStep);
-      var LatIdx1 = 90/this.GribStep + Math.floor(Lat/this.GribStep);
-      var LonIdx2 = 180/this.GribStep + Math.ceil(Lon/this.GribStep);
-      var LatIdx2 = 90/this.GribStep + Math.ceil(Lat/this.GribStep);
       
       if (this.Tables[TableIndex][LonIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx1]  && this.Tables[TableIndex][LonIdx1][LatIdx2] 
           && this.Tables[TableIndex][LonIdx2] && this.Tables[TableIndex][LonIdx2][LatIdx1] && this.Tables[TableIndex][LonIdx2][LatIdx2])
@@ -212,34 +213,58 @@ function VLM2GribManager()
       }
     }
 
+    this.CheckGribLoadedIdx(LonIdx1, LatIdx1);
+    this.CheckGribLoadedIdx(LonIdx1, LatIdx2);
+    this.CheckGribLoadedIdx(LonIdx2, LatIdx1);
+    this.CheckGribLoadedIdx(LonIdx2, LatIdx2);
+    
+  return false;  
+      
+  }
+
+  this.CheckGribLoadedIdx = function(LonIdx, LatIdx)
+  {
+
+    if (isNaN(LonIdx) || isNaN(LatIdx))
+    {
+      var dbgpt=0;
+    }
+
+    if (this.Tables.length && this.Tables[0][LonIdx] && this.Tables[0][LonIdx][LatIdx])
+    {
+      return;
+    }
+
     //Getting there means we need to load from server
     // Get samrtgrib list for the current request position
     var RequestSize = 5;    // Assume 5° zone even though VLM request is for 15°. Most request will only return 1 zone.
-    var SouthStep = Math.floor(Lat/RequestSize)*RequestSize;
-    var WestStep = Math.floor(Lon/RequestSize)*RequestSize;
+    var Lat = (LatIdx*this.GribStep - 90);
+    var Lon = (LonIdx*this.GribStep - 180);
+    var SouthStep = Math.floor(Lat/RequestSize) * RequestSize;
+    var WestStep =  Math.floor(Lon/RequestSize) * RequestSize;
     var NorthStep, EastStep;
     
     if (Lat < SouthStep)
     {
       NorthStep = SouthStep
-      SouthStep = NorthStep - 10
+      SouthStep = NorthStep - 2 * RequestSize
     }
     else
     {
-      NorthStep = SouthStep + 10
+      NorthStep = SouthStep + 2 * RequestSize
     }
     
-    if (Lat < WestStep)
+    if (Lon < WestStep)
     {
       EastStep = WestStep
-      WestStep = EastStep - 10;
+      WestStep = EastStep - 2 * RequestSize;
     }
     else
     {
-      EastStep = WestStep + 10;
+      EastStep = WestStep + 2 * RequestSize;
     }
     
-    var LoadKey = TableIndex + "/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
+    var LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
     if (!(LoadKey in this.LoadQueue))
     {
       this.LoadQueue[LoadKey]=0;
@@ -247,8 +272,6 @@ function VLM2GribManager()
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
 
-    return false;  
-      
   }
 
   this.HandleGetSmartGribList = function (LoadKey, e)
@@ -269,7 +292,8 @@ function VLM2GribManager()
       for (index in e.gribs_url)
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
-        $.get("/cache/gribtiles/"+url,this.HandleSmartGribData.bind(this,LoadKey, url));
+        var seed = (new Date).getTime();
+        $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey]++;
       }
 
@@ -284,7 +308,7 @@ function VLM2GribManager()
 
   this.HandleSmartGribData=function(LoadKey, Url,e)
   {
-    this.ProcessInputGribData(Url,e);
+    this.ProcessInputGribData(Url,e,LoadKey);
 
     this.LoadQueue[LoadKey]--;
 
@@ -294,12 +318,26 @@ function VLM2GribManager()
     }
   }
 
-  this.ProcessInputGribData = function (Url, Data)
+  this.ProcessInputGribData = function (Url, Data,LoadKey)
   {
     var Lines = Data.split("\n");
     var TotalLines = Lines.length
     var Catalog = [];
     var HeaderCompleted = false
+
+    // Handle cache mess
+    if (Data === "--\n")
+    {
+      var Parms = Url.split("/")
+      this.LoadQueue[LoadKey]++;
+      if (Parms[2] != 15)
+      {
+        var i = 0;    
+      }
+      $.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
+      return ;
+    }
+
     // Loop data catalog
     for (var i =0; i< TotalLines ; i++)
     {
@@ -376,7 +414,7 @@ function VLM2GribManager()
     var Fields = Line.split(":");
 
     Ret.Type=Fields[POS_TYPE];
-    if (Fields[POS_INDEX]==="anl")
+    if ((typeof Fields[POS_INDEX]=== "undefined") || (Fields[POS_INDEX]==="anl"))
     {
       Ret.DateIndex = 0;
     }

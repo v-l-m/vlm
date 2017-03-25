@@ -28,21 +28,14 @@ function PolarManagerClass()
 
   this.GetBoatSpeed=function(PolarName, WindSpeed, WindBearing, BoatBearing)
   {
-    if (typeof this.Polars[PolarName] === "undefined")
+    if (! (PolarName in this.Polars))
     {
         return NaN;
     }
-    if (this.Polars[PolarName]==null)
+    if (!this.Polars[PolarName])
     {
       // Polar not loaded yet, load it
-      $.get("/Polaires/"+ PolarName +".csv",
-              function(data)
-              {
-                var polar = $.csv.toArrays(data,{separator:";"});
-                
-                PolarsManager.Polars[PolarName]=polar;
-              }
-      )
+      $.get("/Polaires/"+ PolarName +".csv",this.HandlePolarLoaded.bind(this, PolarName,null, null))
 
       return NaN;
     }
@@ -55,6 +48,35 @@ function PolarManagerClass()
     }
 
   }
+  
+  this.HandlePolarLoaded = function(PolarName,callback,Boat, data)
+  {
+    var polar = $.csv.toArrays(data,{separator:";"});
+
+    // Convert back all values to floats.
+    for (row in polar)
+    {
+      if (polar[row])
+      {
+        for (col in polar[row])
+        {
+          if (polar[row][col])
+          {
+            polar[row][col]=parseFloat(polar[row][col]);
+          }
+        }
+      }
+    }
+    PolarsManager.Polars[PolarName]={};
+    PolarsManager.Polars[PolarName].SpeedPolar=polar;
+    PolarsManager.Polars[PolarName].WindLookup=[];
+    PolarsManager.Polars[PolarName].AngleLookup=[];
+
+    if (callback && Boat)
+    {
+      callback(Boat);
+    }
+  }
 
   this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
   {
@@ -66,14 +88,7 @@ function PolarManagerClass()
     if (this.Polars[PolarName]==null)
     {
       // Polar not loaded yet, load it
-      $.get("/Polaires/"+ PolarName +".csv",
-              function(data)
-              {
-                var polar = $.csv.toArrays(data,{separator:";"});
-                PolarsManager.Polars[PolarName]=polar;
-                callback(boat);
-              }
-      )
+      $.get("/Polaires/"+ PolarName +".csv",this.HandlePolarLoaded.bind(this, PolarName,callback,boat))
     }
     else
     {
@@ -141,6 +156,8 @@ function PolarManagerClass()
     var CapOrtho  = StartPos.GetOrthoCourse(DestPos)
     var b_Alpha = 0;
     var b_Beta = 0;
+    var SpeedAlpha = 0;
+    var SpeedBeta = 0;
         
     var Speed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho)
     if (Speed > 0) 
@@ -178,6 +195,10 @@ function PolarManagerClass()
       D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha)
       SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne)
       
+      if (isNaN(SpeedT1))
+      {
+        throw "Nan SpeedT1 exception"
+      }
       if (SpeedT1 > 0) 
       {
 
@@ -196,6 +217,11 @@ function PolarManagerClass()
           D2 = Dist - D1
           
           SpeedT2 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho -j * ISigne)
+          
+          if (isNaN(SpeedT2))
+          {
+            throw "Nan SpeedT2 exception"
+          }
           
           if (SpeedT2 <= 0) 
           {
@@ -217,17 +243,22 @@ function PolarManagerClass()
             b_L2 = L2
             b_T1 = T1
             b_T2 = T2
+            SpeedAlpha = SpeedT1
+            SpeedBeta = SpeedT2
           }
         }
       }
 
     }
 
-    SpeedAlpha = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - b_Alpha * ISigne)
-    SpeedBeta = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - b_Beta * ISigne)
     
     VMGAlpha = SpeedAlpha * Math.cos(Deg2Rad(b_Alpha))
     VMGBeta = SpeedBeta * Math.cos(Deg2Rad(b_Beta))
+
+    if (isNaN(VMGAlpha) || isNaN(VMGBeta))
+    {
+      throw "NaN VMG found"
+    }
 
     if (VMGAlpha > VMGBeta) 
     {
@@ -242,7 +273,7 @@ function PolarManagerClass()
 }
 
 // Returns the speed at given angle for a polar
-function GetPolarAngleSpeed  (Polar,Alpha, WindSpeed)
+function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
 {
   var SpeedCol1;
   var SpeedCol2;
@@ -257,13 +288,24 @@ function GetPolarAngleSpeed  (Polar,Alpha, WindSpeed)
   Alpha %= 180.;
 
   // Loop and index index <= Speed
-  for (index in Polar[0])
+  var Polar = PolarObject.SpeedPolar;
+  var IntWind = Math.floor(WindSpeed);
+
+  if ((typeof PolarObject.WindLookup !== "undefined") &&  (IntWind in PolarObject.WindLookup))
   {
-    if ((index >0) && (Polar[0][index])>WindSpeed)
+    SpeedCol1=PolarObject.WindLookup[IntWind];
+  }
+  else
+  {
+    for (index in Polar[0])
     {
-      break;
+      if ((index >0) && (Polar[0][index])>WindSpeed)
+      {
+        break;
+      }
+      PolarObject.WindLookup[IntWind]=Math.floor(index);
+      SpeedCol1=Math.floor(index);
     }
-    SpeedCol1=Math.floor(index);
   }
 
   SpeedCol2=(SpeedCol1 < Polar[0].length-1)?SpeedCol1+1:SpeedCol1;
@@ -274,13 +316,24 @@ function GetPolarAngleSpeed  (Polar,Alpha, WindSpeed)
   {
     Alpha = 360 - Alpha;
   }
-  for (index in Polar)
+
+  var IntAlpha = Math.floor(Alpha);
+  if ( (typeof PolarObject.AngleLookup !== "undefined") && (IntAlpha in PolarObject.AngleLookup))
   {
-    if ((index > 0) && (Polar[index][0]>Alpha))
+    AlphaRow1 = PolarObject.AngleLookup[IntAlpha];
+  }
+  else
+  {
+
+    for (index in Polar)
     {
-      break;
+      if ((index > 0) && (Polar[index][0]>Alpha))
+      {
+        break;
+      }
+      PolarObject.AngleLookup[IntAlpha] = Math.floor(index);
+      AlphaRow1=Math.floor(index);
     }
-    AlphaRow1=Math.floor(index);
   }
   AlphaRow2=(AlphaRow1< Polar.length-1)?AlphaRow1+1:AlphaRow1;
 
@@ -326,12 +379,13 @@ function WindAngle (BoatBearing, WindBearing)
 function GetAvgValue(x,Rx1,Rx2,Ry1,Ry2)
 {
   // Cast all params as numbers
-  x=parseFloat(x);
+  /*x=parseFloat(x);
   Rx1=parseFloat(Rx1);
   Rx2=parseFloat(Rx2);
   Ry1=parseFloat(Ry1);
   Ry2=parseFloat(Ry2);
-  
+  */
+
   if ((x==Rx1) || (Rx1 == Rx2) || (Ry1==Ry2) )
   {
     // Trivial & corner cases

@@ -152,7 +152,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
           Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
           
-          console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
+          //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
           //GribMgr.WindAtPointInTime(new Date(),0,0 );
 
           // force refresh of settings if was not initialized
@@ -301,12 +301,6 @@ function DrawBoat(Boat, CenterMapOnBoat)
     // Ignore call, if no boat is provided...
     return;
   }
-  var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-  var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
-  //WP Marker
-  var WP = Boat.GetNextWPPosition();
-  var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value, WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
-  var UpdatedFeatures = [];
 
   // Remove features, before recreate and re-add
   // Can't figure how to move/update the features properly
@@ -318,9 +312,29 @@ function DrawBoat(Boat, CenterMapOnBoat)
       VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
     }
   }
-
+  
   BoatFeatures = [];
 
+  var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
+  var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection)
+  //WP Marker
+  var WP = Boat.GetNextWPPosition();
+  if (typeof WP !== "undefined" && WP)
+  {
+    //console.log ("WP : " + WP.Lon.Value);
+  
+    var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value, WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
+    // Waypoint marker    
+    var WPMarker=new OpenLayers.Feature.Vector(
+      WPTransformed,
+      {},
+      { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 48, graphicWidth: 48 }
+    );
+    
+    BoatFeatures.push(WPMarker);
+    VLMBoatsLayer.addFeatures(WPMarker);
+  }
+ 
   // Boat Marker
   var BoatIcon = new OpenLayers.Feature.Vector(
     PosTransformed,
@@ -330,14 +344,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   VLMBoatsLayer.addFeatures(BoatIcon);
   BoatFeatures.push(BoatIcon)
   
-  // Waypoint marker    
-  var WPMarker=new OpenLayers.Feature.Vector(
-    WPTransformed,
-    {},
-    { externalGraphic: 'images/WP_Marker.gif', graphicHeight: 48, graphicWidth: 48 }
-  );
-  BoatFeatures.push(WPMarker);
-  VLMBoatsLayer.addFeatures(WPMarker);
+  
   //console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
@@ -1152,6 +1159,9 @@ function EngageBoatInRace(RaceID, BoatID) {
 
 function HandleMapZoomEnd(object, element)
 {
+  var Zoom = VLMBoatsLayer.getZoomForResolution (VLMBoatsLayer.getResolution());
+  VLM2Prefs.MapPrefs.MapZoomLevel = Zoom;
+  VLM2Prefs.Save();
   RefreshCurrentBoat(false);
 }
 
