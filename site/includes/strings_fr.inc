@@ -493,7 +493,7 @@ Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cu
     'windspeed=' => 'TWS : Vitesse Vent = %2.2f',
     'winner' => 'Vainqueur',
     'yes' => 'Oui',
-    'youengaged' => 'Vous &ecirc;tes engag&eacute; dans la course ',
+    'youengaged' => 'Vous êtes engagé dans la course ',
     'youlogin' => 'Connect&eacute; :',
     'yourboat' => 'Votre bateau',
   );
