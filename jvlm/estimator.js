@@ -352,6 +352,34 @@ function Estimator(Boat)
     }
   }
 
+  this.GetClosestEstimatePoint = function(Pos)
+  {
+    if (!Pos)
+    {
+      return null;
+    }
+
+    var Dist = 1e30;
+    var index;
+    var RetValue = null;
+
+    for (index = 0; index < Object.keys(this.EstimateTrack).length;index++)
+    {
+      if (this.EstimateTrack[index])
+      {
+        var d = Pos.GetEuclidianDist2(this.EstimateTrack[index].Position);
+
+        if (d < Dist)
+        {
+          RetValue = this.EstimateTrack[index];
+          Dist=d;
+        }
+      }
+    }
+
+    return RetValue;
+  }
+
 }
 
 /*

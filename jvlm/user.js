@@ -84,6 +84,23 @@ function Boat(vlmboat)
 
   }
 
+  this.GetClosestEstimatePoint = function(Pos)
+  {
+    if (typeof Pos === "undefined" || !Pos)
+    {
+      return null;
+    }
+
+    if (this.Estimator)
+    {
+      return this.Estimator.GetClosestEstimatePoint(Pos);
+    }
+    else
+    {
+      return null;
+    }
+  }
+
 
   this.GetNextWPPosition = function(NWP,Position,NWPPosition)
   {
