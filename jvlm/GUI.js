@@ -1460,10 +1460,12 @@ function HandleMapMouseMove(e)
     if (EstimatePos)
     {
       $("#MI_EstDate").text(EstimatePos.Date);
+      _CurPlayer.CurBoat.EstimatePos = EstimatePos.Position;
     }
     else
     {
       $("#MI_EstDate").text("");
+      _CurPlayer.CurBoat.EstimatePos = null;
     }
     
   }  
