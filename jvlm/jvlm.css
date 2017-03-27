@@ -70,7 +70,7 @@ div.GribmapMousePosition {
   font-family: sans-serif;
   /*font-size: smaller;*/
   font-weight: bold;
-  top: 10px;
+  top: 200px;
   right: 0px;
 }
 .GribmapControlWind .baseDiv {
@@ -88,7 +88,7 @@ div.GribmapMousePosition {
 .GribmapControlWind .maximizeDiv,
 .GribmapControlWind .minimizeDiv {
   right: 0px;
-  top: 200px;
+  top: 10px;
 }
 .VlminfoControlPlayer {
   color: white;
