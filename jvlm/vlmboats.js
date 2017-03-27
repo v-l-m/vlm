@@ -406,23 +406,6 @@ function DrawBoat(Boat, CenterMapOnBoat)
   BoatFeatures.push(TrackForecast);
   VLMBoatsLayer.addFeatures(TrackForecast);
 
-  // Track Estimate closest point to mousemove
-  if (Boat.EstimatePos)
-  {
-    var Est = Boat.EstimatePos;
-    var EstPos = new OpenLayers.Geometry.Point(Est.Lon.Value, Est.Lat.Value);
-    var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection)
-
-    // Estimate point marker
-    var PointMarker = new OpenLayers.Feature.Vector(
-      EstPos_Transformed,
-      {},
-      { externalGraphic: 'images/RedDot.png', graphicHeight: 8, graphicWidth: 8 }
-    );
-    VLMBoatsLayer.addFeatures(PointMarker);
-    BoatFeatures.push(PointMarker)
-  }
-
   // Draw polar
   var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
   var Polar = [];

@@ -1456,17 +1456,6 @@ function HandleMapMouseMove(e)
       $("#MI_WPLoxo").text("--- °");
       $("#MI_WPOrtho").text( "--- °");
     }
-
-    if (EstimatePos)
-    {
-      $("#MI_EstDate").text(EstimatePos.Date);
-      _CurPlayer.CurBoat.EstimatePos = EstimatePos.Position;
-    }
-    else
-    {
-      $("#MI_EstDate").text("");
-      _CurPlayer.CurBoat.EstimatePos = null;
-    }
     
   }  
 }
