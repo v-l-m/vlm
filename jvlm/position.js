@@ -51,6 +51,14 @@ function VLMPosition(lon, lat,  format)
     return this.Lat.ToString() + " " + this.Lon.ToString();
   }
 
+  this.GetEuclidianDist2 = function(P)
+  {
+    var dLat= (this.Lat.Value-P.Lat.Value)%90;
+    var dLon= (this.Lon.Value-P.Lon.Value)%180;
+
+    return dLat*dLat + dLon*dLon;
+  }
+
   // function GetLoxoDist
   // Returns the loxodromic distance to another point
   this.GetLoxoDist= function(P,Precision)

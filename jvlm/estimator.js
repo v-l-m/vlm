@@ -10,6 +10,7 @@ function BoatEstimate(Est)
   this.CurWP = new VLMPosition(0,0);
   this.HdgAtWP = -1;
   this.RaceWP = 1;
+  PointMarker = null; // Current estimate position
   
   if (typeof Est!== "undefined" && Est)
   {
@@ -350,6 +351,58 @@ function Estimator(Boat)
       }
       this.ProgressCallBack(Complete,Pct, this.CurEstimate.Date);
     }
+  }
+
+  this.GetClosestEstimatePoint = function(Pos)
+  {
+    if (!Pos)
+    {
+      return null;
+    }
+
+    var Dist = 1e30;
+    var index;
+    var RetValue = null;
+
+    for (index = 0; index < Object.keys(this.EstimateTrack).length;index++)
+    {
+      if (this.EstimateTrack[index])
+      {
+        var d = Pos.GetEuclidianDist2(this.EstimateTrack[index].Position);
+
+        if (d < Dist)
+        {
+          RetValue = this.EstimateTrack[index];
+          Dist=d;
+        }
+      }
+    }
+
+    this.ShowEstimatePosition = function(Position)
+    {
+      // Track Estimate closest point to mousemove
+      if (this.PointMarker)
+      {
+        VLMBoatsLayer.removeFeatures(this.PointMarker);
+        this.PointMarker = null;
+      }
+
+      if (Position)
+      {
+        var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
+        var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection)
+
+        // Estimate point marker
+        this.PointMarker = new OpenLayers.Feature.Vector(
+          EstPos_Transformed,
+          {},
+          { externalGraphic: 'images/RedDot.png', graphicHeight: 8, graphicWidth: 8 }
+        );
+        VLMBoatsLayer.addFeatures(this.PointMarker);
+      }
+    }
+
+    return RetValue;
   }
 
 }

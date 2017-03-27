@@ -19,6 +19,7 @@ function Boat(vlmboat)
   this.VLMPrefs = []; // Preferences Array;
   this.NextServerRequestDate;  // Next VAC Start date
   this.Estimator = new Estimator(this) ; // Estimator object for current boat
+  this.EstimatePos = null;  // Position marker on estimate track
 
   if (typeof vlmboat != 'undefined')
   {
@@ -82,6 +83,29 @@ function Boat(vlmboat)
     return { P1 : P1, P2 : P2};
 
 
+  }
+
+  this.GetClosestEstimatePoint = function(Pos)
+  {
+    if (typeof Pos === "undefined" || !Pos)
+    {
+      return null;
+    }
+
+    if (this.Estimator)
+    {
+      var Est= this.Estimator.GetClosestEstimatePoint(Pos);
+      if (Est)
+      {
+        this.Estimator.ShowEstimatePosition(Est.Position);
+      }
+      return Est
+    }
+    else
+    {
+      this.Estimator.ShowEstimatePosition(null)
+      return null;
+    }
   }
 
 

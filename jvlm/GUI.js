@@ -1433,6 +1433,7 @@ function HandleMapMouseMove(e)
     var Pos = new VLMPosition(GM_Pos.lon,GM_Pos.lat)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
+    var EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
 
     $("#MI_Lat").text(Pos.Lat.ToString());
     $("#MI_Lon").text(Pos.Lon.ToString());
@@ -1455,6 +1456,7 @@ function HandleMapMouseMove(e)
       $("#MI_WPLoxo").text("--- °");
       $("#MI_WPOrtho").text( "--- °");
     }
+    
   }  
 }
 
