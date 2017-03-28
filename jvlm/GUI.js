@@ -1456,6 +1456,15 @@ function HandleMapMouseMove(e)
       $("#MI_WPLoxo").text("--- °");
       $("#MI_WPOrtho").text( "--- °");
     }
+
+    if (EstimatePos) 
+    { 
+      $("#MI_EstDate").text(EstimatePos.Date); 
+    } 
+    else 
+    { 
+      $("#MI_EstDate").text(""); 
+    } 
     
   }  
 }
