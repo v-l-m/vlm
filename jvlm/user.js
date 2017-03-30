@@ -419,11 +419,11 @@ function GetFlagsList()
           if (result.success)
           {
             var DropDown=$("#CountryDropDownList");
-
+            var flagindex = 0;
             for (index in result.flags)
             {
               var title = result.flags[index];
-              DropDown.append("<li class='FlagLine DDLine' flag='"+ title +"'>"+GetCountryDropDownSelectorHTML(title,true)+"</li>")
+              DropDown.append("<li class='FlagLine DDLine' flag='"+ title +"'>"+GetCountryDropDownSelectorHTML(title,true,flagindex++)+"</li>")
             }
           }
 
@@ -434,14 +434,17 @@ function GetFlagsList()
         );
 }
 
-function GetCountryDropDownSelectorHTML(title,loadflag)
+function GetCountryDropDownSelectorHTML(title,loadflag,index)
 {
-  var RetString1 = " <img class='flag' src='/cache/flags/"+encodeURIComponent( title)+".png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
-  var RetString2 = " <span  style='margin-left:10px;' flag='"+title+"'> - "+ title +"</span>";
+  //var RetString1 = " <img class='flag' src='/cache/flags/flagsmap.png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
+  var row=20*Math.floor(index/16);
+  var col=30*(index%16);
+  var RetString1 = " <div class='FlagIcon' style='{background-position: -"+col+"px -"+row+"px}' flag='"+title+"'>"
+  var RetString2 = " <span  style='padding-left:30px;' flag='"+title+"'> - "+ title +"</span>";
 
   if (loadflag)
   {
-    return RetString1+RetString2
+    return RetString1+RetString2+"</div>"
   }
   else
   {
