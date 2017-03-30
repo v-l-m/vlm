@@ -21,15 +21,15 @@ function AutoPilotOrder(Boat,Number)
     }
     var PilOrder = Boat.VLMInfo.PIL[Number-1];
 
-    this.Date = new Date(parseInt(PilOrder.TTS)*1000);
-    this.PIM = parseInt(PilOrder.PIM);
-    this.ID = parseInt(PilOrder.TID);
+    this.Date = new Date(parseInt(PilOrder.TTS)*1000,10);
+    this.PIM = parseInt(PilOrder.PIM,10);
+    this.ID = parseInt(PilOrder.TID,10);
 
     switch (this.PIM)
     {
       case PM_ANGLE:
       case PM_HEADING:
-        this.PIP_Value = parseInt(PilOrder.PIP);
+        this.PIP_Value = parseInt(PilOrder.PIP,10);
         break;
       case PM_ORTHO:
       case PM_VMG:
@@ -101,7 +101,7 @@ function HandleSendAPUpdate(e)
                 }
 
 
-  if (_CurAPOrder.ID!=-1)
+  if (_CurAPOrder.ID!==-1)
   {
     verb ="update";
     OrderData["taskid"]=_CurAPOrder.ID;
@@ -119,7 +119,7 @@ function HandleSendAPUpdate(e)
       OrderData["pip"]={};
       OrderData["pip"]["targetlat"]=_CurAPOrder.PIP_Coords.Lat.Value;
       OrderData["pip"]["targetlong"]=_CurAPOrder.PIP_Coords.Lon.Value;
-      OrderData["pip"]["targetandhdg"]=(_CurAPOrder.PIP_WPAngle==-1?null:_CurAPOrder.PIP_WPAngle);
+      OrderData["pip"]["targetandhdg"]=(_CurAPOrder.PIP_WPAngle===-1?null:_CurAPOrder.PIP_WPAngle);
       break;
   }             
 
@@ -153,7 +153,7 @@ function HandleAPFieldChange(e)
   {
     case "AP_PIP":
       _CurAPOrder.PIP_Value=parseFloat(Target.value);
-      if (_CurAPOrder.PIP_Value.toString() != Target.Value)
+      if (_CurAPOrder.PIP_Value.toString() !== Target.Value)
       {
         Target.value=_CurAPOrder.PIP_Value.toString();
       }
@@ -189,7 +189,7 @@ function CheckFloatInput(DestObj,SrcObj)
     DestObj = parseFloat(SrcObj.value);
     ObjValue = DestObj;
   }
-  if (ObjValue.toString() != SrcObj.Value)
+  if (ObjValue.toString() !== SrcObj.Value)
     {
       SrcObj.value=ObjValue.toString();
     }
