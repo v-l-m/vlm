@@ -29,7 +29,15 @@
             }
         } else if (isset($_POST['VLM_AUTH_USER']) && isset($_POST['VLM_AUTH_PW']) ) {
             if (!is_null($player = checkPlayerLogin($_POST['VLM_AUTH_USER'], $_POST['VLM_AUTH_PW'])) ) {
-                ask_for_auth("");
+                //ask_for_auth("");
+                $idu = $player->getDefaultBoat();
+                if ($idu > 0) {
+                    $user = getUserObject($idu);
+                    loginPlayer($user->idusers, $user->username, $player->idplayers, $player->playername);
+                } else {
+                    loginPlayer(0, "noboat", $player->idplayers, $player->playername);
+                }
+                
                 return True;
             } else {
                 return False;
