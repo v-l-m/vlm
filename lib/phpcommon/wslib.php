@@ -618,7 +618,7 @@ function ask_for_auth($usage = "") {
     unset($_SERVER['PHP_AUTH_USER']);
     unset($_SERVER['PHP_AUTH_PW']);
     header('WWW-Authenticate: Basic realm="VLM Access"');
-    header($_SERVER["SERVER_PROTOCOL"]." 401 Unauthorized");
+    header($_SERVER["SERVER_PROTOCOL"]." 403 Unauthorized");
     header("Content-Type: text/plain; charset=UTF-8");
     echo $usage;
 }
