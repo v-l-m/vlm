@@ -47,6 +47,7 @@ function Estimator(Boat)
   this.EstimateTrack=[];
   this.EstimatePoints=[];
   this.ProgressCallBack = null;
+  this.ErrorCount = 0;
 
   this.Start = function(ProgressCallBack)
   {
@@ -103,6 +104,7 @@ function Estimator(Boat)
     this.ReportProgress(false);
     // Add Start point to estimate track
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
+    this.ErrorCount = 0;
   }
 
   this.Estimate = function(Boat)
@@ -122,10 +124,16 @@ function Estimator(Boat)
       var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
       if (!MI)
       {
-        // FIXME : have a way of going out if needed
+        if (this.ErrorCount > 10)
+        {
+          this.ReportProgress(true)
+        }
+        this.ErrorCount ++;
         setTimeout(this.Estimate.bind(this),1000);
         return;
       }
+
+      this.ErrorCount=0;
 
       if (isNaN(MI.Speed))
       {
