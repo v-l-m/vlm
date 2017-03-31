@@ -219,10 +219,10 @@ function OnLoginRequest()
 {
   
   
-  var user = $(".UserName").val();
+  /*var user = $(".UserName").val();
   var password = $(".UserPassword").val();
   
-  $.ajaxSetup({username : user, password: password});
+  //$.ajaxSetup({username : user, password: password});
   
   $.post("/ws/login.php", 
           {VLM_AUTH_USER:user,
@@ -232,33 +232,38 @@ function OnLoginRequest()
           {
             // :( calls login twice but avoid coding twice
             // Should use events to splits GUI from WS processing
-            CheckLogin();
-          }
+   */         CheckLogin();
+   /*       }
         );
-
+*/
 };
 
 function CheckLogin()
 {
+  var user = $(".UserName").val();
+  var password = $(".UserPassword").val();
+  
   ShowPb("#PbLoginProgress");
   $.post("/ws/login.php", 
-        function(result)
-        {
-          var LoginResult = JSON.parse(result);
-          
-          _IsLoggedIn= LoginResult.success==true;
-              
-          if (_IsLoggedIn)
+          {VLM_AUTH_USER:user,
+            VLM_AUTH_PW:password
+          },
+          function(result)
           {
-            GetPlayerInfo();
+            var LoginResult = JSON.parse(result);
+            
+            _IsLoggedIn= LoginResult.success==true;
+                
+            if (_IsLoggedIn)
+            {
+              GetPlayerInfo();
+            }
+            HidePb("#PbLoginProgress");
+            DisplayLoggedInMenus(_IsLoggedIn);
+    
           }
-          HidePb("#PbLoginProgress");
-          DisplayLoggedInMenus(_IsLoggedIn);
-  
-        }
-      );
-  
-  }
+        );  
+}
 
 function Logout()
 {
