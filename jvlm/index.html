@@ -606,14 +606,16 @@
                     </fieldset>
                     <fieldset class="MI_Coords">
                       <legend class="ui-legend MI_Legend"></legend>
-                      <div  class="col-xs-8"><button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime">Estime</button>
+                      <div  class="col-xs-10"><button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime">Estime</button>
                         <div id="PbEstimatorProgress" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" >
-                          <span class="hidden" id="PbEstimatorProgressText" style="{align-content: center}">...</span>
+                          <span class="hidden" id="PbEstimatorProgressText" style="align-content: center">...</span>
                         </div>  </div>
-                      <div  class="col-xs-4"><button type="button" class="ui-button ui-corner-all ui-widget" >X</button></div>
+                      <div  class="col-xs-2" style="text-align:right">
+                        <button type="button" class="btn btn-danger btn-xs btn-round"><span class="glyphicon glyphicon-remove" style="opacity:1" ></span></button>
+                      </div>
                       </fieldset>
                       <fieldset class="MI_Coords">    
-                      <div><legend class="ui-legend MI_Legend" style="border-bottom:none" I18n="EstimateDate">EstDate.</legend><span> : </span><span id="MI_EstDate"></span></div>
+                      <div><legend class="ui-legend MI_Legend" style="border-bottom:none" I18n="EstimateDate">EstDate.</legend><span></span><span id="MI_EstDate"></span></div>
                       
                     </fieldset>
                 </div>
