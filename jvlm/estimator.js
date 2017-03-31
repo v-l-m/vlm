@@ -126,7 +126,9 @@ function Estimator(Boat)
       {
         if (this.ErrorCount > 10)
         {
+          this.Running = false;
           this.ReportProgress(true)
+          return;
         }
         this.ErrorCount ++;
         setTimeout(this.Estimate.bind(this),1000);
