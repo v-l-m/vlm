@@ -444,8 +444,8 @@ function GetCountryDropDownSelectorHTML(title,loadflag,index)
   //var RetString1 = " <img class='flag' src='/cache/flags/flagsmap.png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
   var row=20*Math.floor(index/16);
   var col=30*(index%16);
-  var RetString1 = " <div class='FlagIcon' style='{background-position: -"+col+"px -"+row+"px}' flag='"+title+"'>"
-  var RetString2 = " <span  style='padding-left:30px;' flag='"+title+"'> - "+ title +"</span>";
+  var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+title+"'>"
+  var RetString2 = " <span  style='padding-left:50px;' flag='"+title+"'> - "+ title +"</span>";
 
   if (loadflag)
   {
