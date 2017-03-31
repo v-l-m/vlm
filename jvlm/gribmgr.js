@@ -213,16 +213,17 @@ function VLM2GribManager()
       }
     }
 
-    this.CheckGribLoadedIdx(LonIdx1, LatIdx1);
-    this.CheckGribLoadedIdx(LonIdx1, LatIdx2);
-    this.CheckGribLoadedIdx(LonIdx2, LatIdx1);
-    this.CheckGribLoadedIdx(LonIdx2, LatIdx2);
+    //console.log("need "+Lat+" " +Lon);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx1);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx2);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx1);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx2);
     
   return false;  
       
   }
 
-  this.CheckGribLoadedIdx = function(LonIdx, LatIdx)
+  this.CheckGribLoadedIdx = function(TableIndex, LonIdx, LatIdx)
   {
 
     if (isNaN(LonIdx) || isNaN(LatIdx))
@@ -230,7 +231,7 @@ function VLM2GribManager()
       var dbgpt=0;
     }
 
-    if (this.Tables.length && this.Tables[0][LonIdx] && this.Tables[0][LonIdx][LatIdx])
+    if (this.Tables.length && this.Tables[TableIndex] && this.Tables[TableIndex][LonIdx] && this.Tables[TableIndex][LonIdx][LatIdx])
     {
       return;
     }
@@ -263,10 +264,24 @@ function VLM2GribManager()
     {
       EastStep = WestStep + 2 * RequestSize;
     }
+
+    if (EastStep > 180)
+    {
+      EastStep = 180;
+      this.CheckGribLoadedIdx(TableIndex, 0,LatIdx);
+    }
+    if (WestStep < -180)
+    {
+      WestStep = -180;
+      this.CheckGribLoadedIdx(TableIndex, 180 / this.GribStep-1,LatIdx);
+    }
+    
+
     
     var LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
     if (!(LoadKey in this.LoadQueue))
     {
+      //console.log("requesting " + LoadKey );
       this.LoadQueue[LoadKey]=0;
       $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
@@ -293,6 +308,7 @@ function VLM2GribManager()
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
         var seed = (new Date).getTime();
+        //console.log("smartgrib points out " + url);
         $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey]++;
       }
@@ -318,6 +334,12 @@ function VLM2GribManager()
     }
   }
 
+  this.ForceReloadGribCache = function(LoadKey,Url)
+  {
+    $.get("/cache/gribtiles/"+Url+"&force=yes",this.HandleSmartGribData.bind(this,LoadKey, Url));
+    this.LoadQueue[LoadKey]++;
+  }
+
   this.ProcessInputGribData = function (Url, Data,LoadKey)
   {
     var Lines = Data.split("\n");
@@ -328,13 +350,15 @@ function VLM2GribManager()
     // Handle cache mess
     if (Data === "--\n")
     {
-      var Parms = Url.split("/")
+      /*var Parms = Url.split("/")
       this.LoadQueue[LoadKey]++;
       if (Parms[2] != 15)
       {
         var i = 0;    
       }
-      $.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
+      //$.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
+      */
+      this.ForceReloadGribCache(LoadKey,Url);
       return ;
     }
 
@@ -355,9 +379,11 @@ function VLM2GribManager()
     var DataStartIndex = Catalog.length+1
     for (var i = 0; i< Catalog.length; i++)
     {
-      if (typeof Lines[DataStartIndex] === "undefined")
+      if (typeof Lines[DataStartIndex] === "undefined" || Lines[DataStartIndex] === "")
       {
         // Somehow sometimes, the data is incomplete, just get out, until next request.
+        //console.log("Incomplete data file. Forcing rebuild..." + Url);
+        this.ForceReloadGribCache(LoadKey,Url);
         break;
       }
       var DataSize = Lines[DataStartIndex].split(" ");
@@ -400,7 +426,10 @@ function VLM2GribManager()
           GribPoint[Catalog[i].Type] = parseFloat(Lines[DataStartIndex+1+LatIdx*NbLon+LonIdx]);
         }
       }
-
+      /*console.log("Loaded table "+ Catalog[i].DateIndex);
+      console.log("Loaded lon index  "+ StartLon + "->" + (StartLon+NbLon));
+      console.log("Loaded lat index  "+ (StartLat-1) + "->" + (StartLat-NbLat-1));
+      */
       DataStartIndex += NbLon*NbLat+1;
     }
 
