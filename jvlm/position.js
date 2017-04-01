@@ -34,6 +34,19 @@ function RoundPow(v,P)
   }
 }
 
+function NormalizeLongitudeDeg(Lon)
+{
+    if (Lon < -180)
+    {
+      Lon += 360;
+    }
+    else if (Lon > 180)
+    {
+      Lon -= 360;
+    }
+
+    return Lon;
+}
 
 // Constructor
 function VLMPosition(lon, lat,  format)
@@ -147,7 +160,7 @@ function VLMPosition(lon, lat,  format)
         throw "Reached Nan Position!!!"
     }
 
-    return new VLMPosition(Rad2Deg(Lon),Rad2Deg(Lat));
+    return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(Lon)),Rad2Deg(Lat));
 
 
   };
@@ -323,7 +336,7 @@ else
     lat =Math.asin(Math.sin(CurLat)*Math.cos(d)+Math.cos(CurLat)*Math.sin(d)*Math.cos(tc))
     dlon=Math.atan2(Math.sin(tc)*Math.sin(d)*Math.cos(CurLat),Math.cos(d)-Math.sin(CurLat)*Math.sin(lat))
     lon=(( CurLon-dlon +Math.PI)%(2*Math.PI ))-Math.PI;
-    return new VLMPosition(Rad2Deg(-lon), Rad2Deg(lat));
+    return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(-lon)), Rad2Deg(lat));
 
   }
 
