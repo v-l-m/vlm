@@ -11,7 +11,7 @@
     }
     mysql_free_result($flagres);
 
-    $ret = sort ($info);
+    //$ret = sort ($info);
     
     $IMG_PITCH = 16;
     $IMG_WIDTH = 30;
@@ -31,6 +31,7 @@
             echo '<img src="/flagimg.php?idflags='.$flagid.'"/>';
 
         }*/
+        //echo "processing " . $flagid;
         $original = getflag($flagid);
         $src=imagecreatefrompng ($original);
         imagecopymerge($img,$src,$col*$IMG_WIDTH,$row*$IMG_HEIGHT,0,0,$IMG_WIDTH, $IMG_HEIGHT,100);
