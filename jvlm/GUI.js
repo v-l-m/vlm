@@ -435,17 +435,21 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
   if (Complete)
   {
     $("#StartEstimator").removeClass("hidden")
-    $("#PbEstimatorProgress").addClass("hidden")
-    $("#PbEstimatorProgressText").addClass("hidden")
+    $("#PbEstimatorProgressBar").addClass("hidden")
+    //$("#PbEstimatorProgressText").addClass("hidden")
+    $("#EstimatorStopButton").addClass("hidden")
     LastPct = -1
   }
   else if (Pct - LastPct > 0.15)
   {
+    $("#EstimatorStopButton").removeClass("hidden")
     $("#StartEstimator").addClass("hidden")
-    $("#PbEstimatorProgress").removeClass("hidden")
+    $("#PbEstimatorProgressBar").removeClass("hidden")
     $("#PbEstimatorProgressText").removeClass("hidden")
     $("#PbEstimatorProgressText").text(Pct)
-    $("#PbEstimatorProgress").css("width",Pct)
+    $("#PbEstimatorProgress").css("width",Pct);
+    $("#PbEstimatorProgress").attr("aria-valuenow",Pct);
+    $("#PbEstimatorProgress").attr("aria-valuetext",Pct);
     LastPct = Pct
   }
 }
