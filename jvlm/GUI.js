@@ -254,16 +254,6 @@ function InitMenusAndButtons()
     }
   )
 
-  // Handle clicking on ICS button
-  /* DEAD CODE to be deleted when ICS dialog is complete and released.
-  $("#ICSButton").click(
-    function()
-    {
-      var win = window.open("/ics.php?idraces="+_CurPlayer.CurBoat.VLMInfo.RAC)
-      win.focus();
-    }
-  )*/
-
   // Handle clicking on ranking button
   $("#Ranking-Panel").on('shown.bs.collapse',
         function()
@@ -413,6 +403,21 @@ function InitMenusAndButtons()
 
     // Handle Start Boat Estimator button
     $("#StartEstimator").on('click',HandleStartEstimator)
+    $("#EstimatorStopButton").on('click',HandleStopEstimator)
+    
+}
+
+function HandleStopEstimator(e)
+{
+  var CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat === "undefined" || ! CurBoat)
+  {
+    // Something's wrong, just ignore
+    return;
+  }
+
+  CurBoat.Estimator.Stop();
 }
 
 function HandleStartEstimator(e)
@@ -1425,6 +1430,8 @@ function HandleBoatSelectionChange(e)
   DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
 }
 
+var LastMouseMouveCall = 0;
+
 function HandleMapMouseMove(e)
 {
 
@@ -1433,7 +1440,16 @@ function HandleMapMouseMove(e)
     var Pos = new VLMPosition(GM_Pos.lon,GM_Pos.lat)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
-    var EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
+    var EstimatePos = null ;
+    var Estimated = new Date()-LastMouseMouveCall > 300;
+    
+    if (Estimated)
+    {
+      // Throttle estimate update to 3/sec
+      EstimatePos=_CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
+      LastMouseMouveCall = new Date();
+    }
+
 
     $("#MI_Lat").text(Pos.Lat.ToString());
     $("#MI_Lon").text(Pos.Lon.ToString());
@@ -1461,7 +1477,7 @@ function HandleMapMouseMove(e)
     { 
       $("#MI_EstDate").text(EstimatePos.Date); 
     } 
-    else 
+    else if (Estimated)
     { 
       $("#MI_EstDate").text(""); 
     } 

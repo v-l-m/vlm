@@ -49,6 +49,22 @@ function Estimator(Boat)
   this.ProgressCallBack = null;
   this.ErrorCount = 0;
 
+  this.Stop = function ()
+  {
+    // Stop the estimator if Running
+    if (this.Running)
+    {
+      this.Running=false;
+      this.ReportProgress(true);
+      
+      //Estimate complete, DrawBoat track
+      DrawBoat(this.Boat);
+      
+    }
+
+    return;
+  }
+
   this.Start = function(ProgressCallBack)
   {
     this.ProgressCallBack = ProgressCallBack
@@ -62,8 +78,7 @@ function Estimator(Boat)
 
     if (typeof this.Boat.VLMInfo === "undefined")
     {
-      this.Running = false;
-      this.ReportProgress(true);
+      this.Stop();
       return;
     }
 
@@ -100,22 +115,20 @@ function Estimator(Boat)
     this.EstimatePoints=[];
 
     this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp); 
-    setTimeout(this.Estimate.bind(this),2000)
     this.ReportProgress(false);
     // Add Start point to estimate track
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
     this.ErrorCount = 0;
+    setTimeout(this.Estimate.bind(this),0)
+    
   }
 
   this.Estimate = function(Boat)
   {
       
-    if (this.CurEstimate.Date >= this.MaxVacEstimate)
+    if (!this.Running || this.CurEstimate.Date >= this.MaxVacEstimate)
     {
-      this.Running = false;
-      //Estimate complete, DrawBoat track
-      DrawBoat(this.Boat);
-      this.ReportProgress(true)
+      this.Stop();
       return;
     }
 
@@ -126,8 +139,7 @@ function Estimator(Boat)
       {
         if (this.ErrorCount > 10)
         {
-          this.Running = false;
-          this.ReportProgress(true)
+          this.Stop();
           return;
         }
         this.ErrorCount ++;
@@ -180,7 +192,7 @@ function Estimator(Boat)
               
             default :
               alert("unsupported pilototo mode");
-              this.ReportProgress(true);
+              this.Stop();
               return;
           }
 
@@ -259,8 +271,7 @@ function Estimator(Boat)
     this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
     if (RaceComplete)
     {
-      this.Running=false;
-      this.ReportProgress(true);
+      this.Stop();
       return;
     }
     else

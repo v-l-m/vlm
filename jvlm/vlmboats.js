@@ -383,29 +383,48 @@ function DrawBoat(Boat, CenterMapOnBoat)
   
   if (Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length)
   {
-    Boat.Estimator.EstimatePoints = [];
+    Boat.Estimator.EstimatePoints[0] = [];
 
+    var TrackIndex = 0
+    var PrevLon = null;
     for (index in Boat.Estimator.EstimateTrack)
     {
-      var Est = Boat.Estimator.EstimateTrack[index];
-      P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
-      P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
+      if ( Boat.Estimator.EstimateTrack[index])
+      {
+        var Est = Boat.Estimator.EstimateTrack[index];
 
-       Boat.Estimator.EstimatePoints.push(P1_PosTransformed);
+        if (PrevLon && PrevLon * Est.Position.Lon.Value < 0 && Math.abs (PrevLon * Est.Position.Lon.Value)>90)
+        {
+          // Anté crossing, split track
+          TrackIndex = 1;
+          Boat.Estimator.EstimatePoints[1] = [];
+          Boat.Estimator.EstimatePoints.push(P1_PosTransformed);
+        }
+        PrevLon = Est.Position.Lon.Value;
+        P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
+        P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
 
+        Boat.Estimator.EstimatePoints[TrackIndex].push(P1_PosTransformed);
+      }
     }
   }
-  var TrackPointList = Boat.Estimator.EstimatePoints;
-  
-  var TrackForecast= new OpenLayers.Feature.Vector(
-    new OpenLayers.Geometry.LineString(TrackPointList),
+
+  for (index in Boat.Estimator.EstimatePoints)
+  {
+    if (Boat.Estimator.EstimatePoints[index])
     {
-      "type": "ForecastPos"
-    });
+      var TrackPointList = Boat.Estimator.EstimatePoints[index];
+      
+      var TrackForecast= new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.LineString(TrackPointList),
+        {
+          "type": "ForecastPos"
+        });
 
-  BoatFeatures.push(TrackForecast);
-  VLMBoatsLayer.addFeatures(TrackForecast);
-
+      BoatFeatures.push(TrackForecast);
+      VLMBoatsLayer.addFeatures(TrackForecast);
+    }
+  }
   // Draw polar
   var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
   var Polar = [];
