@@ -503,3 +503,6 @@ a.ui-button-noir:hover {
 	font-weight: normal;
 	color: #ffffff;
 }
+.progress {
+  background-color: #17354E;
+}
