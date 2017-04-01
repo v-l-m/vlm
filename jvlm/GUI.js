@@ -1367,9 +1367,7 @@ function SaveBoatAndUserPrefs(e)
 
   if (typeof NewTheme  !== "undefined")
   {
-    VLM2Prefs.CurTheme = NewTheme
-
-    
+    VLM2Prefs.CurTheme = NewTheme    
   }
 
   VLM2Prefs.Save();
@@ -1403,10 +1401,8 @@ function SaveBoatAndUserPrefs(e)
 
 function GetPrefSelFlag()
 {
-  var Item =$('#CountryDropDown:first-child')[0];
-  var img = Item.children[0].children[0]
-
-  return img.alt;
+  var Item =$('#CountryDropDown:first-child [flag]')[0];
+  return Item.attributes["flag"].value;
     
 }
 
@@ -1418,7 +1414,7 @@ function ComparePrefString(Obj1, Obj2)
 
 function SelectCountryDDFlag(Country)
 {
-  $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Country)+'<span class="caret"></span></div>');
+  $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Country,false)+'<span class="caret"></span></div>');
     
 }
 

@@ -85,7 +85,7 @@ function PolarManagerClass()
         alert("Unexpected polarname : " + PolarName)
         return null;
     }
-    if (this.Polars[PolarName]==null)
+    if (this.Polars[PolarName] === null)
     {
       // Polar not loaded yet, load it
       $.get("/Polaires/"+ PolarName +".csv",this.HandlePolarLoaded.bind(this, PolarName,callback,boat))
@@ -112,7 +112,10 @@ function PolarManagerClass()
       // Scale Polar to 1
       for (index in RetPolar)
       {
+        if (RetPolar[index])
+        {
           RetPolar[index]/=MaxSpeed;
+        }
       }
 
       return RetPolar;
@@ -386,7 +389,7 @@ function GetAvgValue(x,Rx1,Rx2,Ry1,Ry2)
   Ry2=parseFloat(Ry2);
   */
 
-  if ((x==Rx1) || (Rx1 == Rx2) || (Ry1==Ry2) )
+  if ((x === Rx1) || (Rx1 === Rx2) || (Ry1 === Ry2) )
   {
     // Trivial & corner cases
     return Ry1;

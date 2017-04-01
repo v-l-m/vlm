@@ -118,8 +118,8 @@ function VLM2GribManager()
     }
 
     // Precheck to force loading the second grib, and avoid optimization not checking 2nd when first is needs loading
-    var t1 = this.CheckGribLoaded(TableIndex, Lat,Lon);
-    var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,Lon+this.GribStep);
+    var t1 = this.CheckGribLoaded(TableIndex, Lat,NormalizeLongitudeDeg(Lon));
+    var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,NormalizeLongitudeDeg(Lon+this.GribStep));
 
     if (!t1 || !t2 )
     {
