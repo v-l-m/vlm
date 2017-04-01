@@ -1418,7 +1418,7 @@ function ComparePrefString(Obj1, Obj2)
 
 function SelectCountryDDFlag(Country)
 {
-  $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Country)+'<span class="caret"></span></div>');
+  $('#CountryDropDown:first-child').html('<div>'+GetCountryDropDownSelectorHTML(Country,false)+'<span class="caret"></span></div>');
     
 }
 
