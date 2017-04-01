@@ -403,6 +403,21 @@ function InitMenusAndButtons()
 
     // Handle Start Boat Estimator button
     $("#StartEstimator").on('click',HandleStartEstimator)
+    $("#EstimatorStopButton").on('click',HandleStopEstimator)
+    
+}
+
+function HandleStopEstimator(e)
+{
+  var CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat === "undefined" || ! CurBoat)
+  {
+    // Something's wrong, just ignore
+    return;
+  }
+
+  CurBoat.Estimator.Stop();
 }
 
 function HandleStartEstimator(e)
