@@ -1415,6 +1415,8 @@ function HandleBoatSelectionChange(e)
   DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
 }
 
+var LastMouseMouveCall = 0;
+
 function HandleMapMouseMove(e)
 {
 
@@ -1423,7 +1425,16 @@ function HandleMapMouseMove(e)
     var Pos = new VLMPosition(GM_Pos.lon,GM_Pos.lat)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
-    var EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
+    var EstimatePos = null ;
+    var Estimated = new Date()-LastMouseMouveCall > 300;
+    
+    if (Estimated)
+    {
+      // Throttle estimate update to 3/sec
+      EstimatePos=_CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
+      LastMouseMouveCall = new Date();
+    }
+
 
     $("#MI_Lat").text(Pos.Lat.ToString());
     $("#MI_Lon").text(Pos.Lon.ToString());
@@ -1451,7 +1462,7 @@ function HandleMapMouseMove(e)
     { 
       $("#MI_EstDate").text(EstimatePos.Date); 
     } 
-    else 
+    else if (Estimated)
     { 
       $("#MI_EstDate").text(""); 
     } 
