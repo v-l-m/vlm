@@ -112,7 +112,7 @@ function PolarManagerClass()
       // Scale Polar to 1
       for (index in RetPolar)
       {
-        if (RetPolar[Index])
+        if (RetPolar[index])
         {
           RetPolar[index]/=MaxSpeed;
         }
