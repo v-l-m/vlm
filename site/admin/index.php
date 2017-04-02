@@ -55,6 +55,7 @@
     $tablepages = Array(
         "flags.php" => "Flags definitions (no uploading, see below)",
         "uploadflag.php" => "Flag upload",
+        "../RebuildFlagMap.php" => "Rebuild Flag map for VLM2"
         );
     adminlistbox($tablepages, "Flag management");
 
