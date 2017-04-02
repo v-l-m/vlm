@@ -206,6 +206,17 @@ function User()
   this.Fleet = [];
   this.BSFleet= [];
   this.CurBoat={};  
+
+  this.LastLogin = 0;
+
+  this.KeepAlive = function()
+  {
+    console.log("Keeping login alive...");
+    CheckLogin();
+  }
+
+  // Send Login every 10'
+  setInterval(this.KeepAlive,600000);
   
 };
 
