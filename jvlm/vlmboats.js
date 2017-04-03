@@ -860,7 +860,24 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords) {
       else {
         // No Second buoy, compute segment end
         var P = new VLMPosition(WP.longitude1, WP.latitude1);
-        var Dest = P.ReachDistLoxo(2500, 180 + parseFloat(WP.laisser_au));
+        var complete = false
+        var Dist = 2500
+        while (!complete)
+        {
+          try
+          {
+            var Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
+            complete=true
+          }
+          catch (e)
+          {
+            Dist *= 0.7;
+          }
+          finally
+          {
+          }
+        }
+
         WP.longitude2 = Dest.Lon.Value;
         WP.latitude2 = Dest.Lat.Value;
       }

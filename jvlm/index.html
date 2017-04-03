@@ -73,7 +73,7 @@
           <a class="navbar-brand" href="/" target="_vlm">
             <div class="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v6</div>
+              <div class="version">v7</div>
             </div>
           </a>
         </div>
@@ -611,16 +611,28 @@
                         <div  style="padding: 0 0 0 0" >
                           <button type="button" id="EstimatorStopButton" class="hidden btn btn-danger btn-xs" style="float:left"><span class="glyphicon glyphicon-remove" style="opacity:1" ></span></button>
                         </div> 
-                        <div class="progress hidden style="padding: 0 0 0 0" id="PbEstimatorProgressBar">                          
+                        <div class="progress hidden" style="padding: 0 0 0 0" id="PbEstimatorProgressBar">                          
                           <div id="PbEstimatorProgress" class="progress progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
                             <span class="hidden" id="PbEstimatorProgressText" style="align-content:center">...</span>
                           </div>               
                         </div>        
                       </div>
-                      </fieldset>
-                      <fieldset class="MI_Coords">    
-                      <div class="col-xs-2"><img src="images/deck-small.png" alt="deck" height="40px" width="20px"/></div><div class="col-xs-8"><legend class="ui-legend MI_Legend" style="border-bottom:none" I18n="EstimateDate">EstDate.</legend></div><div class="col-xs-2"><img src="images/Fleche.png" alt="vent" height="40px" width="20px"/></div><span></span><span id="MI_EstDate"></span></div>
-                      
+                    </fieldset>
+                    <fieldset class="MI_Coords">    
+                      <div class="col-xs-2">
+                        <img class= "hidden" src="images/deck-small.png" alt="deck" height="40px" width="20px"/>
+                      </div>
+                      <div class="col-xs-8">
+                        <legend class="ui-legend MI_Legend" style="border-bottom:none" I18n="EstimateDate">
+                          EstDate.                
+                        </legend>
+                      </div>
+                      <div class="hidden col-xs-2">
+                        <img class="hidden" src="images/Fleche.png" alt="vent" height="40px" width="20px"></img>
+                      </div>
+                      <div class="col-xs-12">
+                        <span id="MI_EstDate"></span>                      
+                      </div>
                     </fieldset>
                 </div>
               </div>

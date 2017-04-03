@@ -452,7 +452,7 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#PbEstimatorProgressBar").removeClass("hidden")
     $("#PbEstimatorProgressText").removeClass("hidden")
     $("#PbEstimatorProgressText").text(Pct)
-    $("#PbEstimatorProgress").css("width",Pct);
+    $("#PbEstimatorProgress").css("width",Pct+"%");
     $("#PbEstimatorProgress").attr("aria-valuenow",Pct);
     $("#PbEstimatorProgress").attr("aria-valuetext",Pct);
     LastPct = Pct
