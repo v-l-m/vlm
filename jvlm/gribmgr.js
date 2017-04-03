@@ -71,6 +71,7 @@ function VLM2GribManager()
   this.Initing = false;
   this.MinWindStamp = 0;
   this.MaxWindStamp = 0;
+  this.WindTableLength = 0;
   this.LoadQueue = [];
   this.GribStep = 0.5;    // Grib Grid resolution
   this.LastGribDate = new Date (0);
@@ -92,7 +93,7 @@ function VLM2GribManager()
     this.Initing = false;
     this.MinWindStamp = new Date(this.TableTimeStamps[0]*1000);
     this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps.length-1]*1000);
-    
+    this.WindTableLength = this.TableTimeStamps.length;
   }
 
   this.WindAtPointInTime= function(Time, Lat, Lon)
@@ -373,6 +374,13 @@ function VLM2GribManager()
         break;
       }
       Catalog.push(this.ProcessCatalogLine(Line));
+    }
+
+    if (Catalog.length < this.WindTableLength)
+    {
+      // Force reloading, it table is shorter than windlist
+      this.ForceReloadGribCache(LoadKey,Url);
+      return;
     }
 
     // Now Process the data
