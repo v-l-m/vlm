@@ -10,6 +10,7 @@ function BoatEstimate(Est)
   this.CurWP = new VLMPosition(0,0);
   this.HdgAtWP = -1;
   this.RaceWP = 1;
+  this.Heading;
   PointMarker = null; // Current estimate position
   
   if (typeof Est!== "undefined" && Est)
@@ -29,6 +30,7 @@ function BoatEstimate(Est)
     }
     this.CurWP = Est.CurWP;
     this.RaceWP = Est.RaceWP;
+    this.Heading = Est.Heading;
   }
 
 }
@@ -264,6 +266,7 @@ function Estimator(Boat)
       RaceComplete = this.GetNextRaceWP()
     }
 
+    this.CurEstimate.Heading = Hdg;
     this.CurEstimate.Position = NewPos;
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
