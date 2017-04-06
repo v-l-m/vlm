@@ -5,7 +5,7 @@
 function AutoPilotOrder(Boat,Number)
 {
   // Default construction
-  this.Date = new Date(new Date().getTime()+5*60*1000);
+  this.Date = new Date(new Date().getTime()-new Date().getTime()%(5*60*1000)+5*1.5*60*1000);
   this.PIM = PM_HEADING;
   this.PIP_Value = 0;
   this.PIP_Coords = new VLMPosition(0,0);
