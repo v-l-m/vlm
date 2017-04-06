@@ -21,7 +21,7 @@ function AutoPilotOrder(Boat,Number)
     }
     var PilOrder = Boat.VLMInfo.PIL[Number-1];
 
-    this.Date = new Date(parseInt(PilOrder.TTS)*1000,10);
+    this.Date = new Date(parseInt(PilOrder.TTS,10)*1000);
     this.PIM = parseInt(PilOrder.PIM,10);
     this.ID = parseInt(PilOrder.TID,10);
 
