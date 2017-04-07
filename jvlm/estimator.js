@@ -10,6 +10,7 @@ function BoatEstimate(Est)
   this.CurWP = new VLMPosition(0,0);
   this.HdgAtWP = -1;
   this.RaceWP = 1;
+  this.Heading;
   PointMarker = null; // Current estimate position
   
   if (typeof Est!== "undefined" && Est)
@@ -29,6 +30,7 @@ function BoatEstimate(Est)
     }
     this.CurWP = Est.CurWP;
     this.RaceWP = Est.RaceWP;
+    this.Heading = Est.Heading;
   }
 
 }
@@ -264,6 +266,7 @@ function Estimator(Boat)
       RaceComplete = this.GetNextRaceWP()
     }
 
+    this.CurEstimate.Heading = Hdg;
     this.CurEstimate.Position = NewPos;
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
@@ -399,31 +402,31 @@ function Estimator(Boat)
       }
     }
 
-    this.ShowEstimatePosition = function(Position)
+    return RetValue;
+  }
+
+  this.ShowEstimatePosition = function(Position)
+  {
+    // Track Estimate closest point to mousemove
+    if (this.PointMarker)
     {
-      // Track Estimate closest point to mousemove
-      if (this.PointMarker)
-      {
-        VLMBoatsLayer.removeFeatures(this.PointMarker);
-        this.PointMarker = null;
-      }
-
-      if (Position)
-      {
-        var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
-        var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection)
-
-        // Estimate point marker
-        this.PointMarker = new OpenLayers.Feature.Vector(
-          EstPos_Transformed,
-          {},
-          { externalGraphic: 'images/RedDot.png', graphicHeight: 8, graphicWidth: 8 }
-        );
-        VLMBoatsLayer.addFeatures(this.PointMarker);
-      }
+      VLMBoatsLayer.removeFeatures(this.PointMarker);
+      this.PointMarker = null;
     }
 
-    return RetValue;
+    if (Position)
+    {
+      var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
+      var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection)
+
+      // Estimate point marker
+      this.PointMarker = new OpenLayers.Feature.Vector(
+        EstPos_Transformed,
+        {},
+        { externalGraphic: 'images/RedDot.png', graphicHeight: 8, graphicWidth: 8 }
+      );
+      VLMBoatsLayer.addFeatures(this.PointMarker);
+    }
   }
 
 }

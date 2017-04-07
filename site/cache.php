@@ -33,12 +33,13 @@
                 if (preg_match("/(-?\d+)\/(-?\d+)\/(\d\d\d\d\d\d\d\d\d\d)\.(05|15)\.grb/", $matches[2], $components)) {
                     headeranddie(sprintf("/gribtiles.php?south=%d&west=%d&step=%d&date=%d", $components[1], $components[2], $components[4], $components[3]));
                 }
-                if (preg_match("/(-?\d+)\/(-?\d+)\/(\d\d\d\d\d\d\d\d\d\d)\.(05|15)\.txt/", $matches[2], $components)) {
-                    headeranddie(sprintf("/gribtiles.php?south=%d&west=%d&step=%d&date=%d&fmt=txt&v=".time(), $components[1], $components[2], $components[4], $components[3]));
-                }
                 if (preg_match("/(-?\d+)\/(-?\d+)\/(\d\d\d\d\d\d\d\d\d\d)\.(05|15)\.txt&force=yes/", $matches[2], $components)) {
                     headeranddie(sprintf("/gribtiles.php?south=%d&west=%d&step=%d&date=%d&fmt=txt&force=yes&v=".time(), $components[1], $components[2], $components[4], $components[3]));
                 }
+                if (preg_match("/(-?\d+)\/(-?\d+)\/(\d\d\d\d\d\d\d\d\d\d)\.(05|15)\.txt/", $matches[2], $components)) {
+                    headeranddie(sprintf("/gribtiles.php?south=%d&west=%d&step=%d&date=%d&fmt=txt&v=".time(), $components[1], $components[2], $components[4], $components[3]));
+                }
+                
             break;
             case "racemaps" :
                 if (preg_match("/(\d+)\.png/", $matches[2], $components)) {

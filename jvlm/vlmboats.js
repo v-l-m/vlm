@@ -883,6 +883,8 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords) {
       }
 
       // Draw Gate Segment
+      index = parseInt(index,10);
+      NextGate = parseInt(NextGate,10);
       AddGateSegment(VLMBoatsLayer,RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate === index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
     }
   }
