@@ -1476,7 +1476,7 @@ function HandleMapMouseMove(e)
     if (EstimatePos) 
     { 
       $("#MI_EstDate").text(EstimatePos.Date); 
-      $("#EstBoatIcon").css("transform","rotate("+EstimatePos.Heading+"deg)"); 
+      //$("#EstBoatIcon").css("transform","rotate("+EstimatePos.Heading+"deg)"); 
       
     } 
     else if (Estimated)
