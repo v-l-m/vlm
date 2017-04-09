@@ -262,6 +262,13 @@ function CheckLogin()
           function(result)
           {
             var LoginResult = JSON.parse(result);
+            var CurLoginStatus = _IsLoggedIn;
+            var CurBoatID = null;
+
+            if (CurLoginStatus)
+            {
+              CurBoatID = _CurPlayer.CurBoatID;
+            }
             
             _IsLoggedIn= LoginResult.success==true;
                 
@@ -271,6 +278,11 @@ function CheckLogin()
             }
             HidePb("#PbLoginProgress");
             DisplayLoggedInMenus(_IsLoggedIn);
+
+            if (CurBoatID)
+            {
+              SetCurrentBoat(GetBoatFromIdu(select),false);
+            }
     
           }
         );  
@@ -336,27 +348,44 @@ function GetPlayerInfo()
               _CurPlayer = new User();
             }
 
-            _CurPlayer.Fleet = [];
+            if (typeof _CurPlayer.Fleet ==="undefined")
+            {
+              _CurPlayer.Fleet = [];
+            }
+            
             for (boat in result.fleet)
-            {  
-              _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
-              if ( typeof select == "undefined")
+            {
+              if (typeof _CurPlayer.Fleet[boat]=== "undefined" )  
               {
-                select = _CurPlayer.Fleet[boat];
+                _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
+                if ( typeof select == "undefined")
+                {
+                  select = _CurPlayer.Fleet[boat];
+                }
               }
             }
 
             
-            _CurPlayer.fleet_boatsit = [];
+            if (typeof _CurPlayer.fleet_boatsit === "undefined")
+            {
+              _CurPlayer.fleet_boatsit = [];
+            }
+
             for (boat in result.fleet_boatsit)
-            {  
-              _CurPlayer.BSFleet.push (new Boat(result.fleet_boatsit[boat]));
+            {
+              if (typeof _CurPlayer.BSFleet[boat]===undefined)
+              {  
+                _CurPlayer.BSFleet[boat]= (new Boat(result.fleet_boatsit[boat]));
+              }
             }
             
             RefreshPlayerMenu();
-            DisplayCurrentDDSelectedBoat(select);
-            SetCurrentBoat(GetBoatFromIdu(select),true);                
-            RefreshCurrentBoat (true,false)    
+            if (typeof select !== "undefined" && select)
+            {
+              DisplayCurrentDDSelectedBoat(select);
+              SetCurrentBoat(GetBoatFromIdu(select),true);                
+              RefreshCurrentBoat (true,false)    
+            }
           }
         )
         
