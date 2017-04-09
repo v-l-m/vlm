@@ -109,6 +109,9 @@ div.GribmapMousePosition {
   right: 0px;
   top: 5px;
 }
+.navbar-brand{
+padding:0;
+}
 #logovlm {
   display: fixed;
   position: absolute;
@@ -116,14 +119,20 @@ div.GribmapMousePosition {
   left: 10px;
   z-index: 99999;
 }
-.logo{
+#logo{
   position: relative;
-  max-width:64px
+  max-width:64em;
+}
+#logo div { 
+  position:absolute; 
+  width:100%; 
+  height:100%;
+ background-size:cover;
 }
 .version{
   position: absolute;
-  top:-18px;
-  left:-12px;
+  top:0px;
+  left:18px;
   font-size:10px;
   color:#7C7C7C;
 }
@@ -264,7 +273,7 @@ span.ui-selectmenu-text {
 }
  // CSS for Piloting/dashboard buttons  
 @IconSize:40px;
-@BtnPadLeft:10px;
+@BtnPadLeft:5px;
 @BtnPadTop:4px;
 @Btn2Left:(@IconSize + @BtnPadLeft);
 @Btn3Left:(2*@IconSize + 2*@BtnPadLeft);
@@ -301,11 +310,12 @@ span.ui-selectmenu-text {
   top: 0px;
 }
 .BtnRankingPanel {
-  /*position: absolute;*/
+  /*position: absolute;
  padding-top: @BtnPadTop;
  padding-left:10px;
- padding-right:10px;
+ padding-right:10px;*/
   top: 0px;
+  float:left;
 }
 .BoatSelector {
  padding-top: @BtnPadTop;
@@ -348,7 +358,7 @@ span.ui-selectmenu-text {
 }
 .ranking {
   background-color: #c70000;
-  right: 0px;
+  right: 35px;
   top: 0px;
   z-index:995;
 }
@@ -477,7 +487,18 @@ span.ui-selectmenu-text {
 @media all and (max-width: 430px)
 
 {
-  
+ 
+.NavRaceName{
+max-height: 20px;
+overflow: hidden;
+}
+#nav-stat{
+  background-color:black;
+  visibility:visible;
+}
+#nav-stat .row{
+margin-left:0px;
+} 
 .btn-md,
 .btn-group-md > .btn {
   padding: 8px 14px;
@@ -495,10 +516,66 @@ span.ui-selectmenu-text {
     }
 
 }
+@media (max-width: 1023px) { /* Remplacez 123px par la taille de votre choix */
+.navbar-header {
+float: none;
+}
+.navbar-toggle {
+display: block;
+}
+.navbar-collapse {
+border-top: 1px solid transparent;
+box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.navbar-collapse.collapse {
+display: none!important;
+}
+.navbar-nav {
+float: none!important;
+/*margin: 7.5px -15px;*/
+}
+.navbar-nav>li {
+float: none;
+}
+.navbar-nav>li>a {
+padding-top: 10px;
+padding-bottom: 10px;
+}
+.navbar-text {
+float: none;
+margin: 15px 0;
+}
+/* cette classe est à ajouter lorsque que vous utilisez une version de Bootstap supérieure ou égale à la 3.1.0 */
+.navbar-collapse.collapse.in {
+display: block!important;
+}
+.collapsing {
+overflow: hidden!important;
+}
+.navbar-right>li {
+float:right;
+}
+} 
+
+@media all and (min-width: 430px) and (max-width: 800px)
+
+{
+.NavRaceName{
+max-height: 20px;
+overflow: hidden;
+}
+}
 @media all and (min-width: 430px)
 
 {
-  
+   
+#nav-stat{
+  background-color:black;
+  visibility:hidden;
+}
+#nav-stat .row{
+margin-left:0px;
+} 
 .btn-md,
 .btn-group-md > .btn {
   padding: 8px 14px;
@@ -513,6 +590,30 @@ span.ui-selectmenu-text {
   /*left: 38px;*/
   /*background-color: rgba(240, 248, 255,0.5);*/
 }
+}
+.navbar-toggle{
+padding: 0;
+margin-top: 0;
+margin-right: 10px;
+}
+.ddlangbtn{
+min-width: 50px;
+}
+.logbtn{
+margin-top: 10px;
+min-width: 50px;
+}
+.togglebtn {
+margin-top: 10px;
+}
+#myNavbar{
+min-width:250px;
+}
+#myNavbar ul li {
+float:left;
+}
+#myNavbar ul{
+float:left;
 }
 .Boat_SimpleInput {
   width: 90px;

@@ -61,28 +61,45 @@
       </div>
     </div>
     
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-toggleable-md">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <ul LoggedInNav="false" style="display:none">
+         <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
+        </ul>
+        <ul LoggedInNav="true" style="display:none" >
+        <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-out"></span></button>
+        </ul>
+          <button type="button" class="togglebtn navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span> 
             <span class="icon-bar"></span>             
           </button>
           <a class="navbar-brand" href="/" target="_vlm">
-            <div class="logo">
+            <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
               <div class="version">v7</div>
             </div>
           </a>
+              <div  class="dropdown navbar-toggle" data-toggle="collapse">
+                <button id="dropdownBoat1" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+                <ul id="" class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat1">
+                </ul>
+             </div> 
+             <div class="NavRaceClock dropdown navbar-toggle" data-toggle="collapse">
+                    <Span  class="RaceChrono ChronoRaceStarted"> </Span>
+             </div> 
         </div>
 
         <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
-            <li class="BoatSelector">
+            <li class="BoatSelector  col-md hidden-xs hidden-sm">
+              <span class="glyphicon glyphicon-log-in" style="top:0px"><button id="" type="button" class="logindlgButton ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
+            </li>
+            <li class="BoatSelector  col-md-4 hidden-xs hidden-sm">
               <div class="dropdown">
-                <button id="SelectionLanguageDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
+                <button id="SelectionLanguageDropDown" class="ddlangbtn ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -95,21 +112,18 @@
                 </ul>
               </div>
             </li>
-            <li class="BoatSelector">
-              <span class="glyphicon glyphicon-log-in" style="top:0px"><button id="logindlgButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
-            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right" LoggedInNav="true" style="display:none">
-            <li class="BoatSelector">
-              <span class="glyphicon glyphicon-log-out"><button id="logOutButton" type="button" class="ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span> 
+            <li class="BoatSelector  col-md hidden-xs hidden-sm">
+              <span class="glyphicon glyphicon-log-out" style="top:0px"><button id="" type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
             </li>
           </ul>
-          <ul  class="nav navbar-nav"  LoggedInNav="true" style="display:none">
-            <li  class="active" ><a class="player" id="PlayerId">Not Logged in </a></li>
-            <li  class="BoatSelector">
-              <div id="BoatSelectorDropDown" class="dropdown">
-                <button id="BoatDropDown" class="ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
-                <ul id="BoatSelectorDropDownList" class="dropdown-menu" aria-labelledby="dropdownBoat">
+          <ul  class="nav navbar-right"  LoggedInNav="true" style="display:none">
+            <li  class="nav active  col-md hidden-xs hidden-sm" ><a class="player" id="PlayerId">Not Logged in </a></li>
+            <li  class="BoatSelector col-md hidden-xs hidden-sm">
+              <div  class="nav dropdown  ">
+                <button id="dropdownBoat" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+                <ul  class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat">
                 </ul>
               </div>                     
             </li>
@@ -130,30 +144,45 @@
                 </div>
               </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="float: left;">
-              <!--<div class="BtnGroup1" >-->
+            <li class="nav hidden" RacingBtn="true">
+              <div class="BtnGroup" >
                 <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png"/></a><span id="RankingBadge" class="ranking btnbadge badge">...</span>
                 </div>
-            </li>
-            <li class="nav" style="float: left;">
-                  <div id="BtnSetting" class="button hidden" style="float: left;">
+                  <div id="BtnSetting" class="BtnRankingPanel hidden">
                       <a ><img class="TDB-Icon" src="images/setting.png" alt="setting"/></a>
                   </div>
+              </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="float:left">
-             <!-- <div class="BtnGroup1" >-->
-                  <div class="button" style="float:left">
+             <li class="nav hidden" RacingBtn="true">
+              <div class="BtnGroup" >
+                <div class="BtnRankingPanel">
+                  <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal" alt="compas"/>
+                 </div>
+               <div class="BtnRankingPanel">
+                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png" alt="MapOptions"/>
+               </div>
+              </div>
+              </li>
+              <li class="nav">
+                <div class ="hidden">
+                    <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value="">
+                </div>
+            </li>
+            <li class="nav hidden" RacingBtn="true">
+             <div class="BtnGroup1" >
+                  <div class="BtnRankingPanel" >
                       <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
                   </div>
+              </div>
             </li>
-            <li class="BoatSelector nav hidden" RacingBtn="true" style="padding-top:4px; float:left">
+            <li class="nav BoatSelector nav hidden" RacingBtn="true">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
                     <Span id="RaceName">  </Span>
                   </div>
                   <div class="NavRaceClock">
-                    <Span id="RaceChrono"> </Span>
+                    <Span  class="RaceChrono ChronoRaceStarted"> </Span>
                   </div> 
                    <div>
                     <div class="progressbarmin" id="pbar_innerdivmin" ></div>
@@ -166,19 +195,7 @@
                   </div>-->
                 </div>
             </li>
-            <li class="nav hidden" RacingBtn="true" style="float:left;">
-                <div class="button" style="float:left">
-                  <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal" alt="compas"/>
-                 </div>
-               <div class="button">
-                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png" alt="MapOptions"/>
-               </div>
-              </li>
-              <li>
-                <div class ="hidden">
-                    <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value="">
-                </div>
-            </li>
+           
           </ul>
         
              <!--<script>
