@@ -139,9 +139,11 @@ div.GribmapMousePosition {
   font-size: 10px;
   color: #7C7C7C;
 }
+
 .stop {
   background-color: transparent;
 }
+
 .olControlAttribution {
   left: 100px;
   right: inherit;
