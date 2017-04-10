@@ -60,11 +60,11 @@ function Boat(vlmboat)
       if (Gate.wpformat & WP_ICE_GATE) 
       {
         NWP++;
-        if (NWP >= this.Boat.RaceInfo.races_waypoints)
+        if (NWP >= this.RaceInfo.races_waypoints)
         {
           throw "Oops could not find requested gate type"
         }
-        Gate = this.Boat.RaceInfo.races_waypoints[NWP];
+        Gate = this.RaceInfo.races_waypoints[NWP];
       }
 
     } while  (Gate.wpformat & WP_ICE_GATE)
@@ -97,7 +97,7 @@ function Boat(vlmboat)
       var Est= this.Estimator.GetClosestEstimatePoint(Pos);
       if (Est)
       {
-        this.Estimator.ShowEstimatePosition(Est.Position);
+        this.Estimator.ShowEstimatePosition(Est);
       }
       return Est
     }

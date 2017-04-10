@@ -405,7 +405,7 @@ function Estimator(Boat)
     return RetValue;
   }
 
-  this.ShowEstimatePosition = function(Position)
+  this.ShowEstimatePosition = function(Estimate)
   {
     // Track Estimate closest point to mousemove
     if (this.PointMarker)
@@ -414,8 +414,9 @@ function Estimator(Boat)
       this.PointMarker = null;
     }
 
-    if (Position)
+    if (Estimate && Estimate.Position)
     {
+      var Position = Estimate.Position
       var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
       var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection)
 
@@ -423,7 +424,11 @@ function Estimator(Boat)
       this.PointMarker = new OpenLayers.Feature.Vector(
         EstPos_Transformed,
         {},
-        { externalGraphic: 'images/RedDot.png', graphicHeight: 8, graphicWidth: 8 }
+        { externalGraphic: 'images/target.svg',
+          opacity: 0.8, 
+          graphicHeight: 48, 
+          graphicWidth: 48,
+          rotation: Estimate.Heading }
       );
       VLMBoatsLayer.addFeatures(this.PointMarker);
     }
