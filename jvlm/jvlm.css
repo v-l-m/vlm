@@ -139,6 +139,7 @@ div.GribmapMousePosition {
   font-size: 10px;
   color: #7C7C7C;
 }
+
 .stop {
   width: 22px;
   height: 22px;
@@ -150,6 +151,7 @@ div.GribmapMousePosition {
 .stop:hover {
   background-size: 22px 22px;
 }
+
 .olControlAttribution {
   left: 100px;
   right: inherit;
