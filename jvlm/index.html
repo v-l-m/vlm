@@ -1522,42 +1522,30 @@
                      </div>
                    </div>
                     <div class="BCPane tab-pane fade" id="InfosBoat">
-                        <h4>Type de bateau : Imoca</h4>
-                          <img  src="http://wiki.virtual-loup-de-mer.org/images/thumb/4/40/Britair_-_Brest_2008-2_vlm.jpg/525px-Britair_-_Brest_2008-2_vlm.jpg" alt="Imoca" style="max-width:100%"/>
-                                Gréement : 	sloop<br>
-                                Longueur hors-tout : 	60 pieds<br>
-                                (18,29 m)
-                                Maître-bau : 	3 à 5 m<br>
-                                Tirant d'eau : 	4,50m<br>
-                                Surface de voilure : 	250 et 300 m² au près<br>
-                                500 à 600 m² au portant<br>
-                                Déplacement : 	7 à 10 tonnes<br>
-                                Équipage : 	1<br>
-                                Débuts : 	1991 <br>
-                                source : <a href="http://wiki.virtual-loup-de-mer.org/index.php?title=Imoca" target="blanck">Wiki</a>
+                      <h4>Type de bateau : <span class="BoatClass"></span></h4>
+                      <!--<a id= href="https:///index.php?title=Imoca" target="blanck">Wiki</a>-->
                     </div><!--fin boatinfo-->
                     <div class="BCPane tab-pane fade" id="PolarBoat">
-                              <h4>Polaires Imoca</h4>
-                              <div class="slideshow">
-                                <ul>
-                                  <!--
-                                    <li><img class="polaire" src="../cache/polaires/imoca-45-60.png" alt="imoca45-60" /></li>
-                                    <li><img class="polaire" src="../cache/polaires/imoca-30-45.png" alt="imoca30-45" /></li>
-                                    <li><img class="polaire" src="../cache/polaires/imoca-15-30.png" alt="imoca15-30" /></li>
-                                    <li><img class="polaire" src="../cache/polaires/imoca-0-15.png" alt="imoca0-15" /></li>
-                                  -->
-                                </ul>
-                             </div>
-                             <button id="suivant" type="button" class="ui-button ui-corner-all ui-widget">suivant</button>
-          <script type="text/javascript">
-             $(function(){
-                $("#suivant").click(function(){
-                   $(".slideshow ul").animate({marginLeft:-300},800,function(){
-                      $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
-                   })
-                });
-             });
-          </script>
+                      <h4>Polaires <span class="BoatClass"></span></h4>
+                      <div class="slideshow">
+                        <ul id="PolarList" class="carousel-indicators">
+                            <!--<li><img class="polaire" src="../cache/polaires/imoca-45-60.png" alt="imoca45-60" /></li>
+                            <li><img class="polaire" src="../cache/polaires/imoca-30-45.png" alt="imoca30-45" /></li>
+                            <li><img class="polaire" src="../cache/polaires/imoca-15-30.png" alt="imoca15-30" /></li>
+                            <li><img class="polaire" src="../cache/polaires/imoca-0-15.png" alt="imoca0-15" /></li>
+                            -->
+                        </ul>
+                      </div>
+                      <button id="suivant" type="button" class="ui-button ui-corner-all ui-widget">suivant</button>
+                      <script type="text/javascript">
+                        $(function(){
+                            $("#suivant").click(function(){
+                              $(".slideshow ul").animate({marginLeft:-300},800,function(){
+                                  $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
+                              })
+                            });
+                        });
+                      </script>
                     </div>
                 </div>
              </div>
