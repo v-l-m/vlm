@@ -672,6 +672,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_CHECK,"#PM_WithWPHeading", Boat.VLMInfo['H@WP'] !== "-1.0"]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
   
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lat", WP.Lat.Value]);
@@ -799,8 +800,23 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     }
 
     UpdatePilotInfo(Boat);
+    UpdatePolarImages(Boat);
 
 } 
+
+function UpdatePolarImages(Boat)
+{
+  var PolarName = Boat.VLMInfo.POL.substring(5);
+  var Angle;
+  var HTML=""
+  for (Angle=0; Angle <= 45; Angle +=15)
+  {
+    HTML += '<li><img class="polaire" src="/scaledspeedchart.php?boattype=boat_'+PolarName+'&amp;minws='+Angle+'&amp;maxws='+(Angle+15)+'&amp;pas=2" alt="speedchart"></li>'
+  }
+
+  $("#PolarList").empty();
+  $("#PolarList").append(HTML);
+}
 
 function UpdatePilotInfo(Boat)
 {
