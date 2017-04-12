@@ -254,42 +254,42 @@ span.ui-selectmenu-text {
  left: @SpeedLeft;
 }
 #StatLoch {
- top: @StatLineDNM;
- left: @SpeedLeft+2*40px;
+  top: @StatLineDNM;
+  left: @SpeedLeft+2*40px;
 }
 #StatOrtho {
- top: @StatLineOrtho;
- left: @SpeedLeft;
+  top: @StatLineOrtho;
+  left: @SpeedLeft;
 }
 #StatLoxo {
- top: @StatLineOrtho;
- left: @SpeedLeft+40px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft+40px;
 }
 #StatVMG {
- top: @StatLineOrtho;
- left: @SpeedLeft+2*40px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft+2*40px;
 }
 #BoatDNM {
- top: @BoatLineDNM;
- left: @SpeedLeft;
+  top: @BoatLineDNM;
+  left: @SpeedLeft;
 }
 #BoatLoch {
- top: @BoatLineDNM;
- left: @SpeedLeft+2*40px;
+  top: @BoatLineDNM;
+  left: @SpeedLeft+2*40px;
 }
 #BoatOrtho {
- top: @BoatLineOrtho;
- left: @SpeedLeft;
+  top: @BoatLineOrtho;
+  left: @SpeedLeft;
 }
 #BoatLoxo {
- top: @BoatLineOrtho;
- left: @SpeedLeft+40px;
+  top: @BoatLineOrtho;
+  left: @SpeedLeft+40px;
 }
 #BoatVMG {
- top: @BoatLineOrtho;
- left: @SpeedLeft+2*40px;
+  top: @BoatLineOrtho;
+  left: @SpeedLeft+2*40px;
 }
- // CSS for Piloting/dashboard buttons  
+// CSS for Piloting/dashboard buttons  
 @IconSize:40px;
 @BtnPadLeft:5px;
 @BtnPadTop:4px;
@@ -301,45 +301,44 @@ span.ui-selectmenu-text {
 @BtnMargin:5px;
 .BtnGroup {
   position: relative;
- padding-left: @BtnPadLeft;
- padding-top: @BtnPadTop;
- width: (2*@BtnPadLeft + 2* @IconSize);
+  padding-left: @BtnPadLeft;
+  padding-top: @BtnPadTop;
+  width: (2*@BtnPadLeft + 2* @IconSize);
 }
 .BtnGroup-nav {
- position: relative;
- padding-left: @BtnPadLeft;
- padding-top: @BtnPadTop;
- width: (2*@BtnPadLeft + 2* @IconSize);
- margin-left:@BtnMargin;
+  position: relative;
+  padding-left: @BtnPadLeft;
+  padding-top: @BtnPadTop;
+  width: (2*@BtnPadLeft + 2* @IconSize);
+  margin-left:@BtnMargin;
 }
 .BtnGroup1 {
- position: relative;
- padding-left: 2px;
- padding-top: @BtnPadTop;
+  position: relative;
+  padding-left: 2px;
+  padding-top: @BtnPadTop;
 }
 .BtnTBDPanel {
   position: absolute;
- top:@BtnPadTop;
+  top:@BtnPadTop;
 }
 .BtnCtrlPanel {
   position: absolute;
- left: @Btn2Left;
- padding-top: @BtnPadTop;
+  left: @Btn2Left;
+  padding-top: @BtnPadTop;
   top: 0px;
 }
 .BtnRankingPanel {
   /*position: absolute;
- padding-top: @BtnPadTop;
- padding-left:10px;
- padding-right:10px;*/
+  padding-top: @BtnPadTop;
+  padding-left:10px;
+  padding-right:10px;*/
   top: 0px;
   float:left;
 }
 .BoatSelector {
- padding-top: @BtnPadTop;
- padding-left:10px;
+  padding-top: @BtnPadTop;
+  padding-left:10px;
 }
-
 .BoatStatusIcon{
   width: 24px;
   height: 24px;
@@ -349,10 +348,10 @@ span.ui-selectmenu-text {
   margin-top:1px;
 }
 .TDB-Icon {
- width: @IconSize;
- height: @IconSize;
- padding-left:2px;
- cursor:pointer;
+  width: @IconSize;
+  height: @IconSize;
+  padding-left:2px;
+  cursor:pointer;
 }
 .TDB-Panel {
   width: 163px;
@@ -385,7 +384,6 @@ span.ui-selectmenu-text {
   left: 26px;
   top: 0px;
 }
-
 .panel{
 	background-color:transparent;
   margin-bottom:5px;
@@ -394,16 +392,12 @@ span.ui-selectmenu-text {
 .panel-body{
 	padding:0px;
 }
-
-
 .pilottab{
   background-color: #00c700;
   left: auto;
   top: -5px;
   display:inline;
 }
-
-
 @VLM100WindLine1Top:15px;
 @VLM100LineOffset:39px;
 @VLM100WindLine2Top:@VLM100WindLine1Top+@VLM100LineOffset;
@@ -414,12 +408,9 @@ span.ui-selectmenu-text {
 @VLM100ValueTopOffset:5px;
 @VLM100UnitTopOffset:0px;
 @VLM100TextColor: #FFFFFF;
-
-
 .VLM100_Label, .VLM100_Pos, .VLM100_PosSmall, .VLM100_Unit, .VLM100_Value{
   color:@VLM100TextColor;
 }
-
 .VLM100_Label{
   position: absolute;
   font-size: small;
@@ -427,7 +418,7 @@ span.ui-selectmenu-text {
 .VLM100_Unit {
   position: absolute;
   font-size: x-small;
- left:@VLM100UnitLeft;
+  left:@VLM100UnitLeft;
   text-align: right;
   width: 40px;
 }
@@ -436,38 +427,38 @@ span.ui-selectmenu-text {
   font-size: xx-large;
   text-align: right;
   width: 100px;
- left:@VLM100Left;
+  left:@VLM100Left;
 }
 #StatWindSpeed, #StatWindDirection, #StatWindAngle {
- left: @VLM100Left;
- font-size: @VLM100StatFontSize;
+  left: @VLM100Left;
+  font-size: @VLM100StatFontSize;
 }
 #StatWindSpeed {
- top:@VLM100WindLine1Top;
+  top:@VLM100WindLine1Top;
 }
 #StatWindDirection {
- top:@VLM100WindLine2Top;
+  top:@VLM100WindLine2Top;
 }
 #StatWindAngle {
- top:@VLM100WindLine3Top;
+  top:@VLM100WindLine3Top;
 }
 #StatSpeedUnit {
- top:@VLM100WindLine1Top+@VLM100UnitTopOffset;
+  top:@VLM100WindLine1Top+@VLM100UnitTopOffset;
 }
 #StatDirUnit {
- top:@VLM100WindLine2Top+@VLM100UnitTopOffset;
+  top:@VLM100WindLine2Top+@VLM100UnitTopOffset;
 }
 #StatAngleUnit {
- top:@VLM100WindLine3Top+@VLM100UnitTopOffset;
+  top:@VLM100WindLine3Top+@VLM100UnitTopOffset;
 }
 #BoatWindSpeed {
- top:@VLM100WindLine1Top+@VLM100ValueTopOffset;
+  top:@VLM100WindLine1Top+@VLM100ValueTopOffset;
 }
 #BoatWindDirection {
- top:@VLM100WindLine2Top+@VLM100ValueTopOffset;
+  top:@VLM100WindLine2Top+@VLM100ValueTopOffset;
 }
 #BoatWindAngle {
- top:@VLM100WindLine3Top+@VLM100ValueTopOffset;
+  top:@VLM100WindLine3Top+@VLM100ValueTopOffset;
 }
 #ImgWindAngle {
   width: 142px;
@@ -503,22 +494,20 @@ span.ui-selectmenu-text {
   transform-origin: 83px 75px;
 }
 @media all and (max-width: 430px)
-
 {
- 
 .navbar-right-small {
-margin-left:0px!important;
+  margin-left:0px!important;
 }
 .NavRaceName{
-max-height: 20px;
-overflow: hidden;
+  max-height: 20px;
+  overflow: hidden;
 }
 #nav-stat{
   background-color:black;
   visibility:visible;
 }
 #nav-stat .row{
-margin-left:0px;
+  margin-left:0px;
 } 
 .btn-md,
 .btn-group-md > .btn {
@@ -527,79 +516,71 @@ margin-left:0px;
   line-height: 1.3333333;
   border-radius: 6px;
 }
-    .Controler-Panel
-
-    {
-
-       padding-left:0px;
-       padding-top:10px;
-
-    }
-
+.Controler-Panel
+{
+  padding-left:0px;
+  padding-top:10px; 
+}
 }
 @media (max-width: 1023px) { /* Remplacez 123px par la taille de votre choix */
 .navbar-header {
-float: none;
+  float: none;
 }
 .navbar-toggle {
-display: block;
+  display: block;
 }
 .navbar-collapse {
-border-top: 1px solid transparent;
-box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  border-top: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 }
 .navbar-collapse.collapse {
-display: none!important;
+  display: none!important;
 }
 .navbar-nav {
-float: none!important;
-/*margin: 7.5px -15px;*/
+  float: none!important;
+  /*margin: 7.5px -15px;*/
 }
 .navbar-nav>li {
-float: none;
+  float: none;
 }
 .navbar-nav>li>a {
-padding-top: 10px;
-padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .navbar-text {
-float: none;
-margin: 15px 0;
+  float: none;
+  margin: 15px 0;
 }
 /* cette classe est à ajouter lorsque que vous utilisez une version de Bootstap supérieure ou égale à la 3.1.0 */
 .navbar-collapse.collapse.in {
-display: block!important;
+  display: block!important;
 }
 .collapsing {
-overflow: hidden!important;
+  overflow: hidden!important;
 }
 .navbar-right>li {
-float:right;
+  float:right;
 }
 } 
 .navbar-right-small {
-float:left!important;
-margin-left:30px;
+  float:left!important;
+  margin-left:30px;
 }
-
 @media all and (min-width: 430px) and (max-width: 800px)
-
 {
 .NavRaceName{
-max-height: 20px;
-overflow: hidden;
+  max-height: 20px;
+  overflow: hidden;
 }
 }
 @media all and (min-width: 430px)
-
-{
-   
+{  
 #nav-stat{
   background-color:black;
   visibility:hidden;
 }
 #nav-stat .row{
-margin-left:0px;
+  margin-left:0px;
 } 
 .btn-md,
 .btn-group-md > .btn {
@@ -617,28 +598,28 @@ margin-left:0px;
 }
 }
 .navbar-toggle{
-padding: 0;
-margin-top: 0;
-margin-right: 10px;
+  padding: 0;
+  margin-top: 0;
+  margin-right: 10px;
 }
 .ddlangbtn{
-min-width: 50px;
+  min-width: 50px;
 }
 .logbtn{
-margin-top: 10px;
-min-width: 50px;
+  margin-top: 10px;
+  min-width: 50px;
 }
 .togglebtn {
-margin-top: 10px;
+  margin-top: 10px;
 }
 #myNavbar{
-min-width:250px;
+  min-width:250px;
 }
 #myNavbar ul li {
-float:left;
+  float:left;
 }
 #myNavbar ul{
-float:left;
+  float:left;
 }
 .Boat_SimpleInput {
   width: 90px;
@@ -684,9 +665,9 @@ float:left;
   font-style: italic;
 }
 .button {
- color: @DialogBgColor;
- padding-top:4px;
- float:left;
+  color: @DialogBgColor;
+  padding-top:4px;
+  float:left;
 }
 //Modif Par Chris /* Classe principale de la barre de navigation */
 // defined in variables.css:
@@ -702,46 +683,46 @@ float:left;
   padding-top:0px;
 }
 .tab-content {
- background-color:transparent;
+  background-color:transparent;
   color: #ffffff;
   padding: 20px;
- /* margin-top: 4px;*/
+  /* margin-top: 4px;*/
   border: 1px solid #CCC;
 }
  .BCOng {
- /*text-align:center;
- background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
- background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
- filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
- background-repeat: repeat-x;*/
- background-color:#161616;
- /*height:40px;*/
- margin-right: 2px;
- border-top:1px beige solid;
- border-right:1px beige solid;
- border-left:1px beige solid;
- /*max-width:150px;
- min-width:75px;*/
- border-radius: 4px 4px 0 0;
+  /*text-align:center;
+  background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+  background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
+  background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-repeat: repeat-x;*/
+  background-color:#161616;
+  /*height:40px;*/
+  margin-right: 2px;
+  border-top:1px beige solid;
+  border-right:1px beige solid;
+  border-left:1px beige solid;
+  /*max-width:150px;
+  min-width:75px;*/
+  border-radius: 4px 4px 0 0;
 }
 .nav-tab > li {
- margin-bottom:0px;
+  margin-bottom:0px;
 }
 /*#Boat-Panel #tabs  > li {
- color: #021A9C;
- background-color:#161616;
- margin-right: 2px;
- border-top:1px beige solid;
- border-right:1px beige solid;
- border-left:1px beige solid;
- border-radius: 4px 4px 0 0;
- text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+  color: #021A9C;
+  background-color:#161616;
+  margin-right: 2px;
+  border-top:1px beige solid;
+  border-right:1px beige solid;
+  border-left:1px beige solid;
+  border-radius: 4px 4px 0 0;
+  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
 }
 #Boat-Panel #tabs  > li >a{
-margin-right:0px;
+  margin-right:0px;
 }
 #Boat-Panel #tabs >li> a:focus, {
   color: #021A9C;
@@ -1251,12 +1232,12 @@ td, th {
   /*  border: 1px solid;*/
 }
 
-.polaire{ 
+/*.polaire{ 
   width:300px;
   height:512px;
 }
 #img1 {z-index: 4;}
-/*#img2 {z-index: 3;}
+#img2 {z-index: 3;}
 #img3 {z-index: 2;}
 #img4 {z-index: 1;}*/
 .NoAnimation{
@@ -1269,7 +1250,7 @@ td, th {
 
 .slideshow {
   width: 272px;
-  height: 429px;
+  height: 435px;
   overflow: hidden;
   border: 3px solid #F2F2F2;
   margin-left: auto;

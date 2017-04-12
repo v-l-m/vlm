@@ -311,9 +311,9 @@ span.ui-selectmenu-text {
 }
 .BtnRankingPanel {
   /*position: absolute;
- padding-top: @BtnPadTop;
- padding-left:10px;
- padding-right:10px;*/
+  padding-top: @BtnPadTop;
+  padding-left:10px;
+  padding-right:10px;*/
   top: 0px;
   float: left;
 }
@@ -653,13 +653,13 @@ span.ui-selectmenu-text {
 }
 .BCOng {
   /*text-align:center;
- background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
- background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
- filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
- filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
- background-repeat: repeat-x;*/
+  background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+  background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
+  background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-repeat: repeat-x;*/
   background-color: #161616;
   /*height:40px;*/
   margin-right: 2px;
@@ -667,24 +667,24 @@ span.ui-selectmenu-text {
   border-right: 1px beige solid;
   border-left: 1px beige solid;
   /*max-width:150px;
- min-width:75px;*/
+  min-width:75px;*/
   border-radius: 4px 4px 0 0;
 }
 .nav-tab > li {
   margin-bottom: 0px;
 }
 /*#Boat-Panel #tabs  > li {
- color: #021A9C;
- background-color:#161616;
- margin-right: 2px;
- border-top:1px beige solid;
- border-right:1px beige solid;
- border-left:1px beige solid;
- border-radius: 4px 4px 0 0;
- text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+  color: #021A9C;
+  background-color:#161616;
+  margin-right: 2px;
+  border-top:1px beige solid;
+  border-right:1px beige solid;
+  border-left:1px beige solid;
+  border-radius: 4px 4px 0 0;
+  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
 }
 #Boat-Panel #tabs  > li >a{
-margin-right:0px;
+  margin-right:0px;
 }
 #Boat-Panel #tabs >li> a:focus, {
   color: #021A9C;
@@ -1210,7 +1210,7 @@ th {
 }
  .slideshow {
   width: 272px;
-  height: 429px;
+  height: 435px;
   overflow: hidden;
   border: 3px solid #F2F2F2;
   margin-left: auto;
