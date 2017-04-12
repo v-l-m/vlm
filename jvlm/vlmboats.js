@@ -432,10 +432,11 @@ function DrawBoat(Boat, CenterMapOnBoat)
   // MakePolar in a 200x200 square
   //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
   var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
-  var scale = 50 * map.resolution;
+  //var scale = 50 * map.resolution;
+  var scale = 12;
 
   BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, true);
-  BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
+  //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
   
   var BoatPolar = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(Polar),
@@ -507,28 +508,34 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
 function BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, FirstSide)
 {
-  for (index in PolarPointList) 
+  var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT)
+  var CurDate = new Date(Boat.VLMInfo.LUP*1000);
+
+  if (!CurDate || CurDate < new Date().getTime())
   {
-    if (PolarPointList[index])
+    CurDate = new Date().getTime()
+  }
+  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value)
+  
+  if (MI)
+  {
+    var hdg = parseFloat(Boat.VLMInfo.HDG)
+    var index ;
+
+    for (index=-180; index <=180; index +=5 ) 
     {
-      var Alpha = 5 * Math.floor(index);
-      var Speed = parseFloat(PolarPointList[index]);
+      Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL,MI.Speed,MI.Heading,hdg+index);
 
-      if (!FirstSide)
-      {
-        Alpha = 360 - Alpha;
-      }
-
-      var PixPos = new OpenLayers.Geometry.Point(
-        PosTransformed.x + Math.sin(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed,
-        PosTransformed.y + Math.cos(Deg2Rad(Alpha + Boat.VLMInfo.TWD)) * scale * Speed);
-
+      var PolarPos = StartPos.ReachDistLoxo(Speed/3600.*Boat.VLMInfo.VAC*scale, hdg+index)
+      var PixPos = new OpenLayers.Geometry.Point(PolarPos.Lon.Value, PolarPos.Lat.Value);
+      var PixPos_Transformed = PixPos.transform(MapOptions.displayProjection, MapOptions.projection)
+        
       //var P = map.getLonLatFromPixel(PixPos);
       //var PPoint = new OpenLayers.Geometry.Point(PixPos);
-      Polar.push(PixPos);
+      Polar.push(PixPos_Transformed);
+      
     }
   }
-  
 }
 
 function GetVLMPositionFromClick(pixel)

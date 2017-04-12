@@ -817,10 +817,9 @@ function UpdatePolarImages(Boat)
   var HTML=""
   for (Angle=0; Angle <= 45; Angle +=15)
   {
-         HTML += '<li><img class="polaire" src="/scaledspeedchart.php?boattype=boat_'+PolarName+'&amp;minws='+Angle+'&amp;maxws='+(Angle+15)+'&amp;pas=2" alt="speedchart"></li>'  
+    HTML += '<li><img class="polaire" src="/scaledspeedchart.php?boattype=boat_'+PolarName+'&amp;minws='+Angle+'&amp;maxws='+(Angle+15)+'&amp;pas=2" alt="speedchart"></li>'
   }
-  
-    
+
   $("#PolarList").empty();
   $("#PolarList").append(HTML);
 }

@@ -60,11 +60,11 @@ function Boat(vlmboat)
       if (Gate.wpformat & WP_ICE_GATE) 
       {
         NWP++;
-        if (NWP >= this.Boat.RaceInfo.races_waypoints)
+        if (NWP >= this.RaceInfo.races_waypoints)
         {
           throw "Oops could not find requested gate type"
         }
-        Gate = this.Boat.RaceInfo.races_waypoints[NWP];
+        Gate = this.RaceInfo.races_waypoints[NWP];
       }
 
     } while  (Gate.wpformat & WP_ICE_GATE)
@@ -97,7 +97,7 @@ function Boat(vlmboat)
       var Est= this.Estimator.GetClosestEstimatePoint(Pos);
       if (Est)
       {
-        this.Estimator.ShowEstimatePosition(Est.Position);
+        this.Estimator.ShowEstimatePosition(Est);
       }
       return Est
     }
@@ -262,6 +262,13 @@ function CheckLogin()
           function(result)
           {
             var LoginResult = JSON.parse(result);
+            var CurLoginStatus = _IsLoggedIn;
+            var CurBoatID = null;
+
+            if (CurLoginStatus)
+            {
+              CurBoatID = _CurPlayer.CurBoatID;
+            }
             
             _IsLoggedIn= LoginResult.success==true;
                 
@@ -271,6 +278,11 @@ function CheckLogin()
             }
             HidePb("#PbLoginProgress");
             DisplayLoggedInMenus(_IsLoggedIn);
+
+            if (CurBoatID)
+            {
+              SetCurrentBoat(GetBoatFromIdu(select),false);
+            }
     
           }
         );  
@@ -336,27 +348,44 @@ function GetPlayerInfo()
               _CurPlayer = new User();
             }
 
-            _CurPlayer.Fleet = [];
+            if (typeof _CurPlayer.Fleet ==="undefined")
+            {
+              _CurPlayer.Fleet = [];
+            }
+            
             for (boat in result.fleet)
-            {  
-              _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
-              if ( typeof select == "undefined")
+            {
+              if (typeof _CurPlayer.Fleet[boat]=== "undefined" )  
               {
-                select = _CurPlayer.Fleet[boat];
+                _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
+                if ( typeof select == "undefined")
+                {
+                  select = _CurPlayer.Fleet[boat];
+                }
               }
             }
 
             
-            _CurPlayer.fleet_boatsit = [];
+            if (typeof _CurPlayer.fleet_boatsit === "undefined")
+            {
+              _CurPlayer.fleet_boatsit = [];
+            }
+
             for (boat in result.fleet_boatsit)
-            {  
-              _CurPlayer.BSFleet.push (new Boat(result.fleet_boatsit[boat]));
+            {
+              if (typeof _CurPlayer.BSFleet[boat]===undefined)
+              {  
+                _CurPlayer.BSFleet[boat]= (new Boat(result.fleet_boatsit[boat]));
+              }
             }
             
             RefreshPlayerMenu();
-            DisplayCurrentDDSelectedBoat(select);
-            SetCurrentBoat(GetBoatFromIdu(select),true);                
-            RefreshCurrentBoat (true,false)    
+            if (typeof select !== "undefined" && select)
+            {
+              DisplayCurrentDDSelectedBoat(select);
+              SetCurrentBoat(GetBoatFromIdu(select),true);                
+              RefreshCurrentBoat (true,false)    
+            }
           }
         )
         
