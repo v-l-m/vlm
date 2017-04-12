@@ -74,26 +74,26 @@ $(document).ready(
       }
     )
     
-    $("#logindlgButton").on ('click',
+    $(".logindlgButton").on ('click',
           function (e)
           {
             // Show Login form
             $("#LoginForm").modal('show');
           }
     );
-
-    $("#logOutButton").on ('click',
+    
+    $(".logOutButton").on ('click',
           function (e)
           {
             // Logout user
             Logout();
           }
     );
-
+   
     
     // Handle boat selector selection change
     //
-    $("#BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
+    $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
     
     $('#cp11').colorpicker();
 
@@ -270,7 +270,13 @@ function InitMenusAndButtons()
         OnLoginRequest();
       }
     );   
-
+  //valide par touche retour
+    $('#LoginPanel').keypress(function(e) {
+    if (e.which == '13') {
+        OnLoginRequest();
+        $('#LoginForm').modal('hide');
+    }
+});
     // Display setting dialog
     $("#BtnSetting").click(
       function()
@@ -485,7 +491,7 @@ function HandleStartSetWPOnClick()
 
 function ClearBoatSelector()
 {
-  $("#BoatSelectorDropDownList").empty();
+  $(".BoatSelectorDropDownList").empty();
 }
 
 function AddBoatToSelector(boat, isfleet)
@@ -495,7 +501,7 @@ function AddBoatToSelector(boat, isfleet)
 
 function BuildUserBoatList(boat,IsFleet)
 {
-  $("#BoatSelectorDropDownList").append(GetBoatDDLine(boat,IsFleet));
+  $(".BoatSelectorDropDownList").append(GetBoatDDLine(boat,IsFleet));
 }
 
 function GetBoatDDLine(Boat, IsFleet)
@@ -672,6 +678,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_CHECK,"#PM_WithWPHeading", Boat.VLMInfo['H@WP'] !== "-1.0"]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
   
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lat", WP.Lat.Value]);
@@ -799,8 +806,24 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     }
 
     UpdatePilotInfo(Boat);
+    UpdatePolarImages(Boat);
 
 } 
+
+function UpdatePolarImages(Boat)
+{
+  var PolarName = Boat.VLMInfo.POL.substring(5);
+  var Angle;
+  var HTML=""
+  for (Angle=0; Angle <= 45; Angle +=15)
+  {
+         HTML += '<li><img class="polaire" src="/scaledspeedchart.php?boattype=boat_'+PolarName+'&amp;minws='+Angle+'&amp;maxws='+(Angle+15)+'&amp;pas=2" alt="speedchart"></li>'  
+  }
+  
+    
+  $("#PolarList").empty();
+  $("#PolarList").append(HTML);
+}
 
 function UpdatePilotInfo(Boat)
 {
@@ -1120,7 +1143,7 @@ function PageClock()
     if (typeof CurBoat !== "undefined" && typeof CurBoat.RaceInfo !== "undefined")
     {
       var ClockValue=GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
-      var Chrono = $("#RaceChrono");
+      var Chrono = $(".RaceChrono");
       if (ClockValue < 0 )
       {
         Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
@@ -1176,7 +1199,7 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
 
 function DisplayCurrentDDSelectedBoat(Boat)
 {
-  $('#BoatDropDown:first-child').html(
+  $('.BoatDropDown:first-child').html(
   '<span BoatID='+ Boat.IdBoat +'>'+GetBoatInfoLine(Boat,Boat.IdBoat in _CurPlayer.Fleet)+'</span>'+
   '<span class="caret"></span>'
   )
@@ -1213,7 +1236,7 @@ function GetFormattedChronoString(Value)
 
 function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh,TargetTab)
 {
-  var BoatIDSpan = $('#BoatDropDown > span')
+  var BoatIDSpan = $('.BoatDropDown > span')
   
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && 'BoatId' in BoatIDSpan[0].attributes)
   {
@@ -1476,7 +1499,7 @@ function HandleMapMouseMove(e)
     if (EstimatePos) 
     { 
       $("#MI_EstDate").text(EstimatePos.Date); 
-      $("#EstBoatIcon").css("transform","rotate("+EstimatePos.Heading+"deg)"); 
+      //$("#EstBoatIcon").css("transform","rotate("+EstimatePos.Heading+"deg)"); 
       
     } 
     else if (Estimated)

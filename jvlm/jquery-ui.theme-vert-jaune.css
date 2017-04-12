@@ -499,3 +499,9 @@ a.ui-button-noir:hover {
 	font-weight: normal;
 	color: #e2fb56;
 }
+.progress{
+  background-color:#679759;
+}
+.progress-bar-info{
+  background-color:#336824;
+}
