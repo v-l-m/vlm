@@ -74,26 +74,26 @@ $(document).ready(
       }
     )
     
-    $("#logindlgButton").on ('click',
+    $(".logindlgButton").on ('click',
           function (e)
           {
             // Show Login form
             $("#LoginForm").modal('show');
           }
     );
-
-    $("#logOutButton").on ('click',
+    
+    $(".logOutButton").on ('click',
           function (e)
           {
             // Logout user
             Logout();
           }
     );
-
+   
     
     // Handle boat selector selection change
     //
-    $("#BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
+    $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
     
     $('#cp11').colorpicker();
 
@@ -270,7 +270,13 @@ function InitMenusAndButtons()
         OnLoginRequest();
       }
     );   
-
+  //valide par touche retour
+    $('#LoginPanel').keypress(function(e) {
+    if (e.which == '13') {
+        OnLoginRequest();
+        $('#LoginForm').modal('hide');
+    }
+});
     // Display setting dialog
     $("#BtnSetting").click(
       function()
@@ -485,7 +491,7 @@ function HandleStartSetWPOnClick()
 
 function ClearBoatSelector()
 {
-  $("#BoatSelectorDropDownList").empty();
+  $(".BoatSelectorDropDownList").empty();
 }
 
 function AddBoatToSelector(boat, isfleet)
@@ -495,7 +501,7 @@ function AddBoatToSelector(boat, isfleet)
 
 function BuildUserBoatList(boat,IsFleet)
 {
-  $("#BoatSelectorDropDownList").append(GetBoatDDLine(boat,IsFleet));
+  $(".BoatSelectorDropDownList").append(GetBoatDDLine(boat,IsFleet));
 }
 
 function GetBoatDDLine(Boat, IsFleet)
@@ -1136,7 +1142,7 @@ function PageClock()
     if (typeof CurBoat !== "undefined" && typeof CurBoat.RaceInfo !== "undefined")
     {
       var ClockValue=GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
-      var Chrono = $("#RaceChrono");
+      var Chrono = $(".RaceChrono");
       if (ClockValue < 0 )
       {
         Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
@@ -1192,7 +1198,7 @@ function GetRaceClock(RaceInfo,UserStartTimeString)
 
 function DisplayCurrentDDSelectedBoat(Boat)
 {
-  $('#BoatDropDown:first-child').html(
+  $('.BoatDropDown:first-child').html(
   '<span BoatID='+ Boat.IdBoat +'>'+GetBoatInfoLine(Boat,Boat.IdBoat in _CurPlayer.Fleet)+'</span>'+
   '<span class="caret"></span>'
   )
@@ -1229,7 +1235,7 @@ function GetFormattedChronoString(Value)
 
 function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh,TargetTab)
 {
-  var BoatIDSpan = $('#BoatDropDown > span')
+  var BoatIDSpan = $('.BoatDropDown > span')
   
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && 'BoatId' in BoatIDSpan[0].attributes)
   {
