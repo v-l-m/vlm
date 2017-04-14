@@ -63,18 +63,31 @@
     
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
+        <div class="row">
+               <div class="col-sm-4 hidden-xs">
+                            Cap:<span Class="badge badge-boat">180</span>&deg;
+                            BS:<span class="badge badge-boat">11.5</span>nds
+               </div> 
+               <div class="col-sm-4 hidden-xs">
+                            TWA:<span Class="badge badge-wind">120</span>&deg;
+                            TWS:<span class="badge badge-wind">12.5</span>nds
+               </div> 
+               <div class="racetime col-sm-4">
+                            Temps de course:<Span  class=" badge RaceChrono ChronoRaceStarted"> </Span>
+               </div> 
+        </div>
         <div class="navbar-header">
-        <ul LoggedInNav="false" style="display:none">
-         <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
-        </ul>
-        <ul LoggedInNav="true" style="display:none" >
-        <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-out"></span></button>
-        </ul>
+          <ul LoggedInNav="false" style="display:none">
+              <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
+          </ul>
+          <ul LoggedInNav="true" style="display:none" >
+              <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-out"></span></button>
+          </ul>
           <button type="button" class="togglebtn navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span> 
-            <span class="icon-bar"></span>             
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span> 
+              <span class="icon-bar"></span>             
           </button>
           <a class="navbar-brand" href="/" target="_vlm">
             <div id="logo">
@@ -82,16 +95,13 @@
               <div class="version">v8</div>
             </div>
           </a>
-              <div  class="dropdown navbar-toggle" data-toggle="collapse">
-                <button id="dropdownBoat1" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
-                <ul id="" class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat1">
-                </ul>
-             </div> 
-             <div class="NavRaceClock dropdown navbar-toggle" data-toggle="collapse">
-                    <Span  class="RaceChrono ChronoRaceStarted"> </Span>
-             </div> 
+          <div  class="dropdown navbar-toggle" data-toggle="collapse">
+              <button id="dropdownBoat1" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+              <ul id="" class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat1">
+              </ul>
+           </div>
+           
         </div>
-
         <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
@@ -572,29 +582,16 @@
                       </ul>
                     </div>
                   </fieldset>
-                  <!--<fieldset>
-                    <legend>Opposants</legend>
+                  <fieldset>
+                    <legend class="ui-legend">Infos course</legend>
                       <div class="affich">
-                        <input type="checkbox" id="oppoicon">
-                        <label class="affich" for="oppoicon">Icone</label>
+                        Durée Vac : <span class="badge"> 5 </span> min
                       </div>
                       <div class="affich">
-                        <input type="checkbox" id="opptrace">
-                        <label class="affich" for="opptrace">Trace</label>
+                        <label for="vacpol">Nb vac de la polaire</label>
+                        <input type="number" min="1" value="1" id="vacpol" style="width:50px">
                       </div>
-                      <div class="affich">
-                        <input type="checkbox" id="oppname">
-                        <label class="affich" for="oppname">Nom</label>
-                      </div>
-                        Slide ONE 
-                        <div class="col-xs-8">
-                          <span>Test</span>
-                        </div>
-                        <div class="slideOne col-xs-4">	
-                          <input  type="checkbox" value="None" id="slideOne" name="check" >
-                          <label for="slideOne"></label>
-                        </div>
-                  </fieldset>-->
+                  </fieldset>
                 </div>
             </div>
            <!-- Modal mouseInfo-->

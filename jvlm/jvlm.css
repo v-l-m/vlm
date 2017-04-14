@@ -125,6 +125,7 @@ div.GribmapMousePosition {
 #logo {
   position: relative;
   max-width: 64em;
+  z-index: 999;
 }
 #logo div {
   position: absolute;
@@ -143,12 +144,18 @@ div.GribmapMousePosition {
   width: 22px;
   height: 22px;
   background-color: transparent;
-  background-image: url('images/STOP-32x32-V3.gif');
+  background-image: url('images/StopEstimate.gif');
   background-size: 20px 20px;
   background-repeat: no-repeat;
 }
 .stop:hover {
   background-size: 22px 22px;
+}
+.badge-wind {
+  background-color: #64B5BC;
+}
+.badge-boat {
+  background-color: #83BC64;
 }
 .carousel-page {
   width: 100%;
@@ -311,9 +318,9 @@ span.ui-selectmenu-text {
 }
 .BtnRankingPanel {
   /*position: absolute;
-  padding-top: @BtnPadTop;
-  padding-left:10px;
-  padding-right:10px;*/
+ padding-top: @BtnPadTop;
+ padding-left:10px;
+ padding-right:10px;*/
   top: 0px;
   float: left;
 }
@@ -474,6 +481,7 @@ span.ui-selectmenu-text {
 @media all and (max-width: 430px) {
   .navbar-right-small {
     margin-left: 0px!important;
+    margin-top: 15px;
   }
   .NavRaceName {
     max-height: 20px;
@@ -496,6 +504,12 @@ span.ui-selectmenu-text {
   .Controler-Panel {
     padding-left: 0px;
     padding-top: 10px;
+  }
+}
+@media (min-width: 1024px) {
+  /* Remplacez 123px par la taille de votre choix */
+  .navbar-header {
+    float: left;
   }
 }
 @media (max-width: 1023px) {
@@ -543,6 +557,9 @@ span.ui-selectmenu-text {
   float: left!important;
   margin-left: 30px;
 }
+.navbar {
+  margin-bottom: 0;
+}
 @media all and (min-width: 430px) and (max-width: 800px) {
   .NavRaceName {
     max-height: 20px;
@@ -571,6 +588,10 @@ span.ui-selectmenu-text {
     /*left: 38px;*/
     /*background-color: rgba(240, 248, 255,0.5);*/
   }
+}
+.racetime {
+  text-align: right;
+  padding-right: 30px;
 }
 .navbar-toggle {
   padding: 0;
@@ -653,13 +674,13 @@ span.ui-selectmenu-text {
 }
 .BCOng {
   /*text-align:center;
-  background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
-  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
-  background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
-  background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-  background-repeat: repeat-x;*/
+ background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
+ background-image:       linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
+ filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+ background-repeat: repeat-x;*/
   background-color: #161616;
   /*height:40px;*/
   margin-right: 2px;
@@ -667,24 +688,24 @@ span.ui-selectmenu-text {
   border-right: 1px beige solid;
   border-left: 1px beige solid;
   /*max-width:150px;
-  min-width:75px;*/
+ min-width:75px;*/
   border-radius: 4px 4px 0 0;
 }
 .nav-tab > li {
   margin-bottom: 0px;
 }
 /*#Boat-Panel #tabs  > li {
-  color: #021A9C;
-  background-color:#161616;
-  margin-right: 2px;
-  border-top:1px beige solid;
-  border-right:1px beige solid;
-  border-left:1px beige solid;
-  border-radius: 4px 4px 0 0;
-  text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+ color: #021A9C;
+ background-color:#161616;
+ margin-right: 2px;
+ border-top:1px beige solid;
+ border-right:1px beige solid;
+ border-left:1px beige solid;
+ border-radius: 4px 4px 0 0;
+ text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
 }
 #Boat-Panel #tabs  > li >a{
-  margin-right:0px;
+margin-right:0px;
 }
 #Boat-Panel #tabs >li> a:focus, {
   color: #021A9C;
@@ -898,11 +919,11 @@ label {
 #affichage {
   cursor: move;
   width: 200px;
-  min-height: 350px;
+  height: 400px;
   display: none;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 25%;
   border-radius: 5px;
   z-index: 998;
 }
@@ -1193,12 +1214,14 @@ th {
   padding: 0;
   /*  border: 1px solid;*/
 }
-/*.polaire{ 
-  width:300px;
-  height:512px;
+.polaire {
+  width: 300px;
+  height: 512px;
 }
-#img1 {z-index: 4;}
-#img2 {z-index: 3;}
+#img1 {
+  z-index: 4;
+}
+/*#img2 {z-index: 3;}
 #img3 {z-index: 2;}
 #img4 {z-index: 1;}*/
 .NoAnimation {
@@ -1210,7 +1233,7 @@ th {
 }
  .slideshow {
   width: 272px;
-  height: 435px;
+  height: 429px;
   overflow: hidden;
   border: 3px solid #F2F2F2;
   margin-left: auto;
