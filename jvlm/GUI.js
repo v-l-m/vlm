@@ -402,7 +402,7 @@ function InitMenusAndButtons()
 
     $("#MapPrefsToggle").click(HandleShowMapPrefs);
 
-    $(".chkprefstore").on('change',HandleMapPrefCheckBoxClick);
+    $(".chkprefstore").on('change',HandleMapPrefOptionChange);
     $(".MapOppShowLi").click(HandleMapOppModeChange)
 
     $(".DDTheme").click(HandleDDlineClick)
@@ -1577,9 +1577,11 @@ function HandleShowMapPrefs(e)
   '<span class="caret"></span>'
   );
 
+  $("#VacPol").val(VLM2Prefs.MapPrefs.PolarVacCount);
+
 }
 
-function HandleMapPrefCheckBoxClick(e)
+function HandleMapPrefOptionChange(e)
 {
   var target=e.target;
 
@@ -1600,6 +1602,19 @@ function HandleMapPrefCheckBoxClick(e)
       VLM2Prefs.MapPrefs.ShowOppName = Value
       break;
 
+    case "VacPol":
+      var VacPol = parseInt($("#VacPol").val(),10);
+
+      if (VacPol > 0 && VacPol < 120)
+      {
+        VLM2Prefs.MapPrefs.PolarVacCount = VacPol;
+      }
+      else
+      {
+        $("#VacPol").value(12);
+      }
+      break;
+      
     default:
       return;
       
