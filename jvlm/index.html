@@ -64,17 +64,17 @@
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="row">
-               <div class="col-sm-4 hidden-xs">
-                            Cap:<span Class="badge badge-boat">180</span>&deg;
-                            BS:<span class="badge badge-boat">11.5</span>nds
-               </div> 
-               <div class="col-sm-4 hidden-xs">
-                            TWA:<span Class="badge badge-wind">120</span>&deg;
-                            TWS:<span class="badge badge-wind">12.5</span>nds
-               </div> 
-               <div class="racetime col-sm-4">
-                            Temps de course:<Span  class=" badge RaceChrono ChronoRaceStarted"> </Span>
-               </div> 
+          <div class="col-sm-4 hidden-xs">
+          </div>
+          <div class="col-sm-2 hidden-xs">
+            Cap:<span Class="badge badge-boat BoatHeading">--</span>&deg;
+            BS:<span class="badge badge-boat BoatSpeed">--</span>nds
+          </div> 
+          <div class="col-sm-2 hidden-xs">
+            TWA:<span Class="badge badge-wind BoatWindAngle">--</span>&deg;
+            TWS:<span class="badge badge-wind BoatWindSpeed">--</span>nds
+          </div> 
+           
         </div>
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
@@ -478,9 +478,9 @@
                 <div class="VLM100_PosSmall" id="StatSpeed">Speed</div>
                 <div class="VLM100_PosSmall" id="StatAvg">Avg</div>
                 <div class="VLM100_PosSmall" id="StatHeading">Heading</div>
-                <div class="VLM100_PosSmall" id="BoatSpeed"></div>
+                <div class="VLM100_PosSmall BoatSpeed" id="BoatSpeed"></div>
                 <div class="VLM100_PosSmall" id="BoatAvg"></div>
-                <div class="VLM100_PosSmall" id="BoatHeading"></div>
+                <div class="VLM100_PosSmall BoatHeading" id="BoatHeading"></div>
                 <div class="VLM100_PosSmall" id="StatDNM">DNM</div>
                 <div class="VLM100_PosSmall" id="StatLoch">Loch</div>
                 <div class="VLM100_PosSmall" id="StatOrtho">Ortho</div>
@@ -514,9 +514,9 @@
                 <div class="VLM100_Unit" id="StatSpeedUnit">kts</div>
                 <div class="VLM100_Unit" id="StatDirUnit">°</div>
                 <div class="VLM100_Unit" id="StatAngleUnit">°</div>
-                <div class="VLM100_Value" id="BoatWindSpeed" ></div>
+                <div class="VLM100_Value BoatWindSpeed" id="BoatWindSpeed" ></div>
                 <div class="VLM100_Value" id="BoatWindDirection" ></div>
-                <div class="VLM100_Value" id="BoatWindAngle"></div>
+                <div class="VLM100_Value BoatWindAngle" id="BoatWindAngle"></div>
                 </div>
             </div>
           </div>
@@ -588,8 +588,8 @@
                         Durée Vac : <span class="badge"> 5 </span> min
                       </div>
                       <div class="affich">
-                        <label for="vacpol">Nb vac de la polaire</label>
-                        <input type="number" min="1" value="1" id="vacpol" style="width:50px">
+                        <label for="VacPol">Nb vac de la polaire</label>
+                        <input class="chkprefstore" type="number" min="1" max="120" value="1" id="VacPol" style="width:50px">
                       </div>
                   </fieldset>
                 </div>
@@ -696,7 +696,7 @@
               <button id="BtnCreateAccount" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
             </div> </div>
           <div class="modal-footer">
-            <button id="LoginButton" I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
+            <button type="submit" id="LoginButton" I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
           </div>
         </div>
   
