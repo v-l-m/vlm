@@ -743,7 +743,18 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
               //Récupère le vent et l'affiche en l'absence d'erreur
               try {
                   winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-                  this.drawWind(ctx, p.x, p.y, winfo);
+                  //this.drawWind(ctx, p.x, p.y, winfo);
+                  var MI = GribMgr.WindAtPointInTime(new Date(this.time*1000),LonLat.lat, LonLat.lon)
+                  if (MI)
+                  {
+                      winfo = new Wind(MI.Speed, MI.Heading);
+                      this.drawWind(ctx, p.x, p.y, winfo);
+                  }
+                  else
+                  {
+                      return
+                  }
+                  
               } catch (error) {
                   if (ErrorCatching > 0) {
                       alert(LonLat+" / "+winfo.wspeed+" / "+winfo.wheading);
