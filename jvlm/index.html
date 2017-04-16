@@ -63,24 +63,12 @@
     
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-4 hidden-xs">
-          </div>
-          <div class="col-sm-2 hidden-xs">
-            Cap:<span Class="badge badge-boat BoatHeading">--</span>&deg;
-            BS:<span class="badge badge-boat BoatSpeed">--</span>nds
-          </div> 
-          <div class="col-sm-2 hidden-xs">
-            TWA:<span Class="badge badge-wind BoatWindAngle">--</span>&deg;
-            TWS:<span class="badge badge-wind BoatWindSpeed">--</span>nds
-          </div> 
-           
-        </div>
+        
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
               <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
           </ul>
-          <ul LoggedInNav="true" style="display:none" >
+          <ul class="hidden-xs" LoggedInNav="true" style="display:none" >
               <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-out"></span></button>
           </ul>
           <button type="button" class="togglebtn navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -95,12 +83,25 @@
               <div class="version">v8</div>
             </div>
           </a>
+          <div class="hidden-lg hidden-md" style="float:left"> 
+            <ul class="badgeinfo">
+                <li><img src="images/racing.png" width="20px" height="20px" alt=""/></li>
+                <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
+                <li><span class="badge badge-boat BoatSpeed">--</span>nds</li>
+            </ul>
+         </div>  
+         <div class="hidden-lg hidden-md" style="float:left">
+            <ul class="badgeinfo">
+                <li><img src="images/wind.png" width="20px" height="20px" alt=""/></li>
+                <li><span Class="badge badge-wind BoatWindAngle">--</span>&deg;</li>
+                <li><span class="badge badge-wind BoatWindSpeed">--</span>nds</li>
+            </ul> 
+          </div>
           <div  class="dropdown navbar-toggle" data-toggle="collapse">
               <button id="dropdownBoat1" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
               <ul id="" class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat1">
               </ul>
            </div>
-           
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
@@ -123,11 +124,22 @@
               </div>
             </li>
           </ul>
+
           <ul class="nav navbar-nav navbar-right " LoggedInNav="true" style="display:none">
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
               <span class="glyphicon glyphicon-log-out" style="top:0px"><button id="" type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
             </li>
           </ul>
+          <ul class="badgeinfo hidden-sm hidden-xs">
+                <li><img src="images/racing.png" width="20px" height="20px" alt=""/></li>
+                <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
+                <li><span class="badge badge-boat BoatSpeed">--</span>nds</li>
+            </ul>
+            <ul class="badgeinfo hidden-sm hidden-xs">
+                <li><img src="images/wind.png" width="20px" height="20px" alt=""/></li>
+                <li><span Class="badge badge-wind BoatWindAngle">--</span>&deg;</li>
+                <li><span class="badge badge-wind BoatWindSpeed">--</span>nds</li>
+            </ul> 
           <ul  class="nav navbar-right navbar-right-small"  LoggedInNav="true" style="display:none">
             <li  class="nav active  col-md hidden-xs hidden-sm" ><a class="player" id="PlayerId">Not Logged in </a></li>
             <li  class="BoatSelector col-md hidden-xs hidden-sm">
