@@ -434,8 +434,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
   //var scale = 50 * map.resolution;
   var scale = VLM2Prefs.MapPrefs.PolarVacCount;
-
-  BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, true);
+  var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT)
+  
+  BuilPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000));
   //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
   
   var BoatPolar = new OpenLayers.Feature.Vector(
@@ -506,10 +507,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
   }
 }
 
-function BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, FirstSide)
+function BuilPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
 {
-  var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT)
-  var CurDate = new Date(Boat.VLMInfo.LUP*1000);
+  var CurDate = StartDate;
 
   if (!CurDate || CurDate < new Date().getTime())
   {
@@ -524,19 +524,19 @@ function BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, First
 
     for (index=0; index <=180; index +=5 ) 
     {
+      Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL,MI.Speed,MI.Heading,MI.Heading+index);
+
       var Side;
 
-      for (Side = -1; Side <= 1; Side +=2)
+      for (Side = -1; Side <= 1; Side += 2)
       {
-        Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL,MI.Speed,MI.Heading,hdg+index*Side);
-
-        var PolarPos = StartPos.ReachDistLoxo(Speed/3600.*Boat.VLMInfo.VAC*scale, hdg+index*Side)
+        var PolarPos = StartPos.ReachDistLoxo(Speed/3600.*Boat.VLMInfo.VAC*scale, MI.Heading+index*Side)
         var PixPos = new OpenLayers.Geometry.Point(PolarPos.Lon.Value, PolarPos.Lat.Value);
         var PixPos_Transformed = PixPos.transform(MapOptions.displayProjection, MapOptions.projection)
           
         //var P = map.getLonLatFromPixel(PixPos);
         //var PPoint = new OpenLayers.Geometry.Point(PixPos);
-        Polar[180+index*Side]=PixPos_Transformed;
+        Polar[180+Side*index] = PixPos_Transformed;
       }
     }
   }

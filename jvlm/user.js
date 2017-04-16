@@ -97,13 +97,13 @@ function Boat(vlmboat)
       var Est= this.Estimator.GetClosestEstimatePoint(Pos);
       if (Est)
       {
-        this.Estimator.ShowEstimatePosition(Est);
+        this.Estimator.ShowEstimatePosition(this.Estimator.Boat,Est);
       }
       return Est
     }
     else
     {
-      this.Estimator.ShowEstimatePosition(null)
+      this.Estimator.ShowEstimatePosition(null,null)
       return null;
     }
   }
