@@ -109,6 +109,9 @@ div.GribmapMousePosition {
   right: 0px;
   top: 5px;
 }
+.navbar-brand{
+padding:0;
+}
 #logovlm {
   display: fixed;
   position: absolute;
@@ -116,16 +119,47 @@ div.GribmapMousePosition {
   left: 10px;
   z-index: 99999;
 }
-.logo{
+#logo{
   position: relative;
-  max-width:64px
+  max-width:64em;
+  z-index: 999;
+}
+#logo div { 
+  position:absolute; 
+  width:100%; 
+  height:100%;
+ background-size:cover;
 }
 .version{
   position: absolute;
-  top:-18px;
-  left:-12px;
+  top:0px;
+  left:18px;
   font-size:10px;
   color:#7C7C7C;
+}
+.stop{
+  width:22px;
+  height:22px;
+  background-color:transparent;
+  background-image: url('images/StopEstimate.gif');
+  background-size: 20px 20px;
+  background-repeat:no-repeat;
+}
+.stop:hover{
+  background-size: 22px 22px;
+}
+.badge-wind{
+background-color:#64B5BC;
+}
+.badge-boat{
+background-color:#83BC64;
+}
+.carousel-page
+	{
+	width:100%;
+	height:400px;
+	background-color:#5f666d;
+	color:white;
 }
 .olControlAttribution {
   left: 100px;
@@ -264,7 +298,7 @@ span.ui-selectmenu-text {
 }
  // CSS for Piloting/dashboard buttons  
 @IconSize:40px;
-@BtnPadLeft:10px;
+@BtnPadLeft:5px;
 @BtnPadTop:4px;
 @Btn2Left:(@IconSize + @BtnPadLeft);
 @Btn3Left:(2*@IconSize + 2*@BtnPadLeft);
@@ -301,11 +335,12 @@ span.ui-selectmenu-text {
   top: 0px;
 }
 .BtnRankingPanel {
-  /*position: absolute;*/
+  /*position: absolute;
  padding-top: @BtnPadTop;
  padding-left:10px;
- padding-right:10px;
+ padding-right:10px;*/
   top: 0px;
+  float:left;
 }
 .BoatSelector {
  padding-top: @BtnPadTop;
@@ -348,7 +383,7 @@ span.ui-selectmenu-text {
 }
 .ranking {
   background-color: #c70000;
-  right: 0px;
+  right: 35px;
   top: 0px;
   z-index:995;
 }
@@ -477,7 +512,22 @@ span.ui-selectmenu-text {
 @media all and (max-width: 430px)
 
 {
-  
+ 
+.navbar-right-small {
+  margin-left:0px!important;
+  margin-top:15px;
+}
+.NavRaceName{
+  max-height: 20px;
+  overflow: hidden;
+}
+#nav-stat{
+  background-color:black;
+  visibility:visible;
+}
+#nav-stat .row{
+  margin-left:0px;
+} 
 .btn-md,
 .btn-group-md > .btn {
   padding: 8px 14px;
@@ -485,20 +535,82 @@ span.ui-selectmenu-text {
   line-height: 1.3333333;
   border-radius: 6px;
 }
-    .Controler-Panel
-
-    {
-
-       padding-left:0px;
-       padding-top:10px;
-
-    }
-
+.Controler-Panel
+{
+  padding-left:0px;
+  padding-top:10px;
+}
+}
+@media (min-width: 1024px) { /* Remplacez 123px par la taille de votre choix */
+.navbar-header {
+float: left;
+}
+}
+@media (max-width: 1023px) { /* Remplacez 123px par la taille de votre choix */
+.navbar-header {
+float: none;
+}
+.navbar-toggle {
+display: block;
+}
+.navbar-collapse {
+border-top: 1px solid transparent;
+box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.navbar-collapse.collapse {
+display: none!important;
+}
+.navbar-nav {
+float: none!important;
+/*margin: 7.5px -15px;*/
+}
+.navbar-nav>li {
+float: none;
+}
+.navbar-nav>li>a {
+padding-top: 10px;
+padding-bottom: 10px;
+}
+.navbar-text {
+float: none;
+margin: 15px 0;
+}
+/* cette classe est à ajouter lorsque que vous utilisez une version de Bootstap supérieure ou égale à la 3.1.0 */
+.navbar-collapse.collapse.in {
+display: block!important;
+}
+.collapsing {
+overflow: hidden!important;
+}
+.navbar-right>li {
+float:right;
+}
+} 
+.navbar-right-small {
+  float:left!important;
+  margin-left:30px;
+}
+.navbar{
+  margin-bottom:0;
+}
+@media all and (min-width: 430px) and (max-width: 800px)
+{
+.NavRaceName{
+  max-height: 20px;
+  overflow: hidden;
+}
 }
 @media all and (min-width: 430px)
 
 {
-  
+   
+#nav-stat{
+  background-color:black;
+  visibility:hidden;
+}
+#nav-stat .row{
+margin-left:0px;
+} 
 .btn-md,
 .btn-group-md > .btn {
   padding: 8px 14px;
@@ -513,6 +625,34 @@ span.ui-selectmenu-text {
   /*left: 38px;*/
   /*background-color: rgba(240, 248, 255,0.5);*/
 }
+}
+.racetime{
+text-align:right;
+padding-right:30px;
+}
+.navbar-toggle{
+padding: 0;
+margin-top: 0;
+margin-right: 10px;
+}
+.ddlangbtn{
+min-width: 50px;
+}
+.logbtn{
+margin-top: 10px;
+min-width: 50px;
+}
+.togglebtn {
+margin-top: 10px;
+}
+#myNavbar{
+min-width:250px;
+}
+#myNavbar ul li {
+float:left;
+}
+#myNavbar ul{
+float:left;
 }
 .Boat_SimpleInput {
   width: 90px;
@@ -704,9 +844,9 @@ margin-right:0px;
   border:none;
   background-color:transparent;
 }
-/*.dropdown-menu {
-  background-color: #15214b;
-}*/
+.dropdown-menu {
+min-width:auto;
+}
 .form-control {
   height:auto;
   padding:0px;
@@ -839,11 +979,11 @@ label{
 #affichage{
   cursor:move;
    width:200px;
-    min-height:350px; 
+    height:400px; 
     display:none;
     position:absolute;
     left:50%; 
-    top:50%;
+    top:25%;
     border-radius:5px;
     z-index:998;
 }
@@ -1111,63 +1251,64 @@ margin-bottom:10px;
 .slideOne input[type=checkbox]:checked+label, .slideOne input[type=checkbox]:not(:checked)+label{
   padding-left:0px;
 }
-    /*nav-tabs>li>a {
- margin-right: 0px; 
-   line-height: 1.4;
-   border: 0px ; 
- border-radius: 0 0 0 0; 
+/*nav-tabs>li>a {
+  margin-right: 0px; 
+  line-height: 1.4;
+  border: 0px ; 
+  border-radius: 0 0 0 0; 
 }
 .nav-tabs>li>a :hover{
-background-color:transparent;
+  background-color:transparent;
 }*/
 td, th {
     padding: 0;
   /*  border: 1px solid;*/
 }
 
-/*.polaire{ 
+ /*.polaire{ 
   width:300px;
-  height:auto;
+  height:512px;
 }
-#img1 {z-index: 4;}
-
-#img2 {z-index: 3;}
-
-#img3 {z-index: 2;}
-
-#img4 {z-index: 1;}*/
+  #img1 {z-index: 4;}
+  #img2 {z-index: 3;}
+  #img3 {z-index: 2;}
+  #img4 {z-index: 1;}*/
 .NoAnimation{
-    -webkit-transition: none;
-    -moz-transition: none;
-    -ms-transition: none;
-    -o-transition: none;
-    transition: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
 }​
 
 .slideshow {
-   width: 300px;
-   height: 512px;
-   overflow: hidden;
-   border: 3px solid #F2F2F2;
+  width: 272px;
+  height: 429px;
+  overflow: hidden;
+  border: 3px solid #F2F2F2;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .slideshow ul {
-    /* 4 images donc 4 x 100% */
-   width: 400%;
-   height: 512px;
-   padding:0; margin:0;
-   list-style: none;
+  /* 4 images donc 4 x 100% */
+  width: 500%;
+  height: auto;
+  padding:0; margin:0;
+  list-style: none;
 }
 .slideshow li {
-   float: left;
+  float: left;
+  margin-right:100px;
+  overflow:hidden;
 }
 .btn-round.btn-xs {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
 }
 .progress {
-margin-bottom:0px;
+  margin-bottom:0px;
 }
 .btn-xs {
 line-height:1;

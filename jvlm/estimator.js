@@ -11,7 +11,6 @@ function BoatEstimate(Est)
   this.HdgAtWP = -1;
   this.RaceWP = 1;
   this.Heading;
-  PointMarker = null; // Current estimate position
   
   if (typeof Est!== "undefined" && Est)
   {
@@ -50,7 +49,8 @@ function Estimator(Boat)
   this.EstimatePoints=[];
   this.ProgressCallBack = null;
   this.ErrorCount = 0;
-
+  this.EstimateMapFeatures = []; // Current estimate position
+  
   this.Stop = function ()
   {
     // Stop the estimator if Running
@@ -405,27 +405,57 @@ function Estimator(Boat)
     return RetValue;
   }
 
-  this.ShowEstimatePosition = function(Position)
+  this.ShowEstimatePosition = function(Boat, Estimate)
   {
     // Track Estimate closest point to mousemove
-    if (this.PointMarker)
+    if (this.EstimateMapFeatures)
     {
-      VLMBoatsLayer.removeFeatures(this.PointMarker);
-      this.PointMarker = null;
+      for (index in this.EstimateMapFeatures)
+      {
+        if (this.EstimateMapFeatures[index])
+        {
+          VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
+        }
+      }
+      this.EstimateMapFeatures = [];
     }
 
-    if (Position)
+    if (Estimate && Estimate.Position)
     {
+      var Position = Estimate.Position
       var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
       var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection)
 
       // Estimate point marker
-      this.PointMarker = new OpenLayers.Feature.Vector(
+      var Marker=  new OpenLayers.Feature.Vector(
         EstPos_Transformed,
         {},
-        { externalGraphic: 'images/RedDot.png', graphicHeight: 8, graphicWidth: 8 }
+        { externalGraphic: 'images/target.svg',
+          opacity: 0.8, 
+          graphicHeight: 48, 
+          graphicWidth: 48,
+          rotation: Estimate.Heading }
       );
-      VLMBoatsLayer.addFeatures(this.PointMarker);
+      VLMBoatsLayer.addFeatures(Marker);
+      this.EstimateMapFeatures.push(Marker);
+
+      if (typeof Estimate.Meteo !== "undefined")
+      {
+        var scale = VLM2Prefs.MapPrefs.PolarVacCount;
+        var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
+        var Polar = [];
+
+        BuilPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
+        var BoatPolar = new OpenLayers.Feature.Vector(
+          new OpenLayers.Geometry.LineString(Polar),
+          {
+            "type": "Polar",
+            "WindDir": Estimate.Meteo.Heading
+          });
+
+        this.EstimateMapFeatures.push(BoatPolar)
+        VLMBoatsLayer.addFeatures(BoatPolar);
+      }  
     }
   }
 

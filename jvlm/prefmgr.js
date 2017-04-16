@@ -93,6 +93,7 @@ function MapPrefs()
     }
     this.WindArrowsSpacing = 64;    // Spacing steps for wind arrow drawing
     this.MapZoomLevel = 4;
+    this.PolarVacCount = 12;        // How many vacs for drawing the polar line
 
     this.Load = function()
     {
@@ -101,6 +102,12 @@ function MapPrefs()
             this.ShowReals = store.get('#ShowReals');
             this.ShowOppName = store.get("#ShowOppName");
             this.MapZoomLevel = store.get("#MapZoomLevel");
+            this.PolarVacCount = store.get("#PolarVacCount");
+            if (typeof this.PolarVacCount === "undefined" || !this.PolarVacCount)
+            {
+                // Fallback if invalid value is stored
+                this.PolarVacCount = 12;
+            }
         } 
     }
 
@@ -110,7 +117,8 @@ function MapPrefs()
         {
             store.set("#ShowReals",this.ShowReals);
             store.set("#ShowOppName",this.ShowOppName);   
-            store.set("#MapZoomLevel",this.MapZoomLevel);         
+            store.set("#MapZoomLevel",this.MapZoomLevel); 
+            store.set("#PolarVacCount",this.PolarVacCount);        
         }
 
         var MapPrefVal="mapselboats"
