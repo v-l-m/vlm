@@ -151,6 +151,16 @@ div.GribmapMousePosition {
 .stop:hover {
   background-size: 22px 22px;
 }
+.badgeinfo {
+  list-style: none;
+  float: right;
+  width: 60px;
+  margin-left: 10px;
+  padding: 0;
+}
+.badgeinfo > li {
+  min-width: 50px;
+}
 .badge-wind {
   background-color: #64B5BC;
 }
@@ -481,9 +491,10 @@ span.ui-selectmenu-text {
 @media all and (max-width: 430px) {
   .navbar-right-small {
     margin-left: 0px!important;
-    margin-top: 15px;
+    /*margin-top:15px;*/
   }
   .NavRaceName {
+    max-width: 100px;
     max-height: 20px;
     overflow: hidden;
   }
@@ -510,6 +521,11 @@ span.ui-selectmenu-text {
   /* Remplacez 123px par la taille de votre choix */
   .navbar-header {
     float: left;
+  }
+  .NavRaceName {
+    max-width: 120px;
+    max-height: 20px;
+    overflow: hidden;
   }
 }
 @media (max-width: 1023px) {
@@ -555,13 +571,14 @@ span.ui-selectmenu-text {
 }
 .navbar-right-small {
   float: left!important;
-  margin-left: 30px;
+  /*margin-left:30px;*/
 }
 .navbar {
   margin-bottom: 0;
 }
 @media all and (min-width: 430px) and (max-width: 800px) {
   .NavRaceName {
+    max-width: 120px;
     max-height: 20px;
     overflow: hidden;
   }
