@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'nds' => 'kts',
     'calcestime' => 'Compute track estimate...',
     'ShowReals' => 'Show Reals',
     'ShowOppNames' => 'Display Boat Names',
