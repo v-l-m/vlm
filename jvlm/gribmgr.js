@@ -75,7 +75,7 @@ function VLM2GribManager()
   this.LoadQueue = [];
   this.GribStep = 0.5;    // Grib Grid resolution
   this.LastGribDate = new Date (0);
-
+  
   this.Init= function()
   {
     if (this.Inited || this.Initing)
@@ -96,7 +96,7 @@ function VLM2GribManager()
     this.WindTableLength = this.TableTimeStamps.length;
   }
 
-  this.WindAtPointInTime= function(Time, Lat, Lon)
+  this.WindAtPointInTime= function(Time, Lat, Lon, callback)
   {
     if (!this.Inited)
     {
@@ -120,8 +120,13 @@ function VLM2GribManager()
 
     // Precheck to force loading the second grib, and avoid optimization not checking 2nd when first is needs loading
     var t1 = this.CheckGribLoaded(TableIndex, Lat,NormalizeLongitudeDeg(Lon));
-    var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,NormalizeLongitudeDeg(Lon+this.GribStep));
+    var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,NormalizeLongitudeDeg(Lon+this.GribStep),callback);
 
+    if (t1 && !t2)
+    {
+      //alert("anomaly at "+Lat+this.GribStep+ "/" + NormalizeLongitudeDeg(Lon+this.GribStep))
+      var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,NormalizeLongitudeDeg(Lon+this.GribStep));
+    }
     if (!t1 || !t2 )
     {
       return false;
@@ -197,7 +202,7 @@ function VLM2GribManager()
     return V0 + dX * (V1 - V0)
   }
 
-  this.CheckGribLoaded = function(TableIndex, Lat,Lon)
+  this.CheckGribLoaded = function(TableIndex, Lat,Lon, callback)
   {
     var LonIdx1 = 180/this.GribStep + Math.floor(Lon/this.GribStep);
     var LatIdx1 = 90/this.GribStep + Math.floor(Lat/this.GribStep);
@@ -215,16 +220,16 @@ function VLM2GribManager()
     }
 
     //console.log("need "+Lat+" " +Lon);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx1);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx2);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx1);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx2);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx1, callback);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx2, callback);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx1, callback);
+    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx2, callback);
     
   return false;  
       
   }
 
-  this.CheckGribLoadedIdx = function(TableIndex, LonIdx, LatIdx)
+  this.CheckGribLoadedIdx = function(TableIndex, LonIdx, LatIdx, callback)
   {
 
     if (isNaN(LonIdx) || isNaN(LatIdx))
@@ -269,12 +274,12 @@ function VLM2GribManager()
     if (EastStep > 180)
     {
       EastStep = 180;
-      this.CheckGribLoadedIdx(TableIndex, 0,LatIdx);
+      this.CheckGribLoadedIdx(TableIndex, 0,LatIdx, callback);
     }
     if (WestStep < -180)
     {
       WestStep = -180;
-      this.CheckGribLoadedIdx(TableIndex, 180 / this.GribStep-1,LatIdx);
+      this.CheckGribLoadedIdx(TableIndex, 180 / this.GribStep-1,LatIdx,callback);
     }
     
 
@@ -283,10 +288,13 @@ function VLM2GribManager()
     if (!(LoadKey in this.LoadQueue))
     {
       //console.log("requesting " + LoadKey );
-      this.LoadQueue[LoadKey]=0;
+      this.LoadQueue[LoadKey] = {length:0, CallBacks:[]};
+      this.LoadQueue[LoadKey].Length=0;
       $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
+    
+    this.LoadQueue[LoadKey].CallBacks.push(callback);
 
   }
 
@@ -311,7 +319,7 @@ function VLM2GribManager()
         var seed = parseInt((new Date).getTime());
         //console.log("smartgrib points out " + url);
         $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
-        this.LoadQueue[LoadKey]++;
+        this.LoadQueue[LoadKey].Length++;
       }
 
       
@@ -327,10 +335,21 @@ function VLM2GribManager()
   {
     this.ProcessInputGribData(Url,e,LoadKey);
 
-    this.LoadQueue[LoadKey]--;
+    this.LoadQueue[LoadKey].Length--;
 
-    if (!this.LoadQueue[LoadKey])
+    if (!this.LoadQueue[LoadKey].Length)
     {
+      
+      // Successfull load of one item from the loadqueue
+      // Clear all pending callbacks for this call
+      for (index in this.LoadQueue[LoadKey].CallBacks)
+      {
+        if (this.LoadQueue[LoadKey].CallBacks[index])
+        {
+          this.LoadQueue[LoadKey].CallBacks[index]();
+        }
+      }
+      
       delete this.LoadQueue[LoadKey];
     }
   }
@@ -339,7 +358,7 @@ function VLM2GribManager()
   {
     var Seed = parseInt(new Date().getTime(),10);
     $.get("/cache/gribtiles/"+Url+"&force=yes&seed="+Seed,this.HandleSmartGribData.bind(this,LoadKey, Url));
-    this.LoadQueue[LoadKey]++;
+    this.LoadQueue[LoadKey].Length++;
   }
 
   this.ProcessInputGribData = function (Url, Data,LoadKey)

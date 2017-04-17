@@ -445,7 +445,7 @@ function Estimator(Boat)
         var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
         var Polar = [];
 
-        BuilPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
+        BuildPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
         var BoatPolar = new OpenLayers.Feature.Vector(
           new OpenLayers.Geometry.LineString(Polar),
           {
