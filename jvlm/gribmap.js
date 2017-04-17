@@ -683,22 +683,23 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.drawContext(ctx);
 
       //Get griblevel // FIXME : should use the native zoom level
-      this.setGribLevel(boundsLonLat);
-      bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
+      //this.setGribLevel(boundsLonLat);
+      //bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
 
-      for (i = 0; i < bl.length; i++) {
+      //for (i = 0; i < bl.length; i++) 
+      {
 
-          windarea = bl[i]; //la zone
+          //windarea = bl[i]; //la zone
 
-          if (!windarea.isLoaded(this.gribtimeBefore) || !windarea.isLoaded(this.gribtimeAfter)) continue; //pas chargé, on passe
+          //if (!windarea.isLoaded(this.gribtimeBefore) || !windarea.isLoaded(this.gribtimeAfter)) continue; //pas chargé, on passe
 
           //Passe en sphérique
-          bounds = windarea.clone();
+          //bounds = windarea.clone();
           bounds.transform(
                     new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
                     new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
                     );
-
+          
           //passe en pixel
           start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
           end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
@@ -726,8 +727,8 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
   drawWindArea: function(p, poslimit, windarea, ctx) {
       var bstep = this.arrowstep;
-      var wante = windarea.windArrays[this.gribtimeBefore];
-      var wpost = windarea.windArrays[this.gribtimeAfter];
+      //var wante = windarea.windArrays[this.gribtimeBefore];
+      //var wpost = windarea.windArrays[this.gribtimeAfter];
 
       //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
 
@@ -982,13 +983,21 @@ Gribmap.MousePosition =
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
     },
 
-    formatOutput: function(lonLat) {
-       var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
-       retstr += " "+OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
-       GM_Pos = lonLat;
-       var winfo = this.gribmap.windAtPosition(lonLat);
-       if (winfo != null) retstr += " - "+Math.round(winfo.wspeed*10)/10+"n / "+Math.round(winfo.wheading*10)/10+"°";
-       return retstr;
+    formatOutput: function(lonLat) 
+    {
+      var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
+      retstr += " "+OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
+      GM_Pos = lonLat;
+
+      // Fix me, use map date for showing the grib info
+      var MI = GribMgr.WindAtPointInTime(new Date(),lonLat.lat, lonLat.lon)
+      if (MI)
+      {
+        winfo = new Wind(MI.Speed, MI.Heading);
+        retstr += " - "+Math.round(MI.Speed*10)/10+"n / "+Math.round(MI.Heading*10)/10+"°";
+      }
+      
+      return retstr;
     },
     CLASS_NAME: "Gribmap.MousePosition"
 });
