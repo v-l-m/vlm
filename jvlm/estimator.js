@@ -420,7 +420,7 @@ function Estimator(Boat)
       this.EstimateMapFeatures = [];
     }
 
-    if (Estimate && Estimate.Position)
+    if (Estimate && Estimate.Position && Boat.VLMInfo.LON !== Estimate.Position.Lon.Value && Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value)
     {
       var Position = Estimate.Position
       var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
@@ -445,7 +445,7 @@ function Estimator(Boat)
         var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
         var Polar = [];
 
-        BuilPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
+        BuildPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
         var BoatPolar = new OpenLayers.Feature.Vector(
           new OpenLayers.Geometry.LineString(Polar),
           {
