@@ -2,6 +2,7 @@
 $strings['en'] = 
   array (
     'nds' => 'kts',
+    'minutes' => 'minutes',
     'calcestime' => 'Compute track estimate...',
     'ShowReals' => 'Show Reals',
     'ShowOppNames' => 'Display Boat Names',
