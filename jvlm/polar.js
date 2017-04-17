@@ -288,7 +288,7 @@ function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
     Alpha+=180.;
   }
 
-  Alpha %= 180.;
+  Alpha %= 180.000001;
 
   // Loop and index index <= Speed
   var Polar = PolarObject.SpeedPolar;
