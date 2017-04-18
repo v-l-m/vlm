@@ -436,7 +436,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var scale = VLM2Prefs.MapPrefs.PolarVacCount;
   var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT)
   
-  BuilPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000));
+  BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000));
   //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
   
   var BoatPolar = new OpenLayers.Feature.Vector(
@@ -507,7 +507,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   }
 }
 
-function BuilPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
+function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
 {
   var CurDate = StartDate;
 

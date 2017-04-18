@@ -1,6 +1,8 @@
 <?php
 $strings['fr'] = 
   array (
+    'nds' => 'nds',
+    'minutes' => 'minutes',
     'calcestime' => "Calculer l'estime...",
     'ShowReals' => 'Afficher les réels',
     'ShowOppNames' => 'Afficher les noms des bateaux',
