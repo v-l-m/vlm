@@ -83,7 +83,7 @@ function VLM2GribManager()
       return;
     }
     this.Initing = true;
-    $.get("/ws/windinfo/list.php",this.HandleGribList.bind(this));
+    $.get("/ws/windinfo/list.php?v="+Math.round(new Date().getTime()/1000/60/3),this.HandleGribList.bind(this));
   }
 
   this.HandleGribList = function(e)

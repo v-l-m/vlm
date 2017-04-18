@@ -420,7 +420,7 @@ function Estimator(Boat)
       this.EstimateMapFeatures = [];
     }
 
-    if (Estimate && Estimate.Position)
+    if (Estimate && Estimate.Position && Boat.VLMInfo.LON !== Estimate.Position.Lon.Value && Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value)
     {
       var Position = Estimate.Position
       var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
