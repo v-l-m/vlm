@@ -9,6 +9,8 @@ var RACE_TYPE_OMORMB = 2;
 var FIELD_MAPPING_TEXT = 0;
 var FIELD_MAPPING_VALUE = 1;
 var FIELD_MAPPING_CHECK = 2;
+var FIELD_MAPPING_IMG = 3;
+var FIELD_MAPPING_CALLBACK = 4;
 
 var MAX_PILOT_ORDERS = 5;
 
@@ -710,6 +712,19 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
   }
 
+  // Race Instruction
+  if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
+  {
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.RaceInfo.racename]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoaType",Boat.RaceInfo.boattype.substring(5)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#VacFreq",parseInt(Boat.RaceInfo.vacfreq,10)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(Boat.RaceInfo.firstpcttime,10)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(Boat.RaceInfo.deptime,10)*1000)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(Boat.RaceInfo.closetime,10)*1000)]);
+    BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+Boat.RaceInfo.idraces+".png"])
+    BoatFieldMappings.push([FIELD_MAPPING_CALLBACK,"#RaceWayPoints",function(p){FillRaceWaypointList(p,Boat)}])
+  }
+
   // Loop all mapped fields to their respective location
   for (index in BoatFieldMappings)
   {
@@ -725,6 +740,14 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
       
       case FIELD_MAPPING_CHECK:
         $(BoatFieldMappings[index][1]).prop('checked',(BoatFieldMappings[index][2]));
+        break;
+
+      case FIELD_MAPPING_IMG:
+        $(BoatFieldMappings[index][1]).attr('src',(BoatFieldMappings[index][2]));
+        break;
+
+      case FIELD_MAPPING_CALLBACK:
+        BoatFieldMappings[index][2](BoatFieldMappings[index][1]);
         break;
 
       
@@ -799,16 +822,15 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     $("."+ActivePane).addClass("active");
     $("#"+ActivePane).addClass("active");
 
-    // Add race name
-    if (typeof Boat.RaceInfo !== "undefined")
-    {
-      $("#RaceName").text(Boat.RaceInfo.racename);
-    }
-
     UpdatePilotInfo(Boat);
     UpdatePolarImages(Boat);
 
 } 
+
+function FillRaceWaypointList(p,Boat)
+{
+  $(p).empty();
+}
 
 function UpdatePolarImages(Boat)
 {

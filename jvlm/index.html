@@ -80,7 +80,7 @@
           <a class="navbar-brand" href="/" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v8</div>
+              <div class="version">v9</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" style="float:left"> 
@@ -133,12 +133,12 @@
           <ul class="badgeinfo hidden-sm hidden-xs">
                 <li><img src="images/boat.png" height="20px" alt=""/></li>
                 <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
-                <li><span class="badge badge-boat BoatSpeed">--</span>nds</li>
+                <li><span class="badge badge-boat BoatSpeed">--</span><sup I18N="nds">nds</sup></li>
             </ul>
             <ul class="badgeinfo hidden-sm hidden-xs">
                 <li><img src="images/wind.png" height="20px" alt=""/></li>
                 <li><span Class="badge badge-wind BoatWindAngle">--</span>&deg;</li>
-                <li><span class="badge badge-wind BoatWindSpeed">--</span>nds</li>
+                <li><span class="badge badge-wind BoatWindSpeed">--</span><sup I18N="nds">nds</sup></li>
             </ul> 
           <ul  class="nav navbar-right navbar-right-small"  LoggedInNav="true" style="display:none">
             <li  class="nav active  col-md hidden-xs hidden-sm" ><a class="player" id="PlayerId">Not Logged in </a></li>
@@ -201,7 +201,7 @@
             <li class="nav BoatSelector nav hidden" RacingBtn="true">
                 <div class="RaceInfoDiv">
                   <div class="NavRaceName">
-                    <Span id="RaceName">  </Span>
+                    <Span class="RaceName">  </Span>
                   </div>
                   <div class="NavRaceClock">
                     <Span  class="RaceChrono ChronoRaceStarted"> </Span>
@@ -1470,18 +1470,30 @@
                 <div id="TabModalContent" class="tab-content ">
                   <div class="BCPane tab-pane fade  in active" id="InfosRace" style="padding:0px">
                   <div>
-                    Départ : 2016/01/04 17:00:00<br>
-                    Type de bateau / Polaire : IMOCA2007<br>
-                    vac. : 5 minutes<br>
-                    Fermeture de la ligne de d'arrivée : 200 % <br>
-                    <img src="../cache/racemaps/20141231.png" alt="B2B" style="max-width:100%"/>
+                    <span I18n="race">Course</span> : <span class="RaceName">2016/01/04 17:00:00</span><br>
+                    <span I18n="startmap">Départ</span> : <span id="RaceStartDate">2016/01/04 17:00:00</span><br>
+                    <span I18n="closerace">closeline</span> <span id="RaceLineClose"></span><br>
+                    <span I18n="boattype">Type de bateau / Polaire</span> : <span id="BoatType"> IMOCA2007</span><br>
+                    <span I18n="crank">vac.</span> : <span id="VacFreq">5</span> <span I18n="minutes">minutes</span><br>
+                    <span I18n="endrace">Fermeture de la ligne de d'arrivée</span> <span id="EndRace">200</span> % <br>
+                    <span><img id="RaceImageMap" src="../cache/racemaps/20141231.png" style="max-width:100%"/></span>
                     <div id="waypoints">
                       <h3>Waypoints</h3>
-                        <table class="waypoints">
-                          <tbody>
-                                    <tr>
-                                    <th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th><th>@</th><th>Spec</th><th>Type</th><th>Name</th>
-                                    </tr>
+                        <table class="footable table waypoints">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Lat1</th>
+                              <th>Lon1</th>
+                              <th>Lat2</th>
+                              <th>Lon2</th>
+                              <th>@</th>
+                              <th>Spec</th>
+                              <th>Type</th>
+                              <th>Name</th>
+                            </tr>
+                          </thead>
+                          <tbody id="RaceWayPoints">
                                     <tr>
                                     <td>WP0</td><td>41.412</td><td>2.239</td><td colspan="2">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Départ</td><td>&nbsp;</td>
                                     </tr>
@@ -1525,8 +1537,8 @@
                                     <td><a href="/mercator.img.php?idraces=20141231&amp;lat=41.368&amp;long=2.25&amp;maparea=16&amp;drawwind=no&amp;wp=13&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP13</a></td><td>41.368</td><td>2.250</td><td>41.368</td><td>2.265</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Finish</td><td>Barcelona</td>
                                     </tr>
                                 </tbody>
-                                </table>
-                     </div>
+                          </table>
+                        </div>
                      </div>
                    </div>
                     <div class="BCPane tab-pane fade" id="InfosBoat">
