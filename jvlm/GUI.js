@@ -272,13 +272,7 @@ function InitMenusAndButtons()
         OnLoginRequest();
       }
     );   
-  //valide par touche retour
-    $('#LoginPanel').keypress(function(e) {
-    if (e.which == '13') {
-        OnLoginRequest();
-        $('#LoginForm').modal('hide');
-    }
-});
+  
     // Display setting dialog
     $("#BtnSetting").click(
       function()
