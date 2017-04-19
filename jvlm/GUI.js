@@ -262,157 +262,151 @@ function InitMenusAndButtons()
         {
           FillRankingTable();
         }
-)
+  )
 
   // Init event handlers
-    // Login button click event handler
-    $("#LoginButton").click( 
-      function()
-      {
-        OnLoginRequest();
-      }
-    );   
-  //valide par touche retour
-    $('#LoginPanel').keypress(function(e) {
-    if (e.which == '13') {
-        OnLoginRequest();
-        $('#LoginForm').modal('hide');
-    }
-});
-    // Display setting dialog
-    $("#BtnSetting").click(
-      function()
-      {
-        LoadVLMPrefs();
-        SetDDTheme(VLM2Prefs.CurTheme);
-        $("#SettingsForm").modal("show");
-      }
-    )
-
-    // Handle SettingsSave button
-    $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
-    // Handle SettingsSave button
-    $('#SettingCancelButton').click(function()
+  // Login button click event handler
+  $("#LoginButton").click( 
+    function()
     {
+      OnLoginRequest();
+    }
+  );   
+  
+  // Display setting dialog
+  $("#BtnSetting").click(
+    function()
+    {
+      LoadVLMPrefs();
       SetDDTheme(VLM2Prefs.CurTheme);
-    })
-    
+      $("#SettingsForm").modal("show");
+    }
+  )
 
-    // Do fixed heading button
-    $("#BtnPM_Heading").click(
-      function()
-      {
-        SendVLMBoatOrder(PM_HEADING,$("#PM_Heading")[0].value)
-      }
+  // Handle SettingsSave button
+  $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
+  // Handle SettingsSave button
+  $('#SettingCancelButton').click(function()
+  {
+    SetDDTheme(VLM2Prefs.CurTheme);
+  })
+  
 
-    );
+  // Do fixed heading button
+  $("#BtnPM_Heading").click(
+    function()
+    {
+      SendVLMBoatOrder(PM_HEADING,$("#PM_Heading")[0].value)
+    }
 
-    // Do fixed angle button
-    $("#BtnPM_Angle").click(
-      function()
-      {
-        SendVLMBoatOrder(PM_ANGLE,$("#PM_Angle")[0].value)
-      }
+  );
 
-    );
+  // Do fixed angle button
+  $("#BtnPM_Angle").click(
+    function()
+    {
+      SendVLMBoatOrder(PM_ANGLE,$("#PM_Angle")[0].value)
+    }
 
-    // Tack
-    $("#BtnPM_Tack").click(
-      function()
-      {
-        $("#PM_Angle")[0].value= - $("#PM_Angle")[0].value;
-      }
-    )
+  );
 
-    $("#BtnCreateAccount").click(
-      function()
-      {
-        alert("Function not implemented yet");
-      }
-    )
+  // Tack
+  $("#BtnPM_Tack").click(
+    function()
+    {
+      $("#PM_Angle")[0].value= - $("#PM_Angle")[0].value;
+    }
+  )
 
-    // Handler for Set WP on click
-    $("#SetWPOnClick").click(HandleStartSetWPOnClick);
-    $("#SetWPOffClick").click(HandleCancelSetWPOnClick);
-    HandleCancelSetWPOnClick();
+  $("#BtnCreateAccount").click(
+    function()
+    {
+      alert("Function not implemented yet");
+    }
+  )
 
-    // Add handlers for autopilot buttons
-    $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
-    $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
-    
+  // Handler for Set WP on click
+  $("#SetWPOnClick").click(HandleStartSetWPOnClick);
+  $("#SetWPOffClick").click(HandleCancelSetWPOnClick);
+  HandleCancelSetWPOnClick();
+
+  // Add handlers for autopilot buttons
+  $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
+  $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
+  
 
 
-    // Init Datetime picker for autopilot
-    $('.form_datetime').datetimepicker({
-        language: 'fr',
-        defaultTime: 'current',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 0
-    });
-    $('.form_date').datetimepicker({
-        language: 'fr',
-        defaultTime: 'current',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        forceParse: 0
-    });
-    $('.form_time').datetimepicker({
-        language: 'fr',
-        defaultTime: 'current',
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 1,
-        minView: 0,
-        maxView: 1,
-        forceParse: 0
-    });
+  // Init Datetime picker for autopilot
+  $('.form_datetime').datetimepicker({
+      language: 'fr',
+      defaultTime: 'current',
+      weekStart: 1,
+      todayBtn: 1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      forceParse: 0,
+      showMeridian: 0
+  });
+  $('.form_date').datetimepicker({
+      language: 'fr',
+      defaultTime: 'current',
+      weekStart: 1,
+      todayBtn: 1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      minView: 2,
+      forceParse: 0
+  });
+  $('.form_time').datetimepicker({
+      language: 'fr',
+      defaultTime: 'current',
+      weekStart: 1,
+      todayBtn: 1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 1,
+      minView: 0,
+      maxView: 1,
+      forceParse: 0
+  });
 
-    $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
-    $("#AP_SetTargetWP").click(HandleClickToSetWP)
-    
-    // AP datetime pickers
-    $("#AP_Date").datetimepicker();
-    $("#AP_Time").datetimepicker();
-    $("#AP_Date").on('changeDate', HandleDateChange);
-    $("#AP_Time").on('changeDate', HandleDateChange);
-    $("#APValidateButton").click(HandleSendAPUpdate)
-    $(".APField").on('change',HandleAPFieldChange);
-    $(".APMode").on('click',HandleAPModeDDClick)
+  $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
+  $("#AP_SetTargetWP").click(HandleClickToSetWP)
+  
+  // AP datetime pickers
+  $("#AP_Date").datetimepicker();
+  $("#AP_Time").datetimepicker();
+  $("#AP_Date").on('changeDate', HandleDateChange);
+  $("#AP_Time").on('changeDate', HandleDateChange);
+  $("#APValidateButton").click(HandleSendAPUpdate)
+  $(".APField").on('change',HandleAPFieldChange);
+  $(".APMode").on('click',HandleAPModeDDClick)
 
-    // Draggable info window
-    $("#mouseInfo").draggable(
-              {
-                handle: ".modal-header,.modal-body"
-              });
+  // Draggable info window
+  $("#mouseInfo").draggable(
+            {
+              handle: ".modal-header,.modal-body"
+            });
 
-    // Draggable display settings
-    $("#affichage").draggable(
-              {
-                handle: ".modal-header,.modal-body"
-              });
+  // Draggable display settings
+  $("#affichage").draggable(
+            {
+              handle: ".modal-header,.modal-body"
+            });
 
-    $("#MapPrefsToggle").click(HandleShowMapPrefs);
+  $("#MapPrefsToggle").click(HandleShowMapPrefs);
 
-    $(".chkprefstore").on('change',HandleMapPrefOptionChange);
-    $(".MapOppShowLi").click(HandleMapOppModeChange)
+  $(".chkprefstore").on('change',HandleMapPrefOptionChange);
+  $(".MapOppShowLi").click(HandleMapOppModeChange)
 
-    $(".DDTheme").click(HandleDDlineClick)
+  $(".DDTheme").click(HandleDDlineClick)
 
-    // Handle Start Boat Estimator button
-    $("#StartEstimator").on('click',HandleStartEstimator)
-    $("#EstimatorStopButton").on('click',HandleStopEstimator)
-    
+  // Handle Start Boat Estimator button
+  $("#StartEstimator").on('click',HandleStartEstimator)
+  $("#EstimatorStopButton").on('click',HandleStopEstimator)
+  
 }
 
 function HandleStopEstimator(e)
