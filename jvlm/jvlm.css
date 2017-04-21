@@ -1278,3 +1278,9 @@ th {
 .btn-xs {
   line-height: 1;
 }
+.ui-slider .ui-slider-handle {
+  text-align: center;
+  line-height: 1em;
+  width: 1.4em;
+  cursor: pointer;
+}

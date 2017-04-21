@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="jvlm.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
     <link rel="stylesheet/less" type="text/css" href="jvlm.less">
-    <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
     <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
     <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-noir-bleu.css"/>
     <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-brun-pistache.css"/>
@@ -56,7 +55,8 @@
         <div id="jVlmControl" class="col-xs-12" style="padding:0px"></div>
         </div>
       <div class="row main-row">
-        <div id="jVlmMap" class="col-xs-12"></div>
+        <div id="jVlmMap" class="col-xs-12">
+        </div>
       </div>
     </div>
     <!-- debut de nav-->
@@ -194,22 +194,23 @@
             </li>
             <li class="nav hidden" RacingBtn="true">
              <div class="BtnGroup1" >
-              <div class="BtnRankingPanel" >
-                <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
+                <div class="BtnRankingPanel" >
+                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
+                </div>
               </div>
-            </div>
-          </li>
-          <li class="nav BoatSelector nav hidden" RacingBtn="true">
-            <div class="RaceInfoDiv">
-              <div class="NavRaceName">
-                <Span class="RaceName">  </Span>
-              </div>
-              <div class="NavRaceClock">
-                <Span  class="RaceChrono ChronoRaceStarted"> </Span>
-              </div> 
-              <div>
-                <div class="progressbarmin" id="pbar_innerdivmin" ></div>
-                <div class="progressbarvac" id="pbar_innerdivvac" ></div>
+            </li>
+            <li class="nav BoatSelector nav hidden" RacingBtn="true">
+              <div class="RaceInfoDiv">
+                <div class="NavRaceName">
+                  <Span class="RaceName">  </Span>
+                </div>
+                <div class="NavRaceClock">
+                  <Span  class="RaceChrono ChronoRaceStarted"> </Span>
+                </div> 
+                <div>
+                  <div class="progressbarmin" id="pbar_innerdivmin" ></div>
+                  <div class="progressbarvac" id="pbar_innerdivvac" ></div>
+                </div>
               </div>
             </li>
           </ul>
@@ -558,6 +559,28 @@
         </div>
       </div>
     </nav>
+    <div class="input" style="position:relative">
+      <div id="slider" style="height:200px; position:absolute; right:10px;">
+          <div id="custom-handle" class="ui-slider-handle"></div> 
+      </div>
+     </div>
+  <script>
+    $( function() {
+    var handle = $( "#custom-handle" );
+    $( "#slider" ).slider({
+      orientation: "vertical",
+      min: 0,
+      max: 72,
+      value: 0,
+      create: function() {
+        handle.text( $( this ).slider( "value" ) );
+      },
+      slide: function( event, ui ) {
+        handle.text( ui.value );
+      }
+    });
+  } );
+  </script>
        <!-- Modal affichage-->
             <div id="affichage" class="modal fade" role="dialog">
                 <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -647,7 +670,7 @@
                         </legend>
                       </div>
                       <div class="hidden col-xs-2">
-                        <img class="hidden" src="images/Fleche.png" alt="vent" height="40px" width="20px"></img>
+                        <img class="hidden" src="images/Fleche.png" alt="vent" height="40px" width="20px"/>
                       </div>
                       <div class="col-xs-12">
                         <span id="MI_EstDate"></span>                      
