@@ -710,7 +710,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.RaceInfo.racename]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoaType",Boat.RaceInfo.boattype.substring(5)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",Boat.RaceInfo.boattype.substring(5)]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#VacFreq",parseInt(Boat.RaceInfo.vacfreq,10)]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(Boat.RaceInfo.firstpcttime,10)]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(Boat.RaceInfo.deptime,10)*1000)]);
