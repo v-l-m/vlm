@@ -265,17 +265,34 @@ function InitMenusAndButtons()
   )
 
   // Init event handlers
-  // Login button click event handler
-  $("#LoginButton").click( 
-    function()
-    {
-      OnLoginRequest();
+    // Login button click event handler
+    $("#LoginButton").click( 
+      function()
+      {
+        OnLoginRequest();
+      }
+    );   
+  //valide par touche retour
+    $('#LoginPanel').keypress(function(e) {
+    if (e.which == '13') {
+        OnLoginRequest();
+        $('#LoginForm').modal('hide');
     }
-  );   
-  
-  // Display setting dialog
-  $("#BtnSetting").click(
-    function()
+});
+    // Display setting dialog
+    $("#BtnSetting").click(
+      function()
+      {
+        LoadVLMPrefs();
+        SetDDTheme(VLM2Prefs.CurTheme);
+        $("#SettingsForm").modal("show");
+      }
+    )
+
+    // Handle SettingsSave button
+    $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
+    // Handle SettingsSave button
+    $('#SettingCancelButton').click(function()
     {
       LoadVLMPrefs();
       SetDDTheme(VLM2Prefs.CurTheme);
