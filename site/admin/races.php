@@ -273,6 +273,7 @@ $opts['triggers']['delete']['before'][0] = 'races.TBD.trigger.php';
 $opts['triggers']['delete']['after'][0] = 'races.TAD.trigger.php';
 $opts['triggers']['insert']['pre'][0] = 'races.TPI.trigger.php';
 $opts['triggers']['insert']['after'][0] = 'races.TAI.trigger.php';
+$opts['triggers']['update']['after'][0] = 'races.TAU.trigger.php';
 //$opts['triggers']['select']['pre'][0] = 'races.TPS.trigger.php';
 //$opts['triggers']['update']['before'][0] = 'races.TBU.trigger.php';
 

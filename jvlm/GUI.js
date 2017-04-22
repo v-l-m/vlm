@@ -1698,6 +1698,8 @@ function SetDDTheme(Theme)
 function HandleDDlineClick(e)
 {
   var Target = e.target;
-  var Theme = Target.closest(".DDTheme").attributes["DDTheme"].value;
+  //var Theme = Target.closest(".DDTheme").attributes["DDTheme"].value;
+  var Theme = e.target.attributes['ddtheme'].value;
+
   SetDDTheme(Theme);
 }
