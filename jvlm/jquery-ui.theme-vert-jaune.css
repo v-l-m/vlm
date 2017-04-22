@@ -505,3 +505,7 @@ a.ui-button-noir:hover {
 .progress-bar-info{
   background-color:#336824;
 }
+.player{
+	color:#eae878;
+	padding: 10px 5px;
+}

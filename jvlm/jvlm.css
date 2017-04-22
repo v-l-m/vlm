@@ -17,9 +17,9 @@ input {
   background-color: #82D1D4;
   position: absolute;
   top: 75px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 #jVlmMap .ol-zoom {
   font-size: 0.5em;
@@ -71,7 +71,7 @@ div.GribmapMousePosition {
   /*font-size: smaller;*/
   font-weight: bold;
   top: 200px;
-  right: 0px;
+  right: 0;
 }
 .GribmapControlWind .baseDiv {
   background-color: darkBlue;
@@ -87,7 +87,7 @@ div.GribmapMousePosition {
 }
 .GribmapControlWind .maximizeDiv,
 .GribmapControlWind .minimizeDiv {
-  right: 0px;
+  right: 0;
   top: 10px;
 }
 .VlminfoControlPlayer {
@@ -96,7 +96,7 @@ div.GribmapMousePosition {
   /*font-size: smaller;*/
   font-weight: bold;
   top: 100px;
-  right: 0px;
+  right: 0;
 }
 .VlminfoControlPlayer .baseDiv {
   background-color: #152249;
@@ -109,7 +109,7 @@ div.GribmapMousePosition {
 }
 .VlminfoControlPlayer .maximizeDiv,
 .VlminfoControlPlayer .minimizeDiv {
-  right: 0px;
+  right: 0;
   top: 5px;
 }
 .navbar-brand {
@@ -135,7 +135,7 @@ div.GribmapMousePosition {
 }
 .version {
   position: absolute;
-  top: 0px;
+  top: 0;
   left: 18px;
   font-size: 10px;
   color: #7C7C7C;
@@ -176,7 +176,7 @@ div.GribmapMousePosition {
 .olControlAttribution {
   left: 100px;
   right: inherit;
-  bottom: 0px;
+  bottom: 0;
   top: inherit;
   line-height: 11px;
 }
@@ -197,7 +197,7 @@ option.RacingBoat {
 }
 .FlagLabel {
   position: absolute;
-  margin-top: 0px;
+  margin-top: 0;
   margin-left: 5px;
 }
 .LngFlag {
@@ -324,14 +324,14 @@ span.ui-selectmenu-text {
   position: absolute;
   left: 45px;
   padding-top: 4px;
-  top: 0px;
+  top: 0;
 }
 .BtnRankingPanel {
   /*position: absolute;
  padding-top: @BtnPadTop;
  padding-left:10px;
  padding-right:10px;*/
-  top: 0px;
+  top: 0;
   float: left;
 }
 .BoatSelector {
@@ -375,13 +375,13 @@ span.ui-selectmenu-text {
 .ranking {
   background-color: #c70000;
   right: 35px;
-  top: 0px;
+  top: 0;
   z-index: 995;
 }
 .pilot {
   background-color: #00c700;
   left: 26px;
-  top: 0px;
+  top: 0;
 }
 .panel {
   background-color: transparent;
@@ -389,7 +389,7 @@ span.ui-selectmenu-text {
   margin-top: 5px;
 }
 .panel-body {
-  padding: 0px;
+  padding: 0;
 }
 .pilottab {
   background-color: #00c700;
@@ -465,7 +465,7 @@ span.ui-selectmenu-text {
   height: 0.2em;
   position: absolute;
   display: block;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 #BearingRing {
   padding-left: 23px;
@@ -475,8 +475,8 @@ span.ui-selectmenu-text {
 }
 .WindAnglePanel {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
 }
 #ImgWindAngle {
   transform: rotate(0deg);
@@ -490,7 +490,7 @@ span.ui-selectmenu-text {
 }
 @media all and (max-width: 430px) {
   .navbar-right-small {
-    margin-left: 0px!important;
+    margin-left: 0!important;
     /*margin-top:15px;*/
   }
   .NavRaceName {
@@ -503,7 +503,7 @@ span.ui-selectmenu-text {
     visibility: visible;
   }
   #nav-stat .row {
-    margin-left: 0px;
+    margin-left: 0;
   }
   .btn-md,
   .btn-group-md > .btn {
@@ -513,7 +513,7 @@ span.ui-selectmenu-text {
     border-radius: 6px;
   }
   .Controler-Panel {
-    padding-left: 0px;
+    padding-left: 0;
     padding-top: 10px;
   }
 }
@@ -589,7 +589,7 @@ span.ui-selectmenu-text {
     visibility: hidden;
   }
   #nav-stat .row {
-    margin-left: 0px;
+    margin-left: 0;
   }
   .btn-md,
   .btn-group-md > .btn {
@@ -680,7 +680,7 @@ span.ui-selectmenu-text {
   float: left;
 }
 .navbar-toggle {
-  padding-top: 0px;
+  padding-top: 0;
 }
 .tab-content {
   background-color: transparent;
@@ -709,7 +709,7 @@ span.ui-selectmenu-text {
   border-radius: 4px 4px 0 0;
 }
 .nav-tab > li {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 /*#Boat-Panel #tabs  > li {
  color: #021A9C;
@@ -719,10 +719,10 @@ span.ui-selectmenu-text {
  border-right:1px beige solid;
  border-left:1px beige solid;
  border-radius: 4px 4px 0 0;
- text-shadow: 0px 1px 0px rgba( 255, 255, 255, 0.2);
+ text-shadow: 0 1px 0 rgba( 255, 255, 255, 0.2);
 }
 #Boat-Panel #tabs  > li >a{
-margin-right:0px;
+margin-right:0;
 }
 #Boat-Panel #tabs >li> a:focus, {
   color: #021A9C;
@@ -759,7 +759,7 @@ margin-right:0px;
 .button-black:hover {
   color: #011BA0;
   background: #3152F7;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
   background: linear-gradient(#5486ad, #223941);
 }
 .button-black:active {
@@ -778,7 +778,7 @@ margin-right:0px;
   border-color: #ccc;
   border-radius: 5px;
   color: #09F;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
   /*box-shadow: 0 0 5px rgba( 0, 0, 0, 0.5),
                  /*0 -1px 0 rgba( 255, 255, 255, 0.4);*/
   background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #252525 100%);
@@ -811,7 +811,7 @@ margin-right:0px;
 }
 .form-control {
   height: auto;
-  padding: 0px;
+  padding: 0;
 }
 .scrollable-menu {
   height: auto;
@@ -842,7 +842,7 @@ margin-right:0px;
   padding-bottom: 5px;
 }
 #pilot .form-group {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 #AutoPilotTab .table {
   background-color: transparent;
@@ -901,12 +901,12 @@ margin-right:0px;
   /* Set something to make the badge looks focused */
   /* This really depends on the application, in my case it was: */
   /* Adding a light border */
-  box-shadow: inset 0px 0px 5px;
+  box-shadow: inset 0 0 5px;
   /* Taking the difference out of the padding */
 }
 .close {
   color: #ffffff;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 fieldset {
   margin-bottom: 10px;
@@ -916,11 +916,11 @@ legend {
   text-align: center;
   font-size: 1.2em;
   color: #337AB7;
-  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 label {
   font-weight: normal;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 #mouseInfo {
   cursor: move;
@@ -1166,15 +1166,15 @@ a:hover.tooltips span {
   -moz-border-radius: 50px;
   border-radius: 50px;
   position: relative;
-  -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .slideOne label {
   display: block;
   width: 16px;
   height: 16px;
-  padding-left: 0px;
+  padding-left: 0;
   -webkit-border-radius: 50px;
   -moz-border-radius: 50px;
   border-radius: 50px;
@@ -1187,9 +1187,9 @@ a:hover.tooltips span {
   position: absolute;
   top: -7px;
   left: -5px;
-  -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
   background: #fcfff4;
   background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
   background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
@@ -1203,9 +1203,9 @@ a:hover.tooltips span {
 }
 .slideOne input[type=checkbox]:checked + label:before,
 .slideOne input[type=checkbox]:not(:checked) + label:before {
-  width: 0px;
-  height: 0px;
-  padding-left: 0px;
+  width: 0;
+  height: 0;
+  padding-left: 0;
   top: 4px;
   left: 4px;
 }
@@ -1215,17 +1215,55 @@ hr {
 }
 .slideOne input[type=checkbox]:checked + label,
 .slideOne input[type=checkbox]:not(:checked) + label {
-  padding-left: 0px;
+  padding-left: 0;
 }
 /*nav-tabs>li>a {
-  margin-right: 0px; 
+  margin-right: 0; 
   line-height: 1.4;
-  border: 0px ; 
+  border: 0 ; 
   border-radius: 0 0 0 0; 
 }
 .nav-tabs>li>a :hover{
   background-color:transparent;
 }*/
+.slideshow ul {
+  /* 4 images donc 4 x 100% */
+  width: 500%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.slideshow li {
+  float: left;
+  margin-right: 100px;
+  overflow: hidden;
+}
+.slideshow {
+  width: 272px;
+  height: 429px;
+  overflow: hidden;
+  border: 3px solid #F2F2F2;
+  margin-left: auto;
+  margin-right: auto;
+}
+.btn-round.btn-xs {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+.progress {
+  margin-bottom: 0;
+}
+.btn-xs {
+  line-height: 1;
+}
+.ui-slider .ui-slider-handle {
+  text-align: center;
+  line-height: 1em;
+  width: 1.4em;
+  cursor: pointer;
+}
 td,
 th {
   padding: 0;
@@ -1246,35 +1284,6 @@ th {
   -o-transition: none;
   transition: none;
 }
- .slideshow {
-  width: 272px;
-  height: 429px;
-  overflow: hidden;
-  border: 3px solid #F2F2F2;
-  margin-left: auto;
-  margin-right: auto;
-}
-.slideshow ul {
-  /* 4 images donc 4 x 100% */
-  width: 500%;
-  height: auto;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.slideshow li {
+ .kludge {
   float: left;
-  margin-right: 100px;
-  overflow: hidden;
-}
-.btn-round.btn-xs {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-.progress {
-  margin-bottom: 0px;
-}
-.btn-xs {
-  line-height: 1;
 }
