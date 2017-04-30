@@ -921,6 +921,11 @@ function ShowAutoPilotLine(Boat,Index)
   var OrderDate = new Date(PilOrder.TTS*1000)
   var PIMText = GetPilotModeName(PilOrder.PIM);
 
+  if (typeof $(Id)[0]==="undefined")
+  {
+    let bpkt = 0;
+  }
+
   $(Id)[0].attributes['TID']=PilOrder.TID
   SetSubItemValue(Id,"#PIL_DATE",OrderDate)
   SetSubItemValue(Id,"#PIL_PIM",PIMText)
