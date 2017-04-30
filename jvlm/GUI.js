@@ -589,8 +589,8 @@ function DisplayLoggedInMenus(LoggedIn)
     LoggedInDisplay="none";
     LoggedOutDisplay="block";
   }
-  $("ul[LoggedInNav='true']").css("display",LoggedInDisplay);
-  $("ul[LoggedInNav='false']").css("display",LoggedOutDisplay);
+  $("[LoggedInNav='true']").css("display",LoggedInDisplay);
+  $("[LoggedInNav='false']").css("display",LoggedOutDisplay);
   
 }
 
