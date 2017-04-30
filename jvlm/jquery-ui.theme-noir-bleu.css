@@ -1,15 +1,15 @@
 /*!
- * jQuery UI CSS Framework 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- *
- * http://api.jqueryui.com/category/theming/
- *
- * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=dark-hive&bgImgOpacityHeader=44&bgImgOpacityContent=25&bgImgOpacityDefault=35&bgImgOpacityHover=33&bgImgOpacityActive=30&bgImgOpacityHighlight=80&bgImgOpacityError=40&cornerRadiusShadow=8px&offsetLeftShadow=4px&offsetTopShadow=4px&thicknessShadow=4px&opacityShadow=60&bgImgOpacityShadow=30&bgTextureShadow=flat&bgColorShadow=%23464444&opacityOverlay=80&bgImgOpacityOverlay=50&bgTextureOverlay=flat&bgColorOverlay=%235c5c5c&iconColorError=%23a83300&fcError=%23111111&borderColorError=%23ffb73d&bgTextureError=glass&bgColorError=%23ffc73d&iconColorHighlight=%234b8e0b&fcHighlight=%232e7db2&borderColorHighlight=%23cccccc&bgTextureHighlight=highlight_soft&bgColorHighlight=%23eeeeee&iconColorActive=%23222222&fcActive=%23ffffff&borderColorActive=%2326b3f7&bgTextureActive=highlight_hard&bgColorActive=%2302748d&iconColorHover=%23ffffff&fcHover=%23ffffff&borderColorHover=%230b93d5&bgTextureHover=highlight_soft&bgColorHover=%23202c32&iconColorDefault=%23cccccc&fcDefault=%230b93d5&borderColorDefault=%23444444&bgTextureDefault=highlight_soft&bgColorDefault=%23222222&iconColorContent=%23cccccc&fcContent=%23ffffff&borderColorContent=%23555555&bgTextureContent=highlight_soft&bgColorContent=%23000000&iconColorHeader=%23ffffff&fcHeader=%23ffffff&borderColorHeader=%23333333&bgTextureHeader=highlight_soft&bgColorHeader=%23444444&cornerRadius=6px&fwDefault=normal&fsDefault=1.1em&ffDefault=Segoe%20UI%2CHelvetica%2CArial%2Csans-serif
- */
+  * jQuery UI CSS Framework 1.12.1
+  * http://jqueryui.com
+  *
+  * Copyright jQuery Foundation and other contributors
+  * Released under the MIT license.
+  * http://jquery.org/license
+  *
+  * http://api.jqueryui.com/category/theming/
+  *
+  * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=dark-hive&bgImgOpacityHeader=44&bgImgOpacityContent=25&bgImgOpacityDefault=35&bgImgOpacityHover=33&bgImgOpacityActive=30&bgImgOpacityHighlight=80&bgImgOpacityError=40&cornerRadiusShadow=8px&offsetLeftShadow=4px&offsetTopShadow=4px&thicknessShadow=4px&opacityShadow=60&bgImgOpacityShadow=30&bgTextureShadow=flat&bgColorShadow=%23464444&opacityOverlay=80&bgImgOpacityOverlay=50&bgTextureOverlay=flat&bgColorOverlay=%235c5c5c&iconColorError=%23a83300&fcError=%23111111&borderColorError=%23ffb73d&bgTextureError=glass&bgColorError=%23ffc73d&iconColorHighlight=%234b8e0b&fcHighlight=%232e7db2&borderColorHighlight=%23cccccc&bgTextureHighlight=highlight_soft&bgColorHighlight=%23eeeeee&iconColorActive=%23222222&fcActive=%23ffffff&borderColorActive=%2326b3f7&bgTextureActive=highlight_hard&bgColorActive=%2302748d&iconColorHover=%23ffffff&fcHover=%23ffffff&borderColorHover=%230b93d5&bgTextureHover=highlight_soft&bgColorHover=%23202c32&iconColorDefault=%23cccccc&fcDefault=%230b93d5&borderColorDefault=%23444444&bgTextureDefault=highlight_soft&bgColorDefault=%23222222&iconColorContent=%23cccccc&fcContent=%23ffffff&borderColorContent=%23555555&bgTextureContent=highlight_soft&bgColorContent=%23000000&iconColorHeader=%23ffffff&fcHeader=%23ffffff&borderColorHeader=%23333333&bgTextureHeader=highlight_soft&bgColorHeader=%23444444&cornerRadius=6px&fwDefault=normal&fsDefault=1.1em&ffDefault=Segoe%20UI%2CHelvetica%2CArial%2Csans-serif
+*/
 
 
 /* Component containers
@@ -266,19 +266,19 @@ a.ui-button:active,
 
 
 .ui-legend{
-   margin-bottom:10px;
+  margin-bottom:10px;
   text-align:center;
   font-size:1.2em;
   color:#337AB7;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
 #affichage{
-    border:1px solid #CCC;
-    background-color:#000000;
+  border:1px solid #CCC;
+  background-color:#000000;
 }
 #mouseInfo{
-    border:1px solid #CCC;
-    background-color:#000000;
+  border:1px solid #CCC;
+  background-color:#000000;
 }
 .dropdown-menu {
   background-color:#15214b;
@@ -287,8 +287,8 @@ a.ui-button:active,
   background-color:#070B18;
 }
 .ui-tabs .ui-tabs-nav {
-    margin: 0;
-    padding: .2em .2em 0;
+  margin: 0;
+  padding: .2em .2em 0;
 }
 
 .progressbarmin{
@@ -330,4 +330,8 @@ a.ui-button-noir:hover {
 }
 .progress-bar-info{
   background-color:#3b7d91;
+}
+.player{
+	color:#0b93d5;
+	padding: 10px 5px;
 }

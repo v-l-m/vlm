@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="jvlm.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
     <link rel="stylesheet/less" type="text/css" href="jvlm.less">
-    <!--<link rel="stylesheet" type="text/css" href="external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css" >-->
     <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css" >
     <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-noir-bleu.css"/>
     <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-brun-pistache.css"/>
@@ -23,7 +22,7 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     -->
     <!--<script src="https://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
-    <script src="external/jquery/jquery.js"></script>
+    <script src="external/jquery/jquery-3.2.1.min.js"></script>
     <script src="jquery-ui.js"></script>
     <script src="external/bootstrap-master/js/bootstrap.js"></script>
     <script src="jquery.ui.touch-punch.js"></script>
@@ -50,20 +49,19 @@
 </script>
   </head>
   <body >
-
     <!-- OpenLayer Map Div -->
     <div class="container-fluid">
       <div class="row main-row">
         <div id="jVlmControl" class="col-xs-12" style="padding:0px"></div>
         </div>
       <div class="row main-row">
-        <div id="jVlmMap" class="col-xs-12"></div>
+        <div id="jVlmMap" class="col-xs-12">
+        </div>
       </div>
     </div>
-    
+    <!-- debut de nav-->
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
-        
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
               <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
@@ -103,10 +101,11 @@
               </ul>
            </div>
         </div>
+        <!-- debut barre collapse -->
         <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
+          <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
-              <span class="glyphicon glyphicon-log-in" style="top:0px"><button id="" type="button" class="logindlgButton ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
+              <span class="glyphicon glyphicon-log-in" style="top:0"><button type="button" class="logindlgButton ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
             </li>
             <li class="BoatSelector  col-md-4 hidden-xs hidden-sm">
               <div class="dropdown">
@@ -124,24 +123,26 @@
               </div>
             </li>
           </ul>
-
           <ul class="nav navbar-nav navbar-right " LoggedInNav="true" style="display:none">
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
               <span class="glyphicon glyphicon-log-out" style="top:0px"><button id="" type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
             </li>
           </ul>
           <ul class="badgeinfo hidden-sm hidden-xs">
-                <li><img src="images/boat.png" height="20px" alt=""/></li>
-                <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
-                <li><span class="badge badge-boat BoatSpeed">--</span><sup I18N="nds">nds</sup></li>
-            </ul>
-            <ul class="badgeinfo hidden-sm hidden-xs">
-                <li><img src="images/wind.png" height="20px" alt=""/></li>
-                <li><span Class="badge badge-wind BoatWindAngle">--</span>&deg;</li>
-                <li><span class="badge badge-wind BoatWindSpeed">--</span><sup I18N="nds">nds</sup></li>
-            </ul> 
+            <li><img src="images/boat.png" height="20px" alt=""/></li>
+            <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
+            <li><span class="badge badge-boat BoatSpeed">--</span><sup I18N="nds">nds</sup></li>
+          </ul>
+          <ul class="badgeinfo hidden-sm hidden-xs">
+            <li><img src="images/wind.png" height="20px" alt=""/></li>
+            <li><span Class="badge badge-wind BoatWindAngle">--</span>&deg;</li>
+            <li><span class="badge badge-wind BoatWindSpeed">--</span><sup I18N="nds">nds</sup></li>
+          </ul> 
           <ul  class="nav navbar-right navbar-right-small"  LoggedInNav="true" style="display:none">
-            <li  class="nav active  col-md hidden-xs hidden-sm" ><a class="player" id="PlayerId">Not Logged in </a></li>
+            <li  class="nav active  col-md hidden-xs hidden-sm" >
+              <div class="player" id="PlayerId">Not Logged in 
+              </div>
+            </li>
             <li  class="BoatSelector col-md hidden-xs hidden-sm">
               <div  class="nav dropdown  ">
                 <button id="dropdownBoat" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
@@ -171,53 +172,47 @@
                 <div class="BtnRankingPanel" >
                   <a data-toggle="collapse" data-target="#Ranking-Panel"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png"/></a><span id="RankingBadge" class="ranking btnbadge badge">...</span>
                 </div>
-                  <div id="BtnSetting" class="BtnRankingPanel hidden">
-                      <a ><img class="TDB-Icon" src="images/setting.png" alt="setting"/></a>
-                  </div>
+                <div id="BtnSetting" class="BtnRankingPanel hidden">
+                  <a ><img class="TDB-Icon" src="images/setting.png" alt="setting"/></a>
+                </div>
               </div>
             </li>
-             <li class="nav hidden" RacingBtn="true">
+            <li class="nav hidden" RacingBtn="true">
               <div class="BtnGroup" >
                 <div class="BtnRankingPanel">
                   <img class="TDB-Icon" src="images/compas.png" href="#mouseInfo" data-toggle="modal" alt="compas"/>
-                 </div>
-               <div class="BtnRankingPanel">
-                    <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png" alt="MapOptions"/>
-               </div>
-              </div>
-              </li>
-              <li class="nav">
-                <div class ="hidden">
-                    <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value="">
                 </div>
+                <div class="BtnRankingPanel">
+                  <img id="MapPrefsToggle" class="TDB-Icon" href="#affichage" data-toggle="modal" src="images/MapOptions.png" alt="MapOptions"/>
+                </div>
+              </div>
+            </li>
+            <li class="nav">
+              <div class ="hidden">
+                <img src="images/attention.svg" alt="attention"/><span style="color:#FF0000;font-size:10px"> Stop & Go (temps restant) :</span><br/><input class="attentionInput" type="text" value="">
+              </div>
             </li>
             <li class="nav hidden" RacingBtn="true">
              <div class="BtnGroup1" >
-                  <div class="BtnRankingPanel" >
-                      <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
-                  </div>
+                <div class="BtnRankingPanel" >
+                  <img  href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
+                </div>
               </div>
             </li>
             <li class="nav BoatSelector nav hidden" RacingBtn="true">
-                <div class="RaceInfoDiv">
-                  <div class="NavRaceName">
-                    <Span class="RaceName">  </Span>
-                  </div>
-                  <div class="NavRaceClock">
-                    <Span  class="RaceChrono ChronoRaceStarted"> </Span>
-                  </div> 
-                   <div>
-                    <div class="progressbarmin" id="pbar_innerdivmin" ></div>
-                    <div class="progressbarvac" id="pbar_innerdivvac" ></div>
-                   </div>
-                  <!--<div class="VacChrono">  
-                    <div id="progressBar">
-                      <div></div>
-                    </div>
-                  </div>-->
+              <div class="RaceInfoDiv">
+                <div class="NavRaceName">
+                  <Span class="RaceName">  </Span>
                 </div>
+                <div class="NavRaceClock">
+                  <Span  class="RaceChrono ChronoRaceStarted"> </Span>
+                </div> 
+                <div>
+                  <div class="progressbarmin" id="pbar_innerdivmin" ></div>
+                  <div class="progressbarvac" id="pbar_innerdivvac" ></div>
+                </div>
+              </div>
             </li>
-           
           </ul>
         
              <!--<script>
@@ -539,7 +534,7 @@
         <div class="container-fluid">
           <table  class="footable table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
             <thead>
-              <tr id="PIL_HEADER">
+              <tr id="RankingTableHeader">
                 <th data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
                 <th data-toggle="true" data-type="html"  I18N="name">Nom</th>
                 <th data-breakpoints="xs sm" I18n="distance">Next mark</th>
@@ -564,6 +559,28 @@
         </div>
       </div>
     </nav>
+    <div class="input" style="position:relative">
+      <div id="slider" style="height:200px; position:absolute; right:10px;">
+          <div id="custom-handle" class="ui-slider-handle"></div> 
+      </div>
+     </div>
+  <script>
+    $( function() {
+    var handle = $( "#custom-handle" );
+    $( "#slider" ).slider({
+      orientation: "vertical",
+      min: 0,
+      max: 72,
+      value: 0,
+      create: function() {
+        handle.text( $( this ).slider( "value" ) );
+      },
+      slide: function( event, ui ) {
+        handle.text( ui.value );
+      }
+    });
+  } );
+  </script>
        <!-- Modal affichage-->
             <div id="affichage" class="modal fade" role="dialog">
                 <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -653,7 +670,7 @@
                         </legend>
                       </div>
                       <div class="hidden col-xs-2">
-                        <img class="hidden" src="images/Fleche.png" alt="vent" height="40px" width="20px"></img>
+                        <img class="hidden" src="images/Fleche.png" alt="vent" height="40px" width="20px"/>
                       </div>
                       <div class="col-xs-12">
                         <span id="MI_EstDate"></span>                      
@@ -754,19 +771,19 @@
                                 </button>
                                 <ul id="dropdowntheme" class="dropdown-menu" aria-labelledby="dropdowntheme">
                                   <li class="DDLine DDTheme" DDTheme="bleu-noir">
-                                    <span style="color:#02748d" >Noir/bleu</span>
+                                    <span style="color:#02748d" DDTheme="bleu-noir">Noir/bleu</span>
                                   </li>
                                   <li class="DDLine DDTheme" DDTheme="brun-pistache">
-                                    <span style="color:#8B6F5A" >Brun/pistache</span>
+                                    <span style="color:#8B6F5A" DDTheme="brun-pistache">Brun/pistache</span>
                                   </li>
                                   <li class="DDLine DDTheme" DDTheme="vert-jaune">
-                                    <span style="color:#9bcc60" >Vert/jaune</span>
+                                    <span style="color:#9bcc60" DDTheme="vert-jaune">Vert/jaune</span>
                                   </li>
                                   <li class="DDLine DDTheme" DDTheme="noir-jaune">
-                                    <span style="color:#FCD755" >Noir/jaune</span>
+                                    <span style="color:#FCD755" DDTheme="noir-jaune">Noir/jaune</span>
                                   </li>
                                   <li class="DDLine DDTheme" DDTheme="noir-jaune-v2">
-                                    <span style="color:#FCD755" >Noir/jaune-v2</span>
+                                    <span style="color:#FCD755" DDTheme="noir-jaune-v2">Noir/jaune-v2</span>
                                   </li>
                                 </ul>
                               </div>
@@ -1473,7 +1490,7 @@
                     <span I18n="race">Course</span> : <span class="RaceName">2016/01/04 17:00:00</span><br>
                     <span I18n="startmap">Départ</span> : <span id="RaceStartDate">2016/01/04 17:00:00</span><br>
                     <span I18n="closerace">closeline</span> <span id="RaceLineClose"></span><br>
-                    <span I18n="boattype">Type de bateau / Polaire</span> : <span id="BoatType"> IMOCA2007</span><br>
+                    <span I18n="boattype">Type de bateau / Polaire</span> : <span class="BoatType"> IMOCA2007</span><br>
                     <span I18n="crank">vac.</span> : <span id="VacFreq">5</span> <span I18n="minutes">minutes</span><br>
                     <span I18n="endrace">Fermeture de la ligne de d'arrivée</span> <span id="EndRace">200</span> % <br>
                     <span><img id="RaceImageMap" src="../cache/racemaps/20141231.png" style="max-width:100%"/></span>
@@ -1509,44 +1526,18 @@
                                     <tr>
                                     <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=40.5&amp;maparea=5&amp;drawwind=no&amp;wp=4&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP4</a></td><td>-60.000</td><td>40.500</td><td>-60.000</td><td>50.500</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Kerguelen Gate 2</td>
                                     </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=105&amp;maparea=3&amp;drawwind=no&amp;wp=5&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP5</a></td><td>-60.000</td><td>105.000</td><td>-60.000</td><td>120.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Australian Barrier 3</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-34.372&amp;long=115.133&amp;maparea=2&amp;drawwind=no&amp;wp=6&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP6</a></td><td>-34.372</td><td>115.133</td><td>-60.000</td><td>115.133</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Cape Leeuwin</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=136&amp;maparea=5&amp;drawwind=no&amp;wp=7&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP7</a></td><td>-60.000</td><td>136.000</td><td>-60.000</td><td>146.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Eastern Australian Gate 4</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=-180&amp;maparea=5&amp;drawwind=no&amp;wp=8&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP8</a></td><td>-60.000</td><td>-180.000</td><td>-60.000</td><td>-170.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>New Zealand Gate 5</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=-145&amp;maparea=5&amp;drawwind=no&amp;wp=9&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP9</a></td><td>-60.000</td><td>-145.000</td><td>-60.000</td><td>-135.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Western Pacific Gate 6</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-60&amp;long=-110&amp;maparea=5&amp;drawwind=no&amp;wp=10&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP10</a></td><td>-60.000</td><td>-110.000</td><td>-60.000</td><td>-100.000</td><td>&nbsp;</td><td><span title="Franchissement : Porte de glace(Sud)" class="wpsymbolbig">⟰</span></td><td>IceGate</td><td>Eastern Pacific Gate 7</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=-55.98&amp;long=-67.262&amp;maparea=6&amp;drawwind=no&amp;wp=11&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP11</a></td><td>-55.980</td><td>-67.262</td><td>-60.000</td><td>-67.262</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Cape Horn</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=36.001&amp;long=-5.61&amp;maparea=10&amp;drawwind=no&amp;wp=12&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP12</a></td><td>36.001</td><td>-5.610</td><td>35.830</td><td>-5.610</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Classement</td><td>Gibraltar</td>
-                                    </tr>
-                                    <tr>
-                                    <td><a href="/mercator.img.php?idraces=20141231&amp;lat=41.368&amp;long=2.25&amp;maparea=16&amp;drawwind=no&amp;wp=13&amp;x=800&amp;y=600&amp;proj=mercator" target="_new">WP13</a></td><td>41.368</td><td>2.250</td><td>41.368</td><td>2.265</td><td>&nbsp;</td><td><span title="" class="wpsymbolbig"></span></td><td>Finish</td><td>Barcelona</td>
-                                    </tr>
+                                   
                                 </tbody>
                           </table>
                         </div>
                      </div>
                    </div>
                     <div class="BCPane tab-pane fade" id="InfosBoat">
-                        <h4>Type de bateau : <span class="BoatClass"></span></h4>
+                        <h4>Type de bateau : <span class="BoatType"></span></h4>
                       <!--<a id= href="https:///index.php?title=Imoca" target="blanck">Wiki</a>-->
                     </div><!--fin boatinfo-->
                     <div class="BCPane tab-pane fade in" id="PolarBoat">
-                               <h4>Polaires <span class="BoatClass"></span></h4>
+                               <h4>Polaires <span class="BoatType"></span></h4>
                       <div class="slideshow">
                         <ul id="PolarList">
                             <!--<li><img class="polaire" src="../cache/polaires/imoca-45-60.png" alt="imoca45-60" /></li>

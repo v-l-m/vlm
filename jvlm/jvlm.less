@@ -110,7 +110,7 @@ div.GribmapMousePosition {
   top: 5px;
 }
 .navbar-brand{
-padding:0;
+  padding:0;
 }
 #logovlm {
   display: fixed;
@@ -128,7 +128,7 @@ padding:0;
   position:absolute; 
   width:100%; 
   height:100%;
- background-size:cover;
+  background-size:cover;
 }
 .version{
   position: absolute;
@@ -149,24 +149,22 @@ padding:0;
   background-size: 22px 22px;
 }
 .badgeinfo{
-list-style:none;
-float:right;
-width:60px;
-margin-left: 10px;
-padding:0;
+  list-style:none;
+  float:right;
+  width:60px;
+  margin-left: 10px;
+  padding:0;
 }
 .badgeinfo>li{
-min-width:50px;
-
+  min-width:50px;
 }
 .badge-wind{
-background-color:#64B5BC;
+  background-color:#64B5BC;
 }
 .badge-boat{
-background-color:#83BC64;
+  background-color:#83BC64;
 }
-.carousel-page
-	{
+.carousel-page{
 	width:100%;
 	height:400px;
 	background-color:#5f666d;
@@ -194,8 +192,7 @@ option.RacingBoat {
   height: 20px;
   display: inline-block
 }
-.FlagLabel
-{
+.FlagLabel{
   position: absolute;
   margin-top: 0;
   margin-left: 5px;
@@ -244,24 +241,24 @@ span.ui-selectmenu-text {
   left: @SpeedLeft;
 }
 #BoatAvg {
- top: @SpeedAvgTop;
- left: @SpeedLeft+40px;
+  top: @SpeedAvgTop;
+  left: @SpeedLeft+40px;
 }
 #BoatHeading {
- top: @SpeedAvgTop;
- left: @SpeedLeft+2*40px;
+  top: @SpeedAvgTop;
+  left: @SpeedLeft+2*40px;
 }
 #StatSpeed {
- top: @StatSpeedAvgTop;
- left: @SpeedLeft;
+  top: @StatSpeedAvgTop;
+  left: @SpeedLeft;
 }
 #StatAvg {
- top: @StatSpeedAvgTop;
- left: @SpeedLeft+40px;
+  top: @StatSpeedAvgTop;
+  left: @SpeedLeft+40px;
 }
 #StatHeading {
- top: @StatSpeedAvgTop;
- left: @SpeedLeft+2*40px;
+  top: @StatSpeedAvgTop;
+  left: @SpeedLeft+2*40px;
 }
  @StatLineDNM:75px;
 @StatLineOrtho:@StatLineDNM+25px;
@@ -1278,6 +1275,43 @@ margin-bottom:10px;
 .nav-tabs>li>a :hover{
   background-color:transparent;
 }*/
+.slideshow ul {
+  /* 4 images donc 4 x 100% */
+  width: 500%;
+  height: auto;
+  padding:0; margin:0;
+  list-style: none;
+}
+.slideshow li {
+  float: left;
+  margin-right: 100px;
+  overflow: hidden;
+}
+.slideshow {
+  width: 272px;
+  height: 429px;
+  overflow: hidden;
+  border: 3px solid #F2F2F2;
+  margin-left: auto;
+  margin-right: auto;
+}
+.btn-round.btn-xs {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+.progress {
+  margin-bottom: 0;
+}
+.btn-xs {
+ line-height: 1;
+}
+.ui-slider .ui-slider-handle {
+  text-align: center;
+  line-height: 1em;
+  width: 1.4em;
+  cursor: pointer;
+}
 td, th {
     padding: 0;
   /*  border: 1px solid;*/
@@ -1298,36 +1332,6 @@ td, th {
   -o-transition: none;
   transition: none;
 }​
-
-.slideshow {
-  width: 272px;
-  height: 429px;
-  overflow: hidden;
-  border: 3px solid #F2F2F2;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.slideshow ul {
-  /* 4 images donc 4 x 100% */
-  width: 500%;
-  height: auto;
-  padding:0; margin:0;
-  list-style: none;
-}
-.slideshow li {
-  float: left;
-  margin-right:100px;
-  overflow:hidden;
-}
-.btn-round.btn-xs {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-.progress {
-  margin-bottom:0;
-}
-.btn-xs {
- line-height:1;
+.kludge{
+  float:left;
 }
