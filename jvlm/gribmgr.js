@@ -118,6 +118,15 @@ function VLM2GribManager()
       return false;
     }
 
+    let  RetInfo = new WindData();
+
+    if (Math.abs(Lat)>85)
+    {
+      RetInfo.Heading = 0;
+      RetInfo.Speed = 0
+      return RetInfo;
+    }
+
     // Precheck to force loading the second grib, and avoid optimization not checking 2nd when first is needs loading
     var t1 = this.CheckGribLoaded(TableIndex, Lat,NormalizeLongitudeDeg(Lon));
     var t2 = this.CheckGribLoaded(TableIndex+1,Lat+this.GribStep,NormalizeLongitudeDeg(Lon+this.GribStep),callback);
@@ -136,8 +145,7 @@ function VLM2GribManager()
     var MI0 = this.GetHydbridMeteoAtTimeIndex (TableIndex,Lat,Lon)
     var MI1 = this.GetHydbridMeteoAtTimeIndex (TableIndex+1,Lat,Lon)
 
-    var  RetInfo = new WindData();
-
+    
     var u0 = MI0.UGRD
     var v0 = MI0.VGRD
     var u1 = MI1.UGRD
@@ -293,9 +301,13 @@ function VLM2GribManager()
       $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
-    
-    this.LoadQueue[LoadKey].CallBacks.push(callback);
 
+    if (typeof callback !=="undefined" && callback)
+    {
+      this.LoadQueue[LoadKey].CallBacks.push(callback);
+      //console.log("Adding to callback load queue "+ LoadKey + ":"+this.LoadQueue[LoadKey].CallBacks.length);
+      
+    }
   }
 
   this.HandleGetSmartGribList = function (LoadKey, e)
@@ -320,6 +332,7 @@ function VLM2GribManager()
         //console.log("smartgrib points out " + url);
         $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey].Length++;
+        
       }
 
       
