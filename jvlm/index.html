@@ -560,69 +560,54 @@
       </div>
     </nav>
     <div class="input SmallGrib" style="position:relative">
-      <div id="slider" style="height:200px; position:absolute; right:10px;">
-          <div id="custom-handle" class="ui-slider-handle"></div> 
+      <div id="GribSlider" style="height:200px; position:absolute; right:10px;">
+          <div id="GribSliderHandle" class="ui-slider-handle">
+          </div> 
       </div>
-     </div>
-  <script>
-    $( function() {
-    var handle = $( "#custom-handle" );
-    $( "#slider" ).slider({
-      orientation: "vertical",
-      min: 0,
-      max: 72,
-      value: 0,
-      create: function() {
-        handle.text( $( this ).slider( "value" ) );
-      },
-      slide: function( event, ui ) {
-        handle.text( ui.value );
-      }
-    });
-  } );
-  </script>
-       <!-- Modal affichage-->
-            <div id="affichage" class="modal fade" role="dialog">
-                <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                  <fieldset>
-                    <legend class="ui-legend" I18n='Map'>Route</legend>
-                    <div class="affich">
-                      <input  class="chkprefstore" type="checkbox" id="DisplayReals">
-                      <label for="DisplayReals" I18n="ShowReals">Bouées</label>
-                    </div>
-                    <div class="affich">
-                      <input class="affich chkprefstore" type="checkbox" id="DisplayNames">
-                      <label for="DisplayNames" I18n="ShowOppNames">Bouées</label>
-                    </div>
-                    </fieldset>
-                    <fieldset>
-                    <legend class="ui-legend">Afficher le mien et ...</legend>
-                    <div  class="affich dropdown">
-                      <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
-                      <span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                        <li class="DDLine MapOppShowLi" ><span Mode="3" I18n="mapmeandtop10"></span></li>
-                        <li class="DDLine MapOppShowLi"><span Mode="4" I18n="mapmy10opps"></span></li>
-                        <li class="DDLine MapOppShowLi"><span Mode="2" I18n="mapmy5opps"></span></li>
-                        <li class="DDLine MapOppShowLi"><span Mode="1" I18n="maponlyme"></span></li>  
-                        <li class="DDLine MapOppShowLi"><span Mode="0" I18n="mapselboats"></span></li>
-                      </ul>
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <legend class="ui-legend">Infos course</legend>
-                      <div class="affich">
-                        Durée Vac : <span class="badge"> 5 </span> min
-                      </div>
-                      <div class="affich">
-                        <label for="VacPol">Nb vac de la polaire</label>
-                        <input class="chkprefstore" type="number" min="1" max="120" value="1" id="VacPol" style="width:50px">
-                      </div>
-                  </fieldset>
-                </div>
+    </div>
+    
+    <!-- Modal affichage-->
+    <div id="affichage" class="modal fade" role="dialog">
+      <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <fieldset>
+          <legend class="ui-legend" I18n='Map'>Route</legend>
+          <div class="affich">
+            <input  class="chkprefstore" type="checkbox" id="DisplayReals">
+            <label for="DisplayReals" I18n="ShowReals">Bouées</label>
+          </div>
+          <div class="affich">
+            <input class="affich chkprefstore" type="checkbox" id="DisplayNames">
+            <label for="DisplayNames" I18n="ShowOppNames">Bouées</label>
+          </div>
+          </fieldset>
+          <fieldset>
+          <legend class="ui-legend">Afficher le mien et ...</legend>
+          <div  class="affich dropdown">
+            <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li class="DDLine MapOppShowLi" ><span Mode="3" I18n="mapmeandtop10"></span></li>
+              <li class="DDLine MapOppShowLi"><span Mode="4" I18n="mapmy10opps"></span></li>
+              <li class="DDLine MapOppShowLi"><span Mode="2" I18n="mapmy5opps"></span></li>
+              <li class="DDLine MapOppShowLi"><span Mode="1" I18n="maponlyme"></span></li>  
+              <li class="DDLine MapOppShowLi"><span Mode="0" I18n="mapselboats"></span></li>
+            </ul>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="ui-legend">Infos course</legend>
+            <div class="affich">
+              Durée Vac : <span class="badge"> 5 </span> min
             </div>
+            <div class="affich">
+              <label for="VacPol">Nb vac de la polaire</label>
+              <input class="chkprefstore" type="number" min="1" max="120" value="1" id="VacPol" style="width:50px">
+            </div>
+        </fieldset>
+      </div>
+    </div>
            <!-- Modal mouseInfo-->
               <div id="mouseInfo" class="dialog fade" role="dialog">
                 <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

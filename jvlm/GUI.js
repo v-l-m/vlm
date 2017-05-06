@@ -16,6 +16,7 @@ var MAX_PILOT_ORDERS = 5;
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
+var GribWindController = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -184,7 +185,9 @@ function OLInit() {
     map.addControl(new OpenLayers.Control.KeyboardDefaults());
 
     //Le panel de vent
-    map.addControl(new Gribmap.ControlWind());
+
+    GribWindController = new Gribmap.ControlWind();
+    map.addControl(GribWindController);
 
     //Evite que le zoom molette surcharge le js du navigateur
     var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
@@ -423,7 +426,35 @@ function InitMenusAndButtons()
   // Handle Start Boat Estimator button
   $("#StartEstimator").on('click',HandleStartEstimator)
   $("#EstimatorStopButton").on('click',HandleStopEstimator)
+
+  InitGribSlider();
   
+}
+
+function InitGribSlider()
+{
+  let handle = $( "#GribSliderHandle" );
+  $( "#GribSlider" ).slider({
+    orientation: "vertical",
+    min: 0,
+    max: 72,
+    value: 0,
+    create: function() {
+      handle.text( $( this ).slider( "value" ) );
+    },
+    slide: function( event, ui ) {
+      HandleGribSlideMove(event,ui);
+    }
+  });
+  
+};
+
+function HandleGribSlideMove(event, ui )
+{
+  let handle = $( "#GribSliderHandle" );
+  handle.text( ui.value);
+  let l=GribWindController.getGribmapLayer();
+  l.setTimeSegment(new Date()+ui.value*3600*1000);
 }
 
 function HandleStopEstimator(e)
