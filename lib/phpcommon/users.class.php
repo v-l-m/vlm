@@ -82,14 +82,13 @@ class users extends baseClass
       " engaged, lastchange, email, nextwaypoint, userdeptime, " .
       " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
       " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
-
     if ($forceMaster) {
         $result = wrapper_mysql_db_query_writer($query) or die("\n FAILED !!\n");
     } else {
         $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
     }
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
-    $this->initFromArray($row);
+    $this->initFromArray($row);  
   }
 
   function users($id, $init = TRUE) {
