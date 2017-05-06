@@ -1565,29 +1565,37 @@ function getFullUserObject($id, $initrow = NULL) {
     }
 }
 
-function getUserObject($id, $initrow = NULL) {
+function getUserObject($id, $initrow = NULL) 
+{
   static $uobjects = Array();
   $id = intval($id);
 
   //TO PROTECT FROM POTENTIAL SIDE EFFECTS (?)
-  if (!defined('MOTEUR') && array_key_exists($id, $uobjects)) {
+  if (!defined('MOTEUR') && array_key_exists($id, $uobjects)) 
+  {
     return $uobjects[$id];
   }
   
   require_once('users.class.php');
-  if (is_null($initrow)) {
+  if (is_null($initrow)) 
+  {
     $u = new users($id);
-  } else {
+  } 
+  else 
+  {
     $u = new users($id, FALSE);
     $u->initFromArray($initrow);
   }
-
-  if ($u->idusers == $id and $id > 0) {
-    if (!defined('MOTEUR')) {
+  if ($u->idusers == $id and $id > 0) 
+  {
+    if (!defined('MOTEUR')) 
+    {
       $uobjects[$id] = $u;
     }
     return $u;
-  } else {
+  } 
+  else 
+  {
     return NULL;
   }
 }
