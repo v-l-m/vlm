@@ -1550,6 +1550,7 @@
                   <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true">Course</a></li>
                   <li><a href="#InfosBoat" data-toggle="tab">Bateau</a></li>
                   <li><a href="#PolarBoat" data-toggle="tab">Polaires</a></li>
+                  <li><a href="#DiscontinueRace" data-toggle="tab" I18n="Discontinue"> Disc. Race</a></li>
                 </ul>
                 <div id="TabModalContent" class="tab-content ">
                   <div class="BCPane tab-pane fade  in active" id="InfosRace" style="padding:0px">
@@ -1599,11 +1600,10 @@
                         </div>
                      </div>
                    </div>
-                    <div class="BCPane tab-pane fade" id="InfosBoat">
-                        <h4>Type de bateau : <span class="BoatType"></span></h4>
-                      <!--<a id= href="https:///index.php?title=Imoca" target="blanck">Wiki</a>-->
-                    </div><!--fin boatinfo-->
-                    <div class="BCPane tab-pane fade in" id="PolarBoat">
+                  <div class="BCPane tab-pane fade" id="InfosBoat">
+                      <h4>Type de bateau : <span class="BoatType"></span></h4>                      
+                  </div><!--fin boatinfo-->
+                  <div class="BCPane tab-pane fade in" id="PolarBoat">
                                <h4>Polaires <span class="BoatType"></span></h4>
                       <div class="slideshow">
                         <ul id="PolarList">
@@ -1625,7 +1625,14 @@
                         });
                       </script>
                    </div>
-
+                  <div class="BCPane tab-pane fade" id="DiscontinueRace">
+                      <h3><span I18n="warning"></span></h3>   
+                      <h4><span I18n="youengaged"></span> <span class="RaceName"></span></h4>
+                      <button type="button" class="btn btn-danger">
+                        <span I18n="unsubscribe"></span>
+                      </button>               
+                  </div><!--fin boatinfo-->
+                    
                 </div>
              </div>
            </div>

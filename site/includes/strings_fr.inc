@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'Discontinue'=> 'Abandon',
     'nds' => 'nds',
     'minutes' => 'minutes',
     'calcestime' => "Calculer l'estime...",
