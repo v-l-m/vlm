@@ -338,7 +338,7 @@ function InitMenusAndButtons()
   $("#BtnCreateAccount").click(
     function()
     {
-      alert("Function not implemented yet");
+      VLMAlert("Function not implemented yet","alert-danger");
     }
   )
 
@@ -817,7 +817,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
       break;
 
     default:
-      alert("Unsupported VLM PIM Mode, expect the unexpected....")
+      VLMAlert("Unsupported VLM PIM Mode, expect the unexpected....","alert-info");
       
    }
 
@@ -1336,7 +1336,7 @@ function HandleOpenAutoPilotSetPoint(e)
   }
   else
   {
-    alert("Something bad has happened reload this page....");
+    VLMAlert("Something bad has happened reload this page....","alert-danger");
     return;
   }
   switch(TargetId)
@@ -1353,7 +1353,7 @@ function HandleOpenAutoPilotSetPoint(e)
         $("#AutoPilotSettingForm").modal('show');
         break;
       default:
-        alert("Something bad has happened reload this page....");
+        VLMalert("Something bad has happened reload this page....","alert-danger");
         return;
                
     }
@@ -1748,4 +1748,21 @@ function HandleDDlineClick(e)
   var Theme = e.target.attributes['ddtheme'].value;
 
   SetDDTheme(Theme);
+}
+
+function VLMAlert(Text,Style)
+{
+  if (typeof Style === "undefined" || !Style)
+  {
+    Style="alert-info";
+  }
+
+  $("#AlertText").text(Text);
+  $("#AlertBox").removeClass("alert-sucess");
+  $("#AlertBox").removeClass("alert-warning");
+  $("#AlertBox").removeClass("alert-info");
+  $("#AlertBox").removeClass("alert-danger");
+  $("#AlertBox").addClass(Style);
+  $("#AlertBox").show();
+  
 }
