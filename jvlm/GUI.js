@@ -1759,6 +1759,7 @@ function InitAlerts()
 {
   AlertTemplate = $("#AlertBox")[0];
   $("#AlertBoxContainer").empty();
+  $("#AlertBoxContainer").removeClass("hidden");
 }
 
 function VLMAlertSuccess(Text)
