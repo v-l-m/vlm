@@ -99,6 +99,8 @@ $(document).ready(
     
     $('#cp11').colorpicker();
 
+    // Init Alerts
+    InitAlerts();
                            
     // CheckLogin
     CheckLogin();
@@ -108,6 +110,8 @@ $(document).ready(
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
+
+    
    
   }  
 );
@@ -1779,12 +1783,13 @@ function VLMAlert(Text,Style)
     Style="alert-info";
   }
 
+  $("#AlertBoxContainer").append(AlertTemplate);
+
   $("#AlertText").text(Text);
   $("#AlertBox").removeClass("alert-sucess");
   $("#AlertBox").removeClass("alert-warning");
   $("#AlertBox").removeClass("alert-info");
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
-  $("#AlertBox").show();
   
 }
