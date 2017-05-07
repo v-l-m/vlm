@@ -93,20 +93,31 @@ function InitLocale(Lang)
   }  
 }
 
+function HTMLDecode(String)
+{
+  var txt = document.createElement("textarea");
+  txt.innerHTML = String;
+  return txt.value;
+}
+
 function GetLocalizedString(StringId)
 {
+  let RetString = ""
+    
   if (StringId in _LocaleDict)
   {
-    return decodeURIComponent( _LocaleDict[StringId]);
+    RetString = HTMLDecode( _LocaleDict[StringId]);
   }
   else if ((typeof _EnDict !=="undefined") && (_EnDict) &&  (StringId in _EnDict))
   {
-    return decodeURIComponent(_EnDict[StringId]);
+    RetString = HTMLDecode(_EnDict[StringId]);
   }
   else
   {
-    return StringId
+    RetString= StringId
   }
+
+  return decodeURIComponent(RetString)
 }
 
 function GetCurrentLocale()
