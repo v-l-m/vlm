@@ -100,6 +100,8 @@ $(document).ready(
     
     $('#cp11').colorpicker();
 
+    // Init Alerts
+    InitAlerts();
                            
     // CheckLogin
     CheckLogin();
@@ -109,6 +111,8 @@ $(document).ready(
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
+
+    
    
   }  
 );
@@ -1781,6 +1785,29 @@ function HandleDDlineClick(e)
   SetDDTheme(Theme);
 }
 
+var AlertTemplate;
+function InitAlerts()
+{
+  AlertTemplate = $("#AlertBox")[0];
+  $("#AlertBoxContainer").empty();
+  $("#AlertBoxContainer").removeClass("hidden");
+}
+
+function VLMAlertSuccess(Text)
+{
+  VLMAlert(Text,"alert-success");
+}
+
+function VLMAlertDanger(Text)
+{
+  VLMAlert(Text,"alert-danger");
+}
+
+function VLMAlertInfo(Text)
+{
+  VLMAlert(Text,"alert-Info");
+}
+
 function VLMAlert(Text,Style)
 {
   if (typeof Style === "undefined" || !Style)
@@ -1788,12 +1815,13 @@ function VLMAlert(Text,Style)
     Style="alert-info";
   }
 
+  $("#AlertBoxContainer").append(AlertTemplate);
+
   $("#AlertText").text(Text);
   $("#AlertBox").removeClass("alert-sucess");
   $("#AlertBox").removeClass("alert-warning");
   $("#AlertBox").removeClass("alert-info");
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
-  $("#AlertBox").show();
   
 }
