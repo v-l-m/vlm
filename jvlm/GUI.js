@@ -1750,19 +1750,26 @@ function HandleDDlineClick(e)
   SetDDTheme(Theme);
 }
 
+var AlertTemplate;
+function InitAlerts()
+{
+  AlertTemplate = $("#AlertBox")[0];
+  $("#AlertBoxContainer").empty();
+}
+
 function VLMAlertSuccess(Text)
 {
-  VLMalert(Text,"alert-sucess");
+  VLMAlert(Text,"alert-sucess");
 }
 
 function VLMAlertDanger(Text)
 {
-  VLMalert(Text,"alert-danger");
+  VLMAlert(Text,"alert-danger");
 }
 
 function VLMAlertInfo(Text)
 {
-  VLMalert(Text,"alert-Info");
+  VLMAlert(Text,"alert-Info");
 }
 
 function VLMAlert(Text,Style)
