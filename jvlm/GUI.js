@@ -1794,7 +1794,7 @@ function InitAlerts()
 
 function VLMAlertSuccess(Text)
 {
-  VLMAlert(Text,"alert-sucess");
+  VLMAlert(Text,"alert-success");
 }
 
 function VLMAlertDanger(Text)
