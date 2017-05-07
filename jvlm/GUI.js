@@ -1781,6 +1781,21 @@ function HandleDDlineClick(e)
   SetDDTheme(Theme);
 }
 
+function VLMAlertSuccess(Text)
+{
+  VLMalert(Text,"alert-sucess");
+}
+
+function VLMAlertDanger(Text)
+{
+  VLMalert(Text,"alert-danger");
+}
+
+function VLMAlertInfo(Text)
+{
+  VLMalert(Text,"alert-Info");
+}
+
 function VLMAlert(Text,Style)
 {
   if (typeof Style === "undefined" || !Style)
