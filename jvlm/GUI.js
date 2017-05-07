@@ -1077,19 +1077,70 @@ function UpdatePrefsDialog(Boat)
 
 }
 
+let RaceSorter = function RaceSortEvaluator (r1, r2)
+{
+  if (r1.CanJoin === r2.CanJoin)
+  {
+    if (r1.deptime > r2.deptime)
+    {
+      return 1;
+    }
+    else if (r1.deptime === r2.deptime)
+    {
+      if (r1.racename > r2.racename)
+      {
+        return -1;
+      }
+      else if (r1.racename === r2.racename)
+      {
+        return 0;
+      }
+      else
+      {
+        return 1;
+      }
+    }
+    else
+    {
+      return -1;
+    }
+    
+  }
+  else if (r1.CanJoin)
+  {
+    return 1;
+  }
+  else
+  {
+    return -1;
+  }
+}
+
 function LoadRacesList()
 {
-  $.get("/ws/raceinfo/list.php",
+  let CurUser = _CurPlayer.CurBoat.IdBoat;
+  $.get("/ws/raceinfo/list.php?iduser="+CurUser,
     function (result)
     {
       var racelist= result;
 
       // Clear previous elements
       $("#RaceListPanel").empty();
-  
+      let RaceArray = [];
       for (index in racelist)
       {
-        AddRaceToList(racelist[index]);
+        if (racelist[index])
+        {
+          RaceArray.push(racelist[index]);
+        }
+      }
+      RaceArray.sort(RaceSorter);
+      for (index in RaceArray)
+      {
+        if (RaceArray[index])
+        {
+          AddRaceToList(RaceArray[index]);
+        }
       }
     }
   )
@@ -1097,22 +1148,23 @@ function LoadRacesList()
 
 function AddRaceToList(race)
 {
-  var base = $("#RaceListPanel").first();
+  let base = $("#RaceListPanel").first();
 
   
-  var d = new Date(0); // The there is the key, which sets the date to the epoch
+  let d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
+  let RaceJoinStateClass = race.CanJoin?'CanJoinRace':'NoJoinRace';
 
-  var code = '<div class="raceheaderline panel panel-default")>' +
-              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
+  let code = '<div class="raceheaderline panel panel-default")>' +
+              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">'+
               '    <div class="col-xs-4">'+
               '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
               '    </div>'+
               '    <div class="col-xs-4">'+
-              '      <span>'+ race.racename +
+              '      <span class="'+RaceJoinStateClass+'">'+ race.racename +
               '      </span>'+
               '    </div>'+
-              '    <div class="col-xs-4">'+
+              '    <div class="'+(race.CanJoin?'':'hidden') +' col-xs-4">'+
               '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
               '      </button>'+
               '    </div>'+
@@ -1123,34 +1175,6 @@ function AddRaceToList(race)
               '     <p>'+ GetLocalizedString('boattype') +' : ' + race.boattype.substring(5) +'</p>'+
               '     <p>'+ GetLocalizedString('crank') +' : '+ race.vacfreq + '\'</p>'+
               '     <p>'+ GetLocalizedString('closerace') + new Date(race.closetime*1000) + '</p>'+
-              /*'     <div id="waypoints">'+
-              '       <h3>Waypoints</h3>'+
-              '         <table class="waypoints">'+
-              '           <tbody>'+
-              '             <tr>'+
-              '               <th>#</th>'+
-              '               <th>Lat1</th>'+
-              '               <th>Lon1</th>'+
-              '               <th>Lat2</th>'+
-              '               <th>Lon2</th>'+
-              '               <th>@</th>'+
-              '               <th>Spec</th>'+
-              '               <th>Type</th>'+
-              '               <th>Name</th>'+
-              '              </tr>'+
-              '              <tr>'+
-              '               <td>WP0</td>'+
-              '               <td>22.210</td>'+
-              '               <td>114.335</td>'+
-              '               <td colspan="2">&nbsp;</td>'+
-              '               <td>&nbsp;</td>'+
-              '               <td>&nbsp;</td>'+
-              '               <td>Départ</td>'+
-              '               <td><span title="" class="wpsymbolbig">↻ ⊅</span></td>'+
-              '             </tr>'+
-              '           </tbody>'+
-              '          </table>'+
-              '       </div>'+*/
               '   </div>'
 
   base.prepend(code);
