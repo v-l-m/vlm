@@ -67,6 +67,5 @@
   {
     $iduser = null;
   }
-  echo "User:".$iduser;
   new JsonRacesIterator($iduser);
 ?>
