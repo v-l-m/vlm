@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'Discontinue'=> 'Discontinue',
     'nds' => 'kts',
     'minutes' => 'minutes',
     'calcestime' => 'Compute track estimate...',
@@ -472,7 +473,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'trackage' => 'Track Aging (h)',
     'tracks' => 'Tracks',
     'unlimited' => 'unlimited',
-    'unsubscribe' => 'Unsubscribe to this race',
+    'unsubscribe' => 'Unsubscribe from this race',
     'usechat' => 'Please use the Chat to communicate, instead of changing your boat name',
     'useremail' => 'Player email adress (to be informed if something goes wrong)',
     'valider' => 'Apply',
@@ -480,7 +481,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'version' => 'Version',
     'vmgsheet' => 'VMG for VLM',
     'wanttosubscribe' => 'If you unscribe, you will be definitely out of the current race.',
-    'warning' => 'Warning, you are engaged in a race, if you give up, it will you can\'t subscribe back in this race',
+    'warning' => 'Warning, you are engaged in a race, discontinuing racing is final. You can\'t subscribe back in this race',
     'weather' => 'Weather',
     'webstandard' => 'Web standards',
     'webstandardtext' => 'This site should be compliant with international web standards (XHTML and CSS). To appreciate it fully, please use a standard-compliant web browser like <a href="http://getfirefox.com">firefox</a>.',

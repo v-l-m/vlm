@@ -272,34 +272,39 @@ function InitMenusAndButtons()
   )
 
   // Init event handlers
-    // Login button click event handler
-    $("#LoginButton").click( 
+  // Login button click event handler
+  $("#LoginButton").click( 
       function()
       {
         OnLoginRequest();
       }
-    );   
+  );   
   //valide par touche retour
-    $('#LoginPanel').keypress(function(e) {
-    if (e.which == '13') {
-        OnLoginRequest();
-        $('#LoginForm').modal('hide');
-    }
-});
-    // Display setting dialog
-    $("#BtnSetting").click(
-      function()
-      {
-        LoadVLMPrefs();
-        SetDDTheme(VLM2Prefs.CurTheme);
-        $("#SettingsForm").modal("show");
+  $('#LoginPanel').keypress(
+    function(e) 
+    {
+      if (e.which == '13') {
+          OnLoginRequest();
+          $('#LoginForm').modal('hide');
       }
-    )
+    }
+  );
+  // Display setting dialog
+  $("#BtnSetting").click(
+    function()
+    {
+      LoadVLMPrefs();
+      SetDDTheme(VLM2Prefs.CurTheme);
+      $("#SettingsForm").modal("show");
+    }
+  )
 
-    // Handle SettingsSave button
-    $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
-    // Handle SettingsSave button
-    $('#SettingCancelButton').click(function()
+  // Handle SettingsSave button
+  $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
+  
+  // Handle SettingsSave button
+  $('#SettingCancelButton').click(
+    function()
     {
       LoadVLMPrefs();
       SetDDTheme(VLM2Prefs.CurTheme);
@@ -358,7 +363,6 @@ function InitMenusAndButtons()
   $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
   $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
   
-
 
   // Init Datetime picker for autopilot
   $('.form_datetime').datetimepicker({
@@ -432,6 +436,9 @@ function InitMenusAndButtons()
   $("#EstimatorStopButton").on('click',HandleStopEstimator)
 
   InitGribSlider();
+
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
   
 }
 
@@ -459,6 +466,25 @@ function HandleGribSlideMove(event, ui )
   handle.text( ui.value);
   let l=GribWindController.getGribmapLayer();
   l.setTimeSegment(new Date()+ui.value*3600*1000);
+}
+
+function HandleDiscontinueRaceRequest()
+{
+  GetUserConfirmation(GetLocalizedString('unsubscribe'),true,HandleRaceDisContinueConfirmation)
+}
+
+function HandleRaceDisContinueConfirmation(State)
+{
+ if (State)
+  {
+    VLMAlertDanger("Not implemented yet...")
+  }
+  else
+  {
+    VLMAlertDanger("Ouf!")
+  }
+   $("#RacesInfoPanel").modal('hide');
+  
 }
 
 function HandleStopEstimator(e)
@@ -1788,6 +1814,7 @@ function HandleDDlineClick(e)
 var AlertTemplate;
 function InitAlerts()
 {
+  // Init default alertbox
   AlertTemplate = $("#AlertBox")[0];
   $("#AlertBoxContainer").empty();
   $("#AlertBoxContainer").removeClass("hidden");
@@ -1824,4 +1851,27 @@ function VLMAlert(Text,Style)
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
   
+}
+
+function GetUserConfirmation(Question,IsYesNo,CallBack)
+{
+  $("#ConfirmDialog").modal('show');
+  if (IsYesNo)
+  {
+    $("#OKBtn").hide();
+    $("#CancelBtn").hide();
+    $("#YesBtn").show();
+    $("#NoBtn").show();
+  }
+  else
+  {
+    $("#OKBtn").show();
+    $("#CancelBtn").show();
+    $("#YesBtn").hide();
+    $("#NoBtn").hide();    
+  }
+  $("#ConfirmText").text(Question);
+  $(".OKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
+  $(".NOKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
+
 }
