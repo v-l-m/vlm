@@ -361,7 +361,6 @@ function InitMenusAndButtons()
   $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
   
 
-
   // Init Datetime picker for autopilot
   $('.form_datetime').datetimepicker({
       language: 'fr',
@@ -432,6 +431,28 @@ function InitMenusAndButtons()
   // Handle Start Boat Estimator button
   $("#StartEstimator").on('click',HandleStartEstimator)
   $("#EstimatorStopButton").on('click',HandleStopEstimator)
+
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+  
+}
+
+function HandleDiscontinueRaceRequest()
+{
+  GetUserConfirmation(GetLocalizedString('unsubscribe'),true,HandleRaceDisContinueConfirmation)
+}
+
+function HandleRaceDisContinueConfirmation(State)
+{
+ if (State)
+  {
+    VLMAlertDanger("Not implemented yet...")
+  }
+  else
+  {
+    VLMAlertDanger("Ouf!")
+  }
+   $("#RacesInfoPanel").modal('hide');
   
 }
 
@@ -1762,6 +1783,7 @@ function HandleDDlineClick(e)
 var AlertTemplate;
 function InitAlerts()
 {
+  // Init default alertbox
   AlertTemplate = $("#AlertBox")[0];
   $("#AlertBoxContainer").empty();
   $("#AlertBoxContainer").removeClass("hidden");
@@ -1798,4 +1820,27 @@ function VLMAlert(Text,Style)
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
   
+}
+
+function GetUserConfirmation(Question,IsYesNo,CallBack)
+{
+  $("#ConfirmDialog").modal('show');
+  if (IsYesNo)
+  {
+    $("#OKBtn").hide();
+    $("#CancelBtn").hide();
+    $("#YesBtn").show();
+    $("#NoBtn").show();
+  }
+  else
+  {
+    $("#OKBtn").show();
+    $("#CancelBtn").show();
+    $("#YesBtn").hide();
+    $("#NoBtn").hide();    
+  }
+  $("#ConfirmText").text(Question);
+  $(".OKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
+  $(".NOKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
+
 }

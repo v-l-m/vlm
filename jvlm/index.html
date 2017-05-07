@@ -1571,7 +1571,7 @@
                   <div class="BCPane tab-pane fade" id="DiscontinueRace">
                       <h3><span I18n="warning"></span></h3>   
                       <h4><span I18n="youengaged"></span> <span class="RaceName"></span></h4>
-                      <button type="button" class="btn btn-danger">
+                      <button id="DiscontinueRaceButton" type="button" class="btn btn-danger">
                         <span I18n="unsubscribe"></span>
                       </button>               
                   </div><!--fin boatinfo-->
@@ -1581,6 +1581,25 @@
            </div>
           <div class="modal-footer">
               <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- set up the modal to start hidden and fade in and out -->
+    <div id="ConfirmDialog" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- dialog body -->
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <span id="ConfirmText"></span>
+          </div>
+          <!-- dialog buttons -->
+          <div class="modal-footer">
+            <button id="NoBtn" type="button" class="NOKBtn btn btn-primary" I18n='no'>Cancel</button>
+            <button id="YesBtn" type="button" class="OKBtn btn btn-primary" I18n='yes'>OK</button>
+            <button id="CancelBtn" type="button" class="NOKBtn btn btn-primary" I18n='Cancel'>Cancel</button>
+            <button id="OKBtn" type="button" class="OKBtn btn btn-primary">OK</button>
           </div>
         </div>
       </div>
