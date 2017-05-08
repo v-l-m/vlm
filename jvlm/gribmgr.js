@@ -282,7 +282,7 @@ function VLM2GribManager()
 
   }
 
-  this.AddGribLoadKey(LoadKey)
+  this.AddGribLoadKey=function(LoadKey)
   {
     if (!(LoadKey in this.LoadQueue))
     {
