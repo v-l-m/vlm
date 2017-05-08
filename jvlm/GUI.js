@@ -483,7 +483,7 @@ function HandleRaceDisContinueConfirmation(State)
   {
     VLMAlertDanger("Ouf!")
   }
-   $("#RacesInfoPanel").modal('hide');
+   $("#RacesInfoForm").modal('hide');
   
 }
 
