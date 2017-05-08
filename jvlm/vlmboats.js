@@ -436,9 +436,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var scale = VLM2Prefs.MapPrefs.PolarVacCount;
   var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT)
   
-  BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000));
+  BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000), function(){DrawBoat(Boat, CenterMapOnBoat);}); 
   //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
-  
+
   var BoatPolar = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(Polar),
     {
@@ -507,7 +507,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   }
 }
 
-function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
+function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,Callback)
 {
   var CurDate = StartDate;
 
@@ -515,7 +515,7 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
   {
     CurDate = new Date().getTime()
   }
-  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value)
+  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value, Callback)
   
   if (MI)
   {
@@ -1124,7 +1124,7 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt) {
   var verb = "pilot_set";
 
   if (typeof _CurPlayer == 'undefined' || typeof _CurPlayer.CurBoat == 'undefined') {
-    alert("Must select a boat to send an order");
+    VLMAlertDanger("Must select a boat to send an order");
     return;
   }
 
@@ -1174,7 +1174,7 @@ function PostBoatSetupOrder(idu, verb, orderdata) {
       }
       else 
       {
-        alert(GetLocalizedString("BoatSetupError") + '\n' + Data.error.code + " " + Data.error.msg)
+        VLMAlertDanger(GetLocalizedString("BoatSetupError") + '\n' + Data.error.code + " " + Data.error.msg)
       }
     });
 
@@ -1194,12 +1194,12 @@ function EngageBoatInRace(RaceID, BoatID) {
       {
         var Msg = GetLocalizedString("youengaged")
         $("#RacesListForm").modal('hide');
-        alert(Msg);
+        VLMAlertSuccess(Msg);
       }
       else
       {
         var Msg = data.error.msg + '\n'+ data.error.custom_error_string;
-        alert(Msg);
+        VLMAlertDanger(Msg);
       }
     }
   );
@@ -1647,7 +1647,7 @@ function UpdateBoatPrefs(Boat,NewVals)
             }
             else
             {
-              alert(GetLocalizedString("UpdateFailed"))
+              VLMAlertDanger(GetLocalizedString("UpdateFailed"))
             };
           }
         )
@@ -1679,6 +1679,6 @@ function HandlePrefsLoaded(e)
   }
   else
   {
-    alert("Error communicating with VLM, try reloading the browser page...")
+    VLMAlertDanger("Error communicating with VLM, try reloading the browser page...")
   }
 }

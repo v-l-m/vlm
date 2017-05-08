@@ -1,50 +1,71 @@
 <?php
 
-    include('config.php');
-    require('racesiterators.class.php');
-    
-    class JsonRacesIterator extends RacesIterator {
-        var $query = "SELECT * FROM races
-                      WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( started = 1 ) )
-                      ORDER BY started ASC, deptime ASC, closetime ASC ";
-        var $jsonarray;
+  include('config.php');
+  require('racesiterators.class.php');
+  
+  class JsonRacesIterator extends RacesIterator {
+    var $query = "SELECT * FROM races
+                  WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( started = 1 ) )
+                  ORDER BY started ASC, deptime ASC, closetime ASC ";
+    var $jsonarray;
 
-        function listing() {
-            $this->start();
-            $res = wrapper_mysql_db_query_reader($this->query) or die("Query [".$this->query."] failed \n");
-            while ($row = mysql_fetch_assoc($res) ) $this->onerow($row);
-            $this->end();
-        }
-
-        function onerow($row) {
-            $row['idraces'] = (int) $row['idraces'];
-            $row['started'] = (int) $row['started'];
-            $row['deptime'] = (int) $row['deptime'];
-            $row['closetime'] = (int) $row['closetime'];
-            $row['startlong'] = (float) $row['startlong']/1000.;
-            $row['startlat'] = (float) $row['startlat']/1000.;
-            $row['racetype'] = (int) $row['racetype'];
-            $row['firstpcttime'] = (int) $row['firstpcttime'];
-            $row['coastpenalty'] = (int) $row['coastpenalty'];
-            $row['bobegin'] = (int) $row['bobegin'];
-            $row['boend'] = (int) $row['boend'];
-            $row['maxboats'] = (int) $row['maxboats'];
-            $row['vacfreq'] = (int) $row['vacfreq'];
-            $row['updated'] = $row['updated'];
-            $this->jsonarray[$row['idraces']] = $row;
-        }
-            
-        function start() {
-            $this->jsonarray = Array();
-        }
-        
-        function end() {
-            echo json_encode($this->jsonarray);
-        }
-
+    function listing() 
+    {
+      $this->start();
+      $res = wrapper_mysql_db_query_reader($this->query) or die("Query [".$this->query."] failed \n");
+      while ($row = mysql_fetch_assoc($res) ) $this->onerow($row);
+      $this->end();
     }
 
-    header('Content-type: application/json; charset=UTF-8');
+    function onerow($row) 
+    {
+      $row['idraces'] = (int) $row['idraces'];
+      $row['started'] = (int) $row['started'];
+      $row['deptime'] = (int) $row['deptime'];
+      $row['closetime'] = (int) $row['closetime'];
+      $row['startlong'] = (float) $row['startlong']/1000.;
+      $row['startlat'] = (float) $row['startlat']/1000.;
+      $row['racetype'] = (int) $row['racetype'];
+      $row['firstpcttime'] = (int) $row['firstpcttime'];
+      $row['coastpenalty'] = (int) $row['coastpenalty'];
+      $row['bobegin'] = (int) $row['bobegin'];
+      $row['boend'] = (int) $row['boend'];
+      $row['maxboats'] = (int) $row['maxboats'];
+      $row['vacfreq'] = (int) $row['vacfreq'];
+      $row['updated'] = $row['updated'];
+      $row['CanJoin'] = in_array($row['idraces'],$this->AvRaces);
+      $this->jsonarray[$row['idraces']] = $row;
+    }
+        
+    function start() 
+    {
+      $this->jsonarray = Array();
 
-    new JsonRacesIterator();
+      if ($this->IdUser)
+      {
+        $this->AvRaces = AvailableRaces($this->IdUser);
+      }
+      else
+      {
+        $this->AvRaces = [];
+      }
+    }
+    
+    function end() 
+    {
+        echo json_encode($this->jsonarray);
+    }
+
+  }
+
+  header('Content-type: application/json; charset=UTF-8');
+  if(array_key_exists('iduser',$_REQUEST))
+  {
+    $iduser=htmlentities(quote_smart($_REQUEST['iduser']));
+  }
+  else
+  {
+    $iduser = null;
+  }
+  new JsonRacesIterator($iduser);
 ?>

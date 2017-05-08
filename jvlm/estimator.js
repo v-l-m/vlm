@@ -88,9 +88,20 @@ function Estimator(Boat)
     this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
     if (this.CurEstimate.Date < new Date())
     {
+      if (typeof this.Boat.RaceInfo === "undefined")
+      {
         // Use cur date for estimate before start
         this.CurEstimate.Date = new Date();
+      }
+      else
+      {
+        // Set Start to 1st VAC after start +6s 
+        let StartDate = new Date(parseInt(this.Boat.RaceInfo.deptime,10)*1000+ 1000* this.Boat.VLMInfo.VAC+6000);
+        this.CurEstimate.Date = StartDate;
+      }
     }
+
+    
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
     this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT)
     this.CurEstimate.HdgAtWP = parseFloat(this.Boat.VLMInfo["H@WP"])

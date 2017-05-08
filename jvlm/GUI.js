@@ -16,6 +16,7 @@ var MAX_PILOT_ORDERS = 5;
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
+var GribWindController = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -99,6 +100,8 @@ $(document).ready(
     
     $('#cp11').colorpicker();
 
+    // Init Alerts
+    InitAlerts();
                            
     // CheckLogin
     CheckLogin();
@@ -108,6 +111,8 @@ $(document).ready(
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
+
+    
    
   }  
 );
@@ -184,7 +189,9 @@ function OLInit() {
     map.addControl(new OpenLayers.Control.KeyboardDefaults());
 
     //Le panel de vent
-    map.addControl(new Gribmap.ControlWind());
+
+    GribWindController = new Gribmap.ControlWind();
+    map.addControl(GribWindController);
 
     //Evite que le zoom molette surcharge le js du navigateur
     var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
@@ -265,34 +272,39 @@ function InitMenusAndButtons()
   )
 
   // Init event handlers
-    // Login button click event handler
-    $("#LoginButton").click( 
+  // Login button click event handler
+  $("#LoginButton").click( 
       function()
       {
         OnLoginRequest();
       }
-    );   
+  );   
   //valide par touche retour
-    $('#LoginPanel').keypress(function(e) {
-    if (e.which == '13') {
-        OnLoginRequest();
-        $('#LoginForm').modal('hide');
-    }
-});
-    // Display setting dialog
-    $("#BtnSetting").click(
-      function()
-      {
-        LoadVLMPrefs();
-        SetDDTheme(VLM2Prefs.CurTheme);
-        $("#SettingsForm").modal("show");
+  $('#LoginPanel').keypress(
+    function(e) 
+    {
+      if (e.which == '13') {
+          OnLoginRequest();
+          $('#LoginForm').modal('hide');
       }
-    )
+    }
+  );
+  // Display setting dialog
+  $("#BtnSetting").click(
+    function()
+    {
+      LoadVLMPrefs();
+      SetDDTheme(VLM2Prefs.CurTheme);
+      $("#SettingsForm").modal("show");
+    }
+  )
 
-    // Handle SettingsSave button
-    $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
-    // Handle SettingsSave button
-    $('#SettingCancelButton').click(function()
+  // Handle SettingsSave button
+  $('#SettingValidateButton').click(SaveBoatAndUserPrefs)
+  
+  // Handle SettingsSave button
+  $('#SettingCancelButton').click(
+    function()
     {
       LoadVLMPrefs();
       SetDDTheme(VLM2Prefs.CurTheme);
@@ -338,7 +350,7 @@ function InitMenusAndButtons()
   $("#BtnCreateAccount").click(
     function()
     {
-      alert("Function not implemented yet");
+      VLMAlert("Function not implemented yet","alert-danger");
     }
   )
 
@@ -351,7 +363,6 @@ function InitMenusAndButtons()
   $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
   $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
   
-
 
   // Init Datetime picker for autopilot
   $('.form_datetime').datetimepicker({
@@ -423,6 +434,56 @@ function InitMenusAndButtons()
   // Handle Start Boat Estimator button
   $("#StartEstimator").on('click',HandleStartEstimator)
   $("#EstimatorStopButton").on('click',HandleStopEstimator)
+
+  InitGribSlider();
+
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+  
+}
+
+function InitGribSlider()
+{
+  let handle = $( "#GribSliderHandle" );
+  $( "#GribSlider" ).slider({
+    orientation: "vertical",
+    min: 0,
+    max: 72,
+    value: 0,
+    create: function() {
+      handle.text( $( this ).slider( "value" ) );
+    },
+    slide: function( event, ui ) {
+      HandleGribSlideMove(event,ui);
+    }
+  });
+  
+};
+
+function HandleGribSlideMove(event, ui )
+{
+  let handle = $( "#GribSliderHandle" );
+  handle.text( ui.value);
+  let l=GribWindController.getGribmapLayer();
+  l.setTimeSegment(new Date()+ui.value*3600*1000);
+}
+
+function HandleDiscontinueRaceRequest()
+{
+  GetUserConfirmation(GetLocalizedString('unsubscribe'),true,HandleRaceDisContinueConfirmation)
+}
+
+function HandleRaceDisContinueConfirmation(State)
+{
+ if (State)
+  {
+    VLMAlertDanger("Not implemented yet...")
+  }
+  else
+  {
+    VLMAlertDanger("Ouf!")
+  }
+   $("#RacesInfoPanel").modal('hide');
   
 }
 
@@ -589,8 +650,8 @@ function DisplayLoggedInMenus(LoggedIn)
     LoggedInDisplay="none";
     LoggedOutDisplay="block";
   }
-  $("ul[LoggedInNav='true']").css("display",LoggedInDisplay);
-  $("ul[LoggedInNav='false']").css("display",LoggedOutDisplay);
+  $("[LoggedInNav='true']").css("display",LoggedInDisplay);
+  $("[LoggedInNav='false']").css("display",LoggedOutDisplay);
   
 }
 
@@ -817,7 +878,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
       break;
 
     default:
-      alert("Unsupported VLM PIM Mode, expect the unexpected....")
+      VLMAlert("Unsupported VLM PIM Mode, expect the unexpected....","alert-info");
       
    }
 
@@ -920,6 +981,11 @@ function ShowAutoPilotLine(Boat,Index)
   var PilOrder=Boat.VLMInfo.PIL[Index-1];
   var OrderDate = new Date(PilOrder.TTS*1000)
   var PIMText = GetPilotModeName(PilOrder.PIM);
+
+  if (typeof $(Id)[0]==="undefined")
+  {
+    let bpkt = 0;
+  }
 
   $(Id)[0].attributes['TID']=PilOrder.TID
   SetSubItemValue(Id,"#PIL_DATE",OrderDate)
@@ -1072,19 +1138,70 @@ function UpdatePrefsDialog(Boat)
 
 }
 
+let RaceSorter = function RaceSortEvaluator (r1, r2)
+{
+  if (r1.CanJoin === r2.CanJoin)
+  {
+    if (r1.deptime > r2.deptime)
+    {
+      return 1;
+    }
+    else if (r1.deptime === r2.deptime)
+    {
+      if (r1.racename > r2.racename)
+      {
+        return -1;
+      }
+      else if (r1.racename === r2.racename)
+      {
+        return 0;
+      }
+      else
+      {
+        return 1;
+      }
+    }
+    else
+    {
+      return -1;
+    }
+    
+  }
+  else if (r1.CanJoin)
+  {
+    return 1;
+  }
+  else
+  {
+    return -1;
+  }
+}
+
 function LoadRacesList()
 {
-  $.get("/ws/raceinfo/list.php",
+  let CurUser = _CurPlayer.CurBoat.IdBoat;
+  $.get("/ws/raceinfo/list.php?iduser="+CurUser,
     function (result)
     {
       var racelist= result;
 
       // Clear previous elements
       $("#RaceListPanel").empty();
-  
+      let RaceArray = [];
       for (index in racelist)
       {
-        AddRaceToList(racelist[index]);
+        if (racelist[index])
+        {
+          RaceArray.push(racelist[index]);
+        }
+      }
+      RaceArray.sort(RaceSorter);
+      for (index in RaceArray)
+      {
+        if (RaceArray[index])
+        {
+          AddRaceToList(RaceArray[index]);
+        }
       }
     }
   )
@@ -1092,22 +1209,23 @@ function LoadRacesList()
 
 function AddRaceToList(race)
 {
-  var base = $("#RaceListPanel").first();
+  let base = $("#RaceListPanel").first();
 
   
-  var d = new Date(0); // The there is the key, which sets the date to the epoch
+  let d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
+  let RaceJoinStateClass = race.CanJoin?'CanJoinRace':'NoJoinRace';
 
-  var code = '<div class="raceheaderline panel panel-default")>' +
-              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed" data-parent="#RaceListPanel" aria-expanded="false">'+
+  let code = '<div class="raceheaderline panel panel-default")>' +
+              '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">'+
               '    <div class="col-xs-4">'+
               '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
               '    </div>'+
               '    <div class="col-xs-4">'+
-              '      <span>'+ race.racename +
+              '      <span class="'+RaceJoinStateClass+'">'+ race.racename +
               '      </span>'+
               '    </div>'+
-              '    <div class="col-xs-4">'+
+              '    <div class="'+(race.CanJoin?'':'hidden') +' col-xs-4">'+
               '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
               '      </button>'+
               '    </div>'+
@@ -1118,34 +1236,6 @@ function AddRaceToList(race)
               '     <p>'+ GetLocalizedString('boattype') +' : ' + race.boattype.substring(5) +'</p>'+
               '     <p>'+ GetLocalizedString('crank') +' : '+ race.vacfreq + '\'</p>'+
               '     <p>'+ GetLocalizedString('closerace') + new Date(race.closetime*1000) + '</p>'+
-              /*'     <div id="waypoints">'+
-              '       <h3>Waypoints</h3>'+
-              '         <table class="waypoints">'+
-              '           <tbody>'+
-              '             <tr>'+
-              '               <th>#</th>'+
-              '               <th>Lat1</th>'+
-              '               <th>Lon1</th>'+
-              '               <th>Lat2</th>'+
-              '               <th>Lon2</th>'+
-              '               <th>@</th>'+
-              '               <th>Spec</th>'+
-              '               <th>Type</th>'+
-              '               <th>Name</th>'+
-              '              </tr>'+
-              '              <tr>'+
-              '               <td>WP0</td>'+
-              '               <td>22.210</td>'+
-              '               <td>114.335</td>'+
-              '               <td colspan="2">&nbsp;</td>'+
-              '               <td>&nbsp;</td>'+
-              '               <td>&nbsp;</td>'+
-              '               <td>Départ</td>'+
-              '               <td><span title="" class="wpsymbolbig">↻ ⊅</span></td>'+
-              '             </tr>'+
-              '           </tbody>'+
-              '          </table>'+
-              '       </div>'+*/
               '   </div>'
 
   base.prepend(code);
@@ -1307,7 +1397,7 @@ function HandleOpenAutoPilotSetPoint(e)
   }
   else
   {
-    alert("Something bad has happened reload this page....");
+    VLMAlert("Something bad has happened reload this page....","alert-danger");
     return;
   }
   switch(TargetId)
@@ -1324,7 +1414,7 @@ function HandleOpenAutoPilotSetPoint(e)
         $("#AutoPilotSettingForm").modal('show');
         break;
       default:
-        alert("Something bad has happened reload this page....");
+        VLMalert("Something bad has happened reload this page....","alert-danger");
         return;
                
     }
@@ -1719,4 +1809,69 @@ function HandleDDlineClick(e)
   var Theme = e.target.attributes['ddtheme'].value;
 
   SetDDTheme(Theme);
+}
+
+var AlertTemplate;
+function InitAlerts()
+{
+  // Init default alertbox
+  AlertTemplate = $("#AlertBox")[0];
+  $("#AlertBoxContainer").empty();
+  $("#AlertBoxContainer").removeClass("hidden");
+}
+
+function VLMAlertSuccess(Text)
+{
+  VLMAlert(Text,"alert-success");
+}
+
+function VLMAlertDanger(Text)
+{
+  VLMAlert(Text,"alert-danger");
+}
+
+function VLMAlertInfo(Text)
+{
+  VLMAlert(Text,"alert-Info");
+}
+
+function VLMAlert(Text,Style)
+{
+  if (typeof Style === "undefined" || !Style)
+  {
+    Style="alert-info";
+  }
+
+  $("#AlertBoxContainer").append(AlertTemplate);
+
+  $("#AlertText").text(Text);
+  $("#AlertBox").removeClass("alert-sucess");
+  $("#AlertBox").removeClass("alert-warning");
+  $("#AlertBox").removeClass("alert-info");
+  $("#AlertBox").removeClass("alert-danger");
+  $("#AlertBox").addClass(Style);
+  
+}
+
+function GetUserConfirmation(Question,IsYesNo,CallBack)
+{
+  $("#ConfirmDialog").modal('show');
+  if (IsYesNo)
+  {
+    $("#OKBtn").hide();
+    $("#CancelBtn").hide();
+    $("#YesBtn").show();
+    $("#NoBtn").show();
+  }
+  else
+  {
+    $("#OKBtn").show();
+    $("#CancelBtn").show();
+    $("#YesBtn").hide();
+    $("#NoBtn").hide();    
+  }
+  $("#ConfirmText").text(Question);
+  $(".OKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
+  $(".NOKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
+
 }

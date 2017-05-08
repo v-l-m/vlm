@@ -283,13 +283,6 @@ function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
   var AlphaRow1;
   var AlphaRow2;
 
-  while (Alpha < 0)
-  {
-    Alpha+=180.;
-  }
-
-  Alpha %= 180.000001;
-
   // Loop and index index <= Speed
   var Polar = PolarObject.SpeedPolar;
   var IntWind = Math.floor(WindSpeed);
@@ -315,9 +308,9 @@ function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
 
   // loop Rows to find angle <= alpha
   Alpha%=360.;
-  if (Alpha > 180)
+  if (Alpha > 180.)
   {
-    Alpha = 360 - Alpha;
+    Alpha = 360. - Alpha;
   }
 
   var IntAlpha = Math.floor(Alpha);
