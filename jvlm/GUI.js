@@ -1822,7 +1822,12 @@ function VLMAlert(Text,Style)
   $("#AlertBox").removeClass("alert-info");
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
-  
+  //setTimeout(AutoCloseVLMAlert,15000); 
+}
+
+function AutoCloseVLMAlert()
+{
+  $("#AlertCloseBox").click();
 }
 
 function GetUserConfirmation(Question,IsYesNo,CallBack)
