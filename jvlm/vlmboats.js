@@ -884,9 +884,6 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords) {
           {
             Dist *= 0.7;
           }
-          finally
-          {
-          }
         }
 
         WP.longitude2 = Dest.Lon.Value;
@@ -991,8 +988,8 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
       console.log("loxo angle: " + P1.GetLoxoCourse(P2));
 
     }*/
-    var P1 = new VLMPosition(lon1, lat1);
-    var P2 = new VLMPosition(lon2, lat2);
+    P1 = new VLMPosition(lon1, lat1);
+    P2 = new VLMPosition(lon2, lat2);
     var MarkerDir = P1.GetLoxoCourse(P2);
     var MarkerPos = P1.ReachDistLoxo(P2, 0.5);
     // Gate has special features, add markers
