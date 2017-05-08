@@ -290,9 +290,13 @@ function VLM2GribManager()
       this.CheckGribLoadedIdx(TableIndex, 180 / this.GribStep-1,LatIdx,callback);
     }
     
+    let LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
+    this.AddGribLoadKey(LoadKey)
 
-    
-    var LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
+  }
+
+  this.AddGribLoadKey(LoadKey)
+  {
     if (!(LoadKey in this.LoadQueue))
     {
       //console.log("requesting " + LoadKey );

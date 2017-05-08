@@ -884,9 +884,6 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords) {
           {
             Dist *= 0.7;
           }
-          finally
-          {
-          }
         }
 
         WP.longitude2 = Dest.Lon.Value;
@@ -991,8 +988,8 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
       console.log("loxo angle: " + P1.GetLoxoCourse(P2));
 
     }*/
-    var P1 = new VLMPosition(lon1, lat1);
-    var P2 = new VLMPosition(lon2, lat2);
+    P1 = new VLMPosition(lon1, lat1);
+    P2 = new VLMPosition(lon2, lat2);
     var MarkerDir = P1.GetLoxoCourse(P2);
     var MarkerPos = P1.ReachDistLoxo(P2, 0.5);
     // Gate has special features, add markers
@@ -1014,7 +1011,7 @@ function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidat
     if (GateType & WP_CROSS_ONCE) 
     {
       // Draw the segment again as dashed line for cross once gates
-      var WP = new OpenLayers.Feature.Vector(
+      WP = new OpenLayers.Feature.Vector(
         new OpenLayers.Geometry.LineString(PointList),
         { type: "crossonce" }
         , null);
@@ -1118,12 +1115,14 @@ function SendVLMBoatWPPos(Boat, P) {
   PostBoatSetupOrder(Boat.IdBoat, 'target_set', orderdata);
 }
 
-function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt) {
-  var request = {};;
+function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt) 
+{
+  var request = {};
 
   var verb = "pilot_set";
 
-  if (typeof _CurPlayer == 'undefined' || typeof _CurPlayer.CurBoat == 'undefined') {
+  if (typeof _CurPlayer === 'undefined' || typeof _CurPlayer.CurBoat === 'undefined') 
+  {
     VLMAlertDanger("Must select a boat to send an order");
     return;
   }
@@ -1193,13 +1192,13 @@ function EngageBoatInRace(RaceID, BoatID)
       
       if (data.success)
       {
-        var Msg = GetLocalizedString("youengaged")
+        let Msg = GetLocalizedString("youengaged")
         $("#RacesListForm").modal('hide');
         VLMAlertSuccess(Msg);
       }
       else
       {
-        var Msg = data.error.msg + '\n'+ data.error.custom_error_string;
+        let Msg = data.error.msg + '\n'+ data.error.custom_error_string;
         VLMAlertDanger(Msg);
       }
     }
@@ -1298,7 +1297,7 @@ function contains(a, obj)
 
 function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 {
-  if (!Boat || typeof Boat.Rankings ==="undefined" || Boat.Rankings.ranking.length ==0)
+  if (!Boat || typeof Boat.Rankings === "undefined" || Boat.Rankings.ranking.length === 0)
   {
     return;
   }
@@ -1316,11 +1315,14 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 
     for (index in friends )
     {
-      var Opp = Boat.Rankings.ranking[friends[index]];
-
-      if (typeof Opp !== 'undefined' && Opp.idusers != Boat.IdBoat)
+      if (friend[index])
       {
-        AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+        let Opp = Boat.Rankings.ranking[friends[index]];
+
+        if ((typeof Opp !== 'undefined') && (Opp.idusers !== Boat.IdBoat))
+        {
+          AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
+        }
       }
     }
   }
@@ -1417,14 +1419,17 @@ function GetClosestOpps(Boat,NbOpps)
 
   for (index in Boat.Rankings.ranking)
   {
-    if (CurWP === Boat.Rankings.ranking[index].nwp)
+    if (Boat.Rankings.ranking[index])
     {
-      var O = 
-        { 
-          id : index,
-          dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
-        }
-      List.push(O);
+      if (CurWP === Boat.Rankings.ranking[index].nwp)
+      {
+        var O = 
+          { 
+            id : index,
+            dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
+          }
+        List.push(O);
+      }
     }
   }
 
