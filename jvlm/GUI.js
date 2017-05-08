@@ -477,7 +477,10 @@ function HandleRaceDisContinueConfirmation(State)
 {
  if (State)
   {
-    VLMAlertDanger("Not implemented yet...")
+    //construct base
+    let BoatId = _CurPlayer.CurBoat.IdBoat;
+    let RaceId = _CurPlayer.CurBoat.Engaged;
+    DiconstinueRace(BoatId,RaceId);
   }
   else
   {
@@ -1850,7 +1853,12 @@ function VLMAlert(Text,Style)
   $("#AlertBox").removeClass("alert-info");
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
-  
+  //setTimeout(AutoCloseVLMAlert,15000); 
+}
+
+function AutoCloseVLMAlert()
+{
+  $("#AlertCloseBox").click();
 }
 
 function GetUserConfirmation(Question,IsYesNo,CallBack)
