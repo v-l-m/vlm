@@ -1315,7 +1315,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 
     for (index in friends )
     {
-      if (friend[index])
+      if (friends[index])
       {
         let Opp = Boat.Rankings.ranking[friends[index]];
 
