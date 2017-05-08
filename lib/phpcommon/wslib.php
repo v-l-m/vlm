@@ -547,6 +547,9 @@ function get_error($code) {
         "ENG01"   => 'the boat is already engaged',
         "ENG02"   => 'the race is not available for engagement',
         "ENG03"   => 'engagement error',
+        "ENG04"   => 'the boat is not currently engaged in a race',
+        "ENG05"   => 'Trying to abandon incorrect race',
+        "ENG06"   => 'Error abondonning race',
 
         //DEBUG
         "DBG01"   => 'debug is required',
