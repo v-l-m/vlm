@@ -1180,12 +1180,13 @@ function PostBoatSetupOrder(idu, verb, orderdata) {
 
 }
 
-function EngageBoatInRace(RaceID, BoatID) {
+function EngageBoatInRace(RaceID, BoatID) 
+{
   $.post("/ws/boatsetup/race_subscribe.php",
     "parms=" + JSON.stringify(
       {
         idu: BoatID,
-        idr: parseInt(RaceID)
+        idr: parseInt(RaceID,10)
       }
     ),
     function (data) {
@@ -1205,6 +1206,29 @@ function EngageBoatInRace(RaceID, BoatID) {
   );
 }
 
+function DiconstinueRace(BoatId,RaceId)
+{
+  $.post("/ws/boatsetup/race_unsubscribe.php",
+    "parms=" + JSON.stringify(
+      {
+        idu: BoatId,
+        idr: parseInt(RaceId,10)
+      }
+    ),
+    function (data) {
+      
+      if (data.success)
+      {
+        VLMAlertSuccess("Bye Bye!");
+      }
+      else
+      {
+        var Msg = data.error.msg + '\n'+ data.error.custom_error_string;
+        VLMAlertDanger(Msg);
+      }
+    }
+  );
+}
 
 function HandleMapZoomEnd(object, element)
 {

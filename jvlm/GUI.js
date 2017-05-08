@@ -446,7 +446,10 @@ function HandleRaceDisContinueConfirmation(State)
 {
  if (State)
   {
-    VLMAlertDanger("Not implemented yet...")
+    //construct base
+    let BoatId = _CurPlayer.CurBoat.IdBoat;
+    let RaceId = _CurPlayer.CurBoat.Engaged;
+    DiconstinueRace(BoatId,RaceId);
   }
   else
   {
