@@ -406,7 +406,6 @@
               <!-- Fin VBVMG debut Pilot-->
               <div class="BCPane tab-pane" id="AutoPilotTab">
                 <div class="BoatControllerRow row">
-                  <div class="container-fluid">
                     <!--<div id='PIL_HEADER' class='row'>
                       <div class='PAHeader col-xs-3'>
                         <span I18N="Human Readable date">..HD</span>
@@ -443,8 +442,9 @@
                      </div>
                     </div>
                     <hr/>-->
+
                   <div class="container-fluid">
-                      <table  class="footable table " data-show-toggle="true" data-expand-first="false">
+                      <table id="PilototoTable"  class="footable table" data-paging="true" data-show-toggle="true" data-expand-first="false">
                         <thead>
                           <tr id="PIL_HEADER">
                             <th data-toggle="true" data-type="html" I18N="Human Readable date">Date</th>
@@ -454,9 +454,7 @@
                             <th data-breakpoints="xs sm" data-type="html">edit</th>
                             <th data-breakpoints="xs sm" data-type="html" I18n='delete'>delet</th>
                           </tr>
-                        </thead>
-                        <tbody>
-                          <tr id="PIL1">
+                          <tr id="PIL_TEMPLATE" class="hidden">
                             <td><span id="PIL_DATE" >_</span></td>
                             <td><span id="PIL_PIM">_</span></td>
                             <td><span id="PIL_PIP" >_</span></td>
@@ -464,16 +462,18 @@
                             <td><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></td>
                             <td><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></td>
                           </tr>
+                        </thead>
+                        <tbody id="PilototoBodyTable">
+                          
                         </tbody>
                       </table> 
                   </div>
-                    <div class="BoatControllerRow row">
-                      <div class="col-sm-4">
-                        <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
-                      </div>
+                  <div class="BoatControllerRow row">
+                    <div class="col-sm-4">
+                      <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
                     </div>
-                  </div>   
-                  </div>  <!--Fin du pilot-->
+                  </div>
+                </div>  <!--Fin du pilot-->
               </div>  <!--Fin de la table-->
             </div>
           </div>

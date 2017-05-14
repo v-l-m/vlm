@@ -435,6 +435,10 @@ function InitMenusAndButtons()
   // Handle race discontinuation request
   $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
   
+  // Init footable                      
+  $('.footable').footable();
+  console.log("Footable Inited.")
+      
 }
 
 function HandleDiscontinueRaceRequest()
@@ -898,42 +902,40 @@ function UpdatePilotInfo(Boat)
   }
 
 // Nothing. Clean-up & hide PIL1 line
-  for (index=1;index < 6; index++)
-  {
-    $('#PIL'+index).hide();
-  } 
+  $("#PilototoBodyTable").empty();
    
 
-  var PIL_TEMPLATE = $("#PIL1");
-
+  let PIL_TEMPLATE = $("#PIL_TEMPLATE");
+  //PIL_TEMPLATE.hide()
+  
   if (Boat.VLMInfo.PIL.length >0)
   {
-    var TableLayoutChange=false;
     for (index in Boat.VLMInfo.PIL)
     {
-      var PilIndex = parseInt(index,10)+1;
-      var PrevIndex = PilIndex -1;
-      var PilLine = $("#PIL"+PilIndex).first();
-      if (!PilLine.length)
+      if (Boat.VLMInfo.PIL[index])
       {
-        PilLine = PIL_TEMPLATE.clone();
-        PilLine.attr('id',"PIL"+PilIndex);
-        
-        PilLine.insertAfter($("#PIL"+PrevIndex));
-        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);
-        
-        TableLayoutChange = true ;
+        var PilIndex = parseInt(index,10)+1;
+        //var PrevIndex = PilIndex -1;
+        var PilLine = $("#PIL"+PilIndex).first();
+        if (!PilLine.length)
+        {
+          PilLine = PIL_TEMPLATE.clone();
+          PilLine.attr('id',"PIL"+PilIndex);
+          
+          $("#PilototoBodyTable").append(PilLine);
+          PilLine.removeClass("hidden");
+          
+        }
       }
-        
-      // Init footable                      
-      $('.footable').footable();
-      
-      $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
-      
-      ShowAutoPilotLine(Boat,PilIndex);
-      PilLine.show();
-    } 
 
+      //PilLine.insertAfter($("#PIL"+PrevIndex));
+      $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);        
+      $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
+        
+      ShowAutoPilotLine(Boat,PilIndex);   
+    } 
+    
+    
     if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
     {
       $("#AutoPilotAddButton").removeClass("hidden");
@@ -964,6 +966,7 @@ function ShowAutoPilotLine(Boat,Index)
   SetSubItemValue(Id,"#PIL_PIM",PIMText)
   SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
   SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+  $(Id).show();
 }
 
 function GetPILIdParentElement(item)
