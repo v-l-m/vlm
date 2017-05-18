@@ -434,10 +434,6 @@ function InitMenusAndButtons()
 
   // Handle race discontinuation request
   $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
-  
-  // Init footable                      
-  $('.footable').footable();
-  console.log("Footable Inited.")
       
 }
 
@@ -945,6 +941,9 @@ function UpdatePilotInfo(Boat)
       $("#AutoPilotAddButton").addClass("hidden");  
     }
   }
+
+  // Init footable                      
+  $('#PilototoTable').footable();
   
   UpdatePilotBadge(Boat);
 }
@@ -1625,7 +1624,7 @@ function FillRankingTable()
   }
 
   $('#Ranking-Panel').show();
-  $('.footable').footable(
+  $('#RankingTable').footable(
     {
       "paging": 
       {
