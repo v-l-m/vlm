@@ -1858,7 +1858,7 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
     $("#NoBtn").hide();    
   }
   $("#ConfirmText").text(Question);
-  $(".OKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
-  $(".NOKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
+  $(".OKBtn").unbind().on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
+  $(".NOKBtn").unbind().on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
 
 }
