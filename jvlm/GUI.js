@@ -442,12 +442,13 @@ function InitMenusAndButtons()
 
 function HandleDiscontinueRaceRequest()
 {
+  $("#RacesInfoForm").modal('hide');
   GetUserConfirmation(GetLocalizedString('unsubscribe'),true,HandleRaceDisContinueConfirmation)
 }
 
 function HandleRaceDisContinueConfirmation(State)
 {
- if (State)
+  if (State)
   {
     //construct base
     let BoatId = _CurPlayer.CurBoat.IdBoat;
@@ -458,7 +459,7 @@ function HandleRaceDisContinueConfirmation(State)
   {
     VLMAlertDanger("Ouf!")
   }
-   $("#RacesInfoPanel").modal('hide');
+
   
 }
 
