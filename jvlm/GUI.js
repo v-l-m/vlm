@@ -435,6 +435,9 @@ function InitMenusAndButtons()
   // Handle race discontinuation request
   $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
       
+  // Init footables                      
+  $('#PilototoTable').footable();
+  
 }
 
 function HandleDiscontinueRaceRequest()
@@ -919,7 +922,7 @@ function UpdatePilotInfo(Boat)
           PilLine.attr('id',"PIL"+PilIndex);
           
           $("#PilototoBodyTable").append(PilLine);
-          PilLine.removeClass("hidden");
+          PilLine.removeClass("hidden").addClass("pilototocol");
           
         }
       }
@@ -930,7 +933,8 @@ function UpdatePilotInfo(Boat)
         
       ShowAutoPilotLine(Boat,PilIndex);   
     } 
-    
+    //$("#PilototoTable").footable({rows:[]});
+  
     
     if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
     {
@@ -942,9 +946,6 @@ function UpdatePilotInfo(Boat)
     }
   }
 
-  // Init footable                      
-  $('#PilototoTable').footable();
-  
   UpdatePilotBadge(Boat);
 }
 

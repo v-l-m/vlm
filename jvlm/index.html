@@ -405,8 +405,7 @@
               </div>
               <!-- Fin VBVMG debut Pilot-->
               <div class="BCPane tab-pane" id="AutoPilotTab">
-                <div class="BoatControllerRow row">
-                  <div class="hidden">
+                <div class="hidden">
                     <table>
                       <tr id="PIL_TEMPLATE" class="hidden">
                         <td><span id="PIL_DATE" >_</span></td>
@@ -418,9 +417,9 @@
                       </tr>
                     </table>
                   </div>
-
-                  <div class="container-fluid BoatControllerRow row">
-                      <table id="#PilototoTable" class="table" data-paging="false" data-show-toggle="true" data-expand-first="false">
+                  <div class="container-fluid">
+                    <div class="BoatControllerRow row">
+                      <table id="PilototoTable" class="table" data-show-toggle="true" data-expand-first="false">
                         <thead>
                           <tr id="PIL_HEADER">
                             <th data-type="date" I18N="Human Readable date">Date</th>
@@ -434,7 +433,7 @@
                         <tbody id="PilototoBodyTable">
                         </tbody>
                       </table> 
-                  </div>
+                    </div>                    
                   <div class="BoatControllerRow row">
                     <div class="col-sm-4">
                       <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
