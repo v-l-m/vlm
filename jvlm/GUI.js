@@ -442,7 +442,6 @@ function InitMenusAndButtons()
 
 function HandleDiscontinueRaceRequest()
 {
-  $("#RacesInfoForm").modal('hide');
   GetUserConfirmation(GetLocalizedString('unsubscribe'),true,HandleRaceDisContinueConfirmation)
 }
 
@@ -454,13 +453,13 @@ function HandleRaceDisContinueConfirmation(State)
     let BoatId = _CurPlayer.CurBoat.IdBoat;
     let RaceId = _CurPlayer.CurBoat.Engaged;
     DiconstinueRace(BoatId,RaceId);
+    $("#ConfirmDialog").modal('hide');
+    $("#RacesInfoForm").modal('hide');
   }
   else
   {
     VLMAlertDanger("Ouf!")
-  }
-
-  
+  }  
 }
 
 function HandleStopEstimator(e)
@@ -1791,9 +1790,11 @@ var AlertTemplate;
 function InitAlerts()
 {
   // Init default alertbox
+  $("#AlertBox").css("display","block")
   AlertTemplate = $("#AlertBox")[0];
   $("#AlertBoxContainer").empty();
   $("#AlertBoxContainer").removeClass("hidden");
+  
 }
 
 function VLMAlertSuccess(Text)
@@ -1813,12 +1814,14 @@ function VLMAlertInfo(Text)
 
 function VLMAlert(Text,Style)
 {
+  // Force closing the previous alert if any
+  AutoCloseVLMAlert();
   if (typeof Style === "undefined" || !Style)
   {
     Style="alert-info";
   }
 
-  $("#AlertBoxContainer").append(AlertTemplate);
+  $("#AlertBoxContainer").empty().append(AlertTemplate).show();
 
   $("#AlertText").text(Text);
   $("#AlertBox").removeClass("alert-sucess");
@@ -1826,12 +1829,15 @@ function VLMAlert(Text,Style)
   $("#AlertBox").removeClass("alert-info");
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
-  //setTimeout(AutoCloseVLMAlert,15000); 
+  $("#AlertBox").show();
+  $("#AlertCloseBox").unbind().on('click',AutoCloseVLMAlert)
+  
+  //setTimeout(AutoCloseVLMAlert,10000); 
 }
 
 function AutoCloseVLMAlert()
 {
-  $("#AlertCloseBox").click();
+  $("#AlertBox").hide();
 }
 
 function GetUserConfirmation(Question,IsYesNo,CallBack)
