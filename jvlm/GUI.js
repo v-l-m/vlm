@@ -77,22 +77,6 @@ $(document).ready(
       }
     )
     
-    $(".logindlgButton").on ('click',
-          function (e)
-          {
-            // Show Login form
-            $("#LoginForm").modal('show');
-          }
-    );
-    
-    $(".logOutButton").on ('click',
-          function (e)
-          {
-            // Logout user
-            Logout();
-          }
-    );
-   
     
     // Handle boat selector selection change
     //
