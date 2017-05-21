@@ -87,17 +87,11 @@ $(document).ready(
     // Init Alerts
     InitAlerts();
                            
-    // CheckLogin
-    CheckLogin();
-
     // Start the page clocks
     setInterval(PageClock,1000);
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
-
-    
-   
   }  
 );
 
@@ -204,6 +198,22 @@ function OLInit() {
 
 function InitMenusAndButtons()
 {
+  $(".logindlgButton").on ('click',
+      function (e)
+      {
+        // Show Login form
+        $("#LoginForm").modal('show');
+      }
+  );
+  
+  $(".logOutButton").on ('click',
+        function (e)
+        {
+          // Logout user
+          Logout();
+        }
+  );
+  
   $( "#Menu" ).menu();
   $( "#Menu" ).hide();
   
@@ -422,7 +432,11 @@ function InitMenusAndButtons()
       
   // Init Pilototo footable, and get pointer to object          
   PilototoFt= FooTable.init("#PilototoTable",{
-    'on':{'postdraw.ft.table':HandleTableDrawComplete}
+    'on':
+    {
+      'postdraw.ft.table':HandleTableDrawComplete,
+      'postinit.ft.table':HandleFooTableInitComplete,
+    }
   });
   
   
@@ -945,6 +959,12 @@ function UpdatePilotInfo(Boat)
 
 
   UpdatePilotBadge(Boat);
+}
+
+function HandleFooTableInitComplete(e,ft)
+{
+    // CheckLogin
+    CheckLogin();
 }
 
 function HandleTableDrawComplete(e,ft)
