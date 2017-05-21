@@ -16,6 +16,7 @@ var MAX_PILOT_ORDERS = 5;
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
+var PilototoFt = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -435,8 +436,11 @@ function InitMenusAndButtons()
   // Handle race discontinuation request
   $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
       
-  // Init footables                      
-  $('#PilototoTable').footable();
+  // Init Pilototo footable, and get pointer to object          
+  PilototoFt= FooTable.init("#PilototoTable",{
+    'on':{'postdraw.ft.table':HandleTableDrawComplete}
+  });
+  
   
 }
 
@@ -893,27 +897,30 @@ function UpdatePolarImages(Boat)
   $("#PolarList").append(HTML);
 }
 
+let DrawingPilototoTable=false;
 function UpdatePilotInfo(Boat)
 {
-  if ((typeof Boat === "undefined") || (!Boat))
+  if ((typeof Boat === "undefined") || (!Boat) || DrawingPilototoTable)
   {
     return;
-  }
-
-// Nothing. Clean-up & hide PIL1 line
-  $("#PilototoBodyTable").empty();
-   
+  }   
 
   let PIL_TEMPLATE = $("#PIL_TEMPLATE");
   //PIL_TEMPLATE.hide()
   
+  /*for (index=1; index <=5 ; index ++)
+  {
+    $("#PIL"+PilIndex).hide();
+  }*/
+
+  PilRows=[];
   if (Boat.VLMInfo.PIL.length >0)
   {
     for (index in Boat.VLMInfo.PIL)
     {
       if (Boat.VLMInfo.PIL[index])
       {
-        var PilIndex = parseInt(index,10)+1;
+        /*var PilIndex = parseInt(index,10)+1;
         //var PrevIndex = PilIndex -1;
         var PilLine = $("#PIL"+PilIndex).first();
         if (!PilLine.length)
@@ -925,15 +932,21 @@ function UpdatePilotInfo(Boat)
           PilLine.removeClass("hidden").addClass("pilototocol");
           
         }
+
+        //PilLine.insertAfter($("#PIL"+PrevIndex));
+        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);        
+        $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
+          
+        ShowAutoPilotLine(Boat,PilIndex);  
+        */
+        var PilLine = GetPilototoTableLigneObject(Boat,index);
+        PilRows.push(PilLine);
       }
 
-      //PilLine.insertAfter($("#PIL"+PrevIndex));
-      $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);        
-      $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
-        
-      ShowAutoPilotLine(Boat,PilIndex);   
+       
     } 
-    //$("#PilototoTable").footable({rows:[]});
+    PilototoFt.loadRows(PilRows)
+    DrawingPilototoTable = true;
   
     
     if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
@@ -946,7 +959,40 @@ function UpdatePilotInfo(Boat)
     }
   }
 
+
   UpdatePilotBadge(Boat);
+}
+
+function HandleTableDrawComplete(e,ft)
+{
+  DrawingPilototoTable = false ;
+}
+
+function GetPilototoTableLigneObject(Boat,Index)
+{
+  let PilOrder=Boat.VLMInfo.PIL[Index];
+  let OrderDate = new Date(PilOrder.TTS*1000)
+  let PIMText = GetPilotModeName(PilOrder.PIM);
+
+  // Force as number and rebase from 1
+  Index = parseInt(Index,10)+1;
+
+  let Ret = {
+      date:OrderDate,
+      PIM:PIMText,
+      PIP:PilOrder.PIP,
+      Status:PilOrder.STS,
+      Edit:$("#EditCellTemplate").first().html().replace('pil_id="1"','pil_id="'+Index+'"'),
+      Delete:$("#DeleteCellTemplate").first().html().replace('pil_id="1"','pil_id="'+Index+'"')
+  }
+  
+  /*$(Id)[0].attributes['TID']=PilOrder.TID
+  SetSubItemValue(Id,"#PIL_DATE",OrderDate)
+  SetSubItemValue(Id,"#PIL_PIM",PIMText)
+  SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
+  SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+  $(Id).show();*/
+  return Ret;
 }
 
 function ShowAutoPilotLine(Boat,Index)
