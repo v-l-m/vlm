@@ -981,13 +981,17 @@ function GetPilototoTableLigneObject(Boat,Index)
   // Force as number and rebase from 1
   Index = parseInt(Index,10)+1;
 
+  // Adapt the template to current order
+  $("#EditCellTemplate .PIL_EDIT").attr('pil_id',Index)
+  $("#DeleteCellTemplate .PIL_DELETE").attr("TID",PilOrder.TID).attr('pil_id',Index)
+
   let Ret = {
       date:OrderDate,
       PIM:PIMText,
       PIP:PilOrder.PIP,
       Status:PilOrder.STS,
-      Edit:$("#EditCellTemplate").first().html().replace('pil_id="1"','pil_id="'+Index+'"'),
-      Delete:$("#DeleteCellTemplate").first().html().replace('pil_id="1"','pil_id="'+Index+'"')
+      Edit:$("#EditCellTemplate").first().html(),
+      Delete:$("#DeleteCellTemplate").first().html()
   }
   
   /*$(Id)[0].attributes['TID']=PilOrder.TID
