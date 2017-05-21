@@ -1832,7 +1832,7 @@ function VLMAlert(Text,Style)
   $("#AlertBox").show();
   $("#AlertCloseBox").unbind().on('click',AutoCloseVLMAlert)
   
-  //setTimeout(AutoCloseVLMAlert,10000); 
+  setTimeout(AutoCloseVLMAlert,15000); 
 }
 
 function AutoCloseVLMAlert()
