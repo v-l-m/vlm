@@ -943,9 +943,7 @@ function UpdatePilotInfo(Boat)
 
        
     } 
-    PilototoFt.loadRows(PilRows)
-    DrawingPilototoTable = true;
-  
+    
     
     if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
     {
@@ -957,7 +955,9 @@ function UpdatePilotInfo(Boat)
     }
   }
 
-
+  PilototoFt.loadRows(PilRows)
+  DrawingPilototoTable = true;
+  
   UpdatePilotBadge(Boat);
 }
 
