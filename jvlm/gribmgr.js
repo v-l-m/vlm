@@ -290,12 +290,12 @@ function VLM2GribManager()
       this.CheckGribLoadedIdx(TableIndex, 180 / this.GribStep-1,LatIdx,callback);
     }
     
-    let LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep 
-    this.AddGribLoadKey(LoadKey)
+    let LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep ;
+    this.AddGribLoadKey(LoadKey, NorthStep, SouthStep, WestStep, EastStep);
 
   }
 
-  this.AddGribLoadKey(LoadKey)
+  this.AddGribLoadKey=function(LoadKey, NorthStep, SouthStep, WestStep, EastStep)
   {
     if (!(LoadKey in this.LoadQueue))
     {
@@ -304,13 +304,6 @@ function VLM2GribManager()
       this.LoadQueue[LoadKey].Length=0;
       $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
-    }
-
-    if (typeof callback !=="undefined" && callback)
-    {
-      this.LoadQueue[LoadKey].CallBacks.push(callback);
-      //console.log("Adding to callback load queue "+ LoadKey + ":"+this.LoadQueue[LoadKey].CallBacks.length);
-      
     }
   }
 

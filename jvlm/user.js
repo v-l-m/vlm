@@ -355,7 +355,7 @@ function GetPlayerInfo()
             
             for (boat in result.fleet)
             {
-              if (typeof _CurPlayer.Fleet[boat]=== "undefined" )  
+              if (typeof _CurPlayer.Fleet[boat] === "undefined" )  
               {
                 _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
                 if ( typeof select == "undefined")
@@ -373,7 +373,7 @@ function GetPlayerInfo()
 
             for (boat in result.fleet_boatsit)
             {
-              if (typeof _CurPlayer.BSFleet[boat]===undefined)
+              if (typeof _CurPlayer.BSFleet[boat] === "undefined")
               {  
                 _CurPlayer.BSFleet[boat]= (new Boat(result.fleet_boatsit[boat]));
               }

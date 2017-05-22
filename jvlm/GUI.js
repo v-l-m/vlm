@@ -16,7 +16,7 @@ var MAX_PILOT_ORDERS = 5;
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
-var GribWindController = null;
+var PilototoFt = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -77,22 +77,6 @@ $(document).ready(
       }
     )
     
-    $(".logindlgButton").on ('click',
-          function (e)
-          {
-            // Show Login form
-            $("#LoginForm").modal('show');
-          }
-    );
-    
-    $(".logOutButton").on ('click',
-          function (e)
-          {
-            // Logout user
-            Logout();
-          }
-    );
-   
     
     // Handle boat selector selection change
     //
@@ -103,17 +87,11 @@ $(document).ready(
     // Init Alerts
     InitAlerts();
                            
-    // CheckLogin
-    CheckLogin();
-
     // Start the page clocks
     setInterval(PageClock,1000);
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
-
-    
-   
   }  
 );
 
@@ -222,6 +200,22 @@ function OLInit() {
 
 function InitMenusAndButtons()
 {
+  $(".logindlgButton").on ('click',
+      function (e)
+      {
+        // Show Login form
+        $("#LoginForm").modal('show');
+      }
+  );
+  
+  $(".logOutButton").on ('click',
+        function (e)
+        {
+          // Logout user
+          Logout();
+        }
+  );
+  
   $( "#Menu" ).menu();
   $( "#Menu" ).hide();
   
@@ -435,34 +429,41 @@ function InitMenusAndButtons()
   $("#StartEstimator").on('click',HandleStartEstimator)
   $("#EstimatorStopButton").on('click',HandleStopEstimator)
 
-  InitGribSlider();
-  
-}
-
-function InitGribSlider()
-{
-  let handle = $( "#GribSliderHandle" );
-  $( "#GribSlider" ).slider({
-    orientation: "vertical",
-    min: 0,
-    max: 72,
-    value: 0,
-    create: function() {
-      handle.text( $( this ).slider( "value" ) );
-    },
-    slide: function( event, ui ) {
-      HandleGribSlideMove(event,ui);
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+      
+  // Init Pilototo footable, and get pointer to object          
+  PilototoFt= FooTable.init("#PilototoTable",{
+    'on':
+    {
+      'postdraw.ft.table':HandleTableDrawComplete,
+      'postinit.ft.table':HandleFooTableInitComplete,
     }
   });
   
-};
+  
+}
 
-function HandleGribSlideMove(event, ui )
+function HandleDiscontinueRaceRequest()
 {
-  let handle = $( "#GribSliderHandle" );
-  handle.text( ui.value);
-  let l=GribWindController.getGribmapLayer();
-  l.setTimeSegment(new Date()+ui.value*3600*1000);
+  GetUserConfirmation(GetLocalizedString('unsubscribe'),true,HandleRaceDisContinueConfirmation)
+}
+
+function HandleRaceDisContinueConfirmation(State)
+{
+  if (State)
+  {
+    //construct base
+    let BoatId = _CurPlayer.CurBoat.IdBoat;
+    let RaceId = _CurPlayer.CurBoat.Engaged;
+    DiconstinueRace(BoatId,RaceId);
+    $("#ConfirmDialog").modal('hide');
+    $("#RacesInfoForm").modal('hide');
+  }
+  else
+  {
+    VLMAlertDanger("Ouf!")
+  }  
 }
 
 function HandleStopEstimator(e)
@@ -896,50 +897,56 @@ function UpdatePolarImages(Boat)
   $("#PolarList").append(HTML);
 }
 
+let DrawingPilototoTable=false;
 function UpdatePilotInfo(Boat)
 {
-  if ((typeof Boat === "undefined") || (!Boat))
+  if ((typeof Boat === "undefined") || (!Boat) || DrawingPilototoTable)
   {
     return;
-  }
+  }   
 
-// Nothing. Clean-up & hide PIL1 line
-  for (index=1;index < 6; index++)
+  let PIL_TEMPLATE = $("#PIL_TEMPLATE");
+  //PIL_TEMPLATE.hide()
+  
+  /*for (index=1; index <=5 ; index ++)
   {
-    $('#PIL'+index).hide();
-  } 
-   
+    $("#PIL"+PilIndex).hide();
+  }*/
 
-  var PIL_TEMPLATE = $("#PIL1");
-
+  PilRows=[];
   if (Boat.VLMInfo.PIL.length >0)
   {
-    var TableLayoutChange=false;
     for (index in Boat.VLMInfo.PIL)
     {
-      var PilIndex = parseInt(index,10)+1;
-      var PrevIndex = PilIndex -1;
-      var PilLine = $("#PIL"+PilIndex).first();
-      if (!PilLine.length)
+      if (Boat.VLMInfo.PIL[index])
       {
-        PilLine = PIL_TEMPLATE.clone();
-        PilLine.attr('id',"PIL"+PilIndex);
-        
-        PilLine.insertAfter($("#PIL"+PrevIndex));
-        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);
-        
-        TableLayoutChange = true ;
-      }
-        
-      // Init footable                      
-      $('.footable').footable();
-      
-      $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
-      
-      ShowAutoPilotLine(Boat,PilIndex);
-      PilLine.show();
-    } 
+        /*var PilIndex = parseInt(index,10)+1;
+        //var PrevIndex = PilIndex -1;
+        var PilLine = $("#PIL"+PilIndex).first();
+        if (!PilLine.length)
+        {
+          PilLine = PIL_TEMPLATE.clone();
+          PilLine.attr('id',"PIL"+PilIndex);
+          
+          $("#PilototoBodyTable").append(PilLine);
+          PilLine.removeClass("hidden").addClass("pilototocol");
+          
+        }
 
+        //PilLine.insertAfter($("#PIL"+PrevIndex));
+        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);        
+        $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
+          
+        ShowAutoPilotLine(Boat,PilIndex);  
+        */
+        var PilLine = GetPilototoTableLigneObject(Boat,index);
+        PilRows.push(PilLine);
+      }
+
+       
+    } 
+    
+    
     if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS)
     {
       $("#AutoPilotAddButton").removeClass("hidden");
@@ -949,8 +956,53 @@ function UpdatePilotInfo(Boat)
       $("#AutoPilotAddButton").addClass("hidden");  
     }
   }
+
+  PilototoFt.loadRows(PilRows)
+  DrawingPilototoTable = true;
   
   UpdatePilotBadge(Boat);
+}
+
+function HandleFooTableInitComplete(e,ft)
+{
+    // CheckLogin
+    CheckLogin();
+}
+
+function HandleTableDrawComplete(e,ft)
+{
+  DrawingPilototoTable = false ;
+}
+
+function GetPilototoTableLigneObject(Boat,Index)
+{
+  let PilOrder=Boat.VLMInfo.PIL[Index];
+  let OrderDate = new Date(PilOrder.TTS*1000)
+  let PIMText = GetPilotModeName(PilOrder.PIM);
+
+  // Force as number and rebase from 1
+  Index = parseInt(Index,10)+1;
+
+  // Adapt the template to current order
+  $("#EditCellTemplate .PIL_EDIT").attr('pil_id',Index)
+  $("#DeleteCellTemplate .PIL_DELETE").attr("TID",PilOrder.TID).attr('pil_id',Index)
+
+  let Ret = {
+      date:OrderDate,
+      PIM:PIMText,
+      PIP:PilOrder.PIP,
+      Status:PilOrder.STS,
+      Edit:$("#EditCellTemplate").first().html(),
+      Delete:$("#DeleteCellTemplate").first().html()
+  }
+  
+  /*$(Id)[0].attributes['TID']=PilOrder.TID
+  SetSubItemValue(Id,"#PIL_DATE",OrderDate)
+  SetSubItemValue(Id,"#PIL_PIM",PIMText)
+  SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
+  SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+  $(Id).show();*/
+  return Ret;
 }
 
 function ShowAutoPilotLine(Boat,Index)
@@ -970,6 +1022,7 @@ function ShowAutoPilotLine(Boat,Index)
   SetSubItemValue(Id,"#PIL_PIM",PIMText)
   SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
   SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
+  $(Id).show();
 }
 
 function GetPILIdParentElement(item)
@@ -1628,7 +1681,7 @@ function FillRankingTable()
   }
 
   $('#Ranking-Panel').show();
-  $('.footable').footable(
+  $('#RankingTable').footable(
     {
       "paging": 
       {
@@ -1793,9 +1846,11 @@ var AlertTemplate;
 function InitAlerts()
 {
   // Init default alertbox
+  $("#AlertBox").css("display","block")
   AlertTemplate = $("#AlertBox")[0];
   $("#AlertBoxContainer").empty();
   $("#AlertBoxContainer").removeClass("hidden");
+  
 }
 
 function VLMAlertSuccess(Text)
@@ -1815,12 +1870,14 @@ function VLMAlertInfo(Text)
 
 function VLMAlert(Text,Style)
 {
+  // Force closing the previous alert if any
+  AutoCloseVLMAlert();
   if (typeof Style === "undefined" || !Style)
   {
     Style="alert-info";
   }
 
-  $("#AlertBoxContainer").append(AlertTemplate);
+  $("#AlertBoxContainer").empty().append(AlertTemplate).show();
 
   $("#AlertText").text(Text);
   $("#AlertBox").removeClass("alert-sucess");
@@ -1828,12 +1885,15 @@ function VLMAlert(Text,Style)
   $("#AlertBox").removeClass("alert-info");
   $("#AlertBox").removeClass("alert-danger");
   $("#AlertBox").addClass(Style);
-  //setTimeout(AutoCloseVLMAlert,15000); 
+  $("#AlertBox").show();
+  $("#AlertCloseBox").unbind().on('click',AutoCloseVLMAlert)
+  
+  setTimeout(AutoCloseVLMAlert,15000); 
 }
 
 function AutoCloseVLMAlert()
 {
-  $("#AlertCloseBox").click();
+  $("#AlertBox").hide();
 }
 
 function GetUserConfirmation(Question,IsYesNo,CallBack)
@@ -1854,7 +1914,7 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
     $("#NoBtn").hide();    
   }
   $("#ConfirmText").text(Question);
-  $(".OKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
-  $(".NOKBtn").on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
+  $(".OKBtn").unbind().on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
+  $(".NOKBtn").unbind().on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
 
 }

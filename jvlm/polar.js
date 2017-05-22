@@ -278,14 +278,14 @@ function PolarManagerClass()
 // Returns the speed at given angle for a polar
 function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
 {
-  var SpeedCol1;
-  var SpeedCol2;
-  var AlphaRow1;
-  var AlphaRow2;
+  let SpeedCol1;
+  let SpeedCol2;
+  let AlphaRow1;
+  let AlphaRow2;
 
   // Loop and index index <= Speed
-  var Polar = PolarObject.SpeedPolar;
-  var IntWind = Math.floor(WindSpeed);
+  let Polar = PolarObject.SpeedPolar;
+  let IntWind = Math.floor(WindSpeed);
 
   if ((typeof PolarObject.WindLookup !== "undefined") &&  (IntWind in PolarObject.WindLookup))
   {
@@ -307,7 +307,16 @@ function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
   SpeedCol2=(SpeedCol1 < Polar[0].length-1)?SpeedCol1+1:SpeedCol1;
 
   // loop Rows to find angle <= alpha
-  Alpha%=360.;
+  while (Alpha < 0)
+  {
+    Alpha += 360.;
+  }
+
+  if (Alpha >= 360)
+  {
+    Alpha%=360.;
+  }
+  
   if (Alpha > 180.)
   {
     Alpha = 360. - Alpha;
@@ -333,9 +342,17 @@ function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
   }
   AlphaRow2=(AlphaRow1< Polar.length-1)?AlphaRow1+1:AlphaRow1;
 
-  var v1 = GetAvgValue(WindSpeed,Polar[0][SpeedCol1], Polar[0][SpeedCol2],Polar[AlphaRow1][SpeedCol1], Polar[AlphaRow1][SpeedCol2]);
-  var v2 = GetAvgValue(WindSpeed,Polar[0][SpeedCol1], Polar[0][SpeedCol2],Polar[AlphaRow2][SpeedCol1], Polar[AlphaRow2][SpeedCol2]);
-  return  GetAvgValue(Alpha,Polar[AlphaRow1][0], Polar[AlphaRow2][0],v1,v2);   
+  let v1 = GetAvgValue(WindSpeed,Polar[0][SpeedCol1], Polar[0][SpeedCol2],Polar[AlphaRow1][SpeedCol1], Polar[AlphaRow1][SpeedCol2]);
+  let v2 = GetAvgValue(WindSpeed,Polar[0][SpeedCol1], Polar[0][SpeedCol2],Polar[AlphaRow2][SpeedCol1], Polar[AlphaRow2][SpeedCol2]);
+  let RetValue=  GetAvgValue(Alpha,Polar[AlphaRow1][0], Polar[AlphaRow2][0],v1,v2);   
+
+  if (isNaN(RetValue))
+  {
+    // Start over for debugging (will crash the stack!!)
+    // GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
+    throw "GetAvgValue was NaN"
+  }
+  return RetValue;
 
 }
 
