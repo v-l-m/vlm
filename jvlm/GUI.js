@@ -167,7 +167,9 @@ function OLInit() {
     map.addControl(new OpenLayers.Control.KeyboardDefaults());
 
     //Le panel de vent
-    map.addControl(new Gribmap.ControlWind());
+
+    GribWindController = new Gribmap.ControlWind();
+    map.addControl(GribWindController);
 
     //Evite que le zoom molette surcharge le js du navigateur
     var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];

@@ -515,7 +515,7 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
   {
     CurDate = new Date().getTime()
   }
-  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value)
+  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value, Callback)
   
   if (MI)
   {
