@@ -460,7 +460,7 @@ a.ui-button:active,
 .dropdown-menu {
   background-color:#172A08 ;
 }
-#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel,#ConfirmDialogPanel{
+#LoginPanel, #SettingsPanel, #InscriptPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel,#ConfirmDialogPanel{
 background-color:#172A08 ;
 }
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {

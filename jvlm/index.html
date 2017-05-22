@@ -698,10 +698,10 @@
             </div>          
           <div class="row container-fluid" style="padding-top:20px">
             <span I18n="PleaseCreateDlg">plsc</span>
-            <button id="BtnCreateAccount" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
+            <button href="#InscriptForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
           </div> </div>
         <div class="modal-footer">
-          <button type="submit" id="LoginButton" I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
+          <button type="submit" id="LoginButton"  I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
         </div>
       </div>
 
@@ -1570,6 +1570,55 @@
         </div>
       </div>
     </div>
+    <!-- set up the modal for new inscription -->
+        <div id="InscriptForm" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div id="InscriptPanel" class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 I18n="Inscription" class="modal-title" style="text-align:center">Inscription</h4>
+                </div> 
+                <div class="modal-body">
+                  <div class="row container-fluid">
+                    <div class="col-xs-12">
+                      <div class="row">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="pseudo">Pseudo :</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input  class="UserName " size="15" maxlength="64" name="pseudo" >
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="email">Adresse mail :</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input  class="UserMail" size="15" maxlength="64" name="mail" >
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="password">Mot de passe :</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+                        </div>
+                      </div>
+                      <p>Le pseudo doit comporter au moins 4 caractères.<br>
+                      Le mot de passe ne peut pas être vide.<br>
+                      Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _<br>
+                      </p>
+                    </div>    
+                   </div> 
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>
+                </div>
+              </div>
+          </div>
+        </div>
     <script src="config.js" type="text/javascript"></script>
     <script src='prefmgr.js' type='text/javascript'></script>
     <script src="localize.js" type='text/javascript'></script>

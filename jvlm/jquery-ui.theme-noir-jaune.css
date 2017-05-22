@@ -493,7 +493,7 @@ a.ui-button:active,
 .dropdown-menu {
   background-color:#15214b;
 }
-#LoginPanel, #SettingsPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel,#ConfirmDialogPanel{
+#LoginPanel, #SettingsPanel, #InscriptPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel,#ConfirmDialogPanel{
   background-color:#070B18;
 }
 
