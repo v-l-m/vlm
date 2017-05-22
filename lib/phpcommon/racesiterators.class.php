@@ -6,7 +6,7 @@
   {
     var $query = "SELECT * FROM races";
 
-    function __construct($iduser) 
+    function __construct($iduser=-1) 
     {
       $this->IdUser = $iduser;
       $this->listing();
