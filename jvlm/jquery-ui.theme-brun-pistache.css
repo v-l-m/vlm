@@ -283,7 +283,7 @@ a.ui-button:active,
 .dropdown-menu {
   background-color:#201913;
 }
-#LoginPanel, #SettingsPanel, #InscriptPanel, #RacesListPanel ,#AutoPilotSettingDlg, #RacesInfoPanel #ConfirmDialogPanel{
+.modaldialog{
 background-color:#201913;
 }
 .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
