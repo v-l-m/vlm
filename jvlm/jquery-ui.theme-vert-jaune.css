@@ -279,6 +279,9 @@ a.ui-button:active,
     border:1px solid #edecba;
     background-color:#172A08;
 }
+.navbar-inverse {
+    background-color: #172A08;
+}
 .dropdown-menu {
   background-color:#172A08 ;
 }
