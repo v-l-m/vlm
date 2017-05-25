@@ -13,11 +13,11 @@ const VLM_COORDS_FACTOR = 1000
 // Default map options
 var MapOptions = 
 {
-  // Projection mercator sphérique (type google map ou osm)
+  // Projection mercator sphÃ©rique (type google map ou osm)
   projection: new OpenLayers.Projection("EPSG:900913"),
-  // projection pour l'affichage des coordonnées
+  // projection pour l'affichage des coordonnÃ©es
   displayProjection: new OpenLayers.Projection("EPSG:4326"),
-  // unité : le m
+  // unitÃ© : le m
   units: "m",
   maxResolution: 156543.0339,
   maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
@@ -395,7 +395,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
         if (PrevLon && PrevLon * Est.Position.Lon.Value < 0 && Math.abs (PrevLon * Est.Position.Lon.Value)>90)
         {
-          // Anté crossing, split track
+          // AntÃ© crossing, split track
           TrackIndex = 1;
           Boat.Estimator.EstimatePoints[1] = [];
           Boat.Estimator.EstimatePoints.push(P1_PosTransformed);
@@ -515,7 +515,7 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
   {
     CurDate = new Date().getTime()
   }
-  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value, Callback)
+  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value)
   
   if (MI)
   {
