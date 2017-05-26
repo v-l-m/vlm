@@ -95,9 +95,20 @@ function InitLocale(Lang)
 
 function HTMLDecode(String)
 {
-  var txt = document.createElement("textarea");
+  let txt = document.createElement("textarea");
   txt.innerHTML = String;
-  return txt.value.replace("\n","<br>");
+  let RetString = txt.value;
+  let EOLSigns = ["\n\r","\r\n","\n","\r"]
+
+  for (index in EOLSigns)
+  {
+    while (EOLSigns[index] && RetString.indexOf(EOLSigns[index]) !== -1)
+    {
+      RetString = RetString.replace(EOLSigns[index],"<br>");
+    }
+  } 
+
+  return RetString;
 }
 
 function GetLocalizedString(StringId)
