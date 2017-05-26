@@ -593,11 +593,11 @@
         <fieldset>
           <legend class="ui-legend">Infos course</legend>
             <div class="affich">
-              Durée Vac : <span class="badge"> 5 </span> min
+              <span i18n="crank" >Durée Vac</span> : <span class="badge"> 5 </span> min
             </div>
             <div class="affich">
-              <label for="VacPol">Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" min="1" max="120" value="1" id="VacPol" style="width:50px">
+              <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
+              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
             </div>
         </fieldset>
       </div>
@@ -1577,14 +1577,14 @@
             <div id="InscriptPanel" class="modaldialog modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 I18n="Inscription" class="modal-title" style="text-align:center">Inscription</h4>
+                  <h4 I18n="Registration" class="modal-title" style="text-align:center">Inscription</h4>
                 </div> 
                 <div class="modal-body">
                   <div class="row container-fluid">
                     <div class="col-xs-12">
                       <div class="row">
                         <div class="col-xs-6" align="center">
-                          <span I18n="pseudo">Pseudo :</span>
+                          <span I18n="playername">Pseudo :</span>
                         </div>
                         <div class="col-xs-6">
                           <input  class="UserName " size="15" maxlength="64" name="pseudo" >
@@ -1606,10 +1606,10 @@
                           <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
                         </div>
                       </div>
-                      <p>Le pseudo doit comporter au moins 4 caractères.<br>
-                      Le mot de passe ne peut pas être vide.<br>
-                      Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _<br>
-                      </p>
+                      <div class="row">
+                        <span I18n="createaccountrules"> Le pseudo ... le mot de passe) sont: a-z 0-9 _<br>
+                        </span>
+                      </div>
                     </div>    
                    </div> 
                 </div>
