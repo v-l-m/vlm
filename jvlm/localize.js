@@ -97,7 +97,7 @@ function HTMLDecode(String)
 {
   var txt = document.createElement("textarea");
   txt.innerHTML = String;
-  return txt.value;
+  return txt.value.replace("\n","<br>");
 }
 
 function GetLocalizedString(StringId)
