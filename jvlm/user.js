@@ -264,10 +264,11 @@ function CheckLogin(GuiRequest = false)
             }
             else if (GuiRequest)
             {
-              VLMAlertDanger(GetLocalizedString("authfailed"))
-              $("#LoginForm").modal("show")
+              VLMAlertDanger(GetLocalizedString("authfailed"));
+              $(".UserPassword").value = "";
+              // Reopened login dialog
+              setTimeout(()=>{$("#LoginForm").modal ("hide").modal("show")},1000);
 
-              // TODO add current info cleating method call
             }
             HidePb("#PbLoginProgress");
             DisplayLoggedInMenus(_IsLoggedIn);

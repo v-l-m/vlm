@@ -1897,10 +1897,15 @@ function VLMAlertInfo(Text)
   VLMAlert(Text,"alert-Info");
 }
 
+let AlertIntervalId = null;
+
 function VLMAlert(Text,Style)
 {
-  // Force closing the previous alert if any
-  AutoCloseVLMAlert();
+  if (AlertIntervalId)
+  {
+    clearInterval(AlertIntervalId);
+  } 
+
   if (typeof Style === "undefined" || !Style)
   {
     Style="alert-info";
@@ -1916,8 +1921,12 @@ function VLMAlert(Text,Style)
   $("#AlertBox").addClass(Style);
   $("#AlertBox").show();
   $("#AlertCloseBox").unbind().on('click',AutoCloseVLMAlert)
-  
-  setTimeout(AutoCloseVLMAlert,15000); 
+
+  if (AlertIntervalId)
+  {
+    clearInterval(AlertIntervalId);
+  }  
+  AlertIntervalId = setTimeout(AutoCloseVLMAlert,5000); 
 }
 
 function AutoCloseVLMAlert()
