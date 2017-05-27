@@ -265,7 +265,7 @@ function CheckLogin(GuiRequest = false)
             else if (GuiRequest)
             {
               VLMAlertDanger(GetLocalizedString("authfailed"));
-              $(".UserPassword").value = "";
+              $(".UserPassword").val( "");
               // Reopened login dialog
               setTimeout(()=>{$("#LoginForm").modal ("hide").modal("show")},1000);
 

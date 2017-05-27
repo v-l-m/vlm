@@ -23,6 +23,8 @@ var PilototoFt = null;
 $(document).ready(
   function(){
 
+    ///////////////////////////////////////////////////
+    //
     //Debug only this should not stay when releasing
     //
     //$("#TestGrib").click(HandleGribTestClick)
@@ -33,6 +35,19 @@ $(document).ready(
     //
     ///////////////////////////////////////////////////
 
+    // Setup global ajax error handling
+    //setup ajax error handling
+    $.ajaxSetup({
+        error: function (x, status, error) {
+            if (x.status == 403) {
+                //on access denied try reviving the session
+                OnLoginRequest();
+            }
+            else {
+                VLMAlertDanger("An error occurred: " + status + "nError: " + error);
+            }
+        }
+    });
     // Start converse
     //InitXmpp();
 
