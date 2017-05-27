@@ -1,6 +1,8 @@
 <?php
 $strings['fr'] = 
   array (
+    'PolarVacSize' => 'Nb Vac polaire',
+    'Registration' => 'Inscription',
     'Discontinue'=> 'Abandon',
     'nds' => 'nds',
     'minutes' => 'minutes',

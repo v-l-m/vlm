@@ -60,9 +60,9 @@
       </div>
     </div>
     <!-- Zone de boite d'alertes -->
-    <div id="AlertBoxContainer" class="hidden container-fluid">
-      <div id="AlertBox" class="alert  alert-dismissable fade in" style="{display:none}">
-        <a id="AlertCloseBox" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div id="AlertBoxContainer" class="alertbox hidden container-fluid">
+      <div id="AlertBox" class="alert fade in" >
+        <a id="AlertCloseBox" href="#" aria-label="close">&times;</a>
         <strong><span id="AlertText">Success!</span></strong>
       </div>
     </div>
@@ -85,7 +85,7 @@
           <a class="navbar-brand" href="/" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v9</div>
+              <div class="version">v10</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left"> 
@@ -405,75 +405,44 @@
               </div>
               <!-- Fin VBVMG debut Pilot-->
               <div class="BCPane tab-pane" id="AutoPilotTab">
-                <div class="BoatControllerRow row">
+                <div class="hidden">
+                    <table>
+                      <tr id="PIL_TEMPLATE" class="hidden">
+                        <td><span id="PIL_DATE" >_</span></td>
+                        <td><span id="PIL_PIM">_</span></td>
+                        <td><span id="PIL_PIP" >_</span></td>
+                        <td><span id="PIL_STATUS">_</span></td>
+                        <td><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></td>
+                        <td><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></td>
+                      </tr>
+
+                    </table>
+                    <span id="EditCellTemplate"><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" ></img></span>
+                    <span id="DeleteCellTemplate"><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" ></img></span>                      
+                  </div>
                   <div class="container-fluid">
-                    <!--<div id='PIL_HEADER' class='row'>
-                      <div class='PAHeader col-xs-3'>
-                        <span I18N="Human Readable date">..HD</span>
-                      </div>
-                      <div class='PAHeader col-xs-2'>
-                        <span >Mode pilotage</span>
-                      </div>
-                      <div class='PAHeader col-xs-4'>
-                        <span I18n="AP_OrderParam">Prochain cap</span>
-                      </div>
-                      <div class='PAHeader col-xs-1'>
-                        <span I18n="status">Status</span>
-                      </div>
-                    </div>
-                    <div id='PIL1' class='row'>
-                      <div class='col-xs-3'>
-                        <span id='PIL_DATE' >10 Oct 2016 22:06</span>
-                      </div>
-                      <div class='col-xs-2'>
-                        <span id='PIL_PIM'></span>
-                      </div>
-                      <div class='col-xs-4'>
-                        <span id='PIL_PIP' ></span>
-                      </div>
-                      <div class='col-xs-1'>
-                        <span id='PIL_STATUS'>Status</span>
-                      </div>
-                      <div class="col-xs-1">
-                        <img class='PIL_EDIT' src="images/edit.png" alt=""/>
-                      </div>
-                      <div class="col-xs-1">
-                        <img class='PIL_DELETE' src="images/delete.png" alt="">
-                      </div>
-                     </div>
-                    </div>
-                    <hr/>-->
-                  <div class="container-fluid">
-                      <table  class="footable table " data-show-toggle="true" data-expand-first="false">
+                    <div class="BoatControllerRow row">
+                      <table id="PilototoTable" class="table" data-show-toggle="true" data-expand-first="false">
                         <thead>
                           <tr id="PIL_HEADER">
-                            <th data-toggle="true" data-type="html" I18N="Human Readable date">Date</th>
-                            <th data-breakpoints="xs sm" data-type="html">PIM</th>
-                            <th data-breakpoints="xs sm" data-type="html" I18n="AP_OrderParam">PIP</th>
-                            <th data-breakpoints="xs sm" data-type="html" I18n="Status">Statut</th>
-                            <th data-breakpoints="xs sm" data-type="html">edit</th>
-                            <th data-breakpoints="xs sm" data-type="html" I18n='delete'>delet</th>
-                          </tr>
+                            <th data-name="date" data-type="date" I18N="Human Readable date">Date</th>
+                            <th data-name="PIM" data-breakpoints="xs sm" >PIM</th>
+                            <th data-name="PIP" data-breakpoints="xs "  I18n="AP_OrderParam">PIP</th>
+                            <th data-name="Status" data-breakpoints="xs sm"  I18n="Status">Statut</th>
+                            <th data-name="Edit" data-breakpoints="xs sm" data-type="html">edit</th>
+                            <th data-name="Delete" data-breakpoints="xs sm" data-type="html" I18n='delete'>delet</th>
+                          </tr>                          
                         </thead>
-                        <tbody>
-                          <tr id="PIL1">
-                            <td><span id="PIL_DATE" >_</span></td>
-                            <td><span id="PIL_PIM">_</span></td>
-                            <td><span id="PIL_PIP" >_</span></td>
-                            <td><span id="PIL_STATUS">_</span></td>
-                            <td><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></td>
-                            <td><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></td>
-                          </tr>
+                        <tbody id="PilototoBodyTable">
                         </tbody>
                       </table> 
-                  </div>
-                    <div class="BoatControllerRow row">
-                      <div class="col-sm-4">
-                        <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
-                      </div>
+                    </div>                    
+                  <div class="BoatControllerRow row">
+                    <div class="col-sm-4">
+                      <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
                     </div>
-                  </div>   
-                  </div>  <!--Fin du pilot-->
+                  </div>
+                </div>  <!--Fin du pilot-->
               </div>  <!--Fin de la table-->
             </div>
           </div>
@@ -539,7 +508,7 @@
        <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
         <div class="container-fluid">
-          <table  class="footable table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
+          <table id="RankingTable"  class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
             <thead>
               <tr id="RankingTableHeader">
                 <th data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
@@ -606,11 +575,11 @@
         <fieldset>
           <legend class="ui-legend">Infos course</legend>
             <div class="affich">
-              Durée Vac : <span class="badge"> 5 </span> min
+              <span i18n="crank" >Durée Vac</span> : <span class="badge"> 5 </span> min
             </div>
             <div class="affich">
-              <label for="VacPol">Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" min="1" max="120" value="1" id="VacPol" style="width:50px">
+              <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
+              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
             </div>
         </fieldset>
       </div>
@@ -736,9 +705,6 @@
               EstDate.                
             </legend>
           </div>
-          <div class="hidden col-xs-2">
-            <img class="hidden" src="images/Fleche.png" alt="vent" height="40px" width="20px"/>
-          </div>
           <div class="col-xs-12">
             <span id="MI_EstDate"></span>                      
           </div>
@@ -750,7 +716,7 @@
     <div class="modal-dialog">
 
       <!-- Modal content-->
-      <div id="LoginPanel" class="modal-content">
+      <div id="LoginPanel" class="modaldialog modal-content">
               
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -789,10 +755,10 @@
             </div>          
           <div class="row container-fluid" style="padding-top:20px">
             <span I18n="PleaseCreateDlg">plsc</span>
-            <button id="BtnCreateAccount" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
+            <button href="#InscriptForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
           </div> </div>
         <div class="modal-footer">
-          <button type="submit" id="LoginButton" I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
+          <button type="submit" id="LoginButton"  I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
         </div>
       </div>
 
@@ -802,7 +768,7 @@
     <div id="SettingsForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
-          <div class="modal-content" id="SettingsPanel">              
+          <div class="modaldialog modal-content" id="SettingsPanel">              
             <div class="modal-header">
               <div class="col-xs-7">
               <h4 align="center" I18n="change" class="modal-title">Préférences</h4>
@@ -1420,7 +1386,7 @@
     <div id="AutoPilotSettingForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
           <!-- Modal content-->
-          <div class="modal-content" id="AutoPilotSettingDlg">              
+          <div class="modaldialog modal-content" id="AutoPilotSettingDlg">              
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 align="center" I18n="pilototo_prog_title" class="modal-title">Pilot</h4>
@@ -1520,7 +1486,7 @@
     <div id="RacesListForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
-        <div id="RacesListPanel" class="modal-content">
+        <div id="RacesListPanel" class="modaldialog modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>
@@ -1539,7 +1505,7 @@
     <div id="RacesInfoForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
-        <div id="RacesInfoPanel" class="modal-content">
+        <div id="RacesInfoPanel" class="modaldialog modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo : B2B</h4>
@@ -1628,7 +1594,7 @@
                   <div class="BCPane tab-pane fade" id="DiscontinueRace">
                       <h3><span I18n="warning"></span></h3>   
                       <h4><span I18n="youengaged"></span> <span class="RaceName"></span></h4>
-                      <button id="DiscontinueRaceButton" type="button" class="btn btn-danger">
+                      <button id="DiscontinueRaceButton" type="button" class="ui-button ui-corner-all btn btn-danger">
                         <span I18n="unsubscribe"></span>
                       </button>               
                   </div><!--fin boatinfo-->
@@ -1645,22 +1611,71 @@
     <!-- set up the modal to start hidden and fade in and out -->
     <div id="ConfirmDialog" class="modal fade" role="dialog">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div id="ConfirmDialogPanel" class="modaldialog modal-abandon modal-content">
           <!-- dialog body -->
-          <div class="modal-body">
+          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <span id="ConfirmText"></span>
           </div>
           <!-- dialog buttons -->
           <div class="modal-footer">
-            <button id="NoBtn" type="button" class="NOKBtn btn btn-primary" I18n='no'>Cancel</button>
-            <button id="YesBtn" type="button" class="OKBtn btn btn-primary" I18n='yes'>OK</button>
-            <button id="CancelBtn" type="button" class="NOKBtn btn btn-primary" I18n='Cancel'>Cancel</button>
-            <button id="OKBtn" type="button" class="OKBtn btn btn-primary">OK</button>
+            <button id="NoBtn" type="button" class="NOKBtn btn btn-primary ui-button ui-corner-all" I18n='no'>Cancel</button>
+            <button id="YesBtn" type="button" class="OKBtn btn btn-primary ui-button ui-corner-all" I18n='yes'>OK</button>
+            <button id="CancelBtn" type="button" class="NOKBtn btn btn-primary ui-button ui-corner-all" I18n='Cancel'>Cancel</button>
+            <button id="OKBtn" type="button" class="OKBtn btn btn-primary ui-button ui-corner-all">OK</button>
           </div>
         </div>
       </div>
     </div>
+    <!-- set up the modal for new inscription -->
+        <div id="InscriptForm" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div id="InscriptPanel" class="modaldialog modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 I18n="Registration" class="modal-title" style="text-align:center">Inscription</h4>
+                </div> 
+                <div class="modal-body">
+                  <div class="row container-fluid">
+                    <div class="col-xs-12">
+                      <div class="row">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="playername">Pseudo :</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input  class="UserName " size="15" maxlength="64" name="pseudo" >
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="email">Adresse mail :</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input  class="UserMail" size="15" maxlength="64" name="mail" >
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-6" align="center">
+                          <span I18n="password">Mot de passe :</span>
+                        </div>
+                        <div class="col-xs-6">
+                          <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+                        </div>
+                      </div>
+                      <div class="row">
+                        <span I18n="createaccountrules"> Le pseudo ... le mot de passe) sont: a-z 0-9 _<br>
+                        </span>
+                      </div>
+                    </div>    
+                   </div> 
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>
+                </div>
+              </div>
+          </div>
+        </div>
     <script src="config.js" type="text/javascript"></script>
     <script src='prefmgr.js' type='text/javascript'></script>
     <script src="localize.js" type='text/javascript'></script>

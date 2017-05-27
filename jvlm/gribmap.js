@@ -167,8 +167,8 @@ Gribmap.WindLevel = OpenLayers.Class({
         var left = this.getGribLeftLimit(lon);
         var bottom = this.getGribBottomLimit(lat);
         var wa = new Gribmap.WindArea(left, bottom, this);
-        //on n'appelle pas checkWindArea car on suppose que c'est déjà OK.
-        //mais on mets ça dans une clausse d'exception pour ne pas avoir de soucis
+        //on n'appelle pas checkWindArea car on suppose que c'est dÃ©jÃ  OK.
+        //mais on mets Ã§a dans une clausse d'exception pour ne pas avoir de soucis
         try {
             var w_area = this.windAreas[wa.toString()];
             if (typeof w_area !== "undefined" && w_area != null)
@@ -697,9 +697,9 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
           windarea = bl[i]; //la zone
 
-          if (!windarea.isLoaded(this.gribtimeBefore) || !windarea.isLoaded(this.gribtimeAfter)) continue; //pas chargé, on passe
+          if (!windarea.isLoaded(this.gribtimeBefore) || !windarea.isLoaded(this.gribtimeAfter)) continue; //pas chargÃ©, on passe
 
-          //Passe en sphérique
+          //Passe en sphÃ©rique
           bounds = windarea.clone();
           bounds.transform(
                     new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
@@ -710,13 +710,13 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
           start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
           end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
 
-          //réaligne le premier pixel de la zone
+          //rÃ©aligne le premier pixel de la zone
           start.x -= posstart.x;
           start.y -= posstart.y;
           end.x -= posstart.x;
           end.y -= posstart.y;
 
-          //aligne le début des flêches a un multiple de la grille
+          //aligne le dÃ©but des flÃªches a un multiple de la grille
           start.x = Math.ceil(start.x/this.arrowstep)*this.arrowstep;
           start.y = Math.ceil(start.y/this.arrowstep)*this.arrowstep;
 
@@ -771,12 +771,12 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       var wante = windarea.windArrays[this.gribtimeBefore];
       var wpost = windarea.windArrays[this.gribtimeAfter];
 
-      //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
+      //FIXME: faire un bench pour comparer le cas de re crÃ©ation d'objet Pixel()
 
       while (p.x < poslimit.x) {
-          p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
+          p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le rÃ©injecter...
           while (p.y < poslimit.y) {
-              //passage du pixel en latlon (géographique)
+              //passage du pixel en latlon (gÃ©ographique)
               LonLat = this.map.getLonLatFromPixel(p).transform(
                     new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
                     new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
@@ -943,7 +943,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
           text_y -= 7 - 5*Math.cos(wind_direction*Math.PI/180.0);
       }
       context.fillText(""+Math.round(pos_wind.wspeed)+"/"
-           +Math.round(wind_direction)+"°",
+           +Math.round(wind_direction)+"Â°",
            text_x, text_y);
   },
 
