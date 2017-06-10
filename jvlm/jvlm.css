@@ -1303,7 +1303,7 @@ th {
 #Apropos {
   position: fixed;
   top: 75px;
-  max-width: 100%;
+  max-width: 600px;
   min-height: 50%;
   margin-left: auto;
   margin-right: auto;
