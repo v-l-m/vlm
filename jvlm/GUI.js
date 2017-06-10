@@ -485,7 +485,8 @@ function HandleGribSlideMove(event, ui )
   let handle = $( "#GribSliderHandle" );
   handle.text( ui.value);
   let l=GribWindController.getGribmapLayer();
-  l.setTimeSegment(new Date()+ui.value*3600*1000);
+  let GribEpoch = new Date().getTime();
+  l.setTimeSegment(GribEpoch/1000 + ui.value*3600);
 }
 
 function HandleDiscontinueRaceRequest()
