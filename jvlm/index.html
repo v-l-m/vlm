@@ -529,21 +529,39 @@
            </table> 
         </div>
       </div>
-    <!-- Grib meteo slider -->
+    <!-- COllapsable Pilototo -->
       <div id="Pilot-Panel" class="TDB-Panel collapse">
         <div class="container">
         </div>
       </div>
     </nav>
-    <div class="input SmallGrib" style="position:relative">
-      <div id="GribSlider" style="height:200px; position:absolute; right:10px;">
-          <div id="GribSliderHandle" class="ui-slider-handle">
-          </div> 
+    <div class="input" style="position:relative">
+      <div id="slider" style="height:200px; position:absolute; right:10px;">
+          <div id="custom-handle" class="ui-slider-handle"></div> 
       </div>
+      <script>
+        $( function() 
+        {
+          var handle = $( "#custom-handle" );
+          $( "#slider" ).slider
+          ({
+            orientation: "vertical",
+            min: 0,
+            max: 72,
+            value: 0,
+            create: function() {
+              handle.text( $( this ).slider( "value" ) );
+            },
+            slide: function( event, ui ) {
+              handle.text( ui.value );
+            }
+          });
+        } );
+      </script>
     </div>
     
-    <!-- Modal affichage-->
-    <div id="affichage" class="modal fade" role="dialog">
+  <!-- Modal affichage-->
+  <div id="affichage" class="modal fade" role="dialog">
       <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -580,81 +598,6 @@
             <div class="affich">
               <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
               <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
-            </div>
-        </fieldset>
-      </div>
-    </div>
-           <!-- Modal mouseInfo-->
-              <div id="mouseInfo" class="dialog fade" role="dialog">
-                <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>  
-                <div style="text-align:left" class="modal-body">
-                    <fieldset class="MI_Coords">
-                      <div><label >Latitude</label><span> : </span><span id="MI_Lat"></span></div>
-                      <div><label>Longitude</label><span> : </span><label id="MI_Lon"></label></div>
-                    </fieldset>
-                    <fieldset class="MI_Coords">
-                      <legend class="ui-legend MI_Legend" I18n="fromboat">du bateau</legend>
-                      <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_OrthoDist"></span></div>
-                      <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_Ortho"></span></div>
-                      <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_LoxoDist"></span></div>
-                      <div><label I18n="caploxo">Ortho</label><span> : </span><span id="MI_Loxo"></span></div>
-                    </fieldset>
-                    <fieldset class="MI_Coords">
-                      <legend class="ui-legend MI_Legend">du WP</legend>
-                      <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_WPOrthoDist"></span></div>
-                      <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_WPOrtho"></span></div>
-                      <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_WPLoxoDist"></span></div>
-                      <div><label I18n="caploxo">Ortho</label><span> : </span><span id="MI_WPLoxo"></span></div>
-                    </fieldset>
-                    <fieldset class="MI_Coords">
-                      <legend class="ui-legend MI_Legend"></legend>
-                      <div  style="text-align:center">
-                        <button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime">Estime</button>
-                        <div  style="padding: 0 0 0 0" >
-                          <button type="button" id="EstimatorStopButton" class=" stop hidden btn btn-xs" style="float:left"></button> 
-                        </div> 
-                        <div class="progress hidden" style="padding: 0 0 0 0" id="PbEstimatorProgressBar">                          
-                          <div id="PbEstimatorProgress" class="NoAnimation progress progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
-                            <span class="hidden" id="PbEstimatorProgressText" style="align-content:center">...</span>
-                          </div>               
-                        </div>        
-                      </div>
-                    </fieldset>
-                    <fieldset class="MI_Coords">    
-                      <div class="col-xs-2">
-                        <!--<img id= "EstBoatIcon" src="images/deck-small.png" alt="deck" height="40px" width="20px"/>-->
-                      </div>
-                      <div class="col-xs-8">
-                        <legend class="ui-legend MI_Legend" style="border-bottom:none" I18n="EstimateDate">
-                          EstDate.                
-                        </legend>
-                      </div>
-                      <div class="col-xs-12">
-                        <span id="MI_EstDate"></span>                      
-                      </div>
-                    </fieldset>
-                </div>
-              </div>
-    <!-- Modal login form -->
-    <div id="LoginForm" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-  
-        <!-- Modal content-->
-        <div id="LoginPanel" class="modal-content">
-               
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 I18n="Identification" class="modal-title" style="text-align:center">Identification</h4>
-            <!-- Language bar -->
-            <div class="container-fluid">
-                  <div class="col-xs-2"><img class=" LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></div>
-                  <div class="col-xs-2"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></div>
-                  <div class="col-xs-2"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></div>
-                  <div class="col-xs-2"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></div>
-                  <div class="col-xs-2"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></div>
-                  <div class="col-xs-2"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></div>
-                
             </div>
         </fieldset>
       </div>
