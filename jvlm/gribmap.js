@@ -764,6 +764,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
   drawWindArea:function(p, poslimit, windarea, ctx,InCallBack) 
   {
+      throw "Deprecated drawWindArea"
   },
 
   drawWindAreaBig: function(p, poslimit, windarea, ctx,InCallBack) {
