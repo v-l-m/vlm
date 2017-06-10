@@ -536,28 +536,9 @@
       </div>
     </nav>
     <div class="input" style="position:relative">
-      <div id="slider" style="height:200px; position:absolute; right:10px;">
-          <div id="custom-handle" class="ui-slider-handle"></div> 
+      <div id="GribSlider" style="height:200px; position:absolute; right:10px;">
+          <div id="GribSliderHandle" class="ui-slider-handle"></div> 
       </div>
-      <script>
-        $( function() 
-        {
-          var handle = $( "#custom-handle" );
-          $( "#slider" ).slider
-          ({
-            orientation: "vertical",
-            min: 0,
-            max: 72,
-            value: 0,
-            create: function() {
-              handle.text( $( this ).slider( "value" ) );
-            },
-            slide: function( event, ui ) {
-              handle.text( ui.value );
-            }
-          });
-        } );
-      </script>
     </div>
     
   <!-- Modal affichage-->
