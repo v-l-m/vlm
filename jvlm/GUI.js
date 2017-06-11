@@ -646,6 +646,9 @@ function DisplayLoggedInMenus(LoggedIn)
   }
   $("[LoggedInNav='true']").css("display",LoggedInDisplay);
   $("[LoggedInNav='false']").css("display",LoggedOutDisplay);
+
+  // Display apropos
+  $('#Apropos').modal(LoggedIn?'hide':'show');
   
 }
 
