@@ -230,26 +230,11 @@ function OnLoginRequest()
 {
   
   
-  /*var user = $(".UserName").val();
-  var password = $(".UserPassword").val();
-  
-  //$.ajaxSetup({username : user, password: password});
-  
-  $.post("/ws/login.php", 
-          {VLM_AUTH_USER:user,
-            VLM_AUTH_PW:password
-          },
-          function(result)
-          {
-            // :( calls login twice but avoid coding twice
-            // Should use events to splits GUI from WS processing
-   */         CheckLogin();
-   /*       }
-        );
-*/
+ CheckLogin(true);
+
 };
 
-function CheckLogin()
+function CheckLogin(GuiRequest = false)
 {
   var user = $(".UserName").val();
   var password = $(".UserPassword").val();
@@ -265,6 +250,7 @@ function CheckLogin()
             var CurLoginStatus = _IsLoggedIn;
             var CurBoatID = null;
 
+            
             if (CurLoginStatus)
             {
               CurBoatID = _CurPlayer.CurBoatID;
@@ -275,6 +261,14 @@ function CheckLogin()
             if (_IsLoggedIn)
             {
               GetPlayerInfo();
+            }
+            else if (GuiRequest)
+            {
+              VLMAlertDanger(GetLocalizedString("authfailed"));
+              $(".UserPassword").val( "");
+              // Reopened login dialog
+              setTimeout(()=>{$("#LoginForm").modal ("hide").modal("show")},1000);
+
             }
             HidePb("#PbLoginProgress");
             DisplayLoggedInMenus(_IsLoggedIn);

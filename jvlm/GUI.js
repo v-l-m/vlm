@@ -22,6 +22,8 @@ var PilototoFt = null;
 $(document).ready(
   function(){
 
+    ///////////////////////////////////////////////////
+    //
     //Debug only this should not stay when releasing
     //
     //$("#TestGrib").click(HandleGribTestClick)
@@ -32,6 +34,19 @@ $(document).ready(
     //
     ///////////////////////////////////////////////////
 
+    // Setup global ajax error handling
+    //setup ajax error handling
+    $.ajaxSetup({
+        error: function (x, status, error) {
+            if (x.status == 403) {
+                //on access denied try reviving the session
+                OnLoginRequest();
+            }
+            else {
+                VLMAlertDanger("An error occurred: " + status + "nError: " + error);
+            }
+        }
+    });
     // Start converse
     //InitXmpp();
 
@@ -1868,10 +1883,15 @@ function VLMAlertInfo(Text)
   VLMAlert(Text,"alert-Info");
 }
 
+let AlertIntervalId = null;
+
 function VLMAlert(Text,Style)
 {
-  // Force closing the previous alert if any
-  AutoCloseVLMAlert();
+  if (AlertIntervalId)
+  {
+    clearInterval(AlertIntervalId);
+  } 
+
   if (typeof Style === "undefined" || !Style)
   {
     Style="alert-info";
@@ -1887,8 +1907,12 @@ function VLMAlert(Text,Style)
   $("#AlertBox").addClass(Style);
   $("#AlertBox").show();
   $("#AlertCloseBox").unbind().on('click',AutoCloseVLMAlert)
-  
-  setTimeout(AutoCloseVLMAlert,15000); 
+
+  if (AlertIntervalId)
+  {
+    clearInterval(AlertIntervalId);
+  }  
+  AlertIntervalId = setTimeout(AutoCloseVLMAlert,5000); 
 }
 
 function AutoCloseVLMAlert()

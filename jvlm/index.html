@@ -61,7 +61,7 @@
     </div>
     <!-- Zone de boite d'alertes -->
     <div id="AlertBoxContainer" class="alertbox hidden container-fluid">
-      <div id="AlertBox" class="alert fade in" style="{display:none}">
+      <div id="AlertBox" class="alert fade in" >
         <a id="AlertCloseBox" href="#" aria-label="close">&times;</a>
         <strong><span id="AlertText">Success!</span></strong>
       </div>
@@ -559,21 +559,21 @@
         } );
       </script>
     </div>
-    <div class="input" style="position:relative">
-    <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog" >
-        <div class="modal-dialog" role="document">
-          <div class="Apropos modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="Apropos-title"><span I18n="homeofsailing">Accueil Virtual Loup-de-mer</span></h4>
-            </div>
-            <div class="modal-body">
-              <div class="Apropos-text "><span I18n="a1">texte</span></div>
+    <div class="input " LoggedInNav="false" style="position:relative">
+      <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog" >
+          <div class="modal-dialog" role="document">
+            <div class="Apropos modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="Apropos-title"><span I18n="homeofsailing">Accueil Virtual Loup-de-mer</span></h4>
+              </div>
+              <div class="modal-body">
+                <div class="Apropos-text "><span I18n="a1">texte</span></div>
+              </div>
             </div>
           </div>
-        </div>
+      </div>
     </div>
-  </div>
   <script type="text/javascript">
 $( document ).ready(function() {
     $('#Apropos').modal('toggle')
@@ -612,11 +612,11 @@ $( document ).ready(function() {
         <fieldset>
           <legend class="ui-legend">Infos course</legend>
             <div class="affich">
-              Durée Vac : <span class="badge"> 5 </span> min
+              <span i18n="crank" >Durée Vac</span> : <span class="badge"> 5 </span> min
             </div>
             <div class="affich">
-              <label for="VacPol">Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" min="1" max="120" value="1" id="VacPol" style="width:50px">
+              <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
+              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
             </div>
         </fieldset>
       </div>
@@ -714,11 +714,16 @@ $( document ).ready(function() {
                 </div>
               </div>
             </div>    
-            </div>          
+          </div> 
+          <div class="row container-fluid hidden" style="padding-top:20px">
+            <span I18n="PleaseCreateDlg">plsc</span>
+            <button href="#RecoverPwdForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="You can recover a lost password">recover</button>
+          </div>         
           <div class="row container-fluid" style="padding-top:20px">
             <span I18n="PleaseCreateDlg">plsc</span>
             <button href="#InscriptForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
-          </div> </div>
+          </div> 
+        </div>
         <div class="modal-footer">
           <button type="submit" id="LoginButton"  I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
         </div>
@@ -1596,14 +1601,14 @@ $( document ).ready(function() {
             <div id="InscriptPanel" class="modaldialog modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 I18n="Inscription" class="modal-title" style="text-align:center">Inscription</h4>
+                  <h4 I18n="Registration" class="modal-title" style="text-align:center">Inscription</h4>
                 </div> 
                 <div class="modal-body">
                   <div class="row container-fluid">
                     <div class="col-xs-12">
                       <div class="row">
                         <div class="col-xs-6" align="center">
-                          <span I18n="pseudo">Pseudo :</span>
+                          <span I18n="playername">Pseudo :</span>
                         </div>
                         <div class="col-xs-6">
                           <input  class="UserName " size="15" maxlength="64" name="pseudo" >
@@ -1625,10 +1630,10 @@ $( document ).ready(function() {
                           <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
                         </div>
                       </div>
-                      <p>Le pseudo doit comporter au moins 4 caractères.<br>
-                      Le mot de passe ne peut pas être vide.<br>
-                      Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _<br>
-                      </p>
+                      <div class="row">
+                        <span I18n="createaccountrules"> Le pseudo ... le mot de passe) sont: a-z 0-9 _<br>
+                        </span>
+                      </div>
                     </div>    
                    </div> 
                 </div>
