@@ -1303,11 +1303,11 @@ th {
 #Apropos {
   position: fixed;
   top: 75px;
-  max-width: 100%;
+  max-width: 600px;
   min-height: 50%;
   margin-left: auto;
   margin-right: auto;
-  z-index: 10000;
+  z-index: 1000;
 }
 .Apropos {
   background-color: rgba(0, 0, 0, 0.6);
