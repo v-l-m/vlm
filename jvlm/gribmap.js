@@ -1058,7 +1058,7 @@ Gribmap.ControlWind =
     },
 
 
-    CLASS_NAME: "Gribmap.ControlWind BigGrib hidden"
+    CLASS_NAME: "Gribmap.ControlWind hidden"
 });
 
 /**
