@@ -1654,7 +1654,7 @@ function HandleBoatSelectionChange(e)
   DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
 }
 
-var LastMouseMouveCall = 0;
+var LastMouseMoveCall = 0;
 
 function HandleMapMouseMove(e)
 {
@@ -1665,13 +1665,13 @@ function HandleMapMouseMove(e)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
     var EstimatePos = null ;
-    var Estimated = new Date()-LastMouseMouveCall > 300;
+    var Estimated = new Date()-LastMouseMoveCall > 300;
     
-    if (Estimated)
+    if (VLM2Prefs.MapPrefs.EstTrackMouse && Estimated)
     {
       // Throttle estimate update to 3/sec
       EstimatePos=_CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
-      LastMouseMouveCall = new Date();
+      LastMouseMoveCall = new Date();
     }
 
 
