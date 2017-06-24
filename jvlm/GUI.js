@@ -487,6 +487,12 @@ function HandleGribSlideMove(event, ui )
   let l=GribWindController.getGribmapLayer();
   let GribEpoch = new Date().getTime();
   l.setTimeSegment(GribEpoch/1000 + ui.value*3600);
+
+  if (_CurPlayer.CurBoat.Estimator)
+  {
+    let EstPos = _CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(GribEpoch + ui.value*3600*1000))
+    RefreshEstPosLabels(EstPos);
+  }
 }
 
 function HandleDiscontinueRaceRequest()
@@ -1697,18 +1703,24 @@ function HandleMapMouseMove(e)
       $("#MI_WPOrtho").text( "--- °");
     }
 
-    if (EstimatePos) 
+    if (Estimated)
     { 
-      $("#MI_EstDate").text(EstimatePos.Date); 
-      //$("#EstBoatIcon").css("transform","rotate("+EstimatePos.Heading+"deg)"); 
-      
-    } 
-    else if (Estimated)
-    { 
-      $("#MI_EstDate").text(""); 
+       RefreshEstPosLabels (EstimatePos);
     } 
     
   }  
+}
+
+function RefreshEstPosLabels(Pos)
+{
+  if (Pos && typeof Pos.Date !== "undefined")
+  {
+    $("#MI_EstDate").text(Pos.Date); 
+  }
+  else
+  {
+    $("#MI_EstDate").text("");
+  }
 }
 
 function FillRankingTable()

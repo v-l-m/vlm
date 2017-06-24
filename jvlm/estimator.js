@@ -388,7 +388,62 @@ function Estimator(Boat)
     }
   }
 
-  this.GetClosestEstimatePoint = function(Pos)
+  this.GetClosestEstimatePoint = function (Param)
+  {
+    if (Param instanceof VLMPosition)
+    {
+      return this.GetClosestEstimatePointFromPosition(Param)
+    }
+    else if (Param instanceof Date)
+    {
+      return this.GetClosestEstimatePointFromTime(Param)
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+  this.GetClosestEstimatePointFromTime = function (Time)
+  {
+    if (!Time || !Object.keys(this.EstimateTrack).length)
+    {
+      return null;
+    }
+
+    let Index = 0;
+    let Delta;
+
+    for (Index = 0; Index < Object.keys(this.EstimateTrack).length;Index++)
+    {
+      if (this.EstimateTrack[Index])
+      {
+        if (Time > this.EstimateTrack[Index].Date)
+        {
+          Delta = Time - this.EstimateTrack[Index].Date;
+        }
+        else
+        {
+          break;
+        }
+      }
+    }
+
+    if (Index< Object.keys(this.EstimateTrack).length)
+    {
+      let Delta2 = Time - this.EstimateTrack[Index+1].Date;
+
+      if (Math.abs(Delta2)< Math.abs(Delta))
+      {
+        Index++;
+      }
+    }
+
+    RetValue = this.EstimateTrack[Index];
+    return RetValue;
+  }
+
+  this.GetClosestEstimatePointFromPosition = function(Pos)
   {
     if (!Pos)
     {
