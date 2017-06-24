@@ -1319,7 +1319,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
       {
         let Opp = Boat.Rankings.ranking[friends[index]];
 
-        if ((typeof Opp !== 'undefined') && (Opp.idusers !== Boat.IdBoat))
+        if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers,10) !== Boat.IdBoat))
         {
           AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
         }
@@ -1387,7 +1387,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     {
       var Opp = Boat.Rankings.ranking[index];
 
-      if ((Opp.idusers != Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
+      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
       {
         AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
 
