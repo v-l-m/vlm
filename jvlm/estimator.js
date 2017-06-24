@@ -416,6 +416,11 @@ function Estimator(Boat)
     return RetValue;
   }
 
+  this.ClearEstimatePosition = function(Boat)
+  {
+    this.ShowEstimatePosition(Boat,null);
+  }
+
   this.ShowEstimatePosition = function(Boat, Estimate)
   {
     // Track Estimate closest point to mousemove
