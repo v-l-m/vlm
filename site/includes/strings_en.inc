@@ -1,6 +1,9 @@
 <?php
 $strings['en'] = 
   array (
+    'TrackEstForecast' => 'Track forecast',
+    'TrackEstMouse' => 'Track mouse',
+    'EstimateOptionsGroup' => 'Estimate',
     'PolarVacSize' => 'Crank Polar size',
     'Registration' => 'Registration',
     'Discontinue'=> 'Discontinue',

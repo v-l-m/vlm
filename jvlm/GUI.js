@@ -1773,6 +1773,8 @@ function HandleShowMapPrefs(e)
   //Load prefs
   $("#DisplayReals").attr('checked',VLM2Prefs.MapPrefs.ShowReals);
   $("#DisplayNames").attr('checked',VLM2Prefs.MapPrefs.ShowOppName);
+  $("#EstTrackMouse").attr('checked',VLM2Prefs.MapPrefs.EstTrackMouse);
+  $("#TrackEstForecast").attr('checked',VLM2Prefs.MapPrefs.TrackEstForecast);
 
   $('#DDMapSelOption:first-child').html(
   '<span Mode='+ VLM2Prefs.MapPrefs.MapOppShow +'>'+VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow)+'</span>'+
@@ -1787,7 +1789,7 @@ function HandleMapPrefOptionChange(e)
 {
   var target=e.target;
 
-  if (typeof target === "undefined" || typeof target.attributes['id']==="undefined")
+  if (typeof target === "undefined" || typeof target.attributes['id'] === "undefined")
   {
     return;
   }
@@ -1804,6 +1806,11 @@ function HandleMapPrefOptionChange(e)
       VLM2Prefs.MapPrefs.ShowOppName = Value
       break;
 
+    case "EstTrackMouse":
+    case "TrackEstForecast":
+      VLM2Prefs.MapPrefs[Id] = Value
+      break;
+    
     case "VacPol":
       var VacPol = parseInt($("#VacPol").val(),10);
 
