@@ -1579,11 +1579,21 @@ function GetRealBoatTrack(Boat,IdBoat,IdRace,StartTime, FeatureData)
             )
 }
 
+var TrackRequestPending = false;
 function GetBoatTrack (Boat,IdBoat,IdRace,StartTime, FeatureData)
 {
+  if (TrackRequestPending)
+  {
+    return;
+  }
+  else
+  {
+    TrackRequestPending = true;
+  }
   $.get("/ws/boatinfo/smarttracks.php?idu="+IdBoat+"&idr="+IdRace+"&starttime="+StartTime,
               function(e)
               {
+                TrackRequestPending = false;
                 if (e.success)
                 {
                   var index;
