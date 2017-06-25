@@ -1414,7 +1414,14 @@ function DisplayCurrentDDSelectedBoat(Boat)
 
 function PadLeftZero(v)
 {
-  return ("00"+v).slice(-2);
+  if (v < 100)
+  {
+    return ("00"+v).slice(-2);
+  }
+  else
+  {
+    return v;
+  }
 }
 
 function GetFormattedChronoString(Value)
