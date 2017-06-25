@@ -85,7 +85,7 @@
           <a class="navbar-brand" href="/" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v10</div>
+              <div class="version">v11</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left"> 
@@ -536,28 +536,9 @@
       </div>
     </nav>
     <div class="input" style="position:relative">
-      <div id="slider" style="height:200px; position:absolute; right:10px;">
-          <div id="custom-handle" class="ui-slider-handle"></div> 
+      <div id="GribSlider" style="height:200px; position:absolute; right:10px;">
+          <div id="GribSliderHandle" class="ui-slider-handle"></div> 
       </div>
-      <script>
-        $( function() 
-        {
-          var handle = $( "#custom-handle" );
-          $( "#slider" ).slider
-          ({
-            orientation: "vertical",
-            min: 0,
-            max: 72,
-            value: 0,
-            create: function() {
-              handle.text( $( this ).slider( "value" ) );
-            },
-            slide: function( event, ui ) {
-              handle.text( ui.value );
-            }
-          });
-        } );
-      </script>
     </div>
     <div class="input " LoggedInNav="false" style="position:relative">
       <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog" >
@@ -606,11 +587,22 @@
         <fieldset>
           <legend class="ui-legend">Infos course</legend>
             <div class="affich">
-              <span i18n="crank" >Durée Vac</span> : <span class="badge"> 5 </span> min
+              <span i18n="crank" >Durée Vac</span> : <span class="badge VacFreq"> 5 </span> min
             </div>
             <div class="affich">
               <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
               <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
+            </div>
+        </fieldset>
+        <fieldset>
+          <legend class="ui-legend" I18n="EstimateOptionsGroup">Est.</legend>
+            <div class="affich">
+              <input  class="chkprefstore" type="checkbox" id="EstTrackMouse">
+              <label for="EstTrackMouse" I18n="TrackEstMouse">EstTrackMouse</label>
+            </div>
+            <div class="affich">
+              <input  class="chkprefstore" type="checkbox" id="TrackEstForecast">
+              <label for="TrackEstForecast" I18n="TrackEstForecast">TrackEstForecast</label>
             </div>
         </fieldset>
       </div>
@@ -1486,7 +1478,7 @@
                     <span I18n="startmap">Départ</span> : <span id="RaceStartDate">2016/01/04 17:00:00</span><br>
                     <span I18n="closerace">closeline</span> <span id="RaceLineClose"></span><br>
                     <span I18n="boattype">Type de bateau / Polaire</span> : <span class="BoatType"> IMOCA2007</span><br>
-                    <span I18n="crank">vac.</span> : <span id="VacFreq">5</span> <span I18n="minutes">minutes</span><br>
+                    <span I18n="crank">vac.</span> : <span class="VacFreq">5</span> <span I18n="minutes">minutes</span><br>
                     <span I18n="endrace">Fermeture de la ligne de d'arrivée</span> <span id="EndRace">200</span> % <br>
                     <span><img id="RaceImageMap" src="../cache/racemaps/20141231.png" style="max-width:100%"/></span>
                     <div id="waypoints">
