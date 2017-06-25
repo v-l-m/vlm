@@ -99,11 +99,15 @@ function Boat(vlmboat)
       {
         this.Estimator.ShowEstimatePosition(this.Estimator.Boat,Est);
       }
+      else
+      {
+        this.Estimator.ClearEstimatePosition(this.Estimator.Boat)
+      }
       return Est
     }
     else
     {
-      this.Estimator.ShowEstimatePosition(null,null)
+      // this.Estimator.ShowEstimatePosition(null,null)
       return null;
     }
   }

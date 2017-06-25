@@ -73,7 +73,7 @@ function PrefMgr()
                 break;
 
             default:
-                alert ("unexepected mapping option : " + p.mapOpponents)
+                VLMAlertDanger ("unexepected mapping option : " + p.mapOpponents)
         }
     }
     
@@ -94,6 +94,8 @@ function MapPrefs()
     this.WindArrowsSpacing = 64;    // Spacing steps for wind arrow drawing
     this.MapZoomLevel = 4;
     this.PolarVacCount = 12;        // How many vacs for drawing the polar line
+    this.EstTrackMouse = false;
+    this.TrackEstForecast = true;
 
     this.Load = function()
     {
@@ -103,6 +105,8 @@ function MapPrefs()
             this.ShowOppName = store.get("#ShowOppName");
             this.MapZoomLevel = store.get("#MapZoomLevel");
             this.PolarVacCount = store.get("#PolarVacCount");
+            this.EstTrackMouse = store.get("#EstTrackMouse");
+            this.TrackEstForecast = store.get("#TrackEstForecast");
             if (typeof this.PolarVacCount === "undefined" || !this.PolarVacCount)
             {
                 // Fallback if invalid value is stored
@@ -118,7 +122,10 @@ function MapPrefs()
             store.set("#ShowReals",this.ShowReals);
             store.set("#ShowOppName",this.ShowOppName);   
             store.set("#MapZoomLevel",this.MapZoomLevel); 
-            store.set("#PolarVacCount",this.PolarVacCount);        
+            store.set("#PolarVacCount",this.PolarVacCount);
+            store.set("#TrackEstForecast",this.TrackEstForecast); 
+            store.set("#EstTrackMouse",this.EstTrackMouse); 
+                    
         }
 
         var MapPrefVal="mapselboats"

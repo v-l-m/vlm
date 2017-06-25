@@ -16,6 +16,7 @@ var MAX_PILOT_ORDERS = 5;
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
+var GribWindController = null;
 var PilototoFt = null;
 
 // On ready get started with vlm management
@@ -444,6 +445,8 @@ function InitMenusAndButtons()
   $("#StartEstimator").on('click',HandleStartEstimator)
   $("#EstimatorStopButton").on('click',HandleStopEstimator)
 
+  InitGribSlider();
+
   // Handle race discontinuation request
   $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
       
@@ -457,6 +460,39 @@ function InitMenusAndButtons()
   });
   
   
+}
+
+function InitGribSlider()
+{
+  let handle = $( "#GribSliderHandle" );
+  $( "#GribSlider" ).slider({
+    orientation: "vertical",
+    min: 0,
+    max: 72,
+    value: 0,
+    create: function() {
+      handle.text( $( this ).slider( "value" ) );
+    },
+    slide: function( event, ui ) {
+      HandleGribSlideMove(event,ui);
+    }
+  });
+  
+};
+
+function HandleGribSlideMove(event, ui )
+{
+  let handle = $( "#GribSliderHandle" );
+  handle.text( ui.value);
+  let l=GribWindController.getGribmapLayer();
+  let GribEpoch = new Date().getTime();
+  l.setTimeSegment(GribEpoch/1000 + ui.value*3600);
+
+  if (VLM2Prefs.MapPrefs.TrackEstForecast && _CurPlayer.CurBoat.Estimator)
+  {
+    let EstPos = _CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(GribEpoch + ui.value*3600*1000))
+    RefreshEstPosLabels(EstPos);
+  }
 }
 
 function HandleDiscontinueRaceRequest()
@@ -786,7 +822,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.RaceInfo.racename]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",Boat.RaceInfo.boattype.substring(5)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#VacFreq",parseInt(Boat.RaceInfo.vacfreq,10)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(Boat.RaceInfo.vacfreq,10)]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(Boat.RaceInfo.firstpcttime,10)]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(Boat.RaceInfo.deptime,10)*1000)]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(Boat.RaceInfo.closetime,10)*1000)]);
@@ -1624,7 +1660,7 @@ function HandleBoatSelectionChange(e)
   DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
 }
 
-var LastMouseMouveCall = 0;
+var LastMouseMoveCall = 0;
 
 function HandleMapMouseMove(e)
 {
@@ -1635,13 +1671,13 @@ function HandleMapMouseMove(e)
     var CurPos  = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON,_CurPlayer.CurBoat.VLMInfo.LAT)
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
     var EstimatePos = null ;
-    var Estimated = new Date()-LastMouseMouveCall > 300;
+    var Estimated = new Date()-LastMouseMoveCall > 300;
     
-    if (Estimated)
+    if (VLM2Prefs.MapPrefs.EstTrackMouse && Estimated)
     {
       // Throttle estimate update to 3/sec
       EstimatePos=_CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
-      LastMouseMouveCall = new Date();
+      LastMouseMoveCall = new Date();
     }
 
 
@@ -1667,18 +1703,24 @@ function HandleMapMouseMove(e)
       $("#MI_WPOrtho").text( "--- °");
     }
 
-    if (EstimatePos) 
+    if (Estimated)
     { 
-      $("#MI_EstDate").text(EstimatePos.Date); 
-      //$("#EstBoatIcon").css("transform","rotate("+EstimatePos.Heading+"deg)"); 
-      
-    } 
-    else if (Estimated)
-    { 
-      $("#MI_EstDate").text(""); 
+       RefreshEstPosLabels (EstimatePos);
     } 
     
   }  
+}
+
+function RefreshEstPosLabels(Pos)
+{
+  if (Pos && typeof Pos.Date !== "undefined")
+  {
+    $("#MI_EstDate").text(Pos.Date); 
+  }
+  else
+  {
+    $("#MI_EstDate").text("");
+  }
 }
 
 function FillRankingTable()
@@ -1743,6 +1785,8 @@ function HandleShowMapPrefs(e)
   //Load prefs
   $("#DisplayReals").attr('checked',VLM2Prefs.MapPrefs.ShowReals);
   $("#DisplayNames").attr('checked',VLM2Prefs.MapPrefs.ShowOppName);
+  $("#EstTrackMouse").attr('checked',VLM2Prefs.MapPrefs.EstTrackMouse);
+  $("#TrackEstForecast").attr('checked',VLM2Prefs.MapPrefs.TrackEstForecast);
 
   $('#DDMapSelOption:first-child').html(
   '<span Mode='+ VLM2Prefs.MapPrefs.MapOppShow +'>'+VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow)+'</span>'+
@@ -1757,7 +1801,7 @@ function HandleMapPrefOptionChange(e)
 {
   var target=e.target;
 
-  if (typeof target === "undefined" || typeof target.attributes['id']==="undefined")
+  if (typeof target === "undefined" || typeof target.attributes['id'] === "undefined")
   {
     return;
   }
@@ -1774,6 +1818,11 @@ function HandleMapPrefOptionChange(e)
       VLM2Prefs.MapPrefs.ShowOppName = Value
       break;
 
+    case "EstTrackMouse":
+    case "TrackEstForecast":
+      VLM2Prefs.MapPrefs[Id] = Value
+      break;
+    
     case "VacPol":
       var VacPol = parseInt($("#VacPol").val(),10);
 

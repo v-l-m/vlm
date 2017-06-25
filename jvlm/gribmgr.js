@@ -305,6 +305,13 @@ function VLM2GribManager()
       $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
+
+    if (typeof callback !=="undefined" && callback)
+    {
+      this.LoadQueue[LoadKey].CallBacks.push(callback);
+      //console.log("Adding to callback load queue "+ LoadKey + ":"+this.LoadQueue[LoadKey].CallBacks.length);
+      
+    }
   }
 
   this.HandleGetSmartGribList = function (LoadKey, e)

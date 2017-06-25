@@ -1,6 +1,9 @@
 <?php
 $strings['fr'] = 
   array (
+    'TrackEstForecast' => 'Selon la meteo',
+    'TrackEstMouse' => 'Selon la souris',
+    'EstimateOptionsGroup' => 'Estime',
     'PolarVacSize' => 'Nb Vac polaire',
     'Registration' => 'Inscription',
     'Discontinue'=> 'Abandon',

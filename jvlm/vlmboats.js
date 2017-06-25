@@ -436,9 +436,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
   var scale = VLM2Prefs.MapPrefs.PolarVacCount;
   var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT)
   
-  BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000));
+  BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale,  new Date(Boat.VLMInfo.LUP*1000), function(){DrawBoat(Boat, CenterMapOnBoat);}); 
   //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
-  
+
   var BoatPolar = new OpenLayers.Feature.Vector(
     new OpenLayers.Geometry.LineString(Polar),
     {
@@ -507,7 +507,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   }
 }
 
-function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
+function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,Callback)
 {
   var CurDate = StartDate;
 
@@ -515,7 +515,7 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate)
   {
     CurDate = new Date().getTime()
   }
-  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value)
+  var MI = GribMgr.WindAtPointInTime(CurDate,StartPos.Lat.Value,StartPos.Lon.Value, Callback)
   
   if (MI)
   {
@@ -1319,7 +1319,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
       {
         let Opp = Boat.Rankings.ranking[friends[index]];
 
-        if ((typeof Opp !== 'undefined') && (Opp.idusers !== Boat.IdBoat))
+        if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers,10) !== Boat.IdBoat))
         {
           AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,true);
         }
@@ -1387,7 +1387,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     {
       var Opp = Boat.Rankings.ranking[index];
 
-      if ((Opp.idusers != Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
+      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
       {
         AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
 

@@ -661,11 +661,16 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       var poslimit = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
       poslimit.x -= posstart.x;
       poslimit.y -= posstart.y;
+      
 
-      var boundsLonLat = bounds.transform(
+      let boundsLonLat = bounds.transform(
                     new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
                     new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
                     );
+
+      let BigGrib = Math.abs(bounds.left - bounds.right)>30 || Math.abs(bounds.top-bounds.bottom)> 30;
+      this.UpdateGribMap(BigGrib);
+      console.log("BigGrib"+BigGrib+" "+bounds.left+" "+bounds.right+" "+bounds.top+" "+bounds.bottom);
 
       //canvas object
       var ctx = this.canvas.getContext('2d');
@@ -683,10 +688,12 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
       this.drawContext(ctx);
 
       //Get griblevel // FIXME : should use the native zoom level
-      this.setGribLevel(boundsLonLat);
-      bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
-
-      for (i = 0; i < bl.length; i++) {
+      if (BigGrib)
+      {
+        this.setGribLevel(boundsLonLat);
+        bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
+        for (i = 0; i < bl.length; i++) 
+        {
 
           windarea = bl[i]; //la zone
 
@@ -698,7 +705,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
                     new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
                     new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
                     );
-
+          
           //passe en pixel
           start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
           end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
@@ -719,12 +726,48 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
           if (end.x > poslimit.x) end.x = poslimit.x;
           if (end.y > poslimit.y) end.y = poslimit.y;
 
-          //tracÃ© proprement dit
-          this.drawWindArea(start, end, windarea, ctx);
-       }
+          //tracé proprement dit
+          this.drawWindAreaBig(start, end, windarea, ctx);
+       }    
+      }
+      else
+      {
+        bounds.transform(
+          new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+          new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
+          );
+
+        //passe en pixel
+        start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
+        end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
+
+        //réaligne le premier pixel de la zone
+        start.x -= posstart.x;
+        start.y -= posstart.y;
+        end.x -= posstart.x;
+        end.y -= posstart.y;
+
+        //aligne le début des flêches a un multiple de la grille
+        start.x = Math.ceil(start.x/this.arrowstep)*this.arrowstep;
+        start.y = Math.ceil(start.y/this.arrowstep)*this.arrowstep;
+
+        //On trace sur une partie visible
+        if (start.x < 0) start.x = 0;
+        if (start.y < 0) start.y = 0;
+        if (end.x > poslimit.x) end.x = poslimit.x;
+        if (end.y > poslimit.y) end.y = poslimit.y;
+
+        //tracé proprement dit
+        this.drawWindAreaSmall(start, end, windarea, ctx);
+      }
   },
 
-  drawWindArea: function(p, poslimit, windarea, ctx) {
+  drawWindArea:function(p, poslimit, windarea, ctx,InCallBack) 
+  {
+      throw "Deprecated drawWindArea"
+  },
+
+  drawWindAreaBig: function(p, poslimit, windarea, ctx,InCallBack) {
       var bstep = this.arrowstep;
       var wante = windarea.windArrays[this.gribtimeBefore];
       var wpost = windarea.windArrays[this.gribtimeAfter];
@@ -740,10 +783,73 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
                     new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
                     );
 
-              //RÃ©cupÃ¨re le vent et l'affiche en l'absence d'erreur
+              //Récupère le vent et l'affiche en l'absence d'erreur
+              try 
+              {
+                winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
+                this.drawWind(ctx, p.x, p.y, winfo);
+                  
+              } 
+              catch (error) 
+              {
+                if (ErrorCatching > 0) 
+                {
+                  alert(LonLat+" / "+winfo.wspeed+" / "+winfo.wheading);
+                  ErrorCatching -= 1;
+                }
+              }
+              p.y += bstep;
+          }
+          p.x += bstep;
+      }
+  },
+
+  UpdateGribMap: function(BigGrib)
+  {
+    if (BigGrib)
+    {
+      $(".BigGrib").css("display","block");
+      $(".SmallGrib").css("display","none");
+    }
+    else
+    {
+      $(".BigGrib").css("display","none");
+      $(".SmallGrib").css("display","block");
+    }
+  },
+
+  drawWindAreaSmall: function(p, poslimit, windarea, ctx,InCallBack) {
+      var bstep = this.arrowstep;
+      //var wante = windarea.windArrays[this.gribtimeBefore];
+      //var wpost = windarea.windArrays[this.gribtimeAfter];
+
+      //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
+
+      while (p.x < poslimit.x) {
+          p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
+          while (p.y < poslimit.y) {
+              //passage du pixel en latlon (géographique)
+              LonLat = this.map.getLonLatFromPixel(p).transform(
+                    new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
+                    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
+                    );
+
+              //Récupère le vent et l'affiche en l'absence d'erreur
               try {
-                  winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-                  this.drawWind(ctx, p.x, p.y, winfo);
+                  //winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
+                  //this.drawWind(ctx, p.x, p.y, winfo);
+                  var MI = GribMgr.WindAtPointInTime(new Date(this.time*1000),LonLat.lat, LonLat.lon,
+                            InCallBack?null:()=>{this.drawWindArea(p, poslimit, windarea, ctx,true)})
+                  if (MI)
+                  {
+                      winfo = new Wind(MI.Speed, MI.Heading);
+                      this.drawWind(ctx, p.x, p.y, winfo);
+                  }
+                  else
+                  {
+                      //InCallBack=true;
+                  }
+                  
               } catch (error) {
                   if (ErrorCatching > 0) {
                       alert(LonLat+" / "+winfo.wspeed+" / "+winfo.wheading);
@@ -952,7 +1058,7 @@ Gribmap.ControlWind =
     },
 
 
-    CLASS_NAME: "Gribmap.ControlWind"
+    CLASS_NAME: "Gribmap.ControlWind hidden"
 });
 
 /**
@@ -970,13 +1076,21 @@ Gribmap.MousePosition =
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
     },
 
-    formatOutput: function(lonLat) {
-       var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
-       retstr += " "+OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
-       GM_Pos = lonLat;
-       var winfo = this.gribmap.windAtPosition(lonLat);
-       if (winfo != null) retstr += " - "+Math.round(winfo.wspeed*10)/10+"n / "+Math.round(winfo.wheading*10)/10+"Â°";
-       return retstr;
+    formatOutput: function(lonLat) 
+    {
+      var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
+      retstr += " "+OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
+      GM_Pos = lonLat;
+
+      // Fix me, use map date for showing the grib info
+      var MI = GribMgr.WindAtPointInTime(new Date(),lonLat.lat, lonLat.lon)
+      if (MI)
+      {
+        winfo = new Wind(MI.Speed, MI.Heading);
+        retstr += " - "+Math.round(MI.Speed*10)/10+"n / "+Math.round(MI.Heading*10)/10+"°";
+      }
+      
+      return retstr;
     },
     CLASS_NAME: "Gribmap.MousePosition"
 });
