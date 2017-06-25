@@ -488,7 +488,7 @@ function HandleGribSlideMove(event, ui )
   let GribEpoch = new Date().getTime();
   l.setTimeSegment(GribEpoch/1000 + ui.value*3600);
 
-  if (_CurPlayer.CurBoat.Estimator)
+  if (VLM2Prefs.MapPrefs.TrackEstForecast && _CurPlayer.CurBoat.Estimator)
   {
     let EstPos = _CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(GribEpoch + ui.value*3600*1000))
     RefreshEstPosLabels(EstPos);
