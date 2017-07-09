@@ -21,7 +21,7 @@
     }
     else
     {
-      $proto = "$http://";
+      $proto = "http://";
     }
 ?>
 <script type="text/javascript">
