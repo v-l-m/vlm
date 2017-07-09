@@ -39,7 +39,7 @@ $(document).ready(
     //setup ajax error handling
     $.ajaxSetup({
         error: function (x, status, error) {
-            if (x.status == 403) {
+            if (x.status == 401) {
                 //on access denied try reviving the session
                 OnLoginRequest();
             }
