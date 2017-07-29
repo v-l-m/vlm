@@ -805,6 +805,7 @@ margin-right:0;
 }
 .dropdown-menu {
   min-width: auto;
+  cursor: pointer;
 }
 .form-control {
   height: auto;
