@@ -293,4 +293,5 @@
     {
         define_if_not("VLM_XMPP_HTTP_BIND_URL", "http://".$_SERVER["HTTP_HOST"].VLM_XMPP_HTTP_BIND_PATH);
     }
+    
 ?>
