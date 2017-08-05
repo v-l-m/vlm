@@ -238,7 +238,7 @@ function OnLoginRequest()
 
 };
 
-function CheckLogin(GuiRequest = false)
+function CheckLogin(GuiRequest)
 {
   var user = $(".UserName").val();
   var password = $(".UserPassword").val();
@@ -271,7 +271,7 @@ function CheckLogin(GuiRequest = false)
               VLMAlertDanger(GetLocalizedString("authfailed"));
               $(".UserPassword").val( "");
               // Reopened login dialog
-              setTimeout(()=>{$("#LoginForm").modal ("hide").modal("show")},1000);
+              setTimeout(function(){$("#LoginForm").modal ("hide").modal("show")},1000);
 
             }
             HidePb("#PbLoginProgress");

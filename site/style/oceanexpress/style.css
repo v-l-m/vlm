@@ -128,7 +128,7 @@ td
 
 #raceslistbox {
   color: #44505a;
-  list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+  list-style-image: url("/style/bullet_list.png");
 
 }
 
@@ -189,7 +189,7 @@ tr.oncoast *
 
 
 #messagebox div {
-list-style-image: url("http://www.ocean-express.org/ny/extension/ezwebin/design/ezwebin/images/bullet_list.png");
+list-style-image: url("/style/bullet_list.png");
   background-color: #f9f1e8;
 }
 

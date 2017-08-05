@@ -526,6 +526,13 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
     {
       Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL,MI.Speed,MI.Heading,MI.Heading+index);
 
+      if (Math.isNaN(Speed))
+      {
+        // Just abort in case of not yet loaded polar. Next display should fix it.
+        // FixMe - Should we try later or will luck do it for us??
+        return;  
+      }
+
       var Side;
 
       for (Side = -1; Side <= 1; Side += 2)

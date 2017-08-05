@@ -39,7 +39,7 @@ $(document).ready(
     //setup ajax error handling
     $.ajaxSetup({
         error: function (x, status, error) {
-            if (x.status == 403) {
+            if (x.status == 401) {
                 //on access denied try reviving the session
                 OnLoginRequest();
             }
@@ -1997,7 +1997,7 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
     $("#NoBtn").hide();    
   }
   $("#ConfirmText").text(Question);
-  $(".OKBtn").unbind().on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(true)});
-  $(".NOKBtn").unbind().on("click",()=>{$("#ConfirmDialog").modal('hide');CallBack(false)});
+  $(".OKBtn").unbind().on("click",function(){$("#ConfirmDialog").modal('hide');CallBack(true)});
+  $(".NOKBtn").unbind().on("click",function(){$("#ConfirmDialog").modal('hide');CallBack(false)});
 
 }
