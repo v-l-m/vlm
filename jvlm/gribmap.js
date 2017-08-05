@@ -827,36 +827,42 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
       while (p.x < poslimit.x) {
           p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
-          while (p.y < poslimit.y) {
-              //passage du pixel en latlon (géographique)
-              LonLat = this.map.getLonLatFromPixel(p).transform(
-                    new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-                    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-                    );
+          while (p.y < poslimit.y) 
+          {
+            //passage du pixel en latlon (géographique)
+            LonLat = this.map.getLonLatFromPixel(p).transform(
+                  new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
+                  new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
+                  );
 
-              //Récupère le vent et l'affiche en l'absence d'erreur
-              try {
-                  //winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-                  //this.drawWind(ctx, p.x, p.y, winfo);
-                  var MI = GribMgr.WindAtPointInTime(new Date(this.time*1000),LonLat.lat, LonLat.lon,
-                            InCallBack?null:()=>{this.drawWindArea(p, poslimit, windarea, ctx,true)})
-                  if (MI)
-                  {
-                      winfo = new Wind(MI.Speed, MI.Heading);
-                      this.drawWind(ctx, p.x, p.y, winfo);
-                  }
-                  else
-                  {
-                      //InCallBack=true;
-                  }
-                  
-              } catch (error) {
-                  if (ErrorCatching > 0) {
-                      alert(LonLat+" / "+winfo.wspeed+" / "+winfo.wheading);
-                      ErrorCatching -= 1;
-                  }
+            //Récupère le vent et l'affiche en l'absence d'erreur
+            try 
+            {
+              //winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
+              //this.drawWind(ctx, p.x, p.y, winfo);
+              let self = this;  
+              let MI = GribMgr.WindAtPointInTime(new Date(this.time*1000),LonLat.lat, LonLat.lon,
+                        InCallBack?null:function(){self.drawWindArea(p, poslimit, windarea, ctx,true)});
+              if (MI)
+              {
+                  winfo = new Wind(MI.Speed, MI.Heading);
+                  this.drawWind(ctx, p.x, p.y, winfo);
               }
-              p.y += bstep;
+              else
+              {
+                  //InCallBack=true;
+              }
+                
+            } 
+            catch (error) 
+            {
+              if (ErrorCatching > 0) 
+              {
+                alert(LonLat+" / "+winfo.wspeed+" / "+winfo.wheading);
+                ErrorCatching -= 1;
+              }
+            }
+            p.y += bstep;
           }
           p.x += bstep;
       }
