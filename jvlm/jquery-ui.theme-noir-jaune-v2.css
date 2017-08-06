@@ -299,6 +299,10 @@ a.ui-button:active,
   color:#337AB7;
   text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
 }
+#Infos{
+    border:1px solid #CCC;
+    background-color:#000000;
+}
 #affichage{
     border:1px solid #CCC;
     background-color:#000000;

@@ -60,10 +60,10 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
-              <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
+              <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ></button>
           </ul>
           <ul class="hidden-xs" LoggedInNav="true" style="display:none" >
-              <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-out"></span></button>
+          <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ></button>
           </ul>
           <button type="button" class="togglebtn navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
               <span class="icon-bar"></span>
@@ -99,11 +99,15 @@
         </div>
         <!-- debut barre collapse -->
         <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">
+          
+          <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">            
+            <li class="BoatSelector" ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
+            </li>
+
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
               <span class="glyphicon glyphicon-log-in" style="top:0"><button type="button" class="logindlgButton ui-button-noir ui-corner-all ui-widget"  I18n="login">Login</button></span> 
             </li>
-            <li class="BoatSelector  col-md-4 hidden-xs hidden-sm">
+            <li class="BoatSelector  col-md hidden-xs hidden-sm">
               <div class="dropdown">
                 <button id="SelectionLanguageDropDown" class="ddlangbtn ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">
                   <span class="caret"></span>
@@ -120,8 +124,11 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right " LoggedInNav="true" style="display:none">
+                       
+          <li class="BoatSelector" ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
+          </li>
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
-              <span class="glyphicon glyphicon-log-out" style="top:0px"><button id="" type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
+              <span class="glyphicon glyphicon-log-out" style="top:0px"><button type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
             </li>
           </ul>
           <ul class="badgeinfo hidden-sm hidden-xs" LoggedInNav="true" >
@@ -543,6 +550,26 @@
           </div>
       </div>
     </div>
+    <!-- Modal Infos-->
+  <div id="Infos" class="modal fade" role="dialog">
+      <div class="modal-header"> Infos <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+        <fieldset>
+          <legend class="ui-legend" I18n='serverinfo'>Serveur</legend>
+          <div class="affich">
+           infos serveur
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="ui-legend" I18n='personalinfo'>Perso</legend>
+          <div class="affich">
+           infos perso
+          </div>
+        </fieldset>
+        
+      </div>
+  </div>
   <!-- Modal affichage-->
   <div id="affichage" class="modal fade" role="dialog">
       <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
