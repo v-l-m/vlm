@@ -1662,9 +1662,16 @@ function SelectCountryDDFlag(Country)
 
 function HandleBoatSelectionChange(e)
 {
-  var BoatId= e.target.closest('li').attributes["BoatID"].value;
-  SetCurrentBoat(GetBoatFromIdu(BoatId),true,false); 
-  DisplayCurrentDDSelectedBoat(GetBoatFromIdu(BoatId));
+  let BoatId= $(e.target).closest('li').attr('BoatID');
+  let Boat = GetBoatFromIdu(BoatId);
+
+  if (typeof Boat === "undefined" || ! Boat)
+  {
+    VLMAlertDanger(GetLocalizedString('Error Reload'));
+    return;
+  }
+  SetCurrentBoat(Boat,true,false); 
+  DisplayCurrentDDSelectedBoat(Boat);
 }
 
 var LastMouseMoveCall = 0;

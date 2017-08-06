@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'Error reload' => 'Error lors du traitement de la demande. Essayer de recharger la page',
     'TrackEstForecast' => 'Selon la meteo',
     'TrackEstMouse' => 'Selon la souris',
     'EstimateOptionsGroup' => 'Estime',
