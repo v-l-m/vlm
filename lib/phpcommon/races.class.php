@@ -475,6 +475,9 @@ class races extends baseClass {
   //
   function UpdateRaceRankings()
   {
+
+    $start = microtime();
+
     // Get all racing users with current info
     $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, ifnull(dnm,99999) as dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
       " FROM  races_ranking RR, users US " . 
@@ -582,7 +585,9 @@ class races extends baseClass {
       //print_r($ranking);
     }
 
-    
+    $end = microtime();
+    $ranking['timerequired']=$end - $start;
+    $ranking['update']=$now;
     return $ranking;
             
   }
