@@ -7,7 +7,8 @@
 
    // is the race fnished ?
    // ==1 > no more opponents and MAXDEPTIME is not passed
-   if ( empty($fullRacesObj->opponents) && $fullRacesObj->races->closetime < $now ) {
+   if ( empty($fullRacesObj->opponents) && $fullRacesObj->races->closetime < $now ) 
+   {
         // let's close the race
         $fullRacesObj->stopRaces();
    } 
@@ -16,10 +17,12 @@
    //            >0 si le premier n'est pas arriv� ou est arriv� il y a peu de temps
    //            <0 lorsque pourcentage en plus du temps du premier est d�pass�
    //        Parameter (verbose) added 2008/03/16 (0 non verbose (myboat.php), 1 verbose (here))
-   else if ( $fullRacesObj->races->maxTimeRemaining(1) < 0 ) {
+   else if ( $fullRacesObj->races->maxTimeRemaining(1) < 0 ) 
+   {
      // let's put all the remaining players to status HTP
      echo "\n   This race is finished : time exceeded the Winners's PCT time !\n";
-     foreach ( $fullRacesObj->opponents as $usersObj ) {
+     foreach ( $fullRacesObj->opponents as $usersObj ) 
+     {
        echo "   Setting user ".$usersObj->idusers . " HTP... ";
        
        //need to get fullUsers Object
@@ -32,25 +35,31 @@
    } 
 
    // Race not finished, let's do the job for each user
-   else {
-     foreach ( $fullRacesObj->opponents as $usersObj) {
-
-       if (($USER_NUM == 0) || ($USER_NUM !=0 && $usersObj->idusers == $USER_NUM)) {
-	 // Check only the race given in first arg if one is given, else check all races
-	 //echo "\n==>" . $usersObj->idusers;
-	 
-	 // Cas d'un joueur VLM
-	 if ( $usersObj->idusers > 0 ) {
-	   include "check_user.php";
-	   $nb_boats++;
-	 } else {
-	   // Cas d'un bateau r�e	   $fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
-	   $fullUsersObj->writeCurrentRanking();
-	 }
+   else 
+   {
+     foreach ( $fullRacesObj->opponents as $usersObj) 
+     {
+       if (($USER_NUM == 0) || ($USER_NUM !=0 && $usersObj->idusers == $USER_NUM)) 
+       {
+        // Check only the race given in first arg if one is given, else check all races
+        //echo "\n==>" . $usersObj->idusers;
+        
+        // Cas d'un joueur VLM
+        if ( $usersObj->idusers > 0 ) 
+        {
+          include "check_user.php";
+          $nb_boats++;
+        } 
+        else 
+        {
           // Cas d'un bateau réel
+          $fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
+          $fullUsersObj->writeCurrentRanking();
+        }
        }
      } // Foreach opponent
    } // If race finished
+
 
    $timings_race_end = microtime(TRUE);
    echo "\n*** *** Checking duration for race ". $fullRacesObj->races->idraces . " was " . ($timings_race_end - $timings_race_start) . " seconds";
