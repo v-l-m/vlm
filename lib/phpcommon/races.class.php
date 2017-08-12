@@ -709,6 +709,21 @@ class fullRaces {
     wrapper_mysql_db_query_writer($querypurgepositions);
   }
 
+  function UpdateRankingPage($idrace, $root)
+  {
+    $ranking = $this->races->UpdateRaceRankings();
+    $dest =  $root."/rankings/rnk_".$this->races->idraces.".json";
+    try
+    {
+      file_put_contents($dest, json_encode($ranking), LOCK_EX);
+    }
+    finally
+    {
+      echo "failed to write ranking file to dest:".$dest."\n";
+    }
+    
+  }
+
     //===========================================//
   //                                           //
   // Function dispHtmlEngaged() //
