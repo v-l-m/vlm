@@ -717,7 +717,7 @@ class fullRaces {
     {
       file_put_contents($dest, json_encode($ranking), LOCK_EX);
     }
-    finally
+    catch
     {
       echo "failed to write ranking file to dest:".$dest."\n";
     }
