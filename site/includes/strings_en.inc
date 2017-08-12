@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'Error reload' => 'Error processing request. Try reloading the browser page',
     'TrackEstForecast' => 'Track forecast',
     'TrackEstMouse' => 'Track mouse',
     'EstimateOptionsGroup' => 'Estimate',
