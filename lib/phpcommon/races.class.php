@@ -9,7 +9,7 @@
 //                                                                            //
 //****************************************************************************//
 
-class races {
+class races extends baseClass {
   var $idraces,
     $racename,
     $started,
@@ -470,6 +470,123 @@ class races {
         return $ret;
     }
 
+  // 
+  // Loads the full ranking for a race (should only be called once/race/vac, and stored in cache)
+  //
+  function UpdateRaceRankings()
+  {
+    // Get all racing users with current info
+    $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, ifnull(dnm,99999) as dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
+      " FROM  races_ranking RR, users US " . 
+      " WHERE RR.idusers = US.idusers " . 
+      " AND   RR.idraces = "  . $this->idraces .
+      " ORDER BY nwp desc, dnm asc";
+      
+    $res = $this->queryRead($query_ranking);
+
+    $ranking = array();
+
+    $now = time();
+    $position = 0;
+
+    while ($row = mysql_fetch_assoc($res)) 
+    {
+      // N'entrent dans les tableaux que les bateaux effectivement en course
+      $has_not_started = (!array_key_exists('nwp',$row) || 
+        (($row['dnm'] == 0.0) && ($row['loch'] == 0.0)));
+      // Calcul du status
+      if ( $row['releasetime'] > $now ) 
+      {
+        $row['status'] = 'locked';
+      } else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) 
+      {
+        $row['status'] = 'on_coast';
+      } else if ($has_not_started)
+      {
+        $row['status'] = 'no_started';
+      } 
+      else
+      {
+        $row['status'] = 'sailing';
+      }
+      
+      unset($row['pim']);
+      unset($row['pip']);
+      $row['status'] = "RAC";
+      $row['latitude'] /= 1000.;
+      $row['longitude'] /= 1000.;
+	
+      if ( ! $has_not_started) 
+      {
+        $position += 1;
+        $row['rank'] = $position;
+      }
+
+      $ranking[$row['idusers']]=$row;
+    }
+
+    // Get all not racing anymore users
+
+    $status[BOAT_STATUS_ARR] = "ARR";
+    $status[BOAT_STATUS_HTP] = "HTP";
+    $status[BOAT_STATUS_DNF] = "DNF";
+    $status[BOAT_STATUS_ABD] = "ABD";
+    $status[BOAT_STATUS_HC] = "HC";
+
+    $QueryFinished = "SELECT RR.position status, RR.duration + RR.penalty duration, RR.idusers idusers, username, 
+                        color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
+              FROM      races_results RR, users US
+              WHERE     idraces=".$this->idraces."
+              AND       US.idusers = RR.idusers
+              order by idusers " ;
+    
+    $res = $this->queryRead($QueryFinished);
+
+    $CurUser = '##';
+    while ($row = mysql_fetch_assoc($res)) 
+    {
+      $row['status'] = $status[$row['status']];
+      //echo "non racing user : ".$row['idusers'];
+      if (!isset($ranking[$row['idusers']]))
+      {
+        $ranking[$row['idusers']]=$row;
+      }
+
+    }
+
+    // Get all WP passing times for this race
+    $QueryWPs = "SELECT WC.idwaypoint idwaypoint, WC.time - WC.userdeptime duration, WC.idusers idusers
+                FROM      waypoint_crossing WC
+                WHERE     WC.idraces=".$this->idraces." AND WC.validity=1
+                AND       WC.time > WC.userdeptime AND WC.userdeptime > 0 
+                order by idusers,idwaypoint";
+
+    
+    $res = $this->queryRead($QueryWPs);
+
+    $CurUser = '##';
+    while ($row = mysql_fetch_assoc($res)) 
+    {
+      //echo $CurUser."Record wp ".$row['idwaypoint']." for user ".$row['idusers']."\n";
+      // Get ranking row for this user
+      if ($row['idusers'] !== $CurUser)
+      {
+        $rnk = &$ranking[$row['idusers']];
+        $CurUser = $row['idusers']  ;
+
+        $rnk["WP"] = [];
+        //print_r($rnk);
+
+      }
+      array_push($rnk["WP"],$row);
+      //print_r($ranking);
+    }
+
+    
+    return $ranking;
+            
+  }
+
 }
 
 
@@ -587,8 +704,7 @@ class fullRaces {
     wrapper_mysql_db_query_writer($querypurgepositions);
   }
 
-
-  //===========================================//
+    //===========================================//
   //                                           //
   // Function dispHtmlEngaged() //
   //                                           //
