@@ -13,8 +13,8 @@
    } 
    // ==2 > winner's time * (1 + firstpcttime/100) is not anymore in the future...
    //    Pour les autres courses :
-   //            >0 si le premier n'est pas arrivé ou est arrivé il y a peu de temps
-   //            <0 lorsque pourcentage en plus du temps du premier est dépassé
+   //            >0 si le premier n'est pas arrivï¿½ ou est arrivï¿½ il y a peu de temps
+   //            <0 lorsque pourcentage en plus du temps du premier est dï¿½passï¿½
    //        Parameter (verbose) added 2008/03/16 (0 non verbose (myboat.php), 1 verbose (here))
    else if ( $fullRacesObj->races->maxTimeRemaining(1) < 0 ) {
      // let's put all the remaining players to status HTP
@@ -44,10 +44,10 @@
 	   include "check_user.php";
 	   $nb_boats++;
 	 } else {
-	   // Cas d'un bateau réel
-	   $fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
+	   // Cas d'un bateau rï¿½e	   $fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
 	   $fullUsersObj->writeCurrentRanking();
 	 }
+          // Cas d'un bateau rÃ©el
        }
      } // Foreach opponent
    } // If race finished
