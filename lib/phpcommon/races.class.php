@@ -500,22 +500,21 @@ class races extends baseClass {
       // Calcul du status
       if ( $row['releasetime'] > $now ) 
       {
-        $row['status'] = 'locked';
+        $row['status'] = 'LOC';
       } else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) 
       {
-        $row['status'] = 'on_coast';
+        $row['status'] = 'CST';
       } else if ($has_not_started)
       {
-        $row['status'] = 'no_started';
+        $row['status'] = 'DNS';
       } 
       else
       {
-        $row['status'] = 'sailing';
+        $row['status'] = 'RAC';
       }
       
       unset($row['pim']);
       unset($row['pip']);
-      $row['status'] = "RAC";
       $row['latitude'] /= 1000.;
       $row['longitude'] /= 1000.;
 	
