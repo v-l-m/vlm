@@ -16,11 +16,13 @@
   $ws->answer["RnkGenStatus"]=[];
   while ($row = mysql_fetch_assoc($res)) 
   {
-    $race = new fullRaces($row['idraces']);
-    $line = "Gen rankings for race".$race->races->idraces;
-    array_push($ws->answer["RnkGenStatus"],$line);
-    $race->UpdateRankingPage($race->races->idraces,$_SERVER['DOCUMENT_ROOT']."/../../cache");
-
+    if ($row['idraces']!=='0')
+    {
+      $race = new fullRaces($row['idraces']);
+      $line = "Gen rankings for race".$race->races->idraces;
+      array_push($ws->answer["RnkGenStatus"],$line);
+      $race->UpdateRankingPage($race->races->idraces,$_SERVER['DOCUMENT_ROOT']."/../../cache");
+    }
   }
 
   $ws->reply_with_success();
