@@ -30,6 +30,8 @@
         die503("Could not connect : " . mysql_error());
       $GLOBALS['slavedblink']=$link;
       mysql_select_db(DBNAME, $link) or die503("Could not select database");
+      // Force charset to UTF-8 to help json encoder with db results.
+      mysql_set_charset('utf8');
     } 
 
 ?>
