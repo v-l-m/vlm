@@ -9,19 +9,28 @@
 
   $player = getLoggedPlayerObject();
   $now = time();
+  $skip = get_cgi_var('skip', 0);
   
-  $query = "select distinct idraces from races";
+  $query = "select distinct idraces from races order by idraces";
 
   $res = $ws->queryRead($query);
   $ws->answer["RnkGenStatus"]=[];
+  $skipped = 0;
+  $count = $skip + 1;
   while ($row = mysql_fetch_assoc($res)) 
   {
-    if ($row['idraces']!=='0')
+    if ($row['idraces']!=='0' && $skipped >= $skip)
     {
       $race = new fullRaces($row['idraces']);
       $line = "Gen rankings for race".$race->races->idraces;
       array_push($ws->answer["RnkGenStatus"],$line);
       $race->UpdateRankingPage($race->races->idraces,$_SERVER['DOCUMENT_ROOT']."/../../cache");
+      echo $count.' processed race '.$row['idraces']."\n";
+      $count++;
+    }
+    else
+    {
+      $skipped ++;
     }
   }
 
