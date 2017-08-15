@@ -423,19 +423,7 @@ function InitMenusAndButtons()
   $(".APMode").on('click',HandleAPModeDDClick)
 
   // Draggable info window
-  $("#Infos").draggable(
-            {
-              handle: ".modal-header,.modal-body"
-            });
-
-  // Draggable info window
-  $("#mouseInfo").draggable(
-            {
-              handle: ".modal-header,.modal-body"
-            });
-
-  // Draggable display settings
-  $("#affichage").draggable(
+  $(".Draggable").draggable(
             {
               handle: ".modal-header,.modal-body"
             });
