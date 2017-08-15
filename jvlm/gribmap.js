@@ -670,7 +670,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
 
       let BigGrib = Math.abs(bounds.left - bounds.right)>30 || Math.abs(bounds.top-bounds.bottom)> 30;
       this.UpdateGribMap(BigGrib);
-      console.log("BigGrib"+BigGrib+" "+bounds.left+" "+bounds.right+" "+bounds.top+" "+bounds.bottom);
+      //console.log("BigGrib"+BigGrib+" "+bounds.left+" "+bounds.right+" "+bounds.top+" "+bounds.bottom);
 
       //canvas object
       var ctx = this.canvas.getContext('2d');
