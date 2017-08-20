@@ -1274,17 +1274,17 @@ function LoadRankings(Boat)
     return;
   }
 
-  $.get("/ws/raceinfo/ranking.php?idr="+Boat.VLMInfo.RAC, 
+  $.get("/cache/rankings/rnk_"+Boat.VLMInfo.RAC+".json", 
         function (result)
         {
-          if (result.success)
+          if (result)
           {
-            Boat.Rankings=result;
+            Boat.RnkObject = result;
             DrawBoat(Boat,false);
           }
           else
           {
-            Boat.VLMInfo.Rankings=null;
+            Boat.RnkObject = null;
           }
         }
   );

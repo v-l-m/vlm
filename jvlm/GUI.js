@@ -14,6 +14,10 @@ var FIELD_MAPPING_CALLBACK = 4;
 
 var MAX_PILOT_ORDERS = 5;
 
+var BoatRacingStatus = ["RAC","CST","LOC","DNS"];
+var BoatArrivedStatus = ["ARR"];
+var BoatNotRacingStatus = ["DNF","HC","HTP"];
+
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
 var GribWindController = null;
@@ -1731,7 +1735,7 @@ function RefreshEstPosLabels(Pos)
   }
 }
 
-function FillRankingTable()
+function FillRankingTable(style)
 {
 
   $('#RankingTableBody').empty();
@@ -1742,10 +1746,249 @@ function FillRankingTable()
     return ;
   }
 
-  
-  for (index in Boat.Rankings.ranking)
+  switch (style)
   {
-    AddRankingLine(Boat.Rankings.ranking[index], parseInt(Boat.Rankings.nb_arrived,10))
+
+    default:
+      CurRnk = SortRacing(Boat)
+      FillRacingRanking(Boat);
+  }
+
+}
+
+function RnkIsArrived(rnk)
+{
+  if (typeof rnk === "undefined" || typeof rnk.status === "undefined" || !rnk.status)
+  {
+    return false;
+  }
+  return BoatArrivedStatus.indexOf(rnk.status ) !== -1;
+}
+
+function RnkIsRacing(rnk)
+{
+  if (typeof rnk === "undefined" || typeof rnk.status === "undefined" || !rnk.status)
+  {
+    return false;
+  }
+  return BoatRacingStatus.indexOf(rnk.status ) !== -1;
+}
+
+function Sort2ArrivedBoats(rnk1,rnk2)
+{
+  let Total1 = parseInt(rnk1.duration,10)+parseInt(rnk1.penalty);
+  let Total2 = parseInt(rnk2.duration,10)+parseInt(rnk2.penalty);
+  
+  if (Total1 > Total2)
+  {
+    DebugRacerSort(rnk1,rnk2,1)
+    return 1; 
+  }
+  else if (Total1 < Total2)
+  {
+    DebugRacerSort(rnk1,rnk2,-1)
+    return -1;
+  }
+  else
+  {
+    DebugRacerSort(rnk1,rnk2,0)
+    return 0;
+  }
+}
+
+function Sort2RacingBoats(rnk1,rnk2)
+{
+  let nwp1 = parseInt(rnk1.nwp,10);
+  let nwp2 = parseInt(rnk2.nwp,10);
+  
+  if (nwp1 === nwp2)
+  {
+    let dnm1 = parseFloat(rnk1.dnm);
+    let dnm2 = parseFloat(rnk2.dnm);
+    
+    if (dnm1 > dnm2)
+    {
+      DebugRacerSort(rnk1,rnk2,1)
+      return 1;
+    }
+    else if (dnm1 === dnm2)
+    {
+      DebugRacerSort(rnk1,rnk2,0)
+      return 0;
+    }
+    else
+    {
+      DebugRacerSort(rnk1,rnk2,-1)
+      return -1;
+    }
+
+  }
+  else if (nwp1 > nwp2)
+  {
+    DebugRacerSort(rnk1,rnk2,-1)
+    return -1; 
+  }
+  else
+  {
+    DebugRacerSort(rnk1,rnk2,1)
+    return 1
+  }
+
+  // Should not happen
+  DebugRacerSort(rnk1,rnk2,0)
+  return 0;
+}
+
+function RacersSort(rnk1, rnk2)
+{
+
+  if (RnkIsRacing(rnk1) && RnkIsRacing(rnk2))
+  {
+    return Sort2RacingBoats(rnk1, rnk2)
+  }
+  else if (RnkIsArrived(rnk1) && RnkIsArrived(rnk2))
+  {
+    return Sort2ArrivedBoats(rnk1,rnk2) 
+  }
+  else if (RnkIsArrived(rnk1))
+  {
+    DebugRacerSort(rnk1,rnk2,-1)
+    return -1
+  }
+  else if (RnkIsArrived(rnk2) )
+  {
+    DebugRacerSort(rnk1,rnk2,1)
+    return 1 
+  }
+  else if (RnkIsRacing(rnk1))
+  {
+    DebugRacerSort(rnk1,rnk2,1)
+    return -1 
+  }
+  else if (RnkIsRacing(rnk2))
+  {
+    DebugRacerSort(rnk1,rnk2,1)
+    return 1 
+  }
+  else
+  {
+    return Sort2NonRacing(rnk1,rnk2);
+  }
+}
+
+let DebugCount = 1;
+function DebugRacerSort(rnk1,rnk2,res)
+{
+  let debug= false;
+
+  if (debug)
+  {
+    console.log((DebugCount++)+ "sort " + rnk1.idusers + " vs " + rnk2.idusers + " =>" + res);
+  }
+  
+}
+
+function Sort2NonRacing(rnk1,rnk2)
+{
+
+  if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers != "undefined")
+  {
+    if (rnk1.idusers > rnk2.idusers)
+    {
+      DebugRacerSort(rnk1,rnk2,1)
+      return 1 ;
+    }
+    else if (rnk1.idusers < rnk2.idusers)
+    {
+      DebugRacerSort(rnk1,rnk2,-1)
+      return -1;
+    }
+    else
+    {
+      DebugRacerSort(rnk1,rnk2,0)
+      return 0;
+    }
+  }
+  else if (typeof rnk1.idusers !== "undefined")
+  {
+    return -1;
+  }
+  else if (typeof rnk2.idusers !== "undefined")
+  {
+    return -1;
+  }
+  else
+  {  
+    let ar = [rnk1,rnk2];
+    ar.sort()
+
+    if (ar[0]=== rnk1)
+    {
+      return 1
+    }
+    else
+    {
+      return -1
+    }
+  }
+}
+
+function SortRacing(Boat)
+{
+  
+  if (typeof Boat.RnkObject.RacerRanking === "undefined")
+  {
+    let index ;
+
+    Boat.RnkObject.RacerRanking=[];
+    
+    for (index in Boat.RnkObject)
+    {
+      if (Boat.RnkObject[index] && !isNaN(parseInt(index,10)))
+      {
+        Boat.RnkObject[index].idusers=index;
+        Boat.RnkObject.RacerRanking.push(Boat.RnkObject[index]);
+      }
+    }
+  }
+
+  Boat.RnkObject.RacerRanking.sort(RacersSort);
+  
+  let =rnk = 1;
+  let index = 0;
+
+  for (index in Boat.RnkObject.RacerRanking)
+  {
+    if (Boat.RnkObject.RacerRanking[index] && Boat.IdBoat === index)
+      {
+        rnk  = index +1;
+        break;
+      }
+
+  }
+
+  return rnk;
+}
+
+function FillRacingRanking(Boat)
+{
+  let index;
+
+  for (index in Boat.RnkObject.RacerRanking)
+  {
+    if (Boat.RnkObject.RacerRanking[index])
+    {    
+      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      
+      if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
+      {
+        AddRankingLine(RnkBoat,parseInt(index,10)+1)
+      }
+      else
+      {
+        break;
+      }
+    }
   }
 
   $('#Ranking-Panel').show();
@@ -1759,23 +2002,38 @@ function FillRankingTable()
 
 }
 
-function AddRankingLine(Rank, ArrivedCount)
+function AddRankingLine(RankBoat, rank)
 {
   var Row = $('<tr>')
 
-  Row.append(AppendColumn(Row,Rank['rank']+ArrivedCount))
-  var boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+Rank.idusers+'"></img>   '+Rank['boatname']
+  Row.append(AppendColumn(Row,rank))
+  let boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '+RankBoat['boatname']
   Row.append(AppendColumn(Row,boatsearchstring))
-  var NextMark = '['+Rank['nwp'] +'] -=> '+ RoundPow(Rank['dnm'],2)
-  Row.append(AppendColumn(Row,NextMark))
-  var RacingTime = Math.round((new Date() - new Date(parseInt(Rank['deptime'],10)*1000))/1000);
-  Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
-  Row.append(AppendColumn(Row,Rank['loch']))
-  Row.append(AppendColumn(Row,Rank['longitude']))
-  Row.append(AppendColumn(Row,Rank['latitude']))
-  Row.append(AppendColumn(Row,Rank['last1h']))
-  Row.append(AppendColumn(Row,Rank['last3h']))
-  Row.append(AppendColumn(Row,Rank['last24h']))
+  if (RnkIsRacing(RankBoat))
+  {
+    let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
+    Row.append(AppendColumn(Row,NextMark))
+    let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
+    Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
+    Row.append(AppendColumn(Row,RankBoat['loch']))
+    Row.append(AppendColumn(Row,RankBoat['longitude']))
+    Row.append(AppendColumn(Row,RankBoat['latitude']))
+    Row.append(AppendColumn(Row,RankBoat['last1h']))
+    Row.append(AppendColumn(Row,RankBoat['last3h']))
+    Row.append(AppendColumn(Row,RankBoat['last24h']))
+  }
+  else
+  {
+    let NextMark = " arrived"
+    Row.append(AppendColumn(Row,NextMark))
+    Row.append(AppendColumn(Row,GetFormattedChronoString(parseInt(RankBoat['duration'],10))));
+    Row.append(AppendColumn(Row,RankBoat['loch']))
+    /*Row.append(AppendColumn(Row,RankBoat['longitude']))
+    Row.append(AppendColumn(Row,RankBoat['latitude']))
+    Row.append(AppendColumn(Row,RankBoat['last1h']))
+    Row.append(AppendColumn(Row,RankBoat['last3h']))
+    Row.append(AppendColumn(Row,RankBoat['last24h']))*/
+  }
   
   $('#RankingTableBody').append(Row);
 
