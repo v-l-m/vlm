@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'fromWP' => 'From WP',
     'Error reload' => 'Error processing request. Try reloading the browser page',
     'TrackEstForecast' => 'Track forecast',
     'TrackEstMouse' => 'Track mouse',
@@ -15,10 +16,10 @@ $strings['en'] =
     'ShowOppNames' => 'Display Boat Names',
     'Map' => 'Map',
     'VLM2' => 'New VLM user interface available',
-    'distortho' => 'Orthodrimic dist.',
-    'distloxo' => 'Loxo. dist.',
+    'distortho' => 'Orthodromic dist.',
+    'distloxo' => 'Rhumb line dist.',
     'caportho' => 'Orthodromic bearing',
-    'caploxo' => 'Loxodromique bearing',
+    'caploxo' => 'Rhumb line bearing',
     'fromboat' => 'from Boat',
     'AP_OrderParam' => 'AutoPilot order parameters',
     'AP_Mode' => 'AutoPilot Mode',
