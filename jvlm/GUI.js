@@ -1241,12 +1241,12 @@ let RaceSorter = function RaceSortEvaluator (r1, r2)
       }
       else
       {
-        return 1;
+        return -1;
       }
     }
     else
     {
-      return -1;
+      return 1;
     }
     
   }
