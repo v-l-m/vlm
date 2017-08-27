@@ -1,7 +1,15 @@
 <?php
 $strings['fr'] = 
   array (
+    'status_ABD' => 'Abandon',
+    'status_ARR' => 'Arriv&eacute;(e)',
+    'status_DNF' => 'Disqualifi&eacute;(e)',
+    'status_HC' => 'Hors Classement',
+    'status_HTP' => 'Hors temps',
     'fromWP' => 'Depuis WP',
+    'Racing' => 'En Course',
+    'Arrived' => 'Arrivé',
+    'Finished' => 'Terminé',
     'Error reload' => 'Error lors du traitement de la demande. Essayer de recharger la page',
     'TrackEstForecast' => 'Selon la meteo',
     'TrackEstMouse' => 'Selon la souris',

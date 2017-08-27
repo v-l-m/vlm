@@ -1,7 +1,15 @@
 <?php
 $strings['en'] = 
   array (
+    'status_ABD' => 'Dropped Out',
+    'status_ARR' => 'Arrived',
+    'status_DNF' => 'Disqualified',
+    'status_HC' => 'No Ranked',
+    'status_HTP' => 'Timed-Out',
     'fromWP' => 'From WP',
+    'Racing' => 'Racing',
+    'Arrived' => 'Arrived',
+    'Finished' => 'Finished',
     'Error reload' => 'Error processing request. Try reloading the browser page',
     'TrackEstForecast' => 'Track forecast',
     'TrackEstMouse' => 'Track mouse',

@@ -494,7 +494,6 @@ class races extends baseClass {
 
     while ($row = mysql_fetch_assoc($res)) 
     {
-      // N'entrent dans les tableaux que les bateaux effectivement en course
       $has_not_started = (!array_key_exists('nwp',$row) || 
         (($row['dnm'] == 0.0) && ($row['loch'] == 0.0)));
       // Calcul du status
@@ -535,8 +534,8 @@ class races extends baseClass {
     $status[BOAT_STATUS_ABD] = "ABD";
     $status[BOAT_STATUS_HC] = "HC";
 
-    $QueryFinished = "SELECT RR.position status, RR.duration + RR.penalty duration, RR.idusers idusers, username, 
-                        color, country, boatname, longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
+    $QueryFinished = "SELECT RR.position status, RR.duration + RR.penalty duration, RR.idusers idusers, US.username boatpseudo, US.boatname boatname, 
+                        color, country,  longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
               FROM      races_results RR, users US
               WHERE     idraces=".$this->idraces."
               AND       US.idusers = RR.idusers
