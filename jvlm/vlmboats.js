@@ -526,7 +526,7 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
     {
       Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL,MI.Speed,MI.Heading,MI.Heading+index);
 
-      if (Math.isNaN(Speed))
+      if (isNaN(Speed))
       {
         // Just abort in case of not yet loaded polar. Next display should fix it.
         // FixMe - Should we try later or will luck do it for us??
@@ -1274,17 +1274,17 @@ function LoadRankings(Boat)
     return;
   }
 
-  $.get("/ws/raceinfo/ranking.php?idr="+Boat.VLMInfo.RAC, 
+  $.get("/cache/rankings/rnk_"+Boat.VLMInfo.RAC+".json", 
         function (result)
         {
-          if (result.success)
+          if (result)
           {
-            Boat.Rankings=result;
+            Boat.RnkObject = result;
             DrawBoat(Boat,false);
           }
           else
           {
-            Boat.VLMInfo.Rankings=null;
+            Boat.RnkObject = null;
           }
         }
   );

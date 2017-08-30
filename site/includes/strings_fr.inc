@@ -1,6 +1,16 @@
 <?php
 $strings['fr'] = 
   array (
+    'status_ABD' => 'Abandon',
+    'status_ARR' => 'Arriv&eacute;(e)',
+    'status_DNF' => 'Disqualifi&eacute;(e)',
+    'status_HC' => 'Hors Classement',
+    'status_HTP' => 'Hors temps',
+    'fromWP' => 'Depuis WP',
+    'Racing' => 'En Course',
+    'Arrived' => 'Arrivé',
+    'Finished' => 'Terminé',
+    'Error reload' => 'Error lors du traitement de la demande. Essayer de recharger la page',
     'TrackEstForecast' => 'Selon la meteo',
     'TrackEstMouse' => 'Selon la souris',
     'EstimateOptionsGroup' => 'Estime',
@@ -166,7 +176,7 @@ Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur
     'Your password is now' => 'Votre mot de passe est maintenant',
     'Your playername is already in use.' => 'Votre nom de joueur est déjà utilisé.',
     'Your playername should have at least 3 characters.' => 'Votre nom de joueur doit avoir au moins 3 caractères.',
-    'a1' => 'C\'est une simulation en temps r&eacute;el de strat&eacute;gie et de routage m&eacute;t&eacute;o dans le cadre de courses &agrave; la voile. Les donn&eacute;es m&eacute;t&eacute;o utilis&eacute;es sont celles des fichiers GRIB utilis&eacute;s par les navigateurs r&eacute;els pour estimer leur strat&eacute;gie. Il s\'agit de donn&eacute;es de pr&eacute;vision m&eacute;t&eacute;o (force et direction du vent) qui sont mises &agrave; jour toutes les 3 heures (r&eacute;ception &agrave; GMT 0h30, 3h30,...). Des polaires de vitesse de bateaux r&eacute;els sont utilis&eacute;s et le moteur du logiciel actualise les positions des bateaux toutes les 5 minutes. Des courses avec d&eacute;part en ligne sont souvent organis&eacute;es et des courses permanentes vous permettent de vous entrainer ou de battre un record. VLM un projet altruiste o&ugrave; tout est gratuit et il y règne une bonne ambiance. Cette simulation qui se veut r&eacute;aliste, donc pas forc&eacute;ment &eacute;vidente &agrave; prendre en main est soutenue par le portail Virtual-Winds.com, et dispose d\'un forum <i>(la taverne)</i> et de <i>t\'chats</i>. Ce sont des lieux de convivialit&eacute; et d\'entre-aide qui vous permettront d\'apprendre et de comprendre rapidement pour vous confronter aux autres joueurs de tous ages et de toutes nationalit&eacute;s, naviguant ou pas, dans de bonnes conditions.',
+    'a1' => 'C\'est une simulation en temps r&eacute;el de strat&eacute;gie et de routage m&eacute;t&eacute;o dans le cadre de courses &agrave; la voile. Les donn&eacute;es m&eacute;t&eacute;o utilis&eacute;es sont celles des fichiers GRIB utilis&eacute;s par les navigateurs r&eacute;els pour estimer leur strat&eacute;gie. Il s\'agit de donn&eacute;es de pr&eacute;vision m&eacute;t&eacute;o (force et direction du vent) qui sont mises &agrave; jour toutes les 3 heures (r&eacute;ception &agrave; GMT 0h30, 3h30,...). Des polaires de vitesse de bateaux r&eacute;els sont utilis&eacute;s et le moteur du logiciel actualise les positions des bateaux toutes les 5 minutes. Des courses avec d&eacute;part en ligne sont souvent organis&eacute;es et des courses permanentes vous permettent de vous entrainer ou de battre un record. VLM un projet altruiste o&ugrave; tout est gratuit et il y règne une bonne ambiance. Cette simulation qui se veut r&eacute;aliste, donc pas forc&eacute;ment &eacute;vidente &agrave; prendre en main est soutenue par le portail Virtual-Winds.org, et dispose d\'un forum <i>(la taverne)</i> et de <i>t\'chats</i>. Ce sont des lieux de convivialit&eacute; et d\'entre-aide qui vous permettront d\'apprendre et de comprendre rapidement pour vous confronter aux autres joueurs de tous ages et de toutes nationalit&eacute;s, naviguant ou pas, dans de bonnes conditions.',
     'about' => 'A&nbsp;Propos',
     'accountcreated' => 'Compte cr&eacute;e, pseudonyme et mot de passe = ',
     'action' => 'action',

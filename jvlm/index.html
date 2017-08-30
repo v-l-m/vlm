@@ -504,6 +504,35 @@
        <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
         <div class="container-fluid">
+            <ul class="nav nav-tabs">
+                <li class="active" RnkSort="RAC"><a href="#" I18n="Racing">Rcing</a></li>
+                <li ><a href="#" RNKSort="ARR" I18n="Arrived">Arrved</a></li>
+                <li>
+                  <a RnkSort="ARR" href="#" >
+                    <span I18n="Finished">Menu 1</span>
+                  </a>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" I18n='finished'>Page 1
+                  <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                    <li RnkSort="DNF"><a href="#">DNF</a></li>
+                    <li RnkSort="ABD"><a href="#">ABD</a></li>
+                    <li RnkSort="HTP"><a href="#">HTP</a></li> 
+                    <li RnkSort="HC"><a href="#">HC</a></li>                     
+                  </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" >WP
+                      <span class="caret"></span>
+                    </a>
+                    <ul id="LeaderBoardRankingPerWP" class="dropdown-menu">
+                    </ul>
+                  </li>
+                  
+            </ul>
+        </div>
+        <div class="container-fluid">
           <table id="RankingTable"  class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
             <thead>
               <tr id="RankingTableHeader">
@@ -551,7 +580,7 @@
       </div>
     </div>
     <!-- Modal Infos-->
-  <div id="Infos" class="modal fade" role="dialog">
+  <div id="Infos" class="Draggable modal fade" role="dialog">
       <div class="modal-header"> Infos <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -571,7 +600,7 @@
       </div>
   </div>
   <!-- Modal affichage-->
-  <div id="affichage" class="modal fade" role="dialog">
+  <div id="affichage" class="Draggable modal fade" role="dialog">
       <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -624,7 +653,7 @@
       </div>
   </div>
   <!-- Modal mouseInfo-->
-  <div id="mouseInfo" class="dialog fade" role="dialog">
+  <div id="mouseInfo" class="Draggable dialog fade" role="dialog">
     <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     </div>  
     <div style="text-align:left" class="modal-body">
@@ -640,7 +669,7 @@
           <div><label I18n="caploxo">Ortho</label><span> : </span><span id="MI_Loxo"></span></div>
         </fieldset>
         <fieldset class="MI_Coords">
-          <legend class="ui-legend MI_Legend">du WP</legend>
+          <legend class="ui-legend MI_Legend" I18n="fromWP">du WP</legend>
           <div><label I18n="distortho">Ortho</label><span> : </span><span id="MI_WPOrthoDist"></span></div>
           <div><label I18n="caportho">Ortho</label><span> : </span><span id="MI_WPOrtho"></span></div>
           <div><label I18n="distloxo">Ortho</label><span> : </span><span id="MI_WPLoxoDist"></span></div>

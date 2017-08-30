@@ -443,9 +443,11 @@ function GetBoatFromIdu(Id)
 
 function GetBoatFromBoatArray(BoatsArray, Id)
 {
+  Id = parseInt(Id,10);
+
   for (boat in BoatsArray)
   {
-    if (BoatsArray[boat].IdBoat == Id)
+    if (BoatsArray[boat].IdBoat === Id)
     {
       return BoatsArray[boat];
     }
