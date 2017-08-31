@@ -282,7 +282,7 @@ function InitMenusAndButtons()
   $("#Ranking-Panel").on('shown.bs.collapse',
         function()
         {
-          FillRankingTable();
+          IdUser2();
         }
   )
   $("[RnkSort]").on('click',
@@ -498,7 +498,7 @@ function HandleRaceSortChange(e)
     case 'HTP':
     case 'HC':
     case 'ABD':
-      FillRankingTable(Target);
+      IdUser2(Target);
       break;
 
     default:
@@ -1764,8 +1764,15 @@ function RefreshEstPosLabels(Pos)
   }
 }
 
-function FillRankingTable(style)
+function CheckWPRankingList()
 {
+  
+}
+
+function IdUser2(style)
+{
+
+  CheckWPRankingList();
 
   $('#RankingTableBody').empty();
   var Boat = _CurPlayer.CurBoat;
