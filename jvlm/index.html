@@ -503,15 +503,11 @@
        </div>
        <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
-        <div class="container-fluid">
-            <ul class="nav nav-tabs">
-                <li class="active" RnkSort="RAC"><a href="#" I18n="Racing">Rcing</a></li>
-                <li ><a href="#" RNKSort="ARR" I18n="Arrived">Arrved</a></li>
-                <li>
-                  <a RnkSort="ARR" href="#" >
-                    <span I18n="Finished">Menu 1</span>
-                  </a>
-                </li>
+          <div id="TabsRank">
+            <ul>
+                <li><a href="#RankingTable" RnkSort="RAC" I18n="Racing" data-toggle="tab" >Rcing</a></li>
+                <li><a href="#" RNKSort="ARR" I18n="Arrived" data-toggle="tab">Arrved</a></li>
+                <li><a href="#" RnkSort="ARR" data-toggle="tab"> <span I18n="Finished">Menu 1</span></a></li>
                 <li class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#" I18n='finished'>Page 1
                   <span class="caret"></span></a>
@@ -529,11 +525,11 @@
                     <ul id="LeaderBoardRankingPerWP" class="dropdown-menu">
                     </ul>
                   </li>
-                  
             </ul>
-        </div>
-        <div class="container-fluid">
-          <table id="RankingTable"  class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
+        
+        <div id="my-rank-content" class="tab-content">
+        <div id="RankingTable">
+          <table   class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
             <thead>
               <tr id="RankingTableHeader">
                 <th data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
@@ -552,8 +548,10 @@
               
             </tbody>
            </table> 
+          </div>
         </div>
-      </div>
+    </div>
+ </div>
     <!-- COllapsable Pilototo -->
       <div id="Pilot-Panel" class="TDB-Panel collapse">
         <div class="container">
