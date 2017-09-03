@@ -248,6 +248,7 @@ function InitMenusAndButtons()
       );
   
   // Theme tabs
+  $(".JVLMTabs").tabs();
   $( "#tabs" ).tabs();
   $( "#TabModal" ).tabs();
   $( "#TabsInfos" ).tabs();
@@ -280,9 +281,9 @@ function InitMenusAndButtons()
 
   // Handle clicking on ranking button, and ranking sub tabs
   $("#Ranking-Panel").on('shown.bs.collapse',
-        function()
+        function(e)
         {
-          IdUser2();
+          HandleRaceSortChange(e);
         }
   )
   $("[RnkSort]").on('click',
@@ -490,15 +491,18 @@ function HandleRaceSortChange(e)
 {
   let Target = $(e.currentTarget).attr('rnksort');
 
+  //$("[rnksort]").removeClass("active")
   switch(Target)
   {
-    case 'RAC':
-    case 'ARR':
     case 'DNF':
     case 'HTP':
     case 'HC':
     case 'ABD':
-      IdUser2(Target);
+      //$("[rnksort='FIN']").addClass("active");
+    case 'RAC':
+    case 'ARR':
+      //$("[rnksort='"+Target+"']").addClass("active");
+      SortRanking(Target);
       break;
 
     default:
@@ -1769,7 +1773,7 @@ function CheckWPRankingList()
   
 }
 
-function IdUser2(style)
+function SortRanking(style)
 {
 
   CheckWPRankingList();
@@ -2007,6 +2011,7 @@ function SortRankingData(Boat, SortType)
     case 'HC':
     case 'HPT':
     case 'ABD':
+    case 'ARR':
     
       Boat.RnkObject.RacerRanking.sort(RacersSort);
       break;
@@ -2053,7 +2058,11 @@ function FillStatusRanking(Boat,Status)
   $('#Ranking-Panel').show();
   $('#RankingTable').footable(
     {
-      
+      "paging": 
+      {
+        "size" : 20,
+        "current": 1
+	  	}
 	  });
 }
 
@@ -2083,6 +2092,7 @@ function FillRacingRanking(Boat)
     {
       "paging": 
       {
+        "size" : 20,
         "current": Math.round((parseInt(_CurPlayer.CurBoat.VLMInfo.RNK,10))/20)
 	  	}
 	  });

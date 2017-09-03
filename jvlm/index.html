@@ -504,32 +504,25 @@
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
         <div class="container-fluid JVLMTabs">
           <ul class="nav nav-tabs">
-            <li class="active" RnkSort="RAC">
-              <a href="#RnkRAC" I18n="Racing">Rcing</a>
+            <li RnkSort="RAC">
+              <a href="#DivRnkRAC" I18n="Racing">Rcing</a>
             </li>
-            <li >
-              <a href="#RnkARR" RNKSort="ARR" I18n="Arrived">Arrved</a>
-            </li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" I18n='finished'>Page 1
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li RnkSort="ABD"><a href="#RnkARR">ABD</a></li>
-                <li RnkSort="HTP"><a href="#RnkARR">HTP</a></li> 
-                <li RnkSort="DNF"><a href="#RnkRAC">DNF</a></li>
-                <li RnkSort="HC"><a href="#RnkRAC">HC</a></li>                     
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" >WP
+            <!--<li RNKSort="ARR">
+              <a  RNKSort="ARR" I18n="Arrived">Arrved</a>
+            </li>-->
+            <li RnkSort="ABD"><a href="#DivRnkRAC">ABD</a></li>
+            <li RnkSort="HTP"><a href="#DivRnkRAC" >HTP</a></li> 
+            <li RnkSort="DNF"><a href="#DivRnkRAC">DNF</a></li>
+            <li RnkSort="HC"><a href="#DivRnkRAC">HC</a></li>                     
+            <!--<li class="dropdown" RNKSort="WP">
+              <a class="dropdown-toggle" data-toggle="dropdown" >WP
                 <span class="caret"></span>
               </a>
               <ul id="LeaderBoardRankingPerWP" class="dropdown-menu">
               </ul>
-            </li>
+            </li>-->
           </ul>
-          <div id= "#RnkRAC">
+          <div id='DivRnkRAC'>
             <div id="my-rank-content" class="tab-content">
               <div id="RankingTable">
                 <table   class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
@@ -553,7 +546,7 @@
                 </table> 
               </div>
             </div>
-          </div>
+          </div>   
         </div>
       </div>
       <!-- COllapsable Pilototo -->
