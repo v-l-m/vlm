@@ -261,7 +261,7 @@
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-        <div id="tabs">
+        <div id="tabs" class ="JVLMTab">
           <ul>
             <li class=" BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
               <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" alt="PMActiveMode"/>
@@ -290,161 +290,160 @@
             </li>
           </ul>
 				<!-- Fin de la barre d'onglet-->
-
-            <div id="my-tab-content" class="tab-content">
-              <div class="BCPane tab-pane" id="BearingMode">
-                <div class="BoatControllerRow row">
-                    <div class="col-sm-2" > <span  i18n="heading">Cap à suivre</span>
-                    </div>
+          <div id="my-tab-content" class="tab-content">
+            <div class="BCPane tab-pane" id="BearingMode">
+              <div class="BoatControllerRow row">
+                <div class="col-sm-2" > <span  i18n="heading">Cap à suivre</span>
+                  </div>
                     <div class="col-sm-2">
                       <input type="number" class="input Boat_SimpleInput" id="PM_Heading">
                     </div>
                     <div class="col-sm-4">Entrer le cap à suivre en °
-                    </div>
-                </div>
-                <div class="BoatControllerRow row">
-                  <div class="col-xs-12">
-                    <button class="ui-button ui-corner-all " id="BtnPM_Heading">
-                      <span I18n="autopilot">Do Heading</span>
-                    </button>
                   </div>
-                </div>
               </div>
-              <!-- Fin HDG debut TWA-->
-              <div class="BCPane tab-pane" id="AngleMode">
-                 <div class="BoatControllerRow row">
-                    <div class="col-sm-2"> <span I18n="WindAngle"> Angle du vent</span>
-                    </div>
-                    <div class="col-sm-2">
-                      <input tupe="number" class="input Boat_SimpleInput" id="PM_Angle">
-                    </div>
-                    <div class="col-sm-4">Entrer l'angle +/- par rapport au vent
-                    </div>                </div>
-                <div class="BoatControllerRow row">
-                    <div class="col-sm-2">
-                    <button class="ui-button ui-corner-all " id="BtnPM_Tack" I18n="tack">Virer / Empanner</button>
-                    </div>
-                    <div class="col-sm-2">
-                    <button class="ui-button ui-corner-all " id="BtnPM_Angle" I18n="constant">Regler l'allure</button>
-                  </div>
+              <div class="BoatControllerRow row">
+                <div class="col-xs-12">
+                  <button class="ui-button ui-corner-all " id="BtnPM_Heading">
+                    <span I18n="autopilot">Do Heading</span>
+                  </button>
                 </div>
               </div>
-              <!-- Fin TWA debut Ortho-->
-              <div class="BCPane tab-pane" id="OrthoMode">
-                <div id="PM_WPMode_Div">
-                  <div class="BoatControllerRow row">
-                      <div class="col-sm-2">
-                      <span I18n="mytargetpoint"> CurDest</span>
-                      </div>
-                      <div class="col-sm-2">
-                        <img id="SetWPOnClick" class="ClickWPPos_Off" src="images/clickwp_pos.png" alt="clickwp_pos"/>
-                        <img id="SetWPOffClick" class="ClickWPPos_On" src="images/clickwp_pos_on.png" alt="clickwp_pos_on"/>
-                      </div>
-                      <div class="col-sm-8">Cliquez sur le bouton puis sur la map pour positionner votre WP
-                      </div>
-                  </div>
-                  <div class="BoatControllerRow row">
-                      <div class="col-sm-2"> Latitude</div>
-                      <div class="col-sm-2">
-                      <input class="input Boat_SimpleInput" id="PM_Lat" size="100">
-                      </div>
-                      <div class="col-sm-4"> <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
-                    </div>
-                   </div>
-                  <div class="BoatControllerRow row">
-                      <div class="col-sm-2" > Longitude</div>
-                      <div class="col-sm-2">
-                        <input class="input Boat_SimpleInput" id="PM_Lon">
-                      </div>
-                      <div class="col-sm-4">
-                      <span class="input Boat_SimpleInput" id="PM_CurWPLon">Longitude du WP</span> 
-                      </div>
-                  </div>
-                  <div class="BoatControllerRow row">
-                    <div class="col-sm-2">
-                        <div class="checkbox "> 
-                          <label>
-                            <input type="checkbox" id="PM_WithWPHeading">
-                            @WPH
-                          </label>
-                        </div>
-                   </div>
-                   <div class="col-sm-2">
-                        <input class="input Boat_SimpleInput" id="PM_WPHeading">
-                   </div>
-                   <div class="col-sm-2">
-                        <span class="input Boat_SimpleInput" id="PM_CurWPheading">@WPH</span>
-                   </div>
-                </div>                  
-                </div>
-                <div class="BoatControllerRow row">
-                  <div class="col-sm-4">
-                    <button class="ui-button ui-corner-all " id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
-                  </div>
-                </div>
-              </div>
-              <!-- Fin Ortho debut VMG-->
-              <div class="BCPane tab-pane" id="VMGMode">
-                <div class="BoatControllerRow row">
-                  <div class="col-sm-4">
-                    <button class="ui-button ui-corner-all " id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
-                  </div>
-                </div> 
-              </div>
-              <!-- Fin VMG debut VBVMG-->
-              <div class="BCPane tab-pane" id="VBVMGMode">
-                <div class="BoatControllerRow row">
-                  <div class="col-sm-4">
-                    <button class="ui-button ui-corner-all " id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
-                  </div>
-                </div>    
-              </div>
-              <!-- Fin VBVMG debut Pilot-->
-              <div class="BCPane tab-pane" id="AutoPilotTab">
-                <div class="hidden">
-                    <table>
-                      <tr id="PIL_TEMPLATE" class="hidden">
-                        <td><span id="PIL_DATE" >_</span></td>
-                        <td><span id="PIL_PIM">_</span></td>
-                        <td><span id="PIL_PIP" >_</span></td>
-                        <td><span id="PIL_STATUS">_</span></td>
-                        <td><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></td>
-                        <td><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></td>
-                      </tr>
-
-                    </table>
-                    <span id="EditCellTemplate"><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></span>
-                    <span id="DeleteCellTemplate"><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></span>                      
-                  </div>
-                  <div class="container-fluid">
-                    <div class="BoatControllerRow row">
-                      <table id="PilototoTable" class="table" data-show-toggle="true" data-expand-first="false">
-                        <thead>
-                          <tr id="PIL_HEADER">
-                            <th data-name="date" data-type="date" I18N="Human Readable date">Date</th>
-                            <th data-name="PIM" data-breakpoints="xs sm" >PIM</th>
-                            <th data-name="PIP" data-breakpoints="xs "  I18n="AP_OrderParam">PIP</th>
-                            <th data-name="Status" data-breakpoints="xs sm"  I18n="Status">Statut</th>
-                            <th data-name="Edit" data-breakpoints="xs sm" data-type="html">edit</th>
-                            <th data-name="Delete" data-breakpoints="xs sm" data-type="html" I18n='delete'>delet</th>
-                          </tr>                          
-                        </thead>
-                        <tbody id="PilototoBodyTable">
-                        </tbody>
-                      </table> 
-                    </div>                    
-                  <div class="BoatControllerRow row">
-                    <div class="col-sm-4">
-                      <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
-                    </div>
-                  </div>
-                </div>  <!--Fin du pilot-->
-              </div>  <!--Fin de la table-->
             </div>
+            <!-- Fin HDG debut TWA-->
+            <div class="BCPane tab-pane" id="AngleMode">
+              <div class="BoatControllerRow row">
+                <div class="col-sm-2"> <span I18n="WindAngle"> Angle du vent</span>
+                </div>
+                <div class="col-sm-2">
+                  <input tupe="number" class="input Boat_SimpleInput" id="PM_Angle">
+                </div>
+                <div class="col-sm-4">Entrer l'angle +/- par rapport au vent
+                </div>                
+              </div>
+              <div class="BoatControllerRow row">
+                <div class="col-sm-2">
+                  <button class="ui-button ui-corner-all " id="BtnPM_Tack" I18n="tack">Virer / Empanner</button>
+                </div>
+                <div class="col-sm-2">
+                  <button class="ui-button ui-corner-all " id="BtnPM_Angle" I18n="constant">Regler l'allure</button>
+                </div>
+              </div>
+            </div>
+            <!-- Fin TWA debut Ortho-->
+            <div class="BCPane tab-pane" id="OrthoMode">
+              <div id="PM_WPMode_Div">
+                <div class="BoatControllerRow row">
+                  <div class="col-sm-2">
+                    <span I18n="mytargetpoint"> CurDest</span>
+                  </div>
+                  <div class="col-sm-2">
+                    <img id="SetWPOnClick" class="ClickWPPos_Off" src="images/clickwp_pos.png" alt="clickwp_pos"/>
+                    <img id="SetWPOffClick" class="ClickWPPos_On" src="images/clickwp_pos_on.png" alt="clickwp_pos_on"/>
+                  </div>
+                  <div class="col-sm-8">Cliquez sur le bouton puis sur la map pour positionner votre WP
+                  </div>
+                </div>
+                <div class="BoatControllerRow row">
+                  <div class="col-sm-2"> Latitude</div>
+                    <div class="col-sm-2">
+                      <input class="input Boat_SimpleInput" id="PM_Lat" size="100">
+                    </div>
+                    <div class="col-sm-4"> 
+                      <span class="input Boat_SimpleInput" id="PM_CurWPLat">Latitude du WP</span> 
+                    </div>
+                  </div>
+                <div class="BoatControllerRow row">
+                  <div class="col-sm-2" > Longitude</div>
+                    <div class="col-sm-2">
+                      <input class="input Boat_SimpleInput" id="PM_Lon">
+                    </div>
+                  <div class="col-sm-4">
+                    <span class="input Boat_SimpleInput" id="PM_CurWPLon">Longitude du WP</span> 
+                  </div>
+                </div>
+                <div class="BoatControllerRow row">
+                  <div class="col-sm-2">
+                    <div class="checkbox "> 
+                      <label>
+                        <input type="checkbox" id="PM_WithWPHeading">
+                          @WPH
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-2">
+                    <input class="input Boat_SimpleInput" id="PM_WPHeading">
+                  </div>
+                  <div class="col-sm-2">
+                    <span class="input Boat_SimpleInput" id="PM_CurWPheading">@WPH</span>
+                  </div>
+                </div>                  
+              </div>
+              <div class="BoatControllerRow row">
+                <div class="col-sm-4">
+                  <button class="ui-button ui-corner-all " id="BtnPM_Ortho" I18n="orthodromic">Do Angle</button>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Ortho debut VMG-->
+            <div class="BCPane tab-pane" id="VMGMode">
+              <div class="BoatControllerRow row">
+                <div class="col-sm-4">
+                  <button class="ui-button ui-corner-all " id="BtnPM_VMG" I18n="bestvmgengaged">VMG</button>
+                </div>
+              </div> 
+            </div>
+            <!-- Fin VMG debut VBVMG-->
+            <div class="BCPane tab-pane" id="VBVMGMode">
+              <div class="BoatControllerRow row">
+                <div class="col-sm-4">
+                  <button class="ui-button ui-corner-all " id="BtnPM_VBVMG" I18n="vbvmgengaged">VBVMG</button>
+                </div>
+              </div>    
+            </div>
+            <!-- Fin VBVMG debut Pilot-->
+            <div class="BCPane tab-pane" id="AutoPilotTab">
+              <div class="hidden">
+                <table>
+                  <tr id="PIL_TEMPLATE" class="hidden">
+                    <td><span id="PIL_DATE" >_</span></td>
+                    <td><span id="PIL_PIM">_</span></td>
+                    <td><span id="PIL_PIP" >_</span></td>
+                    <td><span id="PIL_STATUS">_</span></td>
+                    <td><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></td>
+                    <td><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></td>
+                  </tr>
+                </table>
+                <span id="EditCellTemplate"><img class="PIL_EDIT" src="images/edit.png" PIL_ID="1" /></span>
+                <span id="DeleteCellTemplate"><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></span>                      
+              </div>
+              <div class="container-fluid">
+                <div class="BoatControllerRow row">
+                  <table id="PilototoTable" class="table" data-show-toggle="true" data-expand-first="false">
+                    <thead>
+                      <tr id="PIL_HEADER">
+                        <th data-name="date" data-type="date" I18N="Human Readable date">Date</th>
+                        <th data-name="PIM" data-breakpoints="xs sm" >PIM</th>
+                        <th data-name="PIP" data-breakpoints="xs "  I18n="AP_OrderParam">PIP</th>
+                        <th data-name="Status" data-breakpoints="xs sm"  I18n="Status">Statut</th>
+                        <th data-name="Edit" data-breakpoints="xs sm" data-type="html">edit</th>
+                        <th data-name="Delete" data-breakpoints="xs sm" data-type="html" I18n='delete'>delet</th>
+                      </tr>                          
+                    </thead>
+                    <tbody id="PilototoBodyTable">
+                    </tbody>
+                  </table> 
+                </div>                    
+                <div class="BoatControllerRow row">
+                  <div class="col-sm-4">
+                    <button id="AutoPilotAddButton" class="ui-button ui-corner-all "  data-toggle="modal" data-target="#AutoPilotSettingForm" I18n="pilototo_prog_add">AddOrder</button>
+                  </div>
+                </div>
+              </div>  <!--Fin du pilot-->
+            </div>  <!--Fin de la table-->
           </div>
         </div>
-        <script>$( "#tabs" ).tabs();</script>
-       <!-- Collapsable Boat Dashboard (view only display) -->
+      </div>
+      <!-- Collapsable Boat Dashboard (view only display) -->
       <div id="TDB-Panel" class="TDB-Panel collapse">
         <div class="container">
           <div class="row">
@@ -470,21 +469,21 @@
                 <div class="VLM100_PosSmall" id="BoatOrtho"></div>
                 <div class="VLM100_PosSmall" id="BoatLoxo"></div>
                 <div class="VLM100_PosSmall" id="BoatVMG"></div>
-                </div>
-                  </div>
+              </div>
+            </div>
             <div class="TDB-Panel col-xs-3">
               <div  class="TDB-Panel" style="background-image: url('images/VLM100-Wind-Angle.png');">
-                  <div class="WindAnglePanel">
-                    <img id="BearingRing" src="images/compass-small-complete.png" alt="compass-small-complete"/>
-                  </div>
-                  <div class="WindAnglePanel">
-                    <img id="DeckImage" src="images/deck-small.png" alt="deck-small"/>
-                  </div>
-                  <div class="WindAnglePanel">
-                    <img id="ImgWindAngle" alt=""/>
-                  </div>
-                  </div>
-                  </div>
+                <div class="WindAnglePanel">
+                  <img id="BearingRing" src="images/compass-small-complete.png" alt="compass-small-complete"/>
+                </div>
+                <div class="WindAnglePanel">
+                  <img id="DeckImage" src="images/deck-small.png" alt="deck-small"/>
+                </div>
+                <div class="WindAnglePanel">
+                  <img id="ImgWindAngle" alt=""/>
+                </div>
+              </div>
+            </div>
             <div class="TDB-Panel col-xs-3">
               <div  class="TDB-Panel" style="background-image: url('images/VLM100-Windstation.png');">
                 <div class="VLM100_Label" id="StatWindSpeed">Wind Speed</div>
@@ -500,62 +499,64 @@
             </div>
           </div>
          </div>
-       </div>
+      </div>
        <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
-        <div class="container-fluid">
-            <ul class="nav nav-tabs">
-                <li class="active" RnkSort="RAC">
-                  <a href="#" I18n="Racing">Rcing</a>
-                </li>
-                <li >
-                  <a href="#" RNKSort="ARR" I18n="Arrived">Arrved</a>
-                </li>
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" I18n='finished'>Page 1
-                  <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                    <li RnkSort="ABD"><a href="#">ABD</a></li>
-                    <li RnkSort="HTP"><a href="#">HTP</a></li> 
-                    <li RnkSort="DNF"><a href="#">DNF</a></li>
-                    <li RnkSort="HC"><a href="#">HC</a></li>                     
-                  </ul>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" >WP
-                      <span class="caret"></span>
-                    </a>
-                    <ul id="LeaderBoardRankingPerWP" class="dropdown-menu">
-                    </ul>
-                  </li>
-            </ul>
-        
-        <div id="my-rank-content" class="tab-content">
-        <div id="RankingTable">
-          <table   class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
-            <thead>
-              <tr id="RankingTableHeader">
-                <th data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
-                <th data-toggle="true" data-type="html"  I18N="name">Nom</th>
-                <th data-breakpoints="xs sm" I18n="distance">Next mark</th>
-                <th data-breakpoints="xs sm" I18n="racingtime">Next mark</th>
-                <th data-breakpoints="xs sm" I18n='loch'>Loch</th>
-                <th data-breakpoints="xs sm" >Longitude</th>
-                <th data-breakpoints="xs sm" >Latitude</th>
-                <th data-breakpoints="xs sm" >Last 1h</th>
-                <th data-breakpoints="xs sm" >Last 3h</th>
-                <th data-breakpoints="xs sm" >Last 24h</th>
-              </tr>
-            </thead>
-            <tbody id="RankingTableBody">
-              
-            </tbody>
-           </table> 
+        <div class="container-fluid JVLMTabs">
+          <ul class="nav nav-tabs">
+            <li class="active" RnkSort="RAC">
+              <a href="#RnkRAC" I18n="Racing">Rcing</a>
+            </li>
+            <li >
+              <a href="#RnkARR" RNKSort="ARR" I18n="Arrived">Arrved</a>
+            </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" I18n='finished'>Page 1
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li RnkSort="ABD"><a href="#RnkARR">ABD</a></li>
+                <li RnkSort="HTP"><a href="#RnkARR">HTP</a></li> 
+                <li RnkSort="DNF"><a href="#RnkRAC">DNF</a></li>
+                <li RnkSort="HC"><a href="#RnkRAC">HC</a></li>                     
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" >WP
+                <span class="caret"></span>
+              </a>
+              <ul id="LeaderBoardRankingPerWP" class="dropdown-menu">
+              </ul>
+            </li>
+          </ul>
+          <div id= "#RnkRAC">
+            <div id="my-rank-content" class="tab-content">
+              <div id="RankingTable">
+                <table   class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
+                  <thead>
+                    <tr id="RankingTableHeader">
+                      <th data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
+                      <th data-toggle="true" data-type="html"  I18N="name">Nom</th>
+                      <th data-breakpoints="xs sm" I18n="distance">Next mark</th>
+                      <th data-breakpoints="xs sm" I18n="racingtime">Next mark</th>
+                      <th data-breakpoints="xs sm" I18n='loch'>Loch</th>
+                      <th data-breakpoints="xs sm" >Longitude</th>
+                      <th data-breakpoints="xs sm" >Latitude</th>
+                      <th data-breakpoints="xs sm" >Last 1h</th>
+                      <th data-breakpoints="xs sm" >Last 3h</th>
+                      <th data-breakpoints="xs sm" >Last 24h</th>
+                    </tr>
+                  </thead>
+                  <tbody id="RankingTableBody">
+                    
+                  </tbody>
+                </table> 
+              </div>
+            </div>
           </div>
         </div>
-    </div>
- </div>
-    <!-- COllapsable Pilototo -->
+      </div>
+      <!-- COllapsable Pilototo -->
       <div id="Pilot-Panel" class="TDB-Panel collapse">
         <div class="container">
         </div>
@@ -568,20 +569,20 @@
     </div>
     <div class="input " LoggedInNav="false" style="position:relative">
       <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog" >
-          <div class="modal-dialog" role="document">
-            <div class="Apropos modal-content">
-              <div class="modal-header">
-                <h4 class="Apropos-title"><span I18n="homeofsailing">Accueil Virtual Loup-de-mer</span></h4>
-              </div>
-              <div class="modal-body">
-                <div class="Apropos-text "><span I18n="a1">texte</span></div>
-              </div>
+        <div class="modal-dialog" role="document">
+          <div class="Apropos modal-content">
+            <div class="modal-header">
+              <h4 class="Apropos-title"><span I18n="homeofsailing">Accueil Virtual Loup-de-mer</span></h4>
+            </div>
+            <div class="modal-body">
+              <div class="Apropos-text "><span I18n="a1">texte</span></div>
             </div>
           </div>
+        </div>
       </div>
     </div>
     <!-- Modal Infos-->
-  <div id="Infos" class="Draggable modal fade" role="dialog">
+    <div id="Infos" class="Draggable modal fade" role="dialog">
       <div class="modal-header"> Infos <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -597,11 +598,10 @@
            infos perso
           </div>
         </fieldset>
-        
       </div>
-  </div>
-  <!-- Modal affichage-->
-  <div id="affichage" class="Draggable modal fade" role="dialog">
+    </div>
+    <!-- Modal affichage-->
+    <div id="affichage" class="Draggable modal fade" role="dialog">
       <div class="modal-header"> Affichage<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
@@ -652,12 +652,12 @@
             </div>
         </fieldset>
       </div>
-  </div>
-  <!-- Modal mouseInfo-->
-  <div id="mouseInfo" class="Draggable dialog fade" role="dialog">
-    <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    </div>  
-    <div style="text-align:left" class="modal-body">
+    </div>
+    <!-- Modal mouseInfo-->
+    <div id="mouseInfo" class="Draggable dialog fade" role="dialog">
+      <div class="modal-header MI_Title"> Position<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>  
+      <div style="text-align:left" class="modal-body">
         <fieldset class="MI_Coords">
           <div><label >Latitude</label><span> : </span><span id="MI_Lat"></span></div>
           <div><label>Longitude</label><span> : </span><label id="MI_Lon"></label></div>
@@ -703,66 +703,62 @@
             <span id="MI_EstDate"></span>                      
           </div>
         </fieldset>
+      </div>
     </div>
-  </div>
-  <!-- Modal login form -->
-  <div id="LoginForm" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div id="LoginPanel" class="modaldialog modal-content">
-              
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 I18n="Identification" class="modal-title" style="text-align:center">Identification</h4>
-          <!-- Language bar -->
-          <div class="container-fluid">
-                <div class="col-xs-2"><img class=" LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></div>
-                <div class="col-xs-2"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></div>
-                <div class="col-xs-2"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></div>
-                <div class="col-xs-2"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></div>
-                <div class="col-xs-2"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></div>
-                <div class="col-xs-2"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></div>
-              
+    <!-- Modal login form -->
+    <div id="LoginForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div id="LoginPanel" class="modaldialog modal-content">              
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="Identification" class="modal-title" style="text-align:center">Identification</h4>
+            <!-- Language bar -->
+            <div class="container-fluid">
+              <div class="col-xs-2"><img class=" LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version"></div>
+              <div class="col-xs-2"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française"></div>
+              <div class="col-xs-2"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version"></div>
+              <div class="col-xs-2"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version"></div>
+              <div class="col-xs-2"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung"></div>
+              <div class="col-xs-2"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version"></div>          
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="row container-fluid">
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="email">Adresse mail :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input  class="UserName " size="15" maxlength="64" name="pseudo" >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="password">Mot de passe :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+                  </div>
+                </div>
+              </div>    
+            </div> 
+            <div class="row container-fluid hidden" style="padding-top:20px">
+              <span I18n="PleaseCreateDlg">plsc</span>
+              <button href="#RecoverPwdForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="You can recover a lost password">recover</button>
+            </div>         
+            <div class="row container-fluid" style="padding-top:20px">
+              <span I18n="PleaseCreateDlg">plsc</span>
+              <button href="#InscriptForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
+            </div> 
+          </div>
+          <div class="modal-footer">
+            <button type="submit" id="LoginButton"  I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
           </div>
         </div>
-        <div class="modal-body">
-          <div class="row container-fluid">
-            <div class="col-xs-12">
-              <div class="row">
-                <div class="col-xs-6" align="center">
-                  <span I18n="email">Adresse mail :</span>
-                </div>
-                <div class="col-xs-6">
-                  <input  class="UserName " size="15" maxlength="64" name="pseudo" >
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6" align="center">
-                  <span I18n="password">Mot de passe :</span>
-                </div>
-                <div class="col-xs-6">
-                  <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
-                </div>
-              </div>
-            </div>    
-          </div> 
-          <div class="row container-fluid hidden" style="padding-top:20px">
-            <span I18n="PleaseCreateDlg">plsc</span>
-            <button href="#RecoverPwdForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="You can recover a lost password">recover</button>
-          </div>         
-          <div class="row container-fluid" style="padding-top:20px">
-            <span I18n="PleaseCreateDlg">plsc</span>
-            <button href="#InscriptForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="CreateAcctBtn">cre</button>
-          </div> 
-        </div>
-        <div class="modal-footer">
-          <button type="submit" id="LoginButton"  I18n="login" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>
-        </div>
       </div>
-
     </div>
-  </div>
     <!-- Modal Settings form -->
     <div id="SettingsForm" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -782,7 +778,7 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
             </div>
-            <div  id="TabModal">
+            <div  id="TabModal" class="JVLMTabs" >
                 <ul>
                   <li class="active"><a href="#PrefBoat" data-toggle="tab" aria-expanded="true">Bateau</a></li>
                   <li><a href="#PrefJoueur" data-toggle="tab">Joueur</a></li>
@@ -1510,7 +1506,7 @@
             <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo : B2B</h4>
           </div>
           <div id="RaceInfoBody" class="modal-body" >
-            <div  id="TabsInfos">
+            <div  id="TabsInfos" class="JVLMTabs" >
                 <ul>
                   <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true">Course</a></li>
                   <li><a href="#InfosBoat" data-toggle="tab">Bateau</a></li>
