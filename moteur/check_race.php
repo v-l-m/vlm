@@ -53,7 +53,7 @@
         else 
         {
           // Cas d'un bateau réel
-          $fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
+          //$fullUsersObj = new fullUsers($usersObj->idusers, $userObj, $fullRacesObj);
           $fullUsersObj->writeCurrentRanking();
         }
        }
