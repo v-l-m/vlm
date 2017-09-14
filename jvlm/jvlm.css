@@ -1049,6 +1049,10 @@ label.affich {
 .navbar-inverse .navbar-nav > .active > a:focus {
   background-color: transparent;
 }
+.nav > li > a:focus,
+.nav > li > a:hover {
+  background-color: transparent;
+}
 .container-instrument {
   width: 170px;
 }
