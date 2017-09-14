@@ -528,7 +528,7 @@ class fullUsers
     $LongNM, $LatNM,
     $preferences;
 
-  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
+  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false)
   {
     $now = time();
 
@@ -581,6 +581,10 @@ class fullUsers
     } else {
       $time = $this->lastPositions->time;
       $this->hours = ($now - $time )/3600 ;  //everything is in GMT
+      if ($dbg)
+      {
+        echo "vacation length ".$this->hours." from ".$now. " and ".$time." delta:".($now - $time );
+      }
     }
 
     if ($origrace == NULL) {

@@ -14,7 +14,7 @@ if ( $usersObj->engaged != 0 ) {
   // Check Auto Pilote : if there is a command in the spool, then execute it
   $flag_pilototo = $usersObj->pilototoCheck();
 
-  $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj); // use the copy mode
+  $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj,  80000, -80000, -180000,  180000,  MAX_DURATION, true); // use the copy mode
 
   // If boat is
   // - mooring (pilotmode=PILOTMODE_WINDANGLE & pilotparameter=0)
