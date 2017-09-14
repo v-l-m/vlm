@@ -37,7 +37,12 @@ function start()
 		//gmap_key = "ABQIAAAAt-TNu1jygAUkY20DVJC9EBQiRJWtMgCXYC-aY29DJsyyjFhxYRRiuD66kgnawCurNFPlPb4Rfiznqw"
 		var script = document.createElement("script");
 		script.type = "text/javascript";
-		script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;key=" + gmap_key + "&callback=display_race";
+		let proto = 'http'
+		if (location.protocol === 'https:')
+		{
+			proto = 'https';
+		}
+		script.src = proto+"://maps.google.com/maps/api/js?sensor=false&amp;key=" + gmap_key + "&callback=display_race";
 		document.body.appendChild(script);
 		
 		}

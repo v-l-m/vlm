@@ -31,7 +31,7 @@ body {
 }
 
 #banniere {
-	background-image: url(http://www.virtual-loup-de-mer.org/images/site/banniere_haut.jpg);
+	background-image: url(/images/site/banniere_haut.jpg);
 	position:relative;
 	width:1015px;
 	height:90px;

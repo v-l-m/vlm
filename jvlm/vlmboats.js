@@ -1274,7 +1274,7 @@ function LoadRankings(Boat)
     return;
   }
 
-  $.get("/cache/rankings/rnk_"+Boat.VLMInfo.RAC+".json", 
+  $.get("/cache/rankings/rnk_"+Boat.VLMInfo.RAC+".json?d="+ (new Date().getTime()), 
         function (result)
         {
           if (result)

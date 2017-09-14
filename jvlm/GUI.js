@@ -248,10 +248,7 @@ function InitMenusAndButtons()
       );
   
   // Theme tabs
-  $( "#tabs" ).tabs();
-  $( "#TabModal" ).tabs();
-  $( "#TabsInfos" ).tabs();
-  $( "#TabsRank" ).tabs();
+  $(".JVLMTabs").tabs();
   
   // Hide all progressbars
   HidePb("#PbLoginProgress");
@@ -280,9 +277,16 @@ function InitMenusAndButtons()
 
   // Handle clicking on ranking button, and ranking sub tabs
   $("#Ranking-Panel").on('shown.bs.collapse',
-        function()
+        function(e)
         {
-          FillRankingTable();
+          HandleRaceSortChange(e);
+        }
+  )
+  // Handle clicking on ranking button, and ranking sub tabs
+  $("#Ranking-Panel").on('hide.bs.collapse',
+        function(e)
+        {
+          ResetRankingWPList(e);
         }
   )
   $("[RnkSort]").on('click',
@@ -490,15 +494,21 @@ function HandleRaceSortChange(e)
 {
   let Target = $(e.currentTarget).attr('rnksort');
 
+  //$("[rnksort]").removeClass("active")
   switch(Target)
   {
-    case 'RAC':
-    case 'ARR':
+    case 'WP':
+      SortRanking(Target,$(e.currentTarget).attr('WPRnk'));
+      break;
     case 'DNF':
     case 'HTP':
     case 'HC':
     case 'ABD':
-      FillRankingTable(Target);
+      //$("[rnksort='FIN']").addClass("active");
+    case 'RAC':
+    case 'ARR':
+      //$("[rnksort='"+Target+"']").addClass("active");
+      SortRanking(Target);
       break;
 
     default:
@@ -1687,8 +1697,16 @@ function SelectCountryDDFlag(Country)
     
 }
 
+function ResetCollapsiblePanels(e)
+{
+  $(".collapse").collapse("hide");
+
+}
+
 function HandleBoatSelectionChange(e)
 {
+  ResetCollapsiblePanels();
+
   let BoatId= $(e.target).closest('li').attr('BoatID');
   let Boat = GetBoatFromIdu(BoatId);
 
@@ -1764,12 +1782,54 @@ function RefreshEstPosLabels(Pos)
   }
 }
 
-function FillRankingTable(style)
+function GetWPrankingLI(WPInfo)
+{
+  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="1"><a href="#DivRnkRAC">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
+}
+
+function ResetRankingWPList(e)
+{
+  $("[WPRnk]").remove();
+  $("#RnkTabsUL").addClass("WPNotInited");
+  
+}
+
+function CheckWPRankingList(Boat)
+{
+  let InitNeeded = $(".WPNotInited")
+
+  if (typeof InitNeeded !== "undefined" && InitNeeded)
+  {
+
+    let index;
+
+    for (index in Boat.RaceInfo.races_waypoints)
+    {
+      if (Boat.RaceInfo.races_waypoints[index])
+      {
+        let WPInfo = Boat.RaceInfo.races_waypoints[index];
+        let html = GetWPrankingLI(WPInfo);
+        $(InitNeeded).append(html);
+        $("#RnkWP"+WPInfo.wporder).on('click',function(e){HandleRaceSortChange(e)});
+      }
+      
+    }
+    
+  }
+
+  $(InitNeeded).removeClass("WPNotInited");
+  $(".JVLMTabs").tabs("refresh");
+  
+}
+
+function SortRanking(style, WPNum)
 {
 
+  
   $('#RankingTableBody').empty();
   var Boat = _CurPlayer.CurBoat;
-
+  CheckWPRankingList(Boat);
+  
   if (typeof Boat === "undefined" || !Boat)
   {
     return ;
@@ -1777,6 +1837,11 @@ function FillRankingTable(style)
 
   switch (style)
   {
+    case "WP":
+      WPNum = parseInt(WPNum,10)
+      SortRankingData(Boat, style,WPNum);
+      FillWPRanking(Boat,WPNum);
+      break;
 
     case 'DNF':
     case 'HC':
@@ -1877,6 +1942,29 @@ function Sort2RacingBoats(rnk1,rnk2)
   return 0;
 }
 
+function GetWPDuration(Rnk, WPNum)
+{
+  if (Rnk && Rnk["WP"] && Rnk["WP"][WPNum-1] && Rnk["WP"][WPNum-1].duration )
+  {
+    return parseInt(Rnk["WP"][WPNum-1].duration,10);
+  }
+  else
+  {
+    return 9999999999;
+  }
+}
+
+function WPRaceSort(index)
+{
+  return function(a,b)
+    {
+      let wp1 = GetWPDuration(a,index);
+      let wp2 = GetWPDuration(b,index);
+      
+      return wp1 - wp2;
+    }
+}
+
 function RacersSort(rnk1, rnk2)
 {
 
@@ -1974,7 +2062,7 @@ function Sort2NonRacing(rnk1,rnk2)
   }
 }
 
-function SortRankingData(Boat, SortType)
+function SortRankingData(Boat, SortType,WPNum)
 {
   
   if (typeof Boat.RnkObject.RacerRanking === "undefined")
@@ -1995,11 +2083,16 @@ function SortRankingData(Boat, SortType)
 
   switch (SortType)
   {
+    case "WP":
+      Boat.RnkObject.RacerRanking.sort(WPRaceSort(WPNum));
+      break;
+      
     case 'RAC':
     case 'DNF':
     case 'HC':
     case 'HPT':
     case 'ABD':
+    case 'ARR':
     
       Boat.RnkObject.RacerRanking.sort(RacersSort);
       break;
@@ -2025,6 +2118,34 @@ function SortRankingData(Boat, SortType)
   return rnk;
 }
 
+function FillWPRanking(Boat,WPNum)
+{
+  let index;
+  let RowNum = 1;
+
+  for (index in Boat.RnkObject.RacerRanking)
+  {
+    if (Boat.RnkObject.RacerRanking[index])
+    {    
+      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      
+      if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
+      {
+        AddRankingLine(RnkBoat,RowNum++);
+      }
+    }
+  }
+
+  $('#Ranking-Panel').show();
+  $('#RankingTable').footable(
+    {
+      "paging": 
+      {
+        "current": 1
+	  	}
+	  });
+}
+
 function FillStatusRanking(Boat,Status)
 {
   let index;
@@ -2046,7 +2167,10 @@ function FillStatusRanking(Boat,Status)
   $('#Ranking-Panel').show();
   $('#RankingTable').footable(
     {
-      
+      "paging": 
+      {
+        "current": 1
+	  	}
 	  });
 }
 

@@ -1,8 +1,17 @@
 // CONFIGURATION FILE FOR SPECTATOR MODE
 
 webhost = window.location.hostname;
-baseurl = "http://virtual-loup-de-mer.org";
+baseurl = "//virtual-loup-de-mer.org";
 
+if (location.protocol === 'https:')
+{
+    baseurl = 'https:' + baseurl;
+}
+else
+{
+    baseurl = 'http:' + baseurl;
+}
+        
 if (webhost.match("virtual-loup-de-mer.org"))
 {
     // virtual-loup-de-mer.org
@@ -37,6 +46,11 @@ if (webhost.match("zigszags.com"))
     gmap_key = "ABQIAAAAok_IBFtVMWx0xZX21zbpJRTlhEcjKhu1zbEPvkpXJWixh659yBThzICEnW2yhGGYfsPoLArh73nKaA";
 }
 
+if (webhost.match("vlm-dev.ddns.net"))
+{
+    // zigszags.com
+    gmap_key = "ABQIAAAAok_IBFtVMWx0xZX21zbpJRTlhEcjKhu1zbEPvkpXJWixh659yBThzICEnW2yhGGYfsPoLArh73nKaA";
+}
 today = new Date();
 var secs = today.getSeconds();
 var mns = today.getMinutes();
