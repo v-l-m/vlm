@@ -504,10 +504,8 @@ function HandleRaceSortChange(e)
     case 'HTP':
     case 'HC':
     case 'ABD':
-      //$("[rnksort='FIN']").addClass("active");
     case 'RAC':
     case 'ARR':
-      //$("[rnksort='"+Target+"']").addClass("active");
       SortRanking(Target);
       break;
 
@@ -2090,7 +2088,7 @@ function SortRankingData(Boat, SortType,WPNum)
     case 'RAC':
     case 'DNF':
     case 'HC':
-    case 'HPT':
+    case 'HTP':
     case 'ABD':
     case 'ARR':
     
