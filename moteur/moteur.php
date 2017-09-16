@@ -83,10 +83,16 @@ echo "\n".gmdate("M d Y H:i:s",time()). "\n";
 $CurTick= microtime(true);
 if ($CurTick < $EngineStartTick)
 {
-  echo "\n Sleep ". ($EngineStartTick-$CurTick);
+  echo "\n Sleep ". ($EngineStartTick-$CurTick+0.5);
   usleep(($EngineStartTick-$CurTick)*1e6);
 }
- 
+$reftick = round(microtime(true));
+while (time() < $reftick)
+{
+  echo "\n".time()." ".$reftick." ".gmdate("M d Y H:i:s",time())." - ".microtime(true);
+  usleep(100000);
+}
+
 echo "\n".gmdate("M d Y H:i:s",time())." - ".microtime(true);
 
 $engine_start=time();
