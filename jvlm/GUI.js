@@ -282,6 +282,7 @@ function InitMenusAndButtons()
           HandleRaceSortChange(e);
         }
   )
+  $(document.body).on('click',"[RnkSort]",function(e){HandleRaceSortChange(e)});
   // Handle clicking on ranking button, and ranking sub tabs
   $("#Ranking-Panel").on('hide.bs.collapse',
         function(e)
@@ -289,12 +290,12 @@ function InitMenusAndButtons()
           ResetRankingWPList(e);
         }
   )
-  $("[RnkSort]").on('click',
+  /*$("[RnkSort]").on('click',
         function(e)
         {
           HandleRaceSortChange(e);
         }
-  );
+  );*/
 
 
   // Init event handlers
@@ -841,7 +842,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", "N/A"]);
   }
   
-  if (Boat.VLMInfo.PIM === PM_ANGLE)
+  if (parseInt(Boat.VLMInfo.PIM,10) === PM_ANGLE)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.PIP) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Boat.VLMInfo.PIP ]);
@@ -1782,7 +1783,7 @@ function RefreshEstPosLabels(Pos)
 
 function GetWPrankingLI(WPInfo)
 {
-  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="1"><a href="#DivRnkRAC">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
+  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="'+ WPInfo.wporder +'"><a href="#DivRnkRAC" RnkSort="WP">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
 }
 
 function ResetRankingWPList(e)
@@ -1808,7 +1809,6 @@ function CheckWPRankingList(Boat)
         let WPInfo = Boat.RaceInfo.races_waypoints[index];
         let html = GetWPrankingLI(WPInfo);
         $(InitNeeded).append(html);
-        $("#RnkWP"+WPInfo.wporder).on('click',function(e){HandleRaceSortChange(e)});
       }
       
     }
@@ -2129,7 +2129,7 @@ function FillWPRanking(Boat,WPNum)
       
       if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
       {
-        AddRankingLine(RnkBoat,RowNum++);
+        AddRankingLine(RnkBoat,RowNum++, WPNum);
       }
     }
   }
@@ -2213,7 +2213,7 @@ function GetBoatInfoLink(IdUser,BoatName)
   return ret;
 }
 
-function AddRankingLine(RankBoat, rank)
+function AddRankingLine(RankBoat, rank, WPNum)
 {
   var Row = $('<tr>')
 
@@ -2222,8 +2222,9 @@ function AddRankingLine(RankBoat, rank)
   
   boatsearchstring+=  GetBoatInfoLink(RankBoat['idusers'],RankBoat['boatpseudo'])
   Row.append(AppendColumn(Row,boatsearchstring))
-  if (RnkIsRacing(RankBoat))
+  if (RnkIsRacing(RankBoat) && !WPNum)
   {
+    // General ranking layout
     let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
     Row.append(AppendColumn(Row,NextMark))
     let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
@@ -2235,8 +2236,9 @@ function AddRankingLine(RankBoat, rank)
     Row.append(AppendColumn(Row,RankBoat['last3h']))
     Row.append(AppendColumn(Row,RankBoat['last24h']))
   }
-  else
+  else if (!WPNum)
   {
+    // Non General ranking layout
     let NextMark = GetLocalizedString("status_" + RankBoat['status'])
     
     Row.append(AppendColumn(Row,NextMark))
@@ -2244,6 +2246,18 @@ function AddRankingLine(RankBoat, rank)
     Row.append(AppendColumn(Row,RankBoat['loch']))
     Row.append(AppendColumn(Row,RankBoat['longitude']))
     Row.append(AppendColumn(Row,RankBoat['latitude']))
+    Row.append(AppendColumn(Row,""))
+    Row.append(AppendColumn(Row,""))
+    Row.append(AppendColumn(Row,""))
+  }
+  else
+  {
+    // Waypoint ranking layout
+    Row.append(AppendColumn(Row,""))
+    Row.append(AppendColumn(Row,GetFormattedChronoString(parseInt(RankBoat.WP[WPNum-1].duration,10))));
+    Row.append(AppendColumn(Row,""))
+    Row.append(AppendColumn(Row,""))
+    Row.append(AppendColumn(Row,""))
     Row.append(AppendColumn(Row,""))
     Row.append(AppendColumn(Row,""))
     Row.append(AppendColumn(Row,""))
@@ -2412,7 +2426,7 @@ function VLMAlertDanger(Text)
 
 function VLMAlertInfo(Text)
 {
-  VLMAlert(Text,"alert-Info");
+  VLMAlert(Text,"alert-info");
 }
 
 let AlertIntervalId = null;
