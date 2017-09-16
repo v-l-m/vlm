@@ -154,11 +154,11 @@
                 // If it is a start line (nwp == 0), we have to compute the crossing coordinates
                 // Then to compute the crossing time, and compare it to deptime + prestart-duration
                 
-                // distanceSinceLastUpdate = dist entre dernière position et ce coint
+                // distanceSinceLastUpdate = dist entre derniÃ¨re position et ce point
                 $distanceSinceLastUpdate = ortho($latPreCheck, $lonPreCheck,
                          $latAvant, $lonAvant);
                 
-                // Temps de course (entre départ et passage de la ligne )
+                // Temps de course (entre dÃ©part et passage de la ligne )
                 // ======================================================
                 // Calcul exact de duration. 
                 // On en prend $fullRacesObj->races-deptime (si racetype n'est pas un record),
@@ -168,13 +168,13 @@
                 } else {
                     // Cas RACE_TYPE_RECORD
                     $deptime = $fullUsersObj->users->userdeptime  ;
-                    // Au cas où problème de MAJ de userdeptime (cf arrivée de la 46)
+                    // Au cas oï¿½ problï¿½me de MAJ de userdeptime (cf arrivï¿½e de la 46)
                     //$deptime = $fullRacesObj->races->deptime  ;
                 }
           
                 // Duration c'est la somme de :
-                /*     temps de course écoulé jusqu'à la vacatin d'avant
-                 + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
+                /*     temps de course ï¿½coulï¿½ jusqu'ï¿½ la vacatin d'avant
+                 + temps ï¿½coulï¿½ entre la vacation d'avant et le temps de passage de la marque (mesurï¿½ maintenant)
                 */
                 //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($wp_xingratio); (use this if we settle the time for the whole run)
                 $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
@@ -222,11 +222,11 @@
                     $fullUsersObj->lastPositions->lat=$latPreCheck;
                     $fullUsersObj->lastPositions->long=$lonPreCheck;
                     $fullUsersObj->lastPositions->time=($timeAvant + $timeSinceLastUpdate);
-                    $fullUsersObj->lastPositions->writePositions();  
+                    $fullUsersObj->lastPositions->writePositions($now);  
                     
                     echo "\t==>Course =" . $fullRacesObj->races->idraces . "\n";
                     echo "\t==>encounterCoordinates = " . $encounterCoordinates['latitude'] . "/" . $encounterCoordinates['longitude'] . "\n";
-                    // encounterCoordinates est le point où la ligne a été coupée
+                    // encounterCoordinates est le point oï¿½ la ligne a ï¿½tï¿½ coupï¿½e
                     
                     if ($verbose>=0) {
                         echo "\t\tBoatspeed : " . $fullUsersObj->boatspeed . ", ";
@@ -250,10 +250,10 @@
                     } else {
                         // Cas RACE_TYPE_RECORD : on MAJ le resultat seulement s'il est meilleur.
                         
-                        // Récupération de l'éventuel temps de référence getOldDuration($idraces,$idusers)
+                        // Rï¿½cupï¿½ration de l'ï¿½ventuel temps de rï¿½fï¿½rence getOldDuration($idraces,$idusers)
                         $oldDuration=getOldDuration($fullRacesObj->races->idraces, $fullUsersObj->users->idusers);
                         
-                        // ==> Si 0 : pas de temps de référence, on REPLACE
+                        // ==> Si 0 : pas de temps de rï¿½fï¿½rence, on REPLACE
                         //     ou si $duration est meilleur (<), on REPLACE
                         if ( $oldDuration <= 0  OR  $duration < $oldDuration ) {
                           

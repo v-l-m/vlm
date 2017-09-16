@@ -14,7 +14,7 @@ if ( $usersObj->engaged != 0 ) {
   // Check Auto Pilote : if there is a command in the spool, then execute it
   $flag_pilototo = $usersObj->pilototoCheck();
 
-  $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj,  80000, -80000, -180000,  180000,  MAX_DURATION, true); // use the copy mode
+  $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj,  80000, -80000, -180000,  180000,  MAX_DURATION, true,$now); // use the copy mode
 
   // If boat is
   // - mooring (pilotmode=PILOTMODE_WINDANGLE & pilotparameter=0)
@@ -52,7 +52,7 @@ if ( $usersObj->engaged != 0 ) {
       // Else write a new position at the same place, boat won't move this time
       } else {
         //FIXME : Couldn't we just update the "same place" ?
-        $fullUsersObj->lastPositions->writePositions();
+        $fullUsersObj->lastPositions->writePositions($now);
         $fullUsersObj->writeCurrentRanking(0, $now);
         $fullUsersObj->writeLoch($now);
       }
@@ -115,7 +115,8 @@ if ( $usersObj->engaged != 0 ) {
     $fullUsersObj->lastPositions->addDistance2Positions(
 							$fullUsersObj->boatspeed*$fullUsersObj->hours,
 							$fullUsersObj->users->boatheading
-							);
+              );
+    //echo "Storing position with ".$now;
     $fullUsersObj->lastPositions->time = $now;
 
     $lonApres  = $fullUsersObj->lastPositions->long;
@@ -151,9 +152,10 @@ if ( $usersObj->engaged != 0 ) {
         
         $fullUsersObj->lastPositions->lat=$latApres;
         $fullUsersObj->lastPositions->long=$lonApres;
-        $fullUsersObj->lastPositions->writePositions(); //important, will write a new position at thisplace
+        $fullUsersObj->lastPositions->writePositions($now); //important, will write a new position at thisplace
       } else {
-        $fullUsersObj->lastPositions->writePositions(); //important, will write a new position
+        echo "\n bug location : t".time()." n".$now." p".$fullUsersObj->lastPositions->time."\n";
+        $fullUsersObj->lastPositions->writePositions($now); //important, will write a new position
       }
       $fullUsersObj->writeCurrentRanking(1, $now);
       $fullUsersObj->writeLoch($now);

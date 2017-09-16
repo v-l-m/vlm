@@ -528,10 +528,17 @@ class fullUsers
     $LongNM, $LatNM,
     $preferences;
 
-  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false)
+  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
   {
-    $now = time();
-
+    if ($TimeStamp)
+    {
+      $now = $TimeStamp;
+    }
+    else
+    {
+      $now = time();
+    }
+    
     if (is_null($origuser)) {
       $this->users = getUserObject($id);
       if (is_null($this->users)) return;
@@ -1116,6 +1123,7 @@ class fullUsers
   {
     if ($now == 0) {
       $now = time();
+      //echo "$now refreshed for ranking storage";
     }
     // Record classification data
     //"        (idraces , idusers , nwp , dnm, latitude, longitude, last1h, last3h, last24h)  " .
@@ -1131,7 +1139,7 @@ class fullUsers
     if ( $this->users->pilotmode != 2
          || ( $this->users->pilotmode ==2 && $this->users->pilotparameter != 0 )  ) {
 
-      $query_update .= " lastchange = " . time() . "," ;
+      $query_update .= " lastchange = " . $now . "," ;
     }
 
     // Cumul du loch sauf si bout au vent...
@@ -1147,10 +1155,10 @@ class fullUsers
       $query_update .= " hidepos = " .  $this->users->hidepos . "," ;
     }
 
-    $query_update .= " lastupdate = " . time() ;
+    $query_update .= " lastupdate = " . $now ;
     $query_update .= " WHERE idusers  = " . $this->users->idusers ;
     wrapper_mysql_db_query_writer($query_update);// or die("Query failed : " . mysql_error." ".$query_ranking);
-
+    //echo "ranking stored with".$now."\n";
     // =======================================================================================
     // En cas de blackout, on a fini.
     // =======================================================================================
