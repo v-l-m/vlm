@@ -168,13 +168,13 @@
                 } else {
                     // Cas RACE_TYPE_RECORD
                     $deptime = $fullUsersObj->users->userdeptime  ;
-                    // Au cas o� probl�me de MAJ de userdeptime (cf arriv�e de la 46)
+                    // Au cas ou problème de MAJ de userdeptime (cf arrivée de la 46)
                     //$deptime = $fullRacesObj->races->deptime  ;
                 }
           
                 // Duration c'est la somme de :
-                /*     temps de course �coul� jusqu'� la vacatin d'avant
-                 + temps �coul� entre la vacation d'avant et le temps de passage de la marque (mesur� maintenant)
+                /*     temps de course écoulé jusqu'à la vacatin d'avant
+                 + temps écoulé entre la vacation d'avant et le temps de passage de la marque (mesuré maintenant)
                 */
                 //    $timeSinceLastUpdate = (time() - $timeAvant) * doublep_value($wp_xingratio); (use this if we settle the time for the whole run)
                 $timeSinceLastUpdate = ($distanceSinceLastUpdate / $fullUsersObj->boatspeed) * 3600 ;
@@ -226,7 +226,7 @@
                     
                     echo "\t==>Course =" . $fullRacesObj->races->idraces . "\n";
                     echo "\t==>encounterCoordinates = " . $encounterCoordinates['latitude'] . "/" . $encounterCoordinates['longitude'] . "\n";
-                    // encounterCoordinates est le point o� la ligne a �t� coup�e
+                    // encounterCoordinates est le point ou la ligne a été coupée
                     
                     if ($verbose>=0) {
                         echo "\t\tBoatspeed : " . $fullUsersObj->boatspeed . ", ";
@@ -250,10 +250,10 @@
                     } else {
                         // Cas RACE_TYPE_RECORD : on MAJ le resultat seulement s'il est meilleur.
                         
-                        // R�cup�ration de l'�ventuel temps de r�f�rence getOldDuration($idraces,$idusers)
+                        // Récupération de l'éventuel temps de référence getOldDuration($idraces,$idusers)
                         $oldDuration=getOldDuration($fullRacesObj->races->idraces, $fullUsersObj->users->idusers);
                         
-                        // ==> Si 0 : pas de temps de r�f�rence, on REPLACE
+                        // ==> Si 0 : pas de temps de référence, on REPLACE
                         //     ou si $duration est meilleur (<), on REPLACE
                         if ( $oldDuration <= 0  OR  $duration < $oldDuration ) {
                           
