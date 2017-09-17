@@ -43,7 +43,7 @@ $(document).ready(
     //setup ajax error handling
     $.ajaxSetup({
         error: function (x, status, error) {
-            if (x.status == 401) {
+            if (x.status === 401) {
                 //on access denied try reviving the session
                 OnLoginRequest();
             }
@@ -132,7 +132,6 @@ function OLInit() {
     var layeroption = {
         //sphérique
         sphericalMercator: true,
-        //FIXME: voir s'il y a des effets spécifiques à certains layers
         transitionEffect: "resize",
         //pour passer l'ante-meridien sans souci
         wrapDateLine: true
@@ -310,7 +309,7 @@ function InitMenusAndButtons()
   $('#LoginPanel').keypress(
     function(e) 
     {
-      if (e.which == '13') {
+      if (e.which === '13') {
           OnLoginRequest();
           $('#LoginForm').modal('hide');
       }
@@ -466,7 +465,7 @@ function InitMenusAndButtons()
     'on':
     {
       'postdraw.ft.table':HandleTableDrawComplete,
-      'postinit.ft.table':HandleFooTableInitComplete,
+      'postinit.ft.table':HandleFooTableInitComplete
     }
   });
   
@@ -489,7 +488,7 @@ function InitGribSlider()
     }
   });
   
-};
+}
 
 function HandleRaceSortChange(e)
 {
@@ -514,7 +513,7 @@ function HandleRaceSortChange(e)
       console.log("Sort change request"+e);
   }
   
-};
+}
 
 function HandleGribSlideMove(event, ui )
 {
@@ -837,6 +836,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
   }
+  else
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", "N/A"]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", "N/A"]);
@@ -1877,8 +1877,8 @@ function RnkIsRacing(rnk)
 
 function Sort2ArrivedBoats(rnk1,rnk2)
 {
-  let Total1 = parseInt(rnk1.duration,10)+parseInt(rnk1.penalty);
-  let Total2 = parseInt(rnk2.duration,10)+parseInt(rnk2.penalty);
+  let Total1 = parseInt(rnk1.duration,10)+parseInt(rnk1.penalty,10);
+  let Total2 = parseInt(rnk2.duration,10)+parseInt(rnk2.penalty,10);
   
   if (Total1 > Total2)
   {
@@ -2015,7 +2015,7 @@ function DebugRacerSort(rnk1,rnk2,res)
 function Sort2NonRacing(rnk1,rnk2)
 {
 
-  if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers != "undefined")
+  if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers !== "undefined")
   {
     let IdUser1 = parseInt(rnk1.idusers,10)
     let IdUser2 = parseInt(rnk2.idusers,10)
