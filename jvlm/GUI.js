@@ -282,20 +282,15 @@ function InitMenusAndButtons()
           HandleRaceSortChange(e);
         }
   )
-  $(document.body).on('click',"[RnkSort]",function(e){HandleRaceSortChange(e)});
   // Handle clicking on ranking button, and ranking sub tabs
+  $(document.body).on('click',"[RnkSort]",function(e){HandleRaceSortChange(e)});
   $("#Ranking-Panel").on('hide.bs.collapse',
         function(e)
         {
           ResetRankingWPList(e);
         }
   )
-  /*$("[RnkSort]").on('click',
-        function(e)
-        {
-          HandleRaceSortChange(e);
-        }
-  );*/
+
 
 
   // Init event handlers
