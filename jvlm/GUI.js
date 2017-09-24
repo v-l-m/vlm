@@ -22,6 +22,7 @@ var BoatNotRacingStatus = ["DNF","HC","HTP"];
 var GM_Pos=null;
 var GribWindController = null;
 var PilototoFt = null;
+var RankingFt = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -464,12 +465,30 @@ function InitMenusAndButtons()
   PilototoFt= FooTable.init("#PilototoTable",{
     'on':
     {
-      'postdraw.ft.table':HandleTableDrawComplete,
-      'postinit.ft.table':HandleFooTableInitComplete
+      'postdraw.ft.table':HandleTableDrawComplete
     }
   });
+
+  RankingFt = FooTable.init ("#RankingTable",{
+    'on':
+    {
+      'postdraw.ft.table':HandleTableDrawComplete
+    }
+  });
+  PilototoFt.DrawPending = false;
+  RankingFt.DrawPending = false;
   
   
+
+  // Add handler to refresh content of eth pilototo table when showing tab content
+  $("[PilRefresh]").on('click', HandleUpdatePilototoTable)
+  
+  CheckLogin();
+}
+
+function HandleUpdatePilototoTable(e)
+{
+  UpdatePilotInfo(_CurPlayer.CurBoat);
 }
 
 function InitGribSlider()
@@ -987,15 +1006,14 @@ function UpdatePolarImages(Boat)
   $("#PolarList").append(HTML);
 }
 
-let DrawingPilototoTable=false;
 function UpdatePilotInfo(Boat)
 {
-  if ((typeof Boat === "undefined") || (!Boat) || DrawingPilototoTable)
+  if ((typeof Boat === "undefined") || (!Boat) || PilototoFt.DrawPending)
   {
     return;
   }   
 
-  let PIL_TEMPLATE = $("#PIL_TEMPLATE");
+  //let PIL_TEMPLATE = $("#PIL_TEMPLATE");
   //PIL_TEMPLATE.hide()
   
   /*for (index=1; index <=5 ; index ++)
@@ -1047,8 +1065,8 @@ function UpdatePilotInfo(Boat)
     }
   }
 
-  PilototoFt.loadRows(PilRows)
-  DrawingPilototoTable = true;
+  PilototoFt.loadRows(PilRows,false)
+  PilototoFt.DrawPending = true;
   
   UpdatePilotBadge(Boat);
 }
@@ -1056,12 +1074,12 @@ function UpdatePilotInfo(Boat)
 function HandleFooTableInitComplete(e,ft)
 {
     // CheckLogin
-    CheckLogin();
+    //CheckLogin();
 }
 
 function HandleTableDrawComplete(e,ft)
 {
-  DrawingPilototoTable = false ;
+  ft.DrawPending = false ;
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
@@ -1783,7 +1801,7 @@ function RefreshEstPosLabels(Pos)
 
 function GetWPrankingLI(WPInfo)
 {
-  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="'+ WPInfo.wporder +'"><a href="#DivRnkRAC" RnkSort="WP">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
+  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="'+ WPInfo.wporder +'"><a href="#DivRnkRAC" RnkSort="WP" WPRnk="'+ WPInfo.wporder +'">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
 }
 
 function ResetRankingWPList(e)
@@ -1824,7 +1842,7 @@ function SortRanking(style, WPNum)
 {
 
   
-  $('#RankingTableBody').empty();
+  //$('#RankingTableBody').empty();
   var Boat = _CurPlayer.CurBoat;
   CheckWPRankingList(Boat);
   
@@ -2120,35 +2138,51 @@ function FillWPRanking(Boat,WPNum)
 {
   let index;
   let RowNum = 1;
+  let BestTime = 0;
+  let Rows = [];
+
+  if (!Boat || RankingFt.DrawPending)
+  {
+    return;
+  }
 
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
     {    
       let RnkBoat = Boat.RnkObject.RacerRanking[index];
-      
+
+      if (RnkBoat.WP && RnkBoat.WP[WPNum -1] && !RnkBoat.WP[WPNum -1].Delta)
+      {
+        if (!BestTime)
+        {
+          BestTime = RnkBoat.WP[WPNum -1].duration;
+          RnkBoat.WP[WPNum -1].Delta = 0;
+          RnkBoat.WP[WPNum -1].Pct = 0;
+        }
+        else
+        {
+          RnkBoat.WP[WPNum -1].Delta = RnkBoat.WP[WPNum -1].duration - BestTime;
+          RnkBoat.WP[WPNum -1].Pct = 100 *(RnkBoat.WP[WPNum -1].duration / BestTime - 1);
+        }
+      }
+
       if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
       {
-        AddRankingLine(RnkBoat,RowNum++, WPNum);
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum));
       }
     }
   }
 
-  $('#Ranking-Panel').show();
-  $('#RankingTable').footable(
-    {
-      "paging": 
-      {
-        "current": 1
-	  	}
-	  });
+  RankingFt.loadRows(Rows);
+  RankingFt.DrawPending = true;
 }
 
 function FillStatusRanking(Boat,Status)
 {
   let index;
   let RowNum = 1;
-
+  let Rows = [];
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2157,24 +2191,19 @@ function FillStatusRanking(Boat,Status)
       
       if (RnkBoat.status === Status)
       {
-        AddRankingLine(RnkBoat,RowNum++);
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
       }
     }
   }
 
-  $('#Ranking-Panel').show();
-  $('#RankingTable').footable(
-    {
-      "paging": 
-      {
-        "current": 1
-	  	}
-	  });
+  RankingFt.loadRows(Rows)
+  
 }
 
 function FillRacingRanking(Boat)
 {
   let index;
+  let Rows = [];
 
   for (index in Boat.RnkObject.RacerRanking)
   {
@@ -2184,7 +2213,7 @@ function FillRacingRanking(Boat)
       
       if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
       {
-        AddRankingLine(RnkBoat,parseInt(index,10)+1)
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
       }
       else
       {
@@ -2192,15 +2221,7 @@ function FillRacingRanking(Boat)
       }
     }
   }
-
-  $('#Ranking-Panel').show();
-  $('#RankingTable').footable(
-    {
-      "paging": 
-      {
-        "current": Math.round((parseInt(_CurPlayer.CurBoat.VLMInfo.RNK,10))/20)
-	  	}
-	  });
+  RankingFt.loadRows(Rows);
 
 }
 
@@ -2213,15 +2234,75 @@ function GetBoatInfoLink(IdUser,BoatName)
   return ret;
 }
 
+function GetRankingObject(RankBoat, rank, WPNum)
+{
+  let boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
+  boatsearchstring+=  GetBoatInfoLink(RankBoat['idusers'],RankBoat['boatpseudo'])
+  let RetObject = {
+    Rank : rank,
+    Name :boatsearchstring,
+    Distance : "",
+    Time : "",
+    Loch : "",
+    Lon : "",
+    Lat : "",
+    Last1h : "",
+    Last3h : "",
+    Last24h : ""
+  };
+  
+  if (RnkIsRacing(RankBoat) && !WPNum)
+  {
+    // General ranking layout
+    let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
+    RetObject["Distance"]=NextMark
+    let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
+    RetObject["Time"]= RacingTime
+    RetObject["Loch"]= RankBoat['loch']
+    RetObject["Lon"]= RankBoat['longitude']
+    RetObject["Lat"]= RankBoat['latitude']
+    RetObject["Last1h"]=RankBoat['last1h']
+    RetObject["Last3h"]= RankBoat['last3h']
+    RetObject["Last24h"]= RankBoat['last24h']
+  }
+  else if (!WPNum)
+  {
+    // Non General ranking layout
+    let NextMark = GetLocalizedString("status_" + RankBoat['status'])
+    RetObject["Distance"]=NextMark
+    RetObject["Time"]=GetFormattedChronoString(parseInt(RankBoat['duration'],10));
+    RetObject["Loch"]=RankBoat['loch']
+    RetObject["Lon"]= RankBoat['longitude']
+    RetObject["Lat"]= RankBoat['latitude']
+  }
+  else
+  {
+    RetObject["Time"] = GetFormattedChronoString(parseInt(RankBoat.WP[WPNum-1].duration,10));
+    let DeltaStr
+    if (RankBoat.WP[WPNum-1].Delta)
+    {
+      let PctString = RoundPow(RankBoat.WP[WPNum-1].Pct,2);
+      DeltaStr = GetFormattedChronoString(RankBoat.WP[WPNum-1].Delta) + " (+"+PctString + " %)"
+    }
+    else
+    {
+      DeltaStr = GetLocalizedString("winner")
+    }
+    RetObject["Loch"] = DeltaStr
+  }
+
+
+  return RetObject
+}
 function AddRankingLine(RankBoat, rank, WPNum)
 {
   var Row = $('<tr>')
 
-  Row.append(AppendColumn(Row,rank))
+  AppendColumn(Row,rank)
   let boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   
   boatsearchstring+=  GetBoatInfoLink(RankBoat['idusers'],RankBoat['boatpseudo'])
-  Row.append(AppendColumn(Row,boatsearchstring))
+  AppendColumn(Row,boatsearchstring)
   if (RnkIsRacing(RankBoat) && !WPNum)
   {
     // General ranking layout
@@ -2253,14 +2334,29 @@ function AddRankingLine(RankBoat, rank, WPNum)
   else
   {
     // Waypoint ranking layout
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,GetFormattedChronoString(parseInt(RankBoat.WP[WPNum-1].duration,10))));
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
+    AppendColumn(Row,"")
+    AppendColumn(Row,GetFormattedChronoString(parseInt(RankBoat.WP[WPNum-1].duration,10)));
+    let DeltaStr
+    if (RankBoat.WP[WPNum-1].Delta)
+    {
+      let PctString = RoundPow(RankBoat.WP[WPNum-1].Pct,2);
+      DeltaStr = GetFormattedChronoString(RankBoat.WP[WPNum-1].Delta) + " (+"+PctString + " %)"
+    }
+    else
+    {
+      DeltaStr = GetLocalizedString("winner")
+    }
+    AppendColumn(Row,DeltaStr)
+    AppendColumn(Row,"")
+    AppendColumn(Row,"")
+    AppendColumn(Row,"")
+    AppendColumn(Row,"")
+    AppendColumn(Row,"")
+  }
+
+  if (_CurPlayer.CurBoat.IdBoat === parseInt(RankBoat.idusers,10))
+  {
+    $(row).addClass("RnkMyBoat");
   }
   
   $('#RankingTableBody').append(Row);

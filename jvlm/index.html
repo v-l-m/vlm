@@ -30,6 +30,7 @@
     <script src="external/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
     <script src="external/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.fr.js"></script>
     <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
+    <script type="text/javascript" src="external/moments/moment-with-locales.js"></script>
     <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
     <script type="text/javascript" src="jquery.ui.touch-punch.js"></script>
     <script src="external/OpenLayers/OpenLayers.debug.js"></script>
@@ -283,10 +284,10 @@
               <img class="PMActiveMode ActiveMode_VBVMG" src="images/PMActiveMode.png" alt="PMActiveMode"/>
               <span>VBVMG</span></a>
             </li>
-            <li class="BCPane AutoPilot"><a href="#AutoPilotTab" data-toggle="tab">
-              <img src="images/autopilot.png" style="width:21px; margin-right:5px" alt="autopilot"/>
-              <span I18N="pilototoengaged">AutoPilot</span>
-              <span class="PilotOrdersBadge pilottab btnbadge badge">...</span></a>
+            <li class="BCPane AutoPilot" PilRefresh="1"><a href="#AutoPilotTab" data-toggle="tab">
+              <img src="images/autopilot.png" PilRefresh="1" style="width:21px; margin-right:5px" alt="autopilot"/>
+              <span I18N="pilototoengaged" PilRefresh="1">AutoPilot</span>
+              <span class="PilotOrdersBadge pilottab btnbadge badge" PilRefresh="1">...</span></a>
             </li>
           </ul>
 				<!-- Fin de la barre d'onglet-->
@@ -421,7 +422,7 @@
                   <table id="PilototoTable" class="table" data-show-toggle="true" data-expand-first="false">
                     <thead>
                       <tr id="PIL_HEADER">
-                        <th data-name="date" data-type="date" I18N="Human Readable date">Date</th>
+                        <th data-name="date" data-type="date" data-format-string="LLL" I18N="Human Readable date">Date</th>
                         <th data-name="PIM" data-breakpoints="xs sm" >PIM</th>
                         <th data-name="PIP" data-breakpoints="xs "  I18n="AP_OrderParam">PIP</th>
                         <th data-name="Status" data-breakpoints="xs sm"  I18n="Status">Statut</th>
@@ -429,8 +430,8 @@
                         <th data-name="Delete" data-breakpoints="xs sm" data-type="html" I18n='delete'>delet</th>
                       </tr>                          
                     </thead>
-                    <tbody id="PilototoBodyTable">
-                    </tbody>
+                    <!--<tbody id="PilototoBodyTable">
+                    </tbody>-->
                   </table> 
                 </div>                    
                 <div class="BoatControllerRow row">
@@ -504,40 +505,28 @@
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
         <div class="container-fluid JVLMTabs">
           <ul id="RnkTabsUL" class="nav nav-tabs WPNotInited">
-            <li RnkSort="RAC">
-              <a href="#DivRnkRAC" I18n="Racing">Rcing</a>
-            </li>
-            <!--<li RNKSort="ARR">
-              <a  RNKSort="ARR" I18n="Arrived">Arrved</a>
-            </li>-->
+            <li RnkSort="RAC"><a href="#DivRnkRAC" I18n="Racing">Rcing</a></li>
             <li RnkSort="ABD"><a href="#DivRnkRAC">ABD</a></li>
             <li RnkSort="HTP"><a href="#DivRnkRAC" >HTP</a></li> 
             <li RnkSort="DNF"><a href="#DivRnkRAC">DNF</a></li>
-            <li RnkSort="HC"><a href="#DivRnkRAC">HC</a></li>                     
-            <!--<li class="dropdown" RNKSort="WP">
-              <a class="dropdown-toggle" data-toggle="dropdown" >WP
-                <span class="caret"></span>
-              </a>
-              <ul id="LeaderBoardRankingPerWP" class="dropdown-menu">
-              </ul>
-            </li>-->
+            <li RnkSort="HC"><a href="#DivRnkRAC">HC</a></li>
           </ul>
           <div id='DivRnkRAC'>
             <div id="my-rank-content" class="tab-content">
-              <div id="RankingTable">
-                <table   class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
+              <div >
+                <table id="RankingTable"  class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
                   <thead>
                     <tr id="RankingTableHeader">
-                      <th data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
-                      <th data-toggle="true" data-type="html"  I18N="name">Nom</th>
-                      <th data-breakpoints="xs sm" I18n="distance">Next mark</th>
-                      <th data-breakpoints="xs sm" I18n="racingtime">Next mark</th>
-                      <th data-breakpoints="xs sm" I18n='loch'>Loch</th>
-                      <th data-breakpoints="xs sm" >Longitude</th>
-                      <th data-breakpoints="xs sm" >Latitude</th>
-                      <th data-breakpoints="xs sm" >Last 1h</th>
-                      <th data-breakpoints="xs sm" >Last 3h</th>
-                      <th data-breakpoints="xs sm" >Last 24h</th>
+                      <th data-name ="Rank" data-toggle="true"  data-sorted="true" data-direction="ASC" data-type="number" >Pos.</th>
+                      <th data-name ="Name" data-toggle="true" data-type="html"  I18N="name">Nom</th>
+                      <th data-name ="Distance" data-breakpoints="xs sm" I18n="distance">Next mark</th>
+                      <th data-name ="Time" data-breakpoints="xs sm" I18n="racingtime">Next mark</th>
+                      <th data-name ="Loch" data-breakpoints="xs sm" I18n='loch'>Loch</th>
+                      <th data-name ="Lon" data-breakpoints="xs sm" >Longitude</th>
+                      <th data-name ="Lat" data-breakpoints="xs sm" >Latitude</th>
+                      <th data-name ="Last1h" data-breakpoints="xs sm" >Last 1h</th>
+                      <th data-name ="Last3h" data-breakpoints="xs sm" >Last 3h</th>
+                      <th data-name ="Last24h" data-breakpoints="xs sm" >Last 24h</th>
                     </tr>
                   </thead>
                   <tbody id="RankingTableBody">
