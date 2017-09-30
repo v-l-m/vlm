@@ -2301,7 +2301,7 @@ function GetRankingObject(RankBoat, rank, WPNum)
     let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
     RetObject["Distance"]=NextMark
     let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
-    RetObject["Time"]= RacingTime
+    RetObject["Time"]= (RankBoat['deptime']==="-1"?"": GetFormattedChronoString(RacingTime));
     RetObject["Loch"]= RankBoat['loch']
     RetObject["Lon"]= RankBoat['longitude']
     RetObject["Lat"]= RankBoat['latitude']
