@@ -458,20 +458,24 @@ function InitMenusAndButtons()
       
   // Init Pilototo footable, and get pointer to object          
   PilototoFt= FooTable.init("#PilototoTable",{
+    'name' : "PilototoTable",
     'on':
     {
+      'ready.ft.table' : HandleReadyTable,
       'postdraw.ft.table':HandleTableDrawComplete
     }
   });
 
   RankingFt = FooTable.init ("#RankingTable",{
+    'name' : "RankingTable",
     'on':
     {
+      'ready.ft.table' : HandleReadyTable,
       'postdraw.ft.table':HandleTableDrawComplete
     }
   });
-  PilototoFt.DrawPending = false;
-  RankingFt.DrawPending = false;
+  PilototoFt.DrawPending = true;
+  RankingFt.DrawPending = true;
   
   
 
@@ -1072,9 +1076,27 @@ function HandleFooTableInitComplete(e,ft)
     //CheckLogin();
 }
 
+function HandleReadyTable(e,ft)
+{
+  ft.DrawPending = false;
+}
+
 function HandleTableDrawComplete(e,ft)
 {
   ft.DrawPending = false ;
+  if (ft === RankingFt)
+  {
+    setTimeout( DeferedGotoPage,500);
+  }
+}
+
+function DeferedGotoPage()
+{
+  if (RankingFt.TargetPage)
+  {
+    RankingFt.gotoPage(RankingFt.TargetPage);
+    RankingFt.TargetPage = 0;
+  }
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
@@ -2183,11 +2205,17 @@ function FillWPRanking(Boat,WPNum)
       if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
       {
         Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum));
+        if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
+        {
+          RowNum = Rows.length;
+        }
       }
     }
   }
 
+  let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
   RankingFt.loadRows(Rows);
+  RankingFt.TargetPage = TargetPage;
   RankingFt.DrawPending = true;
 }
 
@@ -2205,12 +2233,18 @@ function FillStatusRanking(Boat,Status)
       if (RnkBoat.status === Status)
       {
         Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
+        if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
+        {
+          RowNum = Rows.length;
+        }
       }
     }
   }
 
-  RankingFt.loadRows(Rows)
-  
+  let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
+  RankingFt.loadRows(Rows);
+  RankingFt.TargetPage = TargetPage;
+  RankingFt.DrawPending = true;
 }
 
 function FillRacingRanking(Boat)
@@ -2223,6 +2257,11 @@ function FillRacingRanking(Boat)
     if (Boat.RnkObject.RacerRanking[index])
     {    
       let RnkBoat = Boat.RnkObject.RacerRanking[index];
+
+      if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
+      {
+        RowNum = Rows.length;
+      }
       
       if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
       {
@@ -2234,8 +2273,11 @@ function FillRacingRanking(Boat)
       }
     }
   }
+  
+  let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
   RankingFt.loadRows(Rows);
-
+  RankingFt.TargetPage = TargetPage;
+  RankingFt.DrawPending = true;
 }
 
 function GetBoatInfoLink(IdUser,BoatName)
@@ -2307,7 +2349,8 @@ function GetRankingObject(RankBoat, rank, WPNum)
 
   return RetObject
 }
-function AddRankingLine(RankBoat, rank, WPNum)
+
+/*function AddRankingLine(RankBoat, rank, WPNum)
 {
   var Row = $('<tr>')
 
@@ -2381,7 +2424,7 @@ function  AppendColumn(Row, ColumnValue)
   var Column = $("<td>")
   Column.html(ColumnValue);
   Row.append( Column);
-}
+}*/
 
 function HandleShowMapPrefs(e)
 {

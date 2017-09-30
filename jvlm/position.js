@@ -23,7 +23,7 @@ function Rad2Deg(v)
 
 function RoundPow(v,P)
 {
-  if(P)
+  if(typeof P !== 'undefined')
   {
     var Div = Math.pow(10,P);
     return Math.round(v*Div)/Div;
