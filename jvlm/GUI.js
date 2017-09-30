@@ -1878,6 +1878,7 @@ function SortRanking(style, WPNum)
   switch (style)
   {
     case "WP":
+      SetRankingColumns(style);
       WPNum = parseInt(WPNum,10)
       SortRankingData(Boat, style,WPNum);
       FillWPRanking(Boat,WPNum);
@@ -1888,14 +1889,88 @@ function SortRanking(style, WPNum)
     case 'ARR':
     case 'HTP':
     case 'ABD':
+      SetRankingColumns(style);
       SortRankingData(Boat,style)
       FillStatusRanking(Boat,style);
       break;
     case 'RAC':
     default:
+      SetRankingColumns('RAC');
       CurRnk = SortRankingData(Boat,'RAC')
       FillRacingRanking(Boat);
+      
   }
+
+}
+
+function SetRankingColumns(style)
+{
+  switch (style)
+  {
+    case "WP":
+      SetWPRankingColumns()
+      break;
+
+    case 'DNF':
+    case 'HC':
+    case 'ARR':
+    case 'HTP':
+    case 'ABD':
+      SetNRClassRankingColumns()
+      break;
+    case 'RAC':
+    default:
+      SetRacingClassRankingColumns()
+    
+  }
+}
+
+let RACColumnHeader = ["Rank","Name" ,"Distance","Time","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let NRColumnHeader = ["Rank","Name" ,"Distance"]
+let WPColumnHeader = ["Rank","Name" ,"Time","Loch"]
+let RACColumnHeaderLabels = ["ranking","boatname" ,"distance","racingtime","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let NRColumnHeaderLabels = ["ranking","boatname" ,"status"]
+let WPColumnHeaderLabels = ["ranking","boatname" ,"racingtime","ecart"]
+
+
+function SetRacingClassRankingColumns()
+{
+
+  SetColumnsVisibility(RACColumnHeader, RACColumnHeaderLabels);
+
+}
+
+function SetNRClassRankingColumns()
+{
+  SetColumnsVisibility(NRColumnHeader, NRColumnHeaderLabels)
+}
+
+function SetWPRankingColumns()
+{
+  SetColumnsVisibility(WPColumnHeader, WPColumnHeaderLabels)
+}
+
+function SetColumnsVisibility(cols,labels)
+{
+  let index;
+  for (index = 0 ; index < RankingFt.columns.array.length; index++)
+  {
+    if (RankingFt.columns.array[index])
+    {
+      let ColIdx = cols.indexOf(RankingFt.columns.array[index].name)
+      if (ColIdx > -1)
+      {
+        //RankingFt.columns.array[index].title = GetLocalizedString( labels[ColIdx])
+        $("[data-name='"+cols[ColIdx]+"']").attr("I18n",labels[ColIdx]);
+
+      }
+      RankingFt.columns.array[index].visible = ColIdx>-1;
+      
+    }
+  }
+
+  // use localization to change titles. Hummz creative but title does not seem to update the column header.
+  LocalizeItem($("[I18n][data-name]").get());
 
 }
 
