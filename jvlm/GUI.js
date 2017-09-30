@@ -1348,15 +1348,33 @@ function AddRaceToList(race)
   
   let d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
-  let RaceJoinStateClass = race.CanJoin?'CanJoinRace':'NoJoinRace';
-
-  let code = '<div class="raceheaderline panel panel-default")>' +
+  let RaceJoinStateClass 
+  
+  if(race.CanJoin)
+  {
+    let Now = new Date();
+    let RaceStart = new Date(race.deptime*1000);
+    if (RaceStart <=Now)
+    {
+      RaceJoinStateClass = 'CanJoinRace'
+    }
+    else
+    {
+      RaceJoinStateClass = 'CanJoinRaceNotStarted'
+    }
+  }
+  else
+  {
+    RaceJoinStateClass = 'NoJoinRace'
+  }
+  
+  let code = '<div class="raceheaderline panel panel-default '+RaceJoinStateClass+'" )>' +
               '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">'+
               '    <div class="col-xs-4">'+
               '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
               '    </div>'+
               '    <div class="col-xs-4">'+
-              '      <span class="'+RaceJoinStateClass+'">'+ race.racename +
+              '      <span ">'+ race.racename +
               '      </span>'+
               '    </div>'+
               '    <div class="'+(race.CanJoin?'':'hidden') +' col-xs-4">'+
