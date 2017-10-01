@@ -2355,7 +2355,7 @@ function GetBoatInfoLink(IdUser,BoatName)
 
 function GetRankingObject(RankBoat, rank, WPNum)
 {
-  let boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
+  let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   boatsearchstring+=  GetBoatInfoLink(RankBoat['idusers'],RankBoat['boatpseudo'])
   let RetObject = {
     Rank : rank,
