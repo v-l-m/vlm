@@ -2315,6 +2315,7 @@ function FillRacingRanking(Boat)
 {
   let index;
   let Rows = [];
+  let RowNum = 0;
 
   for (index in Boat.RnkObject.RacerRanking)
   {
