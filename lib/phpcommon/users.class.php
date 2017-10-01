@@ -1448,7 +1448,8 @@ class fullUsers
 
       // Delete old invalid WP crossing from waypoint_crossing
       $query_clean_waypoint_crossing = "DELETE FROM waypoint_crossing WHERE validity=0 AND idusers=".
-	$this->users->idusers." AND idraces=".$id;
+        $this->users->idusers." AND idraces=".$id;
+        
       wrapper_mysql_db_query_writer($query_clean_waypoint_crossing);
 
       // Prepare the table races_ranking
@@ -1462,6 +1463,13 @@ class fullUsers
         "             ,    targetlat = 0, targetlong = 0, targetandhdg = -1        " .
         " WHERE idusers = " . $this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
+
+      // Add to LMNH trophy
+      // Prepare the table races_ranking
+      $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, jointime, RefTrophy) values " .
+        " ( ". $id . ", " . $this->users->idusers . ",".time().", 1)";
+
+      wrapper_mysql_db_query_writer($query_join_LMNH);
 
       logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
 
