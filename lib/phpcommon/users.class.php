@@ -528,10 +528,17 @@ class fullUsers
     $LongNM, $LatNM,
     $preferences;
 
-  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION)
+  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
   {
-    $now = time();
-
+    if ($TimeStamp)
+    {
+      $now = $TimeStamp;
+    }
+    else
+    {
+      $now = time();
+    }
+    
     if (is_null($origuser)) {
       $this->users = getUserObject($id);
       if (is_null($this->users)) return;
@@ -581,6 +588,10 @@ class fullUsers
     } else {
       $time = $this->lastPositions->time;
       $this->hours = ($now - $time )/3600 ;  //everything is in GMT
+      if ($dbg)
+      {
+        echo "vacation length ".$this->hours." from ".$now. " and ".$time." delta:".($now - $time );
+      }
     }
 
     if ($origrace == NULL) {
@@ -1112,6 +1123,7 @@ class fullUsers
   {
     if ($now == 0) {
       $now = time();
+      //echo "$now refreshed for ranking storage";
     }
     // Record classification data
     //"        (idraces , idusers , nwp , dnm, latitude, longitude, last1h, last3h, last24h)  " .
@@ -1127,7 +1139,7 @@ class fullUsers
     if ( $this->users->pilotmode != 2
          || ( $this->users->pilotmode ==2 && $this->users->pilotparameter != 0 )  ) {
 
-      $query_update .= " lastchange = " . time() . "," ;
+      $query_update .= " lastchange = " . $now . "," ;
     }
 
     // Cumul du loch sauf si bout au vent...
@@ -1143,10 +1155,10 @@ class fullUsers
       $query_update .= " hidepos = " .  $this->users->hidepos . "," ;
     }
 
-    $query_update .= " lastupdate = " . time() ;
+    $query_update .= " lastupdate = " . $now ;
     $query_update .= " WHERE idusers  = " . $this->users->idusers ;
     wrapper_mysql_db_query_writer($query_update);// or die("Query failed : " . mysql_error." ".$query_ranking);
-
+    //echo "ranking stored with".$now."\n";
     // =======================================================================================
     // En cas de blackout, on a fini.
     // =======================================================================================
@@ -1436,7 +1448,8 @@ class fullUsers
 
       // Delete old invalid WP crossing from waypoint_crossing
       $query_clean_waypoint_crossing = "DELETE FROM waypoint_crossing WHERE validity=0 AND idusers=".
-	$this->users->idusers." AND idraces=".$id;
+        $this->users->idusers." AND idraces=".$id;
+        
       wrapper_mysql_db_query_writer($query_clean_waypoint_crossing);
 
       // Prepare the table races_ranking
@@ -1450,6 +1463,13 @@ class fullUsers
         "             ,    targetlat = 0, targetlong = 0, targetandhdg = -1        " .
         " WHERE idusers = " . $this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
+
+      // Add to LMNH trophy
+      // Prepare the table races_ranking
+      $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, jointime, RefTrophy) values " .
+        " ( ". $id . ", " . $this->users->idusers . ",".time().", 1)";
+
+      wrapper_mysql_db_query_writer($query_join_LMNH);
 
       logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
 

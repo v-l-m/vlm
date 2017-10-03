@@ -22,6 +22,7 @@ var BoatNotRacingStatus = ["DNF","HC","HTP"];
 var GM_Pos=null;
 var GribWindController = null;
 var PilototoFt = null;
+var RankingFt = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -43,7 +44,7 @@ $(document).ready(
     //setup ajax error handling
     $.ajaxSetup({
         error: function (x, status, error) {
-            if (x.status == 401) {
+            if (x.status === 401) {
                 //on access denied try reviving the session
                 OnLoginRequest();
             }
@@ -132,7 +133,6 @@ function OLInit() {
     var layeroption = {
         //sphérique
         sphericalMercator: true,
-        //FIXME: voir s'il y a des effets spécifiques à certains layers
         transitionEffect: "resize",
         //pour passer l'ante-meridien sans souci
         wrapDateLine: true
@@ -283,18 +283,14 @@ function InitMenusAndButtons()
         }
   )
   // Handle clicking on ranking button, and ranking sub tabs
+  $(document.body).on('click',"[RnkSort]",function(e){HandleRaceSortChange(e)});
   $("#Ranking-Panel").on('hide.bs.collapse',
         function(e)
         {
           ResetRankingWPList(e);
         }
   )
-  $("[RnkSort]").on('click',
-        function(e)
-        {
-          HandleRaceSortChange(e);
-        }
-  );
+
 
 
   // Init event handlers
@@ -309,7 +305,7 @@ function InitMenusAndButtons()
   $('#LoginPanel').keypress(
     function(e) 
     {
-      if (e.which == '13') {
+      if (e.which === '13') {
           OnLoginRequest();
           $('#LoginForm').modal('hide');
       }
@@ -430,13 +426,15 @@ function InitMenusAndButtons()
   $("#AP_SetTargetWP").click(HandleClickToSetWP)
   
   // AP datetime pickers
-  $("#AP_Date").datetimepicker();
-  $("#AP_Time").datetimepicker();
-  $("#AP_Date").on('changeDate', HandleDateChange);
-  $("#AP_Time").on('changeDate', HandleDateChange);
-  $("#APValidateButton").click(HandleSendAPUpdate)
-  $(".APField").on('change',HandleAPFieldChange);
-  $(".APMode").on('click',HandleAPModeDDClick)
+  //$("#AP_Date").datetimepicker();
+  $("#AP_Time").datetimepicker({
+    language: 'fr-FR'
+  });
+  //$("#AP_Date").on('changeDate', HandleDateChange);
+  //$("#AP_Time").on('changeDate', HandleDateChange);
+  //$("#APValidateButton").click(HandleSendAPUpdate)
+  //$(".APField").on('change',HandleAPFieldChange);
+  //$(".APMode").on('click',HandleAPModeDDClick)
 
   // Draggable info window
   $(".Draggable").draggable(
@@ -462,14 +460,36 @@ function InitMenusAndButtons()
       
   // Init Pilototo footable, and get pointer to object          
   PilototoFt= FooTable.init("#PilototoTable",{
+    'name' : "PilototoTable",
     'on':
     {
-      'postdraw.ft.table':HandleTableDrawComplete,
-      'postinit.ft.table':HandleFooTableInitComplete,
+      'ready.ft.table' : HandleReadyTable,
+      'postdraw.ft.table':HandleTableDrawComplete
     }
   });
+
+  RankingFt = FooTable.init ("#RankingTable",{
+    'name' : "RankingTable",
+    'on':
+    {
+      'ready.ft.table' : HandleReadyTable,
+      'postdraw.ft.table':HandleTableDrawComplete
+    }
+  });
+  PilototoFt.DrawPending = true;
+  RankingFt.DrawPending = true;
   
   
+
+  // Add handler to refresh content of eth pilototo table when showing tab content
+  $("[PilRefresh]").on('click', HandleUpdatePilototoTable)
+  
+  CheckLogin();
+}
+
+function HandleUpdatePilototoTable(e)
+{
+  UpdatePilotInfo(_CurPlayer.CurBoat);
 }
 
 function InitGribSlider()
@@ -488,7 +508,7 @@ function InitGribSlider()
     }
   });
   
-};
+}
 
 function HandleRaceSortChange(e)
 {
@@ -504,10 +524,8 @@ function HandleRaceSortChange(e)
     case 'HTP':
     case 'HC':
     case 'ABD':
-      //$("[rnksort='FIN']").addClass("active");
     case 'RAC':
     case 'ARR':
-      //$("[rnksort='"+Target+"']").addClass("active");
       SortRanking(Target);
       break;
 
@@ -515,7 +533,7 @@ function HandleRaceSortChange(e)
       console.log("Sort change request"+e);
   }
   
-};
+}
 
 function HandleGribSlideMove(event, ui )
 {
@@ -838,12 +856,13 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
   }
+  else
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", "N/A"]);
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", "N/A"]);
   }
   
-  if (Boat.VLMInfo.PIM === PM_ANGLE)
+  if (parseInt(Boat.VLMInfo.PIM,10) === PM_ANGLE)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.PIP) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Boat.VLMInfo.PIP ]);
@@ -988,15 +1007,14 @@ function UpdatePolarImages(Boat)
   $("#PolarList").append(HTML);
 }
 
-let DrawingPilototoTable=false;
 function UpdatePilotInfo(Boat)
 {
-  if ((typeof Boat === "undefined") || (!Boat) || DrawingPilototoTable)
+  if ((typeof Boat === "undefined") || (!Boat) || PilototoFt.DrawPending)
   {
     return;
   }   
 
-  let PIL_TEMPLATE = $("#PIL_TEMPLATE");
+  //let PIL_TEMPLATE = $("#PIL_TEMPLATE");
   //PIL_TEMPLATE.hide()
   
   /*for (index=1; index <=5 ; index ++)
@@ -1048,21 +1066,33 @@ function UpdatePilotInfo(Boat)
     }
   }
 
-  PilototoFt.loadRows(PilRows)
-  DrawingPilototoTable = true;
+  PilototoFt.loadRows(PilRows,false)
+  PilototoFt.DrawPending = true;
   
   UpdatePilotBadge(Boat);
 }
 
-function HandleFooTableInitComplete(e,ft)
+function HandleReadyTable(e,ft)
 {
-    // CheckLogin
-    CheckLogin();
+  ft.DrawPending = false;
 }
 
 function HandleTableDrawComplete(e,ft)
 {
-  DrawingPilototoTable = false ;
+  ft.DrawPending = false ;
+  if (ft === RankingFt)
+  {
+    setTimeout( DeferedGotoPage,500);
+  }
+}
+
+function DeferedGotoPage()
+{
+  if (RankingFt.TargetPage)
+  {
+    RankingFt.gotoPage(RankingFt.TargetPage);
+    RankingFt.TargetPage = 0;
+  }
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
@@ -1087,12 +1117,7 @@ function GetPilototoTableLigneObject(Boat,Index)
       Delete:$("#DeleteCellTemplate").first().html()
   }
   
-  /*$(Id)[0].attributes['TID']=PilOrder.TID
-  SetSubItemValue(Id,"#PIL_DATE",OrderDate)
-  SetSubItemValue(Id,"#PIL_PIM",PIMText)
-  SetSubItemValue(Id,"#PIL_PIP",PilOrder.PIP)
-  SetSubItemValue(Id,"#PIL_STATUS",PilOrder.STS)
-  $(Id).show();*/
+
   return Ret;
 }
 
@@ -1336,15 +1361,33 @@ function AddRaceToList(race)
   
   let d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
-  let RaceJoinStateClass = race.CanJoin?'CanJoinRace':'NoJoinRace';
-
-  let code = '<div class="raceheaderline panel panel-default")>' +
+  let RaceJoinStateClass 
+  
+  if(race.CanJoin)
+  {
+    let Now = new Date();
+    let RaceStart = new Date(race.deptime*1000);
+    if (RaceStart <=Now)
+    {
+      RaceJoinStateClass = 'CanJoinRace'
+    }
+    else
+    {
+      RaceJoinStateClass = 'CanJoinRaceNotStarted'
+    }
+  }
+  else
+  {
+    RaceJoinStateClass = 'NoJoinRace'
+  }
+  
+  let code = '<div class="raceheaderline panel panel-default '+RaceJoinStateClass+'" )>' +
               '  <div data-toggle="collapse" href="#RaceDescription'+race.idraces+'" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">'+
               '    <div class="col-xs-4">'+
               '      <img class="racelistminimap" src="/cache/minimaps/'+race.idraces+'.png" ></img>'+
               '    </div>'+
               '    <div class="col-xs-4">'+
-              '      <span class="'+RaceJoinStateClass+'">'+ race.racename +
+              '      <span ">'+ race.racename +
               '      </span>'+
               '    </div>'+
               '    <div class="'+(race.CanJoin?'':'hidden') +' col-xs-4">'+
@@ -1784,7 +1827,7 @@ function RefreshEstPosLabels(Pos)
 
 function GetWPrankingLI(WPInfo)
 {
-  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="1"><a href="#DivRnkRAC">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
+  return '<li id="RnkWP'+ WPInfo.wporder +'" RnkSort="WP" WPRnk="'+ WPInfo.wporder +'"><a href="#DivRnkRAC" RnkSort="WP" WPRnk="'+ WPInfo.wporder +'">WP '+ WPInfo.wporder +' : '+WPInfo.libelle + '</a></li>';
 }
 
 function ResetRankingWPList(e)
@@ -1810,7 +1853,6 @@ function CheckWPRankingList(Boat)
         let WPInfo = Boat.RaceInfo.races_waypoints[index];
         let html = GetWPrankingLI(WPInfo);
         $(InitNeeded).append(html);
-        $("#RnkWP"+WPInfo.wporder).on('click',function(e){HandleRaceSortChange(e)});
       }
       
     }
@@ -1826,7 +1868,7 @@ function SortRanking(style, WPNum)
 {
 
   
-  $('#RankingTableBody').empty();
+  //$('#RankingTableBody').empty();
   var Boat = _CurPlayer.CurBoat;
   CheckWPRankingList(Boat);
   
@@ -1838,6 +1880,7 @@ function SortRanking(style, WPNum)
   switch (style)
   {
     case "WP":
+      SetRankingColumns(style);
       WPNum = parseInt(WPNum,10)
       SortRankingData(Boat, style,WPNum);
       FillWPRanking(Boat,WPNum);
@@ -1848,14 +1891,88 @@ function SortRanking(style, WPNum)
     case 'ARR':
     case 'HTP':
     case 'ABD':
+      SetRankingColumns(style);
       SortRankingData(Boat,style)
       FillStatusRanking(Boat,style);
       break;
     case 'RAC':
     default:
+      SetRankingColumns('RAC');
       CurRnk = SortRankingData(Boat,'RAC')
       FillRacingRanking(Boat);
+      
   }
+
+}
+
+function SetRankingColumns(style)
+{
+  switch (style)
+  {
+    case "WP":
+      SetWPRankingColumns()
+      break;
+
+    case 'DNF':
+    case 'HC':
+    case 'ARR':
+    case 'HTP':
+    case 'ABD':
+      SetNRClassRankingColumns()
+      break;
+    case 'RAC':
+    default:
+      SetRacingClassRankingColumns()
+    
+  }
+}
+
+let RACColumnHeader = ["Rank","Name" ,"Distance","Time","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let NRColumnHeader = ["Rank","Name" ,"Distance"]
+let WPColumnHeader = ["Rank","Name" ,"Time","Loch"]
+let RACColumnHeaderLabels = ["ranking","boatname" ,"distance","racingtime","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let NRColumnHeaderLabels = ["ranking","boatname" ,"status"]
+let WPColumnHeaderLabels = ["ranking","boatname" ,"racingtime","ecart"]
+
+
+function SetRacingClassRankingColumns()
+{
+
+  SetColumnsVisibility(RACColumnHeader, RACColumnHeaderLabels);
+
+}
+
+function SetNRClassRankingColumns()
+{
+  SetColumnsVisibility(NRColumnHeader, NRColumnHeaderLabels)
+}
+
+function SetWPRankingColumns()
+{
+  SetColumnsVisibility(WPColumnHeader, WPColumnHeaderLabels)
+}
+
+function SetColumnsVisibility(cols,labels)
+{
+  let index;
+  for (index = 0 ; index < RankingFt.columns.array.length; index++)
+  {
+    if (RankingFt.columns.array[index])
+    {
+      let ColIdx = cols.indexOf(RankingFt.columns.array[index].name)
+      if (ColIdx > -1)
+      {
+        //RankingFt.columns.array[index].title = GetLocalizedString( labels[ColIdx])
+        $("[data-name='"+cols[ColIdx]+"']").attr("I18n",labels[ColIdx]);
+
+      }
+      RankingFt.columns.array[index].visible = ColIdx>-1;
+      
+    }
+  }
+
+  // use localization to change titles. Hummz creative but title does not seem to update the column header.
+  LocalizeItem($("[I18n][data-name]").get());
 
 }
 
@@ -1879,8 +1996,8 @@ function RnkIsRacing(rnk)
 
 function Sort2ArrivedBoats(rnk1,rnk2)
 {
-  let Total1 = parseInt(rnk1.duration,10)+parseInt(rnk1.penalty);
-  let Total2 = parseInt(rnk2.duration,10)+parseInt(rnk2.penalty);
+  let Total1 = parseInt(rnk1.duration,10)+parseInt(rnk1.penalty,10);
+  let Total2 = parseInt(rnk2.duration,10)+parseInt(rnk2.penalty,10);
   
   if (Total1 > Total2)
   {
@@ -2017,7 +2134,7 @@ function DebugRacerSort(rnk1,rnk2,res)
 function Sort2NonRacing(rnk1,rnk2)
 {
 
-  if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers != "undefined")
+  if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers !== "undefined")
   {
     let IdUser1 = parseInt(rnk1.idusers,10)
     let IdUser2 = parseInt(rnk2.idusers,10)
@@ -2090,7 +2207,7 @@ function SortRankingData(Boat, SortType,WPNum)
     case 'RAC':
     case 'DNF':
     case 'HC':
-    case 'HPT':
+    case 'HTP':
     case 'ABD':
     case 'ARR':
     
@@ -2122,35 +2239,57 @@ function FillWPRanking(Boat,WPNum)
 {
   let index;
   let RowNum = 1;
+  let BestTime = 0;
+  let Rows = [];
+
+  if (!Boat || RankingFt.DrawPending)
+  {
+    return;
+  }
 
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
     {    
       let RnkBoat = Boat.RnkObject.RacerRanking[index];
-      
+
+      if (RnkBoat.WP && RnkBoat.WP[WPNum -1] && !RnkBoat.WP[WPNum -1].Delta)
+      {
+        if (!BestTime)
+        {
+          BestTime = RnkBoat.WP[WPNum -1].duration;
+          RnkBoat.WP[WPNum -1].Delta = 0;
+          RnkBoat.WP[WPNum -1].Pct = 0;
+        }
+        else
+        {
+          RnkBoat.WP[WPNum -1].Delta = RnkBoat.WP[WPNum -1].duration - BestTime;
+          RnkBoat.WP[WPNum -1].Pct = 100 *(RnkBoat.WP[WPNum -1].duration / BestTime - 1);
+        }
+      }
+
       if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
       {
-        AddRankingLine(RnkBoat,RowNum++);
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum));
+        if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
+        {
+          RowNum = Rows.length;
+        }
       }
     }
   }
 
-  $('#Ranking-Panel').show();
-  $('#RankingTable').footable(
-    {
-      "paging": 
-      {
-        "current": 1
-	  	}
-	  });
+  let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
+  RankingFt.loadRows(Rows);
+  RankingFt.TargetPage = TargetPage;
+  RankingFt.DrawPending = true;
 }
 
 function FillStatusRanking(Boat,Status)
 {
   let index;
   let RowNum = 1;
-
+  let Rows = [];
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2159,34 +2298,41 @@ function FillStatusRanking(Boat,Status)
       
       if (RnkBoat.status === Status)
       {
-        AddRankingLine(RnkBoat,RowNum++);
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
+        if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
+        {
+          RowNum = Rows.length;
+        }
       }
     }
   }
 
-  $('#Ranking-Panel').show();
-  $('#RankingTable').footable(
-    {
-      "paging": 
-      {
-        "current": 1
-	  	}
-	  });
+  let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
+  RankingFt.loadRows(Rows);
+  RankingFt.TargetPage = TargetPage;
+  RankingFt.DrawPending = true;
 }
 
 function FillRacingRanking(Boat)
 {
   let index;
+  let Rows = [];
+  let RowNum = 0;
 
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
     {    
       let RnkBoat = Boat.RnkObject.RacerRanking[index];
+
+      if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
+      {
+        RowNum = Rows.length;
+      }
       
       if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
       {
-        AddRankingLine(RnkBoat,parseInt(index,10)+1)
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
       }
       else
       {
@@ -2194,16 +2340,11 @@ function FillRacingRanking(Boat)
       }
     }
   }
-
-  $('#Ranking-Panel').show();
-  $('#RankingTable').footable(
-    {
-      "paging": 
-      {
-        "current": Math.round((parseInt(_CurPlayer.CurBoat.VLMInfo.RNK,10))/20)
-	  	}
-	  });
-
+  
+  let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
+  RankingFt.loadRows(Rows);
+  RankingFt.TargetPage = TargetPage;
+  RankingFt.DrawPending = true;
 }
 
 function GetBoatInfoLink(IdUser,BoatName)
@@ -2215,52 +2356,67 @@ function GetBoatInfoLink(IdUser,BoatName)
   return ret;
 }
 
-function AddRankingLine(RankBoat, rank)
+function GetRankingObject(RankBoat, rank, WPNum)
 {
-  var Row = $('<tr>')
-
-  Row.append(AppendColumn(Row,rank))
-  let boatsearchstring = '<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
-  
+  let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   boatsearchstring+=  GetBoatInfoLink(RankBoat['idusers'],RankBoat['boatpseudo'])
-  Row.append(AppendColumn(Row,boatsearchstring))
-  if (RnkIsRacing(RankBoat))
+  let RetObject = {
+    Rank : rank,
+    Name :boatsearchstring,
+    Distance : "",
+    Time : "",
+    Loch : "",
+    Lon : "",
+    Lat : "",
+    Last1h : "",
+    Last3h : "",
+    Last24h : ""
+  };
+  
+  if (RnkIsRacing(RankBoat) && !WPNum)
   {
+    // General ranking layout
     let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
-    Row.append(AppendColumn(Row,NextMark))
+    RetObject["Distance"]=NextMark
     let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
-    Row.append(AppendColumn(Row,GetFormattedChronoString(RacingTime)));
-    Row.append(AppendColumn(Row,RankBoat['loch']))
-    Row.append(AppendColumn(Row,RankBoat['longitude']))
-    Row.append(AppendColumn(Row,RankBoat['latitude']))
-    Row.append(AppendColumn(Row,RankBoat['last1h']))
-    Row.append(AppendColumn(Row,RankBoat['last3h']))
-    Row.append(AppendColumn(Row,RankBoat['last24h']))
+    RetObject["Time"]= (RankBoat['deptime']==="-1"?"": GetFormattedChronoString(RacingTime));
+    RetObject["Loch"]= RankBoat['loch']
+    RetObject["Lon"]= RankBoat['longitude']
+    RetObject["Lat"]= RankBoat['latitude']
+    RetObject["Last1h"]=RankBoat['last1h']
+    RetObject["Last3h"]= RankBoat['last3h']
+    RetObject["Last24h"]= RankBoat['last24h']
+  }
+  else if (!WPNum)
+  {
+    // Non General ranking layout
+    let NextMark = GetLocalizedString("status_" + RankBoat['status'])
+    RetObject["Distance"]=NextMark
+    RetObject["Time"]=GetFormattedChronoString(parseInt(RankBoat['duration'],10));
+    RetObject["Loch"]=RankBoat['loch']
+    RetObject["Lon"]= RankBoat['longitude']
+    RetObject["Lat"]= RankBoat['latitude']
   }
   else
   {
-    let NextMark = GetLocalizedString("status_" + RankBoat['status'])
-    
-    Row.append(AppendColumn(Row,NextMark))
-    Row.append(AppendColumn(Row,GetFormattedChronoString(parseInt(RankBoat['duration'],10))));
-    Row.append(AppendColumn(Row,RankBoat['loch']))
-    Row.append(AppendColumn(Row,RankBoat['longitude']))
-    Row.append(AppendColumn(Row,RankBoat['latitude']))
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
-    Row.append(AppendColumn(Row,""))
+    RetObject["Time"] = GetFormattedChronoString(parseInt(RankBoat.WP[WPNum-1].duration,10));
+    let DeltaStr
+    if (RankBoat.WP[WPNum-1].Delta)
+    {
+      let PctString = RoundPow(RankBoat.WP[WPNum-1].Pct,2);
+      DeltaStr = GetFormattedChronoString(RankBoat.WP[WPNum-1].Delta) + " (+"+PctString + " %)"
+    }
+    else
+    {
+      DeltaStr = GetLocalizedString("winner")
+    }
+    RetObject["Loch"] = DeltaStr
   }
-  
-  $('#RankingTableBody').append(Row);
 
+
+  return RetObject
 }
 
-function  AppendColumn(Row, ColumnValue)
-{
-  var Column = $("<td>")
-  Column.html(ColumnValue);
-  Row.append( Column);
-}
 
 function HandleShowMapPrefs(e)
 {
@@ -2414,7 +2570,7 @@ function VLMAlertDanger(Text)
 
 function VLMAlertInfo(Text)
 {
-  VLMAlert(Text,"alert-Info");
+  VLMAlert(Text,"alert-info");
 }
 
 let AlertIntervalId = null;

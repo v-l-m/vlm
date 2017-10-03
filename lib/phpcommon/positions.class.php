@@ -104,10 +104,10 @@ class positions
     $this->long = doublep_value($new_long);
   } 
 
-  function writePositions($updatetime = 1)
+  function writePositions($updatetime)
   {
-    if ($updatetime == 1) {
-      $this->time = time();
+    if ($updatetime) {
+      $this->time = $updatetime;
     }
     $query7 = "INSERT INTO positions SET time = ". $this->time .
               ", `long` =". $this->long .
@@ -115,6 +115,7 @@ class positions
               ", idusers = ".$this->idusers .
               ", `race` = ".$this->race;
     wrapper_mysql_db_query_writer($query7);
+    //echo 'Write position time '.$this->time."\t";
   }
 
   function writeDefaultPositions($id, $race)
@@ -128,7 +129,7 @@ class positions
   }
 
   /*returns FALSE if it's false*/
-  // N'est utilisée que par le moteur.
+  // N'est utilisÃ©e que par le moteur.
   // N'a plus de sens avec la nouvelle gestion meteo qui couvre tout le globe
   //FIXME : remove it ?
   function isInsideGrid()
@@ -238,7 +239,7 @@ class positionsList extends positionsIterator {
 }
 
 // La structure fullGrid contient lat, long, wspeed, et wheading
-// Elle est utilisée pour positionner les vecteurs de vent sur les cartes
+// Elle est utilisÃ©e pour positionner les vecteurs de vent sur les carte
 class fullGrid
 {
   var $Lat,
@@ -253,7 +254,7 @@ class fullGrid
       $this->Lat =  $latitude;
       $this->Long = $longitude;
 
-      // Recherche de la donnée vent de ce point
+      // Recherche de la donnï¿½e vent de ce point
       if ( $timestamp > 0 ) {
            $vent = windAtPosition($latitude, $longitude, $timestamp);
       } else {
@@ -270,9 +271,9 @@ class gridList
 {
   var $records = array();
 
-  // Utilisé par mercator.img.php
+  // Utilisï¿½ par mercator.img.php
   // Cette nouvelle version de gridList est plus performante que l'ancienne
-  // car elle ne prend que les points se situant sur la zone à cartographier
+  // car elle ne prend que les points se situant sur la zone ï¿½ cartographier
   function gridList($north, $south, $west, $east, $maille, $timestamp = 0)
   {
     $lat_step=$maille*abs($north - $south)/10;
