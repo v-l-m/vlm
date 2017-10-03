@@ -426,13 +426,15 @@ function InitMenusAndButtons()
   $("#AP_SetTargetWP").click(HandleClickToSetWP)
   
   // AP datetime pickers
-  $("#AP_Date").datetimepicker();
-  $("#AP_Time").datetimepicker();
-  $("#AP_Date").on('changeDate', HandleDateChange);
-  $("#AP_Time").on('changeDate', HandleDateChange);
-  $("#APValidateButton").click(HandleSendAPUpdate)
-  $(".APField").on('change',HandleAPFieldChange);
-  $(".APMode").on('click',HandleAPModeDDClick)
+  //$("#AP_Date").datetimepicker();
+  $("#AP_Time").datetimepicker({
+    language: 'fr-FR'
+  });
+  //$("#AP_Date").on('changeDate', HandleDateChange);
+  //$("#AP_Time").on('changeDate', HandleDateChange);
+  //$("#APValidateButton").click(HandleSendAPUpdate)
+  //$(".APField").on('change',HandleAPFieldChange);
+  //$(".APMode").on('click',HandleAPModeDDClick)
 
   // Draggable info window
   $(".Draggable").draggable(
