@@ -428,7 +428,8 @@ function InitMenusAndButtons()
   // AP datetime pickers
   //$("#AP_Date").datetimepicker();
   $("#AP_Time").datetimepicker({
-    language: 'fr-FR'
+    //language: 'fr-FR',
+    //parentEl: '#AutoPilotSettingDlg'
   });
   //$("#AP_Date").on('changeDate', HandleDateChange);
   //$("#AP_Time").on('changeDate', HandleDateChange);

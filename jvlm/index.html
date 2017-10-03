@@ -1370,7 +1370,7 @@
               <div class="row container-fluid">
                 <div class="col-xs-12">
                   <div id="pilot" class="form-group">
-                    <div class="row">
+                    <!--<div class="row">
                       <label for="AP_Date" class="col-md-4 control-label" I18n="select_date">Date Picking</label>
                       <div id="AP_Date" class="input-group date form_date col-md-8" data-date-format="dd MM yyyy" >
                         <input class="APField form-control" size="12" type="text" value="" >
@@ -1378,21 +1378,20 @@
                           <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                       </div>				              
-                    </div>
+                    </div>-->
                     <div class="row">
                       <div class="form-group">
                         <label for="AP_Time" class="col-md-4 control-label"  I18n="select_time">Time Picking</label>
-                        <div id="AP_Time" class="input-group date col-md-8">
-                          <input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
-                          <span class="add-on">
-                            <i class="glyphicon glyphicon-time" data-time-icon="icon-time" data-date-icon="icon-calendar">
-                            </i>
+                        <div id="AP_Time" class="input-group datecol-md-8">
+                          <input data-format="dd/MM/yyyy hh:mm:ss" type="text" class="form-control"></input>
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
                           </span>
                         </div>
                         <!--<div id="AP_Time" class="input-group date form_time col-md-8" data-date-format="hh:ii:ss" >
                           <input class="APField form-control" size="12" type="text" value="" >
 					                <span class="input-group-addon">
-                            <span ></span>
+                            <span class="glyphicon glyphicon-time"></span>
                           </span>
                         </div>
                       -->
