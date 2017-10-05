@@ -945,9 +945,9 @@ margin-top:15px;
 padding:4px 8px 4px 8px;
 margin-top:2px;
 }
-.btn span.glyphicon {    			
+/*.btn span.glyphicon {    			
 	opacity: 0;				
-}
+}*/
 .btn.active span.glyphicon {				
 	opacity: 1;				
 }
@@ -1401,4 +1401,27 @@ text-align:justify;
 
 .RnkMyBoat{
   background-color: #e0e0a0;
+}
+.bootstrap-datetimepicker-widget button[data-action] {
+  padding: 6px;
+  z-index:9999;
+}
+.bootstrap-datetimepicker-widget .btn[data-action="incrementHours"]::after {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  color:#e0e0a0;
+  content: "Increment Hours";
+  z-index:9999;
+}
+.bootstrap-datetimepicker-widget a[data-action]:active {
+  box-shadow: normal;
+}
+.btn{
+z-index:999;
 }

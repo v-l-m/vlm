@@ -428,6 +428,8 @@ function InitMenusAndButtons()
   // AP datetime pickers
   //$("#AP_Date").datetimepicker();
   $("#AP_Time").datetimepicker({
+    //debug:true,
+    format: 'DD MM YYYY, HH:mm:ss',
     //language: 'fr-FR',
     //parentEl: '#AutoPilotSettingDlg'
   });
