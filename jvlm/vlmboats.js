@@ -1304,7 +1304,7 @@ function contains(a, obj)
 
 function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
 {
-  if (!Boat || typeof Boat.Rankings === "undefined" || Boat.Rankings.ranking.length === 0)
+  if (!Boat || typeof Boat.RnkObject === "undefined" )
   {
     return;
   }
@@ -1324,7 +1324,7 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     {
       if (friends[index])
       {
-        let Opp = Boat.Rankings.ranking[friends[index]];
+        let Opp = Boat.RnkObject[friends[index]];
 
         if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers,10) !== Boat.IdBoat))
         {
@@ -1342,9 +1342,9 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
 
   var MAX_LEN = 150;
-  var ratio =MAX_LEN/ Object.keys(Boat.Rankings.ranking).length;
+  var ratio =MAX_LEN/ Object.keys(Boat.RnkObject).length;
   var count=0;
-  var BoatList = Boat.Rankings.ranking;
+  var BoatList = Boat.RnkObject;
 
   if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
   {
@@ -1366,11 +1366,11 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
       var BoatCount = 0;
       BoatList = [];
       
-      for (index in Boat.Rankings.ranking)
+      for (index in Boat.RnkObject)
       {
-        if (Boat.Rankings.ranking[index].rank < 10)
+        if (Boat.RnkObject[index].rank < 10)
         {
-          BoatList[index]=Boat.Rankings.ranking[index];
+          BoatList[index]=Boat.RnkObject[index];
           BoatCount++;
           if (BoatCount > 10)
           {
@@ -1388,21 +1388,28 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     
   }
 
-  for (index in  BoatList)
+  // Sort racers to be able to show proper opponents
+  SortRankingData(Boat,'RAC')
+  
+  for (index in  Boat.RnkObject.RacerRanking)
   {
-    if (index in Boat.Rankings.ranking)
+    if (index in Boat.RnkObject.RacerRanking)
     {
-      var Opp = Boat.Rankings.ranking[index];
+      var Opp = Boat.RnkObject.RacerRanking[index];
 
-      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && (!contains(friends,Opp.idusers)) && (Math.random()<=ratio) && (count < MAX_LEN))
+      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && (!contains(friends,Opp.idusers)) && RnkIsRacing(Opp) && (Math.random()<=ratio) && (count < MAX_LEN))
       {
         AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
-
+        count +=1;
         if (typeof Boat.OppList === "undefined")
         {
           Boat.OppList=[];
         }
         Boat.OppList[index]=Opp;
+      }
+      else if (count>= MAX_LEN)
+      {
+        break;
       }
     }
   }
@@ -1419,21 +1426,21 @@ function CompareDist(a,b)
 
 function GetClosestOpps(Boat,NbOpps)
 {
-  var CurDnm = parseFloat( Boat.Rankings.ranking[Boat.IdBoat].dnm);
-  var CurWP = Boat.Rankings.ranking[Boat.IdBoat].nwp
+  var CurDnm = parseFloat( Boat.RnkObject[Boat.IdBoat].dnm);
+  var CurWP = Boat.RnkObject[Boat.IdBoat].nwp
   var RetArray = [];
   var List = [];
 
-  for (index in Boat.Rankings.ranking)
+  for (index in Boat.RnkObject)
   {
-    if (Boat.Rankings.ranking[index])
+    if (Boat.RnkObject[index])
     {
-      if (CurWP === Boat.Rankings.ranking[index].nwp)
+      if (CurWP === Boat.RnkObject[index].nwp)
       {
         var O = 
           { 
             id : index,
-            dnm : Math.abs(CurDnm - parseFloat(Boat.Rankings.ranking[index].dnm))
+            dnm : Math.abs(CurDnm - parseFloat(Boat.RnkObject[index].dnm))
           }
         List.push(O);
       }
@@ -1443,7 +1450,7 @@ function GetClosestOpps(Boat,NbOpps)
   List = List.sort(CompareDist);
   for (index in  List.slice(0,NbOpps-1))
   {
-      RetArray[List[index].id]=Boat.Rankings.ranking[List[index].id];
+      RetArray[List[index].id]=Boat.RnkObject[List[index].id];
   }
 
   return RetArray;

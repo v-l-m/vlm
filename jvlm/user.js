@@ -12,7 +12,7 @@ function Boat(vlmboat)
   this.RaceInfo = {}; // Race Info for the boat
   this.Exclusions = []; // Exclusions Zones for this boat
   this.Track = []; // Last 24H of boat Track
-  this.Rankings = {};   // Ranking table
+  this.RnkObject = {};   // Ranking table
   this.OppTrack = []; // Opponents tracks table
   this.OppList = [];  // Opponents list to limit how many boats are shown
   this.Reals = []; // Reals Boat array
@@ -31,7 +31,7 @@ function Boat(vlmboat)
     this.RaceInfo=vlmboat.RaceInfo; 
     this.Exclusions=vlmboat.Exclusions; 
     this.Track=vlmboat.Track; 
-    this.Rankings=vlmboat.Rankings;  
+    this.RnkObject=vlmboat.RnkObject;  
   }
 
   this.GetNextGateSegment = function( NWP)
