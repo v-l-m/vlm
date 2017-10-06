@@ -426,18 +426,16 @@ function InitMenusAndButtons()
   $("#AP_SetTargetWP").click(HandleClickToSetWP)
   
   // AP datetime pickers
-  //$("#AP_Date").datetimepicker();
   $("#AP_Time").datetimepicker({
-    //debug:true,
-    format: 'DD MM YYYY, HH:mm:ss',
+    locale: _CurLocale,
+    format: 'DD MM YYYY, HH:mm:ss'
     //language: 'fr-FR',
     //parentEl: '#AutoPilotSettingDlg'
   });
-  //$("#AP_Date").on('changeDate', HandleDateChange);
-  //$("#AP_Time").on('changeDate', HandleDateChange);
-  //$("#APValidateButton").click(HandleSendAPUpdate)
-  //$(".APField").on('change',HandleAPFieldChange);
-  //$(".APMode").on('click',HandleAPModeDDClick)
+  $("#AP_Time").on('dp.change', HandleDateChange);
+  $("#APValidateButton").click(HandleSendAPUpdate)
+  $(".APField").on('change',HandleAPFieldChange);
+  $(".APMode").on('click',HandleAPModeDDClick)
 
   // Draggable info window
   $(".Draggable").draggable(
@@ -1601,8 +1599,7 @@ function HandleOpenAutoPilotSetPoint(e)
 function RefreshAPDialogFields()
 {
   // Update dialog content from APOrder object
-  $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
-  $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
+  $("#AP_Time").data('DateTimePicker').date(_CurAPOrder.Date);
 
   $('#AP_PIM:first-child').html(
   '<span>'+_CurAPOrder.GetPIMString()+'</span>'+
@@ -1617,18 +1614,10 @@ function RefreshAPDialogFields()
   UpdatePIPFields(_CurAPOrder.PIM);
   
 }
-var _DateChanging=false
+
 function HandleDateChange(ev)
 {
-  if (!_DateChanging)
-  {
-    _DateChanging=true;
-    _CurAPOrder.Date = ev.date;
-    $("#AP_Date").datetimepicker('update',_CurAPOrder.Date);
-    $("#AP_Time").datetimepicker('update',_CurAPOrder.Date);
-    _DateChanging=false;
-  }
-  
+  _CurAPOrder.Date = ev.date;
 }
 
 function HandleClickToSetWP()
