@@ -1131,6 +1131,12 @@ function DeferedGotoPage()
     RankingFt.gotoPage(RankingFt.TargetPage);
     RankingFt.TargetPage = 0;
   }
+  setTimeout(DeferedPagingStyle,200);
+}
+
+function DeferedPagingStyle()
+{
+  HandlePagingComplete();
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
