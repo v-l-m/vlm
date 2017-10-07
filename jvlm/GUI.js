@@ -17,6 +17,12 @@ var MAX_PILOT_ORDERS = 5;
 var BoatRacingStatus = ["RAC","CST","LOC","DNS"];
 var BoatArrivedStatus = ["ARR"];
 var BoatNotRacingStatus = ["DNF","HC","HTP"];
+var BoatRacingClasses = {
+      "RAC": "ft_class_racing",
+      "CST": "ft_class_oncoast",
+      "LOC": "ft_class_locked",
+      "DNS": "ft_class_dns"
+    }
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
@@ -474,6 +480,7 @@ function InitMenusAndButtons()
     'on':
     {
       'ready.ft.table' : HandleReadyTable,
+      'after.ft.paging' : HandlePagingComplete,
       'postdraw.ft.table':HandleTableDrawComplete
     }
   });
@@ -1076,6 +1083,32 @@ function UpdatePilotInfo(Boat)
 function HandleReadyTable(e,ft)
 {
   ft.DrawPending = false;
+}
+
+function HandlePagingComplete(e,ft)
+{
+  let classes = {
+        ft_class_myboat : "rnk-myboat",
+        ft_class_friend :"rnk-friend",
+        ft_class_oncoast : "rnk-oncoast"
+  }
+  let index 
+
+  for (index in classes)
+  {
+    if (classes[index])
+    {
+      $('td').closest('tr').removeClass(classes[index]);
+    }
+  }
+  for (index in classes)
+  {
+    if (classes[index])
+    {
+      $('td:contains("'+index+'")').closest('tr').addClass(classes[index]);      
+    }
+  }
+
 }
 
 function HandleTableDrawComplete(e,ft)
@@ -2362,7 +2395,8 @@ function GetRankingObject(RankBoat, rank, WPNum)
     Lat : "",
     Last1h : "",
     Last3h : "",
-    Last24h : ""
+    Last24h : "",
+    Class : ""
   };
   
   if (RnkIsRacing(RankBoat) && !WPNum)
@@ -2405,6 +2439,20 @@ function GetRankingObject(RankBoat, rank, WPNum)
     RetObject["Loch"] = DeltaStr
   }
 
+  if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
+  {
+    RetObject.Class +=" ft_class_myboat"
+  }
+
+  
+  for (index in BoatRacingStatus)
+  {
+    if (RankBoat['status'] === index)
+    {
+      RetObject.Class +="  "+ BoatRacingClasses[index];
+    }
+  }
+  
 
   return RetObject
 }
