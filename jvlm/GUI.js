@@ -697,7 +697,7 @@ function GetBoatInfoLine(Boat,IsFleet)
     Line = Line + '</span>'
   }
   
-  Line=Line+'<span>-</span><span>'+Boat.BoatName+'</span>'
+  Line=Line+'<span>-</span><span>'+HTMLDecode(Boat.BoatName)+'</span>'
   return Line  
 }
 
