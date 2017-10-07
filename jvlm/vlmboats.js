@@ -1426,8 +1426,14 @@ function CompareDist(a,b)
 
 function GetClosestOpps(Boat,NbOpps)
 {
-  var CurDnm = parseFloat( Boat.RnkObject[Boat.IdBoat].dnm);
-  var CurWP = Boat.RnkObject[Boat.IdBoat].nwp
+  let CurBoat = Boat.RnkObject[Boat.IdBoat]
+
+  if (typeof CurBoat === 'undefined' || !Boat)
+  {
+    CurBoat = {dnm:0,nwm:1}
+  }
+  var CurDnm = parseFloat( CurBoat.dnm);
+  var CurWP = CurBoat.nwp
   var RetArray = [];
   var List = [];
 
