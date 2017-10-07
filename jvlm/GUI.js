@@ -1090,8 +1090,12 @@ function HandlePagingComplete(e,ft)
   let classes = {
         ft_class_myboat : "rnk-myboat",
         ft_class_friend :"rnk-friend",
-        ft_class_oncoast : "rnk-oncoast"
+        ft_class_oncoast : "rnk-oncoast",
+        ft_class_racing : "rnk-racing",
+        ft_class_locked : "rnk-locked",
+        ft_class_dns : "rnk-dns"
   }
+  
   let index 
 
   for (index in classes)
