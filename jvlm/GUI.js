@@ -17,6 +17,12 @@ var MAX_PILOT_ORDERS = 5;
 var BoatRacingStatus = ["RAC","CST","LOC","DNS"];
 var BoatArrivedStatus = ["ARR"];
 var BoatNotRacingStatus = ["DNF","HC","HTP"];
+var BoatRacingClasses = {
+      "RAC": "ft_class_racing",
+      "CST": "ft_class_oncoast",
+      "LOC": "ft_class_locked",
+      "DNS": "ft_class_dns"
+    }
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos=null;
@@ -474,6 +480,7 @@ function InitMenusAndButtons()
     'on':
     {
       'ready.ft.table' : HandleReadyTable,
+      'after.ft.paging' : HandlePagingComplete,
       'postdraw.ft.table':HandleTableDrawComplete
     }
   });
@@ -697,7 +704,7 @@ function GetBoatInfoLine(Boat,IsFleet)
     Line = Line + '</span>'
   }
   
-  Line=Line+'<span>-</span><span>'+Boat.BoatName+'</span>'
+  Line=Line+'<span>-</span><span>'+HTMLDecode(Boat.BoatName)+'</span>'
   return Line  
 }
 
@@ -1078,6 +1085,36 @@ function HandleReadyTable(e,ft)
   ft.DrawPending = false;
 }
 
+function HandlePagingComplete(e,ft)
+{
+  let classes = {
+        ft_class_myboat : "rnk-myboat",
+        ft_class_friend :"rnk-friend",
+        ft_class_oncoast : "rnk-oncoast",
+        ft_class_racing : "rnk-racing",
+        ft_class_locked : "rnk-locked",
+        ft_class_dns : "rnk-dns"
+  }
+  
+  let index 
+
+  for (index in classes)
+  {
+    if (classes[index])
+    {
+      $('td').closest('tr').removeClass(classes[index]);
+    }
+  }
+  for (index in classes)
+  {
+    if (classes[index])
+    {
+      $('td:contains("'+index+'")').closest('tr').addClass(classes[index]);      
+    }
+  }
+
+}
+
 function HandleTableDrawComplete(e,ft)
 {
   ft.DrawPending = false ;
@@ -1094,6 +1131,12 @@ function DeferedGotoPage()
     RankingFt.gotoPage(RankingFt.TargetPage);
     RankingFt.TargetPage = 0;
   }
+  setTimeout(DeferedPagingStyle,200);
+}
+
+function DeferedPagingStyle()
+{
+  HandlePagingComplete();
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
@@ -2362,7 +2405,8 @@ function GetRankingObject(RankBoat, rank, WPNum)
     Lat : "",
     Last1h : "",
     Last3h : "",
-    Last24h : ""
+    Last24h : "",
+    Class : ""
   };
   
   if (RnkIsRacing(RankBoat) && !WPNum)
@@ -2405,6 +2449,20 @@ function GetRankingObject(RankBoat, rank, WPNum)
     RetObject["Loch"] = DeltaStr
   }
 
+  if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
+  {
+    RetObject.Class +=" ft_class_myboat"
+  }
+
+  
+  for (index in BoatRacingStatus)
+  {
+    if (RankBoat['status'] === index)
+    {
+      RetObject.Class +="  "+ BoatRacingClasses[index];
+    }
+  }
+  
 
   return RetObject
 }
