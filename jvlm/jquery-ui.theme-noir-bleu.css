@@ -383,3 +383,14 @@ a.ui-button-noir:hover {
     border: beige 1px solid;
     background-color: #070B18;
 }
+.rnk-myboat{
+  background-color: #125879;
+}
+.rnk-oncoast{
+  background-color: #282828;
+  color: #1978a5;
+}
+.rnk-friend, .rnk-racing, .rnk-locked, .rnk-dns{
+  background-color: #6c6c6c;
+  color: #000000;
+}
