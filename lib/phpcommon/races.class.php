@@ -495,17 +495,19 @@ class races extends baseClass {
     while ($row = mysql_fetch_assoc($res)) 
     {
       $has_not_started = (!array_key_exists('nwp',$row) || 
-        (($row['dnm'] == 0.0) && ($row['loch'] == 0.0)));
+        ( ($row['loch'] == 0.0) && (($row['dnm'] == 0.0)||$row['dnm'] == 99999) ));
       // Calcul du status
       if ( $row['releasetime'] > $now ) 
       {
         $row['status'] = 'LOC';
-      } else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) 
-      {
-        $row['status'] = 'CST';
-      } else if ($has_not_started)
+      } 
+      else if ($has_not_started)
       {
         $row['status'] = 'DNS';
+      } 
+      else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) 
+      {
+        $row['status'] = 'CST';
       } 
       else
       {
