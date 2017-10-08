@@ -386,11 +386,23 @@ a.ui-button-noir:hover {
 .rnk-myboat{
   background-color: #125879;
 }
-.rnk-oncoast{
-  background-color: #282828;
-  color: #1978a5;
+.rnk-oncoast, .rnk-locked, .rnk-dns {
+    background-color: #461801;
+    color: #a7a7a7;
+}
+.rnk-friend, .rnk-racing,{
+    background-color: rgba(108, 108, 108, 0.69);
+    color: #000000;
 }
 .rnk-friend, .rnk-racing, .rnk-locked, .rnk-dns{
   background-color: #6c6c6c;
   color: #000000;
+}
+.rnk-myboat.rnk-racing {
+    background-color: rgb(108, 108, 108);
+    color: #3d9df0;
+}
+.rnk-myboat.rnk-oncoast {
+    background-color: #461801;
+    color: #3d9df0;
 }
