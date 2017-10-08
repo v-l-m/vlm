@@ -385,3 +385,14 @@ a {
     border: beige 1px solid;
     background-color: #172A08;
 }
+.rnk-myboat{
+  background-color: #1e4900;
+}
+.rnk-oncoast{
+  background-color: #0e1f00;
+  color: #47a503;
+}
+.rnk-friend, .rnk-racing, .rnk-locked, .rnk-dns{
+  background-color: #367814;
+  color: #0e1f00;
+})
