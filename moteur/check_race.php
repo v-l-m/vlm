@@ -62,7 +62,7 @@
 
   // generate ranking page
   // fix me the root folder should come from the configuration
-  $ranking = $fullRacesObj->UpdateRankingPage($fullRacesObj->races->idraces,getenv("VLMCACHE"));
+  $ranking = $fullRacesObj->UpdateRankingPage(getenv("VLMCACHE"));
 
    $timings_race_end = microtime(TRUE);
    echo "\n*** *** Checking duration for race ". $fullRacesObj->races->idraces . " was " . ($timings_race_end - $timings_race_start) . " seconds";

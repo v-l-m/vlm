@@ -495,17 +495,19 @@ class races extends baseClass {
     while ($row = mysql_fetch_assoc($res)) 
     {
       $has_not_started = (!array_key_exists('nwp',$row) || 
-        (($row['dnm'] == 0.0) && ($row['loch'] == 0.0)));
+        ( ($row['loch'] == 0.0) && (($row['dnm'] == 0.0)||$row['dnm'] == 99999) ));
       // Calcul du status
       if ( $row['releasetime'] > $now ) 
       {
         $row['status'] = 'LOC';
-      } else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) 
-      {
-        $row['status'] = 'CST';
-      } else if ($has_not_started)
+      } 
+      else if ($has_not_started)
       {
         $row['status'] = 'DNS';
+      } 
+      else if ( $row['pim'] == 2 && abs($row['pip']) <= 1 ) 
+      {
+        $row['status'] = 'CST';
       } 
       else
       {
@@ -551,6 +553,29 @@ class races extends baseClass {
       if (!isset($ranking[$row['idusers']]))
       {
         $ranking[$row['idusers']]=$row;
+      }
+
+    }
+
+    // Get LMNH boats
+    //Je pense ajouter pour chaque joueur un objet : 
+    //Challenge : tableau d'objets 
+    //Objet Challenge :
+    //Id : nombre (probablement) (1/ LMNH, ensuite 2 OAD si ça revient à la mode)
+
+    $QueryLMNH = "SELECT idusers from users_Trophies where idraces = " .$this->idraces.
+                     " and quitdate is null ".
+                     "   order by idusers " ;
+
+    $res = $this->queryRead($QueryLMNH);
+
+    while ($row = mysql_fetch_assoc($res)) 
+    {
+      if (isset($ranking[$row['idusers']]))
+      {
+        $rnk= &$ranking[$row['idusers']];
+        $rnk["Challenge"] = [];
+        $rnk["Challenge"][1]="1";
       }
 
     }
@@ -707,7 +732,7 @@ class fullRaces {
     wrapper_mysql_db_query_writer($querypurgepositions);
   }
 
-  function UpdateRankingPage($idrace, $root)
+  function UpdateRankingPage( $root)
   {
     $ranking = $this->races->UpdateRaceRankings();
     $dest =  $root."/rankings/rnk_".$this->races->idraces.".json";

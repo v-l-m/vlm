@@ -2382,10 +2382,11 @@ function FillRacingRanking(Boat)
   RankingFt.DrawPending = true;
 }
 
-function GetBoatInfoLink(IdUser,BoatName)
+function GetBoatInfoLink(RnkBoat)
 {
+  let IdUser = parseInt(RnkBoat['idusers'],10);
+  let BoatName = RnkBoat['boatname'];
 
-  IdUser = parseInt(IdUser,10);
   let ret = '<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
 
   return ret;
@@ -2394,7 +2395,12 @@ function GetBoatInfoLink(IdUser,BoatName)
 function GetRankingObject(RankBoat, rank, WPNum)
 {
   let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
-  boatsearchstring+=  GetBoatInfoLink(RankBoat['idusers'],RankBoat['boatpseudo'])
+  if (typeof RankBoat["Challenge"] !=="undefined" && RankBoat["Challenge"][1])
+  {
+    boatsearchstring = '<img src="images/LMNH.png"></img>' + boatsearchstring;
+  }
+
+  boatsearchstring+=  GetBoatInfoLink(RankBoat)
   let RetObject = {
     Rank : rank,
     Name :boatsearchstring,
