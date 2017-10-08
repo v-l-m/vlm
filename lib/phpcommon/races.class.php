@@ -730,7 +730,7 @@ class fullRaces {
     wrapper_mysql_db_query_writer($querypurgepositions);
   }
 
-  function UpdateRankingPage($idrace, $root)
+  function UpdateRankingPage( $root)
   {
     $ranking = $this->races->UpdateRaceRankings();
     $dest =  $root."/rankings/rnk_".$this->races->idraces.".json";
