@@ -555,6 +555,29 @@ class races extends baseClass {
 
     }
 
+    // Get LMNH boats
+    //Je pense ajouter pour chaque joueur un objet : 
+    //Challenge : tableau d'objets 
+    //Objet Challenge :
+    //Id : nombre (probablement) (1/ LMNH, ensuite 2 OAD si ça revient à la mode)
+
+    $QueryLMNH = "SELECT idusers from users_Trophies where idraces = " .$this->idraces.
+                     " and quitdate is null ".
+                     "   order by idusers " ;
+
+    $res = $this->queryRead($QueryLMNH);
+
+    while ($row = mysql_fetch_assoc($res)) 
+    {
+      if (isset($ranking[$row['idusers']]))
+      {
+        $rnk= &$ranking[$row['idusers']];
+        $rnk["Challenge"] = [];
+        $rnk["Challenge"][1]="1";
+      }
+
+    }
+
     // Get all WP passing times for this race
     $QueryWPs = "SELECT WC.idwaypoint idwaypoint, WC.time - WC.userdeptime duration, WC.idusers idusers
                 FROM      waypoint_crossing WC
