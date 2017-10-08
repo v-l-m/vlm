@@ -2457,9 +2457,9 @@ function GetRankingObject(RankBoat, rank, WPNum)
   
   for (index in BoatRacingStatus)
   {
-    if (RankBoat['status'] === index)
+    if (RankBoat['status'] === BoatRacingStatus[index])
     {
-      RetObject.Class +="  "+ BoatRacingClasses[index];
+      RetObject.Class +="  "+ BoatRacingClasses[BoatRacingStatus[index]];
     }
   }
   
