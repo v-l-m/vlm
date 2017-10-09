@@ -2254,7 +2254,7 @@ function SortRankingData(Boat, SortType,WPNum)
     
   }
   
-  let =rnk = 1;
+  let rnk = 1;
   let index = 0;
 
   for (index in Boat.RnkObject.RacerRanking)
