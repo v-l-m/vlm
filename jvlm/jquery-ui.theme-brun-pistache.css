@@ -408,8 +408,8 @@ a:focus {
    background-color: rgba(108, 108, 108, 0.80);
   }
 .rnk-oncoast{
-    background-color: #461801;
+    background-color: rgba(108, 108, 108, 0.60);
 }
 .rnk-locked{
-  background-color: rgba(108, 108, 108, 0.60);
+  background-color: #461801;
   }
