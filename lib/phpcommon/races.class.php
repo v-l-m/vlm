@@ -609,9 +609,12 @@ class races extends baseClass {
     }
 
     $end = microtime();
-    $ranking['timerequired']=$end - $start;
-    $ranking['update']=$now;
-    return $ranking;
+    $rank = new stdClass();
+    $rank->Boats=$ranking;
+    $rank->Infos=[];
+    $rank->Infos['timerequired']=$end - $start;
+    $rank->Infos['update']=$now;
+    return $rank;
             
   }
 
