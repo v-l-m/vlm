@@ -1279,7 +1279,7 @@ function LoadRankings(Boat)
         {
           if (result)
           {
-            Boat.RnkObject = result;
+            Boat.RnkObject = result.Boats;
             DrawBoat(Boat,false);
           }
           else
