@@ -386,13 +386,20 @@ a {
     background-color: #172A08;
 }
 .rnk-myboat{
-  background-color: #1e4900;
+  color: #6de931;
 }
+.rnk-friend{
+    color: #eea545;
+}
+.rnk-dns{
+  background-color: rgba(108, 108, 108, 0.30); 
+  }
+.rnk-racing{
+   background-color: rgba(108, 108, 108, 0.80);
+  }
 .rnk-oncoast{
-  background-color: #0e1f00;
-  color: #47a503;
+    background-color: #461801;
 }
-.rnk-friend, .rnk-racing, .rnk-locked, .rnk-dns{
-  background-color: #367814;
-  color: #0e1f00;
-})
+.rnk-locked{
+  background-color: rgba(108, 108, 108, 0.60);
+  }
