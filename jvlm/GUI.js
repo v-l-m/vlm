@@ -2414,6 +2414,11 @@ function GetRankingObject(RankBoat, rank, WPNum)
     Last24h : "",
     Class : ""
   };
+
+  if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
+  {
+    RetObject.Class +=" ft_class_myboat"
+  }
   
   if (RnkIsRacing(RankBoat) && !WPNum)
   {
@@ -2428,6 +2433,14 @@ function GetRankingObject(RankBoat, rank, WPNum)
     RetObject["Last1h"]=RankBoat['last1h']
     RetObject["Last3h"]= RankBoat['last3h']
     RetObject["Last24h"]= RankBoat['last24h']
+
+     for (index in BoatRacingStatus)
+     {
+       if (RankBoat['status'] === BoatRacingStatus[index])
+       {
+         RetObject.Class +="  "+ BoatRacingClasses[BoatRacingStatus[index]];
+       }
+     }
   }
   else if (!WPNum)
   {
@@ -2454,21 +2467,6 @@ function GetRankingObject(RankBoat, rank, WPNum)
     }
     RetObject["Loch"] = DeltaStr
   }
-
-  if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
-  {
-    RetObject.Class +=" ft_class_myboat"
-  }
-
-  
-  for (index in BoatRacingStatus)
-  {
-    if (RankBoat['status'] === BoatRacingStatus[index])
-    {
-      RetObject.Class +="  "+ BoatRacingClasses[BoatRacingStatus[index]];
-    }
-  }
-  
 
   return RetObject
 }
