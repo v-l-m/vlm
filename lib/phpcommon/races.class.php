@@ -569,7 +569,7 @@ class races extends baseClass {
                            and ua.time > from_unixtime(u.userdeptime) 
                            and ua.ipaddr <> '127.0.0.1')";
 
-    mysqli_execute($querycleanLMNH);
+    wrapper_mysql_db_query_writer($querycleanLMNH);
 
     // Get LMNH boats
     //Je pense ajouter pour chaque joueur un objet : 
