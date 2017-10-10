@@ -226,13 +226,18 @@ function OLInit() {
 
 function InitMenusAndButtons()
 {
+  // Handle showing/hide of a-propos depending on login dialog status
+  $("#LoginForm").on('show.bs.modal',function(e){$('#Apropos').modal('hide');});
+  $("#LoginForm").on('hide.bs.modal',function(e){$('#Apropos').modal('show');});
   $(".logindlgButton").on ('click',
       function (e)
       {
         // Show Login form
+          // hide apropos
         $("#LoginForm").modal('show');
       }
   );
+
   
   $(".logOutButton").on ('click',
         function (e)
