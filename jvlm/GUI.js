@@ -1917,13 +1917,20 @@ function SortRanking(style, WPNum)
     return ;
   }
 
+  let Friends = null;
+  if (Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
+  {
+    Friends = Boat.VLMPrefs.mapPrefOpponents.split(",");
+  }
+  
+
   switch (style)
   {
     case "WP":
       SetRankingColumns(style);
       WPNum = parseInt(WPNum,10)
       SortRankingData(Boat, style,WPNum);
-      FillWPRanking(Boat,WPNum);
+      FillWPRanking(Boat,WPNum, Friends);
       break;
 
     case 'DNF':
@@ -1933,13 +1940,13 @@ function SortRanking(style, WPNum)
     case 'ABD':
       SetRankingColumns(style);
       SortRankingData(Boat,style)
-      FillStatusRanking(Boat,style);
+      FillStatusRanking(Boat,style, Friends);
       break;
     case 'RAC':
     default:
       SetRankingColumns('RAC');
       CurRnk = SortRankingData(Boat,'RAC')
-      FillRacingRanking(Boat);
+      FillRacingRanking(Boat, Friends);
       
   }
 
@@ -2275,13 +2282,13 @@ function SortRankingData(Boat, SortType,WPNum)
   return rnk;
 }
 
-function FillWPRanking(Boat,WPNum)
+function FillWPRanking(Boat,WPNum, Friends)
 {
   let index;
   let RowNum = 1;
   let BestTime = 0;
   let Rows = [];
-
+  
   if (!Boat || RankingFt.DrawPending)
   {
     return;
@@ -2310,7 +2317,7 @@ function FillWPRanking(Boat,WPNum)
 
       if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum));
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum,Friends));
         if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
         {
           RowNum = Rows.length;
@@ -2325,11 +2332,12 @@ function FillWPRanking(Boat,WPNum)
   RankingFt.DrawPending = true;
 }
 
-function FillStatusRanking(Boat,Status)
+function FillStatusRanking(Boat,Status, Friends)
 {
   let index;
   let RowNum = 1;
   let Rows = [];
+  
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2338,7 +2346,7 @@ function FillStatusRanking(Boat,Status)
       
       if (RnkBoat.status === Status)
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null,Friends));
         if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
         {
           RowNum = Rows.length;
@@ -2353,11 +2361,12 @@ function FillStatusRanking(Boat,Status)
   RankingFt.DrawPending = true;
 }
 
-function FillRacingRanking(Boat)
+function FillRacingRanking(Boat, Friends)
 {
   let index;
   let Rows = [];
   let RowNum = 0;
+  
 
   for (index in Boat.RnkObject.RacerRanking)
   {
@@ -2372,7 +2381,7 @@ function FillRacingRanking(Boat)
       
       if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends));
       }
       else
       {
@@ -2397,8 +2406,9 @@ function GetBoatInfoLink(RnkBoat)
   return ret;
 }
 
-function GetRankingObject(RankBoat, rank, WPNum)
+function GetRankingObject(RankBoat, rank, WPNum, Friends)
 {
+  
   let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   if (typeof RankBoat["Challenge"] !=="undefined" && RankBoat["Challenge"][1])
   {
@@ -2406,6 +2416,7 @@ function GetRankingObject(RankBoat, rank, WPNum)
   }
 
   boatsearchstring+=  GetBoatInfoLink(RankBoat)
+
   let RetObject = {
     Rank : rank,
     Name :boatsearchstring,
@@ -2423,6 +2434,14 @@ function GetRankingObject(RankBoat, rank, WPNum)
   if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
   {
     RetObject.Class +=" ft_class_myboat"
+  }
+
+  if (typeof Friends !== "undefined" && Friends)
+  {
+    if (Friends.indexOf(RankBoat['idusers']) !== -1 )
+    {
+      RetObject.Class +=" ft_class_friend"
+    }
   }
   
   if (RnkIsRacing(RankBoat) && !WPNum)
