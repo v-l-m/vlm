@@ -395,10 +395,10 @@ a:focus {
     border: beige 1px solid;
     background-color: #201913;
 }
-.rnk-myboat{
+.rnk-myboat, .rnk-myboat a{
   color: #9bcc60;
 }
-.rnk-friend{
+.rnk-friend, .rnk-friend a{
     color: #eea545;
 }
 .rnk-dns{

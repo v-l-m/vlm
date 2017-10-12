@@ -385,10 +385,10 @@ a {
     border: beige 1px solid;
     background-color: #172A08;
 }
-.rnk-myboat{
+.rnk-myboat, .rnk-myboat a{
   color: #6de931;
 }
-.rnk-friend{
+.rnk-friend, .rnk-friend a{
     color: #eea545;
 }
 .rnk-dns{
