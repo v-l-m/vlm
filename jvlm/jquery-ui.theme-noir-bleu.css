@@ -383,10 +383,10 @@ a.ui-button-noir:hover {
     border: beige 1px solid;
     background-color: #070B18;
 }
-.rnk-myboat{
+.rnk-myboat, .rnk-myboat a{
   color: #3d9df0;
 }
-.rnk-friend{
+.rnk-friend, .rnk-friend a{
     color: #eea545;
 }
 .rnk-dns{
