@@ -2366,7 +2366,11 @@ function FillRacingRanking(Boat, Friends)
   let index;
   let Rows = [];
   let RowNum = 0;
-  
+  let Refs = 
+      {
+        Arrived1stTime : null,
+        Racer1stPos : null
+      }
 
   for (index in Boat.RnkObject.RacerRanking)
   {
@@ -2381,7 +2385,17 @@ function FillRacingRanking(Boat, Friends)
       
       if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends));
+        if (!Refs.Arrived1stTime && RnkIsArrived(RnkBoat) )
+        {
+          // First arrived, store time
+          Refs.Arrived1stTime = parseInt(RnkBoat['duration'],10);
+        }
+
+        if (!Refs.Racer1stPos && RnkIsRacing(RnkBoat))
+        {
+          Refs.Racer1stPos = new VLMPosition(RnkBoat['lon'],RnkBoat['lat'] )
+        }
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends,Refs));
       }
       else
       {
@@ -2406,7 +2420,7 @@ function GetBoatInfoLink(RnkBoat)
   return ret;
 }
 
-function GetRankingObject(RankBoat, rank, WPNum, Friends)
+function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
 {
   
   let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
@@ -2471,10 +2485,16 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends)
     // Non General ranking layout
     let NextMark = GetLocalizedString("status_" + RankBoat['status'])
     RetObject["Distance"]=NextMark
-    RetObject["Time"]=GetFormattedChronoString(parseInt(RankBoat['duration'],10));
-    RetObject["Loch"]=RankBoat['loch']
-    RetObject["Lon"]= RankBoat['longitude']
-    RetObject["Lat"]= RankBoat['latitude']
+    let Duration = parseInt(RankBoat['duration'],10)
+    RetObject["Time"]=GetFormattedChronoString(Duration);
+    if (Duration !== Refs.Arrived1stTime)
+    {
+      RetObject["Time"] += " ( +" + RoundPow ( Duration / Refs.Arrived1stTime   * 100 -100,2) + "% )";  
+   
+    }
+     RetObject["Loch"]=RankBoat['loch'];
+    RetObject["Lon"]= RankBoat['longitude'];
+    RetObject["Lat"]= RankBoat['latitude'];
   }
   else
   {
