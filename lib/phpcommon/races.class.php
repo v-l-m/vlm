@@ -1614,6 +1614,6 @@ function CheckLMNHStatus()
 
   wrapper_mysql_db_query_writer($querycleanLMNH);
 
-  }
+}
 
 ?>
