@@ -1411,7 +1411,8 @@ function AddRaceToList(race)
   let d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
   let RaceJoinStateClass 
-  
+  let StartMoment;
+    
   if(race.CanJoin)
   {
     let Now = new Date();
@@ -1419,10 +1420,12 @@ function AddRaceToList(race)
     if (RaceStart <=Now)
     {
       RaceJoinStateClass = 'CanJoinRace'
+      StartMoment =GetLocalizedString("closerace") +" "+ moment("/date("+race.closetime*1000+")/").fromNow();
     }
     else
     {
       RaceJoinStateClass = 'CanJoinRaceNotStarted'
+      StartMoment = GetLocalizedString("departuredate") +" "+ moment("/date("+race.deptime*1000+")/").fromNow();
     }
   }
   else
@@ -1442,7 +1445,11 @@ function AddRaceToList(race)
               '    <div class="'+(race.CanJoin?'':'hidden') +' col-xs-4">'+
               '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
               '      </button>'+
-              '    </div>'+
+              '    </div>'+ (StartMoment?
+              '    <div class="col-xs-12">'+
+              '      <span "> '+ StartMoment +
+              '      </span>'+
+              '    </div>':"")+
               '  <div id="RaceDescription'+race.idraces+'" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">'+
               '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/'+race.idraces+'.png" width="530px"></div>'+
               '  <div class="col-xs-12"><p>' + GetLocalizedString('race') +' : '+ race.racename +'</p>'+
