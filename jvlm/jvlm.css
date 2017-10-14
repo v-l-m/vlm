@@ -1343,3 +1343,6 @@ th {
 .a {
   background-color: #e0e0a0;
 }
+.table .table {
+  background-color: transparent;
+}
