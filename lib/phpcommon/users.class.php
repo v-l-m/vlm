@@ -1466,9 +1466,11 @@ class fullUsers
 
       // Add to LMNH trophy
       // Prepare the table races_ranking
-      $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, jointime, RefTrophy) values " .
-        " ( ". $id . ", " . $this->users->idusers . ",".time().", 1)";
-
+      $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, joindate, RefTrophy) values " .
+        " ( ". $id . ", " . $this->users->idusers . ",FROM_UNIXTIME(".time()."), 1)".
+        " on duplicate key update joindate = FROM_UNIXTIME(".time()."),quitdate=null";
+        logUserEvent($this->users->idusers , $id, $query_join_LMNH );
+        
       wrapper_mysql_db_query_writer($query_join_LMNH);
 
       logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );

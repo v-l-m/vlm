@@ -39,7 +39,7 @@
       $race = new fullRaces($row['idraces']);
       $line = "Gen rankings for race".$race->races->idraces;
       array_push($ws->answer["RnkGenStatus"],$line);
-      $race->UpdateRankingPage($race->races->idraces,$_SERVER['DOCUMENT_ROOT']."/../../cache");
+      $race->UpdateRankingPage($_SERVER['DOCUMENT_ROOT']."/../../cache");
       echo $count.' processed race '.$row['idraces']."\n";
       $count++;
     }

@@ -226,13 +226,18 @@ function OLInit() {
 
 function InitMenusAndButtons()
 {
+  // Handle showing/hide of a-propos depending on login dialog status
+  $("#LoginForm").on('show.bs.modal',function(e){$('#Apropos').modal('hide');});
+  $("#LoginForm").on('hide.bs.modal',function(e){$('#Apropos').modal('show');});
   $(".logindlgButton").on ('click',
       function (e)
       {
         // Show Login form
+          // hide apropos
         $("#LoginForm").modal('show');
       }
   );
+
   
   $(".logOutButton").on ('click',
         function (e)
@@ -1406,7 +1411,8 @@ function AddRaceToList(race)
   let d = new Date(0); // The there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
   let RaceJoinStateClass 
-  
+  let StartMoment;
+    
   if(race.CanJoin)
   {
     let Now = new Date();
@@ -1414,10 +1420,12 @@ function AddRaceToList(race)
     if (RaceStart <=Now)
     {
       RaceJoinStateClass = 'CanJoinRace'
+      StartMoment =GetLocalizedString("closerace") +" "+ moment("/date("+race.closetime*1000+")/").fromNow();
     }
     else
     {
       RaceJoinStateClass = 'CanJoinRaceNotStarted'
+      StartMoment = GetLocalizedString("departuredate") +" "+ moment("/date("+race.deptime*1000+")/").fromNow();
     }
   }
   else
@@ -1437,7 +1445,11 @@ function AddRaceToList(race)
               '    <div class="'+(race.CanJoin?'':'hidden') +' col-xs-4">'+
               '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="'+ race.idraces +'"  >'+GetLocalizedString("subscribe")+
               '      </button>'+
-              '    </div>'+
+              '    </div>'+ (StartMoment?
+              '    <div class="col-xs-12">'+
+              '      <span "> '+ StartMoment +
+              '      </span>'+
+              '    </div>':"")+
               '  <div id="RaceDescription'+race.idraces+'" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">'+
               '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/'+race.idraces+'.png" width="530px"></div>'+
               '  <div class="col-xs-12"><p>' + GetLocalizedString('race') +' : '+ race.racename +'</p>'+
@@ -1912,13 +1924,20 @@ function SortRanking(style, WPNum)
     return ;
   }
 
+  let Friends = null;
+  if (Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
+  {
+    Friends = Boat.VLMPrefs.mapPrefOpponents.split(",");
+  }
+  
+
   switch (style)
   {
     case "WP":
       SetRankingColumns(style);
       WPNum = parseInt(WPNum,10)
       SortRankingData(Boat, style,WPNum);
-      FillWPRanking(Boat,WPNum);
+      FillWPRanking(Boat,WPNum, Friends);
       break;
 
     case 'DNF':
@@ -1928,13 +1947,13 @@ function SortRanking(style, WPNum)
     case 'ABD':
       SetRankingColumns(style);
       SortRankingData(Boat,style)
-      FillStatusRanking(Boat,style);
+      FillStatusRanking(Boat,style, Friends);
       break;
     case 'RAC':
     default:
       SetRankingColumns('RAC');
       CurRnk = SortRankingData(Boat,'RAC')
-      FillRacingRanking(Boat);
+      FillRacingRanking(Boat, Friends);
       
   }
 
@@ -2254,7 +2273,7 @@ function SortRankingData(Boat, SortType,WPNum)
     
   }
   
-  let =rnk = 1;
+  let rnk = 1;
   let index = 0;
 
   for (index in Boat.RnkObject.RacerRanking)
@@ -2270,13 +2289,13 @@ function SortRankingData(Boat, SortType,WPNum)
   return rnk;
 }
 
-function FillWPRanking(Boat,WPNum)
+function FillWPRanking(Boat,WPNum, Friends)
 {
   let index;
   let RowNum = 1;
   let BestTime = 0;
   let Rows = [];
-
+  
   if (!Boat || RankingFt.DrawPending)
   {
     return;
@@ -2305,7 +2324,7 @@ function FillWPRanking(Boat,WPNum)
 
       if (RnkBoat.WP && RnkBoat.WP[WPNum-1])
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum));
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,WPNum,Friends));
         if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
         {
           RowNum = Rows.length;
@@ -2320,11 +2339,12 @@ function FillWPRanking(Boat,WPNum)
   RankingFt.DrawPending = true;
 }
 
-function FillStatusRanking(Boat,Status)
+function FillStatusRanking(Boat,Status, Friends)
 {
   let index;
   let RowNum = 1;
   let Rows = [];
+  
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2333,7 +2353,7 @@ function FillStatusRanking(Boat,Status)
       
       if (RnkBoat.status === Status)
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null,Friends));
         if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
         {
           RowNum = Rows.length;
@@ -2348,11 +2368,16 @@ function FillStatusRanking(Boat,Status)
   RankingFt.DrawPending = true;
 }
 
-function FillRacingRanking(Boat)
+function FillRacingRanking(Boat, Friends)
 {
   let index;
   let Rows = [];
   let RowNum = 0;
+  let Refs = 
+      {
+        Arrived1stTime : null,
+        Racer1stPos : null
+      }
 
   for (index in Boat.RnkObject.RacerRanking)
   {
@@ -2367,7 +2392,17 @@ function FillRacingRanking(Boat)
       
       if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
       {
-        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null));
+        if (!Refs.Arrived1stTime && RnkIsArrived(RnkBoat) )
+        {
+          // First arrived, store time
+          Refs.Arrived1stTime = parseInt(RnkBoat['duration'],10);
+        }
+
+        if (!Refs.Racer1stPos && RnkIsRacing(RnkBoat))
+        {
+          Refs.Racer1stPos = new VLMPosition(RnkBoat['lon'],RnkBoat['lat'] )
+        }
+        Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends,Refs));
       }
       else
       {
@@ -2392,8 +2427,9 @@ function GetBoatInfoLink(RnkBoat)
   return ret;
 }
 
-function GetRankingObject(RankBoat, rank, WPNum)
+function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
 {
+  
   let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   if (typeof RankBoat["Challenge"] !=="undefined" && RankBoat["Challenge"][1])
   {
@@ -2401,6 +2437,7 @@ function GetRankingObject(RankBoat, rank, WPNum)
   }
 
   boatsearchstring+=  GetBoatInfoLink(RankBoat)
+
   let RetObject = {
     Rank : rank,
     Name :boatsearchstring,
@@ -2414,6 +2451,19 @@ function GetRankingObject(RankBoat, rank, WPNum)
     Last24h : "",
     Class : ""
   };
+
+  if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
+  {
+    RetObject.Class +=" ft_class_myboat"
+  }
+
+  if (typeof Friends !== "undefined" && Friends)
+  {
+    if (Friends.indexOf(RankBoat['idusers']) !== -1 )
+    {
+      RetObject.Class +=" ft_class_friend"
+    }
+  }
   
   if (RnkIsRacing(RankBoat) && !WPNum)
   {
@@ -2428,16 +2478,30 @@ function GetRankingObject(RankBoat, rank, WPNum)
     RetObject["Last1h"]=RankBoat['last1h']
     RetObject["Last3h"]= RankBoat['last3h']
     RetObject["Last24h"]= RankBoat['last24h']
+
+     for (index in BoatRacingStatus)
+     {
+       if (RankBoat['status'] === BoatRacingStatus[index])
+       {
+         RetObject.Class +="  "+ BoatRacingClasses[BoatRacingStatus[index]];
+       }
+     }
   }
   else if (!WPNum)
   {
     // Non General ranking layout
     let NextMark = GetLocalizedString("status_" + RankBoat['status'])
     RetObject["Distance"]=NextMark
-    RetObject["Time"]=GetFormattedChronoString(parseInt(RankBoat['duration'],10));
-    RetObject["Loch"]=RankBoat['loch']
-    RetObject["Lon"]= RankBoat['longitude']
-    RetObject["Lat"]= RankBoat['latitude']
+    let Duration = parseInt(RankBoat['duration'],10)
+    RetObject["Time"]=GetFormattedChronoString(Duration);
+    if (Duration !== Refs.Arrived1stTime)
+    {
+      RetObject["Time"] += " ( +" + RoundPow ( Duration / Refs.Arrived1stTime   * 100 -100,2) + "% )";  
+   
+    }
+     RetObject["Loch"]=RankBoat['loch'];
+    RetObject["Lon"]= RankBoat['longitude'];
+    RetObject["Lat"]= RankBoat['latitude'];
   }
   else
   {
@@ -2454,21 +2518,6 @@ function GetRankingObject(RankBoat, rank, WPNum)
     }
     RetObject["Loch"] = DeltaStr
   }
-
-  if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
-  {
-    RetObject.Class +=" ft_class_myboat"
-  }
-
-  
-  for (index in BoatRacingStatus)
-  {
-    if (RankBoat['status'] === BoatRacingStatus[index])
-    {
-      RetObject.Class +="  "+ BoatRacingClasses[BoatRacingStatus[index]];
-    }
-  }
-  
 
   return RetObject
 }
