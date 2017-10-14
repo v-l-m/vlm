@@ -64,6 +64,7 @@ function InitLocale(Lang)
             {
               _CurLocale = result.request.lang;
               _LocaleDict=result.strings;
+              moment.locale(_CurLocale);
               LocalizeString();
               UpdateLngDropDown();
             }
