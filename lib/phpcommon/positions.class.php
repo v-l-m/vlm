@@ -125,7 +125,7 @@ class positions
     $this->lat = $races->startlat;
     $this->idusers = $id;
     $this->race = $race;
-    $this->writePositions();
+    $this->writePositions(0);
   }
 
   /*returns FALSE if it's false*/
