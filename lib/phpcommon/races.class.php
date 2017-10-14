@@ -9,7 +9,8 @@
 //                                                                            //
 //****************************************************************************//
 
-class races extends baseClass {
+class races extends baseClass 
+{
   var $idraces,
     $racename,
     $started,
@@ -410,65 +411,70 @@ class races extends baseClass {
       return $ret;
     }
     
-    function htmlRaceDescription() {
-        $idraces = $this->idraces;
-        $ret  = "<div id=\"raceheader\">\n";
-        $ret .= $this->htmlRaceTitle(getLocalizedString("racestarted"));
-        $ret .= $this->htmlRacePolar(getLocalizedString("boattype"));
-        $ret .= sprintf("<h3>%s : %d minutes</h3>\n" , getLocalizedString('crank'),  $this->vacfreq);
-        $ret .= "<h3>";
-        if ( $this->firstpcttime >0 ) {
-            $ret .= sprintf(getLocalizedString("endrace"). "%d %%\n", 100 + $this->firstpcttime );
-        } else {
-            $ret .= sprintf(getLocalizedString("endrace")." no limit\n");
-        }
-        $ret .= "</h3>";
-        $ret .= "<h3><a href=\"/races.php?type=racing&idraces=".$idraces."\">".getLocalizedString("ranking")."</a></h3>";
-        $ret .= "</div>\n";
-
-        // Carte de la course
-        $ret .= "<div id=\"racemap\">\n";
-        $ret .= $this->htmlRaceMap(getLocalizedString("racemap"));
-        $ret .= "</div>\n";
-
-        $ret .= "<div id=\"ic\">\n";
-        $ret .= "<h3>".getLocalizedString("ic")."</h3>\n";
-        $ret .= $this->htmlIC(getLocalizedString("icforum"));
-        $ret .= "</div>\n";    
-
-        $ret .= "<div id=\"waypoints\">\n";
-        $ret .= "<h3>Waypoints</h3>\n";
-        $ret .= $this->htmlWaypoints(getLocalizedString("startmap"));
-        $ret .= "</div>\n";
-        
-        $NSZ = new exclusionZone($this->idraces);
-        if ( count($NSZ->Exclusions) > 0 ) 
-        {
-          $ret .= "<div id=\"NSZ\">\n";
-          $ret .= "<h3>No Sail Zones</h3>\n";
-          $ret .= "<table class=\"waypoints\">\n";
-          $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th></tr>";
-          
-          $index =1;
-          foreach  ($NSZ->Exclusions as $Exclusion)
-          {
-            $StartSeg=$Exclusion[0];
-            $EndSeg=$Exclusion[1];
-            $Lon1=$StartSeg[0];
-            $Lon2=$EndSeg[0];
-            $Lat1=$StartSeg[1];
-            $Lat2=$EndSeg[1];
-            $ret .= "<td>Seg# ".$index."</td>";
-            $ret .= "<td>".$Lon1."</td>";
-            $ret .= "<td>".$Lat1."</td>";
-            $ret .= "<td>".$Lon2."</td>";
-            $ret .= "<td>".$Lat2."</td></tr>";
-            $index += 1;
-          }
-          $ret .= "</table></div>\n";
-        }
-        return $ret;
+  function htmlRaceDescription() 
+  {
+    $idraces = $this->idraces;
+    $ret  = "<div id=\"raceheader\">\n";
+    $ret .= $this->htmlRaceTitle(getLocalizedString("racestarted"));
+    $ret .= $this->htmlRacePolar(getLocalizedString("boattype"));
+    $ret .= sprintf("<h3>%s : %d minutes</h3>\n" , getLocalizedString('crank'),  $this->vacfreq);
+    $ret .= "<h3>";
+    if ( $this->firstpcttime >0 ) 
+    {
+        $ret .= sprintf(getLocalizedString("endrace"). "%d %%\n", 100 + $this->firstpcttime );
+    } 
+    else 
+    {
+        $ret .= sprintf(getLocalizedString("endrace")." no limit\n");
     }
+    
+    $ret .= "</h3>";
+    $ret .= "<h3><a href=\"/races.php?type=racing&idraces=".$idraces."\">".getLocalizedString("ranking")."</a></h3>";
+    $ret .= "</div>\n";
+
+    // Carte de la course
+    $ret .= "<div id=\"racemap\">\n";
+    $ret .= $this->htmlRaceMap(getLocalizedString("racemap"));
+    $ret .= "</div>\n";
+
+    $ret .= "<div id=\"ic\">\n";
+    $ret .= "<h3>".getLocalizedString("ic")."</h3>\n";
+    $ret .= $this->htmlIC(getLocalizedString("icforum"));
+    $ret .= "</div>\n";    
+
+    $ret .= "<div id=\"waypoints\">\n";
+    $ret .= "<h3>Waypoints</h3>\n";
+    $ret .= $this->htmlWaypoints(getLocalizedString("startmap"));
+    $ret .= "</div>\n";
+    
+    $NSZ = new exclusionZone($this->idraces);
+    if ( count($NSZ->Exclusions) > 0 ) 
+    {
+      $ret .= "<div id=\"NSZ\">\n";
+      $ret .= "<h3>No Sail Zones</h3>\n";
+      $ret .= "<table class=\"waypoints\">\n";
+      $ret .= "<tr><th>#</th><th>Lat1</th><th>Lon1</th><th>Lat2</th><th>Lon2</th></tr>";
+      
+      $index =1;
+      foreach  ($NSZ->Exclusions as $Exclusion)
+      {
+        $StartSeg=$Exclusion[0];
+        $EndSeg=$Exclusion[1];
+        $Lon1=$StartSeg[0];
+        $Lon2=$EndSeg[0];
+        $Lat1=$StartSeg[1];
+        $Lat2=$EndSeg[1];
+        $ret .= "<td>Seg# ".$index."</td>";
+        $ret .= "<td>".$Lon1."</td>";
+        $ret .= "<td>".$Lat1."</td>";
+        $ret .= "<td>".$Lon2."</td>";
+        $ret .= "<td>".$Lat2."</td></tr>";
+        $index += 1;
+      }
+      $ret .= "</table></div>\n";
+    }
+    return $ret;
+  }
 
   // 
   // Loads the full ranking for a race (should only be called once/race/vac, and stored in cache)
@@ -765,7 +771,7 @@ class fullRaces {
     
   }
 
-    //===========================================//
+  //===========================================//
   //                                           //
   // Function dispHtmlEngaged() //
   //                                           //
