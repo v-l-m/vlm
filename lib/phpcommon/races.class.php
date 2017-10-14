@@ -563,20 +563,6 @@ class races extends baseClass
 
     }
 
-    // Clean boats that did not respect LMNH rules
-    $querycleanLMNH = "update users_Trophies set quitdate = now() 
-                        where (idusers,idraces,RefTrophy) 
-                        in (select ua.idusers, ua.idraces,1 
-                          from user_action ua, 
-                          (select * from  users_Trophies where RefTrophy=1) ut, 
-                          users u  
-                          where u.idusers = ua.idusers and ua.idusers = ut.idusers
-                           and ua.idraces = ut.idraces and quitdate is null 
-                           and ua.time > from_unixtime(u.userdeptime) 
-                           and ua.ipaddr <> '127.0.0.1')";
-
-    wrapper_mysql_db_query_writer($querycleanLMNH);
-
     // Get LMNH boats
     //Je pense ajouter pour chaque joueur un objet : 
     //Challenge : tableau d'objets 
@@ -1605,5 +1591,29 @@ class startedRacesList {
     }
   }
 }
+
+////////////////////////////////////////////////////////////
+//
+// Function used to check the LMNH status of racing boats
+//
+////////////////////////////////////////////////////////////
+function CheckLMNHStatus()
+{
+
+  // Clean boats that did not respect LMNH rules
+  $querycleanLMNH = "update users_Trophies set quitdate = now() 
+  where (idusers,idraces,RefTrophy) 
+  in (select ua.idusers, ua.idraces,1 
+    from user_action ua, 
+    (select * from  users_Trophies where RefTrophy=1 and quitdate is null) ut, 
+    users u  
+    where u.idusers = ua.idusers and ua.idusers = ut.idusers
+      and ua.idraces = ut.idraces and quitdate is null 
+      and ua.time > from_unixtime(u.userdeptime) 
+      and ua.ipaddr <> '127.0.0.1')";
+
+  wrapper_mysql_db_query_writer($querycleanLMNH);
+
+  }
 
 ?>

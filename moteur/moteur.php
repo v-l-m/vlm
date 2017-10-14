@@ -78,6 +78,10 @@ if ( $argc > 2 ) {
 }
 
 
+// Check LMNH status, should be wrapped in Challenge check of some sort
+// THis need to complete before the catual vac calculations start 
+CheckLMNHStatus();
+
 
 echo "\n".gmdate("M d Y H:i:s",time()). "\n";
 $CurTick= microtime(true);
