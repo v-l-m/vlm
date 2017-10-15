@@ -2422,7 +2422,7 @@ function GetBoatInfoLink(RnkBoat)
   let IdUser = parseInt(RnkBoat['idusers'],10);
   let BoatName = RnkBoat['boatname'];
 
-  let ret = '<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
+  let ret = GetCountryFlagImgHTML(RnkBoat['country'])+'<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
 
   return ret;
 }
@@ -2433,7 +2433,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
   let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   if (typeof RankBoat["Challenge"] !=="undefined" && RankBoat["Challenge"][1])
   {
-    boatsearchstring = '<img src="images/LMNH.png"></img>' + boatsearchstring;
+    boatsearchstring = '<img class="RnkLMNH" src="images/LMNH.png"></img>' + boatsearchstring;
   }
 
   boatsearchstring+=  GetBoatInfoLink(RankBoat)

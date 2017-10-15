@@ -481,18 +481,31 @@ function GetFlagsList()
 
 var FlagsIndexCache=[];
   
-function GetCountryDropDownSelectorHTML(title, loadflag,index)
+function GetCountryDropDownSelectorHTML(title, loadflag,CountryIndex)
 {
   if (loadflag)
   {
     // Get line to build DropDown
     //var RetString1 = " <img class='flag' src='/cache/flags/flagsmap.png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
-    var row=20*Math.floor(index/16);
-    var col=30*(index%16);
-    var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+title+"'></div>"
+    var RetString1 = GetCountryFlagImg(title,CountryIndex);
     var RetString2 = " <span  class='FlagLabel' flag='"+title+"'> - "+ title +"</span>";
 
-    FlagsIndexCache[title]=RetString1+RetString2
+    FlagsIndexCache[title]=RetString1
   }
-  return FlagsIndexCache[title];
+  var RetString2 = " <span  class='FlagLabel' flag='"+title+"'> - "+ title +"</span>";
+  return FlagsIndexCache[title]+RetString2;
+}
+
+function GetCountryFlagImgHTML(country)
+{
+  return FlagsIndexCache[country];
+}
+
+function GetCountryFlagImg(Title,CountryIndex)
+{
+  var row=20*Math.floor(CountryIndex/16);
+    var col=30*(CountryIndex%16);
+    var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+CountryIndex+"'></div>"
+
+    return RetString1;
 }
