@@ -2421,8 +2421,14 @@ function GetBoatInfoLink(RnkBoat)
 {
   let IdUser = parseInt(RnkBoat['idusers'],10);
   let BoatName = RnkBoat['boatname'];
+  let ret=""
 
-  let ret = GetCountryFlagImgHTML(RnkBoat['country'])+'<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
+  if (RnkBoat['country'])
+  {
+    ret = GetCountryFlagImgHTML(RnkBoat['country'])
+  }
+
+  ret += '<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
 
   return ret;
 }

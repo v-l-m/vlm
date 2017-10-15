@@ -177,6 +177,13 @@
                 </div>
               </div>
             </li>
+            <li class="nav hidden" RacingBtn="false">
+              <div class="BtnGroup" >
+                <div class="BtnRankingPanel" >
+                  <a data-toggle="collapse" ><img id="HistRankingButton" class="TDB-Icon" src="images/ranking.png"/></a>
+                </div>
+              </div>
+            </li>
             <li class="nav" LoggedInNav="true">
               <div class="BtnGroup" >
                 <div id="BtnSetting" class="BtnRankingPanel hidden">
@@ -1616,54 +1623,74 @@
       </div>
     </div>
     <!-- set up the modal for new inscription -->
-        <div id="InscriptForm" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div id="InscriptPanel" class="modaldialog modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 I18n="Registration" class="modal-title" style="text-align:center">Inscription</h4>
-                </div> 
-                <div class="modal-body">
-                  <div class="row container-fluid">
-                    <div class="col-xs-12">
-                      <div class="row">
-                        <div class="col-xs-6" align="center">
-                          <span I18n="playername">Pseudo :</span>
-                        </div>
-                        <div class="col-xs-6">
-                          <input  class="UserName " size="15" maxlength="64" name="pseudo" >
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xs-6" align="center">
-                          <span I18n="email">Adresse mail :</span>
-                        </div>
-                        <div class="col-xs-6">
-                          <input  class="UserMail" size="15" maxlength="64" name="mail" >
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xs-6" align="center">
-                          <span I18n="password">Mot de passe :</span>
-                        </div>
-                        <div class="col-xs-6">
-                          <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
-                        </div>
-                      </div>
-                      <div class="row">
-                        <span I18n="createaccountrules"> Le pseudo ... le mot de passe) sont: a-z 0-9 _<br>
-                        </span>
-                      </div>
-                    </div>    
-                   </div> 
+    <div id="RaceHistForm" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div id="InscriptPanel" class="modaldialog modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="Registration" class="modal-title" style="text-align:center">Inscription</h4>
+          </div> 
+          <div class="modal-body">
+            <div class="row container-fluid">
+              <div class="col-xs-12">
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="playername">Pseudo :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input  class="UserName " size="15" maxlength="64" name="pseudo" >
+                  </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="email">Adresse mail :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input  class="UserMail" size="15" maxlength="64" name="mail" >
+                  </div>
                 </div>
-              </div>
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    <span I18n="password">Mot de passe :</span>
+                  </div>
+                  <div class="col-xs-6">
+                    <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+                  </div>
+                </div>
+                <div class="row">
+                  <span I18n="createaccountrules"> Le pseudo ... le mot de passe) sont: a-z 0-9 _<br>
+                  </span>
+                </div>
+              </div>    
+            </div> 
+          </div>
+          <div class="modal-footer">
+            <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Race history selection panel -->
+    <div id="RaceHistory" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div  class="modaldialog modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="Registration" class="modal-title" style="text-align:center">Inscription</h4>
+          </div> 
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script that can be loaded after DOM -->
     <script src="config.js" type="text/javascript"></script>
     <script src='prefmgr.js' type='text/javascript'></script>
     <script src="localize.js" type='text/javascript'></script>
