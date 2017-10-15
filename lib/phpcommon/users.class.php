@@ -1473,7 +1473,8 @@ class fullUsers
         
       wrapper_mysql_db_query_writer($query_join_LMNH);
 
-      logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
+      // Logging kill LMNH is some case, do not log query unless debugging.
+      //logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
 
     } else {
       $this->deleteCurrentRanking();
