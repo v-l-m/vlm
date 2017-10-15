@@ -366,7 +366,7 @@ class users extends baseClass
   function pilototoUpdate($taskid, $time, $pim, $pip)
   {
       $time = intval($time);
-      $logmsg = "Update pilototo task $taskid : time=$time, pim=$pim, pip=$pip";
+      $logmsg = "Pilototo update task $taskid : time=$time, pim=$pim, pip=$pip";
       if ($time < time()) {
           $this->set_error("FAILED : time < now()");
           $this->logUserEventError($logmsg);
