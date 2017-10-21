@@ -50,15 +50,21 @@ $(document).ready(
     // Setup global ajax error handling
     //setup ajax error handling
     $.ajaxSetup({
-        error: function (x, status, error) {
-            if (x.status === 401) {
-                //on access denied try reviving the session
-                OnLoginRequest();
-            }
-            else {
-                VLMAlertDanger("An error occurred: " + status + "nError: " + error);
-            }
-        }
+        error: function (x, status, error) 
+              {
+                if (x.status === 401) {
+                  //on access denied try reviving the session
+                  OnLoginRequest();
+                }
+                else if (x.status == 404)
+                {
+                  // Juts ignore these for now....
+                }
+                else 
+                {
+                  VLMAlertDanger("An error occurred: " + status + "nError: " + error);
+                }
+              }
     });
     // Start converse
     //InitXmpp();
