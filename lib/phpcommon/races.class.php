@@ -1599,21 +1599,47 @@ class startedRacesList {
 ////////////////////////////////////////////////////////////
 function CheckLMNHStatus()
 {
+  $starttime = microtime();
+  // select boat list that do not respect the LMNH rules
+  $targetlist = "select ua.idusers, ua.idraces,1 
+                  from user_action ua, 
+                  users_Trophies ut, 
+                  users u  
+                  where u.idusers = ua.idusers and ua.idusers = ut.idusers
+                    and ua.idraces = ut.idraces and ut.quitdate is null 
+                    and u.userdeptime <> -1
+                    and ua.time > from_unixtime(u.userdeptime) 
+                    and ua.ipaddr <> '127.0.0.1'";
+
+  $result = wrapper_mysql_db_query_reader($targetlist);
+  $list="";
+  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
+  {
+    if ($list !== "")
+    {
+      $list .= ",";
+    }
+    $list .= $row['idusers'];
+  }
+
+  echo "Targetlist built in ". (microtime() - $starttime) ."\n";
+  if ($list == "")
+  {
+    echo "Targetlist is empty \n";
+    return;
+  }
+
+  $list.=")";
+
 
   // Clean boats that did not respect LMNH rules
   $querycleanLMNH = "update users_Trophies set quitdate = now() 
-  where (idusers,idraces,RefTrophy) 
-  in (select ua.idusers, ua.idraces,1 
-    from user_action ua, 
-    (select * from  users_Trophies where RefTrophy=1 and quitdate is null) ut, 
-    users u  
-    where u.idusers = ua.idusers and ua.idusers = ut.idusers
-      and ua.idraces = ut.idraces and quitdate is null 
-      and ua.time > from_unixtime(u.userdeptime) 
-      and ua.ipaddr <> '127.0.0.1')";
+  where idusers in " .$list;
 
   wrapper_mysql_db_query_writer($querycleanLMNH);
-
+  echo "update complete in ". (microtime() - $starttime) ."\n";
+  echo "update query :  ". $querycleanLMNH ."\n";
+  
 }
 
 ?>
