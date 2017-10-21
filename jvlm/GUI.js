@@ -29,6 +29,7 @@ var GM_Pos=null;
 var GribWindController = null;
 var PilototoFt = null;
 var RankingFt = null;
+var RaceHistFt = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -385,7 +386,7 @@ function InitMenusAndButtons()
     {
       VLMAlert("Function not implemented yet","alert-danger");
     }
-  )
+  );
 
   // Handler for Set WP on click
   $("#SetWPOnClick").click(HandleStartSetWPOnClick);
@@ -467,37 +468,54 @@ function InitMenusAndButtons()
 
   InitGribSlider();
 
-  // Handle race discontinuation request
-  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
-      
-  // Init Pilototo footable, and get pointer to object          
-  PilototoFt= FooTable.init("#PilototoTable",{
-    'name' : "PilototoTable",
-    'on':
-    {
-      'ready.ft.table' : HandleReadyTable,
-      'postdraw.ft.table':HandleTableDrawComplete
-    }
-  });
-
-  RankingFt = FooTable.init ("#RankingTable",{
-    'name' : "RankingTable",
-    'on':
-    {
-      'ready.ft.table' : HandleReadyTable,
-      'after.ft.paging' : HandlePagingComplete,
-      'postdraw.ft.table':HandleTableDrawComplete
-    }
-  });
-  PilototoFt.DrawPending = true;
-  RankingFt.DrawPending = true;
+  InitFootables();
   
+  // Handle clicking on ranking table link
+  $(document.body).on('click',".RaceHistLink",function(e){HandleShowBoatRaceHistory(e)});
   
-
   // Add handler to refresh content of eth pilototo table when showing tab content
   $("[PilRefresh]").on('click', HandleUpdatePilototoTable)
   
   CheckLogin();
+}
+
+function InitFootables()
+{
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+    
+  // Init Pilototo footable, and get pointer to object          
+  PilototoFt= FooTable.init("#PilototoTable",{
+  'name' : "PilototoTable",
+  'on':
+  {
+    'ready.ft.table' : HandleReadyTable,
+    'postdraw.ft.table':HandleTableDrawComplete
+  }
+  });
+
+  RankingFt = FooTable.init ("#RankingTable",{
+  'name' : "RankingTable",
+  'on':
+  {
+    'ready.ft.table' : HandleReadyTable,
+    'after.ft.paging' : HandlePagingComplete,
+    'postdraw.ft.table':HandleTableDrawComplete
+  }
+  });
+
+  RaceHistFt = FooTable.init ("#BoatRaceHist",{
+  'name' : "BoatRaceHist",
+  'on':
+  {
+    'ready.ft.table' : HandleReadyTable,
+    'after.ft.paging' : HandlePagingComplete,
+    'postdraw.ft.table':HandleTableDrawComplete
+  }
+  });
+  PilototoFt.DrawPending = true;
+  RankingFt.DrawPending = true;
+  RaceHistFt.DrawPending = true;
 }
 
 function HandleUpdatePilototoTable(e)
@@ -2426,9 +2444,15 @@ function GetBoatInfoLink(RnkBoat)
   if (RnkBoat['country'])
   {
     ret = GetCountryFlagImgHTML(RnkBoat['country'])
+
+    if (typeof ret === "undefined")
+    {
+      ret = "";
+    }
   }
 
-  ret += '<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
+  //ret += '<a class="RaceHistLink" href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
+  ret += '<a class="RaceHistLink" boatid ="'+IdUser +'">'+BoatName+'</a>';
 
   return ret;
 }
@@ -2742,4 +2766,31 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
   $(".OKBtn").unbind().on("click",function(){$("#ConfirmDialog").modal('hide');CallBack(true)});
   $(".NOKBtn").unbind().on("click",function(){$("#ConfirmDialog").modal('hide');CallBack(false)});
 
+}
+
+function FillBoatPalmares(e,a,b,c,d,f)
+{
+  let index;
+
+  for (index in e)
+  {
+    
+  }
+}
+function ShowUserRaceHistory(BoatId)
+{
+
+  $("#RaceHistory").modal("show");
+  $.get("/ws/boatinfo/palmares.php?idu=".BoatId,function(e,a,b,c,d,f){FillBoatPalmares(e,a,b,c,d,f)});
+  
+}
+
+function HandleShowBoatRaceHistory(e)
+{
+  let BoatId = $(e.target).attr("boatid");
+  
+  if (BoatId)
+  {
+    ShowUserRaceHistory(BoatId);
+  }
 }

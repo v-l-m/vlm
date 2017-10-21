@@ -1865,34 +1865,60 @@ function getWaypointHTMLSymbolsDescription($wpformat) {
 
 
 // For a finished race, to give the Palmares
-function getRaceRanking($idusers, $idraces) {
+function getRaceRanking($idusers, $idraces, $jsonfmt = false) 
+{
   // search for old races for this player
   $query = "SELECT idusers,position FROM races_results WHERE idraces=". 
     $idraces . " ORDER BY position DESC, duration ASC" ;
   $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
   $nbu=0;
-  while ($row = mysql_fetch_array($result, MYSQL_NUM) ) {
-    if( $row[0] == $idusers ) {
-      if ( $row[1] > 0 ) {
+  while ($row = mysql_fetch_array($result, MYSQL_NUM) ) 
+  {
+    if( $row[0] == $idusers ) 
+    {
+      if ( $row[1] > 0 ) 
+      {
         $rank=$nbu+1;
-      } else {
+      }
+      else 
+      {
         $rank=9999;
       }
     }
     //printf ("IDU=%d, RANK=%d<BR>\n", $row[0], $nbu);
     $nbu++;
   }
-  // Si dernier, trouver la raison
-  if ( $rank == 9999 ) {
-    //if ( $position = BOAT_STATUS_ARR ) $commentaire = " (ARR)";
-    $commentaire = "UNK"; // TO TRACK strange statuses
-    if ( $position = BOAT_STATUS_HC ) $commentaire = " (HC)";
-    if ( $position = BOAT_STATUS_HTP ) $commentaire = " (HTP)";
-    if ( $position = BOAT_STATUS_DNF ) $commentaire = " (DNF)";
-    if ( $position = BOAT_STATUS_ABD ) $commentaire = " (ABD)";
-    return ($rank . $commentaire );
-  } else {
-    return ($rank . "/" . $nbu);
+
+  if ($jsonfmt && $rank !== 9999)
+  {
+    $ret['rank']=$rank;
+    $ret['racercount']=$nbu;
+    return $ret;
+  }
+  else
+  {
+    // Si dernier, trouver la raison
+    if ( $rank == 9999 ) 
+    {
+      //if ( $position = BOAT_STATUS_ARR ) $commentaire = " (ARR)";
+      $commentaire = "UNK"; // TO TRACK strange statuses
+      if ( $position = BOAT_STATUS_HC ) $commentaire = " (HC)";
+      if ( $position = BOAT_STATUS_HTP ) $commentaire = " (HTP)";
+      if ( $position = BOAT_STATUS_DNF ) $commentaire = " (DNF)";
+      if ( $position = BOAT_STATUS_ABD ) $commentaire = " (ABD)";
+
+      if ($jsonfmt)
+      {
+        $ret['rank']=$commentaire;
+        $ret['racercount']=$nbu;
+        return $ret;
+      }
+      return ($rank . $commentaire );
+    } 
+    else 
+    {
+        return ($rank . "/" . $nbu);
+    }
   }
 }
 
