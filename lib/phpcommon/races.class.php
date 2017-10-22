@@ -1601,7 +1601,7 @@ function CheckLMNHStatus()
 {
   $starttime = microtime();
   // select boat list that do not respect the LMNH rules
-  $targetlist = "select ua.idusers, ua.idraces,1 
+  $targetlist = "select distinct ua.idusers 
                   from user_action ua, 
                   users_Trophies ut, 
                   users u  
