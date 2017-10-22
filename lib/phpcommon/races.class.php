@@ -1622,14 +1622,14 @@ function CheckLMNHStatus()
     $list .= $row['idusers'];
   }
 
-  echo "Targetlist built in ". (microtime() - $starttime) ."\n";
+  echo "\n Targetlist built in ". (microtime() - $starttime) ."\n";
   if ($list == "")
   {
     echo "Targetlist is empty \n";
     return;
   }
 
-  $list.=")";
+  $list="(".$list.")";
 
 
   // Clean boats that did not respect LMNH rules
