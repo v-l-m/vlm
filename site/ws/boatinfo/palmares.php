@@ -15,6 +15,7 @@
     
     $users = getUserObject($ws->idu);
     $ws->answer['palmares']=$users->GetUserPalmares();
+    $ws->answer['boat']['name']=$users->boatname;
     $ws->reply_with_success();
 
 ?>

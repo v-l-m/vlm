@@ -2775,20 +2775,42 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
 
 }
 
-function FillBoatPalmares(e,a,b,c,d,f)
+function FillBoatPalmares(data,status,b,c,d,f)
 {
   let index;
 
-  for (index in e)
+  if (status == "success")
   {
-    
+    let rows = [];
+    for (index in data.palmares)
+    {
+      if (data.palmares[index])
+      {
+        let palmares = data.palmares[index];
+        let RowsData = 
+          {
+            RaceId:data.palmares[index].idrace,
+            RaceName : data.palmares[index].racename,
+            Ranking : palmares.ranking.rank + " / " + palmares.ranking.racercount 
+          }
+
+
+
+        rows.push(RowsData);
+      }
+    }
+    RaceHistFt.loadRows(rows);
   }
+
+  let str = GetLocalizedString("palmares")
+  str = str.replace("%s",data.boat.name);
+  $("#palmaresheaderline").text(str);
 }
 function ShowUserRaceHistory(BoatId)
 {
 
   $("#RaceHistory").modal("show");
-  $.get("/ws/boatinfo/palmares.php?idu=".BoatId,function(e,a,b,c,d,f){FillBoatPalmares(e,a,b,c,d,f)});
+  $.get("/ws/boatinfo/palmares.php?idu="+BoatId,function(e,a,b,c,d,f){FillBoatPalmares(e,a,b,c,d,f)});
   
 }
 
