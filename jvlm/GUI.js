@@ -52,7 +52,8 @@ $(document).ready(
     $.ajaxSetup({
         error: function (x, status, error) 
               {
-                if (x.status === 401) {
+                if ((x.status === 401) || (x.status == 403))
+                {
                   //on access denied try reviving the session
                   OnLoginRequest();
                 }
