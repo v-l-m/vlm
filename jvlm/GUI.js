@@ -1104,8 +1104,9 @@ function UpdatePilotInfo(Boat)
     }
   }
 
-  PilototoFt.loadRows(PilRows,false)
   PilototoFt.DrawPending = true;
+  PilototoFt.loadRows(PilRows,false);
+  console.log("loaded pilototo table")
   
   UpdatePilotBadge(Boat);
 }
@@ -2321,7 +2322,7 @@ function FillWPRanking(Boat,WPNum, Friends)
   let BestTime = 0;
   let Rows = [];
   
-  if (!Boat || RankingFt.DrawPending)
+  if (!Boat || !RankingFt || RankingFt.DrawPending)
   {
     return;
   }
@@ -2359,10 +2360,12 @@ function FillWPRanking(Boat,WPNum, Friends)
   }
 
   let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
+  RankingFt.DrawPending = true;
   RankingFt.loadRows(Rows);
   RankingFt.TargetPage = TargetPage;
-  RankingFt.DrawPending = true;
+  
 }
+  
 
 function FillStatusRanking(Boat,Status, Friends)
 {
