@@ -177,7 +177,7 @@ foreach($racesListObj->records as $idraces)
     $ranking = $fullRacesObj->UpdateRankingPage(getenv("VLMCACHE"));
   }
 }
-echo "\nRaces ranking built in ". (microtime() - $RnkStartTime) ." µs\n";
+echo "\nRaces ranking built in ". (microtime() - $RnkStartTime) ." s\n";
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
 echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
