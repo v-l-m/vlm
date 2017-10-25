@@ -2534,7 +2534,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     RetObject["Distance"]=NextMark
     let Duration = parseInt(RankBoat['duration'],10)
     RetObject["Time"]=GetFormattedChronoString(Duration);
-    if (Duration !== Refs.Arrived1stTime)
+    if (Refs && Duration !== Refs.Arrived1stTime)
     {
       RetObject["Time"] += " ( +" + RoundPow ( Duration / Refs.Arrived1stTime   * 100 -100,2) + "% )";  
    
