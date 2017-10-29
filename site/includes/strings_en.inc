@@ -1,6 +1,14 @@
 <?php
 $strings['en'] = 
   array (
+    'PwdForbiddenPass' => 'Very weak',
+    'PwdTooShort' => 'Very weak',
+    'PwdInvalidChars' => 'Very weak',
+    'PwdVeryweak' => 'Very weak',
+    'PwdWeak' => 'Weak',
+    'PwdMedium' => 'Medium',
+    'PwdStrong' => 'Strong',
+    'PwdVerystrong' => 'Very Strong', 
     'status_ABD' => 'Dropped Out',
     'status_ARR' => 'Arrived',
     'status_DNF' => 'Disqualified',
