@@ -391,9 +391,17 @@ function InitMenusAndButtons()
   $("#BtnCreateAccount").click(
     function()
     {
-      VLMAlert("Function not implemented yet","alert-danger");
+      HandleCreateUser();
     }
-  );
+    );
+
+  $('.CreatePassword').pstrength();
+  $('#NewPlayerEMail').blur(
+    function(e)
+    {
+      $("#NewPlayerEMail").verimail({messageElement: "#verimailstatus",language:_CurLocale});
+    }
+  )
 
   // Handler for Set WP on click
   $("#SetWPOnClick").click(HandleStartSetWPOnClick);
@@ -2825,4 +2833,50 @@ function HandleShowBoatRaceHistory(e)
   {
     ShowUserRaceHistory(BoatId);
   }
+}
+
+function HandleCreateUserResult(data, status)
+{
+  if (status=="success" && data)
+  {
+    if (data.success)
+    {
+      VLMAlertSuccess(GetLocalizedString('An email has been sent. Click on the link to validate.'))
+      $("#InscriptForm").modal("hide");
+      $("#LoginForm").modal("hide");
+    }
+    else if (data.request && data.request.errorstring)
+    {
+      VLMAlertDanger(GetLocalizedString(data.request.errorstring));
+    }
+    else
+    {
+      VLMAlertDanger(GetLocalizedString(data.error.msg));
+    }
+  }
+  $("#BtnCreateAccount").show();
+  
+  
+}
+
+function HandleCreateUser()
+{
+  let txtplayername = $("#NewPlayerPseudo")[0].value;
+  let txtemail = $("#NewPlayerEMail")[0].value;
+  let txtPwd = $("#NewPlayerPassword")[0].value;
+  let PostData = 
+    {
+      emailid : txtemail,
+      password : txtPwd,
+      pseudo : txtplayername
+    }
+  $("#BtnCreateAccount").hide();
+  $.post("/ws/playerinfo/player_create.php",
+    "parms=" + JSON.stringify(PostData),
+    function(e,status)
+    {
+      HandleCreateUserResult(e, status);
+    });
+  
+  
 }

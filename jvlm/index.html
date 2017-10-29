@@ -1639,23 +1639,43 @@
                     <span I18n="playername">Pseudo :</span>
                   </div>
                   <div class="col-xs-6">
-                    <input  class="UserName " size="15" maxlength="64" name="pseudo" >
+                    <div class="col-xs-11">
+                      <input id="NewPlayerPseudo" class="UserName " size="15" maxlength="64" name="pseudo" >
+                    </div>
+                    <div class="col-xs-1 hidden">
+                      <img src='images/InputOK.png' class = "ValidationMark Valid"/>
+                      <img src='images/InputNOK.png' class = "ValidationMark Invalid"/>
+                    </div>
                   </div>
+                  
                 </div>
                 <div class="row">
                   <div class="col-xs-6" align="center">
                     <span I18n="email">Adresse mail :</span>
                   </div>
                   <div class="col-xs-6">
-                    <input  class="UserMail" size="15" maxlength="64" name="mail" >
+                    <input id="NewPlayerEMail" class="UserMail" size="15" maxlength="50" name="mail" >
+                    <img src='images/InputOK.png' class = "hidden ValidationMark Valid"/>
+                    <img src='images/InputNOK.png' class = "hidden ValidationMark Invalid"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-6" align="center">
+                    
+                  </div>
+                  <div class="col-xs-5">
+                    <span id="verimailstatus" >
+                  </div>
+                  <div class="col-xs-1">
+                    <img />
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-xs-6" align="center">
                     <span I18n="password">Mot de passe :</span>
                   </div>
-                  <div class="col-xs-6">
-                    <input class="UserPassword" size="15" maxlength="15" type="password" name="password"> 
+                  <div class="col-xs-5">
+                    <input id="NewPlayerPassword" class="UserPassword CreatePassword" size="15" maxlength="155" type="password" name="password"> 
                   </div>
                 </div>
                 <div class="row">
@@ -1666,7 +1686,7 @@
             </div> 
           </div>
           <div class="modal-footer">
-            <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>
+            <button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" >Créer</button>
           </div>
         </div>
       </div>
@@ -1720,6 +1740,8 @@
     <script src="GUI.js" type='text/javascript'></script>
     <script src='vlmboats.js' type='text/javascript'></script>
     <script src='MercatorTransform.js' type='text/javascript'></script>
+    <script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
+    <script src='external/PasswordStrength/jquery.pstrength-min.1.2.js' type='text/javascript'></script>
   </body>
   
   
