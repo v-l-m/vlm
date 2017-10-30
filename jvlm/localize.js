@@ -126,10 +126,10 @@ function GetLocalizedString(StringId)
   }
   else
   {
-    RetString= StringId
+    RetString = StringId;
   }
 
-  return decodeURIComponent(RetString)
+  return RetString;
 }
 
 function GetCurrentLocale()

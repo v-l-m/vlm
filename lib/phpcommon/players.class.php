@@ -21,26 +21,29 @@ class playersPending extends baseClass {
         }
     }
 
-    function checkNonconformity() {
-        $players = new players(0, null, $this);
-        $players->checkNonconformity();
-        $this->error_string = $players->error_string;
-        return $players->error_status;
-    }
+  function checkNonconformity($ws = null) 
+  {
+    $players = new players(0, null, $this);
+    $players->checkNonconformity($ws);
 
-    function constructFromRow($row) {
-        $this->idplayers_pending = $row['idplayers_pending'];
-        $this->playername = $row['playername'];
-        $this->password = $row['password'];
-        $this->email = $row['email'];
-        $this->seed = $row['seed'];
-        return True;
-    }
+    $this->error_string = $players->error_string;
+    return $players->error_status;
+  }
 
-    function constructFromEmailSeed($email, $seed) {
-        $seed = intval($seed);
-        return $this->constructFromQuery("email = '$email' AND seed = $seed");
-    }
+  function constructFromRow($row) 
+  {
+    $this->idplayers_pending = $row['idplayers_pending'];
+    $this->playername = $row['playername'];
+    $this->password = $row['password'];
+    $this->email = $row['email'];
+    $this->seed = $row['seed'];
+    return True;
+  }
+
+  function constructFromEmailSeed($email, $seed) {
+    $seed = intval($seed);
+    return $this->constructFromQuery("email = '$email' AND seed = $seed");
+  }
 
     function constructFromQuery($where) {
         $query= "SELECT * FROM players_pending WHERE $where";
@@ -240,32 +243,98 @@ class players extends baseClass {
     }
 
 
-    function checkNonconformity() {
-        $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
-        if (preg_match($pattern, $this->email) < 1) {
-            $this->set_error("Your email address doesn't seem to be valid");
-            return False;
-        }
-
-        $pattern = "/^([\w\!\#_$\*\+\-\=\^\`{\|\}\~\.]+)*$/i";
-        if (preg_match($pattern, $this->playername) < 1) {
-            $this->set_error("Your playername contains invalid characters");
-            return False;
-        }
-
-        
-        if (strlen($this->playername) < 3 && $this->playername != "fm") $this->set_error(getLocalizedString("Your playername should have at least 3 characters."));
-        if (strripos($this->playername, '--') !== False || strripos($this->playername, '  ') !== False) $this->set_error(getLocalizedString("Your playername should not be ascii art")); 
-
-        $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
-        $result = $this->queryRead($query);        
-        if (!($result && mysql_num_rows($result) === 0)) $this->set_error(getLocalizedString("Your email is already in use."));
-        $query = sprintf("SELECT * FROM players WHERE UPPER(`playername`) = UPPER('%s')", $this->playername);
-        $result = $this->queryRead($query);
-        if (!($result && mysql_num_rows($result) === 0)) $this->set_error(getLocalizedString("Your playername is already in use."));
-
-        return $this->error_status;
+  function checkNonconformity($ws = null) 
+  {
+    if ($ws)
+    {
+      if (!isset($ws->answer['request']))
+      {
+        $ws->answer = [];
+        $ws->answer['request'] = new stdClass();
+      }
+      
+      $status = &$ws->answer['request'];
+      $status->MailOK=true;
+      $status->PlayerNameOK=true;
+      $status->PasswordOK=true;
+      $status->ErrorCode=null;
     }
+    
+    $pattern = "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i";
+    if (preg_match($pattern, $this->email) < 1) {
+      $this->set_error("Your email address doesn't seem to be valid");
+      if ($ws)
+      {
+        $status->MailOK=false;
+        $status->ErrorCode='NEWPLAYER01';
+      }
+      return False;
+    }
+
+    $pattern = "/^([\w\!\#_$\*\+\-\=\^\`{\|\}\~\.]+)*$/i";
+    if (preg_match($pattern, $this->playername) < 1) {
+      $this->set_error("Your playername contains invalid characters");
+      if ($ws)
+      {
+        $status->PlayerNameOK=false;
+        $status->ErrorCode='NEWPLAYER02';
+      }
+      
+      return False;
+    }
+
+    
+    if (strlen($this->playername) < 3 && $this->playername != "fm") 
+    {
+      $this->set_error(getLocalizedString("Your playername should have at least 3 characters."));
+      if ($ws)
+      {
+        $status->PlayerNameOK=false;
+        $status->ErrorCode='NEWPLAYER02';
+      }
+
+      return false;
+    }
+
+    if (strripos($this->playername, '--') !== False || strripos($this->playername, '  ') !== False) 
+    {
+      $this->set_error(getLocalizedString("Your playername should not be ascii art")); 
+      if ($ws)
+      {
+        $status->PlayerNameOK=false;
+        $status->ErrorCode='NEWPLAYER02';
+      }
+      return false;
+    }
+
+    $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
+    $result = $this->queryRead($query);        
+    if (!($result && mysql_num_rows($result) === 0)) 
+    {
+      $this->set_error(getLocalizedString("Your email is already in use."));
+      if ($ws)
+      {
+        $status->MailOK=false;
+        $status->ErrorCode='NEWPLAYER01';
+      }
+
+      return false;
+    }
+    $query = sprintf("SELECT * FROM players WHERE UPPER(`playername`) = UPPER('%s')", $this->playername);
+    $result = $this->queryRead($query);
+    if (!($result && mysql_num_rows($result) === 0)) 
+    {
+      $this->set_error(getLocalizedString("Your playername is already in use."));
+      if ($ws)
+      {
+        $status->PlayerNameOK=false;
+        $status->ErrorCode='NEWPLAYER02';
+      }
+      return false;
+    }
+
+    return true ;
+  }
 
     //Convenient bundle
     function logPlayerEventError($logmsg = null, $idusers = null) {

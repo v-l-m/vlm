@@ -160,6 +160,24 @@ if ( $flagglobal == true ) {
      echo "writing timestamp...";
      $result5 = wrapper_mysql_db_query_writer($query5); //or die("Query failed : $query5");
 }
+
+echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... ";
+// Loop again all races to build the ranking tables
+// generate ranking page
+  
+//for every race
+$RnkStartTime = microtime();
+foreach($racesListObj->records as $idraces) 
+{
+  
+  if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) 
+  {
+    $fullRacesObj = new fullRaces( $idraces )  ;
+    // fix me the root folder should come from the configuration
+    $ranking = $fullRacesObj->UpdateRankingPage(getenv("VLMCACHE"));
+  }
+}
+echo "\nRaces ranking built in ". (microtime() - $RnkStartTime) ." s\n";
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
 echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
@@ -168,4 +186,6 @@ echo "  TIMINGS: Time race check=" . $step2_elapsed_float . "sec.  rate=". $nb_b
 if (defined('TRACE_SQL_QUERIES')) {
   echo "  SQL TIMINGS: ".$db_total_time."s\n";
 }
+
+
 ?>

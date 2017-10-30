@@ -29,6 +29,7 @@ var GM_Pos=null;
 var GribWindController = null;
 var PilototoFt = null;
 var RankingFt = null;
+var RaceHistFt = null;
 
 // On ready get started with vlm management
 $(document).ready(
@@ -49,15 +50,22 @@ $(document).ready(
     // Setup global ajax error handling
     //setup ajax error handling
     $.ajaxSetup({
-        error: function (x, status, error) {
-            if (x.status === 401) {
-                //on access denied try reviving the session
-                OnLoginRequest();
-            }
-            else {
-                VLMAlertDanger("An error occurred: " + status + "nError: " + error);
-            }
-        }
+        error: function (x, status, error) 
+              {
+                if ((x.status === 401) || (x.status == 403))
+                {
+                  //on access denied try reviving the session
+                  OnLoginRequest();
+                }
+                else if (x.status == 404)
+                {
+                  // Juts ignore these for now....
+                }
+                else 
+                {
+                  VLMAlertDanger("An error occurred: " + status + "nError: " + error);
+                }
+              }
     });
     // Start converse
     //InitXmpp();
@@ -383,7 +391,15 @@ function InitMenusAndButtons()
   $("#BtnCreateAccount").click(
     function()
     {
-      VLMAlert("Function not implemented yet","alert-danger");
+      HandleCreateUser();
+    }
+    );
+
+  $('.CreatePassword').pstrength();
+  $('#NewPlayerEMail').blur(
+    function(e)
+    {
+      $("#NewPlayerEMail").verimail({messageElement: "#verimailstatus",language:_CurLocale});
     }
   )
 
@@ -467,37 +483,54 @@ function InitMenusAndButtons()
 
   InitGribSlider();
 
-  // Handle race discontinuation request
-  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
-      
-  // Init Pilototo footable, and get pointer to object          
-  PilototoFt= FooTable.init("#PilototoTable",{
-    'name' : "PilototoTable",
-    'on':
-    {
-      'ready.ft.table' : HandleReadyTable,
-      'postdraw.ft.table':HandleTableDrawComplete
-    }
-  });
-
-  RankingFt = FooTable.init ("#RankingTable",{
-    'name' : "RankingTable",
-    'on':
-    {
-      'ready.ft.table' : HandleReadyTable,
-      'after.ft.paging' : HandlePagingComplete,
-      'postdraw.ft.table':HandleTableDrawComplete
-    }
-  });
-  PilototoFt.DrawPending = true;
-  RankingFt.DrawPending = true;
+  InitFootables();
   
+  // Handle clicking on ranking table link
+  $(document.body).on('click',".RaceHistLink",function(e){HandleShowBoatRaceHistory(e)});
   
-
   // Add handler to refresh content of eth pilototo table when showing tab content
   $("[PilRefresh]").on('click', HandleUpdatePilototoTable)
   
   CheckLogin();
+}
+
+function InitFootables()
+{
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+    
+  // Init Pilototo footable, and get pointer to object          
+  PilototoFt= FooTable.init("#PilototoTable",{
+  'name' : "PilototoTable",
+  'on':
+  {
+    'ready.ft.table' : HandleReadyTable,
+    'postdraw.ft.table':HandleTableDrawComplete
+  }
+  });
+
+  RankingFt = FooTable.init ("#RankingTable",{
+  'name' : "RankingTable",
+  'on':
+  {
+    'ready.ft.table' : HandleReadyTable,
+    'after.ft.paging' : HandlePagingComplete,
+    'postdraw.ft.table':HandleTableDrawComplete
+  }
+  });
+
+  RaceHistFt = FooTable.init ("#BoatRaceHist",{
+  'name' : "BoatRaceHist",
+  'on':
+  {
+    'ready.ft.table' : HandleReadyTable,
+    'after.ft.paging' : HandlePagingComplete,
+    'postdraw.ft.table':HandleTableDrawComplete
+  }
+  });
+  PilototoFt.DrawPending = true;
+  RankingFt.DrawPending = true;
+  RaceHistFt.DrawPending = true;
 }
 
 function HandleUpdatePilototoTable(e)
@@ -1079,8 +1112,9 @@ function UpdatePilotInfo(Boat)
     }
   }
 
-  PilototoFt.loadRows(PilRows,false)
   PilototoFt.DrawPending = true;
+  PilototoFt.loadRows(PilRows,false);
+  console.log("loaded pilototo table")
   
   UpdatePilotBadge(Boat);
 }
@@ -2296,7 +2330,7 @@ function FillWPRanking(Boat,WPNum, Friends)
   let BestTime = 0;
   let Rows = [];
   
-  if (!Boat || RankingFt.DrawPending)
+  if (!Boat || !RankingFt || RankingFt.DrawPending)
   {
     return;
   }
@@ -2334,10 +2368,12 @@ function FillWPRanking(Boat,WPNum, Friends)
   }
 
   let TargetPage = RoundPow(RowNum / 20,0) + (RowNum%20 >= 10?0:1);
+  RankingFt.DrawPending = true;
   RankingFt.loadRows(Rows);
   RankingFt.TargetPage = TargetPage;
-  RankingFt.DrawPending = true;
+  
 }
+  
 
 function FillStatusRanking(Boat,Status, Friends)
 {
@@ -2421,8 +2457,20 @@ function GetBoatInfoLink(RnkBoat)
 {
   let IdUser = parseInt(RnkBoat['idusers'],10);
   let BoatName = RnkBoat['boatname'];
+  let ret=""
 
-  let ret = '<a href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
+  if (RnkBoat['country'])
+  {
+    ret = GetCountryFlagImgHTML(RnkBoat['country'])
+
+    if (typeof ret === "undefined")
+    {
+      ret = "";
+    }
+  }
+
+  //ret += '<a class="RaceHistLink" href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
+  ret += '<a class="RaceHistLink" boatid ="'+IdUser +'">'+BoatName+'</a>';
 
   return ret;
 }
@@ -2433,7 +2481,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
   let boatsearchstring = ''//'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
   if (typeof RankBoat["Challenge"] !=="undefined" && RankBoat["Challenge"][1])
   {
-    boatsearchstring = '<img src="images/LMNH.png"></img>' + boatsearchstring;
+    boatsearchstring = '<img class="RnkLMNH" src="images/LMNH.png"></img>' + boatsearchstring;
   }
 
   boatsearchstring+=  GetBoatInfoLink(RankBoat)
@@ -2494,7 +2542,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     RetObject["Distance"]=NextMark
     let Duration = parseInt(RankBoat['duration'],10)
     RetObject["Time"]=GetFormattedChronoString(Duration);
-    if (Duration !== Refs.Arrived1stTime)
+    if (Refs && Duration !== Refs.Arrived1stTime)
     {
       RetObject["Time"] += " ( +" + RoundPow ( Duration / Refs.Arrived1stTime   * 100 -100,2) + "% )";  
    
@@ -2736,4 +2784,99 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
   $(".OKBtn").unbind().on("click",function(){$("#ConfirmDialog").modal('hide');CallBack(true)});
   $(".NOKBtn").unbind().on("click",function(){$("#ConfirmDialog").modal('hide');CallBack(false)});
 
+}
+
+function FillBoatPalmares(data,status,b,c,d,f)
+{
+  let index;
+
+  if (status == "success")
+  {
+    let rows = [];
+    for (index in data.palmares)
+    {
+      if (data.palmares[index])
+      {
+        let palmares = data.palmares[index];
+        let RowsData = 
+          {
+            RaceId:data.palmares[index].idrace,
+            RaceName : data.palmares[index].racename,
+            Ranking : palmares.ranking.rank + " / " + palmares.ranking.racercount 
+          }
+
+
+
+        rows.push(RowsData);
+      }
+    }
+    RaceHistFt.loadRows(rows);
+  }
+
+  let str = GetLocalizedString("palmares")
+  str = str.replace("%s",data.boat.name);
+  $("#palmaresheaderline").text(str);
+}
+function ShowUserRaceHistory(BoatId)
+{
+
+  $("#RaceHistory").modal("show");
+  $.get("/ws/boatinfo/palmares.php?idu="+BoatId,function(e,a,b,c,d,f){FillBoatPalmares(e,a,b,c,d,f)});
+  
+}
+
+function HandleShowBoatRaceHistory(e)
+{
+  let BoatId = $(e.target).attr("boatid");
+  
+  if (BoatId)
+  {
+    ShowUserRaceHistory(BoatId);
+  }
+}
+
+function HandleCreateUserResult(data, status)
+{
+  if (status=="success" && data)
+  {
+    if (data.success)
+    {
+      VLMAlertSuccess(GetLocalizedString('An email has been sent. Click on the link to validate.'))
+      $("#InscriptForm").modal("hide");
+      $("#LoginForm").modal("hide");
+    }
+    else if (data.request && data.request.errorstring)
+    {
+      VLMAlertDanger(GetLocalizedString(data.request.errorstring));
+    }
+    else
+    {
+      VLMAlertDanger(GetLocalizedString(data.error.msg));
+    }
+  }
+  $("#BtnCreateAccount").show();
+  
+  
+}
+
+function HandleCreateUser()
+{
+  let txtplayername = $("#NewPlayerPseudo")[0].value;
+  let txtemail = $("#NewPlayerEMail")[0].value;
+  let txtPwd = $("#NewPlayerPassword")[0].value;
+  let PostData = 
+    {
+      emailid : txtemail,
+      password : txtPwd,
+      pseudo : txtplayername
+    }
+  $("#BtnCreateAccount").hide();
+  $.post("/ws/playerinfo/player_create.php",
+    "parms=" + JSON.stringify(PostData),
+    function(e,status)
+    {
+      HandleCreateUserResult(e, status);
+    });
+  
+  
 }

@@ -508,6 +508,21 @@ class users extends baseClass
       }
   }
 
+  function GetUserPalmares()
+  {
+    // search for old races for this player
+    $query = " SELECT races.idraces idrace, races.racename racename from races_results, races  where idusers = ". $this->idusers ."   and races.idraces = races_results.idraces  ORDER BY (races_results.deptime+duration) DESC;";
+    $result = wrapper_mysql_db_query_reader($query);
+    $palmares = [];
+
+    while ($row = mysql_fetch_assoc($result)) 
+    {
+      $res = $row;
+      $res['ranking']=getRaceRanking($this->idusers,$row['idrace'],true); // Le classement
+      array_push($palmares,$res);
+    }
+    return $palmares;
+  }
 }
 
 
@@ -1473,7 +1488,8 @@ class fullUsers
         
       wrapper_mysql_db_query_writer($query_join_LMNH);
 
-      logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
+      // Logging kill LMNH is some case, do not log query unless debugging.
+      //logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
 
     } else {
       $this->deleteCurrentRanking();

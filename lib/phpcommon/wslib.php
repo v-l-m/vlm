@@ -5,123 +5,193 @@ include_once('players.class.php');
 include_once('base.class.php');
 require_once('users.class.php');
 
-class WSBase extends baseClass {
+class WSBase extends baseClass
+{
 
-    public $answer = Array();
-    public $maxage = WS_DEFAULT_CACHE_DURATION;
-    public $now = 0;
+  public $answer = Array();
+  public $maxage = WS_DEFAULT_CACHE_DURATION;
+  public $now = 0;
+  public $request = null;
+  
 
-    function __construct() {
-        parent::baseClass();
-        $this->now = time();
-    }
+  function __construct() {
+      parent::baseClass();
+      $this->now = time();
+  }
 
-    function queryRead($query) {
-        $res = parent::queryRead($query);
-        if ($res) { 
-            return $res;
-        } else {
-            $this->reply_with_error("CORE01", $this->error_string);
-        }
-    }
+  function queryRead($query) {
+      $res = parent::queryRead($query);
+      if ($res) { 
+          return $res;
+      } else {
+          $this->reply_with_error("CORE01", $this->error_string);
+      }
+  }
     
-    function queryWrite($query) {
-        $res = parent::queryWrite($query);
-        if ($res) { 
-            return $res;
-        } else {
-            $this->reply_with_error("CORE01", $this->error_string);
-        }
+  function queryWrite($query) {
+      $res = parent::queryWrite($query);
+      if ($res) { 
+          return $res;
+      } else {
+          $this->reply_with_error("CORE01", $this->error_string);
+      }
+  }
+
+  function usage() 
+  {
+    return "Usage:
+    Documentation is in progress and should be available at the following url :
+    https://github.com/v-l-m/vlm/wiki/WebServices";
+  }
+
+  function warning($msg) 
+  {
+    if (!isset($this->answer['warnings'])) $this->answer['warnings'] = Array();
+    $this->answer['warnings'][] = $msg;
+  }
+
+  function reply() 
+  {
+    $fmt = "json";
+
+    $this->maxage = min($this->maxage, WS_MAX_MAXAGE); //Max Lifetime is the minimum between ws setup and MAX_MAXAGE
+    $this->maxage = max($this->maxage, WS_MIN_MAXAGE); //Min lifetime is the maximum between ws setup and MIN_MAXAGE
+
+    switch ($fmt) {
+        //retourne du json par défaut, mais peut être qu'on pourra supporter autre chose plus tard
+        case "json":
+        default:
+            header('Content-type: application/json; charset=UTF-8');
+            if ($this->maxage > 0 && !isset($_GET['nocache'])) {
+                header("Cache-Control: max-age=".$this->maxage.", must-revalidate");
+            } else {
+                header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+            }
+            echo json_encode($this->answer);
+    }
+    exit();
+  }
+
+  function reply_with_error($code, $error_string = null) 
+  {
+    $this->answer['success'] = False;
+    $this->answer['error'] = get_error($code);
+    $this->answer['usage'] = $this->usage();
+    if (!is_null($error_string)) $this->answer['error']['custom_error_string'] = $error_string;
+    $this->reply();
+  }
+  
+  function reply_with_success() 
+  {
+    $this->answer['success'] = True;
+    $this->reply();
+  }
+
+  function finish() {
+      //Must be surcharged (?) by inherited classes
+      $ws->reply_with_error("CORE01");
+  }
+
+  function check_cgi($var, $err_exists, $default=null) 
+  {
+    $foo = get_cgi_var($var, $default);
+    if (is_null($foo))
+    {
+      $this->reply_with_error($err_exists);
+    }
+    return $foo;
+  }
+
+  function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) 
+  {
+    $foo = $this->check_cgi($var, $err_exists, $default);
+    if (!is_numeric($foo))
+    {
+      $this->reply_with_error($err_gt_0);
     }
 
-    function usage() {
-        return "Usage:
-        Documentation is in progress and should be available at the following url :
-        https://github.com/v-l-m/vlm/wiki/WebServices";
+    $foo = intval($foo);
+    if (is_int($foo) && $foo > 0) {
+      return $foo;
+    } 
+    else 
+    {
+      $this->reply_with_error($err_gt_0);
     }
+  }
 
-    function warning($msg) {
-        if (!isset($this->answer['warnings'])) $this->answer['warnings'] = Array();
-        $this->answer['warnings'][] = $msg;
-    }
-
-    function reply() {
-        $fmt = "json";
-
-        $this->maxage = min($this->maxage, WS_MAX_MAXAGE); //Max Lifetime is the minimum between ws setup and MAX_MAXAGE
-        $this->maxage = max($this->maxage, WS_MIN_MAXAGE); //Min lifetime is the maximum between ws setup and MIN_MAXAGE
-
-        switch ($fmt) {
-            //retourne du json par défaut, mais peut être qu'on pourra supporter autre chose plus tard
-            case "json":
-            default:
-                header('Content-type: application/json; charset=UTF-8');
-                if ($this->maxage > 0 && !isset($_GET['nocache'])) {
-                    header("Cache-Control: max-age=".$this->maxage.", must-revalidate");
-                } else {
-                    header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
-                }
-                echo json_encode($this->answer);
-        }
-        exit();
-    }
-
-    function reply_with_error($code, $error_string = null) {
-        $this->answer['success'] = False;
-        $this->answer['error'] = get_error($code);
-        $this->answer['usage'] = $this->usage();
-        if (!is_null($error_string)) $this->answer['error']['custom_error_string'] = $error_string;
-        $this->reply();
-    }
-    
-    function reply_with_success() {
-        $this->answer['success'] = True;
-        $this->reply();
-    }
-
-    function finish() {
-        //Must be surcharged (?) by inherited classes
-        $ws->reply_with_error("CORE01");
-    }
-
-    function check_cgi($var, $err_exists, $default=null) {
-        $foo = get_cgi_var($var, $default);
-        if (is_null($foo)) $this->reply_with_error($err_exists);
+  function check_cgi_intzero($var, $err_exists, $err_notint, $default = null) {
+    $foo = $this->check_cgi($var, $err_exists, $default);
+    $foo = intval($foo);
+    if (is_int($foo)) {
         return $foo;
+    } else {
+        $this->reply_with_error($err_notint);
     }
+  }
 
-    function check_cgi_int($var, $err_exists, $err_gt_0, $default = null) {
-        $foo = $this->check_cgi($var, $err_exists, $default);
-        if (!is_numeric($foo)) $this->reply_with_error($err_gt_0);
-        $foo = intval($foo);
-        if (is_int($foo) && $foo > 0) {
-            return $foo;
-        } else {
-            $this->reply_with_error($err_gt_0);
-        }
+  function saveJson($filename, $force = 'no') {
+    $path = dirname($filename);
+    // Création et mise en cache
+    if ( ( ! file_exists($filename) ) ||  ($force == 'yes') ) {
+        if (!is_dir($path)) mkdir($path, 0777, True);
+        return file_put_contents ($filename , json_encode($this->answer));
     }
+    return True;
+  }
 
-    function check_cgi_intzero($var, $err_exists, $err_notint, $default = null) {
-        $foo = $this->check_cgi($var, $err_exists, $default);
-        $foo = intval($foo);
-        if (is_int($foo)) {
-            return $foo;
-        } else {
-            $this->reply_with_error($err_notint);
-        }
-    }
-
-    function saveJson($filename, $force = 'no') {
-        $path = dirname($filename);
-        // Création et mise en cache
-        if ( ( ! file_exists($filename) ) ||  ($force == 'yes') ) {
-            if (!is_dir($path)) mkdir($path, 0777, True);
-            return file_put_contents ($filename , json_encode($this->answer));
-        }
-        return True;
-    }
+  function reply_with_error_if_not_exists($key, $code, $request = null) 
+  {
+    if (is_null($request)) $request = $this->request;
+    if (!isset($request[$key])) $this->reply_with_error($code);
+  }
 
 }
+
+////////////////////
+// END WSBase class
+////////////////////
+
+/////////////////////////////////////////
+//
+// WS Class for new player registration
+//
+/////////////////////////////////////////
+class WSNewPlayer extends WSBase 
+{
+  public $NewPlayerInfo = null;
+
+  function __construct() 
+  {
+    parent::__construct();
+    $this->request = $_POST;
+    $this->reply_with_error_if_not_exists('parms', 'NEWPLAYER00');
+    $params = $this->request['parms']; 
+    $this->NewPlayerInfo = json_decode($params);
+    //$ws->answer['DBG']=print_r($player,true);
+    //print_r ($this->NewPlayerInfo);
+    
+    if (trim($this->NewPlayerInfo->emailid) === "")
+    {
+      $this->reply_with_error('NEWPLAYER01');
+    }
+    if (trim($this->NewPlayerInfo->pseudo) === "")
+    {
+      $this->reply_with_error('NEWPLAYER02');
+    }
+    if (trim($this->NewPlayerInfo->password) === "")
+    {
+      $this->reply_with_error('NEWPLAYER03');
+    }
+  } 
+
+}
+/////////////////////////////////////////
+//
+// END WS Class for new player registration
+//
+/////////////////////////////////////////
+
 
 class WSTracks extends WSBase {
     public $users = null;
@@ -282,36 +352,30 @@ class WSRealBoat extends WSBasePlayer {
 }
 
 
-class WSSetup extends WSBaseAuthent {
-    //should be an extends from WSBaseBoat(?) starting from v0.15
-    public $input = null;
-    public $request = null;
-
-    function __construct() {
-        parent::__construct();
-        
-        //surface test
-        $this->input = get_cgi_var('parms', null);
-        if (is_null($this->input)) $this->reply_with_error('PARM01');
-        $this->request = json_decode($this->input, true);
-        if (is_null($this->request) || !is_array($this->request)) $this->reply_with_error("PARM02");
-
-        //ask for debug
-        if (isset($this->request['debug']) && $this->request['debug']) {
-            $this->answer['request'] = $this->request;
-            $this->warning("Debug mode for testing purposes only");
-        }
-        
-        if (isset($_GET["parms"])) $this->warning("http/GET is allowed for testing purposes only");
-
-    }
+class WSSetup extends WSBaseAuthent 
+{
+  //should be an extends from WSBaseBoat(?) starting from v0.15
+  public $input = null;
+  
+  function __construct() 
+  {
+    parent::__construct();
     
-    function reply_with_error_if_not_exists($key, $code, $request = null) {
-        if (is_null($request)) $request = $this->request;
-        if (!isset($request[$key])) $this->reply_with_error($code);
-    }
+    //surface test
+    $this->input = get_cgi_var('parms', null);
+    if (is_null($this->input)) $this->reply_with_error('PARM01');
+    $this->request = json_decode($this->input, true);
+    if (is_null($this->request) || !is_array($this->request)) $this->reply_with_error("PARM02");
 
-    
+    //ask for debug
+    if (isset($this->request['debug']) && $this->request['debug']) 
+    {
+      $this->answer['request'] = $this->request;
+      $this->warning("Debug mode for testing purposes only");
+    }
+      
+    if (isset($_GET["parms"])) $this->warning("http/GET is allowed for testing purposes only");
+  } 
 }
 
 class WSBasePlayersetup extends WSSetup {
@@ -558,9 +622,18 @@ function get_error($code) {
         //limit - mainly for ranking/results
         "LIMIT01" => "limit is required",
         "LIMIT02" => 'limit should be int and > 0 if specified',
+
         //wpid
         "WPID01" => "wp is required",
         "WPID02" => "wp should be int",
+
+        // New player registration
+        "NEWPLAYER00" => "Data must be posted in JSON parms struct",
+        "NEWPLAYER01" => "emailid is required",
+        "NEWPLAYER02" => "pseudo is required",
+        "NEWPLAYER03" => "password is required",
+        "NEWPLAYER04" => "failed to insert in DB"
+        
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);

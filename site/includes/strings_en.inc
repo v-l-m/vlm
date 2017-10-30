@@ -1,6 +1,14 @@
 <?php
 $strings['en'] = 
   array (
+    'PwdForbiddenPass' => 'Very weak',
+    'PwdTooShort' => 'Very weak',
+    'PwdInvalidChars' => 'Very weak',
+    'PwdVeryweak' => 'Very weak',
+    'PwdWeak' => 'Weak',
+    'PwdMedium' => 'Medium',
+    'PwdStrong' => 'Strong',
+    'PwdVerystrong' => 'Very Strong', 
     'status_ABD' => 'Dropped Out',
     'status_ARR' => 'Arrived',
     'status_DNF' => 'Disqualified',
@@ -54,7 +62,7 @@ $strings['en'] =
     'Account validation error' => 'Account validation error',
     'An email has been sent for your information.' => 'An email has been sent for your information.',
     'An email has been sent. Click on the link inside.' => 'An email has been sent. Click on the link inside.',
-    'An email has been sent. Click on the link to validate.' => 'An email has been sent. Click on the link to validate. Shoudl you not receive it, check your spam folder, otherwise, get in touch with vlm (at) virtual-winds (dot) org for additional help.',
+    'An email has been sent. Click on the link to validate.' => 'An email has been sent. Click on the link to validate. Should you not receive it, check your spam folder, otherwise, get in touch with vlm (at) virtual-winds (dot) org for additional help.',
     'Anti-clockwise' => 'Anti-clockwise',
     'Attachment successful' => 'Attachment successful',
     'Attachment to this account' => 'Attachment to this account',
