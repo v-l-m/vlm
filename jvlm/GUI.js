@@ -2839,8 +2839,11 @@ function HandleCreateUserResult(data, status)
 {
   if (status=="success" && data)
   {
+    $(".ValidationMark").addClass("hidden");
+
     if (data.success)
     {
+      $(".ValidationMark.Valid").removeClass("hidden");
       VLMAlertSuccess(GetLocalizedString('An email has been sent. Click on the link to validate.'))
       $("#InscriptForm").modal("hide");
       $("#LoginForm").modal("hide");
@@ -2852,6 +2855,52 @@ function HandleCreateUserResult(data, status)
     else
     {
       VLMAlertDanger(GetLocalizedString(data.error.msg));
+    }
+
+    
+    if (data.request)
+    {
+      if (data.request.MailOK)
+      {
+        $(".ValidationMark.Email.Valid").removeClass("hidden");
+      }
+      else
+      {
+        $(".ValidationMark.Email.Invalid").removeClass("hidden");
+      }
+      if (data.request.PasswordOK)
+      {
+        $(".ValidationMark.Password.Valid").removeClass("hidden");
+      }
+      else
+      {
+        $(".ValidationMark.Password.Invalid").removeClass("hidden");
+      }
+      if (data.request.PlayerNameOK)
+      {
+        $(".ValidationMark.Pseudo.Valid").removeClass("hidden");
+      }
+      else
+      {
+        $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
+      }
+    }
+    else if (data.error)
+    {
+      switch (data.error.code)
+      {
+        case "NEWPLAYER01":
+          $(".ValidationMark.Email.Invalid").removeClass("hidden");
+          break;
+      
+          case "NEWPLAYER02":
+          $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
+          break;
+        
+        case "NEWPLAYER03":
+          $(".ValidationMark.Password.Invalid").removeClass("hidden");
+          break;
+      }
     }
   }
   $("#BtnCreateAccount").show();
