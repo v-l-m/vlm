@@ -505,7 +505,7 @@ function GetCountryFlagImg(Title,CountryIndex)
 {
   var row=20*Math.floor(CountryIndex/16);
     var col=30*(CountryIndex%16);
-    var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+CountryIndex+"'></div>"
+    var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+Title+"'></div>"
 
     return RetString1;
 }
