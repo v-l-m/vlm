@@ -1530,6 +1530,8 @@ function PageClock()
         Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
       }
 
+      $("#RefreshAge").text(moment(_CurPlayer.CurBoat.LastRefresh).fromNow());
+
       var LastBoatUpdate = new Date(CurBoat.VLMInfo.LUP*1000);
       var TotalVac = CurBoat.VLMInfo.VAC;
       var TimeToNextUpdate = TotalVac - ((new Date() - LastBoatUpdate)/1000)%TotalVac;
