@@ -91,65 +91,98 @@
     } else if ($actioncreate == "validate") { //VALIDATE
         echo "<div id=\"createplayerbox\">";
         $seed = get_cgi_var("seed");
+        $jvlm = get_cgi_var("jvlm");
         $player = new playersPending($emailid, $seed);
-        if (!$player->validate()) {
-            print getLocalizedString("Account validation error");
-            print $player->error_string;
-        } else {
-            echo "<h2>".getLocalizedString("Your account is ready to be created")."</h2>";
-            printAccountSummary($player->email, "****", $player->playername);
+        if (!$player->validate()) 
+        {
+          print getLocalizedString("Account validation error");
+          print $player->error_string;
+        }
+        else
+        {
+          echo "<h2>".getLocalizedString("Your account is ready to be created")."</h2>";
+          printAccountSummary($player->email, "****", $player->playername);
 ?>
-            <form accept-charset="utf-8" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" name="createplayer">
-                <input type="hidden" name="seed" value="<?php echo $seed; ?>" />
-                <input type="hidden" name="emailid" value="<?php echo $emailid; ?>" />
-                <input type="hidden" name="createplayer" value="create" />
-                <input type="submit" value="<?php echo getLocalizedString("Confirm account creation ?"); ?>" />
-            </form> 
+          <form accept-charset="utf-8" action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" name="createplayer">
+            <input type="hidden" name="seed" value="<?php echo $seed; ?>" />
+            <input type="hidden" name="emailid" value="<?php echo $emailid; ?>" />
+            <input type="hidden" name="createplayer" value="create" />
+            <input type="hidden" name="jvlm" value="<?php echo $jvlm ?>" />
+            <input type="submit" value="<?php echo getLocalizedString("Confirm account creation ?"); ?>" />
+          </form> 
 <?php
         }
         echo "</div>";
-    } else if ($actioncreate == "create") { //CREATE
-        $seed = get_cgi_var("seed");
-        $player = new playersPending($emailid, $seed);
-        echo "<div id=\"createplayerbox\">";
-        if (!$player->create()) {
-            echo getLocalizedString("Account creation error");
-            echo $player->error_string;
-        } else {
-            echo "<h2>".getLocalizedString("Your account has been created")."</h2>";
-            $player = new players(0, $player->email);
-            printAccountSummary($player->email, "****", $player->playername);
-
-            if (!checkLoginExists($player->playername)
-                && $idu = createBoat($player->playername, $password = generatePassword($player->playername), $player->email, $player->playername)) {
-                //Manual creation of users, forcing use of MASTER server
-                //FIXME : factorise with create_boat.php
-                $users = new users($idu, FALSE);
-                $users->initFromId($idu, True);
-                echo "<h2>".getLocalizedString("Your boat has been created")."</h2>";
-                printBoatSummary($player->playername, $player->playername);
-                echo "</div>";
-
-                echo "<div id=\"attachboatbox\">";
-                if ($users->setOwnerId($player->idplayers) && !$users->error_status) {
-
-                    echo '<h2>'.getLocalizedString("Attachment successful").'.</h2>';
-                    echo '<p>'.getLocalizedString('You own this boat').'.</p>';
-                    echo '<p><b>'.getLocalizedString('Click here').'</b>&nbsp;:&nbsp;'.$users->htmlIdusers().'</p>';
-                } else {
-                    echo "<h2>".getLocalizedString("It was not possible to attach this boat. Please report this error.")."</h2>";
-                    if ($users->error_status) {
-                        print nl2br($users->error_string);
-                    }
-                }
-                echo "</div>";
-            } else {
-                echo "<h2>".getLocalizedString('Please connect to create your first boat')."</h2>";    
-                echo "</div>";
-            }
+    } 
+    else if ($actioncreate == "create") 
+    { //CREATE
+      $seed = get_cgi_var("seed");
+      $jvlm = get_cgi_var("jvlm");
+      $player = new playersPending($emailid, $seed);
+      echo "<div id=\"createplayerbox\">";
+      if (!$player->create()) 
+      {
+        echo getLocalizedString("Account creation error");
+        echo $player->error_string;
+      }
+      else 
+      {
+        echo "<h2>".getLocalizedString("Your account has been created")."</h2>";
+        $player = new players(0, $player->email);
+        if (! $jvlm)
+        {
+          printAccountSummary($player->email, "****", $player->playername);
         }
-    } else {
-        printFormRequest();
+        
+        if (!checkLoginExists($player->playername)
+            && $idu = createBoat($player->playername, $password = generatePassword($player->playername), $player->email, $player->playername)) 
+        {
+          //Manual creation of users, forcing use of MASTER server
+          //FIXME : factorise with create_boat.php
+          $users = new users($idu, FALSE);
+          $users->initFromId($idu, True);
+          if (!$jvlm)
+          {
+            echo "<h2>".getLocalizedString("Your boat has been created")."</h2>";
+            printBoatSummary($player->playername, $player->playername);
+            echo "</div>";
+
+            echo "<div id=\"attachboatbox\">";
+          
+            if ($users->setOwnerId($player->idplayers) && !$users->error_status) 
+            {
+              echo '<h2>'.getLocalizedString("Attachment successful").'.</h2>';
+              echo '<p>'.getLocalizedString('You own this boat').'.</p>';
+              echo '<p><b>'.getLocalizedString('Click here').'</b>&nbsp;:&nbsp;'.$users->htmlIdusers().'</p>';
+            } 
+            else
+            {
+              echo "<h2>".getLocalizedString("It was not possible to attach this boat. Please report this error.")."</h2>";
+              if ($users->error_status) 
+              {
+                print nl2br($users->error_string);
+              }
+            }
+            echo "</div>";
+          }
+          else
+          {
+            // Bind boat to player, and redirect
+            $users->setOwnerId($player->idplayers);
+            header("location:/jvlm");
+            exit();
+          }
+        }
+        else 
+        {
+          echo "<h2>".getLocalizedString('Please connect to create your first boat')."</h2>";    
+          echo "</div>";
+        }
+      }
+    }
+    else
+    {
+      printFormRequest();
     }
     
     include_once("includes/footer.inc");
