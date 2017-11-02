@@ -490,6 +490,9 @@ function InitMenusAndButtons()
   
   // Add handler to refresh content of eth pilototo table when showing tab content
   $("[PilRefresh]").on('click', HandleUpdatePilototoTable)
+
+  // Handler for not racing boat palmares
+  $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
   CheckLogin();
 }
