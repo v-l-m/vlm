@@ -2283,9 +2283,9 @@ function SortRankingData(Boat, SortType,WPNum)
     
     for (index in Boat.RnkObject)
     {
-      if (Boat.RnkObject[index] && !isNaN(parseInt(index,10)))
+      if (Boat.RnkObject[index] )
       {
-        Boat.RnkObject[index].idusers=index;
+        //Boat.RnkObject[index].idusers=index;
         Boat.RnkObject.RacerRanking.push(Boat.RnkObject[index]);
       }
     }

@@ -560,6 +560,10 @@ class races extends baseClass
       {
         $ranking[$row['idusers']]=$row;
       }
+      else
+      {
+        $ranking['ARR_'.$row['idusers']]=$row;
+      }
 
     }
 
