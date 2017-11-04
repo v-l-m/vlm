@@ -1063,13 +1063,6 @@ function UpdatePilotInfo(Boat)
     return;
   }   
 
-  //let PIL_TEMPLATE = $("#PIL_TEMPLATE");
-  //PIL_TEMPLATE.hide()
-  
-  /*for (index=1; index <=5 ; index ++)
-  {
-    $("#PIL"+PilIndex).hide();
-  }*/
 
   PilRows=[];
   if (Boat.VLMInfo.PIL.length >0)
@@ -1078,25 +1071,6 @@ function UpdatePilotInfo(Boat)
     {
       if (Boat.VLMInfo.PIL[index])
       {
-        /*var PilIndex = parseInt(index,10)+1;
-        //var PrevIndex = PilIndex -1;
-        var PilLine = $("#PIL"+PilIndex).first();
-        if (!PilLine.length)
-        {
-          PilLine = PIL_TEMPLATE.clone();
-          PilLine.attr('id',"PIL"+PilIndex);
-          
-          $("#PilototoBodyTable").append(PilLine);
-          PilLine.removeClass("hidden").addClass("pilototocol");
-          
-        }
-
-        //PilLine.insertAfter($("#PIL"+PrevIndex));
-        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);        
-        $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
-          
-        ShowAutoPilotLine(Boat,PilIndex);  
-        */
         var PilLine = GetPilototoTableLigneObject(Boat,index);
         PilRows.push(PilLine);
       }
