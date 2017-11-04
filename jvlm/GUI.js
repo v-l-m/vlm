@@ -1056,12 +1056,28 @@ function UpdatePolarImages(Boat)
   $("#PolarList").append(HTML);
 }
 
+function BackupFooTable (ft, TableId, RestoreId)
+{
+  if (!ft.DOMBackup)
+  {
+    ft.DOMBackup = $(TableId)
+    ft.RestoreId = RestoreId
+  }
+  else if  (typeof $(TableId)[0] === "undefined")
+  {
+    $(ft.RestoreId).append(ft.DOMBackup);
+    console.log("Restored footable "+ TableId);
+  }
+}
+
 function UpdatePilotInfo(Boat)
 {
   if ((typeof Boat === "undefined") || (!Boat) || PilototoFt.DrawPending)
   {
     return;
   }   
+
+  BackupFooTable(PilototoFt,"#PilototoTable","#PilototoTableInsertPoint")
 
 
   PilRows=[];
@@ -1098,6 +1114,7 @@ function UpdatePilotInfo(Boat)
 
 function HandleReadyTable(e,ft)
 {
+  console.log ("Table ready" + ft);
   ft.DrawPending = false;
 }
 
@@ -1129,30 +1146,37 @@ function HandlePagingComplete(e,ft)
     }
   }
 
+  ft.DrawPending = false;
+
 }
 
 function HandleTableDrawComplete(e,ft)
 {
+  console.log("TableDrawComplete "+ft.id);
   ft.DrawPending = false ;
   if (ft === RankingFt)
   {
-    setTimeout( DeferedGotoPage,500);
+    setTimeout( function() {DeferedGotoPage(e,ft)},500);
+  }
+  else
+  {
+    ft.DrawPending = false ;
   }
 }
 
-function DeferedGotoPage()
+function DeferedGotoPage(e,ft)
 {
   if (RankingFt.TargetPage)
   {
     RankingFt.gotoPage(RankingFt.TargetPage);
     RankingFt.TargetPage = 0;
   }
-  setTimeout(DeferedPagingStyle,200);
+  setTimeout(function() {DeferedPagingStyle(e,ft)},200);
 }
 
-function DeferedPagingStyle()
+function DeferedPagingStyle(e,ft)
 {
-  HandlePagingComplete();
+  HandlePagingComplete(e,ft);
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
@@ -2314,6 +2338,8 @@ function FillWPRanking(Boat,WPNum, Friends)
     return;
   }
 
+  BackupRankingTable();
+
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2354,12 +2380,19 @@ function FillWPRanking(Boat,WPNum, Friends)
 }
   
 
+function BackupRankingTable()
+{
+  BackupFooTable(RankingFt,"#RankingTable","#my-rank-content");
+}
+
 function FillStatusRanking(Boat,Status, Friends)
 {
   let index;
   let RowNum = 1;
   let Rows = [];
   
+  BackupRankingTable();
+
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2393,6 +2426,8 @@ function FillRacingRanking(Boat, Friends)
         Arrived1stTime : null,
         Racer1stPos : null
       }
+
+  BackupRankingTable();
 
   for (index in Boat.RnkObject.RacerRanking)
   {
