@@ -123,9 +123,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
     ForceRefresh=true;
   }
 
-  if (!(CurDate < BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))  
+  if (!(CurDate <= BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))  
   {
-    BoatLoading = CurDate+500;
+    BoatLoading = CurDate+3000;
     console.log("Loading boat info from server....")
     // request current boat info
     ShowPb("#PbGetBoatProgress");
@@ -1703,7 +1703,8 @@ function UpdateBoatPrefs(Boat,NewVals)
           {
             if (e.success)
             {
-              RefreshCurrentBoat(false,true);
+              // avoid forced full round trip
+              RefreshCurrentBoat(false,false);
             }
             else
             {
