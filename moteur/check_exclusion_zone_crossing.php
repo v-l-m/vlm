@@ -20,7 +20,7 @@
 		$zones = $ZoneCache[$fullRacesObj->races->idraces];
 		$ZoneCached = true;
 	}
-  	echo "\t*** Processing exclusion zones ".($ZoneCached?"(cached)"."")."(".$zones->getActiveZoneName().")*** \n";
+  	echo "\t*** Processing exclusion zones ".($ZoneCached?"(cached)":"")."(".$zones->getActiveZoneName().")*** \n";
 	foreach  ($zones->Exclusions as $Exclusion)
 	{
 		$StartSeg=$Exclusion[0];
