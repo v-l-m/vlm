@@ -490,6 +490,9 @@ function InitMenusAndButtons()
   
   // Add handler to refresh content of eth pilototo table when showing tab content
   $("[PilRefresh]").on('click', HandleUpdatePilototoTable)
+
+  // Handler for not racing boat palmares
+  $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
   CheckLogin();
 }
@@ -1053,6 +1056,20 @@ function UpdatePolarImages(Boat)
   $("#PolarList").append(HTML);
 }
 
+function BackupFooTable (ft, TableId, RestoreId)
+{
+  if (!ft.DOMBackup)
+  {
+    ft.DOMBackup = $(TableId)
+    ft.RestoreId = RestoreId
+  }
+  else if  (typeof $(TableId)[0] === "undefined")
+  {
+    $(ft.RestoreId).append(ft.DOMBackup);
+    console.log("Restored footable "+ TableId);
+  }
+}
+
 function UpdatePilotInfo(Boat)
 {
   if ((typeof Boat === "undefined") || (!Boat) || PilototoFt.DrawPending)
@@ -1060,13 +1077,8 @@ function UpdatePilotInfo(Boat)
     return;
   }   
 
-  //let PIL_TEMPLATE = $("#PIL_TEMPLATE");
-  //PIL_TEMPLATE.hide()
-  
-  /*for (index=1; index <=5 ; index ++)
-  {
-    $("#PIL"+PilIndex).hide();
-  }*/
+  BackupFooTable(PilototoFt,"#PilototoTable","#PilototoTableInsertPoint")
+
 
   PilRows=[];
   if (Boat.VLMInfo.PIL.length >0)
@@ -1075,25 +1087,6 @@ function UpdatePilotInfo(Boat)
     {
       if (Boat.VLMInfo.PIL[index])
       {
-        /*var PilIndex = parseInt(index,10)+1;
-        //var PrevIndex = PilIndex -1;
-        var PilLine = $("#PIL"+PilIndex).first();
-        if (!PilLine.length)
-        {
-          PilLine = PIL_TEMPLATE.clone();
-          PilLine.attr('id',"PIL"+PilIndex);
-          
-          $("#PilototoBodyTable").append(PilLine);
-          PilLine.removeClass("hidden").addClass("pilototocol");
-          
-        }
-
-        //PilLine.insertAfter($("#PIL"+PrevIndex));
-        $("#PIL"+PilIndex+" .PIL_EDIT").attr("PIL_ID",PilIndex);        
-        $("#PIL"+PilIndex+" .PIL_DELETE").attr("TID",Boat.VLMInfo.PIL[index].TID);
-          
-        ShowAutoPilotLine(Boat,PilIndex);  
-        */
         var PilLine = GetPilototoTableLigneObject(Boat,index);
         PilRows.push(PilLine);
       }
@@ -1121,6 +1114,7 @@ function UpdatePilotInfo(Boat)
 
 function HandleReadyTable(e,ft)
 {
+  console.log ("Table ready" + ft);
   ft.DrawPending = false;
 }
 
@@ -1152,30 +1146,37 @@ function HandlePagingComplete(e,ft)
     }
   }
 
+  ft.DrawPending = false;
+
 }
 
 function HandleTableDrawComplete(e,ft)
 {
+  console.log("TableDrawComplete "+ft.id);
   ft.DrawPending = false ;
   if (ft === RankingFt)
   {
-    setTimeout( DeferedGotoPage,500);
+    setTimeout( function() {DeferedGotoPage(e,ft)},500);
+  }
+  else
+  {
+    ft.DrawPending = false ;
   }
 }
 
-function DeferedGotoPage()
+function DeferedGotoPage(e,ft)
 {
   if (RankingFt.TargetPage)
   {
     RankingFt.gotoPage(RankingFt.TargetPage);
     RankingFt.TargetPage = 0;
   }
-  setTimeout(DeferedPagingStyle,200);
+  setTimeout(function() {DeferedPagingStyle(e,ft)},200);
 }
 
-function DeferedPagingStyle()
+function DeferedPagingStyle(e,ft)
 {
-  HandlePagingComplete();
+  HandlePagingComplete(e,ft);
 }
 
 function GetPilototoTableLigneObject(Boat,Index)
@@ -1529,6 +1530,8 @@ function PageClock()
       {
         Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
       }
+
+      $("#RefreshAge").text(moment(_CurPlayer.CurBoat.LastRefresh).fromNow());
 
       var LastBoatUpdate = new Date(CurBoat.VLMInfo.LUP*1000);
       var TotalVac = CurBoat.VLMInfo.VAC;
@@ -2278,9 +2281,9 @@ function SortRankingData(Boat, SortType,WPNum)
     
     for (index in Boat.RnkObject)
     {
-      if (Boat.RnkObject[index] && !isNaN(parseInt(index,10)))
+      if (Boat.RnkObject[index] )
       {
-        Boat.RnkObject[index].idusers=index;
+        //Boat.RnkObject[index].idusers=index;
         Boat.RnkObject.RacerRanking.push(Boat.RnkObject[index]);
       }
     }
@@ -2335,6 +2338,8 @@ function FillWPRanking(Boat,WPNum, Friends)
     return;
   }
 
+  BackupRankingTable();
+
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2375,12 +2380,19 @@ function FillWPRanking(Boat,WPNum, Friends)
 }
   
 
+function BackupRankingTable()
+{
+  BackupFooTable(RankingFt,"#RankingTable","#my-rank-content");
+}
+
 function FillStatusRanking(Boat,Status, Friends)
 {
   let index;
   let RowNum = 1;
   let Rows = [];
   
+  BackupRankingTable();
+
   for (index in Boat.RnkObject.RacerRanking)
   {
     if (Boat.RnkObject.RacerRanking[index])
@@ -2414,6 +2426,8 @@ function FillRacingRanking(Boat, Friends)
         Arrived1stTime : null,
         Racer1stPos : null
       }
+
+  BackupRankingTable();
 
   for (index in Boat.RnkObject.RacerRanking)
   {
@@ -2839,8 +2853,11 @@ function HandleCreateUserResult(data, status)
 {
   if (status=="success" && data)
   {
+    $(".ValidationMark").addClass("hidden");
+
     if (data.success)
     {
+      $(".ValidationMark.Valid").removeClass("hidden");
       VLMAlertSuccess(GetLocalizedString('An email has been sent. Click on the link to validate.'))
       $("#InscriptForm").modal("hide");
       $("#LoginForm").modal("hide");
@@ -2852,6 +2869,52 @@ function HandleCreateUserResult(data, status)
     else
     {
       VLMAlertDanger(GetLocalizedString(data.error.msg));
+    }
+
+    
+    if (data.request)
+    {
+      if (data.request.MailOK)
+      {
+        $(".ValidationMark.Email.Valid").removeClass("hidden");
+      }
+      else
+      {
+        $(".ValidationMark.Email.Invalid").removeClass("hidden");
+      }
+      if (data.request.PasswordOK)
+      {
+        $(".ValidationMark.Password.Valid").removeClass("hidden");
+      }
+      else
+      {
+        $(".ValidationMark.Password.Invalid").removeClass("hidden");
+      }
+      if (data.request.PlayerNameOK)
+      {
+        $(".ValidationMark.Pseudo.Valid").removeClass("hidden");
+      }
+      else
+      {
+        $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
+      }
+    }
+    else if (data.error)
+    {
+      switch (data.error.code)
+      {
+        case "NEWPLAYER01":
+          $(".ValidationMark.Email.Invalid").removeClass("hidden");
+          break;
+      
+          case "NEWPLAYER02":
+          $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
+          break;
+        
+        case "NEWPLAYER03":
+          $(".ValidationMark.Password.Invalid").removeClass("hidden");
+          break;
+      }
     }
   }
   $("#BtnCreateAccount").show();

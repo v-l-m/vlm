@@ -76,7 +76,7 @@ class playersPending extends baseClass {
     function mailValidationMessage() {
         $message  = getLocalizedString("Welcome into Virtual Loup de Mer !")."\n\n";
         $message .= getLocalizedString("You have requested to create an account on VLM.\nPlease, click on the link below or copy/paste it in your browser.")."\n";
-        $message .= "http://".$_SERVER['HTTP_HOST']."/create_player.php?createplayer=validate&seed=".$this->seed."&emailid=".urlencode($this->email)."\n";
+        $message .= "http://".$_SERVER['HTTP_HOST']."/create_player.php?createplayer=validate&seed=".$this->seed."&emailid=".urlencode($this->email)."&jvlm=1\n";
         $message .= "\n".getLocalizedString("After activation, use your email address to connect.")."\n";
         $message .= getLocalizedString("Login id")." : ".$this->email."\n";
         return mailInformation($this->email, getLocalizedString("Validate your account"), $message);

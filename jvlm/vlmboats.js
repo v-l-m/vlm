@@ -123,9 +123,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
     ForceRefresh=true;
   }
 
-  if (!(CurDate < BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))  
+  if (!(CurDate <= BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))  
   {
-    BoatLoading = CurDate+500;
+    BoatLoading = CurDate+3000;
     console.log("Loading boat info from server....")
     // request current boat info
     ShowPb("#PbGetBoatProgress");
@@ -147,7 +147,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
 
           // Store next request Date (once per minute)
           Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP,10)+parseInt(Boat.VLMInfo.VAC,10))*1000) ;
-
+          Boat.LastRefresh = new Date() ;
+          
           // Fix Lon, and Lat scale
           Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
           Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
@@ -1702,7 +1703,8 @@ function UpdateBoatPrefs(Boat,NewVals)
           {
             if (e.success)
             {
-              RefreshCurrentBoat(false,true);
+              // avoid forced full round trip
+              RefreshCurrentBoat(false,false);
             }
             else
             {

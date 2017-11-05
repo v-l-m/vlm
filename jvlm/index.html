@@ -74,7 +74,7 @@
           <a class="navbar-brand" href="/index.php" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v14</div>
+              <div class="version">v14.1</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left"> 
@@ -225,6 +225,10 @@
                   <div class="progressbarmin" id="pbar_innerdivmin" ></div>
                   <div class="progressbarvac" id="pbar_innerdivvac" ></div>
                 </div>
+                <div class="RefreshAge">
+                  <Span id="RefreshAge" class="tiny" >  </Span>
+                </div>
+                
               </div>
             </li>
           </ul>
@@ -428,7 +432,7 @@
                 <span id="DeleteCellTemplate"><img class="PIL_DELETE" src="images/delete.png" PIL_ID="1" /></span>                      
               </div>
               <div class="container-fluid">
-                <div class="BoatControllerRow row">
+                <div id="PilototoTableInsertPoint" class="BoatControllerRow row">
                   <table id="PilototoTable" class="table" data-show-toggle="true" data-expand-first="false">
                     <thead>
                       <tr id="PIL_HEADER">
@@ -1636,48 +1640,43 @@
                     <div class="col-xs-4" align="right">
                       <span I18n="playername">Pseudo :</span>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-7">
                         <input id="NewPlayerPseudo" class="UserName " size="15" maxlength="64" name="pseudo" >
                     </div>
                     <div class="col-xs-1">
-                        <img src='images/InputOK.png' class = "ValidationMark Valid hidden"/>
-                        <img src='images/InputNOK.png' class = "ValidationMark Invalid"/>
+                        <img src='images/InputOK.png' class = "ValidationMark Pseudo Valid hidden"/>
+                        <img src='images/InputNOK.png' class = "ValidationMark Pseudo Invalid hidden"/>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-xs-4" align="right">
                       <span I18n="email">Adresse mail :</span>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-7">
                       <input id="NewPlayerEMail" class="UserMail" size="15" maxlength="50" name="mail" >
                     </div>
                     <div class="col-xs-1">
-                      <img src='images/InputOK.png' class = " ValidationMark Valid hidden"/>
-                      <img src='images/InputNOK.png' class = " ValidationMark Invalid"/>
+                      <img src='images/InputOK.png' class = " ValidationMark Email Valid hidden"/>
+                      <img src='images/InputNOK.png' class = " ValidationMark Email Invalid hidden"/>
                     </div>
                   </div>
-                  <!--<div class="row">
+                  <div class="row">
                     <div class="col-xs-4" align="right">
-                      
-                    </div>
-                    <div class="col-xs-6">
+                                          </div>
+                    <div class="col-xs-8">
                       <span id="verimailstatus" >
-                    </div>
-                    <div class="col-xs-1">
-                        <img src='images/InputOK.png' class = "ValidationMark Valid hidden"/>
-                        <img src='images/InputNOK.png' class = "ValidationMark Invalid"/>
-                    </div>
-                  </div>-->
+                    </div>              
+                  </div>
                   <div class="row">
                     <div class="col-xs-4" align="right">
                       <span I18n="password">Mot de passe :</span>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-7">
                       <input id="NewPlayerPassword" class="UserPassword CreatePassword" size="15" maxlength="155" type="password" name="password"> 
                     </div>
                     <div class="col-xs-1">
-                        <img src='images/InputOK.png' class = "ValidationMark Valid hidden"/>
-                        <img src='images/InputNOK.png' class = "ValidationMark Invalid"/>
+                        <img src='images/InputOK.png' class = "ValidationMark Password Valid hidden"/>
+                        <img src='images/InputNOK.png' class = "ValidationMark Password Invalid hidden"/>
                     </div>
                   </div>
                   <div class="row container-fluid">

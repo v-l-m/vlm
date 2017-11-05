@@ -3,7 +3,7 @@
     if (intval($this->rec) < 1) {
         return False;
     }
-    $res = $this->myQuery("DELETE FROM playerstousers WHERE idplayers = ".$this->rec.");
+    $res = $this->myQuery("DELETE FROM playerstousers WHERE idplayers = ".$this->rec.";");
     
     echo "<div class=\"adminbox\">";
     insertAdminChangelog(Array("operation" => "Delete all players/boats links", "rowkey" => "".$this->rec));

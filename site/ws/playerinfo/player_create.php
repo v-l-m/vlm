@@ -31,7 +31,7 @@
         $ws->reply_with_error("NEWPLAYER04");
       }
       
-      $player->mailValidationMessage();
+      $player->mailValidationMessage(true);
       $ws->reply_with_success();
     } 
     else 

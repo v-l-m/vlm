@@ -325,6 +325,8 @@ function GetPlayerInfo()
               _CurPlayer.IsAdmin  = result.profile.admin;
               _CurPlayer.PlayerName  = result.profile.playername;
               
+              $.get("/ws/playerinfo/fleet_private.php",HandleFleetInfoLoaded);
+            
               RefreshPlayerMenu();
             }
             else
@@ -335,60 +337,59 @@ function GetPlayerInfo()
             }
           }
         );
-   $.get("/ws/playerinfo/fleet_private.php",
-          function(result)
-          {
-            var i = result;
-            var select
-            
-            if (typeof _CurPlayer === 'undefined')
-            {
-              _CurPlayer = new User();
-            }
 
-            if (typeof _CurPlayer.Fleet ==="undefined")
-            {
-              _CurPlayer.Fleet = [];
-            }
-            
-            for (boat in result.fleet)
-            {
-              if (typeof _CurPlayer.Fleet[boat] === "undefined" )  
-              {
-                _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
-                if ( typeof select == "undefined")
-                {
-                  select = _CurPlayer.Fleet[boat];
-                }
-              }
-            }
-
-            
-            if (typeof _CurPlayer.fleet_boatsit === "undefined")
-            {
-              _CurPlayer.fleet_boatsit = [];
-            }
-
-            for (boat in result.fleet_boatsit)
-            {
-              if (typeof _CurPlayer.BSFleet[boat] === "undefined")
-              {  
-                _CurPlayer.BSFleet[boat]= (new Boat(result.fleet_boatsit[boat]));
-              }
-            }
-            
-            RefreshPlayerMenu();
-            if (typeof select !== "undefined" && select)
-            {
-              DisplayCurrentDDSelectedBoat(select);
-              SetCurrentBoat(GetBoatFromIdu(select),true);                
-              RefreshCurrentBoat (true,false)    
-            }
-          }
-        )
-        
    
  }
+
+function HandleFleetInfoLoaded(result)
+{
+  let i = result;
+  let select;
+  
+  if (typeof _CurPlayer === 'undefined')
+  {
+    _CurPlayer = new User();
+  }
+
+  if (typeof _CurPlayer.Fleet ==="undefined")
+  {
+    _CurPlayer.Fleet = [];
+  }
+  
+  for (boat in result.fleet)
+  {
+    if (typeof _CurPlayer.Fleet[boat] === "undefined" )  
+    {
+      _CurPlayer.Fleet[boat]= (new Boat(result.fleet[boat]));
+      if ( typeof select == "undefined")
+      {
+        select = _CurPlayer.Fleet[boat];
+      }
+    }
+  }
+
+  
+  if (typeof _CurPlayer.fleet_boatsit === "undefined")
+  {
+    _CurPlayer.fleet_boatsit = [];
+  }
+
+  for (boat in result.fleet_boatsit)
+  {
+    if (typeof _CurPlayer.BSFleet[boat] === "undefined")
+    {  
+      _CurPlayer.BSFleet[boat]= (new Boat(result.fleet_boatsit[boat]));
+    }
+  }
+  
+  RefreshPlayerMenu();
+  if (typeof select !== "undefined" && select)
+  {
+    DisplayCurrentDDSelectedBoat(select);
+    SetCurrentBoat(GetBoatFromIdu(select),true);                
+    RefreshCurrentBoat (true,false)    
+  }
+}
 
 function RefreshPlayerMenu()
 {
@@ -505,7 +506,7 @@ function GetCountryFlagImg(Title,CountryIndex)
 {
   var row=20*Math.floor(CountryIndex/16);
     var col=30*(CountryIndex%16);
-    var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+CountryIndex+"'></div>"
+    var RetString1 = " <div class='FlagIcon' style='background-position: -"+col+"px -"+row+"px' flag='"+Title+"'></div>"
 
     return RetString1;
 }
