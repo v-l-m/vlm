@@ -7,9 +7,20 @@
 	TestExclusionLib();
 
 	// Load and test Exclusion zones
- 
-  $zones = new exclusionZone($fullRacesObj->races->idraces);
-	echo "\t*** Processing exclusion zones (".$zones->getActiveZoneName().")*** \n";
+	
+	if (!isset($ZoneCache[$fullRacesObj->races->idraces]))
+	{
+		$zones = new exclusionZone($fullRacesObj->races->idraces);	
+		$ZoneCache[$fullRacesObj->races->idraces] = $zones;	
+		echo "\n cache exclusion zone for race : ".$fullRacesObj->races->idraces;
+		$ZoneCached = false;
+	}
+	else
+	{
+		$zones = $ZoneCache[$fullRacesObj->races->idraces];
+		$ZoneCached = true;
+	}
+  	echo "\t*** Processing exclusion zones ".($ZoneCached?"(cached)"."")."(".$zones->getActiveZoneName().")*** \n";
 	foreach  ($zones->Exclusions as $Exclusion)
 	{
 		$StartSeg=$Exclusion[0];
