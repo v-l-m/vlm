@@ -128,8 +128,7 @@
                 sqlit($wpmisc, "wporder").
                 sqlit($wpmisc, "laisser_au").
                 sqlit($wpmisc, "wptype", 'string').
-                //default value for allowing v14 to import from v13, to remove when releasing v14.
-                sqlit($wpmisc, "wpformat", 'int', false, 0).
+                sqlit($wpmisc, "wpformat", 'int',false).
                 " );";
         check_unicity('races_waypoints', "idraces = $idraceto AND idwaypoint = $idwaypointto", $umessage);
         exec_sql($sqlrwp, $printsql, $dryrun);            
@@ -194,7 +193,7 @@
       $SqlSeg = "replace into nszsegment (idsegment,lon1, lat1,lon2, lat2) ";
       $SqlRaceSeg = "insert into nszracesegment (idraces,idsegment) ";
       $FirstSeg = 0;
-      foreach ($import[Exclusions] as $excl)
+      foreach ($import['Exclusions'] as $excl)
       {
         $SqlSegId = sprintf("%d%03d",$idraceto,$SegId);
         if ($FirstSeg == 1 )
