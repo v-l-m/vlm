@@ -311,7 +311,6 @@ function InitMenusAndButtons()
   )
 
 
-
   // Init event handlers
   // Login button click event handler
   $("#LoginButton").click( 
@@ -319,8 +318,9 @@ function InitMenusAndButtons()
       {
         OnLoginRequest();
       }
-  );   
-  //valide par touche retour
+  );
+  
+    //valide par touche retour
   $('#LoginPanel').keypress(
     function(e) 
     {
@@ -330,6 +330,7 @@ function InitMenusAndButtons()
       }
     }
   );
+
   // Display setting dialog
   $("#BtnSetting").click(
     function()
@@ -495,6 +496,39 @@ function InitMenusAndButtons()
   $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
   CheckLogin();
+}
+
+function SendResetPasswordLink(RecaptchaCode)
+{
+  let UserMail = $(".UserName").val();
+
+
+  if (UserMail === "")
+  {
+    VLMAlertDanger (GetLocalizedString("Enter your email for resetting your password"));
+    grecaptcha.reset();
+    return;
+  }
+
+  let PostData = {
+      email : UserMail,
+      key : RecaptchaCode};
+
+  $.post("/ws/playersetup/password_reset.php",
+    "parms=" + JSON.stringify(PostData), function (e) {HandlePasswordReset(e)});
+}
+
+function HandlePasswordReset(e)
+{
+  if (e.success)
+  {
+    VLMAlertInfo(GetLocalizedString('Check your inbox to get your new password.'));
+  }
+  else
+  {
+    VLMAlertDanger("Something went wrong :(")
+  }
+  grecaptcha.reset();
 }
 
 function InitFootables()

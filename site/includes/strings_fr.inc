@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'PasswordReset' => 'Réinitialiser votre mot de passe oublié',
     'PwdForbiddenPass' => 'Non autorisé',
     'PwdTooShort' => 'Trop court',
     'PwdInvalidChars' => 'Caractères non autorisés',

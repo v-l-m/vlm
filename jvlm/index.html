@@ -741,9 +741,18 @@
                 </div>
               </div>    
             </div> 
-            <div class="row container-fluid hidden" style="padding-top:20px">
-              <span I18n="PleaseCreateDlg">plsc</span>
-              <button href="#RecoverPwdForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="You can recover a lost password">recover</button>
+            <div id="ResetPasswordLink" class="row container-fluid hidden" style="padding-top:20px">              
+              <div class="col-xs-6" align="center">
+                <span I18n="Lost your password ?">mdp oub</span>
+              </div>
+              <div class="col-xs-6" align="center">
+                <button id="ResetPasswordButton" href="#RecoverPwdForm" data-toggle="modal" class="g-recaptcha ui-button ui-corner-all ui-widget" I18n="PasswordReset"
+                  data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
+                  data-callback="SendResetPasswordLink"
+                  data-badge='inline'>
+                  recover
+                </button>
+              </div>
             </div>         
             <div class="row container-fluid" style="padding-top:20px">
               <span I18n="PleaseCreateDlg">plsc</span>
