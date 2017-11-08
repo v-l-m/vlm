@@ -47,7 +47,7 @@ require(['converse'], function (converse) {
     });
 });
 </script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -55,7 +55,7 @@ require(['converse'], function (converse) {
   gtag('js', new Date());
 
   gtag('config', 'UA-37369243-6');
-</script>
+</script>-->
 
 <?php
 }
