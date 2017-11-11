@@ -17,8 +17,8 @@ $verbose=0;
 $RACE_NUM=0;
 $USER_NUM=0;
 $flagglobal=true;
-// Si on a un argument, c'est le numéro d'une course
-// Si on en a 2, c'est la course PUIS le numéro du bateau
+// Si on a un argument, c'est le numÃ©ro d'une course
+// Si on en a 2, c'est la course PUIS le numÃ©ro du bateau
 if ( $argc > 1 ) {
   $RACE_NUM=$argv[1];
   $flagglobal=false;
@@ -34,16 +34,31 @@ $engine_start_float=microtime(true);
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 
+# build list or currently running races
+$QryEngagedRaces = "select distinct engaged from users";
+$result = wrapper_mysql_db_query_reader($QryEngagedRaces);
+$EngagedList = "";
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC)
+{
+  if ($EngagedList !== "")
+  {
+    $EngagedList .= ","
+  }
+
+  $EngagedList.=$row['engaged'];
+}
+
+$EngagedList = "(".$EngagedList.")";
 # lock tables to remove positions of players not in a race (or in a different race)
 
 $locktables = "LOCK TABLE histpos WRITE, positions WRITE, positions AS pos READ, users AS us READ";
 $result = wrapper_mysql_db_query_writer($locktables);
 
-$queryarrivedpositions = "INSERT INTO histpos SELECT `time`,`long`,`lat`,pos.idusers AS idusers, pos.race FROM positions AS pos, users AS us WHERE pos.idusers=us.idusers AND race!=engaged ORDER BY pos.idusers,`time`;";
+$queryarrivedpositions = "INSERT INTO histpos SELECT `time`,`long`,`lat`,pos.idusers AS idusers, pos.race FROM positions AS pos WHERE race not in ".$EngagedList." ORDER BY pos.idusers,`time`;";
 $result = wrapper_mysql_db_query_writer($queryarrivedpositions);
 printf("\nPositions archived from arrived/resigned boats: %d\n", mysql_affected_rows());
 
-$queryarrivedpositionsdel = "DELETE positions FROM positions INNER JOIN users AS us WHERE positions.idusers=us.idusers AND positions.race!=us.engaged;";
+$queryarrivedpositionsdel = "DELETE positions FROM positions where race not in ".$EngagedList.";";
 $result = wrapper_mysql_db_query_writer($queryarrivedpositionsdel);
 printf("Positions purged from arrived/resigned boats: %d\n", mysql_affected_rows());
 

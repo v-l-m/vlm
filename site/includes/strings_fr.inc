@@ -1,6 +1,12 @@
 <?php
 $strings['fr'] = 
   array (
+    'OldPasswordInvalid' => 'Erreur lors de la vérification de votre mot de passe actuel',
+    'PasswordChangeSuccess' => 'Votre mot de passe a été changé',
+    'NewPwdMismatch' => 'Erreur lors de la saisie du nouveau mot de passe les deux ne sont pas identiques',
+    'CurPwdRequired' => 'Vous devez saisir votre mot de passe actuel pour le changer',
+    'NewPwdRequired' => 'Vous devez saisir un nouveau mot de passe',
+    'PasswordReset' => 'Réinitialiser votre mot de passe oublié',
     'PwdForbiddenPass' => 'Non autorisé',
     'PwdTooShort' => 'Trop court',
     'PwdInvalidChars' => 'Caractères non autorisés',

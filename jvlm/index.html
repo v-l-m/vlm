@@ -741,9 +741,18 @@
                 </div>
               </div>    
             </div> 
-            <div class="row container-fluid hidden" style="padding-top:20px">
-              <span I18n="PleaseCreateDlg">plsc</span>
-              <button href="#RecoverPwdForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="You can recover a lost password">recover</button>
+            <div id="ResetPasswordLink" class="row container-fluid hidden" style="padding-top:20px">              
+              <div class="col-xs-6" align="center">
+                <span I18n="Lost your password ?">mdp oub</span>
+              </div>
+              <div class="col-xs-6" align="center">
+                <button id="ResetPasswordButton" href="#RecoverPwdForm" data-toggle="modal" class="g-recaptcha ui-button ui-corner-all ui-widget" I18n="PasswordReset"
+                  data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
+                  data-callback="SendResetPasswordLink"
+                  data-badge='inline'>
+                  recover
+                </button>
+              </div>
             </div>         
             <div class="row container-fluid" style="padding-top:20px">
               <span I18n="PleaseCreateDlg">plsc</span>
@@ -1064,6 +1073,50 @@
                           </div>
                       </fieldset>
                     </div>
+                    <hr/>
+                    <!-- Password change form -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                          <h4 ><span I18n="password">Information de connexion</span></h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-6" align="center">
+                            <span I18n="Current password">cp</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <input class="input form-control " id="CurPassword" style="margin-top:5px;">    
+                          </div>
+                        </fieldset>
+                        <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-6" align="center">
+                            <span I18n="New password">cp</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <input class="input form-control password createpassword" id="NewPassword1" value="" style="margin-top:5px;">    
+                          </div>
+                        </fieldset>
+                        <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-6" align="center">
+                            <span I18n="new password">cp</span>
+                            <span I18n="check">cp</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <input class="input form-control password" id="NewPassword2" value="" style="margin-top:5px;">    
+                          </div>
+                        </fieldset>
+                        <fieldset class="fieldset row-fluid">
+                          <div class="col-xs-3"></div>                            
+                          <div class="col-xs-6">
+                              <button Id="BtnChangePassword" I18n="Change your password" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">login</button>    
+                          </div>                            
+                          <div class="col-xs-3"></div>                            
+                          
+                        </fieldset>
+                      </div>
+                    </div>                  
                     <hr/>
                     <div class="row">
                         <div class="col-xs-12">
@@ -1743,6 +1796,17 @@
     <script src='MercatorTransform.js' type='text/javascript'></script>
     <script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
     <script src='external/PasswordStrength/jquery.pstrength-min.1.2.js' type='text/javascript'></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-37369243-6');
+    </script>
+
   </body>
   
   

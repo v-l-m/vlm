@@ -234,6 +234,9 @@ function OLInit() {
 
 function InitMenusAndButtons()
 {
+  // Handle password change button
+  $("#BtnChangePassword").on("click",function(e) {e.preventDefault(); HandlePasswordChangeRequest(e)});
+
   // Handle showing/hide of a-propos depending on login dialog status
   $("#LoginForm").on('show.bs.modal',function(e){$('#Apropos').modal('hide');});
   $("#LoginForm").on('hide.bs.modal',function(e){$('#Apropos').modal('show');});
@@ -311,7 +314,6 @@ function InitMenusAndButtons()
   )
 
 
-
   // Init event handlers
   // Login button click event handler
   $("#LoginButton").click( 
@@ -319,8 +321,9 @@ function InitMenusAndButtons()
       {
         OnLoginRequest();
       }
-  );   
-  //valide par touche retour
+  );
+  
+    //valide par touche retour
   $('#LoginPanel').keypress(
     function(e) 
     {
@@ -330,6 +333,7 @@ function InitMenusAndButtons()
       }
     }
   );
+
   // Display setting dialog
   $("#BtnSetting").click(
     function()
@@ -495,6 +499,86 @@ function InitMenusAndButtons()
   $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
   CheckLogin();
+}
+
+function HandlePasswordChangeRequest(e)
+{
+  // Check non empty value for oldpassword
+  let OldPwd = $("#CurPassword")[0].value;
+  let NewPwd1 = $("#NewPassword1")[0].value;
+  let NewPwd2 = $("#NewPassword2")[0].value;
+  
+  $(".Password").val("");
+  
+  if (!OldPwd || OldPwd === "")
+  {
+    VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
+    return;
+  }
+  else if (NewPwd1 !== NewPwd2)
+  {
+    VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
+    return;
+  }
+  else if (NewPwd1 === "")
+  {
+    VLMAlertDanger(GetLocalizedString("NewPwdRequired"));
+    return;
+  }
+
+  let PostData = {OldPwd : OldPwd, NewPwd: NewPwd1}
+
+  $.post(
+    "/ws/playersetup/password_change.php",
+    "parms=" + JSON.stringify(PostData),
+    function (e) {HandlePasswordChangeResult(e)}
+  );
+
+}
+
+function HandlePasswordChangeResult(e)
+{
+  if (e.success)
+  {
+    VLMAlertInfo()
+  }
+  else
+  {
+    VLMAlertDanger(GetLocalizedString(e.error.msg))
+  }
+}
+
+function SendResetPasswordLink(RecaptchaCode)
+{
+  let UserMail = $(".UserName").val();
+
+
+  if (UserMail === "")
+  {
+    VLMAlertDanger (GetLocalizedString("Enter your email for resetting your password"));
+    grecaptcha.reset();
+    return;
+  }
+
+  let PostData = {
+      email : UserMail,
+      key : RecaptchaCode};
+
+  $.post("/ws/playersetup/password_reset.php",
+    "parms=" + JSON.stringify(PostData), function (e) {HandlePasswordReset(e)});
+}
+
+function HandlePasswordReset(e)
+{
+  if (e.success)
+  {
+    VLMAlertInfo(GetLocalizedString('Check your inbox to get your new password.'));
+  }
+  else
+  {
+    VLMAlertDanger("Something went wrong :(")
+  }
+  grecaptcha.reset();
 }
 
 function InitFootables()

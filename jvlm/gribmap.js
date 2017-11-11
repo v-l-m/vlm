@@ -950,7 +950,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
           text_y -= 7 - 5*Math.cos(wind_direction*Math.PI/180.0);
       }
       context.fillText(""+Math.round(pos_wind.wspeed)+"/"
-           +Math.round(wind_direction)+"Â°",
+           +Math.round(wind_direction)+"°",
            text_x, text_y);
   },
 

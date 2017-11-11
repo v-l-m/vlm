@@ -417,6 +417,46 @@ class WSBasePlayersetup extends WSSetup {
         }
     }
 
+    function ChangePassword($Params)
+    {
+        //print_r($Params);
+        $this->request = json_decode( $Params['parms']);
+        
+        //print_r($this->request);
+        $OldPassword = $this->request->OldPwd;
+        $NewPassword = $this->request->NewPwd;
+        
+        if (! $OldPassword || ! $NewPassword)
+        {
+            if (! $OldPassword)
+            {
+                $this->reply_with_error_if_not_exists('OldPwd', 'PWDCHANGE01');
+            }
+            else
+            {
+                $this->reply_with_error_if_not_exists('NewPwd', 'PWDCHANGE01');
+            }
+        }
+        if ($OldPassword === $NewPassword)
+        {
+            $this->reply_with_error("PWDCHANGE02","No action required");
+        }
+        
+        if (!$this->player->checkPassword($OldPassword)) 
+        {
+            $this->reply_with_error("PWDCHANGE03","InvalidOldPassword");
+        }
+
+        if ($this->player->modifyPassword($NewPassword))
+        {
+            $this->reply_with_success();
+        }
+        else
+        {
+            $this->reply_with_error("PWDCHANGE04","UpdateFailed");
+        }
+    }
+
 }
 
 
@@ -632,7 +672,12 @@ function get_error($code) {
         "NEWPLAYER01" => "emailid is required",
         "NEWPLAYER02" => "pseudo is required",
         "NEWPLAYER03" => "password is required",
-        "NEWPLAYER04" => "failed to insert in DB"
+        "NEWPLAYER04" => "failed to insert in DB",
+
+        // Player password change
+        "PWDCHANGE01" => "invalid parameter set (OldPwd, NewPwd required)",
+        "PWDCHANGE02" => "NewPwdRequired",
+        "PWDCHANGE03" => "OldPasswordInvalid",
         
     );
     
