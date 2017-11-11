@@ -234,6 +234,9 @@ function OLInit() {
 
 function InitMenusAndButtons()
 {
+  // Handle password change button
+  $("#BtnChangePassword").on("click",function(e) {e.preventDefault(); HandlePasswordChangeRequest(e)});
+
   // Handle showing/hide of a-propos depending on login dialog status
   $("#LoginForm").on('show.bs.modal',function(e){$('#Apropos').modal('hide');});
   $("#LoginForm").on('hide.bs.modal',function(e){$('#Apropos').modal('show');});
@@ -496,6 +499,53 @@ function InitMenusAndButtons()
   $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
   CheckLogin();
+}
+
+function HandlePasswordChangeRequest(e)
+{
+  // Check non empty value for oldpassword
+  let OldPwd = $("#CurPassword")[0].value;
+  let NewPwd1 = $("#NewPassword1")[0].value;
+  let NewPwd2 = $("#NewPassword2")[0].value;
+  
+  $(".Password").val("");
+  
+  if (!OldPwd || OldPwd === "")
+  {
+    VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
+    return;
+  }
+  else if (NewPwd1 !== NewPwd2)
+  {
+    VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
+    return;
+  }
+  else if (NewPwd1 === "")
+  {
+    VLMAlertDanger(GetLocalizedString("NewPwdRequired"));
+    return;
+  }
+
+  let PostData = {OldPwd : OldPwd, NewPwd: NewPwd1}
+
+  $.post(
+    "/ws/playersetup/password_change.php",
+    "parms=" + JSON.stringify(PostData),
+    function (e) {HandlePasswordChangeResult(e)}
+  );
+
+}
+
+function HandlePasswordChangeResult(e)
+{
+  if (e.success)
+  {
+    VLMAlertInfo()
+  }
+  else
+  {
+    VLMAlertDanger(GetLocalizedString(e.error.msg))
+  }
 }
 
 function SendResetPasswordLink(RecaptchaCode)

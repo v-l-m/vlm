@@ -1,6 +1,11 @@
 <?php
 $strings['en'] = 
   array (
+    'OldPasswordInvalid' => 'Current password check failed.',
+    'PasswordChangeSuccess' => 'Your password has been changed',
+    'NewPwdMismatch' => 'New password input error. Values do not match.',
+    'CurPwdRequired' => 'Your must enter your current password to change it',
+    'NewPwdRequired' => 'Your must enter your new password value',
     'PasswordReset' => 'Reset your forgotten password',
     'PwdForbiddenPass' => 'Very weak',
     'PwdTooShort' => 'Very weak',
