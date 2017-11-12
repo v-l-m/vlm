@@ -746,12 +746,8 @@
                 <span I18n="Lost your password ?">mdp oub</span>
               </div>
               <div class="col-xs-6" align="center">
-                <button id="ResetPasswordButton" href="#RecoverPwdForm" data-toggle="modal" class="g-recaptcha ui-button ui-corner-all ui-widget" I18n="PasswordReset"
-                  data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
-                  data-callback="SendResetPasswordLink"
-                  data-badge='inline'>
-                  recover
-                </button>
+                  <button id="ResetPasswordButton" href="#RecoverPwdForm" data-toggle="modal" class="ui-button ui-corner-all ui-widget" I18n="PasswordReset">
+                  </button>
               </div>
             </div>         
             <div class="row container-fluid" style="padding-top:20px">
@@ -1775,6 +1771,13 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- invisible recaptcha div -->
+    <div id='recaptcha' class="g-recaptcha hidden"
+      data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
+      data-callback="SendResetPasswordLink"
+      data-size="invisible">
     </div>
 
     <!-- Script that can be loaded after DOM -->

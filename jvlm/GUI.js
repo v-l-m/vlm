@@ -127,6 +127,7 @@ $(document).ready(
     
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
+
   }  
 );
 
@@ -236,6 +237,9 @@ function InitMenusAndButtons()
 {
   // Handle password change button
   $("#BtnChangePassword").on("click",function(e) {e.preventDefault(); HandlePasswordChangeRequest(e)});
+
+  // Handle password reset request
+  $("#ResetPasswordButton").on("click",function(e) {    grecaptcha.execute();});
 
   // Handle showing/hide of a-propos depending on login dialog status
   $("#LoginForm").on('show.bs.modal',function(e){$('#Apropos').modal('hide');});
@@ -1017,6 +1021,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(Boat.RaceInfo.closetime,10)*1000)]);
     BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+Boat.RaceInfo.idraces+".png"])
     BoatFieldMappings.push([FIELD_MAPPING_CALLBACK,"#RaceWayPoints",function(p){FillRaceWaypointList(p,Boat)}])
+    FillRaceInstructionsTable(Boat.RaceInfo);
   }
 
   // Loop all mapped fields to their respective location
@@ -1120,6 +1125,19 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     UpdatePolarImages(Boat);
 
 } 
+
+function FillRaceInstructionsTable (RaceInstructions)
+{
+  let Instructions = [];
+
+  for (index in RaceInstructions)
+  {
+    if (RaceInstructions[index])
+    {
+
+    }
+  }
+}
 
 function FillRaceWaypointList(p,Boat)
 {
