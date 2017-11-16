@@ -220,11 +220,20 @@ class players extends baseClass {
         return $this->queryWrite($query);
     }
 
-    function requestPasswordReset() {
+    function requestPasswordReset($WSRequest = false) 
+    {
+      if ($WSRequest)
+      {
+        $msg  = "You have requested a new password. Click on the link below to validate.\n";
+        $msg .= "http://".$_SERVER['HTTP_HOST']."/jvlm?PwdResetKey=".urlencode($this->email).'|'.urlencode($this->password)."\n";
+      }
+      else
+      {
         $msg  = "You have requested a new password. Click on the link below to validate.\n";
         $msg .= "http://".$_SERVER['HTTP_HOST']."/reset_password.php?resetpassword=validated&hashpassword=".urlencode($this->password)."&emailid=".urlencode($this->email)."\n";
-        $this->mailInformation("Password reset requested.", $msg);
-        $this->logPlayerEvent("Password reset requested.");
+      }
+      $this->mailInformation("Password reset requested.", $msg);
+      $this->logPlayerEvent("Password reset requested.");
     }        
 
     function modifyPassword($password) {

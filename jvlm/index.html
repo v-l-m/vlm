@@ -1773,10 +1773,34 @@
       </div>
     </div>
 
+    <!-- Password reset confirmation dialog -->
+    <div id="ResetaPasswordConfirmation" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div  class="modaldialog modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="Click below to reset your password." class="modal-title" style="text-align:center">Click below reste</h4>
+          </div> 
+          <div class="modal-body">
+            
+          </div>
+          <div class="modal-footer">
+            <button id="ConfirmResetPasswordButton" I18n="Click here" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Click</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- invisible recaptcha div -->
-    <div id='recaptcha' class="g-recaptcha hidden"
+    <div id='recaptcha-PwdReset1' class="g-recaptcha hidden"
       data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
       data-callback="SendResetPasswordLink"
+      data-size="invisible">
+    </div>
+    <div id='recaptcha-PwdReset2' class="g-recaptcha hidden"
+      data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
+      data-callback="SendResetPassword"
       data-size="invisible">
     </div>
 
@@ -1799,7 +1823,7 @@
     <script src='MercatorTransform.js' type='text/javascript'></script>
     <script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
     <script src='external/PasswordStrength/jquery.pstrength-min.1.2.js' type='text/javascript'></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js?render=explicit&onload=initrecaptcha' async ></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
     <script>
