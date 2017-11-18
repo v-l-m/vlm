@@ -943,6 +943,15 @@ function DisplayLoggedInMenus(LoggedIn)
   $("[LoggedInNav='true']").css("display",LoggedInDisplay);
   $("[LoggedInNav='false']").css("display",LoggedOutDisplay);
 
+  if (_CurPlayer && _CurPlayer.IsAdmin)
+  {
+    $("[AdminNav='true']").css("display","block");
+  }
+  else
+  {
+    $("[AdminNav='true']").css("display","none");
+  }
+
   // Display apropos
   $('#Apropos').modal(LoggedIn?'hide':'show');
   
