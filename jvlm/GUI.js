@@ -2189,10 +2189,10 @@ function SetRankingColumns(style)
   }
 }
 
-let RACColumnHeader = ["Rank","Name" ,"Distance","Time","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let RACColumnHeader = ["Rank","Name" ,"Distance","Time","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h","Delta1st"]
 let NRColumnHeader = ["Rank","Name" ,"Distance"]
 let WPColumnHeader = ["Rank","Name" ,"Time","Loch"]
-let RACColumnHeaderLabels = ["ranking","boatname" ,"distance","racingtime","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let RACColumnHeaderLabels = ["ranking","boatname" ,"distance","racingtime","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h","ecart"]
 let NRColumnHeaderLabels = ["ranking","boatname" ,"status"]
 let WPColumnHeaderLabels = ["ranking","boatname" ,"racingtime","ecart"]
 
@@ -2641,7 +2641,7 @@ function FillRacingRanking(Boat, Friends)
 
         if (!Refs.Racer1stPos && RnkIsRacing(RnkBoat))
         {
-          Refs.Racer1stPos = new VLMPosition(RnkBoat['lon'],RnkBoat['lat'] )
+          Refs.Racer1stPos = new VLMPosition(RnkBoat['longitude'],RnkBoat['latitude'] )
         }
         Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends,Refs));
       }
@@ -2702,7 +2702,8 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     Last1h : "",
     Last3h : "",
     Last24h : "",
-    Class : ""
+    Class : "",
+    Delta1st : ""
   };
 
   if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
@@ -2722,6 +2723,13 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
   {
     // General ranking layout
     let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
+
+    if (rank > 1 && Refs && Refs.Racer1stPos)
+    {
+      let P = new VLMPosition(RankBoat.longitude,RankBoat.latitude);
+      RetObject["Delta1st"] =  Refs.Racer1stPos.GetLoxoDist(P,1);
+    }
+
     RetObject["Distance"]=NextMark
     let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
     RetObject["Time"]= (RankBoat['deptime']==="-1"?"": GetFormattedChronoString(RacingTime));
