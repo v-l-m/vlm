@@ -2443,7 +2443,7 @@ function Sort2NonRacing(rnk1,rnk2)
 function SortRankingData(Boat, SortType,WPNum)
 {
   
-  if (typeof Boat.RnkObject.RacerRanking === "undefined")
+  if (Boat.RnkObject && typeof Boat.RnkObject.RacerRanking === "undefined")
   {
     let index ;
 
