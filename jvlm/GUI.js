@@ -2123,7 +2123,8 @@ function SortRanking(style, WPNum)
 
   
   //$('#RankingTableBody').empty();
-  var Boat = _CurPlayer.CurBoat;
+  let Boat = _CurPlayer.CurBoat;
+  
   CheckWPRankingList(Boat);
   
   if (typeof Boat === "undefined" || !Boat)
@@ -2295,6 +2296,17 @@ function Sort2RacingBoats(rnk1,rnk2)
     else if (dnm1 === dnm2)
     {
       DebugRacerSort(rnk1,rnk2,0)
+      let SortFlag = ((rnk1.country > rnk2.country)?1:((rnk1.country===rnk2.country)?0:-1));
+
+      if (SortFlag)
+      {
+        return SortFlag;
+      }
+      else
+      {
+        let SortIdu = ((rnk1.idusers > rnk2.idusers)?1:((rnk1.idusers===rnk2.idusers)?0:-1));        
+        return SortIdu;
+      }
       return 0;
     }
     else
@@ -2397,23 +2409,32 @@ function Sort2NonRacing(rnk1,rnk2)
 
   if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers !== "undefined")
   {
-    let IdUser1 = parseInt(rnk1.idusers,10)
-    let IdUser2 = parseInt(rnk2.idusers,10)
+    let SortFlag = ((rnk1.country > rnk2.country)?1:((rnk1.country===rnk2.country)?0:-1));
     
-    if ( IdUser1> IdUser2)
+    if (SortFlag)
     {
-      DebugRacerSort(rnk1,rnk2,1)
-      return 1 ;
-    }
-    else if (IdUser1 < IdUser2)
-    {
-      DebugRacerSort(rnk1,rnk2,-1)
-      return -1;
+      return SortFlag;
     }
     else
     {
-      DebugRacerSort(rnk1,rnk2,0)
-      return 0;
+      let IdUser1 = parseInt(rnk1.idusers,10)
+      let IdUser2 = parseInt(rnk2.idusers,10)
+      
+      if ( IdUser1> IdUser2)
+      {
+        DebugRacerSort(rnk1,rnk2,1)
+        return 1 ;
+      }
+      else if (IdUser1 < IdUser2)
+      {
+        DebugRacerSort(rnk1,rnk2,-1)
+        return -1;
+      }
+      else
+      {
+        DebugRacerSort(rnk1,rnk2,0)
+        return 0;
+      }
     }
   }
   else if (typeof IdUser1 !== "undefined")
