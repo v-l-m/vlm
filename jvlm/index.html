@@ -101,7 +101,7 @@
         <div class="collapse navbar-collapse" id="myNavbar">
           
           <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">            
-            <li class="hidden BoatSelector " ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
+            <li class="BoatSelector " ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
             </li>
 
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
@@ -123,10 +123,9 @@
               </div>
             </li>
           </ul>
-          <ul class="nav navbar-nav navbar-right " LoggedInNav="true" style="display:none">
-                       
-          <li class="hidden BoatSelector" ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
-          </li>
+          <ul class="nav navbar-nav navbar-right " LoggedInNav="true" style="display:none">                       
+            <li class="BoatSelector" ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
+            </li>
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
               <span class="glyphicon glyphicon-log-out" style="top:0px"><button type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
             </li>
@@ -561,19 +560,44 @@
     </div>
     <!-- Modal Infos-->
     <div id="Infos" class="Draggable modal fade" role="dialog">
-      <div class="modal-header"> Infos <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <div class="modal-header" I18n="InfosLinks" > Infos <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       </div>
       <div class="modal-body">
+          <fieldset>
+            <legend class="ui-legend" I18n='serverinfo'>Serveur</legend>
+            <div class="affich">
+              <A href="/status/race-engine-status.php" target="EngineStatus">
+                <!--<img src="images/ServerInfos.png"><img>-->
+                <span I18n="status page">stat page</span>
+              </A>
+              <A LoggedInNav="true" href="/userlogs.php" target="lastactions">
+                <span  I18n="Recent actions"></span>
+              </A>
+              <A AdminNav="true" href="/admin/index.php" target="lastactions" style="display: none">
+                <span >Admin</span>
+              </A>
+              
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend class="ui-legend" I18n="InfosLinks" > </legend>
+            <A href="http://www.virtual-winds.org/forum/index.php?/forum/276-virtual-loup-de-mer/" target="forum" I18n="forum">forum</A>    
+            <legend class="ui-legend" >  </legend>
+            <div class="affich">
+              <A href="/calendar.php" target="calendar" I18n="calendar">Agenda</A>
+              <A href="/guest_map/index.html" target="guestmap" I18n="Spectator">Agenda</A>
+              <A href="http://wiki.v-l-m.org/index.php" target="_wiki" I18n='doc'>doc</A>
+              <A href="http://wiki.v-l-m.org/index.php/FAQ" target="_wiki" I18n='faq'>FAQ</A>
+              <A href="http://wiki.v-l-m.org/index.php/chat" target="_wiki" I18n='tchat'>chat</A>
+              <A href="http://v-l-m.github.io/vlm" target="_dev" I18n='dev'>dev</A>
+              <A href="http://wiki.v-l-m.org/index.php/about" target="_wiki" I18n='about'>ABout</A>
+            </div>
+          </fieldset>
         <fieldset>
-          <legend class="ui-legend" I18n='serverinfo'>Serveur</legend>
+          <legend class="ui-legend" > </legend>
           <div class="affich">
-           infos serveur
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend class="ui-legend" I18n='personalinfo'>Perso</legend>
-          <div class="affich">
-           infos perso
+              <A href="/index.php" target="_vlm1" I18n='VLM1'>doc</A>
+              
           </div>
         </fieldset>
       </div>

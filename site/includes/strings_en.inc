@@ -1,6 +1,8 @@
 <?php
 $strings['en'] = 
   array (
+    'VLM1'=>'Previous web site version',
+    'InfosLinks' => 'Useful Links',
     'OldPasswordInvalid' => 'Current password check failed.',
     'PasswordChangeSuccess' => 'Your password has been changed',
     'NewPwdMismatch' => 'New password input error. Values do not match.',
