@@ -1394,11 +1394,11 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   
   for (index in  Boat.RnkObject.RacerRanking)
   {
-    if (index in Boat.RnkObject.RacerRanking)
+    if (index in Boat.RnkObject.RacerRanking )
     {
       var Opp = Boat.RnkObject.RacerRanking[index];
 
-      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && (!contains(friends,Opp.idusers)) && RnkIsRacing(Opp) && (Math.random()<=ratio) && (count < MAX_LEN))
+      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends,Opp.idusers)) && RnkIsRacing(Opp) && (Math.random()<=ratio) && (count < MAX_LEN))
       {
         AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
         count +=1;
