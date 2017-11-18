@@ -167,9 +167,10 @@ echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... ";
   
 //for every race
 $RnkStartTime = microtime();
-foreach($racesListObj->records as $idraces) 
+$racesListObj = new RankingRacesList();
+foreach($racesListObj->records as $idrace) 
 {
-  
+  //print_r($idraces);
   if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) 
   {
     $fullRacesObj = new fullRaces( $idraces )  ;

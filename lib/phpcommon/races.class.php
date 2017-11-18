@@ -35,18 +35,24 @@ class races extends baseClass
     $ics,
     $lastrun;
 
-  function races($id=0, $row = null) {
+  function races($id=0, $row = null) 
+  {
     $id = intval($id);
-    if ($id != 0 && is_null($row)) {
+    if ($id != 0 && is_null($row)) 
+    {
       $result = queryRacesBatch("WHERE idraces = $id");
-      if (mysql_num_rows($result) > 0) {
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-      } else {
-	$row = null;
+      if (mysql_num_rows($result) > 0) 
+      {
+	      $row = mysql_fetch_array($result, MYSQL_ASSOC);
+      } 
+      else 
+      {
+	      $row = null;
       }
     }
-    if (is_null($row)) {
-      die("Races class was called with bad id=$id");
+    if (is_null($row)) 
+    {
+      die("Races class was called with bad id=**$id**\n");
     }
     
     $this->idraces          = $row['idraces'];
@@ -648,9 +654,12 @@ class fullRaces {
 
   function fullRaces($id = 0, &$origrace = NULL)
   {
-    if ($origrace == NULL) {
+    if ($origrace == NULL) 
+    {
       $this->races = new races($id);
-    } else {
+    }
+    else
+    {
       $this->races = &$origrace;
     }
     //select all the boats
@@ -1560,9 +1569,14 @@ class racesList {
     $query = "SELECT idraces FROM races ORDER BY deptime DESC";
     //printf ($query . "\n");
     $result = wrapper_mysql_db_query_reader($query);
-    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-      $racesFullObj = new fullRaces( $row['idraces'] )  ;
-      array_push ($this->records, $racesFullObj);
+    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
+    {
+      if ($row['idraces'] !== "0") // race 0 is not allowed but exists in DB
+      {
+        //print_r ($row);
+        $racesFullObj = new fullRaces( $row['idraces'] )  ;
+        array_push ($this->records, $racesFullObj);
+      }
     }
   }
 }
@@ -1595,6 +1609,47 @@ class startedRacesList {
     }
   }
 }
+
+class RankingRacesList {
+  var $records = array();
+
+  function RankingRacesList() 
+  {
+    $this->records = array();
+    $query = "SELECT idraces FROM races WHERE (started=".RACE_STARTED;
+    
+    $minute = date('i');
+    
+    if ( $minute % 10 == 0 ) 
+    {
+      $query .= " AND vacfreq IN (1,2,5,10) " ;
+    }
+    else if ( $minute % 5 == 0 ) 
+    {
+      $query .= " AND vacfreq IN (1,5) " ;
+    }
+    else if ( $minute % 2 == 0 ) 
+    {
+      $query .= " AND vacfreq IN (1,2) " ;
+    } 
+    else 
+    {
+      $query .= " AND vacfreq=1 " ;
+    }
+
+    $query .= ") or deptime > ". microtime (true);
+
+    $query .= " ORDER BY vacfreq ASC, deptime DESC";
+
+    //print_r($query);
+    $result = wrapper_mysql_db_query_reader($query);
+    
+    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+      array_push($this->records , $row['idraces']);
+    }
+  }
+}
+
 
 ////////////////////////////////////////////////////////////
 //
