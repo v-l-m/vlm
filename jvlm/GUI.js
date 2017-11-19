@@ -943,7 +943,7 @@ function DisplayLoggedInMenus(LoggedIn)
   $("[LoggedInNav='true']").css("display",LoggedInDisplay);
   $("[LoggedInNav='false']").css("display",LoggedOutDisplay);
 
-  if (_CurPlayer && _CurPlayer.IsAdmin)
+  if (typeof _CurPlayer !== 'undefined' &&  _CurPlayer && _CurPlayer.IsAdmin)
   {
     $("[AdminNav='true']").css("display","block");
   }
