@@ -161,18 +161,19 @@ if ( $flagglobal == true ) {
      $result5 = wrapper_mysql_db_query_writer($query5); //or die("Query failed : $query5");
 }
 
-echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... ";
+echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... \n Ranking : ";
 // Loop again all races to build the ranking tables
 // generate ranking page
   
 //for every race
 $RnkStartTime = microtime();
 $racesListObj = new RankingRacesList();
-foreach($racesListObj->records as $idrace) 
+foreach($racesListObj->records as $idraces) 
 {
   //print_r($idraces);
   if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) 
   {
+    echo $idraces."\t";
     $fullRacesObj = new fullRaces( $idraces )  ;
     // fix me the root folder should come from the configuration
     $ranking = $fullRacesObj->UpdateRankingPage(getenv("VLMCACHE"));
