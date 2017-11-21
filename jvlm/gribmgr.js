@@ -399,6 +399,11 @@ function VLM2GribManager()
       this.ForceReloadGribCache(LoadKey,Url);
       return ;
     }
+    else if (Data.includes("invalid"))
+    {
+      console.log("invalid request :"+Url);
+      return;
+    }
 
     // Loop data catalog
     for (var i =0; i< TotalLines ; i++)
