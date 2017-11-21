@@ -72,12 +72,13 @@
         $original = $original_txt;
         $dlname = $dlname_txt;
         header("Content-Type: text/plain");
-    }
+        header("Cache-Control: max-age=900"); // 15' should be adjusted for next weather update
+   }
     else
     {
         header("Content-Type: image/png");
+        header("Cache-Control: max-age=86400"); // default 1 day
     }
-    header("Cache-Control: max-age=86400"); // default 1 day
     header(sprintf("Content-Disposition: attachment; filename=%s", $dlname));
     readfile($original);
     exit(0); //To prevent bad spaces appended from php script
