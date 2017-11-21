@@ -332,7 +332,7 @@ function VLM2GribManager()
       for (index in e.gribs_url)
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
-        var seed = parseInt((new Date).getTime());
+        var seed = 0; //parseInt((new Date).getTime());
         //console.log("smartgrib points out " + url);
         $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey].Length++;
@@ -373,7 +373,7 @@ function VLM2GribManager()
 
   this.ForceReloadGribCache = function(LoadKey,Url)
   {
-    var Seed = parseInt(new Date().getTime(),10);
+    var Seed = 0; //parseInt(new Date().getTime(),10);
     $.get("/cache/gribtiles/"+Url+"&force=yes&seed="+Seed,this.HandleSmartGribData.bind(this,LoadKey, Url));
     this.LoadQueue[LoadKey].Length++;
   }
