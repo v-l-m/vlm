@@ -34,15 +34,15 @@ $engine_start_float=microtime(true);
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 
-# build list or currently running races
+# build list of currently running races
 $QryEngagedRaces = "select distinct engaged from users";
 $result = wrapper_mysql_db_query_reader($QryEngagedRaces);
 $EngagedList = "";
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC)
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
 {
   if ($EngagedList !== "")
   {
-    $EngagedList .= ","
+    $EngagedList .= ",";
   }
 
   $EngagedList.=$row['engaged'];
