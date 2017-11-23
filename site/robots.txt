@@ -2,3 +2,7 @@ User-agent: *
 Disallow: /mercator.img.php
 Disallow: /speedchart.php
 Disallow: /status
+
+User-agent: SemrushBot
+User-agent: SemrushBot-SA
+Disallow: /
