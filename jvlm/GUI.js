@@ -105,6 +105,7 @@ let PasswordResetInfo = [];
 function HandlePasswordResetLink(PwdKey)
 {
   PasswordResetInfo = unescape(PwdKey).split("|")
+  initrecaptcha(false,true);
   $("#ResetaPasswordConfirmation").modal("show");
 }
 
@@ -235,7 +236,7 @@ function OLInit() {
     click.activate();
 }
 
-function initrecaptcha()
+function initrecaptcha(InitPasswordReset, InitResetConfirm)
 {
   RC_PwdResetReq =  grecaptcha.render('recaptcha-PwdReset1');
   RC_PwdResetConfirm =  grecaptcha.render('recaptcha-PwdReset2');
