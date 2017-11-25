@@ -302,7 +302,7 @@ function VLM2GribManager()
       //console.log("requesting " + LoadKey );
       this.LoadQueue[LoadKey] = {length:0, CallBacks:[]};
       this.LoadQueue[LoadKey].Length=0;
-      $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
+      $.get( Gribmap.ServerURL() + "/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
 
