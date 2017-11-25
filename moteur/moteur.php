@@ -124,7 +124,8 @@ $racesListObj = new startedRacesList();
 //print_r($racesListObj);
 
 //for every race
-foreach($racesListObj->records as $idraces) {
+foreach($racesListObj->records as $idraces) 
+{
   
   $update_races .= $idraces . " " ;
   if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) {
