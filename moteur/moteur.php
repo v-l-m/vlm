@@ -77,12 +77,6 @@ if ( $argc > 2 ) {
   $USER_NUM=$argv[2];
 }
 
-
-// Check LMNH status, should be wrapped in Challenge check of some sort
-// THis need to complete before the actual vac calculations start 
-CheckLMNHStatus();
-
-
 echo "\n".gmdate("M d Y H:i:s",time()). "\n";
 $CurTick= microtime(true);
 if ($CurTick < $EngineStartTick)
@@ -162,6 +156,12 @@ if ( $flagglobal == true ) {
 }
 
 echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... \n Ranking : ";
+
+
+// Check LMNH status, should be wrapped in Challenge check of some sort
+// THis need to complete before the actual vac calculations start 
+CheckLMNHStatus();
+
 // Loop again all races to build the ranking tables
 // generate ranking page
   
