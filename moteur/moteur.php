@@ -77,6 +77,19 @@ if ( $argc > 2 ) {
   $USER_NUM=$argv[2];
 }
 
+//
+// Pre-load race list and associated NSZ if any
+$racesListObj = new startedRacesList();
+//echo date ('i') . "\n";
+//print_r($racesListObj);
+
+//for every race
+foreach($racesListObj->records as $idraces) 
+{
+  $zones = new exclusionZone($idraces);	
+  $ZoneCache[$idraces] = $zones;	
+}
+
 echo "\n".gmdate("M d Y H:i:s",time()). "\n";
 $CurTick= microtime(true);
 if ($CurTick < $EngineStartTick)
@@ -167,7 +180,7 @@ CheckLMNHStatus();
   
 //for every race
 $RnkStartTime = microtime();
-$racesListObj = new RankingRacesList();
+$racesListObj = new RankingRacesList(); 
 foreach($racesListObj->records as $idraces) 
 {
   //print_r($idraces);
