@@ -1616,28 +1616,32 @@ class RankingRacesList {
   function RankingRacesList() 
   {
     $this->records = array();
-    $query = "SELECT idraces FROM races WHERE (started=".RACE_STARTED;
+    $query = "SELECT idraces FROM races WHERE ";
     
     $minute = date('i');
     
     if ( $minute % 10 == 0 ) 
     {
-      $query .= " AND vacfreq IN (1,2,5,10) " ;
+      $query .= "  vacfreq IN (1,2,5,10) " ;
     }
     else if ( $minute % 5 == 0 ) 
     {
-      $query .= " AND vacfreq IN (1,5) " ;
+      $query .= "  vacfreq IN (1,5) " ;
     }
     else if ( $minute % 2 == 0 ) 
     {
-      $query .= " AND vacfreq IN (1,2) " ;
+      $query .= "  vacfreq IN (1,2) " ;
     } 
     else 
     {
-      $query .= " AND vacfreq=1 " ;
+      $query .= "  vacfreq=1 " ;
     }
 
-    $query .= ") or deptime > ". microtime (true);
+    $query .= " and ( started=".RACE_STARTED;
+
+    $query .= " or (deptime > ". microtime (true) . ") ";
+    
+    $query .= " or (closetime > ". (microtime (true) - 24*3600) . ") )";
 
     $query .= " ORDER BY vacfreq ASC, deptime DESC";
 
