@@ -31,6 +31,9 @@ var PilototoFt = null;
 var RankingFt = null;
 var RaceHistFt = null;
 
+var RC_PwdResetReq = null;
+var RC_PwdResetConfirm = null;
+
 // On ready get started with vlm management
 $(document).ready(
   function(){
@@ -82,45 +85,11 @@ $(document).ready(
     // Start-Up Polars manager
     PolarsManager.Init();
     
-    // Go To WP Ortho, VMG, VBVMG Modes
-    $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
-      function()
-      {
-        var WpH=-1;
-        var PMMode=PM_ORTHO;
-        var Lat = $("#PM_Lat")[0].value;
-        var Lon = $("#PM_Lon")[0].value;
-        
-        WpH = parseInt($("#PM_WPHeading")[0].value,10);
-        
-        switch ($(this)[0].id)
-        {
-          case "BtnPM_Ortho":
-            PMMode=PM_ORTHO;
-            break;
-
-          case "BtnPM_VMG":
-            PMMode=PM_VMG;
-            break;
-
-          case "BtnPM_VBVMG":
-            PMMode=PM_VBVMG;
-            break;
-
-        }
-        SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
-      }
-    )
-    
-    
-    // Handle boat selector selection change
-    //
-    $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
-    
-    $('#cp11').colorpicker();
-
     // Init Alerts
     InitAlerts();
+
+    // Handle page parameters if any
+    CheckPageParameters();
                            
     // Start the page clocks
     setInterval(PageClock,1000);
@@ -130,6 +99,41 @@ $(document).ready(
 
   }  
 );
+
+let PasswordResetInfo = [];
+
+function HandlePasswordResetLink(PwdKey)
+{
+  PasswordResetInfo = unescape(PwdKey).split("|")
+  initrecaptcha(false,true);
+  $("#ResetaPasswordConfirmation").modal("show");
+}
+
+function CheckPageParameters()
+{
+  let url = window.location.search
+
+  if (url)
+  {
+    let getQuery = url.split('?')[1]
+    let params = getQuery.split('&') 
+    // params is ['param1=value', 'param2=value2'] 
+    for (param in params)
+    {
+      if (params[param])
+      {
+        let PArray = params[param].split("=");
+
+        switch (PArray[0])
+        {
+          case "PwdResetKey":
+            HandlePasswordResetLink(PArray[1]);
+            break;
+        }
+      }
+    }
+  } 
+}
 
 function OLInit() {
 
@@ -232,15 +236,21 @@ function OLInit() {
     click.activate();
 }
 
+function initrecaptcha(InitPasswordReset, InitResetConfirm)
+{
+  RC_PwdResetReq =  grecaptcha.render('recaptcha-PwdReset1');
+  RC_PwdResetConfirm =  grecaptcha.render('recaptcha-PwdReset2');
+}
 
 function InitMenusAndButtons()
 {
   // Handle password change button
   $("#BtnChangePassword").on("click",function(e) {e.preventDefault(); HandlePasswordChangeRequest(e)});
 
-  // Handle password reset request
-  $("#ResetPasswordButton").on("click",function(e) {    grecaptcha.execute();});
-
+  // Handle password reset request, and confirmation
+  $("#ResetPasswordButton").on("click",function(e) { if (RC_PwdResetReq !== null) { grecaptcha.execute(RC_PwdResetReq)}   });
+  $("#ConfirmResetPasswordButton").on("click",function(e) {  if (RC_PwdResetConfirm !== null) { grecaptcha.execute(RC_PwdResetConfirm)}  });
+  
   // Handle showing/hide of a-propos depending on login dialog status
   $("#LoginForm").on('show.bs.modal',function(e){$('#Apropos').modal('hide');});
   $("#LoginForm").on('hide.bs.modal',function(e){$('#Apropos').modal('show');});
@@ -502,6 +512,43 @@ function InitMenusAndButtons()
   // Handler for not racing boat palmares
   $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
+      // Go To WP Ortho, VMG, VBVMG Modes
+      $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
+        function()
+        {
+          var WpH=-1;
+          var PMMode=PM_ORTHO;
+          var Lat = $("#PM_Lat")[0].value;
+          var Lon = $("#PM_Lon")[0].value;
+          
+          WpH = parseInt($("#PM_WPHeading")[0].value,10);
+          
+          switch ($(this)[0].id)
+          {
+            case "BtnPM_Ortho":
+              PMMode=PM_ORTHO;
+              break;
+  
+            case "BtnPM_VMG":
+              PMMode=PM_VMG;
+              break;
+  
+            case "BtnPM_VBVMG":
+              PMMode=PM_VBVMG;
+              break;
+  
+          }
+          SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
+        }
+      )
+      
+      
+      // Handle boat selector selection change
+      //
+      $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
+      
+      $('#cp11').colorpicker();
+
   CheckLogin();
 }
 
@@ -552,6 +599,17 @@ function HandlePasswordChangeResult(e)
   }
 }
 
+function SendResetPassword(RecaptchaCode)
+{
+  let PostData = {
+      email : PasswordResetInfo[0],
+      seed : PasswordResetInfo[1],
+      key : RecaptchaCode};
+
+  $.get("/ws/playersetup/password_reset.php?email="+ PasswordResetInfo[0] + "&seed=" + PasswordResetInfo[1] + "&key=" + RecaptchaCode,
+    function (e) {HandlePasswordReset(e, true)});
+}
+
 function SendResetPasswordLink(RecaptchaCode)
 {
   let UserMail = $(".UserName").val();
@@ -560,7 +618,7 @@ function SendResetPasswordLink(RecaptchaCode)
   if (UserMail === "")
   {
     VLMAlertDanger (GetLocalizedString("Enter your email for resetting your password"));
-    grecaptcha.reset();
+    grecaptcha.reset(RC_PwdResetReq);
     return;
   }
 
@@ -569,20 +627,31 @@ function SendResetPasswordLink(RecaptchaCode)
       key : RecaptchaCode};
 
   $.post("/ws/playersetup/password_reset.php",
-    "parms=" + JSON.stringify(PostData), function (e) {HandlePasswordReset(e)});
+    "parms=" + JSON.stringify(PostData), function (e) {HandlePasswordReset(e,false)});
 }
 
-function HandlePasswordReset(e)
+function HandlePasswordReset(e, Validation )
 {
   if (e.success)
   {
-    VLMAlertInfo(GetLocalizedString('Check your inbox to get your new password.'));
+    if (Validation)
+    {
+      VLMAlertInfo(GetLocalizedString('Check your inbox to get your new password.'));
+      grecaptcha.reset(RC_PwdResetReq);
+    }
+    else
+    {
+      VLMAlertInfo(GetLocalizedString('An email has been sent. Click on the link to validate.'));
+      grecaptcha.reset(RC_PwdResetConfirm);
+    }
   }
   else
   {
-    VLMAlertDanger("Something went wrong :(")
+    VLMAlertDanger("Something went wrong :(");
+    grecaptcha.reset(RC_PwdResetReq);
+    grecaptcha.reset(RC_PwdResetConfirm);
   }
-  grecaptcha.reset();
+  
 }
 
 function InitFootables()
@@ -874,6 +943,15 @@ function DisplayLoggedInMenus(LoggedIn)
   }
   $("[LoggedInNav='true']").css("display",LoggedInDisplay);
   $("[LoggedInNav='false']").css("display",LoggedOutDisplay);
+
+  if (typeof _CurPlayer !== 'undefined' &&  _CurPlayer && _CurPlayer.IsAdmin)
+  {
+    $("[AdminNav='true']").css("display","block");
+  }
+  else
+  {
+    $("[AdminNav='true']").css("display","none");
+  }
 
   // Display apropos
   $('#Apropos').modal(LoggedIn?'hide':'show');
@@ -2055,7 +2133,8 @@ function SortRanking(style, WPNum)
 
   
   //$('#RankingTableBody').empty();
-  var Boat = _CurPlayer.CurBoat;
+  let Boat = _CurPlayer.CurBoat;
+  
   CheckWPRankingList(Boat);
   
   if (typeof Boat === "undefined" || !Boat)
@@ -2120,10 +2199,10 @@ function SetRankingColumns(style)
   }
 }
 
-let RACColumnHeader = ["Rank","Name" ,"Distance","Time","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let RACColumnHeader = ["Rank","Name" ,"Distance","Time","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h","Delta1st"]
 let NRColumnHeader = ["Rank","Name" ,"Distance"]
 let WPColumnHeader = ["Rank","Name" ,"Time","Loch"]
-let RACColumnHeaderLabels = ["ranking","boatname" ,"distance","racingtime","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h"]
+let RACColumnHeaderLabels = ["ranking","boatname" ,"distance","racingtime","Loch" ,"Lon" ,"Lat","Last1h" ,"Last3h" ,"Last24h","ecart"]
 let NRColumnHeaderLabels = ["ranking","boatname" ,"status"]
 let WPColumnHeaderLabels = ["ranking","boatname" ,"racingtime","ecart"]
 
@@ -2227,6 +2306,17 @@ function Sort2RacingBoats(rnk1,rnk2)
     else if (dnm1 === dnm2)
     {
       DebugRacerSort(rnk1,rnk2,0)
+      let SortFlag = ((rnk1.country > rnk2.country)?1:((rnk1.country===rnk2.country)?0:-1));
+
+      if (SortFlag)
+      {
+        return SortFlag;
+      }
+      else
+      {
+        let SortIdu = ((rnk1.idusers > rnk2.idusers)?1:((rnk1.idusers===rnk2.idusers)?0:-1));        
+        return SortIdu;
+      }
       return 0;
     }
     else
@@ -2329,23 +2419,32 @@ function Sort2NonRacing(rnk1,rnk2)
 
   if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers !== "undefined")
   {
-    let IdUser1 = parseInt(rnk1.idusers,10)
-    let IdUser2 = parseInt(rnk2.idusers,10)
+    let SortFlag = ((rnk1.country > rnk2.country)?1:((rnk1.country===rnk2.country)?0:-1));
     
-    if ( IdUser1> IdUser2)
+    if (SortFlag)
     {
-      DebugRacerSort(rnk1,rnk2,1)
-      return 1 ;
-    }
-    else if (IdUser1 < IdUser2)
-    {
-      DebugRacerSort(rnk1,rnk2,-1)
-      return -1;
+      return SortFlag;
     }
     else
     {
-      DebugRacerSort(rnk1,rnk2,0)
-      return 0;
+      let IdUser1 = parseInt(rnk1.idusers,10)
+      let IdUser2 = parseInt(rnk2.idusers,10)
+      
+      if ( IdUser1> IdUser2)
+      {
+        DebugRacerSort(rnk1,rnk2,1)
+        return 1 ;
+      }
+      else if (IdUser1 < IdUser2)
+      {
+        DebugRacerSort(rnk1,rnk2,-1)
+        return -1;
+      }
+      else
+      {
+        DebugRacerSort(rnk1,rnk2,0)
+        return 0;
+      }
     }
   }
   else if (typeof IdUser1 !== "undefined")
@@ -2375,7 +2474,7 @@ function Sort2NonRacing(rnk1,rnk2)
 function SortRankingData(Boat, SortType,WPNum)
 {
   
-  if (typeof Boat.RnkObject.RacerRanking === "undefined")
+  if (Boat.RnkObject && typeof Boat.RnkObject.RacerRanking === "undefined")
   {
     let index ;
 
@@ -2552,7 +2651,7 @@ function FillRacingRanking(Boat, Friends)
 
         if (!Refs.Racer1stPos && RnkIsRacing(RnkBoat))
         {
-          Refs.Racer1stPos = new VLMPosition(RnkBoat['lon'],RnkBoat['lat'] )
+          Refs.Racer1stPos = new VLMPosition(RnkBoat['longitude'],RnkBoat['latitude'] )
         }
         Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends,Refs));
       }
@@ -2613,7 +2712,8 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     Last1h : "",
     Last3h : "",
     Last24h : "",
-    Class : ""
+    Class : "",
+    Delta1st : ""
   };
 
   if (parseInt(RankBoat['idusers'],10) === _CurPlayer.CurBoat.IdBoat)
@@ -2633,6 +2733,13 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
   {
     // General ranking layout
     let NextMark = '['+RankBoat['nwp'] +'] -=> '+ RoundPow(RankBoat['dnm'],2)
+
+    if (rank > 1 && Refs && Refs.Racer1stPos)
+    {
+      let P = new VLMPosition(RankBoat.longitude,RankBoat.latitude);
+      RetObject["Delta1st"] =  Refs.Racer1stPos.GetLoxoDist(P,1);
+    }
+
     RetObject["Distance"]=NextMark
     let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat['deptime'],10)*1000))/1000);
     RetObject["Time"]= (RankBoat['deptime']==="-1"?"": GetFormattedChronoString(RacingTime));

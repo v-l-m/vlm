@@ -302,7 +302,7 @@ function VLM2GribManager()
       //console.log("requesting " + LoadKey );
       this.LoadQueue[LoadKey] = {length:0, CallBacks:[]};
       this.LoadQueue[LoadKey].Length=0;
-      $.get("/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
+      $.get( Gribmap.ServerURL() + "/ws/windinfo/smartgribs.php?north="+NorthStep+"&south="+(SouthStep)+"&west="+(WestStep) +"&east="+(EastStep)+"&seed=" + (0 + new Date()),
           this.HandleGetSmartGribList.bind(this, LoadKey));
     }
 
@@ -332,7 +332,7 @@ function VLM2GribManager()
       for (index in e.gribs_url)
       {
         var url = e.gribs_url[index].replace(".grb",".txt")
-        var seed = parseInt((new Date).getTime());
+        var seed = 0; //parseInt((new Date).getTime());
         //console.log("smartgrib points out " + url);
         $.get("/cache/gribtiles/"+url+"&v="+seed,this.HandleSmartGribData.bind(this,LoadKey, url));
         this.LoadQueue[LoadKey].Length++;
@@ -373,7 +373,7 @@ function VLM2GribManager()
 
   this.ForceReloadGribCache = function(LoadKey,Url)
   {
-    var Seed = parseInt(new Date().getTime(),10);
+    var Seed = 0; //parseInt(new Date().getTime(),10);
     $.get("/cache/gribtiles/"+Url+"&force=yes&seed="+Seed,this.HandleSmartGribData.bind(this,LoadKey, Url));
     this.LoadQueue[LoadKey].Length++;
   }
@@ -398,6 +398,11 @@ function VLM2GribManager()
       */
       this.ForceReloadGribCache(LoadKey,Url);
       return ;
+    }
+    else if (Data.includes("invalid"))
+    {
+      console.log("invalid request :"+Url);
+      return;
     }
 
     // Loop data catalog

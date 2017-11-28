@@ -272,6 +272,7 @@ function CheckLogin(GuiRequest)
               $(".UserPassword").val( "");
               // Reopened login dialog
               setTimeout(function(){$("#LoginForm").modal ("hide").modal("show")},1000);
+              initrecaptcha (true,false);
               $("#ResetPasswordLink").removeClass("hidden");
 
             }

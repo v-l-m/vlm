@@ -37,7 +37,7 @@
     $original_txt = sprintf("%s/%d.%02d.txt", $originaldir, $grib_date, $step);
     $dlname_txt = sprintf("%d.%02d.%d.%d.txt", $grib_date, $step, $south, $west);
     
-    // Cr�ation et mise en cache
+    // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
         if (!is_dir($originaldir)) {
             umask(0002);
@@ -71,10 +71,14 @@
 
         $original = $original_txt;
         $dlname = $dlname_txt;
+        header("Content-Type: text/plain");
+        header("Cache-Control: max-age=900"); // 15' should be adjusted for next weather update
+   }
+    else
+    {
+        header("Content-Type: image/png");
+        header("Cache-Control: max-age=86400"); // default 1 day
     }
-
-    header("Content-Type: image/png");
-    header("Cache-Control: max-age=86400"); // default 1 day
     header(sprintf("Content-Disposition: attachment; filename=%s", $dlname));
     readfile($original);
     exit(0); //To prevent bad spaces appended from php script

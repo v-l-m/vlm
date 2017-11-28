@@ -20,8 +20,25 @@
 Gribmap = {}; //Module container
 ErrorCatching = -1; //DEBUG: Set this > 0 to catch pixel out of wind grid
 
-//FIXME : should use a config file ?
-Gribmap.windgrid_uribase = "/ws/windinfo/windgrid.php";
+var SrvIndex = 1;
+Gribmap.ServerURL = function()
+{
+  if (typeof WindGridServers !== "undefined" && WindGridServers)
+  {
+    SrvIndex = ((SrvIndex+1) % WindGridServers.length )+1;
+    return WindGridServers[SrvIndex] ;
+  }
+  else
+  {
+    return "";
+  }
+}
+
+Gribmap.windgrid_uribase = function ()
+{
+  return Gribmap.ServerURL() + "/ws/windinfo/windgrid.php";
+}
+
 Gribmap.griblist_uribase = '/ws/windinfo/list.php';
 
 // Class wind info - just a basic vector
@@ -264,7 +281,7 @@ Gribmap.WindArray = OpenLayers.Class({
 
         ShowPb("#PbGribLoginProgress");
         var request = OpenLayers.Request.GET({
-            url: Gribmap.windgrid_uribase,
+            url: Gribmap.windgrid_uribase(),
             params: { north: this.windArea.top, south: this.windArea.bottom,
                       east: reqeast, west: reqwest,
                       timerequest: this.time,

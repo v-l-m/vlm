@@ -77,11 +77,18 @@ if ( $argc > 2 ) {
   $USER_NUM=$argv[2];
 }
 
+//
+// Pre-load race list and associated NSZ if any
+$racesListObj = new startedRacesList();
+//echo date ('i') . "\n";
+//print_r($racesListObj);
 
-// Check LMNH status, should be wrapped in Challenge check of some sort
-// THis need to complete before the catual vac calculations start 
-CheckLMNHStatus();
-
+//for every race
+foreach($racesListObj->records as $idraces) 
+{
+  $zones = new exclusionZone($idraces);	
+  $ZoneCache[$idraces] = $zones;	
+}
 
 echo "\n".gmdate("M d Y H:i:s",time()). "\n";
 $CurTick= microtime(true);
@@ -117,7 +124,8 @@ $racesListObj = new startedRacesList();
 //print_r($racesListObj);
 
 //for every race
-foreach($racesListObj->records as $idraces) {
+foreach($racesListObj->records as $idraces) 
+{
   
   $update_races .= $idraces . " " ;
   if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) {
@@ -161,17 +169,25 @@ if ( $flagglobal == true ) {
      $result5 = wrapper_mysql_db_query_writer($query5); //or die("Query failed : $query5");
 }
 
-echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... ";
+echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... \n Ranking : ";
+
+
+// Check LMNH status, should be wrapped in Challenge check of some sort
+// THis need to complete before the actual vac calculations start 
+CheckLMNHStatus();
+
 // Loop again all races to build the ranking tables
 // generate ranking page
   
 //for every race
 $RnkStartTime = microtime();
+$racesListObj = new RankingRacesList(); 
 foreach($racesListObj->records as $idraces) 
 {
-  
+  //print_r($idraces);
   if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) 
   {
+    echo $idraces."\t";
     $fullRacesObj = new fullRaces( $idraces )  ;
     // fix me the root folder should come from the configuration
     $ranking = $fullRacesObj->UpdateRankingPage(getenv("VLMCACHE"));

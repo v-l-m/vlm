@@ -25,8 +25,16 @@
   $player = getLoggedPlayerObject();
   $now = time();
   $skip = get_cgi_var('skip', 0);
+  $SingleRace = get_cgi_var('idraces',null);
   
-  $query = "select distinct idraces from races order by idraces";
+  $query = "select distinct idraces from races";
+  
+  if ($SingleRace)
+  {
+    $query .= " where idraces = '".$SingleRace."' ";
+  }
+
+  $query.=" order by idraces";
 
   $res = $ws->queryRead($query);
   $ws->answer["RnkGenStatus"]=[];

@@ -674,11 +674,18 @@ function get_error($code) {
         "NEWPLAYER03" => "password is required",
         "NEWPLAYER04" => "failed to insert in DB",
 
+        // Password reset
+        "PWDRESET01" => "invalid parameter set (email)",
+        "PWDRESET02" => "invalid parameter set (seed)",
+        "PWDRESET03" => "invalid parameter set (key)",
+        
         // Player password change
         "PWDCHANGE01" => "invalid parameter set (OldPwd, NewPwd required)",
         "PWDCHANGE02" => "NewPwdRequired",
-        "PWDCHANGE03" => "OldPasswordInvalid",
-        
+        "PWDCHANGE03" => "OldPasswordInvalid"
+
+
+
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
