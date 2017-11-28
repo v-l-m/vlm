@@ -557,6 +557,9 @@ span.ui-selectmenu-text {
 }
 }
 @media (min-width: 1024px) { /* Remplacez 123px par la taille de votre choix */
+#Infos, .Apropos  {
+  width: 600px;
+} 
 .navbar-header {
   float: left;
 }
@@ -615,16 +618,23 @@ float:right;
 }
 @media all and (min-width: 430px) and (max-width: 800px)
 {
+#Infos, .Apropos {
+  width: 75%;
+}
 .NavRaceName{
   max-width:120px;
   max-height: 20px;
   overflow: hidden;
 }
 }
-@media all and (min-width: 430px)
-
+@media all and (max-width: 429px) 
 {
-   
+#Infos, .Apropos {
+  width: 90%;
+}
+}
+@media all and (min-width: 430px)
+{   
 #nav-stat{
   background-color:black;
   visibility:hidden;
@@ -660,14 +670,31 @@ margin-right: 10px;
 min-width: 50px;
 }
 .logbtn{
-margin-top: 10px;
-min-width: 50px;
+margin-top: 4px;
+min-width: 40px;
+}
+.infobtn{
+margin-top: 4px;
+min-width: 40px;
+float: right; 
+margin-left: 5px;
+margin-right: 5px;
+}
+.icon-bar{
+margin-left:auto;
+margin-right:auto;
+}
+.BoatDropDown{
+margin-top: 4px;
+
 }
 .togglebtn {
-margin-top: 10px;
+margin-top: 4px;
+min-width:40px;
 }
 #myNavbar{
 min-width:250px;
+width:100%;
 }
 #myNavbar ul li {
 float:left;
@@ -994,15 +1021,16 @@ label{
   margin-bottom:0;
 }
 #Infos{
-  cursor:move;
-    width:500px;
-    height:350px;
-    display:none;
-    position:absolute;
-    left:50%; 
-    top:25%;
-    border-radius:5px;
-    z-index:1055;
+  cursor:move; 
+  height:350px;
+  display:none;
+  position:absolute;
+  top:80px;
+  margin-left:auto;
+  margin-right:auto;
+  border-radius:5px;
+  z-index:1055;
+
 }
 #mouseInfo{
   cursor:move;
@@ -1349,6 +1377,7 @@ td, th {
   #img2 {z-index: 3;}
   #img3 {z-index: 2;}
   #img4 {z-index: 1;}*/
+  
 .NoAnimation{
   -webkit-transition: none;
   -moz-transition: none;
@@ -1381,14 +1410,13 @@ position:fixed;
 top:75px;
 //max-width:600px;
 min-height:50%;
-margin-left:auto;
-margin-right:auto;
 z-index: 1000;
-
 }
 .Apropos{
-background-color:rgba(0, 0, 0, 0.6);
-color:#FFFFFF;
+  background-color:rgba(0, 0, 0, 0.6);
+  color:#FFFFFF;
+  margin-left:auto;
+  margin-right:auto;
 }
 .Apropos-title{
 font-size:24px;

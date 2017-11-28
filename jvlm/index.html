@@ -60,17 +60,25 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
-              <button   type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
+              <button type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
+              <button type="button" data-target="#Infos" data-toggle="modal"  class="infobtn ui-button-noir ui-corner-all ui-widget  navbar-toggle"><span>?</span></button>
           </ul>
-          <ul class="hidden-xs" LoggedInNav="true" style="display:none" >
-          <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ></button>
-          </ul>
-          <button type="button" class="togglebtn navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <ul LoggedInNav="true" style="display:none" >
+          <button  type="button" class="logbtn logOutButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-out"></span></button>
+          <button type="button" class="togglebtn ui-button-noir ui-corner-all ui-widget navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span> 
               <span class="icon-bar"></span>             
           </button>
+          
+              <button type="button" data-target="#Infos" data-toggle="modal"  class="infobtn ui-button-noir ui-corner-all ui-widget  navbar-toggle"><span>?</span></button>
+          <div  class="dropdown navbar-toggle hidden-lg hidden-md" LoggedInNav="true" data-toggle="collapse" style="display:none">
+              <button id="dropdownBoat1" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
+              <ul id="" class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat1">
+              </ul>
+           </div>
+          </ul>
           <a class="navbar-brand" href="/index.php" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
@@ -91,17 +99,13 @@
                 <li><span class="badge badge-wind BoatWindSpeed">--</span><sup I18N="nds">nds</sup></li>
             </ul> 
           </div>
-          <div  class="dropdown navbar-toggle hidden-lg hidden-md" LoggedInNav="true" data-toggle="collapse" style="display:none">
-              <button id="dropdownBoat1" class="BoatDropDown ui-button-noir ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span>Bateau</button>
-              <ul id="" class="BoatSelectorDropDownList dropdown-menu" aria-labelledby="dropdownBoat1">
-              </ul>
-           </div>
+          
         </div>
         <!-- debut barre collapse -->
         <div class="collapse navbar-collapse" id="myNavbar">
           
           <ul class="nav navbar-nav navbar-right" LoggedInNav="false" style="display:none">            
-            <li class="BoatSelector " ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
+            <li class="hidden-xs hidden-sm"><button type="button" data-target="#Infos" data-toggle="modal" style="width: 40px;" class="infobtn ui-button-noir ui-corner-all ui-widget hidden-xs hidden-sm" ><span>?</span></button>
             </li>
 
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
@@ -124,7 +128,7 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right " LoggedInNav="true" style="display:none">                       
-            <li class="BoatSelector" ><button type="button" data-target="#Infos" data-toggle="modal" class=" ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
+            <li class="hidden-xs hidden-sm"><button type="button" data-target="#Infos" data-toggle="modal" class="infobtn ui-button-noir ui-corner-all ui-widget" ><span>?</span></button>
             </li>
             <li class="BoatSelector  col-md hidden-xs hidden-sm">
               <span class="glyphicon glyphicon-log-out" style="top:0px"><button type="button" class="logOutButton ui-button-noir ui-corner-all ui-widget"  I18n="logout">Logout</button></span>
@@ -568,8 +572,7 @@
           <fieldset>
             <legend class="ui-legend"> <span I18n='serverinfo'>Serveur </span></legend>
             <div class="row affich">
-              <div class="col-xs-4">
-                <div class="col-xs-2">
+                <div class="col-xs-offset-1 col-xs-1">
                   <img src="images/ServerInfo.png">
                 </div>   
                 <div class="col-xs-10">
@@ -579,8 +582,9 @@
                   </A>
                 </div>
               </div>
-              <div class="col-xs-4" LoggedInNav="true" style="display: none">
-                <div class="col-xs-2">
+            <div class="row affich">
+              <div LoggedInNav="true" style="display: none">
+                <div class="col-xs-offset-1 col-xs-1">
                   <img src="images/Picto2.png">
                 </div>   
                 <div class="col-xs-10">
@@ -589,8 +593,10 @@
                   </A>
                 </div>
               </div>
-              <div class="col-xs-4" AdminNav="true" style="display: none">
-                <div class="col-xs-2">
+              </div>
+          <div class="row affich">
+              <div  AdminNav="true" style="display: none">
+                <div class="col-xs-offset-1 col-xs-1">
                   <img src="images/Picto1.png">
                 </div>   
                 <div class="col-xs-10">
@@ -599,6 +605,7 @@
                   </A>
                 </div>
               </div>
+          </div>
           </fieldset>
           <fieldset>
             <legend class="ui-legend" I18n="InfosLinks" > </legend>
