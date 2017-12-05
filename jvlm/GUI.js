@@ -3144,7 +3144,7 @@ function HandleCreateUser()
     }
   $("#BtnCreateAccount").hide();
   $.post("/ws/playerinfo/player_create.php",
-    "parms=" + JSON.stringify(PostData),
+    PostData,
     function(e,status)
     {
       HandleCreateUserResult(e, status);

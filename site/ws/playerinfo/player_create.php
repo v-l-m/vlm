@@ -5,9 +5,9 @@
   $ws = new WSNewPlayer();
 
  
-  $emailid = $ws->NewPlayerInfo->emailid;
-  $password = $ws->NewPlayerInfo->password;
-  $playername = $ws->NewPlayerInfo->pseudo;
+  $emailid = $ws->emailid;
+  $password = $ws->password;
+  $playername = $ws->pseudo;
 
   if (!ALLOW_ACCOUNT_CREATION) 
   {
