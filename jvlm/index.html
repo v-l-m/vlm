@@ -572,30 +572,30 @@
           <fieldset>
             <legend class="ui-legend"> <span I18n='serverinfo'>Serveur </span></legend>
             <div class="row affich">
-                <div class="col-xs-1">
+                <div class="col-xs-1 col-md-1">
                   <img src="images/ServerInfo.png">
                 </div>   
-                <div class="col-xs-3">
+                <div class="col-xs-3 col-md-2">
                   <A href="/status/race-engine-status.php" target="EngineStatus">
                     <!--<img src="images/ServerInfos.png"><img>-->
                     <span I18n="status page">stat page</span>
                   </A>
                 </div>
               <div LoggedInNav="true" style="display: none">
-                <div class="col-xs-1">
+                <div class=" col-xs-1 col-md-1">
                   <img src="images/Picto2.png">
                 </div>   
-                <div class="col-xs-3">
+                <div class="col-xs-3 col-md-2">
                   <A  href="/userlogs.php" target="lastactions">
                     <span  I18n="Recent actions"></span>
                   </A>
                 </div>
               </div>
               <div  AdminNav="true" style="display: none">
-                <div class="col-xs-1">
+                <div class="col-xs-1 col-md-1">
                   <img src="images/Picto1.png">
                 </div>   
-                <div class="col-xs-3">
+                <div class="col-xs-3 col-md-2">
                   <A  href="/admin/index.php" target="admin" >
                     <span >Admin</span>
                   </A>
@@ -604,27 +604,71 @@
           </div>
           </fieldset>
           <fieldset>
-            <legend class="ui-legend" I18n="InfosLinks" > </legend>
-            <A href="http://www.virtual-winds.org/forum/index.php?/forum/276-virtual-loup-de-mer/" target="forum" I18n="forum">forum</A>    
-            <A href="http://ranking.v-l-m.org" target="ranking" I18n="ranking">forum</A>    
-            <legend class="ui-legend" >  </legend>
-            <div class="affich">
-              <A href="/calendar.php" target="calendar" I18n="calendar">Agenda</A>
-              <A href="/guest_map/index.html" target="guestmap" I18n="Spectator">Agenda</A>
-              <A href="http://wiki.v-l-m.org/index.php" target="_wiki" I18n='doc'>doc</A>
-              <A href="http://wiki.v-l-m.org/index.php/FAQ" target="_wiki" I18n='faq'>FAQ</A>
-              <A href="http://wiki.v-l-m.org/index.php/chat" target="_wiki" I18n='tchat'>chat</A>
-              <A href="http://v-l-m.github.io/vlm" target="_dev" I18n='dev'>dev</A>
-              <A href="http://wiki.v-l-m.org/index.php/about" target="_wiki" I18n='about'>ABout</A>
-            </div>
+          <legend class="ui-legend"><span I18n="InfosLinks" >Infos</span> </legend>
+          <div class="row affich">
+                <div class="col-xs-1 col-md-1">
+                  <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                    <a href="http://www.virtual-winds.org/forum/index.php?/forum/276-virtual-loup-de-mer/" target="forum"><span I18n="forum">forum </span></a>   
+                </div>
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                    <a href="http://ranking.v-l-m.org" target="ranking"><span I18n="ranking">forum</span></a>
+                </div>
+           </div>   
+           <hr>
+          <div class="row affich">
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                    <a href="/calendar.php" target="calendar"><span I18n="calendar">Agenda</span></a>
+                </div>   
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                    <a href="/guest_map/index.html" target="guestmap"><span I18n="Spectator">Agenda</span></a> 
+                </div>
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                <a href="http://wiki.v-l-m.org/index.php" target="_wiki"><span I18n='doc'>doc</span></a>
+                </div>
+                <div class="clearfix visible-xs-block"></div>
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                <a href="http://wiki.v-l-m.org/index.php/FAQ" target="_wiki"><span I18n='faq'>FAQ</span></a>
+                </div>   
+           </div>  
+           <hr>
+          <div class="row affich">
+                <div class="col-xs-1 col-md-1">
+                  <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                    <a href="http://wiki.v-l-m.org/index.php/chat" target="_wiki"><span I18n='tchat'>chat</span></a>
+                </div>
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                    <a href="http://v-l-m.github.io/vlm" target="_dev"><span I18n='dev'>dev</span></a>
+                </div>
+                <div class="col-xs-1 col-md-1">
+                    <img src="images/ServerInfo.png">
+                </div>   
+                <div class="col-xs-3 col-md-2">
+                <a href="http://wiki.v-l-m.org/index.php/about" target="_wiki"><span I18n='about'>ABout</span></a>
+                </div>   
+          </div>    
           </fieldset>
-        <fieldset>
-          <legend class="ui-legend" > </legend>
-          <div class="affich">
-              <A href="/index.php" target="_vlm1" I18n='VLM1'>doc</A>
-              
-          </div>
-        </fieldset>
       </div>
     </div>
     <!-- Modal affichage-->
