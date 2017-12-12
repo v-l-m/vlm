@@ -118,6 +118,7 @@ echo "\n2- === DO THE JOB FOR EACH RACE\n";
 $nb_boats=0;
 $nb_races=0;
 $update_races = " " ;
+$FinishingRaces = [];
 
 $racesListObj = new startedRacesList();
 //echo date ('i') . "\n";
@@ -182,9 +183,15 @@ CheckLMNHStatus();
 //for every race
 $RnkStartTime = microtime();
 $racesListObj = new RankingRacesList(); 
+
 foreach($racesListObj->records as $idraces) 
 {
-  //print_r($idraces);
+  array_push( $FinishingRaces,$idraces );
+}
+
+foreach($FinishingRaces as $idraces) 
+  {
+    //print_r($idraces);
   if (( $RACE_NUM != 0 && $idraces == $RACE_NUM ) || ( $RACE_NUM == 0)) 
   {
     echo $idraces."\t";

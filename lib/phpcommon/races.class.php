@@ -1637,11 +1637,7 @@ class RankingRacesList {
       $query .= "  vacfreq=1 " ;
     }
 
-    $query .= " and ( started=".RACE_STARTED;
-
-    $query .= " or (deptime > ". microtime (true) . ") ";
-    
-    $query .= " or (closetime > ". (microtime (true) - 24*3600) . ") )";
+    $query .= " and ( started=".RACE_STARTED. ")";
 
     $query .= " ORDER BY vacfreq ASC, deptime DESC";
 

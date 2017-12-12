@@ -29,6 +29,7 @@
        $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj);
        $fullUsersObj->setHTP();
        echo " done !\n";
+       array_push($FinishingRaces,$fullRacesObj->races->idraces);
      }
      // let's close the race
      $fullRacesObj->stopRaces();
