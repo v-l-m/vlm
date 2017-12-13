@@ -238,8 +238,15 @@ function OLInit() {
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm)
 {
-  RC_PwdResetReq =  grecaptcha.render('recaptcha-PwdReset1');
-  RC_PwdResetConfirm =  grecaptcha.render('recaptcha-PwdReset2');
+  if (InitPasswordReset && !RC_PwdResetReq)
+  {
+    RC_PwdResetReq =  grecaptcha.render('recaptcha-PwdReset1');
+  }
+
+  if (InitResetConfirm && !RC_PwdResetConfirm)
+  {
+    RC_PwdResetConfirm =  grecaptcha.render('recaptcha-PwdReset2');
+  }
 }
 
 function InitMenusAndButtons()
@@ -3144,7 +3151,7 @@ function HandleCreateUser()
     }
   $("#BtnCreateAccount").hide();
   $.post("/ws/playerinfo/player_create.php",
-    "parms=" + JSON.stringify(PostData),
+    PostData,
     function(e,status)
     {
       HandleCreateUserResult(e, status);

@@ -14,8 +14,8 @@
    } 
    // ==2 > winner's time * (1 + firstpcttime/100) is not anymore in the future...
    //    Pour les autres courses :
-   //            >0 si le premier n'est pas arriv� ou est arriv� il y a peu de temps
-   //            <0 lorsque pourcentage en plus du temps du premier est d�pass�
+   //            >0 si le premier n'est pas arrivé ou est arrivé il y a peu de temps
+   //            <0 lorsque pourcentage en plus du temps du premier est dépassé
    //        Parameter (verbose) added 2008/03/16 (0 non verbose (myboat.php), 1 verbose (here))
    else if ( $fullRacesObj->races->maxTimeRemaining(1) < 0 ) 
    {
@@ -29,6 +29,7 @@
        $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj);
        $fullUsersObj->setHTP();
        echo " done !\n";
+       array_push($FinishingRaces,$fullRacesObj->races->idraces);
      }
      // let's close the race
      $fullRacesObj->stopRaces();

@@ -165,24 +165,29 @@ class WSNewPlayer extends WSBase
   {
     parent::__construct();
     $this->request = $_POST;
-    $this->reply_with_error_if_not_exists('parms', 'NEWPLAYER00');
-    $params = $this->request['parms']; 
-    $this->NewPlayerInfo = json_decode($params);
+    //$this->reply_with_error_if_not_exists('parms', 'NEWPLAYER00');
+    //$params = $this->request; 
+    //print_r($params);
+    //$this->NewPlayerInfo = $this->request;
     //$ws->answer['DBG']=print_r($player,true);
     //print_r ($this->NewPlayerInfo);
     
-    if (trim($this->NewPlayerInfo->emailid) === "")
+    if (trim($this->request["emailid"]) === "")
     {
       $this->reply_with_error('NEWPLAYER01');
     }
-    if (trim($this->NewPlayerInfo->pseudo) === "")
+    if (trim($this->request["pseudo"]) === "")
     {
       $this->reply_with_error('NEWPLAYER02');
     }
-    if (trim($this->NewPlayerInfo->password) === "")
+    if (trim($this->request["password"]) === "")
     {
       $this->reply_with_error('NEWPLAYER03');
     }
+
+    $this->emailid = trim($this->request["emailid"]);
+    $this->password=trim($this->request["password"]);
+    $this->pseudo=trim($this->request["pseudo"]);
   } 
 
 }
