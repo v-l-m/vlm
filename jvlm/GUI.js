@@ -148,11 +148,13 @@ function HandleShowOtherRaceRank(RaceId)
     RankingFt.RaceRankingId = RaceId;
   }
   
-  if (_CurPlayer &&  _CurPlayer.CurBoat)
+  if (typeof _CurPlayer !== "undeifined" && _CurPlayer &&  _CurPlayer.CurBoat)
   {
     OnPlayerLoadedCallBack();
     OnPlayerLoadedCallBack= null;
   }
+  
+
 }
 
 function OtherRaceRankingLoaded()
