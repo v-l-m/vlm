@@ -33,6 +33,8 @@ var RaceHistFt = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
+var OnPlayerLoadedCallBack = null;
+
 
 // On ready get started with vlm management
 $(document).ready(
@@ -129,10 +131,35 @@ function CheckPageParameters()
           case "PwdResetKey":
             HandlePasswordResetLink(PArray[1]);
             break;
+
+          case "RaceRank":
+            RankingFt.OnReadyTable = function() {HandleShowOtherRaceRank(PArray[1]);};
         }
       }
     }
   } 
+}
+
+function HandleShowOtherRaceRank(RaceId)
+{
+  OnPlayerLoadedCallBack = function()
+  {
+    LoadRankings(_CurPlayer.CurBoat,RaceId,OtherRaceRankingLoaded);
+    RankingFt.RaceRankingId = RaceId;
+  }
+  
+  if (_CurPlayer &&  _CurPlayer.CurBoat)
+  {
+    OnPlayerLoadedCallBack();
+    OnPlayerLoadedCallBack= null;
+  }
+}
+
+function OtherRaceRankingLoaded()
+{
+ $("#Ranking-Panel").show();
+ SortRanking("RAC");  
+ console.log("off race ranking loaded")
 }
 
 function OLInit() {
@@ -1303,6 +1330,10 @@ function HandleReadyTable(e,ft)
 {
   console.log ("Table ready" + ft);
   ft.DrawPending = false;
+  if (ft.OnReadyTable)
+  {
+    ft.OnReadyTable();
+  }
 }
 
 function HandlePagingComplete(e,ft)
@@ -2031,6 +2062,10 @@ function HandleBoatSelectionChange(e)
   }
   SetCurrentBoat(Boat,true,false); 
   DisplayCurrentDDSelectedBoat(Boat);
+  if (RankingFt)
+  {
+    RankingFt.RaceRankingId = Boat.Engaged;
+  }
 }
 
 var LastMouseMoveCall = 0;
@@ -2138,7 +2173,6 @@ function CheckWPRankingList(Boat)
 function SortRanking(style, WPNum)
 {
 
-  
   //$('#RankingTableBody').empty();
   let Boat = _CurPlayer.CurBoat;
   
@@ -2478,21 +2512,32 @@ function Sort2NonRacing(rnk1,rnk2)
   }
 }
 
-function SortRankingData(Boat, SortType,WPNum)
+function SortRankingData(Boat, SortType,WPNum, RaceId)
 {
+
+  if (!RaceId && !RankingFt.RaceRankingId)
+  {
+    RaceId = Boat.Engaged;
+  }
+  else if (!RaceId)
+  {
+    RaceId = RankingFt.RaceRankingId;
+  }
+
   
-  if (Boat.RnkObject && typeof Boat.RnkObject.RacerRanking === "undefined")
+  if (Boat.RnkObject && Boat.RnkObject[RaceId] && 
+    (typeof Boat.RnkObject[RaceId].RacerRanking === "undefined" )) //|| Boat.RnkObject[RaceId].RacerRanking.length !== Boat.RnkObject[RaceId]+1))
   {
     let index ;
 
-    Boat.RnkObject.RacerRanking=[];
+    Boat.RnkObject[RaceId].RacerRanking=[];
     
-    for (index in Boat.RnkObject)
+    for (index in Boat.RnkObject[RaceId])
     {
-      if (Boat.RnkObject[index] )
+      if (Boat.RnkObject[RaceId][index] )
       {
         //Boat.RnkObject[index].idusers=index;
-        Boat.RnkObject.RacerRanking.push(Boat.RnkObject[index]);
+        Boat.RnkObject[RaceId].RacerRanking.push(Boat.RnkObject[RaceId][index]);
       }
     }
   }
@@ -2500,7 +2545,7 @@ function SortRankingData(Boat, SortType,WPNum)
   switch (SortType)
   {
     case "WP":
-      Boat.RnkObject.RacerRanking.sort(WPRaceSort(WPNum));
+      Boat.RnkObject[RaceId].RacerRanking.sort(WPRaceSort(WPNum));
       break;
       
     case 'RAC':
@@ -2510,7 +2555,7 @@ function SortRankingData(Boat, SortType,WPNum)
     case 'ABD':
     case 'ARR':
     
-      Boat.RnkObject.RacerRanking.sort(RacersSort);
+      Boat.RnkObject[RaceId].RacerRanking.sort(RacersSort);
       break;
 
     default:
@@ -2521,9 +2566,9 @@ function SortRankingData(Boat, SortType,WPNum)
   let rnk = 1;
   let index = 0;
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index] && Boat.IdBoat === index)
+    if (Boat.RnkObject[RaceId].RacerRanking[index] && Boat.IdBoat === index)
       {
         rnk  = index +1;
         break;
@@ -2548,11 +2593,11 @@ function FillWPRanking(Boat,WPNum, Friends)
 
   BackupRankingTable();
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index])
+    if (Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index];
 
       if (RnkBoat.WP && RnkBoat.WP[WPNum -1] && !RnkBoat.WP[WPNum -1].Delta)
       {
@@ -2601,11 +2646,11 @@ function FillStatusRanking(Boat,Status, Friends)
   
   BackupRankingTable();
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index])
+    if (Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index];
       
       if (RnkBoat.status === Status)
       {
@@ -2637,11 +2682,11 @@ function FillRacingRanking(Boat, Friends)
 
   BackupRankingTable();
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index])
+    if (Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index];
 
       if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
       {
@@ -3016,6 +3061,11 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
 
 }
 
+function GetRaceRankingLink(RaceInfo)
+{
+  return '<a href="/jvlm?RaceRank='+RaceInfo.idrace+'" target="RankTab">'+RaceInfo.racename+'</a>'
+}
+
 function FillBoatPalmares(data,status,b,c,d,f)
 {
   let index;
@@ -3031,7 +3081,7 @@ function FillBoatPalmares(data,status,b,c,d,f)
         let RowsData = 
           {
             RaceId:data.palmares[index].idrace,
-            RaceName : data.palmares[index].racename,
+            RaceName : GetRaceRankingLink(data.palmares[index]),
             Ranking : palmares.ranking.rank + " / " + palmares.ranking.racercount 
           }
 

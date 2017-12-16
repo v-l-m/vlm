@@ -277,6 +277,12 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh,TargetTab)
         }
 
         HidePb("#PbGetBoatProgress");
+
+        if (OnPlayerLoadedCallBack)
+        {
+          OnPlayerLoadedCallBack();
+          OnPlayerLoadedCallBack = null;
+        }
       }
     )
 
@@ -1268,24 +1274,41 @@ function LoadRealsList(Boat)
   );
 }
 
-function LoadRankings(Boat)
+function LoadRankings(Boat,RaceId,CallBack)
 {
   if ((typeof Boat === "undefined") || ! Boat || (typeof Boat.VLMInfo === "undefined")  )
   {
     return;
   }
 
-  $.get("/cache/rankings/rnk_"+Boat.VLMInfo.RAC+".json?d="+ (new Date().getTime()), 
+  if (!RaceId)
+  {
+    RaceId = Boat.VLMInfo.RAC
+  }
+  
+  $.get("/cache/rankings/rnk_"+RaceId+".json?d="+ (new Date().getTime()), 
         function (result)
         {
+          if (!Boat.RnkObject)
+          {
+            Boat.RnkObject=[];
+          }
+          
           if (result)
           {
-            Boat.RnkObject = result.Boats;
-            DrawBoat(Boat,false);
+            Boat.RnkObject[RaceId] = result.Boats;
+            if (CallBack)
+            {
+              CallBack();
+            }
+            else
+            {
+              DrawBoat(Boat,false);
+            }
           }
           else
           {
-            Boat.RnkObject = null;
+            Boat.RnkObject[RaceId] = null;
           }
         }
   );
@@ -1390,13 +1413,13 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   }
 
   // Sort racers to be able to show proper opponents
-  SortRankingData(Boat,'RAC')
+  SortRankingData(Boat,'RAC',null,Boat.Engaged)
   
-  for (index in  Boat.RnkObject.RacerRanking)
+  for (index in  Boat.RnkObject[Boat.Engaged].RacerRanking)
   {
-    if (index in Boat.RnkObject.RacerRanking )
+    if (index in Boat.RnkObject[Boat.Engaged].RacerRanking )
     {
-      var Opp = Boat.RnkObject.RacerRanking[index];
+      var Opp = Boat.RnkObject[Boat.Engaged].RacerRanking[index];
 
       if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends,Opp.idusers)) && RnkIsRacing(Opp) && (Math.random()<=ratio) && (count < MAX_LEN))
       {
