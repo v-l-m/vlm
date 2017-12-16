@@ -519,35 +519,35 @@ function InitMenusAndButtons()
   // Handler for not racing boat palmares
   $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
-      // Go To WP Ortho, VMG, VBVMG Modes
-      $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
-        function()
-        {
-          var WpH=-1;
-          var PMMode=PM_ORTHO;
-          var Lat = $("#PM_Lat")[0].value;
-          var Lon = $("#PM_Lon")[0].value;
-          
-          WpH = parseInt($("#PM_WPHeading")[0].value,10);
-          
-          switch ($(this)[0].id)
-          {
-            case "BtnPM_Ortho":
-              PMMode=PM_ORTHO;
-              break;
-  
-            case "BtnPM_VMG":
-              PMMode=PM_VMG;
-              break;
-  
-            case "BtnPM_VBVMG":
-              PMMode=PM_VBVMG;
-              break;
-  
-          }
-          SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
-        }
-      )
+  // Go To WP Ortho, VMG, VBVMG Modes
+  $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
+    function()
+    {
+      var WpH=-1;
+      var PMMode=PM_ORTHO;
+      var Lat = $("#PM_Lat")[0].value;
+      var Lon = $("#PM_Lon")[0].value;
+      
+      WpH = parseInt($("#PM_WPHeading")[0].value,10);
+      
+      switch ($(this)[0].id)
+      {
+        case "BtnPM_Ortho":
+          PMMode=PM_ORTHO;
+          break;
+
+        case "BtnPM_VMG":
+          PMMode=PM_VMG;
+          break;
+
+        case "BtnPM_VBVMG":
+          PMMode=PM_VBVMG;
+          break;
+
+      }
+      SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
+    }
+  )
       
       
       // Handle boat selector selection change
