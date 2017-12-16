@@ -2062,10 +2062,6 @@ function HandleBoatSelectionChange(e)
   }
   SetCurrentBoat(Boat,true,false); 
   DisplayCurrentDDSelectedBoat(Boat);
-  if (RankingFt)
-  {
-    RankingFt.RaceRankingId = Boat.Engaged;
-  }
 }
 
 var LastMouseMoveCall = 0;
@@ -2512,17 +2508,26 @@ function Sort2NonRacing(rnk1,rnk2)
   }
 }
 
-function SortRankingData(Boat, SortType,WPNum, RaceId)
+function GetRankingRaceId (Boat, RaceId)
 {
-
   if (!RaceId && !RankingFt.RaceRankingId)
   {
-    RaceId = Boat.Engaged;
+    return Boat.Engaged;
   }
   else if (!RaceId)
   {
-    RaceId = RankingFt.RaceRankingId;
+    return RankingFt.RaceRankingId;
   }
+  else
+  {
+    return RaceId
+  }
+}
+
+function SortRankingData(Boat, SortType,WPNum, RaceId)
+{
+
+  RaceId = GetRankingRaceId(Boat,RaceId);
 
   
   if (Boat.RnkObject && Boat.RnkObject[RaceId] && 
@@ -2591,13 +2596,15 @@ function FillWPRanking(Boat,WPNum, Friends)
     return;
   }
 
+  let RaceId = GetRankin(Boat)
+
   BackupRankingTable();
 
-  for (index in Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking)
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index])
+    if (Boat.RnkObject[RaceId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
 
       if (RnkBoat.WP && RnkBoat.WP[WPNum -1] && !RnkBoat.WP[WPNum -1].Delta)
       {
@@ -2643,14 +2650,15 @@ function FillStatusRanking(Boat,Status, Friends)
   let index;
   let RowNum = 1;
   let Rows = [];
+  let RaceId = GetRankingRaceId(Boat)
   
   BackupRankingTable();
 
-  for (index in Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking)
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index])
+    if (Boat.RnkObject[RaceId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
       
       if (RnkBoat.status === Status)
       {
@@ -2682,11 +2690,13 @@ function FillRacingRanking(Boat, Friends)
 
   BackupRankingTable();
 
-  for (index in Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking)
+  let RaceId = GetRankingRaceId(Boat)
+
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index])
+    if (Boat.RnkObject[RaceId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject[RankingFt.RaceRankingId].RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
 
       if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
       {
