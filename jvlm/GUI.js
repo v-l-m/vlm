@@ -578,14 +578,39 @@ function InitMenusAndButtons()
     }
   )
       
+  // InitCalendar link
+  $("#CalendarPanel").on("shown.bs.modal",function(e){ HandleShowAgenda()});
       
-      // Handle boat selector selection change
-      //
-      $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
-      
-      $('#cp11').colorpicker();
+  // Handle boat selector selection change
+  //
+  $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
+  
+  $('#cp11').colorpicker();
 
   CheckLogin();
+}
+
+let CalInited = false;
+function HandleShowAgenda()
+{
+  if (!CalInited)
+  {
+    jQuery('#Calendar').fullCalendar({
+      locale: _CurLocale,
+      editable: false,
+      header: { left: 'title', center: '', right:  'today prev,next'},
+      firstDay: 1,
+      events: "/feed/races.fullcalendar.php",
+      timeFormat: 'H:mm',
+      loading: function(bool) {
+          if (bool) jQuery('#loading').show();
+          else jQuery('#loading').hide();
+      }
+    })
+    CalInited = true;
+  }
+
+  $("#Infos").modal("hide")
 }
 
 function HandlePasswordChangeRequest(e)
