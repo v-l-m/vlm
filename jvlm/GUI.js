@@ -593,14 +593,15 @@ function InitMenusAndButtons()
 let CalInited = false;
 function HandleShowAgenda()
 {
-  if (!CalInited)
+  jQuery('#Calendar').fullCalendar('destroy');
+  //if (!CalInited)
   {
     jQuery('#Calendar').fullCalendar({
       locale: _CurLocale,
       editable: false,
       header: { left: 'title', center: '', right:  'today prev,next'},
       firstDay: 1,
-      events: "/feed/races.fullcalendar.php",
+      events: "/feed/races.fullcalendar.php?jvlm=1",
       timeFormat: 'H:mm',
       loading: function(bool) {
           if (bool) jQuery('#loading').show();
@@ -609,7 +610,7 @@ function HandleShowAgenda()
     })
     CalInited = true;
   }
-
+  
   $("#Infos").modal("hide")
 }
 
