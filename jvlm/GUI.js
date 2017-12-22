@@ -33,6 +33,8 @@ var RaceHistFt = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
+var OnPlayerLoadedCallBack = null;
+
 
 // On ready get started with vlm management
 $(document).ready(
@@ -129,10 +131,37 @@ function CheckPageParameters()
           case "PwdResetKey":
             HandlePasswordResetLink(PArray[1]);
             break;
+
+          case "RaceRank":
+            RankingFt.OnReadyTable = function() {HandleShowOtherRaceRank(PArray[1]);};
         }
       }
     }
   } 
+}
+
+function HandleShowOtherRaceRank(RaceId)
+{
+  OnPlayerLoadedCallBack = function()
+  {
+    LoadRankings(_CurPlayer.CurBoat,RaceId,OtherRaceRankingLoaded);
+    RankingFt.RaceRankingId = RaceId;
+  }
+  
+  if (typeof _CurPlayer !== "undeifined" && _CurPlayer &&  _CurPlayer.CurBoat)
+  {
+    OnPlayerLoadedCallBack();
+    OnPlayerLoadedCallBack= null;
+  }
+  
+
+}
+
+function OtherRaceRankingLoaded()
+{
+ $("#Ranking-Panel").show();
+ SortRanking("RAC");  
+ console.log("off race ranking loaded")
 }
 
 function OLInit() {
@@ -519,44 +548,71 @@ function InitMenusAndButtons()
   // Handler for not racing boat palmares
   $("#HistRankingButton").on('click',function(e) { ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat)});
   
-      // Go To WP Ortho, VMG, VBVMG Modes
-      $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
-        function()
-        {
-          var WpH=-1;
-          var PMMode=PM_ORTHO;
-          var Lat = $("#PM_Lat")[0].value;
-          var Lon = $("#PM_Lon")[0].value;
-          
-          WpH = parseInt($("#PM_WPHeading")[0].value,10);
-          
-          switch ($(this)[0].id)
-          {
-            case "BtnPM_Ortho":
-              PMMode=PM_ORTHO;
-              break;
-  
-            case "BtnPM_VMG":
-              PMMode=PM_VMG;
-              break;
-  
-            case "BtnPM_VBVMG":
-              PMMode=PM_VBVMG;
-              break;
-  
-          }
-          SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
-        }
-      )
+  // Go To WP Ortho, VMG, VBVMG Modes
+  $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
+    function()
+    {
+      var WpH=-1;
+      var PMMode=PM_ORTHO;
+      var Lat = $("#PM_Lat")[0].value;
+      var Lon = $("#PM_Lon")[0].value;
       
+      WpH = parseInt($("#PM_WPHeading")[0].value,10);
       
-      // Handle boat selector selection change
-      //
-      $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
+      switch ($(this)[0].id)
+      {
+        case "BtnPM_Ortho":
+          PMMode=PM_ORTHO;
+          break;
+
+        case "BtnPM_VMG":
+          PMMode=PM_VMG;
+          break;
+
+        case "BtnPM_VBVMG":
+          PMMode=PM_VBVMG;
+          break;
+
+      }
+      SendVLMBoatOrder(PMMode, Lon,Lat,WpH);
+    }
+  )
       
-      $('#cp11').colorpicker();
+  // InitCalendar link
+  $("#CalendarPanel").on("shown.bs.modal",function(e){ HandleShowAgenda()});
+      
+  // Handle boat selector selection change
+  //
+  $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
+  
+  $('#cp11').colorpicker();
 
   CheckLogin();
+}
+
+let CalInited = false;
+function HandleShowAgenda()
+{
+  jQuery('#Calendar').fullCalendar('destroy');
+  jQuery('#Calendar').fullCalendar({
+    locale: _CurLocale,
+    editable: false,
+    header: { left: 'title', center: '', right:  'today prev,next'},
+    firstDay: 1,
+    events: "/feed/races.fullcalendar.php",
+    data: function() 
+          { // a function that returns an object
+            return {jvlm: 1}
+          },
+    timeFormat: 'H:mm',
+    loading: function(bool) {
+        if (bool) jQuery('#loading').show();
+        else jQuery('#loading').hide();
+    }
+  })
+  CalInited = true;
+
+  $("#Infos").modal("hide")
 }
 
 function HandlePasswordChangeRequest(e)
@@ -1303,6 +1359,10 @@ function HandleReadyTable(e,ft)
 {
   console.log ("Table ready" + ft);
   ft.DrawPending = false;
+  if (ft.OnReadyTable)
+  {
+    ft.OnReadyTable();
+  }
 }
 
 function HandlePagingComplete(e,ft)
@@ -2138,7 +2198,6 @@ function CheckWPRankingList(Boat)
 function SortRanking(style, WPNum)
 {
 
-  
   //$('#RankingTableBody').empty();
   let Boat = _CurPlayer.CurBoat;
   
@@ -2478,21 +2537,41 @@ function Sort2NonRacing(rnk1,rnk2)
   }
 }
 
-function SortRankingData(Boat, SortType,WPNum)
+function GetRankingRaceId (Boat, RaceId)
 {
+  if (!RaceId && !RankingFt.RaceRankingId)
+  {
+    return Boat.Engaged;
+  }
+  else if (!RaceId)
+  {
+    return RankingFt.RaceRankingId;
+  }
+  else
+  {
+    return RaceId
+  }
+}
+
+function SortRankingData(Boat, SortType,WPNum, RaceId)
+{
+
+  RaceId = GetRankingRaceId(Boat,RaceId);
+
   
-  if (Boat.RnkObject && typeof Boat.RnkObject.RacerRanking === "undefined")
+  if (Boat.RnkObject && Boat.RnkObject[RaceId] && 
+    (typeof Boat.RnkObject[RaceId].RacerRanking === "undefined" )) //|| Boat.RnkObject[RaceId].RacerRanking.length !== Boat.RnkObject[RaceId]+1))
   {
     let index ;
 
-    Boat.RnkObject.RacerRanking=[];
+    Boat.RnkObject[RaceId].RacerRanking=[];
     
-    for (index in Boat.RnkObject)
+    for (index in Boat.RnkObject[RaceId])
     {
-      if (Boat.RnkObject[index] )
+      if (Boat.RnkObject[RaceId][index] )
       {
         //Boat.RnkObject[index].idusers=index;
-        Boat.RnkObject.RacerRanking.push(Boat.RnkObject[index]);
+        Boat.RnkObject[RaceId].RacerRanking.push(Boat.RnkObject[RaceId][index]);
       }
     }
   }
@@ -2500,7 +2579,7 @@ function SortRankingData(Boat, SortType,WPNum)
   switch (SortType)
   {
     case "WP":
-      Boat.RnkObject.RacerRanking.sort(WPRaceSort(WPNum));
+      Boat.RnkObject[RaceId].RacerRanking.sort(WPRaceSort(WPNum));
       break;
       
     case 'RAC':
@@ -2510,7 +2589,7 @@ function SortRankingData(Boat, SortType,WPNum)
     case 'ABD':
     case 'ARR':
     
-      Boat.RnkObject.RacerRanking.sort(RacersSort);
+      Boat.RnkObject[RaceId].RacerRanking.sort(RacersSort);
       break;
 
     default:
@@ -2521,9 +2600,9 @@ function SortRankingData(Boat, SortType,WPNum)
   let rnk = 1;
   let index = 0;
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index] && Boat.IdBoat === index)
+    if (Boat.RnkObject[RaceId].RacerRanking[index] && Boat.IdBoat === index)
       {
         rnk  = index +1;
         break;
@@ -2546,13 +2625,15 @@ function FillWPRanking(Boat,WPNum, Friends)
     return;
   }
 
+  let RaceId = GetRankin(Boat)
+
   BackupRankingTable();
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index])
+    if (Boat.RnkObject[RaceId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
 
       if (RnkBoat.WP && RnkBoat.WP[WPNum -1] && !RnkBoat.WP[WPNum -1].Delta)
       {
@@ -2598,14 +2679,15 @@ function FillStatusRanking(Boat,Status, Friends)
   let index;
   let RowNum = 1;
   let Rows = [];
+  let RaceId = GetRankingRaceId(Boat)
   
   BackupRankingTable();
 
-  for (index in Boat.RnkObject.RacerRanking)
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index])
+    if (Boat.RnkObject[RaceId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
       
       if (RnkBoat.status === Status)
       {
@@ -2637,11 +2719,13 @@ function FillRacingRanking(Boat, Friends)
 
   BackupRankingTable();
 
-  for (index in Boat.RnkObject.RacerRanking)
+  let RaceId = GetRankingRaceId(Boat)
+
+  for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject.RacerRanking[index])
+    if (Boat.RnkObject[RaceId].RacerRanking[index])
     {    
-      let RnkBoat = Boat.RnkObject.RacerRanking[index];
+      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
 
       if (Boat.IdBoat === parseInt(RnkBoat.idusers,10))
       {
@@ -3016,6 +3100,11 @@ function GetUserConfirmation(Question,IsYesNo,CallBack)
 
 }
 
+function GetRaceRankingLink(RaceInfo)
+{
+  return '<a href="/jvlm?RaceRank='+RaceInfo.idrace+'" target="RankTab">'+RaceInfo.racename+'</a>'
+}
+
 function FillBoatPalmares(data,status,b,c,d,f)
 {
   let index;
@@ -3031,7 +3120,7 @@ function FillBoatPalmares(data,status,b,c,d,f)
         let RowsData = 
           {
             RaceId:data.palmares[index].idrace,
-            RaceName : data.palmares[index].racename,
+            RaceName : GetRaceRankingLink(data.palmares[index]),
             Ranking : palmares.ranking.rank + " / " + palmares.ranking.racercount 
           }
 

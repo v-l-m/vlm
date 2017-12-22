@@ -82,7 +82,7 @@
           <a class="navbar-brand" href="/index.php" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v15</div>
+              <div class="version">v15.1</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left"> 
@@ -613,7 +613,7 @@
                     <a href="http://www.virtual-winds.org/forum/index.php?/forum/276-virtual-loup-de-mer/" target="forum"><span I18n="forum">forum </span></a>   
                 </div>
                 <div class="col-xs-1 col-md-1">
-                    <img src="images/ServerInfo.png">
+                    <img src="images/ranking.png" style="width:24px" >
                 </div>   
                 <div class="col-xs-3 col-md-2">
                     <a href="http://ranking.v-l-m.org" target="ranking"><span I18n="ranking">forum</span></a>
@@ -625,7 +625,7 @@
                     <img src="images/ServerInfo.png">
                 </div>   
                 <div class="col-xs-3 col-md-2">
-                    <a href="/calendar.php" target="calendar"><span I18n="calendar">Agenda</span></a>
+                    <a href="#CalendarPanel" data-toggle="modal"><span I18n="calendar">Agenda</span></a>
                 </div>   
                 <div class="col-xs-1 col-md-1">
                     <img src="images/ServerInfo.png">
@@ -637,7 +637,7 @@
                     <img src="images/ServerInfo.png">
                 </div>   
                 <div class="col-xs-3 col-md-2">
-                <a href="http://wiki.v-l-m.org/index.php" target="_wiki"><span I18n='doc'>doc</span></a>
+                <a href="http://wiki.v-l-m.org/index.php" target="_wiki"><span I18n='shortdoc'>doc</span></a>
                 </div>
                 <div class="clearfix visible-xs-block"></div>
                 <div class="col-xs-1 col-md-1">
@@ -659,7 +659,7 @@
                     <img src="images/ServerInfo.png">
                 </div>   
                 <div class="col-xs-3 col-md-2">
-                    <a href="http://v-l-m.github.io/vlm" target="_dev"><span I18n='dev'>dev</span></a>
+                    <a href="http://v-l-m.github.io/vlm" target="_dev"><span I18n='shortdev'>dev</span></a>
                 </div>
                 <div class="col-xs-1 col-md-1">
                     <img src="images/ServerInfo.png">
@@ -674,7 +674,7 @@
                   <img src="images/ServerInfo.png">
                 </div>   
                 <div class="col-xs-8 col-md-8">
-                    <a href="https://virtual-loup-de-mer.org/" target="forum"><span I18n='VLM1'>forum </span></a>   
+                    <a href="/index.php" target="VLM1"><span I18n='VLM1'>forum </span></a>   
                 </div>
           </div>   
           </fieldset>
@@ -1877,6 +1877,25 @@
       </div>
     </div>
 
+    <!-- Calendar panel -->
+    <div id="CalendarPanel" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div  class="modaldialog modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="calendar" class="modal-title" style="text-align:center">RaceCal</h4>
+          </div> 
+          <div class="modal-body">
+            <div id="Calendar">
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- invisible recaptcha div -->
     <div id='recaptcha-PwdReset1' class="g-recaptcha hidden"
       data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
@@ -1909,6 +1928,10 @@
     <script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
     <script src='external/PasswordStrength/jquery.pstrength-min.1.2.js' type='text/javascript'></script>
     <script src='https://www.google.com/recaptcha/api.js?render=explicit&onload=initrecaptcha' async ></script>
+    <script type='text/javascript' src='/externals/fullcalendar/fullcalendar.min.js'></script>
+    <script type='text/javascript' src='/externals/fullcalendar/locale-all.js'></script>
+    <link rel='stylesheet' type='text/css' href='/externals/fullcalendar/fullcalendar.css' />
+    
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
     <script>
