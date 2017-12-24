@@ -1166,34 +1166,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     FillRaceInstructionsTable(Boat.RaceInfo);
   }
 
-  // Loop all mapped fields to their respective location
-  for (index in BoatFieldMappings)
-  {
-    switch (BoatFieldMappings[index][0])
-    {
-      case FIELD_MAPPING_TEXT:
-        $(BoatFieldMappings[index][1]).text(BoatFieldMappings[index][2]);
-        break;
-
-      case FIELD_MAPPING_VALUE:
-        $(BoatFieldMappings[index][1]).val(BoatFieldMappings[index][2]);
-        break;
-      
-      case FIELD_MAPPING_CHECK:
-        $(BoatFieldMappings[index][1]).prop('checked',(BoatFieldMappings[index][2]));
-        break;
-
-      case FIELD_MAPPING_IMG:
-        $(BoatFieldMappings[index][1]).attr('src',(BoatFieldMappings[index][2]));
-        break;
-
-      case FIELD_MAPPING_CALLBACK:
-        BoatFieldMappings[index][2](BoatFieldMappings[index][1]);
-        break;
-
-      
-    }
-  }
+  FillFieldsFromMappingTable(BoatFieldMappings);
  
   // Change color depênding on windangle
   var WindColor="lime"
@@ -1267,6 +1240,38 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     UpdatePolarImages(Boat);
 
 } 
+
+function FillFieldsFromMappingTable(MappingTable)
+{
+  // Loop all mapped fields to their respective location
+  for (index in MappingTable)
+  {
+    switch (MappingTable[index][0])
+    {
+      case FIELD_MAPPING_TEXT:
+        $(MappingTable[index][1]).text(MappingTable[index][2]);
+        break;
+
+      case FIELD_MAPPING_VALUE:
+        $(MappingTable[index][1]).val(MappingTable[index][2]);
+        break;
+      
+      case FIELD_MAPPING_CHECK:
+        $(MappingTable[index][1]).prop('checked',(MappingTable[index][2]));
+        break;
+
+      case FIELD_MAPPING_IMG:
+        $(MappingTable[index][1]).attr('src',(MappingTable[index][2]));
+        break;
+
+      case FIELD_MAPPING_CALLBACK:
+        MappingTable[index][2](MappingTable[index][1]);
+        break;
+
+      
+    }
+  }
+}
 
 function FillRaceInstructionsTable (RaceInstructions)
 {
