@@ -59,8 +59,9 @@ $(document).ready(
               {
                 if ((x.status === 401) || (x.status == 403))
                 {
+                  window.location.replace("jvlm?login")
                   //on access denied try reviving the session
-                  OnLoginRequest();
+                  //OnLoginRequest();
                 }
                 else if (x.status == 404)
                 {
