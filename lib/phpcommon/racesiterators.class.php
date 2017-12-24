@@ -76,45 +76,53 @@
   }
 
 
-  class FullcalendarRacesIterator extends RacesIterator {
-      var $jsonarray;
+class FullcalendarRacesIterator extends RacesIterator 
+{
+  var $jsonarray;
 
-      function __construct() {
-          $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
-                          " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND !(racetype & ".RACE_TYPE_RECORD.") ".
-                          " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
-                          "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
-                          "FROM `racespreview` ".
-                          "WHERE deptime > UNIX_TIMESTAMP() )";
+  function __construct() 
+  {
+    $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
+                    " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND !(racetype & ".RACE_TYPE_RECORD.") ".
+                    " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
+                    "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
+                    "FROM `racespreview` ".
+                    "WHERE deptime > UNIX_TIMESTAMP() )";
 
-                          ;
-          parent::__construct();
-      }
-
-      function start() {
-          $this->jsonarray = Array();
-      }
-
-      function onerow($row) {
-          $jsonarray = Array();
-          $jsonarray['start'] = date(DATE_ISO8601,$row['deptime']);
-          $jsonarray['end'] = date(DATE_ISO8601,$row['closetime']);
-    $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
-    /* #700 candidate
-    if (!is_null($row['racename']))
-      $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
-    else
-      $jsonarray['title'] = "-no title found-";
-    */
-    $jsonarray['allDay'] = is_null($row['closetime']);
-          if (!is_null($row['idraces'])) $jsonarray['url'] = sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
-          $this->jsonarray[] = $jsonarray;
-      }
-
-      function end() {
-          echo json_encode($this->jsonarray);
-      }
+                    ;
+    parent::__construct();
   }
+
+  function start() 
+  {
+    $this->jsonarray = Array();
+  }
+
+  function onerow($row) 
+  {
+    $jsonarray = Array();
+    $jsonarray['start'] = date(DATE_ISO8601,$row['deptime']);
+    $jsonarray['end'] = date(DATE_ISO8601,$row['closetime']);
+    $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
+  /* #700 candidate
+  if (!is_null($row['racename']))
+    $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
+  else
+    $jsonarray['title'] = "-no title found-";
+  */
+    $jsonarray['allDay'] = is_null($row['closetime']);
+    if (!is_null($row['idraces']))
+    {
+      $jsonarray['url'] = sprintf("http://%s/jvlm?ICSRace=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
+    }
+    $this->jsonarray[] = $jsonarray;
+  }
+
+  function end() 
+  {
+    echo json_encode($this->jsonarray);
+  }
+}
 
 
   class RssRacesIterator extends RacesIterator {
