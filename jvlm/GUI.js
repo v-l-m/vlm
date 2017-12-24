@@ -30,6 +30,7 @@ var GribWindController = null;
 var PilototoFt = null;
 var RankingFt = null;
 var RaceHistFt = null;
+var ICS_WPft = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
@@ -135,11 +136,22 @@ function CheckPageParameters()
 
           case "RaceRank":
             RankingFt.OnReadyTable = function() {HandleShowOtherRaceRank(PArray[1]);};
+            break;
+          
+          case "ICSRace":
+            HandleShowICS(PArray[1]);
+            break;
         }
       }
     }
   } 
 }
+
+function HandleShowICS(raceid)
+{
+  $("#RacesInfoForm").modal("show");
+}
+
 
 function HandleShowOtherRaceRank(RaceId)
 {
@@ -752,9 +764,19 @@ function InitFootables()
     'postdraw.ft.table':HandleTableDrawComplete
   }
   });
+  ICS_WPft = FooTable.init ("#RaceWayPoints",{
+    'name' : "RaceWayPoints",
+    'on':
+    {
+      'ready.ft.table' : HandleReadyTable,
+      'after.ft.paging' : HandlePagingComplete,
+      'postdraw.ft.table':HandleTableDrawComplete
+    }
+    });
   PilototoFt.DrawPending = true;
   RankingFt.DrawPending = true;
   RaceHistFt.DrawPending = true;
+  ICS_WPft.DrawPending = true;
 }
 
 function HandleUpdatePilototoTable(e)
@@ -1155,7 +1177,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   // Race Instruction
   if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
   {
-    FillRaceInstructionsTable(Boat.RaceInfo);
+    FillRaceInstructions(Boat.RaceInfo);
   }
 
   FillFieldsFromMappingTable(BoatFieldMappings);
@@ -1265,7 +1287,7 @@ function FillFieldsFromMappingTable(MappingTable)
   }
 }
 
-function FillRaceInstructionsTable (RaceInfo)
+function FillRaceInstructions (RaceInfo)
 {
   let Instructions = [];
   let BoatFieldMappings = [];
@@ -1276,15 +1298,10 @@ function FillRaceInstructionsTable (RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(RaceInfo.deptime,10)*1000)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(RaceInfo.closetime,10)*1000)]);
   BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+RaceInfo.idraces+".png"])
-  BoatFieldMappings.push([FIELD_MAPPING_CALLBACK,"#RaceWayPoints",function(p){FillRaceWaypointList(p,Boat)}])
     
   FillFieldsFromMappingTable (BoatFieldMappings);
-  
-}
+  FillRaceWaypointList(RaceInfo);
 
-function FillRaceWaypointList(p,Boat)
-{
-  $(p).empty();
 }
 
 function UpdatePolarImages(Boat)
@@ -2670,6 +2687,42 @@ function FillWPRanking(Boat,WPNum, Friends)
   
 }
   
+function BackupICS_WPTable()
+{
+  BackupFooTable(ICS_WPft,"#RaceWayPoints","#RaceWayPointsInsertPoint")
+}
+
+function FillRaceWaypointList(RaceInfo)
+{
+  BackupICS_WPTable();
+
+  if (RaceInfo)
+  {
+    let Rows = [];
+
+    for (index in RaceInfo.races_waypoints)
+    {
+      if (RaceInfo.races_waypoints[index])
+      {
+        let WP = RaceInfo.races_waypoints[index];
+        let Row = {};
+
+        Row["WaypointId"]=WP["wporder"]
+        Row["Lat1"]=WP["latitude1"]
+        Row["Lon1"]=WP["longitude1"]
+        Row["Lat2"]=WP["latitude2"]
+        Row["Lon2"]=WP["longitude2"]
+        //Row["Spec"]=WP["latitude1"]
+        Row["Type"]=WP["wptype"]
+        Row["Name"]=WP["libelle"]
+
+        Rows.push(Row);
+      }
+    }
+
+    ICS_WPft.loadRows(Rows);
+  }
+}
 
 function BackupRankingTable()
 {
