@@ -1155,14 +1155,6 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   // Race Instruction
   if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.RaceInfo.racename]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",Boat.RaceInfo.boattype.substring(5)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(Boat.RaceInfo.vacfreq,10)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(Boat.RaceInfo.firstpcttime,10)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(Boat.RaceInfo.deptime,10)*1000)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(Boat.RaceInfo.closetime,10)*1000)]);
-    BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+Boat.RaceInfo.idraces+".png"])
-    BoatFieldMappings.push([FIELD_MAPPING_CALLBACK,"#RaceWayPoints",function(p){FillRaceWaypointList(p,Boat)}])
     FillRaceInstructionsTable(Boat.RaceInfo);
   }
 
@@ -1273,17 +1265,21 @@ function FillFieldsFromMappingTable(MappingTable)
   }
 }
 
-function FillRaceInstructionsTable (RaceInstructions)
+function FillRaceInstructionsTable (RaceInfo)
 {
   let Instructions = [];
-
-  for (index in RaceInstructions)
-  {
-    if (RaceInstructions[index])
-    {
-
-    }
-  }
+  let BoatFieldMappings = [];
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",RaceInfo.racename]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",RaceInfo.boattype.substring(5)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(RaceInfo.vacfreq,10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(RaceInfo.firstpcttime,10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(RaceInfo.deptime,10)*1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(RaceInfo.closetime,10)*1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+RaceInfo.idraces+".png"])
+  BoatFieldMappings.push([FIELD_MAPPING_CALLBACK,"#RaceWayPoints",function(p){FillRaceWaypointList(p,Boat)}])
+    
+  FillFieldsFromMappingTable (BoatFieldMappings);
+  
 }
 
 function FillRaceWaypointList(p,Boat)
