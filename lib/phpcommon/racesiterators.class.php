@@ -97,8 +97,8 @@
 
       function onerow($row) {
           $jsonarray = Array();
-          $jsonarray['start'] = $row['deptime'];
-          $jsonarray['end'] = $row['closetime'];
+          $jsonarray['start'] = date(DATE_ISO8601,$row['deptime']);
+          $jsonarray['end'] = date(DATE_ISO8601,$row['closetime']);
     $jsonarray['title'] = html_entity_decode($row['racename'], ENT_COMPAT, "UTF-8");
     /* #700 candidate
     if (!is_null($row['racename']))
