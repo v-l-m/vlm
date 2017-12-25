@@ -2692,6 +2692,72 @@ function BackupICS_WPTable()
   BackupFooTable(ICS_WPft,"#RaceWayPoints","#RaceWayPointsInsertPoint")
 }
 
+
+function getWaypointHTMLSymbols(WPFormat) 
+{
+  WPSymbols = "";
+  switch (WPFormat & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) 
+  {
+    case WP_CROSS_ANTI_CLOCKWISE:
+      WPSymbols += "&#x21BA; ";
+      break;
+    case WP_CROSS_CLOCKWISE:
+      WPSymbols += "&#x21BB; ";
+      break;
+    default:
+  }
+  if ((WPFormat & WP_CROSS_ONCE) == WP_CROSS_ONCE) 
+  {
+    WPSymbols += "&#x2285; ";
+  } 
+  
+  switch (WPFormat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) 
+  {
+    case WP_ICE_GATE_S:
+      WPSymbols += "&#x27F0;";
+      break;
+    case WP_ICE_GATE_N:
+      WPSymbols += "&#x27F1;";
+    default:
+  }
+  return WPSymbols.trim();
+}
+
+function getWaypointHTMLSymbolsDescription(WPFormat) 
+{
+  WPDesc = "";
+  switch (WPFormat & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) 
+  {
+    case WP_CROSS_ANTI_CLOCKWISE:
+      WPDesc += GetLocalizedString("Anti-clockwise")+" ";
+      break;
+    case WP_CROSS_CLOCKWISE:
+      WPDesc += GetLocalizedString("Clockwise")+" ";
+      break;
+    default:
+  }
+  
+  if ((WPFormat & WP_CROSS_ONCE) == WP_CROSS_ONCE) 
+  {
+    WPDesc += GetLocalizedString("Only once");
+  } 
+  
+  switch (WPFormat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) 
+  {
+    case WP_ICE_GATE_S:
+      WPDesc += GetLocalizedString("Ice gate")+"("+GetLocalizedString("South")+") ";
+      break;
+    case WP_ICE_GATE_N:
+      WPDesc += GetLocalizedString("Ice gate")+"("+GetLocalizedString("North")+") ";
+    default:
+  }
+  if (WPDesc !== "")
+  {
+    WPDesc = GetLocalizedString("Crossing")+" : "+WPDesc;
+  }
+  return WPDesc.trim();
+}
+
 function FillRaceWaypointList(RaceInfo)
 {
   BackupICS_WPTable();
@@ -2707,12 +2773,11 @@ function FillRaceWaypointList(RaceInfo)
         let WP = RaceInfo.races_waypoints[index];
         let Row = {};
 
+        let WPSpec
         Row["WaypointId"]=WP["wporder"]
-        Row["Lat1"]=WP["latitude1"]
-        Row["Lon1"]=WP["longitude1"]
-        Row["Lat2"]=WP["latitude2"]
-        Row["Lon2"]=WP["longitude2"]
-        //Row["Spec"]=WP["latitude1"]
+        Row["WP1"]=WP["latitude1"]+"<BR>"+WP["longitude1"]
+        Row["WP2"]=WP["latitude2"]+"<BR>"+WP["longitude2"]
+        Row["Spec"]="<span title='"+ getWaypointHTMLSymbolsDescription(WP["wpformat"]) +"'>"+ getWaypointHTMLSymbols (WP["wpformat"])+"</span>"
         Row["Type"]=WP["wptype"]
         Row["Name"]=WP["libelle"]
 
