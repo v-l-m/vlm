@@ -1653,7 +1653,7 @@
                   <li><a href="#DiscontinueRace" data-toggle="tab" I18n="Discontinue"> Disc. Race</a></li>
                 </ul>
                 <div id="TabModalContent" class="tab-content ">
-                  <div class="BCPane tab-pane fade  in active" id="InfosRace" style="padding:0px">
+                  <div class="BCPane tab-pane fade in active" id="InfosRace" style="padding:0px">
                         <div>
                           <span I18n="race">Course</span> : <span class="RaceName">2016/01/04 17:00:00</span><br>
                           <span I18n="startmap">Départ</span> : <span id="RaceStartDate">2016/01/04 17:00:00</span><br>
@@ -1668,26 +1668,40 @@
                               <li class="active"><a href="#waypoints" data-toggle="tab"aria-expanded="true">Waypoints</a></li>
                               <li><a href="#NSZ" data-toggle="tab">NSZ</a></li>
                           </ul>
-                            <div class="BCPane tab-pane fade  in active" id="waypoints">
-                                <h3>Waypoints</h3>
-                                <div id="RaceWayPointsInsertPoint">
-                                  <table id="RaceWayPoints" class="footable table waypoints">
-                                    <thead>
-                                      <tr>
-                                        <th data-name ="WaypointId">#</th>
-                                        <th data-name ="WP1">P1</th>
-                                        <th data-name ="WP2">P2/@</th>
-                                        <th data-name ="Spec">Spec</th>
-                                        <th data-name ="Type">Type</th>
-                                        <th data-name ="Name">Name</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody >                                                                       
-                                    </tbody>
-                                  </table>
-                                </div>  
+                            <div class="BCPane tab-pane fade in active" id="waypoints">
+                              <div id="RaceWayPointsInsertPoint">
+                                <table id="RaceWayPoints" class="footable table waypoints">
+                                  <thead>
+                                    <tr>
+                                      <th data-name ="WaypointId">#</th>
+                                      <th data-name ="WP1">P1</th>
+                                      <th data-name ="WP2">P2/@</th>
+                                      <th data-name ="Spec">Spec</th>
+                                      <th data-name ="Type">Type</th>
+                                      <th data-name ="Name">Name</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody >                                                                       
+                                  </tbody>
+                                </table>
+                              </div>  
                             </div>
                             <div class="BCPane tab-pane fade" id="NSZ">
+                                <div id="NSZPointsInsertPoint">
+                                    <table id="NSZPoints" class="footable table waypoints">
+                                      <thead>
+                                        <tr>
+                                          <th data-name ="NSZId">#</th>
+                                          <th data-name ="Lon1">P1</th>
+                                          <th data-name ="Lat1">P2/@</th>
+                                          <th data-name ="Lon2">Spec</th>
+                                          <th data-name ="Lat2">Type</th>                                          
+                                        </tr>
+                                      </thead>
+                                      <tbody >                                                                       
+                                      </tbody>
+                                    </table>
+                                  </div>  
                             </div>
                      </div>
                    </div>

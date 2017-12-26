@@ -31,6 +31,7 @@ var PilototoFt = null;
 var RankingFt = null;
 var RaceHistFt = null;
 var ICS_WPft = null;
+var NSZ_WPft = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
@@ -730,42 +731,10 @@ function HandlePasswordReset(e, Validation )
   
 }
 
-function InitFootables()
+function InitFooTable(Id)
 {
-  // Handle race discontinuation request
-  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
-    
-  // Init Pilototo footable, and get pointer to object          
-  PilototoFt= FooTable.init("#PilototoTable",{
-  'name' : "PilototoTable",
-  'on':
-  {
-    'ready.ft.table' : HandleReadyTable,
-    'postdraw.ft.table':HandleTableDrawComplete
-  }
-  });
-
-  RankingFt = FooTable.init ("#RankingTable",{
-  'name' : "RankingTable",
-  'on':
-  {
-    'ready.ft.table' : HandleReadyTable,
-    'after.ft.paging' : HandlePagingComplete,
-    'postdraw.ft.table':HandleTableDrawComplete
-  }
-  });
-
-  RaceHistFt = FooTable.init ("#BoatRaceHist",{
-  'name' : "BoatRaceHist",
-  'on':
-  {
-    'ready.ft.table' : HandleReadyTable,
-    'after.ft.paging' : HandlePagingComplete,
-    'postdraw.ft.table':HandleTableDrawComplete
-  }
-  });
-  ICS_WPft = FooTable.init ("#RaceWayPoints",{
-    'name' : "RaceWayPoints",
+  let ret= FooTable.init("#"+Id,{
+    'name' : Id,
     'on':
     {
       'ready.ft.table' : HandleReadyTable,
@@ -773,10 +742,21 @@ function InitFootables()
       'postdraw.ft.table':HandleTableDrawComplete
     }
     });
-  PilototoFt.DrawPending = true;
-  RankingFt.DrawPending = true;
-  RaceHistFt.DrawPending = true;
-  ICS_WPft.DrawPending = true;
+  ret.DrawPending = true;
+  return ret;
+}
+
+function InitFootables()
+{
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+    
+  // Init Pilototo footable, and get pointer to object          
+  PilototoFt= InitFooTable("PilototoTable");
+  RankingFt = InitFooTable("RankingTable");
+  RaceHistFt = InitFooTable("BoatRaceHist");
+  ICS_WPft = InitFooTable("RaceWayPoints");
+  NSZ_WPft = InitFooTable("NSZWayPoints");
 }
 
 function HandleUpdatePilototoTable(e)
