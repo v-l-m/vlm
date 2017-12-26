@@ -413,3 +413,10 @@ a:focus {
 .rnk-locked{
   background-color: #461801;
   }
+.fc-today,
+.fc-state-highlight {
+    background: #999;
+}
+.fc-event, .fc-event-dot {
+    background-color: #695444;
+}
