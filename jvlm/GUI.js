@@ -150,7 +150,17 @@ function CheckPageParameters()
 
 function HandleShowICS(raceid)
 {
-  $("#RacesInfoForm").modal("show");
+  $.get("/ws/raceinfo.php?idrace="+raceid,
+        function(result)
+        {
+          if (result )
+          {
+            FillRaceInstructions(result);
+            $("#RacesInfoForm").modal("show");
+          }
+        }
+  )
+  
 }
 
 
@@ -158,6 +168,7 @@ function HandleShowOtherRaceRank(RaceId)
 {
   OnPlayerLoadedCallBack = function()
   {
+    
     LoadRankings(_CurPlayer.CurBoat,RaceId,OtherRaceRankingLoaded);
     RankingFt.RaceRankingId = RaceId;
   }
@@ -167,15 +178,13 @@ function HandleShowOtherRaceRank(RaceId)
     OnPlayerLoadedCallBack();
     OnPlayerLoadedCallBack= null;
   }
-  
-
 }
 
 function OtherRaceRankingLoaded()
 {
- $("#Ranking-Panel").show();
- SortRanking("RAC");  
- console.log("off race ranking loaded")
+  $("#Ranking-Panel").show();
+  SortRanking("RAC");  
+  console.log("off race ranking loaded")
 }
 
 function OLInit() {
