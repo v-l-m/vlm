@@ -483,3 +483,10 @@ a.ui-button:active,
   height: 5px; 
   width: 100px;
 }
+.fc-today,
+.fc-state-highlight {
+    background: #999;
+}
+.fc-event, .fc-event-dot {
+    background-color: #FFC90E;
+}
