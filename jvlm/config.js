@@ -16,6 +16,5 @@ if (webhost == 'vlm-dev.ddns.net')
 
     var WindGridServers = ['https://vlm-dev.ddns.net','https://vlm-dev.ddns.net','https://vlm-dev.ddns.net','https://vlm-dev.ddns.net'];
     
-    
 }
 
