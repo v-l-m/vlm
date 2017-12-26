@@ -30,6 +30,7 @@ var GribWindController = null;
 var PilototoFt = null;
 var RankingFt = null;
 var RaceHistFt = null;
+var ICS_WPft = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
@@ -59,8 +60,9 @@ $(document).ready(
               {
                 if ((x.status === 401) || (x.status == 403))
                 {
+                  window.location.replace("jvlm?login")
                   //on access denied try reviving the session
-                  OnLoginRequest();
+                  //OnLoginRequest();
                 }
                 else if (x.status == 404)
                 {
@@ -134,11 +136,22 @@ function CheckPageParameters()
 
           case "RaceRank":
             RankingFt.OnReadyTable = function() {HandleShowOtherRaceRank(PArray[1]);};
+            break;
+          
+          case "ICSRace":
+            HandleShowICS(PArray[1]);
+            break;
         }
       }
     }
   } 
 }
+
+function HandleShowICS(raceid)
+{
+  $("#RacesInfoForm").modal("show");
+}
+
 
 function HandleShowOtherRaceRank(RaceId)
 {
@@ -148,7 +161,7 @@ function HandleShowOtherRaceRank(RaceId)
     RankingFt.RaceRankingId = RaceId;
   }
   
-  if (typeof _CurPlayer !== "undeifined" && _CurPlayer &&  _CurPlayer.CurBoat)
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer &&  _CurPlayer.CurBoat)
   {
     OnPlayerLoadedCallBack();
     OnPlayerLoadedCallBack= null;
@@ -751,9 +764,19 @@ function InitFootables()
     'postdraw.ft.table':HandleTableDrawComplete
   }
   });
+  ICS_WPft = FooTable.init ("#RaceWayPoints",{
+    'name' : "RaceWayPoints",
+    'on':
+    {
+      'ready.ft.table' : HandleReadyTable,
+      'after.ft.paging' : HandlePagingComplete,
+      'postdraw.ft.table':HandleTableDrawComplete
+    }
+    });
   PilototoFt.DrawPending = true;
   RankingFt.DrawPending = true;
   RaceHistFt.DrawPending = true;
+  ICS_WPft.DrawPending = true;
 }
 
 function HandleUpdatePilototoTable(e)
@@ -1154,45 +1177,10 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   // Race Instruction
   if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.RaceInfo.racename]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",Boat.RaceInfo.boattype.substring(5)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(Boat.RaceInfo.vacfreq,10)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(Boat.RaceInfo.firstpcttime,10)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(Boat.RaceInfo.deptime,10)*1000)]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(Boat.RaceInfo.closetime,10)*1000)]);
-    BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+Boat.RaceInfo.idraces+".png"])
-    BoatFieldMappings.push([FIELD_MAPPING_CALLBACK,"#RaceWayPoints",function(p){FillRaceWaypointList(p,Boat)}])
-    FillRaceInstructionsTable(Boat.RaceInfo);
+    FillRaceInstructions(Boat.RaceInfo);
   }
 
-  // Loop all mapped fields to their respective location
-  for (index in BoatFieldMappings)
-  {
-    switch (BoatFieldMappings[index][0])
-    {
-      case FIELD_MAPPING_TEXT:
-        $(BoatFieldMappings[index][1]).text(BoatFieldMappings[index][2]);
-        break;
-
-      case FIELD_MAPPING_VALUE:
-        $(BoatFieldMappings[index][1]).val(BoatFieldMappings[index][2]);
-        break;
-      
-      case FIELD_MAPPING_CHECK:
-        $(BoatFieldMappings[index][1]).prop('checked',(BoatFieldMappings[index][2]));
-        break;
-
-      case FIELD_MAPPING_IMG:
-        $(BoatFieldMappings[index][1]).attr('src',(BoatFieldMappings[index][2]));
-        break;
-
-      case FIELD_MAPPING_CALLBACK:
-        BoatFieldMappings[index][2](BoatFieldMappings[index][1]);
-        break;
-
-      
-    }
-  }
+  FillFieldsFromMappingTable(BoatFieldMappings);
  
   // Change color depênding on windangle
   var WindColor="lime"
@@ -1267,22 +1255,53 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
 } 
 
-function FillRaceInstructionsTable (RaceInstructions)
+function FillFieldsFromMappingTable(MappingTable)
 {
-  let Instructions = [];
-
-  for (index in RaceInstructions)
+  // Loop all mapped fields to their respective location
+  for (index in MappingTable)
   {
-    if (RaceInstructions[index])
+    switch (MappingTable[index][0])
     {
+      case FIELD_MAPPING_TEXT:
+        $(MappingTable[index][1]).text(MappingTable[index][2]);
+        break;
 
+      case FIELD_MAPPING_VALUE:
+        $(MappingTable[index][1]).val(MappingTable[index][2]);
+        break;
+      
+      case FIELD_MAPPING_CHECK:
+        $(MappingTable[index][1]).prop('checked',(MappingTable[index][2]));
+        break;
+
+      case FIELD_MAPPING_IMG:
+        $(MappingTable[index][1]).attr('src',(MappingTable[index][2]));
+        break;
+
+      case FIELD_MAPPING_CALLBACK:
+        MappingTable[index][2](MappingTable[index][1]);
+        break;
+
+      
     }
   }
 }
 
-function FillRaceWaypointList(p,Boat)
+function FillRaceInstructions (RaceInfo)
 {
-  $(p).empty();
+  let Instructions = [];
+  let BoatFieldMappings = [];
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",RaceInfo.racename]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",RaceInfo.boattype.substring(5)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(RaceInfo.vacfreq,10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(RaceInfo.firstpcttime,10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate",new Date(parseInt(RaceInfo.deptime,10)*1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose",new Date(parseInt(RaceInfo.closetime,10)*1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_IMG,"#RaceImageMap","/cache/racemaps/"+RaceInfo.idraces+".png"])
+    
+  FillFieldsFromMappingTable (BoatFieldMappings);
+  FillRaceWaypointList(RaceInfo);
+
 }
 
 function UpdatePolarImages(Boat)
@@ -2668,6 +2687,107 @@ function FillWPRanking(Boat,WPNum, Friends)
   
 }
   
+function BackupICS_WPTable()
+{
+  BackupFooTable(ICS_WPft,"#RaceWayPoints","#RaceWayPointsInsertPoint")
+}
+
+
+function getWaypointHTMLSymbols(WPFormat) 
+{
+  WPSymbols = "";
+  switch (WPFormat & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) 
+  {
+    case WP_CROSS_ANTI_CLOCKWISE:
+      WPSymbols += "&#x21BA; ";
+      break;
+    case WP_CROSS_CLOCKWISE:
+      WPSymbols += "&#x21BB; ";
+      break;
+    default:
+  }
+  if ((WPFormat & WP_CROSS_ONCE) == WP_CROSS_ONCE) 
+  {
+    WPSymbols += "&#x2285; ";
+  } 
+  
+  switch (WPFormat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) 
+  {
+    case WP_ICE_GATE_S:
+      WPSymbols += "&#x27F0;";
+      break;
+    case WP_ICE_GATE_N:
+      WPSymbols += "&#x27F1;";
+    default:
+  }
+  return WPSymbols.trim();
+}
+
+function getWaypointHTMLSymbolsDescription(WPFormat) 
+{
+  WPDesc = "";
+  switch (WPFormat & (WP_CROSS_CLOCKWISE|WP_CROSS_ANTI_CLOCKWISE)) 
+  {
+    case WP_CROSS_ANTI_CLOCKWISE:
+      WPDesc += GetLocalizedString("Anti-clockwise")+" ";
+      break;
+    case WP_CROSS_CLOCKWISE:
+      WPDesc += GetLocalizedString("Clockwise")+" ";
+      break;
+    default:
+  }
+  
+  if ((WPFormat & WP_CROSS_ONCE) == WP_CROSS_ONCE) 
+  {
+    WPDesc += GetLocalizedString("Only once");
+  } 
+  
+  switch (WPFormat & (WP_ICE_GATE_N|WP_ICE_GATE_S)) 
+  {
+    case WP_ICE_GATE_S:
+      WPDesc += GetLocalizedString("Ice gate")+"("+GetLocalizedString("South")+") ";
+      break;
+    case WP_ICE_GATE_N:
+      WPDesc += GetLocalizedString("Ice gate")+"("+GetLocalizedString("North")+") ";
+    default:
+  }
+  if (WPDesc !== "")
+  {
+    WPDesc = GetLocalizedString("Crossing")+" : "+WPDesc;
+  }
+  return WPDesc.trim();
+}
+
+function FillRaceWaypointList(RaceInfo)
+{
+  BackupICS_WPTable();
+
+  if (RaceInfo)
+  {
+    let Rows = [];
+
+    for (index in RaceInfo.races_waypoints)
+    {
+      if (RaceInfo.races_waypoints[index])
+      {
+        let WP = RaceInfo.races_waypoints[index];
+        let Row = {};
+
+        let WPSpec
+        Row["WaypointId"]=WP["wporder"]
+        Row["WP1"]=WP["latitude1"]+"<BR>"+WP["longitude1"]
+        Row["WP2"]=WP["latitude2"]+"<BR>"+WP["longitude2"]
+        Row["Spec"]="<span title='"+ getWaypointHTMLSymbolsDescription(WP["wpformat"]) +"'>"+ getWaypointHTMLSymbols (WP["wpformat"])+"</span>"
+        Row["Type"]=WP["wptype"]
+        Row["Name"]=WP["libelle"]
+
+        Rows.push(Row);
+      }
+    }
+
+    ICS_WPft.loadRows(Rows);
+  }
+}
 
 function BackupRankingTable()
 {
