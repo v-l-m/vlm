@@ -16,6 +16,12 @@ if (webhost == 'vlm-dev.ddns.net')
 
     var WindGridServers = ['https://vlm-dev.ddns.net','https://vlm-dev.ddns.net','https://vlm-dev.ddns.net','https://vlm-dev.ddns.net'];
     
+}
+if (webhost == 'vlm-dev')
+{
+    tilesUrlArray='/cache/gshhstiles/${z}/${x}/${y}.png'
+
+    var WindGridServers = ['https://vlm-dev','https://vlm-dev','https://vlm-dev','https://vlm-dev'];
     
 }
 

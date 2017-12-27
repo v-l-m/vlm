@@ -31,6 +31,7 @@ var PilototoFt = null;
 var RankingFt = null;
 var RaceHistFt = null;
 var ICS_WPft = null;
+var NSZ_WPft = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
@@ -149,7 +150,17 @@ function CheckPageParameters()
 
 function HandleShowICS(raceid)
 {
-  $("#RacesInfoForm").modal("show");
+  $.get("/ws/raceinfo.php?idrace="+raceid,
+        function(result)
+        {
+          if (result )
+          {
+            FillRaceInstructions(result);
+            $("#RacesInfoForm").modal("show");
+          }
+        }
+  )
+  
 }
 
 
@@ -157,6 +168,7 @@ function HandleShowOtherRaceRank(RaceId)
 {
   OnPlayerLoadedCallBack = function()
   {
+    
     LoadRankings(_CurPlayer.CurBoat,RaceId,OtherRaceRankingLoaded);
     RankingFt.RaceRankingId = RaceId;
   }
@@ -166,15 +178,13 @@ function HandleShowOtherRaceRank(RaceId)
     OnPlayerLoadedCallBack();
     OnPlayerLoadedCallBack= null;
   }
-  
-
 }
 
 function OtherRaceRankingLoaded()
 {
- $("#Ranking-Panel").show();
- SortRanking("RAC");  
- console.log("off race ranking loaded")
+  $("#Ranking-Panel").show();
+  SortRanking("RAC");  
+  console.log("off race ranking loaded")
 }
 
 function OLInit() {
@@ -730,42 +740,10 @@ function HandlePasswordReset(e, Validation )
   
 }
 
-function InitFootables()
+function InitFooTable(Id)
 {
-  // Handle race discontinuation request
-  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
-    
-  // Init Pilototo footable, and get pointer to object          
-  PilototoFt= FooTable.init("#PilototoTable",{
-  'name' : "PilototoTable",
-  'on':
-  {
-    'ready.ft.table' : HandleReadyTable,
-    'postdraw.ft.table':HandleTableDrawComplete
-  }
-  });
-
-  RankingFt = FooTable.init ("#RankingTable",{
-  'name' : "RankingTable",
-  'on':
-  {
-    'ready.ft.table' : HandleReadyTable,
-    'after.ft.paging' : HandlePagingComplete,
-    'postdraw.ft.table':HandleTableDrawComplete
-  }
-  });
-
-  RaceHistFt = FooTable.init ("#BoatRaceHist",{
-  'name' : "BoatRaceHist",
-  'on':
-  {
-    'ready.ft.table' : HandleReadyTable,
-    'after.ft.paging' : HandlePagingComplete,
-    'postdraw.ft.table':HandleTableDrawComplete
-  }
-  });
-  ICS_WPft = FooTable.init ("#RaceWayPoints",{
-    'name' : "RaceWayPoints",
+  let ret= FooTable.init("#"+Id,{
+    'name' : Id,
     'on':
     {
       'ready.ft.table' : HandleReadyTable,
@@ -773,10 +751,21 @@ function InitFootables()
       'postdraw.ft.table':HandleTableDrawComplete
     }
     });
-  PilototoFt.DrawPending = true;
-  RankingFt.DrawPending = true;
-  RaceHistFt.DrawPending = true;
-  ICS_WPft.DrawPending = true;
+  ret.DrawPending = true;
+  return ret;
+}
+
+function InitFootables()
+{
+  // Handle race discontinuation request
+  $("#DiscontinueRaceButton").on('click',HandleDiscontinueRaceRequest)
+    
+  // Init Pilototo footable, and get pointer to object          
+  PilototoFt= InitFooTable("PilototoTable");
+  RankingFt = InitFooTable("RankingTable");
+  RaceHistFt = InitFooTable("BoatRaceHist");
+  ICS_WPft = InitFooTable("RaceWayPoints");
+  NSZ_WPft = InitFooTable("NSZPoints");
 }
 
 function HandleUpdatePilototoTable(e)
@@ -1289,9 +1278,16 @@ function FillFieldsFromMappingTable(MappingTable)
 
 function FillRaceInstructions (RaceInfo)
 {
+
+  if (typeof RaceInfo === "undefined" || ! RaceInfo)
+  {
+    return;
+  }
+
   let Instructions = [];
   let BoatFieldMappings = [];
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",RaceInfo.racename]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId",RaceInfo.idraces]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(RaceInfo.vacfreq,10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace",parseInt(RaceInfo.firstpcttime,10)]);
@@ -1302,6 +1298,16 @@ function FillRaceInstructions (RaceInfo)
   FillFieldsFromMappingTable (BoatFieldMappings);
   FillRaceWaypointList(RaceInfo);
 
+  $.get("/ws/raceinfo/exclusions.php?idr="+RaceInfo.idraces,
+      function (result)
+      {
+        if (result && result.success)
+        {
+          FillNSZList(result.Exclusions);
+        }
+      }
+  );
+  
 }
 
 function UpdatePolarImages(Boat)
@@ -2765,7 +2771,16 @@ function FillRaceWaypointList(RaceInfo)
   if (RaceInfo)
   {
     let Rows = [];
-
+    // Insert the start point
+    let Row = {};
+    Row["WaypointId"]=0
+    Row["WP1"]=RaceInfo.startlat+"<BR>"+RaceInfo.startlong
+    Row["WP2"]=""
+    Row["Spec"]=""
+    Row["Type"]=GetLocalizedString("startmap")
+    Row["Name"]=""
+    Rows.push(Row);
+    
     for (index in RaceInfo.races_waypoints)
     {
       if (RaceInfo.races_waypoints[index])
@@ -2778,7 +2793,7 @@ function FillRaceWaypointList(RaceInfo)
         Row["WP1"]=WP["latitude1"]+"<BR>"+WP["longitude1"]
         Row["WP2"]=WP["latitude2"]+"<BR>"+WP["longitude2"]
         Row["Spec"]="<span title='"+ getWaypointHTMLSymbolsDescription(WP["wpformat"]) +"'>"+ getWaypointHTMLSymbols (WP["wpformat"])+"</span>"
-        Row["Type"]=WP["wptype"]
+        Row["Type"]=GetLocalizedString(WP["wptype"])
         Row["Name"]=WP["libelle"]
 
         Rows.push(Row);
@@ -2786,6 +2801,39 @@ function FillRaceWaypointList(RaceInfo)
     }
 
     ICS_WPft.loadRows(Rows);
+  }
+}
+
+function BackupNSZ_Table()
+{
+  BackupFooTable(NSZ_WPft,"NSZPoints","NSZPointsInsertPoint")
+}
+
+function FillNSZList(Exclusions)
+{
+  BackupNSZ_Table();
+
+  if (Exclusions)
+  {
+    let Rows = [];
+
+    for (index in Exclusions)
+    {
+      if (Exclusions[index])
+      {
+        let Seg = Exclusions[index];
+        let row = {}
+        row["NSZId"]=index;
+        row["Lon1"]=Seg[0][1];
+        row["Lat1"]=Seg[0][0];
+        row["Lon2"]=Seg[1][1];
+        row["Lat2"]=Seg[1][0];
+        
+        Rows.push(row);
+      }
+    }
+
+    NSZ_WPft.loadRows(Rows);
   }
 }
 

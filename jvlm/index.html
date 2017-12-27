@@ -1641,7 +1641,11 @@
         <div id="RacesInfoPanel" class="modaldialog modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title" I18n="race" style="text-align:center">raceInfo : B2B</h4>
+            <h4 class="modal-title"  style="text-align:center">
+              <span I18n="race"></span>
+              <span class="RaceName"></span>
+              <span class="RaceId" AdminNav="true" style="display: none"></span>
+            </h4>
           </div>
             <div id="RaceInfoBody" class="modal-body" >
             </div>
@@ -1653,9 +1657,8 @@
                   <li><a href="#DiscontinueRace" data-toggle="tab" I18n="Discontinue"> Disc. Race</a></li>
                 </ul>
                 <div id="TabModalContent" class="tab-content ">
-                  <div class="BCPane tab-pane fade  in active" id="InfosRace" style="padding:0px">
+                  <div class="BCPane tab-pane fade in active" id="InfosRace" style="padding:0px">
                         <div>
-                          <span I18n="race">Course</span> : <span class="RaceName">2016/01/04 17:00:00</span><br>
                           <span I18n="startmap">Départ</span> : <span id="RaceStartDate">2016/01/04 17:00:00</span><br>
                           <span I18n="closerace">closeline</span> <span id="RaceLineClose"></span><br>
                           <span I18n="boattype">Type de bateau / Polaire</span> : <span class="BoatType"> IMOCA2007</span><br>
@@ -1668,26 +1671,40 @@
                               <li class="active"><a href="#waypoints" data-toggle="tab"aria-expanded="true">Waypoints</a></li>
                               <li><a href="#NSZ" data-toggle="tab">NSZ</a></li>
                           </ul>
-                            <div class="BCPane tab-pane fade  in active" id="waypoints">
-                                <h3>Waypoints</h3>
-                                <div id="RaceWayPointsInsertPoint">
-                                  <table id="RaceWayPoints" class="footable table waypoints">
-                                    <thead>
-                                      <tr>
-                                        <th data-name ="WaypointId">#</th>
-                                        <th data-name ="WP1">P1</th>
-                                        <th data-name ="WP2">P2/@</th>
-                                        <th data-name ="Spec">Spec</th>
-                                        <th data-name ="Type">Type</th>
-                                        <th data-name ="Name">Name</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody >                                                                       
-                                    </tbody>
-                                  </table>
-                                </div>  
+                            <div class="BCPane tab-pane fade in active" id="waypoints">
+                              <div id="RaceWayPointsInsertPoint">
+                                <table id="RaceWayPoints" class="footable table waypoints">
+                                  <thead>
+                                    <tr>
+                                      <th data-name ="WaypointId">#</th>
+                                      <th data-name ="WP1">P1</th>
+                                      <th data-name ="WP2">P2/@</th>
+                                      <th data-name ="Spec">Spec</th>
+                                      <th data-name ="Type">Type</th>
+                                      <th data-name ="Name">Name</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody >                                                                       
+                                  </tbody>
+                                </table>
+                              </div>  
                             </div>
                             <div class="BCPane tab-pane fade" id="NSZ">
+                                <div id="NSZPointsInsertPoint">
+                                    <table id="NSZPoints" class="footable table waypoints">
+                                      <thead>
+                                        <tr>
+                                          <th data-name ="NSZId">#</th>
+                                          <th data-name ="Lat1">lat 1</th>
+                                          <th data-name ="Lon1">lon 1</th>
+                                          <th data-name ="Lat2">lat 2</th>
+                                          <th data-name ="Lon2">lon 2</th>                                          
+                                        </tr>
+                                      </thead>
+                                      <tbody >                                                                       
+                                      </tbody>
+                                    </table>
+                                  </div>  
                             </div>
                      </div>
                    </div>
