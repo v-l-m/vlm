@@ -2766,6 +2766,12 @@ function getWaypointHTMLSymbolsDescription(WPFormat)
 
 function FillRaceWaypointList(RaceInfo)
 {
+
+  if (ICS_WPft.DrawPending)
+  {
+    return;
+  }
+
   BackupICS_WPTable();
 
   if (RaceInfo)
@@ -2811,6 +2817,12 @@ function BackupNSZ_Table()
 
 function FillNSZList(Exclusions)
 {
+
+  if (NSZ_WPft.DrawPending)
+  {
+    return;
+  }
+  
   BackupNSZ_Table();
 
   if (Exclusions)
