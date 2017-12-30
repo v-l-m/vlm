@@ -608,7 +608,7 @@ function InitMenusAndButtons()
   //
   $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
   
-  $('#cp11').colorpicker();
+  $('#cp11').colorpicker({useAlpha:false,format:false});
 
   CheckLogin();
 }
@@ -1633,7 +1633,7 @@ function UpdatePrefsDialog(Boat)
       var ColString = SafeHTMLColor( Boat.VLMInfo.COL);
       
       $("#pref_boatcolor").val(ColString);
-      $("#cp11").colorpicker({color:ColString});
+      $("#cp11").colorpicker({useAlpha:false,format:false,color:ColString});
     }
   }
 
