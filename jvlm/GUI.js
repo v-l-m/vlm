@@ -488,43 +488,6 @@ function InitMenusAndButtons()
   // Add handlers for autopilot buttons
   $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
   $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
-  
-
-  // Init Datetime picker for autopilot
-  $('.form_datetime').datetimepicker({
-      language: 'fr',
-      defaultTime: 'current',
-      weekStart: 1,
-      todayBtn: 1,
-      autoclose: 1,
-      todayHighlight: 1,
-      startView: 2,
-      forceParse: 0,
-      showMeridian: 0
-  });
-  $('.form_date').datetimepicker({
-      language: 'fr',
-      defaultTime: 'current',
-      weekStart: 1,
-      todayBtn: 1,
-      autoclose: 1,
-      todayHighlight: 1,
-      startView: 2,
-      minView: 2,
-      forceParse: 0
-  });
-  $('.form_time').datetimepicker({
-      language: 'fr',
-      defaultTime: 'current',
-      weekStart: 1,
-      todayBtn: 1,
-      autoclose: 1,
-      todayHighlight: 1,
-      startView: 1,
-      minView: 0,
-      maxView: 1,
-      forceParse: 0
-  });
 
   $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
   $("#AP_SetTargetWP").click(HandleClickToSetWP)
