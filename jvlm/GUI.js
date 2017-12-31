@@ -608,7 +608,7 @@ function InitMenusAndButtons()
   //
   $(".BoatSelectorDropDownList").on("click",HandleBoatSelectionChange)
   
-  $('#cp11').colorpicker();
+  $('#cp11').colorpicker({useAlpha:false,format:false});
 
   CheckLogin();
 }
@@ -1633,7 +1633,7 @@ function UpdatePrefsDialog(Boat)
       var ColString = SafeHTMLColor( Boat.VLMInfo.COL);
       
       $("#pref_boatcolor").val(ColString);
-      $("#cp11").colorpicker({color:ColString});
+      $("#cp11").colorpicker({useAlpha:false,format:false,color:ColString});
     }
   }
 
@@ -2766,6 +2766,12 @@ function getWaypointHTMLSymbolsDescription(WPFormat)
 
 function FillRaceWaypointList(RaceInfo)
 {
+
+  if (ICS_WPft.DrawPending)
+  {
+    return;
+  }
+
   BackupICS_WPTable();
 
   if (RaceInfo)
@@ -2811,6 +2817,12 @@ function BackupNSZ_Table()
 
 function FillNSZList(Exclusions)
 {
+
+  if (NSZ_WPft.DrawPending)
+  {
+    return;
+  }
+  
   BackupNSZ_Table();
 
   if (Exclusions)
