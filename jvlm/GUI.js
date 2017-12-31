@@ -1253,6 +1253,21 @@ function FillRaceInstructions (RaceInfo)
     return;
   }
 
+  let HideDiscontinueTab = true
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
+  {
+    HideDiscontinueTab = (_CurPlayer.CurBoat.RaceInfo.idraces !== RaceInfo.idraces)
+  }
+
+  if (HideDiscontinueTab)
+  {
+    $("#DiscontinueRaceTab").addClass("hidden");
+  }
+  else
+  {
+    $("#DiscontinueRaceTab").removeClass("hidden");
+  }
+
   let Instructions = [];
   let BoatFieldMappings = [];
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",RaceInfo.racename]);
