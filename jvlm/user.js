@@ -240,13 +240,15 @@ function OnLoginRequest()
 
 function CheckLogin(GuiRequest)
 {
-  var user = $(".UserName").val();
-  var password = $(".UserPassword").val();
+  let user = $(".UserName").val();
+  let password = $(".UserPassword").val();
   
-  ShowPb("#PbLoginProgress");
-  $.post("/ws/login.php", 
-          {VLM_AUTH_USER:user,
-            VLM_AUTH_PW:password
+  if (typeof user === "string" && typeof password === "string" && user.trim().length>0  && password.trim().length > 0 )
+  {
+    ShowPb("#PbLoginProgress");
+    $.post("/ws/login.php", 
+          {VLM_AUTH_USER:user.trim(),
+            VLM_AUTH_PW:password.trim()
           },
           function(result)
           {
@@ -262,30 +264,41 @@ function CheckLogin(GuiRequest)
             
             _IsLoggedIn= LoginResult.success==true;
                 
-            if (_IsLoggedIn)
-            {
-              GetPlayerInfo();
-            }
-            else if (GuiRequest)
-            {
-              VLMAlertDanger(GetLocalizedString("authfailed"));
-              $(".UserPassword").val( "");
-              // Reopened login dialog
-              setTimeout(function(){$("#LoginForm").modal ("hide").modal("show")},1000);
-              initrecaptcha (true,false);
-              $("#ResetPasswordLink").removeClass("hidden");
-
-            }
-            HidePb("#PbLoginProgress");
-            DisplayLoggedInMenus(_IsLoggedIn);
-
+            HandleCheckLoginResponse(GuiRequest);
+            
             if (CurBoatID)
             {
               SetCurrentBoat(GetBoatFromIdu(select),false);
             }
-    
           }
-        );  
+        ); 
+  }
+  else
+  {
+    HandleCheckLoginResponse(GuiRequest);
+  }
+
+}
+
+function HandleCheckLoginResponse(GuiRequest)
+{
+  if (_IsLoggedIn)
+  {
+    GetPlayerInfo();
+  }
+  else if (GuiRequest)
+  {
+    VLMAlertDanger(GetLocalizedString("authfailed"));
+    $(".UserPassword").val( "");
+    // Reopened login dialog
+    setTimeout(function(){$("#LoginForm").modal ("hide").modal("show")},1000);
+    initrecaptcha (true,false);
+    $("#ResetPasswordLink").removeClass("hidden");
+
+  }
+  HidePb("#PbLoginProgress");
+  DisplayLoggedInMenus(_IsLoggedIn);
+
 }
 
 function Logout()
