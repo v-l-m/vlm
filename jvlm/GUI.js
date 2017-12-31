@@ -726,6 +726,7 @@ function InitFooTable(Id)
     }
     });
   ret.DrawPending = true;
+  ret.CallbackPending = null;
   return ret;
 }
 
@@ -1398,9 +1399,14 @@ function HandleTableDrawComplete(e,ft)
   {
     setTimeout( function() {DeferedGotoPage(e,ft)},500);
   }
-  else
+  else if (ft.CallbackPending)
   {
-    ft.DrawPending = false ;
+    setTimeout( function() 
+      {
+        ft.CallbackPending();
+        ft.CallbackPending = null;
+      },500);
+    return ;
   }
 }
 
@@ -2737,6 +2743,10 @@ function FillRaceWaypointList(RaceInfo)
 
   if (ICS_WPft.DrawPending)
   {
+    if (!ICS_WPft.CallbackPending)
+    {
+        ICS_WPft.CallbackPending = function () {FillRaceWaypointList (RaceInfo)};
+    }
     return;
   }
 
@@ -2788,6 +2798,10 @@ function FillNSZList(Exclusions)
 
   if (NSZ_WPft.DrawPending)
   {
+    if (!NSZ_WPft.CallbackPending)
+    {
+      NSZ_WPft.CallbackPending = function () { FillNSZList (Exclusions)};
+    }
     return;
   }
   
