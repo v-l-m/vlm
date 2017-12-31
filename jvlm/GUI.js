@@ -1106,6 +1106,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.VLMInfo.RAN]);
   
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lat", WP.Lat.Value]);
@@ -1270,7 +1271,7 @@ function FillRaceInstructions (RaceInfo)
 
   let Instructions = [];
   let BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",RaceInfo.racename]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".ICSRaceName",RaceInfo.racename]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId",RaceInfo.idraces]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(RaceInfo.vacfreq,10)]);
