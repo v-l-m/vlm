@@ -573,7 +573,18 @@ function InitMenusAndButtons()
   
   $('#cp11').colorpicker({useAlpha:false,format:false});
 
+  $("#ShowICSButton").on("click", HandleFillICSButton);
+
   CheckLogin();
+}
+
+function HandleFillICSButton()
+{
+    // Race Instruction
+    if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
+    {
+      FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
+    }
 }
 
 let CalInited = false;
@@ -1124,12 +1135,6 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
-  }
-
-  // Race Instruction
-  if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
-  {
-    FillRaceInstructions(Boat.RaceInfo);
   }
 
   FillFieldsFromMappingTable(BoatFieldMappings);
