@@ -429,8 +429,7 @@ a.ui-button-noir:hover {
   height: 5px; 
   width: 100px;
 }
-.fc-today,
-.fc-state-highlight {
+.fc-today{
     background: #999;
 }
 .fc-event, .fc-event-dot {
@@ -439,5 +438,5 @@ a.ui-button-noir:hover {
 .polarslider{
   width:.8em;
   height:20em;
-  background-image: linear-gradient( to right , #FFC90E , #826202 5px, #FFC90E );
+  background: linear-gradient( to right , #FFC90E , #826202 5px, #FFC90E );
 }

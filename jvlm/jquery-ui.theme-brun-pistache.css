@@ -413,8 +413,7 @@ a:focus {
 .rnk-locked{
   background-color: #461801;
   }
-.fc-today,
-.fc-state-highlight {
+.fc-today {
     background: #999;
 }
 .fc-event, .fc-event-dot {
@@ -423,5 +422,5 @@ a:focus {
 .polarslider{
   width:.8em;
   height:20em;
-  background-image: linear-gradient( to right , #a56e28 3px, #461801 10px, #eea545 3px);
+  background: linear-gradient( to right , #a56e28 3px, #461801 10px, #eea545 3px);
 }

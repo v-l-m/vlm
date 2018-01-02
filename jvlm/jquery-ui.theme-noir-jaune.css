@@ -419,8 +419,7 @@ a.ui-button-noir:hover {
   background-color: #461801;
   }
 
-.fc-today,
-.fc-state-highlight {
+.fc-today {
     background: #999;
 }
 .fc-event, .fc-event-dot {

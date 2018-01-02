@@ -401,7 +401,7 @@ a.ui-button-noir:hover {
 .rnk-locked{
   background-color: #461801;
   }
-.fc-today, {
+.fc-today {
     background: #999;
 }
 .fc-event, .fc-event-dot {
@@ -410,5 +410,5 @@ a.ui-button-noir:hover {
 .polarslider{
   width:.8em;
   height:20em;
-  background-image: linear-gradient( to right , #337AB7 3px, #000040 10px, #337AB7 3px);
+  background: linear-gradient( to right , #337AB7 3px, #000040 10px, #337AB7 3px);
 }
