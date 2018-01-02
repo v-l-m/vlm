@@ -76,6 +76,10 @@ function PolarManagerClass()
     {
       callback(Boat);
     }
+    else if (callback)
+    {
+      callback();
+    }
   }
 
   this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
@@ -273,7 +277,30 @@ function PolarManagerClass()
     }
   }
 
-}
+  this.GetPolarMaxSpeed = function(PolarName,WindSpeed)
+  {
+    // Assume polar is already loaded
+    if (!this.Polars[PolarName])
+    {
+      return null;
+    }
+
+    let Alpha ;
+    let MaxSpeed = 0;
+
+    for (Alpha = 0 ; Alpha <= 180; Alpha+=1)
+    {
+      let S = GetPolarAngleSpeed(this.Polars[PolarName],Alpha,WindSpeed)
+      if (S > MaxSpeed)
+      {
+        MaxSpeed = S
+      }
+    }
+
+    return MaxSpeed;
+  }
+
+}// End PolarManagerClass
 
 // Returns the speed at given angle for a polar
 function GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)

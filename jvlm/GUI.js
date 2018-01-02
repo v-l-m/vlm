@@ -488,43 +488,6 @@ function InitMenusAndButtons()
   // Add handlers for autopilot buttons
   $('body').on('click','.PIL_EDIT',HandlePilotEditDelete);
   $('body').on('click','.PIL_DELETE',HandlePilotEditDelete);
-  
-
-  // Init Datetime picker for autopilot
-  $('.form_datetime').datetimepicker({
-      language: 'fr',
-      defaultTime: 'current',
-      weekStart: 1,
-      todayBtn: 1,
-      autoclose: 1,
-      todayHighlight: 1,
-      startView: 2,
-      forceParse: 0,
-      showMeridian: 0
-  });
-  $('.form_date').datetimepicker({
-      language: 'fr',
-      defaultTime: 'current',
-      weekStart: 1,
-      todayBtn: 1,
-      autoclose: 1,
-      todayHighlight: 1,
-      startView: 2,
-      minView: 2,
-      forceParse: 0
-  });
-  $('.form_time').datetimepicker({
-      language: 'fr',
-      defaultTime: 'current',
-      weekStart: 1,
-      todayBtn: 1,
-      autoclose: 1,
-      todayHighlight: 1,
-      startView: 1,
-      minView: 0,
-      maxView: 1,
-      forceParse: 0
-  });
 
   $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
   $("#AP_SetTargetWP").click(HandleClickToSetWP)
@@ -610,7 +573,18 @@ function InitMenusAndButtons()
   
   $('#cp11').colorpicker({useAlpha:false,format:false});
 
+  $("#ShowICSButton").on("click", HandleFillICSButton);
+
   CheckLogin();
+}
+
+function HandleFillICSButton()
+{
+    // Race Instruction
+    if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
+    {
+      FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
+    }
 }
 
 let CalInited = false;
@@ -752,6 +726,7 @@ function InitFooTable(Id)
     }
     });
   ret.DrawPending = true;
+  ret.CallbackPending = null;
   return ret;
 }
 
@@ -773,22 +748,27 @@ function HandleUpdatePilototoTable(e)
   UpdatePilotInfo(_CurPlayer.CurBoat);
 }
 
-function InitGribSlider()
+function InitSlider(SliderId, HandleId,min, max, value, SlideCallback)
 {
-  let handle = $( "#GribSliderHandle" );
-  $( "#GribSlider" ).slider({
+  let handle = $( "#"+ HandleId );
+  $( "#"+SliderId ).slider({
     orientation: "vertical",
-    min: 0,
-    max: 72,
-    value: 0,
+    min: min,
+    max: max,
+    value: value,
     create: function() {
       handle.text( $( this ).slider( "value" ) );
     },
     slide: function( event, ui ) {
-      HandleGribSlideMove(event,ui);
+      SlideCallback(event,ui);
     }
   });
   
+}
+
+function InitGribSlider()
+{
+  InitSlider("GribSlider","GribSliderHandle",0,72,0,HandleGribSlideMove)
 }
 
 function HandleRaceSortChange(e)
@@ -1131,6 +1111,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_WPHeading",Boat.VLMInfo['H@WP']]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",Boat.VLMInfo.RAN]);
   
   WP = new VLMPosition(Boat.VLMInfo.WPLON,Boat.VLMInfo.WPLAT);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE,"#PM_Lat", WP.Lat.Value]);
@@ -1161,12 +1142,6 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle",Math.round(Math.abs(Boat.VLMInfo.TWA) * 10)/10 ]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle",Math.round(Boat.VLMInfo.TWA * 10)/10 ]);
-  }
-
-  // Race Instruction
-  if (typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo)
-  {
-    FillRaceInstructions(Boat.RaceInfo);
   }
 
   FillFieldsFromMappingTable(BoatFieldMappings);
@@ -1284,9 +1259,24 @@ function FillRaceInstructions (RaceInfo)
     return;
   }
 
+  let HideDiscontinueTab = true
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
+  {
+    HideDiscontinueTab = (_CurPlayer.CurBoat.RaceInfo.idraces !== RaceInfo.idraces)
+  }
+
+  if (HideDiscontinueTab)
+  {
+    $("#DiscontinueRaceTab").addClass("hidden");
+  }
+  else
+  {
+    $("#DiscontinueRaceTab").removeClass("hidden");
+  }
+
   let Instructions = [];
   let BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName",RaceInfo.racename]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".ICSRaceName",RaceInfo.racename]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId",RaceInfo.idraces]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType",RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq",parseInt(RaceInfo.vacfreq,10)]);
@@ -1297,6 +1287,7 @@ function FillRaceInstructions (RaceInfo)
     
   FillFieldsFromMappingTable (BoatFieldMappings);
   FillRaceWaypointList(RaceInfo);
+  DrawPolar(RaceInfo)
 
   $.get("/ws/raceinfo/exclusions.php?idr="+RaceInfo.idraces,
       function (result)
@@ -1309,6 +1300,113 @@ function FillRaceInstructions (RaceInfo)
   );
   
 }
+
+let PolarSliderInited = false
+
+function HandlePolarSpeedSlide(event,ui,RaceInfo)
+{
+  let handle = $( "#PolarSpeedHandle" );
+  handle.text( ui.value);
+  DrawPolar(RaceInfo)
+}
+
+function DrawPolar(RaceInfo)
+{
+  let Canvas = $("#PolarCanvas")[0];
+  let WindSpeed = 25;
+  
+  if (PolarSliderInited)
+  {
+    WindSpeed = parseFloat($("#PolarSpeedHandle").text());
+  }
+  let PolarLine = PolarsManager.GetPolarLine(RaceInfo.boattype,WindSpeed,function(){DrawPolar(RaceInfo)})
+
+  if (PolarLine)
+  {
+    if (!PolarSliderInited)
+    {
+      InitSlider("PolarSpeedSlider","PolarSpeedHandle",0,60,WindSpeed, function(e,ui){ HandlePolarSpeedSlide(e,ui,RaceInfo) })
+      PolarSliderInited = true;
+    }
+    Canvas.height = Canvas.width;
+    let Context = Canvas.getContext("2d");
+    let First = true
+    let dAlpha = Math.PI / PolarLine.length; // Not counting 0 helps here
+    let Cx = 0
+    let Cy = Canvas.width/2;
+    let S = Canvas.width/2; // PolarsManager.GetPolarMaxSpeed(RaceInfo.boattype,WindSpeed)
+    let PrevL = 0
+    let VMGAngle = 0
+    let RedZone = true
+    let PrevX
+    let PrevY
+    
+    Context.beginPath(); 
+    Context.lineWidth="1";
+    Context.strokeStyle="#FF0000"; 
+
+    for (index in PolarLine)
+    {
+      if (PolarLine[index])
+      {
+        let l = PolarLine[index]
+        index = parseInt(index,10)
+        let a = index * dAlpha
+        let y = Cy + S * l * Math.cos(a);
+        let x = Cx + S * l * Math.sin(a);
+
+        let VMG = Math.cos(a+VMGAngle)*l
+        if ( RedZone && (VMG <= PrevL))
+        {
+          Context.stroke();
+          Context.beginPath();
+          Context.moveTo(PrevX, PrevY);
+          Context.strokeStyle="#FFFFFF";
+          RedZone = false; 
+        }
+        else if (!RedZone && (VMG >= PrevL))
+        {
+          Context.stroke();
+          Context.beginPath();
+          Context.moveTo(PrevX, PrevY);
+          Context.strokeStyle="#FF0000";
+          RedZone = true;
+        }
+
+        PrevL = VMG
+        
+        if (First)
+        {
+          Context.moveTo(x,y)
+          First=false
+        }
+        else
+        {
+          Context.lineTo(x,y)
+        }
+        PrevX = x;
+        PrevY= y;
+      }
+    }
+    Context.stroke(); // Draw it
+    // Draw axes
+    Context.beginPath()
+    Context.lineWidth="1";
+    Context.strokeStyle="#00FF00"; 
+    Context.moveTo(0,0);
+    Context.lineTo(0,Canvas.height);
+    Context.stroke();
+    Context.moveTo(0,Canvas.height/2);
+    Context.lineTo(Canvas.width,Canvas.height/2);
+    Context.stroke();
+  }
+
+
+}
+
+
+
+
 
 function UpdatePolarImages(Boat)
 {
@@ -1430,9 +1528,14 @@ function HandleTableDrawComplete(e,ft)
   {
     setTimeout( function() {DeferedGotoPage(e,ft)},500);
   }
-  else
+  else if (ft.CallbackPending)
   {
-    ft.DrawPending = false ;
+    setTimeout( function() 
+      {
+        ft.CallbackPending();
+        ft.CallbackPending = null;
+      },500);
+    return ;
   }
 }
 
@@ -2769,6 +2872,10 @@ function FillRaceWaypointList(RaceInfo)
 
   if (ICS_WPft.DrawPending)
   {
+    if (!ICS_WPft.CallbackPending)
+    {
+        ICS_WPft.CallbackPending = function () {FillRaceWaypointList (RaceInfo)};
+    }
     return;
   }
 
@@ -2820,6 +2927,10 @@ function FillNSZList(Exclusions)
 
   if (NSZ_WPft.DrawPending)
   {
+    if (!NSZ_WPft.CallbackPending)
+    {
+      NSZ_WPft.CallbackPending = function () { FillNSZList (Exclusions)};
+    }
     return;
   }
   
