@@ -401,11 +401,14 @@ a.ui-button-noir:hover {
 .rnk-locked{
   background-color: #461801;
   }
-
-.fc-today,
-.fc-state-highlight {
+.fc-today {
     background: #999;
 }
 .fc-event, .fc-event-dot {
     background-color: #337AB7;
+}
+.polarslider{
+  width:.8em;
+  height:20em;
+  background: linear-gradient( to right , #337AB7 3px, #000040 10px, #337AB7 3px);
 }

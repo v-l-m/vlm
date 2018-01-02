@@ -404,10 +404,14 @@ a {
   background-color: #461801;
 }
 
-.fc-today,
-.fc-state-highlight {
+.fc-today{
     background: #999;
 }
 .fc-event, .fc-event-dot {
     background-color: #72b42d;
+}
+.polarslider{
+  width:.8em;
+  height:20em;
+  background-image: linear-gradient( to right , #4c8733, #172A08 5px, #4c8733 );
 }

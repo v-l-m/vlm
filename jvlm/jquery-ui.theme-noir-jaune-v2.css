@@ -423,3 +423,20 @@ a.ui-button-noir:hover {
 .rnk-locked{
   background-color: #461801;
   }
+.progressbarmin{
+  background-color:#FFC90E;
+  z-index: 2; 
+  height: 5px; 
+  width: 100px;
+}
+.fc-today{
+    background: #999;
+}
+.fc-event, .fc-event-dot {
+    background-color: #FFC90E;
+}
+.polarslider{
+  width:.8em;
+  height:20em;
+  background: linear-gradient( to right , #FFC90E , #826202 5px, #FFC90E );
+}
