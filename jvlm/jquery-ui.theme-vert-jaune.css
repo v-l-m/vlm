@@ -411,3 +411,8 @@ a {
 .fc-event, .fc-event-dot {
     background-color: #72b42d;
 }
+.polarslider{
+  width:.8em;
+  height:20em;
+  background-image: linear-gradient( to right , #4c8733, #172A08 5px, #4c8733 );
+}

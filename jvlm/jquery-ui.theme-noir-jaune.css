@@ -426,3 +426,8 @@ a.ui-button-noir:hover {
 .fc-event, .fc-event-dot {
     background-color: #FFC90E;
 }
+.polarslider{
+  width:.8em;
+  height:20em;
+  background-image: linear-gradient( to right , #337AB7 3px, #000040 10px, #337AB7 3px);
+}
