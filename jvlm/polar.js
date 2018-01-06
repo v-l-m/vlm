@@ -82,8 +82,12 @@ function PolarManagerClass()
     }
   }
 
-  this.GetPolarLine=function(PolarName,WindSpeed, callback, boat)
+  this.GetPolarLine=function(PolarName,WindSpeed, callback, boat, Step)
   {
+    if (!Step)
+    {
+      Step = 5
+    }
     if (typeof this.Polars[PolarName] === "undefined")
     {
         alert("Unexpected polarname : " + PolarName)
@@ -102,7 +106,7 @@ function PolarManagerClass()
       var MaxSpeed = 0;
       // Loop to get speedvalue per angle
 
-      for (alpha = 0; alpha <= 180 ; alpha+=5)
+      for (alpha = 0; alpha <= 180 ; alpha+=Step)
       {
         var Speed = GetPolarAngleSpeed(this.Polars[PolarName],alpha, WindSpeed);
 

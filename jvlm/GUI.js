@@ -1319,7 +1319,7 @@ function DrawPolar(RaceInfo)
   {
     WindSpeed = parseFloat($("#PolarSpeedHandle").text());
   }
-  let PolarLine = PolarsManager.GetPolarLine(RaceInfo.boattype,WindSpeed,function(){DrawPolar(RaceInfo)})
+  let PolarLine = PolarsManager.GetPolarLine(RaceInfo.boattype,WindSpeed,function(){DrawPolar(RaceInfo)},null,1)
 
   if (PolarLine)
   {
@@ -1328,13 +1328,16 @@ function DrawPolar(RaceInfo)
       InitSlider("PolarSpeedSlider","PolarSpeedHandle",0,60,WindSpeed, function(e,ui){ HandlePolarSpeedSlide(e,ui,RaceInfo) })
       PolarSliderInited = true;
     }
+    
+    Canvas.width = $("#PolarCanvas").width();
     Canvas.height = Canvas.width;
     let Context = Canvas.getContext("2d");
     let First = true
     let dAlpha = Math.PI / PolarLine.length; // Not counting 0 helps here
-    let Cx = 0
+    let Cx = 3
     let Cy = Canvas.width/2;
-    let S = Canvas.width/2; // PolarsManager.GetPolarMaxSpeed(RaceInfo.boattype,WindSpeed)
+    let S = Canvas.width/2; 
+    let MaxSpeed = PolarsManager.GetPolarMaxSpeed(RaceInfo.boattype,WindSpeed)
     let PrevL = 0
     let VMGAngle = 0
     let RedZone = true
@@ -1393,12 +1396,29 @@ function DrawPolar(RaceInfo)
     Context.beginPath()
     Context.lineWidth="1";
     Context.strokeStyle="#00FF00"; 
-    Context.moveTo(0,0);
-    Context.lineTo(0,Canvas.height);
+    Context.moveTo(Cx,0);
+    Context.lineTo(Cx,Canvas.height);
     Context.stroke();
-    Context.moveTo(0,Canvas.height/2);
-    Context.lineTo(Canvas.width,Canvas.height/2);
+    Context.moveTo(Cx-1,Canvas.height/2);
+    Context.lineTo(Cx+Canvas.width,Canvas.height/2);
     Context.stroke();
+
+    // Draw Speed circles & legends
+    let As = Math.round(MaxSpeed/5)
+
+    if (!As)
+    {
+      As =1
+    }
+
+    for (index = 1; As*index-1 <= MaxSpeed;index++)
+    {
+      Context.beginPath();
+      Context.strokeStyle="#7FFFFF";
+      Context.arc(Cx,Cy,S*index*As/MaxSpeed,Math.PI/2, 1.5 * Math.PI,true);
+      Context.stroke();
+      Context.strokeText(" " + As*index,Cx+1+ As*S*index/MaxSpeed, Cy + 10);
+    }
   }
 
 
