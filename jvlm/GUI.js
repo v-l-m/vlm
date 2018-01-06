@@ -3016,7 +3016,7 @@ function FillRacingRanking(Boat, Friends)
   BackupRankingTable();
 
   let RaceId = GetRankingRaceId(Boat)
-
+  let CurWP = 0
   for (index in Boat.RnkObject[RaceId].RacerRanking)
   {
     if (Boat.RnkObject[RaceId].RacerRanking[index])
@@ -3036,9 +3036,10 @@ function FillRacingRanking(Boat, Friends)
           Refs.Arrived1stTime = parseInt(RnkBoat['duration'],10);
         }
 
-        if (!Refs.Racer1stPos && RnkIsRacing(RnkBoat))
+        if ( RnkIsRacing(RnkBoat) && (!Refs.Racer1stPos || RnkBoat['nwp'] !== CurWP))
         {
-          Refs.Racer1stPos = new VLMPosition(RnkBoat['longitude'],RnkBoat['latitude'] )
+          Refs.Racer1stPos = RnkBoat['dnm'] ;
+          CurWP = RnkBoat['nwp'];
         }
         Rows.push(GetRankingObject(RnkBoat,parseInt(index,10)+1,null, Friends,Refs));
       }
@@ -3124,7 +3125,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     if (rank > 1 && Refs && Refs.Racer1stPos)
     {
       let P = new VLMPosition(RankBoat.longitude,RankBoat.latitude);
-      RetObject["Delta1st"] =  Refs.Racer1stPos.GetLoxoDist(P,1);
+      RetObject["Delta1st"] =  RoundPow(RankBoat['dnm'] - Refs.Racer1stPos,2);
     }
 
     RetObject["Distance"]=NextMark
