@@ -35,20 +35,27 @@ function Coords(v, IsLon)
   };
   
   // Basic string formatting of a floating coordinate
-  this.ToString=function()
+  this.ToString=function(Raw)
   {
-    var Side=""
-
-    if (typeof this.IsLon == 'undefined' || this.IsLon==0)
+    if (Raw)
     {
-      Side = (this.Value>=0?' N':' S')
+      return this.Value
     }
     else
     {
-      Side = (this.Value>=0?' E':' W')
+      let Side=""
+
+      if (typeof this.IsLon == 'undefined' || this.IsLon==0)
+      {
+        Side = (this.Value>=0?' N':' S')
+      }
+      else
+      {
+        Side = (this.Value>=0?' E':' W')
+      }
+      
+      return Math.floor(this.Deg()) +"° "+ Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"' + Side;
     }
-    
-    return Math.floor(this.Deg()) +"° "+ Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"' + Side;
   };
 }
 

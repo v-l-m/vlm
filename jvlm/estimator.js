@@ -4,6 +4,7 @@ function BoatEstimate(Est)
 {
   this.Position;
   this.Date;
+  this.PrevDate;
   this.Mode;
   this.Value;
   this.Meteo;
@@ -16,6 +17,7 @@ function BoatEstimate(Est)
   {
     this.Position =  new VLMPosition(Est.Position.Lon.Value, Est.Position.Lat.Value);
     this.Date = new Date(Est.Date);
+    this.PrevDate = new Date(Est.PrevDate);
     this.Mode = Est.Mode;
     this.Value = Est.Value;
 
@@ -85,6 +87,7 @@ function Estimator(Boat)
     }
 
     this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON,this.Boat.VLMInfo.LAT)
+    this.CurEstimate.PrevDate = new Date (this.Boat.VLMInfo.LUP*1000)
     this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC)
     if (this.CurEstimate.Date < new Date())
     {
@@ -98,8 +101,11 @@ function Estimator(Boat)
         // Set Start to 1st VAC after start +6s 
         let StartDate = new Date(parseInt(this.Boat.RaceInfo.deptime,10)*1000+ 1000* this.Boat.VLMInfo.VAC+6000);
         this.CurEstimate.Date = StartDate;
+        this.CurEstimate.PrevDate =  new Date(parseInt(this.Boat.RaceInfo.deptime,10)*1000);
       }
+      
     }
+
 
     
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
@@ -145,9 +151,11 @@ function Estimator(Boat)
       return;
     }
 
+    let MI;
     do
     {
-      var MI = GribMgr.WindAtPointInTime(this.CurEstimate.Date,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
+      MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value)
+      
       if (!MI)
       {
         if (this.ErrorCount > 10)
@@ -268,7 +276,7 @@ function Estimator(Boat)
         throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode
     }
 
-    console.log(this.CurEstimate.Date + " " + NewPos.Lon.ToString() + " " + NewPos.Lat.ToString() + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
+    console.log(this.CurEstimate.Date + this.CurEstimate.Position.ToString(true) + "=> " + NewPos.Lon.ToString(true) + " " + NewPos.Lat.ToString(true) + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.)%360.),4))
 
     var RaceComplete = false;
 
@@ -282,6 +290,7 @@ function Estimator(Boat)
     this.EstimateTrack.push(new BoatEstimate( this.CurEstimate))
 
     // Start next point computation....
+    this.CurEstimate.PrevDate=this.CurEstimate.Date;
     this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000)
     if (RaceComplete)
     {

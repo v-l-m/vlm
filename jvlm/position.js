@@ -59,9 +59,12 @@ function VLMPosition(lon, lat,  format)
   }
 
   // Default string formating
-  this.ToString=function()
+  this.ToString=function(Raw)
   {
-    return this.Lat.ToString() + " " + this.Lon.ToString();
+    if (Raw)
+    {
+      return this.Lat.ToString(Raw) + " " + this.Lon.ToString(Raw);
+    }
   }
 
   this.GetEuclidianDist2 = function(P)
@@ -160,7 +163,10 @@ function VLMPosition(lon, lat,  format)
         throw "Reached Nan Position!!!"
     }
 
-    return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(Lon)),Rad2Deg(Lat));
+    Lon = RoundPow( Rad2Deg(Lon),9);
+    Lat = RoundPow(Rad2Deg(Lat),9);
+
+    return new VLMPosition(NormalizeLongitudeDeg(Lon),Lat);
 
 
   };
