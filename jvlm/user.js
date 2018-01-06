@@ -238,12 +238,34 @@ function OnLoginRequest()
 
 };
 
+function GetPHPSessId()
+{
+  let Session = document.cookie.split(";")
+  
+  for (index in Session)
+  {
+    if (Session[index])
+    {
+      let f = Session [index].split("=");
+
+      if (f[0] === "PHPSESSID")
+      {
+        return f[0]
+      }
+    }
+  }
+
+  return null;
+
+}
+
 function CheckLogin(GuiRequest)
 {
   let user = $(".UserName").val();
   let password = $(".UserPassword").val();
+  let PhpSessId = GetPHPSessId();
   
-  if (typeof user === "string" && typeof password === "string" && user.trim().length>0  && password.trim().length > 0 )
+  if (PhpSessId || (typeof user === "string" && typeof password === "string" && user.trim().length>0  && password.trim().length > 0 ))
   {
     ShowPb("#PbLoginProgress");
     $.post("/ws/login.php", 
