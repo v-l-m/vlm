@@ -6,12 +6,22 @@ var VLM2Prefs = new PrefMgr()
 
 VLM2Prefs.Init();
 
+function LoadLocalPref ( PrefName, PrefDfaultValue)
+{
+    let ret = store.get(PrefName);
+    if (typeof ret === "undefined")
+    {
+        ret = PrefDfaultValue
+    }
+
+    return ret;
+}
+
 function PrefMgr()
 {
   this.MapPrefs=new MapPrefs();
   this.CurTheme = "bleu-noir"
-  this.ShowTopCount = 50;
-
+  
   this.MapPrefs
   this.Init = function()
   {
@@ -19,21 +29,11 @@ function PrefMgr()
     this.Load();
   } 
 
-  this.LoadLocalPref = function (PrefName, PrefDfaultValue)
-  {
-      
-  }
-
   this.Load = function()
   {
     if (store.enabled)
     {
-      this.CurTheme = store.get('ColorTheme');
-      this.CurTheme = store.get('ShowTopCount');
-      if (typeof this.CurTheme === "undefined")
-      {
-          this.CurTheme = "bleu-noir"
-      }
+      this.CurTheme = LoadLocalPref('CurTheme',"bleu-noir") 
     }
   }
 
@@ -103,22 +103,24 @@ function MapPrefs()
   this.PolarVacCount = 12;        // How many vacs for drawing the polar line
   this.EstTrackMouse = false;
   this.TrackEstForecast = true;
+  this.ShowTopCount = 50;
 
   this.Load = function()
   {
     if (store.enabled)
     {
-      this.ShowReals = store.get('#ShowReals');
+      this.ShowReals = LoadLocalPref('#ShowReals',true);
       this.ShowOppName = store.get("#ShowOppName");
-      this.MapZoomLevel = store.get("#MapZoomLevel");
-      this.PolarVacCount = store.get("#PolarVacCount");
+      this.MapZoomLevel = LoadLocalPref("#MapZoomLevel",4);
+      this.PolarVacCount = LoadLocalPref("#PolarVacCount",12);
       this.EstTrackMouse = store.get("#EstTrackMouse");
       this.TrackEstForecast = store.get("#TrackEstForecast");
-      if (typeof this.PolarVacCount === "undefined" || !this.PolarVacCount)
+      if (!this.PolarVacCount)
       {
           // Fallback if invalid value is stored
           this.PolarVacCount = 12;
       }
+      this.ShowTopCount = LoadLocalPref('ShowTopCount',50);
     } 
   }
 
@@ -132,7 +134,7 @@ function MapPrefs()
       store.set("#PolarVacCount",this.PolarVacCount);
       store.set("#TrackEstForecast",this.TrackEstForecast); 
       store.set("#EstTrackMouse",this.EstTrackMouse); 
-                
+      store.set("ShowTopCount",this.ShowTopCount); 
     }
 
     var MapPrefVal="mapselboats"

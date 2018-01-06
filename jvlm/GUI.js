@@ -3215,7 +3215,18 @@ function HandleShowMapPrefs(e)
   '<span class="caret"></span>'
   );
 
+  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10)
+  {
+    $("#NbDisplayBoat").removeClass("hidden")
+    $("#NbDisplayBoat").val(VLM2Prefs.MapPrefs.ShowTopCount);
+  }
+  else
+  {
+    $("#NbDisplayBoat").addClass("hidden")
+  }
+
   $("#VacPol").val(VLM2Prefs.MapPrefs.PolarVacCount);
+  
 
 }
 
@@ -3246,7 +3257,7 @@ function HandleMapPrefOptionChange(e)
       break;
     
     case "VacPol":
-      var VacPol = parseInt($("#VacPol").val(),10);
+      let VacPol = parseInt($("#VacPol").val(),10);
 
       if (VacPol > 0 && VacPol < 120)
       {
@@ -3256,6 +3267,11 @@ function HandleMapPrefOptionChange(e)
       {
         $("#VacPol").value(12);
       }
+      break;
+
+    case "NbDisplayBoat":
+      let TopCount = parseInt($("#NbDisplayBoat").val(),10);
+      VLM2Prefs.MapPrefs.ShowTopCount = TopCount;
       break;
       
     default:

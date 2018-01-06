@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'ShowMyAnd'=>'Affichier le mien ',
     'VLM1'=>'Ancienne version du site',
     'InfosLinks' => 'Infos & Liens',
     'OldPasswordInvalid' => 'Erreur lors de la vérification de votre mot de passe actuel',

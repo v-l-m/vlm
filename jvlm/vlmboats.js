@@ -1365,10 +1365,10 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,RealOpp,true);
   }
 
-  var MAX_LEN = 150;
-  var ratio =MAX_LEN/ Object.keys(Boat.RnkObject).length;
-  var count=0;
-  var BoatList = Boat.RnkObject;
+  let MAX_LEN = 150;
+  let ratio =MAX_LEN/ Object.keys(Boat.RnkObject).length;
+  let count=0;
+  let BoatList = Boat.RnkObject;
 
   if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
   {
@@ -1387,17 +1387,19 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
       ratio=1;
       break;
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
-      var BoatCount = 0;
+      let BoatCount = 0;
+      let RaceID = Boat.Engaged
       BoatList = [];
       
-      for (index in Boat.RnkObject)
+      for (index in Boat.RnkObject[RaceID])
       {
-        if (Boat.RnkObject[index].rank < 10)
+        if (Boat.RnkObject[RaceID][index].rank <= VLM2Prefs.MapPrefs.ShowTopCount)
         {
-          BoatList[index]=Boat.RnkObject[index];
+          BoatList[index]=Boat.RnkObject[RaceID][index];
           BoatCount++;
-          if (BoatCount > 10)
+          if (BoatCount > VLM2Prefs.MapPrefs.ShowTopCount)
           {
+            MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
             break;
           }
         }

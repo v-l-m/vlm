@@ -694,7 +694,7 @@
           </div>
           </fieldset>
           <fieldset>
-          <legend class="ui-legend">Afficher le mien et ...</legend>
+          <legend class="ui-legend" I18n="ShowMyAnd">Afficher le mien et ...</legend>
           <div  class="affich dropdown">
             <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
             <span class="caret"></span></button>
@@ -705,6 +705,7 @@
               <li class="DDLine MapOppShowLi"><span Mode="1" I18n="maponlyme"></span></li>  
               <li class="DDLine MapOppShowLi"><span Mode="0" I18n="mapselboats"></span></li>
             </ul>
+            <input class="chkprefstore" id="NbDisplayBoat" type="number" pattern="[1-9][0-9]*" style="width:50px">
           </div>
         </fieldset>
         <fieldset>
@@ -714,7 +715,7 @@
             </div>
             <div class="affich">
               <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
+              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1"  max="120" value="1" id="VacPol" style="width:50px">
             </div>
         </fieldset>
         <fieldset>
