@@ -2686,7 +2686,7 @@ function SortRankingData(Boat, SortType,WPNum, RaceId)
 
   RaceId = GetRankingRaceId(Boat,RaceId);
 
-  if (!Boat || !Boat.RnkObject)
+  if (!Boat || !Boat.RnkObject || !Boat.RnkObject[RaceId])
   {
     return;
   }
