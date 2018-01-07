@@ -356,12 +356,20 @@ function DrawBoat(Boat, CenterMapOnBoat)
   // Last 24h track  
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
    {
-    var PointList = [];
-    var TrackLength = Boat.Track.length;
+    let PointList = [];
+    let TrackLength = Boat.Track.length;
+    let PrevLon = 99999;
+    let LonOffSet=0;
+
     for (index=0 ; index < TrackLength ; index++) 
     {
       var P = Boat.Track[index];
-      var P1 = new OpenLayers.Geometry.Point(P.Lon.Value, P.Lat.Value);
+      if (PrevLon !== 99999)
+      {
+        LonOffSet += GetLonOffset(PrevLon,P.Lon.Value)
+      }
+      PrevLon = P.Lon.Value;
+      var P1 = new OpenLayers.Geometry.Point(P.Lon.Value+LonOffSet, P.Lat.Value);
       var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
 
       PointList.push(P1_PosTransformed)
@@ -392,23 +400,21 @@ function DrawBoat(Boat, CenterMapOnBoat)
   {
     Boat.Estimator.EstimatePoints[0] = [];
 
-    var TrackIndex = 0
-    var PrevLon = null;
+    let TrackIndex = 0
+    let PrevLon = 99999;
+    let LonOffSet=0;
     for (index in Boat.Estimator.EstimateTrack)
     {
       if ( Boat.Estimator.EstimateTrack[index])
       {
-        var Est = Boat.Estimator.EstimateTrack[index];
+        let Est = Boat.Estimator.EstimateTrack[index];
 
-        if (PrevLon && PrevLon * Est.Position.Lon.Value < 0 && Math.abs (PrevLon * Est.Position.Lon.Value)>90)
+        if (PrevLon !== 99999)
         {
-          // AntÃ© crossing, split track
-          TrackIndex = 1;
-          Boat.Estimator.EstimatePoints[1] = [];
-          Boat.Estimator.EstimatePoints.push(P1_PosTransformed);
+          LonOffSet += GetLonOffset(PrevLon,Est.Position.Lon.Value)
         }
         PrevLon = Est.Position.Lon.Value;
-        P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value, Est.Position.Lat.Value);
+        P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value+LonOffSet, Est.Position.Lat.Value);
         P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
 
         Boat.Estimator.EstimatePoints[TrackIndex].push(P1_PosTransformed);
