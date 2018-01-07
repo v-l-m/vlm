@@ -964,9 +964,31 @@ function DrawRaceExclusionZone(Layer,ExclusionZones, Zone)
 
 }
 
+function GetLonOffset(L1, L2)
+{
+  if (L1*L2 >=0)
+  {
+    return 0;
+  }
+  else if (Math.abs(L2-L1)> 90)
+  {
+    if (L1 > 0)
+    {
+      return 360
+    }
+    else
+    {
+      return -360
+    }
+  }
+  
+  return 0;
+}
+
 function AddGateSegment(Layer,Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
-  var P1 = new OpenLayers.Geometry.Point(lon1, lat1);
-  var P2 = new OpenLayers.Geometry.Point(lon2, lat2);
+  let P1 = new OpenLayers.Geometry.Point(lon1, lat1);
+  let LonOffset = GetLonOffset(lon1,lon2);
+  let P2 = new OpenLayers.Geometry.Point(lon2+LonOffset, lat2);
   var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection)
   var P2_PosTransformed = P2.transform(MapOptions.displayProjection, MapOptions.projection)
   var PointList = [];
