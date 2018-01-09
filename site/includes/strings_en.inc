@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'Polar'=>'Polars',
     'ShowMyAnd'=>'Display me and ',
     'VLM1'=>'Previous web site version',
     'InfosLinks' => 'Useful Links',
