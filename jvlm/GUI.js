@@ -575,7 +575,24 @@ function InitMenusAndButtons()
 
   $("#ShowICSButton").on("click", HandleFillICSButton);
 
+  $("#PolarTab").on("click",HandlePolarTabClik);
+
   CheckLogin();
+}
+
+let _CachedRaceInfo = null;
+
+function HandlePolarTabClik()
+{
+  if (_CachedRaceInfo)
+  {
+    DrawPolar(_CachedRaceInfo);
+  }
+}
+
+function InitPolar(RaceInfo)
+{
+  _CachedRaceInfo=RaceInfo
 }
 
 function HandleFillICSButton()
@@ -1287,8 +1304,8 @@ function FillRaceInstructions (RaceInfo)
     
   FillFieldsFromMappingTable (BoatFieldMappings);
   FillRaceWaypointList(RaceInfo);
-  DrawPolar(RaceInfo)
-
+  InitPolar(RaceInfo);
+  
   $.get("/ws/raceinfo/exclusions.php?idr="+RaceInfo.idraces,
       function (result)
       {
