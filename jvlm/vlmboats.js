@@ -1445,25 +1445,28 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
   // Sort racers to be able to show proper opponents
   SortRankingData(Boat,'RAC',null,Boat.Engaged)
   
-  for (index in  Boat.RnkObject[Boat.Engaged].RacerRanking)
+  if (Boat.Engaged && typeof Boat.RnkObject[Boat.Engaged] !== "undefined" && typeof  Boat.RnkObject[Boat.Engaged].RacerRanking !== "undefined" &&  Boat.RnkObject[Boat.Engaged].RacerRanking )
   {
-    if (index in Boat.RnkObject[Boat.Engaged].RacerRanking )
+    for (index in  Boat.RnkObject[Boat.Engaged].RacerRanking)
     {
-      var Opp = Boat.RnkObject[Boat.Engaged].RacerRanking[index];
+      if (index in Boat.RnkObject[Boat.Engaged].RacerRanking )
+      {
+        var Opp = Boat.RnkObject[Boat.Engaged].RacerRanking[index];
 
-      if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends,Opp.idusers)) && RnkIsRacing(Opp) && (Math.random()<=ratio) && (count < MAX_LEN))
-      {
-        AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
-        count +=1;
-        if (typeof Boat.OppList === "undefined")
+        if ((parseInt(Opp.idusers,10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends,Opp.idusers)) && RnkIsRacing(Opp) && (Math.random()<=ratio) && (count < MAX_LEN))
         {
-          Boat.OppList=[];
+          AddOpponent(Boat,VLMBoatsLayer,BoatFeatures,Opp,false);
+          count +=1;
+          if (typeof Boat.OppList === "undefined")
+          {
+            Boat.OppList=[];
+          }
+          Boat.OppList[index]=Opp;
         }
-        Boat.OppList[index]=Opp;
-      }
-      else if (count>= MAX_LEN)
-      {
-        break;
+        else if (count>= MAX_LEN)
+        {
+          break;
+        }
       }
     }
   }
