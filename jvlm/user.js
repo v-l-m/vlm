@@ -248,7 +248,7 @@ function GetPHPSessId()
     {
       let f = Session [index].split("=");
 
-      if (f[0] === "PHPSESSID")
+      if (f[0] && f[0].trim() === "PHPSESSID")
       {
         return f[0]
       }
