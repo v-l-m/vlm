@@ -2037,7 +2037,7 @@ function RefreshCurrentBoat(SetCenterOnBoat,ForceRefresh,TargetTab)
 {
   var BoatIDSpan = $('.BoatDropDown > span')
   
-  if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && 'BoatId' in BoatIDSpan[0].attributes)
+  if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in  BoatIDSpan[0].attributes))
   {
     BoatId=BoatIDSpan[0].attributes['BoatID'].value;
     SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat,ForceRefresh,TargetTab)
