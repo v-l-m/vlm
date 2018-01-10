@@ -22,8 +22,9 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     -->
     <!--<script src="https://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script src="external/jquery/jquery-3.2.1.min.js"></script>
-    <script src="jquery-ui.js"></script>
+    <script src="external/jquery-ui/jquery-ui.js"></script>
     <script src="external/bootstrap-master/js/bootstrap.js"></script>
     <script src="external/jquery.csv.js"></script>
     <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
@@ -1532,7 +1533,7 @@
                       <div class="form-group">
                         <label for="AP_Time" class="col-md-4 control-label"  I18n="select_time">Time Picking</label>
                         <div id="AP_Time" class="input-group datecol-md-8">
-                          <input data-format="dd/MM/yyyy hh:mm:ss" type="text" class="form-control"></input>
+                          <input data-format="dd/MM/yyyy hh:mm:ss" type="text" class="form-control">
                           <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                           </span>
@@ -1665,7 +1666,7 @@
                         </div>
                         <div  id="WPInfos" class="JVLMTabs" >
                           <ul>
-                              <li class="active"><a href="#waypoints" data-toggle="tab"aria-expanded="true">Waypoints</a></li>
+                              <li class="active"><a href="#waypoints" data-toggle="tab" aria-expanded="true">Waypoints</a></li>
                               <li><a href="#NSZ" data-toggle="tab">NSZ</a></li>
                           </ul>
                             <div class="BCPane tab-pane fade in active" id="waypoints">
@@ -1813,7 +1814,7 @@
                     <div class="col-xs-4" align="right">
                                           </div>
                     <div class="col-xs-8">
-                      <span id="verimailstatus" >
+                      <span id="verimailstatus" ></span>
                     </div>              
                   </div>
                   <div class="row">

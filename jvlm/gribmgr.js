@@ -399,7 +399,7 @@ function VLM2GribManager()
       this.ForceReloadGribCache(LoadKey,Url);
       return ;
     }
-    else if (Data.includes("invalid"))
+    else if (Data.search("invalid")!== -1)
     {
       console.log("invalid request :"+Url);
       return;
