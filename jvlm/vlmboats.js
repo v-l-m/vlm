@@ -1417,6 +1417,8 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
       let BoatCount = 0;
       let RaceID = Boat.Engaged
+      MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
+            
       BoatList = [];
       
       for (index in Boat.RnkObject[RaceID])
@@ -1425,12 +1427,16 @@ function DrawOpponents(Boat,VLMBoatsLayer,BoatFeatures)
         {
           BoatList[index]=Boat.RnkObject[RaceID][index];
           BoatCount++;
-          if (BoatCount > VLM2Prefs.MapPrefs.ShowTopCount)
+          if (BoatCount > MAX_LEN)
           {
-            MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
             break;
           }
         }
+      }
+
+      if (BoatCount > MAX_LEN)
+      {
+        MAX_LEN = BoatCount;
       }
       ratio=1;
       break;
