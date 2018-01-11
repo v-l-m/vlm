@@ -1139,7 +1139,7 @@ function htmlIdusersUsernameLink($country, $color, $idusers, $boatname, $usernam
 }
 
 function htmlIdracesLink($idraces) {
-    return sprintf("<a href=\"/ics.php?idraces=%s\">%d</a>" , $idraces, $idraces);
+    return sprintf("<a href=\"/jvlm?ICSRace=%s\">%d</a>" , $idraces, $idraces);
 }
 
 function htmlBoattypeLink($boattype) {

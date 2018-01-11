@@ -12,7 +12,7 @@
 
         $tables = array();
 
-        // Ajout en début de tableau d'un classement par WP (uniquement si >1)
+        // Ajout en dï¿½but de tableau d'un classement par WP (uniquement si >1)
         $nbWPs = $fullRacesObj->races->getWPsCount();
         if ( $nbWPs > 1 ) {
             for ($wp_num=1; $wp_num < $nbWPs; $wp_num++) {
@@ -28,7 +28,7 @@
              printf ("<h1>You should not do that, this type of ranking is not accepted : %s</h1>\n", $tableType); exit;
         }
 
-        //on détermine la "bonne largeur" pour le menu des wps
+        //on dï¿½termine la "bonne largeur" pour le menu des wps
         $nblines = ceil(count($tables)/20.);
         $sizeline = ceil(count($tables)/$nblines);
         $colnum = 0;
@@ -62,7 +62,7 @@
 
             echo "</td>\n";
             
-            //gère le multiligne quand il y a beaucoup de wp.
+            //gï¿½re le multiligne quand il y a beaucoup de wp.
             $colnum += 1;
             if ($colnum%$sizeline == 0 && $colnum < count($tables)) echo "</tr><tr>";
         }
@@ -133,7 +133,7 @@
     $sortkey = htmlentities(get_cgi_var('sortkey', "")) ;
     $sortorder = strtolower(htmlentities(get_cgi_var('sortorder', 'asc'))) ;
     $disttype = strtolower(htmlentities(get_cgi_var('disttype', 'tonm'))) ;
-    // Analyse de la clé de tri demandée
+    // Analyse de la clï¿½ de tri demandï¿½e
     $sortkeys = array("", "idusers", "userdeptime", "loch", "last1h", "last3h","last24h","latitude","longitude");
     if ( ! in_array($sortkey, $sortkeys, TRUE) ) {
         $sortkey="";
@@ -158,7 +158,7 @@
         //show alls races
         echo "<div id=\"raceheader\">\n";
             printf("<h3>".getLocalizedString("racestarted")."</h3>", $fullRacesObj->races->racename, gmdate("Y/m/d H:i:s", $fullRacesObj->races->deptime));
-            echo "<h3><a href=\"ics.php?idraces=".$idraces."\">".getLocalizedString("ic")."</a></h3>";
+            echo "<h3><a href=\"/jvlm?ICSRace=".$idraces."\">".getLocalizedString("ic")."</a></h3>";
         echo "</div>\n";     
 
         // Carte de la course
@@ -166,7 +166,7 @@
 
         echo "<table class=\"boat\"><tr class=\"boat\">";
         echo "<td class=\"boat\">";
-        // ** Onglet de choix sur différents classements
+        // ** Onglet de choix sur diffï¿½rents classements
         displayRankingMenu($fullRacesObj, $q, $sortkey);
         echo "</td><td class=\"boat\" valign=\"bottom\">";
         displayPrevious100($startnum);
@@ -182,11 +182,11 @@
                 $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, $sortkey , $sortorder, 0, $startnum);
             } else {
                 if ( $fullRacesObj->races->isRacetype(RACE_TYPE_RECORD) ) {
-                    // dispHtmlResults : 2 derniers paramètres = critère de tri + ordre (asc/desc)
-                    // Pour une course record : c'est le temps de course par défaut
+                    // dispHtmlResults : 2 derniers paramï¿½tres = critï¿½re de tri + ordre (asc/desc)
+                    // Pour une course record : c'est le temps de course par dï¿½faut
                     $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "duration" , "asc" ,0,  $startnum);
                 } else {
-                  // Pour une course classique, c'est tout simplement la date d'arrivée (on l'a avec deptime + duration)
+                  // Pour une course classique, c'est tout simplement la date d'arrivï¿½e (on l'a avec deptime + duration)
                   $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "arrtime", "asc", 0, $startnum);
                 }
             }
@@ -195,10 +195,10 @@
         if ( strstr($q, "WP") ) {
             //echo "<H1>Classement au WP ".substr($q,2) ."</H1>";
             if ( $fullRacesObj->races->isRacetype(RACE_TYPE_RECORD) ) {
-                // Pour une course record : c'est le temps de course par défaut
+                // Pour une course record : c'est le temps de course par dï¿½faut
                 $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "duration" , "asc" , substr($q,2), 0, $startnum);
             } else {
-                // Pour une course classique, c'est tout simplement la date d'arrivée (on l'a avec deptime + duration)
+                // Pour une course classique, c'est tout simplement la date d'arrivï¿½e (on l'a avec deptime + duration)
                 $numarrived=$fullRacesObj->dispHtmlRacesResults(BOAT_STATUS_ARR, "arrtime", "asc", substr($q,2), 0, $startnum);
             }
         }
@@ -245,7 +245,7 @@
 
         echo "<table class=\"boat\"><tr class=\"boat\">";
         echo "<td class=\"boat\">";
-        // ** Onglet de choix sur différents classements
+        // ** Onglet de choix sur diffï¿½rents classements
         displayRankingMenu($fullRacesObj, $q, $sortkey);
         echo "</td><td class=\"boat\" valign=\"bottom\">";
         displayPrevious100($startnum);

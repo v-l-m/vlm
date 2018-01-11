@@ -166,7 +166,7 @@ class FullcalendarRacesIterator extends RacesIterator
           //Create an empty FeedItem
           $newItem = $this->rssobject->createNewItem();
 
-          $linkics = sprintf("http://%s/ics.php?idraces=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
+          $linkics = sprintf("http://%s/jvlm?ICSRace=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
 
           //Add elements to the feed item
           //Use wrapper functions to add common feed elements
