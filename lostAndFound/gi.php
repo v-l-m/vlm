@@ -4,7 +4,7 @@ include_once("config.php");
 
 header("content-type: text/plain; charset=UTF-8");
 
-echo "usage : http://virtual-loup-de-mer.org/gi.php?chaine=xxxx&navigateur=sonnom\n";
+echo "usage : http://v-l-m.org/gi.php?chaine=xxxx&navigateur=sonnom\n";
 
 printf ("========= Sans quotesmart ============\n");
 $chaine=$_REQUEST['chaine'];

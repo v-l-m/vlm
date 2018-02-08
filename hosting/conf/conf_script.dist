@@ -58,7 +58,7 @@ export VLM_GRIB_MAX_TIME=24
 export MAIL_FOR_COASTCROSSING=false
 
 #URL de récupération des fichiers gshhs
-export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs/
+export VLMGSHHSURL=http://testing.v-l-m.org/gshhs/
 
 #URL par défaut
 export VLMURL=http://v-l-m.org

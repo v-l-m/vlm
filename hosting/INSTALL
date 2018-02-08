@@ -73,7 +73,7 @@ Merci
 
   * 1.1 Début installation :
     * 1.1.1 se placer à la racine (exemple : `/home/vlm`
-    * 1.1.2 `$ wget http://dev.virtual-loup-de-mer.org/vlm/browser/trunk/hosting/scripts/install.sh?format=txt -O install.sh `
+    * 1.1.2 `$ wget http://dev.v-l-m.org/vlm/browser/trunk/hosting/scripts/install.sh?format=txt -O install.sh `
     * 1.1.3 `$ source  install.sh V_0_24` (pour la branche V_0_24)
     * 1.1.4 Editer le fichier `~/.subversion/servers` et ajouter :
 
@@ -269,7 +269,7 @@ Merci
        HostAliases="localhost 127.0.0.1 REGEX[.*(virtual-loup-de-mer|v-l-m)\.org$]"
        LogFile="/home/vlm/logs/apache2/vlm_access_log"
        LogFormat=1
-       SiteDomain="virtual-loup-de-mer.org"
+       SiteDomain="v-l-m.org"
        LoadPlugin=tooltips
        LoadPlugin=ipv6
        LoadPlugin=hostinfo

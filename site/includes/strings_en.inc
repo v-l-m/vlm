@@ -115,7 +115,7 @@ $strings['en'] =
     'Identification' => 'Login to VLM',
     'Input invalid' => 'Input invalid',
     'Interface for mobiles devices' => 'Interface for mobiles devices',
-    'Join Virtual-Loup-De-Mer.Org, it\'s free !' => 'Join Virtual Loup de Mer, it\'s free !',
+    'Join v-l-m.org, it\'s free !' => 'Join Virtual Loup de Mer, it\'s free !',
     'Log out to create a player account' => 'Log out to create a player account',
     'Lost your password ?' => 'Lost your password ?',
     'Mobiles' => 'Mobiles',
@@ -192,7 +192,7 @@ Please, click on the link below or copy/paste it in your browser.',
     'Your password is now' => 'Your password is now',
     'Your playername is already in use.' => 'Your playername is already in use.',
     'Your playername should have at least 3 characters.' => 'Your playername should have at least 3 characters.',
-    'a1' => 'It\'s a web-based real-time Sailboat-routing simulation. It uses real weather data (data for wind strength and direction are updated every 6 hours - GMT 3h40, 9h40, 15h40 &amp; 21h40). GRIB file is available here: <a href="http://grib.virtual-loup-de-mer.org/">http://grib.virtual-loup-de-mer.org/</a> GRIB files contains wind info in 3hour steps and 0.5&deg; grid and is interpolated to be used in the game. Boat polar charts are similar to real boats, boat speed and direction are updated every 5 minutes (or less in some very short races). Races will be organised frequently.',
+    'a1' => 'It\'s a web-based real-time Sailboat-routing simulation. It uses real weather data (data for wind strength and direction are updated every 6 hours - GMT 3h40, 9h40, 15h40 &amp; 21h40). GRIB file is available here: <a href="http://grib.v-l-m.org/">http://grib.v-l-m.org/</a> GRIB files contains wind info in 3hour steps and 0.5&deg; grid and is interpolated to be used in the game. Boat polar charts are similar to real boats, boat speed and direction are updated every 5 minutes (or less in some very short races). Races will be organised frequently.',
     'about' => 'About',
     'accountcreated' => 'Account created, username and password = ',
     'action' => 'action',
@@ -304,7 +304,7 @@ Allowed characters for both: a-z 0-9 _
         <li>You can propose any translation of the game. It is quick and easy. See <a href="includes/strings.inc">includes/strings.inc</a> to see how it works</li>
         <li>You can propose logos, banners and CSS.</li>
         <li>You can join the <a href="http://v-l-m.github.io/vlm/">development team</a></li>
-        <li>You can propose some new speed charts (see <a href="http://wiki.virtual-loup-de-mer.org/index.php/Proposer_des_courses">the wiki [fr] </a>)</li>
+        <li>You can propose some new speed charts (see <a href="http://wiki.v-l-m.org/index.php/Proposer_des_courses">the wiki [fr] </a>)</li>
         <li>You can share your knowledge of boats, skippers and navigation by helping the wikipedia project : <a href="http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime">Portail maritime</a></li>
         <li>If you\'re an Imoca or Orma boat owner, you can propose to board us for a sailing trip:-)</li>
         </ul>',

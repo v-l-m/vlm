@@ -47,7 +47,7 @@
       $this->icalobject = new vcalendar();
       
       // create a new calendar instance
-      $this->icalobject->setConfig( 'unique_id', 'virtual-loup-de-mer.org' ); // set Your unique id
+      $this->icalobject->setConfig( 'unique_id', 'v-l-m.org' ); // set Your unique id
       $this->icalobject->setProperty( 'method', 'PUBLISH' ); // required of some calendar software
       $this->icalobject->setProperty( "x-wr-calname", "Agenda VLM" ); // required of some calendar software
       $this->icalobject->setProperty( "X-WR-CALDESC", "Agenda VLM" ); // required of some calendar software

@@ -115,7 +115,7 @@ $strings['fr'] =
     'Identification' => 'Connexion à VLM',
     'Input invalid' => 'Saisie invalide',
     'Interface for mobiles devices' => 'Interface pour les mobiles',
-    'Join Virtual-Loup-De-Mer.Org, it\'s free !' => 'Rejoignez Virtual Loup de Mer, c\'est gratuit !',
+    'Join v-l-m.org, it\'s free !' => 'Rejoignez Virtual Loup de Mer, c\'est gratuit !',
     'Log out to create a player account' => 'Déconnectez vous pour créer un compte de joueur',
     'Lost your password ?' => 'Mot de passe oublié ?',
     'Mobiles' => 'Mobiles',
@@ -307,7 +307,7 @@ Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _
             <li>Vous pouvez proposer une traduction du jeu dans n\'importe quelle langue. C\'est facile et rapide voir <a href="includes/strings.inc">includes/strings.inc</a></li>
             <li>Vous pouvez proposer un logo, une banni&egrave;re ou un CSS</li>
             <li>Vous pouvez rejoindre <a href="http://v-l-m.github.io/vlm/">l\'&eacute;quipe de d&eacute;veloppement</a></li>
-            <li>Vous pouvez proposer de nouveaux diagrammes de vitesse. (voir <a href="http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse">la documentation</a>)</li>
+            <li>Vous pouvez proposer de nouveaux diagrammes de vitesse. (voir <a href="http://wiki.v-l-m.org/index.php/Fournir_des_polaires_de_vitesse">la documentation</a>)</li>
             <li>Le serveur web et celui h&eacute;bergeant la base de donn&eacute;es sont financ&eacute;s par Actilis (actilis.net), la soci&eacute;t&eacute; dont le mainteneur est le g&eacute;rant, qui les finance int&eacute;gralement, et utilise aussi le serveur de bases de donn&eacute;es pour h&eacute;berger d\'autres bases de donn&eacute;es. Vous n\'avez donc pas besoin d\'envoyer vos dons au mainteneur, qui pr&eacute;f&egrave;re largement vos messages d\'encouragement et aime bien les cartes postales parvenant d\'endroits qu\'il ne connait pas.</li>
             <li>Vous pouvez soumettre des parcours, informer le mainteneur des nouvelles courses r&eacute;elles afin qu\'elles soient aussi programm&eacute;es dans VLM pour que nous les courrions en virtuel simultan&eacute;ment. Il faut : la position latitude/longitude du point de d&eacute;part, l\'heure de d&eacute;part, et la position de la ligne d\'arriv&eacute;e.</li>
             <li>Vous pouvez partager vos connaissances sur la mer, les marins et les bateaux sur le portail Maritime de Wikipedia: <a href="http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime">Portail maritime</a></li>
@@ -343,7 +343,7 @@ Les caractères autorisés (pour le pseudo et le mot de passe) sont: a-z 0-9 _
     'logout' => 'D&eacute;connexion',
     'maille' => 'Maille vent',
     'mainteneur' => 'Mainteneurs et contacts actuels',
-    'mainteneurinfo' => '<i><u>Fran&ccedil;ois Micaux - fm / francois (francois **at ** virtual-loup-de-mer.org)</u></i>.<br />
+    'mainteneurinfo' => '<i><u>Fran&ccedil;ois Micaux - fm / francois (francois **at ** v-l-m.org)</u></i>.<br />
 J\'ai repris le d&eacute;veloppement du jeu &agrave; partir d\'Octobre 2006. Je l\'h&eacute;berge sur des serveurs d&eacute;di&eacute; Linux que je loue et administre sp&eacute;cialement pour VLM (c\'est en fait ma soci&eacute;t&eacute; <a href=http://www.actilis.net/>Actilis</a> qui offre les serveurs et le temps que je passe &agrave; les administrer).<br /><br />Marc Dietrich, (Le Tavernier de La Taverne) (Hornblower ** at ** virtual-winds ) s\'occupe d\'op&eacute;rations de communications de mani&egrave;re &agrave; organiser des courses en m&ecirc;me temps que des courses r&eacute;elles... <br />
 <br />
 Pour ce qui concerne l\'entraide et les question sur l\'utilisation du logiciel, pr&eacute;f&eacute;rez le forum et le Chat, car je suis souvent surcharg&eacute; de travail ou en d&eacute;placement et n\'ai pas forc&eacute;ment acc&egrave;s &agrave; mes mails en permanence ou tout simplement le temps d\'y r&eacute;pondre.<br />',

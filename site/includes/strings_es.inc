@@ -44,7 +44,7 @@
     'Ice gate' => 'Puerta de hielo',
     'Input invalid' => 'Entrada inválida',
     'Interface for mobiles devices' => 'Interfaz para dispositivos móviles',
-    'Join Virtual-Loup-De-Mer.Org, it\'s free !' => 'Unese a Virtual Loup de Mer, es gratuito!',
+    'Join v-l-m.org, it\'s free !' => 'Unese a Virtual Loup de Mer, es gratuito!',
     'Log out to create a player account' => 'Desconectarse para crear una cuenta de jugador',
     'Lost your password ?' => 'Olvidó su clave?',
     'Mobiles' => 'Moviles',
@@ -93,7 +93,7 @@ Por favor, pulse el link de abajo o copie y péguelo en su navegador.',
     'Your password has been updated.' => 'Su clave ha sido utilizada.',
     'Your playername is already in use.' => 'Su nombre de jugador ya está en uso.',
     'Your playername should have at least 3 characters.' => 'Su nombre de jugador tiene que tener, al menos, 3 caracteres.',
-    'a1' => 'Es un juego que simula la ruta de un velero en la web a tiempo real. Utiliza datos meteorológicos reales (datos de la fuerza del viento y la dirección se actualizan cada 6 horas - GMT 3h40, 9h40, 15h40 y 21h40). Archivo GRIB está disponible aquí: <a href="http://grib.virtual-loup-de-mer.org/">http://grib.virtual-loup-de-mer.org/</a> Los archivos GRIB contienen información sobre los vientos cada 3 horas, con una precisión de 0,5&deg; y es interpolado para la utilización en el juego (la precisión en la simulación sólo es 1&deg;). Los gráficos polares de los veleros son similares a los de los barcos reales, la velocidad del barco y la dirección se actualizan cada 5 minutos (o menos en algunas carreras muy cortas). Las carreras se organizan con frecuencia.',
+    'a1' => 'Es un juego que simula la ruta de un velero en la web a tiempo real. Utiliza datos meteorológicos reales (datos de la fuerza del viento y la dirección se actualizan cada 6 horas - GMT 3h40, 9h40, 15h40 y 21h40). Archivo GRIB está disponible aquí: <a href="http://grib.v-l-m.org/">http://grib.v-l-m.org/</a> Los archivos GRIB contienen información sobre los vientos cada 3 horas, con una precisión de 0,5&deg; y es interpolado para la utilización en el juego (la precisión en la simulación sólo es 1&deg;). Los gráficos polares de los veleros son similares a los de los barcos reales, la velocidad del barco y la dirección se actualizan cada 5 minutos (o menos en algunas carreras muy cortas). Las carreras se organizan con frecuencia.',
     'about' => 'Sobre...',
     'accountcreated' => 'Cuenta creada, nombre de usuario y contraseña =',
     'action' => 'acción',
@@ -198,7 +198,7 @@ Se permiten los caracteres siguientes: a-z 0-9 _
 Puede proponer la traducción del juego. Es rápido y fácil. En <a href="includes/strings.inc">includes/strings.inc</a> vea cómo funciona.</li>
               <li>Puede proponer logos, banderas y CSS.</li>
               <li>Puede unirse al equipo de desarrollo: publica un mensaje en el foro</li>
-              <li>Puedes proponer nuevos gráficos de velocidad (Vea <a href="http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse">un documentação</a>)</li>
+              <li>Puedes proponer nuevos gráficos de velocidad (Vea <a href="http://wiki.v-l-m.org/index.php/Fournir_des_polaires_de_vitesse">un documentação</a>)</li>
               <li>Puede compartir sus conocimientos de los barcos, los patrones de navegación y ayudar al proyecto en Wikipedia : <a href="http://es.wikipedia.org/wiki/Portal:N%C3%A1utico">Portal náutico</a></li>
               <li>Si es el dueño de un Imoca o Orma, puede proponer para nosotros un viaje de vela :-)</li>
               </ul>',

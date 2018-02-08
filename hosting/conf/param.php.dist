@@ -28,7 +28,7 @@ define("VLMTEMP", "/path/to/VLMRACINE/tmp");
 
 //LIST OF WEB INSTANCES - please note that it is not possible to define an array(), thus the method below
 define("WEBINSTANCE_COUNT", 1);
-define("WEBINSTANCE_1", "testing.virtual-loup-de-mer.org" );
+define("WEBINSTANCE_1", "testing.v-l-m.org" );
 
 //LANG PREFS - Default is False, uncomment for dev server
 //define_if_not("DISPLAY_LANG_WARNINGS", True);
@@ -42,7 +42,7 @@ define("WEBINSTANCE_1", "testing.virtual-loup-de-mer.org" );
 
 define("TILES_G_PATH", "/path/to/VLMRACINE/bin/tiles_g");
 //TILES PREFS - DEFINE ONLY IF YOUR VLM INSTANCE HAS NOT PROPER TILES_G BINARY
-//define("TILES_SOURCE_SERVER", "http://testing.virtual-loup-de-mer.org");
+//define("TILES_SOURCE_SERVER", "http://testing.v-l-m.org");
 
 define("VLM_PROXY_PASS", "password");
 

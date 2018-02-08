@@ -309,8 +309,8 @@ From 0.18.x to 0.19 :
 
   EDIT file ./conf/conf_script 
     - change VLM SVNBRANCH to V_0_19
-    - add "export VLMGSHHSURL=http://testing.virtual-loup-de-mer.org/gshhs"
-    - add "export VLMURL=http://virtual-loup-de-mer.org"
+    - add "export VLMGSHHSURL=http://testing.v-l-m.org/gshhs"
+    - add "export VLMURL=http://v-l-m.org"
 
   RUN
     ./scripts/maj_scripts.sh
@@ -505,7 +505,7 @@ From 0.15.2 to 0.15.5
   get the dump, and ./vlmcode/base/script/import.sh <it>
 
 = DNS SERVER =
-  point virtual-loup-de-mer.org on Neptune.
+  point v-l-m.org on Neptune.
 
 = S9 & S11 =
 
@@ -520,7 +520,7 @@ From 0.15.2 to 0.15.5
 = S9 & S11 =
 
   make them slave for grib downloading
-  Dans conf/conf_script, on mentionne l'url : grib.virtual-loup-de-mer.org.
+  Dans conf/conf_script, on mentionne l'url : grib.v-l-m.org.
   Dans crontab de S9, passer de "noaa.sh" à noaa-slave.sh".  OK
 ___
 From 0.14 to Next:
@@ -723,9 +723,9 @@ From 0.10.2 To Next
 ==Configuration==
 * EDIT conf/param.php and add :
   - define("WEBINSTANCE_COUNT", 3);
-  - define("WEBINSTANCE_1", "s9.virtual-loup-de-mer.org" );
-  - define("WEBINSTANCE_2", "s10.virtual-loup-de-mer.org" );
-  - define("WEBINSTANCE_3", "s11.virtual-loup-de-mer.org" );
+  - define("WEBINSTANCE_1", "s9.v-l-m.org" );
+  - define("WEBINSTANCE_2", "s10.v-l-m.org" );
+  - define("WEBINSTANCE_3", "s11.v-l-m.org" );
 
 ==And update all others modules==
 

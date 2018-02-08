@@ -232,7 +232,7 @@
       <h3>Ready to import a race, please input following values</h3>
       <form action="#" method="post">
           <input type="hidden" name="action" value="import" />
-          From server:&nbsp;<input type="text" name="importserver" size="50" value="testing.virtual-loup-de-mer.org" /><br />
+          From server:&nbsp;<input type="text" name="importserver" size="50" value="testing.v-l-m.org" /><br />
           From Idrace:&nbsp;<input type="text" name="idracefrom" size="12"/><br />
           To Idrace:&nbsp;<input type="text" name="idraceto" size="12"/><br />
           <input type="submit" value="Test import" />

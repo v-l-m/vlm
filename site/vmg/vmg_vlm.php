@@ -1026,7 +1026,7 @@ window.document.vmg.status_way2.value="Calcul !!!";
     <tr>
 
       <td width="33%">
-      <p align="center"><a href="http://virtual-loup-de-mer.org" target="blank"><img src="/<? echo IMAGE_SITE_PATH ?>/banniere_vlm.jpg" border="0" height="55" width="320" /></a></p>
+      <p align="center"><a href="http://v-l-m.org" target="blank"><img src="/<? echo IMAGE_SITE_PATH ?>/banniere_vlm.jpg" border="0" height="55" width="320" /></a></p>
 
       </td>
 
@@ -1427,12 +1427,12 @@ window.document.vmg.status_way2.value="Calcul !!!";
                     if ($_REQUEST['boattype'] == "")
                     {
                         echo "-"."Imoca2008"."-";
-                        echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_"."Imoca2008"."\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"polaire.png\" border=\"0\" /></a></td>";
+                        echo "<td><a href=\"http://v-l-m.org/speedchart.php?boattype=boat_"."Imoca2008"."\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"polaire.png\" border=\"0\" /></a></td>";
                         
                     }
                     else
                     {
-                        echo "<td><a href=\"http://virtual-loup-de-mer.org/speedchart.php?boattype=boat_".$_REQUEST['boattype']."\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"polaire.png\" border=\"0\" /></a></td>";
+                        echo "<td><a href=\"http://v-l-m.org/speedchart.php?boattype=boat_".$_REQUEST['boattype']."\" target=\"blank\"><img style=\"width: 233px; height: 175px;\" alt=\"\" src=\"polaire.png\" border=\"0\" /></a></td>";
 
                     }
                    ?>

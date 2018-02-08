@@ -1,6 +1,6 @@
 // *************** SPECTATOR MODE *****************
 // 2010 => Virtual Loup De Mer
-// http://www.virtual-loup-de-mer.org
+// http://www.v-l-m.org
 // ************************************************
 
 // EXTEND JQUERY WITH A FUNCTION TO GET VARS IN QUERY STRING

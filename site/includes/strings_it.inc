@@ -195,7 +195,7 @@ Allowed characters for both: a-z 0-9 _
         <li>Potete proporre la traduzione del gioco. È rapida e facile. Guarda <a href="includes/strings.inc">includes/strings.inc</a>per vedere come funziona</li>
         <li>Potete proporre i marchi, le bandiere ed il CSS</li>
         <li>Potete fare parte del team di sviluppo inviando un messaggio nel forum</li>
-        <li>Potete proporre nuovi diagrammi per le tabelle di velocità. (guarda <a href="http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse">la documentazione</a>)</li>
+        <li>Potete proporre nuovi diagrammi per le tabelle di velocità. (guarda <a href="http://wiki.v-l-m.org/index.php/Fournir_des_polaires_de_vitesse">la documentazione</a>)</li>
         <li>Vous pouvez soumettre des parcours, informer le mainteneur des nouvelles courses r&eacute;elles afin qu\'elles soient aussi programm&eacute;es dans VLM pour que nous les courrions en virtuel simultan&eacute;ment. Il faut : la position latitude/longitude du point de d&eacute;part, l\'heure de d&eacute;part, et la position de la ligne d\'arriv&eacute;e.</li>
         <li>Potete portare la vostra conoscenza delle barche, degli skipper e della navigazione aiutando il progetto di wikipedia: <a href="http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime">Portail maritime</a></li>
         <li>Se sei un proprietario di barca, può inviare a bordo il team per una vacanza in barca: -).</li>
@@ -229,7 +229,7 @@ Use the following url :',
     'logout' => 'Disconnettiti',
     'maille' => 'Griglia del vento',
     'mainteneur' => 'Mainteneurs et contacts actuels',
-    'mainteneurinfo' => '<i><u>Fran&ccedil;ois Micaux - fm / francois (francois **at ** virtual-loup-de-mer.org)</u></i>.<br />',
+    'mainteneurinfo' => '<i><u>Fran&ccedil;ois Micaux - fm / francois (francois **at ** v-l-m.org)</u></i>.<br />',
     'malformedlogin' => 'Il suo login ha dei carattere non consentiti O è troppo corto',
     'malformedpassword' => 'La sua password ha dei carattere non consentiti o è troppo corta.',
     'map' => 'Vedi la mappa',
