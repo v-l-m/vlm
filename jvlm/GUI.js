@@ -2795,7 +2795,7 @@ function FillWPRanking(Boat,WPNum, Friends)
     return;
   }
 
-  let RaceId = GetRankin(Boat)
+  let RaceId = GetRankingRaceId(Boat)
 
   BackupRankingTable();
 
