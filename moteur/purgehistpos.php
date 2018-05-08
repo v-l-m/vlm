@@ -25,7 +25,7 @@ foreach ($races as $race)
   print("processing race ".$race."\n");
 
   // Get user list from rankings (until index are back available)
-  $query="select idusers from races_results where idraces=".$race.";";
+  $query="select distinct idusers from histpos where race=".$race.";";
   $ulist=[];
   $res = wrapper_mysql_db_query_reader($query) or die("Query [".$query."] failed \n");
   while ($row = mysql_fetch_assoc($res) ) array_push($ulist,$row["idusers"]);
@@ -41,7 +41,7 @@ foreach ($races as $race)
     $DeletedRows = mysql_affected_rows();
     if ($DeletedRows)
     {
-      print("\t user ".$user. "deleted ".mysql_affected_rows()."\n");
+      print("\t user ".$user. " deleted ".mysql_affected_rows()." positions\n");
       $RaceDeletedRows += $DeletedRows;
     }
   }
