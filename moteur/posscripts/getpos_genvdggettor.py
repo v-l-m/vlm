@@ -13,7 +13,7 @@ import sys, time
 trackfile = 'pos'
 vlmtmp = gp.vlm_get_tmp()
 
-racelist = ['171804']
+racelist = []
 
 for i,raceid in enumerate(racelist):
   gp.geturl("http://testing.v-l-m.org/jvlm/pos"+raceid,trackfile)
