@@ -61,22 +61,22 @@
          NWP++;
          if (NWP >= this.RaceInfo.races_waypoints)
          {
-           throw "Oops could not find requested gate type"
+           throw "Oops could not find requested gate type";
          }
          Gate = this.RaceInfo.races_waypoints[NWP];
        }
 
-     } while (Gate.wpformat & WP_ICE_GATE)
+     } while (Gate.wpformat & WP_ICE_GATE);
 
      var P1 = new VLMPosition(Gate.longitude1, Gate.latitude1);
-     var P2 = {}
+     var P2 = {};
      if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
      {
        P2 = new VLMPosition(Gate.longitude2, Gate.latitude2);
      }
      else
      {
-       throw "not implemented 1 buoy gate"
+       throw "not implemented 1 buoy gate";
      }
 
      return {
@@ -85,7 +85,7 @@
      };
 
 
-   }
+   };
 
    this.GetClosestEstimatePoint = function(Pos)
    {
@@ -103,16 +103,16 @@
        }
        else
        {
-         this.Estimator.ClearEstimatePosition(this.Estimator.Boat)
+         this.Estimator.ClearEstimatePosition(this.Estimator.Boat);
        }
-       return Est
+       return Est;
      }
      else
      {
        // this.Estimator.ShowEstimatePosition(null,null)
        return null;
      }
-   }
+   };
 
 
    this.GetNextWPPosition = function(NWP, Position, NWPPosition)
@@ -147,25 +147,25 @@
          return null;
        }
        var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
-       var CurPos
+       var CurPos;
        if (typeof Position != "undefined" && Position)
        {
          CurPos = Position;
        }
        else
        {
-         CurPos = new VLMPosition(this.VLMInfo.LON, this.VLMInfo.LAT)
+         CurPos = new VLMPosition(this.VLMInfo.LON, this.VLMInfo.LAT);
        }
        var Loxo2 = Seg.P1.GetLoxoCourse(CurPos);
        var Delta = Loxo1 - Loxo2;
 
        if (Delta > 180)
        {
-         Delta -= 360.;
+         Delta -= 360.0;
        }
        else if (Delta < -180)
        {
-         Delta += 360.;
+         Delta += 360.0;
        }
 
        Delta = Math.abs(Delta);
@@ -199,7 +199,7 @@
      }
 
 
-   }
+   };
  }
 
 
@@ -219,17 +219,17 @@
    {
      console.log("Keeping login alive...");
      CheckLogin();
-   }
+   };
 
    // Send Login every 10'
    setInterval(this.KeepAlive, 600000);
 
- };
+  }
 
  function IsLoggedIn()
  {
    return _IsLoggedIn;
- };
+ }
 
 
  function OnLoginRequest()
@@ -238,11 +238,12 @@
 
    CheckLogin(true);
 
- };
+ }
 
  function GetPHPSessId()
  {
-   let Session = document.cookie.split(";")
+   let Session = document.cookie.split(";");
+   let index;
 
    for (index in Session)
    {
@@ -252,7 +253,7 @@
 
        if (f[0] && f[0].trim() === "PHPSESSID")
        {
-         return f[0]
+         return f[0];
        }
      }
    }
@@ -318,7 +319,7 @@
      // Reopened login dialog
      setTimeout(function()
      {
-       $("#LoginForm").modal("hide").modal("show")
+       $("#LoginForm").modal("hide").modal("show");
      }, 1000);
      initrecaptcha(true, false);
      $("#ResetPasswordLink").removeClass("hidden");
@@ -399,7 +400,7 @@
      _CurPlayer.Fleet = [];
    }
 
-   for (boat in result.fleet)
+   for (let boat in result.fleet)
    {
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
      {
@@ -417,7 +418,7 @@
      _CurPlayer.fleet_boatsit = [];
    }
 
-   for (boat in result.fleet_boatsit)
+   for (let boat in result.fleet_boatsit)
    {
      if (typeof _CurPlayer.BSFleet[boat] === "undefined")
      {
@@ -430,7 +431,7 @@
    {
      DisplayCurrentDDSelectedBoat(select);
      SetCurrentBoat(GetBoatFromIdu(select), true);
-     RefreshCurrentBoat(true, false)
+     RefreshCurrentBoat(true, false);
    }
  }
 
@@ -443,11 +444,11 @@
 
    // Update the combo to select the current boat
    ClearBoatSelector();
-   for (boat in _CurPlayer.Fleet)
+   for (let boat in _CurPlayer.Fleet)
    {
      AddBoatToSelector(_CurPlayer.Fleet[boat], true);
    }
-   for (boat in _CurPlayer.BSFleet)
+   for (let boat in _CurPlayer.BSFleet)
    {
      AddBoatToSelector(_CurPlayer.BSFleet[boat], false);
    }
@@ -492,7 +493,7 @@
  {
    Id = parseInt(Id, 10);
 
-   for (boat in BoatsArray)
+   for (let boat in BoatsArray)
    {
      if (BoatsArray[boat].IdBoat === Id)
      {
@@ -507,15 +508,15 @@
    $.get("/ws/serverinfo/flags.php",
      function(result)
      {
-       var i = result;
+       let i = result;
        if (result.success)
        {
          var DropDown = $("#CountryDropDownList");
          var flagindex = 0;
-         for (index in result.flags)
+         for (let index in result.flags)
          {
            var title = result.flags[index];
-           DropDown.append("<li class='FlagLine DDLine' flag='" + title + "'>" + GetCountryDropDownSelectorHTML(title, true, flagindex++) + "</li>")
+           DropDown.append("<li class='FlagLine DDLine' flag='" + title + "'>" + GetCountryDropDownSelectorHTML(title, true, flagindex++) + "</li>");
          }
        }
 
@@ -534,12 +535,12 @@
    {
      // Get line to build DropDown
      //var RetString1 = " <img class='flag' src='/cache/flags/flagsmap.png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
-     var RetString1 = GetCountryFlagImg(title, CountryIndex);
-     var RetString2 = " <span  class='FlagLabel' flag='" + title + "'> - " + title + "</span>";
+     let RetString1 = GetCountryFlagImg(title, CountryIndex);
+     let RetString2 = " <span  class='FlagLabel' flag='" + title + "'> - " + title + "</span>";
 
-     FlagsIndexCache[title] = RetString1
+     FlagsIndexCache[title] = RetString1;
    }
-   var RetString2 = " <span  class='FlagLabel' flag='" + title + "'> - " + title + "</span>";
+   let RetString2 = " <span  class='FlagLabel' flag='" + title + "'> - " + title + "</span>";
    return FlagsIndexCache[title] + RetString2;
  }
 
@@ -552,7 +553,7 @@
  {
    var row = 20 * Math.floor(CountryIndex / 16);
    var col = 30 * (CountryIndex % 16);
-   var RetString1 = " <div class='FlagIcon' style='background-position: -" + col + "px -" + row + "px' flag='" + Title + "'></div>"
+   var RetString1 = " <div class='FlagIcon' style='background-position: -" + col + "px -" + row + "px' flag='" + Title + "'></div>";
 
    return RetString1;
  }
