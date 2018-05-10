@@ -12,6 +12,7 @@ function AutoPilotOrder(Boat, Number)
   this.PIP_WPAngle = -1;
   this.ID = -1;
 
+  if (typeof Boat !== 'undefined' && Boat)
   {
     if (!(Number - 1 in Boat.VLMInfo.PIL))
     {
