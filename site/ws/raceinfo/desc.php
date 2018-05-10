@@ -54,7 +54,7 @@ function get_info_array($idrace) {
         $info["races_groups"][] = $ri['grouptag'];
     }
 
-    
+    $info['success'] = True;
     //the racemap ???
     return $info;
 }
