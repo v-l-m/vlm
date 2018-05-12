@@ -21,7 +21,7 @@ function LocalizeString()
 
 function OnLangFlagClick(Lang)
 {
-  InitLocale(Lang)
+  InitLocale(Lang);
 }
 
 function LocalizeItem( Elements )
@@ -46,12 +46,12 @@ function LocalizeItem( Elements )
   finally
   {
   }    
-  return true
+  return true;
 }
 
 function InitLocale(Lang)
 {
-  var query = "/ws/serverinfo/translation.php"
+  var query = "/ws/serverinfo/translation.php";
   
   if (Lang)
   {
@@ -99,9 +99,9 @@ function HTMLDecode(String)
   let txt = document.createElement("textarea");
   txt.innerHTML = String;
   let RetString = txt.value;
-  let EOLSigns = ["\n\r","\r\n","\n","\r"]
+  let EOLSigns = ["\n\r","\r\n","\n","\r"];
 
-  for (index in EOLSigns)
+  for (let index in EOLSigns)
   {
     while (EOLSigns[index] && RetString.indexOf(EOLSigns[index]) !== -1)
     {
@@ -114,7 +114,7 @@ function HTMLDecode(String)
 
 function GetLocalizedString(StringId)
 {
-  let RetString = ""
+  let RetString = "";
     
   if (StringId in _LocaleDict)
   {

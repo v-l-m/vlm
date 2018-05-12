@@ -221,7 +221,7 @@ OpenLayers.Control.ControlSwitch =
 
       this.baseDiv = document.createElement("div");
       this.baseDiv.id = this.id + "_baseDiv";
-      OpenLayers.Element.addClass(this.baseDiv, "baseDiv")
+      OpenLayers.Element.addClass(this.baseDiv, "baseDiv");
 
       this.div.appendChild(this.baseDiv);
 
@@ -237,11 +237,11 @@ OpenLayers.Control.ControlSwitch =
         OpenLayers.Rico.Corner.changeOpacity(this.baseDiv, 0.75);
       }
 
-      var imgLocation = OpenLayers.Util.getImagesLocation();
-      var sz = new OpenLayers.Size(18, 18);
+      let imgLocation = OpenLayers.Util.getImagesLocation();
+      let sz = new OpenLayers.Size(18, 18);
 
       // maximize button div
-      var img = imgLocation + 'layer-switcher-maximize.png';
+      let img = imgLocation + 'layer-switcher-maximize.png';
       this.maximizeDiv = OpenLayers.Util.createAlphaImageDiv(
         "OpenLayers_Control_MaximizeDiv",
         null,
@@ -257,8 +257,8 @@ OpenLayers.Control.ControlSwitch =
       this.div.appendChild(this.maximizeDiv);
 
       // minimize button div
-      var img = imgLocation + 'layer-switcher-minimize.png';
-      var sz = new OpenLayers.Size(18, 18);
+      img = imgLocation + 'layer-switcher-minimize.png';
+      sz = new OpenLayers.Size(18, 18);
       this.minimizeDiv = OpenLayers.Util.createAlphaImageDiv(
         "OpenLayers_Control_MinimizeDiv",
         null,

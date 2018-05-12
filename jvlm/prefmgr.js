@@ -1,51 +1,51 @@
-
 var MAP_OP_SHOW_SEL = 0;
 
 
-var VLM2Prefs = new PrefMgr()
+var VLM2Prefs = new PrefMgr();
 
 VLM2Prefs.Init();
 
-function LoadLocalPref ( PrefName, PrefDfaultValue)
+function LoadLocalPref(PrefName, PrefDfaultValue)
 {
-    let ret = store.get(PrefName);
-    if (typeof ret === "undefined")
-    {
-        ret = PrefDfaultValue
-    }
+  let ret = store.get(PrefName);
+  if (typeof ret === "undefined")
+  {
+    ret = PrefDfaultValue;
+  }
 
-    return ret;
+  return ret;
 }
 
 function PrefMgr()
 {
-  this.MapPrefs=new MapPrefs();
-  this.CurTheme = "bleu-noir"
-  
-  this.MapPrefs
+  this.MapPrefs = new MapPrefs();
+  this.CurTheme = "bleu-noir";
+
+  this.MapPrefs = new MapPrefs();
+
   this.Init = function()
   {
     this.MapPrefs.Load();
     this.Load();
-  } 
+  };
 
   this.Load = function()
   {
     if (store.enabled)
     {
-      this.CurTheme = LoadLocalPref('CurTheme',"bleu-noir") 
+      this.CurTheme = LoadLocalPref('CurTheme', "bleu-noir");
     }
-  }
+  };
 
   this.Save = function()
   {
     if (store.enabled)
     {
-      store.set('ColorTheme',this.CurTheme);
+      store.set('ColorTheme', this.CurTheme);
     }
 
     this.MapPrefs.Save();
-  }
+  };
 
   this.UpdateVLMPrefs = function(p)
   {
@@ -80,27 +80,27 @@ function PrefMgr()
         break;
 
       default:
-        VLMAlertDanger ("unexepected mapping option : " + p.mapOpponents)
+        VLMAlertDanger("unexepected mapping option : " + p.mapOpponents);
     }
-  }
-  
+  };
+
 }
 
 function MapPrefs()
 {
-  this.ShowReals=true;            // Do we show reals?
-  this.ShowOppName=true;          // Do we show opponents names?
-  this.MapOppShow = null;         // Which opponents do we show on the map
+  this.ShowReals = true; // Do we show reals?
+  this.ShowOppName = true; // Do we show opponents names?
+  this.MapOppShow = null; // Which opponents do we show on the map
   this.MapOppShowOptions = {
-      ShowSel : 0,
-      ShowMineOnly : 1,
-      Show5Around : 2,
-      ShowTop10 : 3,
-      Show10Around : 4
-  }
-  this.WindArrowsSpacing = 64;    // Spacing steps for wind arrow drawing
+    ShowSel: 0,
+    ShowMineOnly: 1,
+    Show5Around: 2,
+    ShowTop10: 3,
+    Show10Around: 4
+  };
+  this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
   this.MapZoomLevel = 4;
-  this.PolarVacCount = 12;        // How many vacs for drawing the polar line
+  this.PolarVacCount = 12; // How many vacs for drawing the polar line
   this.EstTrackMouse = false;
   this.TrackEstForecast = true;
   this.ShowTopCount = 50;
@@ -109,64 +109,69 @@ function MapPrefs()
   {
     if (store.enabled)
     {
-      this.ShowReals = LoadLocalPref('#ShowReals',true);
+      this.ShowReals = LoadLocalPref('#ShowReals', true);
       this.ShowOppName = store.get("#ShowOppName");
-      this.MapZoomLevel = LoadLocalPref("#MapZoomLevel",4);
-      this.PolarVacCount = LoadLocalPref("#PolarVacCount",12);
+      this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
+      this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
       this.EstTrackMouse = store.get("#EstTrackMouse");
       this.TrackEstForecast = store.get("#TrackEstForecast");
       if (!this.PolarVacCount)
       {
-          // Fallback if invalid value is stored
-          this.PolarVacCount = 12;
+        // Fallback if invalid value is stored
+        this.PolarVacCount = 12;
       }
-      this.ShowTopCount = LoadLocalPref('ShowTopCount',50);
-    } 
-  }
+      this.ShowTopCount = LoadLocalPref('ShowTopCount', 50);
+    }
+  };
 
   this.Save = function()
   {
-    if(store.enabled)
+    if (store.enabled)
     {
-      store.set("#ShowReals",this.ShowReals);
-      store.set("#ShowOppName",this.ShowOppName);   
-      store.set("#MapZoomLevel",this.MapZoomLevel); 
-      store.set("#PolarVacCount",this.PolarVacCount);
-      store.set("#TrackEstForecast",this.TrackEstForecast); 
-      store.set("#EstTrackMouse",this.EstTrackMouse); 
-      store.set("ShowTopCount",this.ShowTopCount); 
+      store.set("#ShowReals", this.ShowReals);
+      store.set("#ShowOppName", this.ShowOppName);
+      store.set("#MapZoomLevel", this.MapZoomLevel);
+      store.set("#PolarVacCount", this.PolarVacCount);
+      store.set("#TrackEstForecast", this.TrackEstForecast);
+      store.set("#EstTrackMouse", this.EstTrackMouse);
+      store.set("ShowTopCount", this.ShowTopCount);
     }
 
-    var MapPrefVal="mapselboats"
-    switch(this.MapOppShow)
+    let MapPrefVal = "mapselboats";
+    switch (this.MapOppShow)
     {
       case this.MapOppShowOptions.ShowMineOnly:
-        MapPrefVal="myboat"
+        MapPrefVal = "myboat";
         break;
 
       case this.MapOppShowOptions.Show5Around:
-        MapPrefVal="my5opps";
+        MapPrefVal = "my5opps";
         break;
-          
+
       case this.MapOppShowOptions.ShowTop10:
-        MapPrefVal="meandtop10";
+        MapPrefVal = "meandtop10";
         break;
-          
+
       case this.MapOppShowOptions.Show10Around:
-        MapPrefVal="my10opps";
+        MapPrefVal = "my10opps";
         break;
-            
-        
+
+
     }
 
-    var NewVals={mapOpponents:MapPrefVal};
+    var NewVals = {
+      mapOpponents: MapPrefVal
+    };
     if (typeof _CurPlayer !== "undefined")
     {
-      UpdateBoatPrefs(_CurPlayer.CurBoat,{prefs:NewVals});
+      UpdateBoatPrefs(_CurPlayer.CurBoat,
+      {
+        prefs: NewVals
+      });
     }
-  }
+  };
 
-  this.GetOppModeString = function (Mode)
+  this.GetOppModeString = function(Mode)
   {
     switch (Mode)
     {
@@ -174,20 +179,20 @@ function MapPrefs()
         return GetLocalizedString("mapselboats");
 
       case this.MapOppShowOptions.ShowMineOnly:
-        return GetLocalizedString("maponlyme")
-          
+        return GetLocalizedString("maponlyme");
+
       case this.MapOppShowOptions.Show5Around:
-        return GetLocalizedString("mapmy5opps")
-          
+        return GetLocalizedString("mapmy5opps");
+
       case this.MapOppShowOptions.ShowTop10:
-        return GetLocalizedString("mapmeandtop10")
-          
+        return GetLocalizedString("mapmeandtop10");
+
       case this.MapOppShowOptions.Show10Around:
-        return GetLocalizedString("mapmy10opps")
-          
+        return GetLocalizedString("mapmy10opps");
+
       default:
         return Mode;
     }
-  }
+  };
 
 }
