@@ -7313,7 +7313,7 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
     let index;
 
     
-    if (!Boat || !Boat.RnkObject || !Boat.RnkObject[RaceId])
+    if (typeof RaceId =="undefined" || !Boat || !Boat.RnkObject || !Boat.RnkObject[RaceId])
     {
       return;
     }
