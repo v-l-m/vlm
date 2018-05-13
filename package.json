@@ -1,0 +1,44 @@
+{
+  "name": "vlm",
+  "version": "0.1.0",
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-cache": "^1.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssnano": "^2.1.3",
+    "gulp-deploy-ftp": "lastest",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^3.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^3.0.0",
+    "gulp-uglify": "^3.0.0",
+    "uglify-es": "latest"
+  },
+  "description": "VLM",
+  "main": "gulpfile.js",
+  "directories": {
+    "lib": "jvlm",
+    "test": "tests"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.8",
+    "jshint": "^2.9.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v-l-m/vlm.git"
+  },
+  "author": "VLM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/v-l-m/vlm/issues"
+  },
+  "homepage": "https://github.com/v-l-m/vlm#readme"
+}

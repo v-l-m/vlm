@@ -1,6 +1,8 @@
 /* global webhost */
 //webhost
+/* jshint -W020*/
 webhost = window.location.hostname;
+/* jshint +W020*/
 
 //Url for the cache
 //tilesUrlArray = "/cache/gshhstiles/${z}/${x}/${y}.png";

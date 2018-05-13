@@ -2435,7 +2435,7 @@ function ResetRankingWPList(e)
 
 }
 
-function CheckWPRankingList(Boat)
+function CheckWPRankingList(Boat, OtherRaceWPs)
 {
   let InitNeeded = $(".WPNotInited");
 
@@ -2444,9 +2444,45 @@ function CheckWPRankingList(Boat)
 
     let index;
 
-    for (index in Boat.RaceInfo.races_waypoints)
+    
+    if (!Boat || !Boat.RnkObject || !Boat.RnkObject[RaceId])
     {
-      if (Boat.RaceInfo.races_waypoints[index])
+      return;
+    }
+
+    RaceId = GetRankingRaceId(Boat,RaceId);
+
+    if (RaceId == Boat.RaceInfo.RaceId)
+    {
+      BuildWPTabList(index);
+    }
+    else if (OtherRaceWPs)
+    {
+      BuildWPTabList(OtherRaceWPs);
+    }
+    else
+    {
+      $.get("/ws/raceinfo/desc.php?idrace="+RaceId,
+        function (result) 
+        {
+          CheckWPRankingList (Boat,result);
+        } 
+      );
+    }
+    
+  }
+
+  $(InitNeeded).removeClass("WPNotInited");
+  $(".JVLMTabs").tabs("refresh");
+  
+
+  function BuildWPTabList(WPInfos) 
+  {
+    let index;
+    
+    for (index in WPInfos) 
+    {
+      if (Boat.RaceInfo.races_waypoints[index]) 
       {
         let WPInfo = Boat.RaceInfo.races_waypoints[index];
         let html = GetWPrankingLI(WPInfo);

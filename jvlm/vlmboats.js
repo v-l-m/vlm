@@ -126,7 +126,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     ForceRefresh = true;
   }
 
-  if ((CurDate > BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))
+  //if ((CurDate > BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))
+  if ((ForceRefresh) || (CurDate >= Boat.NextServerRequestDate))
   {
     BoatLoading = CurDate + 3000;
     console.log("Loading boat info from server....");

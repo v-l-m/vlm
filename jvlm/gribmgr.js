@@ -432,17 +432,14 @@ function VLM2GribManager()
     // Now Process the data
     var ZoneOffsets = Url.split("/");
     var DataStartIndex = Catalog.length + 1;
-    for (let i = 0; i < Catalog.length; i++);
+    for (let i = 0; i < Catalog.length; i++)
     {
       if (typeof Lines[DataStartIndex] === "undefined" || Lines[DataStartIndex] === "")
       {
         // Somehow sometimes, the data is incomplete, just get out, until next request.
         //console.log("Incomplete data file. Forcing rebuild..." + Url);
         this.ForceReloadGribCache(LoadKey, Url);
-        /* jshint -W052 */ // I mean breaking out of the for loop
         break;
-        /* jshint +W052 */
-
       }
       var DataSize = Lines[DataStartIndex].split(" ");
       var NbLon = parseInt(DataSize[0], 10);
