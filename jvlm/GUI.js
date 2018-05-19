@@ -1196,19 +1196,19 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   var BoatFieldMappings = [];
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.ToString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", Math.round(Boat.VLMInfo.BSP * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", Math.round(Boat.VLMInfo.HDG * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", Math.round(Boat.VLMInfo.HDG * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatAvg", Math.round(Boat.VLMInfo.AVG * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatDNM", Math.round(Boat.VLMInfo.DNM * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoch", Math.round(Boat.VLMInfo.LOC * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatOrtho", Math.round(Boat.VLMInfo.ORT * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoxo", Math.round(Boat.VLMInfo.LOX * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG", Math.round(Boat.VLMInfo.VMG * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindSpeed", Math.round(Boat.VLMInfo.TWS * 10) / 10]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection", Math.round(Boat.VLMInfo.TWD * 10) / 10]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP ,2)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(Boat.VLMInfo.HDG ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(Boat.VLMInfo.HDG ,2)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatAvg", RoundPow(Boat.VLMInfo.AVG ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatDNM", RoundPow(Boat.VLMInfo.DNM ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoch", RoundPow(Boat.VLMInfo.LOC ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatOrtho", RoundPow(Boat.VLMInfo.ORT ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoxo", RoundPow(Boat.VLMInfo.LOX ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG", RoundPow(Boat.VLMInfo.VMG ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindSpeed", RoundPow(Boat.VLMInfo.TWS ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection", RoundPow(Boat.VLMInfo.TWD ,1)]);
   BoatFieldMappings.push([FIELD_MAPPING_CHECK, "#PM_WithWPHeading", Boat.VLMInfo['H@WP'] !== "-1.0"]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);  
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_WPHeading", Boat.VLMInfo['H@WP']]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName", Boat.VLMInfo.RAN]);
@@ -1235,13 +1235,13 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   if (parseInt(Boat.VLMInfo.PIM, 10) === PM_ANGLE)
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", Math.round(Math.abs(Boat.VLMInfo.PIP) * 10) / 10]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.PIP) ,1)]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", Boat.VLMInfo.PIP]);
   }
   else
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", Math.round(Math.abs(Boat.VLMInfo.TWA) * 10) / 10]);
-    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", Math.round(Boat.VLMInfo.TWA * 10) / 10]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.TWA) ,1)]);
+    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.TWA ,1)]);
   }
 
   FillFieldsFromMappingTable(BoatFieldMappings);
