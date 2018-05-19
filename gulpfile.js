@@ -93,7 +93,8 @@ gulp.task('deploy', function()
   });
 
   var globs = [
-    'jvlm/dist/*'
+    'jvlm/dist/*',
+    '*.css'
   ];
 
   // using base = '.' will transfer everything to /public_html correctly
