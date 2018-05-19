@@ -410,15 +410,16 @@ if (webhost == 'vlm-dev.ddns.net')
 {
   tilesUrlArray = '/cache/gshhstiles/${z}/${x}/${y}.png';
 
-  var WindGridServers = ['https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net'];
+  WindGridServers = ['https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net'];
 
 }
-if (webhost == 'vlm-dev')
+if (webhost == 'testing.v-l-m.org' || webhost == 'www.testing.v-l-m.org')
 {
-  tilesUrlArray = '/cache/gshhstiles/${z}/${x}/${y}.png';
+  tilesUrlArray = ["https://c1.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c2.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c3.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c4.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png"];
 
-  var WindGridServers = ['https://vlm-dev', 'https://vlm-dev', 'https://vlm-dev', 'https://vlm-dev'];
-
+  // URI to distribute windgridrequest amount servers
+  WindGridServers = ["https://c1.testing.v-l-m.org", "https://c2.testing.v-l-m.org", "https://c3.testing.v-l-m.org", "https://c4.testing.v-l-m.org"];
+  
 }
 /* Contributors : paparazzia@gmail.com, ...
  * Code is licencesed under the AGPL license
@@ -3034,7 +3035,11 @@ Gribmap.ServerURL = function()
 {
   if (typeof WindGridServers !== "undefined" && WindGridServers)
   {
-    SrvIndex = ((SrvIndex + 1) % WindGridServers.length) + 1;
+    SrvIndex = ((SrvIndex + 1) % WindGridServers.length);
+    if (SrvIndex === 0)
+    {
+      SrvIndex = 1;
+    }
     return WindGridServers[SrvIndex];
   }
   else
@@ -3980,7 +3985,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
             {
               self.drawWindArea(p, poslimit, windarea, ctx, true);
             });
-            /*jshint +W083*/
+          /*jshint +W083*/
           if (MI)
           {
             winfo = new Wind(MI.Speed, MI.Heading);

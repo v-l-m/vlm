@@ -25,7 +25,11 @@ Gribmap.ServerURL = function()
 {
   if (typeof WindGridServers !== "undefined" && WindGridServers)
   {
-    SrvIndex = ((SrvIndex + 1) % WindGridServers.length) + 1;
+    SrvIndex = ((SrvIndex + 1) % WindGridServers.length);
+    if (SrvIndex === 0)
+    {
+      SrvIndex = 1;
+    }
     return WindGridServers[SrvIndex];
   }
   else
@@ -971,7 +975,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
             {
               self.drawWindArea(p, poslimit, windarea, ctx, true);
             });
-            /*jshint +W083*/
+          /*jshint +W083*/
           if (MI)
           {
             winfo = new Wind(MI.Speed, MI.Heading);
