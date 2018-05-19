@@ -16,6 +16,7 @@ const gulp = require('gulp'),
   uglify = composer(uglifyes, console),
   ftp = require('vinyl-ftp'),
   log= require('fancy-log'),
+  debug = require('gulp-debug'),
   runsequence = require('run-sequence');
 
 gulp.task('scripts', function()
@@ -87,7 +88,8 @@ gulp.task('deploy', function()
     password: 'vlm',
     parallel: 1,
     reload: true,
-    log: log
+    log: log//,
+    //debug:log
   });
 
   var globs = [
@@ -99,19 +101,31 @@ gulp.task('deploy', function()
 
   return gulp.src(globs,
     {
-      cwd: '/home/vlm/vlmcode',
-      buffer: false
+      base: '.'
+      //cwd: '/home/vlm/vlmcode',
+      //buffer: true
     })
-    //.pipe(conn.newerOrDifferentSize('jvlm/dist')) // only upload newer files
-    .pipe(conn.dest('jvlm/dist')
-    .pipe(notify(
-      {
-        message: 'Upload task complete'
-      })));
+    //.pipe(debug())
+    //.pipe(debug())
+    //.pipe(debug())
+    .pipe(conn.newerOrDifferentSize('/home/vlm/vlmcode/')) // only upload newer files
+    //.pipe(debug())
+    .pipe(conn.dest('/home/vlm/vlmcode')
+    //.pipe(debug())
+    //.pipe(notify(
+    //  {
+    //    message: 'Upload task complete'
+    //  }))
+    );
 
 });
 
 gulp.task('default', function()
 {
   return runsequence('scripts', 'deploy');
+});
+
+gulp.task('BuildAll', function()
+{
+  return runsequence('libs','scripts', 'deploy');
 });
