@@ -34,3 +34,4 @@ exclude_paths:
 - tests/
 - jvlm/external
 - externals
+- jvlm/dist
