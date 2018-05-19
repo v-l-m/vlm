@@ -20,7 +20,7 @@ const gulp = require('gulp'),
 
 gulp.task('scripts', function()
 {
-  return gulp.src(['jvlm/*.js', '!jvlm/external/*'])
+  return gulp.src(['jvlm/*.js', '!jvlm/external/*', '!jvlm/config.js'])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_main.js'))
@@ -102,7 +102,7 @@ gulp.task('deploy', function()
       cwd: '/home/vlm/vlmcode',
       buffer: false
     })
-    .pipe(conn.newerOrDifferentSize('jvlm/dist')) // only upload newer files
+    //.pipe(conn.newerOrDifferentSize('jvlm/dist')) // only upload newer files
     .pipe(conn.dest('jvlm/dist')
     .pipe(notify(
       {
