@@ -6040,19 +6040,19 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   var BoatFieldMappings = [];
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.ToString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP ,2)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(Boat.VLMInfo.HDG ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(Boat.VLMInfo.HDG ,2)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatAvg", RoundPow(Boat.VLMInfo.AVG ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatDNM", RoundPow(Boat.VLMInfo.DNM ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoch", RoundPow(Boat.VLMInfo.LOC ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatOrtho", RoundPow(Boat.VLMInfo.ORT ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoxo", RoundPow(Boat.VLMInfo.LOX ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG", RoundPow(Boat.VLMInfo.VMG ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindSpeed", RoundPow(Boat.VLMInfo.TWS ,1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection", RoundPow(Boat.VLMInfo.TWD ,1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP, 2)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(Boat.VLMInfo.HDG, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(Boat.VLMInfo.HDG, 2)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatAvg", RoundPow(Boat.VLMInfo.AVG, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatDNM", RoundPow(Boat.VLMInfo.DNM, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoch", RoundPow(Boat.VLMInfo.LOC, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatOrtho", RoundPow(Boat.VLMInfo.ORT, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoxo", RoundPow(Boat.VLMInfo.LOX, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG", RoundPow(Boat.VLMInfo.VMG, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindSpeed", RoundPow(Boat.VLMInfo.TWS, 1)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection", RoundPow(Boat.VLMInfo.TWD, 1)]);
   BoatFieldMappings.push([FIELD_MAPPING_CHECK, "#PM_WithWPHeading", Boat.VLMInfo['H@WP'] !== "-1.0"]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);  
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_WPHeading", Boat.VLMInfo['H@WP']]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName", Boat.VLMInfo.RAN]);
@@ -6079,13 +6079,13 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   if (parseInt(Boat.VLMInfo.PIM, 10) === PM_ANGLE)
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.PIP) ,1)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.PIP), 1)]);
     BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", Boat.VLMInfo.PIP]);
   }
   else
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.TWA) ,1)]);
-    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.TWA ,1)]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.TWA), 1)]);
+    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.TWA, 1)]);
   }
 
   FillFieldsFromMappingTable(BoatFieldMappings);
@@ -7288,13 +7288,13 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
 
     let index;
 
-    
-    if (typeof RaceId =="undefined" || !Boat || !Boat.RnkObject || !Boat.RnkObject[RaceId])
+
+    if (typeof RaceId == "undefined" || !Boat || !Boat.RnkObject || !Boat.RnkObject[RaceId])
     {
       return;
     }
 
-    RaceId = GetRankingRaceId(Boat,RaceId);
+    RaceId = GetRankingRaceId(Boat, RaceId);
 
     if (RaceId == Boat.RaceInfo.RaceId)
     {
@@ -7306,27 +7306,27 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
     }
     else
     {
-      $.get("/ws/raceinfo/desc.php?idrace="+RaceId,
-        function (result) 
+      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId,
+        function(result)
         {
-          CheckWPRankingList (Boat,result);
-        } 
+          CheckWPRankingList(Boat, result);
+        }
       );
     }
-    
+
   }
 
   $(InitNeeded).removeClass("WPNotInited");
   $(".JVLMTabs").tabs("refresh");
-  
 
-  function BuildWPTabList(WPInfos) 
+
+  function BuildWPTabList(WPInfos)
   {
     let index;
-    
-    for (index in WPInfos) 
+
+    for (index in WPInfos)
     {
-      if (Boat.RaceInfo.races_waypoints[index]) 
+      if (Boat.RaceInfo.races_waypoints[index])
       {
         let WPInfo = Boat.RaceInfo.races_waypoints[index];
         let html = GetWPrankingLI(WPInfo);
@@ -7380,7 +7380,7 @@ function SortRanking(style, WPNum)
       SortRankingData(Boat, style);
       FillStatusRanking(Boat, style, Friends);
       break;
-    //case 'RAC':
+      //case 'RAC':
     default:
       SetRankingColumns('RAC');
       CurRnk = SortRankingData(Boat, 'RAC');
@@ -7405,7 +7405,7 @@ function SetRankingColumns(style)
     case 'ABD':
       SetNRClassRankingColumns();
       break;
-    //case 'RAC':
+      //case 'RAC':
     default:
       SetRacingClassRankingColumns();
 
@@ -8046,35 +8046,38 @@ function FillRacingRanking(Boat, Friends)
 
   let RaceId = GetRankingRaceId(Boat);
   let CurWP = 0;
-  for (index in Boat.RnkObject[RaceId].RacerRanking)
+  if (RaceId && typeof Boat.RnkObject !== "undefined" && typeof Boat.RnkObject[RaceId] !== "undefined" && Boat.RnkObject[RaceId] && Boat.RnkObject[RaceId].RacerRanking)
   {
-    if (Boat.RnkObject[RaceId].RacerRanking[index])
+    for (index in Boat.RnkObject[RaceId].RacerRanking)
     {
-      let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
-
-      if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+      if (Boat.RnkObject[RaceId].RacerRanking[index])
       {
-        RowNum = Rows.length;
-      }
+        let RnkBoat = Boat.RnkObject[RaceId].RacerRanking[index];
 
-      if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
-      {
-        if (!Refs.Arrived1stTime && RnkIsArrived(RnkBoat))
+        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
-          // First arrived, store time
-          Refs.Arrived1stTime = parseInt(RnkBoat.duration, 10);
+          RowNum = Rows.length;
         }
 
-        if (RnkIsRacing(RnkBoat) && (!Refs.Racer1stPos || RnkBoat.nwp !== CurWP))
+        if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
         {
-          Refs.Racer1stPos = RnkBoat.dnm;
-          CurWP = RnkBoat.nwp;
+          if (!Refs.Arrived1stTime && RnkIsArrived(RnkBoat))
+          {
+            // First arrived, store time
+            Refs.Arrived1stTime = parseInt(RnkBoat.duration, 10);
+          }
+
+          if (RnkIsRacing(RnkBoat) && (!Refs.Racer1stPos || RnkBoat.nwp !== CurWP))
+          {
+            Refs.Racer1stPos = RnkBoat.dnm;
+            CurWP = RnkBoat.nwp;
+          }
+          Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends, Refs));
         }
-        Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends, Refs));
-      }
-      else
-      {
-        break;
+        else
+        {
+          break;
+        }
       }
     }
   }
@@ -8162,7 +8165,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     RetObject.Time = (RankBoat.deptime === "-1" ? "" : GetFormattedChronoString(RacingTime));
     RetObject.Loch = RankBoat.loch;
     RetObject.lon = RankBoat.longitude;
-    RetObject.Lat= RankBoat.latitude;
+    RetObject.Lat = RankBoat.latitude;
     RetObject.Last1h = RankBoat.last1h;
     RetObject.Last3h = RankBoat.last3h;
     RetObject.Last24h = RankBoat.last24h;
@@ -8189,7 +8192,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     }
     RetObject.Loch = RankBoat.loch;
     RetObject.lon = RankBoat.longitude;
-    RetObject.Lat= RankBoat.latitude;
+    RetObject.Lat = RankBoat.latitude;
   }
   else
   {
