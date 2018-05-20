@@ -10098,7 +10098,7 @@ else
    this.Estimator = new Estimator(this); // Estimator object for current boat
    this.EstimatePos = null; // Position marker on estimate track
 
-   if (typeof vlmboat != 'undefined')
+   if (typeof vlmboat !== 'undefined')
    {
      this.IdBoat = vlmboat.idu;
      this.Engaged = vlmboat.engaged;
@@ -10198,11 +10198,11 @@ else
      var WPIndex = this.VLMInfo.NWP;
 
      //If there is a defined WP, then return it
-     if ((typeof NWPPosition === "undefined" || (!NWPPosition)) && ((this.VLMInfo.WPLON != 0) || (this.VLMInfo.WPLAT != 0)))
+     if ((typeof NWPPosition === "undefined" || (!NWPPosition)) && ((this.VLMInfo.WPLON !== 0) || (this.VLMInfo.WPLAT !== 0)))
      {
        return new VLMPosition(this.VLMInfo.WPLON, this.VLMInfo.WPLAT);
      }
-     else if (typeof NWPPosition !== "undefined" && NWPPosition && NWPPosition.Lon.Value != 0 && NWPPosition.Lat.Value != 0)
+     else if (typeof NWPPosition !== "undefined" && NWPPosition && NWPPosition.Lon.Value !== 0 && NWPPosition.Lat.Value !== 0)
      {
        return new VLMPosition(NWPPosition.Lon.Value, NWPPosition.Lat.Value);
      }
@@ -10225,7 +10225,7 @@ else
        }
        var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
        var CurPos;
-       if (typeof Position != "undefined" && Position)
+       if (typeof Position !== "undefined" && Position)
        {
          CurPos = Position;
        }
@@ -10301,7 +10301,7 @@ else
    // Send Login every 10'
    setInterval(this.KeepAlive, 600000);
 
-  }
+ }
 
  function IsLoggedIn()
  {
@@ -10365,7 +10365,7 @@ else
            CurBoatID = _CurPlayer.CurBoatID;
          }
 
-         _IsLoggedIn = LoginResult.success == true;
+         _IsLoggedIn = LoginResult.success === true;
 
          HandleCheckLoginResponse(GuiRequest);
 
@@ -10416,7 +10416,7 @@ else
        var i = result;
        if (!result.success)
        {
-         alert("Something bad happened while logging out. Restart browser...");
+         VLMAlertDanger("Something bad happened while logging out. Restart browser...");
          windows.location.reload();
        }
        else
@@ -10438,7 +10438,7 @@ else
        if (result.success)
        {
          // Ok, create a user from profile
-         if (typeof _CurPlayer == 'undefined')
+         if (typeof _CurPlayer === 'undefined')
          {
            _CurPlayer = new User();
          }
@@ -10482,7 +10482,7 @@ else
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
      {
        _CurPlayer.Fleet[boat] = (new Boat(result.fleet[boat]));
-       if (typeof select == "undefined")
+       if (typeof select === "undefined")
        {
          select = _CurPlayer.Fleet[boat];
        }
@@ -10527,7 +10527,10 @@ else
    }
    for (let boat in _CurPlayer.BSFleet)
    {
-     AddBoatToSelector(_CurPlayer.BSFleet[boat], false);
+     if (_CurPlayer.BSFleet[boat])
+     {
+       AddBoatToSelector(_CurPlayer.BSFleet[boat], false);
+     }
    }
 
    DisplayLoggedInMenus(true);
@@ -10558,7 +10561,7 @@ else
    }
    var RetBoat = GetBoatFromBoatArray(_CurPlayer.Fleet, Id);
 
-   if (typeof RetBoat == 'undefined')
+   if (typeof RetBoat === 'undefined')
    {
      RetBoat = GetBoatFromBoatArray(_CurPlayer.BSFleet, Id);
    }
@@ -10572,7 +10575,7 @@ else
 
    for (let boat in BoatsArray)
    {
-     if (BoatsArray[boat].IdBoat === Id)
+     if (BoatsArray[boat] &&  (BoatsArray[boat].IdBoat === Id))
      {
        return BoatsArray[boat];
      }
@@ -10592,8 +10595,11 @@ else
          var flagindex = 0;
          for (let index in result.flags)
          {
-           var title = result.flags[index];
-           DropDown.append("<li class='FlagLine DDLine' flag='" + title + "'>" + GetCountryDropDownSelectorHTML(title, true, flagindex++) + "</li>");
+           if (result.flags[index])
+           {
+             let title = result.flags[index];
+             DropDown.append("<li class='FlagLine DDLine' flag='" + title + "'>" + GetCountryDropDownSelectorHTML(title, true, flagindex++) + "</li>");
+           }
          }
        }
 
