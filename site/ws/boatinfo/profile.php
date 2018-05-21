@@ -23,7 +23,7 @@
     $info['IDB'] = $fullusers->users->boatname;
     $info['COL'] = $fullusers->users->color;
     $info['CNT'] = $fullusers->users->country;
-
+    
     if ($ownerObj != NULL) {
       $info['OWN'] = $ownerObj->playername;
       $info['JID'] = $ownerObj->getFullJid();

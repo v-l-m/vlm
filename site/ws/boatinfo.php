@@ -22,14 +22,18 @@ function get_info_array($idu) {
   $info['CNT'] = $userObj->users->country;
   $info['POL'] = $userObj->users->boattype;
 
-  if ($ownerObj != NULL) {
+  if ($ownerObj != NULL) 
+  {
     $info['OWN'] = $ownerObj->playername;
   }
   
-  if ( $userObj->users->engaged == 0 ) {
+  if ( $userObj->users->engaged == 0 ) 
+  {
     // Race is 0
     $info['RAC'] = "0";
-  } else {
+  } 
+  else 
+  {
     $info['RAC'] = $userObj->users->engaged;
     $racesObj = &$userObj->races;
     $info['RAN'] = $racesObj->racename;
@@ -45,6 +49,8 @@ function get_info_array($idu) {
     $info['VMG'] = $userObj->VMGortho;
     $info['STS'] = (int)$racesObj->started;
     $info['UDT'] = $userObj->users->userdeptime;
+    $info['VER'] = $userObj->RaceVersion;
+
 
     if ( $userObj->VMGortho != 0 ) {
       $_timetogo = 3600 * $userObj->distancefromend / $userObj->VMGortho;
@@ -151,6 +157,7 @@ function get_info_array($idu) {
 
     $info['THM'] = $userObj->users->theme;
     $info['HID'] = $userObj->users->hasTrackHidden();
+    
   }
   return $info;
 }
