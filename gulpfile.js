@@ -16,7 +16,7 @@ const gulp = require('gulp'),
   uglify = composer(uglifyes, console),
   ftp = require('vinyl-ftp'),
   log= require('fancy-log'),
-  debug = require('gulp-debug'),
+  //debug = require('gulp-debug'),
   runsequence = require('run-sequence');
 
 gulp.task('scripts', function()
