@@ -1536,16 +1536,23 @@ function getLoggedPlayerObject() {
     return $player;
 }
 
-function getPlayerObject($id) {
+function getPlayerObject($id) 
+{
     static $pobjects = Array();
     $id = intval($id);
-    if (array_key_exists($id, $pobjects)) return $pobjects[$id];
+    if (array_key_exists($id, $pobjects)) 
+    {
+        return $pobjects[$id];
+    }
     require_once('players.class.php');
     $p = new players($id);
-    if ($p->idplayers == $id) {
+    if ($p->idplayers == $id) 
+    {
         $pobjects[$id] = $p;
         return $p;
-    } else {
+    }
+    else
+    {
         return null;
     }
 }
