@@ -17,7 +17,6 @@ function get_info_array($idu) {
   $info['IDU'] = $userObj->users->idusers;
   $info['IDP'] = $ownerId;
   $info['IDB'] = $userObj->users->boatname;
-  $info['EML'] = "email.for.boat@is.deprecated.com";
   $info['COL'] = $userObj->users->color;
   $info['CNT'] = $userObj->users->country;
   $info['POL'] = $userObj->users->boattype;
@@ -176,7 +175,6 @@ function usage() {
     #* CNT : Country 
     #* COL : Color
     #* DNM : Distance to next mark (float)
-    #* EML : EMail (Deprecated)
     #* ETA : Date estimée d'arrivé, seulement si pas de wp perso (string)
     #* HDG : direction (HeaDinG)
     #* HID: trace cachée (1) ou visible (0)
@@ -227,7 +225,8 @@ function usage() {
     #* TWD : Wind direction (float)
     #* TWS : Wind speed (float)
     #* UDT : User departure time (int) (useful for record races)
-    #* VAC: durée de la vacation (en secondes)
+    #* VER : date de la dernière mise à jour de la course (epoch)
+    #* VAC : durée de la vacation (en secondes)
     #* VMG : VMG (float)
     #* WPLAT : latitude du wp perso (float, en degré)
     #* WPL : liste de Waypoints (liste)
