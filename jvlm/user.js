@@ -117,6 +117,13 @@
 
    this.GetNextWPPosition = function(NWP, Position, NWPPosition)
    {
+
+     if (typeof this.VLMInfo === "undefined")
+     {
+       // Should not come here without some kind of VLMInfo...
+       return null;
+     }
+     
      // Assume if we get there, there is a boat with RaceInfo and VLMInfo loaded
      var WPIndex = this.VLMInfo.NWP;
 
@@ -498,7 +505,7 @@
 
    for (let boat in BoatsArray)
    {
-     if (BoatsArray[boat] &&  (BoatsArray[boat].IdBoat === Id))
+     if (BoatsArray[boat] && (BoatsArray[boat].IdBoat === Id))
      {
        return BoatsArray[boat];
      }
