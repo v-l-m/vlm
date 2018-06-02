@@ -4966,7 +4966,7 @@ function CheckPageParameters()
 {
   let url = window.location.search;
   let RacingBarMode = true;
-    
+
   if (url)
   {
     let getQuery = url.split('?')[1];
@@ -5002,7 +5002,7 @@ function CheckPageParameters()
       }
     }
   }
-  if (RacingBarMode )
+  if (RacingBarMode)
   {
     $(".RaceNavBar").css("display", "inherit");
     $(".OffRaceNavBar").css("display", "none");
@@ -5016,25 +5016,32 @@ function CheckPageParameters()
 
 function HandleShowICS(raceid)
 {
-  $.get("/ws/raceinfo.php?idrace=" + raceid,
-    function(result)
+  let CallBack = function(result)
+  {
+    if (result)
     {
-      if (result)
-      {
-        FillRaceInstructions(result);
-        $("#RacesInfoForm").modal("show");
-      }
+      FillRaceInstructions(result);
+      $("#RacesInfoForm").modal("show");
     }
-  );
-
+  };
+  LoadRaceInfo(raceid, CallBack);
 }
 
+
+function LoadRaceInfo(raceid, CallBack)
+{
+  $.get("/ws/raceinfo.php?idrace=" + raceid, CallBack);
+}
 
 function HandleShowOtherRaceRank(RaceId)
 {
   OnPlayerLoadedCallBack = function()
   {
-
+    let CallBack = function(Result)
+    {
+      FillRaceInfoHeader(Result);
+    };
+    LoadRaceInfo(RaceId, CallBack);
     LoadRankings(RaceId, OtherRaceRankingLoaded);
     RankingFt.RaceRankingId = RaceId;
   };
@@ -6235,17 +6242,7 @@ function FillRaceInstructions(RaceInfo)
   }
 
   let Instructions = [];
-  let BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".ICSRaceName", RaceInfo.racename]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId", RaceInfo.idraces]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", new Date(parseInt(RaceInfo.deptime, 10) * 1000)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", new Date(parseInt(RaceInfo.closetime, 10) * 1000)]);
-  BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
-
-  FillFieldsFromMappingTable(BoatFieldMappings);
+  FillRaceInfoHeader(RaceInfo);
   FillRaceWaypointList(RaceInfo);
   InitPolar(RaceInfo);
 
@@ -6262,6 +6259,20 @@ function FillRaceInstructions(RaceInfo)
 }
 
 let PolarSliderInited = false;
+
+function FillRaceInfoHeader(RaceInfo)
+{
+  let BoatFieldMappings = [];
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".ICSRaceName", RaceInfo.racename]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId", RaceInfo.idraces]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", new Date(parseInt(RaceInfo.deptime, 10) * 1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", new Date(parseInt(RaceInfo.closetime, 10) * 1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
+  FillFieldsFromMappingTable(BoatFieldMappings);
+}
 
 function HandlePolarSpeedSlide(event, ui, RaceInfo)
 {
@@ -7298,27 +7309,23 @@ function ResetRankingWPList(e)
 function CheckWPRankingList(Boat, OtherRaceWPs)
 {
   let InitNeeded = $(".WPNotInited");
+  let RaceId = GetRankingRaceId(Boat);
+  let InitComplete = false;
 
-  if (typeof InitNeeded !== "undefined" && InitNeeded)
+  if (typeof InitNeeded !== "undefined" && InitNeeded && RaceId)
   {
 
     let index;
 
-
-    if (typeof RaceId == "undefined")
-    {
-      return;
-    }
-
-    RaceId = GetRankingRaceId(Boat, RaceId);
-
     if (typeof Boat !== "undefined" && Boat && RaceId == Boat.RaceInfo.RaceId)
     {
-      BuildWPTabList(index);
+      BuildWPTabList(index,InitNeeded);
+      InitComplete = true;
     }
     else if (OtherRaceWPs)
     {
-      BuildWPTabList(OtherRaceWPs);
+      BuildWPTabList(OtherRaceWPs,InitNeeded);
+      InitComplete = true;
     }
     else
     {
@@ -7332,31 +7339,40 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
 
   }
 
-  $(InitNeeded).removeClass("WPNotInited");
-  $(".JVLMTabs").tabs("refresh");
-
-
-  function BuildWPTabList(WPInfos)
+  if (InitComplete)
   {
-    let index;
+    $(InitNeeded).removeClass("WPNotInited");
+    $(".JVLMTabs").tabs("refresh");
+  }
 
-    for (index in WPInfos)
+}
+
+function BuildWPTabList(WPInfos, TabsInsertPoint)
+{
+  let index;
+
+  if (typeof TabsInsertPoint === "undefined" || !TabsInsertPoint)
+  {
+    return;
+  }
+  if (typeof WPInfos === "undefined" || !WPInfos)
+  {
+    WPInfos = Boat.RaceInfo.races_waypoints;
+  }
+
+  for (index in WPInfos.races_waypoints)
+  {
+    if (WPInfos.races_waypoints[index])
     {
-      if (Boat.RaceInfo.races_waypoints[index])
-      {
-        let WPInfo = Boat.RaceInfo.races_waypoints[index];
-        let html = GetWPrankingLI(WPInfo);
-        $(InitNeeded).append(html);
-      }
-
+      let WPInfo = WPInfos.races_waypoints[index];
+      let html = GetWPrankingLI(WPInfo);
+      $(TabsInsertPoint).append(html);
     }
 
   }
 
-  $(InitNeeded).removeClass("WPNotInited");
-  $(".JVLMTabs").tabs("refresh");
-
 }
+
 
 function SortRanking(style, WPNum)
 {
