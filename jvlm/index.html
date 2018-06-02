@@ -52,19 +52,15 @@
     </div>
     <!-- debut de nav-->
     <nav class="navbar navbar-inverse ">
-      <div class="OffRaceNavBar container-fluid " style="display:none">
-        <div class="navbar-header">
+      <!--<div class="OffRaceNavBar container-fluid " style="display:none">
+        <div class="navbar-header container-fluid">
           <a class="navbar-brand" href="/index.php" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
             </div>
           </a>
-          <ul>
-            <span class="ICSRaceName"></span><br>
-            <span class="RaceId"></span><br>
-          </ul>
         </div>
-      </div>
+      </div>-->
       <div class="RaceNavBar container-fluid " style="display:none">
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
@@ -267,7 +263,9 @@
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-        <div id="tabs" class ="JVLMTabs">
+          
+          <div id="tabs" class ="JVLMTabs">
+            
           <ul>
             <li class=" BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
               <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" alt="PMActiveMode"/>
@@ -508,6 +506,23 @@
       </div>
        <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
+        <div class="row container-fluid">
+          <div >
+            <a class="navbar-brand" href="/index.php" target="_vlm">
+              <div id="logo">
+                <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
+              </div>
+            </a>
+          </div>
+          <div class="container-fluid">
+            <H1>
+              <span class="ICSRaceName"></span><br>
+            </H1>
+            <h4>
+              <span class="RaceId"></span>
+            </h4>          
+          </div>
+        </div>
         <div class="container-fluid JVLMTabs">
           <ul id="RnkTabsUL" class="nav nav-tabs WPNotInited">
             <li RnkSort="RAC"><a href="#DivRnkRAC" I18n="Racing">Rcing</a></li>
