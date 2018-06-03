@@ -11020,7 +11020,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   let WP = null;
   if (typeof Boat !== "undefined" && Boat && Boat.GetNextWPPosition)
   {
-    Boat.GetNextWPPosition();
+    WP=Boat.GetNextWPPosition();
   }
 
   if (typeof WP !== "undefined" && WP)
@@ -11162,7 +11162,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
-  if (Boat.EstimatePoints)
+  if (Boat.Estimator.EstimatePoints)
   {
     for (let index in Boat.Estimator.EstimatePoints)
     {
