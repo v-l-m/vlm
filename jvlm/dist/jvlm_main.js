@@ -10993,9 +10993,22 @@ function GetRaceInfoFromServer(Boat, TargetTab)
   });
 }
 
-function DrawBoat(Boat, CenterMapOnBoat)
-{
+var DrawBoatTimeOutHandle = null;
 
+function DrawBoat(Boat,CenterMapOnBoat)
+{
+  if (DrawBoatTimeOutHandle)
+  {
+    console.log("Pushed DrawBoat");
+    clearTimeout(DrawBoatTimeOutHandle);
+  }
+  DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat,100,Boat,CenterMapOnBoat);
+}
+
+function ActualDrawBoat(Boat, CenterMapOnBoat)
+{
+  console.log("ClearDrawBoat");
+  DrawBoatTimeOutHandle = null;
   if (typeof Boat === "undefined" || !Boat)
   {
     // Ignore call, if no boat is provided...
@@ -11162,7 +11175,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
-  if (Boat.Estimator.EstimatePoints)
+  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator &&  Boat.Estimator.EstimatePoints)
   {
     for (let index in Boat.Estimator.EstimatePoints)
     {
@@ -11239,6 +11252,9 @@ function DrawBoat(Boat, CenterMapOnBoat)
     map.setCenter(l);
 
   }
+
+  console.log("ActualDrawBoatComplete");
+  
 }
 
 function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate, Callback)
