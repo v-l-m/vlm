@@ -148,8 +148,8 @@ Gribmap.WindLevel = OpenLayers.Class(
 
   notifyLoad: function(time, windarea)
   {
-    if (this.layer != null &&
-      this.gribLevel == this.layer.gribLevel &&
+    if (this.layer &&
+      this.gribLevel === this.layer.gribLevel &&
       this.layer.isInTimeRange(time) &&
       this.layer.getExtent().transform(
         new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
@@ -222,7 +222,7 @@ Gribmap.WindLevel = OpenLayers.Class(
     try
     {
       var w_area = this.windAreas[wa.toString()];
-      if (typeof w_area !== "undefined" && w_area != null)
+      if (typeof w_area !== "undefined" && w_area)
       {
         return (w_area.getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter));
       }
@@ -269,7 +269,10 @@ Gribmap.WindArray = OpenLayers.Class(
 
   notifyLoad: function()
   {
-    if (this.windArea != null) this.windArea.notifyLoad(this.time);
+    if (this.windArea)
+    {
+      this.windArea.notifyLoad(this.time);
+    }
   },
 
   handleWindGridReply: function(request)
@@ -302,16 +305,19 @@ Gribmap.WindArray = OpenLayers.Class(
 
     for (windNodeIdx in jsonArray)
     {
-      windNode = jsonArray[windNodeIdx];
-      if (typeof(wind_array[windNode.lat]) == 'undefined')
+      if (jsonArray[windNodeIdx])
       {
-        wind_array[windNode.lat] = [];
-      }
-      windInfo = new Wind(windNode.wspd, windNode.whdg);
-      wind_array[windNode.lat][windNode.lon] = windInfo;
-      if (windNode.lon == 180.0)
-      {
-        wind_array[windNode.lat][-windNode.lon] = windInfo;
+        windNode = jsonArray[windNodeIdx];
+        if (typeof(wind_array[windNode.lat]) == 'undefined')
+        {
+          wind_array[windNode.lat] = [];
+        }
+        windInfo = new Wind(windNode.wspd, windNode.whdg);
+        wind_array[windNode.lat][windNode.lon] = windInfo;
+        if (windNode.lon === 180.0)
+        {
+          wind_array[windNode.lat][-windNode.lon] = windInfo;
+        }
       }
     }
     return wind_array;
@@ -628,7 +634,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
     this.canvas = document.createElement('canvas');
 
     // code for IE browsers
-    if (typeof G_vmlCanvasManager != 'undefined')
+    if (typeof G_vmlCanvasManager !== 'undefined')
     {
       G_vmlCanvasManager.initElement(this.canvas);
     }

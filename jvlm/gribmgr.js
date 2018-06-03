@@ -325,7 +325,7 @@ function VLM2GribManager()
     {
 
       // Handle grib change
-      if (this.LastGribDate != parseInt(e.GribCacheIndex, 10))
+      if (this.LastGribDate !== parseInt(e.GribCacheIndex, 10))
       {
         // Grib changed, record, and clear Tables, force reinit
         this.LastGribDate = e.GribCacheIndex;
@@ -336,12 +336,14 @@ function VLM2GribManager()
 
       for (let index in e.gribs_url)
       {
-        let url = e.gribs_url[index].replace(".grb", ".txt");
-        let seed = 0; //parseInt((new Date).getTime());
-        //console.log("smartgrib points out " + url);
-        $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
-        this.LoadQueue[LoadKey].Length++;
-
+        if (e.gribs_url[index])
+        {
+          let url = e.gribs_url[index].replace(".grb", ".txt");
+          let seed = 0; //parseInt((new Date).getTime());
+          //console.log("smartgrib points out " + url);
+          $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
+          this.LoadQueue[LoadKey].Length++;
+        }
       }
 
 
