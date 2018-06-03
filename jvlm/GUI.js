@@ -63,13 +63,13 @@ $(document).ready(
     {
       error: function(x, status, error)
       {
-        if ((x.status === 401) || (x.status == 403))
+        if ((x.status === 401) || (x.status === 403))
         {
           window.location.replace("jvlm?login");
           //on access denied try reviving the session
           //OnLoginRequest();
         }
-        else if (x.status == 404)
+        else if (x.status === 404)
         {
           // Juts ignore these for now....
         }
@@ -1347,29 +1347,32 @@ function FillFieldsFromMappingTable(MappingTable)
   // Loop all mapped fields to their respective location
   for (let index in MappingTable)
   {
-    switch (MappingTable[index][0])
+    if (MappingTable[index])
     {
-      case FIELD_MAPPING_TEXT:
-        $(MappingTable[index][1]).text(MappingTable[index][2]);
-        break;
+      switch (MappingTable[index][0])
+      {
+        case FIELD_MAPPING_TEXT:
+          $(MappingTable[index][1]).text(MappingTable[index][2]);
+          break;
 
-      case FIELD_MAPPING_VALUE:
-        $(MappingTable[index][1]).val(MappingTable[index][2]);
-        break;
+        case FIELD_MAPPING_VALUE:
+          $(MappingTable[index][1]).val(MappingTable[index][2]);
+          break;
 
-      case FIELD_MAPPING_CHECK:
-        $(MappingTable[index][1]).prop('checked', (MappingTable[index][2]));
-        break;
+        case FIELD_MAPPING_CHECK:
+          $(MappingTable[index][1]).prop('checked', (MappingTable[index][2]));
+          break;
 
-      case FIELD_MAPPING_IMG:
-        $(MappingTable[index][1]).attr('src', (MappingTable[index][2]));
-        break;
+        case FIELD_MAPPING_IMG:
+          $(MappingTable[index][1]).attr('src', (MappingTable[index][2]));
+          break;
 
-      case FIELD_MAPPING_CALLBACK:
-        MappingTable[index][2](MappingTable[index][1]);
-        break;
+        case FIELD_MAPPING_CALLBACK:
+          MappingTable[index][2](MappingTable[index][1]);
+          break;
 
 
+      }
     }
   }
 }
@@ -2473,14 +2476,14 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
 
     let index;
 
-    if (typeof Boat !== "undefined" && Boat && RaceId == Boat.RaceInfo.RaceId)
+    if (typeof Boat !== "undefined" && Boat && (RaceId === Boat.RaceInfo.RaceId))
     {
-      BuildWPTabList(index,InitNeeded);
+      BuildWPTabList(index, InitNeeded);
       InitComplete = true;
     }
     else if (OtherRaceWPs)
     {
-      BuildWPTabList(OtherRaceWPs,InitNeeded);
+      BuildWPTabList(OtherRaceWPs, InitNeeded);
       InitComplete = true;
     }
     else
@@ -2718,7 +2721,6 @@ function Sort2RacingBoats(rnk1, rnk2)
         let SortIdu = ((rnk1.idusers > rnk2.idusers) ? 1 : ((rnk1.idusers === rnk2.idusers) ? 0 : -1));
         return SortIdu;
       }
-      return 0;
     }
     else
     {
@@ -2738,9 +2740,6 @@ function Sort2RacingBoats(rnk1, rnk2)
     return 1;
   }
 
-  // Should not happen
-  DebugRacerSort(rnk1, rnk2, 0);
-  return 0;
 }
 
 function GetWPDuration(Rnk, WPNum)
@@ -3652,7 +3651,7 @@ function FillBoatPalmares(data, status, b, c, d, f)
 {
   let index;
 
-  if (status == "success")
+  if (status === "success")
   {
     let rows = [];
     for (index in data.palmares)
@@ -3700,7 +3699,7 @@ function HandleShowBoatRaceHistory(e)
 
 function HandleCreateUserResult(data, status)
 {
-  if (status == "success" && data)
+  if (status === "success" && data)
   {
     $(".ValidationMark").addClass("hidden");
 
