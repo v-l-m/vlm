@@ -2476,7 +2476,7 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
 
     let index;
 
-    if (typeof Boat !== "undefined" && Boat && (RaceId === Boat.RaceInfo.RaceId))
+    if (typeof Boat !== "undefined" && Boat && (typeof Boat.RaceInfo !== "undefined") && Boat.RaceInfo && (RaceId === Boat.RaceInfo.RaceId))
     {
       BuildWPTabList(index, InitNeeded);
       InitComplete = true;
