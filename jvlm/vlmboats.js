@@ -313,25 +313,40 @@ function GetRaceInfoFromServer(Boat, TargetTab)
 }
 
 var DrawBoatTimeOutHandle = null;
+var DeferredCenterValue = false;
 
-function DrawBoat(Boat,CenterMapOnBoat)
+function DrawBoat(Boat, CenterMapOnBoat)
 {
+  if (typeof CenterMapOnBoat !== "undefined")
+  {
+    DeferredCenterValue = (DeferredCenterValue || CenterMapOnBoat);
+  }
+  console.log("Call DrawbBoat (" + CenterMapOnBoat + ") deferred : " + DeferredCenterValue);
   if (DrawBoatTimeOutHandle)
   {
     console.log("Pushed DrawBoat");
     clearTimeout(DrawBoatTimeOutHandle);
   }
-  DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat,100,Boat,CenterMapOnBoat);
+  DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat, 100, Boat, DeferredCenterValue);
 }
 
 function ActualDrawBoat(Boat, CenterMapOnBoat)
 {
-  console.log("ClearDrawBoat");
+  console.log("ClearDrawBoat " + CenterMapOnBoat);
+  DeferredCenterValue = false;
   DrawBoatTimeOutHandle = null;
   if (typeof Boat === "undefined" || !Boat)
   {
-    // Ignore call, if no boat is provided...
-    return;
+    if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.CurBoat !== "undefined" && _CurPlayer.CurBoat)
+    {
+      // Fallback to currently selected Boat
+      Boat = _CurPlayer.CurBoat;
+    }
+    else
+    { 
+      // Ignore call, if no boat is provided...
+      return;
+    }
   }
 
   // Remove features, before recreate and re-add
@@ -352,7 +367,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   let WP = null;
   if (typeof Boat !== "undefined" && Boat && Boat.GetNextWPPosition)
   {
-    WP=Boat.GetNextWPPosition();
+    WP = Boat.GetNextWPPosition();
   }
 
   if (typeof WP !== "undefined" && WP)
@@ -494,7 +509,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
-  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator &&  Boat.Estimator.EstimatePoints)
+  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints)
   {
     for (let index in Boat.Estimator.EstimatePoints)
     {
@@ -557,7 +572,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   }
 
 
-  if (CenterMapOnBoat)
+  if (CenterMapOnBoat && typeof Boat.VLMInfo !== "undefined" && Boat.VLMInfo)
   {
     // Set Map Center to current boat position
     var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
@@ -571,9 +586,13 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     map.setCenter(l);
 
   }
+  else if (CenterMapOnBoat)
+  {
+    let BkpPt = 1;
+  }
 
   console.log("ActualDrawBoatComplete");
-  
+
 }
 
 function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate, Callback)
@@ -1405,7 +1424,7 @@ function LoadRankings(RaceId, CallBack)
         }
         else
         {
-          DrawBoat(Boat, false);
+          DrawBoat(null, false);
         }
       }
       else

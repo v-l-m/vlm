@@ -3129,8 +3129,8 @@ Gribmap.WindLevel = OpenLayers.Class(
 
   notifyLoad: function(time, windarea)
   {
-    if (this.layer != null &&
-      this.gribLevel == this.layer.gribLevel &&
+    if (this.layer &&
+      this.gribLevel === this.layer.gribLevel &&
       this.layer.isInTimeRange(time) &&
       this.layer.getExtent().transform(
         new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
@@ -3203,7 +3203,7 @@ Gribmap.WindLevel = OpenLayers.Class(
     try
     {
       var w_area = this.windAreas[wa.toString()];
-      if (typeof w_area !== "undefined" && w_area != null)
+      if (typeof w_area !== "undefined" && w_area)
       {
         return (w_area.getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter));
       }
@@ -3250,7 +3250,10 @@ Gribmap.WindArray = OpenLayers.Class(
 
   notifyLoad: function()
   {
-    if (this.windArea != null) this.windArea.notifyLoad(this.time);
+    if (this.windArea)
+    {
+      this.windArea.notifyLoad(this.time);
+    }
   },
 
   handleWindGridReply: function(request)
@@ -3283,16 +3286,19 @@ Gribmap.WindArray = OpenLayers.Class(
 
     for (windNodeIdx in jsonArray)
     {
-      windNode = jsonArray[windNodeIdx];
-      if (typeof(wind_array[windNode.lat]) == 'undefined')
+      if (jsonArray[windNodeIdx])
       {
-        wind_array[windNode.lat] = [];
-      }
-      windInfo = new Wind(windNode.wspd, windNode.whdg);
-      wind_array[windNode.lat][windNode.lon] = windInfo;
-      if (windNode.lon == 180.0)
-      {
-        wind_array[windNode.lat][-windNode.lon] = windInfo;
+        windNode = jsonArray[windNodeIdx];
+        if (typeof(wind_array[windNode.lat]) == 'undefined')
+        {
+          wind_array[windNode.lat] = [];
+        }
+        windInfo = new Wind(windNode.wspd, windNode.whdg);
+        wind_array[windNode.lat][windNode.lon] = windInfo;
+        if (windNode.lon === 180.0)
+        {
+          wind_array[windNode.lat][-windNode.lon] = windInfo;
+        }
       }
     }
     return wind_array;
@@ -3609,7 +3615,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
     this.canvas = document.createElement('canvas');
 
     // code for IE browsers
-    if (typeof G_vmlCanvasManager != 'undefined')
+    if (typeof G_vmlCanvasManager !== 'undefined')
     {
       G_vmlCanvasManager.initElement(this.canvas);
     }
@@ -4613,7 +4619,7 @@ function VLM2GribManager()
     {
 
       // Handle grib change
-      if (this.LastGribDate != parseInt(e.GribCacheIndex, 10))
+      if (this.LastGribDate !== parseInt(e.GribCacheIndex, 10))
       {
         // Grib changed, record, and clear Tables, force reinit
         this.LastGribDate = e.GribCacheIndex;
@@ -4624,12 +4630,14 @@ function VLM2GribManager()
 
       for (let index in e.gribs_url)
       {
-        let url = e.gribs_url[index].replace(".grb", ".txt");
-        let seed = 0; //parseInt((new Date).getTime());
-        //console.log("smartgrib points out " + url);
-        $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
-        this.LoadQueue[LoadKey].Length++;
-
+        if (e.gribs_url[index])
+        {
+          let url = e.gribs_url[index].replace(".grb", ".txt");
+          let seed = 0; //parseInt((new Date).getTime());
+          //console.log("smartgrib points out " + url);
+          $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
+          this.LoadQueue[LoadKey].Length++;
+        }
       }
 
 
@@ -4907,13 +4915,13 @@ $(document).ready(
     {
       error: function(x, status, error)
       {
-        if ((x.status === 401) || (x.status == 403))
+        if ((x.status === 401) || (x.status === 403))
         {
           window.location.replace("jvlm?login");
           //on access denied try reviving the session
           //OnLoginRequest();
         }
-        else if (x.status == 404)
+        else if (x.status === 404)
         {
           // Juts ignore these for now....
         }
@@ -6191,29 +6199,32 @@ function FillFieldsFromMappingTable(MappingTable)
   // Loop all mapped fields to their respective location
   for (let index in MappingTable)
   {
-    switch (MappingTable[index][0])
+    if (MappingTable[index])
     {
-      case FIELD_MAPPING_TEXT:
-        $(MappingTable[index][1]).text(MappingTable[index][2]);
-        break;
+      switch (MappingTable[index][0])
+      {
+        case FIELD_MAPPING_TEXT:
+          $(MappingTable[index][1]).text(MappingTable[index][2]);
+          break;
 
-      case FIELD_MAPPING_VALUE:
-        $(MappingTable[index][1]).val(MappingTable[index][2]);
-        break;
+        case FIELD_MAPPING_VALUE:
+          $(MappingTable[index][1]).val(MappingTable[index][2]);
+          break;
 
-      case FIELD_MAPPING_CHECK:
-        $(MappingTable[index][1]).prop('checked', (MappingTable[index][2]));
-        break;
+        case FIELD_MAPPING_CHECK:
+          $(MappingTable[index][1]).prop('checked', (MappingTable[index][2]));
+          break;
 
-      case FIELD_MAPPING_IMG:
-        $(MappingTable[index][1]).attr('src', (MappingTable[index][2]));
-        break;
+        case FIELD_MAPPING_IMG:
+          $(MappingTable[index][1]).attr('src', (MappingTable[index][2]));
+          break;
 
-      case FIELD_MAPPING_CALLBACK:
-        MappingTable[index][2](MappingTable[index][1]);
-        break;
+        case FIELD_MAPPING_CALLBACK:
+          MappingTable[index][2](MappingTable[index][1]);
+          break;
 
 
+      }
     }
   }
 }
@@ -7317,14 +7328,14 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
 
     let index;
 
-    if (typeof Boat !== "undefined" && Boat && RaceId == Boat.RaceInfo.RaceId)
+    if (typeof Boat !== "undefined" && Boat && (RaceId === Boat.RaceInfo.RaceId))
     {
-      BuildWPTabList(index,InitNeeded);
+      BuildWPTabList(index, InitNeeded);
       InitComplete = true;
     }
     else if (OtherRaceWPs)
     {
-      BuildWPTabList(OtherRaceWPs,InitNeeded);
+      BuildWPTabList(OtherRaceWPs, InitNeeded);
       InitComplete = true;
     }
     else
@@ -7562,7 +7573,6 @@ function Sort2RacingBoats(rnk1, rnk2)
         let SortIdu = ((rnk1.idusers > rnk2.idusers) ? 1 : ((rnk1.idusers === rnk2.idusers) ? 0 : -1));
         return SortIdu;
       }
-      return 0;
     }
     else
     {
@@ -7582,9 +7592,6 @@ function Sort2RacingBoats(rnk1, rnk2)
     return 1;
   }
 
-  // Should not happen
-  DebugRacerSort(rnk1, rnk2, 0);
-  return 0;
 }
 
 function GetWPDuration(Rnk, WPNum)
@@ -8496,7 +8503,7 @@ function FillBoatPalmares(data, status, b, c, d, f)
 {
   let index;
 
-  if (status == "success")
+  if (status === "success")
   {
     let rows = [];
     for (index in data.palmares)
@@ -8544,7 +8551,7 @@ function HandleShowBoatRaceHistory(e)
 
 function HandleCreateUserResult(data, status)
 {
-  if (status == "success" && data)
+  if (status === "success" && data)
   {
     $(".ValidationMark").addClass("hidden");
 
@@ -10994,25 +11001,40 @@ function GetRaceInfoFromServer(Boat, TargetTab)
 }
 
 var DrawBoatTimeOutHandle = null;
+var DeferredCenterValue = false;
 
-function DrawBoat(Boat,CenterMapOnBoat)
+function DrawBoat(Boat, CenterMapOnBoat)
 {
+  if (typeof CenterMapOnBoat !== "undefined")
+  {
+    DeferredCenterValue = (DeferredCenterValue || CenterMapOnBoat);
+  }
+  console.log("Call DrawbBoat (" + CenterMapOnBoat + ") deferred : " + DeferredCenterValue);
   if (DrawBoatTimeOutHandle)
   {
     console.log("Pushed DrawBoat");
     clearTimeout(DrawBoatTimeOutHandle);
   }
-  DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat,100,Boat,CenterMapOnBoat);
+  DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat, 100, Boat, DeferredCenterValue);
 }
 
 function ActualDrawBoat(Boat, CenterMapOnBoat)
 {
-  console.log("ClearDrawBoat");
+  console.log("ClearDrawBoat " + CenterMapOnBoat);
+  DeferredCenterValue = false;
   DrawBoatTimeOutHandle = null;
   if (typeof Boat === "undefined" || !Boat)
   {
-    // Ignore call, if no boat is provided...
-    return;
+    if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.CurBoat !== "undefined" && _CurPlayer.CurBoat)
+    {
+      // Fallback to currently selected Boat
+      Boat = _CurPlayer.CurBoat;
+    }
+    else
+    { 
+      // Ignore call, if no boat is provided...
+      return;
+    }
   }
 
   // Remove features, before recreate and re-add
@@ -11033,7 +11055,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   let WP = null;
   if (typeof Boat !== "undefined" && Boat && Boat.GetNextWPPosition)
   {
-    WP=Boat.GetNextWPPosition();
+    WP = Boat.GetNextWPPosition();
   }
 
   if (typeof WP !== "undefined" && WP)
@@ -11175,7 +11197,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
-  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator &&  Boat.Estimator.EstimatePoints)
+  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints)
   {
     for (let index in Boat.Estimator.EstimatePoints)
     {
@@ -11238,7 +11260,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   }
 
 
-  if (CenterMapOnBoat)
+  if (CenterMapOnBoat && typeof Boat.VLMInfo !== "undefined" && Boat.VLMInfo)
   {
     // Set Map Center to current boat position
     var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
@@ -11252,9 +11274,13 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     map.setCenter(l);
 
   }
+  else if (CenterMapOnBoat)
+  {
+    let BkpPt = 1;
+  }
 
   console.log("ActualDrawBoatComplete");
-  
+
 }
 
 function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate, Callback)
@@ -12086,7 +12112,7 @@ function LoadRankings(RaceId, CallBack)
         }
         else
         {
-          DrawBoat(Boat, false);
+          DrawBoat(null, false);
         }
       }
       else
