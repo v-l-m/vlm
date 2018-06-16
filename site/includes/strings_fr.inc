@@ -1,6 +1,9 @@
 <?php
 $strings['fr'] = 
   array (
+    'GoToVLM'=>'Retourner à VLM',
+    'HandlingErrorClickToGoBack'=>"Quelquechose d'imprévu s'est produit.Cliquer sur le bouton ci-dessous, pour revenir à la page principale",
+    'Ooops'=>'Ooops',
     'Polar'=>'Polaires',
     'ShowMyAnd'=>'Affichier le mien ',
     'VLM1'=>'Ancienne version du site',

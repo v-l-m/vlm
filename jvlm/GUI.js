@@ -71,7 +71,7 @@ $(document).ready(
         }
         else if (x.status === 404)
         {
-          // Juts ignore these for now....
+          $("#ErrorRedirectPanel").modal('show');
         }
         else
         {

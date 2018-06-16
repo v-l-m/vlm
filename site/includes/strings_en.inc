@@ -1,6 +1,9 @@
 <?php
 $strings['en'] = 
   array (
+    'GoToVLM'=>'Go Back to VLM',
+    'HandlingErrorClickToGoBack'=>'Something unexpected occurred. Click button below to back to main page',
+    'Ooops'=>'Ooops',
     'Polar'=>'Polars',
     'ShowMyAnd'=>'Display me and ',
     'VLM1'=>'Previous web site version',
