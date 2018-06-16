@@ -48,7 +48,8 @@ gulp.task('html', function()
     .pipe(rename('index.html'))
     .pipe(inject.prepend("<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST-->"))
     .pipe(inject.replace('<!--JVLMVERSION-->', 'V' + VLMVersion))
-    .pipe(inject.replace('//JVLMBUILD', "= '" + Date() + "'"))
+    .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
+    .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
     .pipe(gulp.dest('jvlm'))
     .on('error', function(err)
     {
@@ -124,10 +125,7 @@ gulp.task('deploy', function()
     //.pipe(debug())
     .pipe(conn.dest('/home/vlm/vlmcode'))
     //.pipe(debug())
-    .pipe(notify(
-    {
-      message: 'Upload task complete'
-    }));
+    ;
 
 });
 

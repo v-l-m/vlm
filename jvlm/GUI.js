@@ -656,8 +656,16 @@ function InitMenusAndButtons()
   $("#PolarTab").on("click", HandlePolarTabClik);
 
   CheckLogin();
+
+  UpdateVersionLine();
 }
 
+function UpdateVersionLine()
+{
+  let Build = new moment(BuildDate);
+  $("#BuildDate").text("Build : " + Build.fromNow());
+  $('[data-toggle="tooltip"]').tooltip();
+}
 let _CachedRaceInfo = null;
 
 function HandlePolarTabClik()
@@ -1569,10 +1577,6 @@ function DrawPolar(RaceInfo)
 
 
 }
-
-
-
-
 
 function UpdatePolarImages(Boat)
 {
