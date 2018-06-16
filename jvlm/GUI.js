@@ -71,7 +71,8 @@ $(document).ready(
         }
         else if (x.status === 404)
         {
-          $("#ErrorRedirectPanel").modal('show');
+          // Code removed until ranking exist for not started races.
+          //$("#ErrorRedirectPanel").modal('show');
         }
         else
         {
