@@ -15,9 +15,12 @@ const gulp = require('gulp'),
   composer = require('gulp-uglify/composer'),
   uglify = composer(uglifyes, console),
   ftp = require('vinyl-ftp'),
-  log= require('fancy-log'),
+  log = require('fancy-log'),
   //debug = require('gulp-debug'),
+  inject = require('gulp-inject-string'),
   runsequence = require('run-sequence');
+
+const VLMVersion = 17;
 
 gulp.task('scripts', function()
 {
@@ -36,24 +39,35 @@ gulp.task('scripts', function()
       gutil.log(gutil.colors.red('[Error]'), err.toString());
     })
     //.pipe(gulpDeployFtp('./vlmcode', 'vlm-dev.ddns.net', 21, 'vlm', 'vlm'))
-    .pipe(gulp.dest('jvlm/dist'))
-    .pipe(notify(
+    .pipe(gulp.dest('jvlm/dist'));
+});
+
+gulp.task('html', function()
+{
+  return gulp.src(['jvlm/index.htm'])
+    .pipe(rename('index.html'))
+    .pipe(inject.prepend("<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST-->"))
+    .pipe(inject.replace('<!--JVLMVERSION-->', 'V' + VLMVersion))
+    .pipe(inject.replace('//JVLMBUILD', "= '" + Date() + "'"))
+    .pipe(gulp.dest('jvlm'))
+    .on('error', function(err)
     {
-      message: 'Scripts task complete'
-    }));
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    })
+    ;
 });
 
 gulp.task('libs', function()
 {
   return gulp.src(['jvlm/external/jquery/jquery-3.2.1.min.js',
-  'jvlm/external/jquery-ui/jquery-ui.js','jvlm/external/bootstrap-master/js/bootstrap.js',
-  'jvlm/external/jquery.csv.js','jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
-  'jvlm/external/footable-bootstrap/js/footable.js','jvlm/jquery.ui.touch-punch.js',
-  'jvlm/external/store/store.min.js',
-  'jvlm/external/verimail/verimail.jquery.min.js','jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
-  'jvlm/external/moments/moment.min.js','jvlm/externals/fullcalendar/fullcalendar.min.js',
-  'jvlm/externals/fullcalendar/locale-all.js','jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
-])
+      'jvlm/external/jquery-ui/jquery-ui.js', 'jvlm/external/bootstrap-master/js/bootstrap.js',
+      'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
+      'jvlm/external/footable-bootstrap/js/footable.js', 'jvlm/jquery.ui.touch-punch.js',
+      'jvlm/external/store/store.min.js',
+      'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
+      'jvlm/external/moments/moment.min.js', 'jvlm/externals/fullcalendar/fullcalendar.min.js',
+      'jvlm/externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+    ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_libs.js'))
@@ -68,11 +82,7 @@ gulp.task('libs', function()
       gutil.log(gutil.colors.red('[Error]'), err.toString());
     })
     //.pipe(gulpDeployFtp('./vlmcode', 'vlm-dev.ddns.net', 21, 'vlm', 'vlm'))
-    .pipe(gulp.dest('jvlm/dist'))
-    .pipe(notify(
-    {
-      message: 'Minify Libs task complete'
-    }));
+    .pipe(gulp.dest('jvlm/dist'));
 });
 
 
@@ -88,12 +98,13 @@ gulp.task('deploy', function()
     password: 'vlm',
     parallel: 1,
     reload: true,
-    log: log//,
+    log: log //,
     //debug:log
   });
 
   var globs = [
     'jvlm/dist/*',
+    'jvlm/index.html',
     '*.css'
   ];
 
@@ -111,22 +122,21 @@ gulp.task('deploy', function()
     //.pipe(debug())
     .pipe(conn.newerOrDifferentSize('/home/vlm/vlmcode/')) // only upload newer files
     //.pipe(debug())
-    .pipe(conn.dest('/home/vlm/vlmcode')
+    .pipe(conn.dest('/home/vlm/vlmcode'))
     //.pipe(debug())
-    //.pipe(notify(
-    //  {
-    //    message: 'Upload task complete'
-    //  }))
-    );
+    .pipe(notify(
+    {
+      message: 'Upload task complete'
+    }));
 
 });
 
 gulp.task('default', function()
 {
-  return runsequence('scripts', 'deploy');
+  return runsequence('html', 'scripts', 'deploy');
 });
 
 gulp.task('BuildAll', function()
 {
-  return runsequence('libs','scripts', 'deploy');
+  return runsequence('libs', 'html', 'scripts', 'deploy');
 });
