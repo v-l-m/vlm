@@ -1427,6 +1427,10 @@ let PolarSliderInited = false;
 
 function FillRaceInfoHeader(RaceInfo)
 {
+  if (typeof RaceInfo === 'undefined' || !RaceInfo)
+  {
+    return;
+  }
   let BoatFieldMappings = [];
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".ICSRaceName", RaceInfo.racename]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId", RaceInfo.idraces]);
