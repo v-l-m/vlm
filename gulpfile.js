@@ -18,6 +18,7 @@ const gulp = require('gulp'),
   log = require('fancy-log'),
   //debug = require('gulp-debug'),
   inject = require('gulp-inject-string'),
+  htmlmin = require('gulp-htmlmin'),
   runsequence = require('run-sequence');
 
 const VLMVersion = 17;
@@ -47,15 +48,37 @@ gulp.task('html', function()
   return gulp.src(['jvlm/index.htm'])
     .pipe(rename('index.html'))
     .pipe(inject.prepend("<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST-->"))
-    .pipe(inject.replace('<!--JVLMVERSION-->', 'V' + VLMVersion))
+    .pipe(inject.replace('@@JVLMVERSION@@', 'V' + VLMVersion))
     .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
     .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
     .pipe(gulp.dest('jvlm'))
     .on('error', function(err)
     {
       gutil.log(gutil.colors.red('[Error]'), err.toString());
-    })
-    ;
+    });
+});
+
+gulp.task('html_prod', function()
+{
+  return gulp.src(['jvlm/index.htm'])
+    .pipe(rename('index.html'))
+    .pipe(inject.prepend("<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST-->"))
+    .pipe(inject.replace('@@JVLMVERSION@@', 'V' + VLMVersion))
+    .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
+    .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
+    .pipe(inject.replace('dist/jvlm_main.js', 'dist/jvlm_main.min.js'))
+    .pipe(inject.replace('dist/jvlm_main.js', 'dist/jvlm_main.min.js'))
+    .pipe(htmlmin(
+    {
+      collapseWhitespace: true,
+      removeComments: true,
+      removeCommentsFromCDATA: true
+    }))
+    .pipe(gulp.dest('jvlm'))
+    .on('error', function(err)
+    {
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    });
 });
 
 gulp.task('libs', function()
@@ -124,8 +147,8 @@ gulp.task('deploy', function()
     .pipe(conn.newerOrDifferentSize('/home/vlm/vlmcode/')) // only upload newer files
     //.pipe(debug())
     .pipe(conn.dest('/home/vlm/vlmcode'))
-    //.pipe(debug())
-    ;
+  //.pipe(debug())
+  ;
 
 });
 
@@ -137,4 +160,9 @@ gulp.task('default', function()
 gulp.task('BuildAll', function()
 {
   return runsequence('libs', 'html', 'scripts', 'deploy');
+});
+
+gulp.task('BuildProd', function()
+{
+  return runsequence('libs', 'html_prod', 'scripts', 'deploy');
 });
