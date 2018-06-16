@@ -167,6 +167,7 @@ function CheckPageParameters()
   {
     $(".RaceNavBar").css("display", "none");
     $(".OffRaceNavBar").css("display", "inherit");
+    ShowApropos(false);
   }
 }
 
@@ -363,11 +364,11 @@ function InitMenusAndButtons()
   // Handle showing/hide of a-propos depending on login dialog status
   $("#LoginForm").on('show.bs.modal', function(e)
   {
-    $('#Apropos').modal('hide');
+    ShowApropos(false);
   });
   $("#LoginForm").on('hide.bs.modal', function(e)
   {
-    $('#Apropos').modal('show');
+    ShowApropos(true);
   });
   $(".logindlgButton").on('click',
     function(e)
@@ -1132,8 +1133,13 @@ function DisplayLoggedInMenus(LoggedIn)
   }
 
   // Display apropos
-  $('#Apropos').modal(LoggedIn ? 'hide' : 'show');
+  ShowApropos(LoggedIn);
 
+}
+
+function ShowApropos(DisplayModal)
+{
+  $('#Apropos').modal(DisplayModal ? 'hide' : 'show');
 }
 
 function HandleRacingDockingButtons(IsRacing)
