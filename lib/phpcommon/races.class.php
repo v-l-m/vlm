@@ -1637,7 +1637,7 @@ class RankingRacesList {
       $query .= "  vacfreq=1 " ;
     }
 
-    $query .= " and ( started=".RACE_STARTED. ")";
+    $query .= " and ( started=".RACE_STARTED. " or started=".RACE_PENDING.")";
 
     $query .= " ORDER BY vacfreq ASC, deptime DESC";
 
