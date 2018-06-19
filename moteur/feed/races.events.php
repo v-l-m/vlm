@@ -51,7 +51,7 @@
             $timedelay = $this->timetoevent; #$line['deptime'] - intval(time());
             $timetarget = $line['deptime'] - $this->timetoevent;
             $t = sprintf("Depart de %s (~%s) dans %s", $line['racename'], $line['idraces'], $this->secs_to_h($timedelay));
-            $url = sprintf("http://v-l-m.org/ics.php?idraces=%d", $line['idraces']);
+            $url = sprintf("https://v-l-m.org/jvlm?ICSRace=%d", $line['idraces']);
             $medias = explode(",", VLM_NOTIFY_LIST);
             foreach ($medias as $media) {
                 $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', url='%s', timetarget=%d ;", $media, $t, $url, $timetarget);

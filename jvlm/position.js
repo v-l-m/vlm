@@ -30,7 +30,7 @@ function RoundPow(v,P)
   }
   else
   {
-    return v
+    return v;
   }
 }
 
@@ -59,10 +59,10 @@ function VLMPosition(lon, lat,  format)
   }
 
   // Default string formating
-  this.ToString=function()
+  this.ToString=function(Raw)
   {
-    return this.Lat.ToString() + " " + this.Lon.ToString();
-  }
+    return this.Lat.ToString(Raw) + " " + this.Lon.ToString(Raw);
+  };
 
   this.GetEuclidianDist2 = function(P)
   {
@@ -70,7 +70,7 @@ function VLMPosition(lon, lat,  format)
     var dLon= (this.Lon.Value-P.Lon.Value)%180;
 
     return dLat*dLat + dLon*dLon;
-  }
+  };
 
   // function GetLoxoDist
   // Returns the loxodromic distance to another point
@@ -100,7 +100,7 @@ function VLMPosition(lon, lat,  format)
     
     
     return  RoundPow(RetVal,Precision);
-  }
+  };
 
   // Reaches a point from position using rhumbline.
   // Compute the position of point at r * distance to point P is 1st param is a Position
@@ -113,7 +113,7 @@ function VLMPosition(lon, lat,  format)
 
     if (isNaN(r))
     {
-      throw "unsupported reaching NaN distance"
+      throw "unsupported reaching NaN distance";
     }    
 
     if (typeof P == "number")
@@ -157,10 +157,13 @@ function VLMPosition(lon, lat,  format)
 
     if (isNaN(Lon) || isNaN(Lat))
     {
-        throw "Reached Nan Position!!!"
+        throw "Reached Nan Position!!!";
     }
 
-    return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(Lon)),Rad2Deg(Lat));
+    Lon = RoundPow( Rad2Deg(Lon),9);
+    Lat = RoundPow(Rad2Deg(Lat),9);
+
+    return new VLMPosition(NormalizeLongitudeDeg(Lon),Lat);
 
 
   };
@@ -177,7 +180,7 @@ function VLMPosition(lon, lat,  format)
 
     if (typeof Precision == "undefined" || typeof Precision != "number")
     {
-      Precision = 17
+      Precision = 17;
     }
 
     /*if (Lon1 > 0)
@@ -187,7 +190,7 @@ function VLMPosition(lon, lat,  format)
     else
     {   
         Lon2 -= 2 * Math.PI
-    }*/;
+    }*/
     var dlon_w  = (Lon2 - Lon1) % (2 * Math.PI);
     var dlon_e  = (Lon1 - Lon2) % (2 * Math.PI);
     var dphi  = Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
@@ -222,14 +225,14 @@ if (VLM_DIST_ORTHO)
 
     if (typeof Precision == "undefined" || typeof Precision != "number")
     {
-      Precision = 17
+      Precision = 17;
     }
     
     //d=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2))
-    var retval = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2))
+    var retval = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
 
     return RoundPow(60* Rad2Deg (retval),Precision);
-  }
+  };
 
   //
   // Return orthodromic course from this to P
@@ -243,7 +246,7 @@ if (VLM_DIST_ORTHO)
 
     if (typeof Precision == "undefined" || typeof Precision != "number")
     {
-      Precision = 17
+      Precision = 17;
     }
 
     /*IF sin(lon2-lon1)<0       
@@ -252,16 +255,16 @@ if (VLM_DIST_ORTHO)
       tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
     ENDIF*/
     var d = Deg2Rad(this.GetOrthoDist(P)/60);
-    var retval = (Math.sin(lat2)-Math.sin(lat1)*Math.cos(d))/(Math.sin(d)*Math.cos(lat1))
+    var retval = (Math.sin(lat2)-Math.sin(lat1)*Math.cos(d))/(Math.sin(d)*Math.cos(lat1));
     if ((retval >= -1)&&(retval<=1))
     {
       if (Math.sin(lon2-lon1)<0)       
       {
-        retval=Math.acos(retval)    
+        retval=Math.acos(retval)    ;
       }
       else       
       {
-        retval=2*Math.PI-Math.acos(retval)    
+        retval=2*Math.PI-Math.acos(retval) ;   
       }
     }
     else if (lat1 < lat2)
@@ -275,7 +278,7 @@ if (VLM_DIST_ORTHO)
     
     retval = Rad2Deg( retval % (2 * Math.PI));
     return RoundPow( retval,Precision);
-  }
+  };
 
 }
 else
@@ -291,16 +294,16 @@ else
 
     if (typeof Precision == "undefined" || typeof Precision != "number")
     {
-      Precision = 17
+      Precision = 17;
     }
 //        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
 //                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
 
     var retval = 2*Math.asin(Math.sqrt(Math.pow((Math.sin((lat1-lat2)/2)),2) + 
-              Math.pow(Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2)),2)))
+              Math.pow(Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2)),2)));
 
     return RoundPow(EARTH_RADIUS * retval,Precision);
-  }
+  };
     
   //
   // Return orthodromic course from this to P
@@ -314,7 +317,7 @@ else
 
     if (typeof Precision == "undefined" || typeof Precision != "number")
     {
-      Precision = 17
+      Precision = 17;
     }
 
     //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
@@ -322,7 +325,7 @@ else
     var retval = Math.atan2(Math.sin(lon1-lon2)*Math.cos(lat2),Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
     retval = Rad2Deg( retval % (2 * Math.PI));
     return RoundPow( retval,Precision);
-  }
+  };
 }
   this.ReachDistOrtho=function(dist,bearing)
   {
@@ -333,18 +336,18 @@ else
     var CurLat = Deg2Rad(this.Lat.Value);
     var CurLon = Deg2Rad(-this.Lon.Value);
 
-    lat =Math.asin(Math.sin(CurLat)*Math.cos(d)+Math.cos(CurLat)*Math.sin(d)*Math.cos(tc))
-    dlon=Math.atan2(Math.sin(tc)*Math.sin(d)*Math.cos(CurLat),Math.cos(d)-Math.sin(CurLat)*Math.sin(lat))
+    lat =Math.asin(Math.sin(CurLat)*Math.cos(d)+Math.cos(CurLat)*Math.sin(d)*Math.cos(tc));
+    dlon=Math.atan2(Math.sin(tc)*Math.sin(d)*Math.cos(CurLat),Math.cos(d)-Math.sin(CurLat)*Math.sin(lat));
     lon=(( CurLon-dlon +Math.PI)%(2*Math.PI ))-Math.PI;
     return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(-lon)), Rad2Deg(lat));
 
-  }
+  };
 
   this.GetVLMString=function()
   {
     return lat.ToString() +','+lon.ToString();
-  }
-};
+  };
+}
 
 
 

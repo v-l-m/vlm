@@ -17,19 +17,22 @@ function get_info_array($idu) {
   $info['IDU'] = $userObj->users->idusers;
   $info['IDP'] = $ownerId;
   $info['IDB'] = $userObj->users->boatname;
-  $info['EML'] = "email.for.boat@is.deprecated.com";
   $info['COL'] = $userObj->users->color;
   $info['CNT'] = $userObj->users->country;
   $info['POL'] = $userObj->users->boattype;
 
-  if ($ownerObj != NULL) {
+  if ($ownerObj != NULL) 
+  {
     $info['OWN'] = $ownerObj->playername;
   }
   
-  if ( $userObj->users->engaged == 0 ) {
+  if ( $userObj->users->engaged == 0 ) 
+  {
     // Race is 0
     $info['RAC'] = "0";
-  } else {
+  } 
+  else 
+  {
     $info['RAC'] = $userObj->users->engaged;
     $racesObj = &$userObj->races;
     $info['RAN'] = $racesObj->racename;
@@ -45,6 +48,8 @@ function get_info_array($idu) {
     $info['VMG'] = $userObj->VMGortho;
     $info['STS'] = (int)$racesObj->started;
     $info['UDT'] = $userObj->users->userdeptime;
+    $info['VER'] = $userObj->RaceVersion;
+
 
     if ( $userObj->VMGortho != 0 ) {
       $_timetogo = 3600 * $userObj->distancefromend / $userObj->VMGortho;
@@ -151,6 +156,7 @@ function get_info_array($idu) {
 
     $info['THM'] = $userObj->users->theme;
     $info['HID'] = $userObj->users->hasTrackHidden();
+    
   }
   return $info;
 }
@@ -169,7 +175,6 @@ function usage() {
     #* CNT : Country 
     #* COL : Color
     #* DNM : Distance to next mark (float)
-    #* EML : EMail (Deprecated)
     #* ETA : Date estimée d'arrivé, seulement si pas de wp perso (string)
     #* HDG : direction (HeaDinG)
     #* HID: trace cachée (1) ou visible (0)
@@ -220,7 +225,8 @@ function usage() {
     #* TWD : Wind direction (float)
     #* TWS : Wind speed (float)
     #* UDT : User departure time (int) (useful for record races)
-    #* VAC: durée de la vacation (en secondes)
+    #* VER : date de la dernière mise à jour de la course (epoch)
+    #* VAC : durée de la vacation (en secondes)
     #* VMG : VMG (float)
     #* WPLAT : latitude du wp perso (float, en degré)
     #* WPL : liste de Waypoints (liste)

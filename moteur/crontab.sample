@@ -1,6 +1,6 @@
 # Moteur toutes les 5 minutes
 TZ='UTC+0'
-MAILTO=admin@virtual-loup-de-mer.org
+MAILTO=admin@v-l-m.org
 VLMRACINE=/base/de/vlm
 
 * * * * *     $VLMRACINE/vlmcode/moteur/cron-vlm.sh

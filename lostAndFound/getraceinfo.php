@@ -2,7 +2,7 @@
   include_once("config.php");
   $idraces=htmlentities(quote_smart($_REQUEST['race']));
   if (  round($idraces) == 0 ) {
-     echo "usage : http://virtual-loup-de-mer.org?race=X\n";
+     echo "usage : http://v-l-m.org?race=X\n";
      echo "\nX = numero d'une course";
      exit;
   }

@@ -103,7 +103,7 @@ Allowed characters for both: a-z 0-9 _
         <li>Pode propor a tradução do jogo. É rápido e simples. Veja <a href="includes/strings.inc">includes/strings.inc</a> para perceber como funciona.</li>
               <li>Pode propor logos, banners e CSS.</li>
               <li>Pode juntar-se à equipa de desenvolvimento deixando uma mensagem no forum </li>
-        <li>Pode submeter novos diagramas de polares de velocidade para outras classes de embarcações (ver <a href="http://wiki.virtual-loup-de-mer.org/index.php/Fournir_des_polaires_de_vitesse">la documentación</a>)</li>
+        <li>Pode submeter novos diagramas de polares de velocidade para outras classes de embarcações (ver <a href="http://wiki.v-l-m.org/index.php/Fournir_des_polaires_de_vitesse">la documentación</a>)</li>
         <li>Pode partilhar os seus conhecimentos de vela, navegação e nautical de recreio ajudando ao projecto da wikipedia: <a href="http://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Portail_Maritime">Portail maritime</a></li>
         <li>Se for proprietário de uma embarcação à vela pode convidar o responsável pela concepção do jogo para um passeio :-)</li>        
         </ul>',

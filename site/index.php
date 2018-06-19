@@ -70,7 +70,7 @@
     </div>
     
     <div id="joinvlmbox"  class="basic">
-      <h1 class="info"><?php echo getLocalizedString("Join Virtual-Loup-De-Mer.Org, it's free !"); ?></h1>;
+      <h1 class="info"><?php echo getLocalizedString("Join v-l-m.org, it's free !"); ?></h1>;
     </div>
 
 <?php

@@ -1,7 +1,7 @@
 <?php
 /*
   if (  round($idu) == 0 ) {
-     echo "usage : http://virtual-loup-de-mer.org?idu=X&pseudo=xxxx&password=pppp\n";
+     echo "usage : http://v-l-m.org?idu=X&pseudo=xxxx&password=pppp\n";
      echo "\nX = numero de votre bateau";
      echo "\nxxxxx = votre nom d'utilisateur";
      echo "\nppppp = votre mot de passe";

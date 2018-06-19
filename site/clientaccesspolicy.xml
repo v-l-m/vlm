@@ -5,7 +5,6 @@
      <allow-from http-request-headers="*">
        <domain uri="http://frogeater.dyndns.org"/> 
        <domain uri="http://virtual-winds.org"/>
-       <domain uri="http://silverlight.virtual-loup-de-mer.org"/>
        <domain uri="http://silverlight.v-l-m.org"/>
      </allow-from>
      <grant-to>

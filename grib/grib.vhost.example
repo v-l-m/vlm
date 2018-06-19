@@ -5,7 +5,7 @@
         ServerAdmin admin@actilis.net
 
         DocumentRoot /home/vlm/vlmdatas/gribs
-        ServerName grib.virtual-loup-de-mer.org
+        ServerName grib.v-l-m.org
 
         ErrorLog    /home/vlm/logs/apache2/grib_error_log
         CustomLog   /home/vlm/logs/apache2/grib_access_log combined

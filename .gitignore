@@ -12,3 +12,6 @@ jvlm/config.js
 jvlm/index.html
 
 jvlm/jvlm\.css\.map
+node_modules/
+package-lock.json
+

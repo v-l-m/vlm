@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Ce script doit être appelé à 2h33 GMT, 8h33 GMT, 14h33 GMT, 20h33 GMT
-# Pour contourner les problèmes de changement d'heure, il est appelé toutes les heures
+# Ce script doit ï¿½tre appelï¿½ ï¿½ 2h33 GMT, 8h33 GMT, 14h33 GMT, 20h33 GMT
+# Pour contourner les problï¿½mes de changement d'heure, il est appelï¿½ toutes les heures
 # mais teste si l'heure GMT d'appel est valide
 ladate=$( date +%s )
 cd /tmp
 
-UPDATEWIND=/data/www/virtual-loup-de-mer.org/html/new-update-wind.php
+UPDATEWIND=/data/www/v-l-m.org/html/new-update-wind.php
 WGRIB=/usr/local/bin/wgrib
 PHP=/opt/php/bin/php
 
@@ -15,7 +15,7 @@ LOG=/tmp/$(date +%Y%m%d_%H:%M)-cronwind.log
 BASE_URL=ftp://ftpprd.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs
 HH_NOW=$( date -u --date "3 hours ago" +"%H" )
 #HH=$( date -u --date "9 hours ago" +"%H" )
-# On recherche le multiple de 6 le plus proche de nous (nom du répertoire)
+# On recherche le multiple de 6 le plus proche de nous (nom du rï¿½pertoire)
 let HH=HH_NOW/6
 let HH=HH*6
 
@@ -26,7 +26,7 @@ let HH=HH*6
 [ $HH -lt 10 ] && HH=0$HH
 DATE=$( date +"%Y%m%d" )$HH
 
-VLM_GRIB_DIRNAME=/data/www/grib.virtual-loup-de-mer.org/${DATE}
+VLM_GRIB_DIRNAME=/data/www/grib.v-l-m.org/${DATE}
 [ -d $VLM_GRIB_DIRNAME ] || mkdir -p $VLM_GRIB_DIRNAME
 
 # To permit to www-data to copy the gribfile
@@ -47,7 +47,7 @@ function download()
 # $1 est le nom du fichier GRIB
 function importe ()
 {
-	# Le fichier s'appelle $1 contient la donnée UV pour la date GribValidity (calculée grace à $2)
+	# Le fichier s'appelle $1 contient la donnï¿½e UV pour la date GribValidity (calculï¿½e grace ï¿½ $2)
 	GribDate=$( $WGRIB -s -4yr $1 | head -n 1 | cut -d: -f3 | cut -d= -f2 )
 	TimeStamp=$( expr $2 + 0 )
 	(( GV = GribDate + TimeStamp ))
@@ -60,19 +60,19 @@ function importe ()
 	$WGRIB -V $1 -o uwind.tmp -d 1 -text -nh 
 	$WGRIB -V $1 -o vwind.tmp -d 2 -text -nh  
 	
-	# Production des données dans la base
+	# Production des donnï¿½es dans la base
 	> grib.$ladate.$$
 	# Latitudes
 	echo 90 -90 >> grib.$ladate.$$
 	# Longitudes
 	echo 0 -0.5 >> grib.$ladate.$$
-	# GribValidity (ligne en plus par rapport à l'ancien getgrib)
+	# GribValidity (ligne en plus par rapport ï¿½ l'ancien getgrib)
 	echo $GribValidity >> grib.$ladate.$$
 
-	# Le contenu du grib (on a désormais uniquement 2 colonnes)
+	# Le contenu du grib (on a dï¿½sormais uniquement 2 colonnes)
 	paste uwind.tmp vwind.tmp  >> grib.$ladate.$$
 	
-	# Mise en base et nettoyage des anciennes données de plus de 12h
+	# Mise en base et nettoyage des anciennes donnï¿½es de plus de 12h
 	#echo nice -18 $PHP $UPDATEWIND grib.$ladate.$$ >> $LOG 2>&1 
 	nice -18 $PHP $UPDATEWIND grib.$ladate.$$ >> $LOG 2>&1 
 	rm -f grib.$ladate.$$ uwind.tmp vwind.tmp
@@ -84,8 +84,8 @@ function importe ()
 
 function getnewgrib()
 {
-	# Determination des fichiers à télécharger
-	# Les fichiers à récupérer sont : 03, 06, 09, .. 48 (00 est déjà obsolète, 3 est limite, et 6, on l'a avec le 0 d'il y a 6h..)
+	# Determination des fichiers ï¿½ tï¿½lï¿½charger
+	# Les fichiers ï¿½ rï¿½cupï¿½rer sont : 03, 06, 09, .. 48 (00 est dï¿½jï¿½ obsolï¿½te, 3 est limite, et 6, on l'a avec le 0 d'il y a 6h..)
 	# gfs.tXXz.master.grbf03.10m.uv
 	# gfs.tXXz.master.grbf06.10m.uv
 	# ...
@@ -121,5 +121,5 @@ case $GMT_HOUR in
 esac
 
 # Nettoyage des fichiers temporaires
-find /data/www/grib.virtual-loup-de-mer.org -mindepth 1 -type d -mtime +2 -exec rm -rf {} \;
+find /data/www/grib.v-l-m.org -mindepth 1 -type d -mtime +2 -exec rm -rf {} \;
 find /tmp -type f -name '*cron*' -mtime +3 -exec rm -f {} \;

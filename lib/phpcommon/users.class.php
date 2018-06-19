@@ -554,32 +554,40 @@ class fullUsers
       $now = time();
     }
     
-    if (is_null($origuser)) {
+    if (is_null($origuser)) 
+    {
       $this->users = getUserObject($id);
       if (is_null($this->users)) return;
-    } else {
+    } 
+    else 
+    {
       $this->users = &$origuser;
     }
 
     // if boat not engage in a race, nothing else to do ....
     if ($this->users->engaged == 0) return;
 
-    $querypos = "SELECT `time`, `long`, `lat`, `idusers` , `race` ".
-      " FROM positions WHERE idusers=".$this->users->idusers.
-      " AND race = ".$this->users->engaged.
+    $querypos = "SELECT `time`, `long`, `lat`, `idusers` , `race`, UNIX_TIMESTAMP(R.updated) updated ".
+      " FROM positions P, races R WHERE P.idusers=".$this->users->idusers.
+      " AND P.race = R.idraces ".
+      " AND P.race = ".$this->users->engaged.
       " ORDER BY `time` DESC LIMIT 2";
     $result = wrapper_mysql_db_query_reader($querypos);
     $this->lastPositions     = new positions;
     $this->anteLastPositions = new positions;
     
-    if ($result) {
+    if ($result) 
+    {
       $row = mysql_fetch_array($result, MYSQL_ASSOC);
-      if ($row) {
-	$this->lastPositions->init($row);
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-	if ($row) {
-	  $this->anteLastPositions->init($row);
-	}
+      if ($row) 
+      {
+        $this->RaceVersion = $row["updated"];
+        $this->lastPositions->init($row);
+        $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($row) 
+        {
+          $this->anteLastPositions->init($row);
+        }
       }
     }
     // inherit of nwp
@@ -597,10 +605,13 @@ class fullUsers
     }
 
     // this->hours (temps depuis la dernière VAC)
-    if ( $this->users->userdeptime == -1 ) {
+    if ( $this->users->userdeptime == -1 ) 
+    {
       $time = $now;
       $this->hours = 0;
-    } else {
+    } 
+    else 
+    {
       $time = $this->lastPositions->time;
       $this->hours = ($now - $time )/3600 ;  //everything is in GMT
       if ($dbg)
@@ -609,9 +620,12 @@ class fullUsers
       }
     }
 
-    if ($origrace == NULL) {
+    if ($origrace == NULL) 
+    {
       $this->races = new races($this->users->engaged);
-    } else {
+    } 
+    else 
+    {
       $this->races = &$origrace->races;
     }
 
@@ -638,10 +652,13 @@ class fullUsers
        Since 2007-October-10,
        these LatNM & LongNM are a Waypoint given by the user (if not 0/0)
     */
-    if ( $this->users->targetlat == 0 && $this->users->targetlong == 0 ) {
+    if ( $this->users->targetlat == 0 && $this->users->targetlong == 0 ) 
+    {
       //echo "*Race WP*";
       $rc = $this->bestWayToWaypoint($this->getCurrentClassificationWaypointIdx());
-    } else {
+    }
+    else 
+    {
       //echo "*User WP*";
       $this->LatNM = $this->users->targetlat*1000;
       $this->LongNM = $this->users->targetlong*1000;

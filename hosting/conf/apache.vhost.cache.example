@@ -5,15 +5,10 @@
         ServerAdmin admin@actilis.net
 
         DocumentRoot /home/vlm/cache
-        ServerName cache.virtual-loup-de-mer.org
         ServerAlias cache.v-l-m.org
-        ServerAlias c1.virtual-loup-de-mer.org
         ServerAlias c1.v-l-m.org
-        ServerAlias c2.virtual-loup-de-mer.org
         ServerAlias c2.v-l-m.org
-        ServerAlias c3.virtual-loup-de-mer.org
         ServerAlias c3.v-l-m.org
-        ServerAlias c4.virtual-loup-de-mer.org
         ServerAlias c4.v-l-m.org
 
         ErrorLog    /home/vlm/logs/apache2/vlmcache_error_log
@@ -33,7 +28,7 @@
 
                 RewriteCond %{SCRIPT_FILENAME} !-f
                 RewriteCond %{SCRIPT_FILENAME} !-d
-                RewriteRule ^(.*)$ http://www.virtual-loup-de-mer.org/cache/$1 [R]
+                RewriteRule ^(.*)$ http://www.v-l-m.org/cache/$1 [R]
 
         </Directory>
 

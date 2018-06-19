@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST--><!DOCTYPE html>
 
 <html>
   <head>
@@ -16,22 +16,20 @@
     <link rel="alternate stylesheet" type="text/css" title="vert-jaune" href="jquery-ui.theme-vert-jaune.css"/>
     <link rel="alternate stylesheet" type="text/css" title="noir-jaune" href="jquery-ui.theme-noir-jaune.css"/>
     <link rel="alternate stylesheet" type="text/css" title="noir-jaune-v2" href="jquery-ui.theme-noir-jaune-v2.css"/>
-    <!--[if IE]>
-    <script src="excanvas.js"></script><![endif]-->
-    <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"> </script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    -->
     <!--<script src="https://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
+    <!--<script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script src="external/jquery/jquery-3.2.1.min.js"></script>
-    <script src="jquery-ui.js"></script>
+    <script src="external/jquery-ui/jquery-ui.js"></script>
     <script src="external/bootstrap-master/js/bootstrap.js"></script>
     <script src="external/jquery.csv.js"></script>
     <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
     <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
     <script type="text/javascript" src="jquery.ui.touch-punch.js"></script>
-    <script src="external/OpenLayers/OpenLayers.debug.js"></script>
-    <script src="external/store/store.min.js"></script>
+    <script src="external/store/store.min.js"></script>-->
     <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>--> 
+    <script src="config.js"></script>
+    <script src="dist/jvlm_libs.min.js?v=V17"></script>
+    <script src="external/OpenLayers/OpenLayers.js"></script>
       
   </head>
   <body >
@@ -53,8 +51,17 @@
       </div>
     </div>
     <!-- debut de nav-->
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
+    <nav class="navbar navbar-inverse ">
+      <!--<div class="OffRaceNavBar container-fluid " style="display:none">
+        <div class="navbar-header container-fluid">
+          <a class="navbar-brand" href="/index.php" target="_vlm">
+            <div id="logo">
+              <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
+            </div>
+          </a>
+        </div>
+      </div>-->
+      <div class="RaceNavBar container-fluid " style="display:none">
         <div class="navbar-header">
           <ul LoggedInNav="false" style="display:none">
               <button type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle" ><span class="glyphicon glyphicon-log-in"></span></button>
@@ -79,7 +86,7 @@
           <a class="navbar-brand" href="/index.php" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">v15.1</div>
+              <div class="version">V17</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left"> 
@@ -114,12 +121,20 @@
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" style="min-width:150px">
-                  <li class="DDLine"><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li>
-                  <li class="DDLine"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li>
-                  <li class="DDLine"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li>
-                  <li class="DDLine"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li>
-                  <li class="DDLine"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li>
-                  <li class="DDLine"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>        
+                  <li class="DDLine"><img class="LngFlag" lang="en" src="images/lng-en.png" title="English Version" alt="English Version">English Version</li> 
+                  <li class="DDLine"><img class="LngFlag" lang="fr" src="images/lng-fr.png" title="Version Française" alt="Version Française">Version Française</li> 
+                  <li class="DDLine"><img class="LngFlag" lang="it" src="images/lng-it.png" title="Italian Version" alt="Italian Version">Italian Version</li> 
+                  <li class="DDLine"><img class="LngFlag" lang="es" src="images/lng-es.png" title="Spanish Version" alt="Spanish Version">Spanish Version</li> 
+                  <li class="DDLine"><img class="LngFlag" lang="de" src="images/lng-de.png" title="Deutsche Fassung" alt="Deutsche Fassung">Deutsche Fassung</li> 
+                  <li class="DDLine"><img class="LngFlag" lang="pt" src="images/lng-pt.png" title="Portugese Version" alt="Portugese Version">Portugese Version</li>         
+                  <!-- Backup before changing to image map
+                  <li class="DDLine"><div class="VLMIcon_34" style="background-position-y: -34px"></div>English Version</li>
+                  <li class="DDLine"><div class="VLMIcon_34" style="background-position-y: -102px"></div>Version Française</li>
+                  <li class="DDLine"><div class="VLMIcon_34" style="background-position-y: -136px"></div>Italian Version</li>
+                  <li class="DDLine"><div class="VLMIcon_34" style="background-position-y: -68px"></div>Spanish Version</li>
+                  <li class="DDLine"><div class="VLMIcon_34" style="background-position-y: -0px"></div>Deutsche Fassung</li>
+                  <li class="DDLine"><div class="VLMIcon_34" style="background-position-y: -170px"></div>Portugese Version</li>        
+                  -->
                 </ul>
               </div>
             </li>
@@ -256,7 +271,9 @@
       </div>
       <!-- Collapsable Boat Controler panel -->
       <div Id="Boat-Panel" class="collapse">
-        <div id="tabs" class ="JVLMTabs">
+          
+          <div id="tabs" class ="JVLMTabs">
+            
           <ul>
             <li class=" BCPane BearingMode"><a href="#BearingMode" data-toggle="tab" >
               <img class="PMActiveMode ActiveMode_Heading" src="images/PMActiveMode.png" alt="PMActiveMode"/>
@@ -497,6 +514,24 @@
       </div>
        <!-- COllapsable Race ranking -->
       <div id="Ranking-Panel" class="Ranking-Panel collapse">
+        <div class="OffRaceNavBar row container-fluid">
+          <div class="col-xs-1">
+            <a class="navbar-brand" href="/index.php" target="_vlm">
+              <div id="logo">
+                <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
+              </div>
+            </a>
+          </div>
+          <div class="container-fluid col-xs-10" style="text-align: center"> 
+            <H1>
+              <span class="ICSRaceName"></span><br>
+            </H1>
+            <h4>
+              <span class="RaceId"></span>
+            </h4>          
+          </div>
+          <div class="col-xs-1"></div>
+        </div>
         <div class="container-fluid JVLMTabs">
           <ul id="RnkTabsUL" class="nav nav-tabs WPNotInited">
             <li RnkSort="RAC"><a href="#DivRnkRAC" I18n="Racing">Rcing</a></li>
@@ -545,7 +580,7 @@
           <div id="GribSliderHandle" class="ui-slider-handle"></div> 
       </div>
     </div>
-    <div class="input " LoggedInNav="false" style="position:relative">
+    <div class="input RaceNavBar" LoggedInNav="false" style="position:relative">
       <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog" >
         <div class="modal-dialog" role="document">
           <div class="Apropos modal-content">
@@ -670,8 +705,11 @@
                 <div class="col-xs-1 col-md-1">
                   <img src="images/ServerInfo.png">
                 </div>   
-                <div class="col-xs-8 col-md-8">
+                <div class="col-xs-6 col-md-6">
                     <a href="/index.php" target="VLM1"><span I18n='VLM1'>forum </span></a>   
+                </div>
+                <div class="col-xs-5 small">
+                  <a id="BuildDate" data-toggle="tooltip" title="Sun Jun 17 2018 09:47:25 GMT+0200 (Paris, Madrid (heure d’été))"></a>
                 </div>
           </div>   
           </fieldset>
@@ -694,7 +732,7 @@
           </div>
           </fieldset>
           <fieldset>
-          <legend class="ui-legend">Afficher le mien et ...</legend>
+          <legend class="ui-legend" I18n="ShowMyAnd">Afficher le mien et ...</legend>
           <div  class="affich dropdown">
             <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
             <span class="caret"></span></button>
@@ -705,6 +743,7 @@
               <li class="DDLine MapOppShowLi"><span Mode="1" I18n="maponlyme"></span></li>  
               <li class="DDLine MapOppShowLi"><span Mode="0" I18n="mapselboats"></span></li>
             </ul>
+            <input class="chkprefstore" id="NbDisplayBoat" type="number" pattern="[1-9][0-9]*" style="width:50px">
           </div>
         </fieldset>
         <fieldset>
@@ -714,7 +753,7 @@
             </div>
             <div class="affich">
               <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1" max="120" value="1" id="VacPol" style="width:50px">
+              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1"  max="120" value="1" id="VacPol" style="width:50px">
             </div>
         </fieldset>
         <fieldset>
@@ -1531,7 +1570,7 @@
                       <div class="form-group">
                         <label for="AP_Time" class="col-md-4 control-label"  I18n="select_time">Time Picking</label>
                         <div id="AP_Time" class="input-group datecol-md-8">
-                          <input data-format="dd/MM/yyyy hh:mm:ss" type="text" class="form-control"></input>
+                          <input data-format="dd/MM/yyyy hh:mm:ss" type="text" class="form-control">
                           <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                           </span>
@@ -1647,9 +1686,9 @@
           <div id="RaceInfoBody" class="modal-body" >
             <div  id="TabsInfos" class="JVLMTabs" >
                 <ul>
-                  <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true">Course</a></li>
-                  <li><a href="#InfosBoat" data-toggle="tab">Bateau</a></li>
-                  <li><a href="#PolarBoat" data-toggle="tab">Polaires</a></li>
+                  <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true" I18n='race'>Course</a></li>
+                  <li><a href="#InfosBoat" data-toggle="tab" I18n='control'>Bateau</a></li>
+                  <li><a Id="PolarTab" href="#PolarBoat" data-toggle="tab" I18n='Polar'>Polaires</a></li>
                   <li id="DiscontinueRaceTab" ><a href="#DiscontinueRace" data-toggle="tab" I18n="Discontinue"> Disc. Race</a></li>
                 </ul>
                 <div id="TabModalContent" class="tab-content ">
@@ -1664,7 +1703,7 @@
                         </div>
                         <div  id="WPInfos" class="JVLMTabs" >
                           <ul>
-                              <li class="active"><a href="#waypoints" data-toggle="tab"aria-expanded="true">Waypoints</a></li>
+                              <li class="active"><a href="#waypoints" data-toggle="tab" aria-expanded="true">Waypoints</a></li>
                               <li><a href="#NSZ" data-toggle="tab">NSZ</a></li>
                           </ul>
                             <div class="BCPane tab-pane fade in active" id="waypoints">
@@ -1733,7 +1772,7 @@
                           </div>                        
                         </div>
                         <div  class="col-xs-11">
-                          <canvas id="PolarCanvas"></canvas>
+                          <canvas id="PolarCanvas" style="width:98%"></canvas>
                         </div>
                       </div>
                     </div>
@@ -1812,7 +1851,7 @@
                     <div class="col-xs-4" align="right">
                                           </div>
                     <div class="col-xs-8">
-                      <span id="verimailstatus" >
+                      <span id="verimailstatus" ></span>
                     </div>              
                   </div>
                   <div class="row">
@@ -1910,6 +1949,25 @@
       </div>
     </div>
 
+    <!-- Error redirect panel -->
+    <div id="ErrorRedirectPanel" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div  class="modaldialog modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 I18n="Ooops" class="modal-title" style="text-align:center">Ooops</h4>
+          </div> 
+          <div class="modal-body">            
+            <H4 I18n="HandlingErrorClickToGoBack"></H4>            
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="location.href='/';" class="ui-button ui-corner-all ui-widget" data-dismiss="modal" I18n="GoToVLM">&times;</button>            
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- invisible recaptcha div -->
     <div id='recaptcha-PwdReset1' class="g-recaptcha hidden"
       data-sitekey="6Lf_RzcUAAAAABEzD14P4KGjZuF4U4YBX_aruf7F"
@@ -1923,7 +1981,7 @@
     </div>
 
     <!-- Script that can be loaded after DOM -->
-    <script src="config.js" type="text/javascript"></script>
+    <!--<script src="config.js" type="text/javascript"></script>
     <script src='prefmgr.js' type='text/javascript'></script>
     <script src="localize.js" type='text/javascript'></script>
     <script src='ControlSwitch.js' type='text/javascript'></script>
@@ -1938,19 +1996,21 @@
     <script src='estimator.js' type='text/javascript'></script>
     <script src="GUI.js" type='text/javascript'></script>
     <script src='vlmboats.js' type='text/javascript'></script>
-    <script src='MercatorTransform.js' type='text/javascript'></script>
-    <script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
+    <script src='MercatorTransform.js' type='text/javascript'></script>-->
+    <script src='dist/jvlm_main.js?v=V17' type='text/javascript'></script>
+    <!--<script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
     <script src='external/PasswordStrength/jquery.pstrength-min.1.2.js' type='text/javascript'></script>
-    <script src='https://www.google.com/recaptcha/api.js?render=explicit&onload=initrecaptcha' async ></script>
     <script type="text/javascript" src="external/moments/moment.min.js"></script>
     <script type='text/javascript' src='/externals/fullcalendar/fullcalendar.min.js'></script>
     <script type='text/javascript' src='/externals/fullcalendar/locale-all.js'></script>
-    <script src="external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>-->
+    <script src='https://www.google.com/recaptcha/api.js?render=explicit&onload=initrecaptcha' async ></script>
     
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
     <script>
+      var BuildDate = 'Sun, 17 Jun 2018 07:47:25 GMT'
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());

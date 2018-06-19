@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Calcul des positions extremes des concurrents puis demande à saildocs de la meteo sur la zone à 20° autour 
+# Calcul des positions extremes des concurrents puis demande ï¿½ saildocs de la meteo sur la zone ï¿½ 20ï¿½ autour 
 
 
-# Envoi du mail à saildocs pour reception des données
+# Envoi du mail ï¿½ saildocs pour reception des donnï¿½es
 function askwind()
 {
 	echo "ASKING WINDS FOR : $ZONE (race = $RACE)"
 /usr/sbin/sendmail -i -f winds-${RACE}@vlm.team-tnz.org -- query@saildocs.com <<FIN
 To: query@saildocs.com
-Subject: Thanks (http://virtual-loup-de-mer.org)
+Subject: Thanks (http://v-l-m.org)
 send gfs:$ZONE|1,1|6,9|wind
 FIN
 }
@@ -18,12 +18,12 @@ FIN
 ladate=$(date +%s)
 RANGE=20
 
-# "ça", c'est pour tester, si on veut tester..
+# "ï¿½a", c'est pour tester, si on veut tester..
 #ZONE=-50,50,-160,40
 #RACE=35
 #askwind
 #exit
-# Fin de "çà".
+# Fin de "ï¿½ï¿½".
 
 echo "`date +%Y/%m/%d_%H:%M:%S` : Running cron-Getgrib."
 # Pour chaque course :
@@ -53,7 +53,7 @@ for RACE in $(echo "select idraces from races where started=1 or (started=0 and 
 	    ZONE=$S,$N,0,180
 	    askwind
 
-	    # La partie Est de DCL : on raisonne en négatif
+	    # La partie Est de DCL : on raisonne en nï¿½gatif
 	    let E-=360
 	    ZONE=$S,$N,-179,$E
 	    askwind
@@ -71,13 +71,13 @@ for RACE in $(echo "select idraces from races where started=1 or (started=0 and 
 	    askwind
 	    continue
 	fi
-	# W et E sont à l'est de Greenwich
+	# W et E sont ï¿½ l'est de Greenwich
 	if [ $W -lt 0 ] && [ $E -lt 0 ] ; then
 	    ZONE=$S,$N,$W,$E
 	    askwind
 	    continue
 	fi
-	# W et E sont à l'Est de Greenwich
+	# W et E sont ï¿½ l'Est de Greenwich
 	if [ $W -gt 0 ] && [ $E -gt 0 ] ; then
 	    ZONE=$S,$N,$W,$E
 	    askwind

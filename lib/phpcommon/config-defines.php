@@ -28,21 +28,21 @@
     define_if_not("MAIL_PREFIX", "VLM");
 
     //EMAIL NOTIFY
-    define_if_not("EMAIL_NOTIFY_VLM", "noreply@virtual-loup-de-mer.org");
+    define_if_not("EMAIL_NOTIFY_VLM", "noreply@v-l-m.org");
 
     /******** MAP_SERVER_URL A VERIFIER AVANT MISE EN PROD *****************/
-    //define("VMG_SERVER_URL", "http://www.virtual-loup-de-mer.org/vmg/vmg_vlm.php");
-    define_if_not("WWW_SERVER_URL", "http://www.virtual-loup-de-mer.org");
+    //define("VMG_SERVER_URL", "http://www.v-l-m.org/vmg/vmg_vlm.php");
+    define_if_not("WWW_SERVER_URL", "http://www.v-l-m.org");
     define("VMG_SERVER_URL", "/vmg/vmg_vlm.php");
     define("MAP_SERVER_URL", "");
-    //define("MAP_SERVER_URL", "http://map.virtual-loup-de-mer.org");
-    define("GRIB_SERVER_URL", "http://grib.virtual-loup-de-mer.org");
-    define("DOC_SERVER_URL", "http://wiki.virtual-loup-de-mer.org/index.php/");
+    //define("MAP_SERVER_URL", "http://map.v-l-m.org");
+    define("GRIB_SERVER_URL", "http://grib.v-l-m.org");
+    define("DOC_SERVER_URL", "http://wiki.v-l-m.org/index.php/");
     define("DEV_SERVER_URL", "http://v-l-m.github.io/vlm/");
     define("TOOLS_SERVER_URL", DOC_SERVER_URL."Les_accessoires_et_outils_autour_de_VLM");
     define("GRIB_TOOLS_URL", DOC_SERVER_URL."Outils_m%C3%A9t%C3%A9os");
     //define("DOC_SERVER_URL_BO", DOC_SERVER_URL."Vocabulaire_%26_Jargon#BlackOut_.28BO.29");
-    define("MOBILE_SERVER_URL", "http://mobiles.virtual-loup-de-mer.org");
+    define("MOBILE_SERVER_URL", "http://mobiles.v-l-m.org");
     define("FORUM_SERVER_URL", "http://www.virtual-winds.org/forum/index.php?/forum/276-virtual-loup-de-mer/");
 
     // Max position age (engine speedup on long races) => 2 days since we have "histpos" table

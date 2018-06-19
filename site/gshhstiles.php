@@ -22,7 +22,7 @@
   
     $regular = sprintf("%s/%d/%d/%d.png", DIRECTORY_GSHHSTILES, $tilez, $tilex, $tiley);
     $regulardir = sprintf("%s/%d/%d", DIRECTORY_GSHHSTILES, $tilez, $tilex);
-    
+    //print $original; die();
     // Cr�ation et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
         if (!is_dir($originaldir)) {
@@ -30,6 +30,7 @@
             mkdir($originaldir, 0777, True);
         }
         if (defined("TILES_SOURCE_SERVER")) {
+            //print "Copying from tileserver".TILES_SOURCE_SERVER;die();
             copy(sprintf("%s/%s", TILES_SOURCE_SERVER, $original), $original);
         } else if (file_exists($regular) ) {
             copy($regular, $original);
@@ -37,9 +38,13 @@
             $rivers = "";
             if ($tilez > 4) $rivers = sprintf("--rivers %s ", GSHHS_CLIPPED_RIVER_FILENAME);
             $execcmd = sprintf("%s --n_tiles %d --x_tile %d --y_tile %d -d --coast_file %s %s -a %s --water_alpha 0x7F -t %s", TILES_G_PATH, pow(2, $tilez), $tilex, $tiley, GSHHS_CLIPPED_FILENAME, $rivers, GSHHS_CLIPPED_TOPO_FILENAME, $original);
-//            print $execcmd; die();
+            //print $execcmd; die();
             shell_exec($execcmd);
         }
+    }
+    else
+    {
+        //print "using file from cache ".$original;die();
     }
 
     header("Content-Type: image/png");
