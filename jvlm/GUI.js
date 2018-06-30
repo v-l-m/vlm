@@ -3136,7 +3136,7 @@ function FillRaceWaypointList(RaceInfo)
     // Insert the start point
     let Row = {};
     Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat + "<BR>" + RaceInfo.startlong;
+    Row.WP1 = RaceInfo.startlat/1000 + "<BR>" + RaceInfo.startlong/1000;
     Row.WP2 = "";
     Row.Spec = "";
     Row.Type = GetLocalizedString("startmap");
