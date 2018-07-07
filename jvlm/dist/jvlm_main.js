@@ -6911,10 +6911,10 @@ function AddRaceToList(race)
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
     '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
     '  <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + new Date(race.deptime * 1000) + '</p>' +
+    '     <p>Départ : ' + moment.utc(race.deptime * 1000).local().format("LLL") + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime*1000).local().format("LLL") + '</p>' +
+    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime * 1000).local().format("LLL") + '</p>' +
     '  </div>'+
     '  <div class="col-xs-3"><p>' +
     '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
@@ -7335,7 +7335,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(Pos.Date);
+    $("#MI_EstDate").text(moment(Pos.Date).format("LLL"));
   }
   else
   {

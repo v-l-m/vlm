@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'EstimateDate' => "Date de l'estime",
     'Close'=>'Fermer',
     'GoToVLM'=>'Retourner à VLM',
     'HandlingErrorClickToGoBack'=>"Quelquechose d'imprévu s'est produit.Cliquer sur le bouton ci-dessous, pour revenir à la page principale",

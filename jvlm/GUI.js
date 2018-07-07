@@ -2483,7 +2483,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(Pos.Date);
+    $("#MI_EstDate").text(moment(Pos.Date).format("LLL"));
   }
   else
   {
