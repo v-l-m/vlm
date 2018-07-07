@@ -1,6 +1,8 @@
 <?php
 $strings['en'] = 
   array (
+    'EstimateDate' => 'Estimate Date',
+    'Close'=>'Close',
     'GoToVLM'=>'Go Back to VLM',
     'HandlingErrorClickToGoBack'=>'Something unexpected occurred. Click button below to back to main page',
     'Ooops'=>'Ooops',

@@ -224,7 +224,7 @@
             <li class="nav hidden" RacingBtn="true">
              <div class="BtnGroup1" >
                 <div class="BtnRankingPanel" >
-                  <img id="ShowICSButton" href="#RacesInfoForm" data-toggle="modal" class="TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
+                  <img href="#RacesInfoForm" data-toggle="modal" class="ShowICSButton TDB-Icon" src="images/raceinstructions.png" alt="raceinstructions">
                 </div>
               </div>
             </li>
@@ -709,7 +709,7 @@
                     <a href="/index.php" target="VLM1"><span I18n='VLM1'>forum </span></a>   
                 </div>
                 <div class="col-xs-5 small">
-                  <a id="BuildDate" data-toggle="tooltip" title="Sun Jun 17 2018 09:47:25 GMT+0200 (Paris, Madrid (heure d’été))"></a>
+                  <a id="BuildDate" data-toggle="tooltip" title="Sat Jul 07 2018 10:43:53 GMT+0200 (Paris, Madrid (heure d’été))"></a>
                 </div>
           </div>   
           </fieldset>
@@ -1652,10 +1652,10 @@
         </div>
       </div>
     <!-- Modal Races List -->
-    <div id="RacesListForm" class="modal fade" role="dialog">
+    <div id="RacesListForm" class="vresp modal fade" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
-        <div id="RacesListPanel" class="modaldialog modal-content">
+        <div id="RacesListPanel" class=" modaldialog modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>
@@ -1671,7 +1671,7 @@
       </div>
     </div>
     <!-- Modal Infos race -->
-    <div id="RacesInfoForm" class="modal fade" role="dialog">
+    <div id="RacesInfoForm" class="vresp modal fade" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
         <div id="RacesInfoPanel" class="modaldialog modal-content">
@@ -1733,10 +1733,10 @@
                                           <th data-name ="Lat1" data-breakpoints="xs" style="display: none;">lat 1</th>
                                           <th data-name ="Lon1" data-breakpoints="xs" style="display: none;">lon 1</th>
                                           <th data-name ="Lat2">lat 2</th>
-                                          <th data-name ="Lon2">lon 2</th>                                          
+                                          <th data-name ="Lon2">lon 2</th>
                                         </tr>
                                       </thead>
-                                      <tbody >                                                                       
+                                      <tbody >
                                       </tbody>
                                     </table>
                                   </div>  
@@ -1789,7 +1789,7 @@
              </div>
            </div>
           <div class="modal-footer">
-              <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
+              <button type="button" class="ui-button ui-corner-all ui-widget" I18n="close" data-dismiss="modal">Close</button>
           </div>
         </div>
        </div>
@@ -2010,7 +2010,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
     <script>
-      var BuildDate = 'Sun, 17 Jun 2018 07:47:25 GMT'
+      var BuildDate = 'Sat, 07 Jul 2018 08:43:53 GMT'
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());

@@ -89,8 +89,8 @@ gulp.task('libs', function()
       'jvlm/external/footable-bootstrap/js/footable.js', 'jvlm/jquery.ui.touch-punch.js',
       'jvlm/external/store/store.min.js',
       'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
-      'jvlm/external/moments/moment.min.js', 'jvlm/externals/fullcalendar/fullcalendar.min.js',
-      'jvlm/externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+      'jvlm/external/moments/moment-with-locales.min.js', 'externals/fullcalendar/fullcalendar.min.js',
+      'externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))

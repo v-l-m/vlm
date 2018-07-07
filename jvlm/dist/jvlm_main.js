@@ -5191,6 +5191,21 @@ function initrecaptcha(InitPasswordReset, InitResetConfirm)
 
 function InitMenusAndButtons()
 {
+  // Handle modal sizing to fit screen
+  $('div.vresp.modal').on('show.bs.modal', function()
+  {
+    $(this).show();
+    setModalMaxHeight(this);
+  });
+
+  $(window).resize(function()
+  {
+    if ($('.modal.in').length != 0)
+    {
+      setModalMaxHeight($('.modal.in'));
+    }
+  });
+
   // Handle password change button
   $("#BtnChangePassword").on("click", function(e)
   {
@@ -5504,7 +5519,7 @@ function InitMenusAndButtons()
     format: false
   });
 
-  $("#ShowICSButton").on("click", HandleFillICSButton);
+  $(".ShowICSButton").on("click", HandleFillICSButton);
 
   $("#PolarTab").on("click", HandlePolarTabClik);
 
@@ -6586,7 +6601,7 @@ function DeferedPagingStyle(e, ft)
 function GetPilototoTableLigneObject(Boat, Index)
 {
   let PilOrder = Boat.VLMInfo.PIL[Index];
-  let OrderDate = new Date(PilOrder.TTS * 1000);
+  let OrderDate = moment(PilOrder.TTS * 1000).format("LLL");
   let PIMText = GetPilotModeName(PilOrder.PIM);
 
   // Force as number and rebase from 1
@@ -6889,18 +6904,22 @@ function AddRaceToList(race)
     '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '      </button>' +
     '    </div>' + (StartMoment ?
-      '    <div class="col-xs-12">' +
-      '      <span "> ' + StartMoment +
-      '      </span>' +
-      '    </div>' : "") +
+    '    <div class="col-xs-12">' +
+    '       <span "> ' + StartMoment +
+    '       </span>' +
+    '    </div>' : "") +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
     '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '  <div class="col-xs-12"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + new Date(race.deptime * 1000) + '</p>' +
+    '  <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '     <p>Départ : ' + moment.utc(race.deptime * 1000).local().format("LLL") + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + new Date(race.closetime * 1000) + '</p>' +
-    '   </div>';
+    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime * 1000).local().format("LLL") + '</p>' +
+    '  </div>'+
+    '  <div class="col-xs-3"><p>' +
+    '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '  </div>'
+    ;
 
   base.prepend(code);
 
@@ -6915,6 +6934,10 @@ function AddRaceToList(race)
 
     }
   );
+
+  // Handler for ShowICSButtons
+  $(".ShowICSButton").on("click", HandleFillICSButton);
+
 }
 
 function PageClock()
@@ -7312,7 +7335,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(Pos.Date);
+    $("#MI_EstDate").text(moment(Pos.Date).format("LLL"));
   }
   else
   {
@@ -7973,7 +7996,7 @@ function FillRaceWaypointList(RaceInfo)
     // Insert the start point
     let Row = {};
     Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat + "<BR>" + RaceInfo.startlong;
+    Row.WP1 = RaceInfo.startlat/1000 + "<BR>" + RaceInfo.startlong/1000;
     Row.WP2 = "";
     Row.Spec = "";
     Row.Type = GetLocalizedString("startmap");
@@ -8036,7 +8059,7 @@ function FillNSZList(Exclusions)
         let Seg = Exclusions[index];
         let row = {};
         row.NSZId = index;
-        row.Lon = Seg[0][1];
+        row.Lon1 = Seg[0][1];
         row.Lat1 = Seg[0][0];
         row.Lon2 = Seg[1][1];
         row.Lat2 = Seg[1][0];
@@ -8654,8 +8677,30 @@ function HandleCreateUser()
     {
       HandleCreateUserResult(e, status);
     });
+}
 
+function setModalMaxHeight(element)
+{
+  this.$element = $(element);
+  this.$content = this.$element.find('.modal-content');
+  var borderWidth = this.$content.outerHeight() - this.$content.innerHeight();
+  var dialogMargin = $(window).width() < 768 ? 20 : 60;
+  var contentHeight = $(window).height() - (dialogMargin + borderWidth);
+  var headerHeight = this.$element.find('.modal-header').outerHeight() || 0;
+  var footerHeight = this.$element.find('.modal-footer').outerHeight() || 0;
+  var maxHeight = contentHeight - (headerHeight + footerHeight);
 
+  this.$content.css(
+  {
+    'overflow': 'hidden'
+  });
+
+  this.$element
+    .find('.modal-body').css(
+    {
+      'max-height': maxHeight,
+      'overflow-y': 'auto'
+    });
 }
 /**!
  * jQuery Progress Timer - v1.0.5 - 6/8/2015
@@ -11006,7 +11051,7 @@ function GetRaceExclusionsFromServer(Boat)
 
 function GetRaceInfoFromServer(Boat, TargetTab)
 {
-  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC, function(result)
+  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC+" & v="+ Boat.VLMInfo.VER, function(result)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
