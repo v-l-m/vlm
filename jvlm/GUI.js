@@ -3207,7 +3207,7 @@ function FillNSZList(Exclusions)
         let Seg = Exclusions[index];
         let row = {};
         row.NSZId = index;
-        row.Lon = Seg[0][1];
+        row.Lon1 = Seg[0][1];
         row.Lat1 = Seg[0][0];
         row.Lon2 = Seg[1][1];
         row.Lat2 = Seg[1][0];
