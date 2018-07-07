@@ -5519,7 +5519,7 @@ function InitMenusAndButtons()
     format: false
   });
 
-  $("#ShowICSButton").on("click", HandleFillICSButton);
+  $(".ShowICSButton").on("click", HandleFillICSButton);
 
   $("#PolarTab").on("click", HandlePolarTabClik);
 
@@ -6899,24 +6899,27 @@ function AddRaceToList(race)
     '    <div class="col-xs-4">' +
     '      <span ">' + race.racename +
     '      </span>' +
-    '      <BR><span><a href=\"/jvlm?ICSRace= '+ race.idraces + '">ICS</a> </span>'+
     '    </div>' +
     '    <div class="' + (race.CanJoin ? '' : 'hidden') + ' col-xs-4">' +
     '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '      </button>' +
     '    </div>' + (StartMoment ?
-      '    <div class="col-xs-12">' +
-      '      <span "> ' + StartMoment +
-      '      </span>' +
-      '    </div>' : "") +
+    '    <div class="col-xs-12">' +
+    '       <span "> ' + StartMoment +
+    '       </span>' +
+    '    </div>' : "") +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
     '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '  <div class="col-xs-12"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '  <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
     '     <p>Départ : ' + new Date(race.deptime * 1000) + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + new Date(race.closetime * 1000) + '</p>' +
-    '   </div>';
+    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime*1000).local().format("LLL") + '</p>' +
+    '  </div>'+
+    '  <div class="col-xs-3"><p>' +
+    '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '  </div>'
+    ;
 
   base.prepend(code);
 
@@ -6931,6 +6934,10 @@ function AddRaceToList(race)
 
     }
   );
+
+  // Handler for ShowICSButtons
+  $(".ShowICSButton").on("click", HandleFillICSButton);
+
 }
 
 function PageClock()
