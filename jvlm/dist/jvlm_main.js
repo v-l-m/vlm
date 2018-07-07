@@ -11051,7 +11051,7 @@ function GetRaceExclusionsFromServer(Boat)
 
 function GetRaceInfoFromServer(Boat, TargetTab)
 {
-  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC, function(result)
+  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC+" & v="+ Boat.VLMInfo.VER, function(result)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
