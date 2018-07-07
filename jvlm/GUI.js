@@ -1749,7 +1749,7 @@ function DeferedPagingStyle(e, ft)
 function GetPilototoTableLigneObject(Boat, Index)
 {
   let PilOrder = Boat.VLMInfo.PIL[Index];
-  let OrderDate = new Date(PilOrder.TTS * 1000);
+  let OrderDate = moment(PilOrder.TTS * 1000).format("LLL");
   let PIMText = GetPilotModeName(PilOrder.PIM);
 
   // Force as number and rebase from 1
