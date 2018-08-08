@@ -5038,9 +5038,9 @@ function HandleShowICS(raceid)
 }
 
 
-function LoadRaceInfo(raceid, CallBack)
+function LoadRaceInfo(RaceId, RaceVersion, CallBack)
 {
-  $.get("/ws/raceinfo.php?idrace=" + raceid, CallBack);
+  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId +"&v=" + RaceVersion, CallBack);
 }
 
 function HandleShowOtherRaceRank(RaceId)
@@ -5051,7 +5051,7 @@ function HandleShowOtherRaceRank(RaceId)
     {
       FillRaceInfoHeader(Result);
     };
-    LoadRaceInfo(RaceId, CallBack);
+    LoadRaceInfo(RaceId, 0, CallBack);
     LoadRankings(RaceId, OtherRaceRankingLoaded);
     RankingFt.RaceRankingId = RaceId;
   };
@@ -6287,7 +6287,7 @@ function FillRaceInstructions(RaceInfo)
   FillRaceWaypointList(RaceInfo);
   InitPolar(RaceInfo);
 
-  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces,
+  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces +"&v="+ RaceInfo.VER,
     function(result)
     {
       if (result && result.success)
@@ -7378,7 +7378,13 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
     }
     else
     {
-      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId,
+      let Version = 0;
+
+      if (typeof Boat.VLMInfo !== "undefined")
+      {
+        Version = Boat.VLMInfo.VER;
+      }
+      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + Version,
         function(result)
         {
           CheckWPRankingList(Boat, result);
@@ -11013,7 +11019,7 @@ function GetTrackFromServer(Boat)
 
 function GetRaceExclusionsFromServer(Boat)
 {
-  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC, function(result)
+  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC +"&v=" + Boat.VLMInfo.VER, function(result)
   {
     if (result.success)
     {
@@ -11051,7 +11057,7 @@ function GetRaceExclusionsFromServer(Boat)
 
 function GetRaceInfoFromServer(Boat, TargetTab)
 {
-  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC+" & v="+ Boat.VLMInfo.VER, function(result)
+  $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC+"&v="+ Boat.VLMInfo.VER, function(result)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
