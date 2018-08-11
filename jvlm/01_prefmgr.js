@@ -101,6 +101,7 @@ function MapPrefs()
   this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
   this.MapZoomLevel = 4;
   this.PolarVacCount = 12; // How many vacs for drawing the polar line
+  this.UseUTC = false; // USe local of UTC time format for display
   this.EstTrackMouse = false;
   this.TrackEstForecast = true;
   this.ShowTopCount = 50;
@@ -113,6 +114,7 @@ function MapPrefs()
       this.ShowOppName = store.get("#ShowOppName");
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
       this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
+      this.UseUTC = LoadLocalPref("#UseUTC", false);
       this.EstTrackMouse = store.get("#EstTrackMouse");
       this.TrackEstForecast = store.get("#TrackEstForecast");
       if (!this.PolarVacCount)
@@ -132,6 +134,7 @@ function MapPrefs()
       store.set("#ShowOppName", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
+      store.set("#UseUTC", this.UseUTC);
       store.set("#TrackEstForecast", this.TrackEstForecast);
       store.set("#EstTrackMouse", this.EstTrackMouse);
       store.set("ShowTopCount", this.ShowTopCount);

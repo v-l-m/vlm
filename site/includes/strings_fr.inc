@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'UseUTC' => 'Afficher les heures en GMT',
     'EstimateDate' => "Date de l'estime",
     'Close'=>'Fermer',
     'GoToVLM'=>'Retourner à VLM',

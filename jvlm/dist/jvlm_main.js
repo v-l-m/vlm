@@ -101,6 +101,7 @@ function MapPrefs()
   this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
   this.MapZoomLevel = 4;
   this.PolarVacCount = 12; // How many vacs for drawing the polar line
+  this.UseUTC = false; // USe local of UTC time format for display
   this.EstTrackMouse = false;
   this.TrackEstForecast = true;
   this.ShowTopCount = 50;
@@ -113,6 +114,7 @@ function MapPrefs()
       this.ShowOppName = store.get("#ShowOppName");
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
       this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
+      this.UseUTC = LoadLocalPref("#UseUTC", false);
       this.EstTrackMouse = store.get("#EstTrackMouse");
       this.TrackEstForecast = store.get("#TrackEstForecast");
       if (!this.PolarVacCount)
@@ -132,6 +134,7 @@ function MapPrefs()
       store.set("#ShowOppName", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
+      store.set("#UseUTC", this.UseUTC);
       store.set("#TrackEstForecast", this.TrackEstForecast);
       store.set("#EstTrackMouse", this.EstTrackMouse);
       store.set("ShowTopCount", this.ShowTopCount);
@@ -5040,7 +5043,7 @@ function HandleShowICS(raceid)
 
 function LoadRaceInfo(RaceId, RaceVersion, CallBack)
 {
-  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId +"&v=" + RaceVersion, CallBack);
+  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
 }
 
 function HandleShowOtherRaceRank(RaceId)
@@ -5549,12 +5552,23 @@ function InitPolar(RaceInfo)
   _CachedRaceInfo = RaceInfo;
 }
 
-function HandleFillICSButton()
+function HandleFillICSButton(e)
 {
+
   // Race Instruction
   if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
   {
     FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
+  }
+  else if (typeof e !== "undefined" && e)
+  {
+    let b = e.target;
+    let RaceId = $(b).attr.idRace;
+
+    if (typeof RaceId !== "undefined" && RaceId)
+    {
+      HandleShowICS(RaceId);
+    }
   }
 }
 
@@ -6287,7 +6301,7 @@ function FillRaceInstructions(RaceInfo)
   FillRaceWaypointList(RaceInfo);
   InitPolar(RaceInfo);
 
-  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces +"&v="+ RaceInfo.VER,
+  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces + "&v=" + RaceInfo.VER,
     function(result)
     {
       if (result && result.success)
@@ -6313,8 +6327,8 @@ function FillRaceInfoHeader(RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", new Date(parseInt(RaceInfo.deptime, 10) * 1000)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", new Date(parseInt(RaceInfo.closetime, 10) * 1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true,true)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000,true,true)]);
   BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
   FillFieldsFromMappingTable(BoatFieldMappings);
 }
@@ -6601,7 +6615,7 @@ function DeferedPagingStyle(e, ft)
 function GetPilototoTableLigneObject(Boat, Index)
 {
   let PilOrder = Boat.VLMInfo.PIL[Index];
-  let OrderDate = moment(PilOrder.TTS * 1000).format("LLL");
+  let OrderDate = GetLocalUTCTime(PilOrder.TTS * 1000,true,true);
   let PIMText = GetPilotModeName(PilOrder.PIM);
 
   // Force as number and rebase from 1
@@ -6904,22 +6918,24 @@ function AddRaceToList(race)
     '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '      </button>' +
     '    </div>' + (StartMoment ?
-    '    <div class="col-xs-12">' +
-    '       <span "> ' + StartMoment +
-    '       </span>' +
-    '    </div>' : "") +
+      '    <div class="col-xs-12">' +
+      '       <span "> ' + StartMoment +
+      '       </span>' +
+      '    </div>' : "") +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
-    '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '  <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + moment.utc(race.deptime * 1000).local().format("LLL") + '</p>' +
+    '  <div class="panel-body">' +
+    '   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
+    '    <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000,true,true) + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime * 1000).local().format("LLL") + '</p>' +
-    '  </div>'+
-    '  <div class="col-xs-3"><p>' +
+    '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000,true,true) + '</p>' +
+    '    </div>' +
+    '    <div class="col-xs-3"><p>' +
     '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
-    '  </div>'
-    ;
+    '    </div>' +
+    '   </div>' +
+    '  </div>';
 
   base.prepend(code);
 
@@ -8002,7 +8018,7 @@ function FillRaceWaypointList(RaceInfo)
     // Insert the start point
     let Row = {};
     Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat/1000 + "<BR>" + RaceInfo.startlong/1000;
+    Row.WP1 = RaceInfo.startlat / 1000 + "<BR>" + RaceInfo.startlong / 1000;
     Row.WP2 = "";
     Row.Spec = "";
     Row.Type = GetLocalizedString("startmap");
@@ -8304,6 +8320,7 @@ function HandleShowMapPrefs(e)
   $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppName);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
+  $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
 
   $('#DDMapSelOption:first-child').html(
     '<span Mode=' + VLM2Prefs.MapPrefs.MapOppShow + '>' + VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow) + '</span>' +
@@ -8339,13 +8356,16 @@ function HandleMapPrefOptionChange(e)
 
   switch (Id)
   {
-    case "DisplayReals":
-      VLM2Prefs.MapPrefs.ShowReals = Value;
-      break;
+    /*case "DisplayReals":
+      //VLM2Prefs.MapPrefs.ShowReals = Value;
+      //break;
     case "DisplayNames":
-      VLM2Prefs.MapPrefs.ShowOppName = Value;
-      break;
+      //VLM2Prefs.MapPrefs.ShowOppName = Value;
+      //break;*/
 
+    case "DisplayReals":
+    case "UseUTC":
+    case "DisplayNames":
     case "EstTrackMouse":
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;
@@ -8370,6 +8390,7 @@ function HandleMapPrefOptionChange(e)
       break;
 
     default:
+      console.log("unknown pref storage called : " + Id);
       return;
 
   }
@@ -8707,6 +8728,51 @@ function setModalMaxHeight(element)
       'max-height': maxHeight,
       'overflow-y': 'auto'
     });
+}
+
+// Return a moment in UTC or Local according to VLM2 Local Pref
+function GetLocalUTCTime(d, IsUTC, AsString)
+{
+  let m = d;
+  let UTCSuffix = "";
+
+  if (!moment.isMoment(d))
+  {
+    if (IsUTC)
+    {
+      m = moment(d).utc();
+    }
+    else
+    {
+      m = moment(d);
+    }
+  }
+  if (VLM2Prefs.MapPrefs.UseUTC)
+  {
+    if (!IsUTC)
+    {
+      m = m.utc();
+    }
+    UTCSuffix = " Z";
+  }
+  else
+  {
+    if (IsUTC)
+    {
+      m = m.local();
+    }
+  }
+
+  if (AsString)
+  {
+    return m.format("LLLL")+ UTCSuffix ;
+  }
+  else
+  {
+    return m;
+  }
+
+
 }
 /**!
  * jQuery Progress Timer - v1.0.5 - 6/8/2015

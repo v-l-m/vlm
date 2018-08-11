@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'UseUTC' => 'Use UTC time',
     'EstimateDate' => 'Estimate Date',
     'Close'=>'Close',
     'GoToVLM'=>'Go Back to VLM',

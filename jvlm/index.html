@@ -709,7 +709,7 @@
                     <a href="/index.php" target="VLM1"><span I18n='VLM1'>forum </span></a>   
                 </div>
                 <div class="col-xs-5 small">
-                  <a id="BuildDate" data-toggle="tooltip" title="Sun Jul 08 2018 10:29:59 GMT+0200 (Paris, Madrid (heure d’été))"></a>
+                  <a id="BuildDate" data-toggle="tooltip" title="Sat Aug 11 2018 22:13:23 GMT+0200 (Paris, Madrid (heure d’été))"></a>
                 </div>
           </div>   
           </fieldset>
@@ -730,12 +730,13 @@
             <input class="affich chkprefstore" type="checkbox" id="DisplayNames">
             <label for="DisplayNames" I18n="ShowOppNames">Bouées</label>
           </div>
-          </fieldset>
-          <fieldset>
+        </fieldset>
+        <fieldset>
           <legend class="ui-legend" I18n="ShowMyAnd">Afficher le mien et ...</legend>
           <div  class="affich dropdown">
             <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
-            <span class="caret"></span></button>
+              <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
               <li class="DDLine MapOppShowLi" ><span Mode="3" I18n="mapmeandtop10"></span></li>
               <li class="DDLine MapOppShowLi"><span Mode="4" I18n="mapmy10opps"></span></li>
@@ -748,13 +749,17 @@
         </fieldset>
         <fieldset>
           <legend class="ui-legend">Infos course</legend>
-            <div class="affich">
-              <span i18n="crank" >Durée Vac</span> : <span class="badge VacFreq"> 5 </span> min
-            </div>
-            <div class="affich">
-              <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1"  max="120" value="1" id="VacPol" style="width:50px">
-            </div>
+          <div class="affich">
+            <span i18n="crank" >Durée Vac</span> : <span class="badge VacFreq"> 5 </span> min
+          </div>
+          <div class="affich">
+            <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
+            <input class="chkprefstore" type="number" pattern="[0-9]*" min="1"  max="120" value="1" id="VacPol" style="width:50px">
+          </div>
+          <div class="affich">
+            <input class="chkprefstore" type="checkbox" id="UseUTC" style="width:50px">
+            <label for="UseUTC" I18n="UseUTC" >UseUTC</label>            
+          </div>
         </fieldset>
         <fieldset>
           <legend class="ui-legend" I18n="EstimateOptionsGroup">Est.</legend>
@@ -2010,7 +2015,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
     <script>
-      var BuildDate = 'Sun, 08 Jul 2018 08:29:59 GMT'
+      var BuildDate = 'Sat, 11 Aug 2018 20:13:23 GMT'
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
