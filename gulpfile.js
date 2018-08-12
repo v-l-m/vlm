@@ -21,7 +21,7 @@ const gulp = require('gulp'),
   htmlmin = require('gulp-htmlmin'),
   runsequence = require('run-sequence');
 
-const VLMVersion = 17;
+const VLMVersion = 18;
 
 gulp.task('scripts', function()
 {
