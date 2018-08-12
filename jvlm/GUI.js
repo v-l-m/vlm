@@ -182,12 +182,16 @@ function HandleShowICS(raceid)
       $("#RacesInfoForm").modal("show");
     }
   };
-  LoadRaceInfo(raceid, CallBack);
+  LoadRaceInfo(raceid,null, CallBack);
 }
 
 
 function LoadRaceInfo(RaceId, RaceVersion, CallBack)
 {
+  if (!RaceVersion)
+  {
+    RaceVersion='';
+  }
   $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
 }
 
@@ -667,7 +671,12 @@ function InitMenusAndButtons()
     format: false
   });
 
-  $(".ShowICSButton").on("click", HandleFillICSButton);
+  $(document.body).on('click', ".ShowICSButton",
+    function(e)
+    {
+      HandleFillICSButton(e);
+    }
+  );
 
   $("#PolarTab").on("click", HandlePolarTabClik);
 
@@ -708,7 +717,7 @@ function HandleFillICSButton(e)
   else if (typeof e !== "undefined" && e)
   {
     let b = e.target;
-    let RaceId = $(b).attr.idRace;
+    let RaceId = $(e.currentTarget).attr('idRace');
 
     if (typeof RaceId !== "undefined" && RaceId)
     {
@@ -1472,8 +1481,8 @@ function FillRaceInfoHeader(RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true,true)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000,true,true)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true, true)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000, true, true)]);
   BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
   FillFieldsFromMappingTable(BoatFieldMappings);
 }
@@ -1760,7 +1769,7 @@ function DeferedPagingStyle(e, ft)
 function GetPilototoTableLigneObject(Boat, Index)
 {
   let PilOrder = Boat.VLMInfo.PIL[Index];
-  let OrderDate = GetLocalUTCTime(PilOrder.TTS * 1000,true,true);
+  let OrderDate = GetLocalUTCTime(PilOrder.TTS * 1000, true, true);
   let PIMText = GetPilotModeName(PilOrder.PIM);
 
   // Force as number and rebase from 1
@@ -2071,10 +2080,10 @@ function AddRaceToList(race)
     '  <div class="panel-body">' +
     '   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
     '    <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000,true,true) + '</p>' +
+    '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000,true,true) + '</p>' +
+    '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
     '    </div>' +
     '    <div class="col-xs-3"><p>' +
     '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
@@ -2097,7 +2106,7 @@ function AddRaceToList(race)
   );
 
   // Handler for ShowICSButtons
-  $(".ShowICSButton").on("click", HandleFillICSButton);
+  //$(".ShowICSButton").on("click", HandleFillICSButton);
 
 }
 
@@ -3910,7 +3919,7 @@ function GetLocalUTCTime(d, IsUTC, AsString)
 
   if (AsString)
   {
-    return m.format("LLLL")+ UTCSuffix ;
+    return m.format("LLLL") + UTCSuffix;
   }
   else
   {
