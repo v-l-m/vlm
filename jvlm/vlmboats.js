@@ -180,7 +180,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             else
             {
               //Redraw gates and exclusions from cache
-              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
               DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
             }
 
@@ -229,7 +229,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
     DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
   }
 }
@@ -307,7 +307,7 @@ function GetRaceInfoFromServer(Boat, TargetTab)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, true);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
 }
@@ -926,7 +926,7 @@ const WP_CROSS_ONCE = (1 << 10);
 var RaceGates = [];
 var Exclusions = [];
 
-function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
+function DrawRaceGates(RaceInfo, NextGate)
 {
 
   for (let index in RaceGates)
@@ -945,13 +945,7 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
       var WP = RaceInfo.races_waypoints[index];
 
       // Fix coords scales
-      if (IsVLMCoords)
-      {
-        WP.longitude1 /= VLM_COORDS_FACTOR;
-        WP.latitude1 /= VLM_COORDS_FACTOR;
-        WP.longitude2 /= VLM_COORDS_FACTOR;
-        WP.latitude2 /= VLM_COORDS_FACTOR;
-      }
+      NormalizeRaceInfo(RaceInfo);
       var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
       // Draw WP1

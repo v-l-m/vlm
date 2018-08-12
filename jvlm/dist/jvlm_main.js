@@ -5037,7 +5037,7 @@ function HandleShowICS(raceid)
       $("#RacesInfoForm").modal("show");
     }
   };
-  LoadRaceInfo(raceid,null, CallBack);
+  LoadRaceInfo(raceid, null, CallBack);
 }
 
 
@@ -5045,7 +5045,7 @@ function LoadRaceInfo(RaceId, RaceVersion, CallBack)
 {
   if (!RaceVersion)
   {
-    RaceVersion='';
+    RaceVersion = '';
   }
   $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
 }
@@ -6941,7 +6941,12 @@ function AddRaceToList(race)
     '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
     '    </div>' +
     '    <div class="col-xs-3"><p>' +
-    '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '     <div class="col-xs-12">' +
+    '      <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '     </div>' +
+    '     <div class="col-xs-12 hidden">' +
+    '      <button type="button" class="ShowRankingButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
+    '     </div>' +
     '    </div>' +
     '   </div>' +
     '  </div>';
@@ -8004,6 +8009,29 @@ function getWaypointHTMLSymbolsDescription(WPFormat)
   return WPDesc.trim();
 }
 
+function NormalizeRaceInfo(RaceInfo)
+{
+  if (typeof RaceInfo === "undefined" || !RaceInfo || RaceInfo.IsNormalized)
+  {
+    return;
+  }
+  RaceInfo.startlat /= VLM_COORDS_FACTOR;
+  RaceInfo.startlong /= VLM_COORDS_FACTOR;
+
+  for (let index in RaceInfo.races_waypoints)
+  {
+    if (RaceInfo.races_waypoints[index])
+    {
+      let WP = RaceInfo.races_waypoints[index];
+      WP.latitude1 /= VLM_COORDS_FACTOR;
+      WP.longitude1 /= VLM_COORDS_FACTOR;
+      WP.latitude2 /= VLM_COORDS_FACTOR;
+      WP.longitude2 /= VLM_COORDS_FACTOR;
+    }
+  }
+  RaceInfo.IsNormalized = true;
+}
+
 function FillRaceWaypointList(RaceInfo)
 {
 
@@ -8023,11 +8051,12 @@ function FillRaceWaypointList(RaceInfo)
 
   if (RaceInfo)
   {
+    NormalizeRaceInfo(RaceInfo)
     let Rows = [];
     // Insert the start point
     let Row = {};
     Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat / 1000 + "<BR>" + RaceInfo.startlong / 1000;
+    Row.WP1 = RaceInfo.startlat + "<BR>" + RaceInfo.startlong;
     Row.WP2 = "";
     Row.Spec = "";
     Row.Type = GetLocalizedString("startmap");
@@ -11009,7 +11038,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             else
             {
               //Redraw gates and exclusions from cache
-              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
               DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
             }
 
@@ -11058,7 +11087,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
     DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
   }
 }
@@ -11136,7 +11165,7 @@ function GetRaceInfoFromServer(Boat, TargetTab)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, true);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
 }
@@ -11755,7 +11784,7 @@ const WP_CROSS_ONCE = (1 << 10);
 var RaceGates = [];
 var Exclusions = [];
 
-function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
+function DrawRaceGates(RaceInfo, NextGate)
 {
 
   for (let index in RaceGates)
@@ -11774,13 +11803,7 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
       var WP = RaceInfo.races_waypoints[index];
 
       // Fix coords scales
-      if (IsVLMCoords)
-      {
-        WP.longitude1 /= VLM_COORDS_FACTOR;
-        WP.latitude1 /= VLM_COORDS_FACTOR;
-        WP.longitude2 /= VLM_COORDS_FACTOR;
-        WP.latitude2 /= VLM_COORDS_FACTOR;
-      }
+      NormalizeRaceInfo(RaceInfo);
       var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
       // Draw WP1
