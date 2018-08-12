@@ -8025,8 +8025,11 @@ function NormalizeRaceInfo(RaceInfo)
       let WP = RaceInfo.races_waypoints[index];
       WP.latitude1 /= VLM_COORDS_FACTOR;
       WP.longitude1 /= VLM_COORDS_FACTOR;
-      WP.latitude2 /= VLM_COORDS_FACTOR;
-      WP.longitude2 /= VLM_COORDS_FACTOR;
+      if (typeof WP.latitude2 !== "undefined")
+      {
+        WP.latitude2 /= VLM_COORDS_FACTOR;
+        WP.longitude2 /= VLM_COORDS_FACTOR;
+      }
     }
   }
   RaceInfo.IsNormalized = true;
@@ -8051,7 +8054,7 @@ function FillRaceWaypointList(RaceInfo)
 
   if (RaceInfo)
   {
-    NormalizeRaceInfo(RaceInfo)
+    NormalizeRaceInfo(RaceInfo);
     let Rows = [];
     // Insert the start point
     let Row = {};
@@ -8073,7 +8076,14 @@ function FillRaceWaypointList(RaceInfo)
         let WPSpec;
         Row.WaypointId = WP.wporder;
         Row.WP1 = WP.latitude1 + "<BR>" + WP.longitude1;
-        Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
+        if (typeof WP.latitude2 !== "undefined")
+        {
+          Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
+        }
+        else
+        {
+          Row.WP2 = "@"+WP.laisser_au;
+        }
         Row.Spec = "<span title='" + getWaypointHTMLSymbolsDescription(WP.wpformat) + "'>" + getWaypointHTMLSymbols(WP.wpformat) + "</span>";
         Row.Type = GetLocalizedString(WP.wptype);
         Row.Name = WP.libelle;
