@@ -24,6 +24,9 @@ foreach ($races as $race)
 {
   print("processing race ".$race."\n");
 
+  // Save race tracks in zipped file.
+  
+
   // Get user list from rankings (until index are back available)
   $query="select distinct idusers from histpos where race=".$race.";";
   $ulist=[];
