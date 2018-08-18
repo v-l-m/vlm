@@ -2510,7 +2510,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(moment(Pos.Date).format("LLL"));
+    $("#MI_EstDate").text(GetLocalUTCTime(Pos.Date,false,true));
   }
   else
   {
