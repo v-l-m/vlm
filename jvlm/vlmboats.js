@@ -265,7 +265,7 @@ function GetTrackFromServer(Boat)
 
 function GetRaceExclusionsFromServer(Boat)
 {
-  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC +"&v=" + Boat.VLMInfo.VER, function(result)
+  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function(result)
   {
     if (result.success)
     {
@@ -303,7 +303,7 @@ function GetRaceExclusionsFromServer(Boat)
 
 function GetRaceInfoFromServer(Boat, TargetTab)
 {
-  $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC+"&v="+ Boat.VLMInfo.VER, function(result)
+  $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function(result)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
@@ -343,7 +343,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       Boat = _CurPlayer.CurBoat;
     }
     else
-    { 
+    {
       // Ignore call, if no boat is provided...
       return;
     }
@@ -1661,6 +1661,62 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
   Features.push(OL_Opp);
 }
 
+function ShowOpponentPopupInfo(e)
+{
+  var ObjType = e.feature.data.type;
+  let index;
+
+  if (ObjType == "opponent")
+  {
+    let feature = e.feature;
+    var popup = new OpenLayers.Popup.FramedCloud("popup",
+      OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
+      null,
+      BuildBoatPopupInfo(e.feature.attributes.idboat),
+      null,
+      true,
+      null
+    );
+    popup.autoSize = true;
+    popup.maxSize = new OpenLayers.Size(400, 800);
+    popup.fixedRelativePosition = true;
+    feature.popup = popup;
+    map.addPopup(popup);
+
+    let PopupFields = [];
+
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat , e.feature.attributes.name]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat , e.feature.attributes.idboat]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat , e.feature.attributes.rank]);
+    FillFieldsFromMappingTable(PopupFields);
+    
+  }
+
+}
+
+function BuildBoatPopupInfo(BoatId)
+{
+  let RetStr =
+    '<div class="MapPopup_InfoHeader">' +
+    ' <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png">' +
+    ' <span id="__BoatName' + BoatId + '" class="lead PopupText">boatname</span>' +
+    ' <span id="__BoatId' + BoatId + '" class="PopupText">1234</span>' +
+    ' <div id="__BoatRank' + BoatId + '" class="TxtRank">1234</div>' +
+    '</div>' +
+    '<div class="MapPopup_InfoBody">' +
+    ' <fieldset>' +
+    '   <span class="strong PopupText" I18n="Loch"></span><span class="" I18N="">0.9563544</span>' +
+    '   <br><span class="lead PopupText" I18n="Position"></span>' +
+    '   <br><span class="lead PopupText" I18n="NextWP">Next WP</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '   <br><span class="lead PopupText" I18n="Moyennes">Moyennes </span>: <span id="__BoatAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    ' </fieldset>' +
+    '</div>';
+
+  RetStr = GetLocalizedString(RetStr);
+
+  return RetStr;
+}
+
 function HandleFeatureOver(e)
 {
   var ObjType = e.feature.data.type;
@@ -1687,6 +1743,7 @@ function HandleFeatureClick(e)
 {
   // Clicking oppenent will show the track, and popup info (later)
   HandleFeatureOver(e);
+  ShowOpponentPopupInfo(e);
 
 }
 
