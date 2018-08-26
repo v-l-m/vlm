@@ -126,7 +126,7 @@ function display_races_list()
 function display_race()
 {
   
-  map = new L.map('map_canvas').setView([map_lat, map_lon], 9); //google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  map = new L.map('map_canvas',{zoom:9}); //google.maps.Map(document.getElementById("map_canvas"), myOptions);
   if (!LMap)
   {
     LMap = map;
@@ -203,9 +203,9 @@ function get_raceinfo(map, idr)
         map_lat = startlat;
         map_lon = startlong;
         //new_map_latlon = new google.maps.LatLng(map_lat,map_lon);
-        map.setCenter(new_map_latlon);
+        
       }
-
+			LMap.setView([map_lat,map_lon]);
       // AFFICHAGE DU DEPART
       let StartMarker = L.icon(
       {
