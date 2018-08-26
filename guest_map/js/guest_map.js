@@ -125,28 +125,41 @@ function display_races_list()
 // DISPLAY RACE : initialize map and boats array
 function display_race()
 {
-  
-  map = new L.map('map_canvas',{zoom:9}); //google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  map = new L.map('map_canvas',
+  {
+    zoom: 9
+  }); //google.maps.Map(document.getElementById("map_canvas"), myOptions);
   if (!LMap)
   {
     LMap = map;
 
-		// tileLayer for VLM coast lines. Nouw using OpenSeaMap
-		// L.tileLayer('https://c1.v-l-m.org/gshhstiles/{z}/{x}/{y}.png',
+    // tileLayer for VLM coast lines. Nouw using OpenSeaMap
+    // L.tileLayer('https://c1.v-l-m.org/gshhstiles/{z}/{x}/{y}.png',
     // {
     //   attribution: 'VLM Maps',
     //   maxZoom: 18,
     //   id: 'VLM GSHHS'
-		// }).addTo(LMap);
-		// create the tile layer with correct attribution
-    let osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-		let oseamUrl='https://t1.openseamap.org/seamark//{z}/{x}/{y}.png';
-		let osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-		let oseamAttrib='Map data © <a href="http://openSeamap.org">OpenSeaMap</a> contributors';
-		let osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});
-		osm.addTo(LMap);
-		let oseam = new L.TileLayer(oseamUrl, {minZoom: 1, maxZoom: 18, attribution: oseamAttrib});
-		oseam.addTo(LMap);
+    // }).addTo(LMap);
+    // create the tile layer with correct attribution
+    let osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    let oseamUrl = 'https://t1.openseamap.org/seamark//{z}/{x}/{y}.png';
+    let osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    let oseamAttrib = 'Map data © <a href="http://openSeamap.org">OpenSeaMap</a> contributors';
+    let osm = new L.TileLayer(osmUrl,
+    {
+      minZoom: 1,
+      maxZoom: 18,
+      attribution: osmAttrib
+    });
+    osm.addTo(LMap);
+    let oseam = new L.TileLayer(oseamUrl,
+    {
+      minZoom: 1,
+      maxZoom: 18,
+      attribution: oseamAttrib
+    });
+    oseam.addTo(LMap);
   }
 
   //RACE INFOS
@@ -198,14 +211,14 @@ function get_raceinfo(map, idr)
       startlat = answer.startlat / 1000;
 
       // fix #507 If position null for the first boat or no boats => center map on the start
-      if ((map_lat == "0" && map_lon == "0"))
+      if (typeof map_lat === "undefined" || typeof map_lon === "undefined" || (map_lat == "0" && map_lon == "0"))
       {
         map_lat = startlat;
         map_lon = startlong;
         //new_map_latlon = new google.maps.LatLng(map_lat,map_lon);
-        
+
       }
-			LMap.setView([map_lat,map_lon]);
+      LMap.setView([map_lat, map_lon]);
       // AFFICHAGE DU DEPART
       let StartMarker = L.icon(
       {
@@ -224,7 +237,7 @@ function get_raceinfo(map, idr)
         icon: StartMarker
       }).bindPopup(depart_txt).addTo(LMap);
 
-      
+
       // Marques du parcours
       var rwps = answer.races_waypoints;
       test = "";
@@ -335,55 +348,61 @@ function draw_all_boats()
 {
   //"idusers","boatpseudo","boatname","color","country","nwp","dnm","deptime","loch","releasetime","latitude","longitude","last1h","last3h","last24h","status","rank"
 
-
+	if (typeof boats === "undefined" || typeof boats !== "object")
+	{
+		return;
+	}
   i = 0;
   for (let k in boats)
   {
-    boat_idu[k] = boats[k].idusers;
-    boat_rank[k] = boats[k].rank;
-    boat_color[k] = boats[k].color;
-    boat_pos[k] = {
-      Lat: boats[k].latitude,
-      Lon: boats[k].longitude
-    };
-    boat_texte[k] = make_boat_texte(boats[k].idusers);
-
-    let img_b;
-    if (boat_rank[k] == "1")
+    if (boats[k])
     {
-      first_idu = boat_idu[k];
-      first_color = boat_color[k];
-      img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=1';
-    }
-    else
-    {
-      img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=n';
-    }
+      boat_idu[k] = boats[k].idusers;
+      boat_rank[k] = boats[k].rank;
+      boat_color[k] = boats[k].color;
+      boat_pos[k] = {
+        Lat: boats[k].latitude,
+        Lon: boats[k].longitude
+      };
+      boat_texte[k] = make_boat_texte(boats[k].idusers);
 
-    let BoatMarker = L.icon(
-    {
-      iconUrl: img_b,
-      //shadowUrl: 'img/placemark_circle_shadow.png',
+      let img_b;
+      if (boat_rank[k] == "1")
+      {
+        first_idu = boat_idu[k];
+        first_color = boat_color[k];
+        img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=1';
+      }
+      else
+      {
+        img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=n';
+      }
 
-      iconSize: [40, 32], // size of the icon
-      //shadowSize: [32, 32], // size of the shadow
-      iconAnchor: [20, 16], // point of the icon which will correspond to marker's location
-      shadowAnchor: [16, 16], // the same for the shadow
-      popupAnchor: [-4, -15] // point from which the popup should open relative to the iconAnchor
-    });
+      let BoatMarker = L.icon(
+      {
+        iconUrl: img_b,
+        //shadowUrl: 'img/placemark_circle_shadow.png',
+
+        iconSize: [40, 32], // size of the icon
+        //shadowSize: [32, 32], // size of the shadow
+        iconAnchor: [20, 16], // point of the icon which will correspond to marker's location
+        shadowAnchor: [16, 16], // the same for the shadow
+        popupAnchor: [-4, -15] // point from which the popup should open relative to the iconAnchor
+      });
 
 
-    boat_mark[k] = L.marker([boats[k].latitude, boats[k].longitude],
-    {
-      icon: BoatMarker
-    }).bindPopup(boat_texte[k]).addTo(LMap);
+      boat_mark[k] = L.marker([boats[k].latitude, boats[k].longitude],
+      {
+        icon: BoatMarker
+      }).bindPopup(boat_texte[k]).addTo(LMap);
 
-    i++;
+      i++;
 
-    // BOAT DISPLAY LIMIT
-    if (i > 500)
-    {
-      return;
+      // BOAT DISPLAY LIMIT
+      if (i > 500)
+      {
+        return;
+      }
     }
 
   } //for k
@@ -410,25 +429,25 @@ function draw_one_boat(idu)
   {
     q_rank = "n";
   }
-	let img_b = 'img/boat.php?idu=' + idu + '&rank=' + q_rank;
-	
-	let BoatMarker = L.icon(
-    {
-      iconUrl: img_b,
-      //shadowUrl: 'img/placemark_circle_shadow.png',
+  let img_b = 'img/boat.php?idu=' + idu + '&rank=' + q_rank;
 
-      iconSize: [40, 32], // size of the icon
-      //shadowSize: [32, 32], // size of the shadow
-      iconAnchor: [20, 16], // point of the icon which will correspond to marker's location
-      shadowAnchor: [16, 16], // the same for the shadow
-      popupAnchor: [-4, -15] // point from which the popup should open relative to the iconAnchor
-    });
+  let BoatMarker = L.icon(
+  {
+    iconUrl: img_b,
+    //shadowUrl: 'img/placemark_circle_shadow.png',
+
+    iconSize: [40, 32], // size of the icon
+    //shadowSize: [32, 32], // size of the shadow
+    iconAnchor: [20, 16], // point of the icon which will correspond to marker's location
+    shadowAnchor: [16, 16], // the same for the shadow
+    popupAnchor: [-4, -15] // point from which the popup should open relative to the iconAnchor
+  });
 
 
-    boat_mark[idu] = L.marker([boats[idu].latitude, boats[idu].longitude],
-    {
-      icon: BoatMarker
-    }).bindPopup(boat_texte[idu]).addTo(LMap);
+  boat_mark[idu] = L.marker([boats[idu].latitude, boats[idu].longitude],
+  {
+    icon: BoatMarker
+  }).bindPopup(boat_texte[idu]).addTo(LMap);
 
   //} 	
 }
@@ -447,12 +466,12 @@ function get_track(idu, color)
     //password: password,
     success: function(answer)
     {
-			if (boat_track[idu])
-			{
-				boat_track[idu].removeFrom(LMap);
-			}
-			tracks = answer.tracks;
-			let path = [];
+      if (boat_track[idu])
+      {
+        boat_track[idu].removeFrom(LMap);
+      }
+      tracks = answer.tracks;
+      let path = [];
       for (let k in tracks)
       {
         lon = tracks[k][1] / 1000;
@@ -461,11 +480,16 @@ function get_track(idu, color)
         //if(lat > 0 && lon > 0)
         //{
         latLng = [lat, lon];
-        
+
         path.push(latLng);
         //}
-			}
-			boat_track[idu]=L.polyline(path,{color: "#"+color,opacity:0.4,weigth:2}).addTo(LMap);
+      }
+      boat_track[idu] = L.polyline(path,
+      {
+        color: "#" + color,
+        opacity: 0.4,
+        weigth: 2
+      }).addTo(LMap);
     },
     error: function()
     {
@@ -718,22 +742,28 @@ function refresh_ranking(idr)
 // point on a boat when is called from ranking
 function get_boat(idu)
 {
-  new_map_lat = boats[idu].latitude;
-  new_map_lon = boats[idu].longitude;
-  new_map_latlon = [new_map_lat, new_map_lon];
-  LMap.setView(new_map_latlon);
-  draw_one_boat(idu);
+  if (typeof boat !== "undefined" && boat && typeof boat[idu] !== "undefined" && boat[idu])
+  {
+    new_map_lat = boats[idu].latitude;
+    new_map_lon = boats[idu].longitude;
+    new_map_latlon = [new_map_lat, new_map_lon];
+    LMap.setView(new_map_latlon);
+    draw_one_boat(idu);
+  }
 }
 
 // make content for boat info window
 function make_boat_texte(idu)
 {
-  var boat_texte = "<img src='" + baseurl + "/cache/flags/" + boats[idu].country + ".png' width='30' height='20'>" +
-    "&nbsp;&nbsp;<span class='txtbold2'>" + boats[idu].boatpseudo + "</span>&nbsp;&nbsp;<i>" + boats[idu].idusers + "</i>&nbsp;&nbsp;&nbsp;&nbsp;<span class='TxtRank'>&nbsp;" + boats[idu].rank + "&nbsp;</span><hr>" +
-    "<strong>Distance parcourue : </strong>" + boats[idu].loch + "<br>" +
-    "<strong>Latitude : </strong>" + Math.round((boats[idu].latitude) * 1000) / 1000 + ",<strong>Longitude : </strong>" + Math.round((boats[idu].longitude) * 1000) / 1000 + "<br>" +
-    "<strong>Next WP : </strong>[" + boats[idu].nwp + "] " + boats[idu].dnm + "<br>" +
-    "<strong>Moyennes : [1H] </strong>" + boats[idu].last1h + ",[3H] " + boats[idu].last3h + ",[24H] " + boats[idu].last24h;
-
+  let boat_texte = "";
+  if (typeof boat !== "undefined" && boat && typeof boat[idu] !== "undefined" && boat[idu])
+  {
+    "<img src='" + baseurl + "/cache/flags/" + boats[idu].country + ".png' width='30' height='20'>" +
+      "&nbsp;&nbsp;<span class='txtbold2'>" + boats[idu].boatpseudo + "</span>&nbsp;&nbsp;<i>" + boats[idu].idusers + "</i>&nbsp;&nbsp;&nbsp;&nbsp;<span class='TxtRank'>&nbsp;" + boats[idu].rank + "&nbsp;</span><hr>" +
+      "<strong>Distance parcourue : </strong>" + boats[idu].loch + "<br>" +
+      "<strong>Latitude : </strong>" + Math.round((boats[idu].latitude) * 1000) / 1000 + ",<strong>Longitude : </strong>" + Math.round((boats[idu].longitude) * 1000) / 1000 + "<br>" +
+      "<strong>Next WP : </strong>[" + boats[idu].nwp + "] " + boats[idu].dnm + "<br>" +
+      "<strong>Moyennes : [1H] </strong>" + boats[idu].last1h + ",[3H] " + boats[idu].last3h + ",[24H] " + boats[idu].last24h;
+  }
   return boat_texte;
 }
