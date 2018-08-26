@@ -742,7 +742,7 @@ function refresh_ranking(idr)
 // point on a boat when is called from ranking
 function get_boat(idu)
 {
-  if (typeof boat !== "undefined" && boat && typeof boat[idu] !== "undefined" && boat[idu])
+  if (typeof boats !== "undefined" && boats && typeof boats[idu] !== "undefined" && boats[idu])
   {
     new_map_lat = boats[idu].latitude;
     new_map_lon = boats[idu].longitude;
