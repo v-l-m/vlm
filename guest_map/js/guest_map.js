@@ -348,10 +348,10 @@ function draw_all_boats()
 {
   //"idusers","boatpseudo","boatname","color","country","nwp","dnm","deptime","loch","releasetime","latitude","longitude","last1h","last3h","last24h","status","rank"
 
-	if (typeof boats === "undefined" || typeof boats !== "object")
-	{
-		return;
-	}
+  if (typeof boats === "undefined" || typeof boats !== "object")
+  {
+    return;
+  }
   i = 0;
   for (let k in boats)
   {
@@ -756,9 +756,9 @@ function get_boat(idu)
 function make_boat_texte(idu)
 {
   let boat_texte = "";
-  if (typeof boat !== "undefined" && boat && typeof boat[idu] !== "undefined" && boat[idu])
+  if (typeof boats !== "undefined" && boats && typeof boats[idu] !== "undefined" && boats[idu])
   {
-    "<img src='" + baseurl + "/cache/flags/" + boats[idu].country + ".png' width='30' height='20'>" +
+    boat_texte = "<img src='" + baseurl + "/cache/flags/" + boats[idu].country + ".png' width='30' height='20'>" +
       "&nbsp;&nbsp;<span class='txtbold2'>" + boats[idu].boatpseudo + "</span>&nbsp;&nbsp;<i>" + boats[idu].idusers + "</i>&nbsp;&nbsp;&nbsp;&nbsp;<span class='TxtRank'>&nbsp;" + boats[idu].rank + "&nbsp;</span><hr>" +
       "<strong>Distance parcourue : </strong>" + boats[idu].loch + "<br>" +
       "<strong>Latitude : </strong>" + Math.round((boats[idu].latitude) * 1000) / 1000 + ",<strong>Longitude : </strong>" + Math.round((boats[idu].longitude) * 1000) / 1000 + "<br>" +
