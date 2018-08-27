@@ -62,7 +62,10 @@ function refresh_all()
   {
     for (let i in boat_mark)
     {
-      boat_mark[i].setMap(null);
+      if (boat_mark[i])
+      {
+        boat_mark[i].removeFrom(LMap);
+      }
     }
     boat_mark.length = 0;
   }
@@ -175,10 +178,10 @@ function display_race()
 // REFRESH RACE
 function refresh_race(idr)
 {
-  document.getElementById('tab_ranking').innerHTML = "<div align='center' style='width: 200px; height: 200px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
+  //document.getElementById('tab_ranking').innerHTML = "<div align='center' style='width: 200px; height: 200px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
   boats = liste_boats(idr);
   refresh_ranking(idr);
-  for (var i = 1; i < boats.length; i++)
+  for (let i = 1; i < boats.length; i++)
   {
     carte.removeOverlay(bateau[i]);
   }
@@ -502,7 +505,7 @@ function get_track(idu, color)
 function refresh_ranking(idr)
 {
 
-  //document.getElementById('tab_ranking').innerHTML = "<div align='center' style='width:210px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
+  document.getElementById('tab_ranking').innerHTML = "<div class='loading' align='center' style='width:210px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
   $.ajax(
   {
     async: false,
@@ -721,6 +724,8 @@ function refresh_ranking(idr)
               [0, 0]
             ]
           });
+
+          $(".loading").hide();
         }
       }
     },
