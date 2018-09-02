@@ -1650,7 +1650,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
     "color": Opponent.color
   };
 
-  if (!VLM2Prefs.MapPrefs.ShowOppName)
+  if (!VLM2Prefs.MapPrefs.ShowOppNames)
   {
     OppData.name = "";
   }

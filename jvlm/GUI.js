@@ -3510,7 +3510,7 @@ function HandleShowMapPrefs(e)
 {
   //Load prefs
   $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
-  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppName);
+  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNames);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
   $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
@@ -3557,8 +3557,10 @@ function HandleMapPrefOptionChange(e)
       //break;*/
 
     case "DisplayReals":
+    case "ShowReals":
     case "UseUTC":
     case "DisplayNames":
+    case "ShowOppNames":
     case "EstTrackMouse":
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;

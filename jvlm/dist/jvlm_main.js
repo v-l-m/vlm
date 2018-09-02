@@ -89,7 +89,7 @@ function PrefMgr()
 function MapPrefs()
 {
   this.ShowReals = true; // Do we show reals?
-  this.ShowOppName = true; // Do we show opponents names?
+  this.ShowOppNames = true; // Do we show opponents names?
   this.MapOppShow = null; // Which opponents do we show on the map
   this.MapOppShowOptions = {
     ShowSel: 0,
@@ -111,12 +111,12 @@ function MapPrefs()
     if (store.enabled)
     {
       this.ShowReals = LoadLocalPref('#ShowReals', true);
-      this.ShowOppName = store.get("#ShowOppName");
+      this.ShowOppNames = LoadLocalPref("#ShowOppNames",false);
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
-      this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
       this.UseUTC = LoadLocalPref("#UseUTC", false);
-      this.EstTrackMouse = store.get("#EstTrackMouse");
-      this.TrackEstForecast = store.get("#TrackEstForecast");
+      this.EstTrackMouse = LoadLocalPref("#EstTrackMouse",true);
+      this.TrackEstForecast = LoadLocalPref("#TrackEstForecast",false);
+      this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
       if (!this.PolarVacCount)
       {
         // Fallback if invalid value is stored
@@ -131,7 +131,7 @@ function MapPrefs()
     if (store.enabled)
     {
       store.set("#ShowReals", this.ShowReals);
-      store.set("#ShowOppName", this.ShowOppName);
+      store.set("#ShowOppNames", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
       store.set("#UseUTC", this.UseUTC);
@@ -8365,7 +8365,7 @@ function HandleShowMapPrefs(e)
 {
   //Load prefs
   $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
-  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppName);
+  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNames);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
   $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
@@ -8412,8 +8412,10 @@ function HandleMapPrefOptionChange(e)
       //break;*/
 
     case "DisplayReals":
+    case "ShowReals":
     case "UseUTC":
     case "DisplayNames":
+    case "ShowOppNames":
     case "EstTrackMouse":
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;
@@ -12518,7 +12520,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
     "color": Opponent.color
   };
 
-  if (!VLM2Prefs.MapPrefs.ShowOppName)
+  if (!VLM2Prefs.MapPrefs.ShowOppNames)
   {
     OppData.name = "";
   }
@@ -12573,10 +12575,10 @@ function BuildBoatPopupInfo(BoatId)
     '</div>' +
     '<div class="MapPopup_InfoBody">' +
     ' <fieldset>' +
-    '   <span class="strong PopupText" I18n="Loch"></span><span class="" I18N="">0.9563544</span>' +
-    '   <br><span class="lead PopupText" I18n="Position"></span>' +
-    '   <br><span class="lead PopupText" I18n="NextWP">Next WP</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
-    '   <br><span class="lead PopupText" I18n="Moyennes">Moyennes </span>: <span id="__BoatAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="lead PopupText" I18n="loch"></span><span class="PopupText"> : </span><span class="loch">0.9563544</span>' +
+    '   <BR><span class="lead PopupText" I18n="position"></span><span class="PopupText"> : </span><span class="loch">0.9563544</span>' +
+    '   <BR><span class="lead PopupText" I18n="NextWP">Next WP</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '   <BR><span class="lead PopupText" I18n="Moyennes">Moyennes </span>: <span id="__BoatAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     ' </fieldset>' +
     '</div>';
 
