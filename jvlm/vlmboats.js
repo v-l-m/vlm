@@ -1682,16 +1682,45 @@ function ShowOpponentPopupInfo(e)
     popup.fixedRelativePosition = true;
     feature.popup = popup;
     map.addPopup(popup);
-
+    
+    let Boat = GetOppBoat(e.feature.attributes.idboat);
+    let Pos = new VLMPosition(Boat.longitude,Boat.latitude);
     let PopupFields = [];
 
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat , e.feature.attributes.name]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat , e.feature.attributes.idboat]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat , e.feature.attributes.rank]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat , Boat.loch]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat , Pos.GetVLMString()]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last1h),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last3h),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last24h),2)]);
     FillFieldsFromMappingTable(PopupFields);
     
   }
 
+}
+
+function GetOppBoat(BoatId)
+{
+  let CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat !== "undefined" && CurBoat && CurBoat.OppList)
+  {
+    for (let i in CurBoat.OppList)
+    {
+      if (CurBoat.OppList[i] )
+      {
+        let Opp =  CurBoat.OppList[i] ;
+        if (Opp.idusers === BoatId)
+        {
+          return Opp;
+        }
+      }
+    }
+  }
+
+  return null;
 }
 
 function BuildBoatPopupInfo(BoatId)
@@ -1699,21 +1728,23 @@ function BuildBoatPopupInfo(BoatId)
   let RetStr =
     '<div class="MapPopup_InfoHeader">' +
     ' <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png">' +
-    ' <span id="__BoatName' + BoatId + '" class="lead PopupText">boatname</span>' +
-    ' <span id="__BoatId' + BoatId + '" class="PopupText">1234</span>' +
-    ' <div id="__BoatRank' + BoatId + '" class="TxtRank">1234</div>' +
+    ' <span id="__BoatName' + BoatId + '" class="PopupBoatNameNumber ">BoatName</span>' +
+    ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
+    ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
     '</div>' +
     '<div class="MapPopup_InfoBody">' +
     ' <fieldset>' +
-    '   <span class="strong PopupText" I18n="Loch"></span><span class="" I18N="">0.9563544</span>' +
-    '   <br><span class="lead PopupText" I18n="Position"></span>' +
-    '   <br><span class="lead PopupText" I18n="NextWP">Next WP</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
-    '   <br><span class="lead PopupText" I18n="Moyennes">Moyennes </span>: <span id="__BoatAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText " I18n="loch">'+GetLocalizedString('loch')+'</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId+'" class="loch PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="position">'+GetLocalizedString('position')+'</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId+'" class=" PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="NextWP">'+GetLocalizedString('NextWP')+'</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '   <BR><span class="PopupHeadText " I18n="Moyennes">'+GetLocalizedString('Moyennes')+' </span><span class="PopupText"> : </span>'+
+    '   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     ' </fieldset>' +
     '</div>';
 
-  RetStr = GetLocalizedString(RetStr);
-
+  
   return RetStr;
 }
 

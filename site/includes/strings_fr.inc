@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'AvgSpeeds' => 'Moyennes',
     'UseUTC' => 'Afficher les heures en GMT',
     'EstimateDate' => "Date de l'estime",
     'Close'=>'Fermer',

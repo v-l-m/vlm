@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'AvgSpeeds' => 'Average Speed',
     'UseUTC' => 'Use UTC time',
     'EstimateDate' => 'Estimate Date',
     'Close'=>'Close',
