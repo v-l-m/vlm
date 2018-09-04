@@ -182,13 +182,17 @@ function HandleShowICS(raceid)
       $("#RacesInfoForm").modal("show");
     }
   };
-  LoadRaceInfo(raceid, CallBack);
+  LoadRaceInfo(raceid, null, CallBack);
 }
 
 
-function LoadRaceInfo(raceid, CallBack)
+function LoadRaceInfo(RaceId, RaceVersion, CallBack)
 {
-  $.get("/ws/raceinfo.php?idrace=" + raceid, CallBack);
+  if (!RaceVersion)
+  {
+    RaceVersion = '';
+  }
+  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
 }
 
 function HandleShowOtherRaceRank(RaceId)
@@ -199,7 +203,7 @@ function HandleShowOtherRaceRank(RaceId)
     {
       FillRaceInfoHeader(Result);
     };
-    LoadRaceInfo(RaceId, CallBack);
+    LoadRaceInfo(RaceId, 0, CallBack);
     LoadRankings(RaceId, OtherRaceRankingLoaded);
     RankingFt.RaceRankingId = RaceId;
   };
@@ -667,7 +671,12 @@ function InitMenusAndButtons()
     format: false
   });
 
-  $(".ShowICSButton").on("click", HandleFillICSButton);
+  $(document.body).on('click', ".ShowICSButton",
+    function(e)
+    {
+      HandleFillICSButton(e);
+    }
+  );
 
   $("#PolarTab").on("click", HandlePolarTabClik);
 
@@ -697,12 +706,23 @@ function InitPolar(RaceInfo)
   _CachedRaceInfo = RaceInfo;
 }
 
-function HandleFillICSButton()
+function HandleFillICSButton(e)
 {
+
   // Race Instruction
   if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
   {
     FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
+  }
+  else if (typeof e !== "undefined" && e)
+  {
+    let b = e.target;
+    let RaceId = $(e.currentTarget).attr('idRace');
+
+    if (typeof RaceId !== "undefined" && RaceId)
+    {
+      HandleShowICS(RaceId);
+    }
   }
 }
 
@@ -1435,7 +1455,7 @@ function FillRaceInstructions(RaceInfo)
   FillRaceWaypointList(RaceInfo);
   InitPolar(RaceInfo);
 
-  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces,
+  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces + "&v=" + RaceInfo.VER,
     function(result)
     {
       if (result && result.success)
@@ -1461,8 +1481,8 @@ function FillRaceInfoHeader(RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", new Date(parseInt(RaceInfo.deptime, 10) * 1000)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", new Date(parseInt(RaceInfo.closetime, 10) * 1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true, true)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000, true, true)]);
   BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
   FillFieldsFromMappingTable(BoatFieldMappings);
 }
@@ -1749,7 +1769,7 @@ function DeferedPagingStyle(e, ft)
 function GetPilototoTableLigneObject(Boat, Index)
 {
   let PilOrder = Boat.VLMInfo.PIL[Index];
-  let OrderDate = moment(PilOrder.TTS * 1000).format("LLL");
+  let OrderDate = GetLocalUTCTime(PilOrder.TTS * 1000, true, true);
   let PIMText = GetPilotModeName(PilOrder.PIM);
 
   // Force as number and rebase from 1
@@ -2052,22 +2072,29 @@ function AddRaceToList(race)
     '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '      </button>' +
     '    </div>' + (StartMoment ?
-    '    <div class="col-xs-12">' +
-    '       <span "> ' + StartMoment +
-    '       </span>' +
-    '    </div>' : "") +
+      '    <div class="col-xs-12">' +
+      '       <span "> ' + StartMoment +
+      '       </span>' +
+      '    </div>' : "") +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
-    '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '  <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + moment.utc(race.deptime * 1000).local().format("LLL") + '</p>' +
+    '  <div class="panel-body">' +
+    '   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
+    '    <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime * 1000).local().format("LLL") + '</p>' +
-    '  </div>'+
-    '  <div class="col-xs-3"><p>' +
-    '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
-    '  </div>'
-    ;
+    '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
+    '    </div>' +
+    '    <div class="col-xs-3"><p>' +
+    '     <div class="col-xs-12">' +
+    '      <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '     </div>' +
+    '     <div class="col-xs-12 hidden">' +
+    '      <button type="button" class="ShowRankingButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
+    '     </div>' +
+    '    </div>' +
+    '   </div>' +
+    '  </div>';
 
   base.prepend(code);
 
@@ -2084,7 +2111,7 @@ function AddRaceToList(race)
   );
 
   // Handler for ShowICSButtons
-  $(".ShowICSButton").on("click", HandleFillICSButton);
+  //$(".ShowICSButton").on("click", HandleFillICSButton);
 
 }
 
@@ -2483,7 +2510,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(moment(Pos.Date).format("LLL"));
+    $("#MI_EstDate").text(GetLocalUTCTime(Pos.Date,false,true));
   }
   else
   {
@@ -2526,7 +2553,13 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
     }
     else
     {
-      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId,
+      let Version = 0;
+
+      if (typeof Boat.VLMInfo !== "undefined")
+      {
+        Version = Boat.VLMInfo.VER;
+      }
+      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + Version,
         function(result)
         {
           CheckWPRankingList(Boat, result);
@@ -3121,6 +3154,32 @@ function getWaypointHTMLSymbolsDescription(WPFormat)
   return WPDesc.trim();
 }
 
+function NormalizeRaceInfo(RaceInfo)
+{
+  if (typeof RaceInfo === "undefined" || !RaceInfo || RaceInfo.IsNormalized)
+  {
+    return;
+  }
+  RaceInfo.startlat /= VLM_COORDS_FACTOR;
+  RaceInfo.startlong /= VLM_COORDS_FACTOR;
+
+  for (let index in RaceInfo.races_waypoints)
+  {
+    if (RaceInfo.races_waypoints[index])
+    {
+      let WP = RaceInfo.races_waypoints[index];
+      WP.latitude1 /= VLM_COORDS_FACTOR;
+      WP.longitude1 /= VLM_COORDS_FACTOR;
+      if (typeof WP.latitude2 !== "undefined")
+      {
+        WP.latitude2 /= VLM_COORDS_FACTOR;
+        WP.longitude2 /= VLM_COORDS_FACTOR;
+      }
+    }
+  }
+  RaceInfo.IsNormalized = true;
+}
+
 function FillRaceWaypointList(RaceInfo)
 {
 
@@ -3140,11 +3199,12 @@ function FillRaceWaypointList(RaceInfo)
 
   if (RaceInfo)
   {
+    NormalizeRaceInfo(RaceInfo);
     let Rows = [];
     // Insert the start point
     let Row = {};
     Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat/1000 + "<BR>" + RaceInfo.startlong/1000;
+    Row.WP1 = RaceInfo.startlat + "<BR>" + RaceInfo.startlong;
     Row.WP2 = "";
     Row.Spec = "";
     Row.Type = GetLocalizedString("startmap");
@@ -3161,7 +3221,14 @@ function FillRaceWaypointList(RaceInfo)
         let WPSpec;
         Row.WaypointId = WP.wporder;
         Row.WP1 = WP.latitude1 + "<BR>" + WP.longitude1;
-        Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
+        if (typeof WP.latitude2 !== "undefined")
+        {
+          Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
+        }
+        else
+        {
+          Row.WP2 = "@"+WP.laisser_au;
+        }
         Row.Spec = "<span title='" + getWaypointHTMLSymbolsDescription(WP.wpformat) + "'>" + getWaypointHTMLSymbols(WP.wpformat) + "</span>";
         Row.Type = GetLocalizedString(WP.wptype);
         Row.Name = WP.libelle;
@@ -3443,9 +3510,10 @@ function HandleShowMapPrefs(e)
 {
   //Load prefs
   $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
-  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppName);
+  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNames);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
+  $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
 
   $('#DDMapSelOption:first-child').html(
     '<span Mode=' + VLM2Prefs.MapPrefs.MapOppShow + '>' + VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow) + '</span>' +
@@ -3481,13 +3549,18 @@ function HandleMapPrefOptionChange(e)
 
   switch (Id)
   {
-    case "DisplayReals":
-      VLM2Prefs.MapPrefs.ShowReals = Value;
-      break;
+    /*case "DisplayReals":
+      //VLM2Prefs.MapPrefs.ShowReals = Value;
+      //break;
     case "DisplayNames":
-      VLM2Prefs.MapPrefs.ShowOppName = Value;
-      break;
+      //VLM2Prefs.MapPrefs.ShowOppName = Value;
+      //break;*/
 
+    case "DisplayReals":
+    case "ShowReals":
+    case "UseUTC":
+    case "DisplayNames":
+    case "ShowOppNames":
     case "EstTrackMouse":
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;
@@ -3512,6 +3585,7 @@ function HandleMapPrefOptionChange(e)
       break;
 
     default:
+      console.log("unknown pref storage called : " + Id);
       return;
 
   }
@@ -3849,4 +3923,49 @@ function setModalMaxHeight(element)
       'max-height': maxHeight,
       'overflow-y': 'auto'
     });
+}
+
+// Return a moment in UTC or Local according to VLM2 Local Pref
+function GetLocalUTCTime(d, IsUTC, AsString)
+{
+  let m = d;
+  let UTCSuffix = "";
+
+  if (!moment.isMoment(d))
+  {
+    if (IsUTC)
+    {
+      m = moment(d).utc();
+    }
+    else
+    {
+      m = moment(d);
+    }
+  }
+  if (VLM2Prefs.MapPrefs.UseUTC)
+  {
+    if (!IsUTC)
+    {
+      m = m.utc();
+    }
+    UTCSuffix = " Z";
+  }
+  else
+  {
+    if (IsUTC)
+    {
+      m = m.local();
+    }
+  }
+
+  if (AsString)
+  {
+    return m.format("LLLL") + UTCSuffix;
+  }
+  else
+  {
+    return m;
+  }
+
+
 }

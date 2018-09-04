@@ -89,7 +89,7 @@ function PrefMgr()
 function MapPrefs()
 {
   this.ShowReals = true; // Do we show reals?
-  this.ShowOppName = true; // Do we show opponents names?
+  this.ShowOppNames = true; // Do we show opponents names?
   this.MapOppShow = null; // Which opponents do we show on the map
   this.MapOppShowOptions = {
     ShowSel: 0,
@@ -101,6 +101,7 @@ function MapPrefs()
   this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
   this.MapZoomLevel = 4;
   this.PolarVacCount = 12; // How many vacs for drawing the polar line
+  this.UseUTC = false; // USe local of UTC time format for display
   this.EstTrackMouse = false;
   this.TrackEstForecast = true;
   this.ShowTopCount = 50;
@@ -110,11 +111,12 @@ function MapPrefs()
     if (store.enabled)
     {
       this.ShowReals = LoadLocalPref('#ShowReals', true);
-      this.ShowOppName = store.get("#ShowOppName");
+      this.ShowOppNames = LoadLocalPref("#ShowOppNames",false);
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
+      this.UseUTC = LoadLocalPref("#UseUTC", false);
+      this.EstTrackMouse = LoadLocalPref("#EstTrackMouse",true);
+      this.TrackEstForecast = LoadLocalPref("#TrackEstForecast",false);
       this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
-      this.EstTrackMouse = store.get("#EstTrackMouse");
-      this.TrackEstForecast = store.get("#TrackEstForecast");
       if (!this.PolarVacCount)
       {
         // Fallback if invalid value is stored
@@ -129,9 +131,10 @@ function MapPrefs()
     if (store.enabled)
     {
       store.set("#ShowReals", this.ShowReals);
-      store.set("#ShowOppName", this.ShowOppName);
+      store.set("#ShowOppNames", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
+      store.set("#UseUTC", this.UseUTC);
       store.set("#TrackEstForecast", this.TrackEstForecast);
       store.set("#EstTrackMouse", this.EstTrackMouse);
       store.set("ShowTopCount", this.ShowTopCount);
@@ -5034,13 +5037,17 @@ function HandleShowICS(raceid)
       $("#RacesInfoForm").modal("show");
     }
   };
-  LoadRaceInfo(raceid, CallBack);
+  LoadRaceInfo(raceid, null, CallBack);
 }
 
 
-function LoadRaceInfo(raceid, CallBack)
+function LoadRaceInfo(RaceId, RaceVersion, CallBack)
 {
-  $.get("/ws/raceinfo.php?idrace=" + raceid, CallBack);
+  if (!RaceVersion)
+  {
+    RaceVersion = '';
+  }
+  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
 }
 
 function HandleShowOtherRaceRank(RaceId)
@@ -5051,7 +5058,7 @@ function HandleShowOtherRaceRank(RaceId)
     {
       FillRaceInfoHeader(Result);
     };
-    LoadRaceInfo(RaceId, CallBack);
+    LoadRaceInfo(RaceId, 0, CallBack);
     LoadRankings(RaceId, OtherRaceRankingLoaded);
     RankingFt.RaceRankingId = RaceId;
   };
@@ -5519,7 +5526,12 @@ function InitMenusAndButtons()
     format: false
   });
 
-  $(".ShowICSButton").on("click", HandleFillICSButton);
+  $(document.body).on('click', ".ShowICSButton",
+    function(e)
+    {
+      HandleFillICSButton(e);
+    }
+  );
 
   $("#PolarTab").on("click", HandlePolarTabClik);
 
@@ -5549,12 +5561,23 @@ function InitPolar(RaceInfo)
   _CachedRaceInfo = RaceInfo;
 }
 
-function HandleFillICSButton()
+function HandleFillICSButton(e)
 {
+
   // Race Instruction
   if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
   {
     FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
+  }
+  else if (typeof e !== "undefined" && e)
+  {
+    let b = e.target;
+    let RaceId = $(e.currentTarget).attr('idRace');
+
+    if (typeof RaceId !== "undefined" && RaceId)
+    {
+      HandleShowICS(RaceId);
+    }
   }
 }
 
@@ -6287,7 +6310,7 @@ function FillRaceInstructions(RaceInfo)
   FillRaceWaypointList(RaceInfo);
   InitPolar(RaceInfo);
 
-  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces,
+  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces + "&v=" + RaceInfo.VER,
     function(result)
     {
       if (result && result.success)
@@ -6313,8 +6336,8 @@ function FillRaceInfoHeader(RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", new Date(parseInt(RaceInfo.deptime, 10) * 1000)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", new Date(parseInt(RaceInfo.closetime, 10) * 1000)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true, true)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000, true, true)]);
   BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
   FillFieldsFromMappingTable(BoatFieldMappings);
 }
@@ -6601,7 +6624,7 @@ function DeferedPagingStyle(e, ft)
 function GetPilototoTableLigneObject(Boat, Index)
 {
   let PilOrder = Boat.VLMInfo.PIL[Index];
-  let OrderDate = moment(PilOrder.TTS * 1000).format("LLL");
+  let OrderDate = GetLocalUTCTime(PilOrder.TTS * 1000, true, true);
   let PIMText = GetPilotModeName(PilOrder.PIM);
 
   // Force as number and rebase from 1
@@ -6904,22 +6927,29 @@ function AddRaceToList(race)
     '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '      </button>' +
     '    </div>' + (StartMoment ?
-    '    <div class="col-xs-12">' +
-    '       <span "> ' + StartMoment +
-    '       </span>' +
-    '    </div>' : "") +
+      '    <div class="col-xs-12">' +
+      '       <span "> ' + StartMoment +
+      '       </span>' +
+      '    </div>' : "") +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
-    '  <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '  <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + moment.utc(race.deptime * 1000).local().format("LLL") + '</p>' +
+    '  <div class="panel-body">' +
+    '   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
+    '    <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
     '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + moment.utc(race.closetime * 1000).local().format("LLL") + '</p>' +
-    '  </div>'+
-    '  <div class="col-xs-3"><p>' +
-    '     <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
-    '  </div>'
-    ;
+    '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
+    '    </div>' +
+    '    <div class="col-xs-3"><p>' +
+    '     <div class="col-xs-12">' +
+    '      <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '     </div>' +
+    '     <div class="col-xs-12 hidden">' +
+    '      <button type="button" class="ShowRankingButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
+    '     </div>' +
+    '    </div>' +
+    '   </div>' +
+    '  </div>';
 
   base.prepend(code);
 
@@ -6936,7 +6966,7 @@ function AddRaceToList(race)
   );
 
   // Handler for ShowICSButtons
-  $(".ShowICSButton").on("click", HandleFillICSButton);
+  //$(".ShowICSButton").on("click", HandleFillICSButton);
 
 }
 
@@ -7335,7 +7365,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(moment(Pos.Date).format("LLL"));
+    $("#MI_EstDate").text(GetLocalUTCTime(Pos.Date,false,true));
   }
   else
   {
@@ -7378,7 +7408,13 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
     }
     else
     {
-      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId,
+      let Version = 0;
+
+      if (typeof Boat.VLMInfo !== "undefined")
+      {
+        Version = Boat.VLMInfo.VER;
+      }
+      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + Version,
         function(result)
         {
           CheckWPRankingList(Boat, result);
@@ -7973,6 +8009,32 @@ function getWaypointHTMLSymbolsDescription(WPFormat)
   return WPDesc.trim();
 }
 
+function NormalizeRaceInfo(RaceInfo)
+{
+  if (typeof RaceInfo === "undefined" || !RaceInfo || RaceInfo.IsNormalized)
+  {
+    return;
+  }
+  RaceInfo.startlat /= VLM_COORDS_FACTOR;
+  RaceInfo.startlong /= VLM_COORDS_FACTOR;
+
+  for (let index in RaceInfo.races_waypoints)
+  {
+    if (RaceInfo.races_waypoints[index])
+    {
+      let WP = RaceInfo.races_waypoints[index];
+      WP.latitude1 /= VLM_COORDS_FACTOR;
+      WP.longitude1 /= VLM_COORDS_FACTOR;
+      if (typeof WP.latitude2 !== "undefined")
+      {
+        WP.latitude2 /= VLM_COORDS_FACTOR;
+        WP.longitude2 /= VLM_COORDS_FACTOR;
+      }
+    }
+  }
+  RaceInfo.IsNormalized = true;
+}
+
 function FillRaceWaypointList(RaceInfo)
 {
 
@@ -7992,11 +8054,12 @@ function FillRaceWaypointList(RaceInfo)
 
   if (RaceInfo)
   {
+    NormalizeRaceInfo(RaceInfo);
     let Rows = [];
     // Insert the start point
     let Row = {};
     Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat/1000 + "<BR>" + RaceInfo.startlong/1000;
+    Row.WP1 = RaceInfo.startlat + "<BR>" + RaceInfo.startlong;
     Row.WP2 = "";
     Row.Spec = "";
     Row.Type = GetLocalizedString("startmap");
@@ -8013,7 +8076,14 @@ function FillRaceWaypointList(RaceInfo)
         let WPSpec;
         Row.WaypointId = WP.wporder;
         Row.WP1 = WP.latitude1 + "<BR>" + WP.longitude1;
-        Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
+        if (typeof WP.latitude2 !== "undefined")
+        {
+          Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
+        }
+        else
+        {
+          Row.WP2 = "@"+WP.laisser_au;
+        }
         Row.Spec = "<span title='" + getWaypointHTMLSymbolsDescription(WP.wpformat) + "'>" + getWaypointHTMLSymbols(WP.wpformat) + "</span>";
         Row.Type = GetLocalizedString(WP.wptype);
         Row.Name = WP.libelle;
@@ -8295,9 +8365,10 @@ function HandleShowMapPrefs(e)
 {
   //Load prefs
   $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
-  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppName);
+  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNames);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
+  $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
 
   $('#DDMapSelOption:first-child').html(
     '<span Mode=' + VLM2Prefs.MapPrefs.MapOppShow + '>' + VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow) + '</span>' +
@@ -8333,13 +8404,18 @@ function HandleMapPrefOptionChange(e)
 
   switch (Id)
   {
-    case "DisplayReals":
-      VLM2Prefs.MapPrefs.ShowReals = Value;
-      break;
+    /*case "DisplayReals":
+      //VLM2Prefs.MapPrefs.ShowReals = Value;
+      //break;
     case "DisplayNames":
-      VLM2Prefs.MapPrefs.ShowOppName = Value;
-      break;
+      //VLM2Prefs.MapPrefs.ShowOppName = Value;
+      //break;*/
 
+    case "DisplayReals":
+    case "ShowReals":
+    case "UseUTC":
+    case "DisplayNames":
+    case "ShowOppNames":
     case "EstTrackMouse":
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;
@@ -8364,6 +8440,7 @@ function HandleMapPrefOptionChange(e)
       break;
 
     default:
+      console.log("unknown pref storage called : " + Id);
       return;
 
   }
@@ -8701,6 +8778,51 @@ function setModalMaxHeight(element)
       'max-height': maxHeight,
       'overflow-y': 'auto'
     });
+}
+
+// Return a moment in UTC or Local according to VLM2 Local Pref
+function GetLocalUTCTime(d, IsUTC, AsString)
+{
+  let m = d;
+  let UTCSuffix = "";
+
+  if (!moment.isMoment(d))
+  {
+    if (IsUTC)
+    {
+      m = moment(d).utc();
+    }
+    else
+    {
+      m = moment(d);
+    }
+  }
+  if (VLM2Prefs.MapPrefs.UseUTC)
+  {
+    if (!IsUTC)
+    {
+      m = m.utc();
+    }
+    UTCSuffix = " Z";
+  }
+  else
+  {
+    if (IsUTC)
+    {
+      m = m.local();
+    }
+  }
+
+  if (AsString)
+  {
+    return m.format("LLLL") + UTCSuffix;
+  }
+  else
+  {
+    return m;
+  }
+
+
 }
 /**!
  * jQuery Progress Timer - v1.0.5 - 6/8/2015
@@ -9829,26 +9951,26 @@ function GetAvgValue(x,Rx1,Rx2,Ry1,Ry2)
 
 const POS_FORMAT_DEFAULT = 0;
 // Earth radius for all calculation of distance in Naut. Miles
-const EARTH_RADIUS  = 3443.84;
+const EARTH_RADIUS = 3443.84;
 const VLM_DIST_ORTHO = 1;
-        
+
 
 function Deg2Rad(v)
 {
-  return v/180.0*Math.PI;
+  return v / 180.0 * Math.PI;
 }
 
 function Rad2Deg(v)
 {
-  return v/Math.PI*180.0;
+  return v / Math.PI * 180.0;
 }
 
-function RoundPow(v,P)
+function RoundPow(v, P)
 {
-  if(typeof P !== 'undefined')
+  if (typeof P !== 'undefined')
   {
-    var Div = Math.pow(10,P);
-    return Math.round(v*Div)/Div;
+    var Div = Math.pow(10, P);
+    return Math.round(v * Div) / Div;
   }
   else
   {
@@ -9858,70 +9980,70 @@ function RoundPow(v,P)
 
 function NormalizeLongitudeDeg(Lon)
 {
-    if (Lon < -180)
-    {
-      Lon += 360;
-    }
-    else if (Lon > 180)
-    {
-      Lon -= 360;
-    }
+  if (Lon < -180)
+  {
+    Lon += 360;
+  }
+  else if (Lon > 180)
+  {
+    Lon -= 360;
+  }
 
-    return Lon;
+  return Lon;
 }
 
 // Constructor
-function VLMPosition(lon, lat,  format)
-{   
+function VLMPosition(lon, lat, format)
+{
   if (typeof format == 'undefined' || format == POS_FORMAT_DEFAULT)
   {
     // Default constructor, lon and lat in degs flaoting format
-    this.Lon=new Coords(lon,1);
-    this.Lat=new Coords(lat,0);
+    this.Lon = new Coords(lon, 1);
+    this.Lat = new Coords(lat, 0);
   }
 
   // Default string formating
-  this.ToString=function(Raw)
+  this.ToString = function(Raw)
   {
     return this.Lat.ToString(Raw) + " " + this.Lon.ToString(Raw);
   };
 
   this.GetEuclidianDist2 = function(P)
   {
-    var dLat= (this.Lat.Value-P.Lat.Value)%90;
-    var dLon= (this.Lon.Value-P.Lon.Value)%180;
+    var dLat = (this.Lat.Value - P.Lat.Value) % 90;
+    var dLon = (this.Lon.Value - P.Lon.Value) % 180;
 
-    return dLat*dLat + dLon*dLon;
+    return dLat * dLat + dLon * dLon;
   };
 
   // function GetLoxoDist
   // Returns the loxodromic distance to another point
-  this.GetLoxoDist= function(P,Precision)
+  this.GetLoxoDist = function(P, Precision)
   {
 
-    var Lat1  = Deg2Rad(this.Lat.Value);
-    var Lat2  = Deg2Rad(P.Lat.Value);
-    var Lon1  = -Deg2Rad(this.Lon.Value);
-    var Lon2  = -Deg2Rad(P.Lon.Value);
+    var Lat1 = Deg2Rad(this.Lat.Value);
+    var Lat2 = Deg2Rad(P.Lat.Value);
+    var Lon1 = -Deg2Rad(this.Lon.Value);
+    var Lon2 = -Deg2Rad(P.Lon.Value);
 
 
-    var TOL  = 0.000000000000001;
-    var d =0;
-    var q=0;
-    if (Math.abs(Lat2 - Lat1) < Math.sqrt(TOL)) 
+    var TOL = 0.000000000000001;
+    var d = 0;
+    var q = 0;
+    if (Math.abs(Lat2 - Lat1) < Math.sqrt(TOL))
     {
       q = Math.cos(Lat1);
     }
     else
     {
-      q = (Lat2 - Lat1) / Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 +Math.PI / 4));
+      q = (Lat2 - Lat1) / Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
     }
 
-    d= Math.sqrt(Math.pow(Lat2 - Lat1, 2) + q * q * (Lon2 - Lon1) * (Lon2 - Lon1) );
-    var RetVal = EARTH_RADIUS *d;
-    
-    
-    return  RoundPow(RetVal,Precision);
+    d = Math.sqrt(Math.pow(Lat2 - Lat1, 2) + q * q * (Lon2 - Lon1) * (Lon2 - Lon1));
+    var RetVal = EARTH_RADIUS * d;
+
+
+    return RoundPow(RetVal, Precision);
   };
 
   // Reaches a point from position using rhumbline.
@@ -9931,35 +10053,35 @@ function VLMPosition(lon, lat,  format)
   this.ReachDistLoxo = function(P, r)
   {
     var d = 0;
-    var tc= 0;
+    var tc = 0;
 
     if (isNaN(r))
     {
       throw "unsupported reaching NaN distance";
-    }    
+    }
 
     if (typeof P == "number")
     {
-      d=P/EARTH_RADIUS;
-      tc=Deg2Rad(r % 360);
+      d = P / EARTH_RADIUS;
+      tc = Deg2Rad(r % 360);
     }
     else
     {
-      d=this.GetLoxoDist(P)/EARTH_RADIUS*r;
-      tc  = Deg2Rad(this.GetLoxoCourse(P));
+      d = this.GetLoxoDist(P) / EARTH_RADIUS * r;
+      tc = Deg2Rad(this.GetLoxoCourse(P));
     }
-      
-    var Lat1  = Deg2Rad(this.Lat.Value);
-    var Lon1  = -Deg2Rad(this.Lon.Value);
-    var Lat =0; 
-    var Lon =0;
-    var TOL  = 0.000000000000001;
-    var q =0;
-    var dPhi =0;
-    var dlon =0;
+
+    var Lat1 = Deg2Rad(this.Lat.Value);
+    var Lon1 = -Deg2Rad(this.Lon.Value);
+    var Lat = 0;
+    var Lon = 0;
+    var TOL = 0.000000000000001;
+    var q = 0;
+    var dPhi = 0;
+    var dlon = 0;
 
     Lat = Lat1 + d * Math.cos(tc);
-    if (Math.abs(Lat) > Math.PI / 2) 
+    if (Math.abs(Lat) > Math.PI / 2)
     {
       //'"d too large. You can't go this far along this rhumb line!"
       throw "Invalid distance, can't go that far";
@@ -9967,25 +10089,25 @@ function VLMPosition(lon, lat,  format)
 
     if (Math.abs(Lat - Lat1) < Math.sqrt(TOL))
     {
-        q = Math.cos(Lat1);
+      q = Math.cos(Lat1);
     }
     else
     {
-      dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 +Math.PI / 4));
+      dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
       q = (Lat - Lat1) / dPhi;
     }
     dlon = -d * Math.sin(tc) / q;
-    Lon = -(((Lon1 + dlon +Math.PI) % (2 *Math.PI) - Math.PI));
+    Lon = -(((Lon1 + dlon + Math.PI) % (2 * Math.PI) - Math.PI));
 
     if (isNaN(Lon) || isNaN(Lat))
     {
-        throw "Reached Nan Position!!!";
+      throw "Reached Nan Position!!!";
     }
 
-    Lon = RoundPow( Rad2Deg(Lon),9);
-    Lat = RoundPow(Rad2Deg(Lat),9);
+    Lon = RoundPow(Rad2Deg(Lon), 9);
+    Lat = RoundPow(Rad2Deg(Lat), 9);
 
-    return new VLMPosition(NormalizeLongitudeDeg(Lon),Lat);
+    return new VLMPosition(NormalizeLongitudeDeg(Lon), Lat);
 
 
   };
@@ -9993,12 +10115,12 @@ function VLMPosition(lon, lat,  format)
   //
   // Return loxodromic course from this to P in °
   //
-  this.GetLoxoCourse = function(P,Precision)
+  this.GetLoxoCourse = function(P, Precision)
   {
-    var Lon1  = -Deg2Rad(this.Lon.Value);
-    var Lon2  = -Deg2Rad(P.Lon.Value);
-    var Lat1  = Deg2Rad(this.Lat.Value);
-    var Lat2  = Deg2Rad(P.Lat.Value);
+    var Lon1 = -Deg2Rad(this.Lon.Value);
+    var Lon2 = -Deg2Rad(P.Lon.Value);
+    var Lat1 = Deg2Rad(this.Lat.Value);
+    var Lat2 = Deg2Rad(P.Lat.Value);
 
     if (typeof Precision == "undefined" || typeof Precision != "number")
     {
@@ -10013,167 +10135,163 @@ function VLMPosition(lon, lat,  format)
     {   
         Lon2 -= 2 * Math.PI
     }*/
-    var dlon_w  = (Lon2 - Lon1) % (2 * Math.PI);
-    var dlon_e  = (Lon1 - Lon2) % (2 * Math.PI);
-    var dphi  = Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
-    var tc ;
+    var dlon_w = (Lon2 - Lon1) % (2 * Math.PI);
+    var dlon_e = (Lon1 - Lon2) % (2 * Math.PI);
+    var dphi = Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
+    var tc;
 
-      
-    if (dlon_w < dlon_e) 
+
+    if (dlon_w < dlon_e)
     { // Westerly rhumb line is the shortest
-      tc = Math.atan2(dlon_w, dphi) % (2 * Math.PI); 
+      tc = Math.atan2(dlon_w, dphi) % (2 * Math.PI);
     }
     else
     {
       tc = Math.atan2(-dlon_e, dphi) % (2 * Math.PI);
     }
 
-    var ret  = (720 - (tc / Math.PI * 180)) % 360;
+    var ret = (720 - (tc / Math.PI * 180)) % 360;
 
-    return RoundPow( ret,Precision);
+    return RoundPow(ret, Precision);
   };
 
-if (VLM_DIST_ORTHO)
-{
-
-  // Function GetOrthoDist
-  // Return ortho distance from this to P
-  this.GetOrthoDist = function(P,Precision)
+  if (VLM_DIST_ORTHO)
   {
-    var lon1  = -Deg2Rad(this.Lon.Value);
-    var lon2  = -Deg2Rad(P.Lon.Value);
-    var lat1  = Deg2Rad(this.Lat.Value);
-    var lat2  = Deg2Rad(P.Lat.Value);
 
-    if (typeof Precision == "undefined" || typeof Precision != "number")
+    // Function GetOrthoDist
+    // Return ortho distance from this to P
+    this.GetOrthoDist = function(P, Precision)
     {
-      Precision = 17;
-    }
-    
-    //d=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2))
-    var retval = Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
+      var lon1 = -Deg2Rad(this.Lon.Value);
+      var lon2 = -Deg2Rad(P.Lon.Value);
+      var lat1 = Deg2Rad(this.Lat.Value);
+      var lat2 = Deg2Rad(P.Lat.Value);
 
-    return RoundPow(60* Rad2Deg (retval),Precision);
-  };
-
-  //
-  // Return orthodromic course from this to P
-  //
-  this.GetOrthoCourse = function(P,Precision)
-  {
-    var lon1  = -Deg2Rad(this.Lon.Value);
-    var lon2  = -Deg2Rad(P.Lon.Value);
-    var lat1  = Deg2Rad(this.Lat.Value);
-    var lat2  = Deg2Rad(P.Lat.Value);
-
-    if (typeof Precision == "undefined" || typeof Precision != "number")
-    {
-      Precision = 17;
-    }
-
-    /*IF sin(lon2-lon1)<0       
-      tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
-    ELSE       
-      tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
-    ENDIF*/
-    var d = Deg2Rad(this.GetOrthoDist(P)/60);
-    var retval = (Math.sin(lat2)-Math.sin(lat1)*Math.cos(d))/(Math.sin(d)*Math.cos(lat1));
-    if ((retval >= -1)&&(retval<=1))
-    {
-      if (Math.sin(lon2-lon1)<0)       
+      if (typeof Precision == "undefined" || typeof Precision != "number")
       {
-        retval=Math.acos(retval)    ;
+        Precision = 17;
       }
-      else       
+
+      //d=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2))
+      var retval = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+
+      return RoundPow(60 * Rad2Deg(retval), Precision);
+    };
+
+    //
+    // Return orthodromic course from this to P
+    //
+    this.GetOrthoCourse = function(P, Precision)
+    {
+      var lon1 = -Deg2Rad(this.Lon.Value);
+      var lon2 = -Deg2Rad(P.Lon.Value);
+      var lat1 = Deg2Rad(this.Lat.Value);
+      var lat2 = Deg2Rad(P.Lat.Value);
+
+      if (typeof Precision == "undefined" || typeof Precision != "number")
       {
-        retval=2*Math.PI-Math.acos(retval) ;   
+        Precision = 17;
       }
-    }
-    else if (lat1 < lat2)
-    {
-      retval = 0;
-    }
-    else
-    {
-      retval = Math.PI;
-    }
-    
-    retval = Rad2Deg( retval % (2 * Math.PI));
-    return RoundPow( retval,Precision);
-  };
 
-}
-else
-{
-  // Function GetOrthoDist
-  // Return ortho distance from this to P
-  this.GetOrthoDist = function(P,Precision)
+      /*IF sin(lon2-lon1)<0       
+        tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
+      ELSE       
+        tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
+      ENDIF*/
+      var d = Deg2Rad(this.GetOrthoDist(P) / 60);
+      var retval = (Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / (Math.sin(d) * Math.cos(lat1));
+      if ((retval >= -1) && (retval <= 1))
+      {
+        if (Math.sin(lon2 - lon1) < 0)
+        {
+          retval = Math.acos(retval);
+        }
+        else
+        {
+          retval = 2 * Math.PI - Math.acos(retval);
+        }
+      }
+      else if (lat1 < lat2)
+      {
+        retval = 0;
+      }
+      else
+      {
+        retval = Math.PI;
+      }
+
+      retval = Rad2Deg(retval % (2 * Math.PI));
+      return RoundPow(retval, Precision);
+    };
+
+  }
+  else
   {
-    var lon1  = -Deg2Rad(this.Lon.Value);
-    var lon2  = -Deg2Rad(P.Lon.Value);
-    var lat1  = Deg2Rad(this.Lat.Value);
-    var lat2  = Deg2Rad(P.Lat.Value);
-
-    if (typeof Precision == "undefined" || typeof Precision != "number")
+    // Function GetOrthoDist
+    // Return ortho distance from this to P
+    this.GetOrthoDist = function(P, Precision)
     {
-      Precision = 17;
-    }
-//        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
-//                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
+      var lon1 = -Deg2Rad(this.Lon.Value);
+      var lon2 = -Deg2Rad(P.Lon.Value);
+      var lat1 = Deg2Rad(this.Lat.Value);
+      var lat2 = Deg2Rad(P.Lat.Value);
 
-    var retval = 2*Math.asin(Math.sqrt(Math.pow((Math.sin((lat1-lat2)/2)),2) + 
-              Math.pow(Math.cos(lat1)*Math.cos(lat2)*(Math.sin((lon1-lon2)/2)),2)));
+      if (typeof Precision == "undefined" || typeof Precision != "number")
+      {
+        Precision = 17;
+      }
+      //        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
+      //                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
 
-    return RoundPow(EARTH_RADIUS * retval,Precision);
-  };
-    
-  //
-  // Return orthodromic course from this to P
-  //
-  this.GetOrthoCourse = function(P,Precision)
-  {
-    var lon1  = -Deg2Rad(this.Lon.Value);
-    var lon2  = -Deg2Rad(P.Lon.Value);
-    var lat1  = Deg2Rad(this.Lat.Value);
-    var lat2  = Deg2Rad(P.Lat.Value);
+      var retval = 2 * Math.asin(Math.sqrt(Math.pow((Math.sin((lat1 - lat2) / 2)), 2) +
+        Math.pow(Math.cos(lat1) * Math.cos(lat2) * (Math.sin((lon1 - lon2) / 2)), 2)));
 
-    if (typeof Precision == "undefined" || typeof Precision != "number")
+      return RoundPow(EARTH_RADIUS * retval, Precision);
+    };
+
+    //
+    // Return orthodromic course from this to P
+    //
+    this.GetOrthoCourse = function(P, Precision)
     {
-      Precision = 17;
-    }
+      var lon1 = -Deg2Rad(this.Lon.Value);
+      var lon2 = -Deg2Rad(P.Lon.Value);
+      var lat1 = Deg2Rad(this.Lat.Value);
+      var lat2 = Deg2Rad(P.Lat.Value);
 
-    //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
-    //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
-    var retval = Math.atan2(Math.sin(lon1-lon2)*Math.cos(lat2),Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon1-lon2));
-    retval = Rad2Deg( retval % (2 * Math.PI));
-    return RoundPow( retval,Precision);
-  };
-}
-  this.ReachDistOrtho=function(dist,bearing)
+      if (typeof Precision == "undefined" || typeof Precision != "number")
+      {
+        Precision = 17;
+      }
+
+      //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
+      //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
+      var retval = Math.atan2(Math.sin(lon1 - lon2) * Math.cos(lat2), Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
+      retval = Rad2Deg(retval % (2 * Math.PI));
+      return RoundPow(retval, Precision);
+    };
+  }
+  this.ReachDistOrtho = function(dist, bearing)
   {
-    var lat;
-    var dlon;
-    var d=dist/EARTH_RADIUS;
-    var tc = Deg2Rad(bearing);
-    var CurLat = Deg2Rad(this.Lat.Value);
-    var CurLon = Deg2Rad(-this.Lon.Value);
+    let lat;
+    let dlon;
+    let d = dist / EARTH_RADIUS;
+    let tc = Deg2Rad(bearing);
+    let CurLat = Deg2Rad(this.Lat.Value);
+    let CurLon = Deg2Rad(-this.Lon.Value);
 
-    lat =Math.asin(Math.sin(CurLat)*Math.cos(d)+Math.cos(CurLat)*Math.sin(d)*Math.cos(tc));
-    dlon=Math.atan2(Math.sin(tc)*Math.sin(d)*Math.cos(CurLat),Math.cos(d)-Math.sin(CurLat)*Math.sin(lat));
-    lon=(( CurLon-dlon +Math.PI)%(2*Math.PI ))-Math.PI;
+    lat = Math.asin(Math.sin(CurLat) * Math.cos(d) + Math.cos(CurLat) * Math.sin(d) * Math.cos(tc));
+    dlon = Math.atan2(Math.sin(tc) * Math.sin(d) * Math.cos(CurLat), Math.cos(d) - Math.sin(CurLat) * Math.sin(lat));
+    lon = ((CurLon - dlon + Math.PI) % (2 * Math.PI)) - Math.PI;
     return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(-lon)), Rad2Deg(lat));
 
   };
 
-  this.GetVLMString=function()
+  this.GetVLMString = function()
   {
-    return lat.ToString() +','+lon.ToString();
+    return this.Lat.ToString() + ',' + this.Lon.ToString();
   };
 }
-
-
-
-
  var _IsLoggedIn;
 
 
@@ -10928,7 +11046,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             else
             {
               //Redraw gates and exclusions from cache
-              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
               DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
             }
 
@@ -10977,7 +11095,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
     DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
   }
 }
@@ -11013,7 +11131,7 @@ function GetTrackFromServer(Boat)
 
 function GetRaceExclusionsFromServer(Boat)
 {
-  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC, function(result)
+  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function(result)
   {
     if (result.success)
     {
@@ -11051,11 +11169,11 @@ function GetRaceExclusionsFromServer(Boat)
 
 function GetRaceInfoFromServer(Boat, TargetTab)
 {
-  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC+" & v="+ Boat.VLMInfo.VER, function(result)
+  $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function(result)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, true);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
 }
@@ -11091,7 +11209,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       Boat = _CurPlayer.CurBoat;
     }
     else
-    { 
+    {
       // Ignore call, if no boat is provided...
       return;
     }
@@ -11674,7 +11792,7 @@ const WP_CROSS_ONCE = (1 << 10);
 var RaceGates = [];
 var Exclusions = [];
 
-function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
+function DrawRaceGates(RaceInfo, NextGate)
 {
 
   for (let index in RaceGates)
@@ -11693,13 +11811,7 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
       var WP = RaceInfo.races_waypoints[index];
 
       // Fix coords scales
-      if (IsVLMCoords)
-      {
-        WP.longitude1 /= VLM_COORDS_FACTOR;
-        WP.latitude1 /= VLM_COORDS_FACTOR;
-        WP.longitude2 /= VLM_COORDS_FACTOR;
-        WP.latitude2 /= VLM_COORDS_FACTOR;
-      }
+      NormalizeRaceInfo(RaceInfo);
       var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
       // Draw WP1
@@ -12404,7 +12516,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
     "color": Opponent.color
   };
 
-  if (!VLM2Prefs.MapPrefs.ShowOppName)
+  if (!VLM2Prefs.MapPrefs.ShowOppNames)
   {
     OppData.name = "";
   }
@@ -12413,6 +12525,93 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
 
   Layer.addFeatures(OL_Opp);
   Features.push(OL_Opp);
+}
+
+function ShowOpponentPopupInfo(e)
+{
+  var ObjType = e.feature.data.type;
+  let index;
+
+  if (ObjType == "opponent")
+  {
+    let feature = e.feature;
+    var popup = new OpenLayers.Popup.FramedCloud("popup",
+      OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
+      null,
+      BuildBoatPopupInfo(e.feature.attributes.idboat),
+      null,
+      true,
+      null
+    );
+    popup.autoSize = true;
+    popup.maxSize = new OpenLayers.Size(400, 800);
+    popup.fixedRelativePosition = true;
+    feature.popup = popup;
+    map.addPopup(popup);
+    
+    let Boat = GetOppBoat(e.feature.attributes.idboat);
+    let Pos = new VLMPosition(Boat.longitude,Boat.latitude);
+    let PopupFields = [];
+
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat , e.feature.attributes.name]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat , e.feature.attributes.idboat]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat , e.feature.attributes.rank]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat , Boat.loch]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat , Pos.GetVLMString()]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last1h),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last3h),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last24h),2)]);
+    FillFieldsFromMappingTable(PopupFields);
+    
+  }
+
+}
+
+function GetOppBoat(BoatId)
+{
+  let CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat !== "undefined" && CurBoat && CurBoat.OppList)
+  {
+    for (let i in CurBoat.OppList)
+    {
+      if (CurBoat.OppList[i] )
+      {
+        let Opp =  CurBoat.OppList[i] ;
+        if (Opp.idusers === BoatId)
+        {
+          return Opp;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+function BuildBoatPopupInfo(BoatId)
+{
+  let RetStr =
+    '<div class="MapPopup_InfoHeader">' +
+    ' <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png">' +
+    ' <span id="__BoatName' + BoatId + '" class="PopupBoatNameNumber ">BoatName</span>' +
+    ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
+    ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
+    '</div>' +
+    '<div class="MapPopup_InfoBody">' +
+    ' <fieldset>' +
+    '   <span class="PopupHeadText " I18n="loch">'+GetLocalizedString('loch')+'</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId+'" class="loch PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="position">'+GetLocalizedString('position')+'</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId+'" class=" PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="NextWP">'+GetLocalizedString('NextWP')+'</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '   <BR><span class="PopupHeadText " I18n="Moyennes">'+GetLocalizedString('Moyennes')+' </span><span class="PopupText"> : </span>'+
+    '   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    ' </fieldset>' +
+    '</div>';
+
+  
+  return RetStr;
 }
 
 function HandleFeatureOver(e)
@@ -12441,6 +12640,7 @@ function HandleFeatureClick(e)
 {
   // Clicking oppenent will show the track, and popup info (later)
   HandleFeatureOver(e);
+  ShowOpponentPopupInfo(e);
 
 }
 

@@ -89,7 +89,7 @@ function PrefMgr()
 function MapPrefs()
 {
   this.ShowReals = true; // Do we show reals?
-  this.ShowOppName = true; // Do we show opponents names?
+  this.ShowOppNames = true; // Do we show opponents names?
   this.MapOppShow = null; // Which opponents do we show on the map
   this.MapOppShowOptions = {
     ShowSel: 0,
@@ -101,6 +101,7 @@ function MapPrefs()
   this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
   this.MapZoomLevel = 4;
   this.PolarVacCount = 12; // How many vacs for drawing the polar line
+  this.UseUTC = false; // USe local of UTC time format for display
   this.EstTrackMouse = false;
   this.TrackEstForecast = true;
   this.ShowTopCount = 50;
@@ -110,11 +111,12 @@ function MapPrefs()
     if (store.enabled)
     {
       this.ShowReals = LoadLocalPref('#ShowReals', true);
-      this.ShowOppName = store.get("#ShowOppName");
+      this.ShowOppNames = LoadLocalPref("#ShowOppNames",false);
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
+      this.UseUTC = LoadLocalPref("#UseUTC", false);
+      this.EstTrackMouse = LoadLocalPref("#EstTrackMouse",true);
+      this.TrackEstForecast = LoadLocalPref("#TrackEstForecast",false);
       this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
-      this.EstTrackMouse = store.get("#EstTrackMouse");
-      this.TrackEstForecast = store.get("#TrackEstForecast");
       if (!this.PolarVacCount)
       {
         // Fallback if invalid value is stored
@@ -129,9 +131,10 @@ function MapPrefs()
     if (store.enabled)
     {
       store.set("#ShowReals", this.ShowReals);
-      store.set("#ShowOppName", this.ShowOppName);
+      store.set("#ShowOppNames", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
+      store.set("#UseUTC", this.UseUTC);
       store.set("#TrackEstForecast", this.TrackEstForecast);
       store.set("#EstTrackMouse", this.EstTrackMouse);
       store.set("ShowTopCount", this.ShowTopCount);

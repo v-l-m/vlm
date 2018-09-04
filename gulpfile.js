@@ -21,7 +21,7 @@ const gulp = require('gulp'),
   htmlmin = require('gulp-htmlmin'),
   runsequence = require('run-sequence');
 
-const VLMVersion = 17;
+const VLMVersion = 18;
 
 gulp.task('scripts', function()
 {
@@ -129,7 +129,7 @@ gulp.task('deploy', function()
   var globs = [
     'jvlm/dist/*',
     'jvlm/index.html',
-    '*.css'
+    'jvlm/*.css'
   ];
 
   // using base = '.' will transfer everything to /public_html correctly

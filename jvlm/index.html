@@ -16,19 +16,8 @@
     <link rel="alternate stylesheet" type="text/css" title="vert-jaune" href="jquery-ui.theme-vert-jaune.css"/>
     <link rel="alternate stylesheet" type="text/css" title="noir-jaune" href="jquery-ui.theme-noir-jaune.css"/>
     <link rel="alternate stylesheet" type="text/css" title="noir-jaune-v2" href="jquery-ui.theme-noir-jaune-v2.css"/>
-    <!--<script src="https://jsconsole.com/js/remote.js?584f0017-f757-49de-88db-b87c30802ee9"></script>-->
-    <!--<script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-    <script src="external/jquery/jquery-3.2.1.min.js"></script>
-    <script src="external/jquery-ui/jquery-ui.js"></script>
-    <script src="external/bootstrap-master/js/bootstrap.js"></script>
-    <script src="external/jquery.csv.js"></script>
-    <script src="external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js"></script>
-    <script type="text/javascript" src="external/footable-bootstrap/js/footable.js"></script>
-    <script type="text/javascript" src="jquery.ui.touch-punch.js"></script>
-    <script src="external/store/store.min.js"></script>-->
-    <!--<script src="https://cdn.conversejs.org/dist/converse.min.js"></script>--> 
     <script src="config.js"></script>
-    <script src="dist/jvlm_libs.min.js?v=V17"></script>
+    <script src="dist/jvlm_libs.min.js?v=V18"></script>
     <script src="external/OpenLayers/OpenLayers.js"></script>
       
   </head>
@@ -86,7 +75,7 @@
           <a class="navbar-brand" href="/index.php" target="_vlm">
             <div id="logo">
               <img class="img-responsive" src="/images/logos/logovlmnew.png"/>
-              <div class="version">V17</div>
+              <div class="version">V18</div>
             </div>
           </a>
           <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left"> 
@@ -633,7 +622,7 @@
                   </A>
                 </div>
               </div>
-          </div>
+            </div>
           </fieldset>
           <fieldset>
           <legend class="ui-legend"><span I18n="InfosLinks" >Infos</span> </legend>
@@ -709,7 +698,7 @@
                     <a href="/index.php" target="VLM1"><span I18n='VLM1'>forum </span></a>   
                 </div>
                 <div class="col-xs-5 small">
-                  <a id="BuildDate" data-toggle="tooltip" title="Sat Jul 07 2018 10:43:53 GMT+0200 (Paris, Madrid (heure d’été))"></a>
+                  <a id="BuildDate" data-toggle="tooltip" title="Sun Sep 02 2018 11:49:03 GMT+0200 (Paris, Madrid (heure d’été))"></a>
                 </div>
           </div>   
           </fieldset>
@@ -723,19 +712,20 @@
         <fieldset>
           <legend class="ui-legend" I18n='Map'>Route</legend>
           <div class="affich">
-            <input  class="chkprefstore" type="checkbox" id="DisplayReals">
-            <label for="DisplayReals" I18n="ShowReals">Bouées</label>
+            <input  class="chkprefstore" type="checkbox" id="ShowReals">
+            <label for="ShowReals" I18n="ShowReals">Bouées</label>
           </div>
           <div class="affich">
-            <input class="affich chkprefstore" type="checkbox" id="DisplayNames">
-            <label for="DisplayNames" I18n="ShowOppNames">Bouées</label>
+            <input class="affich chkprefstore" type="checkbox" id="ShowOppNames">
+            <label for="ShowOppNames" I18n="ShowOppNames">Bouées</label>
           </div>
-          </fieldset>
-          <fieldset>
+        </fieldset>
+        <fieldset>
           <legend class="ui-legend" I18n="ShowMyAnd">Afficher le mien et ...</legend>
           <div  class="affich dropdown">
             <button id="DDMapSelOption" class="ui-button ui-corner-all ui-widget dropdown-toggle" type="button" data-toggle="dropdown">Mode Aff
-            <span class="caret"></span></button>
+              <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
               <li class="DDLine MapOppShowLi" ><span Mode="3" I18n="mapmeandtop10"></span></li>
               <li class="DDLine MapOppShowLi"><span Mode="4" I18n="mapmy10opps"></span></li>
@@ -748,13 +738,17 @@
         </fieldset>
         <fieldset>
           <legend class="ui-legend">Infos course</legend>
-            <div class="affich">
-              <span i18n="crank" >Durée Vac</span> : <span class="badge VacFreq"> 5 </span> min
-            </div>
-            <div class="affich">
-              <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
-              <input class="chkprefstore" type="number" pattern="[0-9]*" min="1"  max="120" value="1" id="VacPol" style="width:50px">
-            </div>
+          <div class="affich">
+            <span i18n="crank" >Durée Vac</span> : <span class="badge VacFreq"> 5 </span> min
+          </div>
+          <div class="affich">
+            <label for="VacPol" I18n="PolarVacSize" >Nb vac de la polaire</label>
+            <input class="chkprefstore" type="number" pattern="[0-9]*" min="1"  max="120" value="1" id="VacPol" style="width:50px">
+          </div>
+          <div class="affich">
+            <input class="chkprefstore" type="checkbox" id="UseUTC" style="width:50px">
+            <label for="UseUTC" I18n="UseUTC" >UseUTC</label>            
+          </div>
         </fieldset>
         <fieldset>
           <legend class="ui-legend" I18n="EstimateOptionsGroup">Est.</legend>
@@ -1660,12 +1654,12 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>
           </div>
-          <div id="RaceListBody" class="modal-race" >
+          <div id="RaceListBody" class="modal-body" >
             <div id="RaceListPanel" class="panel group">
             </div>            
           </div>
            <div class="modal-footer">
-                <button type="button" class="ui-button ui-corner-all ui-widget" I18n="cancel" data-dismiss="modal">Close</button>
+                <button type="button" class="ui-button ui-corner-all ui-widget" I18n="Close" data-dismiss="modal">Close</button>
            </div>
       </div>
       </div>
@@ -1789,7 +1783,7 @@
              </div>
            </div>
           <div class="modal-footer">
-              <button type="button" class="ui-button ui-corner-all ui-widget" I18n="close" data-dismiss="modal">Close</button>
+              <button type="button" class="ui-button ui-corner-all ui-widget" I18n="Close" data-dismiss="modal">Close</button>
           </div>
         </div>
        </div>
@@ -1881,7 +1875,7 @@
     </div>
 
     <!-- Race history selection panel -->
-    <div id="RaceHistory" class="modal fade" role="dialog">
+    <div id="RaceHistory" class="modal fade vresp" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
         <div  class="modaldialog modal-content">
@@ -1981,36 +1975,16 @@
     </div>
 
     <!-- Script that can be loaded after DOM -->
-    <!--<script src="config.js" type="text/javascript"></script>
-    <script src='prefmgr.js' type='text/javascript'></script>
-    <script src="localize.js" type='text/javascript'></script>
-    <script src='ControlSwitch.js' type='text/javascript'></script>
-    <script src='gribmap.js' type='text/javascript'></script>
-    <script src='geomath.js' type='text/javascript'></script>
-    <script src='position.js' type='text/javascript'></script>
-    <script src="user.js"  type='text/javascript'></script>
-    <script src='polar.js' type='text/javascript'></script>
-    <script src='xmpp.js' type='text/javascript'></script>
-    <script src='autopilot.js' type='text/javascript'></script>
-    <script src='gribmgr.js' type='text/javascript'></script>
-    <script src='estimator.js' type='text/javascript'></script>
-    <script src="GUI.js" type='text/javascript'></script>
-    <script src='vlmboats.js' type='text/javascript'></script>
-    <script src='MercatorTransform.js' type='text/javascript'></script>-->
-    <script src='dist/jvlm_main.js?v=V17' type='text/javascript'></script>
-    <!--<script src='external/verimail/verimail.jquery.min.js' type='text/javascript'></script>
-    <script src='external/PasswordStrength/jquery.pstrength-min.1.2.js' type='text/javascript'></script>
-    <script type="text/javascript" src="external/moments/moment.min.js"></script>
-    <script type='text/javascript' src='/externals/fullcalendar/fullcalendar.min.js'></script>
-    <script type='text/javascript' src='/externals/fullcalendar/locale-all.js'></script>
-    <script src="external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>-->
+    
+    <script src='dist/jvlm_main.js?v=V18' type='text/javascript'></script>
+    
     <script src='https://www.google.com/recaptcha/api.js?render=explicit&onload=initrecaptcha' async ></script>
     
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
     <script>
-      var BuildDate = 'Sat, 07 Jul 2018 08:43:53 GMT'
+      var BuildDate = 'Sun, 02 Sep 2018 09:49:03 GMT'
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());

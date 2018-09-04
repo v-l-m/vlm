@@ -174,7 +174,6 @@ echo "\n6- === Ranking : ".gmdate("M d Y H:i:s",time())." (UTC)... \n Ranking : 
 
 
 // Check LMNH status, should be wrapped in Challenge check of some sort
-// THis need to complete before the actual vac calculations start 
 CheckLMNHStatus();
 
 // Loop again all races to build the ranking tables

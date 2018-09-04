@@ -180,7 +180,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             else
             {
               //Redraw gates and exclusions from cache
-              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+              DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
               DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
             }
 
@@ -229,7 +229,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
     DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, false);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
   }
 }
@@ -265,7 +265,7 @@ function GetTrackFromServer(Boat)
 
 function GetRaceExclusionsFromServer(Boat)
 {
-  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC, function(result)
+  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function(result)
   {
     if (result.success)
     {
@@ -303,11 +303,11 @@ function GetRaceExclusionsFromServer(Boat)
 
 function GetRaceInfoFromServer(Boat, TargetTab)
 {
-  $.get("/ws/raceinfo.php?idrace=" + Boat.VLMInfo.RAC+" & v="+ Boat.VLMInfo.VER, function(result)
+  $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function(result)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP, true);
+    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
 }
@@ -343,7 +343,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       Boat = _CurPlayer.CurBoat;
     }
     else
-    { 
+    {
       // Ignore call, if no boat is provided...
       return;
     }
@@ -926,7 +926,7 @@ const WP_CROSS_ONCE = (1 << 10);
 var RaceGates = [];
 var Exclusions = [];
 
-function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
+function DrawRaceGates(RaceInfo, NextGate)
 {
 
   for (let index in RaceGates)
@@ -945,13 +945,7 @@ function DrawRaceGates(RaceInfo, NextGate, IsVLMCoords)
       var WP = RaceInfo.races_waypoints[index];
 
       // Fix coords scales
-      if (IsVLMCoords)
-      {
-        WP.longitude1 /= VLM_COORDS_FACTOR;
-        WP.latitude1 /= VLM_COORDS_FACTOR;
-        WP.longitude2 /= VLM_COORDS_FACTOR;
-        WP.latitude2 /= VLM_COORDS_FACTOR;
-      }
+      NormalizeRaceInfo(RaceInfo);
       var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
       // Draw WP1
@@ -1656,7 +1650,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
     "color": Opponent.color
   };
 
-  if (!VLM2Prefs.MapPrefs.ShowOppName)
+  if (!VLM2Prefs.MapPrefs.ShowOppNames)
   {
     OppData.name = "";
   }
@@ -1665,6 +1659,93 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
 
   Layer.addFeatures(OL_Opp);
   Features.push(OL_Opp);
+}
+
+function ShowOpponentPopupInfo(e)
+{
+  var ObjType = e.feature.data.type;
+  let index;
+
+  if (ObjType == "opponent")
+  {
+    let feature = e.feature;
+    var popup = new OpenLayers.Popup.FramedCloud("popup",
+      OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
+      null,
+      BuildBoatPopupInfo(e.feature.attributes.idboat),
+      null,
+      true,
+      null
+    );
+    popup.autoSize = true;
+    popup.maxSize = new OpenLayers.Size(400, 800);
+    popup.fixedRelativePosition = true;
+    feature.popup = popup;
+    map.addPopup(popup);
+    
+    let Boat = GetOppBoat(e.feature.attributes.idboat);
+    let Pos = new VLMPosition(Boat.longitude,Boat.latitude);
+    let PopupFields = [];
+
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat , e.feature.attributes.name]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat , e.feature.attributes.idboat]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat , e.feature.attributes.rank]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat , Boat.loch]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat , Pos.GetVLMString()]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last1h),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last3h),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last24h),2)]);
+    FillFieldsFromMappingTable(PopupFields);
+    
+  }
+
+}
+
+function GetOppBoat(BoatId)
+{
+  let CurBoat = _CurPlayer.CurBoat;
+
+  if (typeof CurBoat !== "undefined" && CurBoat && CurBoat.OppList)
+  {
+    for (let i in CurBoat.OppList)
+    {
+      if (CurBoat.OppList[i] )
+      {
+        let Opp =  CurBoat.OppList[i] ;
+        if (Opp.idusers === BoatId)
+        {
+          return Opp;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+function BuildBoatPopupInfo(BoatId)
+{
+  let RetStr =
+    '<div class="MapPopup_InfoHeader">' +
+    ' <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png">' +
+    ' <span id="__BoatName' + BoatId + '" class="PopupBoatNameNumber ">BoatName</span>' +
+    ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
+    ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
+    '</div>' +
+    '<div class="MapPopup_InfoBody">' +
+    ' <fieldset>' +
+    '   <span class="PopupHeadText " I18n="loch">'+GetLocalizedString('loch')+'</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId+'" class="loch PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="position">'+GetLocalizedString('position')+'</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId+'" class=" PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="NextWP">'+GetLocalizedString('NextWP')+'</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '   <BR><span class="PopupHeadText " I18n="Moyennes">'+GetLocalizedString('Moyennes')+' </span><span class="PopupText"> : </span>'+
+    '   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    ' </fieldset>' +
+    '</div>';
+
+  
+  return RetStr;
 }
 
 function HandleFeatureOver(e)
@@ -1693,6 +1774,7 @@ function HandleFeatureClick(e)
 {
   // Clicking oppenent will show the track, and popup info (later)
   HandleFeatureOver(e);
+  ShowOpponentPopupInfo(e);
 
 }
 

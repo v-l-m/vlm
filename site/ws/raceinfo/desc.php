@@ -9,7 +9,7 @@ function get_output_format() {
 
 function get_info_array($idrace) {
     //FIXME : tout cela devrait être partiellement factorisé dans wslib
-    $res = wrapper_mysql_db_query_reader("SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq FROM races WHERE idraces = ".$idrace);
+    $res = wrapper_mysql_db_query_reader("SELECT idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq, UNIX_TIMESTAMP(updated) VER FROM races WHERE idraces = ".$idrace);
     
     //if nothing, then return null.
     if (mysql_num_rows($res) == 0) return 0;
