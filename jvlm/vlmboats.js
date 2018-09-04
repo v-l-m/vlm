@@ -99,6 +99,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
 // Control to handle drag of User WP
 // var DrawControl = null;
 var BoatFeatures = [];
+var OppPopups = [];
 var StartSetWPOnClick = false;
 
 function SetCurrentBoat(Boat, CenterMapOnBoat, ForceRefresh, TargetTab)
@@ -359,7 +360,6 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
     }
   }
-
   BoatFeatures = [];
 
 
@@ -1668,35 +1668,43 @@ function ShowOpponentPopupInfo(e)
 
   if (ObjType == "opponent")
   {
-    let feature = e.feature;
-    var popup = new OpenLayers.Popup.FramedCloud("popup",
-      OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
-      null,
-      BuildBoatPopupInfo(e.feature.attributes.idboat),
-      null,
-      true,
-      null
-    );
-    popup.autoSize = true;
-    popup.maxSize = new OpenLayers.Size(400, 800);
-    popup.fixedRelativePosition = true;
-    feature.popup = popup;
-    map.addPopup(popup);
-    
     let Boat = GetOppBoat(e.feature.attributes.idboat);
-    let Pos = new VLMPosition(Boat.longitude,Boat.latitude);
+    let Pos = new VLMPosition(Boat.longitude, Boat.latitude);
     let PopupFields = [];
+    let feature = e.feature;
 
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat , e.feature.attributes.name]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat , e.feature.attributes.idboat]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat , e.feature.attributes.rank]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat , Boat.loch]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat , Pos.GetVLMString()]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last1h),2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last3h),2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat , RoundPow(parseFloat( Boat.last24h),2)]);
+    if (!OppPopups[e.feature.attributes.idboat])
+    {
+      let popup = new OpenLayers.Popup.FramedCloud("popup",
+        OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
+        null,
+        BuildBoatPopupInfo(e.feature.attributes.idboat),
+        null,
+        true,
+        null
+      );
+      popup.autoSize = true;
+      popup.maxSize = new OpenLayers.Size(400, 800);
+      popup.fixedRelativePosition = true;
+      feature.popup = popup;
+      map.addPopup(popup);
+      OppPopups[e.feature.attributes.idboat] = popup;
+    }
+    else
+    {
+      OppPopups[e.feature.attributes.idboat].show();
+    }
+
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, e.feature.attributes.name]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, Boat.loch]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last1h), 2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last3h), 2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last24h), 2)]);
     FillFieldsFromMappingTable(PopupFields);
-    
+
   }
 
 }
@@ -1709,9 +1717,9 @@ function GetOppBoat(BoatId)
   {
     for (let i in CurBoat.OppList)
     {
-      if (CurBoat.OppList[i] )
+      if (CurBoat.OppList[i])
       {
-        let Opp =  CurBoat.OppList[i] ;
+        let Opp = CurBoat.OppList[i];
         if (Opp.idusers === BoatId)
         {
           return Opp;
@@ -1734,17 +1742,17 @@ function BuildBoatPopupInfo(BoatId)
     '</div>' +
     '<div class="MapPopup_InfoBody">' +
     ' <fieldset>' +
-    '   <span class="PopupHeadText " I18n="loch">'+GetLocalizedString('loch')+'</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId+'" class="loch PopupText">0.9563544</span>' +
-    '   <BR><span class="PopupHeadText " I18n="position">'+GetLocalizedString('position')+'</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId+'" class=" PopupText">0.9563544</span>' +
-    '   <BR><span class="PopupHeadText " I18n="NextWP">'+GetLocalizedString('NextWP')+'</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
-    '   <BR><span class="PopupHeadText " I18n="Moyennes">'+GetLocalizedString('Moyennes')+' </span><span class="PopupText"> : </span>'+
+    '   <span class="PopupHeadText " I18n="loch">' + GetLocalizedString('loch') + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId + '" class="loch PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="position">' + GetLocalizedString('position') + '</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId + '" class=" PopupText">0.9563544</span>' +
+    '   <BR><span class="PopupHeadText " I18n="NextWP">' + GetLocalizedString('NextWP') + '</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '   <BR><span class="PopupHeadText " I18n="Moyennes">' + GetLocalizedString('Moyennes') + ' </span><span class="PopupText"> : </span>' +
     '   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     ' </fieldset>' +
     '</div>';
 
-  
+
   return RetStr;
 }
 
