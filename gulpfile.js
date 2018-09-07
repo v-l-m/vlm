@@ -98,7 +98,9 @@ gulp.task('libs', function()
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_libs.js'))
-    .pipe(gulp.dest('jvlm/dist'))
+    .pipe(babel({
+      presets: ['@babel/env']}))
+		.pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
       suffix: '.min'
