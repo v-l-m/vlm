@@ -19,7 +19,8 @@ const gulp = require('gulp'),
   //debug = require('gulp-debug'),
   inject = require('gulp-inject-string'),
   htmlmin = require('gulp-htmlmin'),
-  runsequence = require('run-sequence');
+  runsequence = require('run-sequence'),
+  babel = require('gulp-babel');
 
 const VLMVersion = 18;
 
@@ -29,7 +30,10 @@ gulp.task('scripts', function()
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_main.js'))
-    .pipe(gulp.dest('jvlm/dist'))
+    .pipe(babel({
+			presets: ['@babel/env']
+		}))
+		.pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
       suffix: '.min'
@@ -141,13 +145,8 @@ gulp.task('deploy', function()
       //cwd: '/home/vlm/vlmcode',
       //buffer: true
     })
-    //.pipe(debug())
-    //.pipe(debug())
-    //.pipe(debug())
     .pipe(conn.newerOrDifferentSize('/home/vlm/vlmcode/')) // only upload newer files
-    //.pipe(debug())
     .pipe(conn.dest('/home/vlm/vlmcode'))
-  //.pipe(debug())
   ;
 
 });
