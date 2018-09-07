@@ -2,46 +2,23 @@
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var MAP_OP_SHOW_SEL = 0;
-var VLM2Prefs = new PrefMgr();
-VLM2Prefs.Init();
+var MAP_OP_SHOW_SEL = 0,
+    VLM2Prefs = new PrefMgr();
 
-function LoadLocalPref(PrefName, PrefDfaultValue) {
-  var ret = store.get(PrefName);
-
-  if (typeof ret === "undefined") {
-    ret = PrefDfaultValue;
-  }
-
-  return ret;
+function LoadLocalPref(e, t) {
+  var a = store.get(e);
+  return void 0 === a && (a = t), a;
 }
 
 function PrefMgr() {
-  this.MapPrefs = new MapPrefs();
-  this.CurTheme = "bleu-noir";
-  this.MapPrefs = new MapPrefs();
-
-  this.Init = function () {
-    this.MapPrefs.Load();
-    this.Load();
-  };
-
-  this.Load = function () {
-    if (store.enabled) {
-      this.CurTheme = LoadLocalPref('CurTheme', "bleu-noir");
-    }
-  };
-
-  this.Save = function () {
-    if (store.enabled) {
-      store.set('ColorTheme', this.CurTheme);
-    }
-
-    this.MapPrefs.Save();
-  };
-
-  this.UpdateVLMPrefs = function (p) {
-    switch (p.mapOpponents) {
+  this.MapPrefs = new MapPrefs(), this.CurTheme = "bleu-noir", this.MapPrefs = new MapPrefs(), this.Init = function () {
+    this.MapPrefs.Load(), this.Load();
+  }, this.Load = function () {
+    store.enabled && (this.CurTheme = LoadLocalPref("CurTheme", "bleu-noir"));
+  }, this.Save = function () {
+    store.enabled && store.set("ColorTheme", this.CurTheme), this.MapPrefs.Save();
+  }, this.UpdateVLMPrefs = function (e) {
+    switch (e.mapOpponents) {
       case "mylist":
       case "mapselboats":
       case "NULL":
@@ -59,9 +36,6 @@ function PrefMgr() {
         break;
 
       case "my5opps":
-        this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.Show5Around;
-        break;
-
       case "maponlyme":
         this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.Show5Around;
         break;
@@ -71,100 +45,49 @@ function PrefMgr() {
         break;
 
       default:
-        VLMAlertDanger("unexepected mapping option : " + p.mapOpponents);
+        VLMAlertDanger("unexepected mapping option : " + e.mapOpponents);
     }
   };
 }
 
 function MapPrefs() {
-  this.ShowReals = true; // Do we show reals?
-
-  this.ShowOppNames = true; // Do we show opponents names?
-
-  this.MapOppShow = null; // Which opponents do we show on the map
-
-  this.MapOppShowOptions = {
+  this.ShowReals = !0, this.ShowOppNames = !0, this.MapOppShow = null, this.MapOppShowOptions = {
     ShowSel: 0,
     ShowMineOnly: 1,
     Show5Around: 2,
     ShowTop10: 3,
     Show10Around: 4
-  };
-  this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
-
-  this.MapZoomLevel = 4;
-  this.PolarVacCount = 12; // How many vacs for drawing the polar line
-
-  this.UseUTC = false; // USe local of UTC time format for display
-
-  this.EstTrackMouse = false;
-  this.TrackEstForecast = true;
-  this.ShowTopCount = 50;
-
-  this.Load = function () {
-    if (store.enabled) {
-      this.ShowReals = LoadLocalPref('#ShowReals', true);
-      this.ShowOppNames = LoadLocalPref("#ShowOppNames", false);
-      this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
-      this.UseUTC = LoadLocalPref("#UseUTC", false);
-      this.EstTrackMouse = LoadLocalPref("#EstTrackMouse", true);
-      this.TrackEstForecast = LoadLocalPref("#TrackEstForecast", false);
-      this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
-
-      if (!this.PolarVacCount) {
-        // Fallback if invalid value is stored
-        this.PolarVacCount = 12;
-      }
-
-      this.ShowTopCount = LoadLocalPref('ShowTopCount', 50);
-    }
-  };
-
-  this.Save = function () {
-    if (store.enabled) {
-      store.set("#ShowReals", this.ShowReals);
-      store.set("#ShowOppNames", this.ShowOppName);
-      store.set("#MapZoomLevel", this.MapZoomLevel);
-      store.set("#PolarVacCount", this.PolarVacCount);
-      store.set("#UseUTC", this.UseUTC);
-      store.set("#TrackEstForecast", this.TrackEstForecast);
-      store.set("#EstTrackMouse", this.EstTrackMouse);
-      store.set("ShowTopCount", this.ShowTopCount);
-    }
-
-    var MapPrefVal = "mapselboats";
+  }, this.WindArrowsSpacing = 64, this.MapZoomLevel = 4, this.PolarVacCount = 12, this.UseUTC = !1, this.EstTrackMouse = !1, this.TrackEstForecast = !0, this.ShowTopCount = 50, this.Load = function () {
+    store.enabled && (this.ShowReals = LoadLocalPref("#ShowReals", !0), this.ShowOppNames = LoadLocalPref("#ShowOppNames", !1), this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4), this.UseUTC = LoadLocalPref("#UseUTC", !1), this.EstTrackMouse = LoadLocalPref("#EstTrackMouse", !0), this.TrackEstForecast = LoadLocalPref("#TrackEstForecast", !1), this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12), this.PolarVacCount || (this.PolarVacCount = 12), this.ShowTopCount = LoadLocalPref("ShowTopCount", 50));
+  }, this.Save = function () {
+    store.enabled && (store.set("#ShowReals", this.ShowReals), store.set("#ShowOppNames", this.ShowOppName), store.set("#MapZoomLevel", this.MapZoomLevel), store.set("#PolarVacCount", this.PolarVacCount), store.set("#UseUTC", this.UseUTC), store.set("#TrackEstForecast", this.TrackEstForecast), store.set("#EstTrackMouse", this.EstTrackMouse), store.set("ShowTopCount", this.ShowTopCount));
+    var e = "mapselboats";
 
     switch (this.MapOppShow) {
       case this.MapOppShowOptions.ShowMineOnly:
-        MapPrefVal = "myboat";
+        e = "myboat";
         break;
 
       case this.MapOppShowOptions.Show5Around:
-        MapPrefVal = "my5opps";
+        e = "my5opps";
         break;
 
       case this.MapOppShowOptions.ShowTop10:
-        MapPrefVal = "meandtop10";
+        e = "meandtop10";
         break;
 
       case this.MapOppShowOptions.Show10Around:
-        MapPrefVal = "my10opps";
-        break;
+        e = "my10opps";
     }
 
-    var NewVals = {
-      mapOpponents: MapPrefVal
+    var t = {
+      mapOpponents: e
     };
-
-    if (typeof _CurPlayer !== "undefined" && _CurPlayer) {
-      UpdateBoatPrefs(_CurPlayer.CurBoat, {
-        prefs: NewVals
-      });
-    }
-  };
-
-  this.GetOppModeString = function (Mode) {
-    switch (Mode) {
+    void 0 !== _CurPlayer && _CurPlayer && UpdateBoatPrefs(_CurPlayer.CurBoat, {
+      prefs: t
+    });
+  }, this.GetOppModeString = function (e) {
+    switch (e) {
       case this.MapOppShowOptions.ShowSel:
         return GetLocalizedString("mapselboats");
 
@@ -181,61 +104,36 @@ function MapPrefs() {
         return GetLocalizedString("mapmy10opps");
 
       default:
-        return Mode;
+        return e;
     }
   };
-} //
-// Class to handle autopilot orders and services
-//
+}
 
+function AutoPilotOrder(e, t) {
+  if (this.Date = new Date(new Date().getTime() - new Date().getTime() % 3e5 + 45e4), this.PIM = PM_HEADING, this.PIP_Value = 0, this.PIP_Coords = new VLMPosition(0, 0), this.PIP_WPAngle = -1, this.ID = -1, void 0 !== e && e) {
+    if (!(t - 1 in e.VLMInfo.PIL)) return void alert("Invalid Pilototo order number. Report error to devs.");
+    var a = e.VLMInfo.PIL[t - 1];
 
-function AutoPilotOrder(Boat, Number) {
-  // Default construction
-  this.Date = new Date(new Date().getTime() - new Date().getTime() % (5 * 60 * 1000) + 5 * 1.5 * 60 * 1000);
-  this.PIM = PM_HEADING;
-  this.PIP_Value = 0;
-  this.PIP_Coords = new VLMPosition(0, 0);
-  this.PIP_WPAngle = -1;
-  this.ID = -1;
-
-  if (typeof Boat !== 'undefined' && Boat) {
-    if (!(Number - 1 in Boat.VLMInfo.PIL)) {
-      alert("Invalid Pilototo order number. Report error to devs.");
-      return;
-    }
-
-    var PilOrder = Boat.VLMInfo.PIL[Number - 1];
-    this.Date = new Date(parseInt(PilOrder.TTS, 10) * 1000);
-    this.PIM = parseInt(PilOrder.PIM, 10);
-    this.ID = parseInt(PilOrder.TID, 10);
-
-    switch (this.PIM) {
+    switch (this.Date = new Date(1e3 * parseInt(a.TTS, 10)), this.PIM = parseInt(a.PIM, 10), this.ID = parseInt(a.TID, 10), this.PIM) {
       case PM_ANGLE:
       case PM_HEADING:
-        this.PIP_Value = parseInt(PilOrder.PIP, 10);
+        this.PIP_Value = parseInt(a.PIP, 10);
         break;
 
       case PM_ORTHO:
       case PM_VMG:
       case PM_VBVMG:
-        var l1 = PilOrder.PIP.split(",");
-        var l2 = l1[1].split("@");
-        this.PIP_Coords.Lat.Value = parseFloat(l1[0]);
-        this.PIP_Coords.Lon.Value = parseFloat(l2[0]);
-        this.PIP_WPAngle = parseFloat(l2[1]);
-        break;
+        var i = a.PIP.split(","),
+            n = i[1].split("@");
+        this.PIP_Coords.Lat.Value = parseFloat(i[0]), this.PIP_Coords.Lon.Value = parseFloat(n[0]), this.PIP_WPAngle = parseFloat(n[1]);
     }
   }
 
   this.GetOrderDateString = function () {
     return this.Date.getDate() + "/" + (this.Date.getMonth() + 1) + "/" + this.Date.getFullYear();
-  };
-
-  this.GetOrderTimeString = function () {
+  }, this.GetOrderTimeString = function () {
     return this.Date.getHours() + ":" + this.Date.getMinutes() + ":15";
-  };
-
-  this.GetPIMString = function () {
+  }, this.GetPIMString = function () {
     switch (this.PIM) {
       case PM_HEADING:
         return GetLocalizedString("autopilotengaged");
@@ -252,9 +150,7 @@ function AutoPilotOrder(Boat, Number) {
       case PM_VBVMG:
         return "VBVMG";
     }
-  };
-
-  this.GetPIPString = function () {
+  }, this.GetPIPString = function () {
     switch (this.PIM) {
       case PM_HEADING:
       case PM_ANGLE:
@@ -269,2707 +165,1303 @@ function AutoPilotOrder(Boat, Number) {
 }
 
 function HandleSendAPUpdate(e) {
-  var verb = 'add';
-
-  if (typeof _CurAPOrder === "undefined" || !_CurAPOrder) {
-    return;
-  }
-
-  var OrderData = {
-    idu: _CurPlayer.CurBoat.IdBoat,
-    tasktime: Math.round(_CurAPOrder.Date / 1000),
-    pim: _CurAPOrder.PIM
-  };
-
-  if (_CurAPOrder.ID !== -1) {
-    verb = "update";
-    OrderData.taskid = _CurAPOrder.ID;
-  }
-
-  switch (_CurAPOrder.PIM) {
-    case PM_HEADING:
-    case PM_ANGLE:
-      OrderData.pip = _CurAPOrder.PIP_Value;
-      break;
-
-    case PM_ORTHO:
-    case PM_VMG:
-    case PM_VBVMG:
-      OrderData.pip = {};
-      OrderData.pip.targetlat = _CurAPOrder.PIP_Coords.Lat.Value;
-      OrderData.pip.targetlong = _CurAPOrder.PIP_Coords.Lon.Value;
-      OrderData.pip.targetandhdg = _CurAPOrder.PIP_WPAngle === -1 ? null : _CurAPOrder.PIP_WPAngle;
-      break;
-  }
-
-  $.post('/ws/boatsetup/pilototo_' + verb + '.php', "parms=" + JSON.stringify(OrderData), function (ap_return) {
-    if (ap_return.success) {
-      // Order Success
-      RefreshCurrentBoat(false, true, 'AutoPilot');
-    } else {
-      alert(ap_return.error.msg);
-    }
-  });
-}
-
-function HandleAPFieldChange(e) {
-  var Target = e.target;
-
-  if (typeof Target.attributes.id === "undefined") {
-    return;
-  }
-
-  switch (Target.attributes.id.value) {
-    case "AP_PIP":
-      _CurAPOrder.PIP_Value = parseFloat(Target.value);
-
-      if (_CurAPOrder.PIP_Value.toString() !== Target.Value) {
-        Target.value = _CurAPOrder.PIP_Value.toString();
-      }
-
-      break;
-
-    case "AP_WPLat":
-      CheckFloatInput(_CurAPOrder.PIP_Coords.Lat, Target);
-      break;
-
-    case "AP_WPLon":
-      CheckFloatInput(_CurAPOrder.PIP_Coords.Lon, Target);
-      break;
-
-    case "AP_WPAt":
-      var Stub = {}; // beurk beurk
-
-      Stub.Value = _CurAPOrder.PIP_WPAngle;
-      CheckFloatInput(Stub, Target);
-      _CurAPOrder.PIP_WPAngle = Stub.Value;
-      break;
-  }
-}
-
-function CheckFloatInput(DestObj, SrcObj) {
-  var ObjValue;
-
-  if (_typeof(DestObj) === "object") {
-    DestObj.Value = parseFloat(SrcObj.value);
-    ObjValue = DestObj.Value;
-  } else {
-    DestObj = parseFloat(SrcObj.value);
-    ObjValue = DestObj;
-  }
-
-  if (ObjValue.toString() !== SrcObj.Value) {
-    SrcObj.value = ObjValue.toString();
-  }
-}
-/* Contributors : paparazzia@gmail.com, ...
- * Code is licencesed under the AGPL license
- * See Copying file
- */
-
-/** 
- * @requires OpenLayers/ControlSwitch.js
- */
-
-/* Class: OpenLayers.Control.ControlSwitch
- * Inherits from:
- *  - <OpenLayers.Control>
- */
-
-
-OpenLayers.Control.ControlSwitch = OpenLayers.Class(OpenLayers.Control, {
-  label: "controlswitch",
-
-  /**
-   * APIProperty: roundedCorner
-   * {Boolean} If true the Rico library is used for rounding the corners
-   */
-  roundedCorner: true,
-
-  /**  
-   * APIProperty: roundedCornerColor
-   * {String} The color of the rounded corners, only applies if roundedCorner
-   *     is true, defaults to "darkblue".
-   */
-  roundedCornerColor: "darkblue",
-  // DOM Elements
-
-  /** 
-   * Property: baseDiv
-   * {DOMElement}
-   */
-  baseDiv: null,
-
-  /** 
-   * Property: minimizeDiv
-   * {DOMElement} 
-   */
-  minimizeDiv: null,
-
-  /** 
-   * Property: maximizeDiv
-   * {DOMElement} 
-   */
-  maximizeDiv: null,
-
-  /**
-   * Constructor: OpenLayers.Control.ControlSwitch
-   * 
-   * Parameters:
-   * options - {Object}
-   */
-  initialize: function initialize(options) {
-    OpenLayers.Control.prototype.initialize.apply(this, arguments);
-  },
-
-  /**
-   * APIMethod: destroy 
-   */
-  destroy: function destroy() {
-    OpenLayers.Event.stopObservingElement(this.div);
-    OpenLayers.Event.stopObservingElement(this.minimizeDiv);
-    OpenLayers.Event.stopObservingElement(this.maximizeDiv);
-    OpenLayers.Control.prototype.destroy.apply(this, arguments);
-  },
-
-  /**
-   * Method: draw
-   *
-   * Returns:
-   * {DOMElement} A reference to the DIV DOMElement containing the 
-   *     switcher tabs.
-   */
-  draw: function draw() {
-    OpenLayers.Control.prototype.draw.apply(this); // create layout divs
-
-    this.loadContents(); // set mode to minimize
-
-    if (!this.outsideViewport) {
-      this.minimizeControl();
-    } // populate div with current info
-
-
-    this.redraw();
-    return this.div;
-  },
-
-  /** 
-   * Method: redraw
-   *
-   * Returns: 
-   * {DOMElement} A reference to the DIV DOMElement containing the control
-   */
-  redraw: function redraw() {
-    //if the state hasn't changed since last redraw, no need 
-    // to do anything. Just return the existing div.
-
-    /*        if (!this.checkRedraw()) { 
-                return this.div; 
-            } */
-    this.baseDiv.innerHTML = "";
-    this.drawBaseDiv();
-    /*
-            OpenLayers.Event.observe(labelSpan, "click", 
-                OpenLayers.Function.bindAsEventListener(this.onInputClick,
-                                                        context)
-            );
-    */
-
-    return this.div;
-  },
-  drawBaseDiv: function drawBaseDiv() {
-    this.baseDiv.innerHTML = "Base Class, Control Switch";
-  },
-
-  /** 
-   * Method: maximizeControl
-   * Set up the labels and divs for the control
-   * 
-   * Parameters:
-   * e - {Event} 
-   */
-  maximizeControl: function maximizeControl(e) {
-    // set the div's width and height to empty values, so
-    // the div dimensions can be controlled by CSS
-    this.div.style.width = "";
-    this.div.style.height = "";
-    this.showControls(false);
-
-    if (e != null) {
-      OpenLayers.Event.stop(e);
-    }
-  },
-
-  /** 
-   * Method: minimizeControl
-   * Hide all the contents of the control, shrink the size, 
-   *     add the maximize icon
-   *
-   * Parameters:
-   * e - {Event} 
-   */
-  minimizeControl: function minimizeControl(e) {
-    // to minimize the control we set its div's width
-    // and height to 0px, we cannot just set "display"
-    // to "none" because it would hide the maximize
-    // div
-    this.div.style.width = "0px";
-    this.div.style.height = "0px";
-    this.showControls(true);
-
-    if (e != null) {
-      OpenLayers.Event.stop(e);
-    }
-  },
-
-  /**
-   * Method: showControls
-   * Hide/Show all LayerSwitcher controls depending on whether we are
-   *     minimized or not
-   * 
-   * Parameters:
-   * minimize - {Boolean}
-   */
-  showControls: function showControls(minimize) {
-    this.maximizeDiv.style.display = minimize ? "" : "none";
-    this.minimizeDiv.style.display = minimize ? "none" : "";
-    this.baseDiv.style.display = minimize ? "none" : "";
-  },
-
-  /** 
-   * Method: loadContents
-   * Set up the labels and divs for the control
-   */
-  loadContents: function loadContents() {
-    //configure main div
-    OpenLayers.Event.observe(this.div, "mouseup", OpenLayers.Function.bindAsEventListener(this.mouseUp, this));
-    OpenLayers.Event.observe(this.div, "click", this.ignoreEvent);
-    OpenLayers.Event.observe(this.div, "mousedown", OpenLayers.Function.bindAsEventListener(this.mouseDown, this));
-    OpenLayers.Event.observe(this.div, "dblclick", this.ignoreEvent);
-    this.baseDiv = document.createElement("div");
-    this.baseDiv.id = this.id + "_baseDiv";
-    OpenLayers.Element.addClass(this.baseDiv, "baseDiv");
-    this.div.appendChild(this.baseDiv);
-
-    if (this.roundedCorner) {
-      OpenLayers.Rico.Corner.round(this.div, {
-        corners: "tl bl",
-        bgColor: "transparent",
-        color: this.roundedCornerColor,
-        blend: false
-      });
-      OpenLayers.Rico.Corner.changeOpacity(this.baseDiv, 0.75);
-    }
-
-    var imgLocation = OpenLayers.Util.getImagesLocation();
-    var sz = new OpenLayers.Size(18, 18); // maximize button div
-
-    var img = imgLocation + 'layer-switcher-maximize.png';
-    this.maximizeDiv = OpenLayers.Util.createAlphaImageDiv("OpenLayers_Control_MaximizeDiv", null, sz, img, "absolute");
-    OpenLayers.Element.addClass(this.maximizeDiv, "maximizeDiv");
-    this.maximizeDiv.style.display = "none";
-    OpenLayers.Event.observe(this.maximizeDiv, "click", OpenLayers.Function.bindAsEventListener(this.maximizeControl, this));
-    this.div.appendChild(this.maximizeDiv); // minimize button div
-
-    img = imgLocation + 'layer-switcher-minimize.png';
-    sz = new OpenLayers.Size(18, 18);
-    this.minimizeDiv = OpenLayers.Util.createAlphaImageDiv("OpenLayers_Control_MinimizeDiv", null, sz, img, "absolute");
-    OpenLayers.Element.addClass(this.minimizeDiv, "minimizeDiv");
-    this.minimizeDiv.style.display = "none";
-    OpenLayers.Event.observe(this.minimizeDiv, "click", OpenLayers.Function.bindAsEventListener(this.minimizeControl, this));
-    this.div.appendChild(this.minimizeDiv);
-  },
-
-  /** 
-   * Method: ignoreEvent
-   * 
-   * Parameters:
-   * evt - {Event} 
-   */
-  ignoreEvent: function ignoreEvent(evt) {
-    OpenLayers.Event.stop(evt);
-  },
-
-  /** 
-   * Method: mouseDown
-   * Register a local 'mouseDown' flag so that we'll know whether or not
-   *     to ignore a mouseUp event
-   * 
-   * Parameters:
-   * evt - {Event}
-   */
-  mouseDown: function mouseDown(evt) {
-    this.isMouseDown = true;
-    this.ignoreEvent(evt);
-  },
-
-  /** 
-   * Method: mouseUp
-   * If the 'isMouseDown' flag has been set, that means that the drag was 
-   *     started from within the LayerSwitcher control, and thus we can 
-   *     ignore the mouseup. Otherwise, let the Event continue.
-   *  
-   * Parameters:
-   * evt - {Event} 
-   */
-  mouseUp: function mouseUp(evt) {
-    if (this.isMouseDown) {
-      this.isMouseDown = false;
-      this.ignoreEvent(evt);
-    }
-  },
-  CLASS_NAME: "OpenLayers.Control.ControlSwitch"
-});
-
-function BoatEstimate(Est) {
-  this.Position = null;
-  this.Date = null;
-  this.PrevDate = null;
-  this.Mode = null;
-  this.Value = null;
-  this.Meteo = null;
-  this.CurWP = new VLMPosition(0, 0);
-  this.HdgAtWP = -1;
-  this.RaceWP = 1;
-  this.Heading = null;
-
-  if (typeof Est !== "undefined" && Est) {
-    this.Position = new VLMPosition(Est.Position.Lon.Value, Est.Position.Lat.Value);
-    this.Date = new Date(Est.Date);
-    this.PrevDate = new Date(Est.PrevDate);
-    this.Mode = Est.Mode;
-    this.Value = Est.Value;
-
-    if (typeof Est.Meteo !== "undefined" && Est.Meteo) {
-      this.Meteo = new WindData({
-        Speed: Est.Meteo.Speed,
-        Heading: Est.Meteo.Heading
-      });
-    }
-
-    this.CurWP = Est.CurWP;
-    this.RaceWP = Est.RaceWP;
-    this.Heading = Est.Heading;
-  }
-}
-
-function Estimator(Boat) {
-  if (typeof Boat === 'undefined' || !Boat) {
-    throw "Boat must exist for tracking....";
-  }
-
-  this.Boat = Boat;
-  this.MaxVacEstimate = 0;
-  this.CurEstimate = new BoatEstimate();
-  this.Running = false;
-  this.EstimateTrack = [];
-  this.EstimatePoints = [];
-  this.ProgressCallBack = null;
-  this.ErrorCount = 0;
-  this.EstimateMapFeatures = []; // Current estimate position
-
-  this.Stop = function () {
-    // Stop the estimator if Running
-    if (this.Running) {
-      this.Running = false;
-      this.ReportProgress(true); //Estimate complete, DrawBoat track
-
-      DrawBoat(this.Boat);
-    }
-
-    return;
-  };
-
-  this.Start = function (ProgressCallBack) {
-    this.ProgressCallBack = ProgressCallBack;
-
-    if (this.Running) {
-      return;
-    }
-
-    this.Running = true;
-    GribMgr.Init();
-
-    if (typeof this.Boat.VLMInfo === "undefined") {
-      this.Stop();
-      return;
-    }
-
-    this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON, this.Boat.VLMInfo.LAT);
-    this.CurEstimate.PrevDate = new Date(this.Boat.VLMInfo.LUP * 1000);
-    this.CurEstimate.Date = new Date(this.Boat.VLMInfo.LUP * 1000 + 1000 * this.Boat.VLMInfo.VAC);
-
-    if (this.CurEstimate.Date < new Date()) {
-      if (typeof this.Boat.RaceInfo === "undefined") {
-        // Use cur date for estimate before start
-        this.CurEstimate.Date = new Date();
-      } else {
-        // Set Start to 1st VAC after start +6s 
-        var StartDate = new Date(parseInt(this.Boat.RaceInfo.deptime, 10) * 1000 + 1000 * this.Boat.VLMInfo.VAC + 6000);
-        this.CurEstimate.Date = StartDate;
-        this.CurEstimate.PrevDate = new Date(parseInt(this.Boat.RaceInfo.deptime, 10) * 1000);
-      }
-    }
-
-    this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM, 10);
-    this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT);
-    this.CurEstimate.HdgAtWP = parseFloat(this.Boat.VLMInfo["H@WP"]);
-    this.CurEstimate.RaceWP = parseInt(this.Boat.VLMInfo.NWP, 10);
-
-    if (this.CurEstimate.Mode == PM_HEADING || this.CurEstimate.Mode == PM_ANGLE) {
-      this.CurEstimate.Value = parseFloat(this.Boat.VLMInfo.PIP);
-    }
-
-    this.CurEstimate.PilOrders = [];
-
-    for (var _index in this.Boat.VLMInfo.PIL) {
-      var Order = this.Boat.VLMInfo.PIL[_index];
-      var NewOrder = {
-        PIP: Order.PIP,
-        PIM: Order.PIM,
-        STS: Order.STS,
-        TTS: Order.TTS
-      };
-      this.CurEstimate.PilOrders.push(NewOrder);
-    }
-
-    this.EstimateTrack = [];
-    this.EstimatePoints = [];
-    this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp);
-    this.ReportProgress(false); // Add Start point to estimate track
-
-    this.EstimateTrack.push(new BoatEstimate(this.CurEstimate));
-    this.ErrorCount = 0;
-    setTimeout(this.Estimate.bind(this), 0);
-  };
-
-  this.Estimate = function (Boat) {
-    if (!this.Running || this.CurEstimate.Date >= this.MaxVacEstimate) {
-      this.Stop();
-      return;
-    }
-
-    var MI;
-
-    do {
-      MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate, this.CurEstimate.Position.Lat.Value, this.CurEstimate.Position.Lon.Value);
-
-      if (!MI) {
-        if (this.ErrorCount > 10) {
-          this.Stop();
-          return;
-        }
-
-        this.ErrorCount++;
-        setTimeout(this.Estimate.bind(this), 1000);
-        return;
-      }
-
-      this.ErrorCount = 0;
-
-      if (isNaN(MI.Speed)) {
-        var Bkpt = 1;
-        alert("Looping on NaN WindSpeed");
-      }
-    } while (isNaN(MI.Speed));
-
-    this.CurEstimate.Meteo = MI; // Ok, got meteo, move the boat, and ask for new METEO
-    // Check if an update is required from AutoPilot;
-
-    for (var _index2 in this.CurEstimate.PilOrders) {
-      var Order = this.CurEstimate.PilOrders[_index2];
-
-      if (Order && Order.STS === "pending") {
-        var OrderTime = new Date(parseInt(Order.TTS, 10) * 1000.0);
-
-        if (OrderTime <= this.CurEstimate.Date) {
-          // Use pilot order to update the current Mode
-          this.CurEstimate.Mode = parseInt(Order.PIM, 10);
-
-          switch (this.CurEstimate.Mode) {
-            case PM_ANGLE:
-            case PM_HEADING:
-              this.CurEstimate.Value = parseFloat(Order.PIP);
-              break;
-
-            case PM_ORTHO:
-            case PM_VMG:
-            case PM_VBVMG:
-              var p1 = Order.PIP.split("@");
-
-              var _Dest = p1[0].split(",");
-
-              this.CurEstimate.CurWP = new VLMPosition(parseFloat(_Dest[1]), parseFloat(_Dest[0]));
-              this.CurEstimate.HdgAtWP = parseFloat(p1[1]);
-              break;
-
-            default:
-              alert("unsupported pilototo mode");
-              this.Stop();
-              return;
-          }
-
-          this.CurEstimate.PilOrders[_index2] = null;
-          break;
-        }
-      }
-    }
-
-    var Hdg = this.CurEstimate.Value;
-    var Speed = 0;
-    var NewPos = null;
-    var Dest = null;
-
-    switch (this.CurEstimate.Mode) {
-      case PM_ANGLE:
-        // This goes just before Heading, since we only update the Hdg, rest is the same
-        // Going fixed angle, get bearing, compute speed, move
-        Hdg = MI.Heading + this.CurEstimate.Value;
-        Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
-        NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
-        break;
-
+  var t = "add";
+
+  if (void 0 !== _CurAPOrder && _CurAPOrder) {
+    var a = {
+      idu: _CurPlayer.CurBoat.IdBoat,
+      tasktime: Math.round(_CurAPOrder.Date / 1e3),
+      pim: _CurAPOrder.PIM
+    };
+
+    switch (-1 !== _CurAPOrder.ID && (t = "update", a.taskid = _CurAPOrder.ID), _CurAPOrder.PIM) {
       case PM_HEADING:
-        // Going fixed bearing, get boat speed, move along loxo
-        Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
-        NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
+      case PM_ANGLE:
+        a.pip = _CurAPOrder.PIP_Value;
         break;
 
       case PM_ORTHO:
       case PM_VMG:
       case PM_VBVMG:
-        Dest = this.GetNextWPCoords(this.CurEstimate);
+        a.pip = {}, a.pip.targetlat = _CurAPOrder.PIP_Coords.Lat.Value, a.pip.targetlong = _CurAPOrder.PIP_Coords.Lon.Value, a.pip.targetandhdg = -1 === _CurAPOrder.PIP_WPAngle ? null : _CurAPOrder.PIP_WPAngle;
+    }
 
-        if (this.CurEstimate.Mode == PM_ORTHO) {
-          Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
-          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
-          NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
-        } else {
-          if (this.CurEstimate.Mode == PM_VMG) {
-            Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, this.CurEstimate.Position, Dest);
-          } else {
-            Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, this.CurEstimate.Position, Dest);
-          }
+    $.post("/ws/boatsetup/pilototo_" + t + ".php", "parms=" + JSON.stringify(a), function (e) {
+      e.success ? RefreshCurrentBoat(!1, !0, "AutoPilot") : alert(e.error.msg);
+    });
+  }
+}
 
-          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
-          NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
+function HandleAPFieldChange(e) {
+  var t = e.target;
+  if (void 0 !== t.attributes.id) switch (t.attributes.id.value) {
+    case "AP_PIP":
+      _CurAPOrder.PIP_Value = parseFloat(t.value), _CurAPOrder.PIP_Value.toString() !== t.Value && (t.value = _CurAPOrder.PIP_Value.toString());
+      break;
+
+    case "AP_WPLat":
+      CheckFloatInput(_CurAPOrder.PIP_Coords.Lat, t);
+      break;
+
+    case "AP_WPLon":
+      CheckFloatInput(_CurAPOrder.PIP_Coords.Lon, t);
+      break;
+
+    case "AP_WPAt":
+      var a = {};
+      a.Value = _CurAPOrder.PIP_WPAngle, CheckFloatInput(a, t), _CurAPOrder.PIP_WPAngle = a.Value;
+  }
+}
+
+function CheckFloatInput(e, t) {
+  var a;
+  "object" == _typeof(e) ? (e.Value = parseFloat(t.value), a = e.Value) : a = e = parseFloat(t.value), a.toString() !== t.Value && (t.value = a.toString());
+}
+
+function BoatEstimate(e) {
+  this.Position = null, this.Date = null, this.PrevDate = null, this.Mode = null, this.Value = null, this.Meteo = null, this.CurWP = new VLMPosition(0, 0), this.HdgAtWP = -1, this.RaceWP = 1, this.Heading = null, void 0 !== e && e && (this.Position = new VLMPosition(e.Position.Lon.Value, e.Position.Lat.Value), this.Date = new Date(e.Date), this.PrevDate = new Date(e.PrevDate), this.Mode = e.Mode, this.Value = e.Value, void 0 !== e.Meteo && e.Meteo && (this.Meteo = new WindData({
+    Speed: e.Meteo.Speed,
+    Heading: e.Meteo.Heading
+  })), this.CurWP = e.CurWP, this.RaceWP = e.RaceWP, this.Heading = e.Heading);
+}
+
+function Estimator(e) {
+  if (void 0 === e || !e) throw "Boat must exist for tracking....";
+  this.Boat = e, this.MaxVacEstimate = 0, this.CurEstimate = new BoatEstimate(), this.Running = !1, this.EstimateTrack = [], this.EstimatePoints = [], this.ProgressCallBack = null, this.ErrorCount = 0, this.EstimateMapFeatures = [], this.Stop = function () {
+    this.Running && (this.Running = !1, this.ReportProgress(!0), DrawBoat(this.Boat));
+  }, this.Start = function (e) {
+    if (this.ProgressCallBack = e, !this.Running) if (this.Running = !0, GribMgr.Init(), void 0 !== this.Boat.VLMInfo) {
+      if (this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON, this.Boat.VLMInfo.LAT), this.CurEstimate.PrevDate = new Date(1e3 * this.Boat.VLMInfo.LUP), this.CurEstimate.Date = new Date(1e3 * this.Boat.VLMInfo.LUP + 1e3 * this.Boat.VLMInfo.VAC), this.CurEstimate.Date < new Date()) if (void 0 === this.Boat.RaceInfo) this.CurEstimate.Date = new Date();else {
+        var _e = new Date(1e3 * parseInt(this.Boat.RaceInfo.deptime, 10) + 1e3 * this.Boat.VLMInfo.VAC + 6e3);
+
+        this.CurEstimate.Date = _e, this.CurEstimate.PrevDate = new Date(1e3 * parseInt(this.Boat.RaceInfo.deptime, 10));
+      }
+      this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM, 10), this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT), this.CurEstimate.HdgAtWP = parseFloat(this.Boat.VLMInfo["H@WP"]), this.CurEstimate.RaceWP = parseInt(this.Boat.VLMInfo.NWP, 10), this.CurEstimate.Mode != PM_HEADING && this.CurEstimate.Mode != PM_ANGLE || (this.CurEstimate.Value = parseFloat(this.Boat.VLMInfo.PIP)), this.CurEstimate.PilOrders = [];
+
+      for (var _e2 in this.Boat.VLMInfo.PIL) {
+        var t = this.Boat.VLMInfo.PIL[_e2],
+            a = {
+          PIP: t.PIP,
+          PIM: t.PIM,
+          STS: t.STS,
+          TTS: t.TTS
+        };
+        this.CurEstimate.PilOrders.push(a);
+      }
+
+      this.EstimateTrack = [], this.EstimatePoints = [], this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp), this.ReportProgress(!1), this.EstimateTrack.push(new BoatEstimate(this.CurEstimate)), this.ErrorCount = 0, setTimeout(this.Estimate.bind(this), 0);
+    } else this.Stop();
+  }, this.Estimate = function (e) {
+    if (!this.Running || this.CurEstimate.Date >= this.MaxVacEstimate) return void this.Stop();
+    var t;
+
+    do {
+      if (!(t = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate, this.CurEstimate.Position.Lat.Value, this.CurEstimate.Position.Lon.Value))) return this.ErrorCount > 10 ? void this.Stop() : (this.ErrorCount++, void setTimeout(this.Estimate.bind(this), 1e3));
+
+      if (this.ErrorCount = 0, isNaN(t.Speed)) {
+        alert("Looping on NaN WindSpeed");
+      }
+    } while (isNaN(t.Speed));
+
+    this.CurEstimate.Meteo = t;
+
+    for (var _e3 in this.CurEstimate.PilOrders) {
+      var a = this.CurEstimate.PilOrders[_e3];
+      if (a && "pending" === a.STS) if (new Date(1e3 * parseInt(a.TTS, 10)) <= this.CurEstimate.Date) {
+        switch (this.CurEstimate.Mode = parseInt(a.PIM, 10), this.CurEstimate.Mode) {
+          case PM_ANGLE:
+          case PM_HEADING:
+            this.CurEstimate.Value = parseFloat(a.PIP);
+            break;
+
+          case PM_ORTHO:
+          case PM_VMG:
+          case PM_VBVMG:
+            var _e4 = a.PIP.split("@"),
+                _t = _e4[0].split(",");
+
+            this.CurEstimate.CurWP = new VLMPosition(parseFloat(_t[1]), parseFloat(_t[0])), this.CurEstimate.HdgAtWP = parseFloat(_e4[1]);
+            break;
+
+          default:
+            return alert("unsupported pilototo mode"), void this.Stop();
         }
 
-        this.CheckWPReached(Dest, this.CurEstimate.Position, NewPos);
+        this.CurEstimate.PilOrders[_e3] = null;
+        break;
+      }
+    }
+
+    var i = this.CurEstimate.Value,
+        n = 0,
+        o = null,
+        r = null;
+
+    switch (this.CurEstimate.Mode) {
+      case PM_ANGLE:
+        i = t.Heading + this.CurEstimate.Value, n = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, t.Speed, t.Heading, i), o = this.CurEstimate.Position.ReachDistLoxo(n / 3600 * this.Boat.VLMInfo.VAC, i);
+        break;
+
+      case PM_HEADING:
+        n = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, t.Speed, t.Heading, i), o = this.CurEstimate.Position.ReachDistLoxo(n / 3600 * this.Boat.VLMInfo.VAC, i);
+        break;
+
+      case PM_ORTHO:
+      case PM_VMG:
+      case PM_VBVMG:
+        r = this.GetNextWPCoords(this.CurEstimate), this.CurEstimate.Mode == PM_ORTHO ? (i = this.CurEstimate.Position.GetOrthoCourse(r), n = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, t.Speed, t.Heading, i), o = this.CurEstimate.Position.ReachDistOrtho(n / 3600 * this.Boat.VLMInfo.VAC, i)) : (i = this.CurEstimate.Mode == PM_VMG ? PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL, t.Speed, t.Heading, this.CurEstimate.Position, r) : PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL, t.Speed, t.Heading, this.CurEstimate.Position, r), n = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, t.Speed, t.Heading, i), o = this.CurEstimate.Position.ReachDistLoxo(n / 3600 * this.Boat.VLMInfo.VAC, i)), this.CheckWPReached(r, this.CurEstimate.Position, o);
         break;
 
       default:
         throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode;
     }
 
-    console.log(this.CurEstimate.Date + this.CurEstimate.Position.ToString(true) + "=> " + NewPos.Lon.ToString(true) + " " + NewPos.Lat.ToString(true) + " Wind : " + RoundPow(MI.Speed, 4) + "@" + RoundPow(MI.Heading, 4) + " Boat " + RoundPow(Speed, 4) + "kts" + RoundPow((Hdg + 360.0) % 360.0, 4));
-    var RaceComplete = false;
+    console.log(this.CurEstimate.Date + this.CurEstimate.Position.ToString(!0) + "=> " + o.Lon.ToString(!0) + " " + o.Lat.ToString(!0) + " Wind : " + RoundPow(t.Speed, 4) + "@" + RoundPow(t.Heading, 4) + " Boat " + RoundPow(n, 4) + "kts" + RoundPow((i + 360) % 360, 4));
+    var s = !1;
+    this.CheckGateValidation(o) && (s = this.GetNextRaceWP()), this.CurEstimate.Heading = i, this.CurEstimate.Position = o, this.EstimateTrack.push(new BoatEstimate(this.CurEstimate)), this.CurEstimate.PrevDate = this.CurEstimate.Date, this.CurEstimate.Date = new Date(1e3 * (this.CurEstimate.Date / 1e3 + this.Boat.VLMInfo.VAC)), s ? this.Stop() : (setTimeout(this.Estimate.bind(this), 0), this.ReportProgress(!1));
+  }, this.GetNextRaceWP = function () {
+    var e = Object.keys(this.Boat.RaceInfo.races_waypoints).length;
+    if (this.CurEstimate.RaceWP === e) return !0;
 
-    if (this.CheckGateValidation(NewPos)) {
-      RaceComplete = this.GetNextRaceWP();
-    }
-
-    this.CurEstimate.Heading = Hdg;
-    this.CurEstimate.Position = NewPos;
-    this.EstimateTrack.push(new BoatEstimate(this.CurEstimate)); // Start next point computation....
-
-    this.CurEstimate.PrevDate = this.CurEstimate.Date;
-    this.CurEstimate.Date = new Date((this.CurEstimate.Date / 1000 + this.Boat.VLMInfo.VAC) * 1000);
-
-    if (RaceComplete) {
-      this.Stop();
-      return;
-    } else {
-      setTimeout(this.Estimate.bind(this), 0);
-      this.ReportProgress(false);
-    }
-  };
-
-  this.GetNextRaceWP = function () {
-    var NbWP = Object.keys(this.Boat.RaceInfo.races_waypoints).length;
-
-    if (this.CurEstimate.RaceWP === NbWP) {
-      //Race Complete
-      return true;
-    }
-
-    for (var i = this.CurEstimate.RaceWP + 1; i <= NbWP; i++) {
-      if (!(this.Boat.RaceInfo.races_waypoints[i].wpformat & WP_ICE_GATE)) {
-        this.CurEstimate.RaceWP = i;
+    for (var t = this.CurEstimate.RaceWP + 1; t <= e; t++) {
+      if (!(this.Boat.RaceInfo.races_waypoints[t].wpformat & WP_ICE_GATE)) {
+        this.CurEstimate.RaceWP = t;
         break;
       }
     }
 
-    return false;
-  };
-
-  this.CheckGateValidation = function (NewPos) {
-    var GateSeg = this.GetNextGateSegment(this.CurEstimate);
-    var Gate = this.Boat.RaceInfo.races_waypoints[this.CurEstimate.RaceWP];
-    var CurSeg = {
+    return !1;
+  }, this.CheckGateValidation = function (e) {
+    var t = this.GetNextGateSegment(this.CurEstimate),
+        a = (this.Boat.RaceInfo.races_waypoints[this.CurEstimate.RaceWP], {
       P1: this.CurEstimate.Position,
-      P2: NewPos
-    };
-    var RetVal = VLMMercatorTransform.SegmentsIntersect(GateSeg, CurSeg);
-    return RetVal;
-  };
+      P2: e
+    });
+    return VLMMercatorTransform.SegmentsIntersect(t, a);
+  }, this.CheckWPReached = function (e, t, a) {
+    if (!this.CurEstimate.CurWP.Lat.value && !this.CurEstimate.CurWP.Lon.Value) return;
+    var i = e.GetOrthoDist(t),
+        n = e.GetOrthoDist(a),
+        o = t.GetOrthoDist(a);
+    (i < o || n < o) && (this.CurEstimate.CurWP = new VLMPosition(0, 0), -1 != this.CurEstimate.HdgAtWP && (this.CurEstimate.Mode = PM_HEADING, this.CurEstimate.Value = this.CurEstimate.HdgAtWP), console.log("WP Reached"));
+  }, this.GetNextWPCoords = function (e) {
+    return e.CurWP.Lat.value || e.CurWP.Lon.Value ? e.CurWP : this.Boat.GetNextWPPosition(e.RaceWP, e.Position, e.CurWP);
+  }, this.GetNextGateSegment = function (e) {
+    return this.Boat.GetNextGateSegment(e.RaceWP);
+  }, this.ReportProgress = function (e) {
+    var t = 0;
+    this.ProgressCallBack && (e || this.EstimateTrack.length > 1 && (t = RoundPow(100 * (1 - (t = (this.MaxVacEstimate - this.EstimateTrack[this.EstimateTrack.length - 1].Date) / (this.MaxVacEstimate - this.EstimateTrack[0].Date))), 1)), this.ProgressCallBack(e, t, this.CurEstimate.Date));
+  }, this.GetClosestEstimatePoint = function (e) {
+    return e instanceof VLMPosition ? this.GetClosestEstimatePointFromPosition(e) : e instanceof Date ? this.GetClosestEstimatePointFromTime(e) : null;
+  }, this.GetClosestEstimatePointFromTime = function (e) {
+    if (!e || !Object.keys(this.EstimateTrack).length) return null;
+    var t,
+        a = 0;
 
-  this.CheckWPReached = function (Dest, PrevPos, NewPos) {
-    if (!this.CurEstimate.CurWP.Lat.value && !this.CurEstimate.CurWP.Lon.Value) {
-      // AutoWP, nothing to do
-      return;
-    } // VLM REF from CheckWayPointCrossing
-    // On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
-    //if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
-
-
-    var BeforeDist = Dest.GetOrthoDist(PrevPos);
-    var AfterDist = Dest.GetOrthoDist(NewPos);
-    var CurDist = PrevPos.GetOrthoDist(NewPos);
-
-    if (BeforeDist < CurDist || AfterDist < CurDist) {
-      // WP Reached revert to AutoWP
-      this.CurEstimate.CurWP = new VLMPosition(0, 0);
-
-      if (this.CurEstimate.HdgAtWP != -1) {
-        this.CurEstimate.Mode = PM_HEADING;
-        this.CurEstimate.Value = this.CurEstimate.HdgAtWP;
-      }
-
-      console.log("WP Reached");
-    }
-  };
-
-  this.GetNextWPCoords = function (Estimate) {
-    if (Estimate.CurWP.Lat.value || Estimate.CurWP.Lon.Value) {
-      return Estimate.CurWP;
-    } else {
-      return this.Boat.GetNextWPPosition(Estimate.RaceWP, Estimate.Position, Estimate.CurWP);
-    }
-  };
-
-  this.GetNextGateSegment = function (Estimate) {
-    return this.Boat.GetNextGateSegment(Estimate.RaceWP);
-  };
-
-  this.ReportProgress = function (Complete) {
-    var Pct = 0;
-
-    if (this.ProgressCallBack) {
-      if (!Complete) {
-        if (this.EstimateTrack.length > 1) {
-          Pct = (this.MaxVacEstimate - this.EstimateTrack[this.EstimateTrack.length - 1].Date) / (this.MaxVacEstimate - this.EstimateTrack[0].Date);
-          Pct = RoundPow((1 - Pct) * 100.0, 1);
-        }
-      }
-
-      this.ProgressCallBack(Complete, Pct, this.CurEstimate.Date);
-    }
-  };
-
-  this.GetClosestEstimatePoint = function (Param) {
-    if (Param instanceof VLMPosition) {
-      return this.GetClosestEstimatePointFromPosition(Param);
-    } else if (Param instanceof Date) {
-      return this.GetClosestEstimatePointFromTime(Param);
-    } else {
-      return null;
-    }
-  };
-
-  this.GetClosestEstimatePointFromTime = function (Time) {
-    if (!Time || !Object.keys(this.EstimateTrack).length) {
-      return null;
-    }
-
-    var Index = 0;
-    var Delta;
-
-    for (Index = 0; Index < Object.keys(this.EstimateTrack).length; Index++) {
-      if (this.EstimateTrack[Index]) {
-        if (Time > this.EstimateTrack[Index].Date) {
-          Delta = Time - this.EstimateTrack[Index].Date;
-        } else {
-          break;
-        }
+    for (a = 0; a < Object.keys(this.EstimateTrack).length; a++) {
+      if (this.EstimateTrack[a]) {
+        if (!(e > this.EstimateTrack[a].Date)) break;
+        t = e - this.EstimateTrack[a].Date;
       }
     }
 
-    if (Index < Object.keys(this.EstimateTrack).length) {
-      var Delta2 = Time - this.EstimateTrack[Index + 1].Date;
+    if (a < Object.keys(this.EstimateTrack).length) {
+      var i = e - this.EstimateTrack[a + 1].Date;
+      Math.abs(i) < Math.abs(t) && a++;
+    }
 
-      if (Math.abs(Delta2) < Math.abs(Delta)) {
-        Index++;
+    return RetValue = this.EstimateTrack[a], RetValue;
+  }, this.GetClosestEstimatePointFromPosition = function (e) {
+    if (!e) return null;
+    var t,
+        a = 1e30,
+        i = null;
+
+    for (t = 0; t < Object.keys(this.EstimateTrack).length; t++) {
+      if (this.EstimateTrack[t]) {
+        var n = e.GetEuclidianDist2(this.EstimateTrack[t].Position);
+        n < a && (i = this.EstimateTrack[t], a = n);
       }
     }
 
-    RetValue = this.EstimateTrack[Index];
-    return RetValue;
-  };
-
-  this.GetClosestEstimatePointFromPosition = function (Pos) {
-    if (!Pos) {
-      return null;
-    }
-
-    var Dist = 1e30;
-    var index;
-    var RetValue = null;
-
-    for (index = 0; index < Object.keys(this.EstimateTrack).length; index++) {
-      if (this.EstimateTrack[index]) {
-        var d = Pos.GetEuclidianDist2(this.EstimateTrack[index].Position);
-
-        if (d < Dist) {
-          RetValue = this.EstimateTrack[index];
-          Dist = d;
-        }
-      }
-    }
-
-    return RetValue;
-  };
-
-  this.ClearEstimatePosition = function (Boat) {
-    this.ShowEstimatePosition(Boat, null);
-  };
-
-  this.ShowEstimatePosition = function (Boat, Estimate) {
-    // Track Estimate closest point to mousemove
+    return i;
+  }, this.ClearEstimatePosition = function (e) {
+    this.ShowEstimatePosition(e, null);
+  }, this.ShowEstimatePosition = function (e, t) {
     if (this.EstimateMapFeatures) {
-      for (var _index3 in this.EstimateMapFeatures) {
-        if (this.EstimateMapFeatures[_index3]) {
-          VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
-        }
+      for (var _e5 in this.EstimateMapFeatures) {
+        this.EstimateMapFeatures[_e5] && VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
       }
 
       this.EstimateMapFeatures = [];
     }
 
-    if (Estimate && Estimate.Position && Boat.VLMInfo.LON !== Estimate.Position.Lon.Value && Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value) {
-      var Position = Estimate.Position;
-      var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
-      var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection); // Estimate point marker
-
-      var Marker = new OpenLayers.Feature.Vector(EstPos_Transformed, {}, {
-        externalGraphic: 'images/target.svg',
-        opacity: 0.8,
+    if (t && t.Position && e.VLMInfo.LON !== t.Position.Lon.Value && e.VLMInfo.LAT !== t.Position.Lat.Value) {
+      var r = t.Position,
+          s = new OpenLayers.Geometry.Point(r.Lon.Value, r.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
+      var a = new OpenLayers.Feature.Vector(s, {}, {
+        externalGraphic: "images/target.svg",
+        opacity: .8,
         graphicHeight: 48,
         graphicWidth: 48,
-        rotation: Estimate.Heading
+        rotation: t.Heading
       });
-      VLMBoatsLayer.addFeatures(Marker);
-      this.EstimateMapFeatures.push(Marker);
 
-      if (typeof Estimate.Meteo !== "undefined") {
-        var scale = VLM2Prefs.MapPrefs.PolarVacCount;
-        var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
-        var Polar = [];
-        BuildPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
-        var BoatPolar = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(Polar), {
-          "type": "Polar",
-          "WindDir": Estimate.Meteo.Heading
+      if (VLMBoatsLayer.addFeatures(a), this.EstimateMapFeatures.push(a), void 0 !== t.Meteo) {
+        var i = VLM2Prefs.MapPrefs.PolarVacCount,
+            n = [];
+        BuildPolarLine(e, PolarsManager.GetPolarLine(e.VLMInfo.POL, t.Meteo.Speed, DrawBoat, e), n, r, i, t.Date);
+        var o = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(n), {
+          type: "Polar",
+          WindDir: t.Meteo.Heading
         });
-        this.EstimateMapFeatures.push(BoatPolar);
-        VLMBoatsLayer.addFeatures(BoatPolar);
+        this.EstimateMapFeatures.push(o), VLMBoatsLayer.addFeatures(o);
       }
     }
   };
 }
-/*
-function HandleEstimatorStart(e)
-{
-  var e = new Estimator(_CurPlayer.CurBoat);
+
+function Coords(e, t) {
+  this.Value = "number" == typeof e ? e : parseFloat(e), this.IsLon = t, this.Deg = function () {
+    return Math.abs(this.Value);
+  }, this.Min = function () {
+    return 60 * (Math.abs(this.Value) - Math.floor(this.Deg()));
+  }, this.Sec = function () {
+    return 60 * (this.Min() - Math.floor(this.Min()));
+  }, this.ToString = function (e) {
+    if (e) return this.Value;
+    {
+      var _e6 = "";
+      return _e6 = void 0 === this.IsLon || 0 == this.IsLon ? this.Value >= 0 ? " N" : " S" : this.Value >= 0 ? " E" : " W", Math.floor(this.Deg()) + "° " + Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"' + _e6;
+    }
+  };
 }
-*/
-// Copyright 2006 Google Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//   http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// Known Issues:
-//
-// * Patterns only support repeat.
-// * Radial gradient are not implemented. The VML version of these look very
-//   different from the canvas one.
-// * Clipping paths are not implemented.
-// * Coordsize. The width and height attribute have higher priority than the
-//   width and height style values which isn't correct.
-// * Painting mode isn't implemented.
-// * Canvas width/height should is using content-box by default. IE in
-//   Quirks mode will draw the canvas using border-box. Either change your
-//   doctype to HTML5
-//   (http://www.whatwg.org/specs/web-apps/current-work/#the-doctype)
-//   or use Box Sizing Behavior from WebFX
-//   (http://webfx.eae.net/dhtml/boxsizing/boxsizing.html)
-// * Non uniform scaling does not correctly scale strokes.
-// * Optimize. There is always room for speed improvements.
-// Only add this code if we do not already have a canvas implementation
 
+function GetDegMinSecFromNumber(e, t, a, i) {
+  SplitNumber(e, t, void 0), SplitNumber(NaN, a, void 0), SplitNumber(NaN, i, void 0);
+}
 
-if (!document.createElement('canvas').getContext) {
-  (function () {
-    // alias some functions to make (compiled) code shorter
-    var m = Math;
-    var mr = m.round;
-    var ms = m.sin;
-    var mc = m.cos;
-    var abs = m.abs;
-    var sqrt = m.sqrt; // this is used for sub pixel precision
+function SplitNumber(e, t, a) {
+  Math.floor(e);
+}
 
-    var Z = 10;
-    var Z2 = Z / 2;
-    var IE_VERSION = +navigator.userAgent.match(/MSIE ([\d.]+)?/)[1];
-    /**
-     * This funtion is assigned to the <canvas> elements as element.getContext().
-     * @this {HTMLElement}
-     * @return {CanvasRenderingContext2D_}
-     */
+VLM2Prefs.Init(), OpenLayers.Control.ControlSwitch = OpenLayers.Class(OpenLayers.Control, {
+  label: "controlswitch",
+  roundedCorner: !0,
+  roundedCornerColor: "darkblue",
+  baseDiv: null,
+  minimizeDiv: null,
+  maximizeDiv: null,
+  initialize: function initialize(e) {
+    OpenLayers.Control.prototype.initialize.apply(this, arguments);
+  },
+  destroy: function destroy() {
+    OpenLayers.Event.stopObservingElement(this.div), OpenLayers.Event.stopObservingElement(this.minimizeDiv), OpenLayers.Event.stopObservingElement(this.maximizeDiv), OpenLayers.Control.prototype.destroy.apply(this, arguments);
+  },
+  draw: function draw() {
+    return OpenLayers.Control.prototype.draw.apply(this), this.loadContents(), this.outsideViewport || this.minimizeControl(), this.redraw(), this.div;
+  },
+  redraw: function redraw() {
+    return this.baseDiv.innerHTML = "", this.drawBaseDiv(), this.div;
+  },
+  drawBaseDiv: function drawBaseDiv() {
+    this.baseDiv.innerHTML = "Base Class, Control Switch";
+  },
+  maximizeControl: function maximizeControl(e) {
+    this.div.style.width = "", this.div.style.height = "", this.showControls(!1), null != e && OpenLayers.Event.stop(e);
+  },
+  minimizeControl: function minimizeControl(e) {
+    this.div.style.width = "0px", this.div.style.height = "0px", this.showControls(!0), null != e && OpenLayers.Event.stop(e);
+  },
+  showControls: function showControls(e) {
+    this.maximizeDiv.style.display = e ? "" : "none", this.minimizeDiv.style.display = e ? "none" : "", this.baseDiv.style.display = e ? "none" : "";
+  },
+  loadContents: function loadContents() {
+    OpenLayers.Event.observe(this.div, "mouseup", OpenLayers.Function.bindAsEventListener(this.mouseUp, this)), OpenLayers.Event.observe(this.div, "click", this.ignoreEvent), OpenLayers.Event.observe(this.div, "mousedown", OpenLayers.Function.bindAsEventListener(this.mouseDown, this)), OpenLayers.Event.observe(this.div, "dblclick", this.ignoreEvent), this.baseDiv = document.createElement("div"), this.baseDiv.id = this.id + "_baseDiv", OpenLayers.Element.addClass(this.baseDiv, "baseDiv"), this.div.appendChild(this.baseDiv), this.roundedCorner && (OpenLayers.Rico.Corner.round(this.div, {
+      corners: "tl bl",
+      bgColor: "transparent",
+      color: this.roundedCornerColor,
+      blend: !1
+    }), OpenLayers.Rico.Corner.changeOpacity(this.baseDiv, .75));
+    var e = OpenLayers.Util.getImagesLocation(),
+        t = new OpenLayers.Size(18, 18),
+        a = e + "layer-switcher-maximize.png";
+    this.maximizeDiv = OpenLayers.Util.createAlphaImageDiv("OpenLayers_Control_MaximizeDiv", null, t, a, "absolute"), OpenLayers.Element.addClass(this.maximizeDiv, "maximizeDiv"), this.maximizeDiv.style.display = "none", OpenLayers.Event.observe(this.maximizeDiv, "click", OpenLayers.Function.bindAsEventListener(this.maximizeControl, this)), this.div.appendChild(this.maximizeDiv), a = e + "layer-switcher-minimize.png", t = new OpenLayers.Size(18, 18), this.minimizeDiv = OpenLayers.Util.createAlphaImageDiv("OpenLayers_Control_MinimizeDiv", null, t, a, "absolute"), OpenLayers.Element.addClass(this.minimizeDiv, "minimizeDiv"), this.minimizeDiv.style.display = "none", OpenLayers.Event.observe(this.minimizeDiv, "click", OpenLayers.Function.bindAsEventListener(this.minimizeControl, this)), this.div.appendChild(this.minimizeDiv);
+  },
+  ignoreEvent: function ignoreEvent(e) {
+    OpenLayers.Event.stop(e);
+  },
+  mouseDown: function mouseDown(e) {
+    this.isMouseDown = !0, this.ignoreEvent(e);
+  },
+  mouseUp: function mouseUp(e) {
+    this.isMouseDown && (this.isMouseDown = !1, this.ignoreEvent(e));
+  },
+  CLASS_NAME: "OpenLayers.Control.ControlSwitch"
+}), document.createElement("canvas").getContext || function () {
+  var e = Math,
+      t = e.round,
+      a = e.sin,
+      i = e.cos,
+      n = e.abs,
+      o = e.sqrt,
+      r = 10,
+      s = r / 2;
+  navigator.userAgent.match(/MSIE ([\d.]+)?/)[1];
 
-    function getContext() {
-      return this.context_ || (this.context_ = new CanvasRenderingContext2D_(this));
+  function l() {
+    return this.context_ || (this.context_ = new T(this));
+  }
+
+  var d = Array.prototype.slice;
+
+  function u(e) {
+    return String(e).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+  }
+
+  function c(e, t, a) {
+    e.namespaces[t] || e.namespaces.add(t, a, "#default#VML");
+  }
+
+  function h(e) {
+    if (c(e, "g_vml_", "urn:schemas-microsoft-com:vml"), c(e, "g_o_", "urn:schemas-microsoft-com:office:office"), !e.styleSheets.ex_canvas_) {
+      var t = e.createStyleSheet();
+      t.owningElement.id = "ex_canvas_", t.cssText = "canvas{display:inline-block;overflow:hidden;text-align:left;width:300px;height:150px}";
     }
+  }
 
-    var slice = Array.prototype.slice;
-    /**
-     * Binds a function to an object. The returned function will always use the
-     * passed in {@code obj} as {@code this}.
-     *
-     * Example:
-     *
-     *   g = bind(f, obj, a, b)
-     *   g(c, d) // will do f.call(obj, a, b, c, d)
-     *
-     * @param {Function} f The function to bind the object to
-     * @param {Object} obj The object that should act as this when the function
-     *     is called
-     * @param {*} var_args Rest arguments that will be used as the initial
-     *     arguments when the function is called
-     * @return {Function} A new function that has bound this
-     */
-
-    function bind(f, obj, var_args) {
-      var a = slice.call(arguments, 2);
-      return function () {
-        return f.apply(obj, a.concat(slice.call(arguments)));
-      };
-    }
-
-    function encodeHtmlAttribute(s) {
-      return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-    }
-
-    function addNamespace(doc, prefix, urn) {
-      if (!doc.namespaces[prefix]) {
-        doc.namespaces.add(prefix, urn, '#default#VML');
+  h(document);
+  var p = {
+    init: function init(e) {
+      var t = e || document;
+      t.createElement("canvas"), t.attachEvent("onreadystatechange", function (e, t, a) {
+        var i = d.call(arguments, 2);
+        return function () {
+          return e.apply(t, i.concat(d.call(arguments)));
+        };
+      }(this.init_, this, t));
+    },
+    init_: function init_(e) {
+      for (var t = e.getElementsByTagName("canvas"), a = 0; a < t.length; a++) {
+        this.initElement(t[a]);
       }
-    }
-
-    function addNamespacesAndStylesheet(doc) {
-      addNamespace(doc, 'g_vml_', 'urn:schemas-microsoft-com:vml');
-      addNamespace(doc, 'g_o_', 'urn:schemas-microsoft-com:office:office'); // Setup default CSS.  Only add one style sheet per document
-
-      if (!doc.styleSheets.ex_canvas_) {
-        var ss = doc.createStyleSheet();
-        ss.owningElement.id = 'ex_canvas_';
-        ss.cssText = 'canvas{display:inline-block;overflow:hidden;' + // default size is 300x150 in Gecko and Opera
-        'text-align:left;width:300px;height:150px}';
+    },
+    initElement: function initElement(e) {
+      if (!e.getContext) {
+        e.getContext = l, h(e.ownerDocument), e.innerHTML = "", e.attachEvent("onpropertychange", f), e.attachEvent("onresize", P);
+        var t = e.attributes;
+        t.width && t.width.specified ? e.style.width = t.width.nodeValue + "px" : e.width = e.clientWidth, t.height && t.height.specified ? e.style.height = t.height.nodeValue + "px" : e.height = e.clientHeight;
       }
-    } // Add namespaces and stylesheet at startup.
 
+      return e;
+    }
+  };
 
-    addNamespacesAndStylesheet(document);
-    var G_vmlCanvasManager_ = {
-      init: function init(opt_doc) {
-        var doc = opt_doc || document; // Create a dummy element so that IE will allow canvas elements to be
-        // recognized.
+  function f(e) {
+    var t = e.srcElement;
 
-        doc.createElement('canvas');
-        doc.attachEvent('onreadystatechange', bind(this.init_, this, doc));
-      },
-      init_: function init_(doc) {
-        // find all canvas elements
-        var els = doc.getElementsByTagName('canvas');
+    switch (e.propertyName) {
+      case "width":
+        t.getContext().clearRect(), t.style.width = t.attributes.width.nodeValue + "px", t.firstChild.style.width = t.clientWidth + "px";
+        break;
 
-        for (var i = 0; i < els.length; i++) {
-          this.initElement(els[i]);
-        }
-      },
+      case "height":
+        t.getContext().clearRect(), t.style.height = t.attributes.height.nodeValue + "px", t.firstChild.style.height = t.clientHeight + "px";
+    }
+  }
 
-      /**
-       * Public initializes a canvas element so that it can be used as canvas
-       * element from now on. This is called automatically before the page is
-       * loaded but if you are creating elements using createElement you need to
-       * make sure this is called on the element.
-       * @param {HTMLElement} el The canvas element to initialize.
-       * @return {HTMLElement} the element that was created.
-       */
-      initElement: function initElement(el) {
-        if (!el.getContext) {
-          el.getContext = getContext; // Add namespaces and stylesheet to document of the element.
+  function P(e) {
+    var t = e.srcElement;
+    t.firstChild && (t.firstChild.style.width = t.clientWidth + "px", t.firstChild.style.height = t.clientHeight + "px");
+  }
 
-          addNamespacesAndStylesheet(el.ownerDocument); // Remove fallback content. There is no way to hide text nodes so we
-          // just remove all childNodes. We could hide all elements and remove
-          // text nodes but who really cares about the fallback content.
+  p.init();
 
-          el.innerHTML = ''; // do not use inline function because that will leak memory
+  for (var g = [], L = 0; L < 16; L++) {
+    for (var m = 0; m < 16; m++) {
+      g[16 * L + m] = L.toString(16) + m.toString(16);
+    }
+  }
 
-          el.attachEvent('onpropertychange', onPropertyChange);
-          el.attachEvent('onresize', onResize);
-          var attrs = el.attributes;
-
-          if (attrs.width && attrs.width.specified) {
-            // TODO: use runtimeStyle and coordsize
-            // el.getContext().setWidth_(attrs.width.nodeValue);
-            el.style.width = attrs.width.nodeValue + 'px';
-          } else {
-            el.width = el.clientWidth;
-          }
-
-          if (attrs.height && attrs.height.specified) {
-            // TODO: use runtimeStyle and coordsize
-            // el.getContext().setHeight_(attrs.height.nodeValue);
-            el.style.height = attrs.height.nodeValue + 'px';
-          } else {
-            el.height = el.clientHeight;
-          } //el.getContext().setCoordsize_()
-
+  function M(e, t) {
+    for (var a = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], i = 0; i < 3; i++) {
+      for (var n = 0; n < 3; n++) {
+        for (var o = 0, r = 0; r < 3; r++) {
+          o += e[i][r] * t[r][n];
         }
 
-        return el;
-      }
-    };
-
-    function onPropertyChange(e) {
-      var el = e.srcElement;
-
-      switch (e.propertyName) {
-        case 'width':
-          el.getContext().clearRect();
-          el.style.width = el.attributes.width.nodeValue + 'px'; // In IE8 this does not trigger onresize.
-
-          el.firstChild.style.width = el.clientWidth + 'px';
-          break;
-
-        case 'height':
-          el.getContext().clearRect();
-          el.style.height = el.attributes.height.nodeValue + 'px';
-          el.firstChild.style.height = el.clientHeight + 'px';
-          break;
+        a[i][n] = o;
       }
     }
 
-    function onResize(e) {
-      var el = e.srcElement;
+    return a;
+  }
 
-      if (el.firstChild) {
-        el.firstChild.style.width = el.clientWidth + 'px';
-        el.firstChild.style.height = el.clientHeight + 'px';
+  function C(e, t) {
+    t.fillStyle = e.fillStyle, t.lineCap = e.lineCap, t.lineJoin = e.lineJoin, t.lineWidth = e.lineWidth, t.miterLimit = e.miterLimit, t.shadowBlur = e.shadowBlur, t.shadowColor = e.shadowColor, t.shadowOffsetX = e.shadowOffsetX, t.shadowOffsetY = e.shadowOffsetY, t.strokeStyle = e.strokeStyle, t.globalAlpha = e.globalAlpha, t.font = e.font, t.textAlign = e.textAlign, t.textBaseline = e.textBaseline, t.arcScaleX_ = e.arcScaleX_, t.arcScaleY_ = e.arcScaleY_, t.lineScale_ = e.lineScale_;
+  }
+
+  var y = {
+    aliceblue: "#F0F8FF",
+    antiquewhite: "#FAEBD7",
+    aquamarine: "#7FFFD4",
+    azure: "#F0FFFF",
+    beige: "#F5F5DC",
+    bisque: "#FFE4C4",
+    black: "#000000",
+    blanchedalmond: "#FFEBCD",
+    blueviolet: "#8A2BE2",
+    brown: "#A52A2A",
+    burlywood: "#DEB887",
+    cadetblue: "#5F9EA0",
+    chartreuse: "#7FFF00",
+    chocolate: "#D2691E",
+    coral: "#FF7F50",
+    cornflowerblue: "#6495ED",
+    cornsilk: "#FFF8DC",
+    crimson: "#DC143C",
+    cyan: "#00FFFF",
+    darkblue: "#00008B",
+    darkcyan: "#008B8B",
+    darkgoldenrod: "#B8860B",
+    darkgray: "#A9A9A9",
+    darkgreen: "#006400",
+    darkgrey: "#A9A9A9",
+    darkkhaki: "#BDB76B",
+    darkmagenta: "#8B008B",
+    darkolivegreen: "#556B2F",
+    darkorange: "#FF8C00",
+    darkorchid: "#9932CC",
+    darkred: "#8B0000",
+    darksalmon: "#E9967A",
+    darkseagreen: "#8FBC8F",
+    darkslateblue: "#483D8B",
+    darkslategray: "#2F4F4F",
+    darkslategrey: "#2F4F4F",
+    darkturquoise: "#00CED1",
+    darkviolet: "#9400D3",
+    deeppink: "#FF1493",
+    deepskyblue: "#00BFFF",
+    dimgray: "#696969",
+    dimgrey: "#696969",
+    dodgerblue: "#1E90FF",
+    firebrick: "#B22222",
+    floralwhite: "#FFFAF0",
+    forestgreen: "#228B22",
+    gainsboro: "#DCDCDC",
+    ghostwhite: "#F8F8FF",
+    gold: "#FFD700",
+    goldenrod: "#DAA520",
+    grey: "#808080",
+    greenyellow: "#ADFF2F",
+    honeydew: "#F0FFF0",
+    hotpink: "#FF69B4",
+    indianred: "#CD5C5C",
+    indigo: "#4B0082",
+    ivory: "#FFFFF0",
+    khaki: "#F0E68C",
+    lavender: "#E6E6FA",
+    lavenderblush: "#FFF0F5",
+    lawngreen: "#7CFC00",
+    lemonchiffon: "#FFFACD",
+    lightblue: "#ADD8E6",
+    lightcoral: "#F08080",
+    lightcyan: "#E0FFFF",
+    lightgoldenrodyellow: "#FAFAD2",
+    lightgreen: "#90EE90",
+    lightgrey: "#D3D3D3",
+    lightpink: "#FFB6C1",
+    lightsalmon: "#FFA07A",
+    lightseagreen: "#20B2AA",
+    lightskyblue: "#87CEFA",
+    lightslategray: "#778899",
+    lightslategrey: "#778899",
+    lightsteelblue: "#B0C4DE",
+    lightyellow: "#FFFFE0",
+    limegreen: "#32CD32",
+    linen: "#FAF0E6",
+    magenta: "#FF00FF",
+    mediumaquamarine: "#66CDAA",
+    mediumblue: "#0000CD",
+    mediumorchid: "#BA55D3",
+    mediumpurple: "#9370DB",
+    mediumseagreen: "#3CB371",
+    mediumslateblue: "#7B68EE",
+    mediumspringgreen: "#00FA9A",
+    mediumturquoise: "#48D1CC",
+    mediumvioletred: "#C71585",
+    midnightblue: "#191970",
+    mintcream: "#F5FFFA",
+    mistyrose: "#FFE4E1",
+    moccasin: "#FFE4B5",
+    navajowhite: "#FFDEAD",
+    oldlace: "#FDF5E6",
+    olivedrab: "#6B8E23",
+    orange: "#FFA500",
+    orangered: "#FF4500",
+    orchid: "#DA70D6",
+    palegoldenrod: "#EEE8AA",
+    palegreen: "#98FB98",
+    paleturquoise: "#AFEEEE",
+    palevioletred: "#DB7093",
+    papayawhip: "#FFEFD5",
+    peachpuff: "#FFDAB9",
+    peru: "#CD853F",
+    pink: "#FFC0CB",
+    plum: "#DDA0DD",
+    powderblue: "#B0E0E6",
+    rosybrown: "#BC8F8F",
+    royalblue: "#4169E1",
+    saddlebrown: "#8B4513",
+    salmon: "#FA8072",
+    sandybrown: "#F4A460",
+    seagreen: "#2E8B57",
+    seashell: "#FFF5EE",
+    sienna: "#A0522D",
+    skyblue: "#87CEEB",
+    slateblue: "#6A5ACD",
+    slategray: "#708090",
+    slategrey: "#708090",
+    snow: "#FFFAFA",
+    springgreen: "#00FF7F",
+    steelblue: "#4682B4",
+    tan: "#D2B48C",
+    thistle: "#D8BFD8",
+    tomato: "#FF6347",
+    turquoise: "#40E0D0",
+    violet: "#EE82EE",
+    wheat: "#F5DEB3",
+    whitesmoke: "#F5F5F5",
+    yellowgreen: "#9ACD32"
+  };
+
+  function w(e) {
+    var t = e.indexOf("(", 3),
+        a = e.indexOf(")", t + 1),
+        i = e.substring(t + 1, a).split(",");
+    return 4 == i.length && "a" == e.charAt(3) || (i[3] = 1), i;
+  }
+
+  function v(e) {
+    return parseFloat(e) / 100;
+  }
+
+  function _(e, t, a) {
+    return Math.min(a, Math.max(t, e));
+  }
+
+  function I(e, t, a) {
+    return a < 0 && a++, a > 1 && a--, 6 * a < 1 ? e + 6 * (t - e) * a : 2 * a < 1 ? t : 3 * a < 2 ? e + (t - e) * (2 / 3 - a) * 6 : e;
+  }
+
+  var S = {};
+
+  function R(e) {
+    if (e in S) return S[e];
+    var t,
+        a = 1;
+    if ("#" == (e = String(e)).charAt(0)) t = e;else if (/^rgb/.test(e)) {
+      var i = w(e);
+
+      var _t2,
+          _o = "#";
+
+      for (var n = 0; n < 3; n++) {
+        _t2 = -1 != i[n].indexOf("%") ? Math.floor(255 * v(i[n])) : +i[n], _o += g[_(_t2, 0, 255)];
       }
-    }
 
-    G_vmlCanvasManager_.init(); // precompute "00" to "FF"
+      a = +i[3];
+    } else if (/^hsl/.test(e)) {
+      var _i = w(e);
 
-    var decToHex = [];
-
-    for (var i = 0; i < 16; i++) {
-      for (var j = 0; j < 16; j++) {
-        decToHex[i * 16 + j] = i.toString(16) + j.toString(16);
-      }
-    }
-
-    function createMatrixIdentity() {
-      return [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
-    }
-
-    function matrixMultiply(m1, m2) {
-      var result = createMatrixIdentity();
-
-      for (var x = 0; x < 3; x++) {
-        for (var y = 0; y < 3; y++) {
-          var sum = 0;
-
-          for (var z = 0; z < 3; z++) {
-            sum += m1[x][z] * m2[z][y];
-          }
-
-          result[x][y] = sum;
+      t = function (e) {
+        var t, a, i, n, o, r;
+        if ((n = parseFloat(e[0]) / 360 % 360) < 0 && n++, o = _(v(e[1]), 0, 1), r = _(v(e[2]), 0, 1), 0 == o) t = a = i = r;else {
+          var s = r < .5 ? r * (1 + o) : r + o - r * o,
+              l = 2 * r - s;
+          t = I(l, s, n + 1 / 3), a = I(l, s, n), i = I(l, s, n - 1 / 3);
         }
-      }
-
-      return result;
-    }
-
-    function copyState(o1, o2) {
-      o2.fillStyle = o1.fillStyle;
-      o2.lineCap = o1.lineCap;
-      o2.lineJoin = o1.lineJoin;
-      o2.lineWidth = o1.lineWidth;
-      o2.miterLimit = o1.miterLimit;
-      o2.shadowBlur = o1.shadowBlur;
-      o2.shadowColor = o1.shadowColor;
-      o2.shadowOffsetX = o1.shadowOffsetX;
-      o2.shadowOffsetY = o1.shadowOffsetY;
-      o2.strokeStyle = o1.strokeStyle;
-      o2.globalAlpha = o1.globalAlpha;
-      o2.font = o1.font;
-      o2.textAlign = o1.textAlign;
-      o2.textBaseline = o1.textBaseline;
-      o2.arcScaleX_ = o1.arcScaleX_;
-      o2.arcScaleY_ = o1.arcScaleY_;
-      o2.lineScale_ = o1.lineScale_;
-    }
-
-    var colorData = {
-      aliceblue: '#F0F8FF',
-      antiquewhite: '#FAEBD7',
-      aquamarine: '#7FFFD4',
-      azure: '#F0FFFF',
-      beige: '#F5F5DC',
-      bisque: '#FFE4C4',
-      black: '#000000',
-      blanchedalmond: '#FFEBCD',
-      blueviolet: '#8A2BE2',
-      brown: '#A52A2A',
-      burlywood: '#DEB887',
-      cadetblue: '#5F9EA0',
-      chartreuse: '#7FFF00',
-      chocolate: '#D2691E',
-      coral: '#FF7F50',
-      cornflowerblue: '#6495ED',
-      cornsilk: '#FFF8DC',
-      crimson: '#DC143C',
-      cyan: '#00FFFF',
-      darkblue: '#00008B',
-      darkcyan: '#008B8B',
-      darkgoldenrod: '#B8860B',
-      darkgray: '#A9A9A9',
-      darkgreen: '#006400',
-      darkgrey: '#A9A9A9',
-      darkkhaki: '#BDB76B',
-      darkmagenta: '#8B008B',
-      darkolivegreen: '#556B2F',
-      darkorange: '#FF8C00',
-      darkorchid: '#9932CC',
-      darkred: '#8B0000',
-      darksalmon: '#E9967A',
-      darkseagreen: '#8FBC8F',
-      darkslateblue: '#483D8B',
-      darkslategray: '#2F4F4F',
-      darkslategrey: '#2F4F4F',
-      darkturquoise: '#00CED1',
-      darkviolet: '#9400D3',
-      deeppink: '#FF1493',
-      deepskyblue: '#00BFFF',
-      dimgray: '#696969',
-      dimgrey: '#696969',
-      dodgerblue: '#1E90FF',
-      firebrick: '#B22222',
-      floralwhite: '#FFFAF0',
-      forestgreen: '#228B22',
-      gainsboro: '#DCDCDC',
-      ghostwhite: '#F8F8FF',
-      gold: '#FFD700',
-      goldenrod: '#DAA520',
-      grey: '#808080',
-      greenyellow: '#ADFF2F',
-      honeydew: '#F0FFF0',
-      hotpink: '#FF69B4',
-      indianred: '#CD5C5C',
-      indigo: '#4B0082',
-      ivory: '#FFFFF0',
-      khaki: '#F0E68C',
-      lavender: '#E6E6FA',
-      lavenderblush: '#FFF0F5',
-      lawngreen: '#7CFC00',
-      lemonchiffon: '#FFFACD',
-      lightblue: '#ADD8E6',
-      lightcoral: '#F08080',
-      lightcyan: '#E0FFFF',
-      lightgoldenrodyellow: '#FAFAD2',
-      lightgreen: '#90EE90',
-      lightgrey: '#D3D3D3',
-      lightpink: '#FFB6C1',
-      lightsalmon: '#FFA07A',
-      lightseagreen: '#20B2AA',
-      lightskyblue: '#87CEFA',
-      lightslategray: '#778899',
-      lightslategrey: '#778899',
-      lightsteelblue: '#B0C4DE',
-      lightyellow: '#FFFFE0',
-      limegreen: '#32CD32',
-      linen: '#FAF0E6',
-      magenta: '#FF00FF',
-      mediumaquamarine: '#66CDAA',
-      mediumblue: '#0000CD',
-      mediumorchid: '#BA55D3',
-      mediumpurple: '#9370DB',
-      mediumseagreen: '#3CB371',
-      mediumslateblue: '#7B68EE',
-      mediumspringgreen: '#00FA9A',
-      mediumturquoise: '#48D1CC',
-      mediumvioletred: '#C71585',
-      midnightblue: '#191970',
-      mintcream: '#F5FFFA',
-      mistyrose: '#FFE4E1',
-      moccasin: '#FFE4B5',
-      navajowhite: '#FFDEAD',
-      oldlace: '#FDF5E6',
-      olivedrab: '#6B8E23',
-      orange: '#FFA500',
-      orangered: '#FF4500',
-      orchid: '#DA70D6',
-      palegoldenrod: '#EEE8AA',
-      palegreen: '#98FB98',
-      paleturquoise: '#AFEEEE',
-      palevioletred: '#DB7093',
-      papayawhip: '#FFEFD5',
-      peachpuff: '#FFDAB9',
-      peru: '#CD853F',
-      pink: '#FFC0CB',
-      plum: '#DDA0DD',
-      powderblue: '#B0E0E6',
-      rosybrown: '#BC8F8F',
-      royalblue: '#4169E1',
-      saddlebrown: '#8B4513',
-      salmon: '#FA8072',
-      sandybrown: '#F4A460',
-      seagreen: '#2E8B57',
-      seashell: '#FFF5EE',
-      sienna: '#A0522D',
-      skyblue: '#87CEEB',
-      slateblue: '#6A5ACD',
-      slategray: '#708090',
-      slategrey: '#708090',
-      snow: '#FFFAFA',
-      springgreen: '#00FF7F',
-      steelblue: '#4682B4',
-      tan: '#D2B48C',
-      thistle: '#D8BFD8',
-      tomato: '#FF6347',
-      turquoise: '#40E0D0',
-      violet: '#EE82EE',
-      wheat: '#F5DEB3',
-      whitesmoke: '#F5F5F5',
-      yellowgreen: '#9ACD32'
-    };
-
-    function getRgbHslContent(styleString) {
-      var start = styleString.indexOf('(', 3);
-      var end = styleString.indexOf(')', start + 1);
-      var parts = styleString.substring(start + 1, end).split(','); // add alpha if needed
-
-      if (parts.length != 4 || styleString.charAt(3) != 'a') {
-        parts[3] = 1;
-      }
-
-      return parts;
-    }
-
-    function percent(s) {
-      return parseFloat(s) / 100;
-    }
-
-    function clamp(v, min, max) {
-      return Math.min(max, Math.max(min, v));
-    }
-
-    function hslToRgb(parts) {
-      var r, g, b, h, s, l;
-      h = parseFloat(parts[0]) / 360 % 360;
-      if (h < 0) h++;
-      s = clamp(percent(parts[1]), 0, 1);
-      l = clamp(percent(parts[2]), 0, 1);
-
-      if (s == 0) {
-        r = g = b = l; // achromatic
-      } else {
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        var p = 2 * l - q;
-        r = hueToRgb(p, q, h + 1 / 3);
-        g = hueToRgb(p, q, h);
-        b = hueToRgb(p, q, h - 1 / 3);
-      }
-
-      return '#' + decToHex[Math.floor(r * 255)] + decToHex[Math.floor(g * 255)] + decToHex[Math.floor(b * 255)];
-    }
-
-    function hueToRgb(m1, m2, h) {
-      if (h < 0) h++;
-      if (h > 1) h--;
-      if (6 * h < 1) return m1 + (m2 - m1) * 6 * h;else if (2 * h < 1) return m2;else if (3 * h < 2) return m1 + (m2 - m1) * (2 / 3 - h) * 6;else return m1;
-    }
-
-    var processStyleCache = {};
-
-    function processStyle(styleString) {
-      if (styleString in processStyleCache) {
-        return processStyleCache[styleString];
-      }
-
-      var str,
-          alpha = 1;
-      styleString = String(styleString);
-
-      if (styleString.charAt(0) == '#') {
-        str = styleString;
-      } else if (/^rgb/.test(styleString)) {
-        var parts = getRgbHslContent(styleString);
-        var _str = '#',
-            n;
-
-        for (var i = 0; i < 3; i++) {
-          if (parts[i].indexOf('%') != -1) {
-            n = Math.floor(percent(parts[i]) * 255);
-          } else {
-            n = +parts[i];
-          }
-
-          _str += decToHex[clamp(n, 0, 255)];
-        }
-
-        alpha = +parts[3];
-      } else if (/^hsl/.test(styleString)) {
-        var _parts = getRgbHslContent(styleString);
-
-        str = hslToRgb(_parts);
-        alpha = _parts[3];
-      } else {
-        str = colorData[styleString] || styleString;
-      }
-
-      processStyleCache[styleString] = {
-        color: str,
-        alpha: alpha
-      };
-      return processStyleCache[styleString];
-    }
-
-    var DEFAULT_STYLE = {
-      style: 'normal',
-      variant: 'normal',
-      weight: 'normal',
-      size: 10,
-      family: 'sans-serif'
-    }; // Internal text style cache
-
-    var fontStyleCache = {};
-
-    function processFontStyle(styleString) {
-      if (fontStyleCache[styleString]) {
-        return fontStyleCache[styleString];
-      }
-
-      var el = document.createElement('div');
-      var style = el.style;
-
-      try {
-        style.font = styleString;
-      } catch (ex) {// Ignore failures to set to invalid font.
-      }
-
-      fontStyleCache[styleString] = {
-        style: style.fontStyle || DEFAULT_STYLE.style,
-        variant: style.fontVariant || DEFAULT_STYLE.variant,
-        weight: style.fontWeight || DEFAULT_STYLE.weight,
-        size: style.fontSize || DEFAULT_STYLE.size,
-        family: style.fontFamily || DEFAULT_STYLE.family
-      };
-      return fontStyleCache[styleString];
-    }
-
-    function getComputedStyle(style, element) {
-      var computedStyle = {};
-
-      for (var p in style) {
-        computedStyle[p] = style[p];
-      } // Compute the size
-
-
-      var canvasFontSize = parseFloat(element.currentStyle.fontSize),
-          fontSize = parseFloat(style.size);
-
-      if (typeof style.size == 'number') {
-        computedStyle.size = style.size;
-      } else if (style.size.indexOf('px') != -1) {
-        computedStyle.size = fontSize;
-      } else if (style.size.indexOf('em') != -1) {
-        computedStyle.size = canvasFontSize * fontSize;
-      } else if (style.size.indexOf('%') != -1) {
-        computedStyle.size = canvasFontSize / 100 * fontSize;
-      } else if (style.size.indexOf('pt') != -1) {
-        computedStyle.size = fontSize / 0.75;
-      } else {
-        computedStyle.size = canvasFontSize;
-      } // Different scaling between normal text and VML text. This was found using
-      // trial and error to get the same size as non VML text.
-
-
-      computedStyle.size *= 0.981;
-      return computedStyle;
-    }
-
-    function buildStyle(style) {
-      return style.style + ' ' + style.variant + ' ' + style.weight + ' ' + style.size + 'px ' + style.family;
-    }
-
-    var lineCapMap = {
-      'butt': 'flat',
-      'round': 'round'
-    };
-
-    function processLineCap(lineCap) {
-      return lineCapMap[lineCap] || 'square';
-    }
-    /**
-     * This class implements CanvasRenderingContext2D interface as described by
-     * the WHATWG.
-     * @param {HTMLElement} canvasElement The element that the 2D context should
-     * be associated with
-     */
-
-
-    function CanvasRenderingContext2D_(canvasElement) {
-      this.m_ = createMatrixIdentity();
-      this.mStack_ = [];
-      this.aStack_ = [];
-      this.currentPath_ = []; // Canvas context properties
-
-      this.strokeStyle = '#000';
-      this.fillStyle = '#000';
-      this.lineWidth = 1;
-      this.lineJoin = 'miter';
-      this.lineCap = 'butt';
-      this.miterLimit = Z * 1;
-      this.globalAlpha = 1;
-      this.font = '10px sans-serif';
-      this.textAlign = 'left';
-      this.textBaseline = 'alphabetic';
-      this.canvas = canvasElement;
-      var cssText = 'width:' + canvasElement.clientWidth + 'px;height:' + canvasElement.clientHeight + 'px;overflow:hidden;position:absolute';
-      var el = canvasElement.ownerDocument.createElement('div');
-      el.style.cssText = cssText;
-      canvasElement.appendChild(el);
-      var overlayEl = el.cloneNode(false); // Use a non transparent background.
-
-      overlayEl.style.backgroundColor = 'red';
-      overlayEl.style.filter = 'alpha(opacity=0)';
-      canvasElement.appendChild(overlayEl);
-      this.element_ = el;
-      this.arcScaleX_ = 1;
-      this.arcScaleY_ = 1;
-      this.lineScale_ = 1;
-    }
-
-    var contextPrototype = CanvasRenderingContext2D_.prototype;
-
-    contextPrototype.clearRect = function () {
-      if (this.textMeasureEl_) {
-        this.textMeasureEl_.removeNode(true);
-        this.textMeasureEl_ = null;
-      }
-
-      this.element_.innerHTML = '';
-    };
-
-    contextPrototype.beginPath = function () {
-      // TODO: Branch current matrix so that save/restore has no effect
-      //       as per safari docs.
-      this.currentPath_ = [];
-    };
-
-    contextPrototype.moveTo = function (aX, aY) {
-      var p = getCoords(this, aX, aY);
-      this.currentPath_.push({
-        type: 'moveTo',
-        x: p.x,
-        y: p.y
-      });
-      this.currentX_ = p.x;
-      this.currentY_ = p.y;
-    };
-
-    contextPrototype.lineTo = function (aX, aY) {
-      var p = getCoords(this, aX, aY);
-      this.currentPath_.push({
-        type: 'lineTo',
-        x: p.x,
-        y: p.y
-      });
-      this.currentX_ = p.x;
-      this.currentY_ = p.y;
-    };
-
-    contextPrototype.bezierCurveTo = function (aCP1x, aCP1y, aCP2x, aCP2y, aX, aY) {
-      var p = getCoords(this, aX, aY);
-      var cp1 = getCoords(this, aCP1x, aCP1y);
-      var cp2 = getCoords(this, aCP2x, aCP2y);
-      bezierCurveTo(this, cp1, cp2, p);
-    }; // Helper function that takes the already fixed cordinates.
-
-
-    function bezierCurveTo(self, cp1, cp2, p) {
-      self.currentPath_.push({
-        type: 'bezierCurveTo',
-        cp1x: cp1.x,
-        cp1y: cp1.y,
-        cp2x: cp2.x,
-        cp2y: cp2.y,
-        x: p.x,
-        y: p.y
-      });
-      self.currentX_ = p.x;
-      self.currentY_ = p.y;
-    }
-
-    contextPrototype.quadraticCurveTo = function (aCPx, aCPy, aX, aY) {
-      // the following is lifted almost directly from
-      // http://developer.mozilla.org/en/docs/Canvas_tutorial:Drawing_shapes
-      var cp = getCoords(this, aCPx, aCPy);
-      var p = getCoords(this, aX, aY);
-      var cp1 = {
-        x: this.currentX_ + 2.0 / 3.0 * (cp.x - this.currentX_),
-        y: this.currentY_ + 2.0 / 3.0 * (cp.y - this.currentY_)
-      };
-      var cp2 = {
-        x: cp1.x + (p.x - this.currentX_) / 3.0,
-        y: cp1.y + (p.y - this.currentY_) / 3.0
-      };
-      bezierCurveTo(this, cp1, cp2, p);
-    };
-
-    contextPrototype.arc = function (aX, aY, aRadius, aStartAngle, aEndAngle, aClockwise) {
-      aRadius *= Z;
-      var arcType = aClockwise ? 'at' : 'wa';
-      var xStart = aX + mc(aStartAngle) * aRadius - Z2;
-      var yStart = aY + ms(aStartAngle) * aRadius - Z2;
-      var xEnd = aX + mc(aEndAngle) * aRadius - Z2;
-      var yEnd = aY + ms(aEndAngle) * aRadius - Z2; // IE won't render arches drawn counter clockwise if xStart == xEnd.
-
-      if (xStart == xEnd && !aClockwise) {
-        xStart += 0.125; // Offset xStart by 1/80 of a pixel. Use something
-        // that can be represented in binary
-      }
-
-      var p = getCoords(this, aX, aY);
-      var pStart = getCoords(this, xStart, yStart);
-      var pEnd = getCoords(this, xEnd, yEnd);
-      this.currentPath_.push({
-        type: arcType,
-        x: p.x,
-        y: p.y,
-        radius: aRadius,
-        xStart: pStart.x,
-        yStart: pStart.y,
-        xEnd: pEnd.x,
-        yEnd: pEnd.y
-      });
-    };
-
-    contextPrototype.rect = function (aX, aY, aWidth, aHeight) {
-      this.moveTo(aX, aY);
-      this.lineTo(aX + aWidth, aY);
-      this.lineTo(aX + aWidth, aY + aHeight);
-      this.lineTo(aX, aY + aHeight);
-      this.closePath();
-    };
-
-    contextPrototype.strokeRect = function (aX, aY, aWidth, aHeight) {
-      var oldPath = this.currentPath_;
-      this.beginPath();
-      this.moveTo(aX, aY);
-      this.lineTo(aX + aWidth, aY);
-      this.lineTo(aX + aWidth, aY + aHeight);
-      this.lineTo(aX, aY + aHeight);
-      this.closePath();
-      this.stroke();
-      this.currentPath_ = oldPath;
-    };
-
-    contextPrototype.fillRect = function (aX, aY, aWidth, aHeight) {
-      var oldPath = this.currentPath_;
-      this.beginPath();
-      this.moveTo(aX, aY);
-      this.lineTo(aX + aWidth, aY);
-      this.lineTo(aX + aWidth, aY + aHeight);
-      this.lineTo(aX, aY + aHeight);
-      this.closePath();
-      this.fill();
-      this.currentPath_ = oldPath;
-    };
-
-    contextPrototype.createLinearGradient = function (aX0, aY0, aX1, aY1) {
-      var gradient = new CanvasGradient_('gradient');
-      gradient.x0_ = aX0;
-      gradient.y0_ = aY0;
-      gradient.x1_ = aX1;
-      gradient.y1_ = aY1;
-      return gradient;
-    };
-
-    contextPrototype.createRadialGradient = function (aX0, aY0, aR0, aX1, aY1, aR1) {
-      var gradient = new CanvasGradient_('gradientradial');
-      gradient.x0_ = aX0;
-      gradient.y0_ = aY0;
-      gradient.r0_ = aR0;
-      gradient.x1_ = aX1;
-      gradient.y1_ = aY1;
-      gradient.r1_ = aR1;
-      return gradient;
-    };
-
-    contextPrototype.drawImage = function (image, var_args) {
-      var dx, dy, dw, dh, sx, sy, sw, sh; // to find the original width we overide the width and height
-
-      var oldRuntimeWidth = image.runtimeStyle.width;
-      var oldRuntimeHeight = image.runtimeStyle.height;
-      image.runtimeStyle.width = 'auto';
-      image.runtimeStyle.height = 'auto'; // get the original size
-
-      var w = image.width;
-      var h = image.height; // and remove overides
-
-      image.runtimeStyle.width = oldRuntimeWidth;
-      image.runtimeStyle.height = oldRuntimeHeight;
-
-      if (arguments.length == 3) {
-        dx = arguments[1];
-        dy = arguments[2];
-        sx = sy = 0;
-        sw = dw = w;
-        sh = dh = h;
-      } else if (arguments.length == 5) {
-        dx = arguments[1];
-        dy = arguments[2];
-        dw = arguments[3];
-        dh = arguments[4];
-        sx = sy = 0;
-        sw = w;
-        sh = h;
-      } else if (arguments.length == 9) {
-        sx = arguments[1];
-        sy = arguments[2];
-        sw = arguments[3];
-        sh = arguments[4];
-        dx = arguments[5];
-        dy = arguments[6];
-        dw = arguments[7];
-        dh = arguments[8];
-      } else {
-        throw Error('Invalid number of arguments');
-      }
-
-      var d = getCoords(this, dx, dy);
-      var w2 = sw / 2;
-      var h2 = sh / 2;
-      var vmlStr = [];
-      var W = 10;
-      var H = 10; // For some reason that I've now forgotten, using divs didn't work
-
-      vmlStr.push(' <g_vml_:group', ' coordsize="', Z * W, ',', Z * H, '"', ' coordorigin="0,0"', ' style="width:', W, 'px;height:', H, 'px;position:absolute;'); // If filters are necessary (rotation exists), create them
-      // filters are bog-slow, so only create them if abbsolutely necessary
-      // The following check doesn't account for skews (which don't exist
-      // in the canvas spec (yet) anyway.
-
-      if (this.m_[0][0] != 1 || this.m_[0][1] || this.m_[1][1] != 1 || this.m_[1][0]) {
-        var filter = []; // Note the 12/21 reversal
-
-        filter.push('M11=', this.m_[0][0], ',', 'M12=', this.m_[1][0], ',', 'M21=', this.m_[0][1], ',', 'M22=', this.m_[1][1], ',', 'Dx=', mr(d.x / Z), ',', 'Dy=', mr(d.y / Z), ''); // Bounding box calculation (need to minimize displayed area so that
-        // filters don't waste time on unused pixels.
-
-        var max = d;
-        var c2 = getCoords(this, dx + dw, dy);
-        var c3 = getCoords(this, dx, dy + dh);
-        var c4 = getCoords(this, dx + dw, dy + dh);
-        max.x = m.max(max.x, c2.x, c3.x, c4.x);
-        max.y = m.max(max.y, c2.y, c3.y, c4.y);
-        vmlStr.push('padding:0 ', mr(max.x / Z), 'px ', mr(max.y / Z), 'px 0;filter:progid:DXImageTransform.Microsoft.Matrix(', filter.join(''), ", sizingmethod='clip');");
-      } else {
-        vmlStr.push('top:', mr(d.y / Z), 'px;left:', mr(d.x / Z), 'px;');
-      }
-
-      vmlStr.push(' ">', '<g_vml_:image src="', image.src, '"', ' style="width:', Z * dw, 'px;', ' height:', Z * dh, 'px"', ' cropleft="', sx / w, '"', ' croptop="', sy / h, '"', ' cropright="', (w - sx - sw) / w, '"', ' cropbottom="', (h - sy - sh) / h, '"', ' />', '</g_vml_:group>');
-      this.element_.insertAdjacentHTML('BeforeEnd', vmlStr.join(''));
-    };
-
-    contextPrototype.stroke = function (aFill) {
-      var lineStr = [];
-      var lineOpen = false;
-      var W = 10;
-      var H = 10;
-      lineStr.push('<g_vml_:shape', ' filled="', !!aFill, '"', ' style="position:absolute;width:', W, 'px;height:', H, 'px;"', ' coordorigin="0,0"', ' coordsize="', Z * W, ',', Z * H, '"', ' stroked="', !aFill, '"', ' path="');
-      var newSeq = false;
-      var min = {
-        x: null,
-        y: null
-      };
-      var max = {
-        x: null,
-        y: null
-      };
-
-      for (var i = 0; i < this.currentPath_.length; i++) {
-        var p = this.currentPath_[i];
-        var c;
-
-        switch (p.type) {
-          case 'moveTo':
-            c = p;
-            lineStr.push(' m ', mr(p.x), ',', mr(p.y));
-            break;
-
-          case 'lineTo':
-            lineStr.push(' l ', mr(p.x), ',', mr(p.y));
-            break;
-
-          case 'close':
-            lineStr.push(' x ');
-            p = null;
-            break;
-
-          case 'bezierCurveTo':
-            lineStr.push(' c ', mr(p.cp1x), ',', mr(p.cp1y), ',', mr(p.cp2x), ',', mr(p.cp2y), ',', mr(p.x), ',', mr(p.y));
-            break;
-
-          case 'at':
-          case 'wa':
-            lineStr.push(' ', p.type, ' ', mr(p.x - this.arcScaleX_ * p.radius), ',', mr(p.y - this.arcScaleY_ * p.radius), ' ', mr(p.x + this.arcScaleX_ * p.radius), ',', mr(p.y + this.arcScaleY_ * p.radius), ' ', mr(p.xStart), ',', mr(p.yStart), ' ', mr(p.xEnd), ',', mr(p.yEnd));
-            break;
-        } // TODO: Following is broken for curves due to
-        //       move to proper paths.
-        // Figure out dimensions so we can do gradient fills
-        // properly
-
-
-        if (p) {
-          if (min.x == null || p.x < min.x) {
-            min.x = p.x;
-          }
-
-          if (max.x == null || p.x > max.x) {
-            max.x = p.x;
-          }
-
-          if (min.y == null || p.y < min.y) {
-            min.y = p.y;
-          }
-
-          if (max.y == null || p.y > max.y) {
-            max.y = p.y;
-          }
-        }
-      }
-
-      lineStr.push(' ">');
-
-      if (!aFill) {
-        appendStroke(this, lineStr);
-      } else {
-        appendFill(this, lineStr, min, max);
-      }
-
-      lineStr.push('</g_vml_:shape>');
-      this.element_.insertAdjacentHTML('beforeEnd', lineStr.join(''));
-    };
-
-    function appendStroke(ctx, lineStr) {
-      var a = processStyle(ctx.strokeStyle);
-      var color = a.color;
-      var opacity = a.alpha * ctx.globalAlpha;
-      var lineWidth = ctx.lineScale_ * ctx.lineWidth; // VML cannot correctly render a line if the width is less than 1px.
-      // In that case, we dilute the color to make the line look thinner.
-
-      if (lineWidth < 1) {
-        opacity *= lineWidth;
-      }
-
-      lineStr.push('<g_vml_:stroke', ' opacity="', opacity, '"', ' joinstyle="', ctx.lineJoin, '"', ' miterlimit="', ctx.miterLimit, '"', ' endcap="', processLineCap(ctx.lineCap), '"', ' weight="', lineWidth, 'px"', ' color="', color, '" />');
-    }
-
-    function appendFill(ctx, lineStr, min, max) {
-      var fillStyle = ctx.fillStyle;
-      var arcScaleX = ctx.arcScaleX_;
-      var arcScaleY = ctx.arcScaleY_;
-      var width = max.x - min.x;
-      var height = max.y - min.y;
-
-      if (fillStyle instanceof CanvasGradient_) {
-        // TODO: Gradients transformed with the transformation matrix.
-        var angle = 0;
-        var focus = {
-          x: 0,
-          y: 0
-        }; // additional offset
-
-        var shift = 0; // scale factor for offset
-
-        var expansion = 1;
-
-        if (fillStyle.type_ == 'gradient') {
-          var x0 = fillStyle.x0_ / arcScaleX;
-          var y0 = fillStyle.y0_ / arcScaleY;
-          var x1 = fillStyle.x1_ / arcScaleX;
-          var y1 = fillStyle.y1_ / arcScaleY;
-          var p0 = getCoords(ctx, x0, y0);
-          var p1 = getCoords(ctx, x1, y1);
-          var dx = p1.x - p0.x;
-          var dy = p1.y - p0.y;
-          angle = Math.atan2(dx, dy) * 180 / Math.PI; // The angle should be a non-negative number.
-
-          if (angle < 0) {
-            angle += 360;
-          } // Very small angles produce an unexpected result because they are
-          // converted to a scientific notation string.
-
-
-          if (angle < 1e-6) {
-            angle = 0;
-          }
-        } else {
-          var _p = getCoords(ctx, fillStyle.x0_, fillStyle.y0_);
-
-          focus = {
-            x: (_p.x - min.x) / width,
-            y: (_p.y - min.y) / height
-          };
-          width /= arcScaleX * Z;
-          height /= arcScaleY * Z;
-          var dimension = m.max(width, height);
-          shift = 2 * fillStyle.r0_ / dimension;
-          expansion = 2 * fillStyle.r1_ / dimension - shift;
-        } // We need to sort the color stops in ascending order by offset,
-        // otherwise IE won't interpret it correctly.
-
-
-        var stops = fillStyle.colors_;
-        stops.sort(function (cs1, cs2) {
-          return cs1.offset - cs2.offset;
-        });
-        var length = stops.length;
-        var color1 = stops[0].color;
-        var color2 = stops[length - 1].color;
-        var opacity1 = stops[0].alpha * ctx.globalAlpha;
-        var opacity2 = stops[length - 1].alpha * ctx.globalAlpha;
-        var colors = [];
-
-        for (var i = 0; i < length; i++) {
-          var stop = stops[i];
-          colors.push(stop.offset * expansion + shift + ' ' + stop.color);
-        } // When colors attribute is used, the meanings of opacity and o:opacity2
-        // are reversed.
-
-
-        lineStr.push('<g_vml_:fill type="', fillStyle.type_, '"', ' method="none" focus="100%"', ' color="', color1, '"', ' color2="', color2, '"', ' colors="', colors.join(','), '"', ' opacity="', opacity2, '"', ' g_o_:opacity2="', opacity1, '"', ' angle="', angle, '"', ' focusposition="', focus.x, ',', focus.y, '" />');
-      } else if (fillStyle instanceof CanvasPattern_) {
-        if (width && height) {
-          var deltaLeft = -min.x;
-          var deltaTop = -min.y;
-          lineStr.push('<g_vml_:fill', ' position="', deltaLeft / width * arcScaleX * arcScaleX, ',', deltaTop / height * arcScaleY * arcScaleY, '"', ' type="tile"', // TODO: Figure out the correct size to fit the scale.
-          //' size="', w, 'px ', h, 'px"',
-          ' src="', fillStyle.src_, '" />');
-        }
-      } else {
-        var a = processStyle(ctx.fillStyle);
-        var color = a.color;
-        var opacity = a.alpha * ctx.globalAlpha;
-        lineStr.push('<g_vml_:fill color="', color, '" opacity="', opacity, '" />');
-      }
-    }
-
-    contextPrototype.fill = function () {
-      this.stroke(true);
-    };
-
-    contextPrototype.closePath = function () {
-      this.currentPath_.push({
-        type: 'close'
-      });
-    };
-
-    function getCoords(ctx, aX, aY) {
-      var m = ctx.m_;
-      return {
-        x: Z * (aX * m[0][0] + aY * m[1][0] + m[2][0]) - Z2,
-        y: Z * (aX * m[0][1] + aY * m[1][1] + m[2][1]) - Z2
-      };
-    }
-
-    contextPrototype.save = function () {
-      var o = {};
-      copyState(this, o);
-      this.aStack_.push(o);
-      this.mStack_.push(this.m_);
-      this.m_ = matrixMultiply(createMatrixIdentity(), this.m_);
-    };
-
-    contextPrototype.restore = function () {
-      if (this.aStack_.length) {
-        copyState(this.aStack_.pop(), this);
-        this.m_ = this.mStack_.pop();
-      }
-    };
-
-    function matrixIsFinite(m) {
-      return isFinite(m[0][0]) && isFinite(m[0][1]) && isFinite(m[1][0]) && isFinite(m[1][1]) && isFinite(m[2][0]) && isFinite(m[2][1]);
-    }
-
-    function setM(ctx, m, updateLineScale) {
-      if (!matrixIsFinite(m)) {
-        return;
-      }
-
-      ctx.m_ = m;
-
-      if (updateLineScale) {
-        // Get the line scale.
-        // Determinant of this.m_ means how much the area is enlarged by the
-        // transformation. So its square root can be used as a scale factor
-        // for width.
-        var det = m[0][0] * m[1][1] - m[0][1] * m[1][0];
-        ctx.lineScale_ = sqrt(abs(det));
-      }
-    }
-
-    contextPrototype.translate = function (aX, aY) {
-      var m1 = [[1, 0, 0], [0, 1, 0], [aX, aY, 1]];
-      setM(this, matrixMultiply(m1, this.m_), false);
-    };
-
-    contextPrototype.rotate = function (aRot) {
-      var c = mc(aRot);
-      var s = ms(aRot);
-      var m1 = [[c, s, 0], [-s, c, 0], [0, 0, 1]];
-      setM(this, matrixMultiply(m1, this.m_), false);
-    };
-
-    contextPrototype.scale = function (aX, aY) {
-      this.arcScaleX_ *= aX;
-      this.arcScaleY_ *= aY;
-      var m1 = [[aX, 0, 0], [0, aY, 0], [0, 0, 1]];
-      setM(this, matrixMultiply(m1, this.m_), true);
-    };
-
-    contextPrototype.transform = function (m11, m12, m21, m22, dx, dy) {
-      var m1 = [[m11, m12, 0], [m21, m22, 0], [dx, dy, 1]];
-      setM(this, matrixMultiply(m1, this.m_), true);
-    };
-
-    contextPrototype.setTransform = function (m11, m12, m21, m22, dx, dy) {
-      var m = [[m11, m12, 0], [m21, m22, 0], [dx, dy, 1]];
-      setM(this, m, true);
-    };
-    /**
-     * The text drawing function.
-     * The maxWidth argument isn't taken in account, since no browser supports
-     * it yet.
-     */
-
-
-    contextPrototype.drawText_ = function (text, x, y, maxWidth, stroke) {
-      var m = this.m_,
-          delta = 1000,
-          left = 0,
-          right = delta,
-          offset = {
+        return "#" + g[Math.floor(255 * t)] + g[Math.floor(255 * a)] + g[Math.floor(255 * i)];
+      }(_i), a = _i[3];
+    } else t = y[e] || e;
+    return S[e] = {
+      color: t,
+      alpha: a
+    }, S[e];
+  }
+
+  var b = {
+    style: "normal",
+    variant: "normal",
+    weight: "normal",
+    size: 10,
+    family: "sans-serif"
+  },
+      D = {};
+  var k = {
+    butt: "flat",
+    round: "round"
+  };
+
+  function T(e) {
+    this.m_ = [[1, 0, 0], [0, 1, 0], [0, 0, 1]], this.mStack_ = [], this.aStack_ = [], this.currentPath_ = [], this.strokeStyle = "#000", this.fillStyle = "#000", this.lineWidth = 1, this.lineJoin = "miter", this.lineCap = "butt", this.miterLimit = 1 * r, this.globalAlpha = 1, this.font = "10px sans-serif", this.textAlign = "left", this.textBaseline = "alphabetic", this.canvas = e;
+    var t = "width:" + e.clientWidth + "px;height:" + e.clientHeight + "px;overflow:hidden;position:absolute",
+        a = e.ownerDocument.createElement("div");
+    a.style.cssText = t, e.appendChild(a);
+    var i = a.cloneNode(!1);
+    i.style.backgroundColor = "red", i.style.filter = "alpha(opacity=0)", e.appendChild(i), this.element_ = a, this.arcScaleX_ = 1, this.arcScaleY_ = 1, this.lineScale_ = 1;
+  }
+
+  var O = T.prototype;
+
+  function A(e, t, a, i) {
+    e.currentPath_.push({
+      type: "bezierCurveTo",
+      cp1x: t.x,
+      cp1y: t.y,
+      cp2x: a.x,
+      cp2y: a.y,
+      x: i.x,
+      y: i.y
+    }), e.currentX_ = i.x, e.currentY_ = i.y;
+  }
+
+  function E(e, t) {
+    var a,
+        i = R(e.strokeStyle),
+        n = i.color,
+        o = i.alpha * e.globalAlpha,
+        r = e.lineScale_ * e.lineWidth;
+    r < 1 && (o *= r), t.push("<g_vml_:stroke", ' opacity="', o, '"', ' joinstyle="', e.lineJoin, '"', ' miterlimit="', e.miterLimit, '"', ' endcap="', (a = e.lineCap, k[a] || "square"), '"', ' weight="', r, 'px"', ' color="', n, '" />');
+  }
+
+  function G(t, a, i, n) {
+    var o = t.fillStyle,
+        s = t.arcScaleX_,
+        l = t.arcScaleY_,
+        d = n.x - i.x,
+        u = n.y - i.y;
+
+    if (o instanceof F) {
+      var c = 0,
+          h = {
         x: 0,
         y: 0
       },
-          lineStr = [];
-      var fontStyle = getComputedStyle(processFontStyle(this.font), this.element_);
-      var fontStyleString = buildStyle(fontStyle);
-      var elementStyle = this.element_.currentStyle;
-      var textAlign = this.textAlign.toLowerCase();
+          p = 0,
+          f = 1;
 
-      switch (textAlign) {
-        case 'left':
-        case 'center':
-        case 'right':
-          break;
-
-        case 'end':
-          textAlign = elementStyle.direction == 'ltr' ? 'right' : 'left';
-          break;
-
-        case 'start':
-          textAlign = elementStyle.direction == 'rtl' ? 'right' : 'left';
-          break;
-
-        default:
-          textAlign = 'left';
-      } // 1.75 is an arbitrary number, as there is no info about the text baseline
-
-
-      switch (this.textBaseline) {
-        case 'hanging':
-        case 'top':
-          offset.y = fontStyle.size / 1.75;
-          break;
-
-        case 'middle':
-          break;
-
-        default:
-        case null:
-        case 'alphabetic':
-        case 'ideographic':
-        case 'bottom':
-          offset.y = -fontStyle.size / 2.25;
-          break;
-      }
-
-      switch (textAlign) {
-        case 'right':
-          left = delta;
-          right = 0.05;
-          break;
-
-        case 'center':
-          left = right = delta / 2;
-          break;
-      }
-
-      var d = getCoords(this, x + offset.x, y + offset.y);
-      lineStr.push('<g_vml_:line from="', -left, ' 0" to="', right, ' 0.05" ', ' coordsize="100 100" coordorigin="0 0"', ' filled="', !stroke, '" stroked="', !!stroke, '" style="position:absolute;width:1px;height:1px;">');
-
-      if (stroke) {
-        appendStroke(this, lineStr);
+      if ("gradient" == o.type_) {
+        var P = o.x0_ / s,
+            g = o.y0_ / l,
+            L = o.x1_ / s,
+            m = o.y1_ / l,
+            M = V(t, P, g),
+            C = V(t, L, m),
+            y = C.x - M.x,
+            w = C.y - M.y;
+        (c = 180 * Math.atan2(y, w) / Math.PI) < 0 && (c += 360), c < 1e-6 && (c = 0);
       } else {
-        // TODO: Fix the min and max params.
-        appendFill(this, lineStr, {
-          x: -left,
-          y: 0
-        }, {
-          x: right,
-          y: fontStyle.size
-        });
+        var _a = V(t, o.x0_, o.y0_);
+
+        h = {
+          x: (_a.x - i.x) / d,
+          y: (_a.y - i.y) / u
+        }, d /= s * r, u /= l * r;
+        var v = e.max(d, u);
+        p = 2 * o.r0_ / v, f = 2 * o.r1_ / v - p;
       }
 
-      var skewM = m[0][0].toFixed(3) + ',' + m[1][0].toFixed(3) + ',' + m[0][1].toFixed(3) + ',' + m[1][1].toFixed(3) + ',0,0';
-      var skewOffset = mr(d.x / Z) + ',' + mr(d.y / Z);
-      lineStr.push('<g_vml_:skew on="t" matrix="', skewM, '" ', ' offset="', skewOffset, '" origin="', left, ' 0" />', '<g_vml_:path textpathok="true" />', '<g_vml_:textpath on="true" string="', encodeHtmlAttribute(text), '" style="v-text-align:', textAlign, ';font:', encodeHtmlAttribute(fontStyleString), '" /></g_vml_:line>');
-      this.element_.insertAdjacentHTML('beforeEnd', lineStr.join(''));
-    };
+      var _ = o.colors_;
 
-    contextPrototype.fillText = function (text, x, y, maxWidth) {
-      this.drawText_(text, x, y, maxWidth, false);
-    };
-
-    contextPrototype.strokeText = function (text, x, y, maxWidth) {
-      this.drawText_(text, x, y, maxWidth, true);
-    };
-
-    contextPrototype.measureText = function (text) {
-      if (!this.textMeasureEl_) {
-        var s = '<span style="position:absolute;' + 'top:-20000px;left:0;padding:0;margin:0;border:none;' + 'white-space:pre;"></span>';
-        this.element_.insertAdjacentHTML('beforeEnd', s);
-        this.textMeasureEl_ = this.element_.lastChild;
-      }
-
-      var doc = this.element_.ownerDocument;
-      this.textMeasureEl_.innerHTML = '';
-      this.textMeasureEl_.style.font = this.font; // Don't use innerHTML or innerText because they allow markup/whitespace.
-
-      this.textMeasureEl_.appendChild(doc.createTextNode(text));
-      return {
-        width: this.textMeasureEl_.offsetWidth
-      };
-    };
-    /******** STUBS ********/
-
-
-    contextPrototype.clip = function () {// TODO: Implement
-    };
-
-    contextPrototype.arcTo = function () {// TODO: Implement
-    };
-
-    contextPrototype.createPattern = function (image, repetition) {
-      return new CanvasPattern_(image, repetition);
-    }; // Gradient / Pattern Stubs
-
-
-    function CanvasGradient_(aType) {
-      this.type_ = aType;
-      this.x0_ = 0;
-      this.y0_ = 0;
-      this.r0_ = 0;
-      this.x1_ = 0;
-      this.y1_ = 0;
-      this.r1_ = 0;
-      this.colors_ = [];
-    }
-
-    CanvasGradient_.prototype.addColorStop = function (aOffset, aColor) {
-      aColor = processStyle(aColor);
-      this.colors_.push({
-        offset: aOffset,
-        color: aColor.color,
-        alpha: aColor.alpha
+      _.sort(function (e, t) {
+        return e.offset - t.offset;
       });
-    };
 
-    function CanvasPattern_(image, repetition) {
-      assertImageIsValid(image);
-
-      switch (repetition) {
-        case 'repeat':
-        case null:
-        case '':
-          this.repetition_ = 'repeat';
-          break;
-
-        case 'repeat-x':
-        case 'repeat-y':
-        case 'no-repeat':
-          this.repetition_ = repetition;
-          break;
-
-        default:
-          throwException('SYNTAX_ERR');
+      for (var I = _.length, S = _[0].color, b = _[I - 1].color, D = _[0].alpha * t.globalAlpha, k = _[I - 1].alpha * t.globalAlpha, T = [], O = 0; O < I; O++) {
+        var A = _[O];
+        T.push(A.offset * f + p + " " + A.color);
       }
 
-      this.src_ = image.src;
-      this.width_ = image.width;
-      this.height_ = image.height;
-    }
-
-    function throwException(s) {
-      throw new DOMException_(s);
-    }
-
-    function assertImageIsValid(img) {
-      if (!img || img.nodeType != 1 || img.tagName != 'IMG') {
-        throwException('TYPE_MISMATCH_ERR');
+      a.push('<g_vml_:fill type="', o.type_, '"', ' method="none" focus="100%"', ' color="', S, '"', ' color2="', b, '"', ' colors="', T.join(","), '"', ' opacity="', k, '"', ' g_o_:opacity2="', D, '"', ' angle="', c, '"', ' focusposition="', h.x, ",", h.y, '" />');
+    } else if (o instanceof x) {
+      if (d && u) {
+        var E = -i.x,
+            G = -i.y;
+        a.push("<g_vml_:fill", ' position="', E / d * s * s, ",", G / u * l * l, '"', ' type="tile"', ' src="', o.src_, '" />');
       }
-
-      if (img.readyState != 'complete') {
-        throwException('INVALID_STATE_ERR');
-      }
+    } else {
+      var B = R(t.fillStyle),
+          W = B.color,
+          N = B.alpha * t.globalAlpha;
+      a.push('<g_vml_:fill color="', W, '" opacity="', N, '" />');
     }
-
-    function DOMException_(s) {
-      this.code = this[s];
-      this.message = s + ': DOM Exception ' + this.code;
-    }
-
-    var p = DOMException_.prototype = new Error();
-    p.INDEX_SIZE_ERR = 1;
-    p.DOMSTRING_SIZE_ERR = 2;
-    p.HIERARCHY_REQUEST_ERR = 3;
-    p.WRONG_DOCUMENT_ERR = 4;
-    p.INVALID_CHARACTER_ERR = 5;
-    p.NO_DATA_ALLOWED_ERR = 6;
-    p.NO_MODIFICATION_ALLOWED_ERR = 7;
-    p.NOT_FOUND_ERR = 8;
-    p.NOT_SUPPORTED_ERR = 9;
-    p.INUSE_ATTRIBUTE_ERR = 10;
-    p.INVALID_STATE_ERR = 11;
-    p.SYNTAX_ERR = 12;
-    p.INVALID_MODIFICATION_ERR = 13;
-    p.NAMESPACE_ERR = 14;
-    p.INVALID_ACCESS_ERR = 15;
-    p.VALIDATION_ERR = 16;
-    p.TYPE_MISMATCH_ERR = 17; // set up externs
-
-    G_vmlCanvasManager = G_vmlCanvasManager_;
-    CanvasRenderingContext2D = CanvasRenderingContext2D_;
-    CanvasGradient = CanvasGradient_;
-    CanvasPattern = CanvasPattern_;
-    DOMException = DOMException_;
-  })();
-} // if
-//
-// Coords Class
-// Basic coordinates conversions and formating
-//
-//
-
-
-function Coords(v, IsLon) {
-  if (typeof v == 'number') {
-    this.Value = v;
-  } else {
-    this.Value = parseFloat(v);
   }
 
-  this.IsLon = IsLon; // Returns the degree part of a coordinate is floating format
+  function V(e, t, a) {
+    var i = e.m_;
+    return {
+      x: r * (t * i[0][0] + a * i[1][0] + i[2][0]) - s,
+      y: r * (t * i[0][1] + a * i[1][1] + i[2][1]) - s
+    };
+  }
 
-  this.Deg = function () {
-    return Math.abs(this.Value);
-  }; // Returns the minutes part of a coordinate in floating format
+  function B(e, t, a) {
+    if (function (e) {
+      return isFinite(e[0][0]) && isFinite(e[0][1]) && isFinite(e[1][0]) && isFinite(e[1][1]) && isFinite(e[2][0]) && isFinite(e[2][1]);
+    }(t) && (e.m_ = t, a)) {
+      var i = t[0][0] * t[1][1] - t[0][1] * t[1][0];
+      e.lineScale_ = o(n(i));
+    }
+  }
 
+  function F(e) {
+    this.type_ = e, this.x0_ = 0, this.y0_ = 0, this.r0_ = 0, this.x1_ = 0, this.y1_ = 0, this.r1_ = 0, this.colors_ = [];
+  }
 
-  this.Min = function () {
-    return (Math.abs(this.Value) - Math.floor(this.Deg())) * 60;
-  }; // Returns the second part of a coordinate in floating format
+  function x(e, t) {
+    switch (function (e) {
+      e && 1 == e.nodeType && "IMG" == e.tagName || W("TYPE_MISMATCH_ERR");
+      "complete" != e.readyState && W("INVALID_STATE_ERR");
+    }(e), t) {
+      case "repeat":
+      case null:
+      case "":
+        this.repetition_ = "repeat";
+        break;
 
+      case "repeat-x":
+      case "repeat-y":
+      case "no-repeat":
+        this.repetition_ = t;
+        break;
 
-  this.Sec = function () {
-    return (this.Min() - Math.floor(this.Min())) * 60;
-  }; // Basic string formatting of a floating coordinate
+      default:
+        W("SYNTAX_ERR");
+    }
 
+    this.src_ = e.src, this.width_ = e.width, this.height_ = e.height;
+  }
 
-  this.ToString = function (Raw) {
-    if (Raw) {
-      return this.Value;
-    } else {
-      var Side = "";
+  function W(e) {
+    throw new N(e);
+  }
 
-      if (typeof this.IsLon == 'undefined' || this.IsLon == 0) {
-        Side = this.Value >= 0 ? ' N' : ' S';
-      } else {
-        Side = this.Value >= 0 ? ' E' : ' W';
+  function N(e) {
+    this.code = this[e], this.message = e + ": DOM Exception " + this.code;
+  }
+
+  O.clearRect = function () {
+    this.textMeasureEl_ && (this.textMeasureEl_.removeNode(!0), this.textMeasureEl_ = null), this.element_.innerHTML = "";
+  }, O.beginPath = function () {
+    this.currentPath_ = [];
+  }, O.moveTo = function (e, t) {
+    var a = V(this, e, t);
+    this.currentPath_.push({
+      type: "moveTo",
+      x: a.x,
+      y: a.y
+    }), this.currentX_ = a.x, this.currentY_ = a.y;
+  }, O.lineTo = function (e, t) {
+    var a = V(this, e, t);
+    this.currentPath_.push({
+      type: "lineTo",
+      x: a.x,
+      y: a.y
+    }), this.currentX_ = a.x, this.currentY_ = a.y;
+  }, O.bezierCurveTo = function (e, t, a, i, n, o) {
+    var r = V(this, n, o);
+    A(this, V(this, e, t), V(this, a, i), r);
+  }, O.quadraticCurveTo = function (e, t, a, i) {
+    var n = V(this, e, t),
+        o = V(this, a, i),
+        r = {
+      x: this.currentX_ + 2 / 3 * (n.x - this.currentX_),
+      y: this.currentY_ + 2 / 3 * (n.y - this.currentY_)
+    };
+    A(this, r, {
+      x: r.x + (o.x - this.currentX_) / 3,
+      y: r.y + (o.y - this.currentY_) / 3
+    }, o);
+  }, O.arc = function (e, t, n, o, l, d) {
+    n *= r;
+    var u = d ? "at" : "wa",
+        c = e + i(o) * n - s,
+        h = t + a(o) * n - s,
+        p = e + i(l) * n - s,
+        f = t + a(l) * n - s;
+    c != p || d || (c += .125);
+    var P = V(this, e, t),
+        g = V(this, c, h),
+        L = V(this, p, f);
+    this.currentPath_.push({
+      type: u,
+      x: P.x,
+      y: P.y,
+      radius: n,
+      xStart: g.x,
+      yStart: g.y,
+      xEnd: L.x,
+      yEnd: L.y
+    });
+  }, O.rect = function (e, t, a, i) {
+    this.moveTo(e, t), this.lineTo(e + a, t), this.lineTo(e + a, t + i), this.lineTo(e, t + i), this.closePath();
+  }, O.strokeRect = function (e, t, a, i) {
+    var n = this.currentPath_;
+    this.beginPath(), this.moveTo(e, t), this.lineTo(e + a, t), this.lineTo(e + a, t + i), this.lineTo(e, t + i), this.closePath(), this.stroke(), this.currentPath_ = n;
+  }, O.fillRect = function (e, t, a, i) {
+    var n = this.currentPath_;
+    this.beginPath(), this.moveTo(e, t), this.lineTo(e + a, t), this.lineTo(e + a, t + i), this.lineTo(e, t + i), this.closePath(), this.fill(), this.currentPath_ = n;
+  }, O.createLinearGradient = function (e, t, a, i) {
+    var n = new F("gradient");
+    return n.x0_ = e, n.y0_ = t, n.x1_ = a, n.y1_ = i, n;
+  }, O.createRadialGradient = function (e, t, a, i, n, o) {
+    var r = new F("gradientradial");
+    return r.x0_ = e, r.y0_ = t, r.r0_ = a, r.x1_ = i, r.y1_ = n, r.r1_ = o, r;
+  }, O.drawImage = function (a, i) {
+    var n,
+        o,
+        s,
+        l,
+        d,
+        u,
+        c,
+        h,
+        p = a.runtimeStyle.width,
+        f = a.runtimeStyle.height;
+    a.runtimeStyle.width = "auto", a.runtimeStyle.height = "auto";
+    var P = a.width,
+        g = a.height;
+    if (a.runtimeStyle.width = p, a.runtimeStyle.height = f, 3 == arguments.length) n = arguments[1], o = arguments[2], d = u = 0, c = s = P, h = l = g;else if (5 == arguments.length) n = arguments[1], o = arguments[2], s = arguments[3], l = arguments[4], d = u = 0, c = P, h = g;else {
+      if (9 != arguments.length) throw Error("Invalid number of arguments");
+      d = arguments[1], u = arguments[2], c = arguments[3], h = arguments[4], n = arguments[5], o = arguments[6], s = arguments[7], l = arguments[8];
+    }
+    var L = V(this, n, o),
+        m = [];
+
+    if (m.push(" <g_vml_:group", ' coordsize="', 10 * r, ",", 10 * r, '"', ' coordorigin="0,0"', ' style="width:', 10, "px;height:", 10, "px;position:absolute;"), 1 != this.m_[0][0] || this.m_[0][1] || 1 != this.m_[1][1] || this.m_[1][0]) {
+      var M = [];
+      M.push("M11=", this.m_[0][0], ",", "M12=", this.m_[1][0], ",", "M21=", this.m_[0][1], ",", "M22=", this.m_[1][1], ",", "Dx=", t(L.x / r), ",", "Dy=", t(L.y / r), "");
+      var C = L,
+          y = V(this, n + s, o),
+          w = V(this, n, o + l),
+          v = V(this, n + s, o + l);
+      C.x = e.max(C.x, y.x, w.x, v.x), C.y = e.max(C.y, y.y, w.y, v.y), m.push("padding:0 ", t(C.x / r), "px ", t(C.y / r), "px 0;filter:progid:DXImageTransform.Microsoft.Matrix(", M.join(""), ", sizingmethod='clip');");
+    } else m.push("top:", t(L.y / r), "px;left:", t(L.x / r), "px;");
+
+    m.push(' ">', '<g_vml_:image src="', a.src, '"', ' style="width:', r * s, "px;", " height:", r * l, 'px"', ' cropleft="', d / P, '"', ' croptop="', u / g, '"', ' cropright="', (P - d - c) / P, '"', ' cropbottom="', (g - u - h) / g, '"', " />", "</g_vml_:group>"), this.element_.insertAdjacentHTML("BeforeEnd", m.join(""));
+  }, O.stroke = function (e) {
+    var a = [];
+    a.push("<g_vml_:shape", ' filled="', !!e, '"', ' style="position:absolute;width:', 10, "px;height:", 10, 'px;"', ' coordorigin="0,0"', ' coordsize="', 10 * r, ",", 10 * r, '"', ' stroked="', !e, '"', ' path="');
+
+    for (var i = {
+      x: null,
+      y: null
+    }, n = {
+      x: null,
+      y: null
+    }, o = 0; o < this.currentPath_.length; o++) {
+      var s = this.currentPath_[o];
+
+      switch (s.type) {
+        case "moveTo":
+          s, a.push(" m ", t(s.x), ",", t(s.y));
+          break;
+
+        case "lineTo":
+          a.push(" l ", t(s.x), ",", t(s.y));
+          break;
+
+        case "close":
+          a.push(" x "), s = null;
+          break;
+
+        case "bezierCurveTo":
+          a.push(" c ", t(s.cp1x), ",", t(s.cp1y), ",", t(s.cp2x), ",", t(s.cp2y), ",", t(s.x), ",", t(s.y));
+          break;
+
+        case "at":
+        case "wa":
+          a.push(" ", s.type, " ", t(s.x - this.arcScaleX_ * s.radius), ",", t(s.y - this.arcScaleY_ * s.radius), " ", t(s.x + this.arcScaleX_ * s.radius), ",", t(s.y + this.arcScaleY_ * s.radius), " ", t(s.xStart), ",", t(s.yStart), " ", t(s.xEnd), ",", t(s.yEnd));
       }
 
-      return Math.floor(this.Deg()) + "° " + Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"' + Side;
+      s && ((null == i.x || s.x < i.x) && (i.x = s.x), (null == n.x || s.x > n.x) && (n.x = s.x), (null == i.y || s.y < i.y) && (i.y = s.y), (null == n.y || s.y > n.y) && (n.y = s.y));
     }
+
+    a.push(' ">'), e ? G(this, a, i, n) : E(this, a), a.push("</g_vml_:shape>"), this.element_.insertAdjacentHTML("beforeEnd", a.join(""));
+  }, O.fill = function () {
+    this.stroke(!0);
+  }, O.closePath = function () {
+    this.currentPath_.push({
+      type: "close"
+    });
+  }, O.save = function () {
+    var e = {};
+    C(this, e), this.aStack_.push(e), this.mStack_.push(this.m_), this.m_ = M([[1, 0, 0], [0, 1, 0], [0, 0, 1]], this.m_);
+  }, O.restore = function () {
+    this.aStack_.length && (C(this.aStack_.pop(), this), this.m_ = this.mStack_.pop());
+  }, O.translate = function (e, t) {
+    B(this, M([[1, 0, 0], [0, 1, 0], [e, t, 1]], this.m_), !1);
+  }, O.rotate = function (e) {
+    var t = i(e),
+        n = a(e);
+    B(this, M([[t, n, 0], [-n, t, 0], [0, 0, 1]], this.m_), !1);
+  }, O.scale = function (e, t) {
+    this.arcScaleX_ *= e, this.arcScaleY_ *= t, B(this, M([[e, 0, 0], [0, t, 0], [0, 0, 1]], this.m_), !0);
+  }, O.transform = function (e, t, a, i, n, o) {
+    B(this, M([[e, t, 0], [a, i, 0], [n, o, 1]], this.m_), !0);
+  }, O.setTransform = function (e, t, a, i, n, o) {
+    B(this, [[e, t, 0], [a, i, 0], [n, o, 1]], !0);
+  }, O.drawText_ = function (e, a, i, n, o) {
+    var s,
+        l = this.m_,
+        d = 0,
+        c = 1e3,
+        h = {
+      x: 0,
+      y: 0
+    },
+        p = [],
+        f = function (e, t) {
+      var a = {};
+
+      for (var i in e) {
+        a[i] = e[i];
+      }
+
+      var n = parseFloat(t.currentStyle.fontSize),
+          o = parseFloat(e.size);
+      return "number" == typeof e.size ? a.size = e.size : -1 != e.size.indexOf("px") ? a.size = o : -1 != e.size.indexOf("em") ? a.size = n * o : -1 != e.size.indexOf("%") ? a.size = n / 100 * o : -1 != e.size.indexOf("pt") ? a.size = o / .75 : a.size = n, a.size *= .981, a;
+    }(function (e) {
+      if (D[e]) return D[e];
+      var t = document.createElement("div").style;
+
+      try {
+        t.font = e;
+      } catch (e) {}
+
+      return D[e] = {
+        style: t.fontStyle || b.style,
+        variant: t.fontVariant || b.variant,
+        weight: t.fontWeight || b.weight,
+        size: t.fontSize || b.size,
+        family: t.fontFamily || b.family
+      }, D[e];
+    }(this.font), this.element_),
+        P = (s = f).style + " " + s.variant + " " + s.weight + " " + s.size + "px " + s.family,
+        g = this.element_.currentStyle,
+        L = this.textAlign.toLowerCase();
+
+    switch (L) {
+      case "left":
+      case "center":
+      case "right":
+        break;
+
+      case "end":
+        L = "ltr" == g.direction ? "right" : "left";
+        break;
+
+      case "start":
+        L = "rtl" == g.direction ? "right" : "left";
+        break;
+
+      default:
+        L = "left";
+    }
+
+    switch (this.textBaseline) {
+      case "hanging":
+      case "top":
+        h.y = f.size / 1.75;
+        break;
+
+      case "middle":
+        break;
+
+      default:
+      case null:
+      case "alphabetic":
+      case "ideographic":
+      case "bottom":
+        h.y = -f.size / 2.25;
+    }
+
+    switch (L) {
+      case "right":
+        d = 1e3, c = .05;
+        break;
+
+      case "center":
+        d = c = 500;
+    }
+
+    var m = V(this, a + h.x, i + h.y);
+    p.push('<g_vml_:line from="', -d, ' 0" to="', c, ' 0.05" ', ' coordsize="100 100" coordorigin="0 0"', ' filled="', !o, '" stroked="', !!o, '" style="position:absolute;width:1px;height:1px;">'), o ? E(this, p) : G(this, p, {
+      x: -d,
+      y: 0
+    }, {
+      x: c,
+      y: f.size
+    });
+    var M = l[0][0].toFixed(3) + "," + l[1][0].toFixed(3) + "," + l[0][1].toFixed(3) + "," + l[1][1].toFixed(3) + ",0,0",
+        C = t(m.x / r) + "," + t(m.y / r);
+    p.push('<g_vml_:skew on="t" matrix="', M, '" ', ' offset="', C, '" origin="', d, ' 0" />', '<g_vml_:path textpathok="true" />', '<g_vml_:textpath on="true" string="', u(e), '" style="v-text-align:', L, ";font:", u(P), '" /></g_vml_:line>'), this.element_.insertAdjacentHTML("beforeEnd", p.join(""));
+  }, O.fillText = function (e, t, a, i) {
+    this.drawText_(e, t, a, i, !1);
+  }, O.strokeText = function (e, t, a, i) {
+    this.drawText_(e, t, a, i, !0);
+  }, O.measureText = function (e) {
+    if (!this.textMeasureEl_) {
+      this.element_.insertAdjacentHTML("beforeEnd", '<span style="position:absolute;top:-20000px;left:0;padding:0;margin:0;border:none;white-space:pre;"></span>'), this.textMeasureEl_ = this.element_.lastChild;
+    }
+
+    var t = this.element_.ownerDocument;
+    return this.textMeasureEl_.innerHTML = "", this.textMeasureEl_.style.font = this.font, this.textMeasureEl_.appendChild(t.createTextNode(e)), {
+      width: this.textMeasureEl_.offsetWidth
+    };
+  }, O.clip = function () {}, O.arcTo = function () {}, O.createPattern = function (e, t) {
+    return new x(e, t);
+  }, F.prototype.addColorStop = function (e, t) {
+    t = R(t), this.colors_.push({
+      offset: e,
+      color: t.color,
+      alpha: t.alpha
+    });
   };
-} //
-// Returns the deg, min, sec parts of a coordinate in decimal number
-//
+  var $ = N.prototype = new Error();
+  $.INDEX_SIZE_ERR = 1, $.DOMSTRING_SIZE_ERR = 2, $.HIERARCHY_REQUEST_ERR = 3, $.WRONG_DOCUMENT_ERR = 4, $.INVALID_CHARACTER_ERR = 5, $.NO_DATA_ALLOWED_ERR = 6, $.NO_MODIFICATION_ALLOWED_ERR = 7, $.NOT_FOUND_ERR = 8, $.NOT_SUPPORTED_ERR = 9, $.INUSE_ATTRIBUTE_ERR = 10, $.INVALID_STATE_ERR = 11, $.SYNTAX_ERR = 12, $.INVALID_MODIFICATION_ERR = 13, $.NAMESPACE_ERR = 14, $.INVALID_ACCESS_ERR = 15, $.VALIDATION_ERR = 16, $.TYPE_MISMATCH_ERR = 17, G_vmlCanvasManager = p, CanvasRenderingContext2D = T, CanvasGradient = F, CanvasPattern = x, DOMException = N;
+}();
+var Gribmap = {},
+    ErrorCatching = -1,
+    SrvIndex = 1;
 
-
-function GetDegMinSecFromNumber(n, d, m, s) {
-  var DecPart;
-  SplitNumber(n, d, DecPart);
-  SplitNumber(DecPart * 60, m, DecPart);
-  SplitNumber(DecPart * 60, s, DecPart);
-  return;
-} //
-// Split a number between its integer and decimal part
-
-
-function SplitNumber(n, i, d) {
-  i = Math.floor(n);
-  d = n - i;
+function Wind(e, t) {
+  this.wspeed = e, this.wheading = t;
 }
-/*
-/* Contributors : paparazzia@gmail.com, ...
- * Code is licencesed under the AGPL license
- * See Copying file
- */
 
-/* TODO:
- * this is rough draft
- * - for better drawing an BC compatibility with OL, the Gribmap layer should use the renderer or the vector base layer (?)
- * - windarea are stored in an objet (pseudo key=>value array) => should be stored in arrays with indexes
- */
+function normalizeLongitude0(e) {
+  var t;
+  return (t = e % 360) > 180 ? t -= 360 : t <= -180 && (t += 360), t;
+}
 
-/**
- * @requires OpenLayers.js
- * @requires ControlSwitch.js
- * @requires OpenLayers/Pixel.js
- */
-
-
-var Gribmap = {}; //Module container
-
-var ErrorCatching = -1; //DEBUG: Set this > 0 to catch pixel out of wind grid
-
-var SrvIndex = 1;
+function normalizeLongitude360(e) {
+  var t;
+  return (t = e % 360) < 0 && (t += 360), t;
+}
 
 Gribmap.ServerURL = function () {
-  if (typeof WindGridServers !== "undefined" && WindGridServers) {
-    SrvIndex = (SrvIndex + 1) % WindGridServers.length;
-
-    if (SrvIndex === 0) {
-      SrvIndex = 1;
-    }
-
-    return WindGridServers[SrvIndex];
-  } else {
-    return "";
-  }
-};
-
-Gribmap.windgrid_uribase = function () {
+  return "undefined" != typeof WindGridServers && WindGridServers ? (0 === (SrvIndex = (SrvIndex + 1) % WindGridServers.length) && (SrvIndex = 1), WindGridServers[SrvIndex]) : "";
+}, Gribmap.windgrid_uribase = function () {
   return Gribmap.ServerURL() + "/ws/windinfo/windgrid.php";
-};
-
-Gribmap.griblist_uribase = '/ws/windinfo/list.php'; // Class wind info - just a basic vector
-
-function Wind(wspeed, wheading) {
-  this.wspeed = wspeed;
-  this.wheading = wheading;
-} // Normalize longitude -180 < long <= 180
-
-
-function normalizeLongitude0(longitude) {
-  var l;
-  l = longitude % 360.0;
-
-  if (l > 180.0) {
-    l -= 360.0;
-  } else if (l <= -180.0) {
-    l += 360.0;
-  }
-
-  return l;
-} // Normalize longitude 0 <= long < 360
-
-
-function normalizeLongitude360(longitude) {
-  var l;
-  l = longitude % 360.0;
-
-  if (l < 0.0) {
-    l += 360.0;
-  }
-
-  return l;
-} // point in the canvas - subclassed from OL.Pixel to make transform easier
-
-
-Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel, {
-  moveBy: function moveBy(offset) {
-    //this is the same as the base.offset() func, but without cloning the object
-    this.x += offset.x;
-    this.y += offset.y;
+}, Gribmap.griblist_uribase = "/ws/windinfo/list.php", Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel, {
+  moveBy: function moveBy(e) {
+    this.x += e.x, this.y += e.y;
   },
-  moveByPolar: function moveByPolar(ro, theta) {
-    var angle = (theta - 90.0) * Math.PI / 180.0;
-    this.x += ro * Math.cos(angle);
-    this.y += ro * Math.sin(angle);
+  moveByPolar: function moveByPolar(e, t) {
+    var a = (t - 90) * Math.PI / 180;
+    this.x += e * Math.cos(a), this.y += e * Math.sin(a);
   },
   CLASS_NAME: "Gribmap.Pixel"
-}); //Store information (windAreas, i.e. bloc of grib datas)
-
-Gribmap.WindLevel = OpenLayers.Class({
-  basestep: 0.5,
+}), Gribmap.WindLevel = OpenLayers.Class({
+  basestep: .5,
   gribLevel: 0,
-  blocx: 360.0,
-  blocy: 180.0,
-  step: 2.0,
-  stepmultiple: 4.0,
+  blocx: 360,
+  blocy: 180,
+  step: 2,
+  stepmultiple: 4,
   windAreas: {},
   layer: null,
-  initialize: function initialize(griblevel, stepmultiple, blocx, blocy, layer) {
-    this.gribLevel = griblevel;
-    this.windAreas = [];
-    this.stepmultiple = stepmultiple;
-    this.step = this.basestep * stepmultiple; //FIXME: useless without proper step handling
-
-    this.blocx = blocx;
-    this.blocy = blocy;
-    this.layer = layer;
+  initialize: function initialize(e, t, a, i, n) {
+    this.gribLevel = e, this.windAreas = [], this.stepmultiple = t, this.step = this.basestep * t, this.blocx = a, this.blocy = i, this.layer = n;
   },
-  //FIXME : should we use native index in place of hash array ?
-  getGribLeftLimit: function getGribLeftLimit(lon) {
-    return this.getGribLeftId(lon) * this.blocx - 180;
+  getGribLeftLimit: function getGribLeftLimit(e) {
+    return this.getGribLeftId(e) * this.blocx - 180;
   },
-  getGribLeftId: function getGribLeftId(lon) {
-    return Math.floor((lon + 180) / this.blocx);
+  getGribLeftId: function getGribLeftId(e) {
+    return Math.floor((e + 180) / this.blocx);
   },
-  getGribBottomLimit: function getGribBottomLimit(lat) {
-    return this.getGribBottomId(lat) * this.blocy - 90;
+  getGribBottomLimit: function getGribBottomLimit(e) {
+    return this.getGribBottomId(e) * this.blocy - 90;
   },
-  getGribBottomId: function getGribBottomId(lat) {
-    return Math.floor((lat + 90) / this.blocy);
+  getGribBottomId: function getGribBottomId(e) {
+    return Math.floor((e + 90) / this.blocy);
   },
-  notifyLoad: function notifyLoad(time, windarea) {
-    if (this.layer && this.gribLevel === this.layer.gribLevel && this.layer.isInTimeRange(time) && this.layer.getExtent().transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-    ).intersectsBounds(windarea)) {
-      this.extendWindArea(windarea);
-      this.layer.redraw();
-    }
+  notifyLoad: function notifyLoad(e, t) {
+    this.layer && this.gribLevel === this.layer.gribLevel && this.layer.isInTimeRange(e) && this.layer.getExtent().transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326")).intersectsBounds(t) && (this.extendWindArea(t), this.layer.redraw());
   },
-  //Get all wind areas inside bounds, and call checkWindArea() for each
-  getWindAreas: function getWindAreas(bounds) {
-    //bounds in LAT-LON
-    var blocks = [];
-    var bc = 0;
-    var left = this.getGribLeftLimit(bounds.left);
-    var bottom = null;
-    var newblock = null;
-
-    while (left < bounds.right) {
-      bottom = this.getGribBottomLimit(bounds.bottom);
-
-      while (bottom < bounds.top) {
-        newblock = new Gribmap.WindArea(left, bottom, this);
-        blocks[bc] = this.checkWindArea(newblock);
-        bottom += this.blocy;
-        bc += 1;
+  getWindAreas: function getWindAreas(e) {
+    for (var t = [], a = 0, i = this.getGribLeftLimit(e.left), n = null, o = null; i < e.right;) {
+      for (n = this.getGribBottomLimit(e.bottom); n < e.top;) {
+        o = new Gribmap.WindArea(i, n, this), t[a] = this.checkWindArea(o), n += this.blocy, a += 1;
       }
 
-      left += this.blocx;
+      i += this.blocx;
     }
 
-    return blocks;
+    return t;
   },
-  checkWindArea: function checkWindArea(windarea) {
-    if (typeof this.windAreas[windarea.toString()] == 'undefined') {
-      //Unknown windarea, we just use it.
-      this.windAreas[windarea.toString()] = windarea;
-    } else {
-      windarea = this.windAreas[windarea.toString()];
-    }
-
-    windarea.checkWindArray(this.layer.gribtimeBefore);
-    windarea.checkWindArray(this.layer.gribtimeAfter);
-    return windarea;
+  checkWindArea: function checkWindArea(e) {
+    return void 0 === this.windAreas[e.toString()] ? this.windAreas[e.toString()] = e : e = this.windAreas[e.toString()], e.checkWindArray(this.layer.gribtimeBefore), e.checkWindArray(this.layer.gribtimeAfter), e;
   },
-  extendWindArea: function extendWindArea(windarea) {
-    var tl = this.layer.getGribTimeList();
-
-    for (var i = 0; i < tl.length; i++) {
-      windarea.checkWindArray(tl[i]);
+  extendWindArea: function extendWindArea(e) {
+    for (var t = this.layer.getGribTimeList(), a = 0; a < t.length; a++) {
+      e.checkWindArray(t[a]);
     }
   },
-  getWindInfo: function getWindInfo(lat, lon) {
-    var left = this.getGribLeftLimit(lon);
-    var bottom = this.getGribBottomLimit(lat);
-    var wa = new Gribmap.WindArea(left, bottom, this); //on n'appelle pas checkWindArea car on suppose que c'est déjà  OK.
-    //mais on mets ça dans une clausse d'exception pour ne pas avoir de soucis
+  getWindInfo: function getWindInfo(e, t) {
+    var a = this.getGribLeftLimit(t),
+        i = this.getGribBottomLimit(e),
+        n = new Gribmap.WindArea(a, i, this);
 
     try {
-      var w_area = this.windAreas[wa.toString()];
-
-      if (typeof w_area !== "undefined" && w_area) {
-        return w_area.getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter);
-      } else {
-        return null;
-      }
-    } catch (error) {
+      var o = this.windAreas[n.toString()];
+      return void 0 !== o && o ? o.getWindInfo(e, t, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter) : null;
+    } catch (e) {
       return null;
     }
   },
   CLASS_NAME: "Gribmap.WindLevel"
-}); //Wind array container
-
-Gribmap.WindArray = OpenLayers.Class({
+}), Gribmap.WindArray = OpenLayers.Class({
   time: null,
   winddatas: null,
-  status: 'void',
+  status: "void",
   windArea: null,
-  //for back notification after loading
-  initialize: function initialize(time, windArea) {
-    this.status = 'void';
-    this.time = time;
-    this.windArea = windArea;
+  initialize: function initialize(e, t) {
+    this.status = "void", this.time = e, this.windArea = t;
   },
   isLoaded: function isLoaded() {
-    return this.status == 'loaded';
+    return "loaded" == this.status;
   },
   isLoading: function isLoading() {
-    return this.status == 'loading';
+    return "loading" == this.status;
   },
   notifyLoad: function notifyLoad() {
-    if (this.windArea) {
-      this.windArea.notifyLoad(this.time);
-    }
+    this.windArea && this.windArea.notifyLoad(this.time);
   },
-  handleWindGridReply: function handleWindGridReply(request) {
-    if (request.status == 200) {
-      var jsonArray;
-      jsonArray = JSON.parse(request.responseText);
-      this.winddatas = this.transformRawWindArray(jsonArray);
-      this.status = 'loaded';
-      this.notifyLoad();
-      HidePb("#PbGribLoginProgress");
-    } else {
-      this.status = "void";
-    }
+  handleWindGridReply: function handleWindGridReply(e) {
+    var t;
+    200 == e.status ? (t = JSON.parse(e.responseText), this.winddatas = this.transformRawWindArray(t), this.status = "loaded", this.notifyLoad(), HidePb("#PbGribLoginProgress")) : this.status = "void";
   },
-  // transform the information retrieved in JSON form the wind service
-  // in VLM into a two-dimensional pseudo-array
-  // parameter:
-  // jsonArray, the raw array in JSON
-  // return:
-  // a two dimensional pseudo-array with index step 0.5
-  transformRawWindArray: function transformRawWindArray(jsonArray) {
-    var wind_array = [];
-    var windNodeIdx, windNode, windInfo;
+  transformRawWindArray: function transformRawWindArray(e) {
+    var t,
+        a,
+        i,
+        n = [];
 
-    for (windNodeIdx in jsonArray) {
-      if (jsonArray[windNodeIdx]) {
-        windNode = jsonArray[windNodeIdx];
-
-        if (typeof wind_array[windNode.lat] == 'undefined') {
-          wind_array[windNode.lat] = [];
-        }
-
-        windInfo = new Wind(windNode.wspd, windNode.whdg);
-        wind_array[windNode.lat][windNode.lon] = windInfo;
-
-        if (windNode.lon === 180.0) {
-          wind_array[windNode.lat][-windNode.lon] = windInfo;
-        }
-      }
+    for (t in e) {
+      e[t] && (void 0 === n[(a = e[t]).lat] && (n[a.lat] = []), i = new Wind(a.wspd, a.whdg), n[a.lat][a.lon] = i, 180 === a.lon && (n[a.lat][-a.lon] = i));
     }
 
-    return wind_array;
+    return n;
   },
   getWindGrid: function getWindGrid() {
-    if (this.isLoaded() || this.isLoading()) return;
-    if (this.time == 0) return;
-    this.status = 'loading';
-    var reqeast = this.windArea.right % 360;
-    var reqwest = this.windArea.left % 360;
-
-    if (reqeast < -180) {
-      reqeast += 360;
+    if (!this.isLoaded() && !this.isLoading() && 0 != this.time) {
+      this.status = "loading";
+      var e = this.windArea.right % 360,
+          t = this.windArea.left % 360;
+      e < -180 && (e += 360), e > 180 && (e -= 360), t < -180 && (t += 360), t > 180 && (t -= 360), ShowPb("#PbGribLoginProgress");
+      OpenLayers.Request.GET({
+        url: Gribmap.windgrid_uribase(),
+        params: {
+          north: this.windArea.top,
+          south: this.windArea.bottom,
+          east: e,
+          west: t,
+          timerequest: this.time,
+          stepmultiple: this.windArea.windlevel.stepmultiple
+        },
+        async: !0,
+        headers: {
+          Accept: "application/json"
+        },
+        callback: this.handleWindGridReply,
+        scope: this
+      });
     }
-
-    if (reqeast > 180) {
-      reqeast -= 360;
-    }
-
-    if (reqwest < -180) {
-      reqwest += 360;
-    }
-
-    if (reqwest > 180) {
-      reqwest -= 360;
-    }
-
-    ShowPb("#PbGribLoginProgress");
-    var request = OpenLayers.Request.GET({
-      url: Gribmap.windgrid_uribase(),
-      params: {
-        north: this.windArea.top,
-        south: this.windArea.bottom,
-        east: reqeast,
-        west: reqwest,
-        timerequest: this.time,
-        stepmultiple: this.windArea.windlevel.stepmultiple
-      },
-      async: true,
-      headers: {
-        'Accept': 'application/json'
-      },
-      callback: this.handleWindGridReply,
-      scope: this
-    });
   },
   CLASS_NAME: "Gribmap.WindArray"
-});
-/* Class: WindArea
- */
-
-Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
+}), Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
   windlevel: null,
-  //pointer to WindLevel ?
   windArrays: null,
-  initialize: function initialize(left, bottom, windlevel) {
-    this.windlevel = windlevel;
-    this.windArrays = [];
-    this.left = left;
-    this.bottom = bottom;
-    this.right = left + windlevel.blocx;
-    this.top = bottom + windlevel.blocy;
+  initialize: function initialize(e, t, a) {
+    this.windlevel = a, this.windArrays = [], this.left = e, this.bottom = t, this.right = e + a.blocx, this.top = t + a.blocy;
   },
-  notifyLoad: function notifyLoad(time) {
-    if (this.windlevel != null) {
-      this.windlevel.notifyLoad(time, this);
-    }
+  notifyLoad: function notifyLoad(e) {
+    null != this.windlevel && this.windlevel.notifyLoad(e, this);
   },
-  checkWindArray: function checkWindArray(ts) {
-    if (this.exists(ts) || ts == 0) return;
-    this.windArrays[ts] = new Gribmap.WindArray(ts, this);
-    this.windArrays[ts].getWindGrid();
+  checkWindArray: function checkWindArray(e) {
+    this.exists(e) || 0 == e || (this.windArrays[e] = new Gribmap.WindArray(e, this), this.windArrays[e].getWindGrid());
   },
-  exists: function exists(ts) {
-    return typeof this.windArrays[ts] != 'undefined';
+  exists: function exists(e) {
+    return void 0 !== this.windArrays[e];
   },
-  isLoaded: function isLoaded(ts) {
-    return this.exists(ts) && this.windArrays[ts].isLoaded();
+  isLoaded: function isLoaded(e) {
+    return this.exists(e) && this.windArrays[e].isLoaded();
   },
-  isLoading: function isLoading(ts) {
-    return this.exists(ts) && this.windArrays[ts].isLoading();
+  isLoading: function isLoading(e) {
+    return this.exists(e) && this.windArrays[e].isLoading();
   },
   toString: function toString() {
-    //        return 'gribresol=('+this.windlevel['griblevel']+") coord=("+normalizeLongitude0(this.left)+","+this.bottom+")";
-    return 'gribresol=(' + this.windlevel.griblevel + ") " + OpenLayers.Bounds.prototype.toString.apply(this, arguments);
+    return "gribresol=(" + this.windlevel.griblevel + ") " + OpenLayers.Bounds.prototype.toString.apply(this, arguments);
   },
-  getWindInfo: function getWindInfo(lat, lon, time, time_ante, time_post) {
-    //FIXME should clean all these API
-    return this.getWindInfo2(lat, lon, time, this.windArrays[time_ante], this.windArrays[time_post]);
+  getWindInfo: function getWindInfo(e, t, a, i, n) {
+    return this.getWindInfo2(e, t, a, this.windArrays[i], this.windArrays[n]);
   },
-  getWindInfo2: function getWindInfo2(lat, lon, time, windarray_ante, windarray_post) {
-    //You should be sure before calling this that all the grib data you need are already loaded.
-    var ne_wind, nw_wind, se_wind, sw_wind;
-    var s_limit, n_limit, e_limit, w_limit;
-    var n_wspeed, s_wspeed, wspeed, wspeed_ante, wspeed_post;
-    var t_angle1, t_angle2, wangle, t_val1, t_val2;
-    var n_u, n_v, s_u, s_v, u_ante, v_ante, u_post, v_post, u, v;
-    var stepwind = this.windlevel.step;
-    var timecoeff, loncoeff, latcoeff; //Normalisation & coeff
+  getWindInfo2: function getWindInfo2(e, t, a, i, n) {
+    var o,
+        r,
+        s,
+        l,
+        d,
+        u,
+        c,
+        h,
+        p,
+        f,
+        P,
+        g,
+        L,
+        m,
+        M,
+        C,
+        y,
+        w,
+        v,
+        _,
+        I,
+        S,
+        R,
+        b,
+        D,
+        k,
+        T,
+        O,
+        A,
+        E,
+        G = this.windlevel.step;
 
-    lon = normalizeLongitude0(lon);
-    s_limit = Math.floor(lat / stepwind) * stepwind;
-    n_limit = Math.ceil(lat / stepwind) * stepwind;
-    w_limit = Math.floor(lon / stepwind) * stepwind;
-    e_limit = Math.ceil(lon / stepwind) * stepwind;
-    loncoeff = (lon - w_limit) / stepwind;
-    latcoeff = (lat - s_limit) / stepwind; //ANTE
-    // Sanity checks
-
-    if (typeof windarray_ante.winddatas === "undefined" || !windarray_ante.winddatas || !(n_limit in windarray_ante.winddatas) || !(s_limit in windarray_ante.winddatas)) {
-      return null;
-    } else if (!(e_limit in windarray_ante.winddatas[n_limit]) || !(w_limit in windarray_ante.winddatas[n_limit]) || !(e_limit in windarray_ante.winddatas[s_limit]) || !(w_limit in windarray_ante.winddatas[s_limit])) {
-      return null;
-    } //4 corners
-
-
-    ne_wind = windarray_ante.winddatas[n_limit][e_limit];
-    nw_wind = windarray_ante.winddatas[n_limit][w_limit];
-    se_wind = windarray_ante.winddatas[s_limit][e_limit];
-    sw_wind = windarray_ante.winddatas[s_limit][w_limit]; //Windspeed : linear north, linear south, then linear        
-
-    n_wspeed = nw_wind.wspeed + loncoeff * (ne_wind.wspeed - nw_wind.wspeed);
-    s_wspeed = sw_wind.wspeed + loncoeff * (se_wind.wspeed - sw_wind.wspeed);
-    wspeed_ante = s_wspeed + latcoeff * (n_wspeed - s_wspeed); //radians
-
-    t_angle1 = nw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = ne_wind.wheading * Math.PI / 180.0;
-    t_val1 = nw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.cos(t_angle2);
-    n_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = nw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.sin(t_angle2);
-    n_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_angle1 = sw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = se_wind.wheading * Math.PI / 180.0;
-    t_val1 = sw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = se_wind.wspeed * Math.cos(t_angle2);
-    s_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = sw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = se_wind.wspeed * Math.sin(t_angle2);
-    s_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    u_ante = s_u + latcoeff * (n_u - s_u);
-    v_ante = s_v + latcoeff * (n_v - s_v); //POST
-    // Sanity checks
-
-    if (typeof windarray_post.winddatas === "undefined" || !windarray_post.winddatas || !(n_limit in windarray_post.winddatas) || !(s_limit in windarray_post.winddatas)) {
-      return null;
-    } else if (!(e_limit in windarray_post.winddatas[n_limit]) || !(w_limit in windarray_post.winddatas[n_limit]) || !(e_limit in windarray_post.winddatas[s_limit]) || !(w_limit in windarray_post.winddatas[s_limit])) {
-      return null;
-    } //4 corners
-
-
-    ne_wind = windarray_post.winddatas[n_limit][e_limit];
-    nw_wind = windarray_post.winddatas[n_limit][w_limit];
-    se_wind = windarray_post.winddatas[s_limit][e_limit];
-    sw_wind = windarray_post.winddatas[s_limit][w_limit]; //Windspeed : linear north, linear south, then linear        
-
-    n_wspeed = nw_wind.wspeed + loncoeff * (ne_wind.wspeed - nw_wind.wspeed);
-    s_wspeed = sw_wind.wspeed + loncoeff * (se_wind.wspeed - sw_wind.wspeed);
-    wspeed_post = s_wspeed + latcoeff * (n_wspeed - s_wspeed); //radians
-
-    t_angle1 = nw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = ne_wind.wheading * Math.PI / 180.0;
-    t_val1 = nw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.cos(t_angle2);
-    n_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = nw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.sin(t_angle2);
-    n_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_angle1 = sw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = se_wind.wheading * Math.PI / 180.0;
-    t_val1 = sw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = se_wind.wspeed * Math.cos(t_angle2);
-    s_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = sw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = se_wind.wspeed * Math.sin(t_angle2);
-    s_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    u_post = s_u + latcoeff * (n_u - s_u);
-    v_post = s_v + latcoeff * (n_v - s_v); //Interpolation temporelle
-
-    timecoeff = (time - windarray_ante.time) / (windarray_post.time - windarray_ante.time);
-    wspeed = wspeed_ante + timecoeff * (wspeed_post - wspeed_ante);
-    u = u_ante + timecoeff * (u_post - u_ante);
-    v = v_ante + timecoeff * (v_post - v_ante);
-    wangle = 180.0 * Math.acos(u / Math.sqrt(u * u + v * v)) / Math.PI;
-
-    if (v < 0) {
-      wangle = 360.0 - wangle;
-    }
-
-    return new Wind(wspeed, wangle);
+    return t = normalizeLongitude0(t), d = Math.floor(e / G) * G, u = Math.ceil(e / G) * G, h = Math.floor(t / G) * G, c = Math.ceil(t / G) * G, A = (t - h) / G, E = (e - d) / G, void 0 !== i.winddatas && i.winddatas && u in i.winddatas && d in i.winddatas && c in i.winddatas[u] && h in i.winddatas[u] && c in i.winddatas[d] && h in i.winddatas[d] ? (o = i.winddatas[u][c], r = i.winddatas[u][h], s = i.winddatas[d][c], l = i.winddatas[d][h], p = r.wspeed + A * (o.wspeed - r.wspeed), g = (f = l.wspeed + A * (s.wspeed - l.wspeed)) + E * (p - f), m = r.wheading * Math.PI / 180, M = o.wheading * Math.PI / 180, w = (y = r.wspeed * Math.cos(m)) + A * (o.wspeed * Math.cos(M) - y), v = (y = r.wspeed * Math.sin(m)) + A * (o.wspeed * Math.sin(M) - y), m = l.wheading * Math.PI / 180, M = s.wheading * Math.PI / 180, S = (_ = (y = l.wspeed * Math.cos(m)) + A * (s.wspeed * Math.cos(M) - y)) + E * (w - _), R = (I = (y = l.wspeed * Math.sin(m)) + A * (s.wspeed * Math.sin(M) - y)) + E * (v - I), void 0 !== n.winddatas && n.winddatas && u in n.winddatas && d in n.winddatas && c in n.winddatas[u] && h in n.winddatas[u] && c in n.winddatas[d] && h in n.winddatas[d] ? (o = n.winddatas[u][c], r = n.winddatas[u][h], s = n.winddatas[d][c], l = n.winddatas[d][h], p = r.wspeed + A * (o.wspeed - r.wspeed), L = (f = l.wspeed + A * (s.wspeed - l.wspeed)) + E * (p - f), m = r.wheading * Math.PI / 180, M = o.wheading * Math.PI / 180, w = (y = r.wspeed * Math.cos(m)) + A * (o.wspeed * Math.cos(M) - y), v = (y = r.wspeed * Math.sin(m)) + A * (o.wspeed * Math.sin(M) - y), m = l.wheading * Math.PI / 180, M = s.wheading * Math.PI / 180, b = (_ = (y = l.wspeed * Math.cos(m)) + A * (s.wspeed * Math.cos(M) - y)) + E * (w - _), D = (I = (y = l.wspeed * Math.sin(m)) + A * (s.wspeed * Math.sin(M) - y)) + E * (v - I), P = g + (O = (a - i.time) / (n.time - i.time)) * (L - g), k = S + O * (b - S), T = R + O * (D - R), C = 180 * Math.acos(k / Math.sqrt(k * k + T * T)) / Math.PI, T < 0 && (C = 360 - C), new Wind(P, C)) : null) : null;
   },
   CLASS_NAME: "Gribmap.WindArea"
-});
-/* Class: Gribmap.
-Layer
- * 
- * Inherits from:
- *  - <OpenLayers.Layer>
- */
-
-Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
-  /* APIProperty: isBaseLayer
-   * {Boolean} Gribmap layer is never a base layer.
-   */
-  isBaseLayer: false,
-
-  /* Property: canvas
-   * {DOMElement} Canvas element.
-   */
+}), Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
+  isBaseLayer: !1,
   canvas: null,
-
-  /* List of windLevels */
   windLevels: [],
-
-  /* define pixel grid */
   arrowstep: VLM2Prefs.MapPrefs.WindArrowsSpacing,
-
-  /* offset from now */
   timeoffset: 0,
-
-  /* current grib timestamp */
   time: 0,
   gribtimeBefore: 0,
   gribtimeAfter: 0,
-
-  /* Property: griblist
-   * List of timestamp for gribs
-   */
   griblist: null,
-  timeDelta: 6 * 3600,
-
-  /* Constructor: Gribmap.Layer
-   * Create a gribmap layer.
-   *
-   * Parameters:
-   * name - {String} Name of the Layer
-   * options - {Object} Hashtable of extra options to tag onto the layer
-   */
-  initialize: function initialize(name, options) {
-    var i;
-    OpenLayers.Layer.prototype.initialize.apply(this, arguments);
-    this.getGribList(); //Async call
-    //init resolutions
-
-    this.windLevels[0] = new Gribmap.WindLevel(0, 4, 120, 60, this);
-    this.windLevels[1] = new Gribmap.WindLevel(1, 2, 60, 30, this);
-    this.windLevels[2] = new Gribmap.WindLevel(2, 1, 20, 20, this);
-    this.canvas = document.createElement('canvas'); // code for IE browsers
-
-    if (typeof G_vmlCanvasManager !== 'undefined') {
-      G_vmlCanvasManager.initElement(this.canvas);
-    }
-
-    this.canvas.style.position = 'absolute'; // For some reason OpenLayers.Layer.setOpacity assumes there is
-    // an additional div between the layer's div and its contents.
-
-    var sub = document.createElement('div');
-    sub.appendChild(this.canvas);
-    this.div.appendChild(sub);
+  timeDelta: 21600,
+  initialize: function initialize(e, t) {
+    OpenLayers.Layer.prototype.initialize.apply(this, arguments), this.getGribList(), this.windLevels[0] = new Gribmap.WindLevel(0, 4, 120, 60, this), this.windLevels[1] = new Gribmap.WindLevel(1, 2, 60, 30, this), this.windLevels[2] = new Gribmap.WindLevel(2, 1, 20, 20, this), this.canvas = document.createElement("canvas"), "undefined" != typeof G_vmlCanvasManager && G_vmlCanvasManager.initElement(this.canvas), this.canvas.style.position = "absolute";
+    var a = document.createElement("div");
+    a.appendChild(this.canvas), this.div.appendChild(a);
   },
-  //Time management
-  addTimeOffset: function addTimeOffset(delta) {
-    this.timeoffset += delta;
-    this.setTimeSegmentFromOffset();
+  addTimeOffset: function addTimeOffset(e) {
+    this.timeoffset += e, this.setTimeSegmentFromOffset();
   },
   timereset: function timereset() {
     this.addTimeOffset(-this.timeoffset);
@@ -2981,926 +1473,392 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
     this.addTimeOffset(-3600);
   },
   getGribList: function getGribList() {
-    var request = OpenLayers.Request.GET({
+    OpenLayers.Request.GET({
       url: Gribmap.griblist_uribase,
-      async: true,
+      async: !0,
       headers: {
-        'Accept': 'application/json'
+        Accept: "application/json"
       },
       callback: this.handleGribListReply,
       scope: this
     });
   },
-  handleGribListReply: function handleGribListReply(request) {
-    if (request.status == 200) {
-      var rep = JSON.parse(request.responseText);
-      this.griblist = rep.grib_timestamps;
-      this.gribupdatetime = rep.update_time;
-      this.maxtime = Math.max.apply(null, this.griblist);
-      this.mintime = Math.min.apply(null, this.griblist);
+  handleGribListReply: function handleGribListReply(e) {
+    if (200 == e.status) {
+      var t = JSON.parse(e.responseText);
+      this.griblist = t.grib_timestamps, this.gribupdatetime = t.update_time, this.maxtime = Math.max.apply(null, this.griblist), this.mintime = Math.min.apply(null, this.griblist);
     }
 
-    var now = new Date();
-    this.setTimeSegment(now.getTime() / 1000.0);
+    var a = new Date();
+    this.setTimeSegment(a.getTime() / 1e3);
   },
   setTimeSegmentFromOffset: function setTimeSegmentFromOffset() {
-    var now = new Date();
-    this.setTimeSegment(now.getTime() / 1000 + this.timeoffset);
+    var e = new Date();
+    this.setTimeSegment(e.getTime() / 1e3 + this.timeoffset);
   },
-  isInTimeRange: function isInTimeRange(time) {
-    return time >= this.gribtimeBefore && time <= this.gribtimeAfter;
+  isInTimeRange: function isInTimeRange(e) {
+    return e >= this.gribtimeBefore && e <= this.gribtimeAfter;
   },
   getGribTimeList: function getGribTimeList() {
-    var timelist = [];
-
-    for (var i = 0; i < this.griblist.length; i++) {
-      if (this.griblist[i] >= this.time - this.timeDelta && this.griblist[i] <= this.time + this.timeDelta) {
-        timelist.push(this.griblist[i]);
-      }
+    for (var e = [], t = 0; t < this.griblist.length; t++) {
+      this.griblist[t] >= this.time - this.timeDelta && this.griblist[t] <= this.time + this.timeDelta && e.push(this.griblist[t]);
     }
 
-    return timelist;
+    return e;
   },
-  setTimeSegment: function setTimeSegment(time) {
-    time = Math.floor(time);
-    var i = 0;
-    var gribtimebefore = this.mintime;
-    var gribtimeafter = this.maxtime;
+  setTimeSegment: function setTimeSegment(e) {
+    e = Math.floor(e);
+    var t = 0,
+        a = this.mintime,
+        i = this.maxtime;
 
-    for (i = 0; i < this.griblist.length; i++) {
-      //delta = this.griblist[i] - time;
-      if (this.griblist[i] >= gribtimebefore && this.griblist[i] <= time) {
-        gribtimebefore = this.griblist[i];
-      }
-
-      if (this.griblist[i] <= gribtimeafter && this.griblist[i] >= time) {
-        gribtimeafter = this.griblist[i];
-      }
+    for (t = 0; t < this.griblist.length; t++) {
+      this.griblist[t] >= a && this.griblist[t] <= e && (a = this.griblist[t]), this.griblist[t] <= i && this.griblist[t] >= e && (i = this.griblist[t]);
     }
 
-    this.gribtimeBefore = gribtimebefore;
-    this.gribtimeAfter = gribtimeafter;
-    this.time = time;
-    this.redraw();
+    this.gribtimeBefore = a, this.gribtimeAfter = i, this.time = e, this.redraw();
   },
-  setGribLevel: function setGribLevel(bounds) {
-    //bounds in LATLON
-    var i;
-    var widthlon = Math.abs(bounds.left - bounds.right);
-    var heightlat = Math.abs(bounds.top - bounds.bottom);
+  setGribLevel: function setGribLevel(e) {
+    var t,
+        a = Math.abs(e.left - e.right),
+        i = Math.abs(e.top - e.bottom);
 
-    for (i = this.windLevels.length - 1; i >= 0; i--) {
-      if (widthlon < 2 * this.windLevels[i].blocx && heightlat < 2 * this.windLevels[i].blocy) break;
+    for (t = this.windLevels.length - 1; t >= 0 && !(a < 2 * this.windLevels[t].blocx && i < 2 * this.windLevels[t].blocy); t--) {
+      ;
     }
 
-    this.gribLevel = Math.max(i, 0);
-    return i;
+    return this.gribLevel = Math.max(t, 0), t;
   },
-  windAtPosition: function windAtPosition(latlon) {
-    return this.windLevels[this.gribLevel].getWindInfo(latlon.lat, latlon.lon);
+  windAtPosition: function windAtPosition(e) {
+    return this.windLevels[this.gribLevel].getWindInfo(e.lat, e.lon);
   },
+  moveTo: function moveTo(e, t, a) {
+    var i, n;
+    if (OpenLayers.Layer.prototype.moveTo.apply(this, arguments), a) return;
+    var o = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(e.left, e.top)),
+        r = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(e.right, e.bottom));
+    r.x -= o.x, r.y -= o.y;
+    var s = e.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326")),
+        l = Math.abs(e.left - e.right) > 30 || Math.abs(e.top - e.bottom) > 30;
+    this.UpdateGribMap(l);
+    var d = this.canvas.getContext("2d");
 
-  /**
-   * Method: moveTo
-   *
-   * Parameters:
-   * bounds - {<OpenLayers.Bounds>}
-   * zoomChanged - {Boolean}
-   * dragging - {Boolean}
-   */
-  moveTo: function moveTo(bounds, zoomChanged, dragging) {
-    var windarea, bl;
-    OpenLayers.Layer.prototype.moveTo.apply(this, arguments); // The code is currently too slow to update the rendering during dragging.
+    if (d.canvas.style.left = o.x + "px", d.canvas.style.top = o.y + "px", d.canvas.width = r.x, d.canvas.height = r.y, this.drawContext(d), l) {
+      this.setGribLevel(s), n = this.windLevels[this.gribLevel].getWindAreas(s);
 
-    if (dragging) return; //define region in pixel and in lat/lon
+      for (var _t3 = 0; _t3 < n.length; _t3++) {
+        if (!(i = n[_t3]).isLoaded(this.gribtimeBefore) || !i.isLoaded(this.gribtimeAfter)) continue;
+        (e = i.clone()).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
 
-    var posstart = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-    var poslimit = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
-    poslimit.x -= posstart.x;
-    poslimit.y -= posstart.y;
-    var boundsLonLat = bounds.transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-    );
-    var BigGrib = Math.abs(bounds.left - bounds.right) > 30 || Math.abs(bounds.top - bounds.bottom) > 30;
-    this.UpdateGribMap(BigGrib); //console.log("BigGrib"+BigGrib+" "+bounds.left+" "+bounds.right+" "+bounds.top+" "+bounds.bottom);
-    //canvas object
+        var _a2 = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(e.left, e.top)),
+            _s = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(e.right, e.bottom));
 
-    var ctx = this.canvas.getContext('2d'); // Unfortunately OpenLayers does not currently support layers that
-    // remain in a fixed position with respect to the screen location
-    // of the base layer, so this puts this layer manually back into
-    // that position using one point's offset as determined earlier.
-
-    ctx.canvas.style.left = posstart.x + 'px';
-    ctx.canvas.style.top = posstart.y + 'px';
-    ctx.canvas.width = poslimit.x;
-    ctx.canvas.height = poslimit.y; //Fix some feature of the canvas
-
-    this.drawContext(ctx); //Get griblevel // FIXME : should use the native zoom level
-
-    if (BigGrib) {
-      this.setGribLevel(boundsLonLat);
-      bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
-
-      for (var i = 0; i < bl.length; i++) {
-        windarea = bl[i]; //la zone
-
-        if (!windarea.isLoaded(this.gribtimeBefore) || !windarea.isLoaded(this.gribtimeAfter)) continue; //pas chargÃ©, on passe
-        //Passe en sphÃ©rique
-
-        bounds = windarea.clone();
-        bounds.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-        new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
-        ); //passe en pixel
-
-        var start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-        var end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom)); //réaligne le premier pixel de la zone
-
-        start.x -= posstart.x;
-        start.y -= posstart.y;
-        end.x -= posstart.x;
-        end.y -= posstart.y; //aligne le dÃ©but des flÃªches a un multiple de la grille
-
-        start.x = Math.ceil(start.x / this.arrowstep) * this.arrowstep;
-        start.y = Math.ceil(start.y / this.arrowstep) * this.arrowstep; //On trace sur une partie visible
-
-        if (start.x < 0) start.x = 0;
-        if (start.y < 0) start.y = 0;
-        if (end.x > poslimit.x) end.x = poslimit.x;
-        if (end.y > poslimit.y) end.y = poslimit.y; //tracé proprement dit
-
-        this.drawWindAreaBig(start, end, windarea, ctx);
+        _a2.x -= o.x, _a2.y -= o.y, _s.x -= o.x, _s.y -= o.y, _a2.x = Math.ceil(_a2.x / this.arrowstep) * this.arrowstep, _a2.y = Math.ceil(_a2.y / this.arrowstep) * this.arrowstep, _a2.x < 0 && (_a2.x = 0), _a2.y < 0 && (_a2.y = 0), _s.x > r.x && (_s.x = r.x), _s.y > r.y && (_s.y = r.y), this.drawWindAreaBig(_a2, _s, i, d);
       }
     } else {
-      bounds.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-      new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
-      ); //passe en pixel
+      e.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
 
-      var _start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
+      var _t4 = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(e.left, e.top)),
+          _a3 = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(e.right, e.bottom));
 
-      var _end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom)); //réaligne le premier pixel de la zone
-
-
-      _start.x -= posstart.x;
-      _start.y -= posstart.y;
-      _end.x -= posstart.x;
-      _end.y -= posstart.y; //aligne le début des flêches a un multiple de la grille
-
-      _start.x = Math.ceil(_start.x / this.arrowstep) * this.arrowstep;
-      _start.y = Math.ceil(_start.y / this.arrowstep) * this.arrowstep; //On trace sur une partie visible
-
-      if (_start.x < 0) _start.x = 0;
-      if (_start.y < 0) _start.y = 0;
-      if (_end.x > poslimit.x) _end.x = poslimit.x;
-      if (_end.y > poslimit.y) _end.y = poslimit.y; //tracé proprement dit
-
-      this.drawWindAreaSmall(_start, _end, windarea, ctx);
+      _t4.x -= o.x, _t4.y -= o.y, _a3.x -= o.x, _a3.y -= o.y, _t4.x = Math.ceil(_t4.x / this.arrowstep) * this.arrowstep, _t4.y = Math.ceil(_t4.y / this.arrowstep) * this.arrowstep, _t4.x < 0 && (_t4.x = 0), _t4.y < 0 && (_t4.y = 0), _a3.x > r.x && (_a3.x = r.x), _a3.y > r.y && (_a3.y = r.y), this.drawWindAreaSmall(_t4, _a3, i, d);
     }
   },
-  drawWindArea: function drawWindArea(p, poslimit, windarea, ctx, InCallBack) {
+  drawWindArea: function drawWindArea(e, t, a, i, n) {
     throw "Deprecated drawWindArea";
   },
-  drawWindAreaBig: function drawWindAreaBig(p, poslimit, windarea, ctx, InCallBack) {
-    var bstep = this.arrowstep;
-    var wante = windarea.windArrays[this.gribtimeBefore];
-    var wpost = windarea.windArrays[this.gribtimeAfter]; //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
-
-    while (p.x < poslimit.x) {
-      p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
-
-      while (p.y < poslimit.y) {
-        //passage du pixel en latlon (géographique)
-        var LonLat = this.map.getLonLatFromPixel(p).transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-        new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-        ); //Récupère le vent et l'affiche en l'absence d'erreur
+  drawWindAreaBig: function drawWindAreaBig(e, t, a, i, n) {
+    for (var o = this.arrowstep, r = a.windArrays[this.gribtimeBefore], s = a.windArrays[this.gribtimeAfter]; e.x < t.x;) {
+      for (e.y = 0; e.y < t.y;) {
+        var _t5 = this.map.getLonLatFromPixel(e).transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
 
         try {
-          winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-          this.drawWind(ctx, p.x, p.y, winfo);
-        } catch (error) {
-          if (ErrorCatching > 0) {
-            alert(LonLat + " / " + winfo.wspeed + " / " + winfo.wheading);
-            ErrorCatching -= 1;
-          }
+          winfo = a.getWindInfo2(_t5.lat, _t5.lon, this.time, r, s), this.drawWind(i, e.x, e.y, winfo);
+        } catch (e) {
+          ErrorCatching > 0 && (alert(_t5 + " / " + winfo.wspeed + " / " + winfo.wheading), ErrorCatching -= 1);
         }
 
-        p.y += bstep;
+        e.y += o;
       }
 
-      p.x += bstep;
+      e.x += o;
     }
   },
-  UpdateGribMap: function UpdateGribMap(BigGrib) {
-    if (BigGrib) {
-      $(".BigGrib").css("display", "block");
-      $(".SmallGrib").css("display", "none");
-    } else {
-      $(".BigGrib").css("display", "none");
-      $(".SmallGrib").css("display", "block");
-    }
+  UpdateGribMap: function UpdateGribMap(e) {
+    e ? ($(".BigGrib").css("display", "block"), $(".SmallGrib").css("display", "none")) : ($(".BigGrib").css("display", "none"), $(".SmallGrib").css("display", "block"));
   },
-  drawWindAreaSmall: function drawWindAreaSmall(p, poslimit, windarea, ctx, InCallBack) {
+  drawWindAreaSmall: function drawWindAreaSmall(e, t, a, i, n) {
     var _this = this;
 
-    var bstep = this.arrowstep; //var wante = windarea.windArrays[this.gribtimeBefore];
-    //var wpost = windarea.windArrays[this.gribtimeAfter];
-    //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
+    var o = this.arrowstep;
 
-    while (p.x < poslimit.x) {
-      p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
-
-      while (p.y < poslimit.y) {
-        //passage du pixel en latlon (géographique)
-        var LonLat = this.map.getLonLatFromPixel(p).transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-        new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-        ); //Récupère le vent et l'affiche en l'absence d'erreur
+    for (; e.x < t.x;) {
+      for (e.y = 0; e.y < t.y;) {
+        var r = this.map.getLonLatFromPixel(e).transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
 
         try {
           (function () {
-            //winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-            //this.drawWind(ctx, p.x, p.y, winfo);
-            var self = _this;
-            var MI = GribMgr.WindAtPointInTime(new Date(_this.time * 1000), LonLat.lat, LonLat.lon,
-            /* jshint -W083*/
-            InCallBack ? null : function () {
-              self.drawWindArea(p, poslimit, windarea, ctx, true);
+            var o = _this,
+                s = GribMgr.WindAtPointInTime(new Date(1e3 * _this.time), r.lat, r.lon, n ? null : function () {
+              o.drawWindArea(e, t, a, i, !0);
             });
-            /*jshint +W083*/
 
-            if (MI) {
-              var _winfo = new Wind(MI.Speed, MI.Heading);
+            if (s) {
+              var _t6 = new Wind(s.Speed, s.Heading);
 
-              _this.drawWind(ctx, p.x, p.y, _winfo);
-            } else {//InCallBack=true;
+              _this.drawWind(i, e.x, e.y, _t6);
             }
           })();
-        } catch (error) {
-          if (ErrorCatching > 0) {
-            alert(LonLat + " / " + winfo.wspeed + " / " + winfo.wheading);
-            ErrorCatching -= 1;
-          }
+        } catch (e) {
+          ErrorCatching > 0 && (alert(r + " / " + winfo.wspeed + " / " + winfo.wheading), ErrorCatching -= 1);
         }
 
-        p.y += bstep;
+        e.y += o;
       }
 
-      p.x += bstep;
+      e.x += o;
     }
   },
-  // return the color based on the wind speed
-  // parameters:
-  // wspeed: the wind speed.
-  windSpeedToColor: function windSpeedToColor(wspeed) {
-    if (wspeed <= 10.0) {
-      if (wspeed <= 3.0) {
-        if (wspeed <= 1.0) {
-          return '#FFFFFF';
-        } else {
-          return '#9696E1';
-        }
-      } else {
-        if (wspeed <= 6.0) {
-          return '#508CCD';
-        } else {
-          return '#3C64B4';
-        }
-      }
-    } else {
-      if (wspeed <= 33.0) {
-        if (wspeed <= 21.0) {
-          if (wspeed <= 15.0) {
-            return '#41B464';
-          } else {
-            return '#B4CD0A';
-          }
-        } else {
-          if (wspeed <= 26.0) {
-            return '#D2D216';
-          } else {
-            return '#E1D220';
-          }
-        }
-      } else {
-        if (wspeed <= 40.0) {
-          return '#FFB300';
-        }
-
-        if (wspeed <= 47.0) {
-          return '#FF6F00';
-        }
-
-        if (wspeed <= 55.0) {
-          return '#FF2B00';
-        }
-
-        if (wspeed <= 63.0) {
-          return '#E60000';
-        }
-      }
-    }
-
-    return '#7F0000';
+  windSpeedToColor: function windSpeedToColor(e) {
+    return e <= 10 ? e <= 3 ? e <= 1 ? "#FFFFFF" : "#9696E1" : e <= 6 ? "#508CCD" : "#3C64B4" : e <= 33 ? e <= 21 ? e <= 15 ? "#41B464" : "#B4CD0A" : e <= 26 ? "#D2D216" : "#E1D220" : e <= 40 ? "#FFB300" : e <= 47 ? "#FF6F00" : e <= 55 ? "#FF2B00" : e <= 63 ? "#E60000" : "#7F0000";
   },
-  drawWindTriangle: function drawWindTriangle(context, x, y, pos_wind) {
-    var a, b, c, bary, offset;
-    var wheading;
-    var wspdlog;
-    windarrow_minsize = 4; // FIXME external constants ?
-
-    windarrow_minwidth = 0;
-    wspdlog = Math.log(pos_wind.wspeed + 1);
-    wheading = (pos_wind.wheading + 180.0) % 360.0;
-    a = new Gribmap.Pixel(x, y);
-    b = new Gribmap.Pixel(x, y);
-    c = new Gribmap.Pixel(x, y);
-    a.moveByPolar(windarrow_minsize + wspdlog * 4.0, wheading);
-    b.moveByPolar(windarrow_minwidth + wspdlog, wheading - 90.0);
-    c.moveByPolar(windarrow_minwidth + wspdlog, wheading + 90.0);
-    bary = new Gribmap.Pixel((a.x + b.x + c.x) / 3, (a.y + b.y + c.y) / 3);
-    offset = new Gribmap.Pixel(x - bary.x, y - bary.y);
-    a.moveBy(offset);
-    b.moveBy(offset);
-    c.moveBy(offset);
-    context.toffset = offset;
-    context.midx = (a.x + x) / 2;
-    context.beginPath();
-    context.moveTo(a.x, a.y);
-    context.lineTo(b.x, b.y);
-    context.lineTo(c.x, c.y);
-    context.fill();
-    context.stroke();
-    context.closePath();
+  drawWindTriangle: function drawWindTriangle(e, t, a, i) {
+    var n, o, r, s, l, d, u;
+    windarrow_minsize = 4, windarrow_minwidth = 0, u = Math.log(i.wspeed + 1), d = (i.wheading + 180) % 360, n = new Gribmap.Pixel(t, a), o = new Gribmap.Pixel(t, a), r = new Gribmap.Pixel(t, a), n.moveByPolar(windarrow_minsize + 4 * u, d), o.moveByPolar(windarrow_minwidth + u, d - 90), r.moveByPolar(windarrow_minwidth + u, d + 90), s = new Gribmap.Pixel((n.x + o.x + r.x) / 3, (n.y + o.y + r.y) / 3), l = new Gribmap.Pixel(t - s.x, a - s.y), n.moveBy(l), o.moveBy(l), r.moveBy(l), e.toffset = l, e.midx = (n.x + t) / 2, e.beginPath(), e.moveTo(n.x, n.y), e.lineTo(o.x, o.y), e.lineTo(r.x, r.y), e.fill(), e.stroke(), e.closePath();
   },
-  // draw wind information around the arrow
-  // parameters:
-  // context, the canvas context
-  // x, y, the coordinates in the window
-  // wspeed, wheading, wind speed and wind heading
-  drawWindText: function drawWindText(context, x, y, pos_wind) {
-    var text_x = context.midx;
-    var text_y = y + context.toffset.y;
-    var wind_direction = pos_wind.wheading;
-
-    if (wind_direction > 90.0 && wind_direction < 270.0) {
-      //  text_y +=10;
-      text_y += 13 + 5 * Math.cos(wind_direction * Math.PI / 180.0);
-    } else {
-      //  text_y -=5;
-      text_y -= 7 - 5 * Math.cos(wind_direction * Math.PI / 180.0);
-    }
-
-    context.fillText("" + Math.round(pos_wind.wspeed) + "/" + Math.round(wind_direction) + "°", text_x, text_y);
+  drawWindText: function drawWindText(e, t, a, i) {
+    var n = e.midx,
+        o = a + e.toffset.y,
+        r = i.wheading;
+    r > 90 && r < 270 ? o += 13 + 5 * Math.cos(r * Math.PI / 180) : o -= 7 - 5 * Math.cos(r * Math.PI / 180), e.fillText(Math.round(i.wspeed) + "/" + Math.round(r) + "°", n, o);
   },
-  drawContext: function drawContext(context) {
-    context.font = '8px sans-serif';
-    context.textAlign = 'center';
-    context.strokeStyle = '#fff';
-    context.lineWidth = 0.5;
+  drawContext: function drawContext(e) {
+    e.font = "8px sans-serif", e.textAlign = "center", e.strokeStyle = "#fff", e.lineWidth = .5;
   },
-  // draw wind information, wind arrows and text in the color relative
-  // to the wind speed
-  // parameters:
-  // context, the canvas context
-  // x, y, the coordinates in the window
-  // wspeed, wheading, wind speed and wind heading
-  drawWind: function drawWind(context, x, y, pos_wind) {
-    if (pos_wind === null) {
-      return;
-    }
-
-    context.fillStyle = this.windSpeedToColor(pos_wind.wspeed);
-    this.drawWindTriangle(context, x, y, pos_wind);
-    context.fillStyle = '#626262';
-    this.drawWindText(context, x, y, pos_wind);
+  drawWind: function drawWind(e, t, a, i) {
+    null !== i && (e.fillStyle = this.windSpeedToColor(i.wspeed), this.drawWindTriangle(e, t, a, i), e.fillStyle = "#626262", this.drawWindText(e, t, a, i));
   },
-  CLASS_NAME: 'Gribmap.Layer'
-});
-/**
- * Class: Gribmap.ControlWind
- *
- * Inherits from:
- *  - <OpenLayers.Control.ControlSwitch>
- */
-
-Gribmap.ControlWind = OpenLayers.Class(OpenLayers.Control.ControlSwitch, {
+  CLASS_NAME: "Gribmap.Layer"
+}), Gribmap.ControlWind = OpenLayers.Class(OpenLayers.Control.ControlSwitch, {
   label: "Gribmap.ControlWind",
   timeOffsetSpan: null,
-  initialize: function initialize(options) {
+  initialize: function initialize(e) {
     OpenLayers.Control.prototype.initialize.apply(this, arguments);
   },
   drawBaseDiv: function drawBaseDiv() {
-    this.baseDiv.appendChild(this.imgButton("west-mini.png", "Gribmap_Backward", this.onClickBackward));
-    this.timeOffsetSpan = this.textButton(" 0h ", "reset", this.onClickReset);
-    this.baseDiv.appendChild(this.timeOffsetSpan);
-    this.baseDiv.appendChild(this.imgButton("east-mini.png", "Gribmap_Forward", this.onClickForward));
+    this.baseDiv.appendChild(this.imgButton("west-mini.png", "Gribmap_Backward", this.onClickBackward)), this.timeOffsetSpan = this.textButton(" 0h ", "reset", this.onClickReset), this.baseDiv.appendChild(this.timeOffsetSpan), this.baseDiv.appendChild(this.imgButton("east-mini.png", "Gribmap_Forward", this.onClickForward));
   },
-  imgButton: function imgButton(imgname, imgid, callback) {
-    var imgLocation = OpenLayers.Util.getImagesLocation();
-    var sz = new OpenLayers.Size(18, 18); // maximize button div
-
-    var img = imgLocation + imgname;
-    var button = OpenLayers.Util.createAlphaImageDiv(imgid, null, sz, img, "relative");
-    OpenLayers.Event.observe(button, "click", OpenLayers.Function.bind(callback, this, img));
-    return button;
+  imgButton: function imgButton(e, t, a) {
+    var i = OpenLayers.Util.getImagesLocation(),
+        n = new OpenLayers.Size(18, 18),
+        o = i + e,
+        r = OpenLayers.Util.createAlphaImageDiv(t, null, n, o, "relative");
+    return OpenLayers.Event.observe(r, "click", OpenLayers.Function.bind(a, this, o)), r;
   },
-  textButton: function textButton(text, textid, callback) {
-    var textSpan = document.createElement("span");
-    OpenLayers.Element.addClass(textSpan, textid);
-    textSpan.innerHTML = text;
-    OpenLayers.Event.observe(textSpan, "click", OpenLayers.Function.bind(callback, this, textSpan));
-    return textSpan;
+  textButton: function textButton(e, t, a) {
+    var i = document.createElement("span");
+    return OpenLayers.Element.addClass(i, t), i.innerHTML = e, OpenLayers.Event.observe(i, "click", OpenLayers.Function.bind(a, this, i)), i;
   },
   getGribmapLayer: function getGribmapLayer() {
-    if (this.gribmap) return this.gribmap;
-
-    if (this.map) {
-      this.gribmap = this.map.getLayersByClass("Gribmap.Layer")[0];
-    }
-
-    return this.gribmap;
+    return this.gribmap ? this.gribmap : (this.map && (this.gribmap = this.map.getLayersByClass("Gribmap.Layer")[0]), this.gribmap);
   },
-  onClickReset: function onClickReset(ctrl, evt) {
-    OpenLayers.Event.stop(evt ? evt : window.event);
-    l = this.getGribmapLayer();
-    l.timereset();
-    this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
+  onClickReset: function onClickReset(e, t) {
+    OpenLayers.Event.stop(t || window.event), l = this.getGribmapLayer(), l.timereset(), this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
   },
-  onClickForward: function onClickForward(ctrl, evt) {
-    OpenLayers.Event.stop(evt ? evt : window.event);
-    l = this.getGribmapLayer();
-    l.timeforward();
-    this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
+  onClickForward: function onClickForward(e, t) {
+    OpenLayers.Event.stop(t || window.event), l = this.getGribmapLayer(), l.timeforward(), this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
   },
-  onClickBackward: function onClickBackward(ctrl, evt) {
-    OpenLayers.Event.stop(evt ? evt : window.event);
-    l = this.getGribmapLayer();
-    l.timebackward();
-    this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
+  onClickBackward: function onClickBackward(e, t) {
+    OpenLayers.Event.stop(t || window.event), l = this.getGribmapLayer(), l.timebackward(), this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
   },
   CLASS_NAME: "Gribmap.ControlWind hidden"
-});
-/**
- * Class: Gribmap.MousePosition
- *
- * Inherits from:
- *  - <OpenLayers.Control.MousePosition>
- */
-
-Gribmap.MousePosition = OpenLayers.Class(OpenLayers.Control.MousePosition, {
+}), Gribmap.MousePosition = OpenLayers.Class(OpenLayers.Control.MousePosition, {
   gribmap: null,
-  initialize: function initialize(options) {
+  initialize: function initialize(e) {
     OpenLayers.Control.prototype.initialize.apply(this, arguments);
   },
-  formatOutput: function formatOutput(lonLat) {
-    var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
-    retstr += " " + OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
-    GM_Pos = lonLat; // Fix me, use map date for showing the grib info
+  formatOutput: function formatOutput(e) {
+    var t = OpenLayers.Util.getFormattedLonLat(e.lat, "lat", "dms");
+    t += " " + OpenLayers.Util.getFormattedLonLat(e.lon, "lon", "dms"), GM_Pos = e;
+    var a = GribMgr.WindAtPointInTime(new Date(), e.lat, e.lon);
 
-    var MI = GribMgr.WindAtPointInTime(new Date(), lonLat.lat, lonLat.lon);
-
-    if (MI) {
-      var _winfo2 = new Wind(MI.Speed, MI.Heading);
-
-      retstr += " - " + Math.round(MI.Speed * 10) / 10 + "n / " + Math.round(MI.Heading * 10) / 10 + "°";
+    if (a) {
+      new Wind(a.Speed, a.Heading);
+      t += " - " + Math.round(10 * a.Speed) / 10 + "n / " + Math.round(10 * a.Heading) / 10 + "°";
     }
 
-    return retstr;
+    return t;
   },
   CLASS_NAME: "Gribmap.MousePosition"
-}); // Create and init a manager
-
+});
 var GribMgr = new VLM2GribManager();
-GribMgr.Init();
 
-function GribData(InitStruct) {
-  this.UGRD = NaN;
-  this.VGRD = NaN;
-  this.TWS = NaN;
-
-  if (typeof InitStruct !== "undefined") {
-    this.UGRD = InitStruct.UGRD;
-    this.VGRD = InitStruct.VGRD;
-    this.TWS = InitStruct.TWS;
-  }
-
-  this.Strength = function () {
-    return Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD) * 1.9438445; //* 3.6 / 1.852
-  };
-
-  this.Direction = function () {
-    var t_speed = Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD);
-    var dir = Math.acos(-this.VGRD / t_speed);
-
-    if (this.UGRD > 0) {
-      dir = 2 * Math.PI - dir;
-    }
-
-    dir = dir / Math.PI * 180 % 360;
-
-    if (dir < 0) {
-      dir += 360;
-    } else if (dir >= 360) {
-      dir -= 360;
-    }
-
-    return dir;
+function GribData(e) {
+  this.UGRD = NaN, this.VGRD = NaN, this.TWS = NaN, void 0 !== e && (this.UGRD = e.UGRD, this.VGRD = e.VGRD, this.TWS = e.TWS), this.Strength = function () {
+    return 1.9438445 * Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD);
+  }, this.Direction = function () {
+    var e = Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD),
+        t = Math.acos(-this.VGRD / e);
+    return this.UGRD > 0 && (t = 2 * Math.PI - t), (t = t / Math.PI * 180 % 360) < 0 ? t += 360 : t >= 360 && (t -= 360), t;
   };
 }
 
-function WindData(InitStruct) {
-  this.Speed = NaN;
-  this.Heading = NaN;
-
-  this.IsValid = function () {
+function WindData(e) {
+  this.Speed = NaN, this.Heading = NaN, this.IsValid = function () {
     return !isNaN(this.Speed) && !isNaN(this.Heading);
-  };
-
-  if (typeof InitStruct !== "undefined") {
-    this.Speed = InitStruct.Speed;
-    this.Heading = InitStruct.Heading;
-  }
+  }, void 0 !== e && (this.Speed = e.Speed, this.Heading = e.Heading);
 }
 
 function VLM2GribManager() {
-  this.Tables = [];
-  this.TableTimeStamps = [];
-  this.Inited = false;
-  this.Initing = false;
-  this.MinWindStamp = 0;
-  this.MaxWindStamp = 0;
-  this.WindTableLength = 0;
-  this.LoadQueue = [];
-  this.GribStep = 0.5; // Grib Grid resolution
-
-  this.LastGribDate = new Date(0);
-
-  this.Init = function () {
-    if (this.Inited || this.Initing) {
-      return;
-    }
-
-    this.Initing = true;
-    $.get("/ws/windinfo/list.php?v=" + Math.round(new Date().getTime() / 1000 / 60 / 3), this.HandleGribList.bind(this));
-  };
-
-  this.HandleGribList = function (e) {
-    this.TableTimeStamps = e.grib_timestamps;
-    this.Inited = true;
-    this.Initing = false;
-    this.MinWindStamp = new Date(this.TableTimeStamps[0] * 1000);
-    this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps.length - 1] * 1000);
-    this.WindTableLength = this.TableTimeStamps.length;
-  };
-
-  this.WindAtPointInTime = function (Time, Lat, Lon, callback) {
-    if (!this.Inited) {
-      return false;
-    }
-
-    var GribGrain = 3.0 * 3600.0; // 1 grib every 3 hours.
-
-    var TableIndex = Math.floor((Time / 1000.0 - this.MinWindStamp / 1000) / GribGrain);
-
-    if (TableIndex < 0) {
-      // Before avaible grib 
-      return false;
-    }
-
-    if (TableIndex + 1 >= this.TableTimeStamps.length) {
-      // To far in the future
-      return false;
-    }
-
-    var RetInfo = new WindData();
-
-    if (Math.abs(Lat) > 85) {
-      RetInfo.Heading = 0;
-      RetInfo.Speed = 0;
-      return RetInfo;
-    } // Precheck to force loading the second grib, and avoid optimization not checking 2nd when first is needs loading
-
-
-    var t1 = this.CheckGribLoaded(TableIndex, Lat, NormalizeLongitudeDeg(Lon));
-    var t2 = this.CheckGribLoaded(TableIndex + 1, Lat + this.GribStep, NormalizeLongitudeDeg(Lon + this.GribStep), callback);
-
-    if (t1 && !t2) {
-      //alert("anomaly at "+Lat+this.GribStep+ "/" + NormalizeLongitudeDeg(Lon+this.GribStep))
-      t2 = this.CheckGribLoaded(TableIndex + 1, Lat + this.GribStep, NormalizeLongitudeDeg(Lon + this.GribStep));
-    }
-
-    if (!t1 || !t2) {
-      return false;
-    } // Ok, now we have the grib data in the table before and after requested time for requested position
-
-
-    var MI0 = this.GetHydbridMeteoAtTimeIndex(TableIndex, Lat, Lon);
-    var MI1 = this.GetHydbridMeteoAtTimeIndex(TableIndex + 1, Lat, Lon);
-    var u0 = MI0.UGRD;
-    var v0 = MI0.VGRD;
-    var u1 = MI1.UGRD;
-    var v1 = MI1.VGRD;
-    var DteOffset = Time / 1000 - this.TableTimeStamps[TableIndex];
-    var GInfo = new GribData({
-      UGRD: u0 + DteOffset / GribGrain * (u1 - u0),
-      VGRD: v0 + DteOffset / GribGrain * (v1 - v0)
+  this.Tables = [], this.TableTimeStamps = [], this.Inited = !1, this.Initing = !1, this.MinWindStamp = 0, this.MaxWindStamp = 0, this.WindTableLength = 0, this.LoadQueue = [], this.GribStep = .5, this.LastGribDate = new Date(0), this.Init = function () {
+    this.Inited || this.Initing || (this.Initing = !0, $.get("/ws/windinfo/list.php?v=" + Math.round(new Date().getTime() / 1e3 / 60 / 3), this.HandleGribList.bind(this)));
+  }, this.HandleGribList = function (e) {
+    this.TableTimeStamps = e.grib_timestamps, this.Inited = !0, this.Initing = !1, this.MinWindStamp = new Date(1e3 * this.TableTimeStamps[0]), this.MaxWindStamp = new Date(1e3 * this.TableTimeStamps[this.TableTimeStamps.length - 1]), this.WindTableLength = this.TableTimeStamps.length;
+  }, this.WindAtPointInTime = function (e, t, a, i) {
+    if (!this.Inited) return !1;
+    var n = Math.floor((e / 1e3 - this.MinWindStamp / 1e3) / 10800);
+    if (n < 0) return !1;
+    if (n + 1 >= this.TableTimeStamps.length) return !1;
+    var o = new WindData();
+    if (Math.abs(t) > 85) return o.Heading = 0, o.Speed = 0, o;
+    var r = this.CheckGribLoaded(n, t, NormalizeLongitudeDeg(a)),
+        s = this.CheckGribLoaded(n + 1, t + this.GribStep, NormalizeLongitudeDeg(a + this.GribStep), i);
+    if (r && !s && (s = this.CheckGribLoaded(n + 1, t + this.GribStep, NormalizeLongitudeDeg(a + this.GribStep))), !r || !s) return !1;
+    var l = this.GetHydbridMeteoAtTimeIndex(n, t, a),
+        d = this.GetHydbridMeteoAtTimeIndex(n + 1, t, a),
+        u = l.UGRD,
+        c = l.VGRD,
+        h = d.UGRD,
+        p = d.VGRD,
+        f = e / 1e3 - this.TableTimeStamps[n],
+        P = new GribData({
+      UGRD: u + f / 10800 * (h - u),
+      VGRD: c + f / 10800 * (p - c)
     });
-    RetInfo.Heading = GInfo.Direction();
-    RetInfo.Speed = MI0.TWS + DteOffset / GribGrain * (MI1.TWS - MI0.TWS);
-    return RetInfo;
-  };
-
-  this.GetHydbridMeteoAtTimeIndex = function (TableIndex, Lat, Lon) {
-    // Compute grid index to get the values
-    var LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
-    var LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
-    var LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
-    var LatIdx2 = (LatIdx1 + 1) % (360 / this.GribStep);
-    var dX = Lon / this.GribStep - Math.floor(Lon / this.GribStep);
-    var dY = Lat / this.GribStep - Math.floor(Lat / this.GribStep); // Get UVS for each 4 grid points
-
-    var U00 = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD;
-    var U01 = this.Tables[TableIndex][LonIdx1][LatIdx2].UGRD;
-    var U10 = this.Tables[TableIndex][LonIdx2][LatIdx1].UGRD;
-    var U11 = this.Tables[TableIndex][LonIdx2][LatIdx2].UGRD;
-    var V00 = this.Tables[TableIndex][LonIdx1][LatIdx1].VGRD;
-    var V01 = this.Tables[TableIndex][LonIdx1][LatIdx2].VGRD;
-    var V10 = this.Tables[TableIndex][LonIdx2][LatIdx1].VGRD;
-    var V11 = this.Tables[TableIndex][LonIdx2][LatIdx2].VGRD;
-    var S00 = this.Tables[TableIndex][LonIdx1][LatIdx1].Strength();
-    var S01 = this.Tables[TableIndex][LonIdx1][LatIdx2].Strength();
-    var S10 = this.Tables[TableIndex][LonIdx2][LatIdx1].Strength();
-    var S11 = this.Tables[TableIndex][LonIdx2][LatIdx2].Strength();
-    var tws = this.QuadraticAverage(S00, S01, S10, S11, dX, dY);
-    var retmeteo = new GribData({
-      UGRD: this.QuadraticAverage(U00, U01, U10, U11, dX, dY),
-      VGRD: this.QuadraticAverage(V00, V01, V10, V11, dX, dY),
-      TWS: tws
+    return o.Heading = P.Direction(), o.Speed = l.TWS + f / 10800 * (d.TWS - l.TWS), o;
+  }, this.GetHydbridMeteoAtTimeIndex = function (e, t, a) {
+    var i = 180 / this.GribStep + Math.floor(a / this.GribStep),
+        n = 90 / this.GribStep + Math.floor(t / this.GribStep),
+        o = (i + 1) % (360 / this.GribStep),
+        r = (n + 1) % (360 / this.GribStep),
+        s = a / this.GribStep - Math.floor(a / this.GribStep),
+        l = t / this.GribStep - Math.floor(t / this.GribStep),
+        d = this.Tables[e][i][n].UGRD,
+        u = this.Tables[e][i][r].UGRD,
+        c = this.Tables[e][o][n].UGRD,
+        h = this.Tables[e][o][r].UGRD,
+        p = this.Tables[e][i][n].VGRD,
+        f = this.Tables[e][i][r].VGRD,
+        P = this.Tables[e][o][n].VGRD,
+        g = this.Tables[e][o][r].VGRD,
+        L = this.Tables[e][i][n].Strength(),
+        m = this.Tables[e][i][r].Strength(),
+        M = this.Tables[e][o][n].Strength(),
+        C = this.Tables[e][o][r].Strength(),
+        y = this.QuadraticAverage(L, m, M, C, s, l);
+    return new GribData({
+      UGRD: this.QuadraticAverage(d, u, c, h, s, l),
+      VGRD: this.QuadraticAverage(p, f, P, g, s, l),
+      TWS: y
     });
-    return retmeteo;
-  };
+  }, this.QuadraticAverage = function (e, t, a, i, n, o) {
+    var r = e + o * (t - e);
+    return r + n * (a + o * (i - a) - r);
+  }, this.CheckGribLoaded = function (e, t, a, i) {
+    var n = 180 / this.GribStep + Math.floor(a / this.GribStep),
+        o = 90 / this.GribStep + Math.floor(t / this.GribStep),
+        r = 180 / this.GribStep + Math.ceil(a / this.GribStep),
+        s = 90 / this.GribStep + Math.ceil(t / this.GribStep);
+    return !!(e in this.Tables && this.Tables[e][n] && this.Tables[e][n][o] && this.Tables[e][n][s] && this.Tables[e][r] && this.Tables[e][r][o] && this.Tables[e][r][s]) || (this.CheckGribLoadedIdx(e, n, o, i), this.CheckGribLoadedIdx(e, n, s, i), this.CheckGribLoadedIdx(e, r, o, i), this.CheckGribLoadedIdx(e, r, s, i), !1);
+  }, this.CheckGribLoadedIdx = function (e, t, a, i) {
+    if (isNaN(t) || isNaN(a)) ;
+    if (this.Tables.length && this.Tables[e] && this.Tables[e][t] && this.Tables[e][t][a]) return;
+    var n,
+        o,
+        r = a * this.GribStep - 90,
+        s = t * this.GribStep - 180,
+        l = 5 * Math.floor(r / 5),
+        d = 5 * Math.floor(s / 5);
+    r < l ? l = (n = l) - 10 : n = l + 10, s < d ? d = (o = d) - 10 : o = d + 10, o > 180 && (o = 180, this.CheckGribLoadedIdx(e, 0, a, i)), d < -180 && (d = -180, this.CheckGribLoadedIdx(e, 180 / this.GribStep - 1, a, i));
+    var u = "0/" + d + "/" + o + "/" + n + "/" + l;
+    this.AddGribLoadKey(u, n, l, d, o);
+  }, this.AddGribLoadKey = function (e, t, a, i, n) {
+    e in this.LoadQueue || (this.LoadQueue[e] = {
+      length: 0,
+      CallBacks: []
+    }, this.LoadQueue[e].Length = 0, $.get(Gribmap.ServerURL() + "/ws/windinfo/smartgribs.php?north=" + t + "&south=" + a + "&west=" + i + "&east=" + n + "&seed=" + (0 + new Date()), this.HandleGetSmartGribList.bind(this, e))), "undefined" != typeof callback && callback && this.LoadQueue[e].CallBacks.push(callback);
+  }, this.HandleGetSmartGribList = function (e, t) {
+    if (t.success) {
+      this.LastGribDate !== parseInt(t.GribCacheIndex, 10) && (this.LastGribDate = t.GribCacheIndex, this.Tables = [], this.Inited = !1, this.Init());
 
-  this.QuadraticAverage = function (V00, V01, v10, V11, dX, dY) {
-    var V0 = V00 + dY * (V01 - V00);
-    var V1 = v10 + dY * (V11 - v10);
-    return V0 + dX * (V1 - V0);
-  };
-
-  this.CheckGribLoaded = function (TableIndex, Lat, Lon, callback) {
-    var LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
-    var LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
-    var LonIdx2 = 180 / this.GribStep + Math.ceil(Lon / this.GribStep);
-    var LatIdx2 = 90 / this.GribStep + Math.ceil(Lat / this.GribStep);
-
-    if (TableIndex in this.Tables) {
-      if (this.Tables[TableIndex][LonIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx2] && this.Tables[TableIndex][LonIdx2] && this.Tables[TableIndex][LonIdx2][LatIdx1] && this.Tables[TableIndex][LonIdx2][LatIdx2]) {
-        return true;
-      }
-    } //console.log("need "+Lat+" " +Lon);
-
-
-    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx1, callback);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx1, LatIdx2, callback);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx1, callback);
-    this.CheckGribLoadedIdx(TableIndex, LonIdx2, LatIdx2, callback);
-    return false;
-  };
-
-  this.CheckGribLoadedIdx = function (TableIndex, LonIdx, LatIdx, callback) {
-    if (isNaN(LonIdx) || isNaN(LatIdx)) {
-      var dbgpt = 0;
-    }
-
-    if (this.Tables.length && this.Tables[TableIndex] && this.Tables[TableIndex][LonIdx] && this.Tables[TableIndex][LonIdx][LatIdx]) {
-      return;
-    } //Getting there means we need to load from server
-    // Get samrtgrib list for the current request position
-
-
-    var RequestSize = 5; // Assume 5° zone even though VLM request is for 15°. Most request will only return 1 zone.
-
-    var Lat = LatIdx * this.GribStep - 90;
-    var Lon = LonIdx * this.GribStep - 180;
-    var SouthStep = Math.floor(Lat / RequestSize) * RequestSize;
-    var WestStep = Math.floor(Lon / RequestSize) * RequestSize;
-    var NorthStep, EastStep;
-
-    if (Lat < SouthStep) {
-      NorthStep = SouthStep;
-      SouthStep = NorthStep - 2 * RequestSize;
-    } else {
-      NorthStep = SouthStep + 2 * RequestSize;
-    }
-
-    if (Lon < WestStep) {
-      EastStep = WestStep;
-      WestStep = EastStep - 2 * RequestSize;
-    } else {
-      EastStep = WestStep + 2 * RequestSize;
-    }
-
-    if (EastStep > 180) {
-      EastStep = 180;
-      this.CheckGribLoadedIdx(TableIndex, 0, LatIdx, callback);
-    }
-
-    if (WestStep < -180) {
-      WestStep = -180;
-      this.CheckGribLoadedIdx(TableIndex, 180 / this.GribStep - 1, LatIdx, callback);
-    }
-
-    var LoadKey = "0/" + WestStep + "/" + EastStep + "/" + NorthStep + "/" + SouthStep;
-    this.AddGribLoadKey(LoadKey, NorthStep, SouthStep, WestStep, EastStep);
-  };
-
-  this.AddGribLoadKey = function (LoadKey, NorthStep, SouthStep, WestStep, EastStep) {
-    if (!(LoadKey in this.LoadQueue)) {
-      //console.log("requesting " + LoadKey );
-      this.LoadQueue[LoadKey] = {
-        length: 0,
-        CallBacks: []
-      };
-      this.LoadQueue[LoadKey].Length = 0;
-      $.get(Gribmap.ServerURL() + "/ws/windinfo/smartgribs.php?north=" + NorthStep + "&south=" + SouthStep + "&west=" + WestStep + "&east=" + EastStep + "&seed=" + (0 + new Date()), this.HandleGetSmartGribList.bind(this, LoadKey));
-    }
-
-    if (typeof callback !== "undefined" && callback) {
-      this.LoadQueue[LoadKey].CallBacks.push(callback); //console.log("Adding to callback load queue "+ LoadKey + ":"+this.LoadQueue[LoadKey].CallBacks.length);
-    }
-  };
-
-  this.HandleGetSmartGribList = function (LoadKey, e) {
-    if (e.success) {
-      // Handle grib change
-      if (this.LastGribDate !== parseInt(e.GribCacheIndex, 10)) {
-        // Grib changed, record, and clear Tables, force reinit
-        this.LastGribDate = e.GribCacheIndex;
-        this.Tables = [];
-        this.Inited = false;
-        this.Init();
-      }
-
-      for (var _index4 in e.gribs_url) {
-        if (e.gribs_url[_index4]) {
-          var url = e.gribs_url[_index4].replace(".grb", ".txt");
-
-          var seed = 0; //parseInt((new Date).getTime());
-          //console.log("smartgrib points out " + url);
-
-          $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
-          this.LoadQueue[LoadKey].Length++;
+      for (var a in t.gribs_url) {
+        if (t.gribs_url[a]) {
+          var i = t.gribs_url[a].replace(".grb", ".txt"),
+              n = 0;
+          $.get("/cache/gribtiles/" + i + "&v=" + n, this.HandleSmartGribData.bind(this, e, i)), this.LoadQueue[e].Length++;
         }
       }
-    } else {
-      console.log(e);
+    } else console.log(t);
+  }, this.HandleSmartGribData = function (e, t, a) {
+    if (this.ProcessInputGribData(t, a, e), this.LoadQueue[e].Length--, !this.LoadQueue[e].Length) {
+      for (var _t7 in this.LoadQueue[e].CallBacks) {
+        this.LoadQueue[e].CallBacks[_t7] && this.LoadQueue[e].CallBacks[_t7]();
+      }
+
+      delete this.LoadQueue[e];
     }
-  };
-
-  this.HandleSmartGribData = function (LoadKey, Url, e) {
-    this.ProcessInputGribData(Url, e, LoadKey);
-    this.LoadQueue[LoadKey].Length--;
-
-    if (!this.LoadQueue[LoadKey].Length) {
-      // Successfull load of one item from the loadqueue
-      // Clear all pending callbacks for this call
-      for (var _index5 in this.LoadQueue[LoadKey].CallBacks) {
-        if (this.LoadQueue[LoadKey].CallBacks[_index5]) {
-          this.LoadQueue[LoadKey].CallBacks[_index5]();
+  }, this.ForceReloadGribCache = function (e, t) {
+    $.get("/cache/gribtiles/" + t + "&force=yes&seed=0", this.HandleSmartGribData.bind(this, e, t)), this.LoadQueue[e].Length++;
+  }, this.ProcessInputGribData = function (e, t, a) {
+    var i = t.split("\n"),
+        n = i.length,
+        o = [];
+    if ("--\n" !== t) {
+      if (-1 === t.search("invalid")) {
+        for (var _e7 = 0; _e7 < n; _e7++) {
+          var r = i[_e7];
+          if ("--" === r) break;
+          o.push(this.ProcessCatalogLine(r));
         }
-      }
 
-      delete this.LoadQueue[LoadKey];
-    }
-  };
+        if (o.length < this.WindTableLength) this.ForceReloadGribCache(a, e);else {
+          var s = e.split("/"),
+              l = o.length + 1;
 
-  this.ForceReloadGribCache = function (LoadKey, Url) {
-    var Seed = 0; //parseInt(new Date().getTime(),10);
+          for (var _t8 = 0; _t8 < o.length; _t8++) {
+            if (void 0 === i[l] || "" === i[l]) {
+              this.ForceReloadGribCache(a, e);
+              break;
+            }
 
-    $.get("/cache/gribtiles/" + Url + "&force=yes&seed=" + Seed, this.HandleSmartGribData.bind(this, LoadKey, Url));
-    this.LoadQueue[LoadKey].Length++;
-  };
+            for (var d = i[l].split(" "), u = parseInt(d[0], 10), c = parseInt(d[1], 10), h = 180 / this.GribStep + parseInt(s[1], 10) / this.GribStep, p = 0; p < u; p++) {
+              for (var f = c + 90 / this.GribStep + parseInt(s[0], 10) / this.GribStep, P = 0; P < c; P++) {
+                o[_t8].DateIndex in this.Tables || (this.Tables[o[_t8].DateIndex] = []);
+                var g = this.Tables[o[_t8].DateIndex];
+                h + p in g || (g[h + p] = []), f - P - 1 in g[h + p] || (g[h + p][f - P - 1] = null);
+                var L = this.Tables[o[_t8].DateIndex][h + p][f - P - 1];
+                void 0 !== L && L || (L = new GribData(), this.Tables[o[_t8].DateIndex][h + p][f - P - 1] = L), L[o[_t8].Type] = parseFloat(i[l + 1 + P * u + p]);
+              }
+            }
 
-  this.ProcessInputGribData = function (Url, Data, LoadKey) {
-    var Lines = Data.split("\n");
-    var TotalLines = Lines.length;
-    var Catalog = [];
-    var HeaderCompleted = false; // Handle cache mess
-
-    if (Data === "--\n") {
-      /*var Parms = Url.split("/")
-      this.LoadQueue[LoadKey]++;
-      if (Parms[2] != 15)
-      {
-        var i = 0;    
-      }
-      //$.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
-      */
-      this.ForceReloadGribCache(LoadKey, Url);
-      return;
-    } else if (Data.search("invalid") !== -1) {
-      console.log("invalid request :" + Url);
-      return;
-    } // Loop data catalog
-
-
-    for (var i = 0; i < TotalLines; i++) {
-      var Line = Lines[i];
-
-      if (Line === "--") {
-        break;
-      }
-
-      Catalog.push(this.ProcessCatalogLine(Line));
-    }
-
-    if (Catalog.length < this.WindTableLength) {
-      // Force reloading, it table is shorter than windlist
-      this.ForceReloadGribCache(LoadKey, Url);
-      return;
-    } // Now Process the data
-
-
-    var ZoneOffsets = Url.split("/");
-    var DataStartIndex = Catalog.length + 1;
-
-    for (var _i = 0; _i < Catalog.length; _i++) {
-      if (typeof Lines[DataStartIndex] === "undefined" || Lines[DataStartIndex] === "") {
-        // Somehow sometimes, the data is incomplete, just get out, until next request.
-        //console.log("Incomplete data file. Forcing rebuild..." + Url);
-        this.ForceReloadGribCache(LoadKey, Url);
-        break;
-      }
-
-      var DataSize = Lines[DataStartIndex].split(" ");
-      var NbLon = parseInt(DataSize[0], 10);
-      var NbLat = parseInt(DataSize[1], 10);
-      var StartLon = 180 / this.GribStep + parseInt(ZoneOffsets[1], 10) / this.GribStep;
-
-      for (var LonIdx = 0; LonIdx < NbLon; LonIdx++) {
-        // Offset by NbLat in grib since the zone is reference by bottom lat, but counts down from top lat
-        var StartLat = NbLat + 90 / this.GribStep + parseInt(ZoneOffsets[0], 10) / this.GribStep;
-
-        for (var LatIdx = 0; LatIdx < NbLat; LatIdx++) {
-          if (!(Catalog[_i].DateIndex in this.Tables)) {
-            this.Tables[Catalog[_i].DateIndex] = [];
+            l += u * c + 1;
           }
-
-          var CurTable = this.Tables[Catalog[_i].DateIndex];
-
-          if (!(StartLon + LonIdx in CurTable)) {
-            CurTable[StartLon + LonIdx] = [];
-          }
-
-          if (!(StartLat - LatIdx - 1 in CurTable[StartLon + LonIdx])) {
-            CurTable[StartLon + LonIdx][StartLat - LatIdx - 1] = null;
-          }
-
-          var GribPoint = this.Tables[Catalog[_i].DateIndex][StartLon + LonIdx][StartLat - LatIdx - 1];
-
-          if (typeof GribPoint === "undefined" || !GribPoint) {
-            GribPoint = new GribData();
-            this.Tables[Catalog[_i].DateIndex][StartLon + LonIdx][StartLat - LatIdx - 1] = GribPoint;
-          }
-
-          GribPoint[Catalog[_i].Type] = parseFloat(Lines[DataStartIndex + 1 + LatIdx * NbLon + LonIdx]);
         }
-      }
-      /*console.log("Loaded table "+ Catalog[i].DateIndex);
-      console.log("Loaded lon index  "+ StartLon + "->" + (StartLon+NbLon));
-      console.log("Loaded lat index  "+ (StartLat-1) + "->" + (StartLat-NbLat-1));
-      */
-
-
-      DataStartIndex += NbLon * NbLat + 1;
-    }
-  };
-
-  this.ProcessCatalogLine = function (Line) {
-    var POS_TYPE = 3;
-    var POS_INDEX = 12;
-    var Ret = new WindCatalogLine();
-    var Fields = Line.split(":");
-    Ret.Type = Fields[POS_TYPE];
-
-    if (typeof Fields[POS_INDEX] === "undefined" || Fields[POS_INDEX] === "anl") {
-      Ret.DateIndex = 0;
-    } else {
-      Ret.DateIndex = parseInt(Fields[POS_INDEX].substring(0, Fields[POS_INDEX].indexOf("hr")), 10) / 3;
-    }
-
-    return Ret;
+      } else console.log("invalid request :" + e);
+    } else this.ForceReloadGribCache(a, e);
+  }, this.ProcessCatalogLine = function (e) {
+    var t = new WindCatalogLine(),
+        a = e.split(":");
+    return t.Type = a[3], void 0 === a[12] || "anl" === a[12] ? t.DateIndex = 0 : t.DateIndex = parseInt(a[12].substring(0, a[12].indexOf("hr")), 10) / 3, t;
   };
 }
 
 function WindCatalogLine() {
-  this.Type = "";
-  this.DateIndex = 0;
+  this.Type = "", this.DateIndex = 0;
 }
 
 function WindTable() {
-  this.GribStep = 0.5;
-  this.Table = [];
-  this.TableDate = 0;
-
-  this.Init = function (TableDate) {
+  this.GribStep = .5, this.Table = [], this.TableDate = 0, this.Init = function (e) {
     for (lat = -90; lat <= 90; lat += this.GribStep) {
       for (lon = -90; lon <= 90; lon += this.GribStep) {
         this.Table[lat][lon] = null;
@@ -3910,687 +1868,368 @@ function WindTable() {
 }
 
 function HandleGribTestClick(e) {
-  var Boat = _CurPlayer.CurBoat;
-
-  for (var index = 0; index <= 0; index++) {
-    var time = new Date(Boat.VLMInfo.LUP * 1000 + index * Boat.VLMInfo.VAC * 1000);
-    var Mi = GribMgr.WindAtPointInTime(time, Boat.VLMInfo.LAT, Boat.VLMInfo.LON);
-
-    if (Mi) {
-      console.log(time + " " + Mi.Speed + "@" + Mi.Heading);
-    } else {
-      console.log("no meteo yet at time : " + time);
-    }
+  for (var t = _CurPlayer.CurBoat, a = 0; a <= 0; a++) {
+    var i = new Date(1e3 * t.VLMInfo.LUP + a * t.VLMInfo.VAC * 1e3),
+        n = GribMgr.WindAtPointInTime(i, t.VLMInfo.LAT, t.VLMInfo.LON);
+    n ? console.log(i + " " + n.Speed + "@" + n.Heading) : console.log("no meteo yet at time : " + i);
   }
-} //
-//
-// Some consts 
+}
 
-
-var RACE_TYPE_CLASSIC = 0;
-var RACE_TYPE_RECORD = 1;
-var RACE_TYPE_OMORMB = 2;
-var FIELD_MAPPING_TEXT = 0;
-var FIELD_MAPPING_VALUE = 1;
-var FIELD_MAPPING_CHECK = 2;
-var FIELD_MAPPING_IMG = 3;
-var FIELD_MAPPING_CALLBACK = 4;
-var MAX_PILOT_ORDERS = 5;
-var BoatRacingStatus = ["RAC", "CST", "LOC", "DNS"];
-var BoatArrivedStatus = ["ARR"];
-var BoatNotRacingStatus = ["DNF", "HC", "HTP"];
-var BoatRacingClasses = {
-  "RAC": "ft_class_racing",
-  "CST": "ft_class_oncoast",
-  "LOC": "ft_class_locked",
-  "DNS": "ft_class_dns"
-}; // Global (beurk) holding last position return by OL mousemove.
-
-var GM_Pos = null;
-var SetWPPending = false;
-var WPPendingTarget = null;
-var GribWindController = null; //Global map object
-
-var map = null; // Ranking related globals
-
-var Rankings = [];
-var PilototoFt = null;
-var RankingFt = null;
-var RaceHistFt = null;
-var ICS_WPft = null;
-var NSZ_WPft = null;
-var RC_PwdResetReq = null;
-var RC_PwdResetConfirm = null;
-var OnPlayerLoadedCallBack = null; // On ready get started with vlm management
-
+GribMgr.Init();
+var RACE_TYPE_CLASSIC = 0,
+    RACE_TYPE_RECORD = 1,
+    RACE_TYPE_OMORMB = 2,
+    FIELD_MAPPING_TEXT = 0,
+    FIELD_MAPPING_VALUE = 1,
+    FIELD_MAPPING_CHECK = 2,
+    FIELD_MAPPING_IMG = 3,
+    FIELD_MAPPING_CALLBACK = 4,
+    MAX_PILOT_ORDERS = 5,
+    BoatRacingStatus = ["RAC", "CST", "LOC", "DNS"],
+    BoatArrivedStatus = ["ARR"],
+    BoatNotRacingStatus = ["DNF", "HC", "HTP"],
+    BoatRacingClasses = {
+  RAC: "ft_class_racing",
+  CST: "ft_class_oncoast",
+  LOC: "ft_class_locked",
+  DNS: "ft_class_dns"
+},
+    GM_Pos = null,
+    SetWPPending = !1,
+    WPPendingTarget = null,
+    GribWindController = null,
+    map = null,
+    Rankings = [],
+    PilototoFt = null,
+    RankingFt = null,
+    RaceHistFt = null,
+    ICS_WPft = null,
+    NSZ_WPft = null,
+    RC_PwdResetReq = null,
+    RC_PwdResetConfirm = null,
+    OnPlayerLoadedCallBack = null;
 $(document).ready(function () {
-  ///////////////////////////////////////////////////
-  //
-  //Debug only this should not stay when releasing
-  //
-  //$("#TestGrib").click(HandleGribTestClick)
-  //$("#StartEstimator").click(HandleEstimatorStart)
-  //
-  // End Debug only
-  //
-  ///////////////////////////////////////////////////
-  // Setup global ajax error handling
-  //setup ajax error handling
   $.ajaxSetup({
-    error: function error(x, status, _error) {
-      if (x.status === 401 || x.status === 403) {
-        window.location.replace("jvlm?login"); //on access denied try reviving the session
-        //OnLoginRequest();
-      } else if (x.status === 404) {// Code removed until ranking exist for not started races.
-        //$("#ErrorRedirectPanel").modal('show');
-      } else {
-        VLMAlertDanger("An error occurred: " + status + "nError: " + _error);
-      }
+    error: function error(e, t, a) {
+      401 === e.status || 403 === e.status ? window.location.replace("jvlm?login") : 404 === e.status || VLMAlertDanger("An error occurred: " + t + "nError: " + a);
     }
-  }); // Start converse
-  //InitXmpp();
-  // Init maps
-
-  OLInit(); // Load translation strings
-
-  InitLocale(); // Init Menus()
-
-  InitMenusAndButtons(); // Start-Up Polars manager
-
-  PolarsManager.Init(); // Init Alerts
-
-  InitAlerts(); // Handle page parameters if any
-
-  CheckPageParameters(); // Start the page clocks
-
-  setInterval(PageClock, 1000); // Load flags list (keep at the end since it takes a lot of time)
-
-  GetFlagsList();
+  }), OLInit(), InitLocale(), InitMenusAndButtons(), PolarsManager.Init(), InitAlerts(), CheckPageParameters(), setInterval(PageClock, 1e3), GetFlagsList();
 });
 var PasswordResetInfo = [];
 
-function HandlePasswordResetLink(PwdKey) {
-  PasswordResetInfo = unescape(PwdKey).split("|");
-  initrecaptcha(false, true);
-  $("#ResetaPasswordConfirmation").modal("show");
+function HandlePasswordResetLink(e) {
+  PasswordResetInfo = unescape(e).split("|"), initrecaptcha(!1, !0), $("#ResetaPasswordConfirmation").modal("show");
 }
 
 function CheckPageParameters() {
-  var url = window.location.search;
-  var RacingBarMode = true;
+  var e = window.location.search,
+      t = !0;
 
-  if (url) {
-    var getQuery = url.split('?')[1];
-    var params = getQuery.split('&'); // params is ['param1=value', 'param2=value2'] 
+  if (e) {
+    var a = e.split("?")[1].split("&");
 
-    for (var param in params) {
-      if (params[param]) {
+    for (var _e8 in a) {
+      if (a[_e8]) {
         (function () {
-          var PArray = params[param].split("=");
+          var i = a[_e8].split("=");
 
-          switch (PArray[0]) {
+          switch (i[0]) {
             case "PwdResetKey":
-              HandlePasswordResetLink(PArray[1]);
+              HandlePasswordResetLink(i[1]);
               break;
 
             case "RaceRank":
-              RacingBarMode = false;
-              /* jshint -W083*/
-
-              RankingFt.OnReadyTable = function () {
-                HandleShowOtherRaceRank(PArray[1]);
+              t = !1, RankingFt.OnReadyTable = function () {
+                HandleShowOtherRaceRank(i[1]);
               };
-              /* jshint +W083*/
-
-
               break;
 
             case "ICSRace":
-              RacingBarMode = false;
-              HandleShowICS(PArray[1]);
-              break;
+              t = !1, HandleShowICS(i[1]);
           }
         })();
       }
     }
   }
 
-  if (RacingBarMode) {
-    $(".RaceNavBar").css("display", "inherit");
-    $(".OffRaceNavBar").css("display", "none");
-  } else {
-    $(".RaceNavBar").css("display", "none");
-    $(".OffRaceNavBar").css("display", "inherit");
-    ShowApropos(false);
-  }
+  t ? ($(".RaceNavBar").css("display", "inherit"), $(".OffRaceNavBar").css("display", "none")) : ($(".RaceNavBar").css("display", "none"), $(".OffRaceNavBar").css("display", "inherit"), ShowApropos(!1));
 }
 
-function HandleShowICS(raceid) {
-  var CallBack = function CallBack(result) {
-    if (result) {
-      FillRaceInstructions(result);
-      $("#RacesInfoForm").modal("show");
-    }
-  };
-
-  LoadRaceInfo(raceid, null, CallBack);
+function HandleShowICS(e) {
+  LoadRaceInfo(e, null, function (e) {
+    e && (FillRaceInstructions(e), $("#RacesInfoForm").modal("show"));
+  });
 }
 
-function LoadRaceInfo(RaceId, RaceVersion, CallBack) {
-  if (!RaceVersion) {
-    RaceVersion = '';
-  }
-
-  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
+function LoadRaceInfo(e, t, a) {
+  t || (t = ""), $.get("/ws/raceinfo/desc.php?idrace=" + e + "&v=" + t, a);
 }
 
-function HandleShowOtherRaceRank(RaceId) {
+function HandleShowOtherRaceRank(e) {
   OnPlayerLoadedCallBack = function OnPlayerLoadedCallBack() {
-    var CallBack = function CallBack(Result) {
-      FillRaceInfoHeader(Result);
-    };
-
-    LoadRaceInfo(RaceId, 0, CallBack);
-    LoadRankings(RaceId, OtherRaceRankingLoaded);
-    RankingFt.RaceRankingId = RaceId;
-  };
-
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat) {
-    OnPlayerLoadedCallBack();
-    OnPlayerLoadedCallBack = null;
-  }
+    LoadRaceInfo(e, 0, function (e) {
+      FillRaceInfoHeader(e);
+    }), LoadRankings(e, OtherRaceRankingLoaded), RankingFt.RaceRankingId = e;
+  }, void 0 !== _CurPlayer && _CurPlayer && _CurPlayer.CurBoat && (OnPlayerLoadedCallBack(), OnPlayerLoadedCallBack = null);
 }
 
 function OtherRaceRankingLoaded() {
-  $("#Ranking-Panel").show();
-  SortRanking("RAC");
-  console.log("off race ranking loaded");
+  $("#Ranking-Panel").show(), SortRanking("RAC"), console.log("off race ranking loaded");
 }
 
 function OLInit() {
-  //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
   OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
-  var default_latitude = 45.5;
-  var default_longitude = -30.0;
-  var default_zoom = 4;
+  var e = 4;
+  void 0 !== VLM2Prefs && VLM2Prefs.MapPrefs && (e = VLM2Prefs.MapPrefs.MapZoomLevel);
+  var t = {
+    sphericalMercator: !0,
+    transitionEffect: "resize",
+    wrapDateLine: !0
+  };
+  map = new OpenLayers.Map("jVlmMap", MapOptions);
+  var a = tilesUrlArray,
+      i = new OpenLayers.Layer.XYZ("VLM Layer", a, t),
+      n = new Gribmap.Layer("Gribmap", t),
+      o = i.clone();
+  map.addLayers([n, VLMBoatsLayer, i]), map.addControl(new Gribmap.MousePosition({
+    gribmap: n
+  })), map.addControl(new OpenLayers.Control.ScaleLine()), map.addControl(new OpenLayers.Control.Permalink("permalink")), map.addControl(new OpenLayers.Control.Graticule()), map.addControl(new OpenLayers.Control.KeyboardDefaults()), GribWindController = new Gribmap.ControlWind(), map.addControl(GribWindController);
+  var r = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
+  r.handlers.wheel.cumulative = !1, r.handlers.wheel.interval = 100;
+  var s = {
+    maximized: !0,
+    layers: [o]
+  };
 
-  if (typeof VLM2Prefs !== "undefined" && VLM2Prefs.MapPrefs) {
-    default_zoom = VLM2Prefs.MapPrefs.MapZoomLevel;
+  if (map.addControl(new OpenLayers.Control.OverviewMap(s)), !map.getCenter()) {
+    var l = new OpenLayers.LonLat(-30, 45.5);
+    l.transform(MapOptions.displayProjection, MapOptions.projection), map.setCenter(l, e);
   }
 
-  var layeroption = {
-    //sphérique
-    sphericalMercator: true,
-    transitionEffect: "resize",
-    //pour passer l'ante-meridien sans souci
-    wrapDateLine: true
-  }; //MAP
-
-  map = new OpenLayers.Map("jVlmMap", //identifiant du div contenant la carte openlayer
-  MapOptions); //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
-
-  var urlArray = tilesUrlArray;
-  var vlm = new OpenLayers.Layer.XYZ("VLM Layer", urlArray, layeroption); //Le calque de vent made in Vlm
-
-  var grib = new Gribmap.Layer("Gribmap", layeroption); //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
-  //La minimap utilise le layer VLM
-
-  var vlmoverview = vlm.clone(); //Et on ajoute tous les layers à la map.
-  //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-
-  map.addLayers([grib, VLMBoatsLayer, vlm]); //map.addLayers([vlm, grib]); //FOR DEBUG
-  //Controle l'affichage des layers
-  //map.addControl(new OpenLayers.Control.LayerSwitcher());
-  //Controle l'affichage de la position ET DU VENT de la souris
-
-  map.addControl(new Gribmap.MousePosition({
-    gribmap: grib
-  })); //Affichage de l'échelle
-
-  map.addControl(new OpenLayers.Control.ScaleLine()); //Le Permalink
-  //FIXME: éviter que le permalink soit masqué par la minimap ?
-
-  map.addControl(new OpenLayers.Control.Permalink('permalink')); //FIXME: Pourquoi le graticule est il un control ?
-
-  map.addControl(new OpenLayers.Control.Graticule()); //Navigation clavier
-
-  map.addControl(new OpenLayers.Control.KeyboardDefaults()); //Le panel de vent
-
-  GribWindController = new Gribmap.ControlWind();
-  map.addControl(GribWindController); //Evite que le zoom molette surcharge le js du navigateur
-
-  var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
-  nav.handlers.wheel.cumulative = false;
-  nav.handlers.wheel.interval = 100; //Minimap
-
-  var ovmapOptions = {
-    maximized: true,
-    layers: [vlmoverview]
-  };
-  map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions)); //Pour centrer quand on a pas de permalink dans l'url
-
-  if (!map.getCenter()) {
-    // Don't do this if argparser already did something...
-    var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
-    lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
-    map.setCenter(lonlat, default_zoom);
-  } // Click handler
-
-
-  var click = new OpenLayers.Control.Click();
-  map.addControl(click);
-  click.activate();
+  var d = new OpenLayers.Control.Click();
+  map.addControl(d), d.activate();
 }
 
-function initrecaptcha(InitPasswordReset, InitResetConfirm) {
-  if (InitPasswordReset && !RC_PwdResetReq) {
-    RC_PwdResetReq = grecaptcha.render('recaptcha-PwdReset1');
-  }
-
-  if (InitResetConfirm && !RC_PwdResetConfirm) {
-    RC_PwdResetConfirm = grecaptcha.render('recaptcha-PwdReset2');
-  }
+function initrecaptcha(e, t) {
+  e && !RC_PwdResetReq && (RC_PwdResetReq = grecaptcha.render("recaptcha-PwdReset1")), t && !RC_PwdResetConfirm && (RC_PwdResetConfirm = grecaptcha.render("recaptcha-PwdReset2"));
 }
 
 function InitMenusAndButtons() {
-  // Handle modal sizing to fit screen
-  $('div.vresp.modal').on('show.bs.modal', function () {
-    $(this).show();
-    setModalMaxHeight(this);
-  });
-  $(window).resize(function () {
-    if ($('.modal.in').length != 0) {
-      setModalMaxHeight($('.modal.in'));
-    }
-  }); // Handle password change button
-
-  $("#BtnChangePassword").on("click", function (e) {
-    e.preventDefault();
-    HandlePasswordChangeRequest(e);
-  }); // Handle password reset request, and confirmation
-
-  $("#ResetPasswordButton").on("click", function (e) {
-    if (RC_PwdResetReq !== null) {
-      grecaptcha.execute(RC_PwdResetReq);
-    }
-  });
-  $("#ConfirmResetPasswordButton").on("click", function (e) {
-    if (RC_PwdResetConfirm !== null) {
-      grecaptcha.execute(RC_PwdResetConfirm);
-    }
-  }); // Handle showing/hide of a-propos depending on login dialog status
-
-  $("#LoginForm").on('show.bs.modal', function (e) {
-    ShowApropos(false);
-  });
-  $("#LoginForm").on('hide.bs.modal', function (e) {
-    ShowApropos(true);
-  });
-  $(".logindlgButton").on('click', function (e) {
-    // Show Login form
-    // hide apropos
-    $("#LoginForm").modal('show');
-  });
-  $(".logOutButton").on('click', function (e) {
-    // Logout user
+  $("div.vresp.modal").on("show.bs.modal", function () {
+    $(this).show(), setModalMaxHeight(this);
+  }), $(window).resize(function () {
+    0 != $(".modal.in").length && setModalMaxHeight($(".modal.in"));
+  }), $("#BtnChangePassword").on("click", function (e) {
+    e.preventDefault(), HandlePasswordChangeRequest(e);
+  }), $("#ResetPasswordButton").on("click", function (e) {
+    null !== RC_PwdResetReq && grecaptcha.execute(RC_PwdResetReq);
+  }), $("#ConfirmResetPasswordButton").on("click", function (e) {
+    null !== RC_PwdResetConfirm && grecaptcha.execute(RC_PwdResetConfirm);
+  }), $("#LoginForm").on("show.bs.modal", function (e) {
+    ShowApropos(!1);
+  }), $("#LoginForm").on("hide.bs.modal", function (e) {
+    ShowApropos(!0);
+  }), $(".logindlgButton").on("click", function (e) {
+    $("#LoginForm").modal("show");
+  }), $(".logOutButton").on("click", function (e) {
     Logout();
-  });
-  $("#Menu").menu();
-  $("#Menu").hide();
-  $("input[type=submit],button").button().click(function (event) {
-    event.preventDefault();
-  }); // Theme tabs
-
-  $(".JVLMTabs").tabs(); // Hide all progressbars
-
-  HidePb("#PbLoginProgress");
-  HidePb("#PbGetBoatProgress");
-  HidePb("#PbGribLoginProgress"); // Add handler to set the WPMode controller in the proper tab
-
-  $(".BCPane.WP_PM_Mode").click(function () {
-    // Beurk , direct access by indexes :(
-    // Assumes second class element is the id of target
-    var target = "#" + $(this)[0].classList[2];
-    MoveWPBoatControlerDiv(target);
-  }); // Display setting dialog
-
-  $(".BtnRaceList").click(function () {
-    LoadRacesList();
-    $("#RacesListForm").modal("show");
-  }); // Handle clicking on ranking button, and ranking sub tabs
-
-  $("#Ranking-Panel").on('shown.bs.collapse', function (e) {
+  }), $("#Menu").menu(), $("#Menu").hide(), $("input[type=submit],button").button().click(function (e) {
+    e.preventDefault();
+  }), $(".JVLMTabs").tabs(), HidePb("#PbLoginProgress"), HidePb("#PbGetBoatProgress"), HidePb("#PbGribLoginProgress"), $(".BCPane.WP_PM_Mode").click(function () {
+    MoveWPBoatControlerDiv("#" + $(this)[0].classList[2]);
+  }), $(".BtnRaceList").click(function () {
+    LoadRacesList(), $("#RacesListForm").modal("show");
+  }), $("#Ranking-Panel").on("shown.bs.collapse", function (e) {
     HandleRaceSortChange(e);
-  }); // Handle clicking on ranking button, and ranking sub tabs
-
-  $(document.body).on('click', "[RnkSort]", function (e) {
+  }), $(document.body).on("click", "[RnkSort]", function (e) {
     HandleRaceSortChange(e);
-  });
-  $("#Ranking-Panel").on('hide.bs.collapse', function (e) {
+  }), $("#Ranking-Panel").on("hide.bs.collapse", function (e) {
     ResetRankingWPList(e);
-  }); // Init event handlers
-  // Login button click event handler
-
-  $("#LoginButton").click(function () {
+  }), $("#LoginButton").click(function () {
     OnLoginRequest();
-  }); //valide par touche retour
-
-  $('#LoginPanel').keypress(function (e) {
-    if (e.which === '13') {
-      OnLoginRequest();
-      $('#LoginForm').modal('hide');
-    }
-  }); // Display setting dialog
-
-  $("#BtnSetting").click(function () {
-    LoadVLMPrefs();
+  }), $("#LoginPanel").keypress(function (e) {
+    "13" === e.which && (OnLoginRequest(), $("#LoginForm").modal("hide"));
+  }), $("#BtnSetting").click(function () {
+    LoadVLMPrefs(), SetDDTheme(VLM2Prefs.CurTheme), $("#SettingsForm").modal("show");
+  }), $("#SettingValidateButton").click(SaveBoatAndUserPrefs), $("#SettingCancelButton").click(function () {
+    LoadVLMPrefs(), SetDDTheme(VLM2Prefs.CurTheme), $("#SettingsForm").modal("show");
+  }), $("#SettingValidateButton").click(SaveBoatAndUserPrefs), $("#SettingCancelButton").click(function () {
     SetDDTheme(VLM2Prefs.CurTheme);
-    $("#SettingsForm").modal("show");
-  }); // Handle SettingsSave button
-
-  $('#SettingValidateButton').click(SaveBoatAndUserPrefs); // Handle SettingsSave button
-
-  $('#SettingCancelButton').click(function () {
-    LoadVLMPrefs();
-    SetDDTheme(VLM2Prefs.CurTheme);
-    $("#SettingsForm").modal("show");
-  }); // Handle SettingsSave button
-
-  $('#SettingValidateButton').click(SaveBoatAndUserPrefs); // Handle SettingsSave button
-
-  $('#SettingCancelButton').click(function () {
-    SetDDTheme(VLM2Prefs.CurTheme);
-  }); // Do fixed heading button
-
-  $("#BtnPM_Heading").click(function () {
+  }), $("#BtnPM_Heading").click(function () {
     SendVLMBoatOrder(PM_HEADING, $("#PM_Heading")[0].value);
-  }); // Do fixed angle button
-
-  $("#BtnPM_Angle").click(function () {
+  }), $("#BtnPM_Angle").click(function () {
     SendVLMBoatOrder(PM_ANGLE, $("#PM_Angle")[0].value);
-  }); // Tack
-
-  $("#BtnPM_Tack").click(function () {
+  }), $("#BtnPM_Tack").click(function () {
     $("#PM_Angle")[0].value = -$("#PM_Angle")[0].value;
-  });
-  $("#BtnCreateAccount").click(function () {
+  }), $("#BtnCreateAccount").click(function () {
     HandleCreateUser();
-  });
-  $('.CreatePassword').pstrength();
-  $('#NewPlayerEMail').blur(function (e) {
+  }), $(".CreatePassword").pstrength(), $("#NewPlayerEMail").blur(function (e) {
     $("#NewPlayerEMail").verimail({
       messageElement: "#verimailstatus",
       language: _CurLocale
     });
-  }); // Handler for Set WP on click
-
-  $("#SetWPOnClick").click(HandleStartSetWPOnClick);
-  $("#SetWPOffClick").click(HandleCancelSetWPOnClick);
-  HandleCancelSetWPOnClick(); // Add handlers for autopilot buttons
-
-  $('body').on('click', '.PIL_EDIT', HandlePilotEditDelete);
-  $('body').on('click', '.PIL_DELETE', HandlePilotEditDelete);
-  $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint);
-  $("#AP_SetTargetWP").click(HandleClickToSetWP); // AP datetime pickers
-
-  $("#AP_Time").datetimepicker({
+  }), $("#SetWPOnClick").click(HandleStartSetWPOnClick), $("#SetWPOffClick").click(HandleCancelSetWPOnClick), HandleCancelSetWPOnClick(), $("body").on("click", ".PIL_EDIT", HandlePilotEditDelete), $("body").on("click", ".PIL_DELETE", HandlePilotEditDelete), $("#AutoPilotAddButton").click(HandleOpenAutoPilotSetPoint), $("#AP_SetTargetWP").click(HandleClickToSetWP), $("#AP_Time").datetimepicker({
     locale: _CurLocale,
-    format: 'DD MM YYYY, HH:mm:ss' //language: 'fr-FR',
-    //parentEl: '#AutoPilotSettingDlg'
-
-  });
-  $("#AP_Time").on('dp.change', HandleDateChange);
-  $("#APValidateButton").click(HandleSendAPUpdate);
-  $(".APField").on('change', HandleAPFieldChange);
-  $(".APMode").on('click', HandleAPModeDDClick); // Draggable info window
-
-  $(".Draggable").draggable({
+    format: "DD MM YYYY, HH:mm:ss"
+  }), $("#AP_Time").on("dp.change", HandleDateChange), $("#APValidateButton").click(HandleSendAPUpdate), $(".APField").on("change", HandleAPFieldChange), $(".APMode").on("click", HandleAPModeDDClick), $(".Draggable").draggable({
     handle: ".modal-header,.modal-body"
-  });
-  $("#MapPrefsToggle").click(HandleShowMapPrefs);
-  $(".chkprefstore").on('change', HandleMapPrefOptionChange);
-  $(".MapOppShowLi").click(HandleMapOppModeChange);
-  $(".DDTheme").click(HandleDDlineClick); // Handle Start Boat Estimator button
-
-  $("#StartEstimator").on('click', HandleStartEstimator);
-  $("#EstimatorStopButton").on('click', HandleStopEstimator);
-  InitGribSlider();
-  InitFootables(); // Handle clicking on ranking table link
-
-  $(document.body).on('click', ".RaceHistLink", function (e) {
+  }), $("#MapPrefsToggle").click(HandleShowMapPrefs), $(".chkprefstore").on("change", HandleMapPrefOptionChange), $(".MapOppShowLi").click(HandleMapOppModeChange), $(".DDTheme").click(HandleDDlineClick), $("#StartEstimator").on("click", HandleStartEstimator), $("#EstimatorStopButton").on("click", HandleStopEstimator), InitGribSlider(), InitFootables(), $(document.body).on("click", ".RaceHistLink", function (e) {
     HandleShowBoatRaceHistory(e);
-  }); // Add handler to refresh content of eth pilototo table when showing tab content
-
-  $("[PilRefresh]").on('click', HandleUpdatePilototoTable); // Handler for not racing boat palmares
-
-  $("#HistRankingButton").on('click', function (e) {
+  }), $("[PilRefresh]").on("click", HandleUpdatePilototoTable), $("#HistRankingButton").on("click", function (e) {
     ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat);
-  }); // Go To WP Ortho, VMG, VBVMG Modes
+  }), $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(function () {
+    var e,
+        t = PM_ORTHO,
+        a = $("#PM_Lat")[0].value,
+        i = $("#PM_Lon")[0].value;
 
-  $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(function () {
-    var WpH = -1;
-    var PMMode = PM_ORTHO;
-    var Lat = $("#PM_Lat")[0].value;
-    var Lon = $("#PM_Lon")[0].value;
-    WpH = parseInt($("#PM_WPHeading")[0].value, 10);
-
-    switch ($(this)[0].id) {
+    switch (e = parseInt($("#PM_WPHeading")[0].value, 10), $(this)[0].id) {
       case "BtnPM_Ortho":
-        PMMode = PM_ORTHO;
+        t = PM_ORTHO;
         break;
 
       case "BtnPM_VMG":
-        PMMode = PM_VMG;
+        t = PM_VMG;
         break;
 
       case "BtnPM_VBVMG":
-        PMMode = PM_VBVMG;
-        break;
+        t = PM_VBVMG;
     }
 
-    SendVLMBoatOrder(PMMode, Lon, Lat, WpH);
-  }); // InitCalendar link
-
-  $("#CalendarPanel").on("shown.bs.modal", function (e) {
+    SendVLMBoatOrder(t, i, a, e);
+  }), $("#CalendarPanel").on("shown.bs.modal", function (e) {
     HandleShowAgenda();
-  }); // Handle boat selector selection change
-  //
-
-  $(".BoatSelectorDropDownList").on("click", HandleBoatSelectionChange);
-  $('#cp11').colorpicker({
-    useAlpha: false,
-    format: false
-  });
-  $(document.body).on('click', ".ShowICSButton", function (e) {
+  }), $(".BoatSelectorDropDownList").on("click", HandleBoatSelectionChange), $("#cp11").colorpicker({
+    useAlpha: !1,
+    format: !1
+  }), $(document.body).on("click", ".ShowICSButton", function (e) {
     HandleFillICSButton(e);
-  });
-  $("#PolarTab").on("click", HandlePolarTabClik);
-  CheckLogin();
-  UpdateVersionLine();
+  }), $("#PolarTab").on("click", HandlePolarTabClik), CheckLogin(), UpdateVersionLine();
 }
 
 function UpdateVersionLine() {
-  var Build = new moment(BuildDate);
-  $("#BuildDate").text("Build : " + Build.fromNow());
-  $('[data-toggle="tooltip"]').tooltip();
+  var e = new moment(BuildDate);
+  $("#BuildDate").text("Build : " + e.fromNow()), $('[data-toggle="tooltip"]').tooltip();
 }
 
 var _CachedRaceInfo = null;
 
 function HandlePolarTabClik() {
-  if (_CachedRaceInfo) {
-    DrawPolar(_CachedRaceInfo);
-  }
+  _CachedRaceInfo && DrawPolar(_CachedRaceInfo);
 }
 
-function InitPolar(RaceInfo) {
-  _CachedRaceInfo = RaceInfo;
+function InitPolar(e) {
+  _CachedRaceInfo = e;
 }
 
 function HandleFillICSButton(e) {
-  // Race Instruction
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo) {
-    FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
-  } else if (typeof e !== "undefined" && e) {
-    var b = e.target;
-    var RaceId = $(e.currentTarget).attr('idRace');
-
-    if (typeof RaceId !== "undefined" && RaceId) {
-      HandleShowICS(RaceId);
-    }
+  if (void 0 !== _CurPlayer && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo) FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);else if (void 0 !== e && e) {
+    e.target;
+    var t = $(e.currentTarget).attr("idRace");
+    void 0 !== t && t && HandleShowICS(t);
   }
 }
 
-var CalInited = false;
+var CalInited = !1;
 
 function HandleShowAgenda() {
-  jQuery('#Calendar').fullCalendar('destroy');
-  jQuery('#Calendar').fullCalendar({
+  jQuery("#Calendar").fullCalendar("destroy"), jQuery("#Calendar").fullCalendar({
     locale: _CurLocale,
-    editable: false,
+    editable: !1,
     header: {
-      left: 'title',
-      center: '',
-      right: 'today prev,next'
+      left: "title",
+      center: "",
+      right: "today prev,next"
     },
     firstDay: 1,
     events: "/feed/races.fullcalendar.php",
     data: function data() {
-      // a function that returns an object
       return {
         jvlm: 1
       };
     },
-    timeFormat: 'H:mm',
-    loading: function loading(bool) {
-      if (bool) jQuery('#loading').show();else jQuery('#loading').hide();
+    timeFormat: "H:mm",
+    loading: function loading(e) {
+      e ? jQuery("#loading").show() : jQuery("#loading").hide();
     }
-  });
-  CalInited = true;
-  $("#Infos").modal("hide");
+  }), CalInited = !0, $("#Infos").modal("hide");
 }
 
 function HandlePasswordChangeRequest(e) {
-  // Check non empty value for oldpassword
-  var OldPwd = $("#CurPassword")[0].value;
-  var NewPwd1 = $("#NewPassword1")[0].value;
-  var NewPwd2 = $("#NewPassword2")[0].value;
-  $(".Password").val("");
-
-  if (!OldPwd || OldPwd === "") {
-    VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
-    return;
-  } else if (NewPwd1 !== NewPwd2) {
-    VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
-    return;
-  } else if (NewPwd1 === "") {
-    VLMAlertDanger(GetLocalizedString("NewPwdRequired"));
-    return;
-  }
-
-  var PostData = {
-    OldPwd: OldPwd,
-    NewPwd: NewPwd1
+  var t = $("#CurPassword")[0].value,
+      a = $("#NewPassword1")[0].value,
+      i = $("#NewPassword2")[0].value;
+  if ($(".Password").val(""), !t || "" === t) return void VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
+  if (a !== i) return void VLMAlertDanger(GetLocalizedString("CurPwdRequired"));
+  if ("" === a) return void VLMAlertDanger(GetLocalizedString("NewPwdRequired"));
+  var n = {
+    OldPwd: t,
+    NewPwd: a
   };
-  $.post("/ws/playersetup/password_change.php", "parms=" + JSON.stringify(PostData), function (e) {
+  $.post("/ws/playersetup/password_change.php", "parms=" + JSON.stringify(n), function (e) {
     HandlePasswordChangeResult(e);
   });
 }
 
 function HandlePasswordChangeResult(e) {
-  if (e.success) {
-    VLMAlertInfo();
-  } else {
-    VLMAlertDanger(GetLocalizedString(e.error.msg));
-  }
+  e.success ? VLMAlertInfo() : VLMAlertDanger(GetLocalizedString(e.error.msg));
 }
 
-function SendResetPassword(RecaptchaCode) {
-  var PostData = {
-    email: PasswordResetInfo[0],
-    seed: PasswordResetInfo[1],
-    key: RecaptchaCode
-  };
-  $.get("/ws/playersetup/password_reset.php?email=" + PasswordResetInfo[0] + "&seed=" + PasswordResetInfo[1] + "&key=" + RecaptchaCode, function (e) {
-    HandlePasswordReset(e, true);
+function SendResetPassword(e) {
+  PasswordResetInfo[0], PasswordResetInfo[1];
+  $.get("/ws/playersetup/password_reset.php?email=" + PasswordResetInfo[0] + "&seed=" + PasswordResetInfo[1] + "&key=" + e, function (e) {
+    HandlePasswordReset(e, !0);
   });
 }
 
-function SendResetPasswordLink(RecaptchaCode) {
-  var UserMail = $(".UserName").val();
-
-  if (UserMail === "") {
-    VLMAlertDanger(GetLocalizedString("Enter your email for resetting your password"));
-    grecaptcha.reset(RC_PwdResetReq);
-    return;
-  }
-
-  var PostData = {
-    email: UserMail,
-    key: RecaptchaCode
+function SendResetPasswordLink(e) {
+  var t = $(".UserName").val();
+  if ("" === t) return VLMAlertDanger(GetLocalizedString("Enter your email for resetting your password")), void grecaptcha.reset(RC_PwdResetReq);
+  var a = {
+    email: t,
+    key: e
   };
-  $.post("/ws/playersetup/password_reset.php", "parms=" + JSON.stringify(PostData), function (e) {
-    HandlePasswordReset(e, false);
+  $.post("/ws/playersetup/password_reset.php", "parms=" + JSON.stringify(a), function (e) {
+    HandlePasswordReset(e, !1);
   });
 }
 
-function HandlePasswordReset(e, Validation) {
-  if (e.success) {
-    if (Validation) {
-      VLMAlertInfo(GetLocalizedString('Check your inbox to get your new password.'));
-      grecaptcha.reset(RC_PwdResetReq);
-    } else {
-      VLMAlertInfo(GetLocalizedString('An email has been sent. Click on the link to validate.'));
-      grecaptcha.reset(RC_PwdResetConfirm);
-    }
-  } else {
-    VLMAlertDanger("Something went wrong :(");
-    grecaptcha.reset(RC_PwdResetReq);
-    grecaptcha.reset(RC_PwdResetConfirm);
-  }
+function HandlePasswordReset(e, t) {
+  e.success ? t ? (VLMAlertInfo(GetLocalizedString("Check your inbox to get your new password.")), grecaptcha.reset(RC_PwdResetReq)) : (VLMAlertInfo(GetLocalizedString("An email has been sent. Click on the link to validate.")), grecaptcha.reset(RC_PwdResetConfirm)) : (VLMAlertDanger("Something went wrong :("), grecaptcha.reset(RC_PwdResetReq), grecaptcha.reset(RC_PwdResetConfirm));
 }
 
-function InitFooTable(Id) {
-  var ret = FooTable.init("#" + Id, {
-    'name': Id,
-    'on': {
-      'ready.ft.table': HandleReadyTable,
-      'after.ft.paging': HandlePagingComplete,
-      'postdraw.ft.table': HandleTableDrawComplete
+function InitFooTable(e) {
+  var t = FooTable.init("#" + e, {
+    name: e,
+    on: {
+      "ready.ft.table": HandleReadyTable,
+      "after.ft.paging": HandlePagingComplete,
+      "postdraw.ft.table": HandleTableDrawComplete
     }
   });
-  ret.DrawPending = true;
-  ret.CallbackPending = null;
-  return ret;
+  return t.DrawPending = !0, t.CallbackPending = null, t;
 }
 
 function InitFootables() {
-  // Handle race discontinuation request
-  $("#DiscontinueRaceButton").on('click', HandleDiscontinueRaceRequest); // Init Pilototo footable, and get pointer to object          
-
-  PilototoFt = InitFooTable("PilototoTable");
-  RankingFt = InitFooTable("RankingTable");
-  RaceHistFt = InitFooTable("BoatRaceHist");
-  ICS_WPft = InitFooTable("RaceWayPoints");
-  NSZ_WPft = InitFooTable("NSZPoints");
+  $("#DiscontinueRaceButton").on("click", HandleDiscontinueRaceRequest), PilototoFt = InitFooTable("PilototoTable"), RankingFt = InitFooTable("RankingTable"), RaceHistFt = InitFooTable("BoatRaceHist"), ICS_WPft = InitFooTable("RaceWayPoints"), NSZ_WPft = InitFooTable("NSZPoints");
 }
 
 function HandleUpdatePilototoTable(e) {
   UpdatePilotInfo(_CurPlayer.CurBoat);
 }
 
-function InitSlider(SliderId, HandleId, min, max, value, SlideCallback) {
-  var handle = $("#" + HandleId);
-  $("#" + SliderId).slider({
+function InitSlider(e, t, a, i, n, o) {
+  var r = $("#" + t);
+  $("#" + e).slider({
     orientation: "vertical",
-    min: min,
-    max: max,
-    value: value,
+    min: a,
+    max: i,
+    value: n,
     create: function create() {
-      handle.text($(this).slider("value"));
+      r.text($(this).slider("value"));
     },
-    slide: function slide(event, ui) {
-      SlideCallback(event, ui);
+    slide: function slide(e, t) {
+      o(e, t);
     }
   });
 }
@@ -4600,20 +2239,20 @@ function InitGribSlider() {
 }
 
 function HandleRaceSortChange(e) {
-  var Target = $(e.currentTarget).attr('rnksort'); //$("[rnksort]").removeClass("active")
+  var t = $(e.currentTarget).attr("rnksort");
 
-  switch (Target) {
-    case 'WP':
-      SortRanking(Target, $(e.currentTarget).attr('WPRnk'));
+  switch (t) {
+    case "WP":
+      SortRanking(t, $(e.currentTarget).attr("WPRnk"));
       break;
 
-    case 'DNF':
-    case 'HTP':
-    case 'HC':
-    case 'ABD':
-    case 'RAC':
-    case 'ARR':
-      SortRanking(Target);
+    case "DNF":
+    case "HTP":
+    case "HC":
+    case "ABD":
+    case "RAC":
+    case "ARR":
+      SortRanking(t);
       break;
 
     default:
@@ -4621,141 +2260,75 @@ function HandleRaceSortChange(e) {
   }
 }
 
-function HandleGribSlideMove(event, ui) {
-  var handle = $("#GribSliderHandle");
-  handle.text(ui.value);
-  var l = GribWindController.getGribmapLayer();
-  var GribEpoch = new Date().getTime();
-  l.setTimeSegment(GribEpoch / 1000 + ui.value * 3600);
+function HandleGribSlideMove(e, t) {
+  $("#GribSliderHandle").text(t.value);
+  var a = GribWindController.getGribmapLayer(),
+      i = new Date().getTime();
 
-  if (VLM2Prefs.MapPrefs.TrackEstForecast && _CurPlayer.CurBoat.Estimator) {
-    var EstPos = _CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(GribEpoch + ui.value * 3600 * 1000));
-
-    RefreshEstPosLabels(EstPos);
+  if (a.setTimeSegment(i / 1e3 + 3600 * t.value), VLM2Prefs.MapPrefs.TrackEstForecast && _CurPlayer.CurBoat.Estimator) {
+    RefreshEstPosLabels(_CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(i + 3600 * t.value * 1e3)));
   }
 }
 
 function HandleDiscontinueRaceRequest() {
-  GetUserConfirmation(GetLocalizedString('unsubscribe'), true, HandleRaceDisContinueConfirmation);
+  GetUserConfirmation(GetLocalizedString("unsubscribe"), !0, HandleRaceDisContinueConfirmation);
 }
 
-function HandleRaceDisContinueConfirmation(State) {
-  if (State) {
-    //construct base
-    var BoatId = _CurPlayer.CurBoat.IdBoat;
-    var RaceId = _CurPlayer.CurBoat.Engaged;
-    DiconstinueRace(BoatId, RaceId);
-    $("#ConfirmDialog").modal('hide');
-    $("#RacesInfoForm").modal('hide');
-  } else {
-    VLMAlertDanger("Ouf!");
-  }
+function HandleRaceDisContinueConfirmation(e) {
+  if (e) {
+    DiconstinueRace(_CurPlayer.CurBoat.IdBoat, _CurPlayer.CurBoat.Engaged), $("#ConfirmDialog").modal("hide"), $("#RacesInfoForm").modal("hide");
+  } else VLMAlertDanger("Ouf!");
 }
 
 function HandleStopEstimator(e) {
-  var CurBoat = _CurPlayer.CurBoat;
-
-  if (typeof CurBoat === "undefined" || !CurBoat) {
-    // Something's wrong, just ignore
-    return;
-  }
-
-  CurBoat.Estimator.Stop();
+  var t = _CurPlayer.CurBoat;
+  void 0 !== t && t && t.Estimator.Stop();
 }
 
 function HandleStartEstimator(e) {
-  var CurBoat = _CurPlayer.CurBoat;
-
-  if (typeof CurBoat === "undefined" || !CurBoat) {
-    // Something's wrong, just ignore
-    return;
-  }
-
-  CurBoat.Estimator.Start(HandleEstimatorProgress);
+  var t = _CurPlayer.CurBoat;
+  void 0 !== t && t && t.Estimator.Start(HandleEstimatorProgress);
 }
 
 var LastPct = -1;
 
-function HandleEstimatorProgress(Complete, Pct, Dte) {
-  if (Complete) {
-    $("#StartEstimator").removeClass("hidden");
-    $("#PbEstimatorProgressBar").addClass("hidden"); //$("#PbEstimatorProgressText").addClass("hidden")
-
-    $("#EstimatorStopButton").addClass("hidden");
-    LastPct = -1;
-  } else if (Pct - LastPct > 0.15) {
-    $("#EstimatorStopButton").removeClass("hidden");
-    $("#StartEstimator").addClass("hidden");
-    $("#PbEstimatorProgressBar").removeClass("hidden");
-    $("#PbEstimatorProgressText").removeClass("hidden");
-    $("#PbEstimatorProgressText").text(Pct);
-    $("#PbEstimatorProgress").css("width", Pct + "%");
-    $("#PbEstimatorProgress").attr("aria-valuenow", Pct);
-    $("#PbEstimatorProgress").attr("aria-valuetext", Pct);
-    LastPct = Pct;
-  }
+function HandleEstimatorProgress(e, t, a) {
+  e ? ($("#StartEstimator").removeClass("hidden"), $("#PbEstimatorProgressBar").addClass("hidden"), $("#EstimatorStopButton").addClass("hidden"), LastPct = -1) : t - LastPct > .15 && ($("#EstimatorStopButton").removeClass("hidden"), $("#StartEstimator").addClass("hidden"), $("#PbEstimatorProgressBar").removeClass("hidden"), $("#PbEstimatorProgressText").removeClass("hidden"), $("#PbEstimatorProgressText").text(t), $("#PbEstimatorProgress").css("width", t + "%"), $("#PbEstimatorProgress").attr("aria-valuenow", t), $("#PbEstimatorProgress").attr("aria-valuetext", t), LastPct = t);
 }
 
 function HandleFlagLineClick(e) {
-  var Flag = e.target.attributes.flag.value;
-  SelectCountryDDFlag(Flag);
+  SelectCountryDDFlag(e.target.attributes.flag.value);
 }
 
 function HandleCancelSetWPOnClick() {
-  SetWPPending = false;
-  $("#SetWPOnClick").show();
-  $("#SetWPOffClick").hide();
+  SetWPPending = !1, $("#SetWPOnClick").show(), $("#SetWPOffClick").hide();
 }
 
 function HandleStartSetWPOnClick() {
-  SetWPPending = true;
-  WPPendingTarget = "WP";
-  $("#SetWPOnClick").hide();
-  $("#SetWPOffClick").show();
+  SetWPPending = !0, WPPendingTarget = "WP", $("#SetWPOnClick").hide(), $("#SetWPOffClick").show();
 }
 
 function ClearBoatSelector() {
   $(".BoatSelectorDropDownList").empty();
 }
 
-function AddBoatToSelector(boat, isfleet) {
-  BuildUserBoatList(boat, isfleet);
+function AddBoatToSelector(e, t) {
+  BuildUserBoatList(e, t);
 }
 
-function BuildUserBoatList(boat, IsFleet) {
-  $(".BoatSelectorDropDownList").append(GetBoatDDLine(boat, IsFleet));
+function BuildUserBoatList(e, t) {
+  $(".BoatSelectorDropDownList").append(GetBoatDDLine(e, t));
 }
 
-function GetBoatDDLine(Boat, IsFleet) {
-  var Line = '<li class="DDLine" BoatID="' + Boat.IdBoat + '">';
-  Line = Line + GetBoatInfoLine(Boat, IsFleet) + '</li>';
-  return Line;
+function GetBoatDDLine(e, t) {
+  var a = '<li class="DDLine" BoatID="' + e.IdBoat + '">';
+  return a = a + GetBoatInfoLine(e, t) + "</li>";
 }
 
-function GetBoatInfoLine(Boat, IsFleet) {
-  var Line = "";
-  var BoatStatus = "racing";
-
-  if (!Boat.Engaged) {
-    BoatStatus = "Docked";
-  }
-
-  if (typeof Boat.VLMInfo !== "undefined" && Boat.VLMInfo["S&G"]) {
-    BoatStatus = "stranded";
-  }
-
-  if (!IsFleet) {
-    Line = Line + '<span class="badge">BS';
-  }
-
-  Line = Line + '<img class="BoatStatusIcon" src="images/' + BoatStatus + '.png" />';
-
-  if (!IsFleet) {
-    Line = Line + '</span>';
-  }
-
-  Line = Line + '<span>-</span><span>' + HTMLDecode(Boat.BoatName) + '</span>';
-  return Line;
+function GetBoatInfoLine(e, t) {
+  var a = "",
+      i = "racing";
+  return e.Engaged || (i = "Docked"), void 0 !== e.VLMInfo && e.VLMInfo["S&G"] && (i = "stranded"), t || (a += '<span class="badge">BS'), a = a + '<img class="BoatStatusIcon" src="images/' + i + '.png" />', t || (a += "</span>"), a = a + "<span>-</span><span>" + HTMLDecode(e.BoatName) + "</span>";
 }
 
 function ShowBgLoad() {
@@ -4766,469 +2339,224 @@ function HideBgLoad() {
   $("#BgLoadProgress").css("display", "block");
 }
 
-function ShowPb(PBName) {
-  $(PBName).show(); //LocalizeString();
+function ShowPb(e) {
+  $(e).show();
 }
 
-function HidePb(PBName) {
-  $(PBName).hide();
+function HidePb(e) {
+  $(e).hide();
 }
 
-function DisplayLoggedInMenus(LoggedIn) {
-  var LoggedInDisplay;
-  var LoggedOutDisplay;
-
-  if (LoggedIn) {
-    LoggedInDisplay = "block";
-    LoggedOutDisplay = "none";
-  } else {
-    LoggedInDisplay = "none";
-    LoggedOutDisplay = "block";
-  }
-
-  $("[LoggedInNav='true']").css("display", LoggedInDisplay);
-  $("[LoggedInNav='false']").css("display", LoggedOutDisplay);
-
-  if (typeof _CurPlayer !== 'undefined' && _CurPlayer && _CurPlayer.IsAdmin) {
-    $("[AdminNav='true']").css("display", "block");
-  } else {
-    $("[AdminNav='true']").css("display", "none");
-  } // Display apropos
-
-
-  ShowApropos(LoggedIn);
+function DisplayLoggedInMenus(e) {
+  var t, a;
+  e ? (t = "block", a = "none") : (t = "none", a = "block"), $("[LoggedInNav='true']").css("display", t), $("[LoggedInNav='false']").css("display", a), void 0 !== _CurPlayer && _CurPlayer && _CurPlayer.IsAdmin ? $("[AdminNav='true']").css("display", "block") : $("[AdminNav='true']").css("display", "none"), ShowApropos(e);
 }
 
-function ShowApropos(DisplayModal) {
-  $('#Apropos').modal(DisplayModal ? 'hide' : 'show');
+function ShowApropos(e) {
+  $("#Apropos").modal(e ? "hide" : "show");
 }
 
-function HandleRacingDockingButtons(IsRacing) {
-  if (IsRacing) {
-    $('[RacingBtn="true"]').removeClass("hidden");
-    $('[RacingBtn="false"]').addClass("hidden");
-  } else {
-    $('[RacingBtn="true"]').addClass("hidden");
-    $('[RacingBtn="false"]').removeClass("hidden");
-  }
+function HandleRacingDockingButtons(e) {
+  e ? ($('[RacingBtn="true"]').removeClass("hidden"), $('[RacingBtn="false"]').addClass("hidden")) : ($('[RacingBtn="true"]').addClass("hidden"), $('[RacingBtn="false"]').removeClass("hidden"));
 }
 
-function UpdateInMenuDockingBoatInfo(Boat) {
-  var IsRacing = typeof Boat !== "undefined" && typeof Boat.VLMInfo !== "undefined" && parseInt(Boat.VLMInfo.RAC, 10);
-  HandleRacingDockingButtons(IsRacing);
+function UpdateInMenuDockingBoatInfo(e) {
+  HandleRacingDockingButtons(void 0 !== e && void 0 !== e.VLMInfo && parseInt(e.VLMInfo.RAC, 10));
 }
 
-function SetTWASign(Boat) {
-  var twd = Boat.VLMInfo.TWD;
-  var heading = Boat.VLMInfo.HDG;
-  var twa = twd - heading;
-
-  if (twa < -180) {
-    twa += 360;
-  }
-
-  if (twa > 180) {
-    twa -= 360;
-  }
-
-  var winddir = (360 - twd) % 360 + 90;
-  var boatdir = (360 - heading) % 360 + 90;
-
-  if (twa * Boat.VLMInfo.TWA > 0) {
-    Boat.VLMInfo.TWA = -Boat.VLMInfo.TWA;
-  }
+function SetTWASign(e) {
+  var t = e.VLMInfo.TWD,
+      a = e.VLMInfo.HDG,
+      i = t - a;
+  i < -180 && (i += 360), i > 180 && (i -= 360);
+  i * e.VLMInfo.TWA > 0 && (e.VLMInfo.TWA = -e.VLMInfo.TWA);
 }
 
-function UpdateInMenuRacingBoatInfo(Boat, TargetTab) {
-  var NorthSouth;
-  var EastWest;
+function UpdateInMenuRacingBoatInfo(e, t) {
+  if (!e || void 0 === e) return;
+  HandleRacingDockingButtons(!0), SetTWASign(e), "2" === e.VLMInfo.PIM && "0" === e.VLMInfo.PIP && (e.VLMInfo.HDG = e.VLMInfo.TWD, e.VLMInfo.BSP = 0);
+  var a = new Coords(e.VLMInfo.LON, !0),
+      i = new Coords(e.VLMInfo.LAT),
+      n = [];
+  n.push([FIELD_MAPPING_TEXT, "#BoatLon", a.ToString()]), n.push([FIELD_MAPPING_TEXT, "#BoatLat", i.ToString()]), n.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(e.VLMInfo.BSP, 2)]), n.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(e.VLMInfo.HDG, 1)]), n.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(e.VLMInfo.HDG, 2)]), n.push([FIELD_MAPPING_TEXT, "#BoatAvg", RoundPow(e.VLMInfo.AVG, 1)]), n.push([FIELD_MAPPING_TEXT, "#BoatDNM", RoundPow(e.VLMInfo.DNM, 1)]), n.push([FIELD_MAPPING_TEXT, "#BoatLoch", RoundPow(e.VLMInfo.LOC, 1)]), n.push([FIELD_MAPPING_TEXT, "#BoatOrtho", RoundPow(e.VLMInfo.ORT, 1)]), n.push([FIELD_MAPPING_TEXT, "#BoatLoxo", RoundPow(e.VLMInfo.LOX, 1)]), n.push([FIELD_MAPPING_TEXT, "#BoatVMG", RoundPow(e.VLMInfo.VMG, 1)]), n.push([FIELD_MAPPING_TEXT, ".BoatWindSpeed", RoundPow(e.VLMInfo.TWS, 1)]), n.push([FIELD_MAPPING_TEXT, "#BoatWindDirection", RoundPow(e.VLMInfo.TWD, 1)]), n.push([FIELD_MAPPING_CHECK, "#PM_WithWPHeading", "-1.0" !== e.VLMInfo["H@WP"]]), n.push([FIELD_MAPPING_TEXT, "#RankingBadge", e.VLMInfo.RNK]), n.push([FIELD_MAPPING_VALUE, "#PM_WPHeading", e.VLMInfo["H@WP"]]), n.push([FIELD_MAPPING_TEXT, ".BoatClass", e.VLMInfo.POL.substring(5)]), n.push([FIELD_MAPPING_TEXT, ".RaceName", e.VLMInfo.RAN]);
+  var o = new VLMPosition(e.VLMInfo.WPLON, e.VLMInfo.WPLAT);
+  n.push([FIELD_MAPPING_VALUE, "#PM_Lat", o.Lat.Value]), n.push([FIELD_MAPPING_VALUE, "#PM_Lon", o.Lon.Value]), 0 === o.Lon.Value && 0 === o.Lat.Value && (o = e.GetNextWPPosition()), void 0 !== o && o ? (n.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", o.Lat.ToString()]), n.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", o.Lon.ToString()])) : (n.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", "N/A"]), n.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", "N/A"])), parseInt(e.VLMInfo.PIM, 10) === PM_ANGLE ? (n.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(e.VLMInfo.PIP), 1)]), n.push([FIELD_MAPPING_VALUE, "#PM_Angle", e.VLMInfo.PIP])) : (n.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(e.VLMInfo.TWA), 1)]), n.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(e.VLMInfo.TWA, 1)])), FillFieldsFromMappingTable(n);
+  var r = "lime";
+  e.VLMInfo.TWA > 0 && (r = "red"), $(".BoatWindAngle").css("color", r);
+  var s = Math.round(100 * (e.VLMInfo.TWD + 180)) / 100,
+      l = (Math.round(100 * e.VLMInfo.TWS), e.VLMInfo.POL),
+      d = Math.round(100 * e.VLMInfo.HDG) / 100,
+      u = Math.round(100 * e.VLMInfo.TWS) / 100,
+      c = Math.round(100 * e.VLMInfo.ORT) / 100;
+  $("#ImgWindAngle").attr("src", "windangle.php?wheading=" + s + "&boatheading=" + d + "&wspeed=" + u + "&roadtoend=" + c + "&boattype=" + l + "&jvlm=" + e.VLMInfo.NOW), $("#ImgWindAngle").css("transform", "rotate(" + s + "deg)"), $("#DeckImage").css("transform", "rotate(" + d + "deg)"), $(".PMActiveMode").css("display", "none"), $(".BCPane").removeClass("active");
+  var h = ".ActiveMode_",
+      p = "";
 
-  if (!Boat || typeof Boat === "undefined") {
-    return;
-  }
-
-  HandleRacingDockingButtons(true); // Put a sign to the TWA
-
-  SetTWASign(Boat); // Fix HDG when boat is mooring
-
-  if (Boat.VLMInfo.PIM === "2" && Boat.VLMInfo.PIP === "0") {
-    // Mooring 
-    Boat.VLMInfo.HDG = Boat.VLMInfo.TWD;
-    Boat.VLMInfo.BSP = 0;
-  } // Update GUI for current player
-  // Todo Get Rid of Coords Class
-
-
-  var lon = new Coords(Boat.VLMInfo.LON, true);
-  var lat = new Coords(Boat.VLMInfo.LAT); // Create field mapping array
-  // 0 for text fields
-  // 1 for input fields
-
-  var BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP, 2)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(Boat.VLMInfo.HDG, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(Boat.VLMInfo.HDG, 2)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatAvg", RoundPow(Boat.VLMInfo.AVG, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatDNM", RoundPow(Boat.VLMInfo.DNM, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoch", RoundPow(Boat.VLMInfo.LOC, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatOrtho", RoundPow(Boat.VLMInfo.ORT, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLoxo", RoundPow(Boat.VLMInfo.LOX, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatVMG", RoundPow(Boat.VLMInfo.VMG, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindSpeed", RoundPow(Boat.VLMInfo.TWS, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatWindDirection", RoundPow(Boat.VLMInfo.TWD, 1)]);
-  BoatFieldMappings.push([FIELD_MAPPING_CHECK, "#PM_WithWPHeading", Boat.VLMInfo['H@WP'] !== "-1.0"]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RankingBadge", Boat.VLMInfo.RNK]);
-  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_WPHeading", Boat.VLMInfo['H@WP']]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName", Boat.VLMInfo.RAN]);
-  var WP = new VLMPosition(Boat.VLMInfo.WPLON, Boat.VLMInfo.WPLAT);
-  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Lat", WP.Lat.Value]);
-  BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Lon", WP.Lon.Value]);
-
-  if (WP.Lon.Value === 0 && WP.Lat.Value === 0) {
-    WP = Boat.GetNextWPPosition();
-  }
-
-  if (typeof WP !== "undefined" && WP) {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
-  } else {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", "N/A"]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", "N/A"]);
-  }
-
-  if (parseInt(Boat.VLMInfo.PIM, 10) === PM_ANGLE) {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.PIP), 1)]);
-    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", Boat.VLMInfo.PIP]);
-  } else {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.TWA), 1)]);
-    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.TWA, 1)]);
-  }
-
-  FillFieldsFromMappingTable(BoatFieldMappings); // Change color depênding on windangle
-
-  var WindColor = "lime";
-
-  if (Boat.VLMInfo.TWA > 0) {
-    WindColor = "red";
-  }
-
-  $(".BoatWindAngle").css("color", WindColor); // Get WindAngleImage
-
-  var wHeading = Math.round((Boat.VLMInfo.TWD + 180) * 100) / 100;
-  var wSpeed = Math.round(Boat.VLMInfo.TWS * 100) / 100;
-  var BoatType = Boat.VLMInfo.POL;
-  var BoatHeading = Math.round(Boat.VLMInfo.HDG * 100) / 100;
-  var WindSpeed = Math.round(Boat.VLMInfo.TWS * 100) / 100;
-  var OrthoToWP = Math.round(Boat.VLMInfo.ORT * 100) / 100;
-  $("#ImgWindAngle").attr('src', 'windangle.php?wheading=' + wHeading + '&boatheading=' + BoatHeading + '&wspeed=' + WindSpeed + '&roadtoend=' + OrthoToWP + '&boattype=' + BoatType + "&jvlm=" + Boat.VLMInfo.NOW);
-  $("#ImgWindAngle").css("transform", "rotate(" + wHeading + "deg)");
-  $("#DeckImage").css("transform", "rotate(" + BoatHeading + "deg)"); // Set active PM mode display
-
-  $(".PMActiveMode").css("display", "none");
-  $(".BCPane").removeClass("active");
-  var TabID = ".ActiveMode_";
-  var ActivePane = "";
-
-  switch (Boat.VLMInfo.PIM) {
+  switch (e.VLMInfo.PIM) {
     case "1":
-      TabID += 'Heading';
-      ActivePane = "BearingMode";
+      h += "Heading", p = "BearingMode";
       break;
 
     case "2":
-      TabID += 'Angle';
-      ActivePane = "AngleMode";
+      h += "Angle", p = "AngleMode";
       break;
 
     case "3":
-      TabID += 'Ortho';
-      ActivePane = "OrthoMode";
+      h += "Ortho", p = "OrthoMode";
       break;
 
     case "4":
-      TabID += 'VMG';
-      ActivePane = "VMGMode";
+      h += "VMG", p = "VMGMode";
       break;
 
     case "5":
-      TabID += 'VBVMG';
-      ActivePane = "VBVMGMode";
+      h += "VBVMG", p = "VBVMGMode";
       break;
 
     default:
       VLMAlert("Unsupported VLM PIM Mode, expect the unexpected....", "alert-info");
-  } // Override PIM Tab if requested
+  }
 
-  /*if (typeof TargetTab !== "undefined" && TargetTab=='AutoPilot')
-  {
-    TabID+='AutoPilotTab';
-    ActivePane=TargetTab;
-    UpdatePilotInfo(Boat);
-  }*/
-
-
-  $(TabID).css("display", "inline");
-  $("." + ActivePane).addClass("active");
-  $("#" + ActivePane).addClass("active");
-  UpdatePilotInfo(Boat);
-  UpdatePolarImages(Boat);
+  $(h).css("display", "inline"), $("." + p).addClass("active"), $("#" + p).addClass("active"), UpdatePilotInfo(e), UpdatePolarImages(e);
 }
 
-function FillFieldsFromMappingTable(MappingTable) {
-  // Loop all mapped fields to their respective location
-  for (var _index6 in MappingTable) {
-    if (MappingTable[_index6]) {
-      switch (MappingTable[_index6][0]) {
-        case FIELD_MAPPING_TEXT:
-          $(MappingTable[_index6][1]).text(MappingTable[_index6][2]);
-          break;
+function FillFieldsFromMappingTable(e) {
+  for (var t in e) {
+    if (e[t]) switch (e[t][0]) {
+      case FIELD_MAPPING_TEXT:
+        $(e[t][1]).text(e[t][2]);
+        break;
 
-        case FIELD_MAPPING_VALUE:
-          $(MappingTable[_index6][1]).val(MappingTable[_index6][2]);
-          break;
+      case FIELD_MAPPING_VALUE:
+        $(e[t][1]).val(e[t][2]);
+        break;
 
-        case FIELD_MAPPING_CHECK:
-          $(MappingTable[_index6][1]).prop('checked', MappingTable[_index6][2]);
-          break;
+      case FIELD_MAPPING_CHECK:
+        $(e[t][1]).prop("checked", e[t][2]);
+        break;
 
-        case FIELD_MAPPING_IMG:
-          $(MappingTable[_index6][1]).attr('src', MappingTable[_index6][2]);
-          break;
+      case FIELD_MAPPING_IMG:
+        $(e[t][1]).attr("src", e[t][2]);
+        break;
 
-        case FIELD_MAPPING_CALLBACK:
-          MappingTable[_index6][2](MappingTable[_index6][1]);
-
-          break;
-      }
+      case FIELD_MAPPING_CALLBACK:
+        e[t][2](e[t][1]);
     }
   }
 }
 
-function FillRaceInstructions(RaceInfo) {
-  if (typeof RaceInfo === "undefined" || !RaceInfo) {
-    return;
-  }
-
-  var HideDiscontinueTab = true;
-
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo) {
-    HideDiscontinueTab = _CurPlayer.CurBoat.RaceInfo.idraces !== RaceInfo.idraces;
-  }
-
-  if (HideDiscontinueTab) {
-    $("#DiscontinueRaceTab").addClass("hidden");
-  } else {
-    $("#DiscontinueRaceTab").removeClass("hidden");
-  }
-
-  var Instructions = [];
-  FillRaceInfoHeader(RaceInfo);
-  FillRaceWaypointList(RaceInfo);
-  InitPolar(RaceInfo);
-  $.get("/ws/raceinfo/exclusions.php?idr=" + RaceInfo.idraces + "&v=" + RaceInfo.VER, function (result) {
-    if (result && result.success) {
-      FillNSZList(result.Exclusions);
-    }
+function FillRaceInstructions(e) {
+  if (void 0 === e || !e) return;
+  var t = !0;
+  void 0 !== _CurPlayer && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && (t = _CurPlayer.CurBoat.RaceInfo.idraces !== e.idraces), t ? $("#DiscontinueRaceTab").addClass("hidden") : $("#DiscontinueRaceTab").removeClass("hidden");
+  FillRaceInfoHeader(e), FillRaceWaypointList(e), InitPolar(e), $.get("/ws/raceinfo/exclusions.php?idr=" + e.idraces + "&v=" + e.VER, function (e) {
+    e && e.success && FillNSZList(e.Exclusions);
   });
 }
 
-var PolarSliderInited = false;
+var PolarSliderInited = !1;
 
-function FillRaceInfoHeader(RaceInfo) {
-  if (typeof RaceInfo === 'undefined' || !RaceInfo) {
-    return;
-  }
-
-  var BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".ICSRaceName", RaceInfo.racename]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId", RaceInfo.idraces]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true, true)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000, true, true)]);
-  BoatFieldMappings.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + RaceInfo.idraces + ".png"]);
-  FillFieldsFromMappingTable(BoatFieldMappings);
+function FillRaceInfoHeader(e) {
+  if (void 0 === e || !e) return;
+  var t = [];
+  t.push([FIELD_MAPPING_TEXT, ".ICSRaceName", e.racename]), t.push([FIELD_MAPPING_TEXT, ".RaceId", e.idraces]), t.push([FIELD_MAPPING_TEXT, ".BoatType", e.boattype.substring(5)]), t.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(e.vacfreq, 10)]), t.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(e.firstpcttime, 10)]), t.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(1e3 * parseInt(e.deptime, 10), !0, !0)]), t.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(1e3 * parseInt(e.closetime, 10), !0, !0)]), t.push([FIELD_MAPPING_IMG, "#RaceImageMap", "/cache/racemaps/" + e.idraces + ".png"]), FillFieldsFromMappingTable(t);
 }
 
-function HandlePolarSpeedSlide(event, ui, RaceInfo) {
-  var handle = $("#PolarSpeedHandle");
-  handle.text(ui.value);
-  DrawPolar(RaceInfo);
+function HandlePolarSpeedSlide(e, t, a) {
+  $("#PolarSpeedHandle").text(t.value), DrawPolar(a);
 }
 
-function DrawPolar(RaceInfo) {
-  var Canvas = $("#PolarCanvas")[0];
-  var WindSpeed = 25;
-
-  if (PolarSliderInited) {
-    WindSpeed = parseFloat($("#PolarSpeedHandle").text());
-  }
-
-  var PolarLine = PolarsManager.GetPolarLine(RaceInfo.boattype, WindSpeed, function () {
-    DrawPolar(RaceInfo);
+function DrawPolar(e) {
+  var t = $("#PolarCanvas")[0],
+      a = 25;
+  PolarSliderInited && (a = parseFloat($("#PolarSpeedHandle").text()));
+  var i = PolarsManager.GetPolarLine(e.boattype, a, function () {
+    DrawPolar(e);
   }, null, 1);
 
-  if (PolarLine) {
-    if (!PolarSliderInited) {
-      InitSlider("PolarSpeedSlider", "PolarSpeedHandle", 0, 60, WindSpeed, function (e, ui) {
-        HandlePolarSpeedSlide(e, ui, RaceInfo);
-      });
-      PolarSliderInited = true;
-    }
+  if (i) {
+    PolarSliderInited || (InitSlider("PolarSpeedSlider", "PolarSpeedHandle", 0, 60, a, function (t, a) {
+      HandlePolarSpeedSlide(t, a, e);
+    }), PolarSliderInited = !0), t.width = $("#PolarCanvas").width(), t.height = t.width;
 
-    Canvas.width = $("#PolarCanvas").width();
-    Canvas.height = Canvas.width;
-    var Context = Canvas.getContext("2d");
-    var First = true;
-    var dAlpha = Math.PI / PolarLine.length; // Not counting 0 helps here
+    var n,
+        o,
+        r = t.getContext("2d"),
+        s = !0,
+        _l = Math.PI / i.length,
+        d = 3,
+        u = t.width / 2,
+        c = t.width / 2,
+        h = PolarsManager.GetPolarMaxSpeed(e.boattype, a),
+        p = 0,
+        f = 0,
+        P = !0;
 
-    var Cx = 3;
-    var Cy = Canvas.width / 2;
-    var S = Canvas.width / 2;
-    var MaxSpeed = PolarsManager.GetPolarMaxSpeed(RaceInfo.boattype, WindSpeed);
-    var PrevL = 0;
-    var VMGAngle = 0;
-    var RedZone = true;
-    var PrevX;
-    var PrevY;
-    Context.beginPath();
-    Context.lineWidth = "1";
-    Context.strokeStyle = "#FF0000";
+    r.beginPath(), r.lineWidth = "1", r.strokeStyle = "#FF0000";
 
-    for (var _index7 in PolarLine) {
-      if (PolarLine[_index7]) {
-        var _l = PolarLine[_index7];
-        _index7 = parseInt(_index7, 10);
-        var a = _index7 * dAlpha;
-        var y = Cy + S * _l * Math.cos(a);
-        var x = Cx + S * _l * Math.sin(a);
+    for (var _e9 in i) {
+      if (i[_e9]) {
+        var _t9 = i[_e9],
+            _a4 = (_e9 = parseInt(_e9, 10)) * _l,
+            _h = u + c * _t9 * Math.cos(_a4),
+            _g = d + c * _t9 * Math.sin(_a4),
+            L = Math.cos(_a4 + f) * _t9;
 
-        var VMG = Math.cos(a + VMGAngle) * _l;
-
-        if (RedZone && VMG <= PrevL) {
-          Context.stroke();
-          Context.beginPath();
-          Context.moveTo(PrevX, PrevY);
-          Context.strokeStyle = "#FFFFFF";
-          RedZone = false;
-        } else if (!RedZone && VMG >= PrevL) {
-          Context.stroke();
-          Context.beginPath();
-          Context.moveTo(PrevX, PrevY);
-          Context.strokeStyle = "#FF0000";
-          RedZone = true;
-        }
-
-        PrevL = VMG;
-
-        if (First) {
-          Context.moveTo(x, y);
-          First = false;
-        } else {
-          Context.lineTo(x, y);
-        }
-
-        PrevX = x;
-        PrevY = y;
+        P && L <= p ? (r.stroke(), r.beginPath(), r.moveTo(n, o), r.strokeStyle = "#FFFFFF", P = !1) : !P && L >= p && (r.stroke(), r.beginPath(), r.moveTo(n, o), r.strokeStyle = "#FF0000", P = !0), p = L, s ? (r.moveTo(_g, _h), s = !1) : r.lineTo(_g, _h), n = _g, o = _h;
       }
     }
 
-    Context.stroke(); // Draw it
-    // Draw axes
+    r.stroke(), r.beginPath(), r.lineWidth = "1", r.strokeStyle = "#00FF00", r.moveTo(d, 0), r.lineTo(d, t.height), r.stroke(), r.moveTo(d - 1, t.height / 2), r.lineTo(d + t.width, t.height / 2), r.stroke();
+    var g = Math.round(h / 5);
 
-    Context.beginPath();
-    Context.lineWidth = "1";
-    Context.strokeStyle = "#00FF00";
-    Context.moveTo(Cx, 0);
-    Context.lineTo(Cx, Canvas.height);
-    Context.stroke();
-    Context.moveTo(Cx - 1, Canvas.height / 2);
-    Context.lineTo(Cx + Canvas.width, Canvas.height / 2);
-    Context.stroke(); // Draw Speed circles & legends
-
-    var As = Math.round(MaxSpeed / 5);
-
-    if (!As) {
-      As = 1;
-    }
-
-    for (index = 1; As * index - 1 <= MaxSpeed; index++) {
-      Context.beginPath();
-      Context.strokeStyle = "#7FFFFF";
-      Context.arc(Cx, Cy, S * index * As / MaxSpeed, Math.PI / 2, 1.5 * Math.PI, true);
-      Context.stroke();
-      Context.strokeText(" " + As * index, Cx + 1 + As * S * index / MaxSpeed, Cy + 10);
+    for (g || (g = 1), index = 1; g * index - 1 <= h; index++) {
+      r.beginPath(), r.strokeStyle = "#7FFFFF", r.arc(d, u, c * index * g / h, Math.PI / 2, 1.5 * Math.PI, !0), r.stroke(), r.strokeText(" " + g * index, d + 1 + g * c * index / h, u + 10);
     }
   }
 }
 
-function UpdatePolarImages(Boat) {
-  var PolarName = Boat.VLMInfo.POL.substring(5);
-  var Angle;
-  var HTML = "";
+function UpdatePolarImages(e) {
+  var t,
+      a = e.VLMInfo.POL.substring(5),
+      i = "";
 
-  for (Angle = 0; Angle <= 45; Angle += 15) {
-    HTML += '<li><img class="polaire" src="/scaledspeedchart.php?boattype=boat_' + PolarName + '&amp;minws=' + Angle + '&amp;maxws=' + (Angle + 15) + '&amp;pas=2" alt="speedchart"></li>';
+  for (t = 0; t <= 45; t += 15) {
+    i += '<li><img class="polaire" src="/scaledspeedchart.php?boattype=boat_' + a + "&amp;minws=" + t + "&amp;maxws=" + (t + 15) + '&amp;pas=2" alt="speedchart"></li>';
   }
 
-  $("#PolarList").empty();
-  $("#PolarList").append(HTML);
+  $("#PolarList").empty(), $("#PolarList").append(i);
 }
 
-function BackupFooTable(ft, TableId, RestoreId) {
-  if (!ft.DOMBackup) {
-    ft.DOMBackup = $(TableId);
-    ft.RestoreId = RestoreId;
-  } else if (typeof $(TableId)[0] === "undefined") {
-    $(ft.RestoreId).append(ft.DOMBackup);
-    console.log("Restored footable " + TableId);
-  }
+function BackupFooTable(e, t, a) {
+  e.DOMBackup ? void 0 === $(t)[0] && ($(e.RestoreId).append(e.DOMBackup), console.log("Restored footable " + t)) : (e.DOMBackup = $(t), e.RestoreId = a);
 }
 
-function UpdatePilotInfo(Boat) {
-  if (typeof Boat === "undefined" || !Boat || PilototoFt.DrawPending) {
-    return;
-  }
-
+function UpdatePilotInfo(e) {
+  if (void 0 === e || !e || PilototoFt.DrawPending) return;
   BackupFooTable(PilototoFt, "#PilototoTable", "#PilototoTableInsertPoint");
-  var PilRows = [];
+  var t = [];
 
-  if (Boat && Boat.VLMInfo && Boat.VLMInfo.PIL && Boat.VLMInfo.PIL.length > 0) {
-    for (var _index8 in Boat.VLMInfo.PIL) {
-      if (Boat.VLMInfo.PIL[_index8]) {
-        var PilLine = GetPilototoTableLigneObject(Boat, _index8);
-        PilRows.push(PilLine);
+  if (e && e.VLMInfo && e.VLMInfo.PIL && e.VLMInfo.PIL.length > 0) {
+    for (var i in e.VLMInfo.PIL) {
+      if (e.VLMInfo.PIL[i]) {
+        var a = GetPilototoTableLigneObject(e, i);
+        t.push(a);
       }
     }
 
-    if (Boat.VLMInfo.PIL.length < MAX_PILOT_ORDERS) {
-      $("#AutoPilotAddButton").removeClass("hidden");
-    } else {
-      $("#AutoPilotAddButton").addClass("hidden");
-    }
+    e.VLMInfo.PIL.length < MAX_PILOT_ORDERS ? $("#AutoPilotAddButton").removeClass("hidden") : $("#AutoPilotAddButton").addClass("hidden");
   }
 
-  PilototoFt.DrawPending = true;
-  PilototoFt.loadRows(PilRows, false);
-  console.log("loaded pilototo table");
-  UpdatePilotBadge(Boat);
+  PilototoFt.DrawPending = !0, PilototoFt.loadRows(t, !1), console.log("loaded pilototo table"), UpdatePilotBadge(e);
 }
 
-function HandleReadyTable(e, ft) {
-  console.log("Table ready" + ft);
-  ft.DrawPending = false;
-
-  if (ft.OnReadyTable) {
-    ft.OnReadyTable();
-  }
+function HandleReadyTable(e, t) {
+  console.log("Table ready" + t), t.DrawPending = !1, t.OnReadyTable && t.OnReadyTable();
 }
 
-function HandlePagingComplete(e, ft) {
-  var classes = {
+function HandlePagingComplete(e, t) {
+  var a,
+      i = {
     ft_class_myboat: "rnk-myboat",
     ft_class_friend: "rnk-friend",
     ft_class_oncoast: "rnk-oncoast",
@@ -5236,525 +2564,321 @@ function HandlePagingComplete(e, ft) {
     ft_class_locked: "rnk-locked",
     ft_class_dns: "rnk-dns"
   };
-  var index;
 
-  for (var _index9 in classes) {
-    if (classes[_index9]) {
-      $('td').closest('tr').removeClass(classes[_index9]);
-    }
+  for (var _e10 in i) {
+    i[_e10] && $("td").closest("tr").removeClass(i[_e10]);
   }
 
-  for (index in classes) {
-    if (classes[index]) {
-      $('td:contains("' + index + '")').closest('tr').addClass(classes[index]);
-    }
+  for (a in i) {
+    i[a] && $('td:contains("' + a + '")').closest("tr").addClass(i[a]);
   }
 
-  ft.DrawPending = false;
+  t.DrawPending = !1;
 }
 
-function HandleTableDrawComplete(e, ft) {
-  console.log("TableDrawComplete " + ft.id);
-  ft.DrawPending = false;
-
-  if (ft === RankingFt) {
-    setTimeout(function () {
-      DeferedGotoPage(e, ft);
-    }, 500);
-  } else if (ft.CallbackPending) {
-    setTimeout(function () {
-      ft.CallbackPending();
-      ft.CallbackPending = null;
-    }, 500);
-    return;
-  }
+function HandleTableDrawComplete(e, t) {
+  if (console.log("TableDrawComplete " + t.id), t.DrawPending = !1, t === RankingFt) setTimeout(function () {
+    DeferedGotoPage(e, t);
+  }, 500);else if (t.CallbackPending) return void setTimeout(function () {
+    t.CallbackPending(), t.CallbackPending = null;
+  }, 500);
 }
 
-function DeferedGotoPage(e, ft) {
-  if (RankingFt.TargetPage) {
-    RankingFt.gotoPage(RankingFt.TargetPage);
-    RankingFt.TargetPage = 0;
-  }
-
-  setTimeout(function () {
-    DeferedPagingStyle(e, ft);
+function DeferedGotoPage(e, t) {
+  RankingFt.TargetPage && (RankingFt.gotoPage(RankingFt.TargetPage), RankingFt.TargetPage = 0), setTimeout(function () {
+    DeferedPagingStyle(e, t);
   }, 200);
 }
 
-function DeferedPagingStyle(e, ft) {
-  HandlePagingComplete(e, ft);
+function DeferedPagingStyle(e, t) {
+  HandlePagingComplete(e, t);
 }
 
-function GetPilototoTableLigneObject(Boat, Index) {
-  var PilOrder = Boat.VLMInfo.PIL[Index];
-  var OrderDate = GetLocalUTCTime(PilOrder.TTS * 1000, true, true);
-  var PIMText = GetPilotModeName(PilOrder.PIM); // Force as number and rebase from 1
-
-  Index = parseInt(Index, 10) + 1; // Adapt the template to current order
-
-  $("#EditCellTemplate .PIL_EDIT").attr('pil_id', Index);
-  $("#DeleteCellTemplate .PIL_DELETE").attr("TID", PilOrder.TID).attr('pil_id', Index);
-  var Ret = {
-    date: OrderDate,
-    PIM: PIMText,
-    PIP: PilOrder.PIP,
-    Status: PilOrder.STS,
+function GetPilototoTableLigneObject(e, t) {
+  var a = e.VLMInfo.PIL[t],
+      i = GetLocalUTCTime(1e3 * a.TTS, !0, !0),
+      n = GetPilotModeName(a.PIM);
+  return t = parseInt(t, 10) + 1, $("#EditCellTemplate .PIL_EDIT").attr("pil_id", t), $("#DeleteCellTemplate .PIL_DELETE").attr("TID", a.TID).attr("pil_id", t), {
+    date: i,
+    PIM: n,
+    PIP: a.PIP,
+    Status: a.STS,
     Edit: $("#EditCellTemplate").first().html(),
     Delete: $("#DeleteCellTemplate").first().html()
   };
-  return Ret;
 }
 
-function ShowAutoPilotLine(Boat, Index) {
-  var Id = "#PIL" + Index;
-  var PilOrder = Boat.VLMInfo.PIL[Index - 1];
-  var OrderDate = new Date(PilOrder.TTS * 1000);
-  var PIMText = GetPilotModeName(PilOrder.PIM);
+function ShowAutoPilotLine(e, t) {
+  var a = "#PIL" + t,
+      i = e.VLMInfo.PIL[t - 1],
+      n = new Date(1e3 * i.TTS),
+      o = GetPilotModeName(i.PIM);
+  if (void 0 === $(a)[0]) ;
+  $(a)[0].attributes.TID = i.TID, SetSubItemValue(a, "#PIL_DATE", n), SetSubItemValue(a, "#PIL_PIM", o), SetSubItemValue(a, "#PIL_PIP", i.PIP), SetSubItemValue(a, "#PIL_STATUS", i.STS), $(a).show();
+}
 
-  if (typeof $(Id)[0] === "undefined") {
-    var bpkt = 0;
+function GetPILIdParentElement(e) {
+  for (var t = e;;) {
+    if (void 0 === t) return;
+
+    if ("id" in t.attributes) {
+      var a = t.attributes.id.value;
+      if (4 === a.length && "PIL" === a.substring(0, 3)) return t;
+    }
+
+    t = t.parentElement;
   }
-
-  $(Id)[0].attributes.TID = PilOrder.TID;
-  SetSubItemValue(Id, "#PIL_DATE", OrderDate);
-  SetSubItemValue(Id, "#PIL_PIM", PIMText);
-  SetSubItemValue(Id, "#PIL_PIP", PilOrder.PIP);
-  SetSubItemValue(Id, "#PIL_STATUS", PilOrder.STS);
-  $(Id).show();
-}
-
-function GetPILIdParentElement(item) {
-  var done = false;
-  var RetValue = item;
-
-  do {
-    if (typeof RetValue === "undefined") {
-      return;
-    }
-
-    if ('id' in RetValue.attributes) {
-      var ItemId = RetValue.attributes.id.value;
-
-      if (ItemId.length === 4 && ItemId.substring(0, 3) === "PIL") {
-        return RetValue;
-      }
-    }
-
-    RetValue = RetValue.parentElement;
-  } while (!done);
 }
 
 function HandlePilotEditDelete(e) {
-  var ClickedItem = $(this)[0];
-  var ItemId = ClickedItem.attributes['class'].value;
-  var Boat = _CurPlayer.CurBoat;
-  var OrderIndex = parseInt(ClickedItem.attributes.pil_id.value, 10);
-
-  if (ItemId === "PIL_EDIT") {
-    HandleOpenAutoPilotSetPoint(e);
-  } else if (ItemId === "PIL_DELETE") {
-    DeletePilotOrder(Boat, ClickedItem.attributes.TID.value);
-  }
+  var t = $(this)[0],
+      a = t.attributes.class.value,
+      i = _CurPlayer.CurBoat;
+  parseInt(t.attributes.pil_id.value, 10);
+  "PIL_EDIT" === a ? HandleOpenAutoPilotSetPoint(e) : "PIL_DELETE" === a && DeletePilotOrder(i, t.attributes.TID.value);
 }
 
-function GetPilotModeName(PIM) {
-  switch (parseInt(PIM, 10)) {
+function GetPilotModeName(e) {
+  switch (parseInt(e, 10)) {
     case 1:
-      return GetLocalizedString('autopilotengaged');
+      return GetLocalizedString("autopilotengaged");
 
     case 2:
-      return GetLocalizedString('constantengaged');
+      return GetLocalizedString("constantengaged");
 
     case 3:
-      return GetLocalizedString('orthoengaged');
+      return GetLocalizedString("orthoengaged");
 
     case 4:
-      return GetLocalizedString('bestvmgengaged');
+      return GetLocalizedString("bestvmgengaged");
 
     case 5:
-      return GetLocalizedString('vbvmgengaged');
+      return GetLocalizedString("vbvmgengaged");
 
     default:
-      return "PIM ???" + PIM + "???";
+      return "PIM ???" + e + "???";
   }
 }
 
-function SetSubItemValue(SourceElementName, TargetElementName, NewVaue) {
-  var El = $(SourceElementName).find(TargetElementName);
-
-  if (El.length > 0) {
-    El.text(NewVaue);
-  }
+function SetSubItemValue(e, t, a) {
+  var i = $(e).find(t);
+  i.length > 0 && i.text(a);
 }
 
-function UpdatePilotBadge(Boat) {
-  var index;
-  var PendingOrdersCount = 0;
+function UpdatePilotBadge(e) {
+  var t,
+      a = 0;
 
-  if (typeof Boat === "undefined" || !Boat) {
-    return;
-  }
-
-  var Pilot = Boat.VLMInfo.PIL;
-
-  if (Pilot.length) {
-    for (index in Pilot) {
-      if (Pilot[index].STS === "pending") {
-        PendingOrdersCount++;
-      }
+  if (void 0 !== e && e) {
+    var i = e.VLMInfo.PIL;
+    if (i.length) for (t in i) {
+      "pending" === i[t].STS && a++;
     }
-  }
-
-  if (PendingOrdersCount > 0) {
-    $(".PilotOrdersBadge").show();
-    $(".PilotOrdersBadge").text(PendingOrdersCount);
-  } else {
-    $(".PilotOrdersBadge").hide();
+    a > 0 ? ($(".PilotOrdersBadge").show(), $(".PilotOrdersBadge").text(a)) : $(".PilotOrdersBadge").hide();
   }
 }
 
-function MoveWPBoatControlerDiv(target) {
-  var div = $(target).prepend($("#PM_WPMode_Div"));
+function MoveWPBoatControlerDiv(e) {
+  $(e).prepend($("#PM_WPMode_Div"));
 }
 
-function UpdatePrefsDialog(Boat) {
-  // Hide prefs setting button is not boat or no vlminfo yet...
-  if (typeof Boat === "undefined") {
-    $("#BtnSetting").addClass("hidden");
-  } else {
-    $("#BtnSetting").removeClass("hidden");
-    $("#pref_boatname").val(Boat.BoatName);
-
-    if (typeof Boat.VLMInfo !== 'undefined') {
-      SelectCountryDDFlag(Boat.VLMInfo.CNT);
-      var ColString = SafeHTMLColor(Boat.VLMInfo.COL);
-      $("#pref_boatcolor").val(ColString);
-      $("#cp11").colorpicker({
-        useAlpha: false,
-        format: false,
-        color: ColString
-      });
-    }
+function UpdatePrefsDialog(e) {
+  if (void 0 === e) $("#BtnSetting").addClass("hidden");else if ($("#BtnSetting").removeClass("hidden"), $("#pref_boatname").val(e.BoatName), void 0 !== e.VLMInfo) {
+    SelectCountryDDFlag(e.VLMInfo.CNT);
+    var t = SafeHTMLColor(e.VLMInfo.COL);
+    $("#pref_boatcolor").val(t), $("#cp11").colorpicker({
+      useAlpha: !1,
+      format: !1,
+      color: t
+    });
   }
 }
 
-var RaceSorter = function RaceSortEvaluator(r1, r2) {
-  if (r1.CanJoin === r2.CanJoin) {
-    if (r1.deptime > r2.deptime) {
-      return -1;
-    } else if (r1.deptime === r2.deptime) {
-      if (r1.racename > r2.racename) {
-        return 1;
-      } else if (r1.racename === r2.racename) {
-        return 0;
-      } else {
-        return -1;
-      }
-    } else {
-      return 1;
-    }
-  } else if (r1.CanJoin) {
-    return 1;
-  } else {
-    return -1;
-  }
+var RaceSorter = function RaceSorter(e, t) {
+  return e.CanJoin === t.CanJoin ? e.deptime > t.deptime ? -1 : e.deptime === t.deptime ? e.racename > t.racename ? 1 : e.racename === t.racename ? 0 : -1 : 1 : e.CanJoin ? 1 : -1;
 };
 
 function LoadRacesList() {
-  var CurUser = _CurPlayer.CurBoat.IdBoat;
-  $.get("/ws/raceinfo/list.php?iduser=" + CurUser, function (result) {
-    var racelist = result; // Clear previous elements
-
+  var e = _CurPlayer.CurBoat.IdBoat;
+  $.get("/ws/raceinfo/list.php?iduser=" + e, function (e) {
+    var t = e;
     $("#RaceListPanel").empty();
-    var RaceArray = [];
+    var a = [];
 
-    for (var _index10 in racelist) {
-      if (racelist[_index10]) {
-        RaceArray.push(racelist[_index10]);
-      }
+    for (var _e11 in t) {
+      t[_e11] && a.push(t[_e11]);
     }
 
-    RaceArray.sort(RaceSorter);
+    a.sort(RaceSorter);
 
-    for (var _index11 in RaceArray) {
-      if (RaceArray[_index11]) {
-        AddRaceToList(RaceArray[_index11]);
-      }
+    for (var _e12 in a) {
+      a[_e12] && AddRaceToList(a[_e12]);
     }
   });
 }
 
-function AddRaceToList(race) {
-  var base = $("#RaceListPanel").first();
-  var d = new Date(0); // The there is the key, which sets the date to the epoch
-  //d.setUTCSeconds(utcSeconds);
+function AddRaceToList(e) {
+  var t,
+      a,
+      i = $("#RaceListPanel").first();
+  new Date(0);
 
-  var RaceJoinStateClass;
-  var StartMoment;
+  if (e.CanJoin) {
+    var _i2 = new Date();
 
-  if (race.CanJoin) {
-    var Now = new Date();
-    var RaceStart = new Date(race.deptime * 1000);
+    new Date(1e3 * e.deptime) <= _i2 ? (t = "CanJoinRace", a = GetLocalizedString("closerace") + " " + moment("/date(" + 1e3 * e.closetime + ")/").fromNow()) : (t = "CanJoinRaceNotStarted", a = GetLocalizedString("departuredate") + " " + moment("/date(" + 1e3 * e.deptime + ")/").fromNow());
+  } else t = "NoJoinRace";
 
-    if (RaceStart <= Now) {
-      RaceJoinStateClass = 'CanJoinRace';
-      StartMoment = GetLocalizedString("closerace") + " " + moment("/date(" + race.closetime * 1000 + ")/").fromNow();
-    } else {
-      RaceJoinStateClass = 'CanJoinRaceNotStarted';
-      StartMoment = GetLocalizedString("departuredate") + " " + moment("/date(" + race.deptime * 1000 + ")/").fromNow();
-    }
-  } else {
-    RaceJoinStateClass = 'NoJoinRace';
-  }
-
-  var code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" )>' + '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' + '    <div class="col-xs-4">' + '      <img class="racelistminimap" src="/cache/minimaps/' + race.idraces + '.png" ></img>' + '    </div>' + '    <div class="col-xs-4">' + '      <span ">' + race.racename + '      </span>' + '    </div>' + '    <div class="' + (race.CanJoin ? '' : 'hidden') + ' col-xs-4">' + '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") + '      </button>' + '    </div>' + (StartMoment ? '    <div class="col-xs-12">' + '       <span "> ' + StartMoment + '       </span>' + '    </div>' : "") + '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' + '  <div class="panel-body">' + '   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' + '    <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' + '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' + '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' + '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' + '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' + '    </div>' + '    <div class="col-xs-3"><p>' + '     <div class="col-xs-12">' + '      <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') + '     </div>' + '     <div class="col-xs-12 hidden">' + '      <button type="button" class="ShowRankingButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') + '     </div>' + '    </div>' + '   </div>' + '  </div>';
-  base.prepend(code); // Handler for the join race button
-
-  $("#JoinRaceButton").click(function (e) {
-    var RaceId = e.currentTarget.attributes.idrace.value;
-    EngageBoatInRace(RaceId, _CurPlayer.CurBoat.IdBoat);
-  }); // Handler for ShowICSButtons
-  //$(".ShowICSButton").on("click", HandleFillICSButton);
+  var n = '<div class="raceheaderline panel panel-default ' + t + '" )>  <div data-toggle="collapse" href="#RaceDescription' + e.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">    <div class="col-xs-4">      <img class="racelistminimap" src="/cache/minimaps/' + e.idraces + '.png" ></img>    </div>    <div class="col-xs-4">      <span ">' + e.racename + '      </span>    </div>    <div class="' + (e.CanJoin ? "" : "hidden") + ' col-xs-4">      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + e.idraces + '"  >' + GetLocalizedString("subscribe") + "      </button>    </div>" + (a ? '    <div class="col-xs-12">       <span "> ' + a + "       </span>    </div>" : "") + '  <div id="RaceDescription' + e.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">  <div class="panel-body">   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + e.idraces + '.png" width="530px"></div>    <div class="col-xs-9"><p>' + GetLocalizedString("race") + " : " + e.racename + "</p>     <p>Départ : " + GetLocalUTCTime(1e3 * e.deptime, !0, !0) + "</p>     <p>" + GetLocalizedString("boattype") + " : " + e.boattype.substring(5) + "</p>     <p>" + GetLocalizedString("crank") + " : " + e.vacfreq + "'</p>     <p>" + GetLocalizedString("closerace") + GetLocalUTCTime(1e3 * e.closetime, !0, !0) + '</p>    </div>    <div class="col-xs-3"><p>     <div class="col-xs-12">      <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + e.idraces + '"  >' + GetLocalizedString("ic") + '     </div>     <div class="col-xs-12 hidden">      <button type="button" class="ShowRankingButton btn-default btn-md" IdRace="' + e.idraces + '"  >' + GetLocalizedString("ranking") + "     </div>    </div>   </div>  </div>";
+  i.prepend(n), $("#JoinRaceButton").click(function (e) {
+    EngageBoatInRace(e.currentTarget.attributes.idrace.value, _CurPlayer.CurBoat.IdBoat);
+  });
 }
 
 function PageClock() {
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.CurBoat !== "undefined") {
-    // Display race clock if a racing boat is selected
-    var CurBoat = _CurPlayer.CurBoat;
+  if (void 0 !== _CurPlayer && _CurPlayer && void 0 !== _CurPlayer.CurBoat) {
+    var e = _CurPlayer.CurBoat;
 
-    if (typeof CurBoat !== "undefined" && typeof CurBoat.RaceInfo !== "undefined") {
-      var ClockValue = GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
-      var Chrono = $(".RaceChrono");
-
-      if (ClockValue < 0) {
-        Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
-      } else {
-        Chrono.addClass("ChronoRaceStarted").removeClass("ChronoRacePending");
-      }
-
-      $("#RefreshAge").text(moment(_CurPlayer.CurBoat.LastRefresh).fromNow());
-      var LastBoatUpdate = new Date(CurBoat.VLMInfo.LUP * 1000);
-      var TotalVac = CurBoat.VLMInfo.VAC;
-      var TimeToNextUpdate = TotalVac - (new Date() - LastBoatUpdate) / 1000 % TotalVac;
-      var Delay = 1000;
-
-      if (TimeToNextUpdate >= TotalVac - 1) {
-        Delay = 100;
-      }
-
-      $("#pbar_innerdivvac").css("width", +Math.round(TimeToNextUpdate % 60 * 100.0 / 60.0) + "px");
-      $("#pbar_innerdivmin").css("width", Math.round(TimeToNextUpdate / TotalVac * 100.0) + "px");
-      Chrono.text(GetFormattedChronoString(ClockValue));
+    if (void 0 !== e && void 0 !== e.RaceInfo) {
+      var t = GetRaceClock(e.RaceInfo, e.VLMInfo.UDT),
+          a = $(".RaceChrono");
+      t < 0 ? a.removeClass("ChronoRaceStarted").addClass("ChronoRacePending") : a.addClass("ChronoRaceStarted").removeClass("ChronoRacePending"), $("#RefreshAge").text(moment(_CurPlayer.CurBoat.LastRefresh).fromNow());
+      var i = new Date(1e3 * e.VLMInfo.LUP),
+          n = e.VLMInfo.VAC,
+          o = n - (new Date() - i) / 1e3 % n;
+      o >= n - 1 && 100, $("#pbar_innerdivvac").css("width", +Math.round(o % 60 * 100 / 60) + "px"), $("#pbar_innerdivmin").css("width", Math.round(o / n * 100) + "px"), a.text(GetFormattedChronoString(t));
     }
   }
 }
 
-function GetRaceClock(RaceInfo, UserStartTimeString) {
-  var CurDate = new Date();
-  var Epoch = new Date(RaceInfo.deptime * 1000);
+function GetRaceClock(e, t) {
+  var a = new Date(),
+      i = new Date(1e3 * e.deptime);
 
-  if (!(RaceInfo.racetype & RACE_TYPE_RECORD)) {
-    // non Permanent race chrono counts from race start time
-    return Math.floor((CurDate - Epoch) / 1000);
-  } else {
-    var UDT = parseInt(UserStartTimeString, 10);
-
-    if (UDT === -1) {
-      return 0;
-    } else {
-      var StartDate = new Date(UDT * 1000);
-      return Math.floor((CurDate - StartDate) / 1000);
-    }
-  }
-}
-
-function DisplayCurrentDDSelectedBoat(Boat) {
-  $('.BoatDropDown:first-child').html('<span BoatID=' + Boat.IdBoat + '>' + GetBoatInfoLine(Boat, Boat.IdBoat in _CurPlayer.Fleet) + '</span>' + '<span class="caret"></span>');
-}
-
-function PadLeftZero(v) {
-  if (v < 100) {
-    return ("00" + v).slice(-2);
-  } else {
-    return v;
-  }
-}
-
-function GetFormattedChronoString(Value) {
-  if (Value < 0) {
-    Value = -Value;
-  } else if (Value === 0) {
-    return "--:--:--";
+  if (e.racetype & RACE_TYPE_RECORD) {
+    var n = parseInt(t, 10);
+    if (-1 === n) return 0;
+    var o = new Date(1e3 * n);
+    return Math.floor((a - o) / 1e3);
   }
 
-  var Sec = PadLeftZero(Value % 60);
-  var Min = PadLeftZero(Math.floor(Value / 60) % 60);
-  var Hrs = PadLeftZero(Math.floor(Value / 3600) % 24);
-  var Days = PadLeftZero(Math.floor(Value / 3600 / 24));
-  var Ret = Hrs.toString() + ":" + Min.toString() + ":" + Sec.toString();
-
-  if (Days > 0) {
-    Ret = Days.toString() + " d " + Ret;
-  }
-
-  return Ret;
+  return Math.floor((a - i) / 1e3);
 }
 
-function RefreshCurrentBoat(SetCenterOnBoat, ForceRefresh, TargetTab) {
-  var BoatIDSpan = $('.BoatDropDown > span');
+function DisplayCurrentDDSelectedBoat(e) {
+  $(".BoatDropDown:first-child").html("<span BoatID=" + e.IdBoat + ">" + GetBoatInfoLine(e, e.IdBoat in _CurPlayer.Fleet) + '</span><span class="caret"></span>');
+}
 
-  if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in BoatIDSpan[0].attributes)) {
-    var BoatId = BoatIDSpan[0].attributes.BoatID.value;
-    SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat, ForceRefresh, TargetTab);
+function PadLeftZero(e) {
+  return e < 100 ? ("00" + e).slice(-2) : e;
+}
+
+function GetFormattedChronoString(e) {
+  if (e < 0) e = -e;else if (0 === e) return "--:--:--";
+  var t = PadLeftZero(e % 60),
+      a = PadLeftZero(Math.floor(e / 60) % 60),
+      i = PadLeftZero(Math.floor(e / 3600) % 24),
+      n = PadLeftZero(Math.floor(e / 3600 / 24)),
+      o = i.toString() + ":" + a.toString() + ":" + t.toString();
+  return n > 0 && (o = n.toString() + " d " + o), o;
+}
+
+function RefreshCurrentBoat(e, t, a) {
+  var i = $(".BoatDropDown > span");
+
+  if (void 0 !== i && void 0 !== i[0] && ("BoatId" in i[0].attributes || "boatid" in i[0].attributes)) {
+    SetCurrentBoat(GetBoatFromIdu(i[0].attributes.BoatID.value), e, t, a);
   }
 }
 
 function UpdateLngDropDown() {
-  // Init the language combo to current language
-  var lng = GetCurrentLocale();
-  $('#SelectionLanguageDropDown:first-child').html('<img class=" LngFlag" lang="' + lng + '" src="images/lng-' + lng + '.png" alt="' + lng + '">' + '<span class="caret"></span>');
+  var e = GetCurrentLocale();
+  $("#SelectionLanguageDropDown:first-child").html('<img class=" LngFlag" lang="' + e + '" src="images/lng-' + e + '.png" alt="' + e + '"><span class="caret"></span>');
 }
 
 var _CurAPOrder = null;
 
 function HandleOpenAutoPilotSetPoint(e) {
-  var Target = e.target;
-  var TargetId;
-
-  if ('id' in Target.attributes) {
-    TargetId = Target.attributes.id.nodeValue;
-  } else if ('class' in Target.attributes) {
-    TargetId = Target.attributes["class"].nodeValue;
-  } else {
-    VLMAlert("Something bad has happened reload this page....", "alert-danger");
-    return;
+  var t,
+      a = e.target;
+  if ("id" in a.attributes) t = a.attributes.id.nodeValue;else {
+    if (!("class" in a.attributes)) return void VLMAlert("Something bad has happened reload this page....", "alert-danger");
+    t = a.attributes.class.nodeValue;
   }
 
-  switch (TargetId) {
+  switch (t) {
     case "AutoPilotAddButton":
-      // Create a new autopilot order
       _CurAPOrder = new AutoPilotOrder();
       break;
 
     case "PIL_EDIT":
-      // Load AP Order from vlminfo structure
-      var OrderIndex = parseInt(Target.attributes.pil_id.value, 10);
-      _CurAPOrder = new AutoPilotOrder(_CurPlayer.CurBoat, OrderIndex);
-      $("#AutoPilotSettingForm").modal('show');
+      var i = parseInt(a.attributes.pil_id.value, 10);
+      _CurAPOrder = new AutoPilotOrder(_CurPlayer.CurBoat, i), $("#AutoPilotSettingForm").modal("show");
       break;
 
     default:
-      VLMalert("Something bad has happened reload this page....", "alert-danger");
-      return;
+      return void VLMalert("Something bad has happened reload this page....", "alert-danger");
   }
 
   RefreshAPDialogFields();
 }
 
 function RefreshAPDialogFields() {
-  // Update dialog content from APOrder object
-  $("#AP_Time").data('DateTimePicker').date(_CurAPOrder.Date);
-  $('#AP_PIM:first-child').html('<span>' + _CurAPOrder.GetPIMString() + '</span>' + '<span class="caret"></span>');
-  $("#AP_PIP").val(_CurAPOrder.PIP_Value);
-  $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value);
-  $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value);
-  $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle);
-  UpdatePIPFields(_CurAPOrder.PIM);
+  $("#AP_Time").data("DateTimePicker").date(_CurAPOrder.Date), $("#AP_PIM:first-child").html("<span>" + _CurAPOrder.GetPIMString() + '</span><span class="caret"></span>'), $("#AP_PIP").val(_CurAPOrder.PIP_Value), $("#AP_WPLat").val(_CurAPOrder.PIP_Coords.Lat.Value), $("#AP_WPLon").val(_CurAPOrder.PIP_Coords.Lon.Value), $("#AP_WPAt").val(_CurAPOrder.PIP_WPAngle), UpdatePIPFields(_CurAPOrder.PIM);
 }
 
-function HandleDateChange(ev) {
-  _CurAPOrder.Date = ev.date;
+function HandleDateChange(e) {
+  _CurAPOrder.Date = e.date;
 }
 
 function HandleClickToSetWP() {
-  SetWPPending = true;
-  WPPendingTarget = "AP";
-  $("#AutoPilotSettingForm").modal("hide");
+  SetWPPending = !0, WPPendingTarget = "AP", $("#AutoPilotSettingForm").modal("hide");
 }
 
 function HandleAPModeDDClick(e) {
-  var NewMode = e.target.attributes.PIM.value;
-  _CurAPOrder.PIM = parseInt(NewMode, 10);
-  $('#AP_PIM:first-child').html('<span>' + _CurAPOrder.GetPIMString() + '</span>' + '<span class="caret"></span>');
-  UpdatePIPFields(_CurAPOrder.PIM);
+  var t = e.target.attributes.PIM.value;
+  _CurAPOrder.PIM = parseInt(t, 10), $("#AP_PIM:first-child").html("<span>" + _CurAPOrder.GetPIMString() + '</span><span class="caret"></span>'), UpdatePIPFields(_CurAPOrder.PIM);
 }
 
-function UpdatePIPFields(PIM) {
-  var IsPip = true;
+function UpdatePIPFields(e) {
+  var t = !0;
 
-  switch (PIM) {
+  switch (e) {
     case PM_HEADING:
     case PM_ANGLE:
-      IsPip = true;
+      t = !0;
       break;
 
     case PM_ORTHO:
     case PM_VMG:
     case PM_VBVMG:
-      IsPip = false;
-      break;
+      t = !1;
   }
 
-  if (IsPip) {
-    $(".AP_PIPRow").removeClass("hidden");
-    $(".AP_WPRow").addClass("hidden");
-  } else {
-    $(".AP_PIPRow").addClass("hidden");
-    $(".AP_WPRow").removeClass("hidden");
-  }
+  t ? ($(".AP_PIPRow").removeClass("hidden"), $(".AP_WPRow").addClass("hidden")) : ($(".AP_PIPRow").addClass("hidden"), $(".AP_WPRow").removeClass("hidden"));
 }
 
 function SaveBoatAndUserPrefs(e) {
-  // Check boat prefs
-  var NewVals = {};
-  var BoatUpdateRequired = false;
-  var PlayerUpdateRequired = false; // Get Theme
-
-  var NewTheme = $("#SelectionThemeDropDown").attr("SelTheme");
-
-  if (typeof NewTheme !== "undefined") {
-    VLM2Prefs.CurTheme = NewTheme;
-  }
-
-  VLM2Prefs.Save();
-
-  if (!ComparePrefString($("#pref_boatname")[0].value, _CurPlayer.CurBoat.BoatName)) {
-    NewVals.boatname = encodeURIComponent($("#pref_boatname")[0].value);
-    BoatUpdateRequired = true;
-  }
-
-  if (!ComparePrefString($("#pref_boatcolor")[0].value, SafeHTMLColor(_CurPlayer.CurBoat.VLMInfo.COL))) {
-    NewVals.color = $("#pref_boatcolor")[0].value.substring(1);
-    BoatUpdateRequired = true;
-  }
-
-  var NewCountry = GetPrefSelFlag();
-
-  if (!ComparePrefString(NewCountry, _CurPlayer.CurBoat.VLMInfo.CNT)) {
-    NewVals.country = encodeURIComponent(NewCountry);
-    BoatUpdateRequired = true;
-  } //NewVals["country"]=$("#FlagSelector")[0].value;
-  //NewVals["color"]=$("#pref_boatcolor")[0].value;
-
-
-  if (BoatUpdateRequired && typeof _CurPlayer !== "undefined" && _CurPlayer) {
-    UpdateBoatPrefs(_CurPlayer.CurBoat, {
-      prefs: NewVals
-    });
-  }
+  var t = {},
+      a = !1,
+      i = $("#SelectionThemeDropDown").attr("SelTheme");
+  void 0 !== i && (VLM2Prefs.CurTheme = i), VLM2Prefs.Save(), ComparePrefString($("#pref_boatname")[0].value, _CurPlayer.CurBoat.BoatName) || (t.boatname = encodeURIComponent($("#pref_boatname")[0].value), a = !0), ComparePrefString($("#pref_boatcolor")[0].value, SafeHTMLColor(_CurPlayer.CurBoat.VLMInfo.COL)) || (t.color = $("#pref_boatcolor")[0].value.substring(1), a = !0);
+  var n = GetPrefSelFlag();
+  ComparePrefString(n, _CurPlayer.CurBoat.VLMInfo.CNT) || (t.country = encodeURIComponent(n), a = !0), a && void 0 !== _CurPlayer && _CurPlayer && UpdateBoatPrefs(_CurPlayer.CurBoat, {
+    prefs: t
+  });
 }
 
 function GetPrefSelFlag() {
-  var Item = $('#CountryDropDown:first-child [flag]')[0];
-  return Item.attributes.flag.value;
+  return $("#CountryDropDown:first-child [flag]")[0].attributes.flag.value;
 }
 
-function ComparePrefString(Obj1, Obj2) {
-  return Obj1.toString() === Obj2.toString();
+function ComparePrefString(e, t) {
+  return e.toString() === t.toString();
 }
 
-function SelectCountryDDFlag(Country) {
-  $('#CountryDropDown:first-child').html('<div>' + GetCountryDropDownSelectorHTML(Country, false) + '<span class="caret"></span></div>');
+function SelectCountryDDFlag(e) {
+  $("#CountryDropDown:first-child").html("<div>" + GetCountryDropDownSelectorHTML(e, !1) + '<span class="caret"></span></div>');
 }
 
 function ResetCollapsiblePanels(e) {
@@ -5763,198 +2887,112 @@ function ResetCollapsiblePanels(e) {
 
 function HandleBoatSelectionChange(e) {
   ResetCollapsiblePanels();
-  var BoatId = $(e.target).closest('li').attr('BoatID');
-  var Boat = GetBoatFromIdu(BoatId);
-
-  if (typeof Boat === "undefined" || !Boat) {
-    VLMAlertDanger(GetLocalizedString('Error Reload'));
-    return;
-  }
-
-  SetCurrentBoat(Boat, true, false);
-  DisplayCurrentDDSelectedBoat(Boat);
+  var t = GetBoatFromIdu($(e.target).closest("li").attr("BoatID"));
+  void 0 !== t && t ? (SetCurrentBoat(t, !0, !1), DisplayCurrentDDSelectedBoat(t)) : VLMAlertDanger(GetLocalizedString("Error Reload"));
 }
 
 var LastMouseMoveCall = 0;
 
 function HandleMapMouseMove(e) {
-  if (GM_Pos && typeof _CurPlayer !== "undefined" && typeof _CurPlayer.CurBoat !== 'undefined' && typeof _CurPlayer.CurBoat.VLMInfo !== "undefined") {
-    var Pos = new VLMPosition(GM_Pos.lon, GM_Pos.lat);
-    var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);
+  if (GM_Pos && void 0 !== _CurPlayer && void 0 !== _CurPlayer.CurBoat && void 0 !== _CurPlayer.CurBoat.VLMInfo) {
+    var t = new VLMPosition(GM_Pos.lon, GM_Pos.lat),
+        a = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT),
+        i = _CurPlayer.CurBoat.GetNextWPPosition(),
+        n = null,
+        o = new Date() - LastMouseMoveCall > 300;
 
-    var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
-
-    var EstimatePos = null;
-    var Estimated = new Date() - LastMouseMoveCall > 300;
-
-    if (VLM2Prefs.MapPrefs.EstTrackMouse && Estimated) {
-      // Throttle estimate update to 3/sec
-      EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
-      LastMouseMoveCall = new Date();
-    }
-
-    $("#MI_Lat").text(Pos.Lat.ToString());
-    $("#MI_Lon").text(Pos.Lon.ToString());
-    $("#MI_LoxoDist").text(CurPos.GetLoxoDist(Pos, 2) + " nM");
-    $("#MI_OrthoDist").text(CurPos.GetOrthoDist(Pos, 2) + " nM");
-    $("#MI_Loxo").text(CurPos.GetLoxoCourse(Pos, 2) + " °");
-    $("#MI_Ortho").text(CurPos.GetOrthoCourse(Pos, 2) + " °");
-
-    if (typeof WPPos !== "undefined" && WPPos) {
-      $("#MI_WPLoxoDist").text(WPPos.GetLoxoDist(Pos, 2) + " nM");
-      $("#MI_WPOrthoDist").text(WPPos.GetOrthoDist(Pos, 2) + " nM");
-      $("#MI_WPLoxo").text(WPPos.GetLoxoCourse(Pos, 2) + " °");
-      $("#MI_WPOrtho").text(WPPos.GetOrthoCourse(Pos, 2) + " °");
-    } else {
-      $("#MI_WPLoxoDist").text("--- nM");
-      $("#MI_WPOrthoDist").text("--- nM");
-      $("#MI_WPLoxo").text("--- °");
-      $("#MI_WPOrtho").text("--- °");
-    }
-
-    if (Estimated) {
-      RefreshEstPosLabels(EstimatePos);
-    }
+    VLM2Prefs.MapPrefs.EstTrackMouse && o && (n = _CurPlayer.CurBoat.GetClosestEstimatePoint(t), LastMouseMoveCall = new Date()), $("#MI_Lat").text(t.Lat.ToString()), $("#MI_Lon").text(t.Lon.ToString()), $("#MI_LoxoDist").text(a.GetLoxoDist(t, 2) + " nM"), $("#MI_OrthoDist").text(a.GetOrthoDist(t, 2) + " nM"), $("#MI_Loxo").text(a.GetLoxoCourse(t, 2) + " °"), $("#MI_Ortho").text(a.GetOrthoCourse(t, 2) + " °"), void 0 !== i && i ? ($("#MI_WPLoxoDist").text(i.GetLoxoDist(t, 2) + " nM"), $("#MI_WPOrthoDist").text(i.GetOrthoDist(t, 2) + " nM"), $("#MI_WPLoxo").text(i.GetLoxoCourse(t, 2) + " °"), $("#MI_WPOrtho").text(i.GetOrthoCourse(t, 2) + " °")) : ($("#MI_WPLoxoDist").text("--- nM"), $("#MI_WPOrthoDist").text("--- nM"), $("#MI_WPLoxo").text("--- °"), $("#MI_WPOrtho").text("--- °")), o && RefreshEstPosLabels(n);
   }
 }
 
-function RefreshEstPosLabels(Pos) {
-  if (Pos && typeof Pos.Date !== "undefined") {
-    $("#MI_EstDate").text(GetLocalUTCTime(Pos.Date, false, true));
-  } else {
-    $("#MI_EstDate").text("");
-  }
+function RefreshEstPosLabels(e) {
+  e && void 0 !== e.Date ? $("#MI_EstDate").text(GetLocalUTCTime(e.Date, !1, !0)) : $("#MI_EstDate").text("");
 }
 
-function GetWPrankingLI(WPInfo) {
-  return '<li id="RnkWP' + WPInfo.wporder + '" RnkSort="WP" WPRnk="' + WPInfo.wporder + '"><a href="#DivRnkRAC" RnkSort="WP" WPRnk="' + WPInfo.wporder + '">WP ' + WPInfo.wporder + ' : ' + WPInfo.libelle + '</a></li>';
+function GetWPrankingLI(e) {
+  return '<li id="RnkWP' + e.wporder + '" RnkSort="WP" WPRnk="' + e.wporder + '"><a href="#DivRnkRAC" RnkSort="WP" WPRnk="' + e.wporder + '">WP ' + e.wporder + " : " + e.libelle + "</a></li>";
 }
 
 function ResetRankingWPList(e) {
-  $("[WPRnk]").remove();
-  $("#RnkTabsUL").addClass("WPNotInited");
+  $("[WPRnk]").remove(), $("#RnkTabsUL").addClass("WPNotInited");
 }
 
-function CheckWPRankingList(Boat, OtherRaceWPs) {
-  var InitNeeded = $(".WPNotInited");
-  var RaceId = GetRankingRaceId(Boat);
-  var InitComplete = false;
+function CheckWPRankingList(e, t) {
+  var a = $(".WPNotInited"),
+      i = GetRankingRaceId(e),
+      n = !1;
 
-  if (typeof InitNeeded !== "undefined" && InitNeeded && RaceId) {
-    var _index12;
-
-    if (typeof Boat !== "undefined" && Boat && typeof Boat.RaceInfo !== "undefined" && Boat.RaceInfo && RaceId === Boat.RaceInfo.RaceId) {
-      BuildWPTabList(_index12, InitNeeded);
-      InitComplete = true;
-    } else if (OtherRaceWPs) {
-      BuildWPTabList(OtherRaceWPs, InitNeeded);
-      InitComplete = true;
-    } else {
-      var Version = 0;
-
-      if (typeof Boat.VLMInfo !== "undefined") {
-        Version = Boat.VLMInfo.VER;
-      }
-
-      $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + Version, function (result) {
-        CheckWPRankingList(Boat, result);
+  if (void 0 !== a && a && i) {
+    var o;
+    if (void 0 !== e && e && void 0 !== e.RaceInfo && e.RaceInfo && i === e.RaceInfo.RaceId) BuildWPTabList(o, a), n = !0;else if (t) BuildWPTabList(t, a), n = !0;else {
+      var _t10 = 0;
+      void 0 !== e.VLMInfo && (_t10 = e.VLMInfo.VER), $.get("/ws/raceinfo/desc.php?idrace=" + i + "&v=" + _t10, function (t) {
+        CheckWPRankingList(e, t);
       });
     }
   }
 
-  if (InitComplete) {
-    $(InitNeeded).removeClass("WPNotInited");
-    $(".JVLMTabs").tabs("refresh");
-  }
+  n && ($(a).removeClass("WPNotInited"), $(".JVLMTabs").tabs("refresh"));
 }
 
-function BuildWPTabList(WPInfos, TabsInsertPoint) {
-  var index;
-
-  if (typeof TabsInsertPoint === "undefined" || !TabsInsertPoint) {
-    return;
-  }
-
-  if (typeof WPInfos === "undefined" || !WPInfos) {
-    WPInfos = Boat.RaceInfo.races_waypoints;
-  }
-
-  for (index in WPInfos.races_waypoints) {
-    if (WPInfos.races_waypoints[index]) {
-      var WPInfo = WPInfos.races_waypoints[index];
-      var html = GetWPrankingLI(WPInfo);
-      $(TabsInsertPoint).append(html);
+function BuildWPTabList(e, t) {
+  var a;
+  if (void 0 !== t && t) for (a in void 0 !== e && e || (e = Boat.RaceInfo.races_waypoints), e.races_waypoints) {
+    if (e.races_waypoints[a]) {
+      var i = GetWPrankingLI(e.races_waypoints[a]);
+      $(t).append(i);
     }
   }
 }
 
-function SortRanking(style, WPNum) {
-  //$('#RankingTableBody').empty();
-  var Boat = _CurPlayer.CurBoat;
-  CheckWPRankingList(Boat);
+function SortRanking(e, t) {
+  var a = _CurPlayer.CurBoat;
+  if (CheckWPRankingList(a), void 0 === a || !a) return;
+  var i = null;
 
-  if (typeof Boat === "undefined" || !Boat) {
-    return;
-  }
-
-  var Friends = null;
-
-  if (Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents) {
-    Friends = Boat.VLMPrefs.mapPrefOpponents.split(",");
-  }
-
-  switch (style) {
+  switch (a.VLMPrefs && a.VLMPrefs.mapPrefOpponents && (i = a.VLMPrefs.mapPrefOpponents.split(",")), e) {
     case "WP":
-      SetRankingColumns(style);
-      WPNum = parseInt(WPNum, 10);
-      SortRankingData(Boat, style, WPNum);
-      FillWPRanking(Boat, WPNum, Friends);
+      SetRankingColumns(e), SortRankingData(a, e, t = parseInt(t, 10)), FillWPRanking(a, t, i);
       break;
 
-    case 'DNF':
-    case 'HC':
-    case 'ARR':
-    case 'HTP':
-    case 'ABD':
-      SetRankingColumns(style);
-      SortRankingData(Boat, style);
-      FillStatusRanking(Boat, style, Friends);
+    case "DNF":
+    case "HC":
+    case "ARR":
+    case "HTP":
+    case "ABD":
+      SetRankingColumns(e), SortRankingData(a, e), FillStatusRanking(a, e, i);
       break;
-    //case 'RAC':
 
     default:
-      SetRankingColumns('RAC');
-      SortRankingData(Boat, 'RAC');
-      FillRacingRanking(Boat, Friends);
+      SetRankingColumns("RAC"), SortRankingData(a, "RAC"), FillRacingRanking(a, i);
   }
 }
 
-function SetRankingColumns(style) {
-  switch (style) {
+function SetRankingColumns(e) {
+  switch (e) {
     case "WP":
       SetWPRankingColumns();
       break;
 
-    case 'DNF':
-    case 'HC':
-    case 'ARR':
-    case 'HTP':
-    case 'ABD':
+    case "DNF":
+    case "HC":
+    case "ARR":
+    case "HTP":
+    case "ABD":
       SetNRClassRankingColumns();
       break;
-    //case 'RAC':
 
     default:
       SetRacingClassRankingColumns();
   }
 }
 
-var RACColumnHeader = ["Rank", "Name", "Distance", "Time", "Loch", "Lon", "Lat", "Last1h", "Last3h", "Last24h", "Delta1st"];
-var NRColumnHeader = ["Rank", "Name", "Distance"];
-var WPColumnHeader = ["Rank", "Name", "Time", "Loch"];
-var RACColumnHeaderLabels = ["ranking", "boatname", "distance", "racingtime", "Loch", "Lon", "Lat", "Last1h", "Last3h", "Last24h", "ecart"];
-var NRColumnHeaderLabels = ["ranking", "boatname", "status"];
-var WPColumnHeaderLabels = ["ranking", "boatname", "racingtime", "ecart"];
+var RACColumnHeader = ["Rank", "Name", "Distance", "Time", "Loch", "Lon", "Lat", "Last1h", "Last3h", "Last24h", "Delta1st"],
+    NRColumnHeader = ["Rank", "Name", "Distance"],
+    WPColumnHeader = ["Rank", "Name", "Time", "Loch"],
+    RACColumnHeaderLabels = ["ranking", "boatname", "distance", "racingtime", "Loch", "Lon", "Lat", "Last1h", "Last3h", "Last24h", "ecart"],
+    NRColumnHeaderLabels = ["ranking", "boatname", "status"],
+    WPColumnHeaderLabels = ["ranking", "boatname", "racingtime", "ecart"];
 
 function SetRacingClassRankingColumns() {
   SetColumnsVisibility(RACColumnHeader, RACColumnHeaderLabels);
@@ -5968,432 +3006,248 @@ function SetWPRankingColumns() {
   SetColumnsVisibility(WPColumnHeader, WPColumnHeaderLabels);
 }
 
-function SetColumnsVisibility(cols, labels) {
-  var index;
+function SetColumnsVisibility(e, t) {
+  var a;
 
-  for (index = 0; index < RankingFt.columns.array.length; index++) {
-    if (RankingFt.columns.array[index]) {
-      var ColIdx = cols.indexOf(RankingFt.columns.array[index].name);
-
-      if (ColIdx > -1) {
-        //RankingFt.columns.array[index].title = GetLocalizedString( labels[ColIdx])
-        $("[data-name='" + cols[ColIdx] + "']").attr("I18n", labels[ColIdx]);
-      }
-
-      RankingFt.columns.array[index].visible = ColIdx > -1;
+  for (a = 0; a < RankingFt.columns.array.length; a++) {
+    if (RankingFt.columns.array[a]) {
+      var i = e.indexOf(RankingFt.columns.array[a].name);
+      i > -1 && $("[data-name='" + e[i] + "']").attr("I18n", t[i]), RankingFt.columns.array[a].visible = i > -1;
     }
-  } // use localization to change titles. Hummz creative but title does not seem to update the column header.
-
+  }
 
   LocalizeItem($("[I18n][data-name]").get());
 }
 
-function RnkIsArrived(rnk) {
-  if (typeof rnk === "undefined" || typeof rnk.status === "undefined" || !rnk.status) {
-    return false;
-  }
-
-  return BoatArrivedStatus.indexOf(rnk.status) !== -1;
+function RnkIsArrived(e) {
+  return !(void 0 === e || void 0 === e.status || !e.status) && -1 !== BoatArrivedStatus.indexOf(e.status);
 }
 
-function RnkIsRacing(rnk) {
-  if (typeof rnk === "undefined" || typeof rnk.status === "undefined" || !rnk.status) {
-    return false;
-  }
-
-  return BoatRacingStatus.indexOf(rnk.status) !== -1;
+function RnkIsRacing(e) {
+  return !(void 0 === e || void 0 === e.status || !e.status) && -1 !== BoatRacingStatus.indexOf(e.status);
 }
 
-function Sort2ArrivedBoats(rnk1, rnk2) {
-  var Total1 = parseInt(rnk1.duration, 10) + parseInt(rnk1.penalty, 10);
-  var Total2 = parseInt(rnk2.duration, 10) + parseInt(rnk2.penalty, 10);
-
-  if (Total1 > Total2) {
-    DebugRacerSort(rnk1, rnk2, 1);
-    return 1;
-  } else if (Total1 < Total2) {
-    DebugRacerSort(rnk1, rnk2, -1);
-    return -1;
-  } else {
-    DebugRacerSort(rnk1, rnk2, 0);
-    return 0;
-  }
+function Sort2ArrivedBoats(e, t) {
+  var a = parseInt(e.duration, 10) + parseInt(e.penalty, 10),
+      i = parseInt(t.duration, 10) + parseInt(t.penalty, 10);
+  return a > i ? (DebugRacerSort(e, t, 1), 1) : a < i ? (DebugRacerSort(e, t, -1), -1) : (DebugRacerSort(e, t, 0), 0);
 }
 
-function Sort2RacingBoats(rnk1, rnk2) {
-  var nwp1 = parseInt(rnk1.nwp, 10);
-  var nwp2 = parseInt(rnk2.nwp, 10);
+function Sort2RacingBoats(e, t) {
+  var a = parseInt(e.nwp, 10),
+      i = parseInt(t.nwp, 10);
 
-  if (nwp1 === nwp2) {
-    var dnm1 = parseFloat(rnk1.dnm);
-    var dnm2 = parseFloat(rnk2.dnm);
+  if (a === i) {
+    var _a5 = parseFloat(e.dnm),
+        _i3 = parseFloat(t.dnm);
 
-    if (dnm1 > dnm2) {
-      DebugRacerSort(rnk1, rnk2, 1);
-      return 1;
-    } else if (dnm1 === dnm2) {
-      DebugRacerSort(rnk1, rnk2, 0);
-      var SortFlag = rnk1.country > rnk2.country ? 1 : rnk1.country === rnk2.country ? 0 : -1;
+    if (_a5 > _i3) return DebugRacerSort(e, t, 1), 1;
 
-      if (SortFlag) {
-        return SortFlag;
-      } else {
-        var SortIdu = rnk1.idusers > rnk2.idusers ? 1 : rnk1.idusers === rnk2.idusers ? 0 : -1;
-        return SortIdu;
-      }
-    } else {
-      DebugRacerSort(rnk1, rnk2, -1);
-      return -1;
+    if (_a5 === _i3) {
+      DebugRacerSort(e, t, 0);
+
+      var _a6 = e.country > t.country ? 1 : e.country === t.country ? 0 : -1;
+
+      if (_a6) return _a6;
+      return e.idusers > t.idusers ? 1 : e.idusers === t.idusers ? 0 : -1;
     }
-  } else if (nwp1 > nwp2) {
-    DebugRacerSort(rnk1, rnk2, -1);
-    return -1;
-  } else {
-    DebugRacerSort(rnk1, rnk2, 1);
-    return 1;
+
+    return DebugRacerSort(e, t, -1), -1;
   }
+
+  return a > i ? (DebugRacerSort(e, t, -1), -1) : (DebugRacerSort(e, t, 1), 1);
 }
 
-function GetWPDuration(Rnk, WPNum) {
-  if (Rnk && Rnk.WP && Rnk.WP[WPNum - 1] && Rnk.WP[WPNum - 1].duration) {
-    return parseInt(Rnk.WP[WPNum - 1].duration, 10);
-  } else {
-    return 9999999999;
-  }
+function GetWPDuration(e, t) {
+  return e && e.WP && e.WP[t - 1] && e.WP[t - 1].duration ? parseInt(e.WP[t - 1].duration, 10) : 9999999999;
 }
 
-function WPRaceSort(index) {
-  return function (a, b) {
-    var wp1 = GetWPDuration(a, index);
-    var wp2 = GetWPDuration(b, index);
-    return wp1 - wp2;
+function WPRaceSort(e) {
+  return function (t, a) {
+    return GetWPDuration(t, e) - GetWPDuration(a, e);
   };
 }
 
-function RacersSort(rnk1, rnk2) {
-  if (RnkIsRacing(rnk1) && RnkIsRacing(rnk2)) {
-    return Sort2RacingBoats(rnk1, rnk2);
-  } else if (RnkIsArrived(rnk1) && RnkIsArrived(rnk2)) {
-    return Sort2ArrivedBoats(rnk1, rnk2);
-  } else if (RnkIsArrived(rnk1)) {
-    DebugRacerSort(rnk1, rnk2, -1);
-    return -1;
-  } else if (RnkIsArrived(rnk2)) {
-    DebugRacerSort(rnk1, rnk2, 1);
-    return 1;
-  } else if (RnkIsRacing(rnk1)) {
-    DebugRacerSort(rnk1, rnk2, 1);
-    return -1;
-  } else if (RnkIsRacing(rnk2)) {
-    DebugRacerSort(rnk1, rnk2, 1);
-    return 1;
-  } else {
-    return Sort2NonRacing(rnk1, rnk2);
-  }
+function RacersSort(e, t) {
+  return RnkIsRacing(e) && RnkIsRacing(t) ? Sort2RacingBoats(e, t) : RnkIsArrived(e) && RnkIsArrived(t) ? Sort2ArrivedBoats(e, t) : RnkIsArrived(e) ? (DebugRacerSort(e, t, -1), -1) : RnkIsArrived(t) ? (DebugRacerSort(e, t, 1), 1) : RnkIsRacing(e) ? (DebugRacerSort(e, t, 1), -1) : RnkIsRacing(t) ? (DebugRacerSort(e, t, 1), 1) : Sort2NonRacing(e, t);
 }
 
 var DebugCount = 1;
 
-function DebugRacerSort(rnk1, rnk2, res) {
-  var debug = false;
+function DebugRacerSort(e, t, a) {}
 
-  if (debug) {
-    console.log(DebugCount++ + "sort " + rnk1.idusers + " vs " + rnk2.idusers + " =>" + res);
-  }
-}
-
-function Sort2NonRacing(rnk1, rnk2) {
-  if (typeof rnk1.idusers !== "undefined" && typeof rnk2.idusers !== "undefined") {
-    var SortFlag = rnk1.country > rnk2.country ? 1 : rnk1.country === rnk2.country ? 0 : -1;
-
-    if (SortFlag) {
-      return SortFlag;
-    } else {
-      var _IdUser = parseInt(rnk1.idusers, 10);
-
-      var _IdUser2 = parseInt(rnk2.idusers, 10);
-
-      if (_IdUser > _IdUser2) {
-        DebugRacerSort(rnk1, rnk2, 1);
-        return 1;
-      } else if (_IdUser < _IdUser2) {
-        DebugRacerSort(rnk1, rnk2, -1);
-        return -1;
-      } else {
-        DebugRacerSort(rnk1, rnk2, 0);
-        return 0;
-      }
-    }
-  } else if (typeof IdUser1 !== "undefined") {
-    return -1;
-  } else if (typeof IdUser2 !== "undefined") {
-    return -1;
-  } else {
-    var ar = [rnk1, rnk2];
-    ar.sort();
-
-    if (ar[0] === rnk1) {
-      return 1;
-    } else {
-      return -1;
-    }
-  }
-}
-
-function GetRankingRaceId(Boat, RaceId) {
-  if (!RaceId && !RankingFt.RaceRankingId) {
-    return Boat.Engaged;
-  } else if (!RaceId) {
-    return RankingFt.RaceRankingId;
-  } else {
-    return RaceId;
-  }
-}
-
-function SortRankingData(Boat, SortType, WPNum, RaceId) {
-  RaceId = GetRankingRaceId(Boat, RaceId);
-
-  if (!Boat || !Rankings[RaceId]) {
-    return;
-  }
-
-  if (Rankings && Rankings[RaceId] && typeof Rankings[RaceId].RacerRanking === "undefined") //|| Rankings[RaceId].RacerRanking.length !== Rankings[RaceId]+1))
+function Sort2NonRacing(e, t) {
+  if (void 0 !== e.idusers && void 0 !== t.idusers) {
+    var a = e.country > t.country ? 1 : e.country === t.country ? 0 : -1;
+    if (a) return a;
     {
-      var _index13;
+      var _a7 = parseInt(e.idusers, 10),
+          i = parseInt(t.idusers, 10);
 
-      Rankings[RaceId].RacerRanking = [];
-
-      for (_index13 in Rankings[RaceId]) {
-        if (Rankings[RaceId][_index13]) {
-          //Rankings[index].idusers=index;
-          Rankings[RaceId].RacerRanking.push(Rankings[RaceId][_index13]);
-        }
-      }
+      return _a7 > i ? (DebugRacerSort(e, t, 1), 1) : _a7 < i ? (DebugRacerSort(e, t, -1), -1) : (DebugRacerSort(e, t, 0), 0);
     }
+  }
 
-  switch (SortType) {
+  if ("undefined" != typeof IdUser1) return -1;
+  if ("undefined" != typeof IdUser2) return -1;
+  {
+    var _a8 = [e, t];
+    return _a8.sort(), _a8[0] === e ? 1 : -1;
+  }
+}
+
+function GetRankingRaceId(e, t) {
+  return t || RankingFt.RaceRankingId ? t || RankingFt.RaceRankingId : e.Engaged;
+}
+
+function SortRankingData(e, t, a, i) {
+  if (i = GetRankingRaceId(e, i), !e || !Rankings[i]) return;
+
+  if (Rankings && Rankings[i] && void 0 === Rankings[i].RacerRanking) {
+    var _e13;
+
+    for (_e13 in Rankings[i].RacerRanking = [], Rankings[i]) {
+      Rankings[i][_e13] && Rankings[i].RacerRanking.push(Rankings[i][_e13]);
+    }
+  }
+
+  switch (t) {
     case "WP":
-      Rankings[RaceId].RacerRanking.sort(WPRaceSort(WPNum));
+      Rankings[i].RacerRanking.sort(WPRaceSort(a));
       break;
 
-    case 'RAC':
-    case 'DNF':
-    case 'HC':
-    case 'HTP':
-    case 'ABD':
-    case 'ARR':
-      Rankings[RaceId].RacerRanking.sort(RacersSort);
+    case "RAC":
+    case "DNF":
+    case "HC":
+    case "HTP":
+    case "ABD":
+    case "ARR":
+      Rankings[i].RacerRanking.sort(RacersSort);
       break;
 
     default:
-      VLMAlertInfo("unexpected sort option : " + SortType);
+      VLMAlertInfo("unexpected sort option : " + t);
   }
 
-  var rnk = 1;
-  var index = 0;
+  var n = 1,
+      o = 0;
 
-  for (index in Rankings[RaceId].RacerRanking) {
-    if (Rankings[RaceId].RacerRanking[index] && Boat.IdBoat === index) {
-      rnk = index + 1;
+  for (o in Rankings[i].RacerRanking) {
+    if (Rankings[i].RacerRanking[o] && e.IdBoat === o) {
+      n = o + 1;
       break;
     }
   }
 
-  return rnk;
+  return n;
 }
 
-function FillWPRanking(Boat, WPNum, Friends) {
-  var index;
-  var RowNum = 1;
-  var BestTime = 0;
-  var Rows = [];
+function FillWPRanking(e, t, a) {
+  var i,
+      n = 1,
+      o = 0,
+      r = [];
+  if (!e || !RankingFt || RankingFt.DrawPending) return;
+  var s = GetRankingRaceId(e);
 
-  if (!Boat || !RankingFt || RankingFt.DrawPending) {
-    return;
-  }
-
-  var RaceId = GetRankingRaceId(Boat);
-  BackupRankingTable();
-
-  for (index in Rankings[RaceId].RacerRanking) {
-    if (Rankings[RaceId].RacerRanking[index]) {
-      var RnkBoat = Rankings[RaceId].RacerRanking[index];
-
-      if (RnkBoat.WP && RnkBoat.WP[WPNum - 1] && !RnkBoat.WP[WPNum - 1].Delta) {
-        if (!BestTime) {
-          BestTime = RnkBoat.WP[WPNum - 1].duration;
-          RnkBoat.WP[WPNum - 1].Delta = 0;
-          RnkBoat.WP[WPNum - 1].Pct = 0;
-        } else {
-          RnkBoat.WP[WPNum - 1].Delta = RnkBoat.WP[WPNum - 1].duration - BestTime;
-          RnkBoat.WP[WPNum - 1].Pct = 100 * (RnkBoat.WP[WPNum - 1].duration / BestTime - 1);
-        }
-      }
-
-      if (RnkBoat.WP && RnkBoat.WP[WPNum - 1]) {
-        Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, WPNum, Friends));
-
-        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10)) {
-          RowNum = Rows.length;
-        }
-      }
+  for (i in BackupRankingTable(), Rankings[s].RacerRanking) {
+    if (Rankings[s].RacerRanking[i]) {
+      var _l2 = Rankings[s].RacerRanking[i];
+      _l2.WP && _l2.WP[t - 1] && !_l2.WP[t - 1].Delta && (o ? (_l2.WP[t - 1].Delta = _l2.WP[t - 1].duration - o, _l2.WP[t - 1].Pct = 100 * (_l2.WP[t - 1].duration / o - 1)) : (o = _l2.WP[t - 1].duration, _l2.WP[t - 1].Delta = 0, _l2.WP[t - 1].Pct = 0)), _l2.WP && _l2.WP[t - 1] && (r.push(GetRankingObject(_l2, parseInt(i, 10) + 1, t, a)), e.IdBoat === parseInt(_l2.idusers, 10) && (n = r.length));
     }
   }
 
-  var TargetPage = RoundPow(RowNum / 20, 0) + (RowNum % 20 >= 10 ? 0 : 1);
-  RankingFt.DrawPending = true;
-  RankingFt.loadRows(Rows);
-  RankingFt.TargetPage = TargetPage;
+  var l = RoundPow(n / 20, 0) + (n % 20 >= 10 ? 0 : 1);
+  RankingFt.DrawPending = !0, RankingFt.loadRows(r), RankingFt.TargetPage = l;
 }
 
 function BackupICS_WPTable() {
   BackupFooTable(ICS_WPft, "#RaceWayPoints", "#RaceWayPointsInsertPoint");
 }
 
-function getWaypointHTMLSymbols(WPFormat) {
-  var WPSymbols = "";
+function getWaypointHTMLSymbols(e) {
+  var t = "";
 
-  switch (WPFormat & (WP_CROSS_CLOCKWISE | WP_CROSS_ANTI_CLOCKWISE)) {
+  switch (e & (WP_CROSS_CLOCKWISE | WP_CROSS_ANTI_CLOCKWISE)) {
     case WP_CROSS_ANTI_CLOCKWISE:
-      WPSymbols += "&#x21BA; ";
+      t += "&#x21BA; ";
       break;
 
     case WP_CROSS_CLOCKWISE:
-      WPSymbols += "&#x21BB; ";
-      break;
-
-    default:
+      t += "&#x21BB; ";
   }
 
-  if ((WPFormat & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
-    WPSymbols += "&#x2285; ";
-  }
-
-  switch (WPFormat & (WP_ICE_GATE_N | WP_ICE_GATE_S)) {
+  switch ((e & WP_CROSS_ONCE) == WP_CROSS_ONCE && (t += "&#x2285; "), e & (WP_ICE_GATE_N | WP_ICE_GATE_S)) {
     case WP_ICE_GATE_S:
-      WPSymbols += "&#x27F0;";
+      t += "&#x27F0;";
       break;
 
     case WP_ICE_GATE_N:
-      WPSymbols += "&#x27F1;";
-      break;
-
-    default:
+      t += "&#x27F1;";
   }
 
-  return WPSymbols.trim();
+  return t.trim();
 }
 
-function getWaypointHTMLSymbolsDescription(WPFormat) {
-  var WPDesc = "";
+function getWaypointHTMLSymbolsDescription(e) {
+  var t = "";
 
-  switch (WPFormat & (WP_CROSS_CLOCKWISE | WP_CROSS_ANTI_CLOCKWISE)) {
+  switch (e & (WP_CROSS_CLOCKWISE | WP_CROSS_ANTI_CLOCKWISE)) {
     case WP_CROSS_ANTI_CLOCKWISE:
-      WPDesc += GetLocalizedString("Anti-clockwise") + " ";
+      t += GetLocalizedString("Anti-clockwise") + " ";
       break;
 
     case WP_CROSS_CLOCKWISE:
-      WPDesc += GetLocalizedString("Clockwise") + " ";
-      break;
-
-    default:
+      t += GetLocalizedString("Clockwise") + " ";
   }
 
-  if ((WPFormat & WP_CROSS_ONCE) == WP_CROSS_ONCE) {
-    WPDesc += GetLocalizedString("Only once");
-  }
-
-  switch (WPFormat & (WP_ICE_GATE_N | WP_ICE_GATE_S)) {
+  switch ((e & WP_CROSS_ONCE) == WP_CROSS_ONCE && (t += GetLocalizedString("Only once")), e & (WP_ICE_GATE_N | WP_ICE_GATE_S)) {
     case WP_ICE_GATE_S:
-      WPDesc += GetLocalizedString("Ice gate") + "(" + GetLocalizedString("South") + ") ";
+      t += GetLocalizedString("Ice gate") + "(" + GetLocalizedString("South") + ") ";
       break;
 
     case WP_ICE_GATE_N:
-      WPDesc += GetLocalizedString("Ice gate") + "(" + GetLocalizedString("North") + ") ";
-      break;
-
-    default:
+      t += GetLocalizedString("Ice gate") + "(" + GetLocalizedString("North") + ") ";
   }
 
-  if (WPDesc !== "") {
-    WPDesc = GetLocalizedString("Crossing") + " : " + WPDesc;
-  }
-
-  return WPDesc.trim();
+  return "" !== t && (t = GetLocalizedString("Crossing") + " : " + t), t.trim();
 }
 
-function NormalizeRaceInfo(RaceInfo) {
-  if (typeof RaceInfo === "undefined" || !RaceInfo || RaceInfo.IsNormalized) {
-    return;
-  }
+function NormalizeRaceInfo(e) {
+  if (void 0 !== e && e && !e.IsNormalized) {
+    e.startlat /= VLM_COORDS_FACTOR, e.startlong /= VLM_COORDS_FACTOR;
 
-  RaceInfo.startlat /= VLM_COORDS_FACTOR;
-  RaceInfo.startlong /= VLM_COORDS_FACTOR;
-
-  for (var _index14 in RaceInfo.races_waypoints) {
-    if (RaceInfo.races_waypoints[_index14]) {
-      var WP = RaceInfo.races_waypoints[_index14];
-      WP.latitude1 /= VLM_COORDS_FACTOR;
-      WP.longitude1 /= VLM_COORDS_FACTOR;
-
-      if (typeof WP.latitude2 !== "undefined") {
-        WP.latitude2 /= VLM_COORDS_FACTOR;
-        WP.longitude2 /= VLM_COORDS_FACTOR;
-      }
-    }
-  }
-
-  RaceInfo.IsNormalized = true;
-}
-
-function FillRaceWaypointList(RaceInfo) {
-  if (ICS_WPft.DrawPending) {
-    if (!ICS_WPft.CallbackPending) {
-      ICS_WPft.CallbackPending = function () {
-        FillRaceWaypointList(RaceInfo);
-      };
-    }
-
-    return;
-  }
-
-  BackupICS_WPTable();
-
-  if (RaceInfo) {
-    NormalizeRaceInfo(RaceInfo);
-    var Rows = []; // Insert the start point
-
-    var Row = {};
-    Row.WaypointId = 0;
-    Row.WP1 = RaceInfo.startlat + "<BR>" + RaceInfo.startlong;
-    Row.WP2 = "";
-    Row.Spec = "";
-    Row.Type = GetLocalizedString("startmap");
-    Row.Name = "";
-    Rows.push(Row);
-
-    for (var _index15 in RaceInfo.races_waypoints) {
-      if (RaceInfo.races_waypoints[_index15]) {
-        var WP = RaceInfo.races_waypoints[_index15];
-        var _Row = {};
-        var WPSpec = void 0;
-        _Row.WaypointId = WP.wporder;
-        _Row.WP1 = WP.latitude1 + "<BR>" + WP.longitude1;
-
-        if (typeof WP.latitude2 !== "undefined") {
-          _Row.WP2 = WP.latitude2 + "<BR>" + WP.longitude2;
-        } else {
-          _Row.WP2 = "@" + WP.laisser_au;
-        }
-
-        _Row.Spec = "<span title='" + getWaypointHTMLSymbolsDescription(WP.wpformat) + "'>" + getWaypointHTMLSymbols(WP.wpformat) + "</span>";
-        _Row.Type = GetLocalizedString(WP.wptype);
-        _Row.Name = WP.libelle;
-        Rows.push(_Row);
+    for (var t in e.races_waypoints) {
+      if (e.races_waypoints[t]) {
+        var a = e.races_waypoints[t];
+        a.latitude1 /= VLM_COORDS_FACTOR, a.longitude1 /= VLM_COORDS_FACTOR, void 0 !== a.latitude2 && (a.latitude2 /= VLM_COORDS_FACTOR, a.longitude2 /= VLM_COORDS_FACTOR);
       }
     }
 
-    ICS_WPft.loadRows(Rows);
+    e.IsNormalized = !0;
+  }
+}
+
+function FillRaceWaypointList(e) {
+  if (ICS_WPft.DrawPending) ICS_WPft.CallbackPending || (ICS_WPft.CallbackPending = function () {
+    FillRaceWaypointList(e);
+  });else if (BackupICS_WPTable(), e) {
+    NormalizeRaceInfo(e);
+    var t = [],
+        a = {
+      WaypointId: 0
+    };
+    a.WP1 = e.startlat + "<BR>" + e.startlong, a.WP2 = "", a.Spec = "", a.Type = GetLocalizedString("startmap"), a.Name = "", t.push(a);
+
+    for (var _a9 in e.races_waypoints) {
+      if (e.races_waypoints[_a9]) {
+        var i = e.races_waypoints[_a9],
+            n = {};
+        n.WaypointId = i.wporder, n.WP1 = i.latitude1 + "<BR>" + i.longitude1, void 0 !== i.latitude2 ? n.WP2 = i.latitude2 + "<BR>" + i.longitude2 : n.WP2 = "@" + i.laisser_au, n.Spec = "<span title='" + getWaypointHTMLSymbolsDescription(i.wpformat) + "'>" + getWaypointHTMLSymbols(i.wpformat) + "</span>", n.Type = GetLocalizedString(i.wptype), n.Name = i.libelle, t.push(n);
+      }
+    }
+
+    ICS_WPft.loadRows(t);
   }
 }
 
@@ -6401,36 +3255,21 @@ function BackupNSZ_Table() {
   BackupFooTable(NSZ_WPft, "NSZPoints", "NSZPointsInsertPoint");
 }
 
-function FillNSZList(Exclusions) {
-  if (NSZ_WPft.DrawPending) {
-    if (!NSZ_WPft.CallbackPending) {
-      NSZ_WPft.CallbackPending = function () {
-        FillNSZList(Exclusions);
-      };
-    }
+function FillNSZList(e) {
+  if (NSZ_WPft.DrawPending) NSZ_WPft.CallbackPending || (NSZ_WPft.CallbackPending = function () {
+    FillNSZList(e);
+  });else if (BackupNSZ_Table(), e) {
+    var t = [];
 
-    return;
-  }
-
-  BackupNSZ_Table();
-
-  if (Exclusions) {
-    var Rows = [];
-
-    for (var _index16 in Exclusions) {
-      if (Exclusions[_index16]) {
-        var Seg = Exclusions[_index16];
-        var row = {};
-        row.NSZId = _index16;
-        row.Lon1 = Seg[0][1];
-        row.Lat1 = Seg[0][0];
-        row.Lon2 = Seg[1][1];
-        row.Lat2 = Seg[1][0];
-        Rows.push(row);
+    for (var a in e) {
+      if (e[a]) {
+        var i = e[a],
+            n = {};
+        n.NSZId = a, n.Lon1 = i[0][1], n.Lat1 = i[0][0], n.Lon2 = i[1][1], n.Lat2 = i[1][0], t.push(n);
       }
     }
 
-    NSZ_WPft.loadRows(Rows);
+    NSZ_WPft.loadRows(t);
   }
 }
 
@@ -6438,108 +3277,58 @@ function BackupRankingTable() {
   BackupFooTable(RankingFt, "#RankingTable", "#my-rank-content");
 }
 
-function FillStatusRanking(Boat, Status, Friends) {
-  var index;
-  var RowNum = 1;
-  var Rows = [];
-  var RaceId = GetRankingRaceId(Boat);
-  BackupRankingTable();
+function FillStatusRanking(e, t, a) {
+  var i,
+      n = 1,
+      o = [],
+      r = GetRankingRaceId(e);
 
-  for (index in Rankings[RaceId].RacerRanking) {
-    if (Rankings[RaceId].RacerRanking[index]) {
-      var RnkBoat = Rankings[RaceId].RacerRanking[index];
-
-      if (RnkBoat.status === Status) {
-        Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends));
-
-        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10)) {
-          RowNum = Rows.length;
-        }
-      }
+  for (i in BackupRankingTable(), Rankings[r].RacerRanking) {
+    if (Rankings[r].RacerRanking[i]) {
+      var _s2 = Rankings[r].RacerRanking[i];
+      _s2.status === t && (o.push(GetRankingObject(_s2, parseInt(i, 10) + 1, null, a)), e.IdBoat === parseInt(_s2.idusers, 10) && (n = o.length));
     }
   }
 
-  var TargetPage = RoundPow(RowNum / 20, 0) + (RowNum % 20 >= 10 ? 0 : 1);
-  RankingFt.loadRows(Rows);
-  RankingFt.TargetPage = TargetPage;
-  RankingFt.DrawPending = true;
+  var s = RoundPow(n / 20, 0) + (n % 20 >= 10 ? 0 : 1);
+  RankingFt.loadRows(o), RankingFt.TargetPage = s, RankingFt.DrawPending = !0;
 }
 
-function FillRacingRanking(Boat, Friends) {
-  var index;
-  var Rows = [];
-  var RowNum = 0;
-  var Refs = {
+function FillRacingRanking(e, t) {
+  var a,
+      i = [],
+      n = 0,
+      o = {
     Arrived1stTime: null,
     Racer1stPos: null
   };
   BackupRankingTable();
-  var RaceId = GetRankingRaceId(Boat);
-  var CurWP = 0;
-
-  if (RaceId && typeof Rankings !== "undefined" && typeof Rankings[RaceId] !== "undefined" && Rankings[RaceId] && Rankings[RaceId].RacerRanking) {
-    for (index in Rankings[RaceId].RacerRanking) {
-      if (Rankings[RaceId].RacerRanking[index]) {
-        var RnkBoat = Rankings[RaceId].RacerRanking[index];
-
-        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10)) {
-          RowNum = Rows.length;
-        }
-
-        if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat)) {
-          if (!Refs.Arrived1stTime && RnkIsArrived(RnkBoat)) {
-            // First arrived, store time
-            Refs.Arrived1stTime = parseInt(RnkBoat.duration, 10);
-          }
-
-          if (RnkIsRacing(RnkBoat) && (!Refs.Racer1stPos || RnkBoat.nwp !== CurWP)) {
-            Refs.Racer1stPos = RnkBoat.dnm;
-            CurWP = RnkBoat.nwp;
-          }
-
-          Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends, Refs));
-        } else {
-          break;
-        }
-      }
+  var r = GetRankingRaceId(e),
+      s = 0;
+  if (r && void 0 !== Rankings && void 0 !== Rankings[r] && Rankings[r] && Rankings[r].RacerRanking) for (a in Rankings[r].RacerRanking) {
+    if (Rankings[r].RacerRanking[a]) {
+      var _l3 = Rankings[r].RacerRanking[a];
+      if (e.IdBoat === parseInt(_l3.idusers, 10) && (n = i.length), !RnkIsArrived(_l3) && !RnkIsRacing(_l3)) break;
+      !o.Arrived1stTime && RnkIsArrived(_l3) && (o.Arrived1stTime = parseInt(_l3.duration, 10)), !RnkIsRacing(_l3) || o.Racer1stPos && _l3.nwp === s || (o.Racer1stPos = _l3.dnm, s = _l3.nwp), i.push(GetRankingObject(_l3, parseInt(a, 10) + 1, null, t, o));
     }
   }
-
-  var TargetPage = RoundPow(RowNum / 20, 0) + (RowNum % 20 >= 10 ? 0 : 1);
-  RankingFt.loadRows(Rows);
-  RankingFt.TargetPage = TargetPage;
-  RankingFt.DrawPending = true;
+  var l = RoundPow(n / 20, 0) + (n % 20 >= 10 ? 0 : 1);
+  RankingFt.loadRows(i), RankingFt.TargetPage = l, RankingFt.DrawPending = !0;
 }
 
-function GetBoatInfoLink(RnkBoat) {
-  var IdUser = parseInt(RnkBoat.idusers, 10);
-  var BoatName = RnkBoat.boatname;
-  var ret = "";
-
-  if (RnkBoat.country) {
-    ret = GetCountryFlagImgHTML(RnkBoat.country);
-
-    if (typeof ret === "undefined") {
-      ret = "";
-    }
-  } //ret += '<a class="RaceHistLink" href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
-
-
-  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '">' + BoatName + '</a>';
-  return ret;
+function GetBoatInfoLink(e) {
+  var t = parseInt(e.idusers, 10),
+      a = e.boatname,
+      i = "";
+  return e.country && void 0 === (i = GetCountryFlagImgHTML(e.country)) && (i = ""), i += '<a class="RaceHistLink" boatid ="' + t + '">' + a + "</a>";
 }
 
-function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs) {
-  var boatsearchstring = ''; //'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
-
-  if (typeof RankBoat.Challenge !== "undefined" && RankBoat.Challenge[1]) {
-    boatsearchstring = '<img class="RnkLMNH" src="images/LMNH.png"></img>' + boatsearchstring;
-  }
-
-  boatsearchstring += GetBoatInfoLink(RankBoat);
-  var RetObject = {
-    Rank: rank,
-    Name: boatsearchstring,
+function GetRankingObject(e, t, a, i, n) {
+  var o = "";
+  void 0 !== e.Challenge && e.Challenge[1] && (o = '<img class="RnkLMNH" src="images/LMNH.png"></img>' + o);
+  var r = {
+    Rank: t,
+    Name: o += GetBoatInfoLink(e),
     Distance: "",
     Time: "",
     Loch: "",
@@ -6552,920 +3341,407 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs) {
     Delta1st: ""
   };
 
-  if (parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat) {
-    RetObject.Class += " ft_class_myboat";
-  }
+  if (parseInt(e.idusers, 10) === _CurPlayer.CurBoat.IdBoat && (r.Class += " ft_class_myboat"), void 0 !== i && i && -1 !== i.indexOf(e.idusers) && (r.Class += " ft_class_friend"), RnkIsRacing(e) && !a) {
+    var _a10 = "[" + e.nwp + "] -=> " + RoundPow(e.dnm, 2);
 
-  if (typeof Friends !== "undefined" && Friends) {
-    if (Friends.indexOf(RankBoat.idusers) !== -1) {
-      RetObject.Class += " ft_class_friend";
-    }
-  }
-
-  if (RnkIsRacing(RankBoat) && !WPNum) {
-    // General ranking layout
-    var NextMark = '[' + RankBoat.nwp + '] -=> ' + RoundPow(RankBoat.dnm, 2);
-
-    if (rank > 1 && Refs && Refs.Racer1stPos) {
-      var P = new VLMPosition(RankBoat.longitude, RankBoat.latitude);
-      RetObject.Delta1st = RoundPow(RankBoat.dnm - Refs.Racer1stPos, 2);
+    if (t > 1 && n && n.Racer1stPos) {
+      new VLMPosition(e.longitude, e.latitude);
+      r.Delta1st = RoundPow(e.dnm - n.Racer1stPos, 2);
     }
 
-    RetObject.Distance = NextMark;
-    var RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat.deptime, 10) * 1000)) / 1000);
-    RetObject.Time = RankBoat.deptime === "-1" ? "" : GetFormattedChronoString(RacingTime);
-    RetObject.Loch = RankBoat.loch;
-    RetObject.lon = RankBoat.longitude;
-    RetObject.Lat = RankBoat.latitude;
-    RetObject.Last1h = RankBoat.last1h;
-    RetObject.Last3h = RankBoat.last3h;
-    RetObject.Last24h = RankBoat.last24h;
+    r.Distance = _a10;
 
-    for (var _index17 in BoatRacingStatus) {
-      if (RankBoat.status === BoatRacingStatus[_index17]) {
-        RetObject.Class += "  " + BoatRacingClasses[BoatRacingStatus[_index17]];
-      }
+    var _i4 = Math.round((new Date() - new Date(1e3 * parseInt(e.deptime, 10))) / 1e3);
+
+    r.Time = "-1" === e.deptime ? "" : GetFormattedChronoString(_i4), r.Loch = e.loch, r.lon = e.longitude, r.Lat = e.latitude, r.Last1h = e.last1h, r.Last3h = e.last3h, r.Last24h = e.last24h;
+
+    for (var _t11 in BoatRacingStatus) {
+      e.status === BoatRacingStatus[_t11] && (r.Class += "  " + BoatRacingClasses[BoatRacingStatus[_t11]]);
     }
-  } else if (!WPNum) {
-    // Non General ranking layout
-    var _NextMark = GetLocalizedString("status_" + RankBoat.status);
+  } else if (a) {
+    var _t12;
 
-    RetObject.Distance = _NextMark;
-    var Duration = parseInt(RankBoat.duration, 10);
-    RetObject.Time = GetFormattedChronoString(Duration);
+    if (r.Time = GetFormattedChronoString(parseInt(e.WP[a - 1].duration, 10)), e.WP[a - 1].Delta) {
+      var _i5 = RoundPow(e.WP[a - 1].Pct, 2);
 
-    if (Refs && Duration !== Refs.Arrived1stTime) {
-      RetObject.Time += " ( +" + RoundPow(Duration / Refs.Arrived1stTime * 100 - 100, 2) + "% )";
-    }
+      _t12 = GetFormattedChronoString(e.WP[a - 1].Delta) + " (+" + _i5 + " %)";
+    } else _t12 = GetLocalizedString("winner");
 
-    RetObject.Loch = RankBoat.loch;
-    RetObject.lon = RankBoat.longitude;
-    RetObject.Lat = RankBoat.latitude;
+    r.Loch = _t12;
   } else {
-    RetObject.Time = GetFormattedChronoString(parseInt(RankBoat.WP[WPNum - 1].duration, 10));
-    var DeltaStr;
+    var _t13 = GetLocalizedString("status_" + e.status);
 
-    if (RankBoat.WP[WPNum - 1].Delta) {
-      var PctString = RoundPow(RankBoat.WP[WPNum - 1].Pct, 2);
-      DeltaStr = GetFormattedChronoString(RankBoat.WP[WPNum - 1].Delta) + " (+" + PctString + " %)";
-    } else {
-      DeltaStr = GetLocalizedString("winner");
-    }
+    r.Distance = _t13;
 
-    RetObject.Loch = DeltaStr;
+    var _a11 = parseInt(e.duration, 10);
+
+    r.Time = GetFormattedChronoString(_a11), n && _a11 !== n.Arrived1stTime && (r.Time += " ( +" + RoundPow(_a11 / n.Arrived1stTime * 100 - 100, 2) + "% )"), r.Loch = e.loch, r.lon = e.longitude, r.Lat = e.latitude;
   }
 
-  return RetObject;
+  return r;
 }
 
 function HandleShowMapPrefs(e) {
-  //Load prefs
-  $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
-  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNames);
-  $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
-  $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
-  $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
-  $('#DDMapSelOption:first-child').html('<span Mode=' + VLM2Prefs.MapPrefs.MapOppShow + '>' + VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow) + '</span>' + '<span class="caret"></span>');
-
-  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10) {
-    $("#NbDisplayBoat").removeClass("hidden");
-    $("#NbDisplayBoat").val(VLM2Prefs.MapPrefs.ShowTopCount);
-  } else {
-    $("#NbDisplayBoat").addClass("hidden");
-  }
-
-  $("#VacPol").val(VLM2Prefs.MapPrefs.PolarVacCount);
+  $("#DisplayReals").attr("checked", VLM2Prefs.MapPrefs.ShowReals), $("#DisplayNames").attr("checked", VLM2Prefs.MapPrefs.ShowOppNames), $("#EstTrackMouse").attr("checked", VLM2Prefs.MapPrefs.EstTrackMouse), $("#TrackEstForecast").attr("checked", VLM2Prefs.MapPrefs.TrackEstForecast), $("#UseUTC").attr("checked", VLM2Prefs.MapPrefs.UseUTC), $("#DDMapSelOption:first-child").html("<span Mode=" + VLM2Prefs.MapPrefs.MapOppShow + ">" + VLM2Prefs.MapPrefs.GetOppModeString(VLM2Prefs.MapPrefs.MapOppShow) + '</span><span class="caret"></span>'), VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10 ? ($("#NbDisplayBoat").removeClass("hidden"), $("#NbDisplayBoat").val(VLM2Prefs.MapPrefs.ShowTopCount)) : $("#NbDisplayBoat").addClass("hidden"), $("#VacPol").val(VLM2Prefs.MapPrefs.PolarVacCount);
 }
 
 function HandleMapPrefOptionChange(e) {
-  var target = e.target;
+  var t = e.target;
 
-  if (typeof target === "undefined" || typeof target.attributes.id === "undefined") {
-    return;
+  if (void 0 !== t && void 0 !== t.attributes.id) {
+    var a = t.attributes.id.value,
+        i = t.checked;
+
+    switch (a) {
+      case "DisplayReals":
+      case "ShowReals":
+      case "UseUTC":
+      case "DisplayNames":
+      case "ShowOppNames":
+      case "EstTrackMouse":
+      case "TrackEstForecast":
+        VLM2Prefs.MapPrefs[a] = i;
+        break;
+
+      case "VacPol":
+        var _e14 = parseInt($("#VacPol").val(), 10);
+
+        _e14 > 0 && _e14 < 120 ? VLM2Prefs.MapPrefs.PolarVacCount = _e14 : $("#VacPol").value(12);
+        break;
+
+      case "NbDisplayBoat":
+        var _t14 = parseInt($("#NbDisplayBoat").val(), 10);
+
+        VLM2Prefs.MapPrefs.ShowTopCount = _t14;
+        break;
+
+      default:
+        return void console.log("unknown pref storage called : " + a);
+    }
+
+    VLM2Prefs.Save(), RefreshCurrentBoat(!1, !1);
   }
-
-  var Id = target.attributes.id.value;
-  var Value = target.checked;
-
-  switch (Id) {
-    /*case "DisplayReals":
-      //VLM2Prefs.MapPrefs.ShowReals = Value;
-      //break;
-    case "DisplayNames":
-      //VLM2Prefs.MapPrefs.ShowOppName = Value;
-      //break;*/
-    case "DisplayReals":
-    case "ShowReals":
-    case "UseUTC":
-    case "DisplayNames":
-    case "ShowOppNames":
-    case "EstTrackMouse":
-    case "TrackEstForecast":
-      VLM2Prefs.MapPrefs[Id] = Value;
-      break;
-
-    case "VacPol":
-      var VacPol = parseInt($("#VacPol").val(), 10);
-
-      if (VacPol > 0 && VacPol < 120) {
-        VLM2Prefs.MapPrefs.PolarVacCount = VacPol;
-      } else {
-        $("#VacPol").value(12);
-      }
-
-      break;
-
-    case "NbDisplayBoat":
-      var TopCount = parseInt($("#NbDisplayBoat").val(), 10);
-      VLM2Prefs.MapPrefs.ShowTopCount = TopCount;
-      break;
-
-    default:
-      console.log("unknown pref storage called : " + Id);
-      return;
-  }
-
-  VLM2Prefs.Save();
-  RefreshCurrentBoat(false, false);
 }
 
-function SafeHTMLColor(Color) {
-  Color = "" + Color;
-
-  if (Color.length < 6) {
-    Color = ("000000" + Color).slice(-6);
-  }
-
-  if (Color.substring(0, 1) !== "#") {
-    Color = "#" + Color;
-  } else if (Color.substring(1, 2) === "#") {
-    Color = Color.substring(1);
-  }
-
-  return Color;
+function SafeHTMLColor(e) {
+  return (e = "" + e).length < 6 && (e = ("000000" + e).slice(-6)), "#" !== e.substring(0, 1) ? e = "#" + e : "#" === e.substring(1, 2) && (e = e.substring(1)), e;
 }
 
 function HandleMapOppModeChange(e) {
-  var t = e.target;
-  var Mode = parseInt(t.attributes.Mode.value, 10);
-  VLM2Prefs.MapPrefs.MapOppShow = Mode;
-  VLM2Prefs.Save();
-  HandleShowMapPrefs(e);
+  var t = e.target,
+      a = parseInt(t.attributes.Mode.value, 10);
+  VLM2Prefs.MapPrefs.MapOppShow = a, VLM2Prefs.Save(), HandleShowMapPrefs(e);
 }
 
-function SetActiveStyleSheet(title) {
-  var i, a, main;
+function SetActiveStyleSheet(e) {
+  var t, a;
 
-  for (i = 0; a = document.getElementsByTagName("link")[i]; i++) {
-    if (a.getAttribute("rel").indexOf("style") !== -1 && a.getAttribute("title")) {
-      a.disabled = true;
-
-      if (a.getAttribute("title") === title) {
-        a.disabled = false;
-      }
-    }
+  for (t = 0; a = document.getElementsByTagName("link")[t]; t++) {
+    -1 !== a.getAttribute("rel").indexOf("style") && a.getAttribute("title") && (a.disabled = !0, a.getAttribute("title") === e && (a.disabled = !1));
   }
 }
 
-function SetDDTheme(Theme) {
-  SetActiveStyleSheet(Theme);
-  $("#SelectionThemeDropDown:first-child").html(Theme + '<span class="caret"></span>');
-  $("#SelectionThemeDropDown").attr("SelTheme", Theme);
+function SetDDTheme(e) {
+  SetActiveStyleSheet(e), $("#SelectionThemeDropDown:first-child").html(e + '<span class="caret"></span>'), $("#SelectionThemeDropDown").attr("SelTheme", e);
 }
 
 function HandleDDlineClick(e) {
-  var Target = e.target; //var Theme = Target.closest(".DDTheme").attributes["DDTheme"].value;
-
-  var Theme = e.target.attributes.ddtheme.value;
-  SetDDTheme(Theme);
+  e.target;
+  SetDDTheme(e.target.attributes.ddtheme.value);
 }
 
 var AlertTemplate;
 
 function InitAlerts() {
-  // Init default alertbox
-  $("#AlertBox").css("display", "block");
-  AlertTemplate = $("#AlertBox")[0];
-  $("#AlertBoxContainer").empty();
-  $("#AlertBoxContainer").removeClass("hidden");
+  $("#AlertBox").css("display", "block"), AlertTemplate = $("#AlertBox")[0], $("#AlertBoxContainer").empty(), $("#AlertBoxContainer").removeClass("hidden");
 }
 
-function VLMAlertSuccess(Text) {
-  VLMAlert(Text, "alert-success");
+function VLMAlertSuccess(e) {
+  VLMAlert(e, "alert-success");
 }
 
-function VLMAlertDanger(Text) {
-  VLMAlert(Text, "alert-danger");
+function VLMAlertDanger(e) {
+  VLMAlert(e, "alert-danger");
 }
 
-function VLMAlertInfo(Text) {
-  VLMAlert(Text, "alert-info");
+function VLMAlertInfo(e) {
+  VLMAlert(e, "alert-info");
 }
 
 var AlertIntervalId = null;
 
-function VLMAlert(Text, Style) {
-  if (AlertIntervalId) {
-    clearInterval(AlertIntervalId);
-  }
-
-  if (typeof Style === "undefined" || !Style) {
-    Style = "alert-info";
-  }
-
-  $("#AlertBoxContainer").empty().append(AlertTemplate).show();
-  $("#AlertText").text(Text);
-  $("#AlertBox").removeClass("alert-sucess");
-  $("#AlertBox").removeClass("alert-warning");
-  $("#AlertBox").removeClass("alert-info");
-  $("#AlertBox").removeClass("alert-danger");
-  $("#AlertBox").addClass(Style);
-  $("#AlertBox").show();
-  $("#AlertCloseBox").unbind().on('click', AutoCloseVLMAlert);
-
-  if (AlertIntervalId) {
-    clearInterval(AlertIntervalId);
-  }
-
-  AlertIntervalId = setTimeout(AutoCloseVLMAlert, 5000);
+function VLMAlert(e, t) {
+  AlertIntervalId && clearInterval(AlertIntervalId), void 0 !== t && t || (t = "alert-info"), $("#AlertBoxContainer").empty().append(AlertTemplate).show(), $("#AlertText").text(e), $("#AlertBox").removeClass("alert-sucess"), $("#AlertBox").removeClass("alert-warning"), $("#AlertBox").removeClass("alert-info"), $("#AlertBox").removeClass("alert-danger"), $("#AlertBox").addClass(t), $("#AlertBox").show(), $("#AlertCloseBox").unbind().on("click", AutoCloseVLMAlert), AlertIntervalId && clearInterval(AlertIntervalId), AlertIntervalId = setTimeout(AutoCloseVLMAlert, 5e3);
 }
 
 function AutoCloseVLMAlert() {
   $("#AlertBox").hide();
 }
 
-function GetUserConfirmation(Question, IsYesNo, CallBack) {
-  $("#ConfirmDialog").modal('show');
-
-  if (IsYesNo) {
-    $("#OKBtn").hide();
-    $("#CancelBtn").hide();
-    $("#YesBtn").show();
-    $("#NoBtn").show();
-  } else {
-    $("#OKBtn").show();
-    $("#CancelBtn").show();
-    $("#YesBtn").hide();
-    $("#NoBtn").hide();
-  }
-
-  $("#ConfirmText").text(Question);
-  $(".OKBtn").unbind().on("click", function () {
-    $("#ConfirmDialog").modal('hide');
-    CallBack(true);
-  });
-  $(".NOKBtn").unbind().on("click", function () {
-    $("#ConfirmDialog").modal('hide');
-    CallBack(false);
+function GetUserConfirmation(e, t, a) {
+  $("#ConfirmDialog").modal("show"), t ? ($("#OKBtn").hide(), $("#CancelBtn").hide(), $("#YesBtn").show(), $("#NoBtn").show()) : ($("#OKBtn").show(), $("#CancelBtn").show(), $("#YesBtn").hide(), $("#NoBtn").hide()), $("#ConfirmText").text(e), $(".OKBtn").unbind().on("click", function () {
+    $("#ConfirmDialog").modal("hide"), a(!0);
+  }), $(".NOKBtn").unbind().on("click", function () {
+    $("#ConfirmDialog").modal("hide"), a(!1);
   });
 }
 
-function GetRaceRankingLink(RaceInfo) {
-  return '<a href="/jvlm?RaceRank=' + RaceInfo.idrace + '" target="RankTab">' + RaceInfo.racename + '</a>';
+function GetRaceRankingLink(e) {
+  return '<a href="/jvlm?RaceRank=' + e.idrace + '" target="RankTab">' + e.racename + "</a>";
 }
 
-function FillBoatPalmares(data, status, b, c, d, f) {
-  var index;
+function FillBoatPalmares(e, t, a, i, n, o) {
+  var r;
 
-  if (status === "success") {
-    var rows = [];
+  if ("success" === t) {
+    var _t15 = [];
 
-    for (index in data.palmares) {
-      if (data.palmares[index]) {
-        var palmares = data.palmares[index];
-        var RowsData = {
-          RaceId: data.palmares[index].idrace,
-          RaceName: GetRaceRankingLink(data.palmares[index]),
-          Ranking: palmares.ranking.rank + " / " + palmares.ranking.racercount
+    for (r in e.palmares) {
+      if (e.palmares[r]) {
+        var _a12 = e.palmares[r],
+            _i6 = {
+          RaceId: e.palmares[r].idrace,
+          RaceName: GetRaceRankingLink(e.palmares[r]),
+          Ranking: _a12.ranking.rank + " / " + _a12.ranking.racercount
         };
-        rows.push(RowsData);
+
+        _t15.push(_i6);
       }
     }
 
-    RaceHistFt.loadRows(rows);
+    RaceHistFt.loadRows(_t15);
   }
 
-  var str = GetLocalizedString("palmares");
-  str = str.replace("%s", data.boat.name);
-  $("#palmaresheaderline").text(str);
+  var s = GetLocalizedString("palmares");
+  s = s.replace("%s", e.boat.name), $("#palmaresheaderline").text(s);
 }
 
-function ShowUserRaceHistory(BoatId) {
-  $("#RaceHistory").modal("show");
-  $.get("/ws/boatinfo/palmares.php?idu=" + BoatId, function (e, a, b, c, d, f) {
-    FillBoatPalmares(e, a, b, c, d, f);
+function ShowUserRaceHistory(e) {
+  $("#RaceHistory").modal("show"), $.get("/ws/boatinfo/palmares.php?idu=" + e, function (e, t, a, i, n, o) {
+    FillBoatPalmares(e, t, a, i, n, o);
   });
 }
 
 function HandleShowBoatRaceHistory(e) {
-  var BoatId = $(e.target).attr("boatid");
-
-  if (BoatId) {
-    ShowUserRaceHistory(BoatId);
-  }
+  var t = $(e.target).attr("boatid");
+  t && ShowUserRaceHistory(t);
 }
 
-function HandleCreateUserResult(data, status) {
-  if (status === "success" && data) {
-    $(".ValidationMark").addClass("hidden");
+function HandleCreateUserResult(e, t) {
+  if ("success" === t && e) if ($(".ValidationMark").addClass("hidden"), e.success ? ($(".ValidationMark.Valid").removeClass("hidden"), VLMAlertSuccess(GetLocalizedString("An email has been sent. Click on the link to validate.")), $("#InscriptForm").modal("hide"), $("#LoginForm").modal("hide")) : e.request && e.request.errorstring ? VLMAlertDanger(GetLocalizedString(e.request.errorstring)) : VLMAlertDanger(GetLocalizedString(e.error.msg)), e.request) e.request.MailOK ? $(".ValidationMark.Email.Valid").removeClass("hidden") : $(".ValidationMark.Email.Invalid").removeClass("hidden"), e.request.PasswordOK ? $(".ValidationMark.Password.Valid").removeClass("hidden") : $(".ValidationMark.Password.Invalid").removeClass("hidden"), e.request.PlayerNameOK ? $(".ValidationMark.Pseudo.Valid").removeClass("hidden") : $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");else if (e.error) switch (e.error.code) {
+    case "NEWPLAYER01":
+      $(".ValidationMark.Email.Invalid").removeClass("hidden");
+      break;
 
-    if (data.success) {
-      $(".ValidationMark.Valid").removeClass("hidden");
-      VLMAlertSuccess(GetLocalizedString('An email has been sent. Click on the link to validate.'));
-      $("#InscriptForm").modal("hide");
-      $("#LoginForm").modal("hide");
-    } else if (data.request && data.request.errorstring) {
-      VLMAlertDanger(GetLocalizedString(data.request.errorstring));
-    } else {
-      VLMAlertDanger(GetLocalizedString(data.error.msg));
-    }
+    case "NEWPLAYER02":
+      $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
+      break;
 
-    if (data.request) {
-      if (data.request.MailOK) {
-        $(".ValidationMark.Email.Valid").removeClass("hidden");
-      } else {
-        $(".ValidationMark.Email.Invalid").removeClass("hidden");
-      }
-
-      if (data.request.PasswordOK) {
-        $(".ValidationMark.Password.Valid").removeClass("hidden");
-      } else {
-        $(".ValidationMark.Password.Invalid").removeClass("hidden");
-      }
-
-      if (data.request.PlayerNameOK) {
-        $(".ValidationMark.Pseudo.Valid").removeClass("hidden");
-      } else {
-        $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
-      }
-    } else if (data.error) {
-      switch (data.error.code) {
-        case "NEWPLAYER01":
-          $(".ValidationMark.Email.Invalid").removeClass("hidden");
-          break;
-
-        case "NEWPLAYER02":
-          $(".ValidationMark.Pseudo.Invalid").removeClass("hidden");
-          break;
-
-        case "NEWPLAYER03":
-          $(".ValidationMark.Password.Invalid").removeClass("hidden");
-          break;
-      }
-    }
+    case "NEWPLAYER03":
+      $(".ValidationMark.Password.Invalid").removeClass("hidden");
   }
-
   $("#BtnCreateAccount").show();
 }
 
 function HandleCreateUser() {
-  var txtplayername = $("#NewPlayerPseudo")[0].value;
-  var txtemail = $("#NewPlayerEMail")[0].value;
-  var txtPwd = $("#NewPlayerPassword")[0].value;
-  var PostData = {
-    emailid: txtemail,
-    password: txtPwd,
-    pseudo: txtplayername
+  var e = $("#NewPlayerPseudo")[0].value,
+      t = {
+    emailid: $("#NewPlayerEMail")[0].value,
+    password: $("#NewPlayerPassword")[0].value,
+    pseudo: e
   };
-  $("#BtnCreateAccount").hide();
-  $.post("/ws/playerinfo/player_create.php", PostData, function (e, status) {
-    HandleCreateUserResult(e, status);
+  $("#BtnCreateAccount").hide(), $.post("/ws/playerinfo/player_create.php", t, function (e, t) {
+    HandleCreateUserResult(e, t);
   });
 }
 
-function setModalMaxHeight(element) {
-  var $element = $(element);
-  var $content = $element.find('.modal-content');
-  var borderWidth = $content.outerHeight() - $content.innerHeight();
-  var dialogMargin = $(window).width() < 768 ? 20 : 60;
-  var contentHeight = $(window).height() - (dialogMargin + borderWidth);
-  var headerHeight = $element.find('.modal-header').outerHeight() || 0;
-  var footerHeight = $element.find('.modal-footer').outerHeight() || 0;
-  var maxHeight = contentHeight - (headerHeight + footerHeight);
-  $content.css({
-    'overflow': 'hidden'
+function setModalMaxHeight(e) {
+  var t = $(e),
+      a = t.find(".modal-content"),
+      i = a.outerHeight() - a.innerHeight(),
+      n = $(window).width() < 768 ? 20 : 60,
+      o = $(window).height() - (n + i) - ((t.find(".modal-header").outerHeight() || 0) + (t.find(".modal-footer").outerHeight() || 0));
+  a.css({
+    overflow: "hidden"
+  }), t.find(".modal-body").css({
+    "max-height": o,
+    "overflow-y": "auto"
   });
-  $element.find('.modal-body').css({
-    'max-height': maxHeight,
-    'overflow-y': 'auto'
-  });
-} // Return a moment in UTC or Local according to VLM2 Local Pref
-
-
-function GetLocalUTCTime(d, IsUTC, AsString) {
-  var m = d;
-  var UTCSuffix = "";
-
-  if (!moment.isMoment(d)) {
-    if (IsUTC) {
-      m = moment(d).utc();
-    } else {
-      m = moment(d);
-    }
-  }
-
-  if (VLM2Prefs.MapPrefs.UseUTC) {
-    if (!IsUTC) {
-      m = m.utc();
-    }
-
-    UTCSuffix = " Z";
-  } else {
-    if (IsUTC) {
-      m = m.local();
-    }
-  }
-
-  if (AsString) {
-    return m.format("LLLL") + UTCSuffix;
-  } else {
-    return m;
-  }
 }
-/**!
- * jQuery Progress Timer - v1.0.5 - 6/8/2015
- * http://www.thomasnorberg.com
- * Copyright (c) 2015 Thomas Norberg;
- * Licensed MIT
- */
 
-/*
- <div class="progress">
- <div class="progress-bar progress-bar-success progress-bar-striped"
- role="progressbar" aria-valuenow="40" aria-valuemin="0"
- aria-valuemax="100" style="width: 40%">
- <span class="sr-only">40% Complete (success)</span>
- </div>
- </div>
- */
-
-
-if (typeof jQuery === "undefined") {
-  throw new Error("jQuery progress timer requires jQuery");
+function GetLocalUTCTime(e, t, a) {
+  var i = e,
+      n = "";
+  return moment.isMoment(e) || (i = t ? moment(e).utc() : moment(e)), VLM2Prefs.MapPrefs.UseUTC ? (t || (i = i.utc()), n = " Z") : t && (i = i.local()), a ? i.format("LLLL") + n : i;
 }
-/*!
- * jQuery lightweight plugin boilerplate
- * Original author: @ajpiano
- * Further changes, comments: @addyosmani
- * Licensed under the MIT license
- */
 
+if ("undefined" == typeof jQuery) throw new Error("jQuery progress timer requires jQuery");
 
-(function ($, window, document, undefined) {
-  "use strict"; // undefined is used here as the undefined global
-  // variable in ECMAScript 3 and is mutable (i.e. it can
-  // be changed by someone else). undefined isn't really
-  // being passed in so we can ensure that its value is
-  // truly undefined. In ES5, undefined can no longer be
-  // modified.
-  // window and document are passed through as local
-  // variables rather than as globals, because this (slightly)
-  // quickens the resolution process and can be more
-  // efficiently minified (especially when both are
-  // regularly referenced in your plugin).
-  // Create the defaults once
+var _LocaleDict, _EnDict;
 
-  var pluginName = "progressTimer",
-      defaults = {
-    //total number of seconds
+!function (e, t, a, i) {
+  "use strict";
+
+  var n = "progressTimer",
+      o = {
     timeLimit: 60,
-    //seconds remaining triggering switch to warning color
     warningThreshold: 5,
-    //invoked once the timer expires
     onFinish: function onFinish() {},
-    //bootstrap progress bar style at the beginning of the timer
     baseStyle: "",
-    //bootstrap progress bar style in the warning phase
     warningStyle: "progress-bar-danger",
-    //bootstrap progress bar style at completion of timer
     completeStyle: "progress-bar-success",
-    //show html on progress bar div area
-    showHtmlSpan: true,
-    //set the error text when error occurs
+    showHtmlSpan: !0,
     errorText: "ERROR!",
-    //set the success text when succes occurs
     successText: "100%"
-  }; // The actual plugin constructor
-
-  var Plugin = function Plugin(element, options) {
-    this.element = element;
-    this.$elem = $(element);
-    this.options = $.extend({}, defaults, options);
-    this._defaults = defaults;
-    this._name = pluginName;
-    this.metadata = this.$elem.data("plugin-options");
-    this.init();
+  },
+      r = function r(t, a) {
+    this.element = t, this.$elem = e(t), this.options = e.extend({}, o, a), this._defaults = o, this._name = n, this.metadata = this.$elem.data("plugin-options"), this.init();
   };
 
-  Plugin.prototype.constructor = Plugin;
-
-  Plugin.prototype.init = function () {
-    var t = this;
-    $(t.element).empty();
-    t.span = $("<span/>");
-    t.barContainer = $("<div>").addClass("progress");
-    t.bar = $("<div>").addClass("progress-bar active progress-bar-striped").addClass(t.options.baseStyle).attr("role", "progressbar").attr("aria-valuenow", "0").attr("aria-valuemin", "0").attr("aria-valuemax", t.options.timeLimit);
-    t.span.appendTo(t.bar);
-
-    if (!t.options.showHtmlSpan) {
-      t.span.addClass("sr-only");
-    }
-
-    t.bar.appendTo(t.barContainer);
-    t.barContainer.appendTo(t.element);
-    t.start = new Date();
-    t.limit = t.options.timeLimit * 1000;
-    t.warningThreshold = t.options.warningThreshold * 1000;
-    t.interval = window.setInterval(function () {
-      t._run.call(t);
-    }, 250);
-    t.bar.data("progress-interval", t.interval);
-    return true;
-  };
-
-  Plugin.prototype.destroy = function () {
+  r.prototype.constructor = r, r.prototype.init = function () {
+    var a = this;
+    return e(a.element).empty(), a.span = e("<span/>"), a.barContainer = e("<div>").addClass("progress"), a.bar = e("<div>").addClass("progress-bar active progress-bar-striped").addClass(a.options.baseStyle).attr("role", "progressbar").attr("aria-valuenow", "0").attr("aria-valuemin", "0").attr("aria-valuemax", a.options.timeLimit), a.span.appendTo(a.bar), a.options.showHtmlSpan || a.span.addClass("sr-only"), a.bar.appendTo(a.barContainer), a.barContainer.appendTo(a.element), a.start = new Date(), a.limit = 1e3 * a.options.timeLimit, a.warningThreshold = 1e3 * a.options.warningThreshold, a.interval = t.setInterval(function () {
+      a._run.call(a);
+    }, 250), a.bar.data("progress-interval", a.interval), !0;
+  }, r.prototype.destroy = function () {
     this.$elem.removeData();
-  };
+  }, r.prototype._run = function () {
+    var e = this,
+        t = new Date() - e.start,
+        a = t / e.limit * 100;
+    e.bar.attr("aria-valuenow", a), e.bar.width(a + "%");
+    var i = a.toFixed(2);
+    return i >= 100 && (i = 100), e.options.showHtmlSpan && e.span.html(i + "%"), t >= e.warningThreshold && e.bar.removeClass(this.options.baseStyle).removeClass(this.options.completeStyle).addClass(this.options.warningStyle), t >= e.limit && e.complete.call(e), !0;
+  }, r.prototype.removeInterval = function () {
+    var a = e(".progress-bar", this.element);
 
-  Plugin.prototype._run = function () {
-    var t = this;
-    var elapsed = new Date() - t.start,
-        width = elapsed / t.limit * 100;
-    t.bar.attr("aria-valuenow", width);
-    t.bar.width(width + "%");
-    var percentage = width.toFixed(2);
-
-    if (percentage >= 100) {
-      percentage = 100;
+    if (void 0 !== a.data("progress-interval")) {
+      var i = a.data("progress-interval");
+      t.clearInterval(i);
     }
 
-    if (t.options.showHtmlSpan) {
-      t.span.html(percentage + "%");
-    }
-
-    if (elapsed >= t.warningThreshold) {
-      t.bar.removeClass(this.options.baseStyle).removeClass(this.options.completeStyle).addClass(this.options.warningStyle);
-    }
-
-    if (elapsed >= t.limit) {
-      t.complete.call(t);
-    }
-
-    return true;
-  };
-
-  Plugin.prototype.removeInterval = function () {
+    return a;
+  }, r.prototype.complete = function () {
     var t = this,
-        bar = $(".progress-bar", t.element);
-
-    if (typeof bar.data("progress-interval") !== "undefined") {
-      var interval = bar.data("progress-interval");
-      window.clearInterval(interval);
-    }
-
-    return bar;
-  };
-
-  Plugin.prototype.complete = function () {
+        a = t.removeInterval.call(t),
+        i = arguments;
+    0 !== i.length && "object" == _typeof(i[0]) && (t.options = e.extend({}, t.options, i[0])), a.removeClass(t.options.baseStyle).removeClass(t.options.warningStyle).addClass(t.options.completeStyle), a.width("100%"), t.options.showHtmlSpan && e("span", a).html(t.options.successText), a.attr("aria-valuenow", 100), setTimeout(function () {
+      t.options.onFinish.call(a);
+    }, 500), t.destroy.call(t);
+  }, r.prototype.error = function () {
     var t = this,
-        bar = t.removeInterval.call(t),
-        args = arguments;
+        a = t.removeInterval.call(t),
+        i = arguments;
+    0 !== i.length && "object" == _typeof(i[0]) && (t.options = e.extend({}, t.options, i[0])), a.removeClass(t.options.baseStyle).addClass(t.options.warningStyle), a.width("100%"), t.options.showHtmlSpan && e("span", a).html(t.options.errorText), a.attr("aria-valuenow", 100), setTimeout(function () {
+      t.options.onFinish.call(a);
+    }, 500), t.destroy.call(t);
+  }, e.fn[n] = function (t) {
+    var a = arguments;
+    if (t === i || "object" == _typeof(t)) return this.each(function () {
+      e.data(this, "plugin_" + n) || e.data(this, "plugin_" + n, new r(this, t));
+    });
 
-    if (args.length !== 0 && _typeof(args[0]) === "object") {
-      t.options = $.extend({}, t.options, args[0]);
-    }
-
-    bar.removeClass(t.options.baseStyle).removeClass(t.options.warningStyle).addClass(t.options.completeStyle);
-    bar.width("100%");
-
-    if (t.options.showHtmlSpan) {
-      $("span", bar).html(t.options.successText);
-    }
-
-    bar.attr("aria-valuenow", 100);
-    setTimeout(function () {
-      t.options.onFinish.call(bar);
-    }, 500);
-    t.destroy.call(t);
-  };
-
-  Plugin.prototype.error = function () {
-    var t = this,
-        bar = t.removeInterval.call(t),
-        args = arguments;
-
-    if (args.length !== 0 && _typeof(args[0]) === "object") {
-      t.options = $.extend({}, t.options, args[0]);
-    }
-
-    bar.removeClass(t.options.baseStyle).addClass(t.options.warningStyle);
-    bar.width("100%");
-
-    if (t.options.showHtmlSpan) {
-      $("span", bar).html(t.options.errorText);
-    }
-
-    bar.attr("aria-valuenow", 100);
-    setTimeout(function () {
-      t.options.onFinish.call(bar);
-    }, 500);
-    t.destroy.call(t);
-  }; // A really lightweight plugin wrapper around the constructor,
-  // preventing against multiple instantiations
-
-
-  $.fn[pluginName] = function (options) {
-    var args = arguments;
-
-    if (options === undefined || _typeof(options) === "object") {
-      // Creates a new plugin instance
-      return this.each(function () {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    } else if (typeof options === "string" && options[0] !== "_" && options !== "init") {
-      // Call a public plugin method (not starting with an underscore) and different
-      // from the "init" one
-      if (Array.prototype.slice.call(args, 1).length === 0 && $.inArray(options, $.fn[pluginName].getters) !== -1) {
-        // If the user does not pass any arguments and the method allows to
-        // work as a getter then break the chainability so we can return a value
-        // instead the element reference.
-        var instance = $.data(this[0], "plugin_" + pluginName);
-        return instance[options].apply(instance, Array.prototype.slice.call(args, 1));
-      } else {
-        // Invoke the specified method on each selected element
-        return this.each(function () {
-          var instance = $.data(this, "plugin_" + pluginName);
-
-          if (instance instanceof Plugin && typeof instance[options] === "function") {
-            instance[options].apply(instance, Array.prototype.slice.call(args, 1));
-          }
-        });
+    if ("string" == typeof t && "_" !== t[0] && "init" !== t) {
+      if (0 === Array.prototype.slice.call(a, 1).length && -1 !== e.inArray(t, e.fn[n].getters)) {
+        var o = e.data(this[0], "plugin_" + n);
+        return o[t].apply(o, Array.prototype.slice.call(a, 1));
       }
+
+      return this.each(function () {
+        var i = e.data(this, "plugin_" + n);
+        i instanceof r && "function" == typeof i[t] && i[t].apply(i, Array.prototype.slice.call(a, 1));
+      });
     }
-  };
-
-  $.fn[pluginName].getters = ["complete", "error"];
-})(jQuery, window, document, undefined);
-/*!
- * jQuery UI Touch Punch 0.2.3
- *
- * Copyright 2011–2014, Dave Furfero
- * Dual licensed under the MIT or GPL Version 2 licenses.
- *
- * Depends:
- *  jquery.ui.widget.js
- *  jquery.ui.mouse.js
- */
-
-
-(function ($) {
-  // Detect touch support
-  $.support.touch = 'ontouchend' in document; // Ignore browsers without touch support
-
-  if (!$.support.touch) {
-    return;
+  }, e.fn[n].getters = ["complete", "error"];
+}(jQuery, window, document, void 0), function (e) {
+  if (e.support.touch = "ontouchend" in document, e.support.touch) {
+    var t,
+        a = e.ui.mouse.prototype,
+        i = a._mouseInit,
+        n = a._mouseDestroy;
+    a._touchStart = function (e) {
+      !t && this._mouseCapture(e.originalEvent.changedTouches[0]) && (t = !0, this._touchMoved = !1, o(e, "mouseover"), o(e, "mousemove"), o(e, "mousedown"));
+    }, a._touchMove = function (e) {
+      t && (this._touchMoved = !0, o(e, "mousemove"));
+    }, a._touchEnd = function (e) {
+      t && (o(e, "mouseup"), o(e, "mouseout"), this._touchMoved || o(e, "click"), t = !1);
+    }, a._mouseInit = function () {
+      this.element.bind({
+        touchstart: e.proxy(this, "_touchStart"),
+        touchmove: e.proxy(this, "_touchMove"),
+        touchend: e.proxy(this, "_touchEnd")
+      }), i.call(this);
+    }, a._mouseDestroy = function () {
+      this.element.unbind({
+        touchstart: e.proxy(this, "_touchStart"),
+        touchmove: e.proxy(this, "_touchMove"),
+        touchend: e.proxy(this, "_touchEnd")
+      }), n.call(this);
+    };
   }
 
-  var mouseProto = $.ui.mouse.prototype,
-      _mouseInit = mouseProto._mouseInit,
-      _mouseDestroy = mouseProto._mouseDestroy,
-      touchHandled;
-  /**
-   * Simulate a mouse event based on a corresponding touch event
-   * @param {Object} event A touch event
-   * @param {String} simulatedType The corresponding mouse event
-   */
-
-  function simulateMouseEvent(event, simulatedType) {
-    // Ignore multi-touch events
-    if (event.originalEvent.touches.length > 1) {
-      return;
+  function o(e, t) {
+    if (!(e.originalEvent.touches.length > 1)) {
+      e.preventDefault();
+      var a = e.originalEvent.changedTouches[0],
+          i = document.createEvent("MouseEvents");
+      i.initMouseEvent(t, !0, !0, window, 1, a.screenX, a.screenY, a.clientX, a.clientY, !1, !1, !1, !1, 0, null), e.target.dispatchEvent(i);
     }
-
-    event.preventDefault();
-    var touch = event.originalEvent.changedTouches[0],
-        simulatedEvent = document.createEvent('MouseEvents'); // Initialize the simulated mouse event using the touch event's coordinates
-
-    simulatedEvent.initMouseEvent(simulatedType, // type
-    true, // bubbles                    
-    true, // cancelable                 
-    window, // view                       
-    1, // detail                     
-    touch.screenX, // screenX                    
-    touch.screenY, // screenY                    
-    touch.clientX, // clientX                    
-    touch.clientY, // clientY                    
-    false, // ctrlKey                    
-    false, // altKey                     
-    false, // shiftKey                   
-    false, // metaKey                    
-    0, // button                     
-    null // relatedTarget              
-    ); // Dispatch the simulated event to the target element
-
-    event.target.dispatchEvent(simulatedEvent);
   }
-  /**
-   * Handle the jQuery UI widget's touchstart events
-   * @param {Object} event The widget element's touchstart event
-   */
-
-
-  mouseProto._touchStart = function (event) {
-    var self = this; // Ignore the event if another widget is already being handled
-
-    if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
-      return;
-    } // Set the flag to prevent other widgets from inheriting the touch event
-
-
-    touchHandled = true; // Track movement to determine if interaction was a click
-
-    self._touchMoved = false; // Simulate the mouseover event
-
-    simulateMouseEvent(event, 'mouseover'); // Simulate the mousemove event
-
-    simulateMouseEvent(event, 'mousemove'); // Simulate the mousedown event
-
-    simulateMouseEvent(event, 'mousedown');
-  };
-  /**
-   * Handle the jQuery UI widget's touchmove events
-   * @param {Object} event The document's touchmove event
-   */
-
-
-  mouseProto._touchMove = function (event) {
-    // Ignore event if not handled
-    if (!touchHandled) {
-      return;
-    } // Interaction was not a click
-
-
-    this._touchMoved = true; // Simulate the mousemove event
-
-    simulateMouseEvent(event, 'mousemove');
-  };
-  /**
-   * Handle the jQuery UI widget's touchend events
-   * @param {Object} event The document's touchend event
-   */
-
-
-  mouseProto._touchEnd = function (event) {
-    // Ignore event if not handled
-    if (!touchHandled) {
-      return;
-    } // Simulate the mouseup event
-
-
-    simulateMouseEvent(event, 'mouseup'); // Simulate the mouseout event
-
-    simulateMouseEvent(event, 'mouseout'); // If the touch interaction did not move, it should trigger a click
-
-    if (!this._touchMoved) {
-      // Simulate the click event
-      simulateMouseEvent(event, 'click');
-    } // Unset the flag to allow other widgets to inherit the touch event
-
-
-    touchHandled = false;
-  };
-  /**
-   * A duck punch of the $.ui.mouse _mouseInit method to support touch events.
-   * This method extends the widget with bound touch event handlers that
-   * translate touch events to mouse events and pass them to the widget's
-   * original mouse event handling methods.
-   */
-
-
-  mouseProto._mouseInit = function () {
-    var self = this; // Delegate the touch handlers to the widget's element
-
-    self.element.bind({
-      touchstart: $.proxy(self, '_touchStart'),
-      touchmove: $.proxy(self, '_touchMove'),
-      touchend: $.proxy(self, '_touchEnd')
-    }); // Call the original $.ui.mouse init method
-
-    _mouseInit.call(self);
-  };
-  /**
-   * Remove the touch event handlers
-   */
-
-
-  mouseProto._mouseDestroy = function () {
-    var self = this; // Delegate the touch handlers to the widget's element
-
-    self.element.unbind({
-      touchstart: $.proxy(self, '_touchStart'),
-      touchmove: $.proxy(self, '_touchMove'),
-      touchend: $.proxy(self, '_touchEnd')
-    }); // Call the original $.ui.mouse destroy method
-
-    _mouseDestroy.call(self);
-  };
-})(jQuery);
-
-var _LocaleDict;
-
-var _EnDict;
-
-var _CurLocale = 'en'; // Default to english unless otherwise posted
+}(jQuery);
+var _CurLocale = "en";
 
 function LocalizeString() {
-  //console.log("Localizing...");
-  LocalizeItem($("[I18n]").get()); // Handle flag clicks
-
-  $(".LngFlag").click(function (event, ui) {
-    OnLangFlagClick($(this).attr('lang'));
-    UpdateLngDropDown();
-  });
-  return true;
+  return LocalizeItem($("[I18n]").get()), $(".LngFlag").click(function (e, t) {
+    OnLangFlagClick($(this).attr("lang")), UpdateLngDropDown();
+  }), !0;
 }
 
-function OnLangFlagClick(Lang) {
-  InitLocale(Lang);
+function OnLangFlagClick(e) {
+  InitLocale(e);
 }
 
-function LocalizeItem(Elements) {
+function LocalizeItem(e) {
   try {
-    var child; //console.log(Elements);
+    var t;
 
-    for (child in Elements) {
-      var el = Elements[child];
-      var Attr = el.attributes.I18n.value;
-
-      if (typeof _LocaleDict != "undefined") {
-        el.innerHTML = GetLocalizedString(Attr);
-      }
+    for (t in e) {
+      var a = e[t],
+          i = a.attributes.I18n.value;
+      void 0 !== _LocaleDict && (a.innerHTML = GetLocalizedString(i));
     }
   } finally {}
 
-  return true;
+  return !0;
 }
 
-function InitLocale(Lang) {
-  var query = "/ws/serverinfo/translation.php";
-
-  if (Lang) {
-    query += "?lang=" + Lang;
-  }
-
-  $.get(query, function (result) {
-    if (result.success == true) {
-      _CurLocale = result.request.lang;
-      _LocaleDict = result.strings;
-      moment.locale(_CurLocale);
-      LocalizeString();
-      UpdateLngDropDown();
-    } else {
-      alert("Localization string table load failure....");
-    }
+function InitLocale(e) {
+  var t = "/ws/serverinfo/translation.php";
+  e && (t += "?lang=" + e), $.get(t, function (e) {
+    1 == e.success ? (_CurLocale = e.request.lang, _LocaleDict = e.strings, moment.locale(_CurLocale), LocalizeString(), UpdateLngDropDown()) : alert("Localization string table load failure....");
+  }), void 0 === _EnDict && $.get("/ws/serverinfo/translation.php?lang=en", function (e) {
+    1 == e.success ? _EnDict = e.strings : alert("Fallback localization string table load failure....");
   });
-
-  if (typeof _EnDict == 'undefined') {
-    // Load english dictionnary as fall back on 1st call
-    $.get("/ws/serverinfo/translation.php?lang=en", function (result) {
-      if (result.success == true) {
-        _EnDict = result.strings;
-      } else {
-        alert("Fallback localization string table load failure....");
-      }
-    });
-  }
 }
 
-function HTMLDecode(String) {
-  var txt = document.createElement("textarea");
-  txt.innerHTML = String;
-  var RetString = txt.value;
-  var EOLSigns = ["\n\r", "\r\n", "\n", "\r"];
+function HTMLDecode(e) {
+  var t = document.createElement("textarea");
+  t.innerHTML = e;
+  var a = t.value,
+      i = ["\n\r", "\r\n", "\n", "\r"];
 
-  for (var _index18 in EOLSigns) {
-    while (EOLSigns[_index18] && RetString.indexOf(EOLSigns[_index18]) !== -1) {
-      RetString = RetString.replace(EOLSigns[_index18], "<br>");
+  for (var _e15 in i) {
+    for (; i[_e15] && -1 !== a.indexOf(i[_e15]);) {
+      a = a.replace(i[_e15], "<br>");
     }
   }
 
-  return RetString;
+  return a;
 }
 
-function GetLocalizedString(StringId) {
-  var RetString = "";
-
-  if (StringId in _LocaleDict) {
-    RetString = HTMLDecode(_LocaleDict[StringId]);
-  } else if (typeof _EnDict !== "undefined" && _EnDict && StringId in _EnDict) {
-    RetString = HTMLDecode(_EnDict[StringId]);
-  } else {
-    RetString = StringId;
-  }
-
-  return RetString;
+function GetLocalizedString(e) {
+  var t = "";
+  return t = e in _LocaleDict ? HTMLDecode(_LocaleDict[e]) : void 0 !== _EnDict && _EnDict && e in _EnDict ? HTMLDecode(_EnDict[e]) : e;
 }
 
 function GetCurrentLocale() {
@@ -7475,943 +3751,364 @@ function GetCurrentLocale() {
 var VLMMercatorTransform = new MercatorTransform();
 
 function MercatorTransform() {
-  this.Width = 10000;
-  this.Height = 10000;
-  this.LonOffset = 0;
-  this.LatOffset = 0;
-  this.Scale = 10000 / 180;
+  this.Width = 1e4, this.Height = 1e4, this.LonOffset = 0, this.LatOffset = 0, this.Scale = 1e4 / 180, this.LonToMapX = function (e) {
+    return this.Width / 2 + (e - this.LonOffset) * this.Scale;
+  }, this.LatToMapY = function (e) {
+    return e = Deg2Rad(e), e = Rad2Deg(e = Math.log(Math.tan(e) + 1 / Math.cos(e))), this.Height / 2 - (e - this.LatOffset) * this.Scale;
+  }, this.SegmentsIntersect = function (e, t) {
+    var a = this.LonToMapX(e.P1.Lon.Value),
+        i = this.LatToMapY(e.P1.Lat.Value),
+        n = this.LonToMapX(e.P2.Lon.Value),
+        o = this.LatToMapY(e.P2.Lat.Value),
+        r = this.LonToMapX(t.P1.Lon.Value),
+        s = this.LatToMapY(t.P1.Lat.Value),
+        l = this.LonToMapX(t.P2.Lon.Value),
+        d = this.LatToMapY(t.P2.Lat.Value);
+    if (e.P1.Lon.Value === e.P2.Lon.Value && e.P1.Lat.Value === e.P2.Lat.Value || t.P1.Lon.Value === t.P2.Lon.Value && t.P1.Lat.Value === t.P2.Lat.Value) return !1;
+    n -= a, o -= i, r -= a, s -= i, l -= a, d -= i, a = 0, i = 0;
+    var u = Math.sqrt(n * n + o * o),
+        c = n / u,
+        h = o / u,
+        p = r * c + s * h;
+    if (s = s * c - r * h, r = p, p = l * c + d * h, d = d * c - l * h, l = p, s === d) return !1;
+    var f = l + (r - l) * d / (d - s),
+        P = f / u;
 
-  this.LonToMapX = function (Lon) {
-    return this.Width / 2.0 + (Lon - this.LonOffset) * this.Scale;
-  };
-
-  this.LatToMapY = function (Lat) {
-    Lat = Deg2Rad(Lat);
-    Lat = Math.log(Math.tan(Lat) + 1 / Math.cos(Lat));
-    Lat = Rad2Deg(Lat);
-    return this.Height / 2.0 - (Lat - this.LatOffset) * this.Scale;
-  };
-
-  this.SegmentsIntersect = function (Seg1, Seg2) {
-    var Ax = this.LonToMapX(Seg1.P1.Lon.Value);
-    var Ay = this.LatToMapY(Seg1.P1.Lat.Value);
-    var Bx = this.LonToMapX(Seg1.P2.Lon.Value);
-    var By = this.LatToMapY(Seg1.P2.Lat.Value);
-    var Cx = this.LonToMapX(Seg2.P1.Lon.Value);
-    var Cy = this.LatToMapY(Seg2.P1.Lat.Value);
-    var Dx = this.LonToMapX(Seg2.P2.Lon.Value);
-    var Dy = this.LatToMapY(Seg2.P2.Lat.Value); //  Fail if either line is undefined.
-
-    if (Seg1.P1.Lon.Value === Seg1.P2.Lon.Value && Seg1.P1.Lat.Value === Seg1.P2.Lat.Value || Seg2.P1.Lon.Value === Seg2.P2.Lon.Value && Seg2.P1.Lat.Value === Seg2.P2.Lat.Value) {
-      return false;
-    } // (1) Translate the system so that point A is on the origin.
-
-
-    Bx -= Ax;
-    By -= Ay;
-    Cx -= Ax;
-    Cy -= Ay;
-    Dx -= Ax;
-    Dy -= Ay;
-    Ax = 0;
-    Ay = 0; // Discover the length of segment A-B.
-
-    var DistAB = Math.sqrt(Bx * Bx + By * By); // (2) Rotate the system so that point B is on the positive X axis.
-
-    var theCos = Bx / DistAB;
-    var theSin = By / DistAB;
-    var newX = Cx * theCos + Cy * theSin;
-    Cy = Cy * theCos - Cx * theSin;
-    Cx = newX;
-    newX = Dx * theCos + Dy * theSin;
-    Dy = Dy * theCos - Dx * theSin;
-    Dx = newX; // Fail if the lines are parallel.
-
-    if (Cy === Dy) {
-      return false;
-    } //  (3) Discover the position of the intersection point along line A-B.
-
-
-    var ABpos = Dx + (Cx - Dx) * Dy / (Dy - Cy);
-    var Ratio = ABpos / DistAB;
-
-    if (Ratio >= 0 && Ratio <= 1) {
-      // Possible Success
-      // Check other segment ratio
-      // Get Intersect coords
-      var Ix = Ax + ABpos;
-      var Iy = Ay;
-      var Ratio2;
-
-      if (Dx - Cx) {
-        // Seg is not vertical
-        Ratio2 = (Ix - Cx) / (Dx - Cx);
-      } else if (Dy - Cy) {
-        // Seg is vertical
-        Ratio2 = (Iy - Cy) / (Dy - Cy);
-      } else {
-        // No segment !!
-        return false;
+    if (P >= 0 && P <= 1) {
+      var g,
+          L = i;
+      if (l - r) g = (a + f - r) / (l - r);else {
+        if (!(d - s)) return !1;
+        g = (L - s) / (d - s);
       }
-
-      if (Ratio2 >= 0 && Ratio2 <= 1) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      // Segments do not intersect
-      return false;
+      return g >= 0 && g <= 1;
     }
+
+    return !1;
   };
-  /*
-  Public Function CanvasToLat(ByVal C As Double) Implements IMapTransform.CanvasToLat
-    Debug.Assert(Scale <> 0)
-    var Ret = (ActualHeight / 2 - C) / Scale + LatOffset
-    Ret = Ret / 180 * PI
-    return (Math.Atan(Math.Sinh(Ret)) / PI * 180)
-  End Function
-    Public Function CanvasToLon(ByVal V As Double) Implements IMapTransform.CanvasToLon
-    Debug.Assert(Scale <> 0)
-    var Ret = ((V - ActualWidth / 2) / Scale + LonOffset) 
-    return Ret
-  End Function
-  */
-
-} //
-// Module for handling boat polars
-//
-
+}
 
 var PolarsManager = new PolarManagerClass();
 
 function PolarManagerClass() {
-  this.Polars = [];
-
-  this.Init = function () {
-    this.Polars = []; // Bg load the list of boats with a polar in VLM
-
-    $.get("/ws/polarlist.php", function (Data) {
-      //Parse WS data, build polarlist and URL
-      // Build list of boat for lazy loading
-      for (var _index19 in Data.list) {
-        PolarsManager.Polars["boat_" + Data.list[_index19]] = null;
+  this.Polars = [], this.Init = function () {
+    this.Polars = [], $.get("/ws/polarlist.php", function (e) {
+      for (var t in e.list) {
+        PolarsManager.Polars["boat_" + e.list[t]] = null;
       }
     });
-  };
+  }, this.GetBoatSpeed = function (e, t, a, i) {
+    if (!(e in this.Polars)) return NaN;
 
-  this.GetBoatSpeed = function (PolarName, WindSpeed, WindBearing, BoatBearing) {
-    if (!(PolarName in this.Polars)) {
-      return NaN;
+    if (this.Polars[e]) {
+      var n = WindAngle(i, a);
+      return GetPolarAngleSpeed(this.Polars[e], n, t);
     }
 
-    if (!this.Polars[PolarName]) {
-      // Polar not loaded yet, load it
-      $.get("/Polaires/" + PolarName + ".csv", this.HandlePolarLoaded.bind(this, PolarName, null, null));
-      return NaN;
-    } else {
-      var alpha = WindAngle(BoatBearing, WindBearing);
-      var Speed = GetPolarAngleSpeed(this.Polars[PolarName], alpha, WindSpeed);
-      return Speed;
-    }
-  };
-
-  this.HandlePolarLoaded = function (PolarName, callback, Boat, data) {
-    var polar = $.csv.toArrays(data, {
+    return $.get("/Polaires/" + e + ".csv", this.HandlePolarLoaded.bind(this, e, null, null)), NaN;
+  }, this.HandlePolarLoaded = function (e, t, a, i) {
+    var n = $.csv.toArrays(i, {
       separator: ";"
-    }); // Convert back all values to floats.
+    });
 
-    for (var row in polar) {
-      if (polar[row]) {
-        for (var col in polar[row]) {
-          if (polar[row][col]) {
-            polar[row][col] = parseFloat(polar[row][col]);
-          }
-        }
+    for (var _e16 in n) {
+      if (n[_e16]) for (var _t16 in n[_e16]) {
+        n[_e16][_t16] && (n[_e16][_t16] = parseFloat(n[_e16][_t16]));
       }
     }
 
-    PolarsManager.Polars[PolarName] = {};
-    PolarsManager.Polars[PolarName].SpeedPolar = polar;
-    PolarsManager.Polars[PolarName].WindLookup = [];
-    PolarsManager.Polars[PolarName].AngleLookup = [];
+    PolarsManager.Polars[e] = {}, PolarsManager.Polars[e].SpeedPolar = n, PolarsManager.Polars[e].WindLookup = [], PolarsManager.Polars[e].AngleLookup = [], t && a ? t(a) : t && t();
+  }, this.GetPolarLine = function (e, t, a, i, n) {
+    if (n || (n = 5), void 0 === this.Polars[e]) return alert("Unexpected polarname : " + e), null;
 
-    if (callback && Boat) {
-      callback(Boat);
-    } else if (callback) {
-      callback();
+    if (null !== this.Polars[e]) {
+      var o,
+          r = [],
+          s = 0;
+
+      for (o = 0; o <= 180; o += n) {
+        var l = GetPolarAngleSpeed(this.Polars[e], o, t);
+        s < l && (s = l), r.push(l);
+      }
+
+      for (var _e17 in r) {
+        r[_e17] && (r[_e17] /= s);
+      }
+
+      return r;
     }
+
+    $.get("/Polaires/" + e + ".csv", this.HandlePolarLoaded.bind(this, e, a, i));
   };
-
-  this.GetPolarLine = function (PolarName, WindSpeed, callback, boat, Step) {
-    if (!Step) {
-      Step = 5;
-    }
-
-    if (typeof this.Polars[PolarName] === "undefined") {
-      alert("Unexpected polarname : " + PolarName);
-      return null;
-    }
-
-    if (this.Polars[PolarName] === null) {
-      // Polar not loaded yet, load it
-      $.get("/Polaires/" + PolarName + ".csv", this.HandlePolarLoaded.bind(this, PolarName, callback, boat));
-    } else {
-      var RetPolar = [];
-      var alpha;
-      var MaxSpeed = 0; // Loop to get speedvalue per angle
-
-      for (alpha = 0; alpha <= 180; alpha += Step) {
-        var Speed = GetPolarAngleSpeed(this.Polars[PolarName], alpha, WindSpeed);
-
-        if (MaxSpeed < Speed) {
-          MaxSpeed = Speed;
-        }
-
-        RetPolar.push(Speed);
-      } // Scale Polar to 1
-
-
-      for (var _index20 in RetPolar) {
-        if (RetPolar[_index20]) {
-          RetPolar[_index20] /= MaxSpeed;
-        }
+  var e = 0;
+  this.GetVMGCourse = function (t, a, i, n, o) {
+    for (var r = n.GetOrthoCourse(o), s = 0, l = -1e10, d = -1; d <= 1; d += 2) {
+      for (var u = 0; u <= 90; u += .1) {
+        var c = this.GetBoatSpeed(t, a, i, r + u * d),
+            h = c * Math.cos(Deg2Rad(u));
+        e && console.log("VMG " + RoundPow((r + u * d + 360) % 360, 3) + " " + RoundPow(c, 3) + " " + RoundPow(h, 3) + " " + RoundPow(l, 3) + " " + (h >= l ? "BEST" : "")), h >= l && (l = h, s = r + u * d);
       }
-
-      return RetPolar;
     }
+
+    return e = 0, s;
+  }, this.GetVBVMGCourse = function (e, t, a, i, n) {
+    var o = i.GetOrthoDist(n),
+        r = i.GetOrthoCourse(n),
+        s = 0,
+        l = 0,
+        d = 0,
+        u = 0,
+        c = 0,
+        h = 1,
+        p = this.GetBoatSpeed(e, t, a, r);
+    c = p > 0 ? o / p : 8760;
+    var f = a - r;
+    f < -90 ? f += 360 : f > 90 && (f -= 360), h = f > 0 ? -1 : 1;
+
+    for (var _i7 = 1; _i7 <= 90; _i7++) {
+      var _n = _i7 * Math.PI / 180,
+          _p = Math.tan(_n),
+          _f = Math.sqrt(1 + _p * _p),
+          _P = this.GetBoatSpeed(e, t, a, r - _i7 * h);
+
+      if (isNaN(_P)) throw "Nan SpeedT1 exception";
+      if (_P > 0) for (var _n2 = -89; _n2 <= 0; _n2++) {
+        var _g2 = _n2 * Math.PI / 180,
+            L = o * (Math.tan(-_g2) / (_p + Math.tan(-_g2))),
+            m = L * _f / _P;
+
+        if (m < 0 || m > c) continue;
+        var M = o - L,
+            C = this.GetBoatSpeed(e, t, a, r - _n2 * h);
+        if (isNaN(C)) throw "Nan SpeedT2 exception";
+        if (C <= 0) continue;
+        var y = Math.tan(-_g2),
+            w = m + M * Math.sqrt(1 + y * y) / C;
+        w < c && (c = w, s = _i7, l = _n2, d = _P, u = C);
+      }
+    }
+
+    var P = d * Math.cos(Deg2Rad(s)),
+        g = u * Math.cos(Deg2Rad(l));
+    if (isNaN(P) || isNaN(g)) throw "NaN VMG found";
+    return P > g ? r - s * h : r - l * h;
+  }, this.GetPolarMaxSpeed = function (e, t) {
+    if (!this.Polars[e]) return null;
+    var a,
+        i = 0;
+
+    for (a = 0; a <= 180; a += 1) {
+      var n = GetPolarAngleSpeed(this.Polars[e], a, t);
+      n > i && (i = n);
+    }
+
+    return i;
   };
-
-  var DebugVMG = 0;
-
-  this.GetVMGCourse = function (Polar, WindSpeed, WindBearing, StartPos, DestPos) {
-    var OrthoBearing = StartPos.GetOrthoCourse(DestPos);
-    var BestAngle = 0;
-    var BestVMG = -1e10;
-
-    for (var dir = -1; dir <= 1; dir += 2) {
-      for (var angle = 0.0; angle <= 90; angle += 0.1) {
-        var CurSpeed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, OrthoBearing + angle * dir);
-        var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle));
-
-        if (DebugVMG) {
-          console.log("VMG " + RoundPow((OrthoBearing + angle * dir + 360.0) % 360.0, 3) + " " + RoundPow(CurSpeed, 3) + " " + RoundPow(CurVMG, 3) + " " + RoundPow(BestVMG, 3) + " " + (CurVMG >= BestVMG ? "BEST" : ""));
-        }
-
-        if (CurVMG >= BestVMG) {
-          BestVMG = CurVMG;
-          BestAngle = OrthoBearing + angle * dir;
-        }
-      }
-    }
-
-    DebugVMG = 0;
-    return BestAngle;
-  };
-
-  this.GetVBVMGCourse = function (Polar, WindSpeed, WindBearing, StartPos, DestPos) {
-    var Dist = StartPos.GetOrthoDist(DestPos);
-    var CapOrtho = StartPos.GetOrthoCourse(DestPos);
-    var b_Alpha = 0;
-    var b_Beta = 0;
-    var SpeedAlpha = 0;
-    var SpeedBeta = 0;
-    var t_min = 0;
-    var ISigne = 1;
-    var Speed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho);
-
-    if (Speed > 0) {
-      t_min = Dist / Speed;
-    } else {
-      t_min = 365 * 24;
-    }
-
-    var angle = WindBearing - CapOrtho;
-
-    if (angle < -90) {
-      angle += 360;
-    } else if (angle > 90) {
-      angle -= 360;
-    }
-
-    if (angle > 0) {
-      ISigne = -1;
-    } else {
-      ISigne = 1;
-    }
-
-    for (var i = 1; i <= 90; i++) {
-      var alpha = i * Math.PI / 180;
-      var TanAlpha = Math.tan(alpha);
-      var D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha);
-      var SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne);
-
-      if (isNaN(SpeedT1)) {
-        throw "Nan SpeedT1 exception";
-      }
-
-      if (SpeedT1 > 0) {
-        for (var j = -89; j <= 0; j++) {
-          var beta = j * Math.PI / 180;
-          var D1 = Dist * (Math.tan(-beta) / (TanAlpha + Math.tan(-beta)));
-          var L1 = D1 * D1HypotRatio;
-          var T1 = L1 / SpeedT1;
-
-          if (T1 < 0 || T1 > t_min) {
-            continue;
-          }
-
-          var D2 = Dist - D1;
-          var SpeedT2 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - j * ISigne);
-
-          if (isNaN(SpeedT2)) {
-            throw "Nan SpeedT2 exception";
-          }
-
-          if (SpeedT2 <= 0) {
-            continue;
-          }
-
-          var TanBeta = Math.tan(-beta);
-          var L2 = D2 * Math.sqrt(1 + TanBeta * TanBeta);
-          var T2 = L2 / SpeedT2;
-          var T = T1 + T2;
-
-          if (T < t_min) {
-            t_min = T;
-            b_Alpha = i;
-            b_Beta = j; // b_L1 = L1;
-            // b_L2 = L2;
-            // b_T1 = T1;
-            // b_T2 = T2;
-
-            SpeedAlpha = SpeedT1;
-            SpeedBeta = SpeedT2;
-          }
-        }
-      }
-    }
-
-    var VMGAlpha = SpeedAlpha * Math.cos(Deg2Rad(b_Alpha));
-    var VMGBeta = SpeedBeta * Math.cos(Deg2Rad(b_Beta));
-
-    if (isNaN(VMGAlpha) || isNaN(VMGBeta)) {
-      throw "NaN VMG found";
-    }
-
-    if (VMGAlpha > VMGBeta) {
-      return CapOrtho - b_Alpha * ISigne;
-    } else {
-      return CapOrtho - b_Beta * ISigne;
-    }
-  };
-
-  this.GetPolarMaxSpeed = function (PolarName, WindSpeed) {
-    // Assume polar is already loaded
-    if (!this.Polars[PolarName]) {
-      return null;
-    }
-
-    var Alpha;
-    var MaxSpeed = 0;
-
-    for (Alpha = 0; Alpha <= 180; Alpha += 1) {
-      var S = GetPolarAngleSpeed(this.Polars[PolarName], Alpha, WindSpeed);
-
-      if (S > MaxSpeed) {
-        MaxSpeed = S;
-      }
-    }
-
-    return MaxSpeed;
-  };
-} // End PolarManagerClass
-// Returns the speed at given angle for a polar
-
-
-function GetPolarAngleSpeed(PolarObject, Alpha, WindSpeed) {
-  var SpeedCol1;
-  var SpeedCol2;
-  var AlphaRow1;
-  var AlphaRow2; // Loop and index index <= Speed
-
-  var Polar = PolarObject.SpeedPolar;
-  var IntWind = Math.floor(WindSpeed);
-
-  if (typeof PolarObject.WindLookup !== "undefined" && IntWind in PolarObject.WindLookup) {
-    SpeedCol1 = PolarObject.WindLookup[IntWind];
-  } else {
-    for (var _index21 in Polar[0]) {
-      if (_index21 > 0 && Polar[0][_index21] > WindSpeed) {
-        break;
-      }
-
-      PolarObject.WindLookup[IntWind] = Math.floor(_index21);
-      SpeedCol1 = Math.floor(_index21);
-    }
-  }
-
-  SpeedCol2 = SpeedCol1 < Polar[0].length - 1 ? SpeedCol1 + 1 : SpeedCol1; // loop Rows to find angle <= alpha
-
-  while (Alpha < 0) {
-    Alpha += 360.0;
-  }
-
-  if (Alpha >= 360) {
-    Alpha %= 360.0;
-  }
-
-  if (Alpha > 180.0) {
-    Alpha = 360.0 - Alpha;
-  }
-
-  var IntAlpha = Math.floor(Alpha);
-
-  if (typeof PolarObject.AngleLookup !== "undefined" && IntAlpha in PolarObject.AngleLookup) {
-    AlphaRow1 = PolarObject.AngleLookup[IntAlpha];
-  } else {
-    for (var _index22 in Polar) {
-      if (_index22 > 0 && Polar[_index22][0] > Alpha) {
-        break;
-      }
-
-      PolarObject.AngleLookup[IntAlpha] = Math.floor(_index22);
-      AlphaRow1 = Math.floor(_index22);
-    }
-  }
-
-  AlphaRow2 = AlphaRow1 < Polar.length - 1 ? AlphaRow1 + 1 : AlphaRow1;
-  var v1 = GetAvgValue(WindSpeed, Polar[0][SpeedCol1], Polar[0][SpeedCol2], Polar[AlphaRow1][SpeedCol1], Polar[AlphaRow1][SpeedCol2]);
-  var v2 = GetAvgValue(WindSpeed, Polar[0][SpeedCol1], Polar[0][SpeedCol2], Polar[AlphaRow2][SpeedCol1], Polar[AlphaRow2][SpeedCol2]);
-  var RetValue = GetAvgValue(Alpha, Polar[AlphaRow1][0], Polar[AlphaRow2][0], v1, v2);
-
-  if (isNaN(RetValue)) {
-    // Start over for debugging (will crash the stack!!)
-    // GetPolarAngleSpeed  (PolarObject,Alpha, WindSpeed)
-    throw "GetAvgValue was NaN";
-  }
-
-  return RetValue;
 }
 
-function WindAngle(BoatBearing, WindBearing) {
-  var I = 0;
-
-  if (BoatBearing >= WindBearing) {
-    if (BoatBearing - WindBearing <= 180.0) {
-      I = BoatBearing - WindBearing;
-    } else {
-      I = 360 - BoatBearing + WindBearing;
-    }
-  } else {
-    if (WindBearing - BoatBearing <= 180.0) {
-      I = WindBearing - BoatBearing;
-    } else {
-      I = 360 - WindBearing + BoatBearing;
-    }
+function GetPolarAngleSpeed(e, t, a) {
+  var i,
+      n,
+      o,
+      r,
+      s = e.SpeedPolar,
+      l = Math.floor(a);
+  if (void 0 !== e.WindLookup && l in e.WindLookup) i = e.WindLookup[l];else for (var _t17 in s[0]) {
+    if (_t17 > 0 && s[0][_t17] > a) break;
+    e.WindLookup[l] = Math.floor(_t17), i = Math.floor(_t17);
   }
 
-  return I;
-} // Return Linear interpolated y for x on line (Rx1,Ry1)(Rx2,Ry2)
-
-
-function GetAvgValue(x, Rx1, Rx2, Ry1, Ry2) {
-  // Cast all params as numbers
-
-  /*x=parseFloat(x);
-  Rx1=parseFloat(Rx1);
-  Rx2=parseFloat(Rx2);
-  Ry1=parseFloat(Ry1);
-  Ry2=parseFloat(Ry2);
-  */
-  if (x === Rx1 || Rx1 === Rx2 || Ry1 === Ry2) {
-    // Trivial & corner cases
-    return Ry1;
-  } else {
-    return Ry1 + (x - Rx1) / (Rx2 - Rx1) * (Ry2 - Ry1);
+  for (n = i < s[0].length - 1 ? i + 1 : i; t < 0;) {
+    t += 360;
   }
-} //
-// Position class
-//
-// Formating, conversion, and geo computation
-//
-//
 
-
-var POS_FORMAT_DEFAULT = 0; // Earth radius for all calculation of distance in Naut. Miles
-
-var EARTH_RADIUS = 3443.84;
-var VLM_DIST_ORTHO = 1;
-
-function Deg2Rad(v) {
-  return v / 180.0 * Math.PI;
+  t >= 360 && (t %= 360), t > 180 && (t = 360 - t);
+  var d = Math.floor(t);
+  if (void 0 !== e.AngleLookup && d in e.AngleLookup) o = e.AngleLookup[d];else for (var _a13 in s) {
+    if (_a13 > 0 && s[_a13][0] > t) break;
+    e.AngleLookup[d] = Math.floor(_a13), o = Math.floor(_a13);
+  }
+  r = o < s.length - 1 ? o + 1 : o;
+  var u = GetAvgValue(a, s[0][i], s[0][n], s[o][i], s[o][n]),
+      c = GetAvgValue(a, s[0][i], s[0][n], s[r][i], s[r][n]),
+      h = GetAvgValue(t, s[o][0], s[r][0], u, c);
+  if (isNaN(h)) throw "GetAvgValue was NaN";
+  return h;
 }
 
-function Rad2Deg(v) {
-  return v / Math.PI * 180.0;
+function WindAngle(e, t) {
+  return e >= t ? e - t <= 180 ? e - t : 360 - e + t : t - e <= 180 ? t - e : 360 - t + e;
 }
 
-function RoundPow(v, P) {
-  if (typeof P !== 'undefined') {
-    var Div = Math.pow(10, P);
-    return Math.round(v * Div) / Div;
-  } else {
-    return v;
-  }
+function GetAvgValue(e, t, a, i, n) {
+  return e === t || t === a || i === n ? i : i + (e - t) / (a - t) * (n - i);
 }
 
-function NormalizeLongitudeDeg(Lon) {
-  if (Lon < -180) {
-    Lon += 360;
-  } else if (Lon > 180) {
-    Lon -= 360;
+var POS_FORMAT_DEFAULT = 0,
+    EARTH_RADIUS = 3443.84,
+    VLM_DIST_ORTHO = 1;
+
+function Deg2Rad(e) {
+  return e / 180 * Math.PI;
+}
+
+function Rad2Deg(e) {
+  return e / Math.PI * 180;
+}
+
+function RoundPow(e, t) {
+  if (void 0 !== t) {
+    var a = Math.pow(10, t);
+    return Math.round(e * a) / a;
   }
 
-  return Lon;
-} // Constructor
+  return e;
+}
 
+function NormalizeLongitudeDeg(e) {
+  return e < -180 ? e += 360 : e > 180 && (e -= 360), e;
+}
 
-function VLMPosition(lon, lat, format) {
-  if (typeof format == 'undefined' || format == POS_FORMAT_DEFAULT) {
-    // Default constructor, lon and lat in degs flaoting format
-    this.Lon = new Coords(lon, 1);
-    this.Lat = new Coords(lat, 0);
-  } // Default string formating
-
-
-  this.ToString = function (Raw) {
-    return this.Lat.ToString(Raw) + " " + this.Lon.ToString(Raw);
-  };
-
-  this.GetEuclidianDist2 = function (P) {
-    var dLat = (this.Lat.Value - P.Lat.Value) % 90;
-    var dLon = (this.Lon.Value - P.Lon.Value) % 180;
-    return dLat * dLat + dLon * dLon;
-  }; // function GetLoxoDist
-  // Returns the loxodromic distance to another point
-
-
-  this.GetLoxoDist = function (P, Precision) {
-    var Lat1 = Deg2Rad(this.Lat.Value);
-    var Lat2 = Deg2Rad(P.Lat.Value);
-    var Lon1 = -Deg2Rad(this.Lon.Value);
-    var Lon2 = -Deg2Rad(P.Lon.Value);
-    var TOL = 0.000000000000001;
-    var d = 0;
-    var q = 0;
-
-    if (Math.abs(Lat2 - Lat1) < Math.sqrt(TOL)) {
-      q = Math.cos(Lat1);
-    } else {
-      q = (Lat2 - Lat1) / Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
-    }
-
-    d = Math.sqrt(Math.pow(Lat2 - Lat1, 2) + q * q * (Lon2 - Lon1) * (Lon2 - Lon1));
-    var RetVal = EARTH_RADIUS * d;
-    return RoundPow(RetVal, Precision);
-  }; // Reaches a point from position using rhumbline.
-  // Compute the position of point at r * distance to point P is 1st param is a Position
-  // Computes the position at Distance P, and heading r if P is a number
-  // Along loxodrome from this to P
-
-
-  this.ReachDistLoxo = function (P, r) {
-    var d = 0;
-    var tc = 0;
-
-    if (isNaN(r)) {
-      throw "unsupported reaching NaN distance";
-    }
-
-    if (typeof P == "number") {
-      d = P / EARTH_RADIUS;
-      tc = Deg2Rad(r % 360);
-    } else {
-      d = this.GetLoxoDist(P) / EARTH_RADIUS * r;
-      tc = Deg2Rad(this.GetLoxoCourse(P));
-    }
-
-    var Lat1 = Deg2Rad(this.Lat.Value);
-    var Lon1 = -Deg2Rad(this.Lon.Value);
-    var Lat = 0;
-    var Lon = 0;
-    var TOL = 0.000000000000001;
-    var q = 0;
-    var dPhi = 0;
-    var dlon = 0;
-    Lat = Lat1 + d * Math.cos(tc);
-
-    if (Math.abs(Lat) > Math.PI / 2) {
-      //'"d too large. You can't go this far along this rhumb line!"
-      throw "Invalid distance, can't go that far";
-    }
-
-    if (Math.abs(Lat - Lat1) < Math.sqrt(TOL)) {
-      q = Math.cos(Lat1);
-    } else {
-      dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
-      q = (Lat - Lat1) / dPhi;
-    }
-
-    dlon = -d * Math.sin(tc) / q;
-    Lon = -((Lon1 + dlon + Math.PI) % (2 * Math.PI) - Math.PI);
-
-    if (isNaN(Lon) || isNaN(Lat)) {
-      throw "Reached Nan Position!!!";
-    }
-
-    Lon = RoundPow(Rad2Deg(Lon), 9);
-    Lat = RoundPow(Rad2Deg(Lat), 9);
-    return new VLMPosition(NormalizeLongitudeDeg(Lon), Lat);
-  }; //
-  // Return loxodromic course from this to P in °
-  //
-
-
-  this.GetLoxoCourse = function (P, Precision) {
-    var Lon1 = -Deg2Rad(this.Lon.Value);
-    var Lon2 = -Deg2Rad(P.Lon.Value);
-    var Lat1 = Deg2Rad(this.Lat.Value);
-    var Lat2 = Deg2Rad(P.Lat.Value);
-
-    if (typeof Precision == "undefined" || typeof Precision != "number") {
-      Precision = 17;
-    }
-    /*if (Lon1 > 0)
-    {
-        Lon2 += 2 * Math.PI
-    }
-    else
-    {   
-        Lon2 -= 2 * Math.PI
-    }*/
-
-
-    var dlon_w = (Lon2 - Lon1) % (2 * Math.PI);
-    var dlon_e = (Lon1 - Lon2) % (2 * Math.PI);
-    var dphi = Math.log(Math.tan(Lat2 / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
-    var tc;
-
-    if (dlon_w < dlon_e) {
-      // Westerly rhumb line is the shortest
-      tc = Math.atan2(dlon_w, dphi) % (2 * Math.PI);
-    } else {
-      tc = Math.atan2(-dlon_e, dphi) % (2 * Math.PI);
-    }
-
-    var ret = (720 - tc / Math.PI * 180) % 360;
-    return RoundPow(ret, Precision);
-  };
-
-  if (VLM_DIST_ORTHO) {
-    // Function GetOrthoDist
-    // Return ortho distance from this to P
-    this.GetOrthoDist = function (P, Precision) {
-      var lon1 = -Deg2Rad(this.Lon.Value);
-      var lon2 = -Deg2Rad(P.Lon.Value);
-      var lat1 = Deg2Rad(this.Lat.Value);
-      var lat2 = Deg2Rad(P.Lat.Value);
-
-      if (typeof Precision == "undefined" || typeof Precision != "number") {
-        Precision = 17;
-      } //d=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon1-lon2))
-
-
-      var retval = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
-      return RoundPow(60 * Rad2Deg(retval), Precision);
-    }; //
-    // Return orthodromic course from this to P
-    //
-
-
-    this.GetOrthoCourse = function (P, Precision) {
-      var lon1 = -Deg2Rad(this.Lon.Value);
-      var lon2 = -Deg2Rad(P.Lon.Value);
-      var lat1 = Deg2Rad(this.Lat.Value);
-      var lat2 = Deg2Rad(P.Lat.Value);
-
-      if (typeof Precision == "undefined" || typeof Precision != "number") {
-        Precision = 17;
-      }
-      /*IF sin(lon2-lon1)<0       
-        tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
-      ELSE       
-        tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
-      ENDIF*/
-
-
-      var d = Deg2Rad(this.GetOrthoDist(P) / 60);
-      var retval = (Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / (Math.sin(d) * Math.cos(lat1));
-
-      if (retval >= -1 && retval <= 1) {
-        if (Math.sin(lon2 - lon1) < 0) {
-          retval = Math.acos(retval);
-        } else {
-          retval = 2 * Math.PI - Math.acos(retval);
-        }
-      } else if (lat1 < lat2) {
-        retval = 0;
-      } else {
-        retval = Math.PI;
-      }
-
-      retval = Rad2Deg(retval % (2 * Math.PI));
-      return RoundPow(retval, Precision);
-    };
-  } else {
-    // Function GetOrthoDist
-    // Return ortho distance from this to P
-    this.GetOrthoDist = function (P, Precision) {
-      var lon1 = -Deg2Rad(this.Lon.Value);
-      var lon2 = -Deg2Rad(P.Lon.Value);
-      var lat1 = Deg2Rad(this.Lat.Value);
-      var lat2 = Deg2Rad(P.Lat.Value);
-
-      if (typeof Precision == "undefined" || typeof Precision != "number") {
-        Precision = 17;
-      } //        d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + 
-      //                 cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
-
-
-      var retval = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin((lat1 - lat2) / 2), 2) + Math.pow(Math.cos(lat1) * Math.cos(lat2) * Math.sin((lon1 - lon2) / 2), 2)));
-      return RoundPow(EARTH_RADIUS * retval, Precision);
-    }; //
-    // Return orthodromic course from this to P
-    //
-
-
-    this.GetOrthoCourse = function (P, Precision) {
-      var lon1 = -Deg2Rad(this.Lon.Value);
-      var lon2 = -Deg2Rad(P.Lon.Value);
-      var lat1 = Deg2Rad(this.Lat.Value);
-      var lat2 = Deg2Rad(P.Lat.Value);
-
-      if (typeof Precision == "undefined" || typeof Precision != "number") {
-        Precision = 17;
-      } //tc1=mod(atan2(sin(lon1-lon2)*cos(lat2),
-      //   cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(lon1-lon2)), 2*pi)
-
-
-      var retval = Math.atan2(Math.sin(lon1 - lon2) * Math.cos(lat2), Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
-      retval = Rad2Deg(retval % (2 * Math.PI));
-      return RoundPow(retval, Precision);
-    };
-  }
-
-  this.ReachDistOrtho = function (dist, bearing) {
-    var lat;
-    var dlon;
-    var d = dist / EARTH_RADIUS;
-    var tc = Deg2Rad(bearing);
-    var CurLat = Deg2Rad(this.Lat.Value);
-    var CurLon = Deg2Rad(-this.Lon.Value);
-    lat = Math.asin(Math.sin(CurLat) * Math.cos(d) + Math.cos(CurLat) * Math.sin(d) * Math.cos(tc));
-    dlon = Math.atan2(Math.sin(tc) * Math.sin(d) * Math.cos(CurLat), Math.cos(d) - Math.sin(CurLat) * Math.sin(lat));
-    lon = (CurLon - dlon + Math.PI) % (2 * Math.PI) - Math.PI;
-    return new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(-lon)), Rad2Deg(lat));
-  };
-
-  this.GetVLMString = function () {
-    return this.Lat.ToString() + ',' + this.Lon.ToString();
+function VLMPosition(e, t, a) {
+  void 0 !== a && a != POS_FORMAT_DEFAULT || (this.Lon = new Coords(e, 1), this.Lat = new Coords(t, 0)), this.ToString = function (e) {
+    return this.Lat.ToString(e) + " " + this.Lon.ToString(e);
+  }, this.GetEuclidianDist2 = function (e) {
+    var t = (this.Lat.Value - e.Lat.Value) % 90,
+        a = (this.Lon.Value - e.Lon.Value) % 180;
+    return t * t + a * a;
+  }, this.GetLoxoDist = function (e, t) {
+    var a,
+        i = Deg2Rad(this.Lat.Value),
+        n = Deg2Rad(e.Lat.Value),
+        o = -Deg2Rad(this.Lon.Value),
+        r = -Deg2Rad(e.Lon.Value),
+        s = 0;
+    return s = Math.abs(n - i) < Math.sqrt(1e-15) ? Math.cos(i) : (n - i) / Math.log(Math.tan(n / 2 + Math.PI / 4) / Math.tan(i / 2 + Math.PI / 4)), a = Math.sqrt(Math.pow(n - i, 2) + s * s * (r - o) * (r - o)), RoundPow(EARTH_RADIUS * a, t);
+  }, this.ReachDistLoxo = function (e, t) {
+    var a = 0,
+        i = 0;
+    if (isNaN(t)) throw "unsupported reaching NaN distance";
+    "number" == typeof e ? (a = e / EARTH_RADIUS, i = Deg2Rad(t % 360)) : (a = this.GetLoxoDist(e) / EARTH_RADIUS * t, i = Deg2Rad(this.GetLoxoCourse(e)));
+    var n = Deg2Rad(this.Lat.Value),
+        o = -Deg2Rad(this.Lon.Value),
+        r = 0,
+        s = 0,
+        l = 0;
+    if (r = n + a * Math.cos(i), Math.abs(r) > Math.PI / 2) throw "Invalid distance, can't go that far";
+    if (l = Math.abs(r - n) < Math.sqrt(1e-15) ? Math.cos(n) : (r - n) / Math.log(Math.tan(r / 2 + Math.PI / 4) / Math.tan(n / 2 + Math.PI / 4)), s = -((o + -a * Math.sin(i) / l + Math.PI) % (2 * Math.PI) - Math.PI), isNaN(s) || isNaN(r)) throw "Reached Nan Position!!!";
+    return s = RoundPow(Rad2Deg(s), 9), r = RoundPow(Rad2Deg(r), 9), new VLMPosition(NormalizeLongitudeDeg(s), r);
+  }, this.GetLoxoCourse = function (e, t) {
+    var a = -Deg2Rad(this.Lon.Value),
+        i = -Deg2Rad(e.Lon.Value),
+        n = Deg2Rad(this.Lat.Value),
+        o = Deg2Rad(e.Lat.Value);
+    void 0 !== t && "number" == typeof t || (t = 17);
+    var r = (i - a) % (2 * Math.PI),
+        s = (a - i) % (2 * Math.PI),
+        l = Math.log(Math.tan(o / 2 + Math.PI / 4) / Math.tan(n / 2 + Math.PI / 4));
+    return RoundPow((720 - (r < s ? Math.atan2(r, l) % (2 * Math.PI) : Math.atan2(-s, l) % (2 * Math.PI)) / Math.PI * 180) % 360, t);
+  }, VLM_DIST_ORTHO ? (this.GetOrthoDist = function (e, t) {
+    var a = -Deg2Rad(this.Lon.Value),
+        i = -Deg2Rad(e.Lon.Value),
+        n = Deg2Rad(this.Lat.Value),
+        o = Deg2Rad(e.Lat.Value);
+    return void 0 !== t && "number" == typeof t || (t = 17), RoundPow(60 * Rad2Deg(Math.acos(Math.sin(n) * Math.sin(o) + Math.cos(n) * Math.cos(o) * Math.cos(a - i))), t);
+  }, this.GetOrthoCourse = function (e, t) {
+    var a = -Deg2Rad(this.Lon.Value),
+        i = -Deg2Rad(e.Lon.Value),
+        n = Deg2Rad(this.Lat.Value),
+        o = Deg2Rad(e.Lat.Value);
+    void 0 !== t && "number" == typeof t || (t = 17);
+    var r = Deg2Rad(this.GetOrthoDist(e) / 60),
+        s = (Math.sin(o) - Math.sin(n) * Math.cos(r)) / (Math.sin(r) * Math.cos(n));
+    return RoundPow(s = Rad2Deg((s = s >= -1 && s <= 1 ? Math.sin(i - a) < 0 ? Math.acos(s) : 2 * Math.PI - Math.acos(s) : n < o ? 0 : Math.PI) % (2 * Math.PI)), t);
+  }) : (this.GetOrthoDist = function (e, t) {
+    var a = -Deg2Rad(this.Lon.Value),
+        i = -Deg2Rad(e.Lon.Value),
+        n = Deg2Rad(this.Lat.Value),
+        o = Deg2Rad(e.Lat.Value);
+    void 0 !== t && "number" == typeof t || (t = 17);
+    var r = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin((n - o) / 2), 2) + Math.pow(Math.cos(n) * Math.cos(o) * Math.sin((a - i) / 2), 2)));
+    return RoundPow(EARTH_RADIUS * r, t);
+  }, this.GetOrthoCourse = function (e, t) {
+    var a = -Deg2Rad(this.Lon.Value),
+        i = -Deg2Rad(e.Lon.Value),
+        n = Deg2Rad(this.Lat.Value),
+        o = Deg2Rad(e.Lat.Value);
+    void 0 !== t && "number" == typeof t || (t = 17);
+    var r = Math.atan2(Math.sin(a - i) * Math.cos(o), Math.cos(n) * Math.sin(o) - Math.sin(n) * Math.cos(o) * Math.cos(a - i));
+    return RoundPow(r = Rad2Deg(r % (2 * Math.PI)), t);
+  }), this.ReachDistOrtho = function (t, a) {
+    var i,
+        n,
+        o = t / EARTH_RADIUS,
+        r = Deg2Rad(a),
+        s = Deg2Rad(this.Lat.Value),
+        l = Deg2Rad(-this.Lon.Value);
+    return i = Math.asin(Math.sin(s) * Math.cos(o) + Math.cos(s) * Math.sin(o) * Math.cos(r)), n = Math.atan2(Math.sin(r) * Math.sin(o) * Math.cos(s), Math.cos(o) - Math.sin(s) * Math.sin(i)), new VLMPosition(NormalizeLongitudeDeg(Rad2Deg(-(e = (l - n + Math.PI) % (2 * Math.PI) - Math.PI))), Rad2Deg(i));
+  }, this.GetVLMString = function () {
+    return this.Lat.ToString() + "," + this.Lon.ToString();
   };
 }
 
 var _IsLoggedIn;
 
-function Boat(vlmboat) {
-  // Default init
-  this.IdBoat = -1;
-  this.Engaged = false;
-  this.BoatName = '';
-  this.BoatPseudo = '';
-  this.VLMInfo = {}; // LastBoatInfoResult
-
-  this.RaceInfo = {}; // Race Info for the boat
-
-  this.Exclusions = []; // Exclusions Zones for this boat
-
-  this.Track = []; // Last 24H of boat Track
-
-  this.RnkObject = {}; // Ranking table
-
-  this.OppTrack = []; // Opponents tracks table
-
-  this.OppList = []; // Opponents list to limit how many boats are shown
-
-  this.Reals = []; // Reals Boat array
-
-  this.VLMPrefs = []; // Preferences Array;
-
-  this.NextServerRequestDate = null; // Next VAC Start date
-
-  this.Estimator = new Estimator(this); // Estimator object for current boat
-
-  this.EstimatePos = null; // Position marker on estimate track
-
-  if (typeof vlmboat !== 'undefined') {
-    this.IdBoat = vlmboat.idu;
-    this.Engaged = vlmboat.engaged;
-    this.BoatName = vlmboat.boatname;
-    this.BoatPseudo = vlmboat.boatpseudo;
-    this.VLMInfo = vlmboat.VLMInfo;
-    this.RaceInfo = vlmboat.RaceInfo;
-    this.Exclusions = vlmboat.Exclusions;
-    this.Track = vlmboat.Track;
-    this.RnkObject = vlmboat.RnkObject;
-  }
-
-  this.GetNextGateSegment = function (NWP) {
-    if (typeof NWP === "string") {
-      NWP = parseInt(NWP, 10);
-    }
-
-    if (typeof this.RaceInfo === "undefined") {
-      return null;
-    }
-
-    var Gate = this.RaceInfo.races_waypoints[NWP];
+function Boat(e) {
+  this.IdBoat = -1, this.Engaged = !1, this.BoatName = "", this.BoatPseudo = "", this.VLMInfo = {}, this.RaceInfo = {}, this.Exclusions = [], this.Track = [], this.RnkObject = {}, this.OppTrack = [], this.OppList = [], this.Reals = [], this.VLMPrefs = [], this.NextServerRequestDate = null, this.Estimator = new Estimator(this), this.EstimatePos = null, void 0 !== e && (this.IdBoat = e.idu, this.Engaged = e.engaged, this.BoatName = e.boatname, this.BoatPseudo = e.boatpseudo, this.VLMInfo = e.VLMInfo, this.RaceInfo = e.RaceInfo, this.Exclusions = e.Exclusions, this.Track = e.Track, this.RnkObject = e.RnkObject), this.GetNextGateSegment = function (e) {
+    if ("string" == typeof e && (e = parseInt(e, 10)), void 0 === this.RaceInfo) return null;
+    var t = this.RaceInfo.races_waypoints[e];
 
     do {
-      // Make sure gate type is handled as a number
-      if (typeof Gate === "string") {
-        Gate = parseInt(Gate, 10);
+      if ("string" == typeof t && (t = parseInt(t, 10)), t.wpformat & WP_ICE_GATE) {
+        if (++e >= this.RaceInfo.races_waypoints) throw "Oops could not find requested gate type";
+        t = this.RaceInfo.races_waypoints[e];
       }
+    } while (t.wpformat & WP_ICE_GATE);
 
-      if (Gate.wpformat & WP_ICE_GATE) {
-        NWP++;
-
-        if (NWP >= this.RaceInfo.races_waypoints) {
-          throw "Oops could not find requested gate type";
-        }
-
-        Gate = this.RaceInfo.races_waypoints[NWP];
-      }
-    } while (Gate.wpformat & WP_ICE_GATE);
-
-    var P1 = new VLMPosition(Gate.longitude1, Gate.latitude1);
-    var P2 = {};
-
-    if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS) {
-      P2 = new VLMPosition(Gate.longitude2, Gate.latitude2);
-    } else {
-      throw "not implemented 1 buoy gate";
-    }
-
+    var a = new VLMPosition(t.longitude1, t.latitude1);
+    if ((t.format & WP_GATE_BUOY_MASK) !== WP_TWO_BUOYS) throw "not implemented 1 buoy gate";
     return {
-      P1: P1,
-      P2: P2
+      P1: a,
+      P2: new VLMPosition(t.longitude2, t.latitude2)
     };
-  };
-
-  this.GetClosestEstimatePoint = function (Pos) {
-    if (typeof Pos === "undefined" || !Pos) {
-      return null;
-    }
+  }, this.GetClosestEstimatePoint = function (e) {
+    if (void 0 === e || !e) return null;
 
     if (this.Estimator) {
-      var Est = this.Estimator.GetClosestEstimatePoint(Pos);
-
-      if (Est) {
-        this.Estimator.ShowEstimatePosition(this.Estimator.Boat, Est);
-      } else {
-        this.Estimator.ClearEstimatePosition(this.Estimator.Boat);
-      }
-
-      return Est;
-    } else {
-      // this.Estimator.ShowEstimatePosition(null,null)
-      return null;
+      var t = this.Estimator.GetClosestEstimatePoint(e);
+      return t ? this.Estimator.ShowEstimatePosition(this.Estimator.Boat, t) : this.Estimator.ClearEstimatePosition(this.Estimator.Boat), t;
     }
-  };
 
-  this.GetNextWPPosition = function (NWP, Position, NWPPosition) {
-    if (typeof this.VLMInfo === "undefined") {
-      // Should not come here without some kind of VLMInfo...
+    return null;
+  }, this.GetNextWPPosition = function (e, t, a) {
+    if (void 0 === this.VLMInfo) return null;
+    this.VLMInfo.NWP;
+    if (!(void 0 !== a && a || 0 === this.VLMInfo.WPLON && 0 === this.VLMInfo.WPLAT)) return new VLMPosition(this.VLMInfo.WPLON, this.VLMInfo.WPLAT);
+    if (void 0 !== a && a && 0 !== a.Lon.Value && 0 !== a.Lat.Value) return new VLMPosition(a.Lon.Value, a.Lat.Value);
+    var i = this.VLMInfo.NWP;
+    void 0 !== e && e && (i = e);
+    var n = this.GetNextGateSegment(i);
+    if (void 0 === n || !n) return null;
+    var o,
+        r = n.P1.GetLoxoCourse(n.P2);
+    o = void 0 !== t && t ? t : new VLMPosition(this.VLMInfo.LON, this.VLMInfo.LAT);
+    var s = r - n.P1.GetLoxoCourse(o);
+    if (s > 180 ? s -= 360 : s < -180 && (s += 360), (s = Math.abs(s)) > 90) return n.P1;
+    var l = n.P1.GetLoxoDist(o);
+
+    try {
+      var d = l * Math.cos(Deg2Rad(s));
+      return n.P1.GetLoxoDist(n.P2) > d ? n.P1.ReachDistLoxo(d, r) : n.P2;
+    } catch (e) {
       return null;
-    } // Assume if we get there, there is a boat with RaceInfo and VLMInfo loaded
-
-
-    var WPIndex = this.VLMInfo.NWP; //If there is a defined WP, then return it
-
-    if ((typeof NWPPosition === "undefined" || !NWPPosition) && (this.VLMInfo.WPLON !== 0 || this.VLMInfo.WPLAT !== 0)) {
-      return new VLMPosition(this.VLMInfo.WPLON, this.VLMInfo.WPLAT);
-    } else if (typeof NWPPosition !== "undefined" && NWPPosition && NWPPosition.Lon.Value !== 0 && NWPPosition.Lat.Value !== 0) {
-      return new VLMPosition(NWPPosition.Lon.Value, NWPPosition.Lat.Value);
-    } else {
-      // Get CurRaceWP
-      // Compute closest point (using bad euclidian method)
-      // Return computed point
-      var CurWP = this.VLMInfo.NWP;
-
-      if (typeof NWP !== "undefined" && NWP) {
-        CurWP = NWP;
-      }
-
-      var Seg = this.GetNextGateSegment(CurWP);
-
-      if (typeof Seg === "undefined" || !Seg) {
-        return null;
-      }
-
-      var Loxo1 = Seg.P1.GetLoxoCourse(Seg.P2);
-      var CurPos;
-
-      if (typeof Position !== "undefined" && Position) {
-        CurPos = Position;
-      } else {
-        CurPos = new VLMPosition(this.VLMInfo.LON, this.VLMInfo.LAT);
-      }
-
-      var Loxo2 = Seg.P1.GetLoxoCourse(CurPos);
-      var Delta = Loxo1 - Loxo2;
-
-      if (Delta > 180) {
-        Delta -= 360.0;
-      } else if (Delta < -180) {
-        Delta += 360.0;
-      }
-
-      Delta = Math.abs(Delta);
-
-      if (Delta > 90) {
-        return Seg.P1;
-      } else {
-        var PointDist = Seg.P1.GetLoxoDist(CurPos);
-
-        try {
-          var SegDist = PointDist * Math.cos(Deg2Rad(Delta));
-          var SegLength = Seg.P1.GetLoxoDist(Seg.P2);
-
-          if (SegLength > SegDist) {
-            return Seg.P1.ReachDistLoxo(SegDist, Loxo1);
-          } else {
-            return Seg.P2;
-          }
-        } catch (e) {
-          return null;
-        }
-      }
     }
   };
 }
 
 function User() {
-  this.IdPlayer = -1;
-  this.IsAdmin = false;
-  this.PlayerName = '';
-  this.PlayerJID = '';
-  this.Fleet = [];
-  this.BSFleet = [];
-  this.CurBoat = {};
-  this.LastLogin = 0;
-
-  this.KeepAlive = function () {
-    console.log("Keeping login alive...");
-    CheckLogin();
-  }; // Send Login every 10'
-
-
-  setInterval(this.KeepAlive, 600000);
+  this.IdPlayer = -1, this.IsAdmin = !1, this.PlayerName = "", this.PlayerJID = "", this.Fleet = [], this.BSFleet = [], this.CurBoat = {}, this.LastLogin = 0, this.KeepAlive = function () {
+    console.log("Keeping login alive..."), CheckLogin();
+  }, setInterval(this.KeepAlive, 6e5);
 }
 
 function IsLoggedIn() {
@@ -8419,789 +4116,438 @@ function IsLoggedIn() {
 }
 
 function OnLoginRequest() {
-  CheckLogin(true);
+  CheckLogin(!0);
 }
 
 function GetPHPSessId() {
-  var Session = document.cookie.split(";");
-  var index;
+  var e,
+      t = document.cookie.split(";");
 
-  for (index in Session) {
-    if (Session[index]) {
-      var f = Session[index].split("=");
-
-      if (f[0] && f[0].trim() === "PHPSESSID") {
-        return f[0];
-      }
+  for (e in t) {
+    if (t[e]) {
+      var a = t[e].split("=");
+      if (a[0] && "PHPSESSID" === a[0].trim()) return a[0];
     }
   }
 
   return null;
 }
 
-function CheckLogin(GuiRequest) {
-  var user = $(".UserName").val();
-  var password = $(".UserPassword").val();
-  var PhpSessId = GetPHPSessId();
-
-  if (PhpSessId || typeof user === "string" && typeof password === "string" && user.trim().length > 0 && password.trim().length > 0) {
-    ShowPb("#PbLoginProgress");
-    $.post("/ws/login.php", {
-      VLM_AUTH_USER: user.trim(),
-      VLM_AUTH_PW: password.trim()
-    }, function (result) {
-      var LoginResult = JSON.parse(result);
-      var CurLoginStatus = _IsLoggedIn;
-      var CurBoatID = null;
-
-      if (CurLoginStatus) {
-        CurBoatID = _CurPlayer.CurBoatID;
-      }
-
-      _IsLoggedIn = LoginResult.success === true;
-      HandleCheckLoginResponse(GuiRequest);
-
-      if (CurBoatID) {
-        SetCurrentBoat(GetBoatFromIdu(select), false);
-      }
-    });
-  } else {
-    HandleCheckLoginResponse(GuiRequest);
-  }
+function CheckLogin(e) {
+  var t = $(".UserName").val(),
+      a = $(".UserPassword").val();
+  GetPHPSessId() || "string" == typeof t && "string" == typeof a && t.trim().length > 0 && a.trim().length > 0 ? (ShowPb("#PbLoginProgress"), $.post("/ws/login.php", {
+    VLM_AUTH_USER: t.trim(),
+    VLM_AUTH_PW: a.trim()
+  }, function (t) {
+    var a = JSON.parse(t),
+        i = null;
+    _IsLoggedIn && (i = _CurPlayer.CurBoatID), _IsLoggedIn = !0 === a.success, HandleCheckLoginResponse(e), i && SetCurrentBoat(GetBoatFromIdu(select), !1);
+  })) : HandleCheckLoginResponse(e);
 }
 
-function HandleCheckLoginResponse(GuiRequest) {
-  if (_IsLoggedIn) {
-    GetPlayerInfo();
-  } else if (GuiRequest) {
-    VLMAlertDanger(GetLocalizedString("authfailed"));
-    $(".UserPassword").val(""); // Reopened login dialog
-
-    setTimeout(function () {
-      $("#LoginForm").modal("hide").modal("show");
-    }, 1000);
-    initrecaptcha(true, false);
-    $("#ResetPasswordLink").removeClass("hidden");
-  }
-
-  HidePb("#PbLoginProgress");
-  DisplayLoggedInMenus(_IsLoggedIn);
+function HandleCheckLoginResponse(e) {
+  _IsLoggedIn ? GetPlayerInfo() : e && (VLMAlertDanger(GetLocalizedString("authfailed")), $(".UserPassword").val(""), setTimeout(function () {
+    $("#LoginForm").modal("hide").modal("show");
+  }, 1e3), initrecaptcha(!0, !1), $("#ResetPasswordLink").removeClass("hidden")), HidePb("#PbLoginProgress"), DisplayLoggedInMenus(_IsLoggedIn);
 }
 
 function Logout() {
-  DisplayLoggedInMenus(false);
-  $.post("/ws/logout.php", function (result) {
-    var i = result;
-
-    if (!result.success) {
-      VLMAlertDanger("Something bad happened while logging out. Restart browser...");
-      windows.location.reload();
-    } else {
-      window.location.reload();
-    }
-  });
-  _IsLoggedIn = false;
-} // Global handle to the current player object
-
+  DisplayLoggedInMenus(!1), $.post("/ws/logout.php", function (e) {
+    e.success ? window.location.reload() : (VLMAlertDanger("Something bad happened while logging out. Restart browser..."), windows.location.reload());
+  }), _IsLoggedIn = !1;
+}
 
 var _CurPlayer = null;
 
 function GetPlayerInfo() {
-  ShowBgLoad();
-  $.get("/ws/playerinfo/profile.php", function (result) {
-    if (result.success) {
-      // Ok, create a user from profile
-      if (typeof _CurPlayer === 'undefined' || !_CurPlayer) {
-        _CurPlayer = new User();
-      }
-
-      _CurPlayer.IdPlayer = result.profile.idp;
-      _CurPlayer.IsAdmin = result.profile.admin;
-      _CurPlayer.PlayerName = result.profile.playername;
-      $.get("/ws/playerinfo/fleet_private.php", HandleFleetInfoLoaded);
-      RefreshPlayerMenu();
-    } else {
-      // Something's wrong, act as not logged in
-      Logout();
-      return;
-    }
+  ShowBgLoad(), $.get("/ws/playerinfo/profile.php", function (e) {
+    e.success ? (void 0 !== _CurPlayer && _CurPlayer || (_CurPlayer = new User()), _CurPlayer.IdPlayer = e.profile.idp, _CurPlayer.IsAdmin = e.profile.admin, _CurPlayer.PlayerName = e.profile.playername, $.get("/ws/playerinfo/fleet_private.php", HandleFleetInfoLoaded), RefreshPlayerMenu()) : Logout();
   });
 }
 
-function HandleFleetInfoLoaded(result) {
-  var i = result;
-  var select;
+function HandleFleetInfoLoaded(e) {
+  var t;
+  void 0 === _CurPlayer && (_CurPlayer = new User()), void 0 === _CurPlayer.Fleet && (_CurPlayer.Fleet = []);
 
-  if (typeof _CurPlayer === 'undefined') {
-    _CurPlayer = new User();
+  for (var a in e.fleet) {
+    void 0 === _CurPlayer.Fleet[a] && (_CurPlayer.Fleet[a] = new Boat(e.fleet[a]), void 0 === t && (t = _CurPlayer.Fleet[a]));
   }
 
-  if (typeof _CurPlayer.Fleet === "undefined") {
-    _CurPlayer.Fleet = [];
+  void 0 === _CurPlayer.fleet_boatsit && (_CurPlayer.fleet_boatsit = []);
+
+  for (var _t18 in e.fleet_boatsit) {
+    void 0 === _CurPlayer.BSFleet[_t18] && (_CurPlayer.BSFleet[_t18] = new Boat(e.fleet_boatsit[_t18]));
   }
 
-  for (var boat in result.fleet) {
-    if (typeof _CurPlayer.Fleet[boat] === "undefined") {
-      _CurPlayer.Fleet[boat] = new Boat(result.fleet[boat]);
-
-      if (typeof select === "undefined") {
-        select = _CurPlayer.Fleet[boat];
-      }
-    }
-  }
-
-  if (typeof _CurPlayer.fleet_boatsit === "undefined") {
-    _CurPlayer.fleet_boatsit = [];
-  }
-
-  for (var _boat in result.fleet_boatsit) {
-    if (typeof _CurPlayer.BSFleet[_boat] === "undefined") {
-      _CurPlayer.BSFleet[_boat] = new Boat(result.fleet_boatsit[_boat]);
-    }
-  }
-
-  RefreshPlayerMenu();
-
-  if (typeof select !== "undefined" && select) {
-    DisplayCurrentDDSelectedBoat(select);
-    SetCurrentBoat(GetBoatFromIdu(select), true);
-    RefreshCurrentBoat(true, false);
-  }
+  RefreshPlayerMenu(), void 0 !== t && t && (DisplayCurrentDDSelectedBoat(t), SetCurrentBoat(GetBoatFromIdu(t), !0), RefreshCurrentBoat(!0, !1));
 }
 
 function RefreshPlayerMenu() {
-  // Update GUI for current player
-  $("#PlayerId").text(_CurPlayer.PlayerName); // Update the combo to select the current boat
+  $("#PlayerId").text(_CurPlayer.PlayerName), ClearBoatSelector();
 
-  ClearBoatSelector();
-
-  for (var boat in _CurPlayer.Fleet) {
-    AddBoatToSelector(_CurPlayer.Fleet[boat], true);
+  for (var e in _CurPlayer.Fleet) {
+    AddBoatToSelector(_CurPlayer.Fleet[e], !0);
   }
 
-  for (var _boat2 in _CurPlayer.BSFleet) {
-    if (_CurPlayer.BSFleet[_boat2]) {
-      AddBoatToSelector(_CurPlayer.BSFleet[_boat2], false);
-    }
+  for (var _e18 in _CurPlayer.BSFleet) {
+    _CurPlayer.BSFleet[_e18] && AddBoatToSelector(_CurPlayer.BSFleet[_e18], !1);
   }
 
-  DisplayLoggedInMenus(true);
-  HideBgLoad("#PbLoginProgress");
+  DisplayLoggedInMenus(!0), HideBgLoad("#PbLoginProgress");
 }
 
 function SetupUserMenu() {
-  // Set position in center of screen
-  var destx = $(document).width() / 2 - $(".UserMenu").width() / 2 + 'px';
-  var desty = 0; // Show Panel
-
-  $(".UserMenu").show();
-  $(".UserMenu").animate({
-    left: destx,
-    top: desty
+  var e = $(document).width() / 2 - $(".UserMenu").width() / 2 + "px";
+  $(".UserMenu").show(), $(".UserMenu").animate({
+    left: e,
+    top: 0
   }, 0);
 }
 
-function GetBoatFromIdu(Id) {
-  if (typeof _CurPlayer === "undefined") {
-    return;
+function GetBoatFromIdu(e) {
+  if (void 0 !== _CurPlayer) {
+    var t = GetBoatFromBoatArray(_CurPlayer.Fleet, e);
+    return void 0 === t && (t = GetBoatFromBoatArray(_CurPlayer.BSFleet, e)), t;
   }
-
-  var RetBoat = GetBoatFromBoatArray(_CurPlayer.Fleet, Id);
-
-  if (typeof RetBoat === 'undefined') {
-    RetBoat = GetBoatFromBoatArray(_CurPlayer.BSFleet, Id);
-  }
-
-  return RetBoat;
 }
 
-function GetBoatFromBoatArray(BoatsArray, Id) {
-  Id = parseInt(Id, 10);
+function GetBoatFromBoatArray(e, t) {
+  t = parseInt(t, 10);
 
-  for (var boat in BoatsArray) {
-    if (BoatsArray[boat] && BoatsArray[boat].IdBoat === Id) {
-      return BoatsArray[boat];
-    }
+  for (var a in e) {
+    if (e[a] && e[a].IdBoat === t) return e[a];
   }
-
-  return;
 }
 
 function GetFlagsList() {
-  $.get("/ws/serverinfo/flags.php", function (result) {
-    var i = result;
+  $.get("/ws/serverinfo/flags.php", function (e) {
+    if (e.success) {
+      var t = $("#CountryDropDownList"),
+          a = 0;
 
-    if (result.success) {
-      var DropDown = $("#CountryDropDownList");
-      var flagindex = 0;
-
-      for (var _index23 in result.flags) {
-        if (result.flags[_index23]) {
-          var title = result.flags[_index23];
-          DropDown.append("<li class='FlagLine DDLine' flag='" + title + "'>" + GetCountryDropDownSelectorHTML(title, true, flagindex++) + "</li>");
+      for (var i in e.flags) {
+        if (e.flags[i]) {
+          var n = e.flags[i];
+          t.append("<li class='FlagLine DDLine' flag='" + n + "'>" + GetCountryDropDownSelectorHTML(n, !0, a++) + "</li>");
         }
       }
-    } // Catch flag selection change
+    }
 
-
-    $(".FlagLine").on('click', HandleFlagLineClick);
+    $(".FlagLine").on("click", HandleFlagLineClick);
   });
 }
 
 var FlagsIndexCache = [];
 
-function GetCountryDropDownSelectorHTML(title, loadflag, CountryIndex) {
-  if (loadflag) {
-    // Get line to build DropDown
-    //var RetString1 = " <img class='flag' src='/cache/flags/flagsmap.png' flag='"+title+"' title='"+title+"' alt='"+title+"'></img>"
-    var RetString1 = GetCountryFlagImg(title, CountryIndex);
+function GetCountryDropDownSelectorHTML(e, t, a) {
+  if (t) {
+    var _t19 = GetCountryFlagImg(e, a);
 
-    var _RetString = " <span  class='FlagLabel' flag='" + title + "'> - " + title + "</span>";
-
-    FlagsIndexCache[title] = RetString1;
+    FlagsIndexCache[e] = _t19;
   }
 
-  var RetString2 = " <span  class='FlagLabel' flag='" + title + "'> - " + title + "</span>";
-  return FlagsIndexCache[title] + RetString2;
+  var i = " <span  class='FlagLabel' flag='" + e + "'> - " + e + "</span>";
+  return FlagsIndexCache[e] + i;
 }
 
-function GetCountryFlagImgHTML(country) {
-  return FlagsIndexCache[country];
+function GetCountryFlagImgHTML(e) {
+  return FlagsIndexCache[e];
 }
 
-function GetCountryFlagImg(Title, CountryIndex) {
-  var row = 20 * Math.floor(CountryIndex / 16);
-  var col = 30 * (CountryIndex % 16);
-  var RetString1 = " <div class='FlagIcon' style='background-position: -" + col + "px -" + row + "px' flag='" + Title + "'></div>";
-  return RetString1;
-} //
-// VLMBoat layer handling displaying vlm boats, traj
-//
+function GetCountryFlagImg(e, t) {
+  return " <div class='FlagIcon' style='background-position: -" + t % 16 * 30 + "px -" + 20 * Math.floor(t / 16) + "px' flag='" + e + "'></div>";
+}
 
-/*const BOAT_ICON = 0
-const BOAT_WP_MARKER = 1
-const BOAT_TRACK = 2
-const BOAT_FORECAST_TRACK = 3
-const BOAT_POLAR = 4
-*/
-
-
-var VLM_COORDS_FACTOR = 1000; // Default map options
-
+var VLM_COORDS_FACTOR = 1e3;
 var MapOptions = {
-  // Projection mercator sphÃ©rique (type google map ou osm)
   projection: new OpenLayers.Projection("EPSG:900913"),
-  // projection pour l'affichage des coordonnÃ©es
   displayProjection: new OpenLayers.Projection("EPSG:4326"),
-  // unitÃ© : le m
   units: "m",
   maxResolution: 156543.0339,
   maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
   restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34, 40037508.34, 20037508.34),
   eventListeners: {
-    "zoomend": HandleMapZoomEnd,
-    "featureover": HandleFeatureOver,
-    "featureout": HandleFeatureOut,
-    "featureclick": HandleFeatureClick,
-    "mousemove": HandleMapMouseMove
+    zoomend: HandleMapZoomEnd,
+    featureover: HandleFeatureOver,
+    featureout: HandleFeatureOut,
+    featureclick: HandleFeatureClick,
+    mousemove: HandleMapMouseMove
   }
-}; // Click handler for handling map clicks.
-
+};
 OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
   defaultHandlerOptions: {
-    'single': true,
-    'double': false,
-    'pixelTolerance': 0,
-    'stopSingle': false,
-    'stopDouble': false
+    single: !0,
+    double: !1,
+    pixelTolerance: 0,
+    stopSingle: !1,
+    stopDouble: !1
   },
-  initialize: function initialize(options) {
-    this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions);
-    OpenLayers.Control.prototype.initialize.apply(this, arguments);
-    this.handler = new OpenLayers.Handler.Click(this, {
-      'click': this.trigger
+  initialize: function initialize(e) {
+    this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions), OpenLayers.Control.prototype.initialize.apply(this, arguments), this.handler = new OpenLayers.Handler.Click(this, {
+      click: this.trigger
     }, this.handlerOptions);
   },
   trigger: function trigger(e) {
-    var MousePos = GetVLMPositionFromClick(e.xy);
-
-    if (_typeof(GM_Pos) !== "object" || !GM_Pos) {
-      GM_Pos = {};
-    }
-
-    GM_Pos.lon = MousePos.Lon.Value;
-    GM_Pos.lat = MousePos.Lat.Value;
-    HandleMapMouseMove(e);
-
-    if (SetWPPending) {
-      if (WPPendingTarget === "WP") {
-        CompleteWPSetPosition(e, e.xy);
-        HandleCancelSetWPOnClick();
-      } else if (WPPendingTarget === "AP") {
-        SetWPPending = false;
-        _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy);
-        $("#AutoPilotSettingForm").modal("show");
-        RefreshAPDialogFields();
-      } else {
-        SetWPPending = false;
-      }
-    }
+    var t = GetVLMPositionFromClick(e.xy);
+    "object" == _typeof(GM_Pos) && GM_Pos || (GM_Pos = {}), GM_Pos.lon = t.Lon.Value, GM_Pos.lat = t.Lat.Value, HandleMapMouseMove(e), SetWPPending && ("WP" === WPPendingTarget ? (CompleteWPSetPosition(e, e.xy), HandleCancelSetWPOnClick()) : "AP" === WPPendingTarget ? (SetWPPending = !1, _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy), $("#AutoPilotSettingForm").modal("show"), RefreshAPDialogFields()) : SetWPPending = !1);
   }
-}); // Control to handle drag of User WP
-// var DrawControl = null;
+});
+var BoatFeatures = [],
+    OppPopups = [],
+    StartSetWPOnClick = !1;
 
-var BoatFeatures = [];
-var OppPopups = [];
-var StartSetWPOnClick = false;
-
-function SetCurrentBoat(Boat, CenterMapOnBoat, ForceRefresh, TargetTab) {
-  CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab);
+function SetCurrentBoat(e, t, a, i) {
+  CheckBoatRefreshRequired(e, t, a, i);
 }
 
 var BoatLoading = new Date(0);
 
-function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab) {
-  // Check Params.
-  if (typeof Boat === "undefined" || !Boat) {
-    return;
-  }
-
-  var CurDate = new Date();
-  var NeedPrefsRefresh = typeof Boat !== "undefined" && (typeof Boat.VLMInfo === "undefined" || typeof Boat.VLMInfo.AVG === "undefined"); // Update preference screen according to current selected boat
-
-  UpdatePrefsDialog(Boat);
-
-  if (typeof Boat.VLMInfo === 'undefined' || typeof Boat.VLMInfo.LUP === 'undefined') {
-    ForceRefresh = true;
-  } //if ((CurDate > BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))
-
-
-  if (ForceRefresh || CurDate >= Boat.NextServerRequestDate) {
-    BoatLoading = CurDate + 3000;
-    console.log("Loading boat info from server...."); // request current boat info
-
-    ShowPb("#PbGetBoatProgress");
-    $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat, function (result) {
-      // Check that boat Id Matches expectations
-      if (Boat.IdBoat === parseInt(result.IDU, 10)) {
-        // Set Current Boat for player
-        _CurPlayer.CurBoat = Boat; // LoadPrefs
-
-        LoadVLMPrefs(); // Store BoatInfo, update map
-
-        Boat.VLMInfo = result; // Store next request Date (once per minute)
-
-        Boat.NextServerRequestDate = new Date((parseInt(Boat.VLMInfo.LUP, 10) + parseInt(Boat.VLMInfo.VAC, 10)) * 1000);
-        Boat.LastRefresh = new Date(); // Fix Lon, and Lat scale
-
-        Boat.VLMInfo.LON /= VLM_COORDS_FACTOR;
-        Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR; //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
-        //GribMgr.WindAtPointInTime(new Date(),0,0 );
-        // force refresh of settings if was not initialized
-
-        if (NeedPrefsRefresh) {
-          UpdatePrefsDialog(Boat);
-        } // update map if racing
-
-
-        if (Boat.VLMInfo.RAC !== "0") {
-          if (typeof Boat.RaceInfo === "undefined" || typeof Boat.RaceInfo.idraces === 'undefined') {
-            // Get race info if first request for the boat
-            GetRaceInfoFromServer(Boat, TargetTab);
-            GetRaceExclusionsFromServer(Boat);
-          } else {
-            //Redraw gates and exclusions from cache
-            DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
-            DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
-          } // Get boat track for the last 24h
-
-
-          GetTrackFromServer(Boat); // Get Rankings
-
-          if (Boat.VLMInfo && Boat.VLMInfo.RAC) {
-            LoadRankings(Boat.VLMInfo.RAC);
-          } // Get Reals
-
-
-          LoadRealsList(Boat); // Draw Boat, course, tracks....
-
-          DrawBoat(Boat, CenterMapOnBoat); // Update Boat info in main menu bar
-
-          UpdateInMenuRacingBoatInfo(Boat, TargetTab);
-        } else {
-          // Boat is not racing
-          //GetLastRacehistory();
-          UpdateInMenuDockingBoatInfo(Boat);
-        }
-      }
-
-      HidePb("#PbGetBoatProgress");
-
-      if (OnPlayerLoadedCallBack) {
-        OnPlayerLoadedCallBack();
-        OnPlayerLoadedCallBack = null;
-      }
-    });
-  } else if (Boat) {
-    // Draw from last request
-    UpdateInMenuDockingBoatInfo(Boat);
-    DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
-    DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
+function CheckBoatRefreshRequired(e, t, a, i) {
+  if (void 0 !== e && e) {
+    var n = new Date(),
+        o = void 0 !== e && (void 0 === e.VLMInfo || void 0 === e.VLMInfo.AVG);
+    UpdatePrefsDialog(e), void 0 !== e.VLMInfo && void 0 !== e.VLMInfo.LUP || (a = !0), a || n >= e.NextServerRequestDate ? (BoatLoading = n + 3e3, console.log("Loading boat info from server...."), ShowPb("#PbGetBoatProgress"), $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + e.IdBoat, function (a) {
+      e.IdBoat === parseInt(a.IDU, 10) && (_CurPlayer.CurBoat = e, LoadVLMPrefs(), e.VLMInfo = a, e.NextServerRequestDate = new Date(1e3 * (parseInt(e.VLMInfo.LUP, 10) + parseInt(e.VLMInfo.VAC, 10))), e.LastRefresh = new Date(), e.VLMInfo.LON /= VLM_COORDS_FACTOR, e.VLMInfo.LAT /= VLM_COORDS_FACTOR, o && UpdatePrefsDialog(e), "0" !== e.VLMInfo.RAC ? (void 0 === e.RaceInfo || void 0 === e.RaceInfo.idraces ? (GetRaceInfoFromServer(e, i), GetRaceExclusionsFromServer(e)) : (DrawRaceGates(e.RaceInfo, e.VLMInfo.NWP), DrawRaceExclusionZones(VLMBoatsLayer, e.Exclusions)), GetTrackFromServer(e), e.VLMInfo && e.VLMInfo.RAC && LoadRankings(e.VLMInfo.RAC), LoadRealsList(e), DrawBoat(e, t), UpdateInMenuRacingBoatInfo(e, i)) : UpdateInMenuDockingBoatInfo(e)), HidePb("#PbGetBoatProgress"), OnPlayerLoadedCallBack && (OnPlayerLoadedCallBack(), OnPlayerLoadedCallBack = null);
+    })) : e && (UpdateInMenuDockingBoatInfo(e), DrawBoat(e, t), DrawRaceGates(e.RaceInfo, e.VLMInfo.NWP), DrawRaceExclusionZones(VLMBoatsLayer, e.Exclusions));
   }
 }
 
-function GetTrackFromServer(Boat) {
-  var end = Math.floor(new Date() / 1000);
-  var start = end - 24 * 3600;
-  $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat + "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end, function (result) {
-    if (result.success) {
-      if (typeof Boat.Track !== "undefined") {
-        Boat.Track.length = 0;
-      } else {
-        Boat.Track = [];
-      }
+function GetTrackFromServer(e) {
+  var t = Math.floor(new Date() / 1e3),
+      a = t - 86400;
+  $.get("/ws/boatinfo/tracks_private.php?idu=" + e.IdBoat + "&idr=" + e.VLMInfo.RAC + "&starttime=" + a + "&endtime=" + t, function (t) {
+    if (t.success) {
+      void 0 !== e.Track ? e.Track.length = 0 : e.Track = [];
 
-      for (var _index24 in result.tracks) {
-        if (result.tracks[_index24]) {
-          var P = new VLMPosition(result.tracks[_index24][1] / 1000.0, result.tracks[_index24][2] / 1000.0);
-          Boat.Track.push(P);
+      for (var i in t.tracks) {
+        if (t.tracks[i]) {
+          var a = new VLMPosition(t.tracks[i][1] / 1e3, t.tracks[i][2] / 1e3);
+          e.Track.push(a);
         }
       }
 
-      DrawBoat(Boat);
+      DrawBoat(e);
     }
   });
 }
 
-function GetRaceExclusionsFromServer(Boat) {
-  $.get("/ws/raceinfo/exclusions.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function (result) {
-    if (result.success) {
-      var Polygons = [];
-      var CurEndPoint;
-      var CurPolyPointsList = [];
+function GetRaceExclusionsFromServer(e) {
+  $.get("/ws/raceinfo/exclusions.php?idrace=" + e.VLMInfo.RAC + "&v=" + e.VLMInfo.VER, function (t) {
+    if (t.success) {
+      var i,
+          n,
+          o = [],
+          r = [];
 
-      var _index25;
-
-      for (_index25 in result.Exclusions) {
-        if (result.Exclusions[_index25]) {
-          var Seg = result.Exclusions[_index25];
-
-          if (typeof CurEndPoint === 'undefined' || CurEndPoint[0] !== Seg[0][0] && CurEndPoint[1] !== Seg[0][1]) {
-            if (typeof CurEndPoint !== 'undefined') {
-              // Changing Polygons
-              Polygons.push(CurPolyPointsList);
-              CurPolyPointsList = [];
-            } // Add segment Start to current point list
-
-
-            CurPolyPointsList.push(Seg[0]);
-          }
-
-          CurEndPoint = Seg[1]; // Add segment end  to current point list
-
-          CurPolyPointsList.push(Seg[1]);
+      for (n in t.Exclusions) {
+        if (t.Exclusions[n]) {
+          var a = t.Exclusions[n];
+          (void 0 === i || i[0] !== a[0][0] && i[1] !== a[0][1]) && (void 0 !== i && (o.push(r), r = []), r.push(a[0])), i = a[1], r.push(a[1]);
         }
       }
 
-      Polygons.push(CurPolyPointsList);
-      Boat.Exclusions = Polygons;
-      DrawRaceExclusionZones(VLMBoatsLayer, Polygons);
+      o.push(r), e.Exclusions = o, DrawRaceExclusionZones(VLMBoatsLayer, o);
     }
   });
 }
 
-function GetRaceInfoFromServer(Boat, TargetTab) {
-  $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function (result) {
-    // Save raceinfo with boat
-    Boat.RaceInfo = result;
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
-    UpdateInMenuRacingBoatInfo(Boat, TargetTab);
+function GetRaceInfoFromServer(e, t) {
+  $.get("/ws/raceinfo/desc.php?idrace=" + e.VLMInfo.RAC + "&v=" + e.VLMInfo.VER, function (a) {
+    e.RaceInfo = a, DrawRaceGates(e.RaceInfo, e.VLMInfo.NWP), UpdateInMenuRacingBoatInfo(e, t);
   });
 }
 
-var DrawBoatTimeOutHandle = null;
-var DeferredCenterValue = false;
+var DrawBoatTimeOutHandle = null,
+    DeferredCenterValue = !1;
 
-function DrawBoat(Boat, CenterMapOnBoat) {
-  if (typeof CenterMapOnBoat !== "undefined") {
-    DeferredCenterValue = DeferredCenterValue || CenterMapOnBoat;
-  }
-
-  console.log("Call DrawbBoat (" + CenterMapOnBoat + ") deferred : " + DeferredCenterValue);
-
-  if (DrawBoatTimeOutHandle) {
-    console.log("Pushed DrawBoat");
-    clearTimeout(DrawBoatTimeOutHandle);
-  }
-
-  DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat, 100, Boat, DeferredCenterValue);
+function DrawBoat(e, t) {
+  void 0 !== t && (DeferredCenterValue = DeferredCenterValue || t), console.log("Call DrawbBoat (" + t + ") deferred : " + DeferredCenterValue), DrawBoatTimeOutHandle && (console.log("Pushed DrawBoat"), clearTimeout(DrawBoatTimeOutHandle)), DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat, 100, e, DeferredCenterValue);
 }
 
-function ActualDrawBoat(Boat, CenterMapOnBoat) {
-  console.log("ClearDrawBoat " + CenterMapOnBoat);
-  DeferredCenterValue = false;
-  DrawBoatTimeOutHandle = null;
-
-  if (typeof Boat === "undefined" || !Boat) {
-    if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.CurBoat !== "undefined" && _CurPlayer.CurBoat) {
-      // Fallback to currently selected Boat
-      Boat = _CurPlayer.CurBoat;
-    } else {
-      // Ignore call, if no boat is provided...
-      return;
-    }
-  } // Remove features, before recreate and re-add
-  // Can't figure how to move/update the features properly
-
-
-  for (var _index26 in BoatFeatures) {
-    // Beurk, but does the job anyways
-    if (BoatFeatures[_index26]) {
-      VLMBoatsLayer.removeFeatures(BoatFeatures[_index26]);
-    }
+function ActualDrawBoat(e, t) {
+  if (console.log("ClearDrawBoat " + t), DeferredCenterValue = !1, DrawBoatTimeOutHandle = null, void 0 === e || !e) {
+    if (void 0 === _CurPlayer || !_CurPlayer || void 0 === _CurPlayer.CurBoat || !_CurPlayer.CurBoat) return;
+    e = _CurPlayer.CurBoat;
   }
 
-  BoatFeatures = []; //WP Marker
-
-  var WP = null;
-
-  if (typeof Boat !== "undefined" && Boat && Boat.GetNextWPPosition) {
-    WP = Boat.GetNextWPPosition();
+  for (var _e19 in BoatFeatures) {
+    BoatFeatures[_e19] && VLMBoatsLayer.removeFeatures(BoatFeatures[_e19]);
   }
 
-  if (typeof WP !== "undefined" && WP) {
-    //console.log ("WP : " + WP.Lon.Value);
-    var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value, WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection); // Waypoint marker    
+  BoatFeatures = [];
+  var a = null;
 
-    var WPMarker = new OpenLayers.Feature.Vector(WPTransformed, {}, {
-      externalGraphic: 'images/WP_Marker.gif',
+  if (void 0 !== e && e && e.GetNextWPPosition && (a = e.GetNextWPPosition()), void 0 !== a && a) {
+    var _e20 = new OpenLayers.Geometry.Point(a.Lon.Value, a.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection),
+        _t20 = new OpenLayers.Feature.Vector(_e20, {}, {
+      externalGraphic: "images/WP_Marker.gif",
       graphicHeight: 48,
       graphicWidth: 48
     });
-    BoatFeatures.push(WPMarker);
-    VLMBoatsLayer.addFeatures(WPMarker);
-  } // Boat Marker
 
+    BoatFeatures.push(_t20), VLMBoatsLayer.addFeatures(_t20);
+  }
 
-  if (_typeof(Boat.VLMInfo) !== undefined && Boat.VLMInfo && (Boat.VLMInfo.LON || Boat.VLMInfo.LAT)) {
-    var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-    var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-    var BoatIcon = new OpenLayers.Feature.Vector(PosTransformed, {
-      "Id": Boat.IdBoat
+  if (void 0 !== _typeof(e.VLMInfo) && e.VLMInfo && (e.VLMInfo.LON || e.VLMInfo.LAT)) {
+    var _a14 = new OpenLayers.Geometry.Point(e.VLMInfo.LON, e.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection),
+        _r = new OpenLayers.Feature.Vector(_a14, {
+      Id: e.IdBoat
     }, {
-      externalGraphic: 'images/target.svg',
+      externalGraphic: "images/target.svg",
       graphicHeight: 64,
       graphicWidth: 64,
-      rotation: Boat.VLMInfo.HDG
+      rotation: e.VLMInfo.HDG
     });
-    VLMBoatsLayer.addFeatures(BoatIcon);
-    BoatFeatures.push(BoatIcon); // Draw polar
 
-    var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
-    var Polar = []; // MakePolar in a 200x200 square
-    //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
+    VLMBoatsLayer.addFeatures(_r), BoatFeatures.push(_r);
+    var i = PolarsManager.GetPolarLine(e.VLMInfo.POL, e.VLMInfo.TWS, DrawBoat, e),
+        n = [];
 
-    if (typeof map !== "undefined" && map) {
-      var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed); //var scale = 50 * map.resolution;
+    if (void 0 !== map && map) {
+      map.getViewPortPxFromLonLat(_a14);
 
-      var scale = VLM2Prefs.MapPrefs.PolarVacCount;
-      var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-      BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, new Date(Boat.VLMInfo.LUP * 1000), function () {
-        DrawBoat(Boat, CenterMapOnBoat);
-      }); //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
+      var _r2 = VLM2Prefs.MapPrefs.PolarVacCount,
+          _s3 = new VLMPosition(e.VLMInfo.LON, e.VLMInfo.LAT);
 
-      var BoatPolar = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(Polar), {
-        "type": "Polar",
-        "WindDir": Boat.VLMInfo.TWD
+      BuildPolarLine(e, i, n, _s3, _r2, new Date(1e3 * e.VLMInfo.LUP), function () {
+        DrawBoat(e, t);
       });
-      BoatFeatures.push(BoatPolar);
-      VLMBoatsLayer.addFeatures(BoatPolar);
+      var o = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(n), {
+        type: "Polar",
+        WindDir: e.VLMInfo.TWD
+      });
+      BoatFeatures.push(o), VLMBoatsLayer.addFeatures(o);
     }
-  } //console.log("Added Pos Feature "+ WPMarker.id);
-  // Last 24h track  
+  }
 
+  if (void 0 !== e.Track && e.Track.length > 0) {
+    var _t21 = [],
+        _a15 = e.Track.length,
+        _i8 = 99999,
+        _n3 = 0;
 
-  if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0) {
-    var PointList = [];
-    var TrackLength = Boat.Track.length;
-    var PrevLon = 99999;
-    var LonOffSet = 0;
+    for (var _o2 = 0; _o2 < _a15; _o2++) {
+      var _a16 = e.Track[_o2];
+      99999 !== _i8 && (_n3 += GetLonOffset(_i8, _a16.Lon.Value)), _i8 = _a16.Lon.Value;
 
-    for (var _index27 = 0; _index27 < TrackLength; _index27++) {
-      var P = Boat.Track[_index27];
+      var _r3 = new OpenLayers.Geometry.Point(_a16.Lon.Value + _n3, _a16.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
 
-      if (PrevLon !== 99999) {
-        LonOffSet += GetLonOffset(PrevLon, P.Lon.Value);
-      }
-
-      PrevLon = P.Lon.Value;
-      var P1 = new OpenLayers.Geometry.Point(P.Lon.Value + LonOffSet, P.Lat.Value);
-      var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
-      PointList.push(P1_PosTransformed);
+      _t21.push(_r3);
     }
 
-    var TrackColor = Boat.VLMInfo.COL;
-
-    if (TrackColor[0] !== "#") {
-      TrackColor = "#" + TrackColor;
-    }
-
-    var BoatTrack = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), {
-      "type": "HistoryTrack",
-      "TrackColor": TrackColor
+    var r = e.VLMInfo.COL;
+    "#" !== r[0] && (r = "#" + r);
+    var s = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(_t21), {
+      type: "HistoryTrack",
+      TrackColor: r
     });
-    VLMBoatsLayer.addFeatures(BoatTrack);
-    BoatFeatures.push(BoatTrack);
-  } // Forecast Track
+    VLMBoatsLayer.addFeatures(s), BoatFeatures.push(s);
+  }
 
+  if (e.Estimator && e.Estimator.EstimateTrack.length !== e.Estimator.EstimatePoints.length) {
+    e.Estimator.EstimatePoints[0] = [];
+    var _t22 = 0,
+        _a17 = 99999,
+        _i9 = 0;
 
-  if (Boat.Estimator && Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length) {
-    Boat.Estimator.EstimatePoints[0] = [];
-    var TrackIndex = 0;
-    var _PrevLon = 99999;
-    var _LonOffSet = 0;
+    for (var _n4 in e.Estimator.EstimateTrack) {
+      if (e.Estimator.EstimateTrack[_n4]) {
+        var _o3 = e.Estimator.EstimateTrack[_n4];
+        99999 !== _a17 && (_i9 += GetLonOffset(_a17, _o3.Position.Lon.Value)), _a17 = _o3.Position.Lon.Value;
 
-    for (var _index28 in Boat.Estimator.EstimateTrack) {
-      if (Boat.Estimator.EstimateTrack[_index28]) {
-        var Est = Boat.Estimator.EstimateTrack[_index28];
+        var _r4 = new OpenLayers.Geometry.Point(_o3.Position.Lon.Value + _i9, _o3.Position.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
 
-        if (_PrevLon !== 99999) {
-          _LonOffSet += GetLonOffset(_PrevLon, Est.Position.Lon.Value);
+        e.Estimator.EstimatePoints[_t22].push(_r4);
+      }
+    }
+  }
+
+  if (void 0 !== e.Estimator && e.Estimator && e.Estimator.EstimatePoints) for (var _t23 in e.Estimator.EstimatePoints) {
+    if (e.Estimator.EstimatePoints[_t23]) {
+      var l = e.Estimator.EstimatePoints[_t23],
+          d = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(l), {
+        type: "ForecastPos"
+      });
+      BoatFeatures.push(d), VLMBoatsLayer.addFeatures(d);
+    }
+  }
+  if (DrawOpponents(e, VLMBoatsLayer, BoatFeatures), void 0 !== e.OppTrack && Object.keys(e.OppTrack).length > 0) for (var _t24 in e.OppTrack) {
+    var u = e.OppTrack[_t24];
+
+    if (u && u.Visible && u.DatePos.length > 1) {
+      if (!u.OLTrackLine) {
+        var _e22 = [],
+            _t25 = Object.keys(u.DatePos).length;
+
+        for (var _a18 = 0; _a18 < _t25; _a18++) {
+          var _t26 = Object.keys(u.DatePos)[_a18],
+              _i10 = u.DatePos[_t26],
+              _n5 = new OpenLayers.Geometry.Point(_i10.lon, _i10.lat).transform(MapOptions.displayProjection, MapOptions.projection);
+
+          _e22.push(_n5);
         }
 
-        _PrevLon = Est.Position.Lon.Value;
-
-        var _P = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + _LonOffSet, Est.Position.Lat.Value);
-
-        var _P1_PosTransformed = _P.transform(MapOptions.displayProjection, MapOptions.projection);
-
-        Boat.Estimator.EstimatePoints[TrackIndex].push(_P1_PosTransformed);
+        u.OLTrackLine = _e22;
       }
+
+      var _e21 = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(u.OLTrackLine), {
+        type: "HistoryTrack",
+        TrackColor: u.TrackColor
+      });
+
+      u.LastShow = new Date(), VLMBoatsLayer.addFeatures(_e21), BoatFeatures.push(_e21);
     }
   }
 
-  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints) {
-    for (var _index29 in Boat.Estimator.EstimatePoints) {
-      if (Boat.Estimator.EstimatePoints[_index29]) {
-        var TrackPointList = Boat.Estimator.EstimatePoints[_index29];
-        var TrackForecast = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(TrackPointList), {
-          "type": "ForecastPos"
-        });
-        BoatFeatures.push(TrackForecast);
-        VLMBoatsLayer.addFeatures(TrackForecast);
-      }
-    }
-  } // opponents  
-
-
-  DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures); // Draw OppTracks, if any is selected
-
-  if (typeof Boat.OppTrack !== "undefined" && Object.keys(Boat.OppTrack).length > 0) {
-    for (var _TrackIndex in Boat.OppTrack) {
-      var T = Boat.OppTrack[_TrackIndex];
-
-      if (T && T.Visible && T.DatePos.length > 1) {
-        if (!T.OLTrackLine) {
-          var TrackPoints = [];
-          var TLen = Object.keys(T.DatePos).length;
-
-          for (var PointIndex = 0; PointIndex < TLen; PointIndex++) {
-            var k = Object.keys(T.DatePos)[PointIndex];
-            var _P2 = T.DatePos[k];
-            var Pi = new OpenLayers.Geometry.Point(_P2.lon, _P2.lat);
-            var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection);
-            TrackPoints.push(Pi_PosTransformed);
-          }
-
-          T.OLTrackLine = TrackPoints;
-        }
-
-        var OppTrack = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(T.OLTrackLine), {
-          "type": "HistoryTrack",
-          "TrackColor": T.TrackColor
-        });
-        T.LastShow = new Date();
-        VLMBoatsLayer.addFeatures(OppTrack);
-        BoatFeatures.push(OppTrack);
-      }
-    }
-  }
-
-  if (CenterMapOnBoat && typeof Boat.VLMInfo !== "undefined" && Boat.VLMInfo) {
-    // Set Map Center to current boat position
-    var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection); // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
-
-    if (isNaN(l.lat) || isNaN(l.lon)) {
-      var i = 0;
-    }
-
-    if (typeof map !== "undefined" && map) {
-      map.setCenter(l);
-    }
-  } else if (CenterMapOnBoat) {
-    var BkpPt = 1;
-  }
+  if (t && void 0 !== e.VLMInfo && e.VLMInfo) {
+    var c = new OpenLayers.LonLat(e.VLMInfo.LON, e.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection);
+    if (isNaN(c.lat) || isNaN(c.lon)) ;
+    void 0 !== map && map && map.setCenter(c);
+  } else if (t) ;
 
   console.log("ActualDrawBoatComplete");
 }
 
-function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate, Callback) {
-  var CurDate = StartDate;
+function BuildPolarLine(e, t, a, i, n, o, r) {
+  var s = o;
+  (!s || s < new Date().getTime()) && (s = new Date().getTime());
+  var l = GribMgr.WindAtPointInTime(s, i.Lat.Value, i.Lon.Value, r);
 
-  if (!CurDate || CurDate < new Date().getTime()) {
-    CurDate = new Date().getTime();
-  }
+  if (l) {
+    var _t27;
 
-  var MI = GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
+    parseFloat(e.VLMInfo.HDG);
 
-  if (MI) {
-    var hdg = parseFloat(Boat.VLMInfo.HDG);
+    for (_t27 = 0; _t27 <= 180; _t27 += 5) {
+      var _o4 = PolarsManager.GetBoatSpeed(e.VLMInfo.POL, l.Speed, l.Heading, l.Heading + _t27);
 
-    var _index30;
+      if (isNaN(_o4)) return;
+      var d;
 
-    for (_index30 = 0; _index30 <= 180; _index30 += 5) {
-      var Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL, MI.Speed, MI.Heading, MI.Heading + _index30);
+      for (d = -1; d <= 1; d += 2) {
+        var _r5 = i.ReachDistLoxo(_o4 / 3600 * e.VLMInfo.VAC * n, l.Heading + _t27 * d),
+            _s4 = new OpenLayers.Geometry.Point(_r5.Lon.Value, _r5.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
 
-      if (isNaN(Speed)) {
-        // Just abort in case of not yet loaded polar. Next display should fix it.
-        // FixMe - Should we try later or will luck do it for us??
-        return;
-      }
-
-      var Side;
-
-      for (Side = -1; Side <= 1; Side += 2) {
-        var PolarPos = StartPos.ReachDistLoxo(Speed / 3600.0 * Boat.VLMInfo.VAC * scale, MI.Heading + _index30 * Side);
-        var PixPos = new OpenLayers.Geometry.Point(PolarPos.Lon.Value, PolarPos.Lat.Value);
-        var PixPos_Transformed = PixPos.transform(MapOptions.displayProjection, MapOptions.projection); //var P = map.getLonLatFromPixel(PixPos);
-        //var PPoint = new OpenLayers.Geometry.Point(PixPos);
-
-        Polar[180 + Side * _index30] = PixPos_Transformed;
+        a[180 + d * _t27] = _s4;
       }
     }
   }
 }
 
-function GetVLMPositionFromClick(pixel) {
+function GetVLMPositionFromClick(e) {
   if (map) {
-    var dest = map.getLonLatFromPixel(pixel);
-    var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-    return new VLMPosition(WGSDest.lon, WGSDest.lat);
-  } else {
-    return null;
+    var t = map.getLonLatFromPixel(e).transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
+    return new VLMPosition(t.lon, t.lat);
   }
+
+  return null;
 }
 
-function CompleteWPSetPosition(feature, pixel) {
-  var PDest = GetVLMPositionFromClick(pixel);
-  console.log("DragComplete " + feature.id);
-  VLMBoatsLayer.removeFeatures(feature); // Use CurPlayer, since the drag layer is not associated to the proper boat
-
-  SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest); //DrawControl.deactivate();
-  //DrawControl.activate();
-} // allow testing of specific renderers via "?renderer=Canvas", etc
-
+function CompleteWPSetPosition(e, t) {
+  var a = GetVLMPositionFromClick(t);
+  console.log("DragComplete " + e.id), VLMBoatsLayer.removeFeatures(e), SendVLMBoatWPPos(_CurPlayer.CurBoat, a);
+}
 
 var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 renderer = renderer ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
@@ -9210,54 +4556,44 @@ var VectorStyles = new OpenLayers.Style({
   strokeOpacity: 1,
   strokeWidth: 3,
   fillColor: "#FF5500",
-  fillOpacity: 0.5
+  fillOpacity: .5
 }, {
   rules: [new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
-      value: 'buoy'
+      value: "buoy"
     }),
     symbolizer: {
-      // if a feature matches the above filter, use this symbolizer
       label: "${name}\n${Coords}",
       pointerEvents: "visiblePainted",
       fontSize: "1.5em",
       labelAlign: "left",
-      //${align}",
       labelXOffset: "4",
-      //${xOffset}",
       labelYOffset: "-12",
-      //${yOffset}",
       externalGraphic: "images/${GateSide}",
       graphicWidth: 36,
       graphicHeight: 72,
       fillOpacity: 1
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "crossonce"
     }),
     symbolizer: {
       xOffset: 1,
       yOffset: 1,
       strokeColor: "black",
-      strokeOpacity: 0.5,
+      strokeOpacity: .5,
       strokeWidth: 4,
       strokeDashstyle: "dashdot"
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "marker"
     }),
     symbolizer: {
@@ -9266,11 +4602,9 @@ var VectorStyles = new OpenLayers.Style({
       graphicWidth: 48
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "NextGate"
     }),
     symbolizer: {
@@ -9279,982 +4613,617 @@ var VectorStyles = new OpenLayers.Style({
       strokeWidth: 3
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "ValidatedGate"
     }),
     symbolizer: {
       strokeColor: "#0000FF",
-      strokeOpacity: 0.5,
+      strokeOpacity: .5,
       strokeWidth: 3
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "FutureGate"
     }),
     symbolizer: {
       strokeColor: "#FF0000",
-      strokeOpacity: 0.5,
+      strokeOpacity: .5,
       strokeWidth: 3
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "ForecastPos"
     }),
     symbolizer: {
       strokeColor: "black",
-      strokeOpacity: 0.75,
-      strokeWidth: 1 //strokeDashstyle: "dot"
-
+      strokeOpacity: .75,
+      strokeWidth: 1
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "HistoryTrack"
     }),
     symbolizer: {
-      strokeOpacity: 0.5,
+      strokeOpacity: .5,
       strokeWidth: 2,
       strokeColor: "${TrackColor}"
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "Polar"
     }),
     symbolizer: {
       strokeColor: "white",
-      strokeOpacity: 0.75,
+      strokeOpacity: .75,
       strokeWidth: 2
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
       value: "ExclusionZone"
     }),
     symbolizer: {
       strokeColor: "red",
-      strokeOpacity: 0.95,
+      strokeOpacity: .95,
       strokeWidth: 2,
       fillColor: "#FF5500",
-      fillOpacity: 0.5
+      fillOpacity: .5
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
     filter: new OpenLayers.Filter.Comparison({
       type: OpenLayers.Filter.Comparison.EQUAL_TO,
       property: "type",
-      // the "foo" feature attribute
-      value: 'opponent'
+      value: "opponent"
     }),
     symbolizer: {
-      // if a feature matches the above filter, use this symbolizer
       label: "${name}",
-      //pointRadius: 6,
       pointerEvents: "visiblePainted",
-      // label with \n linebreaks
-      //fontColor: "${favColor}",
       fontSize: "1.5em",
-      //fontFamily: "Courier New, monospace",
-      //fontWeight: "bold",
       labelAlign: "left",
-      //${align}",
       labelXOffset: "4",
-      //${xOffset}",
       labelYOffset: "-12",
-      //${yOffset}",
-      //labelOutlineColor: "white",
-      //labelOutlineWidth: 2
       externalGraphic: "images/opponent${IsTeam}.png",
       graphicWidth: "${IsFriend}",
       fillOpacity: 1
     }
   }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    elsefilter: true,
+    elsefilter: !0,
     symbolizer: {}
   })]
-});
-var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks", {
+}),
+    VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks", {
   styleMap: new OpenLayers.StyleMap(VectorStyles),
   renderers: renderer
-}); // Background load controller from ext html file
+});
 
 function GetBoatControllerPopup() {
-  $("#BoatController").load("BoatController.html");
-  return '<div id="BoatController"></div>';
+  return $("#BoatController").load("BoatController.html"), '<div id="BoatController"></div>';
 }
 
-var WP_TWO_BUOYS = 0;
-var WP_ONE_BUOY = 1;
-var WP_GATE_BUOY_MASK = 0x000F;
-/* leave space for 0-15 types of gates using buoys
-   next is bitmasks */
+var WP_TWO_BUOYS = 0,
+    WP_ONE_BUOY = 1,
+    WP_GATE_BUOY_MASK = 15,
+    WP_DEFAULT = 0,
+    WP_ICE_GATE_N = 16,
+    WP_ICE_GATE_S = 32,
+    WP_ICE_GATE_E = 64,
+    WP_ICE_GATE_W = 128,
+    WP_ICE_GATE = 64 | WP_ICE_GATE_N | WP_ICE_GATE_S | 128,
+    WP_GATE_KIND_MASK = 65520,
+    WP_CROSS_CLOCKWISE = 256,
+    WP_CROSS_ANTI_CLOCKWISE = 512,
+    WP_CROSS_ONCE = 1024;
+var RaceGates = [],
+    Exclusions = [];
 
-var WP_DEFAULT = 0;
-var WP_ICE_GATE_N = 1 << 4;
-var WP_ICE_GATE_S = 1 << 5;
-var WP_ICE_GATE_E = 1 << 6;
-var WP_ICE_GATE_W = 1 << 7;
-var WP_ICE_GATE = WP_ICE_GATE_E | WP_ICE_GATE_N | WP_ICE_GATE_S | WP_ICE_GATE_W;
-var WP_GATE_KIND_MASK = 0xFFF0;
-/* allow crossing in one direction only */
+function DrawRaceGates(e, t) {
+  for (var _e23 in RaceGates) {
+    RaceGates[_e23] && VLMBoatsLayer.removeFeatures(RaceGates[_e23]);
+  }
 
-var WP_CROSS_CLOCKWISE = 1 << 8;
-var WP_CROSS_ANTI_CLOCKWISE = 1 << 9;
-/* for future releases */
+  for (var n in e.races_waypoints) {
+    if (e.races_waypoints[n]) {
+      var a = e.races_waypoints[n];
+      NormalizeRaceInfo(e);
+      var i = !(a.wpformat & WP_CROSS_ANTI_CLOCKWISE);
+      if (AddBuoyMarker(VLMBoatsLayer, RaceGates, "WP" + n + " " + a.libelle + "\n", a.longitude1, a.latitude1, i), (a.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS) AddBuoyMarker(VLMBoatsLayer, RaceGates, "", a.longitude2, a.latitude2, !i);else {
+        var _e24 = new VLMPosition(a.longitude1, a.latitude1),
+            _t28 = !1,
+            _i11 = 2500,
+            _n6 = null;
 
-var WP_CROSS_ONCE = 1 << 10;
-var RaceGates = [];
-var Exclusions = [];
-
-function DrawRaceGates(RaceInfo, NextGate) {
-  for (var _index31 in RaceGates) {
-    if (RaceGates[_index31]) {
-      VLMBoatsLayer.removeFeatures(RaceGates[_index31]);
-    }
-  } // Loop all gates
-
-
-  for (var _index32 in RaceInfo.races_waypoints) {
-    if (RaceInfo.races_waypoints[_index32]) {
-      // Draw a single race gates
-      var WP = RaceInfo.races_waypoints[_index32]; // Fix coords scales
-
-      NormalizeRaceInfo(RaceInfo);
-      var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE); // Draw WP1
-
-      AddBuoyMarker(VLMBoatsLayer, RaceGates, "WP" + _index32 + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate); // Second buoy (if any)
-
-      if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS) {
-        // Add 2nd buoy marker
-        AddBuoyMarker(VLMBoatsLayer, RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
-      } else {
-        // No Second buoy, compute segment end
-        var P = new VLMPosition(WP.longitude1, WP.latitude1);
-        var complete = false;
-        var Dist = 2500;
-        var Dest = null;
-
-        while (!complete) {
+        for (; !_t28;) {
           try {
-            Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
-            complete = true;
+            _n6 = _e24.ReachDistLoxo(_i11, 180 + parseFloat(a.laisser_au)), _t28 = !0;
           } catch (e) {
-            Dist *= 0.7;
+            _i11 *= .7;
           }
         }
 
-        WP.longitude2 = Dest.Lon.Value;
-        WP.latitude2 = Dest.Lat.Value;
-      } // Draw Gate Segment
-
-
-      _index32 = parseInt(_index32, 10);
-      NextGate = parseInt(NextGate, 10);
-      AddGateSegment(VLMBoatsLayer, RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, NextGate === _index32, _index32 < NextGate, WP.wpformat & WP_GATE_KIND_MASK);
+        a.longitude2 = _n6.Lon.Value, a.latitude2 = _n6.Lat.Value;
+      }
+      n = parseInt(n, 10), t = parseInt(t, 10), AddGateSegment(VLMBoatsLayer, RaceGates, a.longitude1, a.latitude1, a.longitude2, a.latitude2, t === n, n < t, a.wpformat & WP_GATE_KIND_MASK);
     }
   }
 }
 
-function DrawRaceExclusionZones(Layer, Zones) {
-  var index;
+function DrawRaceExclusionZones(e, t) {
+  var a;
 
-  for (index in Exclusions) {
-    if (Exclusions[index]) {
-      Layer.removeFeatures(Exclusions[index]);
-    }
+  for (a in Exclusions) {
+    Exclusions[a] && e.removeFeatures(Exclusions[a]);
   }
 
-  for (index in Zones) {
-    if (Zones[index]) {
-      DrawRaceExclusionZone(Layer, Exclusions, Zones[index]);
-    }
+  for (a in t) {
+    t[a] && DrawRaceExclusionZone(e, Exclusions, t[a]);
   }
 }
 
-function DrawRaceExclusionZone(Layer, ExclusionZones, Zone) {
-  var index;
-  var PointList = [];
+function DrawRaceExclusionZone(e, t, a) {
+  var i,
+      n = [];
 
-  for (index in Zone) {
-    if (Zone[index]) {
-      var P = new OpenLayers.Geometry.Point(Zone[index][1], Zone[index][0]);
-      var P_PosTransformed = P.transform(MapOptions.displayProjection, MapOptions.projection);
-      PointList.push(P_PosTransformed);
+  for (i in a) {
+    if (a[i]) {
+      var o = new OpenLayers.Geometry.Point(a[i][1], a[i][0]).transform(MapOptions.displayProjection, MapOptions.projection);
+      n.push(o);
     }
   }
 
-  var Attr = null;
-  Attr = {
+  var r;
+  r = {
     type: "ExclusionZone"
   };
-  var ExclusionZone = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(PointList)), Attr, null);
-  Layer.addFeatures(ExclusionZone);
-  ExclusionZones.push(ExclusionZone);
+  var s = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(n)), r, null);
+  e.addFeatures(s), t.push(s);
 }
 
-function GetLonOffset(L1, L2) {
-  if (L1 * L2 >= 0) {
-    return 0;
-  } else if (Math.abs(L2 - L1) > 90) {
-    if (L1 > 0) {
-      return 360;
-    } else {
-      return -360;
-    }
-  }
-
-  return 0;
+function GetLonOffset(e, t) {
+  return e * t >= 0 ? 0 : Math.abs(t - e) > 90 ? e > 0 ? 360 : -360 : 0;
 }
 
-function AddGateSegment(Layer, Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
-  var P1 = new OpenLayers.Geometry.Point(lon1, lat1);
-  var LonOffset = GetLonOffset(lon1, lon2);
-  var P2 = new OpenLayers.Geometry.Point(lon2 + LonOffset, lat2);
-  var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
-  var P2_PosTransformed = P2.transform(MapOptions.displayProjection, MapOptions.projection);
-  var PointList = [];
-  PointList.push(P1_PosTransformed);
-  PointList.push(P2_PosTransformed);
-  var Attr = null;
+function AddGateSegment(e, t, a, i, n, o, r, s, l) {
+  var d = new OpenLayers.Geometry.Point(a, i),
+      u = GetLonOffset(a, n),
+      c = new OpenLayers.Geometry.Point(n + u, o);
+  var h = d.transform(MapOptions.displayProjection, MapOptions.projection),
+      p = c.transform(MapOptions.displayProjection, MapOptions.projection),
+      f = [];
+  f.push(h), f.push(p);
+  var P = null;
+  P = r ? {
+    type: "NextGate"
+  } : s ? {
+    type: "ValidatedGate"
+  } : {
+    type: "FutureGate"
+  };
+  var g = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(f), P, null);
 
-  if (IsNextWP) {
-    Attr = {
-      type: "NextGate"
-    };
-  } else if (IsValidated) {
-    Attr = {
-      type: "ValidatedGate"
-    };
-  } else {
-    Attr = {
-      type: "FutureGate"
-    };
-  }
-
-  var WP = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), Attr, null);
-  Layer.addFeatures(WP);
-  Gates.push(WP);
-
-  if (GateType !== WP_DEFAULT) {
-    // Debug testing of the geo calculation functions
-
-    /*{
-      // Rumb line LAX-JFK = 2164.6 nm
-      var P1 = new Position(  -(118+(24/60)),33+ (57/60));
-      var P2 = new Position (-(73+(47/60)),40+(38/60));
-      console.log("loxo dist : " + P1.GetLoxoDist(P2));
-      console.log("loxo angle: " + P1.GetLoxoCourse(P2));
-      }*/
-    P1 = new VLMPosition(lon1, lat1);
-    P2 = new VLMPosition(lon2, lat2);
-    var MarkerDir = P1.GetLoxoCourse(P2);
-    var MarkerPos = P1.ReachDistLoxo(P2, 0.5); // Gate has special features, add markers
-
-    if (GateType & WP_CROSS_ANTI_CLOCKWISE) {
-      MarkerDir -= 90;
-      AddGateDirMarker(VLMBoatsLayer, Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
-    } else if (GateType & WP_CROSS_CLOCKWISE) {
-      MarkerDir += 90;
-      AddGateDirMarker(VLMBoatsLayer, Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
-    } else if (GateType & WP_ICE_GATE) {
-      AddGateIceGateMarker(VLMBoatsLayer, Gates, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
-    }
-
-    if (GateType & WP_CROSS_ONCE) {
-      // Draw the segment again as dashed line for cross once gates
-      WP = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), {
-        type: "crossonce"
-      }, null);
-      Layer.addFeatures(WP);
-      Gates.push(WP);
-    }
+  if (e.addFeatures(g), t.push(g), l !== WP_DEFAULT) {
+    d = new VLMPosition(a, i), c = new VLMPosition(n, o);
+    var L = d.GetLoxoCourse(c),
+        m = d.ReachDistLoxo(c, .5);
+    l & WP_CROSS_ANTI_CLOCKWISE ? (L -= 90, AddGateDirMarker(VLMBoatsLayer, t, m.Lon.Value, m.Lat.Value, L)) : l & WP_CROSS_CLOCKWISE ? (L += 90, AddGateDirMarker(VLMBoatsLayer, t, m.Lon.Value, m.Lat.Value, L)) : l & WP_ICE_GATE && AddGateIceGateMarker(VLMBoatsLayer, t, m.Lon.Value, m.Lat.Value), l & WP_CROSS_ONCE && (g = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(f), {
+      type: "crossonce"
+    }, null), e.addFeatures(g), t.push(g));
   }
 }
 
 var MAX_BUOY_INDEX = 16;
 var BuoyIndex = Math.floor(Math.random() * MAX_BUOY_INDEX);
 
-function AddGateDirMarker(Layer, Gates, Lon, Lat, Dir) {
-  AddGateCenterMarker(Layer, Gates, Lon, Lat, "BuoyDirs/BuoyDir" + BuoyIndex + ".png", Dir, true); // Rotate dir marker...
-
-  BuoyIndex++;
-  BuoyIndex %= MAX_BUOY_INDEX + 1;
+function AddGateDirMarker(e, t, a, i, n) {
+  AddGateCenterMarker(e, t, a, i, "BuoyDirs/BuoyDir" + BuoyIndex + ".png", n, !0), BuoyIndex++, BuoyIndex %= MAX_BUOY_INDEX + 1;
 }
 
-function AddGateIceGateMarker(Layer, Gates, Lon, Lat) {
-  AddGateCenterMarker(Layer, Gates, Lon, Lat, "icegate.png", "");
+function AddGateIceGateMarker(e, t, a, i) {
+  AddGateCenterMarker(e, t, a, i, "icegate.png", "");
 }
 
-function AddGateCenterMarker(Layer, Gates, Lon, Lat, Marker, Dir, IsIceGate) {
-  var MarkerCoords = new VLMPosition(Lon, Lat);
-  var MarkerPos = new OpenLayers.Geometry.Point(MarkerCoords.Lon.Value, MarkerCoords.Lat.Value);
-  var MarkerPosTransformed = MarkerPos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var MarkerObj = new OpenLayers.Feature.Vector(MarkerPosTransformed, {
-    "type": "marker",
-    "BuoyName": Marker,
-    "CrossingDir": Dir,
-    "yOffset": IsIceGate ? -18 : 0
+function AddGateCenterMarker(e, t, a, i, n, o, r) {
+  var s = new VLMPosition(a, i),
+      l = new OpenLayers.Geometry.Point(s.Lon.Value, s.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection),
+      d = new OpenLayers.Feature.Vector(l, {
+    type: "marker",
+    BuoyName: n,
+    CrossingDir: o,
+    yOffset: r ? -18 : 0
   });
-  Layer.addFeatures(MarkerObj);
-  Gates.push(Marker);
+  e.addFeatures(d), t.push(n);
 }
 
-function AddBuoyMarker(Layer, Gates, Name, Lon, Lat, CW_Crossing) {
-  var WP_Coords = new VLMPosition(Lon, Lat);
-  var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
-  var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var WP;
-
-  if (CW_Crossing) {
-    WP = new OpenLayers.Feature.Vector(WP_PosTransformed, {
-      "name": Name,
-      "Coords": WP_Coords.ToString(),
-      "type": 'buoy',
-      "GateSide": "Buoy1.png"
-    });
-  } else {
-    WP = new OpenLayers.Feature.Vector(WP_PosTransformed, {
-      "name": Name,
-      "Coords": WP_Coords.ToString(),
-      "type": 'buoy',
-      "GateSide": "Buoy2.png"
-    });
-  }
-
-  Layer.addFeatures(WP);
-  Gates.push(WP);
+function AddBuoyMarker(e, t, a, i, n, o) {
+  var r,
+      s = new VLMPosition(i, n),
+      l = new OpenLayers.Geometry.Point(s.Lon.Value, s.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection);
+  r = o ? new OpenLayers.Feature.Vector(l, {
+    name: a,
+    Coords: s.ToString(),
+    type: "buoy",
+    GateSide: "Buoy1.png"
+  }) : new OpenLayers.Feature.Vector(l, {
+    name: a,
+    Coords: s.ToString(),
+    type: "buoy",
+    GateSide: "Buoy2.png"
+  }), e.addFeatures(r), t.push(r);
 }
 
-var PM_HEADING = 1;
-var PM_ANGLE = 2;
-var PM_ORTHO = 3;
-var PM_VMG = 4;
-var PM_VBVMG = 5;
+var PM_HEADING = 1,
+    PM_ANGLE = 2,
+    PM_ORTHO = 3,
+    PM_VMG = 4,
+    PM_VBVMG = 5;
 
-function SendVLMBoatWPPos(Boat, P) {
-  var orderdata = {
-    idu: Boat.IdBoat,
+function SendVLMBoatWPPos(e, t) {
+  var a = {
+    idu: e.IdBoat,
     pip: {
-      targetlat: P.Lat.Value,
-      targetlong: P.Lon.Value,
-      targetandhdg: -1 //Boat.VLMInfo.H@WP
-
+      targetlat: t.Lat.Value,
+      targetlong: t.Lon.Value,
+      targetandhdg: -1
     }
   };
-  PostBoatSetupOrder(Boat.IdBoat, 'target_set', orderdata);
+  PostBoatSetupOrder(e.IdBoat, "target_set", a);
 }
 
-function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt) {
-  var request = {};
-  var verb = "pilot_set";
+function SendVLMBoatOrder(e, t, a, i) {
+  var n = {};
 
-  if (typeof _CurPlayer === 'undefined' || typeof _CurPlayer.CurBoat === 'undefined') {
-    VLMAlertDanger("Must select a boat to send an order");
-    return;
-  } // Build WS command accoridng to required pilot mode
+  if (void 0 !== _CurPlayer && void 0 !== _CurPlayer.CurBoat) {
+    switch (e) {
+      case PM_HEADING:
+      case PM_ANGLE:
+        n = {
+          idu: _CurPlayer.CurBoat.IdBoat,
+          pim: e,
+          pip: t
+        };
+        break;
 
+      case PM_ORTHO:
+      case PM_VBVMG:
+      case PM_VMG:
+        n = {
+          idu: _CurPlayer.CurBoat.IdBoat,
+          pim: e,
+          pip: {
+            targetlong: parseFloat(t),
+            targetlat: parseFloat(a),
+            targetandhdg: i
+          }
+        };
+        break;
 
-  switch (Mode) {
-    case PM_HEADING:
-    case PM_ANGLE:
-      request = {
-        idu: _CurPlayer.CurBoat.IdBoat,
-        pim: Mode,
-        pip: AngleOrLon
-      };
-      break;
-
-    case PM_ORTHO:
-    case PM_VBVMG:
-    case PM_VMG:
-      request = {
-        idu: _CurPlayer.CurBoat.IdBoat,
-        pim: Mode,
-        pip: {
-          targetlong: parseFloat(AngleOrLon),
-          targetlat: parseFloat(Lat),
-          targetandhdg: WPAt
-        }
-      }; //PostBoatSetupOrder (_CurPlayer.CurBoat.IdBoat,"target_set",request);
-
-      break;
-
-    default:
-      return;
-  } // Post request
-
-
-  PostBoatSetupOrder(_CurPlayer.CurBoat.IdBoat, verb, request);
-}
-
-function PostBoatSetupOrder(idu, verb, orderdata) {
-  // Now Post the order
-  $.post("/ws/boatsetup/" + verb + ".php?selectidu" + idu, "parms=" + JSON.stringify(orderdata), function (Data, TextStatus) {
-    if (Data.success) {
-      RefreshCurrentBoat(false, true);
-    } else {
-      VLMAlertDanger(GetLocalizedString("BoatSetupError") + '\n' + Data.error.code + " " + Data.error.msg);
+      default:
+        return;
     }
+
+    PostBoatSetupOrder(_CurPlayer.CurBoat.IdBoat, "pilot_set", n);
+  } else VLMAlertDanger("Must select a boat to send an order");
+}
+
+function PostBoatSetupOrder(e, t, a) {
+  $.post("/ws/boatsetup/" + t + ".php?selectidu" + e, "parms=" + JSON.stringify(a), function (e, t) {
+    e.success ? RefreshCurrentBoat(!1, !0) : VLMAlertDanger(GetLocalizedString("BoatSetupError") + "\n" + e.error.code + " " + e.error.msg);
   });
 }
 
-function EngageBoatInRace(RaceID, BoatID) {
+function EngageBoatInRace(e, t) {
   $.post("/ws/boatsetup/race_subscribe.php", "parms=" + JSON.stringify({
-    idu: BoatID,
-    idr: parseInt(RaceID, 10)
-  }), function (data) {
-    if (data.success) {
-      var Msg = GetLocalizedString("youengaged");
-      $("#RacesListForm").modal('hide');
-      VLMAlertSuccess(Msg);
-    } else {
-      var _Msg = data.error.msg + '\n' + data.error.custom_error_string;
+    idu: t,
+    idr: parseInt(e, 10)
+  }), function (e) {
+    if (e.success) {
+      var _e25 = GetLocalizedString("youengaged");
 
-      VLMAlertDanger(_Msg);
+      $("#RacesListForm").modal("hide"), VLMAlertSuccess(_e25);
+    } else {
+      VLMAlertDanger(e.error.msg + "\n" + e.error.custom_error_string);
     }
   });
 }
 
-function DiconstinueRace(BoatId, RaceId) {
+function DiconstinueRace(e, t) {
   $.post("/ws/boatsetup/race_unsubscribe.php", "parms=" + JSON.stringify({
-    idu: BoatId,
-    idr: parseInt(RaceId, 10)
-  }), function (data) {
-    if (data.success) {
-      VLMAlertSuccess("Bye Bye!");
-    } else {
-      var Msg = data.error.msg + '\n' + data.error.custom_error_string;
-      VLMAlertDanger(Msg);
-    }
+    idu: e,
+    idr: parseInt(t, 10)
+  }), function (e) {
+    e.success ? VLMAlertSuccess("Bye Bye!") : VLMAlertDanger(e.error.msg + "\n" + e.error.custom_error_string);
   });
 }
 
-function HandleMapZoomEnd(object, element) {
-  var Zoom = VLMBoatsLayer.getZoomForResolution(VLMBoatsLayer.getResolution());
-  VLM2Prefs.MapPrefs.MapZoomLevel = Zoom;
-  VLM2Prefs.Save();
-  RefreshCurrentBoat(false);
+function HandleMapZoomEnd(e, t) {
+  var a = VLMBoatsLayer.getZoomForResolution(VLMBoatsLayer.getResolution());
+  VLM2Prefs.MapPrefs.MapZoomLevel = a, VLM2Prefs.Save(), RefreshCurrentBoat(!1);
 }
 
-function LoadRealsList(Boat) {
-  if (typeof Boat === "undefined" || !Boat || typeof Boat.VLMInfo === "undefined") {
-    return;
-  }
-
-  $.get("/ws/realinfo/realranking.php?idr=" + Boat.VLMInfo.RAC, function (result) {
-    if (result.success) {
-      Boat.Reals = result;
-      DrawBoat(Boat, false);
-    } else {
-      Boat.Reals = [];
-    }
+function LoadRealsList(e) {
+  void 0 !== e && e && void 0 !== e.VLMInfo && $.get("/ws/realinfo/realranking.php?idr=" + e.VLMInfo.RAC, function (t) {
+    t.success ? (e.Reals = t, DrawBoat(e, !1)) : e.Reals = [];
   });
 }
 
-function LoadRankings(RaceId, CallBack) {
-  if (RaceId && _typeof(RaceId) === 'object') {
-    VLMAlertDanger("NOt updated call to LoadRankings");
-  }
-  /*if ((typeof Boat === "undefined") || !Boat || (typeof Boat.VLMInfo === "undefined"))
-  {
-    return;
-  }*/
-
-
-  $.get("/cache/rankings/rnk_" + RaceId + ".json?d=" + new Date().getTime(), function (result) {
-    if (result) {
-      Rankings[RaceId] = result.Boats;
-
-      if (CallBack) {
-        CallBack();
-      } else {
-        DrawBoat(null, false);
-      }
-    } else {
-      Rankings[RaceId] = null;
-    }
+function LoadRankings(e, t) {
+  e && "object" == _typeof(e) && VLMAlertDanger("NOt updated call to LoadRankings"), $.get("/cache/rankings/rnk_" + e + ".json?d=" + new Date().getTime(), function (a) {
+    a ? (Rankings[e] = a.Boats, t ? t() : DrawBoat(null, !1)) : Rankings[e] = null;
   });
 }
 
-function contains(a, obj) {
-  for (var i = 0; i < a.length; i++) {
-    if (a[i] === obj) {
-      return true;
-    }
+function contains(e, t) {
+  for (var a = 0; a < e.length; a++) {
+    if (e[a] === t) return !0;
   }
 
-  return false;
+  return !1;
 }
 
-function DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures) {
-  if (!Boat || typeof Rankings === "undefined") {
-    return;
-  } // Get Friends
-
-
-  var friends = [];
-  var index; // Map friend only if selection is active
-
-  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel) {
-    if (typeof Boat.VLMInfo !== "undefined" && typeof Boat.VLMInfo.MPO !== "undefined") {
-      friends = Boat.VLMInfo.MPO.split(',');
+function DrawOpponents(e, t, a) {
+  if (!e || void 0 === Rankings) return;
+  var i,
+      n = [];
+  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel) for (i in void 0 !== e.VLMInfo && void 0 !== e.VLMInfo.MPO && (n = e.VLMInfo.MPO.split(",")), n) {
+    if (n[i]) {
+      var _o5 = Rankings[n[i]];
+      void 0 !== _o5 && parseInt(_o5.idusers, 10) !== e.IdBoat && AddOpponent(e, t, a, _o5, !0);
     }
-
-    for (index in friends) {
-      if (friends[index]) {
-        var _Opp = Rankings[friends[index]];
-
-        if (typeof _Opp !== 'undefined' && parseInt(_Opp.idusers, 10) !== Boat.IdBoat) {
-          AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, _Opp, true);
-        }
-      }
-    }
-  } // Get Reals
-
-
-  if (VLM2Prefs.MapPrefs.ShowReals && typeof Boat.Reals !== "undefined" && typeof Boat.Reals.ranking !== "undefined") for (index in Boat.Reals.ranking) {
-    var RealOpp = Boat.Reals.ranking[index];
-    AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, RealOpp, true);
   }
-  var MAX_LEN = 150;
-  var ratio = MAX_LEN / Object.keys(Rankings).length;
-  var count = 0;
-  var BoatList = Rankings;
-
-  if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0) {
-    BoatList = Boat.OppList;
-    ratio = 1;
+  if (VLM2Prefs.MapPrefs.ShowReals && void 0 !== e.Reals && void 0 !== e.Reals.ranking) for (i in e.Reals.ranking) {
+    AddOpponent(e, t, a, e.Reals.ranking[i], !0);
   }
+  var o = 150,
+      r = o / Object.keys(Rankings).length,
+      s = 0,
+      l = Rankings;
 
-  switch (VLM2Prefs.MapPrefs.MapOppShow) {
+  switch (void 0 !== e.OppList && e.OppList.length > 0 && (l = e.OppList, r = 1), VLM2Prefs.MapPrefs.MapOppShow) {
     case VLM2Prefs.MapPrefs.MapOppShowOptions.Show10Around:
-      BoatList = GetClosestOpps(Boat, 10);
-      ratio = 1;
+      l = GetClosestOpps(e, 10), r = 1;
       break;
 
     case VLM2Prefs.MapPrefs.MapOppShowOptions.Show5Around:
-      BoatList = GetClosestOpps(Boat, 5);
-      ratio = 1;
+      l = GetClosestOpps(e, 5), r = 1;
       break;
 
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
-      var BoatCount = 0;
-      var RaceID = Boat.Engaged;
-      MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
-      BoatList = [];
+      var _t29 = 0,
+          _a19 = e.Engaged;
 
-      for (index in Rankings[RaceID]) {
-        if (Rankings[RaceID][index].rank <= VLM2Prefs.MapPrefs.ShowTopCount) {
-          BoatList[index] = Rankings[RaceID][index];
-          BoatCount++;
-
-          if (BoatCount > MAX_LEN) {
-            break;
-          }
-        }
+      for (i in o = VLM2Prefs.MapPrefs.ShowTopCount, l = [], Rankings[_a19]) {
+        if (Rankings[_a19][i].rank <= VLM2Prefs.MapPrefs.ShowTopCount && (l[i] = Rankings[_a19][i], ++_t29 > o)) break;
       }
 
-      if (BoatCount > MAX_LEN) {
-        MAX_LEN = BoatCount;
-      }
-
-      ratio = 1;
+      _t29 > o && (o = _t29), r = 1;
       break;
 
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
-      BoatList = [];
-      ratio = 1;
-      break;
-  } // Sort racers to be able to show proper opponents
+      l = [], r = 1;
+  }
 
-
-  SortRankingData(Boat, 'RAC', null, Boat.Engaged);
-
-  if (Boat.Engaged && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking) {
-    for (index in Rankings[Boat.Engaged].RacerRanking) {
-      if (index in Rankings[Boat.Engaged].RacerRanking) {
-        var Opp = Rankings[Boat.Engaged].RacerRanking[index];
-
-        if (parseInt(Opp.idusers, 10) !== Boat.IdBoat && BoatList[Opp.idusers] && !contains(friends, Opp.idusers) && RnkIsRacing(Opp) && Math.random() <= ratio && count < MAX_LEN) {
-          AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, Opp, false);
-          count += 1;
-
-          if (typeof Boat.OppList === "undefined") {
-            Boat.OppList = [];
-          }
-
-          Boat.OppList[index] = Opp;
-        } else if (count >= MAX_LEN) {
-          break;
-        }
-      }
+  if (SortRankingData(e, "RAC", null, e.Engaged), e.Engaged && void 0 !== Rankings[e.Engaged] && void 0 !== Rankings[e.Engaged].RacerRanking && Rankings[e.Engaged].RacerRanking) for (i in Rankings[e.Engaged].RacerRanking) {
+    if (i in Rankings[e.Engaged].RacerRanking) {
+      var d = Rankings[e.Engaged].RacerRanking[i];
+      if (parseInt(d.idusers, 10) !== e.IdBoat && l[d.idusers] && !contains(n, d.idusers) && RnkIsRacing(d) && Math.random() <= r && s < o) AddOpponent(e, t, a, d, !1), s += 1, void 0 === e.OppList && (e.OppList = []), e.OppList[i] = d;else if (s >= o) break;
     }
   }
 }
 
-function CompareDist(a, b) {
-  if (a.dnm < b.dnm) return -1;
-  if (a.dnm > b.dnm) return 1;
-  return 0;
+function CompareDist(e, t) {
+  return e.dnm < t.dnm ? -1 : e.dnm > t.dnm ? 1 : 0;
 }
 
-function GetClosestOpps(Boat, NbOpps) {
-  var CurBoat = Rankings[Boat.IdBoat];
+function GetClosestOpps(e, t) {
+  var a = Rankings[e.IdBoat];
+  void 0 !== a && e || (a = {
+    dnm: 0,
+    nwm: 1
+  });
+  var i = null;
+  e && e.VLMInfo && (i = e.VLMInfo.RAC);
+  var n = [];
 
-  if (typeof CurBoat === 'undefined' || !Boat) {
-    CurBoat = {
-      dnm: 0,
-      nwm: 1
-    };
-  }
+  if (i) {
+    var _e26 = parseFloat(a.dnm),
+        r = a.nwp,
+        s = [];
 
-  var RaceId = null;
-
-  if (Boat && Boat.VLMInfo) {
-    RaceId = Boat.VLMInfo.RAC;
-  }
-
-  var RetArray = [];
-
-  if (RaceId) {
-    var CurDnm = parseFloat(CurBoat.dnm);
-    var CurWP = CurBoat.nwp;
-    var List = [];
-
-    for (var _index33 in Rankings[RaceId]) {
-      if (Rankings[RaceId][_index33]) {
-        if (CurWP === Rankings[RaceId][_index33].nwp) {
-          var O = {
-            id: _index33,
-            dnm: Math.abs(CurDnm - parseFloat(Rankings[RaceId][_index33].dnm))
-          };
-          List.push(O);
-        }
+    for (var _t30 in Rankings[i]) {
+      if (Rankings[i][_t30] && r === Rankings[i][_t30].nwp) {
+        var o = {
+          id: _t30,
+          dnm: Math.abs(_e26 - parseFloat(Rankings[i][_t30].dnm))
+        };
+        s.push(o);
       }
     }
 
-    List = List.sort(CompareDist);
+    s = s.sort(CompareDist);
 
-    for (var _index34 in List.slice(0, NbOpps - 1)) {
-      RetArray[List[_index34].id] = Rankings[RaceId][List[_index34].id];
+    for (var _e27 in s.slice(0, t - 1)) {
+      n[s[_e27].id] = Rankings[i][s[_e27].id];
     }
   }
 
-  return RetArray;
+  return n;
 }
 
-function AddOpponent(Boat, Layer, Features, Opponent, isFriend) {
-  var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
-  var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
-  var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var OL_Opp;
-  var OppData = {
-    "name": Opponent.idusers + " - " + Opponent.boatname,
-    "Coords": Opp_Coords.ToString(),
-    "type": 'opponent',
-    "idboat": Opponent.idusers,
-    "rank": Opponent.rank,
-    "Last1h": Opponent.last1h,
-    "Last3h": Opponent.last3h,
-    "Last24h": Opponent.last24h,
-    "IsTeam": Opponent.country == Boat.VLMInfo.CNT ? "team" : "",
-    "IsFriend": isFriend ? 24 : 12,
-    "color": Opponent.color
+function AddOpponent(e, t, a, i, n) {
+  var o,
+      r = new VLMPosition(i.longitude, i.latitude),
+      s = new OpenLayers.Geometry.Point(r.Lon.Value, r.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection),
+      l = {
+    name: i.idusers + " - " + i.boatname,
+    Coords: r.ToString(),
+    type: "opponent",
+    idboat: i.idusers,
+    rank: i.rank,
+    Last1h: i.last1h,
+    Last3h: i.last3h,
+    Last24h: i.last24h,
+    IsTeam: i.country == e.VLMInfo.CNT ? "team" : "",
+    IsFriend: n ? 24 : 12,
+    color: i.color
   };
-
-  if (!VLM2Prefs.MapPrefs.ShowOppNames) {
-    OppData.name = "";
-  }
-
-  OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed, OppData);
-  Layer.addFeatures(OL_Opp);
-  Features.push(OL_Opp);
+  VLM2Prefs.MapPrefs.ShowOppNames || (l.name = ""), o = new OpenLayers.Feature.Vector(s, l), t.addFeatures(o), a.push(o);
 }
 
 function ShowOpponentPopupInfo(e) {
-  var ObjType = e.feature.data.type;
-  var index;
-
-  if (ObjType == "opponent") {
-    var _Boat = GetOppBoat(e.feature.attributes.idboat);
-
-    var Pos = new VLMPosition(_Boat.longitude, _Boat.latitude);
-    var PopupFields = [];
-    var feature = e.feature;
-
-    if (OppPopups[e.feature.attributes.idboat]) {
-      map.removePopup(OppPopups[e.feature.attributes.idboat]);
-      OppPopups[e.feature.attributes.idboat] = null;
-    }
-
-    var popup = new OpenLayers.Popup.FramedCloud("popup", OpenLayers.LonLat.fromString(feature.geometry.toShortString()), null, BuildBoatPopupInfo(e.feature.attributes.idboat), null, true, null);
-    popup.autoSize = true;
-    popup.maxSize = new OpenLayers.Size(400, 800);
-    popup.fixedRelativePosition = true;
-    feature.popup = popup;
-    map.addPopup(popup);
-    OppPopups[e.feature.attributes.idboat] = popup;
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, _Boat.boatname]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(_Boat.loch)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last1h), 2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last3h), 2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last24h), 2)]);
-    FillFieldsFromMappingTable(PopupFields);
+  if ("opponent" == e.feature.data.type) {
+    var t = GetOppBoat(e.feature.attributes.idboat),
+        a = new VLMPosition(t.longitude, t.latitude),
+        i = [],
+        n = e.feature;
+    OppPopups[e.feature.attributes.idboat] && (map.removePopup(OppPopups[e.feature.attributes.idboat]), OppPopups[e.feature.attributes.idboat] = null);
+    var o = new OpenLayers.Popup.FramedCloud("popup", OpenLayers.LonLat.fromString(n.geometry.toShortString()), null, BuildBoatPopupInfo(e.feature.attributes.idboat), null, !0, null);
+    o.autoSize = !0, o.maxSize = new OpenLayers.Size(400, 800), o.fixedRelativePosition = !0, n.popup = o, map.addPopup(o), OppPopups[e.feature.attributes.idboat] = o, i.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, t.boatname]), i.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]), i.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]), i.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(t.loch)]), i.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, a.GetVLMString()]), i.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(t.last1h), 2)]), i.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(t.last3h), 2)]), i.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(t.last24h), 2)]), FillFieldsFromMappingTable(i);
   }
 }
 
-function GetOppBoat(BoatId) {
-  var CurBoat = _CurPlayer.CurBoat;
-
-  if (typeof CurBoat !== "undefined" && CurBoat && CurBoat.OppList) {
-    for (var i in CurBoat.OppList) {
-      if (CurBoat.OppList[i]) {
-        var Opp = CurBoat.OppList[i];
-
-        if (Opp.idusers === BoatId) {
-          return Opp;
-        }
-      }
+function GetOppBoat(e) {
+  var t = _CurPlayer.CurBoat;
+  if (void 0 !== t && t && t.OppList) for (var a in t.OppList) {
+    if (t.OppList[a]) {
+      var i = t.OppList[a];
+      if (i.idusers === e) return i;
     }
   }
-
   return null;
 }
 
-function BuildBoatPopupInfo(BoatId) {
-  var RetStr = '<div class="MapPopup_InfoHeader">' + ' <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png">' + ' <span id="__BoatName' + BoatId + '" class="PopupBoatNameNumber ">BoatName</span>' + ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' + ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' + '</div>' + '<div class="MapPopup_InfoBody">' + ' <fieldset>' + '   <span class="PopupHeadText " I18n="loch">' + GetLocalizedString('loch') + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId + '" class="loch PopupText">0.9563544</span>' + '   <BR><span class="PopupHeadText " I18n="position">' + GetLocalizedString('position') + '</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId + '" class=" PopupText">0.9563544</span>' + '   <BR><span class="PopupHeadText " I18n="NextWP">' + GetLocalizedString('NextWP') + '</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' + '   <BR><span class="PopupHeadText " I18n="Moyennes">' + GetLocalizedString('Moyennes') + ' </span><span class="PopupText"> : </span>' + '   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' + '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' + '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' + ' </fieldset>' + '</div>';
-  return RetStr;
+function BuildBoatPopupInfo(e) {
+  return '<div class="MapPopup_InfoHeader"> <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png"> <span id="__BoatName' + e + '" class="PopupBoatNameNumber ">BoatName</span> <span id="__BoatId' + e + '" class="PopupBoatNameNumber ">BoatNumber</span> <div id="__BoatRank' + e + '" class="TxtRank">Rank</div></div><div class="MapPopup_InfoBody"> <fieldset>   <span class="PopupHeadText " I18n="loch">' + GetLocalizedString("loch") + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + e + '" class="loch PopupText">0.9563544</span>   <BR><span class="PopupHeadText " I18n="position">' + GetLocalizedString("position") + '</span><span class="PopupText"> : </span><span id="__BoatPosition' + e + '" class=" PopupText">0.9563544</span>   <BR><span class="PopupHeadText " I18n="NextWP">' + GetLocalizedString("NextWP") + '</span><span class="strong"> : </span><span id="__BoatNWP' + e + '" class="PopupText">[1] 4.531856536865234</span>   <BR><span class="PopupHeadText " I18n="Moyennes">' + GetLocalizedString("Moyennes") + ' </span><span class="PopupText"> : </span>   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + e + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + e + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + e + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span> </fieldset></div>';
 }
 
 function HandleFeatureOver(e) {
-  var ObjType = e.feature.data.type;
-  var index;
+  var t;
 
-  if (ObjType == "opponent") {
-    // Clear previous tracks
-    for (index in _CurPlayer.CurBoat.OppTrack) {
-      _CurPlayer.CurBoat.OppTrack[index].Visible = false;
+  if ("opponent" == e.feature.data.type) {
+    for (t in _CurPlayer.CurBoat.OppTrack) {
+      _CurPlayer.CurBoat.OppTrack[t].Visible = !1;
     }
 
     DrawOpponentTrack(e.feature.data);
-  } //console.log("HoverOn "+ ObjType)
-
-  /*e.feature.renderIntent = "select";
-  e.feature.layer.drawFeature(e.feature);
-  Console.log("Map says: Pointer entered " + e.feature.id + " on " + e.feature.layer.name);
-  */
-
+  }
 }
 
 function HandleFeatureClick(e) {
-  // Clicking oppenent will show the track, and popup info (later)
-  HandleFeatureOver(e);
-  ShowOpponentPopupInfo(e);
+  HandleFeatureOver(e), ShowOpponentPopupInfo(e);
 }
 
 function HandleFeatureOut(e) {
-  if (typeof _CurPlayer === "undefined" || typeof _CurPlayer.CurBoat === "undefined" || typeof _CurPlayer.CurBoat.OppTrack === "undefined") {
-    return;
-  } // Clear previously displayed tracks.
-
-
-  for (var _index35 in _CurPlayer.CurBoat.OppTrack) {
-    _CurPlayer.CurBoat.OppTrack[_index35].Visible = false;
+  if (void 0 !== _CurPlayer && void 0 !== _CurPlayer.CurBoat && void 0 !== _CurPlayer.CurBoat.OppTrack) for (var _e28 in _CurPlayer.CurBoat.OppTrack) {
+    _CurPlayer.CurBoat.OppTrack[_e28].Visible = !1;
   }
 }
 
-var TrackPendingRequests = [];
-var LastTrackRequest = 0;
+var TrackPendingRequests = [],
+    LastTrackRequest = 0;
 
-function DrawOpponentTrack(FeatureData) {
-  var B = _CurPlayer.CurBoat;
-  var IdBoat = FeatureData.idboat;
-  var CurDate = new Date();
-  var PendingID = null;
+function DrawOpponentTrack(e) {
+  var t = _CurPlayer.CurBoat,
+      a = e.idboat,
+      i = new Date(),
+      n = null;
 
-  if (typeof B !== "undefined" && B && CurDate > LastTrackRequest) {
-    LastTrackRequest = new Date(CurDate / 1000 + 0.5);
+  if (void 0 !== t && t && i > LastTrackRequest) {
+    if (LastTrackRequest = new Date(i / 1e3 + .5), void 0 !== t.OppTrack || !(a in t.OppTrack) || a in t.OppTrack && t.OppTrack[a].LastShow <= new Date(1e3 * t.VLMInfo.LUP)) {
+      var _i12 = new Date() / 1e3 - 172800,
+          o = t.VLMInfo.RAC,
+          r = new Date();
 
-    if (typeof B.OppTrack !== "undefined" || !(IdBoat in B.OppTrack) || IdBoat in B.OppTrack && B.OppTrack[IdBoat].LastShow <= new Date(B.VLMInfo.LUP * 1000)) {
-      var _StartTime = new Date() / 1000 - 48 * 3600;
+      n = a.toString() + "/" + o.toString(), a in t.OppTrack && (t.OppTrack[a].Visible = !0), n in TrackPendingRequests && !(r > TrackPendingRequests[n]) || (TrackPendingRequests[n] = new Date(r.getTime() + 6e4), console.log("GetTrack " + n + " " + _i12), parseInt(a) > 0 ? GetBoatTrack(t, a, o, _i12, e) : parseInt(a) && GetRealBoatTrack(t, a, o, _i12, e));
+    } else console.log(" GetTrack ignore before next update" + n + " " + StartTime);
 
-      var IdRace = B.VLMInfo.RAC;
-
-      var _CurDate = new Date();
-
-      PendingID = IdBoat.toString() + "/" + IdRace.toString();
-
-      if (IdBoat in B.OppTrack) {
-        B.OppTrack[IdBoat].Visible = true;
-      }
-
-      if (!(PendingID in TrackPendingRequests) || _CurDate > TrackPendingRequests[PendingID]) {
-        TrackPendingRequests[PendingID] = new Date(_CurDate.getTime() + 60 * 1000);
-        console.log("GetTrack " + PendingID + " " + _StartTime);
-
-        if (parseInt(IdBoat) > 0) {
-          GetBoatTrack(B, IdBoat, IdRace, _StartTime, FeatureData);
-        } else if (parseInt(IdBoat)) {
-          GetRealBoatTrack(B, IdBoat, IdRace, _StartTime, FeatureData);
-        }
-      }
-    } else {
-      console.log(" GetTrack ignore before next update" + PendingID + " " + StartTime);
-    }
-
-    DrawBoat(B);
+    DrawBoat(t);
   }
 }
 
-function GetRealBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData) {
-  $.get("/ws/realinfo/tracks.php?idr=" + IdRace + "&idreals=" + -IdBoat + "&starttime=" + StartTime, function (e) {
-    if (e.success) {
-      AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, FeatureData.color);
-      RefreshCurrentBoat(false, false);
-    }
+function GetRealBoatTrack(e, t, a, i, n) {
+  $.get("/ws/realinfo/tracks.php?idr=" + a + "&idreals=" + -t + "&starttime=" + i, function (a) {
+    a.success && (AddBoatOppTrackPoints(e, t, a.tracks, n.color), RefreshCurrentBoat(!1, !1));
   });
 }
 
-var TrackRequestPending = false;
+var TrackRequestPending = !1;
 
-function GetBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData) {
-  if (TrackRequestPending) {
-    return;
-  } else {
-    TrackRequestPending = true;
-  }
+function GetBoatTrack(e, t, a, i, n) {
+  TrackRequestPending || (TrackRequestPending = !0, $.get("/ws/boatinfo/smarttracks.php?idu=" + t + "&idr=" + a + "&starttime=" + i, function (a) {
+    if (TrackRequestPending = !1, a.success) {
+      var i;
 
-  $.get("/ws/boatinfo/smarttracks.php?idu=" + IdBoat + "&idr=" + IdRace + "&starttime=" + StartTime, function (e) {
-    TrackRequestPending = false;
-
-    if (e.success) {
-      var index;
-      AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, FeatureData.color);
-
-      for (index in e.tracks_url) {
-        if (index > 10) {
-          break;
-        }
-        /* jshint -W083*/
-
-
-        $.get('/cache/tracks/' + e.tracks_url[index], function (e) {
-          if (e.success) {
-            AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, FeatureData.color);
-            RefreshCurrentBoat(false, false);
-          }
+      for (i in AddBoatOppTrackPoints(e, t, a.tracks, n.color), a.tracks_url) {
+        if (i > 10) break;
+        $.get("/cache/tracks/" + a.tracks_url[i], function (a) {
+          a.success && (AddBoatOppTrackPoints(e, t, a.tracks, n.color), RefreshCurrentBoat(!1, !1));
         });
-        /* jshint +W083*/
       }
 
-      RefreshCurrentBoat(false, false);
+      RefreshCurrentBoat(!1, !1);
     }
-  });
+  }));
 }
 
-function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor) {
-  if (!(IdBoat in Boat.OppTrack)) {
-    TrackColor = SafeHTMLColor(TrackColor);
-    Boat.OppTrack[IdBoat] = {
-      LastShow: 0,
-      TrackColor: TrackColor,
-      DatePos: [],
-      Visible: true,
-      OLTrackLine: null
-    };
-  } //
+function AddBoatOppTrackPoints(e, t, a, i) {
+  t in e.OppTrack || (i = SafeHTMLColor(i), e.OppTrack[t] = {
+    LastShow: 0,
+    TrackColor: i,
+    DatePos: [],
+    Visible: !0,
+    OLTrackLine: null
+  });
 
-
-  for (var _index36 in Track) {
-    var Pos = Track[_index36];
-    Boat.OppTrack[IdBoat].DatePos[Pos[0]] = {
-      lat: Pos[2] / 1000,
-      lon: Pos[1] / 1000
+  for (var _i13 in a) {
+    var n = a[_i13];
+    e.OppTrack[t].DatePos[n[0]] = {
+      lat: n[2] / 1e3,
+      lon: n[1] / 1e3
     };
   }
 
-  Boat.OppTrack[IdBoat].LastShow = 0;
-  Boat.OppTrack[IdBoat].OLTrackLine = null;
+  e.OppTrack[t].LastShow = 0, e.OppTrack[t].OLTrackLine = null;
 }
 
-function DeletePilotOrder(Boat, OrderId) {
+function DeletePilotOrder(e, t) {
   $.post("/ws/boatsetup/pilototo_delete.php?", "parms=" + JSON.stringify({
-    idu: Boat.IdBoat,
-    taskid: parseInt(OrderId)
+    idu: e.IdBoat,
+    taskid: parseInt(t)
   }), function (e) {
-    if (e.success) {
-      RefreshCurrentBoat(false, true, 'AutoPilot');
-    }
+    e.success && RefreshCurrentBoat(!1, !0, "AutoPilot");
   });
 }
 
-function UpdateBoatPrefs(Boat, NewVals) {
-  NewVals.idu = Boat.IdBoat;
-  $.post("/ws/boatsetup/prefs_set.php", "parms=" + JSON.stringify(NewVals), function (e) {
-    if (e.success) {
-      // avoid forced full round trip
-      RefreshCurrentBoat(false, false);
-    } else {
-      VLMAlertDanger(GetLocalizedString("UpdateFailed"));
-    }
+function UpdateBoatPrefs(e, t) {
+  t.idu = e.IdBoat, $.post("/ws/boatsetup/prefs_set.php", "parms=" + JSON.stringify(t), function (e) {
+    e.success ? RefreshCurrentBoat(!1, !1) : VLMAlertDanger(GetLocalizedString("UpdateFailed"));
   });
 }
 
 function LoadVLMPrefs() {
-  var Boat;
-
-  if (typeof _CurPlayer === "undefined") {
-    return;
-  }
-
-  Boat = _CurPlayer.CurBoat;
-  SetDDTheme(VLM2Prefs.CurTheme);
-  $.get("/ws/boatinfo/prefs.php?idu=" + Boat.IdBoat, HandlePrefsLoaded);
+  var e;
+  void 0 !== _CurPlayer && (e = _CurPlayer.CurBoat, SetDDTheme(VLM2Prefs.CurTheme), $.get("/ws/boatinfo/prefs.php?idu=" + e.IdBoat, HandlePrefsLoaded));
 }
 
 function HandlePrefsLoaded(e) {
-  if (e.success) {
-    var Boat = _CurPlayer.CurBoat;
-    Boat.VLMPrefs = e.prefs;
-    VLM2Prefs.UpdateVLMPrefs(e.prefs);
-  } else {
-    VLMAlertDanger("Error communicating with VLM, try reloading the browser page...");
-  }
-} //require [converse];
-
+  e.success ? (_CurPlayer.CurBoat.VLMPrefs = e.prefs, VLM2Prefs.UpdateVLMPrefs(e.prefs)) : VLMAlertDanger("Error communicating with VLM, try reloading the browser page...");
+}
 
 function InitXmpp() {
   converse.initialize({
-    bosh_service_url: 'https://bind.conversejs.org',
-    // Please use this connection manager only for testing purposes
+    bosh_service_url: "https://bind.conversejs.org",
     i18n: locales.en,
-    // Refer to ./locale/locales.js to see which locales are supported
-    show_controlbox_by_default: true,
-    roster_groups: true
+    show_controlbox_by_default: !0,
+    roster_groups: !0
   });
 }

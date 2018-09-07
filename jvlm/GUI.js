@@ -3910,12 +3910,12 @@ function setModalMaxHeight(element)
 {
   let $element = $(element);
   let $content = $element.find('.modal-content');
-  var borderWidth = $content.outerHeight() - $content.innerHeight();
-  var dialogMargin = $(window).width() < 768 ? 20 : 60;
-  var contentHeight = $(window).height() - (dialogMargin + borderWidth);
-  var headerHeight = $element.find('.modal-header').outerHeight() || 0;
-  var footerHeight = $element.find('.modal-footer').outerHeight() || 0;
-  var maxHeight = contentHeight - (headerHeight + footerHeight);
+  let borderWidth = $content.outerHeight() - $content.innerHeight();
+  let dialogMargin = $(window).width() < 768 ? 20 : 60;
+  let contentHeight = $(window).height() - (dialogMargin + borderWidth);
+  let headerHeight = $element.find('.modal-header').outerHeight() || 0;
+  let footerHeight = $element.find('.modal-footer').outerHeight() || 0;
+  let maxHeight = contentHeight - (headerHeight + footerHeight);
 
   $content.css(
   {
