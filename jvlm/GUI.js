@@ -25,7 +25,12 @@ var BoatRacingClasses = {
 
 // Global (beurk) holding last position return by OL mousemove.
 var GM_Pos = null;
+var SetWPPending = false;
+var WPPendingTarget = null;
 var GribWindController = null;
+
+//Global map object
+var map = null;
 
 // Ranking related globals
 var Rankings = [];
@@ -1203,16 +1208,16 @@ function HandleRacingDockingButtons(IsRacing)
 
 function UpdateInMenuDockingBoatInfo(Boat)
 {
-  var IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC, 10);
+  let IsRacing = (typeof Boat !== "undefined") && (typeof Boat.VLMInfo !== "undefined") && parseInt(Boat.VLMInfo.RAC, 10);
   HandleRacingDockingButtons(IsRacing);
 }
 
 function SetTWASign(Boat)
 {
-  var twd = Boat.VLMInfo.TWD;
-  var heading = Boat.VLMInfo.HDG;
+  let twd = Boat.VLMInfo.TWD;
+  let heading = Boat.VLMInfo.HDG;
 
-  twa = twd - heading;
+  let twa = twd - heading;
   if (twa < -180)
   {
     twa += 360;
@@ -1224,8 +1229,8 @@ function SetTWASign(Boat)
   }
 
 
-  var winddir = (360 - twd) % 360 + 90;
-  var boatdir = (360 - heading) % 360 + 90;
+  let winddir = (360 - twd) % 360 + 90;
+  let boatdir = (360 - heading) % 360 + 90;
 
   if (twa * Boat.VLMInfo.TWA > 0)
   {
@@ -1260,13 +1265,13 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   // Update GUI for current player
   // Todo Get Rid of Coords Class
-  var lon = new Coords(Boat.VLMInfo.LON, true);
-  var lat = new Coords(Boat.VLMInfo.LAT);
+  let lon = new Coords(Boat.VLMInfo.LON, true);
+  let lat = new Coords(Boat.VLMInfo.LAT);
 
   // Create field mapping array
   // 0 for text fields
   // 1 for input fields
-  var BoatFieldMappings = [];
+  let BoatFieldMappings = [];
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.ToString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.ToString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP, 2)]);
@@ -1286,7 +1291,7 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatClass", Boat.VLMInfo.POL.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceName", Boat.VLMInfo.RAN]);
 
-  WP = new VLMPosition(Boat.VLMInfo.WPLON, Boat.VLMInfo.WPLAT);
+  let WP = new VLMPosition(Boat.VLMInfo.WPLON, Boat.VLMInfo.WPLAT);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Lat", WP.Lat.Value]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Lon", WP.Lon.Value]);
 
@@ -1652,8 +1657,8 @@ function UpdatePilotInfo(Boat)
   BackupFooTable(PilototoFt, "#PilototoTable", "#PilototoTableInsertPoint");
 
 
-  PilRows = [];
-  if (Boat.VLMInfo.PIL.length > 0)
+  let PilRows = [];
+  if (Boat && Boat.VLMInfo && Boat.VLMInfo.PIL && Boat.VLMInfo.PIL.length > 0)
   {
     for (let index in Boat.VLMInfo.PIL)
     {
@@ -2118,7 +2123,7 @@ function AddRaceToList(race)
 function PageClock()
 {
 
-  if (typeof _CurPlayer !== "undefined" && typeof _CurPlayer.CurBoat !== "undefined")
+  if (typeof _CurPlayer !== "undefined" &&_CurPlayer && typeof _CurPlayer.CurBoat !== "undefined")
   {
 
     // Display race clock if a racing boat is selected
@@ -2233,7 +2238,7 @@ function RefreshCurrentBoat(SetCenterOnBoat, ForceRefresh, TargetTab)
 
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in BoatIDSpan[0].attributes))
   {
-    BoatId = BoatIDSpan[0].attributes.BoatID.value;
+    let BoatId = BoatIDSpan[0].attributes.BoatID.value;
     SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat, ForceRefresh, TargetTab);
   }
 
@@ -2405,7 +2410,7 @@ function SaveBoatAndUserPrefs(e)
 
   //NewVals["country"]=$("#FlagSelector")[0].value;
   //NewVals["color"]=$("#pref_boatcolor")[0].value;
-  if (BoatUpdateRequired)
+  if (BoatUpdateRequired && typeof _CurPlayer !== "undefined" && _CurPlayer)
   {
     UpdateBoatPrefs(_CurPlayer.CurBoat,
     {
@@ -2645,7 +2650,7 @@ function SortRanking(style, WPNum)
       //case 'RAC':
     default:
       SetRankingColumns('RAC');
-      CurRnk = SortRankingData(Boat, 'RAC');
+      SortRankingData(Boat, 'RAC');
       FillRacingRanking(Boat, Friends);
 
   }
@@ -3087,7 +3092,7 @@ function BackupICS_WPTable()
 
 function getWaypointHTMLSymbols(WPFormat)
 {
-  WPSymbols = "";
+  let WPSymbols = "";
   switch (WPFormat & (WP_CROSS_CLOCKWISE | WP_CROSS_ANTI_CLOCKWISE))
   {
     case WP_CROSS_ANTI_CLOCKWISE:
@@ -3118,7 +3123,7 @@ function getWaypointHTMLSymbols(WPFormat)
 
 function getWaypointHTMLSymbolsDescription(WPFormat)
 {
-  WPDesc = "";
+  let WPDesc = "";
   switch (WPFormat & (WP_CROSS_CLOCKWISE | WP_CROSS_ANTI_CLOCKWISE))
   {
     case WP_CROSS_ANTI_CLOCKWISE:
@@ -3903,21 +3908,21 @@ function HandleCreateUser()
 
 function setModalMaxHeight(element)
 {
-  this.$element = $(element);
-  this.$content = this.$element.find('.modal-content');
-  var borderWidth = this.$content.outerHeight() - this.$content.innerHeight();
+  let $element = $(element);
+  let $content = $element.find('.modal-content');
+  var borderWidth = $content.outerHeight() - $content.innerHeight();
   var dialogMargin = $(window).width() < 768 ? 20 : 60;
   var contentHeight = $(window).height() - (dialogMargin + borderWidth);
-  var headerHeight = this.$element.find('.modal-header').outerHeight() || 0;
-  var footerHeight = this.$element.find('.modal-footer').outerHeight() || 0;
+  var headerHeight = $element.find('.modal-header').outerHeight() || 0;
+  var footerHeight = $element.find('.modal-footer').outerHeight() || 0;
   var maxHeight = contentHeight - (headerHeight + footerHeight);
 
-  this.$content.css(
+  $content.css(
   {
     'overflow': 'hidden'
   });
 
-  this.$element
+  $element
     .find('.modal-body').css(
     {
       'max-height': maxHeight,

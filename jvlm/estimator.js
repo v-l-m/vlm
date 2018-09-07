@@ -311,13 +311,13 @@ function Estimator(Boat)
 
   this.GetNextRaceWP = function()
   {
-    var NbWP = Object.keys(this.Boat.RaceInfo.races_waypoints).length;
+    let NbWP = Object.keys(this.Boat.RaceInfo.races_waypoints).length;
     if ( this.CurEstimate.RaceWP === NbWP)
     {
       //Race Complete
       return true;
     }
-    for (i = this.CurEstimate.RaceWP+1; i <= NbWP; i++)
+    for (let i = this.CurEstimate.RaceWP+1; i <= NbWP; i++)
     {
         if (!(this.Boat.RaceInfo.races_waypoints[i].wpformat & WP_ICE_GATE))
         {

@@ -163,14 +163,16 @@ function PolarManagerClass()
 
   this.GetVBVMGCourse = function(Polar,WindSpeed,WindBearing,StartPos, DestPos)
   {
-    var Dist = StartPos.GetOrthoDist(DestPos);
-    var CapOrtho  = StartPos.GetOrthoCourse(DestPos);
-    var b_Alpha = 0;
-    var b_Beta = 0;
-    var SpeedAlpha = 0;
-    var SpeedBeta = 0;
-        
-    var Speed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho);
+    let Dist = StartPos.GetOrthoDist(DestPos);
+    let CapOrtho  = StartPos.GetOrthoCourse(DestPos);
+    let b_Alpha = 0;
+    let b_Beta = 0;
+    let SpeedAlpha = 0;
+    let SpeedBeta = 0;
+    let t_min = 0;
+    let ISigne =1;
+
+    let Speed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho);
     if (Speed > 0) 
     {
       t_min = Dist / Speed;
@@ -199,12 +201,12 @@ function PolarManagerClass()
       ISigne = 1;
     }
     
-    for (var i = 1; i<=  90; i++)
+    for (let i = 1; i<=  90; i++)
     {
-      alpha = i * Math.PI / 180;
-      TanAlpha = Math.tan(alpha);
-      D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha);
-      SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne);
+      let alpha = i * Math.PI / 180;
+      let TanAlpha = Math.tan(alpha);
+      let D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha);
+      let SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne);
       
       if (isNaN(SpeedT1))
       {
@@ -213,21 +215,21 @@ function PolarManagerClass()
       if (SpeedT1 > 0) 
       {
 
-        for (j = -89 ; j<= 0; j++)
+        for (let j = -89 ; j<= 0; j++)
         {
-          beta = j * Math.PI / 180;
-          D1 = Dist * (Math.tan(-beta) / (TanAlpha + Math.tan(-beta)));
-          L1 = D1 * D1HypotRatio;
+          let beta = j * Math.PI / 180;
+          let D1 = Dist * (Math.tan(-beta) / (TanAlpha + Math.tan(-beta)));
+          let L1 = D1 * D1HypotRatio;
           
-          T1 = L1 / SpeedT1;
+          let T1 = L1 / SpeedT1;
           if ((T1 < 0) || (T1 > t_min)) 
           {
             continue ;
           }
           
-          D2 = Dist - D1;
+          let D2 = Dist - D1;
           
-          SpeedT2 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho -j * ISigne);
+          let SpeedT2 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho -j * ISigne);
           
           if (isNaN(SpeedT2))
           {
@@ -239,21 +241,21 @@ function PolarManagerClass()
             continue ;
           }
           
-          TanBeta = Math.tan(-beta);
-          L2 = D2 * Math.sqrt(1 + TanBeta * TanBeta);
+          let TanBeta = Math.tan(-beta);
+          let L2 = D2 * Math.sqrt(1 + TanBeta * TanBeta);
           
-          T2 = L2 / SpeedT2;
+          let T2 = L2 / SpeedT2;
           
-          T = T1 + T2;
+          let T = T1 + T2;
           if (T < t_min) 
           {
             t_min = T;
             b_Alpha = i;
             b_Beta = j;
-            b_L1 = L1;
-            b_L2 = L2;
-            b_T1 = T1;
-            b_T2 = T2;
+            // b_L1 = L1;
+            // b_L2 = L2;
+            // b_T1 = T1;
+            // b_T2 = T2;
             SpeedAlpha = SpeedT1;
             SpeedBeta = SpeedT2;
           }
@@ -263,8 +265,8 @@ function PolarManagerClass()
     }
 
     
-    VMGAlpha = SpeedAlpha * Math.cos(Deg2Rad(b_Alpha));
-    VMGBeta = SpeedBeta * Math.cos(Deg2Rad(b_Beta));
+    let VMGAlpha = SpeedAlpha * Math.cos(Deg2Rad(b_Alpha));
+    let VMGBeta = SpeedBeta * Math.cos(Deg2Rad(b_Beta));
 
     if (isNaN(VMGAlpha) || isNaN(VMGBeta))
     {

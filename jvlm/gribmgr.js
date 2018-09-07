@@ -23,8 +23,8 @@ function GribData(InitStruct)
 
   this.Direction = function()
   {
-    var t_speed = Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD);
-    dir = Math.acos(-this.VGRD / t_speed);
+    let t_speed = Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD);
+    let dir = Math.acos(-this.VGRD / t_speed);
 
     if (this.UGRD > 0)
     {
@@ -169,33 +169,33 @@ function VLM2GribManager()
   {
 
     // Compute grid index to get the values
-    var LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
-    var LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
-    var LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
-    var LatIdx2 = (LatIdx1 + 1) % (360 / this.GribStep);
+    let LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
+    let LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
+    let LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
+    let LatIdx2 = (LatIdx1 + 1) % (360 / this.GribStep);
 
-    var dX = (Lon / this.GribStep - Math.floor(Lon / this.GribStep));
-    var dY = (Lat / this.GribStep - Math.floor(Lat / this.GribStep));
+    let dX = (Lon / this.GribStep - Math.floor(Lon / this.GribStep));
+    let dY = (Lat / this.GribStep - Math.floor(Lat / this.GribStep));
 
     // Get UVS for each 4 grid points
-    var U00 = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD;
-    var U01 = this.Tables[TableIndex][LonIdx1][LatIdx2].UGRD;
-    var U10 = this.Tables[TableIndex][LonIdx2][LatIdx1].UGRD;
-    var U11 = this.Tables[TableIndex][LonIdx2][LatIdx2].UGRD;
+    let U00 = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD;
+    let U01 = this.Tables[TableIndex][LonIdx1][LatIdx2].UGRD;
+    let U10 = this.Tables[TableIndex][LonIdx2][LatIdx1].UGRD;
+    let U11 = this.Tables[TableIndex][LonIdx2][LatIdx2].UGRD;
 
-    var V00 = this.Tables[TableIndex][LonIdx1][LatIdx1].VGRD;
-    var V01 = this.Tables[TableIndex][LonIdx1][LatIdx2].VGRD;
-    var V10 = this.Tables[TableIndex][LonIdx2][LatIdx1].VGRD;
-    var V11 = this.Tables[TableIndex][LonIdx2][LatIdx2].VGRD;
+    let V00 = this.Tables[TableIndex][LonIdx1][LatIdx1].VGRD;
+    let V01 = this.Tables[TableIndex][LonIdx1][LatIdx2].VGRD;
+    let V10 = this.Tables[TableIndex][LonIdx2][LatIdx1].VGRD;
+    let V11 = this.Tables[TableIndex][LonIdx2][LatIdx2].VGRD;
 
-    var S00 = this.Tables[TableIndex][LonIdx1][LatIdx1].Strength();
-    var S01 = this.Tables[TableIndex][LonIdx1][LatIdx2].Strength();
-    var S10 = this.Tables[TableIndex][LonIdx2][LatIdx1].Strength();
-    var S11 = this.Tables[TableIndex][LonIdx2][LatIdx2].Strength();
+    let S00 = this.Tables[TableIndex][LonIdx1][LatIdx1].Strength();
+    let S01 = this.Tables[TableIndex][LonIdx1][LatIdx2].Strength();
+    let S10 = this.Tables[TableIndex][LonIdx2][LatIdx1].Strength();
+    let S11 = this.Tables[TableIndex][LonIdx2][LatIdx2].Strength();
 
-    tws = this.QuadraticAverage(S00, S01, S10, S11, dX, dY);
+    let tws = this.QuadraticAverage(S00, S01, S10, S11, dX, dY);
 
-    var retmeteo = new GribData(
+    let retmeteo = new GribData(
     {
       UGRD: this.QuadraticAverage(U00, U01, U10, U11, dX, dY),
       VGRD: this.QuadraticAverage(V00, V01, V10, V11, dX, dY),

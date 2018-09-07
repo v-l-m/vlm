@@ -416,26 +416,29 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
     // MakePolar in a 200x200 square
     //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
-    var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
-    //var scale = 50 * map.resolution;
-    var scale = VLM2Prefs.MapPrefs.PolarVacCount;
-    var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-
-    BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, new Date(Boat.VLMInfo.LUP * 1000), function()
+    if (typeof map !== "undefined" && map)
     {
-      DrawBoat(Boat, CenterMapOnBoat);
-    });
-    //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
+      let BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
+      //var scale = 50 * map.resolution;
+      let scale = VLM2Prefs.MapPrefs.PolarVacCount;
+      let StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
 
-    var BoatPolar = new OpenLayers.Feature.Vector(
-      new OpenLayers.Geometry.LineString(Polar),
+      BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, new Date(Boat.VLMInfo.LUP * 1000), function()
       {
-        "type": "Polar",
-        "WindDir": Boat.VLMInfo.TWD
+        DrawBoat(Boat, CenterMapOnBoat);
       });
+      //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
 
-    BoatFeatures.push(BoatPolar);
-    VLMBoatsLayer.addFeatures(BoatPolar);
+      var BoatPolar = new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.LineString(Polar),
+        {
+          "type": "Polar",
+          "WindDir": Boat.VLMInfo.TWD
+        });
+
+      BoatFeatures.push(BoatPolar);
+      VLMBoatsLayer.addFeatures(BoatPolar);
+    }
   }
 
 
@@ -448,7 +451,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     let PrevLon = 99999;
     let LonOffSet = 0;
 
-    for (index = 0; index < TrackLength; index++)
+    for (let index = 0; index < TrackLength; index++)
     {
       let P = Boat.Track[index];
       if (PrevLon !== 99999)
@@ -501,8 +504,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
           LonOffSet += GetLonOffset(PrevLon, Est.Position.Lon.Value);
         }
         PrevLon = Est.Position.Lon.Value;
-        P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + LonOffSet, Est.Position.Lat.Value);
-        P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
+        let P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + LonOffSet, Est.Position.Lat.Value);
+        let P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
 
         Boat.Estimator.EstimatePoints[TrackIndex].push(P1_PosTransformed);
       }
@@ -544,21 +547,21 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       {
         if (!T.OLTrackLine)
         {
-          var TrackPoints = [];
-          var TLen = Object.keys(T.DatePos).length;
-          for (var PointIndex = 0; PointIndex < TLen; PointIndex++)
+          let TrackPoints = [];
+          let TLen = Object.keys(T.DatePos).length;
+          for (let PointIndex = 0; PointIndex < TLen; PointIndex++)
           {
-            var k = Object.keys(T.DatePos)[PointIndex];
-            P = T.DatePos[k];
-            var Pi = new OpenLayers.Geometry.Point(P.lon, P.lat);
-            var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection);
+            let k = Object.keys(T.DatePos)[PointIndex];
+            let P = T.DatePos[k];
+            let Pi = new OpenLayers.Geometry.Point(P.lon, P.lat);
+            let Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection);
 
             TrackPoints.push(Pi_PosTransformed);
           }
           T.OLTrackLine = TrackPoints;
         }
 
-        var OppTrack = new OpenLayers.Feature.Vector(
+        let OppTrack = new OpenLayers.Feature.Vector(
           new OpenLayers.Geometry.LineString(T.OLTrackLine),
           {
             "type": "HistoryTrack",
@@ -583,7 +586,10 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       var i = 0;
     }
 
-    map.setCenter(l);
+    if (typeof map !== "undefined" && map)
+    {
+      map.setCenter(l);
+    }
 
   }
   else if (CenterMapOnBoat)
@@ -607,12 +613,12 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
 
   if (MI)
   {
-    var hdg = parseFloat(Boat.VLMInfo.HDG);
-    var index;
+    let hdg = parseFloat(Boat.VLMInfo.HDG);
+    let index;
 
     for (index = 0; index <= 180; index += 5)
     {
-      Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL, MI.Speed, MI.Heading, MI.Heading + index);
+      let Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL, MI.Speed, MI.Heading, MI.Heading + index);
 
       if (isNaN(Speed))
       {
@@ -625,9 +631,9 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
 
       for (Side = -1; Side <= 1; Side += 2)
       {
-        var PolarPos = StartPos.ReachDistLoxo(Speed / 3600.0 * Boat.VLMInfo.VAC * scale, MI.Heading + index * Side);
-        var PixPos = new OpenLayers.Geometry.Point(PolarPos.Lon.Value, PolarPos.Lat.Value);
-        var PixPos_Transformed = PixPos.transform(MapOptions.displayProjection, MapOptions.projection);
+        let PolarPos = StartPos.ReachDistLoxo(Speed / 3600.0 * Boat.VLMInfo.VAC * scale, MI.Heading + index * Side);
+        let PixPos = new OpenLayers.Geometry.Point(PolarPos.Lon.Value, PolarPos.Lat.Value);
+        let PixPos_Transformed = PixPos.transform(MapOptions.displayProjection, MapOptions.projection);
 
         //var P = map.getLonLatFromPixel(PixPos);
         //var PPoint = new OpenLayers.Geometry.Point(PixPos);
@@ -639,9 +645,16 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
 
 function GetVLMPositionFromClick(pixel)
 {
-  var dest = map.getLonLatFromPixel(pixel);
-  var WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
-  return new VLMPosition(WGSDest.lon, WGSDest.lat);
+  if (map)
+  {
+    let dest = map.getLonLatFromPixel(pixel);
+    let WGSDest = dest.transform(new OpenLayers.Projection("EPSG:900913"), new OpenLayers.Projection("EPSG:4326"));
+    return new VLMPosition(WGSDest.lon, WGSDest.lat);
+  }
+  else
+  {
+    return null;
+  }
 }
 
 function CompleteWPSetPosition(feature, pixel)
@@ -961,9 +974,10 @@ function DrawRaceGates(RaceInfo, NextGate)
       else
       {
         // No Second buoy, compute segment end
-        var P = new VLMPosition(WP.longitude1, WP.latitude1);
-        var complete = false;
-        var Dist = 2500;
+        let P = new VLMPosition(WP.longitude1, WP.latitude1);
+        let complete = false;
+        let Dist = 2500;
+        let Dest = null;
         while (!complete)
         {
           try

@@ -165,7 +165,7 @@ function MapPrefs()
     var NewVals = {
       mapOpponents: MapPrefVal
     };
-    if (typeof _CurPlayer !== "undefined")
+    if (typeof _CurPlayer !== "undefined" && _CurPlayer)
     {
       UpdateBoatPrefs(_CurPlayer.CurBoat,
       {

@@ -359,6 +359,9 @@
 
  }
 
+ // Global handle to the current player object
+ var _CurPlayer = null;
+
  function GetPlayerInfo()
  {
    ShowBgLoad();
@@ -368,7 +371,7 @@
        if (result.success)
        {
          // Ok, create a user from profile
-         if (typeof _CurPlayer === 'undefined')
+         if (typeof _CurPlayer === 'undefined' || !_CurPlayer)
          {
            _CurPlayer = new User();
          }

@@ -17,8 +17,8 @@
  */
 
 
-Gribmap = {}; //Module container
-ErrorCatching = -1; //DEBUG: Set this > 0 to catch pixel out of wind grid
+var Gribmap = {}; //Module container
+var ErrorCatching = -1; //DEBUG: Set this > 0 to catch pixel out of wind grid
 
 var SrvIndex = 1;
 Gribmap.ServerURL = function()
@@ -733,7 +733,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
     var gribtimeafter = this.maxtime;
     for (i = 0; i < this.griblist.length; i++)
     {
-      delta = this.griblist[i] - time;
+      //delta = this.griblist[i] - time;
       if (this.griblist[i] >= gribtimebefore && this.griblist[i] <= time)
       {
         gribtimebefore = this.griblist[i];
@@ -752,9 +752,9 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
   setGribLevel: function(bounds)
   {
     //bounds in LATLON
-    var i;
-    widthlon = Math.abs(bounds.left - bounds.right);
-    heightlat = Math.abs(bounds.top - bounds.bottom);
+    let i;
+    let widthlon = Math.abs(bounds.left - bounds.right);
+    let heightlat = Math.abs(bounds.top - bounds.bottom);
     for (i = this.windLevels.length - 1; i >= 0; i--)
     {
       if ((widthlon < 2 * this.windLevels[i].blocx) && (heightlat < 2 * this.windLevels[i].blocy)) break;
@@ -821,7 +821,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
     {
       this.setGribLevel(boundsLonLat);
       bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
-      for (i = 0; i < bl.length; i++)
+      for (let i = 0; i < bl.length; i++)
       {
 
         windarea = bl[i]; //la zone
@@ -836,10 +836,10 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
         );
 
         //passe en pixel
-        start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-        end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
+        let start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
+        let end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
 
-        //rÃ©aligne le premier pixel de la zone
+        //réaligne le premier pixel de la zone
         start.x -= posstart.x;
         start.y -= posstart.y;
         end.x -= posstart.x;
@@ -867,8 +867,8 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
       );
 
       //passe en pixel
-      start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-      end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
+      let start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
+      let end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
 
       //réaligne le premier pixel de la zone
       start.x -= posstart.x;
@@ -902,15 +902,15 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
     var wante = windarea.windArrays[this.gribtimeBefore];
     var wpost = windarea.windArrays[this.gribtimeAfter];
 
-    //FIXME: faire un bench pour comparer le cas de re crÃ©ation d'objet Pixel()
+    //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
 
     while (p.x < poslimit.x)
     {
-      p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le rÃ©injecter...
+      p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
       while (p.y < poslimit.y)
       {
-        //passage du pixel en latlon (gÃ©ographique)
-        LonLat = this.map.getLonLatFromPixel(p).transform(
+        //passage du pixel en latlon (géographique)
+        let LonLat = this.map.getLonLatFromPixel(p).transform(
           new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
           new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
         );
@@ -964,7 +964,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
       while (p.y < poslimit.y)
       {
         //passage du pixel en latlon (géographique)
-        LonLat = this.map.getLonLatFromPixel(p).transform(
+        let LonLat = this.map.getLonLatFromPixel(p).transform(
           new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
           new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
         );
@@ -984,7 +984,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
           /*jshint +W083*/
           if (MI)
           {
-            winfo = new Wind(MI.Speed, MI.Heading);
+            let winfo = new Wind(MI.Speed, MI.Heading);
             this.drawWind(ctx, p.x, p.y, winfo);
           }
           else
@@ -1303,7 +1303,7 @@ Gribmap.MousePosition =
       var MI = GribMgr.WindAtPointInTime(new Date(), lonLat.lat, lonLat.lon);
       if (MI)
       {
-        winfo = new Wind(MI.Speed, MI.Heading);
+        let winfo = new Wind(MI.Speed, MI.Heading);
         retstr += " - " + Math.round(MI.Speed * 10) / 10 + "n / " + Math.round(MI.Heading * 10) / 10 + "°";
       }
 
