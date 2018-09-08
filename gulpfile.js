@@ -30,10 +30,10 @@ gulp.task('scripts', function()
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_main.js'))
-    .pipe(uglify())
     .pipe(babel({
       presets: ['@babel/env']}))
-		.pipe(gulp.dest('jvlm/dist'))
+		.pipe(uglify())
+    .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
       suffix: '.min'
@@ -119,10 +119,10 @@ gulp.task('libs_babel', function()
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_libs_babel.js'))
-    .pipe(uglify())
     .pipe(babel({
       presets: ['@babel/env']}))
-		.pipe(gulp.dest('jvlm/dist'))
+		.pipe(uglify())
+    .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
       suffix: '.min'
