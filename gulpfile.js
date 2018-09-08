@@ -84,23 +84,18 @@ gulp.task('html_prod', function()
     });
 });
 
-gulp.task('libs', function()
+gulp.task('libs_std', function()
 {
   return gulp.src(['jvlm/external/jquery/jquery-3.2.1.min.js',
       'jvlm/external/jquery-ui/jquery-ui.js', 'jvlm/external/bootstrap-master/js/bootstrap.js',
-      'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
-      'jvlm/external/footable-bootstrap/js/footable.js', 'jvlm/jquery.ui.touch-punch.js',
-      'jvlm/external/store/store.min.js',
-      'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
-      'jvlm/external/moments/moment-with-locales.min.js', 'externals/fullcalendar/fullcalendar.min.js',
-      'externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+      'jvlm/external/jquery.csv.js','jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
+      'jvlm/jquery.ui.touch-punch.js','jvlm/external/store/store.min.js',
+      'jvlm/external/moments/moment-with-locales.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
-    .pipe(concat('jvlm_libs.js'))
-    .pipe(babel({
-      presets: ['@babel/env']}))
-		.pipe(gulp.dest('jvlm/dist'))
+    .pipe(concat('jvlm_libs_std.js'))
+    .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
       suffix: '.min'
@@ -114,6 +109,45 @@ gulp.task('libs', function()
     .pipe(gulp.dest('jvlm/dist'));
 });
 
+gulp.task('libs_babel', function()
+{
+  return gulp.src(['jvlm/external/footable-bootstrap/js/footable.js',
+      'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
+      'externals/fullcalendar/fullcalendar.min.js',
+      'externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+    ])
+    //.pipe(jshint('.jshintrc'))
+    //.pipe(jshint.reporter('default'))
+    .pipe(concat('jvlm_libs_babel.js'))
+    .pipe(uglify())
+    .pipe(babel({
+      presets: ['@babel/env']}))
+		.pipe(gulp.dest('jvlm/dist'))
+    .pipe(rename(
+    {
+      suffix: '.min'
+    }))
+    .on('error', function(err)
+    {
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    })
+    //.pipe(gulpDeployFtp('./vlmcode', 'vlm-dev.ddns.net', 21, 'vlm', 'vlm'))
+    .pipe(gulp.dest('jvlm/dist'));
+});
+
+gulp.task('libs_concat', function()
+{
+  return gulp.src(['jvlm/dist/jvlm_libs_std.min.js','jvlm/dist/jvlm_libs_babel.min.js'])
+    //.pipe(jshint('.jshintrc'))
+    //.pipe(jshint.reporter('default'))
+    .pipe(concat('jvlm_libs.min.js'))
+    .on('error', function(err)
+    {
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    })
+    //.pipe(gulpDeployFtp('./vlmcode', 'vlm-dev.ddns.net', 21, 'vlm', 'vlm'))
+    .pipe(gulp.dest('jvlm/dist'));
+});
 
 
 
@@ -159,8 +193,9 @@ gulp.task('default', function()
 
 gulp.task('BuildAll', function()
 {
-  return runsequence('libs', 'html', 'scripts', 'deploy');
+  return runsequence('libs_std', 'libs_babel','libs_concat', 'html', 'scripts', 'deploy');
 });
+
 
 gulp.task('BuildProd', function()
 {
