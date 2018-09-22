@@ -24,6 +24,7 @@ const gulp = require('gulp'),
 
 const VLMVersion = 18;
 
+
 gulp.task('scripts', function()
 {
   return gulp.src(['jvlm/*.js', '!jvlm/external/*', '!jvlm/config.js'])
@@ -54,6 +55,7 @@ gulp.task('html', function()
     .pipe(inject.replace('@@JVLMVERSION@@', 'V' + VLMVersion))
     .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
     .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
+    .pipe(inject.replace('@@BUILD_TYPE@@', 'Dev'))
     .pipe(gulp.dest('jvlm'))
     .on('error', function(err)
     {
@@ -71,6 +73,7 @@ gulp.task('html_prod', function()
     .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
     .pipe(inject.replace('dist/jvlm_main.js', 'dist/jvlm_main.min.js'))
     .pipe(inject.replace('dist/jvlm_main.js', 'dist/jvlm_main.min.js'))
+    .pipe(inject.replace('@@BUILD_TYPE@@', 'Prod'))
     .pipe(htmlmin(
     {
       collapseWhitespace: true,
@@ -199,5 +202,5 @@ gulp.task('BuildAll', function()
 
 gulp.task('BuildProd', function()
 {
-  return runsequence('libs', 'html_prod', 'scripts', 'deploy');
+  return runsequence('libs_std', 'libs_babel','libs_concat', 'html_prod', 'scripts', 'deploy');
 });
