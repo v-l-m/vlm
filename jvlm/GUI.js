@@ -2465,7 +2465,7 @@ var LastMouseMoveCall = 0;
 function HandleMapMouseMove(e)
 {
 
-  if (GM_Pos && (typeof _CurPlayer !== "undefined") && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
+  if (GM_Pos && (typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
   {
     var Pos = new VLMPosition(GM_Pos.lon, GM_Pos.lat);
     var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);
