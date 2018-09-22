@@ -20,9 +20,11 @@ const gulp = require('gulp'),
   inject = require('gulp-inject-string'),
   htmlmin = require('gulp-htmlmin'),
   runsequence = require('run-sequence'),
+  gulpif = require('gulp-if'),
   babel = require('gulp-babel');
 
 const VLMVersion = 18;
+var BuildTypeProd = false;
 
 
 gulp.task('scripts', function()
@@ -33,7 +35,7 @@ gulp.task('scripts', function()
     .pipe(concat('jvlm_main.js'))
     .pipe(babel({
       presets: ['@babel/env']}))
-		.pipe(uglify())
+		.pipe(gulpif(BuildTypeProd,uglify()))
     .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
@@ -103,7 +105,7 @@ gulp.task('libs_std', function()
     {
       suffix: '.min'
     }))
-    .pipe(uglify())
+    .pipe(gulpif(BuildTypeProd, uglify()))
     .on('error', function(err)
     {
       gutil.log(gutil.colors.red('[Error]'), err.toString());
@@ -124,7 +126,7 @@ gulp.task('libs_babel', function()
     .pipe(concat('jvlm_libs_babel.js'))
     .pipe(babel({
       presets: ['@babel/env']}))
-		.pipe(uglify())
+		.pipe(gulpif(BuildTypeProd, uglify()))
     .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
@@ -202,5 +204,6 @@ gulp.task('BuildAll', function()
 
 gulp.task('BuildProd', function()
 {
+  BuidTypeProd=true;
   return runsequence('libs_std', 'libs_babel','libs_concat', 'html_prod', 'scripts', 'deploy');
 });
