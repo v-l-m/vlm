@@ -1,5 +1,12 @@
 This file traces the changes that are required for upgrading from a previous VLM version
 
+from 0.28 -> Tag VLM2_18 (GitHub Commit 9ea1de4e014453c6c05f427c719346db635682fc)
+
+Idem Step 0 V027-> 28, mais modification ligne 373
+ /* fix #
+ changer if ( BDS_BinScale(bds)) par if (1 /* BDS_BinScale(bds)*/)
+ puis déployer le binaire dans ~/bin comme pour l'étape 0.27-> 0.28
+
 From 0.27 to 0.28 aka Bora Bora :
 
 = Step 0, can be done at any time = 
