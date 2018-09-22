@@ -18,7 +18,7 @@
 
 
 var Gribmap = {}; //Module container
-var ErrorCatching = -1; //DEBUG: Set this > 0 to catch pixel out of wind grid
+var ErrorCatching = 1; //DEBUG: Set this > 0 to catch pixel out of wind grid
 
 var SrvIndex = 1;
 Gribmap.ServerURL = function()
@@ -916,9 +916,10 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
         );
 
         //Récupère le vent et l'affiche en l'absence d'erreur
+        let winfo;
         try
         {
-          winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
+           winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
           this.drawWind(ctx, p.x, p.y, winfo);
 
         }
@@ -1089,12 +1090,12 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
 
   drawWindTriangle: function(context, x, y, pos_wind)
   {
-    var a, b, c, bary, offset;
-    var wheading;
-    var wspdlog;
+    let a, b, c, bary, offset;
+    let wheading;
+    let wspdlog;
 
-    windarrow_minsize = 4; // FIXME external constants ?
-    windarrow_minwidth = 0;
+    let windarrow_minsize = 4; // FIXME external constants ?
+    let windarrow_minwidth = 0;
 
     wspdlog = Math.log(pos_wind.wspeed + 1);
     wheading = (pos_wind.wheading + 180.0) % 360.0;
