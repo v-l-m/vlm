@@ -89,7 +89,7 @@ function PrefMgr()
 function MapPrefs()
 {
   this.ShowReals = true; // Do we show reals?
-  this.ShowOppNames = true; // Do we show opponents names?
+  this.ShowOppNumbers = true; // Do we show opponents names?
   this.MapOppShow = null; // Which opponents do we show on the map
   this.MapOppShowOptions = {
     ShowSel: 0,
@@ -111,7 +111,7 @@ function MapPrefs()
     if (store.enabled)
     {
       this.ShowReals = LoadLocalPref('#ShowReals', true);
-      this.ShowOppNames = LoadLocalPref("#ShowOppNames",false);
+      this.ShowOppNumbers = LoadLocalPref("#ShowOppNumbers",false);
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
       this.UseUTC = LoadLocalPref("#UseUTC", false);
       this.EstTrackMouse = LoadLocalPref("#EstTrackMouse",true);
@@ -131,7 +131,7 @@ function MapPrefs()
     if (store.enabled)
     {
       store.set("#ShowReals", this.ShowReals);
-      store.set("#ShowOppNames", this.ShowOppName);
+      store.set("#ShowOppNumbers", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
       store.set("#UseUTC", this.UseUTC);
