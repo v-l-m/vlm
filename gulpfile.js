@@ -23,7 +23,7 @@ const gulp = require('gulp'),
   gulpif = require('gulp-if'),
   babel = require('gulp-babel');
 
-const VLMVersion = 18;
+const VLMVersion = 19;
 var BuildTypeProd = false;
 
 
@@ -204,6 +204,6 @@ gulp.task('BuildAll', function()
 
 gulp.task('BuildProd', function()
 {
-  BuidTypeProd=true;
+  BuildTypeProd=true;
   return runsequence('libs_std', 'libs_babel','libs_concat', 'html_prod', 'scripts', 'deploy');
 });
