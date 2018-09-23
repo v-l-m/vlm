@@ -1606,7 +1606,7 @@ function DrawPolar(RaceInfo)
       As = 1;
     }
 
-    for (index = 1; As * index - 1 <= MaxSpeed; index++)
+    for (let index = 1; As * index - 1 <= MaxSpeed; index++)
     {
       Context.beginPath();
       Context.strokeStyle = "#7FFFFF";
