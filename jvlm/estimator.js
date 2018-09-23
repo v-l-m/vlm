@@ -453,7 +453,7 @@ function Estimator(Boat)
       }
     }
 
-    RetValue = this.EstimateTrack[Index];
+    let RetValue = this.EstimateTrack[Index];
     return RetValue;
   };
 
@@ -464,9 +464,9 @@ function Estimator(Boat)
       return null;
     }
 
-    var Dist = 1e30;
-    var index;
-    var RetValue = null;
+    let Dist = 1e30;
+    let index;
+    let RetValue = null;
 
     for (index = 0; index < Object.keys(this.EstimateTrack).length;index++)
     {
