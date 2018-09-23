@@ -23,7 +23,7 @@ const gulp = require('gulp'),
   gulpif = require('gulp-if'),
   babel = require('gulp-babel');
 
-const VLMVersion = 19;
+const VLMVersion = 19.1;
 var BuildTypeProd = false;
 
 
