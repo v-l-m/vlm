@@ -229,6 +229,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   {
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
+    UpdateInMenuRacingBoatInfo(Boat, TargetTab);
     DrawBoat(Boat, CenterMapOnBoat);
     DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
@@ -1651,7 +1652,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
   var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
   var OL_Opp;
   var OppData = {
-    "name": Opponent.idusers + " - " + Opponent.boatname,
+    "name": Opponent.idusers,
     "Coords": Opp_Coords.ToString(),
     "type": 'opponent',
     "idboat": Opponent.idusers,
@@ -1712,8 +1713,8 @@ function ShowOpponentPopupInfo(e)
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, Boat.boatname]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(Boat.loch)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.dnm),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.loch),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + Boat.nwp + "] " + RoundPow(parseFloat(Boat.dnm),2)]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last1h), 2)]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last3h), 2)]);

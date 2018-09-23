@@ -79,7 +79,7 @@ function PrefMgr() {
 function MapPrefs() {
   this.ShowReals = true; // Do we show reals?
 
-  this.ShowOppNames = true; // Do we show opponents names?
+  this.ShowOppNumbers = true; // Do we show opponents names?
 
   this.MapOppShow = null; // Which opponents do we show on the map
 
@@ -104,7 +104,7 @@ function MapPrefs() {
   this.Load = function () {
     if (store.enabled) {
       this.ShowReals = LoadLocalPref('#ShowReals', true);
-      this.ShowOppNames = LoadLocalPref("#ShowOppNames", false);
+      this.ShowOppNumbers = LoadLocalPref("#ShowOppNumbers", false);
       this.MapZoomLevel = LoadLocalPref("#MapZoomLevel", 4);
       this.UseUTC = LoadLocalPref("#UseUTC", false);
       this.EstTrackMouse = LoadLocalPref("#EstTrackMouse", true);
@@ -123,7 +123,7 @@ function MapPrefs() {
   this.Save = function () {
     if (store.enabled) {
       store.set("#ShowReals", this.ShowReals);
-      store.set("#ShowOppNames", this.ShowOppName);
+      store.set("#ShowOppNumbers", this.ShowOppName);
       store.set("#MapZoomLevel", this.MapZoomLevel);
       store.set("#PolarVacCount", this.PolarVacCount);
       store.set("#UseUTC", this.UseUTC);
@@ -6623,7 +6623,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs) {
 function HandleShowMapPrefs(e) {
   //Load prefs
   $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
-  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNames);
+  $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNumbers);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
   $("#UseUTC").attr('checked', VLM2Prefs.MapPrefs.UseUTC);
@@ -6660,7 +6660,7 @@ function HandleMapPrefOptionChange(e) {
     case "ShowReals":
     case "UseUTC":
     case "DisplayNames":
-    case "ShowOppNames":
+    case "ShowOppNumbers":
     case "EstTrackMouse":
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;
@@ -8847,6 +8847,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   } else if (Boat) {
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
+    UpdateInMenuRacingBoatInfo(Boat, TargetTab);
     DrawBoat(Boat, CenterMapOnBoat);
     DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
     DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
@@ -9973,7 +9974,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend) {
   var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
   var OL_Opp;
   var OppData = {
-    "name": Opponent.idusers + " - " + Opponent.boatname,
+    "name": Opponent.idusers,
     "Coords": Opp_Coords.ToString(),
     "type": 'opponent',
     "idboat": Opponent.idusers,
@@ -9986,7 +9987,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend) {
     "color": Opponent.color
   };
 
-  if (!VLM2Prefs.MapPrefs.ShowOppNames) {
+  if (!VLM2Prefs.MapPrefs.ShowOppNumbers) {
     OppData.name = "";
   }
 
@@ -10021,8 +10022,8 @@ function ShowOpponentPopupInfo(e) {
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, _Boat.boatname]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(_Boat.loch)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.dnm), 2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.loch), 2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + _Boat.nwp + "] " + RoundPow(parseFloat(_Boat.dnm), 2)]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last1h), 2)]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last3h), 2)]);
