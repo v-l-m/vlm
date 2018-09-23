@@ -443,7 +443,7 @@ function Estimator(Boat)
       }
     }
 
-    if (Index< Object.keys(this.EstimateTrack).length)
+    if (Index< Object.keys(this.EstimateTrack).length && typeof this.EstimateTrack[Index+1] !== "undefined" && this.EstimateTrack[Index+1])
     {
       let Delta2 = Time - this.EstimateTrack[Index+1].Date;
 
@@ -524,7 +524,7 @@ function Estimator(Boat)
       VLMBoatsLayer.addFeatures(Marker);
       this.EstimateMapFeatures.push(Marker);
 
-      if (typeof Estimate.Meteo !== "undefined")
+      if (typeof Estimate.Meteo !== "undefined" && Estimate.Meteo)
       {
         var scale = VLM2Prefs.MapPrefs.PolarVacCount;
         var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
