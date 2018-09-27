@@ -15,8 +15,8 @@ drop trigger if exists TRG_WAYPOINT_UPDATE;
 drop trigger if exists TRG_WAYPOINT_INSERT;
 drop trigger if exists TRG_WAYPOINT_DELETE;
 
-create trigger TRG_WAYPOINT_INSERT after INSERT on waypoints 
-  for each row update races set updated = now() where idraces in (select distinct idraces from races_waypoints, new  where new.idwaypoint = races_waypoints.idwaypoint);
+#create trigger TRG_WAYPOINT_INSERT after INSERT on waypoints 
+#  for each row update races set updated = now() where idraces in (select distinct idraces from races_waypoints, new  where new.idwaypoint = races_waypoints.idwaypoint);
 
 create trigger TRG_WAYPOINT_UPDATE after UPDATE on waypoints 
   for each row update races set updated = now() where idraces in (select distinct idraces from races_waypoints, new  where new.idwaypoint = races_waypoints.idwaypoint);
