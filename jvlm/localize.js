@@ -116,7 +116,7 @@ function GetLocalizedString(StringId)
 {
   let RetString = "";
     
-  if (StringId in _LocaleDict)
+  if (typeof _LocaleDict !== "undefined" && _LocaleDict && StringId in _LocaleDict)
   {
     RetString = HTMLDecode( _LocaleDict[StringId]);
   }
