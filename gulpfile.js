@@ -23,8 +23,8 @@ const gulp = require('gulp'),
   gulpif = require('gulp-if'),
   babel = require('gulp-babel');
 
-const VLMVersion = 19.3;
-var BuildTypeProd = false;
+const VLMVersion = 19.2;
+var BuildTypeProd = true;
 
 
 gulp.task('scripts', function()
