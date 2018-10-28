@@ -943,63 +943,70 @@ var Exclusions = [];
 function DrawRaceGates(RaceInfo, NextGate)
 {
 
-  for (let index in RaceGates)
+  if (typeof RaceGates !== "undefined" && RaceGates)
   {
-    if (RaceGates[index])
+    for (let index in RaceGates)
     {
-      VLMBoatsLayer.removeFeatures(RaceGates[index]);
+      if (RaceGates[index])
+      {
+        VLMBoatsLayer.removeFeatures(RaceGates[index]);
+      }
     }
   }
+
   // Loop all gates
-  for (let index in RaceInfo.races_waypoints)
+  if (typeof RaceInfo !== undefined && RaceInfo && typeof RaceInfo.races_waypoints !== "undefined" && RaceInfo.races_waypoints)
   {
-    if (RaceInfo.races_waypoints[index])
+    for (let index in RaceInfo.races_waypoints)
     {
-      // Draw a single race gates
-      var WP = RaceInfo.races_waypoints[index];
-
-      // Fix coords scales
-      NormalizeRaceInfo(RaceInfo);
-      var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
-
-      // Draw WP1
-      AddBuoyMarker(VLMBoatsLayer, RaceGates, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
-
-
-      // Second buoy (if any)
-      if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
+      if (RaceInfo.races_waypoints[index])
       {
-        // Add 2nd buoy marker
-        AddBuoyMarker(VLMBoatsLayer, RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
-      }
-      else
-      {
-        // No Second buoy, compute segment end
-        let P = new VLMPosition(WP.longitude1, WP.latitude1);
-        let complete = false;
-        let Dist = 2500;
-        let Dest = null;
-        while (!complete)
+        // Draw a single race gates
+        var WP = RaceInfo.races_waypoints[index];
+
+        // Fix coords scales
+        NormalizeRaceInfo(RaceInfo);
+        var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
+
+        // Draw WP1
+        AddBuoyMarker(VLMBoatsLayer, RaceGates, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
+
+
+        // Second buoy (if any)
+        if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
         {
-          try
+          // Add 2nd buoy marker
+          AddBuoyMarker(VLMBoatsLayer, RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
+        }
+        else
+        {
+          // No Second buoy, compute segment end
+          let P = new VLMPosition(WP.longitude1, WP.latitude1);
+          let complete = false;
+          let Dist = 2500;
+          let Dest = null;
+          while (!complete)
           {
-            Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
-            complete = true;
+            try
+            {
+              Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
+              complete = true;
+            }
+            catch (e)
+            {
+              Dist *= 0.7;
+            }
           }
-          catch (e)
-          {
-            Dist *= 0.7;
-          }
+
+          WP.longitude2 = Dest.Lon.Value;
+          WP.latitude2 = Dest.Lat.Value;
         }
 
-        WP.longitude2 = Dest.Lon.Value;
-        WP.latitude2 = Dest.Lat.Value;
+        // Draw Gate Segment
+        index = parseInt(index, 10);
+        NextGate = parseInt(NextGate, 10);
+        AddGateSegment(VLMBoatsLayer, RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate === index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
       }
-
-      // Draw Gate Segment
-      index = parseInt(index, 10);
-      NextGate = parseInt(NextGate, 10);
-      AddGateSegment(VLMBoatsLayer, RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate === index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
     }
   }
 }
@@ -1713,8 +1720,8 @@ function ShowOpponentPopupInfo(e)
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, Boat.boatname]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.loch),2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + Boat.nwp + "] " + RoundPow(parseFloat(Boat.dnm),2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.loch), 2)]);
+    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + Boat.nwp + "] " + RoundPow(parseFloat(Boat.dnm), 2)]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last1h), 2)]);
     PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last3h), 2)]);
@@ -1805,7 +1812,7 @@ function HandleFeatureClick(e)
 function HandleFeatureOut(e)
 {
 
-  if (typeof _CurPlayer === "undefined" || (! _CurPlayer) || typeof _CurPlayer.CurBoat === "undefined" || (! _CurPlayer.CurBoat) || typeof _CurPlayer.CurBoat.OppTrack === "undefined")
+  if (typeof _CurPlayer === "undefined" || (!_CurPlayer) || typeof _CurPlayer.CurBoat === "undefined" || (!_CurPlayer.CurBoat) || typeof _CurPlayer.CurBoat.OppTrack === "undefined")
   {
     return;
   }
