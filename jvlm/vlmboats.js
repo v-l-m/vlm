@@ -1805,7 +1805,7 @@ function HandleFeatureClick(e)
 function HandleFeatureOut(e)
 {
 
-  if (typeof _CurPlayer === "undefined" || typeof _CurPlayer.CurBoat === "undefined" || typeof _CurPlayer.CurBoat.OppTrack === "undefined")
+  if (typeof _CurPlayer === "undefined" || (! _CurPlayer) || typeof _CurPlayer.CurBoat === "undefined" || (! _CurPlayer.CurBoat) || typeof _CurPlayer.CurBoat.OppTrack === "undefined")
   {
     return;
   }
