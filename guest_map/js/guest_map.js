@@ -434,13 +434,10 @@ function draw_one_boat(idu)
   boat_texte[idu] = make_boat_texte(boats[idu].idusers);
   boat_pos[idu] = [boats[idu].latitude, boats[idu].longitude];
 
+  let q_rank="n";
   if (boats[idu].rank == "1")
   {
     q_rank = "1";
-  }
-  else
-  {
-    q_rank = "n";
   }
   let img_b = 'img/boat.php?idu=' + idu + '&rank=' + q_rank;
 
@@ -483,16 +480,16 @@ function get_track(idu, color)
       {
         boat_track[idu].removeFrom(LMap);
       }
-      tracks = answer.tracks;
+      let tracks = answer.tracks;
       let path = [];
       for (let k in tracks)
       {
-        lon = tracks[k][1] / 1000;
-        lat = tracks[k][2] / 1000;
+        let lon = tracks[k][1] / 1000;
+        let lat = tracks[k][2] / 1000;
         //$("#test").append(idu + " => " + lat + " - " + lon + "<br/>");
         //if(lat > 0 && lon > 0)
         //{
-        latLng = [lat, lon];
+        let latLng = [lat, lon];
 
         path.push(latLng);
         //}
@@ -759,9 +756,9 @@ function get_boat(idu)
 {
   if (typeof boats !== "undefined" && boats && typeof boats[idu] !== "undefined" && boats[idu])
   {
-    new_map_lat = boats[idu].latitude;
-    new_map_lon = boats[idu].longitude;
-    new_map_latlon = [new_map_lat, new_map_lon];
+    let new_map_lat = boats[idu].latitude;
+    let new_map_lon = boats[idu].longitude;
+    let new_map_latlon = [new_map_lat, new_map_lon];
     LMap.setView(new_map_latlon);
     draw_one_boat(idu);
   }
