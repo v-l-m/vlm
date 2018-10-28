@@ -5,3 +5,4 @@ last 1 version
 # maintained node versions
 not dead
 ios_saf 9.2-11.3
+ie > 7
