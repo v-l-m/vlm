@@ -24,7 +24,7 @@ const gulp = require('gulp'),
   babel = require('gulp-babel');
 
 const VLMVersion = 19.2;
-var BuildTypeProd = false;
+var BuildTypeProd = true;
 
 
 gulp.task('scripts', function()
