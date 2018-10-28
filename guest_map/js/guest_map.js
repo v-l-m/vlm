@@ -14,6 +14,11 @@ var boat_texte = [];
 var boat_win = [];
 var boat_info = [];
 var boat_track = [];
+var map_lat;
+var map_lon;
+var boats = [];
+var idr;
+  
 
 
 // EXTEND JQUERY WITH A FUNCTION TO GET VARS IN QUERY STRING
@@ -41,7 +46,7 @@ $.extend(
 // MASTER FUNCTION
 function start()
 {
-  idr = $.getUrlVar('idr');
+   idr = $.getUrlVar('idr');
 
   if (typeof(idr) == 'undefined')
   {
@@ -87,7 +92,12 @@ function display_races_list()
     cache: false,
     success: function(answer)
     {
-      races = "";
+      let races = "";
+      let race_started = "";
+      let race_open = "";
+      let classc1 = "";
+      let classc2 = "";
+
       for (let k in answer)
       {
         if (answer[k].started > 0)
@@ -129,7 +139,7 @@ function display_races_list()
 function display_race()
 {
 
-  map = new L.map('map_canvas',
+  let map = new L.map('map_canvas',
   {
     zoom: 9
   }); //google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -207,11 +217,11 @@ function get_raceinfo(map, idr)
     {
       // INFOS GENERALES COURSE
       // "idraces" "racename" "started" "deptime" "startlong" "startlat" "boattype" "closetime" "racetype" "firstpcttime" "depend_on" "qualifying_races" "idchallenge" "coastpenalty" "bobegin" "boend" "maxboats" "theme" "vacfreq" "races_waypoints"
-      racename = answer.racename;
-      titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 500 premiers bateaux en course - " + current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='refresh' value='Actualiser' class='bouton1'  onclick=\"refresh_all();\" />";
+      let racename = answer.racename;
+      let titre_carte = "<span class='txtbold2'>&nbsp;&nbsp;&nbsp;Course : " + racename + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class='txtbold1'>Situation des 500 premiers bateaux en course - " + current_date + "</span>&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='retour' value='Liste des courses' class='bouton1' onclick=\"document.location.href='index.html';\" />&nbsp;&nbsp;&nbsp;&nbsp;<input type='button' name='refresh' value='Actualiser' class='bouton1'  onclick=\"refresh_all();\" />";
       document.getElementById('titre_carte').innerHTML = titre_carte;
-      startlong = answer.startlong / 1000;
-      startlat = answer.startlat / 1000;
+      let startlong = answer.startlong / 1000;
+      let startlat = answer.startlat / 1000;
 
       // fix #507 If position null for the first boat or no boats => center map on the start
       if (typeof map_lat === "undefined" || typeof map_lon === "undefined" || (map_lat == "0" && map_lon == "0"))
@@ -234,7 +244,7 @@ function get_raceinfo(map, idr)
         shadowAnchor: [0, 32], // the same for the shadow
         popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
       });
-      depart_txt = "<b>START</b><br/><h3>" + racename + "</h3>";
+      let depart_txt = "<b>START</b><br/><h3>" + racename + "</h3>";
       L.marker([startlat, startlong],
       {
         icon: StartMarker
@@ -243,9 +253,9 @@ function get_raceinfo(map, idr)
 
       // Marques du parcours
       var rwps = answer.races_waypoints;
-      test = "";
+      //test = "";
       var i = 0;
-      mark_wp = [];
+      //mark_wp = [];
       var wp_pos = [];
       var texte = [];
 
@@ -355,7 +365,7 @@ function draw_all_boats()
   {
     return;
   }
-  i = 0;
+  let i = 0;
   for (let k in boats)
   {
     if (boats[k])
@@ -372,8 +382,8 @@ function draw_all_boats()
       let img_b;
       if (boat_rank[k] == "1")
       {
-        first_idu = boat_idu[k];
-        first_color = boat_color[k];
+        //first_idu = boat_idu[k];
+        //first_color = boat_color[k];
         img_b = 'img/boat.php?idu=' + boat_idu[k] + '&rank=1';
       }
       else
@@ -504,7 +514,7 @@ function get_track(idu, color)
 // get and display the ranking
 function refresh_ranking(idr)
 {
-
+  let test_engaged;
   document.getElementById('tab_ranking').innerHTML = "<div class='loading' align='center' style='width:210px;'><br/><br/><img src='img/ajax-loader.gif'/></div>";
   $.ajax(
   {
@@ -522,7 +532,7 @@ function refresh_ranking(idr)
       if (answer != null)
       {
         test_engaged = answer.nb_engaged;
-        if (test_engaged == "0")
+        if (test_engaged === "0")
         {
           map_lat = 0;
           map_lon = 0;
@@ -564,7 +574,7 @@ function refresh_ranking(idr)
           {
             'width': '160px'
           }).addClass('STxtRank').appendTo($("thead>tr", mytable));
-          th$ = $('<TH/>',
+          let th$ = $('<TH/>',
           {
             'scope': 'col',
             'html': ''
@@ -572,7 +582,7 @@ function refresh_ranking(idr)
           {
             'width': '20px'
           }).addClass('STxtRank').appendTo($("thead>tr", mytable));
-          a$ = $('<A/>',
+          let a$ = $('<A/>',
           {
             'href': '#'
           }).addClass('reset').appendTo(th$);
@@ -593,16 +603,16 @@ function refresh_ranking(idr)
           {
             // console.log('treating:'+k2 + ' - rank:' + d2[k2].rank);
             //"idusers","boatpseudo","boatname","color","country","nwp","dnm","deptime","loch","releasetime","latitude","longitude","last1h","last3h","last24h","status","rank"
-            i = d2[k2].idusers;
+            let i = d2[k2].idusers;
             boats[i] = d2[k2];
-            if (boats[i].rank == "1")
+            if (boats[i].rank === "1")
             {
               map_lat = boats[i].latitude;
               map_lon = boats[i].longitude;
             }
-            bgcolor = "ffffff";
-            statusb = d2[k2].status;
-            colorb = d2[k2].color;
+            let bgcolor = "ffffff";
+            let statusb = d2[k2].status;
+            let colorb = d2[k2].color;
             if (statusb == "on_coast")
             {
               bgcolor = "999999";

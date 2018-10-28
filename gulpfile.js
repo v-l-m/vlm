@@ -24,7 +24,7 @@ const gulp = require('gulp'),
   babel = require('gulp-babel');
 
 const VLMVersion = 19.2;
-var BuildTypeProd = true;
+var BuildTypeProd = false; // This is automatically set to true in prod build chains
 
 
 gulp.task('scripts', function()
@@ -33,9 +33,11 @@ gulp.task('scripts', function()
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_main.js'))
-    .pipe(babel({
-      presets: ['@babel/env']}))
-		.pipe(gulpif(BuildTypeProd,uglify()))
+    .pipe(babel(
+    {
+      presets: ['@babel/env']
+    }))
+    .pipe(gulpif(BuildTypeProd, uglify()))
     .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
@@ -89,12 +91,35 @@ gulp.task('html_prod', function()
     });
 });
 
+gulp.task('guest_map', function()
+{
+  return gulp.src(['guest_map/index.htm'])
+    .pipe(rename('index.html'))
+    .pipe(inject.prepend("<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST-->"))
+    .pipe(inject.replace('@@JVLMVERSION@@', 'V' + VLMVersion))
+    .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
+    .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
+    .pipe(inject.replace('@@BUILD_TYPE@@', 'Prod'))
+    .pipe(gulpif(BuildTypeProd,inject.replace('dist/guest_map_babel.js', 'dist/guest_map_babel.min.js')))
+    .pipe(gulpif(BuildTypeProd, htmlmin(
+    {
+      collapseWhitespace: true,
+      removeComments: true,
+      removeCommentsFromCDATA: true
+    })))
+    .pipe(gulp.dest('guest_map'))
+    .on('error', function(err)
+    {
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    });
+});
+
 gulp.task('libs_std', function()
 {
   return gulp.src(['jvlm/external/jquery/jquery-3.2.1.min.js',
       'jvlm/external/jquery-ui/jquery-ui.js', 'jvlm/external/bootstrap-master/js/bootstrap.js',
-      'jvlm/external/jquery.csv.js','jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
-      'jvlm/jquery.ui.touch-punch.js','jvlm/external/store/store.min.js',
+      'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
+      'jvlm/jquery.ui.touch-punch.js', 'jvlm/external/store/store.min.js',
       'jvlm/external/moments/moment-with-locales.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
@@ -114,6 +139,32 @@ gulp.task('libs_std', function()
     .pipe(gulp.dest('jvlm/dist'));
 });
 
+gulp.task('guest_map_js', function()
+{
+  return gulp.src(['guest_map/js/config.js',
+      'guest_map/js/guest_map.js'
+    ])
+    //.pipe(jshint('.jshintrc'))
+    //.pipe(jshint.reporter('default'))
+    .pipe(concat('guest_map_babel.js'))
+    .pipe(babel(
+    {
+      presets: ['@babel/env']
+    }))
+    .pipe(gulpif(BuildTypeProd, uglify()))
+    .pipe(gulp.dest('guest_map/dist'))
+    .pipe(rename(
+    {
+      suffix: '.min'
+    }))
+    .on('error', function(err)
+    {
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    })
+    //.pipe(gulpDeployFtp('./vlmcode', 'vlm-dev.ddns.net', 21, 'vlm', 'vlm'))
+    .pipe(gulp.dest('guest_map/dist'));
+});
+
 gulp.task('libs_babel', function()
 {
   return gulp.src(['jvlm/external/footable-bootstrap/js/footable.js',
@@ -124,9 +175,11 @@ gulp.task('libs_babel', function()
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_libs_babel.js'))
-    .pipe(babel({
-      presets: ['@babel/env']}))
-		.pipe(gulpif(BuildTypeProd, uglify()))
+    .pipe(babel(
+    {
+      presets: ['@babel/env']
+    }))
+    .pipe(gulpif(BuildTypeProd, uglify()))
     .pipe(gulp.dest('jvlm/dist'))
     .pipe(rename(
     {
@@ -142,7 +195,7 @@ gulp.task('libs_babel', function()
 
 gulp.task('libs_concat', function()
 {
-  return gulp.src(['jvlm/dist/jvlm_libs_std.min.js','jvlm/dist/jvlm_libs_babel.min.js'])
+  return gulp.src(['jvlm/dist/jvlm_libs_std.min.js', 'jvlm/dist/jvlm_libs_babel.min.js'])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_libs.min.js'))
@@ -171,6 +224,8 @@ gulp.task('deploy', function()
   });
 
   var globs = [
+    'guest_map/index.html',
+    'guest_map/dist/*',
     'jvlm/dist/*',
     'jvlm/index.html',
     'jvlm/*.css'
@@ -186,24 +241,23 @@ gulp.task('deploy', function()
       //buffer: true
     })
     .pipe(conn.newerOrDifferentSize('/home/vlm/vlmcode/')) // only upload newer files
-    .pipe(conn.dest('/home/vlm/vlmcode'))
-  ;
+    .pipe(conn.dest('/home/vlm/vlmcode'));
 
 });
 
 gulp.task('default', function()
 {
-  return runsequence('html', 'scripts', 'deploy');
+  return runsequence('html', 'scripts', 'guest_map','guest_map_js', 'deploy');
 });
 
 gulp.task('BuildAll', function()
 {
-  return runsequence('libs_std', 'libs_babel','libs_concat', 'html', 'scripts', 'deploy');
+  return runsequence('libs_std', 'libs_babel', 'libs_concat', 'guest_map','guest_map_js', 'html', 'scripts', 'deploy');
 });
 
 
 gulp.task('BuildProd', function()
 {
-  BuildTypeProd=true;
-  return runsequence('libs_std', 'libs_babel','libs_concat', 'html_prod', 'scripts', 'deploy');
+  BuildTypeProd = true;
+  return runsequence('libs_std', 'libs_babel', 'libs_concat', 'guest_map','guest_map_js', 'html_prod', 'scripts', 'deploy');
 });
