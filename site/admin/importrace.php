@@ -64,7 +64,8 @@
 
       //Fetching json
       //FIXME : should be a generic function in functions.php
-      $fp = fopen("http://$importserver/ws/raceinfo.php?idrace=$idracefrom","r") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
+      $fp = fopen("http://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom","r") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
+      print "http://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom";
       $json = "";
       while (!feof($fp)) { //on parcourt toutes les lignes
           $json .= fgets($fp, 4096); // lecture du contenu de la ligne
@@ -80,7 +81,7 @@
 
       //Main table 'races'
       $sqlraces = "INSERT INTO races (idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, \n                   ".
-                  "depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq) \n          ".
+                  "depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq, UpdateReason) \n          ".
                   " VALUES (".$idraceto.", ".
                   sqlit($import, "racename", 'string').
                   sqlit($import, "started").
@@ -100,6 +101,7 @@
                   sqlit($import, "maxboats").
                   sqlit($import, "theme", 'string').
                   sqlit($import, "vacfreq", 'int', false).
+                  sqlit($import, "UpdateReason",'string').
                   " );";
       check_unicity('races', "idraces = $idraceto", $umessage);
       exec_sql($sqlraces, $printsql, $dryrun);

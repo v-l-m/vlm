@@ -260,6 +260,16 @@ $opts['fdd']['vacfreq'] = array(
   'default'  => '0',
   'sort'     => true
 );
+
+$opts['fdd']['UpdateReason'] = array(
+  'name'     => 'Update Reason',
+  'select'    => 'T',
+//  'sql|LFVD' => 'FROM_UNIXTIME(updated)',
+  'maxlen'   => 200,
+  'sort'     => true,
+  'help'=> 'Update reason text',
+);
+
 $opts['fdd']['updated'] = array(
   'name'     => 'Updated',
   'input'    => 'R',

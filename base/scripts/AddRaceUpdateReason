@@ -1,0 +1,2 @@
+alter table races
+add UpdateReason varchar(255);
