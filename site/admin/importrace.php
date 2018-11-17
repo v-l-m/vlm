@@ -100,8 +100,8 @@
                   sqlit($import, "boend").
                   sqlit($import, "maxboats").
                   sqlit($import, "theme", 'string').
-                  sqlit($import, "vacfreq", 'int', false).
-                  sqlit($import, "UpdateReason",'string').
+                  sqlit($import, "vacfreq", 'int').
+                  sqlit($import, "UpdateReason",'string',false,'').
                   " );";
       check_unicity('races', "idraces = $idraceto", $umessage);
       exec_sql($sqlraces, $printsql, $dryrun);
