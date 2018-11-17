@@ -210,7 +210,7 @@ function get_raceinfo(map, idr)
   $.ajax(
   {
     async: false,
-    url: "/ws/raceinfo.php?idrace=" + idr,
+    url: "/ws/raceinfo/desc.php?idrace=" + idr,
     dataType: "json",
     cache: false,
     success: function(answer)

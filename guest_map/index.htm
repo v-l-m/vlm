@@ -45,4 +45,22 @@ crossorigin=""></script>
 </table>
 <div id="test"></div>
 </body>
+
+ <!-- Global site tag (gtag.js) - Google Analytics -->
+ <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
+ <script>
+   var BuildDate //JVLMBUILD
+   window.dataLayer = window.dataLayer || [];
+
+   if ('Prod' === '@@BUILD_TYPE@@')
+   {
+     function gtag()
+     {
+       dataLayer.push(arguments);
+     }
+     gtag('js', new Date());
+
+     gtag('config', 'UA-37369243-6');
+   }
+ </script>
 </html>
