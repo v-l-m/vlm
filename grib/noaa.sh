@@ -27,8 +27,8 @@ LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
 #NOAA_SERVICE_MAIN_URI=http://www.ftp.ncep.noaa.gov/data/nccf/com/gfs/prod
 #NOAA_SERVICE_BACKUP_URI=http://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod
-NOAA_SERVICE_MAIN_URI=http://nomads.ncep.noaa.gov
-NOAA_SERVICE_BACKUP_URI=http://nomads.ncep.noaa.gov
+NOAA_SERVICE_MAIN_URI=https://nomads.ncep.noaa.gov
+NOAA_SERVICE_BACKUP_URI=https://nomads.ncep.noaa.gov
 
 if [ $GRIB_MAX_TIME -lt 12 ]; then
     echo "GRIB_MAX_TIME must be > 12"
@@ -81,7 +81,7 @@ for TSTAMP in `echo $allindexes` ; do
         sleep 30
       fi
       
-      wget --waitretry 600 -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
+      wget --waitretry 600 --secure-protocol=auto -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
       #let retry=$?
       echo "wget returned $retry" >>$LOG
       
