@@ -75,14 +75,14 @@
             do {
                 $mrc = curl_multi_exec($this->mh, $active);
             } while ($mrc == CURLM_CALL_MULTI_PERFORM);
-
-            while ($active && $mrc == CURLM_OK) {
-                if (curl_multi_select($this->mh) != -1) {
-                    do {
-                        $mrc = curl_multi_exec($this->mh, $active);
-                    } while ($mrc == CURLM_CALL_MULTI_PERFORM);
-                }
+            
+            while ($active && ($mrc == CURLM_OK)) {
+                do {
+                   $mrc = curl_multi_exec($this->mh, $active);
+                } while (($mrc == CURLM_CALL_MULTI_PERFORM) && ((curl_multi_select($this->mh,1) ==0)));
+                usleep(3000);
             }
+            
         }
 
         function close() {
