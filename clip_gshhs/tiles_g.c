@@ -303,7 +303,7 @@ int main (int argc, char **argv)
                     sscanf(optarg, "%d", &Nb_Tiles);
                     if (flag_verbose) printf("Nb_Tiles: %d\n", Nb_Tiles);
 
-                    // test si nb_tiles est pair ou impair, uniquement les nombres pair sont acceptés
+                    // test si nb_tiles est pair ou impair, uniquement les nombres pair sont acceptï¿½s
                     if (((Nb_Tiles & 1) && (Nb_Tiles != 1)) || (Nb_Tiles < 1))
                     {
                         fprintf (stderr, TILESGENERATOR);
@@ -729,7 +729,7 @@ int main (int argc, char **argv)
     zoom = (double)Nb_Tiles * (double)TileDim  / 360.0;
     if (flag_verbose) printf("Zoom: %lf px/deg\n", zoom);
 
-    //Détermination des longitudes mini, maxi, et origine image x
+    //Dï¿½termination des longitudes mini, maxi, et origine image x
     long_min = (X_Tile * 360.0 / Nb_Tiles) - 180;
     long_max = ((X_Tile+1) * 360.0 / Nb_Tiles) -180;
     if (flag_verbose) printf("long_min: %lf, long_max: %lf\n", long_min, long_max);
@@ -743,7 +743,7 @@ int main (int argc, char **argv)
 
     if (flag_verbose) printf("long_min: %d, long_max: %d, origine_x: %lf\n", long_min_int, long_max_int, origine_x);
 
-    //Détermination des latitudes mini, maxi, et origine image y
+    //Dï¿½termination des latitudes mini, maxi, et origine image y
     lat_min = MercatorInverseLatitudeSimple((((double)Nb_Tiles / 2) - (Y_Tile+1)) * (360.0 / Nb_Tiles) * M_PI / 180.0);
     lat_max = MercatorInverseLatitudeSimple((((double)Nb_Tiles / 2) - (Y_Tile)) * (360.0 / Nb_Tiles) * M_PI / 180.0);
     if (flag_verbose) printf("lat_min: %lf, lat_max: %lf\n", lat_min, lat_max);
@@ -759,14 +759,18 @@ int main (int argc, char **argv)
     if (flag_verbose) printf("lat_min: %d, lat_max: %d, origine_y: %lf\n", lat_min_int, lat_max_int, origine_y);
 
     //printf("%lf\n", MercatorInverseLatitudeSimple(-1* (256-origine_y)*M_PI / (180.0*zoom)));
-    // Création de l'image
+    // Crï¿½ation de l'image
     if (flag_verbose) printf("Map_Width: %d, Map_Height: %d\n", TileDim, TileDim);
     bord = 10;
+
+    if (flag_verbose) printf("before gdImageCreate\n");
     image   = gdImageCreate(TileDim + 2 * bord, TileDim + 2 * bord);
+    if (flag_verbose) printf("gdImageCreated\n");
     image_f = gdImageCreate(TileDim, TileDim);
     //image = gdImageCreate(TileDim, TileDim);
-
-    // Création des couleurs
+    if (flag_verbose) printf("gdImageCreated\n");
+    
+    // Crï¿½ation des couleurs
     if (flag_water_alpha) water_color = gdImageColorAllocateAlpha(image, WaterFullColor.red, WaterFullColor.green, WaterFullColor.blue, WaterAlpha);
     else                  water_color = gdImageColorAllocate(image, WaterFullColor.red, WaterFullColor.green, WaterFullColor.blue);
     if (flag_land_alpha)  land_color  = gdImageColorAllocateAlpha(image, LandFullColor.red, LandFullColor.green, LandFullColor.blue, LandAlpha);
@@ -781,7 +785,7 @@ int main (int argc, char **argv)
     {
         if (flag_memory)
         {
-            // Cas où tout va bien
+            // Cas oï¿½ tout va bien
             if (long_min_int>=0 && long_max_int<=360)
             {
                 for (x=long_min_int; x<long_max_int; x=x+PolyHeader.pasx)
@@ -797,7 +801,7 @@ int main (int argc, char **argv)
                 }
             }
 
-            // Cas où long_min <0
+            // Cas oï¿½ long_min <0
             if (long_min_int<0)
             {
                 for (x=0; x<long_max_int; x=x+PolyHeader.pasx)
@@ -825,7 +829,7 @@ int main (int argc, char **argv)
                 }
             }
 
-            // Cas où long_max >360
+            // Cas oï¿½ long_max >360
             if (long_max_int>360)
             {
                 for (x=long_min_int; x<360; x=x+PolyHeader.pasx)
@@ -855,7 +859,7 @@ int main (int argc, char **argv)
         }
         else
         {
-            // Cas où tout va bien
+            // Cas oï¿½ tout va bien
             if (long_min_int>=0 && long_max_int<=360)
             {
                 for (x=long_min_int; x<long_max_int; x=x+PolyHeader.pasx)
@@ -879,7 +883,7 @@ int main (int argc, char **argv)
                 }
             }
 
-            // Cas où long_min <0
+            // Cas oï¿½ long_min <0
             if (long_min_int<0)
             {
                 for (x=0; x<long_max_int; x=x+PolyHeader.pasx)
@@ -923,7 +927,7 @@ int main (int argc, char **argv)
                 }
             }
 
-            // Cas où long_max >360
+            // Cas oï¿½ long_max >360
             if (long_max_int>360)
             {
                 for (x=long_min_int; x<360; x=x+PolyHeader.pasx)
@@ -969,8 +973,9 @@ int main (int argc, char **argv)
         }
         DrawEtopo(image, EtopoFile, flag_memory, TileDim, bord, origine_x, origine_y, zoom, land_color, water_color, FlagAlpha);
     }
-
-    // Cas où tout va bien
+    if (flag_verbose) printf("DrawEtopo complete\n");
+    
+    // Cas ou tout va bien
     if (long_min_int>=0 && long_max_int<=360)
     {
         for (x=long_min_int; x<long_max_int; x=x+PolyHeader.pasx)
@@ -1064,8 +1069,9 @@ int main (int argc, char **argv)
             }
         }
     }
-
-    // Cas où long_min <0
+    if (flag_verbose) printf("Cas Normal\n");
+    
+    // Cas ou long_min <0
     if (long_min_int<0)
     {
         for (x=0; x<long_max_int; x=x+PolyHeader.pasx)
@@ -1250,8 +1256,9 @@ int main (int argc, char **argv)
             }
         }
     }
-
-    // Cas où long_max >360
+    if (flag_verbose) printf("Cas Longmin < 0\n");
+    
+    // Cas oï¿½ long_max >360
     if (long_max_int>360)
     {
         for (x=long_min_int; x<360; x=x+PolyHeader.pasx)
@@ -1437,13 +1444,21 @@ int main (int argc, char **argv)
         }
     }
 
+    if (flag_verbose) printf("Cas LongMax > 360\n");
+    
     gdImageCopy(image_f, image, 0, 0, bord, bord, TileDim, TileDim);
 
+    if (flag_verbose) printf("GdImageCopy complete\n");
+    
     umask(S_IWOTH);
+    if (flag_verbose) printf("Target image path %s\n", TilePath);
+    
     image_png = fopen(TilePath, "w");
     gdImagePng(image_f, image_png);
 
     fclose(image_png);
+    if (flag_verbose) printf("ImagePng complete\n");
+    
     gdImageDestroy(image);
     gdImageDestroy(image_f);
 
