@@ -2136,7 +2136,7 @@ function AddRaceToList(race)
 function PageClock()
 {
 
-  if (typeof _CurPlayer !== "undefined" &&_CurPlayer && typeof _CurPlayer.CurBoat !== "undefined")
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.CurBoat !== "undefined")
   {
 
     // Display race clock if a racing boat is selected
@@ -2528,7 +2528,7 @@ function RefreshEstPosLabels(Pos)
 {
   if (Pos && typeof Pos.Date !== "undefined")
   {
-    $("#MI_EstDate").text(GetLocalUTCTime(Pos.Date,false,true));
+    $("#MI_EstDate").text(GetLocalUTCTime(Pos.Date, false, true));
   }
   else
   {
@@ -3245,7 +3245,7 @@ function FillRaceWaypointList(RaceInfo)
         }
         else
         {
-          Row.WP2 = "@"+WP.laisser_au;
+          Row.WP2 = "@" + WP.laisser_au;
         }
         Row.Spec = "<span title='" + getWaypointHTMLSymbolsDescription(WP.wpformat) + "'>" + getWaypointHTMLSymbols(WP.wpformat) + "</span>";
         Row.Type = GetLocalizedString(WP.wptype);
