@@ -128,7 +128,7 @@
      var WPIndex = this.VLMInfo.NWP;
 
      //If there is a defined WP, then return it
-     if ((typeof NWPPosition === "undefined" || (!NWPPosition)) && ((this.VLMInfo.WPLON !== 0) || (this.VLMInfo.WPLAT !== 0)))
+     if ((typeof NWPPosition === "undefined" || (!NWPPosition)) && ((this.VLMInfo.WPLON !== "0") || (this.VLMInfo.WPLAT !== "0")))
      {
        return new VLMPosition(this.VLMInfo.WPLON, this.VLMInfo.WPLAT);
      }
