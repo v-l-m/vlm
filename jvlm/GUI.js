@@ -70,7 +70,7 @@ $(document).ready(
       {
         if ((x.status === 401) || (x.status === 403))
         {
-          window.location.replace("jvlm?login");
+          window.location.replace("/");
           //on access denied try reviving the session
           //OnLoginRequest();
         }
