@@ -571,6 +571,15 @@ function InitMenusAndButtons()
         language: _CurLocale
       });
     }
+
+  );
+
+  // Force create user form reset on show
+  $('#InscriptForm').on("shown.bs.modal",
+    function()
+    {
+      $(this).find('div.modal-body :input').val("");
+    }
   );
 
   // Handler for Set WP on click
