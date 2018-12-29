@@ -1704,7 +1704,7 @@ function ShowOpponentPopupInfo(e)
     let popup = new OpenLayers.Popup.FramedCloud("popup",
       OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
       null,
-      BuildBoatPopupInfo(e.feature.attributes.idboat),
+      BuildBoatPopupInfo(Boat),
       null,
       true,
       null
@@ -1754,11 +1754,13 @@ function GetOppBoat(BoatId)
   return null;
 }
 
-function BuildBoatPopupInfo(BoatId)
+function BuildBoatPopupInfo(Boat)
 {
+  let BoatId = Boat.idusers;
+
   let RetStr =
     '<div class="MapPopup_InfoHeader">' +
-    ' <img class="flag" src="https://v-l-m.org/cache/flags/ZZ-T4F.png">' +
+    GetCountryFlagImgHTML(Boat.country) +
     ' <span id="__BoatName' + BoatId + '" class="PopupBoatNameNumber ">BoatName</span>' +
     ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
     ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
