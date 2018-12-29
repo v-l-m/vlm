@@ -681,7 +681,8 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
         'Accept': 'application/json'
       },
       callback: this.handleGribListReply,
-      scope: this
+      scope: this,
+      events: function(x) {console.log("GribLayerEvt : " + e);}
     });
   },
 

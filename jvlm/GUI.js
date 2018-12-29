@@ -247,7 +247,11 @@ function OLInit()
     sphericalMercator: true,
     transitionEffect: "resize",
     //pour passer l'ante-meridien sans souci
-    wrapDateLine: true
+    wrapDateLine: true,
+    events: function(x)
+    {
+      console.log("TileLayer : " + x);
+    }
   };
 
   //MAP
