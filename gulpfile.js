@@ -245,19 +245,12 @@ gulp.task('deploy', function()
 
 });
 
-gulp.task('default', function()
-{
-  return runsequence('html', 'scripts', 'guest_map','guest_map_js', 'deploy');
-});
+gulp.task('default', gulp.series('html', 'scripts', 'guest_map','guest_map_js', 'deploy'),function(done){done();});
 
-gulp.task('BuildAll', function()
-{
-  return runsequence('libs_std', 'libs_babel', 'libs_concat', 'guest_map','guest_map_js', 'html', 'scripts', 'deploy');
-});
+gulp.task('BuildAll', gulp.series('libs_std', 'libs_babel', 'libs_concat', 'guest_map','guest_map_js', 'html', 'scripts', 'deploy'),
+  function(done){ done();});
 
 
-gulp.task('BuildProd', function()
-{
-  BuildTypeProd = true;
-  return runsequence('libs_std', 'libs_babel', 'libs_concat', 'guest_map','guest_map_js', 'html_prod', 'scripts', 'deploy');
-});
+gulp.task('BuildProd', 
+            gulp.series(function(done){ BuildTypeProd = true; done();}, 'libs_std', 'libs_babel', 'libs_concat', 'guest_map','guest_map_js', 'html_prod', 'scripts', 'deploy'),
+            function(done){ done();});
