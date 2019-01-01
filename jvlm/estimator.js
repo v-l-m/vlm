@@ -517,8 +517,8 @@ function Estimator(Boat)
         {},
         { externalGraphic: 'images/target.svg',
           opacity: 0.8, 
-          graphicHeight: 48, 
-          graphicWidth: 48,
+          graphicHeight: map.zoom * 2, 
+          graphicWidth: map.zoom * 2,
           rotation: Estimate.Heading }
       );
       VLMBoatsLayer.addFeatures(Marker);

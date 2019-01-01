@@ -334,7 +334,8 @@ function DrawBoat(Boat, CenterMapOnBoat)
 
 function ActualDrawBoat(Boat, CenterMapOnBoat)
 {
-  console.log("ClearDrawBoat " + CenterMapOnBoat);
+  let ZFactor = map.zoom;
+  //console.log("ClearDrawBoat " + CenterMapOnBoat + " Z level "+ );
   DeferredCenterValue = false;
   DrawBoatTimeOutHandle = null;
   if (typeof Boat === "undefined" || !Boat)
@@ -403,8 +404,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       },
       {
         externalGraphic: 'images/target.svg',
-        graphicHeight: 64,
-        graphicWidth: 64,
+        graphicHeight: 3 * ZFactor,
+        graphicWidth: 3 * ZFactor,
         rotation: Boat.VLMInfo.HDG
       }
     );
@@ -1654,11 +1655,12 @@ function GetClosestOpps(Boat, NbOpps)
 
 function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
 {
-  var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
-  var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
-  var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var OL_Opp;
-  var OppData = {
+  let Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
+  let Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
+  let Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
+  let OL_Opp;
+  let ZFactor = map.zoom;
+  let OppData = {
     "name": Opponent.idusers,
     "Coords": Opp_Coords.ToString(),
     "type": 'opponent',
@@ -1668,7 +1670,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
     "Last3h": Opponent.last3h,
     "Last24h": Opponent.last24h,
     "IsTeam": (Opponent.country == Boat.VLMInfo.CNT) ? "team" : "",
-    "IsFriend": (isFriend ? 24 : 12),
+    "IsFriend": (isFriend ? ZFactor * 2 : ZFactor ),
     "color": Opponent.color
   };
 
