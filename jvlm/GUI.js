@@ -2079,16 +2079,20 @@ function AddRaceToList(race)
 
   let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" )>' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
-    '    <div class="col-xs-4">' +
+    '    <div class="col-xs-2">' +
     '      <img class="racelistminimap" src="/cache/minimaps/' + race.idraces + '.png" ></img>' +
     '    </div>' +
-    '    <div class="col-xs-4">' +
+    '    <div class="col-xs-6">' +
     '      <span ">' + race.racename +
     '      </span>' +
     '    </div>' +
     '    <div class="' + (race.CanJoin ? '' : 'hidden') + ' col-xs-4">' +
+    '     <div class="col-xs-12">' +
     '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '      </button>' +
+    /*'      <button id="SpectateRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectate") +
+    '      </button>' +*/
+    '     </div>' +
     '    </div>' + (StartMoment ?
       '    <div class="col-xs-12">' +
       '       <span "> ' + StartMoment +
