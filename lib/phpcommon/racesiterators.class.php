@@ -128,10 +128,11 @@ class FullcalendarRacesIterator extends RacesIterator
   
       }
   
-      $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
-                      " WHERE ( deptime >= ". $start ." ) AND (deptime <= ". $end .")". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
+      $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces, racetype FROM `races` ".
+                      " WHERE (( deptime >= ". $start ." ) AND (deptime <= ". $end ."))". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
+                      " or (( deptime <= ". $start ." ) AND (closetime >= ". $end ."))". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
                       " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
-                      "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
+                      "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces, null as racetype ".
                       "FROM `racespreview` ".
                       "WHERE ( deptime >= ". $start ." ) AND (deptime <= ". $end .") )";
 
@@ -157,6 +158,10 @@ class FullcalendarRacesIterator extends RacesIterator
     $jsonarray['title'] = "-no title found-";
   */
     $jsonarray['allDay'] = is_null($row['closetime']);
+    if ($row['racetype'] & RACE_TYPE_RECORD )
+    {
+      $jsonarray['color'] = '#33b7b7c4';
+    } 
     if (!is_null($row['idraces']))
     {
       $jsonarray['url'] = sprintf("http://%s/jvlm?ICSRace=%d", $_SERVER['SERVER_NAME'],  $row['idraces']);
