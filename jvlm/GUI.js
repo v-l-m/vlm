@@ -456,23 +456,7 @@ function InitMenusAndButtons()
   );
 
   // Handle clicking on ranking button, and ranking sub tabs
-  $("#Ranking-Panel").on('shown.bs.collapse',
-    function(e)
-    {
-      HandleRaceSortChange(e);
-    }
-  );
-  // Handle clicking on ranking button, and ranking sub tabs
-  $(document.body).on('click', "[RnkSort]", function(e)
-  {
-    HandleRaceSortChange(e);
-  });
-  $("#Ranking-Panel").on('hide.bs.collapse',
-    function(e)
-    {
-      ResetRankingWPList(e);
-    }
-  );
+  InitRankingEvents();
 
 
   // Init event handlers
@@ -696,11 +680,45 @@ function InitMenusAndButtons()
     }
   );
 
+  $(document.body).on('click', ".ShowRaceInSpectatorMode",
+    function(e)
+    {
+      HandleGoToRaceSpectator(e);
+    }
+  );
   $("#PolarTab").on("click", HandlePolarTabClik);
 
   CheckLogin();
 
   UpdateVersionLine();
+}
+
+function InitRankingEvents()
+{
+  $("#Ranking-Panel").on('shown.bs.collapse', function(e)
+  {
+    HandleRaceSortChange(e);
+  });
+
+  $(document.body).on('click', ".RankingButton", function(e)
+  {
+    let RaceId = $(e.currentTarget).attr("IdRace");
+
+    if (typeof RaceId !== "undefined" && RaceId)
+    {
+      window.open('/jvlm?RaceRank=' + RaceId, "RankTab");
+    }
+  });
+
+  // Handle clicking on ranking button, and ranking sub tabs
+  $(document.body).on('click', "[RnkSort]", function(e)
+  {
+    HandleRaceSortChange(e);
+  });
+  $("#Ranking-Panel").on('hide.bs.collapse', function(e)
+  {
+    ResetRankingWPList(e);
+  });
 }
 
 function UpdateVersionLine()
@@ -724,15 +742,26 @@ function InitPolar(RaceInfo)
   _CachedRaceInfo = RaceInfo;
 }
 
+function HandleGoToRaceSpectator(e)
+{
+  if (typeof e !== "undefined" && e)
+  {
+    let b = e.target;
+    let RaceId = $(e.currentTarget).attr('idRace');
+
+    if (typeof RaceId !== "undefined" && RaceId)
+    {
+      window.open("/guest_map/index.html?idr=" + RaceId, "Spec_" + RaceId);
+      return;
+    }
+  }
+}
+
 function HandleFillICSButton(e)
 {
 
   // Race Instruction
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
-  {
-    FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
-  }
-  else if (typeof e !== "undefined" && e)
+  if (typeof e !== "undefined" && e)
   {
     let b = e.target;
     let RaceId = $(e.currentTarget).attr('idRace');
@@ -740,8 +769,14 @@ function HandleFillICSButton(e)
     if (typeof RaceId !== "undefined" && RaceId)
     {
       HandleShowICS(RaceId);
+      return;
     }
   }
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo)
+  {
+    FillRaceInstructions(_CurPlayer.CurBoat.RaceInfo);
+  }
+
 }
 
 let CalInited = false;
@@ -2020,7 +2055,8 @@ let RaceSorter = function RaceSortEvaluator(r1, r2)
 function LoadRacesList()
 {
   let CurUser = _CurPlayer.CurBoat.IdBoat;
-  $.get("/ws/raceinfo/list.php?iduser=" + CurUser,
+  $("#RaceListPanel").empty().append("<H4>...</H4>");
+  $.get("/ws/raceinfo/list.php?iduser=" + CurUser + "&v=" + (new Date().getTime()),
     function(result)
     {
       var racelist = result;
@@ -2043,6 +2079,18 @@ function LoadRacesList()
           AddRaceToList(RaceArray[index]);
         }
       }
+
+      // Resize button height to be uniform with highest one.      
+      let highestBox = 0;
+      $('#RaceListPanel .btn-group .btn-md').each(function()
+      {
+        if ($(this).height() > highestBox)
+        {
+          highestBox = $(this).height();
+        }
+      });
+      $('#RaceListPanel .btn-group .btn-md').height(highestBox);
+
     }
   );
 }
@@ -2079,43 +2127,44 @@ function AddRaceToList(race)
 
   let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" )>' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
-    '    <div class="col-xs-2">' +
-    '      <img class="racelistminimap" src="/cache/minimaps/' + race.idraces + '.png" ></img>' +
+    '    <div class="col-xs-12">' +
+    '      <div class="col-xs-3">' +
+    '        <img class="racelistminimap" src="/cache/minimaps/' + race.idraces + '.png" ></img>' +
+    '      </div>' +
+    '      <div class="col-xs-9">' +
+    '        <div class="col-xs-12">' +
+    '          <span ">' + race.racename +
+    '          </span>' +
+    '        </div>' +
+    '        <div class="btn-group col-xs-12">' +
+    '          <button id="JoinRaceButton" type="button" class="' + (race.CanJoin ? '' : 'hidden') + ' btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
+    '          </button>' +
+    '          <button id="SpectateRaceButton" type="button" class="ShowRaceInSpectatorMode btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
+    '          </button>' +
+    '          <button type="button" class="ShowICSButton btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '          </button>' +
+    '          <button type="button" class="RankingButton btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
+    '          </button>' +
+    '        </div>' +
+    '      </div>' +
     '    </div>' +
-    '    <div class="col-xs-6">' +
-    '      <span ">' + race.racename +
-    '      </span>' +
-    '    </div>' +
-    '    <div class="' + (race.CanJoin ? '' : 'hidden') + ' col-xs-4">' +
-    '     <div class="col-xs-12">' +
-    '      <button id="JoinRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
-    '      </button>' +
-    /*'      <button id="SpectateRaceButton" type="button" class="btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectate") +
-    '      </button>' +*/
-    '     </div>' +
-    '    </div>' + (StartMoment ?
+    '  </div>' +
+    (StartMoment ?
       '    <div class="col-xs-12">' +
       '       <span "> ' + StartMoment +
       '       </span>' +
       '    </div>' : "") +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
-    '  <div class="panel-body">' +
-    '   <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '    <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
-    '     <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
-    '     <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
-    '     <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '     <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
+    '    <div class="panel-body">' +
+    '      <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
+    '        <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '          <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
+    '          <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
+    '          <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
+    '          <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
+    '        </div>' +
+    '      </div>' +
     '    </div>' +
-    '    <div class="col-xs-3"><p>' +
-    '     <div class="col-xs-12">' +
-    '      <button type="button" class="ShowICSButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
-    '     </div>' +
-    '     <div class="col-xs-12 hidden">' +
-    '      <button type="button" class="ShowRankingButton btn-default btn-md" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
-    '     </div>' +
-    '    </div>' +
-    '   </div>' +
     '  </div>';
 
   base.prepend(code);
@@ -2131,9 +2180,6 @@ function AddRaceToList(race)
 
     }
   );
-
-  // Handler for ShowICSButtons
-  //$(".ShowICSButton").on("click", HandleFillICSButton);
 
 }
 
