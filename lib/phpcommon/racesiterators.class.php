@@ -31,12 +31,19 @@
 
     function __construct() 
     {
-      $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
+      /*$this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
                       "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
                       "AND !(racetype & ".RACE_TYPE_RECORD. ") ORDER BY started ASC, deptime ASC, closetime ASC ) ".
                       "UNION ( SELECT deptime, deptime+3600 as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
                       "FROM `racespreview` ".
+                      "WHERE deptime > UNIX_TIMESTAMP() )";*/
+      $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
+                      "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() - 15 * 24 * 3600 ) OR ( closetime > UNIX_TIMESTAMP() + 7 * 24 * 3600) ) ".
+                      " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
+                      "UNION ( SELECT deptime, deptime+3600 as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
+                      "FROM `racespreview` ".
                       "WHERE deptime > UNIX_TIMESTAMP() )";
+
       parent::__construct();
     }
 
@@ -90,19 +97,48 @@ class FullcalendarRacesIterator extends RacesIterator
 {
   var $jsonarray;
 
-  function __construct() 
+  function __construct($start, $end) 
   {
-    $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
+    if (!$start && !$end)
+    {
+      // Old syntax for compat purpose, should get deprecated some time.
+      $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
                     " WHERE ( deptime > (UNIX_TIMESTAMP()-2592000 ) ) AND !(racetype & ".RACE_TYPE_RECORD.") ".
                     " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
                     "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
                     "FROM `racespreview` ".
                     "WHERE deptime > UNIX_TIMESTAMP() )";
+    }
+    else
+    {
+      if ( (int) $start !== $start)
+      {
+        throw "Invalid value for start parameter";
+      }
+  
+      if ( $end && ((int) $end !== $end))
+      {
+        throw "Invalid value for start parameter";
+      }
+  
+      if (!$end || ($end -$start) > 90*3600*24)
+      {
+        // Default to 3 month max query
+        $end = $start + 90*3600*24 ;
+  
+      }
+  
+      $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
+                      " WHERE ( deptime >= ". $start ." ) AND (deptime <= ". $end .")". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
+                      " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
+                      "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
+                      "FROM `racespreview` ".
+                      "WHERE ( deptime >= ". $start ." ) AND (deptime <= ". $end .") )";
 
-                    ;
+    }
+    //print($this->query."\n");
     parent::__construct();
   }
-
   function start() 
   {
     $this->jsonarray = Array();
