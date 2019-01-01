@@ -2105,6 +2105,11 @@ function AddRaceToList(race)
   let RaceJoinStateClass;
   let StartMoment;
 
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && _CurPlayer.CurBoat.RaceInfo.idraces)
+  {
+    race.CanJoin = race.CanJoin & ("0" === _CurPlayer.CurBoat.RaceInfo.idraces);
+  }
+
   if (race.CanJoin)
   {
     let Now = new Date();

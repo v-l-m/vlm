@@ -5541,6 +5541,10 @@ function AddRaceToList(race) {
   var RaceJoinStateClass;
   var StartMoment;
 
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && _CurPlayer.CurBoat.RaceInfo.idraces) {
+    race.CanJoin = race.CanJoin & "0" === _CurPlayer.CurBoat.RaceInfo.idraces;
+  }
+
   if (race.CanJoin) {
     var Now = new Date();
     var RaceStart = new Date(race.deptime * 1000);
