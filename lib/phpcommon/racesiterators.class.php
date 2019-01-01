@@ -130,7 +130,7 @@ class FullcalendarRacesIterator extends RacesIterator
   
       $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces, racetype FROM `races` ".
                       " WHERE (( deptime >= ". $start ." ) AND (deptime <= ". $end ."))". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
-                      " or (( deptime <= ". $start ." ) AND (closetime >= ". $end ."))". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
+                      " or (( deptime <= ". $start ." ) AND (closetime >= ". $start ."))". // AND !(racetype & ".RACE_TYPE_RECORD.") ".
                       " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
                       "UNION ( SELECT deptime, NULL as closetime, racename, comments as description, NULL as boattype, NULL as idraces, null as racetype ".
                       "FROM `racespreview` ".
