@@ -34,23 +34,32 @@ if ( $usersObj->engaged != 0 ) {
     // dans les courses permanentes
     // ==> 2007/09 : handle auto-pilot start (userdeptime =-1 if boat has not started)
     // (test this and write a new position only if boat already started)
-    if ( $fullUsersObj->users->userdeptime == -1 ) {
+    if ( $fullUsersObj->users->userdeptime == -1 ) 
+    {
       //user certainly waiting for a record start.
-      if ( $fullRacesObj->races->closetime < $now ) {
-      // Race has not started, if race is closed, set this boat to ABD
-      // (Race has been closed as the player was in the starting blocks)
-      $fullUsersObj->setDNF();
-      printf ("========= Player %d set to DNF (Late Start) ========\n",$fullUsersObj->users->idusers);
-          } else {
-      printf ("========= Player %d did not start yet ========\n",$fullUsersObj->users->idusers);
-          }
-    } else {
+      if ( $fullRacesObj->races->closetime < $now ) 
+      {
+        // Race has not started, if race is closed, set this boat to ABD
+        // (Race has been closed as the player was in the starting blocks)
+        $fullUsersObj->setDNF();
+        printf ("========= Player %d set to DNF (Late Start) ========\n",$fullUsersObj->users->idusers);
+      } 
+      else 
+      {
+        printf ("========= Player %d did not start yet ========\n",$fullUsersObj->users->idusers);
+      }
+    } 
+    else 
+    {
       // If the boat has been mooring for too long, set it DNF
-      if ( $fullUsersObj->users->lastchange + MAX_STOPTIME < $timestamp ) {
+      if ( $fullUsersObj->users->lastchange + MAX_STOPTIME < $timestamp ) 
+      {
         $fullUsersObj->setDNF();
         printf ("========= Player %d set to DNF =========\n",$fullUsersObj->users->idusers);
       // Else write a new position at the same place, boat won't move this time
-      } else {
+      } 
+      else 
+      {
         //FIXME : Couldn't we just update the "same place" ?
         $fullUsersObj->lastPositions->writePositions($now);
         $fullUsersObj->writeCurrentRanking(0, $now);
@@ -59,10 +68,13 @@ if ( $usersObj->engaged != 0 ) {
     }
     echo "\t** DONE ** " ;
 
-  } else {
+  } 
+  else 
+  {
     // userdeptime est mis a -1 dans subscribeToRaces
     // Donc s'il vaut -1 ici, c'est que le joueur prend le depart d'une course
-    if ( $fullUsersObj->users->userdeptime == -1 ) {
+    if ( $fullUsersObj->users->userdeptime == -1 ) 
+    {
       // update userdeptime in table users 
       // ($now est positionne dans check_race.php pour mettre tout le monde a egalite)
       // FIXME : on ne devrait pas appeler les variables "inter-script" avec des noms aussi evidents...
@@ -74,26 +86,34 @@ if ( $usersObj->engaged != 0 ) {
     $fullUsersObj->updateAngles(0); // update heading, but not the DB
 	  
     echo "PIM=" . $fullUsersObj->users->pilotmode . "/"  ;
-    if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
+    if ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE ) 
+    {
       echo "PIP=" . $fullUsersObj->users->pilotparameter . "/"  ;
     }
     echo "Heading=". $fullUsersObj->users->boatheading ;
 	  
     if ( $fullUsersObj->users->pilotmode == PILOTMODE_ORTHODROMIC
      or $fullUsersObj->users->pilotmode == PILOTMODE_BESTVMG
-     or $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG ) {
+     or $fullUsersObj->users->pilotmode == PILOTMODE_VBVMG ) 
+    {
 	    
       echo ", Reaching position=" . giveDegMinSec("engine",$fullUsersObj->LatNM/1000, $fullUsersObj->LongNM/1000);
       if ( $fullUsersObj->users->targetlong == $fullUsersObj->LongNM/1000 
-        && $fullUsersObj->users->targetlat == $fullUsersObj->LatNM/1000   ) {
+        && $fullUsersObj->users->targetlat == $fullUsersObj->LatNM/1000   ) 
+      {
         	      
         echo " MyWP=(" . $fullUsersObj->users->targetlat . "," . $fullUsersObj->users->targetlong . ")" ;
-        if ( $fullUsersObj->users->targetandhdg != -1 ) {
+        if ( $fullUsersObj->users->targetandhdg != -1 ) 
+        {
           printf(" @WHP=%d", $fullUsersObj->users->targetandhdg);
-        } else {
+        } 
+        else 
+        {
           echo " NO WPH ";
         }
-      } else {
+      } 
+      else 
+      {
         echo " bestWayToWP = (" . $fullUsersObj->LatNM/1000 . "," . $fullUsersObj->LongNM/1000 . ")" ;
       }
 
@@ -145,15 +165,19 @@ if ( $usersObj->engaged != 0 ) {
     // Does he cross a waypoint
     // ==========================
     include "check_waypoint_crossing.php";
-    if (!$is_arrived) {
-      if ($crosses_the_coast) {
+    if (!$is_arrived) 
+    {
+      if ($crosses_the_coast) 
+      {
         $fullUsersObj->setSTOPPED(); // sets the boat mooring
         $fullUsersObj->users->lockBoat($fullRacesObj->races->coastpenalty); // Boat is locked
         
         $fullUsersObj->lastPositions->lat=$latApres;
         $fullUsersObj->lastPositions->long=$lonApres;
         $fullUsersObj->lastPositions->writePositions($now); //important, will write a new position at thisplace
-      } else {
+      } 
+      else 
+      {
         echo "\n bug location : t".time()." n".$now." p".$fullUsersObj->lastPositions->time."\n";
         $fullUsersObj->lastPositions->writePositions($now); //important, will write a new position
       }
@@ -168,7 +192,8 @@ if ( $usersObj->engaged != 0 ) {
       //    should test "pim is 3 or pim is 4 in real life because of a future pim=5" ..
       // ===============================================================================
       if (  $fullUsersObj->users->pilotmode >= PILOTMODE_ORTHODROMIC 
-	    && ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) ) {
+      && ( $fullUsersObj->users->targetlong != 0 || $fullUsersObj->users->targetlat != 0 ) ) 
+      {
 	
         $distAvant=ortho($latAvant, $lonAvant,
              $fullUsersObj->users->targetlat*1000, $fullUsersObj->users->targetlong*1000);
@@ -177,7 +202,8 @@ if ( $usersObj->engaged != 0 ) {
 	
         // On lache le WP perso si il est plus pres que la distance parcourue à la dernière VAC.
         if ( $distAvant < $fullUsersObj->boatspeed*$fullUsersObj->hours 
-             || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) {
+             || $distApres < $fullUsersObj->boatspeed*$fullUsersObj->hours ) 
+        {
 	  
           printf("\n\t** BOAT POSITION (Lon=%f, Lat=%f) **\n", 
            $lonApres/1000, $latApres/1000);

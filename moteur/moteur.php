@@ -153,7 +153,7 @@ if (round($engine_elapsed_float) > 0 ) {
   $engine_elapsed = 1;
 }
 
-// Demarrage des courses � d�marrer... 
+// Demarrage des courses à démarrer... 
 echo "\n4- === CHECKING IF A RACE STARTS\n";
 include "start_races.php";
 
