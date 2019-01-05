@@ -81,7 +81,7 @@ for TSTAMP in `echo $allindexes` ; do
         sleep 30
       fi
       
-      wget --waitretry 600 --secure-protocol=auto -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
+      wget -T 5 --secure-protocol=auto -nc -c ${NOAA_SERVICE_MAIN_URI}/cgi-bin/filter_gfs_0p50.pl?file=$GRIBURL -O $GRIBFILE >>$LOG 2>&1
       #let retry=$?
       echo "wget returned $retry" >>$LOG
       
