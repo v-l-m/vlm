@@ -9,7 +9,8 @@ if ($verbose >= 0) {
 $is_arrived = false;
 
 //need to get fullUsers Object (if it is possible, and only for virtual users)
-if ( $usersObj->engaged != 0 ) {
+if ( $usersObj->engaged != 0 ) 
+{
   // PLayer is racing.
   // Check Auto Pilote : if there is a command in the spool, then execute it
   $flag_pilototo = $usersObj->pilototoCheck();
@@ -23,7 +24,8 @@ if ( $usersObj->engaged != 0 ) {
   if ( ( $fullUsersObj->users->pilotmode == PILOTMODE_WINDANGLE
 	 &&  abs( $fullUsersObj->users->pilotparameter ) <= 1 )
        ||  
-       ($fullUsersObj->users->releasetime > $timestamp) )  {
+       ($fullUsersObj->users->releasetime > $timestamp) )  
+  {
 
     printf ("=== Player %d is mooring : ",$fullUsersObj->users->idusers);
     // Compare (last_change timestamp + MAX_STOPTIME) and now

@@ -761,6 +761,18 @@ class fullUsers
     //echo ( "Query failed : " . mysql_error." ".$query_deptime );
     wrapper_mysql_db_query_writer($query_deptime) or die ( "Query failed : " . mysql_error." ".$query_deptime );
     $this->users->userdeptime = $time;
+
+    // Update LMNH Departure time
+    // Prepare the table races_ranking
+    $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, joindate, RefTrophy) values " .
+      " ( ". $id . ", " . $this->users->idusers . ",FROM_UNIXTIME(".time()."), 1)".
+      " on duplicate key update joindate = FROM_UNIXTIME(".time()."),quitdate=null";
+      logUserEvent($this->users->idusers , $id, $query_join_LMNH );
+      
+    wrapper_mysql_db_query_writer($query_join_LMNH);
+
+    // Logging kill LMNH is some case, do not log query unless debugging.
+    //logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
   }
 
   //this function will delete all the positions of the boat for this race
@@ -1447,7 +1459,8 @@ class fullUsers
       " WHERE idusers = ".$this->users->idusers;
     $result11 = wrapper_mysql_db_query_writer($query11);
 
-    if ( $id != 0 ) {
+    if ( $id != 0 ) 
+    {
       $this->races = new races($id);
       $this->users->boattype = $this->races->boattype;
 
@@ -1496,19 +1509,9 @@ class fullUsers
         " WHERE idusers = " . $this->users->idusers;
       $result = wrapper_mysql_db_query_writer($query_boattype) or die("Query [$query_boattype] failed \n");
 
-      // Add to LMNH trophy
-      // Prepare the table races_ranking
-      $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, joindate, RefTrophy) values " .
-        " ( ". $id . ", " . $this->users->idusers . ",FROM_UNIXTIME(".time()."), 1)".
-        " on duplicate key update joindate = FROM_UNIXTIME(".time()."),quitdate=null";
-        logUserEvent($this->users->idusers , $id, $query_join_LMNH );
-        
-      wrapper_mysql_db_query_writer($query_join_LMNH);
-
-      // Logging kill LMNH is some case, do not log query unless debugging.
-      //logUserEvent($this->users->idusers , $id, "Engaged in race ~$id." );
-
-    } else {
+    } 
+    else 
+    {
       $this->deleteCurrentRanking();
     }
     $this->users->engaged = $id;
