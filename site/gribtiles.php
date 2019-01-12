@@ -36,6 +36,8 @@
     $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_date, $step);
     $original_txt = sprintf("%s/%d.%02d.txt", $originaldir, $grib_date, $step);
     $dlname_txt = sprintf("%d.%02d.%d.%d.txt", $grib_date, $step, $south, $west);
+    $interim = sprintf("%s/gfs_interim-09.grb", GRIB_DIRECTORY);
+
     
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
@@ -52,6 +54,28 @@
     // Ajout passe génération JSON si demandé
     if ($fmt == 'txt')
     {
+        $cache = 900;
+        if (file_exists($interim))
+        {
+            // Interim file exists. 
+            // set short cache
+            //$original = $interim;
+            $cache = 5*600;
+            //print_r("interim short cache");
+        }
+        else
+        {
+            $NextGrib = time();
+            $NextGrib -= $NextGrib % (6*3600);
+            $NextGrib += 3.5*3600;
+            $cache = $NextGrib - time() - 5*60;
+//print_r("T:".time()." NG:".$NextGrib." c:".$cache."\n");    
+            if ($cache < 0) 
+            {
+                $cache = 0;
+            }
+        }
+    
         if ( ( ! file_exists($original_txt) ) ||  ($force == 'yes') ) 
         {
             if (!is_dir($originaldir)) {
@@ -72,8 +96,8 @@
         $original = $original_txt;
         $dlname = $dlname_txt;
         header("Content-Type: text/plain");
-        header("Cache-Control: max-age=900"); // 15' should be adjusted for next weather update
-   }
+        header("Cache-Control: max-age=$cache"); 
+    }   
     else
     {
         header("Content-Type: image/png");

@@ -134,7 +134,8 @@ for TSTAMP in `echo $allindexes` ; do
       if [ $updated -eq 0 ]; then
         windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
         updated=1
-        
+        #Clear the cache as well
+        rm -Rf $VLMRACINE/cache/gribtiles/*/ >> $LOG 2>&1 
       fi
     fi
 done
