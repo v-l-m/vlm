@@ -65,6 +65,7 @@ class users extends baseClass
     $this->releasetime    = $row['releasetime'];
     $this->hidepos        = $row['hidepos'];
     $this->blocnote       = $row['blocnote'];
+    $this->RaceVersion    = $row['RaceVersion'];
     if ( preg_match("/^http|:\/\/|script|language|<|>/i", $this->blocnote) ) {
         $this->blocnote="Some characters are not valid in your notepad. (Code inclusion, &gt;, &lt;, ...)";
     }
@@ -81,7 +82,7 @@ class users extends baseClass
       " boatname, color, boatheading, pilotmode, pilotparameter,".
       " engaged, lastchange, email, nextwaypoint, userdeptime, " .
       " lastupdate, loch, country, class, targetlat,targetlong, targetandhdg, ".
-      " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme  FROM  users WHERE idusers = ".$id;
+      " mooringtime, releasetime, hidepos, blocnote, ipaddr, theme, '' RaceVersion  FROM  users WHERE idusers = ".$id;
     if ($forceMaster) {
         $result = wrapper_mysql_db_query_writer($query) or die("\n FAILED !!\n");
     } else {
@@ -89,6 +90,7 @@ class users extends baseClass
     }
     $row = mysql_fetch_array($result, MYSQL_ASSOC);
     $this->initFromArray($row);  
+    
   }
 
   function users($id, $init = TRUE) {
