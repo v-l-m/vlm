@@ -1,5 +1,3 @@
-
-
 function BoatEstimate(Est)
 {
   this.Position = null;
@@ -8,14 +6,14 @@ function BoatEstimate(Est)
   this.Mode = null;
   this.Value = null;
   this.Meteo = null;
-  this.CurWP = new VLMPosition(0,0);
+  this.CurWP = new VLMPosition(0, 0);
   this.HdgAtWP = -1;
   this.RaceWP = 1;
   this.Heading = null;
-  
-  if (typeof Est!== "undefined" && Est)
+
+  if (typeof Est !== "undefined" && Est)
   {
-    this.Position =  new VLMPosition(Est.Position.Lon.Value, Est.Position.Lat.Value);
+    this.Position = new VLMPosition(Est.Position.Lon.Value, Est.Position.Lat.Value);
     this.Date = new Date(Est.Date);
     this.PrevDate = new Date(Est.PrevDate);
     this.Mode = Est.Mode;
@@ -24,10 +22,10 @@ function BoatEstimate(Est)
     if (typeof Est.Meteo !== "undefined" && Est.Meteo)
     {
       this.Meteo = new WindData(
-                        {
-                          Speed : Est.Meteo.Speed,
-                          Heading : Est.Meteo.Heading
-                        });
+      {
+        Speed: Est.Meteo.Speed,
+        Heading: Est.Meteo.Heading
+      });
     }
     this.CurWP = Est.CurWP;
     this.RaceWP = Est.RaceWP;
@@ -38,32 +36,32 @@ function BoatEstimate(Est)
 
 function Estimator(Boat)
 {
-  if (typeof Boat === 'undefined' || ! Boat)
+  if (typeof Boat === 'undefined' || !Boat)
   {
     throw "Boat must exist for tracking....";
   }
 
   this.Boat = Boat;
-  this.MaxVacEstimate = 0;      
+  this.MaxVacEstimate = 0;
   this.CurEstimate = new BoatEstimate();
   this.Running = false;
-  this.EstimateTrack=[];
-  this.EstimatePoints=[];
+  this.EstimateTrack = [];
+  this.EstimatePoints = [];
   this.ProgressCallBack = null;
   this.ErrorCount = 0;
   this.EstimateMapFeatures = []; // Current estimate position
-  
-  this.Stop = function ()
+
+  this.Stop = function()
   {
     // Stop the estimator if Running
     if (this.Running)
     {
-      this.Running=false;
+      this.Running = false;
       this.ReportProgress(true);
-      
+
       //Estimate complete, DrawBoat track
       DrawBoat(this.Boat);
-      
+
     }
 
     return;
@@ -86,9 +84,9 @@ function Estimator(Boat)
       return;
     }
 
-    this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON,this.Boat.VLMInfo.LAT);
-    this.CurEstimate.PrevDate = new Date (this.Boat.VLMInfo.LUP*1000);
-    this.CurEstimate.Date = new Date (this.Boat.VLMInfo.LUP*1000 + 1000* this.Boat.VLMInfo.VAC);
+    this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON, this.Boat.VLMInfo.LAT);
+    this.CurEstimate.PrevDate = new Date(this.Boat.VLMInfo.LUP * 1000);
+    this.CurEstimate.Date = new Date(this.Boat.VLMInfo.LUP * 1000 + 1000 * this.Boat.VLMInfo.VAC);
     if (this.CurEstimate.Date < new Date())
     {
       if (typeof this.Boat.RaceInfo === "undefined")
@@ -99,19 +97,27 @@ function Estimator(Boat)
       else
       {
         // Set Start to 1st VAC after start +6s 
-        let StartDate = new Date(parseInt(this.Boat.RaceInfo.deptime,10)*1000+ 1000* this.Boat.VLMInfo.VAC+6000);
+        this.CurEstimate.PrevDate = new Date(parseInt(this.Boat.RaceInfo.deptime, 10) * 1000);
+        if (this.CurEstimate.PrevDate < new Date())
+        {
+          // If this is before current date then set to next current vac time
+          let VacTime = new Date().getTime() / 1000;
+          VacTime -= (VacTime % this.Boat.VLMInfo.VAC);
+          this.CurEstimate.PrevDate = new Date (VacTime * 1000);
+        }
+        let StartDate = new Date(this.CurEstimate.PrevDate.getTime() + 1000 * this.Boat.VLMInfo.VAC + 6000);
         this.CurEstimate.Date = StartDate;
-        this.CurEstimate.PrevDate =  new Date(parseInt(this.Boat.RaceInfo.deptime,10)*1000);
+
       }
-      
+
     }
 
 
-    
-    this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM,10);
+
+    this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM, 10);
     this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT);
     this.CurEstimate.HdgAtWP = parseFloat(this.Boat.VLMInfo["H@WP"]);
-    this.CurEstimate.RaceWP = parseInt(this.Boat.VLMInfo.NWP,10);
+    this.CurEstimate.RaceWP = parseInt(this.Boat.VLMInfo.NWP, 10);
 
     if ((this.CurEstimate.Mode == PM_HEADING) || (this.CurEstimate.Mode == PM_ANGLE))
     {
@@ -121,30 +127,31 @@ function Estimator(Boat)
     this.CurEstimate.PilOrders = [];
     for (let index in this.Boat.VLMInfo.PIL)
     {
-      var Order =  this.Boat.VLMInfo.PIL[index];
-      var NewOrder = {PIP: Order.PIP,
-                      PIM: Order.PIM,
-                      STS: Order.STS,
-                      TTS: Order.TTS
-                    };
+      var Order = this.Boat.VLMInfo.PIL[index];
+      var NewOrder = {
+        PIP: Order.PIP,
+        PIM: Order.PIM,
+        STS: Order.STS,
+        TTS: Order.TTS
+      };
       this.CurEstimate.PilOrders.push(NewOrder);
     }
-    
-    this.EstimateTrack=[];
-    this.EstimatePoints=[];
 
-    this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp); 
+    this.EstimateTrack = [];
+    this.EstimatePoints = [];
+
+    this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp);
     this.ReportProgress(false);
     // Add Start point to estimate track
-    this.EstimateTrack.push(new BoatEstimate( this.CurEstimate));
+    this.EstimateTrack.push(new BoatEstimate(this.CurEstimate));
     this.ErrorCount = 0;
-    setTimeout(this.Estimate.bind(this),0);
-    
+    setTimeout(this.Estimate.bind(this), 0);
+
   };
 
   this.Estimate = function(Boat)
   {
-      
+
     if (!this.Running || this.CurEstimate.Date >= this.MaxVacEstimate)
     {
       this.Stop();
@@ -152,10 +159,9 @@ function Estimator(Boat)
     }
 
     let MI;
-    do
-    {
-      MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate,this.CurEstimate.Position.Lat.Value,this.CurEstimate.Position.Lon.Value);
-      
+    do {
+      MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate, this.CurEstimate.Position.Lat.Value, this.CurEstimate.Position.Lon.Value);
+
       if (!MI)
       {
         if (this.ErrorCount > 10)
@@ -163,20 +169,20 @@ function Estimator(Boat)
           this.Stop();
           return;
         }
-        this.ErrorCount ++;
-        setTimeout(this.Estimate.bind(this),1000);
+        this.ErrorCount++;
+        setTimeout(this.Estimate.bind(this), 1000);
         return;
       }
 
-      this.ErrorCount=0;
+      this.ErrorCount = 0;
 
       if (isNaN(MI.Speed))
       {
-        var Bkpt=1;
+        var Bkpt = 1;
         alert("Looping on NaN WindSpeed");
       }
     } while (isNaN(MI.Speed));
-    
+
     this.CurEstimate.Meteo = MI;
 
     // Ok, got meteo, move the boat, and ask for new METEO
@@ -188,14 +194,14 @@ function Estimator(Boat)
 
       if (Order && Order.STS === "pending")
       {
-        var OrderTime = new Date(parseInt(Order.TTS,10)*1000.0);
+        var OrderTime = new Date(parseInt(Order.TTS, 10) * 1000.0);
 
         if (OrderTime <= this.CurEstimate.Date)
         {
           // Use pilot order to update the current Mode
-          this.CurEstimate.Mode = parseInt(Order.PIM,10);
+          this.CurEstimate.Mode = parseInt(Order.PIM, 10);
 
-          switch(this.CurEstimate.Mode)
+          switch (this.CurEstimate.Mode)
           {
             case PM_ANGLE:
             case PM_HEADING:
@@ -207,22 +213,22 @@ function Estimator(Boat)
             case PM_VBVMG:
               let p1 = Order.PIP.split("@");
               let Dest = p1[0].split(",");
-              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[1]),parseFloat(Dest[0]));
+              this.CurEstimate.CurWP = new VLMPosition(parseFloat(Dest[1]), parseFloat(Dest[0]));
               this.CurEstimate.HdgAtWP = parseFloat(p1[1]);
               break;
-              
-            default :
+
+            default:
               alert("unsupported pilototo mode");
               this.Stop();
               return;
           }
 
 
-          this.CurEstimate.PilOrders[index]=null;
+          this.CurEstimate.PilOrders[index] = null;
           break;
         }
       }
-      
+
     }
 
     let Hdg = this.CurEstimate.Value;
@@ -231,49 +237,49 @@ function Estimator(Boat)
     let Dest = null;
     switch (this.CurEstimate.Mode)
     {
-      case PM_ANGLE:  // This goes just before Heading, since we only update the Hdg, rest is the same
+      case PM_ANGLE: // This goes just before Heading, since we only update the Hdg, rest is the same
         // Going fixed angle, get bearing, compute speed, move
-        Hdg = MI.Heading+this.CurEstimate.Value;
-        Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-        NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.0*this.Boat.VLMInfo.VAC, Hdg);
-        break;    
+        Hdg = MI.Heading + this.CurEstimate.Value;
+        Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+        NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
+        break;
 
       case PM_HEADING:
         // Going fixed bearing, get boat speed, move along loxo
-        
-        Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-        NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.0*this.Boat.VLMInfo.VAC, Hdg);
-        
+
+        Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+        NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
+
         break;
 
       case PM_ORTHO:
       case PM_VMG:
       case PM_VBVMG:
         Dest = this.GetNextWPCoords(this.CurEstimate);
-        
+
         if (this.CurEstimate.Mode == PM_ORTHO)
         {
           Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
-          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-          NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed/3600.0*this.Boat.VLMInfo.VAC, Hdg);          
+          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+          NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
         }
         else
         {
           if (this.CurEstimate.Mode == PM_VMG)
           {
-            Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
+            Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, this.CurEstimate.Position, Dest);
           }
           else
           {
-            Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,this.CurEstimate.Position, Dest);
+            Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, this.CurEstimate.Position, Dest);
           }
 
-          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL,MI.Speed,MI.Heading,Hdg);
-          NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed/3600.0*this.Boat.VLMInfo.VAC, Hdg);
-        
+          Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+          NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
+
         }
 
-        this.CheckWPReached(Dest,this.CurEstimate.Position,NewPos);
+        this.CheckWPReached(Dest, this.CurEstimate.Position, NewPos);
         break;
 
 
@@ -281,7 +287,7 @@ function Estimator(Boat)
         throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode;
     }
 
-    console.log(this.CurEstimate.Date + this.CurEstimate.Position.ToString(true) + "=> " + NewPos.Lon.ToString(true) + " " + NewPos.Lat.ToString(true) + " Wind : " + RoundPow(MI.Speed,4) + "@" + RoundPow(MI.Heading,4) + " Boat " + RoundPow(Speed,4) + "kts" + RoundPow(((Hdg+360.0)%360.0),4));
+    console.log(this.CurEstimate.Date + this.CurEstimate.Position.ToString(true) + "=> " + NewPos.Lon.ToString(true) + " " + NewPos.Lat.ToString(true) + " Wind : " + RoundPow(MI.Speed, 4) + "@" + RoundPow(MI.Heading, 4) + " Boat " + RoundPow(Speed, 4) + "kts" + RoundPow(((Hdg + 360.0) % 360.0), 4));
 
     var RaceComplete = false;
 
@@ -292,11 +298,11 @@ function Estimator(Boat)
 
     this.CurEstimate.Heading = Hdg;
     this.CurEstimate.Position = NewPos;
-    this.EstimateTrack.push(new BoatEstimate( this.CurEstimate));
+    this.EstimateTrack.push(new BoatEstimate(this.CurEstimate));
 
     // Start next point computation....
-    this.CurEstimate.PrevDate=this.CurEstimate.Date;
-    this.CurEstimate.Date = new Date((this.CurEstimate.Date/1000+this.Boat.VLMInfo.VAC)*1000);
+    this.CurEstimate.PrevDate = this.CurEstimate.Date;
+    this.CurEstimate.Date = new Date((this.CurEstimate.Date / 1000 + this.Boat.VLMInfo.VAC) * 1000);
     if (RaceComplete)
     {
       this.Stop();
@@ -304,7 +310,7 @@ function Estimator(Boat)
     }
     else
     {
-      setTimeout(this.Estimate.bind(this),0);
+      setTimeout(this.Estimate.bind(this), 0);
       this.ReportProgress(false);
     }
   };
@@ -312,34 +318,37 @@ function Estimator(Boat)
   this.GetNextRaceWP = function()
   {
     let NbWP = Object.keys(this.Boat.RaceInfo.races_waypoints).length;
-    if ( this.CurEstimate.RaceWP === NbWP)
+    if (this.CurEstimate.RaceWP === NbWP)
     {
       //Race Complete
       return true;
     }
-    for (let i = this.CurEstimate.RaceWP+1; i <= NbWP; i++)
+    for (let i = this.CurEstimate.RaceWP + 1; i <= NbWP; i++)
     {
-        if (!(this.Boat.RaceInfo.races_waypoints[i].wpformat & WP_ICE_GATE))
-        {
-          this.CurEstimate.RaceWP = i;
-          break;
-        }
+      if (!(this.Boat.RaceInfo.races_waypoints[i].wpformat & WP_ICE_GATE))
+      {
+        this.CurEstimate.RaceWP = i;
+        break;
+      }
     }
     return false;
   };
 
-  this.CheckGateValidation = function( NewPos)
+  this.CheckGateValidation = function(NewPos)
   {
     let GateSeg = this.GetNextGateSegment(this.CurEstimate);
     let Gate = this.Boat.RaceInfo.races_waypoints[this.CurEstimate.RaceWP];
-    let CurSeg = {P1 : this.CurEstimate.Position, P2 : NewPos};
+    let CurSeg = {
+      P1: this.CurEstimate.Position,
+      P2: NewPos
+    };
 
-    let RetVal =  VLMMercatorTransform.SegmentsIntersect(GateSeg,CurSeg);
+    let RetVal = VLMMercatorTransform.SegmentsIntersect(GateSeg, CurSeg);
     return RetVal;
-    
+
   };
 
-  this.CheckWPReached = function (Dest,PrevPos,NewPos)
+  this.CheckWPReached = function(Dest, PrevPos, NewPos)
   {
     if (!this.CurEstimate.CurWP.Lat.value && !this.CurEstimate.CurWP.Lon.Value)
     {
@@ -352,10 +361,10 @@ function Estimator(Boat)
     let BeforeDist = Dest.GetOrthoDist(PrevPos);
     let AfterDist = Dest.GetOrthoDist(NewPos);
     let CurDist = PrevPos.GetOrthoDist(NewPos);
-    if ((BeforeDist < CurDist)|| AfterDist < CurDist)
+    if ((BeforeDist < CurDist) || AfterDist < CurDist)
     {
       // WP Reached revert to AutoWP
-      this.CurEstimate.CurWP = new VLMPosition(0,0);
+      this.CurEstimate.CurWP = new VLMPosition(0, 0);
       if (this.CurEstimate.HdgAtWP != -1)
       {
         this.CurEstimate.Mode = PM_HEADING;
@@ -364,10 +373,10 @@ function Estimator(Boat)
       }
       console.log("WP Reached");
     }
-    
+
   };
 
-  this.GetNextWPCoords = function (Estimate)
+  this.GetNextWPCoords = function(Estimate)
   {
     if (Estimate.CurWP.Lat.value || Estimate.CurWP.Lon.Value)
     {
@@ -375,7 +384,7 @@ function Estimator(Boat)
     }
     else
     {
-     return this.Boat.GetNextWPPosition (Estimate.RaceWP, Estimate.Position, Estimate.CurWP);
+      return this.Boat.GetNextWPPosition(Estimate.RaceWP, Estimate.Position, Estimate.CurWP);
     }
   };
 
@@ -384,7 +393,7 @@ function Estimator(Boat)
     return this.Boat.GetNextGateSegment(Estimate.RaceWP);
   };
 
-  this.ReportProgress = function (Complete)
+  this.ReportProgress = function(Complete)
   {
     let Pct = 0;
 
@@ -394,15 +403,15 @@ function Estimator(Boat)
       {
         if (this.EstimateTrack.length > 1)
         {
-          Pct =  (this.MaxVacEstimate - this.EstimateTrack[this.EstimateTrack.length - 1].Date)/ (this.MaxVacEstimate - this.EstimateTrack[0].Date);
-          Pct = RoundPow((1 - Pct)*100.0,1);
+          Pct = (this.MaxVacEstimate - this.EstimateTrack[this.EstimateTrack.length - 1].Date) / (this.MaxVacEstimate - this.EstimateTrack[0].Date);
+          Pct = RoundPow((1 - Pct) * 100.0, 1);
         }
       }
-      this.ProgressCallBack(Complete,Pct, this.CurEstimate.Date);
+      this.ProgressCallBack(Complete, Pct, this.CurEstimate.Date);
     }
   };
 
-  this.GetClosestEstimatePoint = function (Param)
+  this.GetClosestEstimatePoint = function(Param)
   {
     if (Param instanceof VLMPosition)
     {
@@ -418,7 +427,7 @@ function Estimator(Boat)
     }
   };
 
-  this.GetClosestEstimatePointFromTime = function (Time)
+  this.GetClosestEstimatePointFromTime = function(Time)
   {
     if (!Time || !Object.keys(this.EstimateTrack).length)
     {
@@ -428,7 +437,7 @@ function Estimator(Boat)
     let Index = 0;
     let Delta;
 
-    for (Index = 0; Index < Object.keys(this.EstimateTrack).length;Index++)
+    for (Index = 0; Index < Object.keys(this.EstimateTrack).length; Index++)
     {
       if (this.EstimateTrack[Index])
       {
@@ -443,11 +452,11 @@ function Estimator(Boat)
       }
     }
 
-    if (Index< Object.keys(this.EstimateTrack).length && typeof this.EstimateTrack[Index+1] !== "undefined" && this.EstimateTrack[Index+1])
+    if (Index < Object.keys(this.EstimateTrack).length && typeof this.EstimateTrack[Index + 1] !== "undefined" && this.EstimateTrack[Index + 1])
     {
-      let Delta2 = Time - this.EstimateTrack[Index+1].Date;
+      let Delta2 = Time - this.EstimateTrack[Index + 1].Date;
 
-      if (Math.abs(Delta2)< Math.abs(Delta))
+      if (Math.abs(Delta2) < Math.abs(Delta))
       {
         Index++;
       }
@@ -468,7 +477,7 @@ function Estimator(Boat)
     let index;
     let RetValue = null;
 
-    for (index = 0; index < Object.keys(this.EstimateTrack).length;index++)
+    for (index = 0; index < Object.keys(this.EstimateTrack).length; index++)
     {
       if (this.EstimateTrack[index])
       {
@@ -477,7 +486,7 @@ function Estimator(Boat)
         if (d < Dist)
         {
           RetValue = this.EstimateTrack[index];
-          Dist=d;
+          Dist = d;
         }
       }
     }
@@ -487,7 +496,7 @@ function Estimator(Boat)
 
   this.ClearEstimatePosition = function(Boat)
   {
-    this.ShowEstimatePosition(Boat,null);
+    this.ShowEstimatePosition(Boat, null);
   };
 
   this.ShowEstimatePosition = function(Boat, Estimate)
@@ -512,14 +521,16 @@ function Estimator(Boat)
       let EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection);
 
       // Estimate point marker
-      var Marker=  new OpenLayers.Feature.Vector(
+      var Marker = new OpenLayers.Feature.Vector(
         EstPos_Transformed,
         {},
-        { externalGraphic: 'images/target.svg',
-          opacity: 0.8, 
-          graphicHeight: map.zoom * 2, 
+        {
+          externalGraphic: 'images/target.svg',
+          opacity: 0.8,
+          graphicHeight: map.zoom * 2,
           graphicWidth: map.zoom * 2,
-          rotation: Estimate.Heading }
+          rotation: Estimate.Heading
+        }
       );
       VLMBoatsLayer.addFeatures(Marker);
       this.EstimateMapFeatures.push(Marker);
@@ -540,7 +551,7 @@ function Estimator(Boat)
 
         this.EstimateMapFeatures.push(BoatPolar);
         VLMBoatsLayer.addFeatures(BoatPolar);
-      }  
+      }
     }
   };
 
