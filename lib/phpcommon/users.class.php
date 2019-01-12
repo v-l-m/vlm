@@ -35,7 +35,8 @@ class users extends baseClass
     $blocnote,
     $ipaddr,
     $pilototo,
-    $theme;
+    $theme,
+    $RaceInfo;
 
   var $idowner = null;
     
