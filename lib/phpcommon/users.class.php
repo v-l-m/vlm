@@ -767,7 +767,7 @@ class fullUsers
     $query_join_LMNH = "INSERT INTO users_Trophies ( idraces, idusers, joindate, RefTrophy) values " .
       " ( ". $id . ", " . $this->users->idusers . ",FROM_UNIXTIME(".time()."), 1)".
       " on duplicate key update joindate = FROM_UNIXTIME(".time()."),quitdate=null";
-      logUserEvent($this->users->idusers , $id, $query_join_LMNH );
+      logUserEvent($this->users->idusers , $this->us->engaged, $query_join_LMNH );
       
     wrapper_mysql_db_query_writer($query_join_LMNH);
 
