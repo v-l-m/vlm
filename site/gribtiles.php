@@ -4,7 +4,7 @@
      * called when origin url doesn't (yet) exists
      * origin cached url : /gribtiles/<south>/<west>/<AAAAMMJJHH>.<STEP>.grb
      * - AAAAMMJJHH : grib's date
-     * - STEP : 05 or 15� (size of the tile)
+     * - STEP : 05 or 15° (size of the tile)
      * - <south> : South longitude (modulo STEP) of the tile
      * - <west> : West latitude (modulo STEP) of the tile
      * - fmt : grb or txt. default is grb. use txt for raw text output

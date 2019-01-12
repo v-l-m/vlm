@@ -23,7 +23,7 @@
     $regular = sprintf("%s/%d/%d/%d.png", DIRECTORY_GSHHSTILES, $tilez, $tilex, $tiley);
     $regulardir = sprintf("%s/%d/%d", DIRECTORY_GSHHSTILES, $tilez, $tilex);
     //print $original; die();
-    // Cr�ation et mise en cache
+    // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
         if (!is_dir($originaldir)) {
             umask(0002);
