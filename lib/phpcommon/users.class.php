@@ -544,7 +544,8 @@ class fullUsers
     $distancefromend, $nwp,
     $VMG, $VMGortho,
     $LongNM, $LatNM,
-    $preferences;
+    $preferences,
+    $RaceVersion=0;
 
   function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
   {
