@@ -721,7 +721,8 @@ class fullRaces {
     wrapper_mysql_db_query_writer($query5);
   }
 
-  function startRaces() {
+  function startRaces() 
+  {
     //set started to 1
     $this->races->started = RACE_STARTED;
     $query5 = "UPDATE races SET `started`=".RACE_STARTED." WHERE idraces=".
@@ -1620,24 +1621,24 @@ class RankingRacesList {
     
     $minute = date('i');
     
-    if ( $minute % 10 == 0 ) 
-    {
-      $query .= "  vacfreq IN (1,2,5,10) " ;
-    }
-    else if ( $minute % 5 == 0 ) 
-    {
-      $query .= "  vacfreq IN (1,5) " ;
-    }
-    else if ( $minute % 2 == 0 ) 
-    {
-      $query .= "  vacfreq IN (1,2) " ;
-    } 
-    else 
-    {
-      $query .= "  vacfreq=1 " ;
-    }
+    // if ( $minute % 10 == 0 ) 
+    // {
+    //   $query .= "  vacfreq IN (1,2,5,10) " ;
+    // }
+    // else if ( $minute % 5 == 0 ) 
+    // {
+    //   $query .= "  vacfreq IN (1,5) " ;
+    // }
+    // else if ( $minute % 2 == 0 ) 
+    // {
+    //   $query .= "  vacfreq IN (1,2) " ;
+    // } 
+    // else 
+    // {
+    //   $query .= "  vacfreq=1 " ;
+    // }
 
-    $query .= " and ( started=".RACE_STARTED. " or started=".RACE_PENDING.")";
+    $query .= " ( started=".RACE_STARTED. " or started=".RACE_PENDING.")";
 
     $query .= " ORDER BY vacfreq ASC, deptime DESC";
 
