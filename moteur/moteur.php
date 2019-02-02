@@ -67,8 +67,8 @@ $verbose=0;
 $RACE_NUM=0;
 $USER_NUM=0;
 $flagglobal=true;
-// Si on a un argument, c'est le num�ro d'une course
-// Si on en a 2, c'est la course PUIS le num�ro du bateau
+// Si on a un argument, c'est le numéro d'une course
+// Si on en a 2, c'est la course PUIS le numéro du bateau
 if ( $argc > 1 ) {
   $RACE_NUM=$argv[1];
   $flagglobal=false;
