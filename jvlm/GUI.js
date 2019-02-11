@@ -1533,6 +1533,7 @@ function FillRaceInfoHeader(RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId", RaceInfo.idraces]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#LockTime", parseInt(RaceInfo.coastpenalty, 10)/60]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true, true)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000, true, true)]);
@@ -2166,6 +2167,7 @@ function AddRaceToList(race)
     '          <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
     '          <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '          <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
+    '          <p>' + GetLocalizedString('locktime') + parseInt( race.coastpenalty,10)/60.0 + ' \'</p>' +
     '          <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
     '        </div>' +
     '      </div>' +
