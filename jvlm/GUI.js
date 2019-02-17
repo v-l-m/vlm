@@ -3472,7 +3472,7 @@ function GetBoatInfoLink(RnkBoat)
   }
 
   //ret += '<a class="RaceHistLink" href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
-  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '">' + BoatName + '</a>';
+  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '"data-toggle="tooltip" title="'+IdUser+'" >' + BoatName + '</a>';
 
   return ret;
 }
@@ -3531,8 +3531,8 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     let RacingTime = Math.round((new Date() - new Date(parseInt(RankBoat.deptime, 10) * 1000)) / 1000);
     RetObject.Time = (RankBoat.deptime === "-1" ? "" : GetFormattedChronoString(RacingTime));
     RetObject.Loch = RankBoat.loch;
-    RetObject.lon = RankBoat.longitude;
-    RetObject.Lat = RankBoat.latitude;
+    RetObject.Lon = FormatLon(RankBoat.longitude);
+    RetObject.Lat = FormatLat(RankBoat.latitude);
     RetObject.Last1h = RankBoat.last1h;
     RetObject.Last3h = RankBoat.last3h;
     RetObject.Last24h = RankBoat.last24h;
@@ -3555,11 +3555,17 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     if (Refs && Duration !== Refs.Arrived1stTime)
     {
       RetObject.Time += " ( +" + RoundPow(Duration / Refs.Arrived1stTime * 100 - 100, 2) + "% )";
-
+      RetObject.Delta1st=GetFormattedChronoString(Duration - Refs.Arrived1stTime);
     }
+    else if (Refs && Duration == Refs.Arrived1stTime)
+    {
+      RetObject.Delta1st = GetLocalizedString("winner");
+    }
+
+    
     RetObject.Loch = RankBoat.loch;
-    RetObject.lon = RankBoat.longitude;
-    RetObject.Lat = RankBoat.latitude;
+    //RetObject.Lon = FormatLon(RankBoat.longitude);
+    //RetObject.Lat = FormatLat(RankBoat.latitude);
   }
   else
   {
@@ -3574,12 +3580,35 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     {
       DeltaStr = GetLocalizedString("winner");
     }
+
+    // Column name is wrong but it works because of cols renaming and hiding
     RetObject.Loch = DeltaStr;
   }
 
   return RetObject;
 }
 
+function formatCoords(v)
+{
+  v=Math.abs(v);
+  let D = Math.trunc(v);
+  let M = Math.trunc((v-D)*60);
+  let S = RoundPow(((v-D)*3600) % 60.0,4);
+
+  return "" + D + "° "+M+"' "+S+'"';
+}
+
+function FormatLon(v)
+{
+  let EW=(v>0?"W":"E");
+  return formatCoords(v) + EW;
+}
+
+function FormatLat(v)
+{
+  let NS=(v>0?"N":"S");
+  return formatCoords(v) + NS;
+}
 
 function HandleShowMapPrefs(e)
 {
