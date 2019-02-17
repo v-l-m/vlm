@@ -1420,7 +1420,7 @@ function LoadRankings(RaceId, CallBack)
 {
   if (RaceId && (typeof RaceId === 'object'))
   {
-    VLMAlertDanger("NOt updated call to LoadRankings");
+    VLMAlertDanger("Not updated call to LoadRankings");
   }
 
 
