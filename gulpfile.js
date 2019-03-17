@@ -23,7 +23,7 @@ const gulp = require('gulp'),
   gulpif = require('gulp-if'),
   babel = require('gulp-babel');
 
-const VLMVersion = 20.1;
+const VLMVersion = 20.2;
 var BuildTypeProd = false; // This is automatically set to true in prod build chains
 
 
