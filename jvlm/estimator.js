@@ -97,15 +97,15 @@ function Estimator(Boat)
       else
       {
         // Set Start to 1st VAC after start +6s 
-        this.CurEstimate.PrevDate = new Date(parseInt(this.Boat.RaceInfo.deptime, 10) * 1000);
+        this.CurEstimate.PrevDate = new Date(parseInt(this.Boat.RaceInfo.deptime, 10) * 1000 + 6000);
         if (this.CurEstimate.PrevDate < new Date())
         {
           // If this is before current date then set to next current vac time
           let VacTime = new Date().getTime() / 1000;
           VacTime -= (VacTime % this.Boat.VLMInfo.VAC);
-          this.CurEstimate.PrevDate = new Date (VacTime * 1000);
+          this.CurEstimate.PrevDate = new Date(VacTime * 1000 + 6000);
         }
-        let StartDate = new Date(this.CurEstimate.PrevDate.getTime() + 1000 * this.Boat.VLMInfo.VAC + 6000);
+        let StartDate = new Date(this.CurEstimate.PrevDate.getTime() + 1000 * this.Boat.VLMInfo.VAC );
         this.CurEstimate.Date = StartDate;
 
       }
@@ -159,8 +159,11 @@ function Estimator(Boat)
     }
 
     let MI;
+    let Lat = RoundPow(1000.0 * this.CurEstimate.Position.Lat.Value, 0) / 1000.0;
+    let Lon = RoundPow(1000.0 * this.CurEstimate.Position.Lon.Value, 0) / 1000.0;
     do {
-      MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate, this.CurEstimate.Position.Lat.Value, this.CurEstimate.Position.Lon.Value);
+
+      MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate, Lat, Lon);
 
       if (!MI)
       {

@@ -1533,7 +1533,7 @@ function FillRaceInfoHeader(RaceInfo)
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".RaceId", RaceInfo.idraces]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatType", RaceInfo.boattype.substring(5)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".VacFreq", parseInt(RaceInfo.vacfreq, 10)]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#LockTime", parseInt(RaceInfo.coastpenalty, 10)/60]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#LockTime", parseInt(RaceInfo.coastpenalty, 10) / 60]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#EndRace", parseInt(RaceInfo.firstpcttime, 10)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceStartDate", GetLocalUTCTime(parseInt(RaceInfo.deptime, 10) * 1000, true, true)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#RaceLineClose", GetLocalUTCTime(parseInt(RaceInfo.closetime, 10) * 1000, true, true)]);
@@ -2167,7 +2167,7 @@ function AddRaceToList(race)
     '          <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
     '          <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '          <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
-    '          <p>' + GetLocalizedString('locktime') + parseInt( race.coastpenalty,10)/60.0 + ' \'</p>' +
+    '          <p>' + GetLocalizedString('locktime') + parseInt(race.coastpenalty, 10) / 60.0 + ' \'</p>' +
     '          <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
     '        </div>' +
     '      </div>' +
@@ -3472,7 +3472,7 @@ function GetBoatInfoLink(RnkBoat)
   }
 
   //ret += '<a class="RaceHistLink" href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
-  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '"data-toggle="tooltip" title="'+IdUser+'" >' + BoatName + '</a>';
+  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '"data-toggle="tooltip" title="' + IdUser + '" >' + BoatName + '</a>';
 
   return ret;
 }
@@ -3555,14 +3555,14 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     if (Refs && Duration !== Refs.Arrived1stTime)
     {
       RetObject.Time += " ( +" + RoundPow(Duration / Refs.Arrived1stTime * 100 - 100, 2) + "% )";
-      RetObject.Delta1st=GetFormattedChronoString(Duration - Refs.Arrived1stTime);
+      RetObject.Delta1st = GetFormattedChronoString(Duration - Refs.Arrived1stTime);
     }
     else if (Refs && Duration == Refs.Arrived1stTime)
     {
       RetObject.Delta1st = GetLocalizedString("winner");
     }
 
-    
+
     RetObject.Loch = RankBoat.loch;
     //RetObject.Lon = FormatLon(RankBoat.longitude);
     //RetObject.Lat = FormatLat(RankBoat.latitude);
@@ -3590,23 +3590,23 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
 
 function formatCoords(v)
 {
-  v=Math.abs(v);
+  v = Math.abs(v);
   let D = Math.trunc(v);
-  let M = Math.trunc((v-D)*60);
-  let S = RoundPow(((v-D)*3600) % 60.0,4);
+  let M = Math.trunc((v - D) * 60);
+  let S = RoundPow(((v - D) * 3600) % 60.0, 4);
 
-  return "" + D + "° "+M+"' "+S+'"';
+  return "" + D + "° " + M + "' " + S + '"';
 }
 
 function FormatLon(v)
 {
-  let EW=(v>0?"W":"E");
+  let EW = (v > 0 ? "W" : "E");
   return formatCoords(v) + EW;
 }
 
 function FormatLat(v)
 {
-  let NS=(v>0?"N":"S");
+  let NS = (v > 0 ? "N" : "S");
   return formatCoords(v) + NS;
 }
 
@@ -3722,11 +3722,14 @@ function SafeHTMLColor(Color)
 function HandleMapOppModeChange(e)
 {
   var t = e.target;
-  var Mode = parseInt(t.attributes.Mode.value, 10);
+  if (typeof t !== "undefined" && t && typeof t.attributes !== "undefined" && t.attributes.Mode !== "undefined" && t.attributes.Mode)
+  {
+    let Mode = parseInt(t.attributes.Mode.value, 10);
 
-  VLM2Prefs.MapPrefs.MapOppShow = Mode;
-  VLM2Prefs.Save();
-  HandleShowMapPrefs(e);
+    VLM2Prefs.MapPrefs.MapOppShow = Mode;
+    VLM2Prefs.Save();
+    HandleShowMapPrefs(e);
+  }
 
 }
 
