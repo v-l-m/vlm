@@ -2154,12 +2154,12 @@ function AddRaceToList(race)
     '        </div>' +
     '      </div>' +
     '    </div>' +
-    '  </div>' +
     (StartMoment ?
       '    <div class="col-xs-12">' +
       '       <span "> ' + StartMoment +
       '       </span>' +
       '    </div>' : "") +
+    '  </div>' +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
     '    <div class="panel-body">' +
     '      <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
