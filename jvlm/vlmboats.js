@@ -1486,15 +1486,19 @@ function DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures)
       friends = Boat.VLMInfo.MPO.split(',');
     }
 
-    for (index in friends)
+    if (friends.length !== 0)
     {
-      if (friends[index])
+      let RaceId = Boat.VLMInfo.RAC;
+      for (index in friends)
       {
-        let Opp = Rankings[friends[index]];
-
-        if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers, 10) !== Boat.IdBoat))
+        if (friends[index])
         {
-          AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, Opp, true);
+          let Opp = Rankings[RaceId][friends[index]];
+
+          if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers, 10) !== Boat.IdBoat))
+          {
+            AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, Opp, true);
+          }
         }
       }
     }
@@ -1603,15 +1607,7 @@ function CompareDist(a, b)
 
 function GetClosestOpps(Boat, NbOpps)
 {
-  let CurBoat = Rankings[Boat.IdBoat];
 
-  if (typeof CurBoat === 'undefined' || !Boat)
-  {
-    CurBoat = {
-      dnm: 0,
-      nwm: 1
-    };
-  }
 
   let RaceId = null;
 
@@ -1623,6 +1619,15 @@ function GetClosestOpps(Boat, NbOpps)
 
   if (RaceId)
   {
+    let CurBoat = Rankings[RaceId][Boat.IdBoat];
+
+    if (typeof CurBoat === 'undefined' || !Boat)
+    {
+      CurBoat = {
+        dnm: 0,
+        nwp: 1
+      };
+    }
     let CurDnm = parseFloat(CurBoat.dnm);
     let CurWP = CurBoat.nwp;
     let List = [];
@@ -1670,7 +1675,7 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend)
     "Last3h": Opponent.last3h,
     "Last24h": Opponent.last24h,
     "IsTeam": (Opponent.country == Boat.VLMInfo.CNT) ? "team" : "",
-    "IsFriend": (isFriend ? ZFactor * 2 : ZFactor ),
+    "IsFriend": (isFriend ? ZFactor * 2 : ZFactor),
     "color": Opponent.color
   };
 
