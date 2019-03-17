@@ -77,7 +77,7 @@ while ($row4 = mysql_fetch_array($result4, MYSQL_ASSOC))
       }
       else
       {
-        echo "LMNH Join Query Successfull " . $query_join_LMNH . "\n";
+        //echo "LMNH Join Query Successfull " . $query_join_LMNH . "\n";
       }
 
     }
