@@ -17,11 +17,20 @@
      if ( in_array($idr, $avRaces) ) {
         //tente de s'inscrire
         $ws->fullusers->subscribeToRaces($idr);
-     } else {
+     } 
+     else 
+     {
         $ws->reply_with_error('ENG02', "This race ($idr) is not available for this boat.");
      }
 
-    if (!$ws->fullusers->users->isEngaged()) $ws->reply_with_error('ENG03', "Subscribe to race ($idr) failed");
+    if (!$ws->fullusers->users->isEngaged())
+    {
+      $ws->reply_with_error('ENG03', "Subscribe to race ($idr) failed");
+    }
+    else
+    {
+      logUserEvent($ws->fullusers->users->idusers , $idr, "Subscription to race ~$idr completed." );
+    }
 
     $ws->finish();
 ?>

@@ -15,8 +15,11 @@
   if ( $idr == $ws->fullusers->users->engaged ) 
   {
     //tente de quitter la course
+    $ws->fullusers->SetABD();
     $ws->fullusers->removeFromRaces();
-  } else 
+    logUserEvent($ws->fullusers->users->idusers , $idr, "Manual request to abandon race ~$idr completed." );
+  } 
+  else 
   {
     $ws->reply_with_error('ENG05', "boat is not currently engaged in race ($idr).");
   }
