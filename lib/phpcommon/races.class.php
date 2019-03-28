@@ -1669,6 +1669,7 @@ function CheckLMNHStatus()
                     and ua.idraces = ut.idraces and ut.quitdate is null 
                     and u.userdeptime <> -1
                     and ua.time > from_unixtime(u.userdeptime) 
+                    and ua.action not like 'Update Prefs%'
                     and ua.ipaddr <> '127.0.0.1'";
 
   $result = wrapper_mysql_db_query_reader($targetlist);

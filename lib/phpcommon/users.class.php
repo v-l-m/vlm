@@ -1309,52 +1309,64 @@ class fullUsers
 
   }
   
-  function setPref($key, $value) {
-      //FIXME: this is a duplicate of setUserPref. Putting here to catch the mysql error if needed
-      if (!in_array($key, explode(',', USER_PREF_ALLOWED))) {
-          $this->users->set_error("UNALLOWED PREFS KEY");
-          return False;
-      }
+  function setPref($key, $value) 
+  {
+    //FIXME: this is a duplicate of setUserPref. Putting here to catch the mysql error if needed
+    if (!in_array($key, explode(',', USER_PREF_ALLOWED))) 
+    {
+        $this->users->set_error("UNALLOWED PREFS KEY");
+        return False;
+    }
       
-      $value = strip_tags(trim($value));
-      //FIXME: we should check prefs values better !
-      switch($key) {
-          //numeric 
-          case "maparea":
-          case "mapMaille" :
-          case "mapX" :
-          case "mapY" :
-          case "mapAge" :
-          case "mapEstime" :
-              if (!is_numeric($value)) {
-                  $this->users->set_error("Value of $key not numeric");
-                  return False;
-              }
-          case "blocnote" :
-          case "boatname" :
-          //more cases
-              //Should check here that UTF8 is valid
-          default :
-      }
+    $value = strip_tags(trim($value));
+    //FIXME: we should check prefs values better !
+    switch($key) 
+    {
+      //numeric 
+      case "maparea":
+      case "mapMaille" :
+      case "mapX" :
+      case "mapY" :
+      case "mapAge" :
+      case "mapEstime" :
+        if (!is_numeric($value)) 
+        {
+            $this->users->set_error("Value of $key not numeric");
+            return False;
+        }
+      case "blocnote" :
+      case "boatname" :
+      //more cases
+          //Should check here that UTF8 is valid
+      default :
+    }
 
-      $value = mysql_real_escape_string($value);
-      
-      //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
-      if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) {
-          $query_pref = "UPDATE users SET `$key` = '" . $value . "'" .
-                        " WHERE idusers = " . $this->users->idusers;
-      } else {
-          $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
-                        " VALUES ( " . $this->users->idusers . 
-                        ", " . " '" . mysql_real_escape_string($key) .  "', '" . $value . "')" ;
-      }
+    $value = mysql_real_escape_string($value);
+    
+    //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
+    if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) 
+    {
+      $query_pref = "UPDATE users SET `$key` = '" . $value . "'" .
+                    " WHERE idusers = " . $this->users->idusers;
+    }
+    else
+    {
+      $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
+                    " VALUES ( " . $this->users->idusers . 
+                    ", " . " '" . mysql_real_escape_string($key) .  "', '" . $value . "')" ;
+    }
 
-      if(wrapper_mysql_db_query_writer($query_pref)) {
-          return True;
-      } else {
-          $this->users->set_error_with_mysql_query($query_pref);
-          return False;
-      }
+    if(wrapper_mysql_db_query_writer($query_pref)) 
+    {
+      $this->users->logUserEvent("Player prefs(".$key.') updated');
+           
+      return True;
+    }
+    else
+    {
+      $this->users->set_error_with_mysql_query($query_pref);
+      return False;
+    }
   }
 
   function setABD() {
