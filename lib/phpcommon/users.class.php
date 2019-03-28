@@ -1358,7 +1358,7 @@ class fullUsers
 
     if(wrapper_mysql_db_query_writer($query_pref)) 
     {
-      $this->users->logUserEvent("Player prefs(".$key.') updated');
+      $this->users->logUserEvent("Update prefs(".$key.')');
            
       return True;
     }
