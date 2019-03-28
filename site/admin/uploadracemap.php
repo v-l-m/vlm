@@ -2,6 +2,15 @@
     $PAGETITLE = "Racemap upload";
     include ("htmlstart.php");
     include_once ("functions.php");
+
+    if( isset($_SERVER['HTTPS'] ) ) 
+    {
+      $proto="https";
+    }
+    else
+    {
+      $proto="http";
+    }
     
     $idnewrace = intval(get_cgi_var('idnewrace', 0)) ;  
     
@@ -20,8 +29,8 @@
         echo "<h3>OK</h3>";
         for ($i = 1 ; $i <= WEBINSTANCE_COUNT ; $i++) {
             $webi = constant("WEBINSTANCE_$i");
-            $racemap = "http://$webi/racemap.php?idraces=$idnewrace&force=yes";
-            $minimap = "http://$webi/minimap.php?idraces=$idnewrace&force=yes";
+            $racemap = "$proto://$webi/racemap.php?idraces=$idnewrace&force=yes";
+            $minimap = "$proto://$webi/minimap.php?idraces=$idnewrace&force=yes";
             echo "<hr /><h3>Force reload on server : ". $webi . "</h3>";
             //on redimensionne à l'affichage la racemap pour garder l'affichage lisible.
             echo "<a href=\"$racemap\"><img style=\"width:180px ;\" src=\"$racemap\" /></a>";

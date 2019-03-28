@@ -64,8 +64,16 @@
 
       //Fetching json
       //FIXME : should be a generic function in functions.php
-      $fp = fopen("http://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom","r") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
-      print "http://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom";
+      if( isset($_SERVER['HTTPS'] ) ) 
+      {
+        $proto="https";
+      }
+      else
+      {
+        $proto="http";
+      }
+      $fp = fopen("$proto://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom","r") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
+      print "$proto://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom";
       $json = "";
       while (!feof($fp)) { //on parcourt toutes les lignes
           $json .= fgets($fp, 4096); // lecture du contenu de la ligne
