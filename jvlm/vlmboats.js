@@ -607,6 +607,12 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
 {
   var CurDate = StartDate;
 
+  if (Boat && Boat.VLMInfo && Boat.VLMInfo.VAC)
+  {
+    // set time 1 vac back
+    CurDate -= Boat.VLMInfo.VAC*1000;
+  }
+
   if (!CurDate || CurDate < new Date().getTime())
   {
     CurDate = new Date().getTime();
