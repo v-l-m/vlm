@@ -20,6 +20,7 @@ function windAtPosition($_lat = 0, $_long = 0, $when = 0)
   */
   include_once("vlmc.php");
 
+  //printf ("Lat=%d, Long=%d \n", $_lat, $_long);
   if (defined('MOTEUR')) {
     shm_lock_sem_construct_grib(1);
   } else {
@@ -28,8 +29,15 @@ function windAtPosition($_lat = 0, $_long = 0, $when = 0)
   }
   
   $wind_boat = new wind_info();
-  $_time=time()+$when;
-
+  if ($when)
+  {
+    $_time=$when;
+  }
+  else
+  {
+    $_time=time();
+  }
+ 
   if (defined('MOTEUR')) {
     VLM_get_wind_info_latlong_millideg($_lat, $_long,
 				       $_time, $wind_boat);
@@ -41,7 +49,7 @@ function windAtPosition($_lat = 0, $_long = 0, $when = 0)
     shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
   }
   
-  //printf ("Lat=%d, Long=%d\n", $_lat, $_long);
+  //printf ("Lat=%d, Long=%d Time=%d\n", $_lat, $_long, $_time);
   //printf ("Wind=%f\n", $wind_boat->speed, $wind_boat->angle);
   return array (
     'speed' => $wind_boat->speed, 'windangle' => $wind_boat->angle
