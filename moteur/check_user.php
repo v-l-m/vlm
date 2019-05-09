@@ -16,7 +16,9 @@ if ( $usersObj->engaged != 0 )
   $flag_pilototo = $usersObj->pilototoCheck();
 
   $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj,  80000, -80000, -180000,  180000,  MAX_DURATION, true,$now); // use the copy mode
-
+  echo "\n=== New Full Users : ".$fullUsersObj->lastPositions->lat." ".$fullUsersObj->lastPositions->long;
+//$this->wspeed = $wind['speed'];
+//$this->wheading = $wind['windangle'];
   // If boat is
   // - mooring (pilotmode=PILOTMODE_WINDANGLE & pilotparameter=0)
   // - waiting for the start of the race
@@ -147,15 +149,22 @@ if ( $usersObj->engaged != 0 )
 
     $distVac=$fullUsersObj->boatspeed*$fullUsersObj->hours;
 
-    echo "\tPosition update (WSpd=" . round($fullUsersObj->wspeed,3) . 
+    /*echo "\tPosition update (WSpd=" . round($fullUsersObj->wspeed,3) . 
       ", WHdg=".(round(((($fullUsersObj->wheading+180)*1000)%360000)/1000,4)). 
       ", Hours=".round($fullUsersObj->hours,4). 
       ", ANG=".round($fullUsersObj->boatanglewithwind,2). 
       ", Hdg=" . $fullUsersObj->users->boatheading. 
       ", BS=" . round($fullUsersObj->boatspeed,3). 
       ", Dist=". $distVac . "nm".
+      ") ...";*/
+    echo "\tPosition update (WSpd=" . $fullUsersObj->wspeed . 
+      ", WHdg=". ($fullUsersObj->wheading+180) . 
+      ", Hours=". $fullUsersObj->hours. 
+      ", ANG=". $fullUsersObj->boatanglewithwind. 
+      ", Hdg=" . $fullUsersObj->users->boatheading. 
+      ", BS=" . $fullUsersObj->boatspeed. 
+      ", Dist=". $distVac . "nm".
       ") ...";
-
     echo " done";
     
     // ==========================
@@ -180,7 +189,7 @@ if ( $usersObj->engaged != 0 )
       } 
       else 
       {
-        echo "\n bug location : t".time()." n".$now." p".$fullUsersObj->lastPositions->time."\n";
+        //echo "\n bug location : t".time()." n".$now." p".$fullUsersObj->lastPositions->time."\n";
         $fullUsersObj->lastPositions->writePositions($now); //important, will write a new position
       }
       $fullUsersObj->writeCurrentRanking(1, $now);

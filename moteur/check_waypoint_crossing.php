@@ -96,6 +96,7 @@
               rad2deg($nextwaypoint->latitude1), rad2deg($nextwaypoint->longitude1), 
               rad2deg($nextwaypoint->latitude2), rad2deg($nextwaypoint->longitude2));
             printf ("\n\t\t* BOAT : %f, %f <---> %f, %f", $latPreCheck/1000, $lonPreCheck/1000, $latCheck/1000, $lonCheck/1000);
+            printf ("\n\t\t* BOAT : %20f, %20f <---> %20f, %20f \n", $latPreCheck, $lonPreCheck, $latCheck, $lonCheck);
             
             // Test de croisement avec un waypoint
             $waypoint_crossed=false;

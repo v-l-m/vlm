@@ -695,7 +695,7 @@ printf("\nGDSWINDS: ");
 			}
 		    }
 	            for (i = 0; i < nxny; i++) {
-		        fprintf(dump_file,"%g\n", array[i]);
+		        fprintf(dump_file,"%.28f\n", array[i]);
 		    }
 	        }
 	        n_dump++;

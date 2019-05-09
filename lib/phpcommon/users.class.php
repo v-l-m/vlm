@@ -639,8 +639,10 @@ class fullUsers
 
     // windAtPosition returns a small array : (wspeed, wheading);
     // see functions.php
+    //echo "\n** pos avant Wind@Position".$this->lastPositions->lat." ".$this->lastPositions->long;
     $wind = windAtPosition($this->lastPositions->lat, 
-			   $this->lastPositions->long, 0);
+			   $this->lastPositions->long, $now);
+    //echo "\n** pos après Wind@Position".$this->lastPositions->lat." ".$this->lastPositions->long;
     $this->wspeed = $wind['speed'];
     $this->wheading = $wind['windangle'];
 

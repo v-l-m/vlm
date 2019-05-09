@@ -33,6 +33,7 @@ gulp.task('scripts', function()
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_main.js'))
+    .pipe(inject.replace('@@BUILD_TYPE@@', 'Dev'))
     .pipe(babel(
     {
       presets: ['@babel/env']

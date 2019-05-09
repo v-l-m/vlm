@@ -203,10 +203,10 @@ wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
   v3prev = prev->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat+1];    
 
 #ifdef DEBUG
-  printf("u0prev: U=%.2f m/s, V=%.2f m/s\n", u0prev, v0prev);
-  printf("u1prev: U=%.2f m/s, V=%.2f m/s\n", u1prev, v1prev);
-  printf("u2prev: U=%.2f m/s, V=%.2f m/s\n", u2prev, v2prev);
-  printf("u3prev: U=%.2f m/s, V=%.2f m/s\n", u3prev, v3prev);
+  printf("u0prev: U=%.9f m/s, V=%.9f m/s\n", u0prev, v0prev);
+  printf("u1prev: U=%.9f m/s, V=%.9f m/s\n", u1prev, v1prev);
+  printf("u2prev: U=%.9f m/s, V=%.9f m/s\n", u2prev, v2prev);
+  printf("u3prev: U=%.9f m/s, V=%.9f m/s\n", u3prev, v3prev);
 #endif /* DEBUG */  
 
   /*
@@ -224,9 +224,9 @@ wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
   vprev = v01prev + (v23prev - v01prev) * (d_long - floor(d_long));
 
 #ifdef DEBUG
-  printf("-> u01prev: U=%.2f m/s, V=%.2f m/s\n", u01prev, v01prev);
-  printf("-> u23prev: U=%.2f m/s, V=%.2f m/s\n", u23prev, v23prev);
-  printf("=>   uprev: U=%.2f m/s, V=%.2f m/s\n", uprev, vprev);
+  printf("-> u01prev: U=%.9f m/s, V=%.9f m/s\n", u01prev, v01prev);
+  printf("-> u23prev: U=%.9f m/s, V=%.9f m/s\n", u23prev, v23prev);
+  printf("=>   uprev: U=%.9f m/s, V=%.9f m/s\n", uprev, vprev);
 #endif /* DEBUG */  
 
   if (next) {
@@ -240,10 +240,10 @@ wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
     v3next = next->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat+1];
       
 #ifdef DEBUG
-    printf("u0next: U=%.2f m/s, V=%.2f m/s\n", u0next, v0next);
-    printf("u1next: U=%.2f m/s, V=%.2f m/s\n", u1next, v1next);
-    printf("u2next: U=%.2f m/s, V=%.2f m/s\n", u2next, v2next);
-    printf("u3next: U=%.2f m/s, V=%.2f m/s\n", u3next, v3next);
+    printf("u0next: U=%.9f m/s, V=%.9f m/s\n", u0next, v0next);
+    printf("u1next: U=%.9f m/s, V=%.9f m/s\n", u1next, v1next);
+    printf("u2next: U=%.9f m/s, V=%.9f m/s\n", u2next, v2next);
+    printf("u3next: U=%.9f m/s, V=%.9f m/s\n", u3next, v3next);
 #endif /* DEBUG */  
 
     /* simple bilinear interpolation, we might factor the cos(lat) in
@@ -258,9 +258,9 @@ wind_info *get_wind_info_latlong_UV_context(vlmc_context *context,
     vnext = v01next + (v23next - v01next) * (d_long - floor(d_long));
       
 #ifdef DEBUG
-    printf("-> u01next: U=%.2f m/s, V=%.2f m/s\n", u01next, v01next);
-    printf("-> u23next: U=%.2f m/s, V=%.2f m/s\n", u23next, v23next);
-    printf("=>   unext: U=%.2f m/s, V=%.2f m/s\n", unext, vnext);
+    printf("-> u01next: U=%.9f m/s, V=%.9f m/s\n", u01next, v01next);
+    printf("-> u23next: U=%.9f m/s, V=%.9f m/s\n", u23next, v23next);
+    printf("=>   unext: U=%.9f m/s, V=%.9f m/s\n", unext, vnext);
 #endif /* DEBUG */  
 
 #ifdef DEBUG
@@ -448,10 +448,10 @@ wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
   _transform_u_v(u3prev, v3prev);
   
 #ifdef DEBUG
-  printf("u0prev: %.2f kts, %.2f deg\n", u0prev, radToDeg(v0prev));
-  printf("u1prev: %.2f kts, %.2f deg\n", u1prev, radToDeg(v1prev));
-  printf("u2prev: %.2f kts, %.2f deg\n", u2prev, radToDeg(v2prev));
-  printf("u3prev: %.2f kts, %.2f deg\n", u3prev, radToDeg(v3prev));
+  printf("u0prev: %.9f kts, %.9f deg\n", u0prev, radToDeg(v0prev));
+  printf("u1prev: %.9f kts, %.9f deg\n", u1prev, radToDeg(v1prev));
+  printf("u2prev: %.9f kts, %.9f deg\n", u2prev, radToDeg(v2prev));
+  printf("u3prev: %.9f kts, %.9f deg\n", u3prev, radToDeg(v3prev));
 #endif /* DEBUG */  
   /* speed interpolation */
   u01prev = u0prev + (u1prev - u0prev) * (d_lat - floor(d_lat));
@@ -488,9 +488,9 @@ wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
   _positive_angle(vprev);
 
 #ifdef DEBUG
-  printf("-> u01prev: %.2f kts, %.2f deg\n", u01prev, radToDeg(v01prev));
-  printf("-> u23prev: %.2f kts, %.2f deg\n", u23prev, radToDeg(v23prev));
-  printf("=>   uprev: %.2f kts, %.2f deg\n", uprev, radToDeg(vprev));
+  printf("-> u01prev: %.9f kts, %.9f deg\n", u01prev, radToDeg(v01prev));
+  printf("-> u23prev: %.9f kts, %.9f deg\n", u23prev, radToDeg(v23prev));
+  printf("=>   uprev: %.9f kts, %.9f deg\n", uprev, radToDeg(vprev));
 #endif /* DEBUG */  
 
   if (next) {
@@ -509,10 +509,10 @@ wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
     _transform_u_v(u3next, v3next);
 
 #ifdef DEBUG
-    printf("u0next: %.2f kts, %.2f deg\n", u0next, radToDeg(v0next));
-    printf("u1next: %.2f kts, %.2f deg\n", u1next, radToDeg(v1next));
-    printf("u2next: %.2f kts, %.2f deg\n", u2next, radToDeg(v2next));
-    printf("u3next: %.2f kts, %.2f deg\n", u3next, radToDeg(v3next));
+    printf("u0next: %.9f kts, %.9f deg\n", u0next, radToDeg(v0next));
+    printf("u1next: %.9f kts, %.9f deg\n", u1next, radToDeg(v1next));
+    printf("u2next: %.9f kts, %.9f deg\n", u2next, radToDeg(v2next));
+    printf("u3next: %.9f kts, %.9f deg\n", u3next, radToDeg(v3next));
 #endif /* DEBUG */  
 
     /* simple bilinear interpolation, we might factor the cos(lat) in
@@ -538,9 +538,9 @@ wind_info *get_wind_info_latlong_TWSA_context(vlmc_context *context,
     _positive_angle(vnext);
     
 #ifdef DEBUG
-    printf("-> u01next: %.2f kts, %.2f deg\n", u01next, radToDeg(v01next));
-    printf("-> u23next: %.2f kts, %.2f deg\n", u23next, radToDeg(v23next));
-    printf("=>   unext: %.2f kts, %.2f deg\n", unext, radToDeg(vnext));
+    printf("-> u01next: %.9f kts, %.9f deg\n", u01next, radToDeg(v01next));
+    printf("-> u23next: %.9f kts, %.9f deg\n", u23next, radToDeg(v23next));
+    printf("=>   unext: %.9f kts, %.9f deg\n", unext, radToDeg(vnext));
 #endif /* DEBUG */  
    
 #ifdef DEBUG
@@ -676,10 +676,10 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
   _transform_u_v(u3prev, v3prev);
   
 #ifdef DEBUG
-  printf("u0prev: %.2f kts, %.2f deg\n", u0prev, radToDeg(v0prev));
-  printf("u1prev: %.2f kts, %.2f deg\n", u1prev, radToDeg(v1prev));
-  printf("u2prev: %.2f kts, %.2f deg\n", u2prev, radToDeg(v2prev));
-  printf("u3prev: %.2f kts, %.2f deg\n", u3prev, radToDeg(v3prev));
+  printf("u0prev: %.9f kts, %.9f deg\n", u0prev, radToDeg(v0prev));
+  printf("u1prev: %.9f kts, %.9f deg\n", u1prev, radToDeg(v1prev));
+  printf("u2prev: %.9f kts, %.9f deg\n", u2prev, radToDeg(v2prev));
+  printf("u3prev: %.9f kts, %.9f deg\n", u3prev, radToDeg(v3prev));
 #endif /* DEBUG */  
   /* speed interpolation */
   u01prev = u0prev + (u1prev - u0prev) * (d_lat - floor(d_lat));
@@ -735,9 +735,9 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
   }
 
 #ifdef DEBUG
-  printf("-> u01prev: %.2f kts, %.2f deg\n", u01prev, radToDeg(v01prev));
-  printf("-> u23prev: %.2f kts, %.2f deg\n", u23prev, radToDeg(v23prev));
-  printf("=>   uprev: %.2f kts, %.2f deg\n", uprev, radToDeg(vprev));
+  printf("-> u01prev: %.9f kts, %.9f deg\n", u01prev, radToDeg(v01prev));
+  printf("-> u23prev: %.9f kts, %.9f deg\n", u23prev, radToDeg(v23prev));
+  printf("=>   uprev: %.9f kts, %.9f deg\n", uprev, radToDeg(vprev));
 #endif /* DEBUG */  
 
   if (next) {
@@ -756,10 +756,10 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
     _transform_u_v(u3next, v3next);
 
 #ifdef DEBUG
-    printf("u0next: %.2f kts, %.2f deg\n", u0next, radToDeg(v0next));
-    printf("u1next: %.2f kts, %.2f deg\n", u1next, radToDeg(v1next));
-    printf("u2next: %.2f kts, %.2f deg\n", u2next, radToDeg(v2next));
-    printf("u3next: %.2f kts, %.2f deg\n", u3next, radToDeg(v3next));
+    printf("u0next: %.9f kts, %.9f deg\n", u0next, radToDeg(v0next));
+    printf("u1next: %.9f kts, %.9f deg\n", u1next, radToDeg(v1next));
+    printf("u2next: %.9f kts, %.9f deg\n", u2next, radToDeg(v2next));
+    printf("u3next: %.9f kts, %.9f deg\n", u3next, radToDeg(v3next));
 #endif /* DEBUG */  
 
     /* simple bilinear interpolation, we might factor the cos(lat) in
@@ -807,9 +807,9 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
 #endif /* OLD_C_COMPILER */
     }    
 #ifdef DEBUG
-    printf("-> u01next: %.2f kts, %.2f deg\n", u01next, radToDeg(v01next));
-    printf("-> u23next: %.2f kts, %.2f deg\n", u23next, radToDeg(v23next));
-    printf("=>   unext: %.2f kts, %.2f deg\n", unext, radToDeg(vnext));
+    printf("-> u01next: %.9f kts, %.9f deg\n", u01next, radToDeg(v01next));
+    printf("-> u23next: %.9f kts, %.9f deg\n", u23next, radToDeg(v23next));
+    printf("=>   unext: %.9f kts, %.9f deg\n", unext, radToDeg(vnext));
 #endif /* DEBUG */  
    
 #ifdef DEBUG
@@ -855,7 +855,7 @@ wind_info *get_wind_info_latlong_selective_TWSA_context(vlmc_context *context,
     v = vprev;
   }
 #ifdef DEBUG
-  printf("Speed %.3f, angle %.3f\n", u, radToDeg(v));
+  printf("Speed %.9f, angle %.9f\n", u, radToDeg(v));
 #endif /* DEBUG */
   wind->speed = u;
   wind->angle = v;
@@ -940,6 +940,10 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
   if (!next && !prev) {
     prev = windtable->wind[windtable->nb_prevs-1];
   } 
+
+#ifdef DEBUG
+  printf("\n-> before dlat=%.16f, Dlon=%.16f \n", d_lat , d_long );
+#endif
 #if defined(GRIB_RESOLUTION_0_25)
   d_long = d_long*4.0;
   d_lat  = d_lat*4.0;
@@ -949,6 +953,10 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
 #endif /* GRID_RESOLUTION_0_25 */
   t_long = (int)floor(d_long);
   t_lat = (int)floor(d_lat);
+
+#ifdef DEBUG
+  printf("\n-> after dlat=%.16f, Dlon=%.16f \n", d_lat , d_long );
+#endif
 
   u0prev = prev->wind_u[t_long][t_lat];
   v0prev = prev->wind_v[t_long][t_lat];
@@ -960,10 +968,10 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
   v3prev = prev->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat+1];    
 
 #ifdef DEBUG
-  printf("u0prev: U=%.2f m/s, V=%.2f m/s\n", u0prev, v0prev);
-  printf("u1prev: U=%.2f m/s, V=%.2f m/s\n", u1prev, v1prev);
-  printf("u2prev: U=%.2f m/s, V=%.2f m/s\n", u2prev, v2prev);
-  printf("u3prev: U=%.2f m/s, V=%.2f m/s\n", u3prev, v3prev);
+  printf("u0prev: U=%.9f m/s, V=%.9f m/s\n", u0prev, v0prev);
+  printf("u1prev: U=%.9f m/s, V=%.9f m/s\n", u1prev, v1prev);
+  printf("u2prev: U=%.9f m/s, V=%.9f m/s\n", u2prev, v2prev);
+  printf("u3prev: U=%.9f m/s, V=%.9f m/s\n", u3prev, v3prev);
 #endif /* DEBUG */  
 
   /* we reuse u = speed v = angle after conversion */
@@ -1003,10 +1011,11 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
   roprev = ro01prev + (ro23prev - ro01prev) * (d_long - floor(d_long));
 
 #ifdef DEBUG
-  printf("-> u01prev: U=%.2f m/s, V=%.2f m/s\n", u01prev, v01prev);
-  printf("-> u23prev: U=%.2f m/s, V=%.2f m/s\n", u23prev, v23prev);
-  printf("=>   uprev: U=%.2f m/s, V=%.2f m/s\n", uprev, vprev);
-  printf("->  roprev: %.2f kts\n", roprev);
+  printf("\n-> Dy=%.9f, Dx=%.9f \n", d_lat - floor(d_lat), d_long - floor(d_long));
+  printf("-> u01prev: U=%.9f m/s, V=%.9f m/s\n", u01prev, v01prev);
+  printf("-> u23prev: U=%.9f m/s, V=%.9f m/s\n", u23prev, v23prev);
+  printf("=>   uprev: U=%.9f m/s, V=%.9f m/s\n", uprev, vprev);
+  printf("->  roprev: %.9f kts\n", roprev);
 #endif /* DEBUG */  
 
   if (next) {
@@ -1020,10 +1029,10 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
     v3next = next->wind_v[(t_long+1)%WIND_GRID_LONG][t_lat+1];
       
 #ifdef DEBUG
-    printf("u0next: U=%.2f m/s, V=%.2f m/s\n", u0next, v0next);
-    printf("u1next: U=%.2f m/s, V=%.2f m/s\n", u1next, v1next);
-    printf("u2next: U=%.2f m/s, V=%.2f m/s\n", u2next, v2next);
-    printf("u3next: U=%.2f m/s, V=%.2f m/s\n", u3next, v3next);
+    printf("u0next: U=%.9f m/s, V=%.9f m/s\n", u0next, v0next);
+    printf("u1next: U=%.9f m/s, V=%.9f m/s\n", u1next, v1next);
+    printf("u2next: U=%.9f m/s, V=%.9f m/s\n", u2next, v2next);
+    printf("u3next: U=%.9f m/s, V=%.9f m/s\n", u3next, v3next);
 #endif /* DEBUG */  
 
     /* simple bilinear interpolation, we might factor the cos(lat) in
@@ -1049,10 +1058,10 @@ wind_info *get_wind_info_latlong_hybrid_context(vlmc_context *context,
     ronext = ro01next + (ro23next - ro01next) * (d_long - floor(d_long));
 
 #ifdef DEBUG
-    printf("-> u01next: U=%.2f m/s, V=%.2f m/s\n", u01next, v01next);
-    printf("-> u23next: U=%.2f m/s, V=%.2f m/s\n", u23next, v23next);
-    printf("=>   unext: U=%.2f m/s, V=%.2f m/s\n", unext, vnext);
-    printf("->  ronext: %.2f kts\n", ronext);
+    printf("-> u01next: U=%.9f m/s, V=%.9f m/s\n", u01next, v01next);
+    printf("-> u23next: U=%.9f m/s, V=%.9f m/s\n", u23next, v23next);
+    printf("=>   unext: U=%.9f m/s, V=%.9f m/s\n", unext, vnext);
+    printf("->  ronext: %.9f kts\n", ronext);
 #endif /* DEBUG */  
 
 #ifdef DEBUG
