@@ -102,71 +102,126 @@ function VLMPosition(lon, lat, format)
     return RoundPow(RetVal, Precision);
   };
 
-  // Reaches a point from position using rhumbline.
+  //  Reaches a point from position using VLM Formula.
   // Compute the position of point at r * distance to point P is 1st param is a Position
   // Computes the position at Distance P, and heading r if P is a number
   // Along loxodrome from this to P
-  this.ReachDistLoxo = function(P, r)
+  this.ReachDistLoxo = function(PosOrDistance, RatioOrHeading)
   {
-    var d = 0;
-    var tc = 0;
+    let d = 0;
+    let tc = 0;
 
-    if (isNaN(r))
+    if (isNaN(RatioOrHeading))
     {
       throw "unsupported reaching NaN distance";
     }
 
-    if (typeof P == "number")
+    if (typeof PosOrDistance == "number")
     {
-      d = P / EARTH_RADIUS;
-      tc = Deg2Rad(r % 360);
+      d = Deg2Rad(PosOrDistance / 60.0);
+      tc = Deg2Rad(RatioOrHeading % 360.0);
     }
     else
     {
-      d = this.GetLoxoDist(P) / EARTH_RADIUS * r;
-      tc = Deg2Rad(this.GetLoxoCourse(P));
+      d = this.GetLoxoDist(PosOrDistance) / EARTH_RADIUS * RatioOrHeading;
+      tc = Deg2Rad(this.GetLoxoCourse(PosOrDistance));
     }
 
-    var Lat1 = Deg2Rad(this.Lat.Value);
-    var Lon1 = -Deg2Rad(this.Lon.Value);
-    var Lat = 0;
-    var Lon = 0;
-    var TOL = 0.000000000000001;
-    var q = 0;
-    var dPhi = 0;
-    var dlon = 0;
-
+    let Lat1 = Deg2Rad(this.Lat.Value);
+    let Lon1 = Deg2Rad(this.Lon.Value);
+    let Lat = 0;
+    let Lon = 0;
+    
     Lat = Lat1 + d * Math.cos(tc);
-    if (Math.abs(Lat) > Math.PI / 2)
+    let t_lat = (Lat1 + Lat) / 2.0;
+    Lon = Lon1 + (d * Math.sin(tc)) / Math.cos(t_lat);
+    if (Lon > Math.PI)
     {
-      //'"d too large. You can't go this far along this rhumb line!"
-      throw "Invalid distance, can't go that far";
+      Lon -= 2 * Math.PI;
     }
-
-    if (Math.abs(Lat - Lat1) < Math.sqrt(TOL))
+    else if (Lon < -Math.PI)
     {
-      q = Math.cos(Lat1);
+      Lon += 2 * Math.PI;
     }
-    else
-    {
-      dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
-      q = (Lat - Lat1) / dPhi;
-    }
-    dlon = -d * Math.sin(tc) / q;
-    Lon = -(((Lon1 + dlon + Math.PI) % (2 * Math.PI) - Math.PI));
 
     if (isNaN(Lon) || isNaN(Lat))
     {
       throw "Reached Nan Position!!!";
     }
 
-    Lon = RoundPow(Rad2Deg(Lon), 9);
-    Lat = RoundPow(Rad2Deg(Lat), 9);
+    Lon = Rad2Deg(Lon);
+    Lat = Rad2Deg(Lat);
 
     return new VLMPosition(NormalizeLongitudeDeg(Lon), Lat);
 
 
   };
+
+  // Reaches a point from position using rhumbline from aviation formulary.
+  // Compute the position of point at r * distance to point P is 1st param is a Position
+  // Computes the position at Distance P, and heading r if P is a number
+  // Along loxodrome from this to P
+  // this.ReachDistLoxo = function(P, r)
+  // {
+  //   var d = 0;
+  //   var tc = 0;
+
+  //   if (isNaN(r))
+  //   {
+  //     throw "unsupported reaching NaN distance";
+  //   }
+
+  //   if (typeof P == "number")
+  //   {
+  //     d = P / EARTH_RADIUS;
+  //     tc = Deg2Rad(r % 360);
+  //   }
+  //   else
+  //   {
+  //     d = this.GetLoxoDist(P) / EARTH_RADIUS * r;
+  //     tc = Deg2Rad(this.GetLoxoCourse(P));
+  //   }
+
+  //   var Lat1 = Deg2Rad(this.Lat.Value);
+  //   var Lon1 = -Deg2Rad(this.Lon.Value);
+  //   var Lat = 0;
+  //   var Lon = 0;
+  //   var TOL = 0.000000000000001;
+  //   var q = 0;
+  //   var dPhi = 0;
+  //   var dlon = 0;
+
+  //   Lat = Lat1 + d * Math.cos(tc);
+  //   if (Math.abs(Lat) > Math.PI / 2)
+  //   {
+  //     //'"d too large. You can't go this far along this rhumb line!"
+  //     throw "Invalid distance, can't go that far";
+  //   }
+
+  //   if (Math.abs(Lat - Lat1) < Math.sqrt(TOL))
+  //   {
+  //     q = Math.cos(Lat1);
+  //   }
+  //   else
+  //   {
+  //     dPhi = Math.log(Math.tan(Lat / 2 + Math.PI / 4) / Math.tan(Lat1 / 2 + Math.PI / 4));
+  //     q = (Lat - Lat1) / dPhi;
+  //   }
+  //   dlon = -d * Math.sin(tc) / q;
+  //   Lon = -(((Lon1 + dlon + Math.PI) % (2 * Math.PI) - Math.PI));
+
+  //   if (isNaN(Lon) || isNaN(Lat))
+  //   {
+  //     throw "Reached Nan Position!!!";
+  //   }
+
+  //   Lon = RoundPow(Rad2Deg(Lon), 9);
+  //   Lat = RoundPow(Rad2Deg(Lat), 9);
+
+  //   return new VLMPosition(NormalizeLongitudeDeg(Lon), Lat);
+
+
+  // };
 
   //
   // Return loxodromic course from this to P in °
