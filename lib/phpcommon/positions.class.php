@@ -99,9 +99,14 @@ class positions
     
     VLM_raw_move_loxo($this->lat, $this->long, $distance, $heading, 
 		      $new_lat, $new_long);
-
+    /*      echo "DBG addDistance2Positions :\n";
+          echo "From : $this->lat / $this->long dist : $distance heading : $heading \n";
+    */      
+    
     $this->lat  = doublep_value($new_lat);
     $this->long = doublep_value($new_long);
+    //echo "To : $this->lat / $this->long ";
+          
   } 
 
   function writePositions($updatetime)
