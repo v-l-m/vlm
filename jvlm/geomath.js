@@ -54,7 +54,7 @@ function Coords(v, IsLon)
         Side = (this.Value>=0?' E':' W');
       }
       
-      return Math.floor(this.Deg()) +"° "+ Math.floor(this.Min()) + "' " + Math.floor(this.Sec()) + '"' + Side;
+      return Math.floor(this.Deg()) +"° "+ Math.floor(this.Min()) + "' " + RoundPow(this.Sec(),2) + '"' + Side;
     }
   };
 }
