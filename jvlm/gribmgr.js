@@ -172,7 +172,7 @@ function VLM2GribManager()
     let LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
     let LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
     let LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
-    let LatIdx2 = (LatIdx1 + 1) % (360 / this.GribStep);
+    let LatIdx2 = (LatIdx1 + 1) % (180 / this.GribStep);
 
     let dX = (Lon / this.GribStep - Math.floor(Lon / this.GribStep));
     let dY = (Lat / this.GribStep - Math.floor(Lat / this.GribStep));
@@ -387,11 +387,12 @@ function VLM2GribManager()
 
   this.ProcessInputGribData = function(Url, Data, LoadKey)
   {
-    var Lines = Data.split("\n");
-    var TotalLines = Lines.length;
-    var Catalog = [];
-    var HeaderCompleted = false;
-
+    let Lines = Data.split("\n");
+    let TotalLines = Lines.length;
+    let Catalog = [];
+    let HeaderCompleted = false;
+    let DataStartIndex = 0;
+    
     // Handle cache mess
     if (Data === "--\n")
     {
@@ -419,9 +420,15 @@ function VLM2GribManager()
 
       if (Line === "--")
       {
+        DataStartIndex = i+1;
         break;
       }
-      Catalog.push(this.ProcessCatalogLine(Line));
+
+      // Filter out GRID lines
+      if (Line && Line.search("GRID:") === -1)
+      {
+        Catalog.push(this.ProcessCatalogLine(Line));
+      }
     }
 
     if (Catalog.length < this.WindTableLength)
@@ -433,7 +440,6 @@ function VLM2GribManager()
 
     // Now Process the data
     var ZoneOffsets = Url.split("/");
-    var DataStartIndex = Catalog.length + 1;
     for (let i = 0; i < Catalog.length; i++)
     {
       if (typeof Lines[DataStartIndex] === "undefined" || Lines[DataStartIndex] === "")
