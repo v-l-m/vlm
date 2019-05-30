@@ -12,8 +12,14 @@ source $VLMRACINE/conf/conf_script || exit 1
 #Le premier argument est le nom du module
 confmodule=$1
 
+if confmodule eq "jvlm_alpha" then
+    $svnmodule="jvlm" 
+else
+    $svnmodule=confmodule
+fi
+
 #Récupération svn
-$VLMSCRIPTS/svn_maj_module.sh $confmodule
+$VLMSCRIPTS/svn_maj_module.sh $svnmodule
 
 if test $? -ne 0 ; then
     echo "!!! Erreur lors de la récupération depuis le subversion" 1>&2
