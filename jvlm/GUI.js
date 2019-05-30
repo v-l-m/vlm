@@ -1954,7 +1954,7 @@ function UpdatePilotBadge(Boat)
 
   var Pilot = Boat.VLMInfo.PIL;
 
-  if (Pilot.length)
+  if (typeof Pilot !== "undefined" && Pilot && Pilot.length)
   {
     for (index in Pilot)
     {
