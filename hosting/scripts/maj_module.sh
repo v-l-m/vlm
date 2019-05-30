@@ -12,14 +12,8 @@ source $VLMRACINE/conf/conf_script || exit 1
 #Le premier argument est le nom du module
 confmodule=$1
 
-if confmodule eq "jvlm_alpha" then
-    $svnmodule="jvlm" 
-else
-    $svnmodule=confmodule
-fi
-
 #Récupération svn
-$VLMSCRIPTS/svn_maj_module.sh $svnmodule
+$VLMSCRIPTS/svn_maj_module.sh $confmodule
 
 if test $? -ne 0 ; then
     echo "!!! Erreur lors de la récupération depuis le subversion" 1>&2
@@ -121,8 +115,9 @@ case $confmodule in
     echo -n "+$confmodule: Mise en place du lien symbolique vers le mode spectateur..."
     ln -s $destmodulepath/../guest_map $destmodulepath/guest_map
     echo 'OK !'
-    echo -n "+$confmodule: Mise en place du lien symbolique vers jvlm..."
+    echo -n "+$confmodule: Mise en place du lien symbolique vers jvlm(alpha)..."
     ln -s $destmodulepath/../jvlm $destmodulepath/jvlm
+    ln -s $destmodulepath/../jvlm_alpha $destmodulepath/jvlm_alpha
     echo 'OK !'
     echo -n "+$confmodule: Mise en place du lien symbolique vers externals..."
     ln -s $destmodulepath/../externals $destmodulepath/externals
