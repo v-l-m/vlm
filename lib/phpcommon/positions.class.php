@@ -259,7 +259,7 @@ class fullGrid
       $this->Lat =  $latitude;
       $this->Long = $longitude;
 
-      // Recherche de la donn�e vent de ce point
+      // Recherche de la donnée vent de ce point
       if ( $timestamp > 0 ) {
            $vent = windAtPosition($latitude, $longitude, $timestamp);
       } else {
