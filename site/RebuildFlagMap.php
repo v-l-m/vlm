@@ -5,11 +5,11 @@
     $info = array();
     $flagres = getFlagsListCursor();
     $index = 0;
-    while ($row = mysql_fetch_array($flagres, MYSQL_ASSOC) ) 
+    while ($row = mysqli_fetch_array($flagres, MYSQL_ASSOC) ) 
     {
         $info[$index++]=$row['idflags'];
     }
-    mysql_free_result($flagres);
+    mysqli_free_result($flagres);
 
     //$ret = sort ($info);
     

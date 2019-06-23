@@ -13,7 +13,7 @@
     $query = sprintf("SELECT idplayers AS idp, playername FROM players WHERE playername LIKE '%%%s%%' ORDER BY playername LIMIT 20", $q);
     $result = $ws->queryRead($query);
     if ($result)  {
-        while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
             $row['jid'] = makeFullJid($row['playername']);
             $ws->answer['list'][] = $row;
         }

@@ -1,17 +1,17 @@
 <?php
 /*
-** Page Admin, ré-entrante.
-** Permet de demander et d'effectuer des tâches d'administration sur VLM.
+** Page Admin, rï¿½-entrante.
+** Permet de demander et d'effectuer des tï¿½ches d'administration sur VLM.
 
-- une page d'admin refaite (une URL en fait, appelable avec login/password de chacun de "nous", vérifiant qu'on est admin (champ en plus dans la table des utilisateurs), et des arguments : pseudo=login&password=password ...
-   + * boat=xx&action=valide_wp&NWP=xx => valide un WP en mettant à jour le numéro duprochain WP pour un bateau donné.
-   + * boat=xx&action=maj_position&LONG=xxx&LAT=xxx => positionne un bateau aux coordonnées indiquées.
-   + * boat=xx&action=reset_username&USN=xxxxxxx => met à jour le nom d'utilisateur
+- une page d'admin refaite (une URL en fait, appelable avec login/password de chacun de "nous", vï¿½rifiant qu'on est admin (champ en plus dans la table des utilisateurs), et des arguments : pseudo=login&password=password ...
+   + * boat=xx&action=valide_wp&NWP=xx => valide un WP en mettant ï¿½ jour le numï¿½ro duprochain WP pour un bateau donnï¿½.
+   + * boat=xx&action=maj_position&LONG=xxx&LAT=xxx => positionne un bateau aux coordonnï¿½es indiquï¿½es.
+   + * boat=xx&action=reset_username&USN=xxxxxxx => met ï¿½ jour le nom d'utilisateur
 */
 $PAGETITLE = "User Admin Wizard (Old admin interface)";
 include("htmlstart.php"); // This will die if not logged or not admin.
 
-// Les paramètres
+// Les paramï¿½tres
 
 $action = get_cgi_var('action');
 $race = get_cgi_var('race');
@@ -28,7 +28,7 @@ if ( $race == "" ) {
    $result = wrapper_mysql_db_query_writer($query) or die("Query [$query] failed \n");
 
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
-   while ( $row = mysql_fetch_assoc($result)) {
+   while ( $row = mysqli_fetch_assoc($result)) {
            $select_list = $select_list . "<option value=\"". 
                                       $_SERVER['PHP_SELF'] . 
               "?boat=".$boat.
@@ -43,7 +43,7 @@ if ( $race == "" ) {
    echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
    echo $select_list . "</select>";
 } else {
-   // On a un numéro, est-ce qu'il existe ?
+   // On a un numï¿½ro, est-ce qu'il existe ?
    if ( ! raceExists($race) ) {
      echo "<h4>You should not do that... your IP : " . getip() . "</h4>";
      exit;
@@ -63,7 +63,7 @@ if ( $race == "" ) {
 
 // Y a t'il un bateau choisi ?
 if ( $boat != "" ) {
-   // On a un numéro, est-ce qu'il existe ?
+   // On a un numï¿½ro, est-ce qu'il existe ?
    if ( !boatExists($boat) ) {
      echo "<h4>You should not do that... your IP : " . getip() . "</h4>";
      exit;
@@ -80,7 +80,7 @@ if ( $boat != "" ) {
                   "&amp;race=".$race.
                   "'\" />";
        } else {
-           // Le bateau qui avait été choisi n'est pas dans la course choisie...
+           // Le bateau qui avait ï¿½tï¿½ choisi n'est pas dans la course choisie...
            $boat="";
        }
    }
@@ -96,7 +96,7 @@ if ( $race != "" && $boat == "" ) {
    $resultusers = wrapper_mysql_db_query_writer($queryusers) or die("Query [$queryusers] failed \n");
 
    $select_list="<option value=\"#\">--- CHOISIR ---</option>";
-   while ( $row = mysql_fetch_assoc($resultusers)) {
+   while ( $row = mysqli_fetch_assoc($resultusers)) {
            $select_list = $select_list . "<option value=\"". 
                                       $_SERVER['PHP_SELF'] . 
               "?race=".$race.
@@ -124,7 +124,7 @@ $URL="\"document.location='". $_SERVER['PHP_SELF'] .
                                 "&amp;race=".$race.
                                 "&amp;action=".$action.
                                 "'\" />";
-// Réalisation de l'action si "do = yes"..
+// Rï¿½alisation de l'action si "do = yes"..
 if ( $do == "yes" ) {
     echo "Mise a jour en cours...";
     switch ($action) {
@@ -133,7 +133,7 @@ if ( $do == "yes" ) {
             if ( get_cgi_var('lock') ) {
                 $querysgo = "SELECT coastpenalty FROM races WHERE idraces = ".$race;
                 $resgo = wrapper_mysql_db_query_writer($querysgo) or die("Query [$query] failed \n");
-                $row = mysql_fetch_assoc($resgo);
+                $row = mysqli_fetch_assoc($resgo);
                 $coastpenalty = $row['coastpenalty'];
                 if ( intval(get_cgi_var('coastpenalty')) != $coastpenalty ) {
                     $coastpenalty = intval(get_cgi_var('coastpenalty'));
@@ -202,7 +202,7 @@ if ( $do == "yes" ) {
 }
 
 
-// Les actions valides laissent passer, si aucune action est choisie, on présente la liste et on s'arrête là
+// Les actions valides laissent passer, si aucune action est choisie, on prï¿½sente la liste et on s'arrï¿½te lï¿½
 $URL="\"document.location='". $_SERVER['PHP_SELF'] .
                                 "?boat=".$boat .
                                 "&amp;race=".$race.
@@ -220,7 +220,7 @@ switch ($action) {
     case "unlock_boat":
         $querysgo = "SELECT coastpenalty FROM races WHERE idraces = ".$race;
         $resgo = wrapper_mysql_db_query_writer($querysgo) or die("Query [$query] failed \n");
-        $row = mysql_fetch_assoc($resgo);
+        $row = mysqli_fetch_assoc($resgo);
         $coastpenalty = $row['coastpenalty'];
         echo "<hr />Bloquer le bateau (if checked) : <input type=\"checkbox\" name=\"lock\" ";
         if ( $usersObj->users->releasetime > time() ) {
@@ -252,7 +252,7 @@ switch ($action) {
         echo "<hr />Nouveau pseudo de bateau : <input type=\"text\" name=\"newusern\" value=\"" . $usersObj->users->username . "\"/><br />";
         break;
     default:
-        // Choix de l'action à réaliser
+        // Choix de l'action ï¿½ rï¿½aliser
         $actions=array("maj_nextwp","unlock_boat","maj_position","reset_username");
         $select_list="<option value=\"#\">--- CHOISIR ---</option>";
         foreach ($actions as $a) {
@@ -269,7 +269,7 @@ switch ($action) {
         echo "onChange=\"document.location=this.options[this.selectedIndex].value\">";
         echo $select_list . "</select>";
         echo "</h4>";
-        // S'il n'y a pas d'action choisie, on s'arrête là.
+        // S'il n'y a pas d'action choisie, on s'arrï¿½te lï¿½.
         exit;
     }
   

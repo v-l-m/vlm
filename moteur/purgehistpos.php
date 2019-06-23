@@ -17,7 +17,7 @@ $query .= "where races.idraces = T2.race and closetime < ".$PurgeEndEpoch.";";
 
 $races=[];
 $res = wrapper_mysql_db_query_reader($query) or die("Query [".$query."] failed \n");
-while ($row = mysql_fetch_assoc($res) ) array_push( $races,$row["idraces"]);
+while ($row = mysqli_fetch_assoc($res) ) array_push( $races,$row["idraces"]);
 
 $TotalDeletedRows = 0;
 foreach ($races as $race)
@@ -31,7 +31,7 @@ foreach ($races as $race)
   $query="select distinct idusers from histpos where race=".$race.";";
   $ulist=[];
   $res = wrapper_mysql_db_query_reader($query) or die("Query [".$query."] failed \n");
-  while ($row = mysql_fetch_assoc($res) ) array_push($ulist,$row["idusers"]);
+  while ($row = mysqli_fetch_assoc($res) ) array_push($ulist,$row["idusers"]);
 
   // delete user positions from race
   $RaceDeletedRows=0;
@@ -41,7 +41,7 @@ foreach ($races as $race)
     //print_r($q2,true);
     $res = wrapper_mysql_db_query_reader($q2) or die("Delete Query Failed ".$q2."\n");
     //print_r($res,true);
-    $DeletedRows = mysql_affected_rows();
+    $DeletedRows = mysqli_affected_rows();
     if ($DeletedRows)
     {
       print("\t user ".$user. " deleted ".mysql_affected_rows()." positions\n");

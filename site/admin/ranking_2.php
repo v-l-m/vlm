@@ -40,7 +40,7 @@
   $ws->answer["RnkGenStatus"]=[];
   $skipped = 0;
   $count = $skip + 1;
-  while ($row = mysql_fetch_assoc($res)) 
+  while ($row = mysqli_fetch_assoc($res)) 
   {
     if ($row['idraces']!=='0' && $skipped >= $skip)
     {

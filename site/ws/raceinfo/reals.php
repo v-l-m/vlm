@@ -25,7 +25,7 @@
     $ws->answer['request'] = array('idr' => $ws->idr, 'time_request' => $now);
     $ws->answer['reals'] = array();
 
-    while ($row = mysql_fetch_assoc($res)) {
+    while ($row = mysqli_fetch_assoc($res)) {
         $ws->answer['reals'][] = $row; //Array("idreals" => -$row['idusers'], "tracks_updated" => $row['track_updated'], "nb_tracks" => $row['nbtracks']);
     }
 

@@ -45,7 +45,7 @@
     //Dessine les WP
     
     $res = wrapper_mysql_db_query_reader("SELECT rw.idwaypoint AS idwaypoint, wpformat, wporder, laisser_au, wptype, latitude1, longitude1, latitude2, longitude2, libelle, maparea FROM races_waypoints AS rw LEFT JOIN waypoints AS w ON (w.idwaypoint = rw.idwaypoint) WHERE rw.idraces  = ".$idr);
-    while ($wp = mysql_fetch_assoc($res)) {
+    while ($wp = mysqli_fetch_assoc($res)) {
         switch ($wp["wpformat"] & 0xF) {
             case WP_ONE_BUOY:
                 $p = new kml_Placemark();
