@@ -48,8 +48,8 @@ class playersPending extends baseClass {
     function constructFromQuery($where) {
         $query= "SELECT * FROM players_pending WHERE $where";
         $result = $this->queryRead($query);
-        if ($result && mysql_num_rows($result) === 1)  {
-            $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($result && mysqli_num_rows($result) === 1)  {
+            $row = mysqli_fetch_array($result, MYSQL_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct player_pending object from query");
@@ -153,8 +153,8 @@ class players extends baseClass {
     function constructFromQuery($where) {
         $query= "SELECT * FROM players WHERE ".$where;
         $result = $this->queryRead($query);
-        if ($result && mysql_num_rows($result) === 1)  {
-            $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($result && mysqli_num_rows($result) === 1)  {
+            $row = mysqli_fetch_array($result, MYSQL_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct player object from query");
@@ -318,7 +318,7 @@ class players extends baseClass {
 
     $query = sprintf("SELECT * FROM players WHERE `email` = '%s'", $this->email);
     $result = $this->queryRead($query);        
-    if (!($result && mysql_num_rows($result) === 0)) 
+    if (!($result && mysqli_num_rows($result) === 0)) 
     {
       $this->set_error(getLocalizedString("Your email is already in use."));
       if ($ws)
@@ -331,7 +331,7 @@ class players extends baseClass {
     }
     $query = sprintf("SELECT * FROM players WHERE UPPER(`playername`) = UPPER('%s')", $this->playername);
     $result = $this->queryRead($query);
-    if (!($result && mysql_num_rows($result) === 0)) 
+    if (!($result && mysqli_num_rows($result) === 0)) 
     {
       $this->set_error(getLocalizedString("Your playername is already in use."));
       if ($ws)
@@ -411,8 +411,8 @@ class players extends baseClass {
         $query = sprintf("SELECT `pref_name`, `pref_value`, `permissions` FROM `players_prefs` WHERE `idplayers` = %d AND `pref_name` = '%s'",
             intval($this->idplayers), $key);
         $result = $this->queryRead($query);
-        if ($result && mysql_num_rows($result) === 1)  {
-            $ret = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($result && mysqli_num_rows($result) === 1)  {
+            $ret = mysqli_fetch_array($result, MYSQL_ASSOC);
             $ret['permissions'] = intval($ret['permissions']);
             return $ret;
         } else {
@@ -427,7 +427,7 @@ class players extends baseClass {
         $grouplist = array();
 
         if ($result) {
-            while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+            while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
                 if (!is_null($row["pref_value"]) && $row["pref_value"] != "") $grouplist[$row["pref_name"]] = $row;
             }
         }
@@ -454,7 +454,7 @@ class players extends baseClass {
         //FIXME : optimiser la requête ?
         $query  = "SELECT DISTINCT `idusers` FROM `user_action` WHERE `idplayers` = ".$this->idplayers." AND idusers NOT IN (SELECT DISTINCT idusers FROM playerstousers WHERE idplayers = ".$this->idplayers." AND linktype = ".PU_FLAG_OWNER." )";
         if ($res = $this->queryRead($query)) {
-            while ($row = mysql_fetch_assoc($res)) {
+            while ($row = mysqli_fetch_assoc($res)) {
                 $boatidlist[$row['idusers']] = $row['idusers'];
                 //FIXME : check result ?
             }
@@ -476,7 +476,7 @@ class players extends baseClass {
         $boatsitterlist = array();
         $query  = "SELECT DISTINCT `idplayers` FROM `playerstousers` WHERE `idusers` IN (".$olmysql.") AND linktype = ".PU_FLAG_BOATSIT;
         if ($res = $this->queryRead($query)) {
-            while ($row = mysql_fetch_assoc($res)) {
+            while ($row = mysqli_fetch_assoc($res)) {
                 $boatsitterlist[$row['idplayers']] = $row['idplayers'];
                 //FIXME : check result ?
             }
@@ -505,7 +505,7 @@ class players extends baseClass {
         $boatidlist = Array();
         $query = "SELECT DISTINCT `idusers` FROM `playerstousers` WHERE `idplayers` = ".$this->idplayers." AND ".$linkfilter;
         if ($res = $this->queryRead($query)) {
-            while ($row = mysql_fetch_assoc($res)) {
+            while ($row = mysqli_fetch_assoc($res)) {
                 $boatidlist[$row['idusers']] = $row['idusers'];
                 //FIXME : check result ?
             }
@@ -521,7 +521,7 @@ class players extends baseClass {
                 ."SELECT DISTINCT PO.`idusers` FROM `playerstousers` as PO WHERE PO.`idplayers` = ".$this->idplayers." AND PO.linktype = ".PU_FLAG_OWNER
                 .") ORDER BY PU.`idusers`, PU.`linktype`, PU.`idplayers`";
         if ($res = $this->queryRead($query)) {
-            while ($row = mysql_fetch_assoc($res)) {
+            while ($row = mysqli_fetch_assoc($res)) {
                 $boatlist[] = $row;
                 //FIXME : check result ?
             }
@@ -535,7 +535,7 @@ class players extends baseClass {
         $query = "SELECT DISTINCT MAIN.`idusers` FROM `users` as MAIN WHERE `email` LIKE '%".$this->email
                 ."%' AND MAIN.`idusers` NOT IN (SELECT DISTINCT `idusers` FROM `playerstousers`)";
         if ($res = $this->queryRead($query)) {
-            while ($row = mysql_fetch_assoc($res)) {
+            while ($row = mysqli_fetch_assoc($res)) {
                 $boatidlist[] = $row['idusers'];
                 //FIXME : check result ?
             }

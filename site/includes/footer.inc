@@ -63,6 +63,6 @@ require(['converse'], function (converse) {
 </html>
 <?php
 
-  mysql_close();
+  //mysqli_close();
 
 ?>
