@@ -21,7 +21,7 @@ $result = wrapper_mysql_db_query_writer($queryracelist);
 
 $min_time = time() - RACE_EXPORT_DURATION;
 $racelist = array();
-while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
   if ($row['t'] < $min_time) {
     array_push($racelist, $row['race']);
   }

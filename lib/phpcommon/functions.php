@@ -1169,7 +1169,7 @@ function getFlag($idflags, $force = 'no') {
     
           $req = "SELECT idflags, flag ".
                  "FROM flags WHERE idflags = '".$idflags."'";
-          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $ret = wrapper_mysql_db_query_reader ($req) or die (mysqli_error ()); // ceci est une erreur "système" / applicative
           $col =mysqli_fetch_array ($ret);
           if ( !$col['idflags'] )
           {
@@ -1200,7 +1200,7 @@ function getFlagsListCursor($with_customs = True) {
     }
     $req .= " ORDER BY idflags";
     
-    $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error());
+    $ret = wrapper_mysql_db_query_reader ($req) or die (mysqli_error());
     return $ret;
 }
 
@@ -1217,7 +1217,7 @@ function getRacemap($idraces, $force = 'no') {
     
           $req = "SELECT idraces, racemap ".
                  "FROM racesmap WHERE idraces = '".$idraces."'";
-          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
+          $ret = wrapper_mysql_db_query_reader ($req) or die (mysqli_error ()); // ceci est une erreur "système" / applicative
           $col =mysqli_fetch_array ($ret, MYSQL_ASSOC);
           if ( !$col['idraces'] )
           {
@@ -1243,7 +1243,7 @@ function insertRacemapContent($idraces, $racemapcontent) {
              ") VALUES ( ".
              "".$idraces." , ".
              "'".addslashes($racemapcontent)."') ";
-    $ret = wrapper_mysql_db_query_writer ($req) or die (mysql_error ());
+    $ret = wrapper_mysql_db_query_writer ($req) or die (mysqli_error ());
 }
 
 /* Insert a racemap image $racemapfile for race $idraces  */
@@ -1269,7 +1269,7 @@ function insertFlag($idflag, $flagfile) {
                   ") VALUES ( ".
                   "'".$idflag."' , ".
                   "'".addslashes($img_blob)."') ";
-        $ret = wrapper_mysql_db_query_writer ($req) or die (mysql_error ());
+        $ret = wrapper_mysql_db_query_writer ($req) or die (mysqli_error ());
         return True;
     }
 }

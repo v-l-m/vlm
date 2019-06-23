@@ -205,7 +205,7 @@ class players extends baseClass {
     function insert() {
         $query = sprintf("INSERT INTO `players` %s", $this->query_addupdate());
         if (!$this->queryWrite($query)) return False;
-        $this->idplayers = mysql_insert_id($GLOBALS['masterdblink']);
+        $this->idplayers = mysqliinsert_id($GLOBALS['masterdblink']);
         $this->logPlayerEvent("Player created.");
         return True;
     }
@@ -377,7 +377,7 @@ class players extends baseClass {
         //FIXME : Should not be used except from playersPrefs class ?
         if (is_null($val)) return $this->unsetPref($key);
         $query = sprintf("REPLACE `players_prefs` SET `idplayers` = %d, `pref_name` = '%s', `pref_value` = '%s'",
-            intval($this->idplayers), $key, mysql_real_escape_string($val) );
+            intval($this->idplayers), $key, mysqlireal_escape_string($val) );
         if (!is_null($perm)) $query .= sprintf(", `permissions` = %d", $perm);
         if ($this->queryWrite($query)) {
             $this->logPlayerEvent("Player prefs(".$key.') updated');

@@ -27,7 +27,7 @@
 
       $res = $this->queryRead($query);
 
-      while ($line = mysql_fetch_assoc($res)) 
+      while ($line = mysqli_fetch_assoc($res)) 
       {
         $this->feedone($line);
       }

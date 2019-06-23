@@ -18,7 +18,7 @@
 	$db->query($query);
 	$result = $db->result;
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+	while($row = mysqli_fetch_array($result, MYSQL_ASSOC))
 	{
 		//Create an empty FeedItem
 		$newItem = $TestFeed->createNewItem();
