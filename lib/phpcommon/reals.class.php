@@ -31,7 +31,7 @@ class reals extends baseClass {
         $query= "SELECT * FROM users WHERE ".$where;
         $result = $this->queryRead($query);
         if ($result && mysqlinum_rows($result) === 1)  {
-            $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct real object from query");
@@ -126,7 +126,7 @@ class reals extends baseClass {
             intval($this->idreals), $key);
         $result = $this->queryRead($query);
         if ($result && mysqli_num_rows($result) === 1)  {
-            $ret = mysqli_fetch_array($result, MYSQL_ASSOC);
+            $ret = mysqli_fetch_array($result, MYSQLI_ASSOC);
             $ret['permissions'] = intval($ret['permissions']);
             return $ret;
         } else {
@@ -141,7 +141,7 @@ class reals extends baseClass {
         $grouplist = array();
 
         if ($result) {
-            while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+            while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                 if (!is_null($row["pref_value"]) && $row["pref_value"] != "") $grouplist[$row["pref_name"]] = $row;
             }
         }

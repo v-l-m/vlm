@@ -543,7 +543,7 @@ class map
       $idpoint = -1;
 
       $polymode = ($fullres == MAP_POLYLINE_FULL_MODE || $fullres = MAP_POLYLINE_MODE);
-      while ( $point = mysqli_fetch_array($result_coast, MYSQL_NUM) ) {
+      while ( $point = mysqli_fetch_array($result_coast, MYSQLI_NUM) ) {
 
         // On parcourt tous les points r�sultant de la requ�te (ils sont class� par  idcoast, idpoint
         //  - Chaque fois qu'on trouve un point : 

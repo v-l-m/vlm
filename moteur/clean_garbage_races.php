@@ -10,7 +10,7 @@ $query = "SELECT distinct idraces FROM races_ranking
 
 $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
 //for every race
-while ($row = mysqli_fetch_array($result, MYSQL_NUM)) {
+while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
       echo "Finished Race " . $row[0] . "\n";
       array_push($raceList, $row[0]);
 }
@@ -35,7 +35,7 @@ $query = " select idraces from races where started = 0 ";
 
 $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
 //for every race
-while ($row = mysqli_fetch_array($result, MYSQL_NUM)) {
+while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
       echo "Not Started Race " . $row[0] . "\n";
       array_push($raceList, $row[0]);
 }

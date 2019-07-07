@@ -93,7 +93,7 @@ class users extends baseClass
     } else {
         $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
     }
-    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $this->initFromArray($row);  
     
   }
@@ -156,7 +156,7 @@ class users extends baseClass
       PILOTOTO_PENDING . "' AND `idusers`=".$this->idusers." AND `time`<=".$now;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
 
-    while ( $row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+    while ( $row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
         // Execute the task
         $PIM=$row['pilotmode'];
         if ( $PIM == 0 OR $PIM > MAX_PILOTMODE ) $flag_err=true;
@@ -234,7 +234,7 @@ class users extends baseClass
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
     //echo $query;
 
-    if ( $row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+    if ( $row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
       $numRows=$row['NumTasks'];
     } else {
       $numRows=0;
@@ -265,7 +265,7 @@ class users extends baseClass
           $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
       }
 
-      while ( $row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+      while ( $row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
           array_push ($this->pilototo, $row);
       }
       return(0);
@@ -586,12 +586,12 @@ class fullUsers
     
     if ($result) 
     {
-      $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       if ($row) 
       {
         $this->RaceVersion = $row["updated"];
         $this->lastPositions->init($row);
-        $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         if ($row) 
         {
           $this->anteLastPositions->init($row);
@@ -710,7 +710,7 @@ class fullUsers
                         " WHERE idusers = ".$this->users->idusers;
           $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
           $this->preferences = array();
-          while( $row = mysqli_fetch_array($result_pref, MYSQL_ASSOC) ) {
+          while( $row = mysqli_fetch_array($result_pref, MYSQLI_ASSOC) ) {
               $this->preferences[$row['pref_name']] = $row['pref_value'];
           }
           //Special case for "old" prefs
@@ -1140,7 +1140,7 @@ class fullUsers
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
-    $rowresult = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $rowresult = mysqli_fetch_array($result, MYSQLI_ASSOC);
     return $rowresult['nbinvalid'];
   }
   
@@ -1152,7 +1152,7 @@ class fullUsers
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp." AND userdeptime=".$this->users->userdeptime;
     $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
-    $rowresult = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $rowresult = mysqli_fetch_array($result, MYSQLI_ASSOC);
     return ($rowresult['nbvalid']>0);
   }
 
@@ -1649,7 +1649,7 @@ class fullUsers
       " AND time=" . ( $timestamp - $duration);
     
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     if (!$row) 
     {
       $query = "SELECT `time`, `loch` ".
@@ -1659,7 +1659,7 @@ class fullUsers
                 " ORDER BY time ASC LIMIT 1";
       
       $result = wrapper_mysql_db_query_reader($query);
-      $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       if (!$row) 
       {
 	      return array(0,0);
@@ -1697,14 +1697,14 @@ class fullUsers
 	$this->users->engaged . " ORDER BY nwp DESC, dnm ASC" ;
       $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
       $nbu=0; $rank = 0;
-      while ($row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+      while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
           if( $row['idusers'] == $this->users->idusers ) $rank=$nbu+1;
           $nbu++;
       }
       // we do add num_arrived boats to each counters
       $query = "SELECT count(*) AS nbarrived FROM races_results where position = " . BOAT_STATUS_ARR . " AND idraces = " . $this->users->engaged;
       $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
-      $rowarrived = mysqli_fetch_array($result, MYSQL_ASSOC);
+      $rowarrived = mysqli_fetch_array($result, MYSQLI_ASSOC);
       return array("rankracing" => $rank, "nbu" => $nbu+$rowarrived['nbarrived'],
                     "rank" => $rank+$rowarrived['nbarrived']);
   }

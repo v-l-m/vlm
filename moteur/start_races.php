@@ -4,7 +4,7 @@
 
 $result4 = queryRacesBatch("WHERE started=0");
 
-while ($row4 = mysqli_fetch_array($result4, MYSQL_ASSOC)) 
+while ($row4 = mysqli_fetch_array($result4, MYSQLI_ASSOC)) 
 {
   $idraces  = $row4['idraces'];
   $racename = $row4['racename'];

@@ -5,7 +5,7 @@
     $info = array();
     $flagres = getFlagsListCursor();
     $index = 0;
-    while ($row = mysqli_fetch_array($flagres, MYSQL_ASSOC) ) 
+    while ($row = mysqli_fetch_array($flagres, MYSQLI_ASSOC) ) 
     {
         $info[$index++]=$row['idflags'];
     }
