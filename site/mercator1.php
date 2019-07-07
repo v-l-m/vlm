@@ -92,7 +92,7 @@ $fullRacesObj->dispHtmlForm(explode(",", $_COOKIE['list']));
 <input type="checkbox" name="save" checked="checked" /><?php echo getLocalizedString("save") ?>  <br/>
 </td></tr></table>
 
-<input type="submit" value="<? echo getLocalizedString("map")?>"/>
+<input type="submit" value="<?php echo getLocalizedString("map")?>"/>
       </form>
 <?php
    }
