@@ -1,6 +1,6 @@
 <?php
-
 /*
+ * php7 compatible code otained from : https://github.com/superfunnl/phpMyEdit-PHP7.0/blob/master/phpMyEdit.class.php
  * phpMyEdit - instant MySQL table editor and code generator
  *
  * phpMyEdit.class.php - main table editor class definition file
@@ -18,12 +18,9 @@
  * Download the latest version from
  * http://platon.sk/projects/phpMyEdit/
  */
-
 /* $Platon: phpMyEdit/phpMyEdit.class.php,v 1.204 2007-09-16 12:57:07 nepto Exp $ */
-
 /*  This is a generic table editing program. The table and fields to be
 	edited are defined in the calling program.
-
 	This program works in three passes.
 	* Pass 1 (the last part of the program) displays the selected SQL
 	  table in a scrolling table on the screen. Radio buttons are used to
@@ -34,12 +31,14 @@
 	* Pass 3 processes the update and the display returns to the
 	  original table view (Pass 1).
 */
-
+function fhtmlspecialchars($myString) {
+  // in PHP 5.4 the default encoding used by htmlspecialchars() was changed.
+  return htmlspecialchars($myString, ENT_COMPAT, 'ISO-8859-1', true);
+}
 class phpMyEdit_timer /* {{{ */
 {
 	var $startTime;
 	var $started;
-
 	function phpMyEdit_timer($start = true)
 	{
 		$this->started = false;
@@ -47,14 +46,12 @@ class phpMyEdit_timer /* {{{ */
 			$this->start();
 		}
 	}
-
 	function start()
 	{
 		$startMtime      = explode(' ', microtime());
 		$this->startTime = (double) $startMtime[0] + (double) $startMtime[1];
 		$this->started   = true;
 	}
-
 	function end($iterations = 1)
 	{
 		// get the time, check whether the timer was started later
@@ -70,7 +67,6 @@ class phpMyEdit_timer /* {{{ */
 		}
 	}
 } /* }}} */
-
 if (! function_exists('array_search')) { /* {{{ */
 	function array_search($needle, $haystack)
 	{
@@ -81,18 +77,15 @@ if (! function_exists('array_search')) { /* {{{ */
 		return false;
 	}
 } /* }}} */
-
 if (! function_exists('realpath')) { /* {{{ */
 	function realpath($path)
 	{
 		return $path;
 	}
 } /* }}} */
-
 class phpMyEdit
 {
 	// Class variables {{{
-
 	// Database handling
 	var $hn;		// hostname
 	var $un;		// user name
@@ -101,8 +94,8 @@ class phpMyEdit
 	var $db;		// database
 	var $dbp;		// database with point and delimiters
 	var $dbh;		// database handle
+	var $sth;		// statement Handle // PDO
 	var $close_dbh;	// if database handle should be closed
-
 	// Record manipulation
 	var $key;		// name of field which is the unique key
 	var $key_num;	// number of field which is the unique key
@@ -120,7 +113,6 @@ class phpMyEdit
 	var $qfn;		// value of all filters used during the last pass
 	var $sfn;		// sort field number (- = descending sort order)
 	var $cur_tab;	// current selected tab
-
 	// Operation
 	var $navop;		// navigation buttons/operations
 	var $sw;		// filter display/hide/clear button
@@ -136,7 +128,6 @@ class phpMyEdit
 	var $savedelete;
 	var $canceldelete;
 	var $cancelview;
-
 	// Additional features
 	var $labels;		// multilingual labels
 	var $cgi;			// CGI variable features array
@@ -150,7 +141,6 @@ class phpMyEdit
 	var $tabs;			// TAB names
 	var $timer = null;	// phpMyEdit_timer object
 	var $sd; var $ed;	// sql start and end delimiters '`' in case of MySQL
-
 	// Predefined variables
 	var $comp_ops  = array('<'=>'<','<='=>'<=','='=>'=','>='=>'>=','>'=>'>');
 	var $sql_aggrs = array(
@@ -178,11 +168,9 @@ class phpMyEdit
 			'V' => array('change','cancel')
 			);
 	// }}}
-
 	/*
 	 * column specific functions
 	 */
-
 	function col_has_sql($k)    { return isset($this->fdd[$k]['sql']); }
 	function col_has_sqlw($k)   { return isset($this->fdd[$k]['sqlw']) && !$this->virtual($k); }
 	function col_has_values($k) { return isset($this->fdd[$k]['values']) || isset($this->fdd[$k]['values2']); }
@@ -199,21 +187,17 @@ class phpMyEdit
 	{ return $this->fdd[$k]['select'] == 'O' && ! $this->fdd[$k]['values']['table']; }
 	function col_has_datemask($k)
 	{ return isset($this->fdd[$k]['datemask']) || isset($this->fdd[$k]['strftimemask']); }
-
 	/*
 	 * functions for indicating whether navigation style is enabled
      */
-
 	function nav_buttons()       { return stristr($this->navigation, 'B'); }
 	function nav_text_links()    { return stristr($this->navigation, 'T'); }
 	function nav_graphic_links() { return stristr($this->navigation, 'G'); }
 	function nav_up()            { return (stristr($this->navigation, 'U') && !($this->buttons[$this->page_type]['up'] === false)); }
 	function nav_down()          { return (stristr($this->navigation, 'D') && !($this->buttons[$this->page_type]['down'] === false)); }
-
 	/*
 	 * functions for indicating whether operations are enabled
 	 */
-
 	function add_enabled()    { return stristr($this->options, 'A'); }
 	function change_enabled() { return stristr($this->options, 'C'); }
 	function delete_enabled() { return stristr($this->options, 'D'); }
@@ -225,7 +209,6 @@ class phpMyEdit
 	function password($k)     { return stristr($this->fdd[$k]['input'],'W'); }
 	function readonly($k)     { return stristr($this->fdd[$k]['input'],'R') || $this->virtual($k);     }
 	function virtual($k)      { return stristr($this->fdd[$k]['input'],'V') && $this->col_has_sql($k); }
-
 	function add_operation()    { return $this->operation == $this->labels['Add']    && $this->add_enabled();    }
 	function change_operation() { return $this->operation == $this->labels['Change'] && $this->change_enabled(); }
 	function copy_operation()   { return $this->operation == $this->labels['Copy']   && $this->copy_enabled();   }
@@ -240,19 +223,16 @@ class phpMyEdit
 	function first_operation()	{ return ($this->navop == $this->labels['First']) || ($this->navop == '<<'); }
 	function last_operation()	{ return ($this->navop == $this->labels['Last']) || ($this->navop == '>>'); }
 	function clear_operation()	{ return $this->sw == $this->labels['Clear'];  }
-
 	function add_canceled()    { return $this->canceladd    == $this->labels['Cancel']; }
 	function view_canceled()   { return $this->cancelview   == $this->labels['Cancel']; }
 	function change_canceled() { return $this->cancelchange == $this->labels['Cancel']; }
 	function copy_canceled()   { return $this->cancelcopy   == $this->labels['Cancel']; }
 	function delete_canceled() { return $this->canceldelete == $this->labels['Cancel']; }
-
 	function is_values2($k, $val = 'X') /* {{{ */
 	{
 		return $val === null ||
 			(isset($this->fdd[$k]['values2']) && !isset($this->fdd[$k]['values']['table']));
 	} /* }}} */
-
 	function processed($k) /* {{{ */
 	{
 		if ($this->virtual($k)) {
@@ -270,7 +250,6 @@ class phpMyEdit
 			($this->savecopy   == $this->labels['Save']  && stristr($options, 'P')) ||
 			($this->savedelete == $this->labels['Save']  && stristr($options, 'D'));
 	} /* }}} */
-
 	function displayed($k) /* {{{ */
 	{
 		if (is_numeric($k)) {
@@ -289,7 +268,6 @@ class phpMyEdit
 			($this->filter_operation() && stristr($options, 'F')) ||
 			($this->list_operation()   && stristr($options, 'L'));
 	} /* }}} */
-	
 	function debug_var($name, $val) /* {{{ */
 	{
 		if (is_array($val) || is_object($val)) {
@@ -299,99 +277,126 @@ class phpMyEdit
 			var_dump($val);
 			$content = ob_get_contents();
 			ob_end_clean();
-			echo htmlspecialchars($content);
+			echo fhtmlspecialchars($content);
 			echo "</pre>\n";
 		} else {
-			echo 'debug_var()::<i>',htmlspecialchars($name),'</i>';
-			echo '::<b>',htmlspecialchars($val),'</b>::',"<br />\n";
+			echo 'debug_var()::<i>',fhtmlspecialchars($name),'</i>';
+			echo '::<b>',fhtmlspecialchars($val),'</b>::',"<br />\n";
 		}
 	} /* }}} */
-
 	/*
 	 * sql functions
      */
-	function sql_connect() /* {{{ */
+	function sql_connect() /* {{{ */   // PDO
 	{
-		$this->dbh = @ini_get('allow_persistent')
-			? @mysql_pconnect($this->hn, $this->un, $this->pw)
-			: @mysql_connect($this->hn, $this->un, $this->pw);
+		try {
+			$dsn = "mysql:host=" . $this->hn . ";dbname=" . $this->db;
+			$this->dbh = @ini_get('allow_persistent')
+				? new PDO($dsn, $this->un, $this->pw, array( PDO::ATTR_PERSISTENT => true )) // @mysql_pconnect($this->hn, $this->un, $this->pw)
+				: new PDO($dsn, $this->un, $this->pw); // @mysql_connect($this->hn, $this->un, $this->pw);
+			// select error-mode: [ERRMODE_SILENT | ERRMODE_WARNING | ERRMODE_EXCEPTION]
+			$this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			// select fetch-mode: [FETCH_ASSOC | FETCH_CLASS | FETCH_OBJ]
+			// $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+		} // try/catch
+		catch(PDOException $e) {
+			$this->error("PME sql_connect ". $e->getMessage());
+			$this->dbh = null;
+		} // try/catch
 	} /* }}} */
-		
-
-	function sql_disconnect() /* {{{ */
+	function sql_disconnect() /* {{{ */ // PDO
 	{
 		if ($this->close_dbh) {
-			@mysql_close($this->dbh);
+			// @mysql_close($this->dbh);
 			$this->dbh = null;
+			$this->sth = null;
 		}
 	} /* }}} */
-
-	function sql_fetch(&$res, $type = 'a') /* {{{ */
+	function sql_fetch_pdo($type = 'a') // sql_fetch(&$res, $type = 'a') /* {{{ */ // PDO
 	{
-		if($type == 'n') $type = MYSQL_NUM;
-		else $type = MYSQL_ASSOC;
-		return @mysql_fetch_array($res, $type);
+		// original code:
+		// if($type == 'n') $type = MYSQL_NUM;
+		// else $type = MYSQL_ASSOC;
+		// return @mysql_fetch_array($res, $type);
+		// PDO:
+		if($type == 'n') $typePdo = PDO::FETCH_NUM;
+		else $typePdo = PDO::FETCH_ASSOC;
+		return $this->sth->fetch($typePdo); // @mysql_fetch_array($res, $typePdo);
 	} /* }}} */
-
-	function sql_free_result(&$res) /* {{{ */
+	function sql_num_rows() { // PDO, used in trg files.
+		return $this->sth->rowCount();  // instead of mysql_num_rows(Query_ID);
+	}
+	function sql_free_result_pdo() // sql_free_result(&$res) /* {{{ */ // PDO, also used in trg files.
 	{
-		return @mysql_free_result($res);
+		return $this->sth->closeCursor();  //@mysql_free_result($res);
 	} /* }}} */
-
-	function sql_affected_rows(&$dbh) /* {{{ */
+	function sql_affected_rows_pdo() // sql_affected_rows(&$dbh) /* {{{ */ // PDO
 	{
-		return @mysql_affected_rows($dbh);
+		return $this->sth->rowCount(); // @mysql_affected_rows($dbh);
 	} /* }}} */
-
-	function sql_field_len(&$res,$field) /* {{{ */
+	function sql_field_len_pdo_dummy() // sql_field_len(&$res,$field) /* {{{ */  // PDO
 	{
-		return @mysql_field_len($res, $field);
+		return (65535 - 1); // @mysql_field_len($res, $field);
+		// PDO :
+		// $meta = $this->sth->getColumnMeta($field);
+		// but getColumnMeta() is EXPERIMENTAL function!
 	} /* }}} */
-
-	function sql_insert_id() /* {{{ */
+	function sql_insert_id() /* {{{ */  // PDO
 	{
-		return mysql_insert_id($this->dbh);
+		return $this->dbh->lastInsertId(); // mysql_insert_id($this->dbh);
 	} /* }}} */
-
 	function sql_limit($start, $more) /* {{{ */
 	{
 		return ' LIMIT '.$start.', '.$more.' ';
 	} /* }}} */
-
 	function sql_delimiter() /* {{{ */
 	{
 		$this->sd = '`'; $this->ed='`';
 		return $this->sd;
 	} /* }}} */
-
-
 	function myquery($qry, $line = 0, $debug = 0) /* {{{ */
 	{
 		global $debug_query;
 		if ($debug_query || $debug) {
 			$line = intval($line);
-			echo '<h4>MySQL query at line ',$line,'</h4>',htmlspecialchars($qry),'<hr size="1" />',"\n";
+			echo '<h4>MySQL query at line ',$line,'</h4>',fhtmlspecialchars($qry),'<hr size="1" />',"\n";
 		}
-		if (isset($this->db)) {
-			$ret = @mysql_db_query($this->db, $qry, $this->dbh);
-		} else {
-			$ret = @mysql_query($qry, $this->dbh);
+		// original code:
+		// if (isset($this->db)) {
+		// 	$ret = @mysql_db_query($this->db, $qry, $this->dbh);
+		// } else {
+		// 	$ret = @mysql_query($qry, $this->dbh);
+		// }
+		// if (! $ret) {
+		// 	echo '<h4>MySQL error ',mysql_errno($this->dbh),'</h4>';
+		// 	echo fhtmlspecialchars(mysql_error($this->dbh)),'<hr size="1" />',"\n";
+		// }
+		// return $ret;
+		// PDO :
+		try {
+			# New query, discard previous result.
+			if ($this->sth) {
+				$this->sth = null;
+			}
+			// Note: The db is already selected in sql_connect().
+			$this->sth = $this->dbh->query($qry); // returns FALSE on failure
+			$errCode = $this->dbh->errorCode(); // mysql_errno();
+			$errInfo = $this->sth->errorInfo(); // mysql_error();
 		}
-		if (! $ret) {
-			echo '<h4>MySQL error ',mysql_errno($this->dbh),'</h4>';
-			echo htmlspecialchars(mysql_error($this->dbh)),'<hr size="1" />',"\n";
+		catch(PDOException $e) {
+			$this->error("Invalid SQL: [" . $qry . "] " . $e->getMessage());
+			echo '<h4>MySQL error ',$errCode,'</h4>';
+			echo fhtmlspecialchars($errInfo),'<hr size="1" />',"\n";
+			return null;
 		}
-		return $ret;
+		return $this->sth;
 	} /* }}} */
-
-	/* end of sql functions */ 
-
+	/* end of sql functions */
 	function make_language_labels($language) /* {{{ */
 	{
 		// just try the first language and variant
 		// this isn't content-negotiation rfc compliant
 		$language = strtoupper($language);
-
 		// try the full language w/ variant
 		$file = $this->dir['lang'].'PME.lang.'.$language.'.inc';
 		while (! file_exists($file)) {
@@ -411,7 +416,7 @@ class phpMyEdit
 				'Search' => 'v',
 				'Hide'   => '^',
 				'Clear'  => 'X',
-				'Query'  => htmlspecialchars('>'));
+				'Query'  => fhtmlspecialchars('>'));
 		if ((!$this->nav_text_links() && !$this->nav_graphic_links())
 				|| !isset($ret['Search']) || !isset($ret['Query'])
 				|| !isset($ret['Hide'])   || !isset($ret['Clear'])) {
@@ -421,7 +426,6 @@ class phpMyEdit
 		}
 		return $ret;
 	} /* }}} */
-
 	function set_values($field_num, $prepend = null, $append = null, $strict = false) /* {{{ */
 	{
 		return (array) $prepend + (array) $this->fdd[$field_num]['values2']
@@ -430,7 +434,6 @@ class phpMyEdit
 					: array())
 			+ (array) $append;
 	} /* }}} */
-
 	function set_values_from_table($field_num, $strict = false) /* {{{ */
 	{
 		$db    = &$this->fdd[$field_num]['values']['db'];
@@ -485,12 +488,11 @@ class phpMyEdit
 		}
 		$values = array();
 		$res    = $this->myquery($this->get_SQL_query($qparts), __LINE__);
-		while ($row = $this->sql_fetch($res, 'n')) {
+		while ($row = $this->sql_fetch_pdo('n')) {  // PDO // while ($row = $this->sql_fetch($res, 'n')) {
 			$values[$row[0]] = $desc ? $row[1] : $row[0];
 		}
 		return $values;
 	} /* }}} */
-
 	function fqn($field, $dont_desc = false, $dont_cols = false) /* {{{ */
 	{
 		is_numeric($field) || $field = array_search($field, $this->fds);
@@ -538,14 +540,10 @@ class phpMyEdit
 		}
 		return $ret;
 	} /* }}} */
-
 	function get_SQL_main_list_query($qparts) /* {{{ */
 	{
  		return $this->get_SQL_query($qparts);
  	} /* }}} */
- 
-
-
 	function get_SQL_query($parts) /* {{{ */
 	{
 		foreach ($parts as $k => $v) {
@@ -592,7 +590,6 @@ class phpMyEdit
 		}
 		return $ret;
 	} /* }}} */
-
 	function get_SQL_column_list() /* {{{ */
 	{
 		$fields = array();
@@ -611,7 +608,6 @@ class phpMyEdit
 		}
 		return join(',', $fields);
 	} /* }}} */
-
 	function get_SQL_join_clause() /* {{{ */
 	{
 		$main_table  = $this->sd.'PMEtable0'.$this->ed;
@@ -643,7 +639,6 @@ class phpMyEdit
 		}
 		return $join_clause;
 	} /* }}} */
-
 	function get_SQL_where_from_query_opts($qp = null, $text = 0) /* {{{ */
 	{
 		if ($qp == null) {
@@ -683,7 +678,6 @@ class phpMyEdit
 		}
 		return ''; /* empty string */
 	} /* }}} */
-
 	function gather_query_opts() /* {{{ */
 	{
 		$this->query_opts = array();
@@ -783,14 +777,12 @@ class phpMyEdit
 		}
 		$this->query_opts = $qo;
 	} /* }}} */
-
 	/*
 	 * Create JavaScripts
 	 */
-
 	function form_begin() /* {{{ */
 	{
-		$page_name = htmlspecialchars($this->page_name);
+		$page_name = fhtmlspecialchars($this->page_name);
 		if ($this->add_operation() || $this->change_operation() || $this->copy_operation()
 				|| $this->view_operation() || $this->delete_operation()) {
 			$field_to_tab = array();
@@ -827,7 +819,6 @@ class phpMyEdit
 				$css_class_name1 = $this->getCSSclass('tab', $position);
 				$css_class_name2 = $this->getCSSclass('tab-selected', $position);
 				echo 'var '.$this->js['prefix'].'cur_tab  = "'.$this->dhtml['prefix'].'tab',$this->cur_tab,'";
-
 function '.$this->js['prefix'].'show_tab(tab_name)
 {';
 				if ($this->nav_up()) {
@@ -853,7 +844,6 @@ function '.$this->js['prefix'].'show_tab(tab_name)
 				echo '// --></script>', "\n";
 			}
 		}
-
 		if ($this->add_operation() || $this->change_operation() || $this->copy_operation()) {
 			$first_required = true;
 			for ($k = 0; $k < $this->num_fds; $k++) {
@@ -879,7 +869,6 @@ function '.$this->js['prefix'].'trim(str)
 	}
 	return str;
 }
-
 function '.$this->js['prefix'].'form_control(theForm)
 {',"\n";
 					}
@@ -898,7 +887,6 @@ function '.$this->js['prefix'].'form_control(theForm)
 									$this->fdd[$k]['js']['regexp'], $this->cgi['prefix']['data'].$this->fds[$k]);
 						}
 					}
-
 					/* Multiple selects have their name like ''name[]''.
 					   It is not possible to work with them directly, because
 					   theForm.name[].something will result into JavaScript
@@ -922,7 +910,7 @@ function '.$this->js['prefix'].'form_control(theForm)
 					echo '
 		alert("';
 					if (isset($this->fdd[$k]['js']['hint'])) {
-						echo htmlspecialchars($this->fdd[$k]['js']['hint']);
+						echo fhtmlspecialchars($this->fdd[$k]['js']['hint']);
 					} else {
 						echo $this->labels['Please enter'],' ',$this->fdd[$k]['name'],'.';
 					}
@@ -944,7 +932,6 @@ function '.$this->js['prefix'].'form_control(theForm)
 				echo '// --></script>', "\n";
 			}
 		}
-
 		if ($this->filter_operation()) {
 				echo '<script type="text/javascript"><!--',"\n";
 				echo '
@@ -964,21 +951,19 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 }',"\n\n";
 				echo '// --></script>', "\n";
 		}
-
 		if ($this->display['form']) {
+			echo '<p>PDO</p>',"\n";  // dbg // PDO //
 			echo '<form class="',$this->getCSSclass('form'),'" method="post"';
 			echo ' action="',$page_name,'" name="'.$this->cgi['prefix']['sys'].'form">',"\n";
 		}
 		return true;
 	} /* }}} */
-
 	function form_end() /* {{{ */
 	{
 		if ($this->display['form']) {
 			echo '</form>',"\n";
 		}
 	} /* }}} */
-
 	function display_tab_labels($position) /* {{{ */
 	{
 		if (! is_array($this->tabs)) {
@@ -997,11 +982,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo '</tr>',"\n";
 		echo '</table>',"\n";
 	} /* }}} */
-
 	/*
 	 * Display functions
 	 */
-
 	function display_add_record() /* {{{ */
 	{
 		for ($tab = 0, $k = 0; $k < $this->num_fds; $k++) {
@@ -1058,7 +1041,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 					echo ' wrap="virtual"';
 				}
 				echo '>';
-				if($escape) echo htmlspecialchars($this->fdd[$k]['default']);
+				if($escape) echo fhtmlspecialchars($this->fdd[$k]['default']);
 				else echo $this->fdd[$k]['default'];
 				echo '</textarea>',"\n";
 			} elseif ($this->col_has_php($k)) {
@@ -1067,7 +1050,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				// Simple edit box required
 				$len_props = '';
 				$maxlen = intval($this->fdd[$k]['maxlen']);
-				$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60); 
+				$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60);
 				if ($size > 0) {
 					$len_props .= ' size="'.$size.'"';
 				}
@@ -1079,7 +1062,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				echo ($this->readonly($k) ? ' disabled' : '');
 				echo ' name="',$this->cgi['prefix']['data'].$this->fds[$k],'"';
 				echo $len_props,' value="';
-				if($escape) echo htmlspecialchars($this->fdd[$k]['default']);
+				if($escape) echo fhtmlspecialchars($this->fdd[$k]['default']);
 			    else echo $this->fdd[$k]['default'];
 				echo '" />';
 			}
@@ -1092,21 +1075,18 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '</tr>',"\n";
 		}
 	} /* }}} */
-
 	function display_copy_change_delete_record() /* {{{ */
 	{
 		/*
 		 * For delete or change: SQL SELECT to retrieve the selected record
 		 */
-
 		$qparts['type']   = 'select';
 		$qparts['select'] = $this->get_SQL_column_list();
 		$qparts['from']   = $this->get_SQL_join_clause();
 		$qparts['where']  = '('.$this->fqn($this->key).'='
 			.$this->key_delim.$this->rec.$this->key_delim.')';
-
 		$res = $this->myquery($this->get_SQL_query($qparts),__LINE__);
-		if (! ($row = $this->sql_fetch($res))) {
+		if (! ($row = $this->sql_fetch_pdo())) { // PDO // if (! ($row = $this->sql_fetch($res))) {
 			return false;
 		}
 		for ($tab = 0, $k = 0; $k < $this->num_fds; $k++) {
@@ -1168,8 +1148,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 	} /* }}} */
-
-	function display_change_field($row, $k) /* {{{ */ 
+	function display_change_field($row, $k) /* {{{ */
 	{
 		$css_postfix    = @$this->fdd[$k]['css']['postfix'];
 		$css_class_name = $this->getCSSclass('input', null, true, $css_postfix);
@@ -1181,19 +1160,14 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			$multiple   = $this->col_has_multiple($k);
 			$readonly   = $this->readonly($k);
 			$strip_tags = true;
-      if ($multiple && isset($row["qf".$k."_idx"])) {
-          $selected = $row["qf".$k."_idx"];
-      } else {
-          $selected = $row["qf$k"];
-      }
 			//$escape     = true;
 			if ($this->col_has_checkboxes($k) || $this->col_has_radio_buttons($k)) {
 				echo $this->htmlRadioCheck($this->cgi['prefix']['data'].$this->fds[$k],
-						$css_class_name, $vals, $selected, $multiple, $readonly,
+						$css_class_name, $vals, $row["qf$k"], $multiple, $readonly,
 						$strip_tags, $escape);
 			} else {
 				echo $this->htmlSelect($this->cgi['prefix']['data'].$this->fds[$k],
-						$css_class_name, $vals, $selected, $multiple, $readonly,
+						$css_class_name, $vals, $row["qf$k"], $multiple, $readonly,
 						$strip_tags, $escape);
 			}
 		} elseif (isset($this->fdd[$k]['textarea'])) {
@@ -1211,7 +1185,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				echo ' wrap="virtual"';
 			}
 			echo '>';
-			if($escape) echo htmlspecialchars($row["qf$k"]);
+			if($escape) echo fhtmlspecialchars($row["qf$k"]);
 			else echo $row["qf$k"];
 			echo '</textarea>',"\n";
 		} elseif ($this->col_has_php($k)) {
@@ -1219,7 +1193,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		} else {
 			$len_props = '';
 			$maxlen = intval($this->fdd[$k]['maxlen']);
-			$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60); 
+			$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60);
 			if ($size > 0) {
 				$len_props .= ' size="'.$size.'"';
 			}
@@ -1229,13 +1203,12 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '<input class="',$css_class_name,'" type="text"';
 			echo ($this->readonly($k) ? ' disabled' : '');
 			echo ' name="',$this->cgi['prefix']['data'].$this->fds[$k],'" value="';
-			if($escape) echo htmlspecialchars($row["qf$k"]);
+			if($escape) echo fhtmlspecialchars($row["qf$k"]);
 			else echo $row["qf$k"];
 			echo '"',$len_props,' />',"\n";
 		}
 		echo '</td>',"\n";
 	} /* }}} */
-
 	function display_password_field($row, $k) /* {{{ */
 	{
 		$css_postfix = @$this->fdd[$k]['css']['postfix'];
@@ -1243,7 +1216,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo $this->getColAttributes($k),">\n";
 		$len_props = '';
 		$maxlen = intval($this->fdd[$k]['maxlen']);
-		$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60); 
+		$size   = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size'] : min($maxlen, 60);
 		if ($size > 0) {
 			$len_props .= ' size="'.$size.'"';
 		}
@@ -1253,10 +1226,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo '<input class="',$this->getCSSclass('value', null, true, $css_postfix),'" type="password"';
 		echo ($this->readonly($k) ? ' disabled' : '');
 		echo ' name="',$this->cgi['prefix']['data'].$this->fds[$k],'" value="';
-		echo htmlspecialchars($row["qf$k"]),'"',$len_props,' />',"\n";
+		echo fhtmlspecialchars($row["qf$k"]),'"',$len_props,' />',"\n";
 		echo '</td>',"\n";
 	} /* }}} */
-
 	function display_delete_field($row, $k) /* {{{ */
 	{
 		$css_postfix    = @$this->fdd[$k]['css']['postfix'];
@@ -1265,7 +1237,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo $this->cellDisplay($k, $row, $css_class_name);
 		echo '</td>',"\n";
 	} /* }}} */
-
 	/**
 	 * Returns CSS class name
 	 */
@@ -1295,7 +1266,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return join($this->css['separator'], $elements);
 	} /* }}} */
-
 	/**
 	 * Returns field cell HTML attributes
 	 */
@@ -1311,7 +1281,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return $colattrs;
 	} /* }}} */
-
 	/**
 	 * Substitutes variables in string
 	 * (this is very simple but secure eval() replacement)
@@ -1328,7 +1297,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return join('', $array);
 	} /* }}} */
-
 	/**
 	 * Print URL
 	 */
@@ -1358,7 +1326,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			?  $this->substituteVars($this->fdd[$k]['URLdisp'], $ar)
 			: $disp_val;
 		$target = isset($this->fdd[$k]['URLtarget'])
-			? 'target="'.htmlspecialchars($this->fdd[$k]['URLtarget']).'" '
+			? 'target="'.fhtmlspecialchars($this->fdd[$k]['URLtarget']).'" '
 			: '';
 		$prefix_found  = false;
 		$postfix_found = false;
@@ -1384,14 +1352,13 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			$ret = '&nbsp;';
 		} else {
 			if ($escape) {
-				$urldisp = htmlspecialchars($urldisp);
+				$urldisp = fhtmlspecialchars($urldisp);
 			}
-			$urllink = htmlspecialchars($urllink);
+			$urllink = fhtmlspecialchars($urllink);
 			$ret = '<a '.$target.'class="'.$css.'" href="'.$urllink.'">'.$urldisp.'</a>';
 		}
 		return $ret;
 	} /* }}} */
-
 	function cellDisplay($k, $row, $css) /* {{{ */
 	{
 		$escape  = isset($this->fdd[$k]['escape']) ? $this->fdd[$k]['escape'] : true;
@@ -1442,7 +1409,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 		if (intval($this->fdd[$k]['trimlen']) > 0 && strlen($value) > $this->fdd[$k]['trimlen']) {
-			$value = ereg_replace("[\r\n\t ]+",' ',$value);
+			$value = ereg_replace("[\r\n\t ]+",' ',$value);                // !! // original line
+			// !! // $value = preg_replace("/[\\r\\n\\t ]+/",' ',$value);  // !! // proposed code. TODO: verify code! http://stackoverflow.com/questions/2443895/ereg-replace-to-preg-replace
 			$value = substr($value, 0, $this->fdd[$k]['trimlen'] - 3).'...';
 		}
 		if (@$this->fdd[$k]['mask']) {
@@ -1458,11 +1426,10 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			return '&nbsp;';
 		}
 		if ($escape) {
-			$value = htmlspecialchars($value);
+			$value = fhtmlspecialchars($value);
 		}
 		return nl2br($value);
 	} /* }}} */
-
 	/**
 	 * Creates HTML submit input element
 	 *
@@ -1489,30 +1456,25 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$ret .= ' />';
 		return $ret;
 	} /* }}} */
-
 	/**
 	 * Creates HTML hidden input element
 	 *
 	 * @param	name	element name
 	 * @param	value	value
 	 */
-
 	function htmlHiddenSys($name, $value) /* {{{ */
 	{
 		return $this->htmlHidden($this->cgi['prefix']['sys'].$name, $value);
 	} /* }}} */
-
 	function htmlHiddenData($name, $value) /* {{{ */
 	{
 		return $this->htmlHidden($this->cgi['prefix']['data'].$name, $value);
 	} /* }}} */
-
 	function htmlHidden($name, $value) /* {{{ */
 	{
-		return '<input type="hidden" name="'.htmlspecialchars($name)
-			.'" value="'.htmlspecialchars($value).'" />'."\n";
+		return '<input type="hidden" name="'.fhtmlspecialchars($name)
+			.'" value="'.fhtmlspecialchars($value).'" />'."\n";
 	} /* }}} */
-
 	/**
 	 * Creates HTML select element (tag)
 	 *
@@ -1530,7 +1492,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 	function htmlSelect($name, $css, $kv_array, $selected = null, /* ...) {{{ */
 			/* booleans: */ $multiple = false, $readonly = false, $strip_tags = false, $escape = true, $js = NULL)
 	{
-		$ret = '<select class="'.htmlspecialchars($css).'" name="'.htmlspecialchars($name);
+		$ret = '<select class="'.fhtmlspecialchars($css).'" name="'.fhtmlspecialchars($name);
 		if ($multiple) {
 			$ret  .= '[]" multiple size="'.$this->multiple;
 			if (! is_array($selected) && $selected !== null) {
@@ -1541,25 +1503,24 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		if (! is_array($selected)) {
 			$selected = $selected === null ? array() : array((string)$selected);
 		} else {
-			foreach($selected as $val) $selected2[]=(string)$val;
+			foreach($selected as $val) $selecte2[]=(string)$val;
 			$selected = $selected2;
 		}
 		$found = false;
 		foreach ($kv_array as $key => $value) {
-			$ret .= '<option value="'.htmlspecialchars($key).'"';
+			$ret .= '<option value="'.fhtmlspecialchars($key).'"';
 			if ((! $found || $multiple) && in_array((string)$key, $selected, 1)
 					|| (count($selected) == 0 && ! $found && ! $multiple)) {
 				$ret  .= ' selected="selected"';
 				$found = true;
 			}
 			$strip_tags && $value = strip_tags($value);
-			$escape     && $value = htmlspecialchars($value);
+			$escape     && $value = fhtmlspecialchars($value);
 			$ret .= '>'.$value.'</option>'."\n";
 		}
 		$ret .= '</select>';
 		return $ret;
 	} /* }}} */
-
 	/**
 	 * Creates HTML checkboxes or radio buttons
 	 *
@@ -1589,7 +1550,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$found = false;
 		foreach ($kv_array as $key => $value) {
 			$ret .= '<input type="'.($multiple ? 'checkbox' : 'radio').'" name="';
-			$ret .= htmlspecialchars($name).'[]" value="'.htmlspecialchars($key).'"';
+			$ret .= fhtmlspecialchars($name).'[]" value="'.fhtmlspecialchars($key).'"';
 			if ((! $found || $multiple) && in_array((string) $key, $selected, 1)
 					|| (count($selected) == 0 && ! $found && ! $multiple)) {
 				$ret  .= ' checked';
@@ -1599,12 +1560,11 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				$ret .= ' disabled';
 			}
 			$strip_tags && $value = strip_tags($value);
-			$escape     && $value = htmlspecialchars($value);
+			$escape     && $value = fhtmlspecialchars($value);
 			$ret .= '>'.$value.'<br>'."\n";
 		}
 		return $ret;
 	} /* }}} */
-
     /**
      * Returns original variables HTML code for use in forms or links.
      *
@@ -1650,9 +1610,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
                         continue;
                     }
                     $ret == '' || $ret .= '&amp;';
-                    $ret .= htmlspecialchars(rawurlencode($key));
+                    $ret .= fhtmlspecialchars(rawurlencode($key));
                     $ret .= '=';
-                    $ret .= htmlspecialchars(rawurlencode($val));
+                    $ret .= fhtmlspecialchars(rawurlencode($val));
                 }
             }
             if ($method[strlen($method) - 1] == '+') {
@@ -1664,7 +1624,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
         }
         return $ret;
     } /* }}} */
-
 	function get_sfn_cgi_vars($alternative_sfn = null) /* {{{ */
 	{
 		if ($alternative_sfn === null) { // FAST! (cached return value)
@@ -1681,7 +1640,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return $ret;
 	} /* }}} */
-
 	function get_default_cgi_prefix($type) /* {{{ */
 	{
 		switch ($type) {
@@ -1691,7 +1649,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return '';
 	} /* }}} */
-
 	function get_sys_cgi_var($name, $default_value = null) /* {{{ */
 	{
 		if (isset($this)) {
@@ -1699,7 +1656,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return phpMyEdit::get_cgi_var(phpMyEdit::get_default_cgi_prefix('sys').$name, $default_value);
 	} /* }}} */
-
 	function get_data_cgi_var($name, $default_value = null) /* {{{ */
 	{
 		if (isset($this)) {
@@ -1707,13 +1663,11 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return phpMyEdit::get_cgi_var(phpMyEdit::get_default_cgi_prefix('data').$name, $default_value);
 	} /* }}} */
-
     function get_cgi_var($name, $default_value = null) /* {{{ */
     {
 		if (isset($this) && isset($this->cgi['overwrite'][$name])) {
 			return $this->cgi['overwrite'][$name];
 		}
-
         static $magic_quotes_gpc = null;
         if ($magic_quotes_gpc === null) {
             $magic_quotes_gpc = get_magic_quotes_gpc();
@@ -1740,7 +1694,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
         return $var;
     } /* }}} */
-
 	function get_server_var($name) /* {{{ */
 	{
 		if (isset($_SERVER[$name])) {
@@ -1756,11 +1709,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return null;
 	} /* }}} */
-
 	/*
 	 * Debug functions
 	 */
-
 	function print_get_vars ($miss = 'No GET variables found') // debug only /* {{{ */
 	{
 		// we parse form GET variables
@@ -1786,7 +1737,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '</p>';
 		}
 	} /* }}} */
-
 	function print_post_vars($miss = 'No POST variables found')  // debug only /* {{{ */
 	{
 		global $_POST;
@@ -1813,7 +1763,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '</p>';
 		}
 	} /* }}} */
-
 	function print_vars ($miss = 'Current instance variables')  // debug only /* {{{ */
 	{
 		echo "$miss   ";
@@ -1832,7 +1781,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo 'fdd=',$this->fdd,'   ';
 		echo 'fl=',$this->fl,'   ';
 		echo 'fm=',$this->fm,'   ';
-		echo 'sfn=',htmlspecialchars($this->get_sfn_cgi_vars()),'   ';
+		echo 'sfn=',fhtmlspecialchars($this->get_sfn_cgi_vars()),'   ';
 		echo 'qfn=',$this->qfn,'   ';
 		echo 'sw=',$this->sw,'   ';
 		echo 'rec=',$this->rec,'   ';
@@ -1851,7 +1800,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo 'operation=',$this->operation,'   ';
 		echo "\n";
 	} /* }}} */
-
 	/*
 	 * Display buttons at top and bottom of page
 	 */
@@ -1886,7 +1834,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo '</tr></table>',"\n";
 		if($position == 'up') echo '<hr size="1" class="'.$this->getCSSclass('hr', 'up').'" />'."\n";
 	} /* }}} */
-
 	/*
 	 * Display buttons at top and bottom of page
 	 */
@@ -1913,7 +1860,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '<hr size="1" class="',$this->getCSSclass('hr', 'up'),'" />',"\n";
 		}
 	} /* }}} */
-
 	function display_buttons($position) /* {{{ */
 	{
 		$nav_fnc = 'nav_'.$position;
@@ -1927,7 +1873,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return $ret;
 	} /* }}} */
-
 	function display_button($name, $position = 'up') /* {{{ */
 	{
 		if (is_array($name)) {
@@ -2020,7 +1965,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		if(isset($this->labels[$name])) return $this->labels[$name];
 		return $name;
 	} /* }}} */
-
 	function number_of_recs() /* {{{ */
 	{
 		$count_parts = array(
@@ -2029,10 +1973,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				'from'   => $this->get_SQL_join_clause(),
 				'where'  => $this->get_SQL_where_from_query_opts());
 		$res = $this->myquery($this->get_SQL_main_list_query($count_parts), __LINE__);
-		$row = $this->sql_fetch($res, 'n');
+		$row = $this->sql_fetch_pdo('n'); // PDO // $row = $this->sql_fetch($res, 'n');
 		$this->total_recs = $row[0];
 	} /* }}} */
-
 	/*
 	 * Table Page Listing
 	 */
@@ -2062,8 +2005,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$this->qfn != $this->prev_qfn && $this->fm = 0;
 		if (0) { // DEBUG
 			echo 'qfn vs. prev_qfn comparsion ';
-			echo '[<b>',htmlspecialchars($this->qfn),'</b>]';
-			echo '[<b>',htmlspecialchars($this->prev_qfn),'</b>]<br />';
+			echo '[<b>',fhtmlspecialchars($this->qfn),'</b>]';
+			echo '[<b>',fhtmlspecialchars($this->prev_qfn),'</b>]<br />';
 			echo 'comparsion <u>',($this->qfn == $this->prev_qfn ? 'proved' : 'failed'),'</u>';
 			echo '<hr size="1" />';
 		}
@@ -2136,7 +2079,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				array_unshift($new_sfn, in_array("$k", $new_sfn, 1) ? "-$k" : $k);
 				echo '<th class="',$css_class_name,'">';
 				echo '<a class="',$css_class_name,'" href="';
-				echo htmlspecialchars($this->page_name.'?'.$this->cgi['prefix']['sys'].'fm'.'=0'
+				echo fhtmlspecialchars($this->page_name.'?'.$this->cgi['prefix']['sys'].'fm'.'=0'
 						.'&'.$this->cgi['prefix']['sys'].'fl'.'='.$this->fl
 						.'&'.$this->cgi['prefix']['sys'].'qfn'.'='.rawurlencode($this->qfn).$this->qfn
 						.'&'.$this->get_sfn_cgi_vars($new_sfn).$this->cgi['persist']);
@@ -2144,7 +2087,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 		echo '</tr>',"\n";
-
 		/*
 		 * Prepare the SQL Query from the data definition file
 		 */
@@ -2187,7 +2129,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 		$qparts['limit'] = $listall ? '' : $this->sql_limit($this->fm,$this->inc);
-
 		/*
 		 * Main list_table() query
 		 *
@@ -2198,12 +2139,11 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		 */
 		$query = $this->get_SQL_main_list_query($qparts);
 		$res   = $this->myquery($query, __LINE__);
-		if ($res == false) {
-			$this->error('invalid SQL query', $query);
+		if (($res == false) || ($res == null)) {  // PDO // if ($res == false)
+			$this->error('invalid SQL query 1', $query);
 			return false;
 		}
-		$row = $this->sql_fetch($res);
-
+		$row = $this->sql_fetch_pdo(); // pdo // $row = $this->sql_fetch($res);
 		/* FILTER {{{
 		 *
 		 * Draw the filter and fill it with any data typed in last pass and stored
@@ -2217,11 +2157,11 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				unset($qparts['where']);
 				$query = $this->get_SQL_query($qparts);
 				$res   = $this->myquery($query, __LINE__);
-				if ($res == false) {
-					$this->error('invalid SQL query', $query);
+				if (($res == false) || ($res == null)) {  // PDO // if ($res == false) {
+					$this->error('invalid SQL query 2', $query);
 					return false;
 				}
-				$filter_row = $this->sql_fetch($res);
+				$filter_row = $this->sql_fetch_pdo(); // PDO // $filter_row = $this->sql_fetch($res);
 			}
 			/* Variable $fields is used to get index of particular field in
 			   result. That index can be passed in example to $this->sql_field_len()
@@ -2275,7 +2215,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 					} elseif ($this->fdd[$fd]['select'] == 'N' || $this->fdd[$fd]['select'] == 'T') {
 						$len_props = '';
 						$maxlen = intval($this->fdd[$k]['maxlen']);
-						$maxlen > 0 || $maxlen = intval($this->sql_field_len($res, $fields["qf$k"]));
+						// PDO // $maxlen > 0 || $maxlen = intval($this->sql_field_len($res, $fields["qf$k"]));
+						$maxlen > 0 || $maxlen = intval($this->sql_field_len_pdo_dummy()); // PDO
 						$size = isset($this->fdd[$k]['size']) ? $this->fdd[$k]['size']
 							: ($maxlen < 30 ? min($maxlen, 8) : 12);
 						$len_props .= ' size="'.$size.'"';
@@ -2285,7 +2226,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 							echo $this->htmlSelect($this->cgi['prefix']['sys'].$l.'_comp',
 									$css_class_name, $this->comp_ops, $mc);
 						}
-						echo '<input class="',$css_class_name,'" value="',htmlspecialchars(@$m);
+						echo '<input class="',$css_class_name,'" value="',fhtmlspecialchars(@$m);
 						echo '" type="text" name="'.$this->cgi['prefix']['sys'].'qf'.$k.'"',$len_props;
 						echo ' onkeypress="return '.$this->js['prefix'].'filter_handler(this.form, event);" />';
 					} else {
@@ -2296,7 +2237,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				echo '</tr>',"\n";
 			}
 		} // }}}
-		
 		/*
 		 * Display sorting sequence
 		 */
@@ -2305,7 +2245,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '<tr class="',$css_class_name,'">',"\n";
 			echo '<td class="',$css_class_name,'" colspan="',$sys_cols,'">';
 			echo '<a class="',$css_class_name,'" href="';
-			echo htmlspecialchars($this->page_name
+			echo fhtmlspecialchars($this->page_name
 					.'?'.$this->cgi['prefix']['sys'].'fl'.'='.$this->fl
 					.'&'.$this->cgi['prefix']['sys'].'fm'.'='.$this->fm
 					.'&'.$this->cgi['prefix']['sys'].'qfn'.'='.rawurlencode($this->qfn)
@@ -2314,7 +2254,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '<td class="',$css_class_name,'" colspan="',$this->num_fields_displayed,'">';
 			echo $this->labels['Sorted By'],': ',join(', ', $sort_fields_w),'</td></tr>',"\n";
 		}
-
 		/*
 		 * Display the current query
 		 */
@@ -2324,16 +2263,15 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			echo '<tr class="',$css_class_name,'">',"\n";
 			echo '<td class="',$css_class_name,'" colspan="',$sys_cols,'">';
 			echo '<a class="',$css_class_name,'" href="';
-			echo htmlspecialchars($this->get_server_var('PHP_SELF')
+			echo fhtmlspecialchars($this->get_server_var('PHP_SELF')
 					.'?'.$this->cgi['prefix']['sys'].'fl'.'='.$this->fl
 					.'&'.$this->cgi['prefix']['sys'].'fm'.'='.$this->fm
 					.'&'.$this->cgi['prefix']['sys'].'qfn'.'='.rawurlencode($this->qfn)
 					.'&'.$this->get_sfn_cgi_vars().$this->cgi['persist']);
 			echo '">',$this->labels['Clear'],'</a></td>',"\n";
 			echo '<td class="',$css_class_name,'" colspan="',$this->num_fields_displayed,'">';
-			echo $this->labels['Current Query'],': ',htmlspecialchars($text_query),'</td></tr>',"\n";
+			echo $this->labels['Current Query'],': ',fhtmlspecialchars($text_query),'</td></tr>',"\n";
 		}
-
 		if ($this->nav_text_links() || $this->nav_graphic_links()) {
 			$qstrparts = array();
 			strlen($this->fl)             > 0 && $qstrparts[] = $this->cgi['prefix']['sys'].'fl'.'='.$this->fl;
@@ -2349,30 +2287,31 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			$qpcopy[]    = $qp_prefix.'Copy';
 			$qpchange[]  = $qp_prefix.'Change';
 			$qpdelete[]  = $qp_prefix.'Delete';
-			$qpviewStr   = htmlspecialchars($this->page_name.'?'.join('&',$qpview).$this->qfn);
-			$qpcopyStr   = htmlspecialchars($this->page_name.'?'.join('&',$qpcopy).$this->qfn);
-			$qpchangeStr = htmlspecialchars($this->page_name.'?'.join('&',$qpchange).$this->qfn);
-			$qpdeleteStr = htmlspecialchars($this->page_name.'?'.join('&',$qpdelete).$this->qfn);
+			$qpviewStr   = fhtmlspecialchars($this->page_name.'?'.join('&',$qpview).$this->qfn);
+			$qpcopyStr   = fhtmlspecialchars($this->page_name.'?'.join('&',$qpcopy).$this->qfn);
+			$qpchangeStr = fhtmlspecialchars($this->page_name.'?'.join('&',$qpchange).$this->qfn);
+			$qpdeleteStr = fhtmlspecialchars($this->page_name.'?'.join('&',$qpdelete).$this->qfn);
 		}
-
 		$fetched  = true;
 		$first    = true;
 		$rowCount = 0;
-		while ((!$fetched && ($row = $this->sql_fetch($res)) != false)
-				|| ($fetched && $row != false)) {
+		// PDO // while ((!$fetched && ($row = $this->sql_fetch($res)) != false)
+		// PDO // 		|| ($fetched && $row != false)) {
+		while ((!$fetched && ($row = $this->sql_fetch_pdo()) != false)   // PDO
+				|| ($fetched && $row != false)) {                        // PDO
 			$fetched = false;
 			echo '<tr class="',$this->getCSSclass('row', null, 'next'),'">',"\n";
 			if ($sys_cols) { /* {{{ */
 				$key_rec     = $row['qf'.$this->key_num];
-				$queryAppend = htmlspecialchars('&'.$this->cgi['prefix']['sys'].'rec'.'='.$key_rec);
+				$queryAppend = fhtmlspecialchars('&'.$this->cgi['prefix']['sys'].'rec'.'='.$key_rec);
 				$viewQuery   = $qpviewStr   . $queryAppend;
 				$copyQuery   = $qpcopyStr   . $queryAppend;
 				$changeQuery = $qpchangeStr . $queryAppend;
 				$deleteQuery = $qpdeleteStr . $queryAppend;
-				$viewTitle   = htmlspecialchars($this->labels['View']);
-				$changeTitle = htmlspecialchars($this->labels['Change']);
-				$copyTitle   = htmlspecialchars($this->labels['Copy']);
-				$deleteTitle = htmlspecialchars($this->labels['Delete']);
+				$viewTitle   = fhtmlspecialchars($this->labels['View']);
+				$changeTitle = fhtmlspecialchars($this->labels['Change']);
+				$copyTitle   = fhtmlspecialchars($this->labels['Copy']);
+				$deleteTitle = fhtmlspecialchars($this->labels['Delete']);
 				$css_class_name = $this->getCSSclass('navigation', null, true);
 				if ($select_recs) {
 					if (! $this->nav_buttons() || $sys_cols > 1) {
@@ -2443,7 +2382,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 					if ($this->nav_buttons()) {
 						echo '<td class="',$css_class_name,'"><input class="',$css_class_name;
 						echo '" type="radio" name="'.$this->cgi['prefix']['sys'].'rec';
-						echo '" value="',htmlspecialchars($key_rec),'"';
+						echo '" value="',fhtmlspecialchars($key_rec),'"';
 						if (($this->rec == '' && $first) || ($this->rec == $key_rec)) {
 							echo ' checked';
 							$first = false;
@@ -2471,7 +2410,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			} /* }}} */
 			echo '</tr>',"\n";
 		}
-
 		/*
 		 * Display and accumulate column aggregation info, do totalling query
 		 * XXX this feature does not work yet!!!
@@ -2487,7 +2425,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				$qp['where']  = $this->get_SQL_where_from_query_opts();
 				$tot_query    = $this->get_SQL_query($qp);
 				$totals_result = $this->myquery($tot_query,__LINE__);
-				$tot_row       = $this->sql_fetch($totals_result);
+				$tot_row       = $this->sql_fetch_pdo(); // PDO // $this->sql_fetch($totals_result);
 			//}
 			$qp_aggr = $qp;
 			echo "\n",'<tr class="TODO-class">',"\n",'<td class="TODO-class">&nbsp;</td>',"\n";
@@ -2519,7 +2457,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$this->display_list_table_buttons('down', $listall);
 		$this->form_end();
 	} /* }}} */
-
 	function display_record() /* {{{ */
 	{
 		// PRE Triggers
@@ -2571,16 +2508,13 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo '</table>',"\n";
  		if ($this->tabs_enabled()) {
 		echo '</div>',"\n";
-		}		
+		}
 		$this->display_record_buttons('down');
-
 		$this->form_end();
 	} /* }}} */
-
 	/*
 	 * Action functions
 	 */
-
 	function do_add_record() /* {{{ */
 	{
 		// Preparing query
@@ -2632,7 +2566,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		$query .= $query2.')';
 		$res    = $this->myquery($query, __LINE__);
-		$this->message = $this->sql_affected_rows($this->dbh).' '.$this->labels['record added'];
+		// PDO // $this->message = $this->sql_affected_rows($this->dbh).' '.$this->labels['record added'];
+		$this->message = $this->sql_affected_rows_pdo().' '.$this->labels['record added']; // PDO
 		if (! $res) {
 			return false;
 		}
@@ -2657,7 +2592,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return true;
 	} /* }}} */
-
 	function do_change_record() /* {{{ */
 	{
 		// Preparing queries
@@ -2684,8 +2618,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$query_oldrec .= ' FROM ' . $this->sd.$this->tb.$this->ed . $where_part;
 		// Additional query (must go before real query)
 		$res     = $this->myquery($query_oldrec, __LINE__);
-		$oldvals = $this->sql_fetch($res);
-		$this->sql_free_result($res);
+		$oldvals = $this->sql_fetch_pdo();  // PDO // $this->sql_fetch($res);
+		$this->sql_free_result_pdo();       // PDO // $this->sql_free_result($res);
 		// Creating array of changed keys ($changed)
 		foreach ($newvals as $fd => $value) {
 			if ($value != $oldvals[$fd])
@@ -2719,7 +2653,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$query_real .= $where_part;
 		// Real query
 		$res = $this->myquery($query_real, __LINE__);
-		$this->message = $this->sql_affected_rows($this->dbh).' '.$this->labels['record changed'];
+		// PDO // $this->message = $this->sql_affected_rows($this->dbh).' '.$this->labels['record changed'];
+		$this->message = $this->sql_affected_rows_pdo().' '.$this->labels['record changed']; // PDO
 		if (! $res) {
 			return false;
 		}
@@ -2729,8 +2664,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		$query_newrec .= ' WHERE ('.$this->key.'='.$this->key_delim.$this->rec.$this->key_delim.')';
 		$res     = $this->myquery($query_newrec, __LINE__);
-		$newvals = $this->sql_fetch($res);
-		$this->sql_free_result($res);
+		$newvals = $this->sql_fetch_pdo(); // PDO // $newvals = $this->sql_fetch($res);
+		$this->sql_free_result_pdo();      // PDO // $this->sql_free_result($res);
 		// Creating array of changed keys ($changed)
 		$changed = array();
 		foreach ($newvals as $fd => $value) {
@@ -2762,15 +2697,14 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return true;
 	} /* }}} */
-
 	function do_delete_record() /* {{{ */
 	{
 		// Additional query
 		$query   = 'SELECT * FROM '.$this->sd.$this->tb.$this->ed.' WHERE ('.$this->sd.$this->key.$this->ed.' = '
 				.$this->key_delim.$this->rec.$this->key_delim.')'; // )
 		$res     = $this->myquery($query, __LINE__);
-		$oldvals = $this->sql_fetch($res);
-		$this->sql_free_result($res);
+		$oldvals = $this->sql_fetch_pdo(); // PDO // $oldvals = $this->sql_fetch($res);
+		$this->sql_free_result_pdo();      // PDO // $this->sql_free_result($res);
 		// Creating array of changed keys ($changed)
 		$changed = is_array($oldvals) ? array_keys($oldvals) : array();
 		$newvals = array();
@@ -2782,7 +2716,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$query = 'DELETE FROM '.$this->tb.' WHERE ('.$this->key.' = '
 				.$this->key_delim.$this->rec.$this->key_delim.')'; // )
 		$res = $this->myquery($query, __LINE__);
-		$this->message = $this->sql_affected_rows($this->dbh).' '.$this->labels['record deleted'];
+		// PDO // $this->message = $this->sql_affected_rows($this->dbh).' '.$this->labels['record deleted'];
+		$this->message = $this->sql_affected_rows_pdo().' '.$this->labels['record deleted']; // PDO
 		if (! $res) {
 			return false;
 		}
@@ -2806,7 +2741,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return true;
 	} /* }}} */
-
 	function email_notify($old_vals, $new_vals) /* {{{ */
 	{
 		if (! function_exists('mail')) {
@@ -2871,7 +2805,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return true;
 	} /* }}} */
-
 	/*
 	 * Apply triggers function
 	 * Run a (set of) trigger(s). $trigger can be an Array or a filename
@@ -2895,13 +2828,11 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return $ret;
 	} /* }}} */
-
 	function exec_triggers_simple($op, $step) /* {{{ */
 	{
 		$oldvals = $newvals = $changed = array();
 		return $this->exec_triggers($op, $step, $oldvals, $changed, $newvals);
 	} /* }}} */
-	
 	/*
 	 * Recreate functions
 	 */
@@ -2932,7 +2863,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			foreach (array_keys($this->fdd[$column]) as $col_option) {
 				if ($col_option[strlen($col_option) - 1] != '~')
 					continue;
-
 				$this->fdd[$column][substr($col_option, 0, strlen($col_option) - 1)]
 					= $this->fdd[$column][$col_option];
 				unset($this->fdd[$column][$col_option]);
@@ -2956,7 +2886,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 	} /* }}} */
-
 	function recreate_displayed() /* {{{ */
 	{
 		$field_num            = 0;
@@ -2992,7 +2921,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		/* Adds first displayed column into sorting fields by replacing last
 		   array entry. Also remove duplicite values and change column names to
 		   their particular field numbers.
-
 		   Note that entries like [0]=>'9' [1]=>'-9' are correct and they will
 		   have desirable sorting behaviour. So there is no need to remove them.
 		 */
@@ -3029,7 +2957,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		$this->sfn = array_unique($this->sfn);
 		return true;
 	} /* }}} */
-
 	function backward_compatibility() /* {{{ */
 	{
 		foreach (array_keys($this->fdd) as $column) {
@@ -3045,19 +2972,27 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			}
 		}
 	} /* }}} */
-
 	/*
 	 * Error handling function
 	 */
 	function error($message, $additional_info = '') /* {{{ */
 	{
-		echo '<h1>phpMyEdit error: ',htmlspecialchars($message),'</h1>',"\n";
+		echo '<h1>phpMyEdit error: ',fhtmlspecialchars($message),'</h1>',"\n";
 		if ($additional_info != '') {
-			echo '<hr size="1" />',htmlspecialchars($additional_info);
+			echo '<hr size="1" />',fhtmlspecialchars($additional_info);
+		}
+		if ($this->dbh) {  // PDO
+			$errCode = $this->dbh->errorCode();
+			echo '<p>phpMyEdit error code: ',$errCode,'</p>',"\n";
+			$timeStamp = gmdate("d-M-Y H:i:s", time() + 2 * 60 * 60);
+			file_put_contents('PDOErrors.txt', "[" . $timeStamp . "] " . $message . "\n", FILE_APPEND);
+		}
+		if ($this->sth) { // PDO
+			$errInfo =  $this->sth->errorInfo();
+			print_r($errInfo);
 		}
 		return false;
 	} /* }}} */
-
 	/*
 	 * Database connection function
 	 */
@@ -3081,7 +3016,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		}
 		return true;
 	} /* }}} */
-	
 	/*
 	 * The workhorse
 	 */
@@ -3100,9 +3034,8 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		echo print_r($this->get_opts);
 		echo "</pre>\n";
 		 */
-
-		// Let's do explicit quoting - it's safer
-		// DEPRECATED set_magic_quotes_runtime(0);
+		// Let's do explicit quoting - it's safer in new PHP-Versions it's switched of by default
+		// set_magic_quotes_runtime(0);
 		// Checking if language file inclusion was successful
 		if (! is_array($this->labels)) {
 			$this->error('could not locate language files', 'searched path: '.$this->dir['lang']);
@@ -3112,7 +3045,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		if ($this->connect() == false) {
 			return false;
 		}
-
 		/*
 		 * ======================================================================
 		 * Pass 3: process any updates generated if the user has selected
@@ -3163,7 +3095,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 			unset($this->savedelete);
 			$this->recreate_fdd();
 		}
-
 		/*
 		 * ======================================================================
 		 * Pass 2: display an input/edit/confirmation screen if the user has
@@ -3175,7 +3106,6 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 				|| $this->view_operation()   || $this->copy_operation()) {
 			$this->display_record();
 		}
-
 		/*
 		 * ======================================================================
 		 * Pass 1 and Pass 3: display the SQL table in a scrolling window on
@@ -3185,13 +3115,11 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		else {
 			$this->list_table();
 		}
-
 		$this->sql_disconnect();
 		if ($this->display['time'] && $this->timer != null) {
 			echo $this->timer->end(),' miliseconds';
 		}
 	} /* }}} */
-
 	/*
 	 * Class constructor
 	 */
@@ -3231,7 +3159,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		if (! isset($this->page_name)) {
 			$this->page_name = basename($this->get_server_var('PHP_SELF'));
 			isset($this->page_name) || $this->page_name = $this->tb;
-		} 
+		}
 		$this->display['query'] = @$opts['display']['query'];
 		$this->display['sort']  = @$opts['display']['sort'];
 		$this->display['time']  = @$opts['display']['time'];
@@ -3322,7 +3250,7 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		elseif($navfmup!=NULL && $navfmup != $this->fm) $this->navfm = $navfmup;
 		elseif($navpndown!=NULL && ($navpndown-1)*$this->inc != $this->fm) $this->navfm = ($navpndown-1)*$this->inc;
 		elseif($navpnup!=NULL && ($navpnup-1)*$this->inc != $this->fm) $this->navfm = ($navpnup-1)*$this->inc;
-		else $this->navfm = $this->fm; 
+		else $this->navfm = $this->fm;
 		$this->operation = $this->get_sys_cgi_var('operation');
 		$oper_prefix_len = strlen($this->cgi['prefix']['operation']);
 		if (! strncmp($this->cgi['prefix']['operation'], $this->operation, $oper_prefix_len)) {
@@ -3374,12 +3302,9 @@ function '.$this->js['prefix'].'filter_handler(theForm, theEvent)
 		// Restore original error reporting level
 		error_reporting($error_reporting);
 	} /* }}} */
-
 }
-
 /* Modeline for ViM {{{
  * vim:set ts=4:
  * vim600:fdm=marker fdl=0 fdc=0:
  * }}} */
-
 ?>
