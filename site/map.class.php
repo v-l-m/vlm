@@ -3,7 +3,7 @@
 require_once("races.class.php");
 require_once("exclusionzone.class.php");
 
-// Création carte MERCATOR CONFORME
+// Crï¿½ation carte MERCATOR CONFORME
 // x = long
 // y = ln(tan(PI/4 + lat/2))
 
@@ -126,7 +126,7 @@ class map
 
     $this->colorContinent= ImageColorAllocate($this->mapImage, 185, 100, 50);
     $this->colorCoastCross= ImageColorAllocate($this->mapImage, 250, 20, 20);
-    // Meridiens et Parallèles (10, 5, 1)
+    // Meridiens et Parallï¿½les (10, 5, 1)
     $colgrid = explode(",", $defaultgridcolor);
 
     if ($defaultgridcolor != 'yes' and count($colgrid) == 3) {
@@ -173,7 +173,7 @@ class map
       $this->gridListObj = new gridList($this->north, $this->south, $this->west, $this->east, $maille, $drawwind);
       $time_stop = time();
     }
-    //printf ("Après new GridList\n");
+    //printf ("Aprï¿½s new GridList\n");
 
     $this->windtext = $windtext;
       
@@ -259,7 +259,7 @@ class map
           $yp = $this->projLat($latp);
           $nb_paralleles++;
 
-          // Coloration des méridiens 1, 5, 10
+          // Coloration des mï¿½ridiens 1, 5, 10
           if ( $latp % 10000 == 0 ) { 
             $medColor=$this->colorLines;
             //imagestring ( $this->mapImage, $font-1, 3, $yp-6 , $latp /1000, $this->colorBlack);
@@ -284,7 +284,7 @@ class map
              || $this->flag_E_W == true && $longm > $this->west && $longm < $this->east + 360000 ) {
           $xm = $this->projLong($longm);
 
-          // Coloration des parallèles 1, 5, 10
+          // Coloration des parallï¿½les 1, 5, 10
           if ( $longm % 10000 == 0 ) { 
             $parColor=$this->colorLines;
             //imagestring( $this->mapImage, $font-1, $xm -4 , 1 , $longm /1000, $this->colorBlack);
@@ -312,7 +312,7 @@ class map
 
     //====================================================================
 
-    // Les bordures, pour éviter de colorier la mer :-)
+    // Les bordures, pour ï¿½viter de colorier la mer :-)
     // 1 - bord gauche  (max avec la bordure West du datafile)
     imagelinethick($this->mapImage, 0, 0, 0, $this->ySize, 
                    $this->colorContinent, 2);
@@ -470,7 +470,7 @@ class map
       // draw Coastline from database
       // =========================================================
       // get the list of coasts and num points for this map area ($north, $south, $east, $west)
-      // Optimisation conseillée par MGA : pas de *1000 dans les reqûetes pour index sur long/lat
+      // Optimisation conseillï¿½e par MGA : pas de *1000 dans les reqï¿½etes pour index sur long/lat
       $north_x1000=$this->north/1000 +1;
       $south_x1000=$this->south/1000 -1 ;
       $west_x1000=$this->west/1000 -1;
@@ -501,7 +501,7 @@ class map
       }
       if ($print_gshhs) imagestring( $this->mapImage, $font+2, 40 , 10 , "GSHHS_" . substr($coastline_table,10) , $this->colorBlack);
 
-      // Détermination de la zone à cartographier
+      // Dï¿½termination de la zone ï¿½ cartographier
       // Si W > 180, W = W-360
       //if ($west_x1000 >= 180 ) $west_x1000 -=360;
       // Si E > 180, E = E-360
@@ -512,7 +512,7 @@ class map
       //$filtre_latitude = "";
        
       // Du coup, Si W > E, il faut prendre :
-      // W à 180 + -180 à E
+      // W ï¿½ 180 + -180 ï¿½ E
       if ( $this->flag_E_W == true ) {
           $filtre_longitude = " AND ((longitude >" . $west_x1000 . " ) OR (longitude < " . $east_x1000 . "))";
       } else {
@@ -543,17 +543,17 @@ class map
       $idpoint = -1;
 
       $polymode = ($fullres == MAP_POLYLINE_FULL_MODE || $fullres = MAP_POLYLINE_MODE);
-      while ( $point = mysql_fetch_array($result_coast, MYSQL_NUM) ) {
+      while ( $point = mysqli_fetch_array($result_coast, MYSQL_NUM) ) {
 
-        // On parcourt tous les points résultant de la requête (ils sont classé par  idcoast, idpoint
+        // On parcourt tous les points rï¿½sultant de la requï¿½te (ils sont classï¿½ par  idcoast, idpoint
         //  - Chaque fois qu'on trouve un point : 
 
-          //    1/ C'est un point d'un trait de cote différent de celui mentionné par "$idcoast"
-          //       ==> Il faut tracer le trait de côte terminé (fonction drawOneCoast)
+          //    1/ C'est un point d'un trait de cote diffï¿½rent de celui mentionnï¿½ par "$idcoast"
+          //       ==> Il faut tracer le trait de cï¿½te terminï¿½ (fonction drawOneCoast)
           //       ==> Il faut initialiser le tableau (nettoyage + creation)
           //       +   ==> on ajoute ce point au tableau 
 
-          //    2/ C'est un point du meme trait de cote que le repère "$idcoast", 
+          //    2/ C'est un point du meme trait de cote que le repï¿½re "$idcoast", 
           //       +   ==> on ajoute ce point au tableau 
 
          if ( $point[0] != $idcoast ) {            
@@ -565,20 +565,20 @@ class map
             }
             $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
           }
-          unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
+          unset($coastpoints_array);  // Utile ou pas ? vidage mï¿½moire ?
           $points_count = 0;
           $coastpoints_array = array(); 
           $idcoast = $point[0];      
           $idpoint = -1;
         }
-        // + ajout au tableau (dans tous les cas, donc factorisé)
+        // + ajout au tableau (dans tous les cas, donc factorisï¿½)
 
         // latitude
         $y = $this->projLat($point[2]*1000);
         // longitude
         if ( $this->flag_E_W == true && $point[3] < 0 ) {
           $x = $this->projLong(360000+$point[3]*1000);
-          //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
+          //printf ("longitude nï¿½gative : %f, x=%d\n" , $point[2], $x[$i]);
         } else {
           $x = $this->projLong($point[3]*1000);
         }
@@ -595,13 +595,13 @@ class map
         $idpoint = $point[1];
         $prev_x = $x;
         $prev_y = $y;
-        // On prépare un tableau que la fonction drawOneCoast mangera. 
-        // Pour le dessin en polygones fermés pleins, on prépare directement la bonne structure
+        // On prï¿½pare un tableau que la fonction drawOneCoast mangera. 
+        // Pour le dessin en polygones fermï¿½s pleins, on prï¿½pare directement la bonne structure
         if ( $polymode ) {
           array_push ($coastpoints_array, $x, $y);
         } else {
-          // Pour le dessin en polygones fermés vides, on conserve la possibilité d'afficher 
-          // les numéros de cote
+          // Pour le dessin en polygones fermï¿½s vides, on conserve la possibilitï¿½ d'afficher 
+          // les numï¿½ros de cote
           array_push ($coastpoints_array, array($point[0],$x,$y));
         }
       }
@@ -628,7 +628,7 @@ class map
         $y2 = $this->projLat($EndSeg[0]*1000);
         if ( $this->east-$this->west < 0 )
         {
-          // Coords got shifted by 360° since AM is on map (the case -360° is not handled here)
+          // Coords got shifted by 360ï¿½ since AM is on map (the case -360ï¿½ is not handled here)
           $x1=$this->projLong(360000+$StartSeg[1]*1000);
           $x2=$this->projLong(360000+$EndSeg[1]*1000);
           imagelinethick($this->mapImage, $x1, $y1, $x2, $y2, $this->colorContinent, 3);
@@ -644,7 +644,7 @@ class map
       }
         
       // Puis on supprime le tableau
-      unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
+      unset($coastpoints_array);  // Utile ou pas ? vidage mï¿½moire ?
   }
         
 
@@ -657,7 +657,7 @@ class map
 
 
     // Draw scale : scale size depends on map size
-    // taille_carte = nord - sud (en millidegrés) ==> /1000 = en milles
+    // taille_carte = nord - sud (en millidegrï¿½s) ==> /1000 = en milles
     $font = 3;
     $map_size = $this->north - $this->south;
     if ( $map_size > 10000 ) {
@@ -765,12 +765,12 @@ class map
       $wp2ProjLong = $this->projLong($waypoint['longitude2']);
       $wp2ProjLat  = $this->projLat($waypoint['latitude2']);
 
-      // bouée sur point 1
+      // bouï¿½e sur point 1
       imagefilledellipse($this->mapImage, $wp1ProjLong, $wp1ProjLat,
                          WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
 
 
-      // Coordonnées bouée 1
+      // Coordonnï¿½es bouï¿½e 1
       if ( $this->drawtextwp && ($this->wp_only == $waypoint_num  || $nwp == $waypoint_num )) {
         imagestring($this->mapImage,
                     3, $wp1ProjLong, $wp1ProjLat,
@@ -778,7 +778,7 @@ class map
                     $this->colorBlack);
       }
 
-      // bouée sur point 2 (seulement si PORTE, pas si WP)
+      // bouï¿½e sur point 2 (seulement si PORTE, pas si WP)
       if ( ($waypoint['wpformat'] & 0xF) == WP_TWO_BUOYS ) {
         imagefilledellipse($this->mapImage, $wp2ProjLong, $wp2ProjLat,
                            WP_BUOY_SIZE+4, WP_BUOY_SIZE+4, $this->colorBuoy);
@@ -880,12 +880,12 @@ class map
                       IMG_COLOR_STYLED);
 
           /*
-          // pointillé sur les WP après 1% de leur longueur.
-          // Début du pointillé
+          // pointillï¿½ sur les WP aprï¿½s 1% de leur longueur.
+          // Dï¿½but du pointillï¿½
           $long_inter=$waypoint[0] + ($waypoint[2]-$waypoint[0]);
           $lat_inter=$waypoint[1] + ($waypoint[3]-$waypoint[1]);
 
-          // Extrémités dessinées
+          // Extrï¿½mitï¿½s dessinï¿½es
           $long_extrem=$waypoint[0] + ($waypoint[2]-$waypoint[0])*10;
           $lat_extrem=$waypoint[1] + ($waypoint[3]-$waypoint[1])*10;
 
@@ -1011,10 +1011,10 @@ class map
               // la trajectoire "des autres" :
               // Si on est en cours de blackout (races->bogegin < time() && races->boend > time())
               if ( $this->fullRacesObj->races->bobegin < $now && $this->fullRacesObj->races->boend > $now ) {
-                  // ==> position la plus récente pour les concurrents = celle de début du blackout
+                  // ==> position la plus rï¿½cente pour les concurrents = celle de dï¿½but du blackout
                   $minage=$this->fullRacesObj->races->bobegin;
               } else {
-                  // Sinon = Position la plus récente : maintenant
+                  // Sinon = Position la plus rï¿½cente : maintenant
                   $minage=0;
               }
           }
@@ -1031,10 +1031,10 @@ class map
           // Si le pixel se cache, on passe au suivant
           if ( $usersObj->hidepos > 0 ) continue;
 
-          // Si la couleur est précédée d'un signe "-", on cache la trace (si c'est pas le demandeur, bien sur)
+          // Si la couleur est prï¿½cï¿½dï¿½e d'un signe "-", on cache la trace (si c'est pas le demandeur, bien sur)
           if ( $usersObj->hasTrackHidden() ) {
               $hidetrack="yes";
-              //FIXME : ce n'est pas prudent de réécrire temporairement dans la classe.
+              //FIXME : ce n'est pas prudent de rï¿½ï¿½crire temporairement dans la classe.
               $usersObj->color=substr($usersObj->color,1);
           } else {
             $hidetrack="no";
@@ -1061,7 +1061,7 @@ class map
           }
 
           // =======================
-          // Tracé de la trajectoire
+          // Tracï¿½ de la trajectoire
           // =======================
           $num_segments=0;
           foreach ($positions->records as $posObj) {
@@ -1150,7 +1150,7 @@ class map
                   imageline ( $this->mapImage, $A[0], $A[1]-POSITIONSIZE/2, $A[0], $A[1]+POSITIONSIZE/2, $this->colorBlack);
                   //imageline ( $this->mapImage, $x-POSITIONSIZE/2, $y, $x+POSITIONSIZE/2, $y, $this->colorBlack);
 
-                  // A +360°..
+                  // A +360ï¿½..
                   $B = array ( 
                           $this->projLong($current_long+360000),
                           $this->projLat($current_lat)
@@ -1163,13 +1163,13 @@ class map
                   //imageline ( $this->mapImage, $x, $y-POSITIONSIZE/2, $x, $y+POSITIONSIZE/2, $this->colorBlack);
 
                   //===============================
-                  // Affichage des numéros de pixel
+                  // Affichage des numï¿½ros de pixel
                   //===============================
                   $font = 2; //FIXME HARDCODED
 
                   $width  = ImageFontWidth($font) * strlen($usersObj->boatname) + POSITIONSIZE/2 + 2;
                   if ($this->text == "left") {
-                      // Label à la position du bateau
+                      // Label ï¿½ la position du bateau
                       imagestring ( $this->mapImage, $font, $A[0] - $width, $A[1] - ImageFontHeight($font)/2, "".$usersObj->idusers , $this->colorText);
                       imagestring ( $this->mapImage, $font, $B[0] - $width, $B[1] - ImageFontHeight($font)/2, "".$usersObj->idusers , $this->colorText);
                   } else if ($this->text == "right") {
@@ -1194,7 +1194,7 @@ class map
                   }
               $font = 1;
 
-              // Dessin de la trajectoire correspondant à l'estime si != 0
+              // Dessin de la trajectoire correspondant ï¿½ l'estime si != 0
               if ( $estime != 0 && $usersObj->idusers == htmlentities($boat) ) {
 
                   /* 2008/01/27 : expression de l'estime en temps plutot qu'en distance  */
@@ -1218,7 +1218,7 @@ class map
                       }
                       //imagestring ( $this->mapImage, $font, 50, 70 ,"EstimeEndAfter ="  .$Estime[1] , $this->colorText);
                   } else {
-                      // Si les longitudes de départ et d'arrivée n'ont pas le même signe
+                      // Si les longitudes de dï¿½part et d'arrivï¿½e n'ont pas le mï¿½me signe
                       //         if ( $current_long * $Estime[1] < 0) {
                       // cas du franchissement de Greenwich
                       //            $Estime[1]+=360000;
@@ -1279,7 +1279,7 @@ class map
       }
 
       if ( $drawn[$boat[0]] > 14 ) {
-        // Sur la Volvo, les pixels reels sont numérotés -700 à -708
+        // Sur la Volvo, les pixels reels sont numï¿½rotï¿½s -700 ï¿½ -708
         if ( $this->am_on_map == true && $boat[2] < 0 ) {
            $xlogo = $this->projLong($boat[2] + 360000);
         } else {
@@ -1290,7 +1290,7 @@ class map
           $Volvologo= imagecreatefrompng("images/bateaux_reels/V70_" . $boat[4] . ".png");
           imagecopymerge  ( $this->mapImage  , $Volvologo  , $xlogo, $ylogo,
                             0 ,0  , 20  , 20  , 70  );
-          // boatname : pour le libellé
+          // boatname : pour le libellï¿½
           $boat[0] = -$boat[0];
           $boatname= $boat[0];
           if ( $boatname >=700 and $boatname <=799 ) $boatname-=700;
@@ -1305,7 +1305,7 @@ class map
           imageline ( $this->mapImage, $xlogo, $ylogo-POSITIONSIZE/2, $xlogo, $ylogo+POSITIONSIZE/2, $this->colorBlack);
 
           $boatname = $boat[4];
-          // Maj de Ylogo pour descendre un peu le libellé
+          // Maj de Ylogo pour descendre un peu le libellï¿½
           $xlogo +=8;
           $ylogo +=8;
 
@@ -1319,7 +1319,7 @@ class map
 //          imageline ( $this->mapImage, $xlogo, $ylogo-POSITIONSIZE/2, $xlogo, $ylogo+POSITIONSIZE/2, $this->colorBlack);
 
 //          $boatname = $boat[4];
-//          // Maj de Ylogo pour descendre un peu le libellé
+//          // Maj de Ylogo pour descendre un peu le libellï¿½
 //         $xlogo +=8;
 //         $ylogo +=8;
 
@@ -1474,7 +1474,7 @@ class map
     foreach( $this->gridListObj->records as $fullGridObj)
       {
 
-        // Si pas de vent, pas de vecteur à représenter.
+        // Si pas de vent, pas de vecteur ï¿½ reprï¿½senter.
         // On ne dessine le vecteur que si vent > 0.1 kts.
         if ( $fullGridObj->wspeed > 1 ) {
 
@@ -1505,10 +1505,10 @@ class map
             $text_y = $y;
   
             if ( $wind_direction < 360 and $wind_direction > 180 )  {
-              // Vent de secteur ouest, affichage à gauche
+              // Vent de secteur ouest, affichage ï¿½ gauche
               $text_x-=10;
             } else {
-              // Vent de secteur Est, affichage à droite
+              // Vent de secteur Est, affichage ï¿½ droite
               $text_x+=5;
             }
   
@@ -1525,14 +1525,14 @@ class map
               $text_y-=5;
             }
   
-            // Couleur des libellés
+            // Couleur des libellï¿½s
             if ( $this->windtext == "default" ) {
               imagestring($this->mapImage, 1, $text_x, $text_y,
-                          round($fullGridObj->wspeed) . "/" . $wind_direction . "°",
+                          round($fullGridObj->wspeed) . "/" . $wind_direction . "ï¿½",
                           $this->colorWind);
             } else {
               imagestring($this->mapImage, 1, $text_x, $text_y,
-                          round($fullGridObj->wspeed) . "/" . $wind_direction . "°",
+                          round($fullGridObj->wspeed) . "/" . $wind_direction . "ï¿½",
                           $col);
             }
 
@@ -1569,7 +1569,7 @@ class map
 
   function display()
   {
-    //   imagestring($this->mapImage, 2, 10, 10, "Vous pouvez déplacer le compas avec la souris", $this->colorText);
+    //   imagestring($this->mapImage, 2, 10, 10, "Vous pouvez dï¿½placer le compas avec la souris", $this->colorText);
     //    imagestring($this->mapImage, 2, 10, 20, "You can drag'n move the compass...", $this->colorText);
     //imagetruecolortopalette($this->mapImage, true, 4096*256);
     Imagepng($this->mapImage);

@@ -20,7 +20,7 @@
     $updateTime = 0;
     $query = "SELECT revid, moduleid, max(updated) as updated FROM modules_status GROUP BY revid, moduleid ORDER BY max(updated) DESC LIMIT 10";
     $res = wrapper_mysql_db_query_reader($query) or die("Query [".$this->query."] failed \n");
-    while ($row = mysql_fetch_assoc($res) ) {
+    while ($row = mysqli_fetch_assoc($res) ) {
         //Create an empty FeedItem
         $newItem = $rssobject->createNewItem();
         

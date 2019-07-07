@@ -20,7 +20,7 @@
             $res = $this->queryRead($query);
             
             $c = 0;
-            while ($line = mysql_fetch_assoc($res)) {
+            while ($line = mysqli_fetch_assoc($res)) {
                 $c += 1;
                 $line['rank'] = $c;
                 if ($this->now - intval($line['deptime']+$line['duration']) < $this->timedelta) $this->feedone($line);
@@ -71,7 +71,7 @@
                 
             $medias = explode(",", VLM_NOTIFY_LIST);
             foreach ($medias as $media) {
-                $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, mysql_real_escape_string($t), $timetarget);
+                $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, mysqli_real_escape_string($t), $timetarget);
                 $this->queryWrite($sql);
             }
             print $t."\n";
@@ -83,7 +83,7 @@
     $query .= " ORDER BY idraces ASC";
     $result = wrapper_mysql_db_query_reader($query);
 
-    while($row = mysql_fetch_assoc($result)) {
+    while($row = mysqli_fetch_assoc($result)) {
         print "--Watching results for ".$row['idraces']."\n";
         $re = new RacesResultsEvents($row['idraces']);
         $re->feed();

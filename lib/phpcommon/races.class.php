@@ -41,9 +41,9 @@ class races extends baseClass
     if ($id != 0 && is_null($row)) 
     {
       $result = queryRacesBatch("WHERE idraces = $id");
-      if (mysql_num_rows($result) > 0) 
+      if (mysqli_num_rows($result) > 0) 
       {
-	      $row = mysql_fetch_array($result, MYSQL_ASSOC);
+	      $row = mysqli_fetch_array($result, MYSQL_ASSOC);
       } 
       else 
       {
@@ -168,7 +168,7 @@ class races extends baseClass
     // printf ("Request Races_Waypoints : %s\n" , $query);
     
     if (defined('MOTEUR')) {
-        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
             $vlm_wp = new waypoint();
             VLM_init_waypoint($vlm_wp, $row['wpformat'],$row['wporder'],
                               $row['latitude1'], $row['longitude1'], 
@@ -177,7 +177,7 @@ class races extends baseClass
             $this->waypoints[$row['wporder']] = $vlm_wp;
         }
     } else {
-        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
             // FIXME reduce code path 
             $WPCoords = internalGiveWaypointCoordinates($row['latitude1'],
                                                         $row['longitude1'], 
@@ -249,7 +249,7 @@ class races extends baseClass
 	
         $result = wrapper_mysql_db_query_reader($query);
 	
-        while( $row = mysql_fetch_array( $result, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
 	  $this->ics[] = $row;
         }
       }
@@ -272,12 +272,12 @@ class races extends baseClass
       $this->idraces." AND position=".BOAT_STATUS_ARR;
 
     $result = wrapper_mysql_db_query_reader($query);
-    if ( mysql_num_rows($result) == 0) {
+    if ( mysqli_num_rows($result) == 0) {
       return(1);  // on s'arrete là si personne n'est arrivé !
     }
     
     // On est encore là, on a donc un enregistrement "duration"
-    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
     $WinnersRaceDuration = $row['duration'];
 
     if ($WinnersRaceDuration == 0) {
@@ -504,7 +504,7 @@ class races extends baseClass
     $now = time();
     $position = 0;
 
-    while ($row = mysql_fetch_assoc($res)) 
+    while ($row = mysqli_fetch_assoc($res)) 
     {
       $has_not_started = (!array_key_exists('nwp',$row) || 
         ( ($row['loch'] == 0.0) && (($row['dnm'] == 0.0)||$row['dnm'] == 99999) ));
@@ -558,7 +558,7 @@ class races extends baseClass
     $res = $this->queryRead($QueryFinished);
 
     $CurUser = '##';
-    while ($row = mysql_fetch_assoc($res)) 
+    while ($row = mysqli_fetch_assoc($res)) 
     {
       $row['status'] = $status[$row['status']];
       //echo "non racing user : ".$row['idusers'];
@@ -586,7 +586,7 @@ class races extends baseClass
 
     $res = $this->queryRead($QueryLMNH);
 
-    while ($row = mysql_fetch_assoc($res)) 
+    while ($row = mysqli_fetch_assoc($res)) 
     {
       if (isset($ranking[$row['idusers']]))
       {
@@ -608,7 +608,7 @@ class races extends baseClass
     $res = $this->queryRead($QueryWPs);
 
     $CurUser = '##';
-    while ($row = mysql_fetch_assoc($res)) 
+    while ($row = mysqli_fetch_assoc($res)) 
     {
       //echo $CurUser."Record wp ".$row['idwaypoint']." for user ".$row['idusers']."\n";
       // Get ranking row for this user
@@ -676,7 +676,7 @@ class fullRaces {
       " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
 
     $result6 = wrapper_mysql_db_query_reader($query6);
-    while($row = mysql_fetch_array($result6, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result6, MYSQL_ASSOC)) {
       //WARNING: dont load fullUsers inside fullRaces
       //because fullRaces contains fullUsers that contain fullRaces ..
       $userid = $row['idusers'];
@@ -697,7 +697,7 @@ class fullRaces {
 	"FROM races_results RR, users US WHERE idraces=".$this->races->idraces.
 	" AND US.idusers = RR.idusers AND US.engaged != ".$this->races->idraces;
       $result6b = wrapper_mysql_db_query_reader($query6b);
-      while($row = mysql_fetch_array($result6b, MYSQL_ASSOC)) {
+      while($row = mysqli_fetch_array($result6b, MYSQL_ASSOC)) {
 	$userid = $row['idusers'];
 	//FIXME : est ce bien d'utiliser getUserObject ici (il met en cache)
 	$this->excluded[$userid] = getUserObject($userid, $row);
@@ -866,11 +866,11 @@ class fullRaces {
       (($sortclause == "") ? "" : " ORDER by " . $sortclause) ;
 
     $result = wrapper_mysql_db_query_reader($query_ranking) or die ($query_ranking);
-    if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
+    if (mysqli_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
     // On calcule les vrais nwp
     $cl_arr = array();
     $raceWP = $this->races->getWPs();
-    while( $row = mysql_fetch_assoc( $result ) ) {
+    while( $row = mysqli_fetch_assoc( $result ) ) {
       // N'entrent dans les tableaux que les bateaux effectivement en course
       if ( !array_key_exists('nwp',$row) || ($row['dnm'] == 0.0) && ($row['loch'] == 0.0)) {
 	  continue;
@@ -994,7 +994,7 @@ class fullRaces {
     $mnum = count($cl_arr);
     for ($i = 0; $i < $mnum; $i++) {
       $row = $cl_arr[$i];
-      //    while( $row = mysql_fetch_assoc( $result ) ) {
+      //    while( $row = mysqli_fetch_assoc( $result ) ) {
       // Si on a déjà affiché suffisament de lignes, on rend la main
       if ( $startnum >0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
 
@@ -1202,7 +1202,7 @@ class fullRaces {
     $raceobj = null;
     $printtd = 0;
 
-    while( $row = mysql_fetch_assoc( $result ) ) {
+    while( $row = mysqli_fetch_assoc( $result ) ) {
       if ( $row['engaged'] != $lastrace ) {
         $lastrace = $row['engaged'];
         $raceobj = new races($lastrace);
@@ -1337,7 +1337,7 @@ class fullRaces {
     }
 
     $result = wrapper_mysql_db_query_reader($query); // or die ($query);
-    if (mysql_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
+    if (mysqli_num_rows($result)==0) return;  // on s'arrete là si personne n'est concerné !
 
     switch ($status) {
     case BOAT_STATUS_ARR:
@@ -1393,7 +1393,7 @@ class fullRaces {
 
     //see the races result table
     $rank = 0; $printed=0;
-    while ($row = mysql_fetch_assoc($result))
+    while ($row = mysqli_fetch_assoc($result))
       {
         // Si on a déjà affiché suffisament de lignes, on rend la main
         if ( $startnum > 0 && $printed >= MAX_BOATS_ON_RANKINGS ) break;
@@ -1548,7 +1548,7 @@ class fullRaces {
     $query = "SELECT count(*) as numengaged FROM users WHERE engaged=" . 
       $this->races->idraces;
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysql_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
     return ($row['numengaged'])  ;
   }
  
@@ -1570,7 +1570,7 @@ class racesList {
     $query = "SELECT idraces FROM races ORDER BY deptime DESC";
     //printf ($query . "\n");
     $result = wrapper_mysql_db_query_reader($query);
-    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
+    while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) 
     {
       if ($row['idraces'] !== "0") // race 0 is not allowed but exists in DB
       {
@@ -1605,7 +1605,7 @@ class startedRacesList {
     $query .= " ORDER BY vacfreq ASC, deptime DESC";
     $result = wrapper_mysql_db_query_reader($query);
     
-    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
       array_push($this->records , $row['idraces']);
     }
   }
@@ -1645,7 +1645,7 @@ class RankingRacesList {
     //print_r($query);
     $result = wrapper_mysql_db_query_reader($query);
     
-    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
       array_push($this->records , $row['idraces']);
     }
   }
@@ -1674,7 +1674,7 @@ function CheckLMNHStatus()
 
   $result = wrapper_mysql_db_query_reader($targetlist);
   $list="";
-  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
+  while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) 
   {
     if ($list !== "")
     {

@@ -30,8 +30,8 @@ class reals extends baseClass {
     function constructFromQuery($where) {
         $query= "SELECT * FROM users WHERE ".$where;
         $result = $this->queryRead($query);
-        if ($result && mysql_num_rows($result) === 1)  {
-            $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($result && mysqlinum_rows($result) === 1)  {
+            $row = mysqli_fetch_array($result, MYSQL_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct real object from query");
@@ -91,7 +91,7 @@ class reals extends baseClass {
         //FIXME : Should not be used except from playersPrefs class ?
         if (is_null($val)) return $this->unsetPref($key);
         $query = sprintf("REPLACE `players_prefs` SET `idreals` = %d, `pref_name` = '%s', `pref_value` = '%s'",
-            intval($this->idreals), $key, mysql_real_escape_string($val) );
+            intval($this->idreals), $key, mysqli_real_escape_string($val) );
         if (!is_null($perm)) $query .= sprintf(", `permissions` = %d", $perm);
         if ($this->queryWrite($query)) {
             $this->logRealEvent("Player prefs(".$key.') updated');
@@ -125,8 +125,8 @@ class reals extends baseClass {
         $query = sprintf("SELECT `pref_name`, `pref_value`, `permissions` FROM `players_prefs` WHERE `idreals` = %d AND `pref_name` = '%s'",
             intval($this->idreals), $key);
         $result = $this->queryRead($query);
-        if ($result && mysql_num_rows($result) === 1)  {
-            $ret = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($result && mysqli_num_rows($result) === 1)  {
+            $ret = mysqli_fetch_array($result, MYSQL_ASSOC);
             $ret['permissions'] = intval($ret['permissions']);
             return $ret;
         } else {
@@ -141,7 +141,7 @@ class reals extends baseClass {
         $grouplist = array();
 
         if ($result) {
-            while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+            while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
                 if (!is_null($row["pref_value"]) && $row["pref_value"] != "") $grouplist[$row["pref_name"]] = $row;
             }
         }

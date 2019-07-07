@@ -36,7 +36,7 @@ abstract class baseClass {
     
     //Convenient with mysql errors
     function set_error_with_mysql_query($query) {
-        $msg = "MySql error ".mysql_errno()." :".mysql_error()."\n".
+        $msg = "MySql error ".mysql_errno()." :".mysqli_error()."\n".
                "Query was :".$query;
         $this->set_error($msg);
     }

@@ -4,7 +4,12 @@
 #Commun aux scripts
 source $VLMRACINE/conf/conf_script || exit 1
 
+
 svnmodule=$1
+svnmodule_dest=$1
+if [ "$svnmodule" == "jvlm_alpha" ]; then
+    svnmodule="jvlm" 
+fi
 
 #Pré déploiement
 case $svnmodule in
@@ -55,7 +60,7 @@ echo " "
 echo "Etape 1 : Recuperation simple du SVN dans $VLMTEMP"
 echo " "
 
-current=$VLMTEMP/$svnmodule
+current=$VLMTEMP/$svnmodule_dest
 svncurrent=$VLMSVNFULL/$svnmodule
 echo -n "Nettoyage de $current... "
 rm -Rf $current

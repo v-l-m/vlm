@@ -27,7 +27,7 @@
 
     $not_started = array();
 
-    while ($row = mysql_fetch_assoc($res)) {
+    while ($row = mysqli_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
         $has_not_started = (!array_key_exists('nwp',$row) || 
 			    (($row['dnm'] == 0.0) && ($row['loch'] == 0.0)));

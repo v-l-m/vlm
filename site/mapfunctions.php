@@ -3,11 +3,11 @@
 //=================================================================//
 //        Get Real Boats                                           //
 // Retourne un tableau avec numero, latitide, longitude, couleur   //
-// Si un parametre est passé, c'est le nuémro de la course, sinon toutes //
+// Si un parametre est passï¿½, c'est le nuï¿½mro de la course, sinon toutes //
 //=================================================================//
 function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus afficher une position
 
-        // Temps de référence
+        // Temps de rï¿½fï¿½rence
         $reftime = time();
 
         // Le retour
@@ -21,13 +21,13 @@ function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus af
                  " AND U.idusers = P.idusers ";
         if ( $race != 0 ) $query .= "AND race = $race ";
 
-        // On se limite le nombre de positions pour les bateaux réels pour l'instant
+        // On se limite le nombre de positions pour les bateaux rï¿½els pour l'instant
         $query .= " ORDER BY P.time DESC, P.idusers DESC";
 
-        $result = mysql_query($query) or die("Query [$query] failed \n");
+        $result = mysqli_query($query) or die("Query [$query] failed \n");
 
         $refid = 0;
-        while ( $boat = mysql_fetch_array($result, MYSQL_NUM) ) {
+        while ( $boat = mysqli_fetch_array($result, MYSQL_NUM) ) {
               if ($refid < $boat[0]) break; //on s'arrÃªte quand on reboucle sur une deuxiÃ¨me serie de coordonnÃ©e
               array_push($boatarr, $boat);
               $refid = $boat[0];
@@ -41,7 +41,7 @@ function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus af
 //                  Dimensions de la carte                         //
 //                   By John-Pet Mai 2007                          //
 //-----------------------------------------------------------------//
-//               Retourne les coordonnées de la carte              //
+//               Retourne les coordonnï¿½es de la carte              //
 //               avec comme milieu le point reference.             //
 //=================================================================//
 //        Algo written by John-Pet (JP@virtual-winds.com)          //
@@ -49,12 +49,12 @@ function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus af
 
 function coordCarte($lat_bat, $long_bat, $unite, $HauteurCartePixel, $LargeurCartePixel)
 //function CoordCarte () //($lat_bat, $long_bat, $unite, $HauteurCartePixel, $LargeurCartePixel)
-    // $unite : unite de carte,  pour le zoom plus le chiffre est élevé plus le zoom est puissant
+    // $unite : unite de carte,  pour le zoom plus le chiffre est ï¿½levï¿½ plus le zoom est puissant
     // $HauteurCartePixel : hauteur de la carte en pixel
     // $LargeurCartePixel : largeur de la carte en pixel
         // ce qui permettra de customiser les cartes 
-        // $lat_bat et $long_bat sont les coordonnées du point milieu de la carte
-        // ce qui permettra par la suite de centrer la carte sur un point quelconque grace à des boutons de déplacement
+        // $lat_bat et $long_bat sont les coordonnï¿½es du point milieu de la carte
+        // ce qui permettra par la suite de centrer la carte sur un point quelconque grace ï¿½ des boutons de dï¿½placement
 {
 /*
    if      ( abs($lat_bat) < 20 ) { $unite=600/$maparea; } 
@@ -62,7 +62,7 @@ function coordCarte($lat_bat, $long_bat, $unite, $HauteurCartePixel, $LargeurCar
    else                           { $unite=300/$maparea; }
 */
 
-    // calcul du delta entre la latitude bateau et latitude 45°
+    // calcul du delta entre la latitude bateau et latitude 45ï¿½
     $deltalat_bat = (10800 / M_PI) * log(tan(deg2rad(45 + ($lat_bat/2))));
 
     // pour la latitude superieure de la carte
@@ -71,7 +71,7 @@ function coordCarte($lat_bat, $long_bat, $unite, $HauteurCartePixel, $LargeurCar
     // pour la latitude inferieure de la carte
     $latsud  = 2 * (rad2deg(atan(exp(($deltalat_bat - ($HauteurCartePixel / (2 * $unite))) * M_PI / 10800))) - 45);
 
-    // pour la longitude à gauche de la carte avec gestion de l'antimeridien
+    // pour la longitude ï¿½ gauche de la carte avec gestion de l'antimeridien
     $longouest = $long_bat - ($LargeurCartePixel / ($unite * 120));
     if ($longouest == 180 or $longouest == -180) {
         $longouest = 180;
@@ -81,7 +81,7 @@ function coordCarte($lat_bat, $long_bat, $unite, $HauteurCartePixel, $LargeurCar
         $longouest = $longouest - (180 * floor($longouest / 180 ));
     }
 
-    // pour la longitude à droite de la carte avec gestion de l'antimeridien
+    // pour la longitude ï¿½ droite de la carte avec gestion de l'antimeridien
     $longest = $long_bat + ($LargeurCartePixel / ($unite * 120));
     if ($longest == 180 or $longest == -180) {
         $longest = 180;

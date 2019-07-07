@@ -8,7 +8,7 @@
     $info = array();
     
     $flagres = getFlagsListCursor();
-    while ($row = mysql_fetch_array($flagres, MYSQL_ASSOC) ) 
+    while ($row = mysqli_fetch_array($flagres, MYSQL_ASSOC) ) 
     {
       $info['flagsurl'][$row['idflags']]='/flagimg.php?idflags='.$row['idflags'];
       $info['flags'][$row['idflags']]=$row['idflags'];
@@ -17,7 +17,7 @@
       //FIXME: il serait plus exact d'utiliser l'attribut label de la balise opton pour fixer l'affichage... mais les vieux navigateurs n'aiment pas...
       //$select_list = $select_list . ">". $row['idflags'] ."</option>\n";
     }
-    mysql_free_result($flagres);
+    mysqli_free_result($flagres);
 
     $info['success']=true;
     return $info;

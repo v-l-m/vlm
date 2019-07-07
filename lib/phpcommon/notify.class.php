@@ -21,7 +21,7 @@
             $query .= "LIMIT ".$this->rate_limit;
             $res = $this->queryRead($query);
             if ($res) {
-                while ($line = mysql_fetch_assoc($res)) {
+                while ($line = mysqli_fetch_assoc($res)) {
                     $this->messages[] = $line;
                 }
             }

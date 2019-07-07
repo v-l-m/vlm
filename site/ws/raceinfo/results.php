@@ -52,7 +52,7 @@
     
     $position = 0;
     
-    while ($row = mysql_fetch_assoc($res)) {
+    while ($row = mysqli_fetch_assoc($res)) {
         // N'entrent dans les tableaux que les bateaux effectivement en course
         $row['latitude'] /= 1000.;
         $row['longitude'] /= 1000.;

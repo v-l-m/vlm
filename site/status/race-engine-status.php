@@ -23,22 +23,22 @@ include("../includes/header-status.inc");
     $query = "SELECT idraces, racename , vacfreq FROM races WHERE started > 0 ";
     $query .= " ORDER BY vacfreq ASC, deptime DESC, idraces ASC";
     $result = wrapper_mysql_db_query_reader($query);
-    while($row = mysql_fetch_assoc($result)) {
+    while($row = mysqli_fetch_assoc($result)) {
         $idraces  = $row['idraces'];
         $racename = $row['racename'];
         $vacfreq  = $row['vacfreq'];
         $query2   = "SELECT UNIX_TIMESTAMP(`time`) AS `time`, time as time2, update_comment FROM updates WHERE update_comment LIKE '% ".$idraces."%' OR update_comment LIKE '".$idraces."%' ORDER BY `time2` DESC LIMIT 1";
         $result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-        $row2     = mysql_fetch_assoc($result2);
+        $row2     = mysqli_fetch_assoc($result2);
         $delay    = $current_time - (int)$row2['time'];
 	$query2   = "SELECT count(*) AS numactive FROM users WHERE engaged=".$idraces
 	  ." AND userdeptime != -1 AND loch > 0";
 	$result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-        $row3     = mysql_fetch_assoc($result2);
+        $row3     = mysqli_fetch_assoc($result2);
 	$active_p = $row3['numactive'];
 	$query2   = "SELECT count(*) AS numengaged FROM users WHERE engaged=".$idraces;
 	$result2  = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-        $row3     = mysql_fetch_assoc($result2);
+        $row3     = mysqli_fetch_assoc($result2);
 
         if ($delay > 60*(int)$vacfreq) {
             $cssklass = "maybelate";
@@ -66,7 +66,7 @@ include("../includes/header-status.inc");
       $query2 = "SELECT UNIX_TIMESTAMP(`time`) AS `time`,races,boats,duration,update_comment FROM updates ORDER BY `time` DESC LIMIT 20";
       $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
       $odd = 0;
-      while($row2 = mysql_fetch_assoc($result2)) {
+      while($row2 = mysqli_fetch_assoc($result2)) {
           $lastupdate     = (int)$row2['time'];
           $races          = $row2['races'];
           $boats          = $row2['boats'];

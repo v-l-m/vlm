@@ -24,6 +24,6 @@ if (webhost == 'testing.v-l-m.org' || webhost == 'www.testing.v-l-m.org')
   tilesUrlArray = ["https://c1.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c2.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c3.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c4.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png"];
 
   // URI to distribute windgridrequest amount servers
-  WindGridServers = ["https://c1.testing.v-l-m.org", "https://c2.testing.v-l-m.org", "https://c3.testing.v-l-m.org", "https://c4.testing.v-l-m.org"];
+  WindGridServers = ["https://testing.v-l-m.org", "https://testing.v-l-m.org", "https://testing.v-l-m.org", "https://testing.v-l-m.org"];
   
 }

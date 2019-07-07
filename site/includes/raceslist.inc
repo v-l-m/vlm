@@ -3,7 +3,7 @@
     
     echo "<div id=\"raceslistbox\" class=\"basic\">";
 
-    // Le user peut-t'il s'engager dans les courses ou est il déjà engagé
+    // Le user peut-t'il s'engager dans les courses ou est il dï¿½jï¿½ engagï¿½
     $display_submit = FALSE;
     if (isLoggedIn()) {
         $users = getLoggedUserObject();
@@ -18,10 +18,10 @@
 			       "(closetime > UNIX_TIMESTAMP())) ORDER BY started ASC,".
 			       " deptime ASC, closetime ASC");
 
-    // Recherche de toutes les courses prévues
+    // Recherche de toutes les courses prÃ©vues
     $allRacesRows = array();
     $allRacesIds  = array();
-    while($row = mysql_fetch_array($result1, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result1, MYSQL_ASSOC)) {
       array_push($allRacesRows, $row);
       array_push($allRacesIds, $row['idraces']);      
     }
@@ -69,7 +69,7 @@
             echo "</td>\n";
       
             echo "<td class=\"racesummary-type$racerecord\">";
-            //Les fonction html* sont destinées à normaliser l'ihm (une même information pointe toujours vers la même page)
+            //Les fonction html* sont destinï¿½es ï¿½ normaliser l'ihm (une mï¿½me information pointe toujours vers la mï¿½me page)
             $urlidraces  = htmlIdracesLink($idraces); // pointe vers les ICS
             $urlboattype = htmlBoattypeLink($boattype); //pointe vers la polaire
             $urlracename = htmlRacenameLink($idraces, $racename, 0); // pointe vers le classement de la course
@@ -108,7 +108,7 @@
             } else {
                 printf("    <li>".getLocalizedString("endrace")." no limit</li>\n");
             }
-            // Affichage des IC destinées à la racelist
+            // Affichage des IC destinï¿½es ï¿½ la racelist
             printf("    <li><a href=\"/ics.php?idraces=%s\">WP(s)</a>" , $idraces);
             printf(" - %s nm - %s : %d minutes - %s</li>\n" , round($cur_race->getRaceDistance()), getLocalizedString('crank'),  $cur_race->vacfreq, htmlRaceSpectatorLink($idraces));
             foreach ( $cur_race->getICS() as $ic) {

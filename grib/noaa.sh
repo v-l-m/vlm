@@ -71,7 +71,7 @@ fi
       
 # Now get the individual grib entry convert in grib1 and merge
 for TSTAMP in `echo $allindexes` ; do
-    GRIBURL="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}&lev_10_m_above_ground=on&var_UGRD=on&var_VGRD=on&leftlon=0&rightlon=360&toplat=90&bottomlat=-90&dir=%2Fgfs.$DAT$HH"
+    GRIBURL="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}&lev_10_m_above_ground=on&var_UGRD=on&var_VGRD=on&leftlon=0&rightlon=360&toplat=90&bottomlat=-90&dir=%2Fgfs.$DAT/$HH"
     GRIBFILE="gfs.t${HH}z.pgrb2full.0p50.f${TSTAMP}"
     rm -f $GRIBFILE
     let retry=1

@@ -12,7 +12,7 @@
         function listing() {
             $this->start();
             $res = wrapper_mysql_db_query_reader($this->query) or die("Query [".$this->query."] failed \n");
-            while ($row = mysql_fetch_assoc($res) ) $this->onerow($row);
+            while ($row = mysqli_fetch_assoc($res) ) $this->onerow($row);
             $this->end();
         }
 

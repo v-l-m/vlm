@@ -9,13 +9,13 @@ function wrapper_mysql_map_db_query_reader($cmd) {
     global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
-    $res = mysql_query($cmd, $GLOBALS['mapdblink']);
+    $res = mysqli_query($GLOBALS['mapdblink'],$cmd );
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
     $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
-  return mysql_query($cmd, $GLOBALS['slavedblink']);
+  return mysqli_query($GLOBALS['slavedblink'],$cmd );
 }
 
 function wrapper_mysql_db_query_reader($cmd) {
@@ -23,13 +23,13 @@ function wrapper_mysql_db_query_reader($cmd) {
     global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
-    $res = mysql_query($cmd, $GLOBALS['slavedblink']);
+    $res = mysqli_query( $GLOBALS['slavedblink'],$cmd);
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
     $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
-  return mysql_query($cmd, $GLOBALS['slavedblink']);
+  return mysqli_query( $GLOBALS['slavedblink'],$cmd);
 }
 
 function wrapper_mysql_db_query_writer($cmd) {
@@ -42,13 +42,13 @@ function wrapper_mysql_db_query_writer($cmd) {
     global $db_total_time;
     echo "*** DB ACCESS ".$cmd;
     $sql_start_time=microtime(1);
-    $res = mysql_query($realcmd, $GLOBALS['masterdblink']);
+    $res = mysqli_query( $GLOBALS['masterdblink'],$realcmd);
     $sql_end_time=microtime(1);
     echo " : ".($sql_end_time-$sql_start_time)."s\n";
     $db_total_time += ($sql_end_time-$sql_start_time);
     return $res;
   }
-  return mysql_query($realcmd, $GLOBALS['masterdblink']);
+  return mysqli_query( $GLOBALS['masterdblink'],$realcmd);
 }
 
 function wrapper_mysql_db_query($cmd) {
@@ -237,7 +237,7 @@ function getLastUpdateRow($master = false) {
         $result = wrapper_mysql_db_query_reader($query) or die("Query [$query] failed on SLAVE\n");
     }
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysql_fetch_assoc($result);
+    $row = mysqli_fetch_assoc($result);
     return $row;
 }
 
@@ -267,7 +267,7 @@ function lastUserAction() {
     if ( isLoggedIn() ) {
         $query2 = "SELECT * FROM user_action WHERE idusers = ".getUserId()." ORDER BY `time` DESC LIMIT 1";
         $result2 = wrapper_mysql_db_query_reader($query2) or die("Query [$query2] failed \n");
-        $row2 = mysql_fetch_assoc($result2);
+        $row2 = mysqli_fetch_assoc($result2);
         return $row2;
     } else {
         return False;
@@ -847,7 +847,7 @@ function checkAccount($login, $passwd)
   $query = 'SELECT idusers,password FROM users WHERE username = "'.$login.'"';
 
   $result = wrapper_mysql_db_query_reader($query)  ;
-  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $row = mysqli_fetch_array($result, MYSQL_NUM);
   if (!$row) {
     return FALSE;
   } else {
@@ -882,20 +882,20 @@ function getNumOpponents($idraces, $check = TRUE) {
   $query= "SELECT count(*) FROM races_results WHERE position=". 
     BOAT_STATUS_ARR." AND idraces=$idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $row = mysqli_fetch_array($result, MYSQL_NUM);
   $num_arrived=$row[0];
 
   // Nombre de bateaux non classés mais sortis de la course
   $query= "SELECT count(*) FROM races_results WHERE position !=". 
     BOAT_STATUS_ARR . " AND idraces=$idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $row = mysqli_fetch_array($result, MYSQL_NUM);
   $num_out=$row[0];
   
   // Nombre de bateaux en course
   $query= "SELECT count(*) FROM races_ranking WHERE idraces=$idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $row =mysqli_fetch_array($result, MYSQL_NUM);
   $num_racing=$row[0];
 
   //              arrivés     en course       inscrits (arr + out + en course)
@@ -920,7 +920,7 @@ function getRacesGroupsBatch($racelist) {
            "FROM races LEFT JOIN racestogroups ON (races.idraces = racestogroups.idraces) WHERE ".$in." ".
            "GROUP BY races.idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  while($row =mysqli_fetch_array($result, MYSQL_ASSOC)) {
     $ret[$row['idraces']] = $row;
   }
   return $ret;
@@ -945,7 +945,7 @@ function getNumOpponentBatch($racelist) {
     $in." AND races.idraces = RR.idraces AND RR.position=". BOAT_STATUS_ARR.
     " GROUP BY RR.idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+  while($row =mysqli_fetch_array($result, MYSQL_NUM)) {
     $res = &$results[$row[1]];
     $res['num_arrived']=$row[0];
   }
@@ -953,7 +953,7 @@ function getNumOpponentBatch($racelist) {
   $query= "SELECT count(RR.idusers), RR.idraces FROM races_ranking AS RR, races WHERE ".
     $in." AND races.idraces = RR.idraces GROUP BY RR.idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+  while($row =mysqli_fetch_array($result, MYSQL_NUM)) {
     $res = &$results[$row[1]];
     $res['num_racing']=$row[0];
   }
@@ -962,7 +962,7 @@ function getNumOpponentBatch($racelist) {
     $in." AND races.idraces = RR.idraces AND RR.position!=". BOAT_STATUS_ARR.
     " GROUP BY RR.idraces";
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  while($row = mysql_fetch_array($result, MYSQL_NUM)) {
+  while($row =mysqli_fetch_array($result, MYSQL_NUM)) {
     $res = &$results[$row[1]];
     $res['num_engaged']=$row[0];
   }
@@ -985,11 +985,11 @@ function getNumEngaged($idraces, $check = TRUE) {
   // Nombre de classés / non classés
   $query= "SELECT count(*) FROM races_results WHERE idraces=$idraces"; 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $row =mysqli_fetch_array($result, MYSQL_NUM);
   $num_engaged=$row[0];
   $query= "SELECT count(*) FROM races_ranking WHERE idraces=$idraces"; 
   $result = wrapper_mysql_db_query_reader($query) or die($query);
-  $row = mysql_fetch_array($result, MYSQL_NUM);
+  $row =mysqli_fetch_array($result, MYSQL_NUM);
   $num_engaged+=$row[0];
   
   return $num_engaged;
@@ -1074,9 +1074,9 @@ function dispHtmlRacesList($where = "", $limit = 100) {
 
     $result = wrapper_mysql_db_query_reader($query) or die($query);
 
-    if (mysql_num_rows($result)) {
+    if (mysqli_num_rows($result)) {
         $allRacesRows = array();
-        while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        while($row =mysqli_fetch_array($result, MYSQL_ASSOC)) {
             $allRacesRows[$row['idraces']] = $row;
         }
         echo htmlRacesList($allRacesRows);
@@ -1169,8 +1169,8 @@ function getFlag($idflags, $force = 'no') {
     
           $req = "SELECT idflags, flag ".
                  "FROM flags WHERE idflags = '".$idflags."'";
-          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
-          $col = mysql_fetch_array ($ret);
+          $ret = wrapper_mysql_db_query_reader ($req) or die (mysqli_error ()); // ceci est une erreur "système" / applicative
+          $col =mysqli_fetch_array ($ret);
           if ( !$col['idflags'] )
           {
               //Ceci est une erreur de données absentes
@@ -1200,7 +1200,7 @@ function getFlagsListCursor($with_customs = True) {
     }
     $req .= " ORDER BY idflags";
     
-    $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error());
+    $ret = wrapper_mysql_db_query_reader ($req) or die (mysqli_error());
     return $ret;
 }
 
@@ -1217,8 +1217,8 @@ function getRacemap($idraces, $force = 'no') {
     
           $req = "SELECT idraces, racemap ".
                  "FROM racesmap WHERE idraces = '".$idraces."'";
-          $ret = wrapper_mysql_db_query_reader ($req) or die (mysql_error ()); // ceci est une erreur "système" / applicative
-          $col = mysql_fetch_array ($ret, MYSQL_ASSOC);
+          $ret = wrapper_mysql_db_query_reader ($req) or die (mysqli_error ()); // ceci est une erreur "système" / applicative
+          $col =mysqli_fetch_array ($ret, MYSQL_ASSOC);
           if ( !$col['idraces'] )
           {
               //Ceci est une erreur de données absentes
@@ -1243,7 +1243,7 @@ function insertRacemapContent($idraces, $racemapcontent) {
              ") VALUES ( ".
              "".$idraces." , ".
              "'".addslashes($racemapcontent)."') ";
-    $ret = wrapper_mysql_db_query_writer ($req) or die (mysql_error ());
+    $ret = wrapper_mysql_db_query_writer ($req) or die (mysqli_error ());
 }
 
 /* Insert a racemap image $racemapfile for race $idraces  */
@@ -1269,7 +1269,7 @@ function insertFlag($idflag, $flagfile) {
                   ") VALUES ( ".
                   "'".$idflag."' , ".
                   "'".addslashes($img_blob)."') ";
-        $ret = wrapper_mysql_db_query_writer ($req) or die (mysql_error ());
+        $ret = wrapper_mysql_db_query_writer ($req) or die (mysqli_error ());
         return True;
     }
 }
@@ -1283,7 +1283,7 @@ function raceExists($race) {
     $result = wrapper_mysql_db_query_reader($query)  ;
     if ($result === False) return False;
     
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    $row =mysqli_fetch_array($result, MYSQL_NUM);
     if (!$row) {
         return False;
     } else {
@@ -1297,7 +1297,7 @@ function boatExists($idboat) {
     $query = 'SELECT idusers FROM users WHERE idusers = "'.$idboat.'"';
 
     $result = wrapper_mysql_db_query_reader($query)  ;
-    $row = mysql_fetch_array($result, MYSQL_NUM);
+    $row =mysqli_fetch_array($result, MYSQL_NUM);
     if (!$row) {
         return FALSE;
     } else {
@@ -1330,7 +1330,7 @@ function createBoat($log, $pass, $mail, $boatname = 'boat') {
   //is there another solution than reread from db?
   $query4 = "SELECT `idusers` FROM `users` WHERE `username` = \"$log\" ";
   $result4 = wrapper_mysql_db_query_writer($query4);// or die($query4);
-  $row4 = mysql_fetch_array($result4, MYSQL_NUM);
+  $row4 =mysqli_fetch_array($result4, MYSQL_NUM);
   return ($row4[0]);
 }
 
@@ -1644,7 +1644,7 @@ function getPlayerList($where = null) {
     }
     $query .= " ORDER BY playername";
     $res = wrapper_mysql_db_query_reader($query) or die($query);
-    while ($row = mysql_fetch_assoc($res)) {
+    while ($row =mysqli_fetch_assoc($res)) {
         $list[$row['idplayers']] = $row;
     }
     return $list;
@@ -1701,7 +1701,7 @@ function getUserPref($idusers,$pref_name) {
     if ($idusers != "") {
         $query_pref = "SELECT `pref_value` FROM `user_prefs` WHERE `idusers` = $idusers AND `pref_name` = '$pref_name'";
         $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
-        if ( $row_pref = mysql_fetch_array($result_pref, MYSQL_NUM) ) {
+        if ( $row_pref =mysqli_fetch_array($result_pref, MYSQL_NUM) ) {
             $pref_value = $row_pref[0];
         } else {
             $pref_value = NOTSET;
@@ -1720,7 +1720,7 @@ function getBoatPopularity($idusers, $idraces=0) {
             $query .= " AND `idusers` IN ( SELECT `idusers` FROM `users` WHERE `engaged` = $idraces)";
         }
         $result = wrapper_mysql_db_query_reader($query) or die($query);
-        while ( $row = mysql_fetch_array($result, MYSQL_NUM) ) {
+        while ( $row =mysqli_fetch_array($result, MYSQL_NUM) ) {
             $arr=explode(',' , $row[0]);
             if ( in_array($idusers, $arr) ) $pop++;
         }
@@ -1749,7 +1749,7 @@ function getOldDuration($idraces,$idusers)
 {
   $query_duration = "SELECT duration FROM races_results WHERE idusers = $idusers AND idraces = $idraces";
   $result_duration = wrapper_mysql_db_query_reader($query_duration); // or die($query_duration);
-  if ( $row_duration = mysql_fetch_array($result_duration, MYSQL_NUM) ) {
+  if ( $row_duration =mysqli_fetch_array($result_duration, MYSQL_NUM) ) {
     $duration = $row_duration[0];
   } else {
     $duration = 0;
@@ -1766,7 +1766,7 @@ function getRaceWinnerInfos($idraces) {
   //echo $query_winner;
   $result_winner = wrapper_mysql_db_query_reader($query_winner); // or die($query_winner);
 
-  if ( $row_winner = mysql_fetch_array($result_winner, MYSQL_NUM) ) {
+  if ( $row_winner =mysqli_fetch_array($result_winner, MYSQL_NUM) ) {
     return ($row_winner);
   } else {
     return (0);
@@ -1786,7 +1786,7 @@ function getWaypointCrossingTime($idraces,$idwaypoint, $idusers)
 
   $result_wptime = wrapper_mysql_db_query_reader($query_wptime); // or die($query_wptime);
 
-  if ( $row_wptime = mysql_fetch_array($result_wptime, MYSQL_NUM) ) {
+  if ( $row_wptime =mysqli_fetch_array($result_wptime, MYSQL_NUM) ) {
     $wptime = $row_wptime[0];
   } else {
     $wptime = -1;
@@ -1809,7 +1809,7 @@ function getWaypointBestTime($idraces,$idwaypoint)
 
   $result_wptime = wrapper_mysql_db_query_reader($query_wptime) ; //or die($query_wptime);
 
-  if ( $row_wptime = mysql_fetch_array($result_wptime, MYSQL_NUM) ) {
+  if ( $row_wptime =mysqli_fetch_array($result_wptime, MYSQL_NUM) ) {
     $wptime = array($row_wptime[0],$row_wptime[1]);
   } else {
     $wptime = array("N/A","N/A");
@@ -1877,9 +1877,9 @@ function getRaceRanking($idusers, $idraces, $jsonfmt = false)
   // search for old races for this player
   $query = "SELECT idusers,position FROM races_results WHERE idraces=". 
     $idraces . " ORDER BY position DESC, duration ASC" ;
-  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " .mysqli_error." ".$query);
   $nbu=0;
-  while ($row = mysql_fetch_array($result, MYSQL_NUM) ) 
+  while ($row =mysqli_fetch_array($result, MYSQL_NUM) ) 
   {
     if( $row[0] == $idusers ) 
     {
@@ -1934,16 +1934,16 @@ function findNearestOpponents($idraces,$idusers,$num) {
   $ret_array=array();
   // search for nwp and dnm of this player
   $query = "SELECT nwp, dnm FROM races_ranking WHERE idraces=$idraces AND idusers=$idusers;";
-  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-  if ( $row = mysql_fetch_array($result, MYSQL_NUM)) {
+  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " .mysqli_error." ".$query);
+  if ( $row =mysqli_fetch_array($result, MYSQL_NUM)) {
 
     $nwp=$row[0];
     $dnm=$row[1];
     $query = "SELECT idusers FROM races_ranking WHERE idraces=$idraces AND ".
       "nwp=$nwp AND dnm IS NOT NULL ORDER BY abs($dnm - dnm) ASC LIMIT $num;";
     // FIXME dnm!=0 ORDER BY abs($nwp-nwp), abs($dnm - dnm) ASC LIMIT $num ?
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-    while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " .mysqli_error." ".$query);
+    while ($row =mysqli_fetch_array($result, MYSQL_NUM)) {
 
       array_push ($ret_array, $row[0]);
 
@@ -1965,8 +1965,8 @@ function findTopUsers($idraces,$num) {
   $query = "SELECT idusers FROM races_ranking WHERE idraces=$idraces AND ".
     "dnm IS NOT NULL AND idusers>1 ORDER BY nwp DESC, dnm ASC LIMIT $num;";
   
-  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
-  while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " .mysqli_error." ".$query);
+  while ($row =mysqli_fetch_array($result, MYSQL_NUM)) {
     array_push ($ret_array, $row[0]);
   }
 
@@ -1977,7 +1977,7 @@ function displayPalmares($idusers) {
 
   // search for old races for this player
   $query = "SELECT idraces from races_results where idusers = " . $idusers . " ORDER BY (deptime+duration) DESC";
-  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysql_error." ".$query);
+  $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " .mysqli_error." ".$query);
 
   echo "<table>\n";
   echo "<thead>\n";
@@ -1989,7 +1989,7 @@ function displayPalmares($idusers) {
   echo "</thead>\n";
   echo "<tbody>\n";
 
-  while ($row = mysql_fetch_array($result, MYSQL_NUM)) {
+  while ($row =mysqli_fetch_array($result, MYSQL_NUM)) {
     $racesObj= new races($row[0]);
     printf ("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", 
 	    htmlIdracesLink($row[0]),
@@ -2003,7 +2003,7 @@ function displayPalmares($idusers) {
 //Insert news
 function insertNews($media, $summary, $timetarget, $longstory = "", $url = "") {
    if ($longstory == "") $longstory = $summary;
-   $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', longstory='%s', url='%s', timetarget=%d ;", $media, mysql_real_escape_string($summary), mysql_real_escape_string($longstory), mysql_real_escape_string($url), $timetarget);
+   $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', longstory='%s', url='%s', timetarget=%d ;", $media,mysqli_real_escape_string($summary),mysqli_real_escape_string($longstory),mysqli_real_escape_string($url), $timetarget);
    $result = wrapper_mysql_db_query_writer($sql) or die("Query [$sql] failed \n");
 }
 
@@ -2016,7 +2016,7 @@ function userFinishedThisRace($idusers, $idraces)
               WHERE idusers=$idusers and idraces=$idraces and position=" .  BOAT_STATUS_ARR  ;
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
-  if ( mysql_fetch_array($result, MYSQL_NUM) )  return(true);
+  if (mysqli_fetch_array($result, MYSQL_NUM) )  return(true);
   
   return (false);
 }
@@ -2033,7 +2033,7 @@ function availableRaces($idusers = 0)
     " OR ( closetime > $timestamp OR closetime=0) ORDER BY deptime ASC";
   //printf ("Query : %s\n", $query);
   $result = wrapper_mysql_db_query_reader($query);
-  if (!mysql_num_rows($result)) return $records;
+  if (!mysqli_num_rows($result)) return $records;
 
   $omorob_restriction = Array();
   $oid = getUserObject($idusers)->getOwnerId();
@@ -2047,7 +2047,7 @@ function availableRaces($idusers = 0)
 
   $allRacesRows = array();
   $allRacesIds  = array();
-  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  while($row =mysqli_fetch_array($result, MYSQL_ASSOC)) {
     array_push($allRacesRows, $row);
     array_push($allRacesIds, $row['idraces']);      
   }
@@ -2168,7 +2168,7 @@ function htmlAbandonButton($idusers, $idraces) {
 function htmlQuery($sql) {
     $result = wrapper_mysql_db_query_writer($sql) or die("<h3 class=\"admin-error\">Query [".$sql."] failed</h3>");
     
-    if (!$result or !mysql_num_rows($result)) {
+    if (!$result or !mysqli_num_rows($result)) {
         echo "<h3 class=\"admin-infos\">Nothing to display</h3>";
         return False;
     }
@@ -2177,19 +2177,26 @@ function htmlQuery($sql) {
     echo "<tr class=\"admin-query\">";
     
     $i = 0;
-    while ($i < mysql_num_fields($result)) {
-        $meta = mysql_fetch_field($result, $i);
-        echo "<th>";
-        if ($meta) {
-            echo $meta->name;
-        }
-        echo "</th>";
-        $i++;
+    $NbFields=mysqli_num_fields($result);
+    while ($i < $NbFields) 
+    {
+      for($x=0; $x<$i; $x++) 
+      {
+        mysqli_fetch_field( $result );
+      }
+      $meta =mysqli_fetch_field($result);
+      echo "<th>";
+      if ($meta) 
+      {
+        echo $meta->name;
+      }
+      echo "</th>";
+      $i++;
     }
     echo "</tr>";
  
     $oddeven = 0;
-    while ( $row = mysql_fetch_array($result, MYSQL_NUM)) {
+    while ( $row =mysqli_fetch_array($result, MYSQL_NUM)) {
         $oddeven = ($oddeven+1) % 2;
         echo "<tr class=\"admin-query-$oddeven\">";
         for($i=0;$i<count($row); $i++) {

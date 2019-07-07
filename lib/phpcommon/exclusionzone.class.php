@@ -17,7 +17,7 @@ class exclusionZone extends baseclass
     $res = $this->queryRead($query);
     if ($res) 
     {
-        while ($line = mysql_fetch_assoc($res)) 
+        while ($line = mysqli_fetch_assoc($res)) 
         {
           $lon1 =$line["lon1"]/1000;
           $lat1 =$line["lat1"]/1000;

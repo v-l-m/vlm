@@ -85,8 +85,8 @@ function Estimator(Boat)
     }
 
     this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON, this.Boat.VLMInfo.LAT);
-    this.CurEstimate.PrevDate = new Date(this.Boat.VLMInfo.LUP * 1000);
     this.CurEstimate.Date = new Date(this.Boat.VLMInfo.LUP * 1000 + 1000 * this.Boat.VLMInfo.VAC);
+    this.CurEstimate.PrevDate = this.CurEstimate.Date;
     if (this.CurEstimate.Date < new Date())
     {
       if (typeof this.Boat.RaceInfo === "undefined")
@@ -107,12 +107,9 @@ function Estimator(Boat)
         }
         let StartDate = new Date(this.CurEstimate.PrevDate.getTime() + 1000 * this.Boat.VLMInfo.VAC );
         this.CurEstimate.Date = StartDate;
-
       }
 
     }
-
-
 
     this.CurEstimate.Mode = parseInt(this.Boat.VLMInfo.PIM, 10);
     this.CurEstimate.CurWP = new VLMPosition(this.Boat.VLMInfo.WPLON, this.Boat.VLMInfo.WPLAT);
@@ -159,8 +156,10 @@ function Estimator(Boat)
     }
 
     let MI;
-    let Lat = RoundPow(1000.0 * this.CurEstimate.Position.Lat.Value, 0) / 1000.0;
-    let Lon = RoundPow(1000.0 * this.CurEstimate.Position.Lon.Value, 0) / 1000.0;
+    // let Lat = RoundPow(1000.0 * this.CurEstimate.Position.Lat.Value, 0) / 1000.0;
+    // let Lon = RoundPow(1000.0 * this.CurEstimate.Position.Lon.Value, 0) / 1000.0;
+    let Lat = this.CurEstimate.Position.Lat.Value;
+    let Lon = this.CurEstimate.Position.Lon.Value;
     do {
 
       MI = GribMgr.WindAtPointInTime(this.CurEstimate.PrevDate, Lat, Lon);
@@ -304,8 +303,8 @@ function Estimator(Boat)
     this.EstimateTrack.push(new BoatEstimate(this.CurEstimate));
 
     // Start next point computation....
-    this.CurEstimate.PrevDate = this.CurEstimate.Date;
     this.CurEstimate.Date = new Date((this.CurEstimate.Date / 1000 + this.Boat.VLMInfo.VAC) * 1000);
+    this.CurEstimate.PrevDate = this.CurEstimate.Date;
     if (RaceComplete)
     {
       this.Stop();

@@ -55,14 +55,14 @@
     // Nombre d'inscrits sur VLM
     $querynbp = "SELECT count(*) as nbp FROM players where idplayers > 0";
 
-    $resultnbp = mysql_query($querynbp) or die("Query [$querynbp] failed \n");
-    $row = mysql_fetch_array($resultnbp, MYSQL_ASSOC);
+    $resultnbp = mysqli_query($querynbp) or die("Query [$querynbp] failed \n");
+    $row = mysqli_fetch_array($resultnbp, MYSQL_ASSOC);
 
     printf( "<h4>" . getLocalizedString("nbplayers"), $row['nbp']);
 
     $querynbu = "SELECT count(*) as nbu FROM users where idusers >0";
-    $resultnbu = mysql_query($querynbu) or die("Query [$querynbu] failed \n");
-    $row = mysql_fetch_array($resultnbu, MYSQL_ASSOC);
+    $resultnbu = mysqli_query($querynbu) or die("Query [$querynbu] failed \n");
+    $row = mysqli_fetch_array($resultnbu, MYSQL_ASSOC);
 
     printf( "&nbsp;" . getLocalizedString("nbboats"). "</h4>", $row['nbu']);
 

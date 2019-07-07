@@ -44,7 +44,7 @@
     function check_unicity($table, $where, $message = "") {
       $sql = "SELECT count(*) as uniques FROM $table WHERE $where";
       $res = wrapper_mysql_db_query($sql) or die("ERROR testing '$sql'");
-      $row = mysql_fetch_assoc($res);
+      $row = mysqli_fetch_assoc($res);
       if ($row['uniques'] > 0) {
         die ("ERROR: Lines in <b>$table</b> matching <b>$where</b> keys. $message");
       }
