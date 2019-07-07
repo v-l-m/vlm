@@ -8,7 +8,7 @@ $raceList=array();
 $query = "SELECT distinct idraces FROM races_ranking 
             WHERE idraces in ( select idraces from races where started = -1 ) ";
 
-$result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
+$result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 //for every race
 while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
       echo "Finished Race " . $row[0] . "\n";
@@ -33,7 +33,7 @@ foreach ( $raceList as $idraces ) {
 // 2 - drop Players ABD when a race is not yes started
 $query = " select idraces from races where started = 0 ";
 
-$result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
+$result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 //for every race
 while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
       echo "Not Started Race " . $row[0] . "\n";
