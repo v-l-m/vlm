@@ -334,6 +334,76 @@ void read_polars() {
 }
 
 /**
+ * finds current boat speed based on polar tab (taken from boat's struct
+ * wind_speed (in kts), wind_angle from boat's heading (in rad)
+ * return boat speed (in kts)
+ */
+double find_speed_polar(double * polar_tab, double wind_speed, double wind_angle)
+{
+  int intangle;
+  int intspeed;
+  double valfloor, valceil;
+#ifndef ROUND_WIND_ANGLE_IN_POLAR
+  double tvalfloor, tvalceil, tangle;
+  int intangle_p1;
+#endif /* !ROUND_WIND_ANGLE_IN_POLAR */
+
+  intspeed = floor(wind_speed);
+  if (intspeed > MAX_SPEED_IN_POLARS)
+  {
+    intspeed = MAX_SPEED_IN_POLARS;
+  }
+
+#ifdef ROUND_WIND_ANGLE_IN_POLAR
+  /* in VLM compatibility mode, we interpolate only speed, not angle
+     which is rounded to nearest integer */
+  /* not using rint, as rint(0.5) = 0, while PHP round(0.5) = 1 */
+  intangle = floor(radToDeg(fabs(fmod(wind_angle, TWO_PI))) + 0.5);
+
+  if (intangle > 180)
+  {
+    intangle = 360 - intangle;
+  }
+  valfloor = polar_tab[intangle * (MAX_SPEED_IN_POLARS + 1) + intspeed];
+  valceil = polar_tab[intangle * (MAX_SPEED_IN_POLARS + 1) + intspeed + 1];
+#else
+    /* higher reolution mode, where bilinear interpolation is performed
+       (angle and speed) */
+    tangle = radToDeg(fabs(fmod(wind_angle, TWO_PI)));
+  if (tangle > 180.0)
+  {
+    tangle = 360.0 - tangle;
+  }
+  intangle = (int) floor(tangle);
+  /* special case when we reach 180 */
+  if (intangle == 180)
+  {
+    intangle_p1 = 179;
+    tangle = 179.0;
+  }
+  else
+  {
+    intangle_p1 = intangle + 1;
+  }
+  valfloor = polar_tab[intangle * (MAX_SPEED_IN_POLARS + 1) + intspeed];
+  tvalfloor = polar_tab[intangle_p1 * (MAX_SPEED_IN_POLARS + 1) + intspeed];
+  valfloor = valfloor + (tvalfloor - valfloor) * (tangle - floor(tangle));
+  /* if we reach the limit, return the right value now */
+  if (intspeed == MAX_SPEED_IN_POLARS)
+  {
+    return valfloor;
+  }
+  valceil = polar_tab[intangle * (MAX_SPEED_IN_POLARS + 1) + intspeed + 1];
+  tvalceil = polar_tab[intangle_p1 * (MAX_SPEED_IN_POLARS + 1) + intspeed + 1];
+  valceil = valceil + (tvalceil - valceil) * (tangle - floor(tangle));
+#endif /* ROUND_WIND_ANGLE_IN_POLAR */
+
+  /* linear interpolation for wind speed */
+  return (valfloor + (valceil - valfloor) * (wind_speed - (double) intspeed));
+}
+
+
+/**
  * finds current speed based on boat location,
  * wind_speed (in kts), wind_angle from boat's heading (in rad)
  * return boat speed (in kts)
