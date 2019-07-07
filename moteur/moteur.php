@@ -180,7 +180,7 @@ CheckLMNHStatus();
 // generate ranking page
   
 //for every race
-$RnkStartTime = microtime();
+$RnkStartTime = microtime(true);
 $racesListObj = new RankingRacesList(); 
 
 foreach($racesListObj->records as $idraces) 
@@ -199,7 +199,7 @@ foreach($FinishingRaces as $idraces)
     $ranking = $fullRacesObj->UpdateRankingPage(getenv("VLMCACHE"));
   }
 }
-echo "\nRaces ranking built in ". (microtime() - $RnkStartTime) ." s\n";
+echo "\nRaces ranking built in ". (microtime(true) - $RnkStartTime) ." s\n";
 echo "done\n";
 echo "\n\tFINISHED ** Races=" . $nb_races . "( " . $update_races . "), Boats=". $nb_boats . ", ";
 echo "Time=" . $engine_elapsed_float . "sec.  rate=". $nb_boats/$engine_elapsed_float . " boats/sec **\n";
