@@ -17,7 +17,8 @@ DELIMITER //
 CREATE PROCEDURE SP_BUILD_VLM_INDEX
 (
   IN StartDate bigint,
-  IN pRaceType int
+  IN pRaceType int,
+  IN WithDetail int
 ) 
 BEGIN
 
@@ -100,11 +101,18 @@ BEGIN
     group by Pl.playername,P.idplayers,PRC.RaceCount
     order by 4 desc;
 
+  if WithDetail then
+    select Pl.playername,P.* 
+    from tmpPlayersIndex P
+    join players Pl on Pl.idplayers = P.idplayers
+    order by idraces, Rank ;
+  END IF;
+
   drop temporary table tmpPlayersIndex;
 END //
 DELIMITER ;
 
 #call SP_BUILD_VLM_INDEX(1528614625,0);
 #call SP_BUILD_VLM_INDEX(1546300800,0);
-call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,0);
+call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,0,1);
 
