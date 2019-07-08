@@ -129,7 +129,7 @@ class users extends baseClass
       " `email` = '" . $this->email . "'," .
       " `country` = '" . $this->country . "'," .
       " `hidepos` =  " . $this->hidepos . "," .
-      " `blocnote` = '" . mysqli_real_escape_string( $this->blocnote) . "'" .
+      " `blocnote` = '" . mysqli_real_escape_string($GLOBALS['slavedblink'], $this->blocnote) . "'" .
       " WHERE idusers = " . $this->idusers;
     wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 
@@ -1352,7 +1352,7 @@ class fullUsers
       default :
     }
 
-    $value = mysqli_real_escape_string($value);
+    $value = mysqli_real_escape_string($GLOBALS['slavedblink'],$value);
     
     //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
     if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) 
@@ -1364,7 +1364,7 @@ class fullUsers
     {
       $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
                     " VALUES ( " . $this->users->idusers . 
-                    ", " . " '" . mysqli_real_escape_string($key) .  "', '" . $value . "')" ;
+                    ", " . " '" . mysqli_real_escape_string($GLOBALS['slavedblink'],$key) .  "', '" . $value . "')" ;
     }
 
     if(wrapper_mysql_db_query_writer($query_pref)) 

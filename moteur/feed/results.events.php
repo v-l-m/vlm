@@ -71,7 +71,7 @@
                 
             $medias = explode(",", VLM_NOTIFY_LIST);
             foreach ($medias as $media) {
-                $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, mysqli_real_escape_string($t), $timetarget);
+                $sql = sprintf("INSERT IGNORE INTO `news` SET media='%s', summary='%s', timetarget=%d ;", $media, mysqli_real_escape_string($GLOBALS['slavedblink'],$t), $timetarget);
                 $this->queryWrite($sql);
             }
             print $t."\n";
