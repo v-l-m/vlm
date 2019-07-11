@@ -1,6 +1,6 @@
 drop view if exists VIEW_ENGAGED_PER_RACE;
 create view VIEW_ENGAGED_PER_RACE as
- select RR.idraces idraces, R.deptime deptime, count(idusers) engaged from races_results RR join races R on RR.idraces=R.idraces and idusers>0 group by idraces;
+ select RR.idraces idraces,R.racetype racetype, R.deptime deptime, count(idusers) engaged, min(RR.deptime+RR.duration) Date1stArrival from races_results RR join races R on RR.idraces=R.idraces and idusers>0 group by idraces, racetype, R.deptime;
 
 drop view if exists VIEW_RACE_COEF;
 create view VIEW_RACE_COEF as
@@ -17,6 +17,7 @@ DELIMITER //
 CREATE PROCEDURE SP_BUILD_VLM_INDEX
 (
   IN StartDate bigint,
+  IN EndDate bigint,
   IN pRaceType int,
   IN WithDetail int
 ) 
@@ -24,12 +25,12 @@ BEGIN
 
   declare v_finished int default 0;
   declare CurRace int default 0;
-  declare MinFactor numeric(6,3) default 40;
+  declare MinFactor numeric(6,3) default 36;
   declare MaxFactor numeric(6,3) default 52;
 
   DECLARE crsr_race CURSOR FOR 
-    select idraces from races
-    where racetype=pRaceType and (closetime is null or closetime>StartDate);
+    select idraces from VIEW_ENGAGED_PER_RACE
+    where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate);
 
   DECLARE CONTINUE HANDLER 
         FOR NOT FOUND SET v_finished = 1;
@@ -87,12 +88,12 @@ BEGIN
 
   
   select Pl.playername,P.idplayers,PRC.RaceCount,
-    sum( coef * (E.engaged - P.rank+1) )  /
+    sum( coef * (E.engaged - P.rank+1)* P.Bonus )   /
     (case 
       when PRC.RaceCount < MinFactor then MinFactor
       when PRC.RaceCount > MaxFactor then MaxFactor
       else PRC.RaceCount
-    end)  as vlmindex, sum(E.engaged - P.rank+1),sum( coef * (E.engaged - P.rank+1) )
+    end)  as vlmindex, sum( coef * (E.engaged - P.rank+1)* P.Bonus )
     from tmpPlayersRaceCount PRC 
     join players Pl on Pl.idplayers = PRC.idplayers
     join tmpPlayersIndex P on PRC.idplayers = P.idplayers
@@ -114,5 +115,5 @@ DELIMITER ;
 
 #call SP_BUILD_VLM_INDEX(1528614625,0);
 #call SP_BUILD_VLM_INDEX(1546300800,0);
-call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,0,1);
+call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,UNIX_TIMESTAMP(),0,1);
 
