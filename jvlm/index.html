@@ -530,6 +530,24 @@
           <li RnkSort="DNF"><a href="#DivRnkRAC">DNF</a></li>
           <li RnkSort="HC"><a href="#DivRnkRAC">HC</a></li>
         </ul>
+        <div id="DivVlmIndex" class="hidden">
+          <div id="my-vlmindex-content" class="tab-content">
+            <div>
+              <table id="VLMIndexTable" class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
+                <thead>
+                  <tr id="VLMIndexTableHeader">
+                    <th data-name="rank" data-toggle="true" data-type="number"  I18N="Rank">Rank</th>
+                    <th data-name="playername" data-toggle="true"  I18N="name">Nom</th>
+                    <th data-name="RaceCount" data-breakpoints="xs" data-type="number" I18N="RaceCount">RaceCount</th>
+                    <th data-name="vlmindex" data-breakpoints="xs" data-sorted="true" data-direction="DESC" data-type="number" I18N="Index">VLMIndex</th>                    
+                  </tr>
+                </thead>
+                <tbody id="VLMIndexTableBody">
+
+                </tbody>
+              </table>
+            
+        </div>
         <div id='DivRnkRAC'>
           <div id="my-rank-content" class="tab-content">
             <div>
@@ -699,7 +717,7 @@
             <a href="/index.php" target="VLM1"><span I18n='VLM1'>forum </span></a>
           </div>
           <div class="col-xs-5 small">
-            <a id="BuildDate" data-toggle="tooltip" title="Thu May 30 2019 23:11:35 GMT+0200 (GMT+02:00)"></a>
+            <a id="BuildDate" data-toggle="tooltip" title="Sat Jul 20 2019 20:32:38 GMT+0200 (GMT+02:00)"></a>
           </div>
         </div>
       </fieldset>
@@ -1982,7 +2000,7 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-37369243-6"></script>
   <script>
-    var BuildDate = 'Thu, 30 May 2019 21:11:35 GMT'
+    var BuildDate = 'Sat, 20 Jul 2019 18:32:38 GMT'
     window.dataLayer = window.dataLayer || [];
 
     if ('Prod' === 'Dev')
