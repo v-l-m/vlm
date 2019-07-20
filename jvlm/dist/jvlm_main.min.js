@@ -3979,6 +3979,7 @@ var RankingFt = null;
 var RaceHistFt = null;
 var ICS_WPft = null;
 var NSZ_WPft = null;
+var VLMINdexFt = null;
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
 var OnPlayerLoadedCallBack = null; // On ready get started with vlm management
@@ -4065,6 +4066,18 @@ function CheckPageParameters() {
 
               break;
 
+            case "VLMIndex":
+              RacingBarMode = false;
+              /* jshint -W083*/
+
+              VLMINdexFt.OnReadyTable = function () {
+                HandleShowIndex(PArray[1]);
+              };
+              /* jshint +W083*/
+
+
+              break;
+
             case "ICSRace":
               RacingBarMode = false;
               HandleShowICS(PArray[1]);
@@ -4102,6 +4115,32 @@ function LoadRaceInfo(RaceId, RaceVersion, CallBack) {
   }
 
   $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
+}
+
+function HandleVLMIndex(result) {
+  if (result) {
+    $("#Ranking-Panel").show();
+    var index;
+    var rank = 1;
+
+    for (index in result) {
+      if (result[index]) {
+        result[index].rank = rank;
+        rank++;
+      }
+    }
+
+    BackupVLMIndexTable();
+    VLMINdexFt.loadRows(result);
+    $("#DivVlmIndex").removeClass("hidden");
+    $("#RnkTabsUL").addClass("hidden");
+    $("#DivRnkRAC").addClass("hidden");
+  }
+}
+
+function HandleShowIndex(IndexType) {
+  var CallBack = HandleVLMIndex;
+  $.get("/cache/rankings/VLMIndex_" + IndexType + ".json", CallBack);
 }
 
 function HandleShowOtherRaceRank(RaceId) {
@@ -4629,6 +4668,7 @@ function InitFootables() {
   RaceHistFt = InitFooTable("BoatRaceHist");
   ICS_WPft = InitFooTable("RaceWayPoints");
   NSZ_WPft = InitFooTable("NSZPoints");
+  VLMINdexFt = InitFooTable("VLMIndexTable");
 }
 
 function HandleUpdatePilototoTable(e) {
@@ -6505,6 +6545,10 @@ function FillNSZList(Exclusions) {
 
 function BackupRankingTable() {
   BackupFooTable(RankingFt, "#RankingTable", "#my-rank-content");
+}
+
+function BackupVLMIndexTable() {
+  BackupFooTable(VLMINdexFt, "#VLMIndexTable", "#my-vlmindex-content");
 }
 
 function FillStatusRanking(Boat, Status, Friends) {
