@@ -5,6 +5,7 @@ include_once("functions.php");
 function BuildIndex($query, $FileNameBase)
 {
   
+  // FIXME put credentials in config.php
   $host = 'loopback';
   $db   = 'vlm';
   $user = 'vlm';
@@ -73,10 +74,12 @@ function BuildIndex($query, $FileNameBase)
 
 ////////////////////////////////////////CHECK IF SOMEONE END RACE
 echo "\n1- === Build 1Year VLMIndex \n";
-$QueryIndex365Days = "call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,0,1);";
-BuildIndex($QueryIndex365Days, "VLMIndex_1year");
-$ts=int(microtime(true)/1000000); //(1/7/2018)'1561351604-2*365*3600*24;
-$QueryIndex365Days = "call SP_BUILD_VLM_INDEX($ts,0,1);"; //UNIX_TIMESTAMP()-2*365*3600*24,0,1);";
-BuildIndex($QueryIndex365Days, "VLMIndex_1year");
+$QueryIndex365Days = "call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,UNIX_TIMESTAMP(),0,1);";
+BuildIndex($QueryIndex365Days, getenv("VLMCACHE")."/rankings/VLMIndex_1year");
+//$ts=int(microtime(true)/1000000); //(1/7/2018)'1561351604-2*365*3600*24;
+$ChallengeStart=strtotime( date("Y").'/01/01 00:00:00 UTC');
+//echo( "ici ".date("Y").'01/01 00:00:00 UTC '.$ChallengeStart);
+$QueryIndex365Days = "call SP_BUILD_VLM_INDEX($ChallengeStart,UNIX_TIMESTAMP(),0,1);"; //UNIX_TIMESTAMP()-2*365*3600*24,0,1);";
+BuildIndex($QueryIndex365Days, getenv("VLMCACHE")."/rankings/VLMIndex_Challenge");
 
 ?>
