@@ -1513,7 +1513,7 @@ function DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures)
       let RaceId = Boat.VLMInfo.RAC;
       for (index in friends)
       {
-        if (friends[index])
+        if (friends[index] && Rankings[RaceId])
         {
           let Opp = Rankings[RaceId][friends[index]];
 
