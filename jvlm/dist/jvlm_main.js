@@ -10212,32 +10212,34 @@ function ShowOpponentPopupInfo(e) {
   if (ObjType == "opponent") {
     var _Boat = GetOppBoat(e.feature.attributes.idboat);
 
-    var Pos = new VLMPosition(_Boat.longitude, _Boat.latitude);
-    var PopupFields = [];
-    var feature = e.feature;
+    if (_Boat) {
+      var Pos = new VLMPosition(_Boat.longitude, _Boat.latitude);
+      var PopupFields = [];
+      var feature = e.feature;
 
-    if (OppPopups[e.feature.attributes.idboat]) {
-      map.removePopup(OppPopups[e.feature.attributes.idboat]);
-      OppPopups[e.feature.attributes.idboat] = null;
+      if (OppPopups[e.feature.attributes.idboat]) {
+        map.removePopup(OppPopups[e.feature.attributes.idboat]);
+        OppPopups[e.feature.attributes.idboat] = null;
+      }
+
+      var popup = new OpenLayers.Popup.FramedCloud("popup", OpenLayers.LonLat.fromString(feature.geometry.toShortString()), null, BuildBoatPopupInfo(_Boat), null, true, null);
+      popup.autoSize = true;
+      popup.maxSize = new OpenLayers.Size(400, 800);
+      popup.fixedRelativePosition = true;
+      feature.popup = popup;
+      map.addPopup(popup);
+      OppPopups[e.feature.attributes.idboat] = popup;
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, _Boat.boatname]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.loch), 2)]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + _Boat.nwp + "] " + RoundPow(parseFloat(_Boat.dnm), 2)]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last1h), 2)]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last3h), 2)]);
+      PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last24h), 2)]);
+      FillFieldsFromMappingTable(PopupFields);
     }
-
-    var popup = new OpenLayers.Popup.FramedCloud("popup", OpenLayers.LonLat.fromString(feature.geometry.toShortString()), null, BuildBoatPopupInfo(_Boat), null, true, null);
-    popup.autoSize = true;
-    popup.maxSize = new OpenLayers.Size(400, 800);
-    popup.fixedRelativePosition = true;
-    feature.popup = popup;
-    map.addPopup(popup);
-    OppPopups[e.feature.attributes.idboat] = popup;
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, _Boat.boatname]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.loch), 2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + _Boat.nwp + "] " + RoundPow(parseFloat(_Boat.dnm), 2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last1h), 2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last3h), 2)]);
-    PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(_Boat.last24h), 2)]);
-    FillFieldsFromMappingTable(PopupFields);
   }
 }
 
@@ -10251,6 +10253,18 @@ function GetOppBoat(BoatId) {
 
         if (Opp.idusers === BoatId) {
           return Opp;
+        }
+      }
+    }
+
+    if (CurBoat.Reals && CurBoat.Reals.ranking) {
+      for (var _i2 in CurBoat.Reals.ranking) {
+        if (CurBoat.Reals.ranking[_i2]) {
+          var _Opp2 = CurBoat.Reals.ranking[_i2];
+
+          if (_Opp2.idusers === BoatId) {
+            return _Opp2;
+          }
         }
       }
     }
