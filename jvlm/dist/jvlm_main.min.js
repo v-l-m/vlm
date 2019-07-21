@@ -10033,7 +10033,7 @@ function DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures) {
       var RaceId = Boat.VLMInfo.RAC;
 
       for (index in friends) {
-        if (friends[index]) {
+        if (friends[index] && Rankings[RaceId]) {
           var _Opp = Rankings[RaceId][friends[index]];
 
           if (typeof _Opp !== 'undefined' && parseInt(_Opp.idusers, 10) !== Boat.IdBoat) {
