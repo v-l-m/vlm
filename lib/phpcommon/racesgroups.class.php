@@ -25,7 +25,7 @@ class racesgroups extends baseClass {
     function constructFromQuery($where) {
         $query= "SELECT * FROM racesgroups WHERE ".$where;
         $result = $this->queryRead($query);
-        if ($result && mysqlinum_rows($result) === 1)  {
+        if ($result && mysqli_num_rows($result) === 1)  {
             $row =  mysqli_fetch_array($result, MYSQLI_ASSOC);
             return $this->constructFromRow($row);
         } else {
