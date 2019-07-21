@@ -5,4 +5,4 @@
 
 source $VLMRACINE/conf/conf_script || exit 1
 
-$VLMPHPPATH BuildVLMIndex.php
+$VLMPHPPATH $VLMRACINE/vlmcode/moteur/BuildVLMIndex.php

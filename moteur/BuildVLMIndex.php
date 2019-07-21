@@ -6,10 +6,10 @@ function BuildIndex($query, $FileNameBase)
 {
   
   // FIXME put credentials in config.php
-  $host = 'loopback';
+  $host = DBSLAVESERVER;
   $db   = 'vlm';
-  $user = 'vlm';
-  $pass = 'vlm';
+  $user = DBSLAVEUSER;
+  $pass = DBSLAVEPASSWORD;
   $charset = 'utf8mb4';
 
   $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
