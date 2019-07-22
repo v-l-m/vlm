@@ -15,7 +15,7 @@ class WSBase extends baseClass
   
 
   function __construct() {
-      parent::baseClass();
+      parent::__construct();
       $this->now = time();
   }
 
