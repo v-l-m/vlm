@@ -19,15 +19,15 @@ CREATE PROCEDURE SP_BUILD_VLM_INDEX
   IN StartDate bigint,
   IN EndDate bigint,
   IN pRaceType int,
-  IN WithDetail int
+  IN WithDetail int,
+  IN MinFactor int,
+  IN MaxFactor int
 ) 
 BEGIN
 
   declare v_finished int default 0;
   declare CurRace int default 0;
-  declare MinFactor numeric(6,3) default 36;
-  declare MaxFactor numeric(6,3) default 52;
-
+  
   DECLARE crsr_race CURSOR FOR 
     select idraces from VIEW_ENGAGED_PER_RACE
     where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate);
@@ -115,5 +115,5 @@ DELIMITER ;
 
 #call SP_BUILD_VLM_INDEX(1528614625,0);
 #call SP_BUILD_VLM_INDEX(1546300800,0);
-call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,UNIX_TIMESTAMP(),0,1);
+call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,UNIX_TIMESTAMP(),0,1,36,52);
 
