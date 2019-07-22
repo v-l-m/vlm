@@ -1,7 +1,23 @@
-drop view if exists VIEW_ENGAGED_PER_RACE;
-create view VIEW_ENGAGED_PER_RACE as
- select RR.idraces idraces,R.racetype racetype, R.deptime deptime, count(idusers) engaged, min(RR.deptime+RR.duration) Date1stArrival from races_results RR join races R on RR.idraces=R.idraces and idusers>0 group by idraces, racetype, R.deptime;
+drop view if exists VIEW_ENGAGED_PER_RACE_COMPLETE;
+create view VIEW_ENGAGED_PER_RACE_COMPLETE as
+ select RR.idraces idraces,R.racetype racetype, R.deptime deptime, count(idusers) engaged, min(RR.deptime+RR.duration) Date1stArrival 
+ from races_results RR join races R on RR.idraces=R.idraces and idusers>0 
+ group by idraces, racetype, R.deptime;
 
+drop view if exists VIEW_ENGAGED_PER_RACE_RACING;
+create view VIEW_ENGAGED_PER_RACE_RACING as
+ select U.engaged idraces,R.racetype, R.deptime, count(U.idusers) engaged from users U join races R on U.engaged = R.idraces
+ where engaged > 0 and idusers >0 
+ group by engaged,racetype, R.deptime;
+
+
+drop view if exists VIEW_ENGAGED_PER_RACE;
+  create view VIEW_ENGAGED_PER_RACE as
+  select idraces, racetype, deptime,sum(engaged), min(Date1stArrival)
+    from (  select * from VIEW_ENGAGED_PER_RACE_COMPLETE union select *, 999999999 Date1stArrival from VIEW_ENGAGED_PER_RACE_RACING) T
+    group by idraces, racetype, deptime;
+
+ 
 drop view if exists VIEW_RACE_COEF;
 create view VIEW_RACE_COEF as
   select idraces, 
