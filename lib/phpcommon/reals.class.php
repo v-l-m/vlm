@@ -19,7 +19,7 @@ class reals extends baseClass {
 
     //computed attributes
           
-    function reals($idreals = 0, $row = null) {
+    function __construct($idreals = 0, $row = null) {
         if ($idreals !== 0) {
             $this->constructFromId($idreals);
         } else if (!is_null($row) && is_array($row)) {

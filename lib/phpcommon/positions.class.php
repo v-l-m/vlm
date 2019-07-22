@@ -9,7 +9,7 @@ class positions
     $long, $lat,
     $idusers, $race;
 
-  function positions()
+  function __construct()
   {
     $this->time = 0;
     $this->long = 0;
@@ -253,7 +253,7 @@ class fullGrid
       $wheading;
 
   //constructor, by position
-  function fullGrid($latitude, $longitude, $timestamp = 0) {
+  function __construct($latitude, $longitude, $timestamp = 0) {
       $vent = array();
 
       $this->Lat =  $latitude;
@@ -279,7 +279,7 @@ class gridList
   // Utilis� par mercator.img.php
   // Cette nouvelle version de gridList est plus performante que l'ancienne
   // car elle ne prend que les points se situant sur la zone � cartographier
-  function gridList($north, $south, $west, $east, $maille, $timestamp = 0)
+  function __construct($north, $south, $west, $east, $maille, $timestamp = 0)
   {
     $lat_step=$maille*abs($north - $south)/10;
     

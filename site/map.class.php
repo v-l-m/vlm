@@ -40,7 +40,7 @@ class map
   var $arrayFuncProj, $arrayFuncProjLong;
   
   //constructor that set all constants and values
-  function map($origRace = NULL, $boatlist, $proj, $text, $tracks, 
+  function __construct($origRace = NULL, $boatlist, $proj, $text, $tracks, 
                $north = 50000, $south = 40000, $east = 0, $west = -35000 , $idraces=0 , 
                $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp='on', $defaultgridcolor='yes')
   {

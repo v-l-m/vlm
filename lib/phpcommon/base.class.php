@@ -6,7 +6,7 @@ abstract class baseClass {
     var $error_status = False;
     var $error_string = "";
 
-    function baseClass() {}
+    function __constructor() {}
 
     function queryWrite($query) {
         $result = wrapper_mysql_db_query_writer($query);

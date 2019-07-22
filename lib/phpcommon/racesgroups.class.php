@@ -14,7 +14,7 @@ class racesgroups extends baseClass {
 
     //computed attributes
           
-    function racesgroups($grouptag, $row = null) {
+    function __construct($grouptag, $row = null) {
         if (!is_null($grouptag)) {
             $this->constructFromId($grouptag);
         } else if (!is_null($row) && is_array($row)) {

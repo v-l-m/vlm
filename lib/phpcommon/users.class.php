@@ -98,7 +98,7 @@ class users extends baseClass
     
   }
 
-  function users($id, $init = TRUE) {
+  function __construct($id, $init = TRUE) {
     $this->idusers = intval($id);
     if ($init) {
       $this->initFromId();
@@ -551,7 +551,7 @@ class fullUsers
     $preferences,
     $RaceVersion=0;
 
-  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
+  function __construct($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
   {
     if ($TimeStamp)
     {
@@ -1754,7 +1754,7 @@ class excludedUsers
 
 
   // This one takes one more parameter than fullUsers (raceid)
-  function excludedUsers($id, $raceid, $age = MAX_DURATION)
+  function __construct($id, $raceid, $age = MAX_DURATION)
   {
 
     $this->users = getUserObject($id);

@@ -13,7 +13,7 @@ class playersPending extends baseClass {
         $updated,        
         $seed;
 
-    function playersPending($email = 0, $seed = 0, $row = null) {
+    function __construct($email = 0, $seed = 0, $row = null) {
         if (!is_null($email) && $seed !== 0) {
             $this->constructFromEmailSeed($email, $seed);
         } else if (!is_null($row) && is_array($row)) {
@@ -138,7 +138,7 @@ class players extends baseClass {
     var $ownedboatidlist = null;
     var $recentlyboatsittedidlist = null;
           
-    function players($idplayers = 0, $email = null, $pending = null, $row = null) {
+    function __construct($idplayers = 0, $email = null, $pending = null, $row = null) {
         if ($idplayers !== 0) {
             $this->constructFromId($idplayers);
         } else if (!is_null($email)) {

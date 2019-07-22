@@ -35,7 +35,7 @@ class races extends baseClass
     $ics,
     $lastrun;
 
-  function races($id=0, $row = null) 
+  function __construct($id=0, $row = null) 
   {
     $id = intval($id);
     if ($id != 0 && is_null($row)) 
@@ -652,7 +652,7 @@ class fullRaces {
     $opponents = array(); //array with users engaged
 
 
-  function fullRaces($id = 0, &$origrace = NULL)
+  function __construct($id = 0, &$origrace = NULL)
   {
     if ($origrace == NULL) 
     {
@@ -1566,7 +1566,7 @@ class fullRaces {
 class racesList {
   var $records = array();
 
-  function racesList() {
+  function __construct() {
     $query = "SELECT idraces FROM races ORDER BY deptime DESC";
     //printf ($query . "\n");
     $result = wrapper_mysql_db_query_reader($query);
@@ -1586,7 +1586,7 @@ class racesList {
 class startedRacesList {
   var $records = array();
 
-  function startedRacesList() {
+  function __construct() {
     $this->records = array();
     $query = "SELECT idraces FROM races WHERE started=".RACE_STARTED;
     
@@ -1614,7 +1614,7 @@ class startedRacesList {
 class RankingRacesList {
   var $records = array();
 
-  function RankingRacesList() 
+  function __construct() 
   {
     $this->records = array();
     $query = "SELECT idraces FROM races WHERE ";
