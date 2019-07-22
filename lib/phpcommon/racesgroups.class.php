@@ -46,7 +46,7 @@ class racesgroups extends baseClass {
     }
 
     function constructFromId($id) {
-        return $this->constructFromQuery("grouptag = '".mysql_real_escape_string($id)."'");
+        return $this->constructFromQuery("grouptag = '".mysqli_real_escape_string($GLOBALS['slavedblink'], $id)."'");
     }
 
     function getRaces($where = null) {

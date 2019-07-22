@@ -1315,7 +1315,7 @@ function checkLoginExists($login) {
     $query2 = "SELECT idusers FROM users WHERE UPPER(`username`) = UPPER('".$login."')";
     $result2 = wrapper_mysql_db_query_reader($query2);
 
-    return ($row2=mysql_fetch_array($result2, MYSQLI_NUM));
+    return ($row2=mysqli_fetch_array($result2, MYSQLI_NUM));
 }
 
 /*create a new account with default values and return idusers*/
@@ -1324,7 +1324,7 @@ function createBoat($log, $pass, $mail, $boatname = 'boat') {
   $color = random_hex_color();
   $query3 = "INSERT INTO `users` ( `boattype` , `username` , `password` , `email`,"
     ."`boatname`, `color`, `boatheading`, `pilotmode`, `engaged`, `country` )"
-    ."VALUES ( '".get_polar_name2id("imoca60")."', '".mysql_real_escape_string($log)."', '$pass', '$mail', '".mysql_real_escape_string($boatname)."', '$color', '0', '1', '0', '00-UN')";
+    ."VALUES ( '".get_polar_name2id("imoca60")."', '".mysqli_real_escape_string($GLOBALS['slavedblink'], $log)."', '$pass', '$mail', '".mysqli_real_escape_string($GLOBALS['slavedblink'], $boatname)."', '$color', '0', '1', '0', '00-UN')";
   $result3 = wrapper_mysql_db_query_writer($query3);//or die("Query [$query3] failed \n");
 
   //is there another solution than reread from db?

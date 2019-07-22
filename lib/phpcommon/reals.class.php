@@ -91,7 +91,7 @@ class reals extends baseClass {
         //FIXME : Should not be used except from playersPrefs class ?
         if (is_null($val)) return $this->unsetPref($key);
         $query = sprintf("REPLACE `players_prefs` SET `idreals` = %d, `pref_name` = '%s', `pref_value` = '%s'",
-            intval($this->idreals), $key, mysqli_real_escape_string($val) );
+            intval($this->idreals), $key, mysqli_real_escape_string($GLOBALS['slavedblink'], $val) );
         if (!is_null($perm)) $query .= sprintf(", `permissions` = %d", $perm);
         if ($this->queryWrite($query)) {
             $this->logRealEvent("Player prefs(".$key.') updated');
