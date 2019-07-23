@@ -231,7 +231,7 @@ function HandleVLMIndex(result)
     $("#DivVlmIndex").removeClass("hidden");
     $("#RnkTabsUL").addClass("hidden");
     $("#DivRnkRAC").addClass("hidden");
-    
+    ShowApropos(true);
   }
 }
 
