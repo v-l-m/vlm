@@ -2627,7 +2627,7 @@ function HandleMapMouseMove(e)
       $("#MI_LocalGribSpan").text("" + span.asHours() +" h");
 
       let now = new Date().getTime()/1000;
-      if ((now-ts_start.unix()) > 9.5*3600)
+      if ((now-ts_start.local().unix()) > 9.5*3600)
       {
         $("#GribLoadOK").addClass("GribNotOK");
       }
