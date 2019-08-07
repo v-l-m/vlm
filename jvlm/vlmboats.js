@@ -162,19 +162,18 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
           {
             //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
             console.log("DBG WIND ");
-            //9184.4813355926 | 41253.839784894
-            let MI = GribMgr.WindAtPointInTime(new Date(1557347106 * 1000), 33.765628840675, -118.51044088479);
+            //49.753227868452, -8.9971082951315
+            let MI = GribMgr.WindAtPointInTime(new Date(1563910806 * 1000), 49.753227868452, -8.9971082951315);
             if (MI)
             {
               let Hdg = MI.Heading + 40;
               let Speed = PolarsManager.GetBoatSpeed("boat_figaro2", MI.Speed, MI.Heading, Hdg);
               if (!isNaN(Speed))
               {
-                let P = new VLMPosition(-118.51044088479, 33.765628840675);
+                let P = new VLMPosition(49.753227868452, -8.9971082951315);
                 let dest = P.ReachDistLoxo(Speed / 3600.0 * 300, Hdg);
                 let bkp1 = 0;
               }
-
             }
           }
 

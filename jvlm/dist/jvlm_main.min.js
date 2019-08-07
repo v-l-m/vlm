@@ -3631,8 +3631,20 @@ function VLM2GribManager() {
     var LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
     var LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
     var LatIdx2 = (LatIdx1 + 1) % (180 / this.GribStep);
-    var dX = Lon / this.GribStep - Math.floor(Lon / this.GribStep);
-    var dY = Lat / this.GribStep - Math.floor(Lat / this.GribStep); // Get UVS for each 4 grid points
+    var Lon_pos = Lon;
+
+    while (Lon_pos < 0) {
+      Lon_pos += 180;
+    }
+
+    var Lat_pos = Lat;
+
+    while (Lat_pos < 0) {
+      Lat_pos += 90;
+    }
+
+    var dX = Lon_pos / this.GribStep - Math.floor(Lon_pos / this.GribStep);
+    var dY = Lat_pos / this.GribStep - Math.floor(Lat_pos / this.GribStep); // Get UVS for each 4 grid points
 
     var U00 = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD;
     var U01 = this.Tables[TableIndex][LonIdx1][LatIdx2].UGRD;
@@ -3749,7 +3761,7 @@ function VLM2GribManager() {
       // Handle grib change
       if (this.LastGribDate !== parseInt(e.GribCacheIndex, 10)) {
         // Grib changed, record, and clear Tables, force reinit
-        this.LastGribDate = e.GribCacheIndex;
+        this.LastGribDate = parseInt(e.GribCacheIndex, 10);
         this.Tables = [];
         this.Inited = false;
         this.Init();
@@ -4135,6 +4147,7 @@ function HandleVLMIndex(result) {
     $("#DivVlmIndex").removeClass("hidden");
     $("#RnkTabsUL").addClass("hidden");
     $("#DivRnkRAC").addClass("hidden");
+    ShowApropos(true);
   }
 }
 
@@ -5921,6 +5934,23 @@ function HandleMapMouseMove(e) {
       $("#MI_WPOrtho").text("--- °");
     }
 
+    if (GribMgr) {
+      var m = moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
+      var ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
+      var ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length - 1] * 1000 + ")/");
+      var span = moment.duration(ts_end.diff(ts_start));
+      $("#MI_SrvrGribAge").text(m);
+      $("#MI_LocalGribAge").text(GetLocalUTCTime(ts_start.add(3.5, "h"), true, true));
+      $("#MI_LocalGribSpan").text("" + span.asHours() + " h");
+      var now = new Date().getTime() / 1000;
+
+      if (now - ts_start.local().unix() > 9.5 * 3600) {
+        $("#GribLoadOK").addClass("GribNotOK");
+      } else {
+        $("#GribLoadOK").removeClass("GribNotOK");
+      }
+    }
+
     if (Estimated) {
       RefreshEstPosLabels(EstimatePos);
     }
@@ -7102,13 +7132,13 @@ function GetLocalUTCTime(d, IsUTC, AsString) {
   }
 
   if (VLM2Prefs.MapPrefs.UseUTC) {
-    if (!IsUTC) {
+    if (m.isLocal()) {
       m = m.utc();
     }
 
     UTCSuffix = " Z";
   } else {
-    if (IsUTC) {
+    if (!m.isLocal()) {
       m = m.local();
     }
   }
@@ -7708,7 +7738,7 @@ function MercatorTransform() {
     Ret = Ret / 180 * PI
     return (Math.Atan(Math.Sinh(Ret)) / PI * 180)
   End Function
-    Public Function CanvasToLon(ByVal V As Double) Implements IMapTransform.CanvasToLon
+   Public Function CanvasToLon(ByVal V As Double) Implements IMapTransform.CanvasToLon
     Debug.Assert(Scale <> 0)
     var Ret = ((V - ActualWidth / 2) / Scale + LonOffset) 
     return Ret
@@ -8980,16 +9010,16 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
 
         if ('Prod' !== 'Dev') {
           //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
-          console.log("DBG WIND "); //9184.4813355926 | 41253.839784894
+          console.log("DBG WIND "); //49.753227868452, -8.9971082951315
 
-          var MI = GribMgr.WindAtPointInTime(new Date(1557347106 * 1000), 33.765628840675, -118.51044088479);
+          var MI = GribMgr.WindAtPointInTime(new Date(1563910806 * 1000), 49.753227868452, -8.9971082951315);
 
           if (MI) {
             var Hdg = MI.Heading + 40;
             var Speed = PolarsManager.GetBoatSpeed("boat_figaro2", MI.Speed, MI.Heading, Hdg);
 
             if (!isNaN(Speed)) {
-              var P = new VLMPosition(-118.51044088479, 33.765628840675);
+              var P = new VLMPosition(49.753227868452, -8.9971082951315);
               var dest = P.ReachDistLoxo(Speed / 3600.0 * 300, Hdg);
               var bkp1 = 0;
             }

@@ -808,8 +808,11 @@
       </fieldset>
       <fieldset class="MI_Coords">
         <legend class="ui-legend MI_Legend"></legend>
-        <div style="text-align:center">
-          <button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime">Estime</button>
+        <div >
+          <div><label I18n="ServerMeteoAge">Grib updated </label><span> : </span><span id="MI_SrvrGribAge"></span></div>
+          <div id="GribLoadOK"><label I18n="LocalMeteoStart">Grib updated </label><span> : </span><span id="MI_LocalGribAge"></span></div>
+          <div><label I18n="LocalMeteoSpan">Grib updated </label><span> : </span><span id="MI_LocalGribSpan"></span></div>
+          <div style="text-align:center"><button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime"  >Estime</button></div>
           <div style="padding: 0 0 0 0">
             <button type="button" id="EstimatorStopButton" class=" stop hidden btn btn-xs" style="float:left"></button>
           </div>
