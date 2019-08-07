@@ -4099,7 +4099,7 @@ function GetLocalUTCTime(d, IsUTC, AsString)
   }
   if (VLM2Prefs.MapPrefs.UseUTC)
   {
-    if (!IsUTC)
+    if (m.isLocal())
     {
       m = m.utc();
     }
@@ -4107,7 +4107,7 @@ function GetLocalUTCTime(d, IsUTC, AsString)
   }
   else
   {
-    if (IsUTC)
+    if (!m.isLocal())
     {
       m = m.local();
     }
