@@ -174,8 +174,20 @@ function VLM2GribManager()
     let LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
     let LatIdx2 = (LatIdx1 + 1) % (180 / this.GribStep);
 
-    let dX = (Lon / this.GribStep - Math.floor(Lon / this.GribStep));
-    let dY = (Lat / this.GribStep - Math.floor(Lat / this.GribStep));
+    let Lon_pos = Lon;
+    while (Lon_pos < 0)
+    {
+      Lon_pos+=180;
+    }
+
+    let Lat_pos = Lat;
+    while (Lat_pos < 0)
+    {
+      Lat_pos+=90;
+    }
+    
+    let dX = (Lon_pos / this.GribStep - Math.floor(Lon_pos / this.GribStep));
+    let dY = (Lat_pos / this.GribStep - Math.floor(Lat_pos / this.GribStep));
 
     // Get UVS for each 4 grid points
     let U00 = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD;
