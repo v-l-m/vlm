@@ -1,6 +1,9 @@
 <?php
 $strings['fr'] = 
   array (
+    'ServerMeteoAge'=>'Grib chargé',
+    'LocalMeteoStart'=>'Grib du',
+    'LocalMeteoSpan'=>'Durée',
     'AvgSpeeds' => 'Moyennes',
     'UseUTC' => 'Afficher les heures en GMT',
     'EstimateDate' => "Date de l'estime",

@@ -1,6 +1,10 @@
 <?php
 $strings['en'] = 
   array (
+    'ServerMeteoAge'=>'Grib loaded',
+    'LocalMeteoStart'=>'Grib from',
+    'LocalMeteoSpan'=>'Span',
+    'AvgSpeeds' => 'Moyennes',
     'AvgSpeeds' => 'Average Speed',
     'UseUTC' => 'Use UTC time',
     'EstimateDate' => 'Estimate Date',

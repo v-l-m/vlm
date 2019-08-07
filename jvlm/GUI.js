@@ -2616,6 +2616,27 @@ function HandleMapMouseMove(e)
       $("#MI_WPOrtho").text("--- °");
     }
 
+    if (GribMgr)
+    {
+      let m =  moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
+      let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
+      let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length-1] * 1000 + ")/");
+      let span = moment.duration(ts_end.diff(ts_start));
+      $("#MI_SrvrGribAge").text(m);
+      $("#MI_LocalGribAge").text(GetLocalUTCTime( ts_start.add(3.5,"h"),true,true));
+      $("#MI_LocalGribSpan").text("" + span.asHours() +" h");
+
+      let now = new Date().getTime()/1000;
+      if ((now-ts_start.unix()) > 9.5*3600)
+      {
+        $("#GribLoadOK").addClass("GribNotOK");
+      }
+      else
+      {
+        $("#GribLoadOK").removeClass("GribNotOK");
+      }
+    }
+
     if (Estimated)
     {
       RefreshEstPosLabels(EstimatePos);
