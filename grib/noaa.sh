@@ -136,6 +136,7 @@ for TSTAMP in `echo $allindexes` ; do
         updated=1
         #Clear the cache as well
         rm -Rf $VLMRACINE/cache/gribtiles/*/ >> $LOG 2>&1 
+        date +%s >  $GRIBPATH/GribCacheIndex
       fi
     fi
 done
