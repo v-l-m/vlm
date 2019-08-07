@@ -328,7 +328,7 @@ function VLM2GribManager()
       if (this.LastGribDate !== parseInt(e.GribCacheIndex, 10))
       {
         // Grib changed, record, and clear Tables, force reinit
-        this.LastGribDate = e.GribCacheIndex;
+        this.LastGribDate = parseInt(e.GribCacheIndex, 10);
         this.Tables = [];
         this.Inited = false;
         this.Init();
