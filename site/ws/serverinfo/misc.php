@@ -17,7 +17,7 @@
       while ($line = fgetss($fd)) {
         if (strlen(trim($line)) > 0) $versiontxt .= $line;
       }
-      $versionarray = split("\n", $versiontxt);
+      $versionarray = explode("\n", $versiontxt);
       $info['version'] = $versionarray[0];
       $info['branch'] = $versionarray[1];
       $info['gshhs_version'] = "2.2.0"; #fixme, synchroniser avec maps, vlm-c, clip_gshhs
