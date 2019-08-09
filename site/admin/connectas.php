@@ -26,7 +26,7 @@
             <input name="idp" value="<?php echo $idp; ?>" />
             <input type="submit" value="Connect as..." />
         </form>
-<?
+<?php
     }
     
     include ("htmlend.php");

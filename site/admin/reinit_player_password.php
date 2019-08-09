@@ -30,7 +30,7 @@
             <input name="playerpassword" value="<?php echo $playerpassword; ?>" /><br />
             <input type="submit" value="Confirm password change !" />
         </form>
-<?
+<?php
     } else {
         echo "<h2>Input the idp and the password you want to change... PLEASE USE WITH CAUTION !</h2>";
 ?>
@@ -43,7 +43,7 @@
             <input name="playerpassword" value="<?php echo $playerpassword; ?>" /><br />
             <input type="submit" value="Change player password" />
         </form>
-<?
+<?php
     }
     
     include ("htmlend.php");

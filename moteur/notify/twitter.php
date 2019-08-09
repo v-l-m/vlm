@@ -1,4 +1,4 @@
-<?
+<?php
     require("config.php");
     require('notify.class.php');
     require_once('TwitterOAuth/TwitterOAuth.php');

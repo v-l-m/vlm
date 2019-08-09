@@ -1,4 +1,4 @@
-<?
+<?php
     require_once("base.class.php");
 
     class RacesResultsEvents extends baseClass {
