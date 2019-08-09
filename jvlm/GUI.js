@@ -1072,6 +1072,7 @@ function HandleGribSlideMove(event, ui)
   {
     let EstPos = _CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(GribEpoch + ui.value * 3600 * 1000));
     RefreshEstPosLabels(EstPos);
+    StartEstimateTimeout();
   }
 }
 
@@ -2593,12 +2594,7 @@ function HandleMapMouseMove(e)
       EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
       LastMouseMoveCall = new Date();
       clearTimeout(ShowEstTimeOutHandle);
-      ShowEstTimeOutHandle = setTimeout(
-        function() 
-        {
-          _CurPlayer.CurBoat.GetClosestEstimatePoint(null); 
-          DrawBoat(_CurPlayer.CurBoat,false);
-        }, 5000);
+      StartEstimateTimeout();
     }
 
 
@@ -2651,6 +2647,14 @@ function HandleMapMouseMove(e)
     }
 
   }
+}
+
+function StartEstimateTimeout() {
+  ShowEstTimeOutHandle = setTimeout(function () {
+    _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
+    RefreshEstPosLabels(null);
+    DrawBoat(_CurPlayer.CurBoat, false);
+  }, 5000);
 }
 
 function RefreshEstPosLabels(Pos)
