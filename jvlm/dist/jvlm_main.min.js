@@ -5898,6 +5898,7 @@ function HandleBoatSelectionChange(e) {
 }
 
 var LastMouseMoveCall = 0;
+var ShowEstTimeOutHandle = null;
 
 function HandleMapMouseMove(e) {
   if (GM_Pos && typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.CurBoat !== 'undefined' && typeof _CurPlayer.CurBoat.VLMInfo !== "undefined") {
@@ -5913,6 +5914,12 @@ function HandleMapMouseMove(e) {
       // Throttle estimate update to 3/sec
       EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
       LastMouseMoveCall = new Date();
+      clearTimeout(ShowEstTimeOutHandle);
+      ShowEstTimeOutHandle = setTimeout(function () {
+        _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
+
+        DrawBoat(_CurPlayer.CurBoat, false);
+      }, 5000);
     }
 
     $("#MI_Lat").text(Pos.Lat.ToString());
@@ -8516,6 +8523,10 @@ function Boat(vlmboat) {
 
   this.GetClosestEstimatePoint = function (Pos) {
     if (typeof Pos === "undefined" || !Pos) {
+      if (this.Estimator) {
+        this.Estimator.ClearEstimatePosition(this.Estimator.Boat);
+      }
+
       return null;
     }
 
@@ -10170,7 +10181,7 @@ function GetClosestOpps(Boat, NbOpps) {
 
   var RetArray = [];
 
-  if (RaceId) {
+  if (RaceId && Rankings[RaceId]) {
     var CurBoat = Rankings[RaceId][Boat.IdBoat];
 
     if (typeof CurBoat === 'undefined' || !Boat) {

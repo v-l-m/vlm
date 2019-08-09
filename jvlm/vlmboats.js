@@ -1638,7 +1638,7 @@ function GetClosestOpps(Boat, NbOpps)
   }
   let RetArray = [];
 
-  if (RaceId)
+  if (RaceId && Rankings[RaceId])
   {
     let CurBoat = Rankings[RaceId][Boat.IdBoat];
 

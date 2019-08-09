@@ -91,6 +91,10 @@
    {
      if (typeof Pos === "undefined" || !Pos)
      {
+       if (this.Estimator)
+       {
+         this.Estimator.ClearEstimatePosition(this.Estimator.Boat);
+       }
        return null;
      }
 

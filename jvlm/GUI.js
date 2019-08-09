@@ -2574,6 +2574,7 @@ function HandleBoatSelectionChange(e)
 }
 
 var LastMouseMoveCall = 0;
+var ShowEstTimeOutHandle = null;
 
 function HandleMapMouseMove(e)
 {
@@ -2591,6 +2592,13 @@ function HandleMapMouseMove(e)
       // Throttle estimate update to 3/sec
       EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
       LastMouseMoveCall = new Date();
+      clearTimeout(ShowEstTimeOutHandle);
+      ShowEstTimeOutHandle = setTimeout(
+        function() 
+        {
+          _CurPlayer.CurBoat.GetClosestEstimatePoint(null); 
+          DrawBoat(_CurPlayer.CurBoat,false);
+        }, 5000);
     }
 
 
