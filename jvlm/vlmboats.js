@@ -163,7 +163,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
             console.log("DBG WIND ");
             //49.753227868452, -8.9971082951315
-            let MI = GribMgr.WindAtPointInTime(new Date(1563910806 * 1000), 49.753227868452, -8.9971082951315);
+            let MI = GribMgr.WindAtPointInTime(new Date(1566149443 * 1000), 49.753227868452, -8.9971082951315);
             if (MI)
             {
               let Hdg = MI.Heading + 40;
