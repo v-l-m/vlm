@@ -1193,7 +1193,7 @@ class fullRaces {
                        " WHERE RR.idusers = US.idusers " . 
    //PAPARAZZIA: quick fix to display only boat in the race (for easier use)
                        " AND   engaged = $currentengaged " . 
-                       " ORDER by engaged desc, nwp desc, dnm asc, RR.idusers asc";
+                       " ORDER by engaged desc, RR.idusers asc";
 
     $result = wrapper_mysql_db_query_reader($query_listusers) or die ($query_listusers);
 
