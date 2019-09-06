@@ -1,7 +1,23 @@
-drop view if exists VIEW_ENGAGED_PER_RACE;
-create view VIEW_ENGAGED_PER_RACE as
- select RR.idraces idraces, R.deptime deptime, count(idusers) engaged from races_results RR join races R on RR.idraces=R.idraces and idusers>0 group by idraces;
+drop view if exists VIEW_ENGAGED_PER_RACE_COMPLETE;
+create view VIEW_ENGAGED_PER_RACE_COMPLETE as
+ select RR.idraces idraces,R.racetype racetype, R.deptime deptime, count(idusers) engaged, min(RR.deptime+RR.duration) Date1stArrival 
+ from races_results RR join races R on RR.idraces=R.idraces and idusers>0 
+ group by idraces, racetype, R.deptime;
 
+drop view if exists VIEW_ENGAGED_PER_RACE_RACING;
+create view VIEW_ENGAGED_PER_RACE_RACING as
+ select U.engaged idraces,R.racetype, R.deptime, count(U.idusers) engaged from users U join races R on U.engaged = R.idraces
+ where engaged > 0 and idusers >0 
+ group by engaged,racetype, R.deptime;
+
+
+drop view if exists VIEW_ENGAGED_PER_RACE;
+  create view VIEW_ENGAGED_PER_RACE as
+  select idraces, racetype, deptime,sum(engaged), min(Date1stArrival)
+    from (  select * from VIEW_ENGAGED_PER_RACE_COMPLETE union select *, 999999999 Date1stArrival from VIEW_ENGAGED_PER_RACE_RACING) T
+    group by idraces, racetype, deptime;
+
+ 
 drop view if exists VIEW_RACE_COEF;
 create view VIEW_RACE_COEF as
   select idraces, 
@@ -17,18 +33,20 @@ DELIMITER //
 CREATE PROCEDURE SP_BUILD_VLM_INDEX
 (
   IN StartDate bigint,
-  IN pRaceType int
+  IN EndDate bigint,
+  IN pRaceType int,
+  IN WithDetail int,
+  IN MinFactor int,
+  IN MaxFactor int
 ) 
 BEGIN
 
   declare v_finished int default 0;
   declare CurRace int default 0;
-  declare MinFactor numeric(6,3) default 40;
-  declare MaxFactor numeric(6,3) default 52;
-
+  
   DECLARE crsr_race CURSOR FOR 
-    select idraces from races
-    where racetype=pRaceType and (closetime is null or closetime>StartDate);
+    select idraces from VIEW_ENGAGED_PER_RACE
+    where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate);
 
   DECLARE CONTINUE HANDLER 
         FOR NOT FOUND SET v_finished = 1;
@@ -86,12 +104,12 @@ BEGIN
 
   
   select Pl.playername,P.idplayers,PRC.RaceCount,
-    sum( coef * (E.engaged - P.rank+1) )  /
+    sum( coef * (E.engaged - P.rank+1)* P.Bonus )   /
     (case 
       when PRC.RaceCount < MinFactor then MinFactor
       when PRC.RaceCount > MaxFactor then MaxFactor
       else PRC.RaceCount
-    end)  as vlmindex, sum(E.engaged - P.rank+1),sum( coef * (E.engaged - P.rank+1) )
+    end)  as vlmindex, sum( coef * (E.engaged - P.rank+1)* P.Bonus )
     from tmpPlayersRaceCount PRC 
     join players Pl on Pl.idplayers = PRC.idplayers
     join tmpPlayersIndex P on PRC.idplayers = P.idplayers
@@ -100,11 +118,18 @@ BEGIN
     group by Pl.playername,P.idplayers,PRC.RaceCount
     order by 4 desc;
 
+  if WithDetail then
+    select Pl.playername,P.* 
+    from tmpPlayersIndex P
+    join players Pl on Pl.idplayers = P.idplayers
+    order by idraces, Rank ;
+  END IF;
+
   drop temporary table tmpPlayersIndex;
 END //
 DELIMITER ;
 
 #call SP_BUILD_VLM_INDEX(1528614625,0);
 #call SP_BUILD_VLM_INDEX(1546300800,0);
-call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,0);
+call SP_BUILD_VLM_INDEX(UNIX_TIMESTAMP()-365*3600*24,UNIX_TIMESTAMP(),0,1,36,52);
 

@@ -1,4 +1,4 @@
-<?
+<?php
 header("Content-Type: text/plain\n\n");
 
 if ($time != "")

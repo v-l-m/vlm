@@ -24,10 +24,10 @@ function getRealBoats($race = 0, $age = 172800 ) { //48h max avant de ne plus af
         // On se limite le nombre de positions pour les bateaux r�els pour l'instant
         $query .= " ORDER BY P.time DESC, P.idusers DESC";
 
-        $result = mysqli_query($query) or die("Query [$query] failed \n");
+        $result = mysqli_query($GLOBALS['slavedblink'],$query) or die("Query [$query] failed \n");
 
         $refid = 0;
-        while ( $boat = mysqli_fetch_array($result, MYSQL_NUM) ) {
+        while ( $boat = mysqli_fetch_array($result, MYSQLI_NUM) ) {
               if ($refid < $boat[0]) break; //on s'arrête quand on reboucle sur une deuxième serie de coordonnée
               array_push($boatarr, $boat);
               $refid = $boat[0];

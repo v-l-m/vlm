@@ -40,7 +40,7 @@ class map
   var $arrayFuncProj, $arrayFuncProjLong;
   
   //constructor that set all constants and values
-  function map($origRace = NULL, $boatlist, $proj, $text, $tracks, 
+  function __construct($origRace = NULL, $boatlist, $proj, $text, $tracks, 
                $north = 50000, $south = 40000, $east = 0, $west = -35000 , $idraces=0 , 
                $x = 800, $y = 800 , $windtext = "default" , $maille=1, $drawwind=0, $timings=false, $drawtextwp='on', $defaultgridcolor='yes')
   {
@@ -543,7 +543,7 @@ class map
       $idpoint = -1;
 
       $polymode = ($fullres == MAP_POLYLINE_FULL_MODE || $fullres = MAP_POLYLINE_MODE);
-      while ( $point = mysqli_fetch_array($result_coast, MYSQL_NUM) ) {
+      while ( $point = mysqli_fetch_array($result_coast, MYSQLI_NUM) ) {
 
         // On parcourt tous les points r�sultant de la requ�te (ils sont class� par  idcoast, idpoint
         //  - Chaque fois qu'on trouve un point : 

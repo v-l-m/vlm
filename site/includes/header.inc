@@ -314,8 +314,12 @@
 <?php
             $langs= getLocalizedString(null);
             foreach ($langs as $lg) {
-                if (!is_null($_SERVER['QUERY_STRING']) || $_SERVER['QUERY_STRING'] != "") {
+                if ( isset($_SERVER['QUERY_STRING'])) {
                     $querystring = $_SERVER['QUERY_STRING']."&";
+                }
+                else
+                {
+                    $querystring = "";
                 }
                 $querystring .= "lang=$lg";
                 echo "<a href=\"".$_SERVER['SCRIPT_NAME']."?$querystring\"><img src=\"/images/site/$lg.png\" title=\"".getLocalizedString('lang_version', $lg)."\" alt=\"".getLocalizedString('lang_version', $lg)."\" /></a>\n";

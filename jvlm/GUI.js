@@ -39,6 +39,7 @@ var RankingFt = null;
 var RaceHistFt = null;
 var ICS_WPft = null;
 var NSZ_WPft = null;
+var VLMINdexFt = null;
 
 var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
@@ -156,6 +157,16 @@ function CheckPageParameters()
             /* jshint +W083*/
             break;
 
+          case "VLMIndex":
+            RacingBarMode = false;
+            /* jshint -W083*/
+            VLMINdexFt.OnReadyTable = function()
+            {
+              HandleShowIndex(PArray[1]);
+            };
+            /* jshint +W083*/
+            break;
+
           case "ICSRace":
             RacingBarMode = false;
             HandleShowICS(PArray[1]);
@@ -198,6 +209,37 @@ function LoadRaceInfo(RaceId, RaceVersion, CallBack)
     RaceVersion = '';
   }
   $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
+}
+
+function HandleVLMIndex(result)
+{
+  if (result)
+  {
+    $("#Ranking-Panel").show();
+    let index;
+    let rank=1;
+    for (index in result)
+    {
+      if (result[index])
+      {
+        result[index].rank=rank;
+        rank++;
+      }
+    }    
+    BackupVLMIndexTable();
+    VLMINdexFt.loadRows(result);
+    $("#DivVlmIndex").removeClass("hidden");
+    $("#RnkTabsUL").addClass("hidden");
+    $("#DivRnkRAC").addClass("hidden");
+    ShowApropos(true);
+  }
+}
+
+function HandleShowIndex(IndexType)
+{
+  let CallBack = HandleVLMIndex;
+
+  $.get("/cache/rankings/VLMIndex_" + IndexType + ".json", CallBack);
 }
 
 function HandleShowOtherRaceRank(RaceId)
@@ -959,6 +1001,7 @@ function InitFootables()
   RaceHistFt = InitFooTable("BoatRaceHist");
   ICS_WPft = InitFooTable("RaceWayPoints");
   NSZ_WPft = InitFooTable("NSZPoints");
+  VLMINdexFt = InitFooTable("VLMIndexTable");
 }
 
 function HandleUpdatePilototoTable(e)
@@ -1029,6 +1072,7 @@ function HandleGribSlideMove(event, ui)
   {
     let EstPos = _CurPlayer.CurBoat.GetClosestEstimatePoint(new Date(GribEpoch + ui.value * 3600 * 1000));
     RefreshEstPosLabels(EstPos);
+    StartEstimateTimeout();
   }
 }
 
@@ -2531,6 +2575,7 @@ function HandleBoatSelectionChange(e)
 }
 
 var LastMouseMoveCall = 0;
+var ShowEstTimeOutHandle = null;
 
 function HandleMapMouseMove(e)
 {
@@ -2548,6 +2593,8 @@ function HandleMapMouseMove(e)
       // Throttle estimate update to 3/sec
       EstimatePos = _CurPlayer.CurBoat.GetClosestEstimatePoint(Pos);
       LastMouseMoveCall = new Date();
+      clearTimeout(ShowEstTimeOutHandle);
+      StartEstimateTimeout();
     }
 
 
@@ -2573,12 +2620,41 @@ function HandleMapMouseMove(e)
       $("#MI_WPOrtho").text("--- °");
     }
 
+    if (GribMgr)
+    {
+      let m =  moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
+      let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
+      let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length-1] * 1000 + ")/");
+      let span = moment.duration(ts_end.diff(ts_start));
+      $("#MI_SrvrGribAge").text(m);
+      $("#MI_LocalGribAge").text(GetLocalUTCTime( ts_start.add(3.5,"h"),true,true));
+      $("#MI_LocalGribSpan").text("" + span.asHours() +" h");
+
+      let now = new Date().getTime()/1000;
+      if ((now-ts_start.local().unix()) > 9.5*3600)
+      {
+        $("#GribLoadOK").addClass("GribNotOK");
+      }
+      else
+      {
+        $("#GribLoadOK").removeClass("GribNotOK");
+      }
+    }
+
     if (Estimated)
     {
       RefreshEstPosLabels(EstimatePos);
     }
 
   }
+}
+
+function StartEstimateTimeout() {
+  ShowEstTimeOutHandle = setTimeout(function () {
+    _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
+    RefreshEstPosLabels(null);
+    DrawBoat(_CurPlayer.CurBoat, false);
+  }, 5000);
 }
 
 function RefreshEstPosLabels(Pos)
@@ -3367,6 +3443,11 @@ function BackupRankingTable()
   BackupFooTable(RankingFt, "#RankingTable", "#my-rank-content");
 }
 
+function BackupVLMIndexTable()
+{
+  BackupFooTable(VLMINdexFt, "#VLMIndexTable", "#my-vlmindex-content");
+}
+
 function FillStatusRanking(Boat, Status, Friends)
 {
   let index;
@@ -4051,7 +4132,7 @@ function GetLocalUTCTime(d, IsUTC, AsString)
   }
   if (VLM2Prefs.MapPrefs.UseUTC)
   {
-    if (!IsUTC)
+    if (m.isLocal())
     {
       m = m.utc();
     }
@@ -4059,7 +4140,7 @@ function GetLocalUTCTime(d, IsUTC, AsString)
   }
   else
   {
-    if (IsUTC)
+    if (!m.isLocal())
     {
       m = m.local();
     }

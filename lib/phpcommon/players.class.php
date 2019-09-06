@@ -13,7 +13,7 @@ class playersPending extends baseClass {
         $updated,        
         $seed;
 
-    function playersPending($email = 0, $seed = 0, $row = null) {
+    function __construct($email = 0, $seed = 0, $row = null) {
         if (!is_null($email) && $seed !== 0) {
             $this->constructFromEmailSeed($email, $seed);
         } else if (!is_null($row) && is_array($row)) {
@@ -49,7 +49,7 @@ class playersPending extends baseClass {
         $query= "SELECT * FROM players_pending WHERE $where";
         $result = $this->queryRead($query);
         if ($result && mysqli_num_rows($result) === 1)  {
-            $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct player_pending object from query");
@@ -138,7 +138,7 @@ class players extends baseClass {
     var $ownedboatidlist = null;
     var $recentlyboatsittedidlist = null;
           
-    function players($idplayers = 0, $email = null, $pending = null, $row = null) {
+    function __construct($idplayers = 0, $email = null, $pending = null, $row = null) {
         if ($idplayers !== 0) {
             $this->constructFromId($idplayers);
         } else if (!is_null($email)) {
@@ -154,7 +154,7 @@ class players extends baseClass {
         $query= "SELECT * FROM players WHERE ".$where;
         $result = $this->queryRead($query);
         if ($result && mysqli_num_rows($result) === 1)  {
-            $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct player object from query");
@@ -412,7 +412,7 @@ class players extends baseClass {
             intval($this->idplayers), $key);
         $result = $this->queryRead($query);
         if ($result && mysqli_num_rows($result) === 1)  {
-            $ret = mysqli_fetch_array($result, MYSQL_ASSOC);
+            $ret = mysqli_fetch_array($result, MYSQLI_ASSOC);
             $ret['permissions'] = intval($ret['permissions']);
             return $ret;
         } else {
@@ -427,7 +427,7 @@ class players extends baseClass {
         $grouplist = array();
 
         if ($result) {
-            while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+            while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                 if (!is_null($row["pref_value"]) && $row["pref_value"] != "") $grouplist[$row["pref_name"]] = $row;
             }
         }

@@ -38,7 +38,7 @@ echo "\n1- === PURGE OLD POSITIONS AND CREATE TEMP TABLES\n";
 $QryEngagedRaces = "select distinct engaged from users";
 $result = wrapper_mysql_db_query_reader($QryEngagedRaces);
 $EngagedList = "";
-while ($row = mysqli_fetch_array($result, MYSQL_ASSOC))
+while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
 {
   if ($EngagedList !== "")
   {

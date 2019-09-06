@@ -21,7 +21,7 @@
     // Recherche de toutes les courses prévues
     $allRacesRows = array();
     $allRacesIds  = array();
-    while($row = mysqli_fetch_array($result1, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result1, MYSQLI_ASSOC)) {
       array_push($allRacesRows, $row);
       array_push($allRacesIds, $row['idraces']);      
     }

@@ -4,7 +4,7 @@
 ?>
 
 <img class=map src="mercator.img.php?<?echo $_SERVER['QUERY_STRING'];?>" />
-<?
+<?php
 
 include_once("includes/footer.inc");
 ?>

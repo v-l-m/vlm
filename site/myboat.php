@@ -10,112 +10,118 @@ it'a little bit messy (html+java+php)
 include_once("vlmc.php");
 include_once("includes/header.inc");
 
-  $usersObj = new fullUsers(getLoginId());
+$usersObj = new fullUsers(getLoginId());
 
-  if ( $usersObj->users->engaged == 0 ) {
-      echo "<div id=\"yourboatsummarybox\">";
-      echo "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
-      echo "<b>";
-      echo $usersObj->users->username;
-      echo "</b>&nbsp;n&deg; <b>";
-      echo $usersObj->users->htmlIdusers();
-      echo "</b>&nbsp;/&nbsp;&quot;";
-      echo $usersObj->users->boatname;
-      echo "&quot; ";
-      echo "</div>";
+if ( !is_null($usersObj) && !is_null($usersObj->users) &&  $usersObj->users->engaged == 0 ) 
+{
+    echo "<div id=\"yourboatsummarybox\">";
+    echo "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
+    echo "<b>";
+    echo $usersObj->users->username;
+    echo "</b>&nbsp;n&deg; <b>";
+    echo $usersObj->users->htmlIdusers();
+    echo "</b>&nbsp;/&nbsp;&quot;";
+    echo $usersObj->users->boatname;
+    echo "&quot; ";
+    echo "</div>";
 
-      echo "<div style=\"display: block; clear: both;\">";
-      // S'engager dans une course
-      printf("<h3>" . getLocalizedString("notengaged") . "</h3>");
-      //include ("subscribe_race.php");
-      include ("includes/raceslist.inc");
-      echo "</div>";
-  } else {
+    echo "<div style=\"display: block; clear: both;\">";
+    // S'engager dans une course
+    printf("<h3>" . getLocalizedString("notengaged") . "</h3>");
+    //include ("subscribe_race.php");
+    include ("includes/raceslist.inc");
+    echo "</div>";
+}
+else 
+{
 
-    $myRace = &$usersObj->races;
+  $myRace = &$usersObj->races;
 
-    echo "<!-- DELAY_BETWEEN_UPDATES=" .  60*$myRace->vacfreq . "-->\n";
+  if (!is_null($myRace))
+  {
+      echo "<!-- DELAY_BETWEEN_UPDATES=" .  60*$myRace->vacfreq . "-->\n";
+  }
 
-    // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
-    // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis
+  // 2008/01/14 : DESACTIVE ICI, pour accelerer le refresh de la page.
+  // 2008/01/19 : REACTIVE AVEC PREFERENCE, tant pis
 
-    $autoUpdateAngles = $usersObj->getMyPref("autoUpdateAngles");
-    if ( $autoUpdateAngles != "false" ) {
-        $usersObj->updateAngles();
-    }
+  $autoUpdateAngles = $usersObj->getMyPref("autoUpdateAngles");
+  if ( $autoUpdateAngles != "false" ) {
+      $usersObj->updateAngles();
+  }
 
-    $winddir = (360 - $usersObj->wheading ) + 90;
-    while ( $winddir > 360 ) $winddir-=360;
-    while ( $winddir < 0 ) $winddir+=360;
+  $winddir = (360 - $usersObj->wheading ) + 90;
+  while ( $winddir > 360 ) $winddir-=360;
+  while ( $winddir < 0 ) $winddir+=360;
 
-    if ( $usersObj->users->pilotmode == PILOTMODE_HEADING
-        OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG
-        OR $usersObj->users->pilotmode == PILOTMODE_VBVMG
+  if ( $usersObj->users->pilotmode == PILOTMODE_HEADING
+      OR $usersObj->users->pilotmode == PILOTMODE_BESTVMG
+      OR $usersObj->users->pilotmode == PILOTMODE_VBVMG
 //      OR $usersObj->users->pilotmode == PILOTMODE_BESTSPD
-        ) {
+      ) {
 
-        $boatdir = (360 - $usersObj->users->boatheading ) ;
+    $boatdir = (360 - $usersObj->users->boatheading ) ;
 
-    } elseif ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
-        //$boatdir = $usersObj->users->pilotparameter + $usersObj->wheading ;
-        $boatdir = (($usersObj->wheading) + $usersObj->users->pilotparameter);
-    } elseif ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
-         $boatdir = $usersObj->orthodromicHeading();
-    }
-    //$boatdir = (360 - $usersObj->users->boatheading )%360 + 90;
-    //$boatdir = (360 - $usersObj->users->boatheading ) + 90;
+  } elseif ( $usersObj->users->pilotmode == PILOTMODE_WINDANGLE ) {
+      //$boatdir = $usersObj->users->pilotparameter + $usersObj->wheading ;
+      $boatdir = (($usersObj->wheading) + $usersObj->users->pilotparameter);
+  } elseif ( $usersObj->users->pilotmode == PILOTMODE_ORTHODROMIC ) {
+        $boatdir = $usersObj->orthodromicHeading();
+  }
+  //$boatdir = (360 - $usersObj->users->boatheading )%360 + 90;
+  //$boatdir = (360 - $usersObj->users->boatheading ) + 90;
 
-    // Vérification de la valeur de boatdir..
-    if ( abs($boatdir) > 720 ) errorprint("Problem with BOATHEADING, please check value");
+  // Vérification de la valeur de boatdir..
+  if ( abs($boatdir) > 720 ) errorprint("Problem with BOATHEADING, please check value");
 
-    $boatdir=$boatdir%360;
-    while ( $boatdir > 360 ) $boatdir-=360;
-    while ( $boatdir < 0 ) $boatdir+=360;
+  $boatdir=$boatdir%360;
+  while ( $boatdir > 360 ) $boatdir-=360;
+  while ( $boatdir < 0 ) $boatdir+=360;
 
-    $twa = $winddir - $boatdir;
-    if ($twa < -180 ) $twa +=360;
-    if ($twa > 180 ) $twa -=360;
+  $twa = $winddir - $boatdir;
+  if ($twa < -180 ) $twa +=360;
+  if ($twa > 180 ) $twa -=360;
 
-    if ( $twa > 0 ) {
-       $amure = "tribord";
-    } else {
-       $amure = "babord";
-    }
+  if ( $twa > 0 ) {
+      $amure = "tribord";
+  } else {
+      $amure = "babord";
+  }
 
-    // Retrieve user_prefs
-    $mapOpponents = $usersObj->getMyPref("mapOpponents");
-    if ( $mapOpponents == "NULL" ) $mapOpponents="myboat";
+  // Retrieve user_prefs
+  $mapOpponents = $usersObj->getMyPref("mapOpponents");
+  if ( $mapOpponents == "NULL" ) $mapOpponents="myboat";
 
-    $mapTools = $usersObj->getMyPref("mapTools");
-    if ( !in_array($mapTools, Array("floatingcompas", "bothcompass", "compas", "none" )) ) $mapTools = "compas";
+  $mapTools = $usersObj->getMyPref("mapTools");
+  if ( !in_array($mapTools, Array("floatingcompas", "bothcompass", "compas", "none" )) ) $mapTools = "compas";
 
-    $mapCenter = $usersObj->getMyPref("mapCenter");
-    if ( !in_array($mapCenter, Array("myboat", "mywp", "roadtowp")) ) $mapCenter = "myboat";
+  $mapCenter = $usersObj->getMyPref("mapCenter");
+  if ( !in_array($mapCenter, Array("myboat", "mywp", "roadtowp")) ) $mapCenter = "myboat";
 
-    $mapArea = $usersObj->getMyPref("maparea");
-    if ( $mapArea == "NULL" ) $mapArea=10;
-    $mapAge = $usersObj->getMyPref("mapAge");
-    if ( $mapAge == "NULL" ) $mapAge=3;
+  $mapArea = $usersObj->getMyPref("maparea");
+  if ( $mapArea == "NULL" ) $mapArea=10;
+  $mapAge = $usersObj->getMyPref("mapAge");
+  if ( $mapAge == "NULL" ) $mapAge=3;
 
-    $mapLayers = $usersObj->getMyPref("mapLayers");
-    if ( !in_array($mapLayers, Array("multi", "merged")) ) $mapLayers = "multi";
-    
-    $mapMaille = $usersObj->getMyPref("mapMaille");
-    if ( $mapMaille == "NULL" ) $mapMaille=3;
-    $mapEstime = $usersObj->getMyPref("mapEstime");
-    if ( $mapEstime == "NULL" ) $mapEstime=50;
-    $mapX = $usersObj->getMyPref("mapX");
-    if ( $mapX == "NULL" ) $mapX = 1024;
-    $mapY = $usersObj->getMyPref("mapY");
-    if ( $mapY == "NULL" ) $mapY = 768;
-    $mapDrawtextwp = $usersObj->getMyPref("mapDrawtextwp");
-    if ( $mapDrawtextwp == "NULL" ) $mapDrawtextwp = "on";
+  $mapLayers = $usersObj->getMyPref("mapLayers");
+  if ( !in_array($mapLayers, Array("multi", "merged")) ) $mapLayers = "multi";
+  
+  $mapMaille = $usersObj->getMyPref("mapMaille");
+  if ( $mapMaille == "NULL" ) $mapMaille=3;
+  $mapEstime = $usersObj->getMyPref("mapEstime");
+  if ( $mapEstime == "NULL" ) $mapEstime=50;
+  $mapX = $usersObj->getMyPref("mapX");
+  if ( $mapX == "NULL" ) $mapX = 1024;
+  $mapY = $usersObj->getMyPref("mapY");
+  if ( $mapY == "NULL" ) $mapY = 768;
+  $mapDrawtextwp = $usersObj->getMyPref("mapDrawtextwp");
+  if ( $mapDrawtextwp == "NULL" ) $mapDrawtextwp = "on";
 
-    //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
-    //printf("amure=%s<BR/>",$amure);
+  //printf ("mO=%s, mT=%s, mC=%s\n",$mapOpponents,$mapTools,$mapCenter);
+  //printf("amure=%s<BR/>",$amure);
 
-include_once("scripts/myboat.js");
-?>
+  include_once("scripts/myboat.js");
+  ?>
 <!-- Affichage de la page -->
 <div id="statusbox">
   <div id="infobulle"></div>
@@ -257,7 +263,7 @@ include_once("scripts/myboat.js");
       <div id="yourboatsummarybox">
         <b><?php echo getLocalizedString("yourboat"); ?></b>&nbsp;
         n&deg; <b><?php echo $usersObj->users->htmlIdusers() ; ?></b>&nbsp;
-        / &quot;<? echo $usersObj->users->boatname ?>&quot;
+        / &quot;<?php echo $usersObj->users->boatname ?>&quot;
 <?php
         echo " / " . $usersObj->users->htmlBoattypeLink() . "&nbsp;";
         echo "<img src=\"/".DIRECTORY_COUNTRY_FLAGS."/".$usersObj->users->country.".png\" align=\"middle\" alt=\"" . $usersObj->users->country . "\" />";
@@ -698,7 +704,7 @@ include_once("scripts/myboat.js");
                 $_SESSION['pttwindangle']=$baww;
             ?>
             <div id="pilototoaction">
-                <input class="<? echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
+                <input class="<?php echo $pilototocssclass; ?>" type="button" value="<?php echo getLocalizedString("pilototo_prog"); ?>" onclick="<?php echo "javascript:palmares=popup_small('pilototo.php?idusers=" . $idusers. "', 'Pilototo');"; ?>" />
             </div>
         </form>
         <!-- end ticket 542-->

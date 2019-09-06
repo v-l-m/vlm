@@ -1,4 +1,4 @@
-<?
+<?php
     include_once("config.php");
     include_once("wslib.php");
     require_once('exclusionzone.class.php');

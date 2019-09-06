@@ -15,12 +15,12 @@
         print "Following operations have been performed : <br /><ul>";
         foreach ($copy_list as $k => $v) {
             $res = $this->myQuery($v);
-            $a = $this->sql_fetch($res);
+            $a = $this->sql_fetch_pdo();
             print "<li>Copy from $k : $v</li>";
         }
         
         $res = $this->myQuery("SELECT * FROM races_waypoints WHERE idraces = '".$oldrectocopy."';");
-        while ($row = $this->sql_fetch($res) ) {
+        while ($row = $this->sql_fetch_pdo() ) {
             $insertracewp = "INSERT INTO races_waypoints (idraces, wporder, idwaypoint, laisser_au, wptype) VALUES ("
                         .$rec.", "
                         .$row['wporder'].", "

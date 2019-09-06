@@ -9,7 +9,7 @@ class positions
     $long, $lat,
     $idusers, $race;
 
-  function positions()
+  function __construct()
   {
     $this->time = 0;
     $this->long = 0;
@@ -40,7 +40,7 @@ class positions
     if (!$result) {
       return;
     }
-    $row =  mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row =  mysqli_fetch_array($result, MYSQLI_ASSOC);
     if (!$row) {
       return;
     }
@@ -58,11 +58,11 @@ class positions
     if (!$result) {
       return;
     }
-    $row =  mysqli_fetch_array($result, MYSQL_NUM);//we are not taking the last one
+    $row =  mysqli_fetch_array($result, MYSQLI_NUM);//we are not taking the last one
     if (!$row) {
       return;
     }
-    $row =  mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row =  mysqli_fetch_array($result, MYSQLI_ASSOC);
     if (!$row) {
       return;
     }
@@ -81,7 +81,7 @@ class positions
     //echo "REQUEST: $query \n";
 
     $result = wrapper_mysql_db_query_reader($query);
-    $row =  mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row =  mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     return array($row['time'], $row['long'], $row['lat']);
 
@@ -189,7 +189,7 @@ class positionsIterator extends baseClass {
         $result = $this->queryRead($this->getQuery());
         if ($this->error_status) return;
         $this->start();
-        while ($row =  mysqli_fetch_array($result, MYSQL_NUM) ) $this->onerow($row);
+        while ($row =  mysqli_fetch_array($result, MYSQLI_NUM) ) $this->onerow($row);
         $this->end();
     }
 
@@ -253,7 +253,7 @@ class fullGrid
       $wheading;
 
   //constructor, by position
-  function fullGrid($latitude, $longitude, $timestamp = 0) {
+  function __construct($latitude, $longitude, $timestamp = 0) {
       $vent = array();
 
       $this->Lat =  $latitude;
@@ -279,7 +279,7 @@ class gridList
   // Utilis� par mercator.img.php
   // Cette nouvelle version de gridList est plus performante que l'ancienne
   // car elle ne prend que les points se situant sur la zone � cartographier
-  function gridList($north, $south, $west, $east, $maille, $timestamp = 0)
+  function __construct($north, $south, $west, $east, $maille, $timestamp = 0)
   {
     $lat_step=$maille*abs($north - $south)/10;
     

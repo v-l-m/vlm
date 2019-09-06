@@ -14,8 +14,15 @@
 <h1>Maintenance du site en cours</h1>
 <p>Nous sommes actuellement en train de mettre &agrave; jour VLM. Il sera de nouveau disponible dans quelques instants...</p>
 <hr />
-<h2>Message:</h2>
-<p><?php include("maintenance.txt");?></p>
+<p><?php 
+  if(file_exists('file.php'))
+  {
+    ?>
+    <h2>Message:</h2>
+    <?php
+    include("maintenance.txt");
+  }
+  ?></p>
 </div>
 </body>
 </html>

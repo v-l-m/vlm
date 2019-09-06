@@ -682,7 +682,10 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
       },
       callback: this.handleGribListReply,
       scope: this,
-      events: function(x) {console.log("GribLayerEvt : " + e);}
+      events: function(x)
+      {
+        console.log("GribLayerEvt : " + e);
+      }
     });
   },
 
@@ -715,11 +718,14 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
   {
     var timelist = [];
 
-    for (var i = 0; i < this.griblist.length; i++)
+    if (this.griblist)
     {
-      if ((this.griblist[i] >= (this.time - this.timeDelta)) && (this.griblist[i] <= (this.time + this.timeDelta)))
+      for (var i = 0; i < this.griblist.length; i++)
       {
-        timelist.push(this.griblist[i]);
+        if ((this.griblist[i] >= (this.time - this.timeDelta)) && (this.griblist[i] <= (this.time + this.timeDelta)))
+        {
+          timelist.push(this.griblist[i]);
+        }
       }
     }
 
@@ -732,16 +738,20 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
     var i = 0;
     var gribtimebefore = this.mintime;
     var gribtimeafter = this.maxtime;
-    for (i = 0; i < this.griblist.length; i++)
+
+    if (this.griblist)
     {
-      //delta = this.griblist[i] - time;
-      if (this.griblist[i] >= gribtimebefore && this.griblist[i] <= time)
+      for (i = 0; i < this.griblist.length; i++)
       {
-        gribtimebefore = this.griblist[i];
-      }
-      if (this.griblist[i] <= gribtimeafter && this.griblist[i] >= time)
-      {
-        gribtimeafter = this.griblist[i];
+        //delta = this.griblist[i] - time;
+        if (this.griblist[i] >= gribtimebefore && this.griblist[i] <= time)
+        {
+          gribtimebefore = this.griblist[i];
+        }
+        if (this.griblist[i] <= gribtimeafter && this.griblist[i] >= time)
+        {
+          gribtimeafter = this.griblist[i];
+        }
       }
     }
     this.gribtimeBefore = gribtimebefore;
@@ -920,7 +930,7 @@ Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer,
         let winfo;
         try
         {
-           winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
+          winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
           this.drawWind(ctx, p.x, p.y, winfo);
 
         }

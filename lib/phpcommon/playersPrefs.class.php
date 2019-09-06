@@ -52,7 +52,7 @@ class playersPrefs extends baseClass {
     var $idplayers,
         $playerclass;
 
-    function playersPrefs($idplayers) {
+    function __construct($idplayers) {
         $po = getPlayerObject($idplayers);
         if (!is_null($po)) {
             $this->playerclass = $po;

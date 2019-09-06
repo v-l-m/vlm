@@ -35,7 +35,7 @@ class races extends baseClass
     $ics,
     $lastrun;
 
-  function races($id=0, $row = null) 
+  function __construct($id=0, $row = null) 
   {
     $id = intval($id);
     if ($id != 0 && is_null($row)) 
@@ -43,7 +43,7 @@ class races extends baseClass
       $result = queryRacesBatch("WHERE idraces = $id");
       if (mysqli_num_rows($result) > 0) 
       {
-	      $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+	      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       } 
       else 
       {
@@ -168,7 +168,7 @@ class races extends baseClass
     // printf ("Request Races_Waypoints : %s\n" , $query);
     
     if (defined('MOTEUR')) {
-        while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC) ) {
             $vlm_wp = new waypoint();
             VLM_init_waypoint($vlm_wp, $row['wpformat'],$row['wporder'],
                               $row['latitude1'], $row['longitude1'], 
@@ -177,7 +177,7 @@ class races extends baseClass
             $this->waypoints[$row['wporder']] = $vlm_wp;
         }
     } else {
-        while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC) ) {
             // FIXME reduce code path 
             $WPCoords = internalGiveWaypointCoordinates($row['latitude1'],
                                                         $row['longitude1'], 
@@ -249,7 +249,7 @@ class races extends baseClass
 	
         $result = wrapper_mysql_db_query_reader($query);
 	
-        while( $row = mysqli_fetch_array( $result, MYSQL_ASSOC) ) {
+        while( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC) ) {
 	  $this->ics[] = $row;
         }
       }
@@ -277,7 +277,7 @@ class races extends baseClass
     }
     
     // On est encore là, on a donc un enregistrement "duration"
-    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $WinnersRaceDuration = $row['duration'];
 
     if ($WinnersRaceDuration == 0) {
@@ -488,7 +488,7 @@ class races extends baseClass
   function UpdateRaceRankings()
   {
 
-    $start = microtime();
+    $start = microtime(true);
 
     // Get all racing users with current info
     $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, ifnull(dnm,99999) as dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
@@ -625,7 +625,7 @@ class races extends baseClass
       //print_r($ranking);
     }
 
-    $end = microtime();
+    $end = microtime(true);
     $rank = new stdClass();
     $rank->Boats=$ranking;
     $rank->Infos=[];
@@ -652,7 +652,7 @@ class fullRaces {
     $opponents = array(); //array with users engaged
 
 
-  function fullRaces($id = 0, &$origrace = NULL)
+  function __construct($id = 0, &$origrace = NULL)
   {
     if ($origrace == NULL) 
     {
@@ -676,7 +676,7 @@ class fullRaces {
       " ORDER by nwp desc, dnm asc, US.ipaddr, US.country asc";
 
     $result6 = wrapper_mysql_db_query_reader($query6);
-    while($row = mysqli_fetch_array($result6, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result6, MYSQLI_ASSOC)) {
       //WARNING: dont load fullUsers inside fullRaces
       //because fullRaces contains fullUsers that contain fullRaces ..
       $userid = $row['idusers'];
@@ -697,7 +697,7 @@ class fullRaces {
 	"FROM races_results RR, users US WHERE idraces=".$this->races->idraces.
 	" AND US.idusers = RR.idusers AND US.engaged != ".$this->races->idraces;
       $result6b = wrapper_mysql_db_query_reader($query6b);
-      while($row = mysqli_fetch_array($result6b, MYSQL_ASSOC)) {
+      while($row = mysqli_fetch_array($result6b, MYSQLI_ASSOC)) {
 	$userid = $row['idusers'];
 	//FIXME : est ce bien d'utiliser getUserObject ici (il met en cache)
 	$this->excluded[$userid] = getUserObject($userid, $row);
@@ -1548,7 +1548,7 @@ class fullRaces {
     $query = "SELECT count(*) as numengaged FROM users WHERE engaged=" . 
       $this->races->idraces;
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     return ($row['numengaged'])  ;
   }
  
@@ -1566,11 +1566,11 @@ class fullRaces {
 class racesList {
   var $records = array();
 
-  function racesList() {
+  function __construct() {
     $query = "SELECT idraces FROM races ORDER BY deptime DESC";
     //printf ($query . "\n");
     $result = wrapper_mysql_db_query_reader($query);
-    while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) 
+    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
     {
       if ($row['idraces'] !== "0") // race 0 is not allowed but exists in DB
       {
@@ -1586,7 +1586,7 @@ class racesList {
 class startedRacesList {
   var $records = array();
 
-  function startedRacesList() {
+  function __construct() {
     $this->records = array();
     $query = "SELECT idraces FROM races WHERE started=".RACE_STARTED;
     
@@ -1605,7 +1605,7 @@ class startedRacesList {
     $query .= " ORDER BY vacfreq ASC, deptime DESC";
     $result = wrapper_mysql_db_query_reader($query);
     
-    while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
       array_push($this->records , $row['idraces']);
     }
   }
@@ -1614,7 +1614,7 @@ class startedRacesList {
 class RankingRacesList {
   var $records = array();
 
-  function RankingRacesList() 
+  function __construct() 
   {
     $this->records = array();
     $query = "SELECT idraces FROM races WHERE ";
@@ -1645,7 +1645,7 @@ class RankingRacesList {
     //print_r($query);
     $result = wrapper_mysql_db_query_reader($query);
     
-    while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+    while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
       array_push($this->records , $row['idraces']);
     }
   }
@@ -1659,7 +1659,7 @@ class RankingRacesList {
 ////////////////////////////////////////////////////////////
 function CheckLMNHStatus()
 {
-  $starttime = microtime();
+  $starttime = microtime(true);
   // select boat list that do not respect the LMNH rules
   $targetlist = "select distinct ua.idusers 
                   from user_action ua, 
@@ -1674,7 +1674,7 @@ function CheckLMNHStatus()
 
   $result = wrapper_mysql_db_query_reader($targetlist);
   $list="";
-  while($row = mysqli_fetch_array($result, MYSQL_ASSOC)) 
+  while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
   {
     if ($list !== "")
     {
@@ -1683,7 +1683,7 @@ function CheckLMNHStatus()
     $list .= $row['idusers'];
   }
 
-  echo "\n Targetlist built in ". (microtime() - $starttime) ."\n";
+  echo "\n Targetlist built in ". (microtime(true) - $starttime) ."\n";
   if ($list == "")
   {
     echo "Targetlist is empty \n";
@@ -1698,7 +1698,7 @@ function CheckLMNHStatus()
   where idusers in " .$list;
 
   wrapper_mysql_db_query_writer($querycleanLMNH);
-  echo "update complete in ". (microtime() - $starttime) ."\n";
+  echo "update complete in ". (microtime(true) - $starttime) ."\n";
   echo "update query :  ". $querycleanLMNH ."\n";
   
 }

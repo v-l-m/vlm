@@ -14,7 +14,7 @@ class racesgroups extends baseClass {
 
     //computed attributes
           
-    function racesgroups($grouptag, $row = null) {
+    function __construct($grouptag, $row = null) {
         if (!is_null($grouptag)) {
             $this->constructFromId($grouptag);
         } else if (!is_null($row) && is_array($row)) {
@@ -25,8 +25,8 @@ class racesgroups extends baseClass {
     function constructFromQuery($where) {
         $query= "SELECT * FROM racesgroups WHERE ".$where;
         $result = $this->queryRead($query);
-        if ($result && mysqlinum_rows($result) === 1)  {
-            $row =  mysqli_fetch_array($result, MYSQL_ASSOC);
+        if ($result && mysqli_num_rows($result) === 1)  {
+            $row =  mysqli_fetch_array($result, MYSQLI_ASSOC);
             return $this->constructFromRow($row);
         } else {
             $this->set_error("FAILED : Construct racesgroups object from query");
@@ -46,7 +46,7 @@ class racesgroups extends baseClass {
     }
 
     function constructFromId($id) {
-        return $this->constructFromQuery("grouptag = '".mysql_real_escape_string($id)."'");
+        return $this->constructFromQuery("grouptag = '".mysqli_real_escape_string($GLOBALS['slavedblink'], $id)."'");
     }
 
     function getRaces($where = null) {
@@ -56,7 +56,7 @@ class racesgroups extends baseClass {
         if (!is_null($where)) $query = $query." ".$where;
         $result = $this->queryRead($query);
         if ($result) {
-            while($row =  mysqli_fetch_array($result, MYSQL_ASSOC)) $raceslist[$row['idraces']] = $row;
+            while($row =  mysqli_fetch_array($result, MYSQLI_ASSOC)) $raceslist[$row['idraces']] = $row;
         } 
         return $raceslist;
     }

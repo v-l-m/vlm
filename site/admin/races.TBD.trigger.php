@@ -4,7 +4,7 @@
         return False;
     }
     $res = $this->myQuery("SELECT count(*) as n FROM users WHERE engaged = '".$this->rec."';");
-    $row = mysqli_fetch_assoc($res);
+    $row = this->sql_fetch_pdo();
     if (intval($row['n']) > 0) {
         echo "<div class=\"adminwarnbox\">";
         echo "<h3>There are still players engaged in this race.</h3>";

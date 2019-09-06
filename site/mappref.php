@@ -71,18 +71,18 @@
             echo "<h3>".getLocalizedString("Popularity of your boat")."&nbsp;:&nbsp;".getBoatPopularity($fullUsersObj->users->idusers, $fullUsersObj->users->engaged);
             echo ".</h3>";
             ?>
-<?
+<?php
         //List of players, check boxes
         $fullRacesObj->dispHtmlForm($prefOpponentsList);
 ?>
           </td>
         </tr>
       </table>
-      <button type="submit" name="action" value="valider"><? echo getLocalizedString("valider") ?></button>
-      <button type="submit" name="action" value="tous"><? echo getLocalizedString("tous") ?></button>
-      <button type="submit" name="action" value="top20"><? echo getLocalizedString("top20") ?></button>
-      <button type="submit" name="action" value="top10"><? echo getLocalizedString("top10") ?></button>
-      <button type="submit" name="action" value="aucun"><? echo getLocalizedString("aucun") ?></button>
+      <button type="submit" name="action" value="valider"><?php echo getLocalizedString("valider") ?></button>
+      <button type="submit" name="action" value="tous"><?php echo getLocalizedString("tous") ?></button>
+      <button type="submit" name="action" value="top20"><?php echo getLocalizedString("top20") ?></button>
+      <button type="submit" name="action" value="top10"><?php echo getLocalizedString("top10") ?></button>
+      <button type="submit" name="action" value="aucun"><?php echo getLocalizedString("aucun") ?></button>
     </form>
 <?php
     } else {

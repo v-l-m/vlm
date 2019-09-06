@@ -530,6 +530,25 @@
           <li RnkSort="DNF"><a href="#DivRnkRAC">DNF</a></li>
           <li RnkSort="HC"><a href="#DivRnkRAC">HC</a></li>
         </ul>
+        <div id="DivVlmIndex" class="hidden">
+          <div id="my-vlmindex-content" class="tab-content">
+            <div>
+              <table id="VLMIndexTable" class="table " data-show-toggle="true" data-sorting="true" data-paging="true" data-paging-size="20" data-expand-first="false">
+                <thead>
+                  <tr id="VLMIndexTableHeader">
+                    <th data-name="rank" data-toggle="true" data-type="number"  I18N="Rank">Rank</th>
+                    <th data-name="playername" data-toggle="true"  I18N="name">Nom</th>
+                    <th data-name="RaceCount" data-breakpoints="xs" data-type="number" I18N="RaceCount">RaceCount</th>
+                    <th data-name="vlmindex" data-breakpoints="xs" data-sorted="true" data-direction="DESC" data-type="number" I18N="Index">VLMIndex</th>                    
+                  </tr>
+                </thead>
+                <tbody id="VLMIndexTableBody">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
         <div id='DivRnkRAC'>
           <div id="my-rank-content" class="tab-content">
             <div>
@@ -789,8 +808,11 @@
       </fieldset>
       <fieldset class="MI_Coords">
         <legend class="ui-legend MI_Legend"></legend>
-        <div style="text-align:center">
-          <button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime">Estime</button>
+        <div >
+          <div><label I18n="ServerMeteoAge">Grib updated </label><span> : </span><span id="MI_SrvrGribAge"></span></div>
+          <div id="GribLoadOK"><label I18n="LocalMeteoStart">Grib updated </label><span> : </span><span id="MI_LocalGribAge"></span></div>
+          <div><label I18n="LocalMeteoSpan">Grib updated </label><span> : </span><span id="MI_LocalGribSpan"></span></div>
+          <div style="text-align:center"><button Id="StartEstimator" type="button" class="ui-button ui-corner-all ui-widget" I18n="calcestime"  >Estime</button></div>
           <div style="padding: 0 0 0 0">
             <button type="button" id="EstimatorStopButton" class=" stop hidden btn btn-xs" style="float:left"></button>
           </div>

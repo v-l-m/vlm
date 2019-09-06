@@ -8,7 +8,7 @@
     $info = array();
     
     $flagres = getFlagsListCursor();
-    while ($row = mysqli_fetch_array($flagres, MYSQL_ASSOC) ) 
+    while ($row = mysqli_fetch_array($flagres, MYSQLI_ASSOC) ) 
     {
       $info['flagsurl'][$row['idflags']]='/flagimg.php?idflags='.$row['idflags'];
       $info['flags'][$row['idflags']]=$row['idflags'];

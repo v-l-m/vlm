@@ -67,7 +67,7 @@ class users extends baseClass
     $this->releasetime    = $row['releasetime'];
     $this->hidepos        = $row['hidepos'];
     $this->blocnote       = $row['blocnote'];
-    if (array_key_exists('RaceVersion',$row))
+    if (is_array($row) && array_key_exists('RaceVersion',$row))
     {
       $this->RaceVersion    = $row['RaceVersion'];
     }
@@ -93,12 +93,12 @@ class users extends baseClass
     } else {
         $result = wrapper_mysql_db_query_reader($query) or die("\n FAILED !!\n");
     }
-    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $this->initFromArray($row);  
     
   }
 
-  function users($id, $init = TRUE) {
+  function __construct($id, $init = TRUE) {
     $this->idusers = intval($id);
     if ($init) {
       $this->initFromId();
@@ -129,9 +129,9 @@ class users extends baseClass
       " `email` = '" . $this->email . "'," .
       " `country` = '" . $this->country . "'," .
       " `hidepos` =  " . $this->hidepos . "," .
-      " `blocnote` = '" . mysqli_real_escape_string( $this->blocnote) . "'" .
+      " `blocnote` = '" . mysqli_real_escape_string($GLOBALS['slavedblink'], $this->blocnote) . "'" .
       " WHERE idusers = " . $this->idusers;
-    wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 
     $this->logUserEvent("Update prefs.");
 
@@ -143,7 +143,7 @@ class users extends baseClass
     $this->releasetime = time() + $time;
     $query = "UPDATE users SET releasetime = " . $this->releasetime .
       " WHERE idusers = " . $this->idusers;
-    wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
   }
 
   // Check pilote auto returns true if an action was done, else false
@@ -154,9 +154,9 @@ class users extends baseClass
     // lookup for a task to do
     $query = "SELECT `taskid`, `pilotmode`, `pilotparameter` FROM `auto_pilot` WHERE `status`='". 
       PILOTOTO_PENDING . "' AND `idusers`=".$this->idusers." AND `time`<=".$now;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 
-    while ( $row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+    while ( $row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
         // Execute the task
         $PIM=$row['pilotmode'];
         if ( $PIM == 0 OR $PIM > MAX_PILOTMODE ) $flag_err=true;
@@ -208,12 +208,12 @@ class users extends baseClass
         }
         // Don't forget to add the where clause... and execute the query
         $query .= " WHERE idusers=$this->idusers;";
-        wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysqli_error." ".$query);
+        wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
         $this->logUserEvent($logmsg);
 
         // Mark the task as DONE
         $query = "UPDATE auto_pilot SET status = '" . PILOTOTO_DONE . "' WHERE taskid = ".$row['taskid'].";";
-        wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysqli_error." ".$query);
+        wrapper_mysql_db_query_writer($query); //or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 
         // Purge old tasks
         $this->pilototoPurge();
@@ -231,10 +231,10 @@ class users extends baseClass
     $query = "SELECT count(*) NumTasks FROM auto_pilot
      WHERE idusers = $this->idusers
        AND status = '" . $status . "'";
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
     //echo $query;
 
-    if ( $row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+    if ( $row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
       $numRows=$row['NumTasks'];
     } else {
       $numRows=0;
@@ -260,12 +260,12 @@ class users extends baseClass
       $query = "SELECT taskid as TID, time as TTS, pilotmode as PIM, pilotparameter as PIP, status as STS ".
                "FROM auto_pilot WHERE idusers = $this->idusers ORDER by TTS ASC";
       if ($forcemaster) { // Special case is needed because of the update delay of the slaves
-          $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error." ".$query);
+          $result = wrapper_mysql_db_query_writer($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
       } else {
-          $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
+          $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
       }
 
-      while ( $row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+      while ( $row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
           array_push ($this->pilototo, $row);
       }
       return(0);
@@ -551,7 +551,7 @@ class fullUsers
     $preferences,
     $RaceVersion=0;
 
-  function fullUsers($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
+  function __construct($id, $origuser = NULL, $origrace = NULL, $north = 80000, $south = -80000, $west = -180000, $east = 180000, $age = MAX_DURATION, $dbg=false,$TimeStamp=0)
   {
     if ($TimeStamp)
     {
@@ -586,12 +586,12 @@ class fullUsers
     
     if ($result) 
     {
-      $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       if ($row) 
       {
         $this->RaceVersion = $row["updated"];
         $this->lastPositions->init($row);
-        $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         if ($row) 
         {
           $this->anteLastPositions->init($row);
@@ -705,12 +705,12 @@ class fullUsers
   }
 
   function feedPrefs() {
-      if (!isset($this->preferences)) {
+      if (!isset($this->preferences) && !is_null($this->users)) {
           $query_pref = "SELECT pref_name, pref_value FROM user_prefs".
                         " WHERE idusers = ".$this->users->idusers;
           $result_pref = wrapper_mysql_db_query_reader($query_pref) or die($query_pref);
           $this->preferences = array();
-          while( $row = mysqli_fetch_array($result_pref, MYSQL_ASSOC) ) {
+          while( $row = mysqli_fetch_array($result_pref, MYSQLI_ASSOC) ) {
               $this->preferences[$row['pref_name']] = $row['pref_value'];
           }
           //Special case for "old" prefs
@@ -722,12 +722,16 @@ class fullUsers
       }
   }
   
-  function getMyPref($pref_name) {
+  function getMyPref($pref_name) 
+  {
       $this->feedPrefs();
-      if (array_key_exists($pref_name, $this->preferences)) {
+      if (is_array($this->preferences) && array_key_exists($pref_name, $this->preferences)) 
+      {
         return $this->preferences[$pref_name];
-      } else {
-          return NOTSET;
+      } 
+      else 
+      {
+        return NOTSET;
       }
   }
 
@@ -768,8 +772,8 @@ class fullUsers
     //delete old positions from database
     //printf ("Time = %d\n",$time);
     $query_deptime = "UPDATE users SET userdeptime = " . $time . " WHERE idusers = ". $this->users->idusers  ;
-    //echo ( "Query failed : " . mysqli_error." ".$query_deptime );
-    wrapper_mysql_db_query_writer($query_deptime) or die ( "Query failed : " . mysqli_error." ".$query_deptime );
+    //echo ( "Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query_deptime );
+    wrapper_mysql_db_query_writer($query_deptime) or die ( "Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query_deptime );
     $this->users->userdeptime = $time;
 
     // Update LMNH Departure time
@@ -793,7 +797,7 @@ class fullUsers
     //delete old positions from database
     $query65 = "DELETE FROM positions WHERE idusers = ". $this->users->idusers  .
       " AND  race = " . $idraces;
-    wrapper_mysql_db_query_writer($query65);// or die("Query failed : " . mysqli_error." ".$query65);
+    wrapper_mysql_db_query_writer($query65);// or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query65);
   }
 
   // delete entries in the races_loch table for this user
@@ -806,6 +810,11 @@ class fullUsers
 
   function updateAngles($write = 1)
   {
+    if (is_null($this->users))
+    {
+      return;
+    }
+
     switch ($this->users->pilotmode) {
     case PILOTMODE_WINDANGLE:
       //update boatheading
@@ -822,24 +831,24 @@ class fullUsers
       $vlmc_heading = new doublep();
       $vlmc_vmg = new doublep();
       if (defined('MOTEUR')) {
-	shm_lock_sem_construct_grib(1);
-	VLM_best_vmg($this->lastPositions->lat,
-		     $this->lastPositions->long,
-		     $this->LatNM, $this->LongNM,
-		     $this->users->boattype,
-		     $vlmc_heading, $vlmc_vmg);
-	shm_unlock_sem_destroy_grib(1);
+        shm_lock_sem_construct_grib(1);
+        VLM_best_vmg($this->lastPositions->lat,
+              $this->lastPositions->long,
+              $this->LatNM, $this->LongNM,
+              $this->users->boattype,
+              $vlmc_heading, $vlmc_vmg);
+        shm_unlock_sem_destroy_grib(1);
       } else { // in regular mode, create and fill context first
-	$temp_vlmc_context = new vlmc_context();
-	shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
-	shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
-	VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat,
-			     $this->lastPositions->long,
-			     $this->LatNM, $this->LongNM,
-			     $this->users->boattype,
-			     $vlmc_heading, $vlmc_vmg);
-	shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
-	shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
+        $temp_vlmc_context = new vlmc_context();
+        shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
+        shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
+        VLM_best_vmg_context($temp_vlmc_context, $this->lastPositions->lat,
+                $this->lastPositions->long,
+                $this->LatNM, $this->LongNM,
+                $this->users->boattype,
+                $vlmc_heading, $vlmc_vmg);
+        shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
+        shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
       }
 
       $this->users->boatheading = doublep_value($vlmc_heading);
@@ -857,24 +866,24 @@ class fullUsers
       $vlmc_heading = new doublep();
       $vlmc_vmg = new doublep();
       if (defined('MOTEUR')) {
-	shm_lock_sem_construct_grib(1);
-	VLM_vbvmg($this->lastPositions->lat,
-		  $this->lastPositions->long,
-		  $this->LatNM, $this->LongNM,
-		  $this->users->boattype,
-		  $vlmc_heading, $vlmc_vmg);
-	shm_unlock_sem_destroy_grib(1);
+        shm_lock_sem_construct_grib(1);
+        VLM_vbvmg($this->lastPositions->lat,
+            $this->lastPositions->long,
+            $this->LatNM, $this->LongNM,
+            $this->users->boattype,
+            $vlmc_heading, $vlmc_vmg);
+        shm_unlock_sem_destroy_grib(1);
       } else { // in regular mode, create and fill context first
-	$temp_vlmc_context = new vlmc_context();
-	shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
-	shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
-	VLM_vbvmg_context($temp_vlmc_context, $this->lastPositions->lat,
-			  $this->lastPositions->long,
-			  $this->LatNM, $this->LongNM,
-			  $this->users->boattype,
-			  $vlmc_heading, $vlmc_vmg);
-	shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
-	shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
+        $temp_vlmc_context = new vlmc_context();
+        shm_lock_sem_construct_polar_context($temp_vlmc_context, 1);
+        shm_lock_sem_construct_grib_context($temp_vlmc_context, 1);
+        VLM_vbvmg_context($temp_vlmc_context, $this->lastPositions->lat,
+              $this->lastPositions->long,
+              $this->LatNM, $this->LongNM,
+              $this->users->boattype,
+              $vlmc_heading, $vlmc_vmg);
+        shm_unlock_sem_destroy_grib_context($temp_vlmc_context, 1);
+        shm_unlock_sem_destroy_polar_context($temp_vlmc_context, 1);
       }
 
       $this->users->boatheading = doublep_value($vlmc_heading);
@@ -893,26 +902,26 @@ class fullUsers
       $Hdg=0; $bestHdg=0;
       $Spd=-1 ;$bestSpd=-1;
       while ( $Hdg <= 359 ) {
-	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
-			      $this->wspeed,
-			      $this->users->boattype);
-	if ( $Spd >= $bestSpd ) {
-	  $bestHdg=$Hdg;
-	  $bestSpd=$Spd;
-	}
-	$Hdg+=1;
-	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
+        $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
+                  $this->wspeed,
+                  $this->users->boattype);
+        if ( $Spd >= $bestSpd ) {
+          $bestHdg=$Hdg;
+          $bestSpd=$Spd;
+        }
+        $Hdg+=1;
+        //echo "DEBUG Spd=$Spd, H=$Hdg \n";
       }
 
       // On se refait un petit calcul avec un pas de 0.1 autour du cap "au degré près".
       for ( $Hdg=$bestHdg-1;$Hdg<$bestHdg+1;$Hdg+=0.1 ) {
-	$Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
-			      $this->wspeed,
-			      $this->users->boattype);
-	if ( $Spd > $bestSpd ) {
-	  $bestHdg=$Hdg;
-	  $bestSpd=$Spd;
-	}
+        $Spd = findboatspeed( angleDifference($Hdg, $this->wheading),
+                  $this->wspeed,
+                  $this->users->boattype);
+        if ( $Spd > $bestSpd ) {
+          $bestHdg=$Hdg;
+          $bestSpd=$Spd;
+        }
 	//echo "DEBUG Spd=$Spd, H=$Hdg \n";
       }
 
@@ -1106,7 +1115,7 @@ class fullUsers
       $xingtime . ", ".
       $udt . ");"   ;
 
-    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
     if ($validity == 1) {
       $this->users->logUserEvent("Boat crossed WP " . $this->nwp . " in race : " . $this->users->engaged );
     } else {
@@ -1120,7 +1129,7 @@ class fullUsers
     $query = "DELETE FROM waypoint_crossing WHERE validity=0 AND idusers=".
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp;
-    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
     $this->users->logUserEvent("Cleared invalid WP crossing " . $this->nwp . " in race : " . $this->users->engaged );
   }
 
@@ -1130,7 +1139,7 @@ class fullUsers
     $query = "DELETE FROM waypoint_crossing WHERE ".($all?"":" validity=1 AND")." idusers=".
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp;
-    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query) ;//or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
   }
   
   // check if there was an invalid crossing reported for that WP
@@ -1139,8 +1148,8 @@ class fullUsers
     $query = "SELECT count(*) AS nbinvalid FROM waypoint_crossing WHERE validity=0 AND idusers=".
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
-    $rowresult = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
+    $rowresult = mysqli_fetch_array($result, MYSQLI_ASSOC);
     return $rowresult['nbinvalid'];
   }
   
@@ -1151,8 +1160,8 @@ class fullUsers
     $query = "SELECT count(*) AS nbvalid FROM waypoint_crossing WHERE validity=1 AND idusers=".
       $this->users->idusers." AND idraces=".$this->users->engaged.
       " AND idwaypoint=".$this->nwp." AND userdeptime=".$this->users->userdeptime;
-    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
-    $rowresult = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
+    $rowresult = mysqli_fetch_array($result, MYSQLI_ASSOC);
     return ($rowresult['nbvalid']>0);
   }
 
@@ -1162,7 +1171,7 @@ class fullUsers
     // MAJ la table users pour prise en compte du prochain Waypoint
     $query = "UPDATE users SET nextwaypoint = " . $this->nwp .
       " WHERE idusers = " . $this->users->idusers;
-    wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
     //printf ("Request USERS : %s\n" , $query);
 
     // MAJ la table races_ranking pour prise en compte du prochain Waypoint
@@ -1170,7 +1179,7 @@ class fullUsers
     //         "                         dnm       = " . $this->distancefromend     . ", " .
     //       " WHERE idusers = " . $this->users->idusers .
     //       "   AND idraces = " . $this->users->engaged;
-    //   wrapper_mysql_db_query($query);// or die("Query failed : " . mysqli_error." ".$query);
+    //   wrapper_mysql_db_query($query);// or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
     //  printf ("Request RACES_RANKING : %s\n" , $query);
   }
 
@@ -1212,7 +1221,7 @@ class fullUsers
 
     $query_update .= " lastupdate = " . $now ;
     $query_update .= " WHERE idusers  = " . $this->users->idusers ;
-    wrapper_mysql_db_query_writer($query_update);// or die("Query failed : " . mysqli_error." ".$query_ranking);
+    wrapper_mysql_db_query_writer($query_update);// or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query_ranking);
     //echo "ranking stored with".$now."\n";
     // =======================================================================================
     // En cas de blackout, on a fini.
@@ -1285,7 +1294,7 @@ class fullUsers
       " WHERE idraces = " . $this->users->engaged .
       " AND idusers   = " . $this->users->idusers ;
 
-    wrapper_mysql_db_query_writer($query_ranking);// or die("Query failed : " . mysqli_error." ".$query_ranking);
+    wrapper_mysql_db_query_writer($query_ranking);// or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query_ranking);
     //printf ("Query : %s\n", $query_ranking);
 
 
@@ -1343,7 +1352,7 @@ class fullUsers
       default :
     }
 
-    $value = mysqli_real_escape_string($value);
+    $value = mysqli_real_escape_string($GLOBALS['slavedblink'],$value);
     
     //FIXME: special cases : notepad and others should be a boat/user prefs but are not but will be
     if (in_array($key, Array("blocnote", "color", "theme", "country", "boatname"))) 
@@ -1355,7 +1364,7 @@ class fullUsers
     {
       $query_pref = "REPLACE INTO `user_prefs` (`idusers`, `pref_name`, `pref_value`) " . 
                     " VALUES ( " . $this->users->idusers . 
-                    ", " . " '" . mysqli_real_escape_string($key) .  "', '" . $value . "')" ;
+                    ", " . " '" . mysqli_real_escape_string($GLOBALS['slavedblink'],$key) .  "', '" . $value . "')" ;
     }
 
     if(wrapper_mysql_db_query_writer($query_pref)) 
@@ -1463,7 +1472,7 @@ class fullUsers
       ",`pilotparameter`=0," .
       "`lastchange`=" . $timestamp .
       " WHERE idusers=".$this->users->idusers;
-    wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysqli_error." ".$query);
+    wrapper_mysql_db_query_writer($query); // or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
 
     $this->updateAngles();
   }
@@ -1649,7 +1658,7 @@ class fullUsers
       " AND time=" . ( $timestamp - $duration);
     
     $result = wrapper_mysql_db_query_reader($query);
-    $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     if (!$row) 
     {
       $query = "SELECT `time`, `loch` ".
@@ -1659,7 +1668,7 @@ class fullUsers
                 " ORDER BY time ASC LIMIT 1";
       
       $result = wrapper_mysql_db_query_reader($query);
-      $row = mysqli_fetch_array($result, MYSQL_ASSOC);
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
       if (!$row) 
       {
 	      return array(0,0);
@@ -1695,16 +1704,16 @@ class fullUsers
   function getCurrentUserRanking() {
       $query = "SELECT idusers FROM races_ranking WHERE idusers >0 AND dnm IS NOT NULL AND idraces = " . 
 	$this->users->engaged . " ORDER BY nwp DESC, dnm ASC" ;
-      $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
+      $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
       $nbu=0; $rank = 0;
-      while ($row = mysqli_fetch_array($result, MYSQL_ASSOC) ) {
+      while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC) ) {
           if( $row['idusers'] == $this->users->idusers ) $rank=$nbu+1;
           $nbu++;
       }
       // we do add num_arrived boats to each counters
       $query = "SELECT count(*) AS nbarrived FROM races_results where position = " . BOAT_STATUS_ARR . " AND idraces = " . $this->users->engaged;
-      $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error." ".$query);
-      $rowarrived = mysqli_fetch_array($result, MYSQL_ASSOC);
+      $result = wrapper_mysql_db_query_reader($query) or die("Query failed : " . mysqli_error($GLOBALS['slavedblink'])." ".$query);
+      $rowarrived = mysqli_fetch_array($result, MYSQLI_ASSOC);
       return array("rankracing" => $rank, "nbu" => $nbu+$rowarrived['nbarrived'],
                     "rank" => $rank+$rowarrived['nbarrived']);
   }
@@ -1745,7 +1754,7 @@ class excludedUsers
 
 
   // This one takes one more parameter than fullUsers (raceid)
-  function excludedUsers($id, $raceid, $age = MAX_DURATION)
+  function __construct($id, $raceid, $age = MAX_DURATION)
   {
 
     $this->users = getUserObject($id);

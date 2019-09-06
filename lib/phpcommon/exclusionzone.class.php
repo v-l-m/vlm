@@ -9,7 +9,7 @@ class exclusionZone extends baseclass
   var $activeZoneName="No Exclusions";
   
   // Class construction, use to init the exclusion zone list for a given race
-  function exclusionZone($idRace)
+  function __construct($idRace)
   {
     // Get exclusion zones def from database
     $query = "select lon1, lat1, lon2, lat2 from nszsegment S inner join nszracesegment RS on S.idsegment = RS.idsegment and RS.idraces = ".$idRace.";";

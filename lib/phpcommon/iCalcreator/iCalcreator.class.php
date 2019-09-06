@@ -4186,7 +4186,7 @@ class calendarComponent {
  */
   function _makeUid() {
     $date   = date('Ymd\THisT');
-    $unique = substr(microtime(), 2, 4);
+    $unique = substr(microtime(true), 2, 4);
     $base   = 'aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPrRsStTuUvVxXuUvVwWzZ1234567890';
     $start  = 0;
     $end    = strlen( $base ) - 1;

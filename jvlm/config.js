@@ -10,7 +10,7 @@ webhost = window.location.hostname;
 var tilesUrlArray = ["https://c1.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c2.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c3.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "https://c4.v-l-m.org/gshhstiles/${z}/${x}/${y}.png"];
 
 // URI to distribute windgridrequest amount servers
-var WindGridServers = ["https://c1.v-l-m.org", "https://c2.v-l-m.org", "https://c3.v-l-m.org", "https://c4.v-l-m.org"];
+//var WindGridServers = ["https://c1.v-l-m.org", "https://c2.v-l-m.org", "https://c3.v-l-m.org", "https://c4.v-l-m.org"];
 
 if (webhost == 'vlm-dev.ddns.net')
 {
