@@ -56,11 +56,11 @@ $result = wrapper_mysql_db_query_writer($locktables);
 
 $queryarrivedpositions = "INSERT INTO histpos SELECT `time`,`long`,`lat`,pos.idusers AS idusers, pos.race FROM positions AS pos WHERE race not in ".$EngagedList." ORDER BY pos.idusers,`time`;";
 $result = wrapper_mysql_db_query_writer($queryarrivedpositions);
-printf("\nPositions archived from arrived/resigned boats: %d\n", mysqli_affected_rows());
+printf("\nPositions archived from arrived/resigned boats: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 
 $queryarrivedpositionsdel = "DELETE positions FROM positions where race not in ".$EngagedList.";";
 $result = wrapper_mysql_db_query_writer($queryarrivedpositionsdel);
-printf("Positions purged from arrived/resigned boats: %d\n", mysqli_affected_rows());
+printf("Positions purged from arrived/resigned boats: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 
 $locktables = "UNLOCK TABLES";
 $result = wrapper_mysql_db_query_writer($locktables);
@@ -72,11 +72,11 @@ $result = wrapper_mysql_db_query_writer($locktables);
 
 $queryhistopositions = "INSERT INTO histpos SELECT * FROM positions AS pos WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($queryhistopositions);
-printf("Positions archived as too old: %d\n", mysqli_affected_rows());
+printf("Positions archived as too old: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 
 $querypurgepositions = "DELETE FROM positions WHERE time < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($querypurgepositions);
-printf("Positions purged as too old: %d\n", mysqli_affected_rows());
+printf("Positions purged as too old: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 
 $locktables = "UNLOCK TABLES";
 $result = wrapper_mysql_db_query_writer($locktables);
@@ -85,11 +85,11 @@ $result = wrapper_mysql_db_query_writer($locktables);
 
 $querypurgeupdates = "DELETE FROM updates WHERE UNIX_TIMESTAMP(time) < " . ($engine_start - MAX_POSITION_AGE) .";";
 $result = wrapper_mysql_db_query_writer($querypurgeupdates);
-printf("Updates deleted as too old: %d\n", mysqli_affected_rows());
+printf("Updates deleted as too old: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 
 $queryloch = "DELETE FROM races_loch WHERE time < " . ($engine_start - 86700) .";";
 $result = wrapper_mysql_db_query_writer($queryloch);
-printf("Race lochs deleted as too old: %d\n", mysqli_affected_rows());
+printf("Race lochs deleted as too old: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 
 $lochrebuild = "ALTER TABLE races_loch ENGINE=MEMORY";
 $result = wrapper_mysql_db_query_writer($lochrebuild);

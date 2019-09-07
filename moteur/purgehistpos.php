@@ -41,7 +41,7 @@ foreach ($races as $race)
     //print_r($q2,true);
     $res = wrapper_mysql_db_query_reader($q2) or die("Delete Query Failed ".$q2."\n");
     //print_r($res,true);
-    $DeletedRows = mysqli_affected_rows();
+    $DeletedRows = mysqli_affected_rows($GLOBALS['masterdblink']);
     if ($DeletedRows)
     {
       print("\t user ".$user. " deleted ".mysql_affected_rows()." positions\n");

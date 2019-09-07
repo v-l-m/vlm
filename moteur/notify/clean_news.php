@@ -7,5 +7,5 @@
               WHERE timetarget < " . (time() - VLM_NOTIFY_NEWS_MAX_AGE)  ;
    $result = wrapper_mysql_db_query_writer($query);
 
-   printf("News deleted as too old: %d\n", mysqli_affected_rows());
+   printf("News deleted as too old: %d\n", mysqli_affected_rows($GLOBALS['masterdblink']));
 ?>
