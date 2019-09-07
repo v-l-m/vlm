@@ -1,8 +1,8 @@
 <?php
 function LoadPng ($imgname) {
    $im = @imagecreatefrompng ($imgname); /* Tentative d'ouverture */
-   if (!$im) { /* Test d'échec */
-       $im = imagecreatetruecolor (150, 30); /* Création d'une image vide */
+   if (!$im) { /* Test d'ï¿½chec */
+       $im = imagecreatetruecolor (150, 30); /* Crï¿½ation d'une image vide */
        $bgc = imagecolorallocate ($im, 255, 255, 255);
        $tc = imagecolorallocate ($im, 0, 0, 0);
        imagefilledrectangle ($im, 0, 0, 150, 30, $bgc);
@@ -14,8 +14,8 @@ function LoadPng ($imgname) {
 
 function LoadGif ($imgname) {
    $im = @imagecreatefromgif ($imgname); /* Tentative d'ouverture */
-   if (!$im) { /* Test d'échec */
-       $im = imagecreatetruecolor (150, 30); /* Création d'une image vide */
+   if (!$im) { /* Test d'ï¿½chec */
+       $im = imagecreatetruecolor (150, 30); /* Crï¿½ation d'une image vide */
        $bgc = imagecolorallocate ($im, 255, 255, 255);
        $tc = imagecolorallocate ($im, 0, 0, 0);
        imagefilledrectangle ($im, 0, 0, 150, 30, $bgc);
@@ -33,7 +33,7 @@ function LoadGif ($imgname) {
 //$im = LoadGif ('images/site/Afficheur-vide-2zones.gif');
 $im = LoadGif ('images/site/Afficheur-vide.gif');
 
-// Définition de code de couleurs
+// Dï¿½finition de code de couleurs
 $white = imagecolorallocate($im, 255, 255, 255);
 $grey = imagecolorallocate($im, 160, 160, 160);
 $or = imagecolorallocate($im, 220, 200, 140);
@@ -41,7 +41,7 @@ $black = imagecolorallocate($im, 7, 9, 5);
 $red = imagecolorallocate($im, 200, 32, 32);
 $green = imagecolorallocate($im, 0, 160, 32);
 
-// Les libellés de l'instrument
+// Les libellï¿½s de l'instrument
 $instrname="VLM10 Windstation";
 $twslib="Wind Speed";
 $twsunit="kts";
@@ -52,18 +52,18 @@ $twdlib="Wind Direction";
 $twdunit="o";
 
 $tws=htmlentities($_GET["tws"]);
-$heading=htmlentities($_GET["cap"])."°";
+$heading=htmlentities($_GET["cap"])."ï¿½";
 
 $twd=htmlentities($_GET["twd"]);
 
 //$twa=htmlentities($_GET["twa"]);
-$twa = $twd - $heading;
+$twa = $twd - floatval($heading);
 if ($twa < -180 ) $twa +=360;
 if ($twa > 180 ) $twa -=360;
 
 
     $winddir = (360 - $twd )%360 + 90;
-    $boatdir = (360 - $heading )%360 + 90;
+    $boatdir = (360 - floatval($heading) )%360 + 90;
 
     if ( $twa > 0 ) {
         $amure = "tribord";

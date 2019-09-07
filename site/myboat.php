@@ -137,7 +137,7 @@ else
         $user_ranking=$usersObj->getCurrentRanking() ;
 ?>
     <div id="racenamebox">
-        <a href="races.php?type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor(($user_ranking-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
+        <a href="races.php?type=racing&amp;idraces=<?php echo $usersObj->users->engaged ; ?>&amp;startnum=<?php echo (floor((floatval($user_ranking)-1)/MAX_BOATS_ON_RANKINGS)*MAX_BOATS_ON_RANKINGS+1); ?>">
         <?php echo $myRace->racename. '&nbsp;('. round($myRace->getRaceDistance()) . "nm)"; ?>
         </a>
     </div> <!-- fin de racenamebox -->
