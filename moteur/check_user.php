@@ -14,13 +14,15 @@ if ( $usersObj->engaged != 0  )
 {
   // PLayer is racing.
   // Check Auto Pilote : if there is a command in the spool, then execute it
+  // Fix me the Fulluser obj does not have the proper information for computing crank
   $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj,  80000, -80000, -180000,  180000,  MAX_DURATION, true,$now); // use the copy mode
   
   // Check that last position time stamp is not set in the future (suspended race)
   if ( $fullUsersObj->lastPositions->time < $timestamp )
   {
     $flag_pilototo = $usersObj->pilototoCheck();
-
+    $fullUsersObj = new fullUsers($usersObj->idusers, $usersObj, $fullRacesObj,  80000, -80000, -180000,  180000,  MAX_DURATION, true,$now); // use the copy mode
+  
     echo "\n=== New Full Users : ".$fullUsersObj->lastPositions->lat." ".$fullUsersObj->lastPositions->long;
   //$this->wspeed = $wind['speed'];
   //$this->wheading = $wind['windangle'];
