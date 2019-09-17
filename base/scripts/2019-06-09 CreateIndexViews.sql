@@ -13,8 +13,10 @@ create view VIEW_ENGAGED_PER_RACE_RACING as
 
 drop view if exists VIEW_ENGAGED_PER_RACE;
   create view VIEW_ENGAGED_PER_RACE as
-  select idraces, racetype, deptime,sum(engaged), min(Date1stArrival)
-    from (  select * from VIEW_ENGAGED_PER_RACE_COMPLETE union select *, 999999999 Date1stArrival from VIEW_ENGAGED_PER_RACE_RACING) T
+  select idraces, racetype, deptime,sum(engaged) engaged, min(Date1stArrival) Date1stArrival
+    from (  select * from VIEW_ENGAGED_PER_RACE_COMPLETE 
+  union 
+  select *, 999999999 Date1stArrival from VIEW_ENGAGED_PER_RACE_RACING) T
     group by idraces, racetype, deptime;
 
  
