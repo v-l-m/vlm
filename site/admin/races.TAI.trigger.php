@@ -3,7 +3,8 @@
 
 
     $oldrectocopy = $this->get_cgi_var('oldrectocopy');
-    if (intval($oldrectocopy) > 0) {
+    if (intval($oldrectocopy) > 0) 
+    {
          //There could be some things to copy...
 
         $rec = $this->get_cgi_var("PME_data_idraces");
@@ -13,14 +14,19 @@
             );
         echo "<div class=\"adminwarnbox\">";
         print "Following operations have been performed : <br /><ul>";
-        foreach ($copy_list as $k => $v) {
+        foreach ($copy_list as $k => $v) 
+        {
+            //echo "executing ".$v;
             $res = $this->myQuery($v);
-            $a = $this->sql_fetch_pdo();
             print "<li>Copy from $k : $v</li>";
         }
         
-        $res = $this->myQuery("SELECT * FROM races_waypoints WHERE idraces = '".$oldrectocopy."';");
-        while ($row = $this->sql_fetch_pdo() ) {
+        $req = "SELECT * FROM races_waypoints WHERE idraces = '".$oldrectocopy."';";
+        echo $req."\n";
+        $res = $this->myQuery($req)->fetchAll();
+        //while ($row = $this->sql_fetch_pdo() ) 
+        foreach($res as $row)
+        {
             $insertracewp = "INSERT INTO races_waypoints (idraces, wporder, idwaypoint, laisser_au, wptype) VALUES ("
                         .$rec.", "
                         .$row['wporder'].", "
@@ -35,7 +41,7 @@
                         ."FROM waypoints WHERE idwaypoint = ".$row['idwaypoint'].";";
             print "<li>Copy from waypoints : ".$insertwp."</li>";
             $res2 = $this->myQuery($insertwp);
-          }        
+        }        
         print "</ul></div>";
         insertAdminChangelog(Array("operation" => "Copy all race datas (racesmap, waypoints, instructions) from race $oldrectocopy to $rec"));
     }

@@ -271,12 +271,14 @@ $opts['fdd']['UpdateReason'] = array(
 );
 
 $opts['fdd']['updated'] = array(
-  'name'     => 'Updated',
-  'input'    => 'R',
+  'name'    => 'Updated',
+  'input'   => 'R',
 //  'sql|LFVD' => 'FROM_UNIXTIME(updated)',
-  'maxlen'   => 20,
-  'sort'     => true,
-  'help'=> 'Last change',
+  'maxlen'  => 20,
+  'sort'    => true,
+  'help'    => 'Last change',
+  'select'  => 'VL',
+  'sqlw'    =>  'CURRENT_TIMESTAMP',
 );
 
 $opts['triggers']['delete']['before'][0] = 'races.TBD.trigger.php';
