@@ -132,6 +132,7 @@ case $confmodule in
     mkdir -p $VLMCACHE/gshhstiles --mode=777
     mkdir -p $VLMCACHE/gribtiles --mode=777
     mv $destmodulepath/cache.htaccess $VLMCACHE/.htaccess
+    mv $destmodulepath/cache_gshhs.htaccess $VLMCACHE/gshhstiles/.htaccess
     echo 'OK !'    
     echo -n "+$confmodule: Mise en place du lien symbolique vers le cache..."
     ln -s $VLMCACHE $destmodulepath/cache

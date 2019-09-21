@@ -1,9 +1,9 @@
 <IfModule mod_expires.c>
   ExpiresActive On
-  ExpiresDefault A3600
-  <FilesMatch "\.json$">
+  ExpiresDefault A2592000
+  <FilesMatch "\.png$">
     ExpiresActive On
-    ExpiresDefault "modification plus 5 minutes"
+    ExpiresDefault "access plus 6 months"
   </FilesMatch>
 
 </IfModule>
