@@ -1450,7 +1450,7 @@ function LoadRankings(RaceId, CallBack)
     return;
   }*/
 
-  $.get("/cache/rankings/rnk_" + RaceId + ".json?d=" + (new Date().getTime()),
+  $.get("/cache/rankings/rnk_" + RaceId + ".json"/*?d=" + (new Date().getTime())*/,
     function(result)
     {
       if (result)
