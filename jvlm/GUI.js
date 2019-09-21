@@ -318,7 +318,7 @@ function OLInit()
   //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
 
   //La minimap utilise le layer VLM
-  var vlmoverview = vlm.clone();
+  //var vlmoverview = vlm.clone();
 
   //Et on ajoute tous les layers à la map.
   //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
@@ -358,12 +358,12 @@ function OLInit()
   nav.handlers.wheel.interval = 100;
 
   //Minimap
-  var ovmapOptions = {
+  /*var ovmapOptions = {
     maximized: true,
     layers: [vlmoverview]
   };
   map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
-
+*/
   //Pour centrer quand on a pas de permalink dans l'url
   if (!map.getCenter())
   {
