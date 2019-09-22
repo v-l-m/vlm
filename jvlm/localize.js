@@ -2,6 +2,8 @@
  var _EnDict;
  var _CurLocale= 'en';  // Default to english unless otherwise posted
 
+ import moment from 'external/moments/moment-with-locales.min.js';
+
 function LocalizeString()
 {
   //console.log("Localizing...");

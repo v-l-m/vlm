@@ -1,6 +1,9 @@
 // Create and init a manager
 var GribMgr = new VLM2GribManager();
 
+//import $ from 'external/jquery/jquery-3.2.1.min.js';
+import jquery from 'external/jquery/jquery-3.2.1.min.js';
+
 GribMgr.Init();
 
 function GribData(InitStruct)
