@@ -1,17 +1,9 @@
 //
 //
-// Imports
-
-//import pStrength  from 'external/PasswordStrength/jquery.pstrength-min.1.2.js';
-//import moment from 'external/moments/moment-with-locales.min.js';
-import DtPicker from 'external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js';
-import jQueryUI from "external/jquery-ui/jquery-ui.min.js";
-import FooTable from 'external/footable-bootstrap/js/footable.min.js';
-
 // Some consts 
 var RACE_TYPE_CLASSIC = 0;
 var RACE_TYPE_RECORD = 1;
-var RACE_TYPE_OMOROB = 2;
+var RACE_TYPE_OMORMB = 2;
 
 var FIELD_MAPPING_TEXT = 0;
 var FIELD_MAPPING_VALUE = 1;
@@ -56,10 +48,7 @@ var OnPlayerLoadedCallBack = null;
 
 // On ready get started with vlm management
 $(document).ready(
- function() { InitJVLM();}
-);
-
-function InitJVLM()
+  function()
   {
 
     ///////////////////////////////////////////////////
@@ -100,8 +89,9 @@ function InitJVLM()
     // Start converse
     //InitXmpp();
 
-    // TODO Init maps
-    
+    // Init maps
+    OLInit();
+
     // Load translation strings
     InitLocale();
 
@@ -124,6 +114,8 @@ function InitJVLM()
     GetFlagsList();
 
   }
+);
+
 let PasswordResetInfo = [];
 
 function HandlePasswordResetLink(PwdKey)
@@ -277,7 +269,115 @@ function OtherRaceRankingLoaded()
   console.log("off race ranking loaded");
 }
 
+function OLInit()
+{
 
+  //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
+  OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
+
+  var default_latitude = 45.5;
+  var default_longitude = -30.0;
+  var default_zoom = 4;
+
+  if (typeof VLM2Prefs !== "undefined" && VLM2Prefs.MapPrefs)
+  {
+    default_zoom = VLM2Prefs.MapPrefs.MapZoomLevel;
+  }
+
+  var layeroption = {
+    //sphérique
+    sphericalMercator: true,
+    transitionEffect: "resize",
+    //pour passer l'ante-meridien sans souci
+    wrapDateLine: true,
+    events: function(x)
+    {
+      console.log("TileLayer : " + x);
+    }
+  };
+
+  //MAP
+
+  map = new OpenLayers.Map(
+    "jVlmMap", //identifiant du div contenant la carte openlayer
+    MapOptions);
+
+  //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
+  var urlArray = tilesUrlArray;
+
+  var vlm = new OpenLayers.Layer.XYZ(
+    "VLM Layer",
+    urlArray,
+    layeroption
+  );
+
+
+
+  //Le calque de vent made in Vlm
+  var grib = new Gribmap.Layer("Gribmap", layeroption);
+  //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
+
+  //La minimap utilise le layer VLM
+  //var vlmoverview = vlm.clone();
+
+  //Et on ajoute tous les layers à la map.
+  //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
+  map.addLayers([grib, VLMBoatsLayer, vlm]);
+  //map.addLayers([vlm, grib]); //FOR DEBUG
+
+  //Controle l'affichage des layers
+  //map.addControl(new OpenLayers.Control.LayerSwitcher());
+
+  //Controle l'affichage de la position ET DU VENT de la souris
+  map.addControl(new Gribmap.MousePosition(
+  {
+    gribmap: grib
+  }));
+
+  //Affichage de l'échelle
+  map.addControl(new OpenLayers.Control.ScaleLine());
+
+  //Le Permalink
+  //FIXME: éviter que le permalink soit masqué par la minimap ?
+  map.addControl(new OpenLayers.Control.Permalink('permalink'));
+
+  //FIXME: Pourquoi le graticule est il un control ?
+  map.addControl(new OpenLayers.Control.Graticule());
+
+  //Navigation clavier
+  map.addControl(new OpenLayers.Control.KeyboardDefaults());
+
+  //Le panel de vent
+
+  GribWindController = new Gribmap.ControlWind();
+  map.addControl(GribWindController);
+
+  //Evite que le zoom molette surcharge le js du navigateur
+  var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
+  nav.handlers.wheel.cumulative = false;
+  nav.handlers.wheel.interval = 100;
+
+  //Minimap
+  /*var ovmapOptions = {
+    maximized: true,
+    layers: [vlmoverview]
+  };
+  map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
+*/
+  //Pour centrer quand on a pas de permalink dans l'url
+  if (!map.getCenter())
+  {
+    // Don't do this if argparser already did something...
+    var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
+    lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
+    map.setCenter(lonlat, default_zoom);
+  }
+
+  // Click handler
+  var click = new OpenLayers.Control.Click();
+  map.addControl(click);
+  click.activate();
+}
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm)
 {
@@ -359,20 +459,18 @@ function InitMenusAndButtons()
     }
   );
 
-  //TODO Fix back menus
-  //$("#Menu").menu();
+  $("#Menu").menu();
   $("#Menu").hide();
 
-  // Todo fix that back also
-  /*$("input[type=submit],button")
+  $("input[type=submit],button")
     .button()
     .click(function(event)
     {
       event.preventDefault();
     });
-*/
-  // TODO Theme tabs
-  //$(".JVLMTabs").tabs();
+
+  // Theme tabs
+  $(".JVLMTabs").tabs();
 
   // Hide all progressbars
   HidePb("#PbLoginProgress");
@@ -489,8 +587,7 @@ function InitMenusAndButtons()
     }
   );
 
-  // TODO fix password strength
-  //$('.CreatePassword').pstrength();
+  $('.CreatePassword').pstrength();
   $('#NewPlayerEMail').blur(
     function(e)
     {

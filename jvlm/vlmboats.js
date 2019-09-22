@@ -10,6 +10,92 @@ const BOAT_POLAR = 4
 */
 const VLM_COORDS_FACTOR = 1000;
 
+// Default map options
+var MapOptions = {
+  // Projection mercator sphÃ©rique (type google map ou osm)
+  projection: new OpenLayers.Projection("EPSG:900913"),
+  // projection pour l'affichage des coordonnÃ©es
+  displayProjection: new OpenLayers.Projection("EPSG:4326"),
+  // unitÃ© : le m
+  units: "m",
+  maxResolution: 156543.0339,
+  maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+    20037508.34, 20037508.34),
+  restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34,
+    40037508.34, 20037508.34),
+  eventListeners:
+  {
+    "zoomend": HandleMapZoomEnd,
+    "featureover": HandleFeatureOver,
+    "featureout": HandleFeatureOut,
+    "featureclick": HandleFeatureClick,
+    "mousemove": HandleMapMouseMove
+  }
+};
+
+// Click handler for handling map clicks.
+OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
+{
+  defaultHandlerOptions:
+  {
+    'single': true,
+    'double': false,
+    'pixelTolerance': 0,
+    'stopSingle': false,
+    'stopDouble': false
+  },
+
+  initialize: function(options)
+  {
+    this.handlerOptions = OpenLayers.Util.extend(
+    {}, this.defaultHandlerOptions);
+    OpenLayers.Control.prototype.initialize.apply(
+      this, arguments
+    );
+    this.handler = new OpenLayers.Handler.Click(
+      this,
+      {
+        'click': this.trigger
+      }, this.handlerOptions
+    );
+  },
+
+  trigger: function(e)
+  {
+
+    var MousePos = GetVLMPositionFromClick(e.xy);
+    if (typeof GM_Pos !== "object" || !GM_Pos)
+    {
+      GM_Pos = {};
+    }
+    GM_Pos.lon = MousePos.Lon.Value;
+    GM_Pos.lat = MousePos.Lat.Value;
+
+    HandleMapMouseMove(e);
+    if (SetWPPending)
+    {
+      if (WPPendingTarget === "WP")
+      {
+        CompleteWPSetPosition(e, e.xy);
+        HandleCancelSetWPOnClick();
+      }
+      else if (WPPendingTarget === "AP")
+      {
+        SetWPPending = false;
+        _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy);
+        $("#AutoPilotSettingForm").modal("show");
+        RefreshAPDialogFields();
+
+      }
+      else
+      {
+        SetWPPending = false;
+      }
+    }
+  }
+
+});
+
 // Control to handle drag of User WP
 // var DrawControl = null;
 var BoatFeatures = [];
@@ -607,8 +693,11 @@ function CompleteWPSetPosition(feature, pixel)
   //DrawControl.activate();
 }
 
-//TODO STYLE elements
-/*var VectorStyles = new OpenLayers.Style(
+// allow testing of specific renderers via "?renderer=Canvas", etc
+var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+
+var VectorStyles = new OpenLayers.Style(
 {
   strokeColor: "#00FF00",
   strokeOpacity: 1,
@@ -836,15 +925,14 @@ function CompleteWPSetPosition(feature, pixel)
 
 
   ]
-});*/
+});
 
 
-// TODO Boats & track layer
-/*var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
+var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
 {
   styleMap: new OpenLayers.StyleMap(VectorStyles),
   renderers: renderer
-});*/
+});
 
 // Background load controller from ext html file
 function GetBoatControllerPopup()

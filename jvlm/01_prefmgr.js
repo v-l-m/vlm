@@ -1,5 +1,3 @@
-
-import store from 'external/store/store.min.js';
 var MAP_OP_SHOW_SEL = 0;
 
 

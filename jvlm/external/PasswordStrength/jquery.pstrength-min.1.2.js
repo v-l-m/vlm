@@ -1,14 +1,4 @@
-(function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
-
-		// AMD. Register as an anonymous module.
-		define([ "jquery" ], factory );
-	} else {
-
-		// Browser globals
-		factory( jQuery );
-	}
-}(function(A)
+(function(A)
   {A.extend(A.fn,
     {
       pstrength:function(B)
@@ -133,4 +123,4 @@
               return F
             }
           })
-    })(jQuery));
+    })(jQuery)
