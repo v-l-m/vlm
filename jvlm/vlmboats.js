@@ -11,7 +11,8 @@ const BOAT_POLAR = 4
 const VLM_COORDS_FACTOR = 1000;
 
 // Default map options
-var MapOptions = {
+// TODO Map Options
+/* var MapOptions = {
   // Projection mercator sphÃ©rique (type google map ou osm)
   projection: new OpenLayers.Projection("EPSG:900913"),
   // projection pour l'affichage des coordonnÃ©es
@@ -31,10 +32,10 @@ var MapOptions = {
     "featureclick": HandleFeatureClick,
     "mousemove": HandleMapMouseMove
   }
-};
+}; */
 
 // Click handler for handling map clicks.
-OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
+/* OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
 {
   defaultHandlerOptions:
   {
@@ -94,7 +95,7 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
     }
   }
 
-});
+}); */
 
 // Control to handle drag of User WP
 // var DrawControl = null;
@@ -693,11 +694,11 @@ function CompleteWPSetPosition(feature, pixel)
   //DrawControl.activate();
 }
 
-// allow testing of specific renderers via "?renderer=Canvas", etc
+/*// al low testing of specific renderers via "?renderer=Canvas", etc
 var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-
-var VectorStyles = new OpenLayers.Style(
+ */
+/* var VectorStyles = new OpenLayers.Style(
 {
   strokeColor: "#00FF00",
   strokeOpacity: 1,
@@ -926,13 +927,14 @@ var VectorStyles = new OpenLayers.Style(
 
   ]
 });
+ */
 
-
-var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
+ // TODO Boats & tracks layer
+/* var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
 {
   styleMap: new OpenLayers.StyleMap(VectorStyles),
   renderers: renderer
-});
+}); */
 
 // Background load controller from ext html file
 function GetBoatControllerPopup()

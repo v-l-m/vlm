@@ -362,264 +362,6 @@ function CheckFloatInput(DestObj, SrcObj) {
     SrcObj.value = ObjValue.toString();
   }
 }
-/* Contributors : paparazzia@gmail.com, ...
- * Code is licencesed under the AGPL license
- * See Copying file
- */
-
-/** 
- * @requires OpenLayers/ControlSwitch.js
- */
-
-/* Class: OpenLayers.Control.ControlSwitch
- * Inherits from:
- *  - <OpenLayers.Control>
- */
-
-
-OpenLayers.Control.ControlSwitch = OpenLayers.Class(OpenLayers.Control, {
-  label: "controlswitch",
-
-  /**
-   * APIProperty: roundedCorner
-   * {Boolean} If true the Rico library is used for rounding the corners
-   */
-  roundedCorner: true,
-
-  /**  
-   * APIProperty: roundedCornerColor
-   * {String} The color of the rounded corners, only applies if roundedCorner
-   *     is true, defaults to "darkblue".
-   */
-  roundedCornerColor: "darkblue",
-  // DOM Elements
-
-  /** 
-   * Property: baseDiv
-   * {DOMElement}
-   */
-  baseDiv: null,
-
-  /** 
-   * Property: minimizeDiv
-   * {DOMElement} 
-   */
-  minimizeDiv: null,
-
-  /** 
-   * Property: maximizeDiv
-   * {DOMElement} 
-   */
-  maximizeDiv: null,
-
-  /**
-   * Constructor: OpenLayers.Control.ControlSwitch
-   * 
-   * Parameters:
-   * options - {Object}
-   */
-  initialize: function initialize(options) {
-    OpenLayers.Control.prototype.initialize.apply(this, arguments);
-  },
-
-  /**
-   * APIMethod: destroy 
-   */
-  destroy: function destroy() {
-    OpenLayers.Event.stopObservingElement(this.div);
-    OpenLayers.Event.stopObservingElement(this.minimizeDiv);
-    OpenLayers.Event.stopObservingElement(this.maximizeDiv);
-    OpenLayers.Control.prototype.destroy.apply(this, arguments);
-  },
-
-  /**
-   * Method: draw
-   *
-   * Returns:
-   * {DOMElement} A reference to the DIV DOMElement containing the 
-   *     switcher tabs.
-   */
-  draw: function draw() {
-    OpenLayers.Control.prototype.draw.apply(this); // create layout divs
-
-    this.loadContents(); // set mode to minimize
-
-    if (!this.outsideViewport) {
-      this.minimizeControl();
-    } // populate div with current info
-
-
-    this.redraw();
-    return this.div;
-  },
-
-  /** 
-   * Method: redraw
-   *
-   * Returns: 
-   * {DOMElement} A reference to the DIV DOMElement containing the control
-   */
-  redraw: function redraw() {
-    //if the state hasn't changed since last redraw, no need 
-    // to do anything. Just return the existing div.
-
-    /*        if (!this.checkRedraw()) { 
-                return this.div; 
-            } */
-    this.baseDiv.innerHTML = "";
-    this.drawBaseDiv();
-    /*
-            OpenLayers.Event.observe(labelSpan, "click", 
-                OpenLayers.Function.bindAsEventListener(this.onInputClick,
-                                                        context)
-            );
-    */
-
-    return this.div;
-  },
-  drawBaseDiv: function drawBaseDiv() {
-    this.baseDiv.innerHTML = "Base Class, Control Switch";
-  },
-
-  /** 
-   * Method: maximizeControl
-   * Set up the labels and divs for the control
-   * 
-   * Parameters:
-   * e - {Event} 
-   */
-  maximizeControl: function maximizeControl(e) {
-    // set the div's width and height to empty values, so
-    // the div dimensions can be controlled by CSS
-    this.div.style.width = "";
-    this.div.style.height = "";
-    this.showControls(false);
-
-    if (e != null) {
-      OpenLayers.Event.stop(e);
-    }
-  },
-
-  /** 
-   * Method: minimizeControl
-   * Hide all the contents of the control, shrink the size, 
-   *     add the maximize icon
-   *
-   * Parameters:
-   * e - {Event} 
-   */
-  minimizeControl: function minimizeControl(e) {
-    // to minimize the control we set its div's width
-    // and height to 0px, we cannot just set "display"
-    // to "none" because it would hide the maximize
-    // div
-    this.div.style.width = "0px";
-    this.div.style.height = "0px";
-    this.showControls(true);
-
-    if (e != null) {
-      OpenLayers.Event.stop(e);
-    }
-  },
-
-  /**
-   * Method: showControls
-   * Hide/Show all LayerSwitcher controls depending on whether we are
-   *     minimized or not
-   * 
-   * Parameters:
-   * minimize - {Boolean}
-   */
-  showControls: function showControls(minimize) {
-    this.maximizeDiv.style.display = minimize ? "" : "none";
-    this.minimizeDiv.style.display = minimize ? "none" : "";
-    this.baseDiv.style.display = minimize ? "none" : "";
-  },
-
-  /** 
-   * Method: loadContents
-   * Set up the labels and divs for the control
-   */
-  loadContents: function loadContents() {
-    //configure main div
-    OpenLayers.Event.observe(this.div, "mouseup", OpenLayers.Function.bindAsEventListener(this.mouseUp, this));
-    OpenLayers.Event.observe(this.div, "click", this.ignoreEvent);
-    OpenLayers.Event.observe(this.div, "mousedown", OpenLayers.Function.bindAsEventListener(this.mouseDown, this));
-    OpenLayers.Event.observe(this.div, "dblclick", this.ignoreEvent);
-    this.baseDiv = document.createElement("div");
-    this.baseDiv.id = this.id + "_baseDiv";
-    OpenLayers.Element.addClass(this.baseDiv, "baseDiv");
-    this.div.appendChild(this.baseDiv);
-
-    if (this.roundedCorner) {
-      OpenLayers.Rico.Corner.round(this.div, {
-        corners: "tl bl",
-        bgColor: "transparent",
-        color: this.roundedCornerColor,
-        blend: false
-      });
-      OpenLayers.Rico.Corner.changeOpacity(this.baseDiv, 0.75);
-    }
-
-    var imgLocation = OpenLayers.Util.getImagesLocation();
-    var sz = new OpenLayers.Size(18, 18); // maximize button div
-
-    var img = imgLocation + 'layer-switcher-maximize.png';
-    this.maximizeDiv = OpenLayers.Util.createAlphaImageDiv("OpenLayers_Control_MaximizeDiv", null, sz, img, "absolute");
-    OpenLayers.Element.addClass(this.maximizeDiv, "maximizeDiv");
-    this.maximizeDiv.style.display = "none";
-    OpenLayers.Event.observe(this.maximizeDiv, "click", OpenLayers.Function.bindAsEventListener(this.maximizeControl, this));
-    this.div.appendChild(this.maximizeDiv); // minimize button div
-
-    img = imgLocation + 'layer-switcher-minimize.png';
-    sz = new OpenLayers.Size(18, 18);
-    this.minimizeDiv = OpenLayers.Util.createAlphaImageDiv("OpenLayers_Control_MinimizeDiv", null, sz, img, "absolute");
-    OpenLayers.Element.addClass(this.minimizeDiv, "minimizeDiv");
-    this.minimizeDiv.style.display = "none";
-    OpenLayers.Event.observe(this.minimizeDiv, "click", OpenLayers.Function.bindAsEventListener(this.minimizeControl, this));
-    this.div.appendChild(this.minimizeDiv);
-  },
-
-  /** 
-   * Method: ignoreEvent
-   * 
-   * Parameters:
-   * evt - {Event} 
-   */
-  ignoreEvent: function ignoreEvent(evt) {
-    OpenLayers.Event.stop(evt);
-  },
-
-  /** 
-   * Method: mouseDown
-   * Register a local 'mouseDown' flag so that we'll know whether or not
-   *     to ignore a mouseUp event
-   * 
-   * Parameters:
-   * evt - {Event}
-   */
-  mouseDown: function mouseDown(evt) {
-    this.isMouseDown = true;
-    this.ignoreEvent(evt);
-  },
-
-  /** 
-   * Method: mouseUp
-   * If the 'isMouseDown' flag has been set, that means that the drag was 
-   *     started from within the LayerSwitcher control, and thus we can 
-   *     ignore the mouseup. Otherwise, let the Event continue.
-   *  
-   * Parameters:
-   * evt - {Event} 
-   */
-  mouseUp: function mouseUp(evt) {
-    if (this.isMouseDown) {
-      this.isMouseDown = false;
-      this.ignoreEvent(evt);
-    }
-  },
-  CLASS_NAME: "OpenLayers.Control.ControlSwitch"
-});
 
 function BoatEstimate(Est) {
   this.Position = null;
@@ -2462,1032 +2204,8 @@ function GetDegMinSecFromNumber(n, d, m, s) {
 function SplitNumber(n, i, d) {
   i = Math.floor(n);
   d = n - i;
-}
-/*
-/* Contributors : paparazzia@gmail.com, ...
- * Code is licencesed under the AGPL license
- * See Copying file
- */
+} // Create and init a manager
 
-/* TODO:
- * this is rough draft
- * - for better drawing an BC compatibility with OL, the Gribmap layer should use the renderer or the vector base layer (?)
- * - windarea are stored in an objet (pseudo key=>value array) => should be stored in arrays with indexes
- */
-
-/**
- * @requires OpenLayers.js
- * @requires ControlSwitch.js
- * @requires OpenLayers/Pixel.js
- */
-
-
-var Gribmap = {}; //Module container
-
-var ErrorCatching = 1; //DEBUG: Set this > 0 to catch pixel out of wind grid
-
-var SrvIndex = 1;
-
-Gribmap.ServerURL = function () {
-  if (typeof WindGridServers !== "undefined" && WindGridServers) {
-    SrvIndex = (SrvIndex + 1) % WindGridServers.length;
-
-    if (SrvIndex === 0) {
-      SrvIndex = 1;
-    }
-
-    return WindGridServers[SrvIndex];
-  } else {
-    return "";
-  }
-};
-
-Gribmap.windgrid_uribase = function () {
-  return Gribmap.ServerURL() + "/ws/windinfo/windgrid.php";
-};
-
-Gribmap.griblist_uribase = '/ws/windinfo/list.php'; // Class wind info - just a basic vector
-
-function Wind(wspeed, wheading) {
-  this.wspeed = wspeed;
-  this.wheading = wheading;
-} // Normalize longitude -180 < long <= 180
-
-
-function normalizeLongitude0(longitude) {
-  var l;
-  l = longitude % 360.0;
-
-  if (l > 180.0) {
-    l -= 360.0;
-  } else if (l <= -180.0) {
-    l += 360.0;
-  }
-
-  return l;
-} // Normalize longitude 0 <= long < 360
-
-
-function normalizeLongitude360(longitude) {
-  var l;
-  l = longitude % 360.0;
-
-  if (l < 0.0) {
-    l += 360.0;
-  }
-
-  return l;
-} // point in the canvas - subclassed from OL.Pixel to make transform easier
-
-
-Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel, {
-  moveBy: function moveBy(offset) {
-    //this is the same as the base.offset() func, but without cloning the object
-    this.x += offset.x;
-    this.y += offset.y;
-  },
-  moveByPolar: function moveByPolar(ro, theta) {
-    var angle = (theta - 90.0) * Math.PI / 180.0;
-    this.x += ro * Math.cos(angle);
-    this.y += ro * Math.sin(angle);
-  },
-  CLASS_NAME: "Gribmap.Pixel"
-}); //Store information (windAreas, i.e. bloc of grib datas)
-
-Gribmap.WindLevel = OpenLayers.Class({
-  basestep: 0.5,
-  gribLevel: 0,
-  blocx: 360.0,
-  blocy: 180.0,
-  step: 2.0,
-  stepmultiple: 4.0,
-  windAreas: {},
-  layer: null,
-  initialize: function initialize(griblevel, stepmultiple, blocx, blocy, layer) {
-    this.gribLevel = griblevel;
-    this.windAreas = [];
-    this.stepmultiple = stepmultiple;
-    this.step = this.basestep * stepmultiple; //FIXME: useless without proper step handling
-
-    this.blocx = blocx;
-    this.blocy = blocy;
-    this.layer = layer;
-  },
-  //FIXME : should we use native index in place of hash array ?
-  getGribLeftLimit: function getGribLeftLimit(lon) {
-    return this.getGribLeftId(lon) * this.blocx - 180;
-  },
-  getGribLeftId: function getGribLeftId(lon) {
-    return Math.floor((lon + 180) / this.blocx);
-  },
-  getGribBottomLimit: function getGribBottomLimit(lat) {
-    return this.getGribBottomId(lat) * this.blocy - 90;
-  },
-  getGribBottomId: function getGribBottomId(lat) {
-    return Math.floor((lat + 90) / this.blocy);
-  },
-  notifyLoad: function notifyLoad(time, windarea) {
-    if (this.layer && this.gribLevel === this.layer.gribLevel && this.layer.isInTimeRange(time) && this.layer.getExtent().transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-    ).intersectsBounds(windarea)) {
-      this.extendWindArea(windarea);
-      this.layer.redraw();
-    }
-  },
-  //Get all wind areas inside bounds, and call checkWindArea() for each
-  getWindAreas: function getWindAreas(bounds) {
-    //bounds in LAT-LON
-    var blocks = [];
-    var bc = 0;
-    var left = this.getGribLeftLimit(bounds.left);
-    var bottom = null;
-    var newblock = null;
-
-    while (left < bounds.right) {
-      bottom = this.getGribBottomLimit(bounds.bottom);
-
-      while (bottom < bounds.top) {
-        newblock = new Gribmap.WindArea(left, bottom, this);
-        blocks[bc] = this.checkWindArea(newblock);
-        bottom += this.blocy;
-        bc += 1;
-      }
-
-      left += this.blocx;
-    }
-
-    return blocks;
-  },
-  checkWindArea: function checkWindArea(windarea) {
-    if (typeof this.windAreas[windarea.toString()] == 'undefined') {
-      //Unknown windarea, we just use it.
-      this.windAreas[windarea.toString()] = windarea;
-    } else {
-      windarea = this.windAreas[windarea.toString()];
-    }
-
-    windarea.checkWindArray(this.layer.gribtimeBefore);
-    windarea.checkWindArray(this.layer.gribtimeAfter);
-    return windarea;
-  },
-  extendWindArea: function extendWindArea(windarea) {
-    var tl = this.layer.getGribTimeList();
-
-    for (var i = 0; i < tl.length; i++) {
-      windarea.checkWindArray(tl[i]);
-    }
-  },
-  getWindInfo: function getWindInfo(lat, lon) {
-    var left = this.getGribLeftLimit(lon);
-    var bottom = this.getGribBottomLimit(lat);
-    var wa = new Gribmap.WindArea(left, bottom, this); //on n'appelle pas checkWindArea car on suppose que c'est déjà  OK.
-    //mais on mets ça dans une clausse d'exception pour ne pas avoir de soucis
-
-    try {
-      var w_area = this.windAreas[wa.toString()];
-
-      if (typeof w_area !== "undefined" && w_area) {
-        return w_area.getWindInfo(lat, lon, this.layer.time, this.layer.gribtimeBefore, this.layer.gribtimeAfter);
-      } else {
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
-  },
-  CLASS_NAME: "Gribmap.WindLevel"
-}); //Wind array container
-
-Gribmap.WindArray = OpenLayers.Class({
-  time: null,
-  winddatas: null,
-  status: 'void',
-  windArea: null,
-  //for back notification after loading
-  initialize: function initialize(time, windArea) {
-    this.status = 'void';
-    this.time = time;
-    this.windArea = windArea;
-  },
-  isLoaded: function isLoaded() {
-    return this.status == 'loaded';
-  },
-  isLoading: function isLoading() {
-    return this.status == 'loading';
-  },
-  notifyLoad: function notifyLoad() {
-    if (this.windArea) {
-      this.windArea.notifyLoad(this.time);
-    }
-  },
-  handleWindGridReply: function handleWindGridReply(request) {
-    if (request.status == 200) {
-      var jsonArray;
-      jsonArray = JSON.parse(request.responseText);
-      this.winddatas = this.transformRawWindArray(jsonArray);
-      this.status = 'loaded';
-      this.notifyLoad();
-      HidePb("#PbGribLoginProgress");
-    } else {
-      this.status = "void";
-    }
-  },
-  // transform the information retrieved in JSON form the wind service
-  // in VLM into a two-dimensional pseudo-array
-  // parameter:
-  // jsonArray, the raw array in JSON
-  // return:
-  // a two dimensional pseudo-array with index step 0.5
-  transformRawWindArray: function transformRawWindArray(jsonArray) {
-    var wind_array = [];
-    var windNodeIdx, windNode, windInfo;
-
-    for (windNodeIdx in jsonArray) {
-      if (jsonArray[windNodeIdx]) {
-        windNode = jsonArray[windNodeIdx];
-
-        if (typeof wind_array[windNode.lat] == 'undefined') {
-          wind_array[windNode.lat] = [];
-        }
-
-        windInfo = new Wind(windNode.wspd, windNode.whdg);
-        wind_array[windNode.lat][windNode.lon] = windInfo;
-
-        if (windNode.lon === 180.0) {
-          wind_array[windNode.lat][-windNode.lon] = windInfo;
-        }
-      }
-    }
-
-    return wind_array;
-  },
-  getWindGrid: function getWindGrid() {
-    if (this.isLoaded() || this.isLoading()) return;
-    if (this.time == 0) return;
-    this.status = 'loading';
-    var reqeast = this.windArea.right % 360;
-    var reqwest = this.windArea.left % 360;
-
-    if (reqeast < -180) {
-      reqeast += 360;
-    }
-
-    if (reqeast > 180) {
-      reqeast -= 360;
-    }
-
-    if (reqwest < -180) {
-      reqwest += 360;
-    }
-
-    if (reqwest > 180) {
-      reqwest -= 360;
-    }
-
-    ShowPb("#PbGribLoginProgress");
-    var request = OpenLayers.Request.GET({
-      url: Gribmap.windgrid_uribase(),
-      params: {
-        north: this.windArea.top,
-        south: this.windArea.bottom,
-        east: reqeast,
-        west: reqwest,
-        timerequest: this.time,
-        stepmultiple: this.windArea.windlevel.stepmultiple
-      },
-      async: true,
-      headers: {
-        'Accept': 'application/json'
-      },
-      callback: this.handleWindGridReply,
-      scope: this
-    });
-  },
-  CLASS_NAME: "Gribmap.WindArray"
-});
-/* Class: WindArea
- */
-
-Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds, {
-  windlevel: null,
-  //pointer to WindLevel ?
-  windArrays: null,
-  initialize: function initialize(left, bottom, windlevel) {
-    this.windlevel = windlevel;
-    this.windArrays = [];
-    this.left = left;
-    this.bottom = bottom;
-    this.right = left + windlevel.blocx;
-    this.top = bottom + windlevel.blocy;
-  },
-  notifyLoad: function notifyLoad(time) {
-    if (this.windlevel != null) {
-      this.windlevel.notifyLoad(time, this);
-    }
-  },
-  checkWindArray: function checkWindArray(ts) {
-    if (this.exists(ts) || ts == 0) return;
-    this.windArrays[ts] = new Gribmap.WindArray(ts, this);
-    this.windArrays[ts].getWindGrid();
-  },
-  exists: function exists(ts) {
-    return typeof this.windArrays[ts] != 'undefined';
-  },
-  isLoaded: function isLoaded(ts) {
-    return this.exists(ts) && this.windArrays[ts].isLoaded();
-  },
-  isLoading: function isLoading(ts) {
-    return this.exists(ts) && this.windArrays[ts].isLoading();
-  },
-  toString: function toString() {
-    //        return 'gribresol=('+this.windlevel['griblevel']+") coord=("+normalizeLongitude0(this.left)+","+this.bottom+")";
-    return 'gribresol=(' + this.windlevel.griblevel + ") " + OpenLayers.Bounds.prototype.toString.apply(this, arguments);
-  },
-  getWindInfo: function getWindInfo(lat, lon, time, time_ante, time_post) {
-    //FIXME should clean all these API
-    return this.getWindInfo2(lat, lon, time, this.windArrays[time_ante], this.windArrays[time_post]);
-  },
-  getWindInfo2: function getWindInfo2(lat, lon, time, windarray_ante, windarray_post) {
-    //You should be sure before calling this that all the grib data you need are already loaded.
-    var ne_wind, nw_wind, se_wind, sw_wind;
-    var s_limit, n_limit, e_limit, w_limit;
-    var n_wspeed, s_wspeed, wspeed, wspeed_ante, wspeed_post;
-    var t_angle1, t_angle2, wangle, t_val1, t_val2;
-    var n_u, n_v, s_u, s_v, u_ante, v_ante, u_post, v_post, u, v;
-    var stepwind = this.windlevel.step;
-    var timecoeff, loncoeff, latcoeff; //Normalisation & coeff
-
-    lon = normalizeLongitude0(lon);
-    s_limit = Math.floor(lat / stepwind) * stepwind;
-    n_limit = Math.ceil(lat / stepwind) * stepwind;
-    w_limit = Math.floor(lon / stepwind) * stepwind;
-    e_limit = Math.ceil(lon / stepwind) * stepwind;
-    loncoeff = (lon - w_limit) / stepwind;
-    latcoeff = (lat - s_limit) / stepwind; //ANTE
-    // Sanity checks
-
-    if (typeof windarray_ante.winddatas === "undefined" || !windarray_ante.winddatas || !(n_limit in windarray_ante.winddatas) || !(s_limit in windarray_ante.winddatas)) {
-      return null;
-    } else if (!(e_limit in windarray_ante.winddatas[n_limit]) || !(w_limit in windarray_ante.winddatas[n_limit]) || !(e_limit in windarray_ante.winddatas[s_limit]) || !(w_limit in windarray_ante.winddatas[s_limit])) {
-      return null;
-    } //4 corners
-
-
-    ne_wind = windarray_ante.winddatas[n_limit][e_limit];
-    nw_wind = windarray_ante.winddatas[n_limit][w_limit];
-    se_wind = windarray_ante.winddatas[s_limit][e_limit];
-    sw_wind = windarray_ante.winddatas[s_limit][w_limit]; //Windspeed : linear north, linear south, then linear        
-
-    n_wspeed = nw_wind.wspeed + loncoeff * (ne_wind.wspeed - nw_wind.wspeed);
-    s_wspeed = sw_wind.wspeed + loncoeff * (se_wind.wspeed - sw_wind.wspeed);
-    wspeed_ante = s_wspeed + latcoeff * (n_wspeed - s_wspeed); //radians
-
-    t_angle1 = nw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = ne_wind.wheading * Math.PI / 180.0;
-    t_val1 = nw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.cos(t_angle2);
-    n_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = nw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.sin(t_angle2);
-    n_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_angle1 = sw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = se_wind.wheading * Math.PI / 180.0;
-    t_val1 = sw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = se_wind.wspeed * Math.cos(t_angle2);
-    s_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = sw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = se_wind.wspeed * Math.sin(t_angle2);
-    s_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    u_ante = s_u + latcoeff * (n_u - s_u);
-    v_ante = s_v + latcoeff * (n_v - s_v); //POST
-    // Sanity checks
-
-    if (typeof windarray_post.winddatas === "undefined" || !windarray_post.winddatas || !(n_limit in windarray_post.winddatas) || !(s_limit in windarray_post.winddatas)) {
-      return null;
-    } else if (!(e_limit in windarray_post.winddatas[n_limit]) || !(w_limit in windarray_post.winddatas[n_limit]) || !(e_limit in windarray_post.winddatas[s_limit]) || !(w_limit in windarray_post.winddatas[s_limit])) {
-      return null;
-    } //4 corners
-
-
-    ne_wind = windarray_post.winddatas[n_limit][e_limit];
-    nw_wind = windarray_post.winddatas[n_limit][w_limit];
-    se_wind = windarray_post.winddatas[s_limit][e_limit];
-    sw_wind = windarray_post.winddatas[s_limit][w_limit]; //Windspeed : linear north, linear south, then linear        
-
-    n_wspeed = nw_wind.wspeed + loncoeff * (ne_wind.wspeed - nw_wind.wspeed);
-    s_wspeed = sw_wind.wspeed + loncoeff * (se_wind.wspeed - sw_wind.wspeed);
-    wspeed_post = s_wspeed + latcoeff * (n_wspeed - s_wspeed); //radians
-
-    t_angle1 = nw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = ne_wind.wheading * Math.PI / 180.0;
-    t_val1 = nw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.cos(t_angle2);
-    n_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = nw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = ne_wind.wspeed * Math.sin(t_angle2);
-    n_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_angle1 = sw_wind.wheading * Math.PI / 180.0;
-    t_angle2 = se_wind.wheading * Math.PI / 180.0;
-    t_val1 = sw_wind.wspeed * Math.cos(t_angle1);
-    t_val2 = se_wind.wspeed * Math.cos(t_angle2);
-    s_u = t_val1 + loncoeff * (t_val2 - t_val1);
-    t_val1 = sw_wind.wspeed * Math.sin(t_angle1);
-    t_val2 = se_wind.wspeed * Math.sin(t_angle2);
-    s_v = t_val1 + loncoeff * (t_val2 - t_val1);
-    u_post = s_u + latcoeff * (n_u - s_u);
-    v_post = s_v + latcoeff * (n_v - s_v); //Interpolation temporelle
-
-    timecoeff = (time - windarray_ante.time) / (windarray_post.time - windarray_ante.time);
-    wspeed = wspeed_ante + timecoeff * (wspeed_post - wspeed_ante);
-    u = u_ante + timecoeff * (u_post - u_ante);
-    v = v_ante + timecoeff * (v_post - v_ante);
-    wangle = 180.0 * Math.acos(u / Math.sqrt(u * u + v * v)) / Math.PI;
-
-    if (v < 0) {
-      wangle = 360.0 - wangle;
-    }
-
-    return new Wind(wspeed, wangle);
-  },
-  CLASS_NAME: "Gribmap.WindArea"
-});
-/* Class: Gribmap.
-Layer
- * 
- * Inherits from:
- *  - <OpenLayers.Layer>
- */
-
-Gribmap.Layer = OpenLayers.Class(OpenLayers.Layer, {
-  /* APIProperty: isBaseLayer
-   * {Boolean} Gribmap layer is never a base layer.
-   */
-  isBaseLayer: false,
-
-  /* Property: canvas
-   * {DOMElement} Canvas element.
-   */
-  canvas: null,
-
-  /* List of windLevels */
-  windLevels: [],
-
-  /* define pixel grid */
-  arrowstep: VLM2Prefs.MapPrefs.WindArrowsSpacing,
-
-  /* offset from now */
-  timeoffset: 0,
-
-  /* current grib timestamp */
-  time: 0,
-  gribtimeBefore: 0,
-  gribtimeAfter: 0,
-
-  /* Property: griblist
-   * List of timestamp for gribs
-   */
-  griblist: null,
-  timeDelta: 6 * 3600,
-
-  /* Constructor: Gribmap.Layer
-   * Create a gribmap layer.
-   *
-   * Parameters:
-   * name - {String} Name of the Layer
-   * options - {Object} Hashtable of extra options to tag onto the layer
-   */
-  initialize: function initialize(name, options) {
-    var i;
-    OpenLayers.Layer.prototype.initialize.apply(this, arguments);
-    this.getGribList(); //Async call
-    //init resolutions
-
-    this.windLevels[0] = new Gribmap.WindLevel(0, 4, 120, 60, this);
-    this.windLevels[1] = new Gribmap.WindLevel(1, 2, 60, 30, this);
-    this.windLevels[2] = new Gribmap.WindLevel(2, 1, 20, 20, this);
-    this.canvas = document.createElement('canvas'); // code for IE browsers
-
-    if (typeof G_vmlCanvasManager !== 'undefined') {
-      G_vmlCanvasManager.initElement(this.canvas);
-    }
-
-    this.canvas.style.position = 'absolute'; // For some reason OpenLayers.Layer.setOpacity assumes there is
-    // an additional div between the layer's div and its contents.
-
-    var sub = document.createElement('div');
-    sub.appendChild(this.canvas);
-    this.div.appendChild(sub);
-  },
-  //Time management
-  addTimeOffset: function addTimeOffset(delta) {
-    this.timeoffset += delta;
-    this.setTimeSegmentFromOffset();
-  },
-  timereset: function timereset() {
-    this.addTimeOffset(-this.timeoffset);
-  },
-  timeforward: function timeforward() {
-    this.addTimeOffset(3600);
-  },
-  timebackward: function timebackward() {
-    this.addTimeOffset(-3600);
-  },
-  getGribList: function getGribList() {
-    var request = OpenLayers.Request.GET({
-      url: Gribmap.griblist_uribase,
-      async: true,
-      headers: {
-        'Accept': 'application/json'
-      },
-      callback: this.handleGribListReply,
-      scope: this,
-      events: function events(x) {
-        console.log("GribLayerEvt : " + e);
-      }
-    });
-  },
-  handleGribListReply: function handleGribListReply(request) {
-    if (request.status == 200) {
-      var rep = JSON.parse(request.responseText);
-      this.griblist = rep.grib_timestamps;
-      this.gribupdatetime = rep.update_time;
-      this.maxtime = Math.max.apply(null, this.griblist);
-      this.mintime = Math.min.apply(null, this.griblist);
-    }
-
-    var now = new Date();
-    this.setTimeSegment(now.getTime() / 1000.0);
-  },
-  setTimeSegmentFromOffset: function setTimeSegmentFromOffset() {
-    var now = new Date();
-    this.setTimeSegment(now.getTime() / 1000 + this.timeoffset);
-  },
-  isInTimeRange: function isInTimeRange(time) {
-    return time >= this.gribtimeBefore && time <= this.gribtimeAfter;
-  },
-  getGribTimeList: function getGribTimeList() {
-    var timelist = [];
-
-    if (this.griblist) {
-      for (var i = 0; i < this.griblist.length; i++) {
-        if (this.griblist[i] >= this.time - this.timeDelta && this.griblist[i] <= this.time + this.timeDelta) {
-          timelist.push(this.griblist[i]);
-        }
-      }
-    }
-
-    return timelist;
-  },
-  setTimeSegment: function setTimeSegment(time) {
-    time = Math.floor(time);
-    var i = 0;
-    var gribtimebefore = this.mintime;
-    var gribtimeafter = this.maxtime;
-
-    if (this.griblist) {
-      for (i = 0; i < this.griblist.length; i++) {
-        //delta = this.griblist[i] - time;
-        if (this.griblist[i] >= gribtimebefore && this.griblist[i] <= time) {
-          gribtimebefore = this.griblist[i];
-        }
-
-        if (this.griblist[i] <= gribtimeafter && this.griblist[i] >= time) {
-          gribtimeafter = this.griblist[i];
-        }
-      }
-    }
-
-    this.gribtimeBefore = gribtimebefore;
-    this.gribtimeAfter = gribtimeafter;
-    this.time = time;
-    this.redraw();
-  },
-  setGribLevel: function setGribLevel(bounds) {
-    //bounds in LATLON
-    var i;
-    var widthlon = Math.abs(bounds.left - bounds.right);
-    var heightlat = Math.abs(bounds.top - bounds.bottom);
-
-    for (i = this.windLevels.length - 1; i >= 0; i--) {
-      if (widthlon < 2 * this.windLevels[i].blocx && heightlat < 2 * this.windLevels[i].blocy) break;
-    }
-
-    this.gribLevel = Math.max(i, 0);
-    return i;
-  },
-  windAtPosition: function windAtPosition(latlon) {
-    return this.windLevels[this.gribLevel].getWindInfo(latlon.lat, latlon.lon);
-  },
-
-  /**
-   * Method: moveTo
-   *
-   * Parameters:
-   * bounds - {<OpenLayers.Bounds>}
-   * zoomChanged - {Boolean}
-   * dragging - {Boolean}
-   */
-  moveTo: function moveTo(bounds, zoomChanged, dragging) {
-    var windarea, bl;
-    OpenLayers.Layer.prototype.moveTo.apply(this, arguments); // The code is currently too slow to update the rendering during dragging.
-
-    if (dragging) return; //define region in pixel and in lat/lon
-
-    var posstart = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-    var poslimit = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom));
-    poslimit.x -= posstart.x;
-    poslimit.y -= posstart.y;
-    var boundsLonLat = bounds.transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-    new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-    );
-    var BigGrib = Math.abs(bounds.left - bounds.right) > 30 || Math.abs(bounds.top - bounds.bottom) > 30;
-    this.UpdateGribMap(BigGrib); //console.log("BigGrib"+BigGrib+" "+bounds.left+" "+bounds.right+" "+bounds.top+" "+bounds.bottom);
-    //canvas object
-
-    var ctx = this.canvas.getContext('2d'); // Unfortunately OpenLayers does not currently support layers that
-    // remain in a fixed position with respect to the screen location
-    // of the base layer, so this puts this layer manually back into
-    // that position using one point's offset as determined earlier.
-
-    ctx.canvas.style.left = posstart.x + 'px';
-    ctx.canvas.style.top = posstart.y + 'px';
-    ctx.canvas.width = poslimit.x;
-    ctx.canvas.height = poslimit.y; //Fix some feature of the canvas
-
-    this.drawContext(ctx); //Get griblevel // FIXME : should use the native zoom level
-
-    if (BigGrib) {
-      this.setGribLevel(boundsLonLat);
-      bl = this.windLevels[this.gribLevel].getWindAreas(boundsLonLat);
-
-      for (var i = 0; i < bl.length; i++) {
-        windarea = bl[i]; //la zone
-
-        if (!windarea.isLoaded(this.gribtimeBefore) || !windarea.isLoaded(this.gribtimeAfter)) continue; //pas chargÃ©, on passe
-        //Passe en sphÃ©rique
-
-        bounds = windarea.clone();
-        bounds.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-        new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
-        ); //passe en pixel
-
-        var start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-        var end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom)); //réaligne le premier pixel de la zone
-
-        start.x -= posstart.x;
-        start.y -= posstart.y;
-        end.x -= posstart.x;
-        end.y -= posstart.y; //aligne le dÃ©but des flÃªches a un multiple de la grille
-
-        start.x = Math.ceil(start.x / this.arrowstep) * this.arrowstep;
-        start.y = Math.ceil(start.y / this.arrowstep) * this.arrowstep; //On trace sur une partie visible
-
-        if (start.x < 0) start.x = 0;
-        if (start.y < 0) start.y = 0;
-        if (end.x > poslimit.x) end.x = poslimit.x;
-        if (end.y > poslimit.y) end.y = poslimit.y; //tracé proprement dit
-
-        this.drawWindAreaBig(start, end, windarea, ctx);
-      }
-    } else {
-      bounds.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-      new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
-      ); //passe en pixel
-
-      var _start = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.left, bounds.top));
-
-      var _end = this.map.getLayerPxFromLonLat(new OpenLayers.LonLat(bounds.right, bounds.bottom)); //réaligne le premier pixel de la zone
-
-
-      _start.x -= posstart.x;
-      _start.y -= posstart.y;
-      _end.x -= posstart.x;
-      _end.y -= posstart.y; //aligne le début des flêches a un multiple de la grille
-
-      _start.x = Math.ceil(_start.x / this.arrowstep) * this.arrowstep;
-      _start.y = Math.ceil(_start.y / this.arrowstep) * this.arrowstep; //On trace sur une partie visible
-
-      if (_start.x < 0) _start.x = 0;
-      if (_start.y < 0) _start.y = 0;
-      if (_end.x > poslimit.x) _end.x = poslimit.x;
-      if (_end.y > poslimit.y) _end.y = poslimit.y; //tracé proprement dit
-
-      this.drawWindAreaSmall(_start, _end, windarea, ctx);
-    }
-  },
-  drawWindArea: function drawWindArea(p, poslimit, windarea, ctx, InCallBack) {
-    throw "Deprecated drawWindArea";
-  },
-  drawWindAreaBig: function drawWindAreaBig(p, poslimit, windarea, ctx, InCallBack) {
-    var bstep = this.arrowstep;
-    var wante = windarea.windArrays[this.gribtimeBefore];
-    var wpost = windarea.windArrays[this.gribtimeAfter]; //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
-
-    while (p.x < poslimit.x) {
-      p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
-
-      while (p.y < poslimit.y) {
-        //passage du pixel en latlon (géographique)
-        var LonLat = this.map.getLonLatFromPixel(p).transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-        new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-        ); //Récupère le vent et l'affiche en l'absence d'erreur
-
-        var _winfo = void 0;
-
-        try {
-          _winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-          this.drawWind(ctx, p.x, p.y, _winfo);
-        } catch (error) {
-          if (ErrorCatching > 0) {
-            alert(LonLat + " / " + _winfo.wspeed + " / " + _winfo.wheading);
-            ErrorCatching -= 1;
-          }
-        }
-
-        p.y += bstep;
-      }
-
-      p.x += bstep;
-    }
-  },
-  UpdateGribMap: function UpdateGribMap(BigGrib) {
-    if (BigGrib) {
-      $(".BigGrib").css("display", "block");
-      $(".SmallGrib").css("display", "none");
-    } else {
-      $(".BigGrib").css("display", "none");
-      $(".SmallGrib").css("display", "block");
-    }
-  },
-  drawWindAreaSmall: function drawWindAreaSmall(p, poslimit, windarea, ctx, InCallBack) {
-    var _this = this;
-
-    var bstep = this.arrowstep; //var wante = windarea.windArrays[this.gribtimeBefore];
-    //var wpost = windarea.windArrays[this.gribtimeAfter];
-    //FIXME: faire un bench pour comparer le cas de re création d'objet Pixel()
-
-    while (p.x < poslimit.x) {
-      p.y = 0; //FIXME: pourquoi 0 ? on devrait stocker p.y et le réinjecter...
-
-      while (p.y < poslimit.y) {
-        //passage du pixel en latlon (géographique)
-        var LonLat = this.map.getLonLatFromPixel(p).transform(new OpenLayers.Projection("EPSG:900913"), // from Spherical Mercator Projection
-        new OpenLayers.Projection("EPSG:4326") // transform to WGS 1984
-        ); //Récupère le vent et l'affiche en l'absence d'erreur
-
-        try {
-          (function () {
-            //winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
-            //this.drawWind(ctx, p.x, p.y, winfo);
-            var self = _this;
-            var MI = GribMgr.WindAtPointInTime(new Date(_this.time * 1000), LonLat.lat, LonLat.lon,
-            /* jshint -W083*/
-            InCallBack ? null : function () {
-              self.drawWindArea(p, poslimit, windarea, ctx, true);
-            });
-            /*jshint +W083*/
-
-            if (MI) {
-              var _winfo2 = new Wind(MI.Speed, MI.Heading);
-
-              _this.drawWind(ctx, p.x, p.y, _winfo2);
-            } else {//InCallBack=true;
-            }
-          })();
-        } catch (error) {
-          if (ErrorCatching > 0) {
-            alert(LonLat + " / " + winfo.wspeed + " / " + winfo.wheading);
-            ErrorCatching -= 1;
-          }
-        }
-
-        p.y += bstep;
-      }
-
-      p.x += bstep;
-    }
-  },
-  // return the color based on the wind speed
-  // parameters:
-  // wspeed: the wind speed.
-  windSpeedToColor: function windSpeedToColor(wspeed) {
-    if (wspeed <= 10.0) {
-      if (wspeed <= 3.0) {
-        if (wspeed <= 1.0) {
-          return '#FFFFFF';
-        } else {
-          return '#9696E1';
-        }
-      } else {
-        if (wspeed <= 6.0) {
-          return '#508CCD';
-        } else {
-          return '#3C64B4';
-        }
-      }
-    } else {
-      if (wspeed <= 33.0) {
-        if (wspeed <= 21.0) {
-          if (wspeed <= 15.0) {
-            return '#41B464';
-          } else {
-            return '#B4CD0A';
-          }
-        } else {
-          if (wspeed <= 26.0) {
-            return '#D2D216';
-          } else {
-            return '#E1D220';
-          }
-        }
-      } else {
-        if (wspeed <= 40.0) {
-          return '#FFB300';
-        }
-
-        if (wspeed <= 47.0) {
-          return '#FF6F00';
-        }
-
-        if (wspeed <= 55.0) {
-          return '#FF2B00';
-        }
-
-        if (wspeed <= 63.0) {
-          return '#E60000';
-        }
-      }
-    }
-
-    return '#7F0000';
-  },
-  drawWindTriangle: function drawWindTriangle(context, x, y, pos_wind) {
-    var a, b, c, bary, offset;
-    var wheading;
-    var wspdlog;
-    var windarrow_minsize = 4; // FIXME external constants ?
-
-    var windarrow_minwidth = 0;
-    wspdlog = Math.log(pos_wind.wspeed + 1);
-    wheading = (pos_wind.wheading + 180.0) % 360.0;
-    a = new Gribmap.Pixel(x, y);
-    b = new Gribmap.Pixel(x, y);
-    c = new Gribmap.Pixel(x, y);
-    a.moveByPolar(windarrow_minsize + wspdlog * 4.0, wheading);
-    b.moveByPolar(windarrow_minwidth + wspdlog, wheading - 90.0);
-    c.moveByPolar(windarrow_minwidth + wspdlog, wheading + 90.0);
-    bary = new Gribmap.Pixel((a.x + b.x + c.x) / 3, (a.y + b.y + c.y) / 3);
-    offset = new Gribmap.Pixel(x - bary.x, y - bary.y);
-    a.moveBy(offset);
-    b.moveBy(offset);
-    c.moveBy(offset);
-    context.toffset = offset;
-    context.midx = (a.x + x) / 2;
-    context.beginPath();
-    context.moveTo(a.x, a.y);
-    context.lineTo(b.x, b.y);
-    context.lineTo(c.x, c.y);
-    context.fill();
-    context.stroke();
-    context.closePath();
-  },
-  // draw wind information around the arrow
-  // parameters:
-  // context, the canvas context
-  // x, y, the coordinates in the window
-  // wspeed, wheading, wind speed and wind heading
-  drawWindText: function drawWindText(context, x, y, pos_wind) {
-    var text_x = context.midx;
-    var text_y = y + context.toffset.y;
-    var wind_direction = pos_wind.wheading;
-
-    if (wind_direction > 90.0 && wind_direction < 270.0) {
-      //  text_y +=10;
-      text_y += 13 + 5 * Math.cos(wind_direction * Math.PI / 180.0);
-    } else {
-      //  text_y -=5;
-      text_y -= 7 - 5 * Math.cos(wind_direction * Math.PI / 180.0);
-    }
-
-    context.fillText("" + Math.round(pos_wind.wspeed) + "/" + Math.round(wind_direction) + "°", text_x, text_y);
-  },
-  drawContext: function drawContext(context) {
-    context.font = '8px sans-serif';
-    context.textAlign = 'center';
-    context.strokeStyle = '#fff';
-    context.lineWidth = 0.5;
-  },
-  // draw wind information, wind arrows and text in the color relative
-  // to the wind speed
-  // parameters:
-  // context, the canvas context
-  // x, y, the coordinates in the window
-  // wspeed, wheading, wind speed and wind heading
-  drawWind: function drawWind(context, x, y, pos_wind) {
-    if (pos_wind === null) {
-      return;
-    }
-
-    context.fillStyle = this.windSpeedToColor(pos_wind.wspeed);
-    this.drawWindTriangle(context, x, y, pos_wind);
-    context.fillStyle = '#626262';
-    this.drawWindText(context, x, y, pos_wind);
-  },
-  CLASS_NAME: 'Gribmap.Layer'
-});
-/**
- * Class: Gribmap.ControlWind
- *
- * Inherits from:
- *  - <OpenLayers.Control.ControlSwitch>
- */
-
-Gribmap.ControlWind = OpenLayers.Class(OpenLayers.Control.ControlSwitch, {
-  label: "Gribmap.ControlWind",
-  timeOffsetSpan: null,
-  initialize: function initialize(options) {
-    OpenLayers.Control.prototype.initialize.apply(this, arguments);
-  },
-  drawBaseDiv: function drawBaseDiv() {
-    this.baseDiv.appendChild(this.imgButton("west-mini.png", "Gribmap_Backward", this.onClickBackward));
-    this.timeOffsetSpan = this.textButton(" 0h ", "reset", this.onClickReset);
-    this.baseDiv.appendChild(this.timeOffsetSpan);
-    this.baseDiv.appendChild(this.imgButton("east-mini.png", "Gribmap_Forward", this.onClickForward));
-  },
-  imgButton: function imgButton(imgname, imgid, callback) {
-    var imgLocation = OpenLayers.Util.getImagesLocation();
-    var sz = new OpenLayers.Size(18, 18); // maximize button div
-
-    var img = imgLocation + imgname;
-    var button = OpenLayers.Util.createAlphaImageDiv(imgid, null, sz, img, "relative");
-    OpenLayers.Event.observe(button, "click", OpenLayers.Function.bind(callback, this, img));
-    return button;
-  },
-  textButton: function textButton(text, textid, callback) {
-    var textSpan = document.createElement("span");
-    OpenLayers.Element.addClass(textSpan, textid);
-    textSpan.innerHTML = text;
-    OpenLayers.Event.observe(textSpan, "click", OpenLayers.Function.bind(callback, this, textSpan));
-    return textSpan;
-  },
-  getGribmapLayer: function getGribmapLayer() {
-    if (this.gribmap) return this.gribmap;
-
-    if (this.map) {
-      this.gribmap = this.map.getLayersByClass("Gribmap.Layer")[0];
-    }
-
-    return this.gribmap;
-  },
-  onClickReset: function onClickReset(ctrl, evt) {
-    OpenLayers.Event.stop(evt ? evt : window.event);
-    l = this.getGribmapLayer();
-    l.timereset();
-    this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
-  },
-  onClickForward: function onClickForward(ctrl, evt) {
-    OpenLayers.Event.stop(evt ? evt : window.event);
-    l = this.getGribmapLayer();
-    l.timeforward();
-    this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
-  },
-  onClickBackward: function onClickBackward(ctrl, evt) {
-    OpenLayers.Event.stop(evt ? evt : window.event);
-    l = this.getGribmapLayer();
-    l.timebackward();
-    this.timeOffsetSpan.innerHTML = " " + Math.round(l.timeoffset / 3600) + "h ";
-  },
-  CLASS_NAME: "Gribmap.ControlWind hidden"
-});
-/**
- * Class: Gribmap.MousePosition
- *
- * Inherits from:
- *  - <OpenLayers.Control.MousePosition>
- */
-
-Gribmap.MousePosition = OpenLayers.Class(OpenLayers.Control.MousePosition, {
-  gribmap: null,
-  initialize: function initialize(options) {
-    OpenLayers.Control.prototype.initialize.apply(this, arguments);
-  },
-  formatOutput: function formatOutput(lonLat) {
-    var retstr = OpenLayers.Util.getFormattedLonLat(lonLat.lat, 'lat', 'dms');
-    retstr += " " + OpenLayers.Util.getFormattedLonLat(lonLat.lon, 'lon', 'dms');
-    GM_Pos = lonLat; // Fix me, use map date for showing the grib info
-
-    var MI = GribMgr.WindAtPointInTime(new Date(), lonLat.lat, lonLat.lon);
-
-    if (MI) {
-      var _winfo3 = new Wind(MI.Speed, MI.Heading);
-
-      retstr += " - " + Math.round(MI.Speed * 10) / 10 + "n / " + Math.round(MI.Heading * 10) / 10 + "°";
-    }
-
-    return retstr;
-  },
-  CLASS_NAME: "Gribmap.MousePosition"
-}); // Create and init a manager
 
 var GribMgr = new VLM2GribManager();
 GribMgr.Init();
@@ -4028,7 +2746,7 @@ $(document).ready(function () {
   //InitXmpp();
   // Init maps
 
-  OLInit(); // Load translation strings
+  LeafletInit(); // Load translation strings
 
   InitLocale(); // Init Menus()
 
@@ -4044,6 +2762,20 @@ $(document).ready(function () {
 
   GetFlagsList();
 });
+
+function LeafletInit() {
+  //Init map object
+  map = L.map('jVlmMap').setView([51.505, -0.09], 13); // Tiles
+
+  var src = tilesUrlArray[0];
+  L.tileLayer(src, {
+    attribution: '',
+    maxZoom: 20,
+    tms: false,
+    id: 'vlm'
+  }).addTo(map);
+}
+
 var PasswordResetInfo = [];
 
 function HandlePasswordResetLink(PwdKey) {
@@ -4182,15 +2914,18 @@ function OtherRaceRankingLoaded() {
   SortRanking("RAC");
   console.log("off race ranking loaded");
 }
+/* function OLInit()
+{
 
-function OLInit() {
   //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
   OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
+
   var default_latitude = 45.5;
   var default_longitude = -30.0;
   var default_zoom = 4;
 
-  if (typeof VLM2Prefs !== "undefined" && VLM2Prefs.MapPrefs) {
+  if (typeof VLM2Prefs !== "undefined" && VLM2Prefs.MapPrefs)
+  {
     default_zoom = VLM2Prefs.MapPrefs.MapZoomLevel;
   }
 
@@ -4200,68 +2935,82 @@ function OLInit() {
     transitionEffect: "resize",
     //pour passer l'ante-meridien sans souci
     wrapDateLine: true,
-    events: function events(x) {
+    events: function(x)
+    {
       console.log("TileLayer : " + x);
     }
-  }; //MAP
-
-  map = new OpenLayers.Map("jVlmMap", //identifiant du div contenant la carte openlayer
-  MapOptions); //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
-
-  var urlArray = tilesUrlArray;
-  var vlm = new OpenLayers.Layer.XYZ("VLM Layer", urlArray, layeroption); //Le calque de vent made in Vlm
-
-  var grib = new Gribmap.Layer("Gribmap", layeroption); //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
-  //La minimap utilise le layer VLM
-  //var vlmoverview = vlm.clone();
-  //Et on ajoute tous les layers à la map.
-  //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-
-  map.addLayers([grib, VLMBoatsLayer, vlm]); //map.addLayers([vlm, grib]); //FOR DEBUG
-  //Controle l'affichage des layers
-  //map.addControl(new OpenLayers.Control.LayerSwitcher());
-  //Controle l'affichage de la position ET DU VENT de la souris
-
-  map.addControl(new Gribmap.MousePosition({
-    gribmap: grib
-  })); //Affichage de l'échelle
-
-  map.addControl(new OpenLayers.Control.ScaleLine()); //Le Permalink
-  //FIXME: éviter que le permalink soit masqué par la minimap ?
-
-  map.addControl(new OpenLayers.Control.Permalink('permalink')); //FIXME: Pourquoi le graticule est il un control ?
-
-  map.addControl(new OpenLayers.Control.Graticule()); //Navigation clavier
-
-  map.addControl(new OpenLayers.Control.KeyboardDefaults()); //Le panel de vent
-
-  GribWindController = new Gribmap.ControlWind();
-  map.addControl(GribWindController); //Evite que le zoom molette surcharge le js du navigateur
-
-  var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
-  nav.handlers.wheel.cumulative = false;
-  nav.handlers.wheel.interval = 100; //Minimap
-
-  /*var ovmapOptions = {
-    maximized: true,
-    layers: [vlmoverview]
   };
-  map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
-  */
-  //Pour centrer quand on a pas de permalink dans l'url
 
-  if (!map.getCenter()) {
-    // Don't do this if argparser already did something...
-    var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
-    lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
-    map.setCenter(lonlat, default_zoom);
-  } // Click handler
+  //MAP
 
+  /*map = new OpenLayers.Map(
+    "jVlmMap", //identifiant du div contenant la carte openlayer
+    MapOptions);
 
-  var click = new OpenLayers.Control.Click();
-  map.addControl(click);
-  click.activate();
-}
+  //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
+  var urlArray = tilesUrlArray;
+
+  var vlm = new OpenLayers.Layer.XYZ(
+    "VLM Layer",
+    urlArray,
+    layeroption
+  );*/
+//Le calque de vent made in Vlm
+// TODO
+//var grib = new Gribmap.Layer("Gribmap", layeroption);
+//grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
+//La minimap utilise le layer VLM
+//var vlmoverview = vlm.clone();
+//Et on ajoute tous les layers à la map.
+//map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
+//map.addLayers([grib, VLMBoatsLayer, vlm]);
+//map.addLayers([vlm, grib]); //FOR DEBUG
+//Controle l'affichage des layers
+//map.addControl(new OpenLayers.Control.LayerSwitcher());
+//Controle l'affichage de la position ET DU VENT de la souris
+
+/*map.addControl(new Gribmap.MousePosition(
+  {
+    gribmap: grib
+  }));
+*/
+//Affichage de l'échelle
+//map.addControl(new OpenLayers.Control.ScaleLine());
+//Le Permalink
+//FIXME: éviter que le permalink soit masqué par la minimap ?
+//   map.addControl(new OpenLayers.Control.Permalink('permalink'));
+//   //FIXME: Pourquoi le graticule est il un control ?
+//   map.addControl(new OpenLayers.Control.Graticule());
+//   //Navigation clavier
+//   map.addControl(new OpenLayers.Control.KeyboardDefaults());
+//   //Le panel de vent
+//   GribWindController = new Gribmap.ControlWind();
+//   map.addControl(GribWindController);
+//   //Evite que le zoom molette surcharge le js du navigateur
+//   var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
+//   nav.handlers.wheel.cumulative = false;
+//   nav.handlers.wheel.interval = 100;
+//   //Minimap
+//   /*var ovmapOptions = {
+//     maximized: true,
+//     layers: [vlmoverview]
+//   };
+//   map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
+// */
+//   //Pour centrer quand on a pas de permalink dans l'url
+//   if (!map.getCenter())
+//   {
+//     // Don't do this if argparser already did something...
+//     var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
+//     lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
+//     map.setCenter(lonlat, default_zoom);
+//   }
+//   // Click handler
+//   var click = new OpenLayers.Control.Click();
+//   map.addControl(click);
+//   click.activate();
+//} */
+
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm) {
   if (InitPasswordReset && !RC_PwdResetReq) {
@@ -5217,13 +3966,12 @@ function DrawPolar(RaceInfo) {
 
     for (var index in PolarLine) {
       if (PolarLine[index]) {
-        var _l = PolarLine[index];
+        var l = PolarLine[index];
         index = parseInt(index, 10);
         var a = index * dAlpha;
-        var y = Cy + S * _l * Math.cos(a);
-        var x = Cx + S * _l * Math.sin(a);
-
-        var VMG = Math.cos(a + VMGAngle) * _l;
+        var y = Cy + S * l * Math.cos(a);
+        var x = Cx + S * l * Math.sin(a);
+        var VMG = Math.cos(a + VMGAngle) * l;
 
         if (RedZone && VMG <= PrevL) {
           Context.stroke();
@@ -8921,8 +7669,9 @@ const BOAT_POLAR = 4
 
 
 var VLM_COORDS_FACTOR = 1000; // Default map options
+// TODO Map Options
 
-var MapOptions = {
+/* var MapOptions = {
   // Projection mercator sphÃ©rique (type google map ou osm)
   projection: new OpenLayers.Projection("EPSG:900913"),
   // projection pour l'affichage des coordonnÃ©es
@@ -8930,58 +7679,83 @@ var MapOptions = {
   // unitÃ© : le m
   units: "m",
   maxResolution: 156543.0339,
-  maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
-  restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34, 40037508.34, 20037508.34),
-  eventListeners: {
+  maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+    20037508.34, 20037508.34),
+  restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34,
+    40037508.34, 20037508.34),
+  eventListeners:
+  {
     "zoomend": HandleMapZoomEnd,
     "featureover": HandleFeatureOver,
     "featureout": HandleFeatureOut,
     "featureclick": HandleFeatureClick,
     "mousemove": HandleMapMouseMove
   }
-}; // Click handler for handling map clicks.
+}; */
+// Click handler for handling map clicks.
 
-OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
-  defaultHandlerOptions: {
+/* OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
+{
+  defaultHandlerOptions:
+  {
     'single': true,
     'double': false,
     'pixelTolerance': 0,
     'stopSingle': false,
     'stopDouble': false
   },
-  initialize: function initialize(options) {
-    this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions);
-    OpenLayers.Control.prototype.initialize.apply(this, arguments);
-    this.handler = new OpenLayers.Handler.Click(this, {
-      'click': this.trigger
-    }, this.handlerOptions);
-  },
-  trigger: function trigger(e) {
-    var MousePos = GetVLMPositionFromClick(e.xy);
 
-    if (_typeof(GM_Pos) !== "object" || !GM_Pos) {
+  initialize: function(options)
+  {
+    this.handlerOptions = OpenLayers.Util.extend(
+    {}, this.defaultHandlerOptions);
+    OpenLayers.Control.prototype.initialize.apply(
+      this, arguments
+    );
+    this.handler = new OpenLayers.Handler.Click(
+      this,
+      {
+        'click': this.trigger
+      }, this.handlerOptions
+    );
+  },
+
+  trigger: function(e)
+  {
+
+    var MousePos = GetVLMPositionFromClick(e.xy);
+    if (typeof GM_Pos !== "object" || !GM_Pos)
+    {
       GM_Pos = {};
     }
-
     GM_Pos.lon = MousePos.Lon.Value;
     GM_Pos.lat = MousePos.Lat.Value;
-    HandleMapMouseMove(e);
 
-    if (SetWPPending) {
-      if (WPPendingTarget === "WP") {
+    HandleMapMouseMove(e);
+    if (SetWPPending)
+    {
+      if (WPPendingTarget === "WP")
+      {
         CompleteWPSetPosition(e, e.xy);
         HandleCancelSetWPOnClick();
-      } else if (WPPendingTarget === "AP") {
+      }
+      else if (WPPendingTarget === "AP")
+      {
         SetWPPending = false;
         _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy);
         $("#AutoPilotSettingForm").modal("show");
         RefreshAPDialogFields();
-      } else {
+
+      }
+      else
+      {
         SetWPPending = false;
       }
     }
   }
-}); // Control to handle drag of User WP
+
+}); */
+// Control to handle drag of User WP
 // var DrawControl = null;
 
 var BoatFeatures = [];
@@ -9456,205 +8230,251 @@ function CompleteWPSetPosition(feature, pixel) {
 
   SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest); //DrawControl.deactivate();
   //DrawControl.activate();
-} // allow testing of specific renderers via "?renderer=Canvas", etc
-
-
+}
+/*// al low testing of specific renderers via "?renderer=Canvas", etc
 var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
-renderer = renderer ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-var VectorStyles = new OpenLayers.Style({
+renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+ */
+
+/* var VectorStyles = new OpenLayers.Style(
+{
   strokeColor: "#00FF00",
   strokeOpacity: 1,
   strokeWidth: 3,
   fillColor: "#FF5500",
   fillOpacity: 0.5
-}, {
-  rules: [new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: 'buoy'
+},
+{
+  rules: [
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: 'buoy'
+      }),
+      symbolizer:
+      {
+        // if a feature matches the above filter, use this symbolizer
+        label: "${name}\n${Coords}",
+        pointerEvents: "visiblePainted",
+        fontSize: "1.5em",
+        labelAlign: "left", //${align}",
+        labelXOffset: "4", //${xOffset}",
+        labelYOffset: "-12", //${yOffset}",
+        externalGraphic: "images/${GateSide}",
+        graphicWidth: 36,
+        graphicHeight: 72,
+        fillOpacity: 1
+      }
     }),
-    symbolizer: {
-      // if a feature matches the above filter, use this symbolizer
-      label: "${name}\n${Coords}",
-      pointerEvents: "visiblePainted",
-      fontSize: "1.5em",
-      labelAlign: "left",
-      //${align}",
-      labelXOffset: "4",
-      //${xOffset}",
-      labelYOffset: "-12",
-      //${yOffset}",
-      externalGraphic: "images/${GateSide}",
-      graphicWidth: 36,
-      graphicHeight: 72,
-      fillOpacity: 1
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "crossonce"
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "crossonce"
+      }),
+      symbolizer:
+      {
+        xOffset: 1,
+        yOffset: 1,
+        strokeColor: "black",
+        strokeOpacity: 0.5,
+        strokeWidth: 4,
+        strokeDashstyle: "dashdot"
+      }
     }),
-    symbolizer: {
-      xOffset: 1,
-      yOffset: 1,
-      strokeColor: "black",
-      strokeOpacity: 0.5,
-      strokeWidth: 4,
-      strokeDashstyle: "dashdot"
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "marker"
-    }),
-    symbolizer: {
-      externalGraphic: "images/${BuoyName}",
-      rotation: "${CrossingDir}",
-      graphicWidth: 48
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "NextGate"
-    }),
-    symbolizer: {
-      strokeColor: "#FF0000",
-      strokeOpacity: 1,
-      strokeWidth: 3
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "ValidatedGate"
-    }),
-    symbolizer: {
-      strokeColor: "#0000FF",
-      strokeOpacity: 0.5,
-      strokeWidth: 3
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "FutureGate"
-    }),
-    symbolizer: {
-      strokeColor: "#FF0000",
-      strokeOpacity: 0.5,
-      strokeWidth: 3
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "ForecastPos"
-    }),
-    symbolizer: {
-      strokeColor: "black",
-      strokeOpacity: 0.75,
-      strokeWidth: 1 //strokeDashstyle: "dot"
 
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "HistoryTrack"
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "marker"
+      }),
+      symbolizer:
+      {
+        externalGraphic: "images/${BuoyName}",
+        rotation: "${CrossingDir}",
+        graphicWidth: 48
+      }
     }),
-    symbolizer: {
-      strokeOpacity: 0.5,
-      strokeWidth: 2,
-      strokeColor: "${TrackColor}"
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "Polar"
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "NextGate"
+      }),
+      symbolizer:
+      {
+        strokeColor: "#FF0000",
+        strokeOpacity: 1,
+        strokeWidth: 3
+      }
     }),
-    symbolizer: {
-      strokeColor: "white",
-      strokeOpacity: 0.75,
-      strokeWidth: 2
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: "ExclusionZone"
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "ValidatedGate"
+      }),
+      symbolizer:
+      {
+        strokeColor: "#0000FF",
+        strokeOpacity: 0.5,
+        strokeWidth: 3
+      }
     }),
-    symbolizer: {
-      strokeColor: "red",
-      strokeOpacity: 0.95,
-      strokeWidth: 2,
-      fillColor: "#FF5500",
-      fillOpacity: 0.5
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    filter: new OpenLayers.Filter.Comparison({
-      type: OpenLayers.Filter.Comparison.EQUAL_TO,
-      property: "type",
-      // the "foo" feature attribute
-      value: 'opponent'
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "FutureGate"
+      }),
+      symbolizer:
+      {
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.5,
+        strokeWidth: 3
+      }
     }),
-    symbolizer: {
-      // if a feature matches the above filter, use this symbolizer
-      label: "${name}",
-      //pointRadius: 6,
-      pointerEvents: "visiblePainted",
-      // label with \n linebreaks
-      //fontColor: "${favColor}",
-      fontSize: "1.5em",
-      //fontFamily: "Courier New, monospace",
-      //fontWeight: "bold",
-      labelAlign: "left",
-      //${align}",
-      labelXOffset: "4",
-      //${xOffset}",
-      labelYOffset: "-12",
-      //${yOffset}",
-      //labelOutlineColor: "white",
-      //labelOutlineWidth: 2
-      externalGraphic: "images/opponent${IsTeam}.png",
-      graphicWidth: "${IsFriend}",
-      fillOpacity: 1
-    }
-  }), new OpenLayers.Rule({
-    // a rule contains an optional filter
-    elsefilter: true,
-    symbolizer: {}
-  })]
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "ForecastPos"
+      }),
+      symbolizer:
+      {
+        strokeColor: "black",
+        strokeOpacity: 0.75,
+        strokeWidth: 1
+        //strokeDashstyle: "dot"
+      }
+    }),
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "HistoryTrack"
+      }),
+      symbolizer:
+      {
+        strokeOpacity: 0.5,
+        strokeWidth: 2,
+        strokeColor: "${TrackColor}"
+      }
+    }),
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "Polar"
+      }),
+      symbolizer:
+      {
+        strokeColor: "white",
+        strokeOpacity: 0.75,
+        strokeWidth: 2
+      }
+    }),
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: "ExclusionZone"
+      }),
+      symbolizer:
+      {
+        strokeColor: "red",
+        strokeOpacity: 0.95,
+        strokeWidth: 2,
+        fillColor: "#FF5500",
+        fillOpacity: 0.5
+      }
+    }),
+    new OpenLayers.Rule(
+    {
+      // a rule contains an optional filter
+      filter: new OpenLayers.Filter.Comparison(
+      {
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: "type", // the "foo" feature attribute
+        value: 'opponent'
+      }),
+      symbolizer:
+      {
+        // if a feature matches the above filter, use this symbolizer
+        label: "${name}",
+        //pointRadius: 6,
+        pointerEvents: "visiblePainted",
+        // label with \n linebreaks
+
+        //fontColor: "${favColor}",
+        fontSize: "1.5em",
+        //fontFamily: "Courier New, monospace",
+        //fontWeight: "bold",
+        labelAlign: "left", //${align}",
+        labelXOffset: "4", //${xOffset}",
+        labelYOffset: "-12", //${yOffset}",
+        //labelOutlineColor: "white",
+        //labelOutlineWidth: 2
+        externalGraphic: "images/opponent${IsTeam}.png",
+        graphicWidth: "${IsFriend}",
+        fillOpacity: 1
+      }
+    }),
+    new OpenLayers.Rule(
+      {
+        // a rule contains an optional filter
+        elsefilter: true,
+        symbolizer:
+        {}
+      }
+
+    )
+
+
+  ]
 });
-var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks", {
+ */
+// TODO Boats & tracks layer
+
+/* var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
+{
   styleMap: new OpenLayers.StyleMap(VectorStyles),
   renderers: renderer
-}); // Background load controller from ext html file
+}); */
+// Background load controller from ext html file
+
 
 function GetBoatControllerPopup() {
   $("#BoatController").load("BoatController.html");

@@ -81,7 +81,7 @@ function normalizeLongitude360(longitude)
 }
 
 // point in the canvas - subclassed from OL.Pixel to make transform easier
-Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel,
+/*Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel,
 {
   moveBy: function(offset)
   {
@@ -98,11 +98,11 @@ Gribmap.Pixel = OpenLayers.Class(OpenLayers.Pixel,
   },
 
   CLASS_NAME: "Gribmap.Pixel"
-});
+});*/
 
 
 //Store information (windAreas, i.e. bloc of grib datas)
-Gribmap.WindLevel = OpenLayers.Class(
+/*Gribmap.WindLevel = OpenLayers.Class(
 {
   basestep: 0.5,
   gribLevel: 0,
@@ -239,11 +239,11 @@ Gribmap.WindLevel = OpenLayers.Class(
 
   CLASS_NAME: "Gribmap.WindLevel"
 
-});
+});*/
 
 
 //Wind array container
-Gribmap.WindArray = OpenLayers.Class(
+/*Gribmap.WindArray = OpenLayers.Class(
 {
   time: null,
   winddatas: null,
@@ -370,12 +370,12 @@ Gribmap.WindArray = OpenLayers.Class(
     });
   },
   CLASS_NAME: "Gribmap.WindArray"
-});
+});*/
 
 /* Class: WindArea
  */
 
-Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds,
+/*Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds,
 {
   windlevel: null, //pointer to WindLevel ?
   windArrays: null,
@@ -571,7 +571,7 @@ Gribmap.WindArea = OpenLayers.Class(OpenLayers.Bounds,
   },
 
   CLASS_NAME: "Gribmap.WindArea"
-});
+});*/
 
 /* Class: Gribmap.
 Layer

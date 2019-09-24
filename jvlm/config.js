@@ -14,7 +14,7 @@ var tilesUrlArray = ["https://c1.v-l-m.org/gshhstiles/${z}/${x}/${y}.png", "http
 
 if (webhost == 'vlm-dev.ddns.net')
 {
-  tilesUrlArray = '/cache/gshhstiles/${z}/${x}/${y}.png';
+  tilesUrlArray = ['https://vlm-dev.ddns.net/cache/gshhstiles/{z}/{x}/{y}.png'];
 
   WindGridServers = ['https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net', 'https://vlm-dev.ddns.net'];
 

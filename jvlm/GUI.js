@@ -90,7 +90,7 @@ $(document).ready(
     //InitXmpp();
 
     // Init maps
-    OLInit();
+    LeafletInit();
 
     // Load translation strings
     InitLocale();
@@ -115,6 +115,22 @@ $(document).ready(
 
   }
 );
+
+function LeafletInit()
+{
+  //Init map object
+  map = L.map('jVlmMap').setView([51.505, -0.09], 13);
+
+  // Tiles
+  let src = tilesUrlArray[0];
+  L.tileLayer( src ,
+  {
+    attribution: '',
+    maxZoom: 20,
+    tms: false,
+    id: 'vlm'
+  }).addTo(map);
+}
 
 let PasswordResetInfo = [];
 
@@ -217,15 +233,15 @@ function HandleVLMIndex(result)
   {
     $("#Ranking-Panel").show();
     let index;
-    let rank=1;
+    let rank = 1;
     for (index in result)
     {
       if (result[index])
       {
-        result[index].rank=rank;
+        result[index].rank = rank;
         rank++;
       }
-    }    
+    }
     BackupVLMIndexTable();
     VLMINdexFt.loadRows(result);
     $("#DivVlmIndex").removeClass("hidden");
@@ -269,7 +285,7 @@ function OtherRaceRankingLoaded()
   console.log("off race ranking loaded");
 }
 
-function OLInit()
+/* function OLInit()
 {
 
   //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
@@ -298,7 +314,7 @@ function OLInit()
 
   //MAP
 
-  map = new OpenLayers.Map(
+  /*map = new OpenLayers.Map(
     "jVlmMap", //identifiant du div contenant la carte openlayer
     MapOptions);
 
@@ -309,75 +325,76 @@ function OLInit()
     "VLM Layer",
     urlArray,
     layeroption
-  );
+  );*/
 
 
 
-  //Le calque de vent made in Vlm
-  var grib = new Gribmap.Layer("Gribmap", layeroption);
-  //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
+//Le calque de vent made in Vlm
+// TODO
+//var grib = new Gribmap.Layer("Gribmap", layeroption);
+//grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
 
-  //La minimap utilise le layer VLM
-  //var vlmoverview = vlm.clone();
+//La minimap utilise le layer VLM
+//var vlmoverview = vlm.clone();
 
-  //Et on ajoute tous les layers à la map.
-  //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-  map.addLayers([grib, VLMBoatsLayer, vlm]);
-  //map.addLayers([vlm, grib]); //FOR DEBUG
+//Et on ajoute tous les layers à la map.
+//map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
+//map.addLayers([grib, VLMBoatsLayer, vlm]);
+//map.addLayers([vlm, grib]); //FOR DEBUG
 
-  //Controle l'affichage des layers
-  //map.addControl(new OpenLayers.Control.LayerSwitcher());
+//Controle l'affichage des layers
+//map.addControl(new OpenLayers.Control.LayerSwitcher());
 
-  //Controle l'affichage de la position ET DU VENT de la souris
-  map.addControl(new Gribmap.MousePosition(
+//Controle l'affichage de la position ET DU VENT de la souris
+/*map.addControl(new Gribmap.MousePosition(
   {
     gribmap: grib
   }));
-
-  //Affichage de l'échelle
-  map.addControl(new OpenLayers.Control.ScaleLine());
-
-  //Le Permalink
-  //FIXME: éviter que le permalink soit masqué par la minimap ?
-  map.addControl(new OpenLayers.Control.Permalink('permalink'));
-
-  //FIXME: Pourquoi le graticule est il un control ?
-  map.addControl(new OpenLayers.Control.Graticule());
-
-  //Navigation clavier
-  map.addControl(new OpenLayers.Control.KeyboardDefaults());
-
-  //Le panel de vent
-
-  GribWindController = new Gribmap.ControlWind();
-  map.addControl(GribWindController);
-
-  //Evite que le zoom molette surcharge le js du navigateur
-  var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
-  nav.handlers.wheel.cumulative = false;
-  nav.handlers.wheel.interval = 100;
-
-  //Minimap
-  /*var ovmapOptions = {
-    maximized: true,
-    layers: [vlmoverview]
-  };
-  map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
 */
-  //Pour centrer quand on a pas de permalink dans l'url
-  if (!map.getCenter())
-  {
-    // Don't do this if argparser already did something...
-    var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
-    lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
-    map.setCenter(lonlat, default_zoom);
-  }
+//Affichage de l'échelle
+//map.addControl(new OpenLayers.Control.ScaleLine());
 
-  // Click handler
-  var click = new OpenLayers.Control.Click();
-  map.addControl(click);
-  click.activate();
-}
+//Le Permalink
+//FIXME: éviter que le permalink soit masqué par la minimap ?
+//   map.addControl(new OpenLayers.Control.Permalink('permalink'));
+
+//   //FIXME: Pourquoi le graticule est il un control ?
+//   map.addControl(new OpenLayers.Control.Graticule());
+
+//   //Navigation clavier
+//   map.addControl(new OpenLayers.Control.KeyboardDefaults());
+
+//   //Le panel de vent
+
+//   GribWindController = new Gribmap.ControlWind();
+//   map.addControl(GribWindController);
+
+//   //Evite que le zoom molette surcharge le js du navigateur
+//   var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
+//   nav.handlers.wheel.cumulative = false;
+//   nav.handlers.wheel.interval = 100;
+
+//   //Minimap
+//   /*var ovmapOptions = {
+//     maximized: true,
+//     layers: [vlmoverview]
+//   };
+//   map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
+// */
+//   //Pour centrer quand on a pas de permalink dans l'url
+//   if (!map.getCenter())
+//   {
+//     // Don't do this if argparser already did something...
+//     var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
+//     lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
+//     map.setCenter(lonlat, default_zoom);
+//   }
+
+//   // Click handler
+//   var click = new OpenLayers.Control.Click();
+//   map.addControl(click);
+//   click.activate();
+//} */
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm)
 {
@@ -2622,16 +2639,16 @@ function HandleMapMouseMove(e)
 
     if (GribMgr)
     {
-      let m =  moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
+      let m = moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
       let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
-      let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length-1] * 1000 + ")/");
+      let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length - 1] * 1000 + ")/");
       let span = moment.duration(ts_end.diff(ts_start));
       $("#MI_SrvrGribAge").text(m);
-      $("#MI_LocalGribAge").text(GetLocalUTCTime( ts_start.add(3.5,"h"),true,true));
-      $("#MI_LocalGribSpan").text("" + span.asHours() +" h");
+      $("#MI_LocalGribAge").text(GetLocalUTCTime(ts_start.add(3.5, "h"), true, true));
+      $("#MI_LocalGribSpan").text("" + span.asHours() + " h");
 
-      let now = new Date().getTime()/1000;
-      if ((now-ts_start.local().unix()) > 9.5*3600)
+      let now = new Date().getTime() / 1000;
+      if ((now - ts_start.local().unix()) > 9.5 * 3600)
       {
         $("#GribLoadOK").addClass("GribNotOK");
       }
@@ -2649,8 +2666,10 @@ function HandleMapMouseMove(e)
   }
 }
 
-function StartEstimateTimeout() {
-  ShowEstTimeOutHandle = setTimeout(function () {
+function StartEstimateTimeout()
+{
+  ShowEstTimeOutHandle = setTimeout(function()
+  {
     _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
     RefreshEstPosLabels(null);
     DrawBoat(_CurPlayer.CurBoat, false);
