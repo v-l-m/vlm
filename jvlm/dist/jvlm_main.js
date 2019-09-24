@@ -2705,7 +2705,8 @@ var SetWPPending = false;
 var WPPendingTarget = null;
 var GribWindController = null; //Global map object
 
-var map = null; // Ranking related globals
+var map = null;
+var VLMBoatsLayer = null; // Ranking related globals
 
 var Rankings = [];
 var PilototoFt = null;
@@ -2765,15 +2766,16 @@ $(document).ready(function () {
 
 function LeafletInit() {
   //Init map object
-  map = L.map('jVlmMap').setView([51.505, -0.09], 13); // Tiles
+  map = L.map('jVlmMap').setView([33.692, -118.292], 13); // Tiles
 
   var src = tilesUrlArray[0];
   L.tileLayer(src, {
-    attribution: '',
+    attribution: 'gshhsv2',
     maxZoom: 20,
     tms: false,
     id: 'vlm'
   }).addTo(map);
+  VLMBoatsLayer = map;
 }
 
 var PasswordResetInfo = [];
@@ -6304,6 +6306,46 @@ if (typeof jQuery === "undefined") {
   };
 })(jQuery);
 
+var BuoyMarker = L.Icon.extend({
+  options: {
+    iconSize: [36, 72],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -72]
+  }
+});
+var TrackWPMarker = L.Icon.extend({
+  options: {
+    iconSize: [48, 48],
+    iconAnchor: [24, 24],
+    iconUrl: 'images/WP_Marker.gif'
+  }
+});
+var BoatMarker = L.Icon.extend({
+  options: {
+    iconSize: [48, 48],
+    iconAnchor: [24, 24],
+    iconUrl: 'images/target.png'
+  }
+});
+
+function GetBuoyMarker(Buoy1) {
+  if (Buoy1) {
+    return new BuoyMarker({
+      iconUrl: 'images/Buoy1.png'
+    });
+  } else {
+    return new BuoyMarker({
+      iconUrl: 'images/Buoy2.png'
+    });
+  }
+}
+
+function GetBoatMarker() {}
+
+function GetTrackWPMarker() {
+  return new TrackWPMarker();
+}
+
 var _LocaleDict;
 
 var _EnDict;
@@ -7992,36 +8034,25 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
 
   var WP = null;
 
-  if (typeof Boat !== "undefined" && Boat && Boat.GetNextWPPosition) {
+  if (typeof Boat !== "undefined" && Boat) {
     WP = Boat.GetNextWPPosition();
   }
 
   if (typeof WP !== "undefined" && WP) {
-    //console.log ("WP : " + WP.Lon.Value);
-    var WPTransformed = new OpenLayers.Geometry.Point(WP.Lon.Value, WP.Lat.Value).transform(MapOptions.displayProjection, MapOptions.projection); // Waypoint marker    
-
-    var WPMarker = new OpenLayers.Feature.Vector(WPTransformed, {}, {
-      externalGraphic: 'images/WP_Marker.gif',
-      graphicHeight: 48,
-      graphicWidth: 48
-    });
+    // Track Waypoint marker    
+    var WPMarker = GetTrackWPMarker();
     BoatFeatures.push(WPMarker);
-    VLMBoatsLayer.addFeatures(WPMarker);
+    L.Marker([WP.Lat.Value, WP.Lon.Value], {
+      icon: WPMarker
+    }).addTo(VLMBoatsLayer);
   } // Boat Marker
 
 
   if (_typeof(Boat.VLMInfo) !== undefined && Boat.VLMInfo && (Boat.VLMInfo.LON || Boat.VLMInfo.LAT)) {
-    var Pos = new OpenLayers.Geometry.Point(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-    var PosTransformed = Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-    var BoatIcon = new OpenLayers.Feature.Vector(PosTransformed, {
-      "Id": Boat.IdBoat
-    }, {
-      externalGraphic: 'images/target.svg',
-      graphicHeight: 3 * ZFactor,
-      graphicWidth: 3 * ZFactor,
-      rotation: Boat.VLMInfo.HDG
-    });
-    VLMBoatsLayer.addFeatures(BoatIcon);
+    var BoatIcon = GetBoatMarker();
+    L.marker([Boat.VLMInfo.LAT, Boat.VLMInfo.LON], {
+      icon: BoatIcon
+    }).addTo(VLMBoatsLayer);
     BoatFeatures.push(BoatIcon); // Draw polar
 
     var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
@@ -8049,7 +8080,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
 
 
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0) {
-    var PointList = [];
+    var _PointList = [];
     var TrackLength = Boat.Track.length;
     var PrevLon = 99999;
     var LonOffSet = 0;
@@ -8062,9 +8093,12 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
       }
 
       PrevLon = P.Lon.Value;
-      var P1 = new OpenLayers.Geometry.Point(P.Lon.Value + LonOffSet, P.Lat.Value);
-      var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
-      PointList.push(P1_PosTransformed);
+
+      var _P = new OpenLayers.Geometry.Point(P.Lon.Value + LonOffSet, P.Lat.Value);
+
+      var P1_PosTransformed = _P.transform(MapOptions.displayProjection, MapOptions.projection);
+
+      _PointList.push(P1_PosTransformed);
     }
 
     var TrackColor = Boat.VLMInfo.COL;
@@ -8073,7 +8107,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
       TrackColor = "#" + TrackColor;
     }
 
-    var BoatTrack = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), {
+    var BoatTrack = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(_PointList), {
       "type": "HistoryTrack",
       "TrackColor": TrackColor
     });
@@ -8098,9 +8132,9 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
 
         _PrevLon = Est.Position.Lon.Value;
 
-        var _P = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + _LonOffSet, Est.Position.Lat.Value);
+        var _P2 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + _LonOffSet, Est.Position.Lat.Value);
 
-        var _P1_PosTransformed = _P.transform(MapOptions.displayProjection, MapOptions.projection);
+        var _P1_PosTransformed = _P2.transform(MapOptions.displayProjection, MapOptions.projection);
 
         Boat.Estimator.EstimatePoints[TrackIndex].push(_P1_PosTransformed);
       }
@@ -8134,8 +8168,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
 
           for (var PointIndex = 0; PointIndex < TLen; PointIndex++) {
             var k = Object.keys(T.DatePos)[PointIndex];
-            var _P2 = T.DatePos[k];
-            var Pi = new OpenLayers.Geometry.Point(_P2.lon, _P2.lat);
+            var _P3 = T.DatePos[k];
+            var Pi = new OpenLayers.Geometry.Point(_P3.lon, _P3.lat);
             var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection);
             TrackPoints.push(Pi_PosTransformed);
           }
@@ -8505,6 +8539,11 @@ var RaceGates = [];
 var Exclusions = [];
 
 function DrawRaceGates(RaceInfo, NextGate) {
+  if (typeof VLMBoatsLayer === "undefined" || !VLMBoatsLayer) {
+    // No drawingbefore loading the maps
+    return;
+  }
+
   if (typeof RaceGates !== "undefined" && RaceGates) {
     for (var index in RaceGates) {
       if (RaceGates[index]) {
@@ -8576,22 +8615,27 @@ function DrawRaceExclusionZones(Layer, Zones) {
 function DrawRaceExclusionZone(Layer, ExclusionZones, Zone) {
   var index;
   var PointList = [];
+  var HasZones = false;
 
   for (index in Zone) {
     if (Zone[index]) {
       var P = new OpenLayers.Geometry.Point(Zone[index][1], Zone[index][0]);
       var P_PosTransformed = P.transform(MapOptions.displayProjection, MapOptions.projection);
       PointList.push(P_PosTransformed);
+      HasZones = true;
     }
   }
 
-  var Attr = null;
-  Attr = {
-    type: "ExclusionZone"
-  };
-  var ExclusionZone = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(PointList)), Attr, null);
-  Layer.addFeatures(ExclusionZone);
-  ExclusionZones.push(ExclusionZone);
+  if (HasZones) {
+    // TODO Leaflet for Exclusion Zones
+    var Attr = null;
+    Attr = {
+      type: "ExclusionZone"
+    };
+    var ExclusionZone = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(PointList)), Attr, null);
+    Layer.addFeatures(ExclusionZone);
+    ExclusionZones.push(ExclusionZone);
+  }
 }
 
 function GetLonOffset(L1, L2) {
@@ -8609,33 +8653,34 @@ function GetLonOffset(L1, L2) {
 }
 
 function AddGateSegment(Layer, Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
-  var P1 = new OpenLayers.Geometry.Point(lon1, lat1);
-  var LonOffset = GetLonOffset(lon1, lon2);
-  var P2 = new OpenLayers.Geometry.Point(lon2 + LonOffset, lat2);
+  /*let P1 = new OpenLayers.Geometry.Point(lon1, lat1);
+  let LonOffset = GetLonOffset(lon1, lon2);
+  let P2 = new OpenLayers.Geometry.Point(lon2 + LonOffset, lat2);
   var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
   var P2_PosTransformed = P2.transform(MapOptions.displayProjection, MapOptions.projection);
   var PointList = [];
-  PointList.push(P1_PosTransformed);
+   PointList.push(P1_PosTransformed);
   PointList.push(P2_PosTransformed);
-  var Attr = null;
+   var Attr = null;
+  */
+  var Points = [[lat1, lon1], [lat2, lon2]];
+  var color = "";
+  var strokeOpacity = 1;
+  var strokeWidth = 3;
 
   if (IsNextWP) {
-    Attr = {
-      type: "NextGate"
-    };
+    color = "green";
   } else if (IsValidated) {
-    Attr = {
-      type: "ValidatedGate"
-    };
+    color = "blue";
   } else {
-    Attr = {
-      type: "FutureGate"
-    };
+    color = "red";
   }
 
-  var WP = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), Attr, null);
-  Layer.addFeatures(WP);
-  Gates.push(WP);
+  var WP = L.polyline(Points, {
+    color: 'red',
+    strole: strokeWidth,
+    opacity: strokeOpacity
+  }).addTo(Layer);
 
   if (GateType !== WP_DEFAULT) {
     // Debug testing of the geo calculation functions
@@ -8702,29 +8747,11 @@ function AddGateCenterMarker(Layer, Gates, Lon, Lat, Marker, Dir, IsIceGate) {
 }
 
 function AddBuoyMarker(Layer, Gates, Name, Lon, Lat, CW_Crossing) {
-  var WP_Coords = new VLMPosition(Lon, Lat);
-  var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
-  var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var WP;
-
-  if (CW_Crossing) {
-    WP = new OpenLayers.Feature.Vector(WP_PosTransformed, {
-      "name": Name,
-      "Coords": WP_Coords.ToString(),
-      "type": 'buoy',
-      "GateSide": "Buoy1.png"
-    });
-  } else {
-    WP = new OpenLayers.Feature.Vector(WP_PosTransformed, {
-      "name": Name,
-      "Coords": WP_Coords.ToString(),
-      "type": 'buoy',
-      "GateSide": "Buoy2.png"
-    });
-  }
-
-  Layer.addFeatures(WP);
+  var WP = GetBuoyMarker(CW_Crossing);
   Gates.push(WP);
+  L.marker([Lat, Lon], {
+    icon: WP
+  }).addTo(Layer).bindPopup(Name);
 }
 
 var PM_HEADING = 1;
