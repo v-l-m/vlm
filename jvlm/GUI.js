@@ -31,6 +31,7 @@ var GribWindController = null;
 
 //Global map object
 var map = null;
+var VLMBoatsLayer = null;
 
 // Ranking related globals
 var Rankings = [];
@@ -116,20 +117,23 @@ $(document).ready(
   }
 );
 
+
 function LeafletInit()
 {
   //Init map object
-  map = L.map('jVlmMap').setView([51.505, -0.09], 13);
+  map = L.map('jVlmMap').setView([ 33.692,-118.292], 13);
 
   // Tiles
   let src = tilesUrlArray[0];
-  L.tileLayer( src ,
+  L.tileLayer(src,
   {
     attribution: '',
     maxZoom: 20,
     tms: false,
     id: 'vlm'
   }).addTo(map);
+
+  VLMBoatsLayer = map;
 }
 
 let PasswordResetInfo = [];

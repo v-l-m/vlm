@@ -929,7 +929,7 @@ renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers
 });
  */
 
- // TODO Boats & tracks layer
+// TODO Boats & tracks layer
 /* var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
 {
   styleMap: new OpenLayers.StyleMap(VectorStyles),
@@ -966,6 +966,11 @@ var Exclusions = [];
 
 function DrawRaceGates(RaceInfo, NextGate)
 {
+  if (typeof VLMBoatsLayer === "undefined" || !VLMBoatsLayer)
+  {
+    // No drawingbefore loading the maps
+    return;
+  }
 
   if (typeof RaceGates !== "undefined" && RaceGates)
   {
@@ -1061,8 +1066,9 @@ function DrawRaceExclusionZones(Layer, Zones)
 function DrawRaceExclusionZone(Layer, ExclusionZones, Zone)
 {
 
-  var index;
-  var PointList = [];
+  let index;
+  let PointList = [];
+  let HasZones = false;
 
   for (index in Zone)
   {
@@ -1072,19 +1078,24 @@ function DrawRaceExclusionZone(Layer, ExclusionZones, Zone)
       var P_PosTransformed = P.transform(MapOptions.displayProjection, MapOptions.projection);
 
       PointList.push(P_PosTransformed);
+      HasZones = true;
     }
   }
-  var Attr = null;
 
-  Attr = {
-    type: "ExclusionZone"
-  };
-  var ExclusionZone = new OpenLayers.Feature.Vector(
-    new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(PointList)), Attr, null);
+  if (HasZones)
+  {
+    // TODO Leaflet for Exclusion Zones
+    var Attr = null;
 
-  Layer.addFeatures(ExclusionZone);
-  ExclusionZones.push(ExclusionZone);
+    Attr = {
+      type: "ExclusionZone"
+    };
+    var ExclusionZone = new OpenLayers.Feature.Vector(
+      new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(PointList)), Attr, null);
 
+    Layer.addFeatures(ExclusionZone);
+    ExclusionZones.push(ExclusionZone);
+  }
 }
 
 function GetLonOffset(L1, L2)
@@ -1110,7 +1121,7 @@ function GetLonOffset(L1, L2)
 
 function AddGateSegment(Layer, Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType)
 {
-  let P1 = new OpenLayers.Geometry.Point(lon1, lat1);
+  /*let P1 = new OpenLayers.Geometry.Point(lon1, lat1);
   let LonOffset = GetLonOffset(lon1, lon2);
   let P2 = new OpenLayers.Geometry.Point(lon2 + LonOffset, lat2);
   var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
@@ -1121,30 +1132,26 @@ function AddGateSegment(Layer, Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValida
   PointList.push(P2_PosTransformed);
 
   var Attr = null;
-
+  */
+  let Points=[[lat1,lon1],[lat2,lon2]];
+  let color="";
+  let strokeOpacity= 1;
+  let strokeWidth= 3;
   if (IsNextWP)
   {
-    Attr = {
-      type: "NextGate"
-    };
+    color="green";
   }
   else if (IsValidated)
   {
-    Attr = {
-      type: "ValidatedGate"
-    };
+    color="blue";
   }
   else
   {
-    Attr = {
-      type: "FutureGate"
-    };
+    color="red";
   }
-  var WP = new OpenLayers.Feature.Vector(
-    new OpenLayers.Geometry.LineString(PointList), Attr, null);
 
-  Layer.addFeatures(WP);
-  Gates.push(WP);
+  var WP = L.polyline(Points, {color: 'red', strole:strokeWidth, opacity:strokeOpacity}).addTo(Layer);
+
   if (GateType !== WP_DEFAULT)
   {
     // Debug testing of the geo calculation functions
@@ -1235,35 +1242,10 @@ function AddGateCenterMarker(Layer, Gates, Lon, Lat, Marker, Dir, IsIceGate)
 
 function AddBuoyMarker(Layer, Gates, Name, Lon, Lat, CW_Crossing)
 {
-  var WP_Coords = new VLMPosition(Lon, Lat);
-  var WP_Pos = new OpenLayers.Geometry.Point(WP_Coords.Lon.Value, WP_Coords.Lat.Value);
-  var WP_PosTransformed = WP_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var WP;
-
-  if (CW_Crossing)
-  {
-    WP = new OpenLayers.Feature.Vector(WP_PosTransformed,
-    {
-      "name": Name,
-      "Coords": WP_Coords.ToString(),
-      "type": 'buoy',
-      "GateSide": "Buoy1.png"
-    });
-  }
-  else
-  {
-    WP = new OpenLayers.Feature.Vector(WP_PosTransformed,
-    {
-      "name": Name,
-      "Coords": WP_Coords.ToString(),
-      "type": 'buoy',
-      "GateSide": "Buoy2.png"
-    });
-  }
-
-
-  Layer.addFeatures(WP);
+  let WP = GetBuoyMarker(CW_Crossing);
+  
   Gates.push(WP);
+  L.marker([Lat,Lon], {icon: WP}).addTo(Layer).bindPopup(Name);
 }
 
 const PM_HEADING = 1;
@@ -1452,7 +1434,7 @@ function LoadRankings(RaceId, CallBack)
     return;
   }*/
 
-  $.get("/cache/rankings/rnk_" + RaceId + ".json"/*?d=" + (new Date().getTime())*/,
+  $.get("/cache/rankings/rnk_" + RaceId + ".json" /*?d=" + (new Date().getTime())*/ ,
     function(result)
     {
       if (result)
