@@ -29,7 +29,7 @@
   {
     var $icalobject;
 
-    function __construct() 
+    function __construct($RaceTypeFilter) 
     {
       /*$this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
                       "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() ) OR ( closetime > UNIX_TIMESTAMP() ) ) ".
@@ -38,8 +38,18 @@
                       "FROM `racespreview` ".
                       "WHERE deptime > UNIX_TIMESTAMP() )";*/
       $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
-                      "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() - 15 * 24 * 3600 ) OR ( closetime > UNIX_TIMESTAMP() + 7 * 24 * 3600) ) ".
-                      " ORDER BY started ASC, deptime ASC, closetime ASC ) ".
+                      "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() - 15 * 24 * 3600 ) OR ( closetime > UNIX_TIMESTAMP() + 7 * 24 * 3600) ) ";
+
+      if ($RaceTypeFilter !== null)
+      {
+        $this->query .= " and ( racetype=".$RaceTypeFilter." ) ";
+      }
+      else
+      {
+        echo "empty $RaceTypeFilter \n";
+      }
+
+      $this->query .=" ORDER BY started ASC, deptime ASC, closetime ASC ) ".
                       "UNION ( SELECT deptime, deptime+3600 as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".
                       "FROM `racespreview` ".
                       "WHERE deptime > UNIX_TIMESTAMP() )";
