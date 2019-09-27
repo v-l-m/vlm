@@ -49,6 +49,7 @@
 
      var Gate = this.RaceInfo.races_waypoints[NWP];
 
+     // Loop to look for next racing gate. ICE_Gate are not used to AutoWP routing
      do {
        // Make sure gate type is handled as a number
        if (typeof Gate === "string")
@@ -68,8 +69,8 @@
 
      } while (Gate.wpformat & WP_ICE_GATE);
 
-     var P1 = new VLMPosition(Gate.longitude1, Gate.latitude1);
-     var P2 = {};
+     let P1 = new VLMPosition(Gate.longitude1, Gate.latitude1);
+     let P2 = {};
      if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
      {
        P2 = new VLMPosition(Gate.longitude2, Gate.latitude2);

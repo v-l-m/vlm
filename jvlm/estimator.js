@@ -510,7 +510,8 @@ function Estimator(Boat)
       {
         if (this.EstimateMapFeatures[index])
         {
-          VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
+          // Todo Handle estimate track
+          //VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
         }
       }
       this.EstimateMapFeatures = [];
@@ -518,7 +519,8 @@ function Estimator(Boat)
 
     if (Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value))
     {
-      let Position = Estimate.Position;
+      // TODO Handle estimate drawing
+      /* let Position = Estimate.Position;
       let EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
       let EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection);
 
@@ -553,7 +555,7 @@ function Estimator(Boat)
 
         this.EstimateMapFeatures.push(BoatPolar);
         VLMBoatsLayer.addFeatures(BoatPolar);
-      }
+      } */
     }
   };
 

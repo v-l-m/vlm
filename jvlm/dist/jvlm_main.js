@@ -792,41 +792,48 @@ function Estimator(Boat) {
     // Track Estimate closest point to mousemove
     if (this.EstimateMapFeatures) {
       for (var index in this.EstimateMapFeatures) {
-        if (this.EstimateMapFeatures[index]) {
-          VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
+        if (this.EstimateMapFeatures[index]) {// Todo Handle estimate track
+          //VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
         }
       }
 
       this.EstimateMapFeatures = [];
     }
 
-    if (Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value)) {
-      var Position = Estimate.Position;
-      var EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
-      var EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection); // Estimate point marker
+    if (Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value)) {// TODO Handle estimate drawing
 
-      var Marker = new OpenLayers.Feature.Vector(EstPos_Transformed, {}, {
-        externalGraphic: 'images/target.svg',
-        opacity: 0.8,
-        graphicHeight: map.zoom * 2,
-        graphicWidth: map.zoom * 2,
-        rotation: Estimate.Heading
-      });
+      /* let Position = Estimate.Position;
+      let EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
+      let EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection);
+        // Estimate point marker
+      var Marker = new OpenLayers.Feature.Vector(
+        EstPos_Transformed,
+        {},
+        {
+          externalGraphic: 'images/target.svg',
+          opacity: 0.8,
+          graphicHeight: map.zoom * 2,
+          graphicWidth: map.zoom * 2,
+          rotation: Estimate.Heading
+        }
+      );
       VLMBoatsLayer.addFeatures(Marker);
       this.EstimateMapFeatures.push(Marker);
-
-      if (typeof Estimate.Meteo !== "undefined" && Estimate.Meteo) {
+        if (typeof Estimate.Meteo !== "undefined" && Estimate.Meteo)
+      {
         var scale = VLM2Prefs.MapPrefs.PolarVacCount;
         var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
         var Polar = [];
-        BuildPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
-        var BoatPolar = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(Polar), {
-          "type": "Polar",
-          "WindDir": Estimate.Meteo.Heading
-        });
-        this.EstimateMapFeatures.push(BoatPolar);
+          BuildPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
+        var BoatPolar = new OpenLayers.Feature.Vector(
+          new OpenLayers.Geometry.LineString(Polar),
+          {
+            "type": "Polar",
+            "WindDir": Estimate.Meteo.Heading
+          });
+          this.EstimateMapFeatures.push(BoatPolar);
         VLMBoatsLayer.addFeatures(BoatPolar);
-      }
+      } */
     }
   };
 }
@@ -2705,8 +2712,7 @@ var SetWPPending = false;
 var WPPendingTarget = null;
 var GribWindController = null; //Global map object
 
-var map = null;
-var VLMBoatsLayer = null; // Ranking related globals
+var map = null; // Ranking related globals
 
 var Rankings = [];
 var PilototoFt = null;
@@ -2766,16 +2772,17 @@ $(document).ready(function () {
 
 function LeafletInit() {
   //Init map object
-  map = L.map('jVlmMap').setView([33.692, -118.292], 13); // Tiles
+  map = L.map('jVlmMap').setView([0, 0], 13); // Tiles
 
-  var src = tilesUrlArray[0];
+  var src = tileUrlSrv;
   L.tileLayer(src, {
     attribution: 'gshhsv2',
     maxZoom: 20,
     tms: false,
-    id: 'vlm'
+    id: 'vlm',
+    detectRetina: true,
+    subdomains: tilesUrlArray
   }).addTo(map);
-  VLMBoatsLayer = map;
 }
 
 var PasswordResetInfo = [];
@@ -6310,7 +6317,7 @@ var BuoyMarker = L.Icon.extend({
   options: {
     iconSize: [36, 72],
     iconAnchor: [18, 36],
-    popupAnchor: [0, -72]
+    popupAnchor: [0, -36]
   }
 });
 var TrackWPMarker = L.Icon.extend({
@@ -6324,7 +6331,8 @@ var BoatMarker = L.Icon.extend({
   options: {
     iconSize: [48, 48],
     iconAnchor: [24, 24],
-    iconUrl: 'images/target.png'
+    iconUrl: 'images/target.png',
+    rotationOrigin: [24, 24]
   }
 });
 
@@ -6340,11 +6348,70 @@ function GetBuoyMarker(Buoy1) {
   }
 }
 
-function GetBoatMarker() {}
+function GetBoatMarker() {
+  return new BoatMarker();
+}
 
 function GetTrackWPMarker() {
   return new TrackWPMarker();
-}
+} // LeafletMarkerRotation from 
+//https://github.com/bbecquet/Leaflet.RotatedMarker/blob/master/leaflet.rotatedMarker.js
+
+
+(function () {
+  // save these original methods before they are overwritten
+  var proto_initIcon = L.Marker.prototype._initIcon;
+  var proto_setPos = L.Marker.prototype._setPos;
+  var oldIE = L.DomUtil.TRANSFORM === 'msTransform';
+  L.Marker.addInitHook(function () {
+    var iconOptions = this.options.icon && this.options.icon.options;
+    var iconAnchor = iconOptions && this.options.icon.options.iconAnchor;
+
+    if (iconAnchor) {
+      iconAnchor = iconAnchor[0] + 'px ' + iconAnchor[1] + 'px';
+    }
+
+    this.options.rotationOrigin = this.options.rotationOrigin || iconAnchor || 'center bottom';
+    this.options.rotationAngle = this.options.rotationAngle || 0; // Ensure marker keeps rotated during dragging
+
+    this.on('drag', function (e) {
+      e.target._applyRotation();
+    });
+  });
+  L.Marker.include({
+    _initIcon: function _initIcon() {
+      proto_initIcon.call(this);
+    },
+    _setPos: function _setPos(pos) {
+      proto_setPos.call(this, pos);
+
+      this._applyRotation();
+    },
+    _applyRotation: function _applyRotation() {
+      if (this.options.rotationAngle) {
+        this._icon.style[L.DomUtil.TRANSFORM + 'Origin'] = this.options.rotationOrigin;
+
+        if (oldIE) {
+          // for IE 9, use the 2D rotation
+          this._icon.style[L.DomUtil.TRANSFORM] = 'rotate(' + this.options.rotationAngle + 'deg)';
+        } else {
+          // for modern browsers, prefer the 3D accelerated version
+          this._icon.style[L.DomUtil.TRANSFORM] += ' rotateZ(' + this.options.rotationAngle + 'deg)';
+        }
+      }
+    },
+    setRotationAngle: function setRotationAngle(angle) {
+      this.options.rotationAngle = angle;
+      this.update();
+      return this;
+    },
+    setRotationOrigin: function setRotationOrigin(origin) {
+      this.options.rotationOrigin = origin;
+      this.update();
+      return this;
+    }
+  });
+})();
 
 var _LocaleDict;
 
@@ -7289,7 +7356,7 @@ function Boat(vlmboat) {
       return null;
     }
 
-    var Gate = this.RaceInfo.races_waypoints[NWP];
+    var Gate = this.RaceInfo.races_waypoints[NWP]; // Loop to look for next racing gate. ICE_Gate are not used to AutoWP routing
 
     do {
       // Make sure gate type is handled as a number
@@ -7702,13 +7769,6 @@ function GetCountryFlagImg(Title, CountryIndex) {
 // VLMBoat layer handling displaying vlm boats, traj
 //
 
-/*const BOAT_ICON = 0
-const BOAT_WP_MARKER = 1
-const BOAT_TRACK = 2
-const BOAT_FORECAST_TRACK = 3
-const BOAT_POLAR = 4
-*/
-
 
 var VLM_COORDS_FACTOR = 1000; // Default map options
 // TODO Map Options
@@ -7800,7 +7860,6 @@ var VLM_COORDS_FACTOR = 1000; // Default map options
 // Control to handle drag of User WP
 // var DrawControl = null;
 
-var BoatFeatures = [];
 var OppPopups = [];
 var StartSetWPOnClick = false;
 
@@ -7878,8 +7937,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             GetRaceExclusionsFromServer(Boat);
           } else {
             //Redraw gates and exclusions from cache
-            DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
-            DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
+            DrawRaceGates(Boat);
+            DrawRaceExclusionZones(Boat.Exclusions);
           } // Get boat track for the last 24h
 
 
@@ -7914,8 +7973,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     UpdateInMenuDockingBoatInfo(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
     DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
-    DrawRaceExclusionZones(VLMBoatsLayer, Boat.Exclusions);
+    DrawRaceGates(Boat);
+    DrawRaceExclusionZones(Boat.Exclusions);
   }
 }
 
@@ -7973,7 +8032,7 @@ function GetRaceExclusionsFromServer(Boat) {
 
       Polygons.push(CurPolyPointsList);
       Boat.Exclusions = Polygons;
-      DrawRaceExclusionZones(VLMBoatsLayer, Polygons);
+      DrawRaceExclusionZones(Polygons);
     }
   });
 }
@@ -7982,7 +8041,7 @@ function GetRaceInfoFromServer(Boat, TargetTab) {
   $.get("/ws/raceinfo/desc.php?idrace=" + Boat.VLMInfo.RAC + "&v=" + Boat.VLMInfo.VER, function (result) {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
-    DrawRaceGates(Boat.RaceInfo, Boat.VLMInfo.NWP);
+    DrawRaceGates(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
 }
@@ -8005,6 +8064,23 @@ function DrawBoat(Boat, CenterMapOnBoat) {
   DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat, 100, Boat, DeferredCenterValue);
 }
 
+function GetRaceFeatures(Boat) {
+  if (!Boat) {
+    throw "Should not GetRaceFeature unless a boat is defined";
+  }
+
+  if (typeof Boat.RaceMapFeatures === "undefined") {
+    Boat.RaceMapFeatures = [];
+  }
+
+  if (!Boat.RaceMapFeatures[Boat.VLMInfo.RAC]) {
+    // Instanciate feature structure for race
+    Boat.RaceMapFeatures[Boat.VLMInfo.RAC] = {};
+  }
+
+  return Boat.RaceMapFeatures[Boat.VLMInfo.RAC];
+}
+
 function ActualDrawBoat(Boat, CenterMapOnBoat) {
   var ZFactor = map.zoom; //console.log("ClearDrawBoat " + CenterMapOnBoat + " Z level "+ );
 
@@ -8019,19 +8095,17 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
       // Ignore call, if no boat is provided...
       return;
     }
-  } // Remove features, before recreate and re-add
-  // Can't figure how to move/update the features properly
-
-
-  for (var index in BoatFeatures) {
-    // Beurk, but does the job anyways
-    if (BoatFeatures[index]) {
-      VLMBoatsLayer.removeFeatures(BoatFeatures[index]);
-    }
   }
 
-  BoatFeatures = []; //WP Marker
+  if (typeof Boat === "undefined" || !Boat) {
+    // Should not be there
+    return;
+  }
 
+  var RaceFeatures = GetRaceFeatures(Boat);
+  RaceFeatures = Boat.RaceMapFeatures[Boat.VLMInfo.RAC]; //WP Marker
+
+  var WPFeature = RaceFeatures.TrackWP;
   var WP = null;
 
   if (typeof Boat !== "undefined" && Boat) {
@@ -8039,42 +8113,57 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
   }
 
   if (typeof WP !== "undefined" && WP) {
-    // Track Waypoint marker    
-    var WPMarker = GetTrackWPMarker();
-    BoatFeatures.push(WPMarker);
-    L.Marker([WP.Lat.Value, WP.Lon.Value], {
-      icon: WPMarker
-    }).addTo(VLMBoatsLayer);
+    if (WPFeature) {
+      WPFeature.setLatLng([WP.Lat.Value, WP.Lon.Value]);
+    } else {
+      // Track Waypoint marker    
+      var WPMarker = GetTrackWPMarker();
+      RaceFeatures.TrackWP = L.marker([WP.Lat.Value, WP.Lon.Value], {
+        icon: WPMarker
+      }).addTo(map);
+    }
   } // Boat Marker
 
 
   if (_typeof(Boat.VLMInfo) !== undefined && Boat.VLMInfo && (Boat.VLMInfo.LON || Boat.VLMInfo.LAT)) {
-    var BoatIcon = GetBoatMarker();
-    L.marker([Boat.VLMInfo.LAT, Boat.VLMInfo.LON], {
-      icon: BoatIcon
-    }).addTo(VLMBoatsLayer);
-    BoatFeatures.push(BoatIcon); // Draw polar
+    var BoatIcon = RaceFeatures.BoatMarker;
+
+    if (BoatIcon) {
+      BoatIcon.setLatLng([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
+      BoatIcon.setRotationAngle(Boat.VLMInfo.HDG);
+    } else {
+      BoatIcon = GetBoatMarker();
+      RaceFeatures.BoatMarker = L.marker([Boat.VLMInfo.LAT, Boat.VLMInfo.LON], {
+        icon: BoatIcon,
+        rotationAngle: Boat.VLMInfo.HDG
+      }).addTo(map);
+    } // Draw polar
+
 
     var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
     var Polar = []; // MakePolar in a 200x200 square
     //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
 
-    if (typeof map !== "undefined" && map) {
-      var BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed); //var scale = 50 * map.resolution;
-
-      var scale = VLM2Prefs.MapPrefs.PolarVacCount;
-      var StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-      BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, new Date(Boat.VLMInfo.LUP * 1000), function () {
+    /* if (typeof map !== "undefined" && map)
+    {
+      let BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
+      //var scale = 50 * map.resolution;
+      let scale = VLM2Prefs.MapPrefs.PolarVacCount;
+      let StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
+       BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, new Date(Boat.VLMInfo.LUP * 1000), function()
+      {
         DrawBoat(Boat, CenterMapOnBoat);
-      }); //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
-
-      var BoatPolar = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(Polar), {
-        "type": "Polar",
-        "WindDir": Boat.VLMInfo.TWD
       });
-      BoatFeatures.push(BoatPolar);
+      //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
+       var BoatPolar = new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.LineString(Polar),
+        {
+          "type": "Polar",
+          "WindDir": Boat.VLMInfo.TWD
+        });
+       BoatFeatures.push(BoatPolar);
       VLMBoatsLayer.addFeatures(BoatPolar);
-    }
+    } */
   } //console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
 
@@ -8085,20 +8174,16 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
     var PrevLon = 99999;
     var LonOffSet = 0;
 
-    for (var _index6 = 0; _index6 < TrackLength; _index6++) {
-      var P = Boat.Track[_index6];
+    for (var index = 0; index < TrackLength; index++) {
+      var P = Boat.Track[index]; // Todo Handle AnteMeridien
 
-      if (PrevLon !== 99999) {
+      /*if (PrevLon !== 99999)
+      {
         LonOffSet += GetLonOffset(PrevLon, P.Lon.Value);
       }
+      PrevLon = P.Lon.Value;*/
 
-      PrevLon = P.Lon.Value;
-
-      var _P = new OpenLayers.Geometry.Point(P.Lon.Value + LonOffSet, P.Lat.Value);
-
-      var P1_PosTransformed = _P.transform(MapOptions.displayProjection, MapOptions.projection);
-
-      _PointList.push(P1_PosTransformed);
+      _PointList.push([P.Lat.Value, P.Lon.Value]);
     }
 
     var TrackColor = Boat.VLMInfo.COL;
@@ -8107,12 +8192,16 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
       TrackColor = "#" + TrackColor;
     }
 
-    var BoatTrack = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(_PointList), {
-      "type": "HistoryTrack",
-      "TrackColor": TrackColor
-    });
-    VLMBoatsLayer.addFeatures(BoatTrack);
-    BoatFeatures.push(BoatTrack);
+    var TrackFeature = RaceFeatures.BoatTrack;
+
+    if (TrackFeature) {
+      TrackFeature.setLatLngs(_PointList);
+    } else {
+      RaceFeatures.BoatTrack = L.polyline(_PointList, {
+        "type": "HistoryTrack",
+        "TrackColor": TrackColor
+      }).addTo(map);
+    }
   } // Forecast Track
 
 
@@ -8122,9 +8211,9 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
     var _PrevLon = 99999;
     var _LonOffSet = 0;
 
-    for (var _index7 in Boat.Estimator.EstimateTrack) {
-      if (Boat.Estimator.EstimateTrack[_index7]) {
-        var Est = Boat.Estimator.EstimateTrack[_index7];
+    for (var _index6 in Boat.Estimator.EstimateTrack) {
+      if (Boat.Estimator.EstimateTrack[_index6]) {
+        var Est = Boat.Estimator.EstimateTrack[_index6];
 
         if (_PrevLon !== 99999) {
           _LonOffSet += GetLonOffset(_PrevLon, Est.Position.Lon.Value);
@@ -8132,19 +8221,19 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
 
         _PrevLon = Est.Position.Lon.Value;
 
-        var _P2 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + _LonOffSet, Est.Position.Lat.Value);
+        var _P = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + _LonOffSet, Est.Position.Lat.Value);
 
-        var _P1_PosTransformed = _P2.transform(MapOptions.displayProjection, MapOptions.projection);
+        var P1_PosTransformed = _P.transform(MapOptions.displayProjection, MapOptions.projection);
 
-        Boat.Estimator.EstimatePoints[TrackIndex].push(_P1_PosTransformed);
+        Boat.Estimator.EstimatePoints[TrackIndex].push(P1_PosTransformed);
       }
     }
   }
 
   if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints) {
-    for (var _index8 in Boat.Estimator.EstimatePoints) {
-      if (Boat.Estimator.EstimatePoints[_index8]) {
-        var TrackPointList = Boat.Estimator.EstimatePoints[_index8];
+    for (var _index7 in Boat.Estimator.EstimatePoints) {
+      if (Boat.Estimator.EstimatePoints[_index7]) {
+        var TrackPointList = Boat.Estimator.EstimatePoints[_index7];
         var TrackForecast = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(TrackPointList), {
           "type": "ForecastPos"
         });
@@ -8155,7 +8244,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
   } // opponents  
 
 
-  DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures); // Draw OppTracks, if any is selected
+  DrawOpponents(Boat); // Draw OppTracks, if any is selected
 
   if (typeof Boat.OppTrack !== "undefined" && Object.keys(Boat.OppTrack).length > 0) {
     for (var _TrackIndex in Boat.OppTrack) {
@@ -8168,8 +8257,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
 
           for (var PointIndex = 0; PointIndex < TLen; PointIndex++) {
             var k = Object.keys(T.DatePos)[PointIndex];
-            var _P3 = T.DatePos[k];
-            var Pi = new OpenLayers.Geometry.Point(_P3.lon, _P3.lat);
+            var _P2 = T.DatePos[k];
+            var Pi = new OpenLayers.Geometry.Point(_P2.lon, _P2.lat);
             var Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection);
             TrackPoints.push(Pi_PosTransformed);
           }
@@ -8189,18 +8278,9 @@ function ActualDrawBoat(Boat, CenterMapOnBoat) {
   }
 
   if (CenterMapOnBoat && typeof Boat.VLMInfo !== "undefined" && Boat.VLMInfo) {
-    // Set Map Center to current boat position
-    var l = new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT).transform(MapOptions.displayProjection, MapOptions.projection); // Fix Me : find a way to use a proper zoom factor (dist to next WP??)
-
-    if (isNaN(l.lat) || isNaN(l.lon)) {
-      var i = 0;
-    }
-
     if (typeof map !== "undefined" && map) {
-      map.setCenter(l);
+      map.setView([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
     }
-  } else if (CenterMapOnBoat) {
-    var BkpPt = 1;
   }
 
   console.log("ActualDrawBoatComplete");
@@ -8535,38 +8615,44 @@ var WP_CROSS_ANTI_CLOCKWISE = 1 << 9;
 /* for future releases */
 
 var WP_CROSS_ONCE = 1 << 10;
-var RaceGates = [];
 var Exclusions = [];
 
-function DrawRaceGates(RaceInfo, NextGate) {
-  if (typeof VLMBoatsLayer === "undefined" || !VLMBoatsLayer) {
-    // No drawingbefore loading the maps
+function DrawRaceGates(Boat) {
+  if (typeof Boat === "undefined" || !Boat || !Boat.RaceInfo) {
+    // Not Ready to draw
     return;
   }
 
-  if (typeof RaceGates !== "undefined" && RaceGates) {
-    for (var index in RaceGates) {
-      if (RaceGates[index]) {
-        VLMBoatsLayer.removeFeatures(RaceGates[index]);
-      }
-    }
-  } // Loop all gates
-
+  var RaceInfo = Boat.RaceInfo;
+  var NextGate = Boat.RaceInfo.NWP;
+  var RaceFeature = GetRaceFeatures(Boat); // Loop all gates
 
   if (_typeof(RaceInfo) !== undefined && RaceInfo && typeof RaceInfo.races_waypoints !== "undefined" && RaceInfo.races_waypoints) {
-    for (var _index9 in RaceInfo.races_waypoints) {
-      if (RaceInfo.races_waypoints[_index9]) {
-        // Draw a single race gates
-        var WP = RaceInfo.races_waypoints[_index9]; // Fix coords scales
+    for (var index in RaceInfo.races_waypoints) {
+      if (!RaceFeature.Gates) {
+        RaceFeature.Gates = [];
+      }
+
+      if (!RaceFeature.Gates[index]) {
+        RaceFeature.Gates[index] = {};
+      }
+
+      var GateFeatures = RaceFeature.Gates[index];
+
+      if (RaceInfo.races_waypoints[index]) {
+        var WPMarker = GateFeatures.Buoy1; // Draw a single race gates
+
+        var WP = RaceInfo.races_waypoints[index]; // Fix coords scales
 
         NormalizeRaceInfo(RaceInfo);
         var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE); // Draw WP1
 
-        AddBuoyMarker(VLMBoatsLayer, RaceGates, "WP" + _index9 + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate); // Second buoy (if any)
+        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate); // Second buoy (if any)
 
         if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS) {
           // Add 2nd buoy marker
-          AddBuoyMarker(VLMBoatsLayer, RaceGates, "", WP.longitude2, WP.latitude2, !cwgate);
+          var _WPMarker = GateFeatures.Buoy2;
+          GateFeatures.Buoy2 = AddBuoyMarker(_WPMarker, "", WP.longitude2, WP.latitude2, !cwgate);
         } else {
           // No Second buoy, compute segment end
           var P = new VLMPosition(WP.longitude1, WP.latitude1);
@@ -8588,28 +8674,31 @@ function DrawRaceGates(RaceInfo, NextGate) {
         } // Draw Gate Segment
 
 
-        _index9 = parseInt(_index9, 10);
+        index = parseInt(index, 10);
         NextGate = parseInt(NextGate, 10);
-        AddGateSegment(VLMBoatsLayer, RaceGates, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, NextGate === _index9, _index9 < NextGate, WP.wpformat & WP_GATE_KIND_MASK);
+        AddGateSegment(GateFeatures, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, NextGate === index, index < NextGate, WP.wpformat & WP_GATE_KIND_MASK);
       }
     }
   }
 }
 
-function DrawRaceExclusionZones(Layer, Zones) {
-  var index;
+function DrawRaceExclusionZones(Zones) {// Todo draw exclusion zone
 
-  for (index in Exclusions) {
-    if (Exclusions[index]) {
+  /* let index;
+   for (index in Exclusions)
+  {
+    if (Exclusions[index])
+    {
       Layer.removeFeatures(Exclusions[index]);
     }
   }
-
-  for (index in Zones) {
-    if (Zones[index]) {
+   for (index in Zones)
+  {
+    if (Zones[index])
+    {
       DrawRaceExclusionZone(Layer, Exclusions, Zones[index]);
     }
-  }
+  } */
 }
 
 function DrawRaceExclusionZone(Layer, ExclusionZones, Zone) {
@@ -8652,35 +8741,30 @@ function GetLonOffset(L1, L2) {
   return 0;
 }
 
-function AddGateSegment(Layer, Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
-  /*let P1 = new OpenLayers.Geometry.Point(lon1, lat1);
-  let LonOffset = GetLonOffset(lon1, lon2);
-  let P2 = new OpenLayers.Geometry.Point(lon2 + LonOffset, lat2);
-  var P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
-  var P2_PosTransformed = P2.transform(MapOptions.displayProjection, MapOptions.projection);
-  var PointList = [];
-   PointList.push(P1_PosTransformed);
-  PointList.push(P2_PosTransformed);
-   var Attr = null;
-  */
+function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType) {
   var Points = [[lat1, lon1], [lat2, lon2]];
-  var color = "";
-  var strokeOpacity = 1;
-  var strokeWidth = 3;
 
-  if (IsNextWP) {
-    color = "green";
-  } else if (IsValidated) {
-    color = "blue";
+  if (GateFeatures.Segment) {
+    Segment.setLatLngs(Points);
   } else {
-    color = "red";
-  }
+    var color = "";
+    var strokeOpacity = 1;
+    var strokeWidth = 3;
 
-  var WP = L.polyline(Points, {
-    color: 'red',
-    strole: strokeWidth,
-    opacity: strokeOpacity
-  }).addTo(Layer);
+    if (IsNextWP) {
+      color = "green";
+    } else if (IsValidated) {
+      color = "blue";
+    } else {
+      color = "red";
+    }
+
+    var WP = L.polyline(Points, {
+      color: color,
+      strole: strokeWidth,
+      opacity: strokeOpacity
+    }).addTo(map);
+  }
 
   if (GateType !== WP_DEFAULT) {
     // Debug testing of the geo calculation functions
@@ -8709,11 +8793,12 @@ function AddGateSegment(Layer, Gates, lon1, lat1, lon2, lat2, IsNextWP, IsValida
 
     if (GateType & WP_CROSS_ONCE) {
       // Draw the segment again as dashed line for cross once gates
-      WP = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), {
+      var _WP = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(PointList), {
         type: "crossonce"
       }, null);
-      Layer.addFeatures(WP);
-      Gates.push(WP);
+
+      Layer.addFeatures(_WP);
+      Gates.push(_WP);
     }
   }
 }
@@ -8746,12 +8831,16 @@ function AddGateCenterMarker(Layer, Gates, Lon, Lat, Marker, Dir, IsIceGate) {
   Gates.push(Marker);
 }
 
-function AddBuoyMarker(Layer, Gates, Name, Lon, Lat, CW_Crossing) {
+function AddBuoyMarker(Marker, Name, Lon, Lat, CW_Crossing) {
   var WP = GetBuoyMarker(CW_Crossing);
-  Gates.push(WP);
-  L.marker([Lat, Lon], {
-    icon: WP
-  }).addTo(Layer).bindPopup(Name);
+
+  if (Marker) {
+    Marker.setLatLng([Lat, Lon]);
+  } else {
+    return L.marker([Lat, Lon], {
+      icon: WP
+    }).addTo(map).bindPopup(Name);
+  }
 }
 
 var PM_HEADING = 1;
@@ -8917,114 +9006,118 @@ function contains(a, obj) {
   return false;
 }
 
-function DrawOpponents(Boat, VLMBoatsLayer, BoatFeatures) {
+function DrawOpponents(Boat) {
   if (!Boat || typeof Rankings === "undefined") {
     return;
-  } // Get Friends
+  } // TODO Draw opponents
 
-
-  var friends = [];
-  var index; // Map friend only if selection is active
-
-  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel) {
-    if (typeof Boat.VLMInfo !== "undefined" && typeof Boat.VLMInfo.MPO !== "undefined") {
+  /*/ / Get Friends
+  let friends = [];
+  let index;
+    // Map friend only if selection is active
+  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel)
+  {
+    if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
+    {
       friends = Boat.VLMInfo.MPO.split(',');
     }
-
-    if (friends.length !== 0) {
-      var RaceId = Boat.VLMInfo.RAC;
-
-      for (index in friends) {
-        if (friends[index] && Rankings[RaceId]) {
-          var _Opp = Rankings[RaceId][friends[index]];
-
-          if (typeof _Opp !== 'undefined' && parseInt(_Opp.idusers, 10) !== Boat.IdBoat) {
-            AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, _Opp, true);
+     if (friends.length !== 0)
+    {
+      let RaceId = Boat.VLMInfo.RAC;
+      for (index in friends)
+      {
+        if (friends[index] && Rankings[RaceId])
+        {
+          let Opp = Rankings[RaceId][friends[index]];
+           if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers, 10) !== Boat.IdBoat))
+          {
+            AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, Opp, true);
           }
         }
       }
     }
-  } // Get Reals
-
-
-  if (VLM2Prefs.MapPrefs.ShowReals && typeof Boat.Reals !== "undefined" && typeof Boat.Reals.ranking !== "undefined") for (index in Boat.Reals.ranking) {
-    var RealOpp = Boat.Reals.ranking[index];
-    AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, RealOpp, true);
   }
-  var MAX_LEN = 150;
-  var ratio = MAX_LEN / Object.keys(Rankings).length;
-  var count = 0;
-  var BoatList = Rankings;
-
-  if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0) {
+  // Get Reals
+  if (VLM2Prefs.MapPrefs.ShowReals && (typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
+    for (index in Boat.Reals.ranking)
+    {
+      var RealOpp = Boat.Reals.ranking[index];
+      AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, RealOpp, true);
+    }
+   let MAX_LEN = 150;
+  let ratio = MAX_LEN / Object.keys(Rankings).length;
+  let count = 0;
+  let BoatList = Rankings;
+   if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
+  {
     BoatList = Boat.OppList;
     ratio = 1;
   }
-
-  switch (VLM2Prefs.MapPrefs.MapOppShow) {
+   switch (VLM2Prefs.MapPrefs.MapOppShow)
+  {
     case VLM2Prefs.MapPrefs.MapOppShowOptions.Show10Around:
       BoatList = GetClosestOpps(Boat, 10);
       ratio = 1;
       break;
-
     case VLM2Prefs.MapPrefs.MapOppShowOptions.Show5Around:
       BoatList = GetClosestOpps(Boat, 5);
       ratio = 1;
       break;
-
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
-      var BoatCount = 0;
-      var RaceID = Boat.Engaged;
+      let BoatCount = 0;
+      let RaceID = Boat.Engaged;
       MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
-      BoatList = [];
-
-      for (index in Rankings[RaceID]) {
-        if (Rankings[RaceID][index].rank <= VLM2Prefs.MapPrefs.ShowTopCount) {
+       BoatList = [];
+       for (index in Rankings[RaceID])
+      {
+        if (Rankings[RaceID][index].rank <= VLM2Prefs.MapPrefs.ShowTopCount)
+        {
           BoatList[index] = Rankings[RaceID][index];
           BoatCount++;
-
-          if (BoatCount > MAX_LEN) {
+          if (BoatCount > MAX_LEN)
+          {
             break;
           }
         }
       }
-
-      if (BoatCount > MAX_LEN) {
+       if (BoatCount > MAX_LEN)
+      {
         MAX_LEN = BoatCount;
       }
-
       ratio = 1;
       break;
-
-    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
+     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
       BoatList = [];
       ratio = 1;
-      break;
-  } // Sort racers to be able to show proper opponents
-
-
+      break; 
+   }
+   // Sort racers to be able to show proper opponents
   SortRankingData(Boat, 'RAC', null, Boat.Engaged);
-
-  if (Boat.Engaged && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking) {
-    for (index in Rankings[Boat.Engaged].RacerRanking) {
-      if (index in Rankings[Boat.Engaged].RacerRanking) {
+   if (Boat.Engaged && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking)
+  {
+    for (index in Rankings[Boat.Engaged].RacerRanking)
+    {
+      if (index in Rankings[Boat.Engaged].RacerRanking)
+      {
         var Opp = Rankings[Boat.Engaged].RacerRanking[index];
-
-        if (parseInt(Opp.idusers, 10) !== Boat.IdBoat && BoatList[Opp.idusers] && !contains(friends, Opp.idusers) && RnkIsRacing(Opp) && Math.random() <= ratio && count < MAX_LEN) {
+         if ((parseInt(Opp.idusers, 10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends, Opp.idusers)) && RnkIsRacing(Opp) && (Math.random() <= ratio) && (count < MAX_LEN))
+        {
           AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, Opp, false);
           count += 1;
-
-          if (typeof Boat.OppList === "undefined") {
+          if (typeof Boat.OppList === "undefined")
+          {
             Boat.OppList = [];
           }
-
           Boat.OppList[index] = Opp;
-        } else if (count >= MAX_LEN) {
+        }
+        else if (count >= MAX_LEN)
+        {
           break;
         }
       }
     }
-  }
+  }*/
+
 }
 
 function CompareDist(a, b) {
@@ -9070,21 +9163,22 @@ function GetClosestOpps(Boat, NbOpps) {
 
     List = List.sort(CompareDist);
 
-    for (var _index10 in List.slice(0, NbOpps - 1)) {
-      RetArray[List[_index10].id] = Rankings[RaceId][List[_index10].id];
+    for (var _index8 in List.slice(0, NbOpps - 1)) {
+      RetArray[List[_index8].id] = Rankings[RaceId][List[_index8].id];
     }
   }
 
   return RetArray;
 }
 
-function AddOpponent(Boat, Layer, Features, Opponent, isFriend) {
-  var Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
-  var Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
-  var Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
-  var OL_Opp;
-  var ZFactor = map.zoom;
-  var OppData = {
+function AddOpponent(Boat, Layer, Features, Opponent, isFriend) {//TODO Put opponents back in map
+
+  /* let Opp_Coords = new VLMPosition(Opponent.longitude, Opponent.latitude);
+  let Opp_Pos = new OpenLayers.Geometry.Point(Opp_Coords.Lon.Value, Opp_Coords.Lat.Value);
+  let Opp_PosTransformed = Opp_Pos.transform(MapOptions.displayProjection, MapOptions.projection);
+  let OL_Opp;
+  let ZFactor = map.zoom;
+  let OppData = {
     "name": Opponent.idusers,
     "Coords": Opp_Coords.ToString(),
     "type": 'opponent',
@@ -9093,18 +9187,17 @@ function AddOpponent(Boat, Layer, Features, Opponent, isFriend) {
     "Last1h": Opponent.last1h,
     "Last3h": Opponent.last3h,
     "Last24h": Opponent.last24h,
-    "IsTeam": Opponent.country == Boat.VLMInfo.CNT ? "team" : "",
-    "IsFriend": isFriend ? ZFactor * 2 : ZFactor,
+    "IsTeam": (Opponent.country == Boat.VLMInfo.CNT) ? "team" : "",
+    "IsFriend": (isFriend ? ZFactor * 2 : ZFactor),
     "color": Opponent.color
   };
-
-  if (!VLM2Prefs.MapPrefs.ShowOppNumbers) {
+   if (!VLM2Prefs.MapPrefs.ShowOppNumbers)
+  {
     OppData.name = "";
   }
-
-  OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed, OppData);
-  Layer.addFeatures(OL_Opp);
-  Features.push(OL_Opp);
+   OL_Opp = new OpenLayers.Feature.Vector(Opp_PosTransformed, OppData);
+   Layer.addFeatures(OL_Opp);
+  Features.push(OL_Opp); */
 }
 
 function ShowOpponentPopupInfo(e) {
@@ -9162,10 +9255,10 @@ function GetOppBoat(BoatId) {
     if (CurBoat.Reals && CurBoat.Reals.ranking) {
       for (var _i2 in CurBoat.Reals.ranking) {
         if (CurBoat.Reals.ranking[_i2]) {
-          var _Opp2 = CurBoat.Reals.ranking[_i2];
+          var _Opp = CurBoat.Reals.ranking[_i2];
 
-          if (_Opp2.idusers === BoatId) {
-            return _Opp2;
+          if (_Opp.idusers === BoatId) {
+            return _Opp;
           }
         }
       }
