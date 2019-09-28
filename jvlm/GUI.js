@@ -24,7 +24,6 @@ var BoatRacingClasses = {
 };
 
 // Global (beurk) holding last position return by OL mousemove.
-var GM_Pos = null;
 var SetWPPending = false;
 var WPPendingTarget = null;
 var GribWindController = null;
@@ -120,7 +119,7 @@ $(document).ready(
 function LeafletInit()
 {
   //Init map object
-  map = L.map('jVlmMap').setView([ 0,0], 13);
+  map = L.map('jVlmMap',{mouseover:HandleMapMouseMove}).setView([0,0],8);
 
   // Tiles
   let src = tileUrlSrv;
@@ -2374,6 +2373,7 @@ function RefreshCurrentBoat(SetCenterOnBoat, ForceRefresh, TargetTab)
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in BoatIDSpan[0].attributes))
   {
     let BoatId = BoatIDSpan[0].attributes.BoatID.value;
+    
     SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat, ForceRefresh, TargetTab);
   }
 
@@ -2584,7 +2584,7 @@ function HandleBoatSelectionChange(e)
   ResetCollapsiblePanels();
 
   let BoatId = $(e.target).closest('li').attr('BoatID');
-  let Boat = GetBoatFromIdu(BoatId);
+  let Boat = GetBoatFromIdu(BoatId);  
 
   if (typeof Boat === "undefined" || !Boat)
   {
@@ -2598,12 +2598,12 @@ function HandleBoatSelectionChange(e)
 var LastMouseMoveCall = 0;
 var ShowEstTimeOutHandle = null;
 
-function HandleMapMouseMove(e)
+function HandleMapMouseMove(LatLng)
 {
 
-  if (GM_Pos && (typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
+  if ( (typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
   {
-    var Pos = new VLMPosition(GM_Pos.lon, GM_Pos.lat);
+    var Pos = new VLMPosition(LatLng[1], LatLng[0]);
     var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
     var EstimatePos = null;

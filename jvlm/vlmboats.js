@@ -99,6 +99,14 @@ var StartSetWPOnClick = false;
 
 function SetCurrentBoat(Boat, CenterMapOnBoat, ForceRefresh, TargetTab)
 {
+  if (_CurPlayer && _CurPlayer.CurBoat && Boat)
+  {
+    if (_CurPlayer.CurBoat.IdBoat !== Boat.IdBoat)
+    {
+      ClearCurrentMapMarker(_CurPlayer.CurBoat);
+    }
+    EnsureMarkersVisible(Boat);
+  }
   CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab);
 }
 
@@ -111,8 +119,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   {
     return;
   }
-  var CurDate = new Date();
-  var NeedPrefsRefresh = (typeof Boat !== "undefined" && (typeof Boat.VLMInfo === "undefined" || typeof Boat.VLMInfo.AVG === "undefined"));
+  let CurDate = new Date();
+  let NeedPrefsRefresh = (typeof Boat !== "undefined" && (typeof Boat.VLMInfo === "undefined" || typeof Boat.VLMInfo.AVG === "undefined"));
 
   // Update preference screen according to current selected boat
   UpdatePrefsDialog(Boat);
@@ -342,7 +350,7 @@ function DrawBoat(Boat, CenterMapOnBoat)
   DrawBoatTimeOutHandle = setTimeout(ActualDrawBoat, 100, Boat, DeferredCenterValue);
 }
 
-function GetRaceFeatures(Boat)
+function GetRaceMapFeatures(Boat)
 {
   if (!Boat)
   {
@@ -352,16 +360,10 @@ function GetRaceFeatures(Boat)
 
   if (typeof Boat.RaceMapFeatures === "undefined")
   {
-    Boat.RaceMapFeatures = [];
+    Boat.RaceMapFeatures = {};
   }
 
-  if (!Boat.RaceMapFeatures[Boat.VLMInfo.RAC])
-  {
-    // Instanciate feature structure for race
-    Boat.RaceMapFeatures[Boat.VLMInfo.RAC] = {};
-  }
-
-  return Boat.RaceMapFeatures[Boat.VLMInfo.RAC];
+  return Boat.RaceMapFeatures;
 }
 
 function ActualDrawBoat(Boat, CenterMapOnBoat)
@@ -390,9 +392,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     return;
   }
 
-  let RaceFeatures = GetRaceFeatures(Boat);
+  let RaceFeatures = GetRaceMapFeatures(Boat);
 
-  RaceFeatures = Boat.RaceMapFeatures[Boat.VLMInfo.RAC];
   //WP Marker
   let WPFeature = RaceFeatures.TrackWP;
   let WP = null;
@@ -490,8 +491,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
         LonOffSet += GetLonOffset(PrevLon, P.Lon.Value);
       }
       PrevLon = P.Lon.Value;*/
-      
-      PointList.push([P.Lat.Value,P.Lon.Value]);
+
+      PointList.push([P.Lat.Value, P.Lon.Value]);
     }
 
     var TrackColor = Boat.VLMInfo.COL;
@@ -512,7 +513,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       RaceFeatures.BoatTrack = L.polyline(PointList,
       {
         "type": "HistoryTrack",
-        "TrackColor": TrackColor
+        "TrackColor": TrackColor,
+        "weight": 1.2
       }).addTo(map);
     }
   }
@@ -520,7 +522,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
   // Forecast Track
 
-  if (Boat.Estimator && (Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length))
+  // TODO Recode forecast position marker
+  /*if (Boat.Estimator && (Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length))
   {
     Boat.Estimator.EstimatePoints[0] = [];
 
@@ -545,8 +548,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       }
     }
   }
-
-  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints)
+   if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints)
   {
     for (let index in Boat.Estimator.EstimatePoints)
     {
@@ -563,8 +565,8 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
         BoatFeatures.push(TrackForecast);
         VLMBoatsLayer.addFeatures(TrackForecast);
       }
-    }
-  }
+    } 
+  }*/
 
 
   // opponents  
@@ -974,8 +976,8 @@ function DrawRaceGates(Boat)
     return;
   }
   let RaceInfo = Boat.RaceInfo;
-  let NextGate = Boat.RaceInfo.NWP;
-  let RaceFeature = GetRaceFeatures(Boat);
+  let NextGate = Boat.VLMInfo.NWP;
+  let RaceFeature = GetRaceMapFeatures(Boat);
 
   // Loop all gates
   if (typeof RaceInfo !== undefined && RaceInfo && typeof RaceInfo.races_waypoints !== "undefined" && RaceInfo.races_waypoints)
@@ -1136,29 +1138,32 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
     [lat2, lon2]
   ];
 
-  if (GateFeatures.Segment)
+  let color = "";
+  let strokeOpacity = 0.75;
+  let strokeWidth = 2;
+  if (IsNextWP)
   {
-    Segment.setLatLngs(Points);
+    color = "green";
+  }
+  else if (IsValidated)
+  {
+    color = "blue";
   }
   else
   {
-    let color = "";
-    let strokeOpacity = 1;
-    let strokeWidth = 3;
-    if (IsNextWP)
-    {
-      color = "green";
-    }
-    else if (IsValidated)
-    {
-      color = "blue";
-    }
-    else
-    {
-      color = "red";
-    }
+    color = "red";
+  }
 
-    var WP = L.polyline(Points,
+  if (GateFeatures.Segment)
+  {
+    GateFeatures.Segment.setLatLngs(Points);
+    GateFeatures.Segment.color = color;
+  }
+  else
+  {
+
+
+    GateFeatures.Segment = L.polyline(Points,
     {
       color: color,
       strole: strokeWidth,
@@ -1259,15 +1264,21 @@ function AddBuoyMarker(Marker, Name, Lon, Lat, CW_Crossing)
 
   if (Marker)
   {
-    Marker.setLatLng([Lat, Lon]);
-  }
-  else
-  {
-    return L.marker([Lat, Lon],
+    if (Marker.IsCWBuoy !== CW_Crossing)
     {
-      icon: WP
-    }).addTo(map).bindPopup(Name);
+      // Change marker direction
+      Marker.remove();
+    }
+    else
+    {
+      return Marker.setLatLng([Lat, Lon]);
+    }
   }
+  return L.marker([Lat, Lon],
+  {
+    icon: WP
+  }).addTo(map).bindPopup(Name);
+
 }
 
 const PM_HEADING = 1;
