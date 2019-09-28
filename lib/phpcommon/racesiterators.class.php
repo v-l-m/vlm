@@ -44,10 +44,7 @@
       {
         $this->query .= " and ( racetype=".$RaceTypeFilter." ) ";
       }
-      else
-      {
-        echo "empty $RaceTypeFilter \n";
-      }
+      
 
       $this->query .=" ORDER BY started ASC, deptime ASC, closetime ASC ) ".
                       "UNION ( SELECT deptime, deptime+3600 as closetime, racename, comments as description, NULL as boattype, NULL as idraces ".

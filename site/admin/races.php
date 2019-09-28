@@ -179,7 +179,8 @@ $opts['fdd']['depend_on'] = array(
   'name'     => 'Depend on',
   'select'   => 'T',
   'maxlen'   => 11,
-  'sort'     => true
+  'sort'     => true,
+  'sqlw'     => 'IF($val_qas = "", NULL, $val_qas)'
 );
 $opts['fdd']['qualifying_races'] = array(
   'name'     => 'Qualifying races',
@@ -208,7 +209,8 @@ $opts['fdd']['coastpenalty'] = array(
   'select'   => 'T',
   'maxlen'   => 11,
   'default'  => '0',
-  'sort'     => true
+  'sort'     => true,
+  'sqlw'     => 'IF($val_qas = "", NULL, $val_qas)'
 );
 $opts['fdd']['bobegin'] = array(
   'name'     => 'Bo Begin',
