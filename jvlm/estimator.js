@@ -547,15 +547,15 @@ function Estimator(Boat)
   this.GetEstimateTracks = function()
   {
     let RetTracks = [];
-    let CurPointList = [];
-    
+    let PrevIndex=null;
+    let PrevPoint = null;
 
     if (this.EstimateTrack && this.EstimateTrack[0])
     {
-      let TrackStartTick = this.EstimateTrack[0].Date.getTime();
-      let GridOffset = TrackStartTick % (6*3600);
+      let TrackStartTick = new Date().getTime();
+      let GridOffset = TrackStartTick % (6*3600000);
 
-      let TrackIndexStartTick = TrackStartTick - GridOffset+3.5*3600;
+      let TrackIndexStartTick = TrackStartTick - GridOffset+3.5*3600000;
 
       for (let index in this.EstimateTrack)
       {
@@ -563,7 +563,7 @@ function Estimator(Boat)
         {
           let est = this.EstimateTrack[index];
           let Delta = est.Date.getTime()-TrackIndexStartTick;
-          let CurTrackInDex = Math.floor(Delta / 6/3600);
+          let CurTrackInDex = Math.floor(Delta / 6/3600000);
 
           if (CurTrackInDex<0)
           {
@@ -578,7 +578,15 @@ function Estimator(Boat)
           {
             RetTracks[CurTrackInDex]=[];
           }
+
+          if (CurTrackInDex!== PrevIndex && PrevPoint)
+          {
+            // Push prev point before starting a new track
+            RetTracks[CurTrackInDex].push([PrevPoint.Position.Lat.Value, PrevPoint.Position.Lon.Value]);
+          }
           RetTracks[CurTrackInDex].push([est.Position.Lat.Value, est.Position.Lon.Value]);
+          PrevPoint = est;
+          PrevIndex=CurTrackInDex;
         }
       }
     }

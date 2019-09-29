@@ -119,7 +119,7 @@ $(document).ready(
 function LeafletInit()
 {
   //Init map object
-  map = L.map('jVlmMap',{mouseover:HandleMapMouseMove}).setView([0,0],8);
+  map = L.map('jVlmMap').setView([0,0],8);
 
   // Tiles
   let src = tileUrlSrv;
@@ -130,7 +130,8 @@ function LeafletInit()
     tms: false,
     id: 'vlm',
     detectRetina:true,
-    subdomains:tilesUrlArray
+    subdomains:tilesUrlArray,
+    onEachFeature:HandleMapMouseMove
   }).addTo(map);
 
 }

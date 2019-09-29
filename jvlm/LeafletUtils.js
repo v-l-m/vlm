@@ -30,19 +30,39 @@ var BoatMarker = L.Icon.extend(
   }
 });
 
+var IceGateMarker = L.Icon.extend(
+{
+  options:
+  {
+    iconSize: [48, 48],
+    iconAnchor: [24, -18],
+    iconUrl: 'images/icegate.png',
+  }
+});
+
+var GateDirMarker = L.Icon.extend(
+{
+  options:
+  {
+    iconSize: [48, 48],
+    iconAnchor: [24, 24],
+    rotationOrigin: [24, 24]
+  }
+});
+
 function GetBuoyMarker(Buoy1)
 {
   let RetMark = null;
   if (Buoy1)
   {
-    RetMark= new BuoyMarker(
+    RetMark = new BuoyMarker(
     {
       iconUrl: 'images/Buoy1.png'
     });
   }
   else
   {
-    RetMark= new BuoyMarker(
+    RetMark = new BuoyMarker(
     {
       iconUrl: 'images/Buoy2.png'
     });
@@ -60,6 +80,47 @@ function GetBoatMarker()
 function GetTrackWPMarker()
 {
   return new TrackWPMarker();
+}
+
+function GetGateTypeMarker(Marker, IsIceGate)
+{
+  if (IsIceGate)
+  {
+    return IceGateMarker;
+  }
+  else
+  {
+    let ret= new GateDirMarker(
+    {
+      iconUrl: "images/" + Marker
+    });
+    
+    return ret;
+  }
+}
+
+function GetOpponentMarker(OppData)
+{
+  /* let OppData = {
+    "name": Opponent.idusers,
+    "Coords": Opp_Coords.ToString(),
+    "type": 'opponent',
+    "idboat": Opponent.idusers,
+    "rank": Opponent.rank,
+    "Last1h": Opponent.last1h,
+    "Last3h": Opponent.last3h,
+    "Last24h": Opponent.last24h,
+    "IsTeam": (Opponent.country == Boat.VLMInfo.CNT) ? "team" : "",
+    "IsFriend": (isFriend ? ZFactor * 2 : ZFactor),
+    "color": Opponent.color
+  }; */
+  let ret = new L.icon({
+    iconUrl:"images/opponent"+OppData.IsTeam+".png",
+    iconAnchor:[OppData.IsFriend/2,OppData.IsFriend/2],
+    iconSize:[OppData.IsFriend,OppData.IsFriend]
+  });
+
+  return ret;
 }
 
 function ClearCurrentMapMarker(Boat)
