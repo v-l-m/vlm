@@ -38,7 +38,7 @@
                       "FROM `racespreview` ".
                       "WHERE deptime > UNIX_TIMESTAMP() )";*/
       $this->query = "(SELECT deptime, closetime, racename, racename as description, boattype, idraces FROM `races` ".
-                      "WHERE ( ( started = ". RACE_PENDING ." AND deptime > UNIX_TIMESTAMP() - 15 * 24 * 3600 ) OR ( closetime > UNIX_TIMESTAMP() + 7 * 24 * 3600) ) ";
+                      "WHERE (  closetime > UNIX_TIMESTAMP() - 7 * 24 * 3600 ) ";
 
       if ($RaceTypeFilter !== null)
       {
