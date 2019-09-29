@@ -513,7 +513,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       RaceFeatures.BoatTrack = L.polyline(PointList,
       {
         "type": "HistoryTrack",
-        "TrackColor": TrackColor,
+        "color": TrackColor,
         "weight": 1.2
       }).addTo(map);
     }
@@ -530,7 +530,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     let TrackIndex = 0;
     let PrevLon = 99999;
     let LonOffSet = 0;
-    for (let index in Boat.Estimator.EstimateTrack)
+    /* for (let index in Boat.Estimator.EstimateTrack)
     {
       if (Boat.Estimator.EstimateTrack[index])
       {
@@ -546,27 +546,47 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
         Boat.Estimator.EstimatePoints[TrackIndex].push(P1_PosTransformed);
       }
-    }
-  }
-   if (typeof Boat.Estimator !== "undefined" && Boat.Estimator && Boat.Estimator.EstimatePoints)
-  {
-    for (let index in Boat.Estimator.EstimatePoints)
-    {
-      if (Boat.Estimator.EstimatePoints[index])
-      {
-        var TrackPointList = Boat.Estimator.EstimatePoints[index];
-
-        var TrackForecast = new OpenLayers.Feature.Vector(
-          new OpenLayers.Geometry.LineString(TrackPointList),
-          {
-            "type": "ForecastPos"
-          });
-
-        BoatFeatures.push(TrackForecast);
-        VLMBoatsLayer.addFeatures(TrackForecast);
-      }
     } 
   }*/
+
+  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator)
+  {
+    let tracks = Boat.Estimator.GetEstimateTracks();
+    
+    let TrackColors = ['green', 'orange', 'red'];
+
+    for (let index in tracks)
+    {
+      if (RaceFeatures.EstimateTracks && RaceFeatures.EstimateTracks[index])
+      {
+        if (typeof tracks[index] !== "undefined")
+        {
+          RaceFeatures.EstimateTracks[index].setLatLngs(tracks[index]);
+        }
+        else
+        {
+          RaceFeatures.EstimateTracks[index].remove();
+          RaceFeatures.EstimateTracks[index] = null;
+        }
+      }
+      else
+      {
+        if (typeof RaceFeatures.EstimateTracks === "undefined")
+        {
+          RaceFeatures.EstimateTracks = [];
+        }
+        if (tracks[index])
+        {
+          let Options = {
+            weight: 2,
+            opacity: 1,
+            color:TrackColors[index]
+          };
+          RaceFeatures.EstimateTracks[index] = L.polyline(tracks[index], Options).addTo(map);          
+        }
+      }
+    }
+  }
 
 
   // opponents  
@@ -934,20 +954,6 @@ renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers
 });
  */
 
-// TODO Boats & tracks layer
-/* var VLMBoatsLayer = new OpenLayers.Layer.Vector("VLM Boats and tracks",
-{
-  styleMap: new OpenLayers.StyleMap(VectorStyles),
-  renderers: renderer
-}); */
-
-// Background load controller from ext html file
-function GetBoatControllerPopup()
-{
-  $("#BoatController").load("BoatController.html");
-  return '<div id="BoatController"></div>';
-}
-
 const WP_TWO_BUOYS = 0;
 const WP_ONE_BUOY = 1;
 const WP_GATE_BUOY_MASK = 0x000F;
@@ -1140,7 +1146,7 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
 
   let color = "";
   let strokeOpacity = 0.75;
-  let strokeWidth = 2;
+  let strokeWidth = 1;
   if (IsNextWP)
   {
     color = "green";
@@ -1154,22 +1160,7 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
     color = "red";
   }
 
-  if (GateFeatures.Segment)
-  {
-    GateFeatures.Segment.setLatLngs(Points);
-    GateFeatures.Segment.color = color;
-  }
-  else
-  {
 
-
-    GateFeatures.Segment = L.polyline(Points,
-    {
-      color: color,
-      strole: strokeWidth,
-      opacity: strokeOpacity
-    }).addTo(map);
-  }
   if (GateType !== WP_DEFAULT)
   {
     // Debug testing of the geo calculation functions
@@ -1181,8 +1172,8 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
       console.log("loxo angle: " + P1.GetLoxoCourse(P2));
 
     }*/
-    P1 = new VLMPosition(lon1, lat1);
-    P2 = new VLMPosition(lon2, lat2);
+    let P1 = new VLMPosition(lon1, lat1);
+    let P2 = new VLMPosition(lon2, lat2);
     var MarkerDir = P1.GetLoxoCourse(P2);
     var MarkerPos = P1.ReachDistLoxo(P2, 0.5);
     // Gate has special features, add markers
@@ -1203,20 +1194,38 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
 
     if (GateType & WP_CROSS_ONCE)
     {
-      // Draw the segment again as dashed line for cross once gates
-      let WP = new OpenLayers.Feature.Vector(
-        new OpenLayers.Geometry.LineString(PointList),
+      if (GateFeatures.Segment2)
+      {
+        GateFeatures.Segment2.setLatLngs(Points);
+      }
+      else
+      {
+        // Draw the segment again as dashed line for cross once gates
+        GateFeatures.Segment2 = L.polyline(Points,
         {
-          type: "crossonce"
-        },
-        null);
-
-      Layer.addFeatures(WP);
-      Gates.push(WP);
+          color: 'black',
+          dashArray: '20,10,5,10',
+          weight: strokeWidth * 2,
+          opacity: strokeOpacity
+        }).addTo(map);
+      }
     }
-
   }
 
+  if (GateFeatures.Segment)
+  {
+    GateFeatures.Segment.setLatLngs(Points);
+    GateFeatures.Segment.color = color;
+  }
+  else
+  {
+    GateFeatures.Segment = L.polyline(Points,
+    {
+      color: color,
+      weight: strokeWidth,
+      opacity: strokeOpacity
+    }).addTo(map);
+  }
 
 }
 

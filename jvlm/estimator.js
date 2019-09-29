@@ -46,7 +46,6 @@ function Estimator(Boat)
   this.CurEstimate = new BoatEstimate();
   this.Running = false;
   this.EstimateTrack = [];
-  this.EstimatePoints = [];
   this.ProgressCallBack = null;
   this.ErrorCount = 0;
   this.EstimateMapFeatures = []; // Current estimate position
@@ -105,7 +104,7 @@ function Estimator(Boat)
           VacTime -= (VacTime % this.Boat.VLMInfo.VAC);
           this.CurEstimate.PrevDate = new Date(VacTime * 1000 + 6000);
         }
-        let StartDate = new Date(this.CurEstimate.PrevDate.getTime() + 1000 * this.Boat.VLMInfo.VAC );
+        let StartDate = new Date(this.CurEstimate.PrevDate.getTime() + 1000 * this.Boat.VLMInfo.VAC);
         this.CurEstimate.Date = StartDate;
       }
 
@@ -135,7 +134,6 @@ function Estimator(Boat)
     }
 
     this.EstimateTrack = [];
-    this.EstimatePoints = [];
 
     this.MaxVacEstimate = new Date(GribMgr.MaxWindStamp);
     this.ReportProgress(false);
@@ -503,23 +501,10 @@ function Estimator(Boat)
 
   this.ShowEstimatePosition = function(Boat, Estimate)
   {
-    // Track Estimate closest point to mousemove
-    if (this.EstimateMapFeatures)
-    {
-      for (let index in this.EstimateMapFeatures)
-      {
-        if (this.EstimateMapFeatures[index])
-        {
-          // Todo Handle estimate track
-          //VLMBoatsLayer.removeFeatures(this.EstimateMapFeatures);
-        }
-      }
-      this.EstimateMapFeatures = [];
-    }
 
     if (Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value))
     {
-      // TODO Handle estimate drawing
+      // TODO Handle estimate position drawing
       /* let Position = Estimate.Position;
       let EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
       let EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection);
@@ -559,11 +544,46 @@ function Estimator(Boat)
     }
   };
 
-}
+  this.GetEstimateTracks = function()
+  {
+    let RetTracks = [];
+    let CurPointList = [];
+    
 
-/*
-function HandleEstimatorStart(e)
-{
-  var e = new Estimator(_CurPlayer.CurBoat);
+    if (this.EstimateTrack && this.EstimateTrack[0])
+    {
+      let TrackStartTick = this.EstimateTrack[0].Date.getTime();
+      let GridOffset = TrackStartTick % (6*3600);
+
+      let TrackIndexStartTick = TrackStartTick - GridOffset+3.5*3600;
+
+      for (let index in this.EstimateTrack)
+      {
+        if (this.EstimateTrack[index])
+        {
+          let est = this.EstimateTrack[index];
+          let Delta = est.Date.getTime()-TrackIndexStartTick;
+          let CurTrackInDex = Math.floor(Delta / 6/3600);
+
+          if (CurTrackInDex<0)
+          {
+            CurTrackInDex=0;
+          }
+          else if ( CurTrackInDex>2)
+          {
+            CurTrackInDex=2;
+          }
+
+          if (typeof RetTracks[CurTrackInDex] === "undefined")
+          {
+            RetTracks[CurTrackInDex]=[];
+          }
+          RetTracks[CurTrackInDex].push([est.Position.Lat.Value, est.Position.Lon.Value]);
+        }
+      }
+    }
+
+    return RetTracks;
+  };
+
 }
-*/
