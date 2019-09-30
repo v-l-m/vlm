@@ -30,6 +30,7 @@ var GribWindController = null;
 
 //Global map object
 var map = null;
+var VLMBoatsLayer = null;
 
 // Ranking related globals
 var Rankings = [];
