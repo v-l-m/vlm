@@ -287,7 +287,7 @@ function Estimator(Boat)
         throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode;
     }
 
-    console.log(this.CurEstimate.Date + this.CurEstimate.Position.ToString(true) + "=> " + NewPos.Lon.ToString(true) + " " + NewPos.Lat.ToString(true) + " Wind : " + RoundPow(MI.Speed, 4) + "@" + RoundPow(MI.Heading, 4) + " Boat " + RoundPow(Speed, 4) + "kts" + RoundPow(((Hdg + 360.0) % 360.0), 4));
+    console.log(this.CurEstimate.Date + this.CurEstimate.Position.toString(true) + "=> " + NewPos.Lon.toString(true) + " " + NewPos.Lat.toString(true) + " Wind : " + RoundPow(MI.Speed, 4) + "@" + RoundPow(MI.Heading, 4) + " Boat " + RoundPow(Speed, 4) + "kts" + RoundPow(((Hdg + 360.0) % 360.0), 4));
 
     var RaceComplete = false;
 

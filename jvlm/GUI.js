@@ -1385,8 +1385,8 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   // 0 for text fields
   // 1 for input fields
   let BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.ToString()]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.toString()]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.toString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP, 2)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(Boat.VLMInfo.HDG, 1)]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(Boat.VLMInfo.HDG, 2)]);
@@ -1415,8 +1415,8 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   if (typeof WP !== "undefined" && WP)
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.toString()]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.toString()]);
   }
   else
   {
@@ -2620,8 +2620,8 @@ function HandleMapMouseMove(LatLng)
     }
 
 
-    $("#MI_Lat").text(Pos.Lat.ToString());
-    $("#MI_Lon").text(Pos.Lon.ToString());
+    $("#MI_Lat").text(Pos.Lat.toString());
+    $("#MI_Lon").text(Pos.Lon.toString());
     $("#MI_LoxoDist").text(CurPos.GetLoxoDist(Pos, 2) + " nM");
     $("#MI_OrthoDist").text(CurPos.GetOrthoDist(Pos, 2) + " nM");
     $("#MI_Loxo").text(CurPos.GetLoxoCourse(Pos, 2) + " °");

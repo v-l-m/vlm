@@ -1006,7 +1006,8 @@ function DrawRaceGates(Boat)
         var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
 
         // Draw WP1
-        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '\n', WP.longitude1, WP.latitude1, cwgate);
+        let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
+        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>'+ Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
 
 
         // Second buoy (if any)
@@ -1014,7 +1015,8 @@ function DrawRaceGates(Boat)
         {
           // Add 2nd buoy marker
           let WPMarker = GateFeatures.Buoy2;
-          GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "", WP.longitude2, WP.latitude2, !cwgate);
+          let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
+        GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>'+ Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
         }
         else
         {
@@ -1699,7 +1701,7 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
   let ZFactor = map.getZoom;
   let OppData = {
     "name": Opponent.idusers,
-    "Coords": new VLMPosition(Opponent.longitude,Opponent.latitude ).ToString(),
+    "Coords": new VLMPosition(Opponent.longitude,Opponent.latitude ).toString(),
     "type": 'opponent',
     "idboat": Opponent.idusers,
     "rank": Opponent.rank,

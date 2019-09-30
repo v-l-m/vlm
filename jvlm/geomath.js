@@ -35,7 +35,7 @@ function Coords(v, IsLon)
   };
   
   // Basic string formatting of a floating coordinate
-  this.ToString=function(Raw)
+  this.toString=function(Raw)
   {
     if (Raw)
     {

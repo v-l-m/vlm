@@ -59,9 +59,9 @@ function VLMPosition(lon, lat, format)
   }
 
   // Default string formating
-  this.ToString = function(Raw)
+  this.toString = function(Raw)
   {
-    return this.Lat.ToString(Raw) + " " + this.Lon.ToString(Raw);
+    return this.Lat.toString(Raw) + " " + this.Lon.toString(Raw);
   };
 
   this.GetEuclidianDist2 = function(P)
@@ -400,6 +400,6 @@ function VLMPosition(lon, lat, format)
 
   this.GetVLMString = function()
   {
-    return this.Lat.ToString() + ',' + this.Lon.ToString();
+    return this.Lat.toString() + ',' + this.Lon.toString();
   };
 }

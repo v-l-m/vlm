@@ -103,7 +103,7 @@ function GetOpponentMarker(OppData)
 {
   /* let OppData = {
     "name": Opponent.idusers,
-    "Coords": Opp_Coords.ToString(),
+    "Coords": Opp_Coords.toString(),
     "type": 'opponent',
     "idboat": Opponent.idusers,
     "rank": Opponent.rank,
