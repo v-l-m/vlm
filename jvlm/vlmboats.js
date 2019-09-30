@@ -1015,7 +1015,7 @@ function DrawRaceGates(Boat)
         {
           // Add 2nd buoy marker
           let WPMarker = GateFeatures.Buoy2;
-          let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
+          let Pos = new VLMPosition(WP.longitude2, WP.latitude2);
         GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>'+ Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
         }
         else

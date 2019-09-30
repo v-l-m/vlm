@@ -131,9 +131,10 @@ function LeafletInit()
     id: 'vlm',
     detectRetina:true,
     subdomains:tilesUrlArray,
-    onEachFeature:HandleMapMouseMove
+    
   }).addTo(map);
 
+  map.on('mousemove',HandleMapMouseMove);
 }
 
 let PasswordResetInfo = [];
@@ -2599,12 +2600,12 @@ function HandleBoatSelectionChange(e)
 var LastMouseMoveCall = 0;
 var ShowEstTimeOutHandle = null;
 
-function HandleMapMouseMove(LatLng)
+function HandleMapMouseMove(e)
 {
-
+  let LatLng = e.latlng;
   if ( (typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
   {
-    var Pos = new VLMPosition(LatLng[1], LatLng[0]);
+    var Pos = new VLMPosition(LatLng.lng, LatLng.lat);
     var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
     var EstimatePos = null;
