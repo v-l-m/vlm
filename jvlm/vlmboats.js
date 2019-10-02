@@ -1698,7 +1698,7 @@ function GetClosestOpps(Boat, NbOpps)
 function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 {
   let Opp_Coords = [Opponent.latitude, Opponent.longitude];
-  let ZFactor = map.getZoom;
+  let ZFactor = map.getZoom();
   let OppData = {
     "name": Opponent.idusers,
     "Coords": new VLMPosition(Opponent.longitude,Opponent.latitude ).toString(),
@@ -1723,15 +1723,15 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
     RaceFeatures.Opponents = [];
   }
 
-  if (RaceFeatures.Opponents[Opponent.idboat])
+  if (RaceFeatures.Opponents[Opponent.idusers])
   {
-    RaceFeatures.Opponents[Opponent.idboat].setLatLng(Opp_Coords);
+    RaceFeatures.Opponents[Opponent.idusers].setLatLng(Opp_Coords);
   }
   else
   {
     let OppMarker = GetOpponentMarker(OppData);
 
-    RaceFeatures.Opponents[Opponent.idboat] = L.marker(Opp_Coords,{icon:OppMarker}).addTo(map);
+    RaceFeatures.Opponents[Opponent.idusers] = L.marker(Opp_Coords,{icon:OppMarker}).addTo(map);
   }
 
 }

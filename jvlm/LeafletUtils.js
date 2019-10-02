@@ -114,7 +114,7 @@ function GetOpponentMarker(OppData)
     "IsFriend": (isFriend ? ZFactor * 2 : ZFactor),
     "color": Opponent.color
   }; */
-  let ret = new L.icon({
+  let ret = new L.Icon({
     iconUrl:"images/opponent"+OppData.IsTeam+".png",
     iconAnchor:[OppData.IsFriend/2,OppData.IsFriend/2],
     iconSize:[OppData.IsFriend,OppData.IsFriend]
