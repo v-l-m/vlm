@@ -8,7 +8,7 @@ webhost = window.location.hostname;
 //tilesUrlArray = "/cache/gshhstiles/${z}/${x}/${y}.png";
 //You may put an array here, example :
 var tilesUrlArray = ["c1", "c2", "c3", "c4"];
-var tileUrlSrv="https://{s}.v-l-m.org/gshhstiles/${z}/${x}/${y}.png";
+var tileUrlSrv="https://{s}.v-l-m.org/gshhstiles/{z}/{x}/{y}.png";
 
 // URI to distribute windgridrequest amount servers
 //var WindGridServers = ["https://c1.v-l-m.org", "https://c2.v-l-m.org", "https://c3.v-l-m.org", "https://c4.v-l-m.org"];
