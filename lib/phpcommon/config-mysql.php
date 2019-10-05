@@ -13,7 +13,7 @@
     if (defined('MOTEUR')) 
     {
       $link = mysqli_connect('p:'.DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
-              die("Could not connect : " . mysqli_error());
+              die("Could not connect : " . mysqli_connect_error());
       $GLOBALS['masterdblink']=$link;
       $GLOBALS['mapdblink']   =$link; // unused in 'MOTEUR' mode
       $GLOBALS['slavedblink'] =$link;
@@ -22,19 +22,19 @@
     else 
     {
       $link = mysqli_connect('p:'.DBMASTERSERVER, DBMASTERUSER, DBMASTERPASSWORD) or 
-        die503("Could not connect : " . mysqli_error());
+        die503("Could not connect : " . mysqli_connect_error());
       $GLOBALS['masterdblink']=$link;
       mysqli_select_db($link, DBNAME) or die503("Could not select database");
       mysqli_set_charset($link,'utf8');
       
       $link = mysqli_connect('p:'.DBMAPSERVER, DBMAPUSER, DBMAPPASSWORD) or 
-        die503("Could not connect : " . mysqli_error());
+        die503("Could not connect : " . mysqli_connect_error());
       $GLOBALS['mapdblink']=$link;
       mysqli_select_db($link, DBNAME) or die503("Could not select database");
       mysqli_set_charset($link,'utf8');
       
       $link = mysqli_connect('p:'.DBSLAVESERVER, DBSLAVEUSER, DBSLAVEPASSWORD) or 
-        die503("Could not connect : " . mysqli_error());
+        die503("Could not connect : " . mysqli_connect_error());
       $GLOBALS['slavedblink']=$link;
       mysqli_select_db($link, DBNAME) or die503("Could not select database");
       // Force charset to UTF-8 to help json encoder with db results.
