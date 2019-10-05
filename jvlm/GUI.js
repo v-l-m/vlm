@@ -23,7 +23,7 @@ var BoatRacingClasses = {
   "DNS": "ft_class_dns"
 };
 
-// Global (beurk) holding last position return by OL mousemove.
+// Globals (beurk).
 var SetWPPending = false;
 var WPPendingTarget = null;
 var GribWindController = null;
@@ -136,6 +136,7 @@ function LeafletInit()
   }).addTo(map);
 
   map.on('mousemove',HandleMapMouseMove);
+  map.on('click',HandleMapMouseClick);
 }
 
 let PasswordResetInfo = [];
@@ -2600,6 +2601,11 @@ function HandleBoatSelectionChange(e)
 
 var LastMouseMoveCall = 0;
 var ShowEstTimeOutHandle = null;
+
+function HandleMapMouseClick(e)
+{
+  let bkpevt=1;
+}
 
 function HandleMapMouseMove(e)
 {

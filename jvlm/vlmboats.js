@@ -6,28 +6,7 @@
 const VLM_COORDS_FACTOR = 1000;
 
 // Default map options
-// TODO Map Options
-/* var MapOptions = {
-  // Projection mercator sphÃ©rique (type google map ou osm)
-  projection: new OpenLayers.Projection("EPSG:900913"),
-  // projection pour l'affichage des coordonnÃ©es
-  displayProjection: new OpenLayers.Projection("EPSG:4326"),
-  // unitÃ© : le m
-  units: "m",
-  maxResolution: 156543.0339,
-  maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
-    20037508.34, 20037508.34),
-  restrictedExtent: new OpenLayers.Bounds(-40037508.34, -20037508.34,
-    40037508.34, 20037508.34),
-  eventListeners:
-  {
-    "zoomend": HandleMapZoomEnd,
-    "featureover": HandleFeatureOver,
-    "featureout": HandleFeatureOut,
-    "featureclick": HandleFeatureClick,
-    "mousemove": HandleMapMouseMove
-  }
-}; */
+
 
 // Click handler for handling map clicks.
 /* OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
@@ -441,27 +420,44 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       }).addTo(map);
 
     }
-    // TODO Draw polar
-    var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Boat.VLMInfo.TWS, DrawBoat, Boat);
-    var Polar = [];
-
-    // MakePolar in a 200x200 square
-    //var BoatPosPixel = map.getPixelFromLonLat(new OpenLayers.LonLat(Boat.VLMInfo.LON, Boat.VLMInfo.LAT));
-    /* if (typeof map !== "undefined" && map)
+    
+    //Draw polar
+    if (typeof map !== "undefined" && map)
     {
-      let BoatPosPixel = map.getViewPortPxFromLonLat(PosTransformed);
-      //var scale = 50 * map.resolution;
-      let scale = VLM2Prefs.MapPrefs.PolarVacCount;
+      let Polar = [];
       let StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
 
-      BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, new Date(Boat.VLMInfo.LUP * 1000), function()
+      Polar = BuildPolarLine(Boat, StartPos, VLM2Prefs.MapPrefs.PolarVacCount, new Date(Boat.VLMInfo.LUP * 1000), function()
       {
         DrawBoat(Boat, CenterMapOnBoat);
       });
-      //BuilPolarLine(Boat, PolarPointList, Polar, PosTransformed, scale, false);
 
-
-    } */
+      if (Polar)
+      {
+        if (RaceFeatures.Polar)
+        {
+          RaceFeatures.Polar.setLatLngs(Polar);
+        }
+        else
+        {
+          let PolarStyle = {
+            color: "#CCCCCC",
+            opacity: 0.6,
+            weight:1
+          };
+          RaceFeatures.Polar = L.polyline(Polar, PolarStyle);
+          RaceFeatures.Polar.addTo(map);
+        }
+      }
+      else
+      {
+        if (RaceFeatures.Polar)
+        {
+          RaceFeatures.Polar.remove();
+        }
+        RaceFeatures.Polar = null;
+      }
+    }
   }
 
 
@@ -636,9 +632,10 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
 }
 
-function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate, Callback)
+function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
 {
-  var CurDate = StartDate;
+  let CurDate = StartDate;
+  let Polar = null;
 
   if (Boat && Boat.VLMInfo && Boat.VLMInfo.VAC)
   {
@@ -650,13 +647,15 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
   {
     CurDate = new Date().getTime();
   }
+
+  // TODO Round date to next vac actual date
   var MI = GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
 
   if (MI)
   {
     let hdg = parseFloat(Boat.VLMInfo.HDG);
     let index;
-
+    let tmpPolar = [];
     for (index = 0; index <= 180; index += 5)
     {
       let Speed = PolarsManager.GetBoatSpeed(Boat.VLMInfo.POL, MI.Speed, MI.Heading, MI.Heading + index);
@@ -668,20 +667,25 @@ function BuildPolarLine(Boat, PolarPointList, Polar, StartPos, scale, StartDate,
         return;
       }
 
-      var Side;
 
-      for (Side = -1; Side <= 1; Side += 2)
+      for (let Side = -1; Side <= 1; Side += 2)
       {
         let PolarPos = StartPos.ReachDistLoxo(Speed / 3600.0 * Boat.VLMInfo.VAC * scale, MI.Heading + index * Side);
-        let PixPos = new OpenLayers.Geometry.Point(PolarPos.Lon.Value, PolarPos.Lat.Value);
-        let PixPos_Transformed = PixPos.transform(MapOptions.displayProjection, MapOptions.projection);
+        let PixPos = [PolarPos.Lat.Value, PolarPos.Lon.Value];
+        tmpPolar[Side * index + 180] = PixPos;
+      }
+    }
 
-        //var P = map.getLonLatFromPixel(PixPos);
-        //var PPoint = new OpenLayers.Geometry.Point(PixPos);
-        Polar[180 + Side * index] = PixPos_Transformed;
+    Polar = [];
+    for (let index in tmpPolar)
+    {
+      if (tmpPolar[index])
+      {
+        Polar.push(tmpPolar[index]);
       }
     }
   }
+  return Polar;
 }
 
 function GetVLMPositionFromClick(pixel)
@@ -1007,7 +1011,7 @@ function DrawRaceGates(Boat)
 
         // Draw WP1
         let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
-        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>'+ Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
+        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
 
 
         // Second buoy (if any)
@@ -1016,7 +1020,7 @@ function DrawRaceGates(Boat)
           // Add 2nd buoy marker
           let WPMarker = GateFeatures.Buoy2;
           let Pos = new VLMPosition(WP.longitude2, WP.latitude2);
-        GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>'+ Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
+          GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
         }
         else
         {
@@ -1421,14 +1425,6 @@ function DiconstinueRace(BoatId, RaceId)
   );
 }
 
-function HandleMapZoomEnd(object, element)
-{
-  var Zoom = VLMBoatsLayer.getZoomForResolution(VLMBoatsLayer.getResolution());
-  VLM2Prefs.MapPrefs.MapZoomLevel = Zoom;
-  VLM2Prefs.Save();
-  RefreshCurrentBoat(false);
-}
-
 function LoadRealsList(Boat)
 {
   if ((typeof Boat === "undefined") || !Boat || (typeof Boat.VLMInfo === "undefined"))
@@ -1644,8 +1640,6 @@ function CompareDist(a, b)
 
 function GetClosestOpps(Boat, NbOpps)
 {
-
-
   let RaceId = null;
 
   if (Boat && Boat.VLMInfo)
@@ -1701,7 +1695,7 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
   let ZFactor = map.getZoom();
   let OppData = {
     "name": Opponent.idusers,
-    "Coords": new VLMPosition(Opponent.longitude,Opponent.latitude ).toString(),
+    "Coords": new VLMPosition(Opponent.longitude, Opponent.latitude).toString(),
     "type": 'opponent',
     "idboat": Opponent.idusers,
     "rank": Opponent.rank,
@@ -1731,11 +1725,15 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
   {
     let OppMarker = GetOpponentMarker(OppData);
 
-    RaceFeatures.Opponents[Opponent.idusers] = L.marker(Opp_Coords,{icon:OppMarker}).addTo(map);
+    RaceFeatures.Opponents[Opponent.idusers] = L.marker(Opp_Coords,
+    {
+      icon: OppMarker
+    }).addTo(map);
   }
 
 }
 
+//TODOfix Opponent Popup
 function ShowOpponentPopupInfo(e)
 {
   var ObjType = e.feature.data.type;
@@ -1865,11 +1863,6 @@ function HandleFeatureOver(e)
 
     DrawOpponentTrack(e.feature.data);
   }
-  //console.log("HoverOn "+ ObjType)
-  /*e.feature.renderIntent = "select";
-  e.feature.layer.drawFeature(e.feature);
-  Console.log("Map says: Pointer entered " + e.feature.id + " on " + e.feature.layer.name);
-  */
 }
 
 function HandleFeatureClick(e)
