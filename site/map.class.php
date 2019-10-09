@@ -501,7 +501,7 @@ class map
       }
       if ($print_gshhs) imagestring( $this->mapImage, $font+2, 40 , 10 , "GSHHS_" . substr($coastline_table,10) , $this->colorBlack);
 
-      // D�termination de la zone � cartographier
+      // Détermination de la zone à cartographier
       // Si W > 180, W = W-360
       //if ($west_x1000 >= 180 ) $west_x1000 -=360;
       // Si E > 180, E = E-360
@@ -545,15 +545,15 @@ class map
       $polymode = ($fullres == MAP_POLYLINE_FULL_MODE || $fullres = MAP_POLYLINE_MODE);
       while ( $point = mysqli_fetch_array($result_coast, MYSQLI_NUM) ) {
 
-        // On parcourt tous les points r�sultant de la requ�te (ils sont class� par  idcoast, idpoint
+        // On parcourt tous les points résultant de la requéte (ils sont classé par  idcoast, idpoint
         //  - Chaque fois qu'on trouve un point : 
 
-          //    1/ C'est un point d'un trait de cote diff�rent de celui mentionn� par "$idcoast"
-          //       ==> Il faut tracer le trait de c�te termin� (fonction drawOneCoast)
+          //    1/ C'est un point d'un trait de cote différent de celui mentionné par "$idcoast"
+          //       ==> Il faut tracer le trait de côte terminé (fonction drawOneCoast)
           //       ==> Il faut initialiser le tableau (nettoyage + creation)
           //       +   ==> on ajoute ce point au tableau 
 
-          //    2/ C'est un point du meme trait de cote que le rep�re "$idcoast", 
+          //    2/ C'est un point du meme trait de cote que le repère "$idcoast", 
           //       +   ==> on ajoute ce point au tableau 
 
          if ( $point[0] != $idcoast ) {            
@@ -565,20 +565,20 @@ class map
             }
             $this->drawOneCoast($projCallbackLong, $projCallbackLat, $coastpoints_array, $fullres, $coasts);
           }
-          unset($coastpoints_array);  // Utile ou pas ? vidage m�moire ?
+          unset($coastpoints_array);  // Utile ou pas ? vidage mémoire ?
           $points_count = 0;
           $coastpoints_array = array(); 
           $idcoast = $point[0];      
           $idpoint = -1;
         }
-        // + ajout au tableau (dans tous les cas, donc factoris�)
+        // + ajout au tableau (dans tous les cas, donc factorisé)
 
         // latitude
         $y = $this->projLat($point[2]*1000);
         // longitude
         if ( $this->flag_E_W == true && $point[3] < 0 ) {
           $x = $this->projLong(360000+$point[3]*1000);
-          //printf ("longitude n�gative : %f, x=%d\n" , $point[2], $x[$i]);
+          //printf ("longitude négative : %f, x=%d\n" , $point[2], $x[$i]);
         } else {
           $x = $this->projLong($point[3]*1000);
         }
