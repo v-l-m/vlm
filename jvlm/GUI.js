@@ -120,8 +120,10 @@ $(document).ready(
 function LeafletInit()
 {
   //Init map object
-  map = L.map('jVlmMap').setView([0,0],8);
+  map = L.map('jVlmMap').setView([0, 0], 8);
 
+  // Coords grid
+  AddMapGrids(map);
   // Tiles
   let src = tileUrlSrv;
   L.tileLayer(src,
@@ -130,13 +132,113 @@ function LeafletInit()
     maxZoom: 20,
     tms: false,
     id: 'vlm',
-    detectRetina:true,
-    subdomains:tilesUrlArray,
-    
+    detectRetina: true,
+    subdomains: tilesUrlArray,
+
   }).addTo(map);
 
-  map.on('mousemove',HandleMapMouseMove);
-  map.on('click',HandleMapMouseClick);
+
+
+  map.on('mousemove', HandleMapMouseMove);
+  map.on('click', HandleMapMouseClick);
+}
+
+function AddMapGrids(m)
+{
+  let Levels = [
+  {
+    Level: 0,
+    Step: 30
+  },
+  {
+    Level: 4,
+    Step: 10
+  },
+  {
+    Level: 5,
+    Step: 5
+  },
+  {
+    Level: 7,
+    Step: 1
+  },
+  {
+    Level: 9,
+    Step: 0.5
+  },
+  {
+    Level: 12,
+    Step: 0.25
+  }];
+
+  for (let index in Levels)
+  {
+    AddMapGrid(m, Levels[index]);
+  }
+
+  m.on("zoomend", HandleMapGridZoom);
+}
+
+function AddMapGrid(m, level)
+{
+  let lStyle = {
+        color: 'black',
+        weight: 1,
+        opacity: 0.5,
+      };
+  let Layers = [];
+
+  for (let x = -180, index = 0; x <= 180; x += level.Step, index++)
+  {
+    let P = [
+      [-90, x],
+      [90, x]
+    ];
+    Layers.push(L.polyline(P, lStyle).bindTooltip("L"+x,{permanent:true,opacity:0.25}));
+    
+  }
+  for (let x = -90, index = 0; x <= 90; x += level.Step, index++)
+  {
+    let P = [
+      [ x,-180],
+      [x,180]
+    ];
+    Layers.push(L.polyline(P, lStyle));
+  }
+
+  if (typeof m.Layers === "undefined")
+  {
+    m.Layers = [];
+  }
+
+  m.Layers.push(L.layerGroup(Layers,
+  {
+    minZoom: level.Level
+
+  }).addTo(m));
+
+}
+
+function HandleMapGridZoom(e)
+{
+  let m = e.sourceTarget;
+  let z = m.getZoom();
+
+  console.log("Zoom Level " + z);
+  for (let index in m.Layers)
+  {
+    if (m.Layers[index] && m.Layers[index].options.minZoom)
+    {
+      if (m.Layers[index].options.minZoom <= z)
+      {
+        m.Layers[index].addTo(m);
+      }
+      else
+      {
+        m.Layers[index].remove();
+      }
+    }
+  }
 }
 
 let PasswordResetInfo = [];
@@ -2377,7 +2479,7 @@ function RefreshCurrentBoat(SetCenterOnBoat, ForceRefresh, TargetTab)
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in BoatIDSpan[0].attributes))
   {
     let BoatId = BoatIDSpan[0].attributes.BoatID.value;
-    
+
     SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat, ForceRefresh, TargetTab);
   }
 
@@ -2588,7 +2690,7 @@ function HandleBoatSelectionChange(e)
   ResetCollapsiblePanels();
 
   let BoatId = $(e.target).closest('li').attr('BoatID');
-  let Boat = GetBoatFromIdu(BoatId);  
+  let Boat = GetBoatFromIdu(BoatId);
 
   if (typeof Boat === "undefined" || !Boat)
   {
@@ -2604,13 +2706,13 @@ var ShowEstTimeOutHandle = null;
 
 function HandleMapMouseClick(e)
 {
-  let bkpevt=1;
+  let bkpevt = 1;
 }
 
 function HandleMapMouseMove(e)
 {
   let LatLng = e.latlng;
-  if ( (typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
+  if ((typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
   {
     var Pos = new VLMPosition(LatLng.lng, LatLng.lat);
     var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);

@@ -420,7 +420,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       }).addTo(map);
 
     }
-    
+
     //Draw polar
     if (typeof map !== "undefined" && map)
     {
@@ -441,9 +441,9 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
         else
         {
           let PolarStyle = {
-            color: "#CCCCCC",
+            color: "white",
             opacity: 0.6,
-            weight:1
+            weight: 1
           };
           RaceFeatures.Polar = L.polyline(Polar, PolarStyle);
           RaceFeatures.Polar.addTo(map);
@@ -581,15 +581,15 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   DrawOpponents(Boat);
 
   // Draw OppTracks, if any is selected
-  if (typeof Boat.OppTrack !== "undefined" && Object.keys(Boat.OppTrack).length > 0)
+  if (typeof Boat.RaceMapFeatures !== "undefined" && typeof Boat.RaceMapFeatures.OppTrack !== "undefined" && Object.keys(Boat.OppTrack).length > 0)
   {
-    for (let TrackIndex in Boat.OppTrack)
+    for (let TrackIndex in Boat.RaceMapFeatures.OppTrack)
     {
-      var T = Boat.OppTrack[TrackIndex];
+      var T = Boat.RaceMapFeatures.OppTrack[TrackIndex];
 
       if (T && T.Visible && T.DatePos.length > 1)
       {
-        if (!T.OLTrackLine)
+        if (!T.OppTrackPoints)
         {
           let TrackPoints = [];
           let TLen = Object.keys(T.DatePos).length;
@@ -597,23 +597,38 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
           {
             let k = Object.keys(T.DatePos)[PointIndex];
             let P = T.DatePos[k];
-            let Pi = new OpenLayers.Geometry.Point(P.lon, P.lat);
-            let Pi_PosTransformed = Pi.transform(MapOptions.displayProjection, MapOptions.projection);
+            let Pi = [P.lat, P.lon];
 
-            TrackPoints.push(Pi_PosTransformed);
+            TrackPoints.push(Pi);
           }
-          T.OLTrackLine = TrackPoints;
+          T.OppTrackPoints = TrackPoints;
         }
 
-        let OppTrack = new OpenLayers.Feature.Vector(
-          new OpenLayers.Geometry.LineString(T.OLTrackLine),
+        //TODO Fix this for leaflet
+        if (typeof RaceFeatures.OppTrack ===  "undefined")
+        {
+          RaceFeatures.OppTrack=[];
+        }
+
+        if (RaceFeatures.OppTrack[TrackIndex])
+        {
+          RaceFeatures.OppTrack[TrackIndex].setLatLngs(T.OppTrackPoints).addTo(map);
+        }
+        else
+        {
+          let color = 'black';
+
+          if (typeof T.TrackColor !== "undefined")
           {
-            "type": "HistoryTrack",
-            "TrackColor": T.TrackColor
-          });
+            color = T.TrackColor;
+          }
+          let TrackStyle = {
+            color: color,
+            weigth: 2
+          };
+          RaceFeatures.OppTrack[TrackIndex] = L.polyline(T.OppTrackPoints, TrackStyle).addTo(map);
+        }
         T.LastShow = new Date();
-        VLMBoatsLayer.addFeatures(OppTrack);
-        BoatFeatures.push(OppTrack);
       }
     }
   }
@@ -1729,6 +1744,7 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
     {
       icon: OppMarker
     }).addTo(map);
+    RaceFeatures.Opponents[Opponent.idusers].on('click', HandleOpponentClick);
   }
 
 }
@@ -1736,9 +1752,8 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 //TODOfix Opponent Popup
 function ShowOpponentPopupInfo(e)
 {
-  var ObjType = e.feature.data.type;
-  let index;
-
+  let ObjType = null; //e.feature.data.type;
+  
   if (ObjType == "opponent")
   {
     let Boat = GetOppBoat(e.feature.attributes.idboat);
@@ -1848,29 +1863,41 @@ function BuildBoatPopupInfo(Boat)
   return RetStr;
 }
 
-function HandleFeatureOver(e)
+function HandleOpponentOver(e)
 {
-  var ObjType = e.feature.data.type;
+  let Opponent = e.sourceTarget;
   let index;
+  let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
+  let OppIndex = null;
 
-  if (ObjType == "opponent")
+  // Clear previous tracks
+  for (index in RaceFeatures.Opponents)
   {
-    // Clear previous tracks
-    for (index in _CurPlayer.CurBoat.OppTrack)
+    if (RaceFeatures.Opponents[index] === Opponent)
     {
-      _CurPlayer.CurBoat.OppTrack[index].Visible = false;
+      OppIndex = index;
+      break;
+    }
+    //_CurPlayer.CurBoat.OppTrack[index].Visible = false;
+  }
+
+  if (OppIndex)
+  {
+    for (index in RaceFeatures.OppTrack)
+    {
+      let ShowTrack = (index === OppIndex);
+      _CurPlayer.CurBoat.OppTrack[index].Visible = ShowTrack;
     }
 
-    DrawOpponentTrack(e.feature.data);
+    DrawOpponentTrack(OppIndex,RaceFeatures.Opponents[index]);
   }
 }
 
-function HandleFeatureClick(e)
+function HandleOpponentClick(e)
 {
   // Clicking oppenent will show the track, and popup info (later)
-  HandleFeatureOver(e);
+  HandleOpponentOver(e);
   ShowOpponentPopupInfo(e);
-
 }
 
 function HandleFeatureOut(e)
@@ -1894,10 +1921,9 @@ var TrackPendingRequests = [];
 
 var LastTrackRequest = 0;
 
-function DrawOpponentTrack(FeatureData)
+function DrawOpponentTrack(IdBoat, OppInfo)
 {
   let B = _CurPlayer.CurBoat;
-  let IdBoat = FeatureData.idboat;
   let CurDate = new Date();
   let PendingID = null;
   if (typeof B !== "undefined" && B && CurDate > LastTrackRequest)
@@ -1922,11 +1948,11 @@ function DrawOpponentTrack(FeatureData)
         console.log("GetTrack " + PendingID + " " + StartTime);
         if (parseInt(IdBoat) > 0)
         {
-          GetBoatTrack(B, IdBoat, IdRace, StartTime, FeatureData);
+          GetBoatTrack(B, IdBoat, IdRace, StartTime, OppInfo);
         }
         else if (parseInt(IdBoat))
         {
-          GetRealBoatTrack(B, IdBoat, IdRace, StartTime, FeatureData);
+          GetRealBoatTrack(B, IdBoat, IdRace, StartTime, OppInfo);
         }
       }
     }
@@ -1938,14 +1964,14 @@ function DrawOpponentTrack(FeatureData)
   }
 }
 
-function GetRealBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData)
+function GetRealBoatTrack(Boat, IdBoat, IdRace, StartTime, OppInfo)
 {
   $.get("/ws/realinfo/tracks.php?idr=" + IdRace + "&idreals=" + (-IdBoat) + "&starttime=" + StartTime,
     function(e)
     {
       if (e.success)
       {
-        AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, FeatureData.color);
+        AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, OppInfo.color);
         RefreshCurrentBoat(false, false);
       }
     }
@@ -1954,7 +1980,7 @@ function GetRealBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData)
 
 var TrackRequestPending = false;
 
-function GetBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData)
+function GetBoatTrack(Boat, IdBoat, IdRace, StartTime, OppInfo)
 {
   if (TrackRequestPending)
   {
@@ -1972,7 +1998,7 @@ function GetBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData)
       {
         var index;
 
-        AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, FeatureData.color);
+        AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, OppInfo.Color);
 
         for (index in e.tracks_url)
         {
@@ -1986,7 +2012,7 @@ function GetBoatTrack(Boat, IdBoat, IdRace, StartTime, FeatureData)
             {
               if (e.success)
               {
-                AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, FeatureData.color);
+                AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, OppInfo.Color);
                 RefreshCurrentBoat(false, false);
               }
             }
@@ -2014,7 +2040,7 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
       TrackColor: TrackColor,
       DatePos: [],
       Visible: true,
-      OLTrackLine: null
+      OppTrackPoints: null
     };
   }
 
@@ -2029,10 +2055,7 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
     };
   }
   Boat.OppTrack[IdBoat].LastShow = 0;
-  Boat.OppTrack[IdBoat].OLTrackLine = null;
-
-
-
+  Boat.OppTrack[IdBoat].OppTrackPoints = null;
 }
 
 function DeletePilotOrder(Boat, OrderId)
