@@ -122,8 +122,6 @@ function LeafletInit()
   //Init map object
   map = L.map('jVlmMap').setView([0, 0], 8);
 
-  // Coords grid
-  AddMapGrids(map);
   // Tiles
   let src = tileUrlSrv;
   L.tileLayer(src,
@@ -140,105 +138,120 @@ function LeafletInit()
 
 
   map.on('mousemove', HandleMapMouseMove);
+  map.on('moveend', HandleMapGridZoom);
   map.on('click', HandleMapMouseClick);
+  map.on("zoomend", HandleMapGridZoom);
 }
 
-function AddMapGrids(m)
-{
-  let Levels = [
-  {
-    Level: 0,
-    Step: 30
-  },
-  {
-    Level: 4,
-    Step: 10
-  },
-  {
-    Level: 5,
-    Step: 5
-  },
-  {
-    Level: 7,
-    Step: 1
-  },
-  {
-    Level: 9,
-    Step: 0.5
-  },
-  {
-    Level: 12,
-    Step: 0.25
-  }];
-
-  for (let index in Levels)
-  {
-    AddMapGrid(m, Levels[index]);
-  }
-
-  m.on("zoomend", HandleMapGridZoom);
-}
-
-function AddMapGrid(m, level)
-{
-  let lStyle = {
-        color: 'black',
-        weight: 1,
-        opacity: 0.5,
-      };
-  let Layers = [];
-
-  for (let x = -180, index = 0; x <= 180; x += level.Step, index++)
-  {
-    let P = [
-      [-90, x],
-      [90, x]
-    ];
-    Layers.push(L.polyline(P, lStyle).bindTooltip("L"+x,{permanent:true,opacity:0.25}));
-    
-  }
-  for (let x = -90, index = 0; x <= 90; x += level.Step, index++)
-  {
-    let P = [
-      [ x,-180],
-      [x,180]
-    ];
-    Layers.push(L.polyline(P, lStyle));
-  }
-
-  if (typeof m.Layers === "undefined")
-  {
-    m.Layers = [];
-  }
-
-  m.Layers.push(L.layerGroup(Layers,
-  {
-    minZoom: level.Level
-
-  }).addTo(m));
-
-}
 
 function HandleMapGridZoom(e)
 {
   let m = e.sourceTarget;
   let z = m.getZoom();
+  let b = m.getBounds();
+
+  let DX = b._northEast.lng - b._southWest.lng;
+  let DY = b._northEast.lat - b._southWest.lat;
+  let S = DX;
+  if (DY < DX)
+  {
+    S = DY;
+  }
+  S = Math.pow(0.25, Math.ceil(Math.log(S) / Math.log(0.25)));
+
+  if (S > 5)
+  {
+    S = Math.pow(5, Math.floor(Math.log(S) / Math.log(5)));
+  }
+
+  if (typeof m.GridLayer == "undefined")
+  {
+    m.Grid = [];
+    m.GridLayer = L.layerGroup().addTo(m);
+  }
+  else
+  {
+    m.GridLayer.clearLayers();
+  }
+
+  let GridLabelOpacity=0.25;
+  let GridLineStyle = {
+    weight: 1,
+    opacity: GridLabelOpacity,
+    color: 'black'
+  };
+  let GridLabelStyle1 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset:[0,-10]
+  };
+  let GridLabelStyle2 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset:[0,10]
+  };
+  let GridLabelStyle3 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset:[10,0]
+  };
+  let GridLabelStyle4 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset:[-10,0]
+  };
+
+  let index = 0;
+  for (let x = b._southWest.lng; x <= b._northEast.lng; x += S)
+  {
+    let P = [
+      [b._southWest.lat, x],
+      [b._northEast.lat, x]
+    ];
+
+    m.Grid[index] = L.polyline(P, GridLineStyle);
+    m.GridLayer.addLayer(m.Grid[index++]);
+    let xlabel = RoundPow(4 * x, 0) / 4;
+
+    m.Grid[index] = L.circleMarker(P[0],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle1);
+    m.GridLayer.addLayer(m.Grid[index++]);
+    m.Grid[index] = L.circleMarker(P[1],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel,GridLabelStyle2);
+    m.GridLayer.addLayer(m.Grid[index++]);
+
+  }
+
+  for (let y = b._southWest.lat; y <= b._northEast.lat; y += S)
+  {
+    let P = [
+      [y, b._southWest.lng],
+      [y, b._northEast.lng]
+    ];
+    let xlabel = RoundPow(4 * y, 0) / 4;
+
+    m.Grid[index] = L.polyline(P, GridLineStyle);
+    m.GridLayer.addLayer(m.Grid[index]);
+    m.Grid[index] = L.circleMarker(P[0],
+      {
+        radius: 1
+      }).bindTooltip("" + xlabel, GridLabelStyle3);
+      m.GridLayer.addLayer(m.Grid[index++]);
+      m.Grid[index] = L.circleMarker(P[1],
+      {
+        radius: 1
+      }).bindTooltip("" + xlabel,GridLabelStyle4);
+      m.GridLayer.addLayer(m.Grid[index++]);
+  
+  }
 
   console.log("Zoom Level " + z);
-  for (let index in m.Layers)
-  {
-    if (m.Layers[index] && m.Layers[index].options.minZoom)
-    {
-      if (m.Layers[index].options.minZoom <= z)
-      {
-        m.Layers[index].addTo(m);
-      }
-      else
-      {
-        m.Layers[index].remove();
-      }
-    }
-  }
+
+
 }
 
 let PasswordResetInfo = [];
