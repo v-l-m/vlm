@@ -174,7 +174,7 @@ function HandleMapGridZoom(e)
     m.GridLayer.clearLayers();
   }
 
-  let GridLabelOpacity=0.25;
+  let GridLabelOpacity=0.4;
   let GridLineStyle = {
     weight: 1,
     opacity: GridLabelOpacity,
@@ -202,7 +202,8 @@ function HandleMapGridZoom(e)
   };
 
   let index = 0;
-  for (let x = b._southWest.lng; x <= b._northEast.lng; x += S)
+  
+  for (let x = Math.floor(b._southWest.lng); x <= b._northEast.lng; x += S)
   {
     let P = [
       [b._southWest.lat, x],
@@ -226,7 +227,7 @@ function HandleMapGridZoom(e)
 
   }
 
-  for (let y = b._southWest.lat; y <= b._northEast.lat; y += S)
+  for (let y = Math.floor(b._southWest.lat); y <= b._northEast.lat; y += S)
   {
     let P = [
       [y, b._southWest.lng],
@@ -3928,6 +3929,10 @@ function HandleMapPrefOptionChange(e)
 
 function SafeHTMLColor(Color)
 {
+  if (typeof Color === "undefined")
+  {
+    Color="#000000";
+  }
   Color = "" + Color;
 
   if (Color.length < 6)
