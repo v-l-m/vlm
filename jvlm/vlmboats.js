@@ -382,7 +382,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     WP = Boat.GetNextWPPosition();
   }
 
-  if (typeof WP !== "undefined" && WP)
+  if (typeof WP !== "undefined" && WP && !isNaN(WP.Lat.Value) && !isNaN(WP.Lon.Value))
   {
     if (WPFeature)
     {
@@ -412,7 +412,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
     else
     {
-      BoatIcon = GetBoatMarker();
+      BoatIcon = GetBoatMarker(Boat.VLMInfo.idusers);
       RaceFeatures.BoatMarker = L.marker([Boat.VLMInfo.LAT, Boat.VLMInfo.LON],
       {
         icon: BoatIcon,
@@ -486,7 +486,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     var TrackColor = Boat.VLMInfo.COL;
 
     TrackColor = SafeHTMLColor(TrackColor);
-    
+
     let TrackFeature = RaceFeatures.BoatTrack;
 
     if (TrackFeature)
@@ -1741,7 +1741,6 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
   else
   {
     let OppMarker = GetOpponentMarker(OppData);
-
     RaceFeatures.Opponents[Opponent.idusers] = L.marker(Opp_Coords,
     {
       icon: OppMarker
@@ -1755,49 +1754,51 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 //TODOfix Opponent Popup
 function ShowOpponentPopupInfo(e)
 {
-  let ObjType = null; //e.feature.data.type;
+  let Opp = e.sourceTarget;
 
-  if (ObjType == "opponent")
+  if (Opp && Opp.options && Opp.options.icon && typeof Opp.options.icon.MarkerOppId !== "undefined")
   {
-    let Boat = GetOppBoat(e.feature.attributes.idboat);
+    let Boat = GetOppBoat(Opp.options.icon.MarkerOppId);
     if (Boat)
     {
       let Pos = new VLMPosition(Boat.longitude, Boat.latitude);
-      let PopupFields = [];
-      let feature = e.feature;
+      let Features = GetRaceMapFeatures(_CurPlayer.CurBoat);
 
-      if (OppPopups[e.feature.attributes.idboat])
+      if (Features)
       {
-        map.removePopup(OppPopups[e.feature.attributes.idboat]);
-        OppPopups[e.feature.attributes.idboat] = null;
+
+        let PopupStr = BuildBoatPopupInfo(Boat);
+        if (!Features.OppPopup)
+        {
+          Features.OppPopup = L.popup(PopupStr);
+        }
+        else
+        {
+          Features.OppPopup.setContent(PopupStr);
+        }
+        if (Features.OppPopup.PrevOpp)
+        {
+          Features.OppPopup.PrevOpp.unbindPopup(Features.OppPopup);
+        }
+        Opp.bindPopup(Features.OppPopup).openPopup();
+        Features.OppPopup.PrevOpp = Opp;
+
+        let PopupFields = [];
+        let OppId = Opp.options.icon.MarkerOppId;
+        Opp.openPopup();
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + OppId, Boat.boatname]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + OppId, Boat.idusers]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + OppId, Boat.rank]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + OppId, RoundPow(parseFloat(Boat.loch), 2)]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + OppId, "[" + Boat.nwp + "] " + RoundPow(parseFloat(Boat.dnm), 2)]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + OppId, Pos.GetVLMString()]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + OppId, RoundPow(parseFloat(Boat.last1h), 2)]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + OppId, RoundPow(parseFloat(Boat.last3h), 2)]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + OppId, RoundPow(parseFloat(Boat.last24h), 2)]);
+        PopupFields.push([FIELD_MAPPING_STYLE, "#__BoatColor" + OppId, "background-color", SafeHTMLColor(Boat.color)]);
+        FillFieldsFromMappingTable(PopupFields);
+
       }
-
-      let popup = new OpenLayers.Popup.FramedCloud("popup",
-        OpenLayers.LonLat.fromString(feature.geometry.toShortString()),
-        null,
-        BuildBoatPopupInfo(Boat),
-        null,
-        true,
-        null
-      );
-      popup.autoSize = true;
-      popup.maxSize = new OpenLayers.Size(400, 800);
-      popup.fixedRelativePosition = true;
-      feature.popup = popup;
-      map.addPopup(popup);
-      OppPopups[e.feature.attributes.idboat] = popup;
-
-
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + e.feature.attributes.idboat, Boat.boatname]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + e.feature.attributes.idboat, e.feature.attributes.idboat]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + e.feature.attributes.idboat, e.feature.attributes.rank]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.loch), 2)]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatNWP" + e.feature.attributes.idboat, "[" + Boat.nwp + "] " + RoundPow(parseFloat(Boat.dnm), 2)]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatPosition" + e.feature.attributes.idboat, Pos.GetVLMString()]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat1HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last1h), 2)]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat3HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last3h), 2)]);
-      PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + e.feature.attributes.idboat, RoundPow(parseFloat(Boat.last24h), 2)]);
-      FillFieldsFromMappingTable(PopupFields);
     }
   }
 
@@ -1841,6 +1842,10 @@ function GetOppBoat(BoatId)
 
 function BuildBoatPopupInfo(Boat)
 {
+  if (!Boat || !Boat.idusers)
+  {
+    return null;
+  }
   let BoatId = Boat.idusers;
 
   let RetStr =
@@ -1850,6 +1855,7 @@ function BuildBoatPopupInfo(Boat)
     ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
     ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
     '</div>' +
+    '<div id="__BoatColor' + BoatId + '" style="height: 2px;"></div>' +
     '<div class="MapPopup_InfoBody">' +
     ' <fieldset>' +
     '   <span class="PopupHeadText " I18n="loch">' + GetLocalizedString('loch') + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId + '" class="loch PopupText">0.9563544</span>' +

@@ -10,6 +10,7 @@ var FIELD_MAPPING_VALUE = 1;
 var FIELD_MAPPING_CHECK = 2;
 var FIELD_MAPPING_IMG = 3;
 var FIELD_MAPPING_CALLBACK = 4;
+var FIELD_MAPPING_STYLE = 5;
 
 var MAX_PILOT_ORDERS = 5;
 
@@ -1658,6 +1659,8 @@ function FillFieldsFromMappingTable(MappingTable)
           MappingTable[index][2](MappingTable[index][1]);
           break;
 
+        case FIELD_MAPPING_STYLE:
+          $(MappingTable[index][1]).css(MappingTable[index][2],MappingTable[index][3]);
 
       }
     }

@@ -72,9 +72,12 @@ function GetBuoyMarker(Buoy1)
   return RetMark;
 }
 
-function GetBoatMarker()
+function GetBoatMarker(idboat)
 {
-  return new BoatMarker();
+  
+  let ret=new BoatMarker();
+  ret.MarkerOppId=idboat;
+  return ret;
 }
 
 function GetTrackWPMarker()
@@ -119,6 +122,8 @@ function GetOpponentMarker(OppData)
     iconAnchor:[OppData.IsFriend/2,OppData.IsFriend/2],
     iconSize:[OppData.IsFriend,OppData.IsFriend]
   });
+
+  ret.MarkerOppId=OppData.idboat;
 
   return ret;
 }
