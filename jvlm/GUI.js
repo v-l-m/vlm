@@ -164,6 +164,10 @@ function HandleMapGridZoom(e)
   {
     S = Math.pow(5, Math.floor(Math.log(S) / Math.log(5)));
   }
+  else if (S < 0.25)
+  {
+    S=0.25;
+  }
 
   if (typeof m.GridLayer == "undefined")
   {
