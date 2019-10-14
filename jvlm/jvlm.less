@@ -36,14 +36,17 @@ input {
   height:auto;
 }
  @DialogBgColor: #15214b;
-.modaldialog{
+.modal,.Draggable {
+  z-index: 3000;
+}
+.modal-dialog{
   background-color: @DialogBgColor;
 }
 div.UserMenu {
   position: absolute;
   background-color: @DialogBgColor;
   color: white;
-  z-index: 1000;
+  z-index: 2000;
 }
 div.LoginButton {
  //background-color: lightBlue;
@@ -121,13 +124,14 @@ div.GribmapMousePosition {
 .navbar-brand{
   padding:0;
 }
-#logovlm {
+
+/*#logovlm {
   display: fixed;
   position: absolute;
   bottom: 50px;
   left: 10px;
   z-index: 99999;
-}
+}*/
 #logo{
   position: relative;
   max-width:64em;
@@ -187,7 +191,7 @@ div.GribmapMousePosition {
   line-height: 11px;
 }
 .ui-menu {
-  z-index: 20000;
+  z-index: 2000;
 }
 option.Boat {
   font-style : italic;
@@ -402,7 +406,6 @@ span.ui-selectmenu-text {
   background-color: #c70000;
   right: 35px;
   top: 0;
-  z-index:995;
 }
 .pilot {
   background-color: #00c700;
@@ -727,14 +730,7 @@ float:left;
   width: 100%;
   height: auto;
 }
-/*.racelistminimap:hover {
-  position: relative;
-  top: -25px;
-  left: -35px;
-  width: 256px;
-  display: block;
-  z-index: 999;
-}*/
+
 .RaceInfoDiv {
   padding-left: 4px;
   min-width:110px;
@@ -1031,8 +1027,6 @@ label{
   margin-left:auto;
   margin-right:auto;
   border-radius:5px;
-  z-index:1055;
-
 }
 #mouseInfo{
   cursor:move;
@@ -1043,7 +1037,6 @@ label{
     left:50%; 
     top:25%;
     border-radius:5px;
-    z-index:999;
 }
 #affichage{
   cursor:move;
@@ -1054,7 +1047,6 @@ label{
     left:50%; 
     top:25%;
     border-radius:5px;
-    z-index:998;
 }
 .affich{
 margin-left:0;
@@ -1191,7 +1183,7 @@ a:hover.tooltips span {
   top: 30px;
   left: 50%;
   margin-left: -76px;
-  z-index: 999;
+  z-index: 4000;
 }
 .DDLine:hover{
   background-color:#7D7D7D;
@@ -1370,15 +1362,6 @@ td, th {
   /*  border: 1px solid;*/
 }
 
- /*.polaire{ 
-  width:300px;
-  height:512px;
-}
-  #img1 {z-index: 4;}
-  #img2 {z-index: 3;}
-  #img3 {z-index: 2;}
-  #img4 {z-index: 1;}*/
-  
 .NoAnimation{
   -webkit-transition: none;
   -moz-transition: none;
@@ -1411,7 +1394,6 @@ position:fixed;
 top:75px;
 //max-width:600px;
 min-height:50%;
-z-index: 1000;
 }
 .Apropos{
   background-color:rgba(0, 0, 0, 0.6);
@@ -1478,4 +1460,8 @@ text-align:justify;
 
 .GribNotOK{
   background: red;
+}
+
+.GribGetsOld{
+  background: orange;
 }
