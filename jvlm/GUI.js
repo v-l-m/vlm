@@ -121,7 +121,7 @@ $(document).ready(
 function LeafletInit()
 {
   //Init map object
-  map = L.map('jVlmMap').setView([0, 0], 8);
+  map = L.map('jVlmMap'/*,{preferCanvas:true}*/).setView([0, 0], 8);
 
   // Tiles
   let src = tileUrlSrv;
@@ -136,7 +136,8 @@ function LeafletInit()
 
   }).addTo(map);
 
-
+  // Wind Layer
+  map.GribMap = new GribMap.Layer().addTo(map);
 
   map.on('mousemove', HandleMapMouseMove);
   map.on('moveend', HandleMapGridZoom);
@@ -179,7 +180,7 @@ function HandleMapGridZoom(e)
     m.GridLayer.clearLayers();
   }
 
-  let GridLabelOpacity=0.4;
+  let GridLabelOpacity = 0.4;
   let GridLineStyle = {
     weight: 1,
     opacity: GridLabelOpacity,
@@ -188,26 +189,26 @@ function HandleMapGridZoom(e)
   let GridLabelStyle1 = {
     permanent: true,
     opacity: GridLabelOpacity,
-    offset:[0,-10]
+    offset: [0, -10]
   };
   let GridLabelStyle2 = {
     permanent: true,
     opacity: GridLabelOpacity,
-    offset:[0,10]
+    offset: [0, 10]
   };
   let GridLabelStyle3 = {
     permanent: true,
     opacity: GridLabelOpacity,
-    offset:[10,0]
+    offset: [10, 0]
   };
   let GridLabelStyle4 = {
     permanent: true,
     opacity: GridLabelOpacity,
-    offset:[-10,0]
+    offset: [-10, 0]
   };
 
   let index = 0;
-  
+
   for (let x = Math.floor(b._southWest.lng); x <= b._northEast.lng; x += S)
   {
     let P = [
@@ -227,7 +228,7 @@ function HandleMapGridZoom(e)
     m.Grid[index] = L.circleMarker(P[1],
     {
       radius: 1
-    }).bindTooltip("" + xlabel,GridLabelStyle2);
+    }).bindTooltip("" + xlabel, GridLabelStyle2);
     m.GridLayer.addLayer(m.Grid[index++]);
 
   }
@@ -243,21 +244,18 @@ function HandleMapGridZoom(e)
     m.Grid[index] = L.polyline(P, GridLineStyle);
     m.GridLayer.addLayer(m.Grid[index]);
     m.Grid[index] = L.circleMarker(P[0],
-      {
-        radius: 1
-      }).bindTooltip("" + xlabel, GridLabelStyle3);
-      m.GridLayer.addLayer(m.Grid[index++]);
-      m.Grid[index] = L.circleMarker(P[1],
-      {
-        radius: 1
-      }).bindTooltip("" + xlabel,GridLabelStyle4);
-      m.GridLayer.addLayer(m.Grid[index++]);
-  
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle3);
+    m.GridLayer.addLayer(m.Grid[index++]);
+    m.Grid[index] = L.circleMarker(P[1],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle4);
+    m.GridLayer.addLayer(m.Grid[index++]);
+
   }
-
-  console.log("Zoom Level " + z);
-
-
+  //console.log("Zoom Level " + z);
 }
 
 let PasswordResetInfo = [];
@@ -412,117 +410,6 @@ function OtherRaceRankingLoaded()
   SortRanking("RAC");
   console.log("off race ranking loaded");
 }
-
-/* function OLInit()
-{
-
-  //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
-  OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
-
-  var default_latitude = 45.5;
-  var default_longitude = -30.0;
-  var default_zoom = 4;
-
-  if (typeof VLM2Prefs !== "undefined" && VLM2Prefs.MapPrefs)
-  {
-    default_zoom = VLM2Prefs.MapPrefs.MapZoomLevel;
-  }
-
-  var layeroption = {
-    //sphérique
-    sphericalMercator: true,
-    transitionEffect: "resize",
-    //pour passer l'ante-meridien sans souci
-    wrapDateLine: true,
-    events: function(x)
-    {
-      console.log("TileLayer : " + x);
-    }
-  };
-
-  //MAP
-
-  /*map = new OpenLayers.Map(
-    "jVlmMap", //identifiant du div contenant la carte openlayer
-    MapOptions);
-
-  //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
-  var urlArray = tilesUrlArray;
-
-  var vlm = new OpenLayers.Layer.XYZ(
-    "VLM Layer",
-    urlArray,
-    layeroption
-  );*/
-
-
-
-//Le calque de vent made in Vlm
-// TODO
-//var grib = new Gribmap.Layer("Gribmap", layeroption);
-//grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
-
-//La minimap utilise le layer VLM
-//var vlmoverview = vlm.clone();
-
-//Et on ajoute tous les layers à la map.
-//map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-//map.addLayers([grib, VLMBoatsLayer, vlm]);
-//map.addLayers([vlm, grib]); //FOR DEBUG
-
-//Controle l'affichage des layers
-//map.addControl(new OpenLayers.Control.LayerSwitcher());
-
-//Controle l'affichage de la position ET DU VENT de la souris
-/*map.addControl(new Gribmap.MousePosition(
-  {
-    gribmap: grib
-  }));
-*/
-//Affichage de l'échelle
-//map.addControl(new OpenLayers.Control.ScaleLine());
-
-//Le Permalink
-//FIXME: éviter que le permalink soit masqué par la minimap ?
-//   map.addControl(new OpenLayers.Control.Permalink('permalink'));
-
-//   //FIXME: Pourquoi le graticule est il un control ?
-//   map.addControl(new OpenLayers.Control.Graticule());
-
-//   //Navigation clavier
-//   map.addControl(new OpenLayers.Control.KeyboardDefaults());
-
-//   //Le panel de vent
-
-//   GribWindController = new Gribmap.ControlWind();
-//   map.addControl(GribWindController);
-
-//   //Evite que le zoom molette surcharge le js du navigateur
-//   var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
-//   nav.handlers.wheel.cumulative = false;
-//   nav.handlers.wheel.interval = 100;
-
-//   //Minimap
-//   /*var ovmapOptions = {
-//     maximized: true,
-//     layers: [vlmoverview]
-//   };
-//   map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
-// */
-//   //Pour centrer quand on a pas de permalink dans l'url
-//   if (!map.getCenter())
-//   {
-//     // Don't do this if argparser already did something...
-//     var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
-//     lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
-//     map.setCenter(lonlat, default_zoom);
-//   }
-
-//   // Click handler
-//   var click = new OpenLayers.Control.Click();
-//   map.addControl(click);
-//   click.activate();
-//} */
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm)
 {
@@ -1664,7 +1551,7 @@ function FillFieldsFromMappingTable(MappingTable)
           break;
 
         case FIELD_MAPPING_STYLE:
-          $(MappingTable[index][1]).css(MappingTable[index][2],MappingTable[index][3]);
+          $(MappingTable[index][1]).css(MappingTable[index][2], MappingTable[index][3]);
 
       }
     }
@@ -2775,23 +2662,39 @@ function HandleMapMouseMove(e)
 
     if (GribMgr)
     {
-      let m = moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
-      let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
-      let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length - 1] * 1000 + ")/");
-      let span = moment.duration(ts_end.diff(ts_start));
-      $("#MI_SrvrGribAge").text(m);
-      $("#MI_LocalGribAge").text(GetLocalUTCTime(ts_start.add(3.5, "h"), true, true));
-      $("#MI_LocalGribSpan").text("" + span.asHours() + " h");
+      let m = "-- N/A --";
+      let GribAgeText = "-- N/A --";
+      let GribSpanText = "-- N/A --";
 
-      let now = new Date().getTime() / 1000;
-      if ((now - ts_start.local().unix()) > 9.5 * 3600)
+      if (GribMgr.LastGribDate)
       {
-        $("#GribLoadOK").addClass("GribNotOK");
+        m = moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
+        let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
+        let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length - 1] * 1000 + ")/");
+        let span = moment.duration(ts_end.diff(ts_start));
+        GribAgeText = GetLocalUTCTime(ts_start.add(3.5, "h"), true, true);
+        GribSpanText = "" + span.asHours() + " h";
+
+        let now = new Date().getTime() / 1000;
+        if ((now - ts_start.local().unix()) > 7 * 3600)
+        {
+          $("#GribLoadOK").addClass("GribNotOK");
+        }
+        else if ((now - ts_start.local().unix()) > 6 * 3600)
+        {
+          $("#GribLoadOK").addClass("GribGetsOld");
+        }
+                else
+        {
+          $("#GribLoadOK").removeClass("GribNotOK");
+        }
       }
-      else
-      {
-        $("#GribLoadOK").removeClass("GribNotOK");
-      }
+
+      $("#MI_SrvrGribAge").text(m);
+      $("#MI_LocalGribAge").text(GribAgeText);
+      $("#MI_LocalGribSpan").text(GribSpanText);
+
+
     }
 
     if (Estimated)
@@ -3938,7 +3841,7 @@ function SafeHTMLColor(Color)
 {
   if (typeof Color === "undefined")
   {
-    Color="#000000";
+    Color = "#000000";
   }
   Color = "" + Color;
 

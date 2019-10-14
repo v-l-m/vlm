@@ -417,7 +417,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       {
         icon: BoatIcon,
         rotationAngle: Boat.VLMInfo.HDG
-      }).addTo(map);
+      }).addTo(map).on('click',HandleOpponentClick);
 
     }
 
@@ -577,72 +577,12 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   // opponents  
   DrawOpponents(Boat);
 
-  // Draw OppTracks, if any is selected
-  if (typeof Boat.RaceMapFeatures !== "undefined" && Object.keys(Boat.OppTrack).length > 0)
-  {
-    for (let TrackIndex in Boat.OppTrack)
-    {
-      var T = Boat.OppTrack[TrackIndex];
-
-      if (T && T.Visible && T.DatePos.length > 1)
-      {
-        if (!T.OppTrackPoints)
-        {
-          let TrackPoints = [];
-          let TLen = Object.keys(T.DatePos).length;
-          for (let PointIndex = 0; PointIndex < TLen; PointIndex++)
-          {
-            let k = Object.keys(T.DatePos)[PointIndex];
-            let P = T.DatePos[k];
-            let Pi = [P.lat, P.lon];
-
-            TrackPoints.push(Pi);
-          }
-          T.OppTrackPoints = TrackPoints;
-        }
-
-        //TODO Fix this for leaflet
-        if (typeof RaceFeatures.OppTrack === "undefined")
-        {
-          RaceFeatures.OppTrack = [];
-        }
-
-        if (RaceFeatures.OppTrack[TrackIndex])
-        {
-          RaceFeatures.OppTrack[TrackIndex].setLatLngs(T.OppTrackPoints).addTo(map);
-        }
-        else
-        {
-          let color = 'black';
-
-          if (typeof T.TrackColor !== "undefined")
-          {
-            color = T.TrackColor;
-          }
-          let TrackStyle = {
-            color: color,
-            weight: 1,
-            opacity: 0.75
-          };
-          RaceFeatures.OppTrack[TrackIndex] = L.polyline(T.OppTrackPoints, TrackStyle).addTo(map);
-        }
-        T.LastShow = new Date();
-      }
-      else if (Boat.RaceMapFeatures.OppTrack && Boat.RaceMapFeatures.OppTrack[TrackIndex])
-      {
-        Boat.RaceMapFeatures.OppTrack[TrackIndex].remove();
-      }
-    }
-  }
-
-
   if (CenterMapOnBoat && typeof Boat.VLMInfo !== "undefined" && Boat.VLMInfo)
   {
     if (typeof map !== "undefined" && map)
     {
       map.setView([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
     }
-
   }
 
   console.log("ActualDrawBoatComplete");
@@ -1644,6 +1584,66 @@ function DrawOpponents(Boat)
       }
     }
   }
+
+    // Draw OppTracks, if any is selected
+    if (typeof Boat.RaceMapFeatures !== "undefined" && Object.keys(Boat.OppTrack).length > 0)
+    {
+      let RaceFeatures = Boat.RaceMapFeatures;
+      for (let TrackIndex in Boat.OppTrack)
+      {
+        var T = Boat.OppTrack[TrackIndex];
+  
+        if (T && T.Visible && T.DatePos.length > 1)
+        {
+          if (!T.OppTrackPoints)
+          {
+            let TrackPoints = [];
+            let TLen = Object.keys(T.DatePos).length;
+            for (let PointIndex = 0; PointIndex < TLen; PointIndex++)
+            {
+              let k = Object.keys(T.DatePos)[PointIndex];
+              let P = T.DatePos[k];
+              let Pi = [P.lat, P.lon];
+  
+              TrackPoints.push(Pi);
+            }
+            T.OppTrackPoints = TrackPoints;
+          }
+  
+          //TODO Fix this for leaflet
+          if (typeof RaceFeatures.OppTrack === "undefined")
+          {
+            RaceFeatures.OppTrack = [];
+          }
+  
+          if (RaceFeatures.OppTrack[TrackIndex])
+          {
+            RaceFeatures.OppTrack[TrackIndex].setLatLngs(T.OppTrackPoints).addTo(map);
+          }
+          else
+          {
+            let color = 'black';
+  
+            if (typeof T.TrackColor !== "undefined")
+            {
+              color = T.TrackColor;
+            }
+            let TrackStyle = {
+              color: color,
+              weight: 1,
+              opacity: 0.75
+            };
+            RaceFeatures.OppTrack[TrackIndex] = L.polyline(T.OppTrackPoints, TrackStyle).addTo(map);
+          }
+          T.LastShow = new Date();
+        }
+        else if (Boat.RaceMapFeatures.OppTrack && Boat.RaceMapFeatures.OppTrack[TrackIndex])
+        {
+          Boat.RaceMapFeatures.OppTrack[TrackIndex].remove();
+        }
+      }
+    }
+  
 }
 
 function CompareDist(a, b)
@@ -1746,7 +1746,8 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
       icon: OppMarker
     }).addTo(map);
     RaceFeatures.Opponents[Opponent.idusers].on('click', HandleOpponentClick);
-    RaceFeatures.Opponents[Opponent.idusers].on('mouseover', HandleOpponentClick);
+    RaceFeatures.Opponents[Opponent.idusers].on('mouseover', HandleOpponentOver);
+    RaceFeatures.Opponents[Opponent.idusers].IdUsers = Opponent.idusers;
   }
 
 }
@@ -1877,20 +1878,9 @@ function HandleOpponentOver(e)
   let Opponent = e.sourceTarget;
   let index;
   let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
-  let OppIndex = null;
+  let OppIndex = Opponent.IdUsers;
 
-  // Clear previous tracks
-  for (index in RaceFeatures.Opponents)
-  {
-    if (RaceFeatures.Opponents[index] === Opponent)
-    {
-      OppIndex = index;
-      break;
-    }
-    //_CurPlayer.CurBoat.OppTrack[index].Visible = false;
-  }
-
-  if (OppIndex)
+    if (OppIndex)
   {
     for (index in RaceFeatures.OppTrack)
     {
@@ -1898,10 +1888,9 @@ function HandleOpponentOver(e)
       _CurPlayer.CurBoat.OppTrack[index].Visible = ShowTrack;
     }
 
-    DrawOpponentTrack(OppIndex, RaceFeatures.Opponents[index]);
+    DrawOpponentTrack(OppIndex, RaceFeatures.Opponents[OppIndex]);
   }
 }
-
 
 function HandleOpponentClick(e)
 {
@@ -2023,14 +2012,14 @@ function GetBoatTrack(Boat, IdBoat, IdRace, StartTime, OppInfo)
               if (e.success)
               {
                 AddBoatOppTrackPoints(Boat, IdBoat, e.tracks, OppInfo.Color);
-                RefreshCurrentBoat(false, false);
+                DrawOpponents(Boat);
               }
             }
           );
           /* jshint +W083*/
 
         }
-        RefreshCurrentBoat(false, false);
+        DrawOpponents(Boat);
       }
     }
   );

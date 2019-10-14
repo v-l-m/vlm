@@ -64,7 +64,8 @@ function GetBuoyMarker(Buoy1)
   {
     RetMark = new BuoyMarker(
     {
-      iconUrl: 'images/Buoy2.png'
+      iconUrl: 'images/Buoy2.png',
+      color:"red"
     });
   }
 
@@ -132,6 +133,10 @@ function ClearCurrentMapMarker(Boat)
 {
   if (Boat && Boat.RaceMapFeatures)
   {
+    if (Boat.RaceMapFeatures.OppPopup && Boat.RaceMapFeatures.OppPopup.PrevOpp)
+    {
+      Boat.RaceMapFeatures.OppPopup.PrevOpp.unbindPopup(Boat.RaceMapFeatures.OppPopup);
+    }
     RemoveFromMap(Boat.RaceMapFeatures);
   }
 }
