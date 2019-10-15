@@ -395,8 +395,9 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
       RaceFeatures.TrackWP = L.marker([WP.Lat.Value, WP.Lon.Value],
       {
-        icon: WPMarker
-      }).addTo(map);
+        icon: WPMarker,
+        draggable: true
+      }).addTo(map).on("dragend",HandleWPDragEnded);
     }
   }
 
@@ -461,7 +462,6 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   }
 
 
-  //console.log("Added Pos Feature "+ WPMarker.id);
   // Last 24h track  
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
   {
@@ -2122,4 +2122,11 @@ function HandlePrefsLoaded(e)
   {
     VLMAlertDanger("Error communicating with VLM, try reloading the browser page...");
   }
+}
+
+function HandleWPDragEnded(e)
+{
+  let bkp = 0;
+  let Marker = _CurPlayer.CurBoat.RaceMapFeatures.TrackWP;
+  VLMAlertInfo("User WP moved to "+Marker.getLatLng());
 }

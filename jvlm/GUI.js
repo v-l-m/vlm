@@ -121,7 +121,7 @@ $(document).ready(
 function LeafletInit()
 {
   //Init map object
-  map = L.map('jVlmMap'/*,{preferCanvas:true}*/).setView([0, 0], 8);
+  map = L.map('jVlmMap' /*,{preferCanvas:true}*/ ).setView([0, 0], 8);
 
   // Tiles
   let src = tileUrlSrv;
@@ -138,7 +138,16 @@ function LeafletInit()
 
   // Wind Layer
   map.GribMap = new GribMap.Layer().addTo(map);
-
+  map.Compass = new L.marker([0, 0],
+  {
+    icon: new L.icon(
+    {
+      iconSize: [350, 341],
+      iconAnchor: [175, 170],
+      iconUrl: 'images/compas-transparent.gif',
+    }),
+    draggable: true
+  }).addTo(map);
   map.on('mousemove', HandleMapMouseMove);
   map.on('moveend', HandleMapGridZoom);
   map.on('click', HandleMapMouseClick);
@@ -167,7 +176,7 @@ function HandleMapGridZoom(e)
   }
   else if (S < 0.25)
   {
-    S=0.25;
+    S = 0.25;
   }
 
   if (typeof m.GridLayer == "undefined")
@@ -1096,9 +1105,8 @@ function HandleGribSlideMove(event, ui)
 {
   let handle = $("#GribSliderHandle");
   handle.text(ui.value);
-  let l = GribWindController.getGribmapLayer();
   let GribEpoch = new Date().getTime();
-  l.setTimeSegment(GribEpoch / 1000 + ui.value * 3600);
+  map.GribMap.SetGribMapTime(GribEpoch + ui.value * 3600000);
 
   if (VLM2Prefs.MapPrefs.TrackEstForecast && _CurPlayer.CurBoat.Estimator)
   {
@@ -2684,7 +2692,7 @@ function HandleMapMouseMove(e)
         {
           $("#GribLoadOK").addClass("GribGetsOld");
         }
-                else
+        else
         {
           $("#GribLoadOK").removeClass("GribNotOK");
         }

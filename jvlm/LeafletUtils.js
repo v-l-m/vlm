@@ -15,7 +15,6 @@ var TrackWPMarker = L.Icon.extend(
     iconSize: [48, 48],
     iconAnchor: [24, 24],
     iconUrl: 'images/WP_Marker.gif',
-    draggable: true
   }
 });
 

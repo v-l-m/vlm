@@ -67,6 +67,11 @@ GribMap.Layer = L.Layer.extend(
     this.DrawWindDebugCnt = 0;
     this.DrawWindDebugDepth = 0;
   },
+  SetGribMapTime: function(epoch)
+  {
+    this._Time = epoch;
+    this._update();
+  },
   onAdd: function(map)
   {
     let size = map.getSize();
