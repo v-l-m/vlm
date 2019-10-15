@@ -71,7 +71,6 @@ const VLM_COORDS_FACTOR = 1000;
 
 }); */
 
-// Control to handle drag of User WP
 // var DrawControl = null;
 var OppPopups = [];
 var StartSetWPOnClick = false;
@@ -224,6 +223,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   }
   else if (Boat)
   {
+    // Set Current Boat for player
+    _CurPlayer.CurBoat = Boat;
+
     // Draw from last request
     UpdateInMenuDockingBoatInfo(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
@@ -233,10 +235,12 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   }
 }
 
+
+// Get Track from server for last 48 hours.
 function GetTrackFromServer(Boat)
 {
   var end = Math.floor(new Date() / 1000);
-  var start = end - 24 * 3600;
+  var start = end - 48 * 3600;
   $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat + "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end, function(result)
   {
     if (result.success)
@@ -397,7 +401,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       {
         icon: WPMarker,
         draggable: true
-      }).addTo(map).on("dragend",HandleWPDragEnded);
+      }).addTo(map).on("dragend", HandleWPDragEnded);
     }
   }
 
@@ -418,94 +422,24 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
       {
         icon: BoatIcon,
         rotationAngle: Boat.VLMInfo.HDG
-      }).addTo(map).on('click',HandleOpponentClick);
+      }).addTo(map).on('click', HandleOpponentClick);
 
     }
 
     //Draw polar
     if (typeof map !== "undefined" && map)
     {
-      let Polar = [];
-      let StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
-
-      Polar = BuildPolarLine(Boat, StartPos, VLM2Prefs.MapPrefs.PolarVacCount, new Date(Boat.VLMInfo.LUP * 1000), function()
-      {
-        DrawBoat(Boat, CenterMapOnBoat);
-      });
-
-      if (Polar)
-      {
-        if (RaceFeatures.Polar)
-        {
-          RaceFeatures.Polar.setLatLngs(Polar);
-        }
-        else
-        {
-          let PolarStyle = {
-            color: "white",
-            opacity: 0.6,
-            weight: 1
-          };
-          RaceFeatures.Polar = L.polyline(Polar, PolarStyle);
-          RaceFeatures.Polar.addTo(map);
-        }
-      }
-      else
-      {
-        if (RaceFeatures.Polar)
-        {
-          RaceFeatures.Polar.remove();
-        }
-        RaceFeatures.Polar = null;
-      }
+      DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures);
     }
   }
-
 
   // Last 24h track  
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
   {
-    let PointList = [];
-    let TrackLength = Boat.Track.length;
-    let PrevLon = 99999;
-    let LonOffSet = 0;
-
-    for (let index = 0; index < TrackLength; index++)
-    {
-      let P = Boat.Track[index];
-      // Todo Handle AnteMeridien
-      /*if (PrevLon !== 99999)
-      {
-        LonOffSet += GetLonOffset(PrevLon, P.Lon.Value);
-      }
-      PrevLon = P.Lon.Value;*/
-
-      PointList.push([P.Lat.Value, P.Lon.Value]);
-    }
-
-    var TrackColor = Boat.VLMInfo.COL;
-
-    TrackColor = SafeHTMLColor(TrackColor);
-
-    let TrackFeature = RaceFeatures.BoatTrack;
-
-    if (TrackFeature)
-    {
-      TrackFeature.setLatLngs(PointList);
-    }
-    else
-    {
-      RaceFeatures.BoatTrack = L.polyline(PointList,
-      {
-        "type": "HistoryTrack",
-        "color": TrackColor,
-        "weight": 1.2
-      }).addTo(map);
-    }
+    DrawBoatTrack(Boat, RaceFeatures);
   }
 
 
-  // Forecast Track
 
   // TODO Recode forecast position marker
   /*if (Boat.Estimator && (Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length))
@@ -534,6 +468,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     } 
   }*/
 
+  // Forecast Track
   if (typeof Boat.Estimator !== "undefined" && Boat.Estimator)
   {
     let tracks = Boat.Estimator.GetEstimateTracks();
@@ -573,7 +508,6 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
-
   // opponents  
   DrawOpponents(Boat);
 
@@ -585,8 +519,97 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
+  // Position Compas according to current boat pos
+  {
+    RepositionCompass(Boat);
+  }
+
   console.log("ActualDrawBoatComplete");
 
+}
+
+function RepositionCompass(Boat)
+{
+  if (!Boat)
+  {
+    return;
+  }
+  let Features = GetRaceMapFeatures(Boat);
+  if (map.Compass)
+  {
+    if ((!Features.Compass) || (Features.Compass.Lat == -1 && Features.Compass.Lon == -1))
+    {
+      map.Compass.setLatLng([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
+    }
+    else if (Features.Compass)
+    {
+      map.Compass.setLatLng([Features.Compass.Lat, Features.Compass.Lon]);
+    }
+  }
+}
+
+function DrawBoatTrack(Boat, RaceFeatures)
+{
+  let PointList = [];
+  let TrackLength = Boat.Track.length;
+  let PrevLon = 99999;
+  let LonOffSet = 0;
+  for (let index = 0; index < TrackLength; index++)
+  {
+    let P = Boat.Track[index];
+    PointList.push([P.Lat.Value, P.Lon.Value]);
+  }
+  var TrackColor = Boat.VLMInfo.COL;
+  TrackColor = SafeHTMLColor(TrackColor);
+  let TrackFeature = RaceFeatures.BoatTrack;
+  if (TrackFeature)
+  {
+    TrackFeature.setLatLngs(PointList);
+  }
+  else
+  {
+    RaceFeatures.BoatTrack = L.polyline(PointList,
+    {
+      "type": "HistoryTrack",
+      "color": TrackColor,
+      "weight": 1.2
+    }).addTo(map);
+  }
+}
+
+function DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures)
+{
+  let Polar = [];
+  let StartPos = new VLMPosition(Boat.VLMInfo.LON, Boat.VLMInfo.LAT);
+  Polar = BuildPolarLine(Boat, StartPos, VLM2Prefs.MapPrefs.PolarVacCount, new Date(Boat.VLMInfo.LUP * 1000), function()
+  {
+    DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures);
+  });
+  if (Polar)
+  {
+    if (RaceFeatures.Polar)
+    {
+      RaceFeatures.Polar.setLatLngs(Polar);
+    }
+    else
+    {
+      let PolarStyle = {
+        color: "white",
+        opacity: 0.6,
+        weight: 1
+      };
+      RaceFeatures.Polar = L.polyline(Polar, PolarStyle);
+      RaceFeatures.Polar.addTo(map);
+    }
+  }
+  else
+  {
+    if (RaceFeatures.Polar)
+    {
+      RaceFeatures.Polar.remove();
+    }
+    RaceFeatures.Polar = null;
+  }
 }
 
 function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
@@ -1585,65 +1608,65 @@ function DrawOpponents(Boat)
     }
   }
 
-    // Draw OppTracks, if any is selected
-    if (typeof Boat.RaceMapFeatures !== "undefined" && Object.keys(Boat.OppTrack).length > 0)
+  // Draw OppTracks, if any is selected
+  if (typeof Boat.RaceMapFeatures !== "undefined" && Object.keys(Boat.OppTrack).length > 0)
+  {
+    let RaceFeatures = Boat.RaceMapFeatures;
+    for (let TrackIndex in Boat.OppTrack)
     {
-      let RaceFeatures = Boat.RaceMapFeatures;
-      for (let TrackIndex in Boat.OppTrack)
+      var T = Boat.OppTrack[TrackIndex];
+
+      if (T && T.Visible && T.DatePos.length > 1)
       {
-        var T = Boat.OppTrack[TrackIndex];
-  
-        if (T && T.Visible && T.DatePos.length > 1)
+        if (!T.OppTrackPoints)
         {
-          if (!T.OppTrackPoints)
+          let TrackPoints = [];
+          let TLen = Object.keys(T.DatePos).length;
+          for (let PointIndex = 0; PointIndex < TLen; PointIndex++)
           {
-            let TrackPoints = [];
-            let TLen = Object.keys(T.DatePos).length;
-            for (let PointIndex = 0; PointIndex < TLen; PointIndex++)
-            {
-              let k = Object.keys(T.DatePos)[PointIndex];
-              let P = T.DatePos[k];
-              let Pi = [P.lat, P.lon];
-  
-              TrackPoints.push(Pi);
-            }
-            T.OppTrackPoints = TrackPoints;
+            let k = Object.keys(T.DatePos)[PointIndex];
+            let P = T.DatePos[k];
+            let Pi = [P.lat, P.lon];
+
+            TrackPoints.push(Pi);
           }
-  
-          //TODO Fix this for leaflet
-          if (typeof RaceFeatures.OppTrack === "undefined")
-          {
-            RaceFeatures.OppTrack = [];
-          }
-  
-          if (RaceFeatures.OppTrack[TrackIndex])
-          {
-            RaceFeatures.OppTrack[TrackIndex].setLatLngs(T.OppTrackPoints).addTo(map);
-          }
-          else
-          {
-            let color = 'black';
-  
-            if (typeof T.TrackColor !== "undefined")
-            {
-              color = T.TrackColor;
-            }
-            let TrackStyle = {
-              color: color,
-              weight: 1,
-              opacity: 0.75
-            };
-            RaceFeatures.OppTrack[TrackIndex] = L.polyline(T.OppTrackPoints, TrackStyle).addTo(map);
-          }
-          T.LastShow = new Date();
+          T.OppTrackPoints = TrackPoints;
         }
-        else if (Boat.RaceMapFeatures.OppTrack && Boat.RaceMapFeatures.OppTrack[TrackIndex])
+
+        //TODO Fix this for leaflet
+        if (typeof RaceFeatures.OppTrack === "undefined")
         {
-          Boat.RaceMapFeatures.OppTrack[TrackIndex].remove();
+          RaceFeatures.OppTrack = [];
         }
+
+        if (RaceFeatures.OppTrack[TrackIndex])
+        {
+          RaceFeatures.OppTrack[TrackIndex].setLatLngs(T.OppTrackPoints).addTo(map);
+        }
+        else
+        {
+          let color = 'black';
+
+          if (typeof T.TrackColor !== "undefined")
+          {
+            color = T.TrackColor;
+          }
+          let TrackStyle = {
+            color: color,
+            weight: 1,
+            opacity: 0.75
+          };
+          RaceFeatures.OppTrack[TrackIndex] = L.polyline(T.OppTrackPoints, TrackStyle).addTo(map);
+        }
+        T.LastShow = new Date();
+      }
+      else if (Boat.RaceMapFeatures.OppTrack && Boat.RaceMapFeatures.OppTrack[TrackIndex])
+      {
+        Boat.RaceMapFeatures.OppTrack[TrackIndex].remove();
       }
     }
-  
+  }
+
 }
 
 function CompareDist(a, b)
@@ -1880,7 +1903,7 @@ function HandleOpponentOver(e)
   let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
   let OppIndex = Opponent.IdUsers;
 
-    if (OppIndex)
+  if (OppIndex)
   {
     for (index in RaceFeatures.OppTrack)
     {
@@ -2128,5 +2151,5 @@ function HandleWPDragEnded(e)
 {
   let bkp = 0;
   let Marker = _CurPlayer.CurBoat.RaceMapFeatures.TrackWP;
-  VLMAlertInfo("User WP moved to "+Marker.getLatLng());
+  VLMAlertInfo("User WP moved to " + Marker.getLatLng());
 }

@@ -18,12 +18,13 @@ var TrackWPMarker = L.Icon.extend(
   }
 });
 
+const BOAT_MARKET_SIZE = 48;
 var BoatMarker = L.Icon.extend(
 {
   options:
   {
-    iconSize: [48, 48],
-    iconAnchor: [24, 24],
+    iconSize: [BOAT_MARKET_SIZE, BOAT_MARKET_SIZE],
+    iconAnchor: [BOAT_MARKET_SIZE/2, BOAT_MARKET_SIZE/2],
     iconUrl: 'images/target.png',
     rotationOrigin: [24, 24]
   }

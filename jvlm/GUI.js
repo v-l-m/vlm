@@ -117,6 +117,7 @@ $(document).ready(
   }
 );
 
+const COMPASS_SIZE = 350;
 
 function LeafletInit()
 {
@@ -148,12 +149,73 @@ function LeafletInit()
     }),
     draggable: true
   }).addTo(map);
+
+  map.Compass.on("dragend", HandleCompassDragEnd);
+  map.Compass.on("mousemove", HandleCompassMouseMove);
+  map.Compass.on("mouseout", HandleCompassMouseOut);
   map.on('mousemove', HandleMapMouseMove);
   map.on('moveend', HandleMapGridZoom);
   map.on('click', HandleMapMouseClick);
   map.on("zoomend", HandleMapGridZoom);
 }
 
+function HandleCompassMouseOut(e)
+{
+  map.Compass.dragging.enable();
+}
+
+function HandleCompassMouseMove(e)
+{
+  let z = map.getZoom();
+  let p = map.project(map.Compass.getLatLng(), z);
+  let m = map.project(map.mouseEventToLatLng(e.originalEvent), z);
+  let dx = p.x - m.x;
+  let dy = p.y - m.y;
+
+  if (((dx * dx) + (dy * dy)) < COMPASS_SIZE * COMPASS_SIZE/8)
+  {
+    map.Compass.dragging.disable();
+    console.log ( " " + dx + " " + dy + " disabled " + ((dx*dx)+(dy*dy)) + " < "+ 0.81*COMPASS_SIZE * COMPASS_SIZE/4);
+  }
+  else
+  {
+    map.Compass.dragging.enable();
+    console.log ( " " + dx + " " + dy + " enabled" );
+  }
+
+}
+
+function HandleCompassDragEnd(e)
+{
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.VLMInfo.LAT  &&_CurPlayer.CurBoat.VLMInfo.LON)
+  {
+    let Boat = _CurPlayer.CurBoat;
+    let B = [_CurPlayer.CurBoat.VLMInfo.LAT, _CurPlayer.CurBoat.VLMInfo.LON];
+    let C = map.Compass.getLatLng();
+
+    let Features = GetRaceMapFeatures(Boat);
+    if (!Features.Compass)
+    {
+      Features.Compass = {};
+    }
+
+    let z = map.getZoom();
+    let P1 = map.project(B, z);
+    let P2 = map.project(C, z);
+    if ((Math.abs(P1.x - P2.x) < BOAT_MARKET_SIZE / 2) && (Math.abs(P1.y - P2.y) < BOAT_MARKET_SIZE / 2))
+    {
+
+      Features.Compass.Lat = -1;
+      Features.Compass.Lon = -1;
+    }
+    else
+    {
+      Features.Compass.Lat = C.lat;
+      Features.Compass.Lon = C.lng;
+    }
+
+  }
+}
 
 function HandleMapGridZoom(e)
 {

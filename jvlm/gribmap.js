@@ -72,6 +72,17 @@ GribMap.Layer = L.Layer.extend(
     this._Time = epoch;
     this._update();
   },
+  _CheckDensity()
+  {
+    if (this._width<500 || this.height<500)
+    {
+      this._Density=5;
+    }
+    else
+    {
+      this._Density=10;
+    }
+  },
   onAdd: function(map)
   {
     let size = map.getSize();
@@ -82,6 +93,7 @@ GribMap.Layer = L.Layer.extend(
     this._height = size.y;
     this._canvas.width = size.x ;
     this._canvas.height = size.y ;
+    this._CheckDensity();
     
     this._canvas.style.width = size.x + 'px';
     this._canvas.style.height = size.y + 'px';
@@ -351,11 +363,13 @@ GribMap.Layer = L.Layer.extend(
     {
       this._canvas.width = size.x;
       this._width = size.x;
+      this._CheckDensity();
     }
     if (this._height !== size.y)
     {
       this._canvas.height = size.y;
       this._height = size.y;
+      this._CheckDensity();
     }
 
     this._draw();
