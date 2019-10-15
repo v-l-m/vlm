@@ -175,12 +175,12 @@ function HandleCompassMouseMove(e)
   if (((dx * dx) + (dy * dy)) < COMPASS_SIZE * COMPASS_SIZE/8)
   {
     map.Compass.dragging.disable();
-    console.log ( " " + dx + " " + dy + " disabled " + ((dx*dx)+(dy*dy)) + " < "+ 0.81*COMPASS_SIZE * COMPASS_SIZE/4);
+    //console.log ( " " + dx + " " + dy + " disabled " + ((dx*dx)+(dy*dy)) + " < "+ 0.81*COMPASS_SIZE * COMPASS_SIZE/4);
   }
   else
   {
     map.Compass.dragging.enable();
-    console.log ( " " + dx + " " + dy + " enabled" );
+    //console.log ( " " + dx + " " + dy + " enabled" );
   }
 
 }
@@ -265,7 +265,7 @@ function HandleMapGridZoom(e)
   let GridLabelStyle2 = {
     permanent: true,
     opacity: GridLabelOpacity,
-    offset: [0, 10]
+    offset: [0, +60]
   };
   let GridLabelStyle3 = {
     permanent: true,

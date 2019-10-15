@@ -143,13 +143,18 @@ GribMap.Layer = L.Layer.extend(
 
     this.DrawWindDebugCnt++;
     this.DrawWindDebugDepth = InCallBack ? this.DrawWindDebugDepth + 1 : 0;
-    console.log("Drawing " + this.DrawWindDebugCnt + " " + this.DrawWindDebugDepth);
+    // " + this.DrawWindDebugCnt + " " + this.DrawWindDebugDepth);
 
     let bstep = this.arrowstep;
     let bounds, zoom;
     let ErrorCatching = 1;
     bounds = this._map.getBounds();
     zoom = this._map.getZoom();
+
+    if (zoom < 5)
+    {
+      return ; 
+    }
 
     let MinX = bounds.getWest();
     let MaxX = bounds.getEast();

@@ -433,7 +433,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
   }
 
-  // Last 24h track  
+  // Cur Boat track  
   if (typeof Boat.Track !== "undefined" && Boat.Track.length > 0)
   {
     DrawBoatTrack(Boat, RaceFeatures);
@@ -554,6 +554,7 @@ function DrawBoatTrack(Boat, RaceFeatures)
   let TrackLength = Boat.Track.length;
   let PrevLon = 99999;
   let LonOffSet = 0;
+  
   for (let index = 0; index < TrackLength; index++)
   {
     let P = Boat.Track[index];
@@ -575,6 +576,7 @@ function DrawBoatTrack(Boat, RaceFeatures)
       "weight": 1.2
     }).addTo(map);
   }
+
 }
 
 function DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures)
