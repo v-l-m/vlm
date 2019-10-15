@@ -80,7 +80,9 @@ GribMap.Layer = L.Layer.extend(
 
     this._width = size.x;
     this._height = size.y;
-
+    this._canvas.width = size.x ;
+    this._canvas.height = size.y ;
+    
     this._canvas.style.width = size.x + 'px';
     this._canvas.style.height = size.y + 'px';
     this._canvas.style.position = 'absolute';
