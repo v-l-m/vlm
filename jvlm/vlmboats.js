@@ -537,11 +537,11 @@ function RepositionCompass(Boat)
   let Features = GetRaceMapFeatures(Boat);
   if (map.Compass)
   {
-    if ((!Features.Compass) || (Features.Compass.Lat == -1 && Features.Compass.Lon == -1))
+    if ((Features.Compass && Features.Compass.Lat == -1 && Features.Compass.Lon == -1) || ( Boat.VLMInfo && (Boat.VLMInfo.LAT || Boat.VLMInfo.LON)))
     {
       map.Compass.setLatLng([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
     }
-    else if (Features.Compass)
+    else if (Features.Compass && !isNaN(Features.Compass.Lat) && !isNaN(Features.Compass.Lon))
     {
       map.Compass.setLatLng([Features.Compass.Lat, Features.Compass.Lon]);
     }
