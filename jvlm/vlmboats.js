@@ -174,11 +174,12 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
               GetRaceInfoFromServer(Boat, TargetTab);
               GetRaceExclusionsFromServer(Boat);
             }
+            //TODO REMOVE DEAD CODE
             else
             {
               //Redraw gates and exclusions from cache
-              DrawRaceGates(Boat);
-              DrawRaceExclusionZones(Boat.Exclusions);
+              //DrawRaceGates(Boat);
+              //DrawRaceExclusionZones(Boat.Exclusions);
             }
 
 
@@ -230,8 +231,9 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     UpdateInMenuDockingBoatInfo(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
     DrawBoat(Boat, CenterMapOnBoat);
-    DrawRaceGates(Boat);
-    DrawRaceExclusionZones(Boat.Exclusions);
+    // TODO REMOVE DEAD CODE
+    //DrawRaceGates(Boat);
+    //DrawRaceExclusionZones(Boat.Exclusions);
   }
 }
 
@@ -299,7 +301,7 @@ function GetRaceExclusionsFromServer(Boat)
       }
       Polygons.push(CurPolyPointsList);
       Boat.Exclusions = Polygons;
-      DrawRaceExclusionZones(Polygons);
+      DrawRaceExclusionZones(Boat, Polygons);
     }
   });
 }
@@ -1034,63 +1036,70 @@ function DrawRaceGates(Boat)
   }
 }
 
-function DrawRaceExclusionZones(Zones)
+function DrawRaceExclusionZones(Boat, Zones)
 {
-  // Todo draw exclusion zone
-  /* let index;
-
-  for (index in Exclusions)
+  if (!Boat)
   {
-    if (Exclusions[index])
-    {
-      Layer.removeFeatures(Exclusions[index]);
-    }
+    return;
   }
 
-  for (index in Zones)
+  let Features = GetRaceMapFeatures(Boat);
+  for (let index in Zones)
   {
     if (Zones[index])
     {
-      DrawRaceExclusionZone(Layer, Exclusions, Zones[index]);
+      DrawRaceExclusionZone(Features, Zones, index);
     }
-  } */
+  }
 
 }
 
-function DrawRaceExclusionZone(Layer, ExclusionZones, Zone)
+function DrawRaceExclusionZone(Features, ExclusionZones, ZoneIndex)
 {
 
-  let index;
   let PointList = [];
   let HasZones = false;
 
-  for (index in Zone)
+  for (let index in ExclusionZones[ZoneIndex])
   {
-    if (Zone[index])
+    if (ExclusionZones[ZoneIndex][index])
     {
-      var P = new OpenLayers.Geometry.Point(Zone[index][1], Zone[index][0]);
-      var P_PosTransformed = P.transform(MapOptions.displayProjection, MapOptions.projection);
+      var P = [ExclusionZones[ZoneIndex][index][0], ExclusionZones[ZoneIndex][index][1]];
 
-      PointList.push(P_PosTransformed);
+      PointList.push(P);
       HasZones = true;
     }
   }
 
   if (HasZones)
   {
-    // TODO Leaflet for Exclusion Zones
-    var Attr = null;
+    if (typeof Features.Exclusions === "undefined")
+    {
+      Features.Exclusions = [];
+    }
 
-    Attr = {
-      type: "ExclusionZone"
-    };
-    var ExclusionZone = new OpenLayers.Feature.Vector(
-      new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(PointList)), Attr, null);
-
-    Layer.addFeatures(ExclusionZone);
-    ExclusionZones.push(ExclusionZone);
+    if (Features.Exclusions[ZoneIndex])
+    {
+      Features.Exclusions[ZoneIndex].setLatLngs(PointList).addTo(map);
+    }
+    else
+    {
+      Features.Exclusions[ZoneIndex] = L.polygon(PointList,
+      {
+        color: "red",
+        opacity: 0.25,
+        weight: 3,
+      }).addTo(map);
+    }
   }
+  else if (Features.Exclusions && Features.Exclusions[index])
+  {
+    Features.Exclusions[ZoneIndex].remove();
+    Features.Exclusions[ZoneIndex] = null;
+  }
+
 }
+
 
 function GetLonOffset(L1, L2)
 {
