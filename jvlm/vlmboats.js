@@ -1632,7 +1632,6 @@ function DrawOpponents(Boat)
           T.OppTrackPoints = TrackPoints;
         }
 
-        //TODO Fix this for leaflet
         if (typeof RaceFeatures.OppTrack === "undefined")
         {
           RaceFeatures.OppTrack = [];
@@ -1774,7 +1773,6 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 
 }
 
-//TODOfix Opponent Popup
 function ShowOpponentPopupInfo(e)
 {
   let Opp = e.sourceTarget;
