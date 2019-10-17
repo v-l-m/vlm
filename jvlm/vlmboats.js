@@ -684,17 +684,14 @@ function GetVLMPositionFromClick(pixel)
   }
 }
 
-function CompleteWPSetPosition(feature, pixel)
+function CompleteWPSetPosition(WPMarker)
 {
+  let pos = WPMarker.getLatLng();
+  let PDest = new VLMPosition(pos.lng, pos.lat);
 
-  var PDest = GetVLMPositionFromClick(pixel);
-
-  console.log("DragComplete " + feature.id);
-  VLMBoatsLayer.removeFeatures(feature);
   // Use CurPlayer, since the drag layer is not associated to the proper boat
   SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest);
-  //DrawControl.deactivate();
-  //DrawControl.activate();
+  
 }
 
 /*// al low testing of specific renderers via "?renderer=Canvas", etc
@@ -2153,5 +2150,6 @@ function HandleWPDragEnded(e)
 {
   let bkp = 0;
   let Marker = _CurPlayer.CurBoat.RaceMapFeatures.TrackWP;
+  CompleteWPSetPosition(Marker);
   VLMAlertInfo("User WP moved to " + Marker.getLatLng());
 }

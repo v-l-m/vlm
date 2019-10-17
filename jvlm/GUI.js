@@ -2684,7 +2684,26 @@ var ShowEstTimeOutHandle = null;
 
 function HandleMapMouseClick(e)
 {
-  let bkpevt = 1;
+  if (SetWPPending)
+    {
+      if (WPPendingTarget === "WP")
+      {
+        CompleteWPSetPosition(e);
+        HandleCancelSetWPOnClick();
+      }
+      else if (WPPendingTarget === "AP")
+      {
+        SetWPPending = false;
+        _CurAPOrder.PIP_Coords = new VLMPosition(e.latlng.lng, e.latlng.lat);
+        $("#AutoPilotSettingForm").modal("show");
+        RefreshAPDialogFields();
+
+      }
+      else
+      {
+        SetWPPending = false;
+      }
+    }
 }
 
 function HandleMapMouseMove(e)
