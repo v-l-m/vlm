@@ -688,7 +688,20 @@ function GetVLMPositionFromClick(pixel)
 
 function CompleteWPSetPosition(WPMarker)
 {
-  let pos = WPMarker.getLatLng();
+  let pos = null;
+  
+  if (WPMarker.getLatLng)
+  {
+    pos=WPMarker.getLatLng();}
+  else if (WPMarker.latlng)
+  {
+    pos=WPMarker.latlng;
+  }
+  else
+  {
+    VLMAlertDanger("Unexpected Object when setting WP report to devs.");
+    return;
+  }
   let PDest = new VLMPosition(pos.lng, pos.lat);
 
   // Use CurPlayer, since the drag layer is not associated to the proper boat
