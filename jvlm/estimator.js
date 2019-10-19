@@ -501,11 +501,11 @@ function Estimator(Boat)
 
   this.ShowEstimatePosition = function(Boat, Estimate)
   {
+let Features = GetRaceMapFeatures(Boat);
 
     if (Boat && Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value))
     {
-      let Features = GetRaceMapFeatures(Boat);
-
+      
       if (!Features)
       {
         return;
@@ -536,11 +536,21 @@ function Estimator(Boat)
 
       if (typeof Estimate.Meteo !== "undefined" && Estimate.Meteo)
       {
-        let Polar = BuildPolarLine(Boat, Position, VLM2Prefs.MapPrefs.PolarVacCount, Estimate.Date);
+        let StartPos = new VLMPosition(Position[1], Position[0]);
+        let Polar = BuildPolarLine(Boat, StartPos, VLM2Prefs.MapPrefs.PolarVacCount, Estimate.Date);
 
         Features.BoatEstimateMarkerPolar = DefinePolarMarker(Polar, Features.BoatEstimateMarkerPolar);
-
-
+      }
+    }
+    else if (Features)
+    {
+      if (Features.BoatEstimateMarker)
+      {
+        Features.BoatEstimateMarker.remove();
+      }
+      if (Features.BoatEstimateMarkerPolar)
+      {
+        Features.BoatEstimateMarkerPolar.remove();
       }
     }
   };

@@ -2800,7 +2800,7 @@ function StartEstimateTimeout()
   {
     _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
     RefreshEstPosLabels(null);
-    DrawBoat(_CurPlayer.CurBoat, false);
+    
   }, 5000);
 }
 
