@@ -502,7 +502,7 @@ function RepositionCompass(Boat)
   let Features = GetRaceMapFeatures(Boat);
   if (map.Compass)
   {
-    if ((Features.Compass && Features.Compass.Lat == -1 && Features.Compass.Lon == -1) || ( Boat.VLMInfo && (Boat.VLMInfo.LAT || Boat.VLMInfo.LON)))
+    if ((Features.Compass && Features.Compass.Lat == -1 && Features.Compass.Lon == -1) || (Boat.VLMInfo && (Boat.VLMInfo.LAT || Boat.VLMInfo.LON)))
     {
       map.Compass.setLatLng([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
     }
@@ -519,7 +519,7 @@ function DrawBoatTrack(Boat, RaceFeatures)
   let TrackLength = Boat.Track.length;
   let PrevLon = 99999;
   let LonOffSet = 0;
-  
+
   for (let index = 0; index < TrackLength; index++)
   {
     let P = Boat.Track[index];
@@ -552,11 +552,17 @@ function DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures)
   {
     DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures);
   });
+
+  RaceFeatures.Polar=DefinePolarMarker(Polar, RaceFeatures.Polar);
+}
+
+function DefinePolarMarker(Polar, PolarFeature)
+{
   if (Polar)
   {
-    if (RaceFeatures.Polar)
+    if (PolarFeature)
     {
-      RaceFeatures.Polar.setLatLngs(Polar);
+      PolarFeature.setLatLngs(Polar);
     }
     else
     {
@@ -565,18 +571,20 @@ function DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures)
         opacity: 0.6,
         weight: 1
       };
-      RaceFeatures.Polar = L.polyline(Polar, PolarStyle);
-      RaceFeatures.Polar.addTo(map);
+      PolarFeature = L.polyline(Polar, PolarStyle);
+      PolarFeature.addTo(map);
     }
   }
   else
   {
-    if (RaceFeatures.Polar)
+    if (PolarFeature)
     {
-      RaceFeatures.Polar.remove();
+      PolarFeature.remove();
     }
-    RaceFeatures.Polar = null;
+    PolarFeature = null;
   }
+
+  return PolarFeature;
 }
 
 function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
@@ -595,9 +603,13 @@ function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
     CurDate = new Date().getTime();
   }
 
-  // TODO Round date to next vac actual date
-  var MI = GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
-
+  let MI = null;
+  
+  if (StartPos && StartPos.Lat && StartPos.Lon)
+  {
+    MI=GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
+  }
+  
   if (MI)
   {
     let hdg = parseFloat(Boat.VLMInfo.HDG);
@@ -652,13 +664,14 @@ function GetVLMPositionFromClick(pixel)
 function CompleteWPSetPosition(WPMarker)
 {
   let pos = null;
-  
+
   if (WPMarker.getLatLng)
   {
-    pos=WPMarker.getLatLng();}
+    pos = WPMarker.getLatLng();
+  }
   else if (WPMarker.latlng)
   {
-    pos=WPMarker.latlng;
+    pos = WPMarker.latlng;
   }
   else
   {
@@ -669,7 +682,7 @@ function CompleteWPSetPosition(WPMarker)
 
   // Use CurPlayer, since the drag layer is not associated to the proper boat
   SendVLMBoatWPPos(_CurPlayer.CurBoat, PDest);
-  
+
 }
 
 /*// al low testing of specific renderers via "?renderer=Canvas", etc

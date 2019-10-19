@@ -502,91 +502,92 @@ function Estimator(Boat)
   this.ShowEstimatePosition = function(Boat, Estimate)
   {
 
-    if (Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value))
+    if (Boat && Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value))
     {
-      // TODO Handle estimate position drawing
-      /* let Position = Estimate.Position;
-      let EstPos = new OpenLayers.Geometry.Point(Position.Lon.Value, Position.Lat.Value);
-      let EstPos_Transformed = EstPos.transform(MapOptions.displayProjection, MapOptions.projection);
+      let Features = GetRaceMapFeatures(Boat);
 
-      // Estimate point marker
-      var Marker = new OpenLayers.Feature.Vector(
-        EstPos_Transformed,
-        {},
+      if (!Features)
+      {
+        return;
+      }
+
+      let Position = [Estimate.Position.Lat.Value, Estimate.Position.Lon.Value];
+
+      if (Features.BoatEstimateMarker)
+      {
+        Features.BoatEstimateMarker.setLatLng(Position).addTo(map);
+      }
+      else
+      {
+        // Estimate point marker
+        let Marker = GetBoatEstimateMarker();
+
+        Features.BoatEstimateMarker = L.marker(Position,
         {
-          externalGraphic: 'images/target.svg',
-          opacity: 0.8,
-          graphicHeight: map.zoom * 2,
-          graphicWidth: map.zoom * 2,
-          rotation: Estimate.Heading
-        }
-      );
-      VLMBoatsLayer.addFeatures(Marker);
-      this.EstimateMapFeatures.push(Marker);
+          icon: Marker
+        }).addTo(map);
+
+      }
+      
+      if (Features.BoatEstimateMarker)
+      {
+        Features.BoatEstimateMarker.setRotationAngle(Estimate.Heading);
+      }
 
       if (typeof Estimate.Meteo !== "undefined" && Estimate.Meteo)
       {
-        var scale = VLM2Prefs.MapPrefs.PolarVacCount;
-        var PolarPointList = PolarsManager.GetPolarLine(Boat.VLMInfo.POL, Estimate.Meteo.Speed, DrawBoat, Boat);
-        var Polar = [];
+        let Polar = BuildPolarLine(Boat, Position, VLM2Prefs.MapPrefs.PolarVacCount, Estimate.Date);
 
-        BuildPolarLine(Boat, PolarPointList, Polar, Position, scale, Estimate.Date);
-        var BoatPolar = new OpenLayers.Feature.Vector(
-          new OpenLayers.Geometry.LineString(Polar),
-          {
-            "type": "Polar",
-            "WindDir": Estimate.Meteo.Heading
-          });
+        Features.BoatEstimateMarkerPolar = DefinePolarMarker(Polar, Features.BoatEstimateMarkerPolar);
 
-        this.EstimateMapFeatures.push(BoatPolar);
-        VLMBoatsLayer.addFeatures(BoatPolar);
-      } */
+
+      }
     }
   };
 
   this.GetEstimateTracks = function()
   {
     let RetTracks = [];
-    let PrevIndex=null;
+    let PrevIndex = null;
     let PrevPoint = null;
 
     if (this.EstimateTrack && this.EstimateTrack[0])
     {
       let TrackStartTick = new Date().getTime();
-      let GridOffset = TrackStartTick % (6*3600000);
+      let GridOffset = TrackStartTick % (6 * 3600000);
 
-      let TrackIndexStartTick = TrackStartTick - GridOffset+3.5*3600000;
+      let TrackIndexStartTick = TrackStartTick - GridOffset + 3.5 * 3600000;
 
       for (let index in this.EstimateTrack)
       {
         if (this.EstimateTrack[index])
         {
           let est = this.EstimateTrack[index];
-          let Delta = est.Date.getTime()-TrackIndexStartTick;
-          let CurTrackInDex = Math.floor(Delta / 6/3600000);
+          let Delta = est.Date.getTime() - TrackIndexStartTick;
+          let CurTrackInDex = Math.floor(Delta / 6 / 3600000);
 
-          if (CurTrackInDex<0)
+          if (CurTrackInDex < 0)
           {
-            CurTrackInDex=0;
+            CurTrackInDex = 0;
           }
-          else if ( CurTrackInDex>2)
+          else if (CurTrackInDex > 2)
           {
-            CurTrackInDex=2;
+            CurTrackInDex = 2;
           }
 
           if (typeof RetTracks[CurTrackInDex] === "undefined")
           {
-            RetTracks[CurTrackInDex]=[];
+            RetTracks[CurTrackInDex] = [];
           }
 
-          if (CurTrackInDex!== PrevIndex && PrevPoint)
+          if (CurTrackInDex !== PrevIndex && PrevPoint)
           {
             // Push prev point before starting a new track
             RetTracks[CurTrackInDex].push([PrevPoint.Position.Lat.Value, PrevPoint.Position.Lon.Value]);
           }
           RetTracks[CurTrackInDex].push([est.Position.Lat.Value, est.Position.Lon.Value]);
           PrevPoint = est;
-          PrevIndex=CurTrackInDex;
+          PrevIndex = CurTrackInDex;
         }
       }
     }

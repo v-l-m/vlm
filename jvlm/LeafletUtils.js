@@ -19,6 +19,7 @@ var TrackWPMarker = L.Icon.extend(
 });
 
 const BOAT_MARKET_SIZE = 48;
+const BOAT_EST_MARKET_SIZE = 24;
 var BoatMarker = L.Icon.extend(
 {
   options:
@@ -26,9 +27,20 @@ var BoatMarker = L.Icon.extend(
     iconSize: [BOAT_MARKET_SIZE, BOAT_MARKET_SIZE],
     iconAnchor: [BOAT_MARKET_SIZE/2, BOAT_MARKET_SIZE/2],
     iconUrl: 'images/target.png',
-    rotationOrigin: [24, 24]
+    rotationOrigin: [BOAT_MARKET_SIZE/2, BOAT_MARKET_SIZE/2]
   }
 });
+
+var BoatEstMarker = L.Icon.extend(
+  {
+    options:
+    {
+      iconSize: [BOAT_EST_MARKET_SIZE, BOAT_EST_MARKET_SIZE],
+      iconAnchor: [BOAT_EST_MARKET_SIZE/2, BOAT_EST_MARKET_SIZE/2],
+      iconUrl: 'images/target.png',
+      rotationOrigin: [BOAT_EST_MARKET_SIZE/2, BOAT_EST_MARKET_SIZE/2]
+    }
+  });
 
 var IceGateMarker = L.Icon.extend(
 {
@@ -78,6 +90,12 @@ function GetBoatMarker(idboat)
   
   let ret=new BoatMarker();
   ret.MarkerOppId=idboat;
+  return ret;
+}
+
+function GetBoatEstimateMarker()
+{
+  let ret=new BoatEstMarker();
   return ret;
 }
 
