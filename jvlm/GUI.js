@@ -1226,7 +1226,8 @@ function HandleStartEstimator(e)
   CurBoat.Estimator.Start(HandleEstimatorProgress);
 }
 
-var LastPct = -1;
+var LastPctRefresh = -1;
+var LastPctDraw = -1;
 
 function HandleEstimatorProgress(Complete, Pct, Dte)
 {
@@ -1236,9 +1237,10 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#PbEstimatorProgressBar").addClass("hidden");
     //$("#PbEstimatorProgressText").addClass("hidden")
     $("#EstimatorStopButton").addClass("hidden");
-    LastPct = -1;
+    LastPctRefresh = -1;
+    LastPctDraw = -1;
   }
-  else if (Pct - LastPct > 0.15)
+  else if (Pct - LastPctRefresh > 0.15)
   {
     $("#EstimatorStopButton").removeClass("hidden");
     $("#StartEstimator").addClass("hidden");
@@ -1248,7 +1250,12 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#PbEstimatorProgress").css("width", Pct + "%");
     $("#PbEstimatorProgress").attr("aria-valuenow", Pct);
     $("#PbEstimatorProgress").attr("aria-valuetext", Pct);
-    LastPct = Pct;
+    LastPctRefresh = Pct;
+  }
+  else if (Pct - LastPctDraw > 1)
+  {
+    DrawBoatEstimateTrack(_CurPlayer.CurBoat, GetRaceMapFeatures(_CurPlayer.CurBoat));
+    LastPctDraw = Pct;
   }
 }
 

@@ -434,44 +434,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   }
 
   // Forecast Track
-  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator)
-  {
-    let tracks = Boat.Estimator.GetEstimateTracks();
-
-    let TrackColors = ['green', 'orange', 'red'];
-
-    for (let index in tracks)
-    {
-      if (RaceFeatures.EstimateTracks && RaceFeatures.EstimateTracks[index])
-      {
-        if (typeof tracks[index] !== "undefined")
-        {
-          RaceFeatures.EstimateTracks[index].setLatLngs(tracks[index]);
-        }
-        else
-        {
-          RaceFeatures.EstimateTracks[index].remove();
-          RaceFeatures.EstimateTracks[index] = null;
-        }
-      }
-      else
-      {
-        if (typeof RaceFeatures.EstimateTracks === "undefined")
-        {
-          RaceFeatures.EstimateTracks = [];
-        }
-        if (tracks[index])
-        {
-          let Options = {
-            weight: 2,
-            opacity: 1,
-            color: TrackColors[index]
-          };
-          RaceFeatures.EstimateTracks[index] = L.polyline(tracks[index], Options).addTo(map);
-        }
-      }
-    }
-  }
+  DrawBoatEstimateTrack(Boat, RaceFeatures);
 
   // opponents  
   DrawOpponents(Boat);
@@ -491,6 +454,37 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
   console.log("ActualDrawBoatComplete");
 
+}
+
+function DrawBoatEstimateTrack(Boat, RaceFeatures) {
+  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator) {
+    let tracks = Boat.Estimator.GetEstimateTracks();
+    let TrackColors = ['green', 'orange', 'red'];
+    for (let index in tracks) {
+      if (RaceFeatures.EstimateTracks && RaceFeatures.EstimateTracks[index]) {
+        if (typeof tracks[index] !== "undefined") {
+          RaceFeatures.EstimateTracks[index].setLatLngs(tracks[index]);
+        }
+        else {
+          RaceFeatures.EstimateTracks[index].remove();
+          RaceFeatures.EstimateTracks[index] = null;
+        }
+      }
+      else {
+        if (typeof RaceFeatures.EstimateTracks === "undefined") {
+          RaceFeatures.EstimateTracks = [];
+        }
+        if (tracks[index]) {
+          let Options = {
+            weight: 2,
+            opacity: 1,
+            color: TrackColors[index]
+          };
+          RaceFeatures.EstimateTracks[index] = L.polyline(tracks[index], Options).addTo(map);
+        }
+      }
+    }
+  }
 }
 
 function RepositionCompass(Boat)
@@ -562,7 +556,7 @@ function DefinePolarMarker(Polar, PolarFeature)
   {
     if (PolarFeature)
     {
-      PolarFeature.setLatLngs(Polar);
+      PolarFeature.setLatLngs(Polar).addTo(map);
     }
     else
     {
@@ -609,7 +603,7 @@ function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
   {
     MI=GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
   }
-  
+
   if (MI)
   {
     let hdg = parseFloat(Boat.VLMInfo.HDG);
