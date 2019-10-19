@@ -174,13 +174,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
               GetRaceInfoFromServer(Boat, TargetTab);
               GetRaceExclusionsFromServer(Boat);
             }
-            //TODO REMOVE DEAD CODE
-            else
-            {
-              //Redraw gates and exclusions from cache
-              //DrawRaceGates(Boat);
-              //DrawRaceExclusionZones(Boat.Exclusions);
-            }
+
 
 
             // Get boat track for the last 24h
@@ -231,9 +225,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     UpdateInMenuDockingBoatInfo(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
     DrawBoat(Boat, CenterMapOnBoat);
-    // TODO REMOVE DEAD CODE
-    //DrawRaceGates(Boat);
-    //DrawRaceExclusionZones(Boat.Exclusions);
+
   }
 }
 
@@ -440,35 +432,6 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   {
     DrawBoatTrack(Boat, RaceFeatures);
   }
-
-
-
-  // TODO Recode forecast position marker
-  /*if (Boat.Estimator && (Boat.Estimator.EstimateTrack.length !== Boat.Estimator.EstimatePoints.length))
-  {
-    Boat.Estimator.EstimatePoints[0] = [];
-
-    let TrackIndex = 0;
-    let PrevLon = 99999;
-    let LonOffSet = 0;
-    /* for (let index in Boat.Estimator.EstimateTrack)
-    {
-      if (Boat.Estimator.EstimateTrack[index])
-      {
-        let Est = Boat.Estimator.EstimateTrack[index];
-
-        if (PrevLon !== 99999)
-        {
-          LonOffSet += GetLonOffset(PrevLon, Est.Position.Lon.Value);
-        }
-        PrevLon = Est.Position.Lon.Value;
-        let P1 = new OpenLayers.Geometry.Point(Est.Position.Lon.Value + LonOffSet, Est.Position.Lat.Value);
-        let P1_PosTransformed = P1.transform(MapOptions.displayProjection, MapOptions.projection);
-
-        Boat.Estimator.EstimatePoints[TrackIndex].push(P1_PosTransformed);
-      }
-    } 
-  }*/
 
   // Forecast Track
   if (typeof Boat.Estimator !== "undefined" && Boat.Estimator)
