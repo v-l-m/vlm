@@ -4,6 +4,9 @@
 webhost = window.location.hostname;
 /* jshint +W020*/
 
+// ******************************************************************
+// THIS FILE WILL BE OVERWRITTEN WITH THE ONE IN CONF WHEN DEPLOYING
+// ******************************************************************
 //Url for the cache
 //tilesUrlArray = "/cache/gshhstiles/${z}/${x}/${y}.png";
 //You may put an array here, example :
@@ -23,7 +26,7 @@ if (webhost == 'vlm-dev.ddns.net')
 }
 if (webhost == 'testing.v-l-m.org' || webhost == 'www.testing.v-l-m.org')
 {
-  tileUrlSrv="https://{s}.testing.v-l-m.org/gshhstiles/${z}/${x}/${y}.png";
+  tileUrlSrv="https://{s}.testing.v-l-m.org/gshhstiles/{z}/{x}/{y}.png";
 
   // URI to distribute windgridrequest amount servers
   WindGridServers = ["https://testing.v-l-m.org", "https://testing.v-l-m.org", "https://testing.v-l-m.org", "https://testing.v-l-m.org"];
