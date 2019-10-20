@@ -501,11 +501,11 @@ function Estimator(Boat)
 
   this.ShowEstimatePosition = function(Boat, Estimate)
   {
-let Features = GetRaceMapFeatures(Boat);
+    let Features = GetRaceMapFeatures(Boat);
 
     if (Boat && Estimate && Estimate.Position && (Boat.VLMInfo.LON !== Estimate.Position.Lon.Value || Boat.VLMInfo.LAT !== Estimate.Position.Lat.Value))
     {
-      
+
       if (!Features)
       {
         return;
@@ -528,7 +528,7 @@ let Features = GetRaceMapFeatures(Boat);
         }).addTo(map);
 
       }
-      
+
       if (Features.BoatEstimateMarker)
       {
         Features.BoatEstimateMarker.setRotationAngle(Estimate.Heading);
