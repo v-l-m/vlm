@@ -10,6 +10,7 @@ var FIELD_MAPPING_VALUE = 1;
 var FIELD_MAPPING_CHECK = 2;
 var FIELD_MAPPING_IMG = 3;
 var FIELD_MAPPING_CALLBACK = 4;
+var FIELD_MAPPING_STYLE = 5;
 
 var MAX_PILOT_ORDERS = 5;
 
@@ -23,14 +24,14 @@ var BoatRacingClasses = {
   "DNS": "ft_class_dns"
 };
 
-// Global (beurk) holding last position return by OL mousemove.
-var GM_Pos = null;
+// Globals (beurk).
 var SetWPPending = false;
 var WPPendingTarget = null;
 var GribWindController = null;
 
 //Global map object
 var map = null;
+var VLMBoatsLayer = null;
 
 // Ranking related globals
 var Rankings = [];
@@ -90,7 +91,7 @@ $(document).ready(
     //InitXmpp();
 
     // Init maps
-    OLInit();
+    LeafletInit();
 
     // Load translation strings
     InitLocale();
@@ -115,6 +116,218 @@ $(document).ready(
 
   }
 );
+
+const COMPASS_SIZE = 350;
+
+function LeafletInit()
+{
+  //Init map object
+  map = L.map('jVlmMap' /*,{preferCanvas:true}*/ ).setView([0, 0], 8);
+
+  // Tiles
+  let src = tileUrlSrv;
+  L.tileLayer(src,
+  {
+    attribution: 'gshhsv2',
+    maxZoom: 20,
+    tms: false,
+    id: 'vlm',
+    detectRetina: true,
+    subdomains: tilesUrlArray,
+
+  }).addTo(map);
+
+  // Wind Layer
+  map.GribMap = new GribMap.Layer().addTo(map);
+  map.Compass = new L.marker([0, 0],
+  {
+    icon: new L.icon(
+    {
+      iconSize: [350, 341],
+      iconAnchor: [175, 170],
+      iconUrl: 'images/compas-transparent.gif',
+    }),
+    draggable: true
+  }).addTo(map);
+
+  map.Compass.on("dragend", HandleCompassDragEnd);
+  map.Compass.on("mousemove", HandleCompassMouseMove);
+  map.Compass.on("mouseout", HandleCompassMouseOut);
+  map.on('mousemove', HandleMapMouseMove);
+  map.on('moveend', HandleMapGridZoom);
+  map.on('click', HandleMapMouseClick);
+  map.on("zoomend", HandleMapGridZoom);
+}
+
+function HandleCompassMouseOut(e)
+{
+  map.Compass.dragging.enable();
+}
+
+function HandleCompassMouseMove(e)
+{
+  let z = map.getZoom();
+  let p = map.project(map.Compass.getLatLng(), z);
+  let m = map.project(map.mouseEventToLatLng(e.originalEvent), z);
+  let dx = p.x - m.x;
+  let dy = p.y - m.y;
+
+  if (((dx * dx) + (dy * dy)) < COMPASS_SIZE * COMPASS_SIZE/8)
+  {
+    map.Compass.dragging.disable();
+    //console.log ( " " + dx + " " + dy + " disabled " + ((dx*dx)+(dy*dy)) + " < "+ 0.81*COMPASS_SIZE * COMPASS_SIZE/4);
+  }
+  else
+  {
+    map.Compass.dragging.enable();
+    //console.log ( " " + dx + " " + dy + " enabled" );
+  }
+
+}
+
+function HandleCompassDragEnd(e)
+{
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.VLMInfo.LAT  &&_CurPlayer.CurBoat.VLMInfo.LON)
+  {
+    let Boat = _CurPlayer.CurBoat;
+    let B = [_CurPlayer.CurBoat.VLMInfo.LAT, _CurPlayer.CurBoat.VLMInfo.LON];
+    let C = map.Compass.getLatLng();
+
+    let Features = GetRaceMapFeatures(Boat);
+    if (!Features.Compass)
+    {
+      Features.Compass = {};
+    }
+
+    let z = map.getZoom();
+    let P1 = map.project(B, z);
+    let P2 = map.project(C, z);
+    if ((Math.abs(P1.x - P2.x) < BOAT_MARKET_SIZE / 2) && (Math.abs(P1.y - P2.y) < BOAT_MARKET_SIZE / 2))
+    {
+
+      Features.Compass.Lat = -1;
+      Features.Compass.Lon = -1;
+    }
+    else
+    {
+      Features.Compass.Lat = C.lat;
+      Features.Compass.Lon = C.lng;
+    }
+
+  }
+}
+
+function HandleMapGridZoom(e)
+{
+  let m = e.sourceTarget;
+  let z = m.getZoom();
+  let b = m.getBounds();
+
+  let DX = b._northEast.lng - b._southWest.lng;
+  let DY = b._northEast.lat - b._southWest.lat;
+  let S = DX;
+  if (DY < DX)
+  {
+    S = DY;
+  }
+  S = Math.pow(0.25, Math.ceil(Math.log(S) / Math.log(0.25)));
+
+  if (S > 5)
+  {
+    S = Math.pow(5, Math.floor(Math.log(S) / Math.log(5)));
+  }
+  else if (S < 0.25)
+  {
+    S = 0.25;
+  }
+
+  if (typeof m.GridLayer == "undefined")
+  {
+    m.Grid = [];
+    m.GridLayer = L.layerGroup().addTo(m);
+  }
+  else
+  {
+    m.GridLayer.clearLayers();
+  }
+
+  let GridLabelOpacity = 0.4;
+  let GridLineStyle = {
+    weight: 1,
+    opacity: GridLabelOpacity,
+    color: 'black'
+  };
+  let GridLabelStyle1 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset: [0, -10]
+  };
+  let GridLabelStyle2 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset: [0, 18]
+  };
+  let GridLabelStyle3 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset: [10, 0]
+  };
+  let GridLabelStyle4 = {
+    permanent: true,
+    opacity: GridLabelOpacity,
+    offset: [-10, 0]
+  };
+
+  let index = 0;
+
+  for (let x = Math.floor(b._southWest.lng); x <= b._northEast.lng; x += S)
+  {
+    let P = [
+      [b._southWest.lat, x],
+      [b._northEast.lat, x]
+    ];
+
+    m.Grid[index] = L.polyline(P, GridLineStyle);
+    m.GridLayer.addLayer(m.Grid[index++]);
+    let xlabel = RoundPow(4 * x, 0) / 4;
+
+    m.Grid[index] = L.circleMarker(P[0],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle1);
+    m.GridLayer.addLayer(m.Grid[index++]);
+    m.Grid[index] = L.circleMarker(P[1],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle2);
+    m.GridLayer.addLayer(m.Grid[index++]);
+
+  }
+
+  for (let y = Math.floor(b._southWest.lat); y <= b._northEast.lat; y += S)
+  {
+    let P = [
+      [y, b._southWest.lng],
+      [y, b._northEast.lng]
+    ];
+    let xlabel = RoundPow(4 * y, 0) / 4;
+
+    m.Grid[index] = L.polyline(P, GridLineStyle);
+    m.GridLayer.addLayer(m.Grid[index]);
+    m.Grid[index] = L.circleMarker(P[0],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle3);
+    m.GridLayer.addLayer(m.Grid[index++]);
+    m.Grid[index] = L.circleMarker(P[1],
+    {
+      radius: 1
+    }).bindTooltip("" + xlabel, GridLabelStyle4);
+    m.GridLayer.addLayer(m.Grid[index++]);
+
+  }
+  //console.log("Zoom Level " + z);
+}
 
 let PasswordResetInfo = [];
 
@@ -217,15 +430,15 @@ function HandleVLMIndex(result)
   {
     $("#Ranking-Panel").show();
     let index;
-    let rank=1;
+    let rank = 1;
     for (index in result)
     {
       if (result[index])
       {
-        result[index].rank=rank;
+        result[index].rank = rank;
         rank++;
       }
-    }    
+    }
     BackupVLMIndexTable();
     VLMINdexFt.loadRows(result);
     $("#DivVlmIndex").removeClass("hidden");
@@ -267,116 +480,6 @@ function OtherRaceRankingLoaded()
   $("#Ranking-Panel").show();
   SortRanking("RAC");
   console.log("off race ranking loaded");
-}
-
-function OLInit()
-{
-
-  //Pour tenter le rechargement des tiles quand le temps de calcul est > au timeout
-  OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
-
-  var default_latitude = 45.5;
-  var default_longitude = -30.0;
-  var default_zoom = 4;
-
-  if (typeof VLM2Prefs !== "undefined" && VLM2Prefs.MapPrefs)
-  {
-    default_zoom = VLM2Prefs.MapPrefs.MapZoomLevel;
-  }
-
-  var layeroption = {
-    //sphérique
-    sphericalMercator: true,
-    transitionEffect: "resize",
-    //pour passer l'ante-meridien sans souci
-    wrapDateLine: true,
-    events: function(x)
-    {
-      console.log("TileLayer : " + x);
-    }
-  };
-
-  //MAP
-
-  map = new OpenLayers.Map(
-    "jVlmMap", //identifiant du div contenant la carte openlayer
-    MapOptions);
-
-  //NB: see config.js file. Le layer VLM peut utiliser plusieurs sous-domaine pour paralélliser les téléchargements des tiles.
-  var urlArray = tilesUrlArray;
-
-  var vlm = new OpenLayers.Layer.XYZ(
-    "VLM Layer",
-    urlArray,
-    layeroption
-  );
-
-
-
-  //Le calque de vent made in Vlm
-  var grib = new Gribmap.Layer("Gribmap", layeroption);
-  //grib.setOpacity(0.9); //FIXME: faut il garder une transparence du vent ?
-
-  //La minimap utilise le layer VLM
-  //var vlmoverview = vlm.clone();
-
-  //Et on ajoute tous les layers à la map.
-  //map.addLayers([ VLMBoatsLayer,vlm, wms, bingroad, bingaerial, binghybrid, gphy, ghyb, gsat, grib]);
-  map.addLayers([grib, VLMBoatsLayer, vlm]);
-  //map.addLayers([vlm, grib]); //FOR DEBUG
-
-  //Controle l'affichage des layers
-  //map.addControl(new OpenLayers.Control.LayerSwitcher());
-
-  //Controle l'affichage de la position ET DU VENT de la souris
-  map.addControl(new Gribmap.MousePosition(
-  {
-    gribmap: grib
-  }));
-
-  //Affichage de l'échelle
-  map.addControl(new OpenLayers.Control.ScaleLine());
-
-  //Le Permalink
-  //FIXME: éviter que le permalink soit masqué par la minimap ?
-  map.addControl(new OpenLayers.Control.Permalink('permalink'));
-
-  //FIXME: Pourquoi le graticule est il un control ?
-  map.addControl(new OpenLayers.Control.Graticule());
-
-  //Navigation clavier
-  map.addControl(new OpenLayers.Control.KeyboardDefaults());
-
-  //Le panel de vent
-
-  GribWindController = new Gribmap.ControlWind();
-  map.addControl(GribWindController);
-
-  //Evite que le zoom molette surcharge le js du navigateur
-  var nav = map.getControlsByClass("OpenLayers.Control.Navigation")[0];
-  nav.handlers.wheel.cumulative = false;
-  nav.handlers.wheel.interval = 100;
-
-  //Minimap
-  /*var ovmapOptions = {
-    maximized: true,
-    layers: [vlmoverview]
-  };
-  map.addControl(new OpenLayers.Control.OverviewMap(ovmapOptions));
-*/
-  //Pour centrer quand on a pas de permalink dans l'url
-  if (!map.getCenter())
-  {
-    // Don't do this if argparser already did something...
-    var lonlat = new OpenLayers.LonLat(default_longitude, default_latitude);
-    lonlat.transform(MapOptions.displayProjection, MapOptions.projection);
-    map.setCenter(lonlat, default_zoom);
-  }
-
-  // Click handler
-  var click = new OpenLayers.Control.Click();
-  map.addControl(click);
-  click.activate();
 }
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm)
@@ -1064,9 +1167,8 @@ function HandleGribSlideMove(event, ui)
 {
   let handle = $("#GribSliderHandle");
   handle.text(ui.value);
-  let l = GribWindController.getGribmapLayer();
   let GribEpoch = new Date().getTime();
-  l.setTimeSegment(GribEpoch / 1000 + ui.value * 3600);
+  map.GribMap.SetGribMapTime(GribEpoch + ui.value * 3600000);
 
   if (VLM2Prefs.MapPrefs.TrackEstForecast && _CurPlayer.CurBoat.Estimator)
   {
@@ -1124,7 +1226,8 @@ function HandleStartEstimator(e)
   CurBoat.Estimator.Start(HandleEstimatorProgress);
 }
 
-var LastPct = -1;
+var LastPctRefresh = -1;
+var LastPctDraw = -1;
 
 function HandleEstimatorProgress(Complete, Pct, Dte)
 {
@@ -1134,9 +1237,10 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#PbEstimatorProgressBar").addClass("hidden");
     //$("#PbEstimatorProgressText").addClass("hidden")
     $("#EstimatorStopButton").addClass("hidden");
-    LastPct = -1;
+    LastPctRefresh = -1;
+    LastPctDraw = -1;
   }
-  else if (Pct - LastPct > 0.15)
+  else if (Pct - LastPctRefresh > 0.15)
   {
     $("#EstimatorStopButton").removeClass("hidden");
     $("#StartEstimator").addClass("hidden");
@@ -1146,7 +1250,12 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#PbEstimatorProgress").css("width", Pct + "%");
     $("#PbEstimatorProgress").attr("aria-valuenow", Pct);
     $("#PbEstimatorProgress").attr("aria-valuetext", Pct);
-    LastPct = Pct;
+    LastPctRefresh = Pct;
+  }
+  else if (Pct - LastPctDraw > 1)
+  {
+    DrawBoatEstimateTrack(_CurPlayer.CurBoat, GetRaceMapFeatures(_CurPlayer.CurBoat));
+    LastPctDraw = Pct;
   }
 }
 
@@ -1364,8 +1473,8 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   // 0 for text fields
   // 1 for input fields
   let BoatFieldMappings = [];
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.ToString()]);
-  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.ToString()]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLon", lon.toString()]);
+  BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#BoatLat", lat.toString()]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatSpeed", RoundPow(Boat.VLMInfo.BSP, 2)]);
   BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatHeading", RoundPow(Boat.VLMInfo.HDG, 1)]);
   BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Heading", RoundPow(Boat.VLMInfo.HDG, 2)]);
@@ -1394,8 +1503,8 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   if (typeof WP !== "undefined" && WP)
   {
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.ToString()]);
-    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.ToString()]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLat", WP.Lat.toString()]);
+    BoatFieldMappings.push([FIELD_MAPPING_TEXT, "#PM_CurWPLon", WP.Lon.toString()]);
   }
   else
   {
@@ -1518,6 +1627,8 @@ function FillFieldsFromMappingTable(MappingTable)
           MappingTable[index][2](MappingTable[index][1]);
           break;
 
+        case FIELD_MAPPING_STYLE:
+          $(MappingTable[index][1]).css(MappingTable[index][2], MappingTable[index][3]);
 
       }
     }
@@ -2353,6 +2464,7 @@ function RefreshCurrentBoat(SetCenterOnBoat, ForceRefresh, TargetTab)
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in BoatIDSpan[0].attributes))
   {
     let BoatId = BoatIDSpan[0].attributes.BoatID.value;
+
     SetCurrentBoat(GetBoatFromIdu(BoatId), SetCenterOnBoat, ForceRefresh, TargetTab);
   }
 
@@ -2577,12 +2689,36 @@ function HandleBoatSelectionChange(e)
 var LastMouseMoveCall = 0;
 var ShowEstTimeOutHandle = null;
 
+function HandleMapMouseClick(e)
+{
+  if (SetWPPending)
+    {
+      if (WPPendingTarget === "WP")
+      {
+        CompleteWPSetPosition(e);
+        HandleCancelSetWPOnClick();
+      }
+      else if (WPPendingTarget === "AP")
+      {
+        SetWPPending = false;
+        _CurAPOrder.PIP_Coords = new VLMPosition(e.latlng.lng, e.latlng.lat);
+        $("#AutoPilotSettingForm").modal("show");
+        RefreshAPDialogFields();
+
+      }
+      else
+      {
+        SetWPPending = false;
+      }
+    }
+}
+
 function HandleMapMouseMove(e)
 {
-
-  if (GM_Pos && (typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
+  let LatLng = e.latlng;
+  if ((typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof _CurPlayer.CurBoat !== 'undefined') && (typeof _CurPlayer.CurBoat.VLMInfo !== "undefined"))
   {
-    var Pos = new VLMPosition(GM_Pos.lon, GM_Pos.lat);
+    var Pos = new VLMPosition(LatLng.lng, LatLng.lat);
     var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
     var EstimatePos = null;
@@ -2598,8 +2734,8 @@ function HandleMapMouseMove(e)
     }
 
 
-    $("#MI_Lat").text(Pos.Lat.ToString());
-    $("#MI_Lon").text(Pos.Lon.ToString());
+    $("#MI_Lat").text(Pos.Lat.toString());
+    $("#MI_Lon").text(Pos.Lon.toString());
     $("#MI_LoxoDist").text(CurPos.GetLoxoDist(Pos, 2) + " nM");
     $("#MI_OrthoDist").text(CurPos.GetOrthoDist(Pos, 2) + " nM");
     $("#MI_Loxo").text(CurPos.GetLoxoCourse(Pos, 2) + " °");
@@ -2622,23 +2758,39 @@ function HandleMapMouseMove(e)
 
     if (GribMgr)
     {
-      let m =  moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
-      let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
-      let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length-1] * 1000 + ")/");
-      let span = moment.duration(ts_end.diff(ts_start));
-      $("#MI_SrvrGribAge").text(m);
-      $("#MI_LocalGribAge").text(GetLocalUTCTime( ts_start.add(3.5,"h"),true,true));
-      $("#MI_LocalGribSpan").text("" + span.asHours() +" h");
+      let m = "-- N/A --";
+      let GribAgeText = "-- N/A --";
+      let GribSpanText = "-- N/A --";
 
-      let now = new Date().getTime()/1000;
-      if ((now-ts_start.local().unix()) > 9.5*3600)
+      if (GribMgr.LastGribDate)
       {
-        $("#GribLoadOK").addClass("GribNotOK");
+        m = moment("/date(" + GribMgr.LastGribDate * 1000 + ")/").fromNow();
+        let ts_start = moment("/date(" + GribMgr.TableTimeStamps[0] * 1000 + ")/");
+        let ts_end = moment("/date(" + GribMgr.TableTimeStamps[GribMgr.TableTimeStamps.length - 1] * 1000 + ")/");
+        let span = moment.duration(ts_end.diff(ts_start));
+        GribAgeText = GetLocalUTCTime(ts_start.add(3.5, "h"), true, true);
+        GribSpanText = "" + span.asHours() + " h";
+
+        let now = new Date().getTime() / 1000;
+        if ((now - ts_start.local().unix()) > 7 * 3600)
+        {
+          $("#GribLoadOK").addClass("GribNotOK");
+        }
+        else if ((now - ts_start.local().unix()) > 6 * 3600)
+        {
+          $("#GribLoadOK").addClass("GribGetsOld");
+        }
+        else
+        {
+          $("#GribLoadOK").removeClass("GribNotOK");
+        }
       }
-      else
-      {
-        $("#GribLoadOK").removeClass("GribNotOK");
-      }
+
+      $("#MI_SrvrGribAge").text(m);
+      $("#MI_LocalGribAge").text(GribAgeText);
+      $("#MI_LocalGribSpan").text(GribSpanText);
+
+
     }
 
     if (Estimated)
@@ -2649,11 +2801,13 @@ function HandleMapMouseMove(e)
   }
 }
 
-function StartEstimateTimeout() {
-  ShowEstTimeOutHandle = setTimeout(function () {
+function StartEstimateTimeout()
+{
+  ShowEstTimeOutHandle = setTimeout(function()
+  {
     _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
     RefreshEstPosLabels(null);
-    DrawBoat(_CurPlayer.CurBoat, false);
+    
   }, 5000);
 }
 
@@ -3781,6 +3935,10 @@ function HandleMapPrefOptionChange(e)
 
 function SafeHTMLColor(Color)
 {
+  if (typeof Color === "undefined")
+  {
+    Color = "#000000";
+  }
   Color = "" + Color;
 
   if (Color.length < 6)

@@ -10,6 +10,11 @@ const POS_FORMAT_DEFAULT = 0;
 const EARTH_RADIUS = 3443.84;
 const VLM_DIST_ORTHO = 1;
 
+// Fmod for javascript from https://gist.github.com/wteuber/6241786
+Math.fmod = function(a, b)
+{
+  return Number((a - (Math.floor(a / b) * b)).toPrecision(8));
+};
 
 function Deg2Rad(v)
 {
@@ -59,9 +64,9 @@ function VLMPosition(lon, lat, format)
   }
 
   // Default string formating
-  this.ToString = function(Raw)
+  this.toString = function(Raw)
   {
-    return this.Lat.ToString(Raw) + " " + this.Lon.ToString(Raw);
+    return this.Lat.toString(Raw) + " " + this.Lon.toString(Raw);
   };
 
   this.GetEuclidianDist2 = function(P)
@@ -131,7 +136,7 @@ function VLMPosition(lon, lat, format)
     let Lon1 = Deg2Rad(this.Lon.Value);
     let Lat = 0;
     let Lon = 0;
-    
+
     Lat = Lat1 + d * Math.cos(tc);
     let t_lat = (Lat1 + Lat) / 2.0;
     Lon = Lon1 + (d * Math.sin(tc)) / Math.cos(t_lat);
@@ -294,11 +299,11 @@ function VLMPosition(lon, lat, format)
     //
     this.GetOrthoCourse = function(P, Precision)
     {
-      var lon1 = -Deg2Rad(this.Lon.Value);
-      var lon2 = -Deg2Rad(P.Lon.Value);
-      var lat1 = Deg2Rad(this.Lat.Value);
-      var lat2 = Deg2Rad(P.Lat.Value);
-
+      let lon1 = Deg2Rad(this.Lon.Value);
+      let lon2 = Deg2Rad(P.Lon.Value);
+      let lat1 = Deg2Rad(this.Lat.Value);
+      let lat2 = Deg2Rad(P.Lat.Value);
+      let retval;
       if (typeof Precision == "undefined" || typeof Precision != "number")
       {
         Precision = 17;
@@ -309,7 +314,7 @@ function VLMPosition(lon, lat, format)
       ELSE       
         tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))    
       ENDIF*/
-      var d = Deg2Rad(this.GetOrthoDist(P) / 60);
+      /* var d = Deg2Rad(this.GetOrthoDist(P) / 60);
       var retval = (Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / (Math.sin(d) * Math.cos(lat1));
       if ((retval >= -1) && (retval <= 1))
       {
@@ -331,6 +336,41 @@ function VLMPosition(lon, lat, format)
         retval = Math.PI;
       }
 
+       */
+
+      let g, d, den;
+
+      g = Math.fmod(lon2 - lon1, 2 * Math.PI);
+      if (Math.abs(g) < 0.0000001)
+      {
+        /* close enough to vertical, clamp to vertical*/
+        den = lat2 - lat1;
+        retval = (den > 0) ? 0 : Math.PI;
+
+      }
+      else
+      {
+        if (g <= -Math.PI)
+        {
+          g += 2 * Math.PI;
+        }
+        else if (g > Math.PI)
+        {
+          g -= 2 * Math.PI;
+        }
+        d = Math.acos(Math.sin(lat2) * Math.sin(lat1) + Math.cos(lat2) * Math.cos(lat1) * Math.cos(g));
+
+        den = Math.cos(lat1) * Math.sin(d);
+        if (g < 0)
+        {
+          retval = 2 * Math.PI - Math.acos((Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / den);
+        }
+        else
+        {
+          retval = Math.acos((Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / den);
+        }
+      }
+      
       retval = Rad2Deg(retval % (2 * Math.PI));
       return RoundPow(retval, Precision);
     };
@@ -400,6 +440,6 @@ function VLMPosition(lon, lat, format)
 
   this.GetVLMString = function()
   {
-    return this.Lat.ToString() + ',' + this.Lon.ToString();
+    return this.Lat.toString() + ',' + this.Lon.toString();
   };
 }

@@ -23,7 +23,7 @@ const gulp = require('gulp'),
   gulpif = require('gulp-if'),
   babel = require('gulp-babel');
 
-const VLMVersion = 21;
+const VLMVersion = 22;
 var BuildTypeProd = false; // This is automatically set to true in prod build chains
 
 
@@ -171,7 +171,7 @@ gulp.task('libs_babel', function()
   return gulp.src(['jvlm/external/footable-bootstrap/js/footable.js',
       'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
       'externals/fullcalendar/fullcalendar.min.js',
-      'externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'
+      'externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))

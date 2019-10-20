@@ -19,19 +19,14 @@
   <link rel="alternate stylesheet" type="text/css" title="noir-jaune-v2" href="jquery-ui.theme-noir-jaune-v2.css?v=@@JVLMVERSION@@" />
   <script src="config.js"></script>
   <script src="dist/jvlm_libs.min.js?v=@@JVLMVERSION@@"></script>
-  <script src="external/OpenLayers/OpenLayers.js"></script>
+  <script src="external/Leaflet/leaflet.js"></script>
 
 </head>
 
 <body>
   <!-- OpenLayer Map Div -->
-  <div class="container-fluid">
-    <div class="row main-row">
-      <div id="jVlmControl" class="col-xs-12" style="padding:0px"></div>
-    </div>
-    <div class="row main-row">
-      <div id="jVlmMap" class="col-xs-12">
-      </div>
+  <div class="container-fluid row main-row" style="z-index:0">
+    <div id="jVlmMap" class="col-xs-12">
     </div>
   </div>
   <!-- Zone de boite d'alertes -->
@@ -42,7 +37,7 @@
     </div>
   </div>
   <!-- debut de nav-->
-  <nav class="navbar navbar-inverse ">
+  <nav class="navbar navbar-inverse " style="z-index:3000">
     <!--<div class="OffRaceNavBar container-fluid " style="display:none">
         <div class="navbar-header container-fluid">
           <a class="navbar-brand" href="/index.php" target="_vlm">
@@ -52,7 +47,7 @@
           </a>
         </div>
       </div>-->
-    <div class="RaceNavBar container-fluid " style="display:none">
+    <div class="RaceNavBar container-fluid " style="display:none;z-index:3000">
       <div class="navbar-header">
         <ul LoggedInNav="false" style="display:none">
           <button type="button" class="logbtn logindlgButton ui-button-noir ui-corner-all ui-widget navbar-toggle"><span class="glyphicon glyphicon-log-in"></span></button>
@@ -584,7 +579,7 @@
       </div>
     </div>
   </nav>
-  <div class="input" style="position:relative">
+  <div class="input" style="position:relative; z-index:3000">
     <div id="GribSlider" style="height:50vh; position:absolute; right:10px;">
       <div id="GribSliderHandle" class="ui-slider-handle"></div>
     </div>

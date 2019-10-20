@@ -49,7 +49,7 @@
         if ( $usersObj->idusers > 0 ) 
         {
           include "check_user.php";
-          $nb_boats++;
+          
         } 
         else 
         {
