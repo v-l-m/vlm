@@ -83,6 +83,7 @@ if ( $usersObj->engaged != 0  )
     {
       // userdeptime est mis a -1 dans subscribeToRaces
       // Donc s'il vaut -1 ici, c'est que le joueur prend le depart d'une course
+      $nb_boats++;
       if ( $fullUsersObj->users->userdeptime == -1 ) 
       {
         // update userdeptime in table users 
