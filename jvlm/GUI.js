@@ -265,7 +265,7 @@ function HandleMapGridZoom(e)
   let GridLabelStyle2 = {
     permanent: true,
     opacity: GridLabelOpacity,
-    offset: [0, 18]
+    offset: [0, 30]
   };
   let GridLabelStyle3 = {
     permanent: true,
