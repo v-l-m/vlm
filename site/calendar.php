@@ -3,14 +3,18 @@
     include_once("config.php");
 ?>
     <script type='text/javascript' src='externals/jquery/jquery.js'></script>
-    <script type='text/javascript' src='externals/fullcalendar/fullcalendar.min.js'></script>
-    <link rel='stylesheet' type='text/css' href='externals/fullcalendar/fullcalendar.css' />
+    <link rel='stylesheet' type='text/css' href='externals/fullcalendar/core/main.min.css' />
+    <link rel='stylesheet' type='text/css' href='externals/fullcalendar/daygrid/main.min.css' />
+    <script src='externals/fullcalendar/core/main.js'></script>
+    <script src='externals/fullcalendar/daygrid/main.js'></script>
     <script type='text/javascript'>
 		//var $jq = jQuery.noConflict();
 		jQuery.noConflict();
 		//$(document).ready(function() {
 		jQuery(document).ready(function() {
-			jQuery('#calendar').fullCalendar({
+            var el =jQuery('#calendar')[0];
+            var Cal = new FullCalendar.Calendar(el,{
+                plugins: [ 'dayGrid' ],
                 editable: false,
                 header: { left: 'title', center: '', right:  'today prev,next'},
                 firstDay: 1,
@@ -21,6 +25,7 @@
                     else jQuery('#loading').hide();
                 }
             });
+            Cal.render();
         });
     </script>
     <style type='text/css'>

@@ -924,13 +924,17 @@ function HandleFillICSButton(e)
 
 }
 
-let CalInited = false;
-
+let VLMAgenda = null;
 function HandleShowAgenda()
 {
-  jQuery('#Calendar').fullCalendar('destroy');
-  jQuery('#Calendar').fullCalendar(
+  if (VLMAgenda)
   {
+    VLMAgenda.destroy();
+  }
+  let CalEl= jQuery('#Calendar')[0];
+  VLMAgenda = new FullCalendar.Calendar(CalEl,
+  {
+    plugins: [ 'dayGrid' ],
     locale: _CurLocale,
     editable: false,
     header:
@@ -954,7 +958,8 @@ function HandleShowAgenda()
       else jQuery('#loading').hide();
     }
   });
-  CalInited = true;
+  
+  VLMAgenda.render();
 
   $("#Infos").modal("hide");
 }

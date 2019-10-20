@@ -121,6 +121,7 @@ gulp.task('libs_std', function()
       'jvlm/external/jquery-ui/jquery-ui.js', 'jvlm/external/bootstrap-master/js/bootstrap.js',
       'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
       'jvlm/jquery.ui.touch-punch.js', 'jvlm/external/store/store.min.js',
+      'externals/fullcalendar/core/main.js','externals/fullcalendar/daygrid/main.js',    
       'jvlm/external/moments/moment-with-locales.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
@@ -170,8 +171,7 @@ gulp.task('libs_babel', function()
 {
   return gulp.src(['jvlm/external/footable-bootstrap/js/footable.js',
       'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
-      'externals/fullcalendar/fullcalendar.min.js',
-      'externals/fullcalendar/locale-all.js', 'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
+      'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))

@@ -9,7 +9,7 @@
     
     if ($start)
     {
-        $start = DateTime::createFromFormat('Y-m-d', $start);
+        $start = DateTime::createFromFormat('Y-m-d\Th:i:sT', $start);
         $start = $start->getTimestamp();
     }
     else
@@ -18,7 +18,7 @@
     }
     if ($end)
     {
-        $end = DateTime::createFromFormat('Y-m-d', $end);
+        $end = DateTime::createFromFormat('Y-m-d\Th:i:sT', $end);
         $end = $end->getTimestamp();
     }
     else
