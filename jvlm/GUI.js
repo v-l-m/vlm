@@ -139,24 +139,51 @@ function LeafletInit()
 
   // Wind Layer
   map.GribMap = new GribMap.Layer().addTo(map);
-  map.Compass = new L.marker([0, 0],
-  {
-    icon: new L.icon(
-    {
-      iconSize: [350, 341],
-      iconAnchor: [175, 170],
-      iconUrl: 'images/compas-transparent.gif',
-    }),
-    draggable: true
-  }).addTo(map);
+  DrawCompass();
 
-  map.Compass.on("dragend", HandleCompassDragEnd);
-  map.Compass.on("mousemove", HandleCompassMouseMove);
-  map.Compass.on("mouseout", HandleCompassMouseOut);
+  // Map Events
   map.on('mousemove', HandleMapMouseMove);
   map.on('moveend', HandleMapGridZoom);
   map.on('click', HandleMapMouseClick);
   map.on("zoomend", HandleMapGridZoom);
+}
+
+function DrawCompass()
+{
+  if (VLM2Prefs.MapPrefs.ShowCompass)
+  {
+    if (map.Compass)
+    {
+      map.Compass.addTo(map);
+      map.Compass.on("dragend", HandleCompassDragEnd);
+      map.Compass.on("mousemove", HandleCompassMouseMove);
+      map.Compass.on("mouseout", HandleCompassMouseOut);
+    }
+    else
+    {
+      map.Compass = new L.marker([0, 0],
+      {
+        icon: new L.icon(
+        {
+          iconSize: [350, 341],
+          iconAnchor: [175, 170],
+          iconUrl: 'images/compas-transparent.gif',
+        }),
+        draggable: true
+      }).addTo(map);
+      map.Compass.on("dragend", HandleCompassDragEnd);
+      map.Compass.on("mousemove", HandleCompassMouseMove);
+      map.Compass.on("mouseout", HandleCompassMouseOut);
+    }
+  }
+  else if (map.Compass)
+  {
+    map.Compass.off("dragend", HandleCompassDragEnd);
+    map.Compass.off("mousemove", HandleCompassMouseMove);
+    map.Compass.off("mouseout", HandleCompassMouseOut);
+    map.Compass.remove();
+  }
+
 }
 
 function HandleCompassMouseOut(e)
@@ -172,7 +199,7 @@ function HandleCompassMouseMove(e)
   let dx = p.x - m.x;
   let dy = p.y - m.y;
 
-  if (((dx * dx) + (dy * dy)) < COMPASS_SIZE * COMPASS_SIZE/8)
+  if (((dx * dx) + (dy * dy)) < COMPASS_SIZE * COMPASS_SIZE / 8)
   {
     map.Compass.dragging.disable();
     //console.log ( " " + dx + " " + dy + " disabled " + ((dx*dx)+(dy*dy)) + " < "+ 0.81*COMPASS_SIZE * COMPASS_SIZE/4);
@@ -187,7 +214,7 @@ function HandleCompassMouseMove(e)
 
 function HandleCompassDragEnd(e)
 {
-  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.VLMInfo.LAT  &&_CurPlayer.CurBoat.VLMInfo.LON)
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.VLMInfo.LAT && _CurPlayer.CurBoat.VLMInfo.LON)
   {
     let Boat = _CurPlayer.CurBoat;
     let B = [_CurPlayer.CurBoat.VLMInfo.LAT, _CurPlayer.CurBoat.VLMInfo.LON];
@@ -925,16 +952,17 @@ function HandleFillICSButton(e)
 }
 
 let VLMAgenda = null;
+
 function HandleShowAgenda()
 {
   if (VLMAgenda)
   {
     VLMAgenda.destroy();
   }
-  let CalEl= jQuery('#Calendar')[0];
+  let CalEl = jQuery('#Calendar')[0];
   VLMAgenda = new FullCalendar.Calendar(CalEl,
   {
-    plugins: [ 'dayGrid' ],
+    plugins: ['dayGrid'],
     locale: _CurLocale,
     editable: false,
     header:
@@ -958,7 +986,7 @@ function HandleShowAgenda()
       else jQuery('#loading').hide();
     }
   });
-  
+
   VLMAgenda.render();
 
   $("#Infos").modal("hide");
@@ -2697,25 +2725,25 @@ var ShowEstTimeOutHandle = null;
 function HandleMapMouseClick(e)
 {
   if (SetWPPending)
+  {
+    if (WPPendingTarget === "WP")
     {
-      if (WPPendingTarget === "WP")
-      {
-        CompleteWPSetPosition(e);
-        HandleCancelSetWPOnClick();
-      }
-      else if (WPPendingTarget === "AP")
-      {
-        SetWPPending = false;
-        _CurAPOrder.PIP_Coords = new VLMPosition(e.latlng.lng, e.latlng.lat);
-        $("#AutoPilotSettingForm").modal("show");
-        RefreshAPDialogFields();
-
-      }
-      else
-      {
-        SetWPPending = false;
-      }
+      CompleteWPSetPosition(e);
+      HandleCancelSetWPOnClick();
     }
+    else if (WPPendingTarget === "AP")
+    {
+      SetWPPending = false;
+      _CurAPOrder.PIP_Coords = new VLMPosition(e.latlng.lng, e.latlng.lat);
+      $("#AutoPilotSettingForm").modal("show");
+      RefreshAPDialogFields();
+
+    }
+    else
+    {
+      SetWPPending = false;
+    }
+  }
 }
 
 function HandleMapMouseMove(e)
@@ -2812,7 +2840,7 @@ function StartEstimateTimeout()
   {
     _CurPlayer.CurBoat.GetClosestEstimatePoint(null);
     RefreshEstPosLabels(null);
-    
+
   }, 5000);
 }
 
@@ -3854,6 +3882,7 @@ function HandleShowMapPrefs(e)
 {
   //Load prefs
   $("#DisplayReals").attr('checked', VLM2Prefs.MapPrefs.ShowReals);
+  $("#ShowCompass").attr('checked', VLM2Prefs.MapPrefs.ShowCompass);
   $("#DisplayNames").attr('checked', VLM2Prefs.MapPrefs.ShowOppNumbers);
   $("#EstTrackMouse").attr('checked', VLM2Prefs.MapPrefs.EstTrackMouse);
   $("#TrackEstForecast").attr('checked', VLM2Prefs.MapPrefs.TrackEstForecast);
@@ -3909,7 +3938,10 @@ function HandleMapPrefOptionChange(e)
     case "TrackEstForecast":
       VLM2Prefs.MapPrefs[Id] = Value;
       break;
-
+    case "ShowCompass":
+      VLM2Prefs.MapPrefs[Id] = Value;
+      DrawCompass();
+      break;
     case "VacPol":
       let VacPol = parseInt($("#VacPol").val(), 10);
 

@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'ShowCompass'=>'Afficher le compas',
     'ServerMeteoAge'=>'Grib chargé',
     'LocalMeteoStart'=>'Grib du',
     'LocalMeteoSpan'=>'Durée',
