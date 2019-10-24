@@ -241,6 +241,12 @@ function Estimator(Boat)
         // Going fixed angle, get bearing, compute speed, move
         Hdg = MI.Heading + this.CurEstimate.Value;
         Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+        if (isNaN(Speed))
+        {
+          VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+          this.Stop();
+          return;
+        }
         NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
         break;
 
@@ -248,6 +254,12 @@ function Estimator(Boat)
         // Going fixed bearing, get boat speed, move along loxo
 
         Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+        if (isNaN(Speed))
+        {
+          VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+          this.Stop();
+          return;
+        }
         NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
 
         break;
@@ -261,6 +273,12 @@ function Estimator(Boat)
         {
           Hdg = this.CurEstimate.Position.GetOrthoCourse(Dest);
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+          if (isNaN(Speed))
+          {
+            VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+            this.Stop();
+            return;
+          }
           NewPos = this.CurEstimate.Position.ReachDistOrtho(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
         }
         else
@@ -275,6 +293,12 @@ function Estimator(Boat)
           }
 
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
+          if (isNaN(Speed))
+          {
+            VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+            this.Stop();
+            return;
+          }
           NewPos = this.CurEstimate.Position.ReachDistLoxo(Speed / 3600.0 * this.Boat.VLMInfo.VAC, Hdg);
 
         }
