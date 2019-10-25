@@ -168,7 +168,7 @@
        {
          CurPos = new VLMPosition(this.VLMInfo.LON, this.VLMInfo.LAT);
        }
-       var Loxo2 = Seg.P1.GetLoxoCourse(CurPos);
+       var Loxo2 = Seg.P1.GetOrthoCourse(CurPos);
        var Delta = Loxo1 - Loxo2;
 
        if (Delta > 180)
