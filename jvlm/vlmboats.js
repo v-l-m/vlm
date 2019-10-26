@@ -459,7 +459,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 function DrawBoatEstimateTrack(Boat, RaceFeatures) {
   if (typeof Boat.Estimator !== "undefined" && Boat.Estimator) {
     let tracks = Boat.Estimator.GetEstimateTracks();
-    let TrackColors = ['green', 'orange', 'red'];
+    let TrackColors = ['green', 'yellow', 'white'];
     for (let index in tracks) {
       if (RaceFeatures.EstimateTracks && RaceFeatures.EstimateTracks[index]) {
         if (typeof tracks[index] !== "undefined") {
