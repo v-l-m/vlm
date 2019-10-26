@@ -49,10 +49,11 @@ gzip -9 $LOG
 # Purge des anciens logs
 #===8<===
 cd $VLMLOG
-[ $(pwd) == "$VLMLOG" ] && find . -name "*--cronvlm-clean.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
+[ $(pwd) == "$VLMLOG" ] && find . -name "*--cronvlm-clean.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} +;
 #===8<===
 
 #purge des fichiers cachés non accédé depuis 30 jours.
 cd $VLMRACINE/cache
-nice /usr/bin/find ./gribtiles ./gshhstiles ./minimaps ./racemaps ./tinymaps ./tracks -type f -atime +30 -exec rm -f {} \;
+nice /usr/bin/find ./gribtiles ./gshhstiles ./minimaps ./racemaps ./tinymaps ./tracks -type f -atime +30 -exec rm -f {} +;
+nice /usr/bin/find ./gribtiles/* ./gshhstiles/* ./minimaps/* ./racemaps/* ./tinymaps/* ./tracks/* -type d -empty -delete
 
