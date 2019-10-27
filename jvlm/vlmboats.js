@@ -81,7 +81,7 @@ function SetCurrentBoat(Boat, CenterMapOnBoat, ForceRefresh, TargetTab)
   {
     if (_CurPlayer.CurBoat.IdBoat !== Boat.IdBoat)
     {
-      ClearCurrentMapMarker(_CurPlayer.CurBoat);
+      ClearCurrentMapMarkers(_CurPlayer.CurBoat);
     }
     EnsureMarkersVisible(Boat);
   }
@@ -174,8 +174,6 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
               GetRaceInfoFromServer(Boat, TargetTab);
               GetRaceExclusionsFromServer(Boat);
             }
-
-
 
             // Get boat track for the last 24h
             GetTrackFromServer(Boat);
@@ -496,7 +494,7 @@ function RepositionCompass(Boat)
   let Features = GetRaceMapFeatures(Boat);
   if (map.Compass)
   {
-    if ((Features.Compass && Features.Compass.Lat == -1 && Features.Compass.Lon == -1) || (Boat.VLMInfo && (Boat.VLMInfo.LAT || Boat.VLMInfo.LON)))
+    if ((Features.Compass && Features.Compass.Lat == -1 && Features.Compass.Lon == -1) || ((!Features.Compass) && Boat.VLMInfo && (Boat.VLMInfo.LAT || Boat.VLMInfo.LON)))
     {
       map.Compass.setLatLng([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
     }
@@ -1722,7 +1720,7 @@ function GetClosestOpps(Boat, NbOpps)
 function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 {
   let Opp_Coords = [Opponent.latitude, Opponent.longitude];
-  let ZFactor = map.getZoom();
+  let ZFactor = 8;//map.getZoom();
   let OppData = {
     "name": Opponent.idusers,
     "Coords": new VLMPosition(Opponent.longitude, Opponent.latitude).toString(),
@@ -1785,15 +1783,12 @@ function ShowOpponentPopupInfo(e)
         {
           Features.OppPopup = L.popup(PopupStr);
         }
-        else
-        {
-          Features.OppPopup.setContent(PopupStr);
-        }
         if (Features.OppPopup.PrevOpp)
         {
-          Features.OppPopup.PrevOpp.unbindPopup(Features.OppPopup);
+          Features.OppPopup.PrevOpp.unbindPopup();
         }
-        Opp.bindPopup(Features.OppPopup).openPopup();
+        Opp.bindPopup(Features.OppPopup);
+        Features.OppPopup.setContent(PopupStr);
         Features.OppPopup.PrevOpp = Opp;
 
         let PopupFields = [];

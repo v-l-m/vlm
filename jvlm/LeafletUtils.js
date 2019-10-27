@@ -147,13 +147,14 @@ function GetOpponentMarker(OppData)
   return ret;
 }
 
-function ClearCurrentMapMarker(Boat)
+function ClearCurrentMapMarkers(Boat)
 {
   if (Boat && Boat.RaceMapFeatures)
   {
     if (Boat.RaceMapFeatures.OppPopup && Boat.RaceMapFeatures.OppPopup.PrevOpp)
     {
-      Boat.RaceMapFeatures.OppPopup.PrevOpp.unbindPopup(Boat.RaceMapFeatures.OppPopup);
+      Boat.RaceMapFeatures.OppPopup.PrevOpp.closePopup();
+      Boat.RaceMapFeatures.OppPopup.PrevOpp.unbindPopup();
     }
     RemoveFromMap(Boat.RaceMapFeatures);
   }
@@ -186,7 +187,16 @@ function RestoreMarkersOnMap(Feat)
   {
     for (let member in Feat)
     {
-      RestoreMarkersOnMap(Feat[member]);
+      switch (member)
+      {
+        // Special restore handling (ie do not show opppopup again)
+        case "OppPopup":
+          break;
+        default:
+          RestoreMarkersOnMap(Feat[member]);
+          break;
+      }
+      
     }
   }
   else if (Feat._leaflet_id && !Feat._map)
