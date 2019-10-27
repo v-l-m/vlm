@@ -224,7 +224,8 @@ function Estimator(Boat)
           }
 
 
-          this.CurEstimate.PilOrders[index] = null;
+          this.CurEstimate.PilOrders[index].STS = "Planned";
+          this.CurEstimate.PilOrders[index].Pos = this.CurEstimate.Position;
           break;
         }
       }
@@ -337,6 +338,23 @@ function Estimator(Boat)
       setTimeout(this.Estimate.bind(this), 0);
       this.ReportProgress(false);
     }
+  };
+
+  this.GetPilotPoints = function()
+  {
+    let RetPoints=[];
+    // Check if an update is required from AutoPilot;
+    for (let index in this.CurEstimate.PilOrders)
+    {
+      var Order = this.CurEstimate.PilOrders[index];
+
+      if (Order && typeof Order.Pos !== "undefined")
+      {
+        RetPoints.push(Order);
+      }
+    }
+
+    return RetPoints;
   };
 
   this.GetNextRaceWP = function()

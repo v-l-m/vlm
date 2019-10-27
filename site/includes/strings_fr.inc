@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'OrthoToWP'=>'Ortho vers WP',
     'ShowCompass'=>'Afficher le compas',
     'ServerMeteoAge'=>'Grib chargé',
     'LocalMeteoStart'=>'Grib du',

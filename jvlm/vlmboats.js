@@ -454,25 +454,88 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
 
 }
 
-function DrawBoatEstimateTrack(Boat, RaceFeatures) {
-  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator) {
+function GetNextPilOrderDate(PilIndex)
+{
+  if (Boat && Boat.VLMInfo && Boat.VLM.PIL)
+  {
+    NextPilOrder = null;
+    for (let index in Boat.VLM.PIL)
+    {
+      if (Boat.VLM.PIL[index])
+      {
+        if (Boat.VLM.PIL[index].STS === "pending")
+        {
+          if (index > PilIndex)
+          {
+            return index;
+          }
+        }
+      }
+    }
+  }
+  return -1;
+}
+
+function GetPilototoMarkerText(Order)
+{
+  let OrderMoment = moment("/date(" + Order.TTS * 1000 + ")/");
+
+  let Text = "Date : " + GetLocalUTCTime(OrderMoment, true, true) +
+    '<BR>' + OrderMoment.fromNow();
+  switch (parseInt(Order.PIM,10))
+  {
+    case PM_ANGLE:
+        Text += '<BR>' + GetLocalizedString('constantengaged') + ' : ' + Order.PIP + '°';
+      break;
+    case PM_HEADING:
+        Text += '<BR>' + GetLocalizedString('heading') + ' : ' + Order.PIP + '°';
+      break;
+    case PM_ORTHO:
+        Text += '<BR>' + GetLocalizedString('OrthoToWP') + ' : ' + Order.PIP;
+      break;
+    case PM_VMG:
+        Text += '<BR>' + GetLocalizedString('bestvmgengaged') + ' : ' + Order.PIP;
+      break;
+    case PM_VBVMG:
+        Text += '<BR>' + GetLocalizedString('vbvmgengaged') + ' : ' + Order.PIP;
+      break;
+    default:
+        Text += '<BR> Strange PIM' + Order.PIM + ' : ' + Order.PIP;
+      break;
+
+  }
+
+  return Text;
+}
+
+function DrawBoatEstimateTrack(Boat, RaceFeatures)
+{
+  if (typeof Boat.Estimator !== "undefined" && Boat.Estimator)
+  {
     let tracks = Boat.Estimator.GetEstimateTracks();
     let TrackColors = ['green', 'yellow', 'white'];
-    for (let index in tracks) {
-      if (RaceFeatures.EstimateTracks && RaceFeatures.EstimateTracks[index]) {
-        if (typeof tracks[index] !== "undefined") {
+    for (let index in tracks)
+    {
+      if (RaceFeatures.EstimateTracks && RaceFeatures.EstimateTracks[index])
+      {
+        if (typeof tracks[index] !== "undefined")
+        {
           RaceFeatures.EstimateTracks[index].setLatLngs(tracks[index]);
         }
-        else {
+        else
+        {
           RaceFeatures.EstimateTracks[index].remove();
           RaceFeatures.EstimateTracks[index] = null;
         }
       }
-      else {
-        if (typeof RaceFeatures.EstimateTracks === "undefined") {
+      else
+      {
+        if (typeof RaceFeatures.EstimateTracks === "undefined")
+        {
           RaceFeatures.EstimateTracks = [];
         }
-        if (tracks[index]) {
+        if (tracks[index])
+        {
           let Options = {
             weight: 2,
             opacity: 1,
@@ -482,6 +545,44 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures) {
         }
       }
     }
+
+    let PilotPoints = Boat.Estimator.GetPilotPoints();
+
+    if (typeof RaceFeatures.PilotMarkers === "undefined")
+    {
+      RaceFeatures.PilotMarkers = [];
+    }
+
+    for (let index in PilotPoints)
+    {
+      if (PilotPoints[index])
+      {
+        let Order = PilotPoints[index];
+        let Coords = [Order.Pos.Lat.Value, Order.Pos.Lon.Value];
+        let SetText = false;
+        if (RaceFeatures.PilotMarkers[index] && ! RaceFeatures.PilotMarkers[index]._map)
+        {
+          RaceFeatures.PilotMarkers[index].setLatLng(Coords);
+          SetText=true;
+        }
+        else if (!RaceFeatures.PilotMarkers[index])
+        {
+          let Marker = GetPilototoMarker(Order);
+          RaceFeatures.PilotMarkers[index] = L.marker(Coords,
+          {
+            icon: Marker
+          });
+          SetText=true;
+        }        
+
+        if (SetText)
+        {
+          let MarkerText = GetPilototoMarkerText(Order);
+          RaceFeatures.PilotMarkers[index].addTo(map).bindPopup(MarkerText);
+        }
+      }
+    }
+
   }
 }
 
@@ -545,7 +646,7 @@ function DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures)
     DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures);
   });
 
-  RaceFeatures.Polar=DefinePolarMarker(Polar, RaceFeatures.Polar);
+  RaceFeatures.Polar = DefinePolarMarker(Polar, RaceFeatures.Polar);
 }
 
 function DefinePolarMarker(Polar, PolarFeature)
@@ -596,10 +697,10 @@ function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
   }
 
   let MI = null;
-  
+
   if (StartPos && StartPos.Lat && StartPos.Lon)
   {
-    MI=GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
+    MI = GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
   }
 
   if (MI)
@@ -1720,7 +1821,7 @@ function GetClosestOpps(Boat, NbOpps)
 function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 {
   let Opp_Coords = [Opponent.latitude, Opponent.longitude];
-  let ZFactor = 8;//map.getZoom();
+  let ZFactor = 8; //map.getZoom();
   let OppData = {
     "name": Opponent.idusers,
     "Coords": new VLMPosition(Opponent.longitude, Opponent.latitude).toString(),

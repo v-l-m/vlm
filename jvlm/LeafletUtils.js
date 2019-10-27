@@ -18,6 +18,16 @@ var TrackWPMarker = L.Icon.extend(
   }
 });
 
+var PilototoMarker = L.Icon.extend(
+{
+  options:
+  {
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    iconUrl: 'images/Pilototo.svg',
+  }
+});
+
 const BOAT_MARKET_SIZE = 48;
 const BOAT_EST_MARKET_SIZE = 24;
 var BoatMarker = L.Icon.extend(
@@ -25,22 +35,22 @@ var BoatMarker = L.Icon.extend(
   options:
   {
     iconSize: [BOAT_MARKET_SIZE, BOAT_MARKET_SIZE],
-    iconAnchor: [BOAT_MARKET_SIZE/2, BOAT_MARKET_SIZE/2],
+    iconAnchor: [BOAT_MARKET_SIZE / 2, BOAT_MARKET_SIZE / 2],
     iconUrl: 'images/target.png',
-    rotationOrigin: [BOAT_MARKET_SIZE/2, BOAT_MARKET_SIZE/2]
+    rotationOrigin: [BOAT_MARKET_SIZE / 2, BOAT_MARKET_SIZE / 2]
   }
 });
 
 var BoatEstMarker = L.Icon.extend(
+{
+  options:
   {
-    options:
-    {
-      iconSize: [BOAT_EST_MARKET_SIZE, BOAT_EST_MARKET_SIZE],
-      iconAnchor: [BOAT_EST_MARKET_SIZE/2, BOAT_EST_MARKET_SIZE/2],
-      iconUrl: 'images/target.png',
-      rotationOrigin: [BOAT_EST_MARKET_SIZE/2, BOAT_EST_MARKET_SIZE/2]
-    }
-  });
+    iconSize: [BOAT_EST_MARKET_SIZE, BOAT_EST_MARKET_SIZE],
+    iconAnchor: [BOAT_EST_MARKET_SIZE / 2, BOAT_EST_MARKET_SIZE / 2],
+    iconUrl: 'images/target.png',
+    rotationOrigin: [BOAT_EST_MARKET_SIZE / 2, BOAT_EST_MARKET_SIZE / 2]
+  }
+});
 
 var IceGateMarker = L.Icon.extend(
 {
@@ -62,6 +72,11 @@ var GateDirMarker = L.Icon.extend(
   }
 });
 
+function GetPilototoMarker()
+{
+  return new PilototoMarker();
+}
+
 function GetBuoyMarker(Buoy1)
 {
   let RetMark = null;
@@ -77,7 +92,7 @@ function GetBuoyMarker(Buoy1)
     RetMark = new BuoyMarker(
     {
       iconUrl: 'images/Buoy2.png',
-      color:"red"
+      color: "red"
     });
   }
 
@@ -87,15 +102,15 @@ function GetBuoyMarker(Buoy1)
 
 function GetBoatMarker(idboat)
 {
-  
-  let ret=new BoatMarker();
-  ret.MarkerOppId=idboat;
+
+  let ret = new BoatMarker();
+  ret.MarkerOppId = idboat;
   return ret;
 }
 
 function GetBoatEstimateMarker()
 {
-  let ret=new BoatEstMarker();
+  let ret = new BoatEstMarker();
   return ret;
 }
 
@@ -112,11 +127,11 @@ function GetGateTypeMarker(Marker, IsIceGate)
   }
   else
   {
-    let ret= new GateDirMarker(
+    let ret = new GateDirMarker(
     {
       iconUrl: "images/" + Marker
     });
-    
+
     return ret;
   }
 }
@@ -136,13 +151,14 @@ function GetOpponentMarker(OppData)
     "IsFriend": (isFriend ? ZFactor * 2 : ZFactor),
     "color": Opponent.color
   }; */
-  let ret = new L.Icon({
-    iconUrl:"images/opponent"+OppData.IsTeam+".png",
-    iconAnchor:[OppData.IsFriend/2,OppData.IsFriend/2],
-    iconSize:[OppData.IsFriend,OppData.IsFriend]
+  let ret = new L.Icon(
+  {
+    iconUrl: "images/opponent" + OppData.IsTeam + ".png",
+    iconAnchor: [OppData.IsFriend / 2, OppData.IsFriend / 2],
+    iconSize: [OppData.IsFriend, OppData.IsFriend]
   });
 
-  ret.MarkerOppId=OppData.idboat;
+  ret.MarkerOppId = OppData.idboat;
 
   return ret;
 }
@@ -196,7 +212,7 @@ function RestoreMarkersOnMap(Feat)
           RestoreMarkersOnMap(Feat[member]);
           break;
       }
-      
+
     }
   }
   else if (Feat._leaflet_id && !Feat._map)

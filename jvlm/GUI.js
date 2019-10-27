@@ -1256,6 +1256,18 @@ function HandleStartEstimator(e)
     return;
   }
 
+  let RaceFeatures = GetRaceMapFeatures(CurBoat);
+  if (RaceFeatures)
+  {
+    for (let index in RaceFeatures.PilotMarkers)
+    {
+      if (RaceFeatures.PilotMarkers[index])
+      {
+        RaceFeatures.PilotMarkers[index].remove();
+        RaceFeatures.PilotMarkers[index].unbindPopup(RaceFeatures.PilotMarkers[index].getPopup());
+      }
+    }
+  }
   CurBoat.Estimator.Start(HandleEstimatorProgress);
 }
 
