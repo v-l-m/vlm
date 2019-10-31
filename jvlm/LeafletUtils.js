@@ -23,8 +23,8 @@ var PilototoMarker = L.Icon.extend(
   options:
   {
     iconSize: [24, 24],
-    iconAnchor: [12, 12],
-    iconUrl: 'images/Pilototo.svg',
+    iconAnchor: [6, 24],
+    iconUrl: 'images/Pilototo.png',
   }
 });
 
