@@ -205,7 +205,7 @@ class players extends baseClass {
     function insert() {
         $query = sprintf("INSERT INTO `players` %s", $this->query_addupdate());
         if (!$this->queryWrite($query)) return False;
-        $this->idplayers = mysqliinsert_id($GLOBALS['masterdblink']);
+        $this->idplayers = mysqli_insert_id($GLOBALS['masterdblink']);
         $this->logPlayerEvent("Player created.");
         return True;
     }
