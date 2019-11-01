@@ -139,7 +139,13 @@ function LeafletInit()
 
   // Wind Layer
   map.GribMap = new GribMap.Layer().addTo(map);
+
+  // Wind & Mouse Pos Control
+  map.WMControl = L.control.WindMouseControl().addTo(map);
+
+  // Draggable compass
   DrawCompass();
+
 
   // Map Events
   map.on('mousemove', HandleMapMouseMove);

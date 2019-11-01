@@ -67,6 +67,10 @@ GribMap.Layer = L.Layer.extend(
     this.DrawWindDebugCnt = 0;
     this.DrawWindDebugDepth = 0;
   },
+  GetGribMapTime: function()
+  {
+    return this._Time;
+  },
   SetGribMapTime: function(epoch)
   {
     this._Time = epoch;
