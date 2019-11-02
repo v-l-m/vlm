@@ -47,7 +47,7 @@ class PrefMgr {
           this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowMineOnly;
           break;
         default:
-          VLMAlertDanger("unexepected mapping option : " + p.mapOpponents);
+          VLMAlertDanger("unexpected mapping option : " + p.mapOpponents);
       }
     };
   }
