@@ -2833,7 +2833,7 @@ function HandleMapMouseMove(e)
         }
         else
         {
-          $("#GribLoadOK").removeClass("GribNotOK");
+          $("#GribLoadOK").removeClass("GribNotOK").removeClass("GribGetsOld");
         }
       }
 
