@@ -215,7 +215,7 @@ GribMap.Layer = L.Layer.extend(
         {
           if (ErrorCatching > 0)
           {
-            alert('_DrawWindArea ' + x + " / " + y + " / <br>" + error);
+            console.log('_DrawWindArea ' + x + " / " + y + " / <br>" + error);
             ErrorCatching -= 1;
           }
 

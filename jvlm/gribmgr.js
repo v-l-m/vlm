@@ -1,5 +1,8 @@
 // Create and init a manager
 
+// Beaufort Scale
+var BeaufortScale = [1, 4, 7, 11, 17, 22, 28, 34, 41, 48, 56, 64];
+var MaxBeaufort = 12;
 class GribData
 {
   constructor(InitStruct)
@@ -71,6 +74,7 @@ class VLM2GribManager
     this.LoadQueue = [];
     this.GribStep = 0.5; // Grib Grid resolution
     this.LastGribDate = new Date(0);
+    this.BeaufortCache = [];
     this.Init = function()
     {
       if (this.Inited || this.Initing)
@@ -82,57 +86,61 @@ class VLM2GribManager
     };
 
     //TODO Put Back the unreadable dichytomy selection 
-    this.GetBeaufort = function(wspeed)
+    this.GetBeaufort = function(wspeed, min, max)
     {
-      if (wspeed <= 1.0)
+      if (!min && !max)
       {
-        return 0;
+        wspeed = Math.floor(wspeed);
+        if (this.BeaufortCache[wspeed])
+        {
+          return this.BeaufortCache[wspeed];
+        }
+        let MidBeaufort = Math.floor(MaxBeaufort / 2);
+        if (wspeed < BeaufortScale[MidBeaufort])
+        {
+          return this.GetBeaufort(wspeed, 0, MidBeaufort);
+        }
+        else
+        {
+          return this.GetBeaufort(wspeed, MidBeaufort, MaxBeaufort);
+        }
       }
-      if (wspeed <= 3.0)
+      else
       {
-        return 1;
+        //debugger;
+        let Mid = Math.floor((max + min) / 2);
+        if (wspeed === BeaufortScale[Mid])
+        {
+          this.BeaufortCache[wspeed] = Mid;
+          return BeaufortScale[Md];
+        }
+
+        else if (wspeed < BeaufortScale[Mid])
+        {
+          if (Mid !== min)
+          {
+            return this.GetBeaufort(wspeed, min, Mid);
+          }
+          else
+          {
+            this.BeaufortCache[wspeed] = mid;
+            return BeaufortScale[mid];
+          }
+        }
+        else
+        {
+          if (Mid + 1 < max)
+          {
+            return this.GetBeaufort(wspeed, Mid, max);
+          }
+          else
+          {
+            this.BeaufortCache[wspeed] = max;
+            return BeaufortScale[max];
+          }
+        }
       }
-      if (wspeed <= 6.0)
-      {
-        return 2;
-      }
-      if (wspeed <= 10.0)
-      {
-        return 3;
-      }
-      if (wspeed <= 15.0)
-      {
-        return 4;
-      }
-      if (wspeed <= 21.0)
-      {
-        return 5;
-      }
-      if (wspeed <= 26.0)
-      {
-        return 6;
-      }
-      if (wspeed <= 33.0)
-      {
-        return 7;
-      }
-      if (wspeed <= 40.0)
-      {
-        return 8;
-      }
-      if (wspeed <= 47.0)
-      {
-        return 9;
-      }
-      if (wspeed <= 55.0)
-      {
-        return 10;
-      }
-      if (wspeed <= 63.0)
-      {
-        return 11;
-      }
-      return 12;
+
     };
     this.HandleGribList = function(e)
     {
