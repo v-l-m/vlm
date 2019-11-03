@@ -43,6 +43,8 @@ class Pixel
   }
 }
 
+var BeaufortColors = ['#FFFFFF','#9696E1','#508CCD','#3C64B4','#41B464','#B4CD0A','#D2D216','#E1D220','#FFB300','#FF6F00','#FF2B00','#E60000','#7F0000'];
+
 // Leaflet Extension layet to draw wind arrows
 // Highly inspired from Leaflet Heat plugin
 // https://github.com/Leaflet/Leaflet.heat/blob/gh-pages/src/HeatLayer.js
@@ -310,57 +312,10 @@ GribMap.Layer = L.Layer.extend(
   // wspeed: the wind speed.
   windSpeedToColor: function(wspeed)
   {
-    if (wspeed <= 1.0)
-    {
-      return '#FFFFFF';
-    }
-    if (wspeed <= 3.0)
-    {
-      return '#9696E1';
-    }
-    if (wspeed <= 6.0)
-    {
-      return '#508CCD';
-    }
-    if (wspeed <= 10.0)
-    {
-      return '#3C64B4';
-    }
-    if (wspeed <= 15.0)
-    {
-      return '#41B464';
-    }
-    if (wspeed <= 21.0)
-    {
-      return '#B4CD0A';
-    }
-    if (wspeed <= 26.0)
-    {
-      return '#D2D216';
-    }
-    if (wspeed <= 33.0)
-    {
-      return '#E1D220';
-    }
-    if (wspeed <= 40.0)
-    {
-      return '#FFB300';
-    }
-    if (wspeed <= 47.0)
-    {
-      return '#FF6F00';
-    }
-    if (wspeed <= 55.0)
-    {
-      return '#FF2B00';
-    }
-    if (wspeed <= 63.0)
-    {
-      return '#E60000';
-    }
-    return '#7F0000';
-  },
+    let Beaufort = GribMgr.GetBeaufort(wspeed);
 
+    return BeaufortColors[Beaufort];
+  },
   _reset: function()
   {
     var topLeft = this._map.containerPointToLayerPoint([0, 0]);
