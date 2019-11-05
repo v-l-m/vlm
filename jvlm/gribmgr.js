@@ -75,6 +75,9 @@ class VLM2GribManager
     this.GribStep = 0.5; // Grib Grid resolution
     this.LastGribDate = new Date(0);
     this.BeaufortCache = [];
+    this.BeaufortCacheHits=0;
+    this.BeaufortRecursionHits=0;
+    this.BeaufortCacheRatio=0;
     this.Init = function()
     {
       if (this.Inited || this.Initing)
@@ -93,6 +96,8 @@ class VLM2GribManager
         wspeed = Math.floor(wspeed);
         if (this.BeaufortCache[wspeed])
         {
+          this.BeaufortCacheHits++;
+          this.BeaufortCacheRatio=this.BeaufortCacheHits/(this.BeaufortCacheHits+this.BeaufortRecursionHits);
           return this.BeaufortCache[wspeed];
         }
         let MidBeaufort = Math.floor(MaxBeaufort / 2);
@@ -108,11 +113,12 @@ class VLM2GribManager
       else
       {
         //debugger;
+        this.BeaufortRecursionHits++;
         let Mid = Math.floor((max + min) / 2);
         if (wspeed === BeaufortScale[Mid])
         {
           this.BeaufortCache[wspeed] = Mid;
-          return BeaufortScale[Md];
+          return Mid;
         }
 
         else if (wspeed < BeaufortScale[Mid])
@@ -123,8 +129,8 @@ class VLM2GribManager
           }
           else
           {
-            this.BeaufortCache[wspeed] = mid;
-            return BeaufortScale[mid];
+            this.BeaufortCache[wspeed] = Mid;
+            return Mid;
           }
         }
         else
@@ -136,7 +142,7 @@ class VLM2GribManager
           else
           {
             this.BeaufortCache[wspeed] = max;
-            return BeaufortScale[max];
+            return max;
           }
         }
       }

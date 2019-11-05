@@ -190,11 +190,13 @@ class PolarManagerClass
         let alpha = i * Math.PI / 180;
         let TanAlpha = Math.tan(alpha);
         let D1HypotRatio = Math.sqrt(1 + TanAlpha * TanAlpha);
+
         let SpeedT1 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - i * ISigne);
         if (isNaN(SpeedT1))
         {
-          throw "Nan SpeedT1 exception";
+          return NaN;
         }
+
         if (SpeedT1 > 0)
         {
           for (let j = -89; j <= 0; j++)
@@ -211,7 +213,7 @@ class PolarManagerClass
             let SpeedT2 = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, CapOrtho - j * ISigne);
             if (isNaN(SpeedT2))
             {
-              throw "Nan SpeedT2 exception";
+              return NaN;
             }
             if (SpeedT2 <= 0)
             {
@@ -240,7 +242,7 @@ class PolarManagerClass
       let VMGBeta = SpeedBeta * Math.cos(Deg2Rad(b_Beta));
       if (isNaN(VMGAlpha) || isNaN(VMGBeta))
       {
-        throw "NaN VMG found";
+        return NaN;
       }
       if (VMGAlpha > VMGBeta)
       {
