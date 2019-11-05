@@ -1578,7 +1578,8 @@ function DrawOpponents(Boat)
   // Get Friends
   let friends = [];
   let index;
-
+  let RaceFeatures = GetRaceMapFeatures(Boat);
+    
 
   // Map friend only if selection is active
   if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel)
@@ -1599,7 +1600,7 @@ function DrawOpponents(Boat)
 
           if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers, 10) !== Boat.IdBoat))
           {
-            AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, Opp, true);
+            AddOpponent(Boat, RaceFeatures, Opp, true);      
           }
         }
       }
@@ -1610,7 +1611,7 @@ function DrawOpponents(Boat)
     for (index in Boat.Reals.ranking)
     {
       var RealOpp = Boat.Reals.ranking[index];
-      AddOpponent(Boat, VLMBoatsLayer, BoatFeatures, RealOpp, true);
+      AddOpponent(Boat, RaceFeatures, RealOpp, true);
     }
 
   let MAX_LEN = 150;
@@ -1673,7 +1674,6 @@ function DrawOpponents(Boat)
 
   if (Boat.Engaged && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking)
   {
-    let RaceFeatures = GetRaceMapFeatures(Boat);
     for (index in Rankings[Boat.Engaged].RacerRanking)
     {
       if (index in Rankings[Boat.Engaged].RacerRanking)
