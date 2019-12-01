@@ -361,17 +361,32 @@ function VLMPosition(lon, lat, format)
         d = Math.acos(Math.sin(lat2) * Math.sin(lat1) + Math.cos(lat2) * Math.cos(lat1) * Math.cos(g));
 
         den = Math.cos(lat1) * Math.sin(d);
+        let lcos = (Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / den;
+        if (lcos > 1)
+        {
+          lcos = 1;
+          console.log("Nan Catch pos");
+        }
+        else if (lcos < -1)
+        {
+          lcos = -1;
+          console.log("Nan Catch neg");
+        }
         if (g < 0)
         {
-          retval = 2 * Math.PI - Math.acos((Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / den);
+          retval = 2 * Math.PI - Math.acos(lcos);
         }
         else
         {
-          retval = Math.acos((Math.sin(lat2) - Math.sin(lat1) * Math.cos(d)) / den);
+          retval = Math.acos(lcos);
         }
       }
       
       retval = Rad2Deg(retval % (2 * Math.PI));
+      // if (isNaN(retval))
+      // {
+      //   let bkp=0;
+      // }
       return RoundPow(retval, Precision);
     };
 

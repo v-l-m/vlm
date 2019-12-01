@@ -291,6 +291,10 @@ function Estimator(Boat)
           else
           {
             Hdg = PolarsManager.GetVBVMGCourse(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, this.CurEstimate.Position, Dest);
+            /* if (isNaN(Hdg))
+            {
+              let bkp=1;
+            } */
           }
 
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);

@@ -244,14 +244,23 @@ class PolarManagerClass
       {
         return NaN;
       }
+
+      let RetVal = 0;
       if (VMGAlpha > VMGBeta)
       {
-        return CapOrtho - b_Alpha * ISigne;
+        RetVal= CapOrtho - b_Alpha * ISigne;
       }
       else
       {
-        return CapOrtho - b_Beta * ISigne;
+        RetVal = CapOrtho - b_Beta * ISigne;
       }
+
+      /* if (isNaN(RetVal)) 
+      {
+        let bkp=0;        
+      } 
+ */
+      return RetVal;
     };
     this.GetPolarMaxSpeed = function(PolarName, WindSpeed)
     {
