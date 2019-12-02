@@ -29,7 +29,7 @@
     $grib_date = intval(get_cgi_var("date", date("Ymd")."00"));
     $force = get_cgi_var('force', 'no');
     $gribfile = sprintf("%s/gfs_NOAA-%s.grb", GRIB_DIRECTORY, $grib_date);
-    if (! file_exists($gribfile)) die("Grib unavailable");
+    if (! file_exists($gribfile) && $fmt !=="txt") die("Grib unavailable");
 
     $dlname = sprintf("%d.%02d.%d.%d.grb", $grib_date, $step, $south, $west);
     $originaldir = sprintf("%s/%d/%d", DIRECTORY_GRIBTILES, $south, $west);
@@ -37,7 +37,7 @@
     $original_txt = sprintf("%s/%d.%02d.txt", $originaldir, $grib_date, $step);
     $dlname_txt = sprintf("%d.%02d.%d.%d.txt", $grib_date, $step, $south, $west);
     $interim = sprintf("%s/gfs_interim-09.grb", GRIB_DIRECTORY);
-
+    $interim_base = sprintf("%s/gfs_interim-", GRIB_DIRECTORY);
     
     // Création et mise en cache
     if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
@@ -60,8 +60,29 @@
             // Interim file exists. 
             // set short cache
             //$original = $interim;
-            $cache = 5*600;
-            //print_r("interim short cache");
+            $files = scandir(GRIB_DIRECTORY,0);
+            $interim_age=null;
+            foreach($files as $file)
+            {
+                //print_r("file ".$file."\n");
+                if ((strlen($file)==19) && (substr($file,15,4)==".grb"))
+                {
+                    $age = strval(substr($file,12,3));
+                    if ($age > $interim_age)
+                    {
+                        $interim_age=$age;
+                    }
+                }
+                
+            }
+
+            //print_r("Interim_age".$interim_age);
+            if ($interim_age)
+            {
+                $originterim=$interim_base.$age.".grb"; 
+            }
+            $cache = 5*60;
+            //print_r("interim short cache".$originterim."\n");
         }
         else
         {
@@ -69,11 +90,23 @@
             $NextGrib -= $NextGrib % (6*3600);
             $NextGrib += 3.5*3600;
             $cache = $NextGrib - time() - 5*60;
-//print_r("T:".time()." NG:".$NextGrib." c:".$cache."\n");    
+            //print_r("T:".time()." NG:".$NextGrib." c:".$cache."\n");    
             if ($cache < 0) 
             {
                 $cache = 0;
             }
+        }
+
+        //print_r("Original : ".$original);
+        if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
+            if (!is_dir($originaldir)) {
+                umask(0002);
+                mkdir($originaldir, 0777, True);
+            }
+            //ggrib ~/vlmdatas/gribs/latest.grb out.grb -15 45 0 60
+            $execcmd = sprintf("%s %s %s %d %d %d %d", GGRIB_PATH, $originterim, $original, $west, $south, $west+$step, $south+$step);
+            // print $execcmd; die();
+            shell_exec($execcmd);
         }
     
         if ( ( ! file_exists($original_txt) ) ||  ($force == 'yes') ) 
@@ -88,8 +121,8 @@
             $execcmd = $execcmd.sprintf("\n cat %s.tmp>%s\n echo '--' >> %s \n cat %s.dat >>%s ",  $original_txt, $original_txt,  $original_txt, $original_txt, $original_txt);
             $execcmd = $execcmd.sprintf("\nrm %s.dat \nrm %s.tmp", $original_txt, $original_txt);
     //      
-             //   print $execcmd; die();
-                shell_exec($execcmd);
+            //print $execcmd; die();
+            shell_exec($execcmd);
             
         }
 

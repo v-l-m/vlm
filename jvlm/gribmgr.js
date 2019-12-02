@@ -369,7 +369,17 @@ class VLM2GribManager
         }
         for (let index in e.gribs_url)
         {
-          if (e.gribs_url[index])
+          if (e.gribs_interim_url )
+          {
+            if (e.gribs_interim_url[index])
+            {
+              let url = e.gribs_interim_url[index].replace(".grb", ".txt");
+              let seed = 0; //parseInt((new Date).getTime());
+              //console.log("smartgrib points out " + url);
+              $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
+            }
+          }
+          else if (e.gribs_url[index])
           {
             let url = e.gribs_url[index].replace(".grb", ".txt");
             let seed = 0; //parseInt((new Date).getTime());

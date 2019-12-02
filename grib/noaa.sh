@@ -25,6 +25,7 @@ GRIB_MAX_TIME=$VLM_GRIB_MAX_TIME
 
 LATEST=latest.grb
 INTERIM_NAME=gfs_interim-${TIME_THRESHOLD}.grb
+INTERIM_BASE_NAME=gfs_interim
 #NOAA_SERVICE_MAIN_URI=http://www.ftp.ncep.noaa.gov/data/nccf/com/gfs/prod
 #NOAA_SERVICE_BACKUP_URI=http://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod
 NOAA_SERVICE_MAIN_URI=https://nomads.ncep.noaa.gov
@@ -127,9 +128,16 @@ for TSTAMP in `echo $allindexes` ; do
     done
     cat $GRIBFILE.grib1 >> ${PREFIX}-${DAT}${HH}.grb
     if [ $TSTAMP -gt $TIME_THRESHOLD ]; then
+
       if [ ! -f $GRIBPATH/$INTERIM_NAME ]; then
         cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_NAME
       fi
+
+      #Create the other interim for VLM track estimates
+      if [ ! -f $GRIBPATH/$INTERIM_BASE_NAME-$TSTAMP ]; then
+        cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_BASE_NAME-$TSTAMP.grb
+      fi
+
       # we change the weather now
       if [ $updated -eq 0 ]; then
         windserver $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
@@ -168,6 +176,7 @@ windserver -update $PREFIX-${DAT}${HH}.grb >> $LOG 2>&1
 # then cleanup
 mv $PREFIX-${DAT}${HH}.grb $GRIBPATH/
 rm -f $GRIBPATH/$INTERIM_NAME
+rm -f $GRIBPATH/$INTERIM_BASE_NAME*.grb
 rm -f $GRIBPATH/$LATEST
 ln -s ${GRIBPATH}/$PREFIX-${DAT}${HH}.grb $GRIBPATH/$LATEST
 rm -Rf $VLMRACINE/cache/gribtiles/*/ >> $LOG 2>&1 

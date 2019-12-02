@@ -29,18 +29,31 @@
       $nb_grib = get_prevision_count();
       $ts = get_prevision_time_index(0);
       shm_unlock_sem_destroy_grib(1);
-      if ($nb_grib <= 5) {
-        $ts -= 6*3600; // 6 hours before
-        $ws->maxage = 30; // update is running, retry very soon
-      } else {
+      if ($nb_grib <= 5) 
+      {
+        $interim_ts=$ts;    // Store available interim date
+        $ts -= 6*3600;      // 6 hours before
+        $ws->maxage = 30;   // update is running, retry very soon
+      }
+      else
+      {
         $ws->maxage = $ts - time() + 34200; //grib offset + 9h30
+        $interim_ts=0;
       }
       //we change maxage only when no date has been given.
       $grib_date = intval(date("YmdH", $ts));
+      if ($interim_ts)
+      {
+        $grib_interim_date = intval(date("YmdH", $interim_ts));
+      }
+      else
+      {
+        $grib_interim_date = null;
+      }
     }
     
     $gribfile = sprintf("%s/gfs_NOAA-%s.grb", GRIB_DIRECTORY, $grib_date);
-    if (! file_exists($gribfile)) $ws->reply_with_error("GRB03");
+    //if (! file_exists($gribfile)) $ws->reply_with_error("GRB03");
     
     //Préremplissagge
     $ws->answer['request'] = Array('time_request' => $ws->now, 'north' => $north, 'south' => $south, 'east' => $east, 'west' => $west, 'step' => $step, 'date' => $grib_date);
@@ -57,6 +70,11 @@
         $originaldir = sprintf("%d/%d", $south, $rwest);
         $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_date, $step);
         $ws->answer['gribs_url'][] = $original;
+        if ($grib_interim_date)
+        {
+          $original = sprintf("%s/%d.%02d.grb", $originaldir, $grib_interim_date, $step);
+          $ws->answer['gribs_interim_url'][] = $original;        
+        }
         $count += 1;
         $twest += $step;
       }
