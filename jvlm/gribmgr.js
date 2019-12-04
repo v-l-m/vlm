@@ -393,6 +393,9 @@ class VLM2GribManager
         console.log(e);
       }
     };
+
+
+    // Callback handling processing of grib data from a smartgrib URL
     this.HandleSmartGribData = function(LoadKey, Url, e)
     {
       let DataOK = this.ProcessInputGribData(Url, e, LoadKey);
@@ -411,11 +414,14 @@ class VLM2GribManager
         delete this.LoadQueue[LoadKey];
       }
     };
+
     this.ForceReloadGribCache = function(LoadKey, Url)
     {
       var Seed = 0; //parseInt(new Date().getTime(),10);
       $.get("/cache/gribtiles/" + Url + "&force=yes&seed=" + Seed, this.HandleSmartGribData.bind(this, LoadKey, Url));
     };
+
+    // Read Grib Data
     this.ProcessInputGribData = function(Url, Data, LoadKey)
     {
       let Lines = Data.split("\n");
@@ -528,6 +534,15 @@ class VLM2GribManager
       else
       {
         Ret.DateIndex = parseInt(Fields[POS_INDEX].substring(0, Fields[POS_INDEX].indexOf("hr")), 10) / 3;
+
+        // Expand weather date duration if found in the catalog
+        let ForecastHour = new Date(this.MinWindStamp.getTime()+3*3600000*Ret.DateIndex);
+        if (ForecastHour > this.MaxWindStamp)
+        {
+          this.MaxWindStamp = ForecastHour;
+          this.WindTableLength = Ret.DateIndex+1;
+          this.TableTimeStamps[Ret.DateIndex]=ForecastHour.getTime()/1000;
+        }
       }
       return Ret;
     };

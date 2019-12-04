@@ -55,37 +55,18 @@
     if ($fmt == 'txt')
     {
         $cache = 900;
-        if (file_exists($interim))
+        $file = GRIB_DIRECTORY."/tmpgrib/".$grib_date."/gfs_NOAA-".$grib_date.".grb";
+        //print_r("Interim ".$file);
+        if (file_exists($interim) && file_exists($file))
         {
-            // Interim file exists. 
-            // set short cache
-            //$original = $interim;
-            $files = scandir(GRIB_DIRECTORY."/tmp",0);
-            $interim_age=null;
-            foreach($files as $file)
-            {
-                //print_r("file ".$file."\n");
-                if ((strlen($file)==19) && (substr($file,15,4)==".grb"))
-                {
-                    $age = strval(substr($file,12,3));
-                    if ($age > $interim_age)
-                    {
-                        $interim_age=$age;
-                    }
-                }
-                
-            }
-
-            //print_r("Interim_age".$interim_age);
-            if ($interim_age)
-            {
-                $originterim=$interim_base.$age.".grb"; 
-            }
+            
+            $originterim=$file; 
             $cache = 5*60;
             //print_r("interim short cache".$originterim."\n");
         }
         else
         {
+            $originterim=null;
             $NextGrib = time();
             $NextGrib -= $NextGrib % (6*3600);
             $NextGrib += 3.5*3600;
@@ -98,7 +79,8 @@
         }
 
         //print_r("Original : ".$original);
-        if ( ( ! file_exists($original) ) ||  ($force == 'yes') ) {
+        if ($originterim && (( ! file_exists($original) ) ||  ($force == 'yes') || filemtime($originterim) < filemtime($original)) ) 
+        {
             if (!is_dir($originaldir)) {
                 umask(0002);
                 mkdir($originaldir, 0777, True);
