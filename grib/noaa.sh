@@ -134,8 +134,8 @@ for TSTAMP in `echo $allindexes` ; do
       fi
 
       #Create the other interim for VLM track estimates
-      if [ ! -f $GRIBPATH/$INTERIM_BASE_NAME-$TSTAMP ]; then
-        cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/$INTERIM_BASE_NAME-$TSTAMP.grb
+      if [ ! -f $GRIBPATH/tmp/$INTERIM_BASE_NAME-$TSTAMP ]; then
+        cp ${PREFIX}-${DAT}${HH}.grb $GRIBPATH/tmp/$INTERIM_BASE_NAME-$TSTAMP.grb
       fi
 
       # we change the weather now

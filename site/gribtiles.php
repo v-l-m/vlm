@@ -60,7 +60,7 @@
             // Interim file exists. 
             // set short cache
             //$original = $interim;
-            $files = scandir(GRIB_DIRECTORY,0);
+            $files = scandir(GRIB_DIRECTORY."/tmp",0);
             $interim_age=null;
             foreach($files as $file)
             {
