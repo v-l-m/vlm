@@ -491,9 +491,9 @@ class races extends baseClass
     $start = microtime(true);
 
     // Get all racing users with current info
-    $query_ranking = "SELECT RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, ifnull(dnm,99999) as dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
-      " FROM  races_ranking RR, users US " . 
-      " WHERE RR.idusers = US.idusers " . 
+    $query_ranking = "SELECT P.IdPlayers, P.PlayerName,RR.idusers idusers, US.username boatpseudo, US.boatname boatname, US.color color, US.country country, nwp, ifnull(dnm,99999) as dnm, userdeptime as deptime, RR.loch loch, US.releasetime releasetime, US.pilotmode pim, US.pilotparameter pip, latitude, longitude, last1h, last3h, last24h " . 
+      " FROM  races_ranking RR, users US , players P, playerstousers PU" . 
+      " WHERE RR.idusers = US.idusers and US.idusers = PU.idusers and PU.linktype=1 and PU.idplayers=P.idplayers" . 
       " AND   RR.idraces = "  . $this->idraces .
       " ORDER BY nwp desc, dnm asc";
       
