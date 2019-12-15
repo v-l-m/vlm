@@ -2307,10 +2307,11 @@ function AddRaceToList(race)
   let base = $("#RaceListPanel").first();
 
 
-  let d = new Date(0); // The there is the key, which sets the date to the epoch
+  let d = new Date(0); // The 0 there is the key, which sets the date to the epoch
   //d.setUTCSeconds(utcSeconds);
   let RaceJoinStateClass;
   let StartMoment;
+  let RecordRace = ((race.racetype & RACE_TYPE_RECORD) == RACE_TYPE_RECORD);
 
   if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && _CurPlayer.CurBoat.RaceInfo.idraces)
   {
@@ -2345,6 +2346,7 @@ function AddRaceToList(race)
     '      </div>' +
     '      <div class="col-xs-9">' +
     '        <div class="col-xs-12">' +
+    (RecordRace ? '<span class="PRecordRace">P</span>' : '') +
     '          <span ">' + race.racename +
     '          </span>' +
     '        </div>' +
@@ -2369,12 +2371,15 @@ function AddRaceToList(race)
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
     '    <div class="panel-body">' +
     '      <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
-    '        <div class="col-xs-9"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
+    '        <div class="col-xs-12"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
     '          <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
     '          <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
     '          <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
     '          <p>' + GetLocalizedString('locktime') + parseInt(race.coastpenalty, 10) / 60.0 + ' \'</p>' +
     '          <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +
+    (!RecordRace ?
+      (race.RaceCloseDate ?
+        '          <p>' + GetLocalizedString('endrace') + GetLocalUTCTime(race.RaceCloseDate * 1000, true, true) + '</p>' : '          <p>' + GetLocalizedString('endrace') + (100 + race.firstpcttime) + '%') + '</p>' : '') +
     '        </div>' +
     '      </div>' +
     '    </div>' +

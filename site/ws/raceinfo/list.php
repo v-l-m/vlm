@@ -34,6 +34,34 @@
       $row['vacfreq'] = (int) $row['vacfreq'];
       $row['updated'] = $row['updated'];
       $row['CanJoin'] = in_array($row['idraces'],$this->AvRaces);
+
+      // If race complete for winner, then compute race closing date
+      // FIXME - Should be refactored with desc.php, in races class
+      $rnkQuery= "SELECT RR.position as status, RR.duration + RR.penalty duration, RR.idusers idusers,  RR.deptime deptime
+      FROM      races_results RR, users US
+      WHERE     idraces=".$row['idraces'].
+      " AND       US.idusers = RR.idusers
+      AND       position=1
+      order by RR.duration+RR.penalty desc
+      limit 1;";
+      $res = wrapper_mysql_db_query_reader($rnkQuery);
+      if ($res)
+      {
+        while ($ri = mysqli_fetch_assoc($res)) 
+        {
+          //var_dump($ri);
+          if ($row['racetype']===RACE_TYPE_RECORD)
+          {
+            $row["RaceCloseDate"] = $row['closetime']+$ri['duration']*(1+$row['firstpcttime']);
+          }
+          else
+          {
+            $row["RaceCloseDate"] = $row['deptime']+$ri['duration']*(1+$row['firstpcttime']/100);
+          }
+
+          break;
+        }
+      }
       $this->jsonarray[$row['idraces']] = $row;
     }
         

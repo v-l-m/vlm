@@ -1,4 +1,3 @@
-
 // out: ./jvlm.css, compress: true, sourceMap: false // 
 /*
 @import url('jquery-ui.css');
@@ -7,16 +6,19 @@
 @import url('external/jquery-ui/jquery-ui.css');
 @import url('external/bootstrap-colorpicker-master/css/bootstrap-colorpicker.css');
 @import url('external/footable-bootstrap/css/footable.bootstrap.css');
-@import url('/externals/fullcalendar/core/main.min.css' );
-@import url('/externals/fullcalendar/daygrid/main.min.css' );
+@import url('/externals/fullcalendar/core/main.min.css');
+@import url('/externals/fullcalendar/daygrid/main.min.css');
 @import url('external/Leaflet/leaflet.css');
 
-html, body, input {
+html,
+body,
+input {
   background-color: #e0e0f0;
   color: #FFFFFF;
   width: 100%;
   height: 100%;
 }
+
 #jVlmMap {
   background-color: #82D1D4;
   position: absolute;
@@ -25,41 +27,53 @@ html, body, input {
   left: 0;
   right: 0;
 }
+
 #jVlmMap .ol-zoom {
   font-size: 0.5em;
 }
+
 #BoatSelector {
   width: 120px;
   top: 6px;
 }
+
 input {
   color: #000000;
-  height:auto;
+  height: auto;
 }
- @DialogBgColor: #15214b;
-.modal,.Draggable {
+
+@DialogBgColor: #15214b;
+
+.modal,
+.Draggable {
   z-index: 3000;
 }
-.modal-dialog{
+
+.modal-dialog {
   background-color: @DialogBgColor;
 }
+
 div.UserMenu {
   position: absolute;
   background-color: @DialogBgColor;
   color: white;
   z-index: 2000;
 }
+
 div.LoginButton {
- //background-color: lightBlue;
+  //background-color: lightBlue;
   position: absolute;
   width: 50px;
 }
+
 div.olControlLayerSwitcher {
   top: 50px;
 }
+
 .olLayerDiv {
   font-size: 9px;
 }
+
 div.GribmapMousePosition {
   position: absolute;
   bottom: 15px;
@@ -71,6 +85,7 @@ div.GribmapMousePosition {
   border-color: darkBlue;
   background-color: rgba(255, 255, 255, 0.23);
 }
+
 .GribmapControlWind {
   color: white;
   font-family: sans-serif;
@@ -79,6 +94,7 @@ div.GribmapMousePosition {
   top: 200px;
   right: 0;
 }
+
 .GribmapControlWind .baseDiv {
   background-color: darkBlue;
   height: 100%;
@@ -88,13 +104,17 @@ div.GribmapMousePosition {
   padding-top: 5px;
   width: 100%;
 }
+
 .baseDiv * {
   display: inline;
 }
-.GribmapControlWind .maximizeDiv, .GribmapControlWind .minimizeDiv {
+
+.GribmapControlWind .maximizeDiv,
+.GribmapControlWind .minimizeDiv {
   right: 0;
   top: 10px;
 }
+
 .VlminfoControlPlayer {
   color: white;
   font-family: sans-serif;
@@ -103,6 +123,7 @@ div.GribmapMousePosition {
   top: 100px;
   right: 0;
 }
+
 .VlminfoControlPlayer .baseDiv {
   background-color: #152249;
   height: 100%;
@@ -112,18 +133,20 @@ div.GribmapMousePosition {
   padding-top: 5px;
   width: 100%;
 }
-.VlminfoControlPlayer .maximizeDiv, .VlminfoControlPlayer .minimizeDiv {
+
+.VlminfoControlPlayer .maximizeDiv,
+.VlminfoControlPlayer .minimizeDiv {
   right: 0;
   top: 5px;
 }
-.nav > li > a:focus, 
-.nav > li > a:hover 
-{ 
-  background-color: transparent; 
-} 
 
-.navbar-brand{
-  padding:0;
+.nav>li>a:focus,
+.nav>li>a:hover {
+  background-color: transparent;
+}
+
+.navbar-brand {
+  padding: 0;
 }
 
 /*#logovlm {
@@ -133,57 +156,67 @@ div.GribmapMousePosition {
   left: 10px;
   z-index: 99999;
 }*/
-#logo{
+#logo {
   position: relative;
-  max-width:64em;
+  max-width: 64em;
   z-index: 999;
 }
-#logo div { 
-  position:absolute; 
-  width:100%; 
-  height:100%;
-  background-size:cover;
-}
-.version{
+
+#logo div {
   position: absolute;
-  top:-9px;
-  left:9px;
-  font-size:10px;
-  color:#b7b7b7;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
 }
-.stop{
-  width:22px;
-  height:22px;
-  background-color:transparent;
+
+.version {
+  position: absolute;
+  top: -9px;
+  left: 9px;
+  font-size: 10px;
+  color: #b7b7b7;
+}
+
+.stop {
+  width: 22px;
+  height: 22px;
+  background-color: transparent;
   background-image: url('images/StopEstimate.gif');
   background-size: 20px 20px;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
 }
-.stop:hover{
+
+.stop:hover {
   background-size: 22px 22px;
 }
-.badgeinfo{
-  list-style:none;
-  float:right;
-  width:60px;
+
+.badgeinfo {
+  list-style: none;
+  float: right;
+  width: 60px;
   margin-left: 10px;
-  padding:0;
+  padding: 0;
 }
-.badgeinfo>li{
-  min-width:50px;
+
+.badgeinfo>li {
+  min-width: 50px;
 }
-.badge-wind{
-  background-color:#64B5BC;
+
+.badge-wind {
+  background-color: #64B5BC;
 }
-.badge-boat{
-  background-color:#83BC64;
+
+.badge-boat {
+  background-color: #83BC64;
 }
-.carousel-page{
-	width:100%;
-	height:400px;
-	background-color:#5f666d;
-	color:white;
+
+.carousel-page {
+  width: 100%;
+  height: 400px;
+  background-color: #5f666d;
+  color: white;
 }
+
 .olControlAttribution {
   left: 100px;
   right: inherit;
@@ -191,26 +224,32 @@ div.GribmapMousePosition {
   top: inherit;
   line-height: 11px;
 }
+
 .ui-menu {
   z-index: 2000;
 }
+
 option.Boat {
-  font-style : italic;
+  font-style: italic;
 }
+
 option.RacingBoat {
   font-weight: bold;
 }
-.FlagIcon{
-  background:url(/cache/flags/flagsmap.png) no-repeat;
+
+.FlagIcon {
+  background: url(/cache/flags/flagsmap.png) no-repeat;
   width: 30px;
   height: 20px;
   display: inline-block
 }
-.FlagLabel{
+
+.FlagLabel {
   position: absolute;
   margin-top: 0;
   margin-left: 5px;
 }
+
 .LngFlag {
   padding-top: 2px;
   padding-bottom: 2px;
@@ -219,513 +258,626 @@ option.RacingBoat {
   width: 24px;
   height: 24px;
 }
+
 span.ui-selectmenu-text {
   line-height: 0.4;
 }
+
 .VLM100_Pos {
   position: absolute;
   width: 118px;
   text-align: center;
   font-size: small;
 }
+
 .VLM100_PosSmall {
   position: absolute;
   width: 40px;
   text-align: center;
   font-size: x-small;
 }
+
 .TDB-EmptyCol {
   max-width: 100px;
 }
- // NAV Center lines 
+
+// NAV Center lines 
 @BoatPosTop: 15px;
 @StatSpeedAvgTop : 44px;
-@SpeedAvgTop : @StatSpeedAvgTop + 13px;
-@SpeedLeft:23px;
+@SpeedAvgTop : @StatSpeedAvgTop +13px;
+@SpeedLeft: 23px;
+
 #BoatLon {
   top: @BoatPosTop;
   left: 30px;
 }
+
 #BoatLat {
-  top:@BoatPosTop+15px;
+  top: @BoatPosTop+15px;
   left: 30px;
 }
+
 #BoatSpeed {
   top: @SpeedAvgTop;
   left: @SpeedLeft;
 }
+
 #BoatAvg {
   top: @SpeedAvgTop;
   left: @SpeedLeft+40px;
 }
+
 #BoatHeading {
   top: @SpeedAvgTop;
   left: @SpeedLeft+2*40px;
 }
+
 #StatSpeed {
   top: @StatSpeedAvgTop;
   left: @SpeedLeft;
 }
+
 #StatAvg {
   top: @StatSpeedAvgTop;
   left: @SpeedLeft+40px;
 }
+
 #StatHeading {
   top: @StatSpeedAvgTop;
   left: @SpeedLeft+2*40px;
 }
- @StatLineDNM:75px;
-@StatLineOrtho:@StatLineDNM+25px;
-@BoatLineDNM:@StatLineDNM+10px;
-@BoatLineOrtho:@StatLineOrtho+10px;
+
+@StatLineDNM: 75px;
+@StatLineOrtho: @StatLineDNM+25px;
+@BoatLineDNM: @StatLineDNM+10px;
+@BoatLineOrtho: @StatLineOrtho+10px;
+
 #StatDNM {
- top: @StatLineDNM;
- left: @SpeedLeft;
+  top: @StatLineDNM;
+  left: @SpeedLeft;
 }
+
 #StatLoch {
- top: @StatLineDNM;
- left: @SpeedLeft+2*40px;
+  top: @StatLineDNM;
+  left: @SpeedLeft+2*40px;
 }
+
 #StatOrtho {
- top: @StatLineOrtho;
- left: @SpeedLeft;
+  top: @StatLineOrtho;
+  left: @SpeedLeft;
 }
+
 #StatLoxo {
- top: @StatLineOrtho;
- left: @SpeedLeft+40px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft+40px;
 }
+
 #StatVMG {
- top: @StatLineOrtho;
- left: @SpeedLeft+2*40px;
+  top: @StatLineOrtho;
+  left: @SpeedLeft+2*40px;
 }
+
 #BoatDNM {
- top: @BoatLineDNM;
- left: @SpeedLeft;
+  top: @BoatLineDNM;
+  left: @SpeedLeft;
 }
+
 #BoatLoch {
- top: @BoatLineDNM;
- left: @SpeedLeft+2*40px;
+  top: @BoatLineDNM;
+  left: @SpeedLeft+2*40px;
 }
+
 #BoatOrtho {
- top: @BoatLineOrtho;
- left: @SpeedLeft;
+  top: @BoatLineOrtho;
+  left: @SpeedLeft;
 }
+
 #BoatLoxo {
- top: @BoatLineOrtho;
- left: @SpeedLeft+40px;
+  top: @BoatLineOrtho;
+  left: @SpeedLeft+40px;
 }
+
 #BoatVMG {
- top: @BoatLineOrtho;
- left: @SpeedLeft+2*40px;
+  top: @BoatLineOrtho;
+  left: @SpeedLeft+2*40px;
 }
- // CSS for Piloting/dashboard buttons  
-@IconSize:40px;
-@BtnPadLeft:5px;
-@BtnPadTop:4px;
-@Btn2Left:(@IconSize + @BtnPadLeft);
-@Btn3Left:(2*@IconSize + 2*@BtnPadLeft);
-@BtnBorder:2px;
-@BtnBorderStyle:inset;
-@BtnBorderColor:#ffffff;
-@BtnMargin:5px;
+
+// CSS for Piloting/dashboard buttons  
+@IconSize: 40px;
+@BtnPadLeft: 5px;
+@BtnPadTop: 4px;
+@Btn2Left: (@IconSize + @BtnPadLeft);
+@Btn3Left: (2*@IconSize + 2*@BtnPadLeft);
+@BtnBorder: 2px;
+@BtnBorderStyle: inset;
+@BtnBorderColor: #ffffff;
+@BtnMargin: 5px;
+
 .BtnGroup {
   position: relative;
- padding-left: @BtnPadLeft;
- padding-top: @BtnPadTop;
- width: (2*@BtnPadLeft + 2* @IconSize);
+  padding-left: @BtnPadLeft;
+  padding-top: @BtnPadTop;
+  width: (2*@BtnPadLeft + 2* @IconSize);
 }
+
 .BtnGroup-nav {
- position: relative;
- padding-left: @BtnPadLeft;
- padding-top: @BtnPadTop;
- width: (2*@BtnPadLeft + 2* @IconSize);
- margin-left:@BtnMargin;
+  position: relative;
+  padding-left: @BtnPadLeft;
+  padding-top: @BtnPadTop;
+  width: (2*@BtnPadLeft + 2* @IconSize);
+  margin-left: @BtnMargin;
 }
+
 .BtnGroup1 {
- position: relative;
- padding-left: 2px;
- padding-top: @BtnPadTop;
+  position: relative;
+  padding-left: 2px;
+  padding-top: @BtnPadTop;
 }
+
 .BtnTBDPanel {
   position: absolute;
- top:@BtnPadTop;
+  top: @BtnPadTop;
 }
+
 .BtnCtrlPanel {
   position: absolute;
- left: @Btn2Left;
- padding-top: @BtnPadTop;
+  left: @Btn2Left;
+  padding-top: @BtnPadTop;
   top: 0;
 }
+
 .BtnRankingPanel {
   /*position: absolute;
  padding-top: @BtnPadTop;
  padding-left:10px;
  padding-right:10px;*/
   top: 0;
-  float:left;
-}
-.BoatSelector {
- padding-top: @BtnPadTop;
- padding-left:10px;
+  float: left;
 }
 
-.BoatStatusIcon{
+.BoatSelector {
+  padding-top: @BtnPadTop;
+  padding-left: 10px;
+}
+
+.BoatStatusIcon {
   width: 24px;
   height: 24px;
-  margin-bottom:1px;
-  margin-left:1px;
-  margin-right:5px;
-  margin-top:1px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+  margin-right: 5px;
+  margin-top: 1px;
 }
+
 .TDB-Icon {
- width: @IconSize;
- height: @IconSize;
- padding-left:2px;
- cursor:pointer;
+  width: @IconSize;
+  height: @IconSize;
+  padding-left: 2px;
+  cursor: pointer;
 }
+
 .TDB-Panel {
   width: 163px;
   height: 163px;
   position: relative;
 }
+
 .Ranking-Panel {
   width: auto;
   height: auto;
   position: relative;
 }
+
 #TDB-Panel {
   position: absolute;
 }
+
 .TDB-Panel2 {
   width: 489px;
   height: 163px;
 }
+
 .btnbadge {
   position: absolute;
 }
+
 .ranking {
   background-color: #c70000;
   right: 35px;
   top: 0;
 }
+
 .pilot {
   background-color: #00c700;
   left: 26px;
   top: 0;
 }
 
-.panel{
-	background-color:transparent;
-  margin-bottom:5px;
-  margin-top:5px;
+.panel {
+  background-color: transparent;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
-.panel-body{
-	padding:0;
+
+.panel-body {
+  padding: 0;
 }
 
 
-.pilottab{
+.pilottab {
   background-color: #00c700;
   left: auto;
   top: -5px;
-  display:inline;
+  display: inline;
 }
 
 
-@VLM100WindLine1Top:15px;
-@VLM100LineOffset:39px;
-@VLM100WindLine2Top:@VLM100WindLine1Top+@VLM100LineOffset;
-@VLM100WindLine3Top:@VLM100WindLine1Top+2*@VLM100LineOffset;
-@VLM100Left:28px;
+@VLM100WindLine1Top: 15px;
+@VLM100LineOffset: 39px;
+@VLM100WindLine2Top: @VLM100WindLine1Top+@VLM100LineOffset;
+@VLM100WindLine3Top: @VLM100WindLine1Top+2*@VLM100LineOffset;
+@VLM100Left: 28px;
 @VLM100UnitLeft: @VLM100Left+70px;
-@VLM100StatFontSize:x-small;
-@VLM100ValueTopOffset:5px;
-@VLM100UnitTopOffset:0;
+@VLM100StatFontSize: x-small;
+@VLM100ValueTopOffset: 5px;
+@VLM100UnitTopOffset: 0;
 @VLM100TextColor: #FFFFFF;
 
 
-.VLM100_Label, .VLM100_Pos, .VLM100_PosSmall, .VLM100_Unit, .VLM100_Value{
-  color:@VLM100TextColor;
+.VLM100_Label,
+.VLM100_Pos,
+.VLM100_PosSmall,
+.VLM100_Unit,
+.VLM100_Value {
+  color: @VLM100TextColor;
 }
 
-.VLM100_Label{
+.VLM100_Label {
   position: absolute;
   font-size: small;
 }
+
 .VLM100_Unit {
   position: absolute;
   font-size: x-small;
- left:@VLM100UnitLeft;
+  left: @VLM100UnitLeft;
   text-align: right;
   width: 40px;
 }
+
 .VLM100_Value {
   position: absolute;
   font-size: xx-large;
   text-align: right;
   width: 100px;
- left:@VLM100Left;
+  left: @VLM100Left;
 }
-#StatWindSpeed, #StatWindDirection, #StatWindAngle {
- left: @VLM100Left;
- font-size: @VLM100StatFontSize;
-}
-#StatWindSpeed {
- top:@VLM100WindLine1Top;
-}
-#StatWindDirection {
- top:@VLM100WindLine2Top;
-}
+
+#StatWindSpeed,
+#StatWindDirection,
 #StatWindAngle {
- top:@VLM100WindLine3Top;
+  left: @VLM100Left;
+  font-size: @VLM100StatFontSize;
 }
+
+#StatWindSpeed {
+  top: @VLM100WindLine1Top;
+}
+
+#StatWindDirection {
+  top: @VLM100WindLine2Top;
+}
+
+#StatWindAngle {
+  top: @VLM100WindLine3Top;
+}
+
 #StatSpeedUnit {
- top:@VLM100WindLine1Top+@VLM100UnitTopOffset;
+  top: @VLM100WindLine1Top+@VLM100UnitTopOffset;
 }
+
 #StatDirUnit {
- top:@VLM100WindLine2Top+@VLM100UnitTopOffset;
+  top: @VLM100WindLine2Top+@VLM100UnitTopOffset;
 }
+
 #StatAngleUnit {
- top:@VLM100WindLine3Top+@VLM100UnitTopOffset;
+  top: @VLM100WindLine3Top+@VLM100UnitTopOffset;
 }
+
 #BoatWindSpeed {
- top:@VLM100WindLine1Top+@VLM100ValueTopOffset;
+  top: @VLM100WindLine1Top+@VLM100ValueTopOffset;
 }
+
 #BoatWindDirection {
- top:@VLM100WindLine2Top+@VLM100ValueTopOffset;
+  top: @VLM100WindLine2Top+@VLM100ValueTopOffset;
 }
+
 #BoatWindAngle {
- top:@VLM100WindLine3Top+@VLM100ValueTopOffset;
+  top: @VLM100WindLine3Top+@VLM100ValueTopOffset;
 }
+
 #ImgWindAngle {
   width: 142px;
   height: 133px;
   padding-left: 24px;
   padding-top: 13px;
 }
+
 .Progress {
   height: 0.2em;
   position: absolute;
   display: block;
   margin-bottom: 0;
 }
+
 #BearingRing {
   padding-left: 23px;
   padding-top: 13px;
   width: 141px;
   height: 132px;
 }
+
 .WindAnglePanel {
   position: absolute;
   top: 0;
   left: 0;
 }
+
 #ImgWindAngle {
   transform: rotate(0deg);
   transform-origin: 82px 73px;
 }
+
 #DeckImage {
   padding-left: 63px;
   padding-top: 32px;
   transform: rotate(0deg);
   transform-origin: 83px 75px;
 }
-@media all and (max-width: 430px)
 
-{
- 
+@media all and (max-width: 430px) {
+
+  .navbar-right-small {
+    margin-left: 0 !important;
+    /*margin-top:15px;*/
+  }
+
+  .NavRaceName {
+    max-width: 100px;
+    max-height: 20px;
+    overflow: hidden;
+  }
+
+  #nav-stat {
+    background-color: black;
+    visibility: visible;
+  }
+
+  #nav-stat .row {
+    margin-left: 0;
+  }
+
+  .btn-md,
+  .btn-group-md>.btn {
+    padding: 8px 14px;
+    font-size: 10px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+  }
+
+  .Controler-Panel {
+    padding-left: 0;
+    padding-top: 10px;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  /* Remplacez 123px par la taille de votre choix */
+  #Infos,
+  .Apropos {
+    width: 600px;
+  }
+
+  .navbar-header {
+    float: left;
+  }
+
+  .NavRaceName {
+    max-width: 120px;
+    max-height: 20px;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 1023px) {
+
+  /* Remplacez 123px par la taille de votre choix */
+  .navbar-header {
+    float: none;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .navbar-collapse.collapse {
+    display: none !important;
+  }
+
+  .navbar-nav {
+    float: none !important;
+    /*margin: 7.5px -15px;*/
+  }
+
+  .navbar-nav>li {
+    float: none;
+  }
+
+  .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .navbar-text {
+    float: none;
+    margin: 15px 0;
+  }
+
+  /* cette classe est à ajouter lorsque que vous utilisez une version de Bootstap supérieure ou égale à la 3.1.0 */
+  .navbar-collapse.collapse.in {
+    display: block !important;
+  }
+
+  .collapsing {
+    overflow: hidden !important;
+  }
+
+  .navbar-right>li {
+    float: right;
+  }
+}
+
 .navbar-right-small {
-  margin-left:0!important;
-  /*margin-top:15px;*/
-}
-.NavRaceName{
-  max-width:100px;
-  max-height: 20px;
-  overflow: hidden;
-}
-#nav-stat{
-  background-color:black;
-  visibility:visible;
-}
-#nav-stat .row{
-  margin-left:0;
-} 
-.btn-md,
-.btn-group-md > .btn {
-  padding: 8px 14px;
-  font-size: 10px;
-  line-height: 1.3333333;
-  border-radius: 6px;
-}
-.Controler-Panel
-{
-  padding-left:0;
-  padding-top:10px;
-}
-}
-@media (min-width: 1024px) { /* Remplacez 123px par la taille de votre choix */
-#Infos, .Apropos  {
-  width: 600px;
-} 
-.navbar-header {
-  float: left;
-}
-.NavRaceName{
-  max-width:120px;
-  max-height: 20px;
-  overflow: hidden;
-}
-}
-@media (max-width: 1023px) { /* Remplacez 123px par la taille de votre choix */
-.navbar-header {
-float: none;
-}
-.navbar-toggle {
-display: block;
-}
-.navbar-collapse {
-border-top: 1px solid transparent;
-box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-}
-.navbar-collapse.collapse {
-display: none!important;
-}
-.navbar-nav {
-float: none!important;
-/*margin: 7.5px -15px;*/
-}
-.navbar-nav>li {
-float: none;
-}
-.navbar-nav>li>a {
-padding-top: 10px;
-padding-bottom: 10px;
-}
-.navbar-text {
-float: none;
-margin: 15px 0;
-}
-/* cette classe est à ajouter lorsque que vous utilisez une version de Bootstap supérieure ou égale à la 3.1.0 */
-.navbar-collapse.collapse.in {
-display: block!important;
-}
-.collapsing {
-overflow: hidden!important;
-}
-.navbar-right>li {
-float:right;
-}
-} 
-.navbar-right-small {
-  float:left!important;
+  float: left !important;
   /*margin-left:30px;*/
 }
-.navbar{
-  margin-bottom:0;
+
+.navbar {
+  margin-bottom: 0;
 }
-@media all and (min-width: 430px) and (max-width: 800px)
-{
-#Infos, .Apropos {
-  width: 75%;
+
+@media all and (min-width: 430px) and (max-width: 800px) {
+
+  #Infos,
+  .Apropos {
+    width: 75%;
+  }
+
+  .NavRaceName {
+    max-width: 120px;
+    max-height: 20px;
+    overflow: hidden;
+  }
 }
-.NavRaceName{
-  max-width:120px;
-  max-height: 20px;
-  overflow: hidden;
+
+@media all and (max-width: 429px) {
+
+  #Infos,
+  .Apropos {
+    width: 90%;
+  }
 }
+
+@media all and (min-width: 430px) {
+  #nav-stat {
+    background-color: black;
+    visibility: hidden;
+  }
+
+  #nav-stat .row {
+    margin-left: 0;
+  }
+
+  .btn-md,
+  .btn-group-md>.btn {
+    padding: 8px 14px;
+    font-size: 14px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+  }
+
+  .Controler-Panel {
+    /*position: absolute;*/
+    padding-left: 85px;
+    /*top: 82px;*/
+    /*left: 38px;*/
+    /*background-color: rgba(240, 248, 255,0.5);*/
+  }
 }
-@media all and (max-width: 429px) 
-{
-#Infos, .Apropos {
-  width: 90%;
+
+.racetime {
+  text-align: right;
+  padding-right: 30px;
 }
+
+.navbar-toggle {
+  padding: 0;
+  margin-top: 0;
+  margin-right: 10px;
 }
-@media all and (min-width: 430px)
-{   
-#nav-stat{
-  background-color:black;
-  visibility:hidden;
+
+.ddlangbtn {
+  min-width: 50px;
 }
-#nav-stat .row{
-margin-left:0;
-} 
-.btn-md,
-.btn-group-md > .btn {
-  padding: 8px 14px;
-  font-size: 14px;
-  line-height: 1.3333333;
-  border-radius: 6px;
+
+.logbtn {
+  margin-top: 4px;
+  min-width: 40px;
 }
-.Controler-Panel {
-  /*position: absolute;*/
-  padding-left: 85px;
-  /*top: 82px;*/
-  /*left: 38px;*/
-  /*background-color: rgba(240, 248, 255,0.5);*/
+
+.infobtn {
+  margin-top: 4px;
+  min-width: 40px;
+  float: right;
+  margin-left: 5px;
+  margin-right: 5px;
 }
+
+.icon-bar {
+  margin-left: auto;
+  margin-right: auto;
 }
-.racetime{
-text-align:right;
-padding-right:30px;
-}
-.navbar-toggle{
-padding: 0;
-margin-top: 0;
-margin-right: 10px;
-}
-.ddlangbtn{
-min-width: 50px;
-}
-.logbtn{
-margin-top: 4px;
-min-width: 40px;
-}
-.infobtn{
-margin-top: 4px;
-min-width: 40px;
-float: right; 
-margin-left: 5px;
-margin-right: 5px;
-}
-.icon-bar{
-margin-left:auto;
-margin-right:auto;
-}
-.BoatDropDown{
-margin-top: 4px;
+
+.BoatDropDown {
+  margin-top: 4px;
 
 }
+
 .togglebtn {
-margin-top: 4px;
-min-width:40px;
+  margin-top: 4px;
+  min-width: 40px;
 }
-#myNavbar{
-min-width:250px;
-width:100%;
+
+#myNavbar {
+  min-width: 250px;
+  width: 100%;
 }
+
 #myNavbar ul li {
-float:left;
+  float: left;
 }
-#myNavbar ul{
-float:left;
+
+#myNavbar ul {
+  float: left;
 }
+
 .Boat_SimpleInput {
   width: 90px;
 }
+
 .attentionInput {
   width: 60px;
-  height:15px;
+  height: 15px;
 }
+
 .PMActiveMode {
   width: 25px;
   padding-right: 4px;
   display: none;
 }
+
 .BoatControllerRow {
   padding-top: 5px;
 }
- // Race list styling .panel-body {
- //background-color: #337ab7;
+
+// Race list styling .panel-body {
+//background-color: #337ab7;
 //}
 .racelistminimap {
   width: 100%;
@@ -734,43 +886,50 @@ float:left;
 
 .RaceInfoDiv {
   padding-left: 4px;
-  min-width:110px;
+  min-width: 110px;
 }
+
 .ChronoRaceStarted {
   color: white;
   font-style: normal;
 }
+
 .ChronoRacePending {
   color: red;
   font-style: italic;
 }
+
 .button {
- color: @DialogBgColor;
- padding-top:4px;
- float:left;
+  color: @DialogBgColor;
+  padding-top: 4px;
+  float: left;
 }
+
 //Modif Par Chris /* Classe principale de la barre de navigation */
 // defined in variables.css:
 @navtabs-gradient-start-color: #3c3c3c;
 @navtabs-gradient-stop-color: #252525;
 @navtabs-gradient: linear-gradient(to bottom, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
-@navbar-default-bg:#000;
+@navbar-default-bg: #000;
 @button-gradient-start-color: #3c3c3c;
 @button-gradient-stop-color: #252525;
 @button-gradient: linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+
 // in your main definitions/ overrides:
-.navbar-toggle{
-  padding-top:0;
+.navbar-toggle {
+  padding-top: 0;
 }
+
 .tab-content {
- background-color:transparent;
+  background-color: transparent;
   color: #ffffff;
   padding: 20px;
- /* margin-top: 4px;*/
+  /* margin-top: 4px;*/
   border: 1px solid #CCC;
 }
- .BCOng {
- /*text-align:center;
+
+.BCOng {
+  /*text-align:center;
  background-image: 		-webkit-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image:      -o-linear-gradient(top, @navtabs-gradient-start-color 0%, @navtabs-gradient-stop-color 100%);
  background-image: 		-webkit-gradient(linear, left top, left bottom, from(@navtabs-gradient-start-color), to(@navtabs-gradient-stop-color));
@@ -778,19 +937,21 @@ float:left;
  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@navtabs-gradient-start-color, endColorstr=@navtabs-gradient-stop-color, GradientType=0);
  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
  background-repeat: repeat-x;*/
- background-color:#161616;
- /*height:40px;*/
- margin-right: 2px;
- border-top:1px beige solid;
- border-right:1px beige solid;
- border-left:1px beige solid;
- /*max-width:150px;
+  background-color: #161616;
+  /*height:40px;*/
+  margin-right: 2px;
+  border-top: 1px beige solid;
+  border-right: 1px beige solid;
+  border-left: 1px beige solid;
+  /*max-width:150px;
  min-width:75px;*/
- border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
 }
-.nav-tab > li {
- margin-bottom:0;
+
+.nav-tab>li {
+  margin-bottom: 0;
 }
+
 /*#Boat-Panel #tabs  > li {
  color: #021A9C;
  background-color:#161616;
@@ -828,28 +989,31 @@ margin-right:0;
   border-color: #ccc;
   border-radius: 5px;
   color: #60ABF9;
-  text-shadow:-1px -1px 0  rgba(0,0,0,0.4),
-             1px 1px 0 rgba(255,255,255,0.15);
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.4),
+    1px 1px 0 rgba(255, 255, 255, 0.15);
   background-image: -webkit-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
-  background-image:      -o-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+  background-image: -o-linear-gradient(top, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
   background-image: -webkit-gradient(linear, left top, left bottom, from(@button-gradient-start-color), to(@button-gradient-stop-color));
-  background-image:         linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
+  background-image: linear-gradient(to bottom, @button-gradient-start-color 0%, @button-gradient-stop-color 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@button-gradient-start-color, endColorstr=@button-gradient-stop-color, GradientType=0);
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
   background-repeat: repeat-x;
 }
+
 .button-black:hover {
   color: #011BA0;
   background: #3152F7;
-  text-shadow: 0 1px 0 rgba( 255, 255, 255, 0.2);
-  background: linear-gradient( #5486AD, #223941);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: linear-gradient(#5486AD, #223941);
 }
+
 .button-black:active {
   color: #000;
   background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
   background: #444;
-  box-shadow: 1px 1px 10px black inset,  0 1px 0 rgba( 255, 255, 255, 0.4);
+  box-shadow: 1px 1px 10px black inset, 0 1px 0 rgba(255, 255, 255, 0.4);
 }
+
 .button-noir {
   /*font-size: 12px;*/
 
@@ -870,219 +1034,256 @@ margin-right:0;
   background-image: -o-linear-gradient(top, #3c3c3c 0%, #252525 100%);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#3c3c3c), to(#252525));
   background-image: linear-gradient(to bottom, #3c3c3c 0%, #252525 100%);
- filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3c3c3c, endColorstr=#252525, GradientType=0);
- filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#3c3c3c, endColorstr=#252525, GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
   background-repeat: repeat-x;
 }
+
 .button-noir:hover {
   color: #CCC;
   background: #555;
   background: linear-gradient(#777777, #333333);
 }
+
 .button-noir:active {
   color: #000;
   background-image: linear-gradient(to bottom, #3c3c3c 0%, #222222 100%);
   background: #444;
   box-shadow: 1px 1px 10px #000000 inset, 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-#pilot  .btn-WP{
-  padding-top:6px;
-  padding-bottom:6px;
-  border:none;
-  background-color:transparent;
+
+#pilot .btn-WP {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border: none;
+  background-color: transparent;
 }
+
 .dropdown-menu {
-  min-width:auto;
-  cursor:pointer;
+  min-width: auto;
+  cursor: pointer;
   z-index: 99999;
 }
+
 .form-control {
-  height:auto;
-  padding:0;
+  height: auto;
+  padding: 0;
 }
+
 .scrollable-menu {
-    height: auto;
-    max-height: 200px;
-    overflow-x: hidden;
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
 }
-#PrefBoat #cp11 > .input-group-addon{
-padding-bottom:2px;
-padding-top:2px;
+
+#PrefBoat #cp11>.input-group-addon {
+  padding-bottom: 2px;
+  padding-top: 2px;
 }
-#PrefBoat #cp11 > .colorpicker-element .input-group-addon i, .colorpicker-element .add-on i{
-height:12px;
-width:12px;
+
+#PrefBoat #cp11>.colorpicker-element .input-group-addon i,
+.colorpicker-element .add-on i {
+  height: 12px;
+  width: 12px;
 }
-#pilot #AP_Time > .input-group-addon:last-child{
-padding-bottom:2px;
-padding-top:2px;
+
+#pilot #AP_Time>.input-group-addon:last-child {
+  padding-bottom: 2px;
+  padding-top: 2px;
 }
-#pilot #AP_Date > .input-group-addon:last-child{
-padding-bottom:2px;
-padding-top:2px;
+
+#pilot #AP_Date>.input-group-addon:last-child {
+  padding-bottom: 2px;
+  padding-top: 2px;
 }
-#pilot > .input{
-margin-top:4px;
+
+#pilot>.input {
+  margin-top: 4px;
 }
-#pilot .input-group[class*="col-"]{
-padding-bottom:5px;
+
+#pilot .input-group[class*="col-"] {
+  padding-bottom: 5px;
 }
-#pilot .form-group{
-margin-bottom:0
+
+#pilot .form-group {
+  margin-bottom: 0
 }
-#AutoPilotTab .table{
-background-color:transparent;
+
+#AutoPilotTab .table {
+  background-color: transparent;
 }
+
 .pref {
-margin-left:15px;
-color:#ffffff;
-font-size:10px;
+  margin-left: 15px;
+  color: #ffffff;
+  font-size: 10px;
 }
-.modal-backdrop{
-position:relative;
+
+.modal-backdrop {
+  position: relative;
 }
-.modal-body{
-padding:10px;
+
+.modal-body {
+  padding: 10px;
 }
-.modal-header{
-text-align:center;
+
+.modal-header {
+  text-align: center;
 }
-.modal-pref{
-background-color:transparent;
-padding-left:15px;
-padding-right:15px;
+
+.modal-pref {
+  background-color: transparent;
+  padding-left: 15px;
+  padding-right: 15px;
 }
-.modal-race{
-background-color:transparent;
-padding-left:5px;
-padding-right:5px;
+
+.modal-race {
+  background-color: transparent;
+  padding-left: 5px;
+  padding-right: 5px;
 }
-.modal-abandon{ 
-  position: absolute; 
-  width: 600px; 
-  left: 5px; 
+
+.modal-abandon {
+  position: absolute;
+  width: 600px;
+  left: 5px;
 }
-.selectpref{
-color:#000000 ;
+
+.selectpref {
+  color: #000000;
 }
+
 .lien-pref {
-margin-top:15px;
+  margin-top: 15px;
 }
-.btn-pref{
-padding:4px 8px 4px 8px;
-margin-top:2px;
+
+.btn-pref {
+  padding: 4px 8px 4px 8px;
+  margin-top: 2px;
 }
+
 /*.btn span.glyphicon {    			
 	opacity: 0;				
 }*/
-.btn.active span.glyphicon {				
-	opacity: 1;				
+.btn.active span.glyphicon {
+  opacity: 1;
 }
+
 /* Hiding the checkbox, but allowing it to be focused */
-.badgebox
-{
-    opacity: 0;
+.badgebox {
+  opacity: 0;
 }
 
-.badgebox + .badge
-{
-    /* Move the check mark away when unchecked */
-    text-indent: -999999px;
-    /* Makes the badge's width stay the same checked and unchecked */
-	width: 27px;
+.badgebox+.badge {
+  /* Move the check mark away when unchecked */
+  text-indent: -999999px;
+  /* Makes the badge's width stay the same checked and unchecked */
+  width: 27px;
 }
 
-.badgebox:focus + .badge
-{
-    /* Set something to make the badge looks focused */
-    /* This really depends on the application, in my case it was: */
-    
-    /* Adding a light border */
-    box-shadow: inset 0 0 5px;
-    /* Taking the difference out of the padding */
+.badgebox:focus+.badge {
+  /* Set something to make the badge looks focused */
+  /* This really depends on the application, in my case it was: */
+
+  /* Adding a light border */
+  box-shadow: inset 0 0 5px;
+  /* Taking the difference out of the padding */
 }
-.close{
-  color:#ffffff;
+
+.close {
+  color: #ffffff;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
-fieldset{
-margin-bottom:10px;
+
+fieldset {
+  margin-bottom: 10px;
 }
-legend{
-  margin-bottom:10px;
-  text-align:center;
-  font-size:1.2em;
-  color:#337AB7;
+
+legend {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 1.2em;
+  color: #337AB7;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
-label{
-  font-weight:normal;
-  margin-bottom:0;
+
+label {
+  font-weight: normal;
+  margin-bottom: 0;
 }
-#Infos{
-  cursor:move; 
-  height:450px;
-  display:none;
-  position:absolute;
-  top:80px;
-  margin-left:auto;
-  margin-right:auto;
-  border-radius:5px;
+
+#Infos {
+  cursor: move;
+  height: 450px;
+  display: none;
+  position: absolute;
+  top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
 }
-#mouseInfo{
-  cursor:move;
-    width:250px;
-    min-height:350px;
-    display:none;
-    position:absolute;
-    left:50%; 
-    top:25%;
-    border-radius:5px;
+
+#mouseInfo {
+  cursor: move;
+  width: 250px;
+  min-height: 350px;
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  border-radius: 5px;
 }
-#affichage{
-  cursor:move;
-   width:200px;
-    height:450px; 
-    display:none;
-    position:absolute;
-    left:50%; 
-    top:25%;
-    border-radius:5px;
+
+#affichage {
+  cursor: move;
+  width: 200px;
+  height: 450px;
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  border-radius: 5px;
 }
-.affich{
-margin-left:0;
+
+.affich {
+  margin-left: 0;
 }
-label.affich{
-padding-top:2px;
-font-size:.8em;
+
+label.affich {
+  padding-top: 2px;
+  font-size: .8em;
 }
+
 .VacChrono_Input {
-    margin: 5px;
-    width: 80px;
-    height: 20px;
+  margin: 5px;
+  width: 80px;
+  height: 20px;
 }
-.VacChrono{
- width:100px;
+
+.VacChrono {
+  width: 100px;
 }
+
 #progressBar {
   width: 90%;
   margin: 5px auto;
   height: 10px;
   /*background-color: #0A5F44;*/
   background: #555;
-	-moz-border-radius: 25px;
-	-webkit-border-radius: 25px;
-	border-radius: 25px;
-	/*padding: 10px;*/
-	box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  /*padding: 10px;*/
+  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
 }
 
 #progressBar div {
-font-size:10px;
+  font-size: 10px;
   height: 100%;
   text-align: right;
   /*padding: 0 10px;*/
-  line-height: 10px; /* same as #progressBar height if we want text middle aligned */
+  line-height: 10px;
+  /* same as #progressBar height if we want text middle aligned */
   width: 0;
   /*background-color: #CBEA00;*/
   box-sizing: border-box;
@@ -1090,63 +1291,80 @@ font-size:10px;
   border-bottom-right-radius: 8px;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  background-color: rgb(43,194,83);
-  background-image: linear-gradient(
-    center bottom,
-    rgb(43,194,83) 37%,
-    rgb(84,240,84) 69%
-  );
+  background-color: rgb(43, 194, 83);
+  background-image: linear-gradient(center bottom,
+      rgb(43, 194, 83) 37%,
+      rgb(84, 240, 84) 69%);
   box-shadow:
-    inset 0 2px 9px  rgba(255,255,255,0.3),
-    inset 0 -2px 6px rgba(0,0,0,0.4);
+    inset 0 2px 9px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.4);
   /*position: relative;
   overflow: hidden;*/
 }
-.progressbarmin{
+
+.progressbarmin {
   background-color: #337AB7;
-  z-index: 2; 
-  height: 5px; 
-  width: 100px;
-}
-.progressbarvac{
-  background-color: #A3A3A3;
-  z-index: 2; 
-  height: 5px; 
+  z-index: 2;
+  height: 5px;
   width: 100px;
 }
 
-.badgebox:checked + .badge
-{
-    /* Move the check mark back when checked */
-	text-indent: 0;
+.progressbarvac {
+  background-color: #A3A3A3;
+  z-index: 2;
+  height: 5px;
+  width: 100px;
 }
-.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+
+.badgebox:checked+.badge {
+  /* Move the check mark back when checked */
+  text-indent: 0;
+}
+
+.col-xs-1,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9 {
   padding: 5px;
   /*margin-bottom: 5px*/
 }
+
 .navbar-brand {
-  float: left; 
+  float: left;
   height: 50px;
 }
-.navbar-header{
-  height:75px;
+
+.navbar-header {
+  height: 75px;
 }
-.navbar-inverse .navbar-nav > .active > a , 
-.navbar-inverse .navbar-nav > .active > a:hover , 
-.navbar-inverse .navbar-nav > .active > a:focus{
-background-color:transparent;
+
+.navbar-inverse .navbar-nav>.active>a,
+.navbar-inverse .navbar-nav>.active>a:hover,
+.navbar-inverse .navbar-nav>.active>a:focus {
+  background-color: transparent;
 }
-.container-instrument{
-  width:170px;
+
+.container-instrument {
+  width: 170px;
 }
+
 a.tooltips {
   position: relative;
   display: inline;
-  font-size:14px
+  font-size: 14px
 }
+
 a.tooltips span {
   position: absolute;
-  width:140px;
+  width: 140px;
   color: #DFFFFF;
   background: #000000;
   border: 2px solid #6D6D6D;
@@ -1156,28 +1374,33 @@ a.tooltips span {
   visibility: hidden;
   border-radius: 6px;
 }
+
 a.tooltips span:before {
   content: '';
   position: absolute;
   bottom: 100%;
   left: 50%;
   margin-left: -12px;
-  width: 0; height: 0;
+  width: 0;
+  height: 0;
   border-bottom: 12px solid #6D6D6D;
   border-right: 12px solid transparent;
   border-left: 12px solid transparent;
 }
+
 a.tooltips span:after {
   content: '';
   position: absolute;
   bottom: 100%;
   left: 50%;
   margin-left: -8px;
-  width: 0; height: 0;
+  width: 0;
+  height: 0;
   border-bottom: 8px solid #000000;
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
 }
+
 a:hover.tooltips span {
   visibility: visible;
   opacity: 0.8;
@@ -1186,132 +1409,159 @@ a:hover.tooltips span {
   margin-left: -76px;
   z-index: 4000;
 }
-.DDLine:hover{
-  background-color:#7D7D7D;
+
+.DDLine:hover {
+  background-color: #7D7D7D;
 }
 
-.MI_Coords{
+.MI_Coords {
   font-size: 0.8em;
 }
+
 /* Cachons la case à cocher */
 [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked {
   position: absolute;
   left: -9999px;
 }
- 
+
 /* on prépare le label */
-[type="checkbox"]:not(:checked) + label,
-[type="checkbox"]:checked + label {
-  position: relative; /* permet de positionner les pseudo-éléments */
-  padding-left: 25px; /* fait un peu d'espace pour notre case à venir */
-  cursor: pointer;    /* affiche un curseur adapté */
+[type="checkbox"]:not(:checked)+label,
+[type="checkbox"]:checked+label {
+  position: relative;
+  /* permet de positionner les pseudo-éléments */
+  padding-left: 25px;
+  /* fait un peu d'espace pour notre case à venir */
+  cursor: pointer;
+  /* affiche un curseur adapté */
 }
+
 /* Aspect des checkboxes */
 /* :before sert à créer la case à cocher */
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before {
+[type="checkbox"]:not(:checked)+label:before,
+[type="checkbox"]:checked+label:before {
   content: '';
   position: absolute;
-  left:0; top: 2px;
-  width: 17px; height: 17px; /* dim. de la case */
+  left: 0;
+  top: 2px;
+  width: 17px;
+  height: 17px;
+  /* dim. de la case */
   border: 1px solid #aaa;
   background: #f8f8f8;
-  border-radius: 3px; /* angles arrondis */
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
+  border-radius: 3px;
+  /* angles arrondis */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .3)
+    /* légère ombre interne */
 }
- 
+
 /* Aspect général de la coche */
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
+[type="checkbox"]:not(:checked)+label:after,
+[type="checkbox"]:checked+label:after {
   content: '✔';
   position: absolute;
-  top: 0; left: 4px;
+  top: 0;
+  left: 4px;
   font-size: 14px;
   color: #09ad7e;
-  transition: all .2s; /* on prévoit une animation */
-}
-/* Aspect si "pas cochée" */
-[type="checkbox"]:not(:checked) + label:after {
-  opacity: 0; /* coche invisible */
-  transform: scale(0); /* mise à l'échelle à 0 */
-}
-/* Aspect si "cochée" */
-[type="checkbox"]:checked + label:after {
-  opacity: 1; /* coche opaque */
-  transform: scale(1); /* mise à l'échelle 1:1 */
+  transition: all .2s;
+  /* on prévoit une animation */
 }
 
-.affich [type=checkbox]:checked+label, [type=checkbox]:not(:checked)+label{
-padding-left:25px;
+/* Aspect si "pas cochée" */
+[type="checkbox"]:not(:checked)+label:after {
+  opacity: 0;
+  /* coche invisible */
+  transform: scale(0);
+  /* mise à l'échelle à 0 */
 }
+
+/* Aspect si "cochée" */
+[type="checkbox"]:checked+label:after {
+  opacity: 1;
+  /* coche opaque */
+  transform: scale(1);
+  /* mise à l'échelle 1:1 */
+}
+
+.affich [type=checkbox]:checked+label,
+[type=checkbox]:not(:checked)+label {
+  padding-left: 25px;
+}
+
 /* SLIDE ONE */
 .slideOne {
-	width: 50px;
-	height: 10px;
-	background: #333;
-	margin: 10px auto;
+  width: 50px;
+  height: 10px;
+  background: #333;
+  margin: 10px auto;
 
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
-	border-radius: 50px;
-	position: relative;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  position: relative;
 
-	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
-	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
-	box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .slideOne label {
-	display: block;
-	width: 16px;
-	height: 16px;
-  padding-left:0;
+  display: block;
+  width: 16px;
+  height: 16px;
+  padding-left: 0;
 
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
-	border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
 
-	-webkit-transition: all .4s ease;
-	-moz-transition: all .4s ease;
-	-o-transition: all .4s ease;
-	-ms-transition: all .4s ease;
-	transition: all .4s ease;
-	cursor: pointer;
-	position: absolute;
-	top: -7px;
-	left: -5px;
+  -webkit-transition: all .4s ease;
+  -moz-transition: all .4s ease;
+  -o-transition: all .4s ease;
+  -ms-transition: all .4s ease;
+  transition: all .4s ease;
+  cursor: pointer;
+  position: absolute;
+  top: -7px;
+  left: -5px;
 
-	-webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.3);
-	-moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.3);
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.3);
-	background: #fcfff4;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+  background: #fcfff4;
 
-	background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-	background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-	background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-	background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-	background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#b3bead',GradientType=0 );
+  background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: -moz-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: -o-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: -ms-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfff4', endColorstr='#b3bead', GradientType=0);
 }
 
-.slideOne input[type=checkbox]:checked + label {
-	left: 37px;
+.slideOne input[type=checkbox]:checked+label {
+  left: 37px;
 }
-.slideOne input[type=checkbox]:checked+label:before, .slideOne input[type=checkbox]:not(:checked)+label:before{
-  width:0;
-  height:0;
-  padding-left:0;
-  top:4px;
-  left:4px;
+
+.slideOne input[type=checkbox]:checked+label:before,
+.slideOne input[type=checkbox]:not(:checked)+label:before {
+  width: 0;
+  height: 0;
+  padding-left: 0;
+  top: 4px;
+  left: 4px;
 }
-hr{
-margin-top:10px;
-margin-bottom:10px;
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-.slideOne input[type=checkbox]:checked+label, .slideOne input[type=checkbox]:not(:checked)+label{
-  padding-left:0;
+
+.slideOne input[type=checkbox]:checked+label,
+.slideOne input[type=checkbox]:not(:checked)+label {
+  padding-left: 0;
 }
+
 /*nav-tabs>li>a {
   margin-right: 0; 
   line-height: 1.4;
@@ -1325,14 +1575,17 @@ margin-bottom:10px;
   /* 4 images donc 4 x 100% */
   width: 500%;
   height: auto;
-  padding:0; margin:0;
+  padding: 0;
+  margin: 0;
   list-style: none;
 }
+
 .slideshow li {
   float: left;
   margin-right: 100px;
   overflow: hidden;
 }
+
 .slideshow {
   width: 272px;
   height: 429px;
@@ -1341,81 +1594,95 @@ margin-bottom:10px;
   margin-left: auto;
   margin-right: auto;
 }
+
 .btn-round.btn-xs {
   width: 24px;
   height: 24px;
   border-radius: 50%;
 }
+
 .progress {
   margin-bottom: 0;
 }
+
 .btn-xs {
- line-height: 1;
+  line-height: 1;
 }
+
 .ui-slider .ui-slider-handle {
   text-align: center;
   line-height: 1em;
   width: 1.4em;
   cursor: pointer;
 }
-td, th {
-    padding: 0;
+
+td,
+th {
+  padding: 0;
   /*  border: 1px solid;*/
 }
 
-.NoAnimation{
+.NoAnimation {
   -webkit-transition: none;
   -moz-transition: none;
   -ms-transition: none;
   -o-transition: none;
   transition: none;
-}​
-.kludge{
-  float:left;
 }
-.CanJoinRaceNotStarted
-{
+
+​ .kludge {
+  float: left;
+}
+
+.CanJoinRaceNotStarted {
   background-color: #260b95;
 }
-.CanJoinRace
-{
+
+.CanJoinRace {
   background-color: #00aa00;
 }
-.NoJoinRace
-{
+
+.NoJoinRace {
   background-color: red;
 }
-.alertbox{
+
+.alertbox {
   position: absolute;
   z-index: 10000;
-  width:100%;
+  width: 100%;
 }
-#Apropos{
-position:fixed;
-top:75px;
-//max-width:600px;
-min-height:50%;
+
+#Apropos {
+  position: fixed;
+  top: 75px;
+  //max-width:600px;
+  min-height: 50%;
 }
-.Apropos{
-  background-color:rgba(0, 0, 0, 0.6);
-  color:#FFFFFF;
-  margin-left:auto;
-  margin-right:auto;
+
+.Apropos {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #FFFFFF;
+  margin-left: auto;
+  margin-right: auto;
 }
-.Apropos-title{
-font-size:24px;
-line-height:1.8;
+
+.Apropos-title {
+  font-size: 24px;
+  line-height: 1.8;
 }
-.Apropos-text{
-font-size:16px;
-line-height:1.6;
-text-align:justify;
+
+.Apropos-text {
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: justify;
 }
-.a{
+
+.a {
   background-color: #e0e0a0;
 }
+
 .table .table {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .RnkLMNH {
@@ -1430,8 +1697,8 @@ text-align:justify;
   font-size: 70%;
 }
 
-.VLMIcon_34{
-  background:url(images/vlm_icons_map.png) no-repeat;
+.VLMIcon_34 {
+  background: url(images/vlm_icons_map.png) no-repeat;
   width: 34px;
   height: 34px;
   display: inline-block;
@@ -1439,17 +1706,18 @@ text-align:justify;
 
 }
 
-.PopupText{
+.PopupText {
   color: #000000;
   font-size: 0.85em;
 }
 
-.PopupHeadText,.PopupBoatNameNumber{
+.PopupHeadText,
+.PopupBoatNameNumber {
   .PopupText;
   font-weight: bold;
 }
 
-.TxtRank{
+.TxtRank {
   color: #FFFFFF;
   background-color: #006699;
   min-width: 32px;
@@ -1459,11 +1727,11 @@ text-align:justify;
   text-align: center;
 }
 
-.GribNotOK{
+.GribNotOK {
   background: red;
 }
 
-.GribGetsOld{
+.GribGetsOld {
   background: orange;
 }
 
@@ -1472,28 +1740,38 @@ text-align:justify;
   min-height: 30px;
   text-align: left;
   border-radius: 20px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
   background: none repeat scroll 0 0 #82d1d494;
   color: #333;
   padding: 6px 10px 6px 6px;
 }
 
-.leaflet-control-windmouse-frame table{
+.leaflet-control-windmouse-frame table {
   width: "100%";
 }
 
-.leaflet-control-windmouse_zoomcol{
+.leaflet-control-windmouse_zoomcol {
   width: 55px;
 }
 
-.BeaufortImg{
-  background:url(images/Beaufort.png) no-repeat;
+.BeaufortImg {
+  background: url(images/Beaufort.png) no-repeat;
   width: 24px;
   height: 24px;
   display: inline-block;
   transition: transform .2s;
 }
 
-.leaflet-control-windmouse_latlon, .leaflet-control-windmouse_wndhdg, .leaflet-control-windmouse_wndspd,.leaflet-control-windmouse_wndimg {
+.leaflet-control-windmouse_latlon,
+.leaflet-control-windmouse_wndhdg,
+.leaflet-control-windmouse_wndspd,
+.leaflet-control-windmouse_wndimg {
   width: 100px;
+}
+
+.PRecordRace {
+  color: blue;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 1.5em;
 }

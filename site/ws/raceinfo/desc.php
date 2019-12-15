@@ -54,6 +54,36 @@ function get_info_array($idrace) {
         $info["races_groups"][] = $ri['grouptag'];
     }
 
+    // If race complete for winner, then compute race closing date
+    $rnkQuery= "SELECT RR.position as status, RR.duration + RR.penalty duration, RR.idusers idusers,  RR.deptime deptime
+                    FROM      races_results RR, users US
+                    WHERE     idraces=".$idrace.
+                    " AND       US.idusers = RR.idusers
+                    AND       position=1
+                    order by RR.duration+RR.penalty desc
+                    limit 1;";
+    $res = wrapper_mysql_db_query_reader($rnkQuery);
+    if ($res)
+    {
+        while ($ri = mysqli_fetch_assoc($res)) 
+        {
+            //var_dump($ri);
+            if ($info['racetype']===RACE_TYPE_RECORD)
+            {
+                $info["RaceCloseDate"] = $ri['closetime']+$ri['duration']*(1+$info['firstpcttime']);
+            }
+            else
+            {
+                $info["RaceCloseDate"] = $ri['deptime']+$ri['duration']*(1+$info['firstpcttime']/100);
+            }
+            
+            break;
+        }
+    }
+    /*else
+    {
+        //var_dump($rnkQuery);
+    }*/
     $info['success'] = True;
     //the racemap ???
     return $info;
