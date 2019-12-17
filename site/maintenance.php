@@ -6,23 +6,34 @@
    <title>Virtual-loup-de-mer - Maintenance page - Work in progress</title>
    <link rel="stylesheet" type="text/css" href="style/default/style.css" /> 
 </head>
-<body>
-  <div>
-<h1>Site Maintenance In Progress</h1>
-<p>We are currently updating VLM. It will be available again shortly. ...</p>
-<hr />
-<h1>Maintenance du site en cours</h1>
-<p>Nous sommes actuellement en train de mettre &agrave; jour VLM. Il sera de nouveau disponible dans quelques instants...</p>
-<hr />
-<p><?php 
-  if(file_exists('file.php'))
-  {
-    ?>
-    <h2>Message:</h2>
-    <?php
-    include("maintenance.txt");
-  }
-  ?></p>
-</div>
-</body>
+  <body>
+    <div class="container">
+    <img  style="
+        width: 80%;
+        
+    " src="/jvlm/images/Maintenance.png">
+      <div style="
+    position: relative;
+    width: 766px;
+    margin-left: 441px;
+    margin-top: -310px;
+    background-color: #ffffff29;">
+        <h1>Site Maintenance In Progress</h1>
+        <p>We are currently updating VLM. It will be available again shortly. ...</p>
+        <hr />
+        <h1>Maintenance du site en cours</h1>
+        <p>Nous sommes actuellement en train de mettre &agrave; jour VLM. Il sera de nouveau disponible dans quelques instants...</p>
+        <hr />
+        <p><?php 
+        if(file_exists('file.php'))
+        {
+          ?>
+          <h2>Message:</h2>
+          <?php
+          include("maintenance.txt");
+        }
+        ?></p>
+      </div>
+    </div>
+  </body>
 </html>
