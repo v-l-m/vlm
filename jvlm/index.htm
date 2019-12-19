@@ -1968,6 +1968,30 @@
     </div>
   </div>
 
+  <!-- Stat Consent modal -->
+  <div id="GConsentModal" class="modal fade wide" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modaldialog modal-content">
+        <div class="modal-header">
+          <H4 I18n="VLMStatAndCookies" class="modal-title" style="text-align:center">RaceCal</H4>          
+        </div>
+        <div class="modal-body">
+          <span I18n="StatsConsent1"  style="text-align:center">RaceCal</span>
+          <br><BR>
+          <div class="row container-fluid">
+            <span class="col-xs-9" I18n="StatsConsent2"  style="text-align:center">RaceCal</span>
+            <span class='col-xs-1'></span>
+            <button id="GConsentToggle" type="button" class="col-xs-2 ui-corner-all ui-widget btn btn-danger" I18n="No">No</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">RaceCal</button>
+        </div>        
+      </div>
+    </div>
+  </div>
+
   <!-- Error redirect panel -->
   <div id="ErrorRedirectPanel" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -2006,7 +2030,8 @@
     var BuildDate //JVLMBUILD
     window.dataLayer = window.dataLayer || [];
 
-    if ('Prod' === '@@BUILD_TYPE@@')
+    
+    if ('Prod' === '@@BUILD_TYPE@@' && VLM2Prefs.GConsentDate && !isNaN(VLM2Prefs.GConsentDate))
     {
       function gtag()
       {

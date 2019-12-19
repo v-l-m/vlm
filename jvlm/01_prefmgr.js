@@ -1,29 +1,44 @@
 var MAP_OP_SHOW_SEL = 0;
 
-
-
-
-class PrefMgr {
-  constructor() {
+class PrefMgr
+{
+  constructor()
+  {
     this.CurTheme = "bleu-noir";
     this.MapPrefs = new MapPrefs();
-    this.Init = function () {
+    this.GConsentDate = null;
+    this.GConsentLastNo = null;
+    this.Init = function()
+    {
+      this.GConsentDate = LoadLocalPref("GConsentDate", null);
+      this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
+      this.VLM2Storage = JSON.parse(LoadLocalPref("VLM2Storage", null));
       this.MapPrefs.Load();
       this.Load();
     };
-    this.Load = function () {
-      if (store.enabled) {
+    this.Load = function()
+    {
+      if (store.enabled)
+      {
         this.CurTheme = LoadLocalPref('CurTheme', "bleu-noir");
       }
     };
-    this.Save = function () {
-      if (store.enabled) {
+    this.Save = function()
+    {
+      if (store.enabled)
+      {
         store.set('ColorTheme', this.CurTheme);
       }
       this.MapPrefs.Save();
+      store.set("GConsentDate", this.GConsentDate);
+      store.set("GConsentLastNo", this.GConsentLastNo);
+      store.set("VLM2Storage", JSON.stringify(this.VLM2Storage));
+
     };
-    this.UpdateVLMPrefs = function (p) {
-      switch (p.mapOpponents) {
+    this.UpdateVLMPrefs = function(p)
+    {
+      switch (p.mapOpponents)
+      {
         case "mylist":
         case "mapselboats":
         case "NULL":
@@ -54,8 +69,10 @@ class PrefMgr {
 }
 
 
-class MapPrefs {
-  constructor() {
+class MapPrefs
+{
+  constructor()
+  {
     this.ShowReals = true; // Do we show reals?
     this.ShowCompass = true; // Do we show reals?
     this.ShowOppNumbers = true; // Do we show opponents names?
@@ -74,8 +91,10 @@ class MapPrefs {
     this.EstTrackMouse = false;
     this.TrackEstForecast = true;
     this.ShowTopCount = 50;
-    this.Load = function () {
-      if (store.enabled) {
+    this.Load = function()
+    {
+      if (store.enabled)
+      {
         this.ShowReals = LoadLocalPref('#ShowReals', true);
         this.ShowCompass = LoadLocalPref('#ShowCompass', true);
         this.ShowOppNumbers = LoadLocalPref("#ShowOppNumbers", false);
@@ -84,15 +103,18 @@ class MapPrefs {
         this.EstTrackMouse = LoadLocalPref("#EstTrackMouse", true);
         this.TrackEstForecast = LoadLocalPref("#TrackEstForecast", false);
         this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
-        if (!this.PolarVacCount) {
+        if (!this.PolarVacCount)
+        {
           // Fallback if invalid value is stored
           this.PolarVacCount = 12;
         }
         this.ShowTopCount = LoadLocalPref('ShowTopCount', 50);
       }
     };
-    this.Save = function () {
-      if (store.enabled) {
+    this.Save = function()
+    {
+      if (store.enabled)
+      {
         store.set("#ShowReals", this.ShowReals);
         store.set("#ShowCompass", this.ShowCompass);
         store.set("#ShowOppNumbers", this.ShowOppName);
@@ -104,7 +126,8 @@ class MapPrefs {
         store.set("ShowTopCount", this.ShowTopCount);
       }
       let MapPrefVal = "mapselboats";
-      switch (this.MapOppShow) {
+      switch (this.MapOppShow)
+      {
         case this.MapOppShowOptions.ShowMineOnly:
           MapPrefVal = "myboat";
           break;
@@ -121,14 +144,18 @@ class MapPrefs {
       var NewVals = {
         mapOpponents: MapPrefVal
       };
-      if (typeof _CurPlayer !== "undefined" && _CurPlayer) {
-        UpdateBoatPrefs(_CurPlayer.CurBoat, {
+      if (typeof _CurPlayer !== "undefined" && _CurPlayer)
+      {
+        UpdateBoatPrefs(_CurPlayer.CurBoat,
+        {
           prefs: NewVals
         });
       }
     };
-    this.GetOppModeString = function (Mode) {
-      switch (Mode) {
+    this.GetOppModeString = function(Mode)
+    {
+      switch (Mode)
+      {
         case this.MapOppShowOptions.ShowSel:
           return GetLocalizedString("mapselboats");
         case this.MapOppShowOptions.ShowMineOnly:

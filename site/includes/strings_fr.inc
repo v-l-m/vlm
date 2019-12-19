@@ -1,6 +1,9 @@
 <?php
 $strings['fr'] = 
   array (
+    'StatsConsent1' => "En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de Cookies requis pour le fonctionnement du jeu.",
+    'StatsConsent2' => "Autorisez vous VLM a faire des mesures d'usages anonymisée via google analytics, à des fins d'amélioration du jeu?",
+    'VLMStatAndCookies' => 'VLM - Cookies et statistiques',
     'OrthoToWP'=>'Ortho vers WP',
     'ShowCompass'=>'Afficher le compas',
     'ServerMeteoAge'=>'Grib chargé',

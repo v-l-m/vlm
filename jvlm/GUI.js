@@ -1250,6 +1250,7 @@ function HandleStopEstimator(e)
   }
 
   CurBoat.Estimator.Stop();
+  StatMGR.Stat("Estimator","Stop");
 }
 
 function HandleStartEstimator(e)
@@ -1275,6 +1276,7 @@ function HandleStartEstimator(e)
     }
   }
   CurBoat.Estimator.Start(HandleEstimatorProgress);
+  StatMGR.Stat("Estimator","Start");
 }
 
 var LastPctRefresh = -1;

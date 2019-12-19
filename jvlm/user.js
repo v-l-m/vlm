@@ -128,7 +128,7 @@
        // Should not come here without some kind of VLMInfo...
        return null;
      }
-     
+
      // Assume if we get there, there is a boat with RaceInfo and VLMInfo loaded
      var WPIndex = this.VLMInfo.NWP;
 
@@ -240,6 +240,10 @@
 
  function IsLoggedIn()
  {
+   if (_IsLoggedIn)
+   {
+     StatMGR.CheckGConsent();
+   }
    return _IsLoggedIn;
  }
 
@@ -322,6 +326,7 @@
  {
    if (_IsLoggedIn)
    {
+     StatMGR.CheckGConsent();
      GetPlayerInfo();
    }
    else if (GuiRequest)
