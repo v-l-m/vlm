@@ -114,7 +114,7 @@
      }
      else
      {
-       this.Estimator.ShowEstimatePosition(null,null);
+       this.Estimator.ShowEstimatePosition(null, null);
        return null;
      }
    };
