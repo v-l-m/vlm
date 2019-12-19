@@ -549,10 +549,10 @@ class races extends baseClass
     $status[BOAT_STATUS_HC] = "HC";
 
     $QueryFinished = "SELECT RR.position status, RR.duration + RR.penalty duration, P.IdPlayers, P.PlayerName,RR.idusers idusers, US.username boatpseudo, US.boatname boatname, 
-                      color, country,  longitude, latitude, RR.deptime deptime, RR.loch loch, penalty
-                      FROM      races_results RR, users US, players P, playerstousers PU
-                      WHERE     idraces=".$this->idraces."
-                      AND       US.idusers = RR.idusers and US.idusers = PU.idusers and PU.linktype=1 and PU.idplayers=P.idplayers
+                      color, country,  longitude, latitude, RR.deptime deptime, RR.loch loch, penalty, R.racetype, R.deptime
+                      FROM      races_results RR, users US, players P, playerstousers PU, races R
+                      WHERE     RR.idraces=".$this->idraces."
+                      AND       US.idusers = RR.idusers and US.idusers = PU.idusers and PU.linktype=1 and PU.idplayers=P.idplayers and R.idraces = RR.idraces
                       order by idusers " ;
     
     $res = $this->queryRead($QueryFinished);
