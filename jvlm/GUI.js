@@ -1250,7 +1250,7 @@ function HandleStopEstimator(e)
   }
 
   CurBoat.Estimator.Stop();
-  StatMGR.Stat("Estimator","Stop");
+  
 }
 
 function HandleStartEstimator(e)
@@ -1276,24 +1276,27 @@ function HandleStartEstimator(e)
     }
   }
   CurBoat.Estimator.Start(HandleEstimatorProgress);
-  StatMGR.Stat("Estimator","Start");
 }
 
-var LastPctRefresh = -1;
-var LastPctDraw = -1;
 
 function HandleEstimatorProgress(Complete, Pct, Dte)
 {
+  let Est = _CurPlayer.CurBoat.Estimator;
+
+  if (!Est)
+  {
+    return;
+  }
   if (Complete)
   {
     $("#StartEstimator").removeClass("hidden");
     $("#PbEstimatorProgressBar").addClass("hidden");
     //$("#PbEstimatorProgressText").addClass("hidden")
     $("#EstimatorStopButton").addClass("hidden");
-    LastPctRefresh = -1;
-    LastPctDraw = -1;
+    Est.LastPctRefresh = -1;
+    Est.LastPctDraw = -1;
   }
-  else if (Pct - LastPctRefresh > 0.15)
+  else if (Pct - Est.LastPctRefresh > 0.25)
   {
     $("#EstimatorStopButton").removeClass("hidden");
     $("#StartEstimator").addClass("hidden");
@@ -1303,12 +1306,12 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#PbEstimatorProgress").css("width", Pct + "%");
     $("#PbEstimatorProgress").attr("aria-valuenow", Pct);
     $("#PbEstimatorProgress").attr("aria-valuetext", Pct);
-    LastPctRefresh = Pct;
+    Est.LastPctRefresh = Pct;
   }
-  else if (Pct - LastPctDraw > 1)
+  else if (Pct - Est.LastPctDraw > 1)
   {
     DrawBoatEstimateTrack(_CurPlayer.CurBoat, GetRaceMapFeatures(_CurPlayer.CurBoat));
-    LastPctDraw = Pct;
+    Est.LastPctDraw = Pct;
   }
 }
 

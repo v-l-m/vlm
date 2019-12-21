@@ -55,6 +55,8 @@ function Estimator(Boat)
     // Stop the estimator if Running
     if (this.Running)
     {
+      StatMGR.Stat("Estimator","Stop", CurBoat.Estimator.LastPctDraw);
+  
       this.Running = false;
       this.ReportProgress(true);
 
@@ -140,6 +142,8 @@ function Estimator(Boat)
     // Add Start point to estimate track
     this.EstimateTrack.push(new BoatEstimate(this.CurEstimate));
     this.ErrorCount = 0;
+    StatMGR.Stat("Estimator","Start");
+  
     setTimeout(this.Estimate.bind(this), 0);
 
   };
