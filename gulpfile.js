@@ -21,7 +21,8 @@ const gulp = require('gulp'),
   htmlmin = require('gulp-htmlmin'),
   runsequence = require('run-sequence'),
   gulpif = require('gulp-if'),
-  babel = require('gulp-babel');
+  babel = require('gulp-babel'),
+  UseGAStats = false;
 
 const VLMVersion = 22.7;
 var BuildTypeProd = false; // This is automatically set to true in prod build chains
@@ -35,6 +36,7 @@ gulp.task('scripts', function()
     .pipe(jshint.reporter('default'))
     .pipe(concat('jvlm_main.js'))
     .pipe(inject.replace('@@BUILD_TYPE@@', 'Dev'))
+    .pipe(inject.replace('@@TEST_GA_STATS@@', UseGAStats))
     .pipe(babel(
     {
       presets: ['@babel/env']
@@ -60,6 +62,7 @@ gulp.task('html', function()
     .pipe(inject.prepend("<!-- AUTO GENERATED FILE DO NOT MODIFY YOUR CHANGES WILL GET LOST-->"))
     .pipe(inject.replace('@@JVLMVERSION@@', 'V' + VLMVersion))
     .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
+    .pipe(inject.replace('@@TEST_GA_STATS@@', UseGAStats))
     .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
     .pipe(inject.replace('@@BUILD_TYPE@@', 'Dev'))
     .pipe(gulp.dest('jvlm'))
@@ -80,6 +83,7 @@ gulp.task('html_prod', function()
     .pipe(inject.replace('dist/jvlm_main.js', 'dist/jvlm_main.min.js'))
     .pipe(inject.replace('dist/jvlm_main.js', 'dist/jvlm_main.min.js'))
     .pipe(inject.replace('@@BUILD_TYPE@@', 'Prod'))
+    .pipe(inject.replace('@@TEST_GA_STATS@@', UseGAStats))
     .pipe(htmlmin(
     {
       collapseWhitespace: true,
@@ -102,6 +106,7 @@ gulp.task('guest_map', function()
     .pipe(inject.replace('@@VLMBUILDATE@@', Date()))
     .pipe(inject.replace('//JVLMBUILD', "= '" + new Date().toUTCString() + "'"))
     .pipe(inject.replace('@@BUILD_TYPE@@', 'Prod'))
+    .pipe(inject.replace('@@TEST_GA_STATS@@', UseGAStats))
     .pipe(gulpif(BuildTypeProd,inject.replace('dist/guest_map_babel.js', 'dist/guest_map_babel.min.js')))
     .pipe(gulpif(BuildTypeProd, htmlmin(
     {

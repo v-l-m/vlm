@@ -2031,7 +2031,7 @@
     window.dataLayer = window.dataLayer || [];
 
     
-    if ('Prod' === '@@BUILD_TYPE@@' && VLM2Prefs.GConsentDate)
+    if (('Prod' === '@@BUILD_TYPE@@' || @@TEST_GA_STATS@@) && VLM2Prefs.GConsentDate)
     {
       function gtag()
       {
