@@ -58,15 +58,32 @@ class StatsManager
       VLM2Prefs.Save();
     };
 
-    this.Stat = function (Evt,Par1,Par2)
+    this.Stat = function(Evt, EvtCategory, EvtLabel,  EvtValue)
     {
-      if (!this.NoStat && ga)
+      if (!this.NoStat && typeof(gtag) !== "undefined" && gtag)
       {
-        if (!Par2)
+        if (typeof (EvtCategory) === "undefined")
         {
-          Par2=" ";
+          EvtCategory = " ";
         }
-        ga('send', 'event', Evt,Par1,Par2);        
+
+        if (typeof(EvtValue) === "number")
+        {
+          gtag('event', Evt,
+          {
+            'event_category': EvtCategory,
+            'event_label': EvtLabel,
+            'value': EvtValue
+          });
+        }
+        else
+        {
+          gtag('event', Evt,
+          {
+            'event_category': EvtCategory,
+            'event_label': EvtLabel
+          });
+        }
       }
     };
   }
