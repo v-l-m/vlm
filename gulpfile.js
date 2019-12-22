@@ -22,7 +22,7 @@ const gulp = require('gulp'),
   runsequence = require('run-sequence'),
   gulpif = require('gulp-if'),
   babel = require('gulp-babel'),
-  UseGAStats = false;
+  UseGAStats = false;    // Set to true to add to stats when in dev
 
 const VLMVersion = 22.7;
 var BuildTypeProd = false; // This is automatically set to true in prod build chains
