@@ -55,14 +55,22 @@ function Estimator(Boat)
     // Stop the estimator if Running
     if (this.Running)
     {
-      StatMGR.Stat("Estimator","Stop", CurBoat.Estimator.LastPctDraw);
+      if (this.EstimateTrack)
+      {
+        StatMGR.Stat("Estimator","Stop", this.EstimateTrack.length);
+      }
+      else
+      {
+        StatMGR.Stat("Estimator","Stop", 0);
+      }
   
       this.Running = false;
       this.ReportProgress(true);
-
+      this.LastPctRefresh = -1;
+      this.LastPctDraw = -1;
       //Estimate complete, DrawBoat track
-      DrawBoat(this.Boat);
-
+      //DrawBoat(this.Boat);
+      this.ReportProgress(true);
     }
 
     return;
@@ -77,6 +85,8 @@ function Estimator(Boat)
     }
 
     this.Running = true;
+    this.LastPctRefresh = 0;
+    this.LastPctDraw = 0;
     GribMgr.Init();
 
     if (typeof this.Boat.VLMInfo === "undefined")
