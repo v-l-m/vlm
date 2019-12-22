@@ -1295,6 +1295,8 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#EstimatorStopButton").addClass("hidden");
     Est.LastPctRefresh = -1;
     Est.LastPctDraw = -1;
+    DrawBoat(_CurPlayer.CurBoat);
+    
   }
   else if (Pct - Est.LastPctRefresh > 0.25)
   {
