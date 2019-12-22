@@ -8,11 +8,10 @@ class PrefMgr
     this.MapPrefs = new MapPrefs();
     this.GConsentDate = null;
     this.GConsentLastNo = null;
+    //TODO need a GUI for this pref
+    this.InputDigits = 3;
     this.Init = function()
     {
-      this.GConsentDate = LoadLocalPref("GConsentDate", null);
-      this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
-      this.VLM2Storage = JSON.parse(LoadLocalPref("VLM2Storage", null));
       this.MapPrefs.Load();
       this.Load();
     };
@@ -20,6 +19,10 @@ class PrefMgr
     {
       if (store.enabled)
       {
+        this.GConsentDate = LoadLocalPref("GConsentDate", null);
+        this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
+        this.VLM2Storage = JSON.parse(LoadLocalPref("VLM2Storage", null));
+        this.InputDigits = JSON.parse(LoadLocalPref("InputDigits", 3));
         this.CurTheme = LoadLocalPref('CurTheme', "bleu-noir");
       }
     };
@@ -33,6 +36,7 @@ class PrefMgr
       store.set("GConsentDate", this.GConsentDate);
       store.set("GConsentLastNo", this.GConsentLastNo);
       store.set("VLM2Storage", JSON.stringify(this.VLM2Storage));
+      store.set("InputDigits", this.InputDigits);
 
     };
     this.UpdateVLMPrefs = function(p)
