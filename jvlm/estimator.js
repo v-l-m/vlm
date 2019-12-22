@@ -672,9 +672,9 @@ function Estimator(Boat)
         PrevIndex = CurTrackInDex;
       }
     }
-  }
 
-  return RetTracks;
-};
+
+    return RetTracks;
+  };
 
 }
