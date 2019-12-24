@@ -75,9 +75,9 @@ class VLM2GribManager
     this.GribStep = 0.5; // Grib Grid resolution
     this.LastGribDate = new Date(0);
     this.BeaufortCache = [];
-    this.BeaufortCacheHits=0;
-    this.BeaufortRecursionHits=0;
-    this.BeaufortCacheRatio=0;
+    this.BeaufortCacheHits = 0;
+    this.BeaufortRecursionHits = 0;
+    this.BeaufortCacheRatio = 0;
     this.Init = function()
     {
       if (this.Inited || this.Initing)
@@ -97,7 +97,7 @@ class VLM2GribManager
         if (this.BeaufortCache[wspeed])
         {
           this.BeaufortCacheHits++;
-          this.BeaufortCacheRatio=this.BeaufortCacheHits/(this.BeaufortCacheHits+this.BeaufortRecursionHits);
+          this.BeaufortCacheRatio = this.BeaufortCacheHits / (this.BeaufortCacheHits + this.BeaufortRecursionHits);
           return this.BeaufortCache[wspeed];
         }
         let MidBeaufort = Math.floor(MaxBeaufort / 2);
@@ -195,14 +195,22 @@ class VLM2GribManager
         return false;
       }
       // Ok, now we have the grib data in the table before and after requested time for requested position
-      var MI0 = this.GetHydbridMeteoAtTimeIndex(TableIndex, Lat, Lon);
-      var MI1 = this.GetHydbridMeteoAtTimeIndex(TableIndex + 1, Lat, Lon);
-      var u0 = MI0.UGRD;
-      var v0 = MI0.VGRD;
-      var u1 = MI1.UGRD;
-      var v1 = MI1.VGRD;
-      var DteOffset = Time / 1000 - this.TableTimeStamps[TableIndex];
-      var GInfo = new GribData(
+      let MI0 = this.GetHydbridMeteoAtTimeIndex(TableIndex, Lat, NormalizeLongitudeDeg(Lon));
+      if (!MI0)
+      {
+        return false;
+      }
+      let MI1 = this.GetHydbridMeteoAtTimeIndex(TableIndex + 1, Lat, NormalizeLongitudeDeg(Lon));
+      if (!MI1)
+      {
+        return false;
+      }
+      let u0 = MI0.UGRD;
+      let v0 = MI0.VGRD;
+      let u1 = MI1.UGRD;
+      let v1 = MI1.VGRD;
+      let DteOffset = Time / 1000 - this.TableTimeStamps[TableIndex];
+      let GInfo = new GribData(
       {
         UGRD: u0 + DteOffset / GribGrain * (u1 - u0),
         VGRD: v0 + DteOffset / GribGrain * (v1 - v0)
@@ -233,13 +241,19 @@ class VLM2GribManager
         Lat_pos -= 90;
       }
       // Compute grid index to get the values
-      let LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
-      let LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
+      let LonIdx1 = (180 / this.GribStep + Math.floor(Lon / this.GribStep) + 360.0 / this.GribStep) % (360 / this.GribStep);
+      let LatIdx1 = (90 / this.GribStep + Math.floor(Lat / this.GribStep) + 180.0 / this.GribStep) % (180 / this.GribStep);
       let LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
       let LatIdx2 = (LatIdx1 + 1) % (180 / this.GribStep);
       let dX = (Lon_pos / this.GribStep - Math.floor(Lon_pos / this.GribStep));
       let dY = (Lat_pos / this.GribStep - Math.floor(Lat_pos / this.GribStep));
-      // Get UVS for each 4 grid points
+      /*// Get UVS for each 4 grid points
+      if (!this.Tables[TableIndex] || !this.Tables[TableIndex][LonIdx1] || !this.Tables[TableIndex][LonIdx2] ||
+        !this.Tables[TableIndex][LonIdx1][LatIdx1] || !this.Tables[TableIndex][LonIdx1][LatIdx2] ||
+        !this.Tables[TableIndex][LonIdx2][LatIdx2] || !this.Tables[TableIndex][LonIdx2][LatIdx1])
+      {
+        return null;
+      }*/
       let U00 = this.Tables[TableIndex][LonIdx1][LatIdx1].UGRD;
       let U01 = this.Tables[TableIndex][LonIdx1][LatIdx2].UGRD;
       let U10 = this.Tables[TableIndex][LonIdx2][LatIdx1].UGRD;
@@ -369,7 +383,7 @@ class VLM2GribManager
         }
         for (let index in e.gribs_url)
         {
-          if (e.gribs_interim_url )
+          if (e.gribs_interim_url)
           {
             if (e.gribs_interim_url[index])
             {
@@ -536,12 +550,12 @@ class VLM2GribManager
         Ret.DateIndex = parseInt(Fields[POS_INDEX].substring(0, Fields[POS_INDEX].indexOf("hr")), 10) / 3;
 
         // Expand weather date duration if found in the catalog
-        let ForecastHour = new Date(this.MinWindStamp.getTime()+3*3600000*Ret.DateIndex);
+        let ForecastHour = new Date(this.MinWindStamp.getTime() + 3 * 3600000 * Ret.DateIndex);
         if (ForecastHour > this.MaxWindStamp)
         {
           this.MaxWindStamp = ForecastHour;
-          this.WindTableLength = Ret.DateIndex+1;
-          this.TableTimeStamps[Ret.DateIndex]=ForecastHour.getTime()/1000;
+          this.WindTableLength = Ret.DateIndex + 1;
+          this.TableTimeStamps[Ret.DateIndex] = ForecastHour.getTime() / 1000;
         }
       }
       return Ret;

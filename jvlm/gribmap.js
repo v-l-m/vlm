@@ -144,7 +144,7 @@ GribMap.Layer = L.Layer.extend(
     this._DrawWindArea(ctx, InCallBack);
 
   },
-  _DrawWindArea: function(ctx, InCallBack)
+  _DrawWindArea: function(ctx, InCallBack, CallBackX, CallBackY)
   {
 
     this.DrawWindDebugCnt++;
@@ -173,11 +173,18 @@ GribMap.Layer = L.Layer.extend(
     let StopGribRequets = false;
     let MI = null;
 
+    if (InCallBack && typeof CallBackX !== "undefined" && typeof CallBackY !== "undefined")
+    {
+      MinX = CallBackX;
+      MaxX = CallBackX;
+      MinY = CallBackY;
+      MaxY = CallBackY;      
+    }
     for (let x = MinX; x <= MaxX; x += DX)
     {
       for (let y = MinY; y <= MaxY; y += DY)
       {
-
+        
         //Récupère le vent et l'affiche en l'absence d'erreur
         try
         {
@@ -190,7 +197,7 @@ GribMap.Layer = L.Layer.extend(
               /* jshint -W083*/
               InCallBack ? null : function()
               {
-                self._update(true);
+                self._update(true, x, y);
               });
             /*jshint +W083*/
             if (!MI)
