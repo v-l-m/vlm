@@ -10,22 +10,39 @@ class PrefMgr
     this.GConsentLastNo = null;
     //TODO need a GUI for this pref
     this.InputDigits = 3;
+    this.RacesStorageLUT=[];
+    this.VLMRacesStorage = [];
+
     this.Init = function()
     {
       this.MapPrefs.Load();
       this.Load();
     };
+
     this.Load = function()
     {
       if (store.enabled)
       {
         this.GConsentDate = LoadLocalPref("GConsentDate", null);
         this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
-        this.VLM2Storage = JSON.parse(LoadLocalPref("VLM2Storage", null));
+        this.VLMRacesStorage = JSON.parse(LoadLocalPref("VLMRacesStorage", null));
         this.InputDigits = JSON.parse(LoadLocalPref("InputDigits", 3));
         this.CurTheme = LoadLocalPref('CurTheme', "bleu-noir");
+
+        if (!this.VLMRacesStorage)
+        {
+          this.VLMRacesStorage = [];
+        }
+        for (let index in this.VLMRacesStorage)
+        {
+          if (this.VLMRacesStorage[index])
+          {
+            this.RacesStorageLUT[this.VLMRacesStorage[index].RaceId]=index;
+          }
+        }
       }
     };
+
     this.Save = function()
     {
       if (store.enabled)
@@ -35,10 +52,11 @@ class PrefMgr
       this.MapPrefs.Save();
       store.set("GConsentDate", this.GConsentDate);
       store.set("GConsentLastNo", this.GConsentLastNo);
-      store.set("VLM2Storage", JSON.stringify(this.VLM2Storage));
+      store.set("VLMRacesStorage", JSON.stringify(this.VLMRacesStorage));
       store.set("InputDigits", this.InputDigits);
 
     };
+
     this.UpdateVLMPrefs = function(p)
     {
       switch (p.mapOpponents)
@@ -68,6 +86,24 @@ class PrefMgr
         default:
           VLMAlertDanger("unexpected mapping option : " + p.mapOpponents);
       }
+    };
+
+    this.GetRaceFromStorage=function(RaceId)
+    {
+    
+      if (this.RacesStorageLUT[RaceId])
+      {
+        return VLM2Prefs.VLMRacesStorage[this.RacesStorageLUT[RaceId]];
+      }
+      else
+      {
+        let RaceStorage = new Race(RaceId);
+        let index = this.VLMRacesStorage.length;
+        this.VLMRacesStorage[index]=RaceStorage;
+        this.Save();
+        return RaceStorage;
+      }
+    
     };
   }
 }

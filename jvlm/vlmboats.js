@@ -302,6 +302,10 @@ function GetRaceInfoFromServer(Boat, TargetTab)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
+    if (!CheckRaceUpdates(Boat.RaceInfo))
+    {
+      VLMAlertInfo("Race update" + Boat.RaceInfo.UpdateReason);
+    }
     DrawRaceGates(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
