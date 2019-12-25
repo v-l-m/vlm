@@ -157,7 +157,21 @@ function VLMPosition(lon, lat, format)
     Lon = Rad2Deg(Lon);
     Lat = Rad2Deg(Lat);
 
-    return new VLMPosition(NormalizeLongitudeDeg(Lon), Lat);
+    if (Lon*this.Lon.Value < 0 && Math.abs(this.Lon.Value-Lon)>90)
+    {
+      let Sign = 1;
+      // Antimeridien crossing
+      if (this.Lon.Value-Lon <0)
+      {
+        Sign =-1;
+      }
+      return new VLMPosition(Lon+360*Sign, Lat);
+    }
+    else
+    {
+      return new VLMPosition((Lon), Lat);    
+    }
+    
 
 
   };
