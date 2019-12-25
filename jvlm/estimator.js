@@ -57,11 +57,11 @@ function Estimator(Boat)
     {
       if (this.EstimateTrack)
       {
-        StatMGR.Stat("Estimator", "Stop", this.EstimateTrack.length);
+        StatMGR.Stat("Estimator_Stop", null,null, this.EstimateTrack.length);
       }
       else
       {
-        StatMGR.Stat("Estimator", "Stop", 0);
+        StatMGR.Stat("Estimator_Stop", null,null, 0);
       }
 
       this.Running = false;
@@ -152,7 +152,7 @@ function Estimator(Boat)
     // Add Start point to estimate track
     this.EstimateTrack.push(new BoatEstimate(this.CurEstimate));
     this.ErrorCount = 0;
-    StatMGR.Stat("Estimator", "Start");
+    StatMGR.Stat("Estimator_Start");
 
     setTimeout(this.Estimate.bind(this), 0);
 
