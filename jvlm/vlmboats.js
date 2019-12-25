@@ -486,25 +486,25 @@ function GetPilototoMarkerText(Order)
 
   let Text = "Date : " + GetLocalUTCTime(OrderMoment, true, true) +
     '<BR>' + OrderMoment.fromNow();
-  switch (parseInt(Order.PIM,10))
+  switch (parseInt(Order.PIM, 10))
   {
     case PM_ANGLE:
-        Text += '<BR>' + GetLocalizedString('constantengaged') + ' : ' + Order.PIP + '°';
+      Text += '<BR>' + GetLocalizedString('constantengaged') + ' : ' + Order.PIP + '°';
       break;
     case PM_HEADING:
-        Text += '<BR>' + GetLocalizedString('heading') + ' : ' + Order.PIP + '°';
+      Text += '<BR>' + GetLocalizedString('heading') + ' : ' + Order.PIP + '°';
       break;
     case PM_ORTHO:
-        Text += '<BR>' + GetLocalizedString('OrthoToWP') + ' : ' + Order.PIP;
+      Text += '<BR>' + GetLocalizedString('OrthoToWP') + ' : ' + Order.PIP;
       break;
     case PM_VMG:
-        Text += '<BR>' + GetLocalizedString('bestvmgengaged') + ' : ' + Order.PIP;
+      Text += '<BR>' + GetLocalizedString('bestvmgengaged') + ' : ' + Order.PIP;
       break;
     case PM_VBVMG:
-        Text += '<BR>' + GetLocalizedString('vbvmgengaged') + ' : ' + Order.PIP;
+      Text += '<BR>' + GetLocalizedString('vbvmgengaged') + ' : ' + Order.PIP;
       break;
     default:
-        Text += '<BR> Strange PIM' + Order.PIM + ' : ' + Order.PIP;
+      Text += '<BR> Strange PIM' + Order.PIM + ' : ' + Order.PIP;
       break;
 
   }
@@ -564,10 +564,10 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
         let Order = PilotPoints[index];
         let Coords = [Order.Pos.Lat.Value, Order.Pos.Lon.Value];
         let SetText = false;
-        if (RaceFeatures.PilotMarkers[index] && ! RaceFeatures.PilotMarkers[index]._map)
+        if (RaceFeatures.PilotMarkers[index] && !RaceFeatures.PilotMarkers[index]._map)
         {
           RaceFeatures.PilotMarkers[index].setLatLng(Coords);
-          SetText=true;
+          SetText = true;
         }
         else if (!RaceFeatures.PilotMarkers[index])
         {
@@ -576,8 +576,8 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
           {
             icon: Marker
           });
-          SetText=true;
-        }        
+          SetText = true;
+        }
 
         if (SetText)
         {
@@ -1603,7 +1603,7 @@ function DrawOpponents(Boat)
   let friends = [];
   let index;
   let RaceFeatures = GetRaceMapFeatures(Boat);
-    
+
 
   // Map friend only if selection is active
   if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel)
@@ -1624,7 +1624,7 @@ function DrawOpponents(Boat)
 
           if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers, 10) !== Boat.IdBoat))
           {
-            AddOpponent(Boat, RaceFeatures, Opp, true);      
+            AddOpponent(Boat, RaceFeatures, Opp, true);
           }
         }
       }
