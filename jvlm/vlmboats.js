@@ -612,16 +612,8 @@ function RepositionCompass(Boat)
 
 function DrawBoatTrack(Boat, RaceFeatures)
 {
-  let PointList = [];
-  let TrackLength = Boat.Track.length;
-  let PrevLon = 99999;
-  let LonOffSet = 0;
+  let PointList = GetSafeTrackPointList(Boat.Track);
 
-  for (let index = 0; index < TrackLength; index++)
-  {
-    let P = Boat.Track[index];
-    PointList.push([P.Lat.Value, P.Lon.Value]);
-  }
   var TrackColor = Boat.VLMInfo.COL;
   TrackColor = SafeHTMLColor(TrackColor);
   let TrackFeature = RaceFeatures.BoatTrack;
@@ -640,6 +632,34 @@ function DrawBoatTrack(Boat, RaceFeatures)
   }
 
 }
+
+function GetSafeTrackPointList(Track)
+{
+  let PointList=[];
+  let TrackLength = Track.length;
+  let PrevLon = 0;
+  let LonOffSet = 0;
+  for (let index = TrackLength - 1; index >= 0; index--)
+  {
+    let P = Track[index];
+    if ((PrevLon * P.Lon.Value < 0) && (Math.abs(P.Lon.Value - PrevLon) > 90))
+    {
+      if (PrevLon < 0)
+      {
+        LonOffSet -= 360;
+      }
+      else
+      {
+        LonOffSet += 360;
+      }
+    }
+    PointList.unshift([P.Lat.Value, P.Lon.Value + LonOffSet]);
+    PrevLon = P.Lon.Value;
+  }
+
+  return PointList;
+}
+
 
 function DrawBoatPolar(Boat, CenterMapOnBoat, RaceFeatures)
 {
@@ -1720,11 +1740,11 @@ function DrawOpponents(Boat)
           {
             let k = Object.keys(T.DatePos)[PointIndex];
             let P = T.DatePos[k];
-            let Pi = [P.lat, P.lon];
+            let Pi = new VLMPosition( P.lon,P.lat);
 
             TrackPoints.push(Pi);
           }
-          T.OppTrackPoints = TrackPoints;
+          T.OppTrackPoints = GetSafeTrackPointList(TrackPoints);
         }
 
         if (typeof RaceFeatures.OppTrack === "undefined")
@@ -2071,7 +2091,7 @@ function DrawOpponentTrack(IdBoat, OppInfo)
     {
       console.log(" GetTrack ignore before next update" + PendingID + " " + StartTime);
     }
-    DrawBoat(B);
+    //DrawBoat(B);
   }
 }
 
