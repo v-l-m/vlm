@@ -164,7 +164,7 @@ class VLM2GribManager
         return false;
       }
       const GribGrain = 3.0 * 3600.0; // 1 grib every 3 hours.
-      var TableIndex = Math.floor((Time / 1000.0 - this.MinWindStamp / 1000) / (GribGrain));
+      let TableIndex = Math.floor((Time / 1000.0 - this.MinWindStamp / 1000) / (GribGrain));
       if (TableIndex < 0)
       {
         // Before avaible grib 
@@ -277,16 +277,16 @@ class VLM2GribManager
     };
     this.QuadraticAverage = function(V00, V01, v10, V11, dX, dY)
     {
-      var V0 = V00 + dY * (V01 - V00);
-      var V1 = v10 + dY * (V11 - v10);
+      let V0 = V00 + dY * (V01 - V00);
+      let V1 = v10 + dY * (V11 - v10);
       return V0 + dX * (V1 - V0);
     };
     this.CheckGribLoaded = function(TableIndex, Lat, Lon, callback)
     {
-      var LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
-      var LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
-      var LonIdx2 = 180 / this.GribStep + Math.ceil(Lon / this.GribStep);
-      var LatIdx2 = 90 / this.GribStep + Math.ceil(Lat / this.GribStep);
+      let LonIdx1 = 180 / this.GribStep + Math.floor(Lon / this.GribStep);
+      let LatIdx1 = 90 / this.GribStep + Math.floor(Lat / this.GribStep);
+      let LonIdx2 = 180 / this.GribStep + Math.ceil(Lon / this.GribStep);
+      let LatIdx2 = 90 / this.GribStep + Math.ceil(Lat / this.GribStep);
       if (TableIndex in this.Tables)
       {
         if (this.Tables[TableIndex][LonIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx2] &&
@@ -306,7 +306,7 @@ class VLM2GribManager
     {
       if (isNaN(LonIdx) || isNaN(LatIdx))
       {
-        var dbgpt = 0;
+        let dbgpt = 0;
       }
       if (this.Tables.length && this.Tables[TableIndex] && this.Tables[TableIndex][LonIdx] && this.Tables[TableIndex][LonIdx][LatIdx])
       {
@@ -314,12 +314,12 @@ class VLM2GribManager
       }
       //Getting there means we need to load from server
       // Get samrtgrib list for the current request position
-      var RequestSize = 5; // Assume 5° zone even though VLM request is for 15°. Most request will only return 1 zone.
-      var Lat = (LatIdx * this.GribStep - 90);
-      var Lon = (LonIdx * this.GribStep - 180);
-      var SouthStep = Math.floor(Lat / RequestSize) * RequestSize;
-      var WestStep = Math.floor(Lon / RequestSize) * RequestSize;
-      var NorthStep, EastStep;
+      let RequestSize = 5; // Assume 5° zone even though VLM request is for 15°. Most request will only return 1 zone.
+      let Lat = (LatIdx * this.GribStep - 90);
+      let Lon = (LonIdx * this.GribStep - 180);
+      let SouthStep = Math.floor(Lat / RequestSize) * RequestSize;
+      let WestStep = Math.floor(Lon / RequestSize) * RequestSize;
+      let NorthStep, EastStep;
       if (Lat < SouthStep)
       {
         NorthStep = SouthStep;
@@ -431,7 +431,7 @@ class VLM2GribManager
 
     this.ForceReloadGribCache = function(LoadKey, Url)
     {
-      var Seed = 0; //parseInt(new Date().getTime(),10);
+      let Seed = 0; //parseInt(new Date().getTime(),10);
       $.get("/cache/gribtiles/" + Url + "&force=yes&seed=" + Seed, this.HandleSmartGribData.bind(this, LoadKey, Url));
     };
 
@@ -446,11 +446,11 @@ class VLM2GribManager
       // Handle cache mess
       if (Data === "--\n")
       {
-        /*var Parms = Url.split("/")
+        /*let Parms = Url.split("/")
         this.LoadQueue[LoadKey]++;
         if (Parms[2] != 15)
         {
-          var i = 0;
+          let i = 0;
         }
         //$.get("/gribtiles.php?south="+ Parms[0]+"&west="+Parms[1]+"&step="+ Parms[2]+"&fmt=txt",this.HandleSmartGribData .bind(this,LoadKey, Url));
         */
@@ -465,8 +465,8 @@ class VLM2GribManager
       // Loop data catalog
       for (let i = 0; i < TotalLines; i++)
       {
-        var Line = Lines[i];
-        if (Line === "--")
+        let Line = Lines[i];
+        if (Line === "--" || Line.search(":") ==-1)
         {
           DataStartIndex = i + 1;
           break;
@@ -477,6 +477,7 @@ class VLM2GribManager
           Catalog.push(this.ProcessCatalogLine(Line));
         }
       }
+
       if (Catalog.length < this.WindTableLength)
       {
         // Force reloading, it table is shorter than windlist
@@ -484,7 +485,7 @@ class VLM2GribManager
         return;
       }
       // Now Process the data
-      var ZoneOffsets = Url.split("/");
+      let ZoneOffsets = Url.split("/");
       for (let i = 0; i < Catalog.length; i++)
       {
         if (typeof Lines[DataStartIndex] === "undefined" || Lines[DataStartIndex] === "")
@@ -494,21 +495,22 @@ class VLM2GribManager
           this.ForceReloadGribCache(LoadKey, Url);
           break;
         }
-        var DataSize = Lines[DataStartIndex].split(" ");
-        var NbLon = parseInt(DataSize[0], 10);
-        var NbLat = parseInt(DataSize[1], 10);
-        var StartLon = 180 / this.GribStep + parseInt(ZoneOffsets[1], 10) / this.GribStep;
-        for (var LonIdx = 0; LonIdx < NbLon; LonIdx++)
+        let DataSize = Lines[DataStartIndex].split(" ");
+        let NbLon = parseInt(DataSize[0], 10);
+        let NbLat = parseInt(DataSize[1], 10);
+
+        let StartLon = 180 / this.GribStep + parseInt(ZoneOffsets[1], 10) / this.GribStep;
+        for (let LonIdx = 0; LonIdx < NbLon; LonIdx++)
         {
           // Offset by NbLat in grib since the zone is reference by bottom lat, but counts down from top lat
-          var StartLat = NbLat + 90 / this.GribStep + parseInt(ZoneOffsets[0], 10) / this.GribStep;
-          for (var LatIdx = 0; LatIdx < NbLat; LatIdx++)
+          let StartLat = NbLat + 90 / this.GribStep + parseInt(ZoneOffsets[0], 10) / this.GribStep;
+          for (let LatIdx = 0; LatIdx < NbLat; LatIdx++)
           {
             if (!(Catalog[i].DateIndex in this.Tables))
             {
               this.Tables[Catalog[i].DateIndex] = [];
             }
-            var CurTable = this.Tables[Catalog[i].DateIndex];
+            let CurTable = this.Tables[Catalog[i].DateIndex];
             if (!(StartLon + LonIdx in CurTable))
             {
               CurTable[StartLon + LonIdx] = [];
@@ -517,7 +519,7 @@ class VLM2GribManager
             {
               CurTable[StartLon + LonIdx][StartLat - LatIdx - 1] = null;
             }
-            var GribPoint = this.Tables[Catalog[i].DateIndex][StartLon + LonIdx][StartLat - LatIdx - 1];
+            let GribPoint = this.Tables[Catalog[i].DateIndex][StartLon + LonIdx][StartLat - LatIdx - 1];
             if (typeof GribPoint === "undefined" || !GribPoint)
             {
               GribPoint = new GribData();
@@ -538,8 +540,8 @@ class VLM2GribManager
     {
       const POS_TYPE = 3;
       const POS_INDEX = 12;
-      var Ret = new WindCatalogLine();
-      var Fields = Line.split(":");
+      let Ret = new WindCatalogLine();
+      let Fields = Line.split(":");
       Ret.Type = Fields[POS_TYPE];
       if ((typeof Fields[POS_INDEX] === "undefined") || (Fields[POS_INDEX] === "anl"))
       {
@@ -592,19 +594,19 @@ class WindTable
   }
 }
 
-var GribMgr = new VLM2GribManager();
+let GribMgr = new VLM2GribManager();
 
 GribMgr.Init();
 
 
 function HandleGribTestClick(e)
 {
-  var Boat = _CurPlayer.CurBoat;
+  let Boat = _CurPlayer.CurBoat;
 
-  for (var index = 0; index <= 0; index++)
+  for (let index = 0; index <= 0; index++)
   {
-    var time = new Date(Boat.VLMInfo.LUP * 1000 + index * Boat.VLMInfo.VAC * 1000);
-    var Mi = GribMgr.WindAtPointInTime(time, Boat.VLMInfo.LAT, Boat.VLMInfo.LON);
+    let time = new Date(Boat.VLMInfo.LUP * 1000 + index * Boat.VLMInfo.VAC * 1000);
+    let Mi = GribMgr.WindAtPointInTime(time, Boat.VLMInfo.LAT, Boat.VLMInfo.LON);
 
     if (Mi)
     {
