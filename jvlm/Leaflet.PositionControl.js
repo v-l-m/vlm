@@ -40,7 +40,14 @@ L.Control.WindMouseControl = L.Control.extend(
   {
     let Lat = (e.latlng.lat);
     let Lon = (e.latlng.lng);
-    let MI = GribMgr.WindAtPointInTime(map.GribMap.GetGribMapTime(), Lat, Lon);
+    let CurZoom = this._map.getZoom();
+
+    let MI = null;
+    
+    if (CurZoom>=MIN_MAP_ZOOM)
+    {
+      MI=GribMgr.WindAtPointInTime(map.GribMap.GetGribMapTime(), Lat, Lon);
+    }
 
     let FieldMappings = [];
     FieldMappings.push([FIELD_MAPPING_TEXT, "#LWM_Lat", RoundPow(Lat, 3)]);
@@ -63,7 +70,7 @@ L.Control.WindMouseControl = L.Control.extend(
     }
 
     FillFieldsFromMappingTable(FieldMappings);
-    this._SetZoom(this._map.getZoom());
+    this._SetZoom(CurZoom);
   },
   _ZoomEnd: function(e)
   {

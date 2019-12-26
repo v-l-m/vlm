@@ -1,4 +1,9 @@
+
+// Server index for multiple grib/tile servers
 var SrvIndex = 1;
+
+// Minimum map zoom fo rgrib requests
+var MIN_MAP_ZOOM = 5;
 
 // Global GribMap Manager
 var GribMap = {};
@@ -157,7 +162,7 @@ GribMap.Layer = L.Layer.extend(
     bounds = this._map.getBounds();
     zoom = this._map.getZoom();
 
-    if (zoom < 5)
+    if (zoom < MIN_MAP_ZOOM)
     {
       return ; 
     }
