@@ -283,6 +283,17 @@ $opts['fdd']['updated'] = array(
   'sqlw'    =>  'CURRENT_TIMESTAMP',
 );
 
+$opts['fdd']['racelength'] = array(
+  'name'    => 'racelength',
+  //'input'   => 'R',
+//  'sql|LFVD' => 'FROM_UNIXTIME(updated)',
+  'maxlen'  => 20,
+  'sort'    => true,
+  'help'    => 'Race expected length',
+  'select'  => 'T',
+  //'sqlw'    =>  'CURRENT_TIMESTAMP',
+);
+
 $opts['triggers']['delete']['before'][0] = 'races.TBD.trigger.php';
 $opts['triggers']['delete']['after'][0] = 'races.TAD.trigger.php';
 $opts['triggers']['insert']['pre'][0] = 'races.TPI.trigger.php';
