@@ -89,7 +89,7 @@
 
       //Main table 'races'
       $sqlraces = "INSERT INTO races (idraces, racename, started, deptime, startlong, startlat, boattype, closetime, racetype, firstpcttime, \n                   ".
-                  "depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq, UpdateReason) \n          ".
+                  "depend_on, qualifying_races, idchallenge, coastpenalty, bobegin, boend, maxboats, theme, vacfreq, UpdateReason, racelength) \n          ".
                   " VALUES (".$idraceto.", ".
                   sqlit($import, "racename", 'string').
                   sqlit($import, "started").
@@ -109,7 +109,8 @@
                   sqlit($import, "maxboats").
                   sqlit($import, "theme", 'string').
                   sqlit($import, "vacfreq", 'int').
-                  sqlit($import, "UpdateReason",'string',false,'').
+                  sqlit($import, "UpdateReason",'string',true,'').
+                  sqlit($import, "racelength", 'int',false).
                   " );";
       check_unicity('races', "idraces = $idraceto", $umessage);
       exec_sql($sqlraces, $printsql, $dryrun);
