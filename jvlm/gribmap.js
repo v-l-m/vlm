@@ -1,4 +1,3 @@
-
 // Server index for multiple grib/tile servers
 var SrvIndex = 1;
 
@@ -48,7 +47,7 @@ class Pixel
   }
 }
 
-var BeaufortColors = ['#FFFFFF','#9696E1','#508CCD','#3C64B4','#41B464','#B4CD0A','#D2D216','#E1D220','#FFB300','#FF6F00','#FF2B00','#E60000','#7F0000'];
+var BeaufortColors = ['#FFFFFF', '#9696E1', '#508CCD', '#3C64B4', '#41B464', '#B4CD0A', '#D2D216', '#E1D220', '#FFB300', '#FF6F00', '#FF2B00', '#E60000', '#7F0000'];
 
 // Leaflet Extension layet to draw wind arrows
 // Highly inspired from Leaflet Heat plugin
@@ -85,13 +84,13 @@ GribMap.Layer = L.Layer.extend(
   },
   _CheckDensity()
   {
-    if (this._width<500 || this.height<500)
+    if (this._width < 500 || this.height < 500)
     {
-      this._Density=5;
+      this._Density = 5;
     }
     else
     {
-      this._Density=10;
+      this._Density = 10;
     }
   },
   onAdd: function(map)
@@ -102,10 +101,10 @@ GribMap.Layer = L.Layer.extend(
 
     this._width = size.x;
     this._height = size.y;
-    this._canvas.width = size.x ;
-    this._canvas.height = size.y ;
+    this._canvas.width = size.x;
+    this._canvas.height = size.y;
     this._CheckDensity();
-    
+
     this._canvas.style.width = size.x + 'px';
     this._canvas.style.height = size.y + 'px';
     this._canvas.style.position = 'absolute';
@@ -164,7 +163,7 @@ GribMap.Layer = L.Layer.extend(
 
     if (zoom < MIN_MAP_ZOOM)
     {
-      return ; 
+      return;
     }
 
     let MinX = bounds.getWest();
@@ -175,7 +174,6 @@ GribMap.Layer = L.Layer.extend(
     let DY = (MaxY - MinY) / this._Density;
     let LatLng = L.latLng(MaxY, MinX);
     let p0 = map.project(LatLng, zoom);
-    let StopGribRequets = false;
     let MI = null;
 
     if (InCallBack && typeof CallBackX !== "undefined" && typeof CallBackY !== "undefined")
@@ -183,44 +181,38 @@ GribMap.Layer = L.Layer.extend(
       MinX = CallBackX;
       MaxX = CallBackX;
       MinY = CallBackY;
-      MaxY = CallBackY;      
+      MaxY = CallBackY;
     }
     for (let x = MinX; x <= MaxX; x += DX)
     {
       for (let y = MinY; y <= MaxY; y += DY)
       {
-        
+
         //Récupère le vent et l'affiche en l'absence d'erreur
         try
         {
           //winfo = windarea.getWindInfo2(LonLat.lat, LonLat.lon, this.time, wante, wpost);
           //this.drawWind(ctx, p.x, p.y, winfo);
-          if (!StopGribRequets)
-          {
-            let self = this;
-            MI = GribMgr.WindAtPointInTime(this._Time, y, x,
-              /* jshint -W083*/
-              InCallBack ? null : function()
-              {
-                self._update(true, x, y);
-              });
-            /*jshint +W083*/
-            if (!MI)
+
+          let self = this;
+          MI = GribMgr.WindAtPointInTime(this._Time, y, x,
+            /* jshint -W083*/
+            InCallBack ? null : function()
             {
-              StopGribRequets = true;
-            }
-          }
-          let LatLng = L.latLng(y, x);
-          let p = map.project(LatLng, zoom);
+              self._update(true, x, y);
+            });
+          /*jshint +W083*/
 
           if (MI)
           {
+            let LatLng = L.latLng(y, x);
+            let p = map.project(LatLng, zoom);
             this._drawWind(ctx, p.x - p0.x, p.y - p0.y, zoom, MI.Speed, MI.Heading);
           }
-          else
+          /*else
           {
             this._drawWind(ctx, p.x - p0.x, p.y - p0.y, zoom, 0, 0);
-          }
+          }*/
 
         }
         catch (error)
