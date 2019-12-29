@@ -72,9 +72,13 @@ var GateDirMarker = L.Icon.extend(
   }
 });
 
-function GetPilototoMarker()
+function GetPilototoMarker(Order,OrderIndex)
 {
-  return new PilototoMarker();
+  let ret= new PilototoMarker();
+  ret.Order = Order;
+  ret.OrderIndex=OrderIndex;
+
+  return ret;
 }
 
 function GetBuoyMarker(Buoy1)

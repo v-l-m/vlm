@@ -571,11 +571,11 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
         }
         else if (!RaceFeatures.PilotMarkers[index])
         {
-          let Marker = GetPilototoMarker(Order);
+          let Marker = GetPilototoMarker(Order,index);
           RaceFeatures.PilotMarkers[index] = L.marker(Coords,
           {
             icon: Marker
-          });
+          }).on("popupopen", HandlePilototoPopup);
           SetText = true;
         }
 
@@ -588,6 +588,13 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
     }
 
   }
+}
+
+function HandlePilototoPopup(e)
+{
+  let Marker = e.popup._source.options.icon;
+  let MarkerText = GetPilototoMarkerText(Marker.Order);
+  e.sourceTarget.unbindPopup().bindPopup(MarkerText);
 }
 
 function RepositionCompass(Boat)
