@@ -10,7 +10,7 @@ class PrefMgr
     this.GConsentLastNo = null;
     //TODO need a GUI for this pref
     this.InputDigits = 3;
-    this.RacesStorageLUT=[];
+    this.RacesStorageLUT = [];
     this.VLMRacesStorage = [];
 
     this.Init = function()
@@ -25,7 +25,15 @@ class PrefMgr
       {
         this.GConsentDate = LoadLocalPref("GConsentDate", null);
         this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
-        this.VLMRacesStorage = JSON.parse(LoadLocalPref("VLMRacesStorage", null));
+        try
+        {
+          // Work around json errors or tampering
+          this.VLMRacesStorage = JSON.parse(LoadLocalPref("VLMRacesStorage", null));
+        }
+        catch (e)
+        {
+          this.VLMRacesStorage = null;
+        }
         this.InputDigits = JSON.parse(LoadLocalPref("InputDigits", 3));
         this.CurTheme = LoadLocalPref('CurTheme', "bleu-noir");
 
@@ -37,7 +45,7 @@ class PrefMgr
         {
           if (this.VLMRacesStorage[index])
           {
-            this.RacesStorageLUT[this.VLMRacesStorage[index].RaceId]=index;
+            this.RacesStorageLUT[this.VLMRacesStorage[index].RaceId] = index;
           }
         }
       }
@@ -88,9 +96,9 @@ class PrefMgr
       }
     };
 
-    this.GetRaceFromStorage=function(RaceId)
+    this.GetRaceFromStorage = function(RaceId)
     {
-    
+
       if (this.RacesStorageLUT[RaceId])
       {
         return VLM2Prefs.VLMRacesStorage[this.RacesStorageLUT[RaceId]];
@@ -99,11 +107,11 @@ class PrefMgr
       {
         let RaceStorage = new Race(RaceId);
         let index = this.VLMRacesStorage.length;
-        this.VLMRacesStorage[index]=RaceStorage;
+        this.VLMRacesStorage[index] = RaceStorage;
         this.Save();
         return RaceStorage;
       }
-    
+
     };
   }
 }
