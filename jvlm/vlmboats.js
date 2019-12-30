@@ -593,8 +593,13 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
 function HandlePilototoPopup(e)
 {
   let Marker = e.popup._source.options.icon;
-  let MarkerText = GetPilototoMarkerText(Marker.Order);
-  e.sourceTarget.unbindPopup().bindPopup(MarkerText);
+  if (!Marker.Opening)
+  {
+    Marker.Opening = true;
+    let MarkerText = GetPilototoMarkerText(Marker.Order);
+    e.sourceTarget.unbindPopup().bindPopup(MarkerText).closePopup().openPopup();
+    Marker.Opening = null;
+  }
 }
 
 function RepositionCompass(Boat)
