@@ -244,7 +244,7 @@ function Pilototo(_orig,_json) {
 			//debug("into render step2");
 
 			// UI JQuery Tabs
-			// Pilototo.myPttDivTab.tabs({event: "mouseover"}); //abandonné c'est moche finalement 
+			// Pilototo.myPttDivTab.tabs({event: "mouseover"}); //abandonnï¿½ c'est moche finalement 
 			Pilototo.myPttDivTab.tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
 			Pilototo.myPttDivTab.tabs().children('ul').children('li').removeClass('ui-corner-top').addClass('ui-corner-left');
 

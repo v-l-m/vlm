@@ -13,6 +13,23 @@ class PrefMgr
     this.RacesStorageLUT = [];
     this.VLMRacesStorage = [];
 
+    this.ClearRaceData= function(RaceId)
+    {
+      if (this.RacesStorageLUT[RaceId])
+      {
+        VLM2Prefs.VLMRacesStorage.splice(this.RacesStorageLUT[RaceId],1);
+        this.RacesStorageLUT.splice(RaceId,1);
+        this.Save();
+      }
+      
+      return;
+    };
+
+    this.HasRaceStorage = function(RaceId)
+    {
+      return typeof  this.RacesStorageLUT !== "undefined" && typeof  this.RacesStorageLUT[RaceId] !== "undefined";
+    }
+
     this.Init = function()
     {
       this.MapPrefs.Load();
@@ -101,13 +118,14 @@ class PrefMgr
 
       if (this.RacesStorageLUT[RaceId])
       {
-        return VLM2Prefs.VLMRacesStorage[this.RacesStorageLUT[RaceId]];
+        return this.VLMRacesStorage[this.RacesStorageLUT[RaceId]];
       }
       else
       {
         let RaceStorage = new Race(RaceId);
         let index = this.VLMRacesStorage.length;
         this.VLMRacesStorage[index] = RaceStorage;
+        this.RacesStorageLUT[RaceId]=index;
         this.Save();
         return RaceStorage;
       }

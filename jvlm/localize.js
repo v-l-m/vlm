@@ -1,138 +1,142 @@
  var _LocaleDict;
  var _EnDict;
- var _CurLocale= 'en';  // Default to english unless otherwise posted
+ var _CurLocale = 'en'; // Default to english unless otherwise posted
 
-function LocalizeString()
-{
-  //console.log("Localizing...");
-  LocalizeItem($("[I18n]").get());
-  
-  // Handle flag clicks
-  $(".LngFlag").click(
-    function(event,ui)
-    {
-      OnLangFlagClick($(this).attr('lang'));
-      UpdateLngDropDown();
-    }
-  );
-  
-  return true;
-}
+ function LocalizeString()
+ {
+   //console.log("Localizing...");
+   LocalizeItem($("[I18n]").get());
 
-function OnLangFlagClick(Lang)
-{
-  InitLocale(Lang);
-}
+   // Handle flag clicks
+   $(".LngFlag").click(
+     function(event, ui)
+     {
+       OnLangFlagClick($(this).attr('lang'));
+       UpdateLngDropDown();
+     }
+   );
 
-function LocalizeItem( Elements )
-{
-  try
-  {
-    var child;
-    
-    //console.log(Elements);
-    for ( child in Elements )
-    {
-      var el = Elements[child];
-      var Attr = el.attributes.I18n.value;
-      
-      if (typeof _LocaleDict != "undefined")
-      {
-        el.innerHTML=GetLocalizedString(Attr);
-      }      
-    }
+   return true;
+ }
 
-  } 
-  finally
-  {
-  }    
-  return true;
-}
+ function OnLangFlagClick(Lang)
+ {
+   InitLocale(Lang);
+ }
 
-function InitLocale(Lang)
-{
-  var query = "/ws/serverinfo/translation.php";
-  
-  if (Lang)
-  {
-    query += "?lang=" + Lang;
-  }
-  $.get( query,
-          function(result)
-          {
-            if (result.success == true)
-            {
-              _CurLocale = result.request.lang;
-              _LocaleDict=result.strings;
-              moment.locale(_CurLocale);
-              LocalizeString();
-              UpdateLngDropDown();
-            }
-            else
-            {
-              alert("Localization string table load failure....");
-            }
-          }
-         );
+ function LocalizeItem(Elements)
+ {
+   try
+   {
+     var child;
 
-	if (typeof _EnDict == 'undefined')
-  {
-    // Load english dictionnary as fall back on 1st call
-    $.get( "/ws/serverinfo/translation.php?lang=en",
-          function(result)
-          {
-            if (result.success == true)
-            {
-              _EnDict=result.strings;
-            }
-            else
-            {
-              alert("Fallback localization string table load failure....");
-            }
-          }
-         );
-  }  
-}
+     //console.log(Elements);
+     for (child in Elements)
+     {
+       var el = Elements[child];
+       var Attr = el.attributes.I18n.value;
 
-function HTMLDecode(String)
-{
-  let txt = document.createElement("textarea");
-  txt.innerHTML = String;
-  let RetString = txt.value;
-  let EOLSigns = ["\n\r","\r\n","\n","\r"];
+       if (typeof _LocaleDict != "undefined")
+       {
+         el.innerHTML = GetLocalizedString(Attr);
+       }
+     }
 
-  for (let index in EOLSigns)
-  {
-    while (EOLSigns[index] && RetString.indexOf(EOLSigns[index]) !== -1)
-    {
-      RetString = RetString.replace(EOLSigns[index],"<br>");
-    }
-  } 
+   }
+   finally
+   {}
+   return true;
+ }
 
-  return RetString;
-}
+ function InitLocale(Lang)
+ {
+   var query = "/ws/serverinfo/translation.php";
 
-function GetLocalizedString(StringId)
-{
-  let RetString = "";
-    
-  if (typeof _LocaleDict !== "undefined" && _LocaleDict && StringId in _LocaleDict)
-  {
-    RetString = HTMLDecode( _LocaleDict[StringId]);
-  }
-  else if ((typeof _EnDict !=="undefined") && (_EnDict) &&  (StringId in _EnDict))
-  {
-    RetString = HTMLDecode(_EnDict[StringId]);
-  }
-  else
-  {
-    RetString = StringId;
-  }
+   if (Lang)
+   {
+     query += "?lang=" + Lang;
+   }
+   $.get(query,
+     function(result)
+     {
+       if (result.success == true)
+       {
+         _CurLocale = result.request.lang;
+         _LocaleDict = result.strings;
+         moment.locale(_CurLocale);
+         LocalizeString();
+         UpdateLngDropDown();
+       }
+       else
+       {
+         alert("Localization string table load failure....");
+       }
+     }
+   );
 
-  return RetString;
-}
+   if (typeof _EnDict == 'undefined')
+   {
+     // Load english dictionnary as fall back on 1st call
+     $.get("/ws/serverinfo/translation.php?lang=en",
+       function(result)
+       {
+         if (result.success == true)
+         {
+           _EnDict = result.strings;
+         }
+         else
+         {
+           alert("Fallback localization string table load failure....");
+         }
+       }
+     );
+   }
+ }
 
-function GetCurrentLocale()
-{
-  return _CurLocale;
-}
+ function HTMLDecode(String)
+ {
+   let txt = document.createElement("textarea");
+   txt.innerHTML = String;
+   let RetString = txt.value;
+   let EOLSigns = ["\n\r", "\r\n", "\n", "\r"];
+
+   for (let index in EOLSigns)
+   {
+     while (EOLSigns[index] && RetString.indexOf(EOLSigns[index]) !== -1)
+     {
+       RetString = RetString.replace(EOLSigns[index], "<br>");
+     }
+   }
+
+   return RetString;
+ }
+
+ function GetLocalizedString(StringId, params)
+ {
+   let RetString = "";
+
+   if (typeof _LocaleDict !== "undefined" && _LocaleDict && StringId in _LocaleDict)
+   {
+     RetString = HTMLDecode(_LocaleDict[StringId]);
+   }
+   else if ((typeof _EnDict !== "undefined") && (_EnDict) && (StringId in _EnDict))
+   {
+     RetString = HTMLDecode(_EnDict[StringId]);
+   }
+   else
+   {
+     RetString = StringId;
+   }
+
+   if (params)
+   {
+     RetString = vsprintf(RetString, params);
+   }
+
+   return RetString;
+ }
+
+ function GetCurrentLocale()
+ {
+   return _CurLocale;
+ }

@@ -19,7 +19,11 @@ class StatsManager
         {
           $("#GConsentToggle").on("click", this.HandleGconsentToggle.bind(this));
           this.SetConsent(false);
-          $("#GConsentModal").modal('show');
+          $("#GConsentModal").modal(
+          {
+            backdrop: 'static',
+            keyboard: false
+          });
         }
       }
 
@@ -58,11 +62,11 @@ class StatsManager
       VLM2Prefs.Save();
     };
 
-    this.Stat = function(Evt,EvtCategory,EvtLabel, EvtValue)
+    this.Stat = function(Evt, EvtCategory, EvtLabel, EvtValue)
     {
       if (!this.NoStat && typeof(gtag) !== "undefined" && gtag)
       {
-        if (typeof (EvtCategory) === "undefined" || !EvtCategory)
+        if (typeof(EvtCategory) === "undefined" || !EvtCategory)
         {
           EvtCategory = Evt;
         }

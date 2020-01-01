@@ -197,6 +197,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
           else
           {
             // Boat is not racing
+            NotifyEndOfRace(Boat.IdBoat);
             //GetLastRacehistory();
             UpdateInMenuDockingBoatInfo(Boat);
           }
@@ -227,6 +228,34 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   }
 }
 
+function NotifyEndOfRace(BoatId)
+{
+  $.get("/ws/boatinfo/palmares.php?idu=" + BoatId, function(e)
+  {
+    let index;
+
+    if (e.success)
+    {
+      for (index in e.palmares)
+      {
+        if (e.palmares[index])
+        {
+          let RaceInfo = e.palmares[index];
+          let RaceObj = new Race(RaceInfo.idrace);
+          if (RaceObj.HasSave())
+          {
+            let EORMessage = GetLocalizedString('EndOfRaceMessage', [RaceInfo.racename, RaceInfo.ranking.rank, RaceInfo.ranking.racercount]);
+            let RaceNews = new RaceNewsHandler(GetLocalizedString('EndOfRaceTitle'), EORMessage);
+            RaceNews.Show();
+            RaceObj.ClearData();
+            StatMGR.Stat("EndOfRaceMessage", RaceInfo.raceid);
+          }
+          break;
+        }
+      }
+    }
+  });
+}
 
 // Get Track from server for last 48 hours.
 function GetTrackFromServer(Boat)
@@ -302,9 +331,26 @@ function GetRaceInfoFromServer(Boat, TargetTab)
   {
     // Save raceinfo with boat
     Boat.RaceInfo = result;
-    if (!CheckRaceUpdates(Boat.RaceInfo))
+    let RaceObj = new Race(Boat.VLMInfo.RAC);
+
+    if (!RaceObj.CheckRaceUpdates(Boat.RaceInfo))
     {
-      VLMAlertInfo("Race update" + Boat.RaceInfo.UpdateReason);
+      if (RaceObj.UpdatedRaceForStart)
+      {
+        let title = GetLocalizedString("RaceStartedNotice");
+        let message = '<H2>' + GetLocalizedString("racestarted", [Boat.VLMInfo.racename, Boat.VLMInfo.deptime]) + '</H2>';
+        let Notify = new RaceNewsHandler(title, message);
+        Notify.Show();
+
+      }
+      else
+      {
+        let title = GetLocalizedString("RaceChangeNotice");
+        let message = '<H2>' + Boat.RaceInfo.UpdateReason + '</H2>' + GetLocalizedString("RaceChangeNoticeText");
+        let Notify = new RaceNewsHandler(title, message);
+        Notify.Show();
+        //VLMAlertInfo("Race update" + Boat.RaceInfo.UpdateReason);
+      }
     }
     DrawRaceGates(Boat);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
@@ -571,7 +617,7 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
         }
         else if (!RaceFeatures.PilotMarkers[index])
         {
-          let Marker = GetPilototoMarker(Order,index);
+          let Marker = GetPilototoMarker(Order, index);
           RaceFeatures.PilotMarkers[index] = L.marker(Coords,
           {
             icon: Marker
@@ -647,7 +693,7 @@ function DrawBoatTrack(Boat, RaceFeatures)
 
 function GetSafeTrackPointList(Track)
 {
-  let PointList=[];
+  let PointList = [];
   let TrackLength = Track.length;
   let PrevLon = 0;
   let LonOffSet = 0;
@@ -1465,7 +1511,7 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
 function PostBoatSetupOrder(idu, verb, orderdata)
 {
   // Now Post the order
-  $.post("/ws/boatsetup/" + verb + ".php?selectidu" + idu,
+  $.post("/ws/boatsetup/" + verb + ".php?selectidu=" + idu,
     "parms=" + JSON.stringify(orderdata),
     function(Data, TextStatus)
     {
@@ -1483,28 +1529,9 @@ function PostBoatSetupOrder(idu, verb, orderdata)
 
 function EngageBoatInRace(RaceID, BoatID)
 {
-  $.post("/ws/boatsetup/race_subscribe.php",
-    "parms=" + JSON.stringify(
-    {
-      idu: BoatID,
-      idr: parseInt(RaceID, 10)
-    }),
-    function(data)
-    {
+  let RaceObj = new Race(RaceID);
 
-      if (data.success)
-      {
-        let Msg = GetLocalizedString("youengaged");
-        $("#RacesListForm").modal('hide');
-        VLMAlertSuccess(Msg);
-      }
-      else
-      {
-        let Msg = data.error.msg + '\n' + data.error.custom_error_string;
-        VLMAlertDanger(Msg);
-      }
-    }
-  );
+  RaceObj.Subscribe(BoatID);
 }
 
 function DiconstinueRace(BoatId, RaceId)
@@ -1752,7 +1779,7 @@ function DrawOpponents(Boat)
           {
             let k = Object.keys(T.DatePos)[PointIndex];
             let P = T.DatePos[k];
-            let Pi = new VLMPosition( P.lon,P.lat);
+            let Pi = new VLMPosition(P.lon, P.lat);
 
             TrackPoints.push(Pi);
           }
