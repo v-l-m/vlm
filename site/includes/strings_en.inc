@@ -1,6 +1,10 @@
 <?php
 $strings['en'] = 
   array (
+    'EndOfRaceTitle' => 'Race completed',
+    'EndOfRaceMessage' => 'You completed race "%s" in position %d out of %d racers',
+    'RaceChangeNotice' => 'Race Change Notification',
+    'RaceChangeNoticeText' => '<BR> Check changes in race instructions.',
     'StatsConsent1' => 'By continuing to use the VLM website you accept that cookies required for the game are stored on your computer.',
     'StatsConsent2' => 'Do you allow VLM to record usage stats via Google Analytics to improve the game?',
     'VLMStatAndCookies' => 'VLM - Statistics and Cookies',
