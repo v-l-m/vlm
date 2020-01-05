@@ -2,8 +2,8 @@
   "name": "vlm",
   "version": "0.1.0",
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
     "del": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^5.0.0",
@@ -35,7 +35,7 @@
     "fancy-log": "^1.3.3",
     "gulp-debug": "^4.0.0",
     "gulp-util": "^3.0.8",
-    "jshint": "^2.10.2"
+    "jshint": "^2.10.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
