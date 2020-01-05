@@ -38,6 +38,12 @@ L.Control.WindMouseControl = L.Control.extend(
   },
   _Update: function(e)
   {
+
+    if (typeof map.GribMap === "undefined")
+    {
+      return;
+    }
+    
     let Lat = (e.latlng.lat);
     let Lon = (e.latlng.lng);
     let CurZoom = this._map.getZoom();
