@@ -13,12 +13,17 @@ class StatsManager
       else if (VLM2Prefs)
       {
         let CurDate = new Date().getTime();
-        let LastNo = new Date(VLM2Prefs.GConsentLastNo);
+        let LastNo = VLM2Prefs.GConsentLastNo;
 
-        if (isNaN(LastNo) || LastNo.getTime() + 6 * 30 * 24 * 3600000 < CurDate)
+        if (LastNo)
         {
-          $("#GConsentToggle").on("click", this.HandleGconsentToggle.bind(this));
-          this.SetConsent(false);
+          LastNo  = new Date(LastNo);
+        }
+
+        if (VLM2Prefs.GConsentDate===null && (VLM2Prefs.GConsentLastNo===null || LastNo.getTime() + 6 * 30 * 24 * 3600000 < CurDate))
+        {
+          $(".GConsentToggle").on("click", this.HandleGconsentToggle.bind(this));
+          //this.SetConsent(false);
           $("#GConsentModal").modal(
           {
             backdrop: 'static',
@@ -32,18 +37,22 @@ class StatsManager
 
     this.HandleGconsentToggle = function(e)
     {
-      let Btn = $("#GConsentToggle");
+      let BtnId = e.currentTarget.id;
+      let Btn = $("#"+ BtnId);
 
-      if (Btn.hasClass("btn-danger"))
+      if (BtnId === "GConsentToggleNo")
       {
-        Btn.removeClass("btn-danger").addClass("btn-success").html(GetLocalizedString("Yes"));
-        this.SetConsent(true);
+        $("#GConsentToggleNo").addClass("btn-danger").removeClass("btn-default");
+        $("#GConsentToggleYes").removeClass("btn-success").addClass("btn-default");
+        this.SetConsent(false);
       }
       else
       {
-        Btn.addClass("btn-danger").removeClass("btn-success").html(GetLocalizedString("No"));
-        this.SetConsent(false);
+        $("#GConsentToggleNo").removeClass("btn-danger").addClass("btn-default");
+        $("#GConsentToggleYes").addClass("btn-success").removeClass("btn-default");
+        this.SetConsent(true);
       }
+      $("#GConsentCloseFormBtn").removeClass("ui-state-disabled");
     };
 
     this.SetConsent = function(status)

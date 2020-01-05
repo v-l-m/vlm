@@ -51,7 +51,7 @@ class Race
     this.HasSave = function()
     {
       return VLM2Prefs.HasRaceStorage(this.RaceId);      
-    }
+    };
 
     this.UpdatedForRaceStart = function(RaceInfo)
     {

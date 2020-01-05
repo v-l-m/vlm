@@ -1980,13 +1980,16 @@
           <span I18n="StatsConsent1"  style="text-align:center">RaceCal</span>
           <br><BR>
           <div class="row container-fluid">
-            <span class="col-xs-9" I18n="StatsConsent2"  style="text-align:center">RaceCal</span>
+            <span class="col-xs-8" I18n="StatsConsent2"  style="text-align:center">RaceCal</span>
             <span class='col-xs-1'></span>
-            <button id="GConsentToggle" type="button" class="col-xs-2 ui-corner-all ui-widget btn btn-danger" I18n="No">No</button>
+            <div class="btn-group col-xs-3">
+              <button id="GConsentToggleNo" type="button" class="GConsentToggle ui-corner-all ui-widget btn btn" I18n="no">No</button>
+              <button id="GConsentToggleYes" type="button" class="GConsentToggle ui-corner-all ui-widget btn btn" I18n="yes">No</button>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">RaceCal</button>
+          <button id="GConsentCloseFormBtn" I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget ui-state-disabled" data-dismiss="modal">RaceCal</button>
         </div>        
       </div>
     </div>
@@ -1998,7 +2001,7 @@
       <!-- Modal content-->
       <div class="modaldialog modal-content">
         <div class="modal-header">
-          <H4 I18n="RaceNewsBox_Title" class="modal-title" style="text-align:center">No Title Set</H4>          
+          <H4 id="RaceNewsBox_Title" class="modal-title" style="text-align:center">No Title Set</H4>          
         </div>
         <div class="modal-body">
           <div id="NewsBody1"></div> 

@@ -28,7 +28,7 @@ class PrefMgr
     this.HasRaceStorage = function(RaceId)
     {
       return typeof  this.RacesStorageLUT !== "undefined" && typeof  this.RacesStorageLUT[RaceId] !== "undefined";
-    }
+    };
 
     this.Init = function()
     {
