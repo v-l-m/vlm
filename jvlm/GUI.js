@@ -114,6 +114,10 @@ $(document).ready(
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
 
+    // Async init of weathermap to current map
+    setTimeout(function() { // Wind Layer
+      map.GribMap = new GribMap.Layer().addTo(map);
+    },100);
   }
 );
 
@@ -137,9 +141,7 @@ function LeafletInit()
 
   }).addTo(map);
 
-  // Wind Layer
-  map.GribMap = new GribMap.Layer().addTo(map);
-
+  
   // Wind & Mouse Pos Control
   map.WMControl = L.control.WindMouseControl().addTo(map);
 
@@ -1204,6 +1206,11 @@ function HandleRaceSortChange(e)
 
 function HandleGribSlideMove(event, ui)
 {
+  if (typeof map.GribMap ==="undefined")
+  {
+    return;
+  }
+  
   let handle = $("#GribSliderHandle");
   handle.text(ui.value);
   let GribEpoch = new Date().getTime();
