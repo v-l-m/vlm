@@ -2248,6 +2248,11 @@ function DeletePilotOrder(Boat, OrderId)
 
 function UpdateBoatPrefs(Boat, NewVals)
 {
+  // Avoid sending invalid stuff to the server
+  if (typeof Boat === "undefined" || typeof Boat.idu === "undefined" || typeof NewVals === "undefined")
+  {
+    return;
+  }
   NewVals.idu = Boat.IdBoat;
   $.post("/ws/boatsetup/prefs_set.php", "parms=" + JSON.stringify(NewVals),
     function(e)
@@ -2259,7 +2264,7 @@ function UpdateBoatPrefs(Boat, NewVals)
       }
       else
       {
-        VLMAlertDanger(GetLocalizedString("UpdateFailed"));
+        VLMAlertDanger("Save Prefs To Server "+ GetLocalizedString("UpdateFailed"));
       }
     }
   );

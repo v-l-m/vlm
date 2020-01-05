@@ -207,10 +207,10 @@ class MapPrefs
           MapPrefVal = "my10opps";
           break;
       }
-      var NewVals = {
+      let NewVals = {
         mapOpponents: MapPrefVal
       };
-      if (typeof _CurPlayer !== "undefined" && _CurPlayer)
+      if ((typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof NewVals!== "undefined") && NewVals)
       {
         UpdateBoatPrefs(_CurPlayer.CurBoat,
         {
