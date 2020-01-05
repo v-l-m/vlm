@@ -177,7 +177,7 @@ gulp.task('libs_babel', function()
 {
   return gulp.src(['jvlm/external/footable-bootstrap/js/footable.js',
       'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
-      'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
+      'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', 'jvlm/external/sprintfjs/sprintf.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
