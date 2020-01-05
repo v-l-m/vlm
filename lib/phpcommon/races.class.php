@@ -1661,41 +1661,30 @@ function CheckLMNHStatus()
 {
   $starttime = microtime(true);
   // select boat list that do not respect the LMNH rules
-  $targetlist = "select distinct ua.idusers 
+  $targetlist = "select distinct ua.idusers , ut.idraces, ua.time
                   from user_action ua, 
                   users_Trophies ut, 
                   users u  
                   where u.idusers = ua.idusers and ua.idusers = ut.idusers
                     and ua.idraces = ut.idraces and ut.quitdate is null 
                     and u.userdeptime <> -1
-                    and ua.time > from_unixtime(u.userdeptime) 
+                    and ua.time > ut.joindate 
                     and ua.action not like 'Update Prefs%'
                     and ua.ipaddr <> '127.0.0.1'";
 
   $result = wrapper_mysql_db_query_reader($targetlist);
-  $list="";
+  $querycleanLMNH = "";
   while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
   {
-    if ($list !== "")
-    {
-      $list .= ",";
-    }
-    $list .= $row['idusers'];
+    $querycleanLMNH .= "update users_Trophies set quitdate = now() where idusers = ". $row['idusers'] ." and idraces = ".$row['idraces'] .";";
   }
 
   echo "\n Targetlist built in ". (microtime(true) - $starttime) ."\n";
-  if ($list == "")
+  if ($querycleanLMNH == "")
   {
     echo "Targetlist is empty \n";
     return;
   }
-
-  $list="(".$list.")";
-
-
-  // Clean boats that did not respect LMNH rules
-  $querycleanLMNH = "update users_Trophies set quitdate = now() 
-  where idusers in " .$list;
 
   wrapper_mysql_db_query_writer($querycleanLMNH);
   echo "update complete in ". (microtime(true) - $starttime) ."\n";
