@@ -2249,7 +2249,7 @@ function DeletePilotOrder(Boat, OrderId)
 function UpdateBoatPrefs(Boat, NewVals)
 {
   // Avoid sending invalid stuff to the server
-  if (typeof Boat === "undefined" || typeof Boat.idu === "undefined" || typeof NewVals === "undefined")
+  if (typeof Boat === "undefined" || typeof Boat.IdBoat === "undefined" || typeof NewVals === "undefined")
   {
     return;
   }
