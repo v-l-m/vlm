@@ -2354,7 +2354,7 @@ function AddRaceToList(race)
     '      <div class="col-xs-9">' +
     '        <div class="col-xs-12">' +
     (RecordRace ? '<span class="PRecordRace">P</span>' : '') +
-    '          <span ">' + race.racename +
+    '          <span ">' + race.racename + (race.racelength!=="0"?' ('+race.racelength+' Nm)':'')+
     '          </span>' +
     '        </div>' +
     '        <div class="btn-group col-xs-12">' +
