@@ -895,7 +895,7 @@ function InitRankingEvents()
   {
     HandleRaceSortChange(e);
   });
-  $("#Ranking-Panel").on('hide.bs.collapse', function(e)
+  $("#Ranking-Panel").on('show.bs.collapse', function(e)
   {
     ResetRankingWPList(e);
   });
