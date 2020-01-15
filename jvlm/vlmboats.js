@@ -1600,14 +1600,11 @@ function LoadRankings(RaceId, CallBack)
       if (result)
       {
         Rankings[RaceId] = result.Boats;
+        ResetRankingWPList();
         if (CallBack)
         {
           CallBack();
-        }
-        else
-        {
-          DrawBoat(null, false);
-        }
+        }        
       }
       else
       {

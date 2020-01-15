@@ -905,10 +905,10 @@ function InitRankingEvents()
   {
     HandleRaceSortChange(e);
   });
-  $("#Ranking-Panel").on('show.bs.collapse', function(e)
+  /*$("#Ranking-Panel").on('show.bs.collapse', function(e)
   {
     ResetRankingWPList(e);
-  });
+  });*/
 }
 
 function UpdateVersionLine()
@@ -1590,12 +1590,12 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
   if (parseInt(Boat.VLMInfo.PIM, 10) === PM_ANGLE)
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.PIP), 1)]);
-    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.PIP,VLM2Prefs.InputDigits)]);
+    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.PIP, VLM2Prefs.InputDigits)]);
   }
   else
   {
     BoatFieldMappings.push([FIELD_MAPPING_TEXT, ".BoatWindAngle", RoundPow(Math.abs(Boat.VLMInfo.TWA), 1)]);
-    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.TWA,VLM2Prefs.InputDigits)]);
+    BoatFieldMappings.push([FIELD_MAPPING_VALUE, "#PM_Angle", RoundPow(Boat.VLMInfo.TWA, VLM2Prefs.InputDigits)]);
   }
 
   FillFieldsFromMappingTable(BoatFieldMappings);
