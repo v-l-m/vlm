@@ -87,11 +87,9 @@ $(document).ready(
         }
       }
     });
+
     // Start converse
     //InitXmpp();
-
-    // Init maps
-    LeafletInit();
 
     // Load translation strings
     InitLocale();
@@ -104,20 +102,26 @@ $(document).ready(
 
     // Init Alerts
     InitAlerts();
-
     // Handle page parameters if any
-    CheckPageParameters();
+    let NoMap = CheckPageParameters();
 
+    // Init maps
+    if (!NoMap)
+    {
+      LeafletInit(); 
+      // Async init of weathermap to current map
+      setTimeout(function()
+      { // Wind Layer
+        map.GribMap = new GribMap.Layer().addTo(map);
+      }, 500);
+    }
     // Start the page clocks
     setInterval(PageClock, 1000);
 
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
 
-    // Async init of weathermap to current map
-    setTimeout(function() { // Wind Layer
-      map.GribMap = new GribMap.Layer().addTo(map);
-    },100);
+
   }
 );
 
@@ -141,7 +145,7 @@ function LeafletInit()
 
   }).addTo(map);
 
-  
+
   // Wind & Mouse Pos Control
   map.WMControl = L.control.WindMouseControl().addTo(map);
 
@@ -375,6 +379,7 @@ function HandlePasswordResetLink(PwdKey)
 
 function CheckPageParameters()
 {
+  let retstop = false;
   let url = window.location.search;
   let RacingBarMode = true;
 
@@ -403,6 +408,7 @@ function CheckPageParameters()
               HandleShowOtherRaceRank(PArray[1]);
             };
             /* jshint +W083*/
+            retstop=true;
             break;
 
           case "VLMIndex":
@@ -413,11 +419,13 @@ function CheckPageParameters()
               HandleShowIndex(PArray[1]);
             };
             /* jshint +W083*/
+            retstop=true;
             break;
 
           case "ICSRace":
             RacingBarMode = false;
             HandleShowICS(PArray[1]);
+            retstop=true;
             break;
         }
       }
@@ -434,6 +442,8 @@ function CheckPageParameters()
     $(".OffRaceNavBar").css("display", "inherit");
     ShowApropos(false);
   }
+
+  return retstop;
 }
 
 function HandleShowICS(raceid)
@@ -1206,11 +1216,11 @@ function HandleRaceSortChange(e)
 
 function HandleGribSlideMove(event, ui)
 {
-  if (typeof map.GribMap ==="undefined")
+  if (typeof map.GribMap === "undefined")
   {
     return;
   }
-  
+
   let handle = $("#GribSliderHandle");
   handle.text(ui.value);
   let GribEpoch = new Date().getTime();
@@ -1257,7 +1267,7 @@ function HandleStopEstimator(e)
   }
 
   CurBoat.Estimator.Stop();
-  
+
 }
 
 function HandleStartEstimator(e)
@@ -1303,7 +1313,7 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     Est.LastPctRefresh = -1;
     Est.LastPctDraw = -1;
     DrawBoat(_CurPlayer.CurBoat);
-    
+
   }
   else if (Pct - Est.LastPctRefresh > 0.25)
   {
