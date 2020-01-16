@@ -2065,13 +2065,18 @@ function availableRaces($idusers = 0)
     if ( in_array($idraces, $omorob_restriction) && !($row['racetype'] & RACE_TYPE_OMORMB) ) continue;
     
     // si pas de course de qualification, on ajoute
-    if ( $row['qualifying_races'] == "" ) {
+    if ( $row['qualifying_races'] == "" ) 
+    {
       array_push ($records, $idraces);
-    } else {
+    }
+    else 
+    {
       // Sinon, on vérifie que le bateau est qualifié (a fini une courses de qualif)
       $qualraces = explode(' ', $row['qualifying_races']);
-      foreach ($qualraces as $qr) {
-        if ( userFinishedThisRace($idusers, $qr ) ) {
+      foreach ($qualraces as $qr) 
+      {
+        if (("@".$oid == $qr)|| ( userFinishedThisRace($idusers, $qr ) ) )
+        {
           array_push ($records, $idraces);
           break;
         }
