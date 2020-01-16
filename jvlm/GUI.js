@@ -105,18 +105,21 @@ $(document).ready(
     // Handle page parameters if any
     let NoMap = CheckPageParameters();
 
+    // Start the page clocks
+    setInterval(PageClock, 1000);
+
     // Init maps
     if (!NoMap)
     {
-      LeafletInit(); 
+      CheckLogin();
+
+      LeafletInit();
       // Async init of weathermap to current map
       setTimeout(function()
       { // Wind Layer
         map.GribMap = new GribMap.Layer().addTo(map);
       }, 500);
     }
-    // Start the page clocks
-    setInterval(PageClock, 1000);
 
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
@@ -408,7 +411,7 @@ function CheckPageParameters()
               HandleShowOtherRaceRank(PArray[1]);
             };
             /* jshint +W083*/
-            retstop=true;
+            retstop = true;
             break;
 
           case "VLMIndex":
@@ -419,13 +422,13 @@ function CheckPageParameters()
               HandleShowIndex(PArray[1]);
             };
             /* jshint +W083*/
-            retstop=true;
+            retstop = true;
             break;
 
           case "ICSRace":
             RacingBarMode = false;
             HandleShowICS(PArray[1]);
-            retstop=true;
+            retstop = true;
             break;
         }
       }
@@ -502,28 +505,28 @@ function HandleShowIndex(IndexType)
 
 function HandleShowOtherRaceRank(RaceId)
 {
-  OnPlayerLoadedCallBack = function()
+  //OnPlayerLoadedCallBack = function()
+  //{
+  let CallBack = function(Result)
   {
-    let CallBack = function(Result)
-    {
-      FillRaceInfoHeader(Result);
-    };
-    LoadRaceInfo(RaceId, 0, CallBack);
-    LoadRankings(RaceId, OtherRaceRankingLoaded);
-    RankingFt.RaceRankingId = RaceId;
+    FillRaceInfoHeader(Result);
   };
+  RankingFt.RaceRankingId = RaceId;
+  LoadRaceInfo(RaceId, 0, CallBack);
+  LoadRankings(RaceId, OtherRaceRankingLoaded);
+  //};
 
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat)
+  /*if (typeof _CurPlayer !== "undefined" && _CurPlayer && _CurPlayer.CurBoat)
   {
     OnPlayerLoadedCallBack();
     OnPlayerLoadedCallBack = null;
-  }
+  }*/
 }
 
-function OtherRaceRankingLoaded()
+function OtherRaceRankingLoaded(RaceId)
 {
   $("#Ranking-Panel").show();
-  SortRanking("RAC");
+  SortRanking("RAC", 0, RaceId);
   console.log("off race ranking loaded");
 }
 
@@ -877,8 +880,6 @@ function InitMenusAndButtons()
     }
   );
   $("#PolarTab").on("click", HandlePolarTabClik);
-
-  CheckLogin();
 
   UpdateVersionLine();
 }
@@ -2931,7 +2932,7 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
       BuildWPTabList(index, InitNeeded);
       InitComplete = true;
     }
-    else if (OtherRaceWPs)
+    else if (typeof OtherRaceWPs === "object" && OtherRaceWPs)
     {
       BuildWPTabList(OtherRaceWPs, InitNeeded);
       InitComplete = true;
@@ -2940,7 +2941,7 @@ function CheckWPRankingList(Boat, OtherRaceWPs)
     {
       let Version = 0;
 
-      if (typeof Boat.VLMInfo !== "undefined")
+      if (typeof Boat !== "undefined" && Boat && typeof Boat.VLMInfo !== "undefined")
       {
         Version = Boat.VLMInfo.VER;
       }
@@ -2989,21 +2990,24 @@ function BuildWPTabList(WPInfos, TabsInsertPoint)
 }
 
 
-function SortRanking(style, WPNum)
+function SortRanking(style, WPNum, OtherRaceWPs)
 {
-
+  let Boat = null;
   //$('#RankingTableBody').empty();
-  let Boat = _CurPlayer.CurBoat;
-
-  CheckWPRankingList(Boat);
-
-  if (typeof Boat === "undefined" || !Boat)
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer)
   {
-    return;
+    Boat = _CurPlayer.CurBoat;
   }
+  CheckWPRankingList(Boat, OtherRaceWPs);
+
+  // Fix Me use logged player (if any to avoid that)
+  //if (typeof Boat === "undefined" || !Boat)
+  //{
+  //  return;
+  //}
 
   let Friends = null;
-  if (Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
+  if (typeof Boat !== "undefined" && Boat && Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
   {
     Friends = Boat.VLMPrefs.mapPrefOpponents.split(",");
   }
@@ -3349,7 +3353,7 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
 
   RaceId = GetRankingRaceId(Boat, RaceId);
 
-  if (!Boat || !Rankings[RaceId])
+  if (!Boat && !Rankings[RaceId])
   {
     return;
   }
@@ -3398,7 +3402,7 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
 
   for (index in Rankings[RaceId].RacerRanking)
   {
-    if (Rankings[RaceId].RacerRanking[index] && Boat.IdBoat === index)
+    if (Rankings[RaceId].RacerRanking[index]  && Boat && Boat.IdBoat === index)
     {
       rnk = index + 1;
       break;
@@ -3416,7 +3420,7 @@ function FillWPRanking(Boat, WPNum, Friends)
   let BestTime = 0;
   let Rows = [];
 
-  if (!Boat || !RankingFt || RankingFt.DrawPending)
+  if (!Boat && (!RankingFt || RankingFt.DrawPending))
   {
     return;
   }
@@ -3449,7 +3453,7 @@ function FillWPRanking(Boat, WPNum, Friends)
       if (RnkBoat.WP && RnkBoat.WP[WPNum - 1])
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, WPNum, Friends));
-        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat &&  Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3700,7 +3704,7 @@ function FillStatusRanking(Boat, Status, Friends)
       if (RnkBoat.status === Status)
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends));
-        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat!== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3736,7 +3740,7 @@ function FillRacingRanking(Boat, Friends)
       {
         let RnkBoat = Rankings[RaceId].RacerRanking[index];
 
-        if (Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat!=="undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3818,7 +3822,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     Delta1st: ""
   };
 
-  if (parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat)
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.GetRankingObject!== "undefined" && parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat)
   {
     RetObject.Class += " ft_class_myboat";
   }

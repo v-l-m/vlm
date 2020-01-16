@@ -554,7 +554,6 @@ function GetPilototoMarkerText(Order)
       break;
 
   }
-
   return Text;
 }
 
@@ -1603,7 +1602,7 @@ function LoadRankings(RaceId, CallBack)
         ResetRankingWPList();
         if (CallBack)
         {
-          CallBack();
+          CallBack(RaceId);
         }        
       }
       else
