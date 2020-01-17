@@ -3799,7 +3799,7 @@ function GetBoatInfoLink(RnkBoat)
 function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
 {
 
-  let boatsearchstring = ''; //'<img class="BoatFinder" src="images/search.png" id=RnkUsr"'+RankBoat.idusers+'"></img>   '
+  let boatsearchstring = '';//'<img class="BoatFinder" src="images/search.png" idu=' + RankBoat.idusers + ' ></img>   ';
   if (typeof RankBoat.Challenge !== "undefined" && RankBoat.Challenge[1])
   {
     boatsearchstring = '<img class="RnkLMNH" src="images/LMNH.png"></img>' + boatsearchstring;

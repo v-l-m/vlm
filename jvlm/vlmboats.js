@@ -2034,6 +2034,7 @@ function BuildBoatPopupInfo(Boat)
     '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     ' </fieldset>' +
+    //' <BR><img class="AddOppWatch" src="images/AddWatch.png">' +
     '</div>';
 
 

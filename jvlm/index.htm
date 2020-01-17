@@ -441,7 +441,7 @@
       </div>
     </div>
     <!-- Collapsable Boat Dashboard (view only display) -->
-    <div id="TDB-Panel" class="TDB-Panel collapse">
+    <div id="TDB-Panel" class="TDB-Panel collapse"> 
       <div class="container">
         <div class="row">
           <div class="TDB-EmptyCol col-xs-3">
@@ -2010,6 +2010,17 @@
           <button I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">RaceCal</button>
         </div>        
       </div>
+    </div>
+  </div>
+
+  <!-- Server Info Panel -->
+  <div id="ServerInfo" class="Draggable dialog fade" role="dialog" style="visibility: hidden;">
+    <div class="modal-header MI_Title"> <span I18n="serverinfo"></span><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    </div>
+    <div style="text-align:left" class="modal-body">
+      <fieldset class="MI_Coords">
+        <div><label I18n="GribQueue"></label><span> : </span><span id="SI_GribQueue"></span></div>      
+      </fieldset>      
     </div>
   </div>
 

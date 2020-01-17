@@ -24,7 +24,7 @@ const gulp = require('gulp'),
   babel = require('gulp-babel'),
   UseGAStats = false;    // Set to true to add to stats when in dev
 
-const VLMVersion = "22.7.3";
+const VLMVersion = "23";
 var BuildTypeProd = false; // This is automatically set to true in prod build chains
 
 
