@@ -123,8 +123,6 @@ $(document).ready(
 
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
-
-
   }
 );
 
@@ -543,6 +541,11 @@ function initrecaptcha(InitPasswordReset, InitResetConfirm)
   }
 }
 
+function HandleShowServerInfoModal(e)
+{
+  $("ServerInfo").show();
+}
+
 function InitMenusAndButtons()
 {
   // Handle modal sizing to fit screen
@@ -551,6 +554,8 @@ function InitMenusAndButtons()
     $(this).show();
     setModalMaxHeight(this);
   });
+
+  $("#ServerStatsLink").click(HandleShowServerInfoModal);
 
   $(window).resize(function()
   {
