@@ -674,13 +674,18 @@ span.ui-selectmenu-text {
 @media (min-width: 1024px) {
 
   /* Remplacez 123px par la taille de votre choix */
-  #Infos
-
-  /*,.Apropos*/
-    {
+  #Infos {
     width: 600px;
   }
 
+  .VLMSplash {
+    background-image: url('images/VLM2_Big.jpg');
+    background-position-y: -65px;
+  }
+
+  .VLMSplashUpperFiller {
+    height: 160px;
+  }
   .navbar-header {
     float: left;
   }
@@ -756,8 +761,7 @@ span.ui-selectmenu-text {
 
 @media all and (min-width: 430px) and (max-width: 800px) {
 
-  #Infos,
-  .Apropos {
+  #Infos {
     width: 75%;
   }
 
@@ -770,8 +774,7 @@ span.ui-selectmenu-text {
 
 @media all and (max-width: 429px) {
 
-  #Infos,
-  .Apropos {
+  #Infos {
     width: 90%;
   }
 }
@@ -1661,13 +1664,6 @@ th {
   min-height: 50%;
 }
 
-.Apropos {
-  background-color: rgba(0, 0, 0, 0.6);
-
-  margin-left: auto;
-  margin-right: auto;
-
-}
 
 .Apropos-title {
   font-size: 24px;
@@ -1679,30 +1675,31 @@ th {
     background-image: url('images/VLM2_small.jpg');
 
   }
+  
 }
-@media all and (min-width :1024px) {
+@media all {
+  
   .VLMSplash {
-    background-image: url('images/VLM2_Big.jpg');
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color: white;
+    position: fixed;
+    margin-top: 75px;
+    overflow: overlay;
   }
-}
-.VLMSplash {
-  width: 100%;
-  height: 100%;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-color: white;
-  position: absolute;
-  margin-top: 75px;
-}
 
-.Apropos-text {
-  color: rgb(7, 0, 70);
-  font-size: 20px;
-  line-height: 1.6;
-  text-align: justify;
-  padding-top: 240px;
-  padding-left: 10px;
-  padding-right: 10px;
+  .Apropos-text {
+    color: rgb(7, 0, 70);
+    font-size: 20px;
+    line-height: 1.6;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: Auto;
+  }
 }
 
 .a {
