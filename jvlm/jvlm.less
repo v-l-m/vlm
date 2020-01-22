@@ -675,7 +675,9 @@ span.ui-selectmenu-text {
 
   /* Remplacez 123px par la taille de votre choix */
   #Infos
-  /*,.Apropos*/ {
+
+  /*,.Apropos*/
+    {
     width: 600px;
   }
 
@@ -1661,9 +1663,10 @@ th {
 
 .Apropos {
   background-color: rgba(0, 0, 0, 0.6);
-  color: #FFFFFF;
+
   margin-left: auto;
   margin-right: auto;
+
 }
 
 .Apropos-title {
@@ -1671,10 +1674,35 @@ th {
   line-height: 1.8;
 }
 
+@media all and (max-width :1024px) {
+  .VLMSplashSmall {
+    background-image: url('images/VLM2_small.jpg');
+
+  }
+}
+@media all and (min-width :1024px) {
+  .VLMSplash {
+    background-image: url('images/VLM2_Big.jpg');
+  }
+}
+.VLMSplash {
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  position: absolute;
+  margin-top: 75px;
+}
+
 .Apropos-text {
-  font-size: 16px;
+  color: rgb(7, 0, 70);
+  font-size: 20px;
   line-height: 1.6;
   text-align: justify;
+  padding-top: 240px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .a {

@@ -595,7 +595,7 @@ function InitMenusAndButtons()
   });
   $("#LoginForm").on('hide.bs.modal', function(e)
   {
-    ShowApropos(true);
+    ShowApropos(false);
   });
   $(".logindlgButton").on('click',
     function(e)
@@ -1468,9 +1468,19 @@ function DisplayLoggedInMenus(LoggedIn)
 
 }
 
-function ShowApropos(DisplayModal)
+function ShowApropos(LoggedIn)
 {
-  $('#Apropos').modal(DisplayModal ? 'hide' : 'show');
+  if (!LoggedIn)
+  {
+    $(".VLMSplash").css("visibility","visible");
+    $(".MapContainer").css("visibility","hidden");    
+  }
+  else
+  {
+    $(".VLMSplash").css("visibility","hidden");
+    $(".MapContainer").css("visibility","visible");    
+  }
+  //$('#Apropos').modal(LoggedIn ? 'hide' : 'show');
 }
 
 function HandleRacingDockingButtons(IsRacing)
