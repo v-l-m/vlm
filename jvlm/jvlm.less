@@ -674,11 +674,18 @@ span.ui-selectmenu-text {
 @media (min-width: 1024px) {
 
   /* Remplacez 123px par la taille de votre choix */
-  #Infos,
-  .Apropos {
+  #Infos {
     width: 600px;
   }
 
+  .VLMSplash {
+    background-image: url('images/VLM2_Big.jpg');
+    background-position-y: -65px;
+  }
+
+  .VLMSplashUpperFiller {
+    height: 160px;
+  }
   .navbar-header {
     float: left;
   }
@@ -754,8 +761,7 @@ span.ui-selectmenu-text {
 
 @media all and (min-width: 430px) and (max-width: 800px) {
 
-  #Infos,
-  .Apropos {
+  #Infos {
     width: 75%;
   }
 
@@ -768,8 +774,7 @@ span.ui-selectmenu-text {
 
 @media all and (max-width: 429px) {
 
-  #Infos,
-  .Apropos {
+  #Infos {
     width: 90%;
   }
 }
@@ -1659,22 +1664,45 @@ th {
   min-height: 50%;
 }
 
-.Apropos {
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #FFFFFF;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 .Apropos-title {
   font-size: 24px;
   line-height: 1.8;
 }
 
-.Apropos-text {
-  font-size: 16px;
-  line-height: 1.6;
-  text-align: justify;
+@media all and (max-width :1024px) {
+  .VLMSplashSmall {
+    background-image: url('images/VLM2_small.jpg');
+    //height: 875px; // TODO strech to 75% of Width and pad text left 20px    
+    background-size: contain;
+    background-repeat: no-repeat;
+
+  }
+  
+}
+@media all {
+  
+  .VLMSplash {
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color: white;
+    position: fixed;
+    margin-top: 78px;
+    overflow: overlay;
+  }
+
+  .Apropos-text {
+    color: rgb(7, 0, 70);
+    font-size: 20px;
+    line-height: 1.6;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: Auto;
+  }
 }
 
 .a {

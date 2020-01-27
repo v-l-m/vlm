@@ -123,8 +123,6 @@ $(document).ready(
 
     // Load flags list (keep at the end since it takes a lot of time)
     GetFlagsList();
-
-
   }
 );
 
@@ -543,6 +541,11 @@ function initrecaptcha(InitPasswordReset, InitResetConfirm)
   }
 }
 
+function HandleShowServerInfoModal(e)
+{
+  $("ServerInfo").show();
+}
+
 function InitMenusAndButtons()
 {
   // Handle modal sizing to fit screen
@@ -552,8 +555,17 @@ function InitMenusAndButtons()
     setModalMaxHeight(this);
   });
 
+  $("#ServerStatsLink").click(HandleShowServerInfoModal);
+
+  // Add resize handler and force resize of small login image (just in case)
+  let SmallHeight = $(window).width() *0.84;
+  $(".VLMSplashSmall").css("height",SmallHeight);
+    
   $(window).resize(function()
   {
+    let SmallHeight = $(window).width() *0.84;
+    $(".VLMSplashSmall").css("height",SmallHeight);
+    
     if ($('.modal.in').length != 0)
     {
       setModalMaxHeight($('.modal.in'));
@@ -590,7 +602,7 @@ function InitMenusAndButtons()
   });
   $("#LoginForm").on('hide.bs.modal', function(e)
   {
-    ShowApropos(true);
+    ShowApropos(false);
   });
   $(".logindlgButton").on('click',
     function(e)
@@ -1463,9 +1475,19 @@ function DisplayLoggedInMenus(LoggedIn)
 
 }
 
-function ShowApropos(DisplayModal)
+function ShowApropos(LoggedIn)
 {
-  $('#Apropos').modal(DisplayModal ? 'hide' : 'show');
+  if (!LoggedIn)
+  {
+    $(".VLMSplash").css("visibility","visible");
+    $(".MapContainer").css("visibility","hidden");    
+  }
+  else
+  {
+    $(".VLMSplash").css("visibility","hidden");
+    $(".MapContainer").css("visibility","visible");    
+  }
+  //$('#Apropos').modal(LoggedIn ? 'hide' : 'show');
 }
 
 function HandleRacingDockingButtons(IsRacing)

@@ -11,7 +11,7 @@
   <link rel="stylesheet/less" type="text/css" href="jvlm.less?v=@@JVLMVERSION@@">
   <link rel="stylesheet" type="text/css" href="jvlm.css?v=@@JVLMVERSION@@" />
   <link rel="stylesheet" type="text/css" href="external/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" />
-  <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">
+  <!--<link rel="stylesheet" type="text/css" media="screen" href="https://cdn.conversejs.org/css/converse.css">-->
   <link rel="stylesheet" type="text/css" title="bleu-noir" href="jquery-ui.theme-noir-bleu.css?v=@@JVLMVERSION@@" />
   <link rel="alternate stylesheet" type="text/css" title="brun-pistache" href="jquery-ui.theme-brun-pistache.css?v=@@JVLMVERSION@@" />
   <link rel="alternate stylesheet" type="text/css" title="vert-jaune" href="jquery-ui.theme-vert-jaune.css?v=@@JVLMVERSION@@" />
@@ -24,8 +24,22 @@
 </head>
 
 <body>
+  <!-- Vlm Splash-->
+  <div class="VLMSplash container-full row main-row" style="visibility: hidden;" >
+    <div class="VLMSplashUpperFiller row hidden-sm hidden-md"></div>
+    <div class="col-md-6">
+
+    </div>
+    <div class="VLMSplashSmall col-xs-12 hidden-lg " >
+
+    </div>
+    <div class="col-xs-12 col-lg-5 Apropos-text " >
+      <span I18n="a1"> texte</span>
+    </div>    
+  
+  </div>
   <!-- OpenLayer Map Div -->
-  <div class="container-fluid row main-row" style="z-index:0">
+  <div class="MapContainer container-fluid row " style="z-index:0; visibility: hidden;">
     <div id="jVlmMap" class="col-xs-12">
     </div>
   </div>
@@ -579,25 +593,25 @@
       </div>
     </div>
   </nav>
-  <div class="input" style="position:relative; z-index:3000">
+  <div class="MapContainer input" style="position:relative; z-index:3000">
     <div id="GribSlider" style="height:50vh; position:absolute; right:10px;">
       <div id="GribSliderHandle" class="ui-slider-handle"></div>
     </div>
   </div>
-  <div class="input RaceNavBar" LoggedInNav="false" style="position:relative">
-    <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="Apropos modal-content">
-          <div class="modal-header">
-            <h4 class="Apropos-title"><span I18n="homeofsailing">Accueil Virtual Loup-de-mer</span></h4>
-          </div>
-          <div class="modal-body">
-            <div class="Apropos-text "><span I18n="a1">texte</span></div>
+
+  <!--<div class="input RaceNavBar" LoggedInNav="false" style="position:relative">
+    <div class="modal fade" data-backdrop="static" id="Apropos" role="dialog" >
+      <div class="modal-dialog container-full modal-lg" role="document" style="width: 1500px;" >
+        <div class="modal-content >
+          <div class="modal-body" style="width: 1500px;height: 800px;background-image: url('images/VLM2_Big.jpg');background-size: 90%; background-repeat:no-repeat; backgound-color:white;">
+            <div class="col-xs-12 col-md-9 Apropos-text " style="padding-left: 681px;padding-top: 185px;">
+              <span I18n="a1" style="color: darkblue;"> texte</span>
+            </div>    
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
   <!-- Modal Infos-->
   <div id="Infos" class="Draggable modal fade" role="dialog">
     <div class="modal-header">
@@ -612,7 +626,7 @@
             <img src="images/ServerInfo.png">
           </div>
           <div class="col-xs-3 col-md-2">
-            <A href="/status/race-engine-status.php" target="EngineStatus">
+            <A id="ServerStatsLink" href="/status/race-engine-status.php" target="EngineStatus">
               <!--<img src="images/ServerInfos.png"><img>-->
               <span I18n="status page">stat page</span>
             </A>
@@ -2014,7 +2028,7 @@
   </div>
 
   <!-- Server Info Panel -->
-  <div id="ServerInfo" class="Draggable dialog fade" role="dialog" style="visibility: hidden;">
+  <div id="ServerInfo" class="Draggable modal dialog fade" role="dialog" >
     <div class="modal-header MI_Title"> <span I18n="serverinfo"></span><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     </div>
     <div style="text-align:left" class="modal-body">
