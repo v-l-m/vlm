@@ -557,8 +557,15 @@ function InitMenusAndButtons()
 
   $("#ServerStatsLink").click(HandleShowServerInfoModal);
 
+  // Add resize handler and force resize of small login image (just in case)
+  let SmallHeight = $(window).width() *0.84;
+  $(".VLMSplashSmall").css("height",SmallHeight);
+    
   $(window).resize(function()
   {
+    let SmallHeight = $(window).width() *0.84;
+    $(".VLMSplashSmall").css("height",SmallHeight);
+    
     if ($('.modal.in').length != 0)
     {
       setModalMaxHeight($('.modal.in'));
