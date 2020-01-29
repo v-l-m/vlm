@@ -558,14 +558,11 @@ function InitMenusAndButtons()
   $("#ServerStatsLink").click(HandleShowServerInfoModal);
 
   // Add resize handler and force resize of small login image (just in case)
-  let SmallHeight = $(window).width() *0.84;
-  $(".VLMSplashSmall").css("height",SmallHeight);
+  HandleAproposSizing();
     
   $(window).resize(function()
   {
-    let SmallHeight = $(window).width() *0.84;
-    $(".VLMSplashSmall").css("height",SmallHeight);
-    
+    HandleAproposSizing();
     if ($('.modal.in').length != 0)
     {
       setModalMaxHeight($('.modal.in'));
@@ -894,6 +891,15 @@ function InitMenusAndButtons()
   $("#PolarTab").on("click", HandlePolarTabClik);
 
   UpdateVersionLine();
+
+  function HandleAproposSizing() {
+    let SmallHeight = $(window).width() ;//* 0.9;
+    let FillerHeight = $(window).width() * 0.12;
+    let AproposHeight = $(".VLMSplash").height() - FillerHeight -180;
+    $(".VLMSplashUpperFiller").css("height", FillerHeight);
+    $(".VLMSplashSmall").css("height", SmallHeight).css("background-position-y",0.1*$(window).width());
+    $(".Apropos-text").css("max-height", AproposHeight);
+  }
 }
 
 function InitRankingEvents()

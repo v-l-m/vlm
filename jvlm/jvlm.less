@@ -678,11 +678,6 @@ span.ui-selectmenu-text {
     width: 600px;
   }
 
-  .VLMSplash {
-    background-image: url('images/VLM2_Big.jpg');
-    background-position-y: -65px;
-  }
-
   .VLMSplashUpperFiller {
     height: 160px;
   }
@@ -1673,6 +1668,16 @@ th {
 
 @media all and (min-width :1024px) {
   
+  .VLMSplash {
+    background-image: url('images/VLM2_Big.jpg');
+    background-position-y: -36px;
+    height: 100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color: white;
+    position: fixed;
+    margin-top: 78px;
+  }
   .Apropos-text {
     padding-left: 10px;
   }
@@ -1684,7 +1689,12 @@ th {
     //height: 875px; // TODO strech to 75% of Width and pad text left 20px    
     background-size: contain;
     background-repeat: no-repeat;
+    background-position-y: 32px;
+  }
 
+  .VLMSplash {
+    background-image: none;
+    position: fixed;
   }
 
   .Apropos-text {
@@ -1693,19 +1703,15 @@ th {
 }
 @media all {
   
-  .VLMSplash {
-    width: 100%;
-    height: 100%;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-color: white;
+  .VLMSplash {    
     position: fixed;
-    margin-top: 78px;
-    overflow: overlay;
+    height: 100%;
   }
+
 
   .Apropos-text {
     color: rgb(7, 0, 70);
+    background-color: white;
     font-size: 20px;
     line-height: 1.6;
     text-align: left;
