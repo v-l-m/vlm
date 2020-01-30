@@ -1661,16 +1661,17 @@ function CheckLMNHStatus()
 {
   $starttime = microtime(true);
   // select boat list that do not respect the LMNH rules
-  $targetlist = "select distinct ua.idusers , ut.idraces, ua.time
+  $targetlist = "select ua.idusers , ut.idraces, min(ua.time)
                   from user_action ua, 
                   users_Trophies ut, 
                   users u  
                   where u.idusers = ua.idusers and ua.idusers = ut.idusers
-                    and ua.idraces = ut.idraces and ut.quitdate is null 
+                    and ua.idraces = ut.idraces and ut.quitdate is null                     
                     and u.userdeptime <> -1
                     and ua.time > ut.joindate 
                     and ua.action not like 'Update Prefs%'
-                    and ua.ipaddr <> '127.0.0.1'";
+                    and ua.ipaddr <> '127.0.0.1'
+                    group by ua.idusers , ut.idraces";
 
   $result = wrapper_mysql_db_query_reader($targetlist);
   $querycleanLMNH = "";
@@ -1678,9 +1679,10 @@ function CheckLMNHStatus()
   while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
   {
     $querycleanLMNH .= "update users_Trophies set quitdate = now() where idusers = ". $row['idusers'] ." and idraces = ".$row['idraces'] .";";
-    if ($querycount == 10)
+    //if ($querycount == 10)
     {
       wrapper_mysql_db_query_writer($querycleanLMNH);
+      $querycleanLMNH = "";
       $querycount=0;
     }
     $querycount++;
