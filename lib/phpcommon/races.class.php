@@ -1674,19 +1674,24 @@ function CheckLMNHStatus()
 
   $result = wrapper_mysql_db_query_reader($targetlist);
   $querycleanLMNH = "";
+  $querycount = 0;
   while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) 
   {
     $querycleanLMNH .= "update users_Trophies set quitdate = now() where idusers = ". $row['idusers'] ." and idraces = ".$row['idraces'] .";";
+    if ($querycount == 10)
+    {
+      wrapper_mysql_db_query_writer($querycleanLMNH);
+      $querycount=0;
+    }
+    $querycount++;
   }
 
   echo "\n Targetlist built in ". (microtime(true) - $starttime) ."\n";
-  if ($querycleanLMNH == "")
+  if ($querycleanLMNH != "")
   {
-    echo "Targetlist is empty \n";
-    return;
+    wrapper_mysql_db_query_writer($querycleanLMNH);    
   }
 
-  wrapper_mysql_db_query_writer($querycleanLMNH);
   echo "update complete in ". (microtime(true) - $starttime) ."\n";
   echo "update query :  ". $querycleanLMNH ."\n";
   
