@@ -432,18 +432,21 @@ function CheckPageParameters()
       }
     }
   }
-  if (RacingBarMode)
-  {
-    $(".RaceNavBar").css("display", "inherit");
-    $(".OffRaceNavBar").css("display", "none");
-  }
-  else
-  {
-    $(".RaceNavBar").css("display", "none");
-    $(".OffRaceNavBar").css("display", "inherit");
-    ShowApropos(false);
-  }
 
+  if (!retstop)
+  {
+    if (RacingBarMode)
+    {
+      $(".RaceNavBar").css("display", "inherit");
+      $(".OffRaceNavBar").css("display", "none");
+    }
+    else
+    {
+      $(".RaceNavBar").css("display", "none");
+      $(".OffRaceNavBar").css("display", "inherit");
+      ShowApropos(false);
+    }
+  }
   return retstop;
 }
 
@@ -482,6 +485,7 @@ function HandleVLMIndex(result)
       if (result[index])
       {
         result[index].rank = rank;
+        result[index].vlmindex ='<span data-toggle="tooltip" title="'+result[index].vlmindex+'">'+ parseInt(result[index].vlmindex,10)+"</span>";
         rank++;
       }
     }
@@ -490,7 +494,7 @@ function HandleVLMIndex(result)
     $("#DivVlmIndex").removeClass("hidden");
     $("#RnkTabsUL").addClass("hidden");
     $("#DivRnkRAC").addClass("hidden");
-    ShowApropos(true);
+    //ShowApropos(true);
   }
 }
 
@@ -559,7 +563,7 @@ function InitMenusAndButtons()
 
   // Add resize handler and force resize of small login image (just in case)
   HandleAproposSizing();
-    
+
   $(window).resize(function()
   {
     HandleAproposSizing();
@@ -892,12 +896,13 @@ function InitMenusAndButtons()
 
   UpdateVersionLine();
 
-  function HandleAproposSizing() {
-    let SmallHeight = $(window).width() ;//* 0.9;
+  function HandleAproposSizing()
+  {
+    let SmallHeight = $(window).width(); //* 0.9;
     let FillerHeight = $(window).width() * 0.12;
-    let AproposHeight = $(".VLMSplash").height() - FillerHeight -180;
+    let AproposHeight = $(".VLMSplash").height() - FillerHeight - 180;
     $(".VLMSplashUpperFiller").css("height", FillerHeight);
-    $(".VLMSplashSmall").css("height", SmallHeight).css("background-position-y",0.1*$(window).width());
+    $(".VLMSplashSmall").css("height", SmallHeight).css("background-position-y", 0.1 * $(window).width());
     $(".Apropos-text").css("max-height", AproposHeight);
   }
 }
@@ -1485,13 +1490,13 @@ function ShowApropos(LoggedIn)
 {
   if (!LoggedIn)
   {
-    $(".VLMSplash").css("visibility","visible");
-    $(".MapContainer").css("visibility","hidden");    
+    $(".VLMSplash").css("visibility", "visible");
+    $(".MapContainer").css("visibility", "hidden");
   }
   else
   {
-    $(".VLMSplash").css("visibility","hidden");
-    $(".MapContainer").css("visibility","visible");    
+    $(".VLMSplash").css("visibility", "hidden");
+    $(".MapContainer").css("visibility", "visible");
   }
   //$('#Apropos').modal(LoggedIn ? 'hide' : 'show');
 }
@@ -3430,7 +3435,7 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
 
   for (index in Rankings[RaceId].RacerRanking)
   {
-    if (Rankings[RaceId].RacerRanking[index]  && Boat && Boat.IdBoat === index)
+    if (Rankings[RaceId].RacerRanking[index] && Boat && Boat.IdBoat === index)
     {
       rnk = index + 1;
       break;
@@ -3481,7 +3486,7 @@ function FillWPRanking(Boat, WPNum, Friends)
       if (RnkBoat.WP && RnkBoat.WP[WPNum - 1])
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, WPNum, Friends));
-        if (typeof Boat !== "undefined" && Boat &&  Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3732,7 +3737,7 @@ function FillStatusRanking(Boat, Status, Friends)
       if (RnkBoat.status === Status)
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends));
-        if (typeof Boat!== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3768,7 +3773,7 @@ function FillRacingRanking(Boat, Friends)
       {
         let RnkBoat = Rankings[RaceId].RacerRanking[index];
 
-        if (typeof Boat!=="undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3827,7 +3832,7 @@ function GetBoatInfoLink(RnkBoat)
 function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
 {
 
-  let boatsearchstring = '';//'<img class="BoatFinder" src="images/search.png" idu=' + RankBoat.idusers + ' ></img>   ';
+  let boatsearchstring = ''; //'<img class="BoatFinder" src="images/search.png" idu=' + RankBoat.idusers + ' ></img>   ';
   if (typeof RankBoat.Challenge !== "undefined" && RankBoat.Challenge[1])
   {
     boatsearchstring = '<img class="RnkLMNH" src="images/LMNH.png"></img>' + boatsearchstring;
@@ -3850,7 +3855,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     Delta1st: ""
   };
 
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.GetRankingObject!== "undefined" && parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat)
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.GetRankingObject !== "undefined" && parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat)
   {
     RetObject.Class += " ft_class_myboat";
   }
