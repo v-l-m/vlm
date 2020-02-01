@@ -16,7 +16,7 @@ drop view if exists VIEW_ENGAGED_PER_RACE;
   select idraces, racetype, deptime,sum(engaged) engaged, min(Date1stArrival) Date1stArrival
     from (  select * from VIEW_ENGAGED_PER_RACE_COMPLETE 
   union 
-  select *, 999999999 Date1stArrival from VIEW_ENGAGED_PER_RACE_RACING) T
+  select *, 999999999999 Date1stArrival from VIEW_ENGAGED_PER_RACE_RACING) T
     group by idraces, racetype, deptime;
 
  
@@ -48,7 +48,7 @@ BEGIN
   
   DECLARE crsr_race CURSOR FOR 
     select idraces from VIEW_ENGAGED_PER_RACE
-    where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate);
+    where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate) and idraces not in (20200123, 20200109);
 
   DECLARE CONTINUE HANDLER 
         FOR NOT FOUND SET v_finished = 1;
