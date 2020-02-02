@@ -485,7 +485,7 @@ function HandleVLMIndex(result)
       if (result[index])
       {
         result[index].rank = rank;
-        result[index].vlmindex ='<span data-toggle="tooltip" title="'+result[index].vlmindex+'">'+ parseInt(result[index].vlmindex,10)+"</span>";
+        result[index].vlmindex = '<span data-toggle="tooltip" title="' + result[index].vlmindex + '">' + parseInt(result[index].vlmindex, 10) + "</span>";
         rank++;
       }
     }
@@ -3469,7 +3469,7 @@ function FillWPRanking(Boat, WPNum, Friends)
   //RankingFt.LastWPFill = new Date();
   let RaceId = GetRankingRaceId(Boat);
 
-  
+
   for (index in Rankings[RaceId].RacerRanking)
   {
     if (Rankings[RaceId].RacerRanking[index])
