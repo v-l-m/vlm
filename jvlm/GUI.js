@@ -909,11 +909,11 @@ function InitMenusAndButtons()
 
 function InitRankingEvents()
 {
-  $("#Ranking-Panel").on('shown.bs.collapse', function(e)
+  /*$("#Ranking-Panel").on('shown.bs.collapse', function(e)
   {
     HandleRaceSortChange(e);
   });
-
+*/
   $(document.body).on('click', ".RankingButton", function(e)
   {
     let RaceId = $(e.currentTarget).attr("IdRace");
@@ -1176,6 +1176,7 @@ function InitFootables()
   // Init Pilototo footable, and get pointer to object          
   PilototoFt = InitFooTable("PilototoTable");
   RankingFt = InitFooTable("RankingTable");
+  //RankingFt.LastWPFill = new Date();  
   RaceHistFt = InitFooTable("BoatRaceHist");
   ICS_WPft = InitFooTable("RaceWayPoints");
   NSZ_WPft = InitFooTable("NSZPoints");
@@ -1221,7 +1222,10 @@ function HandleRaceSortChange(e)
   switch (Target)
   {
     case 'WP':
-      SortRanking(Target, $(e.currentTarget).attr('WPRnk'));
+      if (!RankingFt.DrawPending)
+      {
+        SortRanking(Target, $(e.currentTarget).attr('WPRnk'));
+      }
       break;
     case 'DNF':
     case 'HTP':
@@ -1956,7 +1960,7 @@ function BackupFooTable(ft, TableId, RestoreId)
   else if (typeof $(TableId)[0] === "undefined")
   {
     $(ft.RestoreId).append(ft.DOMBackup);
-    console.log("Restored footable " + TableId);
+    console.log("Restored footable " + TableId + " " + new Date());
   }
 }
 
@@ -3421,8 +3425,10 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
     case 'HTP':
     case 'ABD':
     case 'ARR':
-
-      Rankings[RaceId].RacerRanking.sort(RacersSort);
+      if (typeof Rankings !== "undefined" && Rankings[RaceId] && Rankings[RaceId].RacerRanking)
+      {
+        Rankings[RaceId].RacerRanking.sort(RacersSort);
+      }
       break;
 
     default:
@@ -3453,15 +3459,17 @@ function FillWPRanking(Boat, WPNum, Friends)
   let BestTime = 0;
   let Rows = [];
 
-  if (!Boat && (!RankingFt || RankingFt.DrawPending))
+  BackupRankingTable();
+  //TODO Remove DEADCDOE
+  //console.log( 'Last Fill Delta ' + (new Date().getTime() - RankingFt.LastWPFill.getTime()).toString());
+  /*if (!Boat && (!RankingFt || RankingFt.DrawPending || new Date().getTime() - RankingFt.LastWPFill.getTime() < 1000))
   {
     return;
-  }
-
+  }*/
+  //RankingFt.LastWPFill = new Date();
   let RaceId = GetRankingRaceId(Boat);
 
-  BackupRankingTable();
-
+  
   for (index in Rankings[RaceId].RacerRanking)
   {
     if (Rankings[RaceId].RacerRanking[index])
