@@ -1,6 +1,9 @@
 <?php
 $strings['en'] = 
   array (
+    'BoatRaceList' =>'Boat races',
+    'PlayerRaceList' =>'Player races',
+    'FullRaceList' =>'Full race list',
     'EndOfRaceTitle' => 'Race completed',
     'EndOfRaceMessage' => 'You completed race "%s" in position %d out of %d racers',
     'RaceChangeNotice' => 'Race Change Notification',

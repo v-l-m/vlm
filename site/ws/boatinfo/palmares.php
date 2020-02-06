@@ -14,7 +14,8 @@
     $now = time();
     
     $users = getUserObject($ws->idu);
-    $ws->answer['palmares']=$users->GetUserPalmares();
+    $PlayerPalmares=get_cgi_var("GetPlayerRaces", 0);
+    $ws->answer['palmares']=$users->GetUserPalmares($PlayerPalmares);
     $ws->answer['boat']['name']=$users->boatname;
     $ws->reply_with_success();
 

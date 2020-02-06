@@ -515,17 +515,33 @@ class users extends baseClass
       }
   }
 
-  function GetUserPalmares()
+  function GetUserPalmares($PlayerPalmares=false)
   {
-    // search for old races for this player
-    $query = " SELECT races.idraces idrace, races.racename racename from races_results, races  where idusers = ". $this->idusers ."   and races.idraces = races_results.idraces  ORDER BY (races_results.deptime+duration) DESC;";
+    // search for old races for this user or player according to flag
+    $query = " from races_results inner join races on races.idraces = races_results.idraces " ;
+    $query .= " inner join playerstousers P1 on P1.idusers = ". $this->idusers." and linktype = 1 ";
+      
+    if ($PlayerPalmares)
+    {
+      $query .= " inner join playerstousers P2 on P2.idPlayers = P1.idplayers and P2.linktype = 1 and P2.idusers = races_results.idusers ";
+      $query = " SELECT P2.idusers idusers,races.idraces idrace, races.racename racename " . $query;    
+    }
+    else
+    {
+      $query .= " and linktype = 1 and P1.idusers= races_results.idusers ";
+      $query = " SELECT P1.idusers idusers,races.idraces idrace, races.racename racename " . $query;
+    }
+
+    $query .=" where P1.idusers = ". $this->idusers ."   ORDER BY (races_results.deptime+duration) DESC;";
+
+    //echo $query;
     $result = wrapper_mysql_db_query_reader($query);
     $palmares = [];
 
     while ($row = mysqli_fetch_assoc($result)) 
     {
       $res = $row;
-      $res['ranking']=getRaceRanking($this->idusers,$row['idrace'],true); // Le classement
+      $res['ranking']=getRaceRanking($row["idusers"],$row['idrace'],true); // Le classement
       array_push($palmares,$res);
     }
     return $palmares;

@@ -824,14 +824,21 @@ function InitMenusAndButtons()
     HandleShowBoatRaceHistory(e);
   });
 
+
   // Add handler to refresh content of eth pilototo table when showing tab content
   $("[PilRefresh]").on('click', HandleUpdatePilototoTable);
 
   // Handler for not racing boat palmares
   $("#HistRankingButton").on('click', function(e)
   {
-    ShowUserRaceHistory(_CurPlayer.CurBoat.IdBoat);
+    ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat);
   });
+
+  $(".RaceListTab").on("click", function(e)
+  {
+    ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat);
+  });
+
 
   // Go To WP Ortho, VMG, VBVMG Modes
   $("#BtnPM_Ortho, #BtnPM_VMG, #BtnPM_VBVMG").click(
@@ -4234,7 +4241,7 @@ function GetRaceRankingLink(RaceInfo)
   return '<a href="/jvlm?RaceRank=' + RaceInfo.idrace + '" target="RankTab">' + RaceInfo.racename + '</a>';
 }
 
-function FillBoatPalmares(data, status, b, c, d, f)
+function FillBoatPalmares(data, status)
 {
   let index;
 
@@ -4263,14 +4270,31 @@ function FillBoatPalmares(data, status, b, c, d, f)
   $("#palmaresheaderline").text(str);
 }
 
-function ShowUserRaceHistory(BoatId)
+function ShowUserRaceHistory(e, BoatId)
 {
+  let Source = e.currentTarget;
+  let DisplayType = Source.value;
 
-  $("#RaceHistory").modal("show");
-  $.get("/ws/boatinfo/palmares.php?idu=" + BoatId, function(e, a, b, c, d, f)
+  if (typeof DisplayType === "undefined")
   {
-    FillBoatPalmares(e, a, b, c, d, f);
-  });
+    $("#RaceHistory").modal("show");
+    DisplayType = 0;
+  }
+  switch (DisplayType)
+  {
+
+    case 2:
+      break;
+    case 1:
+    default:
+      let PlayerRaces = (DisplayType == 1 ? '&GetPlayerRaces=1' : '');
+      $.get("/ws/boatinfo/palmares.php?idu=" + BoatId + PlayerRaces, function(e, a)
+      {
+        FillBoatPalmares(e, a);
+      });
+  }
+
+  $(".JVLMTabs").tabs("refresh");
 
 }
 

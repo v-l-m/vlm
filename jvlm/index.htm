@@ -1911,7 +1911,7 @@
   </div>
 
   <!-- Race history selection panel -->
-  <div id="RaceHistory" class="modal fade vresp" role="dialog">
+  <div id="RaceHistory" class="modal fade vresp" role="dialog">    
     <div class="modal-dialog">
       <!-- Modal content-->
       <div class="modaldialog modal-content">
@@ -1920,19 +1920,30 @@
           <h4 id="palmaresheaderline" I18n="palmares" class="modal-title" style="text-align:center">boat palm</h4>
         </div>
         <div class="modal-body">
-          <table id="BoatRaceHist" class="footable table">
-            <thead>
-              <tr id="RankingTableHeader">
-                <th data-name="RaceId" data-sorted="true" data-direction="ASC" I18n="raceid">raceid.</th>
-                <th data-name="RaceName" data-toggle="true" I18n="racename">race.</th>
-                <th data-name="Ranking" data-toggle="true" I18N="ranking">Nom</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div class="container-fluid ui-tabs JVLMTabs">
+            <ul >
+              <li class="active RaceListTab" value=0><a href="#PalmBoatDiv"  I18n='BoatRaceList'>Palmares Boat</a></li>
+              <li class="RaceListTab" value=1><a href="#PalmPlayerDiv"  I18n='PlayerRaceList'>Palmares Joueur</a></li>
+              <li class="RaceListTab" value=2><a href="#PalmAllDiv"  I18n='FullRaceList'>Toutes les courses</a></li>
+            </ul>
+            <div id="PalmTabDiv" style="visibility: hidden;position: absolute;"></div>
+            <div id="PalmPlayerDiv" style="visibility: hidden;position: absolute;"></div>
+            <div id="PalmAllDiv" style="visibility: hidden;position: absolute;"></div>            
+          </div>
+          <div>
+            <table id="BoatRaceHist" class="footable table">
+              <thead>
+                <tr id="RankingTableHeader">
+                  <th data-name="RaceId" data-sorted="true" data-direction="ASC" I18n="raceid">raceid.</th>
+                  <th data-name="RaceName" data-toggle="true" I18n="racename">race.</th>
+                  <th data-name="Ranking" data-toggle="true" I18N="ranking">Nom</th>
+                </tr>
+              </thead>
+              <tbody>
 
-            </tbody>
-          </table>
-
+              </tbody>
+            </table>
+          </div>        
         </div>
         <div class="modal-footer">
           <!--<button type="submit" id="BtnCreateAccount" I18n="CreateAcctBtn" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">Créer</button>-->
