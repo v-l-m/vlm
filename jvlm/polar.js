@@ -31,8 +31,6 @@ class PolarManagerClass
       if (!this.Polars[PolarName])
       {
         // Polar not loaded yet, load it
-        // TODO Remove dead code
-        //$.get("/Polaires/"+ PolarName +".csv",this.HandlePolarLoaded.bind(this, PolarName,null, null));
         this.LoadPolar(PolarName, null, null);
         return NaN;
       }
