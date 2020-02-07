@@ -4288,6 +4288,7 @@ function ShowUserRaceHistory(e, BoatId)
     case 1:
     default:
       let PlayerRaces = (DisplayType == 1 ? '&GetPlayerRaces=1' : '');
+      StatMGR.Stat("BoatPalmares", (DisplayType == 1 ? 'Player' : 'Boat'));
       $.get("/ws/boatinfo/palmares.php?idu=" + BoatId + PlayerRaces, function(e, a)
       {
         FillBoatPalmares(e, a);
