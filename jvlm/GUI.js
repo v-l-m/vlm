@@ -3446,14 +3446,17 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
   let rnk = 1;
   let index = 0;
 
-  for (index in Rankings[RaceId].RacerRanking)
+  if (Rankings && Rankings[RaceId])
   {
-    if (Rankings[RaceId].RacerRanking[index] && Boat && Boat.IdBoat === index)
+    for (index in Rankings[RaceId].RacerRanking)
     {
-      rnk = index + 1;
-      break;
-    }
+      if (Rankings[RaceId].RacerRanking[index] && Boat && Boat.IdBoat === index)
+      {
+        rnk = index + 1;
+        break;
+      }
 
+    }
   }
 
   return rnk;
@@ -3955,6 +3958,20 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
   return RetObject;
 }
 
+// Add polyfill for IE
+Math.trunc = Math.trunc || function(x)
+{
+  if (isNaN(x))
+  {
+    return NaN;
+  }
+  if (x > 0)
+  {
+    return Math.floor(x);
+  }
+  return Math.ceil(x);
+};
+
 function formatCoords(v)
 {
   v = Math.abs(v);
@@ -4305,7 +4322,7 @@ function HandleShowBoatRaceHistory(e)
 
   if (BoatId)
   {
-    ShowUserRaceHistory(BoatId);
+    ShowUserRaceHistory(e, BoatId);
   }
 }
 

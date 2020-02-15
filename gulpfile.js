@@ -125,7 +125,7 @@ gulp.task('libs_std', function()
 {
   return gulp.src(['jvlm/external/jquery/jquery-3.2.1.min.js',
       'jvlm/external/jquery-ui/jquery-ui.js', 'jvlm/external/bootstrap-master/js/bootstrap.js',
-      'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.js',
+      'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js',
       'jvlm/jquery.ui.touch-punch.js', 'jvlm/external/store/store.min.js',
       'externals/fullcalendar/core/main.js','externals/fullcalendar/daygrid/main.js',    
       'jvlm/external/moments/moment-with-locales.min.js'
