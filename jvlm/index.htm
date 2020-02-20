@@ -88,7 +88,10 @@
         </a>
         <div class="hidden-lg hidden-md" LoggedInNav="true" style="float:left">
           <ul class="badgeinfo">
-            <li><img src="images/boat.png" height="20px" alt="" /></li>
+            <li>
+              <img src="images/boat.png" height="20px" alt="" />
+              <span class="NWPBadge btnbadge badge">...</span>
+            </li>
             <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
             <li><span class="badge badge-boat BoatSpeed">--</span><sup I18N="nds">nds</sup></li>
           </ul>
@@ -144,7 +147,10 @@
           </li>
         </ul>
         <ul class="badgeinfo hidden-sm hidden-xs" LoggedInNav="true" style="width: 62px;">
-          <li><img src="images/boat.png" height="20px" alt="" /></li>
+          <li>
+            <img src="images/boat.png" height="20px" alt="" />
+            <span class="NWPBadge btnbadge badge">...</span>
+          </li>
           <li><span Class="badge badge-boat BoatHeading">--</span>&deg;</li>
           <li><span class="badge badge-boat BoatSpeed">--</span><sup I18N="nds">nds</sup></li>
         </ul>
@@ -185,7 +191,8 @@
           <li class="nav hidden" RacingBtn="true">
             <div class="BtnGroup">
               <div class="BtnRankingPanel">
-                <a data-toggle="collapse" data-target="#Ranking-Panel" RnkSort="RAC"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png" /></a><span id="RankingBadge" class="ranking btnbadge badge">...</span>
+                <a data-toggle="collapse" data-target="#Ranking-Panel" RnkSort="RAC"><img id="RankingButton" class="TDB-Icon" src="images/ranking.png" /></a>
+                <span id="RankingBadge" class="ranking btnbadge badge">...</span>
               </div>
             </div>
           </li>
@@ -1684,10 +1691,34 @@
       <!-- Modal content-->
       <div id="RacesListPanel" class=" modaldialog modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>
-        </div>
+           <!--<button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>-->
+         <div id="TabsInfos" class="JVLMTabs">
+          <ul>
+            <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true" I18n='race'>Course</a></li>
+            <li><a href="#InfosBoat" data-toggle="tab" I18n='control'>Bateau</a></li>
+            <li><a Id="PolarTab" href="#PolarBoat" data-toggle="tab" I18n='Polar'>Polaires</a></li>
+            <li id="DiscontinueRaceTab"><a href="#DiscontinueRace" data-toggle="tab" I18n="Discontinue"> Disc. Race</a></li>
+          </ul>
+          <!--<div id="RaceListTabBar" class ="JVLMTabs">
+            <ul>
+              <il class="active" >
+                <a href="#PnlCurrentRaces" data-toggle="tab" class="RaceList" value=0>
+                  <span I18n="current_races"></span> 
+                </a>
+              </il>
+              <il data-toggle="tab" class="RaceList" value=1>
+                <a href="#PnlAllRaces" >
+                  <span I18n="current_races"></span>
+                </a>
+              </il>
+            </ul>
+            <div id="PnlCurrentRaces" class="tab-content" style="visibility: hidden;position: absolute;"></div>
+            <div id="PnlAllRaces" class="tab-content" style="visibility: hidden;position: absolute;"></div>
+          </div>
+        </div>-->
         <div id="RaceListBody" class="modal-body">
+          
           <div id="RaceListPanel" class="panel group">
           </div>
         </div>
