@@ -200,6 +200,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             NotifyEndOfRace(Boat.IdBoat);
             //GetLastRacehistory();
             UpdateInMenuDockingBoatInfo(Boat);
+            $(".NWPBadge").css("visibility","hidden");
+    
           }
         }
 

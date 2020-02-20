@@ -1583,6 +1583,16 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
     Boat.VLMInfo.BSP = 0;
   }
 
+  if (Boat.VLMInfo)
+  {
+    $(".NWPBadge").css("visibility","visible");
+    $(".NWPBadge").text(Boat.VLMInfo.NWP);    
+  }
+  else
+  {
+    $(".NWPBadge").css("visibility","hidden");
+  }
+
 
   // Update GUI for current player
   // Todo Get Rid of Coords Class
