@@ -1692,40 +1692,37 @@
       <div id="RacesListPanel" class=" modaldialog modal-content">
         <div class="modal-header">
            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>
-         <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>-->
-         <div id="TabsInfos" class="JVLMTabs">
-          <ul>
-            <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true" I18n='race'>Course</a></li>
-            <li><a href="#InfosBoat" data-toggle="tab" I18n='control'>Bateau</a></li>
-            <li><a Id="PolarTab" href="#PolarBoat" data-toggle="tab" I18n='Polar'>Polaires</a></li>
-            <li id="DiscontinueRaceTab"><a href="#DiscontinueRace" data-toggle="tab" I18n="Discontinue"> Disc. Race</a></li>
-          </ul>
-          <!--<div id="RaceListTabBar" class ="JVLMTabs">
+          <h4 class="modal-title" I18n="current_races" style="text-align:center">racelist</h4>-->
+          <div id="RaceListTabBar" class="JVLMTabs">
             <ul>
-              <il class="active" >
-                <a href="#PnlCurrentRaces" data-toggle="tab" class="RaceList" value=0>
-                  <span I18n="current_races"></span> 
+              <li class="active RaceListFormTab" value=0>
+                <a href="#PnlCurrentRaces" data-toggle="tab" >
+                  <span I18n="current_races"></span>                  
                 </a>
-              </il>
-              <il data-toggle="tab" class="RaceList" value=1>
-                <a href="#PnlAllRaces" >
-                  <span I18n="current_races"></span>
+              </li>
+              <li class="RaceListFormTab" value=1>
+                <a href="#PnlAllRaces" data-toggle="tab" >
+                  <span I18n="old_races"></span>
                 </a>
-              </il>
+              </li>
             </ul>
             <div id="PnlCurrentRaces" class="tab-content" style="visibility: hidden;position: absolute;"></div>
             <div id="PnlAllRaces" class="tab-content" style="visibility: hidden;position: absolute;"></div>
           </div>
-        </div>-->
+        </div>
         <div id="RaceListBody" class="modal-body">
-          
-          <div id="RaceListPanel" class="panel group">
+          <div id="RaceListPanel" class="panel group">            
+          </div>
+          <img src="images/Preloader_5.gif" alt="Loading..." class="racelistpreloader img-responsive center-block">                         
+          <div class="col-xs-12">
+            <button Id="BtnMoreOldRaces" class="ui-button ui-corner-all ui-widget center-block" I18n="ShowMore" Value=0></button>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="ui-button ui-corner-all ui-widget" I18n="Close" data-dismiss="modal">Close</button>
         </div>
-      </div>
+      </div>    
+      
     </div>
   </div>
   <!-- Modal Infos race -->
@@ -1742,7 +1739,7 @@
           </h4>
         </div>
         <div id="RaceInfoBody" class="modal-body">
-          <div id="TabsInfos" class="JVLMTabs">
+          <div id="RaceTabsInfos" class="JVLMTabs">
             <ul>
               <li class="active"><a href="#InfosRace" data-toggle="tab" aria-expanded="true" I18n='race'>Course</a></li>
               <li><a href="#InfosBoat" data-toggle="tab" I18n='control'>Bateau</a></li>
@@ -2031,7 +2028,7 @@
         </div>
         <div class="modal-body">
           <span I18n="StatsConsent1"  style="text-align:center">RaceCal</span>
-          <br><BR>
+          <br/>
           <div class="row container-fluid">
             <span class="col-xs-8" I18n="StatsConsent2"  style="text-align:center">RaceCal</span>
             <span class='col-xs-1'></span>
