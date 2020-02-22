@@ -1,6 +1,8 @@
 <?php
 $strings['en'] = 
   array (
+    'ShowMore' => 'Show more races ...',    
+    'old_races' => 'All passed races',
     'BoatRaceList' =>'Boat races',
     'PlayerRaceList' =>'Player races',
     'FullRaceList' =>'Full race list',

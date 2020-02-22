@@ -825,7 +825,7 @@ function InitMenusAndButtons()
   });
 
 
-  // Add handler to refresh content of eth pilototo table when showing tab content
+  // Add handler to refresh content of the pilototo table when showing tab content
   $("[PilRefresh]").on('click', HandleUpdatePilototoTable);
 
   // Handler for not racing boat palmares
@@ -837,6 +837,12 @@ function InitMenusAndButtons()
   $(".RaceListTab").on("click", function(e)
   {
     ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat);
+  });
+
+  //Handler for the races list form
+  $(".RaceListFormTab").on("click", function(e)
+  {
+    FillRacesListForm(e);
   });
 
 
@@ -2295,54 +2301,88 @@ function UpdatePrefsDialog(Boat)
     }
   }
 
-
-
 }
 
-let RaceSorter = function RaceSortEvaluator(r1, r2)
+class RaceSorterclass
 {
-  if (r1.CanJoin === r2.CanJoin)
+  constructor(OldRacesSortMode)
   {
-    if (r1.deptime > r2.deptime)
+    this.OldRacesSortMode = false;
+    if (OldRacesSortMode)
     {
-      return -1;
+      this.OldRacesSortMode = true;
     }
-    else if (r1.deptime === r2.deptime)
+    this.sort = function(r1, r2)
     {
-      if (r1.racename > r2.racename)
+      if (r1.CanJoin === r2.CanJoin)
+      {
+        if (r1.deptime > r2.deptime)
+        {
+          if (this.OldRacesSortMode)
+          {
+            return 1;
+          }
+          else
+          {
+            return -1;
+          }
+        }
+        else if (r1.deptime === r2.deptime)
+        {
+          if (r1.racename > r2.racename)
+          {
+            return 1;
+          }
+          else if (r1.racename === r2.racename)
+          {
+            return 0;
+          }
+          else
+          {
+            return -1;
+          }
+        }
+        else
+        {
+          return 1;
+        }
+
+      }
+      else if (r1.CanJoin)
       {
         return 1;
-      }
-      else if (r1.racename === r2.racename)
-      {
-        return 0;
       }
       else
       {
         return -1;
       }
-    }
-    else
-    {
-      return 1;
-    }
+    };
+  }
+}
 
-  }
-  else if (r1.CanJoin)
-  {
-    return 1;
-  }
-  else
-  {
-    return -1;
-  }
-};
 
-function LoadRacesList()
+function FillRacesListForm(e)
 {
+  let Count = null;
+  if (e && e.currentTarget && e.currentTarget.value)
+  {
+    Count=100;
+  }
+  LoadRacesList(Count);
+}
+
+function LoadRacesList(e)
+{
+  let MaxFinishedRacesLength = 0;
   let CurUser = _CurPlayer.CurBoat.IdBoat;
-  $("#RaceListPanel").empty().append("<H4>...</H4>");
-  $.get("/ws/raceinfo/list.php?iduser=" + CurUser + "&v=" + (new Date().getTime()),
+  $("#RaceListPanel").empty();
+  $('.racelistpreloader').removeClass("hidden");
+  $('#BtnMoreOldRaces').addClass("hidden");
+  if (e)
+  {
+    MaxFinishedRacesLength = e;
+  }
+  $.get("/ws/raceinfo/list.php?iduser=" + CurUser + "&OldRaces=" + MaxFinishedRacesLength + "&v=" + (new Date().getTime()),
     function(result)
     {
       var racelist = result;
@@ -2357,13 +2397,22 @@ function LoadRacesList()
           RaceArray.push(racelist[index]);
         }
       }
-      RaceArray.sort(RaceSorter);
+
+      let RaceSorter = new RaceSorterclass(e !== null);
+      
+      RaceArray.sort(RaceSorter.sort.bind(RaceSorter));
+
       for (let index in RaceArray)
       {
         if (RaceArray[index])
         {
           AddRaceToList(RaceArray[index]);
         }
+      }
+      $('.racelistpreloader').addClass("hidden");
+      if (e)
+      {
+        $('#BtnMoreOldRaces').removeClass("hidden").value=e;
       }
 
       // Resize button height to be uniform with highest one.      
@@ -2376,6 +2425,7 @@ function LoadRacesList()
         }
       });
       $('#RaceListPanel .btn-group .btn-md').height(highestBox);
+
 
     }
   );
@@ -2391,6 +2441,7 @@ function AddRaceToList(race)
   let RaceJoinStateClass;
   let StartMoment;
   let RecordRace = ((race.racetype & RACE_TYPE_RECORD) == RACE_TYPE_RECORD);
+  let RaceTerminated = race.started === -1; 
 
   if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && _CurPlayer.CurBoat.RaceInfo.idraces)
   {
@@ -2417,6 +2468,13 @@ function AddRaceToList(race)
     RaceJoinStateClass = 'NoJoinRace';
   }
 
+  let BoatType = "???";
+
+  if (race.boattype)
+  {
+    BoatType = race.boattype.substring(5);
+  }
+
   let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" )>' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
     '    <div class="col-xs-12">' +
@@ -2432,7 +2490,7 @@ function AddRaceToList(race)
     '        <div class="btn-group col-xs-12">' +
     '          <button id="JoinRaceButton" type="button" class="' + (race.CanJoin ? '' : 'hidden') + ' btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '          </button>' +
-    '          <button id="SpectateRaceButton" type="button" class="ShowRaceInSpectatorMode btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
+    '          <button id="SpectateRaceButton" type="button" class="' + (RaceTerminated ?  'hidden':'') + '  ShowRaceInSpectatorMode btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
     '          </button>' +
     '          <button type="button" class="ShowICSButton btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
     '          </button>' +
@@ -2452,7 +2510,7 @@ function AddRaceToList(race)
     '      <div class="col-xs-12"><img class="img-responsive" src="/cache/racemaps/' + race.idraces + '.png" width="530px"></div>' +
     '        <div class="col-xs-12"><p>' + GetLocalizedString('race') + ' : ' + race.racename + '</p>' +
     '          <p>Départ : ' + GetLocalUTCTime(race.deptime * 1000, true, true) + '</p>' +
-    '          <p>' + GetLocalizedString('boattype') + ' : ' + race.boattype.substring(5) + '</p>' +
+    '          <p>' + GetLocalizedString('boattype') + ' : ' + BoatType + '</p>' +
     '          <p>' + GetLocalizedString('crank') + ' : ' + race.vacfreq + '\'</p>' +
     '          <p>' + GetLocalizedString('locktime') + parseInt(race.coastpenalty, 10) / 60.0 + ' \'</p>' +
     '          <p>' + GetLocalizedString('closerace') + GetLocalUTCTime(race.closetime * 1000, true, true) + '</p>' +

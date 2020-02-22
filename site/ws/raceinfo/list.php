@@ -9,6 +9,20 @@
                   ORDER BY started ASC, deptime ASC, closetime ASC ";
     var $jsonarray;
 
+    function __construct($iduser=-1, $OldRaces=0) 
+    {      
+      if ($OldRaces)
+      {
+        if ($OldRaces > 200)
+        {
+          $OldRaces=($OldRaces-200).",".$OldRaces;
+        }
+        $this->query = "SELECT * FROM races
+                  ORDER BY started ASC, deptime desc, closetime ASC limit ".$OldRaces;
+      }
+      parent::__construct($iduser);      
+    }
+
     function listing() 
     {
       $this->start();
@@ -95,5 +109,10 @@
   {
     $iduser = null;
   }
-  new JsonRacesIterator($iduser);
+  $OldRaces=0;
+  if (array_key_exists("OldRaces", $_REQUEST))
+  {
+    $OldRaces=htmlentities(quote_smart($_REQUEST['OldRaces']));
+  }  
+  new JsonRacesIterator($iduser,$OldRaces);
 ?>
