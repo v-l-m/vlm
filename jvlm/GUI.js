@@ -1585,12 +1585,12 @@ function UpdateInMenuRacingBoatInfo(Boat, TargetTab)
 
   if (Boat.VLMInfo)
   {
-    $(".NWPBadge").css("visibility","visible");
-    $(".NWPBadge").text(Boat.VLMInfo.NWP);    
+    $(".NWPBadge").css("visibility", "visible");
+    $(".NWPBadge").text(Boat.VLMInfo.NWP);
   }
   else
   {
-    $(".NWPBadge").css("visibility","hidden");
+    $(".NWPBadge").css("visibility", "hidden");
   }
 
 
