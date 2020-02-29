@@ -2381,11 +2381,20 @@ function FillRacesListForm(e)
 }
 
 var OldRaceArray = [];
-
+var FilterTimerHandler= null;
 function HandleRacesListFilterChange(e)
 {
+  if (FilterTimerHandler)
+  {
+    clearTimeout(FilterTimerHandler);
+  }
+  FilterTimerHandler=setTimeout(function (f) {RaceListFilterChange(e);},300);
+}
+
+function RaceListFilterChange(e)
+{
   let t = e.currentTarget;
-  let StartTick = new Date().getTime();
+  //let StartTick = new Date().getTime();
   let Races = $(".raceheaderline");
   if (t)
   {
@@ -2416,8 +2425,8 @@ function HandleRacesListFilterChange(e)
     $("#RaceListPanel").append(Races);
   }
 
-  let EndTick = new Date().getTime();
-  console.log(OldRaceArray.length + " rows search in " + (EndTick - StartTick) + " µs");
+  //let EndTick = new Date().getTime();
+  //console.log(OldRaceArray.length + " rows search in " + (EndTick - StartTick) + " µs");
 
 }
 
@@ -2426,15 +2435,14 @@ function LoadRacesList(e)
   let MaxFinishedRacesLength = 0;
   let CurUser = _CurPlayer.CurBoat.IdBoat;
   let CurLength = 0;
-  let OldRaces = false;
+  let filter = $("#RacesFilterText").val();
   $('.racelistpreloader').removeClass("hidden");
   $('#BtnMoreOldRaces').addClass("hidden");
 
   if (e)
   {
     CurLength = parseInt($('#BtnMoreOldRaces').addClass("hidden").attr("PageLength"), 10);
-    OldRaces = true;
-
+    
     if (typeof CurLength === "undefined" || isNaN(CurLength))
     {
       CurLength = 0;
@@ -2468,10 +2476,12 @@ function LoadRacesList(e)
 
         if (racelist[index])
         {
+          /*jshint -W083 */
           let find = function(r)
           {
             return r.idraces === racelist[index].idraces;
           };
+          /*jshint +W083 */
 
           if (OldRaceArray.findIndex(find) === -1)
           {
@@ -2492,7 +2502,7 @@ function LoadRacesList(e)
         if (OldRaceArray[index] && !OldRaceArray[index].Loaded)
         {
           OldRaceArray[index].Loaded = true;
-          AddRaceToList(OldRaceArray[index]);
+          AddRaceToList(OldRaceArray[index],filter);
         }
       }
       console.log("RaceList COunters" + FileRaceCount + "/" + FileRaceAdded + "/" + OldRaceArray.length);
@@ -2522,7 +2532,7 @@ function LoadRacesList(e)
   );
 }
 
-function AddRaceToList(race)
+function AddRaceToList(race, filter)
 {
   let base = $("#RaceListPanel").first();
 
@@ -2533,6 +2543,14 @@ function AddRaceToList(race)
   let StartMoment;
   let RecordRace = ((race.racetype & RACE_TYPE_RECORD) == RACE_TYPE_RECORD);
   let RaceTerminated = race.started === -1;
+  let RaceHidden = false;
+  if (filter)
+  {
+    if (!race.racename.toLowerCase().includes(filter.toLowerCase()))
+    {
+      RaceHidden=true;
+    }
+  }
 
   if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && _CurPlayer.CurBoat.RaceInfo.idraces)
   {
@@ -2566,7 +2584,7 @@ function AddRaceToList(race)
     BoatType = race.boattype.substring(5);
   }
 
-  let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" racelistid="' + race.idraces + '">' +
+  let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + ' '+(RaceHidden?"hidden":"") + '" racelistid="' + race.idraces + '">' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
     '    <div class="col-xs-12">' +
     '      <div class="col-xs-3">' +
