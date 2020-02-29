@@ -1715,11 +1715,15 @@
           </div>
           <img src="images/Preloader_5.gif" alt="Loading..." class="racelistpreloader img-responsive center-block">                         
           <div class="col-xs-12">
-            <button Id="BtnMoreOldRaces" class="ui-button ui-corner-all ui-widget center-block" I18n="ShowMore" Value=0></button>
+            <button Id="BtnMoreOldRaces" class="RaceListFormTab ui-button ui-corner-all ui-widget center-block hidden" I18n="ShowMore" Value=0></button>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="ui-button ui-corner-all ui-widget" I18n="Close" data-dismiss="modal">Close</button>
+          <div class="col-xs-9">
+              <input id="RacesFilterText" class="col-xs-10" type="text"></input>
+              <img src="images/search_blue_magglass.png" class="col-xs-1" style="height:100%" />
+          </div>
+          <button type="button" class="col-xs-2 ui-button ui-corner-all ui-widget" I18n="Close" data-dismiss="modal">Close</button>
         </div>
       </div>    
       
@@ -1958,7 +1962,8 @@
             <div id="PalmPlayerDiv" style="visibility: hidden;position: absolute;"></div>
             <!--<div id="PalmAllDiv" style="visibility: hidden;position: absolute;"></div> -->
           </div>
-          <div>
+          <img src="images/Preloader_5.gif" alt="loading" class="racelistpreloader img-responsive center-block"/>
+          <div id="RaceListDiv">
             <table id="BoatRaceHist" class="footable table">
               <thead>
                 <tr id="RankingTableHeader">

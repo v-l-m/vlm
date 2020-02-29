@@ -656,7 +656,7 @@ function InitMenusAndButtons()
   $(".BtnRaceList").click(
     function()
     {
-      LoadRacesList();
+      LoadRacesList(0);
       $("#RacesListForm").modal("show");
     }
   );
@@ -836,8 +836,11 @@ function InitMenusAndButtons()
 
   $(".RaceListTab").on("click", function(e)
   {
+
     ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat);
   });
+
+  $("#RacesFilterText").on("input", HandleRacesListFilterChange);
 
   //Handler for the races list form
   $(".RaceListFormTab").on("click", function(e)
@@ -2366,53 +2369,135 @@ function FillRacesListForm(e)
   let Count = null;
   if (e && e.currentTarget && e.currentTarget.value)
   {
-    Count=100;
+    Count = 200;
   }
   LoadRacesList(Count);
+}
+
+var OldRaceArray = [];
+
+function HandleRacesListFilterChange(e)
+{
+  let t = e.currentTarget;
+  let StartTick = new Date().getTime();
+  let Races = $(".raceheaderline");
+  if (t)
+  {
+    $("#RaceListPanel").empty();
+    let filter = t.value.trim().toLowerCase();
+    let FilterRaces = function(r1)
+    {
+      let raceid = $(Races[r1]).attr("racelistid");
+      let r = OldRaceArray[OldRaceArray.findIndex(function(e)
+      {
+        return e.idraces == raceid;
+      })];
+
+      let visible = filter === "" || r.racename.toLowerCase().includes(filter);
+
+      if (visible)
+      {
+        $(Races[r1]).removeClass("hidden");
+      }
+      else
+      {
+        $(Races[r1]).addClass("hidden");
+      }
+    };
+
+
+    Races.map(FilterRaces);
+    $("#RaceListPanel").append(Races);
+  }
+
+  let EndTick = new Date().getTime();
+  console.log(OldRaceArray.length + " rows search in " + (EndTick - StartTick) + " µs");
+
 }
 
 function LoadRacesList(e)
 {
   let MaxFinishedRacesLength = 0;
   let CurUser = _CurPlayer.CurBoat.IdBoat;
-  $("#RaceListPanel").empty();
+  let CurLength = 0;
+  let OldRaces = false;
   $('.racelistpreloader').removeClass("hidden");
   $('#BtnMoreOldRaces').addClass("hidden");
+
   if (e)
   {
-    MaxFinishedRacesLength = e;
+    CurLength = parseInt($('#BtnMoreOldRaces').addClass("hidden").attr("PageLength"), 10);
+    OldRaces = true;
+
+    if (typeof CurLength === "undefined" || isNaN(CurLength))
+    {
+      CurLength = 0;
+      $("#RaceListPanel").empty();
+      $('#BtnMoreOldRaces').removeClass("hidden").attr("PageLength", 100);
+    }
+    else if (CurLength == -1)
+    {
+      return;
+    }
+    MaxFinishedRacesLength = e + CurLength;
+  }
+  else
+  {
+    $("#RaceListPanel").empty();
+    OldRaceArray = [];
+    $(".RaceListTab").removeClass("Active");
+    $(".RaceListTab [value=0]").addClass("Active");
+    $('#BtnMoreOldRaces').attr("PageLength", 100);
   }
   $.get("/ws/raceinfo/list.php?iduser=" + CurUser + "&OldRaces=" + MaxFinishedRacesLength + "&v=" + (new Date().getTime()),
     function(result)
     {
-      var racelist = result;
+      let racelist = result;
+      let AddedRace = false;
+      let FileRaceCount = 0;
+      let FileRaceAdded = 0;
 
-      // Clear previous elements
-      $("#RaceListPanel").empty();
-      let RaceArray = [];
       for (let index in racelist)
       {
+
         if (racelist[index])
         {
-          RaceArray.push(racelist[index]);
+          let find = function(r)
+          {
+            return r.idraces === racelist[index].idraces;
+          };
+
+          if (OldRaceArray.findIndex(find) === -1)
+          {
+            OldRaceArray.push(racelist[index]);
+            AddedRace = true;
+            FileRaceAdded += 1;
+          }
         }
+        FileRaceCount += 1;
       }
 
       let RaceSorter = new RaceSorterclass(e !== null);
-      
-      RaceArray.sort(RaceSorter.sort.bind(RaceSorter));
 
-      for (let index in RaceArray)
+      OldRaceArray.sort(RaceSorter.sort.bind(RaceSorter));
+
+      for (let index in OldRaceArray)
       {
-        if (RaceArray[index])
+        if (OldRaceArray[index] && !OldRaceArray[index].Loaded)
         {
-          AddRaceToList(RaceArray[index]);
+          OldRaceArray[index].Loaded = true;
+          AddRaceToList(OldRaceArray[index]);
         }
       }
+      console.log("RaceList COunters" + FileRaceCount + "/" + FileRaceAdded + "/" + OldRaceArray.length);
       $('.racelistpreloader').addClass("hidden");
-      if (e)
+      if (e && AddedRace)
       {
-        $('#BtnMoreOldRaces').removeClass("hidden").value=e;
+        $('#BtnMoreOldRaces').removeClass("hidden").attr("PageLength", CurLength + e);
+      }
+      else
+      {
+        $('#BtnMoreOldRaces').attr("PageLength", 0);
       }
 
       // Resize button height to be uniform with highest one.      
@@ -2441,7 +2526,7 @@ function AddRaceToList(race)
   let RaceJoinStateClass;
   let StartMoment;
   let RecordRace = ((race.racetype & RACE_TYPE_RECORD) == RACE_TYPE_RECORD);
-  let RaceTerminated = race.started === -1; 
+  let RaceTerminated = race.started === -1;
 
   if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.RaceInfo && _CurPlayer.CurBoat.RaceInfo.idraces)
   {
@@ -2475,7 +2560,7 @@ function AddRaceToList(race)
     BoatType = race.boattype.substring(5);
   }
 
-  let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" )>' +
+  let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + '" racelistid="' + race.idraces + '">' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
     '    <div class="col-xs-12">' +
     '      <div class="col-xs-3">' +
@@ -2490,7 +2575,7 @@ function AddRaceToList(race)
     '        <div class="btn-group col-xs-12">' +
     '          <button id="JoinRaceButton" type="button" class="' + (race.CanJoin ? '' : 'hidden') + ' btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '          </button>' +
-    '          <button id="SpectateRaceButton" type="button" class="' + (RaceTerminated ?  'hidden':'') + '  ShowRaceInSpectatorMode btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
+    '          <button id="SpectateRaceButton" type="button" class="' + (RaceTerminated ? 'hidden' : '') + '  ShowRaceInSpectatorMode btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
     '          </button>' +
     '          <button type="button" class="ShowICSButton btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
     '          </button>' +
@@ -4374,9 +4459,13 @@ function ShowUserRaceHistory(e, BoatId)
     default:
       let PlayerRaces = (DisplayType == 1 ? '&GetPlayerRaces=1' : '');
       StatMGR.Stat("BoatPalmares", (DisplayType == 1 ? 'Player' : 'Boat'));
+      $("#RaceRankingsPreloader").removeClass("hidden");
+      $(".racelistpreloader").addClass("hidden");
       $.get("/ws/boatinfo/palmares.php?idu=" + BoatId + PlayerRaces, function(e, a)
       {
+        $("#RaceListDiv").removeClass("hidden");
         FillBoatPalmares(e, a);
+        $(".racelistpreloader").addClass("hidden");
       });
   }
 
