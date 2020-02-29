@@ -11,6 +11,7 @@ var FIELD_MAPPING_CHECK = 2;
 var FIELD_MAPPING_IMG = 3;
 var FIELD_MAPPING_CALLBACK = 4;
 var FIELD_MAPPING_STYLE = 5;
+var FIELD_MAPPING_POPUP = 6;
 
 var MAX_PILOT_ORDERS = 5;
 
@@ -1768,6 +1769,11 @@ function FillFieldsFromMappingTable(MappingTable)
 
         case FIELD_MAPPING_STYLE:
           $(MappingTable[index][1]).css(MappingTable[index][2], MappingTable[index][3]);
+          break;
+
+        case FIELD_MAPPING_POPUP:
+          $(MappingTable[index][1]).attr("title", MappingTable[index][2]);
+          break;
 
       }
     }
@@ -3995,7 +4001,7 @@ function GetBoatInfoLink(RnkBoat)
   }
 
   //ret += '<a class="RaceHistLink" href="/palmares.php?type=user&idusers='+IdUser+'" target ="_'+IdUser +'">'+BoatName+'</a>';
-  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '"data-toggle="tooltip" title="' + IdUser + '" >' + BoatName + '</a>';
+  ret += '<a class="RaceHistLink" boatid ="' + IdUser + '"data-toggle="tooltip" title="' + BoatName + '-' + IdUser + '" >' + RnkBoat.PlayerName + '</a>';
 
   return ret;
 }
@@ -4449,6 +4455,11 @@ function ShowUserRaceHistory(e, BoatId)
   {
     $("#RaceHistory").modal("show");
     DisplayType = 0;
+    $(".RaceListTab").attr("BoatId", BoatId);
+  }
+  else
+  {
+    BoatId = $(".RaceListTab").attr("BoatId");
   }
   switch (DisplayType)
   {

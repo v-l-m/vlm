@@ -1956,7 +1956,8 @@ function ShowOpponentPopupInfo(e)
         let PopupFields = [];
         let OppId = Opp.options.icon.MarkerOppId;
         Opp.openPopup();
-        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + OppId, Boat.boatname]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + OppId, Boat.PlayerName]);
+        PopupFields.push([FIELD_MAPPING_POPUP, "#__BoatName" + OppId, Boat.boatname]);
         PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + OppId, Boat.idusers]);
         PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + OppId, Boat.rank]);
         PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatLoch" + OppId, RoundPow(parseFloat(Boat.loch), 2)]);
@@ -2021,7 +2022,7 @@ function BuildBoatPopupInfo(Boat)
   let RetStr =
     '<div class="MapPopup_InfoHeader">' +
     GetCountryFlagImgHTML(Boat.country) +
-    ' <span id="__BoatName' + BoatId + '" class="PopupBoatNameNumber ">BoatName</span>' +
+    ' <a id="__BoatName' + BoatId + '" class="PopupBoatNameNumber " href="#" data-toggle="tooltip" title="BoatName">PlayerName<</a>' +
     ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
     ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
     '</div>' +
