@@ -408,6 +408,39 @@ class VLM2GribManager
       }
     };
 
+    this.AsyncCallBackQueueHandler = function (callbacks)
+    {
+      let StartTick = new Date().getTime();
+      let calls = 0;
+      if (!callbacks)
+      {
+        return;
+      }
+      for (let index in callbacks)
+      {
+        if ((new Date().getTime())-StartTick > 1000)
+        {
+          let HangingCallBacks =[];
+          let HasMore = false;
+          callbacks=callbacks.filter(function(x) {return x!==null;});
+          if (callbacks.length>=1)
+          {
+            callbacks = HangingCallBacks;
+            setTimeout(this.AsyncCallBackQueueHandler.bind(this),50,callbacks);
+            console.log("Sync Callback hangs "+callbacks.length);
+          }
+          
+          return;
+        }
+        if (callbacks[index])
+        {
+          calls+=1;
+          callbacks[index]();
+          callbacks[index]=null;
+        }
+      }
+      //console.log("AsyncCallBack completed for "+ calls + " in "+ (new Date().getTime()-StartTick)+" µs");
+    };
 
     // Callback handling processing of grib data from a smartgrib URL
     this.HandleSmartGribData = function(LoadKey, Url, e)
@@ -418,14 +451,8 @@ class VLM2GribManager
       {
         // Successfull load of one item from the loadqueue
         // Clear all pending callbacks for this call
-        for (let index in this.LoadQueue[LoadKey].CallBacks)
-        {
-          if (this.LoadQueue[LoadKey].CallBacks[index])
-          {
-            this.LoadQueue[LoadKey].CallBacks[index]();
-          }
-        }
-        delete this.LoadQueue[LoadKey];
+        setTimeout(this.AsyncCallBackQueueHandler.bind(this),25,this.LoadQueue[LoadKey].CallBacks);
+        //delete this.LoadQueue[LoadKey];
       }
     };
 

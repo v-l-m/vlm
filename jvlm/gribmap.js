@@ -148,11 +148,11 @@ GribMap.Layer = L.Layer.extend(
     this._DrawWindArea(ctx, InCallBack);
 
   },
-  _DrawWindArea: function(ctx, InCallBack, CallBackX, CallBackY)
+  _DrawWindArea: function(ctx)
   {
 
     this.DrawWindDebugCnt++;
-    this.DrawWindDebugDepth = InCallBack ? this.DrawWindDebugDepth + 1 : 0;
+    //this.DrawWindDebugDepth = InCallBack ? this.DrawWindDebugDepth + 1 : 0;
     // " + this.DrawWindDebugCnt + " " + this.DrawWindDebugDepth);
 
     let bstep = this.arrowstep;
@@ -166,6 +166,7 @@ GribMap.Layer = L.Layer.extend(
       return;
     }
 
+    let StartTick = new Date().getTime();
     let MinX = bounds.getWest();
     let MaxX = bounds.getEast();
     let MaxY = bounds.getNorth();
@@ -175,19 +176,11 @@ GribMap.Layer = L.Layer.extend(
     let LatLng = L.latLng(MaxY, MinX);
     let p0 = map.project(LatLng, zoom);
     let MI = null;
-
-    if (InCallBack && typeof CallBackX !== "undefined" && typeof CallBackY !== "undefined")
-    {
-      MinX = CallBackX;
-      MaxX = CallBackX;
-      MinY = CallBackY;
-      MaxY = CallBackY;
-    }
+    let MissedQueue = false;
     for (let x = MinX; x <= MaxX; x += DX)
     {
       for (let y = MinY; y <= MaxY; y += DY)
       {
-
         //Récupère le vent et l'affiche en l'absence d'erreur
         try
         {
@@ -195,13 +188,13 @@ GribMap.Layer = L.Layer.extend(
           //this.drawWind(ctx, p.x, p.y, winfo);
 
           let self = this;
-          MI = GribMgr.WindAtPointInTime(this._Time, y, x,
-            /* jshint -W083*/
-            InCallBack ? null : function()
-            {
-              self._update(true, x, y);
-            });
-          /*jshint +W083*/
+          MI = GribMgr.WindAtPointInTime(this._Time, y, x
+            /*,
+                      InCallBack ? null : function()
+                      {
+                        self._update(true, x, y);
+                      }*/
+          );
 
           if (MI)
           {
@@ -209,11 +202,10 @@ GribMap.Layer = L.Layer.extend(
             let p = map.project(LatLng, zoom);
             this._drawWind(ctx, p.x - p0.x, p.y - p0.y, zoom, MI.Speed, MI.Heading);
           }
-          /*else
+          else
           {
-            this._drawWind(ctx, p.x - p0.x, p.y - p0.y, zoom, 0, 0);
-          }*/
-
+            MissedQueue=true;
+          }
         }
         catch (error)
         {
@@ -226,8 +218,15 @@ GribMap.Layer = L.Layer.extend(
         }
 
       }
-
     }
+
+    if (MissedQueue)
+    {
+      setTimeout(this._update.bind(this), 250);
+    }
+
+    let EndTick = new Date().getTime();
+    console.log("GribMap Update in "+ (EndTick-StartTick)+" µs");
   },
   _drawWind: function(context, x, y, z, WindSpeed, WindHeading)
   {
