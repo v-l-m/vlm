@@ -28,17 +28,21 @@
  {
    try
    {
-     var child;
+     let child;
 
      //console.log(Elements);
      for (child in Elements)
      {
-       var el = Elements[child];
-       var Attr = el.attributes.I18n.value;
+       let el = Elements[child];
 
-       if (typeof _LocaleDict != "undefined")
+       if (el && el.attributes && el.attributes.I18n)
        {
-         el.innerHTML = GetLocalizedString(Attr);
+         let Attr = el.attributes.I18n.value;
+
+         if (typeof _LocaleDict != "undefined")
+         {
+           el.innerHTML = GetLocalizedString(Attr);
+         }
        }
      }
 
