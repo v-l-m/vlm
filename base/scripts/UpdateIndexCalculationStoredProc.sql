@@ -80,7 +80,7 @@ BEGIN
   
   DECLARE crsr_race CURSOR FOR 
     select idraces from VIEW_ENGAGED_PER_RACE
-    where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate) and idraces not in (20200123, 20200109, 20200313);
+    where racetype=pRaceType and (Date1stArrival>=StartDate and Date1stArrival <= EndDate) and idraces not in (20200123, 20200109, 20200306);
 
   DECLARE CONTINUE HANDLER 
         FOR NOT FOUND SET v_finished = 1;
