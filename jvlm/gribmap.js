@@ -166,7 +166,7 @@ GribMap.Layer = L.Layer.extend(
       return;
     }
 
-    let StartTick = new Date().getTime();
+    //let StartTick = new Date().getTime();
     let MinX = bounds.getWest();
     let MaxX = bounds.getEast();
     let MaxY = bounds.getNorth();
@@ -225,8 +225,8 @@ GribMap.Layer = L.Layer.extend(
       setTimeout(this._update.bind(this), 250);
     }
 
-    let EndTick = new Date().getTime();
-    console.log("GribMap Update in "+ (EndTick-StartTick)+" µs");
+    //let EndTick = new Date().getTime();
+    //console.log("GribMap Update in "+ (EndTick-StartTick)+" µs");
   },
   _drawWind: function(context, x, y, z, WindSpeed, WindHeading)
   {
