@@ -200,8 +200,8 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             NotifyEndOfRace(Boat.IdBoat);
             //GetLastRacehistory();
             UpdateInMenuDockingBoatInfo(Boat);
-            $(".NWPBadge").css("visibility","hidden");
-    
+            $(".NWPBadge").css("visibility", "hidden");
+
           }
         }
 
@@ -1116,6 +1116,63 @@ const WP_CROSS_ONCE = (1 << 10);
 
 var Exclusions = [];
 
+class RaceGateSorter
+{
+  constructor(NextWP)
+  {
+    this.NextWP = NextWP;
+  }
+
+  RaceGatesSorter(r1, r2)
+  {
+    if (typeof r1 === "object" && typeof r2 === "object")
+    {
+      if ((r1.wporder >= this.NextWP && r2.wporder >= this.NextWP) || ((r1.wporder < this.NextWP && r2.wporder < this.NextWP)))
+      {
+        let Sign = 1;
+        if (r1.wporder >= this.NextWP)
+        {
+          Sign = -1;
+        }
+        if (r1.wporder > r2.wporder)
+        {
+          return Sign;
+        }
+        else if (r1.wporder == r2.wporder)
+        {
+          return 0;
+        }
+        else
+        {
+          return Sign;
+        }
+      }
+      else
+      {
+        if (r1.wporder<this.NextWP)
+        {
+          return 1;
+        }
+        else
+        {
+          return 0;
+        }
+      }
+
+    }
+    else if (typeof r1 === "object")
+    {
+      return 1;
+    }
+    else
+    {
+      return -1;
+    }
+  }
+
+
+}
+
 function DrawRaceGates(Boat)
 {
   if (typeof Boat === "undefined" || !Boat || !Boat.RaceInfo)
@@ -1130,6 +1187,20 @@ function DrawRaceGates(Boat)
   // Loop all gates
   if (typeof RaceInfo !== undefined && RaceInfo && typeof RaceInfo.races_waypoints !== "undefined" && RaceInfo.races_waypoints)
   {
+    let GatesList = [];
+
+    if (!Array.isArray(RaceInfo.races_waypoints))
+    {
+      for (let index in RaceInfo.races_waypoints)
+      {
+        GatesList.push(RaceInfo.races_waypoints[index]);
+      }
+      RaceInfo = {};
+      RaceInfo.races_waypoints = GatesList;
+      let Rg = new RaceGateSorter(NextGate);
+      RaceInfo.races_waypoints.sort(Rg.RaceGatesSorter.bind(Rg));
+    }
+
     for (let index in RaceInfo.races_waypoints)
     {
       if (!RaceFeature.Gates)
@@ -1157,7 +1228,7 @@ function DrawRaceGates(Boat)
 
         // Draw WP1
         let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
-        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
+        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
 
 
         // Second buoy (if any)
@@ -1166,7 +1237,7 @@ function DrawRaceGates(Boat)
           // Add 2nd buoy marker
           let WPMarker = GateFeatures.Buoy2;
           let Pos = new VLMPosition(WP.longitude2, WP.latitude2);
-          GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + index + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
+          GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
         }
         else
         {
@@ -1195,7 +1266,7 @@ function DrawRaceGates(Boat)
         // Draw Gate Segment
         index = parseInt(index, 10);
         NextGate = parseInt(NextGate, 10);
-        AddGateSegment(GateFeatures, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate === index), (index < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
+        AddGateSegment(GateFeatures, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
       }
     }
   }
@@ -1311,6 +1382,16 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
     color = "red";
   }
 
+  if (IsValidated)
+  {
+    strokeOpacity = 0.2;
+  }
+  else if (!IsNextWP)
+  {
+    strokeOpacity = 0.4;
+  }
+
+  console.log ("Gate is next : " + IsNextWP + "gate is validated "+ IsValidated + " opacity " + strokeOpacity);
   if (GateType & WP_CROSS_ONCE)
   {
     if (GateFeatures.Segment2)
@@ -1356,12 +1437,12 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
     if (GateType & WP_CROSS_ANTI_CLOCKWISE)
     {
       MarkerDir -= 90;
-      AddGateDirMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
+      AddGateDirMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
     }
     else if (GateType & WP_CROSS_CLOCKWISE)
     {
       MarkerDir += 90;
-      AddGateDirMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir);
+      AddGateDirMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
     }
     else if (GateType & WP_ICE_GATE)
     {
@@ -1376,9 +1457,9 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
 const MAX_BUOY_INDEX = 16;
 var BuoyIndex = Math.floor(Math.random() * MAX_BUOY_INDEX);
 
-function AddGateDirMarker(GateFeatures, Lon, Lat, Dir)
+function AddGateDirMarker(GateFeatures, Lon, Lat, Dir, Opacity)
 {
-  AddGateCenterMarker(GateFeatures, Lon, Lat, "BuoyDirs/BuoyDir" + BuoyIndex + ".png", Dir, false);
+  AddGateCenterMarker(GateFeatures, Lon, Lat, "BuoyDirs/BuoyDir4.png", Dir, false, Opacity);
   // Rotate dir marker...
   BuoyIndex++;
   BuoyIndex %= (MAX_BUOY_INDEX + 1);
@@ -1390,7 +1471,7 @@ function AddGateIceGateMarker(GateFeatures, Lon, Lat)
   AddGateCenterMarker(GateFeatures, Lon, Lat, "icegate.png", true);
 }
 
-function AddGateCenterMarker(GateFeatures, Lon, Lat, Marker, Dir, IsIceGate)
+function AddGateCenterMarker(GateFeatures, Lon, Lat, Marker, Dir, IsIceGate, Opacity)
 {
   let MarkerCoords = [Lat, Lon];
 
@@ -1408,6 +1489,7 @@ function AddGateCenterMarker(GateFeatures, Lon, Lat, Marker, Dir, IsIceGate)
     if (!IsIceGate)
     {
       GateFeatures.GateMarker.setRotationAngle(Dir);
+      GateFeatures.GateMarker.setOpacity(Opacity);
     }
   }
 }
@@ -1605,7 +1687,7 @@ function LoadRankings(RaceId, CallBack)
         if (CallBack)
         {
           CallBack(RaceId);
-        }        
+        }
       }
       else
       {
@@ -2264,7 +2346,7 @@ function UpdateBoatPrefs(Boat, NewVals)
       }
       else
       {
-        VLMAlertDanger("Save Prefs To Server "+ GetLocalizedString("UpdateFailed"));
+        VLMAlertDanger("Save Prefs To Server " + GetLocalizedString("UpdateFailed"));
       }
     }
   );
