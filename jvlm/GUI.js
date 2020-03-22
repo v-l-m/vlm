@@ -550,7 +550,9 @@ function initrecaptcha(InitPasswordReset, InitResetConfirm)
 
 function HandleShowServerInfoModal(e)
 {
-  $("ServerInfo").show();
+  //$("#Infos").modal("hide");
+  //$("#ServerInfo").show();
+  ServerStatsMgr.LoadStats();
 }
 
 function InitMenusAndButtons()

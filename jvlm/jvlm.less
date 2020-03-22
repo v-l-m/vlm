@@ -1251,6 +1251,25 @@ label {
   border-radius: 5px;
 }
 
+#ServerInfo {
+  cursor: move;
+  //width: 400px;
+  //height: 90%;
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  border-radius: 5px;
+}
+
+#ServerInfo .modal-dialog  {width:90%;}
+
+@media screen and (min-width: 1700px) {
+	
+	#ServerInfo  {width:1500px;}
+
+}
+
 .affich {
   margin-left: 0;
 }
@@ -1327,7 +1346,7 @@ label.affich {
   text-indent: 0;
 }
 
-.col-xs-1,
+/*.col-xs-1,
 .col-xs-10,
 .col-xs-11,
 .col-xs-12,
@@ -1341,7 +1360,7 @@ label.affich {
 .col-xs-9 {
   padding: 5px;
   /*margin-bottom: 5px*/
-}
+//}
 
 .navbar-brand {
   float: left;
