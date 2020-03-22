@@ -526,6 +526,12 @@ class VLM2GribManager
         let NbLon = parseInt(DataSize[0], 10);
         let NbLat = parseInt(DataSize[1], 10);
 
+        if (isNaN(NbLat))
+        {
+          this.ForceReloadGribCache(LoadKey, Url);
+          break;
+        }
+
         let StartLon = 180 / this.GribStep + parseInt(ZoneOffsets[1], 10) / this.GribStep;
         for (let LonIdx = 0; LonIdx < NbLon; LonIdx++)
         {
