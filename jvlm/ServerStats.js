@@ -9,32 +9,38 @@ class ServerStatsMgrClass
       "Stat_MailQStat":
       {
         Threshold: [0, 10, 25],
-        Colors: ["lime", "orange", "red"]
+        Colors: ["lime", "orange", "red"],
+        Unit:"msg"
       },
       "Stat_VolumeSpace":
       {
         Threshold: [0, 90, 95],
-        Colors: ["lime", "orange", "red"]
+        Colors: ["lime", "orange", "red"],
+        Unit:"%"
       },
       "Stat_MySQLStats":
       {
         Threshold: [0, 500, 700],
-        Colors: ["lime", "orange", "red"]
+        Colors: ["lime", "orange", "red"],
+        Unit:null
       },
       "Stat_EngineStats":
       {
         Threshold: [0, 100, 200],
-        Colors: ["red", "orange", "lime"]
+        Colors: ["red", "orange", "lime"],
+        Unit:"Boats/s"
       },
       "BoatCount":
       {
         Threshold: [0],
-        Colors: ["lime"]
+        Colors: ["lime"],
+        Unit:null
       },
       "RaceCount":
       {
         Threshold: [0],
-        Colors: ["lime"]
+        Colors: ["lime"],
+        Unit:null
       },
       "max_connections":
       {
@@ -99,6 +105,10 @@ class ServerStatsMgrClass
       let NewTile = this.TemplateDom.clone().removeClass("hidden")[0];
       $(NewTile).attr("Id", TileId);
       $(NewTile).find("[Fld_Id='title']").text(Name);
+      if (ColorInfo)
+      {
+        $(NewTile).find("[Fld_Id='unit']").text(ColorInfo.Unit);
+      }
       $("#CountersList").append(NewTile);
       Tile = NewTile;
     }
