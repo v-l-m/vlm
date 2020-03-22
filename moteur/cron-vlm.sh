@@ -56,3 +56,7 @@ cd $VLMLOG
 [ $(pwd) == "$VLMLOG" ] && find . -name "*--cronvlm.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} \;
 #===8<===
 
+#Mise à jour des stats serveur
+cd $VLMJEUROOT/moteur/stats
+python ServerStatsUpdate.py
+
