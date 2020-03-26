@@ -1,6 +1,7 @@
 import json
 from subprocess import call
 import time
+import datetime
 import os
 import re
 import sys
@@ -61,10 +62,13 @@ class ServerStats:
   ## Serialize dataset to JSON
   ##
   def Serialize(self):
-    data=[]
+    ret={}
+    ret["Generated"]=int(time.time())
+    ret["Data"]=[]
+    
     for item in self.DataSet:
-      data.append(item.Serialize())
-    return data
+      ret['Data'].append(item.Serialize())
+    return ret
 
   ##
   ## Deserialize JSon file to stats dataset
@@ -81,11 +85,11 @@ class ServerStats:
 
     CurModule = sys.modules[__name__]
     self.DataSet=[]    
-    for index in ret:
+    for index in ret['Data']:
       ClassName = index['TypeName']
       Obj=getattr(CurModule,ClassName)
       Stat = Obj()
-      Stat.DeSerialize(index)
+      Stat.DeSerialize(index['Data'])
       self.DataSet.append(Stat)
     
 ###
@@ -118,20 +122,21 @@ class StatInstance:
 
   def Serialize(self):
     ret={}
-    ret['Names']=[]
-    ret['Values']=[]
     ret["TypeName"]=self.__class__.__name__
+    ret["Data"]=[]
     for k in self.Data:
-      ret['Names'].append(k)
-      ret['Values'].append(self.Data[k]['Values'])
+      objdata={"Name":k,"Values":self.Data[k]['Values']}      
+      ret['Data'].append(objdata)
     return ret    
 
   def DeSerialize(self,Data):
     self.Data={}
-    Rows = len(Data['Names'])
+    Rows = len(Data)
+    print(Rows)
+    print(Data)
     for i in range(Rows):
-      Name = Data['Names'][i]
-      for Value in Data['Values'][i]:
+      Name = Data[i]['Name']
+      for Value in Data[i]['Values']:
         self.SetStatValue(Name,Value['date'],Value['value'])
 
   def search(self,list, key, value): 
