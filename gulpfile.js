@@ -128,7 +128,7 @@ gulp.task('libs_std', function()
       'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js',
       'jvlm/jquery.ui.touch-punch.js', 'jvlm/external/store/store.min.js',
       'externals/fullcalendar/core/main.js','externals/fullcalendar/daygrid/main.js',    
-      'jvlm/external/moments/moment-with-locales.min.js'
+      'jvlm/external/moments/moment-with-locales.min.js','jvlm/external/ChartJS/Chart.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
