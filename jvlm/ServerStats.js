@@ -63,7 +63,7 @@ class ServerStatsMgrClass
   HandleStatLoaded(e)
   {
     this.Stats = e;
-    this.DataSetTiles=[];
+    this.DataSetTiles = [];
     this.DisplayCurrentValues();
     $("#StatsPreloader").addClass("hidden");
   }
@@ -83,11 +83,11 @@ class ServerStatsMgrClass
           color = this.TileInfo[TypedDataRow.TypeName];
         }
 
-        TypedDataRow.Data=TypedDataRow.Data.sort(this.TypedRowSorter);
+        TypedDataRow.Data = TypedDataRow.Data.sort(this.TypedRowSorter);
         for (let ValueIndex in TypedDataRow.Data)
         {
           let DataRow = TypedDataRow.Data[ValueIndex];
-          DataRow.Values=DataRow.Values.sort(this.DataRowSorter);
+          DataRow.Values = DataRow.Values.sort(this.DataRowSorter);
 
           if (DataRow.Name)
           {
@@ -99,25 +99,25 @@ class ServerStatsMgrClass
             {
               LocalColor = this.TileInfo[Name];
             }
-            let TileId=this.UpdateStatTile(Name, Value, LocalColor);
-            this.DataSetTiles[TileId]=DataRow;
+            let TileId = this.UpdateStatTile(Name, Value, LocalColor);
+            this.DataSetTiles[TileId] = DataRow;
           }
         }
       }
     }
   }
 
-  TypedRowSorter(r1,r2)
+  TypedRowSorter(r1, r2)
   {
     if (r1.Name && r2.Name)
     {
-      if (r1.Name> r2.Name)
+      if (r1.Name > r2.Name)
       {
         return 1;
       }
       else if (r1.Name < r2.Name)
       {
-        return -1     ;   
+        return -1;
       }
       else
       {
@@ -143,15 +143,22 @@ class ServerStatsMgrClass
     {
       if (r1.date === r2.date)
       {
-        return sort(r1.value,r2.value);
+        if (r1.value > r2.value)
+        {
+          return 1;
+        }
+        else
+        {
+          return -1;
+        }
       }
       else if (r1.date > r2.date)
       {
-        return -1;
+        return 1;
       }
       else
       {
-        return 1;
+        return -1;
       }
     }
     else
@@ -216,40 +223,44 @@ class ServerStatsMgrClass
 
     if (this.DataSetTiles[DataSetId])
     {
-      let Labels=[];
-      let Values=[];
+      let Labels = [];
+      let Values = [];
       let DataName = this.DataSetTiles[DataSetId].Name;
       for (let index in this.DataSetTiles[DataSetId].Values)
       {
-        let Data=this.DataSetTiles[DataSetId].Values[index];
-        Labels.push(new moment(Data.date*1000));
+        let Data = this.DataSetTiles[DataSetId].Values[index];
+        Labels.push(new moment(Data.date * 1000));
         Values.push(Data.value);
-        
+
       }
-      let Height=$("#StatsContainer").css("Height");
-      $("#StatsPlotCanvas").css("Height",Height);
-      let ctx= $("#StatsPlotCanvas")[0].getContext("2d");
-      var chart = new Chart(ctx, {
+      let Height = $("#StatsContainer").css("Height");
+      $("#StatsPlotCanvas").css("Height", Height);
+      let ctx = $("#StatsPlotCanvas")[0].getContext("2d");
+      var chart = new Chart(ctx,
+      {
         // The type of chart we want to create
         type: 'line',
-    
+
         // The data for our dataset
-        data: {
-            labels: Labels,
-            datasets: [{
-                label: DataName,
-                backgroundColor: '#fccd49',
-                borderColor: 'rgb(255, 99, 132)',
-                data: Values,
-                showLine:false
-            }]
+        data:
+        {
+          labels: Labels,
+          datasets: [
+          {
+            label: DataName,
+            backgroundColor: '#fccd49',
+            borderColor: 'rgb(255, 99, 132)',
+            data: Values,
+            showLine: false
+          }]
         },
-    
+
         // Configuration options go here
-        options: {}
-    });
+        options:
+        {}
+      });
     }
-    
+
   }
 
 
