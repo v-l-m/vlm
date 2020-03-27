@@ -2078,7 +2078,7 @@
           </div>          
         </div>
         <div class="modal-body">
-          <div class="container-fluid ">
+          <div id="StatsContainer" class="container-fluid ">
             <div id="StatsPreloader" class="row hidden">
               <img src="images/Preloader_5.gif" alt="Loading..." class="racelistpreloader img-responsive center-block">            
             </div>
@@ -2087,11 +2087,11 @@
                 <div id="StatIndicatorTemplate" class="StatIndicatorTile hidden col-xs-4">
                   <span fld_id="title">Title</span>                  
                   <div class="row">
-                    <div class="col-xs-3">
+                    <div class="col-xs-2">
                       <img src="./images/Stats_Msg.png"/>
                     </div>
-                    <div class="col-xs-8">
-                      <span fld_id="value" class="" style="font-size: 24px;">100%</span>
+                    <div class="col-xs-9">
+                      <span fld_id="value" class="" style="font-size: 24px;"></span>
                       <span fld_id="unit" style="font-size: 0.8em;margin-top:5px"></span>
                     </div>
                   </div>                  
@@ -2106,8 +2106,9 @@
                 </div>
                 
               </div>
-              <div id="CounterPlot" class = "col-xs-6" style="background-color: red;">
-                <H1>Plot goes here</H1>
+              <div id="CounterPlot" class = "col-xs-6">
+                <canvas id="StatsPlotCanvas" >
+                </canvas> 
               </div>
 
             </div>

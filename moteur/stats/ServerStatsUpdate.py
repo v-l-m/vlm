@@ -53,6 +53,7 @@ class ServerStats:
   def UpdateData(self):
     for item in  self.DataSet:
       item.GetNextStat()
+      item.Compress()
 
     f=open(self.FileName,"w")
     f.write(json.dumps(self.Serialize()))    
@@ -91,7 +92,7 @@ class ServerStats:
       Stat = Obj()
       Stat.DeSerialize(index['Data'])
       self.DataSet.append(Stat)
-    
+        
 ###
 ###
 ### Base Stat instance class. Shoudl be inherited
@@ -108,6 +109,9 @@ class StatInstance:
   def GetNextStat(self):
     pass
 
+  def Compress(self):
+    pass
+  
   def SetStatValue(self,name,Dte,value):
     if not name in self.Data:
         self.Data[name]={}
@@ -132,8 +136,8 @@ class StatInstance:
   def DeSerialize(self,Data):
     self.Data={}
     Rows = len(Data)
-    print(Rows)
-    print(Data)
+    #print(Rows)
+    #print(Data)
     for i in range(Rows):
       Name = Data[i]['Name']
       for Value in Data[i]['Values']:

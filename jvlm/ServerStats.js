@@ -4,35 +4,34 @@ class ServerStatsMgrClass
   {
     this.TemplateDom = $("#StatIndicatorTemplate");
     $(".StatIndicatorTile").on('click', this.HandleTileClick.bind(this));
-    this.PlotVisible = false;
     this.TileInfo = {
       "Stat_MailQStat":
       {
         Threshold: [0, 10, 25],
         Colors: ["lime", "orange", "red"],
         Unit: "msg",
-        Image:"./images/Stats_Msg.png"
+        Image: "./images/Stats_Msg.png"
       },
       "Stat_VolumeSpace":
       {
         Threshold: [0, 90, 95],
         Colors: ["lime", "orange", "red"],
         Unit: "%",
-        Image:"./images/Stats_Disk.png"
+        Image: "./images/Stats_Disk.png"
       },
       "Stat_MySQLStats":
       {
         Threshold: [0, 500, 700],
         Colors: ["lime", "orange", "red"],
         Unit: null,
-        Image:"./images/Stats_Connections.png"
+        Image: "./images/Stats_Connections.png"
       },
       "Stat_EngineStats":
       {
         Threshold: [0, 100, 200],
         Colors: ["red", "orange", "lime"],
         Unit: "Boats/s",
-        Image:"./images/Stats_Speed.png"
+        Image: "./images/Stats_Speed.png"
       },
       "BoatCount":
       {
@@ -50,7 +49,7 @@ class ServerStatsMgrClass
       {
         Threshold: [0],
         Colors: ["blue"],
-        Image:"./images/Stats_Connections.png"
+        Image: "./images/Stats_Connections.png"
       },
     };
   }
@@ -64,6 +63,7 @@ class ServerStatsMgrClass
   HandleStatLoaded(e)
   {
     this.Stats = e;
+    this.DataSetTiles=[];
     this.DisplayCurrentValues();
     $("#StatsPreloader").addClass("hidden");
   }
@@ -83,9 +83,11 @@ class ServerStatsMgrClass
           color = this.TileInfo[TypedDataRow.TypeName];
         }
 
+        TypedDataRow.Data=TypedDataRow.Data.sort(this.TypedRowSorter);
         for (let ValueIndex in TypedDataRow.Data)
         {
           let DataRow = TypedDataRow.Data[ValueIndex];
+          DataRow.Values=DataRow.Values.sort(this.DataRowSorter);
 
           if (DataRow.Name)
           {
@@ -97,9 +99,70 @@ class ServerStatsMgrClass
             {
               LocalColor = this.TileInfo[Name];
             }
-            this.UpdateStatTile(Name, Value, LocalColor);
+            let TileId=this.UpdateStatTile(Name, Value, LocalColor);
+            this.DataSetTiles[TileId]=DataRow;
           }
         }
+      }
+    }
+  }
+
+  TypedRowSorter(r1,r2)
+  {
+    if (r1.Name && r2.Name)
+    {
+      if (r1.Name> r2.Name)
+      {
+        return 1;
+      }
+      else if (r1.Name < r2.Name)
+      {
+        return -1     ;   
+      }
+      else
+      {
+        return 0;
+      }
+    }
+    else
+    {
+      if (r1 >= r2)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+    }
+  }
+
+  DataRowSorter(r1, r2)
+  {
+    if (r1.date && r2.date)
+    {
+      if (r1.date === r2.date)
+      {
+        return sort(r1.value,r2.value);
+      }
+      else if (r1.date > r2.date)
+      {
+        return -1;
+      }
+      else
+      {
+        return 1;
+      }
+    }
+    else
+    {
+      if (r1 >= r2)
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
       }
     }
   }
@@ -115,13 +178,14 @@ class ServerStatsMgrClass
       let NewTile = this.TemplateDom.clone().removeClass("hidden")[0];
       $(NewTile).attr("Id", TileId);
       $(NewTile).find("[Fld_Id='title']").text(Name);
+      $(NewTile).on('click', this.HandleTileClick.bind(this));
       if (TileInfo.Unit)
       {
         $(NewTile).find("[Fld_Id='unit']").text(TileInfo.Unit);
       }
       if (TileInfo.Image)
       {
-        $(NewTile).find("[src]").attr("src",TileInfo.Image);
+        $(NewTile).find("[src]").attr("src", TileInfo.Image);
       }
       else
       {
@@ -140,25 +204,52 @@ class ServerStatsMgrClass
         color = TileInfo.Colors[index];
         index++;
       }
-
     }
     $(Tile).find(".StatusColor").css("background-color", color);
+    return TileId;
 
   }
 
-  HandleTileClick()
+  HandleTileClick(e)
   {
-    this.PlotVisible = !this.PlotVisible;
-    if (this.PlotVisible)
+    let DataSetId = e.currentTarget.attributes.Id.value;
+
+    if (this.DataSetTiles[DataSetId])
     {
-      $("#CounterPlot").removeClass("hidden");
-      $("#CounterList").removeClass("col-xs-12").addClass("col-xs-4");
+      let Labels=[];
+      let Values=[];
+      let DataName = this.DataSetTiles[DataSetId].Name;
+      for (let index in this.DataSetTiles[DataSetId].Values)
+      {
+        let Data=this.DataSetTiles[DataSetId].Values[index];
+        Labels.push(new moment(Data.date*1000));
+        Values.push(Data.value);
+        
+      }
+      let Height=$("#StatsContainer").css("Height");
+      $("#StatsPlotCanvas").css("Height",Height);
+      let ctx= $("#StatsPlotCanvas")[0].getContext("2d");
+      var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+    
+        // The data for our dataset
+        data: {
+            labels: Labels,
+            datasets: [{
+                label: DataName,
+                backgroundColor: '#fccd49',
+                borderColor: 'rgb(255, 99, 132)',
+                data: Values,
+                showLine:false
+            }]
+        },
+    
+        // Configuration options go here
+        options: {}
+    });
     }
-    else
-    {
-      $("#CounterPlot").addClass("hidden");
-      $("#CounterList").addClass("col-xs-12").removeClass("col-xs-4");
-    }
+    
   }
 
 
