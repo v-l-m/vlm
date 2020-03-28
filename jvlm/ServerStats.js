@@ -393,7 +393,7 @@ class ServerStatsMgrClass
     {
       let TI = this.DataSetTiles[DataSetId].TileInfo;
       let CurSet = {};
-      
+
       for (let infoindex in TI.Threshold)
       {
         CurSet = {
@@ -401,7 +401,7 @@ class ServerStatsMgrClass
           pointRadius: 0,
           fill: false,
           steppedLine: 'middle',
-          borderColor : TI.Colors[infoindex],
+          borderColor: TI.Colors[infoindex],
           data: [
           {
             x: MinDate,
@@ -414,89 +414,90 @@ class ServerStatsMgrClass
         };
         DataSets.push(CurSet);
       }
-      
-    }    
 
-  if (!this.Chart)
-  {
-    let Height = $("#StatsContainer").css("Height");
-    $("#StatsPlotCanvas").css("Height", Height);
-    let ctx = $("#StatsPlotCanvas")[0].getContext("2d");
-    this.Chart = new Chart(ctx,
+    }
+
+    if (!this.Chart)
     {
-      // The type of chart we want to create
-      type: 'line',
-      // The data for our dataset
-      data:
+      let Height = $("#StatsContainer").css("Height");
+      $("#StatsPlotCanvas").css("Height", Height);
+      let ctx = $("#StatsPlotCanvas")[0].getContext("2d");
+      this.Chart = new Chart(ctx,
       {
-        //labels: Labels,
-        datasets: DataSets
-      },
-      // Configuration options go here
-      options:
-      {
-        scales:
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data:
         {
-          yAxes: [
+          //labels: Labels,
+          datasets: DataSets
+        },
+        // Configuration options go here
+        options:
+        {
+          scales:
           {
-            ticks:
+            yAxes: [
             {
-              tickLength: 5,
-              //suggestedMax: BoundsMaxValue,
-            },
-            gridLines:
-            {
-              zeroLineColor: "white",
-              color: "#FFFFFF55",
-            },
-
-          }],
-          xAxes: [
-          {
-            type: 'time',
-            time:
-            {
-              displayFormats:
+              ticks:
               {
-                minute: 'LT',
-                hour: 'LT',
-                day: "D-M",
-                quarter: 'MMM YYYY'
-              }
+                tickLength: 5,
+                //suggestedMax: BoundsMaxValue,
+              },
+              gridLines:
+              {
+                zeroLineColor: "white",
+                color: "#FFFFFF55",
+              },
 
-            },
-            gridLines:
+            }],
+            xAxes: [
             {
-              zeroLineColor: "white",
-              color: "#FFFFFF55",
-            },
-            ticks:
-            {
-              // Include a dollar sign in the ticks
-              //callback: this.PlotHorizon.LabelFormatter.bind(this.PlotHorizon),
-              minRotation: 0,
-              maxRotation: 0,
-              autoSkipPadding: 5,
-              autoSkip: true,
-              tickLength: 5,
-            },
-          }],
-        },
-        legend:
-        {
-          display: false,
-        },
-        title:
-        {
-          display: true,
-          text: DataName,
+              type: 'time',
+              time:
+              {
+                displayFormats:
+                {
+                  minute: 'LT',
+                  hour: 'LT',
+                  day: "D-M",
+                  quarter: 'MMM YYYY'
+                }
+
+              },
+              gridLines:
+              {
+                zeroLineColor: "white",
+                color: "#FFFFFF55",
+              },
+              ticks:
+              {
+                // Include a dollar sign in the ticks
+                //callback: this.PlotHorizon.LabelFormatter.bind(this.PlotHorizon),
+                minRotation: 0,
+                maxRotation: 0,
+                autoSkipPadding: 5,
+                autoSkip: true,
+                tickLength: 5,
+              },
+            }],
+          },
+          legend:
+          {
+            display: false,
+          },
+          title:
+          {
+            display: true,
+            text: DataName,
+          }
         }
-      }
-    });
+      });
+    }
+    this.Chart.config.data.datasets = DataSets;
+    this.Chart.update();
+    StatMGR.Stat("PlotStats",this.PlotHorizon.Horizon,DataName);
   }
-  this.Chart.config.data.datasets = DataSets;
-  this.Chart.update();
-}
 }
 
 
