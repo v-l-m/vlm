@@ -495,6 +495,7 @@ class ServerStatsMgrClass
       });
     }
     this.Chart.config.data.datasets = DataSets;
+    this.Chart.options.title.text=DataName;
     this.Chart.update();
     StatMGR.Stat("PlotStats",this.PlotHorizon.Horizon,DataName);
   }
