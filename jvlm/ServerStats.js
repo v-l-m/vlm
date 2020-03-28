@@ -1,3 +1,107 @@
+class PlotHorizon
+{
+  constructor(Horizon)
+  {
+    this.LabelFormat = [];
+    this.LabelFormat['1Day'] = this.TickFormat_1Day;
+    this.LabelFormat['1Week'] = this.TickFormat_1Week;
+    this.LabelFormat['1Month'] = this.TickFormat_1Month;
+    this.LabelFormat['1Year'] = this.TickFormat_1Year;
+    this.SetHorizon(Horizon);
+
+  }
+
+  MinPlotDate()
+  {
+    switch (this.Horizon)
+    {
+      case "1Week":
+        return moment().add(-7, 'd').toDate();
+
+      case "1Month":
+        return moment().add(-1, 'M').toDate();
+
+      case "1Year":
+        return moment().add(-1, 'y').toDate();
+
+      case "1Day":
+      default:
+        return moment().add(-1, 'd').toDate();
+
+    }
+  }
+  SetHorizon(Horizon)
+  {
+    switch (Horizon)
+    {
+      case "1Day":
+      case "1Week":
+      case "1Day":
+      case "1Year":
+        this.Horizon = Horizon;
+        break;
+      default:
+        this.Horizon = "1Day";
+    }
+  }
+
+  LabelFormatter(value, index, values)
+  {
+    this.SetHorizon(this.Horizon);
+    return this.LabelFormat[this.Horizon](value, index, values);
+  }
+
+  TickFormat_1Day(value, index, values)
+  {
+    //if (values[index].major)
+    {
+      return moment(value).format("LT");
+    }
+    //else
+    {
+      return null;
+    }
+  }
+
+  TickFormat_1Week(value, index, values)
+  {
+    if (values[index].major)
+    {
+      return moment(value).format("D-M LT");
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+  TickFormat_1Month(value, index, values)
+  {
+    if (values[index].major)
+    {
+      return moment(value).format("D-M");
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+  TickFormat_1Year(value, index, values)
+  {
+    if (values[index].major)
+    {
+      return moment(value).format("M");
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+}
+
+
 class ServerStatsMgrClass
 {
   constructor()
@@ -8,50 +112,51 @@ class ServerStatsMgrClass
       "Stat_MailQStat":
       {
         Threshold: [0, 10, 25],
-        Colors: ["lime", "orange", "red"],
+        Colors: ["#00FF00", "#FFA500", "#FF0000"],
         Unit: "msg",
         Image: "./images/Stats_Msg.png"
       },
       "Stat_VolumeSpace":
       {
         Threshold: [0, 90, 95],
-        Colors: ["lime", "orange", "red"],
+        Colors: ["#00FF00", "#FFA500", "#FF0000"],
         Unit: "%",
         Image: "./images/Stats_Disk.png"
       },
       "Stat_MySQLStats":
       {
         Threshold: [0, 500, 700],
-        Colors: ["lime", "orange", "red"],
+        Colors: ["#00FF00", "#FFA500", "#FF0000"],
         Unit: null,
         Image: "./images/Stats_Connections.png"
       },
       "Stat_EngineStats":
       {
         Threshold: [0, 100, 200],
-        Colors: ["red", "orange", "lime"],
+        Colors: ["#FF0000", "#FFA500", "#00FF00"],
         Unit: "Boats/s",
         Image: "./images/Stats_Speed.png"
       },
       "BoatCount":
       {
         Threshold: [0],
-        Colors: ["lime"],
+        Colors: ["#00FF00"],
         Unit: null
       },
       "RaceCount":
       {
         Threshold: [0],
-        Colors: ["lime"],
+        Colors: ["#00FF00"],
         Unit: null
       },
       "max_connections":
       {
         Threshold: [0],
-        Colors: ["blue"],
+        Colors: ["#0000FF"],
         Image: "./images/Stats_Connections.png"
       },
     };
+    this.PlotHorizon = new PlotHorizon("1Day");
   }
 
   LoadStats()
@@ -100,7 +205,9 @@ class ServerStatsMgrClass
               LocalColor = this.TileInfo[Name];
             }
             let TileId = this.UpdateStatTile(Name, Value, LocalColor);
+
             this.DataSetTiles[TileId] = DataRow;
+            this.DataSetTiles[TileId].TileInfo = LocalColor;
           }
         }
       }
@@ -223,47 +330,175 @@ class ServerStatsMgrClass
 
     if (this.DataSetTiles[DataSetId])
     {
-      let Labels = [];
-      let Values = [];
-      let DataName = this.DataSetTiles[DataSetId].Name;
-      for (let index in this.DataSetTiles[DataSetId].Values)
-      {
-        let Data = this.DataSetTiles[DataSetId].Values[index];
-        Labels.push(new moment(Data.date * 1000));
-        Values.push(Data.value);
-
-      }
-      let Height = $("#StatsContainer").css("Height");
-      $("#StatsPlotCanvas").css("Height", Height);
-      let ctx = $("#StatsPlotCanvas")[0].getContext("2d");
-      var chart = new Chart(ctx,
-      {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
-        data:
-        {
-          labels: Labels,
-          datasets: [
-          {
-            label: DataName,
-            backgroundColor: '#fccd49',
-            borderColor: 'rgb(255, 99, 132)',
-            data: Values,
-            showLine: false
-          }]
-        },
-
-        // Configuration options go here
-        options:
-        {}
-      });
+      this.PlotTileData(DataSetId);
     }
 
   }
 
 
+
+  PlotTileData(DataSetId)
+  {
+    let Values = [];
+    let DataName = this.DataSetTiles[DataSetId].Name;
+    let MinDate = null;
+    let MaxDate = null;
+    let MaxValue = null;
+    let BoundsMaxValue = null;
+    for (let index in this.DataSetTiles[DataSetId].Values)
+    {
+      let Data = this.DataSetTiles[DataSetId].Values[index];
+      let PointDate = new Date(Data.date * 1000);
+      if (PointDate >= this.PlotHorizon.MinPlotDate())
+      {
+        Values.push(
+        {
+          x: PointDate,
+          y: Data.value
+        });
+        if (!MinDate)
+        {
+          MinDate = PointDate;
+        }
+        if (!MaxDate || MaxDate < PointDate)
+        {
+          MaxDate = PointDate;
+        }
+
+        if (!MaxValue || MaxValue < Data.value)
+        {
+          MaxValue = Data.value;
+        }
+      }
+
+    }
+
+    let DataSets = [];
+
+
+    DataSets.push(
+    {
+      label: DataName,
+      backgroundColor: 'AliceBlue',
+      borderColor: 'AliceBlue',
+      data: Values,
+      pointRadius: 1,
+      borderWidth: 1,
+      fill: false,
+      steppedLine: 'middle',
+      //showLine: false
+    });
+
+    if (this.DataSetTiles[DataSetId].TileInfo)
+    {
+      let TI = this.DataSetTiles[DataSetId].TileInfo;
+      let CurSet = {};
+      
+      for (let infoindex in TI.Threshold)
+      {
+        CurSet = {
+          borderWidth: 2,
+          pointRadius: 0,
+          fill: false,
+          steppedLine: 'middle',
+          borderColor : TI.Colors[infoindex],
+          data: [
+          {
+            x: MinDate,
+            y: TI.Threshold[infoindex]
+          },
+          {
+            x: MaxDate,
+            y: TI.Threshold[infoindex]
+          }],
+        };
+        DataSets.push(CurSet);
+      }
+      
+    }    
+
+  if (!this.Chart)
+  {
+    let Height = $("#StatsContainer").css("Height");
+    $("#StatsPlotCanvas").css("Height", Height);
+    let ctx = $("#StatsPlotCanvas")[0].getContext("2d");
+    this.Chart = new Chart(ctx,
+    {
+      // The type of chart we want to create
+      type: 'line',
+      // The data for our dataset
+      data:
+      {
+        //labels: Labels,
+        datasets: DataSets
+      },
+      // Configuration options go here
+      options:
+      {
+        scales:
+        {
+          yAxes: [
+          {
+            ticks:
+            {
+              tickLength: 5,
+              //suggestedMax: BoundsMaxValue,
+            },
+            gridLines:
+            {
+              zeroLineColor: "white",
+              color: "#FFFFFF55",
+            },
+
+          }],
+          xAxes: [
+          {
+            type: 'time',
+            time:
+            {
+              displayFormats:
+              {
+                minute: 'LT',
+                hour: 'LT',
+                day: "D-M",
+                quarter: 'MMM YYYY'
+              }
+
+            },
+            gridLines:
+            {
+              zeroLineColor: "white",
+              color: "#FFFFFF55",
+            },
+            ticks:
+            {
+              // Include a dollar sign in the ticks
+              //callback: this.PlotHorizon.LabelFormatter.bind(this.PlotHorizon),
+              minRotation: 0,
+              maxRotation: 0,
+              autoSkipPadding: 5,
+              autoSkip: true,
+              tickLength: 5,
+            },
+          }],
+        },
+        legend:
+        {
+          display: false,
+        },
+        title:
+        {
+          display: true,
+          text: DataName,
+        }
+      }
+    });
+  }
+  this.Chart.config.data.datasets = DataSets;
+  this.Chart.update();
 }
+}
+
+
 
 var ServerStatsMgr = new ServerStatsMgrClass();
