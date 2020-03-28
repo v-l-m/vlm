@@ -2116,7 +2116,16 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">RaceCal</button>
+          <div class="col-xs-8">
+            <span id="StatsGen"></span>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Day')">1d</button>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Week')">1w</button>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Month')">1m</button>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Year')">1y</button>
+          </div>
+          <div class="col-xs-4">
+            <button I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">RaceCal</button>  
+          </div>          
         </div>        
       </div>
     </div>

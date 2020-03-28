@@ -159,6 +159,15 @@ class ServerStatsMgrClass
     this.PlotHorizon = new PlotHorizon("1Day");
   }
 
+  SetHorizon(horizon)
+  {
+    this.PlotHorizon.Horizon=horizon;
+    if (this.CurSetID)
+    {
+      this.PlotTileData(this.CurSetID);
+    }
+  }
+
   LoadStats()
   {
     $("#StatsPreloader").removeClass("hidden");
@@ -175,6 +184,8 @@ class ServerStatsMgrClass
 
   DisplayCurrentValues()
   {
+
+    $("#StatsGen").text("Stats from : "+ moment(this.Stats.Generated*1000).format());
     this.Stats.Data.sort();
     for (let index in this.Stats.Data)
     {
@@ -345,6 +356,7 @@ class ServerStatsMgrClass
     let MaxDate = null;
     let MaxValue = null;
     let BoundsMaxValue = null;
+    this.CurSetID=DataSetId;
     for (let index in this.DataSetTiles[DataSetId].Values)
     {
       let Data = this.DataSetTiles[DataSetId].Values[index];
@@ -446,7 +458,7 @@ class ServerStatsMgrClass
               },
               gridLines:
               {
-                zeroLineColor: "white",
+                zeroLineColor: "#FFFFFF55",
                 color: "#FFFFFF55",
               },
 
