@@ -714,13 +714,7 @@ function InitMenusAndButtons()
     }
   );
 
-  // Handle SettingsSave button
-  $('#SettingValidateButton').click(SaveBoatAndUserPrefs);
-  // Handle SettingsSave button
-  $('#SettingCancelButton').click(function()
-  {
-    SetDDTheme(VLM2Prefs.CurTheme);
-  });
+
 
 
   // Do fixed heading button
@@ -2385,14 +2379,18 @@ function FillRacesListForm(e)
 }
 
 var OldRaceArray = [];
-var FilterTimerHandler= null;
+var FilterTimerHandler = null;
+
 function HandleRacesListFilterChange(e)
 {
   if (FilterTimerHandler)
   {
     clearTimeout(FilterTimerHandler);
   }
-  FilterTimerHandler=setTimeout(function (f) {RaceListFilterChange(e);},300);
+  FilterTimerHandler = setTimeout(function(f)
+  {
+    RaceListFilterChange(e);
+  }, 300);
 }
 
 function RaceListFilterChange(e)
@@ -2446,7 +2444,7 @@ function LoadRacesList(e)
   if (e)
   {
     CurLength = parseInt($('#BtnMoreOldRaces').addClass("hidden").attr("PageLength"), 10);
-    
+
     if (typeof CurLength === "undefined" || isNaN(CurLength))
     {
       CurLength = 0;
@@ -2506,7 +2504,7 @@ function LoadRacesList(e)
         if (OldRaceArray[index] && !OldRaceArray[index].Loaded)
         {
           OldRaceArray[index].Loaded = true;
-          AddRaceToList(OldRaceArray[index],filter);
+          AddRaceToList(OldRaceArray[index], filter);
         }
       }
       console.log("RaceList COunters" + FileRaceCount + "/" + FileRaceAdded + "/" + OldRaceArray.length);
@@ -2552,7 +2550,7 @@ function AddRaceToList(race, filter)
   {
     if (!race.racename.toLowerCase().includes(filter.toLowerCase()))
     {
-      RaceHidden=true;
+      RaceHidden = true;
     }
   }
 
@@ -2588,7 +2586,7 @@ function AddRaceToList(race, filter)
     BoatType = race.boattype.substring(5);
   }
 
-  let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + ' '+(RaceHidden?"hidden":"") + '" racelistid="' + race.idraces + '">' +
+  let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + ' ' + (RaceHidden ? "hidden" : "") + '" racelistid="' + race.idraces + '">' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
     '    <div class="col-xs-12">' +
     '      <div class="col-xs-3">' +
@@ -2917,8 +2915,9 @@ function SaveBoatAndUserPrefs(e)
   if (typeof NewTheme !== "undefined")
   {
     VLM2Prefs.CurTheme = NewTheme;
-  }
 
+  }
+  VLM2Prefs.AdvancedStats = $("#AdvancedStats").is(":checked");
   VLM2Prefs.Save();
 
   if (!ComparePrefString($("#pref_boatname")[0].value, _CurPlayer.CurBoat.BoatName))
