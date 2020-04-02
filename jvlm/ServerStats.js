@@ -135,19 +135,22 @@ class ServerStatsMgrClass
         Threshold: [0, 100, 200],
         Colors: ["#FF0000", "#FFA500", "#00FF00"],
         Unit: "Boats/s",
-        Image: "./images/Stats_Speed.png"
+        Image: "./images/Stats_Speed.png",
+        Default:true,
       },
       "BoatCount":
       {
         Threshold: [0],
         Colors: ["#00FF00"],
-        Unit: null
+        Unit: null,
+        Default:true,
       },
       "RaceCount":
       {
         Threshold: [0],
         Colors: ["#00FF00"],
-        Unit: null
+        Unit: null,
+        Default:true,
       },
       "max_connections":
       {
@@ -179,6 +182,7 @@ class ServerStatsMgrClass
     this.Stats = e;
     this.DataSetTiles = [];
     this.DisplayCurrentValues();
+    this.PlotTileData("Stt_BoatCount");
     $("#StatsPreloader").addClass("hidden");
   }
 
@@ -189,7 +193,7 @@ class ServerStatsMgrClass
     this.Stats.Data.sort();
     for (let index in this.Stats.Data)
     {
-      if (this.Stats.Data[index])
+      if ( this.Stats.Data[index])
       {
         let TypedDataRow = this.Stats.Data[index];
         let color = null;
@@ -197,6 +201,14 @@ class ServerStatsMgrClass
         if (this.TileInfo[TypedDataRow.TypeName])
         {
           color = this.TileInfo[TypedDataRow.TypeName];
+          if (!VLM2Prefs.AdvancedStats && !color.Default)
+          {
+            continue;
+          }
+        }
+        else if (!VLM2Prefs.AdvancedStats)
+        {
+          continue;
         }
 
         TypedDataRow.Data = TypedDataRow.Data.sort(this.TypedRowSorter);
@@ -409,6 +421,7 @@ class ServerStatsMgrClass
       for (let infoindex in TI.Threshold)
       {
         CurSet = {
+          label : "Thr. "+TI.Threshold[infoindex],
           borderWidth: 2,
           pointRadius: 0,
           fill: false,
@@ -471,7 +484,7 @@ class ServerStatsMgrClass
                 displayFormats:
                 {
                   minute: 'LT',
-                  hour: 'LT',
+                  hour: 'D/LT',
                   day: "D-M",
                   quarter: 'MMM YYYY'
                 }
@@ -496,7 +509,7 @@ class ServerStatsMgrClass
           },
           legend:
           {
-            display: false,
+            display: true,
           },
           title:
           {

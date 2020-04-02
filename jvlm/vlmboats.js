@@ -2375,6 +2375,7 @@ function HandlePrefsLoaded(e)
 
     Boat.VLMPrefs = e.prefs;
     VLM2Prefs.UpdateVLMPrefs(e.prefs);
+    $("#AdvancedStats").prop("checked",VLM2Prefs.AdvancedStats );
   }
   else
   {

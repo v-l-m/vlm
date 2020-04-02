@@ -42,6 +42,7 @@ class PrefMgr
       {
         this.GConsentDate = LoadLocalPref("GConsentDate", null);
         this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
+        this.AdvancedStats = LoadLocalPref("AdvancedStats",false);
         try
         {
           // Work around json errors or tampering
@@ -79,6 +80,7 @@ class PrefMgr
       store.set("GConsentLastNo", this.GConsentLastNo);
       store.set("VLMRacesStorage", JSON.stringify(this.VLMRacesStorage));
       store.set("InputDigits", this.InputDigits);
+      store.set("AdvancedStats", this.AdvancedStats);
 
     };
 

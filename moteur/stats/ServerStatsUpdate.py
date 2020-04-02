@@ -14,6 +14,7 @@ import sys
 
 class ServerStats:
   def __init__(self,FileStat):
+    self.start=time.time()
     self.FileName = FileStat    
     if (FileStat and os.path.isfile(FileStat)):
       self.DeSerialize()    
@@ -53,8 +54,11 @@ class ServerStats:
   def UpdateData(self):
     for item in  self.DataSet:
       item.GetNextStat()
-      item.Compress()
-
+      #Day Compression 1day 15' 
+      item.Compress(self.C[0],3600*24,15*60)
+      #Week Compression 7 days  60'     
+      #Month Compression 30 days 180'
+      
     f=open(self.FileName,"w")
     f.write(json.dumps(self.Serialize()))    
     f.close()
@@ -65,10 +69,13 @@ class ServerStats:
   def Serialize(self):
     ret={}
     ret["Generated"]=int(time.time())
+    ret['GenerationTime']=(time.time()-self.start)
+    ret['Compression']=self.C
     ret["Data"]=[]
     
     for item in self.DataSet:
       ret['Data'].append(item.Serialize())
+    ret['GenerationTime']=(time.time()-self.start)
     return ret
 
   ##
@@ -86,9 +93,15 @@ class ServerStats:
 
     CurModule = sys.modules[__name__]
     self.DataSet=[]    
+    self.C=[0,0,0]
+    if 'Compression' in ret:
+      for index in ret['Compression']:
+        self.C[index]=ret['Compression'][index]
+    
     for index in ret['Data']:
       ClassName = index['TypeName']
       Obj=getattr(CurModule,ClassName)
+      
       Stat = Obj()
       Stat.DeSerialize(index['Data'])
       self.DataSet.append(Stat)
@@ -109,14 +122,57 @@ class StatInstance:
   def GetNextStat(self):
     pass
 
-  def Compress(self):
-    pass
+  def CompressRow(self,Row,StartDate,Period,Interval):
+    Index = 0
+    EndDate=int(time.time())-Period
+    EndDate-=EndDate%Period
+    while Index < len(Row['Values']) and Row['Values'][Index]['date']<=StartDate:
+      Index+=1
+    if Index == len(Row):
+      return
+    if StartDate == 0:
+      StartDate=Row['Values'][Index]['date'] - (Row['Values'][Index]['date']%Period)
+    CurBound = StartDate + Period
+    
+    CurSum = 0
+    CurIndex = Index
+    CurCount =0
+    CurValue = 0
+    while (Index<len(Row['Values']) and Row['Values'][Index]['date'] <= EndDate):
+      if (Row['Values'][Index]['date']-Row['Values'][CurIndex]['date']<=Interval-1):
+        CurSum+=Row['Values'][Index]['value']
+        CurCount+=1
+        Row['Values'][CurIndex]['value']=CurSum/CurCount
+        if Index != CurIndex:
+          del Row['Values'][Index]
+        else:
+          Row['Values'][CurIndex]['date']-=Row['Values'][CurIndex]['date']%Interval
+          Index+=1
+      else:
+        CurSum=0
+        CurCount=0
+        #Index+=1
+        CurIndex=Index
+        CurBound+=Interval
+        CurBound -= (CurBound%Interval)
+        if (CurBound >=EndDate):
+          return;
+    return
+    
+
+  def Compress(self,StartDate,Period,Interval):
+    for Row in self.Data:
+      self.CompressRow(self.Data[Row],StartDate,Period,Interval)
+    
   
-  def SetStatValue(self,name,Dte,value):
+  def SetStatValue(self,name,Dte,value,BulkLoad=False):
     if not name in self.Data:
         self.Data[name]={}
         self.Data[name]['Values']=[]
-    NewData = self.search(self.Data[name]['Values'],'date',Dte)
+    if BulkLoad:
+      NewData=None
+    else:
+      NewData = self.search(self.Data[name]['Values'],'date',Dte)
     if NewData==None:
       NewData={'date':Dte,'value':value}
       self.Data[name]['Values'].append(NewData)
@@ -136,12 +192,10 @@ class StatInstance:
   def DeSerialize(self,Data):
     self.Data={}
     Rows = len(Data)
-    #print(Rows)
-    #print(Data)
     for i in range(Rows):
       Name = Data[i]['Name']
       for Value in Data[i]['Values']:
-        self.SetStatValue(Name,Value['date'],Value['value'])
+        self.SetStatValue(Name,Value['date'],Value['value'],True)
 
   def search(self,list, key, value): 
     for item in list: 
