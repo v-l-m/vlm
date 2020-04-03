@@ -71,7 +71,7 @@
 
      let P1 = new VLMPosition(Gate.longitude1, Gate.latitude1);
      let P2 = {};
-     if ((Gate.format & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
+     if ((Gate.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS || (Gate.longitude2 && Gate.latitude2))
      {
        P2 = new VLMPosition(Gate.longitude2, Gate.latitude2);
      }
