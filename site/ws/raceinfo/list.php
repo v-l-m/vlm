@@ -4,9 +4,11 @@
   require('racesiterators.class.php');
   
   class JsonRacesIterator extends RacesIterator {
-    var $query = "SELECT * FROM races
-                  WHERE ( ( started = 0 AND deptime > UNIX_TIMESTAMP() ) OR ( started = 1 ) )
-                  ORDER BY started ASC, deptime ASC, closetime ASC ";
+    var $query = "SELECT R.*,COALESCE(RR.engaged ,0) racing, COALESCE(ER.engaged,0) engaged FROM races R
+                  left join VIEW_ENGAGED_PER_RACE ER on R.idraces  = ER.idraces
+                  left join VIEW_ENGAGED_PER_RACE_RACING RR on R.idraces  = RR.idraces
+                  WHERE ( ( R.started = 0 AND R.deptime > UNIX_TIMESTAMP() ) OR ( R.started = 1 ) )
+                  ORDER BY R.started ASC, R.deptime ASC, closetime ASC ";
     var $jsonarray;
 
     function __construct($iduser=-1, $OldRaces=0) 
@@ -17,8 +19,10 @@
         {
           $OldRaces=($OldRaces-200).",".$OldRaces;
         }
-        $this->query = "SELECT * FROM races
-                  ORDER BY started ASC, deptime desc, closetime ASC limit ".$OldRaces;
+        $this->query = "SELECT R.*,COALESCE(RR.engaged ,0) racing, COALESCE(ER.engaged,0) engaged FROM races R
+                        left join VIEW_ENGAGED_PER_RACE ER on R.idraces  = ER.idraces
+                        left join VIEW_ENGAGED_PER_RACE_RACING RR on R.idraces  = RR.idraces
+                        ORDER BY started ASC, deptime desc, closetime ASC limit ".$OldRaces;
       }
       parent::__construct($iduser);      
     }
@@ -47,6 +51,8 @@
       $row['maxboats'] = (int) $row['maxboats'];
       $row['vacfreq'] = (int) $row['vacfreq'];
       $row['updated'] = $row['updated'];
+      $row['racing'] = $row['racing'];
+      $row['engaged'] = $row['engaged'];
       $row['CanJoin'] = in_array($row['idraces'],$this->AvRaces);
 
       // If race complete for winner, then compute race closing date
