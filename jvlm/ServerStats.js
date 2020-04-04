@@ -132,8 +132,8 @@ class ServerStatsMgrClass
       },
       "Stat_EngineStats":
       {
-        Threshold: [0, 100, 200],
-        Colors: ["#FF0000", "#FFA500", "#00FF00"],
+        Threshold: [0,50, 90, 180],
+        Colors: ["#FF0000","#FF0000", "#FFA500", "#00FF00"],
         Unit: "Boats/s",
         Image: "./images/Stats_Speed.png",
         Default:true,

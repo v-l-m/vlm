@@ -1251,7 +1251,14 @@ function DrawRaceGates(Boat)
             try
             {
               Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
-              complete = true;
+              if (Math.abs(Dest.Lat.Value)>85)
+              {
+                Dist*= 0.95;
+              }
+              else
+              {
+                complete = true;
+              }
             }
             catch (e)
             {
