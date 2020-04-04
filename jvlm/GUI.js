@@ -185,7 +185,8 @@ function DrawCompass()
           iconAnchor: [175, 170],
           iconUrl: 'images/compas-transparent.gif',
         }),
-        draggable: true
+        draggable: true,
+        zIndexOffset:-1000
       }).addTo(map);
       map.Compass.on("dragend", HandleCompassDragEnd);
       map.Compass.on("mousemove", HandleCompassMouseMove);
