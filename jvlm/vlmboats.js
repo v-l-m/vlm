@@ -1832,7 +1832,7 @@ function DrawOpponents(Boat)
 
         if ((parseInt(Opp.idusers, 10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends, Opp.idusers)) && RnkIsRacing(Opp) && (Math.random() <= ratio) && (count < MAX_LEN))
         {
-          AddOpponent(Boat, RaceFeatures, Opp, false);
+          AddOpponent(Boat, RaceFeatures, Opp, OppIsFriend(Boat,Opp.idusers));
           count += 1;
           if (typeof Boat.OppList === "undefined")
           {
@@ -1967,7 +1967,8 @@ function GetClosestOpps(Boat, NbOpps)
   return RetArray;
 
 }
-
+const OPP_FRIEND_SIZE=12;
+const OPP_SIZE=8;
 function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 {
   let Opp_Coords = [Opponent.latitude, Opponent.longitude];
@@ -1982,7 +1983,7 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
     "Last3h": Opponent.last3h,
     "Last24h": Opponent.last24h,
     "IsTeam": (Opponent.country == Boat.VLMInfo.CNT) ? "team" : "",
-    "IsFriend": (isFriend ? ZFactor * 2 : ZFactor),
+    "IsFriend": (isFriend ? OPP_FRIEND_SIZE : OPP_SIZE),
     "color": Opponent.color
   };
 
@@ -2028,7 +2029,7 @@ function ShowOpponentPopupInfo(e)
 
       if (Features)
       {
-
+        let NeedEvent = $("#PictoSetFriend").length == 0;
         let PopupStr = BuildBoatPopupInfo(Boat);
         if (!Features.OppPopup)
         {
@@ -2057,29 +2058,85 @@ function ShowOpponentPopupInfo(e)
         PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + OppId, RoundPow(parseFloat(Boat.last24h), 2)]);
         PopupFields.push([FIELD_MAPPING_STYLE, "#__BoatColor" + OppId, "background-color", SafeHTMLColor(Boat.color)]);
         FillFieldsFromMappingTable(PopupFields);
-        
-        if ( _CurPlayer && _CurPlayer.CurBoat && OppIsFriend(_CurPlayer.CurBoat, Boat.idusers))
+
+        UpdatePictoFriendStatus(OppId);
+
+        //FIXME will this leak ??
+        //if (NeedEvent)
         {
-          $("#PictoSetFriend").removeClass("AddFriend").addClass("DelFriend");
+          $("#PictoSetFriend").on("click", function(e)
+          {
+            HandleSetFriend(e, _CurPlayer.CurBoat);
+          });
         }
-        else
-        {
-          $("#PictoSetFriend").addClass("AddFriend").removeClass("DelFriend");
-        }
-        
       }
     }
   }
 
 }
 
-function OppIsFriend(Boat,id)
+function UpdatePictoFriendStatus( OppId)
+{
+  if (_CurPlayer && _CurPlayer.CurBoat && OppIsFriend(_CurPlayer.CurBoat, OppId))
+  {
+    $("#PictoSetFriend").removeClass("AddFriend").addClass("DelFriend").attr("BoatId", OppId);
+  }
+  else
+  {
+    $("#PictoSetFriend").addClass("AddFriend").removeClass("DelFriend").attr("BoatId", OppId);
+  }
+}
+
+function HandleSetFriend(e, Boat)
+{
+  let Opp = e.delegateTarget;
+
+  if (Opp && Opp.attributes && Opp.attributes.boatid && Boat && Boat.VLMPrefs)
+  {
+    let OppID = Opp.attributes.boatid.value;
+
+    if (Boat.VLMPrefs)
+    {
+
+      let Friends = [];
+
+      if (Boat.VLMPrefs.mapPrefOpponents)
+      {
+        Friends = Boat.VLMPrefs.mapPrefOpponents.split(",");
+      }
+
+      if ($.inArray(OppID, Friends) === -1)
+      {
+        Friends.push(OppID);
+      }
+      else
+      {
+        Friends.splice(Friends.findIndex(
+          function(x)
+          {
+            return x == OppID;
+          }), 1);
+      }
+      SaveVLMPrefs(
+      {
+        mapPrefOpponents: Friends.join(",")
+      });
+    }
+    else
+    {
+      console.log("Unhandled Friend Change click " + OppID);
+    }
+
+  }
+}
+
+function OppIsFriend(Boat, id)
 {
   if (Boat && Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
   {
     let Friends = _CurPlayer.CurBoat.VLMPrefs.mapPrefOpponents.split(",");
-    return  $.inArray(id,Friends)!==-1;
-    
+    return $.inArray(id, Friends) !== -1;
+
   }
   return false;
 
@@ -2130,28 +2187,28 @@ function BuildBoatPopupInfo(Boat)
   let BoatId = Boat.idusers;
 
   let RetStr =
-    '<div class="container-fluid">'+
+    '<div class="container-fluid">' +
     ' <div class="MapPopup_InfoHeader">' +
-    '   <div class="row">'+
-    '     <div class="row col-xs-2">'+ GetCountryFlagImgHTML(Boat.country) +'</div>'+
-    '     <div class="col-xs-8" style="top:8px">'+
+    '   <div class="row">' +
+    '     <div class="row col-xs-2">' + GetCountryFlagImgHTML(Boat.country) + '</div>' +
+    '     <div class="col-xs-8" style="top:8px">' +
     '       <a id="__BoatName' + BoatId + '" class="PopupBoatNameNumber " href="#" data-toggle="tooltip" title="BoatName">PlayerName</a>' +
     '       <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
     '     </div>' +
-    '     <div class="col-xs-2 TxtRank" id="__BoatRank' + BoatId + '">Rank'+
+    '     <div class="col-xs-2 TxtRank" id="__BoatRank' + BoatId + '">Rank' +
     '     </div>' +
-    '   </div>'+
-    '   <div class="row"id="__BoatColor' + BoatId + '" style="height: 2px;">'+
     '   </div>' +
-    ' </div>'+
+    '   <div class="row"id="__BoatColor' + BoatId + '" style="height: 2px;">' +
+    '   </div>' +
+    ' </div>' +
     ' <div class="row MapPopup_InfoBody">' +
-    '   <div class="col-xs-1">'+
+    '   <div class="col-xs-1">' +
     '     <div class="row PictoSpacer"></div>' +
     '     <div id="PictoSetFriend" class="row VLMPicto AddFriend"></div>' +
     '     <div class="row PictoSpacer"></div>' +
     '     <div id="PictoSetSetBS" class="row VLMPicto AddBS"></div>' +
-    '   </div>'+
-    '   <div class="col-xs-10">'+
+    '   </div>' +
+    '   <div class="col-xs-10">' +
     '     <fieldset>' +
     '       <span class="PopupHeadText " I18n="loch">' + GetLocalizedString('loch') + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId + '" class="loch PopupText">0.9563544</span>' +
     '       <BR><span class="PopupHeadText " I18n="position">' + GetLocalizedString('position') + '</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId + '" class=" PopupText">0.9563544</span>' +
@@ -2161,8 +2218,8 @@ function BuildBoatPopupInfo(Boat)
     '       <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     '       <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
     '     </fieldset>' +
-    '   </div>'+
-    ' </div>'+
+    '   </div>' +
+    ' </div>' +
     '</div>';
 
   return RetStr;
@@ -2397,7 +2454,7 @@ function UpdateBoatPrefs(Boat, NewVals)
 
 function LoadVLMPrefs()
 {
-  var Boat;
+  let Boat;
 
   if (typeof _CurPlayer === "undefined")
   {
@@ -2410,6 +2467,37 @@ function LoadVLMPrefs()
   $.get("/ws/boatinfo/prefs.php?idu=" + Boat.IdBoat, HandlePrefsLoaded);
 }
 
+function SaveVLMPrefs(Prefs)
+{
+
+  if (!_CurPlayer || !_CurPlayer.CurBoat || !Prefs)
+  {
+    return;
+  }
+  let Boat = _CurPlayer.CurBoat;
+
+  let Payload = {
+    idu: Boat.IdBoat,
+    prefs: Prefs
+  };
+
+  $.post("/ws/boatsetup/prefs_set.php", "parms=" + JSON.stringify(Payload), HandlePrefsSaved);
+
+}
+
+function HandlePrefsSaved(e)
+{
+  if (!e.success)
+  {
+    VLMAlertDanger(e.error.msg);
+  }
+  else
+  {
+    VLMAlertSuccess(GetLocalizedString("PreferenceUpdateComplete"));
+    LoadVLMPrefs();
+  }
+}
+
 function HandlePrefsLoaded(e)
 {
   if (e.success)
@@ -2418,13 +2506,51 @@ function HandlePrefsLoaded(e)
 
     Boat.VLMPrefs = e.prefs;
     VLM2Prefs.UpdateVLMPrefs(e.prefs);
-    $("#AdvancedStats").prop("checked",VLM2Prefs.AdvancedStats );
+    $("#AdvancedStats").prop("checked", VLM2Prefs.AdvancedStats);
+    UpdateOppPrefs();
   }
   else
   {
     VLMAlertDanger("Error communicating with VLM, try reloading the browser page...");
   }
 }
+
+function UpdateOppPrefs()
+{
+  if ($("#PictoSetFriend").length > 0)
+  {
+    UpdatePictoFriendStatus($("#PictoSetFriend")[0].attributes.BoatId.value);    
+  }
+  UpdateOppPictos();
+}
+
+function UpdateOppPictos()
+{
+  if (!_CurPlayer)
+  {
+    return;
+  }
+
+  let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
+
+
+  if (RaceFeatures &&  RaceFeatures.Opponents && RaceFeatures.Opponents)
+  {
+    for (let index in RaceFeatures.Opponents)
+    {
+      if ( RaceFeatures.Opponents[index])
+      {
+        let IsFriend = OppIsFriend(_CurPlayer.CurBoat, RaceFeatures.Opponents[index].IdUsers);
+        let Icon = RaceFeatures.Opponents[index].options.icon;
+        Icon.options.iconSize= [(IsFriend ? OPP_FRIEND_SIZE : OPP_SIZE),(IsFriend ? OPP_FRIEND_SIZE : OPP_SIZE)];
+        RaceFeatures.Opponents[index].setIcon(Icon);
+      }
+    }
+    
+  }
+}
+
+
 
 function HandleWPDragEnded(e)
 {
