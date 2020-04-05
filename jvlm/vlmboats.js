@@ -1149,7 +1149,7 @@ class RaceGateSorter
       }
       else
       {
-        if (r1.wporder<this.NextWP)
+        if (r1.wporder < this.NextWP)
         {
           return 1;
         }
@@ -1251,9 +1251,9 @@ function DrawRaceGates(Boat)
             try
             {
               Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
-              if (Math.abs(Dest.Lat.Value)>85)
+              if (Math.abs(Dest.Lat.Value) > 85)
               {
-                Dist*= 0.95;
+                Dist *= 0.95;
               }
               else
               {
@@ -1398,7 +1398,7 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
     strokeOpacity = 0.4;
   }
 
-  console.log ("Gate is next : " + IsNextWP + "gate is validated "+ IsValidated + " opacity " + strokeOpacity);
+  console.log("Gate is next : " + IsNextWP + "gate is validated " + IsValidated + " opacity " + strokeOpacity);
   if (GateType & WP_CROSS_ONCE)
   {
     if (GateFeatures.Segment2)
