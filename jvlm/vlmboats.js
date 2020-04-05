@@ -1832,7 +1832,7 @@ function DrawOpponents(Boat)
 
         if ((parseInt(Opp.idusers, 10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends, Opp.idusers)) && RnkIsRacing(Opp) && (Math.random() <= ratio) && (count < MAX_LEN))
         {
-          AddOpponent(Boat, RaceFeatures, Opp, OppIsFriend(Boat,Opp.idusers));
+          AddOpponent(Boat, RaceFeatures, Opp, OppIsFriend(Boat, Opp.idusers));
           count += 1;
           if (typeof Boat.OppList === "undefined")
           {
@@ -1910,11 +1910,26 @@ function DrawOpponents(Boat)
 
 function CompareDist(a, b)
 {
-  if (a.dnm < b.dnm)
+  if (a.nwp === b.nwp)
+  {
+    if (a.dnm < b.dnm)
+      return -1;
+    if (a.dnm > b.dnm)
+      return 1;
+    return 0;
+  }
+  else if (a.nwp < b.nwp)
+  {
     return -1;
-  if (a.dnm > b.dnm)
+  }
+  else if (a.nwp > b.nwp)
+  {
     return 1;
-  return 0;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 function GetClosestOpps(Boat, NbOpps)
@@ -1939,21 +1954,19 @@ function GetClosestOpps(Boat, NbOpps)
       };
     }
     let CurDnm = parseFloat(CurBoat.dnm);
-    let CurWP = CurBoat.nwp;
+    let CurPos = new VLMPosition(CurBoat.longitude,CurBoat.latitude);
     let List = [];
 
     for (let index in Rankings[RaceId])
     {
       if (Rankings[RaceId][index])
       {
-        if (CurWP === Rankings[RaceId][index].nwp)
-        {
-          var O = {
-            id: index,
-            dnm: Math.abs(CurDnm - parseFloat(Rankings[RaceId][index].dnm))
-          };
-          List.push(O);
-        }
+        let O = {
+          id: index,
+          dnm: CurPos.GetOrthoDist(new VLMPosition(Rankings[RaceId][index].longitude,Rankings[RaceId][index].latitude)),          
+        };
+        List.push(O);
+
       }
     }
 
@@ -1967,8 +1980,9 @@ function GetClosestOpps(Boat, NbOpps)
   return RetArray;
 
 }
-const OPP_FRIEND_SIZE=12;
-const OPP_SIZE=8;
+const OPP_FRIEND_SIZE = 12;
+const OPP_SIZE = 8;
+
 function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 {
   let Opp_Coords = [Opponent.latitude, Opponent.longitude];
@@ -2075,7 +2089,7 @@ function ShowOpponentPopupInfo(e)
 
 }
 
-function UpdatePictoFriendStatus( OppId)
+function UpdatePictoFriendStatus(OppId)
 {
   if (_CurPlayer && _CurPlayer.CurBoat && OppIsFriend(_CurPlayer.CurBoat, OppId))
   {
@@ -2519,7 +2533,7 @@ function UpdateOppPrefs()
 {
   if ($("#PictoSetFriend").length > 0)
   {
-    UpdatePictoFriendStatus($("#PictoSetFriend")[0].attributes.BoatId.value);    
+    UpdatePictoFriendStatus($("#PictoSetFriend")[0].attributes.BoatId.value);
   }
   UpdateOppPictos();
 }
@@ -2534,19 +2548,19 @@ function UpdateOppPictos()
   let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
 
 
-  if (RaceFeatures &&  RaceFeatures.Opponents && RaceFeatures.Opponents)
+  if (RaceFeatures && RaceFeatures.Opponents && RaceFeatures.Opponents)
   {
     for (let index in RaceFeatures.Opponents)
     {
-      if ( RaceFeatures.Opponents[index])
+      if (RaceFeatures.Opponents[index])
       {
         let IsFriend = OppIsFriend(_CurPlayer.CurBoat, RaceFeatures.Opponents[index].IdUsers);
         let Icon = RaceFeatures.Opponents[index].options.icon;
-        Icon.options.iconSize= [(IsFriend ? OPP_FRIEND_SIZE : OPP_SIZE),(IsFriend ? OPP_FRIEND_SIZE : OPP_SIZE)];
+        Icon.options.iconSize = [(IsFriend ? OPP_FRIEND_SIZE : OPP_SIZE), (IsFriend ? OPP_FRIEND_SIZE : OPP_SIZE)];
         RaceFeatures.Opponents[index].setIcon(Icon);
       }
     }
-    
+
   }
 }
 
