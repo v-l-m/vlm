@@ -2057,10 +2057,31 @@ function ShowOpponentPopupInfo(e)
         PopupFields.push([FIELD_MAPPING_TEXT, "#__Boat24HAvg" + OppId, RoundPow(parseFloat(Boat.last24h), 2)]);
         PopupFields.push([FIELD_MAPPING_STYLE, "#__BoatColor" + OppId, "background-color", SafeHTMLColor(Boat.color)]);
         FillFieldsFromMappingTable(PopupFields);
-
+        
+        if ( _CurPlayer && _CurPlayer.CurBoat && OppIsFriend(_CurPlayer.CurBoat, Boat.idusers))
+        {
+          $("#PictoSetFriend").removeClass("AddFriend").addClass("DelFriend");
+        }
+        else
+        {
+          $("#PictoSetFriend").addClass("AddFriend").removeClass("DelFriend");
+        }
+        
       }
     }
   }
+
+}
+
+function OppIsFriend(Boat,id)
+{
+  if (Boat && Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
+  {
+    let Friends = _CurPlayer.CurBoat.VLMPrefs.mapPrefOpponents.split(",");
+    return  $.inArray(id,Friends)!==-1;
+    
+  }
+  return false;
 
 }
 
@@ -2109,26 +2130,40 @@ function BuildBoatPopupInfo(Boat)
   let BoatId = Boat.idusers;
 
   let RetStr =
-    '<div class="MapPopup_InfoHeader">' +
-    GetCountryFlagImgHTML(Boat.country) +
-    ' <a id="__BoatName' + BoatId + '" class="PopupBoatNameNumber " href="#" data-toggle="tooltip" title="BoatName">PlayerName<</a>' +
-    ' <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
-    ' <div id="__BoatRank' + BoatId + '" class="TxtRank">Rank</div>' +
-    '</div>' +
-    '<div id="__BoatColor' + BoatId + '" style="height: 2px;"></div>' +
-    '<div class="MapPopup_InfoBody">' +
-    ' <fieldset>' +
-    '   <span class="PopupHeadText " I18n="loch">' + GetLocalizedString('loch') + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId + '" class="loch PopupText">0.9563544</span>' +
-    '   <BR><span class="PopupHeadText " I18n="position">' + GetLocalizedString('position') + '</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId + '" class=" PopupText">0.9563544</span>' +
-    '   <BR><span class="PopupHeadText " I18n="NextWP">' + GetLocalizedString('NextWP') + '</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
-    '   <BR><span class="PopupHeadText " I18n="Moyennes">' + GetLocalizedString('Moyennes') + ' </span><span class="PopupText"> : </span>' +
-    '   <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
-    '   <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
-    '   <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
-    ' </fieldset>' +
-    //' <BR><img class="AddOppWatch" src="images/AddWatch.png">' +
+    '<div class="container-fluid">'+
+    ' <div class="MapPopup_InfoHeader">' +
+    '   <div class="row">'+
+    '     <div class="row col-xs-2">'+ GetCountryFlagImgHTML(Boat.country) +'</div>'+
+    '     <div class="col-xs-8" style="top:8px">'+
+    '       <a id="__BoatName' + BoatId + '" class="PopupBoatNameNumber " href="#" data-toggle="tooltip" title="BoatName">PlayerName</a>' +
+    '       <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
+    '     </div>' +
+    '     <div class="col-xs-2 TxtRank" id="__BoatRank' + BoatId + '">Rank'+
+    '     </div>' +
+    '   </div>'+
+    '   <div class="row"id="__BoatColor' + BoatId + '" style="height: 2px;">'+
+    '   </div>' +
+    ' </div>'+
+    ' <div class="row MapPopup_InfoBody">' +
+    '   <div class="col-xs-1">'+
+    '     <div class="row PictoSpacer"></div>' +
+    '     <div id="PictoSetFriend" class="row VLMPicto AddFriend"></div>' +
+    '     <div class="row PictoSpacer"></div>' +
+    '     <div id="PictoSetSetBS" class="row VLMPicto AddBS"></div>' +
+    '   </div>'+
+    '   <div class="col-xs-10">'+
+    '     <fieldset>' +
+    '       <span class="PopupHeadText " I18n="loch">' + GetLocalizedString('loch') + '</span><span class="PopupText"> : </span><span id="__BoatLoch' + BoatId + '" class="loch PopupText">0.9563544</span>' +
+    '       <BR><span class="PopupHeadText " I18n="position">' + GetLocalizedString('position') + '</span><span class="PopupText"> : </span><span id="__BoatPosition' + BoatId + '" class=" PopupText">0.9563544</span>' +
+    '       <BR><span class="PopupHeadText " I18n="NextWP">' + GetLocalizedString('NextWP') + '</span><span class="strong"> : </span><span id="__BoatNWP' + BoatId + '" class="PopupText">[1] 4.531856536865234</span>' +
+    '       <BR><span class="PopupHeadText " I18n="Moyennes">' + GetLocalizedString('Moyennes') + ' </span><span class="PopupText"> : </span>' +
+    '       <span class="PopupHeadText ">[1h]</span><span id="__Boat1HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '       <span class="PopupHeadText ">[3h]</span><span id="__Boat3HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '       <span class="PopupHeadText ">[24h]</span><span id="__Boat24HAvg' + BoatId + '" class="PopupText">[1H] </strong>0.946785,[3H] 0.946785,[24H] 0.946785 </span>' +
+    '     </fieldset>' +
+    '   </div>'+
+    ' </div>'+
     '</div>';
-
 
   return RetStr;
 }
@@ -2149,6 +2184,7 @@ function HandleOpponentOver(e)
     }
 
     DrawOpponentTrack(OppIndex, RaceFeatures.Opponents[OppIndex]);
+    ShowOpponentPopupInfo(e);
   }
 }
 
