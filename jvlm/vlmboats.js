@@ -2076,14 +2076,19 @@ function ShowOpponentPopupInfo(e)
 
 function UpdatePictoFriendStatus(OppId)
 {
-  if (_CurPlayer && _CurPlayer.CurBoat && OppIsFriend(_CurPlayer.CurBoat, OppId))
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.IdBoat == OppId)
   {
-    $("#PictoSetFriend").removeClass("AddFriend").addClass("DelFriend").attr("BoatId", OppId);
+    $("#PictoSetFriend").addClass("hidden");
+  }
+  else if (_CurPlayer && _CurPlayer.CurBoat && OppIsFriend(_CurPlayer.CurBoat, OppId))
+  {
+    $("#PictoSetFriend").removeClass("hidden").removeClass("AddFriend").addClass("DelFriend").attr("BoatId", OppId);
   }
   else
   {
-    $("#PictoSetFriend").addClass("AddFriend").removeClass("DelFriend").attr("BoatId", OppId);
+    $("#PictoSetFriend").removeClass("hidden").addClass("AddFriend").removeClass("DelFriend").attr("BoatId", OppId);
   }
+  
 }
 
 function HandleSetFriend(e, Boat)
