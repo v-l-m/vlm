@@ -4190,7 +4190,7 @@ function HandleShowMapPrefs(e)
     '<span class="caret"></span>'
   );
 
-  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10)
+  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTopN)
   {
     $("#NbDisplayBoat").removeClass("hidden");
     $("#NbDisplayBoat").val(VLM2Prefs.MapPrefs.ShowTopCount);

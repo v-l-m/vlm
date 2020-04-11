@@ -1726,36 +1726,10 @@ function DrawOpponents(Boat)
   }
 
   // Get Friends
-  let friends = [];
+  let FriendsOnly = VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel;
   let index;
   let RaceFeatures = GetRaceMapFeatures(Boat);
 
-
-  // Map friend only if selection is active
-  if (VLM2Prefs.MapPrefs.MapOppShow === VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel)
-  {
-    if ((typeof Boat.VLMInfo !== "undefined") && (typeof Boat.VLMInfo.MPO !== "undefined"))
-    {
-      friends = Boat.VLMInfo.MPO.split(',');
-    }
-
-    if (friends.length !== 0)
-    {
-      let RaceId = Boat.VLMInfo.RAC;
-      for (index in friends)
-      {
-        if (friends[index] && Rankings[RaceId])
-        {
-          let Opp = Rankings[RaceId][friends[index]];
-
-          if ((typeof Opp !== 'undefined') && (parseInt(Opp.idusers, 10) !== Boat.IdBoat))
-          {
-            AddOpponent(Boat, RaceFeatures, Opp, true);
-          }
-        }
-      }
-    }
-  }
   // Get Reals
   if (VLM2Prefs.MapPrefs.ShowReals && (typeof Boat.Reals !== "undefined") && (typeof Boat.Reals.ranking !== "undefined"))
     for (index in Boat.Reals.ranking)
@@ -1765,27 +1739,26 @@ function DrawOpponents(Boat)
     }
 
   let MAX_LEN = 150;
-  let ratio = MAX_LEN / Object.keys(Rankings).length;
   let count = 0;
   let BoatList = Rankings;
 
   if (typeof Boat.OppList !== "undefined" && Boat.OppList.length > 0)
   {
     BoatList = Boat.OppList;
-    ratio = 1;
   }
 
   switch (VLM2Prefs.MapPrefs.MapOppShow)
   {
     case VLM2Prefs.MapPrefs.MapOppShowOptions.Show10Around:
       BoatList = GetClosestOpps(Boat, 10);
-      ratio = 1;
       break;
+
     case VLM2Prefs.MapPrefs.MapOppShowOptions.Show5Around:
       BoatList = GetClosestOpps(Boat, 5);
-      ratio = 1;
       break;
-    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTop10:
+
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTopN:
+    case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel:
       let BoatCount = 0;
       let RaceID = Boat.Engaged;
       MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
@@ -1809,12 +1782,10 @@ function DrawOpponents(Boat)
       {
         MAX_LEN = BoatCount;
       }
-      ratio = 1;
       break;
 
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowMineOnly:
       BoatList = [];
-      ratio = 1;
       break;
 
   }
@@ -1824,25 +1795,30 @@ function DrawOpponents(Boat)
 
   if (Boat.Engaged && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking)
   {
+    let count = 0;
     for (index in Rankings[Boat.Engaged].RacerRanking)
     {
       if (index in Rankings[Boat.Engaged].RacerRanking)
       {
-        var Opp = Rankings[Boat.Engaged].RacerRanking[index];
-
-        if ((parseInt(Opp.idusers, 10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (!contains(friends, Opp.idusers)) && RnkIsRacing(Opp) && (Math.random() <= ratio) && (count < MAX_LEN))
+        let Opp = Rankings[Boat.Engaged].RacerRanking[index];
+        if (RnkIsRacing(Opp))
         {
-          AddOpponent(Boat, RaceFeatures, Opp, OppIsFriend(Boat, Opp.idusers));
-          count += 1;
-          if (typeof Boat.OppList === "undefined")
+          let IsFriend = OppIsFriend(Boat, Opp.idusers);
+          if ((parseInt(Opp.idusers, 10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (count < MAX_LEN) && (!FriendsOnly || IsFriend))
           {
-            Boat.OppList = [];
+            AddOpponent(Boat, RaceFeatures, Opp, IsFriend);
+            count += 1;
+            if (typeof Boat.OppList === "undefined")
+            {
+              Boat.OppList = [];
+            }
+
           }
-          Boat.OppList[index] = Opp;
-        }
-        else if (count >= MAX_LEN)
-        {
-          break;
+          else //if (count >= MAX_LEN)
+          {
+            HideOpponent(Boat, RaceFeatures, Opp, OppIsFriend(Boat, Opp.idusers));
+            Boat.OppList[index] = null;
+          }
         }
       }
     }
@@ -1910,26 +1886,11 @@ function DrawOpponents(Boat)
 
 function CompareDist(a, b)
 {
-  if (a.nwp === b.nwp)
-  {
-    if (a.dnm < b.dnm)
-      return -1;
-    if (a.dnm > b.dnm)
-      return 1;
-    return 0;
-  }
-  else if (a.nwp < b.nwp)
-  {
+  if (a.dnm < b.dnm)
     return -1;
-  }
-  else if (a.nwp > b.nwp)
-  {
+  if (a.dnm > b.dnm)
     return 1;
-  }
-  else
-  {
-    return 0;
-  }
+  return 0;
 }
 
 function GetClosestOpps(Boat, NbOpps)
@@ -1954,7 +1915,7 @@ function GetClosestOpps(Boat, NbOpps)
       };
     }
     let CurDnm = parseFloat(CurBoat.dnm);
-    let CurPos = new VLMPosition(CurBoat.longitude,CurBoat.latitude);
+    let CurPos = new VLMPosition(CurBoat.longitude, CurBoat.latitude);
     let List = [];
 
     for (let index in Rankings[RaceId])
@@ -1963,16 +1924,19 @@ function GetClosestOpps(Boat, NbOpps)
       {
         let O = {
           id: index,
-          dnm: CurPos.GetOrthoDist(new VLMPosition(Rankings[RaceId][index].longitude,Rankings[RaceId][index].latitude)),          
+          dnm: CurPos.GetOrthoDist(new VLMPosition(Rankings[RaceId][index].longitude, Rankings[RaceId][index].latitude)),
         };
-        List.push(O);
+        if (O.dnm)
+        {
+          List.push(O);
+        }
 
       }
     }
 
 
-    List = List.sort(CompareDist);
-    for (let index in List.slice(0, NbOpps - 1))
+    List = List.sort(CompareDist).slice(0, NbOpps);
+    for (let index in List.slice(0, NbOpps))
     {
       RetArray[List[index].id] = Rankings[RaceId][List[index].id];
     }
@@ -1983,7 +1947,16 @@ function GetClosestOpps(Boat, NbOpps)
 const OPP_FRIEND_SIZE = 12;
 const OPP_SIZE = 8;
 
-function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
+function HideOpponent(Boat, RaceFeatures, Opponent, isFriend)
+{
+  AddOpponent(Boat, RaceFeatures, Opponent, isFriend, true);
+  if (Boat.OppTrack && Boat.OppTrack[Opponent.idusers])
+  {
+    Boat.OppTrack[Opponent.idusers].Visible=false;
+  }
+}
+
+function AddOpponent(Boat, RaceFeatures, Opponent, isFriend, HideOpp = false)
 {
   let Opp_Coords = [Opponent.latitude, Opponent.longitude];
   let ZFactor = 8; //map.getZoom();
@@ -2013,9 +1986,23 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
 
   if (RaceFeatures.Opponents[Opponent.idusers])
   {
+
     RaceFeatures.Opponents[Opponent.idusers].setLatLng(Opp_Coords);
+    if (HideOpp)
+    {
+      RaceFeatures.Opponents[Opponent.idusers].remove();
+    }
+    else
+    {
+      RaceFeatures.Opponents[Opponent.idusers].setLatLng(Opp_Coords);
+      if (!RaceFeatures.Opponents[Opponent.idusers]._map)
+      {
+        RaceFeatures.Opponents[Opponent.idusers].addTo(map);
+      }
+    }
+
   }
-  else
+  else if (!HideOpp)
   {
     let OppMarker = GetOpponentMarker(OppData);
     RaceFeatures.Opponents[Opponent.idusers] = L.marker(Opp_Coords,
@@ -2026,6 +2013,8 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend)
     RaceFeatures.Opponents[Opponent.idusers].on('mouseover', HandleOpponentOver);
     RaceFeatures.Opponents[Opponent.idusers].IdUsers = Opponent.idusers;
   }
+
+
 
 }
 
@@ -2284,15 +2273,19 @@ function HandleFeatureOut(e)
 }
 
 var TrackPendingRequests = [];
-
 var LastTrackRequest = 0;
 
-function DrawOpponentTrack(IdBoat, OppInfo)
+function HideOpponentTrack(IdBoat, OppInfo)
+{
+  DrawOpponentTrack(IdBoat, OppInfo,true)
+}
+
+function DrawOpponentTrack(IdBoat, OppInfo,HideTrack=false)
 {
   let B = _CurPlayer.CurBoat;
   let CurDate = new Date();
   let PendingID = null;
-  if (typeof B !== "undefined" && B && CurDate > LastTrackRequest)
+  if (typeof B !== "undefined" && !HideTrack && B && CurDate > LastTrackRequest)
   {
     LastTrackRequest = new Date(CurDate / 1000 + 0.5);
     if (typeof B.OppTrack !== "undefined" || !(IdBoat in B.OppTrack) || (IdBoat in B.OppTrack && (B.OppTrack[IdBoat].LastShow <= new Date(B.VLMInfo.LUP * 1000))))
@@ -2421,7 +2414,6 @@ function AddBoatOppTrackPoints(Boat, IdBoat, Track, TrackColor)
     };
   }
   Boat.OppTrack[IdBoat].LastShow = 0;
-  Boat.OppTrack[IdBoat].OppTrackPoints = [];
   Boat.OppTrack[IdBoat].OppTrackPoints = null;
 }
 
@@ -2536,6 +2528,7 @@ function UpdateOppPrefs()
     UpdatePictoFriendStatus($("#PictoSetFriend")[0].attributes.BoatId.value);
   }
   UpdateOppPictos();
+  DrawOpponents(_CurPlayer.CurBoat);
 }
 
 function UpdateOppPictos()

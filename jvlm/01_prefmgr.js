@@ -96,7 +96,7 @@ class PrefMgr
           this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowSel;
           break;
         case "meandtop10":
-          this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowTop10;
+          this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.ShowTopN;
           break;
         case "my10opps":
           this.MapPrefs.MapOppShow = this.MapPrefs.MapOppShowOptions.Show10Around;
@@ -149,7 +149,7 @@ class MapPrefs
       ShowSel: 0,
       ShowMineOnly: 1,
       Show5Around: 2,
-      ShowTop10: 3,
+      ShowTopN: 3,
       Show10Around: 4
     };
     this.WindArrowsSpacing = 64; // Spacing steps for wind arrow drawing
@@ -202,7 +202,7 @@ class MapPrefs
         case this.MapOppShowOptions.Show5Around:
           MapPrefVal = "my5opps";
           break;
-        case this.MapOppShowOptions.ShowTop10:
+        case this.MapOppShowOptions.ShowTopN:
           MapPrefVal = "meandtop10";
           break;
         case this.MapOppShowOptions.Show10Around:
@@ -230,7 +230,7 @@ class MapPrefs
           return GetLocalizedString("maponlyme");
         case this.MapOppShowOptions.Show5Around:
           return GetLocalizedString("mapmy5opps");
-        case this.MapOppShowOptions.ShowTop10:
+        case this.MapOppShowOptions.ShowTopN:
           return GetLocalizedString("mapmeandtop10");
         case this.MapOppShowOptions.Show10Around:
           return GetLocalizedString("mapmy10opps");
