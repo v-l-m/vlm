@@ -461,7 +461,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
     else
     {
-      BoatIcon = GetBoatMarker(Boat.VLMInfo.idusers);
+      BoatIcon = GetBoatMarker(Boat.IdBoat);
       RaceFeatures.BoatMarker = L.marker([Boat.VLMInfo.LAT, Boat.VLMInfo.LON],
       {
         icon: BoatIcon,
@@ -1804,7 +1804,7 @@ function DrawOpponents(Boat)
         if (RnkIsRacing(Opp))
         {
           let IsFriend = OppIsFriend(Boat, Opp.idusers);
-          if ((parseInt(Opp.idusers, 10) !== Boat.IdBoat) && BoatList[Opp.idusers] && (count < MAX_LEN) && (!FriendsOnly || IsFriend))
+          if (BoatList[Opp.idusers] && (count < MAX_LEN) && (!FriendsOnly || IsFriend))
           {
             AddOpponent(Boat, RaceFeatures, Opp, IsFriend);
             count += 1;
@@ -1926,7 +1926,7 @@ function GetClosestOpps(Boat, NbOpps)
           id: index,
           dnm: CurPos.GetOrthoDist(new VLMPosition(Rankings[RaceId][index].longitude, Rankings[RaceId][index].latitude)),
         };
-        if (O.dnm)
+        //if (O.dnm)
         {
           List.push(O);
         }
@@ -1935,8 +1935,8 @@ function GetClosestOpps(Boat, NbOpps)
     }
 
 
-    List = List.sort(CompareDist).slice(0, NbOpps);
-    for (let index in List.slice(0, NbOpps))
+    List = List.sort(CompareDist).slice(0, NbOpps+1);
+    for (let index in List)
     {
       RetArray[List[index].id] = Rankings[RaceId][List[index].id];
     }
@@ -2032,7 +2032,6 @@ function ShowOpponentPopupInfo(e)
 
       if (Features)
       {
-        let NeedEvent = $("#PictoSetFriend").length == 0;
         let PopupStr = BuildBoatPopupInfo(Boat);
         if (!Features.OppPopup)
         {
@@ -2064,14 +2063,11 @@ function ShowOpponentPopupInfo(e)
 
         UpdatePictoFriendStatus(OppId);
 
-        //FIXME will this leak ??
-        //if (NeedEvent)
+        $("#PictoSetFriend").on("click", function(e)
         {
-          $("#PictoSetFriend").on("click", function(e)
-          {
-            HandleSetFriend(e, _CurPlayer.CurBoat);
-          });
-        }
+          HandleSetFriend(e, _CurPlayer.CurBoat);
+        });
+
       }
     }
   }
@@ -2149,6 +2145,11 @@ function GetOppBoat(BoatId)
 {
   let CurBoat = _CurPlayer.CurBoat;
 
+  if (CurBoat && CurBoat.IdBoat === BoatId)
+  {
+    return CurBoat.VLMInfo;
+  }
+
   if (typeof CurBoat !== "undefined" && CurBoat && CurBoat.OppList)
   {
     for (let i in CurBoat.OppList)
@@ -2183,17 +2184,25 @@ function GetOppBoat(BoatId)
 
 function BuildBoatPopupInfo(Boat)
 {
-  if (!Boat || !Boat.idusers)
+  if (!Boat || (!Boat.idusers && !Boat.IDU))
   {
     return null;
   }
+
   let BoatId = Boat.idusers;
+  let Flag=GetCountryFlagImgHTML(Boat.country);
+  if (Boat.IDU)
+  {
+    // Special case of self
+    BoatId = Boat.IDU;
+    Flag=GetCountryFlagImgHTML(Boat.CNT);
+  }
 
   let RetStr =
     '<div class="container-fluid">' +
     ' <div class="MapPopup_InfoHeader">' +
     '   <div class="row">' +
-    '     <div class="row col-xs-2">' + GetCountryFlagImgHTML(Boat.country) + '</div>' +
+    '     <div class="row col-xs-2">' + Flag + '</div>' +
     '     <div class="col-xs-8" style="top:8px">' +
     '       <a id="__BoatName' + BoatId + '" class="PopupBoatNameNumber " href="#" data-toggle="tooltip" title="BoatName">PlayerName</a>' +
     '       <span id="__BoatId' + BoatId + '" class="PopupBoatNameNumber ">BoatNumber</span>' +
@@ -2233,7 +2242,12 @@ function HandleOpponentOver(e)
   let Opponent = e.sourceTarget;
   let index;
   let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
-  let OppIndex = Opponent.IdUsers;
+  let OppIndex = null;
+
+  if (Opponent && Opponent.options && Opponent.options.icon)
+  {
+    OppIndex = Opponent.options.icon.MarkerOppId;
+  }
 
   if (OppIndex)
   {
@@ -2277,7 +2291,7 @@ var LastTrackRequest = 0;
 
 function HideOpponentTrack(IdBoat, OppInfo)
 {
-  DrawOpponentTrack(IdBoat, OppInfo, true)
+  DrawOpponentTrack(IdBoat, OppInfo, true);
 }
 
 function DrawOpponentTrack(IdBoat, OppInfo, HideTrack = false)
