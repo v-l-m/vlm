@@ -1812,7 +1812,7 @@ function DrawOpponents(Boat)
             {
               Boat.OppList = [];
             }
-
+            Boat.OppList[index] = Opp;
           }
           else //if (count >= MAX_LEN)
           {
@@ -1952,7 +1952,7 @@ function HideOpponent(Boat, RaceFeatures, Opponent, isFriend)
   AddOpponent(Boat, RaceFeatures, Opponent, isFriend, true);
   if (Boat.OppTrack && Boat.OppTrack[Opponent.idusers])
   {
-    Boat.OppTrack[Opponent.idusers].Visible=false;
+    Boat.OppTrack[Opponent.idusers].Visible = false;
   }
 }
 
@@ -2277,10 +2277,10 @@ var LastTrackRequest = 0;
 
 function HideOpponentTrack(IdBoat, OppInfo)
 {
-  DrawOpponentTrack(IdBoat, OppInfo,true)
+  DrawOpponentTrack(IdBoat, OppInfo, true)
 }
 
-function DrawOpponentTrack(IdBoat, OppInfo,HideTrack=false)
+function DrawOpponentTrack(IdBoat, OppInfo, HideTrack = false)
 {
   let B = _CurPlayer.CurBoat;
   let CurDate = new Date();
