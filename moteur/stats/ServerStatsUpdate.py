@@ -54,10 +54,12 @@ class ServerStats:
   def UpdateData(self):
     for item in  self.DataSet:
       item.GetNextStat()
-      #Day Compression 1day 15' 
+      #Day Compression 1day 15" 
       item.Compress(self.C[0],3600*24,15*60)
-      #Week Compression 7 days  60'     
-      #Month Compression 30 days 180'
+      #Week Compression 7 days 60"     
+      item.Compress(self.C[0],3600*24*7,60*60)
+      #Month Compression 30 days 180"
+      #item.Compress(self.C[0],3600*24*30,3*60*60)
       
     f=open(self.FileName,"w")
     f.write(json.dumps(self.Serialize()))    
@@ -132,7 +134,7 @@ class StatInstance:
       return
     if StartDate == 0:
       StartDate=Row['Values'][Index]['date'] - (Row['Values'][Index]['date']%Period)
-    CurBound = StartDate + Period
+    CurBound = StartDate + Interval
     
     CurSum = 0
     CurIndex = Index
@@ -156,8 +158,8 @@ class StatInstance:
         CurBound+=Interval
         CurBound -= (CurBound%Interval)
         if (CurBound >=EndDate):
-          return;
-    return
+          return EndDate;
+    return EndDate
     
 
   def Compress(self,StartDate,Period,Interval):
