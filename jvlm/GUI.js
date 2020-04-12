@@ -2315,10 +2315,10 @@ class RaceSorterclass
 {
   constructor(OldRacesSortMode)
   {
-    this.OldRacesSortMode = false;
+    this.OldRacesSortMode = 1;
     if (OldRacesSortMode)
     {
-      this.OldRacesSortMode = true;
+      this.OldRacesSortMode = -1;
     }
     this.sort = function(r1, r2)
     {
@@ -2326,14 +2326,7 @@ class RaceSorterclass
       {
         if (r1.deptime > r2.deptime)
         {
-          if (this.OldRacesSortMode)
-          {
-            return 1;
-          }
-          else
-          {
-            return -1;
-          }
+          return 1*this.OldRacesSortMode;
         }
         else if (r1.deptime === r2.deptime)
         {
@@ -2352,7 +2345,7 @@ class RaceSorterclass
         }
         else
         {
-          return 1;
+          return 1*this.OldRacesSortMode;
         }
 
       }
