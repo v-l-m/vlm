@@ -2119,8 +2119,15 @@
           </div>
         </div>
         <div class="modal-footer">
-          <div class="col-xs-8">
-            <span id="StatsGen"></span>
+          <div class="col-xs-4 text-left">
+            <div class="row">
+              <span id="StatsGen"></span>
+            </div>
+            <div class="row">
+              <span id="StatsGenDur" style="font-size: xx-small;"></span>
+            </div>
+          </div>
+          <div class="col-xs-4">
             <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Day')">1d</button>
             <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Week')">1w</button>
             <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Month')">1m</button>

@@ -158,6 +158,12 @@ class ServerStatsMgrClass
         Colors: ["#0000FF"],
         Image: "./images/Stats_Connections.png"
       },
+      "NTP Offset (ms)":
+      {
+        Threshold: [-5,-1,1,5],
+        Colors: ["#0000FF","#00FF00","#00FF00","#0000FF"],
+        Image: "./images/Stats_Speed.png"
+      },
     };
     this.PlotHorizon = new PlotHorizon("1Day");
   }
@@ -174,8 +180,17 @@ class ServerStatsMgrClass
   LoadStats()
   {
     $("#StatsPreloader").removeClass("hidden");
-    $.get("/ws/serverinfo/ServerStatus.php?v=" + Math.round(new Date().getTime() / 1000 / 60 / 3), this.HandleStatLoaded.bind(this));
+    this.TimeOutHandle = this.GetStats(0);
   }
+
+  GetStats(interval_ms)
+  {
+    return setTimeout(() => {
+      $.get("/ws/serverinfo/ServerStatus.php?v=" + Math.round(new Date().getTime() / 1000 / 60 / 3), this.HandleStatLoaded.bind(this));  
+    }, interval_ms);
+    
+  }
+
 
   HandleStatLoaded(e)
   {
@@ -183,13 +198,15 @@ class ServerStatsMgrClass
     this.DataSetTiles = [];
     this.DisplayCurrentValues();
     this.PlotTileData("Stt_BoatCount");
-    $("#StatsPreloader").addClass("hidden");
+    $("#StatsPreloader").addClass("hidden");    
+    this.TimeOutHandle = this.GetStats(30000);
   }
 
   DisplayCurrentValues()
   {
 
     $("#StatsGen").text("Stats from : "+ moment(this.Stats.Generated*1000).format());
+    $("#StatsGenDur").text("Gen. in :"+ RoundPow( this.Stats.GenerationTime*1000,1)  + " ms");
     this.Stats.Data.sort();
     for (let index in this.Stats.Data)
     {
@@ -306,7 +323,7 @@ class ServerStatsMgrClass
 
   UpdateStatTile(Name, Value, TileInfo)
   {
-    let TileId = "Stt_" + Name.replace(/\//g, "_");
+    let TileId = "Stt_" + Name.replace(/[\/\(\ \)]/g, "_");
     let Tile = $("#" + TileId)[0];
 
     if (!Tile)
@@ -358,7 +375,14 @@ class ServerStatsMgrClass
 
   }
 
-
+  CancelStats()
+  {
+    if (this.TimeOutHandle)
+    {
+      clearTimeout(this.TimeOutHandle);
+      this.TimeOutHandle=null;
+    }
+  }
 
   PlotTileData(DataSetId)
   {

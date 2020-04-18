@@ -566,6 +566,7 @@ function InitMenusAndButtons()
   });
 
   $("#ServerStatsLink").click(HandleShowServerInfoModal);
+  $("#ServerInfo").on("hide.bs.modal",ServerStatsMgr.CancelStats.bind(ServerStatsMgr));
 
   // Add resize handler and force resize of small login image (just in case)
   HandleAproposSizing();

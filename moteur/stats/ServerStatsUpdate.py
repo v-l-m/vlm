@@ -244,7 +244,7 @@ class Stat_VolumeSpace(StatInstance):
 
 ###
 ###
-### MySQL Stats (should be 0) Stat instance class.
+### MySQL Stats Stat instance class.
 ###
 ###
 
@@ -261,6 +261,11 @@ class Stat_MySQLStats(StatInstance):
       if ( fields[0] in StatFields):
         self.SetStatValue(fields[0],Dte,int(fields[1]))
 
+###
+###
+### Engine Stats Stat instance class.
+###
+###
 class Stat_EngineStats(StatInstance):
   def GetNextStat(self):
     f=open(os.path.expanduser("~/tmp/s4"))
@@ -281,6 +286,29 @@ class Stat_EngineStats(StatInstance):
           self.SetStatValue('EngineBoatSpeed',Epoch,NbBoats/RunLength)
         else:
           self.SetStatValue('EngineBoatSpeed',Epoch,0)
+
+###
+###
+### Npt Stats Stat instance class.
+###
+###
+class Stat_EngineStats(StatInstance):
+  def GetNextStat(self):    
+    fname=os.path.expanduser("~/tmp/s5");
+    if not os.path.isfile(fname):
+      return
+    NtpPattern="\*\S*\s+\S+\s+\d+\s+\S+\s+\d+\s+\S*\s+\S*\s+\S*\s+(\S+)"
+    f=open(fname)
+    ret=f.read()
+    f.close()
+    lines = ret.split("\n")
+    Dte=int(lines[0])
+    for line in lines:
+      m=re.match(NtpPattern,line)
+      if ( m != None):
+        g= m.groups()
+        self.SetStatValue("NTP Offset (ms)",Dte,float(g[0]))
+        return
 
 
 if 'VLMCACHE' in os.environ:    
