@@ -2333,7 +2333,7 @@ class RaceSorterclass
         {
           if (r1.racename > r2.racename)
           {
-            return 1;
+            return 1*this.OldRacesSortMode;
           }
           else if (r1.racename === r2.racename)
           {
@@ -2341,12 +2341,12 @@ class RaceSorterclass
           }
           else
           {
-            return -1;
+            return -1*this.OldRacesSortMode;
           }
         }
         else
         {
-          return 1*this.OldRacesSortMode;
+          return -1*this.OldRacesSortMode;
         }
 
       }
