@@ -55,5 +55,5 @@ cd $VLMLOG
 #purge des fichiers cachés non accédé depuis 30 jours.
 cd $VLMRACINE/cache
 nice /usr/bin/find ./gribtiles ./gshhstiles ./minimaps ./racemaps ./tinymaps ./tracks -type f -atime +30 -exec rm -f {} +;
-nice /usr/bin/find ./gribtiles/* ./gshhstiles/* ./minimaps/* ./racemaps/* ./tinymaps/* ./tracks/* -type d -empty -delete
+nice /usr/bin/find ./gribtiles/* ./gshhstiles/* ./minimaps/* ./racemaps/* ./tinymaps/* ./tracks/* -type d -empty -delete | grep -v "No such file"
 
