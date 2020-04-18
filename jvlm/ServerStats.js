@@ -108,6 +108,7 @@ class ServerStatsMgrClass
   {
     this.TemplateDom = $("#StatIndicatorTemplate");
     $(".StatIndicatorTile").on('click', this.HandleTileClick.bind(this));
+    this.CurSetID = null;
     this.TileInfo = {
       "Stat_MailQStat":
       {
@@ -132,25 +133,25 @@ class ServerStatsMgrClass
       },
       "Stat_EngineStats":
       {
-        Threshold: [0,50, 90, 180],
-        Colors: ["#FF0000","#FF0000", "#FFA500", "#00FF00"],
+        Threshold: [0, 50, 90, 180],
+        Colors: ["#FF0000", "#FF0000", "#FFA500", "#00FF00"],
         Unit: "Boats/s",
         Image: "./images/Stats_Speed.png",
-        Default:true,
+        Default: true,
       },
       "BoatCount":
       {
         Threshold: [0],
         Colors: ["#00FF00"],
         Unit: null,
-        Default:true,
+        Default: true,
       },
       "RaceCount":
       {
         Threshold: [0],
         Colors: ["#00FF00"],
         Unit: null,
-        Default:true,
+        Default: true,
       },
       "max_connections":
       {
@@ -160,8 +161,8 @@ class ServerStatsMgrClass
       },
       "NTP Offset (ms)":
       {
-        Threshold: [-5,-1,1,5],
-        Colors: ["#0000FF","#00FF00","#00FF00","#0000FF"],
+        Threshold: [-5, -1, 1, 5],
+        Colors: ["#0000FF", "#00FF00", "#00FF00", "#0000FF"],
         Image: "./images/Stats_Speed.png"
       },
     };
@@ -170,7 +171,7 @@ class ServerStatsMgrClass
 
   SetHorizon(horizon)
   {
-    this.PlotHorizon.Horizon=horizon;
+    this.PlotHorizon.Horizon = horizon;
     if (this.CurSetID)
     {
       this.PlotTileData(this.CurSetID);
@@ -185,10 +186,11 @@ class ServerStatsMgrClass
 
   GetStats(interval_ms)
   {
-    return setTimeout(() => {
-      $.get("/ws/serverinfo/ServerStatus.php?v=" + Math.round(new Date().getTime() / 1000 / 60 / 3), this.HandleStatLoaded.bind(this));  
+    return setTimeout(() =>
+    {
+      $.get("/ws/serverinfo/ServerStatus.php?v=" + Math.round(new Date().getTime() / 1000 / 60 / 3), this.HandleStatLoaded.bind(this));
     }, interval_ms);
-    
+
   }
 
 
@@ -197,20 +199,24 @@ class ServerStatsMgrClass
     this.Stats = e;
     this.DataSetTiles = [];
     this.DisplayCurrentValues();
-    this.PlotTileData("Stt_BoatCount");
-    $("#StatsPreloader").addClass("hidden");    
+    if (!this.CurSetID)
+    {
+      this.CurSetID = "Stt_BoatCount";
+    }
+    this.PlotTileData(this.CurSetID);
+    $("#StatsPreloader").addClass("hidden");
     this.TimeOutHandle = this.GetStats(30000);
   }
 
   DisplayCurrentValues()
   {
 
-    $("#StatsGen").text("Stats from : "+ moment(this.Stats.Generated*1000).format());
-    $("#StatsGenDur").text("Gen. in :"+ RoundPow( this.Stats.GenerationTime*1000,1)  + " ms");
+    $("#StatsGen").text("Stats from : " + moment(this.Stats.Generated * 1000).format());
+    $("#StatsGenDur").text("Gen. in :" + RoundPow(this.Stats.GenerationTime * 1000, 1) + " ms");
     this.Stats.Data.sort();
     for (let index in this.Stats.Data)
     {
-      if ( this.Stats.Data[index])
+      if (this.Stats.Data[index])
       {
         let TypedDataRow = this.Stats.Data[index];
         let color = null;
@@ -380,7 +386,7 @@ class ServerStatsMgrClass
     if (this.TimeOutHandle)
     {
       clearTimeout(this.TimeOutHandle);
-      this.TimeOutHandle=null;
+      this.TimeOutHandle = null;
     }
   }
 
@@ -391,8 +397,7 @@ class ServerStatsMgrClass
     let MinDate = null;
     let MaxDate = null;
     let MaxValue = null;
-    let BoundsMaxValue = null;
-    this.CurSetID=DataSetId;
+    this.CurSetID = DataSetId;
     for (let index in this.DataSetTiles[DataSetId].Values)
     {
       let Data = this.DataSetTiles[DataSetId].Values[index];
@@ -445,7 +450,7 @@ class ServerStatsMgrClass
       for (let infoindex in TI.Threshold)
       {
         CurSet = {
-          label : "Thr. "+TI.Threshold[infoindex],
+          label: "Thr. " + TI.Threshold[infoindex],
           borderWidth: 2,
           pointRadius: 0,
           fill: false,
@@ -544,9 +549,9 @@ class ServerStatsMgrClass
       });
     }
     this.Chart.config.data.datasets = DataSets;
-    this.Chart.options.title.text=DataName;
+    this.Chart.options.title.text = DataName;
     this.Chart.update();
-    StatMGR.Stat("PlotStats",this.PlotHorizon.Horizon,DataName);
+    StatMGR.Stat("PlotStats", this.PlotHorizon.Horizon, DataName);
   }
 }
 
