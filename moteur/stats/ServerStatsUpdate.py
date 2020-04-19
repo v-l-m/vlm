@@ -292,7 +292,7 @@ class Stat_EngineStats(StatInstance):
 ### Npt Stats Stat instance class.
 ###
 ###
-class Stat_EngineStats(StatInstance):
+class Stat_NTPStats(StatInstance):
   def GetNextStat(self):    
     fname=os.path.expanduser("~/tmp/s5");
     if not os.path.isfile(fname):
