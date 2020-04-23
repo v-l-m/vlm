@@ -161,7 +161,7 @@ class ServerStatsMgrClass
       },
       "NTP Offset (ms)":
       {
-        Threshold: [-5, -1, 1, 5],
+        Threshold: [-10, -5, 5, 10],
         Colors: ["#0000FF", "#00FF00", "#00FF00", "#0000FF"],
         Image: "./images/Stats_Speed.png"
       },
