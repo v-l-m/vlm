@@ -129,7 +129,7 @@ class PolarManagerClass
       var BestVMG = -1e10;
       for (var dir = -1; dir <= 1; dir += 2)
       {
-        for (var angle = 0.0; angle <= 90; angle += 0.1)
+        for (var angle = 0.0; angle <= 90; angle += 1)
         {
           var CurSpeed = this.GetBoatSpeed(Polar, WindSpeed, WindBearing, OrthoBearing + angle * dir);
           var CurVMG = CurSpeed * Math.cos(Deg2Rad(angle));
