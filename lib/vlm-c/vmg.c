@@ -85,7 +85,7 @@ void do_bvmg_context(vlmc_context *context, boat *aboat, int mode,
   t_max = -100;
   t_max2 = -100;
 
-  /* -90 to +90 form desired diretion */
+  /* -90 to +90 from desired diretion */
   for (i=0; i<imax; i++) {
     t_heading = wanted_heading + degToRad(((double)i)/anglediv);
     speed = find_speed_polar(polar_tab, w_speed, w_angle - t_heading);
