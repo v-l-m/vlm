@@ -408,7 +408,7 @@
  function HandleFleetInfoLoaded(result)
  {
    let i = result;
-   let select;
+   let select=null;
 
    if (typeof _CurPlayer === 'undefined')
    {
@@ -425,7 +425,7 @@
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
      {
        _CurPlayer.Fleet[boat] = (new Boat(result.fleet[boat]));
-       if (typeof select === "undefined")
+       if (!select || ( select && !select.Engaged && _CurPlayer.Fleet[boat].Engaged))
        {
          select = _CurPlayer.Fleet[boat];
        }
@@ -457,8 +457,6 @@
 
  function RefreshPlayerMenu()
  {
-
-
    // Update GUI for current player
    $("#PlayerId").text(_CurPlayer.PlayerName);
 
