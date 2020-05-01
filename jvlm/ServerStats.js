@@ -250,7 +250,7 @@ class ServerStatsMgrClass
             {
               LocalColor = this.TileInfo[Name];
             }
-            let TileId = this.UpdateStatTile(Name, Value, LocalColor);
+            let TileId = this.UpdateStatTile(Name, Value, LocalColor,VLM2Prefs.AdvancedStats || LocalColor.Default);
 
             this.DataSetTiles[TileId] = DataRow;
             this.DataSetTiles[TileId].TileInfo = LocalColor;
@@ -327,12 +327,12 @@ class ServerStatsMgrClass
     }
   }
 
-  UpdateStatTile(Name, Value, TileInfo)
+  UpdateStatTile(Name, Value, TileInfo, Visibility)
   {
     let TileId = "Stt_" + Name.replace(/[\/\(\ \)]/g, "_");
     let Tile = $("#" + TileId)[0];
 
-    if (!Tile)
+    if (!Tile && Visibility)
     {
       // Create a new tile and add to Dom
       let NewTile = this.TemplateDom.clone().removeClass("hidden")[0];
@@ -347,12 +347,21 @@ class ServerStatsMgrClass
       {
         $(NewTile).find("[src]").attr("src", TileInfo.Image);
       }
-      else
-      {
-        $(NewTile).find("[src]").addClass("hidden");
-      }
       $("#CountersList").append(NewTile);
       Tile = NewTile;
+    }
+    else if (Tile)
+    {
+      if (!Visibility)
+      {
+        $(Tile).find("[src]").addClass("hidden");
+      }
+      else
+      {
+        $(Tile).find("[src]").removeClass("hidden");
+        
+      }
+      
     }
     $(Tile).find("[Fld_Id='value']").text(RoundPow(Value, 2));
     let color = "lightgrey";
