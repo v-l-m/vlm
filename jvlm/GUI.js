@@ -186,7 +186,7 @@ function DrawCompass()
           iconUrl: 'images/compas-transparent.gif',
         }),
         draggable: true,
-        zIndexOffset:-1000
+        zIndexOffset: -1000
       }).addTo(map);
       map.Compass.on("dragend", HandleCompassDragEnd);
       map.Compass.on("mousemove", HandleCompassMouseMove);
@@ -566,7 +566,7 @@ function InitMenusAndButtons()
   });
 
   $("#ServerStatsLink").click(HandleShowServerInfoModal);
-  $("#ServerInfo").on("hide.bs.modal",ServerStatsMgr.CancelStats.bind(ServerStatsMgr));
+  $("#ServerInfo").on("hide.bs.modal", ServerStatsMgr.CancelStats.bind(ServerStatsMgr));
 
   // Add resize handler and force resize of small login image (just in case)
   HandleAproposSizing();
@@ -2327,13 +2327,13 @@ class RaceSorterclass
       {
         if (r1.deptime > r2.deptime)
         {
-          return 1*this.OldRacesSortMode;
+          return 1 * this.OldRacesSortMode;
         }
         else if (r1.deptime === r2.deptime)
         {
           if (r1.racename > r2.racename)
           {
-            return 1*this.OldRacesSortMode;
+            return 1 * this.OldRacesSortMode;
           }
           else if (r1.racename === r2.racename)
           {
@@ -2341,12 +2341,12 @@ class RaceSorterclass
           }
           else
           {
-            return -1*this.OldRacesSortMode;
+            return -1 * this.OldRacesSortMode;
           }
         }
         else
         {
-          return -1*this.OldRacesSortMode;
+          return -1 * this.OldRacesSortMode;
         }
 
       }
@@ -2590,7 +2590,7 @@ function AddRaceToList(race, filter)
     '      <div class="col-xs-9">' +
     '        <div class="col-xs-12">' +
     (RecordRace ? '<span class="PRecordRace">P</span>' : '') +
-    '          <span ">' + race.racename + (race.racelength !== "0" ? ' (' + race.racelength + ' Nm)' : '')  + (race.engaged?' ('+race.racing+'/'+race.engaged+')':'')+
+    '          <span ">' + race.racename + (race.racelength !== "0" ? ' (' + race.racelength + ' Nm)' : '') + (race.engaged ? ' (' + race.racing + '/' + race.engaged + ')' : '') +
     '          </span>' +
     '        </div>' +
     '        <div class="btn-group col-xs-12">' +
@@ -2972,10 +2972,14 @@ function ResetCollapsiblePanels(e)
 
 function HandleBoatSelectionChange(e)
 {
-  ResetCollapsiblePanels();
 
   let BoatId = $(e.target).closest('li').attr('BoatID');
+  if (!BoatId)
+  {
+    return;
+  }
   let Boat = GetBoatFromIdu(BoatId);
+  ResetCollapsiblePanels();
 
   if (typeof Boat === "undefined" || !Boat)
   {
