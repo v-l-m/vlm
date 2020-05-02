@@ -1428,16 +1428,16 @@ function GetBoatDDLine(Boat, IsFleet)
 function GetBoatInfoLine(Boat, IsFleet)
 {
   var Line = "";
-  var BoatStatus = "racing";
+  var BoatStatus = "BStatus_Racing";
 
   if (!Boat.Engaged)
   {
-    BoatStatus = "Docked";
+    BoatStatus = "BStatus_Docked";
   }
 
   if ((typeof Boat.VLMInfo !== "undefined") && Boat.VLMInfo["S&G"])
   {
-    BoatStatus = "stranded";
+    BoatStatus = "BStatus_Stranded";
   }
 
   if (!IsFleet)
@@ -1445,7 +1445,7 @@ function GetBoatInfoLine(Boat, IsFleet)
     Line = Line + '<span class="badge">BS';
   }
 
-  Line = Line + '<img class="BoatStatusIcon" src="images/' + BoatStatus + '.png" />';
+  Line = Line + '<img class="BoatStatusIcon ' + BoatStatus +'" />';
   if (!IsFleet)
   {
     Line = Line + '</span>';
