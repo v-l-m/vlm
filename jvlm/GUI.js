@@ -73,7 +73,7 @@ $(document).ready(
     {
       error: function(x, status, error)
       {
-        if ((x.status === 401) || (x.status === 403))
+        if ((x.status === 401) || (x.status === 403) || (x.status === "error"))
         {
           window.location.replace("/");
           //on access denied try reviving the session
@@ -82,7 +82,7 @@ $(document).ready(
         else if (x.status === 404)
         {
           // Code removed until ranking exist for not started races.
-          //$("#ErrorRedirectPanel").modal('show');
+          $("#ErrorRedirectPanel").modal('show');
         }
         else
         {
