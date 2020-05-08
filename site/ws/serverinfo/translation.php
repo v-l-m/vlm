@@ -17,8 +17,12 @@
     $ws->maxage = 3600*24;
 
     $ws->answer['request'] = Array('lang' => $ws->lang);
-    if (!array_key_exists($ws->lang, $ws->stringarray)) $ws->answser['warn'] = "Requested lang doesn't exists in strings file";
-
+    if (!array_key_exists($ws->lang, $ws->stringarray)) 
+    {
+        $ws->answser['warn'] = "Requested lang doesn't exists in strings file";
+        // Default to en if unknown or wrong language specified
+        $ws->lang='en';
+    }
     $ws->answer['strings'] = $ws->stringarray[$ws->lang];
     $ws->reply_with_success();
 ?>
