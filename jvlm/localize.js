@@ -11,8 +11,23 @@
    $(".LngFlag").click(
      function(event, ui)
      {
-       OnLangFlagClick($(this).attr('lang'));
-       UpdateLngDropDown();
+       let lang = $(this).attr('lang');
+
+       if (!lang)
+      {
+        //let Label = e.currentTarget;
+        let img = $(this).siblings("img");
+        if (img)
+        {
+          lang=img[0].attributes.lang.value;
+        }
+      
+      }
+      if (lang)
+       {
+         OnLangFlagClick(lang);
+        UpdateLngDropDown();
+       }
      }
    );
 

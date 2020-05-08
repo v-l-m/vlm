@@ -1195,7 +1195,7 @@ function DrawRaceGates(Boat)
     {
       for (let index in RaceInfo.races_waypoints)
       {
-        let WPClone = jQuery.extend({}, RaceInfo.races_waypoints[index])
+        let WPClone = jQuery.extend({}, RaceInfo.races_waypoints[index]);
         GatesList.push(WPClone);
       }
       RaceInfo = {};
