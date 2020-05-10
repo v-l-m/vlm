@@ -54,15 +54,17 @@ class ServerStats:
   def UpdateData(self):
     for item in  self.DataSet:
       item.GetNextStat()
-      if (self.C != None):
-        #Day Compression 1day 15' 
-        item.Compress(self.C[0],3600*24,15*60)
-        #Week Compression 7 days 60'    
-        item.Compress(self.C[0],3600*24*7,60*60)
-        #Month Compression 21 days 180'
-        item.Compress(self.C[0],3600*24*18,3*60*60)
-        #3Month Compression 40 days 6h
-        item.Compress(self.C[0],3600*24*40,6*60*60)
+      if (not hasattr(self,"C") ):
+        self.C=[0,0,0]
+
+      #Day Compression 1day 15' 
+      item.Compress(self.C[0],3600*24,15*60)
+      #Week Compression 7 days 60'    
+      item.Compress(self.C[0],3600*24*7,60*60)
+      #Month Compression 21 days 180'
+      item.Compress(self.C[0],3600*24*18,3*60*60)
+      #3Month Compression 40 days 6h
+      item.Compress(self.C[0],3600*24*40,6*60*60)
       
     f=open(self.FileName,"w")
     f.write(json.dumps(self.Serialize()))    
