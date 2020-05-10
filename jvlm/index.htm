@@ -2096,7 +2096,75 @@
 
 
   <!-- Server Info Panel -->
- 
+  <div id="ServerInfo" class="Draggable modal dialog fade" role="dialog" >
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modaldialog modal-content">
+        <div class="modal-header">
+          <div class="modal-header MI_Title"> <span I18n="serverinfo"></span><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          </div>          
+        </div>
+        <div class="modal-body">
+          <div id="StatsContainer" class="container-fluid ">
+            <div id="StatsPreloader" class="row hidden">
+              <img src="images/Preloader_5.gif" alt="Loading..." class="racelistpreloader img-responsive center-block">            
+            </div>
+            <div class="row-fluid">
+              <div id="CountersList" class="row-fluid col-xs-6" >
+                <div id="StatIndicatorTemplate" class="StatIndicatorTile hidden col-xs-4">
+                  <span fld_id="title">Title</span>                  
+                  <div class="row">
+                    <div class="col-xs-2">
+                      <img src="./images/Stats_Msg.png"/>
+                    </div>
+                    <div class="col-xs-9">
+                      <span fld_id="value" class="" style="font-size: 24px;"></span>
+                      <span fld_id="unit" style="font-size: 0.8em;margin-top:5px"></span>
+                    </div>
+                  </div>                  
+                  <div class="row StatusColor" style="
+                    padding-right: 80%;
+                    position: absolute;
+                    height: 5px;
+                    /*margin-top: -5px;*/
+                    background-color: lime;">
+                  </div><BR>
+                  
+                </div>
+                
+              </div>
+              <div id="CounterPlot" class = "col-xs-6">
+                <canvas id="StatsPlotCanvas">
+                </canvas> 
+              </div>
+
+            </div>
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="col-xs-4 text-left">
+            <div class="row">
+              <span id="StatsGen"></span>
+            </div>
+            <div class="row">
+              <span id="StatsGenDur" style="font-size: xx-small;"></span>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Day')">1d</button>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Week')">1w</button>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Month')">1m</button>
+            <button  style="text-align:center" class="ui-button ui-corner-all ui-widget" onclick="ServerStatsMgr.SetHorizon('1Year')">1y</button>
+          </div>
+          <div class="col-xs-4">
+            <button I18n="Close" action="close" style="text-align:center" class="ui-button ui-corner-all ui-widget" data-dismiss="modal">RaceCal</button>  
+          </div>          
+        </div>        
+      </div>
+    </div>
+  </div>
+  
   <!-- Error redirect panel -->
   <div id="ErrorRedirectPanel" class="modal fade" role="dialog">
     <div class="modal-dialog">
