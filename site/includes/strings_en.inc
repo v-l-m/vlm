@@ -2,7 +2,7 @@
 $strings['en'] = 
   array (
     'ShowMore' => 'Show more races ...',    
-    'old_races' => 'All passed races',
+    'old_races' => 'All races',
     'BoatRaceList' =>'Boat races',
     'PlayerRaceList' =>'Player races',
     'FullRaceList' =>'Full race list',
@@ -27,7 +27,7 @@ $strings['en'] =
     'HandlingErrorClickToGoBack'=>'Something unexpected occurred. Click button below to back to main page',
     'Ooops'=>'Ooops',
     'Polar'=>'Polars',
-    'ShowMyAnd'=>'Display me and ',
+    'ShowMyAnd'=>'Fleet display ',
     'VLM1'=>'Previous web site version',
     'InfosLinks' => 'Useful Links',
     'OldPasswordInvalid' => 'Current password check failed.',
