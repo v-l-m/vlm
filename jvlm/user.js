@@ -47,7 +47,8 @@
        return null;
      }
 
-     var Gate = this.RaceInfo.races_waypoints[NWP];
+     NormalizeRaceInfo(this.RaceInfo);
+     let Gate = this.RaceInfo.races_waypoints[NWP];
 
      // Loop to look for next racing gate. ICE_Gate are not used to AutoWP routing
      do {
