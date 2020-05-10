@@ -20,8 +20,9 @@ input {
   height: 100%;
 }
 
+@MapBackground : #82D1D4;
 #jVlmMap {
-  background-color: #82D1D4;
+  background-color: @MapBackground;
   position: absolute;
   top: 75px;
   bottom: 0;
@@ -31,6 +32,12 @@ input {
 
 #jVlmMap .ol-zoom {
   font-size: 0.5em;
+}
+
+#WPMiniMap {
+  background-color: @MapBackground;
+  width:100%;
+  height: 350px;  
 }
 
 #BoatSelector {
@@ -1900,3 +1907,4 @@ th {
   background-image: url("images/stranded.png");
   background-size: contain;
 }
+

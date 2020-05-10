@@ -474,7 +474,21 @@ function LoadRaceInfo(RaceId, RaceVersion, CallBack)
   {
     RaceVersion = '';
   }
-  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion, CallBack);
+  $.get("/ws/raceinfo/desc.php?idrace=" + RaceId + "&v=" + RaceVersion,
+    function(e)
+    {
+      if (_CurPlayer)
+      {
+        if (!_CurPlayer.RaceInfo)
+        {
+          _CurPlayer.RaceInfo={};
+        }
+        _CurPlayer.RaceInfo[RaceId]=e;
+      }
+      
+      CallBack(e);
+    }
+  );
 }
 
 function HandleVLMIndex(result)
@@ -716,9 +730,6 @@ function InitMenusAndButtons()
     }
   );
 
-
-
-
   // Do fixed heading button
   $("#BtnPM_Heading").click(
     function()
@@ -911,6 +922,10 @@ function InitMenusAndButtons()
   );
   $("#PolarTab").on("click", HandlePolarTabClik);
 
+
+  // Add boat to fleet link:
+  InitPrefsDialogHandlers();
+
   UpdateVersionLine();
 
   function HandleAproposSizing()
@@ -922,6 +937,22 @@ function InitMenusAndButtons()
     $(".VLMSplashSmall").css("height", SmallHeight).css("background-position-y", 0.1 * $(window).width());
     $(".Apropos-text").css("max-height", AproposHeight);
   }
+
+  $(document.body).on('mouseover', ".HoverShowMiniMap", HandleWPMiniMapHover);
+
+}
+
+
+
+function InitPrefsDialogHandlers()
+{
+  $("#AddBoatToFleet").on('click', HandleAddBoatToFleetRequest);
+}
+
+function HandleAddBoatToFleetRequest()
+{
+  $("#AddBoatToFleet").addClass("hidden");
+  $("#PnlAddBoat").removeClass("hidden");
 }
 
 function InitRankingEvents()
@@ -1445,7 +1476,7 @@ function GetBoatInfoLine(Boat, IsFleet)
     Line = Line + '<span class="badge">BS';
   }
 
-  Line = Line + '<img class="BoatStatusIcon ' + BoatStatus +'" />';
+  Line = Line + '<img class="BoatStatusIcon ' + BoatStatus + '" />';
   if (!IsFleet)
   {
     Line = Line + '</span>';
@@ -3838,7 +3869,7 @@ function FillRaceWaypointList(RaceInfo)
         let Row = {};
 
         let WPSpec;
-        Row.WaypointId = WP.wporder;
+        Row.WaypointId = '<span class="HoverShowMiniMap" RaceId="' + RaceInfo.idraces + '"  WP_Id="' + WP.idwaypoint + '">' + WP.wporder + '</span>';
         Row.WP1 = WP.latitude1 + "<BR>" + WP.longitude1;
         if (typeof WP.latitude2 !== "undefined")
         {

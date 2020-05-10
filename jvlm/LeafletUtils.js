@@ -176,7 +176,7 @@ function ClearCurrentMapMarkers(Boat)
       Boat.RaceMapFeatures.OppPopup.PrevOpp.closePopup();
       Boat.RaceMapFeatures.OppPopup.PrevOpp.unbindPopup();
     }
-    RemoveFromMap(Boat.RaceMapFeatures);
+    RemoveFromMap(Boat.RaceMapFeatures,map);
   }
 }
 
@@ -184,12 +184,12 @@ function EnsureMarkersVisible(Boat)
 {
   if (Boat)
   {
-    RestoreMarkersOnMap(Boat.RaceMapFeatures);
+    RestoreMarkersOnMap(Boat.RaceMapFeatures,map);
   }
 
 }
 
-function RestoreMarkersOnMap(Feat)
+function RestoreMarkersOnMap(Feat,map)
 {
   if (!Feat || typeof(Feat) === "function")
   {
@@ -200,7 +200,7 @@ function RestoreMarkersOnMap(Feat)
   {
     for (let index in Feat)
     {
-      RestoreMarkersOnMap(Feat[index]);
+      RestoreMarkersOnMap(Feat[index],map);
     }
   }
   else if (typeof Feat === "object" && typeof Feat._leaflet_id === "undefined")
@@ -213,7 +213,7 @@ function RestoreMarkersOnMap(Feat)
         case "OppPopup":
           break;
         default:
-          RestoreMarkersOnMap(Feat[member]);
+          RestoreMarkersOnMap(Feat[member],map);
           break;
       }
 
@@ -226,7 +226,7 @@ function RestoreMarkersOnMap(Feat)
 }
 
 
-function RemoveFromMap(Feat)
+function RemoveFromMap(Feat,map)
 {
   if (!Feat || typeof(Feat) === "function")
   {
@@ -237,14 +237,14 @@ function RemoveFromMap(Feat)
   {
     for (let index in Feat)
     {
-      RemoveFromMap(Feat[index]);
+      RemoveFromMap(Feat[index],map);
     }
   }
   else if (typeof Feat === "object" && typeof Feat._leaflet_id === "undefined")
   {
     for (let member in Feat)
     {
-      RemoveFromMap(Feat[member]);
+      RemoveFromMap(Feat[member],map);
     }
   }
   else if (Feat._leaflet_id)

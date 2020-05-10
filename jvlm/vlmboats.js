@@ -144,7 +144,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
             console.log("DBG WIND ");
             //49.753227868452, -8.9971082951315
-            let MI = GribMgr.WindAtPointInTime(new Date(1587912906 * 1000), 40.4161940000,29.1008060000);
+            let MI = GribMgr.WindAtPointInTime(new Date(1587912906 * 1000), 40.4161940000, 29.1008060000);
             if (MI)
             {
               //let Hdg = PolarsManager.GetVMGCourse(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, this.CurEstimate.Position, Dest);
@@ -153,7 +153,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
               let Speed = PolarsManager.GetBoatSpeed("boat_figaro2", MI.Speed, MI.Heading, Hdg);
               if (!isNaN(Speed))
               {
-                let P = new VLMPosition(40.4161940000,29.1008060000);
+                let P = new VLMPosition(40.4161940000, 29.1008060000);
                 let dest = P.ReachDistLoxo(Speed / 3600.0 * 300, Hdg);
                 let bkp1 = 0;
               }
@@ -1195,7 +1195,8 @@ function DrawRaceGates(Boat)
     {
       for (let index in RaceInfo.races_waypoints)
       {
-        let WPClone = jQuery.extend({}, RaceInfo.races_waypoints[index]);
+        let WPClone = jQuery.extend(
+        {}, RaceInfo.races_waypoints[index]);
         GatesList.push(WPClone);
       }
       RaceInfo = {};
@@ -1217,69 +1218,64 @@ function DrawRaceGates(Boat)
       }
       let GateFeatures = RaceFeature.Gates[index];
 
-      if (RaceInfo.races_waypoints[index])
+      // Fix coords scales
+      NormalizeRaceInfo(RaceInfo);
+      let GateIndex=parseInt(index,10);
+      MakeSingleGateMapFeatures(map, RaceInfo.races_waypoints[GateIndex], GateIndex, GateFeatures, NextGate);
+    }
+  }
+}
+
+// Draw a single race gates on Specified Map    
+function MakeSingleGateMapFeatures(Map, WP, index, GateFeatures, NextGate)
+{
+  let WPMarker = GateFeatures.Buoy1;
+  var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
+  // Draw WP1
+  let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
+  GateFeatures.Buoy1 = AddBuoyMarker(Map, WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
+  // Second buoy (if any)
+  if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
+  {
+    // Add 2nd buoy marker
+    let WPMarker = GateFeatures.Buoy2;
+    let Pos = new VLMPosition(WP.longitude2, WP.latitude2);
+    GateFeatures.Buoy2 = AddBuoyMarker(Map, WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
+  }
+  else
+  {
+    // No Second buoy, compute segment end
+    let P = new VLMPosition(WP.longitude1, WP.latitude1);
+    let complete = false;
+    let Dist = 2500;
+    let Dest = null;
+    while (!complete)
+    {
+      try
       {
-
-        let WPMarker = GateFeatures.Buoy1;
-
-        // Draw a single race gates
-        var WP = RaceInfo.races_waypoints[index];
-
-        // Fix coords scales
-        NormalizeRaceInfo(RaceInfo);
-        var cwgate = !(WP.wpformat & WP_CROSS_ANTI_CLOCKWISE);
-
-        // Draw WP1
-        let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
-        GateFeatures.Buoy1 = AddBuoyMarker(WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
-
-
-        // Second buoy (if any)
-        if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
+        Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
+        if (Math.abs(Dest.Lat.Value) > 85)
         {
-          // Add 2nd buoy marker
-          let WPMarker = GateFeatures.Buoy2;
-          let Pos = new VLMPosition(WP.longitude2, WP.latitude2);
-          GateFeatures.Buoy2 = AddBuoyMarker(WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
+          Dist *= 0.95;
         }
         else
         {
-          // No Second buoy, compute segment end
-          let P = new VLMPosition(WP.longitude1, WP.latitude1);
-          let complete = false;
-          let Dist = 2500;
-          let Dest = null;
-          while (!complete)
-          {
-            try
-            {
-              Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
-              if (Math.abs(Dest.Lat.Value) > 85)
-              {
-                Dist *= 0.95;
-              }
-              else
-              {
-                complete = true;
-              }
-            }
-            catch (e)
-            {
-              Dist *= 0.7;
-            }
-          }
-
-          WP.longitude2 = Dest.Lon.Value;
-          WP.latitude2 = Dest.Lat.Value;
+          complete = true;
         }
-
-        // Draw Gate Segment
-        index = parseInt(index, 10);
-        NextGate = parseInt(NextGate, 10);
-        AddGateSegment(GateFeatures, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
+      }
+      catch (e)
+      {
+        Dist *= 0.7;
       }
     }
+    WP.longitude2 = Dest.Lon.Value;
+    WP.latitude2 = Dest.Lat.Value;
   }
+  // Draw Gate Segment
+  index = parseInt(index, 10);
+  NextGate = parseInt(NextGate, 10);
+  AddGateSegment(Map, GateFeatures, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
+
 }
 
 function DrawRaceExclusionZones(Boat, Zones)
@@ -1368,7 +1364,7 @@ function GetLonOffset(L1, L2)
   return 0;
 }
 
-function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType)
+function AddGateSegment(Map, GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValidated, GateType)
 {
 
   let Points = [
@@ -1417,7 +1413,7 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
         dashArray: '20,10,5,10',
         weight: strokeWidth * 2,
         opacity: strokeOpacity
-      }).addTo(map);
+      }).addTo(Map);
     }
   }
 
@@ -1433,7 +1429,7 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
       color: color,
       weight: strokeWidth,
       opacity: strokeOpacity
-    }).addTo(map);
+    }).addTo(Map);
   }
 
   if (GateType !== WP_DEFAULT)
@@ -1447,16 +1443,16 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
     if (GateType & WP_CROSS_ANTI_CLOCKWISE)
     {
       MarkerDir -= 90;
-      AddGateDirMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
+      AddGateDirMarker(Map,GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
     }
     else if (GateType & WP_CROSS_CLOCKWISE)
     {
       MarkerDir += 90;
-      AddGateDirMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
+      AddGateDirMarker(Map,GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
     }
     else if (GateType & WP_ICE_GATE)
     {
-      AddGateIceGateMarker(GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
+      AddGateIceGateMarker(Map,GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
     }
   }
 
@@ -1467,21 +1463,21 @@ function AddGateSegment(GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsValida
 const MAX_BUOY_INDEX = 16;
 var BuoyIndex = Math.floor(Math.random() * MAX_BUOY_INDEX);
 
-function AddGateDirMarker(GateFeatures, Lon, Lat, Dir, Opacity)
+function AddGateDirMarker(Map, GateFeatures, Lon, Lat, Dir, Opacity)
 {
-  AddGateCenterMarker(GateFeatures, Lon, Lat, "BuoyDirs/BuoyDir4.png", Dir, false, Opacity);
+  AddGateCenterMarker(Map, GateFeatures, Lon, Lat, "BuoyDirs/BuoyDir4.png", Dir, false, Opacity);
   // Rotate dir marker...
   BuoyIndex++;
   BuoyIndex %= (MAX_BUOY_INDEX + 1);
 
 }
 
-function AddGateIceGateMarker(GateFeatures, Lon, Lat)
+function AddGateIceGateMarker(Map, GateFeatures, Lon, Lat)
 {
-  AddGateCenterMarker(GateFeatures, Lon, Lat, "icegate.png", true);
+  AddGateCenterMarker(Map, GateFeatures, Lon, Lat, "icegate.png", true);
 }
 
-function AddGateCenterMarker(GateFeatures, Lon, Lat, Marker, Dir, IsIceGate, Opacity)
+function AddGateCenterMarker(Map, GateFeatures, Lon, Lat, Marker, Dir, IsIceGate, Opacity)
 {
   let MarkerCoords = [Lat, Lon];
 
@@ -1495,7 +1491,7 @@ function AddGateCenterMarker(GateFeatures, Lon, Lat, Marker, Dir, IsIceGate, Opa
     GateFeatures.GateMarker = L.marker(MarkerCoords,
     {
       icon: MarkerObj
-    }).addTo(map);
+    }).addTo(Map);
     if (!IsIceGate)
     {
       GateFeatures.GateMarker.setRotationAngle(Dir);
@@ -1505,7 +1501,7 @@ function AddGateCenterMarker(GateFeatures, Lon, Lat, Marker, Dir, IsIceGate, Opa
 }
 
 
-function AddBuoyMarker(Marker, Name, Lon, Lat, CW_Crossing)
+function AddBuoyMarker(Map, Marker, Name, Lon, Lat, CW_Crossing)
 {
   let WP = GetBuoyMarker(CW_Crossing);
 
@@ -1524,7 +1520,7 @@ function AddBuoyMarker(Marker, Name, Lon, Lat, CW_Crossing)
   return L.marker([Lat, Lon],
   {
     icon: WP
-  }).addTo(map).bindPopup(Name);
+  }).addTo(Map).bindPopup(Name);
 
 }
 
@@ -1938,7 +1934,7 @@ function GetClosestOpps(Boat, NbOpps)
     }
 
 
-    List = List.sort(CompareDist).slice(0, NbOpps+1);
+    List = List.sort(CompareDist).slice(0, NbOpps + 1);
     for (let index in List)
     {
       RetArray[List[index].id] = Rankings[RaceId][List[index].id];
@@ -2091,7 +2087,7 @@ function UpdatePictoFriendStatus(OppId)
   {
     $("#PictoSetFriend").removeClass("hidden").addClass("AddFriend").removeClass("DelFriend").attr("BoatId", OppId);
   }
-  
+
 }
 
 function HandleSetFriend(e, Boat)
@@ -2198,12 +2194,12 @@ function BuildBoatPopupInfo(Boat)
   }
 
   let BoatId = Boat.idusers;
-  let Flag=GetCountryFlagImgHTML(Boat.country);
+  let Flag = GetCountryFlagImgHTML(Boat.country);
   if (Boat.IDU)
   {
     // Special case of self
     BoatId = Boat.IDU;
-    Flag=GetCountryFlagImgHTML(Boat.CNT);
+    Flag = GetCountryFlagImgHTML(Boat.CNT);
   }
 
   let RetStr =
