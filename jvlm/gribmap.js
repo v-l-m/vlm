@@ -82,16 +82,18 @@ GribMap.Layer = L.Layer.extend(
     this._Time = epoch;
     this._update();
   },
-  _CheckDensity()
+  _CheckDensity(ctx)
   {
-    if (this._width < 500 || this.height < 500)
-    {
-      this._Density = 5;
-    }
-    else
+    let TxtWidth = ctx.measureText("  XX.X/XXX.X° ") ;
+    this._Density = Math.floor(this._width / TxtWidth.width);
+    /*if (this._width < 500 || this.height < 500)
     {
       this._Density = 10;
     }
+    else
+    {
+      this._Density = 30;
+    }*/
   },
   onAdd: function(map)
   {
@@ -103,7 +105,7 @@ GribMap.Layer = L.Layer.extend(
     this._height = size.y;
     this._canvas.width = size.x;
     this._canvas.height = size.y;
-    this._CheckDensity();
+    //this._CheckDensity();
 
     this._canvas.style.width = size.x + 'px';
     this._canvas.style.height = size.y + 'px';
@@ -144,6 +146,7 @@ GribMap.Layer = L.Layer.extend(
   _update: function(InCallBack)
   {
     let ctx = this._canvas.getContext('2d');
+    this._CheckDensity(ctx);
     ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
     this._DrawWindArea(ctx, InCallBack);
 
@@ -231,8 +234,8 @@ GribMap.Layer = L.Layer.extend(
   _drawWind: function(context, x, y, z, WindSpeed, WindHeading)
   {
     let YOffset = this._drawWindTriangle(context, x, y, WindSpeed, WindHeading);
-    context.fillStyle = '#626262';
-    this._drawWindText(context, x, y + YOffset, WindSpeed, WindHeading);
+    context.fillStyle = '#620062';
+    this._drawWindText(context, x,  YOffset, WindSpeed, WindHeading);
   },
   // draw wind information around the arrow
   // parameters:
@@ -330,13 +333,13 @@ GribMap.Layer = L.Layer.extend(
     {
       this._canvas.width = size.x;
       this._width = size.x;
-      this._CheckDensity();
+      //this._CheckDensity();
     }
     if (this._height !== size.y)
     {
       this._canvas.height = size.y;
       this._height = size.y;
-      this._CheckDensity();
+      //this._CheckDensity();
     }
 
     this._draw();
