@@ -24,7 +24,7 @@ const gulp = require('gulp'),
   babel = require('gulp-babel'),
   UseGAStats = false;    // Set to true to add to stats when in dev
 
-const VLMVersion = "27";
+const VLMVersion = "27.1";
 var BuildTypeProd = false; // This is automatically set to true in prod build chains
 
 
@@ -128,7 +128,8 @@ gulp.task('libs_std', function()
       'jvlm/external/jquery.csv.js', 'jvlm/external/bootstrap-colorpicker-master/js/bootstrap-colorpicker.min.js',
       'jvlm/external/JQueryTouchPunch/TouchPunch.js','jvlm/external/store/store.min.js',
       'externals/fullcalendar/core/main.js','externals/fullcalendar/daygrid/main.js',    
-      'jvlm/external/moments/moment-with-locales.min.js','jvlm/external/ChartJS/Chart.min.js'
+      'jvlm/external/moments/moment-with-locales.min.js','jvlm/external/ChartJS/Chart.min.js',
+      'jvlm/external/bootstrap-datetimepicker/moment-timezone-with-data-10-year-range.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
     //.pipe(jshint.reporter('default'))
@@ -176,7 +177,7 @@ gulp.task('guest_map_js', function()
 gulp.task('libs_babel', function()
 {
   return gulp.src(['jvlm/external/footable-bootstrap/js/footable.js',
-      'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',
+      'jvlm/external/verimail/verimail.jquery.min.js', 'jvlm/external/PasswordStrength/jquery.pstrength-min.1.2.js',      
       'jvlm/external/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js', 'jvlm/external/sprintfjs/sprintf.min.js'
     ])
     //.pipe(jshint('.jshintrc'))
