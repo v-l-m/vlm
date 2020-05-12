@@ -47,8 +47,8 @@ class Pixel
   }
 }
 
-var BeaufortColors = ['#FFFFFF', '#9696E1', '#508CCD', '#3C64B4', '#41B464', '#B4CD0A', '#D2D216', '#E1D220', '#FFB300', '#FF6F00', '#FF2B00', '#E60000', '#7F0000'];
-
+//var BeaufortColors = ['#FFFFFF', '#9696E1', '#508CCD', '#3C64B4', '#41B464', '#B4CD0A', '#D2D216', '#E1D220', '#FFB300', '#FF6F00', '#FF2B00', '#E60000', '#7F0000'];
+var BeaufortColors = ['#FFFFFF', '#7878c4', '#4070ac', '#305093', '#349350', '#B4CD0A', '#b2b212', '#c4b21a', '#ff9200', '#ff5800', '#ff2200', '#cb0000', '#650000'];
 // Leaflet Extension layet to draw wind arrows
 // Highly inspired from Leaflet Heat plugin
 // https://github.com/Leaflet/Leaflet.heat/blob/gh-pages/src/HeatLayer.js
@@ -84,8 +84,8 @@ GribMap.Layer = L.Layer.extend(
   },
   _CheckDensity(ctx)
   {
-    let TxtWidth = ctx.measureText("  XX.X/XXX.X° ") ;
-    this._Density = Math.floor(this._width / TxtWidth.width);
+    let TxtWidth = ctx.measureText("XX.X/XXX.X°");
+    this._Density = Math.floor(this._width / 2.0 / TxtWidth.width);
     /*if (this._width < 500 || this.height < 500)
     {
       this._Density = 10;
@@ -207,7 +207,7 @@ GribMap.Layer = L.Layer.extend(
           }
           else
           {
-            MissedQueue=true;
+            MissedQueue = true;
           }
         }
         catch (error)
@@ -235,7 +235,7 @@ GribMap.Layer = L.Layer.extend(
   {
     let YOffset = this._drawWindTriangle(context, x, y, WindSpeed, WindHeading);
     context.fillStyle = '#620062';
-    this._drawWindText(context, x,  YOffset, WindSpeed, WindHeading);
+    this._drawWindText(context, x, YOffset, WindSpeed, WindHeading);
   },
   // draw wind information around the arrow
   // parameters:
@@ -301,7 +301,14 @@ GribMap.Layer = L.Layer.extend(
 
     let color = this.windSpeedToColor(WindSpeed);
     context.fillStyle = color;
-    context.strokeStyle = color;
+    if (WindSpeed<2)
+    {
+      context.strokeStyle = 0;
+    }
+    else
+    {
+      context.strokeStyle = color;
+    }
 
     context.beginPath();
     context.moveTo(a.x, a.y);
