@@ -78,7 +78,9 @@
      }
      else
      {
-       throw "not implemented 1 buoy gate";
+       // No Second buoy, compute segment end
+      let Dest = Compute2ndBuoyOfGate(Gate);
+      P2 = new VLMPosition( Dest.Lon.Value, Dest.Lat.Value);
      }
 
      return {

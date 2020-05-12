@@ -745,8 +745,8 @@ function DefinePolarMarker(Polar, PolarFeature)
     else
     {
       let PolarStyle = {
-        color: "white",
-        opacity: 0.6,
+        color: "blue",
+        opacity: 1,
         weight: 1
       };
       PolarFeature = L.polyline(Polar, PolarStyle);
@@ -1220,7 +1220,7 @@ function DrawRaceGates(Boat)
 
       // Fix coords scales
       NormalizeRaceInfo(RaceInfo);
-      let GateIndex=parseInt(index,10);
+      let GateIndex = parseInt(index, 10);
       MakeSingleGateMapFeatures(map, RaceInfo.races_waypoints[GateIndex], GateIndex, GateFeatures, NextGate);
     }
   }
@@ -1235,47 +1235,58 @@ function MakeSingleGateMapFeatures(Map, WP, index, GateFeatures, NextGate)
   let Pos = new VLMPosition(WP.longitude1, WP.latitude1);
   GateFeatures.Buoy1 = AddBuoyMarker(Map, WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude1, WP.latitude1, cwgate);
   // Second buoy (if any)
+  let Lon2;
+  let Lat2;
   if ((WP.wpformat & WP_GATE_BUOY_MASK) === WP_TWO_BUOYS)
   {
     // Add 2nd buoy marker
     let WPMarker = GateFeatures.Buoy2;
     let Pos = new VLMPosition(WP.longitude2, WP.latitude2);
     GateFeatures.Buoy2 = AddBuoyMarker(Map, WPMarker, "WP" + WP.wporder + " " + WP.libelle + '<BR>' + Pos.toString(), WP.longitude2, WP.latitude2, !cwgate);
+    Lon2 = WP.longitude2;
+    Lat2 = WP.latitude2;
+
   }
   else
   {
     // No Second buoy, compute segment end
-    let P = new VLMPosition(WP.longitude1, WP.latitude1);
-    let complete = false;
-    let Dist = 2500;
-    let Dest = null;
-    while (!complete)
-    {
-      try
-      {
-        Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
-        if (Math.abs(Dest.Lat.Value) > 85)
-        {
-          Dist *= 0.95;
-        }
-        else
-        {
-          complete = true;
-        }
-      }
-      catch (e)
-      {
-        Dist *= 0.7;
-      }
-    }
-    WP.longitude2 = Dest.Lon.Value;
-    WP.latitude2 = Dest.Lat.Value;
+    let Dest = Compute2ndBuoyOfGate(WP);
+    Lon2 = Dest.Lon.Value;
+    Lat2 = Dest.Lat.Value;
   }
   // Draw Gate Segment
   index = parseInt(index, 10);
   NextGate = parseInt(NextGate, 10);
-  AddGateSegment(Map, GateFeatures, WP.longitude1, WP.latitude1, WP.longitude2, WP.latitude2, (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
+  AddGateSegment(Map, GateFeatures, WP.longitude1, WP.latitude1, Lon2, Lat2 , (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
 
+}
+
+function Compute2ndBuoyOfGate(WP)
+{
+  let P = new VLMPosition(WP.longitude1, WP.latitude1);
+  let complete = false;
+  let Dist = 2500;
+  let Dest = null;
+  while (!complete)
+  {
+    try
+    {
+      Dest = P.ReachDistLoxo(Dist, 180 + parseFloat(WP.laisser_au));
+      if (Math.abs(Dest.Lat.Value) > 85)
+      {
+        Dist *= 0.95;
+      }
+      else
+      {
+        complete = true;
+      }
+    }
+    catch (e)
+    {
+      Dist *= 0.7;
+    }
+  }
+  return Dest;
 }
 
 function DrawRaceExclusionZones(Boat, Zones)
@@ -1443,16 +1454,16 @@ function AddGateSegment(Map, GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsV
     if (GateType & WP_CROSS_ANTI_CLOCKWISE)
     {
       MarkerDir -= 90;
-      AddGateDirMarker(Map,GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
+      AddGateDirMarker(Map, GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
     }
     else if (GateType & WP_CROSS_CLOCKWISE)
     {
       MarkerDir += 90;
-      AddGateDirMarker(Map,GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
+      AddGateDirMarker(Map, GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value, MarkerDir, strokeOpacity);
     }
     else if (GateType & WP_ICE_GATE)
     {
-      AddGateIceGateMarker(Map,GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
+      AddGateIceGateMarker(Map, GateFeatures, MarkerPos.Lon.Value, MarkerPos.Lat.Value);
     }
   }
 
