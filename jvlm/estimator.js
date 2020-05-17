@@ -635,18 +635,18 @@ function Estimator(Boat)
 
 
 
-    let TrackStartTick = new Date().getTime();
-    let GridOffset = TrackStartTick % (6 * 3600000);
-
-    let TrackIndexStartTick = TrackStartTick - GridOffset + 3.5 * 3600000;
-
+    let TrackStartTick = new moment().utc().startOf('hour');
+    let GribOffset = TrackStartTick.hour() % 6;
+    let TrackIndexStartTime = TrackStartTick.add('hour', - GribOffset).add('hour', - 2.5 ).add('minute',5);
+    let TrackIndexStartTick = TrackIndexStartTime.unix()*1000;
+    
     for (let index in Track)
     {
       if (Track[index])
       {
         let est = Track[index];
         let Delta = est.Date.getTime() - TrackIndexStartTick;
-        let CurTrackInDex = Math.floor(Delta / 6 / 3600000);
+        let CurTrackInDex = Math.floor(Delta / 6.0 / 3600000);
 
         if (CurTrackInDex < 0)
         {
