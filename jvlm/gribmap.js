@@ -85,7 +85,7 @@ GribMap.Layer = L.Layer.extend(
   _CheckDensity(ctx)
   {
     let TxtWidth = ctx.measureText("XX.X/XXX.X°");
-    this._Density = Math.floor(this._width / 2.0 / TxtWidth.width);
+    this._Density = Math.floor(this._width / 1.5 / TxtWidth.width);
     /*if (this._width < 500 || this.height < 500)
     {
       this._Density = 10;
@@ -235,7 +235,7 @@ GribMap.Layer = L.Layer.extend(
   {
     let YOffset = this._drawWindTriangle(context, x, y, WindSpeed, WindHeading);
     context.fillStyle = '#620062';
-    this._drawWindText(context, x, YOffset, WindSpeed, WindHeading);
+    this._drawWindText(context, x, YOffset+2, WindSpeed, WindHeading);
   },
   // draw wind information around the arrow
   // parameters:
@@ -279,7 +279,7 @@ GribMap.Layer = L.Layer.extend(
     }
 
 
-    let windarrow_minsize = 4; // FIXME external constants ?
+    let windarrow_minsize = 2; // FIXME external constants ?
     let windarrow_minwidth = 0;
 
     wspdlog = Math.log(WindSpeed + 1);
@@ -289,7 +289,7 @@ GribMap.Layer = L.Layer.extend(
     b = new Pixel(x, y);
     c = new Pixel(x, y);
 
-    a.moveByPolar(windarrow_minsize + wspdlog * 4.0, wheading);
+    a.moveByPolar(windarrow_minsize + wspdlog * 3.0, wheading);
     b.moveByPolar(windarrow_minwidth + wspdlog * 2.0, wheading - 135.0);
     c.moveByPolar(windarrow_minwidth + wspdlog * 2.0, wheading + 135.0);
 
