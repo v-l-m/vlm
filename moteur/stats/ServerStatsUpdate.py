@@ -216,6 +216,7 @@ class StatInstance:
 ###
 class Stat_MailQStat(StatInstance):
   def GetNextStat(self):
+    MailPattern="\S+\s+\d+\s(\S+\s+){4}(\S+@\S+)"
     f=open(os.path.expanduser("~/tmp/s1"))
     ret=f.read()
     f.close()
@@ -223,9 +224,10 @@ class Stat_MailQStat(StatInstance):
     MailQLen = 0
     Dte=int(lines[0])
     for line in lines:
-        if "Deferred" in line:
-          MailQLen+=1
-    
+      m=re.match(MailPattern,line)
+      if m!=None:
+        MailQLen+=1
+  
     self.SetStatValue("MailQ",Dte,MailQLen)
 
 ###
