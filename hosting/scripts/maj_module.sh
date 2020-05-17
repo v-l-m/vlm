@@ -165,6 +165,7 @@ case $confmodule in
     echo -n "+$confmodule: Copie de la configuration des scripts..."
     cp $VLMRACINE/conf/conf_script $destmodulepath/
     echo 'OK !'
+    chmod a+rx $destmodulepath/stats/BuildStats.sh
     ;;
 
     lib/phpcommon)
