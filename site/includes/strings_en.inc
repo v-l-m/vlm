@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'OldSiteDeprecationWarning' => 'This old website page will soon be deprecated. Please update you links and shortcuts to the current version',
     'ShowMore' => 'Show more races ...',    
     'old_races' => 'All races',
     'BoatRaceList' =>'Boat races',

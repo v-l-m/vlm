@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'OldSiteDeprecationWarning' => 'Cette ancienne page sera bientot supprimée. Mettez à jour vos liens vers la nouvelle interface',
     'ShowMore' => 'Afficher plus ...',    
     'old_races' => 'Toutes les courses',    
     'BoatRaceList' =>'Palmares Bateau',

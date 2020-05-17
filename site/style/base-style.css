@@ -507,3 +507,14 @@ select.selectperm {
 option {
 	background-color: #eeeeee;
 }
+
+.OldSite{
+  background-color: rgba(197, 45, 45, 0.644);
+  width: 980px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.OldSite h1{
+  line-height: normal;
+}

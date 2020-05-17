@@ -194,6 +194,9 @@
        <a href="http://www.actilis.net/" target="_actilis"><img src="/images/site/actilis.png" alt="Actilis" /></a>
        </div>
    </div>
+   <div class="OldSite">
+    <H1 ><?php echo getLocalizedString("OldSiteDeprecationWarning"); ?></H1>
+   </div>
    
    <div id="contenaire"> 
 
