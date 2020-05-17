@@ -481,11 +481,11 @@ function LoadRaceInfo(RaceId, RaceVersion, CallBack)
       {
         if (!_CurPlayer.RaceInfo)
         {
-          _CurPlayer.RaceInfo={};
+          _CurPlayer.RaceInfo = {};
         }
-        _CurPlayer.RaceInfo[RaceId]=e;
+        _CurPlayer.RaceInfo[RaceId] = e;
       }
-      
+
       CallBack(e);
     }
   );
@@ -797,13 +797,7 @@ function InitMenusAndButtons()
   $("#AP_SetTargetWP").click(HandleClickToSetWP);
 
   // AP datetime pickers
-  $("#AP_Time").datetimepicker(
-  {
-    locale: _CurLocale,
-    format: 'DD MM YYYY, HH:mm:ss'
-    //language: 'fr-FR',
-    //parentEl: '#AutoPilotSettingDlg'
-  });
+  InitDateTimePicker();
   $("#AP_Time").on('dp.change', HandleDateChange);
   $("#APValidateButton").click(HandleSendAPUpdate);
   $(".APField").on('change', HandleAPFieldChange);
@@ -943,6 +937,24 @@ function InitMenusAndButtons()
 }
 
 
+
+function InitDateTimePicker()
+{
+  let Options = {
+    locale: _CurLocale,
+    format: 'DD MM YYYY, HH:mm:ss',
+    timeZone: ''
+  };
+
+  if (VLM2Prefs.MapPrefs.UseUTC)
+  {
+    Options.format= 'DD MM YYYY, HH:mm:ss [Z]';
+    Options.timeZone = 'UTC';
+  }
+  
+  $("#AP_Time").datetimepicker(Options);
+  //$('#AP_Time').data("DateTimePicker").OPTION(Options);
+}
 
 function InitPrefsDialogHandlers()
 {
@@ -2858,6 +2870,7 @@ function HandleOpenAutoPilotSetPoint(e)
 function RefreshAPDialogFields()
 {
   // Update dialog content from APOrder object
+  InitDateTimePicker();
   $("#AP_Time").data('DateTimePicker').date(_CurAPOrder.Date);
 
   $('#AP_PIM:first-child').html(
