@@ -2,6 +2,7 @@
 $strings['fr'] = 
   array (
     'OldSiteDeprecationWarning' => 'Cette ancienne page sera bientot supprimée. Mettez à jour vos liens vers la nouvelle interface',
+    'AddBoatFleet' => 'Ajouter un bateau à votre flotte',  
     'ShowMore' => 'Afficher plus ...',    
     'old_races' => 'Toutes les courses',    
     'BoatRaceList' =>'Palmares Bateau',
@@ -272,7 +273,7 @@ Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur
     'classification_dnf' => 'Quand votre bateau risque de heurter la c&ocirc;te, il est mis face au vent et donc stopp&eacute;.',
     'closed' => 'Commenc&eacute;e, ferm&eacute;e',
     'closerace' => 'Fermeture de la ligne de d&eacute;part : ',
-    'color' => 'Couleur de votre voilier',
+    'color' => 'Couleur de votre trace',
     'computerid' => 'Le champ <b>computer id</b> est calculé à partir de l\'adresse IP. Celle ci n\'est pas affichée pour des raisons de vie privée.',
     'constant' => 'Fixer cette allure',
     'constantengaged' => 'Régulateur d\'allure',

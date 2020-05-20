@@ -2,6 +2,7 @@
 $strings['en'] = 
   array (
     'OldSiteDeprecationWarning' => 'This old website page will soon be deprecated. Please update you links and shortcuts to the current version',
+    'AddBoatFleet' => 'Add Boat to fleet',
     'ShowMore' => 'Show more races ...',    
     'old_races' => 'All races',
     'BoatRaceList' =>'Boat races',
@@ -271,7 +272,7 @@ Please, click on the link below or copy/paste it in your browser.',
     'classification_dnf' => 'When boats have no legs, they can\'t walk on the coast. Thus, when your boat is going to cross the shore, it is set facing the wind.',
     'closed' => 'Started &amp; closed',
     'closerace' => 'Start line closing on : ',
-    'color' => 'Colour of your boat',
+    'color' => 'Bboat track color',
     'computerid' => 'The <b>computer id</b> is computed with the IP address. This one is not displayed for privacy concerns.',
     'constant' => 'Lock this Wind Angle',
     'constantengaged' => 'Constant Wind Angle ',
