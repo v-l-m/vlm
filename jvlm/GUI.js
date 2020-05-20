@@ -2626,33 +2626,34 @@ function AddRaceToList(race, filter)
 
   let code = '<div class="raceheaderline panel panel-default ' + RaceJoinStateClass + ' ' + (RaceHidden ? "hidden" : "") + '" racelistid="' + race.idraces + '">' +
     '  <div data-toggle="collapse" href="#RaceDescription' + race.idraces + '" class="panel-body collapsed " data-parent="#RaceListPanel" aria-expanded="false">' +
-    '    <div class="col-xs-12">' +
+    '    <div class="row">' +
     '      <div class="col-xs-3">' +
     '        <img class="racelistminimap" src="/cache/minimaps/' + race.idraces + '.png" ></img>' +
     '      </div>' +
     '      <div class="col-xs-9">' +
-    '        <div class="col-xs-12">' +
+    '        <div class="row">' +
     (RecordRace ? '<span class="PRecordRace">P</span>' : '') +
     '          <span ">' + race.racename + (race.racelength !== "0" ? ' (' + race.racelength + ' Nm)' : '') + (race.engaged ? ' (' + race.racing + '/' + race.engaged + ')' : '') +
     '          </span>' +
     '        </div>' +
     '        <div class="btn-group col-xs-12">' +
-    '          <button id="JoinRaceButton" type="button" class="' + (race.CanJoin ? '' : 'hidden') + ' btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
+    '          <button id="JoinRaceButton" type="button" class="' + (race.CanJoin ? '' : 'hidden') + ' BtnRaceList btn-default btn-sm col-xs-4 col-md-3" IdRace="' + race.idraces + '"  >' + GetLocalizedString("subscribe") +
     '          </button>' +
-    '          <button id="SpectateRaceButton" type="button" class="' + (RaceTerminated ? 'hidden' : '') + '  ShowRaceInSpectatorMode btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
+    '          <button id="SpectateRaceButton" type="button" class="' + (RaceTerminated ? 'hidden' : '') + ' BtnRaceList  ShowRaceInSpectatorMode btn-default btn-sm col-xs-4 col-md-3" IdRace="' + race.idraces + '"  >' + GetLocalizedString("Spectator") +
     '          </button>' +
-    '          <button type="button" class="ShowICSButton btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
+    '          <button type="button" class="ShowICSButton btn-default BtnRaceList btn-sm col-xs-4 col-md-3" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ic') +
     '          </button>' +
-    '          <button type="button" class="RankingButton btn-default btn-md col-xs-4" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
+    '          <button type="button" class="RankingButton btn-default BtnRaceList btn-sm col-xs-4 col-md-3" IdRace="' + race.idraces + '"  >' + GetLocalizedString('ranking') +
     '          </button>' +
     '        </div>' +
-    '      </div>' +
-    '    </div>' +
     (StartMoment ?
-      '    <div class="col-xs-12">' +
+      '      <div class="row">' +
       '       <span "> ' + StartMoment +
       '       </span>' +
-      '    </div>' : "") +
+      '      </div>' : "") +
+    
+    '      </div>' +
+    '    </div>' +
     '  </div>' +
     '  <div id="RaceDescription' + race.idraces + '" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">' +
     '    <div class="panel-body">' +
@@ -4670,7 +4671,8 @@ function setModalMaxHeight(element)
     .find('.modal-body').css(
     {
       'max-height': maxHeight,
-      'overflow-y': 'auto'
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden'
     });
 }
 
