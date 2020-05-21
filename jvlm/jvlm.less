@@ -1912,19 +1912,20 @@ th {
   background-size: contain;
 }
 
-
-.BtnRaceList{
-  min-height: 50px;
-}
-
 @media (max-width: 402px) {
   .BtnRaceList  {
     min-height: 86px;
   }
 }
 
-@media (min-width:403px) (max-width: 572px) {
+@media (min-width:403px) and (max-width: 572px) {
   .BtnRaceList  {
     min-height: 68px;
+  }
+}
+
+@media (min-width:573px)  {
+  .BtnRaceList  {
+    min-height: 50px;
   }
 }
