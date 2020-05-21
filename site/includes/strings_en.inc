@@ -1,7 +1,7 @@
 <?php
 $strings['en'] = 
   array (
-    'OldSiteDeprecationWarning' => 'This old website page will soon be deprecated. Please update you links and shortcuts to the current version',
+    'OldSiteDeprecationWarning' => 'This old website page will soon be deprecated. Please update you links and shortcuts to the <a href="http://v-l-m.org">current version</a>',
     'AddBoatFleet' => 'Add Boat to fleet',
     'ShowMore' => 'Show more races ...',    
     'old_races' => 'All races',

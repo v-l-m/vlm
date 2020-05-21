@@ -1,7 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
-    'OldSiteDeprecationWarning' => 'Cette ancienne page sera bientot supprimée. Mettez à jour vos liens vers la nouvelle interface',
+    'OldSiteDeprecationWarning' => 'Cette ancienne page sera bientot supprimée. Mettez à jour vos liens vers la <a href="http://v-l-m.org">nouvelle interface</a>',
     'AddBoatFleet' => 'Ajouter un bateau à votre flotte',  
     'ShowMore' => 'Afficher plus ...',    
     'old_races' => 'Toutes les courses',    
