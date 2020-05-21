@@ -635,7 +635,7 @@ function Estimator(Boat)
 
 
 
-    let TrackStartTick = new moment().utc().startOf('hour');
+    let TrackStartTick = new moment.utc().startOf('hour');
     let GribOffset = TrackStartTick.hour() % 6;
     let TrackIndexStartTime = TrackStartTick.add('hour', - GribOffset).add('hour', - 2.5 ).add('minute',5);
     let TrackIndexStartTick = TrackIndexStartTime.unix()*1000;
