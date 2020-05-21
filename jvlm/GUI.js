@@ -573,7 +573,7 @@ function HandleShowServerInfoModal(e)
 function InitMenusAndButtons()
 {
   // Handle modal sizing to fit screen
-  $('div.vresp.modal').on('show.bs.modal', function()
+  $('div.vresp.modal').on('shown.bs.modal', function()
   {
     $(this).show();
     setModalMaxHeight(this);
