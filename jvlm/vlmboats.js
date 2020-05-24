@@ -2352,6 +2352,18 @@ function DrawOpponentTrack(IdBoat, OppInfo, HideTrack = false)
       let CurDate = new Date();
       PendingID = IdBoat.toString() + "/" + IdRace.toString();
 
+      if (typeof OppInfo.Color === "undefined")
+      {
+        for (let index in B.OppList)
+        {
+          if (B.OppList[index].idusers==IdBoat)
+          {
+            OppInfo.Color=B.OppList[index].color;
+            break;
+          }
+        }
+      }
+
       if (IdBoat in B.OppTrack)
       {
         B.OppTrack[IdBoat].Visible = true;
