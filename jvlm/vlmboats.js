@@ -2021,6 +2021,7 @@ function AddOpponent(Boat, RaceFeatures, Opponent, isFriend, HideOpp = false)
     }).addTo(map);
     RaceFeatures.Opponents[Opponent.idusers].on('click', HandleOpponentClick);
     RaceFeatures.Opponents[Opponent.idusers].on('mouseover', HandleOpponentOver);
+    RaceFeatures.Opponents[Opponent.idusers].on('mouseout', HandleOpponentMouseOut);
     RaceFeatures.Opponents[Opponent.idusers].IdUsers = Opponent.idusers;
   }
 
@@ -2273,8 +2274,34 @@ function HandleOpponentOver(e)
     }
 
     DrawOpponentTrack(OppIndex, RaceFeatures.Opponents[OppIndex]);
-    ShowOpponentPopupInfo(e);
+
+    RaceFeatures.Opponents[OppIndex].PopupTimeOut = setTimeout(function(f)
+    {
+      DeferredOpponentPopup(e);
+    }, 500);
   }
+}
+
+function HandleOpponentMouseOut(e)
+{
+  let Opponent = e.sourceTarget;
+  let RaceFeatures = GetRaceMapFeatures(_CurPlayer.CurBoat);
+  let OppIndex = null;
+
+  if (Opponent && Opponent.options && Opponent.options.icon)
+  {
+    OppIndex = Opponent.options.icon.MarkerOppId;
+  }
+
+  if (OppIndex)
+  {
+    clearTimeout( RaceFeatures.Opponents[OppIndex].PopupTimeOut);
+  }
+}
+
+function DeferredOpponentPopup(e)
+{
+  ShowOpponentPopupInfo(e);
 }
 
 function HandleOpponentClick(e)
@@ -2599,9 +2626,9 @@ function CheckAndCreateNewBoat(e)
   let Msg = GetLocalizedString("ConfirmBoatName", NewBoatName);
   let Title = GetLocalizedString("Create your boat");
 
-  if (!NewBoatName || NewBoatName === "" )
+  if (!NewBoatName || NewBoatName === "")
   {
-    VLMAlertDanger(GetLocalizedString("No Empty Name"))
+    VLMAlertDanger(GetLocalizedString("No Empty Name"));
   }
   new MsgBox().Show(MsgBox.MSGBOX_YESNO, Title, Msg, OnRenameOK);
 
@@ -2625,7 +2652,7 @@ function OnRenameOK()
       }
       else
       {
-        VLMAlertInfo(GetLocalizedString('Your boat has been created', e.BoatName))
+        VLMAlertInfo(GetLocalizedString('Your boat has been created', e.BoatName));
       }
     });
 }
