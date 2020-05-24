@@ -1,6 +1,8 @@
 <?php
 $strings['fr'] = 
   array (
+    'No Empty Name' => 'Le nom du bateau ne peut pas être vide',
+    'ConfirmBoatName' => 'Etes vous sur de vouloir créer un nouveau bateau nommé : %s',
     'OldSiteDeprecationWarning' => 'Cette ancienne page sera bientot supprimée. Mettez à jour vos liens vers la <a href="http://v-l-m.org">nouvelle interface</a>',
     'AddBoatFleet' => 'Ajouter un bateau à votre flotte',  
     'ShowMore' => 'Afficher plus ...',    
@@ -213,7 +215,7 @@ Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur
     'You will not be allowed to boatsit this boat anymore if you confirm' => 'Vous ne serez plus boatsitter de ce bateau si vous confirmez',
     'Your account has been created' => 'Votre compte a été créé',
     'Your account is ready to be created' => 'Votre compte est prêt à être créé.',
-    'Your boat has been created' => 'Votre bateau a été créé',
+    'Your boat has been created' => 'Votre bateau %s a été créé',
     'Your email address doesn\'t seem to be valid' => 'Votre adresse de courriel semble être non-valide',
     'Your email is already in use.' => 'Il y a déjà un compte avec cette adresse de couriel.',
     'Your password has been updated.' => 'Votre mot de passe a été mis à jour.',

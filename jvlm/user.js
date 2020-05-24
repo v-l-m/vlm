@@ -218,28 +218,33 @@
  }
 
 
- function User()
+ class User
  {
-   this.IdPlayer = -1;
-   this.IsAdmin = false;
-   this.PlayerName = '';
-   this.PlayerJID = '';
-   this.Fleet = [];
-   this.BSFleet = [];
-   this.CurBoat = {};
-
-   this.LastLogin = 0;
-
-   this.KeepAlive = function()
+   constructor()
    {
-     console.log("Keeping login alive...");
-     CheckLogin();
-   };
+     this.MaxFleetSize = 12;
+     this.IdPlayer = -1;
+     this.IsAdmin = false;
+     this.PlayerName = '';
+     this.PlayerJID = '';
+     this.Fleet = [];
+     this.BSFleet = [];
+     this.CurBoat = {};
 
-   // Send Login every 10'
-   setInterval(this.KeepAlive, 600000);
+     this.LastLogin = 0;
 
+     this.KeepAlive = function()
+     {
+       console.log("Keeping login alive...");
+       CheckLogin();
+     };
+
+     // Send Login every 10'
+     setInterval(this.KeepAlive, 600000);
+   }
  }
+
+var _CurPlayer=new User();
 
  function IsLoggedIn()
  {
@@ -372,9 +377,6 @@
 
  }
 
- // Global handle to the current player object
- var _CurPlayer = null;
-
  function GetPlayerInfo()
  {
    ShowBgLoad();
@@ -411,7 +413,7 @@
  function HandleFleetInfoLoaded(result)
  {
    let i = result;
-   let select=null;
+   let select = null;
 
    if (typeof _CurPlayer === 'undefined')
    {
@@ -423,18 +425,21 @@
      _CurPlayer.Fleet = [];
    }
 
+   _CurPlayer.FleetSize = 0;
    for (let boat in result.fleet)
    {
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
      {
        _CurPlayer.Fleet[boat] = (new Boat(result.fleet[boat]));
-       if (!select || ( select && !select.Engaged && _CurPlayer.Fleet[boat].Engaged))
+       if (!select || (select && !select.Engaged && _CurPlayer.Fleet[boat].Engaged))
        {
          select = _CurPlayer.Fleet[boat];
        }
      }
+     _CurPlayer.FleetSize += 1;
    }
 
+   $("#FleetSizeInfo").text ( " (" + _CurPlayer.FleetSize + "/"+_CurPlayer.MaxFleetSize + ')');
 
    if (typeof _CurPlayer.fleet_boatsit === "undefined")
    {

@@ -1257,7 +1257,7 @@ function MakeSingleGateMapFeatures(Map, WP, index, GateFeatures, NextGate)
   // Draw Gate Segment
   index = parseInt(index, 10);
   NextGate = parseInt(NextGate, 10);
-  AddGateSegment(Map, GateFeatures, WP.longitude1, WP.latitude1, Lon2, Lat2 , (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
+  AddGateSegment(Map, GateFeatures, WP.longitude1, WP.latitude1, Lon2, Lat2, (NextGate == WP.wporder), (WP.wporder < NextGate), (WP.wpformat & WP_GATE_KIND_MASK));
 
 }
 
@@ -2586,12 +2586,46 @@ function UpdateOppPictos()
   }
 }
 
-
-
 function HandleWPDragEnded(e)
 {
-  let bkp = 0;
   let Marker = _CurPlayer.CurBoat.RaceMapFeatures.TrackWP;
   CompleteWPSetPosition(Marker);
   VLMAlertInfo("User WP moved to " + Marker.getLatLng());
+}
+
+function CheckAndCreateNewBoat(e)
+{
+  let NewBoatName = $("#NewBoatName")[0].value;
+  let Msg = GetLocalizedString("ConfirmBoatName", NewBoatName);
+  let Title = GetLocalizedString("Create your boat");
+
+  if (!NewBoatName || NewBoatName === "" )
+  {
+    VLMAlertDanger(GetLocalizedString("No Empty Name"))
+  }
+  new MsgBox().Show(MsgBox.MSGBOX_YESNO, Title, Msg, OnRenameOK);
+
+}
+
+function OnRenameOK()
+{
+  let NewBoatName = $("#NewBoatName")[0].value;
+  let PostData = {
+    idp: _CurPlayer.IdPlayer,
+    BoatName: NewBoatName,
+  };
+
+  $.post("/ws/playersetup/BoatCreate.php",
+    "parms=" + JSON.stringify(PostData),
+    function(e)
+    {
+      if (!e.success)
+      {
+        new MsgBox().Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString('Boat creation error'), e.error.code + ' / ' + e.error.msg);
+      }
+      else
+      {
+        VLMAlertInfo(GetLocalizedString('Your boat has been created', e.BoatName))
+      }
+    });
 }

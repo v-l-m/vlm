@@ -143,7 +143,15 @@ class WSBase extends baseClass
   function reply_with_error_if_not_exists($key, $code, $request = null) 
   {
     if (is_null($request)) $request = $this->request;
-    if (!isset($request[$key])) $this->reply_with_error($code);
+    if (is_array($request) && !isset($request[$key]))
+    { 
+        $this->reply_with_error($code);
+    }
+    elseif (!is_array($request) && ! isset ($request->$key))
+    {
+        $this->reply_with_error($code);
+    }
+    
   }
 
 }
@@ -474,8 +482,13 @@ class WSBaseBoatsetup extends WSSetup {
         parent::__construct();
         //auth check - FIXME en lien avec le mode player/boat
         $this->reply_with_error_if_not_exists('idu', "AUTH01");
-        if ($_SESSION['idu'] != $this->request['idu']) $this->reply_with_error("AUTH02");
+        
 
+        if ($_SESSION['idu'] != $this->request['idu'])
+        {
+            $this->answer["extended"]='Got '.$this->request['idu'];
+            $this->reply_with_error("AUTH02");            
+        }
         //OK, on peut instancier l'utilisateur
         $this->fullusers = new fullUsers(getLoginId());
     }
@@ -573,6 +586,74 @@ class WSBaseBoatsetup extends WSSetup {
 
 }
 
+class WSBaseBoatCreate extends WSSetup
+{
+    function __construct() {
+        parent::__construct();
+        if (! isset($_POST['parms']))
+        {
+            $this->reply_with_error('PARM01');
+            return;
+        }
+
+        $this->request = json_decode( $_POST['parms']);           
+        $this->reply_with_error_if_not_exists('idp', "AUTH04");
+        if ($_SESSION['idp'] != $this->request->idp) $this->reply_with_error("AUTH02");
+
+        //OK, on peut instancier l'utilisateur
+        $this->fullusers = new fullUsers(getLoginId());        
+    }
+
+    function finish() {
+        if ($this->fullusers->users->error_status) {
+            $this->reply_with_error("CORE01", $this->fullusers->users->error_string);
+        } else {
+            $this->reply_with_success();
+        }
+    }
+
+    function CheckParams() {
+
+        $this->reply_with_error_if_not_exists('BoatName', 'CREBOAT01');
+        
+        $BoatName = $this->request->BoatName;
+        // Fix Me : Need Test
+        if (getLoggedPlayerObject()->hasMaxBoats() ) 
+        {
+            $this->reply_with_error("CREBOAT02");
+            return;
+        }
+
+        $boat_id_base = "P".$this->request->idp."B_";
+        $BoatIndex = 0;
+        $query = "Select username from users where username like '$boat_id_base%' order by 1 desc limit 1";
+        $res = $this->queryRead($query);
+        if ($res && mysqli_num_rows($res) !== 0) 
+        {
+            $row = mysqli_fetch_assoc($res);
+            $BoatIndex = (int)(substr($row['username'],strlen($row['username'])-3,3))+1;
+        }
+        
+        
+        $BoatId=sprintf("%s_%03d", $boat_id_base, $BoatIndex);
+        
+        $this->answer['idu'] = createBoat($BoatId, generatePassword($BoatName),"no_mail_in_users", $BoatName);
+        $this->answer['BoatName'] = $BoatName;
+        logPlayerEvent($this->request->idp,$this->answer['idu'],0,'Player created new boat '.$BoatName);
+
+        //Manual creation of users, forcing use of MASTER server
+        $users = new users($this->answer['idu'], FALSE);
+        $users->initFromId($this->answer['idu'], True);
+        
+        if (!$users->setOwnerId($this->request->idp))
+        {
+            $this->reply_with_error("CREBOAT03");
+        }
+        return;
+    }
+
+}
+
 function get_error($code) {
 
     $ws_error_types = Array(
@@ -584,6 +665,9 @@ function get_error($code) {
         "AUTH01" => "idu is mandatory for safety reasons and should match your login",
         "AUTH02" => "Your request does not match the idu you are login in",
         "AUTH03" => "Boat account authentification is deprecated, please use a player account.",
+        "AUTH04" => "idp is mandatory for safety reasons and should match your login",
+        "AUTH05" => "Your request does not match the idp you are login in",
+        
         //SQL
         "CORE01" => "Something went wrong when passing orders to the core. You should report this to the developpers ! (See the custom_error_string)",
         //pim
@@ -687,10 +771,15 @@ function get_error($code) {
         // Player password change
         "PWDCHANGE01" => "invalid parameter set (OldPwd, NewPwd required)",
         "PWDCHANGE02" => "NewPwdRequired",
-        "PWDCHANGE03" => "OldPasswordInvalid"
+        "PWDCHANGE03" => "OldPasswordInvalid",
 
+        // Boat creation
+        "CREBOAT01" => "Unspecified Boat Name",
+        "CREBOAT02" => "Max fleet size reached",
+        "CREBOAT03" => "Failed to attach new boat to boat fleet",
 
-
+        // Dummy end to allow , at the end of each line
+        "__END__DO_NOT_ADD_BELOW__" => ""
     );
     
     return Array("code" => $code, "msg" => $ws_error_types[$code]);
