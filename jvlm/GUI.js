@@ -948,10 +948,10 @@ function InitDateTimePicker()
 
   if (VLM2Prefs.MapPrefs.UseUTC)
   {
-    Options.format= 'DD MM YYYY, HH:mm:ss [Z]';
+    Options.format = 'DD MM YYYY, HH:mm:ss [Z]';
     Options.timeZone = 'UTC';
   }
-  
+
   $("#AP_Time").datetimepicker(Options);
   //$('#AP_Time').data("DateTimePicker").OPTION(Options);
 }
@@ -2597,11 +2597,17 @@ function AddRaceToList(race, filter)
     race.CanJoin = race.CanJoin & ("0" === _CurPlayer.CurBoat.RaceInfo.idraces);
   }
 
-  if (race.CanJoin)
+  //if (race.CanJoin)
   {
     let Now = new Date();
     let RaceStart = new Date(race.deptime * 1000);
-    if (RaceStart <= Now)
+    let RaceLineClose = new Date(race.closetime * 1000);
+
+    if (RaceLineClose <= Now)
+    {
+      RaceJoinStateClass = 'NoJoinRace';
+    }
+    else if (RaceStart <= Now)
     {
       RaceJoinStateClass = 'CanJoinRace';
       StartMoment = GetLocalizedString("closerace") + " " + moment("/date(" + race.closetime * 1000 + ")/").fromNow();
@@ -2612,10 +2618,10 @@ function AddRaceToList(race, filter)
       StartMoment = GetLocalizedString("departuredate") + " " + moment("/date(" + race.deptime * 1000 + ")/").fromNow();
     }
   }
-  else
+  /*else
   {
     RaceJoinStateClass = 'NoJoinRace';
-  }
+  }*/
 
   let BoatType = "???";
 
@@ -2651,7 +2657,7 @@ function AddRaceToList(race, filter)
       '       <span "> ' + StartMoment +
       '       </span>' +
       '      </div>' : "") +
-    
+
     '      </div>' +
     '    </div>' +
     '  </div>' +
