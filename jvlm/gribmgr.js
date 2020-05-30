@@ -7,6 +7,7 @@ class GribData
 {
   constructor(InitStruct)
   {
+
     this.UGRD = NaN;
     this.VGRD = NaN;
     this.TWS = NaN;
@@ -20,6 +21,7 @@ class GribData
     {
       return Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD) * 1.9438445; //* 3.6 / 1.852
     };
+
     this.Direction = function()
     {
       let t_speed = Math.sqrt(this.UGRD * this.UGRD + this.VGRD * this.VGRD);
@@ -64,6 +66,8 @@ class VLM2GribManager
 {
   constructor()
   {
+    const GribGrain = 3.0 * 3600.0; // 1 grib every 3 hours.
+
     this.Tables = [];
     this.TableTimeStamps = [];
     this.Inited = false;
@@ -78,6 +82,8 @@ class VLM2GribManager
     this.BeaufortCacheHits = 0;
     this.BeaufortRecursionHits = 0;
     this.BeaufortCacheRatio = 0;
+    this.GribGen= new Date().getDate()/1000;
+
     this.Init = function()
     {
       if (this.Inited || this.Initing)
@@ -86,6 +92,26 @@ class VLM2GribManager
       }
       this.Initing = true;
       $.get("/ws/windinfo/list.php?v=" + Math.round(new Date().getTime() / 1000 / 60 / 3), this.HandleGribList.bind(this));
+    };
+
+    this.ClearBogusData = function(Date, Lon, Lat)
+    {
+      let TableIndex = this.GetTableIndexFromTime(Date);
+      let
+      {
+        LonIdx1,
+        LatIdx1
+      } = this.GetTableCoordIndex(Lon, Lat);
+
+      if (TableIndex in this.Tables)
+      {
+        if (this.Tables[TableIndex][LonIdx1] && this.Tables[TableIndex][LonIdx1][LatIdx1])
+        {
+          this.Tables[TableIndex][LonIdx1][LatIdx1]=null;
+        }
+      }
+      this.GribGen++;
+      this.CheckGribLoadedIdx(TableIndex,LonIdx1,LatIdx1);
     };
 
     //TODO Put Back the unreadable dichytomy selection 
@@ -148,6 +174,22 @@ class VLM2GribManager
       }
 
     };
+
+    this.GetTableCoordIndex = function(Lon, Lat)
+    {
+      let LonIdx1 = (180 / this.GribStep + Math.floor(Lon / this.GribStep) + 360.0 / this.GribStep) % (360 / this.GribStep);
+      let LatIdx1 = (90 / this.GribStep + Math.floor(Lat / this.GribStep) + 180.0 / this.GribStep) % (180 / this.GribStep);
+      return {
+        LonIdx1,
+        LatIdx1
+      };
+    };
+
+    this.GetTableIndexFromTime = function(Time)
+    {
+      return Math.floor((Time / 1000.0 - this.MinWindStamp / 1000) / (GribGrain));
+    };
+
     this.HandleGribList = function(e)
     {
       this.TableTimeStamps = e.grib_timestamps;
@@ -157,14 +199,18 @@ class VLM2GribManager
       this.MaxWindStamp = new Date(this.TableTimeStamps[this.TableTimeStamps.length - 1] * 1000);
       this.WindTableLength = this.TableTimeStamps.length;
     };
+
+    //
+    // Return wind at point in time, if enough data has been loaded
+    // Triggers a windload if required and returns nothing if no data is available
+    //
     this.WindAtPointInTime = function(Time, Lat, Lon, callback)
     {
       if (!this.Inited)
       {
         return false;
       }
-      const GribGrain = 3.0 * 3600.0; // 1 grib every 3 hours.
-      let TableIndex = Math.floor((Time / 1000.0 - this.MinWindStamp / 1000) / (GribGrain));
+      let TableIndex = this.GetTableIndexFromTime(Time);
       if (TableIndex < 0)
       {
         // Before avaible grib 
@@ -217,6 +263,7 @@ class VLM2GribManager
       });
       RetInfo.Heading = GInfo.Direction();
       RetInfo.Speed = MI0.TWS + DteOffset / GribGrain * (MI1.TWS - MI0.TWS);
+
       return RetInfo;
     };
     this.GetHydbridMeteoAtTimeIndex = function(TableIndex, Lat, Lon)
@@ -241,8 +288,11 @@ class VLM2GribManager
         Lat_pos -= 90;
       }
       // Compute grid index to get the values
-      let LonIdx1 = (180 / this.GribStep + Math.floor(Lon / this.GribStep) + 360.0 / this.GribStep) % (360 / this.GribStep);
-      let LatIdx1 = (90 / this.GribStep + Math.floor(Lat / this.GribStep) + 180.0 / this.GribStep) % (180 / this.GribStep);
+      let
+      {
+        LonIdx1,
+        LatIdx1
+      } = this.GetTableCoordIndex(Lon, Lat);
       let LonIdx2 = (LonIdx1 + 1) % (360 / this.GribStep);
       let LatIdx2 = (LatIdx1 + 1) % (180 / this.GribStep);
       let dX = (Lon_pos / this.GribStep - Math.floor(Lon_pos / this.GribStep));
@@ -360,7 +410,7 @@ class VLM2GribManager
           length: 0,
           CallBacks: [callback]
         };
-        $.get(GribMap.ServerURL() + "/ws/windinfo/smartgribs.php?north=" + NorthStep + "&south=" + (SouthStep) + "&west=" + (WestStep) + "&east=" + (EastStep) + "&seed=" + (0 + new Date()), this.HandleGetSmartGribList.bind(this, LoadKey));
+        $.get(GribMap.ServerURL() + "/ws/windinfo/smartgribs.php?north=" + NorthStep + "&south=" + (SouthStep) + "&west=" + (WestStep) + "&east=" + (EastStep) + "&seed=" + this.GribGen, this.HandleGetSmartGribList.bind(this, LoadKey));
       }
       else if (typeof callback !== "undefined" && callback)
       {
@@ -408,7 +458,7 @@ class VLM2GribManager
       }
     };
 
-    this.AsyncCallBackQueueHandler = function (callbacks)
+    this.AsyncCallBackQueueHandler = function(callbacks)
     {
       let StartTick = new Date().getTime();
       let calls = 0;
@@ -418,25 +468,28 @@ class VLM2GribManager
       }
       for (let index in callbacks)
       {
-        if ((new Date().getTime())-StartTick > 1000)
+        if ((new Date().getTime()) - StartTick > 1000)
         {
-          let HangingCallBacks =[];
+          let HangingCallBacks = [];
           let HasMore = false;
-          callbacks=callbacks.filter(function(x) {return x!==null;});
-          if (callbacks.length>=1)
+          callbacks = callbacks.filter(function(x)
+          {
+            return x !== null;
+          });
+          if (callbacks.length >= 1)
           {
             callbacks = HangingCallBacks;
-            setTimeout(this.AsyncCallBackQueueHandler.bind(this),50,callbacks);
-            console.log("Sync Callback hangs "+callbacks.length);
+            setTimeout(this.AsyncCallBackQueueHandler.bind(this), 50, callbacks);
+            console.log("Sync Callback hangs " + callbacks.length);
           }
-          
+
           return;
         }
         if (callbacks[index])
         {
-          calls+=1;
+          calls += 1;
           callbacks[index]();
-          callbacks[index]=null;
+          callbacks[index] = null;
         }
       }
       //console.log("AsyncCallBack completed for "+ calls + " in "+ (new Date().getTime()-StartTick)+" µs");
@@ -451,7 +504,7 @@ class VLM2GribManager
       {
         // Successfull load of one item from the loadqueue
         // Clear all pending callbacks for this call
-        setTimeout(this.AsyncCallBackQueueHandler.bind(this),25,this.LoadQueue[LoadKey].CallBacks);
+        setTimeout(this.AsyncCallBackQueueHandler.bind(this), 25, this.LoadQueue[LoadKey].CallBacks);
         //delete this.LoadQueue[LoadKey];
       }
     };
@@ -493,7 +546,7 @@ class VLM2GribManager
       for (let i = 0; i < TotalLines; i++)
       {
         let Line = Lines[i];
-        if (Line === "--" || Line.search(":") ==-1)
+        if (Line === "--" || Line.search(":") == -1)
         {
           DataStartIndex = i + 1;
           break;
@@ -596,6 +649,7 @@ class VLM2GribManager
       return Ret;
     };
   }
+
 }
 
 class WindCatalogLine
