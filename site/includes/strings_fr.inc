@@ -3,7 +3,7 @@ $strings['fr'] =
   array (
     'No Empty Name' => 'Le nom du bateau ne peut pas être vide',
     'ConfirmBoatName' => 'Etes vous sur de vouloir créer un nouveau bateau nommé : %s',
-    'OldSiteDeprecationWarning' => 'Cette ancienne page sera bientot supprimée. Mettez à jour vos liens vers la <a href="http://v-l-m.org">nouvelle interface</a>',
+    'OldSiteDeprecationWarning' => "Cette ancienne page n'est plus maintenue. Mettez à jour vos liens vers la <a href='http://v-l-m.org'>nouvelle interface</a>",
     'AddBoatFleet' => 'Ajouter un bateau à votre flotte',  
     'ShowMore' => 'Afficher plus ...',    
     'old_races' => 'Toutes les courses',    
