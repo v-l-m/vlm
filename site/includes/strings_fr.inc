@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'RaceClosed' => 'Course terminée ',
     'No Empty Name' => 'Le nom du bateau ne peut pas être vide',
     'ConfirmBoatName' => 'Etes vous sur de vouloir créer un nouveau bateau nommé : %s',
     'OldSiteDeprecationWarning' => "Cette ancienne page n'est plus maintenue. Mettez à jour vos liens vers la <a href='http://v-l-m.org'>nouvelle interface</a>",
