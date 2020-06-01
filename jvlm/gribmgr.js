@@ -82,7 +82,7 @@ class VLM2GribManager
     this.BeaufortCacheHits = 0;
     this.BeaufortRecursionHits = 0;
     this.BeaufortCacheRatio = 0;
-    this.GribGen= new Date().getDate()/1000;
+    this.GribGen= new Date().getTime()/1000;
 
     this.Init = function()
     {
@@ -438,17 +438,17 @@ class VLM2GribManager
             if (e.gribs_interim_url[index])
             {
               let url = e.gribs_interim_url[index].replace(".grb", ".txt");
-              let seed = 0; //parseInt((new Date).getTime());
+              let seed = this.GribGen; 
               //console.log("smartgrib points out " + url);
-              $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
+              $.get("/cache/gribtiles/" + url + "&seed=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
             }
           }
           else if (e.gribs_url[index])
           {
             let url = e.gribs_url[index].replace(".grb", ".txt");
-            let seed = 0; //parseInt((new Date).getTime());
+            let seed = this.GribGen; 
             //console.log("smartgrib points out " + url);
-            $.get("/cache/gribtiles/" + url + "&v=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
+            $.get("/cache/gribtiles/" + url + "&seed=" + seed, this.HandleSmartGribData.bind(this, LoadKey, url));
           }
         }
       }
@@ -511,7 +511,7 @@ class VLM2GribManager
 
     this.ForceReloadGribCache = function(LoadKey, Url)
     {
-      let Seed = 0; //parseInt(new Date().getTime(),10);
+      let Seed = this.GribGen; 
       $.get("/cache/gribtiles/" + Url + "&force=yes&seed=" + Seed, this.HandleSmartGribData.bind(this, LoadKey, Url));
     };
 
