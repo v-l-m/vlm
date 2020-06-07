@@ -486,7 +486,7 @@ class WSBaseBoatsetup extends WSSetup {
 
         if ($_SESSION['idu'] != $this->request['idu'])
         {
-            $this->answer["extended"]='Got '.$this->request['idu'];
+            $this->answer["extended"]='Got '.$this->request['idu']. " expected ".$_SESSION['idu'];
             $this->reply_with_error("AUTH02");            
         }
         //OK, on peut instancier l'utilisateur
