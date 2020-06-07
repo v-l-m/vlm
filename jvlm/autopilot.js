@@ -95,7 +95,7 @@ function HandleSendAPUpdate(e)
   }
 
   var OrderData = {
-    idu: _CurPlayer.CurBoat.IdBoat,
+    idu: _CurPlayer.CurBoat.IdBoat(),
     tasktime: Math.round(_CurAPOrder.Date / 1000),
     pim: _CurAPOrder.PIM
   };

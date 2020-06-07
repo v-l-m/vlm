@@ -32,7 +32,7 @@ class WPMinimapHandlerClass
             if (F[boatindex])
             {
               let Boat = F[boatindex];
-              if ((Boat.Engaged == RaceId) && Boat.RaceInfo)
+              if ((Boat.Engaged() == RaceId) && Boat.RaceInfo)
               {
                 return Boat.RaceInfo;
               }

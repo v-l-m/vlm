@@ -837,13 +837,13 @@ function InitMenusAndButtons()
   // Handler for not racing boat palmares
   $("#HistRankingButton").on('click', function(e)
   {
-    ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat);
+    ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat());
   });
 
   $(".RaceListTab").on("click", function(e)
   {
 
-    ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat);
+    ShowUserRaceHistory(e, _CurPlayer.CurBoat.IdBoat());
   });
 
   $("#RacesFilterText").on("input", HandleRacesListFilterChange);
@@ -1332,8 +1332,8 @@ function HandleRaceDisContinueConfirmation(State)
   if (State)
   {
     //construct base
-    let BoatId = _CurPlayer.CurBoat.IdBoat;
-    let RaceId = _CurPlayer.CurBoat.Engaged;
+    let BoatId = _CurPlayer.CurBoat.IdBoat();
+    let RaceId = _CurPlayer.CurBoat.Engaged();
     DiconstinueRace(BoatId, RaceId);
     $("#ConfirmDialog").modal('hide');
     $("#RacesInfoForm").modal('hide');
@@ -1463,14 +1463,67 @@ function BuildUserBoatList(boat, IsFleet)
 
 function GetBoatDDLine(Boat, IsFleet)
 {
-  var Line = '<li class="DDLine" BoatID="' + Boat.IdBoat + '">';
+  var Line = '<li class="DDLine" BoatID="' + Boat.IdBoat() + '">';
   Line = Line + GetBoatInfoLine(Boat, IsFleet) + '</li>';
   return Line;
 }
 
+function UpdateBoatList(SingleBoat)
+{
+  if (!_CurPlayer || !_CurPlayer.Fleet)
+  {
+    return;
+  }
+
+  let Fleet= _CurPlayer.Fleet.concat(_CurPlayer.BSFleet);
+
+  for (let index in Fleet)
+  {
+    if (Fleet[index])
+    {
+      let Boat = Fleet[index];
+      if (!SingleBoat || SingleBoat.IdBoat() == Boat.IdBoat())
+      {
+        UpdateBoatStatusAndName(Boat);
+        if (SingleBoat)
+        {
+          return;
+        }
+      }
+    }
+  }
+}
+
+function UpdateBoatStatusAndName(Boat)
+{
+  if (!Boat)
+  {
+    return;
+  }
+
+  let DDLine = $("Div[boatid='" + Boat.IdBoat() + "'] img");
+  DDLine.removeClass("BStatus_Docked").removeClass("BStatus_Racing").removeClass("BStatus_Stranded");
+
+  if (!Boat.Engaged())
+  {
+    DDLine.addClass("BStatus_Docked");
+  }
+  else if (Boat.VLMInfo && Boat.VLMInfo["S&G"])
+  {
+    DDLine.addClass("BStatus_Stranded");
+  }
+  else if (Boat.VLMInfo)
+  {
+    DDLine.addClass("BStatus_Racing");
+  }
+  let DDLineBoatName = $(".BoatStatusName[boatid='" + Boat.IdBoat() + "']");
+  DDLineBoatName.text(Boat.BoatName());
+
+}
+
 function GetBoatInfoLine(Boat, IsFleet)
 {
-  var Line = "";
+  var Line = '<div boatid=' + Boat.IdBoat() + '>';
   var BoatStatus = "BStatus_Racing";
 
   if (!Boat.Engaged)
@@ -1494,7 +1547,7 @@ function GetBoatInfoLine(Boat, IsFleet)
     Line = Line + '</span>';
   }
 
-  Line = Line + '<span>-</span><span>' + HTMLDecode(Boat.BoatName) + '</span>';
+  Line = Line + '<span>-</span><span class="BoatStatusName" boatid=' + Boat.IdBoat() + '>' + HTMLDecode(Boat.BoatName()) + '</span></div>';
   return Line;
 }
 
@@ -2336,7 +2389,7 @@ function UpdatePrefsDialog(Boat)
   else
   {
     $("#BtnSetting").removeClass("hidden");
-    $("#pref_boatname").val(Boat.BoatName);
+    $("#pref_boatname").val(Boat.BoatName());
 
     if (typeof Boat.VLMInfo !== 'undefined')
     {
@@ -2473,7 +2526,7 @@ function RaceListFilterChange(e)
 function LoadRacesList(e)
 {
   let MaxFinishedRacesLength = 0;
-  let CurUser = _CurPlayer.CurBoat.IdBoat;
+  let CurUser = _CurPlayer.CurBoat.IdBoat();
   let CurLength = 0;
   let filter = $("#RacesFilterText").val();
   $('.racelistpreloader').removeClass("hidden");
@@ -2686,7 +2739,7 @@ function AddRaceToList(race, filter)
     {
       var RaceId = e.currentTarget.attributes.idrace.value;
 
-      EngageBoatInRace(RaceId, _CurPlayer.CurBoat.IdBoat);
+      EngageBoatInRace(RaceId, _CurPlayer.CurBoat.IdBoat());
 
 
     }
@@ -2765,7 +2818,7 @@ function GetRaceClock(RaceInfo, UserStartTimeString)
 function DisplayCurrentDDSelectedBoat(Boat)
 {
   $('.BoatDropDown:first-child').html(
-    '<span BoatID=' + Boat.IdBoat + '>' + GetBoatInfoLine(Boat, Boat.IdBoat in _CurPlayer.Fleet) + '</span>' +
+    '<span BoatID=' + Boat.IdBoat() + '>' + GetBoatInfoLine(Boat, Boat.IdBoat() in _CurPlayer.Fleet) + '</span>' +
     '<span class="caret"></span>'
   );
 }
@@ -2966,7 +3019,7 @@ function SaveBoatAndUserPrefs(e)
   VLM2Prefs.AdvancedStats = $("#AdvancedStats").is(":checked");
   VLM2Prefs.Save();
 
-  if (!ComparePrefString($("#pref_boatname")[0].value, _CurPlayer.CurBoat.BoatName))
+  if (!ComparePrefString($("#pref_boatname")[0].value, _CurPlayer.CurBoat.BoatName()))
   {
     NewVals.boatname = encodeURIComponent($("#pref_boatname")[0].value);
     BoatUpdateRequired = true;
@@ -3028,6 +3081,10 @@ function HandleBoatSelectionChange(e)
   if (!BoatId)
   {
     return;
+  }
+  else
+  {
+    BoatId = parseInt(BoatId, 10);
   }
   let Boat = GetBoatFromIdu(BoatId);
   ResetCollapsiblePanels();
@@ -3610,7 +3667,7 @@ function GetRankingRaceId(Boat, RaceId)
 {
   if (!RaceId && !RankingFt.RaceRankingId)
   {
-    return Boat.Engaged;
+    return Boat.Engaged();
   }
   else if (!RaceId)
   {
@@ -3680,7 +3737,7 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
   {
     for (index in Rankings[RaceId].RacerRanking)
     {
-      if (Rankings[RaceId].RacerRanking[index] && Boat && Boat.IdBoat === index)
+      if (Rankings[RaceId].RacerRanking[index] && Boat && Boat.IdBoat() === index)
       {
         rnk = index + 1;
         break;
@@ -3734,7 +3791,7 @@ function FillWPRanking(Boat, WPNum, Friends)
       if (RnkBoat.WP && RnkBoat.WP[WPNum - 1])
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, WPNum, Friends));
-        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -3985,7 +4042,7 @@ function FillStatusRanking(Boat, Status, Friends)
       if (RnkBoat.status === Status)
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends));
-        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -4021,7 +4078,7 @@ function FillRacingRanking(Boat, Friends)
       {
         let RnkBoat = Rankings[RaceId].RacerRanking[index];
 
-        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -4103,7 +4160,7 @@ function GetRankingObject(RankBoat, rank, WPNum, Friends, Refs)
     Delta1st: ""
   };
 
-  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.GetRankingObject !== "undefined" && parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat)
+  if (typeof _CurPlayer !== "undefined" && _CurPlayer && typeof _CurPlayer.GetRankingObject !== "undefined" && parseInt(RankBoat.idusers, 10) === _CurPlayer.CurBoat.IdBoat())
   {
     RetObject.Class += " ft_class_myboat";
   }

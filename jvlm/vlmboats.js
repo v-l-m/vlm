@@ -5,73 +5,7 @@
 
 const VLM_COORDS_FACTOR = 1000;
 
-// Default map options
 
-
-// Click handler for handling map clicks.
-/* OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control,
-{
-  defaultHandlerOptions:
-  {
-    'single': true,
-    'double': false,
-    'pixelTolerance': 0,
-    'stopSingle': false,
-    'stopDouble': false
-  },
-
-  initialize: function(options)
-  {
-    this.handlerOptions = OpenLayers.Util.extend(
-    {}, this.defaultHandlerOptions);
-    OpenLayers.Control.prototype.initialize.apply(
-      this, arguments
-    );
-    this.handler = new OpenLayers.Handler.Click(
-      this,
-      {
-        'click': this.trigger
-      }, this.handlerOptions
-    );
-  },
-
-  trigger: function(e)
-  {
-
-    var MousePos = GetVLMPositionFromClick(e.xy);
-    if (typeof GM_Pos !== "object" || !GM_Pos)
-    {
-      GM_Pos = {};
-    }
-    GM_Pos.lon = MousePos.Lon.Value;
-    GM_Pos.lat = MousePos.Lat.Value;
-
-    HandleMapMouseMove(e);
-    if (SetWPPending)
-    {
-      if (WPPendingTarget === "WP")
-      {
-        CompleteWPSetPosition(e, e.xy);
-        HandleCancelSetWPOnClick();
-      }
-      else if (WPPendingTarget === "AP")
-      {
-        SetWPPending = false;
-        _CurAPOrder.PIP_Coords = GetVLMPositionFromClick(e.xy);
-        $("#AutoPilotSettingForm").modal("show");
-        RefreshAPDialogFields();
-
-      }
-      else
-      {
-        SetWPPending = false;
-      }
-    }
-  }
-
-}); */
-
-// var DrawControl = null;
 var OppPopups = [];
 var StartSetWPOnClick = false;
 
@@ -79,7 +13,7 @@ function SetCurrentBoat(Boat, CenterMapOnBoat, ForceRefresh, TargetTab)
 {
   if (_CurPlayer && _CurPlayer.CurBoat && Boat)
   {
-    if (_CurPlayer.CurBoat.IdBoat !== Boat.IdBoat)
+    if (typeof _CurPlayer.CurBoat.IdBoat !== "undefined" && _CurPlayer.CurBoat.IdBoat() !== Boat.IdBoat())
     {
       ClearCurrentMapMarkers(_CurPlayer.CurBoat);
     }
@@ -109,18 +43,18 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   }
 
   //if ((CurDate > BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))
-  if ((ForceRefresh) || (CurDate >= Boat.NextServerRequestDate))
+  //if ((ForceRefresh) || (CurDate >= Boat.NextServerRequestDate))
   {
     BoatLoading = CurDate + 3000;
     console.log("Loading boat info from server....");
     // request current boat info
     ShowPb("#PbGetBoatProgress");
 
-    $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat,
+    $.get("/ws/boatinfo.php?forcefmt=json&select_idu=" + Boat.IdBoat(),
       function(result)
       {
         // Check that boat Id Matches expectations
-        if (Boat.IdBoat === parseInt(result.IDU, 10))
+        if (Boat.IdBoat() === parseInt(result.IDU, 10))
         {
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
@@ -160,12 +94,16 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             }
           }
 
+          
           // force refresh of settings if was not initialized
           if (NeedPrefsRefresh)
           {
             UpdatePrefsDialog(Boat);
           }
 
+          // Update Boat Icon and Name Display
+          UpdateBoatList(Boat);
+            
           // update map if racing
           if (Boat.VLMInfo.RAC !== "0")
           {
@@ -199,7 +137,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
           else
           {
             // Boat is not racing
-            NotifyEndOfRace(Boat.IdBoat);
+            NotifyEndOfRace(Boat.IdBoat());
             //GetLastRacehistory();
             UpdateInMenuDockingBoatInfo(Boat);
             $(".NWPBadge").css("visibility", "hidden");
@@ -219,7 +157,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
 
 
   }
-  else if (Boat)
+  /*else if (Boat)
   {
     // Set Current Boat for player
     _CurPlayer.CurBoat = Boat;
@@ -229,7 +167,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
     DrawBoat(Boat, CenterMapOnBoat);
 
-  }
+  }*/
 }
 
 function NotifyEndOfRace(BoatId)
@@ -266,7 +204,7 @@ function GetTrackFromServer(Boat)
 {
   var end = Math.floor(new Date() / 1000);
   var start = end - 48 * 3600;
-  $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat + "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end, function(result)
+  $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat()+ "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end, function(result)
   {
     if (result.success)
     {
@@ -463,7 +401,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
     }
     else
     {
-      BoatIcon = GetBoatMarker(Boat.IdBoat);
+      BoatIcon = GetBoatMarker(Boat.IdBoat());
       RaceFeatures.BoatMarker = L.marker([Boat.VLMInfo.LAT, Boat.VLMInfo.LON],
       {
         icon: BoatIcon,
@@ -863,240 +801,7 @@ function CompleteWPSetPosition(WPMarker)
 
 }
 
-/*// al low testing of specific renderers via "?renderer=Canvas", etc
-var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
-renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
- */
-/* var VectorStyles = new OpenLayers.Style(
-{
-  strokeColor: "#00FF00",
-  strokeOpacity: 1,
-  strokeWidth: 3,
-  fillColor: "#FF5500",
-  fillOpacity: 0.5
-},
-{
-  rules: [
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: 'buoy'
-      }),
-      symbolizer:
-      {
-        // if a feature matches the above filter, use this symbolizer
-        label: "${name}\n${Coords}",
-        pointerEvents: "visiblePainted",
-        fontSize: "1.5em",
-        labelAlign: "left", //${align}",
-        labelXOffset: "4", //${xOffset}",
-        labelYOffset: "-12", //${yOffset}",
-        externalGraphic: "images/${GateSide}",
-        graphicWidth: 36,
-        graphicHeight: 72,
-        fillOpacity: 1
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "crossonce"
-      }),
-      symbolizer:
-      {
-        xOffset: 1,
-        yOffset: 1,
-        strokeColor: "black",
-        strokeOpacity: 0.5,
-        strokeWidth: 4,
-        strokeDashstyle: "dashdot"
-      }
-    }),
 
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "marker"
-      }),
-      symbolizer:
-      {
-        externalGraphic: "images/${BuoyName}",
-        rotation: "${CrossingDir}",
-        graphicWidth: 48
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "NextGate"
-      }),
-      symbolizer:
-      {
-        strokeColor: "#FF0000",
-        strokeOpacity: 1,
-        strokeWidth: 3
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "ValidatedGate"
-      }),
-      symbolizer:
-      {
-        strokeColor: "#0000FF",
-        strokeOpacity: 0.5,
-        strokeWidth: 3
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "FutureGate"
-      }),
-      symbolizer:
-      {
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.5,
-        strokeWidth: 3
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "ForecastPos"
-      }),
-      symbolizer:
-      {
-        strokeColor: "black",
-        strokeOpacity: 0.75,
-        strokeWidth: 1
-        //strokeDashstyle: "dot"
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "HistoryTrack"
-      }),
-      symbolizer:
-      {
-        strokeOpacity: 0.5,
-        strokeWidth: 2,
-        strokeColor: "${TrackColor}"
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "Polar"
-      }),
-      symbolizer:
-      {
-        strokeColor: "white",
-        strokeOpacity: 0.75,
-        strokeWidth: 2
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: "ExclusionZone"
-      }),
-      symbolizer:
-      {
-        strokeColor: "red",
-        strokeOpacity: 0.95,
-        strokeWidth: 2,
-        fillColor: "#FF5500",
-        fillOpacity: 0.5
-      }
-    }),
-    new OpenLayers.Rule(
-    {
-      // a rule contains an optional filter
-      filter: new OpenLayers.Filter.Comparison(
-      {
-        type: OpenLayers.Filter.Comparison.EQUAL_TO,
-        property: "type", // the "foo" feature attribute
-        value: 'opponent'
-      }),
-      symbolizer:
-      {
-        // if a feature matches the above filter, use this symbolizer
-        label: "${name}",
-        //pointRadius: 6,
-        pointerEvents: "visiblePainted",
-        // label with \n linebreaks
-
-        //fontColor: "${favColor}",
-        fontSize: "1.5em",
-        //fontFamily: "Courier New, monospace",
-        //fontWeight: "bold",
-        labelAlign: "left", //${align}",
-        labelXOffset: "4", //${xOffset}",
-        labelYOffset: "-12", //${yOffset}",
-        //labelOutlineColor: "white",
-        //labelOutlineWidth: 2
-        externalGraphic: "images/opponent${IsTeam}.png",
-        graphicWidth: "${IsFriend}",
-        fillOpacity: 1
-      }
-    }),
-    new OpenLayers.Rule(
-      {
-        // a rule contains an optional filter
-        elsefilter: true,
-        symbolizer:
-        {}
-      }
-
-    )
-
-
-  ]
-});
- */
 
 const WP_TWO_BUOYS = 0;
 const WP_ONE_BUOY = 1;
@@ -1544,7 +1249,7 @@ const PM_VBVMG = 5;
 function SendVLMBoatWPPos(Boat, P)
 {
   var orderdata = {
-    idu: Boat.IdBoat,
+    idu: Boat.IdBoat(),
     pip:
     {
       targetlat: P.Lat.Value,
@@ -1554,7 +1259,7 @@ function SendVLMBoatWPPos(Boat, P)
 
   };
 
-  PostBoatSetupOrder(Boat.IdBoat, 'target_set', orderdata);
+  PostBoatSetupOrder(Boat.IdBoat(), 'target_set', orderdata);
 }
 
 function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
@@ -1575,7 +1280,7 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
     case PM_HEADING:
     case PM_ANGLE:
       request = {
-        idu: _CurPlayer.CurBoat.IdBoat,
+        idu: _CurPlayer.CurBoat.IdBoat(),
         pim: Mode,
         pip: AngleOrLon
       };
@@ -1585,7 +1290,7 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
     case PM_VBVMG:
     case PM_VMG:
       request = {
-        idu: _CurPlayer.CurBoat.IdBoat,
+        idu: _CurPlayer.CurBoat.IdBoat(),
         pim: Mode,
         pip:
         {
@@ -1594,7 +1299,6 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
           targetandhdg: WPAt
         }
       };
-      //PostBoatSetupOrder (_CurPlayer.CurBoat.IdBoat,"target_set",request);
       break;
 
     default:
@@ -1603,7 +1307,7 @@ function SendVLMBoatOrder(Mode, AngleOrLon, Lat, WPAt)
   }
 
   // Post request
-  PostBoatSetupOrder(_CurPlayer.CurBoat.IdBoat, verb, request);
+  PostBoatSetupOrder(_CurPlayer.CurBoat.IdBoat(), verb, request);
 
 
 }
@@ -1803,7 +1507,7 @@ function DrawOpponents(Boat)
   // Sort racers to be able to show proper opponents
   SortRankingData(Boat, 'RAC', null, Boat.Engaged);
 
-  if (Boat.Engaged && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking)
+  if (Boat.Engaged() && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking)
   {
     let count = 0;
     for (index in Rankings[Boat.Engaged].RacerRanking)
@@ -2087,7 +1791,7 @@ function ShowOpponentPopupInfo(e)
 
 function UpdatePictoFriendStatus(OppId)
 {
-  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.IdBoat == OppId)
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat().idboat() == OppId)
   {
     $("#PictoSetFriend").addClass("hidden");
   }
@@ -2161,7 +1865,7 @@ function GetOppBoat(BoatId)
 {
   let CurBoat = _CurPlayer.CurBoat;
 
-  if (CurBoat && CurBoat.IdBoat === BoatId)
+  if (CurBoat && CurBoat.IdBoat() === BoatId)
   {
     return CurBoat.VLMInfo;
   }
@@ -2489,7 +2193,7 @@ function DeletePilotOrder(Boat, OrderId)
 {
   $.post("/ws/boatsetup/pilototo_delete.php?", "parms=" + JSON.stringify(
     {
-      idu: Boat.IdBoat,
+      idu: Boat.IdBoat(),
       taskid: parseInt(OrderId)
     }),
     function(e)
@@ -2505,11 +2209,11 @@ function DeletePilotOrder(Boat, OrderId)
 function UpdateBoatPrefs(Boat, NewVals)
 {
   // Avoid sending invalid stuff to the server
-  if (typeof Boat === "undefined" || typeof Boat.IdBoat === "undefined" || typeof NewVals === "undefined")
+  if (typeof Boat === "undefined" || typeof Boat.IdBoat() === "undefined" || typeof NewVals === "undefined")
   {
     return;
   }
-  NewVals.idu = Boat.IdBoat;
+  NewVals.idu = Boat.IdBoat();
   $.post("/ws/boatsetup/prefs_set.php", "parms=" + JSON.stringify(NewVals),
     function(e)
     {
@@ -2538,7 +2242,7 @@ function LoadVLMPrefs()
 
   SetDDTheme(VLM2Prefs.CurTheme);
 
-  $.get("/ws/boatinfo/prefs.php?idu=" + Boat.IdBoat, HandlePrefsLoaded);
+  $.get("/ws/boatinfo/prefs.php?idu=" + Boat.IdBoat(), HandlePrefsLoaded);
 }
 
 function SaveVLMPrefs(Prefs)
@@ -2551,7 +2255,7 @@ function SaveVLMPrefs(Prefs)
   let Boat = _CurPlayer.CurBoat;
 
   let Payload = {
-    idu: Boat.IdBoat,
+    idu: Boat.IdBoat(),
     prefs: Prefs
   };
 

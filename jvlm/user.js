@@ -4,10 +4,66 @@
  function Boat(vlmboat)
  {
    // Default init
-   this.IdBoat = -1;
-   this.Engaged = false;
-   this.BoatName = '';
-   this.BoatPseudo = '';
+   this.IdBoat = function()
+   {
+     if (this.VLMInfo)
+     {
+       if (typeof this.VLMInfo.IDU === "string")
+       {
+         this.VLMInfo.IDU = parseInt(this.VLMInfo.IDU, 10);
+       }
+       return this.VLMInfo.IDU;
+     }
+     else
+     {
+       return null;
+     }
+   };
+
+   this.Engaged = function()
+   {
+     if (this.VLMInfo)
+     {
+       if (typeof this.VLMInfo.engaged === "undefined" && this.VLMInfo.RAC)
+       {
+         this.VLMInfo.engaged = parseInt(this.VLMInfo.RAC, 10);
+       }
+       return this.VLMInfo.engaged;
+     }
+     else
+     {
+       return 0;
+     }
+   };
+
+   this.BoatName = function()
+   {
+     if (this.VLMInfo)
+     {
+       if (!this.VLMInfo.boatname && this.VLMInfo.IDB)
+       {
+         this.VLMInfo.boatname = this.VLMInfo.IDB;
+       }
+       return this.VLMInfo.boatname;
+     }
+     else
+     {
+       return null;
+     }
+   };
+
+   this.BoatPseudo = function()
+   {
+     if (this.VLMInfo)
+     {
+       return this.VLMInfo.boatpseudo;
+     }
+     else
+     {
+       return null;
+     }
+   };
+
    this.VLMInfo = {}; // LastBoatInfoResult
    this.RaceInfo = {}; // Race Info for the boat
    this.Exclusions = []; // Exclusions Zones for this boat
@@ -23,11 +79,17 @@
 
    if (typeof vlmboat !== 'undefined')
    {
-     this.IdBoat = vlmboat.idu;
-     this.Engaged = vlmboat.engaged;
-     this.BoatName = vlmboat.boatname;
-     this.BoatPseudo = vlmboat.boatpseudo;
-     this.VLMInfo = vlmboat.VLMInfo;
+     this.VLMInfo.IDU = vlmboat.idu;
+     this.VLMInfo.boatname = vlmboat.boatname;
+     this.VLMInfo.boatpseudo = vlmboat.boatpseudo;
+     if (vlmboat.engaged || vlmboat.engaged === 0)
+     {
+       this.VLMInfo.engaged = vlmboat.engaged;
+     }
+     else if (vlmboat.RAC)
+     {
+       this.VLMInfo.engaged = parseInt(vlmboat.RAC, 10);
+     }
      this.RaceInfo = vlmboat.RaceInfo;
      this.Exclusions = vlmboat.Exclusions;
      this.Track = vlmboat.Track;
@@ -79,8 +141,8 @@
      else
      {
        // No Second buoy, compute segment end
-      let Dest = Compute2ndBuoyOfGate(Gate);
-      P2 = new VLMPosition( Dest.Lon.Value, Dest.Lat.Value);
+       let Dest = Compute2ndBuoyOfGate(Gate);
+       P2 = new VLMPosition(Dest.Lon.Value, Dest.Lat.Value);
      }
 
      return {
@@ -244,7 +306,7 @@
    }
  }
 
-var _CurPlayer=new User();
+ var _CurPlayer = new User();
 
  function IsLoggedIn()
  {
@@ -302,9 +364,9 @@ var _CurPlayer=new User();
        },
        function(result)
        {
-         var LoginResult = JSON.parse(result);
-         var CurLoginStatus = _IsLoggedIn;
-         var CurBoatID = null;
+         let LoginResult = JSON.parse(result);
+         let CurLoginStatus = _IsLoggedIn;
+         let CurBoatID = null;
 
 
          if (CurLoginStatus)
@@ -318,7 +380,7 @@ var _CurPlayer=new User();
 
          if (CurBoatID)
          {
-           SetCurrentBoat(GetBoatFromIdu(select), false);
+           SetCurrentBoat(GetBoatFromIdu(CurBoatID), false);
          }
        }
      );
@@ -395,8 +457,6 @@ var _CurPlayer=new User();
          _CurPlayer.PlayerName = result.profile.playername;
 
          $.get("/ws/playerinfo/fleet_private.php", HandleFleetInfoLoaded);
-
-         RefreshPlayerMenu();
        }
        else
        {
@@ -431,7 +491,7 @@ var _CurPlayer=new User();
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
      {
        _CurPlayer.Fleet[boat] = (new Boat(result.fleet[boat]));
-       if (!select || (select && !select.Engaged && _CurPlayer.Fleet[boat].Engaged))
+       if (!select || (select && !select.Engaged() && _CurPlayer.Fleet[boat].Engaged))
        {
          select = _CurPlayer.Fleet[boat];
        }
@@ -439,7 +499,7 @@ var _CurPlayer=new User();
      _CurPlayer.FleetSize += 1;
    }
 
-   $("#FleetSizeInfo").text ( " (" + _CurPlayer.FleetSize + "/"+_CurPlayer.MaxFleetSize + ')');
+   $("#FleetSizeInfo").text(" (" + _CurPlayer.FleetSize + "/" + _CurPlayer.MaxFleetSize + ')');
 
    if (typeof _CurPlayer.fleet_boatsit === "undefined")
    {
@@ -458,7 +518,7 @@ var _CurPlayer=new User();
    if (typeof select !== "undefined" && select)
    {
      DisplayCurrentDDSelectedBoat(select);
-     SetCurrentBoat(GetBoatFromIdu(select), true);
+     SetCurrentBoat(select, true);
      RefreshCurrentBoat(true, false);
    }
  }
@@ -481,7 +541,7 @@ var _CurPlayer=new User();
        AddBoatToSelector(_CurPlayer.BSFleet[boat], false);
      }
    }
-
+   UpdateBoatList();
    DisplayLoggedInMenus(true);
    HideBgLoad("#PbLoginProgress");
  }
@@ -524,7 +584,7 @@ var _CurPlayer=new User();
 
    for (let boat in BoatsArray)
    {
-     if (BoatsArray[boat] && (BoatsArray[boat].IdBoat === Id))
+     if (BoatsArray[boat] && (BoatsArray[boat].IdBoat() === Id))
      {
        return BoatsArray[boat];
      }

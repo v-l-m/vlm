@@ -86,12 +86,14 @@ class Race
             let RI = VLM2Prefs.GetRaceFromStorage(RaceId);
             RI.LastUpdate = new Date();
             VLM2Prefs.Save();
+            
           }
           else
           {
             let Msg = data.error.msg + '\n' + data.error.custom_error_string;
             VLMAlertDanger(Msg);
           }
+          SetCurrentBoat(BoatId);
         }
       );
     };
