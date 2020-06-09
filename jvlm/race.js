@@ -93,7 +93,7 @@ class Race
             let Msg = data.error.msg + '\n' + data.error.custom_error_string;
             VLMAlertDanger(Msg);
           }
-          SetCurrentBoat(BoatId);
+          SetCurrentBoat(GetBoatFromIdu(BoatId));
         }
       );
     };

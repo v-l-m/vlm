@@ -94,7 +94,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
             }
           }
 
-          
+
           // force refresh of settings if was not initialized
           if (NeedPrefsRefresh)
           {
@@ -103,7 +103,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
 
           // Update Boat Icon and Name Display
           UpdateBoatList(Boat);
-            
+
           // update map if racing
           if (Boat.VLMInfo.RAC !== "0")
           {
@@ -204,7 +204,7 @@ function GetTrackFromServer(Boat)
 {
   var end = Math.floor(new Date() / 1000);
   var start = end - 48 * 3600;
-  $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat()+ "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end, function(result)
+  $.get("/ws/boatinfo/tracks_private.php?idu=" + Boat.IdBoat() + "&idr=" + Boat.VLMInfo.RAC + "&starttime=" + start + "&endtime=" + end, function(result)
   {
     if (result.success)
     {
@@ -613,12 +613,15 @@ function DrawBoatTrack(Boat, RaceFeatures)
 {
   let PointList = GetSafeTrackPointList(Boat.Track);
 
-  var TrackColor = Boat.VLMInfo.COL;
+  let TrackColor = Boat.VLMInfo.COL;
   TrackColor = SafeHTMLColor(TrackColor);
   let TrackFeature = RaceFeatures.BoatTrack;
   if (TrackFeature)
   {
-    TrackFeature.setLatLngs(PointList);
+    TrackFeature.setLatLngs(PointList).setStyle(
+    {
+      color: TrackColor
+    });
   }
   else
   {
@@ -1474,7 +1477,7 @@ function DrawOpponents(Boat)
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowTopN:
     case VLM2Prefs.MapPrefs.MapOppShowOptions.ShowSel:
       let BoatCount = 0;
-      let RaceID = Boat.Engaged;
+      let RaceID = Boat.Engaged();
       MAX_LEN = VLM2Prefs.MapPrefs.ShowTopCount;
 
       BoatList = [];
@@ -1505,16 +1508,16 @@ function DrawOpponents(Boat)
   }
 
   // Sort racers to be able to show proper opponents
-  SortRankingData(Boat, 'RAC', null, Boat.Engaged);
+  SortRankingData(Boat, 'RAC', null, Boat.Engaged());
 
-  if (Boat.Engaged() && typeof Rankings[Boat.Engaged] !== "undefined" && typeof Rankings[Boat.Engaged].RacerRanking !== "undefined" && Rankings[Boat.Engaged].RacerRanking)
+  if (Boat.Engaged() && typeof Rankings[Boat.Engaged()] !== "undefined" && typeof Rankings[Boat.Engaged()].RacerRanking !== "undefined" && Rankings[Boat.Engaged()].RacerRanking)
   {
     let count = 0;
-    for (index in Rankings[Boat.Engaged].RacerRanking)
+    for (index in Rankings[Boat.Engaged()].RacerRanking)
     {
-      if (index in Rankings[Boat.Engaged].RacerRanking)
+      if (index in Rankings[Boat.Engaged()].RacerRanking)
       {
-        let Opp = Rankings[Boat.Engaged].RacerRanking[index];
+        let Opp = Rankings[Boat.Engaged()].RacerRanking[index];
         if (RnkIsRacing(Opp))
         {
           let IsFriend = OppIsFriend(Boat, Opp.idusers);
@@ -1791,7 +1794,11 @@ function ShowOpponentPopupInfo(e)
 
 function UpdatePictoFriendStatus(OppId)
 {
-  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat().idboat() == OppId)
+  if (typeof OppId === "string")
+  {
+    OppId = parseInt(OppId, 10);
+  }
+  if (_CurPlayer && _CurPlayer.CurBoat && _CurPlayer.CurBoat.IdBoat() === OppId)
   {
     $("#PictoSetFriend").addClass("hidden");
   }
@@ -1854,7 +1861,7 @@ function OppIsFriend(Boat, id)
   if (Boat && Boat.VLMPrefs && Boat.VLMPrefs.mapPrefOpponents)
   {
     let Friends = _CurPlayer.CurBoat.VLMPrefs.mapPrefOpponents.split(",");
-    return $.inArray(id, Friends) !== -1;
+    return $.inArray("" + id, Friends) !== -1;
 
   }
   return false;
@@ -1999,7 +2006,7 @@ function HandleOpponentMouseOut(e)
 
   if (OppIndex)
   {
-    clearTimeout( RaceFeatures.Opponents[OppIndex].PopupTimeOut);
+    clearTimeout(RaceFeatures.Opponents[OppIndex].PopupTimeOut);
   }
 }
 
@@ -2060,9 +2067,9 @@ function DrawOpponentTrack(IdBoat, OppInfo, HideTrack = false)
       {
         for (let index in B.OppList)
         {
-          if (B.OppList[index].idusers==IdBoat)
+          if (B.OppList[index].idusers == IdBoat)
           {
-            OppInfo.Color=B.OppList[index].color;
+            OppInfo.Color = B.OppList[index].color;
             break;
           }
         }

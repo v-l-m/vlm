@@ -162,7 +162,8 @@ function GetOpponentMarker(OppData)
     iconSize: [OppData.IsFriend, OppData.IsFriend]
   });
 
-  ret.MarkerOppId = OppData.idboat();
+  ret.MarkerOppId = OppData.idboat;
+
 
   return ret;
 }

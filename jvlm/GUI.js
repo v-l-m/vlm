@@ -1475,7 +1475,7 @@ function UpdateBoatList(SingleBoat)
     return;
   }
 
-  let Fleet= _CurPlayer.Fleet.concat(_CurPlayer.BSFleet);
+  let Fleet = _CurPlayer.Fleet.concat(_CurPlayer.BSFleet);
 
   for (let index in Fleet)
   {
@@ -1526,7 +1526,7 @@ function GetBoatInfoLine(Boat, IsFleet)
   var Line = '<div boatid=' + Boat.IdBoat() + '>';
   var BoatStatus = "BStatus_Racing";
 
-  if (!Boat.Engaged)
+  if (!Boat.Engaged())
   {
     BoatStatus = "BStatus_Docked";
   }
