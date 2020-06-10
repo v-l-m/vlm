@@ -2754,12 +2754,12 @@ function PageClock()
   {
 
     // Display race clock if a racing boat is selected
-    var CurBoat = _CurPlayer.CurBoat;
+    let CurBoat = _CurPlayer.CurBoat;
 
     if (typeof CurBoat !== "undefined" && typeof CurBoat.RaceInfo !== "undefined")
     {
-      var ClockValue = GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
-      var Chrono = $(".RaceChrono");
+      let ClockValue = GetRaceClock(CurBoat.RaceInfo, CurBoat.VLMInfo.UDT);
+      let Chrono = $(".RaceChrono");
       if (ClockValue < 0)
       {
         Chrono.removeClass("ChronoRaceStarted").addClass("ChronoRacePending");
@@ -2782,6 +2782,27 @@ function PageClock()
       $("#pbar_innerdivvac").css("width", +Math.round((TimeToNextUpdate % 60) * 100.0 / 60.0) + "px");
       $("#pbar_innerdivmin").css("width", Math.round((TimeToNextUpdate / TotalVac) * 100.0) + "px");
 
+      if (CurBoat.VLMInfo && CurBoat.VLMInfo['S&G'])
+      {
+        let PenEnd = moment(CurBoat.VLMInfo['S&G'] * 1000);
+        let CurTick = moment();
+        if (CurTick < PenEnd)
+        {
+          $("#PenaltyDuration").text(CurTick.to(PenEnd));
+          $(".RaceChrono").addClass("hidden");
+          $("#PenaltyBadge").removeClass("hidden");
+        }
+        else
+        {
+          $("#PenaltyBadge").addClass("hidden");
+          $(".RaceChrono").removeClass("hidden");
+        }
+      }
+      else
+      {
+        $("#PenaltyBadge").addClass("hidden");
+         $(".RaceChrono").removeClass("hidden");
+      }
       Chrono.text(GetFormattedChronoString(ClockValue));
     }
   }

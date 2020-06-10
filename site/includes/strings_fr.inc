@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'PenaltyEnd' => 'Fin de pénalité ',
     'RaceClosed' => 'Course terminée ',
     'No Empty Name' => 'Le nom du bateau ne peut pas être vide',
     'ConfirmBoatName' => 'Etes vous sur de vouloir créer un nouveau bateau nommé : %s',
