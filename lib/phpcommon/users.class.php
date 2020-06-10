@@ -517,22 +517,19 @@ class users extends baseClass
 
   function GetUserPalmares($PlayerPalmares=false)
   {
-    // search for old races for this user or player according to flag
-    $query = " from races_results inner join races on races.idraces = races_results.idraces " ;
-    $query .= " inner join playerstousers P1 on P1.idusers = ". $this->idusers." and linktype = 1 ";
-      
+    
     if ($PlayerPalmares)
     {
-      $query .= " inner join playerstousers P2 on P2.idPlayers = P1.idplayers and P2.linktype = 1 and P2.idusers = races_results.idusers ";
-      $query = " SELECT P2.idusers idusers,races.idraces idrace, races.racename racename " . $query;    
+      $query = "select P1.idusers idusers,R.idraces idrace,R.racename racename from playerstousers P1 join playerstousers P2 on P1.idplayers=P2.idPlayers join races_results RR ";
+      $query .= " on RR.idusers=P1.idusers join races R on R.idraces=RR.idraces where P2.linktype=1 and P2.idusers=". $this->idusers;  
     }
     else
     {
-      $query .= " and linktype = 1 and P1.idusers= races_results.idusers ";
-      $query = " SELECT P1.idusers idusers,races.idraces idrace, races.racename racename " . $query;
+      $query = "select P1.idusers idusers,R.idraces idrace,R.racename racename from playerstousers P1 join races_results RR  on RR.idusers=P1.idusers join races R on R.idraces=RR.idraces ";
+      $query .= "where P1.linktype=1 and P1.idusers=". $this->idusers;
     }
 
-    $query .=" where P1.idusers = ". $this->idusers ."   ORDER BY (races_results.deptime+duration) DESC;";
+    $query .="   ORDER BY (RR.deptime+duration) DESC;";
 
     //echo $query;
     $result = wrapper_mysql_db_query_reader($query);
