@@ -3,9 +3,16 @@
     include ("htmlstart.php");
     include_once ("functions.php");
 
-    $idflags = "".get_cgi_var('idflags', ''); 
+    $idflags = trim("".get_cgi_var('idflags', '')); 
+
+    
 
     if (get_cgi_var("action") == "upload") {
+        if ($idflags == "")
+        {
+            die("<h1> No Empty names for flags</h1>");
+        }
+        
         if (function_exists("exif_imagetype") and exif_imagetype($_FILES['fic']['tmp_name']) != IMAGETYPE_PNG) {
             die("<h1>ERROR : Not a PNG file...</h1>");
         }  
