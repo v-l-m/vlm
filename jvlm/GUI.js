@@ -2801,7 +2801,7 @@ function PageClock()
       else
       {
         $("#PenaltyBadge").addClass("hidden");
-         $(".RaceChrono").removeClass("hidden");
+        $(".RaceChrono").removeClass("hidden");
       }
       Chrono.text(GetFormattedChronoString(ClockValue));
     }
@@ -3754,7 +3754,7 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
   let rnk = 1;
   let index = 0;
 
-  
+
   if (Boat && Boat.IdBoat && Rankings && Rankings[RaceId])
   {
     for (index in Rankings[RaceId].RacerRanking)
@@ -4087,6 +4087,8 @@ function FillRacingRanking(Boat, Friends)
     Arrived1stTime: null,
     Racer1stPos: null
   };
+  let PrevDuration = 0;
+  let BoatRank = 0;
 
   BackupRankingTable();
 
@@ -4107,23 +4109,32 @@ function FillRacingRanking(Boat, Friends)
 
         if (RnkIsArrived(RnkBoat) || RnkIsRacing(RnkBoat))
         {
-          if (!Refs.Arrived1stTime && RnkIsArrived(RnkBoat))
+          if (RnkIsArrived(RnkBoat))
           {
-            // First arrived, store time
-            Refs.Arrived1stTime = parseInt(RnkBoat.duration, 10);
-          }
+            if (!PrevDuration || parseInt(RnkBoat.duration, 10) !== PrevDuration)
+            {
+              PrevDuration = parseInt(RnkBoat.duration, 10);
+              BoatRank += 1;
+            }
 
-          if (RnkIsRacing(RnkBoat) && (!Refs.Racer1stPos || RnkBoat.nwp !== CurWP))
+            if (!Refs.Arrived1stTime)
+            {
+              // First arrived, store time
+              Refs.Arrived1stTime = parseInt(RnkBoat.duration, 10);
+            }
+          }
+          else if (RnkIsRacing(RnkBoat) && (!Refs.Racer1stPos || RnkBoat.nwp !== CurWP))
           {
             Refs.Racer1stPos = RnkBoat.dnm;
             CurWP = RnkBoat.nwp;
+            BoatRank += 1;
           }
-          Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, null, Friends, Refs));
         }
         else
         {
           break;
         }
+        Rows.push(GetRankingObject(RnkBoat, BoatRank, null, Friends, Refs));
       }
     }
   }
