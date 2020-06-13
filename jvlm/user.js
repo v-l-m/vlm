@@ -439,7 +439,7 @@
 
  }
 
- function GetPlayerInfo()
+ function GetPlayerInfo(ShowIdu)
  {
    ShowBgLoad();
    $.get("/ws/playerinfo/profile.php",
@@ -456,7 +456,10 @@
          _CurPlayer.IsAdmin = result.profile.admin;
          _CurPlayer.PlayerName = result.profile.playername;
 
-         $.get("/ws/playerinfo/fleet_private.php", HandleFleetInfoLoaded);
+         $.get("/ws/playerinfo/fleet_private.php", function(e, ShowIdu)
+         {
+           HandleFleetInfoLoaded(e, ShowIdu);
+         });
        }
        else
        {
@@ -470,7 +473,7 @@
 
  }
 
- function HandleFleetInfoLoaded(result)
+ function HandleFleetInfoLoaded(result, ShowIdu)
  {
    let i = result;
    let select = null;

@@ -2352,6 +2352,7 @@ function CheckAndCreateNewBoat(e)
   if (!NewBoatName || NewBoatName === "")
   {
     VLMAlertDanger(GetLocalizedString("No Empty Name"));
+    return;
   }
   new MsgBox().Show(MsgBox.MSGBOX_YESNO, Title, Msg, OnRenameOK);
 
@@ -2376,6 +2377,7 @@ function OnRenameOK()
       else
       {
         VLMAlertInfo(GetLocalizedString('Your boat has been created', e.BoatName));
+        GetPlayerInfo(e.idu);
       }
     });
 }
