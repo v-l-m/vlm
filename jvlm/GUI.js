@@ -3754,7 +3754,8 @@ function SortRankingData(Boat, SortType, WPNum, RaceId)
   let rnk = 1;
   let index = 0;
 
-  if (Rankings && Rankings[RaceId])
+  
+  if (Boat && Boat.IdBoat && Rankings && Rankings[RaceId])
   {
     for (index in Rankings[RaceId].RacerRanking)
     {
@@ -3812,7 +3813,7 @@ function FillWPRanking(Boat, WPNum, Friends)
       if (RnkBoat.WP && RnkBoat.WP[WPNum - 1])
       {
         Rows.push(GetRankingObject(RnkBoat, parseInt(index, 10) + 1, WPNum, Friends));
-        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }
@@ -4099,7 +4100,7 @@ function FillRacingRanking(Boat, Friends)
       {
         let RnkBoat = Rankings[RaceId].RacerRanking[index];
 
-        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
+        if (typeof Boat !== "undefined" && Boat && Boat.IdBoat && Boat.IdBoat() === parseInt(RnkBoat.idusers, 10))
         {
           RowNum = Rows.length;
         }

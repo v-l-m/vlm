@@ -494,7 +494,7 @@
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
      {
        _CurPlayer.Fleet[boat] = (new Boat(result.fleet[boat]));
-       if (!select || (select && !select.Engaged() && _CurPlayer.Fleet[boat].Engaged()))
+       if (ShowIdu === boat || !select || (select && !select.Engaged() && _CurPlayer.Fleet[boat].Engaged()))
        {
          select = _CurPlayer.Fleet[boat];
        }
