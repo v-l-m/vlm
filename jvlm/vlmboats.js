@@ -295,6 +295,7 @@ function GetRaceInfoFromServer(Boat, TargetTab)
       }
     }
     DrawRaceGates(Boat);
+    FillRaceInstructions(Boat.RaceInfo);
     UpdateInMenuRacingBoatInfo(Boat, TargetTab);
   });
 }
