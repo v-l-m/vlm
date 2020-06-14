@@ -33,3 +33,6 @@ VLMRACINE=/base/de/vlm
 
 #Cron Daily
 3 2 * * * $VLMRACINE/vlmcode/moteur/cron-vlm-cleannews.sh
+41 1 * * *  $VLMRACINE/vlmcode/moteur/cron-vlm-daily-clean.sh
+
+

@@ -2,7 +2,7 @@
 ##=================================================================
 ##   DOIT ETRE APPELE REGLIEREMENT A PARTIR DE LA 0.12           ##
 ##=================================================================
-#VLMRACINE=/base/de/vlm #A configurer normalement fans le crontab
+#VLMRACINE=/base/de/vlm #A configurer normalement dans le crontab
 
 MAXMOTEURTIME=120
 
@@ -52,8 +52,4 @@ cd $VLMLOG
 [ $(pwd) == "$VLMLOG" ] && find . -name "*--cronvlm-clean.log.gz" -mtime +$LOGFILE_MAX_AGE -exec rm -f {} +;
 #===8<===
 
-#purge des fichiers cachés non accédé depuis 30 jours.
-cd $VLMRACINE/cache
-nice /usr/bin/find ./gribtiles ./gshhstiles ./minimaps ./racemaps ./tinymaps ./tracks -type f -atime +30 -exec rm -f {} +;
-nice /usr/bin/find ./gribtiles/* ./gshhstiles/* ./minimaps/* ./racemaps/* ./tinymaps/* ./tracks/* -type d -empty -delete | grep -v "No such file"
 
