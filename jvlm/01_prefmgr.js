@@ -4,6 +4,7 @@ class PrefMgr
 {
   constructor()
   {
+    const DefaultZoom = 4;
     this.CurTheme = "bleu-noir";
     this.MapPrefs = new MapPrefs();
     this.GConsentDate = null;
@@ -12,22 +13,61 @@ class PrefMgr
     this.InputDigits = 3;
     this.RacesStorageLUT = [];
     this.VLMRacesStorage = [];
+    this.LastSelBoat = null;
+    this.BoatPrefs = [];
+    this.AdvancedStats = false;
 
-    this.ClearRaceData= function(RaceId)
+    this.GetLastZoom = function(IdBoat)
+    {
+      if (this.BoatPrefs)
+      {
+        for (let index in this.BoatPrefs)
+        {
+          if (this.BoatPrefs[index] && this.BoatPrefs[index].idu === IdBoat)
+          {
+            return this.BoatPrefs[index].LastZoom;
+          }
+        }
+
+      }
+      return DefaultZoom;
+    };
+
+    this.SetLastZoom = function(IdBoat, Zoom)
+    {
+      if (!this.BoatPrefs)
+      {
+        this.BoatPrefs = [];
+      }
+      for (let index in this.BoatPrefs)
+      {
+        if (this.BoatPrefs[index] && this.BoatPrefs[index].idu===IdBoat )
+        {
+          this.BoatPrefs[index].LastZoom = Zoom;
+          this.Save();
+          return;
+        }
+      }
+      let Info = {idu:IdBoat,LastZoom:Zoom};
+      this.BoatPrefs.push(Info);
+      this.Save();
+    };
+
+    this.ClearRaceData = function(RaceId)
     {
       if (this.RacesStorageLUT[RaceId])
       {
-        VLM2Prefs.VLMRacesStorage.splice(this.RacesStorageLUT[RaceId],1);
-        this.RacesStorageLUT.splice(RaceId,1);
+        VLM2Prefs.VLMRacesStorage.splice(this.RacesStorageLUT[RaceId], 1);
+        this.RacesStorageLUT.splice(RaceId, 1);
         this.Save();
       }
-      
+
       return;
     };
 
     this.HasRaceStorage = function(RaceId)
     {
-      return typeof  this.RacesStorageLUT !== "undefined" && typeof  this.RacesStorageLUT[RaceId] !== "undefined";
+      return typeof this.RacesStorageLUT !== "undefined" && typeof this.RacesStorageLUT[RaceId] !== "undefined";
     };
 
     this.Init = function()
@@ -42,7 +82,18 @@ class PrefMgr
       {
         this.GConsentDate = LoadLocalPref("GConsentDate", null);
         this.GConsentLastNo = LoadLocalPref("GConsentLastNo", null);
-        this.AdvancedStats = LoadLocalPref("AdvancedStats",false);
+        this.AdvancedStats = LoadLocalPref("AdvancedStats", false);
+        this.LastSelBoat = LoadLocalPref("LastSelBoat", null);
+        this.BoatPrefs = [];
+        try
+        {
+          this.BoatPrefs = JSON.parse(LoadLocalPref("BoatPrefs", "[]"));
+        }
+        catch (e)
+        {
+          this.BoatPrefs = [];
+        }
+
         try
         {
           // Work around json errors or tampering
@@ -79,9 +130,11 @@ class PrefMgr
       store.set("GConsentDate", this.GConsentDate);
       store.set("GConsentLastNo", this.GConsentLastNo);
       store.set("VLMRacesStorage", JSON.stringify(this.VLMRacesStorage));
+      store.set("BoatPrefs", JSON.stringify(this.BoatPrefs));
       store.set("InputDigits", this.InputDigits);
       store.set("AdvancedStats", this.AdvancedStats);
-
+      store.set("LastSelBoat", this.LastSelBoat);
+      
     };
 
     this.UpdateVLMPrefs = function(p)
@@ -127,7 +180,7 @@ class PrefMgr
         let RaceStorage = new Race(RaceId);
         let index = this.VLMRacesStorage.length;
         this.VLMRacesStorage[index] = RaceStorage;
-        this.RacesStorageLUT[RaceId]=index;
+        this.RacesStorageLUT[RaceId] = index;
         this.Save();
         return RaceStorage;
       }
@@ -171,6 +224,7 @@ class MapPrefs
         this.EstTrackMouse = LoadLocalPref("#EstTrackMouse", true);
         this.TrackEstForecast = LoadLocalPref("#TrackEstForecast", false);
         this.PolarVacCount = LoadLocalPref("#PolarVacCount", 12);
+
         if (!this.PolarVacCount)
         {
           // Fallback if invalid value is stored
@@ -212,7 +266,7 @@ class MapPrefs
       let NewVals = {
         mapOpponents: MapPrefVal
       };
-      if ((typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof NewVals!== "undefined") && NewVals)
+      if ((typeof _CurPlayer !== "undefined") && _CurPlayer && (typeof NewVals !== "undefined") && NewVals)
       {
         UpdateBoatPrefs(_CurPlayer.CurBoat,
         {

@@ -22,8 +22,6 @@ function SetCurrentBoat(Boat, CenterMapOnBoat, ForceRefresh, TargetTab)
   CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab);
 }
 
-var BoatLoading = new Date(0);
-
 function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab)
 {
   // Check Params.
@@ -43,9 +41,7 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
   }
 
   //if ((CurDate > BoatLoading) && (ForceRefresh || CurDate >= Boat.NextServerRequestDate))
-  //if ((ForceRefresh) || (CurDate >= Boat.NextServerRequestDate))
   {
-    BoatLoading = CurDate + 3000;
     console.log("Loading boat info from server....");
     // request current boat info
     ShowPb("#PbGetBoatProgress");
@@ -59,10 +55,11 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
+          VLM2Prefs.LastSelBoat = Boat.IdBoat();
+          VLM2Prefs.Save();
 
           // LoadPrefs
           LoadVLMPrefs();
-
           // Store BoatInfo, update map
           Boat.VLMInfo = result;
 
@@ -434,7 +431,7 @@ function ActualDrawBoat(Boat, CenterMapOnBoat)
   {
     if (typeof map !== "undefined" && map)
     {
-      map.setView([Boat.VLMInfo.LAT, Boat.VLMInfo.LON]);
+      map.setView([Boat.VLMInfo.LAT, Boat.VLMInfo.LON],VLM2Prefs.GetLastZoom(Boat.IdBoat()));
     }
   }
 
@@ -2217,25 +2214,28 @@ function DeletePilotOrder(Boat, OrderId)
 function UpdateBoatPrefs(Boat, NewVals)
 {
   // Avoid sending invalid stuff to the server
-  if (typeof Boat === "undefined" || typeof Boat.IdBoat() === "undefined" || typeof NewVals === "undefined")
+  if (typeof Boat === "undefined" || !Boat.IdBoat ||  typeof Boat.IdBoat() === "undefined" || typeof NewVals === "undefined")
   {
     return;
   }
   NewVals.idu = Boat.IdBoat();
+
+
   $.post("/ws/boatsetup/prefs_set.php", "parms=" + JSON.stringify(NewVals),
     function(e)
     {
-      if (e.success)
-      {
-        // avoid forced full round trip
-        RefreshCurrentBoat(false, false);
-      }
-      else
+
+      if (!e.success)
       {
         VLMAlertDanger("Save Prefs To Server " + GetLocalizedString("UpdateFailed"));
+        //'Force refresh, since something failed'
+        RefreshCurrentBoat(false, false);
       }
+
     }
+
   );
+
 }
 
 function LoadVLMPrefs()

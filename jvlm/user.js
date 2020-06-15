@@ -477,7 +477,8 @@
  {
    let i = result;
    let select = null;
-
+   let LastSelBoat = VLM2Prefs.LastSelBoat;
+   
    if (typeof _CurPlayer === 'undefined')
    {
      _CurPlayer = new User();
@@ -489,6 +490,7 @@
    }
 
    _CurPlayer.FleetSize = 0;
+
    for (let boat in result.fleet)
    {
      if (typeof _CurPlayer.Fleet[boat] === "undefined")
@@ -500,6 +502,11 @@
        }
      }
      _CurPlayer.FleetSize += 1;
+   }
+
+   if (result.fleet && result.fleet[LastSelBoat] && result.fleet[LastSelBoat].engaged)
+   {
+     select = GetBoatFromIdu(LastSelBoat);
    }
 
    $("#FleetSizeInfo").text(" (" + _CurPlayer.FleetSize + "/" + _CurPlayer.MaxFleetSize + ')');
@@ -522,7 +529,7 @@
    {
      DisplayCurrentDDSelectedBoat(select);
      SetCurrentBoat(select, true);
-     RefreshCurrentBoat(true, false);
+     RefreshCurrentBoat(true, false,null);
    }
  }
 

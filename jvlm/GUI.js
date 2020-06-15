@@ -267,6 +267,11 @@ function HandleMapGridZoom(e)
   let z = m.getZoom();
   let b = m.getBounds();
 
+  if (_CurPlayer.CurBoat && _CurPlayer.CurBoat.IdBoat && _CurPlayer.CurBoat.IdBoat())
+  {
+    VLM2Prefs.SetLastZoom(_CurPlayer.CurBoat.IdBoat(), z);
+  }
+
   let DX = b._northEast.lng - b._southWest.lng;
   let DY = b._northEast.lat - b._southWest.lat;
   let S = DX;
@@ -2882,7 +2887,7 @@ function GetFormattedChronoString(Value)
 
 function RefreshCurrentBoat(SetCenterOnBoat, ForceRefresh, TargetTab)
 {
-  var BoatIDSpan = $('.BoatDropDown > span');
+  let BoatIDSpan = $('.BoatDropDown > span');
 
   if (typeof BoatIDSpan !== "undefined" && typeof BoatIDSpan[0] !== "undefined" && ('BoatId' in BoatIDSpan[0].attributes || 'boatid' in BoatIDSpan[0].attributes))
   {
