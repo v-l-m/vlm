@@ -2,8 +2,8 @@
   "name": "vlm",
   "version": "0.1.0",
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
     "del": "^3.0.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^5.0.0",
