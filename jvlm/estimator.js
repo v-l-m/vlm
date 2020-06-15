@@ -306,6 +306,7 @@ class Estimator
       if (RaceComplete)
       {
         this.Stop();
+        VLM2Prefs.StoreEstimate(this.Boat.IdBoat(), this.EstimateTrack);
         return;
       }
       else

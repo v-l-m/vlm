@@ -530,7 +530,7 @@ function DrawBoatEstimateTrack(Boat, RaceFeatures)
             opacity: 1,
             color: TrackColors[index]
           };
-          RaceFeatures.EstimateTracks[index] = L.polyline(tracks[index], Options).addTo(map);
+          RaceFeatures.EstimateTracks[index] = L.polyline(tracks[index], Options).addTo(map);          
         }
       }
     }

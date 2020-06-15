@@ -17,40 +17,70 @@ class PrefMgr
     this.BoatPrefs = [];
     this.AdvancedStats = false;
 
+    this.GetBoatPrefEntry = function(idu)
+    {
+      if (!this.BoatPrefs)
+      {
+        this.BoatPrefs = [];
+        return null;
+      }
+
+      for (let index in this.BoatPrefs)
+      {
+        if (this.BoatPrefs[index] && this.BoatPrefs[index].idu === idu)
+        {
+          return this.BoatPrefs[index];
+        }
+      }
+
+      return null;
+    }
     this.GetLastZoom = function(IdBoat)
     {
-      if (this.BoatPrefs)
-      {
-        for (let index in this.BoatPrefs)
-        {
-          if (this.BoatPrefs[index] && this.BoatPrefs[index].idu === IdBoat)
-          {
-            return this.BoatPrefs[index].LastZoom;
-          }
-        }
+      let Pref = this.GetBoatPrefEntry(IdBoat);
 
+      if (Pref)
+      {
+        return Pref.LastZoom;
       }
       return DefaultZoom;
     };
 
     this.SetLastZoom = function(IdBoat, Zoom)
     {
-      if (!this.BoatPrefs)
+      let Pref = this.GetBoatPrefEntry(IdBoat);
+
+      if (Pref)
       {
-        this.BoatPrefs = [];
+        Pref.LastZoom = Zoom;
       }
-      for (let index in this.BoatPrefs)
+      else
       {
-        if (this.BoatPrefs[index] && this.BoatPrefs[index].idu===IdBoat )
-        {
-          this.BoatPrefs[index].LastZoom = Zoom;
-          this.Save();
-          return;
-        }
+        let Info = {
+          idu: IdBoat,
+          LastZoom: Zoom
+        };
+        this.BoatPrefs.push(Info);
       }
-      let Info = {idu:IdBoat,LastZoom:Zoom};
-      this.BoatPrefs.push(Info);
       this.Save();
+    };
+
+    this.StoreEstimate = function(idu, Estimate)
+    {
+      let Entry = this.GetBoatPrefEntry(idu);
+
+      if (Entry)
+      {
+        Entry.EstimateTrack = Estimate;
+      }
+      else
+      {
+        let Info = {
+          idu: IdBoat,
+          EstimateTrack: Estimate
+        };
+        this.BoatPrefs.push(Info);
+      }
     };
 
     this.ClearRaceData = function(RaceId)
@@ -134,7 +164,7 @@ class PrefMgr
       store.set("InputDigits", this.InputDigits);
       store.set("AdvancedStats", this.AdvancedStats);
       store.set("LastSelBoat", this.LastSelBoat);
-      
+
     };
 
     this.UpdateVLMPrefs = function(p)
