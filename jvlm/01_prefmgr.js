@@ -70,7 +70,7 @@ class PrefMgr
     {
       let Entry = this.GetBoatPrefEntry(idu);
 
-      if (Entry &&  Entry.EstimateTrack && Array.isArray(Entry.EstimateTrack))
+      if (Entry && Entry.EstimateTrack && Array.isArray(Entry.EstimateTrack))
       {
         try
         {
@@ -78,7 +78,7 @@ class PrefMgr
           {
             if (Entry.EstimateTrack[index] && typeof Entry.EstimateTrack[index].Date === "string")
             {
-              Entry.EstimateTrack[index].Date= moment(Entry.EstimateTrack[index].Date).toDate();
+              Entry.EstimateTrack[index].Date = moment(Entry.EstimateTrack[index].Date).toDate();
             }
 
           }
@@ -86,7 +86,7 @@ class PrefMgr
         }
         catch (e)
         {
-          console.log("Exception recovering TrackEstimate : "+ e);
+          console.log("Exception recovering TrackEstimate : " + e);
         }
       }
       else
@@ -111,7 +111,7 @@ class PrefMgr
         };
         this.BoatPrefs.push(Info);
       }
-      this.Save();
+      this.Save(true);
     };
 
     this.ClearRaceData = function(RaceId)
@@ -181,13 +181,16 @@ class PrefMgr
       }
     };
 
-    this.Save = function()
+    this.Save = function(LocalOnly)
     {
       if (store.enabled)
       {
         store.set('ColorTheme', this.CurTheme);
       }
-      this.MapPrefs.Save();
+      if (!LocalOnly)
+      {
+        this.MapPrefs.Save();
+      }
       store.set("GConsentDate", this.GConsentDate);
       store.set("GConsentLastNo", this.GConsentLastNo);
       store.set("VLMRacesStorage", JSON.stringify(this.VLMRacesStorage));

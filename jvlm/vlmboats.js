@@ -55,11 +55,11 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
           // Set Current Boat for player
           _CurPlayer.CurBoat = Boat;
 
-          VLM2Prefs.LastSelBoat = Boat.IdBoat();
-          VLM2Prefs.Save();
-
+          
           // LoadPrefs
           LoadVLMPrefs();
+          VLM2Prefs.LastSelBoat = Boat.IdBoat();
+          VLM2Prefs.Save(true);
           // Store BoatInfo, update map
           Boat.VLMInfo = result;
 

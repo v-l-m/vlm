@@ -70,8 +70,9 @@ class Estimator
         this.LastPctDraw = -1;
         //Estimate complete, DrawBoat track
         //DrawBoat(this.Boat);
-        this.ReportProgress(true);
+        this.ReportProgress(true);               
       }
+      VLM2Prefs.StoreTrackEstimate(this.Boat.IdBoat(), this.EstimateTrack);
       return;
     };
 
@@ -308,7 +309,6 @@ class Estimator
       if (RaceComplete)
       {
         this.Stop();
-        VLM2Prefs.StoreTrackEstimate(this.Boat.IdBoat(), this.EstimateTrack);
         return;
       }
       else
