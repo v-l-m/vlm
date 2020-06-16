@@ -4134,6 +4134,10 @@ function FillRacingRanking(Boat, Friends)
             CurWP = RnkBoat.nwp;
             BoatRank += 1;
           }
+          else
+          {
+            BoatRank += 1;
+          }
         }
         else
         {
