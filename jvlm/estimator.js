@@ -74,6 +74,7 @@ class Estimator
       }
       return;
     };
+
     this.Start = function(ProgressCallBack)
     {
       this.ProgressCallBack = ProgressCallBack;
@@ -144,6 +145,7 @@ class Estimator
       StatMGR.Stat("Estimator_Start");
       setTimeout(this.Estimate.bind(this), 0);
     };
+
     this.Estimate = function(Boat)
     {
       if (!this.Running || this.CurEstimate.Date >= this.MaxVacEstimate)
@@ -306,7 +308,7 @@ class Estimator
       if (RaceComplete)
       {
         this.Stop();
-        VLM2Prefs.StoreEstimate(this.Boat.IdBoat(), this.EstimateTrack);
+        VLM2Prefs.StoreTrackEstimate(this.Boat.IdBoat(), this.EstimateTrack);
         return;
       }
       else
@@ -315,6 +317,12 @@ class Estimator
         this.ReportProgress(false);
       }
     };
+
+    this.LoadTrack = function()
+    {
+      this.EstimateTrack=VLM2Prefs.GetTrackEstimate(this.Boat.IdBoat());
+    };
+
     this.GetPilotPoints = function()
     {
       let RetPoints = [];
@@ -329,6 +337,7 @@ class Estimator
       }
       return RetPoints;
     };
+
     this.GetNextRaceWP = function()
     {
       let NbWP = Object.keys(this.Boat.RaceInfo.races_waypoints).length;

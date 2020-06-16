@@ -94,6 +94,7 @@
      this.Exclusions = vlmboat.Exclusions;
      this.Track = vlmboat.Track;
      this.RnkObject = vlmboat.RnkObject;
+     this.Estimator.LoadTrack();
    }
 
    this.GetNextGateSegment = function(NWP)

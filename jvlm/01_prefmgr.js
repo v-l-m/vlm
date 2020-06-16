@@ -34,7 +34,8 @@ class PrefMgr
       }
 
       return null;
-    }
+    };
+
     this.GetLastZoom = function(IdBoat)
     {
       let Pref = this.GetBoatPrefEntry(IdBoat);
@@ -65,7 +66,36 @@ class PrefMgr
       this.Save();
     };
 
-    this.StoreEstimate = function(idu, Estimate)
+    this.GetTrackEstimate = function(idu)
+    {
+      let Entry = this.GetBoatPrefEntry(idu);
+
+      if (Entry &&  Entry.EstimateTrack && Array.isArray(Entry.EstimateTrack))
+      {
+        try
+        {
+          for (let index in Entry.EstimateTrack)
+          {
+            if (Entry.EstimateTrack[index] && typeof Entry.EstimateTrack[index].Date === "string")
+            {
+              Entry.EstimateTrack[index].Date= moment(Entry.EstimateTrack[index].Date).toDate();
+            }
+
+          }
+          return Entry.EstimateTrack;
+        }
+        catch (e)
+        {
+          console.log("Exception recovering TrackEstimate : "+ e);
+        }
+      }
+      else
+      {
+        return [];
+      }
+    };
+
+    this.StoreTrackEstimate = function(idu, Estimate)
     {
       let Entry = this.GetBoatPrefEntry(idu);
 
@@ -81,6 +111,7 @@ class PrefMgr
         };
         this.BoatPrefs.push(Info);
       }
+      this.Save();
     };
 
     this.ClearRaceData = function(RaceId)
