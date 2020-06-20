@@ -1,6 +1,7 @@
  var _LocaleDict;
  var _EnDict;
  var _CurLocale = 'en'; // Default to english unless otherwise posted
+ var _SyncLocalizedCallBack = [];
 
  function LocalizeString()
  {
@@ -14,19 +15,19 @@
        let lang = $(this).attr('lang');
 
        if (!lang)
-      {
-        //let Label = e.currentTarget;
-        let img = $(this).siblings("img");
-        if (img)
-        {
-          lang=img[0].attributes.lang.value;
-        }
-      
-      }
-      if (lang)
+       {
+         //let Label = e.currentTarget;
+         let img = $(this).siblings("img");
+         if (img)
+         {
+           lang = img[0].attributes.lang.value;
+         }
+
+       }
+       if (lang)
        {
          OnLangFlagClick(lang);
-        UpdateLngDropDown();
+         UpdateLngDropDown();
        }
      }
    );
@@ -85,6 +86,41 @@
          moment.locale(_CurLocale);
          LocalizeString();
          UpdateLngDropDown();
+
+         for (let index in _SyncLocalizedCallBack)
+         {
+           if (_SyncLocalizedCallBack[index])
+           {
+             _SyncLocalizedCallBack[index]();
+           }
+         }
+         _SyncLocalizedCallBack = [];
+
+         let Str = "";
+         
+         for (let i = 0; i < 24; i += 6)
+         {
+           if (Str !== "")
+           {
+             Str += ", ";
+           }
+
+           let m = moment.utc().minutes(30).hour(i + 3);
+           if (VLM2Prefs && VLM2Prefs.MapPrefs && VLM2Prefs.MapPrefs.UseUTC)
+           {
+             Str += m.format("LT");
+           }
+           else
+           {
+             Str += m.local().format("LT");
+           }
+         }
+         if (VLM2Prefs && VLM2Prefs.MapPrefs && VLM2Prefs.MapPrefs.UseUTC)
+         {
+           Str += " UTC";
+         }
+         
+         $(".AProposLine").html(GetLocalizedString("a1", Str));
        }
        else
        {
@@ -115,9 +151,15 @@
  function HTMLDecode(String)
  {
    let txt = document.createElement("textarea");
+   // Get rid of %25 (redirect side effect)
+   while (String.includes("%25"))
+   {
+     String = String.replace("%25", "%");
+   }
    txt.innerHTML = String;
    let RetString = txt.value;
    let EOLSigns = ["\n\r", "\r\n", "\n", "\r"];
+
 
    for (let index in EOLSigns)
    {
@@ -158,4 +200,24 @@
  function GetCurrentLocale()
  {
    return _CurLocale;
+ }
+
+ function WaitLocaleInited(callback)
+ {
+   if (!callback)
+   {
+     return false;
+   }
+
+   if (_LocaleDict || _EnDict)
+   {
+     return true;
+   }
+   else
+   {
+     _SyncLocalizedCallBack.push(callback);
+   }
+
+   return false;
+
  }
