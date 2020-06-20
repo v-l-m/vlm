@@ -26,11 +26,16 @@ function Rad2Deg(v)
   return v / Math.PI * 180.0;
 }
 
+var PowLut=[];
 function RoundPow(v, P)
 {
   if (typeof P !== 'undefined')
   {
-    let Div = Math.pow(10, P);
+    if (!PowLut[P])
+    {
+      PowLut[P]=Math.pow(10, P);
+    }
+    let Div = PowLut[P];
     return Math.round(v * Div) / Div;
   }
   else
