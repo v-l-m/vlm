@@ -85,8 +85,9 @@ class playersPending extends baseClass {
     function validate() {
         if (!$this->constructFromEmailSeed($this->email, $this->seed)) return False;
         $players = new players(0, null, $this);
-        if ($players->error_status) {
-            $this->set_error($players->error_string);
+        if ($players->error_status) 
+        {
+          $this->set_error($players->error_string);
         }
         return !$this->error_status;
     }
@@ -109,7 +110,7 @@ class playersPending extends baseClass {
     }
     
     function setSeed() {
-        $this->seed = rand();
+        $this->seed = random_int(PHP_INT_MIN ,PHP_INT_MAX );
     }
 
     function dump() {

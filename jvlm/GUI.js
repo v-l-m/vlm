@@ -378,11 +378,30 @@ function HandleMapGridZoom(e)
 }
 
 let PasswordResetInfo = [];
+let _RecaptchaInited = false;
+let _RecaptchaCallBack = [];
+let _RecaptchaErrorMsgTimeoutHandle = null;
 
 function HandlePasswordResetLink(PwdKey)
 {
+  if (!_RecaptchaInited)
+  {
+    _RecaptchaCallBack.push(function(e)
+    {
+      HandlePasswordResetLink(PwdKey);
+    });
+
+    _RecaptchaCallBack = setTimeout(function(e)
+    {
+      VLMAlertInfo(GetLocalizedString("WaitingRecpatchaCheckAdBlock"));
+    }, 2000);
+    return;
+  }
   PasswordResetInfo = unescape(PwdKey).split("|");
-  initrecaptcha(false, true);
+  if (!initrecaptcha(false, true))
+  {
+    return;
+  }
   $("#ResetaPasswordConfirmation").modal("show");
 }
 
@@ -396,17 +415,27 @@ function CheckPageParameters()
   {
     let getQuery = url.split('?')[1];
     let params = getQuery.split('&');
-    // params is ['param1=value', 'param2=value2'] 
-    for (let param in params)
-    {
-      if (params[param])
-      {
-        let PArray = params[param].split("=");
+    let ParamSet = [];
 
-        switch (PArray[0])
+    for (let index in params)
+    {
+      if (params[index])
+      {
+        let Fields = params[index].split("=");
+        if (Fields[0] && Fields[1])
+          ParamSet[Fields[0]] = Fields[1];
+      }
+    }
+    // params is ['param1=value', 'param2=value2'] 
+    for (let Param in ParamSet)
+    {
+      if (ParamSet[Param])
+      {
+
+        switch (Param)
         {
           case "PwdResetKey":
-            HandlePasswordResetLink(PArray[1]);
+            HandlePasswordResetLink(ParamSet[Param]);
             break;
 
           case "RaceRank":
@@ -414,7 +443,7 @@ function CheckPageParameters()
             /* jshint -W083*/
             RankingFt.OnReadyTable = function()
             {
-              HandleShowOtherRaceRank(PArray[1]);
+              HandleShowOtherRaceRank(ParamSet[Param]);
             };
             /* jshint +W083*/
             retstop = true;
@@ -425,7 +454,7 @@ function CheckPageParameters()
             /* jshint -W083*/
             VLMINdexFt.OnReadyTable = function()
             {
-              HandleShowIndex(PArray[1]);
+              HandleShowIndex(ParamSet[Param]);
             };
             /* jshint +W083*/
             retstop = true;
@@ -433,8 +462,24 @@ function CheckPageParameters()
 
           case "ICSRace":
             RacingBarMode = false;
-            HandleShowICS(PArray[1]);
+            HandleShowICS(ParamSet[Param]);
             retstop = true;
+            break;
+
+          case "createplayer":
+            if (ParamSet[Param] !== "validate")
+            {
+              VLMAlertDanger("Invalid request has been ignored");
+
+            }
+            else
+            {
+              _CurPlayer.CreateBoatInfo = {};
+
+              _CurPlayer.CreateBoatInfo.UserName = decodeURIComponent(HTMLDecode(ParamSet.emailid));
+              _CurPlayer.CreateBoatInfo.Seed = ParamSet.seed;
+
+            }
             break;
         }
       }
@@ -556,15 +601,43 @@ function OtherRaceRankingLoaded(RaceId)
 
 function initrecaptcha(InitPasswordReset, InitResetConfirm)
 {
+  if (_RecaptchaInited && typeof grecaptcha === "undefined" || !grecaptcha)
+  {
+    let Msg = new MsgBox();
+
+    Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("PasswordResetError"), GetLocalizedString("RemoveAdBlock"));
+    return false;
+
+  }
+
   if (InitPasswordReset && !RC_PwdResetReq)
   {
     RC_PwdResetReq = grecaptcha.render('recaptcha-PwdReset1');
+    return true;
   }
 
   if (InitResetConfirm && !RC_PwdResetConfirm)
   {
     RC_PwdResetConfirm = grecaptcha.render('recaptcha-PwdReset2');
+    return true;
   }
+
+  if (_RecaptchaErrorMsgTimeoutHandle)
+  {
+    clearTimeout(_RecaptchaErrorMsgTimeoutHandle);
+    _RecaptchaErrorMsgTimeoutHandle=null;
+  }
+  _RecaptchaInited = true;
+
+  for (let index in _RecaptchaCallBack)
+  {
+    if (_RecaptchaCallBack[index])
+    {
+      _RecaptchaCallBack[index]();
+    }
+  }
+
+  return true;
 }
 
 function HandleShowServerInfoModal(e)

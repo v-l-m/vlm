@@ -199,6 +199,54 @@ class WSNewPlayer extends WSBase
   } 
 
 }
+
+/////////////////////////////////////////
+//
+// WS Class for new player registration
+//
+/////////////////////////////////////////
+class WSNewPlayerActivation extends WSBase 
+{
+  public $NewPlayerInfo = null;
+
+  function __construct() 
+  {
+    parent::__construct();
+    $this->request = $_POST;
+    
+    if (trim($this->request["emailid"]) === "")
+    {
+      $this->reply_with_error('NEWPLAYER01',var_dump($this->request));
+    }
+    if (trim($this->request["seed"]) === "")
+    {
+      $this->reply_with_error('NEWPLAYER05');
+    }
+
+    $this->emailid = trim($this->request["emailid"]);
+    $this->seed=trim($this->request["seed"]);
+  } 
+
+  function ActivateAccount()
+  {
+    $player = new playersPending($this->emailid, $this->seed);
+    if (!$player->validate()) 
+    {
+      $this->reply_with_error('NEWPLAYER07',$player->error_string);
+    }
+    if (!$player->create()) 
+    {
+      $this->reply_with_error('NEWPLAYER06', $player->error_string);
+    }
+    $this->answer['emailid']=$this->emailid;
+    $log=[];
+    $log["operation"]="Validate player account ".$this->emailid;
+    insertAdminChangeLog($log);
+    $this->reply_with_success();
+  }
+
+}
+
 /////////////////////////////////////////
 //
 // END WS Class for new player registration
@@ -762,6 +810,10 @@ function get_error($code) {
         "NEWPLAYER02" => "pseudo is required",
         "NEWPLAYER03" => "password is required",
         "NEWPLAYER04" => "failed to insert in DB",
+        "NEWPLAYER05" => "seed is required",
+        "NEWPLAYER06" => "Player account creation error",
+        "NEWPLAYER07" => "Account validation error. Email or Seed are wrong.",
+        
 
         // Password reset
         "PWDRESET01" => "invalid parameter set (email)",

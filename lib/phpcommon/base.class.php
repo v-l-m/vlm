@@ -13,7 +13,7 @@ abstract class baseClass {
         if ($result) {
             return $result;
         } else {
-            $this->set_error_with_mysql_query($query);
+            $this->set_error_with_mysql_query($query,$GLOBALS['masterdblink']);
             return False;
         }
     }
@@ -35,10 +35,15 @@ abstract class baseClass {
     }
     
     //Convenient with mysql errors
-    function set_error_with_mysql_query($query) {
-        $msg = "MySql error ".mysqli_errno($GLOBALS['slavedblink'])." :".mysqli_error($GLOBALS['slavedblink'])."\n".
-               "Query was :".$query;
-        $this->set_error($msg);
+    function set_error_with_mysql_query($query,$connexion =null) 
+    {
+      if (!$connexion)
+      {
+        $connexion=$GLOBALS['slavedblink'];
+      }
+      $msg = "MySql error ".mysqli_errno($connexion)." :".mysqli_error($connexion)."\n".
+              "Query was :".$query;
+      $this->set_error($msg);
     }
 }
 

@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'ValidateFailed' => 'Account validation failed',
     'PenaltyEnd' => 'Penalty ends ',
     'RaceClosed' => 'Race closed ',
     'No Empty Name' => 'You cannot create a boat with an empty name',

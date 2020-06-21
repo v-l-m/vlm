@@ -3,6 +3,18 @@
     include_once("players.class.php");
     include_once("config.php");
 
+    $jvlmredirect = get_cgi_var ("jvlm");
+
+    // Redirect to JVLM interface to complete user creation.
+    if ($jvlmredirect)
+    {
+      $url="/?".$_SERVER["QUERY_STRING"];
+      ob_start();
+      header('Location: '.$url);
+      ob_end_flush();
+      die();
+    }
+
     if (isPlayerLoggedIn()) printErrorAndDie("You are already logged.", "Click here if you want to create a boat.", "create_boat.php");
 
     $actioncreate = get_cgi_var("createplayer");
@@ -41,7 +53,7 @@
     $emailid = get_cgi_var("emailid");
     $password = get_cgi_var("password");
     $playername = get_cgi_var("playername");
-
+    
     if (!ALLOW_ACCOUNT_CREATION) {
             echo "<div id=\"createplayerbox-request\">";
             echo "<h1>".getLocalizedString("Account creation is disabled on this server, you should ask to the admins")."</h1>";

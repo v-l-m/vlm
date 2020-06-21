@@ -375,7 +375,7 @@
            CurBoatID = _CurPlayer.CurBoatID;
          }
 
-         _IsLoggedIn = LoginResult.success === true;
+         _IsLoggedIn = (LoginResult.success === true);
 
          HandleCheckLoginResponse(GuiRequest);
 
@@ -413,9 +413,20 @@
      $("#ResetPasswordLink").removeClass("hidden");
 
    }
+   else if (_CurPlayer.CreateBoatInfo)
+   {
+     if (WaitLocaleInited(function()
+       {
+         HandleCheckLoginResponse(GuiRequest);
+       }))
+     {
+       let Msg = new MsgBox();
+       let MsgText = GetLocalizedString("email") + " : " + _CurPlayer.CreateBoatInfo.UserName + "<br><br>" + GetLocalizedString("Confirm account creation ?");
+       Msg.Show(MsgBox.MSGBOX_YESNO, GetLocalizedString("Your account is ready to be created"), MsgText, HandleAccountValidationRequest);
+     }
+   }
    HidePb("#PbLoginProgress");
    DisplayLoggedInMenus(_IsLoggedIn);
-
  }
 
  function Logout()
@@ -479,7 +490,7 @@
    let i = result;
    let select = null;
    let LastSelBoat = VLM2Prefs.LastSelBoat;
-   
+
    if (typeof _CurPlayer === 'undefined')
    {
      _CurPlayer = new User();
@@ -530,7 +541,7 @@
    {
      DisplayCurrentDDSelectedBoat(select);
      SetCurrentBoat(select, true);
-     RefreshCurrentBoat(true, false,null);
+     RefreshCurrentBoat(true, false, null);
    }
  }
 
@@ -659,4 +670,27 @@
    var RetString1 = " <div class='FlagIcon' style='background-position: -" + col + "px -" + row + "px' flag='" + Title + "'></div>";
 
    return RetString1;
+ }
+
+ function HandleAccountValidationRequest()
+ {
+   let parms = {
+     emailid: _CurPlayer.CreateBoatInfo.UserName,
+     seed: _CurPlayer.CreateBoatInfo.Seed
+   };
+   $.post("/ws/playersetup/Player_Create.php",parms,HandleAccountValidationReply);
+ }
+
+ function HandleAccountValidationReply(e)
+ {
+   let Msg = new MsgBox();
+   if (e.success)
+   {
+      Msg.Show(MsgBox.MSGBOX_OKONLY,GetLocalizedString("Your account has been created"),GetLocalizedString('Please connect to create your first boat'));
+   }
+   else
+   {
+     Msg.Show(MsgBox.MSGBOX_OKONLY,GetLocalizedString("ValidateFailed"),e.error.msg);
+   }
+   
  }
