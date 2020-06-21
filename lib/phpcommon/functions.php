@@ -1479,8 +1479,9 @@ function logout()
     if (isset($_COOKIE[session_name()]))
         setcookie(session_name(), '', time()-42000, '/');
     if (isset($_SESSION)) {
-        $_SESSION = array();
         session_destroy();
+        $_SESSION = array();
+        
     }
 }
 
