@@ -17,6 +17,7 @@ class WSBase extends baseClass
   function __construct() {
       parent::__construct();
       $this->now = time();
+      session_start();
   }
 
   function queryRead($query) {
@@ -332,7 +333,7 @@ class WSBasePlayer extends WSBaseAuthent {
     function __construct() {
         parent::__construct();
         //FIXME : is this useless now that only players may log in ?
-        if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03');
+        if (!isPlayerLoggedIn()) $this->reply_with_error('AUTH03',var_dump($_SESSION));
     }
 }
 
@@ -908,7 +909,10 @@ function checkPlayerLogin($pseudo, $passwd) {
 }
 
 function login_if_not($usage = "No usage given") {
-    session_start();
+    if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
     // do we know the player from a previous login session?
     if (isPlayerLoggedIn() && isLoggedIn() ) {
         //OK, we are logged
@@ -919,7 +923,7 @@ function login_if_not($usage = "No usage given") {
             login($user->idusers, $user->username); //Boat login, to change idu in session
         }
         return $_SESSION['idu'];
-    } else {
+    } /*else {
         // fallback to HTTP auth
         if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) ) {
             //not http logged
@@ -949,7 +953,7 @@ function login_if_not($usage = "No usage given") {
                 exit();
             }
         }
-    }
+    }*/
 }
 
 function logout_if_not($usage="Logout usage:\nUsername: test\nPassword: ko\nto force logout.") {

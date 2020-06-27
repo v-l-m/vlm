@@ -2,7 +2,7 @@
 include_once("includes/header.inc");
 include_once("config.php");
 
-session_destroy();?>
+logout();?>
 <p>
 <?echo getLocalizedString("loggedout")?>
 </p>

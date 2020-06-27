@@ -1478,11 +1478,16 @@ function logout()
 {
     if (isset($_COOKIE[session_name()]))
         setcookie(session_name(), '', time()-42000, '/');
-    if (isset($_SESSION)) {
+    if (isset($_SESSION)) 
+    {
+        unset($_COOKIE[session_name()]); 
         session_destroy();
-        $_SESSION = array();
-        
+        $_SESSION = array();        
     }
+    // Force removing server side variables
+    unset($_SERVER['PHP_AUTH_USER']);
+    unset($_SERVER['PHP_AUTH_PW']);
+
 }
 
 function getSessionValue($key) {

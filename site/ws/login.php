@@ -4,14 +4,16 @@
     header("content-type: text/plain; charset=UTF-8");
 
     function checkLogin() {
+        session_set_cookie_params(3600,$secure=true,$httponly=true);
         session_start();
         if (isPlayerLoggedIn() && isLoggedIn() ) {
             //we know the player from a previous login session
-            return True;
-        } else if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']) ) {
+        
+           return True;
+        }/* else if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']) ) {
             //Trying to do http auth, registering session
             if (!is_null($player = checkPlayerLogin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) ) {
-                $idu = get_cgi_var('select_idu');
+                 $idu = get_cgi_var('select_idu');
                 if (is_null($idu) || !in_array($idu, $player->getManageableBoatIdList())) {
                      //select_idu is not correct, selecting default
                      $idu = $player->getDefaultBoat();
@@ -27,7 +29,7 @@
             } else {
                 return False;
             }
-        } else if (isset($_POST['VLM_AUTH_USER']) && isset($_POST['VLM_AUTH_PW']) ) {
+        } */else if (isset($_POST['VLM_AUTH_USER']) && isset($_POST['VLM_AUTH_PW']) ) {
             if (!is_null($player = checkPlayerLogin($_POST['VLM_AUTH_USER'], $_POST['VLM_AUTH_PW'])) ) {
                 //ask_for_auth("");
                 $idu = $player->getDefaultBoat();
