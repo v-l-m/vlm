@@ -733,7 +733,7 @@ function BuildPolarLine(Boat, StartPos, scale, StartDate, Callback)
     MI = GribMgr.WindAtPointInTime(CurDate, StartPos.Lat.Value, StartPos.Lon.Value, Callback);
   }
 
-  if (MI)
+  if (MI && Boat.VLMInfo.POL && Boat.VLMInfo.VAC)
   {
     let hdg = parseFloat(Boat.VLMInfo.HDG);
     let index;
