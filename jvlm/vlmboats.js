@@ -72,6 +72,12 @@ function CheckBoatRefreshRequired(Boat, CenterMapOnBoat, ForceRefresh, TargetTab
           Boat.VLMInfo.LAT /= VLM_COORDS_FACTOR;
           if ('Prod' !== '@@BUILD_TYPE@@')
           {
+            //let Msg = new MsgBox();
+
+            //Msg.Show(MsgBox.MSGBOX_YESNO,"Run RandomText","Run RandomTest",TestRandom);
+            //Msg.Show(MsgBox.MSGBOX_YESNO,GetRandomShipName(),GetRandomShipName());
+            
+
             //console.log(GribMgr.WindAtPointInTime(new Date(Boat.VLMInfo.LUP*1000),Boat.VLMInfo.LAT,Boat.VLMInfo.LON ));
             console.log("DBG WIND ");
             //49.753227868452, -8.9971082951315
@@ -1114,7 +1120,7 @@ function AddGateSegment(Map, GateFeatures, lon1, lat1, lon2, lat2, IsNextWP, IsV
     strokeOpacity = 0.4;
   }
 
-  console.log("Gate is next : " + IsNextWP + "gate is validated " + IsValidated + " opacity " + strokeOpacity);
+  //console.log("Gate is next : " + IsNextWP + "gate is validated " + IsValidated + " opacity " + strokeOpacity);
   if (GateType & WP_CROSS_ONCE)
   {
     if (GateFeatures.Segment2)
@@ -2248,6 +2254,11 @@ function LoadVLMPrefs()
   }
   Boat = _CurPlayer.CurBoat;
 
+  if (!Boat.IdBoat)
+  {
+    return ;
+  }
+
   SetDDTheme(VLM2Prefs.CurTheme);
 
   $.get("/ws/boatinfo/prefs.php?idu=" + Boat.IdBoat(), HandlePrefsLoaded);
@@ -2344,7 +2355,7 @@ function HandleWPDragEnded(e)
   VLMAlertInfo("User WP moved to " + Marker.getLatLng());
 }
 
-function CheckAndCreateNewBoat(e)
+function CheckAndCreateNewBoat()
 {
   let NewBoatName = $("#NewBoatName")[0].value;
   let Msg = GetLocalizedString("ConfirmBoatName", NewBoatName);
@@ -2355,13 +2366,19 @@ function CheckAndCreateNewBoat(e)
     VLMAlertDanger(GetLocalizedString("No Empty Name"));
     return;
   }
-  new MsgBox().Show(MsgBox.MSGBOX_YESNO, Title, Msg, OnRenameOK);
+  new MsgBox().Show(MsgBox.MSGBOX_YESNO, Title, Msg, CreateBoatOnServer);
 
 }
 
-function OnRenameOK()
+function CreateBoatOnServer(ShipName)
 {
   let NewBoatName = $("#NewBoatName")[0].value;
+
+  if (ShipName)
+  {
+    NewBoatName=ShipName;
+  }
+  
   let PostData = {
     idp: _CurPlayer.IdPlayer,
     BoatName: NewBoatName,

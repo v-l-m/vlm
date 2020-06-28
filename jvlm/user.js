@@ -536,6 +536,11 @@
      }
    }
 
+   if (!_CurPlayer.FleetSize)
+   {
+     CreateFirstBoat();
+   }
+
    RefreshPlayerMenu();
    if (typeof select !== "undefined" && select)
    {
@@ -544,6 +549,18 @@
      RefreshCurrentBoat(true, false, null);
    }
  }
+
+ function CreateFirstBoat(Pseudo)
+ {
+  
+  if (!Pseudo || typeof Pseudo== "string"  || Pseudo === "")
+  {
+    Pseudo=GetRandomShipName();
+  }
+   CreateBoatOnServer(Pseudo);
+ }
+
+
 
  function RefreshPlayerMenu()
  {
@@ -678,7 +695,7 @@
      emailid: _CurPlayer.CreateBoatInfo.UserName,
      seed: _CurPlayer.CreateBoatInfo.Seed
    };
-   $.post("/ws/playersetup/Player_Create.php",parms,HandleAccountValidationReply);
+   $.post("/ws/playersetup/Player_Create.php", parms, HandleAccountValidationReply);
  }
 
  function HandleAccountValidationReply(e)
@@ -686,11 +703,125 @@
    let Msg = new MsgBox();
    if (e.success)
    {
-      Msg.Show(MsgBox.MSGBOX_OKONLY,GetLocalizedString("Your account has been created"),GetLocalizedString('Please connect to create your first boat'));
+     Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("Your account has been created"), GetLocalizedString('Please connect to create your first boat'));
    }
    else
    {
-     Msg.Show(MsgBox.MSGBOX_OKONLY,GetLocalizedString("ValidateFailed"),e.error.msg);
+     Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("ValidateFailed"), e.error.msg);
    }
-   
+
+ }
+
+ function GetRandom(min, max)
+ {
+   const LoopCount = 20;
+   let Count = LoopCount;
+   let Sum = 0;
+
+   while (Count)
+   {
+     Sum += Math.random();
+     Count--;
+   }
+
+   let ret = Math.floor(Sum * (max - min) / LoopCount) + min;
+   return ret;
+
+ }
+
+ function TestRandom()
+ {
+   let Values = [];
+
+   for (let i = 0; i < 1000000; i++)
+   {
+     let v = GetRandom(1, 60);
+
+     if (typeof Values[v] === "undefined")
+     {
+       Values[v] = 0;
+     }
+     Values[v]++;
+
+     if (i % 100000 === 0)
+     {
+       for (let j = 0; j < Values.length; j++)
+       {
+         if (Values[j])
+         {
+           console.log(j + " : " + ("").padStart(Math.floor(3 * Math.log(Values[j]))), "*");
+         }
+         else
+         {
+           console.log(j + " : ");
+         }
+       }
+     }
+   }
+
+   for (let j = 0; j < Values.length; j++)
+   {
+     console.log(j + " : " + "".padStart(Math.floor(3 * Math.log(Values[j]))), "*");
+   }
+ }
+
+ function GetRandomShipName()
+ {
+
+   let WordCount = 0;
+
+   while (!WordCount)
+   {
+     WordCount = GetRandom(0, 3);
+   }
+   let Name = null;
+   for (let i = 0; i < WordCount; i++)
+   {
+     let NbSyl = GetRandom(1, 6);
+     let Word = "";
+
+     for (let j = 0; j < NbSyl; j++)
+     {
+       Word += GetSyllab();
+     }
+
+     if (Name)
+     {
+       Name += " " + Word;
+     }
+     else
+     {
+       Name = Word;
+     }
+   }
+
+   return Name;
+ }
+
+ function GetSyllab()
+ {
+   let ret = GetLetter() + GetLetter(true);
+   if (Math.random() > 0.90)
+   {
+     ret += GetLetter();
+   }
+   return ret;
+ }
+
+
+ function GetLetter(Vowel)
+ {
+   let Vowels = 'aeiouy';
+   let Consonnant = 'bcdfghjklmnpqrstvwxz';
+
+   if (Vowel)
+   {
+     let idx = Math.floor(Math.random() * Vowels.length);
+     return Vowels[idx];
+   }
+   else
+   {
+     let idx = Math.floor(Math.random() * Consonnant.length);
+     return Consonnant[idx];
+   }
  }

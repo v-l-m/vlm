@@ -625,7 +625,7 @@ function initrecaptcha(InitPasswordReset, InitResetConfirm)
   if (_RecaptchaErrorMsgTimeoutHandle)
   {
     clearTimeout(_RecaptchaErrorMsgTimeoutHandle);
-    _RecaptchaErrorMsgTimeoutHandle=null;
+    _RecaptchaErrorMsgTimeoutHandle = null;
   }
   _RecaptchaInited = true;
 
@@ -786,12 +786,7 @@ function InitMenusAndButtons()
 
   // Display setting dialog
   $("#BtnSetting").click(
-    function()
-    {
-      LoadVLMPrefs();
-      SetDDTheme(VLM2Prefs.CurTheme);
-      $("#SettingsForm").modal("show");
-    }
+    ShowPrefsDialog
   );
 
   // Handle SettingsSave button
@@ -1042,6 +1037,7 @@ function HandleAddBoatToFleetRequest()
 {
   $("#AddBoatToFleet").addClass("hidden");
   $("#PnlAddBoat").removeClass("hidden");
+  $("#NewBoatName")[0].value=GetRandomShipName();
 }
 
 function InitRankingEvents()
@@ -4896,4 +4892,14 @@ function GetLocalUTCTime(d, IsUTC, AsString)
   }
 
 
+}
+
+function ShowPrefsDialog(SetBoatName)
+{
+  LoadVLMPrefs();
+  $("#AddBoatToFleet").removeClass("hidden");
+  $("#PnlAddBoat").addClass("hidden");
+  
+  SetDDTheme(VLM2Prefs.CurTheme);
+  $("#SettingsForm").modal("show");
 }
