@@ -160,7 +160,7 @@ $strings['fr'] =
     'Permissions' => 'Autorisations',
     'Please attach it to a player !' => 'Merci de le rattacher à un joueur !',
     'Please change it quickly' => 'Merci de le changer rapidement',
-    'Please connect to create your first boat' => 'Connectez vous pour créer votre premier bateau',
+    'Please connect to create your first boat' => 'Vous pouvez maintenant vous connecteà VLM.',
     'Please create a boat !' => 'Créez un bateau !',
     'Popularity of your boat' => 'Popularité de votre bateau',
     'Profile' => 'Profil',
@@ -205,8 +205,7 @@ $strings['fr'] =
     'You are not logged as a player. Please create and use a player account !' => 'Vous n\'êtes pas connecté en tant que joueur. Merci de créer et d\'utiliser un compte de joueur.',
     'You are not logged in with a player account.' => 'Vous n\'êtes pas connecté en tant que joueur.',
     'You can recover a lost password' => 'Vous pouvez récupérer un mot de passe perdu',
-    'You have requested to create an account on VLM.
-Please, click on the link below or copy/paste it in your browser.' => 'Vous avez demandé la création d\'un compte sur VLM.
+    'You have requested to create an account on VLM.' => 'Vous avez demandé la création d\'un compte sur VLM.
 Veuillez cliquer sur le lien ci-dessous, ou bien copiez le dans votre navigateur.',
     'You have to be logged with the player credential to attach the boat.' => 'Vous devez être connecté avec votre compte de joueur pour rattacher un bateau.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'Vous devez être connecté avec le compte du bateau pour pouvoir le rattacher.',

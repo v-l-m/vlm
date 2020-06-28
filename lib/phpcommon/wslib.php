@@ -230,12 +230,12 @@ class WSNewPlayerActivation extends WSBase
 
   function ActivateAccount()
   {
-    $player = new playersPending($this->emailid, $this->seed);
-    if (!$player->validate()) 
+    $Player = new playersPending($this->emailid, $this->seed);
+    if (!$Player->validate()) 
     {
-      $this->reply_with_error('NEWPLAYER07',$player->error_string);
+      $this->reply_with_error('NEWPLAYER07',$Player->error_string);
     }
-    if (!$player->create()) 
+    if (!$Player->create()) 
     {
       $this->reply_with_error('NEWPLAYER06', $player->error_string);
     }
@@ -243,6 +243,25 @@ class WSNewPlayerActivation extends WSBase
     $log=[];
     $log["operation"]="Validate player account ".$this->emailid;
     insertAdminChangeLog($log);
+    
+    // This should be refactored with boat creation WS
+    // Somehow
+    $Player = new Players(0,$this->emailid);
+    //$this->answer['PlayerDump']=var_dump($Player);
+    $BoatId="P".$Player->idplayers."B__000";
+    $BoatName=$Player->playername;
+    $this->answer['idu'] = createBoat($BoatId, generatePassword($BoatName),"no_mail_in_users", $BoatName);
+    $this->answer['BoatName'] = $BoatName;
+    logPlayerEvent($Player->idplayers,$this->answer['idu'],0,'Player created new boat '.$BoatName);
+
+    //Manual creation of users, forcing use of MASTER server
+    $users = new users($this->answer['idu'], FALSE);
+    $users->initFromId($this->answer['idu'], True);
+    
+    if (!$users->setOwnerId($Player->idplayers))
+    {
+        $this->reply_with_error("CREBOAT03");
+    }
     $this->reply_with_success();
   }
 

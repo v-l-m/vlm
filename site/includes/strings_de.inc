@@ -95,8 +95,7 @@ $strings['de'] =
     'You are not allowed to view player info.' => 'Ihnen ist es nicht gestattet, die Daten eines Spielers einzusehen.',
     'You are not logged as a player. Please create and use a player account !' => 'Sie sind nicht als Spieler angemeldet. Bitte errichten und benutzen Sie ein Konto.',
     'You are not logged in with a player account.' => 'Sie sind nicht mit einem Spielerkonto eingeloggt.',
-    'You have requested to create an account on VLM.
-Please, click on the link below or copy/paste it in your browser.' => 'Sie haben um Erstellung eines Kontos auf VLM ersucht. Bitte klicken Sie auf den Link unten oder kopieren Sie ihn in Ihrem Browser.',
+    'You have requested to create an account on VLM.' => 'Sie haben um Erstellung eines Kontos auf VLM ersucht. Bitte klicken Sie auf den Link unten oder kopieren Sie ihn in Ihrem Browser.',
     'You have to be logged with the player credential to attach the boat.' => 'Sie müssen über ihr Konto eingeloggt sein, um ein Boot hinzuzufügen.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'Sie müssen mit dem Konto des Bootes eingeloggt sein, um es hinzufügen zu können.',
     'You may also attach a pre-existing boat' => 'Sie können auch ein früheres Boot hinzufügen',

@@ -161,7 +161,7 @@ $strings['en'] =
     'Permissions' => 'Permissions',
     'Please attach it to a player !' => 'Please attach it to a player !',
     'Please change it quickly' => 'Please change it quickly',
-    'Please connect to create your first boat' => 'Please connect to create your first boat',
+    'Please connect to create your first boat' => 'You can now connect to VLM',
     'Please create a boat !' => 'Please create a boat !',
     'Popularity of your boat' => 'Popularity of your boat',
     'Profile' => 'Profile',
@@ -204,8 +204,7 @@ $strings['en'] =
     'You are not logged as a player. Please create and use a player account !' => 'You are not logged as a player. Please create and use a player account !',
     'You are not logged in with a player account.' => 'You are not logged in with a player account.',
     'You can recover a lost password' => 'You can recover a lost password',
-    'You have requested to create an account on VLM.
-Please, click on the link below or copy/paste it in your browser.' => 'You have requested to create an account on VLM.
+    'You have requested to create an account on VLM.' => 'You have requested to create an account on VLM.
 Please, click on the link below or copy/paste it in your browser.',
     'You have to be logged with the player credential to attach the boat.' => 'You have to be logged with the player credential to attach the boat.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'You have to be logged with the user/boat credential to attach the boat.',

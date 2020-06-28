@@ -80,8 +80,7 @@
     'You are not allowed to view player info.' => 'No está autorizado a ver la información del jugador.',
     'You are not logged as a player. Please create and use a player account !' => 'No está conectado como jugador. Por favor, crée y use una cuenta de jugador!',
     'You are not logged in with a player account.' => 'No está conectado a una cuenta de jugador.',
-    'You have requested to create an account on VLM.
-Please, click on the link below or copy/paste it in your browser.' => 'Usted ha pedido crear una cuenta en VLM.
+    'You have requested to create an account on VLM.' => 'Usted ha pedido crear una cuenta en VLM.
 Por favor, pulse el link de abajo o copie y péguelo en su navegador.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'Tiene que conectarse con la credencial usuario/barco para adjuntar el barco.',
     'You may also attach a pre-existing boat' => 'Puede también adjuntar un barco pre-existente',

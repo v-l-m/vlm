@@ -79,8 +79,7 @@ identificazione.',
     'You are not allowed to view player info.' => 'You are not allowed to view player info.',
     'You are not logged as a player. Please create and use a player account !' => 'You are not logged as a player. Please create and use a player account !',
     'You are not logged in with a player account.' => 'You are not logged in with a player account.',
-    'You have requested to create an account on VLM.
-Please, click on the link below or copy/paste it in your browser.' => 'You have requested to create an account on VLM.
+    'You have requested to create an account on VLM.' => 'You have requested to create an account on VLM.
 Please, click on the link below or copy/paste it in your browser.',
     'You have to be logged with the user/boat credential to attach the boat.' => 'You have to be logged with the user/boat credential to attach the boat.',
     'You may also attach a pre-existing boat' => 'You may also attach a pre-existing boat',
