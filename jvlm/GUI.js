@@ -46,7 +46,10 @@ var RC_PwdResetReq = null;
 var RC_PwdResetConfirm = null;
 var OnPlayerLoadedCallBack = null;
 
-// FindIndex for IE
+
+// GetLanguage wrapper for initiale locale loading
+// As seen on https://stackoverflow.com/questions/673905/best-way-to-determine-users-locale-within-browser
+const GetLanguage = () => navigator.userLanguage || (navigator.languages && navigator.languages.length && navigator.languages[0]) || navigator.language || navigator.browserLanguage || navigator.systemLanguage || 'en';
 
 
 // On ready get started with vlm management
@@ -94,7 +97,7 @@ $(document).ready(
     //InitXmpp();
 
     // Load translation strings
-    InitLocale();
+    InitLocale(GetLanguage());
 
     // Init Menus()
     InitMenusAndButtons();

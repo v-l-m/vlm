@@ -72,8 +72,12 @@
  {
    var query = "/ws/serverinfo/translation.php";
 
-   if (Lang)
+   if (Lang && typeof Lang === "string")
    {
+     if (Lang.includes("-"))
+     {
+       Lang=Lang.split("-")[0];
+     }
      query += "?lang=" + Lang;
    }
    $.get(query,
