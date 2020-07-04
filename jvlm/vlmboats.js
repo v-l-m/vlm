@@ -1768,9 +1768,9 @@ function ShowOpponentPopupInfo(e)
         Features.OppPopup.PrevOpp = Opp;
 
         let PopupFields = [];
-        let OppId = Opp.options.icon.MarkerOppId;
+        let OppId = parseInt(Opp.options.icon.MarkerOppId,10);
         Opp.openPopup();
-        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + OppId, Boat.PlayerName]);
+        PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatName" + OppId, (OppId > 0?Boat.PlayerName:Boat.boatname)]);
         PopupFields.push([FIELD_MAPPING_POPUP, "#__BoatName" + OppId, Boat.boatname]);
         PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatId" + OppId, Boat.idusers]);
         PopupFields.push([FIELD_MAPPING_TEXT, "#__BoatRank" + OppId, Boat.rank]);
