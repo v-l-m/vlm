@@ -536,11 +536,6 @@
      }
    }
 
-   if (!_CurPlayer.FleetSize)
-   {
-     CreateFirstBoat();
-   }
-
    RefreshPlayerMenu();
    if (typeof select !== "undefined" && select)
    {
@@ -549,18 +544,6 @@
      RefreshCurrentBoat(true, false, null);
    }
  }
-
- function CreateFirstBoat(Pseudo)
- {
-  
-  if (!Pseudo || typeof Pseudo== "string"  || Pseudo === "")
-  {
-    Pseudo=GetRandomShipName();
-  }
-   CreateBoatOnServer(Pseudo);
- }
-
-
 
  function RefreshPlayerMenu()
  {
@@ -700,16 +683,21 @@
 
  function HandleAccountValidationReply(e)
  {
-   let Msg = new MsgBox();
-   if (e.success)
+   
+   setTimeout(function()
    {
-     Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("Your account has been created"), GetLocalizedString('Please connect to create your first boat'));
-   }
-   else
-   {
-     Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("ValidateFailed"), e.error.msg);
-   }
-
+     
+     let Msg = new MsgBox();
+     if (e.success)
+     {
+       Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("Your account has been created"), GetLocalizedString('Please connect to create your first boat'));
+     }
+     else
+     {
+      Msg.Show(MsgBox.MSGBOX_OKONLY, GetLocalizedString("ValidateFailed"), GetLocalizedString(e.error.msg));
+     }
+   }, 250);
+   
  }
 
  function GetRandom(min, max)

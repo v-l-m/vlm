@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'Account validation error. Email or Seed are wrong.'=>'Adresse Email ou code de validation invalide',
     'ValidateFailed' => 'Erreur lors de la validation du compte',
     'PenaltyEnd' => 'Fin de pénalité ',
     'RaceClosed' => 'Course terminée ',
@@ -160,7 +161,7 @@ $strings['fr'] =
     'Permissions' => 'Autorisations',
     'Please attach it to a player !' => 'Merci de le rattacher à un joueur !',
     'Please change it quickly' => 'Merci de le changer rapidement',
-    'Please connect to create your first boat' => 'Vous pouvez maintenant vous connecteà VLM.',
+    'Please connect to create your first boat' => 'Vous pouvez maintenant vous connecte à VLM.',
     'Please create a boat !' => 'Créez un bateau !',
     'Popularity of your boat' => 'Popularité de votre bateau',
     'Profile' => 'Profil',

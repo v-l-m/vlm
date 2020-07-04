@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'Account validation error. Email or Seed are wrong.'=>'Account validation error. Email or validation code are wrong.',
     'ValidateFailed' => 'Account validation failed',
     'PenaltyEnd' => 'Penalty ends ',
     'RaceClosed' => 'Race closed ',

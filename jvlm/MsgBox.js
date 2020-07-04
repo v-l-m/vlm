@@ -21,7 +21,7 @@ class MsgBox
       $("#MsgBoxDialog").modal("hide");
       if (this.OkYesCallBack)
       {
-        this.OkYesCallBack();
+        setTimeout(this.OkYesCallBack, 100);
       }
     };
 
@@ -30,7 +30,7 @@ class MsgBox
       $("#MsgBoxDialog").modal("hide");
       if (this.NoCancelCallBack)
       {
-        this.NoCancelCallBack();
+        setTimeout(this.NoCancelCallBack, 100);
       }
     };
 
@@ -77,7 +77,7 @@ class MsgBox
       $("#MsgBoxButton2").off('click');
       $("#MsgBoxButton1").on('click', this.Btn1Function.bind(this));
       $("#MsgBoxButton2").on('click', this.Btn2Function.bind(this));
-      let forms = $(".modal .in").modal("hide");      
+      let forms = $(".modal .in").modal("hide");
 
       $("#MsgBoxDialog").modal("show");
     };
