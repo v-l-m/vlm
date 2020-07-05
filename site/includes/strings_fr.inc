@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'LocalTime'=>'heure locale',
     'Account validation error. Email or Seed are wrong.'=>'Adresse Email ou code de validation invalide',
     'ValidateFailed' => 'Erreur lors de la validation du compte',
     'PenaltyEnd' => 'Fin de pénalité ',

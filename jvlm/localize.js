@@ -70,17 +70,23 @@
 
  // IE polyfill for includes function
  // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes#Polyfill
- if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
-    'use strict';
+ if (!String.prototype.includes)
+ {
+   String.prototype.includes = function(search, start)
+   {
+     'use strict';
 
-    if (search instanceof RegExp) {
-      throw TypeError('first argument must not be a RegExp');
-    } 
-    if (start === undefined) { start = 0; }
-    return this.indexOf(search, start) !== -1;
-  };
-}
+     if (search instanceof RegExp)
+     {
+       throw TypeError('first argument must not be a RegExp');
+     }
+     if (start === undefined)
+     {
+       start = 0;
+     }
+     return this.indexOf(search, start) !== -1;
+   };
+ }
 
  function InitLocale(Lang)
  {
@@ -90,7 +96,7 @@
    {
      if (Lang.includes("-"))
      {
-       Lang=Lang.split("-")[0];
+       Lang = Lang.split("-")[0];
      }
      query += "?lang=" + Lang;
    }
@@ -115,7 +121,7 @@
          _SyncLocalizedCallBack = [];
 
          let Str = "";
-         
+
          for (let i = 0; i < 24; i += 6)
          {
            if (Str !== "")
@@ -137,7 +143,11 @@
          {
            Str += " UTC";
          }
-         
+         else
+         {
+           Str += " " + GetLocalizedString('LocalTime');
+         }
+
          $(".AProposLine").html(GetLocalizedString("a1", Str));
        }
        else
