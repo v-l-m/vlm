@@ -72,6 +72,20 @@ GribMap.Layer = L.Layer.extend(
     this._Time = new Date();
     this.DrawWindDebugCnt = 0;
     this.DrawWindDebugDepth = 0;
+    this.UpdateCount = 0;
+    this.PrevUpdateCount = 0;
+    setInterval(function()
+    {
+      this.HandleIntervalDebug();
+    }.bind(this), 1000);
+  },
+  HandleIntervalDebug: function()
+  {
+    if (this.PrevUpdateCount != this.UpdateCount)
+    {
+      console.log("UpdateCountDelta:" + (this.UpdateCount - this.PrevUpdateCount));
+      this.PrevUpdateCount = this.UpdateCount;
+    }
   },
   GetGribMapTime: function()
   {
@@ -79,8 +93,16 @@ GribMap.Layer = L.Layer.extend(
   },
   SetGribMapTime: function(epoch)
   {
-    this._Time = epoch;
-    this._update();
+    if (!epoch)
+    {
+      epoch = new Date().getTime();
+    }
+    this.UpdateCount++;
+    if (this._Time !== epoch)
+    {
+      this._Time = epoch;
+      this._update();
+    }
   },
   _CheckDensity(ctx)
   {
@@ -180,6 +202,7 @@ GribMap.Layer = L.Layer.extend(
     let p0 = map.project(LatLng, zoom);
     let MI = null;
     let MissedQueue = false;
+    this.Strings = [];
     for (let x = MinX; x <= MaxX; x += DX)
     {
       for (let y = MinY; y <= MaxY; y += DY)
@@ -223,6 +246,16 @@ GribMap.Layer = L.Layer.extend(
       }
     }
 
+    ctx.fillStyle = '#620062';
+    for (let index in this.Strings)
+    {
+      if (this.Strings[index])
+      {
+        let S = this.Strings[index];
+        ctx.fillText(S[0],S[1],S[2]);
+      }
+    }
+
     if (MissedQueue)
     {
       setTimeout(this._update.bind(this), 250);
@@ -234,8 +267,8 @@ GribMap.Layer = L.Layer.extend(
   _drawWind: function(context, x, y, z, WindSpeed, WindHeading)
   {
     let YOffset = this._drawWindTriangle(context, x, y, WindSpeed, WindHeading);
-    context.fillStyle = '#620062';
-    this._drawWindText(context, x, YOffset+2, WindSpeed, WindHeading);
+    //context.fillStyle = '#620062';
+    this._drawWindText(context, x, YOffset + 2, WindSpeed, WindHeading);
   },
   // draw wind information around the arrow
   // parameters:
@@ -260,11 +293,20 @@ GribMap.Layer = L.Layer.extend(
         //  text_y -=5;
         text_y += 7 - 5 * Math.cos(WindHeading * Math.PI / 180.0);
       }
-      TextString = "" + RoundPow(WindSpeed, 1) + "/" + RoundPow(WindHeading, 1) + "°";
+      TextString = String(RoundPow(WindSpeed, 1));
+      TextString += "/";
+      TextString += RoundPow(WindHeading, 1);
+      TextString += "°";
+
     }
 
-    let xoffset = context.measureText(TextString).width / 2;
-    context.fillText(TextString, text_x - xoffset, text_y);
+    if (!this.XOffset)
+    {
+      this.XOffset = context.measureText("88.0 / 888.8").width / 2;
+    }
+    //let xoffset = context.measureText(TextString).width / 2;
+    this.Strings.push([TextString, text_x - this.XOffset, text_y])
+    //context.fillText(TextString, text_x - this.XOffset, text_y);
     //console.log("Drawing "+x+"/"+y+" "+TextString);
   },
   _drawWindTriangle: function(context, x, y, WindSpeed, WindHeading)
@@ -301,7 +343,7 @@ GribMap.Layer = L.Layer.extend(
 
     let color = this.windSpeedToColor(WindSpeed);
     context.fillStyle = color;
-    if (WindSpeed<2)
+    if (WindSpeed < 2)
     {
       context.strokeStyle = 0;
     }

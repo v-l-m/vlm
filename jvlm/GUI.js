@@ -3231,7 +3231,7 @@ function HandleMapMouseMove(e)
     var CurPos = new VLMPosition(_CurPlayer.CurBoat.VLMInfo.LON, _CurPlayer.CurBoat.VLMInfo.LAT);
     var WPPos = _CurPlayer.CurBoat.GetNextWPPosition();
     var EstimatePos = null;
-    var Estimated = new Date() - LastMouseMoveCall > 300;
+    var Estimated = new Date() - LastMouseMoveCall > 10;
 
     if (VLM2Prefs.MapPrefs.EstTrackMouse && Estimated)
     {

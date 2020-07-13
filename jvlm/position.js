@@ -76,8 +76,8 @@ function VLMPosition(lon, lat, format)
 
   this.GetEuclidianDist2 = function(P)
   {
-    var dLat = (this.Lat.Value - P.Lat.Value) % 90;
-    var dLon = (this.Lon.Value - P.Lon.Value) % 180;
+    var dLat = (this.Lat.Value - P.Lat.Value) % 180;
+    var dLon = (this.Lon.Value - P.Lon.Value) % 360;
 
     return dLat * dLat + dLon * dLon;
   };

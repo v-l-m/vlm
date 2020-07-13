@@ -70,7 +70,7 @@ class Estimator
         this.LastPctDraw = -1;
         //Estimate complete, DrawBoat track
         //DrawBoat(this.Boat);
-        this.ReportProgress(true);               
+        this.ReportProgress(true);
       }
       VLM2Prefs.StoreTrackEstimate(this.Boat.IdBoat(), this.EstimateTrack);
       return;
@@ -86,12 +86,19 @@ class Estimator
       this.Running = true;
       this.LastPctRefresh = 0;
       this.LastPctDraw = 0;
+
       GribMgr.Init();
       if (typeof this.Boat.VLMInfo === "undefined")
       {
         this.Stop();
         return;
       }
+      this.CurEstimate.Bob = {};
+      this.CurEstimate.Bob.MinLon = this.Boat.VLMInfo.LON;
+      this.CurEstimate.Bob.MaxLon = this.Boat.VLMInfo.LON;
+      this.CurEstimate.Bob.MinLat = this.Boat.VLMInfo.LAT;
+      this.CurEstimate.Bob.MaxLat = this.Boat.VLMInfo.LAT;
+
       this.CurEstimate.Position = new VLMPosition(this.Boat.VLMInfo.LON, this.Boat.VLMInfo.LAT);
       this.CurEstimate.Date = new Date(this.Boat.VLMInfo.LUP * 1000 + 1000 * this.Boat.VLMInfo.VAC);
       this.CurEstimate.PrevDate = this.CurEstimate.Date;
@@ -165,11 +172,11 @@ class Estimator
         {
           if (this.ErrorCount > 10)
           {
-            if (isNan(MI.Speed))
+            if (isNaN(MI.Speed))
             {
               StatMGR.Stat("NaN Speed in Grib", null, null, GribMgr.WindTableLength);
               console.log("Nan Speed @" + Lat + " / " + Lon);
-              GribMGR.ClearBogusData(this.CurEstimate.PrevDate, Lat, Lon);
+              GribMgr.ClearBogusData(this.CurEstimate.PrevDate, Lat, Lon);
             }
             this.Stop();
             return;
@@ -306,6 +313,26 @@ class Estimator
       // Start next point computation....
       this.CurEstimate.Date = new Date((this.CurEstimate.Date / 1000 + this.Boat.VLMInfo.VAC) * 1000);
       this.CurEstimate.PrevDate = this.CurEstimate.Date;
+
+      // Update Race BOB
+      if (NewPos.Lon.Value < this.CurEstimate.Bob.MinLon)
+      {
+        this.CurEstimate.Bob.MinLon = NewPos.Lon.Value;
+      }
+      if (NewPos.Lon.Value > this.CurEstimate.Bob.MaxLon)
+      {
+        this.CurEstimate.Bob.MaxLon = NewPos.Lon.Value;
+      }
+
+      if (NewPos.Lat.Value < this.CurEstimate.Bob.MinLat)
+      {
+        this.CurEstimate.Bob.MinLat = NewPos.Lat.Value;
+      }
+      if (NewPos.Lat.Value > this.CurEstimate.Bob.MaxLat)
+      {
+        this.CurEstimate.Bob.MaxLat = NewPos.Lat.Value;
+      }
+
       if (RaceComplete)
       {
         this.Stop();
@@ -320,7 +347,7 @@ class Estimator
 
     this.LoadTrack = function()
     {
-      this.EstimateTrack=VLM2Prefs.GetTrackEstimate(this.Boat.IdBoat());
+      this.EstimateTrack = VLM2Prefs.GetTrackEstimate(this.Boat.IdBoat());
     };
 
     this.GetPilotPoints = function()
@@ -471,8 +498,11 @@ class Estimator
       let RetValue = this.EstimateTrack[Index];
       return RetValue;
     };
+    this.DbgCount = 0;
+    this.HitDbgCount = 0;
     this.GetClosestEstimatePointFromPosition = function(Pos)
     {
+      let s = new Date().getTime();
       if (!Pos)
       {
         return null;
@@ -480,18 +510,100 @@ class Estimator
       let Dist = 1e30;
       let index;
       let RetValue = null;
-      for (index = 0; index < Object.keys(this.EstimateTrack).length; index++)
+
+      if (this.CurEstimate.Bob)
       {
-        if (this.EstimateTrack[index])
+        let PosCount = 0;
+
+        if (this.CurEstimate.Bob.QCells)
         {
-          var d = Pos.GetEuclidianDist2(this.EstimateTrack[index].Position);
-          if (d < Dist)
+          
+          for (index in this.CurEstimate.Bob.QCells)
           {
-            RetValue = this.EstimateTrack[index];
-            Dist = d;
+            PosCount+= this.CurEstimate.Bob.QCells[index];
+          }
+        }
+        if (!this.CurEstimate.Bob.QTree || PosCount !== this.EstimateTrack.length)
+        {
+          this.CurEstimate.Bob.QTree = new QTree(QTree.QTREE_MAX_DEPTH, this.CurEstimate.Bob);
+          this.CurEstimate.Bob.QCells = [];
+          for (let index in this.EstimateTrack)
+          {
+            if (this.EstimateTrack[index])
+            {
+              let Idx = this.CurEstimate.Bob.QTree.AddPoint(this.EstimateTrack[index]);
+              if (this.CurEstimate.Bob.QCells[Idx])
+              {
+                this.CurEstimate.Bob.QCells[Idx]++;
+              }
+              else
+              {
+                this.CurEstimate.Bob.QCells[Idx] = 1;
+              }
+            }
+          }
+        }
+
+        let CurCellIdx = this.CurEstimate.Bob.QTree.GetCellKeyFromPoint([Pos.Lon.Value, Pos.Lat.Value]);
+        let QCell = this.CurEstimate.Bob.QTree.GetClosestCellFromList(CurCellIdx, this.CurEstimate.Bob.QCells);
+
+        for (let CellIndex in QCell)
+        {
+          if (QCell[CellIndex])
+          {
+            let PointList = this.CurEstimate.Bob.QTree.GetPointListInCell(QCell[CellIndex]);
+
+            for (index in PointList)
+            {
+              if (PointList[index])
+              {
+                let P = PointList[index].Position;
+                //if (Math.abs(CurLon - P.Lon.Value) < DLon)
+                {
+                  let d = Pos.GetEuclidianDist2(P);
+                  if (d < Dist)
+                  {
+                    RetValue = PointList[index];
+                    Dist = d;
+                    //DLon = 2*Math.abs(CurLon - P.Lon.Value);
+                  }
+                }
+                this.DbgCount++;
+              }
+            }
           }
         }
       }
+
+      //'let DLon = 1e30;
+      //'let CurLon = Pos.Lon.Value;
+      /*for (index = 0; index < Object.keys(this.EstimateTrack).length; index++)
+      {
+        if (this.EstimateTrack[index])
+        {
+          let P = this.EstimateTrack[index].Position;
+          //if (Math.abs(CurLon - P.Lon.Value) < DLon)
+          {
+            let d = Pos.GetEuclidianDist2(P);
+            if (d < Dist)
+            {
+              RetValue = this.EstimateTrack[index];
+              Dist = d;
+              //DLon = 2*Math.abs(CurLon - P.Lon.Value);
+
+            }
+          }
+          this.DbgCount++;
+        }
+      }
+      if (RetValue)
+      {
+        console.log("GetClosest dist " + Dist + " " + RetValue.Date + " pos "+RetValue.Position.toString());
+      }
+      else
+      {
+        console.log("GetClosest dist none found");
+      }*/
       return RetValue;
     };
     this.ClearEstimatePosition = function(Boat)
@@ -508,9 +620,15 @@ class Estimator
           return;
         }
         let Position = [Estimate.Position.Lat.Value, Estimate.Position.Lon.Value];
+        let NewPos = true;
         if (Features.BoatEstimateMarker)
         {
-          Features.BoatEstimateMarker.setLatLng(Position).addTo(map);
+          let L = Features.BoatEstimateMarker.getLatLng();
+          NewPos = L.lat !== Position[0] || L.lng != Position[1];
+          if (NewPos)
+          {
+            Features.BoatEstimateMarker.setLatLng(Position).addTo(map);
+          }
         }
         else
         {
@@ -521,19 +639,45 @@ class Estimator
             icon: Marker
           }).addTo(map);
         }
-        if (Features.BoatEstimateMarker)
+
+        if (Features.BoatEstimateMarker && NewPos)
         {
           Features.BoatEstimateMarker.setRotationAngle(Estimate.Heading);
         }
         if (typeof Estimate.Meteo !== "undefined" && Estimate.Meteo)
         {
-          let StartPos = new VLMPosition(Position[1], Position[0]);
-          let Polar = BuildPolarLine(Boat, StartPos, VLM2Prefs.MapPrefs.PolarVacCount, Estimate.Date);
-          Features.BoatEstimateMarkerPolar = DefinePolarMarker(Polar, Features.BoatEstimateMarkerPolar);
+          map.GribMap.SetGribMapTime(Estimate.Date.getTime());
+          if (this.PolarEstimateUpdate)
+          {
+            clearTimeout(this.PolarEstimateUpdate);
+          }
+
+          if (NewPos)
+          {
+            /*if (Features.BoatEstimateMarkerPolar)
+            {
+              Features.BoatEstimateMarkerPolar.remove();
+              Features.BoatEstimateMarkerPolar = null;
+            }
+
+            this.PolarEstimateUpdate = setTimeout(() =>
+            {*/
+            let StartPos = new VLMPosition(Position[1], Position[0]);
+            let Polar = BuildPolarLine(Boat, StartPos, VLM2Prefs.MapPrefs.PolarVacCount, Estimate.Date);
+            Features.BoatEstimateMarkerPolar = DefinePolarMarker(Polar, Features.BoatEstimateMarkerPolar);
+            /*
+                        }, 25);
+                      */
+          }
         }
       }
       else if (Features)
       {
+        if (map && map.GribMap)
+        {
+          map.GribMap.SetGribMapTime();
+        }
+
         if (Features.BoatEstimateMarker)
         {
           Features.BoatEstimateMarker.remove();
