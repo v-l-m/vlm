@@ -575,35 +575,6 @@ class Estimator
         }
       }
 
-      //'let DLon = 1e30;
-      //'let CurLon = Pos.Lon.Value;
-      /*for (index = 0; index < Object.keys(this.EstimateTrack).length; index++)
-      {
-        if (this.EstimateTrack[index])
-        {
-          let P = this.EstimateTrack[index].Position;
-          //if (Math.abs(CurLon - P.Lon.Value) < DLon)
-          {
-            let d = Pos.GetEuclidianDist2(P);
-            if (d < Dist)
-            {
-              RetValue = this.EstimateTrack[index];
-              Dist = d;
-              //DLon = 2*Math.abs(CurLon - P.Lon.Value);
-
-            }
-          }
-          this.DbgCount++;
-        }
-      }
-      if (RetValue)
-      {
-        console.log("GetClosest dist " + Dist + " " + RetValue.Date + " pos "+RetValue.Position.toString());
-      }
-      else
-      {
-        console.log("GetClosest dist none found");
-      }*/
       return RetValue;
     };
     this.ClearEstimatePosition = function(Boat)
