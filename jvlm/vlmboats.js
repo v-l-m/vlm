@@ -2071,7 +2071,7 @@ function DrawOpponentTrack(IdBoat, OppInfo, HideTrack = false)
       {
         for (let index in B.OppList)
         {
-          if (B.OppList[index].idusers == IdBoat)
+          if (B.OppList[index] && B.OppList[index].idusers == IdBoat)
           {
             OppInfo.Color = B.OppList[index].color;
             break;
