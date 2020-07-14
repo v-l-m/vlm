@@ -10,10 +10,12 @@ L.Control.WindMouseControl = L.Control.extend(
   },
   _GetControlHTML: function()
   {
-    let ret = "<table><tr>" +
+    let ret = "<div><span class='LWM_CurDate'></span><div>"+
+      "<table><tr>" +
       "<td class='leaflet-control-windmouse_zoomcol'><span>Zoom : </span> <span id='LWM_ZoomLevel'></span></td>" +
       "<td class='leaflet-control-windmouse_latlon'><span>Lat : </span> <span id='LWM_Lat'></span></td>" +
-      "<td class='leaflet-control-windmouse_latlon'><span>Lon : </span> <span id='LWM_Lon'></span></td></tr><tr>" +
+      "<td class='leaflet-control-windmouse_latlon'><span>Lon : </span> <span id='LWM_Lon'></span></td></tr>"+
+      "<tr>" +
       "<td class='leaflet-control-windmouse_wndimg'><img class='BeaufortImg'></td>" +
       "<td class='leaflet-control-windmouse_wndhdg'><span id='LWM_Hdg'></span></td>" +
       "<td class='leaflet-control-windmouse_wndspd'><span id='LWM_Spd'></span></td>" +
@@ -47,12 +49,13 @@ L.Control.WindMouseControl = L.Control.extend(
     let Lat = (e.latlng.lat);
     let Lon = (e.latlng.lng);
     let CurZoom = this._map.getZoom();
+    let GribTime = map.GribMap.GetGribMapTime();
 
     let MI = null;
     
     if (CurZoom>=MIN_MAP_ZOOM)
     {
-      MI=GribMgr.WindAtPointInTime(map.GribMap.GetGribMapTime(), Lat, Lon);
+      MI=GribMgr.WindAtPointInTime(GribTime, Lat, Lon);
     }
 
     let FieldMappings = [];
@@ -62,6 +65,7 @@ L.Control.WindMouseControl = L.Control.extend(
     {
       FieldMappings.push([FIELD_MAPPING_TEXT, "#LWM_Hdg", RoundPow(MI.Speed, 2) + " kts"]);
       FieldMappings.push([FIELD_MAPPING_TEXT, "#LWM_Spd", RoundPow(MI.Heading, 2) + " °"]);
+      FieldMappings.push([FIELD_MAPPING_TEXT, ".LWM_CurDate", GetLocalUTCTime(GribTime, false, true)]);
       let Beaufort = GribMgr.GetBeaufort(MI.Speed);
       $(".BeaufortImg").css("background-position",'-0px -'+ 24*Beaufort +'px');
       let Angle = MI.Heading - 56;

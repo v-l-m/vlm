@@ -1485,7 +1485,7 @@ function HandleEstimatorProgress(Complete, Pct, Dte)
     $("#StartEstimator").addClass("hidden");
     $("#PbEstimatorProgressBar").removeClass("hidden");
     $("#PbEstimatorProgressText").removeClass("hidden");
-    $("#PbEstimatorProgressText").text(Pct);
+    $("#PbEstimatorProgressText").text(Pct+ " %");
     $("#PbEstimatorProgress").css("width", Pct + "%");
     $("#PbEstimatorProgress").attr("aria-valuenow", Pct);
     $("#PbEstimatorProgress").attr("aria-valuetext", Pct);
