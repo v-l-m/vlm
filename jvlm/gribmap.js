@@ -252,7 +252,7 @@ GribMap.Layer = L.Layer.extend(
       if (this.Strings[index])
       {
         let S = this.Strings[index];
-        ctx.fillText(S[0],S[1],S[2]);
+        ctx.fillText(S[0], S[1], S[2]);
       }
     }
 
