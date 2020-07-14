@@ -1,6 +1,7 @@
 <?php
 $strings['en'] = 
   array (
+    'MissingGribData'=>'Grib data download pending... Try Again in a bit...',
     'LocalTime'=>'local time',
     'Account validation error. Email or Seed are wrong.'=>'Account validation error. Email or validation code are wrong.',
     'ValidateFailed' => 'Account validation failed',

@@ -74,7 +74,7 @@ GribMap.Layer = L.Layer.extend(
     this.DrawWindDebugDepth = 0;
     this.UpdateCount = 0;
     this.PrevUpdateCount = 0;
-    setInterval(function()
+    /*setInterval(function()
     {
       this.HandleIntervalDebug();
     }.bind(this), 1000);
@@ -85,7 +85,7 @@ GribMap.Layer = L.Layer.extend(
     {
       console.log("UpdateCountDelta:" + (this.UpdateCount - this.PrevUpdateCount));
       this.PrevUpdateCount = this.UpdateCount;
-    }
+    }*/
   },
   GetGribMapTime: function()
   {

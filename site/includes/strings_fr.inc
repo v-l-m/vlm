@@ -1,6 +1,7 @@
 <?php
 $strings['fr'] = 
   array (
+    'MissingGribData'=>'Téléchagement de la météo en cours... Essayer dans quelques instants...',
     'LocalTime'=>'heure locale',
     'Account validation error. Email or Seed are wrong.'=>'Adresse Email ou code de validation invalide',
     'ValidateFailed' => 'Erreur lors de la validation du compte',

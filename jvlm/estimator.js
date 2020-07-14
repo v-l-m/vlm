@@ -240,7 +240,7 @@ class Estimator
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
           if (isNaN(Speed))
           {
-            VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+            VLMAlertDanger(GetLocalizedString('MissingGribData'));
             this.Stop();
             return;
           }
@@ -251,7 +251,7 @@ class Estimator
           Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
           if (isNaN(Speed))
           {
-            VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+            VLMAlertDanger(GetLocalizedString('MissingGribData'));
             this.Stop();
             return;
           }
@@ -267,7 +267,7 @@ class Estimator
             Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
             if (isNaN(Speed))
             {
-              VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+              VLMAlertDanger(GetLocalizedString('MissingGribData'));
               this.Stop();
               return;
             }
@@ -290,7 +290,7 @@ class Estimator
             Speed = PolarsManager.GetBoatSpeed(this.Boat.VLMInfo.POL, MI.Speed, MI.Heading, Hdg);
             if (isNaN(Speed))
             {
-              VLMAlertDanger("PM_ANGLE : Error getting boatSpeed try again later...");
+              VLMAlertDanger(GetLocalizedString('MissingGribData'));
               this.Stop();
               return;
             }
@@ -301,8 +301,10 @@ class Estimator
         default:
           throw "Unsupported pilotmode for estimate..." + this.CurEstimate.Mode;
       }
-      console.log(this.CurEstimate.Date + this.CurEstimate.Position.toString(true) + "=> " + NewPos.Lon.toString(true) + " " + NewPos.Lat.toString(true) + " Wind : " + RoundPow(MI.Speed, 4) + "@" + RoundPow(MI.Heading, 4) + " Boat " + RoundPow(Speed, 4) + "kts" + RoundPow(((Hdg + 360.0) % 360.0), 4));
-      var RaceComplete = false;
+
+      //console.log(this.CurEstimate.Date + this.CurEstimate.Position.toString(true) + "=> " + NewPos.Lon.toString(true) + " " + NewPos.Lat.toString(true) + " Wind : " + RoundPow(MI.Speed, 4) + "@" + RoundPow(MI.Heading, 4) + " Boat " + RoundPow(Speed, 4) + "kts" + RoundPow(((Hdg + 360.0) % 360.0), 4));
+
+      let RaceComplete = false;
       if (this.CheckGateValidation(NewPos))
       {
         RaceComplete = this.GetNextRaceWP();
@@ -517,10 +519,10 @@ class Estimator
 
         if (this.CurEstimate.Bob.QCells)
         {
-          
+
           for (index in this.CurEstimate.Bob.QCells)
           {
-            PosCount+= this.CurEstimate.Bob.QCells[index];
+            PosCount += this.CurEstimate.Bob.QCells[index];
           }
         }
         if (!this.CurEstimate.Bob.QTree || PosCount !== this.EstimateTrack.length)
