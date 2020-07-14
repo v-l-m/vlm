@@ -252,14 +252,19 @@ $fmt = get_output_format();
 if (isPlayerLoggedIn() && is_null(get_cgi_var('select_idu'))) {
     //FIXME normalize error message (like in boatsetup)
     $info_array = Array('error' => 'select_idu is required as a GET parameter when using player login type');
-} else {
+}
+else
+{
+  // Use Select_IDU value to get boatinfo
+  $info_array = get_info_array(get_cgi_var('select_idu'));
+}
+/*else {
     $info_array = get_info_array($_SESSION['idu']);
     if (!isPlayerLoggedIn()) {
         //FIXME : normalize warn message
         $info_array['warning'] = 'This type of authentification is deprecated and is not garanteed in the next version of VLM';
     }
-}
-
+}*/
 switch ($fmt) {
 case "json":
     header('Content-type: application/json; charset=UTF-8');
