@@ -64,7 +64,9 @@
 
       //Fetching json
       //FIXME : should be a generic function in functions.php
-      if( isset($_SERVER['HTTPS'] ) ) 
+      // https access fails as apache/php on neptune doesn't accept testing's certificate since the Let'encrypt changes. Forcing http instead as nothing sensitive is $
+      /*
+      if( isset($_SERVER['HTTPS'] ) )
       {
         $proto="https";
       }
@@ -72,6 +74,8 @@
       {
         $proto="http";
       }
+      */
+      $proto = "http";
       $fp = fopen("$proto://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom","r") or die("<h1>Can't reach server $importserver</h1>"); //lecture du fichier
       print "$proto://$importserver/ws/raceinfo/desc.php?idrace=$idracefrom";
       $json = "";
