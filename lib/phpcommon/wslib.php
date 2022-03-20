@@ -623,8 +623,8 @@ class WSBaseBoatsetup extends WSSetup {
         $this->reply_with_error_if_not_exists('pip', 'PIP01');
         $pip = $this->request['pip'];
         if (!is_numeric($pip)) $this->reply_with_error('PIP02');
-        while ($pip >= 360) $pip -= 360
-        while ($pip < -180) $pip += 360
+        while ($pip >= 360) $pip -= 360;
+        while ($pip < -180) $pip += 360;
         return $pip;
     }
     
