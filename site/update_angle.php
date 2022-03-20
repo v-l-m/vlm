@@ -25,16 +25,16 @@
     if ($idusers != 0 ) {
         if ( $idusers == getLoginId() ) {
 
-            //Contrôles amont...
-            if ( $boatheading >= 360 ) $boatheading -= 360;
-            if ( $boatheading < 0 ) $boatheading += 360;
-            if ( $pilotparameter >= 360 ) $pilotparameter -= 360;
+            //ContrÃ´les amont...
+            while ( $boatheading >= 360 ) $boatheading -= 360;
+            while ( $boatheading < 0 ) $boatheading += 360;
+            while ( $pilotparameter >= 360 ) $pilotparameter -= 360;
             if ( $pilotparameter > 180 ) $pilotparameter -= 360;
-            if ( $pilotparameter < -180 ) $pilotparameter += 360;
-            // $pilotmode est lié  à l ihm, on le bascule en int pour l'interne VLM
+            while ( $pilotparameter < -180 ) $pilotparameter += 360;
+            // $pilotmode est liÃ©  Ã  l ihm, on le bascule en int pour l'interne VLM
             $pim = $pilotmodes[$pilotmode];
 
-            // Tout ça pour mettre à jour la ligne de la table users... on simplifie
+            // Tout Ã§a pour mettre Ã  jour la ligne de la table users... on simplifie
             $fullUsersObj = new fullUsers($idusers);
             if ($fullUsersObj->writeNewheading($pim, $boatheading, $pilotparameter) === False) {
                 die("<h1 class=\"error\">".$fullUsersObj->users->error_string."</h1>");
