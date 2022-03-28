@@ -13,6 +13,9 @@
         case PILOTMODE_HEADING:
         case PILOTMODE_WINDANGLE:
             $pip = $ws->check_pip_with_float();
+            //OK, on a un pip et un pim - et pip est entre 0 et 360
+            //Mais pour pim = 2, on veut pip entre -180 et 180
+            if ( ($pim == PILOTMODE_WINDANGLE) and ($pip > 180) ) $pip -= 360;
             break;
         case PILOTMODE_ORTHODROMIC:
         case PILOTMODE_BESTVMG:
