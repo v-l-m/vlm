@@ -330,7 +330,7 @@
 ?>
         </div> <!-- fin div langbox-->
         <div id="menubox" class="leftbox">
-            <a href="index.php"><?echo getLocalizedString("home")?></a> 
+            <a href="index.php"><?php echo getLocalizedString("home")?></a> 
 <?php
                 // Bouton "ADMIN" pour les administrateurs
                 if ( isAdminLogged() ) {
@@ -338,14 +338,19 @@
                 }
                 //<a href="http://images.v-l-m.org/" target="_images">echo getLocalizedString("images"); </a> 
 ?>
-            <a href="races.php"><?echo getLocalizedString("races"); ?></a>
-            <a href="calendar.php"><?echo getLocalizedString("calendar"); ?></a>
+            <a href="races.php"><?php echo getLocalizedString("races"); ?></a>
+            <a href="calendar.php"><?php echo getLocalizedString("calendar"); ?></a>
             <?php if (isPlayerLoggedIn()) echo htmlRaceSpectatorLink(); ?>
-            <a href="http://ranking.v-l-m.org/" target="_rankings"><?php echo getLocalizedString("ranking"); ?></a> 
-            <a href="<?php echo MOBILE_SERVER_URL; ?>" target="_mobile" title="<?php echo getLocalizedString("Interface for mobiles devices"); ?> ">
+        </div> <!-- fin div menubox-->
+        <div id="rankingbox" class="leftbox">
+            <a href="http://ranking.v-l-m.org/" target="_rankings"><?php echo getLocalizedString("ranking"); ?></a>
+            <a href="/jvlm/?VLMIndex=Challenge1" target="_rankings"><?php echo getLocalizedString("VLMChallenge"); ?></a>
+            <a href="/jvlm/?VLMIndex=1year1" target="_rankings"><?php echo getLocalizedString("VLMIndex"); ?></a>
+<!--            <a href="<?php echo MOBILE_SERVER_URL; ?>" target="_mobile" title="<?php echo getLocalizedString("Interface for mobiles devices"); ?> ">
                 <?php echo getLocalizedString("Mobiles"); ?>
             </a> 
-        </div> <!-- fin div menubox-->
+-->
+        </div> <!-- fin div rankingbox-->
         <div id="menucommunicationbox" class="leftbox">
             <a href="<?php echo FORUM_SERVER_URL; ?>" target="_forum"><?echo getLocalizedString("forum")?></a>
             <a href="#" title="<?echo getLocalizedString("tchat"); ?>" onClick="converse.rooms.open('<?echo VLM_NOTIFY_JABBER_MAIN; ?>');"><img src="/images/site/chaticon.png" /></a>

@@ -502,7 +502,7 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'racestarted' => 'Race : <b>%s</b> <br />Started : %s',
     'racingcomite' => 'In case of trouble (coastcrossing, WP validation...)...&lt;br /&gt;&lt;b&gt;Race committee&lt;/b&gt; : vlm (at) virtual-winds (dot) org',
     'racingtime' => 'Racing Time.. ',
-    'ranking' => 'Ranking',
+    'ranking' => 'Rankings',
     'rankingtype' => 'Ranking type',
     'right' => 'Right',
     'satellite' => 'Satellite map of the Atlantic (Weather Channel)',
@@ -561,6 +561,8 @@ Tip 3 : status is \'pending\' if an order is not yet executed, \'done\' otherwis
     'youengaged' => 'You\'re subscribed to the race ',
     'youlogin' => 'Logged',
     'yourboat' => 'Your boat',
+    'VLMChallenge' => 'VLM Challenge',
+    'VLMIndex' => 'Index VLM',
   );
 
 ?>

@@ -510,7 +510,7 @@ Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cu
     'racestarted' => 'Course : <b>%s</b> <br />D&eacute;part : %s',
     'racingcomite' => 'En cas de probl&egrave;me (bateau bloqu&eacute;, WP non valid&eacute; ...)&lt;br /&gt;&lt;b&gt;Comit&eacute; de course&lt;/b&gt; : vlm (a) virtual-winds (point) org',
     'racingtime' => 'En course depuis.. ',
-    'ranking' => 'Classement',
+    'ranking' => 'Classements',
     'rankingtype' => 'Choix du classement',
     'right' => '&agrave; droite',
     'satellite' => 'Photo satellite de l\'Atlantique Nord (Weather Channel):',
@@ -569,6 +569,8 @@ Conseil 3 : le status est \'pending\' si un ordre n\'est pas encore ex&eacute;cu
     'youengaged' => 'Vous &ecirc;tes engag&eacute; dans la course ',
     'youlogin' => 'Connect&eacute; :',
     'yourboat' => 'Votre bateau',
+    'VLMChallenge' => 'Classement année en cours',
+    'VLMIndex' => 'Classement 365 jours',
   );
 
 ?>
