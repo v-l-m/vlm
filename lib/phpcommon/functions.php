@@ -2069,6 +2069,39 @@ function availableRaces($idusers = 0)
        continue;
     }
     if ( in_array($idraces, $omorob_restriction) && !($row['racetype'] & RACE_TYPE_OMORMB) ) continue;
+
+    // si c'est une course à record avec OMOROB, on vérifie qu'un autre bateau du joueur n'est pas déjà arrivé
+    $alreadyArrivedBoats = array();
+    if (($row['racetype'] & RACE_TYPE_RECORD) && !($row['racetype'] & RACE_TYPE_OMORMB))
+    {
+      $new_query = "SELECT idusers FROM races_results WHERE idraces=$idraces AND position=1";
+      $new_result = wrapper_mysql_db_query_reader($new_query);
+      $arrivedBoats = array();
+      $nrows=mysqli_num_rows($new_result);
+      if ($nrows != 0)
+      {
+        while($new_row=mysqli_fetch_array($new_result, MYSQLI_ASSOC))
+        {
+          array_push($arrivedBoats, $new_row['idusers']);
+        }
+      }
+      $oid = getUserObject($idusers)->getOwnerId();
+      if ($oid > 0) {
+          $ownerlist = getPlayerObject($oid)->getOwnedBoatIdList();
+          foreach ($ownerlist as $idb) {
+              if ($idb != $idusers)
+              {
+                if (in_array($idb, $arrivedBoats)) // an other boat of the same user has already arrived
+                {
+                  array_push($alreadyArrivedBoats, $idb);
+                }
+              
+              }
+          }
+      }
+    }
+    if(($row['racetype'] & RACE_TYPE_RECORD) && !empty($alreadyArrivedBoats)) continue;
+  
     
     // si pas de course de qualification, on ajoute
     if ( $row['qualifying_races'] == "" ) 
