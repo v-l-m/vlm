@@ -104,6 +104,7 @@
         "boats_without_owner.report.php" => "Boats without owner",
         "boats_with_boatsitter_but_without_owner.report.php" => "Boats with boatsitter(s) but without owner",
         "boats_with_strange_polar.report.php" => "Boats engaged with strange polar",
+        "possible_record_omorob_violations.php" => "Possible OMOROB violations on record races",
         );
 
     adminlistbox($reportpages, "Reports");
